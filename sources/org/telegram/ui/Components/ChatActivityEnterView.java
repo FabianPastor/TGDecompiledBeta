@@ -4534,113 +4534,122 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r3 = 0;
     L_0x007b:
         r1 = r13.delegate;
-        if (r1 == 0) goto L_0x0093;
+        if (r1 == 0) goto L_0x008f;
     L_0x007f:
         r1 = r13.isInScheduleMode();
-        if (r1 != 0) goto L_0x0093;
+        if (r1 != 0) goto L_0x008f;
     L_0x0085:
         r1 = r13.delegate;
         r1 = r1.hasScheduledMessages();
-        if (r1 == 0) goto L_0x0093;
+        if (r1 == 0) goto L_0x008f;
     L_0x008d:
-        r1 = r13.scheduleButtonHidden;
-        if (r1 != 0) goto L_0x0093;
-    L_0x0091:
         r1 = 1;
-        goto L_0x0094;
-    L_0x0093:
+        goto L_0x0090;
+    L_0x008f:
         r1 = 0;
-    L_0x0094:
-        r4 = r13.scheduledButton;
-        r5 = NUM; // 0x42CLASSNAME float:96.0 double:5.532938244E-315;
-        r6 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-        r7 = 0;
-        r8 = 8;
-        if (r4 == 0) goto L_0x00ff;
-    L_0x009f:
-        r4 = r4.getTag();
-        if (r4 == 0) goto L_0x00a7;
-    L_0x00a5:
-        if (r1 != 0) goto L_0x00b1;
-    L_0x00a7:
-        r4 = r13.scheduledButton;
-        r4 = r4.getTag();
-        if (r4 != 0) goto L_0x00f2;
-    L_0x00af:
-        if (r1 != 0) goto L_0x00f2;
-    L_0x00b1:
+    L_0x0090:
+        if (r1 == 0) goto L_0x0098;
+    L_0x0092:
+        r4 = r13.scheduleButtonHidden;
+        if (r4 != 0) goto L_0x0098;
+    L_0x0096:
+        r4 = 1;
+        goto L_0x0099;
+    L_0x0098:
+        r4 = 0;
+    L_0x0099:
+        r5 = r13.scheduledButton;
+        r6 = NUM; // 0x42CLASSNAME float:96.0 double:5.532938244E-315;
+        r7 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r8 = 0;
+        r9 = 8;
+        if (r5 == 0) goto L_0x0106;
+    L_0x00a4:
+        r5 = r5.getTag();
+        if (r5 == 0) goto L_0x00ac;
+    L_0x00aa:
+        if (r4 != 0) goto L_0x00b6;
+    L_0x00ac:
+        r5 = r13.scheduledButton;
+        r5 = r5.getTag();
+        if (r5 != 0) goto L_0x00f9;
+    L_0x00b4:
+        if (r4 != 0) goto L_0x00f9;
+    L_0x00b6:
         r14 = r13.notifyButton;
-        if (r14 == 0) goto L_0x00f1;
-    L_0x00b5:
-        if (r3 == 0) goto L_0x00c0;
-    L_0x00b7:
+        if (r14 == 0) goto L_0x00f8;
+    L_0x00ba:
+        if (r1 != 0) goto L_0x00c7;
+    L_0x00bc:
+        if (r3 == 0) goto L_0x00c7;
+    L_0x00be:
         r14 = r13.scheduledButton;
         r14 = r14.getVisibility();
-        if (r14 == 0) goto L_0x00c0;
-    L_0x00bf:
-        goto L_0x00c2;
-    L_0x00c0:
+        if (r14 == 0) goto L_0x00c7;
+    L_0x00c6:
+        goto L_0x00c9;
+    L_0x00c7:
         r2 = 8;
-    L_0x00c2:
+    L_0x00c9:
         r14 = r13.notifyButton;
         r14 = r14.getVisibility();
-        if (r2 == r14) goto L_0x00f1;
-    L_0x00ca:
+        if (r2 == r14) goto L_0x00f8;
+    L_0x00d1:
         r14 = r13.notifyButton;
         r14.setVisibility(r2);
         r14 = r13.attachLayout;
-        if (r14 == 0) goto L_0x00f1;
-    L_0x00d3:
+        if (r14 == 0) goto L_0x00f8;
+    L_0x00da:
         r0 = r13.botButton;
-        if (r0 == 0) goto L_0x00dd;
-    L_0x00d7:
+        if (r0 == 0) goto L_0x00e4;
+    L_0x00de:
         r0 = r0.getVisibility();
-        if (r0 != r8) goto L_0x00e9;
-    L_0x00dd:
+        if (r0 != r9) goto L_0x00f0;
+    L_0x00e4:
         r0 = r13.notifyButton;
-        if (r0 == 0) goto L_0x00e7;
-    L_0x00e1:
+        if (r0 == 0) goto L_0x00ee;
+    L_0x00e8:
         r0 = r0.getVisibility();
-        if (r0 != r8) goto L_0x00e9;
-    L_0x00e7:
-        r5 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-    L_0x00e9:
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        if (r0 != r9) goto L_0x00f0;
+    L_0x00ee:
+        r6 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+    L_0x00f0:
+        r0 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r0 = (float) r0;
         r14.setPivotX(r0);
-    L_0x00f1:
+    L_0x00f8:
         return;
-    L_0x00f2:
-        r4 = r13.scheduledButton;
-        if (r1 == 0) goto L_0x00fb;
-    L_0x00f6:
-        r9 = java.lang.Integer.valueOf(r0);
-        goto L_0x00fc;
-    L_0x00fb:
-        r9 = r7;
-    L_0x00fc:
-        r4.setTag(r9);
-    L_0x00ff:
-        r4 = r13.scheduledButtonAnimation;
-        if (r4 == 0) goto L_0x0108;
+    L_0x00f9:
+        r1 = r13.scheduledButton;
+        if (r4 == 0) goto L_0x0102;
+    L_0x00fd:
+        r5 = java.lang.Integer.valueOf(r0);
+        goto L_0x0103;
+    L_0x0102:
+        r5 = r8;
     L_0x0103:
-        r4.cancel();
-        r13.scheduledButtonAnimation = r7;
-    L_0x0108:
-        r4 = 0;
-        r7 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
-        r9 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        if (r14 == 0) goto L_0x0187;
-    L_0x0110:
-        if (r3 == 0) goto L_0x0113;
-    L_0x0112:
-        goto L_0x0187;
-    L_0x0113:
-        if (r1 == 0) goto L_0x011a;
-    L_0x0115:
+        r1.setTag(r5);
+    L_0x0106:
+        r1 = r13.scheduledButtonAnimation;
+        if (r1 == 0) goto L_0x010f;
+    L_0x010a:
+        r1.cancel();
+        r13.scheduledButtonAnimation = r8;
+    L_0x010f:
+        r1 = 0;
+        r5 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        if (r14 == 0) goto L_0x018e;
+    L_0x0117:
+        if (r3 == 0) goto L_0x011a;
+    L_0x0119:
+        goto L_0x018e;
+    L_0x011a:
+        if (r4 == 0) goto L_0x0121;
+    L_0x011c:
         r14 = r13.scheduledButton;
         r14.setVisibility(r2);
-    L_0x011a:
+    L_0x0121:
         r14 = r13.scheduledButton;
         r3 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
@@ -4655,118 +4664,118 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r10 = r13.scheduledButton;
         r11 = android.view.View.ALPHA;
         r12 = new float[r0];
-        if (r1 == 0) goto L_0x013c;
-    L_0x013a:
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x013c:
-        r12[r2] = r4;
-        r4 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12);
-        r3[r2] = r4;
-        r4 = r13.scheduledButton;
+        if (r4 == 0) goto L_0x0143;
+    L_0x0141:
+        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+    L_0x0143:
+        r12[r2] = r1;
+        r1 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12);
+        r3[r2] = r1;
+        r1 = r13.scheduledButton;
         r10 = android.view.View.SCALE_X;
         r11 = new float[r0];
-        if (r1 == 0) goto L_0x014f;
-    L_0x014c:
+        if (r4 == 0) goto L_0x0156;
+    L_0x0153:
         r12 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0152;
-    L_0x014f:
+        goto L_0x0159;
+    L_0x0156:
         r12 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
-    L_0x0152:
+    L_0x0159:
         r11[r2] = r12;
-        r4 = android.animation.ObjectAnimator.ofFloat(r4, r10, r11);
-        r3[r0] = r4;
-        r4 = 2;
+        r1 = android.animation.ObjectAnimator.ofFloat(r1, r10, r11);
+        r3[r0] = r1;
+        r1 = 2;
         r10 = r13.scheduledButton;
         r11 = android.view.View.SCALE_Y;
         r0 = new float[r0];
-        if (r1 == 0) goto L_0x0165;
-    L_0x0163:
-        r7 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x0165:
-        r0[r2] = r7;
+        if (r4 == 0) goto L_0x016c;
+    L_0x016a:
+        r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+    L_0x016c:
+        r0[r2] = r5;
         r0 = android.animation.ObjectAnimator.ofFloat(r10, r11, r0);
-        r3[r4] = r0;
+        r3[r1] = r0;
         r14.playTogether(r3);
         r14 = r13.scheduledButtonAnimation;
-        r2 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
-        r14.setDuration(r2);
+        r0 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+        r14.setDuration(r0);
         r14 = r13.scheduledButtonAnimation;
         r0 = new org.telegram.ui.Components.ChatActivityEnterView$34;
-        r0.<init>(r1);
+        r0.<init>(r4);
         r14.addListener(r0);
         r14 = r13.scheduledButtonAnimation;
         r14.start();
-        goto L_0x01c7;
-    L_0x0187:
+        goto L_0x01ce;
+    L_0x018e:
         r14 = r13.scheduledButton;
-        if (r14 == 0) goto L_0x01b3;
-    L_0x018b:
-        if (r1 == 0) goto L_0x018f;
-    L_0x018d:
+        if (r14 == 0) goto L_0x01ba;
+    L_0x0192:
+        if (r4 == 0) goto L_0x0196;
+    L_0x0194:
         r0 = 0;
-        goto L_0x0191;
-    L_0x018f:
+        goto L_0x0198;
+    L_0x0196:
         r0 = 8;
-    L_0x0191:
+    L_0x0198:
         r14.setVisibility(r0);
         r14 = r13.scheduledButton;
-        if (r1 == 0) goto L_0x019a;
-    L_0x0198:
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x019a:
-        r14.setAlpha(r4);
-        r14 = r13.scheduledButton;
-        if (r1 == 0) goto L_0x01a4;
+        if (r4 == 0) goto L_0x01a1;
+    L_0x019f:
+        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
     L_0x01a1:
+        r14.setAlpha(r1);
+        r14 = r13.scheduledButton;
+        if (r4 == 0) goto L_0x01ab;
+    L_0x01a8:
         r0 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x01a7;
-    L_0x01a4:
+        goto L_0x01ae;
+    L_0x01ab:
         r0 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
-    L_0x01a7:
+    L_0x01ae:
         r14.setScaleX(r0);
         r14 = r13.scheduledButton;
-        if (r1 == 0) goto L_0x01b0;
-    L_0x01ae:
-        r7 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x01b0:
-        r14.setScaleY(r7);
-    L_0x01b3:
-        r14 = r13.notifyButton;
-        if (r14 == 0) goto L_0x01c7;
+        if (r4 == 0) goto L_0x01b7;
+    L_0x01b5:
+        r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
     L_0x01b7:
-        if (r3 == 0) goto L_0x01c2;
-    L_0x01b9:
+        r14.setScaleY(r5);
+    L_0x01ba:
+        r14 = r13.notifyButton;
+        if (r14 == 0) goto L_0x01ce;
+    L_0x01be:
+        if (r3 == 0) goto L_0x01c9;
+    L_0x01c0:
         r0 = r13.scheduledButton;
         r0 = r0.getVisibility();
-        if (r0 == 0) goto L_0x01c2;
-    L_0x01c1:
-        goto L_0x01c4;
-    L_0x01c2:
+        if (r0 == 0) goto L_0x01c9;
+    L_0x01c8:
+        goto L_0x01cb;
+    L_0x01c9:
         r2 = 8;
-    L_0x01c4:
-        r14.setVisibility(r2);
-    L_0x01c7:
-        r14 = r13.attachLayout;
-        if (r14 == 0) goto L_0x01e9;
     L_0x01cb:
+        r14.setVisibility(r2);
+    L_0x01ce:
+        r14 = r13.attachLayout;
+        if (r14 == 0) goto L_0x01f0;
+    L_0x01d2:
         r0 = r13.botButton;
-        if (r0 == 0) goto L_0x01d5;
-    L_0x01cf:
+        if (r0 == 0) goto L_0x01dc;
+    L_0x01d6:
         r0 = r0.getVisibility();
-        if (r0 != r8) goto L_0x01e1;
-    L_0x01d5:
+        if (r0 != r9) goto L_0x01e8;
+    L_0x01dc:
         r0 = r13.notifyButton;
-        if (r0 == 0) goto L_0x01df;
-    L_0x01d9:
+        if (r0 == 0) goto L_0x01e6;
+    L_0x01e0:
         r0 = r0.getVisibility();
-        if (r0 != r8) goto L_0x01e1;
-    L_0x01df:
-        r5 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-    L_0x01e1:
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        if (r0 != r9) goto L_0x01e8;
+    L_0x01e6:
+        r6 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+    L_0x01e8:
+        r0 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r0 = (float) r0;
         r14.setPivotX(r0);
-    L_0x01e9:
+    L_0x01f0:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.updateScheduleButton(boolean):void");

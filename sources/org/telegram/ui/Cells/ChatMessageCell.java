@@ -4843,15 +4843,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2449:0x3a6e  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
     /* JADX WARNING: Removed duplicated region for block: B:2306:0x36df  */
     /* JADX WARNING: Removed duplicated region for block: B:2299:0x36b2  */
     /* JADX WARNING: Removed duplicated region for block: B:2309:0x36e4  */
@@ -4865,9 +4868,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
     /* JADX WARNING: Removed duplicated region for block: B:2286:0x3669  */
     /* JADX WARNING: Removed duplicated region for block: B:2299:0x36b2  */
     /* JADX WARNING: Removed duplicated region for block: B:2306:0x36df  */
@@ -4883,9 +4888,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
     /* JADX WARNING: Removed duplicated region for block: B:1437:0x21e1  */
     /* JADX WARNING: Removed duplicated region for block: B:1436:0x21db  */
     /* JADX WARNING: Removed duplicated region for block: B:1542:0x2428  */
@@ -4905,9 +4912,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
     /* JADX WARNING: Removed duplicated region for block: B:2329:0x375b  */
     /* JADX WARNING: Removed duplicated region for block: B:2340:0x37bb A:{SYNTHETIC, Splitter:B:2340:0x37bb} */
     /* JADX WARNING: Removed duplicated region for block: B:2357:0x3847  */
@@ -4917,9 +4926,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
     /* JADX WARNING: Removed duplicated region for block: B:133:0x01dc  */
     /* JADX WARNING: Removed duplicated region for block: B:140:0x0204  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x02bc  */
@@ -4934,9 +4945,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
     /* JADX WARNING: Removed duplicated region for block: B:133:0x01dc  */
     /* JADX WARNING: Removed duplicated region for block: B:140:0x0204  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x02bc  */
@@ -4951,9 +4964,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x015a  */
     /* JADX WARNING: Removed duplicated region for block: B:133:0x01dc  */
     /* JADX WARNING: Removed duplicated region for block: B:140:0x0204  */
@@ -4969,9 +4984,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
     /* JADX WARNING: Removed duplicated region for block: B:537:0x0a83  */
     /* JADX WARNING: Removed duplicated region for block: B:467:0x0925  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
@@ -4991,9 +5008,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
     /* JADX WARNING: Removed duplicated region for block: B:467:0x0925  */
     /* JADX WARNING: Removed duplicated region for block: B:537:0x0a83  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
@@ -5013,10 +5032,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:537:0x0a83  */
     /* JADX WARNING: Removed duplicated region for block: B:467:0x0925  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
@@ -5036,10 +5057,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:467:0x0925  */
     /* JADX WARNING: Removed duplicated region for block: B:537:0x0a83  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
@@ -5059,10 +5082,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:658:0x0cb5  */
     /* JADX WARNING: Removed duplicated region for block: B:665:0x0cc8  */
     /* JADX WARNING: Removed duplicated region for block: B:856:0x11c4  */
@@ -5077,10 +5102,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:2125:0x32e1  */
     /* JADX WARNING: Removed duplicated region for block: B:2138:0x3342  */
     /* JADX WARNING: Removed duplicated region for block: B:2144:0x334f  */
@@ -5106,10 +5133,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:658:0x0cb5  */
     /* JADX WARNING: Removed duplicated region for block: B:665:0x0cc8  */
     /* JADX WARNING: Removed duplicated region for block: B:667:0x0cd2  */
@@ -5124,10 +5153,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:656:0x0cad  */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x0b3c  */
@@ -5145,10 +5176,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:658:0x0cb5  */
     /* JADX WARNING: Removed duplicated region for block: B:665:0x0cc8  */
     /* JADX WARNING: Removed duplicated region for block: B:667:0x0cd2  */
@@ -5163,10 +5196,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:2125:0x32e1  */
     /* JADX WARNING: Removed duplicated region for block: B:2138:0x3342  */
     /* JADX WARNING: Removed duplicated region for block: B:2145:0x337a  */
@@ -5192,10 +5227,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x0b3c  */
     /* JADX WARNING: Removed duplicated region for block: B:656:0x0cad  */
@@ -5213,10 +5250,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:656:0x0cad  */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x0b3c  */
@@ -5234,10 +5273,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x0b3c  */
     /* JADX WARNING: Removed duplicated region for block: B:656:0x0cad  */
@@ -5255,10 +5296,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:656:0x0cad  */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x0b3c  */
@@ -5276,10 +5319,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:1500:0x2336  */
     /* JADX WARNING: Removed duplicated region for block: B:1493:0x2303  */
     /* JADX WARNING: Removed duplicated region for block: B:1503:0x233b  */
@@ -5303,10 +5348,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:1493:0x2303  */
     /* JADX WARNING: Removed duplicated region for block: B:1500:0x2336  */
     /* JADX WARNING: Removed duplicated region for block: B:1503:0x233b  */
@@ -5330,10 +5377,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x0a93 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x0b3c  */
     /* JADX WARNING: Removed duplicated region for block: B:656:0x0cad  */
@@ -5351,10 +5400,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:658:0x0cb5  */
     /* JADX WARNING: Removed duplicated region for block: B:665:0x0cc8  */
     /* JADX WARNING: Removed duplicated region for block: B:667:0x0cd2  */
@@ -5369,10 +5420,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:656:0x0cad  */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x0b3c  */
     /* JADX WARNING: Removed duplicated region for block: B:658:0x0cb5  */
@@ -5389,10 +5442,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:658:0x0cb5  */
     /* JADX WARNING: Removed duplicated region for block: B:665:0x0cc8  */
     /* JADX WARNING: Removed duplicated region for block: B:667:0x0cd2  */
@@ -5407,10 +5462,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:658:0x0cb5  */
     /* JADX WARNING: Removed duplicated region for block: B:665:0x0cc8  */
     /* JADX WARNING: Removed duplicated region for block: B:856:0x11c4  */
@@ -5425,10 +5482,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Removed duplicated region for block: B:2384:0x38f2 A:{Catch:{ Exception -> 0x395f }} */
     /* JADX WARNING: Removed duplicated region for block: B:2388:0x393d A:{Catch:{ Exception -> 0x395f }} */
     /* JADX WARNING: Removed duplicated region for block: B:2399:0x3970  */
@@ -5437,10 +5496,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:2493:0x3ccb  */
     /* JADX WARNING: Removed duplicated region for block: B:2499:0x3ce7  */
     /* JADX WARNING: Removed duplicated region for block: B:2498:0x3cdd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2525:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:2510:0x3d06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2515:0x3d1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2518:0x3d2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2528:0x3d6b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2521:0x3d39  */
+    /* JADX WARNING: Removed duplicated region for block: B:2531:0x3d76  */
     /* JADX WARNING: Missing block: B:904:0x128b, code skipped:
             if (r4 != 8) goto L_0x128f;
      */
@@ -5663,7 +5724,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         goto L_0x010c;
     L_0x0109:
         r15 = 0;
-        goto L_0x3d5f;
+        goto L_0x3d71;
     L_0x010c:
         r1.pinnedBottom = r2;
         r1.pinnedTop = r3;
@@ -14556,32 +14617,42 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.totalHeight = r0;
     L_0x3d00:
         r0 = r60.isAnyKindOfSticker();
-        if (r0 == 0) goto L_0x3d18;
+        if (r0 == 0) goto L_0x3d19;
     L_0x3d06:
         r0 = r1.totalHeight;
         r2 = NUM; // 0x428CLASSNAME float:70.0 double:5.51610112E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        if (r0 >= r2) goto L_0x3d18;
+        if (r0 >= r2) goto L_0x3d19;
     L_0x3d10:
         r0 = NUM; // 0x428CLASSNAME float:70.0 double:5.51610112E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r1.totalHeight = r0;
-    L_0x3d18:
+        goto L_0x3d2a;
+    L_0x3d19:
+        r0 = r60.isAnimatedEmoji();
+        if (r0 == 0) goto L_0x3d2a;
+    L_0x3d1f:
+        r0 = r1.totalHeight;
+        r2 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r0 = r0 + r2;
+        r1.totalHeight = r0;
+    L_0x3d2a:
         r0 = r1.drawPhotoImage;
-        if (r0 != 0) goto L_0x3d22;
-    L_0x3d1c:
+        if (r0 != 0) goto L_0x3d34;
+    L_0x3d2e:
         r0 = r1.photoImage;
         r2 = 0;
         r0.setImageBitmap(r2);
-    L_0x3d22:
+    L_0x3d34:
         r0 = r1.documentAttachType;
         r2 = 5;
-        if (r0 != r2) goto L_0x3d59;
-    L_0x3d27:
+        if (r0 != r2) goto L_0x3d6b;
+    L_0x3d39:
         r0 = r1.documentAttach;
         r0 = org.telegram.messenger.MessageObject.isDocumentHasThumb(r0);
-        if (r0 == 0) goto L_0x3d41;
-    L_0x3d2f:
+        if (r0 == 0) goto L_0x3d53;
+    L_0x3d41:
         r0 = r1.documentAttach;
         r0 = r0.thumbs;
         r2 = 90;
@@ -14589,52 +14660,52 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r1.radialProgress;
         r3 = r1.documentAttach;
         r2.setImageOverlay(r0, r3, r14);
-        goto L_0x3d5f;
-    L_0x3d41:
+        goto L_0x3d71;
+    L_0x3d53:
         r2 = 1;
         r0 = r14.getArtworkUrl(r2);
         r2 = android.text.TextUtils.isEmpty(r0);
-        if (r2 != 0) goto L_0x3d52;
-    L_0x3d4c:
+        if (r2 != 0) goto L_0x3d64;
+    L_0x3d5e:
         r2 = r1.radialProgress;
         r2.setImageOverlay(r0);
-        goto L_0x3d5f;
-    L_0x3d52:
-        r0 = r1.radialProgress;
-        r2 = 0;
-        r0.setImageOverlay(r2, r2, r2);
-        goto L_0x3d5f;
-    L_0x3d59:
-        r2 = 0;
-        r0 = r1.radialProgress;
-        r0.setImageOverlay(r2, r2, r2);
-    L_0x3d5f:
-        r59.updateWaveform();
-        if (r17 == 0) goto L_0x3d6a;
+        goto L_0x3d71;
     L_0x3d64:
-        r0 = r14.cancelEditing;
-        if (r0 != 0) goto L_0x3d6a;
-    L_0x3d68:
-        r0 = 1;
-        goto L_0x3d6b;
-    L_0x3d6a:
-        r0 = 0;
+        r0 = r1.radialProgress;
+        r2 = 0;
+        r0.setImageOverlay(r2, r2, r2);
+        goto L_0x3d71;
     L_0x3d6b:
+        r2 = 0;
+        r0 = r1.radialProgress;
+        r0.setImageOverlay(r2, r2, r2);
+    L_0x3d71:
+        r59.updateWaveform();
+        if (r17 == 0) goto L_0x3d7c;
+    L_0x3d76:
+        r0 = r14.cancelEditing;
+        if (r0 != 0) goto L_0x3d7c;
+    L_0x3d7a:
+        r0 = 1;
+        goto L_0x3d7d;
+    L_0x3d7c:
+        r0 = 0;
+    L_0x3d7d:
         r2 = 1;
         r1.updateButtonState(r15, r0, r2);
         r0 = r1.buttonState;
         r2 = 2;
-        if (r0 != r2) goto L_0x3d9f;
-    L_0x3d74:
+        if (r0 != r2) goto L_0x3db1;
+    L_0x3d86:
         r0 = r1.documentAttachType;
         r2 = 3;
-        if (r0 != r2) goto L_0x3d9f;
-    L_0x3d79:
+        if (r0 != r2) goto L_0x3db1;
+    L_0x3d8b:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.DownloadController.getInstance(r0);
         r0 = r0.canDownloadMedia(r14);
-        if (r0 == 0) goto L_0x3d9f;
-    L_0x3d85:
+        if (r0 == 0) goto L_0x3db1;
+    L_0x3d97:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.FileLoader.getInstance(r0);
         r2 = r1.documentAttach;
@@ -14646,7 +14717,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r1.radialProgress;
         r2 = r59.getIconForCurrentState();
         r0.setIcon(r2, r15, r15);
-    L_0x3d9f:
+    L_0x3db1:
         r0 = r1.accessibilityVirtualViewBounds;
         r0.clear();
         return;

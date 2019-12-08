@@ -730,7 +730,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             getMediaDataController().checkFeaturedStickers();
             dialogsLoaded[this.currentAccount] = true;
         }
-        getMediaDataController().checkStickers(4);
         getMessagesController().loadPinnedDialogs(this.folderId, 0, null);
         return true;
     }
@@ -2240,6 +2239,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         ChatActivityEnterView chatActivityEnterView = this.commentView;
         if (chatActivityEnterView != null) {
             chatActivityEnterView.onResume();
+        }
+        if (!this.onlySelect && this.folderId == 0) {
+            getMediaDataController().checkStickers(4);
         }
         DialogsSearchAdapter dialogsSearchAdapter = this.dialogsSearchAdapter;
         if (dialogsSearchAdapter != null) {

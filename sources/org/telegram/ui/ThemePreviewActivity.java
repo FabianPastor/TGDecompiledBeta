@@ -1080,6 +1080,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         if (sizeNotifierFrameLayout != null) {
             sizeNotifierFrameLayout.onResume();
         }
+        AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
+        AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
     }
 
     public void onPause() {

@@ -2009,6 +2009,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         if (this.isMotion) {
             this.parallaxEffect.setEnabled(true);
         }
+        AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
+        AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
     }
 
     public void onPause() {
