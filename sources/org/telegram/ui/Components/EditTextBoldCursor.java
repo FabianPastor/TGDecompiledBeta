@@ -421,7 +421,7 @@ public class EditTextBoldCursor extends EditText {
         this.hintLayout = new StaticLayout(charSequence, getPaint(), AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
     }
 
-    public Layout getHintLayout() {
+    public Layout getHintLayoutEx() {
         return this.hintLayout;
     }
 
