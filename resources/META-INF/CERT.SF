@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: GULb3GJcUIxaqzfGUdFTKa60N3g=
+SHA1-Digest-Manifest: KZeWmVkTgp5WlBPtkU4lhx6XdtQ=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 4Ooy7LeAgFpDHi1EbFE/L1Nyaj4=
+SHA1-Digest: zL8kMLJEa8/yaIaabi5D00NxqKo=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -223,7 +223,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: u0NGOUlfokIL+h38GILLSZib3YQ=
+SHA1-Digest: 2kq2ERYombRb04pGLxtvVX5If1U=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: meJMBKLUSTmOentmkKD9WbS/j5I=
@@ -253,16 +253,16 @@ Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: 3Gxv/giyu0pVFfr4m8ZJ9d8QEs4=
+SHA1-Digest: +tWKdhCeEmfTCpsiTNEKtg0ysLE=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: 8ahvO+gcoKdOrp3bflMh6mxrdDo=
+SHA1-Digest: 1XkpBAtFmTvKIcw7I0vCNnl+1qI=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: 54BRR/84WmX+a7NL38D53+TUdFo=
+SHA1-Digest: m2OAZFZ0SOcccT9zRfVpE6eTQus=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: EXDyKFdktMAtF0X8nKwO336gw3U=
+SHA1-Digest: 1SPzod8deDW/Q4sLSR+yDTFIfHU=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -7907,13 +7907,13 @@ Name: res/drawable/transparent.xml
 SHA1-Digest: sAby2sUG19pckCZgUCzFtnw2Pc0=
 
 Name: res/layout-land/hockeyapp_fragment_update.xml
-SHA1-Digest: +Rplo+bNnY7ovekAN/B4phJlg0M=
+SHA1-Digest: QAiiTBl9HZgPsYEy+odzwgR5PjU=
 
 Name: res/layout-v16/notification_template_custom_big.xml
 SHA1-Digest: NVlIfI4GivOzvE6nrskUxJp3E9c=
 
 Name: res/layout-v17/hockeyapp_activity_feedback.xml
-SHA1-Digest: 2eIiIHJhjvajCdVqI94hEmpo9jE=
+SHA1-Digest: KCWo/Plm5agGHvCn6hJo4xT5kGI=
 
 Name: res/layout-v17/notification_action.xml
 SHA1-Digest: KrOaOdDpV1Ij0x492apP7kAKUhc=
@@ -7949,13 +7949,13 @@ Name: res/layout/hockeyapp_activity_expiry_info.xml
 SHA1-Digest: Ce31w+CSBlA+YJY9oUNQ3bmOCVs=
 
 Name: res/layout/hockeyapp_activity_feedback.xml
-SHA1-Digest: +Wri6tpCSxOgHWDa925/MFXwxGw=
+SHA1-Digest: +4qVU5GldknHZUJNCk2pRB4CfZ0=
 
 Name: res/layout/hockeyapp_activity_login.xml
-SHA1-Digest: px5f+tIvf7YaUJQwBKmJ9j35nnI=
+SHA1-Digest: WcpBV0iVUhFkAS6ps5058oz7Lm4=
 
 Name: res/layout/hockeyapp_fragment_update.xml
-SHA1-Digest: 36tKOuFCbLyQ/hB7d05hlanNKcY=
+SHA1-Digest: fn87y3AkWqjzUr4uoPks4GOBm1Y=
 
 Name: res/layout/hockeyapp_view_feedback_message.xml
 SHA1-Digest: /dzxYf++6+0EFX7qN/hTeqL9cdk=
@@ -8147,7 +8147,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: PFHewT28nLYAZutLrV4rZj/WHz0=
+SHA1-Digest: kWk7+ErlfxVJhVEuGGL5uB3W50w=
 
 Name: version.txt
 SHA1-Digest: N6saYwG9YKFIhHj+jH0ssSY5RCQ=

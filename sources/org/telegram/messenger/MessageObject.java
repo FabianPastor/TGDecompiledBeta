@@ -2830,7 +2830,7 @@ public class MessageObject {
         goto L_0x0672;
     L_0x06c5:
         r11 = new java.lang.StringBuilder;
-        r2 = NUM; // 0x7f0d0af9 float:1.8747812E38 double:1.0531311654E-314;
+        r2 = NUM; // 0x7f0d0b09 float:1.8747845E38 double:1.0531311733E-314;
         r9 = "UserRestrictionsUntilForever";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r11.<init>(r2);
@@ -9369,116 +9369,21 @@ public class MessageObject {
         return false;
     }
 
-    /* JADX WARNING: Missing block: B:28:0x004f, code skipped:
-            if (r1.pin_messages != false) goto L_0x0051;
-     */
-    /* JADX WARNING: Missing block: B:51:0x0084, code skipped:
-            if (r5.out != false) goto L_0x0086;
-     */
-    public static boolean canEditMessageScheduleTime(int r4, org.telegram.tgnet.TLRPC.Message r5, org.telegram.tgnet.TLRPC.Chat r6) {
-        /*
-        r0 = 0;
-        if (r6 == 0) goto L_0x000c;
-    L_0x0003:
-        r1 = r6.left;
-        if (r1 != 0) goto L_0x000b;
-    L_0x0007:
-        r1 = r6.kicked;
-        if (r1 == 0) goto L_0x000c;
-    L_0x000b:
-        return r0;
-    L_0x000c:
-        r1 = r5.from_id;
-        r2 = r5.to_id;
-        r2 = r2.user_id;
-        r3 = 1;
-        if (r1 != r2) goto L_0x0020;
-    L_0x0015:
-        r2 = org.telegram.messenger.UserConfig.getInstance(r4);
-        r2 = r2.getClientUserId();
-        if (r1 != r2) goto L_0x0020;
-    L_0x001f:
-        return r3;
-    L_0x0020:
-        if (r6 != 0) goto L_0x003b;
-    L_0x0022:
-        r1 = r5.to_id;
-        r1 = r1.channel_id;
-        if (r1 == 0) goto L_0x003b;
-    L_0x0028:
-        r6 = org.telegram.messenger.MessagesController.getInstance(r4);
-        r1 = r5.to_id;
-        r1 = r1.channel_id;
-        r1 = java.lang.Integer.valueOf(r1);
-        r6 = r6.getChat(r1);
-        if (r6 != 0) goto L_0x003b;
-    L_0x003a:
-        return r0;
-    L_0x003b:
-        r1 = r5.out;
-        if (r1 == 0) goto L_0x0052;
-    L_0x003f:
-        if (r6 == 0) goto L_0x0052;
-    L_0x0041:
-        r1 = r6.megagroup;
-        if (r1 == 0) goto L_0x0052;
-    L_0x0045:
-        r1 = r6.creator;
-        if (r1 != 0) goto L_0x0051;
-    L_0x0049:
-        r1 = r6.admin_rights;
-        if (r1 == 0) goto L_0x0052;
-    L_0x004d:
-        r1 = r1.pin_messages;
-        if (r1 == 0) goto L_0x0052;
-    L_0x0051:
-        return r3;
-    L_0x0052:
-        r1 = r5.to_id;
-        r1 = r1.channel_id;
-        if (r1 != 0) goto L_0x006a;
-    L_0x0058:
-        r6 = r5.out;
-        if (r6 != 0) goto L_0x0068;
-    L_0x005c:
-        r5 = r5.from_id;
-        r4 = org.telegram.messenger.UserConfig.getInstance(r4);
-        r4 = r4.getClientUserId();
-        if (r5 != r4) goto L_0x0069;
-    L_0x0068:
-        r0 = 1;
-    L_0x0069:
-        return r0;
-    L_0x006a:
-        r4 = r6.megagroup;
-        if (r4 == 0) goto L_0x0072;
-    L_0x006e:
-        r4 = r5.out;
-        if (r4 != 0) goto L_0x008a;
-    L_0x0072:
-        r4 = r6.megagroup;
-        if (r4 != 0) goto L_0x008b;
-    L_0x0076:
-        r4 = r6.creator;
-        if (r4 != 0) goto L_0x0086;
-    L_0x007a:
-        r4 = r6.admin_rights;
-        if (r4 == 0) goto L_0x008b;
-    L_0x007e:
-        r4 = r4.edit_messages;
-        if (r4 != 0) goto L_0x0086;
-    L_0x0082:
-        r4 = r5.out;
-        if (r4 == 0) goto L_0x008b;
-    L_0x0086:
-        r4 = r5.post;
-        if (r4 == 0) goto L_0x008b;
-    L_0x008a:
-        return r3;
-    L_0x008b:
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.canEditMessageScheduleTime(int, org.telegram.tgnet.TLRPC$Message, org.telegram.tgnet.TLRPC$Chat):boolean");
+    public static boolean canEditMessageScheduleTime(int i, Message message, Chat chat) {
+        if (chat == null && message.to_id.channel_id != 0) {
+            chat = MessagesController.getInstance(i).getChat(Integer.valueOf(message.to_id.channel_id));
+            if (chat == null) {
+                return false;
+            }
+        }
+        if (!ChatObject.isChannel(chat) || chat.megagroup || chat.creator) {
+            return true;
+        }
+        TL_chatAdminRights tL_chatAdminRights = chat.admin_rights;
+        if (tL_chatAdminRights == null || (!tL_chatAdminRights.edit_messages && !message.out)) {
+            return false;
+        }
+        return true;
     }
 
     /* JADX WARNING: Missing block: B:10:0x001c, code skipped:

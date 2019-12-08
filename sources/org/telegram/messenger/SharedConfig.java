@@ -681,8 +681,8 @@ public class SharedConfig {
             if (file3.isDirectory()) {
                 new File(file3, str).createNewFile();
             }
-        } catch (Exception e) {
-            FileLog.e(e);
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 

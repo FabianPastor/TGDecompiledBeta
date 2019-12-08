@@ -3720,6 +3720,22 @@
     <public type="string" name="ThemeNotFound" id="NUM" />
     <public type="string" name="ThemeNotSupported" id="NUM" />
     <public type="string" name="ThemePreview" id="NUM" />
+    <public type="string" name="ThemePreviewDialog1" id="NUM" />
+    <public type="string" name="ThemePreviewDialog2" id="NUM" />
+    <public type="string" name="ThemePreviewDialog3" id="NUM" />
+    <public type="string" name="ThemePreviewDialog4" id="NUM" />
+    <public type="string" name="ThemePreviewDialog5" id="NUM" />
+    <public type="string" name="ThemePreviewDialog6" id="NUM" />
+    <public type="string" name="ThemePreviewDialog7" id="NUM" />
+    <public type="string" name="ThemePreviewDialog8" id="NUM" />
+    <public type="string" name="ThemePreviewDialogMessage1" id="NUM" />
+    <public type="string" name="ThemePreviewDialogMessage2" id="NUM" />
+    <public type="string" name="ThemePreviewDialogMessage3" id="NUM" />
+    <public type="string" name="ThemePreviewDialogMessage4" id="NUM" />
+    <public type="string" name="ThemePreviewDialogMessage5" id="NUM" />
+    <public type="string" name="ThemePreviewDialogMessage6" id="NUM" />
+    <public type="string" name="ThemePreviewDialogMessage7" id="NUM" />
+    <public type="string" name="ThemePreviewDialogMessage8" id="NUM" />
     <public type="string" name="ThemePreviewLine1" id="NUM" />
     <public type="string" name="ThemePreviewLine2" id="NUM" />
     <public type="string" name="ThemePreviewLine3" id="NUM" />

@@ -992,6 +992,7 @@ public class Theme {
         }
     };
     private static boolean switchNightRunnableScheduled;
+    private static boolean switchingNightTheme;
     private static final Object sync = new Object();
     private static HashSet<String> themeAccentExclusionKeys = new HashSet();
     private static Drawable themedWallpaper;
@@ -4473,9 +4474,9 @@ public class Theme {
         r0.previewOutColor = r3;
         r3 = 2;
         r0.sortIndex = r3;
-        r3 = 9;
+        r3 = 10;
         r3 = new int[r3];
-        r3 = {-13203974, -12138259, -11880383, -1344335, -1142742, -6127120, -2931932, -1131212, -8417365};
+        r3 = {-13203974, -12138259, -11880383, -1344335, -1142742, -6127120, -2931932, -1131212, -8417365, -13270557};
         r0.setAccentColorOptions(r3);
         r3 = themes;
         r3.add(r0);
@@ -4619,7 +4620,7 @@ public class Theme {
         r6 = r6.equals(r5);	 Catch:{ Exception -> 0x2354 }
         if (r6 == 0) goto L_0x225b;
     L_0x224f:
-        r3 = -8417365; // 0xffffffffff7f8fab float:-3.396991E38 double:NaN;
+        r3 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
         r4.setAccentColor(r3);	 Catch:{ Exception -> 0x2257 }
         r3 = r4;
         goto L_0x2266;
@@ -4643,7 +4644,7 @@ public class Theme {
         if (r6 == 0) goto L_0x227e;
     L_0x2275:
         currentNightTheme = r4;	 Catch:{ Exception -> 0x2354 }
-        r5 = -8417365; // 0xffffffffff7f8fab float:-3.396991E38 double:NaN;
+        r5 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
         r4.setAccentColor(r5);	 Catch:{ Exception -> 0x2354 }
         goto L_0x228c;
     L_0x227e:
@@ -5312,7 +5313,8 @@ public class Theme {
                 edit.putBoolean("selectedBackgroundMotion", booleanValue);
                 edit.commit();
             }
-            applyTheme(previousTheme, true, false, false);
+            ThemeInfo themeInfo = previousTheme;
+            applyTheme(themeInfo, true, false, themeInfo == currentNightTheme);
             previousTheme = null;
             checkAutoNightThemeConditions();
         }
@@ -5333,7 +5335,7 @@ public class Theme {
     }
 
     public static void applyThemeTemporary(ThemeInfo themeInfo) {
-        previousTheme = getCurrentTheme();
+        previousTheme = isCurrentThemeNight() ? getCurrentNightTheme() : getCurrentTheme();
         applyTheme(themeInfo, false, false, false);
     }
 
@@ -5457,7 +5459,6 @@ public class Theme {
 
     /* JADX WARNING: Removed duplicated region for block: B:67:0x0151 A:{Catch:{ all -> 0x01ac }} */
     /* JADX WARNING: Removed duplicated region for block: B:85:0x01b7 A:{Catch:{ Exception -> 0x01bf }} */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x01c7  */
     private static void applyTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r17, boolean r18, boolean r19, boolean r20) {
         /*
         r1 = r17;
@@ -5700,12 +5701,15 @@ public class Theme {
         org.telegram.messenger.FileLog.e(r0);
     L_0x01c3:
         r0 = previousTheme;
-        if (r0 != 0) goto L_0x01d0;
+        if (r0 != 0) goto L_0x01d4;
     L_0x01c7:
+        r0 = switchingNightTheme;
+        if (r0 != 0) goto L_0x01d4;
+    L_0x01cb:
         r0 = r1.account;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r0.saveTheme(r1, r2, r3);
-    L_0x01d0:
+    L_0x01d4:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.applyTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean, boolean, boolean):void");
@@ -6097,11 +6101,15 @@ public class Theme {
             if (z) {
                 if (currentTheme != currentNightTheme) {
                     lastThemeSwitchTime = SystemClock.elapsedRealtime();
+                    switchingNightTheme = true;
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentNightTheme, Boolean.valueOf(true));
+                    switchingNightTheme = false;
                 }
             } else if (currentTheme != currentDayTheme) {
                 lastThemeSwitchTime = SystemClock.elapsedRealtime();
+                switchingNightTheme = true;
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentDayTheme, Boolean.valueOf(true));
+                switchingNightTheme = false;
             }
         }
     }

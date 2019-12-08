@@ -361,6 +361,9 @@ public class MediaDataController extends BaseController {
     }
 
     public boolean isStickerInFavorites(Document document) {
+        if (document == null) {
+            return false;
+        }
         for (int i = 0; i < this.recentStickers[2].size(); i++) {
             Document document2 = (Document) this.recentStickers[2].get(i);
             if (document2.id == document.id && document2.dc_id == document.dc_id) {

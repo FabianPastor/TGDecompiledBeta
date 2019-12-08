@@ -669,7 +669,7 @@ public class AndroidUtilities {
         return iArr;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x0059 A:{SYNTHETIC, Splitter:B:21:0x0059} */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x0059 A:{SYNTHETIC, Splitter:B:22:0x0059} */
     public static boolean isInternalUri(android.net.Uri r5) {
         /*
         r5 = r5.getPath();
@@ -707,7 +707,7 @@ public class AndroidUtilities {
     L_0x0041:
         return r2;
     L_0x0042:
-        r3 = org.telegram.messenger.Utilities.readlink(r5);
+        r3 = org.telegram.messenger.Utilities.readlink(r5);	 Catch:{ all -> 0x009b }
         if (r3 == 0) goto L_0x0057;
     L_0x0048:
         r4 = r3.equals(r5);
@@ -761,6 +761,8 @@ public class AndroidUtilities {
         r0 = 1;
     L_0x009a:
         return r0;
+    L_0x009b:
+        return r2;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.isInternalUri(android.net.Uri):boolean");
     }

@@ -5941,11 +5941,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     /* Access modifiers changed, original: protected */
     public void onResume() {
-        try {
-            super.onResume();
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
+        super.onResume();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(4096));
         MediaController.getInstance().setFeedbackView(this.actionBarLayout, true);
         ApplicationLoader.mainInterfacePaused = false;

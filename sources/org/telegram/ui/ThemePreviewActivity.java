@@ -122,8 +122,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             this.mContext = context;
             int currentTimeMillis = (int) (System.currentTimeMillis() / 1000);
             CustomDialog customDialog = new CustomDialog();
-            customDialog.name = "Eva Summer";
-            customDialog.message = "Reminds me of a Chinese prove...";
+            customDialog.name = LocaleController.getString("ThemePreviewDialog1", NUM);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage1", NUM);
             customDialog.id = 0;
             customDialog.unread_count = 0;
             customDialog.pinned = true;
@@ -135,8 +135,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = true;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Your inner Competition";
-            customDialog.message = "hey, I've updated the source code.";
+            customDialog.name = LocaleController.getString("ThemePreviewDialog2", NUM);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage2", NUM);
             customDialog.id = 1;
             customDialog.unread_count = 2;
             customDialog.pinned = false;
@@ -148,8 +148,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = false;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Mike Apple";
-            customDialog.message = "🤷‍♂️ Sticker";
+            customDialog.name = LocaleController.getString("ThemePreviewDialog3", NUM);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage3", NUM);
             customDialog.id = 2;
             customDialog.unread_count = 3;
             customDialog.pinned = false;
@@ -161,8 +161,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = false;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Paul Newman";
-            customDialog.message = "Any ideas?";
+            customDialog.name = LocaleController.getString("ThemePreviewDialog4", NUM);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage4", NUM);
             customDialog.id = 3;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -174,8 +174,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = false;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Old Pirates";
-            customDialog.message = "Yo-ho-ho!";
+            customDialog.name = LocaleController.getString("ThemePreviewDialog5", NUM);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage5", NUM);
             customDialog.id = 4;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -187,8 +187,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = true;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Kate Bright";
-            customDialog.message = "Hola!";
+            customDialog.name = LocaleController.getString("ThemePreviewDialog6", NUM);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage6", NUM);
             customDialog.id = 5;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -200,8 +200,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = false;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Nick K";
-            customDialog.message = "These are not the droids you are looking for";
+            customDialog.name = LocaleController.getString("ThemePreviewDialog7", NUM);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage7", NUM);
             customDialog.id = 6;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -213,8 +213,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = false;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Adler Toberg";
-            customDialog.message = "Did someone say peanut butter?";
+            customDialog.name = LocaleController.getString("ThemePreviewDialog8", NUM);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage8", NUM);
             customDialog.id = 0;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -833,12 +833,12 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         } else {
             ThemeInfo themeInfo = this.applyingTheme;
             TL_theme tL_theme = themeInfo.info;
-            CharSequence charSequence = tL_theme != null ? tL_theme.title : themeInfo.name;
-            int lastIndexOf = charSequence.lastIndexOf(".attheme");
+            CharSequence name = tL_theme != null ? tL_theme.title : themeInfo.getName();
+            int lastIndexOf = name.lastIndexOf(".attheme");
             if (lastIndexOf >= 0) {
-                charSequence = charSequence.substring(0, lastIndexOf);
+                name = name.substring(0, lastIndexOf);
             }
-            this.actionBar2.setTitle(charSequence);
+            this.actionBar2.setTitle(name);
             TL_theme tL_theme2 = this.applyingTheme.info;
             if (tL_theme2 != null) {
                 int i2 = tL_theme2.installs_count;

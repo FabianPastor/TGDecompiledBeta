@@ -2318,7 +2318,7 @@ public class DialogCell extends BaseCell {
         if (r5 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         r1.drawPinBackground = r13;
-        r5 = NUM; // 0x7f0d0ad1 float:1.874773E38 double:1.0531311456E-314;
+        r5 = NUM; // 0x7f0d0ae1 float:1.8747763E38 double:1.0531311535E-314;
         r9 = "UseProxySponsor";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         goto L_0x0CLASSNAME;
@@ -4243,7 +4243,7 @@ public class DialogCell extends BaseCell {
     L_0x008f:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r17);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r3 = NUM; // 0x7f0d0aa3 float:1.8747638E38 double:1.053131123E-314;
+        r3 = NUM; // 0x7f0d0ab3 float:1.874767E38 double:1.053131131E-314;
         r4 = "UnhideFromTop";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_unpinArchiveDrawable;
@@ -4273,7 +4273,7 @@ public class DialogCell extends BaseCell {
     L_0x00d5:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r17);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r3 = NUM; // 0x7f0d0a9a float:1.874762E38 double:1.0531311184E-314;
+        r3 = NUM; // 0x7f0d0aaa float:1.8747652E38 double:1.0531311263E-314;
         r4 = "Unarchive";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_unarchiveDrawable;

@@ -565,13 +565,13 @@ public class AlertsCreator {
         showSimpleAlert(r1, r0);
         goto L_0x0598;
     L_0x032a:
-        r0 = NUM; // 0x7f0d0b01 float:1.8747828E38 double:1.0531311693E-314;
+        r0 = NUM; // 0x7f0d0b11 float:1.874786E38 double:1.053131177E-314;
         r2 = "UsernameInUse";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
         goto L_0x0598;
     L_0x0338:
-        r0 = NUM; // 0x7f0d0b02 float:1.874783E38 double:1.05313117E-314;
+        r0 = NUM; // 0x7f0d0b12 float:1.8747863E38 double:1.0531311777E-314;
         r2 = "UsernameInvalid";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
@@ -885,7 +885,7 @@ public class AlertsCreator {
         if (r2 == 0) goto L_0x057a;
     L_0x0568:
         r0 = r19.getParentActivity();
-        r1 = NUM; // 0x7f0d0ab2 float:1.8747668E38 double:1.0531311303E-314;
+        r1 = NUM; // 0x7f0d0ac2 float:1.87477E38 double:1.053131138E-314;
         r2 = "UpdateAppAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = 1;
@@ -2181,17 +2181,17 @@ public class AlertsCreator {
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
         anonymousClass4.addView(linearLayout, LayoutHelper.createLinear(-1, -2));
+        long currentTimeMillis = System.currentTimeMillis();
         Calendar instance = Calendar.getInstance();
-        instance.setTimeInMillis(System.currentTimeMillis());
+        instance.setTimeInMillis(currentTimeMillis);
         int i2 = instance.get(1);
         TextView textView2 = new TextView(context2);
         linearLayout.addView(numberPicker, LayoutHelper.createLinear(0, 270, 0.5f));
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(365);
         numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setFormatter(new -$$Lambda$AlertsCreator$h64CVWrc7eanqZ69R8svl-ofq_8(instance, i2));
+        numberPicker.setFormatter(new -$$Lambda$AlertsCreator$S8IVp4ro537QRHJsGZF0Tvy23PA(currentTimeMillis, instance, i2));
         -$$Lambda$AlertsCreator$AoS0yEr1wQv0zK5zFQt2NMzqXOQ -__lambda_alertscreator_aos0yer1wqv0zk5zfqt2nmzqxoq = r0;
-        TextView textView3 = textView2;
         Calendar calendar2 = instance;
         LinearLayout linearLayout2 = linearLayout;
         -$$Lambda$AlertsCreator$AoS0yEr1wQv0zK5zFQt2NMzqXOQ -__lambda_alertscreator_aos0yer1wqv0zk5zfqt2nmzqxoq2 = new -$$Lambda$AlertsCreator$AoS0yEr1wQv0zK5zFQt2NMzqXOQ(textView2, z, numberPicker, numberPicker2, numberPicker3);
@@ -2225,31 +2225,31 @@ public class AlertsCreator {
             calendar = calendar2;
         }
         boolean[] zArr = new boolean[]{true};
-        TextView textView4 = textView3;
-        checkScheduleDate(textView4, z2, numberPicker, numberPicker2, numberPicker3);
-        textView4.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-        textView4.setGravity(17);
-        textView4.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-        textView4.setTextSize(1, 14.0f);
-        textView4.setTypeface(AndroidUtilities.getTypeface(str2));
-        textView4.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-        anonymousClass4.addView(textView4, LayoutHelper.createLinear(-1, 48, 83, 16, 15, 16, 16));
-        textView4.setOnClickListener(new -$$Lambda$AlertsCreator$5-lZYxMK4SyRqWBsGAs7CrRik3Q(zArr, z, numberPicker, numberPicker2, numberPicker3, calendar, scheduleDatePickerDelegate, builder));
+        checkScheduleDate(textView2, z2, numberPicker, numberPicker2, numberPicker3);
+        textView2.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        textView2.setGravity(17);
+        textView2.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+        textView2.setTextSize(1, 14.0f);
+        textView2.setTypeface(AndroidUtilities.getTypeface(str2));
+        textView2.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        anonymousClass4.addView(textView2, LayoutHelper.createLinear(-1, 48, 83, 16, 15, 16, 16));
+        boolean[] zArr2 = zArr;
+        textView2.setOnClickListener(new -$$Lambda$AlertsCreator$5-lZYxMK4SyRqWBsGAs7CrRik3Q(zArr, z, numberPicker, numberPicker2, numberPicker3, calendar, scheduleDatePickerDelegate, builder));
         builder.setCustomView(anonymousClass4);
-        builder.show().setOnDismissListener(new -$$Lambda$AlertsCreator$XV0y1q8-l5UYh_GaKmTABvo6FCI(runnable, zArr));
+        builder.show().setOnDismissListener(new -$$Lambda$AlertsCreator$XV0y1q8-l5UYh_GaKmTABvo6FCI(runnable, zArr2));
         return builder;
     }
 
-    static /* synthetic */ String lambda$createScheduleDatePickerDialog$22(Calendar calendar, int i, int i2) {
+    static /* synthetic */ String lambda$createScheduleDatePickerDialog$22(long j, Calendar calendar, int i, int i2) {
         if (i2 == 0) {
             return LocaleController.getString("MessageScheduleToday", NUM);
         }
-        long currentTimeMillis = System.currentTimeMillis() + (((long) i2) * 86400000);
-        calendar.setTimeInMillis(currentTimeMillis);
+        j += ((long) i2) * 86400000;
+        calendar.setTimeInMillis(j);
         if (calendar.get(1) == i) {
-            return LocaleController.getInstance().formatterScheduleDay.format(currentTimeMillis);
+            return LocaleController.getInstance().formatterScheduleDay.format(j);
         }
-        return LocaleController.getInstance().formatterScheduleYear.format(currentTimeMillis);
+        return LocaleController.getInstance().formatterScheduleYear.format(j);
     }
 
     static /* synthetic */ void lambda$createScheduleDatePickerDialog$26(boolean[] zArr, boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {

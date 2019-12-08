@@ -22127,7 +22127,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r2.messageOwner;
         r6 = r0.via_bot_id;
         r7 = "@";
-        r8 = NUM; // 0x7f0d0b0d float:1.8747853E38 double:1.0531311753E-314;
+        r8 = NUM; // 0x7f0d0b1d float:1.8747885E38 double:1.053131183E-314;
         r9 = "ViaBot";
         r10 = 2;
         if (r6 == 0) goto L_0x0108;
@@ -22393,7 +22393,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
     L_0x0285:
         r9 = r21;
-        r8 = NUM; // 0x7f0d0b0d float:1.8747853E38 double:1.0531311753E-314;
+        r8 = NUM; // 0x7f0d0b1d float:1.8747885E38 double:1.053131183E-314;
         goto L_0x029d;
     L_0x028b:
         r4 = r1.currentMessageObject;
@@ -22714,7 +22714,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7 = 3;
         r7 = new java.lang.Object[r7];
         r7[r5] = r10;
-        r11 = NUM; // 0x7f0d0b0d float:1.8747853E38 double:1.0531311753E-314;
+        r11 = NUM; // 0x7f0d0b1d float:1.8747885E38 double:1.053131183E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r9, r11);
         r11 = 1;
         r7[r11] = r9;

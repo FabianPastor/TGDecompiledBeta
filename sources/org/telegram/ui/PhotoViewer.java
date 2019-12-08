@@ -4181,236 +4181,234 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x00ca  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0117  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0114  */
-    public /* synthetic */ boolean lambda$setParentActivity$8$PhotoViewer(android.view.View r19) {
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x0113  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x0110  */
+    public /* synthetic */ boolean lambda$setParentActivity$8$PhotoViewer(android.view.View r15) {
         /*
-        r18 = this;
-        r0 = r18;
-        r1 = r19;
-        r2 = r0.parentChatActivity;
+        r14 = this;
+        r0 = r14.parentChatActivity;
+        r1 = 0;
+        if (r0 == 0) goto L_0x01b5;
+    L_0x0005:
+        r0 = r0.isInScheduleMode();
+        if (r0 == 0) goto L_0x000d;
+    L_0x000b:
+        goto L_0x01b5;
+    L_0x000d:
+        r0 = r14.parentChatActivity;
+        r0.getCurrentChat();
+        r0 = r14.parentChatActivity;
+        r0 = r0.getCurrentUser();
+        r2 = r14.parentChatActivity;
+        r2 = r2.getCurrentEncryptedChat();
+        if (r2 == 0) goto L_0x0021;
+    L_0x0020:
+        return r1;
+    L_0x0021:
+        r2 = new org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout;
+        r3 = r14.parentActivity;
+        r2.<init>(r3);
+        r14.sendPopupLayout = r2;
+        r2 = r14.sendPopupLayout;
+        r2.setAnimationEnabled(r1);
+        r2 = r14.sendPopupLayout;
+        r3 = new org.telegram.ui.PhotoViewer$13;
+        r3.<init>();
+        r2.setOnTouchListener(r3);
+        r2 = r14.sendPopupLayout;
+        r3 = new org.telegram.ui.-$$Lambda$PhotoViewer$aArwG34KoZhGPyugN6tEOQe8mEg;
+        r3.<init>(r14);
+        r2.setDispatchKeyEventListener(r3);
+        r2 = r14.sendPopupLayout;
+        r2.setShowedFromBotton(r1);
+        r2 = r14.sendPopupLayout;
+        r2 = r2.getBackgroundDrawable();
+        r3 = new android.graphics.PorterDuffColorFilter;
+        r4 = -NUM; // 0xffffffffvar_ float:-5.2615274E34 double:NaN;
+        r5 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r3.<init>(r4, r5);
+        r2.setColorFilter(r3);
+        r2 = 0;
         r3 = 0;
-        if (r2 == 0) goto L_0x01bb;
-    L_0x0009:
-        r2 = r2.isInScheduleMode();
-        if (r2 == 0) goto L_0x0011;
-    L_0x000f:
-        goto L_0x01bb;
-    L_0x0011:
-        r2 = r0.parentChatActivity;
-        r2.getCurrentChat();
-        r2 = r0.parentChatActivity;
-        r2 = r2.getCurrentUser();
-        r4 = r0.parentChatActivity;
-        r4 = r4.getCurrentEncryptedChat();
-        if (r4 == 0) goto L_0x0025;
-    L_0x0024:
-        return r3;
-    L_0x0025:
-        r4 = new org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout;
-        r5 = r0.parentActivity;
-        r4.<init>(r5);
-        r0.sendPopupLayout = r4;
-        r4 = r0.sendPopupLayout;
-        r4.setAnimationEnabled(r3);
-        r4 = r0.sendPopupLayout;
-        r5 = new org.telegram.ui.PhotoViewer$13;
-        r5.<init>();
-        r4.setOnTouchListener(r5);
-        r4 = r0.sendPopupLayout;
-        r5 = new org.telegram.ui.-$$Lambda$PhotoViewer$aArwG34KoZhGPyugN6tEOQe8mEg;
-        r5.<init>(r0);
-        r4.setDispatchKeyEventListener(r5);
-        r4 = r0.sendPopupLayout;
-        r4.setShowedFromBotton(r3);
-        r4 = r0.sendPopupLayout;
-        r4 = r4.getBackgroundDrawable();
-        r5 = new android.graphics.PorterDuffColorFilter;
-        r6 = -NUM; // 0xffffffffvar_ float:-5.2615274E34 double:NaN;
-        r7 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r5.<init>(r6, r7);
-        r4.setColorFilter(r5);
-        r4 = 0;
-        r5 = 0;
-    L_0x0061:
-        r6 = 3;
-        r7 = 2;
-        r8 = 1;
-        if (r4 >= r7) goto L_0x0169;
-    L_0x0066:
-        if (r4 != 0) goto L_0x00ac;
+    L_0x005d:
+        r4 = 3;
+        r5 = 2;
+        r6 = 1;
+        if (r2 >= r5) goto L_0x012f;
+    L_0x0062:
+        if (r2 != 0) goto L_0x00a8;
+    L_0x0064:
+        r5 = r14.placeProvider;
+        if (r5 == 0) goto L_0x00a8;
     L_0x0068:
-        r9 = r0.placeProvider;
-        if (r9 == 0) goto L_0x00ac;
-    L_0x006c:
-        r9 = r9.getSelectedPhotos();
-        if (r9 == 0) goto L_0x00ac;
-    L_0x0072:
-        r9 = r0.placeProvider;
-        r9 = r9.getSelectedPhotos();
-        r9 = r9.entrySet();
-        r9 = r9.iterator();
-    L_0x0080:
-        r10 = r9.hasNext();
-        if (r10 == 0) goto L_0x00a7;
-    L_0x0086:
-        r10 = r9.next();
-        r10 = (java.util.Map.Entry) r10;
-        r10 = r10.getValue();
-        r11 = r10 instanceof org.telegram.messenger.MediaController.PhotoEntry;
-        if (r11 == 0) goto L_0x009c;
-    L_0x0094:
-        r10 = (org.telegram.messenger.MediaController.PhotoEntry) r10;
-        r10 = r10.ttl;
-        if (r10 == 0) goto L_0x0080;
-    L_0x009a:
-        r9 = 1;
-        goto L_0x00a8;
+        r5 = r5.getSelectedPhotos();
+        if (r5 == 0) goto L_0x00a8;
+    L_0x006e:
+        r5 = r14.placeProvider;
+        r5 = r5.getSelectedPhotos();
+        r5 = r5.entrySet();
+        r5 = r5.iterator();
+    L_0x007c:
+        r7 = r5.hasNext();
+        if (r7 == 0) goto L_0x00a3;
+    L_0x0082:
+        r7 = r5.next();
+        r7 = (java.util.Map.Entry) r7;
+        r7 = r7.getValue();
+        r8 = r7 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        if (r8 == 0) goto L_0x0098;
+    L_0x0090:
+        r7 = (org.telegram.messenger.MediaController.PhotoEntry) r7;
+        r7 = r7.ttl;
+        if (r7 == 0) goto L_0x007c;
+    L_0x0096:
+        r5 = 1;
+        goto L_0x00a4;
+    L_0x0098:
+        r8 = r7 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r8 == 0) goto L_0x007c;
     L_0x009c:
-        r11 = r10 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r11 == 0) goto L_0x0080;
-    L_0x00a0:
-        r10 = (org.telegram.messenger.MediaController.SearchImage) r10;
-        r10 = r10.ttl;
-        if (r10 == 0) goto L_0x0080;
+        r7 = (org.telegram.messenger.MediaController.SearchImage) r7;
+        r7 = r7.ttl;
+        if (r7 == 0) goto L_0x007c;
+    L_0x00a2:
+        goto L_0x0096;
+    L_0x00a3:
+        r5 = 0;
+    L_0x00a4:
+        if (r5 == 0) goto L_0x00b2;
     L_0x00a6:
-        goto L_0x009a;
-    L_0x00a7:
-        r9 = 0;
+        goto L_0x012b;
     L_0x00a8:
-        if (r9 == 0) goto L_0x00b6;
+        if (r2 != r6) goto L_0x00b2;
     L_0x00aa:
-        goto L_0x0165;
-    L_0x00ac:
-        if (r4 != r8) goto L_0x00b6;
-    L_0x00ae:
-        r9 = org.telegram.messenger.UserObject.isUserSelf(r2);
-        if (r9 == 0) goto L_0x00b6;
-    L_0x00b4:
-        goto L_0x0165;
-    L_0x00b6:
-        r9 = new org.telegram.ui.ActionBar.ActionBarMenuSubItem;
-        r10 = r0.parentActivity;
-        r9.<init>(r10);
-        r10 = NUM; // 0x24ffffff float:1.11022296E-16 double:3.066947037E-315;
-        r11 = 7;
-        r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10, r11);
-        r9.setBackgroundDrawable(r10);
-        if (r4 != 0) goto L_0x00ed;
-    L_0x00ca:
-        r10 = org.telegram.messenger.UserObject.isUserSelf(r2);
-        r11 = NUM; // 0x7var_a6 float:1.7945434E38 double:1.0529357115E-314;
-        if (r10 == 0) goto L_0x00e0;
-    L_0x00d3:
-        r10 = NUM; // 0x7f0d09a8 float:1.8747129E38 double:1.053130999E-314;
-        r12 = "SetReminder";
-        r10 = org.telegram.messenger.LocaleController.getString(r12, r10);
-        r9.setTextAndIcon(r10, r11);
-        goto L_0x00fe;
-    L_0x00e0:
-        r10 = NUM; // 0x7f0d093b float:1.8746907E38 double:1.053130945E-314;
-        r12 = "ScheduleMessage";
-        r10 = org.telegram.messenger.LocaleController.getString(r12, r10);
-        r9.setTextAndIcon(r10, r11);
-        goto L_0x00fe;
-    L_0x00ed:
-        if (r4 != r8) goto L_0x00fe;
-    L_0x00ef:
-        r10 = NUM; // 0x7f0d098b float:1.874707E38 double:1.0531309845E-314;
-        r11 = "SendWithoutSound";
-        r10 = org.telegram.messenger.LocaleController.getString(r11, r10);
-        r11 = NUM; // 0x7var_f3 float:1.794507E38 double:1.052935623E-314;
-        r9.setTextAndIcon(r10, r11);
-    L_0x00fe:
-        r10 = NUM; // 0x43440000 float:196.0 double:5.57567864E-315;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r9.setMinimumWidth(r10);
-        r10 = -1;
-        r9.setColors(r10, r10);
-        r10 = r0.sendPopupLayout;
-        r11 = -1;
-        r12 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-        r13 = org.telegram.messenger.LocaleController.isRTL;
-        if (r13 == 0) goto L_0x0117;
+        r5 = org.telegram.messenger.UserObject.isUserSelf(r0);
+        if (r5 == 0) goto L_0x00b2;
+    L_0x00b0:
+        goto L_0x012b;
+    L_0x00b2:
+        r5 = new org.telegram.ui.ActionBar.ActionBarMenuSubItem;
+        r7 = r14.parentActivity;
+        r5.<init>(r7);
+        r7 = NUM; // 0x24ffffff float:1.11022296E-16 double:3.066947037E-315;
+        r8 = 7;
+        r7 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7, r8);
+        r5.setBackgroundDrawable(r7);
+        if (r2 != 0) goto L_0x00e9;
+    L_0x00c6:
+        r6 = org.telegram.messenger.UserObject.isUserSelf(r0);
+        r7 = NUM; // 0x7var_a6 float:1.7945434E38 double:1.0529357115E-314;
+        if (r6 == 0) goto L_0x00dc;
+    L_0x00cf:
+        r6 = NUM; // 0x7f0d09a8 float:1.8747129E38 double:1.053130999E-314;
+        r8 = "SetReminder";
+        r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
+        r5.setTextAndIcon(r6, r7);
+        goto L_0x00fa;
+    L_0x00dc:
+        r6 = NUM; // 0x7f0d093b float:1.8746907E38 double:1.053130945E-314;
+        r8 = "ScheduleMessage";
+        r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
+        r5.setTextAndIcon(r6, r7);
+        goto L_0x00fa;
+    L_0x00e9:
+        if (r2 != r6) goto L_0x00fa;
+    L_0x00eb:
+        r6 = NUM; // 0x7f0d098b float:1.874707E38 double:1.0531309845E-314;
+        r7 = "SendWithoutSound";
+        r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
+        r7 = NUM; // 0x7var_f3 float:1.794507E38 double:1.052935623E-314;
+        r5.setTextAndIcon(r6, r7);
+    L_0x00fa:
+        r6 = NUM; // 0x43440000 float:196.0 double:5.57567864E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r5.setMinimumWidth(r6);
+        r6 = -1;
+        r5.setColors(r6, r6);
+        r6 = r14.sendPopupLayout;
+        r7 = -1;
+        r8 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r9 = org.telegram.messenger.LocaleController.isRTL;
+        if (r9 == 0) goto L_0x0113;
+    L_0x0110:
+        r4 = 5;
+        r9 = 5;
+        goto L_0x0114;
+    L_0x0113:
+        r9 = 3;
     L_0x0114:
-        r6 = 5;
-        r13 = 5;
-        goto L_0x0118;
-    L_0x0117:
-        r13 = 3;
-    L_0x0118:
-        r14 = 0;
-        r6 = r5 * 48;
-        r15 = (float) r6;
-        r16 = 0;
-        r17 = 0;
-        r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17);
-        r10.addView(r9, r6);
-        r6 = new org.telegram.ui.-$$Lambda$PhotoViewer$YO7AvWy5kgomuVoNJ5CABQtycKg;
-        r6.<init>(r0, r4, r2);
-        r9.setOnClickListener(r6);
-        r5 = r5 + 1;
-        r6 = new org.telegram.ui.ActionBar.ActionBarPopupWindow;
-        r9 = r0.sendPopupLayout;
-        r10 = -2;
-        r6.<init>(r9, r10, r10);
-        r0.sendPopupWindow = r6;
-        r6 = r0.sendPopupWindow;
-        r6.setAnimationEnabled(r3);
-        r6 = r0.sendPopupWindow;
-        r9 = NUM; // 0x7f0e0009 float:1.8875056E38 double:1.053162161E-314;
-        r6.setAnimationStyle(r9);
-        r6 = r0.sendPopupWindow;
-        r6.setOutsideTouchable(r8);
-        r6 = r0.sendPopupWindow;
-        r6.setClippingEnabled(r8);
-        r6 = r0.sendPopupWindow;
-        r6.setInputMethodMode(r7);
-        r6 = r0.sendPopupWindow;
-        r6.setSoftInputMode(r3);
-        r6 = r0.sendPopupWindow;
-        r6 = r6.getContentView();
-        r6.setFocusableInTouchMode(r8);
-    L_0x0165:
-        r4 = r4 + 1;
-        goto L_0x0061;
-    L_0x0169:
-        r2 = r0.sendPopupLayout;
-        r4 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        r5 = android.view.View.MeasureSpec.makeMeasureSpec(r5, r9);
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = android.view.View.MeasureSpec.makeMeasureSpec(r4, r9);
-        r2.measure(r5, r4);
-        r2 = r0.sendPopupWindow;
-        r2.setFocusable(r8);
-        r2 = new int[r7];
-        r1.getLocationInWindow(r2);
-        r4 = r0.sendPopupWindow;
-        r5 = 51;
-        r9 = r2[r3];
-        r10 = r19.getMeasuredWidth();
-        r9 = r9 + r10;
-        r10 = r0.sendPopupLayout;
-        r10 = r10.getMeasuredWidth();
-        r9 = r9 - r10;
-        r10 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r9 = r9 + r10;
-        r2 = r2[r8];
-        r8 = r0.sendPopupLayout;
-        r8 = r8.getMeasuredHeight();
-        r2 = r2 - r8;
-        r8 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+        r10 = 0;
+        r4 = r3 * 48;
+        r11 = (float) r4;
+        r12 = 0;
+        r13 = 0;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13);
+        r6.addView(r5, r4);
+        r4 = new org.telegram.ui.-$$Lambda$PhotoViewer$YO7AvWy5kgomuVoNJ5CABQtycKg;
+        r4.<init>(r14, r2, r0);
+        r5.setOnClickListener(r4);
+        r3 = r3 + 1;
+    L_0x012b:
+        r2 = r2 + 1;
+        goto L_0x005d;
+    L_0x012f:
+        r0 = new org.telegram.ui.ActionBar.ActionBarPopupWindow;
+        r2 = r14.sendPopupLayout;
+        r3 = -2;
+        r0.<init>(r2, r3, r3);
+        r14.sendPopupWindow = r0;
+        r0 = r14.sendPopupWindow;
+        r0.setAnimationEnabled(r1);
+        r0 = r14.sendPopupWindow;
+        r2 = NUM; // 0x7f0e0009 float:1.8875056E38 double:1.053162161E-314;
+        r0.setAnimationStyle(r2);
+        r0 = r14.sendPopupWindow;
+        r0.setOutsideTouchable(r6);
+        r0 = r14.sendPopupWindow;
+        r0.setClippingEnabled(r6);
+        r0 = r14.sendPopupWindow;
+        r0.setInputMethodMode(r5);
+        r0 = r14.sendPopupWindow;
+        r0.setSoftInputMode(r1);
+        r0 = r14.sendPopupWindow;
+        r0 = r0.getContentView();
+        r0.setFocusableInTouchMode(r6);
+        r0 = r14.sendPopupLayout;
+        r2 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r7 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+        r3 = android.view.View.MeasureSpec.makeMeasureSpec(r3, r7);
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7);
+        r0.measure(r3, r2);
+        r0 = r14.sendPopupWindow;
+        r0.setFocusable(r6);
+        r0 = new int[r5];
+        r15.getLocationInWindow(r0);
+        r2 = r14.sendPopupWindow;
+        r3 = 51;
+        r7 = r0[r1];
+        r8 = r15.getMeasuredWidth();
+        r7 = r7 + r8;
+        r8 = r14.sendPopupLayout;
+        r8 = r8.getMeasuredWidth();
+        r7 = r7 - r8;
+        r8 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
-        r2 = r2 - r8;
-        r4.showAtLocation(r1, r5, r9, r2);
-        r1.performHapticFeedback(r6, r7);
-    L_0x01bb:
-        return r3;
+        r7 = r7 + r8;
+        r0 = r0[r6];
+        r6 = r14.sendPopupLayout;
+        r6 = r6.getMeasuredHeight();
+        r0 = r0 - r6;
+        r6 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r0 = r0 - r6;
+        r2.showAtLocation(r15, r3, r7, r0);
+        r15.performHapticFeedback(r4, r5);
+    L_0x01b5:
+        return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.lambda$setParentActivity$8$PhotoViewer(android.view.View):boolean");
     }
@@ -7357,7 +7355,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     /* JADX WARNING: Removed duplicated region for block: B:197:0x0501  */
     /* JADX WARNING: Removed duplicated region for block: B:196:0x04ff  */
     /* JADX WARNING: Removed duplicated region for block: B:200:0x050a  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x0679  */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x067f  */
     /* JADX WARNING: Removed duplicated region for block: B:177:0x04bb  */
     /* JADX WARNING: Removed duplicated region for block: B:204:0x054a  */
     /* JADX WARNING: Removed duplicated region for block: B:203:0x053e  */
@@ -8243,11 +8241,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         goto L_0x05ef;
     L_0x060a:
         r0.onActionClick(r1);
-        goto L_0x067f;
+        goto L_0x0685;
     L_0x060f:
         r1 = r0.imagesArrLocals;
         r1 = r1.isEmpty();
-        if (r1 != 0) goto L_0x067f;
+        if (r1 != 0) goto L_0x0685;
     L_0x0617:
         r1 = r0.imagesArrLocals;
         r1 = r1.get(r5);
@@ -8260,67 +8258,70 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r7 = r3;
     L_0x0627:
         r2 = r0.parentChatActivity;
-        if (r2 == 0) goto L_0x0649;
+        if (r2 == 0) goto L_0x064f;
     L_0x062b:
         r2 = r2.isSecretChat();
-        if (r2 != 0) goto L_0x0649;
+        if (r2 != 0) goto L_0x064f;
     L_0x0631:
         r2 = r0.parentChatActivity;
         r2 = r2.isInScheduleMode();
-        if (r2 != 0) goto L_0x0649;
+        if (r2 != 0) goto L_0x064f;
     L_0x0639:
-        if (r7 == 0) goto L_0x0649;
+        if (r7 == 0) goto L_0x064f;
     L_0x063b:
         r2 = r7.bot;
-        if (r2 != 0) goto L_0x0649;
+        if (r2 != 0) goto L_0x064f;
     L_0x063f:
+        r2 = org.telegram.messenger.UserObject.isUserSelf(r7);
+        if (r2 != 0) goto L_0x064f;
+    L_0x0645:
         r2 = r0.parentChatActivity;
         r2 = r2.isEditingMessageMedia();
-        if (r2 != 0) goto L_0x0649;
-    L_0x0647:
+        if (r2 != 0) goto L_0x064f;
+    L_0x064d:
         r8 = 1;
-        goto L_0x064a;
-    L_0x0649:
+        goto L_0x0650;
+    L_0x064f:
         r8 = 0;
-    L_0x064a:
-        r2 = r1 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
-        if (r2 == 0) goto L_0x0650;
-    L_0x064e:
-        r8 = 0;
-        goto L_0x0677;
     L_0x0650:
-        r2 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry;
-        if (r2 == 0) goto L_0x066a;
+        r2 = r1 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
+        if (r2 == 0) goto L_0x0656;
     L_0x0654:
+        r8 = 0;
+        goto L_0x067d;
+    L_0x0656:
+        r2 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        if (r2 == 0) goto L_0x0670;
+    L_0x065a:
         r1 = (org.telegram.messenger.MediaController.PhotoEntry) r1;
         r2 = r1.isVideo;
-        if (r2 == 0) goto L_0x0677;
-    L_0x065a:
+        if (r2 == 0) goto L_0x067d;
+    L_0x0660:
         r2 = new java.io.File;
         r1 = r1.path;
         r2.<init>(r1);
         r1 = android.net.Uri.fromFile(r2);
         r2 = 0;
         r0.preparePlayer(r1, r2, r2);
-        goto L_0x0677;
-    L_0x066a:
-        if (r8 == 0) goto L_0x0677;
-    L_0x066c:
-        r2 = r1 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r2 == 0) goto L_0x0677;
+        goto L_0x067d;
     L_0x0670:
+        if (r8 == 0) goto L_0x067d;
+    L_0x0672:
+        r2 = r1 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r2 == 0) goto L_0x067d;
+    L_0x0676:
         r1 = (org.telegram.messenger.MediaController.SearchImage) r1;
         r1 = r1.type;
-        if (r1 != 0) goto L_0x064e;
-    L_0x0676:
+        if (r1 != 0) goto L_0x0654;
+    L_0x067c:
         r8 = 1;
-    L_0x0677:
-        if (r8 == 0) goto L_0x067f;
-    L_0x0679:
+    L_0x067d:
+        if (r8 == 0) goto L_0x0685;
+    L_0x067f:
         r1 = r0.timeItem;
         r2 = 0;
         r1.setVisibility(r2);
-    L_0x067f:
+    L_0x0685:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onPhotoShow(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$FileLocation, org.telegram.messenger.ImageLocation, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int, org.telegram.ui.PhotoViewer$PlaceProviderObject):void");
@@ -8570,7 +8571,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = (long) r5;
         r7 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 * r7;
-        r7 = NUM; // 0x7f0d0ba3 float:1.8748157E38 double:1.0531312494E-314;
+        r7 = NUM; // 0x7f0d0bb3 float:1.874819E38 double:1.0531312573E-314;
         r8 = new java.lang.Object[r13];
         r11 = org.telegram.messenger.LocaleController.getInstance();
         r11 = r11.formatterYear;

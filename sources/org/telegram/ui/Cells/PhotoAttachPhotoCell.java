@@ -272,6 +272,10 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         requestLayout();
     }
 
+    public boolean isChecked() {
+        return this.checkBox.isChecked();
+    }
+
     public void setChecked(int i, final boolean z, boolean z2) {
         this.checkBox.setChecked(i, z, z2);
         if (this.itemSizeChanged) {
@@ -495,14 +499,15 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setEnabled(true);
-        if (this.photoEntry.isVideo) {
+        PhotoEntry photoEntry = this.photoEntry;
+        if (photoEntry == null || !photoEntry.isVideo) {
+            accessibilityNodeInfo.setText(LocaleController.getString("AttachPhoto", NUM));
+        } else {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(LocaleController.getString("AttachVideo", NUM));
             stringBuilder.append(", ");
             stringBuilder.append(LocaleController.formatCallDuration(this.photoEntry.duration));
             accessibilityNodeInfo.setText(stringBuilder.toString());
-        } else {
-            accessibilityNodeInfo.setText(LocaleController.getString("AttachPhoto", NUM));
         }
         if (this.checkBox.isChecked()) {
             accessibilityNodeInfo.setSelected(true);
