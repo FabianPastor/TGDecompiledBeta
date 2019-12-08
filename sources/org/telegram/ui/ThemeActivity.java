@@ -398,25 +398,26 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                 String str = "ExportTheme";
                 int i = 0;
+                String str2 = null;
                 if (themeInfo.pathToFile == null) {
-                    charSequenceArr = new CharSequence[]{LocaleController.getString(str, NUM)};
-                    iArr = new int[]{NUM};
+                    charSequenceArr = new CharSequence[]{null, LocaleController.getString(str, NUM)};
+                    iArr = new int[]{0, NUM};
                 } else {
+                    String string;
                     TL_theme tL_theme = themeInfo.info;
                     int i2 = (tL_theme == null || !tL_theme.isDefault) ? 1 : 0;
                     CharSequence[] charSequenceArr2 = new CharSequence[5];
-                    String str2 = null;
                     charSequenceArr2[0] = themeInfo.info != null ? LocaleController.getString("ShareFile", NUM) : null;
                     charSequenceArr2[1] = LocaleController.getString(str, NUM);
                     TL_theme tL_theme2 = themeInfo.info;
                     if (tL_theme2 == null || (!tL_theme2.isDefault && tL_theme2.creator)) {
-                        str = LocaleController.getString("Edit", NUM);
+                        string = LocaleController.getString("Edit", NUM);
                     } else {
-                        str = null;
+                        string = null;
                     }
-                    charSequenceArr2[2] = str;
-                    tL_theme2 = themeInfo.info;
-                    str = (tL_theme2 == null || !tL_theme2.creator) ? null : LocaleController.getString("ThemeSetUrl", NUM);
+                    charSequenceArr2[2] = string;
+                    TL_theme tL_theme3 = themeInfo.info;
+                    str = (tL_theme3 == null || !tL_theme3.creator) ? null : LocaleController.getString("ThemeSetUrl", NUM);
                     charSequenceArr2[3] = str;
                     if (i2 != 0) {
                         str2 = LocaleController.getString("Delete", NUM);

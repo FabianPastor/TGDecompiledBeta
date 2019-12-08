@@ -9220,8 +9220,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (i7 != Integer.MIN_VALUE && id > 0 && id <= i7 && ((messageObject3.messageOwner.from_scheduled && id > num.intValue()) || messageObject3.isUnread())) {
                             if (messageObject3.messageOwner.from_scheduled) {
                                 i10++;
+                            } else {
+                                messageObject3.setIsRead();
                             }
-                            messageObject3.setIsRead();
                             i++;
                         }
                         if (i3 != Integer.MAX_VALUE && id < 0 && id >= i3 && messageObject3.isUnread()) {

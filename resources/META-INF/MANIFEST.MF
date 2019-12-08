@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.5.0
 
 Name: AndroidManifest.xml
-SHA1-Digest: 5wZrQk77ewip+vgTf/NlndBB5+k=
+SHA1-Digest: ISQIOKD9AyAVIe9f1xJCEQDcDp4=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -222,7 +222,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: WUbkLRd0fXAbbgjKwyVUV8PJTAs=
+SHA1-Digest: XmUU84Y4sZbGLGhYeVGBqEZvhg8=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: FHlRDdxccFhBf1l94YXJ1DBcfcA=
@@ -7906,13 +7906,13 @@ Name: res/drawable/transparent.xml
 SHA1-Digest: 1HSCduNwo/Dj1eQDOT5TX8y7zV0=
 
 Name: res/layout-land/hockeyapp_fragment_update.xml
-SHA1-Digest: 5iq++zL/jaNoMcosrFlNCm3bwSc=
+SHA1-Digest: MWFeKulaKxq40c1OdWWay7SYzLc=
 
 Name: res/layout-v16/notification_template_custom_big.xml
 SHA1-Digest: NkVieojpDcTsYNoK1PO2oq3nOjE=
 
 Name: res/layout-v17/hockeyapp_activity_feedback.xml
-SHA1-Digest: Q9XHeJ92QpX07EJaMnMTe8WxJyA=
+SHA1-Digest: XjBgeBi7IAYdsiNKcO5hx1K3pic=
 
 Name: res/layout-v17/notification_action.xml
 SHA1-Digest: GxwNzeGsv5Dh7j885pOgL/J81eY=
@@ -7948,13 +7948,13 @@ Name: res/layout/hockeyapp_activity_expiry_info.xml
 SHA1-Digest: xlFH3ntLjYzp1XVv7C1r1bkoyEI=
 
 Name: res/layout/hockeyapp_activity_feedback.xml
-SHA1-Digest: h6NT8jYYl3LUnb6PExsSragCADA=
+SHA1-Digest: 4GFODutZu6LGVSvC/Ax6kPKAAu0=
 
 Name: res/layout/hockeyapp_activity_login.xml
-SHA1-Digest: A3Fy3mQaaSir1O2OTHQ6AmxNQIM=
+SHA1-Digest: 2D+5fHUXudPQJBREvJCau1mTi+I=
 
 Name: res/layout/hockeyapp_fragment_update.xml
-SHA1-Digest: v/8fc8wQiVOZo35OvAWSm48fd54=
+SHA1-Digest: 93hyjfQ0yDvAk2LA1svioKENkjw=
 
 Name: res/layout/hockeyapp_view_feedback_message.xml
 SHA1-Digest: XPeF0eSHq4QCaOQvJu03gkZQLq8=
@@ -8146,7 +8146,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: PW50aJSfvzpEeg3gba+l2uTUTpc=
+SHA1-Digest: HPwj0NdvL9K0qtxOQl3IzlgCk74=
 
 Name: version.txt
 SHA1-Digest: J/nihzJRxlZEj3lPEgpfeoTyk98=

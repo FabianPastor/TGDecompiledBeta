@@ -6115,6 +6115,9 @@ public class Theme {
             applyTheme(defaultTheme, true, false, false);
             z = true;
         }
+        if (themeInfo == currentNightTheme) {
+            currentNightTheme = (ThemeInfo) themesDict.get("Dark Blue");
+        }
         themeInfo.removeObservers();
         otherThemes.remove(themeInfo);
         themesDict.remove(themeInfo.name);
@@ -6133,16 +6136,17 @@ public class Theme {
         stringBuilder.append(".attheme");
         themeInfo.pathToFile = new File(filesDirFixed, stringBuilder.toString()).getAbsolutePath();
         themeInfo.name = str;
+        themeInfo.account = UserConfig.selectedAccount;
         saveCurrentTheme(themeInfo, true, true, false);
         return themeInfo;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:109:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x0295  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x02a1 A:{SYNTHETIC, Splitter:B:99:0x02a1} */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x028a A:{SYNTHETIC, Splitter:B:92:0x028a} */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x0295  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:110:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x0290 A:{SYNTHETIC, Splitter:B:93:0x0290} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02a7 A:{SYNTHETIC, Splitter:B:100:0x02a7} */
     public static void saveCurrentTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r19, boolean r20, boolean r21, boolean r22) {
         /*
         r1 = r19;
@@ -6281,221 +6285,226 @@ public class Theme {
     L_0x0118:
         r3 = themedWallpaper;
     L_0x011a:
+        if (r21 == 0) goto L_0x0122;
+    L_0x011c:
+        if (r3 == 0) goto L_0x0122;
+    L_0x011e:
+        r5 = wallpaper;
+        themedWallpaper = r5;
+    L_0x0122:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r6 = currentColors;
         r6 = r6.entrySet();
         r6 = r6.iterator();
-    L_0x0129:
+    L_0x0131:
         r7 = r6.hasNext();
         r8 = "\n";
-        if (r7 == 0) goto L_0x0169;
-    L_0x0131:
+        if (r7 == 0) goto L_0x016f;
+    L_0x0139:
         r7 = r6.next();
         r7 = (java.util.Map.Entry) r7;
         r9 = r7.getKey();
         r9 = (java.lang.String) r9;
-        if (r21 == 0) goto L_0x0156;
-    L_0x013f:
         r10 = r3 instanceof android.graphics.drawable.BitmapDrawable;
-        if (r10 != 0) goto L_0x0145;
-    L_0x0143:
-        if (r0 == 0) goto L_0x0156;
-    L_0x0145:
+        if (r10 != 0) goto L_0x014b;
+    L_0x0149:
+        if (r0 == 0) goto L_0x015c;
+    L_0x014b:
         r10 = "chat_wallpaper";
         r10 = r10.equals(r9);
-        if (r10 != 0) goto L_0x0129;
-    L_0x014d:
+        if (r10 != 0) goto L_0x0131;
+    L_0x0153:
         r10 = "chat_wallpaper_gradient_to";
         r10 = r10.equals(r9);
-        if (r10 == 0) goto L_0x0156;
-    L_0x0155:
-        goto L_0x0129;
-    L_0x0156:
+        if (r10 == 0) goto L_0x015c;
+    L_0x015b:
+        goto L_0x0131;
+    L_0x015c:
         r5.append(r9);
         r9 = "=";
         r5.append(r9);
         r7 = r7.getValue();
         r5.append(r7);
         r5.append(r8);
-        goto L_0x0129;
-    L_0x0169:
-        r6 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x0284 }
-        r7 = r1.pathToFile;	 Catch:{ Exception -> 0x0284 }
-        r6.<init>(r7);	 Catch:{ Exception -> 0x0284 }
-        r4 = r5.length();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        if (r4 != 0) goto L_0x0185;
-    L_0x0176:
-        r4 = r3 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        if (r4 != 0) goto L_0x0185;
-    L_0x017a:
-        r4 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        if (r4 == 0) goto L_0x0185;
+        goto L_0x0131;
+    L_0x016f:
+        r6 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x028a }
+        r7 = r1.pathToFile;	 Catch:{ Exception -> 0x028a }
+        r6.<init>(r7);	 Catch:{ Exception -> 0x028a }
+        r4 = r5.length();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r4 != 0) goto L_0x018b;
+    L_0x017c:
+        r4 = r3 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r4 != 0) goto L_0x018b;
     L_0x0180:
+        r4 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r4 == 0) goto L_0x018b;
+    L_0x0186:
         r4 = 32;
-        r5.append(r4);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-    L_0x0185:
-        r4 = r5.toString();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r4 = org.telegram.messenger.AndroidUtilities.getStringBytes(r4);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r6.write(r4);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r4 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
+        r5.append(r4);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x018b:
+        r4 = r5.toString();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r4 = org.telegram.messenger.AndroidUtilities.getStringBytes(r4);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r6.write(r4);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r4 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
         r5 = 87;
-        if (r4 != 0) goto L_0x01ec;
-    L_0x0198:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r2.<init>();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
+        if (r4 != 0) goto L_0x01f2;
+    L_0x019e:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2.<init>();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
         r4 = "WLS=";
-        r2.append(r4);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r2.append(r0);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r2.append(r8);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r2 = org.telegram.messenger.AndroidUtilities.getStringBytes(r2);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r6.write(r2);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        if (r21 == 0) goto L_0x022d;
-    L_0x01b5:
-        r3 = (android.graphics.drawable.BitmapDrawable) r3;	 Catch:{ all -> 0x01e7 }
-        r2 = r3.getBitmap();	 Catch:{ all -> 0x01e7 }
-        r3 = new java.io.FileOutputStream;	 Catch:{ all -> 0x01e7 }
-        r4 = new java.io.File;	 Catch:{ all -> 0x01e7 }
-        r7 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x01e7 }
-        r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x01e7 }
-        r8.<init>();	 Catch:{ all -> 0x01e7 }
-        r0 = org.telegram.messenger.Utilities.MD5(r0);	 Catch:{ all -> 0x01e7 }
-        r8.append(r0);	 Catch:{ all -> 0x01e7 }
+        r2.append(r4);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2.append(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2.append(r8);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = org.telegram.messenger.AndroidUtilities.getStringBytes(r2);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r6.write(r2);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r21 == 0) goto L_0x0233;
+    L_0x01bb:
+        r3 = (android.graphics.drawable.BitmapDrawable) r3;	 Catch:{ all -> 0x01ed }
+        r2 = r3.getBitmap();	 Catch:{ all -> 0x01ed }
+        r3 = new java.io.FileOutputStream;	 Catch:{ all -> 0x01ed }
+        r4 = new java.io.File;	 Catch:{ all -> 0x01ed }
+        r7 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x01ed }
+        r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x01ed }
+        r8.<init>();	 Catch:{ all -> 0x01ed }
+        r0 = org.telegram.messenger.Utilities.MD5(r0);	 Catch:{ all -> 0x01ed }
+        r8.append(r0);	 Catch:{ all -> 0x01ed }
         r0 = ".wp";
-        r8.append(r0);	 Catch:{ all -> 0x01e7 }
-        r0 = r8.toString();	 Catch:{ all -> 0x01e7 }
-        r4.<init>(r7, r0);	 Catch:{ all -> 0x01e7 }
-        r3.<init>(r4);	 Catch:{ all -> 0x01e7 }
-        r0 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x01e7 }
-        r2.compress(r0, r5, r3);	 Catch:{ all -> 0x01e7 }
-        r3.close();	 Catch:{ all -> 0x01e7 }
-        goto L_0x022d;
-    L_0x01e7:
+        r8.append(r0);	 Catch:{ all -> 0x01ed }
+        r0 = r8.toString();	 Catch:{ all -> 0x01ed }
+        r4.<init>(r7, r0);	 Catch:{ all -> 0x01ed }
+        r3.<init>(r4);	 Catch:{ all -> 0x01ed }
+        r0 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x01ed }
+        r2.compress(r0, r5, r3);	 Catch:{ all -> 0x01ed }
+        r3.close();	 Catch:{ all -> 0x01ed }
+        goto L_0x0233;
+    L_0x01ed:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        goto L_0x022d;
-    L_0x01ec:
-        r0 = r3 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        if (r0 == 0) goto L_0x022d;
-    L_0x01f0:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        goto L_0x0233;
+    L_0x01f2:
+        r0 = r3 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r0 == 0) goto L_0x0233;
+    L_0x01f6:
         r0 = r3;
-        r0 = (android.graphics.drawable.BitmapDrawable) r0;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        if (r0 == 0) goto L_0x0224;
-    L_0x01f9:
+        r0 = (android.graphics.drawable.BitmapDrawable) r0;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r0 == 0) goto L_0x022a;
+    L_0x01ff:
         r4 = 4;
-        r7 = new byte[r4];	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r7[r2] = r5;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
+        r7 = new byte[r4];	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r7[r2] = r5;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
         r8 = 80;
-        r7[r16] = r8;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
+        r7[r16] = r8;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
         r9 = 83;
-        r7[r15] = r9;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
+        r7[r15] = r9;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
         r9 = 10;
-        r7[r14] = r9;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r6.write(r7);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r7 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0.compress(r7, r5, r6);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
+        r7[r14] = r9;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r6.write(r7);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r7 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.compress(r7, r5, r6);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
         r0 = 5;
-        r0 = new byte[r0];	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0[r2] = r9;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0[r16] = r5;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0[r15] = r8;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
+        r0 = new byte[r0];	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0[r2] = r9;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0[r16] = r5;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0[r15] = r8;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
         r2 = 69;
-        r0[r14] = r2;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0[r4] = r9;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r6.write(r0);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-    L_0x0224:
-        if (r20 == 0) goto L_0x022d;
-    L_0x0226:
-        if (r22 != 0) goto L_0x022d;
-    L_0x0228:
-        wallpaper = r3;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        calcBackgroundColor(r3, r15);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-    L_0x022d:
-        if (r22 != 0) goto L_0x0276;
-    L_0x022f:
-        r0 = themesDict;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r2 = r19.getKey();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0 = r0.get(r2);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        if (r0 != 0) goto L_0x0254;
-    L_0x023b:
-        r0 = themes;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0.add(r1);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0 = themesDict;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r2 = r19.getKey();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0.put(r2, r1);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0 = otherThemes;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0.add(r1);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        saveOtherThemes(r16);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        sortThemes();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-    L_0x0254:
-        currentTheme = r1;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0 = currentTheme;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r2 = currentNightTheme;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        if (r0 == r2) goto L_0x0260;
-    L_0x025c:
-        r0 = currentTheme;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        currentDayTheme = r0;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-    L_0x0260:
-        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0 = r0.edit();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
+        r0[r14] = r2;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0[r4] = r9;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r6.write(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x022a:
+        if (r20 == 0) goto L_0x0233;
+    L_0x022c:
+        if (r22 != 0) goto L_0x0233;
+    L_0x022e:
+        wallpaper = r3;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        calcBackgroundColor(r3, r15);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x0233:
+        if (r22 != 0) goto L_0x027c;
+    L_0x0235:
+        r0 = themesDict;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = r19.getKey();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = r0.get(r2);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r0 != 0) goto L_0x025a;
+    L_0x0241:
+        r0 = themes;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.add(r1);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = themesDict;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = r19.getKey();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.put(r2, r1);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = otherThemes;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.add(r1);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        saveOtherThemes(r16);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        sortThemes();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x025a:
+        currentTheme = r1;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = currentTheme;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = currentNightTheme;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r0 == r2) goto L_0x0266;
+    L_0x0262:
+        r0 = currentTheme;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        currentDayTheme = r0;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x0266:
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = r0.edit();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
         r2 = "theme";
-        r3 = currentDayTheme;	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r3 = r3.getKey();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0.putString(r2, r3);	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-        r0.commit();	 Catch:{ Exception -> 0x027d, all -> 0x027a }
-    L_0x0276:
-        r6.close();	 Catch:{ Exception -> 0x028e }
-        goto L_0x0293;
-    L_0x027a:
-        r0 = move-exception;
-        r1 = r0;
-        goto L_0x029f;
-    L_0x027d:
-        r0 = move-exception;
-        r4 = r6;
-        goto L_0x0285;
+        r3 = currentDayTheme;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r3 = r3.getKey();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.putString(r2, r3);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.commit();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x027c:
+        r6.close();	 Catch:{ Exception -> 0x0294 }
+        goto L_0x0299;
     L_0x0280:
         r0 = move-exception;
         r1 = r0;
-        r6 = r4;
-        goto L_0x029f;
-    L_0x0284:
+        goto L_0x02a5;
+    L_0x0283:
         r0 = move-exception;
-    L_0x0285:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0280 }
-        if (r4 == 0) goto L_0x0293;
+        r4 = r6;
+        goto L_0x028b;
+    L_0x0286:
+        r0 = move-exception;
+        r1 = r0;
+        r6 = r4;
+        goto L_0x02a5;
     L_0x028a:
-        r4.close();	 Catch:{ Exception -> 0x028e }
-        goto L_0x0293;
-    L_0x028e:
+        r0 = move-exception;
+    L_0x028b:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0286 }
+        if (r4 == 0) goto L_0x0299;
+    L_0x0290:
+        r4.close();	 Catch:{ Exception -> 0x0294 }
+        goto L_0x0299;
+    L_0x0294:
         r0 = move-exception;
         r2 = r0;
         org.telegram.messenger.FileLog.e(r2);
-    L_0x0293:
-        if (r20 == 0) goto L_0x029e;
-    L_0x0295:
+    L_0x0299:
+        if (r20 == 0) goto L_0x02a4;
+    L_0x029b:
         r0 = r1.account;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r0.saveThemeToServer(r1);
-    L_0x029e:
+    L_0x02a4:
         return;
-    L_0x029f:
-        if (r6 == 0) goto L_0x02aa;
-    L_0x02a1:
-        r6.close();	 Catch:{ Exception -> 0x02a5 }
-        goto L_0x02aa;
     L_0x02a5:
+        if (r6 == 0) goto L_0x02b0;
+    L_0x02a7:
+        r6.close();	 Catch:{ Exception -> 0x02ab }
+        goto L_0x02b0;
+    L_0x02ab:
         r0 = move-exception;
         r2 = r0;
         org.telegram.messenger.FileLog.e(r2);
-    L_0x02aa:
-        goto L_0x02ac;
-    L_0x02ab:
+    L_0x02b0:
+        goto L_0x02b2;
+    L_0x02b1:
         throw r1;
-    L_0x02ac:
-        goto L_0x02ab;
+    L_0x02b2:
+        goto L_0x02b1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.saveCurrentTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean, boolean, boolean):void");
     }

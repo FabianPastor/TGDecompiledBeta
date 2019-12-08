@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
@@ -78,6 +79,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         private BitmapShader bitmapShader;
         private RadioButton button;
         private final ArgbEvaluator evaluator = new ArgbEvaluator();
+        private boolean hasWhiteBackground;
         private Drawable inDrawable;
         private boolean isFirst;
         private boolean isLast;
@@ -514,6 +516,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             this.inDrawable.setColorFilter(new PorterDuffColorFilter(this.themeInfo.previewInColor, Mode.MULTIPLY));
             this.outDrawable.setColorFilter(new PorterDuffColorFilter(this.themeInfo.previewOutColor, Mode.MULTIPLY));
             ThemeInfo themeInfo = this.themeInfo;
+            double[] dArr = null;
             if (themeInfo.pathToFile == null) {
                 updateAccentColor(themeInfo.accentColor, false);
                 this.optionsDrawable = null;
@@ -527,6 +530,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 BackgroundGradientDrawable backgroundGradientDrawable = new BackgroundGradientDrawable(Orientation.BL_TR, new int[]{themeInfo.previewBackgroundColor, r1});
                 backgroundGradientDrawable.setCornerRadius((float) AndroidUtilities.dp(6.0f));
                 this.backgroundDrawable = backgroundGradientDrawable;
+                dArr = AndroidUtilities.rgbToHsv(Color.red(this.themeInfo.previewBackgroundColor), Color.green(this.themeInfo.previewBackgroundColor), Color.blue(this.themeInfo.previewBackgroundColor));
             } else if (themeInfo.previewWallpaperOffset > 0 || themeInfo.pathToWallpaper != null) {
                 float dp = (float) AndroidUtilities.dp(76.0f);
                 float dp2 = (float) AndroidUtilities.dp(97.0f);
@@ -537,7 +541,19 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     TileMode tileMode = TileMode.CLAMP;
                     this.bitmapShader = new BitmapShader(scaledBitmap, tileMode, tileMode);
                     this.bitmapPaint.setShader(this.bitmapShader);
+                    int[] calcDrawableColor = AndroidUtilities.calcDrawableColor(this.backgroundDrawable);
+                    dArr = AndroidUtilities.rgbToHsv(Color.red(calcDrawableColor[0]), Color.green(calcDrawableColor[0]), Color.blue(calcDrawableColor[0]));
                 }
+            } else {
+                int i = themeInfo.previewBackgroundColor;
+                if (i != 0) {
+                    dArr = AndroidUtilities.rgbToHsv(Color.red(i), Color.green(this.themeInfo.previewBackgroundColor), Color.blue(this.themeInfo.previewBackgroundColor));
+                }
+            }
+            if (dArr == null || dArr[1] > 0.10000000149011612d || dArr[2] < 0.9599999785423279d) {
+                this.hasWhiteBackground = false;
+            } else {
+                this.hasWhiteBackground = true;
             }
             themeInfo = this.themeInfo;
             if (themeInfo.previewBackgroundColor == 0 && themeInfo.previewParsed && this.backgroundDrawable == null) {
@@ -669,7 +685,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             if (name.toLowerCase().endsWith(".attheme")) {
                 name = name.substring(0, name.lastIndexOf(46));
             }
-            String charSequence = TextUtils.ellipsize(name, this.textPaint, (float) (getMeasuredWidth() - AndroidUtilities.dp(this.isFirst ? 10.0f : 15.0f)), TruncateAt.END).toString();
+            String charSequence = TextUtils.ellipsize(name, this.textPaint, (float) ((getMeasuredWidth() - AndroidUtilities.dp(this.isFirst ? 10.0f : 15.0f)) - (this.isLast ? AndroidUtilities.dp(7.0f) : 0)), TruncateAt.END).toString();
             int ceil = (int) Math.ceil((double) this.textPaint.measureText(charSequence));
             this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             canvas.drawText(charSequence, (float) (((AndroidUtilities.dp(76.0f) - ceil) / 2) + i), (float) AndroidUtilities.dp(131.0f), this.textPaint);
@@ -718,6 +734,10 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                         Theme.chat_instantViewRectPaint.setColor(NUM);
                         canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), Theme.chat_instantViewRectPaint);
                     }
+                } else if (this.hasWhiteBackground) {
+                    this.button.setColor(-5000269, themeInfo2.previewOutColor);
+                    Theme.chat_instantViewRectPaint.setColor(NUM);
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), Theme.chat_instantViewRectPaint);
                 }
                 this.inDrawable.setBounds(AndroidUtilities.dp(6.0f) + i, AndroidUtilities.dp(22.0f), AndroidUtilities.dp(49.0f) + i, AndroidUtilities.dp(36.0f));
                 this.inDrawable.draw(canvas);

@@ -62,6 +62,7 @@ import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_pollAnswer;
 import org.telegram.tgnet.TLRPC.TL_privacyValueAllowAll;
 import org.telegram.tgnet.TLRPC.TL_privacyValueAllowChatParticipants;
+import org.telegram.tgnet.TLRPC.TL_privacyValueAllowContacts;
 import org.telegram.tgnet.TLRPC.TL_privacyValueAllowUsers;
 import org.telegram.tgnet.TLRPC.TL_privacyValueDisallowAll;
 import org.telegram.tgnet.TLRPC.TL_privacyValueDisallowChatParticipants;
@@ -1474,14 +1475,20 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             if (privacyRules == null || privacyRules.size() == 0) {
                 this.currentSubType = 0;
             } else {
-                for (int i3 = 0; i3 < privacyRules.size(); i3++) {
+                int i3 = 0;
+                while (i3 < privacyRules.size()) {
                     PrivacyRule privacyRule2 = (PrivacyRule) privacyRules.get(i3);
                     if (privacyRule2 instanceof TL_privacyValueAllowAll) {
                         this.currentSubType = 0;
+                        break;
                     } else if (privacyRule2 instanceof TL_privacyValueDisallowAll) {
                         this.currentSubType = 2;
-                    } else {
+                        break;
+                    } else if (privacyRule2 instanceof TL_privacyValueAllowContacts) {
                         this.currentSubType = 1;
+                        break;
+                    } else {
+                        i3++;
                     }
                 }
             }

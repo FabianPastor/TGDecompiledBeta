@@ -545,7 +545,7 @@ public class AndroidUtilities {
         return iArr;
     }
 
-    private static double[] rgbToHsv(int i, int i2, int i3) {
+    public static double[] rgbToHsv(int i, int i2, int i3) {
         double d = (double) i;
         Double.isNaN(d);
         d /= 255.0d;
