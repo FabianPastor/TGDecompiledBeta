@@ -227,8 +227,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             RLottieDrawable.this.nextFrameIsLast = true;
                         }
                     }
+                    RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnable);
                 }
-                RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnable);
             }
         };
         this.width = i;
@@ -375,24 +375,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    public void beginApplyLayerColors() {
-        this.applyingLayerColors = true;
-    }
-
-    public void commitApplyLayerColors() {
-        if (this.applyingLayerColors) {
-            this.applyingLayerColors = false;
-            if (!this.isRunning && this.decodeSingleFrame) {
-                resetCurrentFrame();
-                this.nextFrameIsLast = false;
-                this.singleFrameDecoded = false;
-                if (!scheduleNextGetFrame()) {
-                    this.forceFrameRedraw = true;
-                }
-            }
-        }
-    }
-
     public void recycle() {
         this.isRunning = false;
         this.isRecycled = true;
@@ -431,12 +413,30 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     private void resetCurrentFrame() {
         if (this.currentFrame <= 2) {
-            if (this.nextRenderingBitmap != null) {
+            if (!(this.loadFrameTask == null || this.nextRenderingBitmap == null)) {
                 this.backgroundBitmap = this.renderingBitmap;
                 this.renderingBitmap = this.nextRenderingBitmap;
+                this.loadFrameTask = null;
             }
-            this.loadFrameTask = null;
             this.currentFrame = 0;
+        }
+    }
+
+    public void beginApplyLayerColors() {
+        this.applyingLayerColors = true;
+    }
+
+    public void commitApplyLayerColors() {
+        if (this.applyingLayerColors) {
+            this.applyingLayerColors = false;
+            if (!this.isRunning && this.decodeSingleFrame) {
+                resetCurrentFrame();
+                this.nextFrameIsLast = false;
+                this.singleFrameDecoded = false;
+                if (!scheduleNextGetFrame()) {
+                    this.forceFrameRedraw = true;
+                }
+            }
         }
     }
 
@@ -462,10 +462,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         r0 = r5.cacheGenerateTask;
         if (r0 != 0) goto L_0x0046;
     L_0x0004:
-        r0 = r5.nextRenderingBitmap;
+        r0 = r5.loadFrameTask;
         if (r0 != 0) goto L_0x0046;
     L_0x0008:
-        r0 = r5.loadFrameTask;
+        r0 = r5.nextRenderingBitmap;
         if (r0 != 0) goto L_0x0046;
     L_0x000c:
         r0 = r5.nativePtr;
