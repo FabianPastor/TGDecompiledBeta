@@ -261,25 +261,28 @@ public class DownloadController extends BaseController implements NotificationCe
         this.mediumPreset = new Preset(mainSettings.getString("preset1", "13_13_13_13_1048576_10485760_1048576_524288_1_1_1_0"));
         this.highPreset = new Preset(mainSettings.getString("preset2", "13_13_13_13_1048576_15728640_3145728_524288_1_1_1_0"));
         String str = "newConfig";
-        Object obj = (mainSettings.contains(str) || !getUserConfig().isClientActivated()) ? 1 : null;
+        boolean contains = mainSettings.contains(str);
         String str2 = "currentRoamingPreset";
         String str3 = "currentWifiPreset";
         String str4 = "currentMobilePreset";
         String str5 = "roamingPreset";
         String str6 = "wifiPreset";
         String str7 = "mobilePreset";
-        if (obj != null) {
+        if (contains || !getUserConfig().isClientActivated()) {
+            String str8 = str3;
+            str3 = str2;
+            str2 = str8;
             this.mobilePreset = new Preset(mainSettings.getString(str7, this.mediumPreset.toString()));
             this.wifiPreset = new Preset(mainSettings.getString(str6, this.highPreset.toString()));
             this.roamingPreset = new Preset(mainSettings.getString(str5, this.lowPreset.toString()));
             this.currentMobilePreset = mainSettings.getInt(str4, 3);
-            this.currentWifiPreset = mainSettings.getInt(str3, 3);
-            this.currentRoamingPreset = mainSettings.getInt(str2, 3);
-            if (obj == null) {
+            this.currentWifiPreset = mainSettings.getInt(str2, 3);
+            this.currentRoamingPreset = mainSettings.getInt(str3, 3);
+            if (!contains) {
                 mainSettings.edit().putBoolean(str, true).commit();
             }
         } else {
-            String str8;
+            String str9;
             int i2 = 4;
             int[] iArr = new int[4];
             int[] iArr2 = new int[4];
@@ -287,31 +290,31 @@ public class DownloadController extends BaseController implements NotificationCe
             int[] iArr4 = new int[7];
             int[] iArr5 = new int[7];
             int[] iArr6 = new int[7];
-            String str9 = str2;
+            String str10 = str2;
             int i3 = 0;
             while (i3 < i2) {
-                Object obj2;
+                Object obj;
                 StringBuilder stringBuilder = new StringBuilder();
-                str8 = str3;
+                str9 = str3;
                 stringBuilder.append("mobileDataDownloadMask");
-                Object obj3 = "";
+                Object obj2 = "";
                 if (i3 == 0) {
-                    obj2 = obj3;
+                    obj = obj2;
                 } else {
-                    obj2 = obj3;
-                    obj3 = Integer.valueOf(i3);
+                    obj = obj2;
+                    obj2 = Integer.valueOf(i3);
                 }
-                stringBuilder.append(obj3);
+                stringBuilder.append(obj2);
                 String stringBuilder2 = stringBuilder.toString();
                 if (i3 == 0 || mainSettings.contains(stringBuilder2)) {
                     iArr[i3] = mainSettings.getInt(stringBuilder2, 13);
                     stringBuilder = new StringBuilder();
                     stringBuilder.append("wifiDownloadMask");
-                    stringBuilder.append(i3 == 0 ? obj2 : Integer.valueOf(i3));
+                    stringBuilder.append(i3 == 0 ? obj : Integer.valueOf(i3));
                     iArr2[i3] = mainSettings.getInt(stringBuilder.toString(), 13);
                     stringBuilder = new StringBuilder();
                     stringBuilder.append("roamingDownloadMask");
-                    stringBuilder.append(i3 == 0 ? obj2 : Integer.valueOf(i3));
+                    stringBuilder.append(i3 == 0 ? obj : Integer.valueOf(i3));
                     iArr3[i3] = mainSettings.getInt(stringBuilder.toString(), 1);
                 } else {
                     iArr[i3] = iArr[0];
@@ -319,22 +322,22 @@ public class DownloadController extends BaseController implements NotificationCe
                     iArr3[i3] = iArr3[0];
                 }
                 i3++;
-                str3 = str8;
+                str3 = str9;
                 i2 = 4;
             }
-            str8 = str3;
+            str9 = str3;
             iArr4[2] = mainSettings.getInt("mobileMaxDownloadSize2", this.mediumPreset.sizes[1]);
             iArr4[3] = mainSettings.getInt("mobileMaxDownloadSize3", this.mediumPreset.sizes[2]);
             iArr5[2] = mainSettings.getInt("wifiMaxDownloadSize2", this.highPreset.sizes[1]);
             iArr5[3] = mainSettings.getInt("wifiMaxDownloadSize3", this.highPreset.sizes[2]);
             iArr6[2] = mainSettings.getInt("roamingMaxDownloadSize2", this.lowPreset.sizes[1]);
             iArr6[3] = mainSettings.getInt("roamingMaxDownloadSize3", this.lowPreset.sizes[2]);
-            boolean z = mainSettings.getBoolean("globalAutodownloadEnabled", true);
+            contains = mainSettings.getBoolean("globalAutodownloadEnabled", true);
             int[] iArr7 = iArr3;
             int[] iArr8 = iArr2;
-            this.mobilePreset = new Preset(iArr, this.mediumPreset.sizes[0], iArr4[2], iArr4[3], true, true, z, false);
-            this.wifiPreset = new Preset(iArr8, this.highPreset.sizes[0], iArr5[2], iArr5[3], true, true, z, false);
-            this.roamingPreset = new Preset(iArr7, this.lowPreset.sizes[0], iArr6[2], iArr6[3], false, false, z, true);
+            this.mobilePreset = new Preset(iArr, this.mediumPreset.sizes[0], iArr4[2], iArr4[3], true, true, contains, false);
+            this.wifiPreset = new Preset(iArr8, this.highPreset.sizes[0], iArr5[2], iArr5[3], true, true, contains, false);
+            this.roamingPreset = new Preset(iArr7, this.lowPreset.sizes[0], iArr6[2], iArr6[3], false, false, contains, true);
             Editor edit = mainSettings.edit();
             edit.putBoolean(str, true);
             edit.putString(str7, this.mobilePreset.toString());
@@ -343,9 +346,9 @@ public class DownloadController extends BaseController implements NotificationCe
             this.currentMobilePreset = 3;
             edit.putInt(str4, 3);
             this.currentWifiPreset = 3;
-            edit.putInt(str8, 3);
-            this.currentRoamingPreset = 3;
             edit.putInt(str9, 3);
+            this.currentRoamingPreset = 3;
+            edit.putInt(str10, 3);
             edit.commit();
         }
         AndroidUtilities.runOnUIThread(new -$$Lambda$DownloadController$TvQOK4BckOSg64NROgC4NLSY7xY(this));

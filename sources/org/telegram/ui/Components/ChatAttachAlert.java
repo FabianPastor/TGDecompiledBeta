@@ -792,7 +792,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 photoAttachPhotoCell.setOutlineProvider(new ViewOutlineProvider() {
                     public void getOutline(View view, Outline outline) {
                         int intValue = ((Integer) ((PhotoAttachPhotoCell) view).getTag()).intValue();
-                        if (PhotoAttachAdapter.this.needCamera && ((ChatAttachAlert.this.deviceHasGoodCamera || ChatAttachAlert.this.noCameraPermissions) && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry)) {
+                        if (PhotoAttachAdapter.this.needCamera && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry) {
                             intValue++;
                         }
                         if (intValue == 0) {
@@ -827,7 +827,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     }
                     ChatAttachAlert.this.addToSelectedPhotos(photoEntry, intValue);
                     if (this == ChatAttachAlert.this.cameraAttachAdapter) {
-                        if (ChatAttachAlert.this.adapter.needCamera && ChatAttachAlert.this.deviceHasGoodCamera && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry) {
+                        if (ChatAttachAlert.this.adapter.needCamera && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry) {
                             intValue++;
                         }
                         ChatAttachAlert.this.adapter.notifyItemChanged(intValue);
@@ -855,7 +855,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             int i2 = 0;
             boolean z = true;
             if (itemViewType == 0) {
-                if (this.needCamera && ((ChatAttachAlert.this.deviceHasGoodCamera || ChatAttachAlert.this.noCameraPermissions) && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry)) {
+                if (this.needCamera && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry) {
                     i--;
                 }
                 PhotoAttachPhotoCell photoAttachPhotoCell = (PhotoAttachPhotoCell) viewHolder.itemView;
@@ -936,12 +936,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
 
         public int getItemCount() {
-            int i = 1;
             if (!ChatAttachAlert.this.mediaEnabled) {
                 return 1;
             }
-            if (!(this.needCamera && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry && (ChatAttachAlert.this.deviceHasGoodCamera || ChatAttachAlert.this.noCameraPermissions))) {
-                i = 0;
+            int i = 0;
+            if (this.needCamera && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry) {
+                i = 1;
             }
             if (ChatAttachAlert.this.noGalleryPermissions && this == ChatAttachAlert.this.adapter) {
                 i++;
@@ -962,7 +962,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 return 2;
             }
             if (this.needCamera && i == 0 && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry) {
-                if (ChatAttachAlert.this.deviceHasGoodCamera) {
+                if (!SharedConfig.inappCamera || ChatAttachAlert.this.deviceHasGoodCamera) {
                     return 1;
                 }
                 if (ChatAttachAlert.this.noCameraPermissions) {
@@ -1778,7 +1778,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             }
         };
         RecyclerListView recyclerListView = this.gridView;
-        PhotoAttachAdapter photoAttachAdapter = new PhotoAttachAdapter(context2, SharedConfig.inappCamera);
+        PhotoAttachAdapter photoAttachAdapter = new PhotoAttachAdapter(context2, true);
         this.adapter = photoAttachAdapter;
         recyclerListView.setAdapter(photoAttachAdapter);
         this.gridView.setClipToPadding(false);
@@ -2221,10 +2221,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         return;
                     }
                 }
-                if (this.deviceHasGoodCamera && i == 0 && this.selectedAlbumEntry == this.galleryAlbumEntry) {
-                    openCamera(true);
-                } else {
-                    if ((this.deviceHasGoodCamera || this.noCameraPermissions) && this.selectedAlbumEntry == this.galleryAlbumEntry) {
+                if (i != 0 || this.selectedAlbumEntry != this.galleryAlbumEntry) {
+                    if (this.selectedAlbumEntry == this.galleryAlbumEntry) {
                         i--;
                     }
                     int i2 = i;
@@ -2245,6 +2243,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         }
                         PhotoViewer.getInstance().openPhotoForSelect(allPhotosArray, i2, i3, this.photoViewerProvider, chatActivity);
                         AndroidUtilities.hideKeyboard(this.baseFragment.getFragmentView().findFocus());
+                    }
+                } else if (SharedConfig.inappCamera) {
+                    openCamera(true);
+                } else {
+                    ChatAttachViewDelegate chatAttachViewDelegate = this.delegate;
+                    if (chatAttachViewDelegate != null) {
+                        chatAttachViewDelegate.didPressedButton(0, false);
                     }
                 }
             }
