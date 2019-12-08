@@ -285,15 +285,13 @@ public class TableLayout extends View {
         }
 
         public void setCount(int i) {
-            if (i == Integer.MIN_VALUE || i >= getMaxIndex()) {
-                this.definedCount = i;
-                return;
+            if (i != Integer.MIN_VALUE && i < getMaxIndex()) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(this.horizontal ? "column" : "row");
+                stringBuilder.append("Count must be greater than or equal to the maximum of all grid indices (and spans) defined in the LayoutParams of each child");
+                TableLayout.handleInvalidParams(stringBuilder.toString());
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(this.horizontal ? "column" : "row");
-            stringBuilder.append("Count must be greater than or equal to the maximum of all grid indices (and spans) defined in the LayoutParams of each child");
-            TableLayout.access$1700(stringBuilder.toString());
-            throw null;
+            this.definedCount = i;
         }
 
         public boolean isOrderPreserved() {
@@ -1585,11 +1583,6 @@ public class TableLayout extends View {
         return (i & 2) != 0;
     }
 
-    static /* synthetic */ void access$1700(String str) {
-        handleInvalidParams(str);
-        throw null;
-    }
-
     public void addChild(int i, int i2, int i3, int i4) {
         int i5 = i;
         int i6 = i2;
@@ -1806,8 +1799,8 @@ public class TableLayout extends View {
         Axis axis = z ? this.mHorizontalAxis : this.mVerticalAxis;
         int[] leadingMargins = z2 ? axis.getLeadingMargins() : axis.getTrailingMargins();
         LayoutParams layoutParams = child.getLayoutParams();
-        Spec spec = z ? layoutParams.columnSpec : layoutParams.rowSpec;
-        return leadingMargins[z2 ? spec.span.min : spec.span.max];
+        Interval interval = (z ? layoutParams.columnSpec : layoutParams.rowSpec).span;
+        return leadingMargins[z2 ? interval.min : interval.max];
     }
 
     private int getTotalMargin(Child child, boolean z) {
@@ -1921,41 +1914,36 @@ public class TableLayout extends View {
     }
 
     private void checkLayoutParams(LayoutParams layoutParams, boolean z) {
+        StringBuilder stringBuilder;
         String str = z ? "column" : "row";
         Interval interval = (z ? layoutParams.columnSpec : layoutParams.rowSpec).span;
         int i = interval.min;
-        StringBuilder stringBuilder;
-        if (i == Integer.MIN_VALUE || i >= 0) {
-            int i2 = (z ? this.mHorizontalAxis : this.mVerticalAxis).definedCount;
-            if (i2 != Integer.MIN_VALUE) {
-                String str2 = " count";
-                if (interval.max > i2) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(str);
-                    stringBuilder.append(" indices (start + span) mustn't exceed the ");
-                    stringBuilder.append(str);
-                    stringBuilder.append(str2);
-                    handleInvalidParams(stringBuilder.toString());
-                    throw null;
-                } else if (interval.size() > i2) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(str);
-                    stringBuilder.append(" span mustn't exceed the ");
-                    stringBuilder.append(str);
-                    stringBuilder.append(str2);
-                    handleInvalidParams(stringBuilder.toString());
-                    throw null;
-                } else {
-                    return;
-                }
-            }
-            return;
+        if (i != Integer.MIN_VALUE && i < 0) {
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(str);
+            stringBuilder.append(" indices must be positive");
+            handleInvalidParams(stringBuilder.toString());
         }
-        stringBuilder = new StringBuilder();
-        stringBuilder.append(str);
-        stringBuilder.append(" indices must be positive");
-        handleInvalidParams(stringBuilder.toString());
-        throw null;
+        int i2 = (z ? this.mHorizontalAxis : this.mVerticalAxis).definedCount;
+        if (i2 != Integer.MIN_VALUE) {
+            String str2 = " count";
+            if (interval.max > i2) {
+                stringBuilder = new StringBuilder();
+                stringBuilder.append(str);
+                stringBuilder.append(" indices (start + span) mustn't exceed the ");
+                stringBuilder.append(str);
+                stringBuilder.append(str2);
+                handleInvalidParams(stringBuilder.toString());
+            }
+            if (interval.size() > i2) {
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append(str);
+                stringBuilder2.append(" span mustn't exceed the ");
+                stringBuilder2.append(str);
+                stringBuilder2.append(str2);
+                handleInvalidParams(stringBuilder2.toString());
+            }
+        }
     }
 
     /* Access modifiers changed, original: protected */

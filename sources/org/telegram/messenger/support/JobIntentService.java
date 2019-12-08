@@ -275,8 +275,8 @@ public abstract class JobIntentService extends Service {
             monitor-exit(r0);	 Catch:{ all -> 0x0029 }
             return r2;
         L_0x000a:
-            r1 = r3.mParams;	 Catch:{ Throwable -> 0x0011 }
-            r1 = r1.dequeueWork();	 Catch:{ Throwable -> 0x0011 }
+            r1 = r3.mParams;	 Catch:{ all -> 0x0011 }
+            r1 = r1.dequeueWork();	 Catch:{ all -> 0x0011 }
             goto L_0x0012;
         L_0x0011:
             r1 = r2;

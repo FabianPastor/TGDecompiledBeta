@@ -169,11 +169,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.uiRunnableGenerateCache = new Runnable() {
             public void run() {
                 if (!(RLottieDrawable.this.isRecycled || RLottieDrawable.this.destroyWhenDone || RLottieDrawable.this.nativePtr == 0)) {
-                    ThreadPoolExecutor access$900 = RLottieDrawable.lottieCacheGenerateQueue;
-                    RLottieDrawable rLottieDrawable = RLottieDrawable.this;
-                    -$$Lambda$RLottieDrawable$5$Yb_jU2tqNZSr5pLiqbJfFDeXef4 -__lambda_rlottiedrawable_5_yb_ju2tqnzsr5pliqbjffdexef4 = new -$$Lambda$RLottieDrawable$5$Yb_jU2tqNZSr5pLiqbJfFDeXef4(this);
-                    rLottieDrawable.cacheGenerateTask = -__lambda_rlottiedrawable_5_yb_ju2tqnzsr5pliqbjffdexef4;
-                    access$900.execute(-__lambda_rlottiedrawable_5_yb_ju2tqnzsr5pliqbjffdexef4);
+                    RLottieDrawable.lottieCacheGenerateQueue.execute(RLottieDrawable.this.cacheGenerateTask = new -$$Lambda$RLottieDrawable$5$Yb_jU2tqNZSr5pLiqbJfFDeXef4(this));
                 }
                 RLottieDrawable.this.loadFrameTask = null;
                 RLottieDrawable.this.decodeFrameFinishedInternal();

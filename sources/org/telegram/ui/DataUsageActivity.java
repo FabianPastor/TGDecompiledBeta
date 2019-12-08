@@ -795,19 +795,17 @@ public class DataUsageActivity extends BaseFragment {
             anonymousClass3.addView(anonymousClass4, LayoutHelper.createFrame(-1, -1.0f));
             ViewPage[] viewPageArr2 = this.viewPages;
             viewPageArr2[i] = anonymousClass4;
-            ViewPage viewPage = viewPageArr2[i];
-            AnonymousClass5 anonymousClass5 = new LinearLayoutManager(context, 1, false) {
+            LinearLayoutManager access$2902 = viewPageArr2[i].layoutManager = new LinearLayoutManager(context, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
             };
-            viewPage.layoutManager = anonymousClass5;
             RecyclerListView recyclerListView = new RecyclerListView(context);
             this.viewPages[i].listView = recyclerListView;
             this.viewPages[i].listView.setItemAnimator(null);
             this.viewPages[i].listView.setClipToPadding(false);
             this.viewPages[i].listView.setSectionsType(2);
-            this.viewPages[i].listView.setLayoutManager(anonymousClass5);
+            this.viewPages[i].listView.setLayoutManager(access$2902);
             ViewPage[] viewPageArr3 = this.viewPages;
             viewPageArr3[i].addView(viewPageArr3[i].listView, LayoutHelper.createFrame(-1, -1.0f));
             this.viewPages[i].listView.setOnItemClickListener(new -$$Lambda$DataUsageActivity$NwaR7lgfeGPKETAnvYA4hx0PZOY(this, recyclerListView));
@@ -842,7 +840,7 @@ public class DataUsageActivity extends BaseFragment {
                 }
             });
             if (i == 0 && i2 != -1) {
-                anonymousClass5.scrollToPositionWithOffset(i2, i3);
+                access$2902.scrollToPositionWithOffset(i2, i3);
             }
             if (i != 0) {
                 this.viewPages[i].setVisibility(8);

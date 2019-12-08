@@ -2908,7 +2908,6 @@
     <string name="common_signin_button_text_long">Google 계정으로 로그인</string>
     <string name="fcm_fallback_notification_channel_label">기타</string>
     <string name="formatDateAtTime">%1$s %2$s</string>
-    <string name="formatDateScheduleDay">EEE MMM d</string>
     <string name="formatterBannedUntil12H">yyyy.MM.dd, a h:mm</string>
     <string name="formatterBannedUntil24H">yyyy.MMM.dd, HH:mm</string>
     <string name="formatterBannedUntilThisYear12H">MMM dd, a h:mm</string>

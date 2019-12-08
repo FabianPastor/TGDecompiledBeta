@@ -60,19 +60,19 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
         return new String[]{"image/jpeg", "image/png", "image/webp"};
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:33:0x00ca */
-    /* JADX WARNING: Can't wrap try/catch for region: R(6:29|30|31|32|33|34) */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:39:0x00d2 */
+    /* JADX WARNING: Can't wrap try/catch for region: R(6:35|36|37|38|39|40) */
     public android.os.ParcelFileDescriptor openFile(android.net.Uri r10, java.lang.String r11) throws java.io.FileNotFoundException {
         /*
         r9 = this;
         r0 = "r";
         r11 = r0.equals(r11);
-        if (r11 == 0) goto L_0x00dc;
+        if (r11 == 0) goto L_0x00ec;
     L_0x0008:
         r11 = matcher;
         r11 = r11.match(r10);
         r0 = 1;
-        if (r11 != r0) goto L_0x00d4;
+        if (r11 != r0) goto L_0x00e4;
     L_0x0011:
         r11 = r10.getPathSegments();
         r0 = r11.get(r0);
@@ -87,48 +87,45 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
         r10 = r10.getQueryParameter(r1);
         r1 = new java.io.File;
         r1.<init>(r0);
+        r0 = android.net.Uri.fromFile(r1);
+        r0 = org.telegram.messenger.AndroidUtilities.isInternalUri(r0);
+        if (r0 != 0) goto L_0x00dc;
+    L_0x0040:
         r0 = r1.exists();
         r2 = NUM; // 0x10000000 float:2.5243549E-29 double:1.32624737E-315;
-        if (r0 == 0) goto L_0x0057;
-    L_0x003e:
-        r10 = new java.lang.StringBuilder;
-        r10.<init>();
-        r10.append(r1);
-        r11 = " already exists";
-        r10.append(r11);
-        r10 = r10.toString();
-        org.telegram.messenger.FileLog.d(r10);
+        if (r0 == 0) goto L_0x004d;
+    L_0x0048:
         r10 = android.os.ParcelFileDescriptor.open(r1, r2);
         return r10;
-    L_0x0057:
+    L_0x004d:
         r0 = r9.fileStartTimes;
         r0 = r0.get(r11);
         r0 = (java.lang.Long) r0;
-        if (r0 == 0) goto L_0x0066;
-    L_0x0061:
+        if (r0 == 0) goto L_0x005c;
+    L_0x0057:
         r3 = r0.longValue();
-        goto L_0x006a;
-    L_0x0066:
+        goto L_0x0060;
+    L_0x005c:
         r3 = java.lang.System.currentTimeMillis();
-    L_0x006a:
-        if (r0 != 0) goto L_0x0075;
-    L_0x006c:
+    L_0x0060:
+        if (r0 != 0) goto L_0x006b;
+    L_0x0062:
         r0 = r9.fileStartTimes;
         r5 = java.lang.Long.valueOf(r3);
         r0.put(r11, r5);
-    L_0x0075:
+    L_0x006b:
         r0 = r1.exists();
-        if (r0 != 0) goto L_0x00cf;
-    L_0x007b:
+        if (r0 != 0) goto L_0x00d7;
+    L_0x0071:
         r5 = java.lang.System.currentTimeMillis();
         r5 = r5 - r3;
         r7 = 3000; // 0xbb8 float:4.204E-42 double:1.482E-320;
         r0 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1));
-        if (r0 < 0) goto L_0x00bb;
-    L_0x0086:
+        if (r0 < 0) goto L_0x00c3;
+    L_0x007c:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x00a3;
-    L_0x008a:
+        if (r0 == 0) goto L_0x0099;
+    L_0x0080:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
         r1 = "Waiting for ";
@@ -138,51 +135,65 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
         r0.append(r11);
         r11 = r0.toString();
         org.telegram.messenger.FileLog.w(r11);
-    L_0x00a3:
+    L_0x0099:
         r11 = android.text.TextUtils.isEmpty(r10);
-        if (r11 != 0) goto L_0x00b3;
-    L_0x00a9:
+        if (r11 != 0) goto L_0x00bb;
+    L_0x009f:
         r11 = new java.io.File;
         r11.<init>(r10);
+        r10 = android.net.Uri.fromFile(r11);
+        r10 = org.telegram.messenger.AndroidUtilities.isInternalUri(r10);
+        if (r10 != 0) goto L_0x00b3;
+    L_0x00ae:
         r10 = android.os.ParcelFileDescriptor.open(r11, r2);
         return r10;
     L_0x00b3:
+        r10 = new java.lang.SecurityException;
+        r11 = "trying to read internal file";
+        r10.<init>(r11);
+        throw r10;
+    L_0x00bb:
         r10 = new java.io.FileNotFoundException;
         r11 = "Download timed out";
         r10.<init>(r11);
         throw r10;
-    L_0x00bb:
+    L_0x00c3:
         r0 = r9.sync;
         monitor-enter(r0);
-        r5 = r9.waitingForFiles;	 Catch:{ all -> 0x00cc }
-        r5.add(r11);	 Catch:{ all -> 0x00cc }
-        r5 = r9.sync;	 Catch:{ InterruptedException -> 0x00ca }
+        r5 = r9.waitingForFiles;	 Catch:{ all -> 0x00d4 }
+        r5.add(r11);	 Catch:{ all -> 0x00d4 }
+        r5 = r9.sync;	 Catch:{ InterruptedException -> 0x00d2 }
         r6 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        r5.wait(r6);	 Catch:{ InterruptedException -> 0x00ca }
-    L_0x00ca:
-        monitor-exit(r0);	 Catch:{ all -> 0x00cc }
-        goto L_0x0075;
-    L_0x00cc:
+        r5.wait(r6);	 Catch:{ InterruptedException -> 0x00d2 }
+    L_0x00d2:
+        monitor-exit(r0);	 Catch:{ all -> 0x00d4 }
+        goto L_0x006b;
+    L_0x00d4:
         r10 = move-exception;
-        monitor-exit(r0);	 Catch:{ all -> 0x00cc }
+        monitor-exit(r0);	 Catch:{ all -> 0x00d4 }
         throw r10;
-    L_0x00cf:
+    L_0x00d7:
         r10 = android.os.ParcelFileDescriptor.open(r1, r2);
         return r10;
-    L_0x00d4:
+    L_0x00dc:
+        r10 = new java.lang.SecurityException;
+        r11 = "trying to read internal file";
+        r10.<init>(r11);
+        throw r10;
+    L_0x00e4:
         r10 = new java.io.FileNotFoundException;
         r11 = "Invalid URI";
         r10.<init>(r11);
         throw r10;
-    L_0x00dc:
+    L_0x00ec:
         r10 = new java.lang.SecurityException;
         r11 = "Can only open files for read";
         r10.<init>(r11);
-        goto L_0x00e5;
-    L_0x00e4:
+        goto L_0x00f5;
+    L_0x00f4:
         throw r10;
-    L_0x00e5:
-        goto L_0x00e4;
+    L_0x00f5:
+        goto L_0x00f4;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationImageProvider.openFile(android.net.Uri, java.lang.String):android.os.ParcelFileDescriptor");
     }

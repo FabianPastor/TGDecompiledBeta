@@ -108,8 +108,7 @@ public class Utilities {
             if (matcher.find()) {
                 i = Integer.parseInt(matcher.group(0));
             }
-        } catch (Exception e) {
-            FileLog.e(e);
+        } catch (Exception unused) {
         }
         return Integer.valueOf(i);
     }
@@ -124,8 +123,7 @@ public class Utilities {
             if (matcher.find()) {
                 j = Long.parseLong(matcher.group(0));
             }
-        } catch (Exception e) {
-            FileLog.e(e);
+        } catch (Exception unused) {
         }
         return Long.valueOf(j);
     }

@@ -200,7 +200,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x002e;
     L_0x001f:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d094a float:1.8746938E38 double:1.0531309524E-314;
+        r1 = NUM; // 0x7f0d0969 float:1.8747E38 double:1.0531309677E-314;
         r2 = "SelectContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -210,21 +210,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x0041;
     L_0x0032:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d062b float:1.8745317E38 double:1.0531305577E-314;
+        r1 = NUM; // 0x7f0d0638 float:1.8745344E38 double:1.053130564E-314;
         r2 = "NewSecretChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0041:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d0623 float:1.8745301E38 double:1.0531305537E-314;
+        r1 = NUM; // 0x7f0d0630 float:1.8745327E38 double:1.05313056E-314;
         r2 = "NewMessageTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0050:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d0300 float:1.8743672E38 double:1.053130157E-314;
+        r1 = NUM; // 0x7f0d0302 float:1.8743676E38 double:1.053130158E-314;
         r2 = "Contacts";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -241,7 +241,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r2 = new org.telegram.ui.ContactsActivity$2;
         r2.<init>();
         r1 = r1.setActionBarMenuItemSearchListener(r2);
-        r2 = NUM; // 0x7f0d0922 float:1.8746857E38 double:1.0531309327E-314;
+        r2 = NUM; // 0x7f0d0941 float:1.874692E38 double:1.053130948E-314;
         r3 = "Search";
         r4 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setSearchFieldHint(r4);
@@ -319,11 +319,11 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     L_0x0114:
         r11 = 0;
     L_0x0115:
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0124 }
-        r0 = r0.getPackageManager();	 Catch:{ Throwable -> 0x0124 }
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0124 }
+        r0 = r0.getPackageManager();	 Catch:{ all -> 0x0124 }
         r1 = "android.hardware.location.gps";
-        r0 = r0.hasSystemFeature(r1);	 Catch:{ Throwable -> 0x0124 }
-        r8.hasGps = r0;	 Catch:{ Throwable -> 0x0124 }
+        r0 = r0.hasSystemFeature(r1);	 Catch:{ all -> 0x0124 }
+        r8.hasGps = r0;	 Catch:{ all -> 0x0124 }
         goto L_0x0126;
     L_0x0124:
         r8.hasGps = r6;
@@ -374,7 +374,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = r8.emptyView;
         r1.setShowAtCenter(r15);
         r1 = r8.emptyView;
-        r2 = NUM; // 0x7f0d0637 float:1.8745342E38 double:1.0531305636E-314;
+        r2 = NUM; // 0x7f0d0649 float:1.8745378E38 double:1.0531305725E-314;
         r3 = "NoContacts";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -527,7 +527,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = NUM; // 0x7var_d float:1.7944604E38 double:1.0529355095E-314;
         r0.setImageResource(r1);
         r0 = r8.floatingButtonContainer;
-        r1 = NUM; // 0x7f0d0315 float:1.8743715E38 double:1.0531301674E-314;
+        r1 = NUM; // 0x7f0d0318 float:1.8743721E38 double:1.053130169E-314;
         r2 = "CreateNewContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setContentDescription(r1);
@@ -1101,7 +1101,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_contactsactivity_mx2ayzezkfknxn64ountwgwnyby;
         themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
         themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
-        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$ContactsActivity$mX2AyzEZkfKNXN64OUntWgWNyBY -__lambda_contactsactivity_mx2ayzezkfknxn64ountwgwnyby2 = -__lambda_contactsactivity_mx2ayzezkfknxn64ountwgwnyby;
         themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_contactsactivity_mx2ayzezkfknxn64ountwgwnyby2, "avatar_backgroundRed");
         themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_contactsactivity_mx2ayzezkfknxn64ountwgwnyby2, "avatar_backgroundOrange");

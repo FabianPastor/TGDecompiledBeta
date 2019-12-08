@@ -84,7 +84,7 @@ public class BotKeyboardView extends LinearLayout {
         int i = 0;
         this.scrollView.scrollTo(0, 0);
         if (tL_replyKeyboardMarkup2 != null && this.botButtons.rows.size() != 0) {
-            this.isFullSize = !tL_replyKeyboardMarkup2.resize;
+            this.isFullSize = tL_replyKeyboardMarkup2.resize ^ 1;
             this.buttonHeight = !this.isFullSize ? 42 : (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.dp(30.0f)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
             int i2 = 0;
             while (i2 < tL_replyKeyboardMarkup2.rows.size()) {

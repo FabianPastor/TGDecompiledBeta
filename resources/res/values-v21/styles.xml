@@ -26,6 +26,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:listViewStyle">@style/Theme.TMessages.ListView</item>
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="android:textColorHighlight">#60808080</item>
         <item name="android:itemTextAppearance">@style/ActionBar.Transparent.TMessages.Item</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowActionBarOverlay">false</item>
@@ -34,7 +35,7 @@
         <item name="android:datePickerStyle">@style/Theme.TMessages.DatePicker</item>
         <item name="android:calendarViewStyle">@style/Theme.TMessages.CalendarView</item>
         <item name="android:actionBarItemBackground">@drawable/bar_selector_style</item>
-        <item name="android:colorControlActivated">#4991cc</item>
+        <item name="android:colorControlActivated">#808080</item>
         <item name="android:colorPrimary">#527da3</item>
         <item name="android:colorPrimaryDark">#33000000</item>
         <item name="android:navigationBarColor">#000000</item>
@@ -56,7 +57,7 @@
         <item name="android:textColor">#00000000</item>
     </style>
     <style name="Theme.TMessages.Dialog.Alert">
-        <item name="android:colorControlActivated">#4991cc</item>
+        <item name="android:colorControlActivated">#808080</item>
         <item name="android:colorPrimary">#527da3</item>
         <item name="android:colorAccent">#4991cc</item>
     </style>

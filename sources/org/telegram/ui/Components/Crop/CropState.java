@@ -39,16 +39,12 @@ public class CropState {
 
     public float getX() {
         updateValues();
-        float[] fArr = this.values;
-        Matrix matrix = this.matrix;
-        return fArr[2];
+        return this.values[2];
     }
 
     public float getY() {
         updateValues();
-        float[] fArr = this.values;
-        Matrix matrix = this.matrix;
-        return fArr[5];
+        return this.values[5];
     }
 
     public void scale(float f, float f2, float f3) {

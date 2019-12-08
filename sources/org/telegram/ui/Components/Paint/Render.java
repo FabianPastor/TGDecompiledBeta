@@ -124,7 +124,6 @@ public class Render {
         int i3 = 0;
         int i4 = 0;
         while (i3 < count) {
-            int i5;
             float f;
             float read = renderState.read();
             float read2 = renderState.read();
@@ -154,7 +153,6 @@ public class Render {
             Utils.RectFIntegral(rectF2);
             rectF.union(rectF2);
             if (i4 != 0) {
-                i5 = 0;
                 asFloatBuffer.put(r11[0]);
                 i2 = 1;
                 asFloatBuffer.put(r11[1]);
@@ -164,11 +162,10 @@ public class Render {
                 asFloatBuffer.put(read5);
                 i4++;
             } else {
-                i5 = 0;
                 i2 = 1;
                 f = 0.0f;
             }
-            asFloatBuffer.put(r11[i5]);
+            asFloatBuffer.put(r11[0]);
             asFloatBuffer.put(r11[i2]);
             asFloatBuffer.put(f);
             asFloatBuffer.put(f);

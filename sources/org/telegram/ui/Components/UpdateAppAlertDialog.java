@@ -112,7 +112,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
                 showProgress(false);
                 BlockingUpdateView.openApkInstall(this.parentActivity, this.appUpdate.document);
             }
-        } else if (i == NotificationCenter.fileDidFailedLoad) {
+        } else if (i == NotificationCenter.fileDidFailToLoad) {
             str = (String) objArr[0];
             str2 = this.fileName;
             if (str2 != null && str2.equals(str)) {
@@ -131,7 +131,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailToLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
         this.buttonsLayout.addView(this.radialProgressView, LayoutHelper.createFrame(36, 36.0f));
     }
@@ -139,7 +139,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     public void dismiss() {
         super.dismiss();
         NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailToLoad);
         NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
     }
 

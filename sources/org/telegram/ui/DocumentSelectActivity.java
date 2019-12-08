@@ -26,6 +26,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.UserObject;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -35,6 +36,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
@@ -56,6 +58,7 @@ public class DocumentSelectActivity extends BaseFragment {
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private int maxSelectedFiles = -1;
+    private ChatActivity parentFragment;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             -$$Lambda$DocumentSelectActivity$1$QUHI_wOoyDp1Dwx1fGWii_dVi9g -__lambda_documentselectactivity_1_quhi_wooydp1dwx1fgwii_dvi9g = new -$$Lambda$DocumentSelectActivity$1$QUHI_wOoyDp1Dwx1fGWii_dVi9g(this);
@@ -92,7 +95,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         }
 
-        void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList);
+        void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList, boolean z, int i);
 
         void startDocumentSelectActivity();
 
@@ -114,7 +117,6 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     private class ListItem {
-        long date;
         String ext;
         File file;
         int icon;
@@ -253,11 +255,17 @@ public class DocumentSelectActivity extends BaseFragment {
                     }
                     DocumentSelectActivity.this.finishFragment();
                 } else if (i == 3 && DocumentSelectActivity.this.delegate != null) {
-                    DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet()));
-                    for (ListItem listItem : DocumentSelectActivity.this.selectedFiles.values()) {
-                        listItem.date = System.currentTimeMillis();
+                    ArrayList arrayList = new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet());
+                    if (DocumentSelectActivity.this.parentFragment == null || !DocumentSelectActivity.this.parentFragment.isInScheduleMode()) {
+                        DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, arrayList, true, 0);
+                    } else {
+                        AlertsCreator.createScheduleDatePickerDialog(DocumentSelectActivity.this.getParentActivity(), UserObject.isUserSelf(DocumentSelectActivity.this.parentFragment.getCurrentUser()), new -$$Lambda$DocumentSelectActivity$2$yl01IzUpli-PVnRCzfTZ4UDQ9vY(this, arrayList));
                     }
                 }
+            }
+
+            public /* synthetic */ void lambda$onItemClick$0$DocumentSelectActivity$2(ArrayList arrayList, boolean z, int i) {
+                DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, arrayList, z, i);
             }
         });
         this.selectedFiles.clear();
@@ -293,7 +301,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         });
         this.listView.setOnItemLongClickListener(new -$$Lambda$DocumentSelectActivity$CyKwYdaVewVAaKBAnA3V_bH1l5E(this));
-        this.listView.setOnItemClickListener(new -$$Lambda$DocumentSelectActivity$lBQknjeUipxjA7znufbDrCLASSNAMELRU(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$DocumentSelectActivity$5lyT2SSY46ORn0T6Zpv2y78z0X4(this));
         listRoots();
         return this.fragmentView;
     }
@@ -350,7 +358,7 @@ public class DocumentSelectActivity extends BaseFragment {
         return true;
     }
 
-    public /* synthetic */ void lambda$createView$2$DocumentSelectActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$3$DocumentSelectActivity(View view, int i) {
         ListItem item = this.listAdapter.getItem(i);
         if (item != null) {
             File file = item.file;
@@ -434,11 +442,24 @@ public class DocumentSelectActivity extends BaseFragment {
                     } else if (this.delegate != null) {
                         arrayList = new ArrayList();
                         arrayList.add(file.getAbsolutePath());
-                        this.delegate.didSelectFiles(this, arrayList);
+                        ChatActivity chatActivity = this.parentFragment;
+                        if (chatActivity == null || !chatActivity.isInScheduleMode()) {
+                            this.delegate.didSelectFiles(this, arrayList, true, 0);
+                        } else {
+                            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), UserObject.isUserSelf(this.parentFragment.getCurrentUser()), new -$$Lambda$DocumentSelectActivity$q5kA20dL2OhdGnaRwAco3mC1ZtY(this, arrayList));
+                        }
                     }
                 }
             }
         }
+    }
+
+    public /* synthetic */ void lambda$null$2$DocumentSelectActivity(ArrayList arrayList, boolean z, int i) {
+        this.delegate.didSelectFiles(this, arrayList, z, i);
+    }
+
+    public void setChatActivity(ChatActivity chatActivity) {
+        this.parentFragment = chatActivity;
     }
 
     public void setMaxSelectedFiles(int i) {
@@ -468,13 +489,13 @@ public class DocumentSelectActivity extends BaseFragment {
                     this.recentItems.add(listItem);
                 }
             }
-            Collections.sort(this.recentItems, -$$Lambda$DocumentSelectActivity$9fKm6qZG_Rnisjsmtz1XWQccmXA.INSTANCE);
+            Collections.sort(this.recentItems, -$$Lambda$DocumentSelectActivity$ur54G5M42LrVGpKVa1b4i-PbIbk.INSTANCE);
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    static /* synthetic */ int lambda$loadRecentFiles$3(ListItem listItem, ListItem listItem2) {
+    static /* synthetic */ int lambda$loadRecentFiles$4(ListItem listItem, ListItem listItem2) {
         long lastModified = listItem.file.lastModified();
         long lastModified2 = listItem2.file.lastModified();
         if (lastModified == lastModified2) {
@@ -548,7 +569,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 String str;
                 this.currentDir = file;
                 this.items.clear();
-                Arrays.sort(listFiles, -$$Lambda$DocumentSelectActivity$KoBsEgVmPEJw-tYKCZKJ_jB7oso.INSTANCE);
+                Arrays.sort(listFiles, -$$Lambda$DocumentSelectActivity$KVKeC7vClp7bFHKkuV9tjTBa4As.INSTANCE);
                 int i = 0;
                 while (true) {
                     str = "Folder";
@@ -619,7 +640,7 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    static /* synthetic */ int lambda$listFiles$4(File file, File file2) {
+    static /* synthetic */ int lambda$listFiles$5(File file, File file2) {
         if (file.isDirectory() == file2.isDirectory()) {
             return file.getName().compareToIgnoreCase(file2.getName());
         }
@@ -658,7 +679,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r5 = "mounted";
         r5 = r4.equals(r5);
         r6 = NUM; // 0x7var_c4 float:1.7944975E38 double:1.0529356E-314;
-        r7 = NUM; // 0x7f0d0921 float:1.8746855E38 double:1.053130932E-314;
+        r7 = NUM; // 0x7f0d0940 float:1.8746918E38 double:1.0531309475E-314;
         r8 = "SdCard";
         if (r5 != 0) goto L_0x0036;
     L_0x002e:
@@ -676,7 +697,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r4.icon = r6;
         goto L_0x005a;
     L_0x004a:
-        r5 = NUM; // 0x7f0d0528 float:1.8744792E38 double:1.0531304297E-314;
+        r5 = NUM; // 0x7f0d052d float:1.8744802E38 double:1.053130432E-314;
         r9 = "InternalStorage";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r4.title = r5;
@@ -787,7 +808,7 @@ public class DocumentSelectActivity extends BaseFragment {
         goto L_0x013a;
     L_0x012f:
         r9 = "ExternalStorage";
-        r10 = NUM; // 0x7f0d0461 float:1.8744388E38 double:1.0531303314E-314;
+        r10 = NUM; // 0x7f0d0466 float:1.8744399E38 double:1.053130334E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r9, r10);	 Catch:{ Exception -> 0x0150 }
         r5.title = r9;	 Catch:{ Exception -> 0x0150 }
     L_0x013a:
@@ -831,7 +852,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r2.<init>(r11, r1);
         r3 = "/";
         r2.title = r3;
-        r4 = NUM; // 0x7f0d0a0c float:1.8747331E38 double:1.0531310483E-314;
+        r4 = NUM; // 0x7f0d0a37 float:1.8747419E38 double:1.0531310695E-314;
         r5 = "SystemRoot";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.subtitle = r4;
@@ -864,11 +885,11 @@ public class DocumentSelectActivity extends BaseFragment {
     L_0x01be:
         r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
         r0.<init>(r11, r1);
-        r2 = NUM; // 0x7f0d04cf float:1.8744612E38 double:1.0531303857E-314;
+        r2 = NUM; // 0x7f0d04d4 float:1.8744622E38 double:1.053130388E-314;
         r3 = "Gallery";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0d04d0 float:1.8744614E38 double:1.053130386E-314;
+        r2 = NUM; // 0x7f0d04d5 float:1.8744624E38 double:1.0531303887E-314;
         r3 = "GalleryInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
@@ -886,7 +907,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r3 = "AttachMusic";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0d060d float:1.8745256E38 double:1.053130543E-314;
+        r2 = NUM; // 0x7f0d061a float:1.8745283E38 double:1.0531305493E-314;
         r3 = "MusicInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;

@@ -321,7 +321,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     public ThemeDescription[] getThemeDescriptions() {
         r10 = new ThemeDescription[24];
         -$$Lambda$ContactAddActivity$ZD04TKrAmYykSmykZFEW6KtUdbc -__lambda_contactaddactivity_zd04tkramyyksmykzfew6ktudbc = new -$$Lambda$ContactAddActivity$ZD04TKrAmYykSmykZFEW6KtUdbc(this);
-        r10[16] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_contactaddactivity_zd04tkramyyksmykzfew6ktudbc, "avatar_text");
+        r10[16] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_savedDrawable}, -__lambda_contactaddactivity_zd04tkramyyksmykzfew6ktudbc, "avatar_text");
         r10[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_contactaddactivity_zd04tkramyyksmykzfew6ktudbc, "avatar_backgroundRed");
         r10[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_contactaddactivity_zd04tkramyyksmykzfew6ktudbc, "avatar_backgroundOrange");
         r10[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_contactaddactivity_zd04tkramyyksmykzfew6ktudbc, "avatar_backgroundViolet");

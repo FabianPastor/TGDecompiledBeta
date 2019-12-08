@@ -83,7 +83,7 @@ public class InviteUserCell extends FrameLayout {
     public void update(int i) {
         Contact contact = this.currentContact;
         if (contact != null) {
-            this.avatarDrawable.setInfo(contact.contact_id, contact.first_name, contact.last_name, false);
+            this.avatarDrawable.setInfo(contact.contact_id, contact.first_name, contact.last_name);
             CharSequence charSequence = this.currentName;
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence, true);

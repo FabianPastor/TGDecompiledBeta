@@ -235,7 +235,6 @@ public interface ICustomTabsService extends IInterface {
             String str = "android.support.customtabs.ICustomTabsService";
             if (i != NUM) {
                 Bundle bundle = null;
-                int i3 = 0;
                 boolean warmup;
                 ICustomTabsCallback asInterface;
                 switch (i) {
@@ -243,19 +242,13 @@ public interface ICustomTabsService extends IInterface {
                         parcel.enforceInterface(str);
                         warmup = warmup(parcel.readLong());
                         parcel2.writeNoException();
-                        if (warmup) {
-                            i3 = 1;
-                        }
-                        parcel2.writeInt(i3);
+                        parcel2.writeInt(warmup);
                         return true;
                     case 3:
                         parcel.enforceInterface(str);
                         warmup = newSession(org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder()));
                         parcel2.writeNoException();
-                        if (warmup) {
-                            i3 = 1;
-                        }
-                        parcel2.writeInt(i3);
+                        parcel2.writeInt(warmup);
                         return true;
                     case 4:
                         parcel.enforceInterface(str);
@@ -266,10 +259,7 @@ public interface ICustomTabsService extends IInterface {
                         }
                         warmup = mayLaunchUrl(asInterface, uri, bundle, parcel.createTypedArrayList(Bundle.CREATOR));
                         parcel2.writeNoException();
-                        if (warmup) {
-                            i3 = 1;
-                        }
-                        parcel2.writeInt(i3);
+                        parcel2.writeInt(warmup);
                         return true;
                     case 5:
                         parcel.enforceInterface(str);
@@ -294,10 +284,7 @@ public interface ICustomTabsService extends IInterface {
                         }
                         warmup = updateVisuals(asInterface, bundle);
                         parcel2.writeNoException();
-                        if (warmup) {
-                            i3 = 1;
-                        }
-                        parcel2.writeInt(i3);
+                        parcel2.writeInt(warmup);
                         return true;
                     case 7:
                         Uri uri2;
@@ -308,10 +295,7 @@ public interface ICustomTabsService extends IInterface {
                         }
                         warmup = requestPostMessageChannel(asInterface, uri2);
                         parcel2.writeNoException();
-                        if (warmup) {
-                            i3 = 1;
-                        }
-                        parcel2.writeInt(i3);
+                        parcel2.writeInt(warmup);
                         return true;
                     case 8:
                         parcel.enforceInterface(str);

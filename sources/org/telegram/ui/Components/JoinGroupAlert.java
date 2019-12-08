@@ -116,7 +116,7 @@ public class JoinGroupAlert extends BottomSheet {
             backupImageView.setImage(ImageLocation.getForChat(chat, false), str2, avatarDrawable, obj);
         } else {
             Drawable avatarDrawable2 = new AvatarDrawable();
-            avatarDrawable2.setInfo(0, obj.title, null, false);
+            avatarDrawable2.setInfo(0, obj.title, null);
             charSequence = obj.title;
             i = obj.participants_count;
             backupImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(obj.photo.sizes, 50), obj.photo), str2, avatarDrawable2, obj);

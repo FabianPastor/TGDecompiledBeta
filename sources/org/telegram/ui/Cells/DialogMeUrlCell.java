@@ -283,7 +283,7 @@ public class DialogMeUrlCell extends BaseCell {
         r0 = r0.set;
         r2 = r0.title;
         r0 = r1.avatarDrawable;
-        r0.setInfo(r9, r2, r8, r13);
+        r0.setInfo(r9, r2, r8);
         r14 = r1.avatarImage;
         r0 = r1.recentMeUrl;
         r0 = r0.set;
@@ -367,7 +367,7 @@ public class DialogMeUrlCell extends BaseCell {
     L_0x0211:
         r0 = r0.title;
         r2 = r1.avatarDrawable;
-        r2.setInfo(r9, r0, r8, r13);
+        r2.setInfo(r9, r0, r8);
         r2 = r1.recentMeUrl;
         r2 = r2.chat_invite;
         r8 = r2.broadcast;
@@ -506,7 +506,7 @@ public class DialogMeUrlCell extends BaseCell {
         r0 = android.text.TextUtils.isEmpty(r2);
         if (r0 == 0) goto L_0x031e;
     L_0x0315:
-        r0 = NUM; // 0x7f0d0505 float:1.8744721E38 double:1.0531304124E-314;
+        r0 = NUM; // 0x7f0d050a float:1.8744731E38 double:1.053130415E-314;
         r2 = "HiddenName";
         r2 = org.telegram.messenger.LocaleController.getString(r2, r0);
     L_0x031e:

@@ -231,33 +231,33 @@ public class MediaActionDrawable extends Drawable {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:381:0x0aed  */
-    /* JADX WARNING: Removed duplicated region for block: B:373:0x0ac9  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0b09  */
-    /* JADX WARNING: Removed duplicated region for block: B:387:0x0b3f  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0ba2  */
-    /* JADX WARNING: Removed duplicated region for block: B:389:0x0b62  */
-    /* JADX WARNING: Removed duplicated region for block: B:398:0x0ba6  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0beb  */
-    /* JADX WARNING: Removed duplicated region for block: B:416:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:420:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:429:0x0c5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:373:0x0ac9  */
-    /* JADX WARNING: Removed duplicated region for block: B:381:0x0aed  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0b09  */
-    /* JADX WARNING: Removed duplicated region for block: B:387:0x0b3f  */
-    /* JADX WARNING: Removed duplicated region for block: B:389:0x0b62  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0ba2  */
-    /* JADX WARNING: Removed duplicated region for block: B:398:0x0ba6  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0beb  */
-    /* JADX WARNING: Removed duplicated region for block: B:416:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:420:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:429:0x0c5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:437:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x0830  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x0828  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0982  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x08d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x0aec  */
+    /* JADX WARNING: Removed duplicated region for block: B:371:0x0ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x0b08  */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x0b3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b83  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x0b80  */
+    /* JADX WARNING: Removed duplicated region for block: B:395:0x0ba2  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0be7  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:371:0x0ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x0aec  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x0b08  */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x0b3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x0b80  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b83  */
+    /* JADX WARNING: Removed duplicated region for block: B:395:0x0ba2  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0be7  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0c7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:316:0x082f  */
+    /* JADX WARNING: Removed duplicated region for block: B:315:0x0827  */
+    /* JADX WARNING: Removed duplicated region for block: B:347:0x0981  */
+    /* JADX WARNING: Removed duplicated region for block: B:331:0x08d1  */
     /* JADX WARNING: Removed duplicated region for block: B:199:0x05c7  */
     /* JADX WARNING: Removed duplicated region for block: B:198:0x05c2  */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x05f1  */
@@ -280,17 +280,18 @@ public class MediaActionDrawable extends Drawable {
     /* JADX WARNING: Removed duplicated region for block: B:264:0x0736  */
     /* JADX WARNING: Removed duplicated region for block: B:271:0x0760  */
     /* JADX WARNING: Removed duplicated region for block: B:279:0x07ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x07b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:307:0x0803  */
-    /* JADX WARNING: Removed duplicated region for block: B:303:0x07f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:315:0x0821  */
-    /* JADX WARNING: Removed duplicated region for block: B:310:0x0813  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x0828  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x0830  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0839 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x08d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0982  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x0aec  */
+    /* JADX WARNING: Removed duplicated region for block: B:371:0x0ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x0b08  */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x0b3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b83  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x0b80  */
+    /* JADX WARNING: Removed duplicated region for block: B:395:0x0ba2  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0be7  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0c7c  */
     /* JADX WARNING: Removed duplicated region for block: B:195:0x05b7  */
     /* JADX WARNING: Removed duplicated region for block: B:198:0x05c2  */
     /* JADX WARNING: Removed duplicated region for block: B:199:0x05c7  */
@@ -315,18 +316,18 @@ public class MediaActionDrawable extends Drawable {
     /* JADX WARNING: Removed duplicated region for block: B:265:0x0739  */
     /* JADX WARNING: Removed duplicated region for block: B:271:0x0760  */
     /* JADX WARNING: Removed duplicated region for block: B:279:0x07ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x07b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x07cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:303:0x07f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:307:0x0803  */
-    /* JADX WARNING: Removed duplicated region for block: B:310:0x0813  */
-    /* JADX WARNING: Removed duplicated region for block: B:315:0x0821  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x0830  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x0828  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0839 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0982  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x08d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:371:0x0ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x0aec  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x0b08  */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x0b3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x0b80  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b83  */
+    /* JADX WARNING: Removed duplicated region for block: B:395:0x0ba2  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0be7  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0c7c  */
     /* JADX WARNING: Removed duplicated region for block: B:170:0x0532  */
     /* JADX WARNING: Removed duplicated region for block: B:176:0x053e  */
     /* JADX WARNING: Removed duplicated region for block: B:195:0x05b7  */
@@ -353,18 +354,18 @@ public class MediaActionDrawable extends Drawable {
     /* JADX WARNING: Removed duplicated region for block: B:264:0x0736  */
     /* JADX WARNING: Removed duplicated region for block: B:271:0x0760  */
     /* JADX WARNING: Removed duplicated region for block: B:279:0x07ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x07b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x07cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:307:0x0803  */
-    /* JADX WARNING: Removed duplicated region for block: B:303:0x07f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:315:0x0821  */
-    /* JADX WARNING: Removed duplicated region for block: B:310:0x0813  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x0828  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x0830  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0839 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x08d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0982  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x0aec  */
+    /* JADX WARNING: Removed duplicated region for block: B:371:0x0ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x0b08  */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x0b3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b83  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x0b80  */
+    /* JADX WARNING: Removed duplicated region for block: B:395:0x0ba2  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0be7  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0c7c  */
     /* JADX WARNING: Removed duplicated region for block: B:155:0x048a  */
     /* JADX WARNING: Removed duplicated region for block: B:158:0x0495  */
     /* JADX WARNING: Removed duplicated region for block: B:166:0x0526  */
@@ -395,18 +396,18 @@ public class MediaActionDrawable extends Drawable {
     /* JADX WARNING: Removed duplicated region for block: B:265:0x0739  */
     /* JADX WARNING: Removed duplicated region for block: B:271:0x0760  */
     /* JADX WARNING: Removed duplicated region for block: B:279:0x07ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x07b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x07cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:303:0x07f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:307:0x0803  */
-    /* JADX WARNING: Removed duplicated region for block: B:310:0x0813  */
-    /* JADX WARNING: Removed duplicated region for block: B:315:0x0821  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x0830  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x0828  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0839 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0982  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x08d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:371:0x0ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x0aec  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x0b08  */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x0b3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x0b80  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b83  */
+    /* JADX WARNING: Removed duplicated region for block: B:395:0x0ba2  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0be7  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0c7c  */
     /* JADX WARNING: Removed duplicated region for block: B:155:0x048a  */
     /* JADX WARNING: Removed duplicated region for block: B:158:0x0495  */
     /* JADX WARNING: Removed duplicated region for block: B:160:0x049f  */
@@ -437,18 +438,18 @@ public class MediaActionDrawable extends Drawable {
     /* JADX WARNING: Removed duplicated region for block: B:264:0x0736  */
     /* JADX WARNING: Removed duplicated region for block: B:271:0x0760  */
     /* JADX WARNING: Removed duplicated region for block: B:279:0x07ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x07b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x07cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:307:0x0803  */
-    /* JADX WARNING: Removed duplicated region for block: B:303:0x07f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:315:0x0821  */
-    /* JADX WARNING: Removed duplicated region for block: B:310:0x0813  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x0828  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x0830  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0839 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x08d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0982  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x0aec  */
+    /* JADX WARNING: Removed duplicated region for block: B:371:0x0ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x0b08  */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x0b3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b83  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x0b80  */
+    /* JADX WARNING: Removed duplicated region for block: B:395:0x0ba2  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0be7  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0c7c  */
     /* JADX WARNING: Missing block: B:88:0x0313, code skipped:
             if (r1 != r13) goto L_0x0317;
      */
@@ -458,7 +459,7 @@ public class MediaActionDrawable extends Drawable {
     /* JADX WARNING: Missing block: B:190:0x057f, code skipped:
             if (r1 != r13) goto L_0x05a3;
      */
-    /* JADX WARNING: Missing block: B:417:0x0CLASSNAME, code skipped:
+    /* JADX WARNING: Missing block: B:414:0x0CLASSNAME, code skipped:
             if (r1 != 13) goto L_0x0CLASSNAME;
      */
     public void draw(android.graphics.Canvas r35) {
@@ -1703,70 +1704,68 @@ public class MediaActionDrawable extends Drawable {
         r35.restore();
     L_0x07af:
         r1 = r0.currentIcon;
-        if (r1 == 0) goto L_0x07c6;
-    L_0x07b3:
         r2 = 1;
-        if (r1 == r2) goto L_0x07c7;
+        if (r1 == 0) goto L_0x07c6;
+    L_0x07b4:
+        if (r1 == r2) goto L_0x07c6;
     L_0x07b6:
         r1 = r0.nextIcon;
-        if (r1 == 0) goto L_0x07c7;
+        if (r1 == 0) goto L_0x07c6;
     L_0x07ba:
         if (r1 != r2) goto L_0x07bd;
     L_0x07bc:
-        goto L_0x07c7;
+        goto L_0x07c6;
     L_0x07bd:
         r27 = r9;
         r24 = r10;
         r8 = r11;
         r9 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0ab7;
+        goto L_0x0ab6;
     L_0x07c6:
-        r2 = 1;
-    L_0x07c7:
         r1 = r0.currentIcon;
-        if (r1 != 0) goto L_0x07cf;
-    L_0x07cb:
+        if (r1 != 0) goto L_0x07ce;
+    L_0x07ca:
         r1 = r0.nextIcon;
-        if (r1 == r2) goto L_0x07d7;
-    L_0x07cf:
+        if (r1 == r2) goto L_0x07d6;
+    L_0x07ce:
         r1 = r0.currentIcon;
-        if (r1 != r2) goto L_0x07e5;
-    L_0x07d3:
+        if (r1 != r2) goto L_0x07e4;
+    L_0x07d2:
         r1 = r0.nextIcon;
-        if (r1 != 0) goto L_0x07e5;
-    L_0x07d7:
+        if (r1 != 0) goto L_0x07e4;
+    L_0x07d6:
         r1 = r0.animatingTransition;
-        if (r1 == 0) goto L_0x07e5;
-    L_0x07db:
+        if (r1 == 0) goto L_0x07e4;
+    L_0x07da:
         r1 = r0.interpolator;
         r2 = r0.transitionProgress;
         r1 = r1.getInterpolation(r2);
         r2 = r1;
-        goto L_0x07e6;
-    L_0x07e5:
+        goto L_0x07e5;
+    L_0x07e4:
         r2 = 0;
-    L_0x07e6:
+    L_0x07e5:
         r1 = r0.path1;
         r1.reset();
         r1 = r0.path2;
         r1.reset();
         r1 = 0;
         r3 = r0.currentIcon;
-        if (r3 == 0) goto L_0x0803;
-    L_0x07f5:
+        if (r3 == 0) goto L_0x0802;
+    L_0x07f4:
         r4 = 1;
-        if (r3 == r4) goto L_0x07fc;
-    L_0x07f8:
+        if (r3 == r4) goto L_0x07fb;
+    L_0x07f7:
         r3 = 0;
         r4 = r3;
         r5 = 0;
-        goto L_0x080f;
-    L_0x07fc:
+        goto L_0x080e;
+    L_0x07fb:
         r3 = pausePath1;
         r4 = pausePath2;
         r5 = 90;
-        goto L_0x080f;
-    L_0x0803:
+        goto L_0x080e;
+    L_0x0802:
         r3 = playPath1;
         r1 = playPath2;
         r4 = playFinalPath;
@@ -1774,54 +1773,54 @@ public class MediaActionDrawable extends Drawable {
         r33 = r4;
         r4 = r1;
         r1 = r33;
-    L_0x080f:
+    L_0x080e:
         r6 = r0.nextIcon;
-        if (r6 == 0) goto L_0x0821;
-    L_0x0813:
+        if (r6 == 0) goto L_0x0820;
+    L_0x0812:
         r12 = 1;
-        if (r6 == r12) goto L_0x081a;
-    L_0x0816:
+        if (r6 == r12) goto L_0x0819;
+    L_0x0815:
         r6 = 0;
         r12 = r6;
-    L_0x0818:
+    L_0x0817:
         r13 = 0;
-        goto L_0x0826;
-    L_0x081a:
+        goto L_0x0825;
+    L_0x0819:
         r6 = pausePath1;
         r12 = pausePath2;
         r13 = 90;
-        goto L_0x0826;
-    L_0x0821:
+        goto L_0x0825;
+    L_0x0820:
         r6 = playPath1;
         r12 = playPath2;
-        goto L_0x0818;
-    L_0x0826:
-        if (r3 != 0) goto L_0x0830;
-    L_0x0828:
+        goto L_0x0817;
+    L_0x0825:
+        if (r3 != 0) goto L_0x082f;
+    L_0x0827:
         r3 = 0;
         r4 = 0;
         r33 = r12;
         r12 = r4;
         r4 = r33;
-        goto L_0x0835;
-    L_0x0830:
+        goto L_0x0834;
+    L_0x082f:
         r33 = r6;
         r6 = r3;
         r3 = r33;
-    L_0x0835:
+    L_0x0834:
         r14 = r0.animatingTransition;
-        if (r14 != 0) goto L_0x08ce;
-    L_0x0839:
-        if (r1 == 0) goto L_0x08ce;
-    L_0x083b:
+        if (r14 != 0) goto L_0x08cd;
+    L_0x0838:
+        if (r1 == 0) goto L_0x08cd;
+    L_0x083a:
         r3 = 0;
-    L_0x083c:
+    L_0x083b:
         r4 = r1.length;
         r4 = r4 / r15;
-        if (r3 >= r4) goto L_0x08c2;
-    L_0x0840:
-        if (r3 != 0) goto L_0x087f;
-    L_0x0842:
+        if (r3 >= r4) goto L_0x08c1;
+    L_0x083f:
+        if (r3 != 0) goto L_0x087e;
+    L_0x0841:
         r4 = r0.path1;
         r6 = r3 * 2;
         r12 = r1[r6];
@@ -1849,8 +1848,8 @@ public class MediaActionDrawable extends Drawable {
         r12 = r0.scale;
         r11 = r11 * r12;
         r4.moveTo(r6, r11);
-        goto L_0x08bb;
-    L_0x087f:
+        goto L_0x08ba;
+    L_0x087e:
         r23 = r11;
         r4 = r0.path1;
         r6 = r3 * 2;
@@ -1878,30 +1877,30 @@ public class MediaActionDrawable extends Drawable {
         r12 = r0.scale;
         r11 = r11 * r12;
         r4.lineTo(r6, r11);
-    L_0x08bb:
+    L_0x08ba:
         r3 = r3 + 1;
         r11 = r23;
         r15 = 2;
-        goto L_0x083c;
-    L_0x08c2:
+        goto L_0x083b;
+    L_0x08c1:
         r23 = r11;
         r27 = r9;
         r24 = r10;
-    L_0x08c8:
+    L_0x08c7:
         r25 = r13;
         r9 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0a5e;
-    L_0x08ce:
+        goto L_0x0a5d;
+    L_0x08cd:
         r23 = r11;
-        if (r3 != 0) goto L_0x0982;
-    L_0x08d2:
+        if (r3 != 0) goto L_0x0981;
+    L_0x08d1:
         r1 = 0;
-    L_0x08d3:
+    L_0x08d2:
         r3 = 5;
-        if (r1 >= r3) goto L_0x0957;
-    L_0x08d6:
-        if (r1 != 0) goto L_0x0915;
-    L_0x08d8:
+        if (r1 >= r3) goto L_0x0956;
+    L_0x08d5:
+        if (r1 != 0) goto L_0x0914;
+    L_0x08d7:
         r3 = r0.path1;
         r11 = r1 * 2;
         r12 = r6[r11];
@@ -1929,8 +1928,8 @@ public class MediaActionDrawable extends Drawable {
         r12 = r0.scale;
         r11 = r11 * r12;
         r3.moveTo(r10, r11);
-        goto L_0x0951;
-    L_0x0915:
+        goto L_0x0950;
+    L_0x0914:
         r24 = r10;
         r3 = r0.path1;
         r10 = r1 * 2;
@@ -1958,16 +1957,16 @@ public class MediaActionDrawable extends Drawable {
         r12 = r0.scale;
         r11 = r11 * r12;
         r3.lineTo(r10, r11);
-    L_0x0951:
+    L_0x0950:
         r1 = r1 + 1;
         r10 = r24;
-        goto L_0x08d3;
-    L_0x0957:
+        goto L_0x08d2;
+    L_0x0956:
         r24 = r10;
         r1 = r0.nextIcon;
         r3 = 4;
-        if (r1 != r3) goto L_0x0970;
-    L_0x095e:
+        if (r1 != r3) goto L_0x096f;
+    L_0x095d:
         r1 = r0.paint2;
         r3 = r0.transitionProgress;
         r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -1975,32 +1974,32 @@ public class MediaActionDrawable extends Drawable {
         r3 = r3 * r17;
         r3 = (int) r3;
         r1.setAlpha(r3);
-    L_0x096c:
+    L_0x096b:
         r27 = r9;
-        goto L_0x08c8;
-    L_0x0970:
+        goto L_0x08c7;
+    L_0x096f:
         r3 = r0.paint2;
         r4 = r0.currentIcon;
-        if (r4 != r1) goto L_0x0979;
-    L_0x0976:
+        if (r4 != r1) goto L_0x0978;
+    L_0x0975:
         r6 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x097e;
-    L_0x0979:
+        goto L_0x097d;
+    L_0x0978:
         r1 = r0.transitionProgress;
         r1 = r1 * r17;
         r6 = (int) r1;
-    L_0x097e:
+    L_0x097d:
         r3.setAlpha(r6);
-        goto L_0x096c;
-    L_0x0982:
+        goto L_0x096b;
+    L_0x0981:
         r24 = r10;
         r1 = 0;
-    L_0x0985:
+    L_0x0984:
         r10 = 5;
-        if (r1 >= r10) goto L_0x0a53;
-    L_0x0988:
-        if (r1 != 0) goto L_0x09ec;
-    L_0x098a:
+        if (r1 >= r10) goto L_0x0a52;
+    L_0x0987:
+        if (r1 != 0) goto L_0x09eb;
+    L_0x0989:
         r10 = r0.path1;
         r11 = r1 * 2;
         r14 = r6[r11];
@@ -2049,8 +2048,8 @@ public class MediaActionDrawable extends Drawable {
         r13 = r0.scale;
         r11 = r11 * r13;
         r9.moveTo(r10, r11);
-        goto L_0x0a4b;
-    L_0x09ec:
+        goto L_0x0a4a;
+    L_0x09eb:
         r27 = r9;
         r25 = r13;
         r9 = r0.path1;
@@ -2099,18 +2098,18 @@ public class MediaActionDrawable extends Drawable {
         r13 = r0.scale;
         r11 = r11 * r13;
         r9.lineTo(r10, r11);
-    L_0x0a4b:
+    L_0x0a4a:
         r1 = r1 + 1;
         r13 = r25;
         r9 = r27;
-        goto L_0x0985;
-    L_0x0a53:
+        goto L_0x0984;
+    L_0x0a52:
         r27 = r9;
         r25 = r13;
         r1 = r0.paint2;
         r9 = 255; // 0xff float:3.57E-43 double:1.26E-321;
         r1.setAlpha(r9);
-    L_0x0a5e:
+    L_0x0a5d:
         r1 = r0.path1;
         r1.close();
         r1 = r0.path2;
@@ -2134,15 +2133,15 @@ public class MediaActionDrawable extends Drawable {
         r3 = (float) r10;
         r7.rotate(r1, r2, r3);
         r1 = r0.currentIcon;
-        if (r1 == 0) goto L_0x0a8f;
-    L_0x0a8c:
+        if (r1 == 0) goto L_0x0a8e;
+    L_0x0a8b:
         r2 = 1;
-        if (r1 != r2) goto L_0x0a94;
-    L_0x0a8f:
+        if (r1 != r2) goto L_0x0a93;
+    L_0x0a8e:
         r1 = r0.currentIcon;
         r2 = 4;
-        if (r1 != r2) goto L_0x0aa4;
-    L_0x0a94:
+        if (r1 != r2) goto L_0x0aa3;
+    L_0x0a93:
         r1 = r8.left;
         r1 = r27 - r1;
         r1 = (float) r1;
@@ -2151,10 +2150,10 @@ public class MediaActionDrawable extends Drawable {
         r2 = (float) r10;
         r8 = r23;
         r7.scale(r8, r8, r1, r2);
-        goto L_0x0aa6;
-    L_0x0aa4:
+        goto L_0x0aa5;
+    L_0x0aa3:
         r8 = r23;
-    L_0x0aa6:
+    L_0x0aa5:
         r1 = r0.path1;
         r2 = r0.paint2;
         r7.drawPath(r1, r2);
@@ -2162,26 +2161,26 @@ public class MediaActionDrawable extends Drawable {
         r2 = r0.paint2;
         r7.drawPath(r1, r2);
         r35.restore();
-    L_0x0ab7:
+    L_0x0ab6:
         r1 = r0.currentIcon;
         r2 = 6;
-        if (r1 == r2) goto L_0x0ac5;
-    L_0x0abc:
+        if (r1 == r2) goto L_0x0ac4;
+    L_0x0abb:
         r1 = r0.nextIcon;
-        if (r1 != r2) goto L_0x0ac1;
+        if (r1 != r2) goto L_0x0ac0;
+    L_0x0abf:
+        goto L_0x0ac4;
     L_0x0ac0:
-        goto L_0x0ac5;
-    L_0x0ac1:
         r2 = r31;
-        goto L_0x0b60;
-    L_0x0ac5:
+        goto L_0x0b5f;
+    L_0x0ac4:
         r1 = r0.currentIcon;
-        if (r1 == r2) goto L_0x0aed;
-    L_0x0ac9:
+        if (r1 == r2) goto L_0x0aec;
+    L_0x0ac8:
         r1 = r0.transitionProgress;
         r2 = (r1 > r18 ? 1 : (r1 == r18 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0ae9;
-    L_0x0acf:
+        if (r2 <= 0) goto L_0x0ae8;
+    L_0x0ace:
         r1 = r1 - r18;
         r1 = r1 / r18;
         r2 = r1 / r18;
@@ -2189,24 +2188,24 @@ public class MediaActionDrawable extends Drawable {
         r2 = java.lang.Math.min(r3, r2);
         r13 = r3 - r2;
         r2 = (r1 > r18 ? 1 : (r1 == r18 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0ae6;
-    L_0x0ae1:
+        if (r2 <= 0) goto L_0x0ae5;
+    L_0x0ae0:
         r1 = r1 - r18;
         r1 = r1 / r18;
-        goto L_0x0ae7;
-    L_0x0ae6:
+        goto L_0x0ae6;
+    L_0x0ae5:
         r1 = 0;
-    L_0x0ae7:
+    L_0x0ae6:
         r10 = r1;
-        goto L_0x0af0;
-    L_0x0ae9:
+        goto L_0x0aef;
+    L_0x0ae8:
         r10 = 0;
         r13 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0af0;
-    L_0x0aed:
+        goto L_0x0aef;
+    L_0x0aec:
         r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r13 = 0;
-    L_0x0af0:
+    L_0x0aef:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r11 = r24 + r1;
         r1 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -2216,8 +2215,8 @@ public class MediaActionDrawable extends Drawable {
         r1.setAlpha(r9);
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r2 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1));
-        if (r2 >= 0) goto L_0x0b3a;
-    L_0x0b09:
+        if (r2 >= 0) goto L_0x0b39;
+    L_0x0b08:
         r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = r12 - r1;
@@ -2241,11 +2240,11 @@ public class MediaActionDrawable extends Drawable {
         r6 = r0.paint;
         r1 = r35;
         r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x0b3a:
+    L_0x0b39:
         r1 = 0;
         r2 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0ac1;
-    L_0x0b3f:
+        if (r2 <= 0) goto L_0x0ac0;
+    L_0x0b3e:
         r2 = (float) r12;
         r3 = (float) r11;
         r1 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
@@ -2261,13 +2260,13 @@ public class MediaActionDrawable extends Drawable {
         r6 = r0.paint;
         r1 = r35;
         r1.drawLine(r2, r3, r4, r5, r6);
-        goto L_0x0ac1;
-    L_0x0b60:
-        if (r2 == 0) goto L_0x0ba2;
-    L_0x0b62:
+        goto L_0x0ac0;
+    L_0x0b5f:
         r1 = r32;
-        if (r2 == r1) goto L_0x0ba4;
-    L_0x0b66:
+        if (r2 == 0) goto L_0x0ba0;
+    L_0x0b63:
+        if (r2 == r1) goto L_0x0ba0;
+    L_0x0b65:
         r3 = r2.getIntrinsicWidth();
         r3 = (float) r3;
         r3 = r3 * r21;
@@ -2280,17 +2279,17 @@ public class MediaActionDrawable extends Drawable {
         r2.setColorFilter(r5);
         r5 = r0.currentIcon;
         r6 = r0.nextIcon;
-        if (r5 != r6) goto L_0x0b84;
-    L_0x0b81:
+        if (r5 != r6) goto L_0x0b83;
+    L_0x0b80:
         r6 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0b8d;
-    L_0x0b84:
+        goto L_0x0b8c;
+    L_0x0b83:
         r5 = r0.transitionProgress;
         r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r13 = r6 - r5;
         r13 = r13 * r17;
         r6 = (int) r13;
-    L_0x0b8d:
+    L_0x0b8c:
         r2.setAlpha(r6);
         r5 = 2;
         r3 = r3 / r5;
@@ -2301,12 +2300,9 @@ public class MediaActionDrawable extends Drawable {
         r4 = r24 + r4;
         r2.setBounds(r6, r10, r3, r4);
         r2.draw(r7);
-        goto L_0x0ba4;
+    L_0x0ba0:
+        if (r1 == 0) goto L_0x0bd9;
     L_0x0ba2:
-        r1 = r32;
-    L_0x0ba4:
-        if (r1 == 0) goto L_0x0bdd;
-    L_0x0ba6:
         r2 = r1.getIntrinsicWidth();
         r2 = (float) r2;
         r2 = r2 * r8;
@@ -2319,15 +2315,15 @@ public class MediaActionDrawable extends Drawable {
         r1.setColorFilter(r4);
         r4 = r0.currentIcon;
         r5 = r0.nextIcon;
-        if (r4 != r5) goto L_0x0bc4;
-    L_0x0bc1:
+        if (r4 != r5) goto L_0x0bc0;
+    L_0x0bbd:
         r6 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0bc9;
-    L_0x0bc4:
+        goto L_0x0bc5;
+    L_0x0bc0:
         r4 = r0.transitionProgress;
         r4 = r4 * r17;
         r6 = (int) r4;
-    L_0x0bc9:
+    L_0x0bc5:
         r1.setAlpha(r6);
         r4 = 2;
         r2 = r2 / r4;
@@ -2338,30 +2334,30 @@ public class MediaActionDrawable extends Drawable {
         r3 = r24 + r3;
         r1.setBounds(r9, r10, r2, r3);
         r1.draw(r7);
-    L_0x0bdd:
+    L_0x0bd9:
         r1 = java.lang.System.currentTimeMillis();
         r3 = r0.lastAnimationTime;
         r3 = r1 - r3;
         r5 = 17;
         r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r8 <= 0) goto L_0x0bed;
-    L_0x0beb:
+        if (r8 <= 0) goto L_0x0be9;
+    L_0x0be7:
         r3 = 17;
-    L_0x0bed:
+    L_0x0be9:
         r0.lastAnimationTime = r1;
         r1 = r0.currentIcon;
         r2 = 3;
         if (r1 == r2) goto L_0x0CLASSNAME;
-    L_0x0bf4:
+    L_0x0bf0:
         r2 = 14;
         if (r1 == r2) goto L_0x0CLASSNAME;
-    L_0x0bf8:
+    L_0x0bf4:
         r5 = 4;
-        if (r1 != r5) goto L_0x0bff;
-    L_0x0bfb:
+        if (r1 != r5) goto L_0x0bfb;
+    L_0x0bf7:
         r1 = r0.nextIcon;
         if (r1 == r2) goto L_0x0CLASSNAME;
-    L_0x0bff:
+    L_0x0bfb:
         r1 = r0.currentIcon;
         r2 = 10;
         if (r1 == r2) goto L_0x0CLASSNAME;
@@ -2382,15 +2378,15 @@ public class MediaActionDrawable extends Drawable {
         r0.downloadRadOffset = r1;
         r1 = r0.nextIcon;
         r2 = 2;
-        if (r1 == r2) goto L_0x0CLASSNAME;
+        if (r1 == r2) goto L_0x0c4f;
     L_0x0CLASSNAME:
         r1 = r0.downloadProgress;
         r2 = r0.downloadProgressAnimationStart;
         r5 = r1 - r2;
         r6 = 0;
         r8 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1));
-        if (r8 <= 0) goto L_0x0CLASSNAME;
-    L_0x0c2f:
+        if (r8 <= 0) goto L_0x0c4f;
+    L_0x0c2b:
         r6 = r0.downloadProgressTime;
         r8 = (float) r3;
         r6 = r6 + r8;
@@ -2399,12 +2395,12 @@ public class MediaActionDrawable extends Drawable {
         r8 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
         r8 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
         if (r8 < 0) goto L_0x0CLASSNAME;
-    L_0x0c3d:
+    L_0x0CLASSNAME:
         r0.animatedDownloadProgress = r1;
         r0.downloadProgressAnimationStart = r1;
         r1 = 0;
         r0.downloadProgressTime = r1;
-        goto L_0x0CLASSNAME;
+        goto L_0x0c4f;
     L_0x0CLASSNAME:
         r1 = r0.interpolator;
         r8 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
@@ -2413,17 +2409,17 @@ public class MediaActionDrawable extends Drawable {
         r5 = r5 * r1;
         r2 = r2 + r5;
         r0.animatedDownloadProgress = r2;
-    L_0x0CLASSNAME:
+    L_0x0c4f:
         r34.invalidateSelf();
     L_0x0CLASSNAME:
         r1 = r0.animatingTransition;
-        if (r1 == 0) goto L_0x0c7b;
-    L_0x0c5a:
+        if (r1 == 0) goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
         r1 = r0.transitionProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0c7b;
-    L_0x0CLASSNAME:
+        if (r5 >= 0) goto L_0x0CLASSNAME;
+    L_0x0c5e:
         r3 = (float) r3;
         r4 = r0.transitionAnimationTime;
         r3 = r3 / r4;
@@ -2432,7 +2428,7 @@ public class MediaActionDrawable extends Drawable {
         r1 = r0.transitionProgress;
         r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
         if (r1 < 0) goto L_0x0CLASSNAME;
-    L_0x0c6f:
+    L_0x0c6b:
         r1 = r0.nextIcon;
         r0.currentIcon = r1;
         r0.transitionProgress = r2;
@@ -2440,22 +2436,22 @@ public class MediaActionDrawable extends Drawable {
         r0.animatingTransition = r1;
     L_0x0CLASSNAME:
         r34.invalidateSelf();
-    L_0x0c7b:
+    L_0x0CLASSNAME:
         r1 = r0.nextIcon;
         r2 = 4;
-        if (r1 == r2) goto L_0x0c8b;
-    L_0x0CLASSNAME:
+        if (r1 == r2) goto L_0x0CLASSNAME;
+    L_0x0c7c:
         r3 = 6;
         if (r1 == r3) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+    L_0x0c7f:
         r3 = 10;
-        if (r1 != r3) goto L_0x0c8e;
+        if (r1 != r3) goto L_0x0c8a;
     L_0x0CLASSNAME:
         r1 = r0.currentIcon;
-        if (r1 != r2) goto L_0x0c8e;
-    L_0x0c8b:
+        if (r1 != r2) goto L_0x0c8a;
+    L_0x0CLASSNAME:
         r35.restore();
-    L_0x0c8e:
+    L_0x0c8a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MediaActionDrawable.draw(android.graphics.Canvas):void");

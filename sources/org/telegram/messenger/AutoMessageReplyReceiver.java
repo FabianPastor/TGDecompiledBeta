@@ -18,8 +18,8 @@ public class AutoMessageReplyReceiver extends BroadcastReceiver {
                 int intExtra = intent2.getIntExtra("max_id", 0);
                 int intExtra2 = intent2.getIntExtra("currentAccount", 0);
                 if (!(longExtra == 0 || intExtra == 0)) {
-                    SendMessagesHelper.getInstance(intExtra2).sendMessage(charSequence.toString(), longExtra, null, null, true, null, null, null);
-                    MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, true);
+                    SendMessagesHelper.getInstance(intExtra2).sendMessage(charSequence.toString(), longExtra, null, null, true, null, null, null, true, 0);
+                    MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, true, 0);
                 }
             }
         }

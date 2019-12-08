@@ -325,44 +325,9 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 }
             }
         });
-        this.spkToggle.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                VoIPService sharedInstance = VoIPService.getSharedInstance();
-                if (sharedInstance != null) {
-                    sharedInstance.toggleSpeakerphoneOrShowRouteSheet(VoIPActivity.this);
-                }
-            }
-        });
-        this.micToggle.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                if (VoIPService.getSharedInstance() == null) {
-                    VoIPActivity.this.finish();
-                    return;
-                }
-                int isChecked = VoIPActivity.this.micToggle.isChecked() ^ 1;
-                VoIPActivity.this.micToggle.setChecked(isChecked);
-                VoIPService.getSharedInstance().setMicMute(isChecked);
-            }
-        });
-        this.chatBtn.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                if (VoIPActivity.this.isIncomingWaiting) {
-                    VoIPActivity.this.showMessagesSheet();
-                    return;
-                }
-                Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("com.tmessages.openchat");
-                stringBuilder.append(Math.random());
-                stringBuilder.append(Integer.MAX_VALUE);
-                intent.setAction(stringBuilder.toString());
-                intent.putExtra("currentAccount", VoIPActivity.this.currentAccount);
-                intent.setFlags(32768);
-                intent.putExtra("userId", VoIPActivity.this.user.id);
-                VoIPActivity.this.startActivity(intent);
-                VoIPActivity.this.finish();
-            }
-        });
+        this.spkToggle.setOnClickListener(new -$$Lambda$VoIPActivity$dUHMFM99ze4iOU7D50RvnVcMshI(this));
+        this.micToggle.setOnClickListener(new -$$Lambda$VoIPActivity$4VXO0BtKP7Yfr26BFsLWgsU7aiQ(this));
+        this.chatBtn.setOnClickListener(new -$$Lambda$VoIPActivity$inP4dym5Y3UyHztb8VYJORgcvAk(this));
         this.spkToggle.setChecked(((AudioManager) getSystemService("audio")).isSpeakerphoneOn());
         this.micToggle.setChecked(VoIPService.getSharedInstance().isMicMute());
         onAudioSettingsChanged();
@@ -507,8 +472,43 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         }
     }
 
+    public /* synthetic */ void lambda$onCreate$0$VoIPActivity(View view) {
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            sharedInstance.toggleSpeakerphoneOrShowRouteSheet(this);
+        }
+    }
+
+    public /* synthetic */ void lambda$onCreate$1$VoIPActivity(View view) {
+        if (VoIPService.getSharedInstance() == null) {
+            finish();
+            return;
+        }
+        int isChecked = this.micToggle.isChecked() ^ 1;
+        this.micToggle.setChecked(isChecked);
+        VoIPService.getSharedInstance().setMicMute(isChecked);
+    }
+
+    public /* synthetic */ void lambda$onCreate$2$VoIPActivity(View view) {
+        if (this.isIncomingWaiting) {
+            showMessagesSheet();
+            return;
+        }
+        Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("com.tmessages.openchat");
+        stringBuilder.append(Math.random());
+        stringBuilder.append(Integer.MAX_VALUE);
+        intent.setAction(stringBuilder.toString());
+        intent.putExtra("currentAccount", this.currentAccount);
+        intent.setFlags(32768);
+        intent.putExtra("userId", this.user.id);
+        startActivity(intent);
+        finish();
+    }
+
     private View createContentView() {
-        AnonymousClass11 anonymousClass11 = new FrameLayout(this) {
+        AnonymousClass8 anonymousClass8 = new FrameLayout(this) {
             private void setNegativeMargins(Rect rect, LayoutParams layoutParams) {
                 layoutParams.topMargin = -rect.top;
                 layoutParams.bottomMargin = -rect.bottom;
@@ -524,10 +524,10 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 return super.fitSystemWindows(rect);
             }
         };
-        anonymousClass11.setBackgroundColor(0);
-        anonymousClass11.setFitsSystemWindows(true);
-        anonymousClass11.setClipToPadding(false);
-        AnonymousClass12 anonymousClass12 = new BackupImageView(this) {
+        anonymousClass8.setBackgroundColor(0);
+        anonymousClass8.setFitsSystemWindows(true);
+        anonymousClass8.setClipToPadding(false);
+        AnonymousClass9 anonymousClass9 = new BackupImageView(this) {
             private Drawable bottomGradient = getResources().getDrawable(NUM);
             private Paint paint = new Paint();
             private Drawable topGradient = getResources().getDrawable(NUM);
@@ -545,16 +545,16 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 this.bottomGradient.draw(canvas);
             }
         };
-        this.photoView = anonymousClass12;
-        anonymousClass11.addView(anonymousClass12);
+        this.photoView = anonymousClass9;
+        anonymousClass8.addView(anonymousClass9);
         this.blurOverlayView1 = new ImageView(this);
         this.blurOverlayView1.setScaleType(ScaleType.CENTER_CROP);
         this.blurOverlayView1.setAlpha(0.0f);
-        anonymousClass11.addView(this.blurOverlayView1);
+        anonymousClass8.addView(this.blurOverlayView1);
         this.blurOverlayView2 = new ImageView(this);
         this.blurOverlayView2.setScaleType(ScaleType.CENTER_CROP);
         this.blurOverlayView2.setAlpha(0.0f);
-        anonymousClass11.addView(this.blurOverlayView2);
+        anonymousClass8.addView(this.blurOverlayView2);
         TextView textView = new TextView(this);
         textView.setTextColor(-NUM);
         textView.setText(LocaleController.getString("VoipInCallBranding", NUM));
@@ -573,7 +573,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         textView.setGravity(LocaleController.isRTL ? 5 : 3);
         textView.setCompoundDrawablePadding(AndroidUtilities.dp(5.0f));
         textView.setTextSize(1, 14.0f);
-        anonymousClass11.addView(textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 18.0f, 18.0f, 18.0f, 0.0f));
+        anonymousClass8.addView(textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 18.0f, 18.0f, 18.0f, 0.0f));
         this.brandingText = textView;
         textView = new TextView(this);
         textView.setSingleLine();
@@ -584,7 +584,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         textView.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
         textView.setTypeface(Typeface.create("sans-serif-light", 0));
         this.nameText = textView;
-        anonymousClass11.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 43.0f, 18.0f, 0.0f));
+        anonymousClass8.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 43.0f, 18.0f, 0.0f));
         textView = new TextView(this);
         textView.setTextColor(-NUM);
         textView.setSingleLine();
@@ -594,7 +594,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         textView.setTextSize(1, 15.0f);
         textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.stateText = textView;
-        anonymousClass11.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
+        anonymousClass8.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
         this.durationText = textView;
         textView = new TextView(this);
         textView.setTextColor(-NUM);
@@ -606,11 +606,11 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         textView.setGravity(LocaleController.isRTL ? 5 : 3);
         textView.setVisibility(8);
         this.stateText2 = textView;
-        anonymousClass11.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
+        anonymousClass8.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
         this.ellSpans = new TextAlphaSpan[]{new TextAlphaSpan(), new TextAlphaSpan(), new TextAlphaSpan()};
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(0);
-        anonymousClass11.addView(linearLayout, LayoutHelper.createFrame(-1, -2, 80));
+        anonymousClass8.addView(linearLayout, LayoutHelper.createFrame(-1, -2, 80));
         TextView textView2 = new TextView(this);
         textView2.setTextColor(-NUM);
         textView2.setSingleLine();
@@ -619,7 +619,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         textView2.setTextSize(1, 15.0f);
         textView2.setGravity(LocaleController.isRTL ? 5 : 3);
         this.accountNameText = textView2;
-        anonymousClass11.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 120.0f, 18.0f, 0.0f));
+        anonymousClass8.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 120.0f, 18.0f, 0.0f));
         CheckableImageView checkableImageView = new CheckableImageView(this);
         checkableImageView.setBackgroundResource(NUM);
         mutate = getResources().getDrawable(NUM).mutate();
@@ -666,7 +666,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         this.declineSwipe = callSwipeView2;
         linearLayout.addView(callSwipeView2, LayoutHelper.createLinear(-1, 70, 1.0f, -35, 4, 4, 4));
         this.swipeViewsWrap = linearLayout;
-        anonymousClass11.addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 80, 20.0f, 0.0f, 20.0f, 68.0f));
+        anonymousClass8.addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 80, 20.0f, 0.0f, 20.0f, 68.0f));
         ImageView imageView2 = new ImageView(this);
         FabBackgroundDrawable fabBackgroundDrawable = new FabBackgroundDrawable();
         fabBackgroundDrawable.setColor(-12207027);
@@ -678,7 +678,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         matrix.postRotate(-135.0f, (float) AndroidUtilities.dp(35.0f), (float) AndroidUtilities.dp(35.0f));
         imageView2.setImageMatrix(matrix);
         this.acceptBtn = imageView2;
-        anonymousClass11.addView(imageView2, LayoutHelper.createFrame(78, 78.0f, 83, 20.0f, 0.0f, 0.0f, 68.0f));
+        anonymousClass8.addView(imageView2, LayoutHelper.createFrame(78, 78.0f, 83, 20.0f, 0.0f, 0.0f, 68.0f));
         ImageView imageView3 = new ImageView(this);
         FabBackgroundDrawable fabBackgroundDrawable2 = new FabBackgroundDrawable();
         fabBackgroundDrawable2.setColor(-1696188);
@@ -686,7 +686,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         imageView3.setImageResource(NUM);
         imageView3.setScaleType(ScaleType.CENTER);
         this.declineBtn = imageView3;
-        anonymousClass11.addView(imageView3, LayoutHelper.createFrame(78, 78.0f, 85, 0.0f, 0.0f, 20.0f, 68.0f));
+        anonymousClass8.addView(imageView3, LayoutHelper.createFrame(78, 78.0f, 85, 0.0f, 0.0f, 20.0f, 68.0f));
         callSwipeView.setViewToDrag(imageView2, false);
         callSwipeView2.setViewToDrag(imageView3, true);
         FrameLayout frameLayout2 = new FrameLayout(this);
@@ -702,7 +702,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         frameLayout2.setForeground(getResources().getDrawable(NUM));
         frameLayout2.setContentDescription(LocaleController.getString("VoipEndCall", NUM));
         this.endBtn = frameLayout2;
-        anonymousClass11.addView(frameLayout2, LayoutHelper.createFrame(78, 78.0f, 81, 0.0f, 0.0f, 0.0f, 68.0f));
+        anonymousClass8.addView(frameLayout2, LayoutHelper.createFrame(78, 78.0f, 81, 0.0f, 0.0f, 0.0f, 68.0f));
         imageView2 = new ImageView(this);
         fabBackgroundDrawable3 = new FabBackgroundDrawable();
         fabBackgroundDrawable3.setColor(-1);
@@ -713,7 +713,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         imageView2.setVisibility(8);
         imageView2.setContentDescription(LocaleController.getString("Cancel", NUM));
         this.cancelBtn = imageView2;
-        anonymousClass11.addView(imageView2, LayoutHelper.createFrame(78, 78.0f, 83, 52.0f, 0.0f, 0.0f, 68.0f));
+        anonymousClass8.addView(imageView2, LayoutHelper.createFrame(78, 78.0f, 83, 52.0f, 0.0f, 0.0f, 68.0f));
         this.emojiWrap = new LinearLayout(this);
         this.emojiWrap.setOrientation(0);
         this.emojiWrap.setClipToPadding(false);
@@ -742,7 +742,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 voIPActivity.setEmojiExpanded(voIPActivity.emojiExpanded ^ 1);
             }
         });
-        anonymousClass11.addView(this.emojiWrap, LayoutHelper.createFrame(-2, -2, (LocaleController.isRTL ? 3 : 5) | 48));
+        anonymousClass8.addView(this.emojiWrap, LayoutHelper.createFrame(-2, -2, (LocaleController.isRTL ? 3 : 5) | 48));
         this.emojiWrap.setOnLongClickListener(new OnLongClickListener() {
             public boolean onLongClick(View view) {
                 VoIPActivity voIPActivity = VoIPActivity.this;
@@ -757,16 +757,12 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 voIPActivity.setEmojiTooltipVisible(voIPActivity.emojiTooltipVisible ^ 1);
                 voIPActivity = VoIPActivity.this;
                 if (voIPActivity.emojiTooltipVisible) {
-                    TextView access$2500 = voIPActivity.hintTextView;
-                    VoIPActivity voIPActivity2 = VoIPActivity.this;
-                    AnonymousClass1 anonymousClass1 = new Runnable() {
+                    voIPActivity.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new Runnable() {
                         public void run() {
                             VoIPActivity.this.tooltipHider = null;
                             VoIPActivity.this.setEmojiTooltipVisible(false);
                         }
-                    };
-                    voIPActivity2.tooltipHider = anonymousClass1;
-                    access$2500.postDelayed(anonymousClass1, 5000);
+                    }, 5000);
                 }
                 return true;
             }
@@ -776,7 +772,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         this.emojiExpandedText.setTextColor(-1);
         this.emojiExpandedText.setGravity(17);
         this.emojiExpandedText.setAlpha(0.0f);
-        anonymousClass11.addView(this.emojiExpandedText, LayoutHelper.createFrame(-1, -2.0f, 17, 10.0f, 32.0f, 10.0f, 0.0f));
+        anonymousClass8.addView(this.emojiExpandedText, LayoutHelper.createFrame(-1, -2.0f, 17, 10.0f, 32.0f, 10.0f, 0.0f));
         this.hintTextView = new CorrectlyMeasuringTextView(this);
         this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), -NUM));
         this.hintTextView.setTextColor(Theme.getColor("chat_gifSaveHintText"));
@@ -785,7 +781,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         this.hintTextView.setGravity(17);
         this.hintTextView.setMaxWidth(AndroidUtilities.dp(300.0f));
         this.hintTextView.setAlpha(0.0f);
-        anonymousClass11.addView(this.hintTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 0.0f, 42.0f, 10.0f, 0.0f));
+        anonymousClass8.addView(this.hintTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 0.0f, 42.0f, 10.0f, 0.0f));
         int alpha = this.stateText.getPaint().getAlpha();
         this.ellAnimator = new AnimatorSet();
         AnimatorSet animatorSet = this.ellAnimator;
@@ -814,9 +810,9 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 }
             }
         });
-        anonymousClass11.setClipChildren(false);
-        this.content = anonymousClass11;
-        return anonymousClass11;
+        anonymousClass8.setClipChildren(false);
+        this.content = anonymousClass8;
+        return anonymousClass8;
     }
 
     @SuppressLint({"ObjectAnimatorBinding"})
@@ -999,13 +995,13 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                     if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
                         CharSequence format;
                         long callDuration = VoIPService.getSharedInstance().getCallDuration() / 1000;
-                        TextView access$3100 = VoIPActivity.this.durationText;
+                        TextView access$2800 = VoIPActivity.this.durationText;
                         if (callDuration > 3600) {
                             format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(callDuration / 3600), Long.valueOf((callDuration % 3600) / 60), Long.valueOf(callDuration % 60)});
                         } else {
                             format = String.format("%d:%02d", new Object[]{Long.valueOf(callDuration / 60), Long.valueOf(callDuration % 60)});
                         }
-                        access$3100.setText(format);
+                        access$2800.setText(format);
                         VoIPActivity.this.durationText.postDelayed(this, 500);
                     }
                 }
@@ -1176,14 +1172,11 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         runOnUiThread(new Runnable() {
             public void run() {
                 int i;
-                boolean access$3600 = VoIPActivity.this.firstStateChange;
+                boolean access$3300 = VoIPActivity.this.firstStateChange;
                 String str = "VoipIncoming";
                 if (VoIPActivity.this.firstStateChange) {
                     VoIPActivity.this.spkToggle.setChecked(((AudioManager) VoIPActivity.this.getSystemService("audio")).isSpeakerphoneOn());
-                    VoIPActivity voIPActivity = VoIPActivity.this;
-                    boolean z = i == 15;
-                    voIPActivity.isIncomingWaiting = z;
-                    if (z) {
+                    if (VoIPActivity.this.isIncomingWaiting = i == 15) {
                         VoIPActivity.this.swipeViewsWrap.setVisibility(0);
                         VoIPActivity.this.endBtn.setVisibility(8);
                         VoIPActivity.this.acceptSwipe.startAnimatingArrows();
@@ -1252,21 +1245,17 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                     VoIPActivity.this.showRetry();
                 } else if (i == 3 || i == 5) {
                     VoIPActivity.this.setTitle(null);
-                    if (!access$3600 && i == 3) {
+                    if (!access$3300 && i == 3) {
                         String str2 = "call_emoji_tooltip_count";
                         i2 = MessagesController.getGlobalMainSettings().getInt(str2, 0);
                         if (i2 < 3) {
                             VoIPActivity.this.setEmojiTooltipVisible(true);
-                            TextView access$2500 = VoIPActivity.this.hintTextView;
-                            VoIPActivity voIPActivity2 = VoIPActivity.this;
-                            AnonymousClass2 anonymousClass2 = new Runnable() {
+                            VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new Runnable() {
                                 public void run() {
                                     VoIPActivity.this.tooltipHider = null;
                                     VoIPActivity.this.setEmojiTooltipVisible(false);
                                 }
-                            };
-                            voIPActivity2.tooltipHider = anonymousClass2;
-                            access$2500.postDelayed(anonymousClass2, 5000);
+                            }, 5000);
                             MessagesController.getGlobalMainSettings().edit().putInt(str2, i2 + 1).commit();
                         }
                     }
@@ -1548,25 +1537,25 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                     canvas2.drawRect(0.0f, 0.0f, (float) canvas2.getWidth(), (float) canvas2.getHeight(), paint);
                     VoIPActivity.this.blurredPhoto1 = createBitmap;
                     VoIPActivity.this.blurredPhoto2 = createBitmap2;
-                    VoIPActivity.this.runOnUiThread(new Runnable() {
-                        public void run() {
-                            VoIPActivity.this.blurOverlayView1.setImageBitmap(VoIPActivity.this.blurredPhoto1);
-                            VoIPActivity.this.blurOverlayView2.setImageBitmap(VoIPActivity.this.blurredPhoto2);
-                            bitmapHolder.release();
-                        }
-                    });
+                    VoIPActivity.this.runOnUiThread(new -$$Lambda$VoIPActivity$28$O2Am6USxHnYzaezgtW-3ZQnLyo4(this, bitmapHolder));
                 } catch (Throwable unused) {
                 }
+            }
+
+            public /* synthetic */ void lambda$run$0$VoIPActivity$28(BitmapHolder bitmapHolder) {
+                VoIPActivity.this.blurOverlayView1.setImageBitmap(VoIPActivity.this.blurredPhoto1);
+                VoIPActivity.this.blurOverlayView2.setImageBitmap(VoIPActivity.this.blurredPhoto2);
+                bitmapHolder.release();
             }
         }).start();
     }
 
-    private void sendTextMessage(final String str) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                SendMessagesHelper.getInstance(VoIPActivity.this.currentAccount).sendMessage(str, (long) VoIPActivity.this.user.id, null, null, false, null, null, null);
-            }
-        });
+    private void sendTextMessage(String str) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$VoIPActivity$QzixKI09iihAC1zzDghadBZbcCc(this, str));
+    }
+
+    public /* synthetic */ void lambda$sendTextMessage$3$VoIPActivity(String str) {
+        SendMessagesHelper.getInstance(this.currentAccount).sendMessage(str, (long) this.user.id, null, null, false, null, null, null, true, 0);
     }
 
     private void showMessagesSheet() {
@@ -1581,43 +1570,28 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         r4[3] = sharedPreferences.getString("quick_reply_msg4", LocaleController.getString("QuickReplyDefault4", NUM));
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(1);
-        final BottomSheet bottomSheet = new BottomSheet(this, true, 0);
+        BottomSheet bottomSheet = new BottomSheet(this, true, 0);
         if (VERSION.SDK_INT >= 21) {
             getWindow().setNavigationBarColor(-13948117);
-            bottomSheet.setOnDismissListener(new OnDismissListener() {
-                public void onDismiss(DialogInterface dialogInterface) {
-                    VoIPActivity.this.getWindow().setNavigationBarColor(0);
-                }
-            });
+            bottomSheet.setOnDismissListener(new -$$Lambda$VoIPActivity$FNBtTABZY9SOl53qekJBUNNqq7k(this));
         }
-        AnonymousClass34 anonymousClass34 = new OnClickListener() {
-            public void onClick(final View view) {
-                bottomSheet.dismiss();
-                if (VoIPService.getSharedInstance() != null) {
-                    VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable() {
-                        public void run() {
-                            VoIPActivity.this.sendTextMessage((String) view.getTag());
-                        }
-                    });
-                }
-            }
-        };
+        -$$Lambda$VoIPActivity$vv9zFeTuMzmokkSgVZMX6jmB-DQ -__lambda_voipactivity_vv9zfetumzmokksgvzmx6jmb-dq = new -$$Lambda$VoIPActivity$vv9zFeTuMzmokkSgVZMX6jmB-DQ(this, bottomSheet);
         for (CharSequence charSequence : r4) {
             BottomSheetCell bottomSheetCell = new BottomSheetCell(this, 0);
             bottomSheetCell.setTextAndIcon(charSequence, 0);
             bottomSheetCell.setTextColor(-1);
             bottomSheetCell.setTag(charSequence);
-            bottomSheetCell.setOnClickListener(anonymousClass34);
+            bottomSheetCell.setOnClickListener(-__lambda_voipactivity_vv9zfetumzmokksgvzmx6jmb-dq);
             linearLayout.addView(bottomSheetCell);
         }
         FrameLayout frameLayout = new FrameLayout(this);
-        final BottomSheetCell bottomSheetCell2 = new BottomSheetCell(this, 0);
+        BottomSheetCell bottomSheetCell2 = new BottomSheetCell(this, 0);
         String str = "QuickReplyCustom";
         bottomSheetCell2.setTextAndIcon(LocaleController.getString(str, NUM), 0);
         bottomSheetCell2.setTextColor(-1);
         frameLayout.addView(bottomSheetCell2);
-        final FrameLayout frameLayout2 = new FrameLayout(this);
-        final EditText editText = new EditText(this);
+        FrameLayout frameLayout2 = new FrameLayout(this);
+        EditText editText = new EditText(this);
         editText.setTextSize(1, 16.0f);
         editText.setTextColor(-1);
         editText.setHintTextColor(DarkTheme.getColor("chat_messagePanelHint"));
@@ -1641,34 +1615,13 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         imageView.setScaleY(0.1f);
         imageView.setAlpha(0.0f);
         frameLayout2.addView(imageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
-        imageView.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                if (editText.length() != 0) {
-                    bottomSheet.dismiss();
-                    if (VoIPService.getSharedInstance() != null) {
-                        VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable() {
-                            public void run() {
-                                AnonymousClass35 anonymousClass35 = AnonymousClass35.this;
-                                VoIPActivity.this.sendTextMessage(editText.getText().toString());
-                            }
-                        });
-                    }
-                }
-            }
-        });
+        imageView.setOnClickListener(new -$$Lambda$VoIPActivity$qS8Hi4upiPbU6ePN9io5C_dQhsw(this, editText, bottomSheet));
         imageView.setVisibility(4);
         final ImageView imageView2 = new ImageView(this);
         imageView2.setScaleType(ScaleType.CENTER);
         imageView2.setImageDrawable(DarkTheme.getThemedDrawable(this, NUM, "chat_messagePanelIcons"));
         frameLayout2.addView(imageView2, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
-        imageView2.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                frameLayout2.setVisibility(8);
-                bottomSheetCell2.setVisibility(0);
-                editText.setText("");
-                ((InputMethodManager) VoIPActivity.this.getSystemService("input_method")).hideSoftInputFromWindow(editText.getWindowToken(), 0);
-            }
-        });
+        imageView2.setOnClickListener(new -$$Lambda$VoIPActivity$EkpRskxpSAZKneCZj3Wgdr5iMNs(this, frameLayout2, bottomSheetCell2, editText));
         editText.addTextChangedListener(new TextWatcher() {
             boolean prevState = false;
 
@@ -1704,17 +1657,52 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         });
         frameLayout2.setVisibility(8);
         frameLayout.addView(frameLayout2);
-        bottomSheetCell2.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                frameLayout2.setVisibility(0);
-                bottomSheetCell2.setVisibility(4);
-                editText.requestFocus();
-                ((InputMethodManager) VoIPActivity.this.getSystemService("input_method")).showSoftInput(editText, 0);
-            }
-        });
+        bottomSheetCell2.setOnClickListener(new -$$Lambda$VoIPActivity$M5rvyVwU8mGC-6jzCkCqo_MOVmg(this, frameLayout2, bottomSheetCell2, editText));
         linearLayout.addView(frameLayout);
         bottomSheet.setCustomView(linearLayout);
         bottomSheet.setBackgroundColor(-13948117);
         bottomSheet.show();
+    }
+
+    public /* synthetic */ void lambda$showMessagesSheet$4$VoIPActivity(DialogInterface dialogInterface) {
+        getWindow().setNavigationBarColor(0);
+    }
+
+    public /* synthetic */ void lambda$showMessagesSheet$6$VoIPActivity(BottomSheet bottomSheet, View view) {
+        bottomSheet.dismiss();
+        if (VoIPService.getSharedInstance() != null) {
+            VoIPService.getSharedInstance().declineIncomingCall(4, new -$$Lambda$VoIPActivity$TZ1bdrRcWd888BWgOMWeIUKhz_Q(this, view));
+        }
+    }
+
+    public /* synthetic */ void lambda$null$5$VoIPActivity(View view) {
+        sendTextMessage((String) view.getTag());
+    }
+
+    public /* synthetic */ void lambda$showMessagesSheet$7$VoIPActivity(final EditText editText, BottomSheet bottomSheet, View view) {
+        if (editText.length() != 0) {
+            bottomSheet.dismiss();
+            if (VoIPService.getSharedInstance() != null) {
+                VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable() {
+                    public void run() {
+                        VoIPActivity.this.sendTextMessage(editText.getText().toString());
+                    }
+                });
+            }
+        }
+    }
+
+    public /* synthetic */ void lambda$showMessagesSheet$8$VoIPActivity(FrameLayout frameLayout, BottomSheetCell bottomSheetCell, EditText editText, View view) {
+        frameLayout.setVisibility(8);
+        bottomSheetCell.setVisibility(0);
+        editText.setText("");
+        ((InputMethodManager) getSystemService("input_method")).hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
+
+    public /* synthetic */ void lambda$showMessagesSheet$9$VoIPActivity(FrameLayout frameLayout, BottomSheetCell bottomSheetCell, EditText editText, View view) {
+        frameLayout.setVisibility(0);
+        bottomSheetCell.setVisibility(4);
+        editText.requestFocus();
+        ((InputMethodManager) getSystemService("input_method")).showSoftInput(editText, 0);
     }
 }

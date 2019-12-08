@@ -506,7 +506,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r11 = r11.itemView;
             r11 = (org.telegram.ui.Cells.TextCell) r11;
             r0 = r10.inviteViaLink;
-            r2 = NUM; // 0x7var_ float:1.7945661E38 double:1.052935767E-314;
+            r2 = NUM; // 0x7var_ float:1.7945683E38 double:1.0529357723E-314;
             if (r0 != r12) goto L_0x0028;
         L_0x001a:
             r12 = NUM; // 0x7f0d0237 float:1.8743265E38 double:1.0531300577E-314;
@@ -515,7 +515,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r11.setTextAndIcon(r12, r2, r1);
             goto L_0x018e;
         L_0x0028:
-            r12 = NUM; // 0x7f0d053a float:1.8744829E38 double:1.0531304386E-314;
+            r12 = NUM; // 0x7f0d053f float:1.8744839E38 double:1.053130441E-314;
             r0 = "InviteToGroupByLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
@@ -718,7 +718,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r12 = r10.searching;
             if (r12 == 0) goto L_0x018e;
         L_0x0182:
-            r12 = NUM; // 0x7f0d04da float:1.8744634E38 double:1.053130391E-314;
+            r12 = NUM; // 0x7f0d04df float:1.8744644E38 double:1.0531303936E-314;
             r0 = "GlobalSearch";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -1784,7 +1784,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         strArr[0] = "statusTextView";
         r10[24] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueText");
         r10[25] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, "windowBackgroundWhiteGrayText");
-        r10[26] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        r10[26] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$GroupCreateActivity$hlvy0IowbbkFD_DuH8EGWj1jbRE -__lambda_groupcreateactivity_hlvy0iowbbkfd_duh8egwj1jbre2 = -__lambda_groupcreateactivity_hlvy0iowbbkfd_duh8egwj1jbre;
         r10[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreateactivity_hlvy0iowbbkfd_duh8egwj1jbre2, "avatar_backgroundRed");
         r10[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreateactivity_hlvy0iowbbkfd_duh8egwj1jbre2, "avatar_backgroundOrange");

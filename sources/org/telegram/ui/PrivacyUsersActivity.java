@@ -498,7 +498,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw;
         themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
         themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$PrivacyUsersActivity$MXkjS07yNtFLRhkACbitVef2EDw -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2 = -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw;
         themeDescriptionArr[15] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundRed");
         themeDescriptionArr[16] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundOrange");
@@ -513,8 +513,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         strArr[0] = "textView";
         themeDescriptionArr[22] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueHeader");
         view = this.listView;
-        View view3 = view;
-        themeDescriptionArr[23] = new ThemeDescription(view3, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        view2 = view;
+        themeDescriptionArr[23] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
         view = this.listView;
         int i = ThemeDescription.FLAG_CHECKTAG;
         clsArr = new Class[]{ManageChatTextCell.class};
@@ -522,11 +522,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         strArr[0] = "imageView";
         themeDescriptionArr[24] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayIcon");
         view = this.listView;
-        view3 = view;
-        themeDescriptionArr[25] = new ThemeDescription(view3, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteBlueButton");
+        view2 = view;
+        themeDescriptionArr[25] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteBlueButton");
         view = this.listView;
-        view3 = view;
-        themeDescriptionArr[26] = new ThemeDescription(view3, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueIcon");
+        view2 = view;
+        themeDescriptionArr[26] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueIcon");
         return themeDescriptionArr;
     }
 

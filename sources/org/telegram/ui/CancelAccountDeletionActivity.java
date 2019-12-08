@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -40,6 +41,7 @@ import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -1010,7 +1012,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 TL_codeSettings tL_codeSettings = tL_account_sendConfirmPhoneCode.settings;
                 tL_codeSettings.allow_flashcall = false;
                 tL_codeSettings.allow_app_hash = ApplicationLoader.hasPlayServices;
-                if (tL_codeSettings.allow_flashcall) {
+                SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                String str2 = "sms_hash";
+                if (tL_account_sendConfirmPhoneCode.settings.allow_app_hash) {
+                    sharedPreferences.edit().putString(str2, BuildVars.SMS_HASH).commit();
+                } else {
+                    sharedPreferences.edit().remove(str2).commit();
+                }
+                if (tL_account_sendConfirmPhoneCode.settings.allow_flashcall) {
                     try {
                         String line1Number = telephonyManager.getLine1Number();
                         if (TextUtils.isEmpty(line1Number)) {
@@ -1217,7 +1226,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         slideView.setParams(bundle, false);
         this.actionBar.setTitle(slideView.getHeaderName());
         slideView.onShow();
-        slideView.setX((float) (z2 ? -AndroidUtilities.displaySize.x : AndroidUtilities.displaySize.x));
+        i = AndroidUtilities.displaySize.x;
+        if (z2) {
+            i = -i;
+        }
+        slideView.setX((float) i);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animatorSet.setDuration(300);

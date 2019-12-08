@@ -882,8 +882,14 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     private void linkChat(Chat chat, BaseFragment baseFragment) {
         if (chat != null) {
             if (ChatObject.isChannel(chat)) {
+                AlertDialog alertDialog;
                 AlertDialog[] alertDialogArr = new AlertDialog[1];
-                alertDialogArr[0] = baseFragment != null ? null : new AlertDialog(getParentActivity(), 3);
+                if (baseFragment != null) {
+                    alertDialog = null;
+                } else {
+                    alertDialog = new AlertDialog(getParentActivity(), 3);
+                }
+                alertDialogArr[0] = alertDialog;
                 TL_channels_setDiscussionGroup tL_channels_setDiscussionGroup = new TL_channels_setDiscussionGroup();
                 tL_channels_setDiscussionGroup.broadcast = MessagesController.getInputChannel(this.currentChat);
                 tL_channels_setDiscussionGroup.group = MessagesController.getInputChannel(chat);
@@ -1002,7 +1008,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_chatlinkactivity_m285vuz7t55wg0zesskh6uuk1tu;
         themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
         themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$ChatLinkActivity$M285Vuz7T55WG0zESsKh6UUk1tU -__lambda_chatlinkactivity_m285vuz7t55wg0zesskh6uuk1tu2 = -__lambda_chatlinkactivity_m285vuz7t55wg0zesskh6uuk1tu;
         themeDescriptionArr[16] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatlinkactivity_m285vuz7t55wg0zesskh6uuk1tu2, "avatar_backgroundRed");
         themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatlinkactivity_m285vuz7t55wg0zesskh6uuk1tu2, "avatar_backgroundOrange");

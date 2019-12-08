@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPoll;
 import org.telegram.tgnet.TLRPC.TL_poll;
 import org.telegram.tgnet.TLRPC.TL_pollAnswer;
@@ -41,6 +42,7 @@ import org.telegram.ui.Cells.PollEditTextCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ContextProgressView;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
@@ -63,6 +65,7 @@ public class PollCreateActivity extends BaseFragment {
     private AnimatorSet doneItemAnimation;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
+    private ChatActivity parentFragment;
     private ContextProgressView progressView;
     private int questionHeaderRow;
     private int questionRow;
@@ -72,7 +75,7 @@ public class PollCreateActivity extends BaseFragment {
     private int rowCount;
 
     public interface PollCreateActivityDelegate {
-        void sendPoll(TL_messageMediaPoll tL_messageMediaPoll);
+        void sendPoll(TL_messageMediaPoll tL_messageMediaPoll, boolean z, int i);
     }
 
     public class TouchHelperCallback extends Callback {
@@ -266,9 +269,9 @@ public class PollCreateActivity extends BaseFragment {
                 ViewHolder findContainingViewHolder = PollCreateActivity.this.listView.findContainingViewHolder((View) view.getParent());
                 if (findContainingViewHolder != null) {
                     int adapterPosition = findContainingViewHolder.getAdapterPosition();
-                    int access$1400 = adapterPosition - PollCreateActivity.this.answerStartRow;
+                    int access$1500 = adapterPosition - PollCreateActivity.this.answerStartRow;
                     PollCreateActivity.this.listAdapter.notifyItemRemoved(findContainingViewHolder.getAdapterPosition());
-                    System.arraycopy(PollCreateActivity.this.answers, access$1400 + 1, PollCreateActivity.this.answers, access$1400, (PollCreateActivity.this.answers.length - 1) - access$1400);
+                    System.arraycopy(PollCreateActivity.this.answers, access$1500 + 1, PollCreateActivity.this.answers, access$1500, (PollCreateActivity.this.answers.length - 1) - access$1500);
                     PollCreateActivity.this.answers[PollCreateActivity.this.answers.length - 1] = null;
                     PollCreateActivity.this.answersCount = PollCreateActivity.this.answersCount - 1;
                     if (PollCreateActivity.this.answersCount == PollCreateActivity.this.answers.length - 1) {
@@ -295,10 +298,10 @@ public class PollCreateActivity extends BaseFragment {
             ViewHolder findContainingViewHolder = PollCreateActivity.this.listView.findContainingViewHolder(pollEditTextCell);
             if (findContainingViewHolder != null) {
                 int adapterPosition = findContainingViewHolder.getAdapterPosition();
-                int access$1400 = adapterPosition - PollCreateActivity.this.answerStartRow;
-                if (access$1400 == PollCreateActivity.this.answersCount - 1 && PollCreateActivity.this.answersCount < 10) {
+                int access$1500 = adapterPosition - PollCreateActivity.this.answerStartRow;
+                if (access$1500 == PollCreateActivity.this.answersCount - 1 && PollCreateActivity.this.answersCount < 10) {
                     PollCreateActivity.this.addNewField();
-                } else if (access$1400 == PollCreateActivity.this.answersCount - 1) {
+                } else if (access$1500 == PollCreateActivity.this.answersCount - 1) {
                     AndroidUtilities.hideKeyboard(pollEditTextCell.getTextView());
                 } else {
                     ViewHolder findViewHolderForAdapterPosition = PollCreateActivity.this.listView.findViewHolderForAdapterPosition(adapterPosition + 1);
@@ -339,15 +342,19 @@ public class PollCreateActivity extends BaseFragment {
         }
 
         public void swapElements(int i, int i2) {
-            int access$1400 = i - PollCreateActivity.this.answerStartRow;
-            int access$14002 = i2 - PollCreateActivity.this.answerStartRow;
-            if (access$1400 >= 0 && access$14002 >= 0 && access$1400 < PollCreateActivity.this.answersCount && access$14002 < PollCreateActivity.this.answersCount) {
-                String str = PollCreateActivity.this.answers[access$1400];
-                PollCreateActivity.this.answers[access$1400] = PollCreateActivity.this.answers[access$14002];
-                PollCreateActivity.this.answers[access$14002] = str;
+            int access$1500 = i - PollCreateActivity.this.answerStartRow;
+            int access$15002 = i2 - PollCreateActivity.this.answerStartRow;
+            if (access$1500 >= 0 && access$15002 >= 0 && access$1500 < PollCreateActivity.this.answersCount && access$15002 < PollCreateActivity.this.answersCount) {
+                String str = PollCreateActivity.this.answers[access$1500];
+                PollCreateActivity.this.answers[access$1500] = PollCreateActivity.this.answers[access$15002];
+                PollCreateActivity.this.answers[access$15002] = str;
                 notifyItemMoved(i, i2);
             }
         }
+    }
+
+    public PollCreateActivity(ChatActivity chatActivity) {
+        this.parentFragment = chatActivity;
     }
 
     public boolean onFragmentCreate() {
@@ -387,9 +394,18 @@ public class PollCreateActivity extends BaseFragment {
                         }
                     }
                     tL_messageMediaPoll.results = new TL_pollResults();
-                    PollCreateActivity.this.delegate.sendPoll(tL_messageMediaPoll);
+                    if (PollCreateActivity.this.parentFragment.isInScheduleMode()) {
+                        AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), UserObject.isUserSelf(PollCreateActivity.this.parentFragment.getCurrentUser()), new -$$Lambda$PollCreateActivity$1$Hyg15oY-N3LaZD41EVZTjJmamHg(this, tL_messageMediaPoll));
+                        return;
+                    }
+                    PollCreateActivity.this.delegate.sendPoll(tL_messageMediaPoll, true, 0);
                     PollCreateActivity.this.finishFragment();
                 }
+            }
+
+            public /* synthetic */ void lambda$onItemClick$0$PollCreateActivity$1(TL_messageMediaPoll tL_messageMediaPoll, boolean z, int i) {
+                PollCreateActivity.this.delegate.sendPoll(tL_messageMediaPoll, z, i);
+                PollCreateActivity.this.finishFragment();
             }
         });
         this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));

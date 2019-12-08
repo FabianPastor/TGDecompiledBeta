@@ -16,7 +16,6 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -32,7 +31,6 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Environment;
 import android.os.PowerManager;
-import android.provider.CallLog.Calls;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images.Media;
@@ -77,7 +75,6 @@ import com.google.android.gms.auth.api.phone.SmsRetriever;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,6 +99,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_document;
+import org.telegram.tgnet.TLRPC.TL_restrictionReason;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
 import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.TL_wallPaperSettings;
@@ -111,6 +109,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
+import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PickerBottomLayout;
@@ -414,6 +413,35 @@ public class AndroidUtilities {
         }
     }
 
+    public static float[] RGBtoHSB(int i, int i2, int i3) {
+        float[] fArr = new float[3];
+        int i4 = i > i2 ? i : i2;
+        if (i3 > i4) {
+            i4 = i3;
+        }
+        int i5 = i < i2 ? i : i2;
+        if (i3 < i5) {
+            i5 = i3;
+        }
+        float f = (float) i4;
+        float f2 = f / 255.0f;
+        float f3 = 0.0f;
+        f = i4 != 0 ? ((float) (i4 - i5)) / f : 0.0f;
+        if (f != 0.0f) {
+            float f4 = (float) (i4 - i5);
+            float f5 = ((float) (i4 - i)) / f4;
+            float f6 = ((float) (i4 - i2)) / f4;
+            float f7 = ((float) (i4 - i3)) / f4;
+            f7 = i == i4 ? f7 - f6 : i2 == i4 ? (f5 + 2.0f) - f7 : (f6 + 4.0f) - f5;
+            float f8 = f7 / 6.0f;
+            f3 = f8 < 0.0f ? f8 + 1.0f : f8;
+        }
+        fArr[0] = f3;
+        fArr[1] = f;
+        fArr[2] = f2;
+        return fArr;
+    }
+
     public static int compare(int i, int i2) {
         return i == i2 ? 0 : i > i2 ? 1 : -1;
     }
@@ -424,10 +452,6 @@ public class AndroidUtilities {
 
     public static int getPeerLayerVersion(int i) {
         return (i >> 16) & 65535;
-    }
-
-    public static long makeBroadcastId(int i) {
-        return (((long) i) & 4294967295L) | 4294967296L;
     }
 
     public static int setMyLayerVersion(int i, int i2) {
@@ -483,6 +507,7 @@ public class AndroidUtilities {
     }
 
     public static int[] calcDrawableColor(Drawable drawable) {
+        int[] colorsList;
         Drawable drawable2 = drawable;
         int[] iArr = new int[4];
         int i = -16777216;
@@ -500,6 +525,11 @@ public class AndroidUtilities {
                 }
             } else if (drawable2 instanceof ColorDrawable) {
                 i = ((ColorDrawable) drawable2).getColor();
+            } else if (drawable2 instanceof BackgroundGradientDrawable) {
+                colorsList = ((BackgroundGradientDrawable) drawable2).getColorsList();
+                if (colorsList != null && colorsList.length > 0) {
+                    i = colorsList[0];
+                }
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -509,9 +539,9 @@ public class AndroidUtilities {
         int[] hsvToRgb = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.65d));
         iArr[0] = Color.argb(102, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
         iArr[1] = Color.argb(136, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
-        int[] hsvToRgb2 = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.72d));
-        iArr[2] = Color.argb(102, hsvToRgb2[0], hsvToRgb2[1], hsvToRgb2[2]);
-        iArr[3] = Color.argb(136, hsvToRgb2[0], hsvToRgb2[1], hsvToRgb2[2]);
+        colorsList = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.72d));
+        iArr[2] = Color.argb(102, colorsList[0], colorsList[1], colorsList[2]);
+        iArr[3] = Color.argb(136, colorsList[0], colorsList[1], colorsList[2]);
         return iArr;
     }
 
@@ -708,8 +738,14 @@ public class AndroidUtilities {
         r3 = "/";
         r5.replace(r1, r3);
     L_0x006d:
-        if (r5 == 0) goto L_0x0091;
-    L_0x006f:
+        r1 = ".attheme";
+        r1 = r5.endsWith(r1);
+        if (r1 == 0) goto L_0x0076;
+    L_0x0075:
+        return r0;
+    L_0x0076:
+        if (r5 == 0) goto L_0x009a;
+    L_0x0078:
         r5 = r5.toLowerCase();
         r1 = new java.lang.StringBuilder;
         r1.<init>();
@@ -720,10 +756,10 @@ public class AndroidUtilities {
         r1.append(r3);
         r1 = r1.toString();
         r5 = r5.contains(r1);
-        if (r5 == 0) goto L_0x0091;
-    L_0x0090:
+        if (r5 == 0) goto L_0x009a;
+    L_0x0099:
         r0 = 1;
-    L_0x0091:
+    L_0x009a:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.isInternalUri(android.net.Uri):boolean");
@@ -795,6 +831,7 @@ public class AndroidUtilities {
         Throwable th;
         Uri uri2 = uri;
         ArrayList arrayList2 = arrayList;
+        String str2 = "";
         ArrayList<User> arrayList3 = null;
         if (z) {
             try {
@@ -816,11 +853,10 @@ public class AndroidUtilities {
         }
         ArrayList arrayList4 = new ArrayList();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(createInputStream, "UTF-8"));
-        int i2 = 1;
-        int i3 = 0;
+        int i2 = 0;
         VcardData vcardData = null;
-        String str2 = vcardData;
-        VcardItem vcardItem = str2;
+        String str3 = vcardData;
+        VcardItem vcardItem = str3;
         Object obj = null;
         while (true) {
             String readLine = bufferedReader.readLine();
@@ -830,9 +866,10 @@ public class AndroidUtilities {
                 obj = 1;
             } else {
                 String[] strArr;
-                String str3 = "ORG";
-                String str4 = "TEL";
-                String str5;
+                String[] strArr2;
+                String str4 = "ORG";
+                String str5 = "TEL";
+                String str6;
                 if (readLine.indexOf(58) >= 0) {
                     if (readLine.startsWith("BEGIN:VCARD")) {
                         VcardData vcardData2 = new VcardData(arrayList3);
@@ -841,16 +878,16 @@ public class AndroidUtilities {
                         vcardItem = arrayList3;
                         vcardData = vcardData2;
                     } else {
-                        str5 = str;
+                        str6 = str;
                         if (!readLine.startsWith("END:VCARD")) {
                             if (arrayList2 != null) {
                                 VcardItem vcardItem2;
-                                if (readLine.startsWith(str4)) {
-                                    vcardItem2 = new VcardItem();
-                                    vcardItem2.type = i3;
-                                } else if (readLine.startsWith("EMAIL")) {
+                                if (readLine.startsWith(str5)) {
                                     vcardItem2 = new VcardItem();
                                     vcardItem2.type = i2;
+                                } else if (readLine.startsWith("EMAIL")) {
+                                    vcardItem2 = new VcardItem();
+                                    vcardItem2.type = 1;
                                 } else {
                                     if (!(readLine.startsWith("ADR") || readLine.startsWith("LABEL"))) {
                                         if (!readLine.startsWith("GEO")) {
@@ -864,7 +901,7 @@ public class AndroidUtilities {
                                                 vcardItem2 = new VcardItem();
                                                 vcardItem2.type = 5;
                                             } else {
-                                                if (!(readLine.startsWith(str3) || readLine.startsWith("TITLE"))) {
+                                                if (!(readLine.startsWith(str4) || readLine.startsWith("TITLE"))) {
                                                     if (!readLine.startsWith("ROLE")) {
                                                         if (readLine.startsWith("X-ANDROID")) {
                                                             vcardItem2 = new VcardItem();
@@ -898,7 +935,7 @@ public class AndroidUtilities {
                     }
                     obj = null;
                 } else {
-                    str5 = str;
+                    str6 = str;
                 }
                 if (obj == null && vcardData != null) {
                     if (vcardItem == null) {
@@ -910,17 +947,17 @@ public class AndroidUtilities {
                         vcardItem.vcardData.add(readLine);
                     }
                 }
-                if (str2 != null) {
+                if (str3 != null) {
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(str2);
+                    stringBuilder.append(str3);
                     stringBuilder.append(readLine);
                     readLine = stringBuilder.toString();
-                    str2 = null;
+                    str3 = null;
                 }
-                String str6 = "=";
+                String str7 = "=";
                 if (readLine.contains("=QUOTED-PRINTABLE")) {
-                    if (readLine.endsWith(str6)) {
-                        str2 = readLine.substring(i3, readLine.length() - i2);
+                    if (readLine.endsWith(str7)) {
+                        str3 = readLine.substring(i2, readLine.length() - 1);
                         arrayList3 = null;
                     }
                 }
@@ -928,81 +965,89 @@ public class AndroidUtilities {
                     vcardItem.fullData = readLine;
                 }
                 if (readLine.indexOf(":") >= 0) {
-                    strArr = new String[]{readLine.substring(i3, readLine.indexOf(":")), readLine.substring(readLine.indexOf(":") + 1).trim()};
+                    strArr = new String[]{readLine.substring(0, readLine.indexOf(":")), readLine.substring(readLine.indexOf(":") + 1).trim()};
+                    i2 = 0;
                 } else {
-                    strArr = new String[]{readLine.trim()};
+                    strArr2 = new String[1];
+                    i2 = 0;
+                    strArr2[0] = readLine.trim();
+                    strArr = strArr2;
                 }
                 if (strArr.length >= 2) {
                     if (vcardData != null) {
-                        if (!strArr[i3].startsWith("FN")) {
-                            if (!strArr[i3].startsWith(str3) || !TextUtils.isEmpty(vcardData.name)) {
-                                if (strArr[i3].startsWith(str4)) {
+                        if (!strArr[i2].startsWith("FN")) {
+                            if (!strArr[i2].startsWith(str4) || !TextUtils.isEmpty(vcardData.name)) {
+                                if (strArr[0].startsWith(str5)) {
                                     vcardData.phones.add(strArr[1]);
                                 }
                             }
                         }
-                        String[] split = strArr[i3].split(";");
-                        i2 = split.length;
-                        int i4 = 0;
-                        str3 = null;
+                        strArr2 = strArr[0].split(";");
+                        i2 = strArr2.length;
+                        int i3 = 0;
                         str4 = null;
-                        while (i4 < i2) {
-                            String[] split2 = split[i4].split(str6);
-                            String[] strArr2 = split;
-                            int i5 = i2;
-                            if (split2.length == 2) {
-                                if (split2[0].equals("CHARSET")) {
-                                    str4 = split2[1];
-                                } else if (split2[0].equals("ENCODING")) {
-                                    str3 = split2[1];
+                        str5 = null;
+                        while (i3 < i2) {
+                            int i4 = i2;
+                            String[] split = strArr2[i3].split(str7);
+                            String[] strArr3 = strArr2;
+                            String str8 = str7;
+                            if (split.length == 2) {
+                                if (split[0].equals("CHARSET")) {
+                                    str5 = split[1];
+                                } else if (split[0].equals("ENCODING")) {
+                                    str4 = split[1];
                                 }
                             }
-                            i4++;
-                            split = strArr2;
-                            i2 = i5;
+                            i3++;
+                            i2 = i4;
+                            strArr2 = strArr3;
+                            str7 = str8;
                         }
                         vcardData.name = strArr[1];
-                        if (str3 != null && str3.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                        if (str4 != null && str4.equalsIgnoreCase("QUOTED-PRINTABLE")) {
                             byte[] decodeQuotedPrintable = decodeQuotedPrintable(getStringBytes(vcardData.name));
                             if (!(decodeQuotedPrintable == null || decodeQuotedPrintable.length == 0)) {
-                                vcardData.name = new String(decodeQuotedPrintable, str4);
+                                vcardData.name = new String(decodeQuotedPrintable, str5);
                             }
                         }
                         arrayList2 = arrayList;
                         arrayList3 = null;
-                        i2 = 1;
-                        i3 = 0;
+                        i2 = 0;
                     }
                 }
                 arrayList2 = arrayList;
                 arrayList3 = null;
-                i2 = 1;
-                i3 = 0;
+                i2 = 0;
             }
         }
         bufferedReader.close();
         createInputStream.close();
         arrayList3 = null;
-        for (int i6 = 0; i6 < arrayList4.size(); i6++) {
-            VcardData vcardData3 = (VcardData) arrayList4.get(i6);
+        for (int i5 = 0; i5 < arrayList4.size(); i5++) {
+            VcardData vcardData3 = (VcardData) arrayList4.get(i5);
             if (vcardData3.name != null && !vcardData3.phones.isEmpty()) {
                 if (arrayList3 == null) {
                     arrayList3 = new ArrayList();
                 }
-                String str7 = (String) vcardData3.phones.get(0);
-                for (i2 = 0; i2 < vcardData3.phones.size(); i2++) {
-                    String str8 = (String) vcardData3.phones.get(i2);
-                    if (ContactsController.getInstance(i).contactsByShortPhone.get(str8.substring(Math.max(0, str8.length() - 7))) != null) {
-                        str7 = str8;
+                String str9 = (String) vcardData3.phones.get(0);
+                for (int i6 = 0; i6 < vcardData3.phones.size(); i6++) {
+                    String str10 = (String) vcardData3.phones.get(i6);
+                    if (ContactsController.getInstance(i).contactsByShortPhone.get(str10.substring(Math.max(0, str10.length() - 7))) != null) {
+                        str9 = str10;
                         break;
                     }
                 }
                 TL_userContact_old2 tL_userContact_old2 = new TL_userContact_old2();
-                tL_userContact_old2.phone = str7;
+                tL_userContact_old2.phone = str9;
                 tL_userContact_old2.first_name = vcardData3.name;
-                tL_userContact_old2.last_name = "";
+                tL_userContact_old2.last_name = str2;
                 tL_userContact_old2.id = 0;
-                tL_userContact_old2.restriction_reason = vcardData3.vcard.toString();
+                TL_restrictionReason tL_restrictionReason = new TL_restrictionReason();
+                tL_restrictionReason.text = vcardData3.vcard.toString();
+                tL_restrictionReason.platform = str2;
+                tL_restrictionReason.reason = str2;
+                tL_userContact_old2.restriction_reason.add(tL_restrictionReason);
                 arrayList3.add(tL_userContact_old2);
             }
         }
@@ -1429,64 +1474,98 @@ public class AndroidUtilities {
                 ITelephony iTelephony2 = (ITelephony) declaredMethod.invoke(telephonyManager, new Object[0]);
                 iTelephony2.silenceRinger();
                 iTelephony2.endCall();
-            } catch (Exception e) {
-                FileLog.e(e);
+            } catch (Throwable th) {
+                FileLog.e(th);
             }
         }
     }
 
-    public static String obtainLoginPhoneCall(String str) {
-        Cursor query;
-        String string;
-        Throwable th;
-        if (!hasCallPermissions) {
-            return null;
-        }
-        try {
-            query = ApplicationLoader.applicationContext.getContentResolver().query(Calls.CONTENT_URI, new String[]{"number", "date"}, "type IN (3,1,5)", null, "date DESC LIMIT 5");
-            while (query.moveToNext()) {
-                try {
-                    string = query.getString(0);
-                    long j = query.getLong(1);
-                    if (BuildVars.LOGS_ENABLED) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("number = ");
-                        stringBuilder.append(string);
-                        FileLog.e(stringBuilder.toString());
-                    }
-                    if (Math.abs(System.currentTimeMillis() - j) < 3600000) {
-                        if (checkPhonePattern(str, string)) {
-                            if (query != null) {
-                                query.close();
-                            }
-                            return string;
-                        }
-                    }
-                } catch (Throwable th2) {
-                    Throwable th3 = th2;
-                    string = th;
-                    th = th3;
-                }
-            }
-            if (query != null) {
-                query.close();
-            }
-        } catch (Exception th4) {
-            FileLog.e(th4);
-        }
-        return null;
-        throw th4;
-        if (query != null) {
-            if (string != null) {
-                try {
-                    query.close();
-                } catch (Throwable unused) {
-                }
-            } else {
-                query.close();
-            }
-        }
-        throw th4;
+    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x0075 */
+    /* JADX WARNING: Missing block: B:26:0x0070, code skipped:
+            if (r0 != null) goto L_0x0072;
+     */
+    /* JADX WARNING: Missing block: B:28:?, code skipped:
+            r0.close();
+     */
+    public static java.lang.String obtainLoginPhoneCall(java.lang.String r10) {
+        /*
+        r0 = hasCallPermissions;
+        r1 = 0;
+        if (r0 != 0) goto L_0x0006;
+    L_0x0005:
+        return r1;
+    L_0x0006:
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0076 }
+        r2 = r0.getContentResolver();	 Catch:{ Exception -> 0x0076 }
+        r3 = android.provider.CallLog.Calls.CONTENT_URI;	 Catch:{ Exception -> 0x0076 }
+        r0 = 2;
+        r4 = new java.lang.String[r0];	 Catch:{ Exception -> 0x0076 }
+        r0 = "number";
+        r8 = 0;
+        r4[r8] = r0;	 Catch:{ Exception -> 0x0076 }
+        r0 = "date";
+        r9 = 1;
+        r4[r9] = r0;	 Catch:{ Exception -> 0x0076 }
+        r5 = "type IN (3,1,5)";
+        r6 = 0;
+        r7 = "date DESC LIMIT 5";
+        r0 = r2.query(r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0076 }
+    L_0x0024:
+        r2 = r0.moveToNext();	 Catch:{ all -> 0x006d }
+        if (r2 == 0) goto L_0x0067;
+    L_0x002a:
+        r2 = r0.getString(r8);	 Catch:{ all -> 0x006d }
+        r3 = r0.getLong(r9);	 Catch:{ all -> 0x006d }
+        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x006d }
+        if (r5 == 0) goto L_0x004a;
+    L_0x0036:
+        r5 = new java.lang.StringBuilder;	 Catch:{ all -> 0x006d }
+        r5.<init>();	 Catch:{ all -> 0x006d }
+        r6 = "number = ";
+        r5.append(r6);	 Catch:{ all -> 0x006d }
+        r5.append(r2);	 Catch:{ all -> 0x006d }
+        r5 = r5.toString();	 Catch:{ all -> 0x006d }
+        org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x006d }
+    L_0x004a:
+        r5 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x006d }
+        r5 = r5 - r3;
+        r3 = java.lang.Math.abs(r5);	 Catch:{ all -> 0x006d }
+        r5 = 3600000; // 0x36ee80 float:5.044674E-39 double:1.7786363E-317;
+        r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
+        if (r7 < 0) goto L_0x005b;
+    L_0x005a:
+        goto L_0x0024;
+    L_0x005b:
+        r3 = checkPhonePattern(r10, r2);	 Catch:{ all -> 0x006d }
+        if (r3 == 0) goto L_0x0024;
+    L_0x0061:
+        if (r0 == 0) goto L_0x0066;
+    L_0x0063:
+        r0.close();	 Catch:{ Exception -> 0x0076 }
+    L_0x0066:
+        return r2;
+    L_0x0067:
+        if (r0 == 0) goto L_0x007a;
+    L_0x0069:
+        r0.close();	 Catch:{ Exception -> 0x0076 }
+        goto L_0x007a;
+    L_0x006d:
+        r10 = move-exception;
+        throw r10;	 Catch:{ all -> 0x006f }
+    L_0x006f:
+        r10 = move-exception;
+        if (r0 == 0) goto L_0x0075;
+    L_0x0072:
+        r0.close();	 Catch:{ all -> 0x0075 }
+    L_0x0075:
+        throw r10;	 Catch:{ Exception -> 0x0076 }
+    L_0x0076:
+        r10 = move-exception;
+        org.telegram.messenger.FileLog.e(r10);
+    L_0x007a:
+        return r1;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.obtainLoginPhoneCall(java.lang.String):java.lang.String");
     }
 
     public static boolean checkPhonePattern(String str, String str2) {
@@ -1903,53 +1982,77 @@ public class AndroidUtilities {
         }
     }
 
-    public static String getDataColumn(Context context, Uri uri, String str, String[] strArr) {
-        Cursor query;
-        Throwable th;
-        String[] strArr2 = new String[1];
-        String str2 = "_data";
-        strArr2[0] = str2;
-        try {
-            query = context.getContentResolver().query(uri, strArr2, str, strArr, null);
-            if (query != null) {
-                try {
-                    if (query.moveToFirst()) {
-                        String string = query.getString(query.getColumnIndexOrThrow(str2));
-                        if (string.startsWith("content://") || !(string.startsWith("/") || string.startsWith("file://"))) {
-                            if (query != null) {
-                                query.close();
-                            }
-                            return null;
-                        }
-                        if (query != null) {
-                            query.close();
-                        }
-                        return string;
-                    }
-                } catch (Throwable th2) {
-                    Throwable th3 = th2;
-                    str = th;
-                    th = th3;
-                }
-            }
-            if (query != null) {
-                query.close();
-            }
-        } catch (Exception unused) {
-        }
-        return null;
-        if (query != null) {
-            if (str != null) {
-                try {
-                    query.close();
-                } catch (Throwable unused2) {
-                }
-            } else {
-                query.close();
-            }
-        }
-        throw th;
-        throw th;
+    /* JADX WARNING: Missing exception handler attribute for start block: B:27:0x0052 */
+    /* JADX WARNING: Missing block: B:24:0x004d, code skipped:
+            if (r8 != null) goto L_0x004f;
+     */
+    /* JADX WARNING: Missing block: B:26:?, code skipped:
+            r8.close();
+     */
+    public static java.lang.String getDataColumn(android.content.Context r8, android.net.Uri r9, java.lang.String r10, java.lang.String[] r11) {
+        /*
+        r0 = 1;
+        r3 = new java.lang.String[r0];
+        r0 = "_data";
+        r1 = 0;
+        r3[r1] = r0;
+        r7 = 0;
+        r1 = r8.getContentResolver();	 Catch:{ Exception -> 0x0058 }
+        r6 = 0;
+        r2 = r9;
+        r4 = r10;
+        r5 = r11;
+        r8 = r1.query(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0058 }
+        if (r8 == 0) goto L_0x0053;
+    L_0x0017:
+        r9 = r8.moveToFirst();	 Catch:{ all -> 0x004a }
+        if (r9 == 0) goto L_0x0053;
+    L_0x001d:
+        r9 = r8.getColumnIndexOrThrow(r0);	 Catch:{ all -> 0x004a }
+        r9 = r8.getString(r9);	 Catch:{ all -> 0x004a }
+        r10 = "content://";
+        r10 = r9.startsWith(r10);	 Catch:{ all -> 0x004a }
+        if (r10 != 0) goto L_0x0044;
+    L_0x002d:
+        r10 = "/";
+        r10 = r9.startsWith(r10);	 Catch:{ all -> 0x004a }
+        if (r10 != 0) goto L_0x003e;
+    L_0x0035:
+        r10 = "file://";
+        r10 = r9.startsWith(r10);	 Catch:{ all -> 0x004a }
+        if (r10 != 0) goto L_0x003e;
+    L_0x003d:
+        goto L_0x0044;
+    L_0x003e:
+        if (r8 == 0) goto L_0x0043;
+    L_0x0040:
+        r8.close();	 Catch:{ Exception -> 0x0058 }
+    L_0x0043:
+        return r9;
+    L_0x0044:
+        if (r8 == 0) goto L_0x0049;
+    L_0x0046:
+        r8.close();	 Catch:{ Exception -> 0x0058 }
+    L_0x0049:
+        return r7;
+    L_0x004a:
+        r9 = move-exception;
+        throw r9;	 Catch:{ all -> 0x004c }
+    L_0x004c:
+        r9 = move-exception;
+        if (r8 == 0) goto L_0x0052;
+    L_0x004f:
+        r8.close();	 Catch:{ all -> 0x0052 }
+    L_0x0052:
+        throw r9;	 Catch:{ Exception -> 0x0058 }
+    L_0x0053:
+        if (r8 == 0) goto L_0x0058;
+    L_0x0055:
+        r8.close();	 Catch:{ Exception -> 0x0058 }
+    L_0x0058:
+        return r7;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getDataColumn(android.content.Context, android.net.Uri, java.lang.String, java.lang.String[]):java.lang.String");
     }
 
     public static boolean isExternalStorageDocument(Uri uri) {
@@ -2159,41 +2262,64 @@ public class AndroidUtilities {
         }
     }
 
-    public static boolean copyFile(File file, File file2) throws IOException {
-        Throwable th;
-        Throwable th2;
-        if (!file2.exists()) {
-            file2.createNewFile();
-        }
-        FileInputStream fileInputStream;
-        try {
-            fileInputStream = new FileInputStream(file);
-            FileOutputStream fileOutputStream = new FileOutputStream(file2);
-            try {
-                fileOutputStream.getChannel().transferFrom(fileInputStream.getChannel(), 0, fileInputStream.getChannel().size());
-                fileOutputStream.close();
-                fileInputStream.close();
-                return true;
-            } catch (Throwable th22) {
-                Throwable th3 = th22;
-                th22 = th;
-                th = th3;
-            }
-            throw th;
-            if (th22 != null) {
-                try {
-                    fileOutputStream.close();
-                } catch (Throwable unused) {
-                }
-            } else {
-                fileOutputStream.close();
-            }
-            throw th;
-        } catch (Exception th4) {
-            FileLog.e(th4);
-            return false;
-        } catch (Throwable unused2) {
-        }
+    /* JADX WARNING: Missing exception handler attribute for start block: B:23:0x003d */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:31:0x0044 */
+    /* JADX WARNING: Can't wrap try/catch for region: R(5:20|21|22|23|24) */
+    /* JADX WARNING: Missing block: B:22:?, code skipped:
+            r8.close();
+     */
+    /* JADX WARNING: Missing block: B:30:?, code skipped:
+            r0.close();
+     */
+    public static boolean copyFile(java.io.File r8, java.io.File r9) throws java.io.IOException {
+        /*
+        r0 = r8.equals(r9);
+        r1 = 1;
+        if (r0 == 0) goto L_0x0008;
+    L_0x0007:
+        return r1;
+    L_0x0008:
+        r0 = r9.exists();
+        if (r0 != 0) goto L_0x0011;
+    L_0x000e:
+        r9.createNewFile();
+    L_0x0011:
+        r0 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0045 }
+        r0.<init>(r8);	 Catch:{ Exception -> 0x0045 }
+        r8 = new java.io.FileOutputStream;	 Catch:{ all -> 0x003e }
+        r8.<init>(r9);	 Catch:{ all -> 0x003e }
+        r2 = r8.getChannel();	 Catch:{ all -> 0x0037 }
+        r3 = r0.getChannel();	 Catch:{ all -> 0x0037 }
+        r4 = 0;
+        r9 = r0.getChannel();	 Catch:{ all -> 0x0037 }
+        r6 = r9.size();	 Catch:{ all -> 0x0037 }
+        r2.transferFrom(r3, r4, r6);	 Catch:{ all -> 0x0037 }
+        r8.close();	 Catch:{ all -> 0x003e }
+        r0.close();	 Catch:{ Exception -> 0x0045 }
+        return r1;
+    L_0x0037:
+        r9 = move-exception;
+        throw r9;	 Catch:{ all -> 0x0039 }
+    L_0x0039:
+        r9 = move-exception;
+        r8.close();	 Catch:{ all -> 0x003d }
+    L_0x003d:
+        throw r9;	 Catch:{ all -> 0x003e }
+    L_0x003e:
+        r8 = move-exception;
+        throw r8;	 Catch:{ all -> 0x0040 }
+    L_0x0040:
+        r8 = move-exception;
+        r0.close();	 Catch:{ all -> 0x0044 }
+    L_0x0044:
+        throw r8;	 Catch:{ Exception -> 0x0045 }
+    L_0x0045:
+        r8 = move-exception;
+        org.telegram.messenger.FileLog.e(r8);
+        r8 = 0;
+        return r8;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.copyFile(java.io.File, java.io.File):boolean");
     }
 
     public static byte[] calcAuthKeyHash(byte[] bArr) {
@@ -2264,7 +2390,7 @@ public class AndroidUtilities {
         r7 = r5.exists();
         if (r7 == 0) goto L_0x015c;
     L_0x004d:
-        r7 = NUM; // 0x7f0d06eb float:1.8745707E38 double:1.0531306525E-314;
+        r7 = NUM; // 0x7f0d0700 float:1.874575E38 double:1.053130663E-314;
         r8 = "OK";
         r9 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
         r10 = "AppName";
@@ -2278,11 +2404,11 @@ public class AndroidUtilities {
         if (r12 == 0) goto L_0x00a6;
     L_0x006a:
         r0 = r16.getDocumentName();
-        r0 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r5, r0, r11);
+        r0 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r5, r0, r6, r11);
         if (r0 == 0) goto L_0x007e;
     L_0x0074:
         r1 = new org.telegram.ui.ThemePreviewActivity;
-        r1.<init>(r5, r0);
+        r1.<init>(r0);
         r2.presentFragment(r1);
         goto L_0x015c;
     L_0x007e:
@@ -2290,7 +2416,7 @@ public class AndroidUtilities {
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d0522 float:1.874478E38 double:1.0531304267E-314;
+        r1 = NUM; // 0x7f0d0527 float:1.874479E38 double:1.053130429E-314;
         r3 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
@@ -2387,7 +2513,7 @@ public class AndroidUtilities {
         r3.setTitle(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.setPositiveButton(r1, r6);
-        r1 = NUM; // 0x7f0d063c float:1.8745352E38 double:1.053130566E-314;
+        r1 = NUM; // 0x7f0d064e float:1.8745388E38 double:1.053130575E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r5 = 0;
@@ -2517,7 +2643,7 @@ public class AndroidUtilities {
         r1 = "ApkRestricted";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setMessage(r0);
-        r0 = NUM; // 0x7f0d0835 float:1.8746376E38 double:1.0531308156E-314;
+        r0 = NUM; // 0x7f0d084b float:1.874642E38 double:1.0531308264E-314;
         r1 = "PermissionOpenSettings";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$WTDNtmPdy5yTCpHQSYXokc0QdfY;
@@ -3058,35 +3184,6 @@ public class AndroidUtilities {
             i++;
         }
         return stringBuilder.toString();
-    }
-
-    public static float[] RGBtoHSB(int i, int i2, int i3) {
-        float[] fArr = new float[3];
-        int i4 = i > i2 ? i : i2;
-        if (i3 > i4) {
-            i4 = i3;
-        }
-        int i5 = i < i2 ? i : i2;
-        if (i3 < i5) {
-            i5 = i3;
-        }
-        float f = (float) i4;
-        float f2 = f / 255.0f;
-        float f3 = 0.0f;
-        f = i4 != 0 ? ((float) (i4 - i5)) / f : 0.0f;
-        if (f != 0.0f) {
-            float f4 = (float) (i4 - i5);
-            float f5 = ((float) (i4 - i)) / f4;
-            float f6 = ((float) (i4 - i2)) / f4;
-            float f7 = ((float) (i4 - i3)) / f4;
-            f7 = i == i4 ? f7 - f6 : i2 == i4 ? (f5 + 2.0f) - f7 : (f6 + 4.0f) - f5;
-            float f8 = f7 / 6.0f;
-            f3 = f8 < 0.0f ? f8 + 1.0f : f8;
-        }
-        fArr[0] = f3;
-        fArr[1] = f;
-        fArr[2] = f2;
-        return fArr;
     }
 
     public static int HSBtoRGB(float f, float f2, float f3) {

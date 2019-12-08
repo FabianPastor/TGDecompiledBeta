@@ -25,7 +25,6 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeFilename;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 
 public class VideoSeekPreviewImage extends View {
-    private Bitmap backgroundBitmap;
     private Paint bitmapPaint = new Paint(2);
     private RectF bitmapRect = new RectF();
     private BitmapShader bitmapShader;
@@ -38,7 +37,6 @@ public class VideoSeekPreviewImage extends View {
     private AnimatedFileDrawable fileDrawable;
     private Drawable frameDrawable;
     private String frameTime;
-    private float lastReuqestedProgress;
     private Runnable loadRunnable;
     private Matrix matrix = new Matrix();
     private Paint paint = new Paint(2);
@@ -101,30 +99,23 @@ public class VideoSeekPreviewImage extends View {
         if (frameAtTime != null) {
             int width = frameAtTime.getWidth();
             int height = frameAtTime.getHeight();
-            if (width > max || height > max) {
-                if (frameAtTime.getWidth() > frameAtTime.getHeight()) {
-                    int i = max;
-                    max = (int) (((float) height) / (((float) width) / ((float) max)));
-                    width = i;
-                } else {
-                    width = (int) (((float) width) / (((float) height) / ((float) max)));
-                }
-                Bitmap bitmap = this.backgroundBitmap;
-                if (!(bitmap != null && bitmap.getWidth() == width && this.backgroundBitmap.getHeight() == max)) {
-                    this.backgroundBitmap = Bitmaps.createBitmap(width, max, Config.ARGB_8888);
-                }
-                this.dstR.set(0.0f, 0.0f, (float) width, (float) max);
-                Canvas canvas = new Canvas(this.backgroundBitmap);
+            if (width > height) {
+                width = (int) (((float) height) / (((float) width) / ((float) max)));
+            } else {
+                int i = (int) (((float) width) / (((float) height) / ((float) max)));
+                width = max;
+                max = i;
+            }
+            try {
+                Bitmap createBitmap = Bitmaps.createBitmap(max, width, Config.ARGB_8888);
+                this.dstR.set(0.0f, 0.0f, (float) max, (float) width);
+                Canvas canvas = new Canvas(createBitmap);
                 canvas.drawBitmap(frameAtTime, null, this.dstR, this.paint);
                 canvas.setBitmap(null);
-                frameAtTime = this.backgroundBitmap;
-                this.backgroundBitmap = null;
+                frameAtTime = createBitmap;
+            } catch (Throwable unused) {
+                frameAtTime = null;
             }
-        }
-        if (frameAtTime == null) {
-            this.lastReuqestedProgress = f;
-        } else {
-            this.lastReuqestedProgress = -1.0f;
         }
         AndroidUtilities.runOnUIThread(new -$$Lambda$VideoSeekPreviewImage$vtyatQF0Nebnj1Crg8p5jAvt458(this, frameAtTime));
     }
@@ -262,15 +253,9 @@ public class VideoSeekPreviewImage extends View {
         }
         Utilities.globalQueue.postRunnable(new -$$Lambda$VideoSeekPreviewImage$8K7QnWcf3CoeFLmHeaIUHXjugzI(this));
         setVisibility(4);
-        if (this.bitmapToDraw != null) {
-            Bitmap bitmap = this.bitmapToRecycle;
-            if (bitmap != null) {
-                bitmap.recycle();
-            }
-            this.bitmapToRecycle = this.bitmapToDraw;
-        }
         this.bitmapToDraw = null;
         this.bitmapShader = null;
+        invalidate();
         this.currentPixel = -1;
         this.videoUri = null;
         this.ready = false;

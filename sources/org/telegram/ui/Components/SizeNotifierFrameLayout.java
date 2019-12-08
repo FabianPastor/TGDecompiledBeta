@@ -8,6 +8,7 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build.VERSION;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -147,7 +148,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         Drawable drawable = this.backgroundDrawable;
         if (drawable == null) {
             super.onDraw(canvas);
-        } else if (drawable instanceof ColorDrawable) {
+        } else if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
             if (this.bottomClip != 0) {
                 canvas.save();
                 canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - this.bottomClip);

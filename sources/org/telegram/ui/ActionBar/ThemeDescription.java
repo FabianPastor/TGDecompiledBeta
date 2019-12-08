@@ -49,6 +49,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ScamDrawable;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.TypefaceSpan;
+import org.telegram.ui.Components.VideoTimelineView;
 
 public class ThemeDescription {
     public static int FLAG_AB_AM_BACKGROUND = 1048576;
@@ -354,6 +355,10 @@ public class ThemeDescription {
             }
         }
         view = this.viewToInvalidate;
+        if (view instanceof VideoTimelineView) {
+            ((VideoTimelineView) view).setColor(i);
+        }
+        view = this.viewToInvalidate;
         if (view instanceof EmptyTextProgressView) {
             int i5 = this.changeFlags;
             if ((FLAG_TEXTCOLOR & i5) != 0) {
@@ -613,6 +618,8 @@ public class ThemeDescription {
                                                 if ((this.changeFlags & FLAG_HINTTEXTCOLOR) != 0) {
                                                     ((EditTextCaption) obj2).setHintColor(i);
                                                     ((EditTextCaption) obj2).setHintTextColor(i);
+                                                } else if ((this.changeFlags & FLAG_CURSORCOLOR) != 0) {
+                                                    ((EditTextCaption) obj2).setCursorColor(i);
                                                 } else {
                                                     ((EditTextCaption) obj2).setTextColor(i);
                                                 }

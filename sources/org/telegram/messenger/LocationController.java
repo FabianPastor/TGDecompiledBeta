@@ -185,38 +185,40 @@ public class LocationController extends BaseController implements NotificationCe
         MessageObject messageObject;
         int i5;
         if (i == NotificationCenter.didReceiveNewMessages) {
-            longValue = ((Long) objArr[0]).longValue();
-            if (isSharingLocation(longValue)) {
-                arrayList = (ArrayList) this.locationsCache.get(longValue);
-                if (arrayList != null) {
-                    arrayList2 = (ArrayList) objArr[1];
-                    obj = null;
-                    for (i4 = 0; i4 < arrayList2.size(); i4++) {
-                        messageObject = (MessageObject) arrayList2.get(i4);
-                        if (messageObject.isLiveLocation()) {
-                            for (int i6 = 0; i6 < arrayList.size(); i6++) {
-                                i5 = ((Message) arrayList.get(i6)).from_id;
-                                Message message = messageObject.messageOwner;
-                                if (i5 == message.from_id) {
-                                    arrayList.set(i6, message);
-                                    obj = 1;
-                                    break;
+            if (!((Boolean) objArr[2]).booleanValue()) {
+                longValue = ((Long) objArr[0]).longValue();
+                if (isSharingLocation(longValue)) {
+                    arrayList = (ArrayList) this.locationsCache.get(longValue);
+                    if (arrayList != null) {
+                        arrayList2 = (ArrayList) objArr[1];
+                        obj = null;
+                        for (i4 = 0; i4 < arrayList2.size(); i4++) {
+                            messageObject = (MessageObject) arrayList2.get(i4);
+                            if (messageObject.isLiveLocation()) {
+                                for (int i6 = 0; i6 < arrayList.size(); i6++) {
+                                    i5 = ((Message) arrayList.get(i6)).from_id;
+                                    Message message = messageObject.messageOwner;
+                                    if (i5 == message.from_id) {
+                                        arrayList.set(i6, message);
+                                        obj = 1;
+                                        break;
+                                    }
                                 }
+                                obj = null;
+                                if (obj == null) {
+                                    arrayList.add(messageObject.messageOwner);
+                                }
+                                obj = 1;
                             }
-                            obj = null;
-                            if (obj == null) {
-                                arrayList.add(messageObject.messageOwner);
-                            }
-                            obj = 1;
                         }
-                    }
-                    if (obj != null) {
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(longValue), Integer.valueOf(this.currentAccount));
+                        if (obj != null) {
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(longValue), Integer.valueOf(this.currentAccount));
+                        }
                     }
                 }
             }
         } else if (i == NotificationCenter.messagesDeleted) {
-            if (!this.sharingLocationsUI.isEmpty()) {
+            if (!(((Boolean) objArr[2]).booleanValue() || this.sharingLocationsUI.isEmpty())) {
                 ArrayList arrayList3 = (ArrayList) objArr[0];
                 i2 = ((Integer) objArr[1]).intValue();
                 ArrayList arrayList4 = null;
@@ -571,12 +573,11 @@ public class LocationController extends BaseController implements NotificationCe
                 }
                 arrayList.add(sharingLocationInfo);
                 int i = (int) sharingLocationInfo.did;
-                long j = sharingLocationInfo.did;
                 if (i != 0) {
                     if (i < 0) {
-                        int i2 = -i;
-                        if (!arrayList5.contains(Integer.valueOf(i2))) {
-                            arrayList5.add(Integer.valueOf(i2));
+                        i = -i;
+                        if (!arrayList5.contains(Integer.valueOf(i))) {
+                            arrayList5.add(Integer.valueOf(i));
                         }
                     } else if (!arrayList4.contains(Integer.valueOf(i))) {
                         arrayList4.add(Integer.valueOf(i));
@@ -785,8 +786,8 @@ public class LocationController extends BaseController implements NotificationCe
         r2 = r7.checkPlayServices();
         if (r2 == 0) goto L_0x001f;
     L_0x0015:
-        r2 = r7.googleApiClient;	 Catch:{ Throwable -> 0x001b }
-        r2.connect();	 Catch:{ Throwable -> 0x001b }
+        r2 = r7.googleApiClient;	 Catch:{ all -> 0x001b }
+        r2.connect();	 Catch:{ all -> 0x001b }
         goto L_0x0020;
     L_0x001b:
         r0 = move-exception;

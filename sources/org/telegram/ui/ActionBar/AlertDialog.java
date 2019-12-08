@@ -1333,6 +1333,10 @@ public class AlertDialog extends Dialog implements Callback {
         }
     }
 
+    public int getItemsCount() {
+        return this.itemViews.size();
+    }
+
     public void setMessage(CharSequence charSequence) {
         this.message = charSequence;
         if (this.messageTextView == null) {

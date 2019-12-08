@@ -15,6 +15,9 @@ public class URLSpanReplacement extends URLSpan {
     }
 
     public URLSpanReplacement(String str, TextStyleRun textStyleRun) {
+        if (str != null) {
+            str = str.replace(8238, ' ');
+        }
         super(str);
         this.style = textStyleRun;
     }

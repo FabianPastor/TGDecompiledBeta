@@ -23,10 +23,10 @@ public class AvatarDrawable extends Drawable {
     private float archivedAvatarProgress;
     private int avatarType;
     private int color;
-    private boolean drawBrodcast;
     private boolean drawDeleted;
     private boolean isProfile;
     private TextPaint namePaint;
+    private boolean needApplyColorAccent;
     private StringBuilder stringBuilder;
     private float textHeight;
     private StaticLayout textLayout;
@@ -70,7 +70,7 @@ public class AvatarDrawable extends Drawable {
         this();
         this.isProfile = z;
         if (user != null) {
-            setInfo(user.id, user.first_name, user.last_name, false, null);
+            setInfo(user.id, user.first_name, user.last_name, null);
             this.drawDeleted = UserObject.isDeleted(user);
         }
     }
@@ -79,8 +79,7 @@ public class AvatarDrawable extends Drawable {
         this();
         this.isProfile = z;
         if (chat != null) {
-            int i = chat.id;
-            setInfo(i, chat.title, null, i < 0, null);
+            setInfo(chat.id, chat.title, null, null);
         }
     }
 
@@ -88,7 +87,7 @@ public class AvatarDrawable extends Drawable {
         this.isProfile = z;
     }
 
-    public static int getColorIndex(int i) {
+    private static int getColorIndex(int i) {
         return (i < 0 || i >= 7) ? Math.abs(i % Theme.keys_avatar_background.length) : i;
     }
 
@@ -122,7 +121,7 @@ public class AvatarDrawable extends Drawable {
 
     public void setInfo(User user) {
         if (user != null) {
-            setInfo(user.id, user.first_name, user.last_name, false, null);
+            setInfo(user.id, user.first_name, user.last_name, null);
             this.drawDeleted = UserObject.isDeleted(user);
         }
     }
@@ -134,6 +133,7 @@ public class AvatarDrawable extends Drawable {
         } else {
             this.color = Theme.getColor("avatar_backgroundSaved");
         }
+        this.needApplyColorAccent = false;
     }
 
     public void setArchivedAvatarHiddenProgress(float f) {
@@ -146,34 +146,34 @@ public class AvatarDrawable extends Drawable {
 
     public void setInfo(Chat chat) {
         if (chat != null) {
-            int i = chat.id;
-            setInfo(i, chat.title, null, i < 0, null);
+            setInfo(chat.id, chat.title, null, null);
         }
     }
 
     public void setColor(int i) {
         this.color = i;
+        this.needApplyColorAccent = false;
     }
 
     public void setTextSize(int i) {
         this.namePaint.setTextSize((float) i);
     }
 
-    public void setInfo(int i, String str, String str2, boolean z) {
-        setInfo(i, str, str2, z, null);
+    public void setInfo(int i, String str, String str2) {
+        setInfo(i, str, str2, null);
     }
 
     public int getColor() {
-        return this.color;
+        return this.needApplyColorAccent ? Theme.changeColorAccent(this.color) : this.color;
     }
 
-    public void setInfo(int i, String str, String str2, boolean z, String str3) {
+    public void setInfo(int i, String str, String str2, String str3) {
         if (this.isProfile) {
             this.color = getProfileColorForId(i);
         } else {
             this.color = getColorForId(i);
         }
-        this.drawBrodcast = z;
+        this.needApplyColorAccent = i == 5;
         this.avatarType = 0;
         this.drawDeleted = false;
         if (str == null || str.length() == 0) {
@@ -238,7 +238,7 @@ public class AvatarDrawable extends Drawable {
         if (bounds != null) {
             int width = bounds.width();
             this.namePaint.setColor(Theme.getColor("avatar_text"));
-            Theme.avatar_backgroundPaint.setColor(this.color);
+            Theme.avatar_backgroundPaint.setColor(getColor());
             canvas.save();
             canvas.translate((float) bounds.left, (float) bounds.top);
             float f = (float) width;
@@ -281,7 +281,6 @@ public class AvatarDrawable extends Drawable {
                 canvas.restore();
             } else {
                 Drawable drawable;
-                Drawable drawable2;
                 if (i != 0) {
                     drawable = Theme.avatar_savedDrawable;
                     if (drawable != null) {
@@ -297,22 +296,12 @@ public class AvatarDrawable extends Drawable {
                         Theme.avatar_savedDrawable.draw(canvas);
                     }
                 }
-                if (this.drawBrodcast) {
-                    drawable = Theme.avatar_broadcastDrawable;
-                    if (drawable != null) {
-                        intrinsicWidth = (width - drawable.getIntrinsicWidth()) / 2;
-                        width = (width - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
-                        drawable2 = Theme.avatar_broadcastDrawable;
-                        drawable2.setBounds(intrinsicWidth, width, drawable2.getIntrinsicWidth() + intrinsicWidth, Theme.avatar_broadcastDrawable.getIntrinsicHeight() + width);
-                        Theme.avatar_broadcastDrawable.draw(canvas);
-                    }
-                }
                 if (this.drawDeleted) {
                     drawable = Theme.avatar_ghostDrawable;
                     if (drawable != null) {
                         intrinsicWidth = (width - drawable.getIntrinsicWidth()) / 2;
                         width = (width - Theme.avatar_ghostDrawable.getIntrinsicHeight()) / 2;
-                        drawable2 = Theme.avatar_ghostDrawable;
+                        Drawable drawable2 = Theme.avatar_ghostDrawable;
                         drawable2.setBounds(intrinsicWidth, width, drawable2.getIntrinsicWidth() + intrinsicWidth, Theme.avatar_ghostDrawable.getIntrinsicHeight() + width);
                         Theme.avatar_ghostDrawable.draw(canvas);
                     }

@@ -23,6 +23,10 @@ public class CustomTabsHelper {
     private static final String TAG = "CustomTabsHelper";
     private static String sPackageNameToUse;
 
+    public static String[] getPackages() {
+        return new String[]{"", "com.android.chrome", "com.chrome.beta", "com.chrome.dev", "com.google.android.apps.chrome"};
+    }
+
     private CustomTabsHelper() {
     }
 
@@ -112,9 +116,5 @@ public class CustomTabsHelper {
         } catch (RuntimeException unused) {
             Log.e("CustomTabsHelper", "Runtime exception while getting specialized handlers");
         }
-    }
-
-    public static String[] getPackages() {
-        return new String[]{"", "com.android.chrome", "com.chrome.beta", "com.chrome.dev", "com.google.android.apps.chrome"};
     }
 }

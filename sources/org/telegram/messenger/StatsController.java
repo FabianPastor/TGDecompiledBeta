@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
 import java.io.RandomAccessFile;
-import java.lang.reflect.Array;
 
 public class StatsController extends BaseController {
     private static volatile StatsController[] Instance = new StatsController[3];
@@ -24,36 +23,14 @@ public class StatsController extends BaseController {
     };
     private static DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
     private byte[] buffer = new byte[8];
-    private int[] callsTotalTime = new int[3];
+    private int[] callsTotalTime;
     private long lastInternalStatsSaveTime;
-    private long[][] receivedBytes = ((long[][]) Array.newInstance(long.class, new int[]{3, 7}));
-    private int[][] receivedItems = ((int[][]) Array.newInstance(int.class, new int[]{3, 7}));
-    private long[] resetStatsDate = new long[3];
-    private Runnable saveRunnable = new Runnable() {
-        public void run() {
-            long currentTimeMillis = System.currentTimeMillis();
-            if (Math.abs(currentTimeMillis - StatsController.this.lastInternalStatsSaveTime) >= 2000) {
-                StatsController.this.lastInternalStatsSaveTime = currentTimeMillis;
-                try {
-                    StatsController.this.statsFile.seek(0);
-                    for (int i = 0; i < 3; i++) {
-                        for (int i2 = 0; i2 < 7; i2++) {
-                            StatsController.this.statsFile.write(StatsController.this.longToBytes(StatsController.this.sentBytes[i][i2]), 0, 8);
-                            StatsController.this.statsFile.write(StatsController.this.longToBytes(StatsController.this.receivedBytes[i][i2]), 0, 8);
-                            StatsController.this.statsFile.write(StatsController.this.intToBytes(StatsController.this.sentItems[i][i2]), 0, 4);
-                            StatsController.this.statsFile.write(StatsController.this.intToBytes(StatsController.this.receivedItems[i][i2]), 0, 4);
-                        }
-                        StatsController.this.statsFile.write(StatsController.this.intToBytes(StatsController.this.callsTotalTime[i]), 0, 4);
-                        StatsController.this.statsFile.write(StatsController.this.longToBytes(StatsController.this.resetStatsDate[i]), 0, 8);
-                    }
-                    StatsController.this.statsFile.getFD().sync();
-                } catch (Exception unused) {
-                }
-            }
-        }
-    };
-    private long[][] sentBytes = ((long[][]) Array.newInstance(long.class, new int[]{3, 7}));
-    private int[][] sentItems = ((int[][]) Array.newInstance(int.class, new int[]{3, 7}));
+    private long[][] receivedBytes;
+    private int[][] receivedItems;
+    private long[] resetStatsDate;
+    private Runnable saveRunnable;
+    private long[][] sentBytes;
+    private int[][] sentItems;
     private RandomAccessFile statsFile;
 
     private byte[] intToBytes(int i) {
@@ -103,48 +80,46 @@ public class StatsController extends BaseController {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:47:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0130  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x012c  */
     private StatsController(int r15) {
         /*
         r14 = this;
+        r0 = int.class;
+        r1 = long.class;
         r14.<init>(r15);
-        r0 = 8;
-        r1 = new byte[r0];
-        r14.buffer = r1;
-        r1 = 7;
-        r2 = 3;
-        r3 = new int[]{r2, r1};
-        r4 = long.class;
-        r3 = java.lang.reflect.Array.newInstance(r4, r3);
-        r3 = (long[][]) r3;
-        r14.sentBytes = r3;
-        r3 = new int[]{r2, r1};
-        r4 = long.class;
-        r3 = java.lang.reflect.Array.newInstance(r4, r3);
-        r3 = (long[][]) r3;
-        r14.receivedBytes = r3;
-        r3 = new int[]{r2, r1};
-        r4 = int.class;
-        r3 = java.lang.reflect.Array.newInstance(r4, r3);
-        r3 = (int[][]) r3;
-        r14.sentItems = r3;
-        r3 = new int[]{r2, r1};
-        r4 = int.class;
-        r3 = java.lang.reflect.Array.newInstance(r4, r3);
-        r3 = (int[][]) r3;
-        r14.receivedItems = r3;
-        r3 = new long[r2];
-        r14.resetStatsDate = r3;
-        r3 = new int[r2];
-        r14.callsTotalTime = r3;
-        r3 = new org.telegram.messenger.StatsController$2;
-        r3.<init>();
-        r14.saveRunnable = r3;
-        r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
-        if (r15 == 0) goto L_0x007a;
-    L_0x0058:
-        r3 = new java.io.File;
-        r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
+        r2 = 8;
+        r3 = new byte[r2];
+        r14.buffer = r3;
+        r3 = 7;
+        r4 = 3;
+        r5 = new int[]{r4, r3};
+        r5 = java.lang.reflect.Array.newInstance(r1, r5);
+        r5 = (long[][]) r5;
+        r14.sentBytes = r5;
+        r5 = new int[]{r4, r3};
+        r1 = java.lang.reflect.Array.newInstance(r1, r5);
+        r1 = (long[][]) r1;
+        r14.receivedBytes = r1;
+        r1 = new int[]{r4, r3};
+        r1 = java.lang.reflect.Array.newInstance(r0, r1);
+        r1 = (int[][]) r1;
+        r14.sentItems = r1;
+        r1 = new int[]{r4, r3};
+        r0 = java.lang.reflect.Array.newInstance(r0, r1);
+        r0 = (int[][]) r0;
+        r14.receivedItems = r0;
+        r0 = new long[r4];
+        r14.resetStatsDate = r0;
+        r0 = new int[r4];
+        r14.callsTotalTime = r0;
+        r0 = new org.telegram.messenger.StatsController$2;
+        r0.<init>();
+        r14.saveRunnable = r0;
+        r0 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
+        if (r15 == 0) goto L_0x0076;
+    L_0x0054:
+        r0 = new java.io.File;
+        r1 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r6 = "account";
@@ -153,127 +128,127 @@ public class StatsController extends BaseController {
         r6 = "/";
         r5.append(r6);
         r5 = r5.toString();
-        r3.<init>(r4, r5);
-        r3.mkdirs();
-    L_0x007a:
-        r4 = 0;
-        r6 = 1;
+        r0.<init>(r1, r5);
+        r0.mkdirs();
+    L_0x0076:
+        r5 = 0;
+        r1 = 1;
         r7 = 0;
-        r8 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x012d }
-        r9 = new java.io.File;	 Catch:{ Exception -> 0x012d }
+        r8 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0129 }
+        r9 = new java.io.File;	 Catch:{ Exception -> 0x0129 }
         r10 = "stats2.dat";
-        r9.<init>(r3, r10);	 Catch:{ Exception -> 0x012d }
-        r3 = "rw";
-        r8.<init>(r9, r3);	 Catch:{ Exception -> 0x012d }
-        r14.statsFile = r8;	 Catch:{ Exception -> 0x012d }
-        r3 = r14.statsFile;	 Catch:{ Exception -> 0x012d }
-        r8 = r3.length();	 Catch:{ Exception -> 0x012d }
-        r3 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1));
-        if (r3 <= 0) goto L_0x012d;
-    L_0x0098:
-        r3 = 0;
-        r8 = 0;
-    L_0x009a:
-        if (r3 >= r2) goto L_0x0126;
-    L_0x009c:
-        r9 = 0;
-    L_0x009d:
-        r10 = 4;
-        if (r9 >= r1) goto L_0x00ef;
-    L_0x00a0:
-        r11 = r14.statsFile;	 Catch:{ Exception -> 0x012d }
-        r12 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r11.readFully(r12, r7, r0);	 Catch:{ Exception -> 0x012d }
-        r11 = r14.sentBytes;	 Catch:{ Exception -> 0x012d }
-        r11 = r11[r3];	 Catch:{ Exception -> 0x012d }
-        r12 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r12 = r14.bytesToLong(r12);	 Catch:{ Exception -> 0x012d }
-        r11[r9] = r12;	 Catch:{ Exception -> 0x012d }
-        r11 = r14.statsFile;	 Catch:{ Exception -> 0x012d }
-        r12 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r11.readFully(r12, r7, r0);	 Catch:{ Exception -> 0x012d }
-        r11 = r14.receivedBytes;	 Catch:{ Exception -> 0x012d }
-        r11 = r11[r3];	 Catch:{ Exception -> 0x012d }
-        r12 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r12 = r14.bytesToLong(r12);	 Catch:{ Exception -> 0x012d }
-        r11[r9] = r12;	 Catch:{ Exception -> 0x012d }
-        r11 = r14.statsFile;	 Catch:{ Exception -> 0x012d }
-        r12 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r11.readFully(r12, r7, r10);	 Catch:{ Exception -> 0x012d }
-        r11 = r14.sentItems;	 Catch:{ Exception -> 0x012d }
-        r11 = r11[r3];	 Catch:{ Exception -> 0x012d }
-        r12 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r12 = r14.bytesToInt(r12);	 Catch:{ Exception -> 0x012d }
-        r11[r9] = r12;	 Catch:{ Exception -> 0x012d }
-        r11 = r14.statsFile;	 Catch:{ Exception -> 0x012d }
-        r12 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r11.readFully(r12, r7, r10);	 Catch:{ Exception -> 0x012d }
-        r10 = r14.receivedItems;	 Catch:{ Exception -> 0x012d }
-        r10 = r10[r3];	 Catch:{ Exception -> 0x012d }
-        r11 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r11 = r14.bytesToInt(r11);	 Catch:{ Exception -> 0x012d }
-        r10[r9] = r11;	 Catch:{ Exception -> 0x012d }
-        r9 = r9 + 1;
-        goto L_0x009d;
-    L_0x00ef:
-        r9 = r14.statsFile;	 Catch:{ Exception -> 0x012d }
-        r11 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r9.readFully(r11, r7, r10);	 Catch:{ Exception -> 0x012d }
-        r9 = r14.callsTotalTime;	 Catch:{ Exception -> 0x012d }
-        r10 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r10 = r14.bytesToInt(r10);	 Catch:{ Exception -> 0x012d }
-        r9[r3] = r10;	 Catch:{ Exception -> 0x012d }
-        r9 = r14.statsFile;	 Catch:{ Exception -> 0x012d }
-        r10 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r9.readFully(r10, r7, r0);	 Catch:{ Exception -> 0x012d }
-        r9 = r14.resetStatsDate;	 Catch:{ Exception -> 0x012d }
-        r10 = r14.buffer;	 Catch:{ Exception -> 0x012d }
-        r10 = r14.bytesToLong(r10);	 Catch:{ Exception -> 0x012d }
-        r9[r3] = r10;	 Catch:{ Exception -> 0x012d }
-        r9 = r14.resetStatsDate;	 Catch:{ Exception -> 0x012d }
-        r10 = r9[r3];	 Catch:{ Exception -> 0x012d }
-        r9 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1));
-        if (r9 != 0) goto L_0x0122;
-    L_0x0119:
-        r8 = r14.resetStatsDate;	 Catch:{ Exception -> 0x012d }
-        r9 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x012d }
-        r8[r3] = r9;	 Catch:{ Exception -> 0x012d }
-        r8 = 1;
-    L_0x0122:
-        r3 = r3 + 1;
-        goto L_0x009a;
-    L_0x0126:
-        if (r8 == 0) goto L_0x012b;
-    L_0x0128:
-        r14.saveStats();	 Catch:{ Exception -> 0x012d }
-    L_0x012b:
+        r9.<init>(r0, r10);	 Catch:{ Exception -> 0x0129 }
+        r0 = "rw";
+        r8.<init>(r9, r0);	 Catch:{ Exception -> 0x0129 }
+        r14.statsFile = r8;	 Catch:{ Exception -> 0x0129 }
+        r0 = r14.statsFile;	 Catch:{ Exception -> 0x0129 }
+        r8 = r0.length();	 Catch:{ Exception -> 0x0129 }
+        r0 = (r8 > r5 ? 1 : (r8 == r5 ? 0 : -1));
+        if (r0 <= 0) goto L_0x0129;
+    L_0x0094:
         r0 = 0;
-        goto L_0x012e;
-    L_0x012d:
+        r8 = 0;
+    L_0x0096:
+        if (r0 >= r4) goto L_0x0122;
+    L_0x0098:
+        r9 = 0;
+    L_0x0099:
+        r10 = 4;
+        if (r9 >= r3) goto L_0x00eb;
+    L_0x009c:
+        r11 = r14.statsFile;	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r11.readFully(r12, r7, r2);	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.sentBytes;	 Catch:{ Exception -> 0x0129 }
+        r11 = r11[r0];	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.bytesToLong(r12);	 Catch:{ Exception -> 0x0129 }
+        r11[r9] = r12;	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.statsFile;	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r11.readFully(r12, r7, r2);	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.receivedBytes;	 Catch:{ Exception -> 0x0129 }
+        r11 = r11[r0];	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.bytesToLong(r12);	 Catch:{ Exception -> 0x0129 }
+        r11[r9] = r12;	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.statsFile;	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r11.readFully(r12, r7, r10);	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.sentItems;	 Catch:{ Exception -> 0x0129 }
+        r11 = r11[r0];	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.bytesToInt(r12);	 Catch:{ Exception -> 0x0129 }
+        r11[r9] = r12;	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.statsFile;	 Catch:{ Exception -> 0x0129 }
+        r12 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r11.readFully(r12, r7, r10);	 Catch:{ Exception -> 0x0129 }
+        r10 = r14.receivedItems;	 Catch:{ Exception -> 0x0129 }
+        r10 = r10[r0];	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.bytesToInt(r11);	 Catch:{ Exception -> 0x0129 }
+        r10[r9] = r11;	 Catch:{ Exception -> 0x0129 }
+        r9 = r9 + 1;
+        goto L_0x0099;
+    L_0x00eb:
+        r9 = r14.statsFile;	 Catch:{ Exception -> 0x0129 }
+        r11 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r9.readFully(r11, r7, r10);	 Catch:{ Exception -> 0x0129 }
+        r9 = r14.callsTotalTime;	 Catch:{ Exception -> 0x0129 }
+        r10 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r10 = r14.bytesToInt(r10);	 Catch:{ Exception -> 0x0129 }
+        r9[r0] = r10;	 Catch:{ Exception -> 0x0129 }
+        r9 = r14.statsFile;	 Catch:{ Exception -> 0x0129 }
+        r10 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r9.readFully(r10, r7, r2);	 Catch:{ Exception -> 0x0129 }
+        r9 = r14.resetStatsDate;	 Catch:{ Exception -> 0x0129 }
+        r10 = r14.buffer;	 Catch:{ Exception -> 0x0129 }
+        r10 = r14.bytesToLong(r10);	 Catch:{ Exception -> 0x0129 }
+        r9[r0] = r10;	 Catch:{ Exception -> 0x0129 }
+        r9 = r14.resetStatsDate;	 Catch:{ Exception -> 0x0129 }
+        r10 = r9[r0];	 Catch:{ Exception -> 0x0129 }
+        r9 = (r10 > r5 ? 1 : (r10 == r5 ? 0 : -1));
+        if (r9 != 0) goto L_0x011e;
+    L_0x0115:
+        r8 = r14.resetStatsDate;	 Catch:{ Exception -> 0x0129 }
+        r9 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0129 }
+        r8[r0] = r9;	 Catch:{ Exception -> 0x0129 }
+        r8 = 1;
+    L_0x011e:
+        r0 = r0 + 1;
+        goto L_0x0096;
+    L_0x0122:
+        if (r8 == 0) goto L_0x0127;
+    L_0x0124:
+        r14.saveStats();	 Catch:{ Exception -> 0x0129 }
+    L_0x0127:
+        r0 = 0;
+        goto L_0x012a;
+    L_0x0129:
         r0 = 1;
-    L_0x012e:
-        if (r0 == 0) goto L_0x022b;
-    L_0x0130:
+    L_0x012a:
+        if (r0 == 0) goto L_0x0227;
+    L_0x012c:
         r0 = "stats";
-        if (r15 != 0) goto L_0x013b;
-    L_0x0134:
+        if (r15 != 0) goto L_0x0137;
+    L_0x0130:
         r15 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r15 = r15.getSharedPreferences(r0, r7);
-        goto L_0x0150;
-    L_0x013b:
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;
+        goto L_0x014c;
+    L_0x0137:
+        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r8 = new java.lang.StringBuilder;
         r8.<init>();
         r8.append(r0);
         r8.append(r15);
         r15 = r8.toString();
-        r15 = r3.getSharedPreferences(r15, r7);
-    L_0x0150:
+        r15 = r2.getSharedPreferences(r15, r7);
+    L_0x014c:
         r0 = 0;
-        r3 = 0;
-    L_0x0152:
-        if (r0 >= r2) goto L_0x0226;
-    L_0x0154:
+        r2 = 0;
+    L_0x014e:
+        if (r0 >= r4) goto L_0x0222;
+    L_0x0150:
         r8 = r14.callsTotalTime;
         r9 = new java.lang.StringBuilder;
         r9.<init>();
@@ -290,12 +265,12 @@ public class StatsController extends BaseController {
         r9.append(r10);
         r9.append(r0);
         r9 = r9.toString();
-        r9 = r15.getLong(r9, r4);
+        r9 = r15.getLong(r9, r5);
         r8[r0] = r9;
         r8 = 0;
-    L_0x0187:
-        if (r8 >= r1) goto L_0x0213;
-    L_0x0189:
+    L_0x0183:
+        if (r8 >= r3) goto L_0x020f;
+    L_0x0185:
         r9 = r14.sentBytes;
         r9 = r9[r0];
         r10 = new java.lang.StringBuilder;
@@ -307,7 +282,7 @@ public class StatsController extends BaseController {
         r10.append(r11);
         r10.append(r8);
         r10 = r10.toString();
-        r12 = r15.getLong(r10, r4);
+        r12 = r15.getLong(r10, r5);
         r9[r8] = r12;
         r9 = r14.receivedBytes;
         r9 = r9[r0];
@@ -319,7 +294,7 @@ public class StatsController extends BaseController {
         r10.append(r11);
         r10.append(r8);
         r10 = r10.toString();
-        r12 = r15.getLong(r10, r4);
+        r12 = r15.getLong(r10, r5);
         r9[r8] = r12;
         r9 = r14.sentItems;
         r9 = r9[r0];
@@ -346,24 +321,24 @@ public class StatsController extends BaseController {
         r10 = r15.getInt(r10, r7);
         r9[r8] = r10;
         r8 = r8 + 1;
-        goto L_0x0187;
-    L_0x0213:
+        goto L_0x0183;
+    L_0x020f:
         r8 = r14.resetStatsDate;
         r9 = r8[r0];
-        r11 = (r9 > r4 ? 1 : (r9 == r4 ? 0 : -1));
-        if (r11 != 0) goto L_0x0222;
-    L_0x021b:
+        r11 = (r9 > r5 ? 1 : (r9 == r5 ? 0 : -1));
+        if (r11 != 0) goto L_0x021e;
+    L_0x0217:
         r9 = java.lang.System.currentTimeMillis();
         r8[r0] = r9;
-        r3 = 1;
-    L_0x0222:
+        r2 = 1;
+    L_0x021e:
         r0 = r0 + 1;
-        goto L_0x0152;
-    L_0x0226:
-        if (r3 == 0) goto L_0x022b;
-    L_0x0228:
+        goto L_0x014e;
+    L_0x0222:
+        if (r2 == 0) goto L_0x0227;
+    L_0x0224:
         r14.saveStats();
-    L_0x022b:
+    L_0x0227:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.StatsController.<init>(int):void");

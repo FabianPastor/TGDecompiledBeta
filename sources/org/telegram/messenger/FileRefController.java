@@ -22,6 +22,7 @@ import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.StickerSet;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
+import org.telegram.tgnet.TLRPC.TL_account_getTheme;
 import org.telegram.tgnet.TLRPC.TL_account_getWallPaper;
 import org.telegram.tgnet.TLRPC.TL_account_getWallPapers;
 import org.telegram.tgnet.TLRPC.TL_channel;
@@ -43,6 +44,7 @@ import org.telegram.tgnet.TLRPC.TL_inputSingleMedia;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC.TL_inputStickeredMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_inputStickeredMediaPhoto;
+import org.telegram.tgnet.TLRPC.TL_inputTheme;
 import org.telegram.tgnet.TLRPC.TL_inputWallPaper;
 import org.telegram.tgnet.TLRPC.TL_messages_editMessage;
 import org.telegram.tgnet.TLRPC.TL_messages_faveSticker;
@@ -52,6 +54,7 @@ import org.telegram.tgnet.TLRPC.TL_messages_getFavedStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_getRecentStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getSavedGifs;
+import org.telegram.tgnet.TLRPC.TL_messages_getScheduledMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_getStickerSet;
 import org.telegram.tgnet.TLRPC.TL_messages_getWebPage;
 import org.telegram.tgnet.TLRPC.TL_messages_saveGif;
@@ -61,6 +64,7 @@ import org.telegram.tgnet.TLRPC.TL_messages_sendMedia;
 import org.telegram.tgnet.TLRPC.TL_messages_sendMultiMedia;
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC.TL_photos_getUserPhotos;
+import org.telegram.tgnet.TLRPC.TL_theme;
 import org.telegram.tgnet.TLRPC.TL_users_getUsers;
 import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.User;
@@ -94,13 +98,13 @@ public class FileRefController extends BaseController {
         }
     }
 
-    static /* synthetic */ void lambda$onUpdateObjectReference$21(TLObject tLObject, TL_error tL_error) {
-    }
-
-    static /* synthetic */ void lambda$onUpdateObjectReference$22(TLObject tLObject, TL_error tL_error) {
-    }
-
     static /* synthetic */ void lambda$onUpdateObjectReference$23(TLObject tLObject, TL_error tL_error) {
+    }
+
+    static /* synthetic */ void lambda$onUpdateObjectReference$24(TLObject tLObject, TL_error tL_error) {
+    }
+
+    static /* synthetic */ void lambda$onUpdateObjectReference$25(TLObject tLObject, TL_error tL_error) {
     }
 
     public static FileRefController getInstance(int i) {
@@ -124,8 +128,8 @@ public class FileRefController extends BaseController {
     }
 
     public static String getKeyForParentObject(Object obj) {
-        String str = "_";
-        String str2 = "message";
+        String str = "message";
+        String str2 = "_";
         int channelId;
         StringBuilder stringBuilder;
         StringBuilder stringBuilder2;
@@ -134,19 +138,21 @@ public class FileRefController extends BaseController {
             MessageObject messageObject = (MessageObject) obj;
             channelId = messageObject.getChannelId();
             stringBuilder = new StringBuilder();
-            stringBuilder.append(str2);
-            stringBuilder.append(messageObject.getRealId());
             stringBuilder.append(str);
+            stringBuilder.append(messageObject.getRealId());
+            stringBuilder.append(str2);
             stringBuilder.append(channelId);
+            stringBuilder.append(str2);
+            stringBuilder.append(messageObject.scheduled);
             return stringBuilder.toString();
         } else if (obj instanceof Message) {
             Message message = (Message) obj;
             Peer peer = message.to_id;
             channelId = peer != null ? peer.channel_id : 0;
             stringBuilder = new StringBuilder();
-            stringBuilder.append(str2);
-            stringBuilder.append(message.id);
             stringBuilder.append(str);
+            stringBuilder.append(message.id);
+            stringBuilder.append(str2);
             stringBuilder.append(channelId);
             return stringBuilder.toString();
         } else if (obj instanceof WebPage) {
@@ -198,6 +204,12 @@ public class FileRefController extends BaseController {
                 stringBuilder2 = new StringBuilder();
                 stringBuilder2.append("wallpaper");
                 stringBuilder2.append(tL_wallPaper.id);
+                return stringBuilder2.toString();
+            } else if (obj instanceof TL_theme) {
+                TL_theme tL_theme = (TL_theme) obj;
+                stringBuilder2 = new StringBuilder();
+                stringBuilder2.append("theme");
+                stringBuilder2.append(tL_theme.id);
                 return stringBuilder2.toString();
             } else {
                 if (obj != null) {
@@ -445,16 +457,21 @@ public class FileRefController extends BaseController {
         if (obj instanceof MessageObject) {
             MessageObject messageObject = (MessageObject) obj;
             channelId = messageObject.getChannelId();
-            if (channelId != 0) {
+            if (messageObject.scheduled) {
+                TL_messages_getScheduledMessages tL_messages_getScheduledMessages = new TL_messages_getScheduledMessages();
+                tL_messages_getScheduledMessages.peer = getMessagesController().getInputPeer((int) messageObject.getDialogId());
+                tL_messages_getScheduledMessages.id.add(Integer.valueOf(messageObject.getRealId()));
+                getConnectionsManager().sendRequest(tL_messages_getScheduledMessages, new -$$Lambda$FileRefController$bJSiLyN_Loo2lNffdEwzSUZ6du0(this, str, str2));
+            } else if (channelId != 0) {
                 TL_channels_getMessages tL_channels_getMessages = new TL_channels_getMessages();
                 tL_channels_getMessages.channel = getMessagesController().getInputChannel(channelId);
                 tL_channels_getMessages.id.add(Integer.valueOf(messageObject.getRealId()));
-                getConnectionsManager().sendRequest(tL_channels_getMessages, new -$$Lambda$FileRefController$bJSiLyN_Loo2lNffdEwzSUZ6du0(this, str, str2));
-                return;
+                getConnectionsManager().sendRequest(tL_channels_getMessages, new -$$Lambda$FileRefController$iH_RpP96708b-YCozHWKOTcxbr4(this, str, str2));
+            } else {
+                tL_messages_getMessages = new TL_messages_getMessages();
+                tL_messages_getMessages.id.add(Integer.valueOf(messageObject.getRealId()));
+                getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$FileRefController$l7gUgVrfRVPQOPlPV4-4bUexFYw(this, str, str2));
             }
-            tL_messages_getMessages = new TL_messages_getMessages();
-            tL_messages_getMessages.id.add(Integer.valueOf(messageObject.getRealId()));
-            getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$FileRefController$iH_RpP96708b-YCozHWKOTcxbr4(this, str, str2));
         } else if (obj instanceof TL_wallPaper) {
             TL_wallPaper tL_wallPaper = (TL_wallPaper) obj;
             TL_account_getWallPaper tL_account_getWallPaper = new TL_account_getWallPaper();
@@ -462,39 +479,48 @@ public class FileRefController extends BaseController {
             tL_inputWallPaper.id = tL_wallPaper.id;
             tL_inputWallPaper.access_hash = tL_wallPaper.access_hash;
             tL_account_getWallPaper.wallpaper = tL_inputWallPaper;
-            getConnectionsManager().sendRequest(tL_account_getWallPaper, new -$$Lambda$FileRefController$l7gUgVrfRVPQOPlPV4-4bUexFYw(this, str, str2));
+            getConnectionsManager().sendRequest(tL_account_getWallPaper, new -$$Lambda$FileRefController$ZZalHmw878mE45n2TIDtpdup6rk(this, str, str2));
+        } else if (obj instanceof TL_theme) {
+            TL_theme tL_theme = (TL_theme) obj;
+            TL_account_getTheme tL_account_getTheme = new TL_account_getTheme();
+            TL_inputTheme tL_inputTheme = new TL_inputTheme();
+            tL_inputTheme.id = tL_theme.id;
+            tL_inputTheme.access_hash = tL_theme.access_hash;
+            tL_account_getTheme.theme = tL_inputTheme;
+            tL_account_getTheme.format = "android";
+            getConnectionsManager().sendRequest(tL_account_getTheme, new -$$Lambda$FileRefController$PPQViQbtvXgiD0HkQf0oK3_ZBkE(this, str, str2));
         } else if (obj instanceof WebPage) {
             WebPage webPage = (WebPage) obj;
             TL_messages_getWebPage tL_messages_getWebPage = new TL_messages_getWebPage();
             tL_messages_getWebPage.url = webPage.url;
             tL_messages_getWebPage.hash = 0;
-            getConnectionsManager().sendRequest(tL_messages_getWebPage, new -$$Lambda$FileRefController$ZZalHmw878mE45n2TIDtpdup6rk(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getWebPage, new -$$Lambda$FileRefController$7qx1abCFn6GfdxglKDbFuGfloVQ(this, str, str2));
         } else if (obj instanceof User) {
             User user = (User) obj;
             TL_users_getUsers tL_users_getUsers = new TL_users_getUsers();
             tL_users_getUsers.id.add(getMessagesController().getInputUser(user));
-            getConnectionsManager().sendRequest(tL_users_getUsers, new -$$Lambda$FileRefController$PPQViQbtvXgiD0HkQf0oK3_ZBkE(this, str, str2));
+            getConnectionsManager().sendRequest(tL_users_getUsers, new -$$Lambda$FileRefController$MN7WJPmFdFnXGwTYeLjLskDZA_s(this, str, str2));
         } else if (obj instanceof Chat) {
             Chat chat = (Chat) obj;
             if (chat instanceof TL_chat) {
                 TL_messages_getChats tL_messages_getChats = new TL_messages_getChats();
                 tL_messages_getChats.id.add(Integer.valueOf(chat.id));
-                getConnectionsManager().sendRequest(tL_messages_getChats, new -$$Lambda$FileRefController$7qx1abCFn6GfdxglKDbFuGfloVQ(this, str, str2));
+                getConnectionsManager().sendRequest(tL_messages_getChats, new -$$Lambda$FileRefController$hU-_PNtgoV5UVJ0PgXNS0w6t-Ck(this, str, str2));
             } else if (chat instanceof TL_channel) {
                 TL_channels_getChannels tL_channels_getChannels = new TL_channels_getChannels();
                 tL_channels_getChannels.id.add(MessagesController.getInputChannel(chat));
-                getConnectionsManager().sendRequest(tL_channels_getChannels, new -$$Lambda$FileRefController$MN7WJPmFdFnXGwTYeLjLskDZA_s(this, str, str2));
+                getConnectionsManager().sendRequest(tL_channels_getChannels, new -$$Lambda$FileRefController$XmvlggjDShdh6wwrH2NBXtZN860(this, str, str2));
             }
         } else if (obj instanceof String) {
             String str3 = (String) obj;
             if ("wallpaper".equals(str3)) {
-                getConnectionsManager().sendRequest(new TL_account_getWallPapers(), new -$$Lambda$FileRefController$hU-_PNtgoV5UVJ0PgXNS0w6t-Ck(this, str, str2));
+                getConnectionsManager().sendRequest(new TL_account_getWallPapers(), new -$$Lambda$FileRefController$1aFkU4DGV4no_EoB8k2dbx7DLBY(this, str, str2));
             } else if (str3.startsWith("gif")) {
-                getConnectionsManager().sendRequest(new TL_messages_getSavedGifs(), new -$$Lambda$FileRefController$XmvlggjDShdh6wwrH2NBXtZN860(this, str, str2));
+                getConnectionsManager().sendRequest(new TL_messages_getSavedGifs(), new -$$Lambda$FileRefController$4w92eKYUWTkjdDZrk7Ab6kZgCz4(this, str, str2));
             } else if ("recent".equals(str3)) {
-                getConnectionsManager().sendRequest(new TL_messages_getRecentStickers(), new -$$Lambda$FileRefController$1aFkU4DGV4no_EoB8k2dbx7DLBY(this, str, str2));
+                getConnectionsManager().sendRequest(new TL_messages_getRecentStickers(), new -$$Lambda$FileRefController$lc6KWNmCjlTmUjUWy2DU6yide1g(this, str, str2));
             } else if ("fav".equals(str3)) {
-                getConnectionsManager().sendRequest(new TL_messages_getFavedStickers(), new -$$Lambda$FileRefController$4w92eKYUWTkjdDZrk7Ab6kZgCz4(this, str, str2));
+                getConnectionsManager().sendRequest(new TL_messages_getFavedStickers(), new -$$Lambda$FileRefController$WYAn7hVey6Q-NHtwvjaWCOxf8sA(this, str, str2));
             } else if (str3.startsWith("avatar_")) {
                 int intValue = Utilities.parseInt(str3).intValue();
                 if (intValue > 0) {
@@ -503,7 +529,7 @@ public class FileRefController extends BaseController {
                     tL_photos_getUserPhotos.offset = 0;
                     tL_photos_getUserPhotos.max_id = 0;
                     tL_photos_getUserPhotos.user_id = getMessagesController().getInputUser(intValue);
-                    getConnectionsManager().sendRequest(tL_photos_getUserPhotos, new -$$Lambda$FileRefController$lc6KWNmCjlTmUjUWy2DU6yide1g(this, str, str2));
+                    getConnectionsManager().sendRequest(tL_photos_getUserPhotos, new -$$Lambda$FileRefController$AUpNheLWJQs7kyRgJ6tIGIQTBNY(this, str, str2));
                     return;
                 }
                 TL_messages_search tL_messages_search = new TL_messages_search();
@@ -512,7 +538,7 @@ public class FileRefController extends BaseController {
                 tL_messages_search.offset_id = 0;
                 tL_messages_search.q = "";
                 tL_messages_search.peer = getMessagesController().getInputPeer(intValue);
-                getConnectionsManager().sendRequest(tL_messages_search, new -$$Lambda$FileRefController$WYAn7hVey6Q-NHtwvjaWCOxf8sA(this, str, str2));
+                getConnectionsManager().sendRequest(tL_messages_search, new -$$Lambda$FileRefController$oHc4Ko0S36uJ174mUmftFNV5oEU(this, str, str2));
             } else if (str3.startsWith("sent_")) {
                 String[] split = str3.split("_");
                 if (split.length == 3) {
@@ -521,12 +547,12 @@ public class FileRefController extends BaseController {
                         TL_channels_getMessages tL_channels_getMessages2 = new TL_channels_getMessages();
                         tL_channels_getMessages2.channel = getMessagesController().getInputChannel(channelId);
                         tL_channels_getMessages2.id.add(Utilities.parseInt(split[2]));
-                        getConnectionsManager().sendRequest(tL_channels_getMessages2, new -$$Lambda$FileRefController$AUpNheLWJQs7kyRgJ6tIGIQTBNY(this, str, str2));
+                        getConnectionsManager().sendRequest(tL_channels_getMessages2, new -$$Lambda$FileRefController$exbLp78Kychyc6GzkLXULN8LNGg(this, str, str2));
                         return;
                     }
                     tL_messages_getMessages = new TL_messages_getMessages();
                     tL_messages_getMessages.id.add(Utilities.parseInt(split[2]));
-                    getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$FileRefController$oHc4Ko0S36uJ174mUmftFNV5oEU(this, str, str2));
+                    getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$FileRefController$oQwONz9oH9KbjBHI1GVgQcuvYoU(this, str, str2));
                     return;
                 }
                 sendErrorToObject(objArr, 0);
@@ -541,7 +567,7 @@ public class FileRefController extends BaseController {
             stickerSet = tL_messages_stickerSet.set;
             inputStickerSet.id = stickerSet.id;
             inputStickerSet.access_hash = stickerSet.access_hash;
-            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$exbLp78Kychyc6GzkLXULN8LNGg(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$taVyElfntghqykv41aff7_1-UM8(this, str, str2));
         } else if (obj instanceof StickerSetCovered) {
             StickerSetCovered stickerSetCovered = (StickerSetCovered) obj;
             tL_messages_getStickerSet = new TL_messages_getStickerSet();
@@ -550,11 +576,11 @@ public class FileRefController extends BaseController {
             stickerSet = stickerSetCovered.set;
             inputStickerSet.id = stickerSet.id;
             inputStickerSet.access_hash = stickerSet.access_hash;
-            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$oQwONz9oH9KbjBHI1GVgQcuvYoU(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$NLI3_bovApy1_Ow_Ce8DVrjfkXY(this, str, str2));
         } else if (obj instanceof InputStickerSet) {
             tL_messages_getStickerSet = new TL_messages_getStickerSet();
             tL_messages_getStickerSet.stickerset = (InputStickerSet) obj;
-            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$taVyElfntghqykv41aff7_1-UM8(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$fDaFG0iwCYPICuIQ6EQ-5sdKaSc(this, str, str2));
         } else {
             sendErrorToObject(objArr, 0);
         }
@@ -613,22 +639,30 @@ public class FileRefController extends BaseController {
     }
 
     public /* synthetic */ void lambda$requestReferenceFromServer$13$FileRefController(String str, String str2, TLObject tLObject, TL_error tL_error) {
-        onRequestComplete(str, str2, tLObject, false);
+        onRequestComplete(str, str2, tLObject, true);
     }
 
     public /* synthetic */ void lambda$requestReferenceFromServer$14$FileRefController(String str, String str2, TLObject tLObject, TL_error tL_error) {
-        onRequestComplete(str, str2, tLObject, false);
+        onRequestComplete(str, str2, tLObject, true);
     }
 
     public /* synthetic */ void lambda$requestReferenceFromServer$15$FileRefController(String str, String str2, TLObject tLObject, TL_error tL_error) {
-        onRequestComplete(str, str2, tLObject, true);
+        onRequestComplete(str, str2, tLObject, false);
     }
 
     public /* synthetic */ void lambda$requestReferenceFromServer$16$FileRefController(String str, String str2, TLObject tLObject, TL_error tL_error) {
-        onRequestComplete(str, str2, tLObject, true);
+        onRequestComplete(str, str2, tLObject, false);
     }
 
     public /* synthetic */ void lambda$requestReferenceFromServer$17$FileRefController(String str, String str2, TLObject tLObject, TL_error tL_error) {
+        onRequestComplete(str, str2, tLObject, true);
+    }
+
+    public /* synthetic */ void lambda$requestReferenceFromServer$18$FileRefController(String str, String str2, TLObject tLObject, TL_error tL_error) {
+        onRequestComplete(str, str2, tLObject, true);
+    }
+
+    public /* synthetic */ void lambda$requestReferenceFromServer$19$FileRefController(String str, String str2, TLObject tLObject, TL_error tL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
@@ -665,7 +699,7 @@ public class FileRefController extends BaseController {
                     }
                     if (i != 0) {
                         this.multiMediaCache.remove(tL_messages_sendMultiMedia);
-                        AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$YYHw2l6xM9Gu7JxeQ2EceXGutZg(this, tL_messages_sendMultiMedia, objArr));
+                        AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$VgdcA9EaLIhDdlvN-ujnTFb_q1E(this, tL_messages_sendMultiMedia, objArr));
                     }
                 }
             }
@@ -676,7 +710,7 @@ public class FileRefController extends BaseController {
             } else if (inputMedia instanceof TL_inputMediaPhoto) {
                 ((TL_inputMediaPhoto) inputMedia).id.file_reference = bArr;
             }
-            AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$o4vQiIyb0QuzToqUwZoZxeG34YA(this, requester));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$1zpnUJNBrU6DBGS-JQg1_hSnrvE(this, requester));
         } else if (requester.args[0] instanceof TL_messages_editMessage) {
             inputMedia = ((TL_messages_editMessage) requester.args[0]).media;
             if (inputMedia instanceof TL_inputMediaDocument) {
@@ -684,19 +718,19 @@ public class FileRefController extends BaseController {
             } else if (inputMedia instanceof TL_inputMediaPhoto) {
                 ((TL_inputMediaPhoto) inputMedia).id.file_reference = bArr;
             }
-            AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$xgS6XTcRSqEphNvD0qdBIvBaNtQ(this, requester));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$LQx2jXezBZ6lvpleIJww70xS9AA(this, requester));
         } else if (requester.args[0] instanceof TL_messages_saveGif) {
             TL_messages_saveGif tL_messages_saveGif = (TL_messages_saveGif) requester.args[0];
             tL_messages_saveGif.id.file_reference = bArr;
-            getConnectionsManager().sendRequest(tL_messages_saveGif, -$$Lambda$FileRefController$zRMAyD1gBYHt2PuQHxeaKIMkV1w.INSTANCE);
+            getConnectionsManager().sendRequest(tL_messages_saveGif, -$$Lambda$FileRefController$B8e86bveS3knOZa0Cg1HvRKtz44.INSTANCE);
         } else if (requester.args[0] instanceof TL_messages_saveRecentSticker) {
             TL_messages_saveRecentSticker tL_messages_saveRecentSticker = (TL_messages_saveRecentSticker) requester.args[0];
             tL_messages_saveRecentSticker.id.file_reference = bArr;
-            getConnectionsManager().sendRequest(tL_messages_saveRecentSticker, -$$Lambda$FileRefController$92r6_B5PVYyz52VrJEoDR7nDB-I.INSTANCE);
+            getConnectionsManager().sendRequest(tL_messages_saveRecentSticker, -$$Lambda$FileRefController$9VZxhYR0Ao1KW4hoVDK7k1sUZVI.INSTANCE);
         } else if (requester.args[0] instanceof TL_messages_faveSticker) {
             TL_messages_faveSticker tL_messages_faveSticker = (TL_messages_faveSticker) requester.args[0];
             tL_messages_faveSticker.id.file_reference = bArr;
-            getConnectionsManager().sendRequest(tL_messages_faveSticker, -$$Lambda$FileRefController$B8e86bveS3knOZa0Cg1HvRKtz44.INSTANCE);
+            getConnectionsManager().sendRequest(tL_messages_faveSticker, -$$Lambda$FileRefController$9vHgXK5LhN8UmJHe149yk5CGvC8.INSTANCE);
         } else if (requester.args[0] instanceof TL_messages_getAttachedStickers) {
             TL_messages_getAttachedStickers tL_messages_getAttachedStickers = (TL_messages_getAttachedStickers) requester.args[0];
             InputStickeredMedia inputStickeredMedia = tL_messages_getAttachedStickers.media;
@@ -718,16 +752,16 @@ public class FileRefController extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$onUpdateObjectReference$18$FileRefController(TL_messages_sendMultiMedia tL_messages_sendMultiMedia, Object[] objArr) {
-        getSendMessagesHelper().performSendMessageRequestMulti(tL_messages_sendMultiMedia, (ArrayList) objArr[1], (ArrayList) objArr[2], null, (DelayedMessage) objArr[4]);
+    public /* synthetic */ void lambda$onUpdateObjectReference$20$FileRefController(TL_messages_sendMultiMedia tL_messages_sendMultiMedia, Object[] objArr) {
+        getSendMessagesHelper().performSendMessageRequestMulti(tL_messages_sendMultiMedia, (ArrayList) objArr[1], (ArrayList) objArr[2], null, (DelayedMessage) objArr[4], ((Boolean) objArr[5]).booleanValue());
     }
 
-    public /* synthetic */ void lambda$onUpdateObjectReference$19$FileRefController(Requester requester) {
-        getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
+    public /* synthetic */ void lambda$onUpdateObjectReference$21$FileRefController(Requester requester) {
+        getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null, ((Boolean) requester.args[6]).booleanValue());
     }
 
-    public /* synthetic */ void lambda$onUpdateObjectReference$20$FileRefController(Requester requester) {
-        getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
+    public /* synthetic */ void lambda$onUpdateObjectReference$22$FileRefController(Requester requester) {
+        getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null, ((Boolean) requester.args[6]).booleanValue());
     }
 
     private void sendErrorToObject(Object[] objArr, int i) {
@@ -736,10 +770,10 @@ public class FileRefController extends BaseController {
             Object[] objArr2 = (Object[]) this.multiMediaCache.get(tL_messages_sendMultiMedia);
             if (objArr2 != null) {
                 this.multiMediaCache.remove(tL_messages_sendMultiMedia);
-                AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$SEtHU0XDj7zCn-rzJbCQF3a989Y(this, tL_messages_sendMultiMedia, objArr2));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$aeJobPtYqWiH7OZqZRslXDjvNEk(this, tL_messages_sendMultiMedia, objArr2));
             }
         } else if ((objArr[0] instanceof TL_messages_sendMedia) || (objArr[0] instanceof TL_messages_editMessage)) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$nCVqODC8V62jlWv_ACxJzux1k4M(this, objArr));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$FileRefController$aOKUj2HwIwYMYPjujIv_D4C_mTE(this, objArr));
         } else if (objArr[0] instanceof TL_messages_saveGif) {
             TL_messages_saveGif tL_messages_saveGif = (TL_messages_saveGif) objArr[0];
         } else if (objArr[0] instanceof TL_messages_saveRecentSticker) {
@@ -764,23 +798,23 @@ public class FileRefController extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$sendErrorToObject$24$FileRefController(TL_messages_sendMultiMedia tL_messages_sendMultiMedia, Object[] objArr) {
-        getSendMessagesHelper().performSendMessageRequestMulti(tL_messages_sendMultiMedia, (ArrayList) objArr[1], (ArrayList) objArr[2], null, (DelayedMessage) objArr[4]);
+    public /* synthetic */ void lambda$sendErrorToObject$26$FileRefController(TL_messages_sendMultiMedia tL_messages_sendMultiMedia, Object[] objArr) {
+        getSendMessagesHelper().performSendMessageRequestMulti(tL_messages_sendMultiMedia, (ArrayList) objArr[1], (ArrayList) objArr[2], null, (DelayedMessage) objArr[4], ((Boolean) objArr[5]).booleanValue());
     }
 
-    public /* synthetic */ void lambda$sendErrorToObject$25$FileRefController(Object[] objArr) {
-        getSendMessagesHelper().performSendMessageRequest((TLObject) objArr[0], (MessageObject) objArr[1], (String) objArr[2], (DelayedMessage) objArr[3], ((Boolean) objArr[4]).booleanValue(), (DelayedMessage) objArr[5], null);
+    public /* synthetic */ void lambda$sendErrorToObject$27$FileRefController(Object[] objArr) {
+        getSendMessagesHelper().performSendMessageRequest((TLObject) objArr[0], (MessageObject) objArr[1], (String) objArr[2], (DelayedMessage) objArr[3], ((Boolean) objArr[4]).booleanValue(), (DelayedMessage) objArr[5], null, ((Boolean) objArr[6]).booleanValue());
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:78:0x0161  */
     /* JADX WARNING: Removed duplicated region for block: B:78:0x0161  */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x0153 A:{LOOP_END, LOOP:2: B:37:0x009b->B:74:0x0153} */
-    /* JADX WARNING: Removed duplicated region for block: B:199:0x0103 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:199:0x0103 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:206:0x0103 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:206:0x0103 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x0153 A:{LOOP_END, LOOP:2: B:37:0x009b->B:74:0x0153} */
     /* JADX WARNING: Removed duplicated region for block: B:78:0x0161  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x03f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x03ea  */
+    /* JADX WARNING: Removed duplicated region for block: B:192:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:187:0x0408  */
     /* JADX WARNING: Removed duplicated region for block: B:24:0x0057  */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x0056 A:{RETURN} */
     private boolean onRequestComplete(java.lang.String r25, java.lang.String r26, org.telegram.tgnet.TLObject r27, boolean r28) {
@@ -853,7 +887,7 @@ public class FileRefController extends BaseController {
         r12 = r11;
         r8 = 0;
     L_0x005f:
-        if (r8 >= r7) goto L_0x0409;
+        if (r8 >= r7) goto L_0x0426;
     L_0x0061:
         r13 = r2.get(r8);
         r13 = (org.telegram.messenger.FileRefController.Requester) r13;
@@ -864,7 +898,7 @@ public class FileRefController extends BaseController {
         r14 = r4;
         r2 = 0;
         r5 = 1;
-        goto L_0x0401;
+        goto L_0x041e;
     L_0x0074:
         r14 = r13.location;
         r14 = r14 instanceof org.telegram.tgnet.TLRPC.TL_inputFileLocation;
@@ -1039,7 +1073,7 @@ public class FileRefController extends BaseController {
         r12 = r0.getFileReference(r2, r4, r9, r11);
     L_0x019f:
         r14 = 0;
-        goto L_0x03e8;
+        goto L_0x0406;
     L_0x01a2:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_account_wallPapers;
         if (r2 == 0) goto L_0x01d9;
@@ -1095,33 +1129,50 @@ public class FileRefController extends BaseController {
         r2.putWallpapers(r4, r5);
         goto L_0x019f;
     L_0x01ff:
-        r2 = r3 instanceof org.telegram.tgnet.TLRPC.Vector;
-        if (r2 == 0) goto L_0x028d;
+        r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_theme;
+        if (r2 == 0) goto L_0x021d;
     L_0x0203:
+        r2 = r3;
+        r2 = (org.telegram.tgnet.TLRPC.TL_theme) r2;
+        r4 = r2.document;
+        r5 = r13.location;
+        r12 = r0.getFileReference(r4, r5, r9, r11);
+        if (r12 == 0) goto L_0x019f;
+    L_0x0212:
+        if (r28 == 0) goto L_0x019f;
+    L_0x0214:
+        r4 = new org.telegram.messenger.-$$Lambda$FileRefController$SNJwoq0kr06ZjWyihuJvKSpuIz0;
+        r4.<init>(r2);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
+        goto L_0x019f;
+    L_0x021d:
+        r2 = r3 instanceof org.telegram.tgnet.TLRPC.Vector;
+        if (r2 == 0) goto L_0x02ab;
+    L_0x0221:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.Vector) r2;
         r4 = r2.objects;
         r4 = r4.isEmpty();
         if (r4 != 0) goto L_0x019f;
-    L_0x020e:
+    L_0x022c:
         r4 = r2.objects;
         r4 = r4.size();
         r5 = 0;
-    L_0x0215:
+    L_0x0233:
         if (r5 >= r4) goto L_0x019f;
-    L_0x0217:
+    L_0x0235:
         r6 = r2.objects;
         r6 = r6.get(r5);
         r14 = r6 instanceof org.telegram.tgnet.TLRPC.User;
-        if (r14 == 0) goto L_0x0252;
-    L_0x0221:
+        if (r14 == 0) goto L_0x0270;
+    L_0x023f:
         r6 = (org.telegram.tgnet.TLRPC.User) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r28 == 0) goto L_0x024d;
-    L_0x022d:
-        if (r12 == 0) goto L_0x024d;
-    L_0x022f:
+        if (r28 == 0) goto L_0x026b;
+    L_0x024b:
+        if (r12 == 0) goto L_0x026b;
+    L_0x024d:
         r14 = new java.util.ArrayList;
         r14.<init>();
         r14.add(r6);
@@ -1131,27 +1182,27 @@ public class FileRefController extends BaseController {
         r2 = 0;
         r4 = 1;
         r15.putUsersAndChats(r14, r2, r4, r4);
-        r2 = new org.telegram.messenger.-$$Lambda$FileRefController$BIMksq3odPWDbPzozQvsGbTAFVQ;
+        r2 = new org.telegram.messenger.-$$Lambda$FileRefController$_4y5prO3JWgmruc7MhfACo84xB8;
         r2.<init>(r0, r6);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);
-        goto L_0x0282;
-    L_0x024d:
+        goto L_0x02a0;
+    L_0x026b:
         r16 = r2;
         r18 = r4;
-        goto L_0x0282;
-    L_0x0252:
+        goto L_0x02a0;
+    L_0x0270:
         r16 = r2;
         r18 = r4;
         r2 = r6 instanceof org.telegram.tgnet.TLRPC.Chat;
-        if (r2 == 0) goto L_0x0282;
-    L_0x025a:
+        if (r2 == 0) goto L_0x02a0;
+    L_0x0278:
         r6 = (org.telegram.tgnet.TLRPC.Chat) r6;
         r2 = r13.location;
         r2 = r0.getFileReference(r6, r2, r9, r11);
-        if (r28 == 0) goto L_0x0281;
-    L_0x0266:
-        if (r2 == 0) goto L_0x0281;
-    L_0x0268:
+        if (r28 == 0) goto L_0x029f;
+    L_0x0284:
+        if (r2 == 0) goto L_0x029f;
+    L_0x0286:
         r4 = new java.util.ArrayList;
         r4.<init>();
         r4.add(r6);
@@ -1159,45 +1210,45 @@ public class FileRefController extends BaseController {
         r14 = 0;
         r15 = 1;
         r12.putUsersAndChats(r14, r4, r15, r15);
-        r4 = new org.telegram.messenger.-$$Lambda$FileRefController$iHks5qtZYss0a9YNVtXh2OkBQVM;
+        r4 = new org.telegram.messenger.-$$Lambda$FileRefController$e8OtXvlo5kjEKEtnDDj1BG232-0;
         r4.<init>(r0, r6);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-    L_0x0281:
+    L_0x029f:
         r12 = r2;
-    L_0x0282:
-        if (r12 == 0) goto L_0x0286;
-    L_0x0284:
+    L_0x02a0:
+        if (r12 == 0) goto L_0x02a4;
+    L_0x02a2:
         goto L_0x019f;
-    L_0x0286:
+    L_0x02a4:
         r5 = r5 + 1;
         r2 = r16;
         r4 = r18;
-        goto L_0x0215;
-    L_0x028d:
+        goto L_0x0233;
+    L_0x02ab:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_chats;
-        if (r2 == 0) goto L_0x02d8;
-    L_0x0291:
+        if (r2 == 0) goto L_0x02f6;
+    L_0x02af:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_chats) r2;
         r4 = r2.chats;
         r4 = r4.isEmpty();
         if (r4 != 0) goto L_0x019f;
-    L_0x029c:
+    L_0x02ba:
         r4 = r2.chats;
         r4 = r4.size();
         r5 = 0;
-    L_0x02a3:
+    L_0x02c1:
         if (r5 >= r4) goto L_0x019f;
-    L_0x02a5:
+    L_0x02c3:
         r6 = r2.chats;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Chat) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x02d4;
-    L_0x02b7:
+        if (r12 == 0) goto L_0x02f2;
+    L_0x02d5:
         if (r28 == 0) goto L_0x019f;
-    L_0x02b9:
+    L_0x02d7:
         r2 = new java.util.ArrayList;
         r2.<init>();
         r2.add(r6);
@@ -1205,41 +1256,41 @@ public class FileRefController extends BaseController {
         r5 = 1;
         r14 = 0;
         r4.putUsersAndChats(r14, r2, r5, r5);
-        r2 = new org.telegram.messenger.-$$Lambda$FileRefController$oTs8VbeUd9fDPh8zJI7rzHSfrbE;
+        r2 = new org.telegram.messenger.-$$Lambda$FileRefController$tUyca42NNsTxyQpe3m9-DSncaao;
         r2.<init>(r0, r6);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);
-        goto L_0x03e8;
-    L_0x02d4:
+        goto L_0x0406;
+    L_0x02f2:
         r14 = 0;
         r5 = r5 + 1;
-        goto L_0x02a3;
-    L_0x02d8:
+        goto L_0x02c1;
+    L_0x02f6:
         r14 = 0;
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_savedGifs;
-        if (r2 == 0) goto L_0x0316;
-    L_0x02dd:
+        if (r2 == 0) goto L_0x0334;
+    L_0x02fb:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_savedGifs) r2;
         r4 = r2.gifs;
         r4 = r4.size();
         r5 = 0;
-    L_0x02e7:
-        if (r5 >= r4) goto L_0x02ff;
-    L_0x02e9:
+    L_0x0305:
+        if (r5 >= r4) goto L_0x031d;
+    L_0x0307:
         r6 = r2.gifs;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x02fc;
-    L_0x02fb:
-        goto L_0x02ff;
-    L_0x02fc:
+        if (r12 == 0) goto L_0x031a;
+    L_0x0319:
+        goto L_0x031d;
+    L_0x031a:
         r5 = r5 + 1;
-        goto L_0x02e7;
-    L_0x02ff:
-        if (r28 == 0) goto L_0x03e8;
-    L_0x0301:
+        goto L_0x0305;
+    L_0x031d:
+        if (r28 == 0) goto L_0x0406;
+    L_0x031f:
         r15 = r24.getMediaDataController();
         r16 = 0;
         r2 = r2.gifs;
@@ -1248,65 +1299,65 @@ public class FileRefController extends BaseController {
         r20 = 1;
         r17 = r2;
         r15.processLoadedRecentDocuments(r16, r17, r18, r19, r20);
-        goto L_0x03e8;
-    L_0x0316:
+        goto L_0x0406;
+    L_0x0334:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
-        if (r2 == 0) goto L_0x034a;
-    L_0x031a:
+        if (r2 == 0) goto L_0x0368;
+    L_0x0338:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_stickerSet) r2;
-        if (r12 != 0) goto L_0x033e;
-    L_0x031f:
+        if (r12 != 0) goto L_0x035c;
+    L_0x033d:
         r4 = r2.documents;
         r4 = r4.size();
         r5 = 0;
-    L_0x0326:
-        if (r5 >= r4) goto L_0x033e;
-    L_0x0328:
+    L_0x0344:
+        if (r5 >= r4) goto L_0x035c;
+    L_0x0346:
         r6 = r2.documents;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x033b;
-    L_0x033a:
-        goto L_0x033e;
-    L_0x033b:
+        if (r12 == 0) goto L_0x0359;
+    L_0x0358:
+        goto L_0x035c;
+    L_0x0359:
         r5 = r5 + 1;
-        goto L_0x0326;
-    L_0x033e:
-        if (r28 == 0) goto L_0x03e8;
-    L_0x0340:
-        r4 = new org.telegram.messenger.-$$Lambda$FileRefController$UaoY_wpCP9g2-PaEyO0vN1lbXd8;
+        goto L_0x0344;
+    L_0x035c:
+        if (r28 == 0) goto L_0x0406;
+    L_0x035e:
+        r4 = new org.telegram.messenger.-$$Lambda$FileRefController$q_nWD12uKB_1zPGAdz0IXAdyGJg;
         r4.<init>(r0, r2);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-        goto L_0x03e8;
-    L_0x034a:
+        goto L_0x0406;
+    L_0x0368:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_recentStickers;
-        if (r2 == 0) goto L_0x0386;
-    L_0x034e:
+        if (r2 == 0) goto L_0x03a4;
+    L_0x036c:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_recentStickers) r2;
         r4 = r2.stickers;
         r4 = r4.size();
         r5 = 0;
-    L_0x0358:
-        if (r5 >= r4) goto L_0x0370;
-    L_0x035a:
+    L_0x0376:
+        if (r5 >= r4) goto L_0x038e;
+    L_0x0378:
         r6 = r2.stickers;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x036d;
-    L_0x036c:
-        goto L_0x0370;
-    L_0x036d:
+        if (r12 == 0) goto L_0x038b;
+    L_0x038a:
+        goto L_0x038e;
+    L_0x038b:
         r5 = r5 + 1;
-        goto L_0x0358;
-    L_0x0370:
-        if (r28 == 0) goto L_0x03e8;
-    L_0x0372:
+        goto L_0x0376;
+    L_0x038e:
+        if (r28 == 0) goto L_0x0406;
+    L_0x0390:
         r15 = r24.getMediaDataController();
         r16 = 0;
         r2 = r2.stickers;
@@ -1315,33 +1366,33 @@ public class FileRefController extends BaseController {
         r20 = 1;
         r17 = r2;
         r15.processLoadedRecentDocuments(r16, r17, r18, r19, r20);
-        goto L_0x03e8;
-    L_0x0386:
+        goto L_0x0406;
+    L_0x03a4:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_favedStickers;
-        if (r2 == 0) goto L_0x03c2;
-    L_0x038a:
+        if (r2 == 0) goto L_0x03e0;
+    L_0x03a8:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_favedStickers) r2;
         r4 = r2.stickers;
         r4 = r4.size();
         r5 = 0;
-    L_0x0394:
-        if (r5 >= r4) goto L_0x03ac;
-    L_0x0396:
+    L_0x03b2:
+        if (r5 >= r4) goto L_0x03ca;
+    L_0x03b4:
         r6 = r2.stickers;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x03a9;
-    L_0x03a8:
-        goto L_0x03ac;
-    L_0x03a9:
+        if (r12 == 0) goto L_0x03c7;
+    L_0x03c6:
+        goto L_0x03ca;
+    L_0x03c7:
         r5 = r5 + 1;
-        goto L_0x0394;
-    L_0x03ac:
-        if (r28 == 0) goto L_0x03e8;
-    L_0x03ae:
+        goto L_0x03b2;
+    L_0x03ca:
+        if (r28 == 0) goto L_0x0406;
+    L_0x03cc:
         r15 = r24.getMediaDataController();
         r16 = 2;
         r2 = r2.stickers;
@@ -1350,82 +1401,81 @@ public class FileRefController extends BaseController {
         r20 = 1;
         r17 = r2;
         r15.processLoadedRecentDocuments(r16, r17, r18, r19, r20);
-        goto L_0x03e8;
-    L_0x03c2:
+        goto L_0x0406;
+    L_0x03e0:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.photos_Photos;
-        if (r2 == 0) goto L_0x03e8;
-    L_0x03c6:
+        if (r2 == 0) goto L_0x0406;
+    L_0x03e4:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.photos_Photos) r2;
         r4 = r2.photos;
         r4 = r4.size();
         r5 = 0;
-    L_0x03d0:
-        if (r5 >= r4) goto L_0x03e8;
-    L_0x03d2:
+    L_0x03ee:
+        if (r5 >= r4) goto L_0x0406;
+    L_0x03f0:
         r6 = r2.photos;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Photo) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x03e5;
-    L_0x03e4:
-        goto L_0x03e8;
-    L_0x03e5:
+        if (r12 == 0) goto L_0x0403;
+    L_0x0402:
+        goto L_0x0406;
+    L_0x0403:
         r5 = r5 + 1;
-        goto L_0x03d0;
-    L_0x03e8:
-        if (r12 == 0) goto L_0x03f8;
-    L_0x03ea:
-        if (r11 == 0) goto L_0x03f0;
-    L_0x03ec:
+        goto L_0x03ee;
+    L_0x0406:
+        if (r12 == 0) goto L_0x0415;
+    L_0x0408:
         r2 = 0;
+        if (r11 == 0) goto L_0x040e;
+    L_0x040b:
         r4 = r11[r2];
-        goto L_0x03f2;
-    L_0x03f0:
-        r2 = 0;
+        goto L_0x040f;
+    L_0x040e:
         r4 = r14;
-    L_0x03f2:
+    L_0x040f:
         r0.onUpdateObjectReference(r13, r12, r4);
         r5 = 1;
         r10 = 1;
-        goto L_0x0401;
-    L_0x03f8:
+        goto L_0x041e;
+    L_0x0415:
         r2 = 0;
         r4 = r13.args;
         r5 = 1;
         r0.sendErrorToObject(r4, r5);
-    L_0x0401:
+    L_0x041e:
         r8 = r8 + 1;
         r2 = r26;
         r4 = r14;
         r6 = 1;
         goto L_0x005f;
-    L_0x0409:
+    L_0x0426:
         r2 = r0.locationRequester;
         r2.remove(r1);
-        if (r10 == 0) goto L_0x0413;
-    L_0x0410:
+        if (r10 == 0) goto L_0x0430;
+    L_0x042d:
         r0.putReponseToCache(r1, r3);
-    L_0x0413:
+    L_0x0430:
         return r10;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileRefController.onRequestComplete(java.lang.String, java.lang.String, org.telegram.tgnet.TLObject, boolean):boolean");
     }
 
-    public /* synthetic */ void lambda$onRequestComplete$26$FileRefController(User user) {
+    public /* synthetic */ void lambda$onRequestComplete$29$FileRefController(User user) {
         getMessagesController().putUser(user, false);
     }
 
-    public /* synthetic */ void lambda$onRequestComplete$27$FileRefController(Chat chat) {
+    public /* synthetic */ void lambda$onRequestComplete$30$FileRefController(Chat chat) {
         getMessagesController().putChat(chat, false);
     }
 
-    public /* synthetic */ void lambda$onRequestComplete$28$FileRefController(Chat chat) {
+    public /* synthetic */ void lambda$onRequestComplete$31$FileRefController(Chat chat) {
         getMessagesController().putChat(chat, false);
     }
 
-    public /* synthetic */ void lambda$onRequestComplete$29$FileRefController(TL_messages_stickerSet tL_messages_stickerSet) {
+    public /* synthetic */ void lambda$onRequestComplete$32$FileRefController(TL_messages_stickerSet tL_messages_stickerSet) {
         getMediaDataController().replaceStickerSet(tL_messages_stickerSet);
     }
 

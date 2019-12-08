@@ -113,7 +113,7 @@ public class WallpaperUpdater {
             PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(2, false, false, null);
             photoAlbumPickerActivity.setAllowSearchImages(false);
             photoAlbumPickerActivity.setDelegate(new PhotoAlbumPickerActivityDelegate() {
-                public void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList) {
+                public void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList, boolean z, int i) {
                     WallpaperUpdater.this.didSelectPhotos(arrayList);
                 }
 

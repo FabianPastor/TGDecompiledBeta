@@ -413,8 +413,16 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (this.emojiView == null) {
             this.emojiView = new EmojiView(false, false, getContext(), false, null);
             this.emojiView.setDelegate(new EmojiViewDelegate() {
+                public /* synthetic */ boolean canSchedule() {
+                    return -CC.$default$canSchedule(this);
+                }
+
                 public /* synthetic */ boolean isExpanded() {
                     return -CC.$default$isExpanded(this);
+                }
+
+                public /* synthetic */ boolean isInScheduleMode() {
+                    return -CC.$default$isInScheduleMode(this);
                 }
 
                 public /* synthetic */ boolean isSearchOpened() {
@@ -425,8 +433,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     -CC.$default$onClearEmojiRecent(this);
                 }
 
-                public /* synthetic */ void onGifSelected(View view, Object obj, Object obj2) {
-                    -CC.$default$onGifSelected(this, view, obj, obj2);
+                public /* synthetic */ void onGifSelected(View view, Object obj, Object obj2, boolean z, int i) {
+                    -CC.$default$onGifSelected(this, view, obj, obj2, z, i);
                 }
 
                 public /* synthetic */ void onSearchOpenClose(int i) {
@@ -437,8 +445,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     -CC.$default$onShowStickerSet(this, stickerSet, inputStickerSet);
                 }
 
-                public /* synthetic */ void onStickerSelected(View view, Document document, Object obj) {
-                    -CC.$default$onStickerSelected(this, view, document, obj);
+                public /* synthetic */ void onStickerSelected(View view, Document document, Object obj, boolean z, int i) {
+                    -CC.$default$onStickerSelected(this, view, document, obj, z, i);
                 }
 
                 public /* synthetic */ void onStickerSetAdd(StickerSetCovered stickerSetCovered) {

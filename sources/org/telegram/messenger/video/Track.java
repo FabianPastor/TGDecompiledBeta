@@ -265,16 +265,13 @@ public class Track {
             if (i3 >= this.samplePresentationTimes.size()) {
                 break;
             }
-            int i4;
             SamplePresentationTime samplePresentationTime = (SamplePresentationTime) this.samplePresentationTimes.get(i3);
             long access$000 = samplePresentationTime.presentationTime - j2;
             j2 = samplePresentationTime.presentationTime;
             this.sampleDurations[samplePresentationTime.index] = access$000;
+            int i4 = i3;
             if (samplePresentationTime.index != 0) {
-                i4 = i3;
                 this.duration += access$000;
-            } else {
-                i4 = i3;
             }
             if (access$000 != 0) {
                 j = Math.min(j, access$000);

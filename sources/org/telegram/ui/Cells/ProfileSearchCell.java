@@ -176,14 +176,14 @@ public class ProfileSearchCell extends BaseCell {
         this.sublabelOffsetY = i2;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0491  */
-    /* JADX WARNING: Removed duplicated region for block: B:169:0x045f  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x04a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x0497  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0531  */
-    /* JADX WARNING: Removed duplicated region for block: B:177:0x04ca  */
-    /* JADX WARNING: Missing block: B:159:0x0432, code skipped:
-            if (r4.expires > org.telegram.tgnet.ConnectionsManager.getInstance(r0.currentAccount).getCurrentTime()) goto L_0x0434;
+    /* JADX WARNING: Removed duplicated region for block: B:164:0x047c  */
+    /* JADX WARNING: Removed duplicated region for block: B:163:0x044a  */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x0493  */
+    /* JADX WARNING: Removed duplicated region for block: B:167:0x0482  */
+    /* JADX WARNING: Removed duplicated region for block: B:187:0x051c  */
+    /* JADX WARNING: Removed duplicated region for block: B:171:0x04b5  */
+    /* JADX WARNING: Missing block: B:153:0x041d, code skipped:
+            if (r4.expires > org.telegram.tgnet.ConnectionsManager.getInstance(r0.currentAccount).getCurrentTime()) goto L_0x041f;
      */
     public void buildLayout() {
         /*
@@ -239,58 +239,45 @@ public class ProfileSearchCell extends BaseCell {
     L_0x005d:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r0.nameLockTop = r2;
-        goto L_0x0199;
+        goto L_0x0184;
     L_0x0065:
         r2 = r0.chat;
-        if (r2 == 0) goto L_0x0118;
+        if (r2 == 0) goto L_0x0103;
     L_0x0069:
         r3 = r2.id;
-        r7 = NUM; // 0x41b40000 float:22.5 double:5.446162293E-315;
-        if (r3 >= 0) goto L_0x0082;
-    L_0x006f:
-        r2 = org.telegram.messenger.AndroidUtilities.makeBroadcastId(r3);
-        r0.dialog_id = r2;
-        r2 = org.telegram.messenger.SharedConfig.drawDialogIcons;
-        if (r2 == 0) goto L_0x007b;
-    L_0x0079:
-        r0.drawNameBroadcast = r5;
-    L_0x007b:
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r0.nameLockTop = r2;
-        goto L_0x00a9;
-    L_0x0082:
         r3 = -r3;
-        r8 = (long) r3;
-        r0.dialog_id = r8;
+        r7 = (long) r3;
+        r0.dialog_id = r7;
         r3 = org.telegram.messenger.SharedConfig.drawDialogIcons;
-        if (r3 == 0) goto L_0x00a9;
-    L_0x008a:
+        if (r3 == 0) goto L_0x0094;
+    L_0x0073:
         r2 = org.telegram.messenger.ChatObject.isChannel(r2);
-        if (r2 == 0) goto L_0x009f;
-    L_0x0090:
+        if (r2 == 0) goto L_0x008a;
+    L_0x0079:
         r2 = r0.chat;
         r2 = r2.megagroup;
-        if (r2 != 0) goto L_0x009f;
-    L_0x0096:
+        if (r2 != 0) goto L_0x008a;
+    L_0x007f:
         r0.drawNameBroadcast = r5;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r2 = NUM; // 0x41b40000 float:22.5 double:5.446162293E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.nameLockTop = r2;
-        goto L_0x00a9;
-    L_0x009f:
+        goto L_0x0094;
+    L_0x008a:
         r0.drawNameGroup = r5;
         r2 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.nameLockTop = r2;
-    L_0x00a9:
+    L_0x0094:
         r2 = r0.chat;
         r2 = r2.verified;
         r0.drawCheck = r2;
         r2 = org.telegram.messenger.SharedConfig.drawDialogIcons;
-        if (r2 == 0) goto L_0x0101;
-    L_0x00b3:
+        if (r2 == 0) goto L_0x00ec;
+    L_0x009e:
         r2 = org.telegram.messenger.LocaleController.isRTL;
-        if (r2 != 0) goto L_0x00db;
-    L_0x00b7:
+        if (r2 != 0) goto L_0x00c6;
+    L_0x00a2:
         r2 = org.telegram.messenger.AndroidUtilities.leftBaseline;
         r2 = (float) r2;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
@@ -300,18 +287,18 @@ public class ProfileSearchCell extends BaseCell {
         r2 = (float) r2;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r3 = r0.drawNameGroup;
-        if (r3 == 0) goto L_0x00d0;
-    L_0x00cd:
+        if (r3 == 0) goto L_0x00bb;
+    L_0x00b8:
         r3 = org.telegram.ui.ActionBar.Theme.dialogs_groupDrawable;
-        goto L_0x00d2;
-    L_0x00d0:
+        goto L_0x00bd;
+    L_0x00bb:
         r3 = org.telegram.ui.ActionBar.Theme.dialogs_broadcastDrawable;
-    L_0x00d2:
+    L_0x00bd:
         r3 = r3.getIntrinsicWidth();
         r2 = r2 + r3;
         r0.nameLeft = r2;
-        goto L_0x0199;
-    L_0x00db:
+        goto L_0x0184;
+    L_0x00c6:
         r2 = r25.getMeasuredWidth();
         r3 = org.telegram.messenger.AndroidUtilities.leftBaseline;
         r3 = r3 + 2;
@@ -319,65 +306,65 @@ public class ProfileSearchCell extends BaseCell {
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r2 = r2 - r3;
         r3 = r0.drawNameGroup;
-        if (r3 == 0) goto L_0x00f0;
-    L_0x00ed:
+        if (r3 == 0) goto L_0x00db;
+    L_0x00d8:
         r3 = org.telegram.ui.ActionBar.Theme.dialogs_groupDrawable;
-        goto L_0x00f2;
-    L_0x00f0:
+        goto L_0x00dd;
+    L_0x00db:
         r3 = org.telegram.ui.ActionBar.Theme.dialogs_broadcastDrawable;
-    L_0x00f2:
+    L_0x00dd:
         r3 = r3.getIntrinsicWidth();
         r2 = r2 - r3;
         r0.nameLockLeft = r2;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r0.nameLeft = r2;
-        goto L_0x0199;
-    L_0x0101:
+        goto L_0x0184;
+    L_0x00ec:
         r2 = org.telegram.messenger.LocaleController.isRTL;
-        if (r2 != 0) goto L_0x0110;
-    L_0x0105:
+        if (r2 != 0) goto L_0x00fb;
+    L_0x00f0:
         r2 = org.telegram.messenger.AndroidUtilities.leftBaseline;
         r2 = (float) r2;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.nameLeft = r2;
-        goto L_0x0199;
-    L_0x0110:
+        goto L_0x0184;
+    L_0x00fb:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r0.nameLeft = r2;
-        goto L_0x0199;
-    L_0x0118:
+        goto L_0x0184;
+    L_0x0103:
         r2 = r0.user;
-        if (r2 == 0) goto L_0x0199;
-    L_0x011c:
+        if (r2 == 0) goto L_0x0184;
+    L_0x0107:
         r2 = r2.id;
         r7 = (long) r2;
         r0.dialog_id = r7;
         r2 = org.telegram.messenger.LocaleController.isRTL;
-        if (r2 != 0) goto L_0x012f;
-    L_0x0125:
+        if (r2 != 0) goto L_0x011a;
+    L_0x0110:
         r2 = org.telegram.messenger.AndroidUtilities.leftBaseline;
         r2 = (float) r2;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.nameLeft = r2;
-        goto L_0x0135;
-    L_0x012f:
+        goto L_0x0120;
+    L_0x011a:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r0.nameLeft = r2;
-    L_0x0135:
+    L_0x0120:
         r2 = org.telegram.messenger.SharedConfig.drawDialogIcons;
-        if (r2 == 0) goto L_0x018b;
-    L_0x0139:
+        if (r2 == 0) goto L_0x0176;
+    L_0x0124:
         r2 = r0.user;
         r7 = r2.bot;
-        if (r7 == 0) goto L_0x018b;
-    L_0x013f:
+        if (r7 == 0) goto L_0x0176;
+    L_0x012a:
         r2 = org.telegram.messenger.MessagesController.isSupportUser(r2);
-        if (r2 != 0) goto L_0x018b;
-    L_0x0145:
+        if (r2 != 0) goto L_0x0176;
+    L_0x0130:
         r0.drawNameBot = r5;
         r2 = org.telegram.messenger.LocaleController.isRTL;
-        if (r2 != 0) goto L_0x0167;
-    L_0x014b:
+        if (r2 != 0) goto L_0x0152;
+    L_0x0136:
         r2 = org.telegram.messenger.AndroidUtilities.leftBaseline;
         r2 = (float) r2;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
@@ -390,8 +377,8 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r7.getIntrinsicWidth();
         r2 = r2 + r7;
         r0.nameLeft = r2;
-        goto L_0x0184;
-    L_0x0167:
+        goto L_0x016f;
+    L_0x0152:
         r2 = r25.getMeasuredWidth();
         r7 = org.telegram.messenger.AndroidUtilities.leftBaseline;
         r7 = r7 + 2;
@@ -404,53 +391,53 @@ public class ProfileSearchCell extends BaseCell {
         r0.nameLockLeft = r2;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r0.nameLeft = r2;
-    L_0x0184:
+    L_0x016f:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r0.nameLockTop = r2;
-        goto L_0x0193;
-    L_0x018b:
+        goto L_0x017e;
+    L_0x0176:
         r2 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.nameLockTop = r2;
-    L_0x0193:
+    L_0x017e:
         r2 = r0.user;
         r2 = r2.verified;
         r0.drawCheck = r2;
-    L_0x0199:
+    L_0x0184:
         r2 = r0.currentName;
-        if (r2 == 0) goto L_0x019e;
-    L_0x019d:
-        goto L_0x01b6;
-    L_0x019e:
+        if (r2 == 0) goto L_0x0189;
+    L_0x0188:
+        goto L_0x01a1;
+    L_0x0189:
         r2 = r0.chat;
-        if (r2 == 0) goto L_0x01a5;
-    L_0x01a2:
+        if (r2 == 0) goto L_0x0190;
+    L_0x018d:
         r2 = r2.title;
-        goto L_0x01b0;
-    L_0x01a5:
+        goto L_0x019b;
+    L_0x0190:
         r2 = r0.user;
-        if (r2 == 0) goto L_0x01ae;
-    L_0x01a9:
+        if (r2 == 0) goto L_0x0199;
+    L_0x0194:
         r2 = org.telegram.messenger.UserObject.getUserName(r2);
-        goto L_0x01b0;
-    L_0x01ae:
+        goto L_0x019b;
+    L_0x0199:
         r2 = "";
-    L_0x01b0:
+    L_0x019b:
         r3 = 10;
         r2 = r2.replace(r3, r4);
-    L_0x01b6:
+    L_0x01a1:
         r3 = r2.length();
-        if (r3 != 0) goto L_0x01f1;
-    L_0x01bc:
+        if (r3 != 0) goto L_0x01dc;
+    L_0x01a7:
         r2 = r0.user;
-        if (r2 == 0) goto L_0x01e8;
-    L_0x01c0:
+        if (r2 == 0) goto L_0x01d3;
+    L_0x01ab:
         r2 = r2.phone;
-        if (r2 == 0) goto L_0x01e8;
-    L_0x01c4:
+        if (r2 == 0) goto L_0x01d3;
+    L_0x01af:
         r2 = r2.length();
-        if (r2 == 0) goto L_0x01e8;
-    L_0x01ca:
+        if (r2 == 0) goto L_0x01d3;
+    L_0x01b5:
         r2 = org.telegram.PhoneFormat.PhoneFormat.getInstance();
         r3 = new java.lang.StringBuilder;
         r3.<init>();
@@ -461,24 +448,24 @@ public class ProfileSearchCell extends BaseCell {
         r3.append(r4);
         r3 = r3.toString();
         r2 = r2.format(r3);
-        goto L_0x01f1;
-    L_0x01e8:
-        r2 = NUM; // 0x7f0d0505 float:1.8744721E38 double:1.0531304124E-314;
+        goto L_0x01dc;
+    L_0x01d3:
+        r2 = NUM; // 0x7f0d050a float:1.8744731E38 double:1.053130415E-314;
         r3 = "HiddenName";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
-    L_0x01f1:
+    L_0x01dc:
         r3 = r0.encryptedChat;
-        if (r3 == 0) goto L_0x01f8;
-    L_0x01f5:
+        if (r3 == 0) goto L_0x01e3;
+    L_0x01e0:
         r3 = org.telegram.ui.ActionBar.Theme.dialogs_searchNameEncryptedPaint;
-        goto L_0x01fa;
-    L_0x01f8:
+        goto L_0x01e5;
+    L_0x01e3:
         r3 = org.telegram.ui.ActionBar.Theme.dialogs_searchNamePaint;
-    L_0x01fa:
+    L_0x01e5:
         r9 = r3;
         r3 = org.telegram.messenger.LocaleController.isRTL;
-        if (r3 != 0) goto L_0x0210;
-    L_0x01ff:
+        if (r3 != 0) goto L_0x01fb;
+    L_0x01ea:
         r3 = r25.getMeasuredWidth();
         r4 = r0.nameLeft;
         r3 = r3 - r4;
@@ -486,8 +473,8 @@ public class ProfileSearchCell extends BaseCell {
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r3 = r3 - r4;
         r0.nameWidth = r3;
-        goto L_0x0221;
-    L_0x0210:
+        goto L_0x020c;
+    L_0x01fb:
         r3 = r25.getMeasuredWidth();
         r4 = r0.nameLeft;
         r3 = r3 - r4;
@@ -496,11 +483,11 @@ public class ProfileSearchCell extends BaseCell {
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r3 = r3 - r4;
         r0.nameWidth = r3;
-    L_0x0221:
+    L_0x020c:
         r4 = r0.drawNameLock;
         r7 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        if (r4 == 0) goto L_0x0238;
-    L_0x0227:
+        if (r4 == 0) goto L_0x0223;
+    L_0x0212:
         r4 = r0.nameWidth;
         r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
         r8 = org.telegram.ui.ActionBar.Theme.dialogs_lockDrawable;
@@ -508,11 +495,11 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r7 + r8;
         r4 = r4 - r7;
         r0.nameWidth = r4;
-        goto L_0x0276;
-    L_0x0238:
+        goto L_0x0261;
+    L_0x0223:
         r4 = r0.drawNameBroadcast;
-        if (r4 == 0) goto L_0x024d;
-    L_0x023c:
+        if (r4 == 0) goto L_0x0238;
+    L_0x0227:
         r4 = r0.nameWidth;
         r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
         r8 = org.telegram.ui.ActionBar.Theme.dialogs_broadcastDrawable;
@@ -520,11 +507,11 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r7 + r8;
         r4 = r4 - r7;
         r0.nameWidth = r4;
-        goto L_0x0276;
-    L_0x024d:
+        goto L_0x0261;
+    L_0x0238:
         r4 = r0.drawNameGroup;
-        if (r4 == 0) goto L_0x0262;
-    L_0x0251:
+        if (r4 == 0) goto L_0x024d;
+    L_0x023c:
         r4 = r0.nameWidth;
         r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
         r8 = org.telegram.ui.ActionBar.Theme.dialogs_groupDrawable;
@@ -532,11 +519,11 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r7 + r8;
         r4 = r4 - r7;
         r0.nameWidth = r4;
-        goto L_0x0276;
-    L_0x0262:
+        goto L_0x0261;
+    L_0x024d:
         r4 = r0.drawNameBot;
-        if (r4 == 0) goto L_0x0276;
-    L_0x0266:
+        if (r4 == 0) goto L_0x0261;
+    L_0x0251:
         r4 = r0.nameWidth;
         r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
         r8 = org.telegram.ui.ActionBar.Theme.dialogs_botDrawable;
@@ -544,7 +531,7 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r7 + r8;
         r4 = r4 - r7;
         r0.nameWidth = r4;
-    L_0x0276:
+    L_0x0261:
         r4 = r0.nameWidth;
         r7 = r25.getPaddingLeft();
         r8 = r25.getPaddingRight();
@@ -559,19 +546,19 @@ public class ProfileSearchCell extends BaseCell {
         r15 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
         r16 = NUM; // 0x41980000 float:19.0 double:5.43709615E-315;
         r14 = 0;
-        if (r4 == 0) goto L_0x031e;
-    L_0x0297:
+        if (r4 == 0) goto L_0x0309;
+    L_0x0282:
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.MessagesController.getInstance(r4);
         r4 = r4.dialogs_dict;
         r7 = r0.dialog_id;
         r4 = r4.get(r7);
         r4 = (org.telegram.tgnet.TLRPC.Dialog) r4;
-        if (r4 == 0) goto L_0x0319;
-    L_0x02a9:
+        if (r4 == 0) goto L_0x0304;
+    L_0x0294:
         r4 = r4.unread_count;
-        if (r4 == 0) goto L_0x0319;
-    L_0x02ad:
+        if (r4 == 0) goto L_0x0304;
+    L_0x0298:
         r0.lastUnreadCount = r4;
         r5 = new java.lang.Object[r5];
         r4 = java.lang.Integer.valueOf(r4);
@@ -606,30 +593,30 @@ public class ProfileSearchCell extends BaseCell {
         r5 = r5 - r4;
         r0.nameWidth = r5;
         r5 = org.telegram.messenger.LocaleController.isRTL;
-        if (r5 != 0) goto L_0x030d;
-    L_0x02fe:
+        if (r5 != 0) goto L_0x02f8;
+    L_0x02e9:
         r4 = r25.getMeasuredWidth();
         r5 = r0.countWidth;
         r4 = r4 - r5;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r4 = r4 - r5;
         r0.countLeft = r4;
-        goto L_0x0322;
-    L_0x030d:
+        goto L_0x030d;
+    L_0x02f8:
         r5 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r0.countLeft = r5;
         r5 = r0.nameLeft;
         r5 = r5 + r4;
         r0.nameLeft = r5;
-        goto L_0x0322;
-    L_0x0319:
+        goto L_0x030d;
+    L_0x0304:
         r0.lastUnreadCount = r1;
         r0.countLayout = r14;
-        goto L_0x0322;
-    L_0x031e:
+        goto L_0x030d;
+    L_0x0309:
         r0.lastUnreadCount = r1;
         r0.countLayout = r14;
-    L_0x0322:
+    L_0x030d:
         r4 = r0.nameWidth;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r15);
         r4 = r4 - r5;
@@ -649,163 +636,163 @@ public class ProfileSearchCell extends BaseCell {
         r0.nameLayout = r2;
         r2 = org.telegram.ui.ActionBar.Theme.dialogs_offlinePaint;
         r4 = org.telegram.messenger.LocaleController.isRTL;
-        if (r4 != 0) goto L_0x0352;
-    L_0x0348:
+        if (r4 != 0) goto L_0x033d;
+    L_0x0333:
         r4 = org.telegram.messenger.AndroidUtilities.leftBaseline;
         r4 = (float) r4;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0.statusLeft = r4;
-        goto L_0x0358;
-    L_0x0352:
+        goto L_0x0343;
+    L_0x033d:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r0.statusLeft = r4;
-    L_0x0358:
+    L_0x0343:
         r4 = r0.chat;
-        if (r4 == 0) goto L_0x03d1;
-    L_0x035c:
+        if (r4 == 0) goto L_0x03bc;
+    L_0x0347:
         r7 = r0.subLabel;
-        if (r7 == 0) goto L_0x0362;
-    L_0x0360:
-        goto L_0x03d1;
-    L_0x0362:
-        if (r4 == 0) goto L_0x03c8;
-    L_0x0364:
+        if (r7 == 0) goto L_0x034d;
+    L_0x034b:
+        goto L_0x03bc;
+    L_0x034d:
+        if (r4 == 0) goto L_0x03b3;
+    L_0x034f:
         r4 = org.telegram.messenger.ChatObject.isChannel(r4);
-        if (r4 == 0) goto L_0x0394;
-    L_0x036a:
+        if (r4 == 0) goto L_0x037f;
+    L_0x0355:
         r4 = r0.chat;
         r7 = r4.megagroup;
-        if (r7 != 0) goto L_0x0394;
-    L_0x0370:
+        if (r7 != 0) goto L_0x037f;
+    L_0x035b:
         r4 = r4.username;
         r4 = android.text.TextUtils.isEmpty(r4);
-        if (r4 == 0) goto L_0x0386;
-    L_0x0378:
+        if (r4 == 0) goto L_0x0371;
+    L_0x0363:
         r4 = NUM; // 0x7f0d025a float:1.8743336E38 double:1.053130075E-314;
         r7 = "ChannelPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
-        goto L_0x03c9;
-    L_0x0386:
+        goto L_0x03b4;
+    L_0x0371:
         r4 = NUM; // 0x7f0d025d float:1.8743342E38 double:1.0531300765E-314;
         r7 = "ChannelPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
-        goto L_0x03c9;
-    L_0x0394:
+        goto L_0x03b4;
+    L_0x037f:
         r4 = r0.chat;
         r7 = r4.has_geo;
-        if (r7 == 0) goto L_0x03a4;
-    L_0x039a:
-        r4 = NUM; // 0x7f0d05d2 float:1.8745137E38 double:1.0531305137E-314;
+        if (r7 == 0) goto L_0x038f;
+    L_0x0385:
+        r4 = NUM; // 0x7f0d05d7 float:1.8745147E38 double:1.053130516E-314;
         r7 = "MegaLocation";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
-        goto L_0x03c9;
-    L_0x03a4:
+        goto L_0x03b4;
+    L_0x038f:
         r4 = r4.username;
         r4 = android.text.TextUtils.isEmpty(r4);
-        if (r4 == 0) goto L_0x03ba;
-    L_0x03ac:
-        r4 = NUM; // 0x7f0d05d3 float:1.8745139E38 double:1.053130514E-314;
+        if (r4 == 0) goto L_0x03a5;
+    L_0x0397:
+        r4 = NUM; // 0x7f0d05d8 float:1.874515E38 double:1.0531305167E-314;
         r7 = "MegaPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
-        goto L_0x03c9;
-    L_0x03ba:
-        r4 = NUM; // 0x7f0d05d6 float:1.8745145E38 double:1.0531305157E-314;
+        goto L_0x03b4;
+    L_0x03a5:
+        r4 = NUM; // 0x7f0d05db float:1.8745155E38 double:1.053130518E-314;
         r7 = "MegaPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
-        goto L_0x03c9;
-    L_0x03c8:
+        goto L_0x03b4;
+    L_0x03b3:
         r14 = r5;
-    L_0x03c9:
+    L_0x03b4:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r0.nameTop = r4;
-        goto L_0x0458;
-    L_0x03d1:
+        goto L_0x0443;
+    L_0x03bc:
         r14 = r0.subLabel;
-        if (r14 == 0) goto L_0x03d7;
-    L_0x03d5:
-        goto L_0x044b;
-    L_0x03d7:
+        if (r14 == 0) goto L_0x03c2;
+    L_0x03c0:
+        goto L_0x0436;
+    L_0x03c2:
         r4 = r0.user;
-        if (r4 == 0) goto L_0x044a;
-    L_0x03db:
+        if (r4 == 0) goto L_0x0435;
+    L_0x03c6:
         r4 = org.telegram.messenger.MessagesController.isSupportUser(r4);
-        if (r4 == 0) goto L_0x03eb;
-    L_0x03e1:
-        r4 = NUM; // 0x7f0d0a03 float:1.8747313E38 double:1.053131044E-314;
+        if (r4 == 0) goto L_0x03d6;
+    L_0x03cc:
+        r4 = NUM; // 0x7f0d0a2e float:1.87474E38 double:1.053131065E-314;
         r7 = "SupportStatus";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
-        goto L_0x044b;
-    L_0x03eb:
+        goto L_0x0436;
+    L_0x03d6:
         r4 = r0.user;
         r7 = r4.bot;
-        if (r7 == 0) goto L_0x03fb;
-    L_0x03f1:
+        if (r7 == 0) goto L_0x03e6;
+    L_0x03dc:
         r4 = NUM; // 0x7f0d01cb float:1.8743046E38 double:1.0531300043E-314;
         r7 = "Bot";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
-        goto L_0x044b;
-    L_0x03fb:
+        goto L_0x0436;
+    L_0x03e6:
         r7 = r4.id;
         r8 = 333000; // 0x514c8 float:4.66632E-40 double:1.64524E-318;
-        if (r7 == r8) goto L_0x0440;
-    L_0x0402:
+        if (r7 == r8) goto L_0x042b;
+    L_0x03ed:
         r8 = 777000; // 0xbdb28 float:1.088809E-39 double:3.83889E-318;
-        if (r7 != r8) goto L_0x0408;
-    L_0x0407:
-        goto L_0x0440;
-    L_0x0408:
+        if (r7 != r8) goto L_0x03f3;
+    L_0x03f2:
+        goto L_0x042b;
+    L_0x03f3:
         r7 = r0.currentAccount;
         r14 = org.telegram.messenger.LocaleController.formatUserStatus(r7, r4);
         r4 = r0.user;
-        if (r4 == 0) goto L_0x044b;
-    L_0x0412:
+        if (r4 == 0) goto L_0x0436;
+    L_0x03fd:
         r4 = r4.id;
         r7 = r0.currentAccount;
         r7 = org.telegram.messenger.UserConfig.getInstance(r7);
         r7 = r7.getClientUserId();
-        if (r4 == r7) goto L_0x0434;
-    L_0x0420:
+        if (r4 == r7) goto L_0x041f;
+    L_0x040b:
         r4 = r0.user;
         r4 = r4.status;
-        if (r4 == 0) goto L_0x044b;
-    L_0x0426:
+        if (r4 == 0) goto L_0x0436;
+    L_0x0411:
         r4 = r4.expires;
         r7 = r0.currentAccount;
         r7 = org.telegram.tgnet.ConnectionsManager.getInstance(r7);
         r7 = r7.getCurrentTime();
-        if (r4 <= r7) goto L_0x044b;
-    L_0x0434:
+        if (r4 <= r7) goto L_0x0436;
+    L_0x041f:
         r2 = org.telegram.ui.ActionBar.Theme.dialogs_onlinePaint;
-        r4 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
+        r4 = NUM; // 0x7f0d0703 float:1.8745755E38 double:1.0531306644E-314;
         r7 = "Online";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
-        goto L_0x044b;
-    L_0x0440:
-        r4 = NUM; // 0x7f0d0979 float:1.8747033E38 double:1.0531309757E-314;
+        goto L_0x0436;
+    L_0x042b:
+        r4 = NUM; // 0x7f0d099b float:1.8747102E38 double:1.0531309925E-314;
         r7 = "ServiceNotifications";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
-        goto L_0x044b;
-    L_0x044a:
+        goto L_0x0436;
+    L_0x0435:
         r14 = r5;
-    L_0x044b:
+    L_0x0436:
         r4 = r0.savedMessages;
-        if (r4 == 0) goto L_0x0458;
-    L_0x044f:
+        if (r4 == 0) goto L_0x0443;
+    L_0x043a:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r0.nameTop = r4;
         r12 = r2;
         r14 = r5;
-        goto L_0x0459;
-    L_0x0458:
+        goto L_0x0444;
+    L_0x0443:
         r12 = r2;
-    L_0x0459:
+    L_0x0444:
         r2 = android.text.TextUtils.isEmpty(r14);
-        if (r2 != 0) goto L_0x0491;
-    L_0x045f:
+        if (r2 != 0) goto L_0x047c;
+    L_0x044a:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r15);
         r2 = r3 - r2;
         r2 = (float) r2;
@@ -828,25 +815,25 @@ public class ProfileSearchCell extends BaseCell {
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r2 = r2 - r4;
         r0.nameLockTop = r2;
-        goto L_0x0493;
-    L_0x0491:
+        goto L_0x047e;
+    L_0x047c:
         r0.statusLayout = r5;
-    L_0x0493:
+    L_0x047e:
         r2 = org.telegram.messenger.LocaleController.isRTL;
-        if (r2 == 0) goto L_0x04a8;
-    L_0x0497:
+        if (r2 == 0) goto L_0x0493;
+    L_0x0482:
         r2 = r25.getMeasuredWidth();
         r4 = NUM; // 0x42640000 float:57.0 double:5.503149485E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r2 = r2 - r4;
         r4 = r25.getPaddingRight();
         r2 = r2 - r4;
-        goto L_0x04b1;
-    L_0x04a8:
+        goto L_0x049c;
+    L_0x0493:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = r25.getPaddingLeft();
         r2 = r2 + r4;
-    L_0x04b1:
+    L_0x049c:
         r4 = r0.avatarImage;
         r5 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
@@ -855,18 +842,18 @@ public class ProfileSearchCell extends BaseCell {
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4.setImageCoords(r2, r5, r7, r6);
         r2 = org.telegram.messenger.LocaleController.isRTL;
-        if (r2 == 0) goto L_0x0531;
-    L_0x04ca:
+        if (r2 == 0) goto L_0x051c;
+    L_0x04b5:
         r2 = r0.nameLayout;
         r2 = r2.getLineCount();
         r4 = 0;
-        if (r2 <= 0) goto L_0x04fe;
-    L_0x04d3:
+        if (r2 <= 0) goto L_0x04e9;
+    L_0x04be:
         r2 = r0.nameLayout;
         r2 = r2.getLineLeft(r1);
         r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r2 != 0) goto L_0x04fe;
-    L_0x04dd:
+        if (r2 != 0) goto L_0x04e9;
+    L_0x04c8:
         r2 = r0.nameLayout;
         r2 = r2.getLineWidth(r1);
         r5 = (double) r2;
@@ -874,8 +861,8 @@ public class ProfileSearchCell extends BaseCell {
         r2 = r0.nameWidth;
         r7 = (double) r2;
         r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1));
-        if (r9 >= 0) goto L_0x04fe;
-    L_0x04ef:
+        if (r9 >= 0) goto L_0x04e9;
+    L_0x04da:
         r7 = r0.nameLeft;
         r7 = (double) r7;
         r9 = (double) r2;
@@ -885,26 +872,26 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r7 + r9;
         r2 = (int) r7;
         r0.nameLeft = r2;
-    L_0x04fe:
+    L_0x04e9:
         r2 = r0.statusLayout;
-        if (r2 == 0) goto L_0x059a;
-    L_0x0502:
+        if (r2 == 0) goto L_0x0585;
+    L_0x04ed:
         r2 = r2.getLineCount();
-        if (r2 <= 0) goto L_0x059a;
-    L_0x0508:
+        if (r2 <= 0) goto L_0x0585;
+    L_0x04f3:
         r2 = r0.statusLayout;
         r2 = r2.getLineLeft(r1);
         r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r2 != 0) goto L_0x059a;
-    L_0x0512:
+        if (r2 != 0) goto L_0x0585;
+    L_0x04fd:
         r2 = r0.statusLayout;
         r1 = r2.getLineWidth(r1);
         r1 = (double) r1;
         r1 = java.lang.Math.ceil(r1);
         r3 = (double) r3;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 >= 0) goto L_0x059a;
-    L_0x0522:
+        if (r5 >= 0) goto L_0x0585;
+    L_0x050d:
         r5 = r0.statusLeft;
         r5 = (double) r5;
         java.lang.Double.isNaN(r3);
@@ -913,19 +900,19 @@ public class ProfileSearchCell extends BaseCell {
         r5 = r5 + r3;
         r1 = (int) r5;
         r0.statusLeft = r1;
-        goto L_0x059a;
-    L_0x0531:
+        goto L_0x0585;
+    L_0x051c:
         r2 = r0.nameLayout;
         r2 = r2.getLineCount();
-        if (r2 <= 0) goto L_0x0567;
-    L_0x0539:
+        if (r2 <= 0) goto L_0x0552;
+    L_0x0524:
         r2 = r0.nameLayout;
         r2 = r2.getLineRight(r1);
         r4 = r0.nameWidth;
         r4 = (float) r4;
         r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r2 != 0) goto L_0x0567;
-    L_0x0546:
+        if (r2 != 0) goto L_0x0552;
+    L_0x0531:
         r2 = r0.nameLayout;
         r2 = r2.getLineWidth(r1);
         r4 = (double) r2;
@@ -933,8 +920,8 @@ public class ProfileSearchCell extends BaseCell {
         r2 = r0.nameWidth;
         r6 = (double) r2;
         r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r8 >= 0) goto L_0x0567;
-    L_0x0558:
+        if (r8 >= 0) goto L_0x0552;
+    L_0x0543:
         r6 = r0.nameLeft;
         r6 = (double) r6;
         r8 = (double) r2;
@@ -944,27 +931,27 @@ public class ProfileSearchCell extends BaseCell {
         r6 = r6 - r8;
         r2 = (int) r6;
         r0.nameLeft = r2;
-    L_0x0567:
+    L_0x0552:
         r2 = r0.statusLayout;
-        if (r2 == 0) goto L_0x059a;
-    L_0x056b:
+        if (r2 == 0) goto L_0x0585;
+    L_0x0556:
         r2 = r2.getLineCount();
-        if (r2 <= 0) goto L_0x059a;
-    L_0x0571:
+        if (r2 <= 0) goto L_0x0585;
+    L_0x055c:
         r2 = r0.statusLayout;
         r2 = r2.getLineRight(r1);
         r4 = (float) r3;
         r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r2 != 0) goto L_0x059a;
-    L_0x057c:
+        if (r2 != 0) goto L_0x0585;
+    L_0x0567:
         r2 = r0.statusLayout;
         r1 = r2.getLineWidth(r1);
         r1 = (double) r1;
         r1 = java.lang.Math.ceil(r1);
         r3 = (double) r3;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 >= 0) goto L_0x059a;
-    L_0x058c:
+        if (r5 >= 0) goto L_0x0585;
+    L_0x0577:
         r5 = r0.statusLeft;
         r5 = (double) r5;
         java.lang.Double.isNaN(r3);
@@ -973,7 +960,7 @@ public class ProfileSearchCell extends BaseCell {
         r5 = r5 - r3;
         r1 = (int) r5;
         r0.statusLeft = r1;
-    L_0x059a:
+    L_0x0585:
         r1 = r0.nameLeft;
         r2 = r25.getPaddingLeft();
         r1 = r1 + r2;
@@ -1065,7 +1052,7 @@ public class ProfileSearchCell extends BaseCell {
         goto L_0x0074;
     L_0x0063:
         r0 = r12.avatarDrawable;
-        r0.setInfo(r3, r1, r1, r3);
+        r0.setInfo(r3, r1, r1);
         r4 = r12.avatarImage;
         r5 = 0;
         r6 = 0;

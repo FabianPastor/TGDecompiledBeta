@@ -40,7 +40,9 @@ import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.tgnet.TLRPC.TL_restrictionReason;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -51,6 +53,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBoxSquare;
@@ -76,6 +79,7 @@ public class PhonebookShareActivity extends BaseFragment {
     private TextView nameTextView;
     private ArrayList<VcardItem> other = new ArrayList();
     private int overscrollRow;
+    private ChatActivity parentFragment;
     private int phoneDividerRow;
     private int phoneEndRow;
     private int phoneStartRow;
@@ -518,7 +522,7 @@ public class PhonebookShareActivity extends BaseFragment {
         this.bottomLayout = new FrameLayout(context);
         this.bottomLayout.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor("passport_authorizeBackground"), Theme.getColor("passport_authorizeBackgroundSelected")));
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.bottomLayout.setOnClickListener(new -$$Lambda$PhonebookShareActivity$r6QmJiqDVDqQ-a81o-t3bySVxWU(this));
+        this.bottomLayout.setOnClickListener(new -$$Lambda$PhonebookShareActivity$2zhqCN-oTsHkxj9fJvczsYUH_7E(this));
         this.shareTextView = new TextView(context);
         this.shareTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
         this.shareTextView.setTextColor(Theme.getColor("passport_authorizeText"));
@@ -537,7 +541,7 @@ public class PhonebookShareActivity extends BaseFragment {
         Drawable avatarDrawable = new AvatarDrawable();
         avatarDrawable.setProfile(true);
         User user = this.currentUser;
-        avatarDrawable.setInfo(5, user.first_name, user.last_name, false);
+        avatarDrawable.setInfo(5, user.first_name, user.last_name);
         avatarDrawable.setColor(Theme.getColor("avatar_backgroundInProfileBlue"));
         this.avatarImage.setImage(ImageLocation.getForUser(this.currentUser, false), "50_50", avatarDrawable, this.currentUser);
         TextView textView = this.nameTextView;
@@ -656,55 +660,71 @@ public class PhonebookShareActivity extends BaseFragment {
         }
     }
 
-    public /* synthetic */ void lambda$createView$4$PhonebookShareActivity(View view) {
+    public /* synthetic */ void lambda$createView$5$PhonebookShareActivity(View view) {
         if (!this.isImport) {
             StringBuilder stringBuilder;
-            String str = this.currentUser.restriction_reason;
-            if (str != null) {
-                stringBuilder = new StringBuilder(str);
+            if (this.currentUser.restriction_reason.isEmpty()) {
+                Locale locale = Locale.US;
+                Object[] objArr = new Object[1];
+                User user = this.currentUser;
+                objArr[0] = ContactsController.formatName(user.first_name, user.last_name);
+                stringBuilder = new StringBuilder(String.format(locale, "BEGIN:VCARD\nVERSION:3.0\nFN:%1$s\nEND:VCARD", objArr));
             } else {
-                stringBuilder = new StringBuilder(String.format(Locale.US, "BEGIN:VCARD\nVERSION:3.0\nFN:%1$s\nEND:VCARD", new Object[]{ContactsController.formatName(r10.first_name, r10.last_name)}));
+                stringBuilder = new StringBuilder(((TL_restrictionReason) this.currentUser.restriction_reason.get(0)).text);
             }
             int lastIndexOf = stringBuilder.lastIndexOf("END:VCARD");
             if (lastIndexOf >= 0) {
-                String str2;
+                String str;
+                VcardItem vcardItem;
+                int i;
+                StringBuilder stringBuilder2;
                 this.currentUser.phone = null;
                 int size = this.phones.size() - 1;
                 while (true) {
-                    str2 = "\n";
+                    str = "\n";
                     if (size < 0) {
                         break;
                     }
-                    VcardItem vcardItem = (VcardItem) this.phones.get(size);
+                    vcardItem = (VcardItem) this.phones.get(size);
                     if (vcardItem.checked) {
-                        User user = this.currentUser;
-                        if (user.phone == null) {
-                            user.phone = vcardItem.getValue(false);
+                        User user2 = this.currentUser;
+                        if (user2.phone == null) {
+                            user2.phone = vcardItem.getValue(false);
                         }
-                        for (int i = 0; i < vcardItem.vcardData.size(); i++) {
-                            StringBuilder stringBuilder2 = new StringBuilder();
+                        for (i = 0; i < vcardItem.vcardData.size(); i++) {
+                            stringBuilder2 = new StringBuilder();
                             stringBuilder2.append((String) vcardItem.vcardData.get(i));
-                            stringBuilder2.append(str2);
+                            stringBuilder2.append(str);
                             stringBuilder.insert(lastIndexOf, stringBuilder2.toString());
                         }
                     }
                     size--;
                 }
                 for (size = this.other.size() - 1; size >= 0; size--) {
-                    VcardItem vcardItem2 = (VcardItem) this.other.get(size);
-                    if (vcardItem2.checked) {
-                        for (int size2 = vcardItem2.vcardData.size() - 1; size2 >= 0; size2--) {
-                            StringBuilder stringBuilder3 = new StringBuilder();
-                            stringBuilder3.append((String) vcardItem2.vcardData.get(size2));
-                            stringBuilder3.append(str2);
-                            stringBuilder.insert(lastIndexOf, stringBuilder3.toString());
+                    vcardItem = (VcardItem) this.other.get(size);
+                    if (vcardItem.checked) {
+                        for (i = vcardItem.vcardData.size() - 1; i >= 0; i--) {
+                            stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append((String) vcardItem.vcardData.get(i));
+                            stringBuilder2.append(str);
+                            stringBuilder.insert(lastIndexOf, stringBuilder2.toString());
                         }
                     }
                 }
-                this.currentUser.restriction_reason = stringBuilder.toString();
+                TL_restrictionReason tL_restrictionReason = new TL_restrictionReason();
+                tL_restrictionReason.text = stringBuilder.toString();
+                String str2 = "";
+                tL_restrictionReason.reason = str2;
+                tL_restrictionReason.platform = str2;
+                this.currentUser.restriction_reason.add(tL_restrictionReason);
             }
-            this.delegate.didSelectContact(this.currentUser);
-            finishFragment();
+            ChatActivity chatActivity = this.parentFragment;
+            if (chatActivity == null || !chatActivity.isInScheduleMode()) {
+                this.delegate.didSelectContact(this.currentUser, true, 0);
+                finishFragment();
+            } else {
+                AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), UserObject.isUserSelf(this.parentFragment.getCurrentUser()), new -$$Lambda$PhonebookShareActivity$N2pjGWe3mnE4gLHnQ5bb0KOT80Q(this));
+            }
         } else if (getParentActivity() != null) {
             Builder builder = new Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("AddContactTitle", NUM));
@@ -776,8 +796,8 @@ public class PhonebookShareActivity extends BaseFragment {
                     }
                 }
 
-                /* JADX WARNING: Removed duplicated region for block: B:97:0x029e  */
-                /* JADX WARNING: Removed duplicated region for block: B:96:0x0296  */
+                /* JADX WARNING: Removed duplicated region for block: B:96:0x029b  */
+                /* JADX WARNING: Removed duplicated region for block: B:95:0x0293  */
                 public void onClick(android.content.DialogInterface r19, int r20) {
                     /*
                     r18 = this;
@@ -851,7 +871,7 @@ public class PhonebookShareActivity extends BaseFragment {
                     r9 = org.telegram.ui.PhonebookShareActivity.this;
                     r9 = r9.other;
                     r9 = r9.size();
-                    if (r5 >= r9) goto L_0x0373;
+                    if (r5 >= r9) goto L_0x0370;
                 L_0x0094:
                     r9 = org.telegram.ui.PhonebookShareActivity.this;
                     r9 = r9.other;
@@ -874,7 +894,7 @@ public class PhonebookShareActivity extends BaseFragment {
                     r17 = r5;
                 L_0x00c3:
                     r9 = 0;
-                    goto L_0x036b;
+                    goto L_0x0368;
                 L_0x00c6:
                     r11 = 3;
                     if (r10 != r11) goto L_0x00e5;
@@ -923,7 +943,7 @@ public class PhonebookShareActivity extends BaseFragment {
                     r11 = "data4";
                     r3 = 2;
                     r4 = "data5";
-                    if (r10 != r3) goto L_0x01bf;
+                    if (r10 != r3) goto L_0x01bc;
                 L_0x012b:
                     r10 = new android.content.ContentValues;
                     r10.<init>();
@@ -932,96 +952,93 @@ public class PhonebookShareActivity extends BaseFragment {
                     r3 = r9.getRawValue();
                     r16 = r2;
                     r2 = r3.length;
-                    if (r2 <= 0) goto L_0x0147;
-                L_0x013e:
                     r17 = r5;
+                    if (r2 <= 0) goto L_0x0146;
+                L_0x0140:
                     r2 = 0;
                     r5 = r3[r2];
                     r10.put(r4, r5);
-                    goto L_0x0149;
-                L_0x0147:
-                    r17 = r5;
-                L_0x0149:
+                L_0x0146:
                     r2 = r3.length;
                     r4 = 1;
-                    if (r2 <= r4) goto L_0x0152;
-                L_0x014d:
+                    if (r2 <= r4) goto L_0x014f;
+                L_0x014a:
                     r2 = r3[r4];
                     r10.put(r15, r2);
-                L_0x0152:
+                L_0x014f:
                     r2 = r3.length;
                     r4 = 2;
-                    if (r2 <= r4) goto L_0x015b;
-                L_0x0156:
+                    if (r2 <= r4) goto L_0x0158;
+                L_0x0153:
                     r2 = r3[r4];
                     r10.put(r11, r2);
-                L_0x015b:
+                L_0x0158:
                     r2 = r3.length;
                     r4 = 3;
-                    if (r2 <= r4) goto L_0x0166;
-                L_0x015f:
+                    if (r2 <= r4) goto L_0x0163;
+                L_0x015c:
                     r2 = r3[r4];
                     r4 = "data7";
                     r10.put(r4, r2);
-                L_0x0166:
+                L_0x0163:
                     r2 = r3.length;
                     r4 = 4;
-                    if (r2 <= r4) goto L_0x0171;
-                L_0x016a:
+                    if (r2 <= r4) goto L_0x016e;
+                L_0x0167:
                     r2 = r3[r4];
                     r4 = "data8";
                     r10.put(r4, r2);
-                L_0x0171:
+                L_0x016e:
                     r2 = r3.length;
                     r4 = 5;
-                    if (r2 <= r4) goto L_0x017c;
-                L_0x0175:
+                    if (r2 <= r4) goto L_0x0179;
+                L_0x0172:
                     r2 = r3[r4];
                     r4 = "data9";
                     r10.put(r4, r2);
-                L_0x017c:
+                L_0x0179:
                     r2 = r3.length;
                     r4 = 6;
-                    if (r2 <= r4) goto L_0x0187;
-                L_0x0180:
+                    if (r2 <= r4) goto L_0x0184;
+                L_0x017d:
                     r2 = r3[r4];
                     r3 = "data10";
                     r10.put(r3, r2);
-                L_0x0187:
+                L_0x0184:
                     r2 = 0;
                     r3 = r9.getRawType(r2);
                     r2 = "HOME";
                     r2 = r2.equalsIgnoreCase(r3);
-                    if (r2 == 0) goto L_0x019d;
-                L_0x0194:
+                    if (r2 == 0) goto L_0x019a;
+                L_0x0191:
                     r2 = 1;
                     r3 = java.lang.Integer.valueOf(r2);
                     r10.put(r14, r3);
-                    goto L_0x01ba;
-                L_0x019d:
+                    goto L_0x01b7;
+                L_0x019a:
                     r2 = r12.equalsIgnoreCase(r3);
-                    if (r2 == 0) goto L_0x01ac;
-                L_0x01a3:
+                    if (r2 == 0) goto L_0x01a9;
+                L_0x01a0:
                     r2 = 2;
                     r2 = java.lang.Integer.valueOf(r2);
                     r10.put(r14, r2);
-                    goto L_0x01ba;
-                L_0x01ac:
+                    goto L_0x01b7;
+                L_0x01a9:
                     r2 = r13.equalsIgnoreCase(r3);
-                    if (r2 == 0) goto L_0x01ba;
-                L_0x01b2:
+                    if (r2 == 0) goto L_0x01b7;
+                L_0x01af:
                     r2 = 3;
                     r2 = java.lang.Integer.valueOf(r2);
                     r10.put(r14, r2);
-                L_0x01ba:
+                L_0x01b7:
                     r0.add(r10);
                     goto L_0x00c3;
-                L_0x01bf:
+                L_0x01bc:
                     r16 = r2;
                     r17 = r5;
                     r2 = 20;
-                    if (r10 != r2) goto L_0x02c0;
-                L_0x01c7:
+                    if (r10 != r2) goto L_0x02bd;
+                L_0x01c4:
                     r2 = new android.content.ContentValues;
                     r2.<init>();
                     r3 = "vnd.android.cursor.item/im";
@@ -1034,229 +1051,229 @@ public class PhonebookShareActivity extends BaseFragment {
                     r2.put(r7, r11);
                     r11 = "AIM";
                     r11 = r11.equalsIgnoreCase(r5);
-                    if (r11 == 0) goto L_0x01f4;
-                L_0x01ea:
+                    if (r11 == 0) goto L_0x01f1;
+                L_0x01e7:
                     r5 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r5);
-                L_0x01f1:
+                L_0x01ee:
                     r3 = 1;
-                    goto L_0x028e;
-                L_0x01f4:
+                    goto L_0x028b;
+                L_0x01f1:
                     r3 = "MSN";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0205;
-                L_0x01fc:
+                    if (r3 == 0) goto L_0x0202;
+                L_0x01f9:
                     r3 = 1;
                     r5 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r5);
-                    goto L_0x01f1;
-                L_0x0205:
+                    goto L_0x01ee;
+                L_0x0202:
                     r3 = "YAHOO";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0216;
-                L_0x020d:
+                    if (r3 == 0) goto L_0x0213;
+                L_0x020a:
                     r3 = 2;
                     r5 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r5);
-                    goto L_0x01f1;
-                L_0x0216:
+                    goto L_0x01ee;
+                L_0x0213:
                     r3 = "SKYPE";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0227;
-                L_0x021e:
+                    if (r3 == 0) goto L_0x0224;
+                L_0x021b:
                     r3 = 3;
                     r5 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r5);
-                    goto L_0x01f1;
-                L_0x0227:
+                    goto L_0x01ee;
+                L_0x0224:
                     r3 = "QQ";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0238;
-                L_0x022f:
+                    if (r3 == 0) goto L_0x0235;
+                L_0x022c:
                     r3 = 4;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x0238:
+                    goto L_0x01ee;
+                L_0x0235:
                     r3 = "GOOGLE-TALK";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0249;
-                L_0x0240:
+                    if (r3 == 0) goto L_0x0246;
+                L_0x023d:
                     r3 = 5;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x0249:
+                    goto L_0x01ee;
+                L_0x0246:
                     r3 = "ICQ";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x025a;
-                L_0x0251:
+                    if (r3 == 0) goto L_0x0257;
+                L_0x024e:
                     r3 = 6;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x025a:
+                    goto L_0x01ee;
+                L_0x0257:
                     r3 = "JABBER";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x026b;
-                L_0x0262:
+                    if (r3 == 0) goto L_0x0268;
+                L_0x025f:
                     r3 = 7;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x026b:
+                    goto L_0x01ee;
+                L_0x0268:
                     r3 = "NETMEETING";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x027e;
-                L_0x0273:
+                    if (r3 == 0) goto L_0x027b;
+                L_0x0270:
                     r3 = 8;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x027e:
+                    goto L_0x01ee;
+                L_0x027b:
                     r3 = -1;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
                     r3 = 1;
                     r4 = r9.getRawType(r3);
                     r2.put(r15, r4);
-                L_0x028e:
+                L_0x028b:
                     r4 = "HOME";
                     r4 = r4.equalsIgnoreCase(r10);
-                    if (r4 == 0) goto L_0x029e;
-                L_0x0296:
+                    if (r4 == 0) goto L_0x029b;
+                L_0x0293:
                     r4 = java.lang.Integer.valueOf(r3);
                     r2.put(r14, r4);
-                    goto L_0x02bb;
-                L_0x029e:
+                    goto L_0x02b8;
+                L_0x029b:
                     r3 = r12.equalsIgnoreCase(r10);
-                    if (r3 == 0) goto L_0x02ad;
-                L_0x02a4:
+                    if (r3 == 0) goto L_0x02aa;
+                L_0x02a1:
                     r3 = 2;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r14, r3);
-                    goto L_0x02bb;
-                L_0x02ad:
+                    goto L_0x02b8;
+                L_0x02aa:
                     r3 = r13.equalsIgnoreCase(r10);
-                    if (r3 == 0) goto L_0x02bb;
-                L_0x02b3:
+                    if (r3 == 0) goto L_0x02b8;
+                L_0x02b0:
                     r3 = 3;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r14, r3);
-                L_0x02bb:
+                L_0x02b8:
                     r0.add(r2);
                     goto L_0x00c3;
-                L_0x02c0:
+                L_0x02bd:
                     r2 = 6;
                     if (r10 != r2) goto L_0x00c3;
-                L_0x02c3:
-                    if (r6 == 0) goto L_0x02c7;
-                L_0x02c5:
+                L_0x02c0:
+                    if (r6 == 0) goto L_0x02c4;
+                L_0x02c2:
                     goto L_0x00c3;
-                L_0x02c7:
+                L_0x02c4:
                     r2 = new android.content.ContentValues;
                     r2.<init>();
                     r3 = "vnd.android.cursor.item/organization";
                     r2.put(r8, r3);
                     r3 = r17;
-                L_0x02d3:
+                L_0x02d0:
                     r5 = org.telegram.ui.PhonebookShareActivity.this;
                     r5 = r5.other;
                     r5 = r5.size();
-                    if (r3 >= r5) goto L_0x0366;
-                L_0x02df:
+                    if (r3 >= r5) goto L_0x0363;
+                L_0x02dc:
                     r5 = org.telegram.ui.PhonebookShareActivity.this;
                     r5 = r5.other;
                     r5 = r5.get(r3);
                     r5 = (org.telegram.messenger.AndroidUtilities.VcardItem) r5;
                     r6 = r5.type;
                     r9 = 6;
-                    if (r6 == r9) goto L_0x02f4;
-                L_0x02f0:
+                    if (r6 == r9) goto L_0x02f1;
+                L_0x02ed:
                     r5 = 2;
                     r9 = 0;
-                    goto L_0x0362;
-                L_0x02f4:
+                    goto L_0x035f;
+                L_0x02f1:
                     r6 = 1;
                     r10 = r5.getRawType(r6);
                     r15 = "ORG";
                     r15 = r15.equalsIgnoreCase(r10);
-                    if (r15 == 0) goto L_0x031e;
-                L_0x0301:
+                    if (r15 == 0) goto L_0x031b;
+                L_0x02fe:
                     r10 = r5.getRawValue();
                     r15 = r10.length;
-                    if (r15 != 0) goto L_0x0309;
-                L_0x0308:
-                    goto L_0x02f0;
-                L_0x0309:
+                    if (r15 != 0) goto L_0x0306;
+                L_0x0305:
+                    goto L_0x02ed;
+                L_0x0306:
                     r15 = r10.length;
-                    if (r15 < r6) goto L_0x0312;
-                L_0x030c:
+                    if (r15 < r6) goto L_0x030f;
+                L_0x0309:
                     r15 = 0;
                     r9 = r10[r15];
                     r2.put(r7, r9);
-                L_0x0312:
+                L_0x030f:
                     r9 = r10.length;
                     r15 = 2;
-                    if (r9 < r15) goto L_0x031b;
-                L_0x0316:
+                    if (r9 < r15) goto L_0x0318;
+                L_0x0313:
                     r9 = r10[r6];
                     r2.put(r4, r9);
-                L_0x031b:
+                L_0x0318:
                     r6 = 1;
                     r9 = 0;
-                    goto L_0x0340;
-                L_0x031e:
+                    goto L_0x033d;
+                L_0x031b:
                     r6 = "TITLE";
                     r6 = r6.equalsIgnoreCase(r10);
-                    if (r6 == 0) goto L_0x032f;
-                L_0x0326:
+                    if (r6 == 0) goto L_0x032c;
+                L_0x0323:
                     r9 = 0;
                     r6 = r5.getValue(r9);
                     r2.put(r11, r6);
-                    goto L_0x033f;
-                L_0x032f:
+                    goto L_0x033c;
+                L_0x032c:
                     r9 = 0;
                     r6 = "ROLE";
                     r6 = r6.equalsIgnoreCase(r10);
-                    if (r6 == 0) goto L_0x033f;
-                L_0x0338:
+                    if (r6 == 0) goto L_0x033c;
+                L_0x0335:
                     r6 = r5.getValue(r9);
                     r2.put(r11, r6);
-                L_0x033f:
+                L_0x033c:
                     r6 = 1;
-                L_0x0340:
+                L_0x033d:
                     r5 = r5.getRawType(r6);
                     r10 = r12.equalsIgnoreCase(r5);
-                    if (r10 == 0) goto L_0x0352;
-                L_0x034a:
+                    if (r10 == 0) goto L_0x034f;
+                L_0x0347:
                     r5 = java.lang.Integer.valueOf(r6);
                     r2.put(r14, r5);
-                    goto L_0x0361;
-                L_0x0352:
+                    goto L_0x035e;
+                L_0x034f:
                     r5 = r13.equalsIgnoreCase(r5);
-                    if (r5 == 0) goto L_0x0361;
-                L_0x0358:
+                    if (r5 == 0) goto L_0x035e;
+                L_0x0355:
                     r5 = 2;
                     r6 = java.lang.Integer.valueOf(r5);
                     r2.put(r14, r6);
-                    goto L_0x0362;
-                L_0x0361:
+                    goto L_0x035f;
+                L_0x035e:
                     r5 = 2;
-                L_0x0362:
+                L_0x035f:
                     r3 = r3 + 1;
-                    goto L_0x02d3;
-                L_0x0366:
+                    goto L_0x02d0;
+                L_0x0363:
                     r9 = 0;
                     r0.add(r2);
                     r6 = 1;
-                L_0x036b:
+                L_0x0368:
                     r5 = r17 + 1;
                     r2 = r16;
                     r3 = 1;
                     r4 = 0;
                     goto L_0x0088;
-                L_0x0373:
+                L_0x0370:
                     r16 = r2;
                     r2 = "finishActivityOnSaveCompleted";
                     r3 = r16;
@@ -1264,16 +1281,16 @@ public class PhonebookShareActivity extends BaseFragment {
                     r3.putExtra(r2, r4);
                     r2 = "data";
                     r3.putParcelableArrayListExtra(r2, r0);
-                    r0 = org.telegram.ui.PhonebookShareActivity.this;	 Catch:{ Exception -> 0x0391 }
-                    r0 = r0.getParentActivity();	 Catch:{ Exception -> 0x0391 }
-                    r0.startActivity(r3);	 Catch:{ Exception -> 0x0391 }
-                    r0 = org.telegram.ui.PhonebookShareActivity.this;	 Catch:{ Exception -> 0x0391 }
-                    r0.finishFragment();	 Catch:{ Exception -> 0x0391 }
-                    goto L_0x0395;
-                L_0x0391:
+                    r0 = org.telegram.ui.PhonebookShareActivity.this;	 Catch:{ Exception -> 0x038e }
+                    r0 = r0.getParentActivity();	 Catch:{ Exception -> 0x038e }
+                    r0.startActivity(r3);	 Catch:{ Exception -> 0x038e }
+                    r0 = org.telegram.ui.PhonebookShareActivity.this;	 Catch:{ Exception -> 0x038e }
+                    r0.finishFragment();	 Catch:{ Exception -> 0x038e }
+                    goto L_0x0392;
+                L_0x038e:
                     r0 = move-exception;
                     org.telegram.messenger.FileLog.e(r0);
-                L_0x0395:
+                L_0x0392:
                     return;
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhonebookShareActivity$AnonymousClass5.onClick(android.content.DialogInterface, int):void");
@@ -1281,6 +1298,15 @@ public class PhonebookShareActivity extends BaseFragment {
             });
             builder.show();
         }
+    }
+
+    public /* synthetic */ void lambda$null$4$PhonebookShareActivity(boolean z, int i) {
+        this.delegate.didSelectContact(this.currentUser, z, i);
+        finishFragment();
+    }
+
+    public void setChatActivity(ChatActivity chatActivity) {
+        this.parentFragment = chatActivity;
     }
 
     public void onResume() {

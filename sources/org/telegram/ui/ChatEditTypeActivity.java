@@ -1013,7 +1013,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         themeDescriptionArr[49] = new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_LINKCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"statusTextView"}, null, null, null, "windowBackgroundWhiteLinkText");
         themeDescriptionArr[50] = new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"deleteButton"}, null, null, null, "windowBackgroundWhiteGrayText");
         -$$Lambda$ChatEditTypeActivity$UP1StkagAmS0pxJUzUz16fggWjo -__lambda_chatedittypeactivity_up1stkagams0pxjuzuz16fggwjo2 = -__lambda_chatedittypeactivity_up1stkagams0pxjuzuz16fggwjo;
-        themeDescriptionArr[51] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_chatedittypeactivity_up1stkagams0pxjuzuz16fggwjo2, "avatar_text");
+        themeDescriptionArr[51] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_savedDrawable}, -__lambda_chatedittypeactivity_up1stkagams0pxjuzuz16fggwjo2, "avatar_text");
         themeDescriptionArr[52] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatedittypeactivity_up1stkagams0pxjuzuz16fggwjo2, "avatar_backgroundRed");
         themeDescriptionArr[53] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatedittypeactivity_up1stkagams0pxjuzuz16fggwjo2, "avatar_backgroundOrange");
         themeDescriptionArr[54] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatedittypeactivity_up1stkagams0pxjuzuz16fggwjo2, "avatar_backgroundViolet");

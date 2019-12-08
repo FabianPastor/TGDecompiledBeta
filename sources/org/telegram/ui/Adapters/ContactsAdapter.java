@@ -291,11 +291,7 @@ public class ContactsAdapter extends SectionsAdapter {
         if (this.onlyUsers == 0) {
             i++;
         }
-        if (this.isAdmin) {
-            i++;
-        }
-        boolean z = this.needPhonebook;
-        return i;
+        return this.isAdmin ? i + 1 : i;
     }
 
     public int getCountForSection(int i) {

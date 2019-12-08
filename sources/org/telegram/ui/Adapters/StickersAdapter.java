@@ -71,18 +71,18 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         MediaDataController.getInstance(this.currentAccount).checkStickers(1);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.newEmojiSuggestionsAvailable);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailToLoad);
     }
 
     public void onDestroy() {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.newEmojiSuggestionsAvailable);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailToLoad);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         ArrayList arrayList;
-        if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.fileDidFailedLoad) {
+        if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.fileDidFailToLoad) {
             arrayList = this.stickers;
             if (arrayList != null && !arrayList.isEmpty() && !this.stickersToLoad.isEmpty() && this.visible) {
                 boolean z = false;

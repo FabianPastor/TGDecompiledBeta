@@ -6,22 +6,16 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.SourceLocation;
 
 class JoinPointImpl implements ProceedingJoinPoint {
-    Object _this;
-    Object[] args;
     StaticPart staticPart;
     Object target;
 
     static class StaticPartImpl implements StaticPart {
-        private int id;
         String kind;
         Signature signature;
-        SourceLocation sourceLocation;
 
         public StaticPartImpl(int i, String str, Signature signature, SourceLocation sourceLocation) {
             this.kind = str;
             this.signature = signature;
-            this.sourceLocation = sourceLocation;
-            this.id = i;
         }
 
         public String getKind() {
@@ -49,9 +43,7 @@ class JoinPointImpl implements ProceedingJoinPoint {
 
     public JoinPointImpl(StaticPart staticPart, Object obj, Object obj2, Object[] objArr) {
         this.staticPart = staticPart;
-        this._this = obj;
         this.target = obj2;
-        this.args = objArr;
     }
 
     public Object getTarget() {

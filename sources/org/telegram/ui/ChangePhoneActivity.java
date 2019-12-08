@@ -50,6 +50,7 @@ import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -1507,9 +1508,15 @@ public class ChangePhoneActivity extends BaseFragment {
                     TL_codeSettings tL_codeSettings = tL_account_sendChangePhoneCode.settings;
                     boolean z = (obj2 == null || obj == null) ? false : true;
                     tL_codeSettings.allow_flashcall = z;
-                    TL_codeSettings tL_codeSettings2 = tL_account_sendChangePhoneCode.settings;
-                    tL_codeSettings2.allow_app_hash = ApplicationLoader.hasPlayServices;
-                    if (tL_codeSettings2.allow_flashcall) {
+                    tL_account_sendChangePhoneCode.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
+                    SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                    String str5 = "sms_hash";
+                    if (tL_account_sendChangePhoneCode.settings.allow_app_hash) {
+                        sharedPreferences.edit().putString(str5, BuildVars.SMS_HASH).commit();
+                    } else {
+                        sharedPreferences.edit().remove(str5).commit();
+                    }
+                    if (tL_account_sendChangePhoneCode.settings.allow_flashcall) {
                         try {
                             str2 = telephonyManager.getLine1Number();
                             if (TextUtils.isEmpty(str2)) {
@@ -1527,25 +1534,25 @@ public class ChangePhoneActivity extends BaseFragment {
                     }
                     Bundle bundle = new Bundle();
                     StringBuilder stringBuilder2 = new StringBuilder();
-                    String str5 = "+";
-                    stringBuilder2.append(str5);
-                    stringBuilder2.append(this.codeField.getText());
-                    String str6 = " ";
+                    String str6 = "+";
                     stringBuilder2.append(str6);
+                    stringBuilder2.append(this.codeField.getText());
+                    String str7 = " ";
+                    stringBuilder2.append(str7);
                     stringBuilder2.append(this.phoneField.getText());
                     bundle.putString(str3, stringBuilder2.toString());
                     StringBuilder stringBuilder3;
                     try {
                         stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(str5);
-                        stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()));
                         stringBuilder3.append(str6);
+                        stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()));
+                        stringBuilder3.append(str7);
                         stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
                         bundle.putString(str, stringBuilder3.toString());
                     } catch (Exception e2) {
                         FileLog.e(e2);
                         stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(str5);
+                        stringBuilder3.append(str6);
                         stringBuilder3.append(stripExceptNumbers);
                         bundle.putString(str, stringBuilder3.toString());
                     }
@@ -1753,7 +1760,11 @@ public class ChangePhoneActivity extends BaseFragment {
         slideView.setParams(bundle, false);
         this.actionBar.setTitle(slideView.getHeaderName());
         slideView.onShow();
-        slideView.setX((float) (z2 ? -AndroidUtilities.displaySize.x : AndroidUtilities.displaySize.x));
+        i = AndroidUtilities.displaySize.x;
+        if (z2) {
+            i = -i;
+        }
+        slideView.setX((float) i);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animatorSet.setDuration(300);

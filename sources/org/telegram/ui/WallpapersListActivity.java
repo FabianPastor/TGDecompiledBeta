@@ -542,7 +542,6 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                             }
                             searchImage.id = botInlineResult.id;
                             searchImage.type = 0;
-                            searchImage.localUrl = "";
                             this.searchResult.add(searchImage);
                             this.searchResultKeys.put(searchImage.id, searchImage);
                         }
@@ -782,6 +781,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         WallpapersListActivity.this.selectedBackground = 1000001;
                         Editor edit = MessagesController.getGlobalMainSettings().edit();
                         edit.putLong("selectedBackground2", WallpapersListActivity.this.selectedBackground);
+                        edit.remove("selectedBackgroundSlug");
                         edit.putBoolean("selectedBackgroundBlurred", false);
                         edit.putBoolean("selectedBackgroundMotion", false);
                         edit.putInt("selectedColor", 0);
@@ -832,9 +832,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     while (i2 < arrayList.size()) {
                         long longValue = ((Long) arrayList2.get(i2)).longValue();
                         if (charSequence != null) {
-                            SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, true, null, null, null);
+                            SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, true, null, null, null, true, 0);
                         }
-                        SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(stringBuilder.toString(), longValue, null, null, true, null, null, null);
+                        SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(stringBuilder.toString(), longValue, null, null, true, null, null, null, true, 0);
                         i2++;
                     }
                     dialogsActivity.finishFragment();
@@ -854,7 +854,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     if (i3 == 0 || MessagesController.getInstance(WallpapersListActivity.this.currentAccount).checkCanOpenChat(bundle, dialogsActivity)) {
                         NotificationCenter.getInstance(WallpapersListActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                         WallpapersListActivity.this.presentFragment(new ChatActivity(bundle), true);
-                        SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(stringBuilder.toString(), longValue2, null, null, true, null, null, null);
+                        SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(stringBuilder.toString(), longValue2, null, null, true, null, null, null, true, 0);
                     }
                 }
             }
@@ -1320,13 +1320,13 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 this.wallPapers.remove(fileWallpaper);
             }
             Collections.sort(this.wallPapers, new -$$Lambda$WallpapersListActivity$_kR2j3QKuwClJW1mMrZH7ooQBYo(this, Theme.getCurrentTheme().isDark()));
-            if (Theme.hasWallpaperFromTheme()) {
+            if (!Theme.hasWallpaperFromTheme() || Theme.isThemeWallpaperPublic()) {
+                this.themeWallpaper = null;
+            } else {
                 if (this.themeWallpaper == null) {
                     this.themeWallpaper = new FileWallpaper(-2, -2, -2);
                 }
                 this.wallPapers.add(0, this.themeWallpaper);
-            } else {
-                this.themeWallpaper = null;
             }
             long j = this.selectedBackground;
             long j2;

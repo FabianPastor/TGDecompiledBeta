@@ -193,9 +193,8 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             this.thumbImageView.setVisibility(4);
             this.thumbImageView.setImageBitmap(null);
         } else {
-            CharSequence charSequence2;
+            CharSequence charSequence2 = null;
             if (messageObject.isMusic()) {
-                charSequence2 = null;
                 for (int i = 0; i < document.attributes.size(); i++) {
                     DocumentAttribute documentAttribute = (DocumentAttribute) document.attributes.get(i);
                     if (documentAttribute instanceof TL_documentAttributeAudio) {
@@ -214,8 +213,6 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
                         charSequence2 = stringBuilder.toString();
                     }
                 }
-            } else {
-                charSequence2 = null;
             }
             String documentFileName = FileLoader.getDocumentFileName(document);
             if (charSequence2 == null) {

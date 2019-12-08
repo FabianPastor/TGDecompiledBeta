@@ -2908,7 +2908,6 @@
     <string name="common_signin_button_text_long">Accedi con Google</string>
     <string name="fcm_fallback_notification_channel_label">Varie</string>
     <string name="formatDateAtTime">%1$s alle %2$s</string>
-    <string name="formatDateScheduleDay">EEE MMM d</string>
     <string name="formatterBannedUntil12H">dd MMM yyyy, h:mm a</string>
     <string name="formatterBannedUntil24H">dd MMM yyyy, HH:mm</string>
     <string name="formatterBannedUntilThisYear12H">dd MMM, h:mm a</string>

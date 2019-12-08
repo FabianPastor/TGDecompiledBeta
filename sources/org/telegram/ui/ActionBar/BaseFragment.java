@@ -24,6 +24,7 @@ import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocationController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -46,7 +47,7 @@ public class BaseFragment {
     private boolean isFinished;
     protected boolean isPaused;
     protected ActionBarLayout parentLayout;
-    protected boolean swipeBackEnabled = false;
+    protected boolean swipeBackEnabled;
     protected Dialog visibleDialog;
 
     public boolean canBeginSlide() {
@@ -63,6 +64,10 @@ public class BaseFragment {
 
     public boolean extendActionMode(Menu menu) {
         return false;
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        return new ThemeDescription[0];
     }
 
     public boolean needDelayOpenAnimation() {
@@ -159,6 +164,10 @@ public class BaseFragment {
 
     public int getCurrentAccount() {
         return this.currentAccount;
+    }
+
+    public int getClassGuid() {
+        return this.classGuid;
     }
 
     /* Access modifiers changed, original: protected */
@@ -477,10 +486,6 @@ public class BaseFragment {
         this.visibleDialog = dialog;
     }
 
-    public ThemeDescription[] getThemeDescriptions() {
-        return new ThemeDescription[0];
-    }
-
     public AccountInstance getAccountInstance() {
         return AccountInstance.getInstance(this.currentAccount);
     }
@@ -547,6 +552,10 @@ public class BaseFragment {
 
     public NotificationCenter getNotificationCenter() {
         return getAccountInstance().getNotificationCenter();
+    }
+
+    public MediaController getMediaController() {
+        return MediaController.getInstance();
     }
 
     public UserConfig getUserConfig() {

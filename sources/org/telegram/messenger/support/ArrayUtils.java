@@ -98,6 +98,17 @@ public class ArrayUtils {
         return false;
     }
 
+    public static int indexOf(int[] iArr, int i) {
+        if (iArr != null) {
+            for (int i2 = 0; i2 < iArr.length; i2++) {
+                if (iArr[i2] == i) {
+                    return i2;
+                }
+            }
+        }
+        return -1;
+    }
+
     public static long total(long[] jArr) {
         long j = 0;
         for (long j2 : jArr) {

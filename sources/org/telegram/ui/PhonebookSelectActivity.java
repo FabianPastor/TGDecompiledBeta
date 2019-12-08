@@ -37,12 +37,17 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     private EmptyTextProgressView emptyView;
     private RecyclerListView listView;
     private PhonebookAdapter listViewAdapter;
+    private ChatActivity parentFragment;
     private PhonebookSearchAdapter searchListViewAdapter;
     private boolean searchWas;
     private boolean searching;
 
     public interface PhonebookSelectActivityDelegate {
-        void didSelectContact(User user);
+        void didSelectContact(User user, boolean z, int i);
+    }
+
+    public PhonebookSelectActivity(ChatActivity chatActivity) {
+        this.parentFragment = chatActivity;
     }
 
     public boolean onFragmentCreate() {
@@ -191,14 +196,15 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
                 contact = contact3;
             }
             PhonebookShareActivity phonebookShareActivity = new PhonebookShareActivity(contact, null, null, formatName);
-            phonebookShareActivity.setDelegate(new -$$Lambda$PhonebookSelectActivity$4oi9dmdaHeu97U36787Z9FtySPo(this));
+            phonebookShareActivity.setChatActivity(this.parentFragment);
+            phonebookShareActivity.setDelegate(new -$$Lambda$PhonebookSelectActivity$2MUl0RQRDg-nlGc5PWK84vE22I8(this));
             presentFragment(phonebookShareActivity);
         }
     }
 
-    public /* synthetic */ void lambda$null$0$PhonebookSelectActivity(User user) {
+    public /* synthetic */ void lambda$null$0$PhonebookSelectActivity(User user, boolean z, int i) {
         removeSelfFromStack();
-        this.delegate.didSelectContact(user);
+        this.delegate.didSelectContact(user, z, i);
     }
 
     public void onResume() {
@@ -234,38 +240,27 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
 
     public ThemeDescription[] getThemeDescriptions() {
         -$$Lambda$PhonebookSelectActivity$6vwEKMfHE2uXMGZcFqjn-U8MjEc -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec = new -$$Lambda$PhonebookSelectActivity$6vwEKMfHE2uXMGZcFqjn-U8MjEc(this);
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[26];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, "actionBarDefaultSearch");
-        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, "actionBarDefaultSearchPlaceholder");
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        View view = this.listView;
-        View view2 = view;
-        themeDescriptionArr[9] = new ThemeDescription(view2, ThemeDescription.FLAG_SECTIONS, new Class[]{LetterSectionCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[11] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollActive");
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollInactive");
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollText");
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r11 = new ThemeDescription[26];
+        r11[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{LetterSectionCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        r11[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        r11[11] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
+        r11[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollActive");
+        r11[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollInactive");
+        r11[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollText");
+        r11[15] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
         ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec;
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
-        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        r11[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
+        r11[17] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
+        r11[18] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$PhonebookSelectActivity$6vwEKMfHE2uXMGZcFqjn-U8MjEc -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2 = -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec;
-        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundRed");
-        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundOrange");
-        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundViolet");
-        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundGreen");
-        themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundCyan");
-        themeDescriptionArr[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundBlue");
-        themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundPink");
-        return themeDescriptionArr;
+        r11[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundRed");
+        r11[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundOrange");
+        r11[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundViolet");
+        r11[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundGreen");
+        r11[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundCyan");
+        r11[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundBlue");
+        r11[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundPink");
+        return r11;
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$2$PhonebookSelectActivity() {

@@ -363,7 +363,7 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public /* synthetic */ void lambda$new$0$DownloadController() {
-        getNotificationCenter().addObserver(this, NotificationCenter.fileDidFailedLoad);
+        getNotificationCenter().addObserver(this, NotificationCenter.fileDidFailToLoad);
         getNotificationCenter().addObserver(this, NotificationCenter.fileDidLoad);
         getNotificationCenter().addObserver(this, NotificationCenter.FileLoadProgressChanged);
         getNotificationCenter().addObserver(this, NotificationCenter.FileUploadProgressChanged);
@@ -890,25 +890,25 @@ public class DownloadController extends BaseController implements NotificationCe
 
     public void savePresetToServer(int i) {
         Preset currentMobilePreset;
-        boolean z;
+        int i2;
         TL_account_saveAutoDownloadSettings tL_account_saveAutoDownloadSettings = new TL_account_saveAutoDownloadSettings();
         if (i == 0) {
             currentMobilePreset = getCurrentMobilePreset();
-            z = this.mobilePreset.enabled;
+            i2 = this.mobilePreset.enabled;
         } else if (i == 1) {
             currentMobilePreset = getCurrentWiFiPreset();
-            z = this.wifiPreset.enabled;
+            i2 = this.wifiPreset.enabled;
         } else {
             currentMobilePreset = getCurrentRoamingPreset();
-            z = this.roamingPreset.enabled;
+            i2 = this.roamingPreset.enabled;
         }
         tL_account_saveAutoDownloadSettings.settings = new TL_autoDownloadSettings();
         TL_autoDownloadSettings tL_autoDownloadSettings = tL_account_saveAutoDownloadSettings.settings;
         tL_autoDownloadSettings.audio_preload_next = currentMobilePreset.preloadMusic;
         tL_autoDownloadSettings.video_preload_large = currentMobilePreset.preloadVideo;
         tL_autoDownloadSettings.phonecalls_less_data = currentMobilePreset.lessCallData;
-        int i2 = 0;
-        tL_autoDownloadSettings.disabled = !z;
+        tL_autoDownloadSettings.disabled = i2 ^ 1;
+        i2 = 0;
         int i3 = 0;
         Object obj = null;
         Object obj2 = null;
@@ -1213,7 +1213,7 @@ public class DownloadController extends BaseController implements NotificationCe
         ArrayList arrayList;
         int size2;
         int i4;
-        if (i == NotificationCenter.fileDidFailedLoad || i == NotificationCenter.httpFileDidFailedLoad) {
+        if (i == NotificationCenter.fileDidFailToLoad || i == NotificationCenter.httpFileDidFailedLoad) {
             str = (String) objArr[0];
             Integer num = (Integer) objArr[1];
             this.listenerInProgress = true;

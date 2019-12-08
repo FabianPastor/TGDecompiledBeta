@@ -183,12 +183,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             }
 
             /* Access modifiers changed, original: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:35:0x00a0  */
+            /* JADX WARNING: Removed duplicated region for block: B:35:0x009b  */
             /* JADX WARNING: Removed duplicated region for block: B:31:0x0092  */
             /* JADX WARNING: Removed duplicated region for block: B:27:0x007a  */
             /* JADX WARNING: Removed duplicated region for block: B:20:0x0065  */
             /* JADX WARNING: Removed duplicated region for block: B:31:0x0092  */
-            /* JADX WARNING: Removed duplicated region for block: B:35:0x00a0  */
+            /* JADX WARNING: Removed duplicated region for block: B:35:0x009b  */
             public void onLayout(boolean r10, int r11, int r12, int r13, int r14) {
                 /*
                 r9 = this;
@@ -206,14 +206,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             L_0x001c:
                 r0 = 0;
             L_0x001d:
-                if (r2 >= r10) goto L_0x00ef;
+                if (r2 >= r10) goto L_0x00ea;
             L_0x001f:
                 r1 = r9.getChildAt(r2);
                 r3 = r1.getVisibility();
                 r4 = 8;
                 if (r3 != r4) goto L_0x002d;
             L_0x002b:
-                goto L_0x00eb;
+                goto L_0x00e6;
             L_0x002d:
                 r3 = r1.getLayoutParams();
                 r3 = (android.widget.FrameLayout.LayoutParams) r3;
@@ -284,24 +284,21 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 r8 = org.telegram.ui.PopupNotificationActivity.this;
                 r8 = r8.chatActivityEnterView;
                 r8 = r8.isPopupView(r1);
-                if (r8 == 0) goto L_0x00a0;
+                if (r8 == 0) goto L_0x009b;
             L_0x0092:
-                if (r0 == 0) goto L_0x009a;
-            L_0x0094:
                 r3 = r9.getMeasuredHeight();
+                if (r0 == 0) goto L_0x0099;
+            L_0x0098:
                 r3 = r3 - r0;
-                goto L_0x009e;
-            L_0x009a:
-                r3 = r9.getMeasuredHeight();
-            L_0x009e:
+            L_0x0099:
                 r6 = r3;
-                goto L_0x00e6;
-            L_0x00a0:
+                goto L_0x00e1;
+            L_0x009b:
                 r8 = org.telegram.ui.PopupNotificationActivity.this;
                 r8 = r8.chatActivityEnterView;
                 r8 = r8.isRecordCircle(r1);
-                if (r8 == 0) goto L_0x00e6;
-            L_0x00ac:
+                if (r8 == 0) goto L_0x00e1;
+            L_0x00a7:
                 r6 = org.telegram.ui.PopupNotificationActivity.this;
                 r6 = r6.popupContainer;
                 r6 = r6.getTop();
@@ -324,14 +321,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 r7 = r7 - r8;
                 r3 = r3.rightMargin;
                 r7 = r7 - r3;
-            L_0x00e6:
+            L_0x00e1:
                 r4 = r4 + r7;
                 r5 = r5 + r6;
                 r1.layout(r7, r6, r4, r5);
-            L_0x00eb:
+            L_0x00e6:
                 r2 = r2 + 1;
                 goto L_0x001d;
-            L_0x00ef:
+            L_0x00ea:
                 r9.notifyHeightChanged();
                 return;
                 */
@@ -380,6 +377,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             public void didPressedAttachButton() {
             }
 
+            public /* synthetic */ boolean hasScheduledMessages() {
+                return -CC.$default$hasScheduledMessages(this);
+            }
+
             public void needChangeVideoPreviewState(int i, float f) {
             }
 
@@ -389,7 +390,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             public void needStartRecordAudio(int i) {
             }
 
-            public void needStartRecordVideo(int i) {
+            public void needStartRecordVideo(int i, boolean z, int i2) {
             }
 
             public void onAttachButtonHidden() {
@@ -428,16 +429,20 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             public void onWindowSizeChanged(int i) {
             }
 
+            public /* synthetic */ void openScheduledMessages() {
+                -CC.$default$openScheduledMessages(this);
+            }
+
             public /* synthetic */ void scrollToSendingMessage() {
                 -CC.$default$scrollToSendingMessage(this);
             }
 
-            public void onMessageSend(CharSequence charSequence) {
+            public void onMessageSend(CharSequence charSequence, boolean z, int i) {
                 if (PopupNotificationActivity.this.currentMessageObject != null) {
                     if (PopupNotificationActivity.this.currentMessageNum >= 0 && PopupNotificationActivity.this.currentMessageNum < PopupNotificationActivity.this.popupMessages.size()) {
                         PopupNotificationActivity.this.popupMessages.remove(PopupNotificationActivity.this.currentMessageNum);
                     }
-                    MessagesController.getInstance(PopupNotificationActivity.this.currentMessageObject.currentAccount).markDialogAsRead(PopupNotificationActivity.this.currentMessageObject.getDialogId(), PopupNotificationActivity.this.currentMessageObject.getId(), Math.max(0, PopupNotificationActivity.this.currentMessageObject.getId()), PopupNotificationActivity.this.currentMessageObject.messageOwner.date, true, 0, true);
+                    MessagesController.getInstance(PopupNotificationActivity.this.currentMessageObject.currentAccount).markDialogAsRead(PopupNotificationActivity.this.currentMessageObject.getDialogId(), PopupNotificationActivity.this.currentMessageObject.getId(), Math.max(0, PopupNotificationActivity.this.currentMessageObject.getId()), PopupNotificationActivity.this.currentMessageObject.messageOwner.date, true, 0, true, 0);
                     PopupNotificationActivity.this.currentMessageObject = null;
                     PopupNotificationActivity.this.getNewMessage();
                 }

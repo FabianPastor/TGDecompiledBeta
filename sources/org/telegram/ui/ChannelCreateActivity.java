@@ -510,7 +510,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 }
             };
             this.avatarImage.setRoundRadius(AndroidUtilities.dp(32.0f));
-            this.avatarDrawable.setInfo(5, null, null, false);
+            this.avatarDrawable.setInfo(5, null, null);
             this.avatarImage.setImageDrawable(this.avatarDrawable);
             frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
             final Paint paint = new Paint(1);
@@ -1297,7 +1297,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         themeDescriptionArr[44] = new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_LINKCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"statusTextView"}, null, null, null, "windowBackgroundWhiteLinkText");
         themeDescriptionArr[45] = new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"deleteButton"}, null, null, null, "windowBackgroundWhiteGrayText");
         -$$Lambda$ChannelCreateActivity$ieYbFS24yeOuvItbU135YWldd4c -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2 = -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c;
-        themeDescriptionArr[46] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_text");
+        themeDescriptionArr[46] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_savedDrawable}, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_text");
         themeDescriptionArr[47] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundRed");
         themeDescriptionArr[48] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundOrange");
         themeDescriptionArr[49] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundViolet");

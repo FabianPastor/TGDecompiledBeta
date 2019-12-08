@@ -152,8 +152,16 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             return true;
         }
 
-        public void sendSticker(Document document, Object obj) {
-            EmojiView.this.delegate.onStickerSelected(null, document, obj);
+        public void sendSticker(Document document, Object obj, boolean z, int i) {
+            EmojiView.this.delegate.onStickerSelected(null, document, obj, z, i);
+        }
+
+        public boolean canSchedule() {
+            return EmojiView.this.delegate.canSchedule();
+        }
+
+        public boolean isInScheduleMode() {
+            return EmojiView.this.delegate.isInScheduleMode();
         }
 
         public void openSet(InputStickerSet inputStickerSet, boolean z) {
@@ -162,11 +170,11 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
         }
 
-        public void sendGif(Object obj) {
+        public void sendGif(Object obj, boolean z, int i) {
             if (EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifAdapter) {
-                EmojiView.this.delegate.onGifSelected(null, obj, "gif");
+                EmojiView.this.delegate.onGifSelected(null, obj, "gif", z, i);
             } else if (EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifSearchAdapter) {
-                EmojiView.this.delegate.onGifSelected(null, obj, EmojiView.this.gifSearchAdapter.bot);
+                EmojiView.this.delegate.onGifSelected(null, obj, EmojiView.this.gifSearchAdapter.bot, z, i);
             }
         }
 
@@ -468,7 +476,15 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     public interface EmojiViewDelegate {
 
         public final /* synthetic */ class -CC {
+            public static boolean $default$canSchedule(EmojiViewDelegate emojiViewDelegate) {
+                return false;
+            }
+
             public static boolean $default$isExpanded(EmojiViewDelegate emojiViewDelegate) {
+                return false;
+            }
+
+            public static boolean $default$isInScheduleMode(EmojiViewDelegate emojiViewDelegate) {
                 return false;
             }
 
@@ -476,10 +492,17 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 return false;
             }
 
+            public static boolean $default$onBackspace(EmojiViewDelegate emojiViewDelegate) {
+                return false;
+            }
+
             public static void $default$onClearEmojiRecent(EmojiViewDelegate emojiViewDelegate) {
             }
 
-            public static void $default$onGifSelected(EmojiViewDelegate emojiViewDelegate, View view, Object obj, Object obj2) {
+            public static void $default$onEmojiSelected(EmojiViewDelegate emojiViewDelegate, String str) {
+            }
+
+            public static void $default$onGifSelected(EmojiViewDelegate emojiViewDelegate, View view, Object obj, Object obj2, boolean z, int i) {
             }
 
             public static void $default$onSearchOpenClose(EmojiViewDelegate emojiViewDelegate, int i) {
@@ -488,7 +511,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             public static void $default$onShowStickerSet(EmojiViewDelegate emojiViewDelegate, StickerSet stickerSet, InputStickerSet inputStickerSet) {
             }
 
-            public static void $default$onStickerSelected(EmojiViewDelegate emojiViewDelegate, View view, Document document, Object obj) {
+            public static void $default$onStickerSelected(EmojiViewDelegate emojiViewDelegate, View view, Document document, Object obj, boolean z, int i) {
             }
 
             public static void $default$onStickerSetAdd(EmojiViewDelegate emojiViewDelegate, StickerSetCovered stickerSetCovered) {
@@ -507,7 +530,11 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
         }
 
+        boolean canSchedule();
+
         boolean isExpanded();
+
+        boolean isInScheduleMode();
 
         boolean isSearchOpened();
 
@@ -517,13 +544,13 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
         void onEmojiSelected(String str);
 
-        void onGifSelected(View view, Object obj, Object obj2);
+        void onGifSelected(View view, Object obj, Object obj2, boolean z, int i);
 
         void onSearchOpenClose(int i);
 
         void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet);
 
-        void onStickerSelected(View view, Document document, Object obj);
+        void onStickerSelected(View view, Document document, Object obj, boolean z, int i);
 
         void onStickerSetAdd(StickerSetCovered stickerSetCovered);
 
@@ -3811,8 +3838,6 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     }
                     if (this.startedScroll) {
                         motionEvent.getX();
-                        float f = this.lastX;
-                        f = this.lastTranslateX;
                         try {
                             this.lastTranslateX = yVelocity;
                         } catch (Exception e) {
@@ -4173,7 +4198,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 Adapter adapter = this.gifGridView.getAdapter();
                 Adapter adapter2 = this.gifSearchAdapter;
                 if (adapter == adapter2 && i >= 0 && i < adapter2.results.size()) {
-                    this.delegate.onGifSelected(view, this.gifSearchAdapter.results.get(i), this.gifSearchAdapter.bot);
+                    this.delegate.onGifSelected(view, this.gifSearchAdapter.results.get(i), this.gifSearchAdapter.bot, true, 0);
                     this.recentGifs = MediaDataController.getInstance(this.currentAccount).getRecentGifs();
                     GifAdapter gifAdapter = this.gifAdapter;
                     if (gifAdapter != null) {
@@ -4181,7 +4206,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     }
                 }
             } else if (i >= 0 && i < this.recentGifs.size()) {
-                this.delegate.onGifSelected(view, this.recentGifs.get(i), "gif");
+                this.delegate.onGifSelected(view, this.recentGifs.get(i), "gif", true, 0);
             }
         }
     }
@@ -4205,7 +4230,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
             if (!stickerEmojiCell.isDisabled()) {
                 stickerEmojiCell.disable();
-                this.delegate.onStickerSelected(stickerEmojiCell, stickerEmojiCell.getSticker(), stickerEmojiCell.getParentObject());
+                this.delegate.onStickerSelected(stickerEmojiCell, stickerEmojiCell.getSticker(), stickerEmojiCell.getParentObject(), true, 0);
             }
         }
     }

@@ -54,7 +54,7 @@ public class JoinSheetUserCell extends FrameLayout {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("+");
         stringBuilder.append(LocaleController.formatShortNumber(i, this.result));
-        avatarDrawable.setInfo(0, null, null, false, stringBuilder.toString());
+        avatarDrawable.setInfo(0, null, null, stringBuilder.toString());
         this.imageView.setImage(null, "50_50", this.avatarDrawable, null);
     }
 }

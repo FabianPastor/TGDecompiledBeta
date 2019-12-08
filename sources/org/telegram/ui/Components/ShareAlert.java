@@ -361,9 +361,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             MessagesStorage.getInstance(ShareAlert.this.currentAccount).getStorageQueue().postRunnable(new -$$Lambda$ShareAlert$ShareSearchAdapter$-0pnpfSXHTiImTPZ850FgfY7mkY(this, str, i));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, LOOP:2: B:46:0x0114->B:76:0x01d3, Catch:{ Exception -> 0x0414 }} */
+        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:2: B:46:0x0114->B:76:0x01d3} */
         /* JADX WARNING: Removed duplicated region for block: B:190:0x0165 A:{SYNTHETIC} */
-        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, LOOP:7: B:144:0x0342->B:172:0x03f8, Catch:{ Exception -> 0x0414 }} */
+        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:7: B:144:0x0342->B:172:0x03f8} */
         /* JADX WARNING: Removed duplicated region for block: B:215:0x038c A:{SYNTHETIC} */
         public /* synthetic */ void lambda$searchDialogsInternal$1$ShareAlert$ShareSearchAdapter(java.lang.String r21, int r22) {
             /*
@@ -1786,10 +1786,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         Dialog dialog = (Dialog) this.listAdapter.dialogsMap.get(item.id);
                         if (dialog == null) {
                             this.listAdapter.dialogsMap.put(item.id, item);
-                            this.listAdapter.dialogs.add(1, item);
+                            this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ 1, item);
                         } else if (dialog.id != ((long) i2)) {
                             this.listAdapter.dialogs.remove(dialog);
-                            this.listAdapter.dialogs.add(1, dialog);
+                            this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ 1, dialog);
                         }
                         searchField.searchEditText.setText("");
                         this.gridView.setAdapter(this.listAdapter);
@@ -1834,18 +1834,18 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             while (i < this.selectedDialogs.size()) {
                 keyAt2 = this.selectedDialogs.keyAt(i);
                 if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, null, null, true, null, null, null);
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, null, null, true, null, null, null, true, 0);
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, true, 0);
                 i++;
             }
         } else if (this.sendingText != null) {
             while (i < this.selectedDialogs.size()) {
                 keyAt2 = this.selectedDialogs.keyAt(i);
                 if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, null, null, true, null, null, null);
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, null, null, true, null, null, null, true, 0);
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText, keyAt2, null, null, true, null, null, null);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText, keyAt2, null, null, true, null, null, null, true, 0);
                 i++;
             }
         }
@@ -2076,7 +2076,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             return;
         }
         this.selectedCountView.invalidate();
-        if (i == 0 || showCommentTextView(true)) {
+        if (showCommentTextView(true) || i == 0) {
             this.selectedCountView.setPivotX(0.0f);
             this.selectedCountView.setPivotY(0.0f);
             return;

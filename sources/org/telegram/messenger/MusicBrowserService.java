@@ -241,6 +241,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     public void onDestroy() {
+        super.onDestroy();
         handleStopRequest(null);
         this.delayedStopHandler.removeCallbacksAndMessages(null);
         this.mediaSession.release();
