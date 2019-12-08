@@ -85,6 +85,15 @@
         <item name="android:colorPrimaryDark">#426482</item>
         <item name="android:navigationBarColor">#000000</item>
     </style>
+    <style name="Theme.TMessages.Start">
+        <item name="android:colorBackground">#1var_</item>
+        <item name="android:windowBackground">#1var_</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Transparent.TMessages.Start</item>
+        <item name="android:colorPrimary">#232d3a</item>
+        <item name="android:colorPrimaryDark">#1CLASSNAMEe</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
     <style name="Theme.TMessages.TimePicker">
         <item name="android:headerBackground">#408bc8</item>
     </style>

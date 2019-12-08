@@ -65,6 +65,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.time.SunDate;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
@@ -1523,10 +1524,18 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x27d8  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x27d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x27d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x27d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x2816  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x2813  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x281f  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x2824  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x2813  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x2816  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x281f  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x2824  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x2816  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x2813  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x281f  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x2824  */
     static {
         /*
         r0 = new java.lang.Object;
@@ -5208,62 +5217,64 @@ public class Theme {
         r3.put(r4, r0);
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r3 = "themeconfig";
-        r0 = r0.getSharedPreferences(r3, r1);
-        r3 = 0;
+        r3 = r0.getSharedPreferences(r3, r1);
+        r0 = 0;
         r4 = "themes2";
-        r3 = r0.getString(r4, r3);
+        r0 = r3.getString(r4, r0);
         r4 = "remoteThemesHash";
-        r4 = r0.getInt(r4, r1);
+        r4 = r3.getInt(r4, r1);
         remoteThemesHash = r4;
         r4 = "lastLoadingThemesTime";
-        r4 = r0.getInt(r4, r1);
+        r4 = r3.getInt(r4, r1);
         lastLoadingThemesTime = r4;
-        r4 = android.text.TextUtils.isEmpty(r3);
-        if (r4 != 0) goto L_0x25fc;
+        r4 = android.text.TextUtils.isEmpty(r0);
+        if (r4 != 0) goto L_0x25fd;
     L_0x25cb:
-        r0 = new org.json.JSONArray;	 Catch:{ Exception -> 0x25f7 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x25f7 }
-        r3 = 0;
+        r4 = new org.json.JSONArray;	 Catch:{ Exception -> 0x25f7 }
+        r4.<init>(r0);	 Catch:{ Exception -> 0x25f7 }
+        r0 = 0;
     L_0x25d1:
-        r4 = r0.length();	 Catch:{ Exception -> 0x25f7 }
-        if (r3 >= r4) goto L_0x2642;
+        r5 = r4.length();	 Catch:{ Exception -> 0x25f7 }
+        if (r0 >= r5) goto L_0x25fb;
     L_0x25d7:
-        r4 = r0.getJSONObject(r3);	 Catch:{ Exception -> 0x25f7 }
-        r4 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r4);	 Catch:{ Exception -> 0x25f7 }
-        if (r4 == 0) goto L_0x25f4;
+        r5 = r4.getJSONObject(r0);	 Catch:{ Exception -> 0x25f7 }
+        r5 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r5);	 Catch:{ Exception -> 0x25f7 }
+        if (r5 == 0) goto L_0x25f4;
     L_0x25e1:
-        r5 = otherThemes;	 Catch:{ Exception -> 0x25f7 }
-        r5.add(r4);	 Catch:{ Exception -> 0x25f7 }
-        r5 = themes;	 Catch:{ Exception -> 0x25f7 }
-        r5.add(r4);	 Catch:{ Exception -> 0x25f7 }
-        r5 = themesDict;	 Catch:{ Exception -> 0x25f7 }
-        r6 = r4.getKey();	 Catch:{ Exception -> 0x25f7 }
-        r5.put(r6, r4);	 Catch:{ Exception -> 0x25f7 }
+        r6 = otherThemes;	 Catch:{ Exception -> 0x25f7 }
+        r6.add(r5);	 Catch:{ Exception -> 0x25f7 }
+        r6 = themes;	 Catch:{ Exception -> 0x25f7 }
+        r6.add(r5);	 Catch:{ Exception -> 0x25f7 }
+        r6 = themesDict;	 Catch:{ Exception -> 0x25f7 }
+        r7 = r5.getKey();	 Catch:{ Exception -> 0x25f7 }
+        r6.put(r7, r5);	 Catch:{ Exception -> 0x25f7 }
     L_0x25f4:
-        r3 = r3 + 1;
+        r0 = r0 + 1;
         goto L_0x25d1;
     L_0x25f7:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x2642;
-    L_0x25fc:
-        r3 = 0;
+    L_0x25fb:
+        r4 = 1;
+        goto L_0x2643;
+    L_0x25fd:
+        r0 = 0;
         r4 = "themes";
-        r3 = r0.getString(r4, r3);
-        r4 = android.text.TextUtils.isEmpty(r3);
-        if (r4 != 0) goto L_0x2631;
-    L_0x2609:
+        r0 = r3.getString(r4, r0);
+        r4 = android.text.TextUtils.isEmpty(r0);
+        if (r4 != 0) goto L_0x2632;
+    L_0x260a:
         r4 = "&";
-        r3 = r3.split(r4);
+        r0 = r0.split(r4);
         r4 = 0;
-    L_0x2610:
-        r5 = r3.length;
-        if (r4 >= r5) goto L_0x2631;
-    L_0x2613:
-        r5 = r3[r4];
+    L_0x2611:
+        r5 = r0.length;
+        if (r4 >= r5) goto L_0x2632;
+    L_0x2614:
+        r5 = r0[r4];
         r5 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r5);
-        if (r5 == 0) goto L_0x262e;
-    L_0x261b:
+        if (r5 == 0) goto L_0x262f;
+    L_0x261c:
         r6 = otherThemes;
         r6.add(r5);
         r6 = themes;
@@ -5271,207 +5282,250 @@ public class Theme {
         r6 = themesDict;
         r7 = r5.getKey();
         r6.put(r7, r5);
-    L_0x262e:
+    L_0x262f:
         r4 = r4 + 1;
-        goto L_0x2610;
-    L_0x2631:
-        r3 = 1;
-        saveOtherThemes(r3);
-        r0 = r0.edit();
-        r3 = "themes";
-        r0 = r0.remove(r3);
+        goto L_0x2611;
+    L_0x2632:
+        r4 = 1;
+        saveOtherThemes(r4);
+        r0 = r3.edit();
+        r5 = "themes";
+        r0 = r0.remove(r5);
         r0.commit();
-    L_0x2642:
+    L_0x2643:
         sortThemes();
-        r3 = 0;
-        r0 = themesDict;	 Catch:{ Exception -> 0x27cf }
-        r4 = "Dark Blue";
-        r0 = r0.get(r4);	 Catch:{ Exception -> 0x27cf }
-        r4 = r0;
-        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;	 Catch:{ Exception -> 0x27cf }
-        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x27cf }
-        r5 = "theme";
-        r6 = 0;
-        r5 = r0.getString(r5, r6);	 Catch:{ Exception -> 0x27cf }
-        r6 = "Dark";
-        r6 = r6.equals(r5);	 Catch:{ Exception -> 0x27cf }
-        if (r6 == 0) goto L_0x2670;
-    L_0x2664:
-        r3 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
-        r4.setAccentColor(r3);	 Catch:{ Exception -> 0x266c }
-        r3 = r4;
-        goto L_0x267b;
-    L_0x266c:
-        r0 = move-exception;
-        r3 = r4;
-        goto L_0x27d0;
-    L_0x2670:
-        if (r5 == 0) goto L_0x267b;
-    L_0x2672:
-        r6 = themesDict;	 Catch:{ Exception -> 0x27cf }
-        r5 = r6.get(r5);	 Catch:{ Exception -> 0x27cf }
-        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;	 Catch:{ Exception -> 0x27cf }
-        r3 = r5;
-    L_0x267b:
-        r5 = "nighttheme";
-        r6 = 0;
-        r5 = r0.getString(r5, r6);	 Catch:{ Exception -> 0x27cf }
-        r6 = "Dark";
-        r6 = r6.equals(r5);	 Catch:{ Exception -> 0x27cf }
-        if (r6 == 0) goto L_0x2693;
-    L_0x268a:
-        currentNightTheme = r4;	 Catch:{ Exception -> 0x27cf }
+        r5 = 0;
+        r0 = themesDict;	 Catch:{ Exception -> 0x280d }
+        r6 = "Dark Blue";
+        r0 = r0.get(r6);	 Catch:{ Exception -> 0x280d }
+        r6 = r0;
+        r6 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r6;	 Catch:{ Exception -> 0x280d }
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x280d }
+        r7 = "theme";
+        r8 = 0;
+        r7 = r0.getString(r7, r8);	 Catch:{ Exception -> 0x280d }
+        r8 = "Dark";
+        r8 = r8.equals(r7);	 Catch:{ Exception -> 0x280d }
+        if (r8 == 0) goto L_0x2671;
+    L_0x2665:
         r5 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
-        r4.setAccentColor(r5);	 Catch:{ Exception -> 0x27cf }
-        goto L_0x26a1;
-    L_0x2693:
-        if (r5 == 0) goto L_0x26a1;
-    L_0x2695:
-        r4 = themesDict;	 Catch:{ Exception -> 0x27cf }
-        r4 = r4.get(r5);	 Catch:{ Exception -> 0x27cf }
-        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;	 Catch:{ Exception -> 0x27cf }
-        if (r4 == 0) goto L_0x26a1;
-    L_0x269f:
-        currentNightTheme = r4;	 Catch:{ Exception -> 0x27cf }
-    L_0x26a1:
-        r4 = themesDict;	 Catch:{ Exception -> 0x27cf }
-        r4 = r4.values();	 Catch:{ Exception -> 0x27cf }
-        r4 = r4.iterator();	 Catch:{ Exception -> 0x27cf }
-    L_0x26ab:
-        r5 = r4.hasNext();	 Catch:{ Exception -> 0x27cf }
-        if (r5 == 0) goto L_0x2742;
-    L_0x26b1:
-        r5 = r4.next();	 Catch:{ Exception -> 0x27cf }
-        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;	 Catch:{ Exception -> 0x27cf }
-        r6 = r5.assetName;	 Catch:{ Exception -> 0x27cf }
-        if (r6 == 0) goto L_0x26ab;
-    L_0x26bb:
-        r6 = r5.accentBaseColor;	 Catch:{ Exception -> 0x27cf }
-        if (r6 == 0) goto L_0x26ab;
-    L_0x26bf:
-        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x27cf }
-        r6.<init>();	 Catch:{ Exception -> 0x27cf }
-        r7 = "accent_for_";
-        r6.append(r7);	 Catch:{ Exception -> 0x27cf }
-        r7 = r5.assetName;	 Catch:{ Exception -> 0x27cf }
-        r6.append(r7);	 Catch:{ Exception -> 0x27cf }
-        r6 = r6.toString();	 Catch:{ Exception -> 0x27cf }
-        r7 = r5.accentColor;	 Catch:{ Exception -> 0x27cf }
-        r6 = r0.getInt(r6, r7);	 Catch:{ Exception -> 0x27cf }
-        r5.setAccentColor(r6);	 Catch:{ Exception -> 0x27cf }
-        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x27cf }
-        r6.<init>();	 Catch:{ Exception -> 0x27cf }
-        r7 = "my_msg_accent_for_";
-        r6.append(r7);	 Catch:{ Exception -> 0x27cf }
-        r7 = r5.assetName;	 Catch:{ Exception -> 0x27cf }
-        r6.append(r7);	 Catch:{ Exception -> 0x27cf }
-        r6 = r6.toString();	 Catch:{ Exception -> 0x27cf }
-        r7 = r5.myMessagesAccentColor;	 Catch:{ Exception -> 0x27cf }
-        r6 = r0.getInt(r6, r7);	 Catch:{ Exception -> 0x27cf }
-        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x27cf }
-        r7.<init>();	 Catch:{ Exception -> 0x27cf }
-        r8 = "my_msg_gr_for_";
-        r7.append(r8);	 Catch:{ Exception -> 0x27cf }
-        r8 = r5.assetName;	 Catch:{ Exception -> 0x27cf }
-        r7.append(r8);	 Catch:{ Exception -> 0x27cf }
-        r7 = r7.toString();	 Catch:{ Exception -> 0x27cf }
-        r7 = r0.getInt(r7, r1);	 Catch:{ Exception -> 0x27cf }
-        r5.setMyMessageAccentColor(r6, r7);	 Catch:{ Exception -> 0x27cf }
-        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x27cf }
-        r6.<init>();	 Catch:{ Exception -> 0x27cf }
-        r7 = "bg_for_";
-        r6.append(r7);	 Catch:{ Exception -> 0x27cf }
-        r7 = r5.assetName;	 Catch:{ Exception -> 0x27cf }
-        r6.append(r7);	 Catch:{ Exception -> 0x27cf }
-        r6 = r6.toString();	 Catch:{ Exception -> 0x27cf }
-        r6 = r0.getInt(r6, r1);	 Catch:{ Exception -> 0x27cf }
-        r5.backgroundOverrideColor = r6;	 Catch:{ Exception -> 0x27cf }
-        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x27cf }
-        r6.<init>();	 Catch:{ Exception -> 0x27cf }
-        r7 = "bg_gr_for_";
-        r6.append(r7);	 Catch:{ Exception -> 0x27cf }
-        r7 = r5.assetName;	 Catch:{ Exception -> 0x27cf }
-        r6.append(r7);	 Catch:{ Exception -> 0x27cf }
-        r6 = r6.toString();	 Catch:{ Exception -> 0x27cf }
-        r6 = r0.getInt(r6, r1);	 Catch:{ Exception -> 0x27cf }
-        r5.backgroundGradientOverrideColor = r6;	 Catch:{ Exception -> 0x27cf }
-        goto L_0x26ab;
-    L_0x2742:
-        r4 = "selectedAutoNightType";
-        r4 = r0.getInt(r4, r1);	 Catch:{ Exception -> 0x27cf }
-        selectedAutoNightType = r4;	 Catch:{ Exception -> 0x27cf }
-        r4 = "autoNightScheduleByLocation";
-        r4 = r0.getBoolean(r4, r1);	 Catch:{ Exception -> 0x27cf }
-        autoNightScheduleByLocation = r4;	 Catch:{ Exception -> 0x27cf }
-        r4 = "autoNightBrighnessThreshold";
-        r5 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
-        r4 = r0.getFloat(r4, r5);	 Catch:{ Exception -> 0x27cf }
-        autoNightBrighnessThreshold = r4;	 Catch:{ Exception -> 0x27cf }
-        r4 = "autoNightDayStartTime";
-        r5 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x27cf }
-        autoNightDayStartTime = r4;	 Catch:{ Exception -> 0x27cf }
-        r4 = "autoNightDayEndTime";
-        r5 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x27cf }
-        autoNightDayEndTime = r4;	 Catch:{ Exception -> 0x27cf }
-        r4 = "autoNightSunsetTime";
-        r5 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x27cf }
-        autoNightSunsetTime = r4;	 Catch:{ Exception -> 0x27cf }
-        r4 = "autoNightSunriseTime";
-        r5 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x27cf }
-        autoNightSunriseTime = r4;	 Catch:{ Exception -> 0x27cf }
-        r4 = "autoNightCityName";
-        r5 = "";
-        r4 = r0.getString(r4, r5);	 Catch:{ Exception -> 0x27cf }
-        autoNightCityName = r4;	 Catch:{ Exception -> 0x27cf }
-        r4 = "autoNightLocationLatitude3";
-        r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r4 = r0.getLong(r4, r5);	 Catch:{ Exception -> 0x27cf }
-        r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r8 == 0) goto L_0x27a3;
-    L_0x279c:
-        r4 = java.lang.Double.longBitsToDouble(r4);	 Catch:{ Exception -> 0x27cf }
-        autoNightLocationLatitude = r4;	 Catch:{ Exception -> 0x27cf }
-        goto L_0x27aa;
-    L_0x27a3:
-        r4 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLatitude = r4;	 Catch:{ Exception -> 0x27cf }
-    L_0x27aa:
-        r4 = "autoNightLocationLongitude3";
-        r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r4 = r0.getLong(r4, r5);	 Catch:{ Exception -> 0x27cf }
-        r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r8 == 0) goto L_0x27bf;
-    L_0x27b8:
-        r4 = java.lang.Double.longBitsToDouble(r4);	 Catch:{ Exception -> 0x27cf }
-        autoNightLocationLongitude = r4;	 Catch:{ Exception -> 0x27cf }
-        goto L_0x27c6;
-    L_0x27bf:
-        r4 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLongitude = r4;	 Catch:{ Exception -> 0x27cf }
-    L_0x27c6:
-        r4 = "autoNightLastSunCheckDay";
-        r0 = r0.getInt(r4, r2);	 Catch:{ Exception -> 0x27cf }
-        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x27cf }
-        goto L_0x27d3;
-    L_0x27cf:
+        r6.setAccentColor(r5);	 Catch:{ Exception -> 0x266d }
+        r5 = r6;
+        goto L_0x269b;
+    L_0x266d:
         r0 = move-exception;
-    L_0x27d0:
-        org.telegram.messenger.FileLog.e(r0);
-    L_0x27d3:
-        if (r3 != 0) goto L_0x27d8;
-    L_0x27d5:
-        r3 = defaultTheme;
-        goto L_0x27da;
-    L_0x27d8:
-        currentDayTheme = r3;
+        r5 = r6;
+        goto L_0x280e;
+    L_0x2671:
+        if (r7 == 0) goto L_0x269b;
+    L_0x2673:
+        r8 = themesDict;	 Catch:{ Exception -> 0x280d }
+        r7 = r8.get(r7);	 Catch:{ Exception -> 0x280d }
+        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x280d }
+        if (r7 == 0) goto L_0x269a;
+    L_0x267d:
+        r5 = "lastDayTheme";
+        r5 = r3.contains(r5);	 Catch:{ Exception -> 0x2696 }
+        if (r5 != 0) goto L_0x269a;
+    L_0x2685:
+        r5 = r3.edit();	 Catch:{ Exception -> 0x2696 }
+        r8 = "lastDayTheme";
+        r9 = r7.getKey();	 Catch:{ Exception -> 0x2696 }
+        r5.putString(r8, r9);	 Catch:{ Exception -> 0x2696 }
+        r5.commit();	 Catch:{ Exception -> 0x2696 }
+        goto L_0x269a;
+    L_0x2696:
+        r0 = move-exception;
+        r5 = r7;
+        goto L_0x280e;
+    L_0x269a:
+        r5 = r7;
+    L_0x269b:
+        r7 = "nighttheme";
+        r8 = 0;
+        r7 = r0.getString(r7, r8);	 Catch:{ Exception -> 0x280d }
+        r8 = "Dark";
+        r8 = r8.equals(r7);	 Catch:{ Exception -> 0x280d }
+        if (r8 == 0) goto L_0x26b3;
+    L_0x26aa:
+        currentNightTheme = r6;	 Catch:{ Exception -> 0x280d }
+        r7 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
+        r6.setAccentColor(r7);	 Catch:{ Exception -> 0x280d }
+        goto L_0x26c1;
+    L_0x26b3:
+        if (r7 == 0) goto L_0x26c1;
+    L_0x26b5:
+        r6 = themesDict;	 Catch:{ Exception -> 0x280d }
+        r6 = r6.get(r7);	 Catch:{ Exception -> 0x280d }
+        r6 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r6;	 Catch:{ Exception -> 0x280d }
+        if (r6 == 0) goto L_0x26c1;
+    L_0x26bf:
+        currentNightTheme = r6;	 Catch:{ Exception -> 0x280d }
+    L_0x26c1:
+        r6 = currentNightTheme;	 Catch:{ Exception -> 0x280d }
+        if (r6 == 0) goto L_0x26df;
+    L_0x26c5:
+        r6 = "lastDarkTheme";
+        r6 = r3.contains(r6);	 Catch:{ Exception -> 0x280d }
+        if (r6 != 0) goto L_0x26df;
+    L_0x26cd:
+        r3 = r3.edit();	 Catch:{ Exception -> 0x280d }
+        r6 = "lastDarkTheme";
+        r7 = currentNightTheme;	 Catch:{ Exception -> 0x280d }
+        r7 = r7.getKey();	 Catch:{ Exception -> 0x280d }
+        r3.putString(r6, r7);	 Catch:{ Exception -> 0x280d }
+        r3.commit();	 Catch:{ Exception -> 0x280d }
+    L_0x26df:
+        r3 = themesDict;	 Catch:{ Exception -> 0x280d }
+        r3 = r3.values();	 Catch:{ Exception -> 0x280d }
+        r3 = r3.iterator();	 Catch:{ Exception -> 0x280d }
+    L_0x26e9:
+        r6 = r3.hasNext();	 Catch:{ Exception -> 0x280d }
+        if (r6 == 0) goto L_0x2780;
+    L_0x26ef:
+        r6 = r3.next();	 Catch:{ Exception -> 0x280d }
+        r6 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r6;	 Catch:{ Exception -> 0x280d }
+        r7 = r6.assetName;	 Catch:{ Exception -> 0x280d }
+        if (r7 == 0) goto L_0x26e9;
+    L_0x26f9:
+        r7 = r6.accentBaseColor;	 Catch:{ Exception -> 0x280d }
+        if (r7 == 0) goto L_0x26e9;
+    L_0x26fd:
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x280d }
+        r7.<init>();	 Catch:{ Exception -> 0x280d }
+        r8 = "accent_for_";
+        r7.append(r8);	 Catch:{ Exception -> 0x280d }
+        r8 = r6.assetName;	 Catch:{ Exception -> 0x280d }
+        r7.append(r8);	 Catch:{ Exception -> 0x280d }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x280d }
+        r8 = r6.accentColor;	 Catch:{ Exception -> 0x280d }
+        r7 = r0.getInt(r7, r8);	 Catch:{ Exception -> 0x280d }
+        r6.setAccentColor(r7);	 Catch:{ Exception -> 0x280d }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x280d }
+        r7.<init>();	 Catch:{ Exception -> 0x280d }
+        r8 = "my_msg_accent_for_";
+        r7.append(r8);	 Catch:{ Exception -> 0x280d }
+        r8 = r6.assetName;	 Catch:{ Exception -> 0x280d }
+        r7.append(r8);	 Catch:{ Exception -> 0x280d }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x280d }
+        r8 = r6.myMessagesAccentColor;	 Catch:{ Exception -> 0x280d }
+        r7 = r0.getInt(r7, r8);	 Catch:{ Exception -> 0x280d }
+        r8 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x280d }
+        r8.<init>();	 Catch:{ Exception -> 0x280d }
+        r9 = "my_msg_gr_for_";
+        r8.append(r9);	 Catch:{ Exception -> 0x280d }
+        r9 = r6.assetName;	 Catch:{ Exception -> 0x280d }
+        r8.append(r9);	 Catch:{ Exception -> 0x280d }
+        r8 = r8.toString();	 Catch:{ Exception -> 0x280d }
+        r8 = r0.getInt(r8, r1);	 Catch:{ Exception -> 0x280d }
+        r6.setMyMessageAccentColor(r7, r8);	 Catch:{ Exception -> 0x280d }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x280d }
+        r7.<init>();	 Catch:{ Exception -> 0x280d }
+        r8 = "bg_for_";
+        r7.append(r8);	 Catch:{ Exception -> 0x280d }
+        r8 = r6.assetName;	 Catch:{ Exception -> 0x280d }
+        r7.append(r8);	 Catch:{ Exception -> 0x280d }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x280d }
+        r7 = r0.getInt(r7, r1);	 Catch:{ Exception -> 0x280d }
+        r6.backgroundOverrideColor = r7;	 Catch:{ Exception -> 0x280d }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x280d }
+        r7.<init>();	 Catch:{ Exception -> 0x280d }
+        r8 = "bg_gr_for_";
+        r7.append(r8);	 Catch:{ Exception -> 0x280d }
+        r8 = r6.assetName;	 Catch:{ Exception -> 0x280d }
+        r7.append(r8);	 Catch:{ Exception -> 0x280d }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x280d }
+        r7 = r0.getInt(r7, r1);	 Catch:{ Exception -> 0x280d }
+        r6.backgroundGradientOverrideColor = r7;	 Catch:{ Exception -> 0x280d }
+        goto L_0x26e9;
+    L_0x2780:
+        r3 = "selectedAutoNightType";
+        r3 = r0.getInt(r3, r1);	 Catch:{ Exception -> 0x280d }
+        selectedAutoNightType = r3;	 Catch:{ Exception -> 0x280d }
+        r3 = "autoNightScheduleByLocation";
+        r3 = r0.getBoolean(r3, r1);	 Catch:{ Exception -> 0x280d }
+        autoNightScheduleByLocation = r3;	 Catch:{ Exception -> 0x280d }
+        r3 = "autoNightBrighnessThreshold";
+        r6 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
+        r3 = r0.getFloat(r3, r6);	 Catch:{ Exception -> 0x280d }
+        autoNightBrighnessThreshold = r3;	 Catch:{ Exception -> 0x280d }
+        r3 = "autoNightDayStartTime";
+        r6 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
+        r3 = r0.getInt(r3, r6);	 Catch:{ Exception -> 0x280d }
+        autoNightDayStartTime = r3;	 Catch:{ Exception -> 0x280d }
+        r3 = "autoNightDayEndTime";
+        r6 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r3 = r0.getInt(r3, r6);	 Catch:{ Exception -> 0x280d }
+        autoNightDayEndTime = r3;	 Catch:{ Exception -> 0x280d }
+        r3 = "autoNightSunsetTime";
+        r6 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
+        r3 = r0.getInt(r3, r6);	 Catch:{ Exception -> 0x280d }
+        autoNightSunsetTime = r3;	 Catch:{ Exception -> 0x280d }
+        r3 = "autoNightSunriseTime";
+        r6 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r3 = r0.getInt(r3, r6);	 Catch:{ Exception -> 0x280d }
+        autoNightSunriseTime = r3;	 Catch:{ Exception -> 0x280d }
+        r3 = "autoNightCityName";
+        r6 = "";
+        r3 = r0.getString(r3, r6);	 Catch:{ Exception -> 0x280d }
+        autoNightCityName = r3;	 Catch:{ Exception -> 0x280d }
+        r3 = "autoNightLocationLatitude3";
+        r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r6 = r0.getLong(r3, r6);	 Catch:{ Exception -> 0x280d }
+        r8 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
+        if (r3 == 0) goto L_0x27e1;
     L_0x27da:
-        applyTheme(r3, r1, r1, r1);
+        r6 = java.lang.Double.longBitsToDouble(r6);	 Catch:{ Exception -> 0x280d }
+        autoNightLocationLatitude = r6;	 Catch:{ Exception -> 0x280d }
+        goto L_0x27e8;
+    L_0x27e1:
+        r6 = NUM; // 0x40cNUM float:0.0 double:10000.0;
+        autoNightLocationLatitude = r6;	 Catch:{ Exception -> 0x280d }
+    L_0x27e8:
+        r3 = "autoNightLocationLongitude3";
+        r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r6 = r0.getLong(r3, r6);	 Catch:{ Exception -> 0x280d }
+        r8 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
+        if (r3 == 0) goto L_0x27fd;
+    L_0x27f6:
+        r6 = java.lang.Double.longBitsToDouble(r6);	 Catch:{ Exception -> 0x280d }
+        autoNightLocationLongitude = r6;	 Catch:{ Exception -> 0x280d }
+        goto L_0x2804;
+    L_0x27fd:
+        r6 = NUM; // 0x40cNUM float:0.0 double:10000.0;
+        autoNightLocationLongitude = r6;	 Catch:{ Exception -> 0x280d }
+    L_0x2804:
+        r3 = "autoNightLastSunCheckDay";
+        r0 = r0.getInt(r3, r2);	 Catch:{ Exception -> 0x280d }
+        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x280d }
+        goto L_0x2811;
+    L_0x280d:
+        r0 = move-exception;
+    L_0x280e:
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x2811:
+        if (r5 != 0) goto L_0x2816;
+    L_0x2813:
+        r5 = defaultTheme;
+        goto L_0x2818;
+    L_0x2816:
+        currentDayTheme = r5;
+    L_0x2818:
+        r0 = needSwitchToTheme();
+        r2 = 2;
+        if (r0 != r2) goto L_0x2821;
+    L_0x281f:
+        r5 = currentNightTheme;
+    L_0x2821:
+        if (r0 != r2) goto L_0x2824;
+    L_0x2823:
+        goto L_0x2825;
+    L_0x2824:
+        r4 = 0;
+    L_0x2825:
+        applyTheme(r5, r1, r1, r4);
         r0 = org.telegram.ui.ActionBar.-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I.INSTANCE;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
         r0 = new org.telegram.ui.ActionBar.Theme$7;
@@ -7113,221 +7167,104 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0112  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x011a  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0112  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x011a  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0112  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x011a  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0112  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x011a  */
-    /* JADX WARNING: Missing block: B:51:0x00e6, code skipped:
-            if (switchNightRunnableScheduled == false) goto L_0x00e8;
-     */
-    /* JADX WARNING: Missing block: B:54:0x00ec, code skipped:
-            if (switchDayRunnableScheduled == false) goto L_0x010d;
-     */
-    /* JADX WARNING: Missing block: B:62:0x0108, code skipped:
-            if (r1 != 32) goto L_0x010f;
-     */
-    /* JADX WARNING: Missing block: B:63:0x010b, code skipped:
-            if (r1 == 0) goto L_0x010d;
-     */
-    public static void checkAutoNightThemeConditions(boolean r12) {
-        /*
-        r0 = previousTheme;
-        if (r0 == 0) goto L_0x0005;
-    L_0x0004:
-        return;
-    L_0x0005:
-        r0 = switchNightThemeDelay;
-        if (r0 <= 0) goto L_0x001f;
-    L_0x0009:
-        r0 = android.os.SystemClock.uptimeMillis();
-        r2 = lastDelayUpdateTime;
-        r2 = r0 - r2;
-        lastDelayUpdateTime = r0;
-        r0 = switchNightThemeDelay;
-        r0 = (long) r0;
-        r0 = r0 - r2;
-        r1 = (int) r0;
-        switchNightThemeDelay = r1;
-        r0 = switchNightThemeDelay;
-        if (r0 <= 0) goto L_0x001f;
-    L_0x001e:
-        return;
-    L_0x001f:
-        r0 = 0;
-        if (r12 == 0) goto L_0x0038;
-    L_0x0022:
-        r1 = switchNightRunnableScheduled;
-        if (r1 == 0) goto L_0x002d;
-    L_0x0026:
-        switchNightRunnableScheduled = r0;
-        r1 = switchNightBrightnessRunnable;
-        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1);
-    L_0x002d:
-        r1 = switchDayRunnableScheduled;
-        if (r1 == 0) goto L_0x0038;
-    L_0x0031:
-        switchDayRunnableScheduled = r0;
-        r1 = switchDayBrightnessRunnable;
-        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1);
-    L_0x0038:
-        cancelAutoNightThemeCallbacks();
-        r1 = selectedAutoNightType;
-        r2 = 5;
-        r3 = 2;
-        r4 = 1;
-        if (r1 != r4) goto L_0x00a5;
-    L_0x0042:
-        r1 = java.util.Calendar.getInstance();
-        r5 = java.lang.System.currentTimeMillis();
-        r1.setTimeInMillis(r5);
-        r5 = 11;
-        r5 = r1.get(r5);
-        r5 = r5 * 60;
-        r6 = 12;
-        r6 = r1.get(r6);
-        r5 = r5 + r6;
-        r6 = autoNightScheduleByLocation;
-        if (r6 == 0) goto L_0x008f;
-    L_0x0060:
-        r1 = r1.get(r2);
-        r2 = autoNightLastSunCheckDay;
-        if (r2 == r1) goto L_0x008a;
-    L_0x0068:
-        r6 = autoNightLocationLatitude;
-        r8 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        r2 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r2 == 0) goto L_0x008a;
-    L_0x0073:
-        r10 = autoNightLocationLongitude;
-        r2 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1));
-        if (r2 == 0) goto L_0x008a;
-    L_0x0079:
-        r2 = org.telegram.messenger.time.SunDate.calculateSunriseSunset(r6, r10);
-        r6 = r2[r0];
-        autoNightSunriseTime = r6;
-        r2 = r2[r4];
-        autoNightSunsetTime = r2;
-        autoNightLastSunCheckDay = r1;
-        saveAutoNightThemeConfig();
-    L_0x008a:
-        r1 = autoNightSunsetTime;
-        r2 = autoNightSunriseTime;
-        goto L_0x0093;
-    L_0x008f:
-        r1 = autoNightDayStartTime;
-        r2 = autoNightDayEndTime;
-    L_0x0093:
-        if (r1 >= r2) goto L_0x009a;
-    L_0x0095:
-        if (r1 > r5) goto L_0x010d;
-    L_0x0097:
-        if (r5 > r2) goto L_0x010d;
-    L_0x0099:
-        goto L_0x00a4;
-    L_0x009a:
-        if (r1 > r5) goto L_0x00a0;
-    L_0x009c:
-        r1 = 1440; // 0x5a0 float:2.018E-42 double:7.115E-321;
-        if (r5 <= r1) goto L_0x00e8;
-    L_0x00a0:
-        if (r5 < 0) goto L_0x010d;
-    L_0x00a2:
-        if (r5 > r2) goto L_0x010d;
-    L_0x00a4:
-        goto L_0x00e8;
-    L_0x00a5:
-        if (r1 != r3) goto L_0x00ef;
-    L_0x00a7:
-        r1 = lightSensor;
-        if (r1 != 0) goto L_0x00bf;
-    L_0x00ab:
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r5 = "sensor";
-        r1 = r1.getSystemService(r5);
-        r1 = (android.hardware.SensorManager) r1;
-        sensorManager = r1;
-        r1 = sensorManager;
-        r1 = r1.getDefaultSensor(r2);
-        lightSensor = r1;
-    L_0x00bf:
-        r1 = lightSensorRegistered;
-        if (r1 != 0) goto L_0x00dc;
-    L_0x00c3:
-        r1 = lightSensor;
-        if (r1 == 0) goto L_0x00dc;
-    L_0x00c7:
-        r2 = sensorManager;
-        r5 = ambientSensorListener;
-        r6 = 500000; // 0x7a120 float:7.00649E-40 double:2.47033E-318;
-        r2.registerListener(r5, r1, r6);
-        lightSensorRegistered = r4;
-        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r1 == 0) goto L_0x00dc;
-    L_0x00d7:
-        r1 = "light sensor registered";
-        org.telegram.messenger.FileLog.d(r1);
-    L_0x00dc:
-        r1 = lastBrightnessValue;
-        r2 = autoNightBrighnessThreshold;
-        r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 > 0) goto L_0x00ea;
-    L_0x00e4:
-        r1 = switchNightRunnableScheduled;
-        if (r1 != 0) goto L_0x010f;
-    L_0x00e8:
-        r1 = 2;
-        goto L_0x0110;
-    L_0x00ea:
-        r1 = switchDayRunnableScheduled;
-        if (r1 != 0) goto L_0x010f;
-    L_0x00ee:
-        goto L_0x010d;
-    L_0x00ef:
-        r2 = 3;
-        if (r1 != r2) goto L_0x010b;
-    L_0x00f2:
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r1 = r1.getResources();
-        r1 = r1.getConfiguration();
-        r1 = r1.uiMode;
-        r1 = r1 & 48;
-        if (r1 == 0) goto L_0x010d;
-    L_0x0102:
-        r2 = 16;
-        if (r1 == r2) goto L_0x010d;
-    L_0x0106:
-        r2 = 32;
-        if (r1 == r2) goto L_0x00e8;
-    L_0x010a:
-        goto L_0x010f;
-    L_0x010b:
-        if (r1 != 0) goto L_0x010f;
-    L_0x010d:
-        r1 = 1;
-        goto L_0x0110;
-    L_0x010f:
-        r1 = 0;
-    L_0x0110:
-        if (r1 == 0) goto L_0x0118;
-    L_0x0112:
-        if (r1 != r3) goto L_0x0115;
-    L_0x0114:
-        r0 = 1;
-    L_0x0115:
-        applyDayNightThemeMaybe(r0);
-    L_0x0118:
-        if (r12 == 0) goto L_0x011e;
-    L_0x011a:
-        r0 = 0;
-        lastThemeSwitchTime = r0;
-    L_0x011e:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.checkAutoNightThemeConditions(boolean):void");
+    private static int needSwitchToTheme() {
+        int i = selectedAutoNightType;
+        if (i == 1) {
+            int i2;
+            Calendar instance = Calendar.getInstance();
+            instance.setTimeInMillis(System.currentTimeMillis());
+            int i3 = (instance.get(11) * 60) + instance.get(12);
+            if (autoNightScheduleByLocation) {
+                i = instance.get(5);
+                if (autoNightLastSunCheckDay != i) {
+                    double d = autoNightLocationLatitude;
+                    if (d != 10000.0d) {
+                        double d2 = autoNightLocationLongitude;
+                        if (d2 != 10000.0d) {
+                            int[] calculateSunriseSunset = SunDate.calculateSunriseSunset(d, d2);
+                            autoNightSunriseTime = calculateSunriseSunset[0];
+                            autoNightSunsetTime = calculateSunriseSunset[1];
+                            autoNightLastSunCheckDay = i;
+                            saveAutoNightThemeConfig();
+                        }
+                    }
+                }
+                i = autoNightSunsetTime;
+                i2 = autoNightSunriseTime;
+            } else {
+                i = autoNightDayStartTime;
+                i2 = autoNightDayEndTime;
+            }
+            return i < i2 ? (i > i3 || i3 > i2) ? 1 : 2 : ((i > i3 || i3 > 1440) && (i3 < 0 || i3 > i2)) ? 1 : 2;
+        } else {
+            if (i == 2) {
+                if (lightSensor == null) {
+                    sensorManager = (SensorManager) ApplicationLoader.applicationContext.getSystemService("sensor");
+                    lightSensor = sensorManager.getDefaultSensor(5);
+                }
+                if (!lightSensorRegistered) {
+                    Sensor sensor = lightSensor;
+                    if (sensor != null) {
+                        sensorManager.registerListener(ambientSensorListener, sensor, 500000);
+                        lightSensorRegistered = true;
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("light sensor registered");
+                        }
+                    }
+                }
+                if (lastBrightnessValue <= autoNightBrighnessThreshold) {
+                    if (!switchNightRunnableScheduled) {
+                        return 2;
+                    }
+                } else if (!switchDayRunnableScheduled) {
+                    return 1;
+                }
+            } else if (i == 3) {
+                i = ApplicationLoader.applicationContext.getResources().getConfiguration().uiMode & 48;
+                if (i == 0 || i == 16) {
+                    return 1;
+                }
+                return i != 32 ? 0 : 2;
+            } else if (i == 0) {
+                return 1;
+            }
+        }
+    }
+
+    public static void checkAutoNightThemeConditions(boolean z) {
+        if (previousTheme == null) {
+            if (switchNightThemeDelay > 0) {
+                long uptimeMillis = SystemClock.uptimeMillis();
+                long j = uptimeMillis - lastDelayUpdateTime;
+                lastDelayUpdateTime = uptimeMillis;
+                switchNightThemeDelay = (int) (((long) switchNightThemeDelay) - j);
+                if (switchNightThemeDelay > 0) {
+                    return;
+                }
+            }
+            boolean z2 = false;
+            if (z) {
+                if (switchNightRunnableScheduled) {
+                    switchNightRunnableScheduled = false;
+                    AndroidUtilities.cancelRunOnUIThread(switchNightBrightnessRunnable);
+                }
+                if (switchDayRunnableScheduled) {
+                    switchDayRunnableScheduled = false;
+                    AndroidUtilities.cancelRunOnUIThread(switchDayBrightnessRunnable);
+                }
+            }
+            cancelAutoNightThemeCallbacks();
+            int needSwitchToTheme = needSwitchToTheme();
+            if (needSwitchToTheme != 0) {
+                if (needSwitchToTheme == 2) {
+                    z2 = true;
+                }
+                applyDayNightThemeMaybe(z2);
+            }
+            if (z) {
+                lastThemeSwitchTime = 0;
+            }
+        }
     }
 
     private static void applyDayNightThemeMaybe(boolean z) {

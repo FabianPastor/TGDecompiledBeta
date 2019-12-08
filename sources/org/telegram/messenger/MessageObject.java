@@ -5624,12 +5624,14 @@ public class MessageObject {
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             PhotoSize photoSize = (PhotoSize) arrayList.get(i);
-            int size2 = arrayList2.size();
-            for (int i2 = 0; i2 < size2; i2++) {
-                PhotoSize photoSize2 = (PhotoSize) arrayList2.get(i2);
-                if (!(photoSize2 instanceof TL_photoSizeEmpty) && !(photoSize2 instanceof TL_photoCachedSize) && photoSize2.type.equals(photoSize.type)) {
-                    photoSize.location = photoSize2.location;
-                    break;
+            if (photoSize != null) {
+                int size2 = arrayList2.size();
+                for (int i2 = 0; i2 < size2; i2++) {
+                    PhotoSize photoSize2 = (PhotoSize) arrayList2.get(i2);
+                    if (!(photoSize2 instanceof TL_photoSizeEmpty) && !(photoSize2 instanceof TL_photoCachedSize) && photoSize2 != null && photoSize2.type.equals(photoSize.type)) {
+                        photoSize.location = photoSize2.location;
+                        break;
+                    }
                 }
             }
         }

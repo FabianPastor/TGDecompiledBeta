@@ -1801,8 +1801,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            /* JADX WARNING: Missing block: B:28:0x00d3, code skipped:
-            if (java.lang.Math.abs(r0) > 1) goto L_0x00e1;
+            /* JADX WARNING: Missing block: B:30:0x00d9, code skipped:
+            if (java.lang.Math.abs(r0) > 1) goto L_0x00e7;
      */
             public void onScrolled(androidx.recyclerview.widget.RecyclerView r6, int r7, int r8) {
                 /*
@@ -1859,89 +1859,92 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
             L_0x0082:
                 r8 = r5.wasManualScroll;
-                if (r8 == 0) goto L_0x010c;
+                if (r8 == 0) goto L_0x0112;
             L_0x0086:
                 r8 = org.telegram.ui.DialogsActivity.this;
                 r8 = r8.floatingButtonContainer;
                 r8 = r8.getVisibility();
                 r0 = 8;
-                if (r8 == r0) goto L_0x010c;
+                if (r8 == r0) goto L_0x0112;
             L_0x0094:
+                r8 = r6.getChildCount();
+                if (r8 <= 0) goto L_0x0112;
+            L_0x009a:
                 r8 = 0;
                 r0 = r6.getChildAt(r8);
                 r6 = r6.findContainingViewHolder(r0);
                 r2 = org.telegram.ui.DialogsActivity.this;
                 r2 = r2.hasHiddenArchive();
-                if (r2 == 0) goto L_0x00ad;
-            L_0x00a5:
-                if (r6 == 0) goto L_0x010c;
-            L_0x00a7:
-                r6 = r6.getAdapterPosition();
-                if (r6 == 0) goto L_0x010c;
+                if (r2 == 0) goto L_0x00b3;
+            L_0x00ab:
+                if (r6 == 0) goto L_0x0112;
             L_0x00ad:
-                if (r0 == 0) goto L_0x00b4;
-            L_0x00af:
-                r6 = r0.getTop();
-                goto L_0x00b5;
-            L_0x00b4:
-                r6 = 0;
+                r6 = r6.getAdapterPosition();
+                if (r6 == 0) goto L_0x0112;
+            L_0x00b3:
+                if (r0 == 0) goto L_0x00ba;
             L_0x00b5:
+                r6 = r0.getTop();
+                goto L_0x00bb;
+            L_0x00ba:
+                r6 = 0;
+            L_0x00bb:
                 r0 = org.telegram.ui.DialogsActivity.this;
                 r0 = r0.prevPosition;
-                if (r0 != r7) goto L_0x00d6;
-            L_0x00bd:
+                if (r0 != r7) goto L_0x00dc;
+            L_0x00c3:
                 r0 = org.telegram.ui.DialogsActivity.this;
                 r0 = r0.prevTop;
                 r0 = r0 - r6;
                 r2 = org.telegram.ui.DialogsActivity.this;
                 r2 = r2.prevTop;
-                if (r6 >= r2) goto L_0x00ce;
-            L_0x00cc:
+                if (r6 >= r2) goto L_0x00d4;
+            L_0x00d2:
                 r2 = 1;
-                goto L_0x00cf;
-            L_0x00ce:
+                goto L_0x00d5;
+            L_0x00d4:
                 r2 = 0;
-            L_0x00cf:
-                r0 = java.lang.Math.abs(r0);
-                if (r0 <= r1) goto L_0x00e2;
             L_0x00d5:
-                goto L_0x00e1;
-            L_0x00d6:
+                r0 = java.lang.Math.abs(r0);
+                if (r0 <= r1) goto L_0x00e8;
+            L_0x00db:
+                goto L_0x00e7;
+            L_0x00dc:
                 r0 = org.telegram.ui.DialogsActivity.this;
                 r0 = r0.prevPosition;
-                if (r7 <= r0) goto L_0x00e0;
-            L_0x00de:
-                r2 = 1;
-                goto L_0x00e1;
-            L_0x00e0:
-                r2 = 0;
-            L_0x00e1:
-                r8 = 1;
-            L_0x00e2:
-                if (r8 == 0) goto L_0x00fd;
+                if (r7 <= r0) goto L_0x00e6;
             L_0x00e4:
+                r2 = 1;
+                goto L_0x00e7;
+            L_0x00e6:
+                r2 = 0;
+            L_0x00e7:
+                r8 = 1;
+            L_0x00e8:
+                if (r8 == 0) goto L_0x0103;
+            L_0x00ea:
                 r8 = org.telegram.ui.DialogsActivity.this;
                 r8 = r8.scrollUpdated;
-                if (r8 == 0) goto L_0x00fd;
-            L_0x00ec:
-                if (r2 != 0) goto L_0x00f8;
-            L_0x00ee:
-                if (r2 != 0) goto L_0x00fd;
-            L_0x00f0:
+                if (r8 == 0) goto L_0x0103;
+            L_0x00f2:
+                if (r2 != 0) goto L_0x00fe;
+            L_0x00f4:
+                if (r2 != 0) goto L_0x0103;
+            L_0x00f6:
                 r8 = org.telegram.ui.DialogsActivity.this;
                 r8 = r8.scrollingManually;
-                if (r8 == 0) goto L_0x00fd;
-            L_0x00f8:
+                if (r8 == 0) goto L_0x0103;
+            L_0x00fe:
                 r8 = org.telegram.ui.DialogsActivity.this;
                 r8.hideFloatingButton(r2);
-            L_0x00fd:
+            L_0x0103:
                 r8 = org.telegram.ui.DialogsActivity.this;
                 r8.prevPosition = r7;
                 r7 = org.telegram.ui.DialogsActivity.this;
                 r7.prevTop = r6;
                 r6 = org.telegram.ui.DialogsActivity.this;
                 r6.scrollUpdated = r1;
-            L_0x010c:
+            L_0x0112:
                 return;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity$AnonymousClass9.onScrolled(androidx.recyclerview.widget.RecyclerView, int, int):void");

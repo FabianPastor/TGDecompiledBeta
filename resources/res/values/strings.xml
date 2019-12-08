@@ -2450,7 +2450,7 @@
     <string name="ScamMessage">SCAM</string>
     <string name="Schedule">Schedule</string>
     <string name="ScheduleMessage">Schedule message</string>
-    <string name="ScheduleWhenOnline">Send when %1$s is online</string>
+    <string name="ScheduleWhenOnline">Send when %1$s comes online</string>
     <string name="ScheduledMessages">Scheduled messages</string>
     <string name="ScreenCapture">Show App Content in Task Switcher</string>
     <string name="ScreenCaptureAlert">This will hide the contents of your chats or chat list from the task switcher, but you will not be able to take screenshots on Telegram.\10\10You may need to restart the app for this to take effect.</string>

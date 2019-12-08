@@ -1183,17 +1183,19 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
             /* Access modifiers changed, original: protected */
             public void onDraw(Canvas canvas) {
-                getLocationInWindow(this.loc);
-                if (VERSION.SDK_INT < 21) {
-                    int[] iArr = this.loc;
-                    iArr[1] = iArr[1] - AndroidUtilities.statusBarHeight;
-                }
-                if (ThemePreviewActivity.this.actionBar2.getTranslationY() != ((float) this.loc[1])) {
-                    ThemePreviewActivity.this.actionBar2.setTranslationY((float) (-this.loc[1]));
-                    ThemePreviewActivity.this.page2.invalidate();
-                }
-                if (SystemClock.uptimeMillis() < ThemePreviewActivity.this.watchForKeyboardEndTime) {
-                    invalidate();
+                if (!AndroidUtilities.usingHardwareInput) {
+                    getLocationInWindow(this.loc);
+                    if (VERSION.SDK_INT < 21) {
+                        int[] iArr = this.loc;
+                        iArr[1] = iArr[1] - AndroidUtilities.statusBarHeight;
+                    }
+                    if (ThemePreviewActivity.this.actionBar2.getTranslationY() != ((float) this.loc[1])) {
+                        ThemePreviewActivity.this.actionBar2.setTranslationY((float) (-this.loc[1]));
+                        ThemePreviewActivity.this.page2.invalidate();
+                    }
+                    if (SystemClock.uptimeMillis() < ThemePreviewActivity.this.watchForKeyboardEndTime) {
+                        invalidate();
+                    }
                 }
             }
         };

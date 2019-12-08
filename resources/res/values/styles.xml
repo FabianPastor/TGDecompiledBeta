@@ -9,6 +9,12 @@
         <item name="android:title" />
         <item name="android:logo">@drawable/transparent</item>
     </style>
+    <style name="ActionBar.Transparent.TMessages.Start">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:background">#fvar_d3a</item>
+        <item name="android:title" />
+        <item name="android:logo">@drawable/transparent</item>
+    </style>
     <style name="DialogNoAnimation">
         <item name="android:windowEnterAnimation">@anim/no_animation</item>
         <item name="android:windowExitAnimation">@anim/no_animation</item>
@@ -91,6 +97,12 @@
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Transparent.TMessages.Start</item>
+    </style>
+    <style name="Theme.TMessages.Start">
+        <item name="android:colorBackground">#1var_</item>
+        <item name="android:windowBackground">#1var_</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarStyle">@style/ActionBar.Transparent.TMessages.Start</item>
     </style>
     <style name="Theme.TMessages.Transparent">
