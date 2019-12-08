@@ -542,7 +542,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         manageChatUserCell.setData(user, null, access$3600, z);
                         return;
                     } else if (ChatUsersActivity.this.type == 0) {
-                        formatString = (!z3 || ChatUsersActivity.this.getMessagesController().getUser(Integer.valueOf(i4)) == null) ? null : LocaleController.formatString("UserRemovedBy", NUM, UserObject.getUserName(user));
+                        formatString = (!z3 || ChatUsersActivity.this.getMessagesController().getUser(Integer.valueOf(i4)) == null) ? null : LocaleController.formatString("UserRemovedBy", NUM, UserObject.getUserName(ChatUsersActivity.this.getMessagesController().getUser(Integer.valueOf(i4))));
                         if (i2 != access$3100 - 1) {
                             z = true;
                         }
@@ -555,7 +555,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             if (z2) {
                                 User user2 = ChatUsersActivity.this.getMessagesController().getUser(Integer.valueOf(i5));
                                 if (user2 != null) {
-                                    formatString = user2.id == user.id ? LocaleController.getString("ChannelAdministrator", NUM) : LocaleController.formatString("EditAdminPromotedBy", NUM, UserObject.getUserName(user));
+                                    formatString = user2.id == user.id ? LocaleController.getString("ChannelAdministrator", NUM) : LocaleController.formatString("EditAdminPromotedBy", NUM, UserObject.getUserName(user2));
                                 }
                             }
                             formatString = null;
