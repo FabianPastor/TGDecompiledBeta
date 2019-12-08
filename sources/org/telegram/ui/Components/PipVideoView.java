@@ -456,15 +456,15 @@ public class PipVideoView {
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0116  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0117  */
     /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0182  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0116  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0182  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0184  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0117  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0184  */
     /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0116  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0117  */
     /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0182  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0184  */
     private void animateToBoundsMaybe() {
         /*
         r16 = this;
@@ -492,51 +492,51 @@ public class PipVideoView {
         r13 = "sidex";
         r14 = "x";
         r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        if (r10 <= r9) goto L_0x00e7;
-    L_0x003d:
+        if (r10 <= r9) goto L_0x00e8;
+    L_0x003e:
         r10 = r0.windowLayoutParams;
         r10 = r10.x;
-        if (r10 >= 0) goto L_0x004c;
-    L_0x0043:
+        if (r10 >= 0) goto L_0x004d;
+    L_0x0044:
         r2 = r0.videoWidth;
         r2 = -r2;
         r2 = r2 / 4;
-        if (r10 <= r2) goto L_0x004c;
-    L_0x004a:
-        goto L_0x00e7;
-    L_0x004c:
+        if (r10 <= r2) goto L_0x004d;
+    L_0x004b:
+        goto L_0x00e8;
+    L_0x004d:
         r2 = r0.windowLayoutParams;
         r2 = r2.x;
         r2 = r5 - r2;
         r2 = java.lang.Math.abs(r2);
-        if (r2 <= r9) goto L_0x00b9;
-    L_0x0058:
+        if (r2 <= r9) goto L_0x00ba;
+    L_0x0059:
         r2 = r0.windowLayoutParams;
         r2 = r2.x;
         r10 = org.telegram.messenger.AndroidUtilities.displaySize;
         r10 = r10.x;
         r11 = r0.videoWidth;
         r3 = r10 - r11;
-        if (r2 <= r3) goto L_0x006e;
-    L_0x0066:
+        if (r2 <= r3) goto L_0x006f;
+    L_0x0067:
         r11 = r11 / 4;
         r11 = r11 * 3;
         r10 = r10 - r11;
-        if (r2 >= r10) goto L_0x006e;
-    L_0x006d:
-        goto L_0x00b9;
+        if (r2 >= r10) goto L_0x006f;
     L_0x006e:
+        goto L_0x00ba;
+    L_0x006f:
         r2 = r0.windowView;
         r2 = r2.getAlpha();
         r2 = (r2 > r15 ? 1 : (r2 == r15 ? 0 : -1));
-        if (r2 == 0) goto L_0x00a5;
-    L_0x0078:
+        if (r2 == 0) goto L_0x00a6;
+    L_0x0079:
         r1 = new java.util.ArrayList;
         r1.<init>();
         r2 = r0.windowLayoutParams;
         r2 = r2.x;
-        if (r2 >= 0) goto L_0x0093;
-    L_0x0083:
+        if (r2 >= 0) goto L_0x0094;
+    L_0x0084:
         r2 = new int[r4];
         r3 = r0.videoWidth;
         r3 = -r3;
@@ -544,8 +544,8 @@ public class PipVideoView {
         r2[r5] = r3;
         r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2);
         r1.add(r2);
-        goto L_0x00a3;
-    L_0x0093:
+        goto L_0x00a4;
+    L_0x0094:
         r5 = 0;
         r2 = new int[r4];
         r3 = org.telegram.messenger.AndroidUtilities.displaySize;
@@ -553,10 +553,10 @@ public class PipVideoView {
         r2[r5] = r3;
         r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2);
         r1.add(r2);
-    L_0x00a3:
+    L_0x00a4:
         r10 = 1;
-        goto L_0x0114;
-    L_0x00a5:
+        goto L_0x0115;
+    L_0x00a6:
         r2 = r0.windowLayoutParams;
         r2 = r2.x;
         r2 = r2 - r1;
@@ -569,32 +569,32 @@ public class PipVideoView {
         r1 = 2;
         r8.putInt(r13, r1);
         r1 = 0;
-        goto L_0x0113;
-    L_0x00b9:
+        goto L_0x0114;
+    L_0x00ba:
         r1 = new java.util.ArrayList;
         r1.<init>();
         r8.putInt(r13, r4);
         r2 = r0.windowView;
         r2 = r2.getAlpha();
         r2 = (r2 > r15 ? 1 : (r2 == r15 ? 0 : -1));
-        if (r2 == 0) goto L_0x00da;
-    L_0x00cb:
+        if (r2 == 0) goto L_0x00db;
+    L_0x00cc:
         r2 = r0.windowView;
         r3 = new float[r4];
         r10 = 0;
         r3[r10] = r15;
         r2 = android.animation.ObjectAnimator.ofFloat(r2, r12, r3);
         r1.add(r2);
-        goto L_0x00db;
-    L_0x00da:
-        r10 = 0;
+        goto L_0x00dc;
     L_0x00db:
+        r10 = 0;
+    L_0x00dc:
         r2 = new int[r4];
         r2[r10] = r5;
         r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2);
         r1.add(r2);
-        goto L_0x0114;
-    L_0x00e7:
+        goto L_0x0115;
+    L_0x00e8:
         r10 = 0;
         r2 = new java.util.ArrayList;
         r2.<init>();
@@ -602,58 +602,58 @@ public class PipVideoView {
         r3 = r0.windowView;
         r3 = r3.getAlpha();
         r3 = (r3 > r15 ? 1 : (r3 == r15 ? 0 : -1));
-        if (r3 == 0) goto L_0x0107;
-    L_0x00fa:
+        if (r3 == 0) goto L_0x0108;
+    L_0x00fb:
         r3 = r0.windowView;
         r5 = new float[r4];
         r5[r10] = r15;
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r12, r5);
         r2.add(r3);
-    L_0x0107:
+    L_0x0108:
         r3 = new int[r4];
         r3[r10] = r1;
         r1 = android.animation.ObjectAnimator.ofInt(r0, r14, r3);
         r2.add(r1);
         r1 = r2;
-    L_0x0113:
-        r10 = 0;
     L_0x0114:
-        if (r10 != 0) goto L_0x0180;
-    L_0x0116:
+        r10 = 0;
+    L_0x0115:
+        if (r10 != 0) goto L_0x0182;
+    L_0x0117:
         r2 = r0.windowLayoutParams;
         r2 = r2.y;
         r2 = r6 - r2;
         r2 = java.lang.Math.abs(r2);
         r3 = "y";
         r5 = "sidey";
-        if (r2 <= r9) goto L_0x0167;
-    L_0x0126:
+        if (r2 <= r9) goto L_0x0169;
+    L_0x0128:
         r2 = r0.windowLayoutParams;
         r2 = r2.y;
         r11 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight();
-        if (r2 > r11) goto L_0x0131;
-    L_0x0130:
-        goto L_0x0167;
-    L_0x0131:
+        if (r2 > r11) goto L_0x0133;
+    L_0x0132:
+        goto L_0x0169;
+    L_0x0133:
         r2 = r0.windowLayoutParams;
         r2 = r2.y;
         r2 = r7 - r2;
         r2 = java.lang.Math.abs(r2);
-        if (r2 > r9) goto L_0x0154;
-    L_0x013d:
-        if (r1 != 0) goto L_0x0144;
+        if (r2 > r9) goto L_0x0156;
     L_0x013f:
+        if (r1 != 0) goto L_0x0146;
+    L_0x0141:
         r1 = new java.util.ArrayList;
         r1.<init>();
-    L_0x0144:
+    L_0x0146:
         r8.putInt(r5, r4);
         r2 = new int[r4];
         r5 = 0;
         r2[r5] = r7;
         r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r2);
         r1.add(r2);
-        goto L_0x017d;
-    L_0x0154:
+        goto L_0x017f;
+    L_0x0156:
         r2 = r0.windowLayoutParams;
         r2 = r2.y;
         r2 = r2 - r6;
@@ -665,39 +665,39 @@ public class PipVideoView {
         r8.putFloat(r3, r2);
         r2 = 2;
         r8.putInt(r5, r2);
-        goto L_0x017d;
-    L_0x0167:
-        if (r1 != 0) goto L_0x016e;
+        goto L_0x017f;
     L_0x0169:
+        if (r1 != 0) goto L_0x0170;
+    L_0x016b:
         r1 = new java.util.ArrayList;
         r1.<init>();
-    L_0x016e:
+    L_0x0170:
         r2 = 0;
         r8.putInt(r5, r2);
         r5 = new int[r4];
         r5[r2] = r6;
         r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r5);
         r1.add(r2);
-    L_0x017d:
+    L_0x017f:
         r8.commit();
-    L_0x0180:
-        if (r1 == 0) goto L_0x01bb;
     L_0x0182:
+        if (r1 == 0) goto L_0x01bd;
+    L_0x0184:
         r2 = r0.decelerateInterpolator;
-        if (r2 != 0) goto L_0x018d;
-    L_0x0186:
+        if (r2 != 0) goto L_0x018f;
+    L_0x0188:
         r2 = new android.view.animation.DecelerateInterpolator;
         r2.<init>();
         r0.decelerateInterpolator = r2;
-    L_0x018d:
+    L_0x018f:
         r2 = new android.animation.AnimatorSet;
         r2.<init>();
         r3 = r0.decelerateInterpolator;
         r2.setInterpolator(r3);
         r5 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
         r2.setDuration(r5);
-        if (r10 == 0) goto L_0x01b5;
-    L_0x019e:
+        if (r10 == 0) goto L_0x01b7;
+    L_0x01a0:
         r3 = r0.windowView;
         r4 = new float[r4];
         r5 = 0;
@@ -708,10 +708,10 @@ public class PipVideoView {
         r3 = new org.telegram.ui.Components.PipVideoView$2;
         r3.<init>();
         r2.addListener(r3);
-    L_0x01b5:
+    L_0x01b7:
         r2.playTogether(r1);
         r2.start();
-    L_0x01bb:
+    L_0x01bd:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipVideoView.animateToBoundsMaybe():void");

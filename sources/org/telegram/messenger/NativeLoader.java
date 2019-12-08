@@ -202,8 +202,8 @@ public class NativeLoader {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NativeLoader.loadFromZip(android.content.Context, java.io.File, java.io.File, java.lang.String):boolean");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x00e2 A:{Catch:{ all -> 0x001c }} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x00e7 A:{Catch:{ all -> 0x001c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0101  */
     /* JADX WARNING: Missing block: B:13:0x001b, code skipped:
             return;
      */
@@ -212,7 +212,7 @@ public class NativeLoader {
         /*
         r0 = org.telegram.messenger.NativeLoader.class;
         monitor-enter(r0);
-        r1 = nativeLoaded;	 Catch:{ all -> 0x010f }
+        r1 = nativeLoaded;	 Catch:{ all -> 0x0114 }
         if (r1 == 0) goto L_0x0009;
     L_0x0007:
         monitor-exit(r0);
@@ -232,87 +232,87 @@ public class NativeLoader {
         return;
     L_0x001c:
         r7 = move-exception;
-        goto L_0x00fe;
+        goto L_0x0103;
     L_0x001f:
         r2 = move-exception;
         org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x001c }
-        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0090 }
-        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0090 }
+        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0094 }
+        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0094 }
         r3 = "x86_64";
-        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0090 }
-        if (r2 == 0) goto L_0x0032;
-    L_0x002f:
+        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0094 }
+        if (r2 == 0) goto L_0x0034;
+    L_0x0030:
         r2 = "x86_64";
-        goto L_0x0096;
-    L_0x0032:
-        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0090 }
+        goto L_0x009a;
+    L_0x0034:
+        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0094 }
         r3 = "arm64-v8a";
-        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0090 }
-        if (r2 == 0) goto L_0x003f;
-    L_0x003c:
+        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0094 }
+        if (r2 == 0) goto L_0x0041;
+    L_0x003e:
         r2 = "arm64-v8a";
-        goto L_0x0096;
-    L_0x003f:
-        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0090 }
+        goto L_0x009a;
+    L_0x0041:
+        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0094 }
         r3 = "armeabi-v7a";
-        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0090 }
-        if (r2 == 0) goto L_0x004c;
-    L_0x0049:
+        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0094 }
+        if (r2 == 0) goto L_0x004e;
+    L_0x004b:
         r2 = "armeabi-v7a";
-        goto L_0x0096;
-    L_0x004c:
-        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0090 }
+        goto L_0x009a;
+    L_0x004e:
+        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0094 }
         r3 = "armeabi";
-        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0090 }
-        if (r2 == 0) goto L_0x0059;
-    L_0x0056:
+        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0094 }
+        if (r2 == 0) goto L_0x005b;
+    L_0x0058:
         r2 = "armeabi";
-        goto L_0x0096;
-    L_0x0059:
-        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0090 }
+        goto L_0x009a;
+    L_0x005b:
+        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0094 }
         r3 = "x86";
-        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0090 }
-        if (r2 == 0) goto L_0x0066;
-    L_0x0063:
-        r2 = "x86";
-        goto L_0x0096;
+        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0094 }
+        if (r2 == 0) goto L_0x006a;
     L_0x0066:
-        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0090 }
+        r2 = "x86";
+        goto L_0x009a;
+    L_0x006a:
+        r2 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0094 }
         r3 = "mips";
-        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0090 }
-        if (r2 == 0) goto L_0x0073;
-    L_0x0070:
+        r2 = r2.equalsIgnoreCase(r3);	 Catch:{ Exception -> 0x0094 }
+        if (r2 == 0) goto L_0x0077;
+    L_0x0074:
         r2 = "mips";
-        goto L_0x0096;
-    L_0x0073:
+        goto L_0x009a;
+    L_0x0077:
         r2 = "armeabi";
-        r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0090 }
-        if (r3 == 0) goto L_0x0096;
-    L_0x0079:
-        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0090 }
-        r3.<init>();	 Catch:{ Exception -> 0x0090 }
+        r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0094 }
+        if (r3 == 0) goto L_0x009a;
+    L_0x007d:
+        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0094 }
+        r3.<init>();	 Catch:{ Exception -> 0x0094 }
         r4 = "Unsupported arch: ";
-        r3.append(r4);	 Catch:{ Exception -> 0x0090 }
-        r4 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0090 }
-        r3.append(r4);	 Catch:{ Exception -> 0x0090 }
-        r3 = r3.toString();	 Catch:{ Exception -> 0x0090 }
-        org.telegram.messenger.FileLog.e(r3);	 Catch:{ Exception -> 0x0090 }
-        goto L_0x0096;
-    L_0x0090:
+        r3.append(r4);	 Catch:{ Exception -> 0x0094 }
+        r4 = android.os.Build.CPU_ABI;	 Catch:{ Exception -> 0x0094 }
+        r3.append(r4);	 Catch:{ Exception -> 0x0094 }
+        r3 = r3.toString();	 Catch:{ Exception -> 0x0094 }
+        org.telegram.messenger.FileLog.e(r3);	 Catch:{ Exception -> 0x0094 }
+        goto L_0x009a;
+    L_0x0094:
         r2 = move-exception;
         org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x001c }
         r2 = "armeabi";
-    L_0x0096:
+    L_0x009a:
         r3 = "os.arch";
         r3 = java.lang.System.getProperty(r3);	 Catch:{ all -> 0x001c }
-        if (r3 == 0) goto L_0x00a8;
-    L_0x009e:
+        if (r3 == 0) goto L_0x00ad;
+    L_0x00a2:
         r4 = "686";
         r3 = r3.contains(r4);	 Catch:{ all -> 0x001c }
-        if (r3 == 0) goto L_0x00a8;
-    L_0x00a6:
+        if (r3 == 0) goto L_0x00ad;
+    L_0x00aa:
         r2 = "x86";
-    L_0x00a8:
+    L_0x00ad:
         r3 = new java.io.File;	 Catch:{ all -> 0x001c }
         r4 = r7.getFilesDir();	 Catch:{ all -> 0x001c }
         r5 = "lib";
@@ -322,27 +322,27 @@ public class NativeLoader {
         r5 = "libtmessages.30loc.so";
         r4.<init>(r3, r5);	 Catch:{ all -> 0x001c }
         r5 = r4.exists();	 Catch:{ all -> 0x001c }
-        if (r5 == 0) goto L_0x00de;
-    L_0x00c3:
-        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Error -> 0x00d7 }
-        if (r5 == 0) goto L_0x00cc;
-    L_0x00c7:
-        r5 = "Load local lib";
-        org.telegram.messenger.FileLog.d(r5);	 Catch:{ Error -> 0x00d7 }
+        if (r5 == 0) goto L_0x00e3;
+    L_0x00c8:
+        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Error -> 0x00dc }
+        if (r5 == 0) goto L_0x00d1;
     L_0x00cc:
-        r5 = r4.getAbsolutePath();	 Catch:{ Error -> 0x00d7 }
-        java.lang.System.load(r5);	 Catch:{ Error -> 0x00d7 }
-        nativeLoaded = r1;	 Catch:{ Error -> 0x00d7 }
+        r5 = "Load local lib";
+        org.telegram.messenger.FileLog.d(r5);	 Catch:{ Error -> 0x00dc }
+    L_0x00d1:
+        r5 = r4.getAbsolutePath();	 Catch:{ Error -> 0x00dc }
+        java.lang.System.load(r5);	 Catch:{ Error -> 0x00dc }
+        nativeLoaded = r1;	 Catch:{ Error -> 0x00dc }
         monitor-exit(r0);
         return;
-    L_0x00d7:
+    L_0x00dc:
         r5 = move-exception;
         org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x001c }
         r4.delete();	 Catch:{ all -> 0x001c }
-    L_0x00de:
+    L_0x00e3:
         r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x001c }
-        if (r5 == 0) goto L_0x00f6;
-    L_0x00e2:
+        if (r5 == 0) goto L_0x00fb;
+    L_0x00e7:
         r5 = new java.lang.StringBuilder;	 Catch:{ all -> 0x001c }
         r5.<init>();	 Catch:{ all -> 0x001c }
         r6 = "Library not found, arch = ";
@@ -350,26 +350,26 @@ public class NativeLoader {
         r5.append(r2);	 Catch:{ all -> 0x001c }
         r5 = r5.toString();	 Catch:{ all -> 0x001c }
         org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x001c }
-    L_0x00f6:
+    L_0x00fb:
         r7 = loadFromZip(r7, r3, r4, r2);	 Catch:{ all -> 0x001c }
-        if (r7 == 0) goto L_0x0101;
-    L_0x00fc:
-        monitor-exit(r0);
-        return;
-    L_0x00fe:
-        r7.printStackTrace();	 Catch:{ all -> 0x010f }
+        if (r7 == 0) goto L_0x0106;
     L_0x0101:
-        r7 = "tmessages.30";
-        java.lang.System.loadLibrary(r7);	 Catch:{ Error -> 0x0109 }
-        nativeLoaded = r1;	 Catch:{ Error -> 0x0109 }
-        goto L_0x010d;
-    L_0x0109:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x010f }
-    L_0x010d:
         monitor-exit(r0);
         return;
-    L_0x010f:
+    L_0x0103:
+        r7.printStackTrace();	 Catch:{ all -> 0x0114 }
+    L_0x0106:
+        r7 = "tmessages.30";
+        java.lang.System.loadLibrary(r7);	 Catch:{ Error -> 0x010e }
+        nativeLoaded = r1;	 Catch:{ Error -> 0x010e }
+        goto L_0x0112;
+    L_0x010e:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x0114 }
+    L_0x0112:
+        monitor-exit(r0);
+        return;
+    L_0x0114:
         r7 = move-exception;
         monitor-exit(r0);
         throw r7;
