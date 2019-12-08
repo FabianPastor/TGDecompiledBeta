@@ -4706,8 +4706,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     }
 
     static /* synthetic */ void lambda$sendRegistrationToServer$6(String str) {
+        ConnectionsManager.setRegId(str, SharedConfig.pushStringStatus);
         if (str != null) {
-            ConnectionsManager.setRegId(str);
             SharedConfig.pushString = str;
             for (int i = 0; i < 3; i++) {
                 UserConfig instance = UserConfig.getInstance(i);

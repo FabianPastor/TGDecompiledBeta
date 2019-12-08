@@ -63,6 +63,7 @@ public class SharedConfig {
     public static byte[] pushAuthKey = null;
     public static byte[] pushAuthKeyId = null;
     public static String pushString = "";
+    public static String pushStringStatus = "";
     public static boolean raiseToSpeak = true;
     public static int repeatMode;
     public static boolean roundCamera16to9 = true;

@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import java.io.File;
@@ -103,7 +104,15 @@ public class ApplicationLoader extends Application {
             for (int i = 0; i < 3; i++) {
                 UserConfig.getInstance(i).loadConfig();
                 MessagesController.getInstance(i);
-                ConnectionsManager.getInstance(i);
+                if (i == 0) {
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append("__FIREBASE_GENERATING_SINCE_");
+                    stringBuilder2.append(ConnectionsManager.getInstance(i).getCurrentTime());
+                    stringBuilder2.append("__");
+                    SharedConfig.pushStringStatus = stringBuilder2.toString();
+                } else {
+                    ConnectionsManager.getInstance(i);
+                }
                 User currentUser = UserConfig.getInstance(i).getCurrentUser();
                 if (currentUser != null) {
                     MessagesController.getInstance(i).putUser(currentUser, true);
@@ -168,10 +177,10 @@ public class ApplicationLoader extends Application {
     }
 
     private void initPlayServices() {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ApplicationLoader$3dc_HWgCQpr4N8GC4VMp2iXLXdk(this), 1000);
+        AndroidUtilities.runOnUIThread(new -$$Lambda$ApplicationLoader$eNlk5BY6GTGmalHcs_FU-Fhu7vQ(this), 1000);
     }
 
-    public /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
+    public /* synthetic */ void lambda$initPlayServices$3$ApplicationLoader() {
         if (checkPlayServices()) {
             String str = SharedConfig.pushString;
             if (TextUtils.isEmpty(str)) {
@@ -184,15 +193,21 @@ public class ApplicationLoader extends Application {
                 stringBuilder.append(str);
                 FileLog.d(stringBuilder.toString());
             }
-            Utilities.globalQueue.postRunnable(-$$Lambda$ApplicationLoader$K0O6bl6HEmUlzvsgT8XUBevJ1qw.INSTANCE);
-        } else if (BuildVars.LOGS_ENABLED) {
+            Utilities.globalQueue.postRunnable(-$$Lambda$ApplicationLoader$Zs8m_Ncm6w1SB-p2_GI8M9mBWWQ.INSTANCE);
+            return;
+        }
+        if (BuildVars.LOGS_ENABLED) {
             FileLog.d("No valid Google Play Services APK found.");
         }
+        SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
+        GcmPushListenerService.sendRegistrationToServer(null);
     }
 
-    static /* synthetic */ void lambda$null$1() {
+    static /* synthetic */ void lambda$null$2() {
         try {
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(-$$Lambda$ApplicationLoader$1gYYQTJQUwFTHbnWcMMeK6lerQs.INSTANCE);
+            Task instanceId = FirebaseInstanceId.getInstance().getInstanceId();
+            instanceId.addOnSuccessListener(-$$Lambda$ApplicationLoader$1gYYQTJQUwFTHbnWcMMeK6lerQs.INSTANCE);
+            instanceId.addOnFailureListener(-$$Lambda$ApplicationLoader$394ZCZWLmaJTWPaI7WQrKYXFS88.INSTANCE);
         } catch (Throwable th) {
             FileLog.e(th);
         }
@@ -203,6 +218,14 @@ public class ApplicationLoader extends Application {
         if (!TextUtils.isEmpty(token)) {
             GcmPushListenerService.sendRegistrationToServer(token);
         }
+    }
+
+    static /* synthetic */ void lambda$null$1(Exception exception) {
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("Failed to get regid");
+        }
+        SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
+        GcmPushListenerService.sendRegistrationToServer(null);
     }
 
     private boolean checkPlayServices() {

@@ -232,18 +232,17 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             } else {
                 scrollX++;
             }
-            BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
-            if (z && MessageObject.isAnimatedStickerDocument(document)) {
-                backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
-                scrollX++;
-            } else {
-                if (forDocument.lottieAnimation) {
+            if (forDocument != null) {
+                BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
+                if (z && MessageObject.isAnimatedStickerDocument(document)) {
+                    backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
+                } else if (forDocument.lottieAnimation) {
                     backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
                 } else {
                     backupImageView.setImage(forDocument, null, "webp", null, tag2);
                 }
-                scrollX++;
             }
+            scrollX++;
         }
     }
 
@@ -269,15 +268,17 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 } else if (tag instanceof PhotoSize) {
                     forDocument = ImageLocation.getForSticker((PhotoSize) tag, document);
                 }
-                BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
-                if (i4 < i || i4 >= i + i2) {
-                    backupImageView.setImageDrawable(null);
-                } else if (z && MessageObject.isAnimatedStickerDocument(document)) {
-                    backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
-                } else if (forDocument.lottieAnimation) {
-                    backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
-                } else {
-                    backupImageView.setImage(forDocument, null, "webp", null, tag2);
+                if (forDocument != null) {
+                    BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
+                    if (i4 < i || i4 >= i + i2) {
+                        backupImageView.setImageDrawable(null);
+                    } else if (z && MessageObject.isAnimatedStickerDocument(document)) {
+                        backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
+                    } else if (forDocument.lottieAnimation) {
+                        backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
+                    } else {
+                        backupImageView.setImage(forDocument, null, "webp", null, tag2);
+                    }
                 }
             }
             i4++;

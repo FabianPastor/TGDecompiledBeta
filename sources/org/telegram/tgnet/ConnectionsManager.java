@@ -984,7 +984,11 @@ public class ConnectionsManager extends BaseController {
         stringBuilder2 = stringBuilder3.trim().length() == 0 ? str3 : stringBuilder3;
         toLowerCase2 = str2.trim().length() == 0 ? "SDK Unknown" : str2;
         getUserConfig().loadConfig();
-        init(BuildVars.BUILD_VERSION, 103, BuildVars.APP_ID, str5, toLowerCase2, stringBuilder2, str, str6, file2, FileLog.getNetworkLogPath(), SharedConfig.pushString, getUserConfig().getClientUserId(), z);
+        toLowerCase = SharedConfig.pushString;
+        if (TextUtils.isEmpty(toLowerCase) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
+            toLowerCase = SharedConfig.pushStringStatus;
+        }
+        init(BuildVars.BUILD_VERSION, 103, BuildVars.APP_ID, str5, toLowerCase2, stringBuilder2, str, str6, file2, FileLog.getNetworkLogPath(), toLowerCase, getUserConfig().getClientUserId(), z);
     }
 
     public long getCurrentTimeMillis() {
@@ -1162,7 +1166,10 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
-    public static void setRegId(String str) {
+    public static void setRegId(String str, String str2) {
+        if (TextUtils.isEmpty(str) && !TextUtils.isEmpty(str2)) {
+            str = str2;
+        }
         for (int i = 0; i < 3; i++) {
             native_setRegId(i, str);
         }
