@@ -7116,31 +7116,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void hideVoiceHint() {
-        this.voiceHintAnimation = new AnimatorSet();
-        AnimatorSet animatorSet = this.voiceHintAnimation;
-        Animator[] animatorArr = new Animator[1];
-        animatorArr[0] = ObjectAnimator.ofFloat(this.voiceHintTextView, View.ALPHA, new float[]{0.0f});
-        animatorSet.playTogether(animatorArr);
-        this.voiceHintAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                if (animator.equals(ChatActivity.this.voiceHintAnimation)) {
-                    ChatActivity.this.voiceHintAnimation = null;
-                    ChatActivity.this.voiceHintHideRunnable = null;
-                    if (ChatActivity.this.voiceHintTextView != null) {
-                        ChatActivity.this.voiceHintTextView.setVisibility(8);
+        if (this.voiceHintTextView != null) {
+            this.voiceHintAnimation = new AnimatorSet();
+            AnimatorSet animatorSet = this.voiceHintAnimation;
+            Animator[] animatorArr = new Animator[1];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.voiceHintTextView, View.ALPHA, new float[]{0.0f});
+            animatorSet.playTogether(animatorArr);
+            this.voiceHintAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    if (animator.equals(ChatActivity.this.voiceHintAnimation)) {
+                        ChatActivity.this.voiceHintAnimation = null;
+                        ChatActivity.this.voiceHintHideRunnable = null;
+                        if (ChatActivity.this.voiceHintTextView != null) {
+                            ChatActivity.this.voiceHintTextView.setVisibility(8);
+                        }
                     }
                 }
-            }
 
-            public void onAnimationCancel(Animator animator) {
-                if (animator.equals(ChatActivity.this.voiceHintAnimation)) {
-                    ChatActivity.this.voiceHintAnimation = null;
-                    ChatActivity.this.voiceHintHideRunnable = null;
+                public void onAnimationCancel(Animator animator) {
+                    if (animator.equals(ChatActivity.this.voiceHintAnimation)) {
+                        ChatActivity.this.voiceHintAnimation = null;
+                        ChatActivity.this.voiceHintHideRunnable = null;
+                    }
                 }
-            }
-        });
-        this.voiceHintAnimation.setDuration(300);
-        this.voiceHintAnimation.start();
+            });
+            this.voiceHintAnimation.setDuration(300);
+            this.voiceHintAnimation.start();
+        }
     }
 
     private void showVoiceHint(boolean z, boolean z2) {
