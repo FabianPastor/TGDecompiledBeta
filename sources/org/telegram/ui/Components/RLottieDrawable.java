@@ -16,6 +16,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +54,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private volatile boolean nextFrameIsLast;
     private volatile Bitmap nextRenderingBitmap;
     private ArrayList<WeakReference<View>> parentViews;
-    private volatile HashMap<String, Integer> pendingColorUpdates;
+    private volatile ConcurrentHashMap<String, Integer> pendingColorUpdates;
     private volatile Bitmap renderingBitmap;
     private float scaleX;
     private float scaleY;
@@ -126,7 +127,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2) {
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap();
-        this.pendingColorUpdates = new HashMap();
+        this.pendingColorUpdates = new ConcurrentHashMap();
         this.autoRepeat = true;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
@@ -255,7 +256,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     public RLottieDrawable(int i, String str, int i2, int i3, boolean z) {
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap();
-        this.pendingColorUpdates = new HashMap();
+        this.pendingColorUpdates = new ConcurrentHashMap();
         this.autoRepeat = true;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
