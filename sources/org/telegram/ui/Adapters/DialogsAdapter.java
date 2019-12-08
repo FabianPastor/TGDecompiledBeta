@@ -40,6 +40,7 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.DialogsActivity;
@@ -59,6 +60,7 @@ public class DialogsAdapter extends SelectionAdapter {
     private ArrayList<TL_contact> onlineContacts;
     private long openedDialogId;
     private int prevContactsCount;
+    private PullForegroundDrawable pullForegroundDrawable;
     private ArrayList<Long> selectedDialogs;
     private boolean showArchiveHint;
 
@@ -367,6 +369,7 @@ public class DialogsAdapter extends SelectionAdapter {
         switch (i) {
             case 0:
                 dialogCell = new DialogCell(this.mContext, true, false);
+                dialogCell.setArchivedPullAnimation(this.pullForegroundDrawable);
                 break;
             case 1:
                 dialogCell = new LoadingCell(this.mContext);
@@ -558,5 +561,9 @@ public class DialogsAdapter extends SelectionAdapter {
         dialog2.pinnedNum = i3;
         Collections.swap(dialogsArray, fixPosition, fixPosition2);
         super.notifyItemMoved(i, i2);
+    }
+
+    public void setArchivedPullDrawable(PullForegroundDrawable pullForegroundDrawable) {
+        this.pullForegroundDrawable = pullForegroundDrawable;
     }
 }

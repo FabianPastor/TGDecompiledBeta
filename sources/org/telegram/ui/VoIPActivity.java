@@ -1570,7 +1570,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         r4[3] = sharedPreferences.getString("quick_reply_msg4", LocaleController.getString("QuickReplyDefault4", NUM));
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(1);
-        BottomSheet bottomSheet = new BottomSheet(this, true, 0);
+        BottomSheet bottomSheet = new BottomSheet(this, true);
         if (VERSION.SDK_INT >= 21) {
             getWindow().setNavigationBarColor(-13948117);
             bottomSheet.setOnDismissListener(new -$$Lambda$VoIPActivity$FNBtTABZY9SOl53qekJBUNNqq7k(this));

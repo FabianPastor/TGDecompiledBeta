@@ -1,6 +1,8 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.os.Build.VERSION;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView.LayoutParams;
@@ -70,7 +72,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
             this.accountsShowed = z;
             DrawerProfileCell drawerProfileCell = this.profileCell;
             if (drawerProfileCell != null) {
-                drawerProfileCell.setAccountsShowed(this.accountsShowed);
+                drawerProfileCell.setAccountsShowed(this.accountsShowed, z2);
             }
             MessagesController.getGlobalMainSettings().edit().putBoolean("accountsShowed", this.accountsShowed).commit();
             if (!z2) {
@@ -97,21 +99,24 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         return itemViewType == 3 || itemViewType == 4 || itemViewType == 5;
     }
 
-    public /* synthetic */ void lambda$onCreateViewHolder$0$DrawerLayoutAdapter(View view) {
-        setAccountsShowed(((DrawerProfileCell) view).isAccountsShowed(), true);
-    }
-
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View emptyCell;
-        if (i != 0) {
-            emptyCell = i != 2 ? i != 3 ? i != 4 ? i != 5 ? new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f)) : new DrawerAddCell(this.mContext) : new DrawerUserCell(this.mContext) : new DrawerActionCell(this.mContext) : new DividerCell(this.mContext);
+        View drawerProfileCell;
+        if (i == 0) {
+            drawerProfileCell = new DrawerProfileCell(this.mContext);
+            this.profileCell = drawerProfileCell;
+        } else if (i == 2) {
+            drawerProfileCell = new DividerCell(this.mContext);
+        } else if (i == 3) {
+            drawerProfileCell = new DrawerActionCell(this.mContext);
+        } else if (i == 4) {
+            drawerProfileCell = new DrawerUserCell(this.mContext);
+        } else if (i != 5) {
+            drawerProfileCell = new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f));
         } else {
-            this.profileCell = new DrawerProfileCell(this.mContext);
-            this.profileCell.setOnArrowClickListener(new -$$Lambda$DrawerLayoutAdapter$u-CA_vrvN_8Y4_-5-7WI-JZfY_U(this));
-            emptyCell = this.profileCell;
+            drawerProfileCell = new DrawerAddCell(this.mContext);
         }
-        emptyCell.setLayoutParams(new LayoutParams(-1, -2));
-        return new Holder(emptyCell);
+        drawerProfileCell.setLayoutParams(new LayoutParams(-1, -2));
+        return new Holder(drawerProfileCell);
     }
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
@@ -155,51 +160,56 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
             }
             i -= getAccountRowsCount();
         }
-        return i == 3 ? 2 : 3;
+        return this.items.get(i) == null ? 2 : 3;
     }
 
     private void resetItems() {
         this.accountNumbers.clear();
+        Object obj = null;
         for (int i = 0; i < 3; i++) {
             if (UserConfig.getInstance(i).isClientActivated()) {
                 this.accountNumbers.add(Integer.valueOf(i));
             }
         }
-        Collections.sort(this.accountNumbers, -$$Lambda$DrawerLayoutAdapter$4y-nKr_8KM-K0ZE7aMWcSgkl64k.INSTANCE);
+        Collections.sort(this.accountNumbers, -$$Lambda$DrawerLayoutAdapter$mi1sw6PViLc4Y6s0MqsHrA-JKuc.INSTANCE);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
+            if (!(VERSION.SDK_INT < 18 || TextUtils.isEmpty(MessagesController.getInstance(UserConfig.selectedAccount).walletConfig) || TextUtils.isEmpty(MessagesController.getInstance(UserConfig.selectedAccount).walletBlockchainName))) {
+                obj = 1;
+            }
             String str = "SavedMessages";
-            String str2 = "Contacts";
-            String str3 = "NewChannel";
-            String str4 = "NewSecretChat";
-            String str5 = "NewGroup";
+            String str2 = "Calls";
+            String str3 = "Contacts";
+            String str4 = "NewGroup";
             if (Theme.getEventType() == 0) {
-                this.items.add(new Item(2, LocaleController.getString(str5, NUM), NUM));
-                this.items.add(new Item(3, LocaleController.getString(str4, NUM), NUM));
-                this.items.add(new Item(4, LocaleController.getString(str3, NUM), NUM));
-                this.items.add(null);
-                this.items.add(new Item(6, LocaleController.getString(str2, NUM), NUM));
+                this.items.add(new Item(2, LocaleController.getString(str4, NUM), NUM));
+                this.items.add(new Item(6, LocaleController.getString(str3, NUM), NUM));
+                this.items.add(new Item(10, LocaleController.getString(str2, NUM), NUM));
                 this.items.add(new Item(11, LocaleController.getString(str, NUM), NUM));
-                this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
-                this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
                 this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
+                if (obj != null) {
+                    this.items.add(new Item(12, LocaleController.getString("Wallet", NUM), NUM));
+                }
+                this.items.add(null);
+                this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
                 this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
             } else {
-                this.items.add(new Item(2, LocaleController.getString(str5, NUM), NUM));
-                this.items.add(new Item(3, LocaleController.getString(str4, NUM), NUM));
-                this.items.add(new Item(4, LocaleController.getString(str3, NUM), NUM));
-                this.items.add(null);
-                this.items.add(new Item(6, LocaleController.getString(str2, NUM), NUM));
+                this.items.add(new Item(2, LocaleController.getString(str4, NUM), NUM));
+                this.items.add(new Item(6, LocaleController.getString(str3, NUM), NUM));
+                this.items.add(new Item(10, LocaleController.getString(str2, NUM), NUM));
                 this.items.add(new Item(11, LocaleController.getString(str, NUM), NUM));
-                this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
-                this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
+                if (obj != null) {
+                    this.items.add(new Item(12, LocaleController.getString("Wallet", NUM), NUM));
+                }
                 this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
+                this.items.add(null);
+                this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
                 this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
             }
         }
     }
 
-    static /* synthetic */ int lambda$resetItems$1(Integer num, Integer num2) {
+    static /* synthetic */ int lambda$resetItems$0(Integer num, Integer num2) {
         long j = (long) UserConfig.getInstance(num.intValue()).loginTime;
         long j2 = (long) UserConfig.getInstance(num2.intValue()).loginTime;
         if (j > j2) {

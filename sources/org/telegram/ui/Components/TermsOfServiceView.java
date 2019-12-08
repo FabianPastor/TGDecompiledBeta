@@ -1,7 +1,5 @@
 package org.telegram.ui.Components;
 
-import android.animation.ObjectAnimator;
-import android.animation.StateListAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build.VERSION;
@@ -89,21 +87,14 @@ public class TermsOfServiceView extends FrameLayout {
         addView(textView, LayoutHelper.createFrame(-2, -2.0f, 83, 16.0f, 0.0f, 16.0f, 16.0f));
         textView.setOnClickListener(new -$$Lambda$TermsOfServiceView$iC8ls3ZLGFSjERsGKqRFXaObEoI(this));
         textView = new TextView(context2);
-        textView.setText(LocaleController.getString("Accept", NUM).toUpperCase());
+        textView.setText(LocaleController.getString("Accept", NUM));
         textView.setGravity(17);
         textView.setTypeface(AndroidUtilities.getTypeface(str2));
         textView.setTextColor(-1);
-        textView.setTextSize(1, 16.0f);
-        textView.setBackgroundResource(NUM);
-        if (VERSION.SDK_INT >= 21) {
-            StateListAnimator stateListAnimator = new StateListAnimator();
-            String str3 = "translationZ";
-            stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(textView, str3, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(textView, str3, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
-            textView.setStateListAnimator(stateListAnimator);
-        }
-        textView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
-        addView(textView, LayoutHelper.createFrame(-2, -2.0f, 85, 16.0f, 0.0f, 16.0f, 16.0f));
+        textView.setTextSize(1, 14.0f);
+        textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), -11491093, -12346402));
+        textView.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        addView(textView, LayoutHelper.createFrame(-2, 42.0f, 85, 16.0f, 0.0f, 16.0f, 16.0f));
         textView.setOnClickListener(new -$$Lambda$TermsOfServiceView$SxA1BjEDdG4D6RyZHS_wxrllcTk(this));
     }
 

@@ -64,6 +64,7 @@ public class NotificationCenter {
     public static final int fileNewChunkAvailable;
     public static final int filePreparingFailed;
     public static final int filePreparingStarted;
+    public static final int finishedWalletPreloading;
     public static final int folderBecomeEmpty;
     private static volatile NotificationCenter globalInstance = null;
     public static final int goingToPreviewTheme;
@@ -146,6 +147,7 @@ public class NotificationCenter {
     public static final int updateMessageMedia;
     public static final int userInfoDidLoad;
     public static final int videoLoadingStateChanged;
+    public static final int walletPendingTransactionsChanged;
     public static final int wallpapersDidLoad;
     public static final int wallpapersNeedReload;
     public static final int wasUnableToFindCurrentLocation;
@@ -411,6 +413,12 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         scheduledMessagesUpdated = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        finishedWalletPreloading = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        walletPendingTransactionsChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoad = i;

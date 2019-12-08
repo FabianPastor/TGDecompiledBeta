@@ -795,14 +795,14 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r6 = r27;
         r0 = r28;
         r1 = r6.actionBar;
-        r2 = NUM; // 0x7var_a5 float:1.7944913E38 double:1.0529355845E-314;
+        r2 = NUM; // 0x7var_e8 float:1.7945048E38 double:1.0529356177E-314;
         r1.setBackButtonImage(r2);
         r1 = r6.actionBar;
         r7 = 1;
         r1.setAllowOverlayTitle(r7);
         r1 = r6.actionBar;
         r2 = "BackgroundPreview";
-        r3 = NUM; // 0x7f0d01aa float:1.8742979E38 double:1.053129988E-314;
+        r3 = NUM; // 0x7f0e01ad float:1.8875908E38 double:1.0531623686E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);
         r1.setTitle(r2);
         r1 = r6.actionBar;
@@ -818,7 +818,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
     L_0x0034:
         r1 = r6.actionBar;
         r1 = r1.createMenu();
-        r2 = NUM; // 0x7var_de float:1.7945028E38 double:1.0529356127E-314;
+        r2 = NUM; // 0x7var_ float:1.7945164E38 double:1.052935646E-314;
         r1.addItem(r7, r2);
     L_0x0040:
         r1 = new android.widget.FrameLayout;
@@ -948,7 +948,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r11 = org.telegram.ui.ActionBar.Theme.getColor(r14);
         r9.setTextColor(r11);
         r9 = r6.bottomOverlayChatText;
-        r11 = NUM; // 0x7f0d09a3 float:1.8747118E38 double:1.0531309964E-314;
+        r11 = NUM; // 0x7f0e09b1 float:1.888007E38 double:1.0531633824E-314;
         r10 = "SetBackground";
         r10 = org.telegram.messenger.LocaleController.getString(r10, r11);
         r9.setText(r10);
@@ -979,25 +979,25 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r12 = r12 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
         if (r12 == 0) goto L_0x019f;
     L_0x017d:
-        r12 = NUM; // 0x7f0d01a1 float:1.874296E38 double:1.0531299836E-314;
+        r12 = NUM; // 0x7f0e01a4 float:1.887589E38 double:1.053162364E-314;
         r11 = "BackgroundColor";
         r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
         r9[r4] = r11;
-        r11 = NUM; // 0x7f0d01a9 float:1.8742977E38 double:1.0531299875E-314;
+        r11 = NUM; // 0x7f0e01ac float:1.8875906E38 double:1.053162368E-314;
         r12 = "BackgroundPattern";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r7] = r11;
-        r11 = NUM; // 0x7f0d01a8 float:1.8742975E38 double:1.053129987E-314;
+        r11 = NUM; // 0x7f0e01ab float:1.8875904E38 double:1.0531623676E-314;
         r12 = "BackgroundMotion";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r3] = r11;
         goto L_0x01b5;
     L_0x019f:
-        r11 = NUM; // 0x7f0d019f float:1.8742956E38 double:1.0531299826E-314;
+        r11 = NUM; // 0x7f0e01a2 float:1.8875885E38 double:1.053162363E-314;
         r12 = "BackgroundBlurred";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r4] = r11;
-        r11 = NUM; // 0x7f0d01a8 float:1.8742975E38 double:1.053129987E-314;
+        r11 = NUM; // 0x7f0e01ab float:1.8875904E38 double:1.0531623676E-314;
         r12 = "BackgroundMotion";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r7] = r11;
@@ -1228,7 +1228,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r4.setTextColor(r5);
         r4 = r6.patternsCancelButton;
         r4 = r4[r2];
-        r5 = NUM; // 0x7f0d01f7 float:1.8743135E38 double:1.053130026E-314;
+        r5 = NUM; // 0x7f0e01fa float:1.8876064E38 double:1.0531624066E-314;
         r10 = "Cancel";
         r5 = org.telegram.messenger.LocaleController.getString(r10, r5);
         r5 = r5.toUpperCase();
@@ -1282,7 +1282,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.setTextColor(r8);
         r3 = r6.patternsSaveButton;
         r3 = r3[r2];
-        r8 = NUM; // 0x7f0d0930 float:1.8746885E38 double:1.0531309396E-314;
+        r8 = NUM; // 0x7f0e093e float:1.8879836E38 double:1.0531633256E-314;
         r10 = "Save";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r8 = r8.toUpperCase();
@@ -1357,7 +1357,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.<init>(r0);
         r6.intensityCell = r3;
         r3 = r6.intensityCell;
-        r5 = NUM; // 0x7f0d01a7 float:1.8742973E38 double:1.0531299865E-314;
+        r5 = NUM; // 0x7f0e01aa float:1.8875902E38 double:1.053162367E-314;
         r13 = "BackgroundIntensity";
         r5 = org.telegram.messenger.LocaleController.getString(r13, r5);
         r3.setText(r5);

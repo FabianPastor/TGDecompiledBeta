@@ -531,7 +531,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         this.nameTextView.setEnabled(ChatObject.canChangeChatInfo(this.currentChat));
         editTextEmoji = this.nameTextView;
         editTextEmoji.setFocusable(editTextEmoji.isEnabled());
-        this.nameTextView.setFilters(new InputFilter[]{new LengthFilter(100)});
+        this.nameTextView.setFilters(new InputFilter[]{new LengthFilter(128)});
         frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 16, LocaleController.isRTL ? 5.0f : 96.0f, 0.0f, LocaleController.isRTL ? 96.0f : 5.0f, 0.0f));
         this.settingsContainer = new LinearLayout(context2);
         this.settingsContainer.setOrientation(1);
@@ -1024,31 +1024,31 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r3.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d0af0 float:1.8747794E38 double:1.053131161E-314;
+        r1 = NUM; // 0x7f0e0afe float:1.8880745E38 double:1.053163547E-314;
         r2 = "UserRestrictionsApplyChanges";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         r1 = r3.isChannel;
         if (r1 == 0) goto L_0x008c;
     L_0x007f:
-        r1 = NUM; // 0x7f0d0265 float:1.8743358E38 double:1.0531300804E-314;
+        r1 = NUM; // 0x7f0e0268 float:1.8876287E38 double:1.053162461E-314;
         r2 = "ChannelSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
         goto L_0x0098;
     L_0x008c:
-        r1 = NUM; // 0x7f0d04f3 float:1.8744685E38 double:1.0531304035E-314;
+        r1 = NUM; // 0x7f0e0500 float:1.8877634E38 double:1.053162789E-314;
         r2 = "GroupSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
     L_0x0098:
-        r1 = NUM; // 0x7f0d00f3 float:1.8742608E38 double:1.0531298976E-314;
+        r1 = NUM; // 0x7f0e00f5 float:1.8875534E38 double:1.0531622777E-314;
         r2 = "ApplyTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$NBEr6CX4NZ1r3XbdnOXbearPc6k;
         r2.<init>(r3);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0d0774 float:1.8745985E38 double:1.05313072E-314;
+        r1 = NUM; // 0x7f0e0782 float:1.8878936E38 double:1.053163106E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$TOgShEf6MXFD3VhufzCjnieIAt0;

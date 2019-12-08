@@ -66,7 +66,6 @@ public class PollEditTextCell extends FrameLayout {
             this.deleteImageView.setFocusable(false);
             this.deleteImageView.setScaleType(ScaleType.CENTER);
             this.deleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
-            this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), Mode.MULTIPLY));
             this.deleteImageView.setImageResource(NUM);
             this.deleteImageView.setOnClickListener(onClickListener);
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText"), Mode.MULTIPLY));
@@ -83,20 +82,36 @@ public class PollEditTextCell extends FrameLayout {
         }
     }
 
+    public void createErrorTextView() {
+        this.textView2 = new SimpleTextView(getContext());
+        this.textView2.setTextSize(13);
+        int i = 3;
+        this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        addView(this.textView2, LayoutHelper.createFrame(48, 24.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 20.0f : 0.0f, 17.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
+        EditTextBoldCursor editTextBoldCursor = this.textView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        }
+        editTextBoldCursor.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, i | 16, LocaleController.isRTL ? 58.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 58.0f, 0.0f));
+    }
+
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
         i = MeasureSpec.getSize(i);
         ImageView imageView = this.deleteImageView;
         if (imageView != null) {
             imageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-            this.textView2.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
         }
-        this.textView.measure(MeasureSpec.makeMeasureSpec(((i - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(this.deleteImageView != null ? 79.0f : 42.0f), NUM), MeasureSpec.makeMeasureSpec(0, 0));
-        i2 = this.textView.getMeasuredHeight();
-        setMeasuredDimension(i, Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight()) + this.needDivider);
         SimpleTextView simpleTextView = this.textView2;
         if (simpleTextView != null) {
-            simpleTextView.setAlpha(i2 >= AndroidUtilities.dp(52.0f) ? 1.0f : 0.0f);
+            simpleTextView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
+        }
+        this.textView.measure(MeasureSpec.makeMeasureSpec(((i - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(this.textView2 != null ? 79.0f : 42.0f), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+        i2 = this.textView.getMeasuredHeight();
+        setMeasuredDimension(i, Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight()) + this.needDivider);
+        SimpleTextView simpleTextView2 = this.textView2;
+        if (simpleTextView2 != null) {
+            simpleTextView2.setAlpha(i2 >= AndroidUtilities.dp(52.0f) ? 1.0f : 0.0f);
         }
     }
 
@@ -137,16 +152,17 @@ public class PollEditTextCell extends FrameLayout {
         setWillNotDraw(z ^ 1);
     }
 
-    public void setTextAndHint(String str, String str2, boolean z) {
+    public void setTextAndHint(CharSequence charSequence, String str, boolean z) {
         ImageView imageView = this.deleteImageView;
         if (imageView != null) {
             imageView.setTag(null);
         }
-        this.textView.setText(str);
-        if (!TextUtils.isEmpty(str)) {
-            this.textView.setSelection(str.length());
+        this.textView.setText(charSequence);
+        if (!TextUtils.isEmpty(charSequence)) {
+            EditTextBoldCursor editTextBoldCursor = this.textView;
+            editTextBoldCursor.setSelection(editTextBoldCursor.length());
         }
-        this.textView.setHint(str2);
+        this.textView.setHint(str);
         this.needDivider = z;
         setWillNotDraw(z ^ 1);
     }
@@ -156,7 +172,10 @@ public class PollEditTextCell extends FrameLayout {
     }
 
     public void setText2(String str) {
-        this.textView2.setText(str);
+        SimpleTextView simpleTextView = this.textView2;
+        if (simpleTextView != null) {
+            simpleTextView.setText(str);
+        }
     }
 
     public SimpleTextView getTextView2() {

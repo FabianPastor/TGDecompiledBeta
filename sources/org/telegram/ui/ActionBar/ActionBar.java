@@ -626,7 +626,6 @@ public class ActionBar extends FrameLayout {
         return this.actionMode != null && this.actionModeVisible;
     }
 
-    /* Access modifiers changed, original: protected */
     public void onSearchFieldVisibilityChanged(boolean z) {
         this.isSearchFieldVisible = z;
         SimpleTextView simpleTextView = this.titleTextView;

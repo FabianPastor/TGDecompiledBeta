@@ -34,7 +34,7 @@ public class JoinSheetUserCell extends FrameLayout {
         this.nameTextView.setLines(1);
         this.nameTextView.setSingleLine(true);
         this.nameTextView.setEllipsize(TruncateAt.END);
-        addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 64.0f, 6.0f, 0.0f));
+        addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 65.0f, 6.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */

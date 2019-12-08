@@ -21,6 +21,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
+import org.telegram.ui.Components.StaticLayoutEx;
 
 public class AboutLinkCell extends FrameLayout {
     private String oldText;
@@ -258,7 +259,7 @@ public class AboutLinkCell extends FrameLayout {
             int size = MeasureSpec.getSize(i) - AndroidUtilities.dp(46.0f);
             if (VERSION.SDK_INT >= 24) {
                 SpannableStringBuilder spannableStringBuilder = this.stringBuilder;
-                this.textLayout = Builder.obtain(spannableStringBuilder, 0, spannableStringBuilder.length(), Theme.profile_aboutTextPaint, size).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(LocaleController.isRTL ? Alignment.ALIGN_RIGHT : Alignment.ALIGN_LEFT).build();
+                this.textLayout = Builder.obtain(spannableStringBuilder, 0, spannableStringBuilder.length(), Theme.profile_aboutTextPaint, size).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(LocaleController.isRTL ? StaticLayoutEx.ALIGN_RIGHT() : StaticLayoutEx.ALIGN_LEFT()).build();
             } else {
                 this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, size, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }

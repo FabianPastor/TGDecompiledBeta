@@ -251,9 +251,8 @@ public class AvatarDrawable extends Drawable {
             if (i == 3) {
                 String str = "Arrow2.**";
                 String str2 = "Arrow1.**";
-                String str3;
                 if (this.archivedAvatarProgress != 0.0f) {
-                    str3 = "avatar_backgroundArchived";
+                    String str3 = "avatar_backgroundArchived";
                     Theme.avatar_backgroundPaint.setColor(Theme.getColor(str3));
                     canvas.drawCircle(f2, f2, this.archivedAvatarProgress * f2, Theme.avatar_backgroundPaint);
                     if (Theme.dialogs_archiveAvatarDrawableRecolored) {
@@ -265,9 +264,8 @@ public class AvatarDrawable extends Drawable {
                     }
                 } else if (!Theme.dialogs_archiveAvatarDrawableRecolored) {
                     Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
-                    str3 = "avatar_backgroundArchivedHidden";
-                    Theme.dialogs_archiveAvatarDrawable.setLayerColor(str2, Theme.getColor(str3));
-                    Theme.dialogs_archiveAvatarDrawable.setLayerColor(str, Theme.getColor(str3));
+                    Theme.dialogs_archiveAvatarDrawable.setLayerColor(str2, this.color);
+                    Theme.dialogs_archiveAvatarDrawable.setLayerColor(str, this.color);
                     Theme.dialogs_archiveAvatarDrawable.commitApplyLayerColors();
                     Theme.dialogs_archiveAvatarDrawableRecolored = true;
                 }

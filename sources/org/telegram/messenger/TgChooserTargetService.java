@@ -245,7 +245,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         if (r10 != 0) goto L_0x018c;
     L_0x0182:
         r7 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r8 = NUM; // 0x7var_ float:1.7945195E38 double:1.052935653E-314;
+        r8 = NUM; // 0x7var_ float:1.794533E38 double:1.0529356863E-314;
         r7 = android.graphics.drawable.Icon.createWithResource(r7, r8);
         r10 = r7;
     L_0x018c:

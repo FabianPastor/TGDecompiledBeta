@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.Layout.Alignment;
@@ -14,8 +15,10 @@ import android.text.TextUtils.TruncateAt;
 import android.text.style.CharacterStyle;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
+import android.view.ActionMode.Callback2;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
@@ -105,7 +108,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1 = r9.getContext();
         r0.<init>(r1);
         r1 = "CreateLink";
-        r2 = NUM; // 0x7f0d0317 float:1.874372E38 double:1.0531301684E-314;
+        r2 = NUM; // 0x7f0e031a float:1.8876648E38 double:1.053162549E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setTitle(r1);
         r1 = new org.telegram.ui.Components.EditTextCaption$1;
@@ -120,7 +123,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r1.setTextColor(r3);
         r3 = "URL";
-        r4 = NUM; // 0x7f0d0aa9 float:1.874765E38 double:1.053131126E-314;
+        r4 = NUM; // 0x7f0e0ab7 float:1.88806E38 double:1.053163512E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r1.setHintText(r3);
         r3 = "windowBackgroundWhiteBlueHeader";
@@ -158,13 +161,13 @@ public class EditTextCaption extends EditTextBoldCursor {
         r5 = r9.getSelectionStart();
         r6 = r9.getSelectionEnd();
     L_0x008d:
-        r7 = NUM; // 0x7f0d0700 float:1.874575E38 double:1.053130663E-314;
+        r7 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
         r8 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r8 = new org.telegram.ui.Components.-$$Lambda$EditTextCaption$BQIhHIR0EWfMGyyXmJJ-pkFKO1Y;
         r8.<init>(r9, r5, r6, r1);
         r0.setPositiveButton(r7, r8);
-        r5 = NUM; // 0x7f0d01f7 float:1.8743135E38 double:1.053130026E-314;
+        r5 = NUM; // 0x7f0e01fa float:1.8876064E38 double:1.0531624066E-314;
         r6 = "Cancel";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r0.setNegativeButton(r5, r3);
@@ -279,7 +282,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     private Callback overrideCallback(final Callback callback) {
-        return new Callback() {
+        final AnonymousClass2 anonymousClass2 = new Callback() {
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 EditTextCaption.this.copyPasteShowed = true;
                 return callback.onCreateActionMode(actionMode, menu);
@@ -332,6 +335,32 @@ public class EditTextCaption extends EditTextBoldCursor {
                 callback.onDestroyActionMode(actionMode);
             }
         };
+        return VERSION.SDK_INT >= 23 ? new Callback2() {
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                return anonymousClass2.onCreateActionMode(actionMode, menu);
+            }
+
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return anonymousClass2.onPrepareActionMode(actionMode, menu);
+            }
+
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                return anonymousClass2.onActionItemClicked(actionMode, menuItem);
+            }
+
+            public void onDestroyActionMode(ActionMode actionMode) {
+                anonymousClass2.onDestroyActionMode(actionMode);
+            }
+
+            public void onGetContentRect(ActionMode actionMode, View view, Rect rect) {
+                Callback callback = callback;
+                if (callback instanceof Callback2) {
+                    ((Callback2) callback).onGetContentRect(actionMode, view, rect);
+                } else {
+                    super.onGetContentRect(actionMode, view, rect);
+                }
+            }
+        } : anonymousClass2;
     }
 
     public ActionMode startActionMode(Callback callback, int i) {

@@ -2,7 +2,6 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -106,11 +105,7 @@ public class BotKeyboardView extends LinearLayout {
                     textView.setText(Emoji.replaceEmoji(keyboardButton.text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), i));
                     View view = textView;
                     linearLayout.addView(view, LayoutHelper.createLinear(0, -1, size, 0, 0, i3 != tL_keyboardButtonRow.buttons.size() - 1 ? 10 : 0, 0));
-                    view.setOnClickListener(new OnClickListener() {
-                        public void onClick(View view) {
-                            BotKeyboardView.this.delegate.didPressedButton((KeyboardButton) view.getTag());
-                        }
-                    });
+                    view.setOnClickListener(new -$$Lambda$BotKeyboardView$tjU3j6rK6uXIZ5gFPdgXYJjA6cE(this));
                     this.buttonViews.add(view);
                     i3++;
                     i = 0;
@@ -119,6 +114,10 @@ public class BotKeyboardView extends LinearLayout {
                 i = 0;
             }
         }
+    }
+
+    public /* synthetic */ void lambda$setButtons$0$BotKeyboardView(View view) {
+        this.delegate.didPressedButton((KeyboardButton) view.getTag());
     }
 
     public int getKeyboardHeight() {

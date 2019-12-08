@@ -395,63 +395,57 @@ public class Emoji {
         return replaceEmoji(charSequence, fontMetricsInt, i, z, null);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0253 A:{SYNTHETIC, SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:161:0x024e  */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:161:0x024e  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0253 A:{SYNTHETIC, SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0129 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0253 A:{SYNTHETIC, SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:161:0x024e  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0117 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x010f A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0129 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:161:0x024e  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0253 A:{SYNTHETIC, SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0129 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0253 A:{SYNTHETIC, SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:161:0x024e  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x007a A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0129 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x025f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:161:0x024e  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0253 A:{SYNTHETIC, SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x024d A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x024d A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0129 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x024d A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0117 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x010f A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0129 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x024d A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0129 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x024d A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x007a A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0129 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0194 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x01da A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0240 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0206 A:{Catch:{ Exception -> 0x0264 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x024d A:{Catch:{ Exception -> 0x0264 }} */
     public static java.lang.CharSequence replaceEmoji(java.lang.CharSequence r23, android.graphics.Paint.FontMetricsInt r24, int r25, boolean r26, int[] r27) {
         /*
         r1 = r23;
         r0 = org.telegram.messenger.SharedConfig.useSystemEmoji;
-        if (r0 != 0) goto L_0x0265;
+        if (r0 != 0) goto L_0x026a;
     L_0x0006:
-        if (r1 == 0) goto L_0x0265;
+        if (r1 == 0) goto L_0x026a;
     L_0x0008:
         r0 = r23.length();
         if (r0 != 0) goto L_0x0010;
     L_0x000e:
-        goto L_0x0265;
+        goto L_0x026a;
     L_0x0010:
         if (r26 != 0) goto L_0x001a;
     L_0x0012:
@@ -480,9 +474,9 @@ public class Emoji {
         r16 = 0;
         r17 = 0;
     L_0x003e:
-        if (r9 >= r4) goto L_0x0264;
+        if (r9 >= r4) goto L_0x0269;
     L_0x0040:
-        r8 = r1.charAt(r9);	 Catch:{ Exception -> 0x025f }
+        r8 = r1.charAt(r9);	 Catch:{ Exception -> 0x0264 }
         r3 = 55356; // 0xd83c float:7.757E-41 double:2.73495E-319;
         r7 = 1;
         if (r8 < r3) goto L_0x0052;
@@ -521,16 +515,16 @@ public class Emoji {
     L_0x007a:
         r12 = r9;
     L_0x007b:
-        r2.append(r8);	 Catch:{ Exception -> 0x025f }
+        r2.append(r8);	 Catch:{ Exception -> 0x0264 }
         r3 = r13 + 1;
         r18 = 16;
         r10 = r10 << r18;
-        r13 = (long) r8;	 Catch:{ Exception -> 0x025f }
+        r13 = (long) r8;	 Catch:{ Exception -> 0x0264 }
         r10 = r10 | r13;
         goto L_0x0124;
     L_0x0088:
         r18 = 16;
-        r3 = r2.length();	 Catch:{ Exception -> 0x025f }
+        r3 = r2.length();	 Catch:{ Exception -> 0x0264 }
         if (r3 <= 0) goto L_0x00a6;
     L_0x0090:
         r3 = 9792; // 0x2640 float:1.3722E-41 double:4.838E-320;
@@ -542,7 +536,7 @@ public class Emoji {
         r3 = 9877; // 0x2695 float:1.384E-41 double:4.88E-320;
         if (r8 != r3) goto L_0x00a6;
     L_0x009c:
-        r2.append(r8);	 Catch:{ Exception -> 0x025f }
+        r2.append(r8);	 Catch:{ Exception -> 0x0264 }
         r3 = r13 + 1;
         r10 = r5;
     L_0x00a2:
@@ -557,7 +551,7 @@ public class Emoji {
         r5 = 53248; // 0xd000 float:7.4616E-41 double:2.6308E-319;
         if (r3 != r5) goto L_0x00bb;
     L_0x00b3:
-        r2.append(r8);	 Catch:{ Exception -> 0x025f }
+        r2.append(r8);	 Catch:{ Exception -> 0x0264 }
         r3 = r13 + 1;
         r10 = 0;
         goto L_0x00a2;
@@ -567,7 +561,7 @@ public class Emoji {
     L_0x00bf:
         if (r9 <= 0) goto L_0x0123;
     L_0x00c1:
-        r3 = r1.charAt(r14);	 Catch:{ Exception -> 0x025f }
+        r3 = r1.charAt(r14);	 Catch:{ Exception -> 0x0264 }
         r5 = 48;
         if (r3 < r5) goto L_0x00cd;
     L_0x00c9:
@@ -582,8 +576,8 @@ public class Emoji {
     L_0x00d5:
         r5 = r9 - r14;
         r5 = r5 + r7;
-        r2.append(r3);	 Catch:{ Exception -> 0x025f }
-        r2.append(r8);	 Catch:{ Exception -> 0x025f }
+        r2.append(r3);	 Catch:{ Exception -> 0x0264 }
+        r2.append(r8);	 Catch:{ Exception -> 0x0264 }
         r13 = r5;
         r12 = r14;
         r16 = 1;
@@ -606,9 +600,9 @@ public class Emoji {
         r3 = -1;
         goto L_0x010d;
     L_0x00f6:
-        r3 = org.telegram.messenger.EmojiData.dataCharsMap;	 Catch:{ Exception -> 0x025f }
-        r5 = java.lang.Character.valueOf(r8);	 Catch:{ Exception -> 0x025f }
-        r3 = r3.containsKey(r5);	 Catch:{ Exception -> 0x025f }
+        r3 = org.telegram.messenger.EmojiData.dataCharsMap;	 Catch:{ Exception -> 0x0264 }
+        r5 = java.lang.Character.valueOf(r8);	 Catch:{ Exception -> 0x0264 }
+        r3 = r3.containsKey(r5);	 Catch:{ Exception -> 0x0264 }
         if (r3 == 0) goto L_0x00f4;
     L_0x0102:
         r3 = -1;
@@ -617,14 +611,14 @@ public class Emoji {
         r12 = r9;
     L_0x0106:
         r5 = r13 + 1;
-        r2.append(r8);	 Catch:{ Exception -> 0x025f }
+        r2.append(r8);	 Catch:{ Exception -> 0x0264 }
         r3 = r5;
         goto L_0x00a2;
     L_0x010d:
         if (r12 == r3) goto L_0x0117;
     L_0x010f:
         r3 = 0;
-        r2.setLength(r3);	 Catch:{ Exception -> 0x025f }
+        r2.setLength(r3);	 Catch:{ Exception -> 0x0264 }
         r12 = -1;
         r16 = 0;
         goto L_0x0124;
@@ -635,7 +629,7 @@ public class Emoji {
     L_0x011d:
         if (r15 == 0) goto L_0x0123;
     L_0x011f:
-        r15[r3] = r3;	 Catch:{ Exception -> 0x025f }
+        r15[r3] = r3;	 Catch:{ Exception -> 0x0264 }
         r3 = 0;
         r15 = r3;
     L_0x0123:
@@ -648,34 +642,34 @@ public class Emoji {
         if (r13 >= r4) goto L_0x018d;
     L_0x012d:
         r14 = r9 + 1;
-        r7 = r1.charAt(r14);	 Catch:{ Exception -> 0x025f }
+        r7 = r1.charAt(r14);	 Catch:{ Exception -> 0x0264 }
         r5 = 55356; // 0xd83c float:7.757E-41 double:2.73495E-319;
         if (r7 != r5) goto L_0x0150;
     L_0x0138:
-        r5 = r1.charAt(r13);	 Catch:{ Exception -> 0x025f }
+        r5 = r1.charAt(r13);	 Catch:{ Exception -> 0x0264 }
         if (r5 < r6) goto L_0x018d;
     L_0x013e:
         r7 = 57343; // 0xdfff float:8.0355E-41 double:2.8331E-319;
         if (r5 > r7) goto L_0x018d;
     L_0x0143:
         r9 = r9 + 3;
-        r5 = r1.subSequence(r14, r9);	 Catch:{ Exception -> 0x025f }
-        r2.append(r5);	 Catch:{ Exception -> 0x025f }
+        r5 = r1.subSequence(r14, r9);	 Catch:{ Exception -> 0x0264 }
+        r2.append(r5);	 Catch:{ Exception -> 0x0264 }
         r3 = r3 + 2;
         r14 = r13;
         goto L_0x018e;
     L_0x0150:
-        r5 = r2.length();	 Catch:{ Exception -> 0x025f }
+        r5 = r2.length();	 Catch:{ Exception -> 0x0264 }
         r13 = 2;
         if (r5 < r13) goto L_0x018d;
     L_0x0157:
         r5 = 0;
-        r6 = r2.charAt(r5);	 Catch:{ Exception -> 0x025f }
+        r6 = r2.charAt(r5);	 Catch:{ Exception -> 0x0264 }
         r5 = 55356; // 0xd83c float:7.757E-41 double:2.73495E-319;
         if (r6 != r5) goto L_0x018d;
     L_0x0161:
         r5 = 1;
-        r6 = r2.charAt(r5);	 Catch:{ Exception -> 0x025f }
+        r6 = r2.charAt(r5);	 Catch:{ Exception -> 0x0264 }
         r5 = 57332; // 0xdff4 float:8.0339E-41 double:2.8326E-319;
         if (r6 != r5) goto L_0x018d;
     L_0x016b:
@@ -683,13 +677,13 @@ public class Emoji {
         if (r7 != r5) goto L_0x018d;
     L_0x0170:
         r6 = r14 + 2;
-        r7 = r1.subSequence(r14, r6);	 Catch:{ Exception -> 0x025f }
-        r2.append(r7);	 Catch:{ Exception -> 0x025f }
+        r7 = r1.subSequence(r14, r6);	 Catch:{ Exception -> 0x0264 }
+        r2.append(r7);	 Catch:{ Exception -> 0x0264 }
         r3 = r3 + r13;
-        r7 = r23.length();	 Catch:{ Exception -> 0x025f }
+        r7 = r23.length();	 Catch:{ Exception -> 0x0264 }
         if (r6 >= r7) goto L_0x0189;
     L_0x0180:
-        r7 = r1.charAt(r6);	 Catch:{ Exception -> 0x025f }
+        r7 = r1.charAt(r6);	 Catch:{ Exception -> 0x0264 }
         if (r7 == r5) goto L_0x0187;
     L_0x0186:
         goto L_0x0189;
@@ -713,17 +707,17 @@ public class Emoji {
         r7 = r5 + 1;
         if (r7 >= r4) goto L_0x01d2;
     L_0x0198:
-        r9 = r1.charAt(r7);	 Catch:{ Exception -> 0x025f }
+        r9 = r1.charAt(r7);	 Catch:{ Exception -> 0x0264 }
         r13 = 1;
         if (r3 != r13) goto L_0x01b5;
     L_0x019f:
         r13 = 8205; // 0x200d float:1.1498E-41 double:4.054E-320;
         if (r9 != r13) goto L_0x01d2;
     L_0x01a3:
-        r13 = r2.length();	 Catch:{ Exception -> 0x025f }
+        r13 = r2.length();	 Catch:{ Exception -> 0x0264 }
         if (r13 <= 0) goto L_0x01d2;
     L_0x01a9:
-        r2.append(r9);	 Catch:{ Exception -> 0x025f }
+        r2.append(r9);	 Catch:{ Exception -> 0x0264 }
         r6 = r6 + 1;
         r5 = r7;
         r13 = 65039; // 0xfe0f float:9.1139E-41 double:3.21335E-319;
@@ -763,11 +757,11 @@ public class Emoji {
         if (r3 >= r4) goto L_0x0203;
     L_0x01de:
         r7 = r5 + 1;
-        r8 = r1.charAt(r7);	 Catch:{ Exception -> 0x025f }
+        r8 = r1.charAt(r7);	 Catch:{ Exception -> 0x0264 }
         r9 = 55356; // 0xd83c float:7.757E-41 double:2.73495E-319;
         if (r8 != r9) goto L_0x0203;
     L_0x01e9:
-        r8 = r1.charAt(r3);	 Catch:{ Exception -> 0x025f }
+        r8 = r1.charAt(r3);	 Catch:{ Exception -> 0x0264 }
         r9 = 57339; // 0xdffb float:8.0349E-41 double:2.8329E-319;
         if (r8 < r9) goto L_0x0203;
     L_0x01f2:
@@ -775,8 +769,8 @@ public class Emoji {
         if (r8 > r9) goto L_0x0203;
     L_0x01f7:
         r5 = r5 + 3;
-        r5 = r1.subSequence(r7, r5);	 Catch:{ Exception -> 0x025f }
-        r2.append(r5);	 Catch:{ Exception -> 0x025f }
+        r5 = r1.subSequence(r7, r5);	 Catch:{ Exception -> 0x0264 }
+        r2.append(r5);	 Catch:{ Exception -> 0x0264 }
         r6 = r6 + 2;
         goto L_0x0204;
     L_0x0203:
@@ -787,26 +781,26 @@ public class Emoji {
         if (r15 == 0) goto L_0x0210;
     L_0x0208:
         r5 = 0;
-        r7 = r15[r5];	 Catch:{ Exception -> 0x025f }
+        r7 = r15[r5];	 Catch:{ Exception -> 0x0264 }
         r8 = 1;
         r7 = r7 + r8;
-        r15[r5] = r7;	 Catch:{ Exception -> 0x025f }
+        r15[r5] = r7;	 Catch:{ Exception -> 0x0264 }
         goto L_0x0211;
     L_0x0210:
         r5 = 0;
     L_0x0211:
-        r7 = r2.length();	 Catch:{ Exception -> 0x025f }
-        r7 = r2.subSequence(r5, r7);	 Catch:{ Exception -> 0x025f }
-        r7 = getEmojiDrawable(r7);	 Catch:{ Exception -> 0x025f }
+        r7 = r2.length();	 Catch:{ Exception -> 0x0264 }
+        r7 = r2.subSequence(r5, r7);	 Catch:{ Exception -> 0x0264 }
+        r7 = getEmojiDrawable(r7);	 Catch:{ Exception -> 0x0264 }
         if (r7 == 0) goto L_0x0232;
     L_0x021f:
-        r8 = new org.telegram.messenger.Emoji$EmojiSpan;	 Catch:{ Exception -> 0x025f }
+        r8 = new org.telegram.messenger.Emoji$EmojiSpan;	 Catch:{ Exception -> 0x0264 }
         r9 = r24;
         r13 = r25;
-        r8.<init>(r7, r5, r13, r9);	 Catch:{ Exception -> 0x025f }
+        r8.<init>(r7, r5, r13, r9);	 Catch:{ Exception -> 0x0264 }
         r6 = r6 + r12;
         r5 = 33;
-        r0.setSpan(r8, r12, r6, r5);	 Catch:{ Exception -> 0x025f }
+        r0.setSpan(r8, r12, r6, r5);	 Catch:{ Exception -> 0x0264 }
         r17 = r17 + 1;
         r5 = 0;
         goto L_0x0236;
@@ -814,43 +808,46 @@ public class Emoji {
         r9 = r24;
         r13 = r25;
     L_0x0236:
-        r2.setLength(r5);	 Catch:{ Exception -> 0x025f }
-        r6 = r17;
-        r7 = 0;
+        r2.setLength(r5);	 Catch:{ Exception -> 0x0264 }
+        r7 = r17;
+        r6 = 0;
         r12 = -1;
         r16 = 0;
-        goto L_0x0248;
+        goto L_0x0247;
     L_0x0240:
         r9 = r24;
         r13 = r25;
         r5 = 0;
-        r7 = r6;
-        r6 = r17;
-    L_0x0248:
-        r8 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x025f }
+        r7 = r17;
+    L_0x0247:
+        r8 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0264 }
         r5 = 23;
-        if (r8 >= r5) goto L_0x0253;
-    L_0x024e:
-        r5 = 50;
-        if (r6 < r5) goto L_0x0253;
-    L_0x0252:
-        goto L_0x0264;
+        if (r8 < r5) goto L_0x0253;
+    L_0x024d:
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0264 }
+        r8 = 29;
+        if (r5 < r8) goto L_0x0258;
     L_0x0253:
+        r5 = 50;
+        if (r7 < r5) goto L_0x0258;
+    L_0x0257:
+        goto L_0x0269;
+    L_0x0258:
         r5 = 1;
         r3 = r3 + r5;
         r9 = r3;
-        r17 = r6;
-        r13 = r7;
+        r13 = r6;
+        r17 = r7;
         r3 = 16;
         r5 = 0;
         goto L_0x003e;
-    L_0x025f:
+    L_0x0264:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         return r1;
-    L_0x0264:
+    L_0x0269:
         return r0;
-    L_0x0265:
+    L_0x026a:
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.replaceEmoji(java.lang.CharSequence, android.graphics.Paint$FontMetricsInt, int, boolean, int[]):java.lang.CharSequence");

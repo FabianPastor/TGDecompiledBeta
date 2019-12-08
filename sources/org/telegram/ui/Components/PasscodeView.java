@@ -84,7 +84,7 @@ public class PasscodeView extends FrameLayout {
     private boolean selfCancelled;
 
     private class AnimatingTextView extends FrameLayout {
-        private String DOT = "•";
+        private final String DOT;
         private ArrayList<TextView> characterTextViews = new ArrayList(4);
         private AnimatorSet currentAnimation;
         private Runnable dotRunnable;
@@ -93,6 +93,8 @@ public class PasscodeView extends FrameLayout {
 
         public AnimatingTextView(Context context) {
             super(context);
+            String str = "•";
+            this.DOT = str;
             for (int i = 0; i < 4; i++) {
                 TextView textView = new TextView(context);
                 textView.setTextColor(-1);
@@ -113,7 +115,7 @@ public class PasscodeView extends FrameLayout {
                 textView.setTextSize(1, 36.0f);
                 textView.setGravity(17);
                 textView.setAlpha(0.0f);
-                textView.setText(this.DOT);
+                textView.setText(str);
                 textView.setPivotX((float) AndroidUtilities.dp(25.0f));
                 textView.setPivotY((float) AndroidUtilities.dp(25.0f));
                 addView(textView);
@@ -144,32 +146,28 @@ public class PasscodeView extends FrameLayout {
                 TextView textView = (TextView) this.characterTextViews.get(length);
                 textView.setText(str);
                 textView.setTranslationX((float) getXForTextView(length));
-                String str2 = "scaleX";
-                arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f, 1.0f}));
-                String str3 = "scaleY";
-                arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f, 1.0f}));
-                String str4 = "alpha";
-                arrayList.add(ObjectAnimator.ofFloat(textView, str4, new float[]{0.0f, 1.0f}));
-                String str5 = "translationY";
-                arrayList.add(ObjectAnimator.ofFloat(textView, str5, new float[]{(float) AndroidUtilities.dp(20.0f), 0.0f}));
-                textView = (TextView) this.dotTextViews.get(length);
-                textView.setTranslationX((float) getXForTextView(length));
-                textView.setAlpha(0.0f);
-                arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f, 1.0f}));
-                arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f, 1.0f}));
-                arrayList.add(ObjectAnimator.ofFloat(textView, str5, new float[]{(float) AndroidUtilities.dp(20.0f), 0.0f}));
+                arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f, 1.0f}));
+                arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f, 1.0f}));
+                arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f, 1.0f}));
+                arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(20.0f), 0.0f}));
+                TextView textView2 = (TextView) this.dotTextViews.get(length);
+                textView2.setTranslationX((float) getXForTextView(length));
+                textView2.setAlpha(0.0f);
+                arrayList.add(ObjectAnimator.ofFloat(textView2, View.SCALE_X, new float[]{0.0f, 1.0f}));
+                arrayList.add(ObjectAnimator.ofFloat(textView2, View.SCALE_Y, new float[]{0.0f, 1.0f}));
+                arrayList.add(ObjectAnimator.ofFloat(textView2, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(20.0f), 0.0f}));
                 for (i = length + 1; i < 4; i++) {
                     textView = (TextView) this.characterTextViews.get(i);
                     if (textView.getAlpha() != 0.0f) {
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str4, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
                     }
                     textView = (TextView) this.dotTextViews.get(i);
                     if (textView.getAlpha() != 0.0f) {
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str4, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
                     }
                 }
                 Runnable runnable = this.dotRunnable;
@@ -181,16 +179,13 @@ public class PasscodeView extends FrameLayout {
                         if (AnimatingTextView.this.dotRunnable == this) {
                             ArrayList arrayList = new ArrayList();
                             TextView textView = (TextView) AnimatingTextView.this.characterTextViews.get(length);
-                            String str = "scaleX";
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str, new float[]{0.0f}));
-                            String str2 = "scaleY";
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f}));
-                            String str3 = "alpha";
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
                             textView = (TextView) AnimatingTextView.this.dotTextViews.get(length);
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str, new float[]{1.0f}));
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{1.0f}));
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{1.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{1.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{1.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{1.0f}));
                             AnimatingTextView.this.currentAnimation = new AnimatorSet();
                             AnimatingTextView.this.currentAnimation.setDuration(150);
                             AnimatingTextView.this.currentAnimation.playTogether(arrayList);
@@ -207,19 +202,18 @@ public class PasscodeView extends FrameLayout {
                 };
                 AndroidUtilities.runOnUIThread(this.dotRunnable, 1500);
                 for (i = 0; i < length; i++) {
-                    TextView textView2 = (TextView) this.characterTextViews.get(i);
-                    String str6 = "translationX";
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str6, new float[]{(float) getXForTextView(i)}));
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str2, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str3, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str4, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str5, new float[]{0.0f}));
-                    textView2 = (TextView) this.dotTextViews.get(i);
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str6, new float[]{(float) getXForTextView(i)}));
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str2, new float[]{1.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str3, new float[]{1.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str4, new float[]{1.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(textView2, str5, new float[]{0.0f}));
+                    TextView textView3 = (TextView) this.characterTextViews.get(i);
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.SCALE_X, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.SCALE_Y, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.ALPHA, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.TRANSLATION_Y, new float[]{0.0f}));
+                    textView3 = (TextView) this.dotTextViews.get(i);
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.SCALE_X, new float[]{1.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.SCALE_Y, new float[]{1.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.ALPHA, new float[]{1.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView3, View.TRANSLATION_Y, new float[]{0.0f}));
                 }
                 AnimatorSet animatorSet = this.currentAnimation;
                 if (animatorSet != null) {
@@ -249,7 +243,7 @@ public class PasscodeView extends FrameLayout {
 
         public void eraseLastCharacter() {
             if (this.stringBuilder.length() != 0) {
-                String str;
+                int i;
                 try {
                     performHapticFeedback(3);
                 } catch (Exception e) {
@@ -260,40 +254,30 @@ public class PasscodeView extends FrameLayout {
                 if (length != 0) {
                     this.stringBuilder.deleteCharAt(length);
                 }
-                int i = length;
-                while (true) {
-                    str = "translationX";
-                    if (i >= 4) {
-                        break;
-                    }
+                for (i = length; i < 4; i++) {
                     TextView textView = (TextView) this.characterTextViews.get(i);
-                    String str2 = "translationY";
-                    String str3 = "alpha";
-                    String str4 = "scaleY";
-                    String str5 = "scaleX";
                     if (textView.getAlpha() != 0.0f) {
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str5, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str4, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str, new float[]{(float) getXForTextView(i)}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
                     }
                     textView = (TextView) this.dotTextViews.get(i);
                     if (textView.getAlpha() != 0.0f) {
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str5, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str4, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, str, new float[]{(float) getXForTextView(i)}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, new float[]{0.0f}));
+                        arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
                     }
-                    i++;
                 }
                 if (length == 0) {
                     this.stringBuilder.deleteCharAt(length);
                 }
                 for (i = 0; i < length; i++) {
-                    arrayList.add(ObjectAnimator.ofFloat((TextView) this.characterTextViews.get(i), str, new float[]{(float) getXForTextView(i)}));
-                    arrayList.add(ObjectAnimator.ofFloat((TextView) this.dotTextViews.get(i), str, new float[]{(float) getXForTextView(i)}));
+                    arrayList.add(ObjectAnimator.ofFloat((TextView) this.characterTextViews.get(i), View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
+                    arrayList.add(ObjectAnimator.ofFloat((TextView) this.dotTextViews.get(i), View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
                 }
                 Runnable runnable = this.dotRunnable;
                 if (runnable != null) {
@@ -337,19 +321,16 @@ public class PasscodeView extends FrameLayout {
                     ArrayList arrayList = new ArrayList();
                     for (int i2 = 0; i2 < 4; i2++) {
                         TextView textView = (TextView) this.characterTextViews.get(i2);
-                        String str = "alpha";
-                        String str2 = "scaleY";
-                        String str3 = "scaleX";
                         if (textView.getAlpha() != 0.0f) {
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f}));
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f}));
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
                         }
                         textView = (TextView) this.dotTextViews.get(i2);
                         if (textView.getAlpha() != 0.0f) {
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str3, new float[]{0.0f}));
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str2, new float[]{0.0f}));
-                            arrayList.add(ObjectAnimator.ofFloat(textView, str, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
+                            arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
                         }
                     }
                     this.currentAnimation = new AnimatorSet();
@@ -759,10 +740,10 @@ public class PasscodeView extends FrameLayout {
         AndroidUtilities.hideKeyboard(this.passwordEditText);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setDuration(200);
-        r2 = new Animator[2];
-        r2[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) AndroidUtilities.dp(20.0f)});
-        r2[1] = ObjectAnimator.ofFloat(this, "alpha", new float[]{(float) AndroidUtilities.dp(0.0f)});
-        animatorSet.playTogether(r2);
+        Animator[] animatorArr = new Animator[2];
+        animatorArr[0] = ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(20.0f)});
+        animatorArr[1] = ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{(float) AndroidUtilities.dp(0.0f)});
+        animatorSet.playTogether(animatorArr);
         animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 PasscodeView.this.setVisibility(8);
@@ -783,7 +764,7 @@ public class PasscodeView extends FrameLayout {
         if (i != 6) {
             AnimatorSet animatorSet = new AnimatorSet();
             Animator[] animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.passcodeTextView, "translationX", new float[]{(float) AndroidUtilities.dp(f)});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.passcodeTextView, View.TRANSLATION_X, new float[]{(float) AndroidUtilities.dp(f)});
             animatorSet.playTogether(animatorArr);
             animatorSet.setDuration(50);
             animatorSet.addListener(new AnimatorListenerAdapter() {

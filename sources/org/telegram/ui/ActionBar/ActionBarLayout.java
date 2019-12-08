@@ -786,7 +786,7 @@ public class ActionBarLayout extends FrameLayout {
         boolean z5 = z;
         boolean z6 = z2;
         final boolean z7 = z4;
-        if (!checkTransitionAnimation()) {
+        if (!(baseFragment2 == null || checkTransitionAnimation())) {
             ActionBarLayoutDelegate actionBarLayoutDelegate = this.delegate;
             if ((actionBarLayoutDelegate == null || !z3 || actionBarLayoutDelegate.needPresentFragment(baseFragment2, z5, z6, this)) && baseFragment.onFragmentCreate()) {
                 BaseFragment baseFragment3;

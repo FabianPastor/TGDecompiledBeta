@@ -6,9 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -23,6 +21,7 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SnowflakesEffect;
 
@@ -40,8 +39,6 @@ public class DrawerProfileCell extends FrameLayout {
     private Rect srcRect = new Rect();
 
     public DrawerProfileCell(Context context) {
-        int i;
-        String str;
         super(context);
         this.shadowView = new ImageView(context);
         this.shadowView.setVisibility(4);
@@ -69,16 +66,9 @@ public class DrawerProfileCell extends FrameLayout {
         addView(this.phoneTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 9.0f));
         this.arrowView = new ImageView(context);
         this.arrowView.setScaleType(ScaleType.CENTER);
-        ImageView imageView = this.arrowView;
-        if (this.accountsShowed) {
-            i = NUM;
-            str = "AccDescrHideAccounts";
-        } else {
-            i = NUM;
-            str = "AccDescrShowAccounts";
-        }
-        imageView.setContentDescription(LocaleController.getString(str, i));
+        this.arrowView.setImageResource(NUM);
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
+        setArrowState(false);
         if (Theme.getEventType() == 0) {
             this.snowflakesEffect = new SnowflakesEffect();
         }
@@ -283,38 +273,17 @@ public class DrawerProfileCell extends FrameLayout {
         return this.accountsShowed;
     }
 
-    public void setAccountsShowed(boolean z) {
+    public void setAccountsShowed(boolean z, boolean z2) {
         if (this.accountsShowed != z) {
             this.accountsShowed = z;
-            this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
+            setArrowState(z2);
         }
-    }
-
-    public void setOnArrowClickListener(OnClickListener onClickListener) {
-        this.arrowView.setOnClickListener(new -$$Lambda$DrawerProfileCell$E00gMmT74biKthBWyKI7QNe-uk4(this, onClickListener));
-    }
-
-    public /* synthetic */ void lambda$setOnArrowClickListener$0$DrawerProfileCell(OnClickListener onClickListener, View view) {
-        int i;
-        String str;
-        this.accountsShowed ^= 1;
-        this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
-        onClickListener.onClick(this);
-        ImageView imageView = this.arrowView;
-        if (this.accountsShowed) {
-            i = NUM;
-            str = "AccDescrHideAccounts";
-        } else {
-            i = NUM;
-            str = "AccDescrShowAccounts";
-        }
-        imageView.setContentDescription(LocaleController.getString(str, i));
     }
 
     public void setUser(User user, boolean z) {
         if (user != null) {
             this.accountsShowed = z;
-            this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
+            setArrowState(false);
             this.nameTextView.setText(UserObject.getUserName(user));
             TextView textView = this.phoneTextView;
             PhoneFormat instance = PhoneFormat.getInstance();
@@ -340,5 +309,26 @@ public class DrawerProfileCell extends FrameLayout {
             setTag(str2);
         }
         return str2;
+    }
+
+    private void setArrowState(boolean z) {
+        int i;
+        String str;
+        float f = this.accountsShowed ? 180.0f : 0.0f;
+        if (z) {
+            this.arrowView.animate().rotation(f).setDuration(220).setInterpolator(CubicBezierInterpolator.EASE_OUT).start();
+        } else {
+            this.arrowView.animate().cancel();
+            this.arrowView.setRotation(f);
+        }
+        ImageView imageView = this.arrowView;
+        if (this.accountsShowed) {
+            i = NUM;
+            str = "AccDescrHideAccounts";
+        } else {
+            i = NUM;
+            str = "AccDescrShowAccounts";
+        }
+        imageView.setContentDescription(LocaleController.getString(str, i));
     }
 }

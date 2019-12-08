@@ -18,10 +18,21 @@ public class StaticLayoutEx {
     private static final String TEXT_DIRS_CLASS = "android.text.TextDirectionHeuristics";
     private static final String TEXT_DIR_CLASS = "android.text.TextDirectionHeuristic";
     private static final String TEXT_DIR_FIRSTSTRONG_LTR = "FIRSTSTRONG_LTR";
+    public static Alignment[] alignments = Alignment.values();
     private static boolean initialized;
     private static Constructor<StaticLayout> sConstructor;
     private static Object[] sConstructorArgs;
     private static Object sTextDirection;
+
+    public static Alignment ALIGN_RIGHT() {
+        Alignment[] alignmentArr = alignments;
+        return alignmentArr.length >= 5 ? alignmentArr[4] : Alignment.ALIGN_OPPOSITE;
+    }
+
+    public static Alignment ALIGN_LEFT() {
+        Alignment[] alignmentArr = alignments;
+        return alignmentArr.length >= 5 ? alignmentArr[3] : Alignment.ALIGN_NORMAL;
+    }
 
     public static void init() {
         if (!initialized) {

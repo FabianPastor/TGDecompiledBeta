@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.5.0
 
 Name: AndroidManifest.xml
-SHA1-Digest: zbSBrmPgs5aNrOx9FNMQtk3si58=
+SHA1-Digest: BsnEErOKCiPOBi3RBwU5GKxXHKg=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -222,7 +222,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: BYycqtAu3MWstx724D6eF6G3y2A=
+SHA1-Digest: mFRZtOKgw2t5vCXSqHlFcB8MkFw=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: FHlRDdxccFhBf1l94YXJ1DBcfcA=
@@ -231,10 +231,10 @@ Name: firebase-abt.properties
 SHA1-Digest: O0yq2VhN2Ayr8935aa9NAIxu7qI=
 
 Name: firebase-common.properties
-SHA1-Digest: Uigh2ULGgn8zUGkFNvCHPafa8Jo=
+SHA1-Digest: pIBPgMEpmqFpZ47b67Vd898cmKA=
 
 Name: firebase-config.properties
-SHA1-Digest: g336ohJof5z2Z+1k4GB4tytjeP8=
+SHA1-Digest: NOWTGQk9Fl9Zz9mFqUCNiw14rg8=
 
 Name: firebase-iid-interop.properties
 SHA1-Digest: 8p8Bh8qGwQDEjO9Ye/uB8fO/OPk=
@@ -252,16 +252,16 @@ Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: ckUrM6HLIy0p245+qIfBsGuZHvM=
+SHA1-Digest: voMMfWeAn5JkzlBjDyKJMPszKrs=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: xVfBxKeY/6sl18dyAYJT7+Uq2k8=
+SHA1-Digest: L8M31MCUuj+D4B+Et7WRvhNClIM=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: BW+mVkmwV8z2TolvpPou3j8B5y4=
+SHA1-Digest: SG8a2bh/MefijEryWSN029rypqk=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: Q8A+zlb04nGCVSw39LHTzrJ3bw8=
+SHA1-Digest: JwB8dnvD9tUzYvDsxSLOqDSitOM=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
@@ -317,6 +317,60 @@ SHA1-Digest: x3S0prMwN1qKaUHTQ5/lB2YKx9M=
 Name: play-services-wearable.properties
 SHA1-Digest: vmDNiC/qnn91EoKQFLnoFaxHpcQ=
 
+Name: res/anim/ft_avd_toarrow_rectangle_1_pivot_0_animation.xml
+SHA1-Digest: sk7exwCxeZ14FIe8mu7EXwYBooI=
+
+Name: res/anim/ft_avd_toarrow_rectangle_2_pivot_0_animation.xml
+SHA1-Digest: Xmj/KT+iq4df/4ZOz6SwmNeX9FY=
+
+Name: res/anim/ft_avd_toarrow_rectangle_3_pivot_0_animation.xml
+SHA1-Digest: sk7exwCxeZ14FIe8mu7EXwYBooI=
+
+Name: res/anim/ft_avd_toarrow_rectangle_4_animation.xml
+SHA1-Digest: 1cXv/FwAQfGN3ixgAgG+kmpQqkw=
+
+Name: res/anim/ft_avd_toarrow_rectangle_5_animation.xml
+SHA1-Digest: JKviTbLrhghFOdoQd4z7yfBYYzY=
+
+Name: res/anim/ft_avd_toarrow_rectangle_6_animation.xml
+SHA1-Digest: mJ7MQ8wIJfPnOX69D5s0IIyAJzQ=
+
+Name: res/anim/ft_avd_toarrow_rectangle_path_4_animation.xml
+SHA1-Digest: 03DomDUt6Z1O9R5wts5hpNMjQoA=
+
+Name: res/anim/ft_avd_toarrow_rectangle_path_5_animation.xml
+SHA1-Digest: xPsk0P/K97edP4b+AJnMAc/OXJ4=
+
+Name: res/anim/ft_avd_toarrow_rectangle_path_6_animation.xml
+SHA1-Digest: 03DomDUt6Z1O9R5wts5hpNMjQoA=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_1_animation.xml
+SHA1-Digest: mSnUelsw0hMJzZKqA3CkbsRTvgg=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_1_pivot_animation.xml
+SHA1-Digest: eJfy8QHIFq8W8p0nzRfwWjJ5Esw=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_2_animation.xml
+SHA1-Digest: laIfumQ3JgadYXWp+UZdP1DvfwU=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_2_pivot_animation.xml
+SHA1-Digest: f8FN5QiMSuJaXuOqZibuL4Ma+NM=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_3_animation.xml
+SHA1-Digest: 3K5XLjYmABAMpvLElLHks9D2JJ4=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_3_pivot_animation.xml
+SHA1-Digest: eJfy8QHIFq8W8p0nzRfwWjJ5Esw=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_path_1_animation.xml
+SHA1-Digest: UaptvbpkFfwB+z79D6k3oBmoJfg=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_path_2_animation.xml
+SHA1-Digest: UaptvbpkFfwB+z79D6k3oBmoJfg=
+
+Name: res/anim/ft_avd_tooverflow_rectangle_path_3_animation.xml
+SHA1-Digest: uZb6wLe/zuptz+zKYkAvqle2tBI=
+
 Name: res/anim/no_animation.xml
 SHA1-Digest: 3RXxX2rtbEGFpZJtDgzAv5tywig=
 
@@ -343,6 +397,12 @@ SHA1-Digest: c0W98HOgQ4vLc0j72aPnCwbrBhM=
 
 Name: res/color/wallet_secondary_text_holo_dark.xml
 SHA1-Digest: izQbbNi2WSAk65DTIRxTRGmrzh4=
+
+Name: res/drawable-anydpi-v21/ft_avd_toarrow.xml
+SHA1-Digest: z1llCjpl1it4YCNz7dyEGjSk3H4=
+
+Name: res/drawable-anydpi-v21/ft_avd_tooverflow.xml
+SHA1-Digest: Wl2By8ya3twL5HL4pnynqV3uNqk=
 
 Name: res/drawable-anydpi-v21/ic_action_next.xml
 SHA1-Digest: 9tSRMQ9MQFggKSj0YNz40yLxdZg=
@@ -704,6 +764,18 @@ SHA1-Digest: ddGrVvOkTmZLLpha8LShc9oz8cU=
 
 Name: res/drawable-hdpi-v4/foursquare.png
 SHA1-Digest: YtCo3S/G5HnPPolOlLIy1ylw6nk=
+
+Name: res/drawable-hdpi-v4/ft_avd_toarrow.png
+SHA1-Digest: Nyys97QFYD1m7Ei48fJDriaVEzI=
+
+Name: res/drawable-hdpi-v4/ft_avd_tooverflow.png
+SHA1-Digest: JCodbNDdrTLKWKMZtZxwLW5vjus=
+
+Name: res/drawable-hdpi-v4/gem.png
+SHA1-Digest: 9Vb1KYe9tsgzf3HRhYZvmVAcXx4=
+
+Name: res/drawable-hdpi-v4/gem_s.png
+SHA1-Digest: BmegngmbNSrWfa8M7MfKNKUi+lg=
 
 Name: res/drawable-hdpi-v4/ghost.png
 SHA1-Digest: GL8d3X39SOahDGhIgCwdOcZXJ7s=
@@ -1320,6 +1392,12 @@ SHA1-Digest: G913TNpo8j44Dou18PqcKlNA+bw=
 Name: res/drawable-hdpi-v4/menu_support.png
 SHA1-Digest: 8z1TCsKZkBMTl0NW1mTF+3x3oIg=
 
+Name: res/drawable-hdpi-v4/menu_wallet.png
+SHA1-Digest: 8/A0+jXh+jQAWldPZLDrTITFqOw=
+
+Name: res/drawable-hdpi-v4/menu_wallet_ny.png
+SHA1-Digest: 8/A0+jXh+jQAWldPZLDrTITFqOw=
+
 Name: res/drawable-hdpi-v4/message_arrow.png
 SHA1-Digest: 41VmxNYVLp5sCi8iaQNwg2l0Akc=
 
@@ -1857,6 +1935,12 @@ SHA1-Digest: 1b1m3gnyA2HBylO3FFYzPK+8xzM=
 Name: res/drawable-hdpi-v4/proxy_on.png
 SHA1-Digest: llMJw4oE8rQ+TJURyJY+8m9jlk0=
 
+Name: res/drawable-hdpi-v4/qr_flashlight.png
+SHA1-Digest: TjGH1906gXOXleZf8Jl+IlukG2c=
+
+Name: res/drawable-hdpi-v4/qr_gallery.png
+SHA1-Digest: RZ7613sg+gZUI/E3zYec/nCWItc=
+
 Name: res/drawable-hdpi-v4/redcircle.png
 SHA1-Digest: q5LrTmqkj487QUjJaWetjkrx4nc=
 
@@ -2174,6 +2258,21 @@ SHA1-Digest: YYQktIogvWFdVHo1ehj+MvX/KDQ=
 
 Name: res/drawable-hdpi-v4/wall_selection.9.png
 SHA1-Digest: LbUsylbo3kRIspHKdewuDuAhimk=
+
+Name: res/drawable-hdpi-v4/wallet_clear.png
+SHA1-Digest: wD6HC3KmpA2uAHUdqovp1UieTb4=
+
+Name: res/drawable-hdpi-v4/wallet_fingerprint.png
+SHA1-Digest: N7l3pEuyg/poZjgUYBBhkUPO42A=
+
+Name: res/drawable-hdpi-v4/wallet_qr.png
+SHA1-Digest: NvqEc/1DuPj0Sj4JPcCxD0fLCas=
+
+Name: res/drawable-hdpi-v4/wallet_receive.png
+SHA1-Digest: TodZCLqph/wfhibJHrDXeI+8xdw=
+
+Name: res/drawable-hdpi-v4/wallet_send.png
+SHA1-Digest: onAZKK+yBaHNTvhWGTZcwwJDoP8=
 
 Name: res/drawable-hdpi-v4/zoom_minus.png
 SHA1-Digest: fu+v0eHz4pGX7U2eABS8vxGdGg4=
@@ -2538,6 +2637,18 @@ SHA1-Digest: L7QcaoDILzoCSfygFPQfGLO8bEk=
 
 Name: res/drawable-mdpi-v4/foursquare.png
 SHA1-Digest: K8mxiLkS788EFsUjZdtjgjCLAmI=
+
+Name: res/drawable-mdpi-v4/ft_avd_toarrow.png
+SHA1-Digest: zQUXvr0DyDTatnCQYsSBT1hx7NA=
+
+Name: res/drawable-mdpi-v4/ft_avd_tooverflow.png
+SHA1-Digest: fVwgPdA8S7mKqCcL2102xMBwFMY=
+
+Name: res/drawable-mdpi-v4/gem.png
+SHA1-Digest: vchv0sa9/ERKiPVM5WVsKZOq5Ec=
+
+Name: res/drawable-mdpi-v4/gem_s.png
+SHA1-Digest: wyBV9Vmm8OBJw5rs1zIPU5ENYXQ=
 
 Name: res/drawable-mdpi-v4/ghost.png
 SHA1-Digest: VZt3RhifaIVZsGSkA56NKsVDKsg=
@@ -3157,6 +3268,12 @@ SHA1-Digest: eMulY9fIajkNZkntU2mlT5+VU/4=
 Name: res/drawable-mdpi-v4/menu_support.png
 SHA1-Digest: SSQALsO24Y7h3TXwadeOw8Mrpi8=
 
+Name: res/drawable-mdpi-v4/menu_wallet.png
+SHA1-Digest: lSnrE5VpYmfAGkmogklWar8sID0=
+
+Name: res/drawable-mdpi-v4/menu_wallet_ny.png
+SHA1-Digest: lSnrE5VpYmfAGkmogklWar8sID0=
+
 Name: res/drawable-mdpi-v4/message_arrow.png
 SHA1-Digest: JwlVeCEaCoLEllKPub60Hm4aRhM=
 
@@ -3694,6 +3811,12 @@ SHA1-Digest: 4Nbc9K2mB0YbqDQAX8ra5Ce8FfY=
 Name: res/drawable-mdpi-v4/proxy_on.png
 SHA1-Digest: TMdK2LZ78BVg6YYz43BzQLS2WgU=
 
+Name: res/drawable-mdpi-v4/qr_flashlight.png
+SHA1-Digest: tF/5cWSacXA04sfdOxxNrePnuMM=
+
+Name: res/drawable-mdpi-v4/qr_gallery.png
+SHA1-Digest: pRilWyKITkag/wTm5qip07K2F0k=
+
 Name: res/drawable-mdpi-v4/redcircle.png
 SHA1-Digest: NnjIcdlDWsW/1JDG5L4E+ABzhmE=
 
@@ -4012,6 +4135,21 @@ SHA1-Digest: tOaj8AMr2h3C/IDkMqo13TuitF0=
 Name: res/drawable-mdpi-v4/wall_selection.9.png
 SHA1-Digest: apZXVeHKAqxTayXBzp5rjAm13I4=
 
+Name: res/drawable-mdpi-v4/wallet_clear.png
+SHA1-Digest: tQAlejSUbLtzQNYAblS1Y370gUU=
+
+Name: res/drawable-mdpi-v4/wallet_fingerprint.png
+SHA1-Digest: Uuux5MRliHz/GFnd97FndqRKT+A=
+
+Name: res/drawable-mdpi-v4/wallet_qr.png
+SHA1-Digest: i3vqrUtKObIx5qKFRO4oKDTVc+A=
+
+Name: res/drawable-mdpi-v4/wallet_receive.png
+SHA1-Digest: I/k0t56IVwfqYC2D1mupp0IjnD8=
+
+Name: res/drawable-mdpi-v4/wallet_send.png
+SHA1-Digest: rHj0Pw0/0ZN0+Ow69IRIDSpmsiU=
+
 Name: res/drawable-mdpi-v4/zoom_minus.png
 SHA1-Digest: 8tVoj8wUMVWnu0COTUfNZb05Tgc=
 
@@ -4066,20 +4204,17 @@ SHA1-Digest: M4v4L1NDq6vxqtHS4+ij+1DA2oo=
 Name: res/drawable-v21/notification_action_background.xml
 SHA1-Digest: kYvk/ZRarxRbdHCJMwHkFfUcHXc=
 
-Name: res/drawable-v21/regbtn_states.xml
-SHA1-Digest: yXsGVZmVHoAgRLU6nbiTPHlMrDk=
-
 Name: res/drawable-watch-v20/common_google_signin_btn_text_dark_normal
  .xml
-SHA1-Digest: d8bW5YFlw8N3mBw5tGcJPP6gJzE=
+SHA1-Digest: 5vfgQBo875OM2DDRLcB98HdSbJg=
 
 Name: res/drawable-watch-v20/common_google_signin_btn_text_disabled.xm
  l
-SHA1-Digest: JbrlEh8zwJrzHXPgvLdttNoldtI=
+SHA1-Digest: dwDz1rlp2geu0d8WwnkcDOcaHNY=
 
 Name: res/drawable-watch-v20/common_google_signin_btn_text_light_norma
  l.xml
-SHA1-Digest: kEodvHJfo0LjUkKrxaiaYmTa9vo=
+SHA1-Digest: coGUxs/R9h9CC+rpiZ4woGVNL7U=
 
 Name: res/drawable-xhdpi-v4/ab_progress.png
 SHA1-Digest: DSXu14t7HuAb6iR17Nv+/42fHoM=
@@ -4429,6 +4564,18 @@ SHA1-Digest: vesjSFecCxUc5CoXt3XpitbJ5bw=
 
 Name: res/drawable-xhdpi-v4/foursquare.png
 SHA1-Digest: 0H3mpGydD3fC8xVPNKuCFO2sCX8=
+
+Name: res/drawable-xhdpi-v4/ft_avd_toarrow.png
+SHA1-Digest: lI3JVvNx1TAtNege9/QayvNKPS0=
+
+Name: res/drawable-xhdpi-v4/ft_avd_tooverflow.png
+SHA1-Digest: FFWbJUttLyptqvVBp5XPmTU8Ze8=
+
+Name: res/drawable-xhdpi-v4/gem.png
+SHA1-Digest: jIf1fFj245dpbLKe6zUDaRl1N+Y=
+
+Name: res/drawable-xhdpi-v4/gem_s.png
+SHA1-Digest: cOF7L0OWwnWuyvXh0fINHH5SkhY=
 
 Name: res/drawable-xhdpi-v4/ghost.png
 SHA1-Digest: Cl0M5CmO4cbKUNdUoYQZY5spOnY=
@@ -5048,6 +5195,12 @@ SHA1-Digest: 8xF2hieKyNk5EQPEhcw9624dYYw=
 Name: res/drawable-xhdpi-v4/menu_support.png
 SHA1-Digest: HwYNmGhInr3aE7yJk9HbTRc5kyU=
 
+Name: res/drawable-xhdpi-v4/menu_wallet.png
+SHA1-Digest: JDnTWh5e+BM9I4ZQpxAVj13jTOs=
+
+Name: res/drawable-xhdpi-v4/menu_wallet_ny.png
+SHA1-Digest: JDnTWh5e+BM9I4ZQpxAVj13jTOs=
+
 Name: res/drawable-xhdpi-v4/message_arrow.png
 SHA1-Digest: kOjgWtSnroLpS9AZ2c5slRoqHzE=
 
@@ -5585,6 +5738,12 @@ SHA1-Digest: W5VkzLfdLyNp3M5CYFHueNTMpWU=
 Name: res/drawable-xhdpi-v4/proxy_on.png
 SHA1-Digest: Nqa45tObkU8Av2lp3IXglYZoh18=
 
+Name: res/drawable-xhdpi-v4/qr_flashlight.png
+SHA1-Digest: ff/nY/a22hIHM9pUpyfs1HWQJew=
+
+Name: res/drawable-xhdpi-v4/qr_gallery.png
+SHA1-Digest: SYyXyBAT4zHL48BOt+ZO8CV/9Kk=
+
 Name: res/drawable-xhdpi-v4/redcircle.png
 SHA1-Digest: RndmV3sZpOH1njGr0se5iHyWfo8=
 
@@ -5902,6 +6061,21 @@ SHA1-Digest: P4zaSXhaT1MI5jw+R4GLGf7C/1g=
 
 Name: res/drawable-xhdpi-v4/wall_selection.9.png
 SHA1-Digest: 3Z9xjmXgutL3Az296iTgoMN6610=
+
+Name: res/drawable-xhdpi-v4/wallet_clear.png
+SHA1-Digest: gps5zX7H+/W1oHsfMbPzT41bECo=
+
+Name: res/drawable-xhdpi-v4/wallet_fingerprint.png
+SHA1-Digest: DwWgftpSyy2W3xRI1XE2nzNAra8=
+
+Name: res/drawable-xhdpi-v4/wallet_qr.png
+SHA1-Digest: YZkJIGycJpS/ef9CSEU2KLEL4sU=
+
+Name: res/drawable-xhdpi-v4/wallet_receive.png
+SHA1-Digest: NMfGq9inl2W0eK7oz8DQUGu+7+Y=
+
+Name: res/drawable-xhdpi-v4/wallet_send.png
+SHA1-Digest: j7JxsvUyY0U3F0RmxHshEHg58Qk=
 
 Name: res/drawable-xhdpi-v4/zoom_minus.png
 SHA1-Digest: T5Or/R1oX2M9EaMgKXgvHWA9Ljg=
@@ -6263,6 +6437,18 @@ SHA1-Digest: ojNXbYXzII5EbSCZ04neNYYJeBQ=
 
 Name: res/drawable-xxhdpi-v4/foursquare.png
 SHA1-Digest: SiDqLSbzNz3VAAnXQSXgxg42fUc=
+
+Name: res/drawable-xxhdpi-v4/ft_avd_toarrow.png
+SHA1-Digest: fRPm25GdjqMLQgDc33mBK10mwwY=
+
+Name: res/drawable-xxhdpi-v4/ft_avd_tooverflow.png
+SHA1-Digest: fn2mKENi0FHpW3aRx11MjgJQbK4=
+
+Name: res/drawable-xxhdpi-v4/gem.png
+SHA1-Digest: PjtWxhWkvfizZKM0U6XP1oPPLKI=
+
+Name: res/drawable-xxhdpi-v4/gem_s.png
+SHA1-Digest: LOCekREevlWsVMFEj3OjbEcB0Eo=
 
 Name: res/drawable-xxhdpi-v4/ghost.png
 SHA1-Digest: rsaoy8hkxaKuteLAeO7cjTGAdl4=
@@ -6876,6 +7062,12 @@ SHA1-Digest: A0b5xdd/5JT9EQ8NzbAW9m5gzcQ=
 Name: res/drawable-xxhdpi-v4/menu_support.png
 SHA1-Digest: zakRKDFUusoaOm6U6xedyOcFdKQ=
 
+Name: res/drawable-xxhdpi-v4/menu_wallet.png
+SHA1-Digest: /Yfa8sRNXkWekVvD37Yg9L2mYo8=
+
+Name: res/drawable-xxhdpi-v4/menu_wallet_ny.png
+SHA1-Digest: /Yfa8sRNXkWekVvD37Yg9L2mYo8=
+
 Name: res/drawable-xxhdpi-v4/message_arrow.png
 SHA1-Digest: OhgvsExnCVKPFbCr/+GwQ7AARn8=
 
@@ -7395,6 +7587,12 @@ SHA1-Digest: h/CqZTu0hR9uIbFVpAmqZ81KWhs=
 Name: res/drawable-xxhdpi-v4/proxy_on.png
 SHA1-Digest: xT4UWnGIezMIi5HaMNs2T3AWlDk=
 
+Name: res/drawable-xxhdpi-v4/qr_flashlight.png
+SHA1-Digest: 3OwFIoIzVCMVn0i01d0PVg+6qw8=
+
+Name: res/drawable-xxhdpi-v4/qr_gallery.png
+SHA1-Digest: ob+dvBBbBLfq0mqNLjjPzXgaZAw=
+
 Name: res/drawable-xxhdpi-v4/redcircle.png
 SHA1-Digest: YC6ZwmgawOzWrbvSSwzs8h9SBqU=
 
@@ -7716,6 +7914,21 @@ SHA1-Digest: TqLjHRtxcUPPkDCthio/aV8AKq8=
 Name: res/drawable-xxhdpi-v4/wall_selection.9.png
 SHA1-Digest: zW6Gymg6H7iWcrV7B5kLT8D0CWs=
 
+Name: res/drawable-xxhdpi-v4/wallet_clear.png
+SHA1-Digest: PF7syUydAkd7OpD4/5Rd9dDPiyc=
+
+Name: res/drawable-xxhdpi-v4/wallet_fingerprint.png
+SHA1-Digest: n0/35X5v3WKwdk7A4bw+eTFbc6s=
+
+Name: res/drawable-xxhdpi-v4/wallet_qr.png
+SHA1-Digest: PyvURdHEH7gJL2oH/wrVrD48W5g=
+
+Name: res/drawable-xxhdpi-v4/wallet_receive.png
+SHA1-Digest: ltleIxCsg79/Sh5nXh00tNQ7arw=
+
+Name: res/drawable-xxhdpi-v4/wallet_send.png
+SHA1-Digest: WfOdwJvqV2anxrYML8eh3w7FBYQ=
+
 Name: res/drawable-xxhdpi-v4/zoom_minus.png
 SHA1-Digest: nZ6AJGqmI0gkNkKJGc3grrVzQgI=
 
@@ -7743,20 +7956,194 @@ SHA1-Digest: rILbnGLuvnYu6VlOKrCHHY6tfug=
 Name: res/drawable-xxxhdpi-v4/sheet_shadow.9.png
 SHA1-Digest: F55ewuT6O4DjBNRPW3tQIP6OSEQ=
 
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__1__0.xml
+SHA1-Digest: AGFNFSasfqxEZa4JNBAKaFL/muM=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__1__1.xml
+SHA1-Digest: 6e/02jriHQLeGGN0e6a7jl19i4w=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__2__0.xml
+SHA1-Digest: 1hUHef0zESP3pdLdaPi4Z7+UZso=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__2__1.xml
+SHA1-Digest: Uvz0lUdLgJnjWjFPLVElgDngNC8=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__3__0.xml
+SHA1-Digest: 7Lnt5F6JZr13+DexCmYa2kk2vps=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__3__1.xml
+SHA1-Digest: BijsjiNjjqWF7UUv1sW5RcZZf00=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__4__0.xml
+SHA1-Digest: X/KmYb//0vZlCub7OCRljG7fU1g=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__4__1.xml
+SHA1-Digest: FSiCjcCxJAoF8epLuQ3BQuRKwY0=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__5__0.xml
+SHA1-Digest: S5VMdZdogSXe312M9uRtWRAKT2E=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__5__1.xml
+SHA1-Digest: a6y48vM5UvuqQTf0ttlk84VMAHo=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__6__0.xml
+SHA1-Digest: HWM7vuc6eDzdNXI22Uq9ioyatYo=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__6__1.xml
+SHA1-Digest: ubS3qkvwOyUB/B3FwHMRuAhlSi4=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__6__2.xml
+SHA1-Digest: 0QYzM16ND6hcY+1zu62XKqXUb/0=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__6__3.xml
+SHA1-Digest: bNybKw64AhXia7SukM0/ISZAsVs=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__7__0.xml
+SHA1-Digest: 2JF7D9j5GUUPqPbhCJQTlZHL6ss=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__7__1.xml
+SHA1-Digest: 6hBTHVnjQg3RxuinwuwMPXvGs10=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__7__2.xml
+SHA1-Digest: PRIAqNy9i2EaTYWP6oFKrrPmQ9s=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__7__3.xml
+SHA1-Digest: QEzv0PJw5zy9Iiv0gW1MYZ6tpuM=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__8__0.xml
+SHA1-Digest: TRtyWp5lLnZeTguwyWhC4OWsHEQ=
+
+Name: res/drawable/$$fingerprint_dialog_error_to_fp__8__1.xml
+SHA1-Digest: eBJaGediA1/mcTVyVFe/tmuZtaA=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__1__0.xml
+SHA1-Digest: uMUeFpVo53vfYakOcISpluqtGvM=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__2__0.xml
+SHA1-Digest: ckgCLKmR8xG06h7z4/xPeLqLFRw=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__3__0.xml
+SHA1-Digest: s06MJSGJ0XESr68mKiBUsdjU9XQ=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__4__0.xml
+SHA1-Digest: TLPM47cVSNf5yb9Z3B5Trek98Vc=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__5__0.xml
+SHA1-Digest: cpyWDvyEYlqkEpKhpnmGueVDON8=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__6__0.xml
+SHA1-Digest: gZ67tDJltp5Fwx9/efp9pOXiXrM=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__6__1.xml
+SHA1-Digest: 6DFKqWIxYn8sZEvNXcyl8KhD03c=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__6__2.xml
+SHA1-Digest: wXxYybslwnJLxj2caNnJK0lBLWw=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__6__3.xml
+SHA1-Digest: XBo2GzY6eB9dyoAe5lJBn4diNNE=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__6__4.xml
+SHA1-Digest: DEDNIOXBVt1Jg/feZxOh2msA2LA=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__6__5.xml
+SHA1-Digest: 3CK/fwzUL53uk+9QHDCaiD2Dbg4=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__7__0.xml
+SHA1-Digest: Z7O5wskFsodDEniupgLyVx+1vjc=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__7__1.xml
+SHA1-Digest: C3R73TxIGenisXERTWLIiicmZWg=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__7__2.xml
+SHA1-Digest: 6aLhf0ohYK+AOTdXOgigWyzK0l8=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__7__3.xml
+SHA1-Digest: BlKsiNecy62hpLqbfOaP1ORhbW8=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__7__4.xml
+SHA1-Digest: GPU877rTNtTt9UwbQ535boZpvA8=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__7__5.xml
+SHA1-Digest: 8H3I81MiOXS4zHskttMIcixYDKQ=
+
+Name: res/drawable/$$fingerprint_dialog_fp_to_error__8__0.xml
+SHA1-Digest: dWPcJtiFWhhbAJKwmGbEJzB9YRA=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__0.xml
+SHA1-Digest: hQRSGhJqIFC4q90swqYwyPt0CO0=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__1.xml
+SHA1-Digest: lO6cqc+FVgZwpBYzGxftJmYXcK8=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__2.xml
+SHA1-Digest: p5N7fv+wnGERM040bD3Fk1rj1Ls=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__3.xml
+SHA1-Digest: 9qyIsEmwqnqu+WTREnO/5cWvF1U=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__4.xml
+SHA1-Digest: cJ7xhw34YVffTckK85dEvgAKrsQ=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__5.xml
+SHA1-Digest: DnFoaQyIHWtppL39R22uWvs85Tc=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__6.xml
+SHA1-Digest: zr5lD6o/iEjCfaYC9k+B+Jf3ha0=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__7.xml
+SHA1-Digest: Osj85PNnd9Fsb2cKh8FqvFT+xt4=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__8.xml
+SHA1-Digest: jPFlBNV5JKSd5PRVfV5+1874zG8=
+
+Name: res/drawable/$fingerprint_dialog_error_to_fp__9.xml
+SHA1-Digest: cvFczF9omzItCqMW+WvxwkertMA=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__0.xml
+SHA1-Digest: XgXQKoa8GrlmLr/u6uoODQ5GDDA=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__1.xml
+SHA1-Digest: jVdexb2EdyXT5+vde22Gj8i+los=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__2.xml
+SHA1-Digest: M98xK49ODXQFPa4fqhwIT0CP6W0=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__3.xml
+SHA1-Digest: gAm2yEVH77dZoBP+hOEiZ9E5sGc=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__4.xml
+SHA1-Digest: aDTRM/JCHO16uNmmciNmFgL+yIg=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__5.xml
+SHA1-Digest: 35kAWkUM00bhD/0+dYo1asr/RS4=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__6.xml
+SHA1-Digest: lTo6bxiJjWwNiTXesk3v++xhR0c=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__7.xml
+SHA1-Digest: bAW2CqJ5v89Qay+8yMPeWje+uvo=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__8.xml
+SHA1-Digest: g5qS1E5Xld38T/046hJV5E7VAb4=
+
+Name: res/drawable/$fingerprint_dialog_fp_to_error__9.xml
+SHA1-Digest: 1JpfWGRUfkDt/s1Z3UAR2/1PHhg=
+
 Name: res/drawable/bar_selector_lock.xml
-SHA1-Digest: pRBqrPI1pdsE1tYACqGzs4d+6e0=
+SHA1-Digest: cPcpAX2VjoIq5ugNNlfejHBok20=
 
 Name: res/drawable/bar_selector_style.xml
-SHA1-Digest: C6PgXDHyzNPsCeP7GSG7/jp9sGQ=
+SHA1-Digest: eZYqwpE+FoYqUS9kSbiVPtrIorw=
 
 Name: res/drawable/bar_selector_white.xml
-SHA1-Digest: TbZaaetjYJCcopTNWKtIASWHwI4=
+SHA1-Digest: T44hykB01YWSJ1l3bB/msl4kYVg=
 
 Name: res/drawable/bg_voip_icon_btn.xml
 SHA1-Digest: J22G2/eAoKY4/nC3pxuofnAITl0=
 
 Name: res/drawable/call_custom_notification_icon.xml
-SHA1-Digest: ask8SVNC9VKcuERGrnU9oPXdLe8=
+SHA1-Digest: sGABhWui9vwSttopS+xt05W4NJM=
 
 Name: res/drawable/call_notification_bg.xml
 SHA1-Digest: nOCyiIo3P4selyXXFDwXgqcotxQ=
@@ -7771,52 +8158,67 @@ Name: res/drawable/catstile.jpg
 SHA1-Digest: AaKLLAEEbnyCzZroHLlOc8xSxvs=
 
 Name: res/drawable/common_google_signin_btn_icon_dark.xml
-SHA1-Digest: 15JgMiNlZ+HhRgkngySAVkvG7Bo=
+SHA1-Digest: YAM6OVuBZ+3ceT66TGC5T/WSP70=
 
 Name: res/drawable/common_google_signin_btn_icon_dark_focused.xml
-SHA1-Digest: VIrpBxWozG7a310fJU+JXYVkNhE=
+SHA1-Digest: ieygRa5xQv+tP+0jOLbYfX8yD+g=
 
 Name: res/drawable/common_google_signin_btn_icon_dark_normal.xml
-SHA1-Digest: P0aWf2yDCy4eY1hc47RLzAwLD6U=
+SHA1-Digest: 1wYfcpUrRSJffPzZKlS/NCyQTBY=
 
 Name: res/drawable/common_google_signin_btn_icon_disabled.xml
-SHA1-Digest: 6GW2Yl+jnwa8rMiVUDw3r7Nemf0=
+SHA1-Digest: xoWz/hIlfT3UAoKtMzI0EA6pj7I=
 
 Name: res/drawable/common_google_signin_btn_icon_light.xml
-SHA1-Digest: 4uu4V4QHv5u08m284ct+LZYRgM0=
+SHA1-Digest: htToDds/0oP3DSPs8HiaJxUBprg=
 
 Name: res/drawable/common_google_signin_btn_icon_light_focused.xml
-SHA1-Digest: fjRsTrWtkIVlFg8QjsHxk6Vdrn4=
+SHA1-Digest: iKFQmA3iD/6ljvUx3XPTnZVaWBc=
 
 Name: res/drawable/common_google_signin_btn_icon_light_normal.xml
-SHA1-Digest: GGAH8x15rmKW4QTMOvv3+s/uUKg=
+SHA1-Digest: VFsnBheTBBMTsq9m/sucagxPupg=
 
 Name: res/drawable/common_google_signin_btn_text_dark.xml
-SHA1-Digest: YZTdgps5QrKT2svjjsitecMOw2o=
+SHA1-Digest: mt+VOP8A8d0Xo7a6fq1c7hFz4SA=
 
 Name: res/drawable/common_google_signin_btn_text_dark_focused.xml
-SHA1-Digest: VQs27S+PhI2qbENEezxjee9udUY=
+SHA1-Digest: M0ZJTO+wRs5X4u1DteXAT+JU7ac=
 
 Name: res/drawable/common_google_signin_btn_text_dark_normal.xml
-SHA1-Digest: TaoY5pznvAK6vrnFHSUAqxbhYHc=
+SHA1-Digest: q1ZAu0CyA02Dd334jIz6n0tpWFg=
 
 Name: res/drawable/common_google_signin_btn_text_disabled.xml
-SHA1-Digest: 6Au/yOjS6DzHQdYfmtfI60vHvGo=
+SHA1-Digest: iHWxscJYWGWLMSdq7nVw78LcUWM=
 
 Name: res/drawable/common_google_signin_btn_text_light.xml
-SHA1-Digest: 6x2IjxHc3j41OTGTW25WF8zj6yQ=
+SHA1-Digest: g2Jrclcj6BPr/gePxRZSsnsSNvk=
 
 Name: res/drawable/common_google_signin_btn_text_light_focused.xml
-SHA1-Digest: e6G4WdlkOV5txVxEa+M+XTQYqPU=
+SHA1-Digest: FvQyibOd6+V++L4gXSPyxMEJpUo=
 
 Name: res/drawable/common_google_signin_btn_text_light_normal.xml
-SHA1-Digest: r9effZEeynziv3KI+anIH2f8J9k=
+SHA1-Digest: ftL9Xlw/CSQCwDhn151ZbkYOxZ0=
 
 Name: res/drawable/fab_highlight_dark.xml
 SHA1-Digest: s/IjS96CXmhkYp3JBbLMbDyfCyA=
 
 Name: res/drawable/field_carret_empty.xml
 SHA1-Digest: 8i8YMKeq+pMYb2o5iXZbGStXqs0=
+
+Name: res/drawable/fingerprint_dialog_error_to_fp.xml
+SHA1-Digest: IH45oP0mHM8fBHitj2jRZDJ384Q=
+
+Name: res/drawable/fingerprint_dialog_fp_to_error.xml
+SHA1-Digest: d02pVae6qsKWxnQOvvXJ/6VULcI=
+
+Name: res/drawable/ft_avd_toarrow_animation.xml
+SHA1-Digest: T9xZU4HgUPXg5LaDb7tUVBCIAO4=
+
+Name: res/drawable/ft_avd_tooverflow_animation.xml
+SHA1-Digest: Y7mex5m3nzD4l2wQ7SmKnWqMKKg=
+
+Name: res/drawable/gem_l.png
+SHA1-Digest: 5dWJIFgi8k/dR8Cij6iuLTiZ0yE=
 
 Name: res/drawable/gradient_bottom.png
 SHA1-Digest: BI1RtsvnmgAiaMsGyZcuW3zMh8s=
@@ -7828,10 +8230,10 @@ Name: res/drawable/hockeyapp_btn_background.xml
 SHA1-Digest: 3jCYkabdFgh84X2xkovBNzzL4Ms=
 
 Name: res/drawable/ic_call_notification_answer.xml
-SHA1-Digest: /M9CB4MUbp7h9Wa0qb0bQoKDJeI=
+SHA1-Digest: Tif0dpEJkaUOI8CgvFcC4/i/cGE=
 
 Name: res/drawable/ic_call_notification_decline.xml
-SHA1-Digest: 8Si4VXjUUBReOMbDKcIgJlDCfUk=
+SHA1-Digest: AqLKtrDGpHjgweL/LQsNHh4+77c=
 
 Name: res/drawable/ic_player.png
 SHA1-Digest: iUoR9uzsXedMhxS1DJEgnRCSxdk=
@@ -7840,25 +8242,25 @@ Name: res/drawable/icplaceholder.jpg
 SHA1-Digest: VRZDALhEB9AR7MDc2CvTjZwpK30=
 
 Name: res/drawable/list_selector_ex.xml
-SHA1-Digest: TpkAarFppp5aVeMjWpH5aPWsbiM=
+SHA1-Digest: aS+dLrGoQJMVj/9Hjb3SNQngjzM=
 
 Name: res/drawable/loading_animation.xml
-SHA1-Digest: wc03RnQt0kTV3H5x+0p18bcv8dc=
+SHA1-Digest: P3cooXxWG66o3duqwuet+Fb9WmY=
 
 Name: res/drawable/loading_animation2.xml
-SHA1-Digest: 7L7g2WBxZht6Sl66H+wH77v4XRg=
+SHA1-Digest: Pp18a/ZPl891T5LHiz70i0T98DM=
 
 Name: res/drawable/notification_bg.xml
-SHA1-Digest: NKOGcCfSr9Xv21UUPM0KwyrQGn0=
+SHA1-Digest: 7nSO6VnyMh6uft7iXBysCo352Io=
 
 Name: res/drawable/notification_bg_low.xml
-SHA1-Digest: 3fkyB2XOQc1uxAG37KQLTDkZ09Q=
+SHA1-Digest: k/bcvmQeaKnrBkNcbfuho7tT0cM=
 
 Name: res/drawable/notification_icon_background.xml
 SHA1-Digest: u9ctaNAjzrr48vaHoqnJELteK9w=
 
 Name: res/drawable/notification_tile_bg.xml
-SHA1-Digest: R8UaBgN8D/z+oevTdi50qGNYKYE=
+SHA1-Digest: +CdK9HmTyLA34XXZa+FbEco3UUQ=
 
 Name: res/drawable/paint_elliptical_brush.png
 SHA1-Digest: YxcHWgcRA6mcbCx1dnjhkOsV8yo=
@@ -7884,20 +8286,17 @@ SHA1-Digest: HwSIXZSIVOd3Z487I1yjht2RD58=
 Name: res/drawable/photoview_placeholder.png
 SHA1-Digest: bPpcqE13DFk0hUCW8YzBl7x3ryM=
 
-Name: res/drawable/regbtn_states.xml
-SHA1-Digest: XOzHizOuCZcPT9TCmYLEscBwOe4=
-
 Name: res/drawable/scrollbar_vertical_thumb.xml
 SHA1-Digest: cIMtnFnvAhj5T9tJg+qXs7oxLn0=
 
 Name: res/drawable/scrollbar_vertical_thumb_inset.xml
-SHA1-Digest: oUpp8amU4BH8W+ou32peoRfbe3A=
+SHA1-Digest: VgJdcQkoh7kfRah/fead/eLh39Y=
 
 Name: res/drawable/spinner_states.xml
 SHA1-Digest: s9zsMXEg1GmrEULvRvuxdkq6j1w=
 
 Name: res/drawable/switch_thumb.xml
-SHA1-Digest: LaOOmZ/Iw+hTiPVZUTCbTQMOMv0=
+SHA1-Digest: G0108nr2qPI+86S2bH0ZxY0Vr24=
 
 Name: res/drawable/theme_preview_image.jpg
 SHA1-Digest: ML0+EZSOfk6uQTRUBePSKF60syA=
@@ -7905,41 +8304,50 @@ SHA1-Digest: ML0+EZSOfk6uQTRUBePSKF60syA=
 Name: res/drawable/transparent.xml
 SHA1-Digest: 1HSCduNwo/Dj1eQDOT5TX8y7zV0=
 
+Name: res/interpolator/ft_avd_toarrow_animation_interpolator_1.xml
+SHA1-Digest: 2CE3JfdXqzrER2GIKXc5wf5a7LY=
+
+Name: res/interpolator/ft_avd_toarrow_animation_interpolator_2.xml
+SHA1-Digest: cdReIBIBBoJhKR5eW80+RgFBTMU=
+
+Name: res/interpolator/ft_avd_toarrow_animation_interpolator_5.xml
+SHA1-Digest: 2CE3JfdXqzrER2GIKXc5wf5a7LY=
+
 Name: res/layout-land/hockeyapp_fragment_update.xml
-SHA1-Digest: 7wPGjia53uuzuLJtgtVXmPhcgQM=
+SHA1-Digest: r9pk5i3YqgrRWVSW61b+Itz5LeY=
 
 Name: res/layout-v16/notification_template_custom_big.xml
-SHA1-Digest: NkVieojpDcTsYNoK1PO2oq3nOjE=
+SHA1-Digest: pF8iWSlWydh0/5PaF6Tg+CdaLt0=
 
 Name: res/layout-v17/hockeyapp_activity_feedback.xml
-SHA1-Digest: t70/GW7Rv/sYOelF7+381F0aGGE=
+SHA1-Digest: a+2v4typ6/ntH+t3kwuw3KIHaus=
 
 Name: res/layout-v17/notification_action.xml
-SHA1-Digest: GxwNzeGsv5Dh7j885pOgL/J81eY=
+SHA1-Digest: 0kDLS2UtnxiOM5BeQbdpwlMBc40=
 
 Name: res/layout-v17/notification_action_tombstone.xml
-SHA1-Digest: u1+9r2UKSUfrLFc+XZv/r+3P6hU=
+SHA1-Digest: d8es5DQVMt1QOB8Sg5mC4eeJlD8=
 
 Name: res/layout-v17/notification_template_custom_big.xml
-SHA1-Digest: oFyIPHYdvSXDauKmhx99uZ4tJFc=
+SHA1-Digest: 27uVK3xSG6ils4VVhp0g39JJKSQ=
 
 Name: res/layout-v21/notification_action.xml
-SHA1-Digest: cE5XuiY+nk0MJkcaTlwjBVrTbNk=
+SHA1-Digest: Ffsk3o2iwhLWo/qNnr0QRacgDO0=
 
 Name: res/layout-v21/notification_action_tombstone.xml
-SHA1-Digest: 32wZNjIYWqXJcizqu4VyJmu98cM=
+SHA1-Digest: ZD7yQ9JuH+CgUcOagQMgLc3teoE=
 
 Name: res/layout-v21/notification_template_custom_big.xml
-SHA1-Digest: YnQxbxm/B1E3dlcOorpXJJBeDu4=
+SHA1-Digest: m6sMUHTMGxBcr7RImx1HrMGM9gU=
 
 Name: res/layout-v21/notification_template_icon_group.xml
-SHA1-Digest: U2/neUKsEw44dWKJs4+mwTISpzA=
+SHA1-Digest: v+QS3FzGMaFkwzLN8LUIi3DtxRw=
 
 Name: res/layout/call_notification.xml
-SHA1-Digest: E90Q0VmZkNZd1eiU1MhErhNWaN8=
+SHA1-Digest: H3XVB65aRkplJwh+0xLcn3kawas=
 
 Name: res/layout/call_notification_rtl.xml
-SHA1-Digest: mbgQOEoOtsN8pKAnaXNqtAO+pX4=
+SHA1-Digest: TWtwUHLcrrMuNokJGj/RvfJdTj8=
 
 Name: res/layout/custom_dialog.xml
 SHA1-Digest: 67z+tvN66hUtbIR2F48ZSy5ynA0=
@@ -7948,46 +8356,46 @@ Name: res/layout/hockeyapp_activity_expiry_info.xml
 SHA1-Digest: xlFH3ntLjYzp1XVv7C1r1bkoyEI=
 
 Name: res/layout/hockeyapp_activity_feedback.xml
-SHA1-Digest: y2v2LB9wDmj33B7y5mqAe8U+uvw=
+SHA1-Digest: rieUiFDlR9RkxX7W2pf5FXFzD+Q=
 
 Name: res/layout/hockeyapp_activity_login.xml
-SHA1-Digest: nZY4HRVfcIMry0k3LyKe+iDyubo=
+SHA1-Digest: ilIPZcGvTHwfGC2oe+h71mtpi40=
 
 Name: res/layout/hockeyapp_fragment_update.xml
-SHA1-Digest: n/zGYjhyb61riKuYO8DEd8CJNZk=
+SHA1-Digest: HK0maAH4fLLBJGKjL7fwgVUMCDc=
 
 Name: res/layout/hockeyapp_view_feedback_message.xml
 SHA1-Digest: XPeF0eSHq4QCaOQvJu03gkZQLq8=
 
 Name: res/layout/notification_action.xml
-SHA1-Digest: 3NDkvP9XFj5TfmSB74lPv6zLDQE=
+SHA1-Digest: JshsV3dx/IElGHQJZQ28L+mDcJw=
 
 Name: res/layout/notification_action_tombstone.xml
-SHA1-Digest: QCatUsq/IkwzC3vasWlCPlfxe2k=
+SHA1-Digest: nPFiOTR/0FMvZhsLTaardXA2Kcc=
 
 Name: res/layout/notification_template_icon_group.xml
 SHA1-Digest: zCb1yh7LCrBtZf6eadx+MMR78dw=
 
 Name: res/layout/notification_template_part_chronometer.xml
-SHA1-Digest: HL2mxE14TWuCmmhF5OdBXDGCgZA=
+SHA1-Digest: jXlhw6W2EkBrNMMLttIyGWcGT1w=
 
 Name: res/layout/notification_template_part_time.xml
-SHA1-Digest: mpriz5ZXygXyqWqaiE36MUKql0M=
+SHA1-Digest: How2oaJH1jTZohk31UEWLggjMVI=
 
 Name: res/layout/player_big_notification.xml
-SHA1-Digest: DOltcpyBfTXfvkERthq7+9/Erc0=
+SHA1-Digest: QMUb4RBcMPDv4sXygjQTHK9EYrU=
 
 Name: res/layout/player_small_notification.xml
-SHA1-Digest: B1Wz2ClNSsYTho8dEtm5pg8pBfk=
+SHA1-Digest: DROSyUl9WkdL/+qTfrAUpWRrzfI=
 
 Name: res/layout/wallet_test_layout.xml
 SHA1-Digest: lf7EAo3SaEiHM2vHX7C0oUjy/BY=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
-SHA1-Digest: KwpM5UzoGIYlh+qu2gVKqA42djY=
+SHA1-Digest: f5ZJP3thwJfrQSFormC85H7px44=
 
 Name: res/mipmap-anydpi-v26/ic_launcher_round.xml
-SHA1-Digest: YI1ebHHzzNxOV+2mCoejEG5tMqE=
+SHA1-Digest: 0FpANlPHEmIG5RJPM9/MTbLSigk=
 
 Name: res/mipmap-hdpi-v4/ic_launcher.png
 SHA1-Digest: S3QekJ+KWyPQDaa8Dn4oU8J/kq4=
@@ -8127,17 +8535,50 @@ SHA1-Digest: xxoFOr4CExUGNKLZoLWD+a6T64s=
 Name: res/raw/voip_ringback.mp3
 SHA1-Digest: v9QaFjKBPHitC78HrJZyoPk1yGY=
 
+Name: res/raw/wallet_allset.tgs
+SHA1-Digest: n58VeLUEQtXRBHZ+lUI8TRbEqfM=
+
+Name: res/raw/wallet_congrats.tgs
+SHA1-Digest: EVfnrLUGZkqyYIxedmYRMhUOkhI=
+
+Name: res/raw/wallet_crystal.tgs
+SHA1-Digest: uw985GXFyrZDmE68f6NR9nq/ftM=
+
+Name: res/raw/wallet_egg.tgs
+SHA1-Digest: kENs33izbNHhqq6WXFStOClT0wo=
+
+Name: res/raw/wallet_gem.tgs
+SHA1-Digest: ArUx6DUSqBQGpwm7bBvqMsq+doY=
+
+Name: res/raw/wallet_lock.tgs
+SHA1-Digest: i6ZLJHDDQ8MDOQsSVRDpppJUpPQ=
+
+Name: res/raw/wallet_money.tgs
+SHA1-Digest: xAnJ2Dh6Mg+cQZnkp+5bzx9qI0o=
+
+Name: res/raw/wallet_note.tgs
+SHA1-Digest: AAkb+E+YR0B8/zNBZPrNb4rNfsU=
+
+Name: res/raw/wallet_perfect.tgs
+SHA1-Digest: 4/rqVDTkOGrhzZPBoJm6IrQtjDg=
+
+Name: res/raw/wallet_science.tgs
+SHA1-Digest: tbVYs07S+HEOGTk1tPqnUZxuKd0=
+
+Name: res/raw/wallet_toobad.tgs
+SHA1-Digest: JGGabgIqyZ4vFH4si1v/XpmDWPc=
+
 Name: res/xml/auth.xml
-SHA1-Digest: jK4EuS7KOaz36lRnVw6ZkCBIKDQ=
+SHA1-Digest: DliaulWtzsKvLMChQOWQMfxBP9k=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: SdTTPPdpto6DLb4jlLYMbkp9i5k=
+SHA1-Digest: wM6cGFdIhXRFZHu28ljrjeeVScE=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
 
 Name: res/xml/contacts.xml
-SHA1-Digest: HEg6Ex2bA+DvduFZrCLYTmO+U2s=
+SHA1-Digest: nn76309i765dCqCZYLLPRvvNg0I=
 
 Name: res/xml/provider_paths.xml
 SHA1-Digest: vzcx0lPmeHoGxo5+mbF9D1rkbeY=
@@ -8146,7 +8587,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: yJM9ZDzCDbn+f5c9oSMyRyNuM/Q=
+SHA1-Digest: /+2n/VIQ93kD7EPg6bSFpf+3B0o=
 
 Name: version.txt
 SHA1-Digest: J/nihzJRxlZEj3lPEgpfeoTyk98=

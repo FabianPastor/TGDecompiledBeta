@@ -41,6 +41,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 
 public class AlertDialog extends Dialog implements Callback {
@@ -89,10 +90,11 @@ public class AlertDialog extends Dialog implements Callback {
     private CharSequence title;
     private FrameLayout titleContainer;
     private TextView titleTextView;
+    private int topAnimationId;
     private int topBackgroundColor;
     private Drawable topDrawable;
     private int topHeight = 132;
-    private ImageView topImageView;
+    private RLottieImageView topImageView;
     private int topResId;
 
     public static class AlertDialogCell extends FrameLayout {
@@ -197,6 +199,12 @@ public class AlertDialog extends Dialog implements Callback {
 
         public Builder setTopImage(int i, int i2) {
             this.alertDialog.topResId = i;
+            this.alertDialog.topBackgroundColor = i2;
+            return this;
+        }
+
+        public Builder setTopAnimation(int i, int i2) {
+            this.alertDialog.topAnimationId = i;
             this.alertDialog.topBackgroundColor = i2;
             return this;
         }
@@ -763,13 +771,20 @@ public class AlertDialog extends Dialog implements Callback {
         anonymousClass1.setFitsSystemWindows(VERSION.SDK_INT >= 21);
         setContentView(anonymousClass1);
         Object obj = (this.positiveButtonText == null && this.negativeButtonText == null && this.neutralButtonText == null) ? null : 1;
-        if (!(this.topResId == 0 && this.topDrawable == null)) {
-            this.topImageView = new ImageView(getContext());
+        if (!(this.topResId == 0 && this.topAnimationId == 0 && this.topDrawable == null)) {
+            this.topImageView = new RLottieImageView(getContext());
             Drawable drawable = this.topDrawable;
             if (drawable != null) {
                 this.topImageView.setImageDrawable(drawable);
             } else {
-                this.topImageView.setImageResource(this.topResId);
+                int i = this.topResId;
+                if (i != 0) {
+                    this.topImageView.setImageResource(i);
+                } else {
+                    this.topImageView.setAutoRepeat(true);
+                    this.topImageView.setAnimation(this.topAnimationId, 94, 94);
+                    this.topImageView.playAnimation();
+                }
             }
             this.topImageView.setScaleType(ScaleType.CENTER);
             this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(NUM));
@@ -789,9 +804,9 @@ public class AlertDialog extends Dialog implements Callback {
             this.titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             FrameLayout frameLayout = this.titleContainer;
             TextView textView = this.titleTextView;
-            int i = (LocaleController.isRTL ? 5 : 3) | 48;
-            int i2 = this.subtitle != null ? 2 : this.items != null ? 14 : 10;
-            frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, 0.0f, 19.0f, 0.0f, (float) i2));
+            int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
+            int i3 = this.subtitle != null ? 2 : this.items != null ? 14 : 10;
+            frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, i2, 0.0f, 19.0f, 0.0f, (float) i3));
         }
         if (!(this.secondTitle == null || this.title == null)) {
             this.secondTitleTextView = new TextView(getContext());
@@ -848,9 +863,9 @@ public class AlertDialog extends Dialog implements Callback {
             this.messageTextView.setEnabled(false);
         }
         this.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        int i3 = this.progressViewStyle;
+        int i4 = this.progressViewStyle;
         RadialProgressView radialProgressView;
-        if (i3 == 1) {
+        if (i4 == 1) {
             this.progressViewContainer = new FrameLayout(getContext());
             anonymousClass1.addView(this.progressViewContainer, LayoutHelper.createLinear(-1, 44, 51, 23, this.title == null ? 24 : 0, 23, 24));
             radialProgressView = new RadialProgressView(getContext());
@@ -859,7 +874,7 @@ public class AlertDialog extends Dialog implements Callback {
             this.messageTextView.setLines(1);
             this.messageTextView.setEllipsize(TruncateAt.END);
             this.progressViewContainer.addView(this.messageTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, (float) (LocaleController.isRTL ? 0 : 62), 0.0f, (float) (LocaleController.isRTL ? 62 : 0), 0.0f));
-        } else if (i3 == 2) {
+        } else if (i4 == 2) {
             anonymousClass1.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
             this.lineProgressView = new LineProgressView(getContext());
             this.lineProgressView.setProgress(((float) this.currentProgress) / 100.0f, false);
@@ -873,7 +888,7 @@ public class AlertDialog extends Dialog implements Callback {
             this.lineProgressViewPercent.setTextSize(1, 14.0f);
             anonymousClass1.addView(this.lineProgressViewPercent, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 23, 4, 23, 24));
             updateLineProgressTextView();
-        } else if (i3 == 3) {
+        } else if (i4 == 3) {
             setCanceledOnTouchOutside(false);
             setCancelable(false);
             this.progressViewContainer = new FrameLayout(getContext());
@@ -885,9 +900,9 @@ public class AlertDialog extends Dialog implements Callback {
         } else {
             LinearLayout linearLayout = this.scrollContainer;
             TextView textView2 = this.messageTextView;
-            int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
-            int i5 = (this.customView == null && this.items == null) ? 0 : this.customViewOffset;
-            linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, i4, 24, 0, 24, i5));
+            int i5 = (LocaleController.isRTL ? 5 : 3) | 48;
+            int i6 = (this.customView == null && this.items == null) ? 0 : this.customViewOffset;
+            linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, i5, 24, 0, 24, i6));
         }
         if (TextUtils.isEmpty(this.message)) {
             this.messageTextView.setVisibility(8);
@@ -896,23 +911,23 @@ public class AlertDialog extends Dialog implements Callback {
             this.messageTextView.setVisibility(0);
         }
         if (this.items != null) {
-            i3 = 0;
+            i4 = 0;
             while (true) {
                 CharSequence[] charSequenceArr = this.items;
-                if (i3 >= charSequenceArr.length) {
+                if (i4 >= charSequenceArr.length) {
                     break;
                 }
-                if (charSequenceArr[i3] != null) {
+                if (charSequenceArr[i4] != null) {
                     AlertDialogCell alertDialogCell = new AlertDialogCell(getContext());
-                    CharSequence charSequence = this.items[i3];
+                    CharSequence charSequence = this.items[i4];
                     int[] iArr = this.itemIcons;
-                    alertDialogCell.setTextAndIcon(charSequence, iArr != null ? iArr[i3] : 0);
-                    alertDialogCell.setTag(Integer.valueOf(i3));
+                    alertDialogCell.setTextAndIcon(charSequence, iArr != null ? iArr[i4] : 0);
+                    alertDialogCell.setTag(Integer.valueOf(i4));
                     this.itemViews.add(alertDialogCell);
                     this.scrollContainer.addView(alertDialogCell, LayoutHelper.createLinear(-1, 50));
                     alertDialogCell.setOnClickListener(new -$$Lambda$AlertDialog$iCLASSNAMEx2guh9hO2NrF8CCJRy6v4_w(this));
                 }
-                i3++;
+                i4++;
             }
         }
         View view = this.customView;
@@ -1090,19 +1105,19 @@ public class AlertDialog extends Dialog implements Callback {
         } else {
             layoutParams.dimAmount = 0.6f;
             layoutParams.flags |= 2;
-            int i6 = AndroidUtilities.displaySize.x;
-            this.lastScreenWidth = i6;
-            i6 -= AndroidUtilities.dp(48.0f);
+            int i7 = AndroidUtilities.displaySize.x;
+            this.lastScreenWidth = i7;
+            i7 -= AndroidUtilities.dp(48.0f);
             if (!AndroidUtilities.isTablet()) {
-                i3 = AndroidUtilities.dp(356.0f);
+                i4 = AndroidUtilities.dp(356.0f);
             } else if (AndroidUtilities.isSmallTablet()) {
-                i3 = AndroidUtilities.dp(446.0f);
+                i4 = AndroidUtilities.dp(446.0f);
             } else {
-                i3 = AndroidUtilities.dp(496.0f);
+                i4 = AndroidUtilities.dp(496.0f);
             }
-            i6 = Math.min(i3, i6);
+            i7 = Math.min(i4, i7);
             Rect rect = this.backgroundPaddings;
-            layoutParams.width = (i6 + rect.left) + rect.right;
+            layoutParams.width = (i7 + rect.left) + rect.right;
         }
         View view2 = this.customView;
         if (view2 == null || !canTextInput(view2)) {
@@ -1286,6 +1301,11 @@ public class AlertDialog extends Dialog implements Callback {
 
     public void setTopImage(int i, int i2) {
         this.topResId = i;
+        this.topBackgroundColor = i2;
+    }
+
+    public void setTopAnimation(int i, int i2) {
+        this.topAnimationId = i;
         this.topBackgroundColor = i2;
     }
 

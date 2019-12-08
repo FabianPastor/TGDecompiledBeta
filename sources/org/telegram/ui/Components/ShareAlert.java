@@ -82,6 +82,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private EditTextEmoji commentTextView;
     private boolean copyLinkOnEnd;
     private int currentAccount = UserConfig.selectedAccount;
+    private ShareAlertDelegate delegate;
     private TL_exportedMessageLink exportedMessageLink;
     private FrameLayout frameLayout;
     private FrameLayout frameLayout2;
@@ -231,6 +232,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         public void requestDisallowInterceptTouchEvent(boolean z) {
             super.requestDisallowInterceptTouchEvent(z);
         }
+    }
+
+    public interface ShareAlertDelegate {
+        void didShare();
     }
 
     private class ShareDialogsAdapter extends SelectionAdapter {
@@ -1075,7 +1080,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         Context context2 = context;
         ArrayList<MessageObject> arrayList2 = arrayList;
         boolean z3 = z;
-        super(context2, true, 1);
+        super(context2, true);
         this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
         String str3 = "dialogBackground";
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str3), Mode.MULTIPLY));
@@ -1849,6 +1854,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 i++;
             }
         }
+        ShareAlertDelegate shareAlertDelegate = this.delegate;
+        if (shareAlertDelegate != null) {
+            shareAlertDelegate.didShare();
+        }
         dismiss();
     }
 
@@ -1866,6 +1875,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             }
         }
         return -1000;
+    }
+
+    public void setDelegate(ShareAlertDelegate shareAlertDelegate) {
+        this.delegate = shareAlertDelegate;
     }
 
     public void dismissInternal() {

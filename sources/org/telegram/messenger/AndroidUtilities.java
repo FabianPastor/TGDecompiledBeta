@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Environment;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images.Media;
@@ -46,6 +47,9 @@ import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.URLSpan;
+import android.text.util.Linkify;
+import android.text.util.Linkify.MatchFilter;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
 import android.view.Display;
@@ -84,10 +88,13 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
@@ -148,6 +155,7 @@ public class AndroidUtilities {
     private static int prevOrientation = -10;
     public static int roundMessageSize;
     private static Paint roundPaint;
+    public static final MatchFilter sUrlMatchFilter = -$$Lambda$AndroidUtilities$69khgLSl9NZ64odrZ1S3Vo9PGBk.INSTANCE;
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable();
@@ -168,6 +176,19 @@ public class AndroidUtilities {
                 FileLog.e(e);
                 return false;
             }
+        }
+    }
+
+    private static class LinkSpec {
+        int end;
+        int start;
+        String url;
+
+        private LinkSpec() {
+        }
+
+        /* synthetic */ LinkSpec(AnonymousClass1 anonymousClass1) {
+            this();
         }
     }
 
@@ -473,7 +494,7 @@ public class AndroidUtilities {
             stringBuilder.append(")");
             compile = Pattern.compile(stringBuilder.toString());
             stringBuilder = new StringBuilder();
-            stringBuilder.append("((?:(http|https|Http|Https):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?(?:");
+            stringBuilder.append("((?:(http|https|Http|Https|ton|tg):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?(?:");
             stringBuilder.append(compile);
             stringBuilder.append(")(?:\\:\\d{1,5})?)(\\/(?:(?:[");
             stringBuilder.append("a-zA-Z0-9 -퟿豈-﷏ﷰ-￯");
@@ -487,6 +508,142 @@ public class AndroidUtilities {
             z = true;
         }
         hasCallPermissions = z;
+    }
+
+    private static boolean containsUnsupportedCharacters(String str) {
+        if (str.contains("‬") || str.contains("‭") || str.contains("‮")) {
+            return true;
+        }
+        return false;
+    }
+
+    private static String makeUrl(String str, String[] strArr, Matcher matcher) {
+        Object obj;
+        int i = 0;
+        while (true) {
+            obj = 1;
+            if (i >= strArr.length) {
+                obj = null;
+                break;
+            }
+            if (str.regionMatches(true, 0, strArr[i], 0, strArr[i].length())) {
+                if (!str.regionMatches(false, 0, strArr[i], 0, strArr[i].length())) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(strArr[i]);
+                    stringBuilder.append(str.substring(strArr[i].length()));
+                    str = stringBuilder.toString();
+                }
+            } else {
+                i++;
+            }
+        }
+        if (obj != null || strArr.length <= 0) {
+            return str;
+        }
+        StringBuilder stringBuilder2 = new StringBuilder();
+        stringBuilder2.append(strArr[0]);
+        stringBuilder2.append(str);
+        return stringBuilder2.toString();
+    }
+
+    private static void gatherLinks(ArrayList<LinkSpec> arrayList, Spannable spannable, Pattern pattern, String[] strArr, MatchFilter matchFilter) {
+        Matcher matcher = pattern.matcher(spannable);
+        while (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            if (matchFilter == null || matchFilter.acceptMatch(spannable, start, end)) {
+                LinkSpec linkSpec = new LinkSpec();
+                linkSpec.url = makeUrl(matcher.group(0), strArr, matcher);
+                linkSpec.start = start;
+                linkSpec.end = end;
+                arrayList.add(linkSpec);
+            }
+        }
+    }
+
+    static /* synthetic */ boolean lambda$static$0(CharSequence charSequence, int i, int i2) {
+        return i == 0 || charSequence.charAt(i - 1) != '@';
+    }
+
+    public static boolean addLinks(Spannable spannable, int i) {
+        if ((spannable != null && containsUnsupportedCharacters(spannable.toString())) || i == 0) {
+            return false;
+        }
+        URLSpan[] uRLSpanArr = (URLSpan[]) spannable.getSpans(0, spannable.length(), URLSpan.class);
+        for (int length = uRLSpanArr.length - 1; length >= 0; length--) {
+            spannable.removeSpan(uRLSpanArr[length]);
+        }
+        ArrayList arrayList = new ArrayList();
+        if ((i & 4) != 0) {
+            Linkify.addLinks(spannable, 4);
+        }
+        if ((i & 1) != 0) {
+            gatherLinks(arrayList, spannable, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://"}, sUrlMatchFilter);
+        }
+        pruneOverlaps(arrayList);
+        if (arrayList.size() == 0) {
+            return false;
+        }
+        Iterator it = arrayList.iterator();
+        while (it.hasNext()) {
+            LinkSpec linkSpec = (LinkSpec) it.next();
+            spannable.setSpan(new URLSpan(linkSpec.url), linkSpec.start, linkSpec.end, 33);
+        }
+        return true;
+    }
+
+    private static void pruneOverlaps(ArrayList<LinkSpec> arrayList) {
+        Collections.sort(arrayList, -$$Lambda$AndroidUtilities$DG4OX7fP3ZJJ-hdrMNccmtZzHkA.INSTANCE);
+        int size = arrayList.size();
+        int i = 0;
+        while (i < size - 1) {
+            LinkSpec linkSpec = (LinkSpec) arrayList.get(i);
+            int i2 = i + 1;
+            LinkSpec linkSpec2 = (LinkSpec) arrayList.get(i2);
+            int i3 = linkSpec.start;
+            int i4 = linkSpec2.start;
+            if (i3 <= i4) {
+                int i5 = linkSpec.end;
+                if (i5 > i4) {
+                    int i6 = linkSpec2.end;
+                    i5 = (i6 > i5 && i5 - i3 <= i6 - i4) ? i5 - i3 < i6 - i4 ? i : -1 : i2;
+                    if (i5 != -1) {
+                        arrayList.remove(i5);
+                        size--;
+                    }
+                }
+            }
+            i = i2;
+        }
+    }
+
+    static /* synthetic */ int lambda$pruneOverlaps$1(LinkSpec linkSpec, LinkSpec linkSpec2) {
+        int i = linkSpec.start;
+        int i2 = linkSpec2.start;
+        if (i < i2) {
+            return -1;
+        }
+        if (i > i2) {
+            return 1;
+        }
+        int i3 = linkSpec.end;
+        int i4 = linkSpec2.end;
+        if (i3 < i4) {
+            return 1;
+        }
+        if (i3 > i4) {
+            return -1;
+        }
+        return 0;
+    }
+
+    public static void fillStatusBarHeight(Context context) {
+        if (context != null && statusBarHeight <= 0) {
+            int identifier = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (identifier > 0) {
+                statusBarHeight = context.getResources().getDimensionPixelSize(identifier);
+            }
+        }
     }
 
     public static int getThumbForNameOrMime(String str, String str2, boolean z) {
@@ -646,14 +803,14 @@ public class AndroidUtilities {
             }
             Builder builder = new Builder(baseFragment.getParentActivity());
             builder.setMessage(LocaleController.getString("InstallGoogleMaps", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$AndroidUtilities$9EW49D3frdKbOrTr4GJNg1xI0yM(baseFragment));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$AndroidUtilities$mhdoljIVTHl0q4BF5E5nfL0D0Iw(baseFragment));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
             baseFragment.showDialog(builder.create());
             return false;
         }
     }
 
-    static /* synthetic */ void lambda$isGoogleMapsInstalled$0(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$isGoogleMapsInstalled$2(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         try {
             baseFragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
         } catch (Exception e) {
@@ -1105,7 +1262,7 @@ public class AndroidUtilities {
             waitingForSms = z;
             try {
                 if (waitingForSms) {
-                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(-$$Lambda$AndroidUtilities$PIS3tB-hc0vfcfJPQ8BqBwJb5lo.INSTANCE);
+                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(-$$Lambda$AndroidUtilities$IRN0QhS5moKHAdF_zR-s3vjvAIc.INSTANCE);
                 }
             } catch (Throwable th) {
                 FileLog.e(th);
@@ -1113,7 +1270,7 @@ public class AndroidUtilities {
         }
     }
 
-    static /* synthetic */ void lambda$setWaitingForSms$1(Void voidR) {
+    static /* synthetic */ void lambda$setWaitingForSms$3(Void voidR) {
         if (BuildVars.DEBUG_VERSION) {
             FileLog.d("sms listener registered");
         }
@@ -1829,7 +1986,8 @@ public class AndroidUtilities {
         if (z) {
             ForegroundDetector.getInstance().resetBackgroundVar();
         }
-        return SharedConfig.passcodeHash.length() > 0 && isWasInBackground && (SharedConfig.appLocked || (!(SharedConfig.autoLockIn == 0 || SharedConfig.lastPauseTime == 0 || SharedConfig.appLocked || SharedConfig.lastPauseTime + SharedConfig.autoLockIn > ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime()) || ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime() + 5 < SharedConfig.lastPauseTime));
+        int uptimeMillis = (int) (SystemClock.uptimeMillis() / 1000);
+        return SharedConfig.passcodeHash.length() > 0 && isWasInBackground && (SharedConfig.appLocked || (!(SharedConfig.autoLockIn == 0 || SharedConfig.lastPauseTime == 0 || SharedConfig.appLocked || SharedConfig.lastPauseTime + SharedConfig.autoLockIn > uptimeMillis) || uptimeMillis + 5 < SharedConfig.lastPauseTime));
     }
 
     public static void shakeView(final View view, final float f, final int i) {
@@ -2392,9 +2550,9 @@ public class AndroidUtilities {
         r7 = r5.exists();
         if (r7 == 0) goto L_0x015c;
     L_0x004d:
-        r7 = NUM; // 0x7f0d0700 float:1.874575E38 double:1.053130663E-314;
+        r7 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
         r8 = "OK";
-        r9 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r9 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
         r10 = "AppName";
         r11 = 1;
         if (r2 == 0) goto L_0x00a6;
@@ -2418,7 +2576,7 @@ public class AndroidUtilities {
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d0527 float:1.874479E38 double:1.053130429E-314;
+        r1 = NUM; // 0x7f0e0535 float:1.8877741E38 double:1.053162815E-314;
         r3 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
@@ -2515,7 +2673,7 @@ public class AndroidUtilities {
         r3.setTitle(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.setPositiveButton(r1, r6);
-        r1 = NUM; // 0x7f0d064e float:1.8745388E38 double:1.053130575E-314;
+        r1 = NUM; // 0x7f0e065c float:1.887834E38 double:1.053162961E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r5 = 0;
@@ -2637,21 +2795,21 @@ public class AndroidUtilities {
     L_0x0092:
         r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r8.<init>(r9);
-        r0 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r0 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
         r1 = "AppName";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setTitle(r0);
-        r0 = NUM; // 0x7f0d00ee float:1.8742597E38 double:1.053129895E-314;
+        r0 = NUM; // 0x7f0e00f0 float:1.8875524E38 double:1.053162275E-314;
         r1 = "ApkRestricted";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setMessage(r0);
-        r0 = NUM; // 0x7f0d084b float:1.874642E38 double:1.0531308264E-314;
+        r0 = NUM; // 0x7f0e0859 float:1.8879372E38 double:1.0531632124E-314;
         r1 = "PermissionOpenSettings";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
-        r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$WTDNtmPdy5yTCpHQSYXokc0QdfY;
+        r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw;
         r1.<init>(r9);
         r8.setPositiveButton(r0, r1);
-        r9 = NUM; // 0x7f0d01f7 float:1.8743135E38 double:1.053130026E-314;
+        r9 = NUM; // 0x7f0e01fa float:1.8876064E38 double:1.0531624066E-314;
         r0 = "Cancel";
         r9 = org.telegram.messenger.LocaleController.getString(r0, r9);
         r8.setNegativeButton(r9, r2);
@@ -2711,7 +2869,7 @@ public class AndroidUtilities {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openForView(org.telegram.messenger.MessageObject, android.app.Activity):void");
     }
 
-    static /* synthetic */ void lambda$openForView$2(Activity activity, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$openForView$4(Activity activity, DialogInterface dialogInterface, int i) {
         try {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("package:");
@@ -3096,16 +3254,16 @@ public class AndroidUtilities {
         String str7 = "dialogTextBlue2";
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(str7));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new -$$Lambda$AndroidUtilities$jUNDa_ygB19u08pi8wOlTDRHeBo(dismissRunnable));
+        pickerBottomLayout.cancelButton.setOnClickListener(new -$$Lambda$AndroidUtilities$IAE24g80HPX-roPMD-KtaF_A4ms(dismissRunnable));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(str7));
         pickerBottomLayout.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", NUM).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(new -$$Lambda$AndroidUtilities$3sGpS5JwiCuQR9NgP1Xk7usREfk(str, str2, str5, str4, str3, dismissRunnable));
+        pickerBottomLayout.doneButton.setOnClickListener(new -$$Lambda$AndroidUtilities$FR3C_HWy2brNPhggTUnhh7_xisc(str, str2, str5, str4, str3, dismissRunnable));
         builder.show();
     }
 
-    static /* synthetic */ void lambda$showProxyAlert$4(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
+    static /* synthetic */ void lambda$showProxyAlert$6(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("proxy_enabled", true);
         edit.putString("proxy_ip", str);

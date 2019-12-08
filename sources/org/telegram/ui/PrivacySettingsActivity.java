@@ -495,7 +495,6 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         AlertsCreator.showSecretLocationAlert(getParentActivity(), this.currentAccount, new -$$Lambda$PrivacySettingsActivity$UDnLY7DIuRnfm37P1EPe2aUKeCM(this), false);
                     } else if (i == this.paymentsClearRow) {
                         BottomSheet.Builder builder3 = new BottomSheet.Builder(getParentActivity());
-                        builder3.setApplyTopPadding(false);
                         builder3.setApplyBottomPadding(false);
                         LinearLayout linearLayout = new LinearLayout(getParentActivity());
                         linearLayout.setOrientation(1);

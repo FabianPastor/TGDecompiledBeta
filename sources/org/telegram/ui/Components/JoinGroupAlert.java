@@ -93,7 +93,7 @@ public class JoinGroupAlert extends BottomSheet {
         int i;
         Context context2 = context;
         Object obj = chatInvite;
-        super(context2, false, 0);
+        super(context2, false);
         setApplyBottomPadding(false);
         setApplyTopPadding(false);
         this.fragment = baseFragment;
@@ -105,7 +105,7 @@ public class JoinGroupAlert extends BottomSheet {
         setCustomView(linearLayout);
         BackupImageView backupImageView = new BackupImageView(context2);
         backupImageView.setRoundRadius(AndroidUtilities.dp(35.0f));
-        linearLayout.addView(backupImageView, LayoutHelper.createLinear(70, 70, 49, 0, 12, 0, 0));
+        linearLayout.addView(backupImageView, LayoutHelper.createLinear(70, 70, 49, 0, 29, 0, 0));
         Chat chat = obj.chat;
         String str2 = "50_50";
         if (chat != null) {
@@ -128,7 +128,7 @@ public class JoinGroupAlert extends BottomSheet {
         textView.setText(charSequence);
         textView.setSingleLine(true);
         textView.setEllipsize(TruncateAt.END);
-        linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 10, 10, i > 0 ? 0 : 10));
+        linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 9, 10, i > 0 ? 0 : 20));
         if (i > 0) {
             textView = new TextView(context2);
             textView.setTextSize(1, 14.0f);
@@ -136,7 +136,7 @@ public class JoinGroupAlert extends BottomSheet {
             textView.setSingleLine(true);
             textView.setEllipsize(TruncateAt.END);
             textView.setText(LocaleController.formatPluralString("Members", i));
-            linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 4, 10, 10));
+            linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 3, 10, 20));
         }
         if (!obj.participants.isEmpty()) {
             RecyclerListView recyclerListView = new RecyclerListView(context2);
@@ -148,7 +148,7 @@ public class JoinGroupAlert extends BottomSheet {
             recyclerListView.setVerticalScrollBarEnabled(false);
             recyclerListView.setAdapter(new UsersAdapter(context2));
             recyclerListView.setGlowColor(Theme.getColor("dialogScrollGlow"));
-            linearLayout.addView(recyclerListView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 0));
+            linearLayout.addView(recyclerListView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 7));
         }
         View view = new View(context2);
         view.setBackgroundColor(Theme.getColor("dialogShadowLine"));

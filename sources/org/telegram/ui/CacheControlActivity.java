@@ -412,7 +412,6 @@ public class CacheControlActivity extends BaseFragment {
                 showDialog(builder2.create());
             } else if (i2 == this.cacheRow && this.totalSize > 0 && getParentActivity() != null) {
                 builder = new Builder(getParentActivity());
-                builder.setApplyTopPadding(false);
                 builder.setApplyBottomPadding(false);
                 LinearLayout linearLayout = new LinearLayout(getParentActivity());
                 linearLayout.setOrientation(1);

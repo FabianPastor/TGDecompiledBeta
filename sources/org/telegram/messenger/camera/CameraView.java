@@ -110,7 +110,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     /* JADX WARNING: Missing block: B:42:0x00e7, code skipped:
             if (r0.getHeight() >= 1280) goto L_0x00ea;
      */
-    private void initCamera() {
+    public void initCamera() {
         /*
         r15 = this;
         r0 = org.telegram.messenger.camera.CameraController.getInstance();

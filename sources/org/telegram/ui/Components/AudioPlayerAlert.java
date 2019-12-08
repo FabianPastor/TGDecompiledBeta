@@ -388,7 +388,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
 
     public AudioPlayerAlert(Context context) {
         Context context2 = context;
-        super(context2, true, 0);
+        super(context2, true);
         MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
         if (playingMessageObject != null) {
             this.currentAccount = playingMessageObject.currentAccount;
@@ -1111,7 +1111,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r0.<init>(r5, r6);
         r1.setDelegate(r0);
         r6 = r5.parentActivity;
-        r6.lambda$runLinkRequest$27$LaunchActivity(r1);
+        r6.lambda$runLinkRequest$29$LaunchActivity(r1);
         r5.dismiss();
         goto L_0x0174;
     L_0x004b:
@@ -1174,7 +1174,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     L_0x00b3:
         r6 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r0 = "ShareFile";
-        r2 = NUM; // 0x7f0d09bc float:1.874717E38 double:1.053131009E-314;
+        r2 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r0 = android.content.Intent.createChooser(r1, r0);	 Catch:{ Exception -> 0x00f9 }
         r1 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -1185,15 +1185,15 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r6.<init>(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "AppName";
-        r2 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r2 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r6.setTitle(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "OK";
-        r2 = NUM; // 0x7f0d0700 float:1.874575E38 double:1.053130663E-314;
+        r2 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r6.setPositiveButton(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r0 = "PleaseDownload";
-        r1 = NUM; // 0x7f0d0876 float:1.8746508E38 double:1.0531308477E-314;
+        r1 = NUM; // 0x7f0e0884 float:1.887946E38 double:1.0531632337E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r6.setMessage(r0);	 Catch:{ Exception -> 0x00f9 }
         r6.show();	 Catch:{ Exception -> 0x00f9 }

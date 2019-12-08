@@ -16,6 +16,7 @@ public class FileLog {
     private DispatchQueue logQueue = null;
     private File networkFile = null;
     private OutputStreamWriter streamWriter = null;
+    private File tonlibFile = null;
 
     public static FileLog getInstance() {
         FileLog fileLog = Instance;
@@ -99,6 +100,33 @@ public class FileLog {
             stringBuilder2.append("_net.txt");
             instance.networkFile = new File(file, stringBuilder2.toString());
             return getInstance().networkFile.getAbsolutePath();
+        } catch (Throwable th) {
+            th.printStackTrace();
+            return str;
+        }
+    }
+
+    public static String getTonlibLogPath() {
+        String str = "";
+        if (!BuildVars.LOGS_ENABLED) {
+            return str;
+        }
+        try {
+            File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+            if (externalFilesDir == null) {
+                return str;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(externalFilesDir.getAbsolutePath());
+            stringBuilder.append("/logs");
+            File file = new File(stringBuilder.toString());
+            file.mkdirs();
+            FileLog instance = getInstance();
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append(getInstance().dateFormat.format(System.currentTimeMillis()));
+            stringBuilder2.append("_tonlib.txt");
+            instance.tonlibFile = new File(file, stringBuilder2.toString());
+            return getInstance().tonlibFile.getAbsolutePath();
         } catch (Throwable th) {
             th.printStackTrace();
             return str;
@@ -255,7 +283,7 @@ public class FileLog {
             File[] listFiles = new File(stringBuilder.toString()).listFiles();
             if (listFiles != null) {
                 for (File file : listFiles) {
-                    if ((getInstance().currentFile == null || !file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) && (getInstance().networkFile == null || !file.getAbsolutePath().equals(getInstance().networkFile.getAbsolutePath()))) {
+                    if ((getInstance().currentFile == null || !file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) && ((getInstance().networkFile == null || !file.getAbsolutePath().equals(getInstance().networkFile.getAbsolutePath())) && (getInstance().tonlibFile == null || !file.getAbsolutePath().equals(getInstance().tonlibFile.getAbsolutePath())))) {
                         file.delete();
                     }
                 }

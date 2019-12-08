@@ -97,6 +97,21 @@ public class CameraSession {
         ApplicationLoader.applicationContext.getSharedPreferences("camera", 0).edit().putString(this.cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", str).commit();
     }
 
+    public void setTorchEnabled(boolean z) {
+        String str;
+        if (z) {
+            try {
+                str = "torch";
+            } catch (Exception e) {
+                FileLog.e(e);
+                return;
+            }
+        }
+        str = "off";
+        this.currentFlashMode = str;
+        configurePhotoCamera();
+    }
+
     public String getCurrentFlashMode() {
         return this.currentFlashMode;
     }
@@ -678,7 +693,10 @@ public class CameraSession {
         if (cameraInfo != null) {
             Camera camera = cameraInfo.camera;
             if (camera != null) {
-                camera.setOneShotPreviewCallback(previewCallback);
+                try {
+                    camera.setOneShotPreviewCallback(previewCallback);
+                } catch (Exception unused) {
+                }
             }
         }
     }

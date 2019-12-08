@@ -7,8 +7,11 @@ import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 
 public class RLottieImageView extends ImageView {
+    private boolean attachedToWindow;
+    private boolean autoRepeat;
     private RLottieDrawable drawable;
     private HashMap<String, Integer> layerColors;
+    private boolean playing;
 
     public RLottieImageView(Context context) {
         super(context);
@@ -30,6 +33,9 @@ public class RLottieImageView extends ImageView {
         stringBuilder.append("");
         stringBuilder.append(i);
         this.drawable = new RLottieDrawable(i, stringBuilder.toString(), AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false);
+        if (this.autoRepeat) {
+            this.drawable.setAutoRepeat(1);
+        }
         this.drawable.beginApplyLayerColors();
         HashMap hashMap = this.layerColors;
         if (hashMap != null) {
@@ -42,6 +48,29 @@ public class RLottieImageView extends ImageView {
         setImageDrawable(this.drawable);
     }
 
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.attachedToWindow = true;
+        if (this.playing) {
+            this.drawable.start();
+        }
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        this.attachedToWindow = false;
+        RLottieDrawable rLottieDrawable = this.drawable;
+        if (rLottieDrawable != null) {
+            rLottieDrawable.stop();
+        }
+    }
+
+    public void setAutoRepeat(boolean z) {
+        this.autoRepeat = z;
+    }
+
     public void setProgress(float f) {
         RLottieDrawable rLottieDrawable = this.drawable;
         if (rLottieDrawable != null) {
@@ -52,7 +81,10 @@ public class RLottieImageView extends ImageView {
     public void playAnimation() {
         RLottieDrawable rLottieDrawable = this.drawable;
         if (rLottieDrawable != null) {
-            rLottieDrawable.start();
+            this.playing = true;
+            if (this.attachedToWindow) {
+                rLottieDrawable.start();
+            }
         }
     }
 }

@@ -271,7 +271,7 @@ public class AdminLogFilterAlert extends BottomSheet {
 
     public AdminLogFilterAlert(Context context, TL_channelAdminLogEventsFilter tL_channelAdminLogEventsFilter, SparseArray<User> sparseArray, boolean z) {
         int i;
-        super(context, false, 0);
+        super(context, false);
         if (tL_channelAdminLogEventsFilter != null) {
             this.currentFilter = new TL_channelAdminLogEventsFilter();
             TL_channelAdminLogEventsFilter tL_channelAdminLogEventsFilter2 = this.currentFilter;

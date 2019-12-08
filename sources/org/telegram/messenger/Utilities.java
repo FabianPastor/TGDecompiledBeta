@@ -35,6 +35,8 @@ public class Utilities {
 
     private static native void aesIgeEncryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, boolean z, int i, int i2);
 
+    private static native void aesIgeEncryptionByteArray(byte[] bArr, byte[] bArr2, byte[] bArr3, boolean z, int i, int i2);
+
     public static native void blurBitmap(Object obj, int i, int i2, int i3, int i4, int i5);
 
     public static native void calcCDT(ByteBuffer byteBuffer, int i, int i2, ByteBuffer byteBuffer2);
@@ -92,6 +94,13 @@ public class Utilities {
             bArr2 = (byte[]) bArr2.clone();
         }
         aesIgeEncryption(byteBuffer, bArr, bArr2, z, i, i2);
+    }
+
+    public static void aesIgeEncryptionByteArray(byte[] bArr, byte[] bArr2, byte[] bArr3, boolean z, boolean z2, int i, int i2) {
+        if (!z2) {
+            bArr3 = (byte[]) bArr3.clone();
+        }
+        aesIgeEncryptionByteArray(bArr, bArr2, bArr3, z, i, i2);
     }
 
     public static void aesCbcEncryptionByteArraySafe(byte[] bArr, byte[] bArr2, byte[] bArr3, int i, int i2, int i3, int i4) {

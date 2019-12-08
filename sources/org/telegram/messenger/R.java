@@ -3,6 +3,24 @@ package org.telegram.messenger;
 public final class R {
 
     public static final class anim {
+        public static final int ft_avd_toarrow_rectangle_1_pivot_0_animation = NUM;
+        public static final int ft_avd_toarrow_rectangle_2_pivot_0_animation = NUM;
+        public static final int ft_avd_toarrow_rectangle_3_pivot_0_animation = NUM;
+        public static final int ft_avd_toarrow_rectangle_4_animation = NUM;
+        public static final int ft_avd_toarrow_rectangle_5_animation = NUM;
+        public static final int ft_avd_toarrow_rectangle_6_animation = NUM;
+        public static final int ft_avd_toarrow_rectangle_path_4_animation = NUM;
+        public static final int ft_avd_toarrow_rectangle_path_5_animation = NUM;
+        public static final int ft_avd_toarrow_rectangle_path_6_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_1_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_1_pivot_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_2_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_2_pivot_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_3_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_3_pivot_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_path_1_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_path_2_animation = NUM;
+        public static final int ft_avd_tooverflow_rectangle_path_3_animation = NUM;
         public static final int no_animation = NUM;
         public static final int popup_context_in = NUM;
         public static final int popup_in = NUM;
@@ -287,6 +305,8 @@ public final class R {
         public static final int fab_highlight_dark = NUM;
         public static final int fast_reply = NUM;
         public static final int field_carret_empty = NUM;
+        public static final int fingerprint_dialog_error_to_fp = NUM;
+        public static final int fingerprint_dialog_fp_to_error = NUM;
         public static final int flame_small = NUM;
         public static final int flash_auto = NUM;
         public static final int flash_off = NUM;
@@ -299,6 +319,13 @@ public final class R {
         public static final int floating_shadow_profile = NUM;
         public static final int forwardvideo = NUM;
         public static final int foursquare = NUM;
+        public static final int ft_avd_toarrow = NUM;
+        public static final int ft_avd_toarrow_animation = NUM;
+        public static final int ft_avd_tooverflow = NUM;
+        public static final int ft_avd_tooverflow_animation = NUM;
+        public static final int gem = NUM;
+        public static final int gem_l = NUM;
+        public static final int gem_s = NUM;
         public static final int ghost = NUM;
         public static final int gif_empty = NUM;
         public static final int googleg_disabled_color_18 = NUM;
@@ -515,6 +542,8 @@ public final class R {
         public static final int menu_settings_ny = NUM;
         public static final int menu_shadow = NUM;
         public static final int menu_support = NUM;
+        public static final int menu_wallet = NUM;
+        public static final int menu_wallet_ny = NUM;
         public static final int message_arrow = NUM;
         public static final int minibubble_in = NUM;
         public static final int minibubble_out = NUM;
@@ -714,10 +743,11 @@ public final class R {
         public static final int proxy_check = NUM;
         public static final int proxy_off = NUM;
         public static final int proxy_on = NUM;
+        public static final int qr_flashlight = NUM;
+        public static final int qr_gallery = NUM;
         public static final int redcircle = NUM;
         public static final int regbtn2 = NUM;
         public static final int regbtn2_pressed = NUM;
-        public static final int regbtn_states = NUM;
         public static final int replyvideo = NUM;
         public static final int round_check2 = NUM;
         public static final int round_grey = NUM;
@@ -829,12 +859,133 @@ public final class R {
         public static final int volume_off = NUM;
         public static final int volume_on = NUM;
         public static final int wall_selection = NUM;
+        public static final int wallet_clear = NUM;
+        public static final int wallet_fingerprint = NUM;
+        public static final int wallet_qr = NUM;
+        public static final int wallet_receive = NUM;
+        public static final int wallet_send = NUM;
         public static final int zoom_minus = NUM;
         public static final int zoom_plus = NUM;
         public static final int zoom_round = NUM;
         public static final int zoom_round_b = NUM;
         public static final int zoom_slide = NUM;
         public static final int zoom_slide_a = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__1__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__1__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__2__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__2__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__3__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__3__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__4__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__4__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__5__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__5__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__6__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__6__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__6__2 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__6__3 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__7__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__7__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__7__2 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__7__3 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__8__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_error_to_fp__8__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__1__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__2__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__3__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__4__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__5__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__6__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__6__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__6__2 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__6__3 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__6__4 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__6__5 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__7__0 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__7__1 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__7__2 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__7__3 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__7__4 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__7__5 = NUM;
+        /* added by JADX */
+        public static final int $$fingerprint_dialog_fp_to_error__8__0 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__0 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__1 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__2 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__3 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__4 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__5 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__6 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__7 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__8 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__9 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__0 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__1 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__2 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__3 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__4 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__5 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__6 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__7 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__8 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__9 = NUM;
     }
 
     public static final class id {
@@ -985,6 +1136,7 @@ public final class R {
         public static final int passcode_btn_8 = NUM;
         public static final int passcode_btn_9 = NUM;
         public static final int passcode_btn_backspace = NUM;
+        public static final int passcode_btn_done = NUM;
         public static final int photo = NUM;
         public static final int player_album_art = NUM;
         public static final int player_album_title = NUM;
@@ -1041,6 +1193,12 @@ public final class R {
         public static final int status_bar_notification_info_maxnum = NUM;
     }
 
+    public static final class interpolator {
+        public static final int ft_avd_toarrow_animation_interpolator_1 = NUM;
+        public static final int ft_avd_toarrow_animation_interpolator_2 = NUM;
+        public static final int ft_avd_toarrow_animation_interpolator_5 = NUM;
+    }
+
     public static final class layout {
         public static final int call_notification = NUM;
         public static final int call_notification_rtl = NUM;
@@ -1087,6 +1245,17 @@ public final class R {
         public static final int voip_end = NUM;
         public static final int voip_failed = NUM;
         public static final int voip_ringback = NUM;
+        public static final int wallet_allset = NUM;
+        public static final int wallet_congrats = NUM;
+        public static final int wallet_crystal = NUM;
+        public static final int wallet_egg = NUM;
+        public static final int wallet_gem = NUM;
+        public static final int wallet_lock = NUM;
+        public static final int wallet_money = NUM;
+        public static final int wallet_note = NUM;
+        public static final int wallet_perfect = NUM;
+        public static final int wallet_science = NUM;
+        public static final int wallet_toobad = NUM;
     }
 
     public static final class string {
@@ -1174,6 +1343,8 @@ public final class R {
         public static final int AccDescrVideoMessage = NUM;
         public static final int AccDescrVideoQuality = NUM;
         public static final int AccDescrVoiceMessage = NUM;
+        public static final int AccReleaseForArchive = NUM;
+        public static final int AccSwipeForArchive = NUM;
         public static final int Accept = NUM;
         public static final int AccessError = NUM;
         public static final int Account = NUM;
@@ -1485,6 +1656,7 @@ public final class R {
         public static final int AutoNightPreferred = NUM;
         public static final int AutoNightSchedule = NUM;
         public static final int AutoNightScheduled = NUM;
+        public static final int AutoNightSystemDefault = NUM;
         public static final int AutoNightTheme = NUM;
         public static final int AutoNightThemeOff = NUM;
         public static final int AutoNightTo = NUM;
@@ -1882,6 +2054,8 @@ public final class R {
         public static final int CreateEncryptedChatError = NUM;
         public static final int CreateGroupError = NUM;
         public static final int CreateLink = NUM;
+        public static final int CreateMyWallet = NUM;
+        public static final int CreateMyWalletTerms = NUM;
         public static final int CreateNewContact = NUM;
         public static final int CreateNewThemeAlert = NUM;
         public static final int CreateNewThemeHelp = NUM;
@@ -1980,6 +2154,12 @@ public final class R {
         public static final int DescriptionPlaceholder = NUM;
         public static final int DidNotGetTheCode = NUM;
         public static final int DidNotGetTheCodeSms = NUM;
+        public static final int Digits_few = NUM;
+        public static final int Digits_many = NUM;
+        public static final int Digits_one = NUM;
+        public static final int Digits_other = NUM;
+        public static final int Digits_two = NUM;
+        public static final int Digits_zero = NUM;
         public static final int DirectShare = NUM;
         public static final int DirectShareInfo = NUM;
         public static final int DisappearingGif = NUM;
@@ -2342,6 +2522,8 @@ public final class R {
         public static final int GotAQuestion = NUM;
         public static final int GpsDisabledAlert = NUM;
         public static final int Grain = NUM;
+        public static final int GramWallet = NUM;
+        public static final int GramWalletInfo = NUM;
         public static final int Gray = NUM;
         public static final int Green = NUM;
         public static final int GroupAddMembers = NUM;
@@ -2402,6 +2584,7 @@ public final class R {
         public static final int Hybrid = NUM;
         public static final int ImagesTab = NUM;
         public static final int ImportContacts = NUM;
+        public static final int ImportExistingWallet = NUM;
         public static final int InAppNotifications = NUM;
         public static final int InAppPreview = NUM;
         public static final int InAppSounds = NUM;
@@ -4005,6 +4188,135 @@ public final class R {
         public static final int Vote_zero = NUM;
         public static final int WaitMore = NUM;
         public static final int WaitingForNetwork = NUM;
+        public static final int Wallet = NUM;
+        public static final int WalletAddressCopy = NUM;
+        public static final int WalletAmount = NUM;
+        public static final int WalletBiometricTooManyAttempts = NUM;
+        public static final int WalletBlockchainFees = NUM;
+        public static final int WalletChangePasscode = NUM;
+        public static final int WalletComment = NUM;
+        public static final int WalletConfirm = NUM;
+        public static final int WalletConfirmation = NUM;
+        public static final int WalletConfirmationText = NUM;
+        public static final int WalletCongratulations = NUM;
+        public static final int WalletCongratulationsinfo = NUM;
+        public static final int WalletContinue = NUM;
+        public static final int WalletCopyAddress = NUM;
+        public static final int WalletCreateInvoice = NUM;
+        public static final int WalletCreateInvoiceTitle = NUM;
+        public static final int WalletCreated = NUM;
+        public static final int WalletDelete = NUM;
+        public static final int WalletDeleteInfo = NUM;
+        public static final int WalletDeleteTitle = NUM;
+        public static final int WalletDone = NUM;
+        public static final int WalletEnterPasscode = NUM;
+        public static final int WalletEnterWalletAddress = NUM;
+        public static final int WalletExport = NUM;
+        public static final int WalletExportConfirmCredentials = NUM;
+        public static final int WalletFrom = NUM;
+        public static final int WalletGramsToReceive = NUM;
+        public static final int WalletGramsToSend = NUM;
+        public static final int WalletImportAlertText = NUM;
+        public static final int WalletImportAlertTitle = NUM;
+        public static final int WalletImportDontHave = NUM;
+        public static final int WalletImportInfo = NUM;
+        public static final int WalletInsufficientGramsText = NUM;
+        public static final int WalletInsufficientGramsTitle = NUM;
+        public static final int WalletInvoiceInfo = NUM;
+        public static final int WalletKeystoreInvalidated = NUM;
+        public static final int WalletPasscodeLength = NUM;
+        public static final int WalletPendingTransactions = NUM;
+        public static final int WalletPerfect = NUM;
+        public static final int WalletPerfectInfo = NUM;
+        public static final int WalletPerfectSetPasscode = NUM;
+        public static final int WalletPermissionNoCamera = NUM;
+        public static final int WalletQRCode = NUM;
+        public static final int WalletReady = NUM;
+        public static final int WalletReadyInfo = NUM;
+        public static final int WalletReceive = NUM;
+        public static final int WalletReceiveYourAddress = NUM;
+        public static final int WalletReleaseToRefresh = NUM;
+        public static final int WalletScanCode = NUM;
+        public static final int WalletScanCodeNotFound = NUM;
+        public static final int WalletScanImageNotFound = NUM;
+        public static final int WalletSecretWords = NUM;
+        public static final int WalletSecretWordsAlertButton = NUM;
+        public static final int WalletSecretWordsAlertText = NUM;
+        public static final int WalletSecretWordsAlertTitle = NUM;
+        public static final int WalletSecretWordsInfo = NUM;
+        public static final int WalletSecretWordsTitle = NUM;
+        public static final int WalletSecurityAlertCreateContinue = NUM;
+        public static final int WalletSecurityAlertImportContinue = NUM;
+        public static final int WalletSecurityAlertSetup = NUM;
+        public static final int WalletSecurityAlertTextBiometric = NUM;
+        public static final int WalletSecurityAlertTextLockscreen = NUM;
+        public static final int WalletSecurityAlertTextLockscreenBiometric = NUM;
+        public static final int WalletSecurityAlertTitle = NUM;
+        public static final int WalletSend = NUM;
+        public static final int WalletSendBalance = NUM;
+        public static final int WalletSendConfirmCredentials = NUM;
+        public static final int WalletSendDone = NUM;
+        public static final int WalletSendDoneText = NUM;
+        public static final int WalletSendGrams = NUM;
+        public static final int WalletSendRecipient = NUM;
+        public static final int WalletSendSameWalletProceed = NUM;
+        public static final int WalletSendSameWalletText = NUM;
+        public static final int WalletSendWarningSendAnyway = NUM;
+        public static final int WalletSendWarningText = NUM;
+        public static final int WalletSendWarningTitle = NUM;
+        public static final int WalletSendingGrams = NUM;
+        public static final int WalletSendingGramsInfo = NUM;
+        public static final int WalletSetPasscode = NUM;
+        public static final int WalletSetPasscode4Digit = NUM;
+        public static final int WalletSetPasscode6Digit = NUM;
+        public static final int WalletSetPasscodeChooseType = NUM;
+        public static final int WalletSetPasscodeCustom = NUM;
+        public static final int WalletSetPasscodeEnterCode = NUM;
+        public static final int WalletSetPasscodeError = NUM;
+        public static final int WalletSetPasscodeMinLength = NUM;
+        public static final int WalletSetPasscodeOptions = NUM;
+        public static final int WalletSetPasscodeRepeat = NUM;
+        public static final int WalletSettings = NUM;
+        public static final int WalletShareAddress = NUM;
+        public static final int WalletShareInfo = NUM;
+        public static final int WalletShareInvoiceUrl = NUM;
+        public static final int WalletShareInvoiceUrlInfo = NUM;
+        public static final int WalletShareQr = NUM;
+        public static final int WalletStorageFee = NUM;
+        public static final int WalletStorageFeeHeader = NUM;
+        public static final int WalletSwipeToRefresh = NUM;
+        public static final int WalletTelegramLogout = NUM;
+        public static final int WalletTestTime = NUM;
+        public static final int WalletTestTimeAlertButtonSee = NUM;
+        public static final int WalletTestTimeAlertButtonTry = NUM;
+        public static final int WalletTestTimeAlertText = NUM;
+        public static final int WalletTestTimeAlertTitle = NUM;
+        public static final int WalletTestTimeInfo = NUM;
+        public static final int WalletTestTimeTitle = NUM;
+        public static final int WalletTo = NUM;
+        public static final int WalletTonLinkNoWalletCreateWallet = NUM;
+        public static final int WalletTonLinkNoWalletText = NUM;
+        public static final int WalletTooBad = NUM;
+        public static final int WalletTooBadCreate = NUM;
+        public static final int WalletTooBadEnter = NUM;
+        public static final int WalletTooBadInfo = NUM;
+        public static final int WalletTosUrl = NUM;
+        public static final int WalletTouchFingerprint = NUM;
+        public static final int WalletTouchFingerprintNotRecognized = NUM;
+        public static final int WalletTransaction = NUM;
+        public static final int WalletTransactionAddressCopied = NUM;
+        public static final int WalletTransactionComment = NUM;
+        public static final int WalletTransactionFee = NUM;
+        public static final int WalletTransactionFeeHeader = NUM;
+        public static final int WalletTransactionRecipient = NUM;
+        public static final int WalletTransactionSendGrams = NUM;
+        public static final int WalletTransactionSender = NUM;
+        public static final int WalletUpdatedFewSecondsAgo = NUM;
+        public static final int WalletUpdatedTimeAgo = NUM;
+        public static final int WalletUpdating = NUM;
+        public static final int WalletView = NUM;
+        public static final int WalletYourAddress = NUM;
+        public static final int WalletYourBalance = NUM;
         public static final int Warmth = NUM;
         public static final int WebSessionsTitle = NUM;
         public static final int Weeks_few = NUM;

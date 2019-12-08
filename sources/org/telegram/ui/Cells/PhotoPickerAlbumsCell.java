@@ -161,9 +161,9 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
         if (AndroidUtilities.isTablet()) {
-            i2 = (AndroidUtilities.dp(490.0f) - ((this.albumsCount + 1) * AndroidUtilities.dp(4.0f))) / this.albumsCount;
+            i2 = ((AndroidUtilities.dp(490.0f) - AndroidUtilities.dp(12.0f)) - ((this.albumsCount - 1) * AndroidUtilities.dp(4.0f))) / this.albumsCount;
         } else {
-            i2 = (AndroidUtilities.displaySize.x - ((this.albumsCount + 1) * AndroidUtilities.dp(4.0f))) / this.albumsCount;
+            i2 = ((AndroidUtilities.displaySize.x - AndroidUtilities.dp(12.0f)) - ((this.albumsCount - 1) * AndroidUtilities.dp(4.0f))) / this.albumsCount;
         }
         for (int i3 = 0; i3 < this.albumsCount; i3++) {
             LayoutParams layoutParams = (LayoutParams) this.albumViews[i3].getLayoutParams();

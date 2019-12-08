@@ -1108,7 +1108,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 if (z) {
                     PhotoPickerActivity.this.parentLayout.requestDisallowInterceptTouchEvent(true);
                 }
-                PhotoPickerActivity.this.listView.hideSelector();
+                PhotoPickerActivity.this.listView.hideSelector(true);
             }
         });
         this.listView.addOnItemTouchListener(this.itemRangeSelector);
@@ -1281,7 +1281,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 AndroidUtilities.hideKeyboard(actionBarMenuItem.getSearchField());
             }
             int i2 = this.selectPhotoType;
-            int i3 = i2 == 1 ? 1 : i2 == 2 ? 3 : this.chatActivity == null ? 4 : 0;
+            int i3 = i2 == 1 ? 1 : i2 == 2 ? 3 : i2 == 10 ? 10 : this.chatActivity == null ? 4 : 0;
             PhotoViewer.getInstance().setParentActivity(getParentActivity());
             PhotoViewer.getInstance().setMaxSelectedPhotos(this.maxSelectedPhotos, this.allowOrder);
             PhotoViewer.getInstance().openPhotoForSelect(arrayList2, i, i3, this.provider, this.chatActivity);

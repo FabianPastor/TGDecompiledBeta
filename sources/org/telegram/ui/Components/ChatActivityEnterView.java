@@ -33,7 +33,9 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.Property;
+import android.view.ActionMode;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.AccessibilityDelegate;
@@ -1033,8 +1035,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     ChatActivityEnterView.this.delegate.onTextSelectionChanged(i, i2);
                 }
             }
+
+            /* Access modifiers changed, original: protected */
+            public void extendActionMode(ActionMode actionMode, Menu menu) {
+                if (ChatActivityEnterView.this.parentFragment != null) {
+                    ChatActivityEnterView.this.parentFragment.extendActionMode(menu);
+                }
+            }
         };
         this.messageEditText.setDelegate(new -$$Lambda$ChatActivityEnterView$YXzMuZPPiDr1K7R7cpN8afDWrUQ(this));
+        this.messageEditText.setWindowView(this.parentActivity.getWindow().getDecorView());
         ChatActivity chatActivity3 = this.parentFragment;
         EncryptedChat currentEncryptedChat = chatActivity3 != null ? chatActivity3.getCurrentEncryptedChat() : null;
         EditTextCaption editTextCaption = this.messageEditText;
@@ -4507,10 +4517,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r4 = r13.silent;
         if (r4 == 0) goto L_0x0061;
     L_0x005d:
-        r4 = NUM; // 0x7var_f3 float:1.794507E38 double:1.052935623E-314;
+        r4 = NUM; // 0x7var_ float:1.7945207E38 double:1.052935656E-314;
         goto L_0x0064;
     L_0x0061:
-        r4 = NUM; // 0x7var_f4 float:1.7945073E38 double:1.0529356236E-314;
+        r4 = NUM; // 0x7var_ float:1.7945209E38 double:1.0529356567E-314;
     L_0x0064:
         r1.setImageResource(r4);
         goto L_0x0069;
