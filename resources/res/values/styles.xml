@@ -42,6 +42,10 @@
     <style name="PopupContextAnimation">
         <item name="android:windowEnterAnimation">@anim/popup_context_in</item>
     </style>
+    <style name="PopupContextAnimation2">
+        <item name="android:windowEnterAnimation">@anim/popup_context_in</item>
+        <item name="android:windowExitAnimation">@anim/popup_out</item>
+    </style>
     <style name="TextAppearance.Compat.Notification">
     </style>
     <style name="TextAppearance.Compat.Notification.Info">

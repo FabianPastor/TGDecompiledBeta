@@ -220,6 +220,20 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
+    public void onSearchPressed() {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = getChildAt(i);
+            if (childAt instanceof ActionBarMenuItem) {
+                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
+                if (actionBarMenuItem.isSearchField()) {
+                    actionBarMenuItem.onSearchPressed();
+                    return;
+                }
+            }
+        }
+    }
+
     public void openSearchField(boolean z, String str, boolean z2) {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {

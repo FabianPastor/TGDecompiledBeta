@@ -229,6 +229,23 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
         }
     }
 
+    public void updateColors() {
+        if (this.currentStyle == 0) {
+            this.editText.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
+            String str = "windowBackgroundWhiteBlackText";
+            this.editText.setCursorColor(Theme.getColor(str));
+            this.editText.setTextColor(Theme.getColor(str));
+        } else {
+            this.editText.setHintTextColor(Theme.getColor("dialogTextHint"));
+            this.editText.setTextColor(Theme.getColor("dialogTextBlack"));
+        }
+        this.emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), Mode.MULTIPLY));
+        EmojiView emojiView = this.emojiView;
+        if (emojiView != null) {
+            emojiView.updateColors();
+        }
+    }
+
     public void setMaxLines(int i) {
         this.editText.setMaxLines(i);
     }
@@ -386,8 +403,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
                     return -CC.$default$isSearchOpened(this);
                 }
 
-                public /* synthetic */ void onGifSelected(Object obj, Object obj2) {
-                    -CC.$default$onGifSelected(this, obj, obj2);
+                public /* synthetic */ void onGifSelected(View view, Object obj, Object obj2) {
+                    -CC.$default$onGifSelected(this, view, obj, obj2);
                 }
 
                 public /* synthetic */ void onSearchOpenClose(int i) {
@@ -398,8 +415,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
                     -CC.$default$onShowStickerSet(this, stickerSet, inputStickerSet);
                 }
 
-                public /* synthetic */ void onStickerSelected(Document document, Object obj) {
-                    -CC.$default$onStickerSelected(this, document, obj);
+                public /* synthetic */ void onStickerSelected(View view, Document document, Object obj) {
+                    -CC.$default$onStickerSelected(this, view, document, obj);
                 }
 
                 public /* synthetic */ void onStickerSetAdd(StickerSetCovered stickerSetCovered) {

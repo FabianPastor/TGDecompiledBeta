@@ -29,6 +29,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private static PorterDuffColorFilter selectedGroupColorFilter = new PorterDuffColorFilter(-4473925, Mode.MULTIPLY);
     private boolean allowDecodeSingleFrame;
     private boolean allowStartAnimation;
+    private int autoRepeat;
     private RectF bitmapRect;
     private boolean canceledLoading;
     private boolean centerRotation;
@@ -181,6 +182,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
 
     public ImageReceiver(View view) {
         this.allowStartAnimation = true;
+        this.autoRepeat = 1;
         this.drawRegion = new RectF();
         this.isVisible = true;
         this.roundRect = new RectF();
@@ -1011,6 +1013,13 @@ public class ImageReceiver implements NotificationCenterDelegate {
             if (this.currentOpenedLayerFlags == 0) {
                 lottieAnimation = getLottieAnimation();
                 if (lottieAnimation != null) {
+                    lottieAnimation.start();
+                }
+            }
+            if (this.autoRepeat == 2) {
+                lottieAnimation = getLottieAnimation();
+                if (lottieAnimation != null && lottieAnimation.getParentViewsCounts() <= 1) {
+                    lottieAnimation.setCurrentFrame(0);
                     lottieAnimation.start();
                 }
             }
@@ -2178,6 +2187,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.allowDecodeSingleFrame = z;
     }
 
+    public void setAutoRepeat(int i) {
+        this.autoRepeat = i;
+        RLottieDrawable lottieAnimation = getLottieAnimation();
+        if (lottieAnimation != null) {
+            lottieAnimation.setAutoRepeat(i);
+        }
+    }
+
     public void setUseSharedAnimationQueue(boolean z) {
         this.useSharedAnimationQueue = z;
     }
@@ -2278,14 +2295,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
         /*
         r5 = this;
         r0 = 0;
-        if (r6 == 0) goto L_0x025d;
+        if (r6 == 0) goto L_0x0262;
     L_0x0003:
-        if (r7 == 0) goto L_0x025d;
+        if (r7 == 0) goto L_0x0262;
     L_0x0005:
         r1 = r5.currentGuid;
         if (r1 == r10) goto L_0x000b;
     L_0x0009:
-        goto L_0x025d;
+        goto L_0x0262;
     L_0x000b:
         r10 = 0;
         r1 = 0;
@@ -2645,10 +2662,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
     L_0x0204:
         r7 = r5.allowDecodeSingleFrame;
         r6.setAllowDecodeSingleFrame(r7);
-        goto L_0x021f;
+        goto L_0x0224;
     L_0x020a:
         r7 = r6 instanceof org.telegram.ui.Components.RLottieDrawable;
-        if (r7 == 0) goto L_0x021f;
+        if (r7 == 0) goto L_0x0224;
     L_0x020e:
         r6 = (org.telegram.ui.Components.RLottieDrawable) r6;
         r7 = r5.parentView;
@@ -2659,16 +2676,18 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r6.start();
     L_0x021c:
         r6.setAllowDecodeSingleFrame(r3);
-    L_0x021f:
+        r7 = r5.autoRepeat;
+        r6.setAutoRepeat(r7);
+    L_0x0224:
         r6 = r5.parentView;
-        if (r6 == 0) goto L_0x0238;
-    L_0x0223:
+        if (r6 == 0) goto L_0x023d;
+    L_0x0228:
         r7 = r5.invalidateAll;
-        if (r7 == 0) goto L_0x022b;
-    L_0x0227:
+        if (r7 == 0) goto L_0x0230;
+    L_0x022c:
         r6.invalidate();
-        goto L_0x0238;
-    L_0x022b:
+        goto L_0x023d;
+    L_0x0230:
         r7 = r5.imageX;
         r8 = r5.imageY;
         r9 = r5.imageW;
@@ -2676,41 +2695,41 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r10 = r5.imageH;
         r10 = r10 + r8;
         r6.invalidate(r7, r8, r9, r10);
-    L_0x0238:
+    L_0x023d:
         r6 = r5.delegate;
-        if (r6 == 0) goto L_0x025c;
-    L_0x023c:
+        if (r6 == 0) goto L_0x0261;
+    L_0x0241:
         r7 = r5.currentImageDrawable;
-        if (r7 != 0) goto L_0x024f;
-    L_0x0240:
+        if (r7 != 0) goto L_0x0254;
+    L_0x0245:
         r7 = r5.currentThumbDrawable;
-        if (r7 != 0) goto L_0x024f;
-    L_0x0244:
+        if (r7 != 0) goto L_0x0254;
+    L_0x0249:
         r7 = r5.staticThumbDrawable;
-        if (r7 != 0) goto L_0x024f;
-    L_0x0248:
-        r7 = r5.currentMediaDrawable;
-        if (r7 == 0) goto L_0x024d;
-    L_0x024c:
-        goto L_0x024f;
+        if (r7 != 0) goto L_0x0254;
     L_0x024d:
+        r7 = r5.currentMediaDrawable;
+        if (r7 == 0) goto L_0x0252;
+    L_0x0251:
+        goto L_0x0254;
+    L_0x0252:
         r7 = 0;
-        goto L_0x0250;
-    L_0x024f:
-        r7 = 1;
-    L_0x0250:
-        r8 = r5.currentImageDrawable;
-        if (r8 != 0) goto L_0x0259;
+        goto L_0x0255;
     L_0x0254:
-        r8 = r5.currentMediaDrawable;
-        if (r8 != 0) goto L_0x0259;
-    L_0x0258:
-        r0 = 1;
+        r7 = 1;
+    L_0x0255:
+        r8 = r5.currentImageDrawable;
+        if (r8 != 0) goto L_0x025e;
     L_0x0259:
-        r6.didSetImage(r5, r7, r0);
-    L_0x025c:
-        return r3;
+        r8 = r5.currentMediaDrawable;
+        if (r8 != 0) goto L_0x025e;
     L_0x025d:
+        r0 = 1;
+    L_0x025e:
+        r6.didSetImage(r5, r7, r0);
+    L_0x0261:
+        return r3;
+    L_0x0262:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setImageBitmapByKey(android.graphics.drawable.Drawable, java.lang.String, int, boolean, int):boolean");
@@ -2828,7 +2847,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     if (this.currentOpenedLayerFlags == 0) {
                         lottieAnimation = getLottieAnimation();
                         if (lottieAnimation != null) {
-                            lottieAnimation.start();
+                            i2 = this.autoRepeat;
+                            if (i2 != 2 || (i2 == 2 && lottieAnimation.getAutoRepeatPlayCount() == 0)) {
+                                lottieAnimation.start();
+                            }
                         }
                     }
                 }

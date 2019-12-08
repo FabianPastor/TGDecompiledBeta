@@ -509,8 +509,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                         -CC.$default$didStartVideoStream(this, messageObject);
                     }
 
-                    public /* synthetic */ boolean isChatAdminCell(int i) {
-                        return -CC.$default$isChatAdminCell(this, i);
+                    public /* synthetic */ String getAdminRank(int i) {
+                        return -CC.$default$getAdminRank(this, i);
                     }
 
                     public /* synthetic */ void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2) {

@@ -273,11 +273,11 @@ public class VideoTimelinePlayView extends View {
         this.paint.setColor(i);
     }
 
-    public void setVideoPath(String str) {
+    public void setVideoPath(String str, float f, float f2) {
         destroy();
         this.mediaMetadataRetriever = new MediaMetadataRetriever();
-        this.progressLeft = 0.0f;
-        this.progressRight = 1.0f;
+        this.progressLeft = f;
+        this.progressRight = f2;
         try {
             this.mediaMetadataRetriever.setDataSource(str);
             this.videoLength = Long.parseLong(this.mediaMetadataRetriever.extractMetadata(9));

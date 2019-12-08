@@ -1,12 +1,13 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
@@ -22,6 +23,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
     private AlbumEntry[] albumEntries = new AlbumEntry[4];
     private AlbumView[] albumViews = new AlbumView[4];
     private int albumsCount;
+    private Paint backgroundPaint = new Paint();
     private PhotoPickerAlbumsCellDelegate delegate;
 
     private class AlbumView extends FrameLayout {
@@ -68,6 +70,14 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             }
             return super.onTouchEvent(motionEvent);
         }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (!this.imageView.getImageReceiver().hasNotThumb() || this.imageView.getImageReceiver().getCurrentAlpha() != 1.0f) {
+                this.this$0.backgroundPaint.setColor(Theme.getColor("chat_attachPhotoBackground"));
+                canvas.drawRect(0.0f, 0.0f, (float) this.imageView.getMeasuredWidth(), (float) this.imageView.getMeasuredHeight(), this.this$0.backgroundPaint);
+            }
+        }
     }
 
     public interface PhotoPickerAlbumsCellDelegate {
@@ -81,13 +91,14 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             addView(this.albumViews[i]);
             this.albumViews[i].setVisibility(4);
             this.albumViews[i].setTag(Integer.valueOf(i));
-            this.albumViews[i].setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    if (PhotoPickerAlbumsCell.this.delegate != null) {
-                        PhotoPickerAlbumsCell.this.delegate.didSelectAlbum(PhotoPickerAlbumsCell.this.albumEntries[((Integer) view.getTag()).intValue()]);
-                    }
-                }
-            });
+            this.albumViews[i].setOnClickListener(new -$$Lambda$PhotoPickerAlbumsCell$dzAVbD6ml-DCLCwxmux2jHi7Nyk(this));
+        }
+    }
+
+    public /* synthetic */ void lambda$new$0$PhotoPickerAlbumsCell(View view) {
+        PhotoPickerAlbumsCellDelegate photoPickerAlbumsCellDelegate = this.delegate;
+        if (photoPickerAlbumsCellDelegate != null) {
+            photoPickerAlbumsCellDelegate.didSelectAlbum(this.albumEntries[((Integer) view.getTag()).intValue()]);
         }
     }
 
@@ -116,28 +127,28 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             albumView.imageView.setOrientation(0, true);
             PhotoEntry photoEntry = albumEntry.coverPhoto;
             if (photoEntry == null || photoEntry.path == null) {
-                albumView.imageView.setImageResource(NUM);
+                albumView.imageView.setImageDrawable(Theme.chat_attachEmptyDrawable);
             } else {
                 albumView.imageView.setOrientation(albumEntry.coverPhoto.orientation, true);
                 String str = ":";
-                BackupImageView access$200;
+                BackupImageView access$100;
                 StringBuilder stringBuilder;
                 if (albumEntry.coverPhoto.isVideo) {
-                    access$200 = albumView.imageView;
+                    access$100 = albumView.imageView;
                     stringBuilder = new StringBuilder();
                     stringBuilder.append("vthumb://");
                     stringBuilder.append(albumEntry.coverPhoto.imageId);
                     stringBuilder.append(str);
                     stringBuilder.append(albumEntry.coverPhoto.path);
-                    access$200.setImage(stringBuilder.toString(), null, getContext().getResources().getDrawable(NUM));
+                    access$100.setImage(stringBuilder.toString(), null, Theme.chat_attachEmptyDrawable);
                 } else {
-                    access$200 = albumView.imageView;
+                    access$100 = albumView.imageView;
                     stringBuilder = new StringBuilder();
                     stringBuilder.append("thumb://");
                     stringBuilder.append(albumEntry.coverPhoto.imageId);
                     stringBuilder.append(str);
                     stringBuilder.append(albumEntry.coverPhoto.path);
-                    access$200.setImage(stringBuilder.toString(), null, getContext().getResources().getDrawable(NUM));
+                    access$100.setImage(stringBuilder.toString(), null, Theme.chat_attachEmptyDrawable);
                 }
             }
             albumView.nameTextView.setText(albumEntry.bucketName);

@@ -451,6 +451,10 @@ public class CameraController implements OnInfoListener {
         return (!this.cameraInitied || this.cameraInfos == null || this.cameraInfos.isEmpty()) ? false : true;
     }
 
+    public void runOnThreadPool(Runnable runnable) {
+        this.threadPool.execute(runnable);
+    }
+
     public void close(CameraSession cameraSession, CountDownLatch countDownLatch, Runnable runnable) {
         cameraSession.destroy();
         this.threadPool.execute(new -$$Lambda$CameraController$Mku2q5OGwNan-h4puDdyST57U90(runnable, cameraSession, countDownLatch));

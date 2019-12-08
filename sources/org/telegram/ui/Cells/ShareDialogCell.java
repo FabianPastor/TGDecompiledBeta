@@ -45,8 +45,7 @@ public class ShareDialogCell extends FrameLayout {
         this.nameTextView.setLines(2);
         this.nameTextView.setEllipsize(TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 66.0f, 6.0f, 0.0f));
-        this.checkBox = new CheckBox2(context);
-        this.checkBox.setSize(21);
+        this.checkBox = new CheckBox2(context, 21);
         this.checkBox.setColor("dialogRoundCheckBox", "dialogBackground", "dialogRoundCheckBoxCheck");
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(4);

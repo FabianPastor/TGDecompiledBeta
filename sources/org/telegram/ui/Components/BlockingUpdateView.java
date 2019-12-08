@@ -34,9 +34,13 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.TL_document;
+import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
+import org.telegram.tgnet.TLRPC.TL_help_getAppUpdate;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -298,7 +302,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.progressAnimation.start();
     }
 
-    public void show(int i, TL_help_appUpdate tL_help_appUpdate) {
+    public void show(int i, TL_help_appUpdate tL_help_appUpdate, boolean z) {
         this.pressCount = 0;
         this.appUpdate = tL_help_appUpdate;
         this.accountNum = i;
@@ -325,5 +329,28 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        if (z) {
+            TL_help_getAppUpdate tL_help_getAppUpdate = new TL_help_getAppUpdate();
+            try {
+                tL_help_getAppUpdate.source = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
+            } catch (Exception unused) {
+            }
+            if (tL_help_getAppUpdate.source == null) {
+                tL_help_getAppUpdate.source = "";
+            }
+            ConnectionsManager.getInstance(this.accountNum).sendRequest(tL_help_getAppUpdate, new -$$Lambda$BlockingUpdateView$IMGtOo6ZHOPONCRx2yC4X_1QmSM(this));
+        }
+    }
+
+    public /* synthetic */ void lambda$show$4$BlockingUpdateView(TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$BlockingUpdateView$tW9xygtx1eZK95aajS8E6pWLkkc(this, tLObject));
+    }
+
+    public /* synthetic */ void lambda$null$3$BlockingUpdateView(TLObject tLObject) {
+        if ((tLObject instanceof TL_help_appUpdate) && !((TL_help_appUpdate) tLObject).can_not_skip) {
+            setVisibility(8);
+            UserConfig.getInstance(0).pendingAppUpdate = null;
+            UserConfig.getInstance(0).saveConfig(false);
+        }
     }
 }

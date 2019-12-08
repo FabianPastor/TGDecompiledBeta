@@ -5,10 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -17,25 +21,32 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController.PhotoEntry;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
-import org.telegram.ui.Components.CheckBox;
+import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.PhotoViewer;
 
 public class PhotoAttachPhotoCell extends FrameLayout {
     private static Rect rect = new Rect();
+    private AnimatorSet animator;
     private AnimatorSet animatorSet;
-    private CheckBox checkBox;
+    private Paint backgroundPaint = new Paint();
+    private CheckBox2 checkBox;
     private FrameLayout checkFrame;
+    private FrameLayout container;
     private PhotoAttachPhotoCellDelegate delegate;
     private BackupImageView imageView;
     private boolean isLast;
     private boolean isVertical;
+    private int itemSize;
+    private boolean itemSizeChanged;
     private boolean needCheckShow;
     private PhotoEntry photoEntry;
     private boolean pressed;
@@ -48,51 +59,85 @@ public class PhotoAttachPhotoCell extends FrameLayout {
 
     public PhotoAttachPhotoCell(Context context) {
         super(context);
+        setWillNotDraw(false);
+        this.container = new FrameLayout(context);
+        addView(this.container, LayoutHelper.createFrame(80, 80.0f));
         this.imageView = new BackupImageView(context);
-        addView(this.imageView, LayoutHelper.createFrame(80, 80.0f));
-        this.checkFrame = new FrameLayout(context);
-        addView(this.checkFrame, LayoutHelper.createFrame(42, 42.0f, 51, 38.0f, 0.0f, 0.0f, 0.0f));
-        this.videoInfoContainer = new FrameLayout(context);
-        this.videoInfoContainer.setBackgroundResource(NUM);
-        this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
-        addView(this.videoInfoContainer, LayoutHelper.createFrame(80, 16, 83));
+        this.container.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
+        this.videoInfoContainer = new FrameLayout(context) {
+            private RectF rect = new RectF();
+
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
+                this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+                canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Theme.chat_timeBackgroundPaint);
+            }
+        };
+        this.videoInfoContainer.setWillNotDraw(false);
+        this.videoInfoContainer.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), 0);
+        this.container.addView(this.videoInfoContainer, LayoutHelper.createFrame(-2, 17.0f, 83, 4.0f, 0.0f, 0.0f, 4.0f));
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(NUM);
         this.videoInfoContainer.addView(imageView, LayoutHelper.createFrame(-2, -2, 19));
         this.videoTextView = new TextView(context);
         this.videoTextView.setTextColor(-1);
+        this.videoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.videoTextView.setTextSize(1, 12.0f);
         this.videoTextView.setImportantForAccessibility(2);
-        this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
-        this.checkBox = new CheckBox(context, NUM);
-        this.checkBox.setSize(30);
-        this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
-        this.checkBox.setDrawBackground(true);
-        this.checkBox.setColor(-12793105, -1);
-        addView(this.checkBox, LayoutHelper.createFrame(30, 30.0f, 51, 46.0f, 4.0f, 0.0f, 0.0f));
+        this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 13.0f, -0.7f, 0.0f, 0.0f));
+        this.checkBox = new CheckBox2(context, 24);
+        this.checkBox.setDrawBackgroundAsArc(7);
+        this.checkBox.setColor("chat_attachCheckBoxBackground", "chat_attachPhotoBackground", "chat_attachCheckBoxCheck");
+        addView(this.checkBox, LayoutHelper.createFrame(26, 26.0f, 51, 52.0f, 4.0f, 0.0f, 0.0f));
         this.checkBox.setVisibility(0);
         setFocusable(true);
+        this.checkFrame = new FrameLayout(context);
+        addView(this.checkFrame, LayoutHelper.createFrame(42, 42.0f, 51, 38.0f, 0.0f, 0.0f, 0.0f));
+        this.itemSize = AndroidUtilities.dp(80.0f);
     }
 
     public void setIsVertical(boolean z) {
         this.isVertical = z;
     }
 
+    public void setItemSize(int i) {
+        this.itemSize = i;
+        LayoutParams layoutParams = (LayoutParams) this.container.getLayoutParams();
+        int i2 = this.itemSize;
+        layoutParams.height = i2;
+        layoutParams.width = i2;
+        layoutParams = (LayoutParams) this.checkFrame.getLayoutParams();
+        layoutParams.gravity = 53;
+        layoutParams.leftMargin = 0;
+        layoutParams = (LayoutParams) this.checkBox.getLayoutParams();
+        layoutParams.gravity = 53;
+        layoutParams.leftMargin = 0;
+        i2 = AndroidUtilities.dp(5.0f);
+        layoutParams.topMargin = i2;
+        layoutParams.rightMargin = i2;
+        this.checkBox.setDrawBackgroundAsArc(6);
+        this.itemSizeChanged = true;
+    }
+
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
-        i2 = 0;
+        if (this.itemSizeChanged) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(this.itemSize, NUM), MeasureSpec.makeMeasureSpec(this.itemSize + AndroidUtilities.dp(5.0f), NUM));
+            return;
+        }
+        int i3 = 0;
         if (this.isVertical) {
             i = MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM);
             if (!this.isLast) {
-                i2 = 6;
+                i3 = 6;
             }
-            super.onMeasure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i2 + 80)), NUM));
+            super.onMeasure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i3 + 80)), NUM));
             return;
         }
         if (!this.isLast) {
-            i2 = 6;
+            i3 = 6;
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i2 + 80)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i3 + 80)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
     }
 
     public PhotoEntry getPhotoEntry() {
@@ -103,7 +148,11 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         return this.imageView;
     }
 
-    public CheckBox getCheckBox() {
+    public float getScale() {
+        return this.container.getScaleX();
+    }
+
+    public CheckBox2 getCheckBox() {
         return this.checkBox;
     }
 
@@ -132,7 +181,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         photoEntry = this.photoEntry;
         String str = photoEntry.thumbPath;
         if (str != null) {
-            this.imageView.setImage(str, null, getResources().getDrawable(NUM));
+            this.imageView.setImage(str, null, Theme.chat_attachEmptyDrawable);
         } else if (photoEntry.path != null) {
             String str2 = ":";
             BackupImageView backupImageView;
@@ -144,7 +193,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 stringBuilder.append(this.photoEntry.imageId);
                 stringBuilder.append(str2);
                 stringBuilder.append(this.photoEntry.path);
-                backupImageView.setImage(stringBuilder.toString(), null, getResources().getDrawable(NUM));
+                backupImageView.setImage(stringBuilder.toString(), null, Theme.chat_attachEmptyDrawable);
             } else {
                 this.imageView.setOrientation(photoEntry.orientation, true);
                 backupImageView = this.imageView;
@@ -153,10 +202,10 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 stringBuilder.append(this.photoEntry.imageId);
                 stringBuilder.append(str2);
                 stringBuilder.append(this.photoEntry.path);
-                backupImageView.setImage(stringBuilder.toString(), null, getResources().getDrawable(NUM));
+                backupImageView.setImage(stringBuilder.toString(), null, Theme.chat_attachEmptyDrawable);
             }
         } else {
-            this.imageView.setImageResource(NUM);
+            this.imageView.setImageDrawable(Theme.chat_attachEmptyDrawable);
         }
         if (z && PhotoViewer.isShowingImage(this.photoEntry.path)) {
             i = 1;
@@ -172,8 +221,60 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         requestLayout();
     }
 
-    public void setChecked(int i, boolean z, boolean z2) {
+    public void setChecked(int i, final boolean z, boolean z2) {
         this.checkBox.setChecked(i, z, z2);
+        if (this.itemSizeChanged) {
+            AnimatorSet animatorSet = this.animator;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+                this.animator = null;
+            }
+            float f = 0.787f;
+            if (z2) {
+                this.animator = new AnimatorSet();
+                AnimatorSet animatorSet2 = this.animator;
+                Animator[] animatorArr = new Animator[2];
+                FrameLayout frameLayout = this.container;
+                Property property = View.SCALE_X;
+                float[] fArr = new float[1];
+                fArr[0] = z ? 0.787f : 1.0f;
+                animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
+                frameLayout = this.container;
+                property = View.SCALE_Y;
+                fArr = new float[1];
+                if (!z) {
+                    f = 1.0f;
+                }
+                fArr[0] = f;
+                animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
+                animatorSet2.playTogether(animatorArr);
+                this.animator.setDuration(200);
+                this.animator.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        if (PhotoAttachPhotoCell.this.animator != null && PhotoAttachPhotoCell.this.animator.equals(animator)) {
+                            PhotoAttachPhotoCell.this.animator = null;
+                            if (!z) {
+                                PhotoAttachPhotoCell.this.setBackgroundColor(0);
+                            }
+                        }
+                    }
+
+                    public void onAnimationCancel(Animator animator) {
+                        if (PhotoAttachPhotoCell.this.animator != null && PhotoAttachPhotoCell.this.animator.equals(animator)) {
+                            PhotoAttachPhotoCell.this.animator = null;
+                        }
+                    }
+                });
+                this.animator.start();
+                return;
+            }
+            this.container.setScaleX(z ? 0.787f : 1.0f);
+            FrameLayout frameLayout2 = this.container;
+            if (!z) {
+                f = 1.0f;
+            }
+            frameLayout2.setScaleY(f);
+        }
     }
 
     public void setNum(int i) {
@@ -210,17 +311,18 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             animatorSet = this.animatorSet;
             Animator[] animatorArr = new Animator[2];
             FrameLayout frameLayout = this.videoInfoContainer;
+            Property property = View.ALPHA;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.0f;
-            String str = "alpha";
-            animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
-            CheckBox checkBox = this.checkBox;
+            animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
+            CheckBox2 checkBox2 = this.checkBox;
+            property = View.ALPHA;
             fArr = new float[1];
             if (!z) {
                 f = 0.0f;
             }
             fArr[0] = f;
-            animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str, fArr);
+            animatorArr[1] = ObjectAnimator.ofFloat(checkBox2, property, fArr);
             animatorSet.playTogether(animatorArr);
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
@@ -230,6 +332,22 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 }
             });
             this.animatorSet.start();
+        }
+    }
+
+    public void clearAnimation() {
+        super.clearAnimation();
+        AnimatorSet animatorSet = this.animator;
+        if (animatorSet != null) {
+            animatorSet.cancel();
+            this.animator = null;
+            float f = 0.787f;
+            this.container.setScaleX(this.checkBox.isChecked() ? 0.787f : 1.0f);
+            FrameLayout frameLayout = this.container;
+            if (!this.checkBox.isChecked()) {
+                f = 1.0f;
+            }
+            frameLayout.setScaleY(f);
         }
     }
 
@@ -306,6 +424,14 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.PhotoAttachPhotoCell.onTouchEvent(android.view.MotionEvent):boolean");
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
+        if (this.checkBox.isChecked() || this.container.getScaleX() != 1.0f || !this.imageView.getImageReceiver().hasNotThumb() || this.imageView.getImageReceiver().getCurrentAlpha() != 1.0f || PhotoViewer.isShowingImage(this.photoEntry.path)) {
+            this.backgroundPaint.setColor(Theme.getColor("chat_attachPhotoBackground"));
+            canvas.drawRect(0.0f, 0.0f, (float) this.imageView.getMeasuredWidth(), (float) this.imageView.getMeasuredHeight(), this.backgroundPaint);
+        }
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

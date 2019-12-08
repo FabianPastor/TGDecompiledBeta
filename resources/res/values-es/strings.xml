@@ -212,8 +212,6 @@
     <string name="AllowCustomQuickReply">Permitir personalización</string>
     <string name="AllowFillNumber">Por favor, permite a Telegram recibir llamadas para que podamos confirmar tu número de teléfono automáticamente.</string>
     <string name="AllowReadCall">Por favor, permite a Telegram recibir llamadas para que podamos ingresar automáticamente el código por ti.</string>
-    <string name="AllowReadCallAndSms">Por favor, permite a Telegram recibir llamadas para que podamos confirmar tu número de teléfono automáticamente.</string>
-    <string name="AllowReadSms">Por favor, permite a Telegram recibir SMS para que podamos ingresar automáticamente el código por ti.</string>
     <string name="AlternativeOptions">Opciones alternativas</string>
     <string name="AlwaysAllow">Permitir</string>
     <string name="AlwaysShareWith">Compartir con</string>
@@ -976,7 +974,6 @@
     <string name="Emoji6">Objetos</string>
     <string name="Emoji7">Símbolos</string>
     <string name="Emoji8">Banderas</string>
-    <string name="EmojiBigSize">Usar un emoji grande</string>
     <string name="EmojiSuggestions">Sugerencias de emojis</string>
     <string name="EmojiSuggestionsInfo">**Telegram** te permite encontrar emojis a partir de miles de palabras clave, pero siempre puede faltar alguna. Si quieres sugerir una palabra clave, puedes ayudarnos visitando:</string>
     <string name="EmojiSuggestionsUrl">https://translations.telegram.org/%1$s/emoji</string>

@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -31,6 +32,7 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Environment;
 import android.os.PowerManager;
+import android.provider.CallLog.Calls;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images.Media;
@@ -126,6 +128,7 @@ public class AndroidUtilities {
     private static int adjustOwnerClassGuid = 0;
     private static RectF bitmapRect;
     private static final Object callLock = new Object();
+    private static ContentObserver callLogContentObserver;
     private static CallReceiver callReceiver;
     public static DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     public static float density = 1.0f;
@@ -149,6 +152,7 @@ public class AndroidUtilities {
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable();
+    private static Runnable unregisterRunnable;
     public static boolean usingHardwareInput;
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
@@ -1431,6 +1435,60 @@ public class AndroidUtilities {
         }
     }
 
+    public static String obtainLoginPhoneCall(String str) {
+        Cursor query;
+        String string;
+        Throwable th;
+        if (!hasCallPermissions) {
+            return null;
+        }
+        try {
+            query = ApplicationLoader.applicationContext.getContentResolver().query(Calls.CONTENT_URI, new String[]{"number", "date"}, "type IN (3,1,5)", null, "date DESC LIMIT 5");
+            while (query.moveToNext()) {
+                try {
+                    string = query.getString(0);
+                    long j = query.getLong(1);
+                    if (BuildVars.LOGS_ENABLED) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("number = ");
+                        stringBuilder.append(string);
+                        FileLog.e(stringBuilder.toString());
+                    }
+                    if (Math.abs(System.currentTimeMillis() - j) < 3600000) {
+                        if (checkPhonePattern(str, string)) {
+                            if (query != null) {
+                                query.close();
+                            }
+                            return string;
+                        }
+                    }
+                } catch (Throwable th2) {
+                    Throwable th3 = th2;
+                    string = th;
+                    th = th3;
+                }
+            }
+            if (query != null) {
+                query.close();
+            }
+        } catch (Exception th4) {
+            FileLog.e(th4);
+        }
+        return null;
+        throw th4;
+        if (query != null) {
+            if (string != null) {
+                try {
+                    query.close();
+                } catch (Throwable unused) {
+                }
+            } else {
+                query.close();
+            }
+        }
+        throw th4;
+    }
+
     public static boolean checkPhonePattern(String str, String str2) {
         if (!(TextUtils.isEmpty(str) || str.equals("*"))) {
             String[] split = str.split("\\*");
@@ -2206,9 +2264,9 @@ public class AndroidUtilities {
         r7 = r5.exists();
         if (r7 == 0) goto L_0x015c;
     L_0x004d:
-        r7 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+        r7 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r8 = "OK";
-        r9 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r9 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r10 = "AppName";
         r11 = 1;
         if (r2 == 0) goto L_0x00a6;
@@ -2232,7 +2290,7 @@ public class AndroidUtilities {
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d0519 float:1.8744762E38 double:1.0531304223E-314;
+        r1 = NUM; // 0x7f0d0525 float:1.8744786E38 double:1.053130428E-314;
         r3 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
@@ -2329,7 +2387,7 @@ public class AndroidUtilities {
         r3.setTitle(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.setPositiveButton(r1, r6);
-        r1 = NUM; // 0x7f0d062b float:1.8745317E38 double:1.0531305577E-314;
+        r1 = NUM; // 0x7f0d063f float:1.8745358E38 double:1.0531305676E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r5 = 0;
@@ -2451,21 +2509,21 @@ public class AndroidUtilities {
     L_0x0092:
         r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r8.<init>(r9);
-        r0 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r0 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r1 = "AppName";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setTitle(r0);
-        r0 = NUM; // 0x7f0d00ee float:1.8742597E38 double:1.053129895E-314;
+        r0 = NUM; // 0x7f0d00f0 float:1.8742602E38 double:1.053129896E-314;
         r1 = "ApkRestricted";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setMessage(r0);
-        r0 = NUM; // 0x7f0d0824 float:1.8746342E38 double:1.053130807E-314;
+        r0 = NUM; // 0x7f0d0838 float:1.8746382E38 double:1.053130817E-314;
         r1 = "PermissionOpenSettings";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$WTDNtmPdy5yTCpHQSYXokc0QdfY;
         r1.<init>(r9);
         r8.setPositiveButton(r0, r1);
-        r9 = NUM; // 0x7f0d01f6 float:1.8743133E38 double:1.0531300256E-314;
+        r9 = NUM; // 0x7f0d01f9 float:1.874314E38 double:1.053130027E-314;
         r0 = "Cancel";
         r9 = org.telegram.messenger.LocaleController.getString(r0, r9);
         r8.setNegativeButton(r9, r2);
@@ -3188,5 +3246,25 @@ public class AndroidUtilities {
         int blue2 = Color.blue(i);
         i = Color.alpha(i);
         return Color.argb((int) ((((float) i) + (((float) (i2 - i)) * f)) * f2), (int) (((float) red2) + (((float) (red - red2)) * f)), (int) (((float) green2) + (((float) (green - green2)) * f)), (int) (((float) blue2) + (((float) (blue - blue2)) * f)));
+    }
+
+    public static int indexOfIgnoreCase(String str, String str2) {
+        if (str2.isEmpty() || str.isEmpty()) {
+            return str.indexOf(str2);
+        }
+        int i = 0;
+        while (i < str.length() && str2.length() + i <= str.length()) {
+            int i2 = i;
+            int i3 = 0;
+            while (i2 < str.length() && i3 < str2.length() && Character.toLowerCase(str.charAt(i2)) == Character.toLowerCase(str2.charAt(i3))) {
+                i3++;
+                i2++;
+            }
+            if (i3 == str2.length()) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 }

@@ -4,9 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +20,6 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -53,13 +50,11 @@ import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.SmsReceiver;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_changePhone;
@@ -1156,7 +1151,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     substring = stripExceptNumbers.substring(0, i);
                                     if (((String) PhoneView.this.codesMap.get(substring)) != null) {
                                         StringBuilder stringBuilder = new StringBuilder();
-                                        stringBuilder.append(stripExceptNumbers.substring(i, stripExceptNumbers.length()));
+                                        stringBuilder.append(stripExceptNumbers.substring(i));
                                         stringBuilder.append(PhoneView.this.phoneField.getText().toString());
                                         stripExceptNumbers = stringBuilder.toString();
                                         PhoneView.this.codeField.setText(substring);
@@ -1172,7 +1167,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                 if (obj == null) {
                                     PhoneView.this.ignoreOnTextChange = true;
                                     StringBuilder stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(substring.substring(1, substring.length()));
+                                    stringBuilder2.append(substring.substring(1));
                                     stringBuilder2.append(PhoneView.this.phoneField.getText().toString());
                                     charSequence = stringBuilder2.toString();
                                     EditTextBoldCursor access$400 = PhoneView.this.codeField;
@@ -1265,7 +1260,7 @@ public class ChangePhoneActivity extends BaseFragment {
                         if (this.characterAction == 3) {
                             stringBuilder = new StringBuilder();
                             stringBuilder.append(obj.substring(0, this.actionPosition));
-                            stringBuilder.append(obj.substring(this.actionPosition + 1, obj.length()));
+                            stringBuilder.append(obj.substring(this.actionPosition + 1));
                             obj = stringBuilder.toString();
                             selectionStart--;
                         }
@@ -1490,7 +1485,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                 ChangePhoneActivity changePhoneActivity = this.this$0;
                                 changePhoneActivity.permissionsDialog = changePhoneActivity.showDialog(builder.create());
                             } else {
-                                this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[this.this$0.permissionsItems.size()]), 6);
+                                this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[0]), 6);
                             }
                             return;
                         }
@@ -1512,27 +1507,9 @@ public class ChangePhoneActivity extends BaseFragment {
                     TL_codeSettings tL_codeSettings = tL_account_sendChangePhoneCode.settings;
                     boolean z = (obj2 == null || obj == null) ? false : true;
                     tL_codeSettings.allow_flashcall = z;
-                    if (VERSION.SDK_INT >= 26) {
-                        try {
-                            tL_account_sendChangePhoneCode.settings.app_hash = SmsManager.getDefault().createAppSpecificSmsToken(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, SmsReceiver.class), NUM));
-                        } catch (Throwable th) {
-                            FileLog.e(th);
-                        }
-                    } else {
-                        TL_codeSettings tL_codeSettings2 = tL_account_sendChangePhoneCode.settings;
-                        tL_codeSettings2.app_hash = BuildVars.SMS_HASH;
-                        tL_codeSettings2.app_hash_persistent = true;
-                    }
-                    SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                    String str5 = "sms_hash";
-                    if (TextUtils.isEmpty(tL_account_sendChangePhoneCode.settings.app_hash)) {
-                        sharedPreferences.edit().remove(str5).commit();
-                    } else {
-                        TL_codeSettings tL_codeSettings3 = tL_account_sendChangePhoneCode.settings;
-                        tL_codeSettings3.flags |= 8;
-                        sharedPreferences.edit().putString(str5, tL_account_sendChangePhoneCode.settings.app_hash).commit();
-                    }
-                    if (tL_account_sendChangePhoneCode.settings.allow_flashcall) {
+                    TL_codeSettings tL_codeSettings2 = tL_account_sendChangePhoneCode.settings;
+                    tL_codeSettings2.allow_app_hash = ApplicationLoader.hasPlayServices;
+                    if (tL_codeSettings2.allow_flashcall) {
                         try {
                             str2 = telephonyManager.getLine1Number();
                             if (TextUtils.isEmpty(str2)) {
@@ -1550,25 +1527,25 @@ public class ChangePhoneActivity extends BaseFragment {
                     }
                     Bundle bundle = new Bundle();
                     StringBuilder stringBuilder2 = new StringBuilder();
-                    String str6 = "+";
-                    stringBuilder2.append(str6);
+                    String str5 = "+";
+                    stringBuilder2.append(str5);
                     stringBuilder2.append(this.codeField.getText());
-                    String str7 = " ";
-                    stringBuilder2.append(str7);
+                    String str6 = " ";
+                    stringBuilder2.append(str6);
                     stringBuilder2.append(this.phoneField.getText());
                     bundle.putString(str3, stringBuilder2.toString());
                     StringBuilder stringBuilder3;
                     try {
                         stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(str6);
+                        stringBuilder3.append(str5);
                         stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()));
-                        stringBuilder3.append(str7);
+                        stringBuilder3.append(str6);
                         stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
                         bundle.putString(str, stringBuilder3.toString());
                     } catch (Exception e2) {
                         FileLog.e(e2);
                         stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(str6);
+                        stringBuilder3.append(str5);
                         stringBuilder3.append(stripExceptNumbers);
                         bundle.putString(str, stringBuilder3.toString());
                     }
@@ -1708,9 +1685,7 @@ public class ChangePhoneActivity extends BaseFragment {
     /* Access modifiers changed, original: protected */
     public void onDialogDismiss(Dialog dialog) {
         if (VERSION.SDK_INT >= 23 && dialog == this.permissionsDialog && !this.permissionsItems.isEmpty()) {
-            Activity parentActivity = getParentActivity();
-            ArrayList arrayList = this.permissionsItems;
-            parentActivity.requestPermissions((String[]) arrayList.toArray(new String[arrayList.size()]), 6);
+            getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[0]), 6);
         }
     }
 
@@ -1929,6 +1904,6 @@ public class ChangePhoneActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{r3}, null, null, null, "login_progressOuter"));
         arrayList.add(new ThemeDescription(loginActivitySmsView4.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(loginActivitySmsView4.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionBackground"));
-        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[arrayList.size()]);
+        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
     }
 }

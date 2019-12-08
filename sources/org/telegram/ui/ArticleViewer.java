@@ -14666,7 +14666,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004f:
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r3 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x0098 }
         r1 = android.content.Intent.createChooser(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -14677,16 +14677,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r0.<init>(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "AppName";
-        r2 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r2 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setTitle(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "OK";
-        r2 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+        r2 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 0;
         r0.setPositiveButton(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r1 = "PleaseDownload";
-        r2 = NUM; // 0x7f0d0849 float:1.8746417E38 double:1.0531308255E-314;
+        r2 = NUM; // 0x7f0d0863 float:1.874647E38 double:1.0531308383E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setMessage(r1);	 Catch:{ Exception -> 0x0098 }
         r0 = r0.create();	 Catch:{ Exception -> 0x0098 }
@@ -15205,7 +15205,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r6.menuItem;
         r0.hideSubItem(r9);
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0140 float:1.8742764E38 double:1.0531299356E-314;
+        r1 = NUM; // 0x7f0d0142 float:1.8742768E38 double:1.0531299366E-314;
         r2 = "AttachGif";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -15220,21 +15220,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r14 == 0) goto L_0x00ef;
     L_0x00e0:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0151 float:1.8742798E38 double:1.053129944E-314;
+        r1 = NUM; // 0x7f0d0153 float:1.8742802E38 double:1.053129945E-314;
         r2 = "AttachVideo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x0123;
     L_0x00ef:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d014b float:1.8742786E38 double:1.053129941E-314;
+        r1 = NUM; // 0x7f0d014d float:1.874279E38 double:1.053129942E-314;
         r2 = "AttachPhoto";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x0123;
     L_0x00fe:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d06dc float:1.8745676E38 double:1.053130645E-314;
+        r1 = NUM; // 0x7f0d06f0 float:1.8745717E38 double:1.053130655E-314;
         r2 = new java.lang.Object[r10];
         r3 = r6.currentIndex;
         r3 = r3 + r9;

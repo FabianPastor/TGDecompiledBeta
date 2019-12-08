@@ -2,7 +2,6 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
@@ -357,29 +355,14 @@ public class ThemeCell extends FrameLayout {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        int color;
         if (this.needDivider) {
-            color = Theme.dividerPaint.getColor();
-            r1 = new Object[4];
-            int i = 0;
-            r1[0] = Integer.valueOf(Color.alpha(color));
-            r1[1] = Integer.valueOf(Color.red(color));
-            r1[2] = Integer.valueOf(Color.green(color));
-            r1[3] = Integer.valueOf(Color.blue(color));
-            FileLog.d(String.format("set color %d %d %d %d", r1));
-            float dp = LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f);
-            float measuredHeight = (float) (getMeasuredHeight() - 1);
-            color = getMeasuredWidth();
-            if (LocaleController.isRTL) {
-                i = AndroidUtilities.dp(20.0f);
-            }
-            canvas.drawLine(dp, measuredHeight, (float) (color - i), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
-        color = AndroidUtilities.dp(31.0f);
+        int dp = AndroidUtilities.dp(31.0f);
         if (LocaleController.isRTL) {
-            color = getWidth() - color;
+            dp = getWidth() - dp;
         }
-        canvas.drawCircle((float) color, (float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(11.0f), this.paint);
+        canvas.drawCircle((float) dp, (float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(11.0f), this.paint);
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

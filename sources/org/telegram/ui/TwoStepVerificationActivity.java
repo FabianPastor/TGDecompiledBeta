@@ -1296,7 +1296,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         return;
     L_0x0022:
         r3.needHideProgress();
-        r0 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+        r0 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r1 = "OK";
         r2 = 0;
         if (r4 != 0) goto L_0x00ac;
@@ -1339,18 +1339,18 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r5 = r5.has_password;
         if (r5 == 0) goto L_0x0082;
     L_0x0075:
-        r5 = NUM; // 0x7f0d0b13 float:1.8747865E38 double:1.053131178E-314;
+        r5 = NUM; // 0x7f0d0b42 float:1.874796E38 double:1.0531312014E-314;
         r6 = "YourEmailSuccessText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
         goto L_0x008e;
     L_0x0082:
-        r5 = NUM; // 0x7f0d0b18 float:1.8747875E38 double:1.0531311807E-314;
+        r5 = NUM; // 0x7f0d0b47 float:1.874797E38 double:1.053131204E-314;
         r6 = "YourPasswordSuccessText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
     L_0x008e:
-        r5 = NUM; // 0x7f0d0b17 float:1.8747873E38 double:1.05313118E-314;
+        r5 = NUM; // 0x7f0d0b46 float:1.8747968E38 double:1.0531312034E-314;
         r6 = "YourPasswordSuccess";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setTitle(r5);
@@ -1379,12 +1379,12 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r5 = r4.text;
         r6 = "EMAIL_INVALID";
         r5 = r6.equals(r5);
-        r6 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r6 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r7 = "AppName";
         if (r5 == 0) goto L_0x00e4;
     L_0x00d2:
         r4 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r5 = NUM; // 0x7f0d07d4 float:1.874618E38 double:1.0531307677E-314;
+        r5 = NUM; // 0x7f0d07e8 float:1.874622E38 double:1.0531307775E-314;
         r6 = "PasswordEmailInvalid";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.showAlertWithText(r4, r5);
@@ -1410,7 +1410,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r4);
     L_0x010a:
         r5 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r6 = NUM; // 0x7f0d046f float:1.8744417E38 double:1.0531303383E-314;
+        r6 = NUM; // 0x7f0d0478 float:1.8744435E38 double:1.053130343E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r7[r2] = r4;
@@ -1436,11 +1436,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r6 = new org.telegram.ui.-$$Lambda$TwoStepVerificationActivity$dZl6L7A3pdg7u0zh2dz9t60mIJU;
         r6.<init>(r3, r7, r8);
         r4.setPositiveButton(r5, r6);
-        r5 = NUM; // 0x7f0d0b0c float:1.874785E38 double:1.053131175E-314;
+        r5 = NUM; // 0x7f0d0b3b float:1.8747946E38 double:1.053131198E-314;
         r6 = "YourEmailAlmostThereText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
-        r5 = NUM; // 0x7f0d0b0b float:1.8747849E38 double:1.0531311743E-314;
+        r5 = NUM; // 0x7f0d0b3a float:1.8747944E38 double:1.0531311975E-314;
         r6 = "YourEmailAlmostThere";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setTitle(r5);

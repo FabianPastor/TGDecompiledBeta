@@ -5,11 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -21,7 +19,6 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -43,12 +40,10 @@ import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.SmsReceiver;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
@@ -803,7 +798,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (r7 != 0) goto L_0x003e;
         L_0x000b:
             r7 = r6.this$0;
-            r8 = NUM; // 0x7f0d01fb float:1.8743143E38 double:1.053130028E-314;
+            r8 = NUM; // 0x7f0d01fe float:1.874315E38 double:1.0531300295E-314;
             r1 = new java.lang.Object[r1];
             r2 = org.telegram.PhoneFormat.PhoneFormat.getInstance();
             r3 = new java.lang.StringBuilder;
@@ -1014,26 +1009,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 tL_account_sendConfirmPhoneCode.settings = new TL_codeSettings();
                 TL_codeSettings tL_codeSettings = tL_account_sendConfirmPhoneCode.settings;
                 tL_codeSettings.allow_flashcall = false;
-                if (VERSION.SDK_INT >= 26) {
-                    try {
-                        tL_codeSettings.app_hash = SmsManager.getDefault().createAppSpecificSmsToken(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, SmsReceiver.class), NUM));
-                    } catch (Throwable th) {
-                        FileLog.e(th);
-                    }
-                } else {
-                    tL_codeSettings.app_hash = BuildVars.SMS_HASH;
-                    tL_codeSettings.app_hash_persistent = true;
-                }
-                SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                String str2 = "sms_hash";
-                if (TextUtils.isEmpty(tL_account_sendConfirmPhoneCode.settings.app_hash)) {
-                    sharedPreferences.edit().remove(str2).commit();
-                } else {
-                    TL_codeSettings tL_codeSettings2 = tL_account_sendConfirmPhoneCode.settings;
-                    tL_codeSettings2.flags |= 8;
-                    sharedPreferences.edit().putString(str2, tL_account_sendConfirmPhoneCode.settings.app_hash).commit();
-                }
-                if (tL_account_sendConfirmPhoneCode.settings.allow_flashcall) {
+                tL_codeSettings.allow_app_hash = ApplicationLoader.hasPlayServices;
+                if (tL_codeSettings.allow_flashcall) {
                     try {
                         String line1Number = telephonyManager.getLine1Number();
                         if (TextUtils.isEmpty(line1Number)) {

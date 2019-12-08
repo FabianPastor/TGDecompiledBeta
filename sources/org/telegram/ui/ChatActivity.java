@@ -408,6 +408,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private TextView bottomOverlayText;
     private boolean[] cacheEndReached = new boolean[2];
     private int canEditMessagesCount;
+    private int canForwardMessagesCount;
     private int cantDeleteMessagesCount;
     private int cantForwardMessagesCount;
     protected ChatActivityEnterView chatActivityEnterView;
@@ -555,6 +556,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
     };
     private boolean openAnimationEnded;
+    private boolean openKeyboardOnAttachMenuClose;
     private boolean openSearchKeyboard;
     private View overlayView;
     private FrameLayout pagedownButton;
@@ -704,6 +706,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private MessageObject selectedObject;
     private GroupedMessages selectedObjectGroup;
     private MessageObject selectedObjectToEditCaption;
+    private boolean showScrollToMessageError;
+    private HintView slowModeHint;
     private int startLoadFromMessageId;
     private int startLoadFromMessageOffset = Integer.MAX_VALUE;
     private String startVideoEdit;
@@ -1814,14 +1818,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         }
                     }
 
-                    public boolean isChatAdminCell(int i) {
+                    public String getAdminRank(int i) {
                         if (ChatObject.isChannel(ChatActivity.this.currentChat)) {
                             ChatActivity chatActivity = ChatActivity.this;
                             if (chatActivity.currentChat.megagroup) {
-                                return chatActivity.getMessagesController().isChannelAdmin(ChatActivity.this.currentChat.id, i);
+                                return chatActivity.getMessagesController().getAdminRank(ChatActivity.this.currentChat.id, i);
                             }
                         }
-                        return false;
+                        return null;
                     }
                 });
                 if (ChatActivity.this.currentEncryptedChat == null) {
@@ -1835,10 +1839,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         PhotoViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity());
                         PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 640);
                         if (closestPhotoSizeWithSize != null) {
-                            PhotoViewer.getInstance().openPhoto(closestPhotoSizeWithSize.location, ChatActivity.this.photoViewerProvider);
-                        } else {
-                            PhotoViewer.getInstance().openPhoto(messageObject, 0, 0, ChatActivity.this.photoViewerProvider);
+                            PhotoViewer.getInstance().openPhoto(closestPhotoSizeWithSize.location, ImageLocation.getForPhoto(closestPhotoSizeWithSize, messageObject.messageOwner.action.photo), ChatActivity.this.photoViewerProvider);
+                            return;
                         }
+                        PhotoViewer.getInstance().openPhoto(messageObject, 0, 0, ChatActivity.this.photoViewerProvider);
                     }
 
                     public void didLongPress(ChatActionCell chatActionCell, float f, float f2) {
@@ -2270,7 +2274,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (r13 == 0) goto L_0x0249;
         L_0x021d:
             r3 = (org.telegram.ui.Cells.ChatUnreadCell) r3;
-            r13 = NUM; // 0x7f0d0a42 float:1.874744E38 double:1.053131075E-314;
+            r13 = NUM; // 0x7f0d0a6b float:1.8747524E38 double:1.053131095E-314;
             r14 = "UnreadMessages";
             r13 = org.telegram.messenger.LocaleController.getString(r14, r13);
             r3.setText(r13);
@@ -2715,7 +2719,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     public boolean onFragmentCreate() {
-        CountDownLatch countDownLatch;
         int i;
         int i2 = this.arguments.getInt("chat_id", 0);
         int i3 = this.arguments.getInt("user_id", 0);
@@ -2725,6 +2728,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.startLoadFromMessageId = this.arguments.getInt("message_id", 0);
         int i5 = this.arguments.getInt("migrated_to", 0);
         this.scrollToTopOnResume = this.arguments.getBoolean("scrollToTopOnResume", false);
+        CountDownLatch countDownLatch;
         if (i2 != 0) {
             this.currentChat = getMessagesController().getChat(Integer.valueOf(i2));
             if (this.currentChat == null) {
@@ -2887,6 +2891,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 this.startLoadFromMessageId = i2;
             }
         } else {
+            this.showScrollToMessageError = true;
             this.needSelectFromMessageId = true;
         }
         MessagesController messagesController;
@@ -2929,14 +2934,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             messagesController.loadMessages(j, i6, 0, 0, true, 0, i, 2, 0, isChannel, i2);
         }
         if (this.currentChat != null) {
-            countDownLatch = this.isBroadcast ? new CountDownLatch(1) : null;
-            getMessagesController().loadChatInfo(this.currentChat.id, countDownLatch, true);
             this.chatInfo = getMessagesController().getChatFull(this.currentChat.id);
-            if (this.isBroadcast && countDownLatch != null) {
-                try {
-                    countDownLatch.await();
-                } catch (Exception e2222) {
-                    FileLog.e(e2222);
+            ChatFull loadChatInfo = getMessagesStorage().loadChatInfo(this.currentChat.id, this.isBroadcast ? new CountDownLatch(1) : null, true, false);
+            if (this.chatInfo == null) {
+                this.chatInfo = loadChatInfo;
+            }
+            if (this.chatInfo != null && ChatObject.isChannel(this.currentChat)) {
+                loadChatInfo = this.chatInfo;
+                i4 = loadChatInfo.migrated_from_chat_id;
+                if (i4 != 0) {
+                    this.mergeDialogId = (long) (-i4);
+                    this.maxMessageId[1] = loadChatInfo.migrated_from_max_id;
                 }
             }
         } else if (this.currentUser != null) {
@@ -3087,69 +3095,75 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:218:0x0d98  */
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x0d96  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x0dba  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x0db7  */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x0776  */
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x08d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x0cb9  */
-    /* JADX WARNING: Removed duplicated region for block: B:249:0x1102  */
-    /* JADX WARNING: Removed duplicated region for block: B:259:0x1667  */
-    /* JADX WARNING: Removed duplicated region for block: B:284:0x183d  */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x0421  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0504  */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x047e  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x05ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x05a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x05cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:148:0x05c9  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x05dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x05da  */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x0708  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x062c  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x075e  */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x0776  */
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x08d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x0cb9  */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x10df  */
-    /* JADX WARNING: Removed duplicated region for block: B:243:0x10ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:249:0x1102  */
-    /* JADX WARNING: Removed duplicated region for block: B:259:0x1667  */
-    /* JADX WARNING: Removed duplicated region for block: B:262:0x17e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:284:0x183d  */
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x0337  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x0375  */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x0421  */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x047e  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0504  */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0576  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x05a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x05ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:148:0x05c9  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x05cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x05da  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x05dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x062c  */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x0708  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x075e  */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x0776  */
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x08d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x0cb9  */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x10df  */
-    /* JADX WARNING: Removed duplicated region for block: B:243:0x10ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:249:0x1102  */
-    /* JADX WARNING: Removed duplicated region for block: B:259:0x1667  */
-    /* JADX WARNING: Removed duplicated region for block: B:262:0x17e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:284:0x183d  */
-    /* JADX WARNING: Missing block: B:51:0x00f5, code skipped:
-            if ((r1.participants instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden) != false) goto L_0x00f7;
+    /* JADX WARNING: Removed duplicated region for block: B:219:0x0d9c  */
+    /* JADX WARNING: Removed duplicated region for block: B:218:0x0d9a  */
+    /* JADX WARNING: Removed duplicated region for block: B:229:0x0dbe  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x0dbb  */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x077a  */
+    /* JADX WARNING: Removed duplicated region for block: B:206:0x08d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x0cbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x10c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x110f  */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x1674  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x17e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x187d  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0425  */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x0508  */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0482  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x05af  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x05ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:150:0x05cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x05cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x05e0  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x05de  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x070c  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0630  */
+    /* JADX WARNING: Removed duplicated region for block: B:192:0x0762  */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x077a  */
+    /* JADX WARNING: Removed duplicated region for block: B:206:0x08d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x0cbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x10c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x10ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x10fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x110f  */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x1674  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x17e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x1820  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x187d  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x033b  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0379  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0425  */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0482  */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x0508  */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x057a  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x05ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x05af  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x05cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:150:0x05cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x05de  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x05e0  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x0630  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x070c  */
+    /* JADX WARNING: Removed duplicated region for block: B:192:0x0762  */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x077a  */
+    /* JADX WARNING: Removed duplicated region for block: B:206:0x08d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x0cbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x10c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x10ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x10fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x110f  */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x1674  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x17e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x1820  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x187d  */
+    /* JADX WARNING: Missing block: B:51:0x00f7, code skipped:
+            if ((r1.participants instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden) != false) goto L_0x00f9;
      */
-    /* JADX WARNING: Missing block: B:92:0x0305, code skipped:
-            if (android.text.TextUtils.isEmpty(r2.username) != false) goto L_0x0307;
+    /* JADX WARNING: Missing block: B:93:0x0309, code skipped:
+            if (android.text.TextUtils.isEmpty(r2.username) != false) goto L_0x030b;
      */
-    /* JADX WARNING: Missing block: B:213:0x0d7b, code skipped:
-            if (r1.megagroup != false) goto L_0x0d7d;
+    /* JADX WARNING: Missing block: B:214:0x0d7f, code skipped:
+            if (r1.megagroup != false) goto L_0x0d81;
      */
     public android.view.View createView(android.content.Context r33) {
         /*
@@ -3193,129 +3207,130 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7.cantDeleteMessagesCount = r9;
         r7.canEditMessagesCount = r9;
         r7.cantForwardMessagesCount = r9;
+        r7.canForwardMessagesCount = r9;
         r11 = 0;
         r7.videoPlayerContainer = r11;
         r7.hasOwnBackground = r10;
         r1 = r7.chatAttachAlert;
-        if (r1 == 0) goto L_0x005c;
-    L_0x004a:
-        r1 = r1.isShowing();	 Catch:{ Exception -> 0x0055 }
-        if (r1 == 0) goto L_0x0055;
-    L_0x0050:
-        r1 = r7.chatAttachAlert;	 Catch:{ Exception -> 0x0055 }
-        r1.dismiss();	 Catch:{ Exception -> 0x0055 }
-    L_0x0055:
+        if (r1 == 0) goto L_0x005e;
+    L_0x004c:
+        r1 = r1.isShowing();	 Catch:{ Exception -> 0x0057 }
+        if (r1 == 0) goto L_0x0057;
+    L_0x0052:
+        r1 = r7.chatAttachAlert;	 Catch:{ Exception -> 0x0057 }
+        r1.dismiss();	 Catch:{ Exception -> 0x0057 }
+    L_0x0057:
         r1 = r7.chatAttachAlert;
         r1.onDestroy();
         r7.chatAttachAlert = r11;
-    L_0x005c:
+    L_0x005e:
         r1 = r7.stickersAdapter;
-        if (r1 == 0) goto L_0x0065;
-    L_0x0060:
+        if (r1 == 0) goto L_0x0067;
+    L_0x0062:
         r1.onDestroy();
         r7.stickersAdapter = r11;
-    L_0x0065:
+    L_0x0067:
         org.telegram.ui.ActionBar.Theme.createChatResources(r0, r9);
         r1 = r7.actionBar;
         r1.setAddToContainer(r9);
         r1 = r7.inPreviewMode;
-        if (r1 == 0) goto L_0x0077;
-    L_0x0071:
+        if (r1 == 0) goto L_0x0079;
+    L_0x0073:
         r1 = r7.actionBar;
         r1.setBackButtonDrawable(r11);
-        goto L_0x0081;
-    L_0x0077:
+        goto L_0x0083;
+    L_0x0079:
         r1 = r7.actionBar;
         r2 = new org.telegram.ui.ActionBar.BackDrawable;
         r2.<init>(r9);
         r1.setBackButtonDrawable(r2);
-    L_0x0081:
+    L_0x0083:
         r1 = r7.actionBar;
         r2 = new org.telegram.ui.ChatActivity$5;
         r2.<init>();
         r1.setActionBarMenuOnItemClick(r2);
         r1 = new org.telegram.ui.Components.ChatAvatarContainer;
         r2 = r7.currentEncryptedChat;
-        if (r2 == 0) goto L_0x0093;
-    L_0x0091:
-        r2 = 1;
-        goto L_0x0094;
+        if (r2 == 0) goto L_0x0095;
     L_0x0093:
+        r2 = 1;
+        goto L_0x0096;
+    L_0x0095:
         r2 = 0;
-    L_0x0094:
+    L_0x0096:
         r1.<init>(r0, r7, r2);
         r7.avatarContainer = r1;
         r1 = r7.inPreviewMode;
-        if (r1 == 0) goto L_0x00a2;
-    L_0x009d:
+        if (r1 == 0) goto L_0x00a4;
+    L_0x009f:
         r1 = r7.avatarContainer;
         r1.setOccupyStatusBar(r9);
-    L_0x00a2:
+    L_0x00a4:
         r1 = r7.actionBar;
         r2 = r7.avatarContainer;
         r12 = -2;
         r13 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
         r14 = 51;
         r3 = r7.inPreviewMode;
-        if (r3 != 0) goto L_0x00b4;
-    L_0x00af:
+        if (r3 != 0) goto L_0x00b6;
+    L_0x00b1:
         r3 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r15 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
-        goto L_0x00b6;
-    L_0x00b4:
+        goto L_0x00b8;
+    L_0x00b6:
         r3 = 0;
         r15 = 0;
-    L_0x00b6:
+    L_0x00b8:
         r16 = 0;
         r17 = NUM; // 0x42200000 float:40.0 double:5.481131706E-315;
         r18 = 0;
         r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18);
         r1.addView(r2, r9, r3);
         r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x00fc;
-    L_0x00c7:
+        if (r1 == 0) goto L_0x00fe;
+    L_0x00c9:
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 != 0) goto L_0x00fc;
-    L_0x00cd:
+        if (r1 != 0) goto L_0x00fe;
+    L_0x00cf:
         r1 = r7.currentChat;
         r1 = r1.participants_count;
         r2 = r7.chatInfo;
-        if (r2 == 0) goto L_0x00dd;
-    L_0x00d5:
+        if (r2 == 0) goto L_0x00df;
+    L_0x00d7:
         r1 = r2.participants;
         r1 = r1.participants;
         r1 = r1.size();
-    L_0x00dd:
-        if (r1 == 0) goto L_0x00f7;
     L_0x00df:
+        if (r1 == 0) goto L_0x00f9;
+    L_0x00e1:
         r1 = r7.currentChat;
         r2 = r1.deactivated;
-        if (r2 != 0) goto L_0x00f7;
-    L_0x00e5:
+        if (r2 != 0) goto L_0x00f9;
+    L_0x00e7:
         r2 = r1.left;
-        if (r2 != 0) goto L_0x00f7;
-    L_0x00e9:
+        if (r2 != 0) goto L_0x00f9;
+    L_0x00eb:
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_chatForbidden;
-        if (r1 != 0) goto L_0x00f7;
-    L_0x00ed:
+        if (r1 != 0) goto L_0x00f9;
+    L_0x00ef:
         r1 = r7.chatInfo;
-        if (r1 == 0) goto L_0x00fc;
-    L_0x00f1:
+        if (r1 == 0) goto L_0x00fe;
+    L_0x00f3:
         r1 = r1.participants;
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden;
-        if (r1 == 0) goto L_0x00fc;
-    L_0x00f7:
+        if (r1 == 0) goto L_0x00fe;
+    L_0x00f9:
         r1 = r7.avatarContainer;
         r1.setEnabled(r9);
-    L_0x00fc:
+    L_0x00fe:
         r1 = r7.actionBar;
         r1 = r1.createMenu();
         r2 = r7.currentEncryptedChat;
-        if (r2 != 0) goto L_0x0133;
-    L_0x0106:
+        if (r2 != 0) goto L_0x0135;
+    L_0x0108:
         r2 = r7.isBroadcast;
-        if (r2 != 0) goto L_0x0133;
-    L_0x010a:
+        if (r2 != 0) goto L_0x0135;
+    L_0x010c:
         r2 = NUM; // 0x7var_af float:1.7944933E38 double:1.0529355895E-314;
         r2 = r1.addItem(r9, r2);
         r2 = r2.setIsSearchField(r10);
@@ -3324,13 +3339,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r2.setActionBarMenuItemSearchListener(r3);
         r7.searchItem = r2;
         r2 = r7.searchItem;
-        r3 = NUM; // 0x7f0d090b float:1.874681E38 double:1.0531309213E-314;
+        r3 = NUM; // 0x7f0d0925 float:1.8746863E38 double:1.053130934E-314;
         r4 = "Search";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.setSearchFieldHint(r3);
         r2 = r7.searchItem;
         r2.setVisibility(r8);
-    L_0x0133:
+    L_0x0135:
         r2 = NUM; // 0x7var_ac float:1.7944927E38 double:1.052935588E-314;
         r2 = r1.addItem(r9, r2);
         r7.headerItem = r2;
@@ -3340,12 +3355,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.setContentDescription(r3);
         r2 = r7.currentUser;
-        if (r2 == 0) goto L_0x0182;
-    L_0x014e:
+        if (r2 == 0) goto L_0x0184;
+    L_0x0150:
         r2 = r7.headerItem;
         r3 = 32;
         r4 = NUM; // 0x7var_e float:1.794532E38 double:1.052935684E-314;
-        r5 = NUM; // 0x7f0d01e0 float:1.8743088E38 double:1.0531300147E-314;
+        r5 = NUM; // 0x7f0d01e2 float:1.8743092E38 double:1.0531300157E-314;
         r6 = "Call";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r2.addSubItem(r3, r4, r5);
@@ -3353,20 +3368,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r7.currentUser;
         r3 = r3.id;
         r2 = r2.getUserFull(r3);
-        if (r2 == 0) goto L_0x017b;
-    L_0x016f:
+        if (r2 == 0) goto L_0x017d;
+    L_0x0171:
         r2 = r2.phone_calls_available;
-        if (r2 == 0) goto L_0x017b;
-    L_0x0173:
+        if (r2 == 0) goto L_0x017d;
+    L_0x0175:
         r2 = r7.headerItem;
         r3 = 32;
         r2.showSubItem(r3);
-        goto L_0x0182;
-    L_0x017b:
+        goto L_0x0184;
+    L_0x017d:
         r2 = r7.headerItem;
         r3 = 32;
         r2.hideSubItem(r3);
-    L_0x0182:
+    L_0x0184:
         r2 = NUM; // 0x7var_ac float:1.7944927E38 double:1.052935588E-314;
         r2 = r1.addItem(r9, r2);
         r7.editTextItem = r2;
@@ -3375,7 +3390,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r7.editTextItem;
         r2.setVisibility(r8);
         r2 = new android.text.SpannableStringBuilder;
-        r3 = NUM; // 0x7f0d01ca float:1.8743044E38 double:1.053130004E-314;
+        r3 = NUM; // 0x7f0d01cc float:1.8743048E38 double:1.053130005E-314;
         r4 = "Bold";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.<init>(r3);
@@ -3390,7 +3405,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = 50;
         r3.addSubItem(r4, r2);
         r2 = new android.text.SpannableStringBuilder;
-        r3 = NUM; // 0x7f0d053e float:1.8744837E38 double:1.0531304406E-314;
+        r3 = NUM; // 0x7f0d054a float:1.874486E38 double:1.0531304465E-314;
         r4 = "Italic";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.<init>(r3);
@@ -3404,7 +3419,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r13 = 51;
         r3.addSubItem(r13, r2);
         r2 = new android.text.SpannableStringBuilder;
-        r3 = NUM; // 0x7f0d05f4 float:1.8745206E38 double:1.0531305305E-314;
+        r3 = NUM; // 0x7f0d0608 float:1.8745246E38 double:1.0531305404E-314;
         r4 = "Mono";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.<init>(r3);
@@ -3418,15 +3433,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3.addSubItem(r4, r2);
         r2 = r7.currentEncryptedChat;
         r14 = 16;
-        if (r2 == 0) goto L_0x0270;
-    L_0x020e:
+        if (r2 == 0) goto L_0x021c;
+    L_0x0210:
+        if (r2 == 0) goto L_0x0274;
+    L_0x0212:
         r2 = r2.layer;
         r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);
         r3 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
-        if (r2 < r3) goto L_0x0270;
-    L_0x0218:
+        if (r2 < r3) goto L_0x0274;
+    L_0x021c:
         r2 = new android.text.SpannableStringBuilder;
-        r3 = NUM; // 0x7f0d09cf float:1.8747208E38 double:1.053131018E-314;
+        r3 = NUM; // 0x7f0d09f7 float:1.8747289E38 double:1.053131038E-314;
         r4 = "Strike";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.<init>(r3);
@@ -3444,7 +3461,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = 55;
         r3.addSubItem(r4, r2);
         r2 = new android.text.SpannableStringBuilder;
-        r3 = NUM; // 0x7f0d0a36 float:1.8747417E38 double:1.053131069E-314;
+        r3 = NUM; // 0x7f0d0a5f float:1.87475E38 double:1.0531310893E-314;
         r4 = "Underline";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.<init>(r3);
@@ -3460,162 +3477,162 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r7.editTextItem;
         r4 = 56;
         r3.addSubItem(r4, r2);
-    L_0x0270:
+    L_0x0274:
         r2 = r7.editTextItem;
         r3 = 53;
-        r4 = NUM; // 0x7f0d0313 float:1.874371E38 double:1.0531301664E-314;
+        r4 = NUM; // 0x7f0d0316 float:1.8743717E38 double:1.053130168E-314;
         r5 = "CreateLink";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.addSubItem(r3, r4);
         r2 = r7.editTextItem;
         r3 = 54;
-        r4 = NUM; // 0x7f0d08ad float:1.874662E38 double:1.053130875E-314;
+        r4 = NUM; // 0x7f0d08c7 float:1.8746672E38 double:1.0531308877E-314;
         r5 = "Regular";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.addSubItem(r3, r4);
         r2 = r7.searchItem;
-        if (r2 == 0) goto L_0x02a7;
-    L_0x0294:
+        if (r2 == 0) goto L_0x02ab;
+    L_0x0298:
         r2 = r7.headerItem;
         r3 = 40;
         r4 = NUM; // 0x7var_a3 float:1.7945428E38 double:1.05293571E-314;
-        r5 = NUM; // 0x7f0d090b float:1.874681E38 double:1.0531309213E-314;
+        r5 = NUM; // 0x7f0d0925 float:1.8746863E38 double:1.053130934E-314;
         r6 = "Search";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r2.addSubItem(r3, r4, r5);
-    L_0x02a7:
-        r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x02c2;
     L_0x02ab:
-        r2 = r2.creator;
-        if (r2 != 0) goto L_0x02c2;
+        r2 = r7.currentChat;
+        if (r2 == 0) goto L_0x02c6;
     L_0x02af:
+        r2 = r2.creator;
+        if (r2 != 0) goto L_0x02c6;
+    L_0x02b3:
         r2 = r7.headerItem;
         r3 = 21;
         r4 = NUM; // 0x7var_a float:1.794541E38 double:1.0529357056E-314;
-        r5 = NUM; // 0x7f0d08bd float:1.8746652E38 double:1.053130883E-314;
+        r5 = NUM; // 0x7f0d08d7 float:1.8746705E38 double:1.0531308956E-314;
         r6 = "ReportChat";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r2.addSubItem(r3, r4, r5);
-    L_0x02c2:
+    L_0x02c6:
         r2 = r7.currentUser;
         r15 = 17;
-        if (r2 == 0) goto L_0x02d5;
-    L_0x02c8:
+        if (r2 == 0) goto L_0x02d9;
+    L_0x02cc:
         r2 = r7.headerItem;
         r3 = NUM; // 0x7var_a float:1.7945312E38 double:1.052935682E-314;
         r4 = "";
         r2 = r2.addSubItem(r15, r3, r4);
         r7.addContactItem = r2;
-    L_0x02d5:
-        r2 = r7.currentEncryptedChat;
-        if (r2 == 0) goto L_0x02ef;
     L_0x02d9:
+        r2 = r7.currentEncryptedChat;
+        if (r2 == 0) goto L_0x02f3;
+    L_0x02dd:
         r2 = r7.headerItem;
         r3 = 13;
         r4 = NUM; // 0x7var_a9 float:1.794544E38 double:1.052935713E-314;
-        r5 = NUM; // 0x7f0d096c float:1.8747007E38 double:1.053130969E-314;
+        r5 = NUM; // 0x7f0d0989 float:1.8747066E38 double:1.0531309836E-314;
         r6 = "SetTimer";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r2 = r2.addSubItem(r3, r4, r5);
         r7.timeItem2 = r2;
-    L_0x02ef:
+    L_0x02f3:
         r2 = r7.currentChat;
         r2 = org.telegram.messenger.ChatObject.isChannel(r2);
-        if (r2 == 0) goto L_0x0307;
-    L_0x02f7:
-        r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x031a;
+        if (r2 == 0) goto L_0x030b;
     L_0x02fb:
-        r3 = r2.megagroup;
-        if (r3 == 0) goto L_0x031a;
+        r2 = r7.currentChat;
+        if (r2 == 0) goto L_0x031e;
     L_0x02ff:
+        r3 = r2.megagroup;
+        if (r3 == 0) goto L_0x031e;
+    L_0x0303:
         r2 = r2.username;
         r2 = android.text.TextUtils.isEmpty(r2);
-        if (r2 == 0) goto L_0x031a;
-    L_0x0307:
+        if (r2 == 0) goto L_0x031e;
+    L_0x030b:
         r2 = r7.headerItem;
         r3 = 15;
         r4 = NUM; // 0x7var_ float:1.7945326E38 double:1.0529356853E-314;
-        r5 = NUM; // 0x7f0d02d5 float:1.8743585E38 double:1.0531301357E-314;
+        r5 = NUM; // 0x7f0d02d8 float:1.8743591E38 double:1.053130137E-314;
         r6 = "ClearHistory";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r2.addSubItem(r3, r4, r5);
-    L_0x031a:
-        r2 = r7.currentUser;
-        if (r2 == 0) goto L_0x0322;
     L_0x031e:
-        r2 = r2.self;
-        if (r2 != 0) goto L_0x032f;
+        r2 = r7.currentUser;
+        if (r2 == 0) goto L_0x0326;
     L_0x0322:
+        r2 = r2.self;
+        if (r2 != 0) goto L_0x0333;
+    L_0x0326:
         r2 = r7.headerItem;
         r3 = 18;
         r4 = NUM; // 0x7var_e float:1.7945385E38 double:1.0529356997E-314;
         r2 = r2.addSubItem(r3, r4, r11);
         r7.muteItem = r2;
-    L_0x032f:
+    L_0x0333:
         r2 = r7.currentChat;
         r2 = org.telegram.messenger.ChatObject.isChannel(r2);
-        if (r2 == 0) goto L_0x036d;
-    L_0x0337:
+        if (r2 == 0) goto L_0x0371;
+    L_0x033b:
         r2 = r7.currentChat;
         r3 = r2.creator;
-        if (r3 != 0) goto L_0x036d;
-    L_0x033d:
+        if (r3 != 0) goto L_0x0371;
+    L_0x0341:
         r2 = org.telegram.messenger.ChatObject.isNotInChat(r2);
-        if (r2 != 0) goto L_0x03a0;
-    L_0x0343:
+        if (r2 != 0) goto L_0x03a4;
+    L_0x0347:
         r2 = r7.currentChat;
         r2 = r2.megagroup;
-        if (r2 == 0) goto L_0x035b;
-    L_0x0349:
+        if (r2 == 0) goto L_0x035f;
+    L_0x034d:
         r2 = r7.headerItem;
         r3 = NUM; // 0x7var_ float:1.7945367E38 double:1.052935695E-314;
-        r4 = NUM; // 0x7f0d0354 float:1.8743843E38 double:1.0531301985E-314;
+        r4 = NUM; // 0x7f0d0357 float:1.8743849E38 double:1.0531302E-314;
         r5 = "DeleteAndExit";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.addSubItem(r14, r3, r4);
-        goto L_0x03a0;
-    L_0x035b:
+        goto L_0x03a4;
+    L_0x035f:
         r2 = r7.headerItem;
         r3 = NUM; // 0x7var_ float:1.7945367E38 double:1.052935695E-314;
-        r4 = NUM; // 0x7f0d056a float:1.8744926E38 double:1.0531304623E-314;
+        r4 = NUM; // 0x7f0d0577 float:1.8744952E38 double:1.0531304687E-314;
         r5 = "LeaveChannelMenu";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.addSubItem(r14, r3, r4);
-        goto L_0x03a0;
-    L_0x036d:
+        goto L_0x03a4;
+    L_0x0371:
         r2 = r7.currentChat;
         r2 = org.telegram.messenger.ChatObject.isChannel(r2);
-        if (r2 != 0) goto L_0x03a0;
-    L_0x0375:
-        r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x038f;
+        if (r2 != 0) goto L_0x03a4;
     L_0x0379:
-        r2 = r7.isBroadcast;
-        if (r2 != 0) goto L_0x038f;
+        r2 = r7.currentChat;
+        if (r2 == 0) goto L_0x0393;
     L_0x037d:
+        r2 = r7.isBroadcast;
+        if (r2 != 0) goto L_0x0393;
+    L_0x0381:
         r2 = r7.headerItem;
         r3 = NUM; // 0x7var_ float:1.7945367E38 double:1.052935695E-314;
-        r4 = NUM; // 0x7f0d0354 float:1.8743843E38 double:1.0531301985E-314;
+        r4 = NUM; // 0x7f0d0357 float:1.8743849E38 double:1.0531302E-314;
         r5 = "DeleteAndExit";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.addSubItem(r14, r3, r4);
-        goto L_0x03a0;
-    L_0x038f:
+        goto L_0x03a4;
+    L_0x0393:
         r2 = r7.headerItem;
         r3 = NUM; // 0x7var_ float:1.7945334E38 double:1.0529356873E-314;
-        r4 = NUM; // 0x7f0d035a float:1.8743855E38 double:1.0531302015E-314;
+        r4 = NUM; // 0x7f0d035d float:1.8743861E38 double:1.053130203E-314;
         r5 = "DeleteChatUser";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.addSubItem(r14, r3, r4);
-    L_0x03a0:
-        r2 = r7.currentUser;
-        if (r2 == 0) goto L_0x03bb;
     L_0x03a4:
-        r2 = r2.self;
-        if (r2 == 0) goto L_0x03bb;
+        r2 = r7.currentUser;
+        if (r2 == 0) goto L_0x03bf;
     L_0x03a8:
+        r2 = r2.self;
+        if (r2 == 0) goto L_0x03bf;
+    L_0x03ac:
         r2 = r7.headerItem;
         r3 = 24;
         r4 = NUM; // 0x7var_f float:1.7945355E38 double:1.0529356923E-314;
@@ -3623,32 +3640,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6 = "AddShortcut";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r2.addSubItem(r3, r4, r5);
-    L_0x03bb:
-        r2 = r7.currentUser;
-        if (r2 == 0) goto L_0x03f0;
     L_0x03bf:
-        r3 = r7.currentEncryptedChat;
-        if (r3 != 0) goto L_0x03f0;
+        r2 = r7.currentUser;
+        if (r2 == 0) goto L_0x03f4;
     L_0x03c3:
-        r2 = r2.bot;
-        if (r2 == 0) goto L_0x03f0;
+        r3 = r7.currentEncryptedChat;
+        if (r3 != 0) goto L_0x03f4;
     L_0x03c7:
+        r2 = r2.bot;
+        if (r2 == 0) goto L_0x03f4;
+    L_0x03cb:
         r2 = r7.headerItem;
         r3 = 31;
         r4 = NUM; // 0x7var_c float:1.7945284E38 double:1.052935675E-314;
-        r5 = NUM; // 0x7f0d01d2 float:1.874306E38 double:1.053130008E-314;
+        r5 = NUM; // 0x7f0d01d4 float:1.8743064E38 double:1.053130009E-314;
         r6 = "BotSettings";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r2.addSubItem(r3, r4, r5);
         r2 = r7.headerItem;
         r3 = 30;
         r4 = NUM; // 0x7var_d float:1.7945253E38 double:1.0529356676E-314;
-        r5 = NUM; // 0x7f0d01cd float:1.874305E38 double:1.0531300053E-314;
+        r5 = NUM; // 0x7f0d01cf float:1.8743054E38 double:1.0531300063E-314;
         r6 = "BotHelp";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r2.addSubItem(r3, r4, r5);
         r32.updateBotButtons();
-    L_0x03f0:
+    L_0x03f4:
         r32.updateTitle();
         r2 = r7.avatarContainer;
         r2.updateOnlineCount();
@@ -3666,14 +3683,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r7.actionModeViews;
         r1.clear();
         r1 = r7.inPreviewMode;
-        if (r1 == 0) goto L_0x042c;
-    L_0x0421:
+        if (r1 == 0) goto L_0x0430;
+    L_0x0425:
         r1 = r7.headerItem;
         r2 = 0;
         r1.setAlpha(r2);
         r1 = r7.attachItem;
         r1.setAlpha(r2);
-    L_0x042c:
+    L_0x0430:
         r1 = r7.actionBar;
         r1 = r1.createActionMode();
         r2 = new org.telegram.ui.Components.NumberTextView;
@@ -3706,12 +3723,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r7.currentEncryptedChat;
         r6 = 23;
         r3 = NUM; // 0x42580000 float:54.0 double:5.499263994E-315;
-        if (r2 != 0) goto L_0x0504;
-    L_0x047e:
+        if (r2 != 0) goto L_0x0508;
+    L_0x0482:
         r2 = r7.actionModeViews;
         r4 = NUM; // 0x7var_ float:1.7945339E38 double:1.0529356883E-314;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r14 = NUM; // 0x7f0d039c float:1.8743989E38 double:1.053130234E-314;
+        r14 = NUM; // 0x7f0d039f float:1.8743995E38 double:1.0531302355E-314;
         r8 = "Edit";
         r8 = org.telegram.messenger.LocaleController.getString(r8, r14);
         r4 = r1.addItemWithWidth(r6, r4, r5, r8);
@@ -3729,7 +3746,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = 10;
         r5 = NUM; // 0x7var_ float:1.7945332E38 double:1.052935687E-314;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r13 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
+        r13 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r14 = "Copy";
         r13 = org.telegram.messenger.LocaleController.getString(r14, r13);
         r4 = r1.addItemWithWidth(r4, r5, r8, r13);
@@ -3738,7 +3755,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = 11;
         r5 = NUM; // 0x7var_ float:1.7945343E38 double:1.0529356893E-314;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r13 = NUM; // 0x7f0d0478 float:1.8744435E38 double:1.053130343E-314;
+        r13 = NUM; // 0x7f0d0481 float:1.8744453E38 double:1.053130347E-314;
         r14 = "Forward";
         r13 = org.telegram.messenger.LocaleController.getString(r14, r13);
         r4 = r1.addItemWithWidth(r4, r5, r8, r13);
@@ -3747,17 +3764,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = 12;
         r5 = NUM; // 0x7var_ float:1.7945334E38 double:1.0529356873E-314;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r8 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
+        r8 = NUM; // 0x7f0d0350 float:1.8743835E38 double:1.0531301965E-314;
         r13 = "Delete";
         r8 = org.telegram.messenger.LocaleController.getString(r13, r8);
         r3 = r1.addItemWithWidth(r4, r5, r3, r8);
         r2.add(r3);
-        goto L_0x056e;
-    L_0x0504:
+        goto L_0x0572;
+    L_0x0508:
         r2 = r7.actionModeViews;
         r4 = NUM; // 0x7var_ float:1.7945339E38 double:1.0529356883E-314;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r8 = NUM; // 0x7f0d039c float:1.8743989E38 double:1.053130234E-314;
+        r8 = NUM; // 0x7f0d039f float:1.8743995E38 double:1.0531302355E-314;
         r13 = "Edit";
         r8 = org.telegram.messenger.LocaleController.getString(r13, r8);
         r4 = r1.addItemWithWidth(r6, r4, r5, r8);
@@ -3775,7 +3792,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = 10;
         r5 = NUM; // 0x7var_ float:1.7945332E38 double:1.052935687E-314;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r13 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
+        r13 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r14 = "Copy";
         r13 = org.telegram.messenger.LocaleController.getString(r14, r13);
         r4 = r1.addItemWithWidth(r4, r5, r8, r13);
@@ -3784,16 +3801,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = 12;
         r5 = NUM; // 0x7var_ float:1.7945334E38 double:1.0529356873E-314;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r8 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
+        r8 = NUM; // 0x7f0d0350 float:1.8743835E38 double:1.0531301965E-314;
         r13 = "Delete";
         r8 = org.telegram.messenger.LocaleController.getString(r13, r8);
         r3 = r1.addItemWithWidth(r4, r5, r3, r8);
         r2.add(r3);
-    L_0x056e:
+    L_0x0572:
         r2 = r1.getItem(r6);
         r3 = r7.canEditMessagesCount;
-        if (r3 != r10) goto L_0x058b;
-    L_0x0576:
+        if (r3 != r10) goto L_0x058f;
+    L_0x057a:
         r3 = r7.selectedMessagesIds;
         r3 = r3[r9];
         r3 = r3.size();
@@ -3801,13 +3818,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = r4[r10];
         r4 = r4.size();
         r3 = r3 + r4;
-        if (r3 != r10) goto L_0x058b;
-    L_0x0589:
-        r3 = 0;
-        goto L_0x058d;
-    L_0x058b:
-        r3 = 8;
+        if (r3 != r10) goto L_0x058f;
     L_0x058d:
+        r3 = 0;
+        goto L_0x0591;
+    L_0x058f:
+        r3 = 8;
+    L_0x0591:
         r2.setVisibility(r3);
         r2 = 10;
         r2 = r1.getItem(r2);
@@ -3818,13 +3835,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = r4[r10];
         r4 = r4.size();
         r3 = r3 + r4;
-        if (r3 == 0) goto L_0x05ab;
-    L_0x05a9:
-        r3 = 0;
-        goto L_0x05ad;
-    L_0x05ab:
-        r3 = 8;
+        if (r3 == 0) goto L_0x05af;
     L_0x05ad:
+        r3 = 0;
+        goto L_0x05b1;
+    L_0x05af:
+        r3 = 8;
+    L_0x05b1:
         r2.setVisibility(r3);
         r2 = 22;
         r2 = r1.getItem(r2);
@@ -3835,24 +3852,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = r4[r10];
         r4 = r4.size();
         r3 = r3 + r4;
-        if (r3 == 0) goto L_0x05cb;
-    L_0x05c9:
-        r3 = 0;
-        goto L_0x05cd;
-    L_0x05cb:
-        r3 = 8;
+        if (r3 == 0) goto L_0x05cf;
     L_0x05cd:
+        r3 = 0;
+        goto L_0x05d1;
+    L_0x05cf:
+        r3 = 8;
+    L_0x05d1:
         r2.setVisibility(r3);
         r2 = 12;
         r1 = r1.getItem(r2);
         r2 = r7.cantDeleteMessagesCount;
-        if (r2 != 0) goto L_0x05dc;
-    L_0x05da:
-        r2 = 0;
-        goto L_0x05de;
-    L_0x05dc:
-        r2 = 8;
+        if (r2 != 0) goto L_0x05e0;
     L_0x05de:
+        r2 = 0;
+        goto L_0x05e2;
+    L_0x05e0:
+        r2 = 8;
+    L_0x05e2:
         r1.setVisibility(r2);
         r32.checkActionBarMenu();
         r1 = new org.telegram.ui.ChatActivity$7;
@@ -3885,29 +3902,29 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.setOnTouchListener(r2);
         r1 = r7.currentEncryptedChat;
         r5 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        if (r1 != 0) goto L_0x0708;
-    L_0x062c:
-        r1 = r7.currentUser;
-        if (r1 == 0) goto L_0x0634;
+        if (r1 != 0) goto L_0x070c;
     L_0x0630:
-        r1 = r1.self;
-        if (r1 != 0) goto L_0x063c;
+        r1 = r7.currentUser;
+        if (r1 == 0) goto L_0x0638;
     L_0x0634:
-        r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x066e;
+        r1 = r1.self;
+        if (r1 != 0) goto L_0x0640;
     L_0x0638:
-        r1 = r1.creator;
-        if (r1 == 0) goto L_0x066e;
+        r1 = r7.currentChat;
+        if (r1 == 0) goto L_0x0672;
     L_0x063c:
+        r1 = r1.creator;
+        if (r1 == 0) goto L_0x0672;
+    L_0x0640:
         r1 = new org.telegram.ui.Components.ChatBigEmptyView;
         r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x0644;
-    L_0x0642:
+        if (r2 == 0) goto L_0x0648;
+    L_0x0646:
         r2 = 1;
-        goto L_0x0645;
-    L_0x0644:
+        goto L_0x0649;
+    L_0x0648:
         r2 = 2;
-    L_0x0645:
+    L_0x0649:
         r1.<init>(r0, r2);
         r7.bigEmptyView = r1;
         r1 = r7.emptyViewContainer;
@@ -3916,48 +3933,48 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3.<init>(r13, r13, r15);
         r1.addView(r2, r3);
         r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x075a;
-    L_0x065a:
+        if (r1 == 0) goto L_0x075e;
+    L_0x065e:
         r1 = r7.bigEmptyView;
-        r2 = NUM; // 0x7f0d04e0 float:1.8744646E38 double:1.053130394E-314;
+        r2 = NUM; // 0x7f0d04eb float:1.8744668E38 double:1.0531303996E-314;
         r3 = "GroupEmptyTitle1";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2);
         r1.setStatusText(r2);
-        goto L_0x075a;
-    L_0x066e:
+        goto L_0x075e;
+    L_0x0672:
         r1 = new android.widget.TextView;
         r1.<init>(r0);
         r7.emptyView = r1;
         r1 = r7.currentUser;
-        if (r1 == 0) goto L_0x069f;
-    L_0x0679:
+        if (r1 == 0) goto L_0x06a3;
+    L_0x067d:
         r2 = r1.id;
         r3 = 777000; // 0xbdb28 float:1.088809E-39 double:3.83889E-318;
-        if (r2 == r3) goto L_0x069f;
-    L_0x0680:
+        if (r2 == r3) goto L_0x06a3;
+    L_0x0684:
         r3 = 429000; // 0x68bc8 float:6.01157E-40 double:2.11954E-318;
-        if (r2 == r3) goto L_0x069f;
-    L_0x0685:
+        if (r2 == r3) goto L_0x06a3;
+    L_0x0689:
         r3 = 4244000; // 0x40CLASSNAME float:5.94711E-39 double:2.0968146E-317;
-        if (r2 == r3) goto L_0x069f;
-    L_0x068a:
+        if (r2 == r3) goto L_0x06a3;
+    L_0x068e:
         r1 = org.telegram.messenger.MessagesController.isSupportUser(r1);
-        if (r1 == 0) goto L_0x069f;
-    L_0x0690:
+        if (r1 == 0) goto L_0x06a3;
+    L_0x0694:
         r1 = r7.emptyView;
-        r2 = NUM; // 0x7f0d04d4 float:1.8744622E38 double:1.053130388E-314;
+        r2 = NUM; // 0x7f0d04df float:1.8744644E38 double:1.0531303936E-314;
         r3 = "GotAQuestion";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
-        goto L_0x06ad;
-    L_0x069f:
+        goto L_0x06b1;
+    L_0x06a3:
         r1 = r7.emptyView;
-        r2 = NUM; // 0x7f0d0631 float:1.874533E38 double:1.0531305606E-314;
+        r2 = NUM; // 0x7f0d0645 float:1.874537E38 double:1.0531305705E-314;
         r3 = "NoMessages";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
-    L_0x06ad:
+    L_0x06b1:
         r1 = r7.emptyView;
         r1.setTextSize(r10, r5);
         r1 = r7.emptyView;
@@ -3967,7 +3984,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setTextColor(r2);
         r1 = r7.emptyView;
-        r2 = NUM; // 0x7var_ float:1.7945821E38 double:1.052935806E-314;
+        r2 = NUM; // 0x7var_ float:1.794583E38 double:1.052935808E-314;
         r1.setBackgroundResource(r2);
         r1 = r7.emptyView;
         r1 = r1.getBackground();
@@ -3991,8 +4008,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = new android.widget.FrameLayout$LayoutParams;
         r3.<init>(r13, r13, r15);
         r1.addView(r2, r3);
-        goto L_0x075a;
-    L_0x0708:
+        goto L_0x075e;
+    L_0x070c:
         r1 = new org.telegram.ui.Components.ChatBigEmptyView;
         r1.<init>(r0, r9);
         r7.bigEmptyView = r1;
@@ -4000,10 +4017,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r1.admin_id;
         r2 = r32.getUserConfig();
         r2 = r2.getClientUserId();
-        if (r1 != r2) goto L_0x0736;
-    L_0x071d:
+        if (r1 != r2) goto L_0x073a;
+    L_0x0721:
         r1 = r7.bigEmptyView;
-        r2 = NUM; // 0x7f0d03e3 float:1.8744133E38 double:1.053130269E-314;
+        r2 = NUM; // 0x7f0d03e8 float:1.8744143E38 double:1.0531302716E-314;
         r3 = new java.lang.Object[r10];
         r4 = r7.currentUser;
         r4 = org.telegram.messenger.UserObject.getFirstName(r4);
@@ -4011,10 +4028,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = "EncryptedPlaceholderTitleOutgoing";
         r2 = org.telegram.messenger.LocaleController.formatString(r4, r2, r3);
         r1.setStatusText(r2);
-        goto L_0x074e;
-    L_0x0736:
+        goto L_0x0752;
+    L_0x073a:
         r1 = r7.bigEmptyView;
-        r2 = NUM; // 0x7f0d03e2 float:1.874413E38 double:1.0531302686E-314;
+        r2 = NUM; // 0x7f0d03e7 float:1.874414E38 double:1.053130271E-314;
         r3 = new java.lang.Object[r10];
         r4 = r7.currentUser;
         r4 = org.telegram.messenger.UserObject.getFirstName(r4);
@@ -4022,46 +4039,46 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = "EncryptedPlaceholderTitleIncoming";
         r2 = org.telegram.messenger.LocaleController.formatString(r4, r2, r3);
         r1.setStatusText(r2);
-    L_0x074e:
+    L_0x0752:
         r1 = r7.emptyViewContainer;
         r2 = r7.bigEmptyView;
         r3 = new android.widget.FrameLayout$LayoutParams;
         r3.<init>(r13, r13, r15);
         r1.addView(r2, r3);
-    L_0x075a:
-        r1 = r7.chatActivityEnterView;
-        if (r1 == 0) goto L_0x0771;
     L_0x075e:
+        r1 = r7.chatActivityEnterView;
+        if (r1 == 0) goto L_0x0775;
+    L_0x0762:
         r1.onDestroy();
         r1 = r7.chatActivityEnterView;
         r1 = r1.isEditingMessage();
-        if (r1 != 0) goto L_0x0771;
-    L_0x0769:
+        if (r1 != 0) goto L_0x0775;
+    L_0x076d:
         r1 = r7.chatActivityEnterView;
         r1 = r1.getFieldText();
         r5 = r1;
-        goto L_0x0772;
-    L_0x0771:
+        goto L_0x0776;
+    L_0x0775:
         r5 = r11;
-    L_0x0772:
-        r1 = r7.mentionsAdapter;
-        if (r1 == 0) goto L_0x0779;
     L_0x0776:
+        r1 = r7.mentionsAdapter;
+        if (r1 == 0) goto L_0x077d;
+    L_0x077a:
         r1.onDestroy();
-    L_0x0779:
+    L_0x077d:
         r1 = new org.telegram.ui.ChatActivity$9;
         r1.<init>(r0);
         r7.chatListView = r1;
         r1 = r7.currentEncryptedChat;
-        if (r1 == 0) goto L_0x078f;
-    L_0x0784:
+        if (r1 == 0) goto L_0x0793;
+    L_0x0788:
         r1 = android.os.Build.VERSION.SDK_INT;
         r2 = 19;
-        if (r1 < r2) goto L_0x078f;
-    L_0x078a:
+        if (r1 < r2) goto L_0x0793;
+    L_0x078e:
         r1 = r7.chatListView;
         r1.setImportantForAccessibility(r8);
-    L_0x078f:
+    L_0x0793:
         r1 = r7.chatListView;
         r1.setInstantClick(r10);
         r1 = r7.chatListView;
@@ -4143,7 +4160,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.<init>(r0);
         r7.progressView2 = r1;
         r1 = r7.progressView2;
-        r2 = NUM; // 0x7var_ float:1.7945823E38 double:1.0529358064E-314;
+        r2 = NUM; // 0x7var_a float:1.7945831E38 double:1.0529358084E-314;
         r1.setBackgroundResource(r2);
         r1 = r7.progressView2;
         r1 = r1.getBackground();
@@ -4194,8 +4211,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2.<init>(r7);
         r1.setOnClickListener(r2);
         r1 = r7.currentEncryptedChat;
-        if (r1 != 0) goto L_0x0a2e;
-    L_0x08d2:
+        if (r1 != 0) goto L_0x0a32;
+    L_0x08d6:
         r1 = new android.widget.FrameLayout;
         r1.<init>(r0);
         r7.pinnedMessageView = r1;
@@ -4320,7 +4337,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = android.widget.ImageView.ScaleType.CENTER;
         r1.setScaleType(r2);
         r1 = r7.closePinned;
-        r2 = NUM; // 0x7f0d02df float:1.8743605E38 double:1.0531301407E-314;
+        r2 = NUM; // 0x7f0d02e2 float:1.8743612E38 double:1.053130142E-314;
         r3 = "Close";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setContentDescription(r2);
@@ -4335,7 +4352,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = new org.telegram.ui.-$$Lambda$ChatActivity$MC1nlfA7DBtHsUYoqPF_QO9JBh4;
         r2.<init>(r7);
         r1.setOnClickListener(r2);
-    L_0x0a2e:
+    L_0x0a32:
         r1 = new org.telegram.ui.ChatActivity$15;
         r1.<init>(r0);
         r7.topChatPanelView = r1;
@@ -4596,8 +4613,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.setOnLongClickListener(r2);
         r1 = r7.isBroadcast;
         r13 = 46;
-        if (r1 != 0) goto L_0x0dde;
-    L_0x0cb9:
+        if (r1 != 0) goto L_0x0de2;
+    L_0x0cbd:
         r1 = new org.telegram.ui.ChatActivity$17;
         r1.<init>(r0);
         r7.mentionContainer = r1;
@@ -4678,18 +4695,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r14.setAdapter(r11);
         r1 = r7.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 == 0) goto L_0x0d7d;
-    L_0x0d75:
-        r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x0d84;
+        if (r1 == 0) goto L_0x0d81;
     L_0x0d79:
-        r1 = r1.megagroup;
-        if (r1 == 0) goto L_0x0d84;
+        r1 = r7.currentChat;
+        if (r1 == 0) goto L_0x0d88;
     L_0x0d7d:
+        r1 = r1.megagroup;
+        if (r1 == 0) goto L_0x0d88;
+    L_0x0d81:
         r1 = r7.mentionsAdapter;
         r2 = r7.botInfo;
         r1.setBotInfo(r2);
-    L_0x0d84:
+    L_0x0d88:
         r1 = r7.mentionsAdapter;
         r1.setParentFragment(r7);
         r1 = r7.mentionsAdapter;
@@ -4697,39 +4714,39 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.setChatInfo(r2);
         r1 = r7.mentionsAdapter;
         r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x0d98;
-    L_0x0d96:
+        if (r2 == 0) goto L_0x0d9c;
+    L_0x0d9a:
         r2 = 1;
-        goto L_0x0d99;
-    L_0x0d98:
+        goto L_0x0d9d;
+    L_0x0d9c:
         r2 = 0;
-    L_0x0d99:
+    L_0x0d9d:
         r1.setNeedUsernames(r2);
         r1 = r7.mentionsAdapter;
         r2 = r7.currentEncryptedChat;
-        if (r2 == 0) goto L_0x0dad;
-    L_0x0da2:
+        if (r2 == 0) goto L_0x0db1;
+    L_0x0da6:
         r2 = r2.layer;
         r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);
-        if (r2 < r13) goto L_0x0dab;
-    L_0x0daa:
-        goto L_0x0dad;
-    L_0x0dab:
-        r2 = 0;
-        goto L_0x0dae;
-    L_0x0dad:
-        r2 = 1;
+        if (r2 < r13) goto L_0x0daf;
     L_0x0dae:
+        goto L_0x0db1;
+    L_0x0daf:
+        r2 = 0;
+        goto L_0x0db2;
+    L_0x0db1:
+        r2 = 1;
+    L_0x0db2:
         r1.setNeedBotContext(r2);
         r1 = r7.mentionsAdapter;
         r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x0dba;
-    L_0x0db7:
-        r2 = r7.botsCount;
-        goto L_0x0dbb;
-    L_0x0dba:
-        r2 = 1;
+        if (r2 == 0) goto L_0x0dbe;
     L_0x0dbb:
+        r2 = r7.botsCount;
+        goto L_0x0dbf;
+    L_0x0dbe:
+        r2 = 1;
+    L_0x0dbf:
         r1.setBotsCount(r2);
         r1 = r7.mentionListView;
         r2 = new org.telegram.ui.-$$Lambda$ChatActivity$vQvOODyAJAsviazwjbu2efaVStw;
@@ -4744,12 +4761,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = new org.telegram.ui.ChatActivity$24;
         r2.<init>();
         r1.setOnScrollListener(r2);
-    L_0x0dde:
+    L_0x0de2:
         r1 = new android.widget.ImageView;
         r1.<init>(r0);
         r7.pagedownButtonImage = r1;
         r1 = r7.pagedownButtonImage;
-        r2 = NUM; // 0x7var_d7 float:1.7945533E38 double:1.0529357357E-314;
+        r2 = NUM; // 0x7var_d8 float:1.7945535E38 double:1.052935736E-314;
         r1.setImageResource(r2);
         r1 = r7.pagedownButtonImage;
         r2 = android.widget.ImageView.ScaleType.CENTER;
@@ -4771,7 +4788,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r1, r2);
         r2 = r33.getResources();
-        r3 = NUM; // 0x7var_d8 float:1.7945535E38 double:1.052935736E-314;
+        r3 = NUM; // 0x7var_d9 float:1.7945537E38 double:1.0529357367E-314;
         r2 = r2.getDrawable(r3);
         r2 = r2.mutate();
         r3 = new android.graphics.PorterDuffColorFilter;
@@ -4868,7 +4885,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r1, r2);
         r2 = r33.getResources();
-        r3 = NUM; // 0x7var_d8 float:1.7945535E38 double:1.052935736E-314;
+        r3 = NUM; // 0x7var_d9 float:1.7945537E38 double:1.0529357367E-314;
         r2 = r2.getDrawable(r3);
         r2 = r2.mutate();
         r3 = new android.graphics.PorterDuffColorFilter;
@@ -4939,11 +4956,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setContentDescription(r2);
         r1 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r1 == 0) goto L_0x0ffa;
-    L_0x0ff4:
+        if (r1 == 0) goto L_0x0ffe;
+    L_0x0ff8:
         r1 = org.telegram.messenger.AndroidUtilities.isSmallTablet();
-        if (r1 == 0) goto L_0x1030;
-    L_0x0ffa:
+        if (r1 == 0) goto L_0x1034;
+    L_0x0ffe:
         r1 = new org.telegram.ui.Components.FragmentContextView;
         r1.<init>(r0, r7, r10);
         r2 = r7.contentView;
@@ -4966,7 +4983,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2.setAdditionalContextView(r1);
         r2 = r7.fragmentContextView;
         r1.setAdditionalContextView(r2);
-    L_0x1030:
+    L_0x1034:
         r1 = r7.contentView;
         r2 = r7.actionBar;
         r1.addView(r2);
@@ -5027,6 +5044,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r7.dialog_id;
         r4 = r7.currentAccount;
         r1.setDialogId(r2, r4);
+        r1 = r7.chatInfo;
+        if (r1 == 0) goto L_0x10cb;
+    L_0x10c6:
+        r2 = r7.chatActivityEnterView;
+        r2.setChatInfo(r1);
+    L_0x10cb:
         r1 = r7.chatActivityEnterView;
         r2 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r1.setId(r2);
@@ -5040,40 +5063,40 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.setMinimumHeight(r2);
         r1 = r7.chatActivityEnterView;
         r2 = r7.currentEncryptedChat;
-        if (r2 == 0) goto L_0x10ea;
-    L_0x10df:
+        if (r2 == 0) goto L_0x10f7;
+    L_0x10ec:
         r2 = r2.layer;
         r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);
-        if (r2 < r11) goto L_0x10e8;
-    L_0x10e7:
-        goto L_0x10ea;
-    L_0x10e8:
+        if (r2 < r11) goto L_0x10f5;
+    L_0x10f4:
+        goto L_0x10f7;
+    L_0x10f5:
         r2 = 0;
-        goto L_0x10eb;
-    L_0x10ea:
+        goto L_0x10f8;
+    L_0x10f7:
         r2 = 1;
-    L_0x10eb:
+    L_0x10f8:
         r3 = r7.currentEncryptedChat;
-        if (r3 == 0) goto L_0x10fa;
-    L_0x10ef:
+        if (r3 == 0) goto L_0x1107;
+    L_0x10fc:
         r3 = r3.layer;
         r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3);
-        if (r3 < r13) goto L_0x10f8;
-    L_0x10f7:
-        goto L_0x10fa;
-    L_0x10f8:
+        if (r3 < r13) goto L_0x1105;
+    L_0x1104:
+        goto L_0x1107;
+    L_0x1105:
         r3 = 0;
-        goto L_0x10fb;
-    L_0x10fa:
+        goto L_0x1108;
+    L_0x1107:
         r3 = 1;
-    L_0x10fb:
+    L_0x1108:
         r1.setAllowStickersAndGifs(r2, r3);
         r1 = r7.inPreviewMode;
-        if (r1 == 0) goto L_0x1107;
-    L_0x1102:
+        if (r1 == 0) goto L_0x1114;
+    L_0x110f:
         r1 = r7.chatActivityEnterView;
         r1.setVisibility(r8);
-    L_0x1107:
+    L_0x1114:
         r1 = r7.contentView;
         r2 = r7.chatActivityEnterView;
         r3 = r1.getChildCount();
@@ -5249,7 +5272,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.<init>(r0);
         r7.stickersPanelArrow = r1;
         r1 = r7.stickersPanelArrow;
-        r2 = NUM; // 0x7var_a float:1.7945799E38 double:1.0529358005E-314;
+        r2 = NUM; // 0x7var_e float:1.7945807E38 double:1.0529358024E-314;
         r1.setImageResource(r2);
         r1 = r7.stickersPanelArrow;
         r2 = new android.graphics.PorterDuffColorFilter;
@@ -5361,15 +5384,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setContentDescription(r2);
         r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x1447;
-    L_0x13d3:
+        if (r1 == 0) goto L_0x1454;
+    L_0x13e0:
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 == 0) goto L_0x13df;
-    L_0x13d9:
+        if (r1 == 0) goto L_0x13ec;
+    L_0x13e6:
         r1 = r7.currentChat;
         r1 = r1.megagroup;
-        if (r1 == 0) goto L_0x1447;
-    L_0x13df:
+        if (r1 == 0) goto L_0x1454;
+    L_0x13ec:
         r1 = new android.widget.ImageView;
         r1.<init>(r0);
         r7.searchUserButton = r1;
@@ -5411,7 +5434,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = "AccDescrSearchByUser";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setContentDescription(r2);
-    L_0x1447:
+    L_0x1454:
         r1 = new android.widget.ImageView;
         r1.<init>(r0);
         r7.searchCalendarButton = r1;
@@ -5445,7 +5468,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2.<init>(r7);
         r1.setOnClickListener(r2);
         r1 = r7.searchCalendarButton;
-        r2 = NUM; // 0x7f0d0544 float:1.8744849E38 double:1.0531304435E-314;
+        r2 = NUM; // 0x7f0d0550 float:1.8744873E38 double:1.0531304495E-314;
         r3 = "JumpToDate";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setContentDescription(r2);
@@ -5630,13 +5653,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4, r15);
         r1.addView(r2, r3);
         r1 = r7.isBroadcast;
-        if (r1 != 0) goto L_0x1708;
-    L_0x1667:
+        if (r1 != 0) goto L_0x1715;
+    L_0x1674:
         r1 = new android.widget.TextView;
         r1.<init>(r0);
         r7.replyButton = r1;
         r1 = r7.replyButton;
-        r2 = NUM; // 0x7f0d08ba float:1.8746646E38 double:1.0531308813E-314;
+        r2 = NUM; // 0x7f0d08d4 float:1.8746699E38 double:1.053130894E-314;
         r3 = "Reply";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -5693,12 +5716,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r5 = -1;
         r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r5, r4);
         r1.addView(r2, r6);
-    L_0x1708:
+    L_0x1715:
         r1 = new android.widget.TextView;
         r1.<init>(r0);
         r7.forwardButton = r1;
         r1 = r7.forwardButton;
-        r2 = NUM; // 0x7f0d0478 float:1.8744435E38 double:1.053130343E-314;
+        r2 = NUM; // 0x7f0d0481 float:1.8744453E38 double:1.053130347E-314;
         r3 = "Forward";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -5775,66 +5798,91 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r18 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18);
         r0.addView(r1, r2);
+        r0 = r7.currentChat;
+        if (r0 == 0) goto L_0x1817;
+    L_0x17e8:
+        r0 = new org.telegram.ui.Components.HintView;
+        r1 = r32.getParentActivity();
+        r2 = 2;
+        r0.<init>(r1, r2);
+        r7.slowModeHint = r0;
+        r0 = r7.slowModeHint;
+        r1 = 0;
+        r0.setAlpha(r1);
+        r0 = r7.slowModeHint;
+        r0.setVisibility(r8);
+        r0 = r7.contentView;
+        r1 = r7.slowModeHint;
+        r12 = -2;
+        r13 = -NUM; // 0xffffffffCLASSNAME float:-2.0 double:NaN;
+        r14 = 51;
+        r15 = NUM; // 0x41980000 float:19.0 double:5.43709615E-315;
+        r16 = 0;
+        r17 = NUM; // 0x41980000 float:19.0 double:5.43709615E-315;
+        r18 = 0;
+        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18);
+        r0.addView(r1, r2);
+    L_0x1817:
         r0 = r7.chatAdapter;
         r0.updateRows();
         r0 = r7.loading;
-        if (r0 == 0) goto L_0x17fe;
-    L_0x17e0:
+        if (r0 == 0) goto L_0x183e;
+    L_0x1820:
         r0 = r7.messages;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x17fe;
-    L_0x17e8:
+        if (r0 == 0) goto L_0x183e;
+    L_0x1828:
         r0 = r7.progressView;
         r1 = r7.chatAdapter;
         r1 = r1.botInfoRow;
         r2 = -1;
-        if (r1 != r2) goto L_0x17f4;
-    L_0x17f3:
+        if (r1 != r2) goto L_0x1834;
+    L_0x1833:
         r8 = 0;
-    L_0x17f4:
+    L_0x1834:
         r0.setVisibility(r8);
         r0 = r7.chatListView;
         r1 = 0;
         r0.setEmptyView(r1);
-        goto L_0x180a;
-    L_0x17fe:
+        goto L_0x184a;
+    L_0x183e:
         r0 = r7.progressView;
         r0.setVisibility(r8);
         r0 = r7.chatListView;
         r1 = r7.emptyViewContainer;
         r0.setEmptyView(r1);
-    L_0x180a:
+    L_0x184a:
         r32.checkBotKeyboard();
         r32.updateBottomOverlay();
         r32.updateSecretStatus();
         r7.updateTopPanel(r9);
         r7.updatePinnedMessageView(r10);
-        r0 = r7.currentEncryptedChat;	 Catch:{ Throwable -> 0x1835 }
-        if (r0 == 0) goto L_0x1839;
-    L_0x181d:
-        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x1835 }
-        if (r0 < r11) goto L_0x1839;
-    L_0x1821:
-        r0 = org.telegram.messenger.SharedConfig.passcodeHash;	 Catch:{ Throwable -> 0x1835 }
-        r0 = r0.length();	 Catch:{ Throwable -> 0x1835 }
-        if (r0 == 0) goto L_0x182d;
-    L_0x1829:
-        r0 = org.telegram.messenger.SharedConfig.allowScreenCapture;	 Catch:{ Throwable -> 0x1835 }
-        if (r0 == 0) goto L_0x1839;
-    L_0x182d:
-        r0 = org.telegram.messenger.MediaController.getInstance();	 Catch:{ Throwable -> 0x1835 }
-        r0.setFlagSecure(r7, r10);	 Catch:{ Throwable -> 0x1835 }
-        goto L_0x1839;
-    L_0x1835:
+        r0 = r7.currentEncryptedChat;	 Catch:{ Throwable -> 0x1875 }
+        if (r0 == 0) goto L_0x1879;
+    L_0x185d:
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x1875 }
+        if (r0 < r11) goto L_0x1879;
+    L_0x1861:
+        r0 = org.telegram.messenger.SharedConfig.passcodeHash;	 Catch:{ Throwable -> 0x1875 }
+        r0 = r0.length();	 Catch:{ Throwable -> 0x1875 }
+        if (r0 == 0) goto L_0x186d;
+    L_0x1869:
+        r0 = org.telegram.messenger.SharedConfig.allowScreenCapture;	 Catch:{ Throwable -> 0x1875 }
+        if (r0 == 0) goto L_0x1879;
+    L_0x186d:
+        r0 = org.telegram.messenger.MediaController.getInstance();	 Catch:{ Throwable -> 0x1875 }
+        r0.setFlagSecure(r7, r10);	 Catch:{ Throwable -> 0x1875 }
+        goto L_0x1879;
+    L_0x1875:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x1839:
+    L_0x1879:
         r11 = r23;
-        if (r11 == 0) goto L_0x1842;
-    L_0x183d:
+        if (r11 == 0) goto L_0x1882;
+    L_0x187d:
         r0 = r7.chatActivityEnterView;
         r0.setFieldText(r11);
-    L_0x1842:
+    L_0x1882:
         r32.fixLayoutInternal();
         r0 = r7.fragmentView;
         return r0;
@@ -6043,19 +6091,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
             } else if (item instanceof String) {
-                if (this.mentionsAdapter.isBotCommands()) {
-                    getSendMessagesHelper().sendMessage((String) item, this.dialog_id, this.replyingMessageObject, null, false, null, null, null);
-                    this.chatActivityEnterView.setFieldText(str);
-                    hideFieldPanel(false);
-                } else {
+                if (!this.mentionsAdapter.isBotCommands()) {
                     chatActivityEnterView = this.chatActivityEnterView;
                     stringBuilder = new StringBuilder();
                     stringBuilder.append(item);
                     stringBuilder.append(str2);
                     chatActivityEnterView.replaceWithText(resultStartPosition, resultLength, stringBuilder.toString(), false);
+                } else if (!checkSlowMode(view)) {
+                    getSendMessagesHelper().sendMessage((String) item, this.dialog_id, this.replyingMessageObject, null, false, null, null, null);
+                    this.chatActivityEnterView.setFieldText(str);
+                    hideFieldPanel(false);
                 }
             } else if (item instanceof BotInlineResult) {
-                if (this.chatActivityEnterView.getFieldText() != null) {
+                if (this.chatActivityEnterView.getFieldText() != null && !checkSlowMode(view)) {
                     BotInlineResult botInlineResult = (BotInlineResult) item;
                     if ((!botInlineResult.type.equals("photo") || (botInlineResult.photo == null && botInlineResult.content == null)) && ((!botInlineResult.type.equals("gif") || (botInlineResult.document == null && botInlineResult.content == null)) && (!botInlineResult.type.equals("video") || botInlineResult.document == null))) {
                         sendBotInlineResult(botInlineResult);
@@ -6146,6 +6194,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         Bundle bundle = new Bundle();
         bundle.putBoolean("onlySelect", true);
         bundle.putInt("dialogsType", 3);
+        bundle.putInt("messagesCount", this.forwardingMessages.size());
         DialogsActivity dialogsActivity = new DialogsActivity(bundle);
         dialogsActivity.setDelegate(this);
         presentFragment(dialogsActivity);
@@ -6447,6 +6496,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         Bundle bundle = new Bundle();
         bundle.putBoolean("onlySelect", true);
         bundle.putInt("dialogsType", 3);
+        bundle.putInt("messagesCount", this.canForwardMessagesCount);
         DialogsActivity dialogsActivity = new DialogsActivity(bundle);
         dialogsActivity.setDelegate(this);
         presentFragment(dialogsActivity);
@@ -6725,9 +6775,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     private void createChatAttachView() {
         if (getParentActivity() != null && this.chatAttachAlert == null) {
-            this.chatAttachAlert = new ChatAttachAlert(getParentActivity(), this);
+            this.chatAttachAlert = new ChatAttachAlert(getParentActivity(), this) {
+                public void dismissInternal() {
+                    if (ChatActivity.this.chatAttachAlert.isShowing()) {
+                        AndroidUtilities.requestAdjustResize(ChatActivity.this.getParentActivity(), ChatActivity.this.classGuid);
+                        if (ChatActivity.this.chatActivityEnterView.getVisibility() == 0 && ChatActivity.this.fragmentView != null) {
+                            ChatActivity.this.fragmentView.requestLayout();
+                        }
+                    }
+                    super.dismissInternal();
+                    if (ChatActivity.this.openKeyboardOnAttachMenuClose) {
+                        AndroidUtilities.runOnUIThread(new -$$Lambda$ChatActivity$38$X1xph1TWo-y1HWnNmQbSpPzFgnc(this), 50);
+                        ChatActivity.this.openKeyboardOnAttachMenuClose = false;
+                    }
+                }
+
+                public /* synthetic */ void lambda$dismissInternal$0$ChatActivity$38() {
+                    ChatActivity.this.chatActivityEnterView.openKeyboard();
+                }
+            };
             this.chatAttachAlert.setDelegate(new ChatAttachViewDelegate() {
-                public void didPressedButton(int i) {
+                public void didPressedButton(int i, boolean z) {
+                    int i2 = i;
                     if (!(ChatActivity.this.getParentActivity() == null || ChatActivity.this.chatAttachAlert == null)) {
                         if (ChatActivity.this.chatAttachAlert != null) {
                             ChatActivity chatActivity = ChatActivity.this;
@@ -6735,16 +6804,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else {
                             ChatActivity.this.editingMessageObject = null;
                         }
-                        if (i == 8 || i == 7 || (i == 4 && !ChatActivity.this.chatAttachAlert.getSelectedPhotos().isEmpty())) {
-                            if (i != 8) {
+                        if (i2 == 8 || i2 == 7 || (i2 == 4 && !ChatActivity.this.chatAttachAlert.getSelectedPhotos().isEmpty())) {
+                            if (i2 != 8) {
                                 ChatActivity.this.chatAttachAlert.dismiss();
                             }
                             HashMap selectedPhotos = ChatActivity.this.chatAttachAlert.getSelectedPhotos();
                             ArrayList selectedPhotosOrder = ChatActivity.this.chatAttachAlert.getSelectedPhotosOrder();
                             if (!selectedPhotos.isEmpty()) {
                                 ArrayList arrayList = new ArrayList();
-                                for (int i2 = 0; i2 < selectedPhotosOrder.size(); i2++) {
-                                    PhotoEntry photoEntry = (PhotoEntry) selectedPhotos.get(selectedPhotosOrder.get(i2));
+                                for (int i3 = 0; i3 < selectedPhotosOrder.size(); i3++) {
+                                    PhotoEntry photoEntry = (PhotoEntry) selectedPhotos.get(selectedPhotosOrder.get(i3));
                                     SendingMediaInfo sendingMediaInfo = new SendingMediaInfo();
                                     String str = photoEntry.imagePath;
                                     if (str != null) {
@@ -6767,15 +6836,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     photoEntry.reset();
                                 }
                                 ChatActivity.this.fillEditingMediaWithCaption(((SendingMediaInfo) arrayList.get(0)).caption, ((SendingMediaInfo) arrayList.get(0)).entities);
-                                SendMessagesHelper.prepareSendingMedia(ChatActivity.this.getAccountInstance(), arrayList, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, null, i == 4, SharedConfig.groupPhotosEnabled, ChatActivity.this.editingMessageObject);
+                                SendMessagesHelper.prepareSendingMedia(ChatActivity.this.getAccountInstance(), arrayList, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, null, i2 == 4, z, ChatActivity.this.editingMessageObject);
                                 ChatActivity.this.hideFieldPanel(false);
                                 ChatActivity.this.getMediaDataController().cleanDraft(ChatActivity.this.dialog_id, true);
                             }
                         } else {
                             if (ChatActivity.this.chatAttachAlert != null) {
-                                ChatActivity.this.chatAttachAlert.dismissWithButtonClick(i);
+                                ChatActivity.this.chatAttachAlert.dismissWithButtonClick(i2);
                             }
-                            ChatActivity.this.processSelectedAttach(i);
+                            ChatActivity.this.processSelectedAttach(i2);
                         }
                     }
                 }
@@ -6800,8 +6869,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.chatActivityEnterView.closeKeyboard();
                 }
 
-                public boolean allowGroupPhotos() {
-                    return ChatActivity.this.allowGroupPhotos();
+                public void needEnterComment() {
+                    if (ChatActivity.this.chatActivityEnterView.isKeyboardVisible()) {
+                        ChatActivity.this.chatActivityEnterView.showEmojiView();
+                        ChatActivity.this.openKeyboardOnAttachMenuClose = true;
+                    }
+                    AndroidUtilities.setAdjustResizeToNothing(ChatActivity.this.getParentActivity(), ChatActivity.this.classGuid);
+                    ChatActivity.this.fragmentView.requestLayout();
                 }
             });
         }
@@ -6933,11 +7007,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         Object item = this.stickersAdapter.getItem(i);
         Object itemParent = this.stickersAdapter.getItemParent(i);
         if (item instanceof TL_document) {
-            Document document = (TL_document) item;
-            getSendMessagesHelper().sendSticker(document, this.dialog_id, this.replyingMessageObject, itemParent);
-            hideFieldPanel(false);
-            this.chatActivityEnterView.addStickerToRecent(document);
-            this.chatActivityEnterView.setFieldText("");
+            if (!checkSlowMode(view)) {
+                Document document = (TL_document) item;
+                getSendMessagesHelper().sendSticker(document, this.dialog_id, this.replyingMessageObject, itemParent);
+                hideFieldPanel(false);
+                this.chatActivityEnterView.addStickerToRecent(document);
+                this.chatActivityEnterView.setFieldText("");
+            }
         } else if (item instanceof String) {
             SpannableString spannableString = new SpannableString((String) item);
             Emoji.replaceEmoji(spannableString, this.chatActivityEnterView.getEditField().getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
@@ -7006,7 +7082,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
             public void onAnimationCancel(Animator animator) {
                 if (animator.equals(ChatActivity.this.voiceHintAnimation)) {
-                    ChatActivity.this.voiceHintHideRunnable = null;
+                    ChatActivity.this.voiceHintAnimation = null;
                     ChatActivity.this.voiceHintHideRunnable = null;
                 }
             }
@@ -7085,13 +7161,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     if (animator.equals(ChatActivity.this.voiceHintAnimation)) {
                         ChatActivity.this.voiceHintAnimation = null;
                         ChatActivity chatActivity = ChatActivity.this;
-                        -$$Lambda$ChatActivity$41$8fiwN1aRW9i7tMSud_cpL2PkIsM -__lambda_chatactivity_41_8fiwn1arw9i7tmsud_cpl2pkism = new -$$Lambda$ChatActivity$41$8fiwN1aRW9i7tMSud_cpL2PkIsM(this);
-                        chatActivity.voiceHintHideRunnable = -__lambda_chatactivity_41_8fiwn1arw9i7tmsud_cpl2pkism;
-                        AndroidUtilities.runOnUIThread(-__lambda_chatactivity_41_8fiwn1arw9i7tmsud_cpl2pkism, 2000);
+                        -$$Lambda$ChatActivity$42$q_FtZ4mUBdWh5WQN98Sbu_ePbjs -__lambda_chatactivity_42_q_ftz4mubdwh5wqn98sbu_epbjs = new -$$Lambda$ChatActivity$42$q_FtZ4mUBdWh5WQN98Sbu_ePbjs(this);
+                        chatActivity.voiceHintHideRunnable = -__lambda_chatactivity_42_q_ftz4mubdwh5wqn98sbu_epbjs;
+                        AndroidUtilities.runOnUIThread(-__lambda_chatactivity_42_q_ftz4mubdwh5wqn98sbu_epbjs, 2000);
                     }
                 }
 
-                public /* synthetic */ void lambda$onAnimationEnd$0$ChatActivity$41() {
+                public /* synthetic */ void lambda$onAnimationEnd$0$ChatActivity$42() {
                     ChatActivity.this.hideVoiceHint();
                 }
 
@@ -7103,6 +7179,30 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             });
             this.voiceHintAnimation.setDuration(300);
             this.voiceHintAnimation.start();
+        }
+    }
+
+    private boolean checkSlowMode(View view) {
+        CharSequence slowModeTimer = this.chatActivityEnterView.getSlowModeTimer();
+        if (slowModeTimer == null) {
+            return false;
+        }
+        showSlowModeHint(view, true, slowModeTimer);
+        return true;
+    }
+
+    private void showSlowModeHint(View view, boolean z, CharSequence charSequence) {
+        if (getParentActivity() != null && this.fragmentView != null) {
+            if (!z) {
+                HintView hintView = this.slowModeHint;
+                if (hintView == null || hintView.getVisibility() != 0) {
+                    return;
+                }
+            }
+            this.slowModeHint.setText(AndroidUtilities.replaceTags(LocaleController.formatString("SlowModeHint", NUM, charSequence)));
+            if (z) {
+                this.slowModeHint.showForView(view, true);
+            }
         }
     }
 
@@ -7142,10 +7242,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.mediaBanTooltip, View.ALPHA, new float[]{0.0f, 1.0f})});
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
-                            AndroidUtilities.runOnUIThread(new -$$Lambda$ChatActivity$42$q_FtZ4mUBdWh5WQN98Sbu_ePbjs(this), 5000);
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$ChatActivity$43$VO4nZS6qYAkQlcqiQljZq1QNAiE(this), 5000);
                         }
 
-                        public /* synthetic */ void lambda$onAnimationEnd$0$ChatActivity$42() {
+                        public /* synthetic */ void lambda$onAnimationEnd$0$ChatActivity$43() {
                             if (ChatActivity.this.mediaBanTooltip != null) {
                                 AnimatorSet animatorSet = new AnimatorSet();
                                 Animator[] animatorArr = new Animator[1];
@@ -7257,10 +7357,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.gifHintTextView, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.emojiButtonRed, View.ALPHA, new float[]{0.0f, 1.0f})});
                             animatorSet.addListener(new AnimatorListenerAdapter() {
                                 public void onAnimationEnd(Animator animator) {
-                                    AndroidUtilities.runOnUIThread(new -$$Lambda$ChatActivity$43$VO4nZS6qYAkQlcqiQljZq1QNAiE(this), 2000);
+                                    AndroidUtilities.runOnUIThread(new -$$Lambda$ChatActivity$44$R1vDtHEyccW887hwRWJ3Lkwgc2g(this), 2000);
                                 }
 
-                                public /* synthetic */ void lambda$onAnimationEnd$0$ChatActivity$43() {
+                                public /* synthetic */ void lambda$onAnimationEnd$0$ChatActivity$44() {
                                     if (ChatActivity.this.gifHintTextView != null) {
                                         AnimatorSet animatorSet = new AnimatorSet();
                                         Animator[] animatorArr = new Animator[1];
@@ -7300,6 +7400,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             int i = VERSION.SDK_INT;
             if (i == 21 || i == 22) {
                 this.chatActivityEnterView.closeKeyboard();
+            }
+            Chat chat = this.currentChat;
+            if (chat == null || ChatObject.hasAdminRights(chat) || !this.currentChat.slowmode_enabled) {
+                this.chatAttachAlert.setMaxSelectedPhotos(-1, true);
+            } else {
+                this.chatAttachAlert.setMaxSelectedPhotos(10, true);
             }
             this.chatAttachAlert.init();
             showDialog(this.chatAttachAlert);
@@ -7596,10 +7702,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     i2 = this.cacheEndReached[1] ^ 1;
                     int i12 = this.minDate[1];
                     i3 = this.classGuid;
-                    boolean isChannel3 = ChatObject.isChannel(this.currentChat);
                     i4 = this.lastLoadIndex;
                     this.lastLoadIndex = i4 + 1;
-                    messagesController3.loadMessages(j3, 50, i11, 0, i2, i12, i3, 0, 0, isChannel3, i4);
+                    messagesController3.loadMessages(j3, 50, i11, 0, i2, i12, i3, 0, 0, false, i4);
                 }
             }
             if (i > 0 && !this.loadingForward && findFirstVisibleItemPosition <= 10) {
@@ -7607,7 +7712,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 long j4;
                 int i13;
                 int i14;
-                boolean isChannel4;
                 if (this.mergeDialogId != 0 && !this.forwardEndReached[1]) {
                     this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
                     messagesController4 = getMessagesController();
@@ -7615,10 +7719,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     i13 = this.minMessageId[1];
                     i14 = this.maxDate[1];
                     i2 = this.classGuid;
-                    isChannel4 = ChatObject.isChannel(this.currentChat);
                     findFirstVisibleItemPosition = this.lastLoadIndex;
                     this.lastLoadIndex = findFirstVisibleItemPosition + 1;
-                    messagesController4.loadMessages(j4, 50, i13, 0, true, i14, i2, 1, 0, isChannel4, findFirstVisibleItemPosition);
+                    messagesController4.loadMessages(j4, 50, i13, 0, true, i14, i2, 1, 0, false, findFirstVisibleItemPosition);
                     this.loadingForward = true;
                 } else if (!this.forwardEndReached[0]) {
                     this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
@@ -7627,17 +7730,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     i13 = this.minMessageId[0];
                     i14 = this.maxDate[0];
                     i2 = this.classGuid;
-                    isChannel4 = ChatObject.isChannel(this.currentChat);
+                    boolean isChannel3 = ChatObject.isChannel(this.currentChat);
                     findFirstVisibleItemPosition = this.lastLoadIndex;
                     this.lastLoadIndex = findFirstVisibleItemPosition + 1;
-                    messagesController4.loadMessages(j4, 50, i13, 0, true, i14, i2, 1, 0, isChannel4, findFirstVisibleItemPosition);
+                    messagesController4.loadMessages(j4, 50, i13, 0, true, i14, i2, 1, 0, isChannel3, findFirstVisibleItemPosition);
                     this.loadingForward = true;
                 }
             }
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x00b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x00c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x00ce  */
     /* JADX WARNING: Missing block: B:34:0x0095, code skipped:
             if (r11.send_gifs != false) goto L_0x0097;
      */
@@ -7691,15 +7796,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r10.currentPicturePath = r0;	 Catch:{ Exception -> 0x0060 }
     L_0x005b:
         r10.startActivityForResult(r11, r6);	 Catch:{ Exception -> 0x0060 }
-        goto L_0x01ff;
+        goto L_0x022c;
     L_0x0060:
         r11 = move-exception;
         org.telegram.messenger.FileLog.e(r11);
-        goto L_0x01ff;
+        goto L_0x022c;
     L_0x0066:
         r8 = 4;
         r9 = "android.permission.READ_EXTERNAL_STORAGE";
-        if (r11 != r7) goto L_0x00c2;
+        if (r11 != r7) goto L_0x00df;
     L_0x006b:
         r11 = android.os.Build.VERSION.SDK_INT;
         if (r11 < r5) goto L_0x0085;
@@ -7741,191 +7846,224 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     L_0x00a8:
         r0 = new org.telegram.ui.PhotoAlbumPickerActivity;
         r0.<init>(r6, r11, r7, r10);
-        r11 = r10.editingMessageObject;
-        if (r11 == 0) goto L_0x00b2;
+        r11 = r10.currentChat;
+        if (r11 == 0) goto L_0x00c3;
     L_0x00b1:
+        r11 = org.telegram.messenger.ChatObject.hasAdminRights(r11);
+        if (r11 != 0) goto L_0x00c3;
+    L_0x00b7:
+        r11 = r10.currentChat;
+        r11 = r11.slowmode_enabled;
+        if (r11 == 0) goto L_0x00c3;
+    L_0x00bd:
+        r11 = 10;
+        r0.setMaxSelectedPhotos(r11, r7);
+        goto L_0x00d2;
+    L_0x00c3:
+        r11 = r10.editingMessageObject;
+        if (r11 == 0) goto L_0x00c9;
+    L_0x00c7:
+        r11 = 1;
+        goto L_0x00ca;
+    L_0x00c9:
+        r11 = 0;
+    L_0x00ca:
+        r1 = r10.editingMessageObject;
+        if (r1 != 0) goto L_0x00cf;
+    L_0x00ce:
         r6 = 1;
-    L_0x00b2:
-        r0.setMaxSelectedPhotos(r6);
-        r11 = new org.telegram.ui.ChatActivity$48;
+    L_0x00cf:
+        r0.setMaxSelectedPhotos(r11, r6);
+    L_0x00d2:
+        r11 = new org.telegram.ui.ChatActivity$49;
         r11.<init>();
         r0.setDelegate(r11);
         r10.presentFragment(r0);
-        goto L_0x01ff;
-    L_0x00c2:
-        if (r11 != r4) goto L_0x0129;
-    L_0x00c4:
+        goto L_0x022c;
+    L_0x00df:
+        if (r11 != r4) goto L_0x0146;
+    L_0x00e1:
         r11 = android.os.Build.VERSION.SDK_INT;
-        if (r11 < r5) goto L_0x00e0;
-    L_0x00c8:
+        if (r11 < r5) goto L_0x00fd;
+    L_0x00e5:
         r11 = r10.getParentActivity();
         r11 = r11.checkSelfPermission(r3);
-        if (r11 == 0) goto L_0x00e0;
-    L_0x00d2:
-        r11 = r10.getParentActivity();	 Catch:{ Throwable -> 0x00df }
-        r0 = new java.lang.String[r7];	 Catch:{ Throwable -> 0x00df }
-        r0[r6] = r3;	 Catch:{ Throwable -> 0x00df }
+        if (r11 == 0) goto L_0x00fd;
+    L_0x00ef:
+        r11 = r10.getParentActivity();	 Catch:{ Throwable -> 0x00fc }
+        r0 = new java.lang.String[r7];	 Catch:{ Throwable -> 0x00fc }
+        r0[r6] = r3;	 Catch:{ Throwable -> 0x00fc }
         r1 = 20;
-        r11.requestPermissions(r0, r1);	 Catch:{ Throwable -> 0x00df }
-    L_0x00df:
+        r11.requestPermissions(r0, r1);	 Catch:{ Throwable -> 0x00fc }
+    L_0x00fc:
         return;
-    L_0x00e0:
-        r11 = new android.content.Intent;	 Catch:{ Exception -> 0x0123 }
+    L_0x00fd:
+        r11 = new android.content.Intent;	 Catch:{ Exception -> 0x0140 }
         r3 = "android.media.action.VIDEO_CAPTURE";
-        r11.<init>(r3);	 Catch:{ Exception -> 0x0123 }
-        r3 = org.telegram.messenger.AndroidUtilities.generateVideoPath();	 Catch:{ Exception -> 0x0123 }
-        if (r3 == 0) goto L_0x011e;
-    L_0x00ed:
-        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0123 }
-        if (r5 < r1) goto L_0x0103;
-    L_0x00f1:
-        r1 = r10.getParentActivity();	 Catch:{ Exception -> 0x0123 }
-        r0 = androidx.core.content.FileProvider.getUriForFile(r1, r0, r3);	 Catch:{ Exception -> 0x0123 }
-        r11.putExtra(r2, r0);	 Catch:{ Exception -> 0x0123 }
-        r11.addFlags(r4);	 Catch:{ Exception -> 0x0123 }
-        r11.addFlags(r7);	 Catch:{ Exception -> 0x0123 }
-        goto L_0x0110;
-    L_0x0103:
-        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0123 }
+        r11.<init>(r3);	 Catch:{ Exception -> 0x0140 }
+        r3 = org.telegram.messenger.AndroidUtilities.generateVideoPath();	 Catch:{ Exception -> 0x0140 }
+        if (r3 == 0) goto L_0x013b;
+    L_0x010a:
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0140 }
+        if (r5 < r1) goto L_0x0120;
+    L_0x010e:
+        r1 = r10.getParentActivity();	 Catch:{ Exception -> 0x0140 }
+        r0 = androidx.core.content.FileProvider.getUriForFile(r1, r0, r3);	 Catch:{ Exception -> 0x0140 }
+        r11.putExtra(r2, r0);	 Catch:{ Exception -> 0x0140 }
+        r11.addFlags(r4);	 Catch:{ Exception -> 0x0140 }
+        r11.addFlags(r7);	 Catch:{ Exception -> 0x0140 }
+        goto L_0x012d;
+    L_0x0120:
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0140 }
         r1 = 18;
-        if (r0 < r1) goto L_0x0110;
-    L_0x0109:
-        r0 = android.net.Uri.fromFile(r3);	 Catch:{ Exception -> 0x0123 }
-        r11.putExtra(r2, r0);	 Catch:{ Exception -> 0x0123 }
-    L_0x0110:
+        if (r0 < r1) goto L_0x012d;
+    L_0x0126:
+        r0 = android.net.Uri.fromFile(r3);	 Catch:{ Exception -> 0x0140 }
+        r11.putExtra(r2, r0);	 Catch:{ Exception -> 0x0140 }
+    L_0x012d:
         r0 = "android.intent.extra.sizeLimit";
         r1 = NUM; // 0x60000000 float:3.6893488E19 double:7.957484216E-315;
-        r11.putExtra(r0, r1);	 Catch:{ Exception -> 0x0123 }
-        r0 = r3.getAbsolutePath();	 Catch:{ Exception -> 0x0123 }
-        r10.currentPicturePath = r0;	 Catch:{ Exception -> 0x0123 }
-    L_0x011e:
-        r10.startActivityForResult(r11, r4);	 Catch:{ Exception -> 0x0123 }
-        goto L_0x01ff;
-    L_0x0123:
+        r11.putExtra(r0, r1);	 Catch:{ Exception -> 0x0140 }
+        r0 = r3.getAbsolutePath();	 Catch:{ Exception -> 0x0140 }
+        r10.currentPicturePath = r0;	 Catch:{ Exception -> 0x0140 }
+    L_0x013b:
+        r10.startActivityForResult(r11, r4);	 Catch:{ Exception -> 0x0140 }
+        goto L_0x022c;
+    L_0x0140:
         r11 = move-exception;
         org.telegram.messenger.FileLog.e(r11);
-        goto L_0x01ff;
-    L_0x0129:
+        goto L_0x022c;
+    L_0x0146:
         r0 = 6;
-        if (r11 != r0) goto L_0x014a;
-    L_0x012c:
+        if (r11 != r0) goto L_0x0167;
+    L_0x0149:
         r11 = org.telegram.messenger.AndroidUtilities.isGoogleMapsInstalled(r10);
-        if (r11 != 0) goto L_0x0133;
-    L_0x0132:
+        if (r11 != 0) goto L_0x0150;
+    L_0x014f:
         return;
-    L_0x0133:
+    L_0x0150:
         r11 = new org.telegram.ui.LocationActivity;
         r0 = r10.currentEncryptedChat;
-        if (r0 != 0) goto L_0x013a;
-    L_0x0139:
+        if (r0 != 0) goto L_0x0157;
+    L_0x0156:
         r6 = 1;
-    L_0x013a:
+    L_0x0157:
         r11.<init>(r6);
         r0 = r10.dialog_id;
         r11.setDialogId(r0);
         r11.setDelegate(r10);
         r10.presentFragment(r11);
-        goto L_0x01ff;
-    L_0x014a:
-        if (r11 != r8) goto L_0x0181;
-    L_0x014c:
+        goto L_0x022c;
+    L_0x0167:
+        if (r11 != r8) goto L_0x01ae;
+    L_0x0169:
         r11 = android.os.Build.VERSION.SDK_INT;
-        if (r11 < r5) goto L_0x0166;
-    L_0x0150:
+        if (r11 < r5) goto L_0x0183;
+    L_0x016d:
         r11 = r10.getParentActivity();
         r11 = r11.checkSelfPermission(r9);
-        if (r11 == 0) goto L_0x0166;
-    L_0x015a:
-        r11 = r10.getParentActivity();	 Catch:{ Throwable -> 0x0165 }
-        r0 = new java.lang.String[r7];	 Catch:{ Throwable -> 0x0165 }
-        r0[r6] = r9;	 Catch:{ Throwable -> 0x0165 }
-        r11.requestPermissions(r0, r8);	 Catch:{ Throwable -> 0x0165 }
-    L_0x0165:
+        if (r11 == 0) goto L_0x0183;
+    L_0x0177:
+        r11 = r10.getParentActivity();	 Catch:{ Throwable -> 0x0182 }
+        r0 = new java.lang.String[r7];	 Catch:{ Throwable -> 0x0182 }
+        r0[r6] = r9;	 Catch:{ Throwable -> 0x0182 }
+        r11.requestPermissions(r0, r8);	 Catch:{ Throwable -> 0x0182 }
+    L_0x0182:
         return;
-    L_0x0166:
+    L_0x0183:
         r11 = new org.telegram.ui.DocumentSelectActivity;
         r11.<init>(r7);
+        r0 = r10.currentChat;
+        if (r0 == 0) goto L_0x0198;
+    L_0x018c:
+        r0 = org.telegram.messenger.ChatObject.hasAdminRights(r0);
+        if (r0 != 0) goto L_0x0198;
+    L_0x0192:
+        r0 = r10.currentChat;
+        r0 = r0.slowmode_enabled;
+        if (r0 != 0) goto L_0x019e;
+    L_0x0198:
         r0 = r10.editingMessageObject;
-        if (r0 == 0) goto L_0x0170;
-    L_0x016f:
-        goto L_0x0171;
-    L_0x0170:
+        if (r0 == 0) goto L_0x019d;
+    L_0x019c:
+        goto L_0x019e;
+    L_0x019d:
         r7 = -1;
-    L_0x0171:
+    L_0x019e:
         r11.setMaxSelectedFiles(r7);
-        r0 = new org.telegram.ui.ChatActivity$49;
+        r0 = new org.telegram.ui.ChatActivity$50;
         r0.<init>();
         r11.setDelegate(r0);
         r10.presentFragment(r11);
-        goto L_0x01ff;
-    L_0x0181:
+        goto L_0x022c;
+    L_0x01ae:
         r0 = 3;
-        if (r11 != r0) goto L_0x01af;
-    L_0x0184:
+        if (r11 != r0) goto L_0x01dc;
+    L_0x01b1:
         r11 = android.os.Build.VERSION.SDK_INT;
-        if (r11 < r5) goto L_0x019e;
-    L_0x0188:
+        if (r11 < r5) goto L_0x01cb;
+    L_0x01b5:
         r11 = r10.getParentActivity();
         r11 = r11.checkSelfPermission(r9);
-        if (r11 == 0) goto L_0x019e;
-    L_0x0192:
+        if (r11 == 0) goto L_0x01cb;
+    L_0x01bf:
         r11 = r10.getParentActivity();
         r0 = new java.lang.String[r7];
         r0[r6] = r9;
         r11.requestPermissions(r0, r8);
         return;
-    L_0x019e:
+    L_0x01cb:
         r11 = new org.telegram.ui.AudioSelectActivity;
         r11.<init>();
         r0 = new org.telegram.ui.-$$Lambda$ChatActivity$-GtAEHdnhYsGF9-WtU4tijSIkdI;
         r0.<init>(r10);
         r11.setDelegate(r0);
         r10.presentFragment(r11);
-        goto L_0x01ff;
-    L_0x01af:
+        goto L_0x022c;
+    L_0x01dc:
         r0 = 5;
-        if (r11 != r0) goto L_0x01df;
-    L_0x01b2:
+        if (r11 != r0) goto L_0x020c;
+    L_0x01df:
         r11 = android.os.Build.VERSION.SDK_INT;
-        if (r11 < r5) goto L_0x01ce;
-    L_0x01b6:
+        if (r11 < r5) goto L_0x01fb;
+    L_0x01e3:
         r11 = r10.getParentActivity();
         r1 = "android.permission.READ_CONTACTS";
         r11 = r11.checkSelfPermission(r1);
-        if (r11 == 0) goto L_0x01ce;
-    L_0x01c2:
+        if (r11 == 0) goto L_0x01fb;
+    L_0x01ef:
         r11 = r10.getParentActivity();
         r2 = new java.lang.String[r7];
         r2[r6] = r1;
         r11.requestPermissions(r2, r0);
         return;
-    L_0x01ce:
+    L_0x01fb:
         r11 = new org.telegram.ui.PhonebookSelectActivity;
         r11.<init>();
         r0 = new org.telegram.ui.-$$Lambda$ChatActivity$WiczyarIwMsf9z7UB_OQTv70EA4;
         r0.<init>(r10);
         r11.setDelegate(r0);
         r10.presentFragment(r11);
-        goto L_0x01ff;
-    L_0x01df:
+        goto L_0x022c;
+    L_0x020c:
         r0 = 9;
-        if (r11 != r0) goto L_0x01ff;
-    L_0x01e3:
+        if (r11 != r0) goto L_0x022c;
+    L_0x0210:
         r11 = r10.currentChat;
-        if (r11 == 0) goto L_0x01ff;
-    L_0x01e7:
+        if (r11 == 0) goto L_0x022c;
+    L_0x0214:
         r11 = org.telegram.messenger.ChatObject.canSendPolls(r11);
-        if (r11 != 0) goto L_0x01ee;
-    L_0x01ed:
-        goto L_0x01ff;
-    L_0x01ee:
+        if (r11 != 0) goto L_0x021b;
+    L_0x021a:
+        goto L_0x022c;
+    L_0x021b:
         r11 = new org.telegram.ui.PollCreateActivity;
         r11.<init>();
         r0 = new org.telegram.ui.-$$Lambda$ChatActivity$xjME3A9fFFJMEuiO7cfeOzv2Q5w;
         r0.<init>(r10);
         r11.setDelegate(r0);
         r10.presentFragment(r11);
-    L_0x01ff:
+    L_0x022c:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.processSelectedAttach(int):void");
@@ -8388,7 +8526,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     arrayList3.add(Integer.valueOf(-messageObject5.messageOwner.to_id.channel_id));
                                 }
                             }
-                            int i4 = ((MessageObject) arrayList2.get(0)).type;
+                            int i4 = messageObject5.isAnimatedEmoji() ? 0 : messageObject5.type;
                             for (int i5 = 1; i5 < arrayList2.size(); i5++) {
                                 int i6;
                                 MessageObject messageObject6 = (MessageObject) arrayList2.get(i5);
@@ -8680,6 +8818,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.loadingForward = false;
         this.waitingForReplyMessageLoad = false;
         this.startLoadFromMessageId = 0;
+        this.showScrollToMessageError = false;
         this.last_message_id = 0;
         this.unreadMessageObject = null;
         this.createUnreadMessageAfterId = 0;
@@ -9253,6 +9392,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             removeSelectedMessageHighlight();
             this.scrollToMessagePosition = -10000;
             this.startLoadFromMessageId = i5;
+            this.showScrollToMessageError = true;
             if (i5 == this.createUnreadMessageAfterId) {
                 this.createUnreadMessageAfterIdLoading = true;
             }
@@ -9486,6 +9626,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
+        ChatAttachAlert chatAttachAlert;
         ChatActivityEnterView chatActivityEnterView = this.chatActivityEnterView;
         if (chatActivityEnterView != null) {
             chatActivityEnterView.onRequestPermissionsResultFragment(i, strArr, iArr);
@@ -9494,9 +9635,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (mentionsAdapter != null) {
             mentionsAdapter.onRequestPermissionsResultFragment(i, strArr, iArr);
         }
+        if (i == 4) {
+            chatAttachAlert = this.chatAttachAlert;
+            if (chatAttachAlert != null) {
+                chatAttachAlert.checkStorage();
+            }
+        }
         boolean z = false;
-        if (i == 17) {
-            ChatAttachAlert chatAttachAlert = this.chatAttachAlert;
+        if (i == 17 || i == 18) {
+            chatAttachAlert = this.chatAttachAlert;
             if (chatAttachAlert != null) {
                 if (iArr.length > 0 && iArr[0] == 0) {
                     z = true;
@@ -9617,6 +9764,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 return -1;
             }
             if ((this.isBroadcast || messageObject.getId() > 0 || !messageObject.isOut()) && obj == null) {
+                if (messageObject.isAnimatedEmoji()) {
+                    return 2;
+                }
                 i2 = messageObject2.type;
                 if (i2 == 6) {
                     return -1;
@@ -9676,9 +9826,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             } else {
                 return -1;
             }
-        } else if (messageObject.isSending() || messageObject2.type == 6) {
+        } else if (messageObject.isSending()) {
             return -1;
         } else {
+            if (messageObject.isAnimatedEmoji()) {
+                return 2;
+            }
+            if (messageObject2.type == 6) {
+                return -1;
+            }
             if (messageObject.isSendError()) {
                 return !messageObject.isMediaEmpty() ? 0 : 20;
             } else {
@@ -9689,7 +9845,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     if (messageObject.isVoice()) {
                         return 2;
                     }
-                    if (messageObject.isSticker() || messageObject.isAnimatedSticker()) {
+                    if (!messageObject.isAnimatedEmoji() && (messageObject.isSticker() || messageObject.isAnimatedSticker())) {
                         inputStickerSet = messageObject.getInputStickerSet();
                         if ((inputStickerSet instanceof TL_inputStickerSetShortName) && !getMediaDataController().isStickerPackInstalled(inputStickerSet.short_name)) {
                             return 7;
@@ -9729,7 +9885,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         addToSelectedMessages(messageObject, z, true);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x03ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x0413  */
     private void addToSelectedMessages(org.telegram.messenger.MessageObject r23, boolean r24, boolean r25) {
         /*
         r22 = this;
@@ -9739,7 +9895,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = 0;
         r5 = 0;
         r6 = 1;
-        if (r1 == 0) goto L_0x016d;
+        if (r1 == 0) goto L_0x0193;
     L_0x000c:
         r7 = r23.getDialogId();
         r9 = r0.dialog_id;
@@ -9834,58 +9990,69 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = r8[r7];
         r9 = r23.getId();
         r8 = r8.indexOfKey(r9);
-        if (r8 < 0) goto L_0x00fd;
+        if (r8 < 0) goto L_0x0111;
     L_0x00a2:
         r8 = r0.selectedMessagesIds;
         r8 = r8[r7];
         r9 = r23.getId();
         r8.remove(r9);
         r8 = r1.type;
-        if (r8 == 0) goto L_0x00b5;
+        if (r8 == 0) goto L_0x00bb;
     L_0x00b1:
+        r8 = r23.isAnimatedEmoji();
+        if (r8 != 0) goto L_0x00bb;
+    L_0x00b7:
         r8 = r1.caption;
-        if (r8 == 0) goto L_0x00c0;
-    L_0x00b5:
+        if (r8 == 0) goto L_0x00c6;
+    L_0x00bb:
         r8 = r0.selectedMessagesCanCopyIds;
         r8 = r8[r7];
         r9 = r23.getId();
         r8.remove(r9);
-    L_0x00c0:
-        r8 = r23.isSticker();
-        if (r8 != 0) goto L_0x00cc;
     L_0x00c6:
-        r8 = r23.isAnimatedSticker();
-        if (r8 == 0) goto L_0x00d7;
+        r8 = r23.isAnimatedEmoji();
+        if (r8 != 0) goto L_0x00e3;
     L_0x00cc:
+        r8 = r23.isSticker();
+        if (r8 != 0) goto L_0x00d8;
+    L_0x00d2:
+        r8 = r23.isAnimatedSticker();
+        if (r8 == 0) goto L_0x00e3;
+    L_0x00d8:
         r8 = r0.selectedMessagesCanStarIds;
         r7 = r8[r7];
         r8 = r23.getId();
         r7.remove(r8);
-    L_0x00d7:
+    L_0x00e3:
         r7 = r0.currentChat;
         r7 = r1.canEditMessage(r7);
-        if (r7 == 0) goto L_0x00e4;
-    L_0x00df:
+        if (r7 == 0) goto L_0x00f0;
+    L_0x00eb:
         r7 = r0.canEditMessagesCount;
         r7 = r7 - r6;
         r0.canEditMessagesCount = r7;
-    L_0x00e4:
+    L_0x00f0:
         r7 = r0.currentChat;
         r7 = r1.canDeleteMessage(r7);
-        if (r7 != 0) goto L_0x00f1;
-    L_0x00ec:
+        if (r7 != 0) goto L_0x00fd;
+    L_0x00f8:
         r7 = r0.cantDeleteMessagesCount;
         r7 = r7 - r6;
         r0.cantDeleteMessagesCount = r7;
-    L_0x00f1:
+    L_0x00fd:
         r1 = r23.canForwardMessage();
-        if (r1 != 0) goto L_0x016d;
-    L_0x00f7:
+        if (r1 != 0) goto L_0x010a;
+    L_0x0103:
         r1 = r0.cantForwardMessagesCount;
         r1 = r1 - r6;
         r0.cantForwardMessagesCount = r1;
-        goto L_0x016d;
-    L_0x00fd:
+        goto L_0x0193;
+    L_0x010a:
+        r1 = r0.canForwardMessagesCount;
+        r1 = r1 - r6;
+        r0.canForwardMessagesCount = r1;
+        goto L_0x0193;
+    L_0x0111:
         r8 = r0.selectedMessagesIds;
         r8 = r8[r5];
         r8 = r8.size();
@@ -9894,72 +10061,83 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9 = r9.size();
         r8 = r8 + r9;
         r9 = 100;
-        if (r8 < r9) goto L_0x0113;
-    L_0x0112:
+        if (r8 < r9) goto L_0x0127;
+    L_0x0126:
         return;
-    L_0x0113:
+    L_0x0127:
         r8 = r0.selectedMessagesIds;
         r8 = r8[r7];
         r9 = r23.getId();
         r8.put(r9, r1);
         r8 = r1.type;
-        if (r8 == 0) goto L_0x0126;
-    L_0x0122:
+        if (r8 == 0) goto L_0x0140;
+    L_0x0136:
+        r8 = r23.isAnimatedEmoji();
+        if (r8 != 0) goto L_0x0140;
+    L_0x013c:
         r8 = r1.caption;
-        if (r8 == 0) goto L_0x0131;
-    L_0x0126:
+        if (r8 == 0) goto L_0x014b;
+    L_0x0140:
         r8 = r0.selectedMessagesCanCopyIds;
         r8 = r8[r7];
         r9 = r23.getId();
         r8.put(r9, r1);
-    L_0x0131:
+    L_0x014b:
+        r8 = r23.isAnimatedEmoji();
+        if (r8 != 0) goto L_0x0168;
+    L_0x0151:
         r8 = r23.isSticker();
-        if (r8 != 0) goto L_0x013d;
-    L_0x0137:
+        if (r8 != 0) goto L_0x015d;
+    L_0x0157:
         r8 = r23.isAnimatedSticker();
-        if (r8 == 0) goto L_0x0148;
-    L_0x013d:
+        if (r8 == 0) goto L_0x0168;
+    L_0x015d:
         r8 = r0.selectedMessagesCanStarIds;
         r7 = r8[r7];
         r8 = r23.getId();
         r7.put(r8, r1);
-    L_0x0148:
+    L_0x0168:
         r7 = r0.currentChat;
         r7 = r1.canEditMessage(r7);
-        if (r7 == 0) goto L_0x0155;
-    L_0x0150:
+        if (r7 == 0) goto L_0x0175;
+    L_0x0170:
         r7 = r0.canEditMessagesCount;
         r7 = r7 + r6;
         r0.canEditMessagesCount = r7;
-    L_0x0155:
+    L_0x0175:
         r7 = r0.currentChat;
         r7 = r1.canDeleteMessage(r7);
-        if (r7 != 0) goto L_0x0162;
-    L_0x015d:
+        if (r7 != 0) goto L_0x0182;
+    L_0x017d:
         r7 = r0.cantDeleteMessagesCount;
         r7 = r7 + r6;
         r0.cantDeleteMessagesCount = r7;
-    L_0x0162:
+    L_0x0182:
         r1 = r23.canForwardMessage();
-        if (r1 != 0) goto L_0x016d;
-    L_0x0168:
+        if (r1 != 0) goto L_0x018e;
+    L_0x0188:
         r1 = r0.cantForwardMessagesCount;
         r1 = r1 + r6;
         r0.cantForwardMessagesCount = r1;
-    L_0x016d:
+        goto L_0x0193;
+    L_0x018e:
+        r1 = r0.canForwardMessagesCount;
+        r1 = r1 + r6;
+        r0.canForwardMessagesCount = r1;
+    L_0x0193:
         r1 = r0.forwardButtonAnimation;
-        if (r1 == 0) goto L_0x0177;
-    L_0x0171:
+        if (r1 == 0) goto L_0x019d;
+    L_0x0197:
         r1.cancel();
         r1 = 0;
         r0.forwardButtonAnimation = r1;
-    L_0x0177:
-        if (r25 == 0) goto L_0x0504;
-    L_0x0179:
+    L_0x019d:
+        if (r25 == 0) goto L_0x052a;
+    L_0x019f:
         r1 = r0.actionBar;
         r1 = r1.isActionModeShowed();
-        if (r1 == 0) goto L_0x0504;
-    L_0x0181:
+        if (r1 == 0) goto L_0x052a;
+    L_0x01a7:
         r1 = r0.selectedMessagesIds;
         r1 = r1[r5];
         r1 = r1.size();
@@ -9967,12 +10145,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7 = r7[r6];
         r7 = r7.size();
         r1 = r1 + r7;
-        if (r1 != 0) goto L_0x019c;
-    L_0x0194:
+        if (r1 != 0) goto L_0x01c2;
+    L_0x01ba:
         r22.hideActionMode();
         r0.updatePinnedMessageView(r6);
-        goto L_0x0504;
-    L_0x019c:
+        goto L_0x052a;
+    L_0x01c2:
         r7 = r0.actionBar;
         r7 = r7.createActionMode();
         r8 = 10;
@@ -9990,129 +10168,129 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r11 = 11;
         r10 = r10.getItem(r11);
         r11 = 100;
-        if (r2 != 0) goto L_0x01d4;
-    L_0x01d0:
+        if (r2 != 0) goto L_0x01fa;
+    L_0x01f6:
         r15 = r0.cantForwardMessagesCount;
-        if (r15 != 0) goto L_0x01da;
-    L_0x01d4:
-        if (r2 == 0) goto L_0x0248;
-    L_0x01d6:
+        if (r15 != 0) goto L_0x0200;
+    L_0x01fa:
+        if (r2 == 0) goto L_0x026e;
+    L_0x01fc:
         r2 = r0.cantForwardMessagesCount;
-        if (r2 != 0) goto L_0x0248;
-    L_0x01da:
+        if (r2 != 0) goto L_0x026e;
+    L_0x0200:
         r2 = new android.animation.AnimatorSet;
         r2.<init>();
         r0.forwardButtonAnimation = r2;
         r2 = new java.util.ArrayList;
         r2.<init>();
-        if (r10 == 0) goto L_0x0208;
-    L_0x01e8:
+        if (r10 == 0) goto L_0x022e;
+    L_0x020e:
         r15 = r0.cantForwardMessagesCount;
-        if (r15 != 0) goto L_0x01ee;
-    L_0x01ec:
+        if (r15 != 0) goto L_0x0214;
+    L_0x0212:
         r15 = 1;
-        goto L_0x01ef;
-    L_0x01ee:
+        goto L_0x0215;
+    L_0x0214:
         r15 = 0;
-    L_0x01ef:
+    L_0x0215:
         r10.setEnabled(r15);
         r15 = android.view.View.ALPHA;
         r13 = new float[r6];
         r14 = r0.cantForwardMessagesCount;
-        if (r14 != 0) goto L_0x01fd;
-    L_0x01fa:
+        if (r14 != 0) goto L_0x0223;
+    L_0x0220:
         r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x01ff;
-    L_0x01fd:
+        goto L_0x0225;
+    L_0x0223:
         r14 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
-    L_0x01ff:
+    L_0x0225:
         r13[r5] = r14;
         r10 = android.animation.ObjectAnimator.ofFloat(r10, r15, r13);
         r2.add(r10);
-    L_0x0208:
+    L_0x022e:
         r10 = r0.forwardButton;
-        if (r10 == 0) goto L_0x022e;
-    L_0x020c:
+        if (r10 == 0) goto L_0x0254;
+    L_0x0232:
         r13 = r0.cantForwardMessagesCount;
-        if (r13 != 0) goto L_0x0212;
-    L_0x0210:
+        if (r13 != 0) goto L_0x0238;
+    L_0x0236:
         r13 = 1;
-        goto L_0x0213;
-    L_0x0212:
+        goto L_0x0239;
+    L_0x0238:
         r13 = 0;
-    L_0x0213:
+    L_0x0239:
         r10.setEnabled(r13);
         r10 = r0.forwardButton;
         r13 = android.view.View.ALPHA;
         r14 = new float[r6];
         r15 = r0.cantForwardMessagesCount;
-        if (r15 != 0) goto L_0x0223;
-    L_0x0220:
+        if (r15 != 0) goto L_0x0249;
+    L_0x0246:
         r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0225;
-    L_0x0223:
+        goto L_0x024b;
+    L_0x0249:
         r15 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
-    L_0x0225:
+    L_0x024b:
         r14[r5] = r15;
         r10 = android.animation.ObjectAnimator.ofFloat(r10, r13, r14);
         r2.add(r10);
-    L_0x022e:
+    L_0x0254:
         r10 = r0.forwardButtonAnimation;
         r10.playTogether(r2);
         r2 = r0.forwardButtonAnimation;
         r2.setDuration(r11);
         r2 = r0.forwardButtonAnimation;
-        r10 = new org.telegram.ui.ChatActivity$52;
+        r10 = new org.telegram.ui.ChatActivity$53;
         r10.<init>();
         r2.addListener(r10);
         r2 = r0.forwardButtonAnimation;
         r2.start();
-        goto L_0x027c;
-    L_0x0248:
-        if (r10 == 0) goto L_0x0260;
-    L_0x024a:
+        goto L_0x02a2;
+    L_0x026e:
+        if (r10 == 0) goto L_0x0286;
+    L_0x0270:
         r2 = r0.cantForwardMessagesCount;
-        if (r2 != 0) goto L_0x0250;
-    L_0x024e:
+        if (r2 != 0) goto L_0x0276;
+    L_0x0274:
         r2 = 1;
-        goto L_0x0251;
-    L_0x0250:
+        goto L_0x0277;
+    L_0x0276:
         r2 = 0;
-    L_0x0251:
+    L_0x0277:
         r10.setEnabled(r2);
         r2 = r0.cantForwardMessagesCount;
-        if (r2 != 0) goto L_0x025b;
-    L_0x0258:
+        if (r2 != 0) goto L_0x0281;
+    L_0x027e:
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x025d;
-    L_0x025b:
+        goto L_0x0283;
+    L_0x0281:
         r2 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
-    L_0x025d:
+    L_0x0283:
         r10.setAlpha(r2);
-    L_0x0260:
+    L_0x0286:
         r2 = r0.forwardButton;
-        if (r2 == 0) goto L_0x027c;
-    L_0x0264:
+        if (r2 == 0) goto L_0x02a2;
+    L_0x028a:
         r10 = r0.cantForwardMessagesCount;
-        if (r10 != 0) goto L_0x026a;
-    L_0x0268:
+        if (r10 != 0) goto L_0x0290;
+    L_0x028e:
         r10 = 1;
-        goto L_0x026b;
-    L_0x026a:
+        goto L_0x0291;
+    L_0x0290:
         r10 = 0;
-    L_0x026b:
+    L_0x0291:
         r2.setEnabled(r10);
         r2 = r0.forwardButton;
         r10 = r0.cantForwardMessagesCount;
-        if (r10 != 0) goto L_0x0277;
-    L_0x0274:
+        if (r10 != 0) goto L_0x029d;
+    L_0x029a:
         r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0279;
-    L_0x0277:
+        goto L_0x029f;
+    L_0x029d:
         r10 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
-    L_0x0279:
+    L_0x029f:
         r2.setAlpha(r10);
-    L_0x027c:
+    L_0x02a2:
         r2 = r7.getVisibility();
         r10 = r8.getVisibility();
         r13 = r0.selectedMessagesCanCopyIds;
@@ -10122,18 +10300,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r14 = r14[r6];
         r14 = r14.size();
         r13 = r13 + r14;
-        if (r13 == 0) goto L_0x0299;
-    L_0x0297:
+        if (r13 == 0) goto L_0x02bf;
+    L_0x02bd:
         r13 = 0;
-        goto L_0x029b;
-    L_0x0299:
+        goto L_0x02c1;
+    L_0x02bf:
         r13 = 8;
-    L_0x029b:
+    L_0x02c1:
         r7.setVisibility(r13);
         r13 = r22.getMediaDataController();
         r13 = r13.canAddStickerToFavorites();
-        if (r13 == 0) goto L_0x02bd;
-    L_0x02a8:
+        if (r13 == 0) goto L_0x02e3;
+    L_0x02ce:
         r13 = r0.selectedMessagesCanStarIds;
         r13 = r13[r5];
         r13 = r13.size();
@@ -10141,13 +10319,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15 = r15[r6];
         r15 = r15.size();
         r13 = r13 + r15;
-        if (r13 != r1) goto L_0x02bd;
-    L_0x02bb:
+        if (r13 != r1) goto L_0x02e3;
+    L_0x02e1:
         r13 = 0;
-        goto L_0x02bf;
-    L_0x02bd:
+        goto L_0x02e5;
+    L_0x02e3:
         r13 = 8;
-    L_0x02bf:
+    L_0x02e5:
         r8.setVisibility(r13);
         r7 = r7.getVisibility();
         r13 = r8.getVisibility();
@@ -10156,27 +10334,27 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r11 = 12;
         r11 = r15.getItem(r11);
         r12 = r0.cantDeleteMessagesCount;
-        if (r12 != 0) goto L_0x02dc;
-    L_0x02da:
+        if (r12 != 0) goto L_0x0302;
+    L_0x0300:
         r12 = 0;
-        goto L_0x02de;
-    L_0x02dc:
+        goto L_0x0304;
+    L_0x0302:
         r12 = 8;
-    L_0x02de:
+    L_0x0304:
         r11.setVisibility(r12);
         r0.hasUnfavedSelected = r5;
         r11 = 0;
-    L_0x02e4:
+    L_0x030a:
         r12 = 2;
-        if (r11 >= r12) goto L_0x031c;
-    L_0x02e7:
+        if (r11 >= r12) goto L_0x0342;
+    L_0x030d:
         r15 = 0;
-    L_0x02e8:
+    L_0x030e:
         r14 = r0.selectedMessagesCanStarIds;
         r14 = r14[r11];
         r14 = r14.size();
-        if (r15 >= r14) goto L_0x0312;
-    L_0x02f2:
+        if (r15 >= r14) goto L_0x0338;
+    L_0x0318:
         r14 = r0.selectedMessagesCanStarIds;
         r14 = r14[r11];
         r14 = r14.valueAt(r15);
@@ -10184,127 +10362,127 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r22.getMediaDataController();
         r4 = r14.getDocument();
         r3 = r3.isStickerInFavorites(r4);
-        if (r3 != 0) goto L_0x030d;
-    L_0x030a:
+        if (r3 != 0) goto L_0x0333;
+    L_0x0330:
         r0.hasUnfavedSelected = r6;
-        goto L_0x0312;
-    L_0x030d:
+        goto L_0x0338;
+    L_0x0333:
         r15 = r15 + 1;
         r3 = 0;
-        goto L_0x02e8;
-    L_0x0312:
+        goto L_0x030e;
+    L_0x0338:
         r3 = r0.hasUnfavedSelected;
-        if (r3 == 0) goto L_0x0317;
-    L_0x0316:
-        goto L_0x031c;
-    L_0x0317:
+        if (r3 == 0) goto L_0x033d;
+    L_0x033c:
+        goto L_0x0342;
+    L_0x033d:
         r11 = r11 + 1;
         r3 = 0;
-        goto L_0x02e4;
-    L_0x031c:
+        goto L_0x030a;
+    L_0x0342:
         r3 = r0.hasUnfavedSelected;
-        if (r3 == 0) goto L_0x0324;
-    L_0x0320:
+        if (r3 == 0) goto L_0x034a;
+    L_0x0346:
         r3 = NUM; // 0x7var_ float:1.794534E38 double:1.052935689E-314;
-        goto L_0x0327;
-    L_0x0324:
+        goto L_0x034d;
+    L_0x034a:
         r3 = NUM; // 0x7var_ab float:1.7945444E38 double:1.052935714E-314;
-    L_0x0327:
+    L_0x034d:
         r8.setIcon(r3);
         r3 = r0.canEditMessagesCount;
-        if (r3 != r6) goto L_0x0332;
-    L_0x032e:
-        if (r1 != r6) goto L_0x0332;
-    L_0x0330:
+        if (r3 != r6) goto L_0x0358;
+    L_0x0354:
+        if (r1 != r6) goto L_0x0358;
+    L_0x0356:
         r3 = 0;
-        goto L_0x0334;
-    L_0x0332:
+        goto L_0x035a;
+    L_0x0358:
         r3 = 8;
-    L_0x0334:
+    L_0x035a:
         r4 = r0.replyButton;
-        if (r4 == 0) goto L_0x0463;
-    L_0x0338:
+        if (r4 == 0) goto L_0x0489;
+    L_0x035e:
         r4 = r0.currentEncryptedChat;
-        if (r4 == 0) goto L_0x0346;
-    L_0x033c:
+        if (r4 == 0) goto L_0x036c;
+    L_0x0362:
         r4 = r4.layer;
         r4 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r4);
         r11 = 46;
-        if (r4 < r11) goto L_0x037f;
-    L_0x0346:
+        if (r4 < r11) goto L_0x03a5;
+    L_0x036c:
         r4 = r0.isBroadcast;
-        if (r4 != 0) goto L_0x037f;
-    L_0x034a:
+        if (r4 != 0) goto L_0x03a5;
+    L_0x0370:
         r4 = r0.bottomOverlayChat;
-        if (r4 == 0) goto L_0x0354;
-    L_0x034e:
+        if (r4 == 0) goto L_0x037a;
+    L_0x0374:
         r4 = r4.getVisibility();
-        if (r4 == 0) goto L_0x037f;
-    L_0x0354:
+        if (r4 == 0) goto L_0x03a5;
+    L_0x037a:
         r4 = r0.currentChat;
-        if (r4 == 0) goto L_0x037d;
-    L_0x0358:
+        if (r4 == 0) goto L_0x03a3;
+    L_0x037e:
         r4 = org.telegram.messenger.ChatObject.isNotInChat(r4);
-        if (r4 != 0) goto L_0x037f;
-    L_0x035e:
+        if (r4 != 0) goto L_0x03a5;
+    L_0x0384:
         r4 = r0.currentChat;
         r4 = org.telegram.messenger.ChatObject.isChannel(r4);
-        if (r4 == 0) goto L_0x0374;
-    L_0x0366:
+        if (r4 == 0) goto L_0x039a;
+    L_0x038c:
         r4 = r0.currentChat;
         r4 = org.telegram.messenger.ChatObject.canPost(r4);
-        if (r4 != 0) goto L_0x0374;
-    L_0x036e:
+        if (r4 != 0) goto L_0x039a;
+    L_0x0394:
         r4 = r0.currentChat;
         r4 = r4.megagroup;
-        if (r4 == 0) goto L_0x037f;
-    L_0x0374:
+        if (r4 == 0) goto L_0x03a5;
+    L_0x039a:
         r4 = r0.currentChat;
         r4 = org.telegram.messenger.ChatObject.canSendMessages(r4);
-        if (r4 != 0) goto L_0x037d;
-    L_0x037c:
-        goto L_0x037f;
-    L_0x037d:
+        if (r4 != 0) goto L_0x03a3;
+    L_0x03a2:
+        goto L_0x03a5;
+    L_0x03a3:
         r4 = 1;
-        goto L_0x0380;
-    L_0x037f:
+        goto L_0x03a6;
+    L_0x03a5:
         r4 = 0;
-    L_0x0380:
-        if (r4 == 0) goto L_0x03e1;
-    L_0x0382:
-        if (r1 == 0) goto L_0x03e1;
-    L_0x0384:
+    L_0x03a6:
+        if (r4 == 0) goto L_0x0407;
+    L_0x03a8:
+        if (r1 == 0) goto L_0x0407;
+    L_0x03aa:
         r4 = r0.selectedMessagesIds;
         r4 = r4[r5];
         r4 = r4.size();
-        if (r4 == 0) goto L_0x0399;
-    L_0x038e:
+        if (r4 == 0) goto L_0x03bf;
+    L_0x03b4:
         r4 = r0.selectedMessagesIds;
         r4 = r4[r6];
         r4 = r4.size();
-        if (r4 == 0) goto L_0x0399;
-    L_0x0398:
-        goto L_0x03e1;
-    L_0x0399:
-        if (r1 != r6) goto L_0x039d;
-    L_0x039b:
+        if (r4 == 0) goto L_0x03bf;
+    L_0x03be:
+        goto L_0x0407;
+    L_0x03bf:
+        if (r1 != r6) goto L_0x03c3;
+    L_0x03c1:
         r4 = 0;
-        goto L_0x03e5;
-    L_0x039d:
+        goto L_0x040b;
+    L_0x03c3:
         r1 = 0;
         r4 = 0;
         r14 = 0;
-    L_0x03a1:
-        if (r1 >= r12) goto L_0x03e5;
-    L_0x03a3:
+    L_0x03c7:
+        if (r1 >= r12) goto L_0x040b;
+    L_0x03c9:
         r11 = r0.selectedMessagesIds;
         r11 = r11[r1];
         r11 = r11.size();
         r18 = r14;
         r14 = 0;
-    L_0x03ae:
-        if (r14 >= r11) goto L_0x03d5;
-    L_0x03b0:
+    L_0x03d4:
+        if (r14 >= r11) goto L_0x03fb;
+    L_0x03d6:
         r15 = r0.selectedMessagesIds;
         r15 = r15[r1];
         r15 = r15.valueAt(r14);
@@ -10312,51 +10490,51 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r20 = r15.getGroupId();
         r16 = 0;
         r15 = (r20 > r16 ? 1 : (r20 == r16 ? 0 : -1));
-        if (r15 == 0) goto L_0x03d2;
-    L_0x03c4:
+        if (r15 == 0) goto L_0x03f8;
+    L_0x03ea:
         r15 = (r18 > r16 ? 1 : (r18 == r16 ? 0 : -1));
-        if (r15 == 0) goto L_0x03cd;
-    L_0x03c8:
+        if (r15 == 0) goto L_0x03f3;
+    L_0x03ee:
         r15 = (r18 > r20 ? 1 : (r18 == r20 ? 0 : -1));
-        if (r15 == 0) goto L_0x03cd;
-    L_0x03cc:
-        goto L_0x03d2;
-    L_0x03cd:
+        if (r15 == 0) goto L_0x03f3;
+    L_0x03f2:
+        goto L_0x03f8;
+    L_0x03f3:
         r14 = r14 + 1;
         r18 = r20;
-        goto L_0x03ae;
-    L_0x03d2:
+        goto L_0x03d4;
+    L_0x03f8:
         r4 = 8;
-        goto L_0x03d7;
-    L_0x03d5:
+        goto L_0x03fd;
+    L_0x03fb:
         r16 = 0;
-    L_0x03d7:
+    L_0x03fd:
         r11 = 8;
-        if (r4 != r11) goto L_0x03dc;
-    L_0x03db:
-        goto L_0x03e5;
-    L_0x03dc:
+        if (r4 != r11) goto L_0x0402;
+    L_0x0401:
+        goto L_0x040b;
+    L_0x0402:
         r1 = r1 + 1;
         r14 = r18;
-        goto L_0x03a1;
-    L_0x03e1:
+        goto L_0x03c7;
+    L_0x0407:
         r11 = 8;
         r4 = 8;
-    L_0x03e5:
+    L_0x040b:
         r1 = r0.replyButton;
         r1 = r1.getVisibility();
-        if (r1 == r4) goto L_0x0463;
-    L_0x03ed:
+        if (r1 == r4) goto L_0x0489;
+    L_0x0413:
         r1 = r0.replyButtonAnimation;
-        if (r1 == 0) goto L_0x03f4;
-    L_0x03f1:
+        if (r1 == 0) goto L_0x041a;
+    L_0x0417:
         r1.cancel();
-    L_0x03f4:
+    L_0x041a:
         r1 = new android.animation.AnimatorSet;
         r1.<init>();
         r0.replyButtonAnimation = r1;
-        if (r4 != 0) goto L_0x0428;
-    L_0x03fd:
+        if (r4 != 0) goto L_0x044e;
+    L_0x0423:
         r1 = r0.replyButton;
         r1.setVisibility(r4);
         r1 = r0.replyButtonAnimation;
@@ -10375,8 +10553,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = android.animation.ObjectAnimator.ofFloat(r8, r14, r15);
         r11[r6] = r8;
         r1.playTogether(r11);
-        goto L_0x044d;
-    L_0x0428:
+        goto L_0x0473;
+    L_0x044e:
         r1 = r0.replyButtonAnimation;
         r8 = new android.animation.Animator[r12];
         r11 = r0.replyButton;
@@ -10393,33 +10571,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r11 = android.animation.ObjectAnimator.ofFloat(r11, r14, r15);
         r8[r6] = r11;
         r1.playTogether(r8);
-    L_0x044d:
+    L_0x0473:
         r1 = r0.replyButtonAnimation;
         r14 = 100;
         r1.setDuration(r14);
         r1 = r0.replyButtonAnimation;
-        r8 = new org.telegram.ui.ChatActivity$53;
+        r8 = new org.telegram.ui.ChatActivity$54;
         r8.<init>(r4);
         r1.addListener(r8);
         r1 = r0.replyButtonAnimation;
         r1.start();
-    L_0x0463:
-        if (r9 == 0) goto L_0x0504;
-    L_0x0465:
-        if (r2 != r7) goto L_0x04ef;
-    L_0x0467:
-        if (r10 == r13) goto L_0x046b;
-    L_0x0469:
-        goto L_0x04ef;
-    L_0x046b:
+    L_0x0489:
+        if (r9 == 0) goto L_0x052a;
+    L_0x048b:
+        if (r2 != r7) goto L_0x0515;
+    L_0x048d:
+        if (r10 == r13) goto L_0x0491;
+    L_0x048f:
+        goto L_0x0515;
+    L_0x0491:
         r1 = r9.getVisibility();
-        if (r1 == r3) goto L_0x0504;
-    L_0x0471:
+        if (r1 == r3) goto L_0x052a;
+    L_0x0497:
         r1 = r0.editButtonAnimation;
-        if (r1 == 0) goto L_0x0478;
-    L_0x0475:
+        if (r1 == 0) goto L_0x049e;
+    L_0x049b:
         r1.cancel();
-    L_0x0478:
+    L_0x049e:
         r1 = new android.animation.AnimatorSet;
         r1.<init>();
         r0.editButtonAnimation = r1;
@@ -10430,8 +10608,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = (float) r1;
         r9.setPivotX(r1);
-        if (r3 != 0) goto L_0x04b8;
-    L_0x0493:
+        if (r3 != 0) goto L_0x04de;
+    L_0x04b9:
         r9.setVisibility(r3);
         r1 = r0.editButtonAnimation;
         r2 = new android.animation.Animator[r12];
@@ -10447,8 +10625,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = android.animation.ObjectAnimator.ofFloat(r9, r4, r7);
         r2[r6] = r4;
         r1.playTogether(r2);
-        goto L_0x04d8;
-    L_0x04b8:
+        goto L_0x04fe;
+    L_0x04de:
         r1 = r0.editButtonAnimation;
         r2 = new android.animation.Animator[r12];
         r4 = android.view.View.ALPHA;
@@ -10463,31 +10641,31 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = android.animation.ObjectAnimator.ofFloat(r9, r4, r7);
         r2[r6] = r4;
         r1.playTogether(r2);
-    L_0x04d8:
+    L_0x04fe:
         r1 = r0.editButtonAnimation;
         r4 = 100;
         r1.setDuration(r4);
         r1 = r0.editButtonAnimation;
-        r2 = new org.telegram.ui.ChatActivity$54;
+        r2 = new org.telegram.ui.ChatActivity$55;
         r2.<init>(r3, r9);
         r1.addListener(r2);
         r1 = r0.editButtonAnimation;
         r1.start();
-        goto L_0x0504;
-    L_0x04ef:
-        if (r3 != 0) goto L_0x04fa;
-    L_0x04f1:
+        goto L_0x052a;
+    L_0x0515:
+        if (r3 != 0) goto L_0x0520;
+    L_0x0517:
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r9.setAlpha(r1);
         r9.setScaleX(r1);
-        goto L_0x0501;
-    L_0x04fa:
+        goto L_0x0527;
+    L_0x0520:
         r1 = 0;
         r9.setAlpha(r1);
         r9.setScaleX(r1);
-    L_0x0501:
+    L_0x0527:
         r9.setVisibility(r3);
-    L_0x0504:
+    L_0x052a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.addToSelectedMessages(org.telegram.messenger.MessageObject, boolean, boolean):void");
@@ -10807,136 +10985,131 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         return this.chatActivityEnterView.processSendingText(str);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x0686  */
-    /* JADX WARNING: Removed duplicated region for block: B:341:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:345:0x0695  */
-    /* JADX WARNING: Removed duplicated region for block: B:341:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x0686  */
-    /* JADX WARNING: Removed duplicated region for block: B:345:0x0695  */
-    /* JADX WARNING: Removed duplicated region for block: B:482:0x08bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:498:0x0922  */
-    /* JADX WARNING: Removed duplicated region for block: B:448:0x0820  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x07ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0826  */
-    /* JADX WARNING: Removed duplicated region for block: B:450:0x0824  */
-    /* JADX WARNING: Removed duplicated region for block: B:454:0x083d  */
-    /* JADX WARNING: Removed duplicated region for block: B:457:0x0856  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0984  */
-    /* JADX WARNING: Removed duplicated region for block: B:518:0x0990  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x0203  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x025c  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x0263  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x0273  */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x026f  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x0290  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x02cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:351:0x06bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0773  */
-    /* JADX WARNING: Removed duplicated region for block: B:361:0x06dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:525:0x09a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:570:0x0a4d  */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x0a90  */
-    /* JADX WARNING: Removed duplicated region for block: B:577:0x0a8b  */
-    /* JADX WARNING: Removed duplicated region for block: B:865:0x0edc  */
-    /* JADX WARNING: Removed duplicated region for block: B:966:0x109f  */
-    /* JADX WARNING: Removed duplicated region for block: B:965:0x109d  */
-    /* JADX WARNING: Removed duplicated region for block: B:959:0x1083  */
-    /* JADX WARNING: Removed duplicated region for block: B:965:0x109d  */
-    /* JADX WARNING: Removed duplicated region for block: B:966:0x109f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1049:0x1262  */
-    /* JADX WARNING: Removed duplicated region for block: B:940:0x1036  */
-    /* JADX WARNING: Removed duplicated region for block: B:977:0x10d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:996:0x1129  */
-    /* JADX WARNING: Removed duplicated region for block: B:2404:0x1110 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:1180:0x1487  */
-    /* JADX WARNING: Removed duplicated region for block: B:1197:0x14cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:1215:0x1519  */
-    /* JADX WARNING: Removed duplicated region for block: B:1345:0x17bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:1322:0x173a  */
-    /* JADX WARNING: Removed duplicated region for block: B:1302:0x16e8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1356:0x17ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:1360:0x17fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:1374:0x184d  */
-    /* JADX WARNING: Removed duplicated region for block: B:1407:0x1910  */
-    /* JADX WARNING: Removed duplicated region for block: B:1491:0x1ab0  */
-    /* JADX WARNING: Removed duplicated region for block: B:1495:0x1acb  */
-    /* JADX WARNING: Removed duplicated region for block: B:1502:0x1ae8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1603:0x1cf5  */
-    /* JADX WARNING: Removed duplicated region for block: B:1615:0x1d28  */
-    /* JADX WARNING: Removed duplicated region for block: B:1618:0x1d2f  */
-    /* JADX WARNING: Removed duplicated region for block: B:2039:0x252b  */
-    /* JADX WARNING: Removed duplicated region for block: B:2034:0x2514  */
-    /* JADX WARNING: Removed duplicated region for block: B:1491:0x1ab0  */
-    /* JADX WARNING: Removed duplicated region for block: B:1495:0x1acb  */
-    /* JADX WARNING: Removed duplicated region for block: B:1502:0x1ae8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1505:0x1af0  */
-    /* JADX WARNING: Removed duplicated region for block: B:1508:0x1b1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1511:0x1b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:1514:0x1b45  */
-    /* JADX WARNING: Removed duplicated region for block: B:1491:0x1ab0  */
-    /* JADX WARNING: Removed duplicated region for block: B:1495:0x1acb  */
-    /* JADX WARNING: Removed duplicated region for block: B:1502:0x1ae8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1505:0x1af0  */
-    /* JADX WARNING: Removed duplicated region for block: B:1508:0x1b1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1511:0x1b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:1514:0x1b45  */
-    /* JADX WARNING: Missing block: B:116:0x0270, code skipped:
-            if (r2 == true) goto L_0x0274;
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x0696  */
+    /* JADX WARNING: Removed duplicated region for block: B:344:0x0690  */
+    /* JADX WARNING: Removed duplicated region for block: B:348:0x06a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:344:0x0690  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x0696  */
+    /* JADX WARNING: Removed duplicated region for block: B:348:0x06a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:419:0x07b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x08d9  */
+    /* JADX WARNING: Removed duplicated region for block: B:506:0x093f  */
+    /* JADX WARNING: Removed duplicated region for block: B:456:0x083d  */
+    /* JADX WARNING: Removed duplicated region for block: B:448:0x081c  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0843  */
+    /* JADX WARNING: Removed duplicated region for block: B:458:0x0841  */
+    /* JADX WARNING: Removed duplicated region for block: B:462:0x085a  */
+    /* JADX WARNING: Removed duplicated region for block: B:465:0x0873  */
+    /* JADX WARNING: Removed duplicated region for block: B:521:0x09a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:526:0x09ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x020d  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0266  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x026d  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x027d  */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x0279  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x029a  */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x02d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:354:0x06cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:399:0x0783  */
+    /* JADX WARNING: Removed duplicated region for block: B:364:0x06ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x09c2  */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x0a6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:586:0x0aad  */
+    /* JADX WARNING: Removed duplicated region for block: B:585:0x0aa8  */
+    /* JADX WARNING: Removed duplicated region for block: B:886:0x0f4d  */
+    /* JADX WARNING: Removed duplicated region for block: B:987:0x1110  */
+    /* JADX WARNING: Removed duplicated region for block: B:986:0x110e  */
+    /* JADX WARNING: Removed duplicated region for block: B:980:0x10f4  */
+    /* JADX WARNING: Removed duplicated region for block: B:986:0x110e  */
+    /* JADX WARNING: Removed duplicated region for block: B:987:0x1110  */
+    /* JADX WARNING: Removed duplicated region for block: B:1070:0x12d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:961:0x10a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:998:0x1142  */
+    /* JADX WARNING: Removed duplicated region for block: B:1017:0x119a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2426:0x1181 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:1201:0x14f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:1218:0x153d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1236:0x158a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1366:0x182d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1343:0x17ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:1323:0x1759  */
+    /* JADX WARNING: Removed duplicated region for block: B:1377:0x185e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1381:0x186b  */
+    /* JADX WARNING: Removed duplicated region for block: B:1395:0x18be  */
+    /* JADX WARNING: Removed duplicated region for block: B:1428:0x1981  */
+    /* JADX WARNING: Removed duplicated region for block: B:1513:0x1b29  */
+    /* JADX WARNING: Removed duplicated region for block: B:1517:0x1b44  */
+    /* JADX WARNING: Removed duplicated region for block: B:1524:0x1b61  */
+    /* JADX WARNING: Removed duplicated region for block: B:1625:0x1d6e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1637:0x1da1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1640:0x1da8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2061:0x25a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2056:0x258d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1513:0x1b29  */
+    /* JADX WARNING: Removed duplicated region for block: B:1517:0x1b44  */
+    /* JADX WARNING: Removed duplicated region for block: B:1524:0x1b61  */
+    /* JADX WARNING: Removed duplicated region for block: B:1527:0x1b69  */
+    /* JADX WARNING: Removed duplicated region for block: B:1530:0x1b95  */
+    /* JADX WARNING: Removed duplicated region for block: B:1533:0x1bb1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1536:0x1bbe  */
+    /* JADX WARNING: Removed duplicated region for block: B:1513:0x1b29  */
+    /* JADX WARNING: Removed duplicated region for block: B:1517:0x1b44  */
+    /* JADX WARNING: Removed duplicated region for block: B:1524:0x1b61  */
+    /* JADX WARNING: Removed duplicated region for block: B:1527:0x1b69  */
+    /* JADX WARNING: Removed duplicated region for block: B:1530:0x1b95  */
+    /* JADX WARNING: Removed duplicated region for block: B:1533:0x1bb1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1536:0x1bbe  */
+    /* JADX WARNING: Missing block: B:116:0x027a, code skipped:
+            if (r2 == true) goto L_0x027e;
      */
-    /* JADX WARNING: Missing block: B:199:0x03d9, code skipped:
-            if (r1 == r9) goto L_0x03e6;
+    /* JADX WARNING: Missing block: B:199:0x03e3, code skipped:
+            if (r1 == r9) goto L_0x03f0;
      */
-    /* JADX WARNING: Missing block: B:269:0x057a, code skipped:
-            if (r1.getId() < r7.createUnreadMessageAfterId) goto L_0x059d;
+    /* JADX WARNING: Missing block: B:269:0x0584, code skipped:
+            if (r1.getId() < r7.createUnreadMessageAfterId) goto L_0x05a7;
      */
-    /* JADX WARNING: Missing block: B:279:0x059a, code skipped:
-            if (r1.getId() < r7.createUnreadMessageAfterId) goto L_0x059d;
+    /* JADX WARNING: Missing block: B:279:0x05a4, code skipped:
+            if (r1.getId() < r7.createUnreadMessageAfterId) goto L_0x05a7;
      */
-    /* JADX WARNING: Missing block: B:302:0x05fe, code skipped:
-            if (r11 <= r9) goto L_0x0600;
+    /* JADX WARNING: Missing block: B:303:0x060a, code skipped:
+            if (r11 <= r9) goto L_0x060c;
      */
-    /* JADX WARNING: Missing block: B:435:0x07dc, code skipped:
-            if (r6 == true) goto L_0x07de;
+    /* JADX WARNING: Missing block: B:443:0x07f9, code skipped:
+            if (r6 == true) goto L_0x07fb;
      */
-    /* JADX WARNING: Missing block: B:464:0x086e, code skipped:
-            if (r6 == true) goto L_0x0870;
+    /* JADX WARNING: Missing block: B:472:0x088b, code skipped:
+            if (r6 == true) goto L_0x088d;
      */
-    /* JADX WARNING: Missing block: B:489:0x08eb, code skipped:
-            if (r4.get(r4.size() - 2) == r7.scrollToMessage) goto L_0x08ed;
+    /* JADX WARNING: Missing block: B:497:0x0908, code skipped:
+            if (r4.get(r4.size() - 2) == r7.scrollToMessage) goto L_0x090a;
      */
-    /* JADX WARNING: Missing block: B:727:0x0cdc, code skipped:
-            if (r6.users.contains(java.lang.Integer.valueOf(r0)) != false) goto L_0x0cde;
+    /* JADX WARNING: Missing block: B:748:0x0d4d, code skipped:
+            if (r6.users.contains(java.lang.Integer.valueOf(r0)) != false) goto L_0x0d4f;
      */
-    /* JADX WARNING: Missing block: B:962:0x1098, code skipped:
-            if (r13.messages.size() == 0) goto L_0x109a;
+    /* JADX WARNING: Missing block: B:983:0x1109, code skipped:
+            if (r13.messages.size() == 0) goto L_0x110b;
      */
-    /* JADX WARNING: Missing block: B:1312:0x1717, code skipped:
-            if (r12.pinned_msg_id == r10.intValue()) goto L_0x170b;
+    /* JADX WARNING: Missing block: B:1333:0x1788, code skipped:
+            if (r12.pinned_msg_id == r10.intValue()) goto L_0x177c;
      */
-    /* JADX WARNING: Missing block: B:1472:0x1a67, code skipped:
-            if (r2.messageOwner.params.containsKey("query_id") != false) goto L_0x1a8a;
+    /* JADX WARNING: Missing block: B:1645:0x1db6, code skipped:
+            if (r0.megagroup != false) goto L_0x1db8;
      */
-    /* JADX WARNING: Missing block: B:1478:0x1a85, code skipped:
-            if (r3.media.getClass().equals(r2.messageOwner.media.getClass()) == false) goto L_0x1a8a;
+    /* JADX WARNING: Missing block: B:2104:0x2686, code skipped:
+            if (r1.pinned_msg_id == r0.getId()) goto L_0x2688;
      */
-    /* JADX WARNING: Missing block: B:1623:0x1d3d, code skipped:
-            if (r0.megagroup != false) goto L_0x1d3f;
+    /* JADX WARNING: Missing block: B:2188:0x27f7, code skipped:
+            if (r0.megagroup != false) goto L_0x27f9;
      */
-    /* JADX WARNING: Missing block: B:2082:0x260d, code skipped:
-            if (r1.pinned_msg_id == r0.getId()) goto L_0x260f;
+    /* JADX WARNING: Missing block: B:2255:0x2940, code skipped:
+            if (((long) r2.id) == r0) goto L_0x2942;
      */
-    /* JADX WARNING: Missing block: B:2166:0x277e, code skipped:
-            if (r0.megagroup != false) goto L_0x2780;
-     */
-    /* JADX WARNING: Missing block: B:2233:0x28c7, code skipped:
-            if (((long) r2.id) == r0) goto L_0x28c9;
-     */
-    public void didReceivedNotification(int r40, int r41, java.lang.Object... r42) {
+    public void didReceivedNotification(int r41, int r42, java.lang.Object... r43) {
         /*
-        r39 = this;
-        r7 = r39;
-        r0 = r40;
-        r8 = r42;
+        r40 = this;
+        r7 = r40;
+        r0 = r41;
+        r8 = r43;
         r1 = org.telegram.messenger.NotificationCenter.messagesDidLoad;
         r3 = "";
         r4 = 6;
@@ -10948,20 +11121,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = 2;
         r14 = 1;
         r13 = 0;
-        if (r0 != r1) goto L_0x0a9a;
+        if (r0 != r1) goto L_0x0ab7;
     L_0x0016:
         r0 = 10;
         r0 = r8[r0];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
         r1 = r7.classGuid;
-        if (r0 != r1) goto L_0x2ad5;
+        if (r0 != r1) goto L_0x2b4e;
     L_0x0024:
         r7.setItemAnimationsEnabled(r13);
         r0 = r7.openAnimationEnded;
         if (r0 != 0) goto L_0x004c;
     L_0x002b:
-        r0 = r39.getNotificationCenter();
+        r0 = r40.getNotificationCenter();
         r1 = new int[r4];
         r19 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad;
         r1[r13] = r19;
@@ -10984,7 +11157,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r7.waitingForLoad;
         r0 = java.lang.Integer.valueOf(r0);
         r0 = r1.indexOf(r0);
-        r1 = r39.getUserConfig();
+        r1 = r40.getUserConfig();
         r1 = r1.getClientUserId();
         if (r0 != r12) goto L_0x006b;
     L_0x006a:
@@ -11048,7 +11221,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = r7.needSelectFromMessageId;
         r6 = r7.createUnreadMessageAfterId;
         r9 = r7.createUnreadMessageAfterIdLoading;
-        r39.clearChatData();
+        r40.clearChatData();
         r7.createUnreadMessageAfterId = r6;
         r7.startLoadFromMessageId = r2;
         r7.needSelectFromMessageId = r4;
@@ -11090,147 +11263,151 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r23 = r8[r23];
         r23 = (java.lang.Integer) r23;
         r2 = r23.intValue();
-        r23 = 12;
+        r23 = 9;
         r23 = r8[r23];
-        r23 = (java.lang.Integer) r23;
-        r15 = r23.intValue();
-        r23 = 13;
-        r23 = r8[r23];
-        r23 = (java.lang.Integer) r23;
-        r23 = r23.intValue();
-        if (r23 >= 0) goto L_0x0133;
-    L_0x012e:
-        r23 = r23 * -1;
+        r23 = (java.lang.Boolean) r23;
+        r23 = r23.booleanValue();
+        r24 = 12;
+        r24 = r8[r24];
+        r24 = (java.lang.Integer) r24;
+        r15 = r24.intValue();
+        r24 = 13;
+        r24 = r8[r24];
+        r24 = (java.lang.Integer) r24;
+        r24 = r24.intValue();
+        if (r24 >= 0) goto L_0x013d;
+    L_0x0138:
+        r24 = r24 * -1;
         r7.hasAllMentionsLocal = r13;
-        goto L_0x0139;
-    L_0x0133:
+        goto L_0x0143;
+    L_0x013d:
         r13 = r7.first;
-        if (r13 == 0) goto L_0x0139;
-    L_0x0137:
+        if (r13 == 0) goto L_0x0143;
+    L_0x0141:
         r7.hasAllMentionsLocal = r14;
-    L_0x0139:
-        r13 = r23;
+    L_0x0143:
+        r13 = r24;
         r14 = 4;
-        if (r2 != r14) goto L_0x0173;
-    L_0x013e:
+        if (r2 != r14) goto L_0x017d;
+    L_0x0148:
         r7.startLoadFromMessageId = r15;
         r14 = r0.size();
         r15 = 1;
         r14 = r14 - r15;
-    L_0x0146:
-        if (r14 <= 0) goto L_0x0173;
-    L_0x0148:
-        r23 = r0.get(r14);
-        r15 = r23;
+    L_0x0150:
+        if (r14 <= 0) goto L_0x017d;
+    L_0x0152:
+        r24 = r0.get(r14);
+        r15 = r24;
         r15 = (org.telegram.messenger.MessageObject) r15;
         r26 = r4;
         r4 = r15.type;
-        if (r4 >= 0) goto L_0x016d;
-    L_0x0156:
+        if (r4 >= 0) goto L_0x0177;
+    L_0x0160:
         r4 = r15.getId();
         r15 = r7.startLoadFromMessageId;
-        if (r4 != r15) goto L_0x016d;
-    L_0x015e:
+        if (r4 != r15) goto L_0x0177;
+    L_0x0168:
         r4 = 1;
         r14 = r14 - r4;
         r4 = r0.get(r14);
         r4 = (org.telegram.messenger.MessageObject) r4;
         r4 = r4.getId();
         r7.startLoadFromMessageId = r4;
-        goto L_0x0175;
-    L_0x016d:
+        goto L_0x017f;
+    L_0x0177:
         r14 = r14 + -1;
         r4 = r26;
         r15 = 1;
-        goto L_0x0146;
-    L_0x0173:
+        goto L_0x0150;
+    L_0x017d:
         r26 = r4;
-    L_0x0175:
-        if (r12 == 0) goto L_0x01ab;
-    L_0x0177:
+    L_0x017f:
+        if (r12 == 0) goto L_0x01b5;
+    L_0x0181:
         r4 = 5;
         r14 = r8[r4];
         r14 = (java.lang.Integer) r14;
         r4 = r14.intValue();
         r7.last_message_id = r4;
         r4 = 3;
-        if (r2 != r4) goto L_0x019f;
-    L_0x0185:
+        if (r2 != r4) goto L_0x01a9;
+    L_0x018f:
         r14 = r7.loadingFromOldPosition;
-        if (r14 == 0) goto L_0x019a;
-    L_0x0189:
+        if (r14 == 0) goto L_0x01a4;
+    L_0x0193:
         r14 = 6;
         r8 = r8[r14];
         r8 = (java.lang.Integer) r8;
         r8 = r8.intValue();
-        if (r8 == 0) goto L_0x0196;
-    L_0x0194:
+        if (r8 == 0) goto L_0x01a0;
+    L_0x019e:
         r7.createUnreadMessageAfterId = r12;
-    L_0x0196:
+    L_0x01a0:
         r12 = 0;
         r7.loadingFromOldPosition = r12;
-        goto L_0x019c;
-    L_0x019a:
+        goto L_0x01a6;
+    L_0x01a4:
         r12 = 0;
         r8 = 0;
-    L_0x019c:
+    L_0x01a6:
         r7.first_unread_id = r12;
-        goto L_0x01c1;
-    L_0x019f:
+        goto L_0x01cb;
+    L_0x01a9:
         r7.first_unread_id = r12;
         r12 = 6;
         r8 = r8[r12];
         r8 = (java.lang.Integer) r8;
         r8 = r8.intValue();
-        goto L_0x01c1;
-    L_0x01ab:
-        r12 = r7.startLoadFromMessageId;
-        if (r12 == 0) goto L_0x01c0;
-    L_0x01af:
-        r4 = 3;
-        if (r2 == r4) goto L_0x01b5;
-    L_0x01b2:
-        r12 = 4;
-        if (r2 != r12) goto L_0x01c0;
+        goto L_0x01cb;
     L_0x01b5:
+        r12 = r7.startLoadFromMessageId;
+        if (r12 == 0) goto L_0x01ca;
+    L_0x01b9:
+        r4 = 3;
+        if (r2 == r4) goto L_0x01bf;
+    L_0x01bc:
+        r12 = 4;
+        if (r2 != r12) goto L_0x01ca;
+    L_0x01bf:
         r12 = 5;
         r8 = r8[r12];
         r8 = (java.lang.Integer) r8;
         r8 = r8.intValue();
         r7.last_message_id = r8;
-    L_0x01c0:
+    L_0x01ca:
         r8 = 0;
-    L_0x01c1:
-        if (r2 == 0) goto L_0x01d5;
-    L_0x01c3:
-        r12 = r7.startLoadFromMessageId;
-        if (r12 != 0) goto L_0x01cf;
-    L_0x01c7:
-        r12 = r7.last_message_id;
-        if (r12 == 0) goto L_0x01cc;
     L_0x01cb:
-        goto L_0x01cf;
-    L_0x01cc:
+        if (r2 == 0) goto L_0x01df;
+    L_0x01cd:
+        r12 = r7.startLoadFromMessageId;
+        if (r12 != 0) goto L_0x01d9;
+    L_0x01d1:
+        r12 = r7.last_message_id;
+        if (r12 == 0) goto L_0x01d6;
+    L_0x01d5:
+        goto L_0x01d9;
+    L_0x01d6:
         r12 = 1;
         r14 = 0;
-        goto L_0x01d7;
-    L_0x01cf:
+        goto L_0x01e1;
+    L_0x01d9:
         r12 = r7.forwardEndReached;
         r14 = 0;
         r12[r6] = r14;
-        goto L_0x01d6;
-    L_0x01d5:
+        goto L_0x01e0;
+    L_0x01df:
         r14 = 0;
-    L_0x01d6:
+    L_0x01e0:
         r12 = 1;
-    L_0x01d7:
-        if (r2 == r12) goto L_0x01dc;
-    L_0x01d9:
+    L_0x01e1:
+        if (r2 == r12) goto L_0x01e6;
+    L_0x01e3:
         r4 = 3;
-        if (r2 != r4) goto L_0x01ee;
-    L_0x01dc:
-        if (r6 != r12) goto L_0x01ee;
-    L_0x01de:
+        if (r2 != r4) goto L_0x01f8;
+    L_0x01e6:
+        if (r6 != r12) goto L_0x01f8;
+    L_0x01e8:
         r15 = r7.endReached;
         r4 = r7.cacheEndReached;
         r4[r14] = r12;
@@ -11239,25 +11416,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4[r14] = r14;
         r4 = r7.minMessageId;
         r4[r14] = r14;
-    L_0x01ee:
+    L_0x01f8:
         r4 = r7.loadsCount;
-        if (r4 != r12) goto L_0x01ff;
-    L_0x01f2:
+        if (r4 != r12) goto L_0x0209;
+    L_0x01fc:
         r4 = r0.size();
         r14 = 20;
-        if (r4 <= r14) goto L_0x01ff;
-    L_0x01fa:
+        if (r4 <= r14) goto L_0x0209;
+    L_0x0204:
         r4 = r7.loadsCount;
         r4 = r4 + r12;
         r7.loadsCount = r4;
-    L_0x01ff:
+    L_0x0209:
         r4 = r7.firstLoading;
-        if (r4 == 0) goto L_0x0259;
-    L_0x0203:
+        if (r4 == 0) goto L_0x0263;
+    L_0x020d:
         r4 = r7.forwardEndReached;
         r4 = r4[r6];
-        if (r4 != 0) goto L_0x024e;
-    L_0x0209:
+        if (r4 != 0) goto L_0x0258;
+    L_0x0213:
         r4 = r7.messages;
         r4.clear();
         r4 = r7.messagesByDays;
@@ -11265,128 +11442,128 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = r7.groupedMessagesMap;
         r4.clear();
         r4 = 0;
-    L_0x0219:
+    L_0x0223:
         r12 = 2;
-        if (r4 >= r12) goto L_0x024e;
-    L_0x021c:
+        if (r4 >= r12) goto L_0x0258;
+    L_0x0226:
         r12 = r7.messagesDict;
         r12 = r12[r4];
         r12.clear();
         r12 = r7.currentEncryptedChat;
-        if (r12 != 0) goto L_0x0235;
-    L_0x0227:
+        if (r12 != 0) goto L_0x023f;
+    L_0x0231:
         r12 = r7.maxMessageId;
         r14 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
         r12[r4] = r14;
         r12 = r7.minMessageId;
         r15 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r12[r4] = r15;
-        goto L_0x0242;
-    L_0x0235:
+        goto L_0x024c;
+    L_0x023f:
         r14 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
         r15 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r12 = r7.maxMessageId;
         r12[r4] = r15;
         r12 = r7.minMessageId;
         r12[r4] = r14;
-    L_0x0242:
+    L_0x024c:
         r12 = r7.maxDate;
         r12[r4] = r15;
         r12 = r7.minDate;
         r14 = 0;
         r12[r4] = r14;
         r4 = r4 + 1;
-        goto L_0x0219;
-    L_0x024e:
+        goto L_0x0223;
+    L_0x0258:
         r14 = 0;
         r7.firstLoading = r14;
         r4 = new org.telegram.ui.-$$Lambda$ChatActivity$2d1ii8B76N0Qvbg73XgLRZ3MPbw;
         r4.<init>(r7);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-    L_0x0259:
-        r4 = 1;
-        if (r2 != r4) goto L_0x025f;
-    L_0x025c:
-        java.util.Collections.reverse(r0);
-    L_0x025f:
-        r4 = r7.currentEncryptedChat;
-        if (r4 != 0) goto L_0x026c;
     L_0x0263:
-        r4 = r39.getMediaDataController();
+        r4 = 1;
+        if (r2 != r4) goto L_0x0269;
+    L_0x0266:
+        java.util.Collections.reverse(r0);
+    L_0x0269:
+        r4 = r7.currentEncryptedChat;
+        if (r4 != 0) goto L_0x0276;
+    L_0x026d:
+        r4 = r40.getMediaDataController();
         r14 = r7.dialog_id;
         r4.loadReplyMessagesForMessages(r0, r14);
-    L_0x026c:
+    L_0x0276:
         r4 = 2;
-        if (r2 == r4) goto L_0x0273;
-    L_0x026f:
+        if (r2 == r4) goto L_0x027d;
+    L_0x0279:
         r4 = 1;
-        if (r2 != r4) goto L_0x0281;
-    L_0x0272:
-        goto L_0x0274;
-    L_0x0273:
-        r4 = 1;
-    L_0x0274:
-        r12 = r0.isEmpty();
-        if (r12 == 0) goto L_0x0281;
-    L_0x027a:
-        if (r11 != 0) goto L_0x0281;
+        if (r2 != r4) goto L_0x028b;
     L_0x027c:
+        goto L_0x027e;
+    L_0x027d:
+        r4 = 1;
+    L_0x027e:
+        r12 = r0.isEmpty();
+        if (r12 == 0) goto L_0x028b;
+    L_0x0284:
+        if (r11 != 0) goto L_0x028b;
+    L_0x0286:
         r12 = r7.forwardEndReached;
         r14 = 0;
         r12[r14] = r4;
-    L_0x0281:
+    L_0x028b:
         r12 = org.telegram.messenger.MediaController.getInstance();
         r14 = r0.size();
         r15 = 0;
         r20 = 0;
         r27 = 0;
-    L_0x028e:
-        if (r15 >= r14) goto L_0x02bb;
-    L_0x0290:
-        r23 = r14 - r15;
-        r41 = r14;
-        r14 = r23 + -1;
+    L_0x0298:
+        if (r15 >= r14) goto L_0x02c5;
+    L_0x029a:
+        r24 = r14 - r15;
+        r42 = r14;
+        r14 = r24 + -1;
         r4 = r0.get(r14);
         r4 = (org.telegram.messenger.MessageObject) r4;
         r4 = r4.messageOwner;
         r4 = r4.action;
-        if (r15 != 0) goto L_0x02a9;
-    L_0x02a2:
-        r14 = r4 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatCreate;
-        if (r14 == 0) goto L_0x02a9;
-    L_0x02a6:
-        r20 = 1;
-        goto L_0x02b5;
-    L_0x02a9:
-        if (r20 != 0) goto L_0x02ac;
-    L_0x02ab:
-        goto L_0x02bb;
+        if (r15 != 0) goto L_0x02b3;
     L_0x02ac:
-        r14 = 2;
-        if (r15 >= r14) goto L_0x02b5;
-    L_0x02af:
-        r14 = r4 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatEditPhoto;
-        if (r14 == 0) goto L_0x02b5;
+        r14 = r4 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatCreate;
+        if (r14 == 0) goto L_0x02b3;
+    L_0x02b0:
+        r20 = 1;
+        goto L_0x02bf;
     L_0x02b3:
-        r27 = r4;
+        if (r20 != 0) goto L_0x02b6;
     L_0x02b5:
+        goto L_0x02c5;
+    L_0x02b6:
+        r14 = 2;
+        if (r15 >= r14) goto L_0x02bf;
+    L_0x02b9:
+        r14 = r4 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatEditPhoto;
+        if (r14 == 0) goto L_0x02bf;
+    L_0x02bd:
+        r27 = r4;
+    L_0x02bf:
         r15 = r15 + 1;
-        r14 = r41;
+        r14 = r42;
         r4 = 1;
-        goto L_0x028e;
-    L_0x02bb:
+        goto L_0x0298;
+    L_0x02c5:
         r28 = r5;
-        r42 = r8;
-        r41 = r13;
+        r43 = r8;
+        r42 = r13;
         r4 = 0;
         r5 = 0;
         r13 = 0;
         r14 = 0;
         r15 = 0;
-    L_0x02c6:
+    L_0x02d0:
         r8 = r0.size();
-        if (r4 >= r8) goto L_0x06b4;
-    L_0x02cc:
+        if (r4 >= r8) goto L_0x06c4;
+    L_0x02d6:
         r8 = r0.get(r4);
         r8 = (org.telegram.messenger.MessageObject) r8;
         r29 = r11;
@@ -11395,56 +11572,56 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r14 = r14 + r20;
         r30 = r10;
         r10 = r7.currentUser;
-        if (r10 == 0) goto L_0x0308;
-    L_0x02e4:
+        if (r10 == 0) goto L_0x0312;
+    L_0x02ee:
         r10 = r10.self;
-        if (r10 == 0) goto L_0x02f0;
-    L_0x02e8:
+        if (r10 == 0) goto L_0x02fa;
+    L_0x02f2:
         r10 = r8.messageOwner;
         r31 = r9;
         r9 = 1;
         r10.out = r9;
-        goto L_0x02f2;
-    L_0x02f0:
+        goto L_0x02fc;
+    L_0x02fa:
         r31 = r9;
-    L_0x02f2:
+    L_0x02fc:
         r9 = r7.currentUser;
         r9 = r9.bot;
-        if (r9 == 0) goto L_0x02fe;
-    L_0x02f8:
+        if (r9 == 0) goto L_0x0308;
+    L_0x0302:
         r9 = r8.isOut();
-        if (r9 != 0) goto L_0x0304;
-    L_0x02fe:
+        if (r9 != 0) goto L_0x030e;
+    L_0x0308:
         r9 = r7.currentUser;
         r9 = r9.id;
-        if (r9 != r1) goto L_0x030a;
-    L_0x0304:
+        if (r9 != r1) goto L_0x0314;
+    L_0x030e:
         r8.setIsRead();
-        goto L_0x030a;
-    L_0x0308:
+        goto L_0x0314;
+    L_0x0312:
         r31 = r9;
-    L_0x030a:
+    L_0x0314:
         r9 = r7.messagesDict;
         r9 = r9[r6];
         r9 = r9.indexOfKey(r11);
-        if (r9 < 0) goto L_0x031c;
-    L_0x0314:
+        if (r9 < 0) goto L_0x0326;
+    L_0x031e:
         r32 = r1;
-    L_0x0316:
+    L_0x0320:
         r33 = r12;
         r20 = r27;
-        goto L_0x06a4;
-    L_0x031c:
+        goto L_0x06b4;
+    L_0x0326:
         r9 = 0;
         r7.addToPolls(r8, r9);
-        r9 = r39.isSecretChat();
-        if (r9 == 0) goto L_0x0329;
-    L_0x0326:
+        r9 = r40.isSecretChat();
+        if (r9 == 0) goto L_0x0333;
+    L_0x0330:
         r7.checkSecretMessageForLocation(r8);
-    L_0x0329:
+    L_0x0333:
         r9 = r12.isPlayingMessage(r8);
-        if (r9 == 0) goto L_0x033f;
-    L_0x032f:
+        if (r9 == 0) goto L_0x0349;
+    L_0x0339:
         r9 = r12.getPlayingMessageObject();
         r10 = r9.audioProgress;
         r8.audioProgress = r10;
@@ -11452,23 +11629,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8.audioProgressSec = r10;
         r9 = r9.audioPlayerDuration;
         r8.audioPlayerDuration = r9;
-    L_0x033f:
-        if (r6 != 0) goto L_0x0354;
-    L_0x0341:
+    L_0x0349:
+        if (r6 != 0) goto L_0x035e;
+    L_0x034b:
         r9 = r7.currentChat;
         r9 = org.telegram.messenger.ChatObject.isChannel(r9);
-        if (r9 == 0) goto L_0x0354;
-    L_0x0349:
+        if (r9 == 0) goto L_0x035e;
+    L_0x0353:
         r9 = 1;
-        if (r11 != r9) goto L_0x0354;
-    L_0x034c:
+        if (r11 != r9) goto L_0x035e;
+    L_0x0356:
         r10 = r7.endReached;
         r10[r6] = r9;
         r10 = r7.cacheEndReached;
         r10[r6] = r9;
-    L_0x0354:
-        if (r11 <= 0) goto L_0x036b;
-    L_0x0356:
+    L_0x035e:
+        if (r11 <= 0) goto L_0x0375;
+    L_0x0360:
         r9 = r7.maxMessageId;
         r10 = r9[r6];
         r10 = java.lang.Math.min(r11, r10);
@@ -11477,11 +11654,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r10 = r9[r6];
         r10 = java.lang.Math.max(r11, r10);
         r9[r6] = r10;
-        goto L_0x0383;
-    L_0x036b:
+        goto L_0x038d;
+    L_0x0375:
         r9 = r7.currentEncryptedChat;
-        if (r9 == 0) goto L_0x0383;
-    L_0x036f:
+        if (r9 == 0) goto L_0x038d;
+    L_0x0379:
         r9 = r7.maxMessageId;
         r10 = r9[r6];
         r10 = java.lang.Math.max(r11, r10);
@@ -11490,11 +11667,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r10 = r9[r6];
         r10 = java.lang.Math.min(r11, r10);
         r9[r6] = r10;
-    L_0x0383:
+    L_0x038d:
         r9 = r8.messageOwner;
         r9 = r9.date;
-        if (r9 == 0) goto L_0x03ac;
-    L_0x0389:
+        if (r9 == 0) goto L_0x03b6;
+    L_0x0393:
         r10 = r7.maxDate;
         r32 = r1;
         r1 = r10[r6];
@@ -11502,88 +11679,88 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r10[r6] = r1;
         r1 = r7.minDate;
         r9 = r1[r6];
-        if (r9 == 0) goto L_0x03a3;
-    L_0x039b:
+        if (r9 == 0) goto L_0x03ad;
+    L_0x03a5:
         r9 = r8.messageOwner;
         r9 = r9.date;
         r1 = r1[r6];
-        if (r9 >= r1) goto L_0x03ae;
-    L_0x03a3:
+        if (r9 >= r1) goto L_0x03b8;
+    L_0x03ad:
         r1 = r7.minDate;
         r9 = r8.messageOwner;
         r9 = r9.date;
         r1[r6] = r9;
-        goto L_0x03ae;
-    L_0x03ac:
+        goto L_0x03b8;
+    L_0x03b6:
         r32 = r1;
-    L_0x03ae:
+    L_0x03b8:
         r1 = r7.last_message_id;
-        if (r11 != r1) goto L_0x03b8;
-    L_0x03b2:
+        if (r11 != r1) goto L_0x03c2;
+    L_0x03bc:
         r1 = r7.forwardEndReached;
         r9 = 1;
         r1[r6] = r9;
-        goto L_0x03b9;
-    L_0x03b8:
+        goto L_0x03c3;
+    L_0x03c2:
         r9 = 1;
-    L_0x03b9:
+    L_0x03c3:
         r1 = r8.messageOwner;
         r1 = r1.action;
         r10 = r8.type;
-        if (r10 < 0) goto L_0x0316;
-    L_0x03c1:
-        if (r6 != r9) goto L_0x03c9;
-    L_0x03c3:
-        r9 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
-        if (r9 == 0) goto L_0x03c9;
-    L_0x03c7:
-        goto L_0x0316;
-    L_0x03c9:
-        r9 = r7.currentChat;
-        if (r9 == 0) goto L_0x03dc;
+        if (r10 < 0) goto L_0x0320;
+    L_0x03cb:
+        if (r6 != r9) goto L_0x03d3;
     L_0x03cd:
-        r9 = r9.creator;
-        if (r9 == 0) goto L_0x03dc;
+        r9 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
+        if (r9 == 0) goto L_0x03d3;
     L_0x03d1:
-        r9 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatCreate;
-        if (r9 != 0) goto L_0x0316;
-    L_0x03d5:
-        r9 = r27;
-        if (r9 == 0) goto L_0x03de;
-    L_0x03d9:
-        if (r1 != r9) goto L_0x03de;
+        goto L_0x0320;
+    L_0x03d3:
+        r9 = r7.currentChat;
+        if (r9 == 0) goto L_0x03e6;
+    L_0x03d7:
+        r9 = r9.creator;
+        if (r9 == 0) goto L_0x03e6;
     L_0x03db:
-        goto L_0x03e6;
-    L_0x03dc:
+        r9 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatCreate;
+        if (r9 != 0) goto L_0x0320;
+    L_0x03df:
         r9 = r27;
-    L_0x03de:
+        if (r9 == 0) goto L_0x03e8;
+    L_0x03e3:
+        if (r1 != r9) goto L_0x03e8;
+    L_0x03e5:
+        goto L_0x03f0;
+    L_0x03e6:
+        r9 = r27;
+    L_0x03e8:
         r1 = r8.messageOwner;
         r1 = r1.action;
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChannelMigrateFrom;
-        if (r1 == 0) goto L_0x03ec;
-    L_0x03e6:
+        if (r1 == 0) goto L_0x03f6;
+    L_0x03f0:
         r20 = r9;
         r33 = r12;
-        goto L_0x06a4;
-    L_0x03ec:
-        r1 = r7.needAnimateToMessage;
-        if (r1 == 0) goto L_0x0407;
-    L_0x03f0:
-        r1 = r1.getId();
-        if (r1 != r11) goto L_0x0407;
+        goto L_0x06b4;
     L_0x03f6:
-        if (r11 >= 0) goto L_0x0407;
-    L_0x03f8:
+        r1 = r7.needAnimateToMessage;
+        if (r1 == 0) goto L_0x0411;
+    L_0x03fa:
+        r1 = r1.getId();
+        if (r1 != r11) goto L_0x0411;
+    L_0x0400:
+        if (r11 >= 0) goto L_0x0411;
+    L_0x0402:
         r1 = r8.type;
         r10 = 5;
-        if (r1 != r10) goto L_0x0407;
-    L_0x03fd:
+        if (r1 != r10) goto L_0x0411;
+    L_0x0407:
         r8 = r7.needAnimateToMessage;
         r1 = r7.animatingMessageObjects;
         r1.add(r8);
         r1 = 0;
         r7.needAnimateToMessage = r1;
-    L_0x0407:
+    L_0x0411:
         r1 = r7.messagesDict;
         r1 = r1[r6];
         r1.put(r11, r8);
@@ -11591,8 +11768,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r10 = r8.dateKey;
         r1 = r1.get(r10);
         r1 = (java.util.ArrayList) r1;
-        if (r1 != 0) goto L_0x0467;
-    L_0x041a:
+        if (r1 != 0) goto L_0x0471;
+    L_0x0424:
         r1 = new java.util.ArrayList;
         r1.<init>();
         r10 = r7.messagesByDays;
@@ -11621,85 +11798,85 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = 1;
         r11.contentType = r1;
         r11.isDateObject = r1;
-        if (r2 != r1) goto L_0x045d;
-    L_0x0457:
+        if (r2 != r1) goto L_0x0467;
+    L_0x0461:
         r1 = r7.messages;
         r1.add(r10, r11);
-        goto L_0x0462;
-    L_0x045d:
+        goto L_0x046c;
+    L_0x0467:
         r1 = r7.messages;
         r1.add(r11);
-    L_0x0462:
+    L_0x046c:
         r15 = r15 + 1;
         r1 = r33;
-        goto L_0x046b;
-    L_0x0467:
+        goto L_0x0475;
+    L_0x0471:
         r20 = r9;
         r27 = r11;
-    L_0x046b:
+    L_0x0475:
         r9 = r8.hasValidGroupId();
-        if (r9 == 0) goto L_0x052c;
-    L_0x0471:
+        if (r9 == 0) goto L_0x0536;
+    L_0x047b:
         r9 = r7.groupedMessagesMap;
         r10 = r8.getGroupIdForUse();
         r9 = r9.get(r10);
         r9 = (org.telegram.messenger.MessageObject.GroupedMessages) r9;
-        if (r9 == 0) goto L_0x04df;
-    L_0x047f:
+        if (r9 == 0) goto L_0x04e9;
+    L_0x0489:
         r10 = r7.messages;
         r10 = r10.size();
         r11 = 1;
-        if (r10 <= r11) goto L_0x04df;
-    L_0x0488:
-        if (r2 != r11) goto L_0x0494;
-    L_0x048a:
+        if (r10 <= r11) goto L_0x04e9;
+    L_0x0492:
+        if (r2 != r11) goto L_0x049e;
+    L_0x0494:
         r10 = r7.messages;
         r11 = 0;
         r10 = r10.get(r11);
         r10 = (org.telegram.messenger.MessageObject) r10;
-        goto L_0x04a4;
-    L_0x0494:
+        goto L_0x04ae;
+    L_0x049e:
         r10 = r7.messages;
         r11 = r10.size();
         r22 = 2;
         r11 = r11 + -2;
         r10 = r10.get(r11);
         r10 = (org.telegram.messenger.MessageObject) r10;
-    L_0x04a4:
+    L_0x04ae:
         r33 = r10.getGroupIdForUse();
         r35 = r8.getGroupIdForUse();
         r11 = (r33 > r35 ? 1 : (r33 == r35 ? 0 : -1));
-        if (r11 != 0) goto L_0x04c7;
-    L_0x04b0:
+        if (r11 != 0) goto L_0x04d1;
+    L_0x04ba:
         r33 = r12;
         r11 = r10.localGroupId;
         r17 = 0;
         r34 = (r11 > r17 ? 1 : (r11 == r17 ? 0 : -1));
-        if (r34 == 0) goto L_0x04e1;
-    L_0x04ba:
+        if (r34 == 0) goto L_0x04eb;
+    L_0x04c4:
         r8.localGroupId = r11;
         r9 = r7.groupedMessagesMap;
         r10 = r10.localGroupId;
         r9 = r9.get(r10);
         r9 = (org.telegram.messenger.MessageObject.GroupedMessages) r9;
-        goto L_0x04e1;
-    L_0x04c7:
+        goto L_0x04eb;
+    L_0x04d1:
         r33 = r12;
         r10 = r10.getGroupIdForUse();
         r34 = r8.getGroupIdForUse();
         r12 = (r10 > r34 ? 1 : (r10 == r34 ? 0 : -1));
-        if (r12 == 0) goto L_0x04e1;
-    L_0x04d5:
+        if (r12 == 0) goto L_0x04eb;
+    L_0x04df:
         r9 = org.telegram.messenger.Utilities.random;
         r9 = r9.nextLong();
         r8.localGroupId = r9;
         r9 = 0;
-        goto L_0x04e1;
-    L_0x04df:
+        goto L_0x04eb;
+    L_0x04e9:
         r33 = r12;
-    L_0x04e1:
-        if (r9 != 0) goto L_0x04f6;
-    L_0x04e3:
+    L_0x04eb:
+        if (r9 != 0) goto L_0x0500;
+    L_0x04ed:
         r9 = new org.telegram.messenger.MessageObject$GroupedMessages;
         r9.<init>();
         r10 = r8.getGroupId();
@@ -11707,133 +11884,133 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r10 = r7.groupedMessagesMap;
         r11 = r9.groupId;
         r10.put(r11, r9);
-        goto L_0x0510;
-    L_0x04f6:
-        if (r13 == 0) goto L_0x0502;
-    L_0x04f8:
+        goto L_0x051a;
+    L_0x0500:
+        if (r13 == 0) goto L_0x050c;
+    L_0x0502:
         r10 = r8.getGroupId();
         r10 = r13.indexOfKey(r10);
-        if (r10 >= 0) goto L_0x0510;
-    L_0x0502:
-        if (r5 != 0) goto L_0x0509;
-    L_0x0504:
+        if (r10 >= 0) goto L_0x051a;
+    L_0x050c:
+        if (r5 != 0) goto L_0x0513;
+    L_0x050e:
         r5 = new android.util.LongSparseArray;
         r5.<init>();
-    L_0x0509:
+    L_0x0513:
         r10 = r8.getGroupId();
         r5.put(r10, r9);
-    L_0x0510:
-        if (r13 != 0) goto L_0x0517;
-    L_0x0512:
+    L_0x051a:
+        if (r13 != 0) goto L_0x0521;
+    L_0x051c:
         r13 = new android.util.LongSparseArray;
         r13.<init>();
-    L_0x0517:
+    L_0x0521:
         r10 = r9.groupId;
         r13.put(r10, r9);
         r10 = 1;
-        if (r2 != r10) goto L_0x0525;
-    L_0x051f:
+        if (r2 != r10) goto L_0x052f;
+    L_0x0529:
         r9 = r9.messages;
         r9.add(r8);
-        goto L_0x053e;
-    L_0x0525:
+        goto L_0x0548;
+    L_0x052f:
         r9 = r9.messages;
         r10 = 0;
         r9.add(r10, r8);
-        goto L_0x053e;
-    L_0x052c:
+        goto L_0x0548;
+    L_0x0536:
         r33 = r12;
         r9 = r8.getGroupIdForUse();
         r11 = 0;
         r17 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
-        if (r17 == 0) goto L_0x053e;
-    L_0x0538:
+        if (r17 == 0) goto L_0x0548;
+    L_0x0542:
         r9 = r8.messageOwner;
         r9.grouped_id = r11;
         r8.localSentGroupId = r11;
-    L_0x053e:
+    L_0x0548:
         r9 = 1;
         r15 = r15 + r9;
         r1.add(r8);
-        if (r2 != r9) goto L_0x054c;
-    L_0x0545:
+        if (r2 != r9) goto L_0x0556;
+    L_0x054f:
         r1 = r7.messages;
         r10 = 0;
         r1.add(r10, r8);
-        goto L_0x0556;
-    L_0x054c:
+        goto L_0x0560;
+    L_0x0556:
         r1 = r7.messages;
         r10 = r1.size();
         r10 = r10 - r9;
         r1.add(r10, r8);
-    L_0x0556:
-        r1 = r7.currentEncryptedChat;
-        if (r1 != 0) goto L_0x057d;
-    L_0x055a:
-        r1 = r7.createUnreadMessageAfterId;
-        if (r1 == 0) goto L_0x059c;
-    L_0x055e:
-        if (r2 == r9) goto L_0x059c;
     L_0x0560:
+        r1 = r7.currentEncryptedChat;
+        if (r1 != 0) goto L_0x0587;
+    L_0x0564:
+        r1 = r7.createUnreadMessageAfterId;
+        if (r1 == 0) goto L_0x05a6;
+    L_0x0568:
+        if (r2 == r9) goto L_0x05a6;
+    L_0x056a:
         r1 = r4 + 1;
         r9 = r0.size();
-        if (r1 >= r9) goto L_0x059c;
-    L_0x0568:
+        if (r1 >= r9) goto L_0x05a6;
+    L_0x0572:
         r1 = r0.get(r1);
         r1 = (org.telegram.messenger.MessageObject) r1;
         r9 = r8.isOut();
-        if (r9 != 0) goto L_0x059c;
-    L_0x0574:
+        if (r9 != 0) goto L_0x05a6;
+    L_0x057e:
         r9 = r1.getId();
         r10 = r7.createUnreadMessageAfterId;
-        if (r9 < r10) goto L_0x059d;
-    L_0x057c:
-        goto L_0x059c;
-    L_0x057d:
+        if (r9 < r10) goto L_0x05a7;
+    L_0x0586:
+        goto L_0x05a6;
+    L_0x0587:
         r1 = r7.createUnreadMessageAfterId;
-        if (r1 == 0) goto L_0x059c;
-    L_0x0581:
+        if (r1 == 0) goto L_0x05a6;
+    L_0x058b:
         r1 = 1;
-        if (r2 == r1) goto L_0x059c;
-    L_0x0584:
+        if (r2 == r1) goto L_0x05a6;
+    L_0x058e:
         r1 = r4 + -1;
-        if (r1 < 0) goto L_0x059c;
-    L_0x0588:
+        if (r1 < 0) goto L_0x05a6;
+    L_0x0592:
         r1 = r0.get(r1);
         r1 = (org.telegram.messenger.MessageObject) r1;
         r9 = r8.isOut();
-        if (r9 != 0) goto L_0x059c;
-    L_0x0594:
+        if (r9 != 0) goto L_0x05a6;
+    L_0x059e:
         r9 = r1.getId();
         r10 = r7.createUnreadMessageAfterId;
-        if (r9 < r10) goto L_0x059d;
-    L_0x059c:
+        if (r9 < r10) goto L_0x05a7;
+    L_0x05a6:
         r1 = 0;
-    L_0x059d:
+    L_0x05a7:
         r9 = 2;
-        if (r2 != r9) goto L_0x05ea;
-    L_0x05a0:
+        if (r2 != r9) goto L_0x05f4;
+    L_0x05aa:
         r10 = r7.first_unread_id;
         r11 = r27;
-        if (r11 != r10) goto L_0x05ec;
-    L_0x05a6:
+        if (r11 != r10) goto L_0x05f6;
+    L_0x05b0:
         r10 = org.telegram.messenger.AndroidUtilities.displaySize;
         r10 = r10.y;
         r10 = r10 / r9;
-        if (r14 > r10) goto L_0x05b9;
-    L_0x05ad:
+        if (r14 > r10) goto L_0x05c3;
+    L_0x05b7:
         r9 = r7.forwardEndReached;
         r10 = 0;
         r9 = r9[r10];
-        if (r9 != 0) goto L_0x05b5;
-    L_0x05b4:
-        goto L_0x05ba;
-    L_0x05b5:
+        if (r9 != 0) goto L_0x05bf;
+    L_0x05be:
+        goto L_0x05c4;
+    L_0x05bf:
         r27 = r5;
-        goto L_0x062c;
-    L_0x05b9:
+        goto L_0x063c;
+    L_0x05c3:
         r10 = 0;
-    L_0x05ba:
+    L_0x05c4:
         r9 = new org.telegram.tgnet.TLRPC$TL_message;
         r9.<init>();
         r9.message = r3;
@@ -11857,100 +12034,105 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r5 = -10000; // 0xffffffffffffd8f0 float:NaN double:NaN;
         r7.scrollToMessagePosition = r5;
         r15 = r15 + 1;
-        goto L_0x062c;
-    L_0x05ea:
+        goto L_0x063c;
+    L_0x05f4:
         r11 = r27;
-    L_0x05ec:
+    L_0x05f6:
         r27 = r5;
         r5 = 3;
-        if (r2 == r5) goto L_0x05f4;
-    L_0x05f1:
+        if (r2 == r5) goto L_0x05fe;
+    L_0x05fb:
         r9 = 4;
-        if (r2 != r9) goto L_0x062c;
-    L_0x05f4:
-        r9 = r7.startLoadFromMessageId;
-        if (r9 >= 0) goto L_0x05fa;
-    L_0x05f8:
-        if (r11 == r9) goto L_0x0600;
-    L_0x05fa:
-        r9 = r7.startLoadFromMessageId;
-        if (r9 <= 0) goto L_0x062c;
+        if (r2 != r9) goto L_0x063c;
     L_0x05fe:
-        if (r11 > r9) goto L_0x062c;
-    L_0x0600:
-        r39.removeSelectedMessageHighlight();
+        r9 = r7.startLoadFromMessageId;
+        if (r9 >= 0) goto L_0x0604;
+    L_0x0602:
+        if (r11 == r9) goto L_0x060c;
+    L_0x0604:
+        r9 = r7.startLoadFromMessageId;
+        if (r9 <= 0) goto L_0x063c;
+    L_0x0608:
+        if (r11 <= 0) goto L_0x063c;
+    L_0x060a:
+        if (r11 > r9) goto L_0x063c;
+    L_0x060c:
+        r40.removeSelectedMessageHighlight();
         r9 = r7.needSelectFromMessageId;
-        if (r9 == 0) goto L_0x060d;
-    L_0x0607:
+        if (r9 == 0) goto L_0x0619;
+    L_0x0613:
         r9 = r7.startLoadFromMessageId;
-        if (r11 != r9) goto L_0x060d;
-    L_0x060b:
+        if (r11 != r9) goto L_0x0619;
+    L_0x0617:
         r7.highlightMessageId = r11;
-    L_0x060d:
+    L_0x0619:
+        r9 = r7.showScrollToMessageError;
+        if (r9 == 0) goto L_0x062d;
+    L_0x061d:
         r9 = r7.startLoadFromMessageId;
-        if (r11 == r9) goto L_0x061d;
-    L_0x0611:
-        r9 = NUM; // 0x7f0d05d8 float:1.874515E38 double:1.0531305167E-314;
+        if (r11 == r9) goto L_0x062d;
+    L_0x0621:
+        r9 = NUM; // 0x7f0d05ec float:1.874519E38 double:1.0531305265E-314;
         r10 = "MessageNotFound";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         org.telegram.ui.Components.AlertsCreator.showSimpleToast(r7, r9);
-    L_0x061d:
+    L_0x062d:
         r7.scrollToMessage = r8;
         r9 = 0;
         r7.startLoadFromMessageId = r9;
         r9 = r7.scrollToMessagePosition;
         r10 = -10000; // 0xffffffffffffd8f0 float:NaN double:NaN;
-        if (r9 != r10) goto L_0x062c;
-    L_0x0628:
+        if (r9 != r10) goto L_0x063c;
+    L_0x0638:
         r9 = -9000; // 0xffffffffffffdcd8 float:NaN double:NaN;
         r7.scrollToMessagePosition = r9;
-    L_0x062c:
+    L_0x063c:
         r9 = 2;
-        if (r2 == r9) goto L_0x06a2;
-    L_0x062f:
+        if (r2 == r9) goto L_0x06b2;
+    L_0x063f:
         r9 = r7.unreadMessageObject;
-        if (r9 != 0) goto L_0x06a2;
-    L_0x0633:
+        if (r9 != 0) goto L_0x06b2;
+    L_0x0643:
         r9 = r7.createUnreadMessageAfterId;
-        if (r9 == 0) goto L_0x06a2;
-    L_0x0637:
+        if (r9 == 0) goto L_0x06b2;
+    L_0x0647:
         r9 = r7.currentEncryptedChat;
-        if (r9 != 0) goto L_0x0648;
-    L_0x063b:
+        if (r9 != 0) goto L_0x0658;
+    L_0x064b:
         r9 = r8.isOut();
-        if (r9 != 0) goto L_0x0648;
-    L_0x0641:
+        if (r9 != 0) goto L_0x0658;
+    L_0x0651:
         r9 = r7.createUnreadMessageAfterId;
-        if (r11 >= r9) goto L_0x0646;
-    L_0x0645:
-        goto L_0x0648;
-    L_0x0646:
-        r8 = 1;
-        goto L_0x0657;
-    L_0x0648:
-        r9 = r7.currentEncryptedChat;
-        if (r9 == 0) goto L_0x06a2;
-    L_0x064c:
-        r8 = r8.isOut();
-        if (r8 != 0) goto L_0x06a2;
-    L_0x0652:
-        r8 = r7.createUnreadMessageAfterId;
-        if (r11 > r8) goto L_0x06a2;
+        if (r11 >= r9) goto L_0x0656;
+    L_0x0655:
+        goto L_0x0658;
     L_0x0656:
-        goto L_0x0646;
-    L_0x0657:
-        if (r2 == r8) goto L_0x0666;
-    L_0x0659:
-        if (r1 != 0) goto L_0x0666;
-    L_0x065b:
-        if (r1 != 0) goto L_0x06a2;
-    L_0x065d:
-        if (r31 == 0) goto L_0x06a2;
-    L_0x065f:
+        r8 = 1;
+        goto L_0x0667;
+    L_0x0658:
+        r9 = r7.currentEncryptedChat;
+        if (r9 == 0) goto L_0x06b2;
+    L_0x065c:
+        r8 = r8.isOut();
+        if (r8 != 0) goto L_0x06b2;
+    L_0x0662:
+        r8 = r7.createUnreadMessageAfterId;
+        if (r11 > r8) goto L_0x06b2;
+    L_0x0666:
+        goto L_0x0656;
+    L_0x0667:
+        if (r2 == r8) goto L_0x0676;
+    L_0x0669:
+        if (r1 != 0) goto L_0x0676;
+    L_0x066b:
+        if (r1 != 0) goto L_0x06b2;
+    L_0x066d:
+        if (r31 == 0) goto L_0x06b2;
+    L_0x066f:
         r1 = r0.size();
         r1 = r1 - r8;
-        if (r4 != r1) goto L_0x06a2;
-    L_0x0666:
+        if (r4 != r1) goto L_0x06b2;
+    L_0x0676:
         r1 = new org.telegram.tgnet.TLRPC$TL_message;
         r1.<init>();
         r1.message = r3;
@@ -11964,32 +12146,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = 2;
         r9.contentType = r1;
         r1 = 1;
-        if (r2 != r1) goto L_0x0686;
-    L_0x0680:
+        if (r2 != r1) goto L_0x0696;
+    L_0x0690:
         r8 = r7.messages;
         r8.add(r1, r9);
-        goto L_0x0690;
-    L_0x0686:
+        goto L_0x06a0;
+    L_0x0696:
         r8 = r7.messages;
         r10 = r8.size();
         r10 = r10 - r1;
         r8.add(r10, r9);
-    L_0x0690:
+    L_0x06a0:
         r7.unreadMessageObject = r9;
         r1 = 3;
-        if (r2 != r1) goto L_0x06a0;
-    L_0x0695:
+        if (r2 != r1) goto L_0x06b0;
+    L_0x06a5:
         r5 = r7.unreadMessageObject;
         r7.scrollToMessage = r5;
         r5 = 0;
         r7.startLoadFromMessageId = r5;
         r5 = -9000; // 0xffffffffffffdcd8 float:NaN double:NaN;
         r7.scrollToMessagePosition = r5;
-    L_0x06a0:
+    L_0x06b0:
         r15 = r15 + 1;
-    L_0x06a2:
+    L_0x06b2:
         r5 = r27;
-    L_0x06a4:
+    L_0x06b4:
         r4 = r4 + 1;
         r27 = r20;
         r11 = r29;
@@ -11997,59 +12179,59 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9 = r31;
         r1 = r32;
         r12 = r33;
-        goto L_0x02c6;
-    L_0x06b4:
+        goto L_0x02d0;
+    L_0x06c4:
         r31 = r9;
         r30 = r10;
         r29 = r11;
-        if (r31 == 0) goto L_0x06bf;
-    L_0x06bc:
+        if (r31 == 0) goto L_0x06cf;
+    L_0x06cc:
         r4 = 0;
         r7.createUnreadMessageAfterId = r4;
-    L_0x06bf:
-        if (r2 != 0) goto L_0x06ca;
-    L_0x06c1:
-        if (r15 != 0) goto L_0x06ca;
-    L_0x06c3:
+    L_0x06cf:
+        if (r2 != 0) goto L_0x06da;
+    L_0x06d1:
+        if (r15 != 0) goto L_0x06da;
+    L_0x06d3:
         r4 = r7.loadsCount;
         r8 = 1;
         r4 = r4 - r8;
         r7.loadsCount = r4;
-        goto L_0x06cb;
-    L_0x06ca:
+        goto L_0x06db;
+    L_0x06da:
         r8 = 1;
-    L_0x06cb:
+    L_0x06db:
         r4 = r7.forwardEndReached;
         r4 = r4[r6];
-        if (r4 == 0) goto L_0x06da;
-    L_0x06d1:
-        if (r6 == r8) goto L_0x06da;
-    L_0x06d3:
+        if (r4 == 0) goto L_0x06ea;
+    L_0x06e1:
+        if (r6 == r8) goto L_0x06ea;
+    L_0x06e3:
         r4 = 0;
         r7.first_unread_id = r4;
         r7.last_message_id = r4;
         r7.createUnreadMessageAfterId = r4;
-    L_0x06da:
-        if (r2 != r8) goto L_0x0773;
-    L_0x06dc:
+    L_0x06ea:
+        if (r2 != r8) goto L_0x0783;
+    L_0x06ec:
         r0 = r0.size();
         r4 = r30;
-        if (r0 == r4) goto L_0x070e;
-    L_0x06e4:
-        if (r29 == 0) goto L_0x06f0;
-    L_0x06e6:
+        if (r0 == r4) goto L_0x071e;
+    L_0x06f4:
+        if (r29 == 0) goto L_0x0700;
+    L_0x06f6:
         r0 = r7.currentEncryptedChat;
-        if (r0 != 0) goto L_0x06f0;
-    L_0x06ea:
+        if (r0 != 0) goto L_0x0700;
+    L_0x06fa:
         r0 = r7.forwardEndReached;
         r0 = r0[r6];
-        if (r0 == 0) goto L_0x070e;
-    L_0x06f0:
+        if (r0 == 0) goto L_0x071e;
+    L_0x0700:
         r0 = r7.forwardEndReached;
         r2 = 1;
         r0[r6] = r2;
-        if (r6 == r2) goto L_0x0709;
-    L_0x06f7:
+        if (r6 == r2) goto L_0x0719;
+    L_0x0707:
         r2 = 0;
         r7.first_unread_id = r2;
         r7.last_message_id = r2;
@@ -12058,60 +12240,60 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = r0.loadingDownRow;
         r0.notifyItemRemoved(r4);
         r0 = 1;
-        goto L_0x070b;
-    L_0x0709:
+        goto L_0x071b;
+    L_0x0719:
         r2 = 0;
         r0 = 0;
-    L_0x070b:
+    L_0x071b:
         r7.startLoadFromMessageId = r2;
-        goto L_0x070f;
-    L_0x070e:
+        goto L_0x071f;
+    L_0x071e:
         r0 = 0;
-    L_0x070f:
-        if (r15 <= 0) goto L_0x076e;
-    L_0x0711:
+    L_0x071f:
+        if (r15 <= 0) goto L_0x077e;
+    L_0x0721:
         r2 = r7.chatLayoutManager;
         r2 = r2.findFirstVisibleItemPosition();
-        if (r2 != 0) goto L_0x071b;
-    L_0x0719:
+        if (r2 != 0) goto L_0x072b;
+    L_0x0729:
         r2 = r2 + 1;
-    L_0x071b:
+    L_0x072b:
         r12 = r2;
         r2 = r7.chatLayoutManager;
         r2 = r2.findViewByPosition(r12);
-        if (r2 == 0) goto L_0x0745;
-    L_0x0724:
+        if (r2 == 0) goto L_0x0755;
+    L_0x0734:
         r4 = r2;
         r8 = r12;
-    L_0x0726:
+    L_0x0736:
         r9 = r4 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r9 == 0) goto L_0x0742;
-    L_0x072a:
+        if (r9 == 0) goto L_0x0752;
+    L_0x073a:
         r9 = r4;
         r9 = (org.telegram.ui.Cells.ChatMessageCell) r9;
         r9 = r9.getMessageObject();
         r9 = r9.hasValidGroupId();
-        if (r9 == 0) goto L_0x0742;
-    L_0x0737:
+        if (r9 == 0) goto L_0x0752;
+    L_0x0747:
         r8 = r8 + 1;
         r4 = r7.chatLayoutManager;
         r4 = r4.findViewByPosition(r8);
-        if (r4 != 0) goto L_0x0726;
-    L_0x0741:
-        goto L_0x0747;
-    L_0x0742:
+        if (r4 != 0) goto L_0x0736;
+    L_0x0751:
+        goto L_0x0757;
+    L_0x0752:
         r2 = r4;
         r12 = r8;
-        goto L_0x0747;
-    L_0x0745:
+        goto L_0x0757;
+    L_0x0755:
         r2 = 0;
         r12 = -1;
-    L_0x0747:
-        if (r2 != 0) goto L_0x074b;
-    L_0x0749:
+    L_0x0757:
+        if (r2 != 0) goto L_0x075b;
+    L_0x0759:
         r2 = 0;
-        goto L_0x075e;
-    L_0x074b:
+        goto L_0x076e;
+    L_0x075b:
         r4 = r7.chatListView;
         r4 = r4.getMeasuredHeight();
         r2 = r2.getBottom();
@@ -12119,107 +12301,117 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r7.chatListView;
         r2 = r2.getPaddingBottom();
         r2 = r4 - r2;
-    L_0x075e:
+    L_0x076e:
         r4 = r7.chatAdapter;
         r8 = 1;
         r4.notifyItemRangeInserted(r8, r15);
         r4 = -1;
-        if (r12 == r4) goto L_0x076e;
-    L_0x0767:
+        if (r12 == r4) goto L_0x077e;
+    L_0x0777:
         r4 = r7.chatLayoutManager;
         r12 = r12 + r15;
         r12 = r12 - r0;
         r4.scrollToPositionWithOffset(r12, r2);
-    L_0x076e:
+    L_0x077e:
         r2 = 0;
         r7.loadingForward = r2;
-        goto L_0x09a3;
-    L_0x0773:
+        goto L_0x09c0;
+    L_0x0783:
         r4 = r30;
         r8 = r0.size();
-        if (r8 >= r4) goto L_0x07b1;
-    L_0x077b:
-        r1 = 3;
-        if (r2 == r1) goto L_0x07b1;
-    L_0x077e:
-        r4 = 4;
-        if (r2 == r4) goto L_0x07b1;
-    L_0x0781:
-        if (r29 == 0) goto L_0x079b;
-    L_0x0783:
-        r0 = r7.currentEncryptedChat;
-        if (r0 != 0) goto L_0x078e;
-    L_0x0787:
-        r0 = r7.isBroadcast;
-        if (r0 == 0) goto L_0x078c;
+        if (r8 >= r4) goto L_0x07ce;
     L_0x078b:
-        goto L_0x078e;
-    L_0x078c:
-        r4 = 1;
-        goto L_0x0793;
+        r1 = 3;
+        if (r2 == r1) goto L_0x07ce;
     L_0x078e:
-        r0 = r7.endReached;
-        r4 = 1;
-        r0[r6] = r4;
+        r4 = 4;
+        if (r2 == r4) goto L_0x07ce;
+    L_0x0791:
+        if (r29 == 0) goto L_0x07b8;
     L_0x0793:
-        r8 = 2;
-        if (r2 == r8) goto L_0x07b1;
-    L_0x0796:
-        r0 = r7.cacheEndReached;
-        r0[r6] = r4;
-        goto L_0x07b1;
+        r0 = r7.currentEncryptedChat;
+        if (r0 != 0) goto L_0x07ab;
+    L_0x0797:
+        r0 = r7.isBroadcast;
+        if (r0 != 0) goto L_0x07ab;
     L_0x079b:
-        r8 = 2;
-        if (r2 != r8) goto L_0x07ac;
+        r4 = 1;
+        if (r6 != r4) goto L_0x07b0;
     L_0x079e:
-        r0 = r0.size();
-        if (r0 != 0) goto L_0x07b1;
-    L_0x07a4:
-        r0 = r7.messages;
-        r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x07b1;
-    L_0x07ac:
-        r0 = r7.endReached;
-        r2 = 1;
-        r0[r6] = r2;
-    L_0x07b1:
-        r2 = 0;
-        r7.loading = r2;
-        r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x099a;
-    L_0x07b8:
-        r0 = r7.first;
-        if (r0 != 0) goto L_0x087b;
-    L_0x07bc:
-        r0 = r7.scrollToTopOnResume;
-        if (r0 != 0) goto L_0x087b;
-    L_0x07c0:
-        r0 = r7.forceScrollToTop;
-        if (r0 == 0) goto L_0x07c6;
-    L_0x07c4:
-        goto L_0x087b;
-    L_0x07c6:
-        if (r15 == 0) goto L_0x085d;
-    L_0x07c8:
-        r0 = r7.endReached;
-        r0 = r0[r6];
-        if (r0 == 0) goto L_0x07f0;
-    L_0x07ce:
-        if (r6 != 0) goto L_0x07db;
-    L_0x07d0:
         r8 = r7.mergeDialogId;
         r10 = 0;
         r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r0 == 0) goto L_0x07d9;
-    L_0x07d8:
-        goto L_0x07db;
+        if (r0 == 0) goto L_0x07a9;
+    L_0x07a6:
+        if (r23 == 0) goto L_0x07a9;
+    L_0x07a8:
+        goto L_0x07ab;
+    L_0x07a9:
+        r4 = 1;
+        goto L_0x07b0;
+    L_0x07ab:
+        r0 = r7.endReached;
+        r4 = 1;
+        r0[r6] = r4;
+    L_0x07b0:
+        r8 = 2;
+        if (r2 == r8) goto L_0x07ce;
+    L_0x07b3:
+        r0 = r7.cacheEndReached;
+        r0[r6] = r4;
+        goto L_0x07ce;
+    L_0x07b8:
+        r8 = 2;
+        if (r2 != r8) goto L_0x07c9;
+    L_0x07bb:
+        r0 = r0.size();
+        if (r0 != 0) goto L_0x07ce;
+    L_0x07c1:
+        r0 = r7.messages;
+        r0 = r0.isEmpty();
+        if (r0 == 0) goto L_0x07ce;
+    L_0x07c9:
+        r0 = r7.endReached;
+        r2 = 1;
+        r0[r6] = r2;
+    L_0x07ce:
+        r2 = 0;
+        r7.loading = r2;
+        r0 = r7.chatListView;
+        if (r0 == 0) goto L_0x09b7;
+    L_0x07d5:
+        r0 = r7.first;
+        if (r0 != 0) goto L_0x0898;
     L_0x07d9:
+        r0 = r7.scrollToTopOnResume;
+        if (r0 != 0) goto L_0x0898;
+    L_0x07dd:
+        r0 = r7.forceScrollToTop;
+        if (r0 == 0) goto L_0x07e3;
+    L_0x07e1:
+        goto L_0x0898;
+    L_0x07e3:
+        if (r15 == 0) goto L_0x087a;
+    L_0x07e5:
+        r0 = r7.endReached;
+        r0 = r0[r6];
+        if (r0 == 0) goto L_0x080d;
+    L_0x07eb:
+        if (r6 != 0) goto L_0x07f8;
+    L_0x07ed:
+        r8 = r7.mergeDialogId;
+        r10 = 0;
+        r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
+        if (r0 == 0) goto L_0x07f6;
+    L_0x07f5:
+        goto L_0x07f8;
+    L_0x07f6:
         r2 = 1;
-        goto L_0x07de;
-    L_0x07db:
+        goto L_0x07fb;
+    L_0x07f8:
         r2 = 1;
-        if (r6 != r2) goto L_0x07f0;
-    L_0x07de:
+        if (r6 != r2) goto L_0x080d;
+    L_0x07fb:
         r0 = r7.chatAdapter;
         r4 = r0.loadingUpRow;
         r4 = r4 - r2;
@@ -12228,47 +12420,47 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.chatAdapter;
         r0.updateRows();
         r0 = 1;
-        goto L_0x07f1;
-    L_0x07f0:
+        goto L_0x080e;
+    L_0x080d:
         r0 = 0;
-    L_0x07f1:
+    L_0x080e:
         r2 = r7.chatLayoutManager;
         r12 = r2.findFirstVisibleItemPosition();
         r2 = r7.chatLayoutManager;
         r2 = r2.findViewByPosition(r12);
-        if (r2 == 0) goto L_0x0820;
-    L_0x07ff:
+        if (r2 == 0) goto L_0x083d;
+    L_0x081c:
         r4 = r2;
         r8 = r12;
-    L_0x0801:
+    L_0x081e:
         r9 = r4 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r9 == 0) goto L_0x081d;
-    L_0x0805:
+        if (r9 == 0) goto L_0x083a;
+    L_0x0822:
         r9 = r4;
         r9 = (org.telegram.ui.Cells.ChatMessageCell) r9;
         r9 = r9.getMessageObject();
         r9 = r9.hasValidGroupId();
-        if (r9 == 0) goto L_0x081d;
-    L_0x0812:
+        if (r9 == 0) goto L_0x083a;
+    L_0x082f:
         r8 = r8 + 1;
         r4 = r7.chatLayoutManager;
         r4 = r4.findViewByPosition(r8);
-        if (r4 != 0) goto L_0x0801;
-    L_0x081c:
-        goto L_0x0822;
-    L_0x081d:
+        if (r4 != 0) goto L_0x081e;
+    L_0x0839:
+        goto L_0x083f;
+    L_0x083a:
         r2 = r4;
         r12 = r8;
-        goto L_0x0822;
-    L_0x0820:
+        goto L_0x083f;
+    L_0x083d:
         r2 = 0;
         r12 = -1;
-    L_0x0822:
-        if (r2 != 0) goto L_0x0826;
-    L_0x0824:
+    L_0x083f:
+        if (r2 != 0) goto L_0x0843;
+    L_0x0841:
         r2 = 0;
-        goto L_0x0839;
-    L_0x0826:
+        goto L_0x0856;
+    L_0x0843:
         r4 = r7.chatListView;
         r4 = r4.getMeasuredHeight();
         r2 = r2.getBottom();
@@ -12276,10 +12468,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r7.chatListView;
         r2 = r2.getPaddingBottom();
         r2 = r4 - r2;
-    L_0x0839:
+    L_0x0856:
         r4 = r15 - r0;
-        if (r4 <= 0) goto L_0x0853;
-    L_0x083d:
+        if (r4 <= 0) goto L_0x0870;
+    L_0x085a:
         r4 = r7.chatAdapter;
         r4 = r4.messagesEndRow;
         r8 = r7.chatAdapter;
@@ -12288,108 +12480,108 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = r7.chatAdapter;
         r0 = r15 - r0;
         r8.notifyItemRangeInserted(r4, r0);
-    L_0x0853:
+    L_0x0870:
         r0 = -1;
-        if (r12 == r0) goto L_0x097f;
-    L_0x0856:
+        if (r12 == r0) goto L_0x099c;
+    L_0x0873:
         r0 = r7.chatLayoutManager;
         r0.scrollToPositionWithOffset(r12, r2);
-        goto L_0x097f;
-    L_0x085d:
+        goto L_0x099c;
+    L_0x087a:
         r0 = r7.endReached;
         r0 = r0[r6];
-        if (r0 == 0) goto L_0x097f;
-    L_0x0863:
-        if (r6 != 0) goto L_0x086d;
-    L_0x0865:
+        if (r0 == 0) goto L_0x099c;
+    L_0x0880:
+        if (r6 != 0) goto L_0x088a;
+    L_0x0882:
         r8 = r7.mergeDialogId;
         r10 = 0;
         r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r0 == 0) goto L_0x0870;
-    L_0x086d:
+        if (r0 == 0) goto L_0x088d;
+    L_0x088a:
         r2 = 1;
-        if (r6 != r2) goto L_0x0980;
-    L_0x0870:
+        if (r6 != r2) goto L_0x099d;
+    L_0x088d:
         r0 = r7.chatAdapter;
         r2 = r0.loadingUpRow;
         r0.notifyItemRemoved(r2);
-        goto L_0x097f;
-    L_0x087b:
+        goto L_0x099c;
+    L_0x0898:
         r2 = 0;
         r7.forceScrollToTop = r2;
         r0 = r7.chatAdapter;
         r0.notifyDataSetChanged();
         r0 = r7.scrollToMessage;
-        if (r0 == 0) goto L_0x0956;
-    L_0x0887:
+        if (r0 == 0) goto L_0x0973;
+    L_0x08a4:
         r2 = r7.startLoadFromMessageOffset;
         r4 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        if (r2 == r4) goto L_0x089a;
-    L_0x088e:
+        if (r2 == r4) goto L_0x08b7;
+    L_0x08ab:
         r0 = -r2;
         r2 = r7.chatListView;
         r2 = r2.getPaddingBottom();
         r0 = r0 - r2;
         r7.startLoadFromMessageOffset = r4;
-    L_0x0898:
+    L_0x08b5:
         r2 = 1;
-        goto L_0x08b4;
-    L_0x089a:
+        goto L_0x08d1;
+    L_0x08b7:
         r2 = r7.scrollToMessagePosition;
         r4 = -9000; // 0xffffffffffffdcd8 float:NaN double:NaN;
-        if (r2 != r4) goto L_0x08a6;
-    L_0x08a0:
+        if (r2 != r4) goto L_0x08c3;
+    L_0x08bd:
         r0 = r7.getScrollOffsetForMessage(r0);
-    L_0x08a4:
+    L_0x08c1:
         r2 = 0;
-        goto L_0x08b4;
-    L_0x08a6:
+        goto L_0x08d1;
+    L_0x08c3:
         r0 = -10000; // 0xffffffffffffd8f0 float:NaN double:NaN;
-        if (r2 != r0) goto L_0x08b2;
-    L_0x08aa:
+        if (r2 != r0) goto L_0x08cf;
+    L_0x08c7:
         r0 = NUM; // 0x41300000 float:11.0 double:5.4034219E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r0 = -r0;
-        goto L_0x08a4;
-    L_0x08b2:
+        goto L_0x08c1;
+    L_0x08cf:
         r0 = r2;
-        goto L_0x0898;
-    L_0x08b4:
+        goto L_0x08b5;
+    L_0x08d1:
         r4 = r7.messages;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x090d;
-    L_0x08bc:
+        if (r4 != 0) goto L_0x092a;
+    L_0x08d9:
         r4 = r7.chatAdapter;
         r4 = r4.loadingUpRow;
         r8 = -1;
-        if (r4 == r8) goto L_0x08f9;
-    L_0x08c5:
+        if (r4 == r8) goto L_0x0916;
+    L_0x08e2:
         r4 = r7.messages;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x08f9;
-    L_0x08cd:
+        if (r4 != 0) goto L_0x0916;
+    L_0x08ea:
         r4 = r7.messages;
         r8 = r4.size();
         r9 = 1;
         r8 = r8 - r9;
         r4 = r4.get(r8);
         r8 = r7.scrollToMessage;
-        if (r4 == r8) goto L_0x08ed;
-    L_0x08dd:
+        if (r4 == r8) goto L_0x090a;
+    L_0x08fa:
         r4 = r7.messages;
         r8 = r4.size();
         r9 = 2;
         r8 = r8 - r9;
         r4 = r4.get(r8);
         r8 = r7.scrollToMessage;
-        if (r4 != r8) goto L_0x08f9;
-    L_0x08ed:
+        if (r4 != r8) goto L_0x0916;
+    L_0x090a:
         r4 = r7.chatLayoutManager;
         r8 = r7.chatAdapter;
         r8 = r8.loadingUpRow;
         r4.scrollToPositionWithOffset(r8, r0, r2);
-        goto L_0x090d;
-    L_0x08f9:
+        goto L_0x092a;
+    L_0x0916:
         r4 = r7.chatLayoutManager;
         r8 = r7.chatAdapter;
         r8 = r8.messagesStartRow;
@@ -12398,32 +12590,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9 = r9.indexOf(r10);
         r8 = r8 + r9;
         r4.scrollToPositionWithOffset(r8, r0, r2);
-    L_0x090d:
+    L_0x092a:
         r0 = r7.chatListView;
         r0.invalidate();
         r0 = r7.scrollToMessagePosition;
         r2 = -10000; // 0xffffffffffffd8f0 float:NaN double:NaN;
-        if (r0 == r2) goto L_0x091c;
-    L_0x0918:
+        if (r0 == r2) goto L_0x0939;
+    L_0x0935:
         r2 = -9000; // 0xffffffffffffdcd8 float:NaN double:NaN;
-        if (r0 != r2) goto L_0x094c;
-    L_0x091c:
+        if (r0 != r2) goto L_0x0969;
+    L_0x0939:
         r2 = 1;
         r7.showPagedownButton(r2, r2);
-        if (r42 == 0) goto L_0x094c;
-    L_0x0922:
+        if (r43 == 0) goto L_0x0969;
+    L_0x093f:
         r0 = r7.pagedownButtonCounter;
-        if (r0 == 0) goto L_0x094c;
-    L_0x0926:
+        if (r0 == 0) goto L_0x0969;
+    L_0x0943:
         r4 = 0;
         r0.setVisibility(r4);
         r0 = r7.prevSetUnreadCount;
         r8 = r7.newUnreadMessageCount;
-        if (r0 == r8) goto L_0x094c;
-    L_0x0930:
+        if (r0 == r8) goto L_0x0969;
+    L_0x094d:
         r0 = r7.pagedownButtonCounter;
         r8 = new java.lang.Object[r2];
-        r2 = r42;
+        r2 = r43;
         r7.newUnreadMessageCount = r2;
         r2 = java.lang.Integer.valueOf(r2);
         r8[r4] = r2;
@@ -12432,85 +12624,85 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0.setText(r2);
         r0 = r7.newUnreadMessageCount;
         r7.prevSetUnreadCount = r0;
-        goto L_0x094e;
-    L_0x094c:
+        goto L_0x096b;
+    L_0x0969:
         r4 = r28;
-    L_0x094e:
+    L_0x096b:
         r0 = -10000; // 0xffffffffffffd8f0 float:NaN double:NaN;
         r7.scrollToMessagePosition = r0;
         r2 = 0;
         r7.scrollToMessage = r2;
-        goto L_0x095b;
-    L_0x0956:
+        goto L_0x0978;
+    L_0x0973:
         r4 = r28;
-        r39.moveScrollToLastMessage();
-    L_0x095b:
-        if (r41 == 0) goto L_0x097f;
-    L_0x095d:
+        r40.moveScrollToLastMessage();
+    L_0x0978:
+        if (r42 == 0) goto L_0x099c;
+    L_0x097a:
         r2 = 1;
         r7.showMentionDownButton(r2, r2);
         r0 = r7.mentiondownButtonCounter;
-        if (r0 == 0) goto L_0x0980;
-    L_0x0965:
+        if (r0 == 0) goto L_0x099d;
+    L_0x0982:
         r8 = 0;
         r0.setVisibility(r8);
         r0 = r7.mentiondownButtonCounter;
         r9 = new java.lang.Object[r2];
-        r10 = r41;
+        r10 = r42;
         r7.newMentionsCount = r10;
         r10 = java.lang.Integer.valueOf(r10);
         r9[r8] = r10;
         r4 = java.lang.String.format(r4, r9);
         r0.setText(r4);
-        goto L_0x0980;
-    L_0x097f:
+        goto L_0x099d;
+    L_0x099c:
         r2 = 1;
-    L_0x0980:
+    L_0x099d:
         r0 = r7.paused;
-        if (r0 == 0) goto L_0x098c;
-    L_0x0984:
+        if (r0 == 0) goto L_0x09a9;
+    L_0x09a1:
         r7.scrollToTopOnResume = r2;
         r0 = r7.scrollToMessage;
-        if (r0 == 0) goto L_0x098c;
-    L_0x098a:
+        if (r0 == 0) goto L_0x09a9;
+    L_0x09a7:
         r7.scrollToTopUnReadOnResume = r2;
-    L_0x098c:
+    L_0x09a9:
         r0 = r7.first;
-        if (r0 == 0) goto L_0x09a3;
-    L_0x0990:
+        if (r0 == 0) goto L_0x09c0;
+    L_0x09ad:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x09a3;
-    L_0x0994:
+        if (r0 == 0) goto L_0x09c0;
+    L_0x09b1:
         r2 = r7.emptyViewContainer;
         r0.setEmptyView(r2);
-        goto L_0x09a3;
-    L_0x099a:
+        goto L_0x09c0;
+    L_0x09b7:
         r2 = 1;
         r7.scrollToTopOnResume = r2;
         r0 = r7.scrollToMessage;
-        if (r0 == 0) goto L_0x09a3;
-    L_0x09a1:
+        if (r0 == 0) goto L_0x09c0;
+    L_0x09be:
         r7.scrollToTopUnReadOnResume = r2;
-    L_0x09a3:
-        if (r13 == 0) goto L_0x09ee;
-    L_0x09a5:
+    L_0x09c0:
+        if (r13 == 0) goto L_0x0a0b;
+    L_0x09c2:
         r0 = 0;
-    L_0x09a6:
+    L_0x09c3:
         r2 = r13.size();
-        if (r0 >= r2) goto L_0x09ee;
-    L_0x09ac:
+        if (r0 >= r2) goto L_0x0a0b;
+    L_0x09c9:
         r2 = r13.valueAt(r0);
         r2 = (org.telegram.messenger.MessageObject.GroupedMessages) r2;
         r2.calculate();
         r4 = r7.chatAdapter;
-        if (r4 == 0) goto L_0x09eb;
-    L_0x09b9:
-        if (r5 == 0) goto L_0x09eb;
-    L_0x09bb:
+        if (r4 == 0) goto L_0x0a08;
+    L_0x09d6:
+        if (r5 == 0) goto L_0x0a08;
+    L_0x09d8:
         r8 = r13.keyAt(r0);
         r4 = r5.indexOfKey(r8);
-        if (r4 < 0) goto L_0x09eb;
-    L_0x09c5:
+        if (r4 < 0) goto L_0x0a08;
+    L_0x09e2:
         r4 = r2.messages;
         r8 = r4.size();
         r9 = 1;
@@ -12519,101 +12711,101 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = (org.telegram.messenger.MessageObject) r4;
         r8 = r7.messages;
         r4 = r8.indexOf(r4);
-        if (r4 < 0) goto L_0x09eb;
-    L_0x09db:
+        if (r4 < 0) goto L_0x0a08;
+    L_0x09f8:
         r8 = r7.chatAdapter;
         r9 = r8.messagesStartRow;
         r4 = r4 + r9;
         r2 = r2.messages;
         r2 = r2.size();
         r8.notifyItemRangeChanged(r4, r2);
-    L_0x09eb:
+    L_0x0a08:
         r0 = r0 + 1;
-        goto L_0x09a6;
-    L_0x09ee:
+        goto L_0x09c3;
+    L_0x0a0b:
         r0 = r7.first;
-        if (r0 == 0) goto L_0x09fd;
-    L_0x09f2:
+        if (r0 == 0) goto L_0x0a1a;
+    L_0x0a0f:
         r0 = r7.messages;
         r0 = r0.size();
-        if (r0 <= 0) goto L_0x09fd;
-    L_0x09fa:
+        if (r0 <= 0) goto L_0x0a1a;
+    L_0x0a17:
         r2 = 0;
         r7.first = r2;
-    L_0x09fd:
+    L_0x0a1a:
         r0 = r7.messages;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x0a1a;
-    L_0x0a05:
+        if (r0 == 0) goto L_0x0a37;
+    L_0x0a22:
         r0 = r7.currentEncryptedChat;
-        if (r0 != 0) goto L_0x0a1a;
-    L_0x0a09:
+        if (r0 != 0) goto L_0x0a37;
+    L_0x0a26:
         r0 = r7.currentUser;
-        if (r0 == 0) goto L_0x0a1a;
-    L_0x0a0d:
+        if (r0 == 0) goto L_0x0a37;
+    L_0x0a2a:
         r0 = r0.bot;
-        if (r0 == 0) goto L_0x0a1a;
-    L_0x0a11:
+        if (r0 == 0) goto L_0x0a37;
+    L_0x0a2e:
         r0 = r7.botUser;
-        if (r0 != 0) goto L_0x0a1a;
-    L_0x0a15:
+        if (r0 != 0) goto L_0x0a37;
+    L_0x0a32:
         r7.botUser = r3;
-        r39.updateBottomOverlay();
-    L_0x0a1a:
-        if (r15 != 0) goto L_0x0a48;
-    L_0x0a1c:
+        r40.updateBottomOverlay();
+    L_0x0a37:
+        if (r15 != 0) goto L_0x0a65;
+    L_0x0a39:
         r2 = r7.mergeDialogId;
         r4 = 0;
         r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r0 == 0) goto L_0x0a29;
-    L_0x0a24:
-        if (r6 == 0) goto L_0x0a27;
-    L_0x0a26:
-        goto L_0x0a29;
-    L_0x0a27:
+        if (r0 == 0) goto L_0x0a46;
+    L_0x0a41:
+        if (r6 == 0) goto L_0x0a44;
+    L_0x0a43:
+        goto L_0x0a46;
+    L_0x0a44:
         r2 = 1;
-        goto L_0x0a35;
-    L_0x0a29:
+        goto L_0x0a52;
+    L_0x0a46:
         r0 = r7.currentEncryptedChat;
-        if (r0 == 0) goto L_0x0a48;
-    L_0x0a2d:
+        if (r0 == 0) goto L_0x0a65;
+    L_0x0a4a:
         r0 = r7.endReached;
         r2 = 0;
         r0 = r0[r2];
-        if (r0 != 0) goto L_0x0a48;
-    L_0x0a34:
-        goto L_0x0a27;
-    L_0x0a35:
+        if (r0 != 0) goto L_0x0a65;
+    L_0x0a51:
+        goto L_0x0a44;
+    L_0x0a52:
         r7.first = r2;
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x0a3f;
-    L_0x0a3b:
+        if (r0 == 0) goto L_0x0a5c;
+    L_0x0a58:
         r2 = 0;
         r0.setEmptyView(r2);
-    L_0x0a3f:
+    L_0x0a5c:
         r0 = r7.emptyViewContainer;
-        if (r0 == 0) goto L_0x0a50;
-    L_0x0a43:
+        if (r0 == 0) goto L_0x0a6d;
+    L_0x0a60:
         r2 = 4;
         r0.setVisibility(r2);
-        goto L_0x0a50;
-    L_0x0a48:
+        goto L_0x0a6d;
+    L_0x0a65:
         r2 = 4;
         r0 = r7.progressView;
-        if (r0 == 0) goto L_0x0a50;
-    L_0x0a4d:
+        if (r0 == 0) goto L_0x0a6d;
+    L_0x0a6a:
         r0.setVisibility(r2);
-    L_0x0a50:
-        if (r15 != 0) goto L_0x0a89;
-    L_0x0a52:
+    L_0x0a6d:
+        if (r15 != 0) goto L_0x0aa6;
+    L_0x0a6f:
         r2 = r7.mergeDialogId;
         r4 = 0;
         r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r0 == 0) goto L_0x0a89;
-    L_0x0a5a:
-        if (r6 != 0) goto L_0x0a89;
-    L_0x0a5c:
-        r0 = r39.getNotificationCenter();
+        if (r0 == 0) goto L_0x0aa6;
+    L_0x0a77:
+        if (r6 != 0) goto L_0x0aa6;
+    L_0x0a79:
+        r0 = r40.getNotificationCenter();
         r2 = 7;
         r2 = new int[r2];
         r3 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad;
@@ -12638,85 +12830,85 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = 6;
         r2[r3] = r1;
         r0.setAllowedNotificationsDutingAnimation(r2);
-    L_0x0a89:
-        if (r26 == 0) goto L_0x0a90;
-    L_0x0a8b:
+    L_0x0aa6:
+        if (r26 == 0) goto L_0x0aad;
+    L_0x0aa8:
         r1 = 0;
         r7.showFloatingDateView(r1);
-        goto L_0x0a91;
-    L_0x0a90:
+        goto L_0x0aae;
+    L_0x0aad:
         r1 = 0;
-    L_0x0a91:
+    L_0x0aae:
         r7.checkScrollForLoad(r1);
         r1 = 1;
         r7.setItemAnimationsEnabled(r1);
-        goto L_0x2ad5;
-    L_0x0a9a:
+        goto L_0x2b4e;
+    L_0x0ab7:
         r4 = r5;
         r1 = org.telegram.messenger.NotificationCenter.emojiDidLoad;
-        if (r0 != r1) goto L_0x0acb;
-    L_0x0a9f:
+        if (r0 != r1) goto L_0x0ae8;
+    L_0x0abc:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x0aa6;
-    L_0x0aa3:
+        if (r0 == 0) goto L_0x0ac3;
+    L_0x0ac0:
         r0.invalidateViews();
-    L_0x0aa6:
+    L_0x0ac3:
         r0 = r7.replyObjectTextView;
-        if (r0 == 0) goto L_0x0aad;
-    L_0x0aaa:
+        if (r0 == 0) goto L_0x0aca;
+    L_0x0ac7:
         r0.invalidate();
-    L_0x0aad:
+    L_0x0aca:
         r0 = r7.alertTextView;
-        if (r0 == 0) goto L_0x0ab4;
-    L_0x0ab1:
+        if (r0 == 0) goto L_0x0ad1;
+    L_0x0ace:
         r0.invalidate();
-    L_0x0ab4:
+    L_0x0ad1:
         r0 = r7.pinnedMessageTextView;
-        if (r0 == 0) goto L_0x0abb;
-    L_0x0ab8:
+        if (r0 == 0) goto L_0x0ad8;
+    L_0x0ad5:
         r0.invalidate();
-    L_0x0abb:
+    L_0x0ad8:
         r0 = r7.mentionListView;
-        if (r0 == 0) goto L_0x0ac2;
-    L_0x0abf:
+        if (r0 == 0) goto L_0x0adf;
+    L_0x0adc:
         r0.invalidateViews();
-    L_0x0ac2:
+    L_0x0adf:
         r0 = r7.stickersListView;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x0ac6:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x0ae3:
         r0.invalidateViews();
-        goto L_0x2ad5;
-    L_0x0acb:
+        goto L_0x2b4e;
+    L_0x0ae8:
         r1 = org.telegram.messenger.NotificationCenter.didUpdateConnectionState;
-        if (r0 != r1) goto L_0x0ae0;
-    L_0x0acf:
-        r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r41);
+        if (r0 != r1) goto L_0x0afd;
+    L_0x0aec:
+        r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r42);
         r0 = r0.getConnectionState();
         r1 = 3;
-        if (r0 != r1) goto L_0x2ad5;
-    L_0x0ada:
+        if (r0 != r1) goto L_0x2b4e;
+    L_0x0af7:
         r1 = 0;
         r7.checkAutoDownloadMessages(r1);
-        goto L_0x2ad5;
-    L_0x0ae0:
+        goto L_0x2b4e;
+    L_0x0afd:
         r1 = 0;
         r5 = org.telegram.messenger.NotificationCenter.chatOnlineCountDidLoad;
-        if (r0 != r5) goto L_0x0b16;
-    L_0x0ae5:
+        if (r0 != r5) goto L_0x0b33;
+    L_0x0b02:
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
         r1 = r7.chatInfo;
-        if (r1 == 0) goto L_0x0b15;
-    L_0x0aed:
+        if (r1 == 0) goto L_0x0b32;
+    L_0x0b0a:
         r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x0b15;
-    L_0x0af1:
+        if (r1 == 0) goto L_0x0b32;
+    L_0x0b0e:
         r1 = r1.id;
         r0 = r0.intValue();
-        if (r1 == r0) goto L_0x0afa;
-    L_0x0af9:
-        goto L_0x0b15;
-    L_0x0afa:
+        if (r1 == r0) goto L_0x0b17;
+    L_0x0b16:
+        goto L_0x0b32;
+    L_0x0b17:
         r0 = r7.chatInfo;
         r1 = 1;
         r1 = r8[r1];
@@ -12724,226 +12916,226 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r1.intValue();
         r0.online_count = r1;
         r0 = r7.avatarContainer;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x0b0b:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x0b28:
         r0.updateOnlineCount();
         r0 = r7.avatarContainer;
         r0.updateSubtitle();
-        goto L_0x2ad5;
-    L_0x0b15:
+        goto L_0x2b4e;
+    L_0x0b32:
         return;
-    L_0x0b16:
+    L_0x0b33:
         r1 = org.telegram.messenger.NotificationCenter.updateInterfaces;
-        if (r0 != r1) goto L_0x0bf0;
-    L_0x0b1a:
+        if (r0 != r1) goto L_0x0c0d;
+    L_0x0b37:
         r1 = 0;
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
         r1 = r0 & 1;
-        if (r1 != 0) goto L_0x0b2b;
-    L_0x0b27:
+        if (r1 != 0) goto L_0x0b48;
+    L_0x0b44:
         r2 = r0 & 16;
-        if (r2 == 0) goto L_0x0b5f;
-    L_0x0b2b:
+        if (r2 == 0) goto L_0x0b7c;
+    L_0x0b48:
         r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x0b44;
-    L_0x0b2f:
-        r2 = r39.getMessagesController();
+        if (r2 == 0) goto L_0x0b61;
+    L_0x0b4c:
+        r2 = r40.getMessagesController();
         r3 = r7.currentChat;
         r3 = r3.id;
         r3 = java.lang.Integer.valueOf(r3);
         r2 = r2.getChat(r3);
-        if (r2 == 0) goto L_0x0b5c;
-    L_0x0b41:
+        if (r2 == 0) goto L_0x0b79;
+    L_0x0b5e:
         r7.currentChat = r2;
-        goto L_0x0b5c;
-    L_0x0b44:
+        goto L_0x0b79;
+    L_0x0b61:
         r2 = r7.currentUser;
-        if (r2 == 0) goto L_0x0b5c;
-    L_0x0b48:
-        r2 = r39.getMessagesController();
+        if (r2 == 0) goto L_0x0b79;
+    L_0x0b65:
+        r2 = r40.getMessagesController();
         r3 = r7.currentUser;
         r3 = r3.id;
         r3 = java.lang.Integer.valueOf(r3);
         r2 = r2.getUser(r3);
-        if (r2 == 0) goto L_0x0b5c;
-    L_0x0b5a:
+        if (r2 == 0) goto L_0x0b79;
+    L_0x0b77:
         r7.currentUser = r2;
-    L_0x0b5c:
-        r39.updateTitle();
-    L_0x0b5f:
+    L_0x0b79:
+        r40.updateTitle();
+    L_0x0b7c:
         r2 = r0 & 32;
-        if (r2 != 0) goto L_0x0b6a;
-    L_0x0b63:
-        r2 = r0 & 4;
-        if (r2 == 0) goto L_0x0b68;
-    L_0x0b67:
-        goto L_0x0b6a;
-    L_0x0b68:
-        r14 = 0;
-        goto L_0x0b76;
-    L_0x0b6a:
-        r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x0b75;
-    L_0x0b6e:
-        r2 = r7.avatarContainer;
-        if (r2 == 0) goto L_0x0b75;
-    L_0x0b72:
-        r2.updateOnlineCount();
-    L_0x0b75:
-        r14 = 1;
-    L_0x0b76:
-        r2 = r0 & 2;
-        if (r2 != 0) goto L_0x0b80;
-    L_0x0b7a:
-        r2 = r0 & 8;
-        if (r2 != 0) goto L_0x0b80;
-    L_0x0b7e:
-        if (r1 == 0) goto L_0x0b86;
+        if (r2 != 0) goto L_0x0b87;
     L_0x0b80:
-        r39.checkAndUpdateAvatar();
-        r39.updateVisibleRows();
-    L_0x0b86:
-        r1 = r0 & 64;
-        if (r1 == 0) goto L_0x0b8b;
-    L_0x0b8a:
-        r14 = 1;
+        r2 = r0 & 4;
+        if (r2 == 0) goto L_0x0b85;
+    L_0x0b84:
+        goto L_0x0b87;
+    L_0x0b85:
+        r14 = 0;
+        goto L_0x0b93;
+    L_0x0b87:
+        r2 = r7.currentChat;
+        if (r2 == 0) goto L_0x0b92;
     L_0x0b8b:
-        r1 = r0 & 8192;
-        if (r1 == 0) goto L_0x0bb7;
+        r2 = r7.avatarContainer;
+        if (r2 == 0) goto L_0x0b92;
     L_0x0b8f:
-        r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x0bb7;
+        r2.updateOnlineCount();
+    L_0x0b92:
+        r14 = 1;
     L_0x0b93:
-        r1 = r39.getMessagesController();
+        r2 = r0 & 2;
+        if (r2 != 0) goto L_0x0b9d;
+    L_0x0b97:
+        r2 = r0 & 8;
+        if (r2 != 0) goto L_0x0b9d;
+    L_0x0b9b:
+        if (r1 == 0) goto L_0x0ba3;
+    L_0x0b9d:
+        r40.checkAndUpdateAvatar();
+        r40.updateVisibleRows();
+    L_0x0ba3:
+        r1 = r0 & 64;
+        if (r1 == 0) goto L_0x0ba8;
+    L_0x0ba7:
+        r14 = 1;
+    L_0x0ba8:
+        r1 = r0 & 8192;
+        if (r1 == 0) goto L_0x0bd4;
+    L_0x0bac:
+        r1 = r7.currentChat;
+        if (r1 == 0) goto L_0x0bd4;
+    L_0x0bb0:
+        r1 = r40.getMessagesController();
         r2 = r7.currentChat;
         r2 = r2.id;
         r2 = java.lang.Integer.valueOf(r2);
         r1 = r1.getChat(r2);
-        if (r1 != 0) goto L_0x0ba6;
-    L_0x0ba5:
+        if (r1 != 0) goto L_0x0bc3;
+    L_0x0bc2:
         return;
-    L_0x0ba6:
+    L_0x0bc3:
         r7.currentChat = r1;
-        r39.updateBottomOverlay();
+        r40.updateBottomOverlay();
         r1 = r7.chatActivityEnterView;
-        if (r1 == 0) goto L_0x0bb6;
-    L_0x0baf:
+        if (r1 == 0) goto L_0x0bd3;
+    L_0x0bcc:
         r2 = r7.dialog_id;
         r4 = r7.currentAccount;
         r1.setDialogId(r2, r4);
-    L_0x0bb6:
+    L_0x0bd3:
         r14 = 1;
-    L_0x0bb7:
+    L_0x0bd4:
         r1 = r0 & 256;
-        if (r1 == 0) goto L_0x0bdd;
-    L_0x0bbb:
+        if (r1 == 0) goto L_0x0bfa;
+    L_0x0bd8:
         r1 = r7.bottomOverlayChatText2;
-        if (r1 == 0) goto L_0x0bdd;
-    L_0x0bbf:
+        if (r1 == 0) goto L_0x0bfa;
+    L_0x0bdc:
         r1 = r7.chatInfo;
-        if (r1 == 0) goto L_0x0bdd;
-    L_0x0bc3:
+        if (r1 == 0) goto L_0x0bfa;
+    L_0x0be0:
         r1 = r7.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 == 0) goto L_0x0bdd;
-    L_0x0bcb:
+        if (r1 == 0) goto L_0x0bfa;
+    L_0x0be8:
         r1 = r7.currentChat;
         r1 = r1.megagroup;
-        if (r1 != 0) goto L_0x0bdd;
-    L_0x0bd1:
+        if (r1 != 0) goto L_0x0bfa;
+    L_0x0bee:
         r1 = r7.chatInfo;
         r1 = r1.linked_chat_id;
         r1 = -r1;
-        if (r1 == 0) goto L_0x0bdd;
-    L_0x0bd8:
+        if (r1 == 0) goto L_0x0bfa;
+    L_0x0bf5:
         r1 = r7.bottomOverlayChatText2;
         r1.updateCounter();
-    L_0x0bdd:
+    L_0x0bfa:
         r1 = r7.avatarContainer;
-        if (r1 == 0) goto L_0x0be6;
-    L_0x0be1:
-        if (r14 == 0) goto L_0x0be6;
-    L_0x0be3:
+        if (r1 == 0) goto L_0x0CLASSNAME;
+    L_0x0bfe:
+        if (r14 == 0) goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
         r1.updateSubtitle();
-    L_0x0be6:
+    L_0x0CLASSNAME:
         r0 = r0 & 128;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x0bea:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x0CLASSNAME:
         r1 = 1;
         r7.updateTopPanel(r1);
-        goto L_0x2ad5;
-    L_0x0bf0:
+        goto L_0x2b4e;
+    L_0x0c0d:
         r1 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages;
-        if (r0 != r1) goto L_0x13d8;
-    L_0x0bf4:
+        if (r0 != r1) goto L_0x1449;
+    L_0x0CLASSNAME:
         r1 = 0;
         r0 = r8[r1];
         r0 = (java.lang.Long) r0;
         r0 = r0.longValue();
         r5 = r7.dialog_id;
         r2 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-        if (r2 != 0) goto L_0x2ad5;
+        if (r2 != 0) goto L_0x2b4e;
     L_0x0CLASSNAME:
-        r0 = r39.getUserConfig();
+        r0 = r40.getUserConfig();
         r0 = r0.getClientUserId();
         r1 = 1;
         r2 = r8[r1];
         r2 = (java.util.ArrayList) r2;
         r5 = r7.currentEncryptedChat;
-        if (r5 == 0) goto L_0x0CLASSNAME;
+        if (r5 == 0) goto L_0x0cb4;
     L_0x0CLASSNAME:
         r5 = r2.size();
-        if (r5 != r1) goto L_0x0CLASSNAME;
-    L_0x0c1a:
+        if (r5 != r1) goto L_0x0cb4;
+    L_0x0CLASSNAME:
         r1 = 0;
         r5 = r2.get(r1);
         r5 = (org.telegram.messenger.MessageObject) r5;
         r1 = r7.currentEncryptedChat;
-        if (r1 == 0) goto L_0x0CLASSNAME;
+        if (r1 == 0) goto L_0x0cb4;
     L_0x0CLASSNAME:
         r1 = r5.isOut();
-        if (r1 == 0) goto L_0x0CLASSNAME;
-    L_0x0c2b:
+        if (r1 == 0) goto L_0x0cb4;
+    L_0x0CLASSNAME:
         r1 = r5.messageOwner;
         r1 = r1.action;
         r5 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
-        if (r5 == 0) goto L_0x0CLASSNAME;
+        if (r5 == 0) goto L_0x0cb4;
     L_0x0CLASSNAME:
         r1 = r1.encryptedAction;
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL;
-        if (r1 == 0) goto L_0x0CLASSNAME;
+        if (r1 == 0) goto L_0x0cb4;
     L_0x0CLASSNAME:
-        r1 = r39.getParentActivity();
-        if (r1 == 0) goto L_0x0CLASSNAME;
-    L_0x0c3f:
+        r1 = r40.getParentActivity();
+        if (r1 == 0) goto L_0x0cb4;
+    L_0x0c5c:
         r1 = r7.currentEncryptedChat;
         r1 = r1.layer;
         r1 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r1);
         r5 = 17;
-        if (r1 >= r5) goto L_0x0CLASSNAME;
-    L_0x0c4b:
+        if (r1 >= r5) goto L_0x0cb4;
+    L_0x0CLASSNAME:
         r1 = r7.currentEncryptedChat;
         r1 = r1.ttl;
-        if (r1 <= 0) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+        if (r1 <= 0) goto L_0x0cb4;
+    L_0x0c6e:
         r5 = 60;
-        if (r1 > r5) goto L_0x0CLASSNAME;
+        if (r1 > r5) goto L_0x0cb4;
     L_0x0CLASSNAME:
         r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
-        r5 = r39.getParentActivity();
+        r5 = r40.getParentActivity();
         r1.<init>(r5);
-        r5 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r5 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r6 = "AppName";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
-        r5 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+        r5 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r6 = "OK";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r6 = 0;
         r1.setPositiveButton(r5, r6);
-        r5 = NUM; // 0x7f0d02f0 float:1.874364E38 double:1.053130149E-314;
+        r5 = NUM; // 0x7f0d02f3 float:1.8743646E38 double:1.0531301506E-314;
         r6 = 2;
         r8 = new java.lang.Object[r6];
         r6 = r7.currentUser;
@@ -12957,115 +13149,158 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.setMessage(r5);
         r1 = r1.create();
         r7.showDialog(r1);
-    L_0x0CLASSNAME:
+    L_0x0cb4:
         r1 = 0;
         r14 = 0;
-    L_0x0CLASSNAME:
+    L_0x0cb6:
         r5 = r2.size();
-        if (r1 >= r5) goto L_0x0d95;
-    L_0x0c9f:
+        if (r1 >= r5) goto L_0x0e06;
+    L_0x0cbc:
         r5 = r2.get(r1);
         r5 = (org.telegram.messenger.MessageObject) r5;
-        if (r14 != 0) goto L_0x0cba;
-    L_0x0ca7:
         r6 = r5.isOut();
-        if (r6 == 0) goto L_0x0cba;
-    L_0x0cad:
+        if (r6 == 0) goto L_0x0d2b;
+    L_0x0cc8:
+        if (r14 != 0) goto L_0x0cd7;
+    L_0x0cca:
         r6 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
         r8 = org.telegram.messenger.NotificationCenter.closeSearchByActiveAction;
         r9 = 0;
         r10 = new java.lang.Object[r9];
         r6.postNotificationName(r8, r10);
         r14 = 1;
-    L_0x0cba:
+    L_0x0cd7:
         r6 = r7.currentChat;
-        if (r6 == 0) goto L_0x0d00;
-    L_0x0cbe:
+        if (r6 == 0) goto L_0x0d2b;
+    L_0x0cdb:
+        r6 = r6.slowmode_enabled;
+        if (r6 == 0) goto L_0x0d2b;
+    L_0x0cdf:
+        r6 = r5.isSent();
+        if (r6 == 0) goto L_0x0d2b;
+    L_0x0ce5:
+        r6 = r7.chatInfo;
+        if (r6 == 0) goto L_0x0d1e;
+    L_0x0ce9:
+        r8 = r5.messageOwner;
+        r8 = r8.date;
+        r6 = r6.slowmode_seconds;
+        r8 = r8 + r6;
+        r6 = r40.getConnectionsManager();
+        r6 = r6.getCurrentTime();
+        r9 = r40.getConnectionsManager();
+        r9 = r9.getCurrentTime();
+        if (r8 <= r9) goto L_0x0d1e;
+    L_0x0d02:
+        r9 = r7.chatInfo;
+        r10 = r9.slowmode_next_send_date;
+        r11 = r9.slowmode_seconds;
+        r6 = r6 + r11;
+        r6 = java.lang.Math.min(r6, r8);
+        r6 = java.lang.Math.max(r10, r6);
+        r9.slowmode_next_send_date = r6;
+        r6 = r7.chatActivityEnterView;
+        if (r6 == 0) goto L_0x0d1e;
+    L_0x0d17:
+        r8 = r7.chatInfo;
+        r8 = r8.slowmode_next_send_date;
+        r6.setSlowModeTimer(r8);
+    L_0x0d1e:
+        r6 = r40.getMessagesController();
+        r8 = r7.currentChat;
+        r8 = r8.id;
+        r9 = 1;
+        r10 = 0;
+        r6.loadFullChat(r8, r10, r9);
+    L_0x0d2b:
+        r6 = r7.currentChat;
+        if (r6 == 0) goto L_0x0d71;
+    L_0x0d2f:
         r6 = r5.messageOwner;
         r6 = r6.action;
         r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
-        if (r8 == 0) goto L_0x0cca;
-    L_0x0cc6:
+        if (r8 == 0) goto L_0x0d3b;
+    L_0x0d37:
         r6 = r6.user_id;
-        if (r6 == r0) goto L_0x0cde;
-    L_0x0cca:
+        if (r6 == r0) goto L_0x0d4f;
+    L_0x0d3b:
         r6 = r5.messageOwner;
         r6 = r6.action;
         r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
-        if (r8 == 0) goto L_0x0d48;
-    L_0x0cd2:
+        if (r8 == 0) goto L_0x0db9;
+    L_0x0d43:
         r6 = r6.users;
         r8 = java.lang.Integer.valueOf(r0);
         r6 = r6.contains(r8);
-        if (r6 == 0) goto L_0x0d48;
-    L_0x0cde:
-        r6 = r39.getMessagesController();
+        if (r6 == 0) goto L_0x0db9;
+    L_0x0d4f:
+        r6 = r40.getMessagesController();
         r8 = r7.currentChat;
         r8 = r8.id;
         r8 = java.lang.Integer.valueOf(r8);
         r6 = r6.getChat(r8);
-        if (r6 == 0) goto L_0x0d48;
-    L_0x0cf0:
+        if (r6 == 0) goto L_0x0db9;
+    L_0x0d61:
         r7.currentChat = r6;
-        r39.checkActionBarMenu();
-        r39.updateBottomOverlay();
+        r40.checkActionBarMenu();
+        r40.updateBottomOverlay();
         r6 = r7.avatarContainer;
-        if (r6 == 0) goto L_0x0d48;
-    L_0x0cfc:
+        if (r6 == 0) goto L_0x0db9;
+    L_0x0d6d:
         r6.updateSubtitle();
-        goto L_0x0d48;
-    L_0x0d00:
+        goto L_0x0db9;
+    L_0x0d71:
         r8 = r7.inlineReturn;
         r10 = 0;
         r6 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r6 == 0) goto L_0x0d48;
-    L_0x0d08:
+        if (r6 == 0) goto L_0x0db9;
+    L_0x0d79:
         r6 = r5.messageOwner;
         r6 = r6.reply_markup;
-        if (r6 == 0) goto L_0x0d48;
-    L_0x0d0e:
+        if (r6 == 0) goto L_0x0db9;
+    L_0x0d7f:
         r6 = 0;
-    L_0x0d0f:
+    L_0x0d80:
         r8 = r5.messageOwner;
         r8 = r8.reply_markup;
         r8 = r8.rows;
         r8 = r8.size();
-        if (r6 >= r8) goto L_0x0d48;
-    L_0x0d1b:
+        if (r6 >= r8) goto L_0x0db9;
+    L_0x0d8c:
         r8 = r5.messageOwner;
         r8 = r8.reply_markup;
         r8 = r8.rows;
         r8 = r8.get(r6);
         r8 = (org.telegram.tgnet.TLRPC.TL_keyboardButtonRow) r8;
         r9 = 0;
-    L_0x0d28:
+    L_0x0d99:
         r10 = r8.buttons;
         r10 = r10.size();
-        if (r9 >= r10) goto L_0x0d45;
-    L_0x0d30:
+        if (r9 >= r10) goto L_0x0db6;
+    L_0x0da1:
         r10 = r8.buttons;
         r10 = r10.get(r9);
         r10 = (org.telegram.tgnet.TLRPC.KeyboardButton) r10;
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonSwitchInline;
-        if (r11 == 0) goto L_0x0d42;
-    L_0x0d3c:
+        if (r11 == 0) goto L_0x0db3;
+    L_0x0dad:
         r10 = (org.telegram.tgnet.TLRPC.TL_keyboardButtonSwitchInline) r10;
         r7.processSwitchButton(r10);
-        goto L_0x0d45;
-    L_0x0d42:
+        goto L_0x0db6;
+    L_0x0db3:
         r9 = r9 + 1;
-        goto L_0x0d28;
-    L_0x0d45:
+        goto L_0x0d99;
+    L_0x0db6:
         r6 = r6 + 1;
-        goto L_0x0d0f;
-    L_0x0d48:
+        goto L_0x0d80;
+    L_0x0db9:
         r6 = r5.messageOwner;
         r6 = r6.reply_to_msg_id;
-        if (r6 == 0) goto L_0x0d91;
-    L_0x0d4e:
+        if (r6 == 0) goto L_0x0e02;
+    L_0x0dbf:
         r8 = r5.replyMessageObject;
-        if (r8 != 0) goto L_0x0d91;
-    L_0x0d52:
+        if (r8 != 0) goto L_0x0e02;
+    L_0x0dc3:
         r8 = r7.messagesDict;
         r9 = 0;
         r8 = r8[r9];
@@ -13075,241 +13310,241 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6 = r5.messageOwner;
         r6 = r6.action;
         r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
-        if (r8 == 0) goto L_0x0d6c;
-    L_0x0d67:
+        if (r8 == 0) goto L_0x0ddd;
+    L_0x0dd8:
         r8 = 0;
         r5.generatePinMessageText(r8, r8);
-        goto L_0x0d7c;
-    L_0x0d6c:
+        goto L_0x0ded;
+    L_0x0ddd:
         r8 = 0;
         r9 = r6 instanceof org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
-        if (r9 == 0) goto L_0x0d75;
-    L_0x0d71:
+        if (r9 == 0) goto L_0x0de6;
+    L_0x0de2:
         r5.generateGameMessageText(r8);
-        goto L_0x0d7c;
-    L_0x0d75:
+        goto L_0x0ded;
+    L_0x0de6:
         r6 = r6 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
-        if (r6 == 0) goto L_0x0d7c;
-    L_0x0d79:
+        if (r6 == 0) goto L_0x0ded;
+    L_0x0dea:
         r5.generatePaymentSentMessageText(r8);
-    L_0x0d7c:
+    L_0x0ded:
         r6 = r5.isMegagroup();
-        if (r6 == 0) goto L_0x0d91;
-    L_0x0d82:
+        if (r6 == 0) goto L_0x0e02;
+    L_0x0df3:
         r5 = r5.replyMessageObject;
-        if (r5 == 0) goto L_0x0d91;
-    L_0x0d86:
+        if (r5 == 0) goto L_0x0e02;
+    L_0x0df7:
         r5 = r5.messageOwner;
-        if (r5 == 0) goto L_0x0d91;
-    L_0x0d8a:
+        if (r5 == 0) goto L_0x0e02;
+    L_0x0dfb:
         r6 = r5.flags;
         r8 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r6 = r6 | r8;
         r5.flags = r6;
-    L_0x0d91:
+    L_0x0e02:
         r1 = r1 + 1;
-        goto L_0x0CLASSNAME;
-    L_0x0d95:
+        goto L_0x0cb6;
+    L_0x0e06:
         r1 = r7.forwardEndReached;
         r5 = 0;
         r1 = r1[r5];
-        if (r1 != 0) goto L_0x0eff;
-    L_0x0d9c:
+        if (r1 != 0) goto L_0x0var_;
+    L_0x0e0d:
         r1 = r7.currentEncryptedChat;
-        if (r1 == 0) goto L_0x0da4;
-    L_0x0da0:
+        if (r1 == 0) goto L_0x0e15;
+    L_0x0e11:
         r21 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        goto L_0x0da6;
-    L_0x0da4:
+        goto L_0x0e17;
+    L_0x0e15:
         r21 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-    L_0x0da6:
+    L_0x0e17:
         r6 = r21;
         r1 = 0;
         r3 = 0;
         r5 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r14 = 0;
-    L_0x0dad:
+    L_0x0e1e:
         r8 = r2.size();
-        if (r1 >= r8) goto L_0x0eb0;
-    L_0x0db3:
+        if (r1 >= r8) goto L_0x0var_;
+    L_0x0e24:
         r8 = r2.get(r1);
         r8 = (org.telegram.messenger.MessageObject) r8;
         r9 = r8.getId();
         r10 = r7.currentUser;
-        if (r10 == 0) goto L_0x0dd4;
-    L_0x0dc1:
+        if (r10 == 0) goto L_0x0e45;
+    L_0x0e32:
         r10 = r10.bot;
-        if (r10 == 0) goto L_0x0dcb;
-    L_0x0dc5:
+        if (r10 == 0) goto L_0x0e3c;
+    L_0x0e36:
         r10 = r8.isOut();
-        if (r10 != 0) goto L_0x0dd1;
-    L_0x0dcb:
+        if (r10 != 0) goto L_0x0e42;
+    L_0x0e3c:
         r10 = r7.currentUser;
         r10 = r10.id;
-        if (r10 != r0) goto L_0x0dd4;
-    L_0x0dd1:
+        if (r10 != r0) goto L_0x0e45;
+    L_0x0e42:
         r8.setIsRead();
-    L_0x0dd4:
+    L_0x0e45:
         r10 = r8.messageOwner;
         r10 = r10.action;
         r11 = r7.avatarContainer;
-        if (r11 == 0) goto L_0x0df1;
-    L_0x0ddc:
+        if (r11 == 0) goto L_0x0e62;
+    L_0x0e4d:
         r12 = r7.currentEncryptedChat;
-        if (r12 == 0) goto L_0x0df1;
-    L_0x0de0:
+        if (r12 == 0) goto L_0x0e62;
+    L_0x0e51:
         r12 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
-        if (r12 == 0) goto L_0x0df1;
-    L_0x0de4:
+        if (r12 == 0) goto L_0x0e62;
+    L_0x0e55:
         r12 = r10.encryptedAction;
         r13 = r12 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL;
-        if (r13 == 0) goto L_0x0df1;
-    L_0x0dea:
+        if (r13 == 0) goto L_0x0e62;
+    L_0x0e5b:
         r12 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL) r12;
         r12 = r12.ttl_seconds;
         r11.setTime(r12);
-    L_0x0df1:
+    L_0x0e62:
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
-        if (r11 == 0) goto L_0x0df9;
-    L_0x0df5:
+        if (r11 == 0) goto L_0x0e6a;
+    L_0x0e66:
         r7.migrateToNewChat(r8);
         return;
-    L_0x0df9:
+    L_0x0e6a:
         r11 = r7.currentChat;
-        if (r11 == 0) goto L_0x0e0a;
-    L_0x0dfd:
+        if (r11 == 0) goto L_0x0e7b;
+    L_0x0e6e:
         r11 = r11.megagroup;
-        if (r11 == 0) goto L_0x0e0a;
-    L_0x0e01:
+        if (r11 == 0) goto L_0x0e7b;
+    L_0x0e72:
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
-        if (r11 != 0) goto L_0x0e09;
-    L_0x0e05:
+        if (r11 != 0) goto L_0x0e7a;
+    L_0x0e76:
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
-        if (r11 == 0) goto L_0x0e0a;
-    L_0x0e09:
+        if (r11 == 0) goto L_0x0e7b;
+    L_0x0e7a:
         r14 = 1;
-    L_0x0e0a:
-        if (r1 != 0) goto L_0x0e19;
-    L_0x0e0c:
+    L_0x0e7b:
+        if (r1 != 0) goto L_0x0e8a;
+    L_0x0e7d:
         r11 = r8.messageOwner;
         r11 = r11.id;
-        if (r11 >= 0) goto L_0x0e19;
-    L_0x0e12:
+        if (r11 >= 0) goto L_0x0e8a;
+    L_0x0e83:
         r11 = r8.type;
         r12 = 5;
-        if (r11 != r12) goto L_0x0e19;
-    L_0x0e17:
+        if (r11 != r12) goto L_0x0e8a;
+    L_0x0e88:
         r7.needAnimateToMessage = r8;
-    L_0x0e19:
+    L_0x0e8a:
         r11 = r8.isOut();
-        if (r11 == 0) goto L_0x0e2a;
-    L_0x0e1f:
+        if (r11 == 0) goto L_0x0e9b;
+    L_0x0e90:
         r11 = r8.isSending();
-        if (r11 == 0) goto L_0x0e2a;
-    L_0x0e25:
+        if (r11 == 0) goto L_0x0e9b;
+    L_0x0e96:
         r11 = 0;
         r7.scrollToLastMessage(r11);
         return;
-    L_0x0e2a:
+    L_0x0e9b:
         r11 = 0;
         r12 = r8.type;
-        if (r12 < 0) goto L_0x0eac;
-    L_0x0e2f:
+        if (r12 < 0) goto L_0x0f1d;
+    L_0x0ea0:
         r12 = r7.messagesDict;
         r12 = r12[r11];
         r11 = r12.indexOfKey(r9);
-        if (r11 < 0) goto L_0x0e3b;
-    L_0x0e39:
-        goto L_0x0eac;
-    L_0x0e3b:
+        if (r11 < 0) goto L_0x0eac;
+    L_0x0eaa:
+        goto L_0x0f1d;
+    L_0x0eac:
         r11 = r7.currentChat;
-        if (r11 == 0) goto L_0x0e55;
-    L_0x0e3f:
+        if (r11 == 0) goto L_0x0ec6;
+    L_0x0eb0:
         r11 = r11.creator;
-        if (r11 == 0) goto L_0x0e55;
-    L_0x0e43:
+        if (r11 == 0) goto L_0x0ec6;
+    L_0x0eb4:
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatCreate;
-        if (r11 != 0) goto L_0x0eac;
-    L_0x0e47:
+        if (r11 != 0) goto L_0x0f1d;
+    L_0x0eb8:
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatEditPhoto;
-        if (r11 == 0) goto L_0x0e55;
-    L_0x0e4b:
+        if (r11 == 0) goto L_0x0ec6;
+    L_0x0ebc:
         r11 = r7.messages;
         r11 = r11.size();
         r12 = 4;
-        if (r11 >= r12) goto L_0x0e55;
-    L_0x0e54:
-        goto L_0x0eac;
-    L_0x0e55:
+        if (r11 >= r12) goto L_0x0ec6;
+    L_0x0ec5:
+        goto L_0x0f1d;
+    L_0x0ec6:
         r10 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChannelMigrateFrom;
-        if (r10 == 0) goto L_0x0e5a;
-    L_0x0e59:
-        goto L_0x0eac;
-    L_0x0e5a:
+        if (r10 == 0) goto L_0x0ecb;
+    L_0x0eca:
+        goto L_0x0f1d;
+    L_0x0ecb:
         r10 = 0;
         r7.addToPolls(r8, r10);
         r8.checkLayout();
         r10 = r8.messageOwner;
         r10 = r10.date;
         r5 = java.lang.Math.max(r5, r10);
-        if (r9 <= 0) goto L_0x0e78;
-    L_0x0e6b:
+        if (r9 <= 0) goto L_0x0ee9;
+    L_0x0edc:
         r6 = java.lang.Math.max(r9, r6);
         r10 = r7.last_message_id;
         r9 = java.lang.Math.max(r10, r9);
         r7.last_message_id = r9;
-        goto L_0x0e88;
-    L_0x0e78:
+        goto L_0x0ef9;
+    L_0x0ee9:
         r10 = r7.currentEncryptedChat;
-        if (r10 == 0) goto L_0x0e88;
-    L_0x0e7c:
+        if (r10 == 0) goto L_0x0ef9;
+    L_0x0eed:
         r6 = java.lang.Math.min(r9, r6);
         r10 = r7.last_message_id;
         r9 = java.lang.Math.min(r10, r9);
         r7.last_message_id = r9;
-    L_0x0e88:
+    L_0x0ef9:
         r9 = r8.messageOwner;
         r9 = r9.mentioned;
-        if (r9 == 0) goto L_0x0e9b;
-    L_0x0e8e:
+        if (r9 == 0) goto L_0x0f0c;
+    L_0x0eff:
         r9 = r8.isContentUnread();
-        if (r9 == 0) goto L_0x0e9b;
-    L_0x0e94:
+        if (r9 == 0) goto L_0x0f0c;
+    L_0x0var_:
         r9 = r7.newMentionsCount;
         r10 = 1;
         r9 = r9 + r10;
         r7.newMentionsCount = r9;
-        goto L_0x0e9c;
-    L_0x0e9b:
+        goto L_0x0f0d;
+    L_0x0f0c:
         r10 = 1;
-    L_0x0e9c:
+    L_0x0f0d:
         r9 = r7.newUnreadMessageCount;
         r9 = r9 + r10;
         r7.newUnreadMessageCount = r9;
         r8 = r8.type;
         r9 = 10;
-        if (r8 == r9) goto L_0x0eab;
-    L_0x0ea7:
+        if (r8 == r9) goto L_0x0f1c;
+    L_0x0var_:
         r9 = 11;
-        if (r8 != r9) goto L_0x0eac;
-    L_0x0eab:
+        if (r8 != r9) goto L_0x0f1d;
+    L_0x0f1c:
         r3 = 1;
-    L_0x0eac:
+    L_0x0f1d:
         r1 = r1 + 1;
-        goto L_0x0dad;
-    L_0x0eb0:
+        goto L_0x0e1e;
+    L_0x0var_:
         r0 = r7.newUnreadMessageCount;
-        if (r0 == 0) goto L_0x0ed7;
-    L_0x0eb4:
+        if (r0 == 0) goto L_0x0var_;
+    L_0x0var_:
         r0 = r7.pagedownButtonCounter;
-        if (r0 == 0) goto L_0x0ed7;
-    L_0x0eb8:
+        if (r0 == 0) goto L_0x0var_;
+    L_0x0var_:
         r1 = 0;
         r0.setVisibility(r1);
         r0 = r7.prevSetUnreadCount;
         r2 = r7.newUnreadMessageCount;
-        if (r0 == r2) goto L_0x0ed8;
-    L_0x0ec2:
+        if (r0 == r2) goto L_0x0var_;
+    L_0x0var_:
         r7.prevSetUnreadCount = r2;
         r0 = r7.pagedownButtonCounter;
         r5 = 1;
@@ -13318,16 +13553,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6[r1] = r2;
         r2 = java.lang.String.format(r4, r6);
         r0.setText(r2);
-        goto L_0x0ed8;
-    L_0x0ed7:
+        goto L_0x0var_;
+    L_0x0var_:
         r1 = 0;
-    L_0x0ed8:
+    L_0x0var_:
         r0 = r7.newMentionsCount;
-        if (r0 == 0) goto L_0x0efa;
-    L_0x0edc:
+        if (r0 == 0) goto L_0x0f6b;
+    L_0x0f4d:
         r0 = r7.mentiondownButtonCounter;
-        if (r0 == 0) goto L_0x0efa;
-    L_0x0ee0:
+        if (r0 == 0) goto L_0x0f6b;
+    L_0x0var_:
         r0.setVisibility(r1);
         r0 = r7.mentiondownButtonCounter;
         r2 = 1;
@@ -13338,10 +13573,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = java.lang.String.format(r4, r5);
         r0.setText(r1);
         r7.showMentionDownButton(r2, r2);
-    L_0x0efa:
-        r39.updateVisibleRows();
-        goto L_0x13a7;
-    L_0x0eff:
+    L_0x0f6b:
+        r40.updateVisibleRows();
+        goto L_0x1418;
+    L_0x0var_:
         r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
         if (r1 == 0) goto L_0x0var_;
     L_0x0var_:
@@ -13364,117 +13599,117 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = 0;
         r9 = 0;
         r14 = 0;
-    L_0x0f2b:
+    L_0x0f9c:
         r10 = r2.size();
-        if (r1 >= r10) goto L_0x12a7;
-    L_0x0var_:
+        if (r1 >= r10) goto L_0x1318;
+    L_0x0fa2:
         r10 = r2.get(r1);
         r10 = (org.telegram.messenger.MessageObject) r10;
         r11 = r10.getId();
-        r12 = r39.isSecretChat();
-        if (r12 == 0) goto L_0x0var_;
-    L_0x0var_:
+        r12 = r40.isSecretChat();
+        if (r12 == 0) goto L_0x0fb5;
+    L_0x0fb2:
         r7.checkSecretMessageForLocation(r10);
-    L_0x0var_:
+    L_0x0fb5:
         r12 = r7.currentUser;
-        if (r12 == 0) goto L_0x0f5b;
-    L_0x0var_:
+        if (r12 == 0) goto L_0x0fcc;
+    L_0x0fb9:
         r12 = r12.bot;
-        if (r12 == 0) goto L_0x0var_;
-    L_0x0f4c:
+        if (r12 == 0) goto L_0x0fc3;
+    L_0x0fbd:
         r12 = r10.isOut();
-        if (r12 != 0) goto L_0x0var_;
-    L_0x0var_:
+        if (r12 != 0) goto L_0x0fc9;
+    L_0x0fc3:
         r12 = r7.currentUser;
         r12 = r12.id;
-        if (r12 != r0) goto L_0x0f5b;
-    L_0x0var_:
+        if (r12 != r0) goto L_0x0fcc;
+    L_0x0fc9:
         r10.setIsRead();
-    L_0x0f5b:
+    L_0x0fcc:
         r12 = r10.messageOwner;
         r12 = r12.action;
         r13 = r7.avatarContainer;
-        if (r13 == 0) goto L_0x0f7b;
-    L_0x0var_:
+        if (r13 == 0) goto L_0x0fec;
+    L_0x0fd4:
         r15 = r7.currentEncryptedChat;
-        if (r15 == 0) goto L_0x0f7b;
-    L_0x0var_:
+        if (r15 == 0) goto L_0x0fec;
+    L_0x0fd8:
         r15 = r12 instanceof org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
-        if (r15 == 0) goto L_0x0f7b;
-    L_0x0f6b:
+        if (r15 == 0) goto L_0x0fec;
+    L_0x0fdc:
         r15 = r12.encryptedAction;
-        r40 = r0;
+        r41 = r0;
         r0 = r15 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL;
-        if (r0 == 0) goto L_0x0f7d;
-    L_0x0var_:
+        if (r0 == 0) goto L_0x0fee;
+    L_0x0fe4:
         r15 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL) r15;
         r0 = r15.ttl_seconds;
         r13.setTime(r0);
-        goto L_0x0f7d;
-    L_0x0f7b:
-        r40 = r0;
-    L_0x0f7d:
+        goto L_0x0fee;
+    L_0x0fec:
+        r41 = r0;
+    L_0x0fee:
         r0 = r10.type;
-        if (r0 < 0) goto L_0x1295;
-    L_0x0var_:
+        if (r0 < 0) goto L_0x1306;
+    L_0x0ff2:
         r0 = r7.messagesDict;
         r13 = 0;
         r0 = r0[r13];
         r0 = r0.indexOfKey(r11);
-        if (r0 < 0) goto L_0x0f8e;
-    L_0x0f8c:
-        goto L_0x1295;
-    L_0x0f8e:
+        if (r0 < 0) goto L_0x0fff;
+    L_0x0ffd:
+        goto L_0x1306;
+    L_0x0fff:
         r0 = r7.currentChat;
-        if (r0 == 0) goto L_0x0fa9;
-    L_0x0var_:
+        if (r0 == 0) goto L_0x101a;
+    L_0x1003:
         r0 = r0.creator;
-        if (r0 == 0) goto L_0x0fa9;
-    L_0x0var_:
+        if (r0 == 0) goto L_0x101a;
+    L_0x1007:
         r0 = r12 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatCreate;
-        if (r0 != 0) goto L_0x1295;
-    L_0x0f9a:
+        if (r0 != 0) goto L_0x1306;
+    L_0x100b:
         r0 = r12 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatEditPhoto;
-        if (r0 == 0) goto L_0x0fa9;
-    L_0x0f9e:
+        if (r0 == 0) goto L_0x101a;
+    L_0x100f:
         r0 = r7.messages;
         r0 = r0.size();
         r13 = 4;
-        if (r0 >= r13) goto L_0x0fa9;
-    L_0x0fa7:
-        goto L_0x1295;
-    L_0x0fa9:
+        if (r0 >= r13) goto L_0x101a;
+    L_0x1018:
+        goto L_0x1306;
+    L_0x101a:
         r0 = r12 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChannelMigrateFrom;
-        if (r0 == 0) goto L_0x0faf;
-    L_0x0fad:
-        goto L_0x1295;
-    L_0x0faf:
+        if (r0 == 0) goto L_0x1020;
+    L_0x101e:
+        goto L_0x1306;
+    L_0x1020:
         r13 = 0;
         r7.addToPolls(r10, r13);
-        if (r1 != 0) goto L_0x0fc5;
-    L_0x0fb5:
+        if (r1 != 0) goto L_0x1036;
+    L_0x1026:
         r0 = r10.messageOwner;
         r0 = r0.id;
-        if (r0 >= 0) goto L_0x0fc5;
-    L_0x0fbb:
+        if (r0 >= 0) goto L_0x1036;
+    L_0x102c:
         r0 = r10.type;
         r13 = 5;
-        if (r0 != r13) goto L_0x0fc5;
-    L_0x0fc0:
+        if (r0 != r13) goto L_0x1036;
+    L_0x1031:
         r0 = r7.animatingMessageObjects;
         r0.add(r10);
-    L_0x0fc5:
+    L_0x1036:
         r0 = r10.hasValidGroupId();
-        if (r0 == 0) goto L_0x1005;
-    L_0x0fcb:
+        if (r0 == 0) goto L_0x1076;
+    L_0x103c:
         r0 = r7.groupedMessagesMap;
-        r41 = r8;
-        r42 = r9;
+        r42 = r8;
+        r43 = r9;
         r8 = r10.getGroupId();
         r0 = r0.get(r8);
         r0 = (org.telegram.messenger.MessageObject.GroupedMessages) r0;
-        if (r0 != 0) goto L_0x0ff1;
-    L_0x0fdd:
+        if (r0 != 0) goto L_0x1062;
+    L_0x104e:
         r0 = new org.telegram.messenger.MessageObject$GroupedMessages;
         r0.<init>();
         r8 = r10.getGroupId();
@@ -13483,34 +13718,34 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9 = r14;
         r13 = r0.groupId;
         r8.put(r13, r0);
-        goto L_0x0ff2;
-    L_0x0ff1:
+        goto L_0x1063;
+    L_0x1062:
         r9 = r14;
-    L_0x0ff2:
+    L_0x1063:
         r13 = r0;
-        if (r6 != 0) goto L_0x0ffa;
-    L_0x0ff5:
+        if (r6 != 0) goto L_0x106b;
+    L_0x1066:
         r6 = new android.util.LongSparseArray;
         r6.<init>();
-    L_0x0ffa:
+    L_0x106b:
         r14 = r13.groupId;
         r6.put(r14, r13);
         r0 = r13.messages;
         r0.add(r10);
-        goto L_0x100b;
-    L_0x1005:
-        r41 = r8;
-        r42 = r9;
+        goto L_0x107c;
+    L_0x1076:
+        r42 = r8;
+        r43 = r9;
         r9 = r14;
         r13 = 0;
-    L_0x100b:
-        if (r13 == 0) goto L_0x1032;
-    L_0x100d:
+    L_0x107c:
+        if (r13 == 0) goto L_0x10a3;
+    L_0x107e:
         r0 = r13.messages;
         r0 = r0.size();
         r8 = 1;
-        if (r0 <= r8) goto L_0x1026;
-    L_0x1016:
+        if (r0 <= r8) goto L_0x1097;
+    L_0x1087:
         r0 = r13.messages;
         r8 = r0.size();
         r13 = 2;
@@ -13518,88 +13753,88 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r0.get(r8);
         r13 = r0;
         r13 = (org.telegram.messenger.MessageObject) r13;
-        goto L_0x1027;
-    L_0x1026:
+        goto L_0x1098;
+    L_0x1097:
         r13 = 0;
-    L_0x1027:
-        if (r13 == 0) goto L_0x1032;
-    L_0x1029:
+    L_0x1098:
+        if (r13 == 0) goto L_0x10a3;
+    L_0x109a:
         r0 = r7.messages;
         r0 = r0.indexOf(r13);
         r13 = r0;
         r0 = -1;
-        goto L_0x1034;
-    L_0x1032:
+        goto L_0x10a5;
+    L_0x10a3:
         r0 = -1;
         r13 = -1;
-    L_0x1034:
-        if (r13 != r0) goto L_0x10cd;
-    L_0x1036:
+    L_0x10a5:
+        if (r13 != r0) goto L_0x113e;
+    L_0x10a7:
         r0 = r10.messageOwner;
         r0 = r0.id;
-        if (r0 < 0) goto L_0x10cc;
-    L_0x103c:
+        if (r0 < 0) goto L_0x113d;
+    L_0x10ad:
         r0 = r7.messages;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x1046;
-    L_0x1044:
-        goto L_0x10cc;
-    L_0x1046:
+        if (r0 == 0) goto L_0x10b7;
+    L_0x10b5:
+        goto L_0x113d;
+    L_0x10b7:
         r0 = r7.messages;
         r0 = r0.size();
         r8 = 0;
-    L_0x104d:
-        if (r8 >= r0) goto L_0x10ba;
-    L_0x104f:
+    L_0x10be:
+        if (r8 >= r0) goto L_0x112b;
+    L_0x10c0:
         r14 = r7.messages;
         r14 = r14.get(r8);
         r14 = (org.telegram.messenger.MessageObject) r14;
         r15 = r14.type;
-        if (r15 < 0) goto L_0x10b3;
-    L_0x105b:
+        if (r15 < 0) goto L_0x1124;
+    L_0x10cc:
         r15 = r14.messageOwner;
         r20 = r0;
         r0 = r15.date;
-        if (r0 <= 0) goto L_0x10b5;
-    L_0x1063:
+        if (r0 <= 0) goto L_0x1126;
+    L_0x10d4:
         r0 = r15.id;
-        if (r0 <= 0) goto L_0x106f;
-    L_0x1067:
+        if (r0 <= 0) goto L_0x10e0;
+    L_0x10d8:
         r15 = r10.messageOwner;
         r15 = r15.id;
-        if (r15 <= 0) goto L_0x106f;
-    L_0x106d:
-        if (r0 < r15) goto L_0x1079;
-    L_0x106f:
+        if (r15 <= 0) goto L_0x10e0;
+    L_0x10de:
+        if (r0 < r15) goto L_0x10ea;
+    L_0x10e0:
         r0 = r14.messageOwner;
         r0 = r0.date;
         r15 = r10.messageOwner;
         r15 = r15.date;
-        if (r0 >= r15) goto L_0x10b5;
-    L_0x1079:
+        if (r0 >= r15) goto L_0x1126;
+    L_0x10ea:
         r20 = r14.getGroupId();
         r17 = 0;
         r0 = (r20 > r17 ? 1 : (r20 == r17 ? 0 : -1));
-        if (r0 == 0) goto L_0x109a;
-    L_0x1083:
+        if (r0 == 0) goto L_0x110b;
+    L_0x10f4:
         r0 = r7.groupedMessagesMap;
         r13 = r14.getGroupId();
         r0 = r0.get(r13);
         r13 = r0;
         r13 = (org.telegram.messenger.MessageObject.GroupedMessages) r13;
-        if (r13 == 0) goto L_0x109b;
-    L_0x1092:
+        if (r13 == 0) goto L_0x110c;
+    L_0x1103:
         r0 = r13.messages;
         r0 = r0.size();
-        if (r0 != 0) goto L_0x109b;
-    L_0x109a:
+        if (r0 != 0) goto L_0x110c;
+    L_0x110b:
         r13 = 0;
-    L_0x109b:
-        if (r13 != 0) goto L_0x109f;
-    L_0x109d:
+    L_0x110c:
+        if (r13 != 0) goto L_0x1110;
+    L_0x110e:
         r13 = r8;
-        goto L_0x10ba;
-    L_0x109f:
+        goto L_0x112b;
+    L_0x1110:
         r0 = r7.messages;
         r8 = r13.messages;
         r13 = r8.size();
@@ -13608,52 +13843,52 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = r8.get(r13);
         r0 = r0.indexOf(r8);
         r13 = r0;
-        goto L_0x10ba;
-    L_0x10b3:
+        goto L_0x112b;
+    L_0x1124:
         r20 = r0;
-    L_0x10b5:
+    L_0x1126:
         r8 = r8 + 1;
         r0 = r20;
-        goto L_0x104d;
-    L_0x10ba:
+        goto L_0x10be;
+    L_0x112b:
         r0 = -1;
-        if (r13 == r0) goto L_0x10c5;
-    L_0x10bd:
+        if (r13 == r0) goto L_0x1136;
+    L_0x112e:
         r0 = r7.messages;
         r0 = r0.size();
-        if (r13 <= r0) goto L_0x10cd;
-    L_0x10c5:
+        if (r13 <= r0) goto L_0x113e;
+    L_0x1136:
         r0 = r7.messages;
         r13 = r0.size();
-        goto L_0x10cd;
-    L_0x10cc:
+        goto L_0x113e;
+    L_0x113d:
         r13 = 0;
-    L_0x10cd:
+    L_0x113e:
         r0 = r7.currentEncryptedChat;
-        if (r0 == 0) goto L_0x1109;
-    L_0x10d1:
+        if (r0 == 0) goto L_0x117a;
+    L_0x1142:
         r0 = r10.messageOwner;
         r0 = r0.media;
         r8 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
-        if (r8 == 0) goto L_0x1109;
-    L_0x10d9:
+        if (r8 == 0) goto L_0x117a;
+    L_0x114a:
         r0 = r0.webpage;
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_webPageUrlPending;
-        if (r0 == 0) goto L_0x1109;
-    L_0x10df:
-        if (r5 != 0) goto L_0x10e6;
-    L_0x10e1:
+        if (r0 == 0) goto L_0x117a;
+    L_0x1150:
+        if (r5 != 0) goto L_0x1157;
+    L_0x1152:
         r5 = new java.util.HashMap;
         r5.<init>();
-    L_0x10e6:
+    L_0x1157:
         r0 = r10.messageOwner;
         r0 = r0.media;
         r0 = r0.webpage;
         r0 = r0.url;
         r0 = r5.get(r0);
         r0 = (java.util.ArrayList) r0;
-        if (r0 != 0) goto L_0x1106;
-    L_0x10f6:
+        if (r0 != 0) goto L_0x1177;
+    L_0x1167:
         r0 = new java.util.ArrayList;
         r0.<init>();
         r8 = r10.messageOwner;
@@ -13661,73 +13896,73 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = r8.webpage;
         r8 = r8.url;
         r5.put(r8, r0);
-    L_0x1106:
+    L_0x1177:
         r0.add(r10);
-    L_0x1109:
+    L_0x117a:
         r10.checkLayout();
         r0 = r12 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
-        if (r0 == 0) goto L_0x1129;
-    L_0x1110:
+        if (r0 == 0) goto L_0x119a;
+    L_0x1181:
         r7.migrateToNewChat(r10);
-        if (r6 == 0) goto L_0x1128;
-    L_0x1115:
+        if (r6 == 0) goto L_0x1199;
+    L_0x1186:
         r0 = 0;
-    L_0x1116:
+    L_0x1187:
         r1 = r6.size();
-        if (r0 >= r1) goto L_0x1128;
-    L_0x111c:
+        if (r0 >= r1) goto L_0x1199;
+    L_0x118d:
         r1 = r6.valueAt(r0);
         r1 = (org.telegram.messenger.MessageObject.GroupedMessages) r1;
         r1.calculate();
         r0 = r0 + 1;
-        goto L_0x1116;
-    L_0x1128:
+        goto L_0x1187;
+    L_0x1199:
         return;
-    L_0x1129:
+    L_0x119a:
         r0 = r7.currentChat;
-        if (r0 == 0) goto L_0x113b;
-    L_0x112d:
+        if (r0 == 0) goto L_0x11ac;
+    L_0x119e:
         r0 = r0.megagroup;
-        if (r0 == 0) goto L_0x113b;
-    L_0x1131:
+        if (r0 == 0) goto L_0x11ac;
+    L_0x11a2:
         r0 = r12 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
-        if (r0 != 0) goto L_0x1139;
-    L_0x1135:
+        if (r0 != 0) goto L_0x11aa;
+    L_0x11a6:
         r0 = r12 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
-        if (r0 == 0) goto L_0x113b;
-    L_0x1139:
+        if (r0 == 0) goto L_0x11ac;
+    L_0x11aa:
         r8 = 1;
-        goto L_0x113d;
-    L_0x113b:
-        r8 = r41;
-    L_0x113d:
+        goto L_0x11ae;
+    L_0x11ac:
+        r8 = r42;
+    L_0x11ae:
         r0 = r7.minDate;
         r12 = 0;
         r14 = r0[r12];
-        if (r14 == 0) goto L_0x114c;
-    L_0x1144:
+        if (r14 == 0) goto L_0x11bd;
+    L_0x11b5:
         r14 = r10.messageOwner;
         r14 = r14.date;
         r0 = r0[r12];
-        if (r14 >= r0) goto L_0x1154;
-    L_0x114c:
+        if (r14 >= r0) goto L_0x11c5;
+    L_0x11bd:
         r0 = r7.minDate;
         r14 = r10.messageOwner;
         r14 = r14.date;
         r0[r12] = r14;
-    L_0x1154:
+    L_0x11c5:
         r0 = r10.isOut();
-        if (r0 == 0) goto L_0x1160;
-    L_0x115a:
+        if (r0 == 0) goto L_0x11d1;
+    L_0x11cb:
         r14 = 1;
         r7.removeUnreadPlane(r14);
         r14 = 1;
-        goto L_0x1161;
-    L_0x1160:
+        goto L_0x11d2;
+    L_0x11d1:
         r14 = r9;
-    L_0x1161:
-        if (r11 <= 0) goto L_0x1178;
-    L_0x1163:
+    L_0x11d2:
+        if (r11 <= 0) goto L_0x11e9;
+    L_0x11d4:
         r0 = r7.maxMessageId;
         r9 = r0[r12];
         r9 = java.lang.Math.min(r11, r9);
@@ -13736,11 +13971,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9 = r0[r12];
         r9 = java.lang.Math.max(r11, r9);
         r0[r12] = r9;
-        goto L_0x1190;
-    L_0x1178:
+        goto L_0x1201;
+    L_0x11e9:
         r0 = r7.currentEncryptedChat;
-        if (r0 == 0) goto L_0x1190;
-    L_0x117c:
+        if (r0 == 0) goto L_0x1201;
+    L_0x11ed:
         r0 = r7.maxMessageId;
         r9 = r0[r12];
         r9 = java.lang.Math.max(r11, r9);
@@ -13749,7 +13984,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9 = r0[r12];
         r9 = java.lang.Math.min(r11, r9);
         r0[r12] = r9;
-    L_0x1190:
+    L_0x1201:
         r0 = r7.maxDate;
         r9 = r0[r12];
         r15 = r10.messageOwner;
@@ -13765,13 +14000,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = (java.util.ArrayList) r0;
         r9 = r7.messages;
         r9 = r9.size();
-        if (r13 <= r9) goto L_0x11bd;
-    L_0x11b7:
+        if (r13 <= r9) goto L_0x122e;
+    L_0x1228:
         r9 = r7.messages;
         r13 = r9.size();
-    L_0x11bd:
-        if (r0 != 0) goto L_0x1200;
-    L_0x11bf:
+    L_0x122e:
+        if (r0 != 0) goto L_0x1271;
+    L_0x1230:
         r0 = new java.util.ArrayList;
         r0.<init>();
         r9 = r7.messagesByDays;
@@ -13800,35 +14035,35 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9 = r7.messages;
         r9.add(r13, r12);
         r9 = r7.chatAdapter;
-        if (r9 == 0) goto L_0x1200;
-    L_0x11fd:
+        if (r9 == 0) goto L_0x1271;
+    L_0x126e:
         r9.notifyItemInserted(r13);
-    L_0x1200:
+    L_0x1271:
         r9 = r10.isOut();
-        if (r9 != 0) goto L_0x1253;
-    L_0x1206:
+        if (r9 != 0) goto L_0x12c4;
+    L_0x1277:
         r9 = r7.paused;
-        if (r9 == 0) goto L_0x1253;
-    L_0x120a:
-        if (r13 != 0) goto L_0x1253;
-    L_0x120c:
+        if (r9 == 0) goto L_0x12c4;
+    L_0x127b:
+        if (r13 != 0) goto L_0x12c4;
+    L_0x127d:
         r9 = r7.scrollToTopUnReadOnResume;
-        if (r9 != 0) goto L_0x121e;
-    L_0x1210:
+        if (r9 != 0) goto L_0x128f;
+    L_0x1281:
         r9 = r7.unreadMessageObject;
-        if (r9 == 0) goto L_0x121e;
-    L_0x1214:
+        if (r9 == 0) goto L_0x128f;
+    L_0x1285:
         r7.removeMessageObject(r9);
-        if (r13 <= 0) goto L_0x121b;
-    L_0x1219:
+        if (r13 <= 0) goto L_0x128c;
+    L_0x128a:
         r13 = r13 + -1;
-    L_0x121b:
+    L_0x128c:
         r9 = 0;
         r7.unreadMessageObject = r9;
-    L_0x121e:
+    L_0x128f:
         r9 = r7.unreadMessageObject;
-        if (r9 != 0) goto L_0x1253;
-    L_0x1222:
+        if (r9 != 0) goto L_0x12c4;
+    L_0x1293:
         r9 = new org.telegram.tgnet.TLRPC$TL_message;
         r9.<init>();
         r9.message = r3;
@@ -13844,10 +14079,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9 = r7.messages;
         r9.add(r11, r12);
         r9 = r7.chatAdapter;
-        if (r9 == 0) goto L_0x1245;
-    L_0x1242:
+        if (r9 == 0) goto L_0x12b6;
+    L_0x12b3:
         r9.notifyItemInserted(r11);
-    L_0x1245:
+    L_0x12b6:
         r7.unreadMessageObject = r12;
         r9 = r7.unreadMessageObject;
         r7.scrollToMessage = r9;
@@ -13855,81 +14090,81 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7.scrollToMessagePosition = r11;
         r9 = 1;
         r7.scrollToTopUnReadOnResume = r9;
-        goto L_0x1255;
-    L_0x1253:
+        goto L_0x12c6;
+    L_0x12c4:
         r11 = -10000; // 0xffffffffffffd8f0 float:NaN double:NaN;
-    L_0x1255:
+    L_0x12c6:
         r9 = 0;
         r0.add(r9, r10);
         r0 = r7.messages;
         r0.add(r13, r10);
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x126a;
-    L_0x1262:
+        if (r0 == 0) goto L_0x12db;
+    L_0x12d3:
         r0.notifyItemChanged(r13);
         r0 = r7.chatAdapter;
         r0.notifyItemInserted(r13);
-    L_0x126a:
+    L_0x12db:
         r0 = r10.isOut();
-        if (r0 != 0) goto L_0x1283;
-    L_0x1270:
+        if (r0 != 0) goto L_0x12f4;
+    L_0x12e1:
         r0 = r10.messageOwner;
         r0 = r0.mentioned;
-        if (r0 == 0) goto L_0x1283;
-    L_0x1276:
+        if (r0 == 0) goto L_0x12f4;
+    L_0x12e7:
         r0 = r10.isContentUnread();
-        if (r0 == 0) goto L_0x1283;
-    L_0x127c:
+        if (r0 == 0) goto L_0x12f4;
+    L_0x12ed:
         r0 = r7.newMentionsCount;
         r9 = 1;
         r0 = r0 + r9;
         r7.newMentionsCount = r0;
-        goto L_0x1284;
-    L_0x1283:
+        goto L_0x12f5;
+    L_0x12f4:
         r9 = 1;
-    L_0x1284:
+    L_0x12f5:
         r0 = r7.newUnreadMessageCount;
         r0 = r0 + r9;
         r7.newUnreadMessageCount = r0;
         r0 = r10.type;
         r9 = 10;
-        if (r0 == r9) goto L_0x1293;
-    L_0x128f:
+        if (r0 == r9) goto L_0x1304;
+    L_0x1300:
         r9 = 11;
-        if (r0 != r9) goto L_0x129f;
-    L_0x1293:
+        if (r0 != r9) goto L_0x1310;
+    L_0x1304:
         r9 = 1;
-        goto L_0x12a1;
-    L_0x1295:
-        r41 = r8;
-        r42 = r9;
+        goto L_0x1312;
+    L_0x1306:
+        r42 = r8;
+        r43 = r9;
         r9 = r14;
         r11 = -10000; // 0xffffffffffffd8f0 float:NaN double:NaN;
-        r8 = r41;
+        r8 = r42;
         r14 = r9;
-    L_0x129f:
-        r9 = r42;
-    L_0x12a1:
+    L_0x1310:
+        r9 = r43;
+    L_0x1312:
         r1 = r1 + 1;
-        r0 = r40;
-        goto L_0x0f2b;
-    L_0x12a7:
-        r41 = r8;
-        r42 = r9;
+        r0 = r41;
+        goto L_0x0f9c;
+    L_0x1318:
+        r42 = r8;
+        r43 = r9;
         r9 = r14;
-        if (r5 == 0) goto L_0x12b7;
-    L_0x12ae:
-        r0 = r39.getMessagesController();
+        if (r5 == 0) goto L_0x1328;
+    L_0x131f:
+        r0 = r40.getMessagesController();
         r1 = r7.dialog_id;
         r0.reloadWebPages(r1, r5);
-    L_0x12b7:
-        if (r6 == 0) goto L_0x12f9;
-    L_0x12b9:
+    L_0x1328:
+        if (r6 == 0) goto L_0x136a;
+    L_0x132a:
         r0 = 0;
-    L_0x12ba:
+    L_0x132b:
         r1 = r6.size();
-        if (r0 >= r1) goto L_0x12f9;
-    L_0x12c0:
+        if (r0 >= r1) goto L_0x136a;
+    L_0x1331:
         r1 = r6.valueAt(r0);
         r1 = (org.telegram.messenger.MessageObject.GroupedMessages) r1;
         r2 = r1.posArray;
@@ -13938,11 +14173,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r1.posArray;
         r3 = r3.size();
         r2 = r3 - r2;
-        if (r2 <= 0) goto L_0x12f6;
-    L_0x12d9:
+        if (r2 <= 0) goto L_0x1367;
+    L_0x134a:
         r2 = r7.chatAdapter;
-        if (r2 == 0) goto L_0x12f6;
-    L_0x12dd:
+        if (r2 == 0) goto L_0x1367;
+    L_0x134e:
         r2 = r7.messages;
         r1 = r1.messages;
         r5 = r1.size();
@@ -13950,90 +14185,90 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r5 = r5 - r8;
         r1 = r1.get(r5);
         r1 = r2.indexOf(r1);
-        if (r1 < 0) goto L_0x12f6;
-    L_0x12f1:
+        if (r1 < 0) goto L_0x1367;
+    L_0x1362:
         r2 = r7.chatAdapter;
         r2.notifyItemRangeChanged(r1, r3);
-    L_0x12f6:
+    L_0x1367:
         r0 = r0 + 1;
-        goto L_0x12ba;
-    L_0x12f9:
+        goto L_0x132b;
+    L_0x136a:
         r0 = r7.progressView;
-        if (r0 == 0) goto L_0x1301;
-    L_0x12fd:
+        if (r0 == 0) goto L_0x1372;
+    L_0x136e:
         r1 = 4;
         r0.setVisibility(r1);
-    L_0x1301:
+    L_0x1372:
         r0 = r7.chatAdapter;
-        if (r0 != 0) goto L_0x1308;
-    L_0x1305:
+        if (r0 != 0) goto L_0x1379;
+    L_0x1376:
         r1 = 1;
         r7.scrollToTopOnResume = r1;
-    L_0x1308:
+    L_0x1379:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x13a0;
-    L_0x130c:
+        if (r0 == 0) goto L_0x1411;
+    L_0x137d:
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x13a0;
-    L_0x1310:
+        if (r0 == 0) goto L_0x1411;
+    L_0x1381:
         r0 = r7.chatLayoutManager;
         r13 = r0.findFirstVisibleItemPosition();
         r0 = -1;
-        if (r13 != r0) goto L_0x131a;
-    L_0x1319:
+        if (r13 != r0) goto L_0x138b;
+    L_0x138a:
         r13 = 0;
-    L_0x131a:
+    L_0x138b:
         r0 = r7.chatLayoutManager;
         r0 = r0.findViewByPosition(r13);
-        if (r0 == 0) goto L_0x132e;
-    L_0x1322:
+        if (r0 == 0) goto L_0x139f;
+    L_0x1393:
         r0 = r0.getBottom();
         r1 = r7.chatListView;
         r1 = r1.getMeasuredHeight();
         r0 = r0 - r1;
-        goto L_0x132f;
-    L_0x132e:
+        goto L_0x13a0;
+    L_0x139f:
         r0 = 0;
-    L_0x132f:
-        if (r13 != 0) goto L_0x1339;
-    L_0x1331:
+    L_0x13a0:
+        if (r13 != 0) goto L_0x13aa;
+    L_0x13a2:
         r1 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        if (r0 <= r1) goto L_0x133b;
-    L_0x1339:
-        if (r9 == 0) goto L_0x1352;
-    L_0x133b:
+        if (r0 <= r1) goto L_0x13ac;
+    L_0x13aa:
+        if (r9 == 0) goto L_0x13c3;
+    L_0x13ac:
         r1 = 0;
         r7.newUnreadMessageCount = r1;
         r0 = r7.firstLoading;
-        if (r0 != 0) goto L_0x1350;
-    L_0x1342:
+        if (r0 != 0) goto L_0x13c1;
+    L_0x13b3:
         r0 = r7.paused;
-        if (r0 == 0) goto L_0x134a;
-    L_0x1346:
+        if (r0 == 0) goto L_0x13bb;
+    L_0x13b7:
         r1 = 1;
         r7.scrollToTopOnResume = r1;
-        goto L_0x1350;
-    L_0x134a:
+        goto L_0x13c1;
+    L_0x13bb:
         r1 = 1;
         r7.forceScrollToTop = r1;
-        r39.moveScrollToLastMessage();
-    L_0x1350:
+        r40.moveScrollToLastMessage();
+    L_0x13c1:
         r3 = 1;
-        goto L_0x137d;
-    L_0x1352:
+        goto L_0x13ee;
+    L_0x13c3:
         r0 = r7.newUnreadMessageCount;
-        if (r0 == 0) goto L_0x1379;
-    L_0x1356:
+        if (r0 == 0) goto L_0x13ea;
+    L_0x13c7:
         r0 = r7.pagedownButtonCounter;
-        if (r0 == 0) goto L_0x1379;
-    L_0x135a:
+        if (r0 == 0) goto L_0x13ea;
+    L_0x13cb:
         r1 = 0;
         r0.setVisibility(r1);
         r0 = r7.prevSetUnreadCount;
         r2 = r7.newUnreadMessageCount;
-        if (r0 == r2) goto L_0x1379;
-    L_0x1364:
+        if (r0 == r2) goto L_0x13ea;
+    L_0x13d5:
         r7.prevSetUnreadCount = r2;
         r0 = r7.pagedownButtonCounter;
         r3 = 1;
@@ -14042,18 +14277,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r5[r1] = r2;
         r1 = java.lang.String.format(r4, r5);
         r0.setText(r1);
-        goto L_0x137a;
-    L_0x1379:
+        goto L_0x13eb;
+    L_0x13ea:
         r3 = 1;
-    L_0x137a:
+    L_0x13eb:
         r7.showPagedownButton(r3, r3);
-    L_0x137d:
+    L_0x13ee:
         r0 = r7.newMentionsCount;
-        if (r0 == 0) goto L_0x13a3;
-    L_0x1381:
+        if (r0 == 0) goto L_0x1414;
+    L_0x13f2:
         r0 = r7.mentiondownButtonCounter;
-        if (r0 == 0) goto L_0x13a3;
-    L_0x1385:
+        if (r0 == 0) goto L_0x1414;
+    L_0x13f6:
         r1 = 0;
         r0.setVisibility(r1);
         r0 = r7.mentiondownButtonCounter;
@@ -14064,169 +14299,169 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = java.lang.String.format(r4, r2);
         r0.setText(r1);
         r7.showMentionDownButton(r3, r3);
-        goto L_0x13a3;
-    L_0x13a0:
+        goto L_0x1414;
+    L_0x1411:
         r3 = 1;
         r7.scrollToTopOnResume = r3;
-    L_0x13a3:
-        r14 = r41;
-        r3 = r42;
-    L_0x13a7:
+    L_0x1414:
+        r14 = r42;
+        r3 = r43;
+    L_0x1418:
         r0 = r7.messages;
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x13bf;
-    L_0x13af:
+        if (r0 != 0) goto L_0x1430;
+    L_0x1420:
         r0 = r7.botUser;
-        if (r0 == 0) goto L_0x13bf;
-    L_0x13b3:
+        if (r0 == 0) goto L_0x1430;
+    L_0x1424:
         r0 = r0.length();
-        if (r0 != 0) goto L_0x13bf;
-    L_0x13b9:
+        if (r0 != 0) goto L_0x1430;
+    L_0x142a:
         r1 = 0;
         r7.botUser = r1;
-        r39.updateBottomOverlay();
-    L_0x13bf:
-        if (r3 == 0) goto L_0x13c7;
-    L_0x13c1:
-        r39.updateTitle();
-        r39.checkAndUpdateAvatar();
-    L_0x13c7:
-        if (r14 == 0) goto L_0x2ad5;
-    L_0x13c9:
-        r0 = r39.getMessagesController();
+        r40.updateBottomOverlay();
+    L_0x1430:
+        if (r3 == 0) goto L_0x1438;
+    L_0x1432:
+        r40.updateTitle();
+        r40.checkAndUpdateAvatar();
+    L_0x1438:
+        if (r14 == 0) goto L_0x2b4e;
+    L_0x143a:
+        r0 = r40.getMessagesController();
         r1 = r7.currentChat;
         r1 = r1.id;
         r2 = 1;
         r5 = 0;
         r0.loadFullChat(r1, r5, r2);
-        goto L_0x2ad5;
-    L_0x13d8:
+        goto L_0x2b4e;
+    L_0x1449:
         r5 = 0;
         r1 = org.telegram.messenger.NotificationCenter.closeChats;
-        if (r0 != r1) goto L_0x13fa;
-    L_0x13dd:
-        if (r8 == 0) goto L_0x13f5;
-    L_0x13df:
+        if (r0 != r1) goto L_0x146b;
+    L_0x144e:
+        if (r8 == 0) goto L_0x1466;
+    L_0x1450:
         r0 = r8.length;
-        if (r0 <= 0) goto L_0x13f5;
-    L_0x13e2:
+        if (r0 <= 0) goto L_0x1466;
+    L_0x1453:
         r0 = r8[r5];
         r0 = (java.lang.Long) r0;
         r0 = r0.longValue();
         r2 = r7.dialog_id;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 != 0) goto L_0x2ad5;
-    L_0x13f0:
-        r39.finishFragment();
-        goto L_0x2ad5;
-    L_0x13f5:
-        r39.removeSelfFromStack();
-        goto L_0x2ad5;
-    L_0x13fa:
+        if (r4 != 0) goto L_0x2b4e;
+    L_0x1461:
+        r40.finishFragment();
+        goto L_0x2b4e;
+    L_0x1466:
+        r40.removeSelfFromStack();
+        goto L_0x2b4e;
+    L_0x146b:
         r1 = org.telegram.messenger.NotificationCenter.messagesRead;
-        if (r0 != r1) goto L_0x151e;
-    L_0x13fe:
+        if (r0 != r1) goto L_0x158f;
+    L_0x146f:
         r1 = 0;
         r0 = r8[r1];
         r0 = (org.telegram.messenger.support.SparseLongArray) r0;
         r1 = 1;
         r2 = r8[r1];
         r2 = (org.telegram.messenger.support.SparseLongArray) r2;
-        if (r0 == 0) goto L_0x1483;
-    L_0x140a:
+        if (r0 == 0) goto L_0x14f4;
+    L_0x147b:
         r1 = r7.bottomOverlayChatText2;
-        if (r1 == 0) goto L_0x142c;
-    L_0x140e:
+        if (r1 == 0) goto L_0x149d;
+    L_0x147f:
         r1 = r7.chatInfo;
-        if (r1 == 0) goto L_0x142c;
-    L_0x1412:
+        if (r1 == 0) goto L_0x149d;
+    L_0x1483:
         r1 = r7.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 == 0) goto L_0x142c;
-    L_0x141a:
+        if (r1 == 0) goto L_0x149d;
+    L_0x148b:
         r1 = r7.currentChat;
         r1 = r1.megagroup;
-        if (r1 != 0) goto L_0x142c;
-    L_0x1420:
+        if (r1 != 0) goto L_0x149d;
+    L_0x1491:
         r1 = r7.chatInfo;
         r1 = r1.linked_chat_id;
         r1 = -r1;
-        if (r1 == 0) goto L_0x142c;
-    L_0x1427:
+        if (r1 == 0) goto L_0x149d;
+    L_0x1498:
         r1 = r7.bottomOverlayChatText2;
         r1.updateCounter();
-    L_0x142c:
+    L_0x149d:
         r1 = r0.size();
         r3 = 0;
-    L_0x1431:
-        if (r3 >= r1) goto L_0x1483;
-    L_0x1433:
+    L_0x14a2:
+        if (r3 >= r1) goto L_0x14f4;
+    L_0x14a4:
         r5 = r0.keyAt(r3);
         r8 = r0.get(r5);
         r5 = (long) r5;
         r10 = r7.dialog_id;
         r12 = (r5 > r10 ? 1 : (r5 == r10 ? 0 : -1));
-        if (r12 == 0) goto L_0x1445;
-    L_0x1442:
+        if (r12 == 0) goto L_0x14b6;
+    L_0x14b3:
         r3 = r3 + 1;
-        goto L_0x1431;
-    L_0x1445:
+        goto L_0x14a2;
+    L_0x14b6:
         r0 = r7.messages;
         r0 = r0.size();
         r1 = 0;
         r14 = 0;
-    L_0x144d:
-        if (r1 >= r0) goto L_0x147e;
-    L_0x144f:
+    L_0x14be:
+        if (r1 >= r0) goto L_0x14ef;
+    L_0x14c0:
         r3 = r7.messages;
         r3 = r3.get(r1);
         r3 = (org.telegram.messenger.MessageObject) r3;
         r5 = r3.isOut();
-        if (r5 != 0) goto L_0x147b;
-    L_0x145d:
+        if (r5 != 0) goto L_0x14ec;
+    L_0x14ce:
         r5 = r3.getId();
-        if (r5 <= 0) goto L_0x147b;
-    L_0x1463:
+        if (r5 <= 0) goto L_0x14ec;
+    L_0x14d4:
         r5 = r3.getId();
         r6 = (int) r8;
-        if (r5 > r6) goto L_0x147b;
-    L_0x146a:
+        if (r5 > r6) goto L_0x14ec;
+    L_0x14db:
         r5 = r3.isUnread();
-        if (r5 != 0) goto L_0x1471;
-    L_0x1470:
-        goto L_0x147e;
-    L_0x1471:
+        if (r5 != 0) goto L_0x14e2;
+    L_0x14e1:
+        goto L_0x14ef;
+    L_0x14e2:
         r3.setIsRead();
         r3 = r7.newUnreadMessageCount;
         r5 = 1;
         r3 = r3 - r5;
         r7.newUnreadMessageCount = r3;
         r14 = 1;
-    L_0x147b:
+    L_0x14ec:
         r1 = r1 + 1;
-        goto L_0x144d;
-    L_0x147e:
+        goto L_0x14be;
+    L_0x14ef:
         r1 = 0;
         r7.removeUnreadPlane(r1);
-        goto L_0x1485;
-    L_0x1483:
+        goto L_0x14f6;
+    L_0x14f4:
         r1 = 0;
         r14 = 0;
-    L_0x1485:
-        if (r14 == 0) goto L_0x14ca;
-    L_0x1487:
+    L_0x14f6:
+        if (r14 == 0) goto L_0x153b;
+    L_0x14f8:
         r0 = r7.newUnreadMessageCount;
-        if (r0 >= 0) goto L_0x148d;
-    L_0x148b:
+        if (r0 >= 0) goto L_0x14fe;
+    L_0x14fc:
         r7.newUnreadMessageCount = r1;
-    L_0x148d:
+    L_0x14fe:
         r0 = r7.pagedownButtonCounter;
-        if (r0 == 0) goto L_0x14ca;
-    L_0x1491:
+        if (r0 == 0) goto L_0x153b;
+    L_0x1502:
         r3 = r7.prevSetUnreadCount;
         r5 = r7.newUnreadMessageCount;
-        if (r3 == r5) goto L_0x14a9;
-    L_0x1497:
+        if (r3 == r5) goto L_0x151a;
+    L_0x1508:
         r7.prevSetUnreadCount = r5;
         r3 = 1;
         r6 = new java.lang.Object[r3];
@@ -14234,148 +14469,148 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6[r1] = r3;
         r1 = java.lang.String.format(r4, r6);
         r0.setText(r1);
-    L_0x14a9:
+    L_0x151a:
         r0 = r7.newUnreadMessageCount;
-        if (r0 > 0) goto L_0x14bc;
-    L_0x14ad:
+        if (r0 > 0) goto L_0x152d;
+    L_0x151e:
         r0 = r7.pagedownButtonCounter;
         r0 = r0.getVisibility();
         r1 = 4;
-        if (r0 == r1) goto L_0x14ca;
-    L_0x14b6:
+        if (r0 == r1) goto L_0x153b;
+    L_0x1527:
         r0 = r7.pagedownButtonCounter;
         r0.setVisibility(r1);
-        goto L_0x14ca;
-    L_0x14bc:
+        goto L_0x153b;
+    L_0x152d:
         r0 = r7.pagedownButtonCounter;
         r0 = r0.getVisibility();
-        if (r0 == 0) goto L_0x14ca;
-    L_0x14c4:
+        if (r0 == 0) goto L_0x153b;
+    L_0x1535:
         r0 = r7.pagedownButtonCounter;
         r1 = 0;
         r0.setVisibility(r1);
-    L_0x14ca:
-        if (r2 == 0) goto L_0x1517;
-    L_0x14cc:
+    L_0x153b:
+        if (r2 == 0) goto L_0x1588;
+    L_0x153d:
         r0 = r2.size();
         r1 = 0;
-    L_0x14d1:
-        if (r1 >= r0) goto L_0x1517;
-    L_0x14d3:
+    L_0x1542:
+        if (r1 >= r0) goto L_0x1588;
+    L_0x1544:
         r3 = r2.keyAt(r1);
         r4 = r2.get(r3);
         r5 = (int) r4;
         r3 = (long) r3;
         r8 = r7.dialog_id;
         r6 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1));
-        if (r6 == 0) goto L_0x14e6;
-    L_0x14e3:
+        if (r6 == 0) goto L_0x1557;
+    L_0x1554:
         r1 = r1 + 1;
-        goto L_0x14d1;
-    L_0x14e6:
+        goto L_0x1542;
+    L_0x1557:
         r0 = r7.messages;
         r0 = r0.size();
         r1 = 0;
-    L_0x14ed:
-        if (r1 >= r0) goto L_0x1517;
-    L_0x14ef:
+    L_0x155e:
+        if (r1 >= r0) goto L_0x1588;
+    L_0x1560:
         r2 = r7.messages;
         r2 = r2.get(r1);
         r2 = (org.telegram.messenger.MessageObject) r2;
         r3 = r2.isOut();
-        if (r3 == 0) goto L_0x1514;
-    L_0x14fd:
+        if (r3 == 0) goto L_0x1585;
+    L_0x156e:
         r3 = r2.getId();
-        if (r3 <= 0) goto L_0x1514;
-    L_0x1503:
+        if (r3 <= 0) goto L_0x1585;
+    L_0x1574:
         r3 = r2.getId();
-        if (r3 > r5) goto L_0x1514;
-    L_0x1509:
+        if (r3 > r5) goto L_0x1585;
+    L_0x157a:
         r3 = r2.isUnread();
-        if (r3 != 0) goto L_0x1510;
-    L_0x150f:
-        goto L_0x1517;
-    L_0x1510:
+        if (r3 != 0) goto L_0x1581;
+    L_0x1580:
+        goto L_0x1588;
+    L_0x1581:
         r2.setIsRead();
         r14 = 1;
-    L_0x1514:
+    L_0x1585:
         r1 = r1 + 1;
-        goto L_0x14ed;
-    L_0x1517:
-        if (r14 == 0) goto L_0x2ad5;
-    L_0x1519:
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x151e:
+        goto L_0x155e;
+    L_0x1588:
+        if (r14 == 0) goto L_0x2b4e;
+    L_0x158a:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x158f:
         r1 = org.telegram.messenger.NotificationCenter.historyCleared;
-        if (r0 != r1) goto L_0x16ab;
-    L_0x1522:
+        if (r0 != r1) goto L_0x171c;
+    L_0x1593:
         r1 = 0;
         r0 = r8[r1];
         r0 = (java.lang.Long) r0;
         r0 = r0.longValue();
         r4 = r7.dialog_id;
         r2 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1));
-        if (r2 == 0) goto L_0x1532;
-    L_0x1531:
+        if (r2 == 0) goto L_0x15a3;
+    L_0x15a2:
         return;
-    L_0x1532:
+    L_0x15a3:
         r1 = 1;
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
         r1 = 0;
         r14 = 0;
-    L_0x153d:
+    L_0x15ae:
         r2 = r7.messages;
         r2 = r2.size();
-        if (r1 >= r2) goto L_0x15d4;
-    L_0x1545:
+        if (r1 >= r2) goto L_0x1645;
+    L_0x15b6:
         r2 = r7.messages;
         r2 = r2.get(r1);
         r2 = (org.telegram.messenger.MessageObject) r2;
         r4 = r2.getId();
-        if (r4 <= 0) goto L_0x15d0;
-    L_0x1553:
-        if (r4 <= r0) goto L_0x1557;
-    L_0x1555:
-        goto L_0x15d0;
-    L_0x1557:
+        if (r4 <= 0) goto L_0x1641;
+    L_0x15c4:
+        if (r4 <= r0) goto L_0x15c8;
+    L_0x15c6:
+        goto L_0x1641;
+    L_0x15c8:
         r5 = r7.chatInfo;
-        if (r5 == 0) goto L_0x1575;
-    L_0x155b:
+        if (r5 == 0) goto L_0x15e6;
+    L_0x15cc:
         r6 = r5.pinned_msg_id;
-        if (r6 != r4) goto L_0x1575;
-    L_0x155f:
+        if (r6 != r4) goto L_0x15e6;
+    L_0x15d0:
         r6 = 0;
         r7.pinnedMessageObject = r6;
         r6 = 0;
         r5.pinned_msg_id = r6;
-        r5 = r39.getMessagesStorage();
+        r5 = r40.getMessagesStorage();
         r8 = r7.chatInfo;
         r8 = r8.id;
         r5.updateChatPinnedMessage(r8, r6);
         r5 = 1;
         r7.updatePinnedMessageView(r5);
-        goto L_0x1592;
-    L_0x1575:
+        goto L_0x1603;
+    L_0x15e6:
         r6 = 0;
         r5 = r7.userInfo;
-        if (r5 == 0) goto L_0x1592;
-    L_0x157a:
+        if (r5 == 0) goto L_0x1603;
+    L_0x15eb:
         r8 = r5.pinned_msg_id;
-        if (r8 != r4) goto L_0x1592;
-    L_0x157e:
+        if (r8 != r4) goto L_0x1603;
+    L_0x15ef:
         r8 = 0;
         r7.pinnedMessageObject = r8;
         r5.pinned_msg_id = r6;
-        r5 = r39.getMessagesStorage();
+        r5 = r40.getMessagesStorage();
         r8 = r7.chatInfo;
         r8 = r8.id;
         r5.updateUserPinnedMessage(r8, r6);
         r5 = 1;
         r7.updatePinnedMessageView(r5);
-    L_0x1592:
+    L_0x1603:
         r5 = r7.messages;
         r5.remove(r1);
         r1 = r1 + -1;
@@ -14386,61 +14621,61 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r5 = r2.dateKey;
         r4 = r4.get(r5);
         r4 = (java.util.ArrayList) r4;
-        if (r4 == 0) goto L_0x15cd;
-    L_0x15ac:
+        if (r4 == 0) goto L_0x163e;
+    L_0x161d:
         r4.remove(r2);
         r4 = r4.isEmpty();
-        if (r4 == 0) goto L_0x15cd;
-    L_0x15b5:
+        if (r4 == 0) goto L_0x163e;
+    L_0x1626:
         r4 = r7.messagesByDays;
         r2 = r2.dateKey;
         r4.remove(r2);
-        if (r1 < 0) goto L_0x15cd;
-    L_0x15be:
+        if (r1 < 0) goto L_0x163e;
+    L_0x162f:
         r2 = r7.messages;
         r2 = r2.size();
-        if (r1 >= r2) goto L_0x15cd;
-    L_0x15c6:
+        if (r1 >= r2) goto L_0x163e;
+    L_0x1637:
         r2 = r7.messages;
         r2.remove(r1);
         r1 = r1 + -1;
-    L_0x15cd:
+    L_0x163e:
         r2 = 1;
         r14 = 1;
-        goto L_0x15d1;
-    L_0x15d0:
+        goto L_0x1642;
+    L_0x1641:
         r2 = 1;
-    L_0x15d1:
+    L_0x1642:
         r1 = r1 + r2;
-        goto L_0x153d;
-    L_0x15d4:
+        goto L_0x15ae;
+    L_0x1645:
         r0 = r7.messages;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x1693;
-    L_0x15dc:
+        if (r0 == 0) goto L_0x1704;
+    L_0x164d:
         r0 = r7.endReached;
         r1 = 0;
         r0 = r0[r1];
-        if (r0 != 0) goto L_0x166f;
-    L_0x15e3:
+        if (r0 != 0) goto L_0x16e0;
+    L_0x1654:
         r0 = r7.loading;
-        if (r0 != 0) goto L_0x166f;
-    L_0x15e7:
+        if (r0 != 0) goto L_0x16e0;
+    L_0x1658:
         r0 = r7.progressView;
-        if (r0 == 0) goto L_0x15ef;
-    L_0x15eb:
+        if (r0 == 0) goto L_0x1660;
+    L_0x165c:
         r1 = 4;
         r0.setVisibility(r1);
-    L_0x15ef:
+    L_0x1660:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x15f7;
-    L_0x15f3:
+        if (r0 == 0) goto L_0x1668;
+    L_0x1664:
         r1 = 0;
         r0.setEmptyView(r1);
-    L_0x15f7:
+    L_0x1668:
         r0 = r7.currentEncryptedChat;
-        if (r0 != 0) goto L_0x160f;
-    L_0x15fb:
+        if (r0 != 0) goto L_0x1680;
+    L_0x166c:
         r0 = r7.maxMessageId;
         r1 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
         r2 = 1;
@@ -14451,8 +14686,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r0[r2] = r4;
         r0[r3] = r4;
-        goto L_0x1622;
-    L_0x160f:
+        goto L_0x1693;
+    L_0x1680:
         r1 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
         r2 = 1;
         r3 = 0;
@@ -14463,7 +14698,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.minMessageId;
         r0[r2] = r1;
         r0[r3] = r1;
-    L_0x1622:
+    L_0x1693:
         r0 = r7.maxDate;
         r0[r2] = r4;
         r0[r3] = r4;
@@ -14474,7 +14709,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r7.lastLoadIndex;
         r1 = java.lang.Integer.valueOf(r1);
         r0.add(r1);
-        r26 = r39.getMessagesController();
+        r26 = r40.getMessagesController();
         r0 = r7.dialog_id;
         r29 = 30;
         r30 = 0;
@@ -14499,53 +14734,53 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r26.loadMessages(r27, r29, r30, r31, r32, r33, r34, r35, r36, r37, r38);
         r1 = 1;
         r7.loading = r1;
-        goto L_0x1694;
-    L_0x166f:
+        goto L_0x1705;
+    L_0x16e0:
         r0 = r7.botButtons;
-        if (r0 == 0) goto L_0x167e;
-    L_0x1673:
+        if (r0 == 0) goto L_0x16ef;
+    L_0x16e4:
         r1 = 0;
         r7.botButtons = r1;
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x167e;
-    L_0x167a:
+        if (r0 == 0) goto L_0x16ef;
+    L_0x16eb:
         r2 = 0;
         r0.setButtons(r1, r2);
-    L_0x167e:
+    L_0x16ef:
         r0 = r7.currentEncryptedChat;
-        if (r0 != 0) goto L_0x1693;
-    L_0x1682:
+        if (r0 != 0) goto L_0x1704;
+    L_0x16f3:
         r0 = r7.currentUser;
-        if (r0 == 0) goto L_0x1693;
-    L_0x1686:
+        if (r0 == 0) goto L_0x1704;
+    L_0x16f7:
         r0 = r0.bot;
-        if (r0 == 0) goto L_0x1693;
-    L_0x168a:
+        if (r0 == 0) goto L_0x1704;
+    L_0x16fb:
         r0 = r7.botUser;
-        if (r0 != 0) goto L_0x1693;
-    L_0x168e:
+        if (r0 != 0) goto L_0x1704;
+    L_0x16ff:
         r7.botUser = r3;
-        r39.updateBottomOverlay();
-    L_0x1693:
+        r40.updateBottomOverlay();
+    L_0x1704:
         r1 = 1;
-    L_0x1694:
+    L_0x1705:
         r2 = 0;
         r7.showPagedownButton(r2, r1);
         r7.showMentionDownButton(r2, r1);
-        if (r14 == 0) goto L_0x2ad5;
-    L_0x169d:
+        if (r14 == 0) goto L_0x2b4e;
+    L_0x170e:
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x16a1:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1712:
         r7.removeUnreadPlane(r1);
         r0 = r7.chatAdapter;
         r0.notifyDataSetChanged();
-        goto L_0x2ad5;
-    L_0x16ab:
+        goto L_0x2b4e;
+    L_0x171c:
         r1 = 1;
         r5 = org.telegram.messenger.NotificationCenter.messagesDeleted;
-        if (r0 != r5) goto L_0x1991;
-    L_0x16b0:
+        if (r0 != r5) goto L_0x1a02;
+    L_0x1721:
         r5 = 0;
         r0 = r8[r5];
         r0 = (java.util.ArrayList) r0;
@@ -14554,41 +14789,41 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r2.intValue();
         r2 = r7.currentChat;
         r2 = org.telegram.messenger.ChatObject.isChannel(r2);
-        if (r2 == 0) goto L_0x16d9;
-    L_0x16c5:
-        if (r1 != 0) goto L_0x16d1;
-    L_0x16c7:
+        if (r2 == 0) goto L_0x174a;
+    L_0x1736:
+        if (r1 != 0) goto L_0x1742;
+    L_0x1738:
         r4 = r7.mergeDialogId;
         r8 = 0;
         r2 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1));
-        if (r2 == 0) goto L_0x16d1;
-    L_0x16cf:
+        if (r2 == 0) goto L_0x1742;
+    L_0x1740:
         r2 = 1;
-        goto L_0x16dd;
-    L_0x16d1:
+        goto L_0x174e;
+    L_0x1742:
         r2 = r7.currentChat;
         r2 = r2.id;
-        if (r1 != r2) goto L_0x16d8;
-    L_0x16d7:
-        goto L_0x16dc;
-    L_0x16d8:
+        if (r1 != r2) goto L_0x1749;
+    L_0x1748:
+        goto L_0x174d;
+    L_0x1749:
         return;
-    L_0x16d9:
-        if (r1 == 0) goto L_0x16dc;
-    L_0x16db:
+    L_0x174a:
+        if (r1 == 0) goto L_0x174d;
+    L_0x174c:
         return;
-    L_0x16dc:
+    L_0x174d:
         r2 = 0;
-    L_0x16dd:
+    L_0x174e:
         r4 = r0.size();
         r5 = 0;
         r6 = 0;
         r8 = 0;
         r9 = 0;
         r14 = 0;
-    L_0x16e6:
-        if (r5 >= r4) goto L_0x17eb;
-    L_0x16e8:
+    L_0x1757:
+        if (r5 >= r4) goto L_0x185c;
+    L_0x1759:
         r10 = r0.get(r5);
         r10 = (java.lang.Integer) r10;
         r11 = r7.messagesDict;
@@ -14596,115 +14831,115 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r12 = r10.intValue();
         r11 = r11.get(r12);
         r11 = (org.telegram.messenger.MessageObject) r11;
-        if (r2 != 0) goto L_0x1737;
-    L_0x16fe:
+        if (r2 != 0) goto L_0x17a8;
+    L_0x176f:
         r12 = r7.chatInfo;
-        if (r12 == 0) goto L_0x170d;
-    L_0x1702:
+        if (r12 == 0) goto L_0x177e;
+    L_0x1773:
         r12 = r12.pinned_msg_id;
         r13 = r10.intValue();
-        if (r12 == r13) goto L_0x170b;
-    L_0x170a:
-        goto L_0x170d;
-    L_0x170b:
+        if (r12 == r13) goto L_0x177c;
+    L_0x177b:
+        goto L_0x177e;
+    L_0x177c:
         r12 = 0;
-        goto L_0x171a;
-    L_0x170d:
+        goto L_0x178b;
+    L_0x177e:
         r12 = r7.userInfo;
-        if (r12 == 0) goto L_0x1737;
-    L_0x1711:
+        if (r12 == 0) goto L_0x17a8;
+    L_0x1782:
         r12 = r12.pinned_msg_id;
         r13 = r10.intValue();
-        if (r12 != r13) goto L_0x1737;
-    L_0x1719:
-        goto L_0x170b;
-    L_0x171a:
+        if (r12 != r13) goto L_0x17a8;
+    L_0x178a:
+        goto L_0x177c;
+    L_0x178b:
         r7.pinnedMessageObject = r12;
         r12 = r7.chatInfo;
-        if (r12 == 0) goto L_0x1724;
-    L_0x1720:
+        if (r12 == 0) goto L_0x1795;
+    L_0x1791:
         r13 = 0;
         r12.pinned_msg_id = r13;
-        goto L_0x172b;
-    L_0x1724:
+        goto L_0x179c;
+    L_0x1795:
         r13 = 0;
         r12 = r7.userInfo;
-        if (r12 == 0) goto L_0x172b;
-    L_0x1729:
+        if (r12 == 0) goto L_0x179c;
+    L_0x179a:
         r12.pinned_msg_id = r13;
-    L_0x172b:
-        r12 = r39.getMessagesStorage();
+    L_0x179c:
+        r12 = r40.getMessagesStorage();
         r12.updateChatPinnedMessage(r1, r13);
         r12 = 1;
         r7.updatePinnedMessageView(r12);
-        goto L_0x1738;
-    L_0x1737:
+        goto L_0x17a9;
+    L_0x17a8:
         r12 = 1;
-    L_0x1738:
-        if (r11 == 0) goto L_0x17df;
-    L_0x173a:
+    L_0x17a9:
+        if (r11 == 0) goto L_0x1850;
+    L_0x17ab:
         r13 = r7.editingMessageObject;
-        if (r13 != r11) goto L_0x1741;
-    L_0x173e:
+        if (r13 != r11) goto L_0x17b2;
+    L_0x17af:
         r7.hideFieldPanel(r12);
-    L_0x1741:
+    L_0x17b2:
         r12 = r7.messages;
         r12 = r12.indexOf(r11);
         r13 = -1;
-        if (r12 == r13) goto L_0x17df;
-    L_0x174a:
+        if (r12 == r13) goto L_0x1850;
+    L_0x17bb:
         r13 = 0;
         r7.removeUnreadPlane(r13);
         r9 = r7.selectedMessagesIds;
         r9 = r9[r2];
         r15 = r10.intValue();
         r9 = r9.indexOfKey(r15);
-        if (r9 < 0) goto L_0x1767;
-    L_0x175c:
+        if (r9 < 0) goto L_0x17d8;
+    L_0x17cd:
         r6 = r4 + -1;
-        if (r5 != r6) goto L_0x1762;
-    L_0x1760:
+        if (r5 != r6) goto L_0x17d3;
+    L_0x17d1:
         r6 = 1;
-        goto L_0x1763;
-    L_0x1762:
+        goto L_0x17d4;
+    L_0x17d3:
         r6 = 0;
-    L_0x1763:
+    L_0x17d4:
         r7.addToSelectedMessages(r11, r13, r6);
         r14 = 1;
-    L_0x1767:
+    L_0x17d8:
         r9 = r7.messages;
         r9 = r9.remove(r12);
         r9 = (org.telegram.messenger.MessageObject) r9;
         r15 = r9.getGroupId();
         r17 = 0;
         r13 = (r15 > r17 ? 1 : (r15 == r17 ? 0 : -1));
-        if (r13 == 0) goto L_0x179f;
-    L_0x1779:
+        if (r13 == 0) goto L_0x1810;
+    L_0x17ea:
         r13 = r7.groupedMessagesMap;
-        r40 = r0;
-        r41 = r1;
+        r41 = r0;
+        r42 = r1;
         r0 = r9.getGroupId();
         r0 = r13.get(r0);
         r0 = (org.telegram.messenger.MessageObject.GroupedMessages) r0;
-        if (r0 == 0) goto L_0x17a3;
-    L_0x178b:
-        if (r8 != 0) goto L_0x1792;
-    L_0x178d:
+        if (r0 == 0) goto L_0x1814;
+    L_0x17fc:
+        if (r8 != 0) goto L_0x1803;
+    L_0x17fe:
         r8 = new android.util.LongSparseArray;
         r8.<init>();
-    L_0x1792:
-        r42 = r14;
+    L_0x1803:
+        r43 = r14;
         r13 = r0.groupId;
         r8.put(r13, r0);
         r0 = r0.messages;
         r0.remove(r11);
-        goto L_0x17a5;
-    L_0x179f:
-        r40 = r0;
-        r41 = r1;
-    L_0x17a3:
-        r42 = r14;
-    L_0x17a5:
+        goto L_0x1816;
+    L_0x1810:
+        r41 = r0;
+        r42 = r1;
+    L_0x1814:
+        r43 = r14;
+    L_0x1816:
         r0 = r7.messagesDict;
         r0 = r0[r2];
         r1 = r10.intValue();
@@ -14713,65 +14948,65 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r11.dateKey;
         r0 = r0.get(r1);
         r0 = (java.util.ArrayList) r0;
-        if (r0 == 0) goto L_0x17db;
-    L_0x17bc:
+        if (r0 == 0) goto L_0x184c;
+    L_0x182d:
         r0.remove(r11);
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x17db;
-    L_0x17c5:
+        if (r0 == 0) goto L_0x184c;
+    L_0x1836:
         r0 = r7.messagesByDays;
         r1 = r11.dateKey;
         r0.remove(r1);
-        if (r12 < 0) goto L_0x17db;
-    L_0x17ce:
+        if (r12 < 0) goto L_0x184c;
+    L_0x183f:
         r0 = r7.messages;
         r0 = r0.size();
-        if (r12 >= r0) goto L_0x17db;
-    L_0x17d6:
+        if (r12 >= r0) goto L_0x184c;
+    L_0x1847:
         r0 = r7.messages;
         r0.remove(r12);
-    L_0x17db:
-        r14 = r42;
+    L_0x184c:
+        r14 = r43;
         r9 = 1;
-        goto L_0x17e3;
-    L_0x17df:
-        r40 = r0;
-        r41 = r1;
-    L_0x17e3:
+        goto L_0x1854;
+    L_0x1850:
+        r41 = r0;
+        r42 = r1;
+    L_0x1854:
         r5 = r5 + 1;
-        r0 = r40;
-        r1 = r41;
-        goto L_0x16e6;
-    L_0x17eb:
-        if (r14 == 0) goto L_0x17f8;
-    L_0x17ed:
-        if (r6 != 0) goto L_0x17f5;
-    L_0x17ef:
+        r0 = r41;
+        r1 = r42;
+        goto L_0x1757;
+    L_0x185c:
+        if (r14 == 0) goto L_0x1869;
+    L_0x185e:
+        if (r6 != 0) goto L_0x1866;
+    L_0x1860:
         r1 = 0;
         r2 = 1;
         r4 = 0;
         r7.addToSelectedMessages(r1, r4, r2);
-    L_0x17f5:
-        r39.updateActionModeTitle();
-    L_0x17f8:
-        if (r8 == 0) goto L_0x1845;
-    L_0x17fa:
+    L_0x1866:
+        r40.updateActionModeTitle();
+    L_0x1869:
+        if (r8 == 0) goto L_0x18b6;
+    L_0x186b:
         r0 = 0;
-    L_0x17fb:
+    L_0x186c:
         r1 = r8.size();
-        if (r0 >= r1) goto L_0x1845;
-    L_0x1801:
+        if (r0 >= r1) goto L_0x18b6;
+    L_0x1872:
         r1 = r8.valueAt(r0);
         r1 = (org.telegram.messenger.MessageObject.GroupedMessages) r1;
         r2 = r1.messages;
         r2 = r2.isEmpty();
-        if (r2 == 0) goto L_0x1817;
-    L_0x180f:
+        if (r2 == 0) goto L_0x1888;
+    L_0x1880:
         r2 = r7.groupedMessagesMap;
         r4 = r1.groupId;
         r2.remove(r4);
-        goto L_0x1842;
-    L_0x1817:
+        goto L_0x18b3;
+    L_0x1888:
         r1.calculate();
         r2 = r1.messages;
         r4 = r2.size();
@@ -14781,47 +15016,47 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = (org.telegram.messenger.MessageObject) r2;
         r4 = r7.messages;
         r2 = r4.indexOf(r2);
-        if (r2 < 0) goto L_0x1842;
-    L_0x1830:
+        if (r2 < 0) goto L_0x18b3;
+    L_0x18a1:
         r4 = r7.chatAdapter;
-        if (r4 == 0) goto L_0x1842;
-    L_0x1834:
+        if (r4 == 0) goto L_0x18b3;
+    L_0x18a5:
         r5 = r4.messagesStartRow;
         r2 = r2 + r5;
         r1 = r1.messages;
         r1 = r1.size();
         r4.notifyItemRangeChanged(r2, r1);
-    L_0x1842:
+    L_0x18b3:
         r0 = r0 + 1;
-        goto L_0x17fb;
-    L_0x1845:
+        goto L_0x186c;
+    L_0x18b6:
         r0 = r7.messages;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x190c;
-    L_0x184d:
+        if (r0 == 0) goto L_0x197d;
+    L_0x18be:
         r0 = r7.endReached;
         r1 = 0;
         r0 = r0[r1];
-        if (r0 != 0) goto L_0x18e0;
-    L_0x1854:
+        if (r0 != 0) goto L_0x1951;
+    L_0x18c5:
         r0 = r7.loading;
-        if (r0 != 0) goto L_0x18e0;
-    L_0x1858:
+        if (r0 != 0) goto L_0x1951;
+    L_0x18c9:
         r0 = r7.progressView;
-        if (r0 == 0) goto L_0x1860;
-    L_0x185c:
+        if (r0 == 0) goto L_0x18d1;
+    L_0x18cd:
         r1 = 4;
         r0.setVisibility(r1);
-    L_0x1860:
+    L_0x18d1:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x1868;
-    L_0x1864:
+        if (r0 == 0) goto L_0x18d9;
+    L_0x18d5:
         r1 = 0;
         r0.setEmptyView(r1);
-    L_0x1868:
+    L_0x18d9:
         r0 = r7.currentEncryptedChat;
-        if (r0 != 0) goto L_0x1880;
-    L_0x186c:
+        if (r0 != 0) goto L_0x18f1;
+    L_0x18dd:
         r0 = r7.maxMessageId;
         r1 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
         r2 = 1;
@@ -14832,8 +15067,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r0[r2] = r4;
         r0[r3] = r4;
-        goto L_0x1893;
-    L_0x1880:
+        goto L_0x1904;
+    L_0x18f1:
         r1 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
         r2 = 1;
         r3 = 0;
@@ -14844,7 +15079,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.minMessageId;
         r0[r2] = r1;
         r0[r3] = r1;
-    L_0x1893:
+    L_0x1904:
         r0 = r7.maxDate;
         r0[r2] = r4;
         r0[r3] = r4;
@@ -14855,7 +15090,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r7.lastLoadIndex;
         r1 = java.lang.Integer.valueOf(r1);
         r0.add(r1);
-        r26 = r39.getMessagesController();
+        r26 = r40.getMessagesController();
         r0 = r7.dialog_id;
         r29 = 30;
         r30 = 0;
@@ -14880,97 +15115,97 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r26.loadMessages(r27, r29, r30, r31, r32, r33, r34, r35, r36, r37, r38);
         r1 = 1;
         r7.loading = r1;
-        goto L_0x1905;
-    L_0x18e0:
+        goto L_0x1976;
+    L_0x1951:
         r0 = r7.botButtons;
-        if (r0 == 0) goto L_0x18ef;
-    L_0x18e4:
+        if (r0 == 0) goto L_0x1960;
+    L_0x1955:
         r1 = 0;
         r7.botButtons = r1;
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x18ef;
-    L_0x18eb:
+        if (r0 == 0) goto L_0x1960;
+    L_0x195c:
         r2 = 0;
         r0.setButtons(r1, r2);
-    L_0x18ef:
+    L_0x1960:
         r0 = r7.currentEncryptedChat;
-        if (r0 != 0) goto L_0x1904;
-    L_0x18f3:
+        if (r0 != 0) goto L_0x1975;
+    L_0x1964:
         r0 = r7.currentUser;
-        if (r0 == 0) goto L_0x1904;
-    L_0x18f7:
+        if (r0 == 0) goto L_0x1975;
+    L_0x1968:
         r0 = r0.bot;
-        if (r0 == 0) goto L_0x1904;
-    L_0x18fb:
+        if (r0 == 0) goto L_0x1975;
+    L_0x196c:
         r0 = r7.botUser;
-        if (r0 != 0) goto L_0x1904;
-    L_0x18ff:
+        if (r0 != 0) goto L_0x1975;
+    L_0x1970:
         r7.botUser = r3;
-        r39.updateBottomOverlay();
-    L_0x1904:
+        r40.updateBottomOverlay();
+    L_0x1975:
         r1 = 1;
-    L_0x1905:
+    L_0x1976:
         r2 = 0;
         r7.showPagedownButton(r2, r1);
         r7.showMentionDownButton(r2, r1);
-    L_0x190c:
+    L_0x197d:
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1910:
-        if (r9 == 0) goto L_0x1978;
-    L_0x1912:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1981:
+        if (r9 == 0) goto L_0x19e9;
+    L_0x1983:
         r0 = r7.chatListView;
         r0 = r0.getChildCount();
         r1 = 0;
-    L_0x1919:
-        if (r1 >= r0) goto L_0x1957;
-    L_0x191b:
+    L_0x198a:
+        if (r1 >= r0) goto L_0x19c8;
+    L_0x198c:
         r2 = r7.chatListView;
         r2 = r2.getChildAt(r1);
         r3 = r2 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r3 == 0) goto L_0x192d;
-    L_0x1925:
+        if (r3 == 0) goto L_0x199e;
+    L_0x1996:
         r3 = r2;
         r3 = (org.telegram.ui.Cells.ChatMessageCell) r3;
         r13 = r3.getMessageObject();
-        goto L_0x193a;
-    L_0x192d:
+        goto L_0x19ab;
+    L_0x199e:
         r3 = r2 instanceof org.telegram.ui.Cells.ChatActionCell;
-        if (r3 == 0) goto L_0x1939;
-    L_0x1931:
+        if (r3 == 0) goto L_0x19aa;
+    L_0x19a2:
         r3 = r2;
         r3 = (org.telegram.ui.Cells.ChatActionCell) r3;
         r13 = r3.getMessageObject();
-        goto L_0x193a;
-    L_0x1939:
+        goto L_0x19ab;
+    L_0x19aa:
         r13 = 0;
-    L_0x193a:
-        if (r13 == 0) goto L_0x1954;
-    L_0x193c:
+    L_0x19ab:
+        if (r13 == 0) goto L_0x19c5;
+    L_0x19ad:
         r3 = r7.messages;
         r3 = r3.indexOf(r13);
-        if (r3 >= 0) goto L_0x1945;
-    L_0x1944:
-        goto L_0x1954;
-    L_0x1945:
+        if (r3 >= 0) goto L_0x19b6;
+    L_0x19b5:
+        goto L_0x19c5;
+    L_0x19b6:
         r0 = r7.chatAdapter;
         r0 = r0.messagesStartRow;
         r12 = r0 + r3;
         r13 = r2.getBottom();
         r25 = r13;
-        goto L_0x195a;
-    L_0x1954:
+        goto L_0x19cb;
+    L_0x19c5:
         r1 = r1 + 1;
-        goto L_0x1919;
-    L_0x1957:
+        goto L_0x198a;
+    L_0x19c8:
         r12 = -1;
         r25 = 0;
-    L_0x195a:
+    L_0x19cb:
         r0 = r7.chatAdapter;
         r0.notifyDataSetChanged();
         r1 = -1;
-        if (r12 == r1) goto L_0x2ad5;
-    L_0x1962:
+        if (r12 == r1) goto L_0x2b4e;
+    L_0x19d3:
         r0 = r7.chatLayoutManager;
         r1 = r7.chatListView;
         r1 = r1.getMeasuredHeight();
@@ -14979,8 +15214,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r2.getPaddingBottom();
         r1 = r1 - r2;
         r0.scrollToPositionWithOffset(r12, r1);
-        goto L_0x2ad5;
-    L_0x1978:
+        goto L_0x2b4e;
+    L_0x19e9:
         r1 = 0;
         r7.first_unread_id = r1;
         r7.last_message_id = r1;
@@ -14990,16 +15225,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = 0;
         r7.unreadMessageObject = r1;
         r0 = r7.pagedownButtonCounter;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x198b:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x19fc:
         r1 = 4;
         r0.setVisibility(r1);
-        goto L_0x2ad5;
-    L_0x1991:
+        goto L_0x2b4e;
+    L_0x1a02:
         r1 = -1;
         r3 = org.telegram.messenger.NotificationCenter.messageReceivedByServer;
-        if (r0 != r3) goto L_0x1b61;
-    L_0x1996:
+        if (r0 != r3) goto L_0x1bda;
+    L_0x1a07:
         r3 = 0;
         r0 = r8[r3];
         r1 = r0;
@@ -15010,21 +15245,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r0.get(r2);
         r2 = r0;
         r2 = (org.telegram.messenger.MessageObject) r2;
-        if (r2 == 0) goto L_0x2ad5;
-    L_0x19ad:
+        if (r2 == 0) goto L_0x2b4e;
+    L_0x1a1e:
         r4 = 1;
         r0 = r8[r4];
         r4 = r0;
         r4 = (java.lang.Integer) r4;
         r0 = r4.equals(r1);
-        if (r0 != 0) goto L_0x1a1e;
-    L_0x19b9:
+        if (r0 != 0) goto L_0x1a8f;
+    L_0x1a2a:
         r0 = r7.messagesDict;
         r0 = r0[r3];
         r5 = r4.intValue();
         r0 = r0.indexOfKey(r5);
-        if (r0 < 0) goto L_0x1a1e;
-    L_0x19c7:
+        if (r0 < 0) goto L_0x1a8f;
+    L_0x1a38:
         r0 = r7.messagesDict;
         r0 = r0[r3];
         r4 = r1.intValue();
@@ -15034,8 +15269,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r4[r3];
         r1 = r1.intValue();
         r3.remove(r1);
-        if (r0 == 0) goto L_0x1a1d;
-    L_0x19e2:
+        if (r0 == 0) goto L_0x1a8e;
+    L_0x1a53:
         r1 = r7.messages;
         r1 = r1.indexOf(r0);
         r3 = r7.messages;
@@ -15046,225 +15281,232 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = (java.util.ArrayList) r0;
         r0.remove(r2);
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x1a16;
-    L_0x1a00:
+        if (r0 == 0) goto L_0x1a87;
+    L_0x1a71:
         r0 = r7.messagesByDays;
         r2 = r2.dateKey;
         r0.remove(r2);
-        if (r1 < 0) goto L_0x1a16;
-    L_0x1a09:
+        if (r1 < 0) goto L_0x1a87;
+    L_0x1a7a:
         r0 = r7.messages;
         r0 = r0.size();
-        if (r1 >= r0) goto L_0x1a16;
-    L_0x1a11:
+        if (r1 >= r0) goto L_0x1a87;
+    L_0x1a82:
         r0 = r7.messages;
         r0.remove(r1);
-    L_0x1a16:
+    L_0x1a87:
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x1a1d;
-    L_0x1a1a:
+        if (r0 == 0) goto L_0x1a8e;
+    L_0x1a8b:
         r0.notifyDataSetChanged();
-    L_0x1a1d:
+    L_0x1a8e:
         return;
-    L_0x1a1e:
+    L_0x1a8f:
         r0 = 2;
         r0 = r8[r0];
         r3 = r0;
         r3 = (org.telegram.tgnet.TLRPC.Message) r3;
         r0 = r8.length;
         r5 = 4;
-        if (r0 < r5) goto L_0x1a2d;
-    L_0x1a28:
+        if (r0 < r5) goto L_0x1a9e;
+    L_0x1a99:
         r0 = r8[r5];
         r0 = (java.lang.Long) r0;
-        goto L_0x1a33;
-    L_0x1a2d:
+        goto L_0x1aa4;
+    L_0x1a9e:
         r5 = 0;
         r0 = java.lang.Long.valueOf(r5);
-    L_0x1a33:
+    L_0x1aa4:
         r5 = r0;
-        if (r3 == 0) goto L_0x1aec;
-    L_0x1a36:
-        r0 = r2.isForwarded();	 Catch:{ Exception -> 0x1a8c }
-        if (r0 == 0) goto L_0x1a54;
-    L_0x1a3c:
-        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1a8c }
-        r0 = r0.reply_markup;	 Catch:{ Exception -> 0x1a8c }
-        if (r0 != 0) goto L_0x1a46;
-    L_0x1a42:
-        r0 = r3.reply_markup;	 Catch:{ Exception -> 0x1a8c }
-        if (r0 != 0) goto L_0x1a52;
-    L_0x1a46:
-        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1a8c }
-        r0 = r0.message;	 Catch:{ Exception -> 0x1a8c }
-        r6 = r3.message;	 Catch:{ Exception -> 0x1a8c }
-        r0 = r0.equals(r6);	 Catch:{ Exception -> 0x1a8c }
-        if (r0 != 0) goto L_0x1a54;
-    L_0x1a52:
+        if (r3 == 0) goto L_0x1b65;
+    L_0x1aa7:
+        r0 = r2.isForwarded();	 Catch:{ Exception -> 0x1b04 }
+        if (r0 == 0) goto L_0x1ac5;
+    L_0x1aad:
+        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1b04 }
+        r0 = r0.reply_markup;	 Catch:{ Exception -> 0x1b04 }
+        if (r0 != 0) goto L_0x1ab7;
+    L_0x1ab3:
+        r0 = r3.reply_markup;	 Catch:{ Exception -> 0x1b04 }
+        if (r0 != 0) goto L_0x1ac3;
+    L_0x1ab7:
+        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1b04 }
+        r0 = r0.message;	 Catch:{ Exception -> 0x1b04 }
+        r6 = r3.message;	 Catch:{ Exception -> 0x1b04 }
+        r0 = r0.equals(r6);	 Catch:{ Exception -> 0x1b04 }
+        if (r0 != 0) goto L_0x1ac5;
+    L_0x1ac3:
         r13 = 1;
-        goto L_0x1a55;
-    L_0x1a54:
+        goto L_0x1ac6;
+    L_0x1ac5:
         r13 = 0;
-    L_0x1a55:
-        if (r13 != 0) goto L_0x1a8a;
-    L_0x1a57:
-        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1a88 }
-        r0 = r0.params;	 Catch:{ Exception -> 0x1a88 }
-        if (r0 == 0) goto L_0x1a69;
-    L_0x1a5d:
-        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1a88 }
-        r0 = r0.params;	 Catch:{ Exception -> 0x1a88 }
+    L_0x1ac6:
+        if (r13 != 0) goto L_0x1afd;
+    L_0x1ac8:
+        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1afb }
+        r0 = r0.params;	 Catch:{ Exception -> 0x1afb }
+        if (r0 == 0) goto L_0x1ada;
+    L_0x1ace:
+        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1afb }
+        r0 = r0.params;	 Catch:{ Exception -> 0x1afb }
         r6 = "query_id";
-        r0 = r0.containsKey(r6);	 Catch:{ Exception -> 0x1a88 }
-        if (r0 != 0) goto L_0x1a8a;
-    L_0x1a69:
-        r0 = r3.media;	 Catch:{ Exception -> 0x1a88 }
-        if (r0 == 0) goto L_0x1a91;
-    L_0x1a6d:
-        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1a88 }
-        r0 = r0.media;	 Catch:{ Exception -> 0x1a88 }
-        if (r0 == 0) goto L_0x1a91;
-    L_0x1a73:
-        r0 = r3.media;	 Catch:{ Exception -> 0x1a88 }
-        r0 = r0.getClass();	 Catch:{ Exception -> 0x1a88 }
-        r6 = r2.messageOwner;	 Catch:{ Exception -> 0x1a88 }
-        r6 = r6.media;	 Catch:{ Exception -> 0x1a88 }
-        r6 = r6.getClass();	 Catch:{ Exception -> 0x1a88 }
-        r0 = r0.equals(r6);	 Catch:{ Exception -> 0x1a88 }
-        if (r0 != 0) goto L_0x1a91;
-    L_0x1a87:
-        goto L_0x1a8a;
-    L_0x1a88:
+        r0 = r0.containsKey(r6);	 Catch:{ Exception -> 0x1afb }
+        if (r0 != 0) goto L_0x1afd;
+    L_0x1ada:
+        r0 = r3.media;	 Catch:{ Exception -> 0x1afb }
+        if (r0 == 0) goto L_0x1af9;
+    L_0x1ade:
+        r0 = r2.messageOwner;	 Catch:{ Exception -> 0x1afb }
+        r0 = r0.media;	 Catch:{ Exception -> 0x1afb }
+        if (r0 == 0) goto L_0x1af9;
+    L_0x1ae4:
+        r0 = r3.media;	 Catch:{ Exception -> 0x1afb }
+        r0 = r0.getClass();	 Catch:{ Exception -> 0x1afb }
+        r6 = r2.messageOwner;	 Catch:{ Exception -> 0x1afb }
+        r6 = r6.media;	 Catch:{ Exception -> 0x1afb }
+        r6 = r6.getClass();	 Catch:{ Exception -> 0x1afb }
+        r0 = r0.equals(r6);	 Catch:{ Exception -> 0x1afb }
+        if (r0 != 0) goto L_0x1af9;
+    L_0x1af8:
+        goto L_0x1afd;
+    L_0x1af9:
+        r0 = 0;
+        goto L_0x1afe;
+    L_0x1afb:
         r0 = move-exception;
-        goto L_0x1a8e;
-    L_0x1a8a:
+        goto L_0x1b06;
+    L_0x1afd:
         r0 = 1;
-        goto L_0x1a92;
-    L_0x1a8c:
+    L_0x1afe:
+        r39 = r13;
+        r13 = r0;
+        r0 = r39;
+        goto L_0x1b0b;
+    L_0x1b04:
         r0 = move-exception;
         r13 = 0;
-    L_0x1a8e:
+    L_0x1b06:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x1a91:
-        r0 = 0;
-    L_0x1a92:
+        r0 = r13;
+        r13 = 0;
+    L_0x1b0b:
         r9 = r2.getGroupId();
         r11 = 0;
         r6 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
-        if (r6 == 0) goto L_0x1ac3;
-    L_0x1a9c:
+        if (r6 == 0) goto L_0x1b3c;
+    L_0x1b15:
         r9 = r3.grouped_id;
         r6 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
-        if (r6 == 0) goto L_0x1ac3;
-    L_0x1aa2:
+        if (r6 == 0) goto L_0x1b3c;
+    L_0x1b1b:
         r6 = r7.groupedMessagesMap;
         r9 = r2.getGroupId();
         r6 = r6.get(r9);
         r6 = (org.telegram.messenger.MessageObject.GroupedMessages) r6;
-        if (r6 == 0) goto L_0x1ab7;
-    L_0x1ab0:
+        if (r6 == 0) goto L_0x1b30;
+    L_0x1b29:
         r9 = r7.groupedMessagesMap;
         r10 = r3.grouped_id;
         r9.put(r10, r6);
-    L_0x1ab7:
+    L_0x1b30:
         r6 = r2.messageOwner;
         r9 = r6.grouped_id;
         r2.localSentGroupId = r9;
         r9 = r5.longValue();
         r6.grouped_id = r9;
-    L_0x1ac3:
+    L_0x1b3c:
         r5 = r2.messageOwner;
         r5 = r5.fwd_from;
         r2.messageOwner = r3;
-        if (r5 == 0) goto L_0x1adb;
-    L_0x1acb:
+        if (r5 == 0) goto L_0x1b54;
+    L_0x1b44:
         r6 = r3.fwd_from;
-        if (r6 == 0) goto L_0x1adb;
-    L_0x1acf:
+        if (r6 == 0) goto L_0x1b54;
+    L_0x1b48:
         r6 = r6.from_name;
         r6 = android.text.TextUtils.isEmpty(r6);
-        if (r6 != 0) goto L_0x1adb;
-    L_0x1ad7:
+        if (r6 != 0) goto L_0x1b54;
+    L_0x1b50:
         r6 = r2.messageOwner;
         r6.fwd_from = r5;
-    L_0x1adb:
+    L_0x1b54:
         r5 = 1;
         r2.generateThumbs(r5);
         r2.setType();
         r3 = r3.media;
         r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaGame;
-        if (r3 == 0) goto L_0x1aee;
-    L_0x1ae8:
+        if (r3 == 0) goto L_0x1b67;
+    L_0x1b61:
         r2.applyNewText();
-        goto L_0x1aee;
-    L_0x1aec:
+        goto L_0x1b67;
+    L_0x1b65:
         r0 = 0;
         r13 = 0;
-    L_0x1aee:
-        if (r13 == 0) goto L_0x1af3;
-    L_0x1af0:
+    L_0x1b67:
+        if (r0 == 0) goto L_0x1b6c;
+    L_0x1b69:
         r2.measureInlineBotButtons();
-    L_0x1af3:
-        r3 = r7.messagesDict;
-        r5 = 0;
-        r3 = r3[r5];
+    L_0x1b6c:
+        r0 = r7.messagesDict;
+        r3 = 0;
+        r0 = r0[r3];
         r1 = r1.intValue();
-        r3.remove(r1);
-        r1 = r7.messagesDict;
-        r1 = r1[r5];
-        r3 = r4.intValue();
-        r1.put(r3, r2);
-        r1 = r2.messageOwner;
-        r3 = r4.intValue();
-        r1.id = r3;
-        r1 = r2.messageOwner;
-        r1.send_state = r5;
-        r2.forceUpdate = r0;
-        r1 = r8.length;
-        r3 = 6;
-        if (r1 < r3) goto L_0x1b28;
-    L_0x1b1c:
+        r0.remove(r1);
+        r0 = r7.messagesDict;
+        r0 = r0[r3];
+        r1 = r4.intValue();
+        r0.put(r1, r2);
+        r0 = r2.messageOwner;
+        r1 = r4.intValue();
+        r0.id = r1;
+        r0 = r2.messageOwner;
+        r0.send_state = r3;
+        r2.forceUpdate = r13;
+        r0 = r8.length;
+        r1 = 6;
+        if (r0 < r1) goto L_0x1ba1;
+    L_0x1b95:
         r1 = 5;
-        r1 = r8[r1];
-        r1 = (java.lang.Integer) r1;
-        r1 = r1.intValue();
-        r2.applyMediaExistanceFlags(r1);
-    L_0x1b28:
+        r0 = r8[r1];
+        r0 = (java.lang.Integer) r0;
+        r0 = r0.intValue();
+        r2.applyMediaExistanceFlags(r0);
+    L_0x1ba1:
         r1 = 0;
         r7.addToPolls(r2, r1);
-        r1 = new java.util.ArrayList;
-        r1.<init>();
-        r1.add(r2);
-        r3 = r7.currentEncryptedChat;
-        if (r3 != 0) goto L_0x1b41;
-    L_0x1b38:
-        r3 = r39.getMediaDataController();
-        r4 = r7.dialog_id;
-        r3.loadReplyMessagesForMessages(r1, r4);
-    L_0x1b41:
-        r1 = r7.chatAdapter;
-        if (r1 == 0) goto L_0x1b49;
-    L_0x1b45:
-        r3 = 1;
-        r1.updateRowWithMessageObject(r2, r3);
-    L_0x1b49:
-        r1 = r7.chatLayoutManager;
-        if (r1 == 0) goto L_0x1b58;
-    L_0x1b4d:
-        if (r0 == 0) goto L_0x1b58;
-    L_0x1b4f:
-        r0 = r1.findFirstVisibleItemPosition();
-        if (r0 != 0) goto L_0x1b58;
-    L_0x1b55:
-        r39.moveScrollToLastMessage();
-    L_0x1b58:
-        r0 = r39.getNotificationsController();
+        r0 = new java.util.ArrayList;
+        r0.<init>();
+        r0.add(r2);
+        r1 = r7.currentEncryptedChat;
+        if (r1 != 0) goto L_0x1bba;
+    L_0x1bb1:
+        r1 = r40.getMediaDataController();
+        r3 = r7.dialog_id;
+        r1.loadReplyMessagesForMessages(r0, r3);
+    L_0x1bba:
+        r0 = r7.chatAdapter;
+        if (r0 == 0) goto L_0x1bc2;
+    L_0x1bbe:
+        r1 = 1;
+        r0.updateRowWithMessageObject(r2, r1);
+    L_0x1bc2:
+        r0 = r7.chatLayoutManager;
+        if (r0 == 0) goto L_0x1bd1;
+    L_0x1bc6:
+        if (r13 == 0) goto L_0x1bd1;
+    L_0x1bc8:
+        r0 = r0.findFirstVisibleItemPosition();
+        if (r0 != 0) goto L_0x1bd1;
+    L_0x1bce:
+        r40.moveScrollToLastMessage();
+    L_0x1bd1:
+        r0 = r40.getNotificationsController();
         r0.playOutChatSound();
-        goto L_0x2ad5;
-    L_0x1b61:
+        goto L_0x2b4e;
+    L_0x1bda:
         r3 = org.telegram.messenger.NotificationCenter.messageReceivedByAck;
-        if (r0 != r3) goto L_0x1b88;
-    L_0x1b65:
+        if (r0 != r3) goto L_0x1CLASSNAME;
+    L_0x1bde:
         r3 = 0;
         r0 = r8[r3];
         r0 = (java.lang.Integer) r0;
@@ -15273,21 +15515,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r0.intValue();
         r0 = r1.get(r0);
         r0 = (org.telegram.messenger.MessageObject) r0;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1b7a:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1bf3:
         r1 = r0.messageOwner;
         r1.send_state = r3;
         r1 = r7.chatAdapter;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x1b82:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x1bfb:
         r2 = 1;
         r1.updateRowWithMessageObject(r0, r2);
-        goto L_0x2ad5;
-    L_0x1b88:
+        goto L_0x2b4e;
+    L_0x1CLASSNAME:
         r3 = 0;
         r5 = org.telegram.messenger.NotificationCenter.messageSendError;
-        if (r0 != r5) goto L_0x1bab;
-    L_0x1b8d:
+        if (r0 != r5) goto L_0x1CLASSNAME;
+    L_0x1CLASSNAME:
         r0 = r8[r3];
         r0 = (java.lang.Integer) r0;
         r1 = r7.messagesDict;
@@ -15295,44 +15537,44 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r0.intValue();
         r0 = r1.get(r0);
         r0 = (org.telegram.messenger.MessageObject) r0;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1ba1:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1c1a:
         r0 = r0.messageOwner;
         r1 = 2;
         r0.send_state = r1;
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x1bab:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x1CLASSNAME:
         r3 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad;
-        if (r0 != r3) goto L_0x1db4;
-    L_0x1baf:
+        if (r0 != r3) goto L_0x1e2d;
+    L_0x1CLASSNAME:
         r3 = 0;
         r0 = r8[r3];
         r0 = (org.telegram.tgnet.TLRPC.ChatFull) r0;
         r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x1bb8:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x1CLASSNAME:
         r3 = r0.id;
         r4 = r1.id;
-        if (r3 != r4) goto L_0x2ad5;
-    L_0x1bbe:
+        if (r3 != r4) goto L_0x2b4e;
+    L_0x1CLASSNAME:
         r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;
-        if (r3 == 0) goto L_0x1c1a;
-    L_0x1bc2:
+        if (r3 == 0) goto L_0x1CLASSNAME;
+    L_0x1c3b:
         r1 = r1.megagroup;
-        if (r1 == 0) goto L_0x1c0e;
-    L_0x1bc6:
+        if (r1 == 0) goto L_0x1CLASSNAME;
+    L_0x1c3f:
         r1 = r0.participants;
-        if (r1 == 0) goto L_0x1be9;
-    L_0x1bca:
+        if (r1 == 0) goto L_0x1CLASSNAME;
+    L_0x1CLASSNAME:
         r1 = 0;
         r13 = 0;
-    L_0x1bcc:
+    L_0x1CLASSNAME:
         r3 = r0.participants;
         r3 = r3.participants;
         r3 = r3.size();
-        if (r1 >= r3) goto L_0x1bea;
-    L_0x1bd6:
+        if (r1 >= r3) goto L_0x1CLASSNAME;
+    L_0x1c4f:
         r3 = r0.participants;
         r3 = r3.participants;
         r3 = r3.get(r1);
@@ -15340,12 +15582,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r3.date;
         r13 = java.lang.Math.max(r3, r13);
         r1 = r1 + 1;
-        goto L_0x1bcc;
-    L_0x1be9:
+        goto L_0x1CLASSNAME;
+    L_0x1CLASSNAME:
         r13 = 0;
-    L_0x1bea:
-        if (r13 == 0) goto L_0x1bff;
-    L_0x1bec:
+    L_0x1CLASSNAME:
+        if (r13 == 0) goto L_0x1CLASSNAME;
+    L_0x1CLASSNAME:
         r3 = java.lang.System.currentTimeMillis();
         r5 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r3 = r3 / r5;
@@ -15354,69 +15596,69 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = java.lang.Math.abs(r3);
         r5 = 3600; // 0xe10 float:5.045E-42 double:1.7786E-320;
         r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r1 <= 0) goto L_0x1c0e;
-    L_0x1bff:
-        r1 = r39.getMessagesController();
+        if (r1 <= 0) goto L_0x1CLASSNAME;
+    L_0x1CLASSNAME:
+        r1 = r40.getMessagesController();
         r3 = r7.currentChat;
         r3 = r3.id;
         r3 = java.lang.Integer.valueOf(r3);
         r1.loadChannelParticipants(r3);
-    L_0x1c0e:
+    L_0x1CLASSNAME:
         r1 = r0.participants;
-        if (r1 != 0) goto L_0x1c1a;
-    L_0x1CLASSNAME:
+        if (r1 != 0) goto L_0x1CLASSNAME;
+    L_0x1c8b:
         r1 = r7.chatInfo;
-        if (r1 == 0) goto L_0x1c1a;
-    L_0x1CLASSNAME:
+        if (r1 == 0) goto L_0x1CLASSNAME;
+    L_0x1c8f:
         r1 = r1.participants;
         r0.participants = r1;
-    L_0x1c1a:
+    L_0x1CLASSNAME:
         r7.chatInfo = r0;
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x1CLASSNAME;
+        if (r0 == 0) goto L_0x1c9e;
     L_0x1CLASSNAME:
         r1 = r7.chatInfo;
         r0.setChatInfo(r1);
-    L_0x1CLASSNAME:
+    L_0x1c9e:
         r0 = r7.mentionsAdapter;
-        if (r0 == 0) goto L_0x1c2e;
-    L_0x1CLASSNAME:
+        if (r0 == 0) goto L_0x1ca7;
+    L_0x1ca2:
         r1 = r7.chatInfo;
         r0.setChatInfo(r1);
-    L_0x1c2e:
+    L_0x1ca7:
         r0 = 3;
         r1 = r8[r0];
         r1 = r1 instanceof org.telegram.messenger.MessageObject;
-        if (r1 == 0) goto L_0x1CLASSNAME;
-    L_0x1CLASSNAME:
+        if (r1 == 0) goto L_0x1cb9;
+    L_0x1cae:
         r0 = r8[r0];
         r0 = (org.telegram.messenger.MessageObject) r0;
         r7.pinnedMessageObject = r0;
         r1 = 0;
         r7.updatePinnedMessageView(r1);
-        goto L_0x1CLASSNAME;
-    L_0x1CLASSNAME:
+        goto L_0x1cbd;
+    L_0x1cb9:
         r1 = 1;
         r7.updatePinnedMessageView(r1);
-    L_0x1CLASSNAME:
+    L_0x1cbd:
         r0 = r7.avatarContainer;
-        if (r0 == 0) goto L_0x1CLASSNAME;
-    L_0x1CLASSNAME:
+        if (r0 == 0) goto L_0x1cc9;
+    L_0x1cc1:
         r0.updateOnlineCount();
         r0 = r7.avatarContainer;
         r0.updateSubtitle();
-    L_0x1CLASSNAME:
+    L_0x1cc9:
         r0 = r7.isBroadcast;
-        if (r0 == 0) goto L_0x1c5d;
-    L_0x1CLASSNAME:
-        r0 = r39.getSendMessagesHelper();
+        if (r0 == 0) goto L_0x1cd6;
+    L_0x1ccd:
+        r0 = r40.getSendMessagesHelper();
         r1 = r7.chatInfo;
         r0.setCurrentChatInfo(r1);
-    L_0x1c5d:
+    L_0x1cd6:
         r0 = r7.chatInfo;
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_chatFull;
-        if (r1 == 0) goto L_0x1cbb;
-    L_0x1CLASSNAME:
+        if (r1 == 0) goto L_0x1d34;
+    L_0x1cdc:
         r1 = 0;
         r7.hasBotsCommands = r1;
         r0 = r7.botInfo;
@@ -15424,49 +15666,49 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7.botsCount = r1;
         org.telegram.ui.Components.URLSpanBotCommand.enabled = r1;
         r0 = 0;
-    L_0x1CLASSNAME:
+    L_0x1ce9:
         r1 = r7.chatInfo;
         r1 = r1.participants;
         r1 = r1.participants;
         r1 = r1.size();
-        if (r0 >= r1) goto L_0x1cb2;
-    L_0x1c7c:
+        if (r0 >= r1) goto L_0x1d2b;
+    L_0x1cf5:
         r1 = r7.chatInfo;
         r1 = r1.participants;
         r1 = r1.participants;
         r1 = r1.get(r0);
         r1 = (org.telegram.tgnet.TLRPC.ChatParticipant) r1;
-        r2 = r39.getMessagesController();
+        r2 = r40.getMessagesController();
         r1 = r1.user_id;
         r1 = java.lang.Integer.valueOf(r1);
         r1 = r2.getUser(r1);
-        if (r1 == 0) goto L_0x1caf;
-    L_0x1CLASSNAME:
+        if (r1 == 0) goto L_0x1d28;
+    L_0x1d11:
         r2 = r1.bot;
-        if (r2 == 0) goto L_0x1caf;
-    L_0x1c9c:
+        if (r2 == 0) goto L_0x1d28;
+    L_0x1d15:
         r2 = 1;
         org.telegram.ui.Components.URLSpanBotCommand.enabled = r2;
         r3 = r7.botsCount;
         r3 = r3 + r2;
         r7.botsCount = r3;
-        r3 = r39.getMediaDataController();
+        r3 = r40.getMediaDataController();
         r1 = r1.id;
         r4 = r7.classGuid;
         r3.loadBotInfo(r1, r2, r4);
-    L_0x1caf:
+    L_0x1d28:
         r0 = r0 + 1;
-        goto L_0x1CLASSNAME;
-    L_0x1cb2:
+        goto L_0x1ce9;
+    L_0x1d2b:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x1d64;
-    L_0x1cb6:
+        if (r0 == 0) goto L_0x1ddd;
+    L_0x1d2f:
         r0.invalidateViews();
-        goto L_0x1d64;
-    L_0x1cbb:
+        goto L_0x1ddd;
+    L_0x1d34:
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;
-        if (r0 == 0) goto L_0x1d64;
-    L_0x1cbf:
+        if (r0 == 0) goto L_0x1ddd;
+    L_0x1d38:
         r1 = 0;
         r7.hasBotsCommands = r1;
         r0 = r7.botInfo;
@@ -15475,125 +15717,125 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.chatInfo;
         r0 = r0.bot_info;
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x1cdd;
-    L_0x1cd3:
+        if (r0 != 0) goto L_0x1d56;
+    L_0x1d4c:
         r0 = r7.currentChat;
-        if (r0 == 0) goto L_0x1cdd;
-    L_0x1cd7:
+        if (r0 == 0) goto L_0x1d56;
+    L_0x1d50:
         r0 = r0.megagroup;
-        if (r0 == 0) goto L_0x1cdd;
-    L_0x1cdb:
+        if (r0 == 0) goto L_0x1d56;
+    L_0x1d54:
         r0 = 1;
-        goto L_0x1cde;
-    L_0x1cdd:
+        goto L_0x1d57;
+    L_0x1d56:
         r0 = 0;
-    L_0x1cde:
+    L_0x1d57:
         org.telegram.ui.Components.URLSpanBotCommand.enabled = r0;
         r0 = r7.chatInfo;
         r0 = r0.bot_info;
         r0 = r0.size();
         r7.botsCount = r0;
         r0 = 0;
-    L_0x1ceb:
+    L_0x1d64:
         r1 = r7.chatInfo;
         r1 = r1.bot_info;
         r1 = r1.size();
-        if (r0 >= r1) goto L_0x1d24;
-    L_0x1cf5:
+        if (r0 >= r1) goto L_0x1d9d;
+    L_0x1d6e:
         r1 = r7.chatInfo;
         r1 = r1.bot_info;
         r1 = r1.get(r0);
         r1 = (org.telegram.tgnet.TLRPC.BotInfo) r1;
         r2 = r1.commands;
         r2 = r2.isEmpty();
-        if (r2 != 0) goto L_0x1d1a;
-    L_0x1d07:
+        if (r2 != 0) goto L_0x1d93;
+    L_0x1d80:
         r2 = r7.currentChat;
         r2 = org.telegram.messenger.ChatObject.isChannel(r2);
-        if (r2 == 0) goto L_0x1d17;
-    L_0x1d0f:
+        if (r2 == 0) goto L_0x1d90;
+    L_0x1d88:
         r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x1d1a;
-    L_0x1d13:
+        if (r2 == 0) goto L_0x1d93;
+    L_0x1d8c:
         r2 = r2.megagroup;
-        if (r2 == 0) goto L_0x1d1a;
-    L_0x1d17:
+        if (r2 == 0) goto L_0x1d93;
+    L_0x1d90:
         r2 = 1;
         r7.hasBotsCommands = r2;
-    L_0x1d1a:
+    L_0x1d93:
         r2 = r7.botInfo;
         r3 = r1.user_id;
         r2.put(r3, r1);
         r0 = r0 + 1;
-        goto L_0x1ceb;
-    L_0x1d24:
+        goto L_0x1d64;
+    L_0x1d9d:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x1d2b;
-    L_0x1d28:
+        if (r0 == 0) goto L_0x1da4;
+    L_0x1da1:
         r0.invalidateViews();
-    L_0x1d2b:
+    L_0x1da4:
         r0 = r7.mentionsAdapter;
-        if (r0 == 0) goto L_0x1d46;
-    L_0x1d2f:
+        if (r0 == 0) goto L_0x1dbf;
+    L_0x1da8:
         r0 = r7.currentChat;
         r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 == 0) goto L_0x1d3f;
-    L_0x1d37:
+        if (r0 == 0) goto L_0x1db8;
+    L_0x1db0:
         r0 = r7.currentChat;
-        if (r0 == 0) goto L_0x1d46;
-    L_0x1d3b:
+        if (r0 == 0) goto L_0x1dbf;
+    L_0x1db4:
         r0 = r0.megagroup;
-        if (r0 == 0) goto L_0x1d46;
-    L_0x1d3f:
+        if (r0 == 0) goto L_0x1dbf;
+    L_0x1db8:
         r0 = r7.mentionsAdapter;
         r1 = r7.botInfo;
         r0.setBotInfo(r1);
-    L_0x1d46:
+    L_0x1dbf:
         r0 = r7.bottomOverlayChatText2;
-        if (r0 == 0) goto L_0x1d64;
-    L_0x1d4a:
+        if (r0 == 0) goto L_0x1ddd;
+    L_0x1dc3:
         r0 = r7.currentChat;
         r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 == 0) goto L_0x1d64;
-    L_0x1d52:
+        if (r0 == 0) goto L_0x1ddd;
+    L_0x1dcb:
         r0 = r7.currentChat;
         r0 = r0.megagroup;
-        if (r0 != 0) goto L_0x1d64;
-    L_0x1d58:
+        if (r0 != 0) goto L_0x1ddd;
+    L_0x1dd1:
         r0 = r7.chatInfo;
         r0 = r0.linked_chat_id;
         r0 = -r0;
-        if (r0 == 0) goto L_0x1d64;
-    L_0x1d5f:
+        if (r0 == 0) goto L_0x1ddd;
+    L_0x1dd8:
         r0 = r7.bottomOverlayChatText2;
         r0.updateCounter();
-    L_0x1d64:
+    L_0x1ddd:
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x1d6f;
-    L_0x1d68:
+        if (r0 == 0) goto L_0x1de8;
+    L_0x1de1:
         r1 = r7.botsCount;
         r2 = r7.hasBotsCommands;
         r0.setBotsCount(r1, r2);
-    L_0x1d6f:
+    L_0x1de8:
         r0 = r7.mentionsAdapter;
-        if (r0 == 0) goto L_0x1d78;
-    L_0x1d73:
+        if (r0 == 0) goto L_0x1df1;
+    L_0x1dec:
         r1 = r7.botsCount;
         r0.setBotsCount(r1);
-    L_0x1d78:
+    L_0x1df1:
         r0 = r7.currentChat;
         r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1d80:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1df9:
         r0 = r7.mergeDialogId;
         r2 = 0;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 != 0) goto L_0x2ad5;
-    L_0x1d88:
+        if (r4 != 0) goto L_0x2b4e;
+    L_0x1e01:
         r0 = r7.chatInfo;
         r1 = r0.migrated_from_chat_id;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x1d8e:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x1e07:
         r1 = -r1;
         r1 = (long) r1;
         r7.mergeDialogId = r1;
@@ -15602,81 +15844,81 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = 1;
         r1[r2] = r0;
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x1da0;
-    L_0x1d9d:
+        if (r0 == 0) goto L_0x1e19;
+    L_0x1e16:
         r0.notifyDataSetChanged();
-    L_0x1da0:
+    L_0x1e19:
         r0 = r7.mergeDialogId;
         r2 = 0;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 == 0) goto L_0x2ad5;
-    L_0x1da8:
+        if (r4 == 0) goto L_0x2b4e;
+    L_0x1e21:
         r0 = r7.endReached;
         r1 = 0;
         r0 = r0[r1];
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1daf:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1e28:
         r7.checkScrollForLoad(r1);
-        goto L_0x2ad5;
-    L_0x1db4:
+        goto L_0x2b4e;
+    L_0x1e2d:
         r3 = org.telegram.messenger.NotificationCenter.chatInfoCantLoad;
-        if (r0 != r3) goto L_0x1e4b;
-    L_0x1db8:
+        if (r0 != r3) goto L_0x1ec4;
+    L_0x1e31:
         r3 = 0;
         r0 = r8[r3];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
         r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x1dc5:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x1e3e:
         r1 = r1.id;
-        if (r1 != r0) goto L_0x2ad5;
-    L_0x1dc9:
+        if (r1 != r0) goto L_0x2b4e;
+    L_0x1e42:
         r1 = 1;
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
-        r1 = r39.getParentActivity();
-        if (r1 == 0) goto L_0x1e4a;
-    L_0x1dd8:
+        r1 = r40.getParentActivity();
+        if (r1 == 0) goto L_0x1ec3;
+    L_0x1e51:
         r1 = r7.closeChatDialog;
-        if (r1 == 0) goto L_0x1ddd;
-    L_0x1ddc:
-        goto L_0x1e4a;
-    L_0x1ddd:
+        if (r1 == 0) goto L_0x1e56;
+    L_0x1e55:
+        goto L_0x1ec3;
+    L_0x1e56:
         r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
-        r2 = r39.getParentActivity();
+        r2 = r40.getParentActivity();
         r1.<init>(r2);
-        r2 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r2 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r3 = "AppName";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setTitle(r2);
-        if (r0 != 0) goto L_0x1e01;
-    L_0x1df4:
-        r0 = NUM; // 0x7f0d0228 float:1.8743234E38 double:1.0531300503E-314;
+        if (r0 != 0) goto L_0x1e7a;
+    L_0x1e6d:
+        r0 = NUM; // 0x7f0d022b float:1.874324E38 double:1.0531300518E-314;
         r2 = "ChannelCantOpenPrivate";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r1.setMessage(r0);
-        goto L_0x1e20;
-    L_0x1e01:
+        goto L_0x1e99;
+    L_0x1e7a:
         r2 = 1;
-        if (r0 != r2) goto L_0x1e11;
-    L_0x1e04:
-        r0 = NUM; // 0x7f0d0227 float:1.8743232E38 double:1.05313005E-314;
+        if (r0 != r2) goto L_0x1e8a;
+    L_0x1e7d:
+        r0 = NUM; // 0x7f0d022a float:1.8743238E38 double:1.0531300513E-314;
         r2 = "ChannelCantOpenNa";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r1.setMessage(r0);
-        goto L_0x1e20;
-    L_0x1e11:
+        goto L_0x1e99;
+    L_0x1e8a:
         r2 = 2;
-        if (r0 != r2) goto L_0x1e20;
-    L_0x1e14:
-        r0 = NUM; // 0x7f0d0226 float:1.874323E38 double:1.0531300493E-314;
+        if (r0 != r2) goto L_0x1e99;
+    L_0x1e8d:
+        r0 = NUM; // 0x7f0d0229 float:1.8743236E38 double:1.053130051E-314;
         r2 = "ChannelCantOpenBanned";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r1.setMessage(r0);
-    L_0x1e20:
-        r0 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+    L_0x1e99:
+        r0 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r2 = "OK";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r2 = 0;
@@ -15687,211 +15929,211 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = 0;
         r7.loading = r1;
         r0 = r7.progressView;
-        if (r0 == 0) goto L_0x1e41;
-    L_0x1e3d:
+        if (r0 == 0) goto L_0x1eba;
+    L_0x1eb6:
         r1 = 4;
         r0.setVisibility(r1);
-    L_0x1e41:
+    L_0x1eba:
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1e45:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1ebe:
         r0.notifyDataSetChanged();
-        goto L_0x2ad5;
-    L_0x1e4a:
+        goto L_0x2b4e;
+    L_0x1ec3:
         return;
-    L_0x1e4b:
+    L_0x1ec4:
         r3 = org.telegram.messenger.NotificationCenter.contactsDidLoad;
-        if (r0 != r3) goto L_0x1e5c;
-    L_0x1e4f:
+        if (r0 != r3) goto L_0x1ed5;
+    L_0x1ec8:
         r3 = 1;
         r7.updateTopPanel(r3);
         r0 = r7.avatarContainer;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1e57:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1ed0:
         r0.updateSubtitle();
-        goto L_0x2ad5;
-    L_0x1e5c:
+        goto L_0x2b4e;
+    L_0x1ed5:
         r3 = org.telegram.messenger.NotificationCenter.encryptedChatUpdated;
-        if (r0 != r3) goto L_0x1ecd;
-    L_0x1e60:
+        if (r0 != r3) goto L_0x1var_;
+    L_0x1ed9:
         r3 = 0;
         r0 = r8[r3];
         r0 = (org.telegram.tgnet.TLRPC.EncryptedChat) r0;
         r1 = r7.currentEncryptedChat;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x1e69:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x1ee2:
         r2 = r0.id;
         r1 = r1.id;
-        if (r2 != r1) goto L_0x2ad5;
-    L_0x1e6f:
+        if (r2 != r1) goto L_0x2b4e;
+    L_0x1ee8:
         r7.currentEncryptedChat = r0;
         r1 = 1;
         r7.updateTopPanel(r1);
-        r39.updateSecretStatus();
-        r39.initStickers();
+        r40.updateSecretStatus();
+        r40.initStickers();
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x1eab;
-    L_0x1e7f:
+        if (r0 == 0) goto L_0x1var_;
+    L_0x1ef8:
         r1 = r7.currentEncryptedChat;
-        if (r1 == 0) goto L_0x1e90;
-    L_0x1e83:
+        if (r1 == 0) goto L_0x1var_;
+    L_0x1efc:
         r1 = r1.layer;
         r1 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r1);
         r2 = 23;
-        if (r1 < r2) goto L_0x1e8e;
-    L_0x1e8d:
-        goto L_0x1e90;
-    L_0x1e8e:
+        if (r1 < r2) goto L_0x1var_;
+    L_0x1var_:
+        goto L_0x1var_;
+    L_0x1var_:
         r1 = 0;
-        goto L_0x1e91;
-    L_0x1e90:
+        goto L_0x1f0a;
+    L_0x1var_:
         r1 = 1;
-    L_0x1e91:
+    L_0x1f0a:
         r2 = r7.currentEncryptedChat;
-        if (r2 == 0) goto L_0x1ea2;
-    L_0x1e95:
+        if (r2 == 0) goto L_0x1f1b;
+    L_0x1f0e:
         r2 = r2.layer;
         r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);
         r3 = 46;
-        if (r2 < r3) goto L_0x1ea0;
-    L_0x1e9f:
-        goto L_0x1ea2;
-    L_0x1ea0:
+        if (r2 < r3) goto L_0x1var_;
+    L_0x1var_:
+        goto L_0x1f1b;
+    L_0x1var_:
         r2 = 0;
-        goto L_0x1ea3;
-    L_0x1ea2:
+        goto L_0x1f1c;
+    L_0x1f1b:
         r2 = 1;
-    L_0x1ea3:
+    L_0x1f1c:
         r0.setAllowStickersAndGifs(r1, r2);
         r0 = r7.chatActivityEnterView;
         r0.checkRoundVideo();
-    L_0x1eab:
+    L_0x1var_:
         r0 = r7.mentionsAdapter;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1eaf:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1var_:
         r1 = r7.chatActivityEnterView;
         r1 = r1.isEditingMessage();
-        if (r1 != 0) goto L_0x1ec7;
-    L_0x1eb7:
+        if (r1 != 0) goto L_0x1var_;
+    L_0x1var_:
         r1 = r7.currentEncryptedChat;
-        if (r1 == 0) goto L_0x1ec5;
-    L_0x1ebb:
+        if (r1 == 0) goto L_0x1f3e;
+    L_0x1var_:
         r1 = r1.layer;
         r1 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r1);
         r2 = 46;
-        if (r1 < r2) goto L_0x1ec7;
-    L_0x1ec5:
+        if (r1 < r2) goto L_0x1var_;
+    L_0x1f3e:
         r1 = 1;
-        goto L_0x1ec8;
-    L_0x1ec7:
+        goto L_0x1var_;
+    L_0x1var_:
         r1 = 0;
-    L_0x1ec8:
+    L_0x1var_:
         r0.setNeedBotContext(r1);
-        goto L_0x2ad5;
-    L_0x1ecd:
+        goto L_0x2b4e;
+    L_0x1var_:
         r3 = org.telegram.messenger.NotificationCenter.messagesReadEncrypted;
-        if (r0 != r3) goto L_0x1var_;
-    L_0x1ed1:
+        if (r0 != r3) goto L_0x1f9b;
+    L_0x1f4a:
         r3 = 0;
         r0 = r8[r3];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
         r1 = r7.currentEncryptedChat;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x1ede:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x1var_:
         r1 = r1.id;
-        if (r1 != r0) goto L_0x2ad5;
-    L_0x1ee2:
+        if (r1 != r0) goto L_0x2b4e;
+    L_0x1f5b:
         r1 = 1;
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
         r1 = r7.messages;
         r1 = r1.iterator();
-    L_0x1ef1:
+    L_0x1f6a:
         r2 = r1.hasNext();
-        if (r2 == 0) goto L_0x1f1d;
-    L_0x1ef7:
+        if (r2 == 0) goto L_0x1var_;
+    L_0x1var_:
         r2 = r1.next();
         r2 = (org.telegram.messenger.MessageObject) r2;
         r3 = r2.isOut();
-        if (r3 != 0) goto L_0x1var_;
-    L_0x1var_:
-        goto L_0x1ef1;
-    L_0x1var_:
+        if (r3 != 0) goto L_0x1f7d;
+    L_0x1f7c:
+        goto L_0x1f6a;
+    L_0x1f7d:
         r3 = r2.isOut();
-        if (r3 == 0) goto L_0x1var_;
-    L_0x1f0a:
+        if (r3 == 0) goto L_0x1f8a;
+    L_0x1var_:
         r3 = r2.isUnread();
-        if (r3 != 0) goto L_0x1var_;
+        if (r3 != 0) goto L_0x1f8a;
     L_0x1var_:
-        goto L_0x1f1d;
-    L_0x1var_:
+        goto L_0x1var_;
+    L_0x1f8a:
         r3 = r2.messageOwner;
         r3 = r3.date;
         r4 = 1;
         r3 = r3 - r4;
-        if (r3 > r0) goto L_0x1ef1;
+        if (r3 > r0) goto L_0x1f6a;
     L_0x1var_:
         r2.setIsRead();
-        goto L_0x1ef1;
-    L_0x1f1d:
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
+        goto L_0x1f6a;
     L_0x1var_:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x1f9b:
         r3 = org.telegram.messenger.NotificationCenter.removeAllMessagesFromDialog;
-        if (r0 != r3) goto L_0x1var_;
-    L_0x1var_:
+        if (r0 != r3) goto L_0x1fbc;
+    L_0x1f9f:
         r3 = 0;
         r0 = r8[r3];
         r0 = (java.lang.Long) r0;
         r0 = r0.longValue();
         r2 = r7.dialog_id;
         r4 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1));
-        if (r4 != 0) goto L_0x2ad5;
-    L_0x1var_:
+        if (r4 != 0) goto L_0x2b4e;
+    L_0x1fae:
         r1 = 1;
         r0 = r8[r1];
         r0 = (java.lang.Boolean) r0;
         r0 = r0.booleanValue();
         r7.clearHistory(r0);
-        goto L_0x2ad5;
-    L_0x1var_:
+        goto L_0x2b4e;
+    L_0x1fbc:
         r3 = org.telegram.messenger.NotificationCenter.screenshotTook;
-        if (r0 != r3) goto L_0x1f4c;
-    L_0x1var_:
-        r39.updateInformationForScreenshotDetector();
-        goto L_0x2ad5;
-    L_0x1f4c:
+        if (r0 != r3) goto L_0x1fc5;
+    L_0x1fc0:
+        r40.updateInformationForScreenshotDetector();
+        goto L_0x2b4e;
+    L_0x1fc5:
         r3 = org.telegram.messenger.NotificationCenter.blockedUsersDidLoad;
-        if (r0 != r3) goto L_0x1var_;
-    L_0x1var_:
+        if (r0 != r3) goto L_0x1fed;
+    L_0x1fc9:
         r0 = r7.currentUser;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1var_:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x1fcd:
         r0 = r7.userBlocked;
-        r1 = r39.getMessagesController();
+        r1 = r40.getMessagesController();
         r1 = r1.blockedUsers;
         r2 = r7.currentUser;
         r2 = r2.id;
         r1 = r1.indexOfKey(r2);
-        if (r1 < 0) goto L_0x1var_;
-    L_0x1var_:
+        if (r1 < 0) goto L_0x1fe1;
+    L_0x1fdf:
         r1 = 1;
-        goto L_0x1var_;
-    L_0x1var_:
+        goto L_0x1fe2;
+    L_0x1fe1:
         r1 = 0;
-    L_0x1var_:
+    L_0x1fe2:
         r7.userBlocked = r1;
         r1 = r7.userBlocked;
-        if (r0 == r1) goto L_0x2ad5;
-    L_0x1f6f:
-        r39.updateBottomOverlay();
-        goto L_0x2ad5;
-    L_0x1var_:
+        if (r0 == r1) goto L_0x2b4e;
+    L_0x1fe8:
+        r40.updateBottomOverlay();
+        goto L_0x2b4e;
+    L_0x1fed:
         r3 = org.telegram.messenger.NotificationCenter.fileNewChunkAvailable;
-        if (r0 != r3) goto L_0x1fb7;
-    L_0x1var_:
+        if (r0 != r3) goto L_0x2030;
+    L_0x1ff1:
         r3 = 0;
         r0 = r8[r3];
         r0 = (org.telegram.messenger.MessageObject) r0;
@@ -15901,128 +16143,128 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r1.longValue();
         r3 = 0;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 == 0) goto L_0x2ad5;
-    L_0x1f8c:
+        if (r5 == 0) goto L_0x2b4e;
+    L_0x2005:
         r3 = r7.dialog_id;
         r5 = r0.getDialogId();
         r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r8 != 0) goto L_0x2ad5;
-    L_0x1var_:
+        if (r8 != 0) goto L_0x2b4e;
+    L_0x200f:
         r3 = r7.messagesDict;
         r4 = 0;
         r3 = r3[r4];
         r0 = r0.getId();
         r0 = r3.get(r0);
         r0 = (org.telegram.messenger.MessageObject) r0;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1fa7:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x2020:
         r0 = r0.messageOwner;
         r0 = r0.media;
         r0 = r0.document;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x1faf:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x2028:
         r2 = (int) r1;
         r0.size = r2;
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x1fb7:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x2030:
         r3 = org.telegram.messenger.NotificationCenter.didCreatedNewDeleteTask;
-        if (r0 != r3) goto L_0x2020;
-    L_0x1fbb:
+        if (r0 != r3) goto L_0x2099;
+    L_0x2034:
         r3 = 0;
         r0 = r8[r3];
         r0 = (android.util.SparseArray) r0;
         r1 = 0;
         r2 = 0;
-    L_0x1fc2:
+    L_0x203b:
         r3 = r0.size();
-        if (r1 >= r3) goto L_0x2019;
-    L_0x1fc8:
+        if (r1 >= r3) goto L_0x2092;
+    L_0x2041:
         r3 = r0.keyAt(r1);
         r4 = r0.get(r3);
         r4 = (java.util.ArrayList) r4;
         r5 = r2;
         r2 = 0;
-    L_0x1fd4:
+    L_0x204d:
         r6 = r4.size();
-        if (r2 >= r6) goto L_0x2015;
-    L_0x1fda:
+        if (r2 >= r6) goto L_0x208e;
+    L_0x2053:
         r6 = r4.get(r2);
         r6 = (java.lang.Long) r6;
         r8 = r6.longValue();
-        if (r2 != 0) goto L_0x1fff;
-    L_0x1fe6:
+        if (r2 != 0) goto L_0x2078;
+    L_0x205f:
         r6 = 32;
         r10 = r8 >> r6;
         r13 = (int) r10;
-        if (r13 >= 0) goto L_0x1fee;
-    L_0x1fed:
+        if (r13 >= 0) goto L_0x2067;
+    L_0x2066:
         r13 = 0;
-    L_0x1fee:
+    L_0x2067:
         r6 = r7.currentChat;
         r6 = org.telegram.messenger.ChatObject.isChannel(r6);
-        if (r6 == 0) goto L_0x1ffb;
-    L_0x1ff6:
+        if (r6 == 0) goto L_0x2074;
+    L_0x206f:
         r6 = r7.currentChat;
         r6 = r6.id;
-        goto L_0x1ffc;
-    L_0x1ffb:
+        goto L_0x2075;
+    L_0x2074:
         r6 = 0;
-    L_0x1ffc:
-        if (r13 == r6) goto L_0x1fff;
-    L_0x1ffe:
+    L_0x2075:
+        if (r13 == r6) goto L_0x2078;
+    L_0x2077:
         return;
-    L_0x1fff:
+    L_0x2078:
         r6 = r7.messagesDict;
         r10 = 0;
         r6 = r6[r10];
         r9 = (int) r8;
         r6 = r6.get(r9);
         r6 = (org.telegram.messenger.MessageObject) r6;
-        if (r6 == 0) goto L_0x2012;
-    L_0x200d:
+        if (r6 == 0) goto L_0x208b;
+    L_0x2086:
         r5 = r6.messageOwner;
         r5.destroyTime = r3;
         r5 = 1;
-    L_0x2012:
+    L_0x208b:
         r2 = r2 + 1;
-        goto L_0x1fd4;
-    L_0x2015:
+        goto L_0x204d;
+    L_0x208e:
         r1 = r1 + 1;
         r2 = r5;
-        goto L_0x1fc2;
-    L_0x2019:
-        if (r2 == 0) goto L_0x2ad5;
-    L_0x201b:
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x2020:
+        goto L_0x203b;
+    L_0x2092:
+        if (r2 == 0) goto L_0x2b4e;
+    L_0x2094:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x2099:
         r3 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart;
-        if (r0 != r3) goto L_0x2108;
-    L_0x2024:
+        if (r0 != r3) goto L_0x2181;
+    L_0x209d:
         r3 = 0;
         r0 = r8[r3];
         r0 = (org.telegram.messenger.MessageObject) r0;
         r1 = r0.eventId;
         r3 = 0;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 == 0) goto L_0x2032;
-    L_0x2031:
+        if (r5 == 0) goto L_0x20ab;
+    L_0x20aa:
         return;
-    L_0x2032:
+    L_0x20ab:
         r7.sendSecretMessageRead(r0);
         r1 = r0.isRoundVideo();
-        if (r1 != 0) goto L_0x2041;
-    L_0x203b:
+        if (r1 != 0) goto L_0x20ba;
+    L_0x20b4:
         r0 = r0.isVideo();
-        if (r0 == 0) goto L_0x205e;
-    L_0x2041:
+        if (r0 == 0) goto L_0x20d7;
+    L_0x20ba:
         r0 = r7.fragmentView;
-        if (r0 == 0) goto L_0x205e;
-    L_0x2045:
+        if (r0 == 0) goto L_0x20d7;
+    L_0x20be:
         r0 = r0.getParent();
-        if (r0 == 0) goto L_0x205e;
-    L_0x204b:
+        if (r0 == 0) goto L_0x20d7;
+    L_0x20c4:
         r0 = org.telegram.messenger.MediaController.getInstance();
         r1 = 1;
         r2 = r7.createTextureView(r1);
@@ -16030,116 +16272,116 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = r7.videoPlayerContainer;
         r0.setTextureView(r2, r3, r4, r1);
         r7.updateTextureViewPosition(r1);
-    L_0x205e:
+    L_0x20d7:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x2062:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x20db:
         r0 = r0.getChildCount();
         r1 = 0;
-    L_0x2067:
-        if (r1 >= r0) goto L_0x20d9;
-    L_0x2069:
+    L_0x20e0:
+        if (r1 >= r0) goto L_0x2152;
+    L_0x20e2:
         r2 = r7.chatListView;
         r2 = r2.getChildAt(r1);
         r3 = r2 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r3 == 0) goto L_0x20d6;
-    L_0x2073:
+        if (r3 == 0) goto L_0x214f;
+    L_0x20ec:
         r2 = (org.telegram.ui.Cells.ChatMessageCell) r2;
         r3 = r2.getMessageObject();
-        if (r3 == 0) goto L_0x20d6;
-    L_0x207b:
+        if (r3 == 0) goto L_0x214f;
+    L_0x20f4:
         r4 = r3.isVideo();
         r5 = r3.isRoundVideo();
-        if (r5 != 0) goto L_0x209a;
-    L_0x2085:
-        if (r4 == 0) goto L_0x2088;
-    L_0x2087:
-        goto L_0x209a;
-    L_0x2088:
+        if (r5 != 0) goto L_0x2113;
+    L_0x20fe:
+        if (r4 == 0) goto L_0x2101;
+    L_0x2100:
+        goto L_0x2113;
+    L_0x2101:
         r4 = r3.isVoice();
-        if (r4 != 0) goto L_0x2094;
-    L_0x208e:
+        if (r4 != 0) goto L_0x210d;
+    L_0x2107:
         r3 = r3.isMusic();
-        if (r3 == 0) goto L_0x20d6;
-    L_0x2094:
+        if (r3 == 0) goto L_0x214f;
+    L_0x210d:
         r3 = 1;
         r5 = 0;
         r2.updateButtonState(r5, r3, r5);
-        goto L_0x20d6;
-    L_0x209a:
+        goto L_0x214f;
+    L_0x2113:
         r5 = 0;
         r2.checkVideoPlayback(r5);
         r5 = org.telegram.messenger.MediaController.getInstance();
         r5 = r5.isPlayingMessage(r3);
-        if (r5 != 0) goto L_0x20cf;
-    L_0x20a8:
-        if (r4 == 0) goto L_0x20c1;
-    L_0x20aa:
+        if (r5 != 0) goto L_0x2148;
+    L_0x2121:
+        if (r4 == 0) goto L_0x213a;
+    L_0x2123:
         r4 = org.telegram.messenger.MediaController.getInstance();
         r4 = r4.isGoingToShowMessageObject(r3);
-        if (r4 != 0) goto L_0x20c1;
-    L_0x20b4:
+        if (r4 != 0) goto L_0x213a;
+    L_0x212d:
         r4 = r2.getPhotoImage();
         r4 = r4.getAnimation();
-        if (r4 == 0) goto L_0x20c1;
-    L_0x20be:
+        if (r4 == 0) goto L_0x213a;
+    L_0x2137:
         r4.start();
-    L_0x20c1:
+    L_0x213a:
         r4 = r3.audioProgress;
         r5 = 0;
         r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
-        if (r4 == 0) goto L_0x20d6;
-    L_0x20c8:
+        if (r4 == 0) goto L_0x214f;
+    L_0x2141:
         r3.resetPlayingProgress();
         r2.invalidate();
-        goto L_0x20d6;
-    L_0x20cf:
-        if (r4 == 0) goto L_0x20d6;
-    L_0x20d1:
+        goto L_0x214f;
+    L_0x2148:
+        if (r4 == 0) goto L_0x214f;
+    L_0x214a:
         r3 = 1;
         r4 = 0;
         r2.updateButtonState(r4, r3, r4);
-    L_0x20d6:
+    L_0x214f:
         r1 = r1 + 1;
-        goto L_0x2067;
-    L_0x20d9:
+        goto L_0x20e0;
+    L_0x2152:
         r0 = r7.mentionListView;
         r0 = r0.getChildCount();
         r1 = 0;
-    L_0x20e0:
-        if (r1 >= r0) goto L_0x2ad5;
-    L_0x20e2:
+    L_0x2159:
+        if (r1 >= r0) goto L_0x2b4e;
+    L_0x215b:
         r2 = r7.mentionListView;
         r2 = r2.getChildAt(r1);
         r3 = r2 instanceof org.telegram.ui.Cells.ContextLinkCell;
-        if (r3 == 0) goto L_0x2105;
-    L_0x20ec:
+        if (r3 == 0) goto L_0x217e;
+    L_0x2165:
         r2 = (org.telegram.ui.Cells.ContextLinkCell) r2;
         r3 = r2.getMessageObject();
-        if (r3 == 0) goto L_0x2105;
-    L_0x20f4:
+        if (r3 == 0) goto L_0x217e;
+    L_0x216d:
         r4 = r3.isVoice();
-        if (r4 != 0) goto L_0x2100;
-    L_0x20fa:
+        if (r4 != 0) goto L_0x2179;
+    L_0x2173:
         r3 = r3.isMusic();
-        if (r3 == 0) goto L_0x2105;
-    L_0x2100:
+        if (r3 == 0) goto L_0x217e;
+    L_0x2179:
         r3 = 1;
         r4 = 0;
         r2.updateButtonState(r4, r3);
-    L_0x2105:
+    L_0x217e:
         r1 = r1 + 1;
-        goto L_0x20e0;
-    L_0x2108:
+        goto L_0x2159;
+    L_0x2181:
         r3 = org.telegram.messenger.NotificationCenter.messagePlayingGoingToStop;
-        if (r0 != r3) goto L_0x21a0;
-    L_0x210c:
+        if (r0 != r3) goto L_0x2219;
+    L_0x2185:
         r3 = 1;
         r0 = r8[r3];
         r0 = (java.lang.Boolean) r0;
         r0 = r0.booleanValue();
-        if (r0 == 0) goto L_0x2127;
-    L_0x2117:
+        if (r0 == 0) goto L_0x21a0;
+    L_0x2190:
         r0 = r7.contentView;
         r1 = r7.videoPlayerContainer;
         r0.removeView(r1);
@@ -16147,17 +16389,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7.videoPlayerContainer = r1;
         r7.videoTextureView = r1;
         r7.aspectRatioFrameLayout = r1;
-        goto L_0x2ad5;
-    L_0x2127:
+        goto L_0x2b4e;
+    L_0x21a0:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x212b:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x21a4:
         r0 = r7.videoPlayerContainer;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x212f:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x21a8:
         r0 = r0.getTag();
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x2135:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x21ae:
         r1 = 0;
         r0 = r8[r1];
         r1 = r0;
@@ -16165,93 +16407,93 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.chatListView;
         r0 = r0.getChildCount();
         r2 = 0;
-    L_0x2142:
-        if (r2 >= r0) goto L_0x2ad5;
-    L_0x2144:
+    L_0x21bb:
+        if (r2 >= r0) goto L_0x2b4e;
+    L_0x21bd:
         r3 = r7.chatListView;
         r3 = r3.getChildAt(r2);
         r4 = r3 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r4 == 0) goto L_0x219d;
-    L_0x214e:
+        if (r4 == 0) goto L_0x2216;
+    L_0x21c7:
         r3 = (org.telegram.ui.Cells.ChatMessageCell) r3;
         r4 = r3.getMessageObject();
-        if (r1 != r4) goto L_0x219d;
-    L_0x2156:
+        if (r1 != r4) goto L_0x2216;
+    L_0x21cf:
         r0 = r3.getPhotoImage();
         r2 = r0.getAnimation();
-        if (r2 == 0) goto L_0x2ad5;
-    L_0x2160:
+        if (r2 == 0) goto L_0x2b4e;
+    L_0x21d9:
         r0 = r2.getAnimatedBitmap();
-        if (r0 == 0) goto L_0x2187;
-    L_0x2166:
-        r3 = r7.videoTextureView;	 Catch:{ Throwable -> 0x2183 }
-        r4 = r0.getWidth();	 Catch:{ Throwable -> 0x2183 }
-        r5 = r0.getHeight();	 Catch:{ Throwable -> 0x2183 }
-        r3 = r3.getBitmap(r4, r5);	 Catch:{ Throwable -> 0x2183 }
-        r4 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x2183 }
-        r4.<init>(r0);	 Catch:{ Throwable -> 0x2183 }
+        if (r0 == 0) goto L_0x2200;
+    L_0x21df:
+        r3 = r7.videoTextureView;	 Catch:{ Throwable -> 0x21fc }
+        r4 = r0.getWidth();	 Catch:{ Throwable -> 0x21fc }
+        r5 = r0.getHeight();	 Catch:{ Throwable -> 0x21fc }
+        r3 = r3.getBitmap(r4, r5);	 Catch:{ Throwable -> 0x21fc }
+        r4 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x21fc }
+        r4.<init>(r0);	 Catch:{ Throwable -> 0x21fc }
         r0 = 0;
         r5 = 0;
         r6 = 0;
-        r4.drawBitmap(r3, r0, r5, r6);	 Catch:{ Throwable -> 0x2183 }
-        r3.recycle();	 Catch:{ Throwable -> 0x2183 }
-        goto L_0x2187;
-    L_0x2183:
+        r4.drawBitmap(r3, r0, r5, r6);	 Catch:{ Throwable -> 0x21fc }
+        r3.recycle();	 Catch:{ Throwable -> 0x21fc }
+        goto L_0x2200;
+    L_0x21fc:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x2187:
+    L_0x2200:
         r0 = r1.audioProgressMs;
         r3 = (long) r0;
-        r0 = r39.getFileLoader();
+        r0 = r40.getFileLoader();
         r1 = r1.getDocument();
         r5 = 1;
         r0 = r0.isLoadingVideo(r1, r5);
         r0 = r0 ^ r5;
         r2.seekTo(r3, r0);
-        goto L_0x2ad5;
-    L_0x219d:
+        goto L_0x2b4e;
+    L_0x2216:
         r2 = r2 + 1;
-        goto L_0x2142;
-    L_0x21a0:
+        goto L_0x21bb;
+    L_0x2219:
         r3 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset;
-        if (r0 == r3) goto L_0x2a28;
-    L_0x21a4:
+        if (r0 == r3) goto L_0x2aa1;
+    L_0x221d:
         r3 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged;
-        if (r0 != r3) goto L_0x21aa;
-    L_0x21a8:
-        goto L_0x2a28;
-    L_0x21aa:
+        if (r0 != r3) goto L_0x2223;
+    L_0x2221:
+        goto L_0x2aa1;
+    L_0x2223:
         r3 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged;
-        if (r0 != r3) goto L_0x2201;
-    L_0x21ae:
+        if (r0 != r3) goto L_0x227a;
+    L_0x2227:
         r3 = 0;
         r0 = r8[r3];
         r0 = (java.lang.Integer) r0;
         r1 = r7.chatListView;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x21b7:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x2230:
         r1 = r1.getChildCount();
         r2 = 0;
-    L_0x21bc:
-        if (r2 >= r1) goto L_0x2ad5;
-    L_0x21be:
+    L_0x2235:
+        if (r2 >= r1) goto L_0x2b4e;
+    L_0x2237:
         r3 = r7.chatListView;
         r3 = r3.getChildAt(r2);
         r4 = r3 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r4 == 0) goto L_0x21fe;
-    L_0x21c8:
+        if (r4 == 0) goto L_0x2277;
+    L_0x2241:
         r3 = (org.telegram.ui.Cells.ChatMessageCell) r3;
         r4 = r3.getMessageObject();
-        if (r4 == 0) goto L_0x21fe;
-    L_0x21d0:
+        if (r4 == 0) goto L_0x2277;
+    L_0x2249:
         r5 = r4.getId();
         r6 = r0.intValue();
-        if (r5 != r6) goto L_0x21fe;
-    L_0x21da:
+        if (r5 != r6) goto L_0x2277;
+    L_0x2253:
         r0 = org.telegram.messenger.MediaController.getInstance();
         r0 = r0.getPlayingMessageObject();
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x21e4:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x225d:
         r1 = r0.audioProgress;
         r4.audioProgress = r1;
         r1 = r0.audioProgressSec;
@@ -16260,18 +16502,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4.audioPlayerDuration = r0;
         r3.updatePlayingMessageProgress();
         r0 = r7.drawLaterRoundProgressCell;
-        if (r0 != r3) goto L_0x2ad5;
-    L_0x21f7:
+        if (r0 != r3) goto L_0x2b4e;
+    L_0x2270:
         r0 = r7.fragmentView;
         r0.invalidate();
-        goto L_0x2ad5;
-    L_0x21fe:
+        goto L_0x2b4e;
+    L_0x2277:
         r2 = r2 + 1;
-        goto L_0x21bc;
-    L_0x2201:
+        goto L_0x2235;
+    L_0x227a:
         r3 = org.telegram.messenger.NotificationCenter.didUpdatePollResults;
-        if (r0 != r3) goto L_0x2247;
-    L_0x2205:
+        if (r0 != r3) goto L_0x22c0;
+    L_0x227e:
         r3 = 0;
         r0 = r8[r3];
         r0 = (java.lang.Long) r0;
@@ -16279,8 +16521,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r7.polls;
         r0 = r2.get(r0);
         r0 = (java.util.ArrayList) r0;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x2218:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x2291:
         r1 = 1;
         r2 = r8[r1];
         r2 = (org.telegram.tgnet.TLRPC.TL_poll) r2;
@@ -16289,32 +16531,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = (org.telegram.tgnet.TLRPC.TL_pollResults) r1;
         r3 = r0.size();
         r4 = 0;
-    L_0x2227:
-        if (r4 >= r3) goto L_0x2ad5;
-    L_0x2229:
+    L_0x22a0:
+        if (r4 >= r3) goto L_0x2b4e;
+    L_0x22a2:
         r5 = r0.get(r4);
         r5 = (org.telegram.messenger.MessageObject) r5;
         r6 = r5.messageOwner;
         r6 = r6.media;
         r6 = (org.telegram.tgnet.TLRPC.TL_messageMediaPoll) r6;
-        if (r2 == 0) goto L_0x2239;
-    L_0x2237:
+        if (r2 == 0) goto L_0x22b2;
+    L_0x22b0:
         r6.poll = r2;
-    L_0x2239:
+    L_0x22b2:
         org.telegram.messenger.MessageObject.updatePollResults(r6, r1);
         r6 = r7.chatAdapter;
-        if (r6 == 0) goto L_0x2244;
-    L_0x2240:
+        if (r6 == 0) goto L_0x22bd;
+    L_0x22b9:
         r8 = 1;
         r6.updateRowWithMessageObject(r5, r8);
-    L_0x2244:
+    L_0x22bd:
         r4 = r4 + 1;
-        goto L_0x2227;
-    L_0x2247:
+        goto L_0x22a0;
+    L_0x22c0:
         r3 = 2;
         r5 = org.telegram.messenger.NotificationCenter.updateMessageMedia;
-        if (r0 != r5) goto L_0x235f;
-    L_0x224c:
+        if (r0 != r5) goto L_0x23d8;
+    L_0x22c5:
         r5 = 0;
         r0 = r8[r5];
         r0 = (org.telegram.tgnet.TLRPC.Message) r0;
@@ -16323,8 +16565,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r0.id;
         r1 = r1.get(r2);
         r1 = (org.telegram.messenger.MessageObject) r1;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x225f:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x22d8:
         r2 = r1.messageOwner;
         r3 = r0.media;
         r2.media = r3;
@@ -16334,34 +16576,34 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r1.getGroupId();
         r4 = 0;
         r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x233b;
-    L_0x2276:
+        if (r6 == 0) goto L_0x23b4;
+    L_0x22ef:
         r2 = r1.photoThumbs;
-        if (r2 == 0) goto L_0x2280;
-    L_0x227a:
+        if (r2 == 0) goto L_0x22f9;
+    L_0x22f3:
         r2 = r2.isEmpty();
-        if (r2 == 0) goto L_0x233b;
-    L_0x2280:
+        if (r2 == 0) goto L_0x23b4;
+    L_0x22f9:
         r2 = r7.groupedMessagesMap;
         r3 = r1.getGroupId();
         r2 = r2.get(r3);
         r2 = (org.telegram.messenger.MessageObject.GroupedMessages) r2;
-        if (r2 == 0) goto L_0x233b;
-    L_0x228e:
+        if (r2 == 0) goto L_0x23b4;
+    L_0x2307:
         r3 = r2.messages;
         r3 = r3.indexOf(r1);
-        if (r3 < 0) goto L_0x233b;
-    L_0x2296:
+        if (r3 < 0) goto L_0x23b4;
+    L_0x230f:
         r4 = r2.messages;
         r4 = r4.size();
-        if (r3 <= 0) goto L_0x22fd;
-    L_0x229e:
+        if (r3 <= 0) goto L_0x2376;
+    L_0x2317:
         r5 = r2.messages;
         r5 = r5.size();
         r6 = 1;
         r5 = r5 - r6;
-        if (r3 >= r5) goto L_0x22fd;
-    L_0x22a8:
+        if (r3 >= r5) goto L_0x2376;
+    L_0x2321:
         r5 = new org.telegram.messenger.MessageObject$GroupedMessages;
         r5.<init>();
         r6 = org.telegram.messenger.Utilities.random;
@@ -16374,11 +16616,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = r8.subList(r9, r10);
         r6.addAll(r8);
         r6 = 0;
-    L_0x22c7:
+    L_0x2340:
         r8 = r5.messages;
         r8 = r8.size();
-        if (r6 >= r8) goto L_0x22e3;
-    L_0x22cf:
+        if (r6 >= r8) goto L_0x235c;
+    L_0x2348:
         r8 = r5.messages;
         r8 = r8.get(r6);
         r8 = (org.telegram.messenger.MessageObject) r8;
@@ -16387,8 +16629,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = r2.messages;
         r8.remove(r9);
         r6 = r6 + 1;
-        goto L_0x22c7;
-    L_0x22e3:
+        goto L_0x2340;
+    L_0x235c:
         r6 = r7.groupedMessagesMap;
         r8 = r5.groupId;
         r6.put(r8, r5);
@@ -16400,23 +16642,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r13 = r6;
         r13 = (org.telegram.messenger.MessageObject) r13;
         r5.calculate();
-        goto L_0x22fe;
-    L_0x22fd:
+        goto L_0x2377;
+    L_0x2376:
         r13 = 0;
-    L_0x22fe:
+    L_0x2377:
         r5 = r2.messages;
         r5.remove(r3);
         r3 = r2.messages;
         r3 = r3.isEmpty();
-        if (r3 == 0) goto L_0x2313;
-    L_0x230b:
+        if (r3 == 0) goto L_0x238c;
+    L_0x2384:
         r3 = r7.groupedMessagesMap;
         r4 = r2.groupId;
         r3.remove(r4);
-        goto L_0x233b;
-    L_0x2313:
-        if (r13 != 0) goto L_0x2324;
-    L_0x2315:
+        goto L_0x23b4;
+    L_0x238c:
+        if (r13 != 0) goto L_0x239d;
+    L_0x238e:
         r3 = r2.messages;
         r5 = r3.size();
         r6 = 1;
@@ -16424,77 +16666,77 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r3.get(r5);
         r13 = r3;
         r13 = (org.telegram.messenger.MessageObject) r13;
-    L_0x2324:
+    L_0x239d:
         r2.calculate();
         r2 = r7.messages;
         r2 = r2.indexOf(r13);
-        if (r2 < 0) goto L_0x233b;
-    L_0x232f:
+        if (r2 < 0) goto L_0x23b4;
+    L_0x23a8:
         r3 = r7.chatAdapter;
-        if (r3 == 0) goto L_0x233b;
-    L_0x2333:
+        if (r3 == 0) goto L_0x23b4;
+    L_0x23ac:
         r5 = r3.messagesStartRow;
         r2 = r2 + r5;
         r3.notifyItemRangeChanged(r2, r4);
-    L_0x233b:
+    L_0x23b4:
         r0 = r0.media;
         r2 = r0.ttl_seconds;
-        if (r2 == 0) goto L_0x235a;
-    L_0x2341:
+        if (r2 == 0) goto L_0x23d3;
+    L_0x23ba:
         r2 = r0.photo;
         r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_photoEmpty;
-        if (r2 != 0) goto L_0x234d;
-    L_0x2347:
+        if (r2 != 0) goto L_0x23c6;
+    L_0x23c0:
         r0 = r0.document;
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_documentEmpty;
-        if (r0 == 0) goto L_0x235a;
-    L_0x234d:
+        if (r0 == 0) goto L_0x23d3;
+    L_0x23c6:
         r1.setType();
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x2354:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x23cd:
         r5 = 0;
         r0.updateRowWithMessageObject(r1, r5);
-        goto L_0x2ad5;
-    L_0x235a:
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x235f:
+        goto L_0x2b4e;
+    L_0x23d3:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x23d8:
         r5 = 0;
         r6 = org.telegram.messenger.NotificationCenter.replaceMessagesObjects;
-        if (r0 != r6) goto L_0x25b8;
-    L_0x2364:
+        if (r0 != r6) goto L_0x2631;
+    L_0x23dd:
         r0 = r8[r5];
         r0 = (java.lang.Long) r0;
         r2 = r0.longValue();
         r4 = r7.dialog_id;
         r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r0 == 0) goto L_0x2379;
-    L_0x2372:
+        if (r0 == 0) goto L_0x23f2;
+    L_0x23eb:
         r4 = r7.mergeDialogId;
         r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r0 == 0) goto L_0x2379;
-    L_0x2378:
+        if (r0 == 0) goto L_0x23f2;
+    L_0x23f1:
         return;
-    L_0x2379:
+    L_0x23f2:
         r4 = r7.dialog_id;
         r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r0 != 0) goto L_0x2381;
-    L_0x237f:
+        if (r0 != 0) goto L_0x23fa;
+    L_0x23f8:
         r0 = 0;
-        goto L_0x2382;
-    L_0x2381:
+        goto L_0x23fb;
+    L_0x23fa:
         r0 = 1;
-    L_0x2382:
+    L_0x23fb:
         r2 = 1;
         r3 = r8[r2];
         r3 = (java.util.ArrayList) r3;
         r2 = 0;
         r4 = 0;
-    L_0x2389:
+    L_0x2402:
         r5 = r3.size();
-        if (r2 >= r5) goto L_0x256b;
-    L_0x238f:
+        if (r2 >= r5) goto L_0x25e4;
+    L_0x2408:
         r5 = r3.get(r2);
         r5 = (org.telegram.messenger.MessageObject) r5;
         r6 = r7.messagesDict;
@@ -16503,49 +16745,49 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6 = r6.get(r8);
         r6 = (org.telegram.messenger.MessageObject) r6;
         r8 = r7.pinnedMessageObject;
-        if (r8 == 0) goto L_0x23b7;
-    L_0x23a7:
+        if (r8 == 0) goto L_0x2430;
+    L_0x2420:
         r8 = r8.getId();
         r9 = r5.getId();
-        if (r8 != r9) goto L_0x23b7;
-    L_0x23b1:
+        if (r8 != r9) goto L_0x2430;
+    L_0x242a:
         r7.pinnedMessageObject = r5;
         r8 = 1;
         r7.updatePinnedMessageView(r8);
-    L_0x23b7:
-        if (r6 == 0) goto L_0x255d;
-    L_0x23b9:
+    L_0x2430:
+        if (r6 == 0) goto L_0x25d6;
+    L_0x2432:
         r7.addToPolls(r5, r6);
         r8 = r5.type;
-        if (r8 < 0) goto L_0x240f;
-    L_0x23c0:
+        if (r8 < 0) goto L_0x2488;
+    L_0x2439:
         r8 = r6.replyMessageObject;
-        if (r8 == 0) goto L_0x23db;
-    L_0x23c4:
+        if (r8 == 0) goto L_0x2454;
+    L_0x243d:
         r5.replyMessageObject = r8;
         r8 = r5.messageOwner;
         r8 = r8.action;
         r9 = r8 instanceof org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
-        if (r9 == 0) goto L_0x23d3;
-    L_0x23ce:
+        if (r9 == 0) goto L_0x244c;
+    L_0x2447:
         r9 = 0;
         r5.generateGameMessageText(r9);
-        goto L_0x23db;
-    L_0x23d3:
+        goto L_0x2454;
+    L_0x244c:
         r9 = 0;
         r8 = r8 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
-        if (r8 == 0) goto L_0x23db;
-    L_0x23d8:
+        if (r8 == 0) goto L_0x2454;
+    L_0x2451:
         r5.generatePaymentSentMessageText(r9);
-    L_0x23db:
+    L_0x2454:
         r8 = r6.isEditing();
-        if (r8 != 0) goto L_0x2403;
-    L_0x23e1:
+        if (r8 != 0) goto L_0x247c;
+    L_0x245a:
         r8 = r6.getFileName();
         r9 = r5.getFileName();
         r8 = r8.equals(r9);
-        if (r8 == 0) goto L_0x2400;
-    L_0x23ef:
+        if (r8 == 0) goto L_0x2479;
+    L_0x2468:
         r8 = r5.messageOwner;
         r9 = r6.messageOwner;
         r9 = r9.attachPath;
@@ -16554,106 +16796,106 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r5.attachPathExists = r8;
         r8 = r6.mediaExists;
         r5.mediaExists = r8;
-        goto L_0x2403;
-    L_0x2400:
+        goto L_0x247c;
+    L_0x2479:
         r5.checkMediaExistance();
-    L_0x2403:
+    L_0x247c:
         r8 = r7.messagesDict;
         r8 = r8[r0];
         r9 = r6.getId();
         r8.put(r9, r5);
-        goto L_0x241a;
-    L_0x240f:
+        goto L_0x2493;
+    L_0x2488:
         r8 = r7.messagesDict;
         r8 = r8[r0];
         r9 = r6.getId();
         r8.remove(r9);
-    L_0x241a:
+    L_0x2493:
         r8 = r7.messages;
         r8 = r8.indexOf(r6);
-        if (r8 < 0) goto L_0x255d;
-    L_0x2422:
+        if (r8 < 0) goto L_0x25d6;
+    L_0x249b:
         r9 = r7.messagesByDays;
         r10 = r6.dateKey;
         r9 = r9.get(r10);
         r9 = (java.util.ArrayList) r9;
-        if (r9 == 0) goto L_0x2433;
-    L_0x242e:
+        if (r9 == 0) goto L_0x24ac;
+    L_0x24a7:
         r12 = r9.indexOf(r6);
-        goto L_0x2434;
-    L_0x2433:
+        goto L_0x24ad;
+    L_0x24ac:
         r12 = -1;
-    L_0x2434:
+    L_0x24ad:
         r10 = r6.getGroupId();
         r13 = 0;
         r15 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
-        if (r15 == 0) goto L_0x2494;
-    L_0x243e:
+        if (r15 == 0) goto L_0x250d;
+    L_0x24b7:
         r10 = r7.groupedMessagesMap;
         r13 = r6.getGroupId();
         r10 = r10.get(r13);
         r10 = (org.telegram.messenger.MessageObject.GroupedMessages) r10;
-        if (r10 == 0) goto L_0x2494;
-    L_0x244c:
+        if (r10 == 0) goto L_0x250d;
+    L_0x24c5:
         r11 = r10.messages;
         r11 = r11.indexOf(r6);
-        if (r11 < 0) goto L_0x2494;
-    L_0x2454:
+        if (r11 < 0) goto L_0x250d;
+    L_0x24cd:
         r13 = r6.getGroupId();
         r15 = r5.getGroupId();
         r19 = (r13 > r15 ? 1 : (r13 == r15 ? 0 : -1));
-        if (r19 == 0) goto L_0x2469;
-    L_0x2460:
+        if (r19 == 0) goto L_0x24e2;
+    L_0x24d9:
         r13 = r7.groupedMessagesMap;
         r14 = r5.getGroupId();
         r13.put(r14, r10);
-    L_0x2469:
+    L_0x24e2:
         r13 = r5.photoThumbs;
-        if (r13 == 0) goto L_0x249b;
-    L_0x246d:
+        if (r13 == 0) goto L_0x2514;
+    L_0x24e6:
         r13 = r13.isEmpty();
-        if (r13 == 0) goto L_0x2474;
-    L_0x2473:
-        goto L_0x249b;
-    L_0x2474:
+        if (r13 == 0) goto L_0x24ed;
+    L_0x24ec:
+        goto L_0x2514;
+    L_0x24ed:
         r13 = r10.messages;
         r13.set(r11, r5);
         r11 = r10.positions;
         r11 = r11.remove(r6);
         r11 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r11;
-        if (r11 == 0) goto L_0x2488;
-    L_0x2483:
+        if (r11 == 0) goto L_0x2501;
+    L_0x24fc:
         r13 = r10.positions;
         r13.put(r5, r11);
-    L_0x2488:
-        if (r4 != 0) goto L_0x248f;
-    L_0x248a:
+    L_0x2501:
+        if (r4 != 0) goto L_0x2508;
+    L_0x2503:
         r4 = new android.util.LongSparseArray;
         r4.<init>();
-    L_0x248f:
+    L_0x2508:
         r13 = r10.groupId;
         r4.put(r13, r10);
-    L_0x2494:
-        r40 = r0;
+    L_0x250d:
+        r41 = r0;
         r15 = r2;
-        r41 = r3;
-        goto L_0x2510;
-    L_0x249b:
-        if (r4 != 0) goto L_0x24a2;
-    L_0x249d:
+        r42 = r3;
+        goto L_0x2589;
+    L_0x2514:
+        if (r4 != 0) goto L_0x251b;
+    L_0x2516:
         r4 = new android.util.LongSparseArray;
         r4.<init>();
-    L_0x24a2:
+    L_0x251b:
         r13 = r10.groupId;
         r4.put(r13, r10);
-        if (r11 <= 0) goto L_0x2506;
-    L_0x24a9:
+        if (r11 <= 0) goto L_0x257f;
+    L_0x2522:
         r13 = r10.messages;
         r13 = r13.size();
         r14 = 1;
         r13 = r13 - r14;
-        if (r11 >= r13) goto L_0x2506;
-    L_0x24b3:
+        if (r11 >= r13) goto L_0x257f;
+    L_0x252c:
         r13 = new org.telegram.messenger.MessageObject$GroupedMessages;
         r13.<init>();
         r14 = org.telegram.messenger.Utilities.random;
@@ -16662,78 +16904,78 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r14 = r13.messages;
         r15 = r10.messages;
         r1 = r11 + 1;
-        r40 = r0;
+        r41 = r0;
         r0 = r15.size();
         r0 = r15.subList(r1, r0);
         r14.addAll(r0);
         r0 = 0;
-    L_0x24d4:
+    L_0x254d:
         r14 = r13.messages;
         r14 = r14.size();
-        if (r0 >= r14) goto L_0x24f6;
-    L_0x24dc:
+        if (r0 >= r14) goto L_0x256f;
+    L_0x2555:
         r14 = r13.messages;
         r14 = r14.get(r0);
         r14 = (org.telegram.messenger.MessageObject) r14;
         r15 = r2;
-        r41 = r3;
+        r42 = r3;
         r2 = r13.groupId;
         r14.localGroupId = r2;
         r2 = r10.messages;
         r2.remove(r1);
         r0 = r0 + 1;
-        r3 = r41;
+        r3 = r42;
         r2 = r15;
-        goto L_0x24d4;
-    L_0x24f6:
+        goto L_0x254d;
+    L_0x256f:
         r15 = r2;
-        r41 = r3;
+        r42 = r3;
         r0 = r13.groupId;
         r4.put(r0, r13);
         r0 = r7.groupedMessagesMap;
         r1 = r13.groupId;
         r0.put(r1, r13);
-        goto L_0x250b;
-    L_0x2506:
-        r40 = r0;
+        goto L_0x2584;
+    L_0x257f:
+        r41 = r0;
         r15 = r2;
-        r41 = r3;
-    L_0x250b:
+        r42 = r3;
+    L_0x2584:
         r0 = r10.messages;
         r0.remove(r11);
-    L_0x2510:
+    L_0x2589:
         r0 = r5.type;
-        if (r0 < 0) goto L_0x252b;
-    L_0x2514:
+        if (r0 < 0) goto L_0x25a4;
+    L_0x258d:
         r0 = r7.messages;
         r0.set(r8, r5);
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x2525;
-    L_0x251d:
+        if (r0 == 0) goto L_0x259e;
+    L_0x2596:
         r1 = r0.messagesStartRow;
         r1 = r1 + r8;
         r0.updateRowAtPosition(r1);
-    L_0x2525:
-        if (r12 < 0) goto L_0x2562;
-    L_0x2527:
+    L_0x259e:
+        if (r12 < 0) goto L_0x25db;
+    L_0x25a0:
         r9.set(r12, r5);
-        goto L_0x2562;
-    L_0x252b:
+        goto L_0x25db;
+    L_0x25a4:
         r0 = r7.messages;
         r0.remove(r8);
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x253c;
-    L_0x2534:
+        if (r0 == 0) goto L_0x25b5;
+    L_0x25ad:
         r1 = r0.messagesStartRow;
         r1 = r1 + r8;
         r0.notifyItemRemoved(r1);
-    L_0x253c:
-        if (r12 < 0) goto L_0x2562;
-    L_0x253e:
+    L_0x25b5:
+        if (r12 < 0) goto L_0x25db;
+    L_0x25b7:
         r9.remove(r12);
         r0 = r9.isEmpty();
-        if (r0 == 0) goto L_0x2562;
-    L_0x2547:
+        if (r0 == 0) goto L_0x25db;
+    L_0x25c0:
         r0 = r7.messagesByDays;
         r1 = r6.dateKey;
         r0.remove(r1);
@@ -16742,36 +16984,36 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.chatAdapter;
         r1 = r0.messagesStartRow;
         r0.notifyItemRemoved(r1);
-        goto L_0x2562;
-    L_0x255d:
-        r40 = r0;
+        goto L_0x25db;
+    L_0x25d6:
+        r41 = r0;
         r15 = r2;
-        r41 = r3;
-    L_0x2562:
+        r42 = r3;
+    L_0x25db:
         r2 = r15 + 1;
-        r0 = r40;
-        r3 = r41;
+        r0 = r41;
+        r3 = r42;
         r1 = -1;
-        goto L_0x2389;
-    L_0x256b:
-        if (r4 == 0) goto L_0x2ad5;
-    L_0x256d:
+        goto L_0x2402;
+    L_0x25e4:
+        if (r4 == 0) goto L_0x2b4e;
+    L_0x25e6:
         r0 = 0;
-    L_0x256e:
+    L_0x25e7:
         r1 = r4.size();
-        if (r0 >= r1) goto L_0x2ad5;
-    L_0x2574:
+        if (r0 >= r1) goto L_0x2b4e;
+    L_0x25ed:
         r1 = r4.valueAt(r0);
         r1 = (org.telegram.messenger.MessageObject.GroupedMessages) r1;
         r2 = r1.messages;
         r2 = r2.isEmpty();
-        if (r2 == 0) goto L_0x258a;
-    L_0x2582:
+        if (r2 == 0) goto L_0x2603;
+    L_0x25fb:
         r2 = r7.groupedMessagesMap;
         r5 = r1.groupId;
         r2.remove(r5);
-        goto L_0x25b5;
-    L_0x258a:
+        goto L_0x262e;
+    L_0x2603:
         r1.calculate();
         r2 = r1.messages;
         r3 = r2.size();
@@ -16781,118 +17023,118 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = (org.telegram.messenger.MessageObject) r2;
         r3 = r7.messages;
         r2 = r3.indexOf(r2);
-        if (r2 < 0) goto L_0x25b5;
-    L_0x25a3:
+        if (r2 < 0) goto L_0x262e;
+    L_0x261c:
         r3 = r7.chatAdapter;
-        if (r3 == 0) goto L_0x25b5;
-    L_0x25a7:
+        if (r3 == 0) goto L_0x262e;
+    L_0x2620:
         r5 = r3.messagesStartRow;
         r2 = r2 + r5;
         r1 = r1.messages;
         r1 = r1.size();
         r3.notifyItemRangeChanged(r2, r1);
-    L_0x25b5:
+    L_0x262e:
         r0 = r0 + 1;
-        goto L_0x256e;
-    L_0x25b8:
+        goto L_0x25e7;
+    L_0x2631:
         r1 = org.telegram.messenger.NotificationCenter.notificationsSettingsUpdated;
-        if (r0 != r1) goto L_0x25cc;
-    L_0x25bc:
-        r39.updateTitleIcons();
+        if (r0 != r1) goto L_0x2645;
+    L_0x2635:
+        r40.updateTitleIcons();
         r0 = r7.currentChat;
         r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x25c7:
-        r39.updateBottomOverlay();
-        goto L_0x2ad5;
-    L_0x25cc:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x2640:
+        r40.updateBottomOverlay();
+        goto L_0x2b4e;
+    L_0x2645:
         r1 = org.telegram.messenger.NotificationCenter.replyMessagesDidLoad;
-        if (r0 != r1) goto L_0x25e4;
-    L_0x25d0:
+        if (r0 != r1) goto L_0x265d;
+    L_0x2649:
         r1 = 0;
         r0 = r8[r1];
         r0 = (java.lang.Long) r0;
         r0 = r0.longValue();
         r2 = r7.dialog_id;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 != 0) goto L_0x2ad5;
-    L_0x25df:
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x25e4:
+        if (r4 != 0) goto L_0x2b4e;
+    L_0x2658:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x265d:
         r1 = org.telegram.messenger.NotificationCenter.pinnedMessageDidLoad;
-        if (r0 != r1) goto L_0x261a;
-    L_0x25e8:
+        if (r0 != r1) goto L_0x2693;
+    L_0x2661:
         r1 = 0;
         r0 = r8[r1];
         r0 = (org.telegram.messenger.MessageObject) r0;
         r1 = r0.getDialogId();
         r3 = r7.dialog_id;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 != 0) goto L_0x2ad5;
-    L_0x25f7:
+        if (r5 != 0) goto L_0x2b4e;
+    L_0x2670:
         r1 = r7.chatInfo;
-        if (r1 == 0) goto L_0x2603;
-    L_0x25fb:
+        if (r1 == 0) goto L_0x267c;
+    L_0x2674:
         r1 = r1.pinned_msg_id;
         r2 = r0.getId();
-        if (r1 == r2) goto L_0x260f;
-    L_0x2603:
+        if (r1 == r2) goto L_0x2688;
+    L_0x267c:
         r1 = r7.userInfo;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x2607:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x2680:
         r1 = r1.pinned_msg_id;
         r2 = r0.getId();
-        if (r1 != r2) goto L_0x2ad5;
-    L_0x260f:
+        if (r1 != r2) goto L_0x2b4e;
+    L_0x2688:
         r7.pinnedMessageObject = r0;
         r1 = 0;
         r7.loadingPinnedMessage = r1;
         r1 = 1;
         r7.updatePinnedMessageView(r1);
-        goto L_0x2ad5;
-    L_0x261a:
+        goto L_0x2b4e;
+    L_0x2693:
         r1 = 0;
         r5 = org.telegram.messenger.NotificationCenter.didReceivedWebpages;
-        if (r0 != r5) goto L_0x267b;
-    L_0x261f:
+        if (r0 != r5) goto L_0x26f4;
+    L_0x2698:
         r0 = r8[r1];
         r0 = (java.util.ArrayList) r0;
         r1 = 0;
         r14 = 0;
-    L_0x2625:
+    L_0x269e:
         r2 = r0.size();
-        if (r1 >= r2) goto L_0x2674;
-    L_0x262b:
+        if (r1 >= r2) goto L_0x26ed;
+    L_0x26a4:
         r2 = r0.get(r1);
         r2 = (org.telegram.tgnet.TLRPC.Message) r2;
         r3 = org.telegram.messenger.MessageObject.getDialogId(r2);
         r5 = r7.dialog_id;
         r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r8 == 0) goto L_0x2642;
-    L_0x263b:
+        if (r8 == 0) goto L_0x26bb;
+    L_0x26b4:
         r5 = r7.mergeDialogId;
         r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r8 == 0) goto L_0x2642;
-    L_0x2641:
-        goto L_0x2671;
-    L_0x2642:
+        if (r8 == 0) goto L_0x26bb;
+    L_0x26ba:
+        goto L_0x26ea;
+    L_0x26bb:
         r5 = r7.messagesDict;
         r8 = r7.dialog_id;
         r6 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1));
-        if (r6 != 0) goto L_0x264c;
-    L_0x264a:
+        if (r6 != 0) goto L_0x26c5;
+    L_0x26c3:
         r3 = 0;
-        goto L_0x264d;
-    L_0x264c:
+        goto L_0x26c6;
+    L_0x26c5:
         r3 = 1;
-    L_0x264d:
+    L_0x26c6:
         r3 = r5[r3];
         r4 = r2.id;
         r3 = r3.get(r4);
         r3 = (org.telegram.messenger.MessageObject) r3;
-        if (r3 == 0) goto L_0x2671;
-    L_0x2659:
+        if (r3 == 0) goto L_0x26ea;
+    L_0x26d2:
         r4 = r3.messageOwner;
         r5 = new org.telegram.tgnet.TLRPC$TL_messageMediaWebPage;
         r5.<init>();
@@ -16905,254 +17147,254 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = 1;
         r3.generateThumbs(r2);
         r14 = 1;
-    L_0x2671:
+    L_0x26ea:
         r1 = r1 + 1;
-        goto L_0x2625;
-    L_0x2674:
-        if (r14 == 0) goto L_0x2ad5;
-    L_0x2676:
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x267b:
+        goto L_0x269e;
+    L_0x26ed:
+        if (r14 == 0) goto L_0x2b4e;
+    L_0x26ef:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x26f4:
         r1 = org.telegram.messenger.NotificationCenter.didReceivedWebpagesInUpdates;
-        if (r0 != r1) goto L_0x26b0;
-    L_0x267f:
+        if (r0 != r1) goto L_0x2729;
+    L_0x26f8:
         r0 = r7.foundWebPage;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x2683:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x26fc:
         r1 = 0;
         r0 = r8[r1];
         r0 = (android.util.LongSparseArray) r0;
         r1 = 0;
-    L_0x2689:
+    L_0x2702:
         r2 = r0.size();
-        if (r1 >= r2) goto L_0x2ad5;
-    L_0x268f:
+        if (r1 >= r2) goto L_0x2b4e;
+    L_0x2708:
         r2 = r0.valueAt(r1);
         r2 = (org.telegram.tgnet.TLRPC.WebPage) r2;
         r3 = r2.id;
         r5 = r7.foundWebPage;
         r5 = r5.id;
         r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r8 != 0) goto L_0x26ac;
-    L_0x269f:
+        if (r8 != 0) goto L_0x2725;
+    L_0x2718:
         r0 = r2 instanceof org.telegram.tgnet.TLRPC.TL_webPageEmpty;
-        if (r0 != 0) goto L_0x26a5;
-    L_0x26a3:
+        if (r0 != 0) goto L_0x271e;
+    L_0x271c:
         r0 = 1;
-        goto L_0x26a6;
-    L_0x26a5:
+        goto L_0x271f;
+    L_0x271e:
         r0 = 0;
-    L_0x26a6:
+    L_0x271f:
         r5 = 0;
         r7.showFieldPanelForWebPage(r0, r2, r5);
-        goto L_0x2ad5;
-    L_0x26ac:
+        goto L_0x2b4e;
+    L_0x2725:
         r5 = 0;
         r1 = r1 + 1;
-        goto L_0x2689;
-    L_0x26b0:
+        goto L_0x2702;
+    L_0x2729:
         r5 = 0;
         r1 = org.telegram.messenger.NotificationCenter.messagesReadContent;
-        if (r0 != r1) goto L_0x272d;
-    L_0x26b5:
+        if (r0 != r1) goto L_0x27a6;
+    L_0x272e:
         r0 = r8[r5];
         r0 = (java.util.ArrayList) r0;
         r1 = r7.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 == 0) goto L_0x26c6;
-    L_0x26c1:
+        if (r1 == 0) goto L_0x273f;
+    L_0x273a:
         r1 = r7.currentChat;
         r13 = r1.id;
-        goto L_0x26c7;
-    L_0x26c6:
+        goto L_0x2740;
+    L_0x273f:
         r13 = 0;
-    L_0x26c7:
+    L_0x2740:
         r1 = 0;
         r14 = 0;
-    L_0x26c9:
+    L_0x2742:
         r2 = r0.size();
-        if (r1 >= r2) goto L_0x2726;
-    L_0x26cf:
+        if (r1 >= r2) goto L_0x279f;
+    L_0x2748:
         r2 = r0.get(r1);
         r2 = (java.lang.Long) r2;
         r2 = r2.longValue();
         r5 = 32;
         r5 = r2 >> r5;
         r6 = (int) r5;
-        if (r6 >= 0) goto L_0x26e1;
-    L_0x26e0:
+        if (r6 >= 0) goto L_0x275a;
+    L_0x2759:
         r6 = 0;
-    L_0x26e1:
-        if (r6 == r13) goto L_0x26e4;
-    L_0x26e3:
-        goto L_0x2723;
-    L_0x26e4:
+    L_0x275a:
+        if (r6 == r13) goto L_0x275d;
+    L_0x275c:
+        goto L_0x279c;
+    L_0x275d:
         r5 = r7.messagesDict;
         r6 = 0;
         r5 = r5[r6];
         r3 = (int) r2;
         r2 = r5.get(r3);
         r2 = (org.telegram.messenger.MessageObject) r2;
-        if (r2 == 0) goto L_0x2723;
-    L_0x26f2:
+        if (r2 == 0) goto L_0x279c;
+    L_0x276b:
         r2.setContentIsRead();
         r2 = r2.messageOwner;
         r2 = r2.mentioned;
-        if (r2 == 0) goto L_0x2722;
-    L_0x26fb:
+        if (r2 == 0) goto L_0x279b;
+    L_0x2774:
         r2 = r7.newMentionsCount;
         r3 = 1;
         r2 = r2 - r3;
         r7.newMentionsCount = r2;
         r2 = r7.newMentionsCount;
-        if (r2 > 0) goto L_0x270e;
-    L_0x2705:
+        if (r2 > 0) goto L_0x2787;
+    L_0x277e:
         r5 = 0;
         r7.newMentionsCount = r5;
         r7.hasAllMentionsLocal = r3;
         r7.showMentionDownButton(r5, r3);
-        goto L_0x2722;
-    L_0x270e:
+        goto L_0x279b;
+    L_0x2787:
         r5 = 0;
         r6 = r7.mentiondownButtonCounter;
-        if (r6 == 0) goto L_0x2722;
-    L_0x2713:
+        if (r6 == 0) goto L_0x279b;
+    L_0x278c:
         r8 = new java.lang.Object[r3];
         r2 = java.lang.Integer.valueOf(r2);
         r8[r5] = r2;
         r2 = java.lang.String.format(r4, r8);
         r6.setText(r2);
-    L_0x2722:
+    L_0x279b:
         r14 = 1;
-    L_0x2723:
+    L_0x279c:
         r1 = r1 + 1;
-        goto L_0x26c9;
-    L_0x2726:
-        if (r14 == 0) goto L_0x2ad5;
-    L_0x2728:
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x272d:
+        goto L_0x2742;
+    L_0x279f:
+        if (r14 == 0) goto L_0x2b4e;
+    L_0x27a1:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x27a6:
         r1 = org.telegram.messenger.NotificationCenter.botInfoDidLoad;
-        if (r0 != r1) goto L_0x2797;
-    L_0x2731:
+        if (r0 != r1) goto L_0x2810;
+    L_0x27aa:
         r1 = 1;
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
         r1 = r7.classGuid;
-        if (r1 != r0) goto L_0x2ad5;
-    L_0x273e:
+        if (r1 != r0) goto L_0x2b4e;
+    L_0x27b7:
         r1 = 0;
         r0 = r8[r1];
         r0 = (org.telegram.tgnet.TLRPC.BotInfo) r0;
         r1 = r7.currentEncryptedChat;
-        if (r1 != 0) goto L_0x2792;
-    L_0x2747:
+        if (r1 != 0) goto L_0x280b;
+    L_0x27c0:
         r1 = r0.commands;
         r1 = r1.isEmpty();
-        if (r1 != 0) goto L_0x275a;
-    L_0x274f:
+        if (r1 != 0) goto L_0x27d3;
+    L_0x27c8:
         r1 = r7.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 != 0) goto L_0x275a;
-    L_0x2757:
+        if (r1 != 0) goto L_0x27d3;
+    L_0x27d0:
         r1 = 1;
         r7.hasBotsCommands = r1;
-    L_0x275a:
+    L_0x27d3:
         r1 = r7.botInfo;
         r2 = r0.user_id;
         r1.put(r2, r0);
         r0 = r7.chatAdapter;
-        if (r0 == 0) goto L_0x276c;
-    L_0x2765:
+        if (r0 == 0) goto L_0x27e5;
+    L_0x27de:
         r1 = r0.botInfoRow;
         r0.notifyItemChanged(r1);
-    L_0x276c:
+    L_0x27e5:
         r0 = r7.mentionsAdapter;
-        if (r0 == 0) goto L_0x2787;
-    L_0x2770:
+        if (r0 == 0) goto L_0x2800;
+    L_0x27e9:
         r0 = r7.currentChat;
         r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 == 0) goto L_0x2780;
-    L_0x2778:
+        if (r0 == 0) goto L_0x27f9;
+    L_0x27f1:
         r0 = r7.currentChat;
-        if (r0 == 0) goto L_0x2787;
-    L_0x277c:
+        if (r0 == 0) goto L_0x2800;
+    L_0x27f5:
         r0 = r0.megagroup;
-        if (r0 == 0) goto L_0x2787;
-    L_0x2780:
+        if (r0 == 0) goto L_0x2800;
+    L_0x27f9:
         r0 = r7.mentionsAdapter;
         r1 = r7.botInfo;
         r0.setBotInfo(r1);
-    L_0x2787:
+    L_0x2800:
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x2792;
-    L_0x278b:
+        if (r0 == 0) goto L_0x280b;
+    L_0x2804:
         r1 = r7.botsCount;
         r2 = r7.hasBotsCommands;
         r0.setBotsCount(r1, r2);
-    L_0x2792:
-        r39.updateBotButtons();
-        goto L_0x2ad5;
-    L_0x2797:
+    L_0x280b:
+        r40.updateBotButtons();
+        goto L_0x2b4e;
+    L_0x2810:
         r1 = org.telegram.messenger.NotificationCenter.botKeyboardDidLoad;
-        if (r0 != r1) goto L_0x27e1;
-    L_0x279b:
+        if (r0 != r1) goto L_0x285a;
+    L_0x2814:
         r0 = r7.dialog_id;
         r2 = 1;
         r3 = r8[r2];
         r3 = (java.lang.Long) r3;
         r2 = r3.longValue();
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 != 0) goto L_0x2ad5;
-    L_0x27aa:
+        if (r4 != 0) goto L_0x2b4e;
+    L_0x2823:
         r1 = 0;
         r0 = r8[r1];
         r0 = (org.telegram.tgnet.TLRPC.Message) r0;
-        if (r0 == 0) goto L_0x27c3;
-    L_0x27b1:
+        if (r0 == 0) goto L_0x283c;
+    L_0x282a:
         r2 = r7.userBlocked;
-        if (r2 != 0) goto L_0x27c3;
-    L_0x27b5:
+        if (r2 != 0) goto L_0x283c;
+    L_0x282e:
         r2 = new org.telegram.messenger.MessageObject;
         r3 = r7.currentAccount;
         r2.<init>(r3, r0, r1);
         r7.botButtons = r2;
-        r39.checkBotKeyboard();
-        goto L_0x2ad5;
-    L_0x27c3:
+        r40.checkBotKeyboard();
+        goto L_0x2b4e;
+    L_0x283c:
         r1 = 0;
         r7.botButtons = r1;
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x27ca:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x2843:
         r0 = r7.replyingMessageObject;
-        if (r0 == 0) goto L_0x27d8;
-    L_0x27ce:
+        if (r0 == 0) goto L_0x2851;
+    L_0x2847:
         r2 = r7.botReplyButtons;
-        if (r2 != r0) goto L_0x27d8;
-    L_0x27d2:
+        if (r2 != r0) goto L_0x2851;
+    L_0x284b:
         r7.botReplyButtons = r1;
         r1 = 1;
         r7.hideFieldPanel(r1);
-    L_0x27d8:
+    L_0x2851:
         r0 = r7.chatActivityEnterView;
         r1 = r7.botButtons;
         r0.setButtons(r1);
-        goto L_0x2ad5;
-    L_0x27e1:
+        goto L_0x2b4e;
+    L_0x285a:
         r1 = org.telegram.messenger.NotificationCenter.chatSearchResultsAvailable;
-        if (r0 != r1) goto L_0x284b;
-    L_0x27e5:
+        if (r0 != r1) goto L_0x28c4;
+    L_0x285e:
         r0 = r7.classGuid;
         r1 = 0;
         r4 = r8[r1];
         r4 = (java.lang.Integer) r4;
         r1 = r4.intValue();
-        if (r0 != r1) goto L_0x2ad5;
-    L_0x27f2:
+        if (r0 != r1) goto L_0x2b4e;
+    L_0x286b:
         r1 = 1;
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
@@ -17161,32 +17403,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r8[r1];
         r1 = (java.lang.Long) r1;
         r1 = r1.longValue();
-        if (r0 == 0) goto L_0x2820;
-    L_0x2806:
+        if (r0 == 0) goto L_0x2899;
+    L_0x287f:
         r4 = 0;
         r5 = 1;
         r9 = r7.dialog_id;
         r6 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1));
-        if (r6 != 0) goto L_0x2811;
-    L_0x280e:
-        r23 = 0;
-        goto L_0x2813;
-    L_0x2811:
-        r23 = 1;
-    L_0x2813:
+        if (r6 != 0) goto L_0x288a;
+    L_0x2887:
+        r24 = 0;
+        goto L_0x288c;
+    L_0x288a:
+        r24 = 1;
+    L_0x288c:
         r6 = 0;
-        r1 = r39;
+        r1 = r40;
         r9 = 2;
         r2 = r0;
         r3 = r4;
         r4 = r5;
-        r5 = r23;
+        r5 = r24;
         r1.scrollToMessageId(r2, r3, r4, r5, r6);
-        goto L_0x2824;
-    L_0x2820:
+        goto L_0x289d;
+    L_0x2899:
         r9 = 2;
-        r39.updateVisibleRows();
-    L_0x2824:
+        r40.updateVisibleRows();
+    L_0x289d:
         r0 = r8[r9];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
@@ -17200,33 +17442,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r2.intValue();
         r7.updateSearchButtons(r0, r1, r2);
         r0 = r7.searchItem;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x2845:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x28be:
         r1 = 0;
         r0.setShowSearchProgress(r1);
-        goto L_0x2ad5;
-    L_0x284b:
+        goto L_0x2b4e;
+    L_0x28c4:
         r1 = 0;
         r9 = 2;
         r2 = org.telegram.messenger.NotificationCenter.chatSearchResultsLoading;
-        if (r0 != r2) goto L_0x2867;
-    L_0x2851:
+        if (r0 != r2) goto L_0x28e0;
+    L_0x28ca:
         r0 = r7.classGuid;
         r1 = r8[r1];
         r1 = (java.lang.Integer) r1;
         r1 = r1.intValue();
-        if (r0 != r1) goto L_0x2ad5;
-    L_0x285d:
+        if (r0 != r1) goto L_0x2b4e;
+    L_0x28d6:
         r0 = r7.searchItem;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x2861:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x28da:
         r1 = 1;
         r0.setShowSearchProgress(r1);
-        goto L_0x2ad5;
-    L_0x2867:
+        goto L_0x2b4e;
+    L_0x28e0:
         r1 = org.telegram.messenger.NotificationCenter.didUpdatedMessagesViews;
-        if (r0 != r1) goto L_0x28ab;
-    L_0x286b:
+        if (r0 != r1) goto L_0x2924;
+    L_0x28e4:
         r1 = 0;
         r0 = r8[r1];
         r0 = (android.util.SparseArray) r0;
@@ -17234,130 +17476,130 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = (int) r1;
         r0 = r0.get(r2);
         r0 = (android.util.SparseIntArray) r0;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x287b:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x28f4:
         r1 = 0;
         r14 = 0;
-    L_0x287d:
+    L_0x28f6:
         r2 = r0.size();
-        if (r1 >= r2) goto L_0x28a4;
-    L_0x2883:
+        if (r1 >= r2) goto L_0x291d;
+    L_0x28fc:
         r2 = r0.keyAt(r1);
         r3 = r7.messagesDict;
         r4 = 0;
         r3 = r3[r4];
         r3 = r3.get(r2);
         r3 = (org.telegram.messenger.MessageObject) r3;
-        if (r3 == 0) goto L_0x28a1;
-    L_0x2894:
+        if (r3 == 0) goto L_0x291a;
+    L_0x290d:
         r2 = r0.get(r2);
         r3 = r3.messageOwner;
         r4 = r3.views;
-        if (r2 <= r4) goto L_0x28a1;
-    L_0x289e:
+        if (r2 <= r4) goto L_0x291a;
+    L_0x2917:
         r3.views = r2;
         r14 = 1;
-    L_0x28a1:
+    L_0x291a:
         r1 = r1 + 1;
-        goto L_0x287d;
-    L_0x28a4:
-        if (r14 == 0) goto L_0x2ad5;
-    L_0x28a6:
-        r39.updateVisibleRows();
-        goto L_0x2ad5;
-    L_0x28ab:
+        goto L_0x28f6;
+    L_0x291d:
+        if (r14 == 0) goto L_0x2b4e;
+    L_0x291f:
+        r40.updateVisibleRows();
+        goto L_0x2b4e;
+    L_0x2924:
         r1 = org.telegram.messenger.NotificationCenter.peerSettingsDidLoad;
-        if (r0 != r1) goto L_0x28d2;
-    L_0x28af:
+        if (r0 != r1) goto L_0x294b;
+    L_0x2928:
         r1 = 0;
         r0 = r8[r1];
         r0 = (java.lang.Long) r0;
         r0 = r0.longValue();
         r2 = r7.dialog_id;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 == 0) goto L_0x28c9;
-    L_0x28be:
+        if (r4 == 0) goto L_0x2942;
+    L_0x2937:
         r2 = r7.currentUser;
-        if (r2 == 0) goto L_0x2ad5;
-    L_0x28c2:
+        if (r2 == 0) goto L_0x2b4e;
+    L_0x293b:
         r2 = r2.id;
         r2 = (long) r2;
         r4 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1));
-        if (r4 != 0) goto L_0x2ad5;
-    L_0x28c9:
+        if (r4 != 0) goto L_0x2b4e;
+    L_0x2942:
         r0 = r7.paused;
         r1 = 1;
         r0 = r0 ^ r1;
         r7.updateTopPanel(r0);
-        goto L_0x2ad5;
-    L_0x28d2:
+        goto L_0x2b4e;
+    L_0x294b:
         r1 = org.telegram.messenger.NotificationCenter.newDraftReceived;
-        if (r0 != r1) goto L_0x28eb;
-    L_0x28d6:
+        if (r0 != r1) goto L_0x2964;
+    L_0x294f:
         r1 = 0;
         r0 = r8[r1];
         r0 = (java.lang.Long) r0;
         r0 = r0.longValue();
         r2 = r7.dialog_id;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 != 0) goto L_0x2ad5;
-    L_0x28e5:
+        if (r4 != 0) goto L_0x2b4e;
+    L_0x295e:
         r1 = 1;
         r7.applyDraftMaybe(r1);
-        goto L_0x2ad5;
-    L_0x28eb:
+        goto L_0x2b4e;
+    L_0x2964:
         r1 = org.telegram.messenger.NotificationCenter.userInfoDidLoad;
-        if (r0 != r1) goto L_0x2934;
-    L_0x28ef:
+        if (r0 != r1) goto L_0x29ad;
+    L_0x2968:
         r1 = 0;
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
         r1 = r7.currentUser;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x28f8:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x2971:
         r1 = r1.id;
         r0 = r0.intValue();
-        if (r1 != r0) goto L_0x2ad5;
-    L_0x2900:
+        if (r1 != r0) goto L_0x2b4e;
+    L_0x2979:
         r1 = 1;
         r0 = r8[r1];
         r0 = (org.telegram.tgnet.TLRPC.UserFull) r0;
         r7.userInfo = r0;
         r0 = r7.headerItem;
-        if (r0 == 0) goto L_0x291c;
-    L_0x290b:
+        if (r0 == 0) goto L_0x2995;
+    L_0x2984:
         r1 = r7.userInfo;
         r1 = r1.phone_calls_available;
-        if (r1 == 0) goto L_0x2917;
-    L_0x2911:
+        if (r1 == 0) goto L_0x2990;
+    L_0x298a:
         r1 = 32;
         r0.showSubItem(r1);
-        goto L_0x291c;
-    L_0x2917:
+        goto L_0x2995;
+    L_0x2990:
         r1 = 32;
         r0.hideSubItem(r1);
-    L_0x291c:
+    L_0x2995:
         r0 = r8[r9];
         r0 = r0 instanceof org.telegram.messenger.MessageObject;
-        if (r0 == 0) goto L_0x292e;
-    L_0x2922:
+        if (r0 == 0) goto L_0x29a7;
+    L_0x299b:
         r0 = r8[r9];
         r0 = (org.telegram.messenger.MessageObject) r0;
         r7.pinnedMessageObject = r0;
         r1 = 0;
         r7.updatePinnedMessageView(r1);
-        goto L_0x2ad5;
-    L_0x292e:
+        goto L_0x2b4e;
+    L_0x29a7:
         r1 = 1;
         r7.updatePinnedMessageView(r1);
-        goto L_0x2ad5;
-    L_0x2934:
+        goto L_0x2b4e;
+    L_0x29ad:
         r1 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper;
-        if (r0 != r1) goto L_0x2975;
-    L_0x2938:
+        if (r0 != r1) goto L_0x29ee;
+    L_0x29b1:
         r0 = r7.fragmentView;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x293c:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x29b5:
         r0 = r7.contentView;
         r1 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper();
         r2 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion();
@@ -17367,73 +17609,73 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = org.telegram.ui.ActionBar.Theme.colorFilter;
         r0.setColorFilter(r1);
         r0 = r7.emptyView;
-        if (r0 == 0) goto L_0x2961;
-    L_0x2958:
+        if (r0 == 0) goto L_0x29da;
+    L_0x29d1:
         r0 = r0.getBackground();
         r1 = org.telegram.ui.ActionBar.Theme.colorFilter;
         r0.setColorFilter(r1);
-    L_0x2961:
+    L_0x29da:
         r0 = r7.bigEmptyView;
-        if (r0 == 0) goto L_0x296e;
-    L_0x2965:
+        if (r0 == 0) goto L_0x29e7;
+    L_0x29de:
         r0 = r0.getBackground();
         r1 = org.telegram.ui.ActionBar.Theme.colorFilter;
         r0.setColorFilter(r1);
-    L_0x296e:
+    L_0x29e7:
         r0 = r7.chatListView;
         r0.invalidateViews();
-        goto L_0x2ad5;
-    L_0x2975:
+        goto L_0x2b4e;
+    L_0x29ee:
         r1 = org.telegram.messenger.NotificationCenter.channelRightsUpdated;
-        if (r0 != r1) goto L_0x2999;
-    L_0x2979:
+        if (r0 != r1) goto L_0x2a12;
+    L_0x29f2:
         r1 = 0;
         r0 = r8[r1];
         r0 = (org.telegram.tgnet.TLRPC.Chat) r0;
         r1 = r7.currentChat;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x2982:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x29fb:
         r2 = r0.id;
         r1 = r1.id;
-        if (r2 != r1) goto L_0x2ad5;
-    L_0x2988:
+        if (r2 != r1) goto L_0x2b4e;
+    L_0x2a01:
         r1 = r7.chatActivityEnterView;
-        if (r1 == 0) goto L_0x2ad5;
-    L_0x298c:
+        if (r1 == 0) goto L_0x2b4e;
+    L_0x2a05:
         r7.currentChat = r0;
         r1.checkChannelRights();
-        r39.checkRaiseSensors();
-        r39.updateSecretStatus();
-        goto L_0x2ad5;
-    L_0x2999:
+        r40.checkRaiseSensors();
+        r40.updateSecretStatus();
+        goto L_0x2b4e;
+    L_0x2a12:
         r1 = org.telegram.messenger.NotificationCenter.updateMentionsCount;
-        if (r0 != r1) goto L_0x29dd;
-    L_0x299d:
+        if (r0 != r1) goto L_0x2a56;
+    L_0x2a16:
         r0 = r7.dialog_id;
         r2 = 0;
         r3 = r8[r2];
         r3 = (java.lang.Long) r3;
         r2 = r3.longValue();
         r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r5 != 0) goto L_0x2ad5;
-    L_0x29ac:
+        if (r5 != 0) goto L_0x2b4e;
+    L_0x2a25:
         r1 = 1;
         r0 = r8[r1];
         r0 = (java.lang.Integer) r0;
         r0 = r0.intValue();
         r2 = r7.newMentionsCount;
-        if (r2 <= r0) goto L_0x2ad5;
-    L_0x29b9:
+        if (r2 <= r0) goto L_0x2b4e;
+    L_0x2a32:
         r7.newMentionsCount = r0;
         r0 = r7.newMentionsCount;
-        if (r0 > 0) goto L_0x29c9;
-    L_0x29bf:
+        if (r0 > 0) goto L_0x2a42;
+    L_0x2a38:
         r2 = 0;
         r7.newMentionsCount = r2;
         r7.hasAllMentionsLocal = r1;
         r7.showMentionDownButton(r2, r1);
-        goto L_0x2ad5;
-    L_0x29c9:
+        goto L_0x2b4e;
+    L_0x2a42:
         r2 = 0;
         r3 = r7.mentiondownButtonCounter;
         r1 = new java.lang.Object[r1];
@@ -17441,156 +17683,156 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1[r2] = r0;
         r0 = java.lang.String.format(r4, r1);
         r3.setText(r0);
-        goto L_0x2ad5;
-    L_0x29dd:
+        goto L_0x2b4e;
+    L_0x2a56:
         r2 = 0;
         r1 = org.telegram.messenger.NotificationCenter.audioRecordTooShort;
-        if (r0 != r1) goto L_0x29ef;
-    L_0x29e2:
+        if (r0 != r1) goto L_0x2a68;
+    L_0x2a5b:
         r0 = r8[r2];
         r0 = (java.lang.Boolean) r0;
         r0 = r0.booleanValue();
         r7.showVoiceHint(r2, r0);
-        goto L_0x2ad5;
-    L_0x29ef:
+        goto L_0x2b4e;
+    L_0x2a68:
         r1 = org.telegram.messenger.NotificationCenter.videoLoadingStateChanged;
-        if (r0 != r1) goto L_0x2ad5;
-    L_0x29f3:
+        if (r0 != r1) goto L_0x2b4e;
+    L_0x2a6c:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x29f7:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x2a70:
         r1 = r8[r2];
         r1 = (java.lang.String) r1;
         r0 = r0.getChildCount();
         r2 = 0;
-    L_0x2a00:
-        if (r2 >= r0) goto L_0x2ad5;
-    L_0x2a02:
+    L_0x2a79:
+        if (r2 >= r0) goto L_0x2b4e;
+    L_0x2a7b:
         r3 = r7.chatListView;
         r3 = r3.getChildAt(r2);
         r4 = r3 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r4 != 0) goto L_0x2a0d;
-    L_0x2a0c:
-        goto L_0x2a25;
-    L_0x2a0d:
+        if (r4 != 0) goto L_0x2a86;
+    L_0x2a85:
+        goto L_0x2a9e;
+    L_0x2a86:
         r3 = (org.telegram.ui.Cells.ChatMessageCell) r3;
         r4 = r3.getStreamingMedia();
-        if (r4 != 0) goto L_0x2a16;
-    L_0x2a15:
-        goto L_0x2a25;
-    L_0x2a16:
+        if (r4 != 0) goto L_0x2a8f;
+    L_0x2a8e:
+        goto L_0x2a9e;
+    L_0x2a8f:
         r4 = org.telegram.messenger.FileLoader.getAttachFileName(r4);
         r4 = r4.equals(r1);
-        if (r4 == 0) goto L_0x2a25;
-    L_0x2a20:
+        if (r4 == 0) goto L_0x2a9e;
+    L_0x2a99:
         r4 = 1;
         r5 = 0;
         r3.updateButtonState(r5, r4, r5);
-    L_0x2a25:
+    L_0x2a9e:
         r2 = r2 + 1;
-        goto L_0x2a00;
-    L_0x2a28:
+        goto L_0x2a79;
+    L_0x2aa1:
         r1 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset;
-        if (r0 != r1) goto L_0x2a2f;
-    L_0x2a2c:
-        r39.destroyTextureView();
-    L_0x2a2f:
+        if (r0 != r1) goto L_0x2aa8;
+    L_0x2aa5:
+        r40.destroyTextureView();
+    L_0x2aa8:
         r0 = r7.chatListView;
-        if (r0 == 0) goto L_0x2ad5;
-    L_0x2a33:
+        if (r0 == 0) goto L_0x2b4e;
+    L_0x2aac:
         r0 = r0.getChildCount();
         r1 = 0;
-    L_0x2a38:
-        if (r1 >= r0) goto L_0x2aa3;
-    L_0x2a3a:
+    L_0x2ab1:
+        if (r1 >= r0) goto L_0x2b1c;
+    L_0x2ab3:
         r2 = r7.chatListView;
         r2 = r2.getChildAt(r1);
         r3 = r2 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r3 == 0) goto L_0x2aa0;
-    L_0x2a44:
+        if (r3 == 0) goto L_0x2b19;
+    L_0x2abd:
         r2 = (org.telegram.ui.Cells.ChatMessageCell) r2;
         r3 = r2.getMessageObject();
-        if (r3 == 0) goto L_0x2aa0;
-    L_0x2a4c:
+        if (r3 == 0) goto L_0x2b19;
+    L_0x2ac5:
         r4 = r3.isVoice();
-        if (r4 != 0) goto L_0x2a9b;
-    L_0x2a52:
+        if (r4 != 0) goto L_0x2b14;
+    L_0x2acb:
         r4 = r3.isMusic();
-        if (r4 == 0) goto L_0x2a59;
-    L_0x2a58:
-        goto L_0x2a9b;
-    L_0x2a59:
+        if (r4 == 0) goto L_0x2ad2;
+    L_0x2ad1:
+        goto L_0x2b14;
+    L_0x2ad2:
         r4 = r3.isVideo();
-        if (r4 == 0) goto L_0x2a86;
-    L_0x2a5f:
+        if (r4 == 0) goto L_0x2aff;
+    L_0x2ad8:
         r4 = 1;
         r5 = 0;
         r2.updateButtonState(r5, r4, r5);
         r4 = org.telegram.messenger.MediaController.getInstance();
         r4 = r4.isPlayingMessage(r3);
-        if (r4 != 0) goto L_0x2aa0;
-    L_0x2a6e:
+        if (r4 != 0) goto L_0x2b19;
+    L_0x2ae7:
         r4 = org.telegram.messenger.MediaController.getInstance();
         r3 = r4.isGoingToShowMessageObject(r3);
-        if (r3 != 0) goto L_0x2aa0;
-    L_0x2a78:
+        if (r3 != 0) goto L_0x2b19;
+    L_0x2af1:
         r2 = r2.getPhotoImage();
         r2 = r2.getAnimation();
-        if (r2 == 0) goto L_0x2aa0;
-    L_0x2a82:
+        if (r2 == 0) goto L_0x2b19;
+    L_0x2afb:
         r2.start();
-        goto L_0x2aa0;
-    L_0x2a86:
+        goto L_0x2b19;
+    L_0x2aff:
         r4 = r3.isRoundVideo();
-        if (r4 == 0) goto L_0x2aa0;
-    L_0x2a8c:
+        if (r4 == 0) goto L_0x2b19;
+    L_0x2b05:
         r4 = org.telegram.messenger.MediaController.getInstance();
         r3 = r4.isPlayingMessage(r3);
-        if (r3 != 0) goto L_0x2aa0;
-    L_0x2a96:
+        if (r3 != 0) goto L_0x2b19;
+    L_0x2b0f:
         r3 = 1;
         r2.checkVideoPlayback(r3);
-        goto L_0x2aa0;
-    L_0x2a9b:
+        goto L_0x2b19;
+    L_0x2b14:
         r3 = 1;
         r4 = 0;
         r2.updateButtonState(r4, r3, r4);
-    L_0x2aa0:
+    L_0x2b19:
         r1 = r1 + 1;
-        goto L_0x2a38;
-    L_0x2aa3:
+        goto L_0x2ab1;
+    L_0x2b1c:
         r0 = r7.mentionListView;
         r0 = r0.getChildCount();
         r1 = 0;
-    L_0x2aaa:
-        if (r1 >= r0) goto L_0x2ad5;
-    L_0x2aac:
+    L_0x2b23:
+        if (r1 >= r0) goto L_0x2b4e;
+    L_0x2b25:
         r2 = r7.mentionListView;
         r2 = r2.getChildAt(r1);
         r3 = r2 instanceof org.telegram.ui.Cells.ContextLinkCell;
-        if (r3 == 0) goto L_0x2ad0;
-    L_0x2ab6:
+        if (r3 == 0) goto L_0x2b49;
+    L_0x2b2f:
         r2 = (org.telegram.ui.Cells.ContextLinkCell) r2;
         r3 = r2.getMessageObject();
-        if (r3 == 0) goto L_0x2ad0;
-    L_0x2abe:
+        if (r3 == 0) goto L_0x2b49;
+    L_0x2b37:
         r4 = r3.isVoice();
-        if (r4 != 0) goto L_0x2aca;
-    L_0x2ac4:
+        if (r4 != 0) goto L_0x2b43;
+    L_0x2b3d:
         r3 = r3.isMusic();
-        if (r3 == 0) goto L_0x2ad0;
-    L_0x2aca:
+        if (r3 == 0) goto L_0x2b49;
+    L_0x2b43:
         r3 = 1;
         r4 = 0;
         r2.updateButtonState(r4, r3);
-        goto L_0x2ad2;
-    L_0x2ad0:
+        goto L_0x2b4b;
+    L_0x2b49:
         r3 = 1;
         r4 = 0;
-    L_0x2ad2:
+    L_0x2b4b:
         r1 = r1 + 1;
-        goto L_0x2aaa;
-    L_0x2ad5:
+        goto L_0x2b23;
+    L_0x2b4e:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -17952,12 +18194,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     L_0x0025:
         r0 = r8.chatActivityEnterView;
         r0 = r0.getSelectionLength();
-        if (r0 == 0) goto L_0x0142;
+        if (r0 == 0) goto L_0x0144;
     L_0x002d:
         r0 = r9.findItem(r1);
         if (r0 != 0) goto L_0x0035;
     L_0x0033:
-        goto L_0x0142;
+        goto L_0x0144;
     L_0x0035:
         r0 = android.os.Build.VERSION.SDK_INT;
         r1 = 23;
@@ -17967,7 +18209,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r9.removeItem(r0);
     L_0x0041:
         r0 = new android.text.SpannableStringBuilder;
-        r1 = NUM; // 0x7f0d01ca float:1.8743044E38 double:1.053130004E-314;
+        r1 = NUM; // 0x7f0d01cc float:1.8743048E38 double:1.053130005E-314;
         r3 = "Bold";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.<init>(r1);
@@ -17984,7 +18226,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6 = NUM; // 0x7var_ float:1.8077744E38 double:1.0529679414E-314;
         r9.add(r6, r1, r3, r0);
         r0 = new android.text.SpannableStringBuilder;
-        r1 = NUM; // 0x7f0d053e float:1.8744837E38 double:1.0531304406E-314;
+        r1 = NUM; // 0x7f0d054a float:1.874486E38 double:1.0531304465E-314;
         r3 = "Italic";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.<init>(r1);
@@ -17998,7 +18240,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = 7;
         r9.add(r6, r1, r3, r0);
         r0 = new android.text.SpannableStringBuilder;
-        r1 = NUM; // 0x7f0d05f4 float:1.8745206E38 double:1.0531305305E-314;
+        r1 = NUM; // 0x7f0d0608 float:1.8745246E38 double:1.0531305404E-314;
         r3 = "Mono";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.<init>(r1);
@@ -18011,15 +18253,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = 8;
         r9.add(r6, r1, r3, r0);
         r0 = r8.currentEncryptedChat;
-        if (r0 == 0) goto L_0x0120;
+        if (r0 == 0) goto L_0x00c9;
     L_0x00bd:
+        if (r0 == 0) goto L_0x0122;
+    L_0x00bf:
         r0 = r0.layer;
         r0 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r0);
         r1 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
-        if (r0 < r1) goto L_0x0120;
-    L_0x00c7:
+        if (r0 < r1) goto L_0x0122;
+    L_0x00c9:
         r0 = new android.text.SpannableStringBuilder;
-        r1 = NUM; // 0x7f0d09cf float:1.8747208E38 double:1.053131018E-314;
+        r1 = NUM; // 0x7f0d09f7 float:1.8747289E38 double:1.053131038E-314;
         r7 = "Strike";
         r1 = org.telegram.messenger.LocaleController.getString(r7, r1);
         r0.<init>(r1);
@@ -18036,7 +18280,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = 9;
         r9.add(r6, r1, r3, r0);
         r0 = new android.text.SpannableStringBuilder;
-        r1 = NUM; // 0x7f0d0a36 float:1.8747417E38 double:1.053131069E-314;
+        r1 = NUM; // 0x7f0d0a5f float:1.87475E38 double:1.0531310893E-314;
         r3 = "Underline";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.<init>(r1);
@@ -18052,20 +18296,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_e float:1.8077756E38 double:1.0529679444E-314;
         r3 = 10;
         r9.add(r6, r1, r3, r0);
-    L_0x0120:
+    L_0x0122:
         r0 = NUM; // 0x7var_a float:1.8077748E38 double:1.0529679424E-314;
         r1 = 11;
-        r3 = NUM; // 0x7f0d0313 float:1.874371E38 double:1.0531301664E-314;
+        r3 = NUM; // 0x7f0d0316 float:1.8743717E38 double:1.053130168E-314;
         r4 = "CreateLink";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r9.add(r6, r0, r1, r3);
         r0 = NUM; // 0x7var_c float:1.8077752E38 double:1.0529679434E-314;
         r1 = 12;
-        r3 = NUM; // 0x7f0d08ad float:1.874662E38 double:1.053130875E-314;
+        r3 = NUM; // 0x7f0d08c7 float:1.8746672E38 double:1.0531308877E-314;
         r4 = "Regular";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r9.add(r6, r0, r1, r3);
-    L_0x0142:
+    L_0x0144:
         return r2;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.extendActionMode(android.view.Menu):boolean");
@@ -18109,7 +18353,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         goto L_0x007a;
     L_0x0031:
         r0 = r6.bottomOverlayChatText;
-        r4 = NUM; // 0x7f0d0237 float:1.8743265E38 double:1.0531300577E-314;
+        r4 = NUM; // 0x7f0d023a float:1.874327E38 double:1.053130059E-314;
         r5 = "ChannelJoin";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
@@ -18122,14 +18366,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (r0 != 0) goto L_0x005e;
     L_0x004f:
         r0 = r6.bottomOverlayChatText;
-        r4 = NUM; // 0x7f0d0251 float:1.8743317E38 double:1.0531300705E-314;
+        r4 = NUM; // 0x7f0d0254 float:1.8743324E38 double:1.053130072E-314;
         r5 = "ChannelMute";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
         goto L_0x006c;
     L_0x005e:
         r0 = r6.bottomOverlayChatText;
-        r4 = NUM; // 0x7f0d026d float:1.8743374E38 double:1.0531300844E-314;
+        r4 = NUM; // 0x7f0d0270 float:1.874338E38 double:1.053130086E-314;
         r5 = "ChannelUnmute";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
@@ -18163,7 +18407,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (r0 == 0) goto L_0x00ae;
     L_0x0094:
         r0 = r6.bottomOverlayChatText2;
-        r4 = NUM; // 0x7f0d0232 float:1.8743255E38 double:1.053130055E-314;
+        r4 = NUM; // 0x7f0d0235 float:1.874326E38 double:1.0531300567E-314;
         r5 = "ChannelDiscuss";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
@@ -18178,7 +18422,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         goto L_0x014c;
     L_0x00b5:
         r0 = r6.bottomOverlayChatText;
-        r4 = NUM; // 0x7f0d0370 float:1.87439E38 double:1.0531302123E-314;
+        r4 = NUM; // 0x7f0d0373 float:1.8743906E38 double:1.053130214E-314;
         r5 = "DeleteThisGroup";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
@@ -18193,14 +18437,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (r0 == 0) goto L_0x00e1;
     L_0x00d2:
         r0 = r6.bottomOverlayChatText;
-        r4 = NUM; // 0x7f0d01d8 float:1.8743072E38 double:1.0531300107E-314;
+        r4 = NUM; // 0x7f0d01da float:1.8743076E38 double:1.0531300117E-314;
         r5 = "BotUnblock";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
         goto L_0x00ef;
     L_0x00e1:
         r0 = r6.bottomOverlayChatText;
-        r4 = NUM; // 0x7f0d0a34 float:1.8747413E38 double:1.053131068E-314;
+        r4 = NUM; // 0x7f0d0a5d float:1.8747496E38 double:1.0531310883E-314;
         r5 = "Unblock";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
@@ -18235,7 +18479,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (r0 == 0) goto L_0x013e;
     L_0x0119:
         r0 = r6.bottomOverlayChatText;
-        r4 = NUM; // 0x7f0d01d4 float:1.8743064E38 double:1.053130009E-314;
+        r4 = NUM; // 0x7f0d01d6 float:1.8743068E38 double:1.05313001E-314;
         r5 = "BotStart";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
@@ -18250,7 +18494,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         goto L_0x014c;
     L_0x013e:
         r0 = r6.bottomOverlayChatText;
-        r4 = NUM; // 0x7f0d036f float:1.8743898E38 double:1.053130212E-314;
+        r4 = NUM; // 0x7f0d0372 float:1.8743904E38 double:1.0531302133E-314;
         r5 = "DeleteThisChat";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r4);
@@ -18443,7 +18687,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
             }
-            AnonymousClass57 anonymousClass57 = new Runnable() {
+            AnonymousClass58 anonymousClass58 = new Runnable() {
                 public void run() {
                     if (ChatActivity.this.hideAlertViewRunnable == this && ChatActivity.this.alertView.getTag() == null) {
                         ChatActivity.this.alertView.setTag(Integer.valueOf(1));
@@ -18452,10 +18696,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ChatActivity.this.alertViewAnimator = null;
                         }
                         ChatActivity.this.alertViewAnimator = new AnimatorSet();
-                        AnimatorSet access$22000 = ChatActivity.this.alertViewAnimator;
+                        AnimatorSet access$22800 = ChatActivity.this.alertViewAnimator;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(50.0f))});
-                        access$22000.playTogether(animatorArr);
+                        access$22800.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
                         ChatActivity.this.alertViewAnimator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
@@ -18475,8 +18719,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
             };
-            this.hideAlertViewRunnable = anonymousClass57;
-            AndroidUtilities.runOnUIThread(anonymousClass57, 3000);
+            this.hideAlertViewRunnable = anonymousClass58;
+            AndroidUtilities.runOnUIThread(anonymousClass58, 3000);
         }
     }
 
@@ -18660,7 +18904,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r5 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r1.setDuration(r5);
         r1 = r0.pinnedMessageViewAnimator;
-        r5 = new org.telegram.ui.ChatActivity$59;
+        r5 = new org.telegram.ui.ChatActivity$60;
         r5.<init>();
         r1.addListener(r5);
         r1 = r0.pinnedMessageViewAnimator;
@@ -18806,14 +19050,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (r1 != r2) goto L_0x020b;
     L_0x01fc:
         r1 = r0.pinnedMessageNameTextView;
-        r5 = NUM; // 0x7f0d0848 float:1.8746415E38 double:1.053130825E-314;
+        r5 = NUM; // 0x7f0d0862 float:1.8746467E38 double:1.053130838E-314;
         r6 = "PinnedPoll";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setText(r5);
         goto L_0x0219;
     L_0x020b:
         r1 = r0.pinnedMessageNameTextView;
-        r5 = NUM; // 0x7f0d0846 float:1.874641E38 double:1.053130824E-314;
+        r5 = NUM; // 0x7f0d0860 float:1.8746463E38 double:1.053130837E-314;
         r6 = "PinnedMessage";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setText(r5);
@@ -20212,10 +20456,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         createMenu(view, z, z2, f, f2, true);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0e21  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0e20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0e20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0e21  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0e39  */
+    /* JADX WARNING: Removed duplicated region for block: B:433:0x0e38 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:433:0x0e38 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0e39  */
     /* JADX WARNING: Removed duplicated region for block: B:168:0x0312  */
     /* JADX WARNING: Removed duplicated region for block: B:167:0x0311 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:73:0x0110  */
@@ -20251,14 +20495,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     /* JADX WARNING: Missing block: B:57:0x00df, code skipped:
             if (r5.pinned_msg_id == r0.getId()) goto L_0x00e1;
      */
-    /* JADX WARNING: Missing block: B:217:0x047b, code skipped:
-            if (r2.bot != false) goto L_0x047d;
+    /* JADX WARNING: Missing block: B:219:0x0483, code skipped:
+            if (r2.bot != false) goto L_0x0485;
      */
-    /* JADX WARNING: Missing block: B:285:0x06aa, code skipped:
-            if (r1.edit_messages != false) goto L_0x06ac;
+    /* JADX WARNING: Missing block: B:289:0x06ba, code skipped:
+            if (r1.edit_messages != false) goto L_0x06bc;
      */
-    /* JADX WARNING: Missing block: B:375:0x0b7e, code skipped:
-            if (r1.bot != false) goto L_0x0b80;
+    /* JADX WARNING: Missing block: B:379:0x0b8e, code skipped:
+            if (r1.bot != false) goto L_0x0b90;
      */
     private void createMenu(android.view.View r22, boolean r23, boolean r24, float r25, float r26, boolean r27) {
         /*
@@ -20755,23 +20999,27 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         goto L_0x033c;
     L_0x0339:
         r1 = 4;
-        goto L_0x0e1a;
+        goto L_0x0e32;
     L_0x033c:
         r7.selectedObject = r0;
         r7.selectedObjectGroup = r3;
         r1 = -1;
         r3 = "Copy";
         r17 = NUM; // 0x7var_ float:1.7945334E38 double:1.0529356873E-314;
-        if (r2 != r1) goto L_0x038b;
+        if (r2 != r1) goto L_0x0393;
     L_0x0348:
         r0 = r7.selectedObject;
         r1 = r0.type;
-        if (r1 == 0) goto L_0x0352;
+        if (r1 == 0) goto L_0x035a;
     L_0x034e:
+        r0 = r0.isAnimatedEmoji();
+        if (r0 != 0) goto L_0x035a;
+    L_0x0354:
+        r0 = r7.selectedObject;
         r0 = r0.caption;
-        if (r0 == 0) goto L_0x036e;
-    L_0x0352:
-        r0 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
+        if (r0 == 0) goto L_0x0376;
+    L_0x035a:
+        r0 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r14.add(r0);
         r0 = 3;
@@ -20780,8 +21028,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_ float:1.7945332E38 double:1.052935687E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-    L_0x036e:
-        r0 = NUM; // 0x7f0d0200 float:1.8743153E38 double:1.0531300305E-314;
+    L_0x0376:
+        r0 = NUM; // 0x7f0d0203 float:1.874316E38 double:1.053130032E-314;
         r1 = "CancelSending";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r14.add(r0);
@@ -20791,12 +21039,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = java.lang.Integer.valueOf(r17);
         r13.add(r0);
         goto L_0x0339;
-    L_0x038b:
-        r1 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
+    L_0x0393:
+        r1 = NUM; // 0x7f0d0350 float:1.8743835E38 double:1.0531301965E-314;
         r11 = "Delete";
-        if (r2 != 0) goto L_0x03c6;
-    L_0x0392:
-        r0 = NUM; // 0x7f0d08f1 float:1.8746757E38 double:1.0531309085E-314;
+        if (r2 != 0) goto L_0x03ce;
+    L_0x039a:
+        r0 = NUM; // 0x7f0d090b float:1.874681E38 double:1.0531309213E-314;
         r2 = "Retry";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r14.add(r0);
@@ -20812,18 +21060,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = java.lang.Integer.valueOf(r17);
         r13.add(r0);
         goto L_0x0339;
-    L_0x03c6:
-        if (r2 != r9) goto L_0x0503;
-    L_0x03c8:
-        r2 = r7.currentChat;
-        if (r2 == 0) goto L_0x04bb;
-    L_0x03cc:
-        r2 = r7.isBroadcast;
-        if (r2 != 0) goto L_0x04bb;
+    L_0x03ce:
+        if (r2 != r9) goto L_0x050b;
     L_0x03d0:
-        if (r12 == 0) goto L_0x03f1;
-    L_0x03d2:
-        r2 = NUM; // 0x7f0d08ba float:1.8746646E38 double:1.0531308813E-314;
+        r2 = r7.currentChat;
+        if (r2 == 0) goto L_0x04c3;
+    L_0x03d4:
+        r2 = r7.isBroadcast;
+        if (r2 != 0) goto L_0x04c3;
+    L_0x03d8:
+        if (r12 == 0) goto L_0x03f9;
+    L_0x03da:
+        r2 = NUM; // 0x7f0d08d4 float:1.8746699E38 double:1.053130894E-314;
         r3 = "Reply";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -20833,10 +21081,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_ float:1.7945407E38 double:1.052935705E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-    L_0x03f1:
-        if (r5 == 0) goto L_0x0413;
-    L_0x03f3:
-        r2 = NUM; // 0x7f0d0a3f float:1.8747435E38 double:1.0531310735E-314;
+    L_0x03f9:
+        if (r5 == 0) goto L_0x041b;
+    L_0x03fb:
+        r2 = NUM; // 0x7f0d0a68 float:1.8747518E38 double:1.0531310937E-314;
         r3 = "UnpinMessage";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -20846,11 +21094,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_ad float:1.7945448E38 double:1.052935715E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-        goto L_0x0434;
-    L_0x0413:
-        if (r4 == 0) goto L_0x0434;
-    L_0x0415:
-        r2 = NUM; // 0x7f0d083c float:1.874639E38 double:1.053130819E-314;
+        goto L_0x043c;
+    L_0x041b:
+        if (r4 == 0) goto L_0x043c;
+    L_0x041d:
+        r2 = NUM; // 0x7f0d0856 float:1.8746443E38 double:1.053130832E-314;
         r3 = "PinMessage";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -20860,10 +21108,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_ float:1.7945403E38 double:1.052935704E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-    L_0x0434:
-        if (r6 == 0) goto L_0x0455;
-    L_0x0436:
-        r2 = NUM; // 0x7f0d039c float:1.8743989E38 double:1.053130234E-314;
+    L_0x043c:
+        if (r6 == 0) goto L_0x045d;
+    L_0x043e:
+        r2 = NUM; // 0x7f0d039f float:1.8743995E38 double:1.0531302355E-314;
         r3 = "Edit";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -20873,32 +21121,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_ float:1.7945339E38 double:1.0529356883E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-    L_0x0455:
+    L_0x045d:
         r2 = r7.selectedObject;
         r3 = r2.contentType;
-        if (r3 != 0) goto L_0x049c;
-    L_0x045b:
+        if (r3 != 0) goto L_0x04a4;
+    L_0x0463:
         r2 = r2.isMediaEmptyWebpage();
-        if (r2 != 0) goto L_0x049c;
-    L_0x0461:
-        r2 = r7.selectedObject;
-        r2 = r2.getId();
-        if (r2 <= 0) goto L_0x049c;
+        if (r2 != 0) goto L_0x04a4;
     L_0x0469:
         r2 = r7.selectedObject;
-        r2 = r2.isOut();
-        if (r2 != 0) goto L_0x049c;
+        r2 = r2.getId();
+        if (r2 <= 0) goto L_0x04a4;
     L_0x0471:
-        r2 = r7.currentChat;
-        if (r2 != 0) goto L_0x047d;
-    L_0x0475:
-        r2 = r7.currentUser;
-        if (r2 == 0) goto L_0x049c;
+        r2 = r7.selectedObject;
+        r2 = r2.isOut();
+        if (r2 != 0) goto L_0x04a4;
     L_0x0479:
-        r2 = r2.bot;
-        if (r2 == 0) goto L_0x049c;
+        r2 = r7.currentChat;
+        if (r2 != 0) goto L_0x0485;
     L_0x047d:
-        r2 = NUM; // 0x7f0d08bd float:1.8746652E38 double:1.053130883E-314;
+        r2 = r7.currentUser;
+        if (r2 == 0) goto L_0x04a4;
+    L_0x0481:
+        r2 = r2.bot;
+        if (r2 == 0) goto L_0x04a4;
+    L_0x0485:
+        r2 = NUM; // 0x7f0d08d7 float:1.8746705E38 double:1.0531308956E-314;
         r3 = "ReportChat";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -20908,11 +21156,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_a float:1.794541E38 double:1.0529357056E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-    L_0x049c:
+    L_0x04a4:
         r2 = r7.currentChat;
         r0 = r0.canDeleteMessage(r2);
         if (r0 == 0) goto L_0x0339;
-    L_0x04a4:
+    L_0x04ac:
         r0 = org.telegram.messenger.LocaleController.getString(r11, r1);
         r14.add(r0);
         r0 = java.lang.Integer.valueOf(r9);
@@ -20920,14 +21168,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = java.lang.Integer.valueOf(r17);
         r13.add(r0);
         goto L_0x0339;
-    L_0x04bb:
+    L_0x04c3:
         r2 = r7.selectedObject;
         r2 = r2.getId();
-        if (r2 <= 0) goto L_0x04e4;
-    L_0x04c3:
-        if (r12 == 0) goto L_0x04e4;
-    L_0x04c5:
-        r2 = NUM; // 0x7f0d08ba float:1.8746646E38 double:1.0531308813E-314;
+        if (r2 <= 0) goto L_0x04ec;
+    L_0x04cb:
+        if (r12 == 0) goto L_0x04ec;
+    L_0x04cd:
+        r2 = NUM; // 0x7f0d08d4 float:1.8746699E38 double:1.053130894E-314;
         r3 = "Reply";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -20937,11 +21185,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_ float:1.7945407E38 double:1.052935705E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-    L_0x04e4:
+    L_0x04ec:
         r2 = r7.currentChat;
         r0 = r0.canDeleteMessage(r2);
         if (r0 == 0) goto L_0x0339;
-    L_0x04ec:
+    L_0x04f4:
         r0 = org.telegram.messenger.LocaleController.getString(r11, r1);
         r14.add(r0);
         r0 = java.lang.Integer.valueOf(r9);
@@ -20949,11 +21197,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = java.lang.Integer.valueOf(r17);
         r13.add(r0);
         goto L_0x0339;
-    L_0x0503:
+    L_0x050b:
         r9 = 20;
-        if (r2 != r9) goto L_0x0558;
-    L_0x0507:
-        r0 = NUM; // 0x7f0d08f1 float:1.8746757E38 double:1.0531309085E-314;
+        if (r2 != r9) goto L_0x0560;
+    L_0x050f:
+        r0 = NUM; // 0x7f0d090b float:1.874681E38 double:1.0531309213E-314;
         r2 = "Retry";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r14.add(r0);
@@ -20962,7 +21210,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_b float:1.7945412E38 double:1.052935706E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-        r0 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
+        r0 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r14.add(r0);
         r0 = 3;
@@ -20979,39 +21227,39 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = java.lang.Integer.valueOf(r17);
         r13.add(r0);
         goto L_0x0339;
-    L_0x0558:
+    L_0x0560:
         r9 = r7.currentEncryptedChat;
         r19 = NUM; // 0x7var_ float:1.7945337E38 double:1.052935688E-314;
         r20 = NUM; // 0x7var_a5 float:1.7945432E38 double:1.052935711E-314;
         r1 = "ShareFile";
-        if (r9 != 0) goto L_0x0bc2;
-    L_0x0564:
+        if (r9 != 0) goto L_0x0bd2;
+    L_0x056c:
         r9 = r7.selectedObject;
         r9 = r9.messageOwner;
         r9 = r9.action;
         r9 = r9 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
-        if (r9 == 0) goto L_0x05ce;
-    L_0x056e:
+        if (r9 == 0) goto L_0x05d6;
+    L_0x0576:
         r9 = r0.messageOwner;
         r9 = r9.action;
         r9 = (org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall) r9;
         r10 = r9.reason;
         r8 = r10 instanceof org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
-        if (r8 != 0) goto L_0x057e;
-    L_0x057a:
+        if (r8 != 0) goto L_0x0586;
+    L_0x0582:
         r8 = r10 instanceof org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
-        if (r8 == 0) goto L_0x058a;
-    L_0x057e:
+        if (r8 == 0) goto L_0x0592;
+    L_0x0586:
         r8 = r0.isOutOwner();
-        if (r8 != 0) goto L_0x058a;
-    L_0x0584:
-        r8 = NUM; // 0x7f0d01e2 float:1.8743092E38 double:1.0531300157E-314;
+        if (r8 != 0) goto L_0x0592;
+    L_0x058c:
+        r8 = NUM; // 0x7f0d01e4 float:1.8743096E38 double:1.0531300167E-314;
         r10 = "CallBack";
-        goto L_0x058f;
-    L_0x058a:
-        r8 = NUM; // 0x7f0d01e1 float:1.874309E38 double:1.053130015E-314;
+        goto L_0x0597;
+    L_0x0592:
+        r8 = NUM; // 0x7f0d01e3 float:1.8743094E38 double:1.053130016E-314;
         r10 = "CallAgain";
-    L_0x058f:
+    L_0x0597:
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r14.add(r8);
         r8 = 18;
@@ -21021,9 +21269,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = java.lang.Integer.valueOf(r8);
         r13.add(r8);
         r8 = org.telegram.ui.Components.voip.VoIPHelper.canRateCall(r9);
-        if (r8 == 0) goto L_0x05ce;
-    L_0x05af:
-        r8 = NUM; // 0x7f0d01e9 float:1.8743107E38 double:1.053130019E-314;
+        if (r8 == 0) goto L_0x05d6;
+    L_0x05b7:
+        r8 = NUM; // 0x7f0d01eb float:1.874311E38 double:1.05313002E-314;
         r9 = "CallMessageReportProblem";
         r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
         r14.add(r8);
@@ -21033,10 +21281,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = NUM; // 0x7var_ float:1.794534E38 double:1.052935689E-314;
         r8 = java.lang.Integer.valueOf(r8);
         r13.add(r8);
-    L_0x05ce:
-        if (r12 == 0) goto L_0x05ef;
-    L_0x05d0:
-        r8 = NUM; // 0x7f0d08ba float:1.8746646E38 double:1.0531308813E-314;
+    L_0x05d6:
+        if (r12 == 0) goto L_0x05f7;
+    L_0x05d8:
+        r8 = NUM; // 0x7f0d08d4 float:1.8746699E38 double:1.053130894E-314;
         r9 = "Reply";
         r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
         r14.add(r8);
@@ -21046,15 +21294,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = NUM; // 0x7var_ float:1.7945407E38 double:1.052935705E-314;
         r8 = java.lang.Integer.valueOf(r8);
         r13.add(r8);
-    L_0x05ef:
+    L_0x05f7:
         r8 = r7.selectedObject;
         r9 = r8.type;
-        if (r9 == 0) goto L_0x05f9;
-    L_0x05f5:
+        if (r9 == 0) goto L_0x0609;
+    L_0x05fd:
+        r8 = r8.isAnimatedEmoji();
+        if (r8 != 0) goto L_0x0609;
+    L_0x0603:
+        r8 = r7.selectedObject;
         r8 = r8.caption;
-        if (r8 == 0) goto L_0x0615;
-    L_0x05f9:
-        r8 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
+        if (r8 == 0) goto L_0x0625;
+    L_0x0609:
+        r8 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
         r14.add(r8);
         r8 = 3;
@@ -21063,16 +21315,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = NUM; // 0x7var_ float:1.7945332E38 double:1.052935687E-314;
         r8 = java.lang.Integer.valueOf(r8);
         r13.add(r8);
-    L_0x0615:
+    L_0x0625:
         r8 = r7.currentChat;
         r8 = org.telegram.messenger.ChatObject.isChannel(r8);
-        if (r8 == 0) goto L_0x0642;
-    L_0x061d:
+        if (r8 == 0) goto L_0x0652;
+    L_0x062d:
         r8 = r7.currentChat;
         r8 = r8.megagroup;
-        if (r8 == 0) goto L_0x0642;
-    L_0x0623:
-        r8 = NUM; // 0x7f0d030e float:1.87437E38 double:1.053130164E-314;
+        if (r8 == 0) goto L_0x0652;
+    L_0x0633:
+        r8 = NUM; // 0x7f0d0311 float:1.8743707E38 double:1.0531301654E-314;
         r9 = "CopyLink";
         r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
         r14.add(r8);
@@ -21082,22 +21334,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8 = NUM; // 0x7var_ float:1.7945369E38 double:1.0529356957E-314;
         r8 = java.lang.Integer.valueOf(r8);
         r13.add(r8);
-    L_0x0642:
+    L_0x0652:
         r8 = 2;
-        if (r2 != r8) goto L_0x06cd;
-    L_0x0645:
+        if (r2 != r8) goto L_0x06dd;
+    L_0x0655:
         r1 = r7.selectedObject;
         r1 = r1.type;
         r2 = 17;
-        if (r1 != r2) goto L_0x0ac6;
-    L_0x064d:
+        if (r1 != r2) goto L_0x0ad6;
+    L_0x065d:
         r1 = r0.isPollClosed();
-        if (r1 != 0) goto L_0x0ac6;
-    L_0x0653:
+        if (r1 != 0) goto L_0x0ad6;
+    L_0x0663:
         r1 = r0.isVoted();
-        if (r1 == 0) goto L_0x0678;
-    L_0x0659:
-        r1 = NUM; // 0x7f0d0a45 float:1.8747447E38 double:1.0531310764E-314;
+        if (r1 == 0) goto L_0x0688;
+    L_0x0669:
+        r1 = NUM; // 0x7f0d0a6e float:1.874753E38 double:1.0531310967E-314;
         r2 = "Unvote";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21107,39 +21359,39 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ae float:1.794545E38 double:1.0529357155E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-    L_0x0678:
+    L_0x0688:
         r1 = r0.isForwarded();
-        if (r1 != 0) goto L_0x0ac6;
-    L_0x067e:
+        if (r1 != 0) goto L_0x0ad6;
+    L_0x068e:
         r1 = r0.isOut();
-        if (r1 == 0) goto L_0x0692;
-    L_0x0684:
+        if (r1 == 0) goto L_0x06a2;
+    L_0x0694:
         r1 = r7.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 == 0) goto L_0x06ac;
-    L_0x068c:
+        if (r1 == 0) goto L_0x06bc;
+    L_0x069c:
         r1 = r7.currentChat;
         r1 = r1.megagroup;
-        if (r1 != 0) goto L_0x06ac;
-    L_0x0692:
+        if (r1 != 0) goto L_0x06bc;
+    L_0x06a2:
         r1 = r7.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 == 0) goto L_0x0ac6;
-    L_0x069a:
+        if (r1 == 0) goto L_0x0ad6;
+    L_0x06aa:
         r1 = r7.currentChat;
         r2 = r1.megagroup;
-        if (r2 != 0) goto L_0x0ac6;
-    L_0x06a0:
+        if (r2 != 0) goto L_0x0ad6;
+    L_0x06b0:
         r2 = r1.creator;
-        if (r2 != 0) goto L_0x06ac;
-    L_0x06a4:
+        if (r2 != 0) goto L_0x06bc;
+    L_0x06b4:
         r1 = r1.admin_rights;
-        if (r1 == 0) goto L_0x0ac6;
-    L_0x06a8:
+        if (r1 == 0) goto L_0x0ad6;
+    L_0x06b8:
         r1 = r1.edit_messages;
-        if (r1 == 0) goto L_0x0ac6;
-    L_0x06ac:
-        r1 = NUM; // 0x7f0d09c9 float:1.8747195E38 double:1.053131015E-314;
+        if (r1 == 0) goto L_0x0ad6;
+    L_0x06bc:
+        r1 = NUM; // 0x7f0d09f1 float:1.8747277E38 double:1.053131035E-314;
         r2 = "StopPoll";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21149,23 +21401,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ float:1.7945405E38 double:1.0529357046E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x06cd:
+        goto L_0x0ad6;
+    L_0x06dd:
         r8 = 3;
-        if (r2 != r8) goto L_0x0705;
-    L_0x06d0:
+        if (r2 != r8) goto L_0x0715;
+    L_0x06e0:
         r1 = r7.selectedObject;
         r1 = r1.messageOwner;
         r1 = r1.media;
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
-        if (r2 == 0) goto L_0x0ac6;
-    L_0x06da:
+        if (r2 == 0) goto L_0x0ad6;
+    L_0x06ea:
         r1 = r1.webpage;
         r1 = r1.document;
         r1 = org.telegram.messenger.MessageObject.isNewGifDocument(r1);
-        if (r1 == 0) goto L_0x0ac6;
-    L_0x06e4:
-        r1 = NUM; // 0x7f0d0900 float:1.8746788E38 double:1.053130916E-314;
+        if (r1 == 0) goto L_0x0ad6;
+    L_0x06f4:
+        r1 = NUM; // 0x7f0d091a float:1.874684E38 double:1.0531309287E-314;
         r2 = "SaveToGIFs";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21175,20 +21427,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_b float:1.7945347E38 double:1.0529356903E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x0705:
+        goto L_0x0ad6;
+    L_0x0715:
         r8 = 4;
-        if (r2 != r8) goto L_0x0821;
-    L_0x0708:
+        if (r2 != r8) goto L_0x0831;
+    L_0x0718:
         r2 = r7.selectedObject;
         r2 = r2.isVideo();
-        if (r2 == 0) goto L_0x0750;
-    L_0x0710:
+        if (r2 == 0) goto L_0x0760;
+    L_0x0720:
         r2 = r7.selectedObject;
         r2 = r2.needDrawBluredPreview();
-        if (r2 != 0) goto L_0x0ac6;
-    L_0x0718:
-        r2 = NUM; // 0x7f0d0901 float:1.874679E38 double:1.0531309164E-314;
+        if (r2 != 0) goto L_0x0ad6;
+    L_0x0728:
+        r2 = NUM; // 0x7f0d091b float:1.8746843E38 double:1.053130929E-314;
         r3 = "SaveToGallery";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21197,7 +21449,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r2 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r14.add(r1);
         r1 = 6;
@@ -21205,13 +21457,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r1);
         r1 = java.lang.Integer.valueOf(r20);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x0750:
+        goto L_0x0ad6;
+    L_0x0760:
         r2 = r7.selectedObject;
         r2 = r2.isMusic();
-        if (r2 == 0) goto L_0x078f;
-    L_0x0758:
-        r2 = NUM; // 0x7f0d0903 float:1.8746794E38 double:1.0531309174E-314;
+        if (r2 == 0) goto L_0x079f;
+    L_0x0768:
+        r2 = NUM; // 0x7f0d091d float:1.8746847E38 double:1.05313093E-314;
         r3 = "SaveToMusic";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21220,7 +21472,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r2);
         r2 = java.lang.Integer.valueOf(r19);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r2 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r14.add(r1);
         r1 = 6;
@@ -21228,18 +21480,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r1);
         r1 = java.lang.Integer.valueOf(r20);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x078f:
+        goto L_0x0ad6;
+    L_0x079f:
         r2 = r7.selectedObject;
         r2 = r2.getDocument();
-        if (r2 == 0) goto L_0x07f9;
-    L_0x0797:
+        if (r2 == 0) goto L_0x0809;
+    L_0x07a7:
         r2 = r7.selectedObject;
         r2 = r2.getDocument();
         r2 = org.telegram.messenger.MessageObject.isNewGifDocument(r2);
-        if (r2 == 0) goto L_0x07c2;
-    L_0x07a3:
-        r2 = NUM; // 0x7f0d0900 float:1.8746788E38 double:1.053130916E-314;
+        if (r2 == 0) goto L_0x07d2;
+    L_0x07b3:
+        r2 = NUM; // 0x7f0d091a float:1.874684E38 double:1.0531309287E-314;
         r3 = "SaveToGIFs";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21249,8 +21501,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_b float:1.7945347E38 double:1.0529356903E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-    L_0x07c2:
-        r2 = NUM; // 0x7f0d08ff float:1.8746786E38 double:1.0531309154E-314;
+    L_0x07d2:
+        r2 = NUM; // 0x7f0d0919 float:1.8746839E38 double:1.053130928E-314;
         r3 = "SaveToDownloads";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21259,7 +21511,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r2);
         r2 = java.lang.Integer.valueOf(r19);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r2 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r14.add(r1);
         r1 = 6;
@@ -21267,13 +21519,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r1);
         r1 = java.lang.Integer.valueOf(r20);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x07f9:
+        goto L_0x0ad6;
+    L_0x0809:
         r1 = r7.selectedObject;
         r1 = r1.needDrawBluredPreview();
-        if (r1 != 0) goto L_0x0ac6;
-    L_0x0801:
-        r1 = NUM; // 0x7f0d0901 float:1.874679E38 double:1.0531309164E-314;
+        if (r1 != 0) goto L_0x0ad6;
+    L_0x0811:
+        r1 = NUM; // 0x7f0d091b float:1.8746843E38 double:1.053130929E-314;
         r2 = "SaveToGallery";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21283,12 +21535,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x0821:
+        goto L_0x0ad6;
+    L_0x0831:
         r8 = 5;
-        if (r2 != r8) goto L_0x0879;
-    L_0x0824:
-        r2 = NUM; // 0x7f0d00f2 float:1.8742606E38 double:1.053129897E-314;
+        if (r2 != r8) goto L_0x0889;
+    L_0x0834:
+        r2 = NUM; // 0x7f0d00f4 float:1.874261E38 double:1.053129898E-314;
         r3 = "ApplyLocalizationFile";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21298,7 +21550,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_ float:1.7945365E38 double:1.0529356947E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d08ff float:1.8746786E38 double:1.0531309154E-314;
+        r2 = NUM; // 0x7f0d0919 float:1.8746839E38 double:1.053130928E-314;
         r3 = "SaveToDownloads";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21307,7 +21559,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r2);
         r2 = java.lang.Integer.valueOf(r19);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r2 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r14.add(r1);
         r1 = 6;
@@ -21315,12 +21567,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r1);
         r1 = java.lang.Integer.valueOf(r20);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x0879:
+        goto L_0x0ad6;
+    L_0x0889:
         r8 = 10;
-        if (r2 != r8) goto L_0x08d2;
-    L_0x087d:
-        r2 = NUM; // 0x7f0d00f4 float:1.874261E38 double:1.053129898E-314;
+        if (r2 != r8) goto L_0x08e2;
+    L_0x088d:
+        r2 = NUM; // 0x7f0d00f6 float:1.8742614E38 double:1.053129899E-314;
         r3 = "ApplyThemeFile";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21330,7 +21582,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_a8 float:1.7945438E38 double:1.0529357125E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d08ff float:1.8746786E38 double:1.0531309154E-314;
+        r2 = NUM; // 0x7f0d0919 float:1.8746839E38 double:1.053130928E-314;
         r3 = "SaveToDownloads";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21339,7 +21591,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r2);
         r2 = java.lang.Integer.valueOf(r19);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r2 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r14.add(r1);
         r8 = 6;
@@ -21347,12 +21599,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r1);
         r1 = java.lang.Integer.valueOf(r20);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x08d2:
+        goto L_0x0ad6;
+    L_0x08e2:
         r8 = 6;
-        if (r2 != r8) goto L_0x092a;
-    L_0x08d5:
-        r2 = NUM; // 0x7f0d0901 float:1.874679E38 double:1.0531309164E-314;
+        if (r2 != r8) goto L_0x093a;
+    L_0x08e5:
+        r2 = NUM; // 0x7f0d091b float:1.8746843E38 double:1.053130929E-314;
         r3 = "SaveToGallery";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21362,7 +21614,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
         r2 = java.lang.Integer.valueOf(r2);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d08ff float:1.8746786E38 double:1.0531309154E-314;
+        r2 = NUM; // 0x7f0d0919 float:1.8746839E38 double:1.053130928E-314;
         r3 = "SaveToDownloads";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21371,7 +21623,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r2);
         r2 = java.lang.Integer.valueOf(r19);
         r13.add(r2);
-        r2 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r2 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r14.add(r1);
         r1 = 6;
@@ -21379,15 +21631,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r1);
         r1 = java.lang.Integer.valueOf(r20);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x092a:
+        goto L_0x0ad6;
+    L_0x093a:
         r1 = 7;
-        if (r2 != r1) goto L_0x09d1;
-    L_0x092d:
+        if (r2 != r1) goto L_0x09e1;
+    L_0x093d:
         r1 = r7.selectedObject;
         r1 = r1.isMask();
-        if (r1 == 0) goto L_0x0956;
-    L_0x0935:
+        if (r1 == 0) goto L_0x0966;
+    L_0x0945:
         r1 = NUM; // 0x7f0d00c4 float:1.8742512E38 double:1.0531298744E-314;
         r2 = "AddToMasks";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
@@ -21398,8 +21650,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_a7 float:1.7945436E38 double:1.052935712E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x0956:
+        goto L_0x0ad6;
+    L_0x0966:
         r1 = NUM; // 0x7f0d00c5 float:1.8742514E38 double:1.053129875E-314;
         r2 = "AddToStickers";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
@@ -21414,12 +21666,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r7.selectedObject;
         r2 = r2.getDocument();
         r1 = r1.isStickerInFavorites(r2);
-        if (r1 != 0) goto L_0x09b0;
-    L_0x0985:
+        if (r1 != 0) goto L_0x09c0;
+    L_0x0995:
         r1 = r21.getMediaDataController();
         r1 = r1.canAddStickerToFavorites();
-        if (r1 == 0) goto L_0x0ac6;
-    L_0x098f:
+        if (r1 == 0) goto L_0x0ad6;
+    L_0x099f:
         r1 = NUM; // 0x7f0d00c3 float:1.874251E38 double:1.053129874E-314;
         r2 = "AddToFavorites";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
@@ -21430,9 +21682,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ float:1.794534E38 double:1.052935689E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x09b0:
-        r1 = NUM; // 0x7f0d035f float:1.8743865E38 double:1.053130204E-314;
+        goto L_0x0ad6;
+    L_0x09c0:
+        r1 = NUM; // 0x7f0d0362 float:1.8743871E38 double:1.0531302054E-314;
         r2 = "DeleteFromFavorites";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21442,11 +21694,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ab float:1.7945444E38 double:1.052935714E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x09d1:
+        goto L_0x0ad6;
+    L_0x09e1:
         r1 = 8;
-        if (r2 != r1) goto L_0x0a73;
-    L_0x09d5:
+        if (r2 != r1) goto L_0x0a83;
+    L_0x09e5:
         r1 = r21.getMessagesController();
         r2 = r7.selectedObject;
         r2 = r2.messageOwner;
@@ -21454,20 +21706,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r2.user_id;
         r2 = java.lang.Integer.valueOf(r2);
         r1 = r1.getUser(r2);
-        if (r1 == 0) goto L_0x0a28;
-    L_0x09eb:
+        if (r1 == 0) goto L_0x0a38;
+    L_0x09fb:
         r2 = r1.id;
         r8 = r21.getUserConfig();
         r8 = r8.getClientUserId();
-        if (r2 == r8) goto L_0x0a28;
-    L_0x09f7:
+        if (r2 == r8) goto L_0x0a38;
+    L_0x0a07:
         r2 = r21.getContactsController();
         r2 = r2.contactsDict;
         r1 = r1.id;
         r1 = java.lang.Integer.valueOf(r1);
         r1 = r2.get(r1);
-        if (r1 != 0) goto L_0x0a28;
-    L_0x0a09:
+        if (r1 != 0) goto L_0x0a38;
+    L_0x0a19:
         r1 = NUM; // 0x7f0d00ab float:1.8742462E38 double:1.053129862E-314;
         r2 = "AddContactTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
@@ -21478,15 +21730,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_a float:1.7945312E38 double:1.052935682E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-    L_0x0a28:
+    L_0x0a38:
         r1 = r7.selectedObject;
         r1 = r1.messageOwner;
         r1 = r1.media;
         r1 = r1.phone_number;
         r1 = android.text.TextUtils.isEmpty(r1);
-        if (r1 != 0) goto L_0x0ac6;
-    L_0x0a36:
-        r1 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
+        if (r1 != 0) goto L_0x0ad6;
+    L_0x0a46:
+        r1 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.add(r1);
         r1 = 16;
@@ -21495,7 +21747,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ float:1.7945332E38 double:1.052935687E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        r1 = NUM; // 0x7f0d01e0 float:1.8743088E38 double:1.0531300147E-314;
+        r1 = NUM; // 0x7f0d01e2 float:1.8743092E38 double:1.0531300157E-314;
         r2 = "Call";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21505,17 +21757,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_e float:1.794532E38 double:1.052935684E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x0a73:
+        goto L_0x0ad6;
+    L_0x0a83:
         r1 = 9;
-        if (r2 != r1) goto L_0x0ac6;
-    L_0x0a77:
+        if (r2 != r1) goto L_0x0ad6;
+    L_0x0a87:
         r1 = r21.getMediaDataController();
         r2 = r7.selectedObject;
         r2 = r2.getDocument();
         r1 = r1.isStickerInFavorites(r2);
-        if (r1 != 0) goto L_0x0aa7;
-    L_0x0a87:
+        if (r1 != 0) goto L_0x0ab7;
+    L_0x0a97:
         r1 = NUM; // 0x7f0d00c3 float:1.874251E38 double:1.053129874E-314;
         r2 = "AddToFavorites";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
@@ -21526,9 +21778,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ float:1.794534E38 double:1.052935689E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0ac6;
-    L_0x0aa7:
-        r1 = NUM; // 0x7f0d035f float:1.8743865E38 double:1.053130204E-314;
+        goto L_0x0ad6;
+    L_0x0ab7:
+        r1 = NUM; // 0x7f0d0362 float:1.8743871E38 double:1.0531302054E-314;
         r2 = "DeleteFromFavorites";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21538,21 +21790,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ab float:1.7945444E38 double:1.052935714E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-    L_0x0ac6:
+    L_0x0ad6:
         r1 = r7.selectedObject;
         r1 = r1.needDrawBluredPreview();
-        if (r1 != 0) goto L_0x0afc;
-    L_0x0ace:
+        if (r1 != 0) goto L_0x0b0c;
+    L_0x0ade:
         r1 = r7.selectedObject;
         r1 = r1.isLiveLocation();
-        if (r1 != 0) goto L_0x0afc;
-    L_0x0ad6:
+        if (r1 != 0) goto L_0x0b0c;
+    L_0x0ae6:
         r1 = r7.selectedObject;
         r1 = r1.type;
         r2 = 16;
-        if (r1 == r2) goto L_0x0afc;
-    L_0x0ade:
-        r1 = NUM; // 0x7f0d0478 float:1.8744435E38 double:1.053130343E-314;
+        if (r1 == r2) goto L_0x0b0c;
+    L_0x0aee:
+        r1 = NUM; // 0x7f0d0481 float:1.8744453E38 double:1.053130347E-314;
         r2 = "Forward";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21562,10 +21814,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ float:1.7945343E38 double:1.0529356893E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-    L_0x0afc:
-        if (r5 == 0) goto L_0x0b1e;
-    L_0x0afe:
-        r1 = NUM; // 0x7f0d0a3f float:1.8747435E38 double:1.0531310735E-314;
+    L_0x0b0c:
+        if (r5 == 0) goto L_0x0b2e;
+    L_0x0b0e:
+        r1 = NUM; // 0x7f0d0a68 float:1.8747518E38 double:1.0531310937E-314;
         r2 = "UnpinMessage";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21575,11 +21827,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ad float:1.7945448E38 double:1.052935715E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-        goto L_0x0b3f;
-    L_0x0b1e:
-        if (r4 == 0) goto L_0x0b3f;
-    L_0x0b20:
-        r1 = NUM; // 0x7f0d083c float:1.874639E38 double:1.053130819E-314;
+        goto L_0x0b4f;
+    L_0x0b2e:
+        if (r4 == 0) goto L_0x0b4f;
+    L_0x0b30:
+        r1 = NUM; // 0x7f0d0856 float:1.8746443E38 double:1.053130832E-314;
         r2 = "PinMessage";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21589,10 +21841,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ float:1.7945403E38 double:1.052935704E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-    L_0x0b3f:
-        if (r6 == 0) goto L_0x0b60;
-    L_0x0b41:
-        r1 = NUM; // 0x7f0d039c float:1.8743989E38 double:1.053130234E-314;
+    L_0x0b4f:
+        if (r6 == 0) goto L_0x0b70;
+    L_0x0b51:
+        r1 = NUM; // 0x7f0d039f float:1.8743995E38 double:1.0531302355E-314;
         r2 = "Edit";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21602,28 +21854,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_ float:1.7945339E38 double:1.0529356883E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-    L_0x0b60:
+    L_0x0b70:
         r1 = r7.selectedObject;
         r2 = r1.contentType;
-        if (r2 != 0) goto L_0x0b9f;
-    L_0x0b66:
+        if (r2 != 0) goto L_0x0baf;
+    L_0x0b76:
         r1 = r1.getId();
-        if (r1 <= 0) goto L_0x0b9f;
-    L_0x0b6c:
+        if (r1 <= 0) goto L_0x0baf;
+    L_0x0b7c:
         r1 = r7.selectedObject;
         r1 = r1.isOut();
-        if (r1 != 0) goto L_0x0b9f;
-    L_0x0b74:
+        if (r1 != 0) goto L_0x0baf;
+    L_0x0b84:
         r1 = r7.currentChat;
-        if (r1 != 0) goto L_0x0b80;
-    L_0x0b78:
+        if (r1 != 0) goto L_0x0b90;
+    L_0x0b88:
         r1 = r7.currentUser;
-        if (r1 == 0) goto L_0x0b9f;
-    L_0x0b7c:
+        if (r1 == 0) goto L_0x0baf;
+    L_0x0b8c:
         r1 = r1.bot;
-        if (r1 == 0) goto L_0x0b9f;
-    L_0x0b80:
-        r1 = NUM; // 0x7f0d08bd float:1.8746652E38 double:1.053130883E-314;
+        if (r1 == 0) goto L_0x0baf;
+    L_0x0b90:
+        r1 = NUM; // 0x7f0d08d7 float:1.8746705E38 double:1.0531308956E-314;
         r2 = "ReportChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r14.add(r1);
@@ -21633,12 +21885,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_a float:1.794541E38 double:1.0529357056E-314;
         r1 = java.lang.Integer.valueOf(r1);
         r13.add(r1);
-    L_0x0b9f:
+    L_0x0baf:
         r1 = r7.currentChat;
         r0 = r0.canDeleteMessage(r1);
         if (r0 == 0) goto L_0x0339;
-    L_0x0ba7:
-        r0 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
+    L_0x0bb7:
+        r0 = NUM; // 0x7f0d0350 float:1.8743835E38 double:1.0531301965E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r11, r0);
         r14.add(r0);
         r0 = 1;
@@ -21647,10 +21899,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = java.lang.Integer.valueOf(r17);
         r13.add(r0);
         goto L_0x0339;
-    L_0x0bc2:
-        if (r12 == 0) goto L_0x0be3;
-    L_0x0bc4:
-        r0 = NUM; // 0x7f0d08ba float:1.8746646E38 double:1.0531308813E-314;
+    L_0x0bd2:
+        if (r12 == 0) goto L_0x0bf3;
+    L_0x0bd4:
+        r0 = NUM; // 0x7f0d08d4 float:1.8746699E38 double:1.053130894E-314;
         r4 = "Reply";
         r0 = org.telegram.messenger.LocaleController.getString(r4, r0);
         r14.add(r0);
@@ -21660,15 +21912,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_ float:1.7945407E38 double:1.052935705E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-    L_0x0be3:
+    L_0x0bf3:
         r0 = r7.selectedObject;
         r4 = r0.type;
-        if (r4 == 0) goto L_0x0bed;
-    L_0x0be9:
+        if (r4 == 0) goto L_0x0CLASSNAME;
+    L_0x0bf9:
+        r0 = r0.isAnimatedEmoji();
+        if (r0 != 0) goto L_0x0CLASSNAME;
+    L_0x0bff:
+        r0 = r7.selectedObject;
         r0 = r0.caption;
         if (r0 == 0) goto L_0x0CLASSNAME;
-    L_0x0bed:
-        r0 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
+    L_0x0CLASSNAME:
+        r0 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r14.add(r0);
         r0 = 3;
@@ -21679,13 +21935,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r13.add(r0);
     L_0x0CLASSNAME:
         r0 = 4;
-        if (r2 != r0) goto L_0x0cf4;
-    L_0x0c0c:
+        if (r2 != r0) goto L_0x0d0c;
+    L_0x0CLASSNAME:
         r2 = r7.selectedObject;
         r2 = r2.isVideo();
         if (r2 == 0) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        r2 = NUM; // 0x7f0d0901 float:1.874679E38 double:1.0531309164E-314;
+    L_0x0c2c:
+        r2 = NUM; // 0x7f0d091b float:1.8746843E38 double:1.053130929E-314;
         r3 = "SaveToGallery";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r14.add(r2);
@@ -21694,7 +21950,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-        r0 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r0 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r14.add(r0);
         r0 = 6;
@@ -21702,16 +21958,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r0);
         r0 = java.lang.Integer.valueOf(r20);
         r13.add(r0);
-    L_0x0c4a:
-        r0 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
+    L_0x0CLASSNAME:
+        r0 = NUM; // 0x7f0d0350 float:1.8743835E38 double:1.0531301965E-314;
         r1 = 4;
-        goto L_0x0e04;
+        goto L_0x0e1c;
     L_0x0CLASSNAME:
         r0 = r7.selectedObject;
         r0 = r0.isMusic();
-        if (r0 == 0) goto L_0x0c8e;
+        if (r0 == 0) goto L_0x0ca6;
     L_0x0CLASSNAME:
-        r0 = NUM; // 0x7f0d0903 float:1.8746794E38 double:1.0531309174E-314;
+        r0 = NUM; // 0x7f0d091d float:1.8746847E38 double:1.05313093E-314;
         r2 = "SaveToMusic";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r14.add(r0);
@@ -21720,7 +21976,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r0);
         r0 = java.lang.Integer.valueOf(r19);
         r13.add(r0);
-        r0 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r0 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r14.add(r0);
         r0 = 6;
@@ -21728,17 +21984,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r0);
         r0 = java.lang.Integer.valueOf(r20);
         r13.add(r0);
-        goto L_0x0c4a;
-    L_0x0c8e:
+        goto L_0x0CLASSNAME;
+    L_0x0ca6:
         r0 = r7.selectedObject;
         r0 = r0.isVideo();
-        if (r0 != 0) goto L_0x0cd5;
-    L_0x0CLASSNAME:
+        if (r0 != 0) goto L_0x0ced;
+    L_0x0cae:
         r0 = r7.selectedObject;
         r0 = r0.getDocument();
-        if (r0 == 0) goto L_0x0cd5;
-    L_0x0c9e:
-        r0 = NUM; // 0x7f0d08ff float:1.8746786E38 double:1.0531309154E-314;
+        if (r0 == 0) goto L_0x0ced;
+    L_0x0cb6:
+        r0 = NUM; // 0x7f0d0919 float:1.8746839E38 double:1.053130928E-314;
         r2 = "SaveToDownloads";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r14.add(r0);
@@ -21747,7 +22003,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r0);
         r0 = java.lang.Integer.valueOf(r19);
         r13.add(r0);
-        r0 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r0 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r14.add(r0);
         r0 = 6;
@@ -21755,9 +22011,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r0);
         r0 = java.lang.Integer.valueOf(r20);
         r13.add(r0);
-        goto L_0x0c4a;
-    L_0x0cd5:
-        r0 = NUM; // 0x7f0d0901 float:1.874679E38 double:1.0531309164E-314;
+        goto L_0x0CLASSNAME;
+    L_0x0ced:
+        r0 = NUM; // 0x7f0d091b float:1.8746843E38 double:1.053130929E-314;
         r1 = "SaveToGallery";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r14.add(r0);
@@ -21767,13 +22023,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-        goto L_0x0d16;
-    L_0x0cf4:
+        goto L_0x0d2e;
+    L_0x0d0c:
         r1 = 4;
         r0 = 5;
-        if (r2 != r0) goto L_0x0d1b;
-    L_0x0cf8:
-        r0 = NUM; // 0x7f0d00f2 float:1.8742606E38 double:1.053129897E-314;
+        if (r2 != r0) goto L_0x0d33;
+    L_0x0d10:
+        r0 = NUM; // 0x7f0d00f4 float:1.874261E38 double:1.053129898E-314;
         r2 = "ApplyLocalizationFile";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r14.add(r0);
@@ -21783,14 +22039,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_ float:1.7945365E38 double:1.0529356947E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-    L_0x0d16:
-        r0 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
-        goto L_0x0e04;
-    L_0x0d1b:
+    L_0x0d2e:
+        r0 = NUM; // 0x7f0d0350 float:1.8743835E38 double:1.0531301965E-314;
+        goto L_0x0e1c;
+    L_0x0d33:
         r0 = 10;
-        if (r2 != r0) goto L_0x0d3e;
-    L_0x0d1f:
-        r0 = NUM; // 0x7f0d00f4 float:1.874261E38 double:1.053129898E-314;
+        if (r2 != r0) goto L_0x0d56;
+    L_0x0d37:
+        r0 = NUM; // 0x7f0d00f6 float:1.8742614E38 double:1.053129899E-314;
         r2 = "ApplyThemeFile";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r14.add(r0);
@@ -21800,11 +22056,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_a8 float:1.7945438E38 double:1.0529357125E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-        goto L_0x0d16;
-    L_0x0d3e:
+        goto L_0x0d2e;
+    L_0x0d56:
         r0 = 7;
-        if (r2 != r0) goto L_0x0d61;
-    L_0x0d41:
+        if (r2 != r0) goto L_0x0d79;
+    L_0x0d59:
         r0 = NUM; // 0x7f0d00c5 float:1.8742514E38 double:1.053129875E-314;
         r2 = "AddToStickers";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
@@ -21815,11 +22071,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_a7 float:1.7945436E38 double:1.052935712E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-        goto L_0x0d16;
-    L_0x0d61:
+        goto L_0x0d2e;
+    L_0x0d79:
         r0 = 8;
-        if (r2 != r0) goto L_0x0d16;
-    L_0x0d65:
+        if (r2 != r0) goto L_0x0d2e;
+    L_0x0d7d:
         r0 = r21.getMessagesController();
         r2 = r7.selectedObject;
         r2 = r2.messageOwner;
@@ -21827,20 +22083,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = r2.user_id;
         r2 = java.lang.Integer.valueOf(r2);
         r0 = r0.getUser(r2);
-        if (r0 == 0) goto L_0x0db8;
-    L_0x0d7b:
+        if (r0 == 0) goto L_0x0dd0;
+    L_0x0d93:
         r2 = r0.id;
         r4 = r21.getUserConfig();
         r4 = r4.getClientUserId();
-        if (r2 == r4) goto L_0x0db8;
-    L_0x0d87:
+        if (r2 == r4) goto L_0x0dd0;
+    L_0x0d9f:
         r2 = r21.getContactsController();
         r2 = r2.contactsDict;
         r0 = r0.id;
         r0 = java.lang.Integer.valueOf(r0);
         r0 = r2.get(r0);
-        if (r0 != 0) goto L_0x0db8;
-    L_0x0d99:
+        if (r0 != 0) goto L_0x0dd0;
+    L_0x0db1:
         r0 = NUM; // 0x7f0d00ab float:1.8742462E38 double:1.053129862E-314;
         r2 = "AddContactTitle";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
@@ -21851,15 +22107,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_a float:1.7945312E38 double:1.052935682E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-    L_0x0db8:
+    L_0x0dd0:
         r0 = r7.selectedObject;
         r0 = r0.messageOwner;
         r0 = r0.media;
         r0 = r0.phone_number;
         r0 = android.text.TextUtils.isEmpty(r0);
-        if (r0 != 0) goto L_0x0d16;
-    L_0x0dc6:
-        r0 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
+        if (r0 != 0) goto L_0x0d2e;
+    L_0x0dde:
+        r0 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r14.add(r0);
         r0 = 16;
@@ -21868,7 +22124,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_ float:1.7945332E38 double:1.052935687E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-        r0 = NUM; // 0x7f0d01e0 float:1.8743088E38 double:1.0531300147E-314;
+        r0 = NUM; // 0x7f0d01e2 float:1.8743092E38 double:1.0531300157E-314;
         r2 = "Call";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r14.add(r0);
@@ -21878,8 +22134,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = NUM; // 0x7var_e float:1.794532E38 double:1.052935684E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r13.add(r0);
-        goto L_0x0d16;
-    L_0x0e04:
+        goto L_0x0d2e;
+    L_0x0e1c:
         r0 = org.telegram.messenger.LocaleController.getString(r11, r0);
         r14.add(r0);
         r0 = 1;
@@ -21887,20 +22143,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r15.add(r2);
         r0 = java.lang.Integer.valueOf(r17);
         r13.add(r0);
-    L_0x0e1a:
+    L_0x0e32:
         r0 = r15.isEmpty();
-        if (r0 == 0) goto L_0x0e21;
-    L_0x0e20:
+        if (r0 == 0) goto L_0x0e39;
+    L_0x0e38:
         return;
-    L_0x0e21:
+    L_0x0e39:
         r0 = r7.scrimPopupWindow;
-        if (r0 == 0) goto L_0x0e2c;
-    L_0x0e25:
+        if (r0 == 0) goto L_0x0e44;
+    L_0x0e3d:
         r0.dismiss();
         r0 = 0;
         r7.scrimPopupWindow = r0;
         return;
-    L_0x0e2c:
+    L_0x0e44:
         r0 = new android.graphics.Rect;
         r0.<init>();
         r8 = new org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout;
@@ -21917,7 +22173,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r10.<init>();
         r0 = r21.getParentActivity();
         r0 = r0.getResources();
-        r2 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
+        r2 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
         r0 = r0.getDrawable(r2);
         r0 = r0.mutate();
         r2 = new android.graphics.PorterDuffColorFilter;
@@ -21933,13 +22189,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r11.<init>(r0);
         r0 = android.os.Build.VERSION.SDK_INT;
         r2 = 21;
-        if (r0 < r2) goto L_0x0ea2;
-    L_0x0e89:
-        r12 = new org.telegram.ui.ChatActivity$63;
+        if (r0 < r2) goto L_0x0eba;
+    L_0x0ea1:
+        r12 = new org.telegram.ui.ChatActivity$64;
         r2 = r21.getParentActivity();
         r3 = 0;
         r4 = 0;
-        r5 = NUM; // 0x7f0e0022 float:1.8875107E38 double:1.0531621734E-314;
+        r5 = NUM; // 0x7f0e0023 float:1.8875109E38 double:1.053162174E-314;
         r0 = r12;
         r6 = 4;
         r1 = r21;
@@ -21948,13 +22204,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6 = r11;
         r0.<init>(r2, r3, r4, r5, r6);
         r0 = r23;
-        goto L_0x0eac;
-    L_0x0ea2:
+        goto L_0x0ec4;
+    L_0x0eba:
         r12 = 4;
         r0 = new android.widget.ScrollView;
         r1 = r21.getParentActivity();
         r0.<init>(r1);
-    L_0x0eac:
+    L_0x0ec4:
         r1 = 0;
         r0.setClipToPadding(r1);
         r1 = -2;
@@ -21968,9 +22224,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r11.setOrientation(r1);
         r1 = r14.size();
         r2 = 0;
-    L_0x0ecc:
-        if (r2 >= r1) goto L_0x0ef8;
-    L_0x0ece:
+    L_0x0ee4:
+        if (r2 >= r1) goto L_0x0var_;
+    L_0x0ee6:
         r3 = new org.telegram.ui.ActionBar.ActionBarMenuSubItem;
         r4 = r21.getParentActivity();
         r3.<init>(r4);
@@ -21985,14 +22241,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4.<init>(r7, r2, r15);
         r3.setOnClickListener(r4);
         r2 = r2 + 1;
-        goto L_0x0ecc;
-    L_0x0ef8:
+        goto L_0x0ee4;
+    L_0x0var_:
         r1 = -2;
         r2 = -2;
         r3 = 51;
         r1 = org.telegram.ui.Components.LayoutHelper.createScroll(r1, r2, r3);
         r0.addView(r11, r1);
-        r0 = new org.telegram.ui.ChatActivity$64;
+        r0 = new org.telegram.ui.ChatActivity$65;
         r1 = -2;
         r0.<init>(r8, r1, r2);
         r7.scrimPopupWindow = r0;
@@ -22042,10 +22298,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         if (r0 >= r1) goto L_0x0var_;
-    L_0x0f7a:
+    L_0x0var_:
         r0 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
-        goto L_0x0fa7;
+        goto L_0x0fbf;
     L_0x0var_:
         r1 = r7.chatListView;
         r1 = r1.getMeasuredWidth();
@@ -22054,8 +22310,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = r1 - r2;
         r2 = r8.getMeasuredWidth();
         r1 = r1 - r2;
-        if (r0 <= r1) goto L_0x0fa7;
-    L_0x0var_:
+        if (r0 <= r1) goto L_0x0fbf;
+    L_0x0fad:
         r0 = r7.chatListView;
         r0 = r0.getMeasuredWidth();
         r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
@@ -22063,10 +22319,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r0 - r1;
         r1 = r8.getMeasuredWidth();
         r0 = r0 - r1;
-    L_0x0fa7:
+    L_0x0fbf:
         r1 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r1 == 0) goto L_0x0fb9;
-    L_0x0fad:
+        if (r1 == 0) goto L_0x0fd1;
+    L_0x0fc5:
         r1 = 2;
         r2 = new int[r1];
         r1 = r7.fragmentView;
@@ -22074,7 +22330,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = 0;
         r2 = r2[r1];
         r0 = r0 + r2;
-    L_0x0fb9:
+    L_0x0fd1:
         r1 = r7.contentView;
         r1 = r1.getHeight();
         r2 = r8.getMeasuredHeight();
@@ -22082,12 +22338,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r3.getKeyboardHeight();
         r4 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        if (r3 <= r4) goto L_0x0fd2;
-    L_0x0fd1:
+        if (r3 <= r4) goto L_0x0fea;
+    L_0x0fe9:
         r1 = r1 + r3;
-    L_0x0fd2:
-        if (r2 >= r1) goto L_0x1031;
-    L_0x0fd4:
+    L_0x0fea:
+        if (r2 >= r1) goto L_0x1049;
+    L_0x0fec:
         r3 = r7.chatListView;
         r3 = r3.getY();
         r4 = r22.getTop();
@@ -22101,13 +22357,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = r4 - r5;
         r5 = NUM; // 0x43700000 float:240.0 double:5.589925436E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        if (r4 <= r5) goto L_0x0ffa;
-    L_0x0ff2:
+        if (r4 <= r5) goto L_0x1012;
+    L_0x100a:
         r4 = NUM; // 0x43700000 float:240.0 double:5.589925436E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = r4 - r2;
         r3 = r3 + r4;
-    L_0x0ffa:
+    L_0x1012:
         r4 = (float) r3;
         r5 = r7.chatListView;
         r5 = r5.getY();
@@ -22116,8 +22372,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6 = (float) r6;
         r5 = r5 + r6;
         r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
-        if (r4 >= 0) goto L_0x101d;
-    L_0x100d:
+        if (r4 >= 0) goto L_0x1035;
+    L_0x1025:
         r1 = r7.chatListView;
         r1 = r1.getY();
         r2 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
@@ -22125,21 +22381,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = (float) r2;
         r1 = r1 + r2;
         r3 = (int) r1;
-        goto L_0x1033;
-    L_0x101d:
+        goto L_0x104b;
+    L_0x1035:
         r1 = r1 - r2;
         r2 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r2 = r1 - r2;
-        if (r3 <= r2) goto L_0x1033;
-    L_0x1028:
+        if (r3 <= r2) goto L_0x104b;
+    L_0x1040:
         r2 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r3 = r1 - r2;
-        goto L_0x1033;
-    L_0x1031:
+        goto L_0x104b;
+    L_0x1049:
         r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight;
-    L_0x1033:
+    L_0x104b:
         r1 = r7.scrimPopupWindow;
         r2 = r7.chatListView;
         r4 = 51;
@@ -22152,21 +22408,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7.scrimView = r9;
         r0 = r7.scrimView;
         r1 = r0 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r1 == 0) goto L_0x1055;
-    L_0x104f:
+        if (r1 == 0) goto L_0x106d;
+    L_0x1067:
         r0 = (org.telegram.ui.Cells.ChatMessageCell) r0;
         r1 = 1;
         r0.setInvalidatesParent(r1);
-    L_0x1055:
+    L_0x106d:
         r0 = r7.contentView;
         r0.invalidate();
         r0 = r7.chatListView;
         r0.invalidate();
         r0 = r7.scrimAnimatorSet;
-        if (r0 == 0) goto L_0x1066;
-    L_0x1063:
+        if (r0 == 0) goto L_0x107e;
+    L_0x107b:
         r0.cancel();
-    L_0x1066:
+    L_0x107e:
         r0 = new android.animation.AnimatorSet;
         r0.<init>();
         r7.scrimAnimatorSet = r0;
@@ -22181,8 +22437,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0.add(r1);
         r1 = r7.pagedownButton;
         r1 = r1.getTag();
-        if (r1 == 0) goto L_0x109d;
-    L_0x108b:
+        if (r1 == 0) goto L_0x10b5;
+    L_0x10a3:
         r1 = r7.pagedownButton;
         r2 = android.view.View.ALPHA;
         r3 = 1;
@@ -22192,11 +22448,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4[r5] = r3;
         r1 = android.animation.ObjectAnimator.ofFloat(r1, r2, r4);
         r0.add(r1);
-    L_0x109d:
+    L_0x10b5:
         r1 = r7.mentiondownButton;
         r1 = r1.getTag();
-        if (r1 == 0) goto L_0x10b7;
-    L_0x10a5:
+        if (r1 == 0) goto L_0x10cf;
+    L_0x10bd:
         r1 = r7.mentiondownButton;
         r2 = android.view.View.ALPHA;
         r3 = 1;
@@ -22206,7 +22462,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3[r5] = r4;
         r1 = android.animation.ObjectAnimator.ofFloat(r1, r2, r3);
         r0.add(r1);
-    L_0x10b7:
+    L_0x10cf:
         r1 = r7.scrimAnimatorSet;
         r1.playTogether(r0);
         r0 = r7.scrimAnimatorSet;
@@ -22215,31 +22471,31 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.scrimAnimatorSet;
         r0.start();
         r0 = r7.forwardHintView;
-        if (r0 == 0) goto L_0x10cf;
-    L_0x10cc:
+        if (r0 == 0) goto L_0x10e7;
+    L_0x10e4:
         r0.hide();
-    L_0x10cf:
+    L_0x10e7:
         r0 = r7.noSoundHintView;
-        if (r0 == 0) goto L_0x10d6;
-    L_0x10d3:
+        if (r0 == 0) goto L_0x10ee;
+    L_0x10eb:
         r0.hide();
-    L_0x10d6:
+    L_0x10ee:
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x10e2;
-    L_0x10da:
+        if (r0 == 0) goto L_0x10fa;
+    L_0x10f2:
         r0 = r0.getEditField();
         r1 = 0;
         r0.setAllowDrawCursor(r1);
-    L_0x10e2:
+    L_0x10fa:
         r0 = android.os.Build.VERSION.SDK_INT;
         r1 = 19;
-        if (r0 < r1) goto L_0x10f7;
-    L_0x10e8:
+        if (r0 < r1) goto L_0x110f;
+    L_0x1100:
         r0 = r21.getParentActivity();
         r0 = r0.getWindow();
         r0 = r0.getDecorView();
         r0.setImportantForAccessibility(r12);
-    L_0x10f7:
+    L_0x110f:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.createMenu(android.view.View, boolean, boolean, float, float, boolean):void");
@@ -22357,17 +22613,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         }
         StringBuilder stringBuilder2;
-        if (messageObject.type != 0 || messageObject.messageOwner.message == null) {
-            Message message = messageObject.messageOwner;
-            if (message.media == null || message.message == null) {
-                stringBuilder2 = new StringBuilder();
-                stringBuilder2.append(str);
-                stringBuilder2.append(messageObject.messageText);
-                return stringBuilder2.toString();
-            }
+        if ((messageObject.type == 0 || messageObject.isAnimatedEmoji()) && messageObject.messageOwner.message != null) {
             stringBuilder2 = new StringBuilder();
             stringBuilder2.append(str);
             stringBuilder2.append(messageObject.messageOwner.message);
+            return stringBuilder2.toString();
+        }
+        Message message = messageObject.messageOwner;
+        if (message.media == null || message.message == null) {
+            stringBuilder2 = new StringBuilder();
+            stringBuilder2.append(str);
+            stringBuilder2.append(messageObject.messageText);
             return stringBuilder2.toString();
         }
         stringBuilder2 = new StringBuilder();
@@ -22395,30 +22651,30 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r23 = this;
         r7 = r23;
         r0 = r7.selectedObject;
-        if (r0 == 0) goto L_0x06c8;
+        if (r0 == 0) goto L_0x06da;
     L_0x0006:
         r0 = r23.getParentActivity();
         if (r0 != 0) goto L_0x000e;
     L_0x000c:
-        goto L_0x06c8;
+        goto L_0x06da;
     L_0x000e:
         r0 = "";
         r1 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r3 = 4;
-        r4 = NUM; // 0x7f0d01f6 float:1.8743133E38 double:1.0531300256E-314;
+        r4 = NUM; // 0x7f0d01f9 float:1.874314E38 double:1.053130027E-314;
         r5 = "Cancel";
         r6 = 23;
         r8 = 3;
-        r9 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+        r9 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r10 = "OK";
         r11 = "android.permission.WRITE_EXTERNAL_STORAGE";
         r12 = 1;
         r13 = 0;
         r14 = 0;
         switch(r24) {
-            case 0: goto L_0x0682;
-            case 1: goto L_0x066c;
-            case 2: goto L_0x0648;
+            case 0: goto L_0x0693;
+            case 1: goto L_0x067d;
+            case 2: goto L_0x064a;
             case 3: goto L_0x063e;
             case 4: goto L_0x05f9;
             case 5: goto L_0x04d5;
@@ -22447,21 +22703,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         };
     L_0x0028:
         r1 = r14;
-        goto L_0x06c2;
+        goto L_0x06d4;
     L_0x002b:
         r0 = r7.selectedObject;
         r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r2 = r23.getParentActivity();
         r1.<init>(r2);
-        r2 = NUM; // 0x7f0d09cb float:1.87472E38 double:1.053131016E-314;
+        r2 = NUM; // 0x7f0d09f3 float:1.874728E38 double:1.053131036E-314;
         r3 = "StopPollAlertTitle";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setTitle(r2);
-        r2 = NUM; // 0x7f0d09ca float:1.8747198E38 double:1.0531310157E-314;
+        r2 = NUM; // 0x7f0d09f2 float:1.8747279E38 double:1.0531310354E-314;
         r3 = "StopPollAlertText";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setMessage(r2);
-        r2 = NUM; // 0x7f0d09c1 float:1.874718E38 double:1.053131011E-314;
+        r2 = NUM; // 0x7f0d09e9 float:1.874726E38 double:1.053131031E-314;
         r3 = "Stop";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r3 = new org.telegram.ui.-$$Lambda$ChatActivity$DIMPYRfOO1arM3MSK4qcHTTOkHM;
@@ -22652,11 +22908,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r23.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d0a41 float:1.8747439E38 double:1.0531310745E-314;
+        r1 = NUM; // 0x7f0d0a6a float:1.8747522E38 double:1.0531310947E-314;
         r2 = "UnpinMessageAlertTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d0a40 float:1.8747437E38 double:1.053131074E-314;
+        r1 = NUM; // 0x7f0d0a69 float:1.874752E38 double:1.053131094E-314;
         r2 = "UnpinMessageAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
@@ -22675,14 +22931,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r3 = r23.getParentActivity();
         r2.<init>(r3);
-        r3 = NUM; // 0x7f0d0840 float:1.8746398E38 double:1.053130821E-314;
+        r3 = NUM; // 0x7f0d085a float:1.8746451E38 double:1.053130834E-314;
         r6 = "PinMessageAlertTitle";
         r3 = org.telegram.messenger.LocaleController.getString(r6, r3);
         r2.setTitle(r3);
         r3 = r7.currentUser;
         if (r3 == 0) goto L_0x0251;
     L_0x023f:
-        r0 = NUM; // 0x7f0d083f float:1.8746396E38 double:1.0531308205E-314;
+        r0 = NUM; // 0x7f0d0859 float:1.874645E38 double:1.0531308334E-314;
         r3 = "PinMessageAlertChat";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r2.setMessage(r0);
@@ -22704,7 +22960,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = org.telegram.messenger.ChatObject.isChannel(r3);
         if (r3 != 0) goto L_0x02dd;
     L_0x0269:
-        r3 = NUM; // 0x7f0d083d float:1.8746392E38 double:1.0531308195E-314;
+        r3 = NUM; // 0x7f0d0857 float:1.8746445E38 double:1.0531308324E-314;
         r6 = "PinMessageAlert";
         r3 = org.telegram.messenger.LocaleController.getString(r6, r3);
         r2.setMessage(r3);
@@ -22718,7 +22974,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r8.<init>(r11, r12);
         r11 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r13);
         r8.setBackgroundDrawable(r11);
-        r11 = NUM; // 0x7f0d0841 float:1.87464E38 double:1.0531308215E-314;
+        r11 = NUM; // 0x7f0d085b float:1.8746453E38 double:1.0531308344E-314;
         r15 = new java.lang.Object[r13];
         r14 = "PinNotify";
         r11 = org.telegram.messenger.LocaleController.formatString(r14, r11, r15);
@@ -22758,7 +23014,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r3;
         goto L_0x02ed;
     L_0x02dd:
-        r0 = NUM; // 0x7f0d083e float:1.8746394E38 double:1.05313082E-314;
+        r0 = NUM; // 0x7f0d0858 float:1.8746447E38 double:1.053130833E-314;
         r3 = "PinMessageAlertChannel";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r2.setMessage(r0);
@@ -22774,7 +23030,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2.setNegativeButton(r0, r1);
         r0 = r2.create();
         r7.showDialog(r0);
-        goto L_0x06c2;
+        goto L_0x06d4;
     L_0x030a:
         r1 = r14;
         r0 = r7.selectedObjectToEditCaption;
@@ -22789,7 +23045,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7.selectedObject = r1;
         r7.selectedObjectGroup = r1;
         r7.selectedObjectToEditCaption = r1;
-        goto L_0x06c2;
+        goto L_0x06d4;
     L_0x0320:
         r0 = r7.selectedObject;
         r0 = r0.getDocument();
@@ -22799,7 +23055,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r23.showGifHint();
         r1 = r7.chatActivityEnterView;
         r1.addRecentGif(r0);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x0339:
         r1 = android.os.Build.VERSION.SDK_INT;
         if (r1 < r6) goto L_0x035a;
@@ -22870,7 +23126,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r0.mime_type;
     L_0x03bc:
         org.telegram.messenger.MediaController.saveFile(r14, r2, r8, r1, r0);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x03c1:
         r0 = new org.telegram.ui.Components.StickersAlert;
         r2 = r23.getParentActivity();
@@ -22897,11 +23153,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r23;
         r1.<init>(r2, r3, r4, r5, r6);
         r7.showDialog(r0);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x03f0:
         r0 = r7.selectedObject;
         r7.showFieldPanelForReply(r0);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x03f7:
         r0 = r7.selectedObject;
         r0 = r0.messageOwner;
@@ -22948,7 +23204,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = 0;
         r0 = r23.getParentActivity();
         org.telegram.messenger.MediaController.saveFile(r14, r0, r13, r1, r1);
-        goto L_0x06c2;
+        goto L_0x06d4;
     L_0x0450:
         r0 = r7.selectedObject;
         r0 = r0.messageOwner;
@@ -23003,14 +23259,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = android.net.Uri.fromFile(r1);
         r0.putExtra(r4, r1);
     L_0x04bd:
-        r1 = r23.getParentActivity();	 Catch:{ Throwable -> 0x066a }
+        r1 = r23.getParentActivity();	 Catch:{ Throwable -> 0x0647 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
-        r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Throwable -> 0x066a }
-        r0 = android.content.Intent.createChooser(r0, r2);	 Catch:{ Throwable -> 0x066a }
+        r3 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
+        r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Throwable -> 0x0647 }
+        r0 = android.content.Intent.createChooser(r0, r2);	 Catch:{ Throwable -> 0x0647 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
-        r1.startActivityForResult(r0, r2);	 Catch:{ Throwable -> 0x066a }
-        goto L_0x066a;
+        r1.startActivityForResult(r0, r2);	 Catch:{ Throwable -> 0x0647 }
+        goto L_0x0647;
     L_0x04d5:
         r0 = r7.selectedObject;
         r0 = r0.messageOwner;
@@ -23040,7 +23296,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     L_0x0504:
         r14 = r0;
     L_0x0505:
-        if (r14 == 0) goto L_0x066a;
+        if (r14 == 0) goto L_0x0647;
     L_0x0507:
         r0 = r14.getName();
         r0 = r0.toLowerCase();
@@ -23086,7 +23342,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = new org.telegram.ui.ThemePreviewActivity;
         r1.<init>(r14, r0);
         r7.presentFragment(r1);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x0562:
         r7.scrollToPositionOnRecreate = r1;
         r0 = r23.getParentActivity();
@@ -23101,11 +23357,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r23.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r1 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r2 = "AppName";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d0519 float:1.8744762E38 double:1.0531304223E-314;
+        r1 = NUM; // 0x7f0d0525 float:1.8744786E38 double:1.053130428E-314;
         r2 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
@@ -23114,7 +23370,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0.setPositiveButton(r1, r2);
         r0 = r0.create();
         r7.showDialog(r0);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x05a4:
         r0 = org.telegram.messenger.LocaleController.getInstance();
         r1 = r7.currentAccount;
@@ -23124,7 +23380,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = new org.telegram.ui.LanguageSelectActivity;
         r0.<init>();
         r7.presentFragment(r0);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x05ba:
         r0 = r23.getParentActivity();
         if (r0 != 0) goto L_0x05c8;
@@ -23138,11 +23394,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r23.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r1 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r2 = "AppName";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d0518 float:1.874476E38 double:1.053130422E-314;
+        r1 = NUM; // 0x7f0d0524 float:1.8744784E38 double:1.0531304277E-314;
         r2 = "IncorrectLocalization";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
@@ -23151,7 +23407,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0.setPositiveButton(r1, r2);
         r0 = r0.create();
         r7.showDialog(r0);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x05f9:
         r0 = android.os.Build.VERSION.SDK_INT;
         if (r0 < r6) goto L_0x061a;
@@ -23176,7 +23432,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.selectedObjectGroup;
         r0 = r0.messages;
         r0 = r0.size();
-        if (r13 >= r0) goto L_0x066a;
+        if (r13 >= r0) goto L_0x0647;
     L_0x0628:
         r0 = r7.selectedObjectGroup;
         r0 = r0.messages;
@@ -23188,13 +23444,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     L_0x0638:
         r0 = r7.selectedObject;
         r7.saveMessageToGallery(r0);
-        goto L_0x066a;
+        goto L_0x0647;
     L_0x063e:
         r0 = r7.selectedObject;
         r0 = r7.getMessageContent(r0, r13, r13);
         org.telegram.messenger.AndroidUtilities.addToClipboard(r0);
-        goto L_0x066a;
-    L_0x0648:
+    L_0x0647:
+        r1 = 0;
+        goto L_0x06d4;
+    L_0x064a:
         r0 = r7.selectedObject;
         r7.forwardingMessage = r0;
         r0 = r7.selectedObjectGroup;
@@ -23205,69 +23463,77 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0.putBoolean(r1, r12);
         r1 = "dialogsType";
         r0.putInt(r1, r8);
+        r1 = r7.forwardingMessageGroup;
+        if (r1 != 0) goto L_0x0666;
+    L_0x0665:
+        goto L_0x066c;
+    L_0x0666:
+        r1 = r1.messages;
+        r12 = r1.size();
+    L_0x066c:
+        r1 = "messagesCount";
+        r0.putInt(r1, r12);
         r1 = new org.telegram.ui.DialogsActivity;
         r1.<init>(r0);
         r1.setDelegate(r7);
         r7.presentFragment(r1);
-    L_0x066a:
-        r1 = 0;
-        goto L_0x06c2;
-    L_0x066c:
+        goto L_0x0647;
+    L_0x067d:
         r0 = r23.getParentActivity();
-        if (r0 != 0) goto L_0x067a;
-    L_0x0672:
+        if (r0 != 0) goto L_0x068b;
+    L_0x0683:
         r1 = 0;
         r7.selectedObject = r1;
         r7.selectedObjectToEditCaption = r1;
         r7.selectedObjectGroup = r1;
         return;
-    L_0x067a:
+    L_0x068b:
         r0 = r7.selectedObject;
         r1 = r7.selectedObjectGroup;
         r7.createDeleteMessagesAlert(r0, r1);
-        goto L_0x066a;
-    L_0x0682:
+        goto L_0x0647;
+    L_0x0693:
         r0 = r7.selectedObjectGroup;
-        if (r0 == 0) goto L_0x06af;
-    L_0x0686:
+        if (r0 == 0) goto L_0x06c0;
+    L_0x0697:
         r0 = 0;
-    L_0x0687:
+    L_0x0698:
         r1 = r7.selectedObjectGroup;
         r1 = r1.messages;
         r1 = r1.size();
-        if (r0 >= r1) goto L_0x06a9;
-    L_0x0691:
+        if (r0 >= r1) goto L_0x06ba;
+    L_0x06a2:
         r1 = r23.getSendMessagesHelper();
         r2 = r7.selectedObjectGroup;
         r2 = r2.messages;
         r2 = r2.get(r0);
         r2 = (org.telegram.messenger.MessageObject) r2;
         r1 = r1.retrySendMessage(r2, r13);
-        if (r1 != 0) goto L_0x06a6;
-    L_0x06a5:
+        if (r1 != 0) goto L_0x06b7;
+    L_0x06b6:
         r12 = 0;
-    L_0x06a6:
+    L_0x06b7:
         r0 = r0 + 1;
-        goto L_0x0687;
-    L_0x06a9:
-        if (r12 == 0) goto L_0x066a;
-    L_0x06ab:
+        goto L_0x0698;
+    L_0x06ba:
+        if (r12 == 0) goto L_0x0647;
+    L_0x06bc:
         r23.moveScrollToLastMessage();
-        goto L_0x066a;
-    L_0x06af:
+        goto L_0x0647;
+    L_0x06c0:
         r0 = r23.getSendMessagesHelper();
         r1 = r7.selectedObject;
         r0 = r0.retrySendMessage(r1, r13);
-        if (r0 == 0) goto L_0x066a;
-    L_0x06bb:
+        if (r0 == 0) goto L_0x0647;
+    L_0x06cc:
         r23.updateVisibleRows();
         r23.moveScrollToLastMessage();
-        goto L_0x066a;
-    L_0x06c2:
+        goto L_0x0647;
+    L_0x06d4:
         r7.selectedObject = r1;
         r7.selectedObjectGroup = r1;
         r7.selectedObjectToEditCaption = r1;
-    L_0x06c8:
+    L_0x06da:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.processSelectedOption(int):void");
@@ -23904,7 +24170,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r13 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r3 = r9.getParentActivity();
         r13.<init>(r3);
-        r3 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r3 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
         r4 = "AppName";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r13.setTitle(r3);
@@ -23914,14 +24180,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r0.last_name;
         r2 = org.telegram.messenger.ContactsController.formatName(r2, r0);
     L_0x0030:
-        r0 = NUM; // 0x7f0d01d0 float:1.8743056E38 double:1.053130007E-314;
+        r0 = NUM; // 0x7f0d01d2 float:1.874306E38 double:1.053130008E-314;
         r1 = new java.lang.Object[r1];
         r3 = 0;
         r1[r3] = r2;
         r2 = "BotPermissionGameAlert";
         r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1);
         r13.setMessage(r0);
-        r0 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+        r0 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r1 = "OK";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r7 = new org.telegram.ui.-$$Lambda$ChatActivity$j3p4cSxcgswHs6XMpffWohhkQ0I;
@@ -23933,7 +24199,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r6 = r14;
         r1.<init>(r2, r3, r4, r5, r6);
         r13.setPositiveButton(r0, r7);
-        r10 = NUM; // 0x7f0d01f6 float:1.8743133E38 double:1.0531300256E-314;
+        r10 = NUM; // 0x7f0d01f9 float:1.874314E38 double:1.053130027E-314;
         r11 = "Cancel";
         r10 = org.telegram.messenger.LocaleController.getString(r11, r10);
         r11 = 0;
@@ -24212,7 +24478,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     public ThemeDescription[] getThemeDescriptions() {
         View subtitleTextView;
         -$$Lambda$ChatActivity$bxn2T3MUo3ExItMpqkbTacQIMRg -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg = new -$$Lambda$ChatActivity$bxn2T3MUo3ExItMpqkbTacQIMRg(this);
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[399];
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[393];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, 0, null, null, null, null, "chat_wallpaper");
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
         themeDescriptionArr[2] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
@@ -24545,248 +24811,247 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         themeDescriptionArr[226] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"messageEditText"}, null, null, null, "chat_messagePanelText");
         themeDescriptionArr[227] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordSendText"}, null, null, null, "chat_fieldOverlayText");
         themeDescriptionArr[228] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_HINTTEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"messageEditText"}, null, null, null, "chat_messagePanelHint");
-        themeDescriptionArr[229] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"sendButton"}, null, null, null, "chat_messagePanelSend");
-        themeDescriptionArr[230] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"emojiButton"}, null, null, null, "chat_messagePanelIcons");
-        themeDescriptionArr[231] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"botButton"}, null, null, null, "chat_messagePanelIcons");
-        themeDescriptionArr[232] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"notifyButton"}, null, null, null, "chat_messagePanelIcons");
-        themeDescriptionArr[233] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"attachButton"}, null, null, null, "chat_messagePanelIcons");
-        themeDescriptionArr[234] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"audioSendButton"}, null, null, null, "chat_messagePanelIcons");
-        themeDescriptionArr[235] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"videoSendButton"}, null, null, null, "chat_messagePanelIcons");
-        themeDescriptionArr[236] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatActivityEnterView.class}, new String[]{"doneButtonImage"}, null, null, null, "chat_messagePanelSend");
-        themeDescriptionArr[237] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"doneButtonImage"}, null, null, null, "chat_messagePanelBackground");
-        themeDescriptionArr[238] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUND, new Class[]{ChatActivityEnterView.class}, new String[]{"recordedAudioPanel"}, null, null, null, "chat_messagePanelBackground");
-        themeDescriptionArr[239] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"micDrawable"}, null, null, null, "chat_messagePanelVoicePressed");
-        themeDescriptionArr[240] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"cameraDrawable"}, null, null, null, "chat_messagePanelVoicePressed");
-        themeDescriptionArr[241] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"sendDrawable"}, null, null, null, "chat_messagePanelVoicePressed");
-        themeDescriptionArr[242] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockDrawable"}, null, null, null, "key_chat_messagePanelVoiceLock");
-        themeDescriptionArr[243] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockTopDrawable"}, null, null, null, "key_chat_messagePanelVoiceLock");
-        themeDescriptionArr[244] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockArrowDrawable"}, null, null, null, "key_chat_messagePanelVoiceLock");
-        themeDescriptionArr[245] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockBackgroundDrawable"}, null, null, null, "key_chat_messagePanelVoiceLockBackground");
-        themeDescriptionArr[246] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockShadowDrawable"}, null, null, null, "key_chat_messagePanelVoiceLockShadow");
-        themeDescriptionArr[247] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordDeleteImageView"}, null, null, null, "chat_messagePanelVoiceDelete");
-        themeDescriptionArr[248] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatActivityEnterView.class}, new String[]{"recordedAudioBackground"}, null, null, null, "chat_recordedVoiceBackground");
-        themeDescriptionArr[249] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordTimeText"}, null, null, null, "chat_recordTime");
-        themeDescriptionArr[250] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUND, new Class[]{ChatActivityEnterView.class}, new String[]{"recordTimeContainer"}, null, null, null, "chat_messagePanelBackground");
-        themeDescriptionArr[251] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordCancelText"}, null, null, null, "chat_recordVoiceCancel");
-        themeDescriptionArr[252] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUND, new Class[]{ChatActivityEnterView.class}, new String[]{"recordPanel"}, null, null, null, "chat_messagePanelBackground");
-        themeDescriptionArr[253] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordedAudioTimeTextView"}, null, null, null, "chat_messagePanelVoiceDuration");
-        themeDescriptionArr[254] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordCancelImage"}, null, null, null, "chat_recordVoiceCancel");
-        themeDescriptionArr[255] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"doneButtonProgress"}, null, null, null, "contextProgressInner1");
-        themeDescriptionArr[256] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"doneButtonProgress"}, null, null, null, "contextProgressOuter1");
-        themeDescriptionArr[257] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"cancelBotButton"}, null, null, null, "chat_messagePanelCancelInlineBot");
-        themeDescriptionArr[258] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"redDotPaint"}, null, null, null, "chat_recordedVoiceDot");
-        themeDescriptionArr[259] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"paint"}, null, null, null, "chat_messagePanelVoiceBackground");
-        themeDescriptionArr[260] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"paintRecord"}, null, null, null, "chat_messagePanelVoiceShadow");
-        themeDescriptionArr[261] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"seekBarWaveform"}, null, null, null, "chat_recordedVoiceProgress");
-        themeDescriptionArr[262] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"seekBarWaveform"}, null, null, null, "chat_recordedVoiceProgressInner");
-        themeDescriptionArr[263] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"playDrawable"}, null, null, null, "chat_recordedVoicePlayPause");
-        themeDescriptionArr[264] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"pauseDrawable"}, null, null, null, "chat_recordedVoicePlayPause");
-        themeDescriptionArr[265] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{ChatActivityEnterView.class}, new String[]{"playDrawable"}, null, null, null, "chat_recordedVoicePlayPausePressed");
-        themeDescriptionArr[266] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{ChatActivityEnterView.class}, new String[]{"pauseDrawable"}, null, null, null, "chat_recordedVoicePlayPausePressed");
-        themeDescriptionArr[267] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"dotPaint"}, null, null, null, "chat_emojiPanelNewTrending");
+        view2 = this.chatActivityEnterView;
+        int i2 = ThemeDescription.FLAG_IMAGECOLOR;
+        clsArr = new Class[]{ChatActivityEnterView.class};
+        String[] strArr = new String[1];
+        strArr[0] = "sendButton";
+        themeDescriptionArr[229] = new ThemeDescription(view2, i2, clsArr, strArr, null, null, null, "chat_messagePanelSend");
+        themeDescriptionArr[230] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"sendButton"}, null, null, null, "chat_messagePanelPressedSend");
+        themeDescriptionArr[231] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatActivityEnterView.class}, new String[]{"sendButton"}, null, null, 24, null, "chat_messagePanelSend");
+        themeDescriptionArr[232] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"emojiButton"}, null, null, null, "chat_messagePanelIcons");
+        themeDescriptionArr[233] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"botButton"}, null, null, null, "chat_messagePanelIcons");
+        themeDescriptionArr[234] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"notifyButton"}, null, null, null, "chat_messagePanelIcons");
+        themeDescriptionArr[235] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"attachButton"}, null, null, null, "chat_messagePanelIcons");
+        themeDescriptionArr[236] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"audioSendButton"}, null, null, null, "chat_messagePanelIcons");
+        themeDescriptionArr[237] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"videoSendButton"}, null, null, null, "chat_messagePanelIcons");
+        themeDescriptionArr[238] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatActivityEnterView.class}, new String[]{"doneButtonImage"}, null, null, null, "chat_messagePanelSend");
+        themeDescriptionArr[239] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"doneButtonImage"}, null, null, null, "chat_messagePanelBackground");
+        themeDescriptionArr[240] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUND, new Class[]{ChatActivityEnterView.class}, new String[]{"recordedAudioPanel"}, null, null, null, "chat_messagePanelBackground");
+        themeDescriptionArr[241] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"micDrawable"}, null, null, null, "chat_messagePanelVoicePressed");
+        themeDescriptionArr[242] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"cameraDrawable"}, null, null, null, "chat_messagePanelVoicePressed");
+        themeDescriptionArr[243] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"sendDrawable"}, null, null, null, "chat_messagePanelVoicePressed");
+        themeDescriptionArr[244] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockDrawable"}, null, null, null, "key_chat_messagePanelVoiceLock");
+        themeDescriptionArr[245] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockTopDrawable"}, null, null, null, "key_chat_messagePanelVoiceLock");
+        themeDescriptionArr[246] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockArrowDrawable"}, null, null, null, "key_chat_messagePanelVoiceLock");
+        themeDescriptionArr[247] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockBackgroundDrawable"}, null, null, null, "key_chat_messagePanelVoiceLockBackground");
+        themeDescriptionArr[248] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"lockShadowDrawable"}, null, null, null, "key_chat_messagePanelVoiceLockShadow");
+        themeDescriptionArr[249] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordDeleteImageView"}, null, null, null, "chat_messagePanelVoiceDelete");
+        themeDescriptionArr[250] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatActivityEnterView.class}, new String[]{"recordedAudioBackground"}, null, null, null, "chat_recordedVoiceBackground");
+        themeDescriptionArr[251] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordTimeText"}, null, null, null, "chat_recordTime");
+        themeDescriptionArr[252] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUND, new Class[]{ChatActivityEnterView.class}, new String[]{"recordTimeContainer"}, null, null, null, "chat_messagePanelBackground");
+        themeDescriptionArr[253] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordCancelText"}, null, null, null, "chat_recordVoiceCancel");
+        themeDescriptionArr[254] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_BACKGROUND, new Class[]{ChatActivityEnterView.class}, new String[]{"recordPanel"}, null, null, null, "chat_messagePanelBackground");
+        themeDescriptionArr[255] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordedAudioTimeTextView"}, null, null, null, "chat_messagePanelVoiceDuration");
+        themeDescriptionArr[256] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"recordCancelImage"}, null, null, null, "chat_recordVoiceCancel");
+        themeDescriptionArr[257] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"doneButtonProgress"}, null, null, null, "contextProgressInner1");
+        themeDescriptionArr[258] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"doneButtonProgress"}, null, null, null, "contextProgressOuter1");
+        themeDescriptionArr[259] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"cancelBotButton"}, null, null, null, "chat_messagePanelCancelInlineBot");
+        themeDescriptionArr[260] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"redDotPaint"}, null, null, null, "chat_recordedVoiceDot");
+        themeDescriptionArr[261] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"paint"}, null, null, null, "chat_messagePanelVoiceBackground");
+        themeDescriptionArr[262] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"paintRecord"}, null, null, null, "chat_messagePanelVoiceShadow");
+        themeDescriptionArr[263] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"seekBarWaveform"}, null, null, null, "chat_recordedVoiceProgress");
+        themeDescriptionArr[264] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"seekBarWaveform"}, null, null, null, "chat_recordedVoiceProgressInner");
+        themeDescriptionArr[265] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"playDrawable"}, null, null, null, "chat_recordedVoicePlayPause");
+        themeDescriptionArr[266] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"pauseDrawable"}, null, null, null, "chat_recordedVoicePlayPause");
+        themeDescriptionArr[267] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{ChatActivityEnterView.class}, new String[]{"playDrawable"}, null, null, null, "chat_recordedVoicePlayPausePressed");
+        themeDescriptionArr[268] = new ThemeDescription(this.chatActivityEnterView, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{ChatActivityEnterView.class}, new String[]{"pauseDrawable"}, null, null, null, "chat_recordedVoicePlayPausePressed");
+        themeDescriptionArr[269] = new ThemeDescription(this.chatActivityEnterView, 0, new Class[]{ChatActivityEnterView.class}, new String[]{"dotPaint"}, null, null, null, "chat_emojiPanelNewTrending");
         View view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[268] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelBackground");
+        themeDescriptionArr[270] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelBackground");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[269] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelShadowLine");
+        themeDescriptionArr[271] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelShadowLine");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[270] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelEmptyText");
+        themeDescriptionArr[272] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelEmptyText");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[271] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelIcon");
+        themeDescriptionArr[273] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelIcon");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[272] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelIconSelected");
+        themeDescriptionArr[274] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelIconSelected");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[273] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelStickerPackSelector");
+        themeDescriptionArr[275] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelStickerPackSelector");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[274] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelBackspace");
+        themeDescriptionArr[276] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelBackspace");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[275] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelTrendingTitle");
+        themeDescriptionArr[277] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelTrendingTitle");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[276] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelTrendingDescription");
+        themeDescriptionArr[278] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelTrendingDescription");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[277] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelBadgeText");
+        themeDescriptionArr[279] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelBadgeText");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[278] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelBadgeBackground");
+        themeDescriptionArr[280] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelBadgeBackground");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[279] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiBottomPanelIcon");
+        themeDescriptionArr[281] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiBottomPanelIcon");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[280] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiSearchIcon");
+        themeDescriptionArr[282] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiSearchIcon");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[281] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelStickerSetNameHighlight");
+        themeDescriptionArr[283] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelStickerSetNameHighlight");
         view3 = this.chatActivityEnterView;
         if (view3 != null) {
             view3 = view3.getEmojiView();
         }
-        themeDescriptionArr[282] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelStickerPackSelectorLine");
-        themeDescriptionArr[283] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "undo_background");
-        themeDescriptionArr[284] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, null, null, null, "undo_cancelColor");
-        themeDescriptionArr[285] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, null, null, null, "undo_cancelColor");
-        themeDescriptionArr[286] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"infoTextView"}, null, null, null, "undo_infoColor");
-        themeDescriptionArr[287] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"textPaint"}, null, null, null, "undo_infoColor");
-        themeDescriptionArr[288] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"progressPaint"}, null, null, null, "undo_infoColor");
-        themeDescriptionArr[289] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{UndoView.class}, new String[]{"leftImageView"}, null, null, null, "undo_infoColor");
-        themeDescriptionArr[290] = new ThemeDescription(null, 0, null, null, null, null, "chat_botKeyboardButtonText");
-        themeDescriptionArr[291] = new ThemeDescription(null, 0, null, null, null, null, "chat_botKeyboardButtonBackground");
-        themeDescriptionArr[292] = new ThemeDescription(null, 0, null, null, null, null, "chat_botKeyboardButtonBackgroundPressed");
-        themeDescriptionArr[293] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, "inappPlayerBackground");
-        themeDescriptionArr[294] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, "inappPlayerPlayPause");
-        themeDescriptionArr[295] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "inappPlayerTitle");
-        themeDescriptionArr[296] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_FASTSCROLL, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "inappPlayerPerformer");
-        themeDescriptionArr[297] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, "inappPlayerClose");
-        themeDescriptionArr[298] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, "returnToCallBackground");
-        themeDescriptionArr[299] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "returnToCallText");
-        themeDescriptionArr[300] = new ThemeDescription(this.pinnedLineView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "chat_topPanelLine");
-        themeDescriptionArr[301] = new ThemeDescription(this.pinnedMessageNameTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_topPanelTitle");
-        themeDescriptionArr[302] = new ThemeDescription(this.pinnedMessageTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_topPanelMessage");
-        themeDescriptionArr[303] = new ThemeDescription(this.alertNameTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_topPanelTitle");
-        themeDescriptionArr[304] = new ThemeDescription(this.alertTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_topPanelMessage");
-        themeDescriptionArr[305] = new ThemeDescription(this.closePinned, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_topPanelClose");
-        themeDescriptionArr[306] = new ThemeDescription(this.closeReportSpam, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_topPanelClose");
-        themeDescriptionArr[307] = new ThemeDescription(this.topChatPanelView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_topPanelBackground");
-        themeDescriptionArr[308] = new ThemeDescription(this.alertView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_topPanelBackground");
-        themeDescriptionArr[309] = new ThemeDescription(this.pinnedMessageView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_topPanelBackground");
-        themeDescriptionArr[310] = new ThemeDescription(this.addToContactsButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_addContact");
-        themeDescriptionArr[311] = new ThemeDescription(this.reportSpamButton, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_reportSpam");
-        themeDescriptionArr[312] = new ThemeDescription(this.reportSpamButton, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_addContact");
-        themeDescriptionArr[313] = new ThemeDescription(this.replyLineView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "chat_replyPanelLine");
-        themeDescriptionArr[314] = new ThemeDescription(this.replyNameTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_replyPanelName");
-        themeDescriptionArr[315] = new ThemeDescription(this.replyObjectTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_replyPanelMessage");
-        themeDescriptionArr[316] = new ThemeDescription(this.replyIconImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_replyPanelIcons");
-        themeDescriptionArr[317] = new ThemeDescription(this.replyCloseImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_replyPanelClose");
-        themeDescriptionArr[318] = new ThemeDescription(this.searchUpButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_searchPanelIcons");
-        themeDescriptionArr[319] = new ThemeDescription(this.searchDownButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_searchPanelIcons");
-        themeDescriptionArr[320] = new ThemeDescription(this.searchCalendarButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_searchPanelIcons");
-        themeDescriptionArr[321] = new ThemeDescription(this.searchUserButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_searchPanelIcons");
-        themeDescriptionArr[322] = new ThemeDescription(this.searchCountText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_searchPanelText");
-        themeDescriptionArr[323] = new ThemeDescription(this.bottomOverlayText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_secretChatStatusText");
-        themeDescriptionArr[324] = new ThemeDescription(this.bottomOverlayChatText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_fieldOverlayText");
-        themeDescriptionArr[325] = new ThemeDescription(this.bottomOverlayChatText2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_fieldOverlayText");
-        themeDescriptionArr[326] = new ThemeDescription(this.bottomOverlayProgress, 0, null, null, null, null, "chat_fieldOverlayText");
-        themeDescriptionArr[327] = new ThemeDescription(this.bigEmptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_serviceText");
-        themeDescriptionArr[328] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_serviceText");
-        themeDescriptionArr[329] = new ThemeDescription(this.progressBar, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "chat_serviceText");
-        themeDescriptionArr[330] = new ThemeDescription(this.stickersPanelArrow, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_stickersHintPanel");
-        themeDescriptionArr[331] = new ThemeDescription(this.stickersListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{StickerCell.class}, null, null, null, "chat_stickersHintPanel");
-        themeDescriptionArr[332] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{ChatUnreadCell.class}, new String[]{"backgroundLayout"}, null, null, null, "chat_unreadMessagesStartBackground");
-        themeDescriptionArr[333] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"imageView"}, null, null, null, "chat_unreadMessagesStartArrowIcon");
+        themeDescriptionArr[284] = new ThemeDescription(view3, 0, new Class[]{EmojiView.class}, null, null, null, (ThemeDescriptionDelegate) -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg, "chat_emojiPanelStickerPackSelectorLine");
+        themeDescriptionArr[285] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "undo_background");
+        themeDescriptionArr[286] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, null, null, null, "undo_cancelColor");
+        themeDescriptionArr[287] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, null, null, null, "undo_cancelColor");
+        themeDescriptionArr[288] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"infoTextView"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[289] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"textPaint"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[290] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"progressPaint"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[291] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{UndoView.class}, new String[]{"leftImageView"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[292] = new ThemeDescription(null, 0, null, null, null, null, "chat_botKeyboardButtonText");
+        themeDescriptionArr[293] = new ThemeDescription(null, 0, null, null, null, null, "chat_botKeyboardButtonBackground");
+        themeDescriptionArr[294] = new ThemeDescription(null, 0, null, null, null, null, "chat_botKeyboardButtonBackgroundPressed");
+        themeDescriptionArr[295] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, "inappPlayerBackground");
+        themeDescriptionArr[296] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, "inappPlayerPlayPause");
+        themeDescriptionArr[297] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "inappPlayerTitle");
+        themeDescriptionArr[298] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_FASTSCROLL, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "inappPlayerPerformer");
+        themeDescriptionArr[299] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, "inappPlayerClose");
+        themeDescriptionArr[300] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, "returnToCallBackground");
+        themeDescriptionArr[301] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "returnToCallText");
+        themeDescriptionArr[302] = new ThemeDescription(this.pinnedLineView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "chat_topPanelLine");
+        themeDescriptionArr[303] = new ThemeDescription(this.pinnedMessageNameTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_topPanelTitle");
+        themeDescriptionArr[304] = new ThemeDescription(this.pinnedMessageTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_topPanelMessage");
+        themeDescriptionArr[305] = new ThemeDescription(this.alertNameTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_topPanelTitle");
+        themeDescriptionArr[306] = new ThemeDescription(this.alertTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_topPanelMessage");
+        themeDescriptionArr[307] = new ThemeDescription(this.closePinned, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_topPanelClose");
+        themeDescriptionArr[308] = new ThemeDescription(this.closeReportSpam, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_topPanelClose");
+        themeDescriptionArr[309] = new ThemeDescription(this.topChatPanelView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_topPanelBackground");
+        themeDescriptionArr[310] = new ThemeDescription(this.alertView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_topPanelBackground");
+        themeDescriptionArr[311] = new ThemeDescription(this.pinnedMessageView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_topPanelBackground");
+        themeDescriptionArr[312] = new ThemeDescription(this.addToContactsButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_addContact");
+        themeDescriptionArr[313] = new ThemeDescription(this.reportSpamButton, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_reportSpam");
+        themeDescriptionArr[314] = new ThemeDescription(this.reportSpamButton, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_addContact");
+        themeDescriptionArr[315] = new ThemeDescription(this.replyLineView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "chat_replyPanelLine");
+        themeDescriptionArr[316] = new ThemeDescription(this.replyNameTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_replyPanelName");
+        themeDescriptionArr[317] = new ThemeDescription(this.replyObjectTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_replyPanelMessage");
+        themeDescriptionArr[318] = new ThemeDescription(this.replyIconImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_replyPanelIcons");
+        themeDescriptionArr[319] = new ThemeDescription(this.replyCloseImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_replyPanelClose");
+        themeDescriptionArr[320] = new ThemeDescription(this.searchUpButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_searchPanelIcons");
+        themeDescriptionArr[321] = new ThemeDescription(this.searchDownButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_searchPanelIcons");
+        themeDescriptionArr[322] = new ThemeDescription(this.searchCalendarButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_searchPanelIcons");
+        themeDescriptionArr[323] = new ThemeDescription(this.searchUserButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_searchPanelIcons");
+        themeDescriptionArr[324] = new ThemeDescription(this.searchCountText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_searchPanelText");
+        themeDescriptionArr[325] = new ThemeDescription(this.bottomOverlayText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_secretChatStatusText");
+        themeDescriptionArr[326] = new ThemeDescription(this.bottomOverlayChatText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_fieldOverlayText");
+        themeDescriptionArr[327] = new ThemeDescription(this.bottomOverlayChatText2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_fieldOverlayText");
+        themeDescriptionArr[328] = new ThemeDescription(this.bottomOverlayProgress, 0, null, null, null, null, "chat_fieldOverlayText");
+        themeDescriptionArr[329] = new ThemeDescription(this.bigEmptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_serviceText");
+        themeDescriptionArr[330] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_serviceText");
+        themeDescriptionArr[331] = new ThemeDescription(this.progressBar, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "chat_serviceText");
+        themeDescriptionArr[332] = new ThemeDescription(this.stickersPanelArrow, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_stickersHintPanel");
+        themeDescriptionArr[333] = new ThemeDescription(this.stickersListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{StickerCell.class}, null, null, null, "chat_stickersHintPanel");
+        themeDescriptionArr[334] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{ChatUnreadCell.class}, new String[]{"backgroundLayout"}, null, null, null, "chat_unreadMessagesStartBackground");
+        themeDescriptionArr[335] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"imageView"}, null, null, null, "chat_unreadMessagesStartArrowIcon");
         view2 = this.chatListView;
         i = ThemeDescription.FLAG_TEXTCOLOR;
         clsArr = new Class[]{ChatUnreadCell.class};
-        String[] strArr = new String[1];
+        strArr = new String[1];
         strArr[0] = "textView";
-        themeDescriptionArr[334] = new ThemeDescription(view2, i, clsArr, strArr, null, null, null, "chat_unreadMessagesStartText");
-        themeDescriptionArr[335] = new ThemeDescription(this.progressView2, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
-        themeDescriptionArr[336] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
-        themeDescriptionArr[337] = new ThemeDescription(this.bigEmptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
-        themeDescriptionArr[338] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_SERVICEBACKGROUND, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, "chat_serviceBackground");
-        themeDescriptionArr[339] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, "chat_serviceText");
-        themeDescriptionArr[340] = new ThemeDescription(this.mentionListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{BotSwitchCell.class}, new String[]{"textView"}, null, null, null, "chat_botSwitchToInlineText");
-        themeDescriptionArr[341] = new ThemeDescription(this.mentionListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{MentionCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[342] = new ThemeDescription(this.mentionListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{MentionCell.class}, new String[]{"usernameTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
-        themeDescriptionArr[343] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, new Drawable[]{Theme.chat_inlineResultFile, Theme.chat_inlineResultAudio, Theme.chat_inlineResultLocation}, null, "chat_inlineResultIcon");
-        themeDescriptionArr[344] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "windowBackgroundWhiteGrayText2");
-        themeDescriptionArr[345] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "windowBackgroundWhiteLinkText");
-        themeDescriptionArr[346] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[347] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "chat_inAudioProgress");
-        themeDescriptionArr[348] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "chat_inAudioSelectedProgress");
-        themeDescriptionArr[349] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "divider");
-        themeDescriptionArr[350] = new ThemeDescription(this.gifHintTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_gifSaveHintBackground");
-        themeDescriptionArr[351] = new ThemeDescription(this.gifHintTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_gifSaveHintText");
+        themeDescriptionArr[336] = new ThemeDescription(view2, i, clsArr, strArr, null, null, null, "chat_unreadMessagesStartText");
+        themeDescriptionArr[337] = new ThemeDescription(this.progressView2, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
+        themeDescriptionArr[338] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
+        themeDescriptionArr[339] = new ThemeDescription(this.bigEmptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
+        themeDescriptionArr[340] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_SERVICEBACKGROUND, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, "chat_serviceBackground");
+        themeDescriptionArr[341] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, "chat_serviceText");
+        themeDescriptionArr[342] = new ThemeDescription(this.mentionListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{BotSwitchCell.class}, new String[]{"textView"}, null, null, null, "chat_botSwitchToInlineText");
+        themeDescriptionArr[343] = new ThemeDescription(this.mentionListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{MentionCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[344] = new ThemeDescription(this.mentionListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{MentionCell.class}, new String[]{"usernameTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
+        themeDescriptionArr[345] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, new Drawable[]{Theme.chat_inlineResultFile, Theme.chat_inlineResultAudio, Theme.chat_inlineResultLocation}, null, "chat_inlineResultIcon");
+        themeDescriptionArr[346] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "windowBackgroundWhiteGrayText2");
+        themeDescriptionArr[347] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "windowBackgroundWhiteLinkText");
+        themeDescriptionArr[348] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[349] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "chat_inAudioProgress");
+        themeDescriptionArr[350] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "chat_inAudioSelectedProgress");
+        themeDescriptionArr[351] = new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, null, null, null, "divider");
+        themeDescriptionArr[352] = new ThemeDescription(this.gifHintTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_gifSaveHintBackground");
+        themeDescriptionArr[353] = new ThemeDescription(this.gifHintTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_gifSaveHintText");
         -$$Lambda$ChatActivity$bxn2T3MUo3ExItMpqkbTacQIMRg -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2 = -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg;
-        themeDescriptionArr[352] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "chat_attachMediaBanBackground");
-        themeDescriptionArr[353] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "chat_attachMediaBanText");
-        themeDescriptionArr[354] = new ThemeDescription(this.noSoundHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"textView"}, null, null, null, "chat_gifSaveHintText");
-        themeDescriptionArr[355] = new ThemeDescription(this.noSoundHintView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{HintView.class}, new String[]{"imageView"}, null, null, null, "chat_gifSaveHintText");
-        themeDescriptionArr[356] = new ThemeDescription(this.noSoundHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"arrowImageView"}, null, null, null, "chat_gifSaveHintBackground");
-        themeDescriptionArr[357] = new ThemeDescription(this.forwardHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"textView"}, null, null, null, "chat_gifSaveHintText");
-        themeDescriptionArr[358] = new ThemeDescription(this.forwardHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"arrowImageView"}, null, null, null, "chat_gifSaveHintBackground");
-        themeDescriptionArr[359] = new ThemeDescription(this.pagedownButtonCounter, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButtonCounterBackground");
-        themeDescriptionArr[360] = new ThemeDescription(this.pagedownButtonCounter, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_goDownButtonCounter");
-        themeDescriptionArr[361] = new ThemeDescription(this.pagedownButtonImage, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButton");
-        themeDescriptionArr[362] = new ThemeDescription(this.pagedownButtonImage, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButtonShadow");
-        themeDescriptionArr[363] = new ThemeDescription(this.pagedownButtonImage, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_goDownButtonIcon");
-        themeDescriptionArr[364] = new ThemeDescription(this.mentiondownButtonCounter, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButtonCounterBackground");
-        themeDescriptionArr[365] = new ThemeDescription(this.mentiondownButtonCounter, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_goDownButtonCounter");
-        themeDescriptionArr[366] = new ThemeDescription(this.mentiondownButtonImage, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButton");
-        themeDescriptionArr[367] = new ThemeDescription(this.mentiondownButtonImage, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButtonShadow");
-        themeDescriptionArr[368] = new ThemeDescription(this.mentiondownButtonImage, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_goDownButtonIcon");
+        themeDescriptionArr[354] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "chat_attachMediaBanBackground");
+        themeDescriptionArr[355] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "chat_attachMediaBanText");
+        themeDescriptionArr[356] = new ThemeDescription(this.noSoundHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"textView"}, null, null, null, "chat_gifSaveHintText");
+        themeDescriptionArr[357] = new ThemeDescription(this.noSoundHintView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{HintView.class}, new String[]{"imageView"}, null, null, null, "chat_gifSaveHintText");
+        themeDescriptionArr[358] = new ThemeDescription(this.noSoundHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"arrowImageView"}, null, null, null, "chat_gifSaveHintBackground");
+        themeDescriptionArr[359] = new ThemeDescription(this.forwardHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"textView"}, null, null, null, "chat_gifSaveHintText");
+        themeDescriptionArr[360] = new ThemeDescription(this.forwardHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"arrowImageView"}, null, null, null, "chat_gifSaveHintBackground");
+        themeDescriptionArr[361] = new ThemeDescription(this.pagedownButtonCounter, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButtonCounterBackground");
+        themeDescriptionArr[362] = new ThemeDescription(this.pagedownButtonCounter, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_goDownButtonCounter");
+        themeDescriptionArr[363] = new ThemeDescription(this.pagedownButtonImage, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButton");
+        themeDescriptionArr[364] = new ThemeDescription(this.pagedownButtonImage, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButtonShadow");
+        themeDescriptionArr[365] = new ThemeDescription(this.pagedownButtonImage, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_goDownButtonIcon");
+        themeDescriptionArr[366] = new ThemeDescription(this.mentiondownButtonCounter, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButtonCounterBackground");
+        themeDescriptionArr[367] = new ThemeDescription(this.mentiondownButtonCounter, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_goDownButtonCounter");
+        themeDescriptionArr[368] = new ThemeDescription(this.mentiondownButtonImage, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButton");
+        themeDescriptionArr[369] = new ThemeDescription(this.mentiondownButtonImage, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chat_goDownButtonShadow");
+        themeDescriptionArr[370] = new ThemeDescription(this.mentiondownButtonImage, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chat_goDownButtonIcon");
         chatAvatarContainer = this.avatarContainer;
-        themeDescriptionArr[369] = new ThemeDescription(chatAvatarContainer != null ? chatAvatarContainer.getTimeItem() : null, 0, null, null, null, null, "chat_secretTimerBackground");
+        themeDescriptionArr[371] = new ThemeDescription(chatAvatarContainer != null ? chatAvatarContainer.getTimeItem() : null, 0, null, null, null, null, "chat_secretTimerBackground");
         chatAvatarContainer = this.avatarContainer;
         if (chatAvatarContainer != null) {
             view = chatAvatarContainer.getTimeItem();
         }
-        themeDescriptionArr[370] = new ThemeDescription(view, 0, null, null, null, null, "chat_secretTimerText");
-        themeDescriptionArr[371] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[0]}, null, "chat_attachCameraIcon1");
-        themeDescriptionArr[372] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[0]}, null, "chat_attachCameraIcon2");
-        themeDescriptionArr[373] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[0]}, null, "chat_attachCameraIcon3");
-        themeDescriptionArr[374] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[0]}, null, "chat_attachCameraIcon4");
-        themeDescriptionArr[375] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[0]}, null, "chat_attachCameraIcon5");
-        themeDescriptionArr[376] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[0]}, null, "chat_attachCameraIcon6");
-        themeDescriptionArr[377] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[1]}, null, "chat_attachGalleryBackground");
-        themeDescriptionArr[378] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[1]}, null, "chat_attachGalleryIcon");
-        themeDescriptionArr[379] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[2]}, null, "chat_attachVideoBackground");
-        themeDescriptionArr[380] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[2]}, null, "chat_attachVideoIcon");
-        themeDescriptionArr[381] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[3]}, null, "chat_attachAudioBackground");
-        themeDescriptionArr[382] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[3]}, null, "chat_attachAudioIcon");
-        themeDescriptionArr[383] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[4]}, null, "chat_attachFileBackground");
-        themeDescriptionArr[384] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[4]}, null, "chat_attachFileIcon");
-        themeDescriptionArr[385] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[5]}, null, "chat_attachContactBackground");
-        themeDescriptionArr[386] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[5]}, null, "chat_attachContactIcon");
-        themeDescriptionArr[387] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[6]}, null, "chat_attachLocationBackground");
-        themeDescriptionArr[388] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[6]}, null, "chat_attachLocationIcon");
-        themeDescriptionArr[389] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[7]}, null, "chat_attachHideBackground");
-        themeDescriptionArr[390] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[7]}, null, "chat_attachHideIcon");
-        themeDescriptionArr[391] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[8]}, null, "chat_attachSendBackground");
-        themeDescriptionArr[392] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[8]}, null, "chat_attachSendIcon");
+        themeDescriptionArr[372] = new ThemeDescription(view, 0, null, null, null, null, "chat_secretTimerText");
+        themeDescriptionArr[373] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[0]}, null, "chat_attachGalleryBackground");
+        themeDescriptionArr[374] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[0]}, null, "chat_attachGalleryIcon");
+        themeDescriptionArr[375] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[1]}, null, "chat_attachAudioBackground");
+        themeDescriptionArr[376] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[1]}, null, "chat_attachAudioIcon");
+        themeDescriptionArr[377] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[2]}, null, "chat_attachFileBackground");
+        themeDescriptionArr[378] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[2]}, null, "chat_attachFileIcon");
+        themeDescriptionArr[379] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[3]}, null, "chat_attachContactBackground");
+        themeDescriptionArr[380] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[3]}, null, "chat_attachContactIcon");
+        themeDescriptionArr[381] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[4]}, null, "chat_attachLocationBackground");
+        themeDescriptionArr[382] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[4]}, null, "chat_attachLocationIcon");
+        themeDescriptionArr[383] = new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[5]}, null, "chat_attachPollBackground");
+        themeDescriptionArr[384] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachButtonDrawables[5]}, null, "chat_attachPollIcon");
+        themeDescriptionArr[385] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.chat_attachEmptyDrawable}, null, "chat_attachEmptyImage");
         -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2 = -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg;
-        themeDescriptionArr[393] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogBackground");
-        themeDescriptionArr[394] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogBackgroundGray");
-        themeDescriptionArr[395] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogTextGray2");
-        themeDescriptionArr[396] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogScrollGlow");
-        themeDescriptionArr[397] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogGrayLine");
-        themeDescriptionArr[398] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogCameraIcon");
+        themeDescriptionArr[386] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "chat_attachPhotoBackground");
+        themeDescriptionArr[387] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogBackground");
+        themeDescriptionArr[388] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogBackgroundGray");
+        themeDescriptionArr[389] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogTextGray2");
+        themeDescriptionArr[390] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogScrollGlow");
+        themeDescriptionArr[391] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogGrayLine");
+        themeDescriptionArr[392] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatactivity_bxn2t3muo3exitmpqkbtacqimrg2, "dialogCameraIcon");
         return themeDescriptionArr;
     }
 
@@ -24794,7 +25059,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         updateVisibleRows();
         ChatActivityEnterView chatActivityEnterView = this.chatActivityEnterView;
         if (!(chatActivityEnterView == null || chatActivityEnterView.getEmojiView() == null)) {
-            this.chatActivityEnterView.getEmojiView().updateUIColors();
+            this.chatActivityEnterView.getEmojiView().updateColors();
         }
         ChatAttachAlert chatAttachAlert = this.chatAttachAlert;
         if (chatAttachAlert != null) {

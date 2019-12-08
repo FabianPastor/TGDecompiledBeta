@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,6 +46,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     private EmptyTextProgressView emptyView;
     private boolean isAlwaysShare;
     private boolean isGroup;
+    private LinearLayoutManager layoutManager;
     private RecyclerListView listView;
     private ListAdapter listViewAdapter;
     private int rowCount;
@@ -191,7 +194,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     return;
                 }
                 if (PrivacyUsersActivity.this.blockedUsersActivity) {
-                    headerCell.setText(LocaleController.formatPluralString("BlockedUsersCount", PrivacyUsersActivity.this.getMessagesController().blockedUsers.size()));
+                    headerCell.setText(LocaleController.formatPluralString("BlockedUsersCount", PrivacyUsersActivity.this.getMessagesController().totalBlockedCount));
                     return;
                 }
                 headerCell.setText(LocaleController.getString("PrivacyExceptions", NUM));
@@ -220,7 +223,6 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         if (this.blockedUsersActivity) {
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.blockedUsersDidLoad);
-            getMessagesController().getBlockedUsers(false);
         }
         return true;
     }
@@ -269,9 +271,12 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
-        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
-        this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView.setLayoutManager(linearLayoutManager);
+        this.listView.setVerticalScrollBarEnabled(false);
+        recyclerListView = this.listView;
         ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
@@ -283,7 +288,20 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new -$$Lambda$PrivacyUsersActivity$D3bLTU7NAbbHWcoiH45oxyckkb4(this));
         this.listView.setOnItemLongClickListener(new -$$Lambda$PrivacyUsersActivity$r_SA004H7_gb5NSQvdo4AkX5yCs(this));
-        if (getMessagesController().loadingBlockedUsers) {
+        if (this.blockedUsersActivity) {
+            this.listView.setOnScrollListener(new OnScrollListener() {
+                public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                    if (!PrivacyUsersActivity.this.getMessagesController().blockedEndReached) {
+                        i = Math.abs(PrivacyUsersActivity.this.layoutManager.findLastVisibleItemPosition() - PrivacyUsersActivity.this.layoutManager.findFirstVisibleItemPosition()) + 1;
+                        int itemCount = recyclerView.getAdapter().getItemCount();
+                        if (i > 0 && PrivacyUsersActivity.this.layoutManager.findLastVisibleItemPosition() >= itemCount - 10) {
+                            PrivacyUsersActivity.this.getMessagesController().getBlockedUsers(false);
+                        }
+                    }
+                }
+            });
+        }
+        if (getMessagesController().totalBlockedCount < 0) {
             this.emptyView.showProgress();
         } else {
             this.emptyView.showTextView();
@@ -385,7 +403,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     private void updateRows() {
         this.rowCount = 0;
-        if (!(this.blockedUsersActivity && getMessagesController().loadingBlockedUsers)) {
+        if (!this.blockedUsersActivity || getMessagesController().totalBlockedCount >= 0) {
             int i = this.rowCount;
             this.rowCount = i + 1;
             this.blockUserRow = i;

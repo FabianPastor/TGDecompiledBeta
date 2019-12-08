@@ -212,8 +212,6 @@
     <string name="AllowCustomQuickReply">Aangepast toestaan</string>
     <string name="AllowFillNumber">Sta het ontvangen van oproepen toe zodat we automatisch je telefoonnummer kunnen bevestigen.</string>
     <string name="AllowReadCall">Sta het ontvangen van oproepen toe zodat we automatisch je inlogcode kunnen invoeren.</string>
-    <string name="AllowReadCallAndSms">Sta het ontvangen van oproepen toe zodat we automatisch je telefoonnummer kunnen bevestigen.</string>
-    <string name="AllowReadSms">Sta het ontvangen van SMS toe zodat we automatisch je inlogcode kunnen invoeren.</string>
     <string name="AlternativeOptions">Andere opties</string>
     <string name="AlwaysAllow">Altijd toestaan</string>
     <string name="AlwaysShareWith">Altijd delen met</string>
@@ -976,7 +974,6 @@
     <string name="Emoji6">Dingen</string>
     <string name="Emoji7">Symbolen</string>
     <string name="Emoji8">Vlaggen</string>
-    <string name="EmojiBigSize">Grote emoji gebruiken</string>
     <string name="EmojiSuggestions">Emojisuggesties</string>
     <string name="EmojiSuggestionsInfo">**Telegram** maakt het mogelijk om emoji te vinden op basis van duizenden woorden, maar er zullen er altijd wat missen. Als je suggesties wilt doen om emoji\'s nog makkelijker te vinden kan dat via:\10</string>
     <string name="EmojiSuggestionsUrl">https://translations.telegram.org/%1$s/emoji</string>

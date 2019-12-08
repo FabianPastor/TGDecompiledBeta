@@ -38,7 +38,6 @@ public class SharedConfig {
     public static int distanceSystemType = 0;
     public static boolean drawDialogIcons = false;
     public static int fontSize = AndroidUtilities.dp(16.0f);
-    public static boolean groupPhotosEnabled = true;
     public static boolean hasCameraCache = false;
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter = false;
@@ -48,6 +47,7 @@ public class SharedConfig {
     public static String lastUpdateVersion = null;
     public static long lastUptimeMillis = 0;
     private static final Object localIdSync = new Object();
+    public static boolean loopStickers = false;
     public static int mapPreviewType = 2;
     public static boolean noSoundHintShowed = false;
     public static String passcodeHash = "";
@@ -209,7 +209,6 @@ public class SharedConfig {
             inappCamera = sharedPreferences.getBoolean("inappCamera", true);
             hasCameraCache = sharedPreferences.contains("cameraCache");
             roundCamera16to9 = true;
-            groupPhotosEnabled = sharedPreferences.getBoolean("groupPhotosEnabled", true);
             repeatMode = sharedPreferences.getInt("repeatMode", 0);
             fontSize = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
             allowBigEmoji = sharedPreferences.getBoolean("allowBigEmoji", true);
@@ -226,6 +225,7 @@ public class SharedConfig {
             archiveHidden = sharedPreferences.getBoolean("archiveHidden", false);
             distanceSystemType = sharedPreferences.getInt("distanceSystemType", 0);
             devicePerformanceClass = sharedPreferences.getInt("devicePerformanceClass", -1);
+            loopStickers = sharedPreferences.getBoolean("loopStickers", true);
             showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
             configLoaded = true;
         }
@@ -339,6 +339,20 @@ public class SharedConfig {
         suggestStickers = i;
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("suggestStickers", suggestStickers);
+        edit.commit();
+    }
+
+    public static void toggleLoopStickers() {
+        loopStickers ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("loopStickers", loopStickers);
+        edit.commit();
+    }
+
+    public static void toggleBigEmoji() {
+        allowBigEmoji ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("allowBigEmoji", allowBigEmoji);
         edit.commit();
     }
 
@@ -489,13 +503,6 @@ public class SharedConfig {
         roundCamera16to9 ^= 1;
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("roundCamera16to9", roundCamera16to9);
-        edit.commit();
-    }
-
-    public static void toggleGroupPhotosEnabled() {
-        groupPhotosEnabled ^= 1;
-        Editor edit = MessagesController.getGlobalMainSettings().edit();
-        edit.putBoolean("groupPhotosEnabled", groupPhotosEnabled);
         edit.commit();
     }
 

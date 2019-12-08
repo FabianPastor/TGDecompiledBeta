@@ -24,7 +24,6 @@ public class UserConfig extends BaseController {
     public static final int i_dialogsLoadOffsetUserId = 2;
     public static int selectedAccount;
     public long autoDownloadConfigLoadTime;
-    public boolean blockedUsersLoaded;
     public int botRatingLoadTime;
     public int clientUserId;
     private boolean configLoaded;
@@ -118,7 +117,6 @@ public class UserConfig extends BaseController {
                 edit.putInt("lastSendMessageId", this.lastSendMessageId);
                 edit.putInt("contactsSavedCount", this.contactsSavedCount);
                 edit.putInt("lastBroadcastId", this.lastBroadcastId);
-                edit.putBoolean("blockedUsersLoaded", this.blockedUsersLoaded);
                 edit.putInt("lastContactsSyncTime", this.lastContactsSyncTime);
                 edit.putInt("lastHintsSyncTime", this.lastHintsSyncTime);
                 edit.putBoolean("draftsLoaded", this.draftsLoaded);
@@ -235,267 +233,264 @@ public class UserConfig extends BaseController {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x00f0 A:{Catch:{ Exception -> 0x0109 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x0111 A:{Catch:{ Exception -> 0x0109 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x019e A:{Catch:{ Exception -> 0x0109 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x01ce A:{Catch:{ Exception -> 0x0109 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x01ee A:{Catch:{ Exception -> 0x0109 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x020a A:{Catch:{ Exception -> 0x0109 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x00e8 A:{Catch:{ Exception -> 0x0101 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x0109 A:{Catch:{ Exception -> 0x0101 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x0196 A:{Catch:{ Exception -> 0x0101 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x01c6 A:{Catch:{ Exception -> 0x0101 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x01e6 A:{Catch:{ Exception -> 0x0101 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0202 A:{Catch:{ Exception -> 0x0101 }} */
     public void loadConfig() {
         /*
         r13 = this;
         r0 = r13.sync;
         monitor-enter(r0);
-        r1 = r13.configLoaded;	 Catch:{ all -> 0x0214 }
+        r1 = r13.configLoaded;	 Catch:{ all -> 0x020c }
         if (r1 == 0) goto L_0x0009;
     L_0x0007:
-        monitor-exit(r0);	 Catch:{ all -> 0x0214 }
+        monitor-exit(r0);	 Catch:{ all -> 0x020c }
         return;
     L_0x0009:
-        r1 = r13.getPreferences();	 Catch:{ all -> 0x0214 }
-        r2 = r13.currentAccount;	 Catch:{ all -> 0x0214 }
+        r1 = r13.getPreferences();	 Catch:{ all -> 0x020c }
+        r2 = r13.currentAccount;	 Catch:{ all -> 0x020c }
         r3 = 0;
         if (r2 != 0) goto L_0x001a;
     L_0x0012:
         r2 = "selectedAccount";
-        r2 = r1.getInt(r2, r3);	 Catch:{ all -> 0x0214 }
-        selectedAccount = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getInt(r2, r3);	 Catch:{ all -> 0x020c }
+        selectedAccount = r2;	 Catch:{ all -> 0x020c }
     L_0x001a:
         r2 = "registeredForPush";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.registeredForPush = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.registeredForPush = r2;	 Catch:{ all -> 0x020c }
         r2 = "lastSendMessageId";
         r4 = -210000; // 0xfffffffffffccbb0 float:NaN double:NaN;
-        r2 = r1.getInt(r2, r4);	 Catch:{ all -> 0x0214 }
-        r13.lastSendMessageId = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getInt(r2, r4);	 Catch:{ all -> 0x020c }
+        r13.lastSendMessageId = r2;	 Catch:{ all -> 0x020c }
         r2 = "contactsSavedCount";
-        r2 = r1.getInt(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.contactsSavedCount = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getInt(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.contactsSavedCount = r2;	 Catch:{ all -> 0x020c }
         r2 = "lastBroadcastId";
         r4 = -1;
-        r2 = r1.getInt(r2, r4);	 Catch:{ all -> 0x0214 }
-        r13.lastBroadcastId = r2;	 Catch:{ all -> 0x0214 }
-        r2 = "blockedUsersLoaded";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.blockedUsersLoaded = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getInt(r2, r4);	 Catch:{ all -> 0x020c }
+        r13.lastBroadcastId = r2;	 Catch:{ all -> 0x020c }
         r2 = "lastContactsSyncTime";
-        r5 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x0214 }
+        r5 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x020c }
         r7 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 / r7;
-        r6 = (int) r5;	 Catch:{ all -> 0x0214 }
+        r6 = (int) r5;	 Catch:{ all -> 0x020c }
         r5 = 82800; // 0x14370 float:1.16028E-40 double:4.09086E-319;
         r6 = r6 - r5;
-        r2 = r1.getInt(r2, r6);	 Catch:{ all -> 0x0214 }
-        r13.lastContactsSyncTime = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getInt(r2, r6);	 Catch:{ all -> 0x020c }
+        r13.lastContactsSyncTime = r2;	 Catch:{ all -> 0x020c }
         r2 = "lastHintsSyncTime";
-        r5 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x0214 }
+        r5 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x020c }
         r5 = r5 / r7;
-        r6 = (int) r5;	 Catch:{ all -> 0x0214 }
+        r6 = (int) r5;	 Catch:{ all -> 0x020c }
         r5 = 90000; // 0x15var_ float:1.26117E-40 double:4.4466E-319;
         r6 = r6 - r5;
-        r2 = r1.getInt(r2, r6);	 Catch:{ all -> 0x0214 }
-        r13.lastHintsSyncTime = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getInt(r2, r6);	 Catch:{ all -> 0x020c }
+        r13.lastHintsSyncTime = r2;	 Catch:{ all -> 0x020c }
         r2 = "draftsLoaded";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.draftsLoaded = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.draftsLoaded = r2;	 Catch:{ all -> 0x020c }
         r2 = "unreadDialogsLoaded";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.unreadDialogsLoaded = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.unreadDialogsLoaded = r2;	 Catch:{ all -> 0x020c }
         r2 = "contactsReimported";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.contactsReimported = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.contactsReimported = r2;	 Catch:{ all -> 0x020c }
         r2 = "ratingLoadTime";
-        r2 = r1.getInt(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.ratingLoadTime = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getInt(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.ratingLoadTime = r2;	 Catch:{ all -> 0x020c }
         r2 = "botRatingLoadTime";
-        r2 = r1.getInt(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.botRatingLoadTime = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getInt(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.botRatingLoadTime = r2;	 Catch:{ all -> 0x020c }
         r2 = "loginTime";
-        r5 = r13.currentAccount;	 Catch:{ all -> 0x0214 }
-        r2 = r1.getInt(r2, r5);	 Catch:{ all -> 0x0214 }
-        r13.loginTime = r2;	 Catch:{ all -> 0x0214 }
+        r5 = r13.currentAccount;	 Catch:{ all -> 0x020c }
+        r2 = r1.getInt(r2, r5);	 Catch:{ all -> 0x020c }
+        r13.loginTime = r2;	 Catch:{ all -> 0x020c }
         r2 = "syncContacts";
         r5 = 1;
-        r2 = r1.getBoolean(r2, r5);	 Catch:{ all -> 0x0214 }
-        r13.syncContacts = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r5);	 Catch:{ all -> 0x020c }
+        r13.syncContacts = r2;	 Catch:{ all -> 0x020c }
         r2 = "suggestContacts";
-        r2 = r1.getBoolean(r2, r5);	 Catch:{ all -> 0x0214 }
-        r13.suggestContacts = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r5);	 Catch:{ all -> 0x020c }
+        r13.suggestContacts = r2;	 Catch:{ all -> 0x020c }
         r2 = "hasSecureData";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.hasSecureData = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.hasSecureData = r2;	 Catch:{ all -> 0x020c }
         r2 = "notificationsSettingsLoaded3";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.notificationsSettingsLoaded = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.notificationsSettingsLoaded = r2;	 Catch:{ all -> 0x020c }
         r2 = "notificationsSignUpSettingsLoaded";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        r13.notificationsSignUpSettingsLoaded = r2;	 Catch:{ all -> 0x0214 }
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x020c }
+        r13.notificationsSignUpSettingsLoaded = r2;	 Catch:{ all -> 0x020c }
         r2 = "autoDownloadConfigLoadTime";
         r6 = 0;
-        r8 = r1.getLong(r2, r6);	 Catch:{ all -> 0x0214 }
-        r13.autoDownloadConfigLoadTime = r8;	 Catch:{ all -> 0x0214 }
+        r8 = r1.getLong(r2, r6);	 Catch:{ all -> 0x020c }
+        r13.autoDownloadConfigLoadTime = r8;	 Catch:{ all -> 0x020c }
         r2 = "2dialogsLoadOffsetId";
-        r2 = r1.contains(r2);	 Catch:{ all -> 0x0214 }
-        if (r2 != 0) goto L_0x00e4;
-    L_0x00d9:
+        r2 = r1.contains(r2);	 Catch:{ all -> 0x020c }
+        if (r2 != 0) goto L_0x00dc;
+    L_0x00d1:
         r2 = "hasValidDialogLoadIds";
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x0214 }
-        if (r2 == 0) goto L_0x00e2;
-    L_0x00e1:
-        goto L_0x00e4;
-    L_0x00e2:
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x020c }
+        if (r2 == 0) goto L_0x00da;
+    L_0x00d9:
+        goto L_0x00dc;
+    L_0x00da:
         r2 = 0;
-        goto L_0x00e5;
-    L_0x00e4:
+        goto L_0x00dd;
+    L_0x00dc:
         r2 = 1;
-    L_0x00e5:
-        r13.hasValidDialogLoadIds = r2;	 Catch:{ all -> 0x0214 }
+    L_0x00dd:
+        r13.hasValidDialogLoadIds = r2;	 Catch:{ all -> 0x020c }
         r2 = 0;
         r8 = "terms";
-        r8 = r1.getString(r8, r2);	 Catch:{ Exception -> 0x0109 }
-        if (r8 == 0) goto L_0x010d;
-    L_0x00f0:
-        r8 = android.util.Base64.decode(r8, r3);	 Catch:{ Exception -> 0x0109 }
-        if (r8 == 0) goto L_0x010d;
-    L_0x00f6:
-        r9 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x0109 }
-        r9.<init>(r8);	 Catch:{ Exception -> 0x0109 }
-        r8 = r9.readInt32(r3);	 Catch:{ Exception -> 0x0109 }
-        r8 = org.telegram.tgnet.TLRPC.TL_help_termsOfService.TLdeserialize(r9, r8, r3);	 Catch:{ Exception -> 0x0109 }
-        r13.unacceptedTermsOfService = r8;	 Catch:{ Exception -> 0x0109 }
-        r9.cleanup();	 Catch:{ Exception -> 0x0109 }
-        goto L_0x010d;
+        r8 = r1.getString(r8, r2);	 Catch:{ Exception -> 0x0101 }
+        if (r8 == 0) goto L_0x0105;
+    L_0x00e8:
+        r8 = android.util.Base64.decode(r8, r3);	 Catch:{ Exception -> 0x0101 }
+        if (r8 == 0) goto L_0x0105;
+    L_0x00ee:
+        r9 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x0101 }
+        r9.<init>(r8);	 Catch:{ Exception -> 0x0101 }
+        r8 = r9.readInt32(r3);	 Catch:{ Exception -> 0x0101 }
+        r8 = org.telegram.tgnet.TLRPC.TL_help_termsOfService.TLdeserialize(r9, r8, r3);	 Catch:{ Exception -> 0x0101 }
+        r13.unacceptedTermsOfService = r8;	 Catch:{ Exception -> 0x0101 }
+        r9.cleanup();	 Catch:{ Exception -> 0x0101 }
+        goto L_0x0105;
+    L_0x0101:
+        r8 = move-exception;
+        org.telegram.messenger.FileLog.e(r8);	 Catch:{ all -> 0x020c }
+    L_0x0105:
+        r8 = r13.currentAccount;	 Catch:{ all -> 0x020c }
+        if (r8 != 0) goto L_0x018a;
     L_0x0109:
-        r8 = move-exception;
-        org.telegram.messenger.FileLog.e(r8);	 Catch:{ all -> 0x0214 }
-    L_0x010d:
-        r8 = r13.currentAccount;	 Catch:{ all -> 0x0214 }
-        if (r8 != 0) goto L_0x0192;
-    L_0x0111:
         r8 = "appUpdateCheckTime";
-        r9 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x0214 }
-        r8 = r1.getLong(r8, r9);	 Catch:{ all -> 0x0214 }
-        r13.lastUpdateCheckTime = r8;	 Catch:{ all -> 0x0214 }
+        r9 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x020c }
+        r8 = r1.getLong(r8, r9);	 Catch:{ all -> 0x020c }
+        r13.lastUpdateCheckTime = r8;	 Catch:{ all -> 0x020c }
         r8 = "appUpdate";
-        r8 = r1.getString(r8, r2);	 Catch:{ Exception -> 0x018e }
-        if (r8 == 0) goto L_0x0155;
-    L_0x0125:
+        r8 = r1.getString(r8, r2);	 Catch:{ Exception -> 0x0186 }
+        if (r8 == 0) goto L_0x014d;
+    L_0x011d:
         r9 = "appUpdateBuild";
-        r10 = org.telegram.messenger.BuildVars.BUILD_VERSION;	 Catch:{ Exception -> 0x018e }
-        r9 = r1.getInt(r9, r10);	 Catch:{ Exception -> 0x018e }
-        r13.pendingAppUpdateBuildVersion = r9;	 Catch:{ Exception -> 0x018e }
+        r10 = org.telegram.messenger.BuildVars.BUILD_VERSION;	 Catch:{ Exception -> 0x0186 }
+        r9 = r1.getInt(r9, r10);	 Catch:{ Exception -> 0x0186 }
+        r13.pendingAppUpdateBuildVersion = r9;	 Catch:{ Exception -> 0x0186 }
         r9 = "appUpdateTime";
-        r10 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x018e }
-        r9 = r1.getLong(r9, r10);	 Catch:{ Exception -> 0x018e }
-        r13.pendingAppUpdateInstallTime = r9;	 Catch:{ Exception -> 0x018e }
-        r8 = android.util.Base64.decode(r8, r3);	 Catch:{ Exception -> 0x018e }
-        if (r8 == 0) goto L_0x0155;
-    L_0x0141:
-        r9 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x018e }
-        r9.<init>(r8);	 Catch:{ Exception -> 0x018e }
-        r8 = r9.readInt32(r3);	 Catch:{ Exception -> 0x018e }
-        r8 = org.telegram.tgnet.TLRPC.help_AppUpdate.TLdeserialize(r9, r8, r3);	 Catch:{ Exception -> 0x018e }
-        r8 = (org.telegram.tgnet.TLRPC.TL_help_appUpdate) r8;	 Catch:{ Exception -> 0x018e }
-        r13.pendingAppUpdate = r8;	 Catch:{ Exception -> 0x018e }
-        r9.cleanup();	 Catch:{ Exception -> 0x018e }
-    L_0x0155:
-        r8 = r13.pendingAppUpdate;	 Catch:{ Exception -> 0x018e }
-        if (r8 == 0) goto L_0x0192;
-    L_0x0159:
-        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0172 }
-        r8 = r8.getPackageManager();	 Catch:{ Exception -> 0x0172 }
-        r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0172 }
-        r9 = r9.getPackageName();	 Catch:{ Exception -> 0x0172 }
-        r8 = r8.getPackageInfo(r9, r3);	 Catch:{ Exception -> 0x0172 }
-        r9 = r8.lastUpdateTime;	 Catch:{ Exception -> 0x0172 }
-        r11 = r8.firstInstallTime;	 Catch:{ Exception -> 0x0172 }
-        r8 = java.lang.Math.max(r9, r11);	 Catch:{ Exception -> 0x0172 }
-        goto L_0x0177;
-    L_0x0172:
+        r10 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0186 }
+        r9 = r1.getLong(r9, r10);	 Catch:{ Exception -> 0x0186 }
+        r13.pendingAppUpdateInstallTime = r9;	 Catch:{ Exception -> 0x0186 }
+        r8 = android.util.Base64.decode(r8, r3);	 Catch:{ Exception -> 0x0186 }
+        if (r8 == 0) goto L_0x014d;
+    L_0x0139:
+        r9 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x0186 }
+        r9.<init>(r8);	 Catch:{ Exception -> 0x0186 }
+        r8 = r9.readInt32(r3);	 Catch:{ Exception -> 0x0186 }
+        r8 = org.telegram.tgnet.TLRPC.help_AppUpdate.TLdeserialize(r9, r8, r3);	 Catch:{ Exception -> 0x0186 }
+        r8 = (org.telegram.tgnet.TLRPC.TL_help_appUpdate) r8;	 Catch:{ Exception -> 0x0186 }
+        r13.pendingAppUpdate = r8;	 Catch:{ Exception -> 0x0186 }
+        r9.cleanup();	 Catch:{ Exception -> 0x0186 }
+    L_0x014d:
+        r8 = r13.pendingAppUpdate;	 Catch:{ Exception -> 0x0186 }
+        if (r8 == 0) goto L_0x018a;
+    L_0x0151:
+        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x016a }
+        r8 = r8.getPackageManager();	 Catch:{ Exception -> 0x016a }
+        r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x016a }
+        r9 = r9.getPackageName();	 Catch:{ Exception -> 0x016a }
+        r8 = r8.getPackageInfo(r9, r3);	 Catch:{ Exception -> 0x016a }
+        r9 = r8.lastUpdateTime;	 Catch:{ Exception -> 0x016a }
+        r11 = r8.firstInstallTime;	 Catch:{ Exception -> 0x016a }
+        r8 = java.lang.Math.max(r9, r11);	 Catch:{ Exception -> 0x016a }
+        goto L_0x016f;
+    L_0x016a:
         r8 = move-exception;
-        org.telegram.messenger.FileLog.e(r8);	 Catch:{ Exception -> 0x018e }
+        org.telegram.messenger.FileLog.e(r8);	 Catch:{ Exception -> 0x0186 }
         r8 = r6;
-    L_0x0177:
-        r10 = r13.pendingAppUpdateBuildVersion;	 Catch:{ Exception -> 0x018e }
-        r11 = org.telegram.messenger.BuildVars.BUILD_VERSION;	 Catch:{ Exception -> 0x018e }
-        if (r10 != r11) goto L_0x0183;
-    L_0x017d:
-        r10 = r13.pendingAppUpdateInstallTime;	 Catch:{ Exception -> 0x018e }
+    L_0x016f:
+        r10 = r13.pendingAppUpdateBuildVersion;	 Catch:{ Exception -> 0x0186 }
+        r11 = org.telegram.messenger.BuildVars.BUILD_VERSION;	 Catch:{ Exception -> 0x0186 }
+        if (r10 != r11) goto L_0x017b;
+    L_0x0175:
+        r10 = r13.pendingAppUpdateInstallTime;	 Catch:{ Exception -> 0x0186 }
         r12 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1));
-        if (r12 >= 0) goto L_0x0192;
-    L_0x0183:
-        r13.pendingAppUpdate = r2;	 Catch:{ Exception -> 0x018e }
-        r8 = new org.telegram.messenger.-$$Lambda$UserConfig$HoXioNChxQlw-svExyMbii8fWo0;	 Catch:{ Exception -> 0x018e }
-        r8.<init>(r13);	 Catch:{ Exception -> 0x018e }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r8);	 Catch:{ Exception -> 0x018e }
-        goto L_0x0192;
-    L_0x018e:
+        if (r12 >= 0) goto L_0x018a;
+    L_0x017b:
+        r13.pendingAppUpdate = r2;	 Catch:{ Exception -> 0x0186 }
+        r8 = new org.telegram.messenger.-$$Lambda$UserConfig$HoXioNChxQlw-svExyMbii8fWo0;	 Catch:{ Exception -> 0x0186 }
+        r8.<init>(r13);	 Catch:{ Exception -> 0x0186 }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r8);	 Catch:{ Exception -> 0x0186 }
+        goto L_0x018a;
+    L_0x0186:
         r8 = move-exception;
-        org.telegram.messenger.FileLog.e(r8);	 Catch:{ all -> 0x0214 }
-    L_0x0192:
+        org.telegram.messenger.FileLog.e(r8);	 Catch:{ all -> 0x020c }
+    L_0x018a:
         r8 = "6migrateOffsetId";
-        r8 = r1.getInt(r8, r3);	 Catch:{ all -> 0x0214 }
-        r13.migrateOffsetId = r8;	 Catch:{ all -> 0x0214 }
-        r8 = r13.migrateOffsetId;	 Catch:{ all -> 0x0214 }
-        if (r8 == r4) goto L_0x01c6;
-    L_0x019e:
+        r8 = r1.getInt(r8, r3);	 Catch:{ all -> 0x020c }
+        r13.migrateOffsetId = r8;	 Catch:{ all -> 0x020c }
+        r8 = r13.migrateOffsetId;	 Catch:{ all -> 0x020c }
+        if (r8 == r4) goto L_0x01be;
+    L_0x0196:
         r4 = "6migrateOffsetDate";
-        r4 = r1.getInt(r4, r3);	 Catch:{ all -> 0x0214 }
-        r13.migrateOffsetDate = r4;	 Catch:{ all -> 0x0214 }
+        r4 = r1.getInt(r4, r3);	 Catch:{ all -> 0x020c }
+        r13.migrateOffsetDate = r4;	 Catch:{ all -> 0x020c }
         r4 = "6migrateOffsetUserId";
-        r4 = r1.getInt(r4, r3);	 Catch:{ all -> 0x0214 }
-        r13.migrateOffsetUserId = r4;	 Catch:{ all -> 0x0214 }
+        r4 = r1.getInt(r4, r3);	 Catch:{ all -> 0x020c }
+        r13.migrateOffsetUserId = r4;	 Catch:{ all -> 0x020c }
         r4 = "6migrateOffsetChatId";
-        r4 = r1.getInt(r4, r3);	 Catch:{ all -> 0x0214 }
-        r13.migrateOffsetChatId = r4;	 Catch:{ all -> 0x0214 }
+        r4 = r1.getInt(r4, r3);	 Catch:{ all -> 0x020c }
+        r13.migrateOffsetChatId = r4;	 Catch:{ all -> 0x020c }
         r4 = "6migrateOffsetChannelId";
-        r4 = r1.getInt(r4, r3);	 Catch:{ all -> 0x0214 }
-        r13.migrateOffsetChannelId = r4;	 Catch:{ all -> 0x0214 }
+        r4 = r1.getInt(r4, r3);	 Catch:{ all -> 0x020c }
+        r13.migrateOffsetChannelId = r4;	 Catch:{ all -> 0x020c }
         r4 = "6migrateOffsetAccess";
-        r6 = r1.getLong(r4, r6);	 Catch:{ all -> 0x0214 }
-        r13.migrateOffsetAccess = r6;	 Catch:{ all -> 0x0214 }
-    L_0x01c6:
+        r6 = r1.getLong(r4, r6);	 Catch:{ all -> 0x020c }
+        r13.migrateOffsetAccess = r6;	 Catch:{ all -> 0x020c }
+    L_0x01be:
         r4 = "tmpPassword";
-        r4 = r1.getString(r4, r2);	 Catch:{ all -> 0x0214 }
-        if (r4 == 0) goto L_0x01e6;
-    L_0x01ce:
-        r4 = android.util.Base64.decode(r4, r3);	 Catch:{ all -> 0x0214 }
-        if (r4 == 0) goto L_0x01e6;
-    L_0x01d4:
-        r6 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x0214 }
-        r6.<init>(r4);	 Catch:{ all -> 0x0214 }
-        r4 = r6.readInt32(r3);	 Catch:{ all -> 0x0214 }
-        r4 = org.telegram.tgnet.TLRPC.TL_account_tmpPassword.TLdeserialize(r6, r4, r3);	 Catch:{ all -> 0x0214 }
-        r13.tmpPassword = r4;	 Catch:{ all -> 0x0214 }
-        r6.cleanup();	 Catch:{ all -> 0x0214 }
-    L_0x01e6:
+        r4 = r1.getString(r4, r2);	 Catch:{ all -> 0x020c }
+        if (r4 == 0) goto L_0x01de;
+    L_0x01c6:
+        r4 = android.util.Base64.decode(r4, r3);	 Catch:{ all -> 0x020c }
+        if (r4 == 0) goto L_0x01de;
+    L_0x01cc:
+        r6 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x020c }
+        r6.<init>(r4);	 Catch:{ all -> 0x020c }
+        r4 = r6.readInt32(r3);	 Catch:{ all -> 0x020c }
+        r4 = org.telegram.tgnet.TLRPC.TL_account_tmpPassword.TLdeserialize(r6, r4, r3);	 Catch:{ all -> 0x020c }
+        r13.tmpPassword = r4;	 Catch:{ all -> 0x020c }
+        r6.cleanup();	 Catch:{ all -> 0x020c }
+    L_0x01de:
         r4 = "user";
-        r1 = r1.getString(r4, r2);	 Catch:{ all -> 0x0214 }
-        if (r1 == 0) goto L_0x0206;
-    L_0x01ee:
-        r1 = android.util.Base64.decode(r1, r3);	 Catch:{ all -> 0x0214 }
-        if (r1 == 0) goto L_0x0206;
-    L_0x01f4:
-        r2 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x0214 }
-        r2.<init>(r1);	 Catch:{ all -> 0x0214 }
-        r1 = r2.readInt32(r3);	 Catch:{ all -> 0x0214 }
-        r1 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r2, r1, r3);	 Catch:{ all -> 0x0214 }
-        r13.currentUser = r1;	 Catch:{ all -> 0x0214 }
-        r2.cleanup();	 Catch:{ all -> 0x0214 }
-    L_0x0206:
-        r1 = r13.currentUser;	 Catch:{ all -> 0x0214 }
-        if (r1 == 0) goto L_0x0210;
-    L_0x020a:
-        r1 = r13.currentUser;	 Catch:{ all -> 0x0214 }
-        r1 = r1.id;	 Catch:{ all -> 0x0214 }
-        r13.clientUserId = r1;	 Catch:{ all -> 0x0214 }
-    L_0x0210:
-        r13.configLoaded = r5;	 Catch:{ all -> 0x0214 }
-        monitor-exit(r0);	 Catch:{ all -> 0x0214 }
+        r1 = r1.getString(r4, r2);	 Catch:{ all -> 0x020c }
+        if (r1 == 0) goto L_0x01fe;
+    L_0x01e6:
+        r1 = android.util.Base64.decode(r1, r3);	 Catch:{ all -> 0x020c }
+        if (r1 == 0) goto L_0x01fe;
+    L_0x01ec:
+        r2 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x020c }
+        r2.<init>(r1);	 Catch:{ all -> 0x020c }
+        r1 = r2.readInt32(r3);	 Catch:{ all -> 0x020c }
+        r1 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r2, r1, r3);	 Catch:{ all -> 0x020c }
+        r13.currentUser = r1;	 Catch:{ all -> 0x020c }
+        r2.cleanup();	 Catch:{ all -> 0x020c }
+    L_0x01fe:
+        r1 = r13.currentUser;	 Catch:{ all -> 0x020c }
+        if (r1 == 0) goto L_0x0208;
+    L_0x0202:
+        r1 = r13.currentUser;	 Catch:{ all -> 0x020c }
+        r1 = r1.id;	 Catch:{ all -> 0x020c }
+        r13.clientUserId = r1;	 Catch:{ all -> 0x020c }
+    L_0x0208:
+        r13.configLoaded = r5;	 Catch:{ all -> 0x020c }
+        monitor-exit(r0);	 Catch:{ all -> 0x020c }
         return;
-    L_0x0214:
+    L_0x020c:
         r1 = move-exception;
-        monitor-exit(r0);	 Catch:{ all -> 0x0214 }
+        monitor-exit(r0);	 Catch:{ all -> 0x020c }
         throw r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.UserConfig.loadConfig():void");
@@ -554,7 +549,6 @@ public class UserConfig extends BaseController {
         this.contactsSavedCount = 0;
         this.lastSendMessageId = -210000;
         this.lastBroadcastId = -1;
-        this.blockedUsersLoaded = false;
         this.notificationsSettingsLoaded = false;
         this.notificationsSignUpSettingsLoaded = false;
         this.migrateOffsetId = -1;

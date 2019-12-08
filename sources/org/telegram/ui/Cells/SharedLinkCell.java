@@ -138,10 +138,9 @@ public class SharedLinkCell extends FrameLayout {
         this.linkImageView = new ImageReceiver(this);
         this.linkImageView.setRoundRadius(AndroidUtilities.dp(4.0f));
         this.letterDrawable = new LetterDrawable();
-        this.checkBox = new CheckBox2(context);
+        this.checkBox = new CheckBox2(context, 21);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(null, "windowBackgroundWhite", "checkboxCheck");
-        this.checkBox.setSize(21);
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(2);
         addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 44.0f, 44.0f, LocaleController.isRTL ? 44.0f : 0.0f, 0.0f));

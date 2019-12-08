@@ -212,8 +212,6 @@
     <string name="AllowCustomQuickReply">맞춤 허용</string>
     <string name="AllowFillNumber">텔레그램이 전화를 받을 수 있도록 허용해 주셔야 회원님의 전화번호를 자동으로 확인할 수 있습니다.</string>
     <string name="AllowReadCall">텔레그램이 전화를 수신 할 수 있도록 설정해주셔야 자동으로 코드 입력이 가능합니다.</string>
-    <string name="AllowReadCallAndSms">텔레그램이 전화를 받을 수 있도록 허용해 주시면 전화번호가 자동으로 확인됩니다.</string>
-    <string name="AllowReadSms">텔레그램이 SMS를 받을 수 있도록 허락해 주셔야 자동으로 코드를 입력해 드릴 수 있습니다.</string>
     <string name="AlternativeOptions">대체 옵션</string>
     <string name="AlwaysAllow">항상 허용</string>
     <string name="AlwaysShareWith">항상 공유할 사람</string>
@@ -976,7 +974,6 @@
     <string name="Emoji6">사물</string>
     <string name="Emoji7">특수문자</string>
     <string name="Emoji8">깃발</string>
-    <string name="EmojiBigSize">큰 이모지 하나 그리기</string>
     <string name="EmojiSuggestions">이모지 추천</string>
     <string name="EmojiSuggestionsInfo">**텔레그램**에서 여러분이 이모지를 손쉽게 찾으실 수 있도록 수천 개의 키워드를 지원해 드리지만, 누락된 키워드들이란 있기 마련입니다. 이모지 대치어를 새로 제안하려면 다음 사이트를 방문해 주세요:</string>
     <string name="EmojiSuggestionsUrl">https://translations.telegram.org/%1$s/emoji</string>

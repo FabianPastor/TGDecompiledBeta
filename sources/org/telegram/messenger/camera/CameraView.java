@@ -23,7 +23,7 @@ import org.telegram.messenger.AndroidUtilities;
 @SuppressLint({"NewApi"})
 public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private CameraSession cameraSession;
-    private int clipLeft;
+    private int clipBottom;
     private int clipTop;
     private int cx;
     private int cy;
@@ -81,6 +81,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
 
     public boolean isFrontface() {
         return this.isFrontface;
+    }
+
+    public TextureView getTextureView() {
+        return this.textureView;
     }
 
     public boolean hasFrontFaceCamera() {
@@ -258,15 +262,30 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         r15.cameraSession = r3;
         r0 = org.telegram.messenger.camera.CameraController.getInstance();
         r2 = r15.cameraSession;
-        r3 = new org.telegram.messenger.camera.CameraView$1;
-        r3.<init>();
-        r4 = new org.telegram.messenger.camera.CameraView$2;
-        r4.<init>();
+        r3 = new org.telegram.messenger.camera.-$$Lambda$CameraView$p1Q9XvCpkKK5Re9wn8tNGeDQ4vs;
+        r3.<init>(r15);
+        r4 = new org.telegram.messenger.camera.-$$Lambda$CameraView$l4G-1k9CLASSNAMEfFIDGX-fnY3ljxHc0;
+        r4.<init>(r15);
         r0.open(r2, r1, r3, r4);
     L_0x0122:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraView.initCamera():void");
+    }
+
+    public /* synthetic */ void lambda$initCamera$0$CameraView() {
+        CameraSession cameraSession = this.cameraSession;
+        if (cameraSession != null) {
+            cameraSession.setInitied();
+        }
+        checkPreviewMatrix();
+    }
+
+    public /* synthetic */ void lambda$initCamera$1$CameraView() {
+        CameraViewDelegate cameraViewDelegate = this.delegate;
+        if (cameraViewDelegate != null) {
+            cameraViewDelegate.onCameraCreated(this.cameraSession.cameraInfo.camera);
+        }
     }
 
     public Size getPreviewSize() {
@@ -305,8 +324,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.clipTop = i;
     }
 
-    public void setClipLeft(int i) {
-        this.clipLeft = i;
+    public void setClipBottom(int i) {
+        this.clipBottom = i;
     }
 
     private void checkPreviewMatrix() {
@@ -324,9 +343,9 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         float f = (float) (width / 2);
         float f2 = (float) (height / 2);
         if (i3 == 0 || i3 == 2) {
-            max = Math.max(((float) (this.clipTop + height)) / ((float) i), ((float) (this.clipLeft + width)) / ((float) i2));
+            max = Math.max(((float) ((this.clipTop + height) + this.clipBottom)) / ((float) i), ((float) width) / ((float) i2));
         } else {
-            max = Math.max(((float) (this.clipTop + height)) / ((float) i2), ((float) (this.clipLeft + width)) / ((float) i));
+            max = Math.max(((float) ((this.clipTop + height) + this.clipBottom)) / ((float) i2), ((float) width) / ((float) i));
         }
         float f3 = (float) width;
         float f4 = (float) height;
@@ -339,8 +358,14 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         if (this.mirror) {
             this.txform.postScale(-1.0f, 1.0f, f, f2);
         }
-        if (!(this.clipTop == 0 && this.clipLeft == 0)) {
-            this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
+        i = this.clipTop;
+        if (i != 0) {
+            this.txform.postTranslate(0.0f, (float) ((-i) / 2));
+        } else {
+            i = this.clipBottom;
+            if (i != 0) {
+                this.txform.postTranslate(0.0f, (float) (i / 2));
+            }
         }
         this.textureView.setTransform(this.txform);
         Matrix matrix = new Matrix();
@@ -396,6 +421,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             cameraSession.destroy();
             CameraController.getInstance().close(this.cameraSession, !z ? new CountDownLatch(1) : null, runnable);
         }
+    }
+
+    public Matrix getMatrix() {
+        return this.txform;
     }
 
     /* Access modifiers changed, original: protected */

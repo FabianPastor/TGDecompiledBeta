@@ -172,7 +172,8 @@ public class PollCreateActivity extends BaseFragment {
         }
 
         public void onViewAttachedToWindow(ViewHolder viewHolder) {
-            if (viewHolder.getItemViewType() == 0) {
+            int itemViewType = viewHolder.getItemViewType();
+            if (itemViewType == 0 || itemViewType == 5) {
                 PollCreateActivity.this.setTextLeft(viewHolder.itemView, viewHolder.getAdapterPosition() == PollCreateActivity.this.questionHeaderRow ? -1 : 0);
             }
         }

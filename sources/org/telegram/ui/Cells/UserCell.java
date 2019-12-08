@@ -191,19 +191,15 @@ public class UserCell extends FrameLayout {
         }
     }
 
-    public void setIsAdmin(int i) {
+    public void setAdminRole(String str) {
         TextView textView = this.adminTextView;
         if (textView != null) {
-            textView.setVisibility(i != 0 ? 0 : 8);
-            if (i == 1) {
-                this.adminTextView.setText(LocaleController.getString("ChannelCreator", NUM));
-            } else if (i == 2) {
-                this.adminTextView.setText(LocaleController.getString("ChannelAdmin", NUM));
-            }
-            if (i != 0) {
+            textView.setVisibility(str != null ? 0 : 8);
+            this.adminTextView.setText(str);
+            if (str != null) {
                 CharSequence text = this.adminTextView.getText();
-                i = (int) Math.ceil((double) this.adminTextView.getPaint().measureText(text, 0, text.length()));
-                this.nameTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(6.0f) + i : 0, 0, !LocaleController.isRTL ? i + AndroidUtilities.dp(6.0f) : 0, 0);
+                int ceil = (int) Math.ceil((double) this.adminTextView.getPaint().measureText(text, 0, text.length()));
+                this.nameTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(6.0f) + ceil : 0, 0, !LocaleController.isRTL ? ceil + AndroidUtilities.dp(6.0f) : 0, 0);
             } else {
                 this.nameTextView.setPadding(0, 0, 0, 0);
             }
@@ -607,14 +603,14 @@ public class UserCell extends FrameLayout {
         goto L_0x0125;
     L_0x0116:
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d01d5 float:1.8743066E38 double:1.0531300093E-314;
+        r2 = NUM; // 0x7f0d01d7 float:1.874307E38 double:1.0531300102E-314;
         r5 = "BotStatusCantRead";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);
         goto L_0x0191;
     L_0x0125:
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d01d6 float:1.8743068E38 double:1.05313001E-314;
+        r2 = NUM; // 0x7f0d01d8 float:1.8743072E38 double:1.0531300107E-314;
         r5 = "BotStatusRead";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);
@@ -658,7 +654,7 @@ public class UserCell extends FrameLayout {
         r2 = r12.statusOnlineColor;
         r13.setTextColor(r2);
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d06dd float:1.8745678E38 double:1.0531306456E-314;
+        r2 = NUM; // 0x7f0d06f1 float:1.8745719E38 double:1.0531306555E-314;
         r5 = "Online";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);

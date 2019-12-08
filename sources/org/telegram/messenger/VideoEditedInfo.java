@@ -7,6 +7,7 @@ import org.telegram.tgnet.TLRPC.InputFile;
 public class VideoEditedInfo {
     public int bitrate;
     public InputEncryptedFile encryptedFile;
+    public float end;
     public long endTime;
     public long estimatedDuration;
     public long estimatedSize;
@@ -22,6 +23,7 @@ public class VideoEditedInfo {
     public int resultWidth;
     public int rotationValue;
     public boolean roundVideo;
+    public float start;
     public long startTime;
 
     public String getString() {

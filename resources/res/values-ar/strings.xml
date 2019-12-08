@@ -212,8 +212,6 @@
     <string name="AllowCustomQuickReply">السماح برسائل مخصصة</string>
     <string name="AllowFillNumber">رجاءً قم بالسماح لتيليجرام بتلقي المكالمات للتمكن من تفعيل رقم هاتفك تلقائيًا.</string>
     <string name="AllowReadCall">فصلًا قم بالسماح لتيليجرام باستقبال اتصالات ليتمكن من إدخال الرمز لك تلقائيًا.</string>
-    <string name="AllowReadCallAndSms">رجاءً قم بالسماح لتيليجرام بتلقي المكالمات للتمكن من تفعيل رقم هاتفك تلقائيًا.</string>
-    <string name="AllowReadSms">فضلًا قم بالسماح لتيليجرام بتلقي رسائل SMS القصيرة ليتمكن من تفعيل حسابك تلقائيًا.</string>
     <string name="AlternativeOptions">خيارات بديلة</string>
     <string name="AlwaysAllow">السماح دائمًا</string>
     <string name="AlwaysShareWith">المشاركة دائمًا مع</string>
@@ -976,7 +974,6 @@
     <string name="Emoji6">أدوات</string>
     <string name="Emoji7">رموز</string>
     <string name="Emoji8">أعلام</string>
-    <string name="EmojiBigSize">رسمُ رمز تعبيري واحد كبير</string>
     <string name="EmojiSuggestions">اقتراحات الرموز التعبيرية</string>
     <string name="EmojiSuggestionsInfo">يسمح لك **تيليجرام** بالعثور على الرموز التعبيرية عبر آلاف الكلمات، لكن من المؤكد أنه لايزال هناك نقصٌ ما، في حال كنت ترغب في اقتراح كلمة مفتاحية جديدة لرمز تعبيري ما، يمكنك مساعدتنا عبر زيارة:</string>
     <string name="EmojiSuggestionsUrl">https://translations.telegram.org/%1$s/emoji</string>
