@@ -7029,10 +7029,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     public void onLowMemory() {
         super.onLowMemory();
-        this.actionBarLayout.onLowMemory();
-        if (AndroidUtilities.isTablet()) {
-            this.rightActionBarLayout.onLowMemory();
-            this.layersActionBarLayout.onLowMemory();
+        ActionBarLayout actionBarLayout = this.actionBarLayout;
+        if (actionBarLayout != null) {
+            actionBarLayout.onLowMemory();
+            if (AndroidUtilities.isTablet()) {
+                this.rightActionBarLayout.onLowMemory();
+                this.layersActionBarLayout.onLowMemory();
+            }
         }
     }
 

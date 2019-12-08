@@ -11553,6 +11553,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             this.animatingImageView.setImageBitmap(this.centerImage.getBitmapSafe());
                             drawRegion = null;
                         }
+                        if (layoutParams.width == 0) {
+                            layoutParams.width = 1;
+                        }
+                        if (layoutParams.height == 0) {
+                            layoutParams.height = 1;
+                        }
                         this.animatingImageView.setLayoutParams(layoutParams);
                         float measuredWidth = ((float) this.windowView.getMeasuredWidth()) / ((float) layoutParams.width);
                         float f = ((float) (AndroidUtilities.displaySize.y + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / ((float) layoutParams.height);
