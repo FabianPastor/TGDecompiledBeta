@@ -2011,7 +2011,7 @@ public class FileLoadOperation {
                     if (this.ungzip) {
                         try {
                             GZIPInputStream gZIPInputStream = new GZIPInputStream(new FileInputStream(file));
-                            FileLoader.copyFile(gZIPInputStream, this.cacheFileGzipTemp);
+                            FileLoader.copyFile(gZIPInputStream, this.cacheFileGzipTemp, 2097152);
                             gZIPInputStream.close();
                             this.cacheFileTemp.delete();
                             this.cacheFileTemp = this.cacheFileGzipTemp;

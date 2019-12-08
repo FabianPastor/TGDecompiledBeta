@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseIntArray;
@@ -51,7 +52,7 @@ import org.telegram.tgnet.TLRPC.Updates;
 import org.telegram.tgnet.TLRPC.messages_Messages;
 
 public class LocationController extends BaseController implements NotificationCenterDelegate, ConnectionCallbacks, OnConnectionFailedListener {
-    private static final int BACKGROUD_UPDATE_TIME = 90000;
+    private static final int BACKGROUD_UPDATE_TIME = 30000;
     private static final long FASTEST_INTERVAL = 1000;
     private static final int FOREGROUND_UPDATE_TIME = 20000;
     private static volatile LocationController[] Instance = new LocationController[3];
@@ -59,7 +60,6 @@ public class LocationController extends BaseController implements NotificationCe
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final long UPDATE_INTERVAL = 1000;
     private static HashMap<LocationFetchCallback, Runnable> callbacks = new HashMap();
-    private static final double eps = 1.0E-4d;
     private LongSparseArray<Boolean> cacheRequests = new LongSparseArray();
     private ArrayList<TL_peerLocated> cachedNearbyChats = new ArrayList();
     private ArrayList<TL_peerLocated> cachedNearbyUsers = new ArrayList();
@@ -105,7 +105,7 @@ public class LocationController extends BaseController implements NotificationCe
                     LocationController.this.setLastKnownLocation(location);
                 } else if (!LocationController.this.started && location.distanceTo(LocationController.this.lastKnownLocation) > 20.0f) {
                     LocationController.this.setLastKnownLocation(location);
-                    LocationController.this.lastLocationSendTime = (System.currentTimeMillis() - 90000) + 5000;
+                    LocationController.this.lastLocationSendTime = (SystemClock.uptimeMillis() - 30000) + 5000;
                 }
             }
         }
@@ -359,6 +359,7 @@ public class LocationController extends BaseController implements NotificationCe
                 this.requests.clear();
             }
             i = getConnectionsManager().getCurrentTime();
+            float[] fArr = new float[1];
             for (int i2 = 0; i2 < this.sharingLocations.size(); i2++) {
                 SharingLocationInfo sharingLocationInfo = (SharingLocationInfo) this.sharingLocations.get(i2);
                 Message message = sharingLocationInfo.messageObject.messageOwner;
@@ -369,7 +370,10 @@ public class LocationController extends BaseController implements NotificationCe
                         i3 = message.date;
                     }
                     GeoPoint geoPoint = sharingLocationInfo.messageObject.messageOwner.media.geo;
-                    if (Math.abs(i - i3) < 30 && Math.abs(geoPoint.lat - this.lastKnownLocation.getLatitude()) <= 1.0E-4d && Math.abs(geoPoint._long - this.lastKnownLocation.getLongitude()) <= 1.0E-4d) {
+                    if (Math.abs(i - i3) < 10) {
+                        Location.distanceBetween(geoPoint.lat, geoPoint._long, this.lastKnownLocation.getLatitude(), this.lastKnownLocation.getLongitude(), fArr);
+                        if (fArr[0] < 1.0f) {
+                        }
                     }
                 }
                 TL_messages_editMessage tL_messages_editMessage = new TL_messages_editMessage();
@@ -382,7 +386,7 @@ public class LocationController extends BaseController implements NotificationCe
                 inputMedia.geo_point = new TL_inputGeoPoint();
                 tL_messages_editMessage.media.geo_point.lat = AndroidUtilities.fixLocationCoord(this.lastKnownLocation.getLatitude());
                 tL_messages_editMessage.media.geo_point._long = AndroidUtilities.fixLocationCoord(this.lastKnownLocation.getLongitude());
-                this.requests.put(new int[]{getConnectionsManager().sendRequest(tL_messages_editMessage, new -$$Lambda$LocationController$nSJH9qZNTlSrmnG1la3CG2Fuy4c(this, sharingLocationInfo, r5))}[0], 0);
+                this.requests.put(new int[]{getConnectionsManager().sendRequest(tL_messages_editMessage, new -$$Lambda$LocationController$nSJH9qZNTlSrmnG1la3CG2Fuy4c(this, sharingLocationInfo, r4))}[0], 0);
             }
             getConnectionsManager().resumeNetworkMaybe();
             stop(false);
@@ -443,14 +447,14 @@ public class LocationController extends BaseController implements NotificationCe
                 i++;
             }
             if (this.started) {
-                if (this.lastLocationByGoogleMaps || Math.abs(this.lastLocationStartTime - System.currentTimeMillis()) > 10000) {
+                if (this.lastLocationByGoogleMaps || Math.abs(this.lastLocationStartTime - SystemClock.uptimeMillis()) > 10000) {
                     this.lastLocationByGoogleMaps = false;
                     this.locationSentSinceLastGoogleMapUpdate = true;
-                    this.lastLocationSendTime = System.currentTimeMillis();
+                    this.lastLocationSendTime = SystemClock.uptimeMillis();
                     broadcastLastKnownLocation();
                 }
-            } else if (Math.abs(this.lastLocationSendTime - System.currentTimeMillis()) > 90000) {
-                this.lastLocationStartTime = System.currentTimeMillis();
+            } else if (Math.abs(this.lastLocationSendTime - SystemClock.uptimeMillis()) > 30000) {
+                this.lastLocationStartTime = SystemClock.uptimeMillis();
                 start();
             }
         }
@@ -519,7 +523,7 @@ public class LocationController extends BaseController implements NotificationCe
         }
         this.sharingLocations.add(sharingLocationInfo);
         saveSharingLocation(sharingLocationInfo, 0);
-        this.lastLocationSendTime = (System.currentTimeMillis() - 90000) + 5000;
+        this.lastLocationSendTime = (SystemClock.uptimeMillis() - 30000) + 5000;
         AndroidUtilities.runOnUIThread(new -$$Lambda$LocationController$Pu-U11hvPEurl1Ab6Bm2sYLQ1rg(this, sharingLocationInfo2, sharingLocationInfo));
     }
 
@@ -752,13 +756,13 @@ public class LocationController extends BaseController implements NotificationCe
                 Location location2 = this.lastKnownLocation;
                 if (location2 == null || location2.distanceTo(location) < 20.0f) {
                     if (this.locationSentSinceLastGoogleMapUpdate) {
-                        this.lastLocationSendTime = (System.currentTimeMillis() - 90000) + 20000;
+                        this.lastLocationSendTime = (SystemClock.uptimeMillis() - 30000) + 20000;
                         this.locationSentSinceLastGoogleMapUpdate = false;
                     }
                     setLastKnownLocation(location);
                 }
             }
-            this.lastLocationSendTime = System.currentTimeMillis() - 90000;
+            this.lastLocationSendTime = SystemClock.uptimeMillis() - 30000;
             this.locationSentSinceLastGoogleMapUpdate = false;
             setLastKnownLocation(location);
         }
@@ -773,7 +777,7 @@ public class LocationController extends BaseController implements NotificationCe
     L_0x0004:
         return;
     L_0x0005:
-        r0 = java.lang.System.currentTimeMillis();
+        r0 = android.os.SystemClock.uptimeMillis();
         r7.lastLocationStartTime = r0;
         r0 = 1;
         r7.started = r0;

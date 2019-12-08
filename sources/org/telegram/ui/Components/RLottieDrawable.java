@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
 import org.telegram.messenger.AndroidUtilities;
@@ -51,9 +52,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private final int[] metaData;
     private volatile long nativePtr;
     private boolean needGenerateCache;
+    private HashMap<String, Integer> newColorUpdates;
     private volatile boolean nextFrameIsLast;
     private volatile Bitmap nextRenderingBitmap;
     private ArrayList<WeakReference<View>> parentViews;
+    private volatile HashMap<String, Integer> pendingColorUpdates;
     private volatile Bitmap renderingBitmap;
     private float scaleX;
     private float scaleY;
@@ -111,6 +114,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2) {
         this.metaData = new int[3];
+        this.newColorUpdates = new HashMap();
+        this.pendingColorUpdates = new HashMap();
         this.autoRepeat = true;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
@@ -179,6 +184,12 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                     RLottieDrawable.this.needGenerateCache = false;
                                     return;
                                 }
+                                if (!RLottieDrawable.this.pendingColorUpdates.isEmpty()) {
+                                    for (Entry entry : RLottieDrawable.this.pendingColorUpdates.entrySet()) {
+                                        RLottieDrawable.setLayerColor(RLottieDrawable.this.nativePtr, (String) entry.getKey(), ((Integer) entry.getValue()).intValue());
+                                    }
+                                    RLottieDrawable.this.pendingColorUpdates.clear();
+                                }
                                 RLottieDrawable.getFrame(RLottieDrawable.this.nativePtr, RLottieDrawable.this.currentFrame, RLottieDrawable.this.backgroundBitmap, RLottieDrawable.this.width, RLottieDrawable.this.height, RLottieDrawable.this.backgroundBitmap.getRowBytes());
                                 int i = 2;
                                 if (RLottieDrawable.this.metaData[2] != 0 && RLottieDrawable.this.cacheGenerateTask == null) {
@@ -233,6 +244,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public RLottieDrawable(int i, String str, int i2, int i3, boolean z) {
         this.metaData = new int[3];
+        this.newColorUpdates = new HashMap();
+        this.pendingColorUpdates = new HashMap();
         this.autoRepeat = true;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
@@ -434,18 +447,16 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setLayerColor(String str, int i) {
-        if (this.nativePtr != 0) {
-            setLayerColor(this.nativePtr, str, i);
-            if (!(this.applyingLayerColors || this.isRunning || !this.decodeSingleFrame)) {
-                resetCurrentFrame();
-                this.nextFrameIsLast = false;
-                this.singleFrameDecoded = false;
-                if (!scheduleNextGetFrame()) {
-                    this.forceFrameRedraw = true;
-                }
+        this.newColorUpdates.put(str, Integer.valueOf(i));
+        if (!(this.applyingLayerColors || this.isRunning || !this.decodeSingleFrame)) {
+            resetCurrentFrame();
+            this.nextFrameIsLast = false;
+            this.singleFrameDecoded = false;
+            if (!scheduleNextGetFrame()) {
+                this.forceFrameRedraw = true;
             }
-            invalidateSelf();
         }
+        invalidateSelf();
     }
 
     /* JADX WARNING: Missing block: B:16:0x0024, code skipped:
@@ -455,35 +466,45 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         /*
         r5 = this;
         r0 = r5.cacheGenerateTask;
-        if (r0 != 0) goto L_0x0034;
+        if (r0 != 0) goto L_0x0048;
     L_0x0004:
         r0 = r5.nextRenderingBitmap;
-        if (r0 != 0) goto L_0x0034;
+        if (r0 != 0) goto L_0x0048;
     L_0x0008:
         r0 = r5.loadFrameTask;
-        if (r0 != 0) goto L_0x0034;
+        if (r0 != 0) goto L_0x0048;
     L_0x000c:
         r0 = r5.nativePtr;
         r2 = 0;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 == 0) goto L_0x0034;
+        if (r4 == 0) goto L_0x0048;
     L_0x0014:
         r0 = r5.destroyWhenDone;
-        if (r0 != 0) goto L_0x0034;
+        if (r0 != 0) goto L_0x0048;
     L_0x0018:
         r0 = r5.isRunning;
         if (r0 != 0) goto L_0x0027;
     L_0x001c:
         r0 = r5.decodeSingleFrame;
-        if (r0 == 0) goto L_0x0034;
+        if (r0 == 0) goto L_0x0048;
     L_0x0020:
         if (r0 == 0) goto L_0x0027;
     L_0x0022:
         r0 = r5.singleFrameDecoded;
         if (r0 == 0) goto L_0x0027;
     L_0x0026:
-        goto L_0x0034;
+        goto L_0x0048;
     L_0x0027:
+        r0 = r5.newColorUpdates;
+        r0 = r0.isEmpty();
+        if (r0 != 0) goto L_0x003b;
+    L_0x002f:
+        r0 = r5.pendingColorUpdates;
+        r1 = r5.newColorUpdates;
+        r0.putAll(r1);
+        r0 = r5.newColorUpdates;
+        r0.clear();
+    L_0x003b:
         r0 = executor;
         r1 = r5.loadFrameRunnable;
         r5.loadFrameTask = r1;
@@ -491,7 +512,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         r0.schedule(r1, r2, r4);
         r0 = 1;
         return r0;
-    L_0x0034:
+    L_0x0048:
         r0 = 0;
         return r0;
         */
