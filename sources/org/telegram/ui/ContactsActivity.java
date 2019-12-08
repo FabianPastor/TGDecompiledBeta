@@ -966,7 +966,11 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 arrayList.add(str);
                 arrayList.add("android.permission.WRITE_CONTACTS");
                 arrayList.add("android.permission.GET_ACCOUNTS");
-                parentActivity.requestPermissions((String[]) arrayList.toArray(new String[0]), 1);
+                try {
+                    parentActivity.requestPermissions((String[]) arrayList.toArray(new String[0]), 1);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
             }
         }
     }
