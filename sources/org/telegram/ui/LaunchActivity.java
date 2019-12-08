@@ -913,7 +913,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0552:
         r2 = r12.toLowerCase();	 Catch:{ Exception -> 0x05a3 }
     L_0x0556:
-        r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION;	 Catch:{ Exception -> 0x05a3 }
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x05a3 }
         if (r0 == 0) goto L_0x0576;
     L_0x055a:
         r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x05a3 }

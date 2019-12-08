@@ -61,7 +61,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                 int i;
                 if (!AnimatedFileDrawable.this.decoderCreated && AnimatedFileDrawable.this.nativePtr == 0) {
                     AnimatedFileDrawable animatedFileDrawable = AnimatedFileDrawable.this;
-                    animatedFileDrawable.nativePtr = AnimatedFileDrawable.createDecoder(animatedFileDrawable.path.getAbsolutePath(), AnimatedFileDrawable.this.metaData, AnimatedFileDrawable.this.currentAccount, AnimatedFileDrawable.this.streamFileSize, AnimatedFileDrawable.this.stream);
+                    animatedFileDrawable.nativePtr = AnimatedFileDrawable.createDecoder(animatedFileDrawable.path.getAbsolutePath(), AnimatedFileDrawable.this.metaData, AnimatedFileDrawable.this.currentAccount, AnimatedFileDrawable.this.streamFileSize, AnimatedFileDrawable.this.stream, false);
                     AnimatedFileDrawable.this.decoderCreated = true;
                 }
                 try {
@@ -220,7 +220,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     };
     private boolean useSharedQueue;
 
-    private static native long createDecoder(String str, int[] iArr, int i, long j, Object obj);
+    private static native long createDecoder(String str, int[] iArr, int i, long j, Object obj, boolean z);
 
     private static native void destroyDecoder(long j);
 
@@ -271,7 +271,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             this.stream = new AnimatedFileDrawableStream(document, obj, i, z2);
         }
         if (z) {
-            this.nativePtr = createDecoder(file.getAbsolutePath(), this.metaData, this.currentAccount, this.streamFileSize, this.stream);
+            this.nativePtr = createDecoder(file.getAbsolutePath(), this.metaData, this.currentAccount, this.streamFileSize, this.stream, z2);
             this.decoderCreated = true;
         }
     }
@@ -370,8 +370,13 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         if (animatedFileDrawableStream != null) {
             animatedFileDrawableStream.cancel(true);
         }
-        if (z && this.nativePtr != 0) {
+        if (this.nativePtr == 0) {
+            return;
+        }
+        if (z) {
             stopDecoder(this.nativePtr);
+        } else {
+            prepareToSeek(this.nativePtr);
         }
     }
 
