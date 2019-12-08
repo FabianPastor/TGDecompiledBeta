@@ -2638,7 +2638,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1[r10] = r2;
         r2 = "PinToTopLimitReached";
         r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1);
-        org.telegram.ui.Components.AlertsCreator.showSimpleToast(r7, r0);
+        org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r7, r0);
         r0 = r7.pinItem;
         r1 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         org.telegram.messenger.AndroidUtilities.shakeView(r0, r1, r10);

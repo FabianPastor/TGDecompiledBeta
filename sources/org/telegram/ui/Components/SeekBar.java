@@ -26,6 +26,14 @@ public class SeekBar {
     private int width;
 
     public interface SeekBarDelegate {
+
+        public final /* synthetic */ class -CC {
+            public static void $default$onSeekBarContinuousDrag(SeekBarDelegate seekBarDelegate, float f) {
+            }
+        }
+
+        void onSeekBarContinuousDrag(float f);
+
         void onSeekBarDrag(float f);
     }
 
@@ -41,6 +49,7 @@ public class SeekBar {
     }
 
     public boolean onTouch(int i, float f, float f2) {
+        SeekBarDelegate seekBarDelegate;
         if (i == 0) {
             i = this.height;
             int i2 = thumbWidth;
@@ -54,7 +63,7 @@ public class SeekBar {
         } else if (i == 1 || i == 3) {
             if (this.pressed) {
                 if (i == 1) {
-                    SeekBarDelegate seekBarDelegate = this.delegate;
+                    seekBarDelegate = this.delegate;
                     if (seekBarDelegate != null) {
                         seekBarDelegate.onSeekBarDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
                     }
@@ -73,6 +82,10 @@ public class SeekBar {
                 if (i > i5 - i6) {
                     this.thumbX = i5 - i6;
                 }
+            }
+            seekBarDelegate = this.delegate;
+            if (seekBarDelegate != null) {
+                seekBarDelegate.onSeekBarContinuousDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
             }
             return true;
         }
@@ -109,6 +122,10 @@ public class SeekBar {
         return ((float) this.thumbX) / ((float) (this.width - thumbWidth));
     }
 
+    public int getThumbX() {
+        return this.thumbX + (thumbWidth / 2);
+    }
+
     public boolean isDragging() {
         return this.pressed;
     }
@@ -120,6 +137,10 @@ public class SeekBar {
     public void setSize(int i, int i2) {
         this.width = i;
         this.height = i2;
+    }
+
+    public int getWidth() {
+        return this.width - thumbWidth;
     }
 
     public void setLineHeight(int i) {

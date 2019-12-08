@@ -550,16 +550,21 @@ public class UndoView extends FrameLayout {
         r1 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r0.undoViewHeight = r1;
-        goto L_0x02fc;
+        goto L_0x02ec;
     L_0x02a8:
         r1 = r16.getParent();
         r1 = r1 instanceof android.view.ViewGroup;
-        if (r1 == 0) goto L_0x02fc;
+        if (r1 == 0) goto L_0x02ec;
     L_0x02b0:
         r1 = r16.getParent();
         r1 = (android.view.ViewGroup) r1;
-        r2 = r0.infoTextView;
         r1 = r1.getMeasuredWidth();
+        if (r1 != 0) goto L_0x02c0;
+    L_0x02bc:
+        r1 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r1 = r1.x;
+    L_0x02c0:
+        r2 = r0.infoTextView;
         r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r3);
         r3 = 0;
@@ -578,18 +583,10 @@ public class UndoView extends FrameLayout {
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r1 = r1 + r2;
         r0.undoViewHeight = r1;
-        r1 = new java.lang.StringBuilder;
-        r1.<init>();
-        r2 = "h = ";
-        r1.append(r2);
-        r2 = r0.undoViewHeight;
-        r1.append(r2);
-        r1 = r1.toString();
-        org.telegram.messenger.FileLog.d(r1);
-    L_0x02fc:
+    L_0x02ec:
         r1 = r16.getVisibility();
-        if (r1 == 0) goto L_0x0348;
-    L_0x0302:
+        if (r1 == 0) goto L_0x0338;
+    L_0x02f2:
         r0.setVisibility(r15);
         r1 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
@@ -621,7 +618,7 @@ public class UndoView extends FrameLayout {
         r2 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
         r1.setDuration(r2);
         r1.start();
-    L_0x0348:
+    L_0x0338:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.UndoView.showWithAction(long, int, java.lang.Object, java.lang.Runnable, java.lang.Runnable):void");

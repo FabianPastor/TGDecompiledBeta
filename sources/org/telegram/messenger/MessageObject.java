@@ -111,7 +111,6 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messageService;
 import org.telegram.tgnet.TLRPC.TL_message_secret;
-import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC.TL_pageBlockCollage;
 import org.telegram.tgnet.TLRPC.TL_pageBlockPhoto;
 import org.telegram.tgnet.TLRPC.TL_pageBlockSlideshow;
@@ -138,7 +137,6 @@ import org.telegram.tgnet.TLRPC.TL_secureValueTypePhone;
 import org.telegram.tgnet.TLRPC.TL_secureValueTypeRentalAgreement;
 import org.telegram.tgnet.TLRPC.TL_secureValueTypeTemporaryRegistration;
 import org.telegram.tgnet.TLRPC.TL_secureValueTypeUtilityBill;
-import org.telegram.tgnet.TLRPC.TL_stickerPack;
 import org.telegram.tgnet.TLRPC.TL_webPage;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.WebDocument;
@@ -1779,23 +1777,7 @@ public class MessageObject {
             checkEmojiOnly(iArr);
             this.emojiAnimatedSticker = null;
             if (this.emojiOnlyCount == 1) {
-                String replace = this.messageText.toString().replace("️", "");
-                ArrayList stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(4);
-                int size = stickerSets.size();
-                for (int i6 = 0; i6 < size; i6++) {
-                    TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) stickerSets.get(i6);
-                    int size2 = tL_messages_stickerSet.packs.size();
-                    for (int i7 = 0; i7 < size2; i7++) {
-                        TL_stickerPack tL_stickerPack = (TL_stickerPack) tL_messages_stickerSet.packs.get(i7);
-                        if (!tL_stickerPack.documents.isEmpty() && TextUtils.equals(tL_stickerPack.emoticon, replace)) {
-                            this.emojiAnimatedSticker = (Document) MediaDataController.getInstance(this.currentAccount).getStickerByIds(4).get(((Long) tL_stickerPack.documents.get(0)).longValue());
-                            break;
-                        }
-                    }
-                    if (this.emojiAnimatedSticker != null) {
-                        break;
-                    }
-                }
+                this.emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(this.messageText);
             }
             if (this.emojiAnimatedSticker == null) {
                 generateLayout(user);

@@ -3527,7 +3527,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             ChatAttachAlert.this.cameraAnimationInProgress = false;
-                            if (VERSION.SDK_INT >= 21) {
+                            if (VERSION.SDK_INT >= 21 && ChatAttachAlert.this.cameraView != null) {
                                 ChatAttachAlert.this.cameraView.invalidateOutline();
                             }
                             ChatAttachAlert.this.cameraOpened = false;

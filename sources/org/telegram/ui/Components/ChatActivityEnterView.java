@@ -1528,7 +1528,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
                 if (obj != null || this.animationProgress != 1.0f) {
-                    Theme.dialogs_onlinePaint.setColor(Theme.getColor(str));
+                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(str));
                     int dp = AndroidUtilities.dp(20.0f);
                     int dp2;
                     if (obj != null) {
@@ -1553,10 +1553,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         dp = dp2;
                     } else {
                         dp2 = (int) ((1.0f - this.animationProgress) * 255.0f);
-                        Theme.dialogs_onlinePaint.setAlpha(dp2);
+                        Theme.dialogs_onlineCirclePaint.setAlpha(dp2);
                         ChatActivityEnterView.this.sendButtonInverseDrawable.setAlpha(dp2);
                     }
-                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) dp, Theme.dialogs_onlinePaint);
+                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) dp, Theme.dialogs_onlineCirclePaint);
                     ChatActivityEnterView.this.sendButtonInverseDrawable.setBounds(measuredWidth, measuredHeight, ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicWidth() + measuredWidth, ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicHeight() + measuredHeight);
                     ChatActivityEnterView.this.sendButtonInverseDrawable.draw(canvas);
                 }

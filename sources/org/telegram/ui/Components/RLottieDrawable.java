@@ -202,11 +202,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             RLottieDrawable.this.needGenerateCache = false;
                             return;
                         }
-                        if (!RLottieDrawable.this.pendingColorUpdates.isEmpty()) {
-                            for (Entry entry : RLottieDrawable.this.pendingColorUpdates.entrySet()) {
-                                RLottieDrawable.setLayerColor(RLottieDrawable.this.nativePtr, (String) entry.getKey(), ((Integer) entry.getValue()).intValue());
+                        try {
+                            if (!RLottieDrawable.this.pendingColorUpdates.isEmpty()) {
+                                for (Entry entry : RLottieDrawable.this.pendingColorUpdates.entrySet()) {
+                                    RLottieDrawable.setLayerColor(RLottieDrawable.this.nativePtr, (String) entry.getKey(), ((Integer) entry.getValue()).intValue());
+                                }
+                                RLottieDrawable.this.pendingColorUpdates.clear();
                             }
-                            RLottieDrawable.this.pendingColorUpdates.clear();
+                        } catch (Exception unused) {
                         }
                         RLottieDrawable.getFrame(RLottieDrawable.this.nativePtr, RLottieDrawable.this.currentFrame, RLottieDrawable.this.backgroundBitmap, RLottieDrawable.this.width, RLottieDrawable.this.height, RLottieDrawable.this.backgroundBitmap.getRowBytes());
                         if (RLottieDrawable.this.metaData[2] != 0) {

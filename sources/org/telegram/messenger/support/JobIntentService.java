@@ -43,7 +43,10 @@ public abstract class JobIntentService extends Service {
                     return null;
                 }
                 JobIntentService.this.onHandleWork(dequeueWork.getIntent());
-                dequeueWork.complete();
+                try {
+                    dequeueWork.complete();
+                } catch (Throwable unused) {
+                }
             }
         }
 

@@ -1173,7 +1173,7 @@ public class ActionBarLayout extends FrameLayout {
                     view2.setLayoutParams(layoutParams);
                 }
                 baseFragment.onTransitionAnimationStart(true, true);
-                baseFragment2.onTransitionAnimationStart(false, false);
+                baseFragment2.onTransitionAnimationStart(false, true);
                 baseFragment.onResume();
                 if (this.themeAnimatorSet != null) {
                     this.presentingFragmentDescriptions = baseFragment.getThemeDescriptions();
@@ -1212,7 +1212,7 @@ public class ActionBarLayout extends FrameLayout {
                         return;
                     }
                 }
-                baseFragment2.onTransitionAnimationEnd(false, false);
+                baseFragment2.onTransitionAnimationEnd(false, true);
                 baseFragment.onTransitionAnimationEnd(true, true);
                 baseFragment.onBecomeFullyVisible();
             } else if (this.useAlphaAnimations) {
@@ -1261,7 +1261,7 @@ public class ActionBarLayout extends FrameLayout {
             this.containerViewBack.setTranslationX(0.0f);
         }
         closeLastFragmentInternalRemoveOld(baseFragment);
-        baseFragment.onTransitionAnimationEnd(false, false);
+        baseFragment.onTransitionAnimationEnd(false, true);
         baseFragment2.onTransitionAnimationEnd(true, true);
         baseFragment2.onBecomeFullyVisible();
     }

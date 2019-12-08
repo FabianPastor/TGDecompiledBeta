@@ -100,6 +100,7 @@ import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.Components.RoundVideoPlayingDrawable;
 import org.telegram.ui.Components.SeekBar;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
+import org.telegram.ui.Components.SeekBar.SeekBarDelegate.-CC;
 import org.telegram.ui.Components.SeekBarWaveform;
 import org.telegram.ui.Components.StaticLayoutEx;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -996,6 +997,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             z = false;
         }
         return z;
+    }
+
+    public /* synthetic */ void onSeekBarContinuousDrag(float f) {
+        -CC.$default$onSeekBarContinuousDrag(this, f);
     }
 
     public ChatMessageCell(Context context) {
@@ -2647,7 +2652,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
 
     /* JADX WARNING: Removed duplicated region for block: B:21:0x004c  */
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0045  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0144  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x014d  */
     private boolean checkPhotoImageMotionEvent(android.view.MotionEvent r9) {
         /*
         r8 = this;
@@ -2667,7 +2672,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         r3 = (int) r3;
         r4 = r9.getAction();
         r5 = -1;
-        if (r4 != 0) goto L_0x016e;
+        if (r4 != 0) goto L_0x0177;
     L_0x001c:
         r9 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
@@ -2701,7 +2706,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     L_0x0045:
         r8.miniButtonPressed = r2;
         r8.invalidate();
-        goto L_0x0140;
+        goto L_0x0149;
     L_0x004c:
         r4 = r8.buttonState;
         if (r4 == r5) goto L_0x006e;
@@ -2725,7 +2730,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     L_0x0067:
         r8.buttonPressed = r2;
         r8.invalidate();
-        goto L_0x0140;
+        goto L_0x0149;
     L_0x006e:
         r9 = r8.drawVideoImageButton;
         if (r9 == 0) goto L_0x00a0;
@@ -2755,14 +2760,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     L_0x0099:
         r8.videoButtonPressed = r2;
         r8.invalidate();
-        goto L_0x0140;
+        goto L_0x0149;
     L_0x00a0:
         r9 = r8.documentAttachType;
-        if (r9 != r2) goto L_0x00d8;
+        if (r9 != r2) goto L_0x00d9;
     L_0x00a4:
         r9 = r8.photoImage;
         r9 = r9.getImageX();
-        if (r0 < r9) goto L_0x00e9;
+        if (r0 < r9) goto L_0x00f2;
     L_0x00ac:
         r9 = r8.photoImage;
         r9 = r9.getImageX();
@@ -2771,67 +2776,71 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         r4 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r9 = r9 - r4;
-        if (r0 > r9) goto L_0x00e9;
+        if (r0 > r9) goto L_0x00f2;
     L_0x00be:
         r9 = r8.photoImage;
         r9 = r9.getImageY();
-        if (r3 < r9) goto L_0x00e9;
+        if (r3 < r9) goto L_0x00f2;
     L_0x00c6:
         r9 = r8.photoImage;
         r9 = r9.getImageY();
         r0 = r8.photoImage;
         r0 = r0.getImageHeight();
         r9 = r9 + r0;
-        if (r3 > r9) goto L_0x00e9;
+        if (r3 > r9) goto L_0x00f2;
     L_0x00d5:
         r8.imagePressed = r2;
-        goto L_0x0140;
-    L_0x00d8:
+        goto L_0x0149;
+    L_0x00d9:
         r9 = r8.currentMessageObject;
         r9 = r9.isAnyKindOfSticker();
-        if (r9 == 0) goto L_0x00eb;
-    L_0x00e0:
+        if (r9 == 0) goto L_0x00f4;
+    L_0x00e1:
         r9 = r8.currentMessageObject;
         r9 = r9.getInputStickerSet();
-        if (r9 == 0) goto L_0x00e9;
-    L_0x00e8:
-        goto L_0x00eb;
+        if (r9 != 0) goto L_0x00f4;
     L_0x00e9:
+        r9 = r8.currentMessageObject;
+        r9 = r9.isAnimatedEmoji();
+        if (r9 == 0) goto L_0x00f2;
+    L_0x00f1:
+        goto L_0x00f4;
+    L_0x00f2:
         r2 = 0;
-        goto L_0x0140;
-    L_0x00eb:
+        goto L_0x0149;
+    L_0x00f4:
         r9 = r8.photoImage;
         r9 = r9.getImageX();
-        if (r0 < r9) goto L_0x011c;
-    L_0x00f3:
+        if (r0 < r9) goto L_0x0125;
+    L_0x00fc:
         r9 = r8.photoImage;
         r9 = r9.getImageX();
         r4 = r8.photoImage;
         r4 = r4.getImageWidth();
         r9 = r9 + r4;
-        if (r0 > r9) goto L_0x011c;
-    L_0x0102:
+        if (r0 > r9) goto L_0x0125;
+    L_0x010b:
         r9 = r8.photoImage;
         r9 = r9.getImageY();
-        if (r3 < r9) goto L_0x011c;
-    L_0x010a:
+        if (r3 < r9) goto L_0x0125;
+    L_0x0113:
         r9 = r8.photoImage;
         r9 = r9.getImageY();
         r0 = r8.photoImage;
         r0 = r0.getImageHeight();
         r9 = r9 + r0;
-        if (r3 > r9) goto L_0x011c;
-    L_0x0119:
+        if (r3 > r9) goto L_0x0125;
+    L_0x0122:
         r8.imagePressed = r2;
-        goto L_0x011d;
-    L_0x011c:
+        goto L_0x0126;
+    L_0x0125:
         r2 = 0;
-    L_0x011d:
+    L_0x0126:
         r9 = r8.currentMessageObject;
         r9 = r9.type;
         r0 = 12;
-        if (r9 != r0) goto L_0x0140;
-    L_0x0125:
+        if (r9 != r0) goto L_0x0149;
+    L_0x012e:
         r9 = r8.currentAccount;
         r9 = org.telegram.messenger.MessagesController.getInstance(r9);
         r0 = r8.currentMessageObject;
@@ -2840,108 +2849,108 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         r0 = r0.user_id;
         r0 = java.lang.Integer.valueOf(r0);
         r9 = r9.getUser(r0);
-        if (r9 != 0) goto L_0x0140;
-    L_0x013d:
+        if (r9 != 0) goto L_0x0149;
+    L_0x0146:
         r8.imagePressed = r1;
-        goto L_0x00e9;
-    L_0x0140:
+        goto L_0x00f2;
+    L_0x0149:
         r9 = r8.imagePressed;
-        if (r9 == 0) goto L_0x016c;
-    L_0x0144:
+        if (r9 == 0) goto L_0x0175;
+    L_0x014d:
         r9 = r8.currentMessageObject;
         r9 = r9.isSendError();
-        if (r9 == 0) goto L_0x0150;
-    L_0x014c:
+        if (r9 == 0) goto L_0x0159;
+    L_0x0155:
         r8.imagePressed = r1;
-        goto L_0x01d3;
-    L_0x0150:
+        goto L_0x01dc;
+    L_0x0159:
         r9 = r8.currentMessageObject;
         r9 = r9.type;
         r0 = 8;
-        if (r9 != r0) goto L_0x016c;
-    L_0x0158:
+        if (r9 != r0) goto L_0x0175;
+    L_0x0161:
         r9 = r8.buttonState;
-        if (r9 != r5) goto L_0x016c;
-    L_0x015c:
+        if (r9 != r5) goto L_0x0175;
+    L_0x0165:
         r9 = org.telegram.messenger.SharedConfig.autoplayGifs;
-        if (r9 == 0) goto L_0x016c;
-    L_0x0160:
+        if (r9 == 0) goto L_0x0175;
+    L_0x0169:
         r9 = r8.photoImage;
         r9 = r9.getAnimation();
-        if (r9 != 0) goto L_0x016c;
-    L_0x0168:
+        if (r9 != 0) goto L_0x0175;
+    L_0x0171:
         r8.imagePressed = r1;
-        goto L_0x01d3;
-    L_0x016c:
+        goto L_0x01dc;
+    L_0x0175:
         r1 = r2;
-        goto L_0x01d3;
-    L_0x016e:
+        goto L_0x01dc;
+    L_0x0177:
         r9 = r9.getAction();
-        if (r9 != r2) goto L_0x01d3;
-    L_0x0174:
+        if (r9 != r2) goto L_0x01dc;
+    L_0x017d:
         r9 = r8.videoButtonPressed;
-        if (r9 != r2) goto L_0x0184;
-    L_0x0178:
+        if (r9 != r2) goto L_0x018d;
+    L_0x0181:
         r8.videoButtonPressed = r1;
         r8.playSoundEffect(r1);
         r8.didPressButton(r2, r2);
         r8.invalidate();
-        goto L_0x01d3;
-    L_0x0184:
+        goto L_0x01dc;
+    L_0x018d:
         r9 = r8.buttonPressed;
-        if (r9 != r2) goto L_0x019c;
-    L_0x0188:
+        if (r9 != r2) goto L_0x01a5;
+    L_0x0191:
         r8.buttonPressed = r1;
         r8.playSoundEffect(r1);
         r9 = r8.drawVideoImageButton;
-        if (r9 == 0) goto L_0x0195;
-    L_0x0191:
+        if (r9 == 0) goto L_0x019e;
+    L_0x019a:
         r8.didClickedImage();
-        goto L_0x0198;
-    L_0x0195:
+        goto L_0x01a1;
+    L_0x019e:
         r8.didPressButton(r2, r1);
-    L_0x0198:
+    L_0x01a1:
         r8.invalidate();
-        goto L_0x01d3;
-    L_0x019c:
+        goto L_0x01dc;
+    L_0x01a5:
         r9 = r8.miniButtonPressed;
-        if (r9 != r2) goto L_0x01ac;
-    L_0x01a0:
+        if (r9 != r2) goto L_0x01b5;
+    L_0x01a9:
         r8.miniButtonPressed = r1;
         r8.playSoundEffect(r1);
         r8.didPressMiniButton(r2);
         r8.invalidate();
-        goto L_0x01d3;
-    L_0x01ac:
+        goto L_0x01dc;
+    L_0x01b5:
         r9 = r8.imagePressed;
-        if (r9 == 0) goto L_0x01d3;
-    L_0x01b0:
+        if (r9 == 0) goto L_0x01dc;
+    L_0x01b9:
         r8.imagePressed = r1;
         r9 = r8.buttonState;
-        if (r9 == r5) goto L_0x01ca;
-    L_0x01b6:
+        if (r9 == r5) goto L_0x01d3;
+    L_0x01bf:
         r0 = 2;
-        if (r9 == r0) goto L_0x01ca;
-    L_0x01b9:
+        if (r9 == r0) goto L_0x01d3;
+    L_0x01c2:
         r0 = 3;
-        if (r9 == r0) goto L_0x01ca;
-    L_0x01bc:
+        if (r9 == r0) goto L_0x01d3;
+    L_0x01c5:
         r0 = r8.drawVideoImageButton;
-        if (r0 == 0) goto L_0x01c1;
-    L_0x01c0:
-        goto L_0x01ca;
-    L_0x01c1:
-        if (r9 != 0) goto L_0x01d0;
-    L_0x01c3:
+        if (r0 == 0) goto L_0x01ca;
+    L_0x01c9:
+        goto L_0x01d3;
+    L_0x01ca:
+        if (r9 != 0) goto L_0x01d9;
+    L_0x01cc:
         r8.playSoundEffect(r1);
         r8.didPressButton(r2, r1);
-        goto L_0x01d0;
-    L_0x01ca:
+        goto L_0x01d9;
+    L_0x01d3:
         r8.playSoundEffect(r1);
         r8.didClickedImage();
-    L_0x01d0:
+    L_0x01d9:
         r8.invalidate();
-    L_0x01d3:
+    L_0x01dc:
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.checkPhotoImageMotionEvent(android.view.MotionEvent):boolean");

@@ -745,6 +745,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             this.pickerBottomLayout.doneButton.setOnClickListener(new -$$Lambda$PhotoPickerActivity$mGdvO16vUkJ4QAJ7aZX42E0io7E(this));
             if (this.selectPhotoType != 0) {
                 this.pickerBottomLayout.setVisibility(8);
+                this.shadowView.setVisibility(8);
             }
         }
         if ((this.selectedAlbum != null || this.type == 0) && this.allowOrder) {

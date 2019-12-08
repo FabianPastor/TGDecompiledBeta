@@ -4102,7 +4102,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
     /* Access modifiers changed, original: protected */
     public void onTransitionAnimationStart(boolean z, boolean z2) {
-        if (!(z && z2) && !z2 && this.playProfileAnimation && this.allowProfileAnimation) {
+        if (((!z && z2) || (z && !z2)) && this.playProfileAnimation && this.allowProfileAnimation) {
             this.openAnimationInProgress = true;
         }
         if (z) {
