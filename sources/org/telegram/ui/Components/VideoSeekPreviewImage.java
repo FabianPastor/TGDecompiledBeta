@@ -153,7 +153,7 @@ public class VideoSeekPreviewImage extends View {
                 dp = (int) (((float) dp) / width);
                 i = i2;
             } else {
-                i = (int) (((float) dp) / width);
+                i = (int) (((float) dp) * width);
             }
             LayoutParams layoutParams = getLayoutParams();
             if (!(getVisibility() == 0 && layoutParams.width == i && layoutParams.height == dp)) {

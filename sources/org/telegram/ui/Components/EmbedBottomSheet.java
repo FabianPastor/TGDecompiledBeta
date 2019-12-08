@@ -94,6 +94,7 @@ public class EmbedBottomSheet extends BottomSheet {
     private int prevOrientation = -2;
     private RadialProgressView progressBar;
     private View progressBarBlackBackground;
+    private int seekTimeOverride;
     private WebPlayerView videoView;
     private int waitingForDraw;
     private boolean wasInLandscape;
@@ -125,20 +126,25 @@ public class EmbedBottomSheet extends BottomSheet {
     }
 
     public static void show(Context context, String str, String str2, String str3, String str4, int i, int i2) {
+        show(context, str, str2, str3, str4, i, i2, -1);
+    }
+
+    public static void show(Context context, String str, String str2, String str3, String str4, int i, int i2, int i3) {
         EmbedBottomSheet embedBottomSheet = instance;
         if (embedBottomSheet != null) {
             embedBottomSheet.destroy();
         }
-        new EmbedBottomSheet(context, str, str2, str3, str4, i, i2).show();
+        new EmbedBottomSheet(context, str, str2, str3, str4, i, i2, i3).show();
     }
 
     @SuppressLint({"SetJavaScriptEnabled"})
-    private EmbedBottomSheet(Context context, String str, String str2, String str3, String str4, int i, int i2) {
+    private EmbedBottomSheet(Context context, String str, String str2, String str3, String str4, int i, int i2, int i3) {
         Context context2 = context;
         String str5 = str2;
         super(context2, false, 0);
         setApplyTopPadding(false);
         setApplyBottomPadding(false);
+        this.seekTimeOverride = i3;
         if (context2 instanceof Activity) {
             this.parentActivity = (Activity) context2;
         }
@@ -248,7 +254,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 }
             }
         });
-        int i3 = 22;
+        int i4 = 22;
         this.containerLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) ((this.hasDescription ? 22 : 0) + 84)));
         this.videoView = new WebPlayerView(context2, true, false, new WebPlayerViewDelegate() {
             public void onSharePressed() {
@@ -503,9 +509,9 @@ public class EmbedBottomSheet extends BottomSheet {
         FrameLayout frameLayout = this.containerLayout;
         RadialProgressView radialProgressView = this.progressBar;
         if (!this.hasDescription) {
-            i3 = 0;
+            i4 = 0;
         }
-        frameLayout.addView(radialProgressView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, (float) ((i3 + 84) / 2)));
+        frameLayout.addView(radialProgressView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, (float) ((i4 + 84) / 2)));
         String str6 = "fonts/rmedium.ttf";
         if (this.hasDescription) {
             TextView textView = new TextView(context2);
@@ -623,25 +629,31 @@ public class EmbedBottomSheet extends BottomSheet {
                         int intValue;
                         EmbedBottomSheet.this.progressBarBlackBackground.setVisibility(0);
                         EmbedBottomSheet.this.isYouTube = true;
+                        String str2 = null;
                         if (VERSION.SDK_INT >= 17) {
                             EmbedBottomSheet.this.webView.addJavascriptInterface(new YoutubeProxy(EmbedBottomSheet.this, null), "YoutubeProxy");
                         }
                         if (EmbedBottomSheet.this.openUrl != null) {
                             try {
                                 Uri parse = Uri.parse(EmbedBottomSheet.this.openUrl);
-                                String queryParameter = parse.getQueryParameter("ot");
-                                if (queryParameter == null) {
-                                    queryParameter = parse.getQueryParameter("t");
-                                    if (queryParameter == null) {
-                                        queryParameter = parse.getQueryParameter("time_continue");
+                                if (EmbedBottomSheet.this.seekTimeOverride > 0) {
+                                    StringBuilder stringBuilder = new StringBuilder();
+                                    stringBuilder.append("");
+                                    stringBuilder.append(EmbedBottomSheet.this.seekTimeOverride);
+                                    str2 = stringBuilder.toString();
+                                }
+                                if (str2 == null) {
+                                    str2 = parse.getQueryParameter("t");
+                                    if (str2 == null) {
+                                        str2 = parse.getQueryParameter("time_continue");
                                     }
                                 }
-                                if (queryParameter != null) {
-                                    if (queryParameter.contains(str)) {
-                                        String[] split = queryParameter.split(str);
+                                if (str2 != null) {
+                                    if (str2.contains(str)) {
+                                        String[] split = str2.split(str);
                                         intValue = (Utilities.parseInt(split[0]).intValue() * 60) + Utilities.parseInt(split[1]).intValue();
                                     } else {
-                                        intValue = Utilities.parseInt(queryParameter).intValue();
+                                        intValue = Utilities.parseInt(str2).intValue();
                                     }
                                     EmbedBottomSheet.this.webView.loadDataWithBaseURL("https://www.youtube.com", String.format(Locale.US, "<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var observer;   var videoEl;   var playing;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 0,                              \"showinfo\" : 0,                              \"modestbranding\" : 1,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function hideControls() {        playing = !videoEl.paused;       videoEl.controls = 0;       observer.observe(videoEl, {attributes: true});    }    function showControls() {        playing = !videoEl.paused;       observer.disconnect();       videoEl.controls = 1;    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();       videoEl = player.getIframe().contentDocument.getElementsByTagName('video')[0];\n       videoEl.addEventListener(\"canplay\", function() {            if (playing) {               videoEl.play();            }       }, true);       videoEl.addEventListener(\"timeupdate\", function() {            if (!posted && videoEl.currentTime > 0) {               if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);                }               posted = true;           }       }, true);       observer = new MutationObserver(function() {\n          if (videoEl.controls) {\n               videoEl.controls = 0;\n          }       });\n    }    window.onresize = function() {        player.setSize(window.innerWidth, window.innerHeight);    }    </script></body></html>", new Object[]{r2, Integer.valueOf(intValue)}), "text/html", "UTF-8", "http://youtube.com");
                                     return;

@@ -15,7 +15,7 @@ public class SeekBar {
     private int cacheColor;
     private int circleColor;
     private SeekBarDelegate delegate;
-    private int dragStartX;
+    private int draggingThumbX = 0;
     private int height;
     private int lineHeight = AndroidUtilities.dp(2.0f);
     private boolean pressed = false;
@@ -58,12 +58,13 @@ public class SeekBar {
             int i4 = this.thumbX;
             if (((float) (i4 - i3)) <= f && f <= ((float) ((i2 + i4) + i3)) && f2 >= 0.0f && f2 <= ((float) i)) {
                 this.pressed = true;
+                this.draggingThumbX = i4;
                 this.thumbDX = (int) (f - ((float) i4));
-                this.dragStartX = i4;
                 return true;
             }
         } else if (i == 1 || i == 3) {
             if (this.pressed) {
+                this.thumbX = this.draggingThumbX;
                 if (i == 1) {
                     seekBarDelegate = this.delegate;
                     if (seekBarDelegate != null) {
@@ -74,20 +75,20 @@ public class SeekBar {
                 return true;
             }
         } else if (i == 2 && this.pressed) {
-            this.thumbX = (int) (f - ((float) this.thumbDX));
-            i = this.thumbX;
+            this.draggingThumbX = (int) (f - ((float) this.thumbDX));
+            i = this.draggingThumbX;
             if (i < 0) {
-                this.thumbX = 0;
+                this.draggingThumbX = 0;
             } else {
                 int i5 = this.width;
                 int i6 = thumbWidth;
                 if (i > i5 - i6) {
-                    this.thumbX = i5 - i6;
+                    this.draggingThumbX = i5 - i6;
                 }
             }
             seekBarDelegate = this.delegate;
             if (seekBarDelegate != null) {
-                seekBarDelegate.onSeekBarContinuousDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
+                seekBarDelegate.onSeekBarContinuousDrag(((float) this.draggingThumbX) / ((float) (this.width - thumbWidth)));
             }
             return true;
         }
@@ -125,7 +126,7 @@ public class SeekBar {
     }
 
     public int getThumbX() {
-        return this.thumbX + (thumbWidth / 2);
+        return (this.pressed ? this.draggingThumbX : this.thumbX) + (thumbWidth / 2);
     }
 
     public boolean isDragging() {
@@ -176,12 +177,16 @@ public class SeekBar {
         }
         rectF = this.rect;
         i = thumbWidth;
-        rectF.set((float) (i / 2), (float) ((this.height / 2) - (this.lineHeight / 2)), (float) ((i / 2) + (this.pressed ? this.dragStartX : this.thumbX)), (float) ((this.height / 2) + (this.lineHeight / 2)));
+        f = (float) (i / 2);
+        i2 = this.height;
+        i3 = i2 / 2;
+        i4 = this.lineHeight;
+        rectF.set(f, (float) (i3 - (i4 / 2)), (float) ((i / 2) + this.thumbX), (float) ((i2 / 2) + (i4 / 2)));
         paint.setColor(this.progressColor);
         rectF = this.rect;
         i = thumbWidth;
         canvas.drawRoundRect(rectF, (float) (i / 2), (float) (i / 2), paint);
         paint.setColor(this.circleColor);
-        canvas.drawCircle((float) (this.thumbX + (thumbWidth / 2)), (float) (this.height / 2), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), paint);
+        canvas.drawCircle((float) ((this.pressed ? this.draggingThumbX : this.thumbX) + (thumbWidth / 2)), (float) (this.height / 2), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), paint);
     }
 }

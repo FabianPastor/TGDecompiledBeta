@@ -406,7 +406,7 @@ public class Browser {
         r3 = getSession();	 Catch:{ Exception -> 0x021d }
         r2.<init>(r3);	 Catch:{ Exception -> 0x021d }
         r3 = "CopyLink";
-        r4 = NUM; // 0x7f0d0311 float:1.8743707E38 double:1.0531301654E-314;
+        r4 = NUM; // 0x7f0d030f float:1.8743703E38 double:1.0531301644E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x021d }
         r2.addMenuItem(r3, r1);	 Catch:{ Exception -> 0x021d }
         r1 = -1;
@@ -417,7 +417,7 @@ public class Browser {
         r3 = NUM; // 0x7var_ float:1.794458E38 double:1.0529355035E-314;
         r1 = android.graphics.BitmapFactory.decodeResource(r1, r3);	 Catch:{ Exception -> 0x021d }
         r3 = "ShareFile";
-        r4 = NUM; // 0x7f0d0994 float:1.8747088E38 double:1.053130989E-314;
+        r4 = NUM; // 0x7f0d0991 float:1.8747082E38 double:1.0531309875E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x021d }
         r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x021d }
         r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12);	 Catch:{ Exception -> 0x021d }

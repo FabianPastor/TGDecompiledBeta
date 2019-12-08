@@ -3788,24 +3788,24 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r4 = r4.size();
         if (r4 == r11) goto L_0x0fd1;
     L_0x0var_:
-        r4 = NUM; // 0x7f0d0965 float:1.8746993E38 double:1.053130966E-314;
+        r4 = NUM; // 0x7f0d0962 float:1.8746987E38 double:1.0531309643E-314;
         r5 = "SendContactTo";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertString";
         r0.putString(r5, r4);
-        r4 = NUM; // 0x7f0d0957 float:1.8746964E38 double:1.053130959E-314;
+        r4 = NUM; // 0x7f0d0954 float:1.8746958E38 double:1.0531309574E-314;
         r5 = "SendContactToGroup";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertStringGroup";
         r0.putString(r5, r4);
         goto L_0x0fd1;
     L_0x0fb5:
-        r4 = NUM; // 0x7f0d0965 float:1.8746993E38 double:1.053130966E-314;
+        r4 = NUM; // 0x7f0d0962 float:1.8746987E38 double:1.0531309643E-314;
         r5 = "SendMessagesTo";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertString";
         r0.putString(r5, r4);
-        r4 = NUM; // 0x7f0d0966 float:1.8746995E38 double:1.0531309663E-314;
+        r4 = NUM; // 0x7f0d0963 float:1.8746989E38 double:1.053130965E-314;
         r5 = "SendMessagesToGroup";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertStringGroup";
@@ -4087,18 +4087,18 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x007a:
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r0.<init>(r13);
-        r1 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
+        r1 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
         r4 = "AppName";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d070f float:1.874578E38 double:1.0531306703E-314;
+        r1 = NUM; // 0x7f0d070c float:1.8745774E38 double:1.053130669E-314;
         r3 = new java.lang.Object[r3];
         r3[r12] = r39;
         r4 = "OtherLoginCode";
         r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3);
         r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
+        r1 = NUM; // 0x7f0d06eb float:1.8745707E38 double:1.0531306525E-314;
         r3 = "OK";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setPositiveButton(r1, r2);
@@ -4507,12 +4507,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5 = "cantSendToChannels";
         r4.putBoolean(r5, r10);
         r4.putInt(r7, r10);
-        r5 = NUM; // 0x7f0d0958 float:1.8746966E38 double:1.0531309593E-314;
+        r5 = NUM; // 0x7f0d0955 float:1.874696E38 double:1.053130958E-314;
         r7 = "SendGameTo";
         r5 = org.telegram.messenger.LocaleController.getString(r7, r5);
         r7 = "selectAlertString";
         r4.putString(r7, r5);
-        r5 = NUM; // 0x7f0d0959 float:1.8746968E38 double:1.05313096E-314;
+        r5 = NUM; // 0x7f0d0956 float:1.8746962E38 double:1.0531309584E-314;
         r7 = "SendGameToGroup";
         r5 = org.telegram.messenger.LocaleController.getString(r7, r5);
         r7 = "selectAlertStringGroup";
@@ -4663,7 +4663,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x026c;
     L_0x0197:
         r0 = "BotCantJoinGroups";
-        r2 = NUM; // 0x7f0d01ce float:1.8743052E38 double:1.053130006E-314;
+        r2 = NUM; // 0x7f0d01cc float:1.8743048E38 double:1.053130005E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x01a8 }
         r0 = android.widget.Toast.makeText(r11, r0, r6);	 Catch:{ Exception -> 0x01a8 }
         r0.show();	 Catch:{ Exception -> 0x01a8 }
@@ -4764,7 +4764,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x026c;
     L_0x0257:
         r0 = "NoUsernameFound";
-        r2 = NUM; // 0x7f0d065c float:1.8745417E38 double:1.053130582E-314;
+        r2 = NUM; // 0x7f0d0659 float:1.874541E38 double:1.0531305804E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x0268 }
         r0 = android.widget.Toast.makeText(r11, r0, r6);	 Catch:{ Exception -> 0x0268 }
         r0.show();	 Catch:{ Exception -> 0x0268 }
@@ -4859,9 +4859,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2 = r0;
         org.telegram.messenger.FileLog.e(r2);
     L_0x0013:
-        r0 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
+        r0 = NUM; // 0x7f0d06eb float:1.8745707E38 double:1.0531306525E-314;
         r2 = "OK";
-        r3 = NUM; // 0x7f0d00f1 float:1.8742604E38 double:1.0531298966E-314;
+        r3 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
         r4 = "AppName";
         r14 = 0;
         if (r1 != 0) goto L_0x0160;
@@ -4974,7 +4974,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r13.<init>(r15);
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r13.setTitle(r3);
-        r3 = NUM; // 0x7f0d023b float:1.8743273E38 double:1.0531300597E-314;
+        r3 = NUM; // 0x7f0d0239 float:1.8743269E38 double:1.0531300587E-314;
         r4 = new java.lang.Object[r6];
         r6 = r1.chat;
         if (r6 == 0) goto L_0x0107;
@@ -5016,7 +5016,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1 = r20;
         r2 = r21;
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0d01f9 float:1.874314E38 double:1.053130027E-314;
+        r1 = NUM; // 0x7f0d01f7 float:1.8743135E38 double:1.053130026E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r5 = 0;
@@ -5036,13 +5036,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1 = r1.startsWith(r3);
         if (r1 == 0) goto L_0x0185;
     L_0x0178:
-        r1 = NUM; // 0x7f0d0477 float:1.8744433E38 double:1.0531303423E-314;
+        r1 = NUM; // 0x7f0d0474 float:1.8744427E38 double:1.053130341E-314;
         r3 = "FloodWait";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r7.setMessage(r1);
         goto L_0x0191;
     L_0x0185:
-        r1 = NUM; // 0x7f0d054e float:1.874487E38 double:1.0531304485E-314;
+        r1 = NUM; // 0x7f0d054b float:1.8744863E38 double:1.053130447E-314;
         r3 = "JoinToGroupErrorNotExist";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r7.setMessage(r1);
@@ -6163,7 +6163,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder;	 Catch:{ Exception -> 0x0115 }
         r7.<init>(r1);	 Catch:{ Exception -> 0x0115 }
         r8 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
-        r9 = NUM; // 0x7f0d02cf float:1.8743573E38 double:1.053130133E-314;
+        r9 = NUM; // 0x7f0d02cd float:1.874357E38 double:1.053130132E-314;
         r8 = r1.getStringForLanguageAlert(r8, r2, r9);	 Catch:{ Exception -> 0x0115 }
         r7.setTitle(r8);	 Catch:{ Exception -> 0x0115 }
         r8 = r1.englishLocaleStrings;	 Catch:{ Exception -> 0x0115 }
@@ -6178,7 +6178,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8];	 Catch:{ Exception -> 0x0115 }
         r12 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
         r13 = "English";
-        r14 = NUM; // 0x7f0d03ee float:1.8744155E38 double:1.0531302746E-314;
+        r14 = NUM; // 0x7f0d03eb float:1.874415E38 double:1.053130273E-314;
         r12 = r1.getStringForLanguageAlert(r12, r13, r14);	 Catch:{ Exception -> 0x0115 }
         if (r5 == 0) goto L_0x0056;
     L_0x0054:
@@ -6255,7 +6255,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r3 = new org.telegram.ui.Cells.LanguageCell;	 Catch:{ Exception -> 0x0115 }
         r3.<init>(r1, r6);	 Catch:{ Exception -> 0x0115 }
         r4 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
-        r5 = NUM; // 0x7f0d02d0 float:1.8743575E38 double:1.0531301333E-314;
+        r5 = NUM; // 0x7f0d02ce float:1.8743571E38 double:1.0531301323E-314;
         r4 = r1.getStringForLanguageAlert(r4, r0, r5);	 Catch:{ Exception -> 0x0115 }
         r6 = r1.englishLocaleStrings;	 Catch:{ Exception -> 0x0115 }
         r0 = r1.getStringForLanguageAlert(r6, r0, r5);	 Catch:{ Exception -> 0x0115 }
@@ -6268,7 +6268,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2.addView(r3, r0);	 Catch:{ Exception -> 0x0115 }
         r7.setView(r2);	 Catch:{ Exception -> 0x0115 }
         r0 = "OK";
-        r2 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
+        r2 = NUM; // 0x7f0d06eb float:1.8745707E38 double:1.0531306525E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x0115 }
         r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$-_OYvDrFInFakn0WORCpq62kH08;	 Catch:{ Exception -> 0x0115 }
         r2.<init>(r1, r10);	 Catch:{ Exception -> 0x0115 }

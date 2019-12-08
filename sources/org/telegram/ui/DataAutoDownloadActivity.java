@@ -318,7 +318,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r5 = "windowBackgroundGrayShadow";
             if (r15 != r0) goto L_0x003e;
         L_0x0024:
-            r15 = NUM; // 0x7f0d015a float:1.8742817E38 double:1.0531299485E-314;
+            r15 = NUM; // 0x7f0d0158 float:1.8742812E38 double:1.0531299475E-314;
             r0 = "AutoDownloadAudioInfo";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -345,7 +345,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r15 = r15.currentType;
             if (r15 != 0) goto L_0x0071;
         L_0x0063:
-            r15 = NUM; // 0x7f0d016d float:1.8742855E38 double:1.053129958E-314;
+            r15 = NUM; // 0x7f0d016b float:1.874285E38 double:1.053129957E-314;
             r0 = "AutoDownloadOnMobileDataInfo";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -355,7 +355,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r15 = r15.currentType;
             if (r15 != r2) goto L_0x0087;
         L_0x0079:
-            r15 = NUM; // 0x7f0d0172 float:1.8742865E38 double:1.0531299603E-314;
+            r15 = NUM; // 0x7f0d0170 float:1.8742861E38 double:1.0531299594E-314;
             r0 = "AutoDownloadOnWiFiDataInfo";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -365,7 +365,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r15 = r15.currentType;
             if (r15 != r3) goto L_0x02a8;
         L_0x008f:
-            r15 = NUM; // 0x7f0d016f float:1.874286E38 double:1.053129959E-314;
+            r15 = NUM; // 0x7f0d016d float:1.8742855E38 double:1.053129958E-314;
             r0 = "AutoDownloadOnRoamingDataInfo";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -387,7 +387,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r14 = r14.photosRow;
             if (r15 != r14) goto L_0x00ca;
         L_0x00be:
-            r14 = NUM; // 0x7f0d0173 float:1.8742867E38 double:1.053129961E-314;
+            r14 = NUM; // 0x7f0d0171 float:1.8742863E38 double:1.05312996E-314;
             r0 = "AutoDownloadPhotos";
             r14 = org.telegram.messenger.LocaleController.getString(r0, r14);
             r6 = r14;
@@ -398,14 +398,14 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r14 = r14.videosRow;
             if (r15 != r14) goto L_0x00de;
         L_0x00d2:
-            r14 = NUM; // 0x7f0d017d float:1.8742888E38 double:1.053129966E-314;
+            r14 = NUM; // 0x7f0d017b float:1.8742883E38 double:1.053129965E-314;
             r0 = "AutoDownloadVideos";
             r14 = org.telegram.messenger.LocaleController.getString(r0, r14);
             r6 = r14;
             r0 = 4;
             goto L_0x00ea;
         L_0x00de:
-            r14 = NUM; // 0x7f0d015f float:1.8742827E38 double:1.053129951E-314;
+            r14 = NUM; // 0x7f0d015d float:1.8742823E38 double:1.05312995E-314;
             r0 = "AutoDownloadFiles";
             r14 = org.telegram.messenger.LocaleController.getString(r0, r14);
             r0 = 8;
@@ -469,25 +469,25 @@ public class DataAutoDownloadActivity extends BaseFragment {
         L_0x0153:
             goto L_0x0187;
         L_0x0154:
-            r11 = NUM; // 0x7f0d015b float:1.8742819E38 double:1.053129949E-314;
+            r11 = NUM; // 0x7f0d0159 float:1.8742814E38 double:1.053129948E-314;
             r12 = "AutoDownloadChannels";
             r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
             r8.append(r11);
             goto L_0x0187;
         L_0x0161:
-            r11 = NUM; // 0x7f0d0162 float:1.8742833E38 double:1.0531299524E-314;
+            r11 = NUM; // 0x7f0d0160 float:1.8742829E38 double:1.0531299515E-314;
             r12 = "AutoDownloadGroups";
             r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
             r8.append(r11);
             goto L_0x0187;
         L_0x016e:
-            r11 = NUM; // 0x7f0d0176 float:1.8742873E38 double:1.0531299623E-314;
+            r11 = NUM; // 0x7f0d0174 float:1.874287E38 double:1.0531299613E-314;
             r12 = "AutoDownloadPm";
             r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
             r8.append(r11);
             goto L_0x0187;
         L_0x017b:
-            r11 = NUM; // 0x7f0d015c float:1.874282E38 double:1.0531299495E-314;
+            r11 = NUM; // 0x7f0d015a float:1.8742817E38 double:1.0531299485E-314;
             r12 = "AutoDownloadContacts";
             r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
             r8.append(r11);
@@ -504,13 +504,13 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r14 = r14.photosRow;
             if (r15 != r14) goto L_0x01a6;
         L_0x0199:
-            r14 = NUM; // 0x7f0d016a float:1.8742849E38 double:1.0531299564E-314;
+            r14 = NUM; // 0x7f0d0168 float:1.8742845E38 double:1.0531299554E-314;
             r0 = "AutoDownloadOnAllChats";
             r14 = org.telegram.messenger.LocaleController.getString(r0, r14);
             r8.append(r14);
             goto L_0x01ca;
         L_0x01a6:
-            r14 = NUM; // 0x7f0d017c float:1.8742885E38 double:1.0531299653E-314;
+            r14 = NUM; // 0x7f0d017a float:1.8742881E38 double:1.0531299643E-314;
             r0 = new java.lang.Object[r2];
             r3 = (long) r7;
             r3 = org.telegram.messenger.AndroidUtilities.formatFileSize(r3);
@@ -522,7 +522,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         L_0x01bc:
             if (r10 != 0) goto L_0x01cc;
         L_0x01be:
-            r14 = NUM; // 0x7f0d0169 float:1.8742847E38 double:1.053129956E-314;
+            r14 = NUM; // 0x7f0d0167 float:1.8742843E38 double:1.053129955E-314;
             r0 = "AutoDownloadOff";
             r14 = org.telegram.messenger.LocaleController.getString(r0, r14);
             r8.append(r14);
@@ -535,7 +535,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             if (r15 != r14) goto L_0x01eb;
         L_0x01d4:
             r14 = new java.lang.StringBuilder;
-            r0 = NUM; // 0x7f0d016b float:1.874285E38 double:1.053129957E-314;
+            r0 = NUM; // 0x7f0d0169 float:1.8742847E38 double:1.053129956E-314;
             r3 = new java.lang.Object[r2];
             r4 = r8.toString();
             r3[r1] = r4;
@@ -545,7 +545,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             goto L_0x0208;
         L_0x01eb:
             r14 = new java.lang.StringBuilder;
-            r0 = NUM; // 0x7f0d0170 float:1.8742861E38 double:1.0531299594E-314;
+            r0 = NUM; // 0x7f0d016e float:1.8742857E38 double:1.0531299584E-314;
             r3 = new java.lang.Object[r3];
             r11 = (long) r7;
             r4 = org.telegram.messenger.AndroidUtilities.formatFileSize(r11);
@@ -598,7 +598,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r0 = r0.usageHeaderRow;
             if (r15 != r0) goto L_0x0249;
         L_0x023c:
-            r15 = NUM; // 0x7f0d015e float:1.8742825E38 double:1.0531299505E-314;
+            r15 = NUM; // 0x7f0d015c float:1.874282E38 double:1.0531299495E-314;
             r0 = "AutoDownloadDataUsage";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -608,7 +608,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r0 = r0.typeHeaderRow;
             if (r15 != r0) goto L_0x02a8;
         L_0x0251:
-            r15 = NUM; // 0x7f0d017b float:1.8742883E38 double:1.053129965E-314;
+            r15 = NUM; // 0x7f0d0179 float:1.874288E38 double:1.053129964E-314;
             r0 = "AutoDownloadTypes";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -621,7 +621,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             if (r15 != r0) goto L_0x02a8;
         L_0x026a:
             r14.setDrawCheckRipple(r2);
-            r15 = NUM; // 0x7f0d0167 float:1.8742843E38 double:1.053129955E-314;
+            r15 = NUM; // 0x7f0d0165 float:1.8742839E38 double:1.053129954E-314;
             r0 = "AutoDownloadMedia";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r0 = org.telegram.ui.DataAutoDownloadActivity.this;
@@ -1150,7 +1150,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         r1 = r12.photosRow;
         if (r8 != r1) goto L_0x026e;
     L_0x0261:
-        r1 = NUM; // 0x7f0d0175 float:1.8742871E38 double:1.053129962E-314;
+        r1 = NUM; // 0x7f0d0173 float:1.8742867E38 double:1.053129961E-314;
         r2 = "AutoDownloadPhotosTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -1159,13 +1159,13 @@ public class DataAutoDownloadActivity extends BaseFragment {
         r1 = r12.videosRow;
         if (r8 != r1) goto L_0x027f;
     L_0x0272:
-        r1 = NUM; // 0x7f0d017f float:1.8742892E38 double:1.053129967E-314;
+        r1 = NUM; // 0x7f0d017d float:1.8742888E38 double:1.053129966E-314;
         r2 = "AutoDownloadVideosTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
         goto L_0x028b;
     L_0x027f:
-        r1 = NUM; // 0x7f0d0161 float:1.874283E38 double:1.053129952E-314;
+        r1 = NUM; // 0x7f0d015f float:1.8742827E38 double:1.053129951E-314;
         r2 = "AutoDownloadFilesTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -1188,7 +1188,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         if (r14 != 0) goto L_0x02d0;
     L_0x02ac:
         r10 = r9[r14];
-        r15 = NUM; // 0x7f0d0193 float:1.8742932E38 double:1.0531299767E-314;
+        r15 = NUM; // 0x7f0d0191 float:1.8742928E38 double:1.0531299757E-314;
         r22 = r0;
         r0 = "AutodownloadContacts";
         r0 = org.telegram.messenger.LocaleController.getString(r0, r15);
@@ -1216,7 +1216,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         if (r14 != r1) goto L_0x02f1;
     L_0x02d7:
         r0 = r9[r14];
-        r10 = NUM; // 0x7f0d0195 float:1.8742936E38 double:1.0531299776E-314;
+        r10 = NUM; // 0x7f0d0193 float:1.8742932E38 double:1.0531299767E-314;
         r15 = "AutodownloadPrivateChats";
         r10 = org.telegram.messenger.LocaleController.getString(r15, r10);
         r15 = r7.mask;
@@ -1236,7 +1236,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         if (r14 != r10) goto L_0x0310;
     L_0x02f4:
         r0 = r9[r14];
-        r1 = NUM; // 0x7f0d0194 float:1.8742934E38 double:1.053129977E-314;
+        r1 = NUM; // 0x7f0d0192 float:1.874293E38 double:1.053129976E-314;
         r15 = "AutodownloadGroupChats";
         r1 = org.telegram.messenger.LocaleController.getString(r15, r1);
         r15 = r7.mask;
@@ -1258,7 +1258,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         if (r14 != r10) goto L_0x0333;
     L_0x0313:
         r0 = r9[r14];
-        r1 = NUM; // 0x7f0d0192 float:1.874293E38 double:1.053129976E-314;
+        r1 = NUM; // 0x7f0d0190 float:1.8742926E38 double:1.053129975E-314;
         r15 = "AutodownloadChannels";
         r1 = org.telegram.messenger.LocaleController.getString(r15, r1);
         r15 = r7.mask;
@@ -1396,17 +1396,17 @@ public class DataAutoDownloadActivity extends BaseFragment {
     L_0x0424:
         r0 = 0;
         r1 = r22[r0];
-        r3 = NUM; // 0x7f0d0166 float:1.874284E38 double:1.0531299544E-314;
+        r3 = NUM; // 0x7f0d0164 float:1.8742837E38 double:1.0531299534E-314;
         r4 = "AutoDownloadMaxVideoSize";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r1.setText(r3);
         r1 = r6[r0];
-        r3 = NUM; // 0x7f0d0179 float:1.874288E38 double:1.053129964E-314;
+        r3 = NUM; // 0x7f0d0177 float:1.8742875E38 double:1.053129963E-314;
         r4 = "AutoDownloadPreloadVideo";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = r2.preloadVideo;
         r1.setTextAndCheck(r3, r4, r0);
-        r1 = NUM; // 0x7f0d017a float:1.8742881E38 double:1.0531299643E-314;
+        r1 = NUM; // 0x7f0d0178 float:1.8742877E38 double:1.0531299633E-314;
         r3 = 1;
         r4 = new java.lang.Object[r3];
         r3 = r2.sizes;
@@ -1421,17 +1421,17 @@ public class DataAutoDownloadActivity extends BaseFragment {
     L_0x045e:
         r0 = 0;
         r1 = r22[r0];
-        r3 = NUM; // 0x7f0d0165 float:1.8742839E38 double:1.053129954E-314;
+        r3 = NUM; // 0x7f0d0163 float:1.8742835E38 double:1.053129953E-314;
         r4 = "AutoDownloadMaxFileSize";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r1.setText(r3);
         r1 = r6[r0];
-        r3 = NUM; // 0x7f0d0177 float:1.8742875E38 double:1.053129963E-314;
+        r3 = NUM; // 0x7f0d0175 float:1.8742871E38 double:1.053129962E-314;
         r4 = "AutoDownloadPreloadMusic";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = r2.preloadMusic;
         r1.setTextAndCheck(r3, r4, r0);
-        r1 = NUM; // 0x7f0d0178 float:1.8742877E38 double:1.0531299633E-314;
+        r1 = NUM; // 0x7f0d0176 float:1.8742873E38 double:1.0531299623E-314;
         r3 = "AutoDownloadPreloadMusicInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r15.setText(r1);
@@ -1520,7 +1520,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         r3 = "fonts/rmedium.ttf";
         r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);
         r1.setTypeface(r3);
-        r3 = NUM; // 0x7f0d01f9 float:1.874314E38 double:1.053130027E-314;
+        r3 = NUM; // 0x7f0d01f7 float:1.8743135E38 double:1.053130026E-314;
         r4 = "Cancel";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r3 = r3.toUpperCase();
@@ -1552,7 +1552,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         r1 = "fonts/rmedium.ttf";
         r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r1);
         r14.setTypeface(r1);
-        r1 = NUM; // 0x7f0d0917 float:1.8746834E38 double:1.053130927E-314;
+        r1 = NUM; // 0x7f0d0914 float:1.8746828E38 double:1.0531309258E-314;
         r2 = "Save";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r1 = r1.toUpperCase();

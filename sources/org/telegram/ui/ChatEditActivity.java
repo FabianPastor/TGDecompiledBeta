@@ -1024,31 +1024,31 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r3.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d0a9d float:1.8747625E38 double:1.05313112E-314;
+        r1 = NUM; // 0x7f0d0a9a float:1.874762E38 double:1.0531311184E-314;
         r2 = "UserRestrictionsApplyChanges";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         r1 = r3.isChannel;
         if (r1 == 0) goto L_0x008c;
     L_0x007f:
-        r1 = NUM; // 0x7f0d0267 float:1.8743362E38 double:1.0531300814E-314;
+        r1 = NUM; // 0x7f0d0265 float:1.8743358E38 double:1.0531300804E-314;
         r2 = "ChannelSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
         goto L_0x0098;
     L_0x008c:
-        r1 = NUM; // 0x7f0d04f1 float:1.874468E38 double:1.0531304025E-314;
+        r1 = NUM; // 0x7f0d04ee float:1.8744674E38 double:1.053130401E-314;
         r2 = "GroupSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
     L_0x0098:
-        r1 = NUM; // 0x7f0d00f5 float:1.8742612E38 double:1.0531298986E-314;
+        r1 = NUM; // 0x7f0d00f3 float:1.8742608E38 double:1.0531298976E-314;
         r2 = "ApplyTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$NBEr6CX4NZ1r3XbdnOXbearPc6k;
         r2.<init>(r3);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0d0761 float:1.8745946E38 double:1.053130711E-314;
+        r1 = NUM; // 0x7f0d075e float:1.874594E38 double:1.0531307094E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$TOgShEf6MXFD3VhufzCjnieIAt0;
