@@ -288,7 +288,7 @@ public class Theme {
     private static ThemeInfo defaultTheme = null;
     public static LottieDrawable dialogs_archiveAvatarDrawable = null;
     public static boolean dialogs_archiveAvatarDrawableRecolored = false;
-    public static LottieDrawable dialogs_archiveDrawable = null;
+    public static Drawable dialogs_archiveDrawable = null;
     public static boolean dialogs_archiveDrawableRecolored = false;
     public static TextPaint dialogs_archiveTextPaint = null;
     public static Drawable dialogs_botDrawable = null;
@@ -316,7 +316,7 @@ public class Theme {
     public static TextPaint dialogs_offlinePaint = null;
     public static Paint dialogs_onlineCirclePaint = null;
     public static TextPaint dialogs_onlinePaint = null;
-    public static LottieDrawable dialogs_pinArchiveDrawable = null;
+    public static Drawable dialogs_pinArchiveDrawable = null;
     public static Drawable dialogs_pinnedDrawable = null;
     public static Paint dialogs_pinnedPaint = null;
     public static Drawable dialogs_reorderDrawable = null;
@@ -325,8 +325,8 @@ public class Theme {
     public static TextPaint dialogs_searchNamePaint = null;
     public static Paint dialogs_tabletSeletedPaint = null;
     public static TextPaint dialogs_timePaint = null;
-    public static LottieDrawable dialogs_unarchiveDrawable = null;
-    public static LottieDrawable dialogs_unpinArchiveDrawable = null;
+    public static Drawable dialogs_unarchiveDrawable = null;
+    public static Drawable dialogs_unpinArchiveDrawable = null;
     public static Drawable dialogs_verifiedCheckDrawable = null;
     public static Drawable dialogs_verifiedDrawable = null;
     public static Paint dividerPaint = null;
@@ -3334,18 +3334,25 @@ public class Theme {
             avatar_ghostDrawable = resources.getDrawable(NUM);
             dialogs_archiveAvatarDrawable = new LottieDrawable();
             dialogs_archiveAvatarDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            LottieDrawable lottieDrawable = new LottieDrawable();
-            lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            dialogs_archiveDrawable = lottieDrawable;
-            lottieDrawable = new LottieDrawable();
-            lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            dialogs_unarchiveDrawable = lottieDrawable;
-            lottieDrawable = new LottieDrawable();
-            lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            dialogs_pinArchiveDrawable = lottieDrawable;
-            lottieDrawable = new LottieDrawable();
-            lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            dialogs_unpinArchiveDrawable = lottieDrawable;
+            if (VERSION.SDK_INT == 24) {
+                dialogs_archiveDrawable = resources.getDrawable(NUM);
+                dialogs_unarchiveDrawable = resources.getDrawable(NUM);
+                dialogs_pinArchiveDrawable = resources.getDrawable(NUM);
+                dialogs_unpinArchiveDrawable = resources.getDrawable(NUM);
+            } else {
+                LottieDrawable lottieDrawable = new LottieDrawable();
+                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+                dialogs_archiveDrawable = lottieDrawable;
+                lottieDrawable = new LottieDrawable();
+                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+                dialogs_unarchiveDrawable = lottieDrawable;
+                lottieDrawable = new LottieDrawable();
+                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+                dialogs_pinArchiveDrawable = lottieDrawable;
+                lottieDrawable = new LottieDrawable();
+                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+                dialogs_unpinArchiveDrawable = lottieDrawable;
+            }
             applyCommonTheme();
         }
     }
@@ -3385,31 +3392,49 @@ public class Theme {
             r8[1] = str2;
             lottieDrawable.addValueCallback(new KeyPath(r8), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
             dialogs_archiveAvatarDrawableRecolored = false;
-            dialogs_pinArchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-            lottieDrawable = dialogs_pinArchiveDrawable;
-            r2 = new String[2];
-            r2[0] = "Arrow";
-            r2[1] = str2;
-            String str4 = "chats_archiveIcon";
-            lottieDrawable.addValueCallback(new KeyPath(r2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
-            lottieDrawable = dialogs_pinArchiveDrawable;
-            r2 = new String[2];
-            r2[0] = "Line";
-            r2[1] = str2;
-            lottieDrawable.addValueCallback(new KeyPath(r2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
-            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath("Arrow", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
-            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath("Line", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
-            dialogs_archiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-            dialogs_archiveDrawable.addValueCallback(new KeyPath("Arrow", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archiveBackground"))));
-            dialogs_archiveDrawable.addValueCallback(new KeyPath("Box2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
-            dialogs_archiveDrawable.addValueCallback(new KeyPath("Box1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
-            dialogs_archiveDrawableRecolored = false;
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Arrow1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Arrow2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archivePinBackground"))));
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Box2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Box1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            Drawable drawable = dialogs_pinArchiveDrawable;
+            String str4 = "Line";
+            String str5 = "Arrow";
+            String str6 = "chats_archiveIcon";
+            if (drawable instanceof LottieDrawable) {
+                lottieDrawable = (LottieDrawable) drawable;
+                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+                lottieDrawable.addValueCallback(new KeyPath(str4, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+            } else {
+                setDrawableColorByKey(drawable, str6);
+            }
+            drawable = dialogs_unpinArchiveDrawable;
+            if (drawable instanceof LottieDrawable) {
+                lottieDrawable = (LottieDrawable) drawable;
+                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+                lottieDrawable.addValueCallback(new KeyPath(str4, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+            } else {
+                setDrawableColorByKey(drawable, str6);
+            }
+            drawable = dialogs_archiveDrawable;
+            if (drawable instanceof LottieDrawable) {
+                lottieDrawable = (LottieDrawable) drawable;
+                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archiveBackground"))));
+                lottieDrawable.addValueCallback(new KeyPath(r11, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+                lottieDrawable.addValueCallback(new KeyPath(str3, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+                dialogs_archiveDrawableRecolored = false;
+            } else {
+                setDrawableColorByKey(drawable, str6);
+            }
+            drawable = dialogs_unarchiveDrawable;
+            if (drawable instanceof LottieDrawable) {
+                lottieDrawable = (LottieDrawable) drawable;
+                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+                lottieDrawable.addValueCallback(new KeyPath(r9, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+                lottieDrawable.addValueCallback(new KeyPath(r10, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archivePinBackground"))));
+                lottieDrawable.addValueCallback(new KeyPath(r11, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+                lottieDrawable.addValueCallback(new KeyPath(str3, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
+            } else {
+                setDrawableColorByKey(drawable, str6);
+            }
         }
     }
 

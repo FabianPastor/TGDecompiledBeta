@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build.VERSION;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import java.util.Collections;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Dialog;
 import org.telegram.tgnet.TLRPC.RecentMeUrl;
@@ -51,11 +54,13 @@ public class DialogsAdapter extends SelectionAdapter {
     private boolean hasHints;
     private boolean isOnlySelect;
     private boolean isReordering;
+    private long lastSortTime;
     private Context mContext;
+    private ArrayList<TL_contact> onlineContacts;
     private long openedDialogId;
+    private int prevContactsCount;
     private ArrayList<Long> selectedDialogs;
     private boolean showArchiveHint;
-    private boolean showContacts;
 
     public DialogsAdapter(Context context, int i, int i2, boolean z) {
         this.mContext = context;
@@ -121,50 +126,69 @@ public class DialogsAdapter extends SelectionAdapter {
     }
 
     public int getItemCount() {
-        this.showContacts = false;
         int size = DialogsActivity.getDialogsArray(this.currentAccount, this.dialogsType, this.folderId, this.dialogsListFrozen).size();
+        int i = 0;
         if (size != 0 || (this.folderId == 0 && !MessagesController.getInstance(this.currentAccount).isLoadingDialogs(this.folderId))) {
-            int i = (!MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId) || size == 0) ? size + 1 : size;
+            int i2 = (!MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId) || size == 0) ? size + 1 : size;
             if (this.hasHints) {
-                i += MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
+                i2 += MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
             } else if (this.dialogsType == 0 && size == 0 && this.folderId == 0) {
                 if (ContactsController.getInstance(this.currentAccount).contacts.isEmpty() && ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
+                    this.onlineContacts = null;
                     this.currentCount = 0;
                     return 0;
                 } else if (!ContactsController.getInstance(this.currentAccount).contacts.isEmpty()) {
-                    i += ContactsController.getInstance(this.currentAccount).contacts.size() + 2;
-                    this.showContacts = true;
+                    if (this.onlineContacts == null || this.prevContactsCount != ContactsController.getInstance(this.currentAccount).contacts.size()) {
+                        this.onlineContacts = new ArrayList(ContactsController.getInstance(this.currentAccount).contacts);
+                        this.prevContactsCount = this.onlineContacts.size();
+                        int i3 = UserConfig.getInstance(this.currentAccount).clientUserId;
+                        int size2 = this.onlineContacts.size();
+                        for (int i4 = 0; i4 < size2; i4++) {
+                            if (((TL_contact) this.onlineContacts.get(i4)).user_id == i3) {
+                                this.onlineContacts.remove(i4);
+                                break;
+                            }
+                        }
+                        sortOnlineContacts(false);
+                    }
+                    i2 += this.onlineContacts.size() + 2;
+                    i = 1;
                 }
             }
+            if (i == 0 && this.onlineContacts != null) {
+                this.onlineContacts = null;
+            }
             if (this.folderId == 1 && this.showArchiveHint) {
-                i += 2;
+                i2 += 2;
             }
             if (this.folderId == 0 && size != 0) {
-                i++;
+                i2++;
             }
-            this.currentCount = i;
-            return i;
-        } else if (this.folderId == 1 && this.showArchiveHint) {
+            this.currentCount = i2;
+            return i2;
+        }
+        this.onlineContacts = null;
+        if (this.folderId == 1 && this.showArchiveHint) {
             this.currentCount = 2;
             return 2;
-        } else {
-            this.currentCount = 0;
-            return 0;
         }
+        this.currentCount = 0;
+        return 0;
     }
 
     public TLObject getItem(int i) {
-        if (this.showContacts) {
+        ArrayList arrayList = this.onlineContacts;
+        if (arrayList != null) {
             i -= 3;
-            if (i < 0 || i >= ContactsController.getInstance(this.currentAccount).contacts.size()) {
+            if (i < 0 || i >= arrayList.size()) {
                 return null;
             }
-            return MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) ContactsController.getInstance(this.currentAccount).contacts.get(i)).user_id));
+            return MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) this.onlineContacts.get(i)).user_id));
         }
         if (this.showArchiveHint) {
             i -= 2;
         }
-        ArrayList dialogsArray = DialogsActivity.getDialogsArray(this.currentAccount, this.dialogsType, this.folderId, this.dialogsListFrozen);
+        arrayList = DialogsActivity.getDialogsArray(this.currentAccount, this.dialogsType, this.folderId, this.dialogsListFrozen);
         if (this.hasHints) {
             int size = MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
             if (i < size) {
@@ -172,10 +196,130 @@ public class DialogsAdapter extends SelectionAdapter {
             }
             i -= size;
         }
-        if (i < 0 || i >= dialogsArray.size()) {
+        if (i < 0 || i >= arrayList.size()) {
             return null;
         }
-        return (TLObject) dialogsArray.get(i);
+        return (TLObject) arrayList.get(i);
+    }
+
+    public void sortOnlineContacts(boolean z) {
+        if (this.onlineContacts == null) {
+            return;
+        }
+        if (!z || SystemClock.uptimeMillis() - this.lastSortTime >= 2000) {
+            this.lastSortTime = SystemClock.uptimeMillis();
+            try {
+                int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
+                Collections.sort(this.onlineContacts, new -$$Lambda$DialogsAdapter$Xl2Fm6ABchAKa8HnZJtWg3ArO0E(MessagesController.getInstance(this.currentAccount), currentTime));
+                if (z) {
+                    notifyDataSetChanged();
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:10:0x002b  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x003e A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x0049 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0054 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x005d A:{SKIP} */
+    static /* synthetic */ int lambda$sortOnlineContacts$0(org.telegram.messenger.MessagesController r2, int r3, org.telegram.tgnet.TLRPC.TL_contact r4, org.telegram.tgnet.TLRPC.TL_contact r5) {
+        /*
+        r5 = r5.user_id;
+        r5 = java.lang.Integer.valueOf(r5);
+        r5 = r2.getUser(r5);
+        r4 = r4.user_id;
+        r4 = java.lang.Integer.valueOf(r4);
+        r2 = r2.getUser(r4);
+        r4 = 50000; // 0xCLASSNAME float:7.0065E-41 double:2.47033E-319;
+        r0 = 0;
+        if (r5 == 0) goto L_0x0028;
+    L_0x001a:
+        r1 = r5.self;
+        if (r1 == 0) goto L_0x0021;
+    L_0x001e:
+        r5 = r3 + r4;
+        goto L_0x0029;
+    L_0x0021:
+        r5 = r5.status;
+        if (r5 == 0) goto L_0x0028;
+    L_0x0025:
+        r5 = r5.expires;
+        goto L_0x0029;
+    L_0x0028:
+        r5 = 0;
+    L_0x0029:
+        if (r2 == 0) goto L_0x0039;
+    L_0x002b:
+        r1 = r2.self;
+        if (r1 == 0) goto L_0x0032;
+    L_0x002f:
+        r2 = r3 + r4;
+        goto L_0x003a;
+    L_0x0032:
+        r2 = r2.status;
+        if (r2 == 0) goto L_0x0039;
+    L_0x0036:
+        r2 = r2.expires;
+        goto L_0x003a;
+    L_0x0039:
+        r2 = 0;
+    L_0x003a:
+        r3 = -1;
+        r4 = 1;
+        if (r5 <= 0) goto L_0x0047;
+    L_0x003e:
+        if (r2 <= 0) goto L_0x0047;
+    L_0x0040:
+        if (r5 <= r2) goto L_0x0043;
+    L_0x0042:
+        return r4;
+    L_0x0043:
+        if (r5 >= r2) goto L_0x0046;
+    L_0x0045:
+        return r3;
+    L_0x0046:
+        return r0;
+    L_0x0047:
+        if (r5 >= 0) goto L_0x0052;
+    L_0x0049:
+        if (r2 >= 0) goto L_0x0052;
+    L_0x004b:
+        if (r5 <= r2) goto L_0x004e;
+    L_0x004d:
+        return r4;
+    L_0x004e:
+        if (r5 >= r2) goto L_0x0051;
+    L_0x0050:
+        return r3;
+    L_0x0051:
+        return r0;
+    L_0x0052:
+        if (r5 >= 0) goto L_0x0056;
+    L_0x0054:
+        if (r2 > 0) goto L_0x005a;
+    L_0x0056:
+        if (r5 != 0) goto L_0x005b;
+    L_0x0058:
+        if (r2 == 0) goto L_0x005b;
+    L_0x005a:
+        return r3;
+    L_0x005b:
+        if (r2 >= 0) goto L_0x005f;
+    L_0x005d:
+        if (r5 > 0) goto L_0x0063;
+    L_0x005f:
+        if (r2 != 0) goto L_0x0064;
+    L_0x0061:
+        if (r5 == 0) goto L_0x0064;
+    L_0x0063:
+        return r4;
+    L_0x0064:
+        return r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsAdapter.lambda$sortOnlineContacts$0(org.telegram.messenger.MessagesController, int, org.telegram.tgnet.TLRPC$TL_contact, org.telegram.tgnet.TLRPC$TL_contact):int");
     }
 
     public void setDialogsListFrozen(boolean z) {
@@ -209,7 +353,7 @@ public class DialogsAdapter extends SelectionAdapter {
         return (itemViewType == 1 || itemViewType == 5 || itemViewType == 3 || itemViewType == 8 || itemViewType == 7 || itemViewType == 9 || itemViewType == 10) ? false : true;
     }
 
-    public /* synthetic */ void lambda$onCreateViewHolder$0$DialogsAdapter(View view) {
+    public /* synthetic */ void lambda$onCreateViewHolder$1$DialogsAdapter(View view) {
         MessagesController.getInstance(this.currentAccount).hintDialogs.clear();
         MessagesController.getGlobalMainSettings().edit().remove("installReferer").commit();
         notifyDataSetChanged();
@@ -241,7 +385,7 @@ public class DialogsAdapter extends SelectionAdapter {
                     i2 = 5;
                 }
                 dialogCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 17.0f, 15.0f, 17.0f, 0.0f));
-                textView.setOnClickListener(new -$$Lambda$DialogsAdapter$9rZHEUZrGiCwZ807CAFufwsMqa0(this));
+                textView.setOnClickListener(new -$$Lambda$DialogsAdapter$DWIibGxp-Clk-7MRxEqoD1mmox4(this));
                 break;
             case 3:
                 anonymousClass1 = new FrameLayout(this.mContext) {
@@ -323,11 +467,12 @@ public class DialogsAdapter extends SelectionAdapter {
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
+        int i2 = 0;
+        boolean z = true;
         if (itemViewType == 0) {
             DialogCell dialogCell = (DialogCell) viewHolder.itemView;
             Dialog dialog = (Dialog) getItem(i);
             Dialog dialog2 = (Dialog) getItem(i + 1);
-            boolean z = true;
             if (this.folderId == 0) {
                 dialogCell.useSeparator = i != getItemCount() + -2;
             } else {
@@ -346,14 +491,18 @@ public class DialogsAdapter extends SelectionAdapter {
         } else if (itemViewType == 4) {
             ((DialogMeUrlCell) viewHolder.itemView).setRecentMeUrl((RecentMeUrl) getItem(i));
         } else if (itemViewType == 5) {
-            ((DialogsEmptyCell) viewHolder.itemView).setType(this.showContacts);
+            DialogsEmptyCell dialogsEmptyCell = (DialogsEmptyCell) viewHolder.itemView;
+            if (this.onlineContacts != null) {
+                i2 = 1;
+            }
+            dialogsEmptyCell.setType(i2);
         } else if (itemViewType == 6) {
-            ((UserCell) viewHolder.itemView).setData(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) ContactsController.getInstance(this.currentAccount).contacts.get(i - 3)).user_id)), null, null, 0);
+            ((UserCell) viewHolder.itemView).setData(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) this.onlineContacts.get(i - 3)).user_id)), null, null, 0);
         }
     }
 
     public int getItemViewType(int i) {
-        if (!this.showContacts) {
+        if (this.onlineContacts == null) {
             int size;
             if (this.hasHints) {
                 size = MessagesController.getInstance(this.currentAccount).hintDialogs.size();

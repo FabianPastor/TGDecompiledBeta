@@ -74,6 +74,7 @@ public class ActionBarLayout extends FrameLayout {
     private Runnable onOpenAnimationEndRunnable;
     private Runnable overlayAction;
     protected Activity parentActivity;
+    private ThemeDescription[] presentingFragmentDescriptions;
     private ColorDrawable previewBackgroundDrawable;
     private boolean rebuildAfterAnimation;
     private boolean rebuildLastAfterAnimation;
@@ -467,6 +468,9 @@ public class ActionBarLayout extends FrameLayout {
             view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         }
         baseFragment.onResume();
+        if (this.themeAnimatorSet != null) {
+            this.presentingFragmentDescriptions = baseFragment.getThemeDescriptions();
+        }
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
@@ -496,7 +500,7 @@ public class ActionBarLayout extends FrameLayout {
                 int max = Math.max(0, (int) (motionEvent.getX() - ((float) this.startedTrackingX)));
                 int abs = Math.abs(((int) motionEvent.getY()) - this.startedTrackingY);
                 this.velocityTracker.addMovement(motionEvent);
-                if (this.maybeStartTracking && !this.startedTracking && ((float) max) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(max) / 3 > abs) {
+                if (!this.inPreviewMode && this.maybeStartTracking && !this.startedTracking && ((float) max) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(max) / 3 > abs) {
                     arrayList = this.fragmentsStack;
                     if (((BaseFragment) arrayList.get(arrayList.size() - 1)).canBeginSlide()) {
                         prepareForMoving(motionEvent);
@@ -878,6 +882,9 @@ public class ActionBarLayout extends FrameLayout {
                         view.setVisibility(0);
                     }
                 }
+                if (this.themeAnimatorSet != null) {
+                    this.presentingFragmentDescriptions = baseFragment.getThemeDescriptions();
+                }
                 if (obj == null && !z7) {
                     View view2 = this.backgroundView;
                     if (view2 != null) {
@@ -1168,6 +1175,9 @@ public class ActionBarLayout extends FrameLayout {
                 baseFragment.onTransitionAnimationStart(true, true);
                 baseFragment2.onTransitionAnimationStart(false, false);
                 baseFragment.onResume();
+                if (this.themeAnimatorSet != null) {
+                    this.presentingFragmentDescriptions = baseFragment.getThemeDescriptions();
+                }
                 this.currentActionBar = baseFragment.actionBar;
                 if (!baseFragment.hasOwnBackground && view2.getBackground() == null) {
                     view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -1381,6 +1391,18 @@ public class ActionBarLayout extends FrameLayout {
                 }
             }
         }
+        if (this.presentingFragmentDescriptions != null) {
+            int i3 = 0;
+            while (true) {
+                ThemeDescription[] themeDescriptionArr = this.presentingFragmentDescriptions;
+                if (i3 < themeDescriptionArr.length) {
+                    this.presentingFragmentDescriptions[i3].setColor(Theme.getColor(themeDescriptionArr[i3].getCurrentKey()), false, false);
+                    i3++;
+                } else {
+                    return;
+                }
+            }
+        }
     }
 
     @Keep
@@ -1460,6 +1482,7 @@ public class ActionBarLayout extends FrameLayout {
                             ActionBarLayout.this.themeAnimatorDelegate[i] = null;
                         }
                         Theme.setAnimatingColor(false);
+                        ActionBarLayout.this.presentingFragmentDescriptions = null;
                         ActionBarLayout.this.themeAnimatorSet = null;
                     }
                 }
@@ -1473,6 +1496,7 @@ public class ActionBarLayout extends FrameLayout {
                             ActionBarLayout.this.themeAnimatorDelegate[i] = null;
                         }
                         Theme.setAnimatingColor(false);
+                        ActionBarLayout.this.presentingFragmentDescriptions = null;
                         ActionBarLayout.this.themeAnimatorSet = null;
                     }
                 }

@@ -63,9 +63,8 @@ public class ContactsAdapter extends SectionsAdapter {
         this.sortType = i;
         if (this.sortType == 2) {
             if (this.onlineContacts == null) {
-                this.onlineContacts = new ArrayList();
+                this.onlineContacts = new ArrayList(ContactsController.getInstance(this.currentAccount).contacts);
                 i = UserConfig.getInstance(this.currentAccount).clientUserId;
-                this.onlineContacts.addAll(ContactsController.getInstance(this.currentAccount).contacts);
                 int size = this.onlineContacts.size();
                 for (int i2 = 0; i2 < size; i2++) {
                     if (((TL_contact) this.onlineContacts.get(i2)).user_id == i) {

@@ -2504,7 +2504,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r12 = r9;
         r6 = 0;
     L_0x038f:
-        if (r10 == 0) goto L_0x04d4;
+        if (r10 == 0) goto L_0x04d5;
     L_0x0391:
         r0 = r8.selectType;
         if (r0 == 0) goto L_0x0430;
@@ -2516,7 +2516,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         goto L_0x039f;
     L_0x039a:
         r8.removeUser(r10);
-        goto L_0x04d4;
+        goto L_0x04d5;
     L_0x039f:
         r0 = r8.selectType;
         if (r0 == r4) goto L_0x0414;
@@ -2566,7 +2566,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r10.setNegativeButton(r0, r7);
         r0 = r10.create();
         r8.showDialog(r0);
-        goto L_0x04d4;
+        goto L_0x04d5;
     L_0x0414:
         r0 = r8.selectType;
         if (r0 != r4) goto L_0x041a;
@@ -2593,7 +2593,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r6 = r7;
         r7 = r11;
         r0.openRightsEdit(r1, r2, r3, r4, r5, r6, r7);
-        goto L_0x04d4;
+        goto L_0x04d5;
     L_0x0430:
         r0 = r8.type;
         if (r0 != r4) goto L_0x044c;
@@ -2692,7 +2692,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r1.<init>(r2);
         r0.setDelegate(r1);
         r8.presentFragment(r0);
-        goto L_0x04d4;
+        goto L_0x04d5;
     L_0x04b7:
         r0 = r19.getUserConfig();
         r0 = r0.getClientUserId();
@@ -2707,7 +2707,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r1 = new org.telegram.ui.ProfileActivity;
         r1.<init>(r0);
         r8.presentFragment(r1);
-    L_0x04d4:
+    L_0x04d5:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.lambda$createView$1$ChatUsersActivity(android.view.View, int):void");
