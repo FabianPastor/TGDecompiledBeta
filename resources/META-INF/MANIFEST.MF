@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.5.0
 
 Name: AndroidManifest.xml
-SHA1-Digest: kldl4+4L8qMatAlg0SinEOezPKE=
+SHA1-Digest: Mfr6MfKmWBdn4AbqZ5KLAxUwv0g=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -222,7 +222,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: oC1PSh5Krquh0mToiQZg6oK/c+g=
+SHA1-Digest: /7gnh+fnVmtyZ6KVAKXLlzGFd2o=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: FHlRDdxccFhBf1l94YXJ1DBcfcA=
