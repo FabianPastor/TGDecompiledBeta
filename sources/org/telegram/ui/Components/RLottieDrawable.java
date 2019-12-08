@@ -425,6 +425,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
+    public void restart() {
+        if (this.autoRepeat >= 2 && this.autoRepeatPlayCount != 0) {
+            this.autoRepeatPlayCount = 0;
+            this.autoRepeat = 2;
+            start();
+        }
+    }
+
     public void beginApplyLayerColors() {
         this.applyingLayerColors = true;
     }

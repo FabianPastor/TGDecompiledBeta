@@ -470,6 +470,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         string = LocaleController.getString(str2, NUM);
                     }
                     this.ignoreTextChange = true;
+                    pollEditTextCell.getTextView().setEnabled(ChatRightsEditActivity.this.canEdit);
                     pollEditTextCell.getTextView().setSingleLine(true);
                     pollEditTextCell.getTextView().setImeOptions(6);
                     pollEditTextCell.setTextAndHint(ChatRightsEditActivity.this.currentRank, string, false);
