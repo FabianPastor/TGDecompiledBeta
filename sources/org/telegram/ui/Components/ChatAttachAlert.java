@@ -1123,7 +1123,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             }
 
             /* Access modifiers changed, original: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:37:0x01ce  */
+            /* JADX WARNING: Removed duplicated region for block: B:37:0x01d2  */
             public void onMeasure(int r10, int r11) {
                 /*
                 r9 = this;
@@ -1277,6 +1277,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 r7 = r7 - r2;
                 r6 = r6 * r7;
                 r4 = r4 + r6;
+                r4 = java.lang.Math.max(r2, r4);
                 r3.setSpanCount(r4);
                 r3 = org.telegram.ui.Components.ChatAttachAlert.this;
                 r3 = r3.adapter;
@@ -1306,33 +1307,33 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 r2 = java.lang.Math.max(r1, r2);
                 r3 = org.telegram.ui.Components.ChatAttachAlert.this;
                 r3 = r3.gridExtraSpace;
-                if (r3 == r2) goto L_0x01ad;
-            L_0x019f:
+                if (r3 == r2) goto L_0x01b1;
+            L_0x01a3:
                 r3 = org.telegram.ui.Components.ChatAttachAlert.this;
                 r3.gridExtraSpace = r2;
                 r2 = org.telegram.ui.Components.ChatAttachAlert.this;
                 r2 = r2.adapter;
                 r2.notifyDataSetChanged();
-            L_0x01ad:
+            L_0x01b1:
                 r2 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r2 != 0) goto L_0x01be;
-            L_0x01b3:
+                if (r2 != 0) goto L_0x01c2;
+            L_0x01b7:
                 r2 = org.telegram.messenger.AndroidUtilities.displaySize;
                 r3 = r2.x;
                 r2 = r2.y;
-                if (r3 <= r2) goto L_0x01be;
-            L_0x01bb:
+                if (r3 <= r2) goto L_0x01c2;
+            L_0x01bf:
                 r0 = r0 / 6;
-                goto L_0x01c2;
-            L_0x01be:
+                goto L_0x01c6;
+            L_0x01c2:
                 r0 = r0 / 5;
                 r0 = r0 * 2;
-            L_0x01c2:
+            L_0x01c6:
                 r2 = org.telegram.ui.Components.ChatAttachAlert.this;
                 r2 = r2.gridView;
                 r2 = r2.getPaddingTop();
-                if (r2 == r0) goto L_0x01e7;
-            L_0x01ce:
+                if (r2 == r0) goto L_0x01eb;
+            L_0x01d2:
                 r2 = org.telegram.ui.Components.ChatAttachAlert.this;
                 r2 = r2.gridView;
                 r3 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
@@ -1341,7 +1342,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 r5 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
                 r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
                 r2.setPadding(r4, r0, r3, r5);
-            L_0x01e7:
+            L_0x01eb:
                 r9.ignoreLayout = r1;
                 r0 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
                 r11 = android.view.View.MeasureSpec.makeMeasureSpec(r11, r0);
@@ -3320,7 +3321,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x003a:
         goto L_0x0073;
     L_0x003b:
-        r6 = NUM; // 0x7var_bd float:1.7944961E38 double:1.0529355964E-314;
+        r6 = NUM; // 0x7var_be float:1.7944963E38 double:1.052935597E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0011 float:1.8875072E38 double:1.053162165E-314;
         r0 = "AccDescrCameraFlashAuto";
@@ -3328,7 +3329,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x004e:
-        r6 = NUM; // 0x7var_bf float:1.7944965E38 double:1.0529355974E-314;
+        r6 = NUM; // 0x7var_c0 float:1.7944967E38 double:1.052935598E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0013 float:1.8875076E38 double:1.053162166E-314;
         r0 = "AccDescrCameraFlashOn";
@@ -3336,7 +3337,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x0061:
-        r6 = NUM; // 0x7var_be float:1.7944963E38 double:1.052935597E-314;
+        r6 = NUM; // 0x7var_bf float:1.7944965E38 double:1.0529355974E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0012 float:1.8875074E38 double:1.0531621655E-314;
         r0 = "AccDescrCameraFlashOff";

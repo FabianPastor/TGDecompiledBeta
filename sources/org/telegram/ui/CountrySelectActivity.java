@@ -131,8 +131,14 @@ public class CountrySelectActivity extends BaseFragment {
         }
 
         public /* synthetic */ void lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter(ArrayList arrayList) {
-            this.searchResult = arrayList;
-            notifyDataSetChanged();
+            if (CountrySelectActivity.this.searching) {
+                this.searchResult = arrayList;
+                if (!(!CountrySelectActivity.this.searchWas || CountrySelectActivity.this.listView == null || CountrySelectActivity.this.listView.getAdapter() == CountrySelectActivity.this.searchListViewAdapter)) {
+                    CountrySelectActivity.this.listView.setAdapter(CountrySelectActivity.this.searchListViewAdapter);
+                    CountrySelectActivity.this.listView.setFastScrollVisible(false);
+                }
+                notifyDataSetChanged();
+            }
         }
 
         public int getItemCount() {
@@ -342,7 +348,6 @@ public class CountrySelectActivity extends BaseFragment {
                 CountrySelectActivity.this.searchWas = false;
                 CountrySelectActivity.this.listView.setAdapter(CountrySelectActivity.this.listViewAdapter);
                 CountrySelectActivity.this.listView.setFastScrollVisible(true);
-                CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", NUM));
             }
 
             public void onTextChanged(EditText editText) {
@@ -350,11 +355,6 @@ public class CountrySelectActivity extends BaseFragment {
                 CountrySelectActivity.this.searchListViewAdapter.search(obj);
                 if (obj.length() != 0) {
                     CountrySelectActivity.this.searchWas = true;
-                    if (CountrySelectActivity.this.listView != null) {
-                        CountrySelectActivity.this.listView.setAdapter(CountrySelectActivity.this.searchListViewAdapter);
-                        CountrySelectActivity.this.listView.setFastScrollVisible(false);
-                    }
-                    CountrySelectActivity.this.emptyView;
                 }
             }
         }).setSearchFieldHint(LocaleController.getString("Search", NUM));

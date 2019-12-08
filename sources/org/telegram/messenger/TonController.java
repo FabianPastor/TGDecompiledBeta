@@ -6,9 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec.Builder;
@@ -18,7 +15,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import drinkless.org.ton.Client;
@@ -124,7 +120,10 @@ public class TonController extends BaseController {
     private boolean initied;
     private boolean isPrealodingWallet;
     private File keyDirectoty;
+    private Runnable onPendingTransactionsEmpty;
     private ArrayList<RawTransaction> pendingTransactions = new ArrayList();
+    private Runnable shortPollRunnable;
+    private boolean shortPollingInProgress;
     private SharedPreferences tonCache;
 
     public interface AccountStateCallback {
@@ -198,7 +197,9 @@ public class TonController extends BaseController {
         this.tonCache = context.getSharedPreferences(stringBuilder.toString(), 0);
         loadCache();
         this.client = Client.create(new -$$Lambda$TonController$bsWlPmC-mcv5bw47ilenQ4kKjmI(this), null, null);
-        this.client.send(new SetLogStream(new LogStreamFile(FileLog.getTonlibLogPath(), 5242880)), null);
+        if (BuildVars.LOGS_ENABLED) {
+            this.client.send(new SetLogStream(new LogStreamFile(FileLog.getTonlibLogPath(), 5242880)), null);
+        }
     }
 
     public /* synthetic */ void lambda$new$1$TonController(Object object) {
@@ -751,6 +752,7 @@ public class TonController extends BaseController {
             initTonLib();
             sendRequest(new DeleteAllKeys(), true);
         }
+        cancelShortPoll();
         this.tonCache.edit().clear().commit();
         this.isPrealodingWallet = false;
         this.accountAddress = null;
@@ -912,12 +914,14 @@ public class TonController extends BaseController {
     }
 
     public Cipher getCipherForDecrypt() {
+        Cipher cipher = null;
         try {
-            cipher.init(2, (PrivateKey) keyStore.getKey(getUserConfig().tonKeyName, null), new OAEPParameterSpec("SHA-1", "MGF1", MGF1ParameterSpec.SHA1, PSpecified.DEFAULT));
+            cipher.init(2, (PrivateKey) keyStore.getKey(getUserConfig().tonKeyName, cipher), new OAEPParameterSpec("SHA-1", "MGF1", MGF1ParameterSpec.SHA1, PSpecified.DEFAULT));
+            return cipher;
         } catch (Exception e) {
             FileLog.e(e);
+            return cipher;
         }
-        return cipher;
     }
 
     private Object sendRequest(Function function, boolean z) {
@@ -948,12 +952,14 @@ public class TonController extends BaseController {
             return;
         }
         if (object instanceof Error) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("TonApi query ");
-            stringBuilder.append(function);
-            stringBuilder.append(" error ");
-            stringBuilder.append(((Error) object).message);
-            FileLog.e(stringBuilder.toString());
+            if (BuildVars.LOGS_ENABLED) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("TonApi query ");
+                stringBuilder.append(function);
+                stringBuilder.append(" error ");
+                stringBuilder.append(((Error) object).message);
+                FileLog.e(stringBuilder.toString());
+            }
             objArr[0] = object;
         } else {
             objArr[0] = object;
@@ -1122,7 +1128,7 @@ public class TonController extends BaseController {
                         onFinishWalletCreate(null, wordsCallback, bArr, key);
                     }
                 } else {
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$ljDRUZSNWwLl559T79nqEjViPAk(this, errorCallback, tLObject));
+                    AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$nol4SDV7Xq2g28zLuViVPJF_Hd8(this, errorCallback, sendRequest));
                 }
             } else {
                 AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$A_GCvar_k9IFPgwfloPcNNJckftE(errorCallback));
@@ -1136,8 +1142,8 @@ public class TonController extends BaseController {
         errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
     }
 
-    public /* synthetic */ void lambda$null$9$TonController(ErrorCallback errorCallback, TLObject tLObject) {
-        errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(tLObject));
+    public /* synthetic */ void lambda$null$9$TonController(ErrorCallback errorCallback, Object obj) {
+        errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
     }
 
     public void setUserPasscode(String str, int i, Runnable runnable) {
@@ -1195,49 +1201,10 @@ public class TonController extends BaseController {
 
     public Bitmap createTonQR(Context context, String str, Bitmap bitmap) {
         try {
-            int i;
-            Bitmap createBitmap;
             HashMap hashMap = new HashMap();
-            hashMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hashMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
             hashMap.put(EncodeHintType.MARGIN, Integer.valueOf(0));
-            BitMatrix encode = new QRCodeWriter().encode(str, BarcodeFormat.QR_CODE, 768, 768, hashMap);
-            int width = encode.getWidth();
-            int height = encode.getHeight();
-            int multiple = encode.getMultiple();
-            int[] iArr = new int[(width * height)];
-            for (i = 0; i < height; i++) {
-                int i2 = i * width;
-                for (int i3 = 0; i3 < width; i3++) {
-                    iArr[i2 + i3] = encode.get(i3, i) ? -16777216 : -1;
-                }
-            }
-            if (bitmap == null || bitmap.getWidth() != width) {
-                createBitmap = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888);
-            } else {
-                createBitmap = bitmap;
-            }
-            createBitmap.setPixels(iArr, 0, width, 0, 0, width, height);
-            Drawable mutate = context.getResources().getDrawable(NUM).mutate();
-            Paint paint = new Paint();
-            paint.setColor(-1);
-            i = width - 32;
-            int i4 = i / multiple;
-            i = Math.round((((float) i) / 4.65f) / ((float) multiple));
-            if (i % 2 != i4 % 2) {
-                i++;
-            }
-            i *= multiple;
-            width = (width - i) / 2;
-            Canvas canvas = new Canvas(createBitmap);
-            canvas.drawBitmap(createBitmap, 0.0f, 0.0f, null);
-            float f = (float) width;
-            i += width;
-            float f2 = (float) i;
-            canvas.drawRect(f, f, f2, f2, paint);
-            mutate.setBounds(width, width, i, i);
-            mutate.draw(canvas);
-            canvas.setBitmap(null);
-            return createBitmap;
+            return new QRCodeWriter().encode(str, BarcodeFormat.QR_CODE, 768, 768, hashMap, bitmap, context);
         } catch (Exception e) {
             FileLog.e(e);
             return null;
@@ -1305,7 +1272,7 @@ public class TonController extends BaseController {
         r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x008f }
     L_0x007c:
         r6 = "WalletShareQr";
-        r0 = NUM; // 0x7f0e0bce float:1.8881167E38 double:1.0531636497E-314;
+        r0 = NUM; // 0x7f0e0bd0 float:1.888117E38 double:1.0531636507E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x008f }
         r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x008f }
         r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -1348,7 +1315,7 @@ public class TonController extends BaseController {
     public /* synthetic */ void lambda$getTransactions$17$TonController(boolean z, GetTransactionsCallback getTransactionsCallback, Object obj) {
         if (obj instanceof RawTransactions) {
             AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$vzgwuH2JLJf2Svz9kAwPm6yC8gw(this, new ArrayList(Arrays.asList(((RawTransactions) obj).transactions)), z, getTransactionsCallback));
-        } else {
+        } else if (getTransactionsCallback != null) {
             AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$tSYjV4eYPmxo38iPvsGvtQxADDY(getTransactionsCallback));
         }
     }
@@ -1376,6 +1343,10 @@ public class TonController extends BaseController {
             }
             obj = obj2;
         }
+        if (this.onPendingTransactionsEmpty != null && this.pendingTransactions.isEmpty()) {
+            this.onPendingTransactionsEmpty.run();
+            this.onPendingTransactionsEmpty = null;
+        }
         if (z) {
             this.cachedTransactions.clear();
             this.cachedTransactions.addAll(arrayList);
@@ -1383,7 +1354,9 @@ public class TonController extends BaseController {
         } else if (obj != null) {
             saveCache();
         }
-        getTransactionsCallback.run(arrayList);
+        if (getTransactionsCallback != null) {
+            getTransactionsCallback.run(arrayList);
+        }
     }
 
     private void preloadWallet(String str) {
@@ -1502,29 +1475,32 @@ public class TonController extends BaseController {
         errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
     }
 
-    public void sendGrams(String str, Cipher cipher, InputKey inputKey, String str2, String str3, long j, String str4, Runnable runnable, Runnable runnable2, DangerousCallback dangerousCallback, ErrorCallback errorCallback) {
-        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$I4uwf1w6bpJUeWzMXsZzvsOipyw(this, inputKey, str, cipher, runnable, errorCallback, str2, str3, j, str4, runnable2, dangerousCallback));
+    public void sendGrams(String str, Cipher cipher, InputKey inputKey, String str2, String str3, long j, String str4, Runnable runnable, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback, ErrorCallback errorCallback) {
+        DispatchQueue dispatchQueue = Utilities.globalQueue;
+        -$$Lambda$TonController$LACzhOYWYTXLVgjY9gdId5UtvFo -__lambda_toncontroller_laczhoywytxlvgjy9gdid5utvfo = r1;
+        -$$Lambda$TonController$LACzhOYWYTXLVgjY9gdId5UtvFo -__lambda_toncontroller_laczhoywytxlvgjy9gdid5utvfo2 = new -$$Lambda$TonController$LACzhOYWYTXLVgjY9gdId5UtvFo(this, inputKey, str, cipher, runnable, errorCallback, str2, str3, j, str4, runnable3, runnable2, dangerousCallback);
+        dispatchQueue.postRunnable(-__lambda_toncontroller_laczhoywytxlvgjy9gdid5utvfo);
     }
 
-    public /* synthetic */ void lambda$sendGrams$34$TonController(InputKey inputKey, String str, Cipher cipher, Runnable runnable, ErrorCallback errorCallback, String str2, String str3, long j, String str4, Runnable runnable2, DangerousCallback dangerousCallback) {
+    public /* synthetic */ void lambda$sendGrams$34$TonController(InputKey inputKey, String str, Cipher cipher, Runnable runnable, ErrorCallback errorCallback, String str2, String str3, long j, String str4, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback) {
         InputKey decryptTonData = inputKey == null ? decryptTonData(str, cipher, runnable, errorCallback, false) : inputKey;
         if (decryptTonData != null) {
             long j2 = j;
-            Function genericSendGrams = new GenericSendGrams(decryptTonData, new AccountAddress(str2), new AccountAddress(str3), j2, 0, inputKey != null, str4 != null ? str4.getBytes() : new byte[0]);
-            TonLibCallback -__lambda_toncontroller_rrxcbcdmwp6ckdylx0waxux6348 = new -$$Lambda$TonController$rRXcbCDmWp6CKDyLX0wAxUx6348(this, str2, str3, j2, str4, runnable2, dangerousCallback, decryptTonData, errorCallback);
-            sendRequest(genericSendGrams, -__lambda_toncontroller_rrxcbcdmwp6ckdylx0waxux6348);
+            Function genericSendGrams = new GenericSendGrams(decryptTonData, new AccountAddress(str2), new AccountAddress(str3), j2, 0, true, str4 != null ? str4.getBytes() : new byte[0]);
+            TonLibCallback -__lambda_toncontroller_qiferhhjkja_l70bdu_6bt4u0mc = new -$$Lambda$TonController$QIFeRhHjkJA_l70Bdu_6bT4U0mc(this, str2, str3, j2, str4, runnable2, runnable3, dangerousCallback, decryptTonData, errorCallback);
+            sendRequest(genericSendGrams, -__lambda_toncontroller_qiferhhjkja_l70bdu_6bt4u0mc);
         }
     }
 
-    public /* synthetic */ void lambda$null$33$TonController(String str, String str2, long j, String str3, Runnable runnable, DangerousCallback dangerousCallback, InputKey inputKey, ErrorCallback errorCallback, Object obj) {
+    public /* synthetic */ void lambda$null$33$TonController(String str, String str2, long j, String str3, Runnable runnable, Runnable runnable2, DangerousCallback dangerousCallback, InputKey inputKey, ErrorCallback errorCallback, Object obj) {
         if (obj instanceof SendGramsResult) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$5KleeTKjYZ3I8y6tes4IZVJ9IuA(this, obj, str, str2, j, str3, runnable));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$MwWG4jo1UnBeZTlf4c_Dd_4QCcA(this, obj, str, str2, j, str3, runnable, runnable2));
         } else {
             AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$TkyDfizMrTGiHx3pu7apJKfwdmM(this, obj, dangerousCallback, inputKey, errorCallback));
         }
     }
 
-    public /* synthetic */ void lambda$null$31$TonController(Object obj, String str, String str2, long j, String str3, Runnable runnable) {
+    public /* synthetic */ void lambda$null$31$TonController(Object obj, String str, String str2, long j, String str3, Runnable runnable, Runnable runnable2) {
         SendGramsResult sendGramsResult = (SendGramsResult) obj;
         RawMessage rawMessage = new RawMessage();
         rawMessage.source = str;
@@ -1535,7 +1511,8 @@ public class TonController extends BaseController {
         this.pendingTransactions.add(0, new RawTransaction(System.currentTimeMillis() / 1000, new byte[0], new InternalTransactionId(), 0, 0, 0, rawMessage, new RawMessage[0]));
         saveCache();
         getNotificationCenter().postNotificationName(NotificationCenter.walletPendingTransactionsChanged, new Object[0]);
-        runnable.run();
+        this.onPendingTransactionsEmpty = runnable;
+        runnable2.run();
     }
 
     public /* synthetic */ void lambda$null$32$TonController(Object obj, DangerousCallback dangerousCallback, InputKey inputKey, ErrorCallback errorCallback) {
@@ -1545,6 +1522,49 @@ public class TonController extends BaseController {
         } else {
             dangerousCallback.run(inputKey);
         }
+    }
+
+    private void runShortPolling() {
+        if (!this.shortPollingInProgress && !this.pendingTransactions.isEmpty()) {
+            this.shortPollingInProgress = true;
+            getAccountState(new -$$Lambda$TonController$RJupFG7ruVYFOeDFSlIAU1gcAD4(this));
+        }
+    }
+
+    public /* synthetic */ void lambda$runShortPolling$36$TonController(GenericAccountState genericAccountState) {
+        if (genericAccountState != null) {
+            getTransactions(true, getLastTransactionId(genericAccountState), new -$$Lambda$TonController$UKUZGf4hmg7yXgAQn7dXPjFBr7A(this));
+            return;
+        }
+        this.shortPollRunnable = null;
+        this.shortPollingInProgress = false;
+        scheduleShortPoll();
+    }
+
+    public /* synthetic */ void lambda$null$35$TonController(ArrayList arrayList) {
+        this.shortPollRunnable = null;
+        this.shortPollingInProgress = false;
+        if (!this.pendingTransactions.isEmpty()) {
+            scheduleShortPoll();
+        }
+    }
+
+    public void scheduleShortPoll() {
+        if (this.shortPollRunnable == null) {
+            -$$Lambda$TonController$y5gHwqWFihVH-4vITInmi9Ihzbk -__lambda_toncontroller_y5ghwqwfihvh-4vitinmi9ihzbk = new -$$Lambda$TonController$y5gHwqWFihVH-4vITInmi9Ihzbk(this);
+            this.shortPollRunnable = -__lambda_toncontroller_y5ghwqwfihvh-4vitinmi9ihzbk;
+            AndroidUtilities.runOnUIThread(-__lambda_toncontroller_y5ghwqwfihvh-4vitinmi9ihzbk, 3000);
+        }
+    }
+
+    public void cancelShortPoll() {
+        Runnable runnable = this.shortPollRunnable;
+        if (runnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(runnable);
+            this.shortPollRunnable = null;
+        }
+        this.onPendingTransactionsEmpty = null;
+        this.shortPollingInProgress = false;
     }
 
     public static CharSequence formatCurrency(long j) {

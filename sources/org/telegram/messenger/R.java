@@ -181,6 +181,7 @@ public final class R {
         public static final int abc_ic_menu_share_mtrl_alpha = NUM;
         public static final int account_add = NUM;
         public static final int account_check = NUM;
+        public static final int actionbtn_next = NUM;
         public static final int actions_addadmin = NUM;
         public static final int actions_addmember2 = NUM;
         public static final int actions_permissions = NUM;
@@ -839,6 +840,7 @@ public final class R {
         public static final int update = NUM;
         public static final int verified_area = NUM;
         public static final int verified_check = NUM;
+        public static final int verified_profile = NUM;
         public static final int video_1080 = NUM;
         public static final int video_240 = NUM;
         public static final int video_360 = NUM;
@@ -4194,6 +4196,7 @@ public final class R {
         public static final int WalletBiometricTooManyAttempts = NUM;
         public static final int WalletBlockchainFees = NUM;
         public static final int WalletChangePasscode = NUM;
+        public static final int WalletClose = NUM;
         public static final int WalletComment = NUM;
         public static final int WalletConfirm = NUM;
         public static final int WalletConfirmation = NUM;
@@ -4212,6 +4215,7 @@ public final class R {
         public static final int WalletEnterPasscode = NUM;
         public static final int WalletEnterWalletAddress = NUM;
         public static final int WalletExport = NUM;
+        public static final int WalletExportConfirmContinue = NUM;
         public static final int WalletExportConfirmCredentials = NUM;
         public static final int WalletFrom = NUM;
         public static final int WalletGramsToReceive = NUM;

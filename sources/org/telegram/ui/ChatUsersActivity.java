@@ -2079,7 +2079,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r9.searching = r0;
         r9.searchWas = r0;
         r1 = r9.actionBar;
-        r2 = NUM; // 0x7var_e8 float:1.7945048E38 double:1.0529356177E-314;
+        r2 = NUM; // 0x7var_e9 float:1.794505E38 double:1.052935618E-314;
         r1.setBackButtonImage(r2);
         r1 = r9.actionBar;
         r2 = 1;
@@ -2181,7 +2181,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r9.searchListViewAdapter = r1;
         r1 = r9.actionBar;
         r1 = r1.createMenu();
-        r5 = NUM; // 0x7var_f2 float:1.7945069E38 double:1.0529356226E-314;
+        r5 = NUM; // 0x7var_f3 float:1.794507E38 double:1.052935623E-314;
         r5 = r1.addItem(r0, r5);
         r5 = r5.setIsSearchField(r2);
         r6 = new org.telegram.ui.ChatUsersActivity$2;
@@ -2207,7 +2207,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r5 = r9.type;
         if (r5 != r4) goto L_0x011b;
     L_0x0103:
-        r5 = NUM; // 0x7var_ float:1.794511E38 double:1.0529356325E-314;
+        r5 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
         r6 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r7 = NUM; // 0x7f0e03a9 float:1.8876938E38 double:1.0531626196E-314;
@@ -3579,7 +3579,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
     L_0x00da:
         r1.add(r0);
-        r0 = NUM; // 0x7var_e float:1.7944704E38 double:1.0529355337E-314;
+        r0 = NUM; // 0x7var_f float:1.7944706E38 double:1.052935534E-314;
         r0 = java.lang.Integer.valueOf(r0);
         r2 = r19;
         r2.add(r0);
@@ -3613,7 +3613,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r15 = "ChangePermissions";
         r12 = org.telegram.messenger.LocaleController.getString(r15, r12);
         r1.add(r12);
-        r12 = NUM; // 0x7var_ float:1.7944708E38 double:1.0529355346E-314;
+        r12 = NUM; // 0x7var_ float:1.794471E38 double:1.052935535E-314;
         r12 = java.lang.Integer.valueOf(r12);
         r2.add(r12);
         r12 = 1;
@@ -3624,7 +3624,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r15 = "KickFromGroup";
         r12 = org.telegram.messenger.LocaleController.getString(r15, r12);
         r1.add(r12);
-        r12 = NUM; // 0x7var_ float:1.794471E38 double:1.052935535E-314;
+        r12 = NUM; // 0x7var_ float:1.7944712E38 double:1.0529355356E-314;
         r12 = java.lang.Integer.valueOf(r12);
         r2.add(r12);
         r15 = 2;
@@ -3632,12 +3632,12 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0.add(r12);
         goto L_0x016f;
     L_0x014e:
-        r12 = NUM; // 0x7var_ float:1.794471E38 double:1.052935535E-314;
+        r12 = NUM; // 0x7var_ float:1.7944712E38 double:1.0529355356E-314;
         r15 = NUM; // 0x7f0e0263 float:1.8876277E38 double:1.0531624585E-314;
         r12 = "ChannelRemoveUser";
         r12 = org.telegram.messenger.LocaleController.getString(r12, r15);
         r1.add(r12);
-        r12 = NUM; // 0x7var_ float:1.794471E38 double:1.052935535E-314;
+        r12 = NUM; // 0x7var_ float:1.7944712E38 double:1.0529355356E-314;
         r12 = java.lang.Integer.valueOf(r12);
         r2.add(r12);
         r12 = 2;
@@ -3813,7 +3813,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r5 = 0;
         r1[r5] = r2;
         r2 = new int[r0];
-        r3 = NUM; // 0x7var_ float:1.794471E38 double:1.052935535E-314;
+        r3 = NUM; // 0x7var_ float:1.7944712E38 double:1.0529355356E-314;
         r2[r5] = r3;
         r12 = r1;
         r13 = r2;

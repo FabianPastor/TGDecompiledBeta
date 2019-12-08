@@ -218,6 +218,7 @@
     <public type="drawable" name="abc_ic_menu_share_mtrl_alpha" id="NUM" />
     <public type="drawable" name="account_add" id="NUM" />
     <public type="drawable" name="account_check" id="NUM" />
+    <public type="drawable" name="actionbtn_next" id="NUM" />
     <public type="drawable" name="actions_addadmin" id="NUM" />
     <public type="drawable" name="actions_addmember2" id="NUM" />
     <public type="drawable" name="actions_permissions" id="NUM" />
@@ -876,6 +877,7 @@
     <public type="drawable" name="update" id="NUM" />
     <public type="drawable" name="verified_area" id="NUM" />
     <public type="drawable" name="verified_check" id="NUM" />
+    <public type="drawable" name="verified_profile" id="NUM" />
     <public type="drawable" name="video_1080" id="NUM" />
     <public type="drawable" name="video_240" id="NUM" />
     <public type="drawable" name="video_360" id="NUM" />
@@ -4094,6 +4096,7 @@
     <public type="string" name="WalletBiometricTooManyAttempts" id="NUM" />
     <public type="string" name="WalletBlockchainFees" id="NUM" />
     <public type="string" name="WalletChangePasscode" id="NUM" />
+    <public type="string" name="WalletClose" id="NUM" />
     <public type="string" name="WalletComment" id="NUM" />
     <public type="string" name="WalletConfirm" id="NUM" />
     <public type="string" name="WalletConfirmation" id="NUM" />
@@ -4112,6 +4115,7 @@
     <public type="string" name="WalletEnterPasscode" id="NUM" />
     <public type="string" name="WalletEnterWalletAddress" id="NUM" />
     <public type="string" name="WalletExport" id="NUM" />
+    <public type="string" name="WalletExportConfirmContinue" id="NUM" />
     <public type="string" name="WalletExportConfirmCredentials" id="NUM" />
     <public type="string" name="WalletFrom" id="NUM" />
     <public type="string" name="WalletGramsToReceive" id="NUM" />

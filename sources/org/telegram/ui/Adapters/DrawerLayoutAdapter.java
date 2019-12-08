@@ -183,6 +183,10 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
             String str4 = "NewGroup";
             if (Theme.getEventType() == 0) {
                 this.items.add(new Item(2, LocaleController.getString(str4, NUM), NUM));
+                if (obj == null) {
+                    this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
+                    this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
+                }
                 this.items.add(new Item(6, LocaleController.getString(str3, NUM), NUM));
                 this.items.add(new Item(10, LocaleController.getString(str2, NUM), NUM));
                 this.items.add(new Item(11, LocaleController.getString(str, NUM), NUM));
@@ -195,6 +199,10 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
                 this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
             } else {
                 this.items.add(new Item(2, LocaleController.getString(str4, NUM), NUM));
+                if (obj == null) {
+                    this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
+                    this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
+                }
                 this.items.add(new Item(6, LocaleController.getString(str3, NUM), NUM));
                 this.items.add(new Item(10, LocaleController.getString(str2, NUM), NUM));
                 this.items.add(new Item(11, LocaleController.getString(str, NUM), NUM));

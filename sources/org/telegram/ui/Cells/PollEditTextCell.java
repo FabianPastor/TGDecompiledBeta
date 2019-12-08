@@ -34,6 +34,10 @@ public class PollEditTextCell extends FrameLayout {
         return true;
     }
 
+    /* Access modifiers changed, original: protected */
+    public void onEditTextDraw(EditTextBoldCursor editTextBoldCursor, Canvas canvas) {
+    }
+
     public PollEditTextCell(Context context, OnClickListener onClickListener) {
         super(context);
         this.textView = new EditTextBoldCursor(context) {
@@ -43,6 +47,12 @@ public class PollEditTextCell extends FrameLayout {
                     editorInfo.imeOptions &= -NUM;
                 }
                 return onCreateInputConnection;
+            }
+
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                PollEditTextCell.this.onEditTextDraw(this, canvas);
             }
         };
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -87,12 +97,11 @@ public class PollEditTextCell extends FrameLayout {
         this.textView2.setTextSize(13);
         int i = 3;
         this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-        addView(this.textView2, LayoutHelper.createFrame(48, 24.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 20.0f : 0.0f, 17.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
-        EditTextBoldCursor editTextBoldCursor = this.textView;
-        if (LocaleController.isRTL) {
+        SimpleTextView simpleTextView = this.textView2;
+        if (!LocaleController.isRTL) {
             i = 5;
         }
-        editTextBoldCursor.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, i | 16, LocaleController.isRTL ? 58.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 58.0f, 0.0f));
+        addView(simpleTextView, LayoutHelper.createFrame(48, 24.0f, i | 48, LocaleController.isRTL ? 20.0f : 0.0f, 17.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
@@ -106,7 +115,10 @@ public class PollEditTextCell extends FrameLayout {
         if (simpleTextView != null) {
             simpleTextView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
         }
-        this.textView.measure(MeasureSpec.makeMeasureSpec(((i - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(this.textView2 != null ? 79.0f : 42.0f), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+        EditTextBoldCursor editTextBoldCursor = this.textView;
+        int paddingLeft = (i - getPaddingLeft()) - getPaddingRight();
+        float f = (this.textView2 == null || this.textView.getBackground() != null) ? 42.0f : 79.0f;
+        editTextBoldCursor.measure(MeasureSpec.makeMeasureSpec(paddingLeft - AndroidUtilities.dp(f), NUM), MeasureSpec.makeMeasureSpec(0, 0));
         i2 = this.textView.getMeasuredHeight();
         setMeasuredDimension(i, Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight()) + this.needDivider);
         SimpleTextView simpleTextView2 = this.textView2;
@@ -146,8 +158,8 @@ public class PollEditTextCell extends FrameLayout {
         this.textView.setTextColor(i);
     }
 
-    public void setText(String str, boolean z) {
-        this.textView.setText(str);
+    public void setText(CharSequence charSequence, boolean z) {
+        this.textView.setText(charSequence);
         this.needDivider = z;
         setWillNotDraw(z ^ 1);
     }

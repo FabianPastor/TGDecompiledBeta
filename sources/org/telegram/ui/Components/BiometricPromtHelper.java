@@ -75,17 +75,20 @@ public class BiometricPromtHelper {
     }
 
     public void promtWithCipher(Cipher cipher, String str, CipherCallback cipherCallback) {
-        Cipher cipher2 = cipher;
-        String str2 = str;
+        promtWithCipher(cipher, str, cipherCallback, false);
+    }
+
+    private void promtWithCipher(Cipher cipher, String str, CipherCallback cipherCallback, boolean z) {
+        final Cipher cipher2 = cipher;
+        final String str2 = str;
         final CipherCallback cipherCallback2 = cipherCallback;
         if (cipher2 != null && cipherCallback2 != null) {
             BaseFragment baseFragment = this.parentFragment;
             if (baseFragment != null && baseFragment.getParentActivity() != null) {
                 Activity parentActivity = this.parentFragment.getParentActivity();
-                int i = VERSION.SDK_INT;
                 String str3 = "Cancel";
                 String str4 = "Wallet";
-                if (i >= 28) {
+                if (VERSION.SDK_INT >= 28 && !z) {
                     this.cancellationSignal = new CancellationSignal();
                     Builder builder = new Builder(parentActivity);
                     builder.setTitle(LocaleController.getString(str4, NUM));
@@ -101,6 +104,8 @@ public class BiometricPromtHelper {
                         public void onAuthenticationError(int i, CharSequence charSequence) {
                             if (i == 7) {
                                 AlertsCreator.showSimpleAlert(BiometricPromtHelper.this.parentFragment, LocaleController.getString("Wallet", NUM), LocaleController.getString("WalletBiometricTooManyAttempts", NUM));
+                            } else if (i == 11) {
+                                BiometricPromtHelper.this.promtWithCipher(cipher2, str2, cipherCallback2, true);
                             }
                         }
 
@@ -108,7 +113,7 @@ public class BiometricPromtHelper {
                             cipherCallback2.run(authenticationResult.getCryptoObject().getCipher());
                         }
                     });
-                } else if (i >= 23) {
+                } else if (VERSION.SDK_INT >= 23) {
                     this.cancellationSignal = new CancellationSignal();
                     parentActivity = this.parentFragment.getParentActivity();
                     final BottomSheet.Builder builder2 = new BottomSheet.Builder(parentActivity);
@@ -268,7 +273,7 @@ public class BiometricPromtHelper {
         goto L_0x003a;
     L_0x0012:
         r0 = 2;
-        r2 = NUM; // 0x7var_bb float:1.7944957E38 double:1.0529355954E-314;
+        r2 = NUM; // 0x7var_bc float:1.794496E38 double:1.052935596E-314;
         if (r7 != r0) goto L_0x0019;
     L_0x0018:
         goto L_0x002f;
@@ -278,7 +283,7 @@ public class BiometricPromtHelper {
     L_0x001c:
         if (r7 != r3) goto L_0x0022;
     L_0x001e:
-        r2 = NUM; // 0x7var_ba float:1.7944955E38 double:1.052935595E-314;
+        r2 = NUM; // 0x7var_bb float:1.7944957E38 double:1.0529355954E-314;
         goto L_0x002f;
     L_0x0022:
         r4 = 4;

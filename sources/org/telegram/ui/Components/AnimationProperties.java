@@ -4,7 +4,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.util.Property;
-import org.telegram.messenger.FileLog;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.PhotoViewer;
 
@@ -86,18 +85,10 @@ public class AnimationProperties {
         };
         SHAPE_DRAWABLE_ALPHA = new IntProperty<ShapeDrawable>(str) {
             public void setValue(ShapeDrawable shapeDrawable, int i) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("setalpha = ");
-                stringBuilder.append(i);
-                FileLog.d(stringBuilder.toString());
                 shapeDrawable.getPaint().setAlpha(i);
             }
 
             public Integer get(ShapeDrawable shapeDrawable) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("getalpha = ");
-                stringBuilder.append(shapeDrawable.getPaint().getAlpha());
-                FileLog.d(stringBuilder.toString());
                 return Integer.valueOf(shapeDrawable.getPaint().getAlpha());
             }
         };

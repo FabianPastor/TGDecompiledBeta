@@ -25,7 +25,6 @@ import org.telegram.tgnet.TLRPC.TL_inputPeerPhotoFileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputPhotoFileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputSecureFileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetThumb;
-import org.telegram.tgnet.TLRPC.TL_inputWebFileGeoPointLocation;
 import org.telegram.tgnet.TLRPC.TL_secureFile;
 import org.telegram.tgnet.TLRPC.TL_theme;
 import org.telegram.tgnet.TLRPC.TL_upload_cdnFile;
@@ -3260,9 +3259,6 @@ public class FileLoadOperation {
                 boolean z = i3 <= 0 || i == max - 1 || (i3 > 0 && this.currentDownloadChunkSize + i2 >= i3);
                 int i8 = this.requestsCount % 2 == 0 ? 2 : 65538;
                 int i9 = this.isForceRequest ? 32 : 0;
-                if (!(this.webLocation instanceof TL_inputWebFileGeoPointLocation)) {
-                    i9 |= 2;
-                }
                 if (this.isCdn) {
                     tL_upload_getCdnFile = new TL_upload_getCdnFile();
                     tL_upload_getCdnFile.file_token = this.cdnToken;

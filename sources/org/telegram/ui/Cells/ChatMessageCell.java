@@ -13419,7 +13419,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x345a:
         r2 = r1.photoImage;
         r3 = r59.getResources();
-        r4 = NUM; // 0x7var_bd float:1.7946E38 double:1.0529358494E-314;
+        r4 = NUM; // 0x7var_be float:1.7946002E38 double:1.05293585E-314;
         r3 = r3.getDrawable(r4);
         r2.setImageBitmap(r3);
         goto L_0x3649;

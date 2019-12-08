@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,7 @@ import org.telegram.ui.Components.ShareAlert;
 
 public class WalletActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final String PENDING_KEY = "pending";
+    private static final int SHORT_POLL_DELAY = 3000;
     private static final int menu_settings = 1;
     public static float viewOffset;
     private GenericAccountState accountState;
@@ -87,7 +89,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
     private Runnable shortPollRunnable = new Runnable() {
         public void run() {
             WalletActivity.this.loadAccountState();
-            AndroidUtilities.runOnUIThread(WalletActivity.this.shortPollRunnable, 10000);
+            AndroidUtilities.runOnUIThread(WalletActivity.this.shortPollRunnable, 3000);
         }
     };
     private long startArchivePullingTime;
@@ -161,37 +163,40 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                         textView.setEllipsize(TruncateAt.END);
                         textView.setGravity(16);
                         anonymousClass1.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 21.0f, 22.0f, 21.0f, 0.0f));
-                        textView = new TextView(Adapter.this.context);
-                        textView.setTextColor(Theme.getColor("dialogTextGray2"));
-                        textView.setGravity(1);
-                        textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-                        textView.setTextSize(1, 14.0f);
-                        textView.setText(LocaleController.getString("WalletShareInfo", NUM));
-                        textView.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
-                        anonymousClass1.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 78.0f, 0.0f, 0.0f));
-                        textView = new TextView(Adapter.this.context);
+                        LinearLayout linearLayout = new LinearLayout(getContext());
+                        linearLayout.setOrientation(1);
+                        anonymousClass1.addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
+                        TextView textView2 = new TextView(Adapter.this.context);
+                        textView2.setTextColor(Theme.getColor("dialogTextGray2"));
+                        textView2.setGravity(1);
+                        textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+                        textView2.setTextSize(1, 14.0f);
+                        textView2.setText(LocaleController.getString("WalletShareInfo", NUM));
+                        textView2.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
+                        linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 49, 0, 0, 0, 0));
+                        textView2 = new TextView(Adapter.this.context);
                         ImageView imageView = new ImageView(Adapter.this.context);
                         imageView.setImageBitmap(WalletActivity.this.getTonController().createTonQR(Adapter.this.context, WalletActivity.this.getTonUrl(), null));
-                        anonymousClass1.addView(imageView, LayoutHelper.createFrame(190, 190.0f, 49, 0.0f, 127.0f, 0.0f, 0.0f));
-                        imageView.setOnLongClickListener(new -$$Lambda$WalletActivity$Adapter$1$0O46dSAinUuAaH3tp7nHtMiH-Ew(this, textView));
-                        textView.setTextSize(1, 17.0f);
-                        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmono.ttf"));
-                        textView.setTextColor(Theme.getColor(str));
+                        linearLayout.addView(imageView, LayoutHelper.createLinear(190, 190, 49, 0, 16, 0, 0));
+                        imageView.setOnLongClickListener(new -$$Lambda$WalletActivity$Adapter$1$0O46dSAinUuAaH3tp7nHtMiH-Ew(this, textView2));
+                        textView2.setTextSize(1, 17.0f);
+                        textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmono.ttf"));
+                        textView2.setTextColor(Theme.getColor(str));
                         StringBuilder stringBuilder = new StringBuilder(WalletActivity.this.walletAddress);
                         stringBuilder.insert(stringBuilder.length() / 2, 10);
-                        textView.setText(stringBuilder);
-                        anonymousClass1.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 1, 0.0f, 329.0f, 0.0f, 0.0f));
-                        textView.setOnLongClickListener(new -$$Lambda$WalletActivity$Adapter$1$D2CFM7cphGt52x6oeA-KuGV7IYs(this, textView));
-                        textView = new TextView(Adapter.this.context);
-                        textView.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-                        textView.setGravity(17);
-                        textView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-                        textView.setTextSize(1, 14.0f);
-                        textView.setText(LocaleController.getString("WalletShareAddress", NUM));
-                        textView.setTypeface(AndroidUtilities.getTypeface(str2));
-                        textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-                        anonymousClass1.addView(textView, LayoutHelper.createFrame(-1, 42.0f, 83, 16.0f, 0.0f, 16.0f, 16.0f));
-                        textView.setOnClickListener(new -$$Lambda$WalletActivity$Adapter$1$0y5_Jga2halHiCWg4aj2oA6EuTU(this));
+                        textView2.setText(stringBuilder);
+                        linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
+                        textView2.setOnLongClickListener(new -$$Lambda$WalletActivity$Adapter$1$D2CFM7cphGt52x6oeA-KuGV7IYs(this, textView2));
+                        TextView textView3 = new TextView(Adapter.this.context);
+                        textView3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+                        textView3.setGravity(17);
+                        textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+                        textView3.setTextSize(1, 14.0f);
+                        textView3.setText(LocaleController.getString("WalletShareAddress", NUM));
+                        textView3.setTypeface(AndroidUtilities.getTypeface(str2));
+                        textView3.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+                        linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 42.0f, 51, 16.0f, 20.0f, 16.0f, 16.0f));
+                        textView3.setOnClickListener(new -$$Lambda$WalletActivity$Adapter$1$0y5_Jga2halHiCWg4aj2oA6EuTU(this));
                         ScrollView scrollView = new ScrollView(Adapter.this.context);
                         scrollView.setVerticalScrollBarEnabled(false);
                         scrollView.addView(anonymousClass1, LayoutHelper.createScroll(-1, -2, 51));
@@ -1011,10 +1016,12 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         }
     }
 
-    private InternalTransactionId getLastTransactionId() {
-        RawTransaction rawTransaction = this.lastTransaction;
-        if (rawTransaction != null) {
-            return rawTransaction.transactionId;
+    private InternalTransactionId getLastTransactionId(boolean z) {
+        if (!z) {
+            RawTransaction rawTransaction = this.lastTransaction;
+            if (rawTransaction != null) {
+                return rawTransaction.transactionId;
+            }
         }
         return TonController.getLastTransactionId(this.accountState);
     }
@@ -1038,14 +1045,13 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
 
     private void scheduleShortPoll() {
         AndroidUtilities.cancelRunOnUIThread(this.shortPollRunnable);
-        AndroidUtilities.runOnUIThread(this.shortPollRunnable, 10000);
+        AndroidUtilities.runOnUIThread(this.shortPollRunnable, 3000);
     }
 
     private void loadAccountState() {
         if (!this.loadingAccountState) {
             this.loadingAccountState = true;
             AndroidUtilities.cancelRunOnUIThread(this.shortPollRunnable);
-            this.lastTransaction = null;
             if (this.accountState == null) {
                 this.accountState = getTonController().getCachedAccountState();
                 this.lastUpdateTime = getLastUpdateTime();
@@ -1140,10 +1146,10 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         scheduleShortPoll();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0092  */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x007f  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x00a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00a6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0095  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0082  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x00aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x00a9 A:{RETURN} */
     private boolean fillTransactions(java.util.ArrayList<drinkless.org.ton.TonApi.RawTransaction> r18, boolean r19) {
         /*
         r17 = this;
@@ -1152,12 +1158,12 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         r2 = "pending";
         r3 = 1;
         r4 = 0;
-        if (r1 == 0) goto L_0x0070;
+        if (r1 == 0) goto L_0x0073;
     L_0x000a:
         r5 = r18.isEmpty();
-        if (r5 != 0) goto L_0x0070;
+        if (r5 != 0) goto L_0x0073;
     L_0x0010:
-        if (r19 == 0) goto L_0x0070;
+        if (r19 == 0) goto L_0x0073;
     L_0x0012:
         r5 = r18.size();
         r5 = r5 - r3;
@@ -1167,7 +1173,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         r6 = r6.size();
         r7 = 0;
     L_0x0024:
-        if (r7 >= r6) goto L_0x0070;
+        if (r7 >= r6) goto L_0x0073;
     L_0x0026:
         r8 = r0.sections;
         r8 = r8.get(r7);
@@ -1188,7 +1194,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         r6 = r6.utime;
         r8 = r5.utime;
         r5 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r5 >= 0) goto L_0x006d;
+        if (r5 >= 0) goto L_0x0070;
     L_0x0053:
         r5 = r0.sections;
         r5.clear();
@@ -1196,51 +1202,53 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         r5.clear();
         r5 = r0.transactionsDict;
         r5.clear();
+        r5 = 0;
+        r0.lastTransaction = r5;
         r0.transactionsEndReached = r4;
         r5 = r17.getTonController();
         r5.clearPendingCache();
         r5 = 1;
-        goto L_0x0071;
-    L_0x006d:
-        java.util.Collections.reverse(r18);
+        goto L_0x0074;
     L_0x0070:
+        java.util.Collections.reverse(r18);
+    L_0x0073:
         r5 = 0;
-    L_0x0071:
+    L_0x0074:
         r6 = r17.getTonController();
         r6 = r6.getPendingTransactions();
         r7 = r6.isEmpty();
-        if (r7 == 0) goto L_0x0092;
-    L_0x007f:
+        if (r7 == 0) goto L_0x0095;
+    L_0x0082:
         r6 = r0.sectionArrays;
         r6 = r6.containsKey(r2);
-        if (r6 == 0) goto L_0x00a4;
-    L_0x0087:
+        if (r6 == 0) goto L_0x00a7;
+    L_0x008a:
         r6 = r0.sectionArrays;
         r6.remove(r2);
         r6 = r0.sections;
         r6.remove(r4);
-        goto L_0x00a4;
-    L_0x0092:
+        goto L_0x00a7;
+    L_0x0095:
         r7 = r0.sectionArrays;
         r7 = r7.containsKey(r2);
-        if (r7 != 0) goto L_0x00a4;
-    L_0x009a:
+        if (r7 != 0) goto L_0x00a7;
+    L_0x009d:
         r7 = r0.sections;
         r7.add(r4, r2);
         r7 = r0.sectionArrays;
         r7.put(r2, r6);
-    L_0x00a4:
-        if (r1 != 0) goto L_0x00a7;
-    L_0x00a6:
-        return r4;
     L_0x00a7:
+        if (r1 != 0) goto L_0x00aa;
+    L_0x00a9:
+        return r4;
+    L_0x00aa:
         r6 = java.util.Calendar.getInstance();
         r7 = r18.size();
         r8 = 0;
         r9 = 0;
-    L_0x00b1:
-        if (r8 >= r7) goto L_0x0179;
-    L_0x00b3:
+    L_0x00b4:
+        if (r8 >= r7) goto L_0x017c;
+    L_0x00b6:
         r10 = r1.get(r8);
         r10 = (drinkless.org.ton.TonApi.RawTransaction) r10;
         r11 = r0.transactionsDict;
@@ -1248,11 +1256,11 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         r12 = r12.lt;
         r12 = java.lang.Long.valueOf(r12);
         r11 = r11.containsKey(r12);
-        if (r11 == 0) goto L_0x00cc;
-    L_0x00c9:
-        r3 = 0;
-        goto L_0x0173;
+        if (r11 == 0) goto L_0x00cf;
     L_0x00cc:
+        r3 = 0;
+        goto L_0x0176;
+    L_0x00cf:
         r11 = r10.utime;
         r13 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r11 = r11 * r13;
@@ -1275,23 +1283,23 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         r11 = r0.sectionArrays;
         r11 = r11.get(r9);
         r11 = (java.util.ArrayList) r11;
-        if (r11 != 0) goto L_0x0158;
-    L_0x0108:
+        if (r11 != 0) goto L_0x015b;
+    L_0x010b:
         r11 = r0.sections;
         r11 = r11.size();
         r12 = r0.sections;
         r12 = r12.size();
         r13 = 0;
-    L_0x0115:
-        if (r13 >= r12) goto L_0x0148;
-    L_0x0117:
+    L_0x0118:
+        if (r13 >= r12) goto L_0x014b;
+    L_0x011a:
         r14 = r0.sections;
         r14 = r14.get(r13);
         r14 = r2.equals(r14);
-        if (r14 == 0) goto L_0x0124;
-    L_0x0123:
-        goto L_0x0143;
-    L_0x0124:
+        if (r14 == 0) goto L_0x0127;
+    L_0x0126:
+        goto L_0x0146;
+    L_0x0127:
         r14 = r0.sections;
         r14 = r14.get(r13);
         r14 = (java.lang.String) r14;
@@ -1303,47 +1311,47 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         r14 = r14.utime;
         r3 = r10.utime;
         r16 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1));
-        if (r16 >= 0) goto L_0x0143;
-    L_0x0142:
-        goto L_0x0149;
-    L_0x0143:
+        if (r16 >= 0) goto L_0x0146;
+    L_0x0145:
+        goto L_0x014c;
+    L_0x0146:
         r13 = r13 + 1;
         r3 = 1;
         r4 = 0;
-        goto L_0x0115;
-    L_0x0148:
+        goto L_0x0118;
+    L_0x014b:
         r13 = r11;
-    L_0x0149:
+    L_0x014c:
         r11 = new java.util.ArrayList;
         r11.<init>();
         r3 = r0.sections;
         r3.add(r13, r9);
         r3 = r0.sectionArrays;
         r3.put(r9, r11);
-    L_0x0158:
-        if (r19 == 0) goto L_0x0161;
-    L_0x015a:
-        if (r5 != 0) goto L_0x0161;
-    L_0x015c:
+    L_0x015b:
+        if (r19 == 0) goto L_0x0164;
+    L_0x015d:
+        if (r5 != 0) goto L_0x0164;
+    L_0x015f:
         r3 = 0;
         r11.add(r3, r10);
-        goto L_0x0165;
-    L_0x0161:
+        goto L_0x0168;
+    L_0x0164:
         r3 = 0;
         r11.add(r10);
-    L_0x0165:
+    L_0x0168:
         r4 = r0.transactionsDict;
         r9 = r10.transactionId;
         r11 = r9.lt;
         r9 = java.lang.Long.valueOf(r11);
         r4.put(r9, r10);
         r9 = 1;
-    L_0x0173:
+    L_0x0176:
         r8 = r8 + 1;
         r3 = 1;
         r4 = 0;
-        goto L_0x00b1;
-    L_0x0179:
+        goto L_0x00b4;
+    L_0x017c:
         return r9;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Wallet.WalletActivity.fillTransactions(java.util.ArrayList, boolean):boolean");
@@ -1352,7 +1360,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
     private void loadTransactions(boolean z) {
         if (!this.loadingTransactions && this.accountStateLoaded) {
             this.loadingTransactions = true;
-            getTonController().getTransactions(z, getLastTransactionId(), new -$$Lambda$WalletActivity$PkhskOdzX-UYRFCdTegzQkxUPLQ(this, z));
+            getTonController().getTransactions(z, getLastTransactionId(z), new -$$Lambda$WalletActivity$PkhskOdzX-UYRFCdTegzQkxUPLQ(this, z));
         }
     }
 
@@ -1365,7 +1373,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
             if (!(fillTransactions(arrayList, z) || z)) {
                 this.transactionsEndReached = true;
             }
-            if (!arrayList.isEmpty()) {
+            if (!arrayList.isEmpty() && (this.lastTransaction == null || !z)) {
                 this.lastTransaction = (RawTransaction) arrayList.get(arrayList.size() - 1);
             }
             this.adapter.notifyDataSetChanged();

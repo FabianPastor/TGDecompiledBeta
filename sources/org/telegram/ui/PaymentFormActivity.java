@@ -582,7 +582,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0.setTitle(r9);
     L_0x00d6:
         r0 = r1.actionBar;
-        r9 = NUM; // 0x7var_e8 float:1.7945048E38 double:1.0529356177E-314;
+        r9 = NUM; // 0x7var_e9 float:1.794505E38 double:1.052935618E-314;
         r0.setBackButtonImage(r9);
         r0 = r1.actionBar;
         r0.setAllowOverlayTitle(r8);
@@ -606,7 +606,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     L_0x0100:
         if (r9 != r3) goto L_0x013d;
     L_0x0102:
-        r9 = NUM; // 0x7var_ float:1.794511E38 double:1.0529356325E-314;
+        r9 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
         r11 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r11 = org.telegram.messenger.AndroidUtilities.dp(r11);
         r0 = r0.addItemWithWidth(r8, r9, r11);
@@ -1348,7 +1348,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4[r8] = r7;
         r4 = r1.bottomCell;
         r4 = r4[r8];
-        r7 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r7 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r7, r14);
         r4.setBackgroundDrawable(r10);
         r4 = r1.linearLayout2;
@@ -1428,7 +1428,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r3[r5] = r4;
         r3 = r1.bottomCell;
         r3 = r3[r5];
-        r4 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r4 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r6 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r4, r14);
         r3.setBackgroundDrawable(r6);
         r3 = r1.bottomCell;
@@ -1876,7 +1876,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0[r5] = r3;
         r0 = r1.bottomCell;
         r0 = r0[r5];
-        r3 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r3 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r3, r14);
         r0.setBackgroundDrawable(r2);
         r28.updateSavePaymentField();
@@ -2295,7 +2295,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r6[r5] = r7;
         r6 = r1.bottomCell;
         r6 = r6[r5];
-        r7 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r7 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r7, r14);
         r6.setBackgroundDrawable(r9);
         r28.updateSavePaymentField();
@@ -2481,7 +2481,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0[r5] = r3;
         r0 = r1.bottomCell;
         r0 = r0[r5];
-        r3 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r3 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r3, r14);
         r0.setBackgroundDrawable(r2);
         r0 = r1.linearLayout2;
@@ -2722,7 +2722,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r3.setText(r4);
         r3 = r1.bottomCell;
         r3 = r3[r5];
-        r4 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
+        r4 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
         r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r4, r14);
         r3.setBackgroundDrawable(r4);
         r3 = r1.linearLayout2;
@@ -2764,7 +2764,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r3[r8] = r4;
         r3 = r1.bottomCell;
         r3 = r3[r8];
-        r4 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r4 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r6 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r4, r14);
         r3.setBackgroundDrawable(r6);
         r3 = r1.linearLayout2;
@@ -2827,7 +2827,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0[r4] = r3;
         r0 = r1.bottomCell;
         r0 = r0[r4];
-        r3 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
+        r3 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
         r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r3, r14);
         r0.setBackgroundDrawable(r3);
         r0 = r1.linearLayout2;
@@ -3135,7 +3135,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r3.setText(r4);
         r3 = r1.bottomCell;
         r3 = r3[r5];
-        r4 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
+        r4 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
         r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r4, r14);
         r3.setBackgroundDrawable(r4);
         r3 = r1.linearLayout2;
@@ -3162,7 +3162,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r3.setText(r4);
         r3 = r1.bottomCell;
         r3 = r3[r8];
-        r4 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r4 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r6 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r4, r14);
         r3.setBackgroundDrawable(r6);
         r3 = r1.linearLayout2;
@@ -3579,7 +3579,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0.addView(r3, r4);
         r0 = new android.view.View;
         r0.<init>(r2);
-        r3 = NUM; // 0x7var_e6 float:1.7945044E38 double:1.0529356167E-314;
+        r3 = NUM; // 0x7var_e7 float:1.7945046E38 double:1.052935617E-314;
         r0.setBackgroundResource(r3);
         r19 = -1;
         r20 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -3640,7 +3640,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0[r4] = r3;
         r0 = r1.sectionCell;
         r0 = r0[r4];
-        r3 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r3 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r2, r3, r14);
         r0.setBackgroundDrawable(r2);
         r0 = r1.linearLayout2;

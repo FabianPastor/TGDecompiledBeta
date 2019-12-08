@@ -506,7 +506,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r11 = r11.itemView;
             r11 = (org.telegram.ui.Cells.TextCell) r11;
             r0 = r10.inviteViaLink;
-            r2 = NUM; // 0x7var_ float:1.7945823E38 double:1.0529358064E-314;
+            r2 = NUM; // 0x7var_ float:1.7945825E38 double:1.052935807E-314;
             if (r0 != r12) goto L_0x0028;
         L_0x001a:
             r12 = NUM; // 0x7f0e023a float:1.8876194E38 double:1.0531624382E-314;

@@ -8,6 +8,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -504,7 +505,12 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
             startActivity(intent);
             finish();
         } else if (SharedConfig.passcodeHash.length() <= 0) {
-            showMessagesSheet();
+            try {
+                if (!((KeyguardManager) ApplicationLoader.applicationContext.getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
+                    showMessagesSheet();
+                }
+            } catch (Exception unused) {
+            }
         }
     }
 

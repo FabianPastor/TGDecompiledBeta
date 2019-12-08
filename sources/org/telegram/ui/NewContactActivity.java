@@ -60,7 +60,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r1 = r23;
         r0 = r24;
         r2 = r1.actionBar;
-        r3 = NUM; // 0x7var_e8 float:1.7945048E38 double:1.0529356177E-314;
+        r3 = NUM; // 0x7var_e9 float:1.794505E38 double:1.052935618E-314;
         r2.setBackButtonImage(r3);
         r2 = r1.actionBar;
         r3 = 1;
@@ -85,7 +85,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2 = r2.createMenu();
         r4 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = NUM; // 0x7var_ float:1.794511E38 double:1.0529356325E-314;
+        r6 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
         r2 = r2.addItemWithWidth(r3, r6, r4);
         r1.editDoneItem = r2;
         r2 = r1.editDoneItem;
@@ -291,7 +291,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r4 = r1.countryButton;
         r4.setGravity(r13);
         r4 = r1.countryButton;
-        r5 = NUM; // 0x7var_ac float:1.7945965E38 double:1.052935841E-314;
+        r5 = NUM; // 0x7var_ad float:1.7945967E38 double:1.0529358415E-314;
         r4.setBackgroundResource(r5);
         r4 = r1.countryButton;
         r17 = 36;

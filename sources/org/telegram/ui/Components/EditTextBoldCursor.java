@@ -270,7 +270,7 @@ public class EditTextBoldCursor extends EditText {
         if (r0 == 0) goto L_0x00ff;
     L_0x00f3:
         r0 = mCursorDrawableResField;	 Catch:{ all -> 0x00ff }
-        r1 = NUM; // 0x7var_b9 float:1.7944953E38 double:1.0529355944E-314;
+        r1 = NUM; // 0x7var_ba float:1.7944955E38 double:1.052935595E-314;
         r1 = java.lang.Integer.valueOf(r1);	 Catch:{ all -> 0x00ff }
         r0.set(r8, r1);	 Catch:{ all -> 0x00ff }
     L_0x00ff:
@@ -417,8 +417,12 @@ public class EditTextBoldCursor extends EditText {
         }
     }
 
-    public void setHintText(String str) {
-        this.hintLayout = new StaticLayout(str, getPaint(), AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+    public void setHintText(CharSequence charSequence) {
+        this.hintLayout = new StaticLayout(charSequence, getPaint(), AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+    }
+
+    public Layout getHintLayout() {
+        return this.hintLayout;
     }
 
     /* Access modifiers changed, original: protected */

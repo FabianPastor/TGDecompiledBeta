@@ -7,34 +7,18 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.AttributeSet;
 import android.view.View;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.SecureDocument;
 
 public class BackupImageView extends View {
-    private int height = -1;
-    private ImageReceiver imageReceiver;
-    private int width = -1;
+    protected int height = -1;
+    protected ImageReceiver imageReceiver = new ImageReceiver(this);
+    protected int width = -1;
 
     public BackupImageView(Context context) {
         super(context);
-        init();
-    }
-
-    public BackupImageView(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet);
-        init();
-    }
-
-    public BackupImageView(Context context, AttributeSet attributeSet, int i) {
-        super(context, attributeSet, i);
-        init();
-    }
-
-    private void init() {
-        this.imageReceiver = new ImageReceiver(this);
     }
 
     public void setOrientation(int i, boolean z) {

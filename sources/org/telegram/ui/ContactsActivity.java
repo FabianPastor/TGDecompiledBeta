@@ -188,7 +188,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r8.searching = r6;
         r8.searchWas = r6;
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7var_e8 float:1.7945048E38 double:1.0529356177E-314;
+        r1 = NUM; // 0x7var_e9 float:1.794505E38 double:1.052935618E-314;
         r0.setBackButtonImage(r1);
         r0 = r8.actionBar;
         r5 = 1;
@@ -235,7 +235,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r0.setActionBarMenuOnItemClick(r1);
         r0 = r8.actionBar;
         r0 = r0.createMenu();
-        r1 = NUM; // 0x7var_f2 float:1.7945069E38 double:1.0529356226E-314;
+        r1 = NUM; // 0x7var_f3 float:1.794507E38 double:1.052935623E-314;
         r1 = r0.addItem(r6, r1);
         r1 = r1.setIsSearchField(r5);
         r2 = new org.telegram.ui.ContactsActivity$2;
@@ -256,10 +256,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = r8.sortByName;
         if (r1 == 0) goto L_0x00a5;
     L_0x00a1:
-        r1 = NUM; // 0x7var_aa float:1.7944923E38 double:1.052935587E-314;
+        r1 = NUM; // 0x7var_ab float:1.7944925E38 double:1.0529355875E-314;
         goto L_0x00a8;
     L_0x00a5:
-        r1 = NUM; // 0x7var_a9 float:1.794492E38 double:1.0529355865E-314;
+        r1 = NUM; // 0x7var_aa float:1.7944923E38 double:1.052935587E-314;
     L_0x00a8:
         r0 = r0.addItem(r5, r1);
         r8.sortItem = r0;
@@ -499,7 +499,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r2 >= r5) goto L_0x028f;
     L_0x0263:
         r2 = r25.getResources();
-        r6 = NUM; // 0x7var_c4 float:1.7944975E38 double:1.0529356E-314;
+        r6 = NUM; // 0x7var_c5 float:1.7944978E38 double:1.0529356004E-314;
         r2 = r2.getDrawable(r6);
         r2 = r2.mutate();
         r6 = new android.graphics.PorterDuffColorFilter;
@@ -524,7 +524,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1.<init>(r2, r6);
         r0.setColorFilter(r1);
         r0 = r8.floatingButton;
-        r1 = NUM; // 0x7var_ float:1.7944722E38 double:1.052935538E-314;
+        r1 = NUM; // 0x7var_ float:1.7944724E38 double:1.0529355386E-314;
         r0.setImageResource(r1);
         r0 = r8.floatingButtonContainer;
         r1 = NUM; // 0x7f0e031d float:1.8876654E38 double:1.0531625504E-314;

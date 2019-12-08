@@ -2935,6 +2935,7 @@
     <string name="WalletBiometricTooManyAttempts">Too many attempts. Please try again later.</string>
     <string name="WalletBlockchainFees">%1$s blockchain fees</string>
     <string name="WalletChangePasscode">Change Passcode</string>
+    <string name="WalletClose">CLOSE</string>
     <string name="WalletComment">Comment (optional)</string>
     <string name="WalletConfirm">Confirm</string>
     <string name="WalletConfirmation">Confirmation</string>
@@ -2953,6 +2954,7 @@
     <string name="WalletEnterPasscode">Enter passcode</string>
     <string name="WalletEnterWalletAddress">Enter wallet address</string>
     <string name="WalletExport">Export Wallet</string>
+    <string name="WalletExportConfirmContinue">Please confirm your credentials to continue.</string>
     <string name="WalletExportConfirmCredentials">Please confirm your credentials to export your wallet.</string>
     <string name="WalletFrom">from:</string>
     <string name="WalletGramsToReceive">Number of Grams you expect to receive...</string>

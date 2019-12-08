@@ -314,7 +314,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r14 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r14;
             r0 = org.telegram.ui.DataAutoDownloadActivity.this;
             r0 = r0.typeSectionRow;
-            r4 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
+            r4 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
             r5 = "windowBackgroundGrayShadow";
             if (r15 != r0) goto L_0x003e;
         L_0x0024:
@@ -338,7 +338,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             if (r15 != r0) goto L_0x009d;
         L_0x004f:
             r15 = r13.mContext;
-            r0 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+            r0 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
             r15 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r15, r0, r5);
             r14.setBackgroundDrawable(r15);
             r15 = org.telegram.ui.DataAutoDownloadActivity.this;
@@ -1374,7 +1374,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         r0.<init>(r6);
         r1.setOnClickListener(r0);
         r0 = r29.getParentActivity();
-        r1 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
+        r1 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
         r3 = "windowBackgroundGrayShadow";
         r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r0, r1, r3);
         r1 = new org.telegram.ui.Components.CombinedDrawable;

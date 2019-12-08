@@ -2638,26 +2638,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
     }
 
-    public boolean hasFlagSecureFragment() {
-        return this.flagSecureFragment != null;
-    }
-
-    public void setFlagSecure(BaseFragment baseFragment, boolean z) {
-        if (z) {
-            try {
-                baseFragment.getParentActivity().getWindow().setFlags(8192, 8192);
-            } catch (Exception unused) {
-            }
-            this.flagSecureFragment = baseFragment;
-        } else if (this.flagSecureFragment == baseFragment) {
-            try {
-                baseFragment.getParentActivity().getWindow().clearFlags(8192);
-            } catch (Exception unused2) {
-            }
-            this.flagSecureFragment = null;
-        }
-    }
-
     public void setBaseActivity(Activity activity, boolean z) {
         if (z) {
             this.baseActivity = activity;

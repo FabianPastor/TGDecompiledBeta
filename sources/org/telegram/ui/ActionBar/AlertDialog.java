@@ -1185,7 +1185,10 @@ public class AlertDialog extends Dialog implements Callback {
             builder.setPositiveButton(LocaleController.getString("WaitMore", NUM), null);
             builder.setNegativeButton(LocaleController.getString("Stop", NUM), new -$$Lambda$AlertDialog$1zFp_sikyCYaQ1aMdMAPeCc-86g(this));
             builder.setOnDismissListener(new -$$Lambda$AlertDialog$_jIiJ2tOQUco_X_BniQD16XJ3QE(this));
-            this.cancelDialog = builder.show();
+            try {
+                this.cancelDialog = builder.show();
+            } catch (Exception unused) {
+            }
         }
     }
 

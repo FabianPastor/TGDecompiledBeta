@@ -678,7 +678,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r4 = android.os.Environment.getExternalStorageState();
         r5 = "mounted";
         r5 = r4.equals(r5);
-        r6 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
+        r6 = NUM; // 0x7var_ float:1.7945113E38 double:1.0529356335E-314;
         r7 = NUM; // 0x7f0e094e float:1.8879869E38 double:1.0531633335E-314;
         r8 = "SdCard";
         if (r5 != 0) goto L_0x0036;
@@ -701,7 +701,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r9 = "InternalStorage";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r4.title = r5;
-        r5 = NUM; // 0x7var_ float:1.7945168E38 double:1.052935647E-314;
+        r5 = NUM; // 0x7var_ float:1.794517E38 double:1.0529356473E-314;
         r4.icon = r5;
     L_0x005a:
         r5 = r11.getRootSubtitle(r3);
@@ -856,7 +856,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r5 = "SystemRoot";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.subtitle = r4;
-        r4 = NUM; // 0x7var_ float:1.7945107E38 double:1.052935632E-314;
+        r4 = NUM; // 0x7var_ float:1.794511E38 double:1.0529356325E-314;
         r2.icon = r4;
         r5 = new java.io.File;
         r5.<init>(r3);
@@ -893,7 +893,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r3 = "GalleryInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
-        r2 = NUM; // 0x7var_ float:1.794517E38 double:1.0529356473E-314;
+        r2 = NUM; // 0x7var_ float:1.7945172E38 double:1.052935648E-314;
         r0.icon = r2;
         r0.file = r1;
         r2 = r11.items;
@@ -911,7 +911,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r3 = "MusicInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
-        r2 = NUM; // 0x7var_ float:1.7945172E38 double:1.052935648E-314;
+        r2 = NUM; // 0x7var_ float:1.7945174E38 double:1.0529356483E-314;
         r0.icon = r2;
         r0.file = r1;
         r1 = r11.items;
