@@ -12,7 +12,11 @@ import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -5969,6 +5973,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
         ArrayList arrayList;
         super.onRequestPermissionsResult(i, strArr, iArr);
+        if (iArr == null) {
+            iArr = new int[0];
+        }
+        if (strArr == null) {
+            strArr = new String[0];
+        }
         Object obj = (iArr.length <= 0 || iArr[0] != 0) ? null : 1;
         if (i == 4) {
             if (obj == null) {
@@ -5979,10 +5989,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } else if (i != 5) {
             String str = "PermissionNoCamera";
             if (i == 3) {
-                int length = strArr.length;
+                int min = Math.min(strArr.length, iArr.length);
                 Object obj2 = 1;
                 Object obj3 = 1;
-                for (int i2 = 0; i2 < length; i2++) {
+                for (int i2 = 0; i2 < min; i2++) {
                     if ("android.permission.RECORD_AUDIO".equals(strArr[i2])) {
                         obj2 = iArr[i2] == 0 ? 1 : null;
                     } else {
@@ -6511,6 +6521,17 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     public /* synthetic */ void lambda$didReceivedNotification$55$LaunchActivity(File file) {
         try {
             Bitmap scaledBitmap = ThemesHorizontalListCell.getScaledBitmap((float) AndroidUtilities.dp(640.0f), (float) AndroidUtilities.dp(360.0f), file.getAbsolutePath(), null, 0);
+            if (!(scaledBitmap == null || this.loadingThemeInfo.patternBgColor == 0)) {
+                Bitmap createBitmap = Bitmap.createBitmap(scaledBitmap.getWidth(), scaledBitmap.getHeight(), scaledBitmap.getConfig());
+                Canvas canvas = new Canvas(createBitmap);
+                canvas.drawColor(this.loadingThemeInfo.patternBgColor);
+                Paint paint = new Paint(2);
+                paint.setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(this.loadingThemeInfo.patternBgColor), Mode.SRC_IN));
+                paint.setAlpha((int) ((((float) this.loadingThemeInfo.patternIntensity) / 100.0f) * 255.0f));
+                canvas.drawBitmap(scaledBitmap, 0.0f, 0.0f, paint);
+                canvas.setBitmap(null);
+                scaledBitmap = createBitmap;
+            }
             if (this.loadingThemeInfo.isBlured) {
                 scaledBitmap = Utilities.blurWallpaper(scaledBitmap);
             }
