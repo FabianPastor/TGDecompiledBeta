@@ -3871,7 +3871,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         }
                         this.topView.setBackgroundColor(Theme.getColor("avatar_backgroundActionBarBlue"));
                         ProfileGalleryView profileGalleryView = this.avatarsViewPager;
-                        this.avatarImage.setForegroundImageDrawable(((BackupImageView) profileGalleryView.findViewWithTag(Integer.valueOf(profileGalleryView.getCurrentItem()))).getImageReceiver().getDrawable());
+                        BackupImageView backupImageView = (BackupImageView) profileGalleryView.findViewWithTag(Integer.valueOf(profileGalleryView.getCurrentItem()));
+                        if (backupImageView != null) {
+                            this.avatarImage.setForegroundImageDrawable(backupImageView.getImageReceiver().getDrawable());
+                        }
                         this.avatarImage.setForegroundAlpha(1.0f);
                         this.avatarImage.setVisibility(0);
                         this.avatarsViewPager.setVisibility(8);
@@ -4059,7 +4062,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     private void fixListViewPaddings() {
-        if (!this.openAnimationInProgress) {
+        if (!this.openAnimationInProgress && this.listView.getWidth() != 0) {
             int dp;
             int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);
             int i = 0;

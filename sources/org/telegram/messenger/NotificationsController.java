@@ -397,70 +397,56 @@ public class NotificationsController extends BaseController {
     }
 
     public /* synthetic */ void lambda$removeDeletedMessagesFromNotifications$8$NotificationsController(SparseArray sparseArray, ArrayList arrayList) {
+        boolean z;
         SparseArray sparseArray2 = sparseArray;
         ArrayList arrayList2 = arrayList;
         int i = this.total_unread_count;
         getAccountInstance().getNotificationsSettings();
         Integer valueOf = Integer.valueOf(0);
         int i2 = 0;
-        while (i2 < sparseArray.size()) {
-            Integer num;
-            long j;
-            long j2;
-            int keyAt = sparseArray2.keyAt(i2);
-            long j3 = (long) (-keyAt);
-            ArrayList arrayList3 = (ArrayList) sparseArray2.get(keyAt);
-            Integer num2 = (Integer) this.pushDialogs.get(j3);
-            if (num2 == null) {
-                num2 = valueOf;
+        while (true) {
+            z = true;
+            if (i2 >= sparseArray.size()) {
+                break;
             }
-            Integer num3 = num2;
-            int i3 = 0;
-            while (i3 < arrayList3.size()) {
-                num = valueOf;
-                j = j3;
-                long intValue = ((long) ((Integer) arrayList3.get(i3)).intValue()) | (((long) keyAt) << 32);
+            ArrayList arrayList3 = (ArrayList) sparseArray2.get(sparseArray2.keyAt(i2));
+            for (int i3 = 0; i3 < arrayList3.size(); i3++) {
+                long intValue = (long) ((Integer) arrayList3.get(i3)).intValue();
                 MessageObject messageObject = (MessageObject) this.pushMessagesDict.get(intValue);
                 if (messageObject != null) {
-                    int i4;
+                    Integer num;
+                    long dialogId = messageObject.getDialogId();
+                    Integer num2 = (Integer) this.pushDialogs.get(dialogId);
+                    if (num2 == null) {
+                        num2 = valueOf;
+                    }
+                    Integer valueOf2 = Integer.valueOf(num2.intValue() - 1);
+                    if (valueOf2.intValue() <= 0) {
+                        this.smartNotificationsDialogs.remove(dialogId);
+                        num = valueOf;
+                    } else {
+                        num = valueOf2;
+                    }
+                    if (!num.equals(num2)) {
+                        this.total_unread_count -= num2.intValue();
+                        this.total_unread_count += num.intValue();
+                        this.pushDialogs.put(dialogId, num);
+                    }
+                    if (num.intValue() == 0) {
+                        this.pushDialogs.remove(dialogId);
+                        this.pushDialogsOverrideMention.remove(dialogId);
+                    }
                     this.pushMessagesDict.remove(intValue);
                     this.delayedPushMessages.remove(messageObject);
                     this.pushMessages.remove(messageObject);
                     if (isPersonalMessage(messageObject)) {
-                        i4 = 1;
                         this.personal_count--;
-                    } else {
-                        i4 = 1;
                     }
                     arrayList2.add(messageObject);
-                    num3 = Integer.valueOf(num3.intValue() - i4);
                 }
-                i3++;
-                valueOf = num;
-                j3 = j;
-            }
-            num = valueOf;
-            j = j3;
-            if (num3.intValue() <= 0) {
-                j2 = j;
-                this.smartNotificationsDialogs.remove(j2);
-                num3 = num;
-            } else {
-                j2 = j;
-            }
-            if (!num3.equals(num2)) {
-                this.total_unread_count -= num2.intValue();
-                this.total_unread_count += num3.intValue();
-                this.pushDialogs.put(j2, num3);
-            }
-            if (num3.intValue() == 0) {
-                this.pushDialogs.remove(j2);
-                this.pushDialogsOverrideMention.remove(j2);
             }
             i2++;
-            valueOf = num;
         }
-        boolean z = true;
         if (!arrayList.isEmpty()) {
             AndroidUtilities.runOnUIThread(new -$$Lambda$NotificationsController$uUrKIQpuu_OHFjMyR7HGe660wQk(this, arrayList2));
         }
