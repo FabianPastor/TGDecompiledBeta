@@ -5,17 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
-import android.os.Build.VERSION;
 import android.util.Property;
-import android.util.StateSet;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.AnimationProperties.FloatProperty;
@@ -36,27 +28,25 @@ public class ZoomControlView extends View {
     };
     private float animatingToZoom;
     private AnimatorSet animatorSet;
-    private Paint blackPaint = new Paint(1);
-    private Paint blackStrokePaint = new Paint(1);
     private ZoomControlViewDelegate delegate;
-    private boolean drawRipple;
+    private Drawable filledProgressDrawable;
+    private Drawable knobDrawable;
     private boolean knobPressed;
     private float knobStartX;
     private float knobStartY;
     private int minusCx;
     private int minusCy;
+    private Drawable minusDrawable;
     private int plusCx;
     private int plusCy;
+    private Drawable plusDrawable;
     private boolean pressed;
-    private int[] pressedState = new int[]{16842910, 16842919};
+    private Drawable pressedKnobDrawable;
+    private Drawable progressDrawable;
     private int progressEndX;
     private int progressEndY;
     private int progressStartX;
     private int progressStartY;
-    private RippleDrawable rippleDrawable;
-    private Paint ripplePaint;
-    private Paint whitePaint = new Paint(1);
-    private Paint whiteStrokePaint = new Paint(1);
     private float zoom;
 
     public interface ZoomControlViewDelegate {
@@ -65,14 +55,12 @@ public class ZoomControlView extends View {
 
     public ZoomControlView(Context context) {
         super(context);
-        this.blackPaint.setColor(NUM);
-        this.whitePaint.setColor(-1);
-        this.whiteStrokePaint.setColor(-1);
-        this.whiteStrokePaint.setStyle(Style.STROKE);
-        this.whiteStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.blackStrokePaint.setColor(NUM);
-        this.blackStrokePaint.setStyle(Style.STROKE);
-        this.blackStrokePaint.setStrokeWidth((float) (AndroidUtilities.dp(2.0f) + 2));
+        this.minusDrawable = context.getResources().getDrawable(NUM);
+        this.plusDrawable = context.getResources().getDrawable(NUM);
+        this.progressDrawable = context.getResources().getDrawable(NUM);
+        this.filledProgressDrawable = context.getResources().getDrawable(NUM);
+        this.knobDrawable = context.getResources().getDrawable(NUM);
+        this.pressedKnobDrawable = context.getResources().getDrawable(NUM);
     }
 
     public float getZoom() {
@@ -102,55 +90,6 @@ public class ZoomControlView extends View {
 
     public void setDelegate(ZoomControlViewDelegate zoomControlViewDelegate) {
         this.delegate = zoomControlViewDelegate;
-    }
-
-    public void setDrawRipple(boolean z) {
-        if (VERSION.SDK_INT >= 21 && z != this.drawRipple) {
-            this.drawRipple = z;
-            if (this.rippleDrawable == null) {
-                Drawable drawable;
-                this.ripplePaint = new Paint(1);
-                this.ripplePaint.setColor(-1);
-                if (VERSION.SDK_INT >= 23) {
-                    drawable = null;
-                } else {
-                    drawable = new Drawable() {
-                        public int getOpacity() {
-                            return 0;
-                        }
-
-                        public void setAlpha(int i) {
-                        }
-
-                        public void setColorFilter(ColorFilter colorFilter) {
-                        }
-
-                        public void draw(Canvas canvas) {
-                            Rect bounds = getBounds();
-                            canvas.drawCircle((float) bounds.centerX(), (float) bounds.centerY(), (float) AndroidUtilities.dp(18.0f), ZoomControlView.this.ripplePaint);
-                        }
-                    };
-                }
-                this.rippleDrawable = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{NUM}), null, drawable);
-                if (VERSION.SDK_INT >= 23) {
-                    this.rippleDrawable.setRadius(AndroidUtilities.dp(16.0f));
-                }
-                this.rippleDrawable.setCallback(this);
-            }
-            this.rippleDrawable.setState(z ? this.pressedState : StateSet.NOTHING);
-            invalidate();
-        }
-    }
-
-    /* Access modifiers changed, original: protected */
-    public boolean verifyDrawable(Drawable drawable) {
-        if (!super.verifyDrawable(drawable)) {
-            Drawable drawable2 = this.rippleDrawable;
-            if (drawable2 == null || drawable != drawable2) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:89:0x01de  */
@@ -279,7 +218,7 @@ public class ZoomControlView extends View {
         r0 = (float) r10;
         r1 = r1 - r0;
         r14.knobStartY = r1;
-        r14.setDrawRipple(r6);
+        r14.invalidate();
     L_0x00b5:
         r0 = 1;
         goto L_0x01dc;
@@ -470,7 +409,7 @@ public class ZoomControlView extends View {
     L_0x01de:
         r14.pressed = r5;
         r14.knobPressed = r5;
-        r14.setDrawRipple(r5);
+        r14.invalidate();
     L_0x01e5:
         if (r0 != 0) goto L_0x01f5;
     L_0x01e7:
@@ -516,79 +455,61 @@ public class ZoomControlView extends View {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        Canvas canvas2 = canvas;
         int measuredWidth = getMeasuredWidth() / 2;
         int measuredHeight = getMeasuredHeight() / 2;
         Object obj = getMeasuredWidth() > getMeasuredHeight() ? 1 : null;
         if (obj != null) {
-            this.minusCx = AndroidUtilities.dp(32.0f);
+            this.minusCx = AndroidUtilities.dp(41.0f);
             this.minusCy = measuredHeight;
-            this.plusCx = getMeasuredWidth() - AndroidUtilities.dp(32.0f);
+            this.plusCx = getMeasuredWidth() - AndroidUtilities.dp(41.0f);
             this.plusCy = measuredHeight;
-            this.progressStartX = this.minusCx + AndroidUtilities.dp(44.0f);
+            this.progressStartX = this.minusCx + AndroidUtilities.dp(18.0f);
             this.progressStartY = measuredHeight;
-            this.progressEndX = this.plusCx - AndroidUtilities.dp(44.0f);
+            this.progressEndX = this.plusCx - AndroidUtilities.dp(18.0f);
             this.progressEndY = measuredHeight;
         } else {
             this.minusCx = measuredWidth;
-            this.minusCy = AndroidUtilities.dp(32.0f);
+            this.minusCy = AndroidUtilities.dp(41.0f);
             this.plusCx = measuredWidth;
-            this.plusCy = getMeasuredHeight() - AndroidUtilities.dp(32.0f);
+            this.plusCy = getMeasuredHeight() - AndroidUtilities.dp(41.0f);
             this.progressStartX = measuredWidth;
-            this.progressStartY = this.minusCy + AndroidUtilities.dp(44.0f);
+            this.progressStartY = this.minusCy + AndroidUtilities.dp(18.0f);
             this.progressEndX = measuredWidth;
-            this.progressEndY = this.plusCy - AndroidUtilities.dp(44.0f);
+            this.progressEndY = this.plusCy - AndroidUtilities.dp(18.0f);
         }
-        canvas2.drawCircle((float) this.minusCx, (float) this.minusCy, (float) AndroidUtilities.dp(16.0f), this.blackPaint);
-        canvas2.drawCircle((float) this.plusCx, (float) this.plusCy, (float) AndroidUtilities.dp(16.0f), this.blackPaint);
-        int i = this.progressEndX - this.progressStartX;
-        int i2 = this.progressEndY - this.progressStartY;
-        int max = Math.max(i, i2) / 4;
-        int i3 = max / 6;
-        this.whitePaint.setAlpha(127);
-        for (int i4 = 0; i4 < 5; i4++) {
-            int i5;
-            float f;
-            if (obj != null) {
-                i5 = this.progressStartX + (max * i4);
-                f = (float) i5;
-                float f2 = (float) measuredHeight;
-                canvas2.drawCircle(f, f2, (float) AndroidUtilities.dp(4.0f), this.blackStrokePaint);
-                canvas2.drawCircle(f, f2, (float) AndroidUtilities.dp(4.0f), this.whiteStrokePaint);
-            } else {
-                i5 = this.progressStartY + (max * i4);
-                float f3 = (float) measuredWidth;
-                f = (float) i5;
-                canvas2.drawCircle(f3, f, (float) AndroidUtilities.dp(4.0f), this.blackStrokePaint);
-                canvas2.drawCircle(f3, f, (float) AndroidUtilities.dp(4.0f), this.whiteStrokePaint);
-            }
-            if (i4 != 4) {
-                for (int i6 = 0; i6 < 5; i6++) {
-                    if (obj != null) {
-                        canvas2.drawCircle((float) (((i6 + 1) * i3) + i5), (float) measuredHeight, (float) AndroidUtilities.dp(1.0f), this.whitePaint);
-                    } else {
-                        canvas2.drawCircle((float) measuredWidth, (float) (((i6 + 1) * i3) + i5), (float) AndroidUtilities.dp(1.0f), this.whitePaint);
-                    }
-                }
-            }
+        this.minusDrawable.setBounds(this.minusCx - AndroidUtilities.dp(7.0f), this.minusCy - AndroidUtilities.dp(7.0f), this.minusCx + AndroidUtilities.dp(7.0f), this.minusCy + AndroidUtilities.dp(7.0f));
+        this.minusDrawable.draw(canvas);
+        this.plusDrawable.setBounds(this.plusCx - AndroidUtilities.dp(7.0f), this.plusCy - AndroidUtilities.dp(7.0f), this.plusCx + AndroidUtilities.dp(7.0f), this.plusCy + AndroidUtilities.dp(7.0f));
+        this.plusDrawable.draw(canvas);
+        measuredWidth = this.progressEndX;
+        measuredHeight = this.progressStartX;
+        measuredWidth -= measuredHeight;
+        int i = this.progressEndY;
+        int i2 = this.progressStartY;
+        int i3 = i - i2;
+        float f = (float) measuredHeight;
+        float f2 = (float) measuredWidth;
+        float f3 = this.zoom;
+        measuredWidth = (int) (f + (f2 * f3));
+        i3 = (int) (((float) i2) + (((float) i3) * f3));
+        if (obj != null) {
+            this.progressDrawable.setBounds(measuredHeight, i2 - AndroidUtilities.dp(3.0f), this.progressEndX, this.progressStartY + AndroidUtilities.dp(3.0f));
+            this.filledProgressDrawable.setBounds(this.progressStartX, this.progressStartY - AndroidUtilities.dp(3.0f), measuredWidth, this.progressStartY + AndroidUtilities.dp(3.0f));
+        } else {
+            this.progressDrawable.setBounds(i2, 0, i, AndroidUtilities.dp(6.0f));
+            this.filledProgressDrawable.setBounds(this.progressStartY, 0, i3, AndroidUtilities.dp(6.0f));
+            canvas.save();
+            canvas.rotate(90.0f);
+            canvas.translate(0.0f, (float) ((-this.progressStartX) - AndroidUtilities.dp(3.0f)));
         }
-        this.whitePaint.setAlpha(255);
-        canvas.drawRect((float) (this.minusCx - AndroidUtilities.dp(8.0f)), (float) (this.minusCy - AndroidUtilities.dp(1.0f)), (float) (this.minusCx + AndroidUtilities.dp(8.0f)), (float) (this.minusCy + AndroidUtilities.dp(1.0f)), this.whitePaint);
-        canvas.drawRect((float) (this.plusCx - AndroidUtilities.dp(8.0f)), (float) (this.plusCy - AndroidUtilities.dp(1.0f)), (float) (this.plusCx + AndroidUtilities.dp(8.0f)), (float) (this.plusCy + AndroidUtilities.dp(1.0f)), this.whitePaint);
-        canvas.drawRect((float) (this.plusCx - AndroidUtilities.dp(1.0f)), (float) (this.plusCy - AndroidUtilities.dp(8.0f)), (float) (this.plusCx + AndroidUtilities.dp(1.0f)), (float) (this.plusCy + AndroidUtilities.dp(8.0f)), this.whitePaint);
-        float f4 = (float) this.progressStartX;
-        float f5 = (float) i;
-        float f6 = this.zoom;
-        measuredWidth = (int) (f4 + (f5 * f6));
-        measuredHeight = (int) (((float) this.progressStartY) + (((float) i2) * f6));
-        RippleDrawable rippleDrawable = this.rippleDrawable;
-        if (rippleDrawable != null) {
-            rippleDrawable.setBounds(measuredWidth - AndroidUtilities.dp(10.0f), measuredHeight - AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f) + measuredWidth, AndroidUtilities.dp(10.0f) + measuredHeight);
-            this.rippleDrawable.draw(canvas2);
+        this.progressDrawable.draw(canvas);
+        this.filledProgressDrawable.draw(canvas);
+        if (obj == null) {
+            canvas.restore();
         }
-        f4 = (float) measuredWidth;
-        f5 = (float) measuredHeight;
-        canvas2.drawCircle(f4, f5, (float) (AndroidUtilities.dp(8.0f) - 1), this.blackStrokePaint);
-        canvas2.drawCircle(f4, f5, (float) AndroidUtilities.dp(8.0f), this.whitePaint);
+        Drawable drawable = this.knobPressed ? this.pressedKnobDrawable : this.knobDrawable;
+        int intrinsicWidth = drawable.getIntrinsicWidth() / 2;
+        drawable.setBounds(measuredWidth - intrinsicWidth, i3 - intrinsicWidth, measuredWidth + intrinsicWidth, i3 + intrinsicWidth);
+        drawable.draw(canvas);
     }
 }

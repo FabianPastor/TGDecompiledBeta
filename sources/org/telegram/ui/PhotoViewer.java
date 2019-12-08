@@ -1575,7 +1575,15 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
             } else if (view == PhotoViewer.this.cameraItem || view == PhotoViewer.this.pickerView || view == PhotoViewer.this.pickerViewSendButton || view == PhotoViewer.this.captionTextView || (PhotoViewer.this.muteItem.getVisibility() == 0 && view == PhotoViewer.this.bottomLayout)) {
                 int emojiPadding = (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow) ? 0 : PhotoViewer.this.captionEditText.getEmojiPadding();
-                if (PhotoViewer.this.captionEditText.isPopupShowing() || ((AndroidUtilities.usingHardwareInput && PhotoViewer.this.captionEditText.getTag() != null) || getKeyboardHeight() > 0 || emojiPadding != 0)) {
+                if (PhotoViewer.this.captionEditText.isPopupShowing() || ((AndroidUtilities.usingHardwareInput && PhotoViewer.this.captionEditText.getTag() != null) || getKeyboardHeight() > AndroidUtilities.dp(80.0f) || emojiPadding != 0)) {
+                    if (BuildVars.DEBUG_VERSION) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("keyboard height = ");
+                        stringBuilder.append(getKeyboardHeight());
+                        stringBuilder.append(" padding = ");
+                        stringBuilder.append(emojiPadding);
+                        FileLog.d(stringBuilder.toString());
+                    }
                     PhotoViewer.this.bottomTouchEnabled = false;
                     return false;
                 }
@@ -10771,15 +10779,15 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x005f A:{Catch:{ Exception -> 0x026a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0057 A:{Catch:{ Exception -> 0x026a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0113  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x012a  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0126  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x01e7 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x024d  */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:21:0x004b */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005a A:{Catch:{ Exception -> 0x0265 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0052 A:{Catch:{ Exception -> 0x0265 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x010e  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0125  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0121  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x01e2 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x013c  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0248  */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:17:0x0046 */
     /* JADX WARNING: Failed to process nested try/catch */
     public boolean openPhoto(org.telegram.messenger.MessageObject r18, org.telegram.tgnet.TLRPC.FileLocation r19, org.telegram.messenger.ImageLocation r20, java.util.ArrayList<org.telegram.messenger.MessageObject> r21, java.util.ArrayList<org.telegram.messenger.SecureDocument> r22, java.util.ArrayList<java.lang.Object> r23, int r24, org.telegram.ui.PhotoViewer.PhotoViewerProvider r25, org.telegram.ui.ChatActivity r26, long r27, long r29, boolean r31) {
         /*
@@ -10791,15 +10799,15 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1 = r25;
         r2 = r10.parentActivity;
         r12 = 0;
-        if (r2 == 0) goto L_0x026e;
+        if (r2 == 0) goto L_0x0269;
     L_0x000f:
         r2 = r10.isVisible;
-        if (r2 != 0) goto L_0x026e;
+        if (r2 != 0) goto L_0x0269;
     L_0x0013:
         if (r1 != 0) goto L_0x001b;
     L_0x0015:
         r2 = r17.checkAnimation();
-        if (r2 != 0) goto L_0x026e;
+        if (r2 != 0) goto L_0x0269;
     L_0x001b:
         if (r0 != 0) goto L_0x0029;
     L_0x001d:
@@ -10813,17 +10821,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x0025:
         if (r20 != 0) goto L_0x0029;
     L_0x0027:
-        goto L_0x026e;
+        goto L_0x0269;
     L_0x0029:
         r13 = 1;
         r8 = r24;
         r14 = r1.getPlaceForPhoto(r0, r3, r8, r13);
-        if (r14 != 0) goto L_0x0035;
-    L_0x0032:
-        if (r11 != 0) goto L_0x0035;
-    L_0x0034:
-        return r12;
-    L_0x0035:
         r2 = 0;
         r10.lastInsets = r2;
         r4 = r10.parentActivity;
@@ -10831,37 +10833,37 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4 = r4.getSystemService(r5);
         r4 = (android.view.WindowManager) r4;
         r5 = r10.attachedToWindow;
-        if (r5 == 0) goto L_0x004b;
+        if (r5 == 0) goto L_0x0046;
+    L_0x0041:
+        r5 = r10.windowView;	 Catch:{ Exception -> 0x0046 }
+        r4.removeView(r5);	 Catch:{ Exception -> 0x0046 }
     L_0x0046:
-        r5 = r10.windowView;	 Catch:{ Exception -> 0x004b }
-        r4.removeView(r5);	 Catch:{ Exception -> 0x004b }
-    L_0x004b:
-        r5 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x026a }
+        r5 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x0265 }
         r6 = 99;
-        r5.type = r6;	 Catch:{ Exception -> 0x026a }
-        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x026a }
+        r5.type = r6;	 Catch:{ Exception -> 0x0265 }
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0265 }
         r6 = 21;
-        if (r5 < r6) goto L_0x005f;
-    L_0x0057:
-        r5 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x026a }
+        if (r5 < r6) goto L_0x005a;
+    L_0x0052:
+        r5 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x0265 }
         r7 = -NUM; // 0xfffffffvar_ float:-2.75865E-40 double:NaN;
-        r5.flags = r7;	 Catch:{ Exception -> 0x026a }
-        goto L_0x0065;
-    L_0x005f:
-        r5 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x026a }
+        r5.flags = r7;	 Catch:{ Exception -> 0x0265 }
+        goto L_0x0060;
+    L_0x005a:
+        r5 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x0265 }
         r7 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
-        r5.flags = r7;	 Catch:{ Exception -> 0x026a }
-    L_0x0065:
-        r5 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x026a }
+        r5.flags = r7;	 Catch:{ Exception -> 0x0265 }
+    L_0x0060:
+        r5 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x0265 }
         r7 = 272; // 0x110 float:3.81E-43 double:1.344E-321;
-        r5.softInputMode = r7;	 Catch:{ Exception -> 0x026a }
-        r5 = r10.windowView;	 Catch:{ Exception -> 0x026a }
-        r5.setFocusable(r12);	 Catch:{ Exception -> 0x026a }
-        r5 = r10.containerView;	 Catch:{ Exception -> 0x026a }
-        r5.setFocusable(r12);	 Catch:{ Exception -> 0x026a }
-        r5 = r10.windowView;	 Catch:{ Exception -> 0x026a }
-        r9 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x026a }
-        r4.addView(r5, r9);	 Catch:{ Exception -> 0x026a }
+        r5.softInputMode = r7;	 Catch:{ Exception -> 0x0265 }
+        r5 = r10.windowView;	 Catch:{ Exception -> 0x0265 }
+        r5.setFocusable(r12);	 Catch:{ Exception -> 0x0265 }
+        r5 = r10.containerView;	 Catch:{ Exception -> 0x0265 }
+        r5.setFocusable(r12);	 Catch:{ Exception -> 0x0265 }
+        r5 = r10.windowView;	 Catch:{ Exception -> 0x0265 }
+        r9 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x0265 }
+        r4.addView(r5, r9);	 Catch:{ Exception -> 0x0265 }
         r10.doneButtonPressed = r12;
         r5 = r26;
         r10.parentChatActivity = r5;
@@ -10919,94 +10921,94 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r10.selectedPhotosAdapter;
         r5.notifyDataSetChanged();
         r5 = r10.velocityTracker;
-        if (r5 != 0) goto L_0x0119;
-    L_0x0113:
+        if (r5 != 0) goto L_0x0114;
+    L_0x010e:
         r5 = android.view.VelocityTracker.obtain();
         r10.velocityTracker = r5;
-    L_0x0119:
+    L_0x0114:
         r10.isVisible = r13;
         r10.togglePhotosListView(r12, r12);
         r5 = r31 ^ 1;
         r10.openedFullScreenVideo = r5;
         r5 = r10.openedFullScreenVideo;
-        if (r5 == 0) goto L_0x012a;
-    L_0x0126:
+        if (r5 == 0) goto L_0x0125;
+    L_0x0121:
         r10.toggleActionBar(r12, r12);
-        goto L_0x0138;
-    L_0x012a:
+        goto L_0x0133;
+    L_0x0125:
         r5 = r10.sendPhotoType;
-        if (r5 != r13) goto L_0x0135;
-    L_0x012e:
+        if (r5 != r13) goto L_0x0130;
+    L_0x0129:
         r17.createCropView();
         r10.toggleActionBar(r12, r12);
-        goto L_0x0138;
-    L_0x0135:
+        goto L_0x0133;
+    L_0x0130:
         r10.toggleActionBar(r13, r12);
-    L_0x0138:
+    L_0x0133:
         r15 = 0;
         r10.seekToProgressPending2 = r15;
         r10.skipFirstBufferingProgress = r12;
         r10.playerInjected = r12;
-        if (r14 == 0) goto L_0x01e7;
-    L_0x0141:
+        if (r14 == 0) goto L_0x01e2;
+    L_0x013c:
         r10.disableShowCheck = r13;
         r10.animationInProgress = r13;
-        if (r0 == 0) goto L_0x01b1;
-    L_0x0147:
+        if (r0 == 0) goto L_0x01ac;
+    L_0x0142:
         r1 = r14.imageReceiver;
         r1 = r1.getAnimation();
         r10.currentAnimation = r1;
         r1 = r10.currentAnimation;
-        if (r1 == 0) goto L_0x01b1;
-    L_0x0153:
+        if (r1 == 0) goto L_0x01ac;
+    L_0x014e:
         r1 = r18.isVideo();
-        if (r1 == 0) goto L_0x01a5;
-    L_0x0159:
+        if (r1 == 0) goto L_0x01a0;
+    L_0x0154:
         r1 = r14.imageReceiver;
         r1.setAllowStartAnimation(r12);
         r1 = r14.imageReceiver;
         r1.stopAnimation();
         r1 = org.telegram.messenger.MediaController.getInstance();
         r1 = r1.isPlayingMessage(r0);
-        if (r1 == 0) goto L_0x0171;
-    L_0x016d:
+        if (r1 == 0) goto L_0x016c;
+    L_0x0168:
         r1 = r0.audioProgress;
         r10.seekToProgressPending2 = r1;
-    L_0x0171:
+    L_0x016c:
         r1 = r10.injectingVideoPlayer;
-        if (r1 != 0) goto L_0x019f;
-    L_0x0175:
+        if (r1 != 0) goto L_0x019a;
+    L_0x0170:
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.FileLoader.getInstance(r1);
         r4 = r18.getDocument();
         r1 = r1.isLoadingVideo(r4, r13);
-        if (r1 != 0) goto L_0x019f;
-    L_0x0185:
+        if (r1 != 0) goto L_0x019a;
+    L_0x0180:
         r1 = r10.currentAnimation;
         r1 = r1.hasBitmap();
-        if (r1 != 0) goto L_0x019d;
-    L_0x018d:
+        if (r1 != 0) goto L_0x0198;
+    L_0x0188:
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.FileLoader.getInstance(r1);
         r4 = r18.getDocument();
         r1 = r1.isLoadingVideo(r4, r12);
-        if (r1 != 0) goto L_0x019f;
-    L_0x019d:
+        if (r1 != 0) goto L_0x019a;
+    L_0x0198:
         r1 = 1;
-        goto L_0x01a0;
-    L_0x019f:
+        goto L_0x019b;
+    L_0x019a:
         r1 = 0;
-    L_0x01a0:
+    L_0x019b:
         r10.skipFirstBufferingProgress = r1;
         r10.currentAnimation = r2;
-        goto L_0x01b1;
-    L_0x01a5:
+        goto L_0x01ac;
+    L_0x01a0:
         r1 = r0.getWebPagePhotos(r2, r2);
         r1 = r1.size();
-        if (r1 <= r13) goto L_0x01b1;
-    L_0x01af:
+        if (r1 <= r13) goto L_0x01ac;
+    L_0x01aa:
         r10.currentAnimation = r2;
-    L_0x01b1:
+    L_0x01ac:
         r1 = r17;
         r2 = r18;
         r3 = r19;
@@ -11018,40 +11020,40 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r9 = r14;
         r1.onPhotoShow(r2, r3, r4, r5, r6, r7, r8, r9);
         r0 = r10.sendPhotoType;
-        if (r0 != r13) goto L_0x01d8;
-    L_0x01c9:
+        if (r0 != r13) goto L_0x01d3;
+    L_0x01c4:
         r0 = r10.photoCropView;
         r0.setVisibility(r12);
         r0 = r10.photoCropView;
         r0.setAlpha(r15);
         r0 = r10.photoCropView;
         r0.setFreeform(r12);
-    L_0x01d8:
+    L_0x01d3:
         r0 = r10.windowView;
         r0 = r0.getViewTreeObserver();
         r1 = new org.telegram.ui.PhotoViewer$40;
         r1.<init>(r14, r11);
         r0.addOnPreDrawListener(r1);
-        goto L_0x023d;
-    L_0x01e7:
-        if (r11 == 0) goto L_0x0215;
-    L_0x01e9:
+        goto L_0x0238;
+    L_0x01e2:
+        if (r11 == 0) goto L_0x0210;
+    L_0x01e4:
         r2 = r10.sendPhotoType;
         r5 = 3;
-        if (r2 == r5) goto L_0x0215;
-    L_0x01ee:
+        if (r2 == r5) goto L_0x0210;
+    L_0x01e9:
         r2 = android.os.Build.VERSION.SDK_INT;
         r1 = 21;
-        if (r2 < r1) goto L_0x01fc;
-    L_0x01f4:
+        if (r2 < r1) goto L_0x01f7;
+    L_0x01ef:
         r1 = r10.windowLayoutParams;
         r2 = -NUM; // 0xfffffffvar_ float:-9.2194E-41 double:NaN;
         r1.flags = r2;
-        goto L_0x0200;
-    L_0x01fc:
+        goto L_0x01fb;
+    L_0x01f7:
         r1 = r10.windowLayoutParams;
         r1.flags = r12;
-    L_0x0200:
+    L_0x01fb:
         r1 = r10.windowLayoutParams;
         r2 = 272; // 0x110 float:3.81E-43 double:1.344E-321;
         r1.softInputMode = r2;
@@ -11061,7 +11063,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1.setFocusable(r13);
         r1 = r10.containerView;
         r1.setFocusable(r13);
-    L_0x0215:
+    L_0x0210:
         r1 = r10.backgroundDrawable;
         r2 = 255; // 0xff float:3.57E-43 double:1.26E-321;
         r1.setAlpha(r2);
@@ -11080,14 +11082,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1.onPhotoShow(r2, r3, r4, r5, r6, r7, r8, r9);
         r17.initCropView();
         r17.setCropBitmap();
-    L_0x023d:
+    L_0x0238:
         r0 = r10.parentActivity;
         r1 = "accessibility";
         r0 = r0.getSystemService(r1);
         r0 = (android.view.accessibility.AccessibilityManager) r0;
         r1 = r0.isTouchExplorationEnabled();
-        if (r1 == 0) goto L_0x0269;
-    L_0x024d:
+        if (r1 == 0) goto L_0x0264;
+    L_0x0248:
         r1 = android.view.accessibility.AccessibilityEvent.obtain();
         r2 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
         r1.setEventType(r2);
@@ -11097,12 +11099,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.add(r3);
         r0.sendAccessibilityEvent(r1);
-    L_0x0269:
+    L_0x0264:
         return r13;
-    L_0x026a:
+    L_0x0265:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x026e:
+    L_0x0269:
         return r12;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.openPhoto(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$FileLocation, org.telegram.messenger.ImageLocation, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int, org.telegram.ui.PhotoViewer$PhotoViewerProvider, org.telegram.ui.ChatActivity, long, long, boolean):boolean");

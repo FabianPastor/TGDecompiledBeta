@@ -817,7 +817,12 @@ public final class R {
         public static final int volume_off = NUM;
         public static final int volume_on = NUM;
         public static final int wall_selection = NUM;
-        public static final int ytlogo = NUM;
+        public static final int zoom_minus = NUM;
+        public static final int zoom_plus = NUM;
+        public static final int zoom_round = NUM;
+        public static final int zoom_round_b = NUM;
+        public static final int zoom_slide = NUM;
+        public static final int zoom_slide_a = NUM;
     }
 
     public static final class id {

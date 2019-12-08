@@ -796,7 +796,12 @@
     <public type="drawable" name="volume_off" id="NUM" />
     <public type="drawable" name="volume_on" id="NUM" />
     <public type="drawable" name="wall_selection" id="NUM" />
-    <public type="drawable" name="ytlogo" id="NUM" />
+    <public type="drawable" name="zoom_minus" id="NUM" />
+    <public type="drawable" name="zoom_plus" id="NUM" />
+    <public type="drawable" name="zoom_round" id="NUM" />
+    <public type="drawable" name="zoom_round_b" id="NUM" />
+    <public type="drawable" name="zoom_slide" id="NUM" />
+    <public type="drawable" name="zoom_slide_a" id="NUM" />
     <public type="id" name="acc_action_msg_options" id="NUM" />
     <public type="id" name="acc_action_open_photo" id="NUM" />
     <public type="id" name="acc_action_small_button" id="NUM" />

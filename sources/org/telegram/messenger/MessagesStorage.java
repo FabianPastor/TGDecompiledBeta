@@ -92,7 +92,7 @@ import org.telegram.tgnet.TLRPC.photos_Photos;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 61;
+    private static final int LAST_DB_VERSION = 62;
     private File cacheFile;
     private SQLiteDatabase database;
     private int lastDateValue = 0;
@@ -303,7 +303,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages ON messages(uid, date, mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages ON messages(mid, out);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages ON messages(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages ON messages(mid, send_state, date) WHERE mid < 0 AND send_state = 1;").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages2 ON messages(mid, send_state, date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, parent TEXT, PRIMARY KEY (uid, type));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
@@ -371,7 +371,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 61").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 62").stepThis().dispose();
                 loadUnreadMessages();
                 loadPendingTasks();
                 try {
@@ -417,7 +417,7 @@ public class MessagesStorage extends BaseController {
                         FileLog.e(e2);
                     }
                 }
-                if (intValue < 61) {
+                if (intValue < 62) {
                     updateDbToLastVersion(intValue);
                 }
                 loadUnreadMessages();
@@ -470,7 +470,6 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE IF NOT EXISTS download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, PRIMARY KEY (uid, type));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages ON messages(mid, send_state, date) WHERE mid < 0 AND send_state = 1;").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
                 this.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid < 0 AND send_state = 1").stepThis().dispose();
                 fixNotificationSettings();
@@ -833,6 +832,12 @@ public class MessagesStorage extends BaseController {
             this.database.executeFast("DROP TABLE IF EXISTS blocked_users;").stepThis().dispose();
             this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins_v2(did INTEGER, uid INTEGER, rank TEXT, PRIMARY KEY(did, uid))").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 61").stepThis().dispose();
+            i = 61;
+        }
+        if (i == 61) {
+            this.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages;").stepThis().dispose();
+            this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages2 ON messages(mid, send_state, date);").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 62").stepThis().dispose();
         }
     }
 
@@ -3775,7 +3780,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{Splitter:B:1:0x0001, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:1:0x0001} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:21:0x005d, code skipped:
             r5 = th;
@@ -4781,7 +4786,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x0195 A:{Catch:{ Exception -> 0x0216, all -> 0x0214 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{Splitter:B:62:0x00fd, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:62:0x00fd} */
     /* JADX WARNING: Removed duplicated region for block: B:95:0x015e  */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
@@ -4790,7 +4795,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x0195 A:{Catch:{ Exception -> 0x0216, all -> 0x0214 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{Splitter:B:62:0x00fd, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:62:0x00fd} */
     /* JADX WARNING: Removed duplicated region for block: B:58:0x00ee  */
     /* JADX WARNING: Removed duplicated region for block: B:80:0x013c  */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x0103 A:{Catch:{ Throwable -> 0x014b, all -> 0x0148 }} */
@@ -5584,9 +5589,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:714:0x10d7 A:{SYNTHETIC, Splitter:B:714:0x10d7} */
     /* JADX WARNING: Removed duplicated region for block: B:813:0x1306 A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
     /* JADX WARNING: Removed duplicated region for block: B:842:0x13ba A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x1209 A:{Splitter:B:631:0x0var_, PHI: r11 r27 r29 r30 r31 r33 r39 r44 , ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Splitter:B:711:0x10d1, ExcHandler: all (th java.lang.Throwable), Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Splitter:B:711:0x10d1, ExcHandler: all (th java.lang.Throwable), Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:760:0x1209 A:{ExcHandler: all (th java.lang.Throwable), PHI: r11 r27 r29 r30 r31 r33 r39 r44 , Splitter:B:631:0x0var_} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:711:0x10d1, Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:711:0x10d1, Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */

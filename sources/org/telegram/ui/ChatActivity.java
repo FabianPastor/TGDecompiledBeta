@@ -1171,8 +1171,36 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                             }
                                         }
                                     } else if (url.startsWith("video")) {
-                                        messageObject.forceSeekTo = ((float) Utilities.parseInt(url).intValue()) / ((float) messageObject.getDuration());
-                                        didPressImage(chatMessageCell, 0.0f, 0.0f);
+                                        WebPage webPage;
+                                        int intValue = Utilities.parseInt(url).intValue();
+                                        if (messageObject.isYouTubeVideo()) {
+                                            webPage = messageObject.messageOwner.media.webpage;
+                                        } else {
+                                            MessageObject messageObject2 = messageObject.replyMessageObject;
+                                            webPage = (messageObject2 == null || !messageObject2.isYouTubeVideo()) ? null : messageObject.replyMessageObject.messageOwner.media.webpage;
+                                        }
+                                        if (webPage != null) {
+                                            Context access$24000 = ChatActivityAdapter.this.mContext;
+                                            String str = webPage.title;
+                                            String str2 = webPage.description;
+                                            StringBuilder stringBuilder = new StringBuilder();
+                                            stringBuilder.append(webPage.url);
+                                            stringBuilder.append("&ot=");
+                                            stringBuilder.append(intValue);
+                                            EmbedBottomSheet.show(access$24000, str, str2, stringBuilder.toString(), webPage.embed_url, webPage.embed_width, webPage.embed_height);
+                                        } else {
+                                            if (!(messageObject.isVideo() || messageObject.replyMessageObject == null)) {
+                                                int i;
+                                                SparseArray[] access$2900 = ChatActivity.this.messagesDict;
+                                                if (messageObject.replyMessageObject.getDialogId() != ChatActivity.this.dialog_id) {
+                                                    i = 1;
+                                                }
+                                                messageObject = (MessageObject) access$2900[i].get(messageObject.replyMessageObject.getId());
+                                                chatMessageCell = null;
+                                            }
+                                            messageObject.forceSeekTo = ((float) intValue) / ((float) messageObject.getDuration());
+                                            openPhotoViewerForMessage(chatMessageCell, messageObject);
+                                        }
                                     }
                                 } else {
                                     toLowerCase = ((URLSpan) characterStyle).getURL();
@@ -1186,8 +1214,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     } else if (characterStyle instanceof URLSpan) {
                                         MessageMedia messageMedia = messageObject.messageOwner.media;
                                         if (messageMedia instanceof TL_messageMediaWebPage) {
-                                            WebPage webPage = messageMedia.webpage;
-                                            if (!(webPage == null || webPage.cached_page == null)) {
+                                            WebPage webPage2 = messageMedia.webpage;
+                                            if (!(webPage2 == null || webPage2.cached_page == null)) {
                                                 url = toLowerCase.toLowerCase();
                                                 String toLowerCase2 = messageObject.messageOwner.media.webpage.url.toLowerCase();
                                                 if ((url.contains("telegram.org/blog") || url.contains("telegra.ph") || url.contains("t.me/iv")) && (url.contains(toLowerCase2) || toLowerCase2.contains(url))) {
@@ -1310,13 +1338,73 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         }
                     }
 
-                    /* JADX WARNING: Missing block: B:73:0x0183, code skipped:
-            if (r10.exists() != false) goto L_0x0187;
+                    /* Access modifiers changed, original: 0000 */
+                    public void openPhotoViewerForMessage(ChatMessageCell chatMessageCell, MessageObject messageObject) {
+                        if (chatMessageCell == null) {
+                            int childCount = ChatActivity.this.chatListView.getChildCount();
+                            for (int i = 0; i < childCount; i++) {
+                                View childAt = ChatActivity.this.chatListView.getChildAt(i);
+                                if (childAt instanceof ChatMessageCell) {
+                                    ChatMessageCell chatMessageCell2 = (ChatMessageCell) childAt;
+                                    if (chatMessageCell2.getMessageObject().equals(messageObject)) {
+                                        chatMessageCell = chatMessageCell2;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (messageObject.isVideo()) {
+                            ChatActivity.this.sendSecretMessageRead(messageObject);
+                        }
+                        PhotoViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity());
+                        MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                        if (!(chatMessageCell == null || playingMessageObject == null || !playingMessageObject.isVideo())) {
+                            ChatActivity.this.getFileLoader().setLoadingVideoForPlayer(playingMessageObject.getDocument(), false);
+                            if (playingMessageObject.equals(messageObject)) {
+                                AnimatedFileDrawable animation = chatMessageCell.getPhotoImage().getAnimation();
+                                if (!(animation == null || ChatActivity.this.videoTextureView == null || ChatActivity.this.videoPlayerContainer.getTag() == null)) {
+                                    Bitmap animatedBitmap = animation.getAnimatedBitmap();
+                                    if (animatedBitmap != null) {
+                                        try {
+                                            Bitmap bitmap = ChatActivity.this.videoTextureView.getBitmap(animatedBitmap.getWidth(), animatedBitmap.getHeight());
+                                            new Canvas(animatedBitmap).drawBitmap(bitmap, 0.0f, 0.0f, null);
+                                            bitmap.recycle();
+                                        } catch (Throwable th) {
+                                            FileLog.e(th);
+                                        }
+                                    }
+                                }
+                            }
+                            MediaController.getInstance().cleanupPlayer(true, true, false, playingMessageObject.equals(messageObject));
+                        }
+                        PhotoViewer instance = PhotoViewer.getInstance();
+                        long j = 0;
+                        long access$2300 = messageObject.type != 0 ? ChatActivity.this.dialog_id : 0;
+                        if (messageObject.type != 0) {
+                            j = ChatActivity.this.mergeDialogId;
+                        }
+                        if (instance.openPhoto(messageObject, access$2300, j, ChatActivity.this.photoViewerProvider)) {
+                            PhotoViewer.getInstance().setParentChatActivity(ChatActivity.this);
+                        }
+                        if (ChatActivity.this.noSoundHintView != null) {
+                            ChatActivity.this.noSoundHintView.hide();
+                        }
+                        if (ChatActivity.this.forwardHintView != null) {
+                            ChatActivity.this.forwardHintView.hide();
+                        }
+                        if (ChatActivity.this.slowModeHint != null) {
+                            ChatActivity.this.slowModeHint.hide();
+                        }
+                        MediaController.getInstance().resetGoingToShowMessageObject();
+                    }
+
+                    /* JADX WARNING: Missing block: B:73:0x0181, code skipped:
+            if (r9.exists() != false) goto L_0x0185;
      */
-                    public void didPressImage(org.telegram.ui.Cells.ChatMessageCell r10, float r11, float r12) {
+                    public void didPressImage(org.telegram.ui.Cells.ChatMessageCell r9, float r10, float r11) {
                         /*
-                        r9 = this;
-                        r7 = r10.getMessageObject();
+                        r8 = this;
+                        r7 = r9.getMessageObject();
                         r0 = r7.isSendError();
                         if (r0 == 0) goto L_0x0017;
                     L_0x000a:
@@ -1324,498 +1412,372 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         r1 = org.telegram.ui.ChatActivity.this;
                         r3 = 0;
                         r4 = 0;
-                        r2 = r10;
-                        r5 = r11;
-                        r6 = r12;
+                        r2 = r9;
+                        r5 = r10;
+                        r6 = r11;
                         r1.createMenu(r2, r3, r4, r5, r6);
                         return;
                     L_0x0017:
-                        r11 = r7.isSending();
-                        if (r11 == 0) goto L_0x001e;
+                        r10 = r7.isSending();
+                        if (r10 == 0) goto L_0x001e;
                     L_0x001d:
                         return;
                     L_0x001e:
-                        r11 = r7.isAnimatedEmoji();
-                        if (r11 == 0) goto L_0x002d;
+                        r10 = r7.isAnimatedEmoji();
+                        if (r10 == 0) goto L_0x002d;
                     L_0x0024:
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11.restartSticker(r10);
-                        goto L_0x03d4;
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10.restartSticker(r9);
+                        goto L_0x02bd;
                     L_0x002d:
-                        r11 = r7.needDrawBluredPreview();
-                        if (r11 == 0) goto L_0x0060;
+                        r10 = r7.needDrawBluredPreview();
+                        if (r10 == 0) goto L_0x0060;
                     L_0x0033:
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11 = r11.sendSecretMessageRead(r7);
-                        if (r11 == 0) goto L_0x0040;
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10 = r10.sendSecretMessageRead(r7);
+                        if (r10 == 0) goto L_0x0040;
                     L_0x003d:
-                        r10.invalidate();
+                        r9.invalidate();
                     L_0x0040:
-                        r10 = org.telegram.ui.SecretMediaViewer.getInstance();
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11 = r11.getParentActivity();
-                        r10.setParentActivity(r11);
-                        r10 = org.telegram.ui.SecretMediaViewer.getInstance();
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11 = r11.photoViewerProvider;
-                        r10.openMedia(r7, r11);
-                        goto L_0x03d4;
+                        r9 = org.telegram.ui.SecretMediaViewer.getInstance();
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10 = r10.getParentActivity();
+                        r9.setParentActivity(r10);
+                        r9 = org.telegram.ui.SecretMediaViewer.getInstance();
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10 = r10.photoViewerProvider;
+                        r9.openMedia(r7, r10);
+                        goto L_0x02bd;
                     L_0x0060:
-                        r11 = r7.type;
-                        r12 = 13;
-                        r0 = 0;
-                        if (r11 == r12) goto L_0x0397;
-                    L_0x0067:
-                        r12 = 15;
-                        if (r11 != r12) goto L_0x006d;
-                    L_0x006b:
-                        goto L_0x0397;
-                    L_0x006d:
-                        r11 = r7.isVideo();
-                        r12 = 0;
-                        r1 = 0;
-                        r8 = 1;
-                        if (r11 != 0) goto L_0x027d;
-                    L_0x0077:
-                        r11 = r7.type;
-                        if (r11 == r8) goto L_0x027d;
-                    L_0x007b:
-                        if (r11 != 0) goto L_0x0083;
-                    L_0x007d:
-                        r11 = r7.isWebpageDocument();
-                        if (r11 == 0) goto L_0x027d;
-                    L_0x0083:
-                        r11 = r7.isGif();
-                        if (r11 == 0) goto L_0x008b;
-                    L_0x0089:
-                        goto L_0x027d;
-                    L_0x008b:
                         r10 = r7.type;
-                        r11 = 3;
-                        if (r10 != r11) goto L_0x0105;
-                    L_0x0090:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10.sendSecretMessageRead(r7);
-                        r10 = r7.messageOwner;	 Catch:{ Exception -> 0x00f8 }
-                        r10 = r10.attachPath;	 Catch:{ Exception -> 0x00f8 }
-                        if (r10 == 0) goto L_0x00b0;
-                    L_0x009d:
-                        r10 = r7.messageOwner;	 Catch:{ Exception -> 0x00f8 }
-                        r10 = r10.attachPath;	 Catch:{ Exception -> 0x00f8 }
-                        r10 = r10.length();	 Catch:{ Exception -> 0x00f8 }
-                        if (r10 == 0) goto L_0x00b0;
-                    L_0x00a7:
-                        r0 = new java.io.File;	 Catch:{ Exception -> 0x00f8 }
-                        r10 = r7.messageOwner;	 Catch:{ Exception -> 0x00f8 }
-                        r10 = r10.attachPath;	 Catch:{ Exception -> 0x00f8 }
-                        r0.<init>(r10);	 Catch:{ Exception -> 0x00f8 }
-                    L_0x00b0:
-                        if (r0 == 0) goto L_0x00b8;
-                    L_0x00b2:
-                        r10 = r0.exists();	 Catch:{ Exception -> 0x00f8 }
-                        if (r10 != 0) goto L_0x00be;
-                    L_0x00b8:
-                        r10 = r7.messageOwner;	 Catch:{ Exception -> 0x00f8 }
-                        r0 = org.telegram.messenger.FileLoader.getPathToMessage(r10);	 Catch:{ Exception -> 0x00f8 }
-                    L_0x00be:
-                        r10 = new android.content.Intent;	 Catch:{ Exception -> 0x00f8 }
-                        r11 = "android.intent.action.VIEW";
-                        r10.<init>(r11);	 Catch:{ Exception -> 0x00f8 }
-                        r11 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00f8 }
-                        r12 = 24;
-                        r1 = "video/mp4";
-                        if (r11 < r12) goto L_0x00e2;
-                    L_0x00cd:
-                        r10.setFlags(r8);	 Catch:{ Exception -> 0x00f8 }
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00f8 }
-                        r11 = org.telegram.ui.ChatActivity.this;	 Catch:{ Exception -> 0x00f8 }
-                        r11 = r11.getParentActivity();	 Catch:{ Exception -> 0x00f8 }
-                        r12 = "org.telegram.messenger.beta.provider";
-                        r11 = androidx.core.content.FileProvider.getUriForFile(r11, r12, r0);	 Catch:{ Exception -> 0x00f8 }
-                        r10.setDataAndType(r11, r1);	 Catch:{ Exception -> 0x00f8 }
-                        goto L_0x00e9;
-                    L_0x00e2:
-                        r11 = android.net.Uri.fromFile(r0);	 Catch:{ Exception -> 0x00f8 }
-                        r10.setDataAndType(r11, r1);	 Catch:{ Exception -> 0x00f8 }
-                    L_0x00e9:
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00f8 }
-                        r11 = org.telegram.ui.ChatActivity.this;	 Catch:{ Exception -> 0x00f8 }
-                        r11 = r11.getParentActivity();	 Catch:{ Exception -> 0x00f8 }
-                        r12 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
-                        r11.startActivityForResult(r10, r12);	 Catch:{ Exception -> 0x00f8 }
-                        goto L_0x03d4;
-                    L_0x00f8:
-                        r10 = move-exception;
-                        org.telegram.messenger.FileLog.e(r10);
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10.alertUserOpenError(r7);
-                        goto L_0x03d4;
-                    L_0x0105:
-                        r3 = 4;
-                        if (r10 != r3) goto L_0x0154;
-                    L_0x0108:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = org.telegram.messenger.AndroidUtilities.isGoogleMapsInstalled(r10);
-                        if (r10 != 0) goto L_0x0113;
-                    L_0x0112:
+                        r11 = 13;
+                        r0 = 0;
+                        if (r10 == r11) goto L_0x0280;
+                    L_0x0067:
+                        r11 = 15;
+                        if (r10 != r11) goto L_0x006d;
+                    L_0x006b:
+                        goto L_0x0280;
+                    L_0x006d:
+                        r10 = r7.isVideo();
+                        if (r10 != 0) goto L_0x027c;
+                    L_0x0073:
+                        r10 = r7.type;
+                        r11 = 1;
+                        if (r10 == r11) goto L_0x027c;
+                    L_0x0078:
+                        if (r10 != 0) goto L_0x0080;
+                    L_0x007a:
+                        r10 = r7.isWebpageDocument();
+                        if (r10 == 0) goto L_0x027c;
+                    L_0x0080:
+                        r10 = r7.isGif();
+                        if (r10 == 0) goto L_0x0088;
+                    L_0x0086:
+                        goto L_0x027c;
+                    L_0x0088:
+                        r9 = r7.type;
+                        r10 = 3;
+                        if (r9 != r10) goto L_0x0102;
+                    L_0x008d:
+                        r9 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r9 = org.telegram.ui.ChatActivity.this;
+                        r9.sendSecretMessageRead(r7);
+                        r9 = r7.messageOwner;	 Catch:{ Exception -> 0x00f5 }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00f5 }
+                        if (r9 == 0) goto L_0x00ad;
+                    L_0x009a:
+                        r9 = r7.messageOwner;	 Catch:{ Exception -> 0x00f5 }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00f5 }
+                        r9 = r9.length();	 Catch:{ Exception -> 0x00f5 }
+                        if (r9 == 0) goto L_0x00ad;
+                    L_0x00a4:
+                        r0 = new java.io.File;	 Catch:{ Exception -> 0x00f5 }
+                        r9 = r7.messageOwner;	 Catch:{ Exception -> 0x00f5 }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00f5 }
+                        r0.<init>(r9);	 Catch:{ Exception -> 0x00f5 }
+                    L_0x00ad:
+                        if (r0 == 0) goto L_0x00b5;
+                    L_0x00af:
+                        r9 = r0.exists();	 Catch:{ Exception -> 0x00f5 }
+                        if (r9 != 0) goto L_0x00bb;
+                    L_0x00b5:
+                        r9 = r7.messageOwner;	 Catch:{ Exception -> 0x00f5 }
+                        r0 = org.telegram.messenger.FileLoader.getPathToMessage(r9);	 Catch:{ Exception -> 0x00f5 }
+                    L_0x00bb:
+                        r9 = new android.content.Intent;	 Catch:{ Exception -> 0x00f5 }
+                        r10 = "android.intent.action.VIEW";
+                        r9.<init>(r10);	 Catch:{ Exception -> 0x00f5 }
+                        r10 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00f5 }
+                        r1 = 24;
+                        r2 = "video/mp4";
+                        if (r10 < r1) goto L_0x00df;
+                    L_0x00ca:
+                        r9.setFlags(r11);	 Catch:{ Exception -> 0x00f5 }
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00f5 }
+                        r10 = org.telegram.ui.ChatActivity.this;	 Catch:{ Exception -> 0x00f5 }
+                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00f5 }
+                        r11 = "org.telegram.messenger.beta.provider";
+                        r10 = androidx.core.content.FileProvider.getUriForFile(r10, r11, r0);	 Catch:{ Exception -> 0x00f5 }
+                        r9.setDataAndType(r10, r2);	 Catch:{ Exception -> 0x00f5 }
+                        goto L_0x00e6;
+                    L_0x00df:
+                        r10 = android.net.Uri.fromFile(r0);	 Catch:{ Exception -> 0x00f5 }
+                        r9.setDataAndType(r10, r2);	 Catch:{ Exception -> 0x00f5 }
+                    L_0x00e6:
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00f5 }
+                        r10 = org.telegram.ui.ChatActivity.this;	 Catch:{ Exception -> 0x00f5 }
+                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00f5 }
+                        r11 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
+                        r10.startActivityForResult(r9, r11);	 Catch:{ Exception -> 0x00f5 }
+                        goto L_0x02bd;
+                    L_0x00f5:
+                        r9 = move-exception;
+                        org.telegram.messenger.FileLog.e(r9);
+                        r9 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r9 = org.telegram.ui.ChatActivity.this;
+                        r9.alertUserOpenError(r7);
+                        goto L_0x02bd;
+                    L_0x0102:
+                        r1 = 4;
+                        r2 = 0;
+                        if (r9 != r1) goto L_0x0152;
+                    L_0x0106:
+                        r9 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r9 = org.telegram.ui.ChatActivity.this;
+                        r9 = org.telegram.messenger.AndroidUtilities.isGoogleMapsInstalled(r9);
+                        if (r9 != 0) goto L_0x0111;
+                    L_0x0110:
                         return;
-                    L_0x0113:
-                        r10 = r7.isLiveLocation();
-                        if (r10 == 0) goto L_0x0132;
-                    L_0x0119:
-                        r10 = new org.telegram.ui.LocationActivity;
-                        r11 = 2;
-                        r10.<init>(r11);
-                        r10.setMessageObject(r7);
+                    L_0x0111:
+                        r9 = r7.isLiveLocation();
+                        if (r9 == 0) goto L_0x0130;
+                    L_0x0117:
+                        r9 = new org.telegram.ui.LocationActivity;
+                        r10 = 2;
+                        r9.<init>(r10);
+                        r9.setMessageObject(r7);
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r9.setDelegate(r10);
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10.presentFragment(r9);
+                        goto L_0x02bd;
+                    L_0x0130:
+                        r9 = new org.telegram.ui.LocationActivity;
                         r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChatActivity.this;
-                        r10.setDelegate(r11);
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11.presentFragment(r10);
-                        goto L_0x03d4;
-                    L_0x0132:
-                        r10 = new org.telegram.ui.LocationActivity;
-                        r0 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r0 = org.telegram.ui.ChatActivity.this;
-                        r0 = r0.currentEncryptedChat;
-                        if (r0 != 0) goto L_0x013d;
+                        r11 = r11.currentEncryptedChat;
+                        if (r11 != 0) goto L_0x013b;
+                    L_0x013a:
+                        goto L_0x013c;
+                    L_0x013b:
+                        r10 = 0;
                     L_0x013c:
-                        goto L_0x013e;
-                    L_0x013d:
-                        r11 = 0;
-                    L_0x013e:
-                        r10.<init>(r11);
-                        r10.setMessageObject(r7);
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r10.setDelegate(r11);
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11.presentFragment(r10);
-                        goto L_0x03d4;
-                    L_0x0154:
-                        r11 = 9;
-                        if (r10 == r11) goto L_0x015a;
+                        r9.<init>(r10);
+                        r9.setMessageObject(r7);
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r9.setDelegate(r10);
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10.presentFragment(r9);
+                        goto L_0x02bd;
+                    L_0x0152:
+                        r10 = 9;
+                        if (r9 == r10) goto L_0x0158;
+                    L_0x0156:
+                        if (r9 != 0) goto L_0x02bd;
                     L_0x0158:
-                        if (r10 != 0) goto L_0x03d4;
-                    L_0x015a:
-                        r10 = r7.getDocumentName();
-                        r10 = r10.toLowerCase();
-                        r11 = "attheme";
-                        r10 = r10.endsWith(r11);
-                        if (r10 == 0) goto L_0x021f;
-                    L_0x016a:
+                        r9 = r7.getDocumentName();
+                        r9 = r9.toLowerCase();
+                        r10 = "attheme";
+                        r9 = r9.endsWith(r10);
+                        if (r9 == 0) goto L_0x021d;
+                    L_0x0168:
+                        r9 = r7.messageOwner;
+                        r9 = r9.attachPath;
+                        if (r9 == 0) goto L_0x0184;
+                    L_0x016e:
+                        r9 = r9.length();
+                        if (r9 == 0) goto L_0x0184;
+                    L_0x0174:
+                        r9 = new java.io.File;
                         r10 = r7.messageOwner;
                         r10 = r10.attachPath;
-                        if (r10 == 0) goto L_0x0186;
-                    L_0x0170:
-                        r10 = r10.length();
-                        if (r10 == 0) goto L_0x0186;
-                    L_0x0176:
-                        r10 = new java.io.File;
-                        r11 = r7.messageOwner;
-                        r11 = r11.attachPath;
-                        r10.<init>(r11);
-                        r11 = r10.exists();
-                        if (r11 == 0) goto L_0x0186;
+                        r9.<init>(r10);
+                        r10 = r9.exists();
+                        if (r10 == 0) goto L_0x0184;
+                    L_0x0183:
+                        goto L_0x0185;
+                    L_0x0184:
+                        r9 = r0;
                     L_0x0185:
-                        goto L_0x0187;
-                    L_0x0186:
-                        r10 = r0;
+                        if (r9 != 0) goto L_0x0194;
                     L_0x0187:
-                        if (r10 != 0) goto L_0x0196;
-                    L_0x0189:
-                        r11 = r7.messageOwner;
-                        r11 = org.telegram.messenger.FileLoader.getPathToMessage(r11);
-                        r0 = r11.exists();
-                        if (r0 == 0) goto L_0x0196;
-                    L_0x0195:
-                        r10 = r11;
-                    L_0x0196:
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11 = r11.chatLayoutManager;
+                        r10 = r7.messageOwner;
+                        r10 = org.telegram.messenger.FileLoader.getPathToMessage(r10);
+                        r0 = r10.exists();
+                        if (r0 == 0) goto L_0x0194;
+                    L_0x0193:
+                        r9 = r10;
+                    L_0x0194:
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10 = r10.chatLayoutManager;
                         r0 = -1;
-                        if (r11 == 0) goto L_0x0201;
-                    L_0x01a1:
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11 = r11.chatLayoutManager;
-                        r11 = r11.findFirstVisibleItemPosition();
-                        if (r11 == 0) goto L_0x01fa;
-                    L_0x01af:
-                        r3 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r3 = org.telegram.ui.ChatActivity.this;
-                        r3.scrollToPositionOnRecreate = r11;
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11 = r11.chatListView;
-                        r3 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r3 = org.telegram.ui.ChatActivity.this;
-                        r3 = r3.scrollToPositionOnRecreate;
-                        r11 = r11.findViewHolderForAdapterPosition(r3);
-                        r11 = (org.telegram.ui.Components.RecyclerListView.Holder) r11;
-                        if (r11 == 0) goto L_0x01f2;
-                    L_0x01ce:
-                        r3 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r3 = org.telegram.ui.ChatActivity.this;
-                        r4 = r3.chatListView;
-                        r4 = r4.getMeasuredHeight();
-                        r11 = r11.itemView;
-                        r11 = r11.getBottom();
-                        r4 = r4 - r11;
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11 = r11.chatListView;
-                        r11 = r11.getPaddingBottom();
-                        r4 = r4 - r11;
-                        r3.scrollToOffsetOnRecreate = r4;
-                        goto L_0x0201;
-                    L_0x01f2:
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11.scrollToPositionOnRecreate = r0;
-                        goto L_0x0201;
-                    L_0x01fa:
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11.scrollToPositionOnRecreate = r0;
-                    L_0x0201:
-                        r11 = r7.getDocumentName();
-                        r11 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r10, r11, r8);
-                        if (r11 == 0) goto L_0x0218;
-                    L_0x020b:
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r12 = org.telegram.ui.ChatActivity.this;
-                        r0 = new org.telegram.ui.ThemePreviewActivity;
-                        r0.<init>(r10, r11);
-                        r12.presentFragment(r0);
-                        return;
-                    L_0x0218:
+                        if (r10 == 0) goto L_0x01ff;
+                    L_0x019f:
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10 = r10.chatLayoutManager;
+                        r10 = r10.findFirstVisibleItemPosition();
+                        if (r10 == 0) goto L_0x01f8;
+                    L_0x01ad:
+                        r1 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r1 = org.telegram.ui.ChatActivity.this;
+                        r1.scrollToPositionOnRecreate = r10;
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10 = r10.chatListView;
+                        r1 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r1 = org.telegram.ui.ChatActivity.this;
+                        r1 = r1.scrollToPositionOnRecreate;
+                        r10 = r10.findViewHolderForAdapterPosition(r1);
+                        r10 = (org.telegram.ui.Components.RecyclerListView.Holder) r10;
+                        if (r10 == 0) goto L_0x01f0;
+                    L_0x01cc:
+                        r1 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r1 = org.telegram.ui.ChatActivity.this;
+                        r3 = r1.chatListView;
+                        r3 = r3.getMeasuredHeight();
+                        r10 = r10.itemView;
+                        r10 = r10.getBottom();
+                        r3 = r3 - r10;
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10 = r10.chatListView;
+                        r10 = r10.getPaddingBottom();
+                        r3 = r3 - r10;
+                        r1.scrollToOffsetOnRecreate = r3;
+                        goto L_0x01ff;
+                    L_0x01f0:
                         r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
                         r10 = org.telegram.ui.ChatActivity.this;
                         r10.scrollToPositionOnRecreate = r0;
-                    L_0x021f:
-                        r10 = r7.canPreviewDocument();
-                        if (r10 == 0) goto L_0x0261;
-                    L_0x0225:
-                        r10 = org.telegram.ui.PhotoViewer.getInstance();
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11 = r11.getParentActivity();
-                        r10.setParentActivity(r11);
-                        r0 = org.telegram.ui.PhotoViewer.getInstance();
-                        r10 = r7.type;
-                        if (r10 == 0) goto L_0x0245;
-                    L_0x023c:
+                        goto L_0x01ff;
+                    L_0x01f8:
                         r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
                         r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = r10.dialog_id;
+                        r10.scrollToPositionOnRecreate = r0;
+                    L_0x01ff:
+                        r10 = r7.getDocumentName();
+                        r10 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r9, r10, r11);
+                        if (r10 == 0) goto L_0x0216;
+                    L_0x0209:
+                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r11 = org.telegram.ui.ChatActivity.this;
+                        r0 = new org.telegram.ui.ThemePreviewActivity;
+                        r0.<init>(r9, r10);
+                        r11.presentFragment(r0);
+                        return;
+                    L_0x0216:
+                        r9 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r9 = org.telegram.ui.ChatActivity.this;
+                        r9.scrollToPositionOnRecreate = r0;
+                    L_0x021d:
+                        r9 = r7.canPreviewDocument();
+                        if (r9 == 0) goto L_0x0261;
+                    L_0x0223:
+                        r9 = org.telegram.ui.PhotoViewer.getInstance();
+                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r10 = org.telegram.ui.ChatActivity.this;
+                        r10 = r10.getParentActivity();
+                        r9.setParentActivity(r10);
+                        r0 = org.telegram.ui.PhotoViewer.getInstance();
+                        r9 = r7.type;
+                        r1 = 0;
+                        if (r9 == 0) goto L_0x0245;
+                    L_0x023c:
+                        r9 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r9 = org.telegram.ui.ChatActivity.this;
+                        r9 = r9.dialog_id;
                         goto L_0x0246;
                     L_0x0245:
-                        r10 = r1;
+                        r9 = r1;
                     L_0x0246:
-                        r12 = r7.type;
-                        if (r12 == 0) goto L_0x0252;
+                        r3 = r7.type;
+                        if (r3 == 0) goto L_0x0252;
                     L_0x024a:
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r12 = org.telegram.ui.ChatActivity.this;
-                        r1 = r12.mergeDialogId;
+                        r1 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r1 = org.telegram.ui.ChatActivity.this;
+                        r1 = r1.mergeDialogId;
                     L_0x0252:
                         r4 = r1;
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r12 = org.telegram.ui.ChatActivity.this;
-                        r6 = r12.photoViewerProvider;
+                        r1 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r1 = org.telegram.ui.ChatActivity.this;
+                        r6 = r1.photoViewerProvider;
                         r1 = r7;
-                        r2 = r10;
+                        r2 = r9;
                         r0.openPhoto(r1, r2, r4, r6);
-                        r12 = 1;
+                        goto L_0x0262;
                     L_0x0261:
-                        if (r12 != 0) goto L_0x03d4;
-                    L_0x0263:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x0270 }
-                        r10 = org.telegram.ui.ChatActivity.this;	 Catch:{ Exception -> 0x0270 }
-                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x0270 }
-                        org.telegram.messenger.AndroidUtilities.openForView(r7, r10);	 Catch:{ Exception -> 0x0270 }
-                        goto L_0x03d4;
+                        r11 = 0;
+                    L_0x0262:
+                        if (r11 != 0) goto L_0x02bd;
+                    L_0x0264:
+                        r9 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x0270 }
+                        r9 = org.telegram.ui.ChatActivity.this;	 Catch:{ Exception -> 0x0270 }
+                        r9 = r9.getParentActivity();	 Catch:{ Exception -> 0x0270 }
+                        org.telegram.messenger.AndroidUtilities.openForView(r7, r9);	 Catch:{ Exception -> 0x0270 }
+                        goto L_0x02bd;
                     L_0x0270:
-                        r10 = move-exception;
-                        org.telegram.messenger.FileLog.e(r10);
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10.alertUserOpenError(r7);
-                        goto L_0x03d4;
-                    L_0x027d:
-                        r11 = r7.isVideo();
-                        if (r11 == 0) goto L_0x028a;
-                    L_0x0283:
+                        r9 = move-exception;
+                        org.telegram.messenger.FileLog.e(r9);
+                        r9 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r9 = org.telegram.ui.ChatActivity.this;
+                        r9.alertUserOpenError(r7);
+                        goto L_0x02bd;
+                    L_0x027c:
+                        r8.openPhotoViewerForMessage(r9, r7);
+                        goto L_0x02bd;
+                    L_0x0280:
+                        r9 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r9 = org.telegram.ui.ChatActivity.this;
+                        r10 = new org.telegram.ui.Components.StickersAlert;
+                        r2 = r9.getParentActivity();
                         r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r11.sendSecretMessageRead(r7);
-                    L_0x028a:
-                        r11 = org.telegram.ui.PhotoViewer.getInstance();
-                        r3 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r3 = org.telegram.ui.ChatActivity.this;
-                        r3 = r3.getParentActivity();
-                        r11.setParentActivity(r3);
-                        r11 = org.telegram.messenger.MediaController.getInstance();
-                        r11 = r11.getPlayingMessageObject();
-                        if (r11 == 0) goto L_0x0316;
-                    L_0x02a3:
-                        r3 = r11.isVideo();
-                        if (r3 == 0) goto L_0x0316;
-                    L_0x02a9:
-                        r3 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r3 = org.telegram.ui.ChatActivity.this;
-                        r3 = r3.getFileLoader();
-                        r4 = r11.getDocument();
-                        r3.setLoadingVideoForPlayer(r4, r12);
-                        r3 = r11.equals(r7);
-                        if (r3 == 0) goto L_0x030b;
-                    L_0x02be:
-                        r10 = r10.getPhotoImage();
-                        r10 = r10.getAnimation();
-                        if (r10 == 0) goto L_0x030b;
-                    L_0x02c8:
-                        r3 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r3 = org.telegram.ui.ChatActivity.this;
-                        r3 = r3.videoTextureView;
-                        if (r3 == 0) goto L_0x030b;
-                    L_0x02d2:
-                        r3 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r3 = org.telegram.ui.ChatActivity.this;
-                        r3 = r3.videoPlayerContainer;
-                        r3 = r3.getTag();
-                        if (r3 == 0) goto L_0x030b;
-                    L_0x02e0:
-                        r10 = r10.getAnimatedBitmap();
-                        if (r10 == 0) goto L_0x030b;
-                    L_0x02e6:
-                        r3 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;	 Catch:{ Throwable -> 0x0307 }
-                        r3 = org.telegram.ui.ChatActivity.this;	 Catch:{ Throwable -> 0x0307 }
-                        r3 = r3.videoTextureView;	 Catch:{ Throwable -> 0x0307 }
-                        r4 = r10.getWidth();	 Catch:{ Throwable -> 0x0307 }
-                        r5 = r10.getHeight();	 Catch:{ Throwable -> 0x0307 }
-                        r3 = r3.getBitmap(r4, r5);	 Catch:{ Throwable -> 0x0307 }
-                        r4 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x0307 }
-                        r4.<init>(r10);	 Catch:{ Throwable -> 0x0307 }
-                        r10 = 0;
-                        r4.drawBitmap(r3, r10, r10, r0);	 Catch:{ Throwable -> 0x0307 }
-                        r3.recycle();	 Catch:{ Throwable -> 0x0307 }
-                        goto L_0x030b;
-                    L_0x0307:
-                        r10 = move-exception;
-                        org.telegram.messenger.FileLog.e(r10);
-                    L_0x030b:
-                        r10 = org.telegram.messenger.MediaController.getInstance();
-                        r11 = r11.equals(r7);
-                        r10.cleanupPlayer(r8, r8, r12, r11);
-                    L_0x0316:
-                        r0 = org.telegram.ui.PhotoViewer.getInstance();
-                        r10 = r7.type;
-                        if (r10 == 0) goto L_0x0327;
-                    L_0x031e:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = r10.dialog_id;
-                        goto L_0x0328;
-                    L_0x0327:
-                        r10 = r1;
-                    L_0x0328:
-                        r12 = r7.type;
-                        if (r12 == 0) goto L_0x0334;
-                    L_0x032c:
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r12 = org.telegram.ui.ChatActivity.this;
-                        r1 = r12.mergeDialogId;
-                    L_0x0334:
-                        r4 = r1;
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r12 = org.telegram.ui.ChatActivity.this;
-                        r6 = r12.photoViewerProvider;
-                        r1 = r7;
-                        r2 = r10;
-                        r10 = r0.openPhoto(r1, r2, r4, r6);
-                        if (r10 == 0) goto L_0x0350;
-                    L_0x0345:
-                        r10 = org.telegram.ui.PhotoViewer.getInstance();
-                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r11 = org.telegram.ui.ChatActivity.this;
-                        r10.setParentChatActivity(r11);
-                    L_0x0350:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = r10.noSoundHintView;
-                        if (r10 == 0) goto L_0x0365;
-                    L_0x035a:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = r10.noSoundHintView;
-                        r10.hide();
-                    L_0x0365:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = r10.forwardHintView;
-                        if (r10 == 0) goto L_0x037a;
-                    L_0x036f:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = r10.forwardHintView;
-                        r10.hide();
-                    L_0x037a:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = r10.slowModeHint;
-                        if (r10 == 0) goto L_0x038f;
-                    L_0x0384:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r10 = r10.slowModeHint;
-                        r10.hide();
-                    L_0x038f:
-                        r10 = org.telegram.messenger.MediaController.getInstance();
-                        r10.resetGoingToShowMessageObject();
-                        goto L_0x03d4;
-                    L_0x0397:
-                        r10 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r10 = org.telegram.ui.ChatActivity.this;
-                        r11 = new org.telegram.ui.Components.StickersAlert;
-                        r2 = r10.getParentActivity();
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
                         r3 = org.telegram.ui.ChatActivity.this;
                         r4 = r7.getInputStickerSet();
                         r5 = 0;
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r12 = org.telegram.ui.ChatActivity.this;
-                        r12 = r12.bottomOverlayChat;
-                        r12 = r12.getVisibility();
-                        if (r12 == 0) goto L_0x03cc;
-                    L_0x03b8:
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r12 = org.telegram.ui.ChatActivity.this;
-                        r12 = r12.currentChat;
-                        if (r12 == 0) goto L_0x03c6;
-                    L_0x03c0:
-                        r12 = org.telegram.messenger.ChatObject.canSendStickers(r12);
-                        if (r12 == 0) goto L_0x03cc;
-                    L_0x03c6:
-                        r12 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
-                        r12 = org.telegram.ui.ChatActivity.this;
-                        r0 = r12.chatActivityEnterView;
-                    L_0x03cc:
+                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r11 = org.telegram.ui.ChatActivity.this;
+                        r11 = r11.bottomOverlayChat;
+                        r11 = r11.getVisibility();
+                        if (r11 == 0) goto L_0x02b5;
+                    L_0x02a1:
+                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r11 = org.telegram.ui.ChatActivity.this;
+                        r11 = r11.currentChat;
+                        if (r11 == 0) goto L_0x02af;
+                    L_0x02a9:
+                        r11 = org.telegram.messenger.ChatObject.canSendStickers(r11);
+                        if (r11 == 0) goto L_0x02b5;
+                    L_0x02af:
+                        r11 = org.telegram.ui.ChatActivity.ChatActivityAdapter.this;
+                        r11 = org.telegram.ui.ChatActivity.this;
+                        r0 = r11.chatActivityEnterView;
+                    L_0x02b5:
                         r6 = r0;
-                        r1 = r11;
+                        r1 = r10;
                         r1.<init>(r2, r3, r4, r5, r6);
-                        r10.showDialog(r11);
-                    L_0x03d4:
+                        r9.showDialog(r10);
+                    L_0x02bd:
                         return;
                         */
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity$ChatActivityAdapter$AnonymousClass1.didPressImage(org.telegram.ui.Cells.ChatMessageCell, float, float):void");

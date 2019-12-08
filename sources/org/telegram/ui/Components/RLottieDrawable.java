@@ -70,7 +70,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private HashMap<Integer, Integer> vibrationPattern;
     private int width;
 
-    private static native long create(String str, int[] iArr, boolean z);
+    private static native long create(String str, int[] iArr, boolean z, int[] iArr2);
 
     private static native void createCache(long j, Bitmap bitmap, int i, int i2, int i3);
 
@@ -127,6 +127,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2) {
+        this(file, i, i2, z, z2, null);
+    }
+
+    public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2, int[] iArr) {
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap();
         this.pendingColorUpdates = new HashMap();
@@ -247,7 +251,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.height = i2;
         this.shouldLimitFps = z2;
         getPaint().setFlags(2);
-        this.nativePtr = create(file.getAbsolutePath(), this.metaData, z);
+        this.nativePtr = create(file.getAbsolutePath(), this.metaData, z, iArr);
         if (z && lottieCacheGenerateQueue == null) {
             lottieCacheGenerateQueue = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue());
         }

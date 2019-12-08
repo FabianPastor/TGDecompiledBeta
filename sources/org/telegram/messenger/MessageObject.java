@@ -184,6 +184,7 @@ public class MessageObject {
     public CharSequence editingMessage;
     public ArrayList<MessageEntity> editingMessageEntities;
     public Document emojiAnimatedSticker;
+    public String emojiAnimatedStickerColor;
     private int emojiOnlyCount;
     public long eventId;
     public float forceSeekTo;
@@ -1705,7 +1706,11 @@ public class MessageObject {
     }
 
     public MessageObject(int i, Message message, boolean z) {
-        this(i, message, null, null, null, null, z, 0);
+        this(i, message, null, null, null, null, null, z, 0);
+    }
+
+    public MessageObject(int i, Message message, MessageObject messageObject, boolean z) {
+        this(i, message, messageObject, null, null, null, null, z, 0);
     }
 
     public MessageObject(int i, Message message, AbstractMap<Integer, User> abstractMap, AbstractMap<Integer, Chat> abstractMap2, boolean z) {
@@ -1713,15 +1718,14 @@ public class MessageObject {
     }
 
     public MessageObject(int i, Message message, SparseArray<User> sparseArray, SparseArray<Chat> sparseArray2, boolean z) {
-        this(i, message, null, null, (SparseArray) sparseArray, (SparseArray) sparseArray2, z, 0);
+        this(i, message, null, null, null, sparseArray, sparseArray2, z, 0);
     }
 
     public MessageObject(int i, Message message, AbstractMap<Integer, User> abstractMap, AbstractMap<Integer, Chat> abstractMap2, boolean z, long j) {
-        this(i, message, (AbstractMap) abstractMap, (AbstractMap) abstractMap2, null, null, z, j);
+        this(i, message, null, abstractMap, abstractMap2, null, null, z, j);
     }
 
-    public MessageObject(int i, Message message, AbstractMap<Integer, User> abstractMap, AbstractMap<Integer, Chat> abstractMap2, SparseArray<User> sparseArray, SparseArray<Chat> sparseArray2, boolean z, long j) {
-        int i2;
+    public MessageObject(int i, Message message, MessageObject messageObject, AbstractMap<Integer, User> abstractMap, AbstractMap<Integer, Chat> abstractMap2, SparseArray<User> sparseArray, SparseArray<Chat> sparseArray2, boolean z, long j) {
         User user;
         AbstractMap abstractMap3;
         SparseArray sparseArray3;
@@ -1734,19 +1738,17 @@ public class MessageObject {
         Theme.createChatResources(null, true);
         this.currentAccount = i;
         this.messageOwner = message2;
+        this.replyMessageObject = messageObject;
         this.eventId = j;
         Message message3 = message2.replyMessage;
         if (message3 != null) {
-            MessageObject messageObject = r2;
-            i2 = 1;
-            MessageObject messageObject2 = new MessageObject(this.currentAccount, message3, (AbstractMap) abstractMap, (AbstractMap) abstractMap2, (SparseArray) sparseArray, (SparseArray) sparseArray2, false, j);
-            this.replyMessageObject = messageObject;
-        } else {
-            i2 = 1;
+            MessageObject messageObject2 = r2;
+            MessageObject messageObject3 = new MessageObject(this.currentAccount, message3, null, abstractMap, abstractMap2, sparseArray, sparseArray2, false, j);
+            this.replyMessageObject = messageObject2;
         }
-        int i3 = message2.from_id;
-        if (i3 > 0) {
-            user = abstractMap4 != null ? (User) abstractMap4.get(Integer.valueOf(i3)) : sparseArray4 != null ? (User) sparseArray4.get(i3) : null;
+        int i2 = message2.from_id;
+        if (i2 > 0) {
+            user = abstractMap4 != null ? (User) abstractMap4.get(Integer.valueOf(i2)) : sparseArray4 != null ? (User) sparseArray4.get(i2) : null;
             if (user == null) {
                 user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(message2.from_id));
             }
@@ -1762,15 +1764,14 @@ public class MessageObject {
         measureInlineBotButtons();
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTimeInMillis(((long) this.messageOwner.date) * 1000);
-        int i4 = gregorianCalendar.get(6);
-        int i5 = gregorianCalendar.get(i2);
-        i3 = gregorianCalendar.get(2);
-        this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(i5), Integer.valueOf(i3), Integer.valueOf(i4)});
-        this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(i5), Integer.valueOf(i3)});
+        int i3 = gregorianCalendar.get(6);
+        int i4 = gregorianCalendar.get(1);
+        i2 = gregorianCalendar.get(2);
+        this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(i4), Integer.valueOf(i2), Integer.valueOf(i3)});
+        this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(i4), Integer.valueOf(i2)});
         createMessageSendInfo();
         generateCaption();
-        boolean z3 = z;
-        if (z3) {
+        if (z2) {
             TextPaint textPaint;
             if (this.messageOwner.media instanceof TL_messageMediaGame) {
                 textPaint = Theme.chat_msgGameTextPaint;
@@ -1782,7 +1783,39 @@ public class MessageObject {
             checkEmojiOnly(iArr);
             this.emojiAnimatedSticker = null;
             if (this.emojiOnlyCount == 1 && !(message2.media instanceof TL_messageMediaWebPage) && message2.entities.isEmpty()) {
-                this.emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(this.messageText);
+                CharSequence charSequence = this.messageText;
+                i2 = TextUtils.indexOf(charSequence, "🏻");
+                if (i2 >= 0) {
+                    this.emojiAnimatedStickerColor = "_c1";
+                    charSequence = charSequence.subSequence(0, i2);
+                } else {
+                    i2 = TextUtils.indexOf(charSequence, "🏼");
+                    if (i2 >= 0) {
+                        this.emojiAnimatedStickerColor = "_c2";
+                        charSequence = charSequence.subSequence(0, i2);
+                    } else {
+                        i2 = TextUtils.indexOf(charSequence, "🏽");
+                        if (i2 >= 0) {
+                            this.emojiAnimatedStickerColor = "_c3";
+                            charSequence = charSequence.subSequence(0, i2);
+                        } else {
+                            i2 = TextUtils.indexOf(charSequence, "🏾");
+                            if (i2 >= 0) {
+                                this.emojiAnimatedStickerColor = "_c4";
+                                charSequence = charSequence.subSequence(0, i2);
+                            } else {
+                                i2 = TextUtils.indexOf(charSequence, "🏿");
+                                if (i2 >= 0) {
+                                    this.emojiAnimatedStickerColor = "_c5";
+                                    charSequence = charSequence.subSequence(0, i2);
+                                } else {
+                                    this.emojiAnimatedStickerColor = "";
+                                }
+                            }
+                        }
+                    }
+                }
+                this.emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence);
             }
             if (this.emojiAnimatedSticker == null) {
                 generateLayout(user);
@@ -1795,7 +1828,7 @@ public class MessageObject {
                 }
             }
         }
-        this.layoutCreated = z3;
+        this.layoutCreated = z2;
         generateThumbs(false);
         checkMediaExistance();
     }
@@ -5249,120 +5282,132 @@ public class MessageObject {
                     }
                 }
                 this.photoThumbsObject = this.messageOwner.action.photo;
-                return;
             }
-            return;
-        }
-        MessageMedia messageMedia = message.media;
-        if (messageMedia != null && !(messageMedia instanceof TL_messageMediaEmpty)) {
-            Document document;
-            if (messageMedia instanceof TL_messageMediaPhoto) {
-                photo = messageMedia.photo;
-                if (z) {
-                    arrayList = this.photoThumbs;
-                    if (arrayList == null || arrayList.size() == photo.sizes.size()) {
+        } else if (this.emojiAnimatedSticker == null) {
+            MessageMedia messageMedia = message.media;
+            if (messageMedia != null && !(messageMedia instanceof TL_messageMediaEmpty)) {
+                Document document;
+                if (messageMedia instanceof TL_messageMediaPhoto) {
+                    photo = messageMedia.photo;
+                    if (z) {
                         arrayList = this.photoThumbs;
-                        if (!(arrayList == null || arrayList.isEmpty())) {
-                            for (i = 0; i < this.photoThumbs.size(); i++) {
-                                photoSize = (PhotoSize) this.photoThumbs.get(i);
-                                if (photoSize != null) {
-                                    for (i2 = 0; i2 < photo.sizes.size(); i2++) {
-                                        photoSize2 = (PhotoSize) photo.sizes.get(i2);
-                                        if (photoSize2 != null && !(photoSize2 instanceof TL_photoSizeEmpty) && photoSize2.type.equals(photoSize.type)) {
-                                            photoSize.location = photoSize2.location;
-                                            break;
+                        if (arrayList == null || arrayList.size() == photo.sizes.size()) {
+                            arrayList = this.photoThumbs;
+                            if (!(arrayList == null || arrayList.isEmpty())) {
+                                for (i = 0; i < this.photoThumbs.size(); i++) {
+                                    photoSize = (PhotoSize) this.photoThumbs.get(i);
+                                    if (photoSize != null) {
+                                        for (i2 = 0; i2 < photo.sizes.size(); i2++) {
+                                            photoSize2 = (PhotoSize) photo.sizes.get(i2);
+                                            if (photoSize2 != null && !(photoSize2 instanceof TL_photoSizeEmpty) && photoSize2.type.equals(photoSize.type)) {
+                                                photoSize.location = photoSize2.location;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
+                            this.photoThumbsObject = this.messageOwner.media.photo;
                         }
-                        this.photoThumbsObject = this.messageOwner.media.photo;
                     }
-                }
-                this.photoThumbs = new ArrayList(photo.sizes);
-                this.photoThumbsObject = this.messageOwner.media.photo;
-            } else if (messageMedia instanceof TL_messageMediaDocument) {
-                document = getDocument();
-                if (isDocumentHasThumb(document)) {
-                    if (z) {
-                        arrayList = this.photoThumbs;
+                    this.photoThumbs = new ArrayList(photo.sizes);
+                    this.photoThumbsObject = this.messageOwner.media.photo;
+                } else if (messageMedia instanceof TL_messageMediaDocument) {
+                    document = getDocument();
+                    if (isDocumentHasThumb(document)) {
+                        if (z) {
+                            arrayList = this.photoThumbs;
+                            if (arrayList != null) {
+                                if (!(arrayList == null || arrayList.isEmpty())) {
+                                    updatePhotoSizeLocations(this.photoThumbs, document.thumbs);
+                                }
+                                this.photoThumbsObject = document;
+                            }
+                        }
+                        this.photoThumbs = new ArrayList();
+                        this.photoThumbs.addAll(document.thumbs);
+                        this.photoThumbsObject = document;
+                    }
+                } else if (messageMedia instanceof TL_messageMediaGame) {
+                    document = messageMedia.game.document;
+                    if (document != null && isDocumentHasThumb(document)) {
+                        if (z) {
+                            ArrayList arrayList2 = this.photoThumbs;
+                            if (!(arrayList2 == null || arrayList2.isEmpty())) {
+                                updatePhotoSizeLocations(this.photoThumbs, document.thumbs);
+                            }
+                        } else {
+                            this.photoThumbs = new ArrayList();
+                            this.photoThumbs.addAll(document.thumbs);
+                        }
+                        this.photoThumbsObject = document;
+                    }
+                    photo = this.messageOwner.media.game.photo;
+                    if (photo != null) {
+                        if (z) {
+                            arrayList = this.photoThumbs2;
+                            if (arrayList != null) {
+                                if (!arrayList.isEmpty()) {
+                                    updatePhotoSizeLocations(this.photoThumbs2, photo.sizes);
+                                }
+                                this.photoThumbsObject2 = photo;
+                            }
+                        }
+                        this.photoThumbs2 = new ArrayList(photo.sizes);
+                        this.photoThumbsObject2 = photo;
+                    }
+                    if (this.photoThumbs == null) {
+                        arrayList = this.photoThumbs2;
                         if (arrayList != null) {
+                            this.photoThumbs = arrayList;
+                            this.photoThumbs2 = null;
+                            this.photoThumbsObject = this.photoThumbsObject2;
+                            this.photoThumbsObject2 = null;
+                        }
+                    }
+                } else if (messageMedia instanceof TL_messageMediaWebPage) {
+                    WebPage webPage = messageMedia.webpage;
+                    Photo photo2 = webPage.photo;
+                    document = webPage.document;
+                    if (photo2 != null) {
+                        if (z) {
+                            arrayList = this.photoThumbs;
+                            if (arrayList != null) {
+                                if (!arrayList.isEmpty()) {
+                                    updatePhotoSizeLocations(this.photoThumbs, photo2.sizes);
+                                }
+                                this.photoThumbsObject = photo2;
+                            }
+                        }
+                        this.photoThumbs = new ArrayList(photo2.sizes);
+                        this.photoThumbsObject = photo2;
+                    } else if (document != null && isDocumentHasThumb(document)) {
+                        if (z) {
+                            arrayList = this.photoThumbs;
                             if (!(arrayList == null || arrayList.isEmpty())) {
                                 updatePhotoSizeLocations(this.photoThumbs, document.thumbs);
                             }
-                            this.photoThumbsObject = document;
+                        } else {
+                            this.photoThumbs = new ArrayList();
+                            this.photoThumbs.addAll(document.thumbs);
                         }
+                        this.photoThumbsObject = document;
                     }
-                    this.photoThumbs = new ArrayList();
-                    this.photoThumbs.addAll(document.thumbs);
-                    this.photoThumbsObject = document;
-                }
-            } else if (messageMedia instanceof TL_messageMediaGame) {
-                document = messageMedia.game.document;
-                if (document != null && isDocumentHasThumb(document)) {
-                    if (z) {
-                        ArrayList arrayList2 = this.photoThumbs;
-                        if (!(arrayList2 == null || arrayList2.isEmpty())) {
-                            updatePhotoSizeLocations(this.photoThumbs, document.thumbs);
-                        }
-                    } else {
-                        this.photoThumbs = new ArrayList();
-                        this.photoThumbs.addAll(document.thumbs);
-                    }
-                    this.photoThumbsObject = document;
-                }
-                photo = this.messageOwner.media.game.photo;
-                if (photo != null) {
-                    if (z) {
-                        arrayList = this.photoThumbs2;
-                        if (arrayList != null) {
-                            if (!arrayList.isEmpty()) {
-                                updatePhotoSizeLocations(this.photoThumbs2, photo.sizes);
-                            }
-                            this.photoThumbsObject2 = photo;
-                        }
-                    }
-                    this.photoThumbs2 = new ArrayList(photo.sizes);
-                    this.photoThumbsObject2 = photo;
-                }
-                if (this.photoThumbs == null) {
-                    arrayList = this.photoThumbs2;
-                    if (arrayList != null) {
-                        this.photoThumbs = arrayList;
-                        this.photoThumbs2 = null;
-                        this.photoThumbsObject = this.photoThumbsObject2;
-                        this.photoThumbsObject2 = null;
-                    }
-                }
-            } else if (messageMedia instanceof TL_messageMediaWebPage) {
-                WebPage webPage = messageMedia.webpage;
-                Photo photo2 = webPage.photo;
-                document = webPage.document;
-                if (photo2 != null) {
-                    if (z) {
-                        arrayList = this.photoThumbs;
-                        if (arrayList != null) {
-                            if (!arrayList.isEmpty()) {
-                                updatePhotoSizeLocations(this.photoThumbs, photo2.sizes);
-                            }
-                            this.photoThumbsObject = photo2;
-                        }
-                    }
-                    this.photoThumbs = new ArrayList(photo2.sizes);
-                    this.photoThumbsObject = photo2;
-                } else if (document != null && isDocumentHasThumb(document)) {
-                    if (z) {
-                        arrayList = this.photoThumbs;
-                        if (!(arrayList == null || arrayList.isEmpty())) {
-                            updatePhotoSizeLocations(this.photoThumbs, document.thumbs);
-                        }
-                    } else {
-                        this.photoThumbs = new ArrayList();
-                        this.photoThumbs.addAll(document.thumbs);
-                    }
-                    this.photoThumbsObject = document;
                 }
             }
+        } else if (TextUtils.isEmpty(this.emojiAnimatedStickerColor) && isDocumentHasThumb(this.emojiAnimatedSticker)) {
+            if (z) {
+                arrayList = this.photoThumbs;
+                if (arrayList != null) {
+                    if (!(arrayList == null || arrayList.isEmpty())) {
+                        updatePhotoSizeLocations(this.photoThumbs, this.emojiAnimatedSticker.thumbs);
+                    }
+                    this.photoThumbsObject = this.emojiAnimatedSticker;
+                }
+            }
+            this.photoThumbs = new ArrayList();
+            this.photoThumbs.addAll(this.emojiAnimatedSticker.thumbs);
+            this.photoThumbsObject = this.emojiAnimatedSticker;
         }
     }
 
@@ -6816,6 +6861,17 @@ public class MessageObject {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.needDrawShareButton():boolean");
     }
 
+    public boolean isYouTubeVideo() {
+        MessageMedia messageMedia = this.messageOwner.media;
+        if (messageMedia instanceof TL_messageMediaWebPage) {
+            WebPage webPage = messageMedia.webpage;
+            if (!(webPage == null || TextUtils.isEmpty(webPage.embed_url) || !this.messageOwner.media.webpage.site_name.equals("YouTube"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int getMaxMessageTextWidth() {
         int dp;
         if (!AndroidUtilities.isTablet() || this.eventId == 0) {
@@ -6855,48 +6911,56 @@ public class MessageObject {
         return this.messageOwner.media instanceof TL_messageMediaGame ? dp - AndroidUtilities.dp(10.0f) : dp;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0237 A:{Catch:{ Exception -> 0x03d4 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x025c  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x0297  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x028d  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x02bb  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x02c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0384  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x02cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0273 A:{SYNTHETIC, Splitter:B:113:0x0273} */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x0298  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x02d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x02c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x02f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x02fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x03c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:150:0x0308  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x00f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x00ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x011b A:{Catch:{ Exception -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00f9 A:{Catch:{ Exception -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x0143  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0141  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0157  */
     /* JADX WARNING: Removed duplicated region for block: B:41:0x0088  */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x007e  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x00b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x00e0 A:{Catch:{ Exception -> 0x040f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x00c1 A:{Catch:{ Exception -> 0x040f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0103  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x0101  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0117  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x02bb  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x02c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x02cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0384  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x00aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x00ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x00f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00f9 A:{Catch:{ Exception -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x011b A:{Catch:{ Exception -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0141  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x0143  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0157  */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x02f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x02fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:150:0x0308  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x03c6  */
     /* JADX WARNING: Missing block: B:36:0x0077, code skipped:
             if ((r0.media instanceof org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported) == false) goto L_0x007b;
      */
-    public void generateLayout(org.telegram.tgnet.TLRPC.User r31) {
+    public void generateLayout(org.telegram.tgnet.TLRPC.User r30) {
         /*
-        r30 = this;
-        r1 = r30;
+        r29 = this;
+        r1 = r29;
         r0 = r1.type;
-        if (r0 != 0) goto L_0x0413;
+        if (r0 != 0) goto L_0x043b;
     L_0x0006:
         r0 = r1.messageOwner;
         r0 = r0.to_id;
-        if (r0 == 0) goto L_0x0413;
+        if (r0 == 0) goto L_0x043b;
     L_0x000c:
         r0 = r1.messageText;
         r0 = android.text.TextUtils.isEmpty(r0);
         if (r0 == 0) goto L_0x0016;
     L_0x0014:
-        goto L_0x0413;
+        goto L_0x043b;
     L_0x0016:
-        r30.generateLinkDescription();
+        r29.generateLinkDescription();
         r0 = new java.util.ArrayList;
         r0.<init>();
         r1.textLayoutBlocks = r0;
@@ -6947,7 +7011,7 @@ public class MessageObject {
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
         if (r0 != 0) goto L_0x0079;
     L_0x0061:
-        r0 = r30.isOut();
+        r0 = r29.isOut();
         if (r0 == 0) goto L_0x006d;
     L_0x0067:
         r0 = r1.messageOwner;
@@ -6969,7 +7033,7 @@ public class MessageObject {
     L_0x007c:
         if (r3 == 0) goto L_0x0088;
     L_0x007e:
-        r0 = r30.isOutOwner();
+        r0 = r29.isOutOwner();
         r5 = r1.messageText;
         addLinks(r0, r5);
         goto L_0x00a3;
@@ -6991,563 +7055,590 @@ public class MessageObject {
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
     L_0x00a3:
+        r0 = r29.isYouTubeVideo();
+        r5 = 3;
+        if (r0 != 0) goto L_0x00cf;
+    L_0x00aa:
+        r0 = r1.replyMessageObject;
+        if (r0 == 0) goto L_0x00b5;
+    L_0x00ae:
+        r0 = r0.isYouTubeVideo();
+        if (r0 == 0) goto L_0x00b5;
+    L_0x00b4:
+        goto L_0x00cf;
+    L_0x00b5:
+        r0 = r1.replyMessageObject;
+        if (r0 == 0) goto L_0x00db;
+    L_0x00b9:
+        r0 = r0.isVideo();
+        if (r0 == 0) goto L_0x00db;
+    L_0x00bf:
+        r0 = r29.isOutOwner();
+        r6 = r1.messageText;
+        r7 = r1.replyMessageObject;
+        r7 = r7.getDuration();
+        addUrlsByPattern(r0, r6, r2, r5, r7);
+        goto L_0x00db;
+    L_0x00cf:
+        r0 = r29.isOutOwner();
+        r6 = r1.messageText;
+        r7 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+        addUrlsByPattern(r0, r6, r2, r5, r7);
+    L_0x00db:
         r0 = r1.messageText;
         r3 = r1.addEntitiesToText(r0, r3);
-        r15 = r30.getMaxMessageTextWidth();
+        r15 = r29.getMaxMessageTextWidth();
         r0 = r1.messageOwner;
         r0 = r0.media;
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaGame;
-        if (r0 == 0) goto L_0x00b8;
-    L_0x00b5:
+        if (r0 == 0) goto L_0x00f0;
+    L_0x00ed:
         r0 = org.telegram.ui.ActionBar.Theme.chat_msgGameTextPaint;
-        goto L_0x00ba;
-    L_0x00b8:
-        r0 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;
-    L_0x00ba:
-        r14 = r0;
-        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x040f }
-        r13 = 24;
-        if (r0 < r13) goto L_0x00e0;
-    L_0x00c1:
-        r0 = r1.messageText;	 Catch:{ Exception -> 0x040f }
-        r5 = r1.messageText;	 Catch:{ Exception -> 0x040f }
-        r5 = r5.length();	 Catch:{ Exception -> 0x040f }
-        r0 = android.text.StaticLayout.Builder.obtain(r0, r2, r5, r14, r15);	 Catch:{ Exception -> 0x040f }
-        r0 = r0.setBreakStrategy(r4);	 Catch:{ Exception -> 0x040f }
-        r0 = r0.setHyphenationFrequency(r2);	 Catch:{ Exception -> 0x040f }
-        r5 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x040f }
-        r0 = r0.setAlignment(r5);	 Catch:{ Exception -> 0x040f }
-        r0 = r0.build();	 Catch:{ Exception -> 0x040f }
-        goto L_0x00f0;
-    L_0x00e0:
-        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x040f }
-        r6 = r1.messageText;	 Catch:{ Exception -> 0x040f }
-        r9 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x040f }
-        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r11 = 0;
-        r12 = 0;
-        r5 = r0;
-        r7 = r14;
-        r8 = r15;
-        r5.<init>(r6, r7, r8, r9, r10, r11, r12);	 Catch:{ Exception -> 0x040f }
+        goto L_0x00f2;
     L_0x00f0:
-        r12 = r0;
-        r0 = r12.getHeight();
+        r0 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;
+    L_0x00f2:
+        r14 = r0;
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0437 }
+        r13 = 24;
+        if (r0 < r13) goto L_0x011b;
+    L_0x00f9:
+        r0 = r1.messageText;	 Catch:{ Exception -> 0x0437 }
+        r6 = r1.messageText;	 Catch:{ Exception -> 0x0437 }
+        r6 = r6.length();	 Catch:{ Exception -> 0x0437 }
+        r0 = android.text.StaticLayout.Builder.obtain(r0, r2, r6, r14, r15);	 Catch:{ Exception -> 0x0437 }
+        r0 = r0.setBreakStrategy(r4);	 Catch:{ Exception -> 0x0437 }
+        r0 = r0.setHyphenationFrequency(r2);	 Catch:{ Exception -> 0x0437 }
+        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0437 }
+        r0 = r0.setAlignment(r6);	 Catch:{ Exception -> 0x0437 }
+        r0 = r0.build();	 Catch:{ Exception -> 0x0437 }
+        r13 = r0;
+        r5 = 24;
+        goto L_0x0131;
+    L_0x011b:
+        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0437 }
+        r7 = r1.messageText;	 Catch:{ Exception -> 0x0437 }
+        r10 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0437 }
+        r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r12 = 0;
+        r16 = 0;
+        r6 = r0;
+        r8 = r14;
+        r9 = r15;
+        r5 = 24;
+        r13 = r16;
+        r6.<init>(r7, r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x0437 }
+        r13 = r0;
+    L_0x0131:
+        r0 = r13.getHeight();
         r1.textHeight = r0;
-        r0 = r12.getLineCount();
+        r0 = r13.getLineCount();
         r1.linesCount = r0;
         r0 = android.os.Build.VERSION.SDK_INT;
-        if (r0 < r13) goto L_0x0103;
-    L_0x0101:
-        r11 = 1;
-        goto L_0x0110;
-    L_0x0103:
+        if (r0 < r5) goto L_0x0143;
+    L_0x0141:
+        r12 = 1;
+        goto L_0x0150;
+    L_0x0143:
         r0 = r1.linesCount;
         r0 = (float) r0;
-        r5 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r0 = r0 / r5;
-        r5 = (double) r0;
-        r5 = java.lang.Math.ceil(r5);
-        r0 = (int) r5;
-        r11 = r0;
-    L_0x0110:
-        r10 = 0;
-        r8 = 0;
+        r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r0 = r0 / r6;
+        r6 = (double) r0;
+        r6 = java.lang.Math.ceil(r6);
+        r0 = (int) r6;
+        r12 = r0;
+    L_0x0150:
+        r11 = 0;
         r9 = 0;
+        r10 = 0;
         r16 = 0;
-    L_0x0115:
-        if (r9 >= r11) goto L_0x040e;
-    L_0x0117:
+    L_0x0155:
+        if (r10 >= r12) goto L_0x0436;
+    L_0x0157:
         r0 = android.os.Build.VERSION.SDK_INT;
-        if (r0 < r13) goto L_0x011e;
-    L_0x011b:
+        if (r0 < r5) goto L_0x015e;
+    L_0x015b:
         r0 = r1.linesCount;
-        goto L_0x0127;
-    L_0x011e:
+        goto L_0x0167;
+    L_0x015e:
         r0 = 10;
-        r5 = r1.linesCount;
-        r5 = r5 - r8;
-        r0 = java.lang.Math.min(r0, r5);
-    L_0x0127:
-        r7 = new org.telegram.messenger.MessageObject$TextLayoutBlock;
-        r7.<init>();
-        r6 = 2;
-        if (r11 != r4) goto L_0x019b;
-    L_0x012f:
-        r7.textLayout = r12;
-        r7.textYOffset = r10;
-        r7.charactersOffset = r2;
-        r5 = r1.emojiOnlyCount;
-        if (r5 == 0) goto L_0x0187;
-    L_0x0139:
-        if (r5 == r4) goto L_0x0170;
-    L_0x013b:
-        if (r5 == r6) goto L_0x0159;
-    L_0x013d:
-        r6 = 3;
-        if (r5 == r6) goto L_0x0141;
-    L_0x0140:
-        goto L_0x0187;
-    L_0x0141:
-        r5 = r1.textHeight;
-        r6 = NUM; // 0x40866666 float:4.2 double:5.348506967E-315;
-        r17 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r5 = r5 - r17;
-        r1.textHeight = r5;
-        r5 = r7.textYOffset;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r5 = r5 - r6;
-        r7.textYOffset = r5;
-        goto L_0x0187;
-    L_0x0159:
-        r5 = r1.textHeight;
+        r6 = r1.linesCount;
+        r6 = r6 - r9;
+        r0 = java.lang.Math.min(r0, r6);
+    L_0x0167:
+        r8 = new org.telegram.messenger.MessageObject$TextLayoutBlock;
+        r8.<init>();
+        r7 = 2;
+        if (r12 != r4) goto L_0x01dc;
+    L_0x016f:
+        r8.textLayout = r13;
+        r8.textYOffset = r11;
+        r8.charactersOffset = r2;
+        r6 = r1.emojiOnlyCount;
+        if (r6 == 0) goto L_0x01c7;
+    L_0x0179:
+        if (r6 == r4) goto L_0x01b0;
+    L_0x017b:
+        if (r6 == r7) goto L_0x0199;
+    L_0x017d:
+        r2 = 3;
+        if (r6 == r2) goto L_0x0181;
+    L_0x0180:
+        goto L_0x01c7;
+    L_0x0181:
+        r6 = r1.textHeight;
+        r17 = NUM; // 0x40866666 float:4.2 double:5.348506967E-315;
+        r18 = org.telegram.messenger.AndroidUtilities.dp(r17);
+        r6 = r6 - r18;
+        r1.textHeight = r6;
+        r6 = r8.textYOffset;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r17);
+        r2 = (float) r2;
+        r6 = r6 - r2;
+        r8.textYOffset = r6;
+        goto L_0x01c7;
+    L_0x0199:
+        r2 = r1.textHeight;
         r6 = NUM; // 0x40900000 float:4.5 double:5.35161536E-315;
         r17 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r5 = r5 - r17;
-        r1.textHeight = r5;
-        r5 = r7.textYOffset;
+        r2 = r2 - r17;
+        r1.textHeight = r2;
+        r2 = r8.textYOffset;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r6 = (float) r6;
-        r5 = r5 - r6;
-        r7.textYOffset = r5;
-        goto L_0x0187;
-    L_0x0170:
-        r5 = r1.textHeight;
+        r2 = r2 - r6;
+        r8.textYOffset = r2;
+        goto L_0x01c7;
+    L_0x01b0:
+        r2 = r1.textHeight;
         r6 = NUM; // 0x40a9999a float:5.3 double:5.35990441E-315;
         r17 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r5 = r5 - r17;
-        r1.textHeight = r5;
-        r5 = r7.textYOffset;
+        r2 = r2 - r17;
+        r1.textHeight = r2;
+        r2 = r8.textYOffset;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r6 = (float) r6;
-        r5 = r5 - r6;
-        r7.textYOffset = r5;
-    L_0x0187:
-        r5 = r1.textHeight;
-        r7.height = r5;
-        r5 = r7;
-        r2 = r8;
-        r4 = r9;
-        r8 = r11;
-        r6 = r12;
-        r18 = r14;
-        r7 = r16;
-        r17 = 24;
-        r25 = 2;
-    L_0x0198:
-        r9 = r0;
-        goto L_0x027e;
-    L_0x019b:
-        r6 = r12.getLineStart(r8);
-        r5 = r8 + r0;
-        r5 = r5 - r4;
-        r5 = r12.getLineEnd(r5);
-        if (r5 >= r6) goto L_0x01b9;
-    L_0x01a8:
+        r2 = r2 - r6;
+        r8.textYOffset = r2;
+    L_0x01c7:
+        r2 = r1.textHeight;
+        r8.height = r2;
         r19 = r3;
-        r20 = r8;
-        r4 = r9;
-        r8 = r11;
-        r28 = r12;
+        r5 = r8;
+        r2 = r9;
+        r6 = r10;
+        r8 = r12;
+        r4 = r13;
         r18 = r14;
         r3 = r15;
-        r2 = 0;
-        r10 = 1;
-        r17 = 24;
-        goto L_0x03fa;
-    L_0x01b9:
-        r7.charactersOffset = r6;
-        r7.charactersEnd = r5;
-        if (r3 == 0) goto L_0x01f2;
-    L_0x01bf:
-        r10 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x03e7 }
-        if (r10 < r13) goto L_0x01f2;
-    L_0x01c3:
-        r10 = r1.messageText;	 Catch:{ Exception -> 0x03e7 }
-        r18 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r18 = org.telegram.messenger.AndroidUtilities.dp(r18);	 Catch:{ Exception -> 0x03e7 }
-        r13 = r15 + r18;
-        r5 = android.text.StaticLayout.Builder.obtain(r10, r6, r5, r14, r13);	 Catch:{ Exception -> 0x03e7 }
-        r5 = r5.setBreakStrategy(r4);	 Catch:{ Exception -> 0x03e7 }
-        r5 = r5.setHyphenationFrequency(r2);	 Catch:{ Exception -> 0x03e7 }
-        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x03e7 }
-        r5 = r5.setAlignment(r6);	 Catch:{ Exception -> 0x03e7 }
-        r5 = r5.build();	 Catch:{ Exception -> 0x03e7 }
-        r7.textLayout = r5;	 Catch:{ Exception -> 0x03e7 }
-        r5 = r7;
-        r2 = r8;
-        r4 = r9;
-        r27 = r11;
-        r6 = r12;
-        r18 = r14;
-        r17 = 24;
-        r25 = 2;
-        goto L_0x022e;
-    L_0x01f2:
-        r13 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x03e7 }
-        r10 = r1.messageText;	 Catch:{ Exception -> 0x03e7 }
-        r18 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x03e7 }
-        r20 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r21 = 0;
-        r22 = 0;
-        r23 = r5;
-        r5 = r13;
-        r24 = r6;
-        r25 = 2;
+        r7 = r16;
+        r17 = 2;
+    L_0x01d9:
+        r9 = r0;
+        goto L_0x02ba;
+    L_0x01dc:
+        r2 = r13.getLineStart(r9);
+        r6 = r9 + r0;
+        r6 = r6 - r4;
+        r6 = r13.getLineEnd(r6);
+        if (r6 >= r2) goto L_0x01f7;
+    L_0x01e9:
+        r19 = r3;
+        r2 = r9;
         r6 = r10;
-        r10 = r7;
-        r7 = r24;
-        r2 = r8;
-        r8 = r23;
-        r4 = r9;
-        r9 = r14;
-        r26 = r10;
-        r10 = r15;
-        r27 = r11;
-        r11 = r18;
-        r28 = r12;
-        r12 = r20;
-        r29 = r13;
-        r17 = 24;
-        r13 = r21;
+        r8 = r12;
+        r25 = r13;
         r18 = r14;
-        r14 = r22;
-        r5.<init>(r6, r7, r8, r9, r10, r11, r12, r13, r14);	 Catch:{ Exception -> 0x03dc }
-        r5 = r26;
-        r6 = r29;
-        r5.textLayout = r6;	 Catch:{ Exception -> 0x03dc }
-        r6 = r28;
-    L_0x022e:
-        r7 = r6.getLineTop(r2);	 Catch:{ Exception -> 0x03d4 }
-        r7 = (float) r7;	 Catch:{ Exception -> 0x03d4 }
-        r5.textYOffset = r7;	 Catch:{ Exception -> 0x03d4 }
-        if (r4 == 0) goto L_0x023e;
-    L_0x0237:
-        r7 = r5.textYOffset;	 Catch:{ Exception -> 0x03d4 }
+        r3 = r15;
+        r4 = 0;
+        r10 = 1;
+        goto L_0x0423;
+    L_0x01f7:
+        r8.charactersOffset = r2;
+        r8.charactersEnd = r6;
+        if (r3 == 0) goto L_0x0233;
+    L_0x01fd:
+        r7 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0413 }
+        if (r7 < r5) goto L_0x0233;
+    L_0x0201:
+        r7 = r1.messageText;	 Catch:{ Exception -> 0x0413 }
+        r18 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r18 = org.telegram.messenger.AndroidUtilities.dp(r18);	 Catch:{ Exception -> 0x0413 }
+        r5 = r15 + r18;
+        r2 = android.text.StaticLayout.Builder.obtain(r7, r2, r6, r14, r5);	 Catch:{ Exception -> 0x0413 }
+        r2 = r2.setBreakStrategy(r4);	 Catch:{ Exception -> 0x0413 }
+        r5 = 0;
+        r2 = r2.setHyphenationFrequency(r5);	 Catch:{ Exception -> 0x0413 }
+        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0413 }
+        r2 = r2.setAlignment(r6);	 Catch:{ Exception -> 0x0413 }
+        r2 = r2.build();	 Catch:{ Exception -> 0x0413 }
+        r8.textLayout = r2;	 Catch:{ Exception -> 0x0413 }
+        r19 = r3;
+        r5 = r8;
+        r2 = r9;
+        r23 = r10;
+        r24 = r12;
+        r4 = r13;
+        r18 = r14;
+        r3 = r15;
+        r17 = 2;
+        goto L_0x0268;
+    L_0x0233:
+        r5 = 0;
+        r7 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0413 }
+        r5 = r1.messageText;	 Catch:{ Exception -> 0x0413 }
+        r18 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0413 }
+        r19 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r20 = 0;
+        r21 = 0;
+        r22 = r6;
+        r6 = r7;
+        r4 = r7;
+        r17 = 2;
+        r7 = r5;
+        r5 = r8;
+        r8 = r2;
+        r2 = r9;
+        r9 = r22;
+        r23 = r10;
+        r10 = r14;
+        r11 = r15;
+        r24 = r12;
+        r12 = r18;
+        r25 = r13;
+        r13 = r19;
+        r18 = r14;
+        r14 = r20;
+        r19 = r3;
+        r3 = r15;
+        r15 = r21;
+        r6.<init>(r7, r8, r9, r10, r11, r12, r13, r14, r15);	 Catch:{ Exception -> 0x040d }
+        r5.textLayout = r4;	 Catch:{ Exception -> 0x040d }
+        r4 = r25;
+    L_0x0268:
+        r6 = r4.getLineTop(r2);	 Catch:{ Exception -> 0x0409 }
+        r6 = (float) r6;	 Catch:{ Exception -> 0x0409 }
+        r5.textYOffset = r6;	 Catch:{ Exception -> 0x0409 }
+        r6 = r23;
+        if (r6 == 0) goto L_0x027a;
+    L_0x0273:
+        r7 = r5.textYOffset;	 Catch:{ Exception -> 0x0405 }
         r7 = r7 - r16;
-        r7 = (int) r7;	 Catch:{ Exception -> 0x03d4 }
-        r5.height = r7;	 Catch:{ Exception -> 0x03d4 }
-    L_0x023e:
-        r7 = r5.height;	 Catch:{ Exception -> 0x03d4 }
-        r8 = r5.textLayout;	 Catch:{ Exception -> 0x03d4 }
-        r9 = r5.textLayout;	 Catch:{ Exception -> 0x03d4 }
-        r9 = r9.getLineCount();	 Catch:{ Exception -> 0x03d4 }
+        r7 = (int) r7;	 Catch:{ Exception -> 0x0405 }
+        r5.height = r7;	 Catch:{ Exception -> 0x0405 }
+    L_0x027a:
+        r7 = r5.height;	 Catch:{ Exception -> 0x0405 }
+        r8 = r5.textLayout;	 Catch:{ Exception -> 0x0405 }
+        r9 = r5.textLayout;	 Catch:{ Exception -> 0x0405 }
+        r9 = r9.getLineCount();	 Catch:{ Exception -> 0x0405 }
         r10 = 1;
         r9 = r9 - r10;
-        r8 = r8.getLineBottom(r9);	 Catch:{ Exception -> 0x03d4 }
-        r7 = java.lang.Math.max(r7, r8);	 Catch:{ Exception -> 0x03d4 }
-        r5.height = r7;	 Catch:{ Exception -> 0x03d4 }
-        r7 = r5.textYOffset;	 Catch:{ Exception -> 0x03d4 }
-        r8 = r27;
-        r11 = r8 + -1;
-        if (r4 != r11) goto L_0x0198;
-    L_0x025c:
+        r8 = r8.getLineBottom(r9);	 Catch:{ Exception -> 0x0405 }
+        r7 = java.lang.Math.max(r7, r8);	 Catch:{ Exception -> 0x0405 }
+        r5.height = r7;	 Catch:{ Exception -> 0x0405 }
+        r7 = r5.textYOffset;	 Catch:{ Exception -> 0x0405 }
+        r8 = r24;
+        r12 = r8 + -1;
+        if (r6 != r12) goto L_0x01d9;
+    L_0x0298:
         r9 = r5.textLayout;
         r9 = r9.getLineCount();
         r9 = java.lang.Math.max(r0, r9);
-        r0 = r1.textHeight;	 Catch:{ Exception -> 0x027a }
-        r10 = r5.textYOffset;	 Catch:{ Exception -> 0x027a }
-        r11 = r5.textLayout;	 Catch:{ Exception -> 0x027a }
-        r11 = r11.getHeight();	 Catch:{ Exception -> 0x027a }
-        r11 = (float) r11;	 Catch:{ Exception -> 0x027a }
+        r0 = r1.textHeight;	 Catch:{ Exception -> 0x02b6 }
+        r10 = r5.textYOffset;	 Catch:{ Exception -> 0x02b6 }
+        r11 = r5.textLayout;	 Catch:{ Exception -> 0x02b6 }
+        r11 = r11.getHeight();	 Catch:{ Exception -> 0x02b6 }
+        r11 = (float) r11;	 Catch:{ Exception -> 0x02b6 }
         r10 = r10 + r11;
-        r10 = (int) r10;	 Catch:{ Exception -> 0x027a }
-        r0 = java.lang.Math.max(r0, r10);	 Catch:{ Exception -> 0x027a }
-        r1.textHeight = r0;	 Catch:{ Exception -> 0x027a }
-        goto L_0x027e;
-    L_0x027a:
+        r10 = (int) r10;	 Catch:{ Exception -> 0x02b6 }
+        r0 = java.lang.Math.max(r0, r10);	 Catch:{ Exception -> 0x02b6 }
+        r1.textHeight = r0;	 Catch:{ Exception -> 0x02b6 }
+        goto L_0x02ba;
+    L_0x02b6:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x027e:
+    L_0x02ba:
         r0 = r1.textLayoutBlocks;
         r0.add(r5);
-        r0 = r5.textLayout;	 Catch:{ Exception -> 0x0299 }
+        r0 = r5.textLayout;	 Catch:{ Exception -> 0x02d5 }
         r10 = r9 + -1;
-        r10 = r0.getLineLeft(r10);	 Catch:{ Exception -> 0x0299 }
-        if (r4 != 0) goto L_0x0297;
-    L_0x028d:
-        r11 = 0;
-        r0 = (r10 > r11 ? 1 : (r10 == r11 ? 0 : -1));
-        if (r0 < 0) goto L_0x02a3;
-    L_0x0292:
-        r1.textXOffset = r10;	 Catch:{ Exception -> 0x0295 }
-        goto L_0x02a3;
-    L_0x0295:
-        r0 = move-exception;
-        goto L_0x029b;
-    L_0x0297:
-        r11 = 0;
-        goto L_0x02a3;
-    L_0x0299:
-        r0 = move-exception;
-        r11 = 0;
-    L_0x029b:
-        if (r4 != 0) goto L_0x029f;
-    L_0x029d:
-        r1.textXOffset = r11;
-    L_0x029f:
-        org.telegram.messenger.FileLog.e(r0);
+        r11 = r0.getLineLeft(r10);	 Catch:{ Exception -> 0x02d5 }
+        if (r6 != 0) goto L_0x02d3;
+    L_0x02c9:
         r10 = 0;
-    L_0x02a3:
-        r0 = r5.textLayout;	 Catch:{ Exception -> 0x02ac }
+        r0 = (r11 > r10 ? 1 : (r11 == r10 ? 0 : -1));
+        if (r0 < 0) goto L_0x02df;
+    L_0x02ce:
+        r1.textXOffset = r11;	 Catch:{ Exception -> 0x02d1 }
+        goto L_0x02df;
+    L_0x02d1:
+        r0 = move-exception;
+        goto L_0x02d7;
+    L_0x02d3:
+        r10 = 0;
+        goto L_0x02df;
+    L_0x02d5:
+        r0 = move-exception;
+        r10 = 0;
+    L_0x02d7:
+        if (r6 != 0) goto L_0x02db;
+    L_0x02d9:
+        r1.textXOffset = r10;
+    L_0x02db:
+        org.telegram.messenger.FileLog.e(r0);
+        r11 = 0;
+    L_0x02df:
+        r0 = r5.textLayout;	 Catch:{ Exception -> 0x02e8 }
         r12 = r9 + -1;
-        r0 = r0.getLineWidth(r12);	 Catch:{ Exception -> 0x02ac }
-        goto L_0x02b1;
-    L_0x02ac:
+        r0 = r0.getLineWidth(r12);	 Catch:{ Exception -> 0x02e8 }
+        goto L_0x02ed;
+    L_0x02e8:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x02b1:
+    L_0x02ed:
         r12 = (double) r0;
         r12 = java.lang.Math.ceil(r12);
-        r12 = (int) r12;
-        r13 = r15 + 80;
-        if (r12 <= r13) goto L_0x02bc;
-    L_0x02bb:
-        r12 = r15;
-    L_0x02bc:
-        r13 = r8 + -1;
-        if (r4 != r13) goto L_0x02c2;
-    L_0x02c0:
-        r1.lastLineWidth = r12;
-    L_0x02c2:
-        r0 = r0 + r10;
-        r14 = r12;
-        r11 = (double) r0;
-        r11 = java.lang.Math.ceil(r11);
-        r11 = (int) r11;
-        r12 = 1;
-        if (r9 <= r12) goto L_0x0384;
-    L_0x02cd:
-        r19 = r3;
-        r28 = r6;
-        r16 = r7;
-        r7 = r11;
-        r3 = r14;
-        r6 = 0;
-        r10 = 0;
-        r12 = 0;
-        r14 = 0;
-    L_0x02d9:
-        if (r10 >= r9) goto L_0x035f;
-    L_0x02db:
-        r0 = r5.textLayout;	 Catch:{ Exception -> 0x02e2 }
-        r0 = r0.getLineWidth(r10);	 Catch:{ Exception -> 0x02e2 }
-        goto L_0x02e7;
-    L_0x02e2:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        r0 = 0;
-    L_0x02e7:
-        r20 = r2;
-        r2 = r15 + 20;
-        r2 = (float) r2;
-        r2 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r2 <= 0) goto L_0x02f1;
-    L_0x02f0:
-        r0 = (float) r15;
-    L_0x02f1:
-        r2 = r0;
-        r0 = r5.textLayout;	 Catch:{ Exception -> 0x02f9 }
-        r0 = r0.getLineLeft(r10);	 Catch:{ Exception -> 0x02f9 }
-        goto L_0x02fe;
-    L_0x02f9:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        r0 = 0;
+        r15 = (int) r12;
+        r12 = r3 + 80;
+        if (r15 <= r12) goto L_0x02f8;
+    L_0x02f7:
+        r15 = r3;
+    L_0x02f8:
+        r12 = r8 + -1;
+        if (r6 != r12) goto L_0x02fe;
+    L_0x02fc:
+        r1.lastLineWidth = r15;
     L_0x02fe:
-        r21 = 0;
-        r22 = (r0 > r21 ? 1 : (r0 == r21 ? 0 : -1));
-        if (r22 <= 0) goto L_0x031a;
-    L_0x0304:
-        r21 = r9;
-        r9 = r1.textXOffset;
-        r9 = java.lang.Math.min(r9, r0);
-        r1.textXOffset = r9;
-        r9 = r5.directionFlags;
-        r22 = r15;
-        r15 = 1;
-        r9 = r9 | r15;
-        r9 = (byte) r9;
-        r5.directionFlags = r9;
-        r1.hasRtl = r15;
-        goto L_0x0325;
+        r0 = r0 + r11;
+        r13 = (double) r0;
+        r13 = java.lang.Math.ceil(r13);
+        r13 = (int) r13;
+        r14 = 1;
+        if (r9 <= r14) goto L_0x03c6;
+    L_0x0308:
+        r28 = r13;
+        r26 = r15;
+        r11 = 0;
+        r14 = 0;
+        r15 = 0;
+        r27 = 0;
+    L_0x0311:
+        if (r11 >= r9) goto L_0x03a1;
+    L_0x0313:
+        r0 = r5.textLayout;	 Catch:{ Exception -> 0x031a }
+        r0 = r0.getLineWidth(r11);	 Catch:{ Exception -> 0x031a }
+        goto L_0x031f;
     L_0x031a:
-        r21 = r9;
-        r22 = r15;
-        r9 = r5.directionFlags;
-        r9 = r9 | 2;
-        r9 = (byte) r9;
-        r5.directionFlags = r9;
-    L_0x0325:
-        if (r12 != 0) goto L_0x0336;
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+        r0 = 0;
+    L_0x031f:
+        r10 = r3 + 20;
+        r10 = (float) r10;
+        r10 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1));
+        if (r10 <= 0) goto L_0x0327;
+    L_0x0326:
+        r0 = (float) r3;
     L_0x0327:
-        r9 = 0;
-        r15 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1));
-        if (r15 != 0) goto L_0x0336;
-    L_0x032c:
-        r9 = r5.textLayout;	 Catch:{ Exception -> 0x0335 }
-        r9 = r9.getParagraphDirection(r10);	 Catch:{ Exception -> 0x0335 }
-        r15 = 1;
-        if (r9 != r15) goto L_0x0336;
-    L_0x0335:
-        r12 = 1;
-    L_0x0336:
-        r6 = java.lang.Math.max(r6, r2);
-        r0 = r0 + r2;
-        r14 = java.lang.Math.max(r14, r0);
-        r9 = r14;
-        r14 = (double) r2;
+        r10 = r0;
+        r0 = r5.textLayout;	 Catch:{ Exception -> 0x032f }
+        r0 = r0.getLineLeft(r11);	 Catch:{ Exception -> 0x032f }
+        goto L_0x0334;
+    L_0x032f:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+        r0 = 0;
+    L_0x0334:
+        r16 = 0;
+        r20 = (r0 > r16 ? 1 : (r0 == r16 ? 0 : -1));
+        if (r20 <= 0) goto L_0x0350;
+    L_0x033a:
+        r25 = r4;
+        r4 = r1.textXOffset;
+        r4 = java.lang.Math.min(r4, r0);
+        r1.textXOffset = r4;
+        r4 = r5.directionFlags;
+        r16 = r7;
+        r7 = 1;
+        r4 = r4 | r7;
+        r4 = (byte) r4;
+        r5.directionFlags = r4;
+        r1.hasRtl = r7;
+        goto L_0x035b;
+    L_0x0350:
+        r25 = r4;
+        r16 = r7;
+        r4 = r5.directionFlags;
+        r4 = r4 | 2;
+        r4 = (byte) r4;
+        r5.directionFlags = r4;
+    L_0x035b:
+        if (r14 != 0) goto L_0x0371;
+    L_0x035d:
+        r4 = 0;
+        r7 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1));
+        if (r7 != 0) goto L_0x0371;
+    L_0x0362:
+        r4 = r5.textLayout;	 Catch:{ Exception -> 0x036d }
+        r4 = r4.getParagraphDirection(r11);	 Catch:{ Exception -> 0x036d }
+        r7 = 1;
+        if (r4 != r7) goto L_0x0371;
+    L_0x036b:
+        r14 = 1;
+        goto L_0x0371;
+    L_0x036d:
+        r4 = r27;
+        r14 = 1;
+        goto L_0x0373;
+    L_0x0371:
+        r4 = r27;
+    L_0x0373:
+        r27 = java.lang.Math.max(r4, r10);
+        r0 = r0 + r10;
+        r15 = java.lang.Math.max(r15, r0);
+        r7 = r14;
+        r4 = r15;
+        r14 = (double) r10;
         r14 = java.lang.Math.ceil(r14);
-        r2 = (int) r14;
-        r3 = java.lang.Math.max(r3, r2);
+        r10 = (int) r14;
+        r14 = r26;
+        r26 = java.lang.Math.max(r14, r10);
         r14 = (double) r0;
         r14 = java.lang.Math.ceil(r14);
         r0 = (int) r14;
-        r7 = java.lang.Math.max(r7, r0);
-        r10 = r10 + 1;
-        r14 = r9;
-        r2 = r20;
-        r9 = r21;
-        r15 = r22;
-        goto L_0x02d9;
-    L_0x035f:
-        r20 = r2;
-        r21 = r9;
-        r22 = r15;
-        if (r12 == 0) goto L_0x036c;
-    L_0x0367:
-        if (r4 != r13) goto L_0x0371;
-    L_0x0369:
-        r1.lastLineWidth = r11;
-        goto L_0x0371;
-    L_0x036c:
-        if (r4 != r13) goto L_0x0370;
-    L_0x036e:
-        r1.lastLineWidth = r3;
-    L_0x0370:
-        r14 = r6;
-    L_0x0371:
-        r0 = r1.textWidth;
-        r2 = (double) r14;
-        r2 = java.lang.Math.ceil(r2);
-        r2 = (int) r2;
-        r0 = java.lang.Math.max(r0, r2);
-        r1.textWidth = r0;
-        r3 = r22;
-        r2 = 0;
-        r10 = 1;
-        goto L_0x03d1;
-    L_0x0384:
-        r20 = r2;
-        r19 = r3;
-        r28 = r6;
+        r10 = r28;
+        r28 = java.lang.Math.max(r10, r0);
+        r11 = r11 + 1;
+        r15 = r4;
+        r14 = r7;
+        r7 = r16;
+        r4 = r25;
+        r10 = 0;
+        goto L_0x0311;
+    L_0x03a1:
+        r25 = r4;
         r16 = r7;
-        r21 = r9;
-        r22 = r15;
-        r2 = 0;
-        r0 = (r10 > r2 ? 1 : (r10 == r2 ? 0 : -1));
-        if (r0 <= 0) goto L_0x03ba;
-    L_0x0395:
+        r7 = r26;
+        r4 = r27;
+        if (r14 == 0) goto L_0x03b0;
+    L_0x03ab:
+        if (r6 != r12) goto L_0x03b5;
+    L_0x03ad:
+        r1.lastLineWidth = r13;
+        goto L_0x03b5;
+    L_0x03b0:
+        if (r6 != r12) goto L_0x03b4;
+    L_0x03b2:
+        r1.lastLineWidth = r7;
+    L_0x03b4:
+        r15 = r4;
+    L_0x03b5:
+        r0 = r1.textWidth;
+        r4 = (double) r15;
+        r4 = java.lang.Math.ceil(r4);
+        r4 = (int) r4;
+        r0 = java.lang.Math.max(r0, r4);
+        r1.textWidth = r0;
+        r4 = 0;
+        r10 = 1;
+        goto L_0x0403;
+    L_0x03c6:
+        r25 = r4;
+        r16 = r7;
+        r4 = 0;
+        r0 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1));
+        if (r0 <= 0) goto L_0x03ef;
+    L_0x03cf:
         r0 = r1.textXOffset;
-        r0 = java.lang.Math.min(r0, r10);
+        r0 = java.lang.Math.min(r0, r11);
         r1.textXOffset = r0;
         r0 = r1.textXOffset;
-        r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r0 != 0) goto L_0x03a8;
-    L_0x03a3:
-        r15 = r14;
+        r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1));
+        if (r0 != 0) goto L_0x03e0;
+    L_0x03dd:
         r0 = (float) r15;
-        r0 = r0 + r10;
-        r12 = (int) r0;
-        goto L_0x03aa;
-    L_0x03a8:
-        r15 = r14;
-        r12 = r15;
-    L_0x03aa:
+        r0 = r0 + r11;
+        r15 = (int) r0;
+    L_0x03e0:
         r10 = 1;
-        if (r8 == r10) goto L_0x03af;
-    L_0x03ad:
+        if (r8 == r10) goto L_0x03e5;
+    L_0x03e3:
         r0 = 1;
-        goto L_0x03b0;
-    L_0x03af:
+        goto L_0x03e6;
+    L_0x03e5:
         r0 = 0;
-    L_0x03b0:
+    L_0x03e6:
         r1.hasRtl = r0;
         r0 = r5.directionFlags;
         r0 = r0 | r10;
         r0 = (byte) r0;
         r5.directionFlags = r0;
-        r15 = r12;
-        goto L_0x03c3;
-    L_0x03ba:
-        r15 = r14;
+        goto L_0x03f7;
+    L_0x03ef:
         r10 = 1;
         r0 = r5.directionFlags;
         r0 = r0 | 2;
         r0 = (byte) r0;
         r5.directionFlags = r0;
-    L_0x03c3:
+    L_0x03f7:
         r0 = r1.textWidth;
-        r3 = r22;
         r5 = java.lang.Math.min(r3, r15);
         r0 = java.lang.Math.max(r0, r5);
         r1.textWidth = r0;
-    L_0x03d1:
-        r0 = r20 + r21;
-        goto L_0x03fc;
-    L_0x03d4:
+    L_0x0403:
+        r9 = r9 + r2;
+        goto L_0x0424;
+    L_0x0405:
         r0 = move-exception;
-        r20 = r2;
-        r19 = r3;
-        r28 = r6;
-        goto L_0x03e1;
-    L_0x03dc:
+        r25 = r4;
+        goto L_0x0410;
+    L_0x0409:
         r0 = move-exception;
-        r20 = r2;
-        r19 = r3;
-    L_0x03e1:
-        r3 = r15;
-        r8 = r27;
-        r2 = 0;
-        r10 = 1;
-        goto L_0x03f7;
-    L_0x03e7:
+        r25 = r4;
+        goto L_0x040e;
+    L_0x040d:
+        r0 = move-exception;
+    L_0x040e:
+        r6 = r23;
+    L_0x0410:
+        r8 = r24;
+        goto L_0x041e;
+    L_0x0413:
         r0 = move-exception;
         r19 = r3;
-        r20 = r8;
-        r4 = r9;
-        r8 = r11;
-        r28 = r12;
+        r2 = r9;
+        r6 = r10;
+        r8 = r12;
+        r25 = r13;
         r18 = r14;
         r3 = r15;
-        r2 = 0;
+    L_0x041e:
+        r4 = 0;
         r10 = 1;
-        r17 = 24;
-    L_0x03f7:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x03fa:
-        r0 = r20;
-    L_0x03fc:
-        r9 = r4 + 1;
+    L_0x0423:
+        r9 = r2;
+    L_0x0424:
+        r0 = r6 + 1;
+        r10 = r0;
         r15 = r3;
-        r11 = r8;
+        r12 = r8;
         r14 = r18;
         r3 = r19;
-        r12 = r28;
+        r13 = r25;
         r2 = 0;
         r4 = 1;
-        r10 = 0;
-        r13 = 24;
-        r8 = r0;
-        goto L_0x0115;
-    L_0x040e:
+        r5 = 24;
+        r11 = 0;
+        goto L_0x0155;
+    L_0x0436:
         return;
-    L_0x040f:
+    L_0x0437:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0413:
+    L_0x043b:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generateLayout(org.telegram.tgnet.TLRPC$User):void");
@@ -8345,17 +8436,25 @@ public class MessageObject {
         if (messageMedia != null) {
             Document document = messageMedia.document;
             if (document != null) {
-                Iterator it = document.attributes.iterator();
-                while (it.hasNext()) {
-                    DocumentAttribute documentAttribute = (DocumentAttribute) it.next();
-                    if (documentAttribute instanceof TL_documentAttributeSticker) {
-                        InputStickerSet inputStickerSet = documentAttribute.stickerset;
-                        if (inputStickerSet instanceof TL_inputStickerSetEmpty) {
-                            return null;
-                        }
-                        return inputStickerSet;
-                    }
+                return getInputStickerSet(document);
+            }
+        }
+        return null;
+    }
+
+    public static InputStickerSet getInputStickerSet(Document document) {
+        if (document == null) {
+            return null;
+        }
+        int size = document.attributes.size();
+        for (int i = 0; i < size; i++) {
+            DocumentAttribute documentAttribute = (DocumentAttribute) document.attributes.get(i);
+            if (documentAttribute instanceof TL_documentAttributeSticker) {
+                InputStickerSet inputStickerSet = documentAttribute.stickerset;
+                if (inputStickerSet instanceof TL_inputStickerSetEmpty) {
+                    return null;
                 }
+                return inputStickerSet;
             }
         }
         return null;
