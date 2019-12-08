@@ -2374,75 +2374,74 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             ChatActivity chatActivity = (ChatActivity) baseFragment;
             chatActivity.getCurrentChat();
             User currentUser = chatActivity.getCurrentUser();
-            if (chatActivity.getCurrentEncryptedChat() != null) {
-                return false;
-            }
-            this.sendPopupLayout = new ActionBarPopupWindowLayout(getContext());
-            this.sendPopupLayout.setAnimationEnabled(false);
-            this.sendPopupLayout.setOnTouchListener(new OnTouchListener() {
-                private Rect popupRect = new Rect();
+            if (chatActivity.getCurrentEncryptedChat() == null && !chatActivity.isInScheduleMode()) {
+                this.sendPopupLayout = new ActionBarPopupWindowLayout(getContext());
+                this.sendPopupLayout.setAnimationEnabled(false);
+                this.sendPopupLayout.setOnTouchListener(new OnTouchListener() {
+                    private Rect popupRect = new Rect();
 
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getActionMasked() == 0 && ChatAttachAlert.this.sendPopupWindow != null && ChatAttachAlert.this.sendPopupWindow.isShowing()) {
-                        view.getHitRect(this.popupRect);
-                        if (!this.popupRect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
-                            ChatAttachAlert.this.sendPopupWindow.dismiss();
-                        }
-                    }
-                    return false;
-                }
-            });
-            this.sendPopupLayout.setDispatchKeyEventListener(new -$$Lambda$ChatAttachAlert$DTb2JibzRyGEL_0syQNX80Vj34g(this));
-            this.sendPopupLayout.setShowedFromBotton(false);
-            this.itemCells = new ActionBarMenuSubItem[2];
-            int i = 0;
-            for (int i2 = 0; i2 < 2; i2++) {
-                if (i2 == 0) {
-                    Object obj;
-                    for (Entry value : selectedPhotos.entrySet()) {
-                        Object value2 = value.getValue();
-                        if (value2 instanceof PhotoEntry) {
-                            if (((PhotoEntry) value2).ttl != 0) {
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if (motionEvent.getActionMasked() == 0 && ChatAttachAlert.this.sendPopupWindow != null && ChatAttachAlert.this.sendPopupWindow.isShowing()) {
+                            view.getHitRect(this.popupRect);
+                            if (!this.popupRect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
+                                ChatAttachAlert.this.sendPopupWindow.dismiss();
                             }
-                        } else if ((value2 instanceof SearchImage) && ((SearchImage) value2).ttl != 0) {
                         }
-                        obj = 1;
+                        return false;
                     }
-                    obj = null;
-                    if (obj != null) {
+                });
+                this.sendPopupLayout.setDispatchKeyEventListener(new -$$Lambda$ChatAttachAlert$DTb2JibzRyGEL_0syQNX80Vj34g(this));
+                this.sendPopupLayout.setShowedFromBotton(false);
+                this.itemCells = new ActionBarMenuSubItem[2];
+                int i = 0;
+                for (int i2 = 0; i2 < 2; i2++) {
+                    if (i2 == 0) {
+                        Object obj;
+                        for (Entry value : selectedPhotos.entrySet()) {
+                            Object value2 = value.getValue();
+                            if (value2 instanceof PhotoEntry) {
+                                if (((PhotoEntry) value2).ttl != 0) {
+                                }
+                            } else if ((value2 instanceof SearchImage) && ((SearchImage) value2).ttl != 0) {
+                            }
+                            obj = 1;
+                        }
+                        obj = null;
+                        if (obj != null) {
+                        }
+                    } else if (i2 == 1 && UserObject.isUserSelf(currentUser)) {
                     }
-                } else if (i2 == 1 && UserObject.isUserSelf(currentUser)) {
+                    this.itemCells[i2] = new ActionBarMenuSubItem(getContext());
+                    if (i2 == 0) {
+                        if (UserObject.isUserSelf(currentUser)) {
+                            this.itemCells[i2].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
+                        } else {
+                            this.itemCells[i2].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
+                        }
+                    } else if (i2 == 1) {
+                        this.itemCells[i2].setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
+                    }
+                    this.itemCells[i2].setMinimumWidth(AndroidUtilities.dp(196.0f));
+                    this.sendPopupLayout.addView(this.itemCells[i2], LayoutHelper.createFrame(-1, 48.0f, LocaleController.isRTL ? 5 : 3, 0.0f, (float) (i * 48), 0.0f, 0.0f));
+                    this.itemCells[i2].setOnClickListener(new -$$Lambda$ChatAttachAlert$YOukuNzr6sOu9UxKKjWHswPV7Us(this, i2, currentUser));
+                    i++;
                 }
-                this.itemCells[i2] = new ActionBarMenuSubItem(getContext());
-                if (i2 == 0) {
-                    if (UserObject.isUserSelf(currentUser)) {
-                        this.itemCells[i2].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
-                    } else {
-                        this.itemCells[i2].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
-                    }
-                } else if (i2 == 1) {
-                    this.itemCells[i2].setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
-                }
-                this.itemCells[i2].setMinimumWidth(AndroidUtilities.dp(196.0f));
-                this.sendPopupLayout.addView(this.itemCells[i2], LayoutHelper.createFrame(-1, 48.0f, LocaleController.isRTL ? 5 : 3, 0.0f, (float) (i * 48), 0.0f, 0.0f));
-                this.itemCells[i2].setOnClickListener(new -$$Lambda$ChatAttachAlert$YOukuNzr6sOu9UxKKjWHswPV7Us(this, i2, currentUser));
-                i++;
+                this.sendPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
+                this.sendPopupWindow.setAnimationEnabled(false);
+                this.sendPopupWindow.setAnimationStyle(NUM);
+                this.sendPopupWindow.setOutsideTouchable(true);
+                this.sendPopupWindow.setClippingEnabled(true);
+                this.sendPopupWindow.setInputMethodMode(2);
+                this.sendPopupWindow.setSoftInputMode(0);
+                this.sendPopupWindow.getContentView().setFocusableInTouchMode(true);
+                this.sendPopupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
+                this.sendPopupWindow.setFocusable(true);
+                int[] iArr = new int[2];
+                view2.getLocationInWindow(iArr);
+                this.sendPopupWindow.showAtLocation(view2, 51, ((iArr[0] + view.getMeasuredWidth()) - this.sendPopupLayout.getMeasuredWidth()) + AndroidUtilities.dp(8.0f), (iArr[1] - this.sendPopupLayout.getMeasuredHeight()) - AndroidUtilities.dp(2.0f));
+                this.sendPopupWindow.dimBehind();
+                view2.performHapticFeedback(3, 2);
             }
-            this.sendPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
-            this.sendPopupWindow.setAnimationEnabled(false);
-            this.sendPopupWindow.setAnimationStyle(NUM);
-            this.sendPopupWindow.setOutsideTouchable(true);
-            this.sendPopupWindow.setClippingEnabled(true);
-            this.sendPopupWindow.setInputMethodMode(2);
-            this.sendPopupWindow.setSoftInputMode(0);
-            this.sendPopupWindow.getContentView().setFocusableInTouchMode(true);
-            this.sendPopupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
-            this.sendPopupWindow.setFocusable(true);
-            int[] iArr = new int[2];
-            view2.getLocationInWindow(iArr);
-            this.sendPopupWindow.showAtLocation(view2, 51, ((iArr[0] + view.getMeasuredWidth()) - this.sendPopupLayout.getMeasuredWidth()) + AndroidUtilities.dp(8.0f), (iArr[1] - this.sendPopupLayout.getMeasuredHeight()) - AndroidUtilities.dp(2.0f));
-            this.sendPopupWindow.dimBehind();
-            view2.performHapticFeedback(3, 2);
         }
         return false;
     }

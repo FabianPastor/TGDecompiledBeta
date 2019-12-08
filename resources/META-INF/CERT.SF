@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: UnrsoUsvYd8LG5iE4l9x3wNGFNc=
+SHA1-Digest-Manifest: l9eJBfp8NNc5jNYvAt+ZGhxr0A4=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: yhujAcFnsDv/IyzDYgT686DDMIg=
+SHA1-Digest: p4jNqcw+w89Ot5eGxaL70LsOWlA=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -223,7 +223,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: Jk+8Z4iE9d6XUhL065/jDqjm4Pg=
+SHA1-Digest: Q2VXpXicprg+6GgbIde+51Pe7LE=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: meJMBKLUSTmOentmkKD9WbS/j5I=
