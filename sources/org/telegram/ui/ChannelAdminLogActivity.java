@@ -2399,7 +2399,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fb:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0d0979 float:1.8747033E38 double:1.0531309757E-314;
+        r3 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);
@@ -2441,7 +2441,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r1 = r1.toLowerCase();
         r2 = "attheme";
         r1 = r1.endsWith(r2);
-        r2 = NUM; // 0x7f0d06dc float:1.8745676E38 double:1.053130645E-314;
+        r2 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
         r3 = "OK";
         r4 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
         r5 = "AppName";

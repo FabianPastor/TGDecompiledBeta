@@ -28,6 +28,7 @@ public class StickerCell extends FrameLayout {
     private boolean clearsInputField;
     private BackupImageView imageView;
     private long lastUpdateTime;
+    private Object parentObject;
     private float scale;
     private boolean scaled;
     private Document sticker;
@@ -66,14 +67,15 @@ public class StickerCell extends FrameLayout {
     public void setSticker(Document document, Object obj, int i) {
         Document document2 = document;
         int i2 = i;
+        this.parentObject = obj;
         if (document2 != null) {
             PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
             if (!MessageObject.canAutoplayAnimatedSticker(document)) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), null, "webp", null, obj);
+                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), null, "webp", null, this.parentObject);
             } else if (closestPhotoSizeWithSize != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), null, 0, obj);
+                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), null, 0, this.parentObject);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", null, null, obj);
+                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", null, null, this.parentObject);
             }
         }
         this.sticker = document2;
@@ -99,6 +101,10 @@ public class StickerCell extends FrameLayout {
 
     public Document getSticker() {
         return this.sticker;
+    }
+
+    public Object getParentObject() {
+        return this.parentObject;
     }
 
     public void setScaled(boolean z) {

@@ -1215,7 +1215,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r1 = r0.set;
         r1 = r1.masks;
-        r6 = NUM; // 0x7f0d08b1 float:1.8746628E38 double:1.053130877E-314;
+        r6 = NUM; // 0x7f0d08af float:1.8746624E38 double:1.053130876E-314;
         r7 = "RemoveStickersCount";
         if (r1 == 0) goto L_0x00d0;
     L_0x00b9:

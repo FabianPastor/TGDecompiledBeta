@@ -2473,7 +2473,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = r12 + r16;
         if (r12 <= r4) goto L_0x0228;
     L_0x011b:
-        r0 = NUM; // 0x7f0d0845 float:1.8746409E38 double:1.0531308235E-314;
+        r0 = NUM; // 0x7f0d0843 float:1.8746404E38 double:1.0531308225E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);

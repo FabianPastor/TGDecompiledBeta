@@ -242,7 +242,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r7.setImeOptions(r5);
         r5 = r1.lastNameField;
         r7 = "LastName";
-        r9 = NUM; // 0x7f0d055a float:1.8744893E38 double:1.0531304544E-314;
+        r9 = NUM; // 0x7f0d0559 float:1.8744891E38 double:1.053130454E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r9);
         r5.setHint(r7);
         r5 = r1.lastNameField;

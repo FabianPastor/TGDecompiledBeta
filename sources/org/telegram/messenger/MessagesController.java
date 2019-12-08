@@ -1326,6 +1326,10 @@ public class MessagesController extends BaseController implements NotificationCe
         return this.users;
     }
 
+    public ConcurrentHashMap<Integer, Chat> getChats() {
+        return this.chats;
+    }
+
     public Chat getChat(Integer num) {
         return (Chat) this.chats.get(num);
     }

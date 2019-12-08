@@ -1796,7 +1796,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         goto L_0x00ff;
     L_0x00f1:
         r5 = r9.searchItem;
-        r6 = NUM; // 0x7f0d090d float:1.8746814E38 double:1.0531309223E-314;
+        r6 = NUM; // 0x7f0d090b float:1.874681E38 double:1.0531309213E-314;
         r7 = "Search";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r5.setSearchFieldHint(r6);
@@ -1833,7 +1833,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r5 != r4) goto L_0x014e;
     L_0x0140:
         r4 = r9.emptyView;
-        r5 = NUM; // 0x7f0d063e float:1.8745356E38 double:1.053130567E-314;
+        r5 = NUM; // 0x7f0d063c float:1.8745352E38 double:1.053130566E-314;
         r6 = "NoResult";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setText(r5);
@@ -2549,7 +2549,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r3 = "AdminWillBeRemoved";
         r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r1);
         r10.setMessage(r0);
-        r0 = NUM; // 0x7f0d06dc float:1.8745676E38 double:1.053130645E-314;
+        r0 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
         r1 = "OK";
         r11 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r13 = new org.telegram.ui.-$$Lambda$ChatUsersActivity$KNIqsP-pADnMQdRiONDKf0ONyrY;
@@ -3156,7 +3156,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = org.telegram.messenger.LocaleController.getString(r11, r5);
         goto L_0x00d5;
     L_0x00cc:
-        r0 = NUM; // 0x7f0d0968 float:1.8746999E38 double:1.0531309673E-314;
+        r0 = NUM; // 0x7f0d0966 float:1.8746995E38 double:1.0531309663E-314;
         r2 = "SetAsAdmin";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
     L_0x00d5:
@@ -3199,7 +3199,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = java.lang.Integer.valueOf(r14);
         r5.add(r0);
     L_0x0125:
-        r0 = NUM; // 0x7f0d054c float:1.8744865E38 double:1.0531304475E-314;
+        r0 = NUM; // 0x7f0d054b float:1.8744863E38 double:1.053130447E-314;
         r2 = "KickFromGroup";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r15.add(r0);

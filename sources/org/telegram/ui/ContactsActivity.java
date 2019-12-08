@@ -200,7 +200,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x002e;
     L_0x001f:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d0935 float:1.8746895E38 double:1.053130942E-314;
+        r1 = NUM; // 0x7f0d0933 float:1.8746891E38 double:1.053130941E-314;
         r2 = "SelectContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -210,14 +210,14 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x0041;
     L_0x0032:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d061c float:1.8745287E38 double:1.0531305503E-314;
+        r1 = NUM; // 0x7f0d061a float:1.8745283E38 double:1.0531305493E-314;
         r2 = "NewSecretChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0041:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d0614 float:1.874527E38 double:1.0531305463E-314;
+        r1 = NUM; // 0x7f0d0612 float:1.8745267E38 double:1.0531305453E-314;
         r2 = "NewMessageTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -241,7 +241,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r2 = new org.telegram.ui.ContactsActivity$2;
         r2.<init>();
         r1 = r1.setActionBarMenuItemSearchListener(r2);
-        r2 = NUM; // 0x7f0d090d float:1.8746814E38 double:1.0531309223E-314;
+        r2 = NUM; // 0x7f0d090b float:1.874681E38 double:1.0531309213E-314;
         r3 = "Search";
         r4 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setSearchFieldHint(r4);
@@ -374,7 +374,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = r8.emptyView;
         r1.setShowAtCenter(r15);
         r1 = r8.emptyView;
-        r2 = NUM; // 0x7f0d0628 float:1.8745311E38 double:1.053130556E-314;
+        r2 = NUM; // 0x7f0d0626 float:1.8745307E38 double:1.053130555E-314;
         r3 = "NoContacts";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);

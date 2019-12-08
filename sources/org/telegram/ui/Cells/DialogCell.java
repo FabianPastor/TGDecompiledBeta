@@ -1628,7 +1628,7 @@ public class DialogCell extends BaseCell {
         r7 = org.telegram.messenger.UserObject.isUserSelf(r7);
         if (r7 == 0) goto L_0x07bb;
     L_0x07aa:
-        r0 = NUM; // 0x7f0d0907 float:1.8746802E38 double:1.0531309193E-314;
+        r0 = NUM; // 0x7f0d0905 float:1.8746798E38 double:1.0531309183E-314;
         r5 = "SavedMessagesInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r5, r0);
         r6 = r0;
@@ -2318,7 +2318,7 @@ public class DialogCell extends BaseCell {
         if (r5 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         r1.drawPinBackground = r13;
-        r5 = NUM; // 0x7f0d0a67 float:1.8747516E38 double:1.053131093E-314;
+        r5 = NUM; // 0x7f0d0a65 float:1.8747512E38 double:1.0531310923E-314;
         r9 = "UseProxySponsor";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         goto L_0x0CLASSNAME;
@@ -2356,7 +2356,7 @@ public class DialogCell extends BaseCell {
         r9 = 1;
         r1.drawPinBackground = r9;
     L_0x0CLASSNAME:
-        r9 = NUM; // 0x7f0d0906 float:1.87468E38 double:1.053130919E-314;
+        r9 = NUM; // 0x7f0d0904 float:1.8746796E38 double:1.053130918E-314;
         r13 = "SavedMessages";
         r9 = org.telegram.messenger.LocaleController.getString(r13, r9);
         goto L_0x0CLASSNAME;
@@ -4252,7 +4252,7 @@ public class DialogCell extends BaseCell {
     L_0x008f:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r17);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r3 = NUM; // 0x7f0d0a3b float:1.8747427E38 double:1.0531310715E-314;
+        r3 = NUM; // 0x7f0d0a39 float:1.8747423E38 double:1.0531310705E-314;
         r4 = "UnhideFromTop";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_unpinArchiveDrawable;
@@ -4282,7 +4282,7 @@ public class DialogCell extends BaseCell {
     L_0x00d5:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r17);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r3 = NUM; // 0x7f0d0a32 float:1.8747408E38 double:1.053131067E-314;
+        r3 = NUM; // 0x7f0d0a30 float:1.8747404E38 double:1.053131066E-314;
         r4 = "Unarchive";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_unarchiveDrawable;

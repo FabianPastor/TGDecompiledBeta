@@ -2272,7 +2272,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r1 = org.telegram.ui.PassportActivity.this;
                 r1 = r1.inputFields;
                 r1 = r1[r12];
-                r2 = NUM; // 0x7f0d07d2 float:1.8746175E38 double:1.0531307667E-314;
+                r2 = NUM; // 0x7f0d07d0 float:1.8746171E38 double:1.0531307657E-314;
                 r3 = "PassportUseLatinOnly";
                 r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
                 r1.setErrorText(r2);
@@ -2351,7 +2351,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0 = org.telegram.ui.PassportActivity.this;
                 r0 = r0.getParentActivity();
                 r13.<init>(r0);
-                r0 = NUM; // 0x7f0d079c float:1.8746066E38 double:1.05313074E-314;
+                r0 = NUM; // 0x7f0d079a float:1.8746062E38 double:1.053130739E-314;
                 r1 = new java.lang.Object[r9];
                 r1[r8] = r2;
                 r1[r11] = r3;
@@ -2749,7 +2749,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r2 = org.telegram.ui.PassportActivity.this;
                 r2 = r2.getParentActivity();
                 r1.<init>(r2);
-                r2 = NUM; // 0x7f0d0764 float:1.8745952E38 double:1.0531307123E-314;
+                r2 = NUM; // 0x7f0d0762 float:1.8745948E38 double:1.0531307113E-314;
                 r7 = "PassportInfo2";
                 r2 = org.telegram.messenger.LocaleController.getString(r7, r2);
                 r7 = new android.text.SpannableStringBuilder;
@@ -2767,7 +2767,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r3 = r9 + 1;
                 r7.replace(r9, r3, r8);
                 r3 = new org.telegram.ui.PassportActivity$3$1;
-                r8 = NUM; // 0x7f0d0766 float:1.8745956E38 double:1.0531307133E-314;
+                r8 = NUM; // 0x7f0d0764 float:1.8745952E38 double:1.0531307123E-314;
                 r10 = "PassportInfoUrl";
                 r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
                 r3.<init>(r8);
@@ -2799,7 +2799,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r3 = r3.getParentActivity();
                 r2.<init>(r3);
                 r2.setView(r1);
-                r1 = NUM; // 0x7f0d0765 float:1.8745954E38 double:1.053130713E-314;
+                r1 = NUM; // 0x7f0d0763 float:1.874595E38 double:1.053130712E-314;
                 r3 = "PassportInfoTitle";
                 r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
                 r2.setTitle(r1);
@@ -3901,7 +3901,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r11 = r0;
         r11 = (android.widget.FrameLayout) r11;
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d09f8 float:1.874729E38 double:1.0531310384E-314;
+        r1 = NUM; // 0x7f0d09f6 float:1.8747287E38 double:1.0531310374E-314;
         r2 = "TelegramPassport";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -3948,7 +3948,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r7, r1, r13);
         r0.setBackgroundDrawable(r1);
         r0 = r6.bottomCell;
-        r1 = NUM; // 0x7f0d07b5 float:1.8746116E38 double:1.0531307523E-314;
+        r1 = NUM; // 0x7f0d07b3 float:1.8746112E38 double:1.0531307513E-314;
         r2 = new java.lang.Object[r12];
         r3 = org.telegram.messenger.UserObject.getFirstName(r10);
         r2[r9] = r3;
@@ -3973,7 +3973,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.<init>(r7);
         r6.headerCell = r0;
         r0 = r6.headerCell;
-        r1 = NUM; // 0x7f0d07b7 float:1.874612E38 double:1.0531307533E-314;
+        r1 = NUM; // 0x7f0d07b5 float:1.8746116E38 double:1.0531307523E-314;
         r2 = "PassportRequestedInformation";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -4359,7 +4359,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = 2;
         if (r0 != 0) goto L_0x0392;
     L_0x033b:
-        r0 = NUM; // 0x7f0d07b2 float:1.874611E38 double:1.053130751E-314;
+        r0 = NUM; // 0x7f0d07b0 float:1.8746106E38 double:1.05313075E-314;
         r2 = new java.lang.Object[r2];
         r3 = org.telegram.messenger.UserObject.getFirstName(r10);
         r4 = 0;
@@ -4401,7 +4401,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         goto L_0x03b2;
     L_0x0392:
         r0 = r6.bottomCell;
-        r3 = NUM; // 0x7f0d07a6 float:1.8746086E38 double:1.053130745E-314;
+        r3 = NUM; // 0x7f0d07a4 float:1.8746082E38 double:1.053130744E-314;
         r2 = new java.lang.Object[r2];
         r4 = org.telegram.messenger.UserObject.getFirstName(r10);
         r5 = 0;
@@ -4465,7 +4465,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r0.setTextColor(r1);
         r0 = r6.acceptTextView;
-        r1 = NUM; // 0x7f0d073c float:1.8745871E38 double:1.0531306926E-314;
+        r1 = NUM; // 0x7f0d073a float:1.8745867E38 double:1.0531306916E-314;
         r2 = "PassportAuthorize";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -4769,7 +4769,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = (android.widget.FrameLayout) r0;
         r0 = r6.actionBar;
         r1 = "TelegramPassport";
-        r2 = NUM; // 0x7f0d09f8 float:1.874729E38 double:1.0531310384E-314;
+        r2 = NUM; // 0x7f0d09f6 float:1.8747287E38 double:1.0531310374E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setTitle(r1);
         r0 = r6.actionBar;
@@ -4782,7 +4782,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r6.headerCell = r0;
         r0 = r6.headerCell;
         r1 = "PassportProvidedInformation";
-        r2 = NUM; // 0x7f0d07b4 float:1.8746114E38 double:1.053130752E-314;
+        r2 = NUM; // 0x7f0d07b2 float:1.874611E38 double:1.053130751E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setText(r1);
         r0 = r6.headerCell;
@@ -4814,7 +4814,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8);
         r0.setBackgroundDrawable(r4);
         r0 = r6.addDocumentCell;
-        r4 = NUM; // 0x7f0d07a3 float:1.874608E38 double:1.0531307434E-314;
+        r4 = NUM; // 0x7f0d07a1 float:1.8746076E38 double:1.0531307425E-314;
         r5 = "PassportNoDocumentsAdd";
         r9 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r9, r8);
@@ -4838,7 +4838,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.setBackgroundDrawable(r9);
         r0 = r6.deletePassportCell;
         r9 = "TelegramPassportDelete";
-        r10 = NUM; // 0x7f0d09fb float:1.8747297E38 double:1.05313104E-314;
+        r10 = NUM; // 0x7f0d09f9 float:1.8747293E38 double:1.053131039E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r9, r10);
         r10 = 0;
         r0.setText(r9, r10);
@@ -4930,7 +4930,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);
         r0.setTypeface(r9);
         r0 = r6.emptyTextView1;
-        r9 = NUM; // 0x7f0d07a2 float:1.8746078E38 double:1.053130743E-314;
+        r9 = NUM; // 0x7f0d07a0 float:1.8746074E38 double:1.053130742E-314;
         r12 = "PassportNoDocuments";
         r9 = org.telegram.messenger.LocaleController.getString(r12, r9);
         r0.setText(r9);
@@ -4962,7 +4962,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r0.setPadding(r9, r10, r1, r10);
         r0 = r6.emptyTextView2;
-        r1 = NUM; // 0x7f0d07a4 float:1.8746082E38 double:1.053130744E-314;
+        r1 = NUM; // 0x7f0d07a2 float:1.8746078E38 double:1.053130743E-314;
         r9 = "PassportNoDocumentsInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r9, r1);
         r0.setText(r1);
@@ -5564,7 +5564,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         r1 = r1[r2];
                         r1 = (org.telegram.ui.Components.HintEditText) r1;
                         r3 = r12.length();
-                        r4 = NUM; // 0x7f0d0809 float:1.8746287E38 double:1.053130794E-314;
+                        r4 = NUM; // 0x7f0d0807 float:1.8746283E38 double:1.053130793E-314;
                         r5 = "PaymentShippingPhoneNumber";
                         r6 = 0;
                         r7 = 0;
@@ -5693,7 +5693,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         r3 = org.telegram.ui.PassportActivity.this;
                         r3 = r3.inputFields;
                         r3 = r3[r7];
-                        r4 = NUM; // 0x7f0d0af9 float:1.8747812E38 double:1.0531311654E-314;
+                        r4 = NUM; // 0x7f0d0af7 float:1.8747808E38 double:1.0531311644E-314;
                         r5 = "WrongCountry";
                         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
                         r3.setText(r4);
@@ -7744,9 +7744,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     private void updateUploadText(int r9) {
         /*
         r8 = this;
-        r0 = NUM; // 0x7f0d07ce float:1.8746167E38 double:1.0531307647E-314;
+        r0 = NUM; // 0x7f0d07cc float:1.8746163E38 double:1.0531307637E-314;
         r1 = "PassportUploadAdditinalDocument";
-        r2 = NUM; // 0x7f0d07cf float:1.874617E38 double:1.053130765E-314;
+        r2 = NUM; // 0x7f0d07cd float:1.8746165E38 double:1.053130764E-314;
         r3 = "PassportUploadDocument";
         r4 = 1;
         r5 = 0;
@@ -7845,20 +7845,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         goto L_0x00ac;
     L_0x0094:
         r9 = r8.uploadFrontCell;
-        r0 = NUM; // 0x7f0d075b float:1.8745934E38 double:1.053130708E-314;
+        r0 = NUM; // 0x7f0d0759 float:1.874593E38 double:1.053130707E-314;
         r1 = "PassportFrontSide";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
-        r1 = NUM; // 0x7f0d075c float:1.8745936E38 double:1.0531307084E-314;
+        r1 = NUM; // 0x7f0d075a float:1.8745932E38 double:1.0531307074E-314;
         r2 = "PassportFrontSideInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r9.setTextAndValue(r0, r1, r4);
         goto L_0x00c3;
     L_0x00ac:
         r9 = r8.uploadFrontCell;
-        r0 = NUM; // 0x7f0d0795 float:1.8746052E38 double:1.0531307365E-314;
+        r0 = NUM; // 0x7f0d0793 float:1.8746047E38 double:1.0531307355E-314;
         r1 = "PassportMainPage";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
-        r1 = NUM; // 0x7f0d0796 float:1.8746054E38 double:1.053130737E-314;
+        r1 = NUM; // 0x7f0d0794 float:1.874605E38 double:1.053130736E-314;
         r2 = "PassportMainPageInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r9.setTextAndValue(r0, r1, r4);
@@ -8075,7 +8075,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r7[r3] = r4;
         r7[r5] = r4;
         r7[r4] = r4;
-        r7 = NUM; // 0x7f0d07a5 float:1.8746084E38 double:1.0531307444E-314;
+        r7 = NUM; // 0x7f0d07a3 float:1.874608E38 double:1.0531307434E-314;
         r0 = "PassportNoExpireDate";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r8.setText(r7);
@@ -8086,7 +8086,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x00b6;
     L_0x00a7:
         r6.currentGender = r7;
-        r7 = NUM; // 0x7f0d0797 float:1.8746056E38 double:1.0531307375E-314;
+        r7 = NUM; // 0x7f0d0795 float:1.8746052E38 double:1.0531307365E-314;
         r0 = "PassportMale";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r8.setText(r7);
@@ -8097,7 +8097,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x00f0;
     L_0x00be:
         r6.currentGender = r7;
-        r7 = NUM; // 0x7f0d075a float:1.8745932E38 double:1.0531307074E-314;
+        r7 = NUM; // 0x7f0d0758 float:1.8745928E38 double:1.0531307064E-314;
         r0 = "PassportFemale";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r8.setText(r7);
@@ -8590,7 +8590,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r3 = 0;
         r7.languageMap = r3;
     L_0x00cb:
-        r5 = NUM; // 0x7f0d0753 float:1.8745918E38 double:1.053130704E-314;
+        r5 = NUM; // 0x7f0d0751 float:1.8745914E38 double:1.053130703E-314;
         r14 = "PassportDocuments";
         if (r9 == 0) goto L_0x010f;
     L_0x00d2:
@@ -9008,7 +9008,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r4 == 0) goto L_0x0351;
     L_0x0344:
         r2 = "PassportMale";
-        r4 = NUM; // 0x7f0d0797 float:1.8746056E38 double:1.0531307375E-314;
+        r4 = NUM; // 0x7f0d0795 float:1.8746052E38 double:1.0531307365E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r4);	 Catch:{ Exception -> 0x037f }
         r12.append(r2);	 Catch:{ Exception -> 0x037f }
         goto L_0x037c;
@@ -9018,7 +9018,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r2 == 0) goto L_0x037c;
     L_0x0359:
         r2 = "PassportFemale";
-        r4 = NUM; // 0x7f0d075a float:1.8745932E38 double:1.0531307074E-314;
+        r4 = NUM; // 0x7f0d0758 float:1.8745928E38 double:1.0531307064E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r4);	 Catch:{ Exception -> 0x037f }
         r12.append(r2);	 Catch:{ Exception -> 0x037f }
         goto L_0x037c;
@@ -9155,7 +9155,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     L_0x042e:
         if (r11 != 0) goto L_0x043e;
     L_0x0430:
-        r0 = NUM; // 0x7f0d07a9 float:1.8746092E38 double:1.0531307464E-314;
+        r0 = NUM; // 0x7f0d07a7 float:1.8746088E38 double:1.0531307454E-314;
         r1 = "PassportPersonalDetailsInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
     L_0x0439:
@@ -9168,7 +9168,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r1 != r2) goto L_0x044e;
     L_0x0444:
         r2 = r25;
-        r1 = NUM; // 0x7f0d0753 float:1.8745918E38 double:1.053130704E-314;
+        r1 = NUM; // 0x7f0d0751 float:1.8745914E38 double:1.053130703E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r2, r1);
         goto L_0x0439;
     L_0x044e:
@@ -9180,7 +9180,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypePassport;
         if (r2 == 0) goto L_0x0463;
     L_0x0459:
-        r0 = NUM; // 0x7f0d0763 float:1.874595E38 double:1.053130712E-314;
+        r0 = NUM; // 0x7f0d0761 float:1.8745946E38 double:1.053130711E-314;
         r1 = "PassportIdentityPassport";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0439;
@@ -9188,7 +9188,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeInternalPassport;
         if (r2 == 0) goto L_0x0471;
     L_0x0467:
-        r0 = NUM; // 0x7f0d0762 float:1.8745948E38 double:1.0531307113E-314;
+        r0 = NUM; // 0x7f0d0760 float:1.8745944E38 double:1.0531307103E-314;
         r1 = "PassportIdentityInternalPassport";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0439;
@@ -9196,7 +9196,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeDriverLicense;
         if (r2 == 0) goto L_0x047f;
     L_0x0475:
-        r0 = NUM; // 0x7f0d0760 float:1.8745944E38 double:1.0531307103E-314;
+        r0 = NUM; // 0x7f0d075e float:1.874594E38 double:1.0531307094E-314;
         r1 = "PassportIdentityDriverLicence";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0439;
@@ -9204,12 +9204,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeIdentityCard;
         if (r1 == 0) goto L_0x0497;
     L_0x0483:
-        r0 = NUM; // 0x7f0d0761 float:1.8745946E38 double:1.053130711E-314;
+        r0 = NUM; // 0x7f0d075f float:1.8745942E38 double:1.05313071E-314;
         r1 = "PassportIdentityID";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0439;
     L_0x048d:
-        r0 = NUM; // 0x7f0d075f float:1.8745942E38 double:1.05313071E-314;
+        r0 = NUM; // 0x7f0d075d float:1.8745938E38 double:1.053130709E-314;
         r1 = "PassportIdentityDocumentInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0439;
@@ -9227,7 +9227,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     L_0x04a8:
         if (r11 != 0) goto L_0x04b4;
     L_0x04aa:
-        r0 = NUM; // 0x7f0d073b float:1.874587E38 double:1.053130692E-314;
+        r0 = NUM; // 0x7f0d0739 float:1.8745865E38 double:1.053130691E-314;
         r1 = "PassportAddressNoUploadInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0439;
@@ -9236,7 +9236,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = 8;
         if (r1 != r4) goto L_0x04c3;
     L_0x04ba:
-        r1 = NUM; // 0x7f0d0753 float:1.8745918E38 double:1.053130704E-314;
+        r1 = NUM; // 0x7f0d0751 float:1.8745914E38 double:1.053130703E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r2, r1);
         goto L_0x0439;
     L_0x04c3:
@@ -9247,7 +9247,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeRentalAgreement;
         if (r2 == 0) goto L_0x04d7;
     L_0x04cc:
-        r0 = NUM; // 0x7f0d0721 float:1.8745816E38 double:1.053130679E-314;
+        r0 = NUM; // 0x7f0d071f float:1.8745812E38 double:1.053130678E-314;
         r1 = "PassportAddAgreementInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0541;
@@ -9255,7 +9255,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeUtilityBill;
         if (r2 == 0) goto L_0x04e5;
     L_0x04db:
-        r0 = NUM; // 0x7f0d0725 float:1.8745824E38 double:1.053130681E-314;
+        r0 = NUM; // 0x7f0d0723 float:1.874582E38 double:1.05313068E-314;
         r1 = "PassportAddBillInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0541;
@@ -9263,7 +9263,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypePassportRegistration;
         if (r2 == 0) goto L_0x04f3;
     L_0x04e9:
-        r0 = NUM; // 0x7f0d072f float:1.8745845E38 double:1.053130686E-314;
+        r0 = NUM; // 0x7f0d072d float:1.874584E38 double:1.053130685E-314;
         r1 = "PassportAddPassportRegistrationInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0541;
@@ -9271,7 +9271,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeTemporaryRegistration;
         if (r2 == 0) goto L_0x0501;
     L_0x04f7:
-        r0 = NUM; // 0x7f0d0731 float:1.8745849E38 double:1.053130687E-314;
+        r0 = NUM; // 0x7f0d072f float:1.8745845E38 double:1.053130686E-314;
         r1 = "PassportAddTemporaryRegistrationInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0541;
@@ -9279,12 +9279,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeBankStatement;
         if (r1 == 0) goto L_0x0541;
     L_0x0505:
-        r0 = NUM; // 0x7f0d0723 float:1.874582E38 double:1.05313068E-314;
+        r0 = NUM; // 0x7f0d0721 float:1.8745816E38 double:1.053130679E-314;
         r1 = "PassportAddBankInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0541;
     L_0x050f:
-        r0 = NUM; // 0x7f0d073a float:1.8745867E38 double:1.0531306916E-314;
+        r0 = NUM; // 0x7f0d0738 float:1.8745863E38 double:1.0531306906E-314;
         r1 = "PassportAddressInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0541;
@@ -9296,7 +9296,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = android.text.TextUtils.isEmpty(r0);
         if (r1 == 0) goto L_0x0541;
     L_0x0524:
-        r0 = NUM; // 0x7f0d07ac float:1.8746098E38 double:1.053130748E-314;
+        r0 = NUM; // 0x7f0d07aa float:1.8746094E38 double:1.053130747E-314;
         r1 = "PassportPhoneInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0541;
@@ -9307,7 +9307,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = android.text.TextUtils.isEmpty(r0);
         if (r1 == 0) goto L_0x0541;
     L_0x0538:
-        r0 = NUM; // 0x7f0d0756 float:1.8745924E38 double:1.0531307054E-314;
+        r0 = NUM; // 0x7f0d0754 float:1.874592E38 double:1.0531307044E-314;
         r1 = "PassportEmailInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
     L_0x0541:
@@ -10228,7 +10228,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r9.setBackgroundDrawable(r4);
         r4 = r1.type;
         r5 = r4 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypePersonalDetails;
-        r10 = NUM; // 0x7f0d07cd float:1.8746165E38 double:1.053130764E-314;
+        r10 = NUM; // 0x7f0d07cb float:1.8746161E38 double:1.053130763E-314;
         r11 = "PassportTwoDocuments";
         r12 = 2;
         r13 = "";
@@ -10271,12 +10271,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4);
         goto L_0x008b;
     L_0x0078:
-        r4 = NUM; // 0x7f0d075e float:1.874594E38 double:1.0531307094E-314;
+        r4 = NUM; // 0x7f0d075c float:1.8745936E38 double:1.0531307084E-314;
         r5 = "PassportIdentityDocument";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x008b;
     L_0x0082:
-        r4 = NUM; // 0x7f0d07a8 float:1.874609E38 double:1.053130746E-314;
+        r4 = NUM; // 0x7f0d07a6 float:1.8746086E38 double:1.053130745E-314;
         r5 = "PassportPersonalDetails";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
     L_0x008b:
@@ -10324,12 +10324,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4);
         goto L_0x00f2;
     L_0x00df:
-        r4 = NUM; // 0x7f0d07ba float:1.8746127E38 double:1.053130755E-314;
+        r4 = NUM; // 0x7f0d07b8 float:1.8746123E38 double:1.053130754E-314;
         r5 = "PassportResidentialAddress";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x00f2;
     L_0x00e9:
-        r4 = NUM; // 0x7f0d0738 float:1.8745863E38 double:1.0531306906E-314;
+        r4 = NUM; // 0x7f0d0736 float:1.8745859E38 double:1.0531306896E-314;
         r5 = "PassportAddress";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
     L_0x00f2:
@@ -10340,7 +10340,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r5 = r4 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypePhone;
         if (r5 == 0) goto L_0x010b;
     L_0x00fc:
-        r4 = NUM; // 0x7f0d07ab float:1.8746096E38 double:1.0531307474E-314;
+        r4 = NUM; // 0x7f0d07a9 float:1.8746092E38 double:1.0531307464E-314;
         r5 = "PassportPhone";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = r21 ^ 1;
@@ -10350,7 +10350,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeEmail;
         if (r4 == 0) goto L_0x011d;
     L_0x010f:
-        r4 = NUM; // 0x7f0d0754 float:1.874592E38 double:1.0531307044E-314;
+        r4 = NUM; // 0x7f0d0752 float:1.8745916E38 double:1.0531307034E-314;
         r5 = "PassportEmail";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = r21 ^ 1;

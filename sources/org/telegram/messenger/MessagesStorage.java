@@ -5652,9 +5652,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:714:0x10d7 A:{SYNTHETIC, Splitter:B:714:0x10d7} */
     /* JADX WARNING: Removed duplicated region for block: B:813:0x1306 A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
     /* JADX WARNING: Removed duplicated region for block: B:842:0x13ba A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x1209 A:{PHI: r11 r27 r29 r30 r31 r33 r39 r44 , Splitter:B:631:0x0var_, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }, Splitter:B:711:0x10d1, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }, Splitter:B:711:0x10d1, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:760:0x1209 A:{Splitter:B:631:0x0var_, PHI: r11 r27 r29 r30 r31 r33 r39 r44 , ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Splitter:B:711:0x10d1, Catch:{ Exception -> 0x1214, all -> 0x1209 }, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Splitter:B:711:0x10d1, Catch:{ Exception -> 0x1214, all -> 0x1209 }, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -10274,11 +10274,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /* JADX WARNING: Removed duplicated region for block: B:67:0x01b9 A:{Catch:{ Exception -> 0x0045 }} */
     /* JADX WARNING: Removed duplicated region for block: B:60:0x017c A:{Catch:{ Exception -> 0x0045 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x01d7 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:352:0x01d7 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x01c2 A:{Catch:{ Exception -> 0x0045 }} */
     /* JADX WARNING: Removed duplicated region for block: B:219:0x05a8 A:{Catch:{ Exception -> 0x0045 }} */
     /* JADX WARNING: Removed duplicated region for block: B:218:0x0596 A:{Catch:{ Exception -> 0x0045 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0628 A:{Catch:{ Exception -> 0x0045 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:244:0x062f A:{Catch:{ Exception -> 0x0045 }} */
     private void putMessagesInternal(java.util.ArrayList<org.telegram.tgnet.TLRPC.Message> r31, boolean r32, boolean r33, int r34, boolean r35) {
         /*
         r30 = this;
@@ -10322,7 +10322,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = move-exception;
     L_0x0046:
         r2 = r0;
-        goto L_0x094a;
+        goto L_0x0951;
     L_0x0049:
         if (r32 == 0) goto L_0x0050;
     L_0x004b:
@@ -10785,7 +10785,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r5 = 0;
     L_0x03c7:
         r8 = r31.size();	 Catch:{ Exception -> 0x0045 }
-        if (r2 >= r8) goto L_0x06a6;
+        if (r2 >= r8) goto L_0x06ad;
     L_0x03cd:
         r8 = r31;
         r27 = r8.get(r2);	 Catch:{ Exception -> 0x0045 }
@@ -11011,25 +11011,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7.step();	 Catch:{ Exception -> 0x0045 }
     L_0x054e:
         r9.reuse();	 Catch:{ Exception -> 0x0045 }
-        if (r34 == 0) goto L_0x068e;
+        if (r34 == 0) goto L_0x0695;
     L_0x0553:
         r3 = r11.to_id;	 Catch:{ Exception -> 0x0045 }
         r3 = r3.channel_id;	 Catch:{ Exception -> 0x0045 }
         if (r3 == 0) goto L_0x055d;
     L_0x0559:
         r3 = r11.post;	 Catch:{ Exception -> 0x0045 }
-        if (r3 == 0) goto L_0x068e;
+        if (r3 == 0) goto L_0x0695;
     L_0x055d:
         r3 = r11.date;	 Catch:{ Exception -> 0x0045 }
         r9 = r30.getConnectionsManager();	 Catch:{ Exception -> 0x0045 }
         r9 = r9.getCurrentTime();	 Catch:{ Exception -> 0x0045 }
         r9 = r9 + -3600;
-        if (r3 < r9) goto L_0x068e;
+        if (r3 < r9) goto L_0x0695;
     L_0x056b:
         r3 = r30.getDownloadController();	 Catch:{ Exception -> 0x0045 }
         r3 = r3.canDownloadMedia(r11);	 Catch:{ Exception -> 0x0045 }
         r9 = 1;
-        if (r3 != r9) goto L_0x068e;
+        if (r3 != r9) goto L_0x0695;
     L_0x0576:
         r3 = r11.media;	 Catch:{ Exception -> 0x0045 }
         r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;	 Catch:{ Exception -> 0x0045 }
@@ -11041,7 +11041,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0582:
         r3 = r11.media;	 Catch:{ Exception -> 0x0045 }
         r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;	 Catch:{ Exception -> 0x0045 }
-        if (r3 == 0) goto L_0x068e;
+        if (r3 == 0) goto L_0x0695;
     L_0x0588:
         r3 = org.telegram.messenger.MessageObject.getDocument(r11);	 Catch:{ Exception -> 0x0045 }
         r9 = org.telegram.messenger.MessageObject.getPhoto(r11);	 Catch:{ Exception -> 0x0045 }
@@ -11057,36 +11057,29 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3 | r9;
         r15.flags = r3;	 Catch:{ Exception -> 0x0045 }
         r3 = 2;
-        goto L_0x0626;
+        goto L_0x062d;
     L_0x05a8:
         r12 = org.telegram.messenger.MessageObject.isStickerMessage(r11);	 Catch:{ Exception -> 0x0045 }
-        if (r12 == 0) goto L_0x05bf;
+        if (r12 != 0) goto L_0x061d;
     L_0x05ae:
-        r12 = r3.id;	 Catch:{ Exception -> 0x0045 }
-        r15 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0045 }
-        r15.<init>();	 Catch:{ Exception -> 0x0045 }
-        r15.document = r3;	 Catch:{ Exception -> 0x0045 }
-        r3 = r15.flags;	 Catch:{ Exception -> 0x0045 }
-        r9 = 1;
-        r3 = r3 | r9;
-        r15.flags = r3;	 Catch:{ Exception -> 0x0045 }
-    L_0x05bd:
-        r3 = 1;
-        goto L_0x0626;
-    L_0x05bf:
+        r12 = org.telegram.messenger.MessageObject.isAnimatedStickerMessage(r11);	 Catch:{ Exception -> 0x0045 }
+        if (r12 == 0) goto L_0x05b5;
+    L_0x05b4:
+        goto L_0x061d;
+    L_0x05b5:
         r12 = org.telegram.messenger.MessageObject.isVideoMessage(r11);	 Catch:{ Exception -> 0x0045 }
-        if (r12 != 0) goto L_0x0616;
-    L_0x05c5:
+        if (r12 != 0) goto L_0x060c;
+    L_0x05bb:
         r12 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r11);	 Catch:{ Exception -> 0x0045 }
-        if (r12 != 0) goto L_0x0616;
-    L_0x05cb:
+        if (r12 != 0) goto L_0x060c;
+    L_0x05c1:
         r12 = org.telegram.messenger.MessageObject.isGifMessage(r11);	 Catch:{ Exception -> 0x0045 }
-        if (r12 == 0) goto L_0x05d2;
-    L_0x05d1:
-        goto L_0x0616;
-    L_0x05d2:
-        if (r3 == 0) goto L_0x05e6;
-    L_0x05d4:
+        if (r12 == 0) goto L_0x05c8;
+    L_0x05c7:
+        goto L_0x060c;
+    L_0x05c8:
+        if (r3 == 0) goto L_0x05dc;
+    L_0x05ca:
         r12 = r3.id;	 Catch:{ Exception -> 0x0045 }
         r15 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0045 }
         r15.<init>();	 Catch:{ Exception -> 0x0045 }
@@ -11096,15 +11089,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3 | r9;
         r15.flags = r3;	 Catch:{ Exception -> 0x0045 }
         r3 = 8;
-        goto L_0x0626;
-    L_0x05e6:
-        if (r9 == 0) goto L_0x0611;
-    L_0x05e8:
+        goto L_0x062d;
+    L_0x05dc:
+        if (r9 == 0) goto L_0x0607;
+    L_0x05de:
         r3 = r9.sizes;	 Catch:{ Exception -> 0x0045 }
         r12 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0045 }
         r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r12);	 Catch:{ Exception -> 0x0045 }
-        if (r3 == 0) goto L_0x0611;
-    L_0x05f4:
+        if (r3 == 0) goto L_0x0607;
+    L_0x05ea:
         r12 = r9.id;	 Catch:{ Exception -> 0x0045 }
         r15 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x0045 }
         r15.<init>();	 Catch:{ Exception -> 0x0045 }
@@ -11115,19 +11108,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r15.flags = r3;	 Catch:{ Exception -> 0x0045 }
         r3 = r11.media;	 Catch:{ Exception -> 0x0045 }
         r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;	 Catch:{ Exception -> 0x0045 }
-        if (r3 == 0) goto L_0x05bd;
-    L_0x0609:
+        if (r3 == 0) goto L_0x062c;
+    L_0x05ff:
         r3 = r15.flags;	 Catch:{ Exception -> 0x0045 }
         r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r3 = r3 | r9;
         r15.flags = r3;	 Catch:{ Exception -> 0x0045 }
-        goto L_0x05bd;
-    L_0x0611:
+        goto L_0x062c;
+    L_0x0607:
         r3 = 0;
         r12 = 0;
         r15 = 0;
-        goto L_0x0626;
-    L_0x0616:
+        goto L_0x062d;
+    L_0x060c:
         r12 = r3.id;	 Catch:{ Exception -> 0x0045 }
         r15 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0045 }
         r15.<init>();	 Catch:{ Exception -> 0x0045 }
@@ -11137,13 +11130,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3 | r9;
         r15.flags = r3;	 Catch:{ Exception -> 0x0045 }
         r3 = 4;
-    L_0x0626:
-        if (r15 == 0) goto L_0x068e;
-    L_0x0628:
+        goto L_0x062d;
+    L_0x061d:
+        r12 = r3.id;	 Catch:{ Exception -> 0x0045 }
+        r15 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0045 }
+        r15.<init>();	 Catch:{ Exception -> 0x0045 }
+        r15.document = r3;	 Catch:{ Exception -> 0x0045 }
+        r3 = r15.flags;	 Catch:{ Exception -> 0x0045 }
+        r9 = 1;
+        r3 = r3 | r9;
+        r15.flags = r3;	 Catch:{ Exception -> 0x0045 }
+    L_0x062c:
+        r3 = 1;
+    L_0x062d:
+        if (r15 == 0) goto L_0x0695;
+    L_0x062f:
         r9 = r11.media;	 Catch:{ Exception -> 0x0045 }
         r9 = r9.ttl_seconds;	 Catch:{ Exception -> 0x0045 }
-        if (r9 == 0) goto L_0x063a;
-    L_0x062e:
+        if (r9 == 0) goto L_0x0641;
+    L_0x0635:
         r9 = r11.media;	 Catch:{ Exception -> 0x0045 }
         r9 = r9.ttl_seconds;	 Catch:{ Exception -> 0x0045 }
         r15.ttl_seconds = r9;	 Catch:{ Exception -> 0x0045 }
@@ -11151,7 +11156,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = 4;
         r9 = r9 | r14;
         r15.flags = r9;	 Catch:{ Exception -> 0x0045 }
-    L_0x063a:
+    L_0x0641:
         r5 = r5 | r3;
         r20.requery();	 Catch:{ Exception -> 0x0045 }
         r9 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0045 }
@@ -11173,14 +11178,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12 = "sent_";
         r3.append(r12);	 Catch:{ Exception -> 0x0045 }
         r12 = r11.to_id;	 Catch:{ Exception -> 0x0045 }
-        if (r12 == 0) goto L_0x0671;
-    L_0x066c:
+        if (r12 == 0) goto L_0x0678;
+    L_0x0673:
         r12 = r11.to_id;	 Catch:{ Exception -> 0x0045 }
         r12 = r12.channel_id;	 Catch:{ Exception -> 0x0045 }
-        goto L_0x0672;
-    L_0x0671:
+        goto L_0x0679;
+    L_0x0678:
         r12 = 0;
-    L_0x0672:
+    L_0x0679:
         r3.append(r12);	 Catch:{ Exception -> 0x0045 }
         r12 = "_";
         r3.append(r12);	 Catch:{ Exception -> 0x0045 }
@@ -11191,10 +11196,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14.bindString(r11, r3);	 Catch:{ Exception -> 0x0045 }
         r14.step();	 Catch:{ Exception -> 0x0045 }
         r9.reuse();	 Catch:{ Exception -> 0x0045 }
-        goto L_0x0690;
-    L_0x068e:
+        goto L_0x0697;
+    L_0x0695:
         r14 = r20;
-    L_0x0690:
+    L_0x0697:
         r2 = r2 + 1;
         r25 = r8;
         r20 = r14;
@@ -11206,7 +11211,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r24;
         r24 = r10;
         goto L_0x03c7;
-    L_0x06a6:
+    L_0x06ad:
         r29 = r15;
         r14 = r20;
         r10 = r24;
@@ -11216,14 +11221,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r22 = r7;
         r7 = r21;
         r8.dispose();	 Catch:{ Exception -> 0x0045 }
-        if (r3 == 0) goto L_0x06be;
-    L_0x06bb:
+        if (r3 == 0) goto L_0x06c5;
+    L_0x06c2:
         r3.dispose();	 Catch:{ Exception -> 0x0045 }
-    L_0x06be:
-        if (r4 == 0) goto L_0x06c3;
-    L_0x06c0:
+    L_0x06c5:
+        if (r4 == 0) goto L_0x06ca;
+    L_0x06c7:
         r4.dispose();	 Catch:{ Exception -> 0x0045 }
-    L_0x06c3:
+    L_0x06ca:
         r6.dispose();	 Catch:{ Exception -> 0x0045 }
         r14.dispose();	 Catch:{ Exception -> 0x0045 }
         r7.dispose();	 Catch:{ Exception -> 0x0045 }
@@ -11234,15 +11239,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = "UPDATE dialogs SET date = ?, unread_count = ?, last_mid = ?, unread_count_i = ? WHERE did = ?";
         r3 = r3.executeFast(r4);	 Catch:{ Exception -> 0x0045 }
         r4 = 0;
-    L_0x06dd:
+    L_0x06e4:
         r6 = r10.size();	 Catch:{ Exception -> 0x0045 }
-        if (r4 >= r6) goto L_0x0872;
-    L_0x06e3:
-        r6 = r10.keyAt(r4);	 Catch:{ Exception -> 0x0945 }
+        if (r4 >= r6) goto L_0x0879;
+    L_0x06ea:
+        r6 = r10.keyAt(r4);	 Catch:{ Exception -> 0x094c }
         r8 = 0;
         r11 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r11 != 0) goto L_0x0702;
-    L_0x06ed:
+        if (r11 != 0) goto L_0x0709;
+    L_0x06f4:
         r1 = r2;
         r35 = r5;
         r20 = r10;
@@ -11254,31 +11259,31 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = 9;
         r24 = r4;
         r4 = 8;
-        goto L_0x0862;
-    L_0x0702:
-        r8 = r10.valueAt(r4);	 Catch:{ Exception -> 0x0945 }
-        r8 = (org.telegram.tgnet.TLRPC.Message) r8;	 Catch:{ Exception -> 0x0945 }
-        if (r8 == 0) goto L_0x070f;
-    L_0x070a:
+        goto L_0x0869;
+    L_0x0709:
+        r8 = r10.valueAt(r4);	 Catch:{ Exception -> 0x094c }
+        r8 = (org.telegram.tgnet.TLRPC.Message) r8;	 Catch:{ Exception -> 0x094c }
+        if (r8 == 0) goto L_0x0716;
+    L_0x0711:
         r9 = r8.to_id;	 Catch:{ Exception -> 0x0045 }
         r9 = r9.channel_id;	 Catch:{ Exception -> 0x0045 }
-        goto L_0x0710;
-    L_0x070f:
+        goto L_0x0717;
+    L_0x0716:
         r9 = 0;
-    L_0x0710:
-        r11 = r1.database;	 Catch:{ Exception -> 0x0945 }
-        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0945 }
-        r12.<init>();	 Catch:{ Exception -> 0x0945 }
+    L_0x0717:
+        r11 = r1.database;	 Catch:{ Exception -> 0x094c }
+        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x094c }
+        r12.<init>();	 Catch:{ Exception -> 0x094c }
         r13 = "SELECT date, unread_count, last_mid, unread_count_i FROM dialogs WHERE did = ";
-        r12.append(r13);	 Catch:{ Exception -> 0x0945 }
-        r12.append(r6);	 Catch:{ Exception -> 0x0945 }
-        r12 = r12.toString();	 Catch:{ Exception -> 0x0945 }
+        r12.append(r13);	 Catch:{ Exception -> 0x094c }
+        r12.append(r6);	 Catch:{ Exception -> 0x094c }
+        r12 = r12.toString();	 Catch:{ Exception -> 0x094c }
         r13 = 0;
-        r14 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0945 }
-        r11 = r11.queryFinalized(r12, r14);	 Catch:{ Exception -> 0x0945 }
-        r12 = r11.next();	 Catch:{ Exception -> 0x0945 }
-        if (r12 == 0) goto L_0x0756;
-    L_0x0730:
+        r14 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x094c }
+        r11 = r11.queryFinalized(r12, r14);	 Catch:{ Exception -> 0x094c }
+        r12 = r11.next();	 Catch:{ Exception -> 0x094c }
+        if (r12 == 0) goto L_0x075d;
+    L_0x0737:
         r14 = r11.intValue(r13);	 Catch:{ Exception -> 0x0045 }
         r20 = r10;
         r15 = 1;
@@ -11294,167 +11299,167 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r15 = r14;
         r14 = r21;
         r10 = r31;
-        goto L_0x0765;
-    L_0x0756:
+        goto L_0x076c;
+    L_0x075d:
         r20 = r10;
-        if (r9 == 0) goto L_0x0761;
-    L_0x075a:
+        if (r9 == 0) goto L_0x0768;
+    L_0x0761:
         r10 = r30.getMessagesController();	 Catch:{ Exception -> 0x0045 }
         r10.checkChannelInviter(r9);	 Catch:{ Exception -> 0x0045 }
-    L_0x0761:
+    L_0x0768:
         r10 = 0;
         r13 = 0;
         r14 = 0;
         r15 = 0;
-    L_0x0765:
-        r11.dispose();	 Catch:{ Exception -> 0x0945 }
+    L_0x076c:
+        r11.dispose();	 Catch:{ Exception -> 0x094c }
         r11 = r22;
-        r21 = r11.get(r6);	 Catch:{ Exception -> 0x0945 }
-        r21 = (java.lang.Integer) r21;	 Catch:{ Exception -> 0x0945 }
+        r21 = r11.get(r6);	 Catch:{ Exception -> 0x094c }
+        r21 = (java.lang.Integer) r21;	 Catch:{ Exception -> 0x094c }
         r35 = r5;
         r5 = r24;
-        r22 = r5.get(r6);	 Catch:{ Exception -> 0x0945 }
-        r22 = (java.lang.Integer) r22;	 Catch:{ Exception -> 0x0945 }
-        if (r22 != 0) goto L_0x0783;
-    L_0x077c:
+        r22 = r5.get(r6);	 Catch:{ Exception -> 0x094c }
+        r22 = (java.lang.Integer) r22;	 Catch:{ Exception -> 0x094c }
+        if (r22 != 0) goto L_0x078a;
+    L_0x0783:
         r16 = 0;
         r22 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0045 }
-        goto L_0x0790;
-    L_0x0783:
-        r24 = r22.intValue();	 Catch:{ Exception -> 0x0945 }
+        goto L_0x0797;
+    L_0x078a:
+        r24 = r22.intValue();	 Catch:{ Exception -> 0x094c }
         r24 = r24 + r10;
-        r1 = java.lang.Integer.valueOf(r24);	 Catch:{ Exception -> 0x0945 }
-        r5.put(r6, r1);	 Catch:{ Exception -> 0x0945 }
-    L_0x0790:
-        if (r21 != 0) goto L_0x0798;
-    L_0x0792:
+        r1 = java.lang.Integer.valueOf(r24);	 Catch:{ Exception -> 0x094c }
+        r5.put(r6, r1);	 Catch:{ Exception -> 0x094c }
+    L_0x0797:
+        if (r21 != 0) goto L_0x079f;
+    L_0x0799:
         r1 = 0;
-        r21 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x0945 }
-        goto L_0x07a4;
-    L_0x0798:
-        r1 = r21.intValue();	 Catch:{ Exception -> 0x0945 }
+        r21 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x094c }
+        goto L_0x07ab;
+    L_0x079f:
+        r1 = r21.intValue();	 Catch:{ Exception -> 0x094c }
         r1 = r1 + r13;
-        r1 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x0945 }
-        r11.put(r6, r1);	 Catch:{ Exception -> 0x0945 }
-    L_0x07a4:
-        if (r8 == 0) goto L_0x07ae;
-    L_0x07a6:
-        r1 = r8.id;	 Catch:{ Exception -> 0x0945 }
+        r1 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x094c }
+        r11.put(r6, r1);	 Catch:{ Exception -> 0x094c }
+    L_0x07ab:
+        if (r8 == 0) goto L_0x07b5;
+    L_0x07ad:
+        r1 = r8.id;	 Catch:{ Exception -> 0x094c }
         r24 = r4;
         r25 = r5;
-        r4 = (long) r1;	 Catch:{ Exception -> 0x0945 }
-        goto L_0x07b3;
-    L_0x07ae:
-        r24 = r4;
-        r25 = r5;
-        r4 = (long) r14;	 Catch:{ Exception -> 0x0945 }
-    L_0x07b3:
-        if (r8 == 0) goto L_0x07bc;
+        r4 = (long) r1;	 Catch:{ Exception -> 0x094c }
+        goto L_0x07ba;
     L_0x07b5:
-        r1 = r8.local_id;	 Catch:{ Exception -> 0x0945 }
-        if (r1 == 0) goto L_0x07bc;
-    L_0x07b9:
-        r1 = r8.local_id;	 Catch:{ Exception -> 0x0945 }
-        r4 = (long) r1;	 Catch:{ Exception -> 0x0945 }
+        r24 = r4;
+        r25 = r5;
+        r4 = (long) r14;	 Catch:{ Exception -> 0x094c }
+    L_0x07ba:
+        if (r8 == 0) goto L_0x07c3;
     L_0x07bc:
-        if (r9 == 0) goto L_0x07c5;
-    L_0x07be:
-        r31 = r2;
-        r1 = (long) r9;	 Catch:{ Exception -> 0x0945 }
-        r1 = r1 << r23;
-        r4 = r4 | r1;
-        goto L_0x07c7;
+        r1 = r8.local_id;	 Catch:{ Exception -> 0x094c }
+        if (r1 == 0) goto L_0x07c3;
+    L_0x07c0:
+        r1 = r8.local_id;	 Catch:{ Exception -> 0x094c }
+        r4 = (long) r1;	 Catch:{ Exception -> 0x094c }
+    L_0x07c3:
+        if (r9 == 0) goto L_0x07cc;
     L_0x07c5:
         r31 = r2;
-    L_0x07c7:
-        if (r12 == 0) goto L_0x0800;
-    L_0x07c9:
-        r3.requery();	 Catch:{ Exception -> 0x0945 }
-        if (r8 == 0) goto L_0x07d4;
+        r1 = (long) r9;	 Catch:{ Exception -> 0x094c }
+        r1 = r1 << r23;
+        r4 = r4 | r1;
+        goto L_0x07ce;
+    L_0x07cc:
+        r31 = r2;
     L_0x07ce:
-        if (r33 == 0) goto L_0x07d2;
+        if (r12 == 0) goto L_0x0807;
     L_0x07d0:
-        if (r15 != 0) goto L_0x07d4;
-    L_0x07d2:
-        r15 = r8.date;	 Catch:{ Exception -> 0x0945 }
-    L_0x07d4:
+        r3.requery();	 Catch:{ Exception -> 0x094c }
+        if (r8 == 0) goto L_0x07db;
+    L_0x07d5:
+        if (r33 == 0) goto L_0x07d9;
+    L_0x07d7:
+        if (r15 != 0) goto L_0x07db;
+    L_0x07d9:
+        r15 = r8.date;	 Catch:{ Exception -> 0x094c }
+    L_0x07db:
         r1 = 1;
-        r3.bindInteger(r1, r15);	 Catch:{ Exception -> 0x0945 }
-        r1 = r22.intValue();	 Catch:{ Exception -> 0x0945 }
+        r3.bindInteger(r1, r15);	 Catch:{ Exception -> 0x094c }
+        r1 = r22.intValue();	 Catch:{ Exception -> 0x094c }
         r10 = r10 + r1;
         r1 = 2;
-        r3.bindInteger(r1, r10);	 Catch:{ Exception -> 0x0945 }
+        r3.bindInteger(r1, r10);	 Catch:{ Exception -> 0x094c }
         r1 = 3;
-        r3.bindLong(r1, r4);	 Catch:{ Exception -> 0x0945 }
-        r1 = r21.intValue();	 Catch:{ Exception -> 0x0945 }
+        r3.bindLong(r1, r4);	 Catch:{ Exception -> 0x094c }
+        r1 = r21.intValue();	 Catch:{ Exception -> 0x094c }
         r13 = r13 + r1;
         r1 = 4;
-        r3.bindInteger(r1, r13);	 Catch:{ Exception -> 0x0945 }
+        r3.bindInteger(r1, r13);	 Catch:{ Exception -> 0x094c }
         r1 = 5;
-        r3.bindLong(r1, r6);	 Catch:{ Exception -> 0x0945 }
-        r3.step();	 Catch:{ Exception -> 0x0945 }
+        r3.bindLong(r1, r6);	 Catch:{ Exception -> 0x094c }
+        r3.step();	 Catch:{ Exception -> 0x094c }
         r1 = r31;
         r2 = 5;
         r4 = 8;
         r5 = 6;
         r6 = 0;
         r9 = 9;
-        goto L_0x0862;
-    L_0x0800:
-        r31.requery();	 Catch:{ Exception -> 0x0945 }
+        goto L_0x0869;
+    L_0x0807:
+        r31.requery();	 Catch:{ Exception -> 0x094c }
         r1 = r31;
         r2 = 1;
-        r1.bindLong(r2, r6);	 Catch:{ Exception -> 0x0945 }
-        if (r8 == 0) goto L_0x0811;
-    L_0x080b:
-        if (r33 == 0) goto L_0x080f;
-    L_0x080d:
-        if (r15 != 0) goto L_0x0811;
-    L_0x080f:
-        r15 = r8.date;	 Catch:{ Exception -> 0x0945 }
-    L_0x0811:
+        r1.bindLong(r2, r6);	 Catch:{ Exception -> 0x094c }
+        if (r8 == 0) goto L_0x0818;
+    L_0x0812:
+        if (r33 == 0) goto L_0x0816;
+    L_0x0814:
+        if (r15 != 0) goto L_0x0818;
+    L_0x0816:
+        r15 = r8.date;	 Catch:{ Exception -> 0x094c }
+    L_0x0818:
         r2 = 2;
-        r1.bindInteger(r2, r15);	 Catch:{ Exception -> 0x0945 }
-        r2 = r22.intValue();	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r2, r15);	 Catch:{ Exception -> 0x094c }
+        r2 = r22.intValue();	 Catch:{ Exception -> 0x094c }
         r10 = r10 + r2;
         r2 = 3;
-        r1.bindInteger(r2, r10);	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r2, r10);	 Catch:{ Exception -> 0x094c }
         r2 = 4;
-        r1.bindLong(r2, r4);	 Catch:{ Exception -> 0x0945 }
+        r1.bindLong(r2, r4);	 Catch:{ Exception -> 0x094c }
         r2 = 5;
         r4 = 0;
-        r1.bindInteger(r2, r4);	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r2, r4);	 Catch:{ Exception -> 0x094c }
         r5 = 6;
-        r1.bindInteger(r5, r4);	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r5, r4);	 Catch:{ Exception -> 0x094c }
         r4 = 7;
         r6 = 0;
-        r1.bindLong(r4, r6);	 Catch:{ Exception -> 0x0945 }
-        r4 = r21.intValue();	 Catch:{ Exception -> 0x0945 }
+        r1.bindLong(r4, r6);	 Catch:{ Exception -> 0x094c }
+        r4 = r21.intValue();	 Catch:{ Exception -> 0x094c }
         r13 = r13 + r4;
         r4 = 8;
-        r1.bindInteger(r4, r13);	 Catch:{ Exception -> 0x0945 }
-        if (r9 == 0) goto L_0x083f;
-    L_0x083d:
+        r1.bindInteger(r4, r13);	 Catch:{ Exception -> 0x094c }
+        if (r9 == 0) goto L_0x0846;
+    L_0x0844:
         r8 = 1;
-        goto L_0x0840;
-    L_0x083f:
+        goto L_0x0847;
+    L_0x0846:
         r8 = 0;
-    L_0x0840:
+    L_0x0847:
         r9 = 9;
-        r1.bindInteger(r9, r8);	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r9, r8);	 Catch:{ Exception -> 0x094c }
         r8 = 10;
         r10 = 0;
-        r1.bindInteger(r8, r10);	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r8, r10);	 Catch:{ Exception -> 0x094c }
         r8 = 11;
-        r1.bindInteger(r8, r10);	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r8, r10);	 Catch:{ Exception -> 0x094c }
         r8 = 12;
-        r1.bindInteger(r8, r10);	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r8, r10);	 Catch:{ Exception -> 0x094c }
         r8 = 13;
-        r1.bindInteger(r8, r10);	 Catch:{ Exception -> 0x0945 }
+        r1.bindInteger(r8, r10);	 Catch:{ Exception -> 0x094c }
         r8 = 14;
-        r1.bindNull(r8);	 Catch:{ Exception -> 0x0945 }
-        r1.step();	 Catch:{ Exception -> 0x0945 }
-    L_0x0862:
+        r1.bindNull(r8);	 Catch:{ Exception -> 0x094c }
+        r1.step();	 Catch:{ Exception -> 0x094c }
+    L_0x0869:
         r8 = r24 + 1;
         r5 = r35;
         r2 = r1;
@@ -11463,34 +11468,34 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = r20;
         r24 = r25;
         r1 = r30;
-        goto L_0x06dd;
-    L_0x0872:
+        goto L_0x06e4;
+    L_0x0879:
         r1 = r2;
         r35 = r5;
         r11 = r22;
         r25 = r24;
-        r3.dispose();	 Catch:{ Exception -> 0x0945 }
-        r1.dispose();	 Catch:{ Exception -> 0x0945 }
-        if (r29 == 0) goto L_0x0926;
-    L_0x0881:
+        r3.dispose();	 Catch:{ Exception -> 0x094c }
+        r1.dispose();	 Catch:{ Exception -> 0x094c }
+        if (r29 == 0) goto L_0x092d;
+    L_0x0888:
         r1 = r30;
         r2 = r1.database;	 Catch:{ Exception -> 0x0045 }
         r3 = "REPLACE INTO media_counts_v2 VALUES(?, ?, ?, ?)";
         r2 = r2.executeFast(r3);	 Catch:{ Exception -> 0x0045 }
         r3 = 0;
-    L_0x088c:
+    L_0x0893:
         r4 = r29.size();	 Catch:{ Exception -> 0x0045 }
-        if (r3 >= r4) goto L_0x0922;
-    L_0x0892:
+        if (r3 >= r4) goto L_0x0929;
+    L_0x0899:
         r15 = r29;
         r4 = r15.keyAt(r3);	 Catch:{ Exception -> 0x0045 }
         r5 = r15.valueAt(r3);	 Catch:{ Exception -> 0x0045 }
         r5 = (android.util.LongSparseArray) r5;	 Catch:{ Exception -> 0x0045 }
         r6 = 0;
-    L_0x089f:
+    L_0x08a6:
         r7 = r5.size();	 Catch:{ Exception -> 0x0045 }
-        if (r6 >= r7) goto L_0x0916;
-    L_0x08a5:
+        if (r6 >= r7) goto L_0x091d;
+    L_0x08ac:
         r7 = r5.keyAt(r6);	 Catch:{ Exception -> 0x0045 }
         r9 = r1.database;	 Catch:{ Exception -> 0x0045 }
         r10 = java.util.Locale.US;	 Catch:{ Exception -> 0x0045 }
@@ -11508,20 +11513,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x0045 }
         r9 = r9.queryFinalized(r10, r12);	 Catch:{ Exception -> 0x0045 }
         r10 = r9.next();	 Catch:{ Exception -> 0x0045 }
-        if (r10 == 0) goto L_0x08dd;
-    L_0x08d3:
+        if (r10 == 0) goto L_0x08e4;
+    L_0x08da:
         r10 = r9.intValue(r15);	 Catch:{ Exception -> 0x0045 }
         r12 = 1;
         r13 = r9.intValue(r12);	 Catch:{ Exception -> 0x0045 }
-        goto L_0x08df;
-    L_0x08dd:
+        goto L_0x08e6;
+    L_0x08e4:
         r10 = -1;
         r13 = 0;
-    L_0x08df:
+    L_0x08e6:
         r9.dispose();	 Catch:{ Exception -> 0x0045 }
         r9 = -1;
-        if (r10 == r9) goto L_0x090c;
-    L_0x08e5:
+        if (r10 == r9) goto L_0x0913;
+    L_0x08ec:
         r2.requery();	 Catch:{ Exception -> 0x0045 }
         r12 = r5.valueAt(r6);	 Catch:{ Exception -> 0x0045 }
         r12 = (java.lang.Integer) r12;	 Catch:{ Exception -> 0x0045 }
@@ -11538,18 +11543,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = 4;
         r2.bindInteger(r10, r13);	 Catch:{ Exception -> 0x0045 }
         r2.step();	 Catch:{ Exception -> 0x0045 }
-        goto L_0x0911;
-    L_0x090c:
+        goto L_0x0918;
+    L_0x0913:
         r7 = 2;
         r8 = 0;
         r10 = 4;
         r12 = 1;
         r14 = 3;
-    L_0x0911:
+    L_0x0918:
         r6 = r6 + 1;
         r15 = r29;
-        goto L_0x089f;
-    L_0x0916:
+        goto L_0x08a6;
+    L_0x091d:
         r29 = r15;
         r7 = 2;
         r8 = 0;
@@ -11558,35 +11563,35 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12 = 1;
         r14 = 3;
         r3 = r3 + 1;
-        goto L_0x088c;
-    L_0x0922:
+        goto L_0x0893;
+    L_0x0929:
         r2.dispose();	 Catch:{ Exception -> 0x0045 }
-        goto L_0x0928;
-    L_0x0926:
+        goto L_0x092f;
+    L_0x092d:
         r1 = r30;
-    L_0x0928:
-        if (r32 == 0) goto L_0x092f;
-    L_0x092a:
+    L_0x092f:
+        if (r32 == 0) goto L_0x0936;
+    L_0x0931:
         r2 = r1.database;	 Catch:{ Exception -> 0x0045 }
         r2.commitTransaction();	 Catch:{ Exception -> 0x0045 }
-    L_0x092f:
+    L_0x0936:
         r2 = r30.getMessagesController();	 Catch:{ Exception -> 0x0045 }
         r3 = r25;
         r2.processDialogsUpdateRead(r3, r11);	 Catch:{ Exception -> 0x0045 }
-        if (r35 == 0) goto L_0x094d;
-    L_0x093a:
+        if (r35 == 0) goto L_0x0954;
+    L_0x0941:
         r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$EDTDSO5ZD7EJWhgiA72HtAyXwnM;	 Catch:{ Exception -> 0x0045 }
         r5 = r35;
         r2.<init>(r1, r5);	 Catch:{ Exception -> 0x0045 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0045 }
-        goto L_0x094d;
-    L_0x0945:
+        goto L_0x0954;
+    L_0x094c:
         r0 = move-exception;
         r1 = r30;
         goto L_0x0046;
-    L_0x094a:
+    L_0x0951:
         org.telegram.messenger.FileLog.e(r2);
-    L_0x094d:
+    L_0x0954:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.putMessagesInternal(java.util.ArrayList, boolean, boolean, int, boolean):void");

@@ -279,7 +279,7 @@ public class UndoView extends FrameLayout {
     L_0x004b:
         r1 = r20;
         r1 = (org.telegram.tgnet.TLRPC.User) r1;
-        r2 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+        r2 = NUM; // 0x7f0d06d8 float:1.8745668E38 double:1.053130643E-314;
         r3 = new java.lang.Object[r4];
         r1 = org.telegram.messenger.UserObject.getFirstName(r1);
         r3[r11] = r1;

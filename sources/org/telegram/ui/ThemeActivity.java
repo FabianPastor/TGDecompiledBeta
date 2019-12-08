@@ -789,7 +789,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x00e0:
             r4 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f6 }
             r6 = "ShareFile";
-            r0 = NUM; // 0x7f0d0979 float:1.8747033E38 double:1.0531309757E-314;
+            r0 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
             r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x00f6 }
             r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x00f6 }
             r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -1937,7 +1937,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
 
     public /* synthetic */ void lambda$null$1$ThemeActivity(DialogInterface dialogInterface, int i) {
         SharedConfig.setDistanceSystemType(i);
-        this.listAdapter.onBindViewHolder(this.listView.findViewHolderForAdapterPosition(this.distanceRow), this.distanceRow);
+        ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.distanceRow);
+        if (findViewHolderForAdapterPosition != null) {
+            this.listAdapter.onBindViewHolder(findViewHolderForAdapterPosition, this.distanceRow);
+        }
     }
 
     public /* synthetic */ void lambda$null$2$ThemeActivity(int i, DialogInterface dialogInterface, int i2) {

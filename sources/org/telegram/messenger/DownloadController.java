@@ -631,22 +631,22 @@ public class DownloadController extends BaseController implements NotificationCe
         return z;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00db  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00db  */
-    /* JADX WARNING: Missing block: B:29:0x0059, code skipped:
-            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r5.user_id)) != false) goto L_0x005b;
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x00b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x00b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x00b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00e1  */
+    /* JADX WARNING: Missing block: B:31:0x005f, code skipped:
+            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r5.user_id)) != false) goto L_0x0061;
      */
-    /* JADX WARNING: Missing block: B:36:0x0075, code skipped:
-            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x005b;
+    /* JADX WARNING: Missing block: B:38:0x007b, code skipped:
+            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x0061;
      */
-    /* JADX WARNING: Missing block: B:43:0x0094, code skipped:
-            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x005b;
+    /* JADX WARNING: Missing block: B:45:0x009a, code skipped:
+            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x0061;
      */
     public int canDownloadMedia(org.telegram.tgnet.TLRPC.Message r10) {
         /*
@@ -659,168 +659,171 @@ public class DownloadController extends BaseController implements NotificationCe
         r1 = org.telegram.messenger.MessageObject.isVideoMessage(r10);
         r2 = 2;
         r3 = 1;
-        if (r1 != 0) goto L_0x0040;
+        if (r1 != 0) goto L_0x0046;
     L_0x000c:
         r4 = org.telegram.messenger.MessageObject.isGifMessage(r10);
-        if (r4 != 0) goto L_0x0040;
+        if (r4 != 0) goto L_0x0046;
     L_0x0012:
         r4 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r10);
-        if (r4 != 0) goto L_0x0040;
+        if (r4 != 0) goto L_0x0046;
     L_0x0018:
         r4 = org.telegram.messenger.MessageObject.isGameMessage(r10);
         if (r4 == 0) goto L_0x001f;
     L_0x001e:
-        goto L_0x0040;
+        goto L_0x0046;
     L_0x001f:
         r4 = org.telegram.messenger.MessageObject.isVoiceMessage(r10);
         if (r4 == 0) goto L_0x0027;
     L_0x0025:
         r4 = 2;
-        goto L_0x0041;
+        goto L_0x0047;
     L_0x0027:
         r4 = org.telegram.messenger.MessageObject.isPhoto(r10);
-        if (r4 != 0) goto L_0x003e;
+        if (r4 != 0) goto L_0x0044;
     L_0x002d:
         r4 = org.telegram.messenger.MessageObject.isStickerMessage(r10);
-        if (r4 == 0) goto L_0x0034;
+        if (r4 != 0) goto L_0x0044;
     L_0x0033:
-        goto L_0x003e;
-    L_0x0034:
-        r4 = org.telegram.messenger.MessageObject.getDocument(r10);
-        if (r4 == 0) goto L_0x003d;
+        r4 = org.telegram.messenger.MessageObject.isAnimatedStickerMessage(r10);
+        if (r4 == 0) goto L_0x003a;
+    L_0x0039:
+        goto L_0x0044;
     L_0x003a:
-        r4 = 8;
-        goto L_0x0041;
-    L_0x003d:
-        return r0;
-    L_0x003e:
-        r4 = 1;
-        goto L_0x0041;
+        r4 = org.telegram.messenger.MessageObject.getDocument(r10);
+        if (r4 == 0) goto L_0x0043;
     L_0x0040:
+        r4 = 8;
+        goto L_0x0047;
+    L_0x0043:
+        return r0;
+    L_0x0044:
+        r4 = 1;
+        goto L_0x0047;
+    L_0x0046:
         r4 = 4;
-    L_0x0041:
+    L_0x0047:
         r5 = r10.to_id;
-        if (r5 == 0) goto L_0x0099;
-    L_0x0045:
+        if (r5 == 0) goto L_0x009f;
+    L_0x004b:
         r6 = r5.user_id;
-        if (r6 == 0) goto L_0x005d;
-    L_0x0049:
+        if (r6 == 0) goto L_0x0063;
+    L_0x004f:
         r6 = r9.getContactsController();
         r6 = r6.contactsDict;
         r5 = r5.user_id;
         r5 = java.lang.Integer.valueOf(r5);
         r5 = r6.containsKey(r5);
-        if (r5 == 0) goto L_0x0099;
-    L_0x005b:
-        r5 = 0;
-        goto L_0x009a;
-    L_0x005d:
-        r5 = r5.chat_id;
-        if (r5 == 0) goto L_0x007a;
+        if (r5 == 0) goto L_0x009f;
     L_0x0061:
+        r5 = 0;
+        goto L_0x00a0;
+    L_0x0063:
+        r5 = r5.chat_id;
+        if (r5 == 0) goto L_0x0080;
+    L_0x0067:
         r5 = r10.from_id;
-        if (r5 == 0) goto L_0x0078;
-    L_0x0065:
+        if (r5 == 0) goto L_0x007e;
+    L_0x006b:
         r5 = r9.getContactsController();
         r5 = r5.contactsDict;
         r6 = r10.from_id;
         r6 = java.lang.Integer.valueOf(r6);
         r5 = r5.containsKey(r6);
-        if (r5 == 0) goto L_0x0078;
-    L_0x0077:
-        goto L_0x005b;
-    L_0x0078:
+        if (r5 == 0) goto L_0x007e;
+    L_0x007d:
+        goto L_0x0061;
+    L_0x007e:
         r5 = 2;
-        goto L_0x009a;
-    L_0x007a:
-        r5 = org.telegram.messenger.MessageObject.isMegagroup(r10);
-        if (r5 == 0) goto L_0x0097;
+        goto L_0x00a0;
     L_0x0080:
+        r5 = org.telegram.messenger.MessageObject.isMegagroup(r10);
+        if (r5 == 0) goto L_0x009d;
+    L_0x0086:
         r5 = r10.from_id;
-        if (r5 == 0) goto L_0x0078;
-    L_0x0084:
+        if (r5 == 0) goto L_0x007e;
+    L_0x008a:
         r5 = r9.getContactsController();
         r5 = r5.contactsDict;
         r6 = r10.from_id;
         r6 = java.lang.Integer.valueOf(r6);
         r5 = r5.containsKey(r6);
-        if (r5 == 0) goto L_0x0078;
-    L_0x0096:
-        goto L_0x005b;
-    L_0x0097:
+        if (r5 == 0) goto L_0x007e;
+    L_0x009c:
+        goto L_0x0061;
+    L_0x009d:
         r5 = 3;
-        goto L_0x009a;
-    L_0x0099:
+        goto L_0x00a0;
+    L_0x009f:
         r5 = 1;
-    L_0x009a:
-        r6 = org.telegram.messenger.ApplicationLoader.isConnectedToWiFi();
-        if (r6 == 0) goto L_0x00ac;
     L_0x00a0:
+        r6 = org.telegram.messenger.ApplicationLoader.isConnectedToWiFi();
+        if (r6 == 0) goto L_0x00b2;
+    L_0x00a6:
         r6 = r9.wifiPreset;
         r6 = r6.enabled;
-        if (r6 != 0) goto L_0x00a7;
-    L_0x00a6:
-        return r0;
-    L_0x00a7:
-        r6 = r9.getCurrentWiFiPreset();
-        goto L_0x00c9;
+        if (r6 != 0) goto L_0x00ad;
     L_0x00ac:
-        r6 = org.telegram.messenger.ApplicationLoader.isRoaming();
-        if (r6 == 0) goto L_0x00be;
+        return r0;
+    L_0x00ad:
+        r6 = r9.getCurrentWiFiPreset();
+        goto L_0x00cf;
     L_0x00b2:
+        r6 = org.telegram.messenger.ApplicationLoader.isRoaming();
+        if (r6 == 0) goto L_0x00c4;
+    L_0x00b8:
         r6 = r9.roamingPreset;
         r6 = r6.enabled;
-        if (r6 != 0) goto L_0x00b9;
-    L_0x00b8:
-        return r0;
-    L_0x00b9:
-        r6 = r9.getCurrentRoamingPreset();
-        goto L_0x00c9;
+        if (r6 != 0) goto L_0x00bf;
     L_0x00be:
+        return r0;
+    L_0x00bf:
+        r6 = r9.getCurrentRoamingPreset();
+        goto L_0x00cf;
+    L_0x00c4:
         r6 = r9.mobilePreset;
         r6 = r6.enabled;
-        if (r6 != 0) goto L_0x00c5;
-    L_0x00c4:
+        if (r6 != 0) goto L_0x00cb;
+    L_0x00ca:
         return r0;
-    L_0x00c5:
+    L_0x00cb:
         r6 = r9.getCurrentMobilePreset();
-    L_0x00c9:
+    L_0x00cf:
         r7 = r6.mask;
         r5 = r7[r5];
         r7 = r6.sizes;
         r8 = typeToIndex(r4);
         r7 = r7[r8];
         r10 = org.telegram.messenger.MessageObject.getMessageSize(r10);
-        if (r1 == 0) goto L_0x00eb;
-    L_0x00db:
-        r1 = r6.preloadVideo;
-        if (r1 == 0) goto L_0x00eb;
-    L_0x00df:
-        if (r10 <= r7) goto L_0x00eb;
+        if (r1 == 0) goto L_0x00f1;
     L_0x00e1:
-        r1 = 2097152; // 0x200000 float:2.938736E-39 double:1.0361308E-317;
-        if (r7 <= r1) goto L_0x00eb;
+        r1 = r6.preloadVideo;
+        if (r1 == 0) goto L_0x00f1;
     L_0x00e5:
-        r10 = r5 & r4;
-        if (r10 == 0) goto L_0x00ea;
-    L_0x00e9:
-        r0 = 2;
-    L_0x00ea:
-        return r0;
+        if (r10 <= r7) goto L_0x00f1;
+    L_0x00e7:
+        r1 = 2097152; // 0x200000 float:2.938736E-39 double:1.0361308E-317;
+        if (r7 <= r1) goto L_0x00f1;
     L_0x00eb:
-        if (r4 == r3) goto L_0x00f1;
-    L_0x00ed:
-        if (r10 == 0) goto L_0x00f8;
-    L_0x00ef:
-        if (r10 > r7) goto L_0x00f8;
-    L_0x00f1:
-        if (r4 == r2) goto L_0x00f7;
-    L_0x00f3:
         r10 = r5 & r4;
-        if (r10 == 0) goto L_0x00f8;
+        if (r10 == 0) goto L_0x00f0;
+    L_0x00ef:
+        r0 = 2;
+    L_0x00f0:
+        return r0;
+    L_0x00f1:
+        if (r4 == r3) goto L_0x00f7;
+    L_0x00f3:
+        if (r10 == 0) goto L_0x00fe;
+    L_0x00f5:
+        if (r10 > r7) goto L_0x00fe;
     L_0x00f7:
+        if (r4 == r2) goto L_0x00fd;
+    L_0x00f9:
+        r10 = r5 & r4;
+        if (r10 == 0) goto L_0x00fe;
+    L_0x00fd:
         r0 = 1;
-    L_0x00f8:
+    L_0x00fe:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.canDownloadMedia(org.telegram.tgnet.TLRPC$Message):int");

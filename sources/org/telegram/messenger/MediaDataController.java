@@ -419,7 +419,7 @@ public class MediaDataController extends BaseController {
         if (r1 == 0) goto L_0x005e;
     L_0x004b:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0d08b2 float:1.874663E38 double:1.0531308773E-314;
+        r3 = NUM; // 0x7f0d08b0 float:1.8746626E38 double:1.0531308763E-314;
         r4 = "RemovedFromFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r8);
@@ -3047,7 +3047,7 @@ public class MediaDataController extends BaseController {
             if (MessageObject.isVideoMessage(message)) {
                 return 0;
             }
-            if (MessageObject.isStickerMessage(message)) {
+            if (MessageObject.isStickerMessage(message) || MessageObject.isAnimatedStickerMessage(message)) {
                 return -1;
             }
             return MessageObject.isMusicMessage(message) ? 4 : 1;
@@ -3607,7 +3607,7 @@ public class MediaDataController extends BaseController {
         r10 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ Throwable -> 0x02b7 }
         r11 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x02b7 }
         r10.<init>(r11, r9);	 Catch:{ Throwable -> 0x02b7 }
-        r11 = NUM; // 0x7f0d0612 float:1.8745267E38 double:1.0531305453E-314;
+        r11 = NUM; // 0x7f0d0610 float:1.8745263E38 double:1.0531305443E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ Throwable -> 0x02b7 }
         r10 = r10.setShortLabel(r12);	 Catch:{ Throwable -> 0x02b7 }
         r0 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ Throwable -> 0x02b7 }
@@ -4354,7 +4354,7 @@ public class MediaDataController extends BaseController {
         if (r8 == 0) goto L_0x006b;
     L_0x005e:
         r8 = "SavedMessages";
-        r9 = NUM; // 0x7f0d0906 float:1.87468E38 double:1.053130919E-314;
+        r9 = NUM; // 0x7f0d0904 float:1.8746796E38 double:1.053130918E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);	 Catch:{ Exception -> 0x023d }
         r9 = r4;
         r10 = r8;

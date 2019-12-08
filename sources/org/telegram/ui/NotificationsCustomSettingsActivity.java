@@ -985,11 +985,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r15.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d06b8 float:1.8745603E38 double:1.0531306273E-314;
+        r1 = NUM; // 0x7f0d06b6 float:1.87456E38 double:1.0531306263E-314;
         r2 = "NotificationsDeleteAllExceptionTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d06b7 float:1.8745601E38 double:1.053130627E-314;
+        r1 = NUM; // 0x7f0d06b5 float:1.8745597E38 double:1.053130626E-314;
         r2 = "NotificationsDeleteAllExceptionAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
