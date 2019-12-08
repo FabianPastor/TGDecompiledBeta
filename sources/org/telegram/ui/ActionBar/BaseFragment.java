@@ -44,6 +44,7 @@ public class BaseFragment {
     protected boolean hasOwnBackground;
     protected boolean inPreviewMode;
     private boolean isFinished;
+    protected boolean isPaused;
     protected ActionBarLayout parentLayout;
     protected boolean swipeBackEnabled = false;
     protected Dialog visibleDialog;
@@ -105,9 +106,6 @@ public class BaseFragment {
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
     }
 
-    public void onResume() {
-    }
-
     /* Access modifiers changed, original: protected */
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
     }
@@ -126,6 +124,7 @@ public class BaseFragment {
         this.currentAccount = UserConfig.selectedAccount;
         this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
+        this.isPaused = true;
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
@@ -133,6 +132,7 @@ public class BaseFragment {
         this.currentAccount = UserConfig.selectedAccount;
         this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
+        this.isPaused = true;
         this.arguments = bundle;
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
@@ -318,11 +318,16 @@ public class BaseFragment {
         }
     }
 
+    public void onResume() {
+        this.isPaused = false;
+    }
+
     public void onPause() {
         ActionBar actionBar = this.actionBar;
         if (actionBar != null) {
             actionBar.onPause();
         }
+        this.isPaused = true;
         try {
             if (this.visibleDialog != null && this.visibleDialog.isShowing() && dismissDialogOnPause(this.visibleDialog)) {
                 this.visibleDialog.dismiss();

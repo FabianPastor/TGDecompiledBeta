@@ -1245,7 +1245,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         boolean z2 = this.canEdit;
         if (z2) {
             Chat chat = this.currentChat;
-            if (chat != null && chat.creator && this.currentType == 0 && hasAllAdminRights()) {
+            if (chat != null && chat.creator && this.currentType == 0 && hasAllAdminRights() && !this.currentUser.bot) {
                 i2 = this.rowCount;
                 this.rowCount = i2 + 1;
                 this.transferOwnerShadowRow = i2;

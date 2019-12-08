@@ -1696,15 +1696,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         /*
         r11 = this;
         r0 = r11.listView;
-        if (r0 == 0) goto L_0x025a;
+        if (r0 == 0) goto L_0x025b;
     L_0x0004:
         r0 = r0.getAdapter();
-        if (r0 == 0) goto L_0x025a;
+        if (r0 == 0) goto L_0x025b;
     L_0x000a:
         r0 = r11.getParentActivity();
         if (r0 != 0) goto L_0x0012;
     L_0x0010:
-        goto L_0x025a;
+        goto L_0x025b;
     L_0x0012:
         r0 = r11.listView;
         r0 = r0.getAdapter();
@@ -1956,103 +1956,103 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r13 = r11.dialogsAdapter;
         r13.addOrRemoveSelectedDialog(r7, r12);
         r11.updateSelectedCount();
-        goto L_0x025a;
+        goto L_0x025b;
     L_0x01a0:
         r11.didSelectResult(r7, r5, r6);
-        goto L_0x025a;
+        goto L_0x025b;
     L_0x01a5:
         r12 = new android.os.Bundle;
         r12.<init>();
         r3 = (int) r7;
         r9 = r7 >> r2;
         r2 = (int) r9;
-        if (r3 == 0) goto L_0x01e6;
+        if (r3 == 0) goto L_0x01e7;
     L_0x01b0:
         r4 = "chat_id";
         if (r2 != r5) goto L_0x01b8;
     L_0x01b4:
         r12.putInt(r4, r3);
-        goto L_0x01eb;
+        goto L_0x01ec;
     L_0x01b8:
-        if (r3 <= 0) goto L_0x01c0;
+        if (r3 <= 0) goto L_0x01c1;
     L_0x01ba:
         r2 = "user_id";
         r12.putInt(r2, r3);
-        goto L_0x01eb;
-    L_0x01c0:
-        if (r3 >= 0) goto L_0x01eb;
-    L_0x01c2:
-        if (r1 == 0) goto L_0x01e1;
-    L_0x01c4:
+        goto L_0x01ec;
+    L_0x01c1:
+        if (r3 >= 0) goto L_0x01ec;
+    L_0x01c3:
+        if (r1 == 0) goto L_0x01e2;
+    L_0x01c5:
         r2 = r11.getMessagesController();
         r5 = -r3;
         r5 = java.lang.Integer.valueOf(r5);
         r2 = r2.getChat(r5);
-        if (r2 == 0) goto L_0x01e1;
-    L_0x01d3:
+        if (r2 == 0) goto L_0x01e2;
+    L_0x01d4:
         r5 = r2.migrated_to;
-        if (r5 == 0) goto L_0x01e1;
-    L_0x01d7:
+        if (r5 == 0) goto L_0x01e2;
+    L_0x01d8:
         r5 = "migrated_to";
         r12.putInt(r5, r3);
         r2 = r2.migrated_to;
         r2 = r2.channel_id;
         r3 = -r2;
-    L_0x01e1:
+    L_0x01e2:
         r2 = -r3;
         r12.putInt(r4, r2);
-        goto L_0x01eb;
-    L_0x01e6:
+        goto L_0x01ec;
+    L_0x01e7:
         r3 = "enc_id";
         r12.putInt(r3, r2);
-    L_0x01eb:
-        if (r1 == 0) goto L_0x01f3;
-    L_0x01ed:
+    L_0x01ec:
+        if (r1 == 0) goto L_0x01f4;
+    L_0x01ee:
         r13 = "message_id";
         r12.putInt(r13, r1);
-        goto L_0x0207;
-    L_0x01f3:
-        if (r13 != 0) goto L_0x01f9;
-    L_0x01f5:
+        goto L_0x0208;
+    L_0x01f4:
+        if (r13 != 0) goto L_0x01fa;
+    L_0x01f6:
         r11.closeSearch();
-        goto L_0x0207;
-    L_0x01f9:
+        goto L_0x0208;
+    L_0x01fa:
         r13 = r11.searchObject;
-        if (r13 == 0) goto L_0x0207;
-    L_0x01fd:
+        if (r13 == 0) goto L_0x0208;
+    L_0x01fe:
         r1 = r11.dialogsSearchAdapter;
         r2 = r11.searchDialogId;
         r1.putRecentSearch(r2, r13);
         r13 = 0;
         r11.searchObject = r13;
-    L_0x0207:
+    L_0x0208:
         r13 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r13 == 0) goto L_0x0226;
-    L_0x020d:
+        if (r13 == 0) goto L_0x0227;
+    L_0x020e:
         r1 = r11.openedDialogId;
         r13 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1));
-        if (r13 != 0) goto L_0x0218;
-    L_0x0213:
+        if (r13 != 0) goto L_0x0219;
+    L_0x0214:
         r13 = r11.dialogsSearchAdapter;
-        if (r0 == r13) goto L_0x0218;
-    L_0x0217:
-        return;
+        if (r0 == r13) goto L_0x0219;
     L_0x0218:
+        return;
+    L_0x0219:
         r13 = r11.dialogsAdapter;
-        if (r13 == 0) goto L_0x0226;
-    L_0x021c:
+        if (r13 == 0) goto L_0x0227;
+    L_0x021d:
         r11.openedDialogId = r7;
         r13.setOpenedDialogId(r7);
         r13 = 512; // 0x200 float:7.175E-43 double:2.53E-321;
         r11.updateVisibleRows(r13);
-    L_0x0226:
+    L_0x0227:
         r13 = r11.searchString;
-        if (r13 == 0) goto L_0x0248;
-    L_0x022a:
+        if (r13 == 0) goto L_0x0249;
+    L_0x022b:
         r13 = r11.getMessagesController();
         r13 = r13.checkCanOpenChat(r12, r11);
-        if (r13 == 0) goto L_0x025a;
-    L_0x0234:
+        if (r13 == 0) goto L_0x025b;
+    L_0x0235:
         r13 = r11.getNotificationCenter();
         r0 = org.telegram.messenger.NotificationCenter.closeChats;
         r1 = new java.lang.Object[r6];
@@ -2060,16 +2060,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r13 = new org.telegram.ui.ChatActivity;
         r13.<init>(r12);
         r11.presentFragment(r13);
-        goto L_0x025a;
-    L_0x0248:
+        goto L_0x025b;
+    L_0x0249:
         r13 = r11.getMessagesController();
         r13 = r13.checkCanOpenChat(r12, r11);
-        if (r13 == 0) goto L_0x025a;
-    L_0x0252:
+        if (r13 == 0) goto L_0x025b;
+    L_0x0253:
         r13 = new org.telegram.ui.ChatActivity;
         r13.<init>(r12);
         r11.presentFragment(r13);
-    L_0x025a:
+    L_0x025b:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.lambda$createView$3$DialogsActivity(android.view.View, int):void");
@@ -3430,7 +3430,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         } else if (i == NotificationCenter.proxySettingsChanged) {
             updateProxyButton(false);
         } else if (i == NotificationCenter.updateInterfaces) {
-            updateVisibleRows(((Integer) objArr[0]).intValue());
+            Integer num = (Integer) objArr[0];
+            updateVisibleRows(num.intValue());
+            if ((num.intValue() & 4) != 0) {
+                dialogsAdapter = this.dialogsAdapter;
+                if (dialogsAdapter != null) {
+                    dialogsAdapter.sortOnlineContacts(true);
+                }
+            }
         } else if (i == NotificationCenter.appDidLogout) {
             dialogsLoaded[this.currentAccount] = false;
         } else if (i == NotificationCenter.encryptedChatUpdated) {
@@ -3487,7 +3494,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         } else if (i != NotificationCenter.dialogsUnreadCounterChanged) {
             if (i == NotificationCenter.needDeleteDialog) {
-                if (this.fragmentView != null) {
+                if (this.fragmentView != null && !this.isPaused) {
                     long longValue2 = ((Long) objArr[0]).longValue();
                     User user = (User) objArr[1];
                     Runnable -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g = new -$$Lambda$DialogsActivity$SHFUF_xzVvtOneSCklijoIHeS8g(this, (Chat) objArr[2], longValue2, ((Boolean) objArr[3]).booleanValue());
@@ -3775,6 +3782,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     public ThemeDescription[] getThemeDescriptions() {
+        LottieDrawable lottieDrawable;
         -$$Lambda$DialogsActivity$kk8TCoSt0Vvk5iX4TZpsEfeGO6c -__lambda_dialogsactivity_kk8tcost0vvk5ix4tzpsefego6c = new -$$Lambda$DialogsActivity$kk8TCoSt0Vvk5iX4TZpsEfeGO6c(this);
         ArrayList arrayList = new ArrayList();
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"));
@@ -3872,17 +3880,41 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveAvatarDrawable}, "Box2", "avatar_text"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveAvatarDrawable}, "Box1", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_pinArchiveDrawable}, "Arrow", "chats_archiveIcon"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_pinArchiveDrawable}, "Line", "chats_archiveIcon"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unpinArchiveDrawable}, "Arrow", "chats_archiveIcon"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unpinArchiveDrawable}, "Line", "chats_archiveIcon"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveDrawable}, "Arrow", "chats_archiveBackground"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveDrawable}, "Box2", "chats_archiveIcon"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveDrawable}, "Box1", "chats_archiveIcon"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Arrow1", "chats_archiveIcon"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Arrow2", "chats_archivePinBackground"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Box2", "chats_archiveIcon"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Box1", "chats_archiveIcon"));
+        Drawable drawable = Theme.dialogs_pinArchiveDrawable;
+        if (drawable instanceof LottieDrawable) {
+            lottieDrawable = (LottieDrawable) drawable;
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow", "chats_archiveIcon"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Line", "chats_archiveIcon"));
+        } else {
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{drawable}, null, "chats_archiveIcon"));
+        }
+        drawable = Theme.dialogs_unpinArchiveDrawable;
+        if (drawable instanceof LottieDrawable) {
+            lottieDrawable = (LottieDrawable) drawable;
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow", "chats_archiveIcon"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Line", "chats_archiveIcon"));
+        } else {
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{drawable}, null, "chats_archiveIcon"));
+        }
+        drawable = Theme.dialogs_archiveDrawable;
+        if (drawable instanceof LottieDrawable) {
+            lottieDrawable = (LottieDrawable) drawable;
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow", "chats_archiveBackground"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Box2", "chats_archiveIcon"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Box1", "chats_archiveIcon"));
+        } else {
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{drawable}, null, "chats_archiveIcon"));
+        }
+        drawable = Theme.dialogs_unarchiveDrawable;
+        if (drawable instanceof LottieDrawable) {
+            lottieDrawable = (LottieDrawable) drawable;
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow1", "chats_archiveIcon"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow2", "chats_archivePinBackground"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Box2", "chats_archiveIcon"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Box1", "chats_archiveIcon"));
+        } else {
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{drawable}, null, "chats_archiveIcon"));
+        }
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "chats_menuBackground"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuName"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuPhone"));

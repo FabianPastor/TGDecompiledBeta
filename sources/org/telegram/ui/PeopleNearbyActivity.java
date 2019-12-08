@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
@@ -61,6 +62,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.ShareLocationDrawable;
+import org.telegram.ui.Components.UndoView;
 
 public class PeopleNearbyActivity extends BaseFragment implements NotificationCenterDelegate, LocationFetchCallback {
     private static final int SHORT_POLL_TIMEOUT = 25000;
@@ -100,6 +102,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
     private AnimatorSet showProgressAnimation;
     private Runnable showProgressRunnable;
     private boolean showingLoadingProgress;
+    private UndoView undoView;
     private ArrayList<TL_peerLocated> users = new ArrayList(getLocationController().getCachedNearbyUsers());
     private int usersEmptyRow;
     private int usersEndRow;
@@ -365,6 +368,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         super.onFragmentCreate();
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.newLocationAvailable);
         getNotificationCenter().addObserver(this, NotificationCenter.newPeopleNearbyAvailable);
+        getNotificationCenter().addObserver(this, NotificationCenter.needDeleteDialog);
         checkCanCreateGroup();
         sendRequest(false);
         AndroidUtilities.runOnUIThread(this.shortPollRunnable, 25000);
@@ -375,6 +379,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         super.onFragmentDestroy();
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.newLocationAvailable);
         getNotificationCenter().removeObserver(this, NotificationCenter.newPeopleNearbyAvailable);
+        getNotificationCenter().removeObserver(this, NotificationCenter.needDeleteDialog);
         Runnable runnable = this.shortPollRunnable;
         if (runnable != null) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
@@ -389,6 +394,10 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         if (runnable != null) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
             this.showProgressRunnable = null;
+        }
+        UndoView undoView = this.undoView;
+        if (undoView != null) {
+            undoView.hide(true, 0);
         }
     }
 
@@ -415,13 +424,15 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        RecyclerListView recyclerListView2 = this.listView;
+        recyclerListView = this.listView;
         if (!LocaleController.isRTL) {
             i = 2;
         }
-        recyclerListView2.setVerticalScrollbarPosition(i);
+        recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new -$$Lambda$PeopleNearbyActivity$Qap2kZjT1Phz_rvar_FyNJeztgy8(this));
+        this.undoView = new UndoView(context);
+        frameLayout.addView(this.undoView, LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 8.0f));
         updateRows();
         return this.fragmentView;
     }
@@ -649,7 +660,20 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     public void onPause() {
         super.onPause();
+        UndoView undoView = this.undoView;
+        if (undoView != null) {
+            undoView.hide(true, 0);
+        }
         getLocationController().startLocationLookupForPeopleNearby(true);
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onBecomeFullyHidden() {
+        super.onBecomeFullyHidden();
+        UndoView undoView = this.undoView;
+        if (undoView != null) {
+            undoView.hide(true, 0);
+        }
     }
 
     public void onLocationAddressAvailable(String str, String str2, Location location) {
@@ -716,6 +740,26 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             }
             checkForExpiredLocations(true);
             updateRows();
+        } else if (i == NotificationCenter.needDeleteDialog && this.fragmentView != null && !this.isPaused) {
+            long longValue = ((Long) objArr[0]).longValue();
+            User user = (User) objArr[1];
+            Runnable -__lambda_peoplenearbyactivity_l7oxjy0b-wlmyvywbrjsu21acta = new -$$Lambda$PeopleNearbyActivity$l7oXjY0b-wLmYvYWbRJsU21AcTA(this, (Chat) objArr[2], longValue, ((Boolean) objArr[3]).booleanValue());
+            UndoView undoView = this.undoView;
+            if (undoView != null) {
+                undoView.showWithAction(longValue, 1, -__lambda_peoplenearbyactivity_l7oxjy0b-wlmyvywbrjsu21acta);
+            } else {
+                -__lambda_peoplenearbyactivity_l7oxjy0b-wlmyvywbrjsu21acta.run();
+            }
+        }
+    }
+
+    public /* synthetic */ void lambda$didReceivedNotification$7$PeopleNearbyActivity(Chat chat, long j, boolean z) {
+        if (chat == null) {
+            getMessagesController().deleteDialog(j, 0, z);
+        } else if (ChatObject.isNotInChat(chat)) {
+            getMessagesController().deleteDialog(j, 0, z);
+        } else {
+            getMessagesController().deleteUserFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), null, false, z);
         }
     }
 
@@ -756,20 +800,20 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             getLocationController().setCachedNearbyUsersAndChats(this.users, this.chats);
         }
         if (i2 != Integer.MAX_VALUE) {
-            -$$Lambda$PeopleNearbyActivity$-JJbumohTDgMYtKfclf-hulUL1I -__lambda_peoplenearbyactivity_-jjbumohtdgmytkfclf-hulul1i = new -$$Lambda$PeopleNearbyActivity$-JJbumohTDgMYtKfclf-hulUL1I(this);
-            this.checkExpiredRunnable = -__lambda_peoplenearbyactivity_-jjbumohtdgmytkfclf-hulul1i;
-            AndroidUtilities.runOnUIThread(-__lambda_peoplenearbyactivity_-jjbumohtdgmytkfclf-hulul1i, (long) ((i2 - currentTime) * 1000));
+            -$$Lambda$PeopleNearbyActivity$9rkO2iqBs2f1u0FRyFN3brPpvY4 -__lambda_peoplenearbyactivity_9rko2iqbs2f1u0fryfn3brppvy4 = new -$$Lambda$PeopleNearbyActivity$9rkO2iqBs2f1u0FRyFN3brPpvY4(this);
+            this.checkExpiredRunnable = -__lambda_peoplenearbyactivity_9rko2iqbs2f1u0fryfn3brppvy4;
+            AndroidUtilities.runOnUIThread(-__lambda_peoplenearbyactivity_9rko2iqbs2f1u0fryfn3brppvy4, (long) ((i2 - currentTime) * 1000));
         }
     }
 
-    public /* synthetic */ void lambda$checkForExpiredLocations$7$PeopleNearbyActivity() {
+    public /* synthetic */ void lambda$checkForExpiredLocations$8$PeopleNearbyActivity() {
         this.checkExpiredRunnable = null;
         checkForExpiredLocations(false);
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        -$$Lambda$PeopleNearbyActivity$Xh35-tY7bRwDvzkcNu6g0_gG1Ew -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew = new -$$Lambda$PeopleNearbyActivity$Xh35-tY7bRwDvzkcNu6g0_gG1Ew(this);
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[30];
+        -$$Lambda$PeopleNearbyActivity$BD_IAr3r6B6E9m17l1OW7ZTzfLY -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly = new -$$Lambda$PeopleNearbyActivity$BD_IAr3r6B6E9m17l1OW7ZTzfLY(this);
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[37];
         themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class, ManageChatTextCell.class, HeaderCell.class, TextView.class}, null, null, null, "windowBackgroundWhite");
         themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundGray");
         themeDescriptionArr[2] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundWhite");
@@ -792,18 +836,18 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         view2 = view;
         themeDescriptionArr[12] = new ThemeDescription(view2, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{HeaderCellProgress.class}, new String[]{"progressView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
         themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew;
+        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly;
         themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
         themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
         themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
-        -$$Lambda$PeopleNearbyActivity$Xh35-tY7bRwDvzkcNu6g0_gG1Ew -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew2 = -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew;
-        themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew2, "avatar_backgroundRed");
-        themeDescriptionArr[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew2, "avatar_backgroundOrange");
-        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew2, "avatar_backgroundViolet");
-        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew2, "avatar_backgroundGreen");
-        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew2, "avatar_backgroundCyan");
-        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew2, "avatar_backgroundBlue");
-        themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_xh35-ty7brwdvzkcnu6g0_gg1ew2, "avatar_backgroundPink");
+        -$$Lambda$PeopleNearbyActivity$BD_IAr3r6B6E9m17l1OW7ZTzfLY -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly2 = -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly;
+        themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly2, "avatar_backgroundRed");
+        themeDescriptionArr[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly2, "avatar_backgroundOrange");
+        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly2, "avatar_backgroundViolet");
+        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly2, "avatar_backgroundGreen");
+        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly2, "avatar_backgroundCyan");
+        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly2, "avatar_backgroundBlue");
+        themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_bd_iar3r6b6e9m17l1ow7ztzfly2, "avatar_backgroundPink");
         view = this.listView;
         int i = ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE;
         clsArr = new Class[]{HintInnerCell.class};
@@ -823,10 +867,17 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         view = this.listView;
         view3 = view;
         themeDescriptionArr[29] = new ThemeDescription(view3, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueIcon");
+        themeDescriptionArr[30] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "undo_background");
+        themeDescriptionArr[31] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, null, null, null, "undo_cancelColor");
+        themeDescriptionArr[32] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, null, null, null, "undo_cancelColor");
+        themeDescriptionArr[33] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"infoTextView"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[34] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"subinfoTextView"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[35] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"textPaint"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[36] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"progressPaint"}, null, null, null, "undo_infoColor");
         return themeDescriptionArr;
     }
 
-    public /* synthetic */ void lambda$getThemeDescriptions$8$PeopleNearbyActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$9$PeopleNearbyActivity() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

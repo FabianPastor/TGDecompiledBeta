@@ -97,6 +97,7 @@ public class NotificationCenter {
     public static final int needReloadRecentDialogsSearch;
     public static final int needSetDayNightTheme;
     public static final int needShowAlert;
+    public static final int needShowPlayServicesAlert;
     public static final int newDraftReceived;
     public static final int newEmojiSuggestionsAvailable;
     public static final int newLocationAvailable;
@@ -329,6 +330,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         needShowAlert = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        needShowPlayServicesAlert = i;
         i = totalEvents;
         totalEvents = i + 1;
         didUpdatedMessagesViews = i;
