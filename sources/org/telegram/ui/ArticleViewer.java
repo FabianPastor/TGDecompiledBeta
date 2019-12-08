@@ -13317,7 +13317,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     } else {
                         str2 = this.currentPage.cached_page.url;
                     }
-                    Browser.openUrl(this.parentActivity, str2);
+                    Browser.openUrl(this.parentActivity, str2, true, false);
                 } else if (i == 4) {
                     Builder builder = new Builder(activity);
                     builder.setApplyTopPadding(false);

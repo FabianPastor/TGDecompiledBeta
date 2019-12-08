@@ -78,18 +78,20 @@ public class TextInfoPrivacyCell extends FrameLayout {
                 this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp((float) this.bottomPadding));
             }
             CharSequence charSequence2 = null;
-            int length = charSequence.length();
-            while (i < length - 1) {
-                if (charSequence.charAt(i) == 10) {
-                    int i2 = i + 1;
-                    if (charSequence.charAt(i2) == 10) {
-                        if (charSequence2 == null) {
-                            charSequence2 = new SpannableString(charSequence);
+            if (charSequence != null) {
+                int length = charSequence.length();
+                while (i < length - 1) {
+                    if (charSequence.charAt(i) == 10) {
+                        int i2 = i + 1;
+                        if (charSequence.charAt(i2) == 10) {
+                            if (charSequence2 == null) {
+                                charSequence2 = new SpannableString(charSequence);
+                            }
+                            charSequence2.setSpan(new AbsoluteSizeSpan(10, true), i2, i + 2, 33);
                         }
-                        charSequence2.setSpan(new AbsoluteSizeSpan(10, true), i2, i + 2, 33);
                     }
+                    i++;
                 }
-                i++;
             }
             TextView textView = this.textView;
             if (charSequence2 != null) {
