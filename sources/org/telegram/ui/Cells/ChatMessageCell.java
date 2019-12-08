@@ -4002,7 +4002,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                     invalidate();
                 }
-            } else if (!PhotoViewer.isPlayingMessage(messageObject) && !MediaController.getInstance().isGoingToShowMessageObject(this.currentMessageObject)) {
+            } else if (this.infoLayout == null || !(PhotoViewer.isPlayingMessage(messageObject) || MediaController.getInstance().isGoingToShowMessageObject(this.currentMessageObject))) {
                 AnimatedFileDrawable animation = this.photoImage.getAnimation();
                 if (animation != null) {
                     i = animation.getDurationMs() / 1000;

@@ -2967,7 +2967,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (z) {
                 this.blockedUsers.clear();
             }
-            this.totalBlockedCount = contacts_blocked.count;
+            this.totalBlockedCount = Math.max(contacts_blocked.count, contacts_blocked.blocked.size());
             this.blockedEndReached = contacts_blocked.blocked.size() < tL_contacts_getBlocked.limit;
             int size = contacts_blocked.blocked.size();
             for (int i = 0; i < size; i++) {

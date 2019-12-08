@@ -23,6 +23,7 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 
 public class VideoSeekPreviewImage extends ImageView {
     private Bitmap backgroundBitmap;
+    private Bitmap bitmapToRecycle;
     private int currentPixel = -1;
     private VideoSeekPreviewImageDelegate delegate;
     private RectF dstR = new RectF();
@@ -114,7 +115,11 @@ public class VideoSeekPreviewImage extends ImageView {
             int i;
             Drawable drawable = getDrawable();
             if (drawable instanceof BitmapDrawable) {
-                ((BitmapDrawable) drawable).getBitmap().recycle();
+                Bitmap bitmap2 = this.bitmapToRecycle;
+                if (bitmap2 != null) {
+                    bitmap2.recycle();
+                }
+                this.bitmapToRecycle = ((BitmapDrawable) drawable).getBitmap();
             }
             setImageBitmap(bitmap);
             int dp = AndroidUtilities.dp(150.0f);
@@ -199,6 +204,19 @@ public class VideoSeekPreviewImage extends ImageView {
         return this.ready;
     }
 
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
+        Bitmap bitmap = this.bitmapToRecycle;
+        if (bitmap != null) {
+            bitmap.recycle();
+            this.bitmapToRecycle = null;
+        }
+        try {
+            super.onDraw(canvas);
+        } catch (Throwable unused) {
+        }
+    }
+
     public void close() {
         if (this.loadRunnable != null) {
             Utilities.globalQueue.cancelRunnable(this.loadRunnable);
@@ -214,6 +232,15 @@ public class VideoSeekPreviewImage extends ImageView {
         }
         Utilities.globalQueue.postRunnable(new -$$Lambda$VideoSeekPreviewImage$8K7QnWcf3CoeFLmHeaIUHXjugzI(this));
         setVisibility(4);
+        Drawable drawable = getDrawable();
+        if (drawable instanceof BitmapDrawable) {
+            Bitmap bitmap = this.bitmapToRecycle;
+            if (bitmap != null) {
+                bitmap.recycle();
+            }
+            this.bitmapToRecycle = ((BitmapDrawable) drawable).getBitmap();
+        }
+        setImageDrawable(null);
         this.currentPixel = -1;
         this.videoUri = null;
         this.ready = false;

@@ -18,10 +18,7 @@ import org.telegram.messenger.FileLog;
 
 public class CameraSession {
     public static final int ORIENTATION_HYSTERESIS = 5;
-    private AutoFocusCallback autoFocusCallback = new AutoFocusCallback() {
-        public void onAutoFocus(boolean z, Camera camera) {
-        }
-    };
+    private AutoFocusCallback autoFocusCallback = -$$Lambda$CameraSession$XMt9_OOlnCLbx3LVWHZ1eqpLkD4.INSTANCE;
     protected CameraInfo cameraInfo;
     private String currentFlashMode;
     private int currentOrientation;
@@ -32,12 +29,16 @@ public class CameraSession {
     private int jpegOrientation;
     private int lastDisplayOrientation = -1;
     private int lastOrientation = -1;
+    private int maxZoom;
     private boolean meteringAreaSupported;
     private OrientationEventListener orientationEventListener;
     private final int pictureFormat;
     private final Size pictureSize;
     private final Size previewSize;
     private boolean sameTakePictureOrientation;
+
+    static /* synthetic */ void lambda$new$0(boolean z, Camera camera) {
+    }
 
     public CameraSession(CameraInfo cameraInfo, Size size, Size size2, int i) {
         this.previewSize = size;
@@ -363,47 +364,47 @@ public class CameraSession {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x0055 A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00e8 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0065 A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00e8 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x005b A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00e8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0055 A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00f1 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0065 A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00f1 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x005b A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00f1 }} */
     /* JADX WARNING: Removed duplicated region for block: B:68:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x00e5 A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00e8 }} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:59:0x00df */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x00e5 A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00e8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x00ee A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00f1 }} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:55:0x00e0 */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x00ee A:{Catch:{ Exception -> 0x0011, Throwable -> 0x00f1 }} */
     /* JADX WARNING: Removed duplicated region for block: B:68:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:55:0x00d7 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:59:0x00e8 */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
     public void configurePhotoCamera() {
         /*
         r9 = this;
-        r0 = r9.cameraInfo;	 Catch:{ Throwable -> 0x00e8 }
-        r0 = r0.camera;	 Catch:{ Throwable -> 0x00e8 }
-        if (r0 == 0) goto L_0x00ec;
+        r0 = r9.cameraInfo;	 Catch:{ Throwable -> 0x00f1 }
+        r0 = r0.camera;	 Catch:{ Throwable -> 0x00f1 }
+        if (r0 == 0) goto L_0x00f5;
     L_0x0006:
-        r1 = new android.hardware.Camera$CameraInfo;	 Catch:{ Throwable -> 0x00e8 }
-        r1.<init>();	 Catch:{ Throwable -> 0x00e8 }
+        r1 = new android.hardware.Camera$CameraInfo;	 Catch:{ Throwable -> 0x00f1 }
+        r1.<init>();	 Catch:{ Throwable -> 0x00f1 }
         r2 = 0;
         r2 = r0.getParameters();	 Catch:{ Exception -> 0x0011 }
         goto L_0x0015;
     L_0x0011:
         r3 = move-exception;
-        org.telegram.messenger.FileLog.e(r3);	 Catch:{ Throwable -> 0x00e8 }
+        org.telegram.messenger.FileLog.e(r3);	 Catch:{ Throwable -> 0x00f1 }
     L_0x0015:
-        r3 = r9.cameraInfo;	 Catch:{ Throwable -> 0x00e8 }
-        r3 = r3.getCameraId();	 Catch:{ Throwable -> 0x00e8 }
-        android.hardware.Camera.getCameraInfo(r3, r1);	 Catch:{ Throwable -> 0x00e8 }
+        r3 = r9.cameraInfo;	 Catch:{ Throwable -> 0x00f1 }
+        r3 = r3.getCameraId();	 Catch:{ Throwable -> 0x00f1 }
+        android.hardware.Camera.getCameraInfo(r3, r1);	 Catch:{ Throwable -> 0x00f1 }
         r3 = 1;
-        r4 = r9.getDisplayOrientation(r1, r3);	 Catch:{ Throwable -> 0x00e8 }
+        r4 = r9.getDisplayOrientation(r1, r3);	 Catch:{ Throwable -> 0x00f1 }
         r5 = "samsung";
-        r6 = android.os.Build.MANUFACTURER;	 Catch:{ Throwable -> 0x00e8 }
-        r5 = r5.equals(r6);	 Catch:{ Throwable -> 0x00e8 }
+        r6 = android.os.Build.MANUFACTURER;	 Catch:{ Throwable -> 0x00f1 }
+        r5 = r5.equals(r6);	 Catch:{ Throwable -> 0x00f1 }
         r6 = 0;
         if (r5 == 0) goto L_0x003a;
     L_0x002e:
         r5 = "sf2wifixx";
-        r7 = android.os.Build.PRODUCT;	 Catch:{ Throwable -> 0x00e8 }
-        r5 = r5.equals(r7);	 Catch:{ Throwable -> 0x00e8 }
+        r7 = android.os.Build.PRODUCT;	 Catch:{ Throwable -> 0x00f1 }
+        r5 = r5.equals(r7);	 Catch:{ Throwable -> 0x00f1 }
         if (r5 == 0) goto L_0x003a;
     L_0x0038:
         r5 = 0;
@@ -431,104 +432,107 @@ public class CameraSession {
     L_0x004e:
         r7 = 90;
     L_0x0050:
-        r8 = r1.orientation;	 Catch:{ Throwable -> 0x00e8 }
+        r8 = r1.orientation;	 Catch:{ Throwable -> 0x00f1 }
         r8 = r8 % r5;
         if (r8 == 0) goto L_0x0057;
     L_0x0055:
-        r1.orientation = r6;	 Catch:{ Throwable -> 0x00e8 }
+        r1.orientation = r6;	 Catch:{ Throwable -> 0x00f1 }
     L_0x0057:
-        r5 = r1.facing;	 Catch:{ Throwable -> 0x00e8 }
+        r5 = r1.facing;	 Catch:{ Throwable -> 0x00f1 }
         if (r5 != r3) goto L_0x0065;
     L_0x005b:
-        r5 = r1.orientation;	 Catch:{ Throwable -> 0x00e8 }
+        r5 = r1.orientation;	 Catch:{ Throwable -> 0x00f1 }
         r5 = r5 + r7;
         r5 = r5 % 360;
         r5 = 360 - r5;
         r5 = r5 % 360;
         goto L_0x006c;
     L_0x0065:
-        r5 = r1.orientation;	 Catch:{ Throwable -> 0x00e8 }
+        r5 = r1.orientation;	 Catch:{ Throwable -> 0x00f1 }
         r5 = r5 - r7;
         r5 = r5 + 360;
         r5 = r5 % 360;
     L_0x006c:
-        r9.currentOrientation = r5;	 Catch:{ Throwable -> 0x00e8 }
-        r0.setDisplayOrientation(r5);	 Catch:{ Throwable -> 0x00e8 }
-        if (r2 == 0) goto L_0x00ec;
+        r9.currentOrientation = r5;	 Catch:{ Throwable -> 0x00f1 }
+        r0.setDisplayOrientation(r5);	 Catch:{ Throwable -> 0x00f1 }
+        if (r2 == 0) goto L_0x00f5;
     L_0x0073:
-        r5 = r9.previewSize;	 Catch:{ Throwable -> 0x00e8 }
-        r5 = r5.getWidth();	 Catch:{ Throwable -> 0x00e8 }
-        r7 = r9.previewSize;	 Catch:{ Throwable -> 0x00e8 }
-        r7 = r7.getHeight();	 Catch:{ Throwable -> 0x00e8 }
-        r2.setPreviewSize(r5, r7);	 Catch:{ Throwable -> 0x00e8 }
-        r5 = r9.pictureSize;	 Catch:{ Throwable -> 0x00e8 }
-        r5 = r5.getWidth();	 Catch:{ Throwable -> 0x00e8 }
-        r7 = r9.pictureSize;	 Catch:{ Throwable -> 0x00e8 }
-        r7 = r7.getHeight();	 Catch:{ Throwable -> 0x00e8 }
-        r2.setPictureSize(r5, r7);	 Catch:{ Throwable -> 0x00e8 }
-        r5 = r9.pictureFormat;	 Catch:{ Throwable -> 0x00e8 }
-        r2.setPictureFormat(r5);	 Catch:{ Throwable -> 0x00e8 }
+        r5 = r9.previewSize;	 Catch:{ Throwable -> 0x00f1 }
+        r5 = r5.getWidth();	 Catch:{ Throwable -> 0x00f1 }
+        r7 = r9.previewSize;	 Catch:{ Throwable -> 0x00f1 }
+        r7 = r7.getHeight();	 Catch:{ Throwable -> 0x00f1 }
+        r2.setPreviewSize(r5, r7);	 Catch:{ Throwable -> 0x00f1 }
+        r5 = r9.pictureSize;	 Catch:{ Throwable -> 0x00f1 }
+        r5 = r5.getWidth();	 Catch:{ Throwable -> 0x00f1 }
+        r7 = r9.pictureSize;	 Catch:{ Throwable -> 0x00f1 }
+        r7 = r7.getHeight();	 Catch:{ Throwable -> 0x00f1 }
+        r2.setPictureSize(r5, r7);	 Catch:{ Throwable -> 0x00f1 }
+        r5 = r9.pictureFormat;	 Catch:{ Throwable -> 0x00f1 }
+        r2.setPictureFormat(r5);	 Catch:{ Throwable -> 0x00f1 }
+        r5 = r2.getMaxZoom();	 Catch:{ Throwable -> 0x00f1 }
+        r9.maxZoom = r5;	 Catch:{ Throwable -> 0x00f1 }
+        r2.getZoom();	 Catch:{ Throwable -> 0x00f1 }
         r5 = "continuous-picture";
-        r7 = r2.getSupportedFocusModes();	 Catch:{ Throwable -> 0x00e8 }
-        r7 = r7.contains(r5);	 Catch:{ Throwable -> 0x00e8 }
-        if (r7 == 0) goto L_0x00a5;
-    L_0x00a2:
-        r2.setFocusMode(r5);	 Catch:{ Throwable -> 0x00e8 }
-    L_0x00a5:
-        r5 = r9.jpegOrientation;	 Catch:{ Throwable -> 0x00e8 }
-        r7 = -1;
-        if (r5 == r7) goto L_0x00c0;
-    L_0x00aa:
-        r5 = r1.facing;	 Catch:{ Throwable -> 0x00e8 }
-        if (r5 != r3) goto L_0x00b8;
+        r7 = r2.getSupportedFocusModes();	 Catch:{ Throwable -> 0x00f1 }
+        r7 = r7.contains(r5);	 Catch:{ Throwable -> 0x00f1 }
+        if (r7 == 0) goto L_0x00ae;
+    L_0x00ab:
+        r2.setFocusMode(r5);	 Catch:{ Throwable -> 0x00f1 }
     L_0x00ae:
-        r5 = r1.orientation;	 Catch:{ Throwable -> 0x00e8 }
-        r7 = r9.jpegOrientation;	 Catch:{ Throwable -> 0x00e8 }
+        r5 = r9.jpegOrientation;	 Catch:{ Throwable -> 0x00f1 }
+        r7 = -1;
+        if (r5 == r7) goto L_0x00c9;
+    L_0x00b3:
+        r5 = r1.facing;	 Catch:{ Throwable -> 0x00f1 }
+        if (r5 != r3) goto L_0x00c1;
+    L_0x00b7:
+        r5 = r1.orientation;	 Catch:{ Throwable -> 0x00f1 }
+        r7 = r9.jpegOrientation;	 Catch:{ Throwable -> 0x00f1 }
         r5 = r5 - r7;
         r5 = r5 + 360;
         r5 = r5 % 360;
-        goto L_0x00c1;
-    L_0x00b8:
-        r5 = r1.orientation;	 Catch:{ Throwable -> 0x00e8 }
-        r7 = r9.jpegOrientation;	 Catch:{ Throwable -> 0x00e8 }
+        goto L_0x00ca;
+    L_0x00c1:
+        r5 = r1.orientation;	 Catch:{ Throwable -> 0x00f1 }
+        r7 = r9.jpegOrientation;	 Catch:{ Throwable -> 0x00f1 }
         r5 = r5 + r7;
         r5 = r5 % 360;
-        goto L_0x00c1;
-    L_0x00c0:
+        goto L_0x00ca;
+    L_0x00c9:
         r5 = 0;
-    L_0x00c1:
-        r2.setRotation(r5);	 Catch:{ Exception -> 0x00d7 }
-        r1 = r1.facing;	 Catch:{ Exception -> 0x00d7 }
-        if (r1 != r3) goto L_0x00d2;
-    L_0x00c8:
+    L_0x00ca:
+        r2.setRotation(r5);	 Catch:{ Exception -> 0x00e0 }
+        r1 = r1.facing;	 Catch:{ Exception -> 0x00e0 }
+        if (r1 != r3) goto L_0x00db;
+    L_0x00d1:
         r1 = 360 - r4;
         r1 = r1 % 360;
-        if (r1 != r5) goto L_0x00cf;
-    L_0x00ce:
-        r6 = 1;
-    L_0x00cf:
-        r9.sameTakePictureOrientation = r6;	 Catch:{ Exception -> 0x00d7 }
-        goto L_0x00d7;
-    L_0x00d2:
-        if (r4 != r5) goto L_0x00d5;
-    L_0x00d4:
-        r6 = 1;
-    L_0x00d5:
-        r9.sameTakePictureOrientation = r6;	 Catch:{ Exception -> 0x00d7 }
+        if (r1 != r5) goto L_0x00d8;
     L_0x00d7:
-        r1 = r9.currentFlashMode;	 Catch:{ Throwable -> 0x00e8 }
-        r2.setFlashMode(r1);	 Catch:{ Throwable -> 0x00e8 }
-        r0.setParameters(r2);	 Catch:{ Exception -> 0x00df }
-    L_0x00df:
-        r0 = r2.getMaxNumMeteringAreas();	 Catch:{ Throwable -> 0x00e8 }
-        if (r0 <= 0) goto L_0x00ec;
-    L_0x00e5:
-        r9.meteringAreaSupported = r3;	 Catch:{ Throwable -> 0x00e8 }
-        goto L_0x00ec;
+        r6 = 1;
+    L_0x00d8:
+        r9.sameTakePictureOrientation = r6;	 Catch:{ Exception -> 0x00e0 }
+        goto L_0x00e0;
+    L_0x00db:
+        if (r4 != r5) goto L_0x00de;
+    L_0x00dd:
+        r6 = 1;
+    L_0x00de:
+        r9.sameTakePictureOrientation = r6;	 Catch:{ Exception -> 0x00e0 }
+    L_0x00e0:
+        r1 = r9.currentFlashMode;	 Catch:{ Throwable -> 0x00f1 }
+        r2.setFlashMode(r1);	 Catch:{ Throwable -> 0x00f1 }
+        r0.setParameters(r2);	 Catch:{ Exception -> 0x00e8 }
     L_0x00e8:
+        r0 = r2.getMaxNumMeteringAreas();	 Catch:{ Throwable -> 0x00f1 }
+        if (r0 <= 0) goto L_0x00f5;
+    L_0x00ee:
+        r9.meteringAreaSupported = r3;	 Catch:{ Throwable -> 0x00f1 }
+        goto L_0x00f5;
+    L_0x00f1:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x00ec:
+    L_0x00f5:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraSession.configurePhotoCamera():void");
@@ -559,6 +563,36 @@ public class CameraSession {
                     try {
                         camera.setParameters(parameters);
                         camera.autoFocus(this.autoFocusCallback);
+                    } catch (Exception e2) {
+                        FileLog.e(e2);
+                    }
+                }
+            }
+        } catch (Exception e22) {
+            FileLog.e(e22);
+        }
+    }
+
+    /* Access modifiers changed, original: protected */
+    public int getMaxZoom() {
+        return this.maxZoom;
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void setZoom(float f) {
+        try {
+            Camera camera = this.cameraInfo.camera;
+            if (camera != null) {
+                Parameters parameters = null;
+                try {
+                    parameters = camera.getParameters();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                if (parameters != null) {
+                    parameters.setZoom((int) (f * ((float) this.maxZoom)));
+                    try {
+                        camera.setParameters(parameters);
                     } catch (Exception e2) {
                         FileLog.e(e2);
                     }

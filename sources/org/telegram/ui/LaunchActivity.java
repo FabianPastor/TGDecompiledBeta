@@ -1050,6 +1050,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     static /* synthetic */ void lambda$onCreate$3(View view) {
         int measuredHeight = view.getMeasuredHeight();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("height = ");
+        stringBuilder.append(measuredHeight);
+        stringBuilder.append(" displayHeight = ");
+        stringBuilder.append(AndroidUtilities.displaySize.y);
+        FileLog.d(stringBuilder.toString());
         if (VERSION.SDK_INT >= 21) {
             measuredHeight -= AndroidUtilities.statusBarHeight;
         }
@@ -1059,10 +1065,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             if (dp > point.y) {
                 point.y = measuredHeight;
                 if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("fix display size y to ");
-                    stringBuilder.append(AndroidUtilities.displaySize.y);
-                    FileLog.d(stringBuilder.toString());
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append("fix display size y to ");
+                    stringBuilder2.append(AndroidUtilities.displaySize.y);
+                    FileLog.d(stringBuilder2.toString());
                 }
             }
         }

@@ -2328,18 +2328,22 @@ public class Theme {
     }
 
     public static Drawable createSelectorDrawable(int i) {
-        return createSelectorDrawable(i, 1);
+        return createSelectorDrawable(i, 1, -1);
+    }
+
+    public static Drawable createSelectorDrawable(int i, int i2) {
+        return createSelectorDrawable(i, i2, -1);
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:24:0x0053  */
     /* JADX WARNING: Removed duplicated region for block: B:24:0x0053  */
-    public static android.graphics.drawable.Drawable createSelectorDrawable(int r10, final int r11) {
+    public static android.graphics.drawable.Drawable createSelectorDrawable(int r10, final int r11, int r12) {
         /*
         r0 = android.os.Build.VERSION.SDK_INT;
         r1 = 0;
         r2 = 1;
         r3 = 21;
-        if (r0 < r3) goto L_0x0065;
+        if (r0 < r3) goto L_0x0067;
     L_0x0008:
         r0 = 23;
         r3 = -1;
@@ -2395,42 +2399,45 @@ public class Theme {
         r10 = new android.graphics.drawable.RippleDrawable;
         r10.<init>(r7, r5, r6);
         r1 = android.os.Build.VERSION.SDK_INT;
-        if (r1 < r0) goto L_0x0064;
+        if (r1 < r0) goto L_0x0066;
     L_0x0053:
-        if (r11 != r2) goto L_0x005f;
+        if (r11 != r2) goto L_0x0061;
     L_0x0055:
+        if (r12 > 0) goto L_0x005d;
+    L_0x0057:
         r11 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);
-        r10.setRadius(r11);
-        goto L_0x0064;
-    L_0x005f:
-        if (r11 != r4) goto L_0x0064;
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r11);
+    L_0x005d:
+        r10.setRadius(r12);
+        goto L_0x0066;
     L_0x0061:
+        if (r11 != r4) goto L_0x0066;
+    L_0x0063:
         r10.setRadius(r3);
-    L_0x0064:
+    L_0x0066:
         return r10;
-    L_0x0065:
+    L_0x0067:
         r11 = new android.graphics.drawable.StateListDrawable;
         r11.<init>();
-        r0 = new int[r2];
-        r3 = 16842919; // 0x10100a7 float:2.3694026E-38 double:8.3215077E-317;
-        r0[r1] = r3;
-        r3 = new android.graphics.drawable.ColorDrawable;
-        r3.<init>(r10);
-        r11.addState(r0, r3);
-        r0 = new int[r2];
-        r2 = 16842913; // 0x10100a1 float:2.369401E-38 double:8.3215047E-317;
-        r0[r1] = r2;
-        r2 = new android.graphics.drawable.ColorDrawable;
-        r2.<init>(r10);
-        r11.addState(r0, r2);
-        r10 = android.util.StateSet.WILD_CARD;
+        r12 = new int[r2];
+        r0 = 16842919; // 0x10100a7 float:2.3694026E-38 double:8.3215077E-317;
+        r12[r1] = r0;
         r0 = new android.graphics.drawable.ColorDrawable;
-        r0.<init>(r1);
-        r11.addState(r10, r0);
+        r0.<init>(r10);
+        r11.addState(r12, r0);
+        r12 = new int[r2];
+        r0 = 16842913; // 0x10100a1 float:2.369401E-38 double:8.3215047E-317;
+        r12[r1] = r0;
+        r0 = new android.graphics.drawable.ColorDrawable;
+        r0.<init>(r10);
+        r11.addState(r12, r0);
+        r10 = android.util.StateSet.WILD_CARD;
+        r12 = new android.graphics.drawable.ColorDrawable;
+        r12.<init>(r1);
+        r11.addState(r10, r12);
         return r11;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createSelectorDrawable(int, int):android.graphics.drawable.Drawable");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createSelectorDrawable(int, int, int):android.graphics.drawable.Drawable");
     }
 
     public static void applyPreviousTheme() {

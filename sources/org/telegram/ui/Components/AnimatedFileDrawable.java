@@ -292,8 +292,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
         long j2 = this.nativePtr;
         Bitmap bitmap = this.backgroundBitmap;
-        getVideoFrame(j2, bitmap, this.metaData, bitmap.getRowBytes(), true);
-        return this.backgroundBitmap;
+        if (getVideoFrame(j2, bitmap, this.metaData, bitmap.getRowBytes(), true) != 0) {
+            return this.backgroundBitmap;
+        }
+        return null;
     }
 
     public void setParentView(View view) {
@@ -672,11 +674,20 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         AnimatedFileDrawable animatedFileDrawable;
         AnimatedFileDrawableStream animatedFileDrawableStream = this.stream;
         if (animatedFileDrawableStream != null) {
-            animatedFileDrawable = new AnimatedFileDrawable(this.path, false, this.streamFileSize, animatedFileDrawableStream.getDocument(), this.stream.getParentObject(), this.currentAccount, this.stream.isPreview());
-        } else {
             File file = this.path;
             long j = this.streamFileSize;
-            AnimatedFileDrawable animatedFileDrawable2 = new AnimatedFileDrawable(file, false, j, null, null, this.currentAccount, animatedFileDrawableStream.isPreview());
+            Document document = animatedFileDrawableStream.getDocument();
+            Object parentObject = this.stream.getParentObject();
+            int i = this.currentAccount;
+            animatedFileDrawableStream = this.stream;
+            boolean z = animatedFileDrawableStream != null && animatedFileDrawableStream.isPreview();
+            animatedFileDrawable = new AnimatedFileDrawable(file, false, j, document, parentObject, i, z);
+        } else {
+            File file2 = this.path;
+            long j2 = this.streamFileSize;
+            int i2 = this.currentAccount;
+            boolean z2 = animatedFileDrawableStream != null && animatedFileDrawableStream.isPreview();
+            AnimatedFileDrawable animatedFileDrawable2 = new AnimatedFileDrawable(file2, false, j2, null, null, i2, z2);
         }
         int[] iArr = animatedFileDrawable.metaData;
         int[] iArr2 = this.metaData;

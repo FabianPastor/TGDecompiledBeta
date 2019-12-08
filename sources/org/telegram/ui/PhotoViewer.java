@@ -18,6 +18,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
+import android.graphics.Point;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -1233,6 +1234,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     }
 
     private class FrameLayoutDrawer extends SizeNotifierFrameLayoutPhoto {
+        private boolean ignoreLayout;
         private Paint paint = new Paint();
 
         public FrameLayoutDrawer(Context context) {
@@ -1246,6 +1248,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             int size = MeasureSpec.getSize(i);
             int size2 = MeasureSpec.getSize(i2);
             setMeasuredDimension(size, size2);
+            this.ignoreLayout = true;
+            TextView access$3700 = PhotoViewer.this.captionTextView;
+            Point point = AndroidUtilities.displaySize;
+            access$3700.setMaxLines(point.x > point.y ? 5 : 10);
+            this.ignoreLayout = false;
             measureChildWithMargins(PhotoViewer.this.captionEditText, i, 0, i2, 0);
             int measuredHeight = PhotoViewer.this.captionEditText.getMeasuredHeight();
             size -= getPaddingRight() + getPaddingLeft();
@@ -1569,6 +1576,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             } catch (Throwable unused) {
             }
             return z;
+        }
+
+        public void requestLayout() {
+            if (!this.ignoreLayout) {
+                super.requestLayout();
+            }
         }
     }
 
@@ -6739,6 +6752,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             }
             if (this.captionTextView.getTag() != null) {
                 this.captionTextView.setVisibility(0);
+                VideoSeekPreviewImage videoSeekPreviewImage = this.videoPreviewFrame;
+                if (videoSeekPreviewImage != null) {
+                    videoSeekPreviewImage.requestLayout();
+                }
             }
         }
         this.isActionBarVisible = z;
@@ -9631,7 +9648,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.captionTextView.setSingleLine(true);
         } else {
             this.captionTextView.setSingleLine(false);
-            this.captionTextView.setMaxLines(10);
+            TextView textView = this.captionTextView;
+            Point point = AndroidUtilities.displaySize;
+            textView.setMaxLines(point.x > point.y ? 5 : 10);
         }
         Object obj = this.captionTextView.getTag() != null ? 1 : null;
         AnimatorSet animatorSet;

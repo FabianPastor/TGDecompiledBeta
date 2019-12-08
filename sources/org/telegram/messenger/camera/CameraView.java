@@ -403,6 +403,13 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         invalidate();
     }
 
+    public void setZoom(float f) {
+        CameraSession cameraSession = this.cameraSession;
+        if (cameraSession != null) {
+            cameraSession.setZoom(f);
+        }
+    }
+
     public void setDelegate(CameraViewDelegate cameraViewDelegate) {
         this.delegate = cameraViewDelegate;
     }
