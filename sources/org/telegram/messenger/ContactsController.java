@@ -31,7 +31,6 @@ import org.telegram.tgnet.TLRPC.TL_accountDaysTTL;
 import org.telegram.tgnet.TLRPC.TL_account_getAccountTTL;
 import org.telegram.tgnet.TLRPC.TL_account_getPrivacy;
 import org.telegram.tgnet.TLRPC.TL_account_privacyRules;
-import org.telegram.tgnet.TLRPC.TL_boolTrue;
 import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.TL_contactStatus;
 import org.telegram.tgnet.TLRPC.TL_contacts_addContact;
@@ -522,7 +521,7 @@ public class ContactsController extends BaseController {
     }
 
     public /* synthetic */ void lambda$deleteAllContacts$8$ContactsController(Runnable runnable, TLObject tLObject, TL_error tL_error) {
-        if (tLObject instanceof TL_boolTrue) {
+        if (tL_error == null) {
             this.contactsBookSPhones.clear();
             this.contactsBook.clear();
             this.completedRequestsCount = 0;
@@ -533,7 +532,9 @@ public class ContactsController extends BaseController {
             this.contactsBookLoaded = false;
             this.lastContactsVersions = "";
             AndroidUtilities.runOnUIThread(new -$$Lambda$ContactsController$Oyly5yQ4u-Oj_ZJTW79_45tDILE(this, runnable));
+            return;
         }
+        AndroidUtilities.runOnUIThread(runnable);
     }
 
     /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x0049 */
@@ -737,7 +738,7 @@ public class ContactsController extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:205:0x0346 A:{Catch:{ all -> 0x0357 }} */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x034b A:{SYNTHETIC, Splitter:B:207:0x034b} */
     /* JADX WARNING: Removed duplicated region for block: B:210:0x0351  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x01f9 A:{Splitter:B:18:0x0055, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x01f9 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:18:0x0055} */
     /* JADX WARNING: Removed duplicated region for block: B:205:0x0346 A:{Catch:{ all -> 0x0357 }} */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x034b A:{SYNTHETIC, Splitter:B:207:0x034b} */
     /* JADX WARNING: Removed duplicated region for block: B:210:0x0351  */
