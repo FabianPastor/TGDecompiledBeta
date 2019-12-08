@@ -8573,7 +8573,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = (long) r5;
         r7 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 * r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881402E38 double:1.053163707E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881406E38 double:1.053163708E-314;
         r8 = new java.lang.Object[r13];
         r11 = org.telegram.messenger.LocaleController.getInstance();
         r11 = r11.formatterYear;

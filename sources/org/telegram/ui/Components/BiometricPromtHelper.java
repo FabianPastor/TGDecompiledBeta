@@ -12,6 +12,7 @@ import android.hardware.biometrics.BiometricPrompt.AuthenticationResult;
 import android.hardware.biometrics.BiometricPrompt.Builder;
 import android.hardware.biometrics.BiometricPrompt.CryptoObject;
 import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.CancellationSignal;
 import android.widget.Button;
@@ -35,6 +36,8 @@ public class BiometricPromtHelper {
     private static final int STATE_ERROR = 2;
     private static final int STATE_IDLE = 0;
     private static final int STATE_PENDING_CONFIRMATION = 3;
+    static final String[] badBiometricModels;
+    static final String[] hideBiometricModels = new String[]{"SM-G97", "SM-N97"};
     private BottomSheet bottomSheet;
     private CancellationSignal cancellationSignal;
     private int currentState;
@@ -75,7 +78,7 @@ public class BiometricPromtHelper {
     }
 
     public void promtWithCipher(Cipher cipher, String str, CipherCallback cipherCallback) {
-        promtWithCipher(cipher, str, cipherCallback, false);
+        promtWithCipher(cipher, str, cipherCallback, shouldUseFingerprintForCrypto());
     }
 
     private void promtWithCipher(Cipher cipher, String str, CipherCallback cipherCallback, boolean z) {
@@ -338,14 +341,13 @@ public class BiometricPromtHelper {
     }
 
     public static boolean hasBiometricEnrolled() {
-        int i = VERSION.SDK_INT;
         boolean z = true;
-        if (i >= 29) {
+        if (VERSION.SDK_INT >= 29 && !shouldUseFingerprintForCrypto()) {
             if (((BiometricManager) ApplicationLoader.applicationContext.getSystemService(BiometricManager.class)).canAuthenticate() != 0) {
                 z = false;
             }
             return z;
-        } else if (i < 23) {
+        } else if (VERSION.SDK_INT < 23) {
             return false;
         } else {
             FingerprintManager fingerprintManagerOrNull = getFingerprintManagerOrNull();
@@ -357,7 +359,7 @@ public class BiometricPromtHelper {
     }
 
     public static boolean canAddBiometric() {
-        if (VERSION.SDK_INT < 29) {
+        if (VERSION.SDK_INT < 29 || shouldUseFingerprintForCrypto()) {
             return hasFingerprintHardware();
         }
         boolean z = true;
@@ -419,5 +421,38 @@ public class BiometricPromtHelper {
             }
         }
         baseFragment.getParentActivity().startActivity(new Intent("android.settings.SECURITY_SETTINGS"));
+    }
+
+    static {
+        String[] strArr = new String[7];
+        strArr[0] = "SM-G95";
+        strArr[1] = "SM-G96";
+        strArr[2] = "SM-G97";
+        strArr[3] = "SM-N95";
+        strArr[4] = "SM-N96";
+        strArr[5] = "SM-N97";
+        strArr[6] = "SM-A20";
+        badBiometricModels = strArr;
+    }
+
+    private static boolean shouldHideBiometric() {
+        return isModelInList(Build.MODEL, hideBiometricModels);
+    }
+
+    private static boolean shouldUseFingerprintForCrypto() {
+        int i = VERSION.SDK_INT;
+        return (i < 28 || i > 29) ? false : isModelInList(Build.MODEL, badBiometricModels);
+    }
+
+    private static boolean isModelInList(String str, String[] strArr) {
+        if (str == null) {
+            return false;
+        }
+        for (String startsWith : strArr) {
+            if (str.startsWith(startsWith)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

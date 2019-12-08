@@ -45,10 +45,22 @@ public class ProfileGalleryView extends ViewPager implements NotificationCenterD
     private boolean isSwipingViewPager = true;
     private ProfileActivity parentActivity;
     private RecyclerListView parentListView;
+    private ImageLocation prevImageLocation;
     private final SparseArray<RadialProgress2> radialProgresses = new SparseArray();
     private ArrayList<String> thumbsFileNames = new ArrayList();
     private ArrayList<ImageLocation> thumbsLocations = new ArrayList();
     private final int touchSlop;
+
+    private class Item {
+        private BackupImageView imageView;
+
+        private Item() {
+        }
+
+        /* synthetic */ Item(ProfileGalleryView profileGalleryView, AnonymousClass1 anonymousClass1) {
+            this();
+        }
+    }
 
     public ProfileGalleryView(final Context context, final ProfileActivity profileActivity) {
         super(context);
@@ -99,79 +111,91 @@ public class ProfileGalleryView extends ViewPager implements NotificationCenterD
             }
         });
         setAdapter(new PagerAdapter() {
-            public boolean isViewFromObject(View view, Object obj) {
-                return view == obj;
-            }
+            private final ArrayList<Item> objects = new ArrayList();
 
             public int getCount() {
-                return ProfileGalleryView.this.imagesLocations.size();
+                return this.objects.size();
             }
 
-            public Object instantiateItem(ViewGroup viewGroup, final int i) {
-                AnonymousClass1 anonymousClass1 = new BackupImageView(context) {
-                    private long initTime = SystemClock.elapsedRealtime();
-                    private final Drawable placeholderDrawable = ContextCompat.getDrawable(context, NUM);
-                    private RadialProgress2 radialProgress;
-                    private ValueAnimator radialProgressHideAnimator;
-                    private float radialProgressHideAnimatorStartValue;
-                    private final int radialProgressSize = AndroidUtilities.dp(64.0f);
+            public boolean isViewFromObject(View view, Object obj) {
+                return ((Item) view.getTag()) == ((Item) obj);
+            }
 
-                    /* Access modifiers changed, original: protected */
-                    public void onSizeChanged(int i, int i2, int i3, int i4) {
-                        super.onSizeChanged(i, i2, i3, i4);
-                        if (this.radialProgress != null) {
-                            i3 = (profileActivity.getActionBar().getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight();
-                            i4 = AndroidUtilities.dp2(80.0f);
-                            RadialProgress2 radialProgress2 = this.radialProgress;
-                            int i5 = this.radialProgressSize;
-                            i2 = (i2 - i3) - i4;
-                            radialProgress2.setProgressRect((i - i5) / 2, ((i2 - i5) / 2) + i3, (i + i5) / 2, i3 + ((i2 + i5) / 2));
-                        }
-                    }
+            public int getItemPosition(Object obj) {
+                int indexOf = this.objects.indexOf((Item) obj);
+                return indexOf == -1 ? -2 : indexOf;
+            }
 
-                    /* Access modifiers changed, original: protected */
-                    public void onDraw(Canvas canvas) {
-                        super.onDraw(canvas);
-                        if (this.radialProgress == null) {
-                            return;
-                        }
-                        if (getImageReceiver().getDrawable() == this.placeholderDrawable) {
-                            float elapsedRealtime = (float) (SystemClock.elapsedRealtime() - this.initTime);
-                            if (elapsedRealtime <= 550.0f) {
-                                if (elapsedRealtime > 300.0f) {
-                                    this.radialProgress.setOverrideAlpha(CubicBezierInterpolator.DEFAULT.getInterpolation((elapsedRealtime - 300.0f) / 250.0f));
-                                }
-                                postInvalidateOnAnimation();
+            public Item instantiateItem(ViewGroup viewGroup, final int i) {
+                Item item = (Item) this.objects.get(i);
+                if (item.imageView == null) {
+                    item.imageView = new BackupImageView(context) {
+                        private long initTime = SystemClock.elapsedRealtime();
+                        private final Drawable placeholderDrawable = ContextCompat.getDrawable(context, NUM);
+                        private RadialProgress2 radialProgress;
+                        private ValueAnimator radialProgressHideAnimator;
+                        private float radialProgressHideAnimatorStartValue;
+                        private final int radialProgressSize = AndroidUtilities.dp(64.0f);
+
+                        /* Access modifiers changed, original: protected */
+                        public void onSizeChanged(int i, int i2, int i3, int i4) {
+                            super.onSizeChanged(i, i2, i3, i4);
+                            if (this.radialProgress != null) {
+                                i3 = (profileActivity.getActionBar().getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight();
+                                i4 = AndroidUtilities.dp2(80.0f);
+                                RadialProgress2 radialProgress2 = this.radialProgress;
+                                int i5 = this.radialProgressSize;
+                                i2 = (i2 - i3) - i4;
+                                radialProgress2.setProgressRect((i - i5) / 2, ((i2 - i5) / 2) + i3, (i + i5) / 2, i3 + ((i2 + i5) / 2));
                             }
-                            if (this.radialProgress.getOverrideAlpha() > 0.0f) {
-                                this.radialProgress.draw(canvas);
-                            }
-                        } else if (this.radialProgressHideAnimator == null) {
-                            this.radialProgressHideAnimatorStartValue = this.radialProgress.getOverrideAlpha();
-                            this.radialProgressHideAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                            this.radialProgressHideAnimator.setDuration((long) (this.radialProgressHideAnimatorStartValue * 250.0f));
-                            this.radialProgressHideAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                            this.radialProgressHideAnimator.addUpdateListener(new -$$Lambda$ProfileGalleryView$2$1$gNRFpm0niMTZhnvL1PAiuA8Z8_4(this));
-                            this.radialProgressHideAnimator.addListener(new AnimatorListenerAdapter() {
-                                public void onAnimationEnd(Animator animator) {
-                                    AnonymousClass1.this.radialProgress = null;
-                                    ProfileGalleryView.this.radialProgresses.delete(i);
-                                }
-                            });
-                            this.radialProgressHideAnimator.start();
                         }
-                    }
 
-                    public /* synthetic */ void lambda$onDraw$0$ProfileGalleryView$2$1(ValueAnimator valueAnimator) {
-                        this.radialProgress.setOverrideAlpha(AndroidUtilities.lerp(this.radialProgressHideAnimatorStartValue, 0.0f, valueAnimator.getAnimatedFraction()));
-                    }
-                };
-                viewGroup.addView(anonymousClass1);
-                return anonymousClass1;
+                        /* Access modifiers changed, original: protected */
+                        public void onDraw(Canvas canvas) {
+                            super.onDraw(canvas);
+                            if (this.radialProgress == null) {
+                                return;
+                            }
+                            if (getImageReceiver().getDrawable() == this.placeholderDrawable) {
+                                float elapsedRealtime = (float) (SystemClock.elapsedRealtime() - this.initTime);
+                                if (elapsedRealtime <= 550.0f) {
+                                    if (elapsedRealtime > 300.0f) {
+                                        this.radialProgress.setOverrideAlpha(CubicBezierInterpolator.DEFAULT.getInterpolation((elapsedRealtime - 300.0f) / 250.0f));
+                                    }
+                                    postInvalidateOnAnimation();
+                                }
+                                if (this.radialProgress.getOverrideAlpha() > 0.0f) {
+                                    this.radialProgress.draw(canvas);
+                                }
+                            } else if (this.radialProgressHideAnimator == null) {
+                                this.radialProgressHideAnimatorStartValue = this.radialProgress.getOverrideAlpha();
+                                this.radialProgressHideAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                                this.radialProgressHideAnimator.setDuration((long) (this.radialProgressHideAnimatorStartValue * 250.0f));
+                                this.radialProgressHideAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                                this.radialProgressHideAnimator.addUpdateListener(new -$$Lambda$ProfileGalleryView$2$1$gNRFpm0niMTZhnvL1PAiuA8Z8_4(this));
+                                this.radialProgressHideAnimator.addListener(new AnimatorListenerAdapter() {
+                                    public void onAnimationEnd(Animator animator) {
+                                        AnonymousClass1.this.radialProgress = null;
+                                        ProfileGalleryView.this.radialProgresses.delete(i);
+                                    }
+                                });
+                                this.radialProgressHideAnimator.start();
+                            }
+                        }
+
+                        public /* synthetic */ void lambda$onDraw$0$ProfileGalleryView$2$1(ValueAnimator valueAnimator) {
+                            this.radialProgress.setOverrideAlpha(AndroidUtilities.lerp(this.radialProgressHideAnimatorStartValue, 0.0f, valueAnimator.getAnimatedFraction()));
+                        }
+                    };
+                    item.imageView.setTag(item);
+                }
+                viewGroup.removeView(item.imageView);
+                viewGroup.addView(item.imageView);
+                return item;
             }
 
             public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-                viewGroup.removeView((View) obj);
+                viewGroup.removeView(((Item) obj).imageView);
                 ProfileGalleryView.this.radialProgresses.delete(i);
             }
 
@@ -181,6 +205,15 @@ public class ProfileGalleryView extends ViewPager implements NotificationCenterD
                 stringBuilder.append("/");
                 stringBuilder.append(getCount());
                 return stringBuilder.toString();
+            }
+
+            public void notifyDataSetChanged() {
+                this.objects.clear();
+                int size = ProfileGalleryView.this.imagesLocations.size();
+                for (int i = 0; i < size; i++) {
+                    this.objects.add(new Item(ProfileGalleryView.this, null));
+                }
+                super.notifyDataSetChanged();
             }
         });
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogPhotosLoaded);
@@ -246,12 +279,20 @@ public class ProfileGalleryView extends ViewPager implements NotificationCenterD
     }
 
     public void initIfEmpty(ImageLocation imageLocation, ImageLocation imageLocation2) {
-        if (this.imagesLocations.isEmpty() && imageLocation != null) {
-            this.thumbsFileNames.add("");
-            this.imagesLocations.add(imageLocation);
-            this.thumbsLocations.add(imageLocation2);
-            this.imagesLocationsSizes.add(Integer.valueOf(-1));
-            getAdapter().notifyDataSetChanged();
+        if (!(imageLocation == null || imageLocation2 == null)) {
+            ImageLocation imageLocation3 = this.prevImageLocation;
+            if (!(imageLocation3 == null || imageLocation3.location.local_id == imageLocation.location.local_id)) {
+                this.imagesLocations.clear();
+                MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) this.parentActivity.getAvatarDialogId(), 80, 0, true, this.parentActivity.getClassGuid());
+            }
+            if (this.imagesLocations.isEmpty()) {
+                this.prevImageLocation = imageLocation;
+                this.thumbsFileNames.add("");
+                this.imagesLocations.add(imageLocation);
+                this.thumbsLocations.add(imageLocation2);
+                this.imagesLocationsSizes.add(Integer.valueOf(-1));
+                getAdapter().notifyDataSetChanged();
+            }
         }
     }
 

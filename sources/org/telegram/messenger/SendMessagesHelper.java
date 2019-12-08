@@ -1190,8 +1190,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 getSecretChatHelper().sendMessagesReadMessage(encryptedChat, null, messageObject.messageOwner);
             } else if (decryptedMessageAction instanceof TL_decryptedMessageActionScreenshotMessages) {
                 getSecretChatHelper().sendScreenshotMessage(encryptedChat, null, messageObject.messageOwner);
-            } else if (!((decryptedMessageAction instanceof TL_decryptedMessageActionTyping) || (decryptedMessageAction instanceof TL_decryptedMessageActionResend))) {
-                if (decryptedMessageAction instanceof TL_decryptedMessageActionCommitKey) {
+            } else if (!(decryptedMessageAction instanceof TL_decryptedMessageActionTyping)) {
+                if (decryptedMessageAction instanceof TL_decryptedMessageActionResend) {
+                    getSecretChatHelper().sendResendMessage(encryptedChat, 0, 0, messageObject.messageOwner);
+                } else if (decryptedMessageAction instanceof TL_decryptedMessageActionCommitKey) {
                     getSecretChatHelper().sendCommitKeyMessage(encryptedChat, messageObject.messageOwner);
                 } else if (decryptedMessageAction instanceof TL_decryptedMessageActionAbortKey) {
                     getSecretChatHelper().sendAbortKeyMessage(encryptedChat, messageObject.messageOwner, 0);

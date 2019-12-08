@@ -198,6 +198,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private int banFromGroup;
     private int blockedUsersRow;
     private BotInfo botInfo;
+    private int bottomPaddingRow;
     private ActionBarMenuItem callItem;
     private int channelInfoRow;
     private ChatFull chatInfo;
@@ -223,12 +224,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private boolean[] isOnline = new boolean[1];
     private boolean isPulledDown;
     private int joinRow;
+    private int lastMeasuredContentWidth;
     private int[] lastMediaCount = new int[]{-1, -1, -1, -1, -1};
     private int lastSectionRow;
     private LinearLayoutManager layoutManager;
     private int leaveChannelRow;
     private int linksRow;
     private ListAdapter listAdapter;
+    private int listContentHeight;
     private RecyclerListView listView;
     private float listViewVelocityY;
     private boolean loadingUsers;
@@ -649,7 +652,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
         private void invalidateIndicatorRect() {
             float measureText = this.textPaint.measureText(getCurrentTitle());
-            this.indicatorRect.right = (float) (getWidth() - AndroidUtilities.dp(54.0f));
+            this.indicatorRect.right = (float) (getMeasuredWidth() - AndroidUtilities.dp(54.0f));
             RectF rectF = this.indicatorRect;
             rectF.left = rectF.right - (measureText + AndroidUtilities.dpf2(16.0f));
             this.indicatorRect.top = (float) ((ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.dp(15.0f));
@@ -762,29 +765,29 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
             if (this.width == -1 || this.height == -1) {
                 if (obj2 != null) {
-                    this.imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
+                    this.imageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 }
                 if (obj != null) {
-                    this.foregroundImageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
+                    this.foregroundImageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 }
             } else {
                 ImageReceiver imageReceiver;
-                int width;
-                int height;
+                int measuredWidth;
+                int measuredHeight;
                 int i;
                 if (obj2 != null) {
                     imageReceiver = this.imageReceiver;
-                    width = (getWidth() - this.width) / 2;
-                    height = getHeight();
+                    measuredWidth = (getMeasuredWidth() - this.width) / 2;
+                    measuredHeight = getMeasuredHeight();
                     i = this.height;
-                    imageReceiver.setImageCoords(width, (height - i) / 2, this.width, i);
+                    imageReceiver.setImageCoords(measuredWidth, (measuredHeight - i) / 2, this.width, i);
                 }
                 if (obj != null) {
                     imageReceiver = this.foregroundImageReceiver;
-                    width = (getWidth() - this.width) / 2;
-                    height = getHeight();
+                    measuredWidth = (getMeasuredWidth() - this.width) / 2;
+                    measuredHeight = getMeasuredHeight();
                     i = this.height;
-                    imageReceiver.setImageCoords(width, (height - i) / 2, this.width, i);
+                    imageReceiver.setImageCoords(measuredWidth, (measuredHeight - i) / 2, this.width, i);
                 }
             }
             if (obj2 != null) {
@@ -807,60 +810,94 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View headerCell;
             View textDetailCell;
-            if (i != 11) {
-                View headerCell;
-                switch (i) {
-                    case 1:
-                        headerCell = new HeaderCell(this.mContext, 23);
-                        break;
-                    case 2:
-                        textDetailCell = new TextDetailCell(this.mContext);
-                        break;
-                    case 3:
-                        textDetailCell = new AboutLinkCell(this.mContext) {
-                            /* Access modifiers changed, original: protected */
-                            public void didPressUrl(String str) {
-                                if (str.startsWith("@")) {
-                                    MessagesController.getInstance(ProfileActivity.this.currentAccount).openByUserName(str.substring(1), ProfileActivity.this, 0);
-                                } else if (str.startsWith("#")) {
-                                    DialogsActivity dialogsActivity = new DialogsActivity(null);
-                                    dialogsActivity.setSearchString(str);
-                                    ProfileActivity.this.presentFragment(dialogsActivity);
-                                } else if (str.startsWith("/") && ProfileActivity.this.parentLayout.fragmentsStack.size() > 1) {
-                                    BaseFragment baseFragment = (BaseFragment) ProfileActivity.this.parentLayout.fragmentsStack.get(ProfileActivity.this.parentLayout.fragmentsStack.size() - 2);
-                                    if (baseFragment instanceof ChatActivity) {
-                                        ProfileActivity.this.finishFragment();
-                                        ((ChatActivity) baseFragment).chatActivityEnterView.setCommand(null, str, false, false);
-                                    }
+            switch (i) {
+                case 1:
+                    headerCell = new HeaderCell(this.mContext, 23);
+                    break;
+                case 2:
+                    textDetailCell = new TextDetailCell(this.mContext);
+                    break;
+                case 3:
+                    textDetailCell = new AboutLinkCell(this.mContext) {
+                        /* Access modifiers changed, original: protected */
+                        public void didPressUrl(String str) {
+                            if (str.startsWith("@")) {
+                                MessagesController.getInstance(ProfileActivity.this.currentAccount).openByUserName(str.substring(1), ProfileActivity.this, 0);
+                            } else if (str.startsWith("#")) {
+                                DialogsActivity dialogsActivity = new DialogsActivity(null);
+                                dialogsActivity.setSearchString(str);
+                                ProfileActivity.this.presentFragment(dialogsActivity);
+                            } else if (str.startsWith("/") && ProfileActivity.this.parentLayout.fragmentsStack.size() > 1) {
+                                BaseFragment baseFragment = (BaseFragment) ProfileActivity.this.parentLayout.fragmentsStack.get(ProfileActivity.this.parentLayout.fragmentsStack.size() - 2);
+                                if (baseFragment instanceof ChatActivity) {
+                                    ProfileActivity.this.finishFragment();
+                                    ((ChatActivity) baseFragment).chatActivityEnterView.setCommand(null, str, false, false);
                                 }
                             }
-                        };
-                        break;
-                    case 4:
-                        textDetailCell = new TextCell(this.mContext);
-                        break;
-                    case 5:
-                        textDetailCell = new DividerCell(this.mContext);
-                        textDetailCell.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(4.0f), 0, 0);
-                        break;
-                    case 6:
-                        headerCell = new NotificationsCheckCell(this.mContext, 23, 70);
-                        break;
-                    case 7:
-                        textDetailCell = new ShadowSectionCell(this.mContext);
-                        break;
-                    case 8:
-                        textDetailCell = new UserCell(this.mContext, ProfileActivity.this.addMemberRow == -1 ? 9 : 6, 0, true);
-                        break;
-                    default:
-                        textDetailCell = null;
-                        break;
-                }
-                textDetailCell = headerCell;
-            } else {
-                textDetailCell = new EmptyCell(this.mContext, 36);
+                        }
+                    };
+                    break;
+                case 4:
+                    textDetailCell = new TextCell(this.mContext);
+                    break;
+                case 5:
+                    textDetailCell = new DividerCell(this.mContext);
+                    textDetailCell.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(4.0f), 0, 0);
+                    break;
+                case 6:
+                    headerCell = new NotificationsCheckCell(this.mContext, 23, 70);
+                    break;
+                case 7:
+                    textDetailCell = new ShadowSectionCell(this.mContext);
+                    break;
+                case 8:
+                    textDetailCell = new UserCell(this.mContext, ProfileActivity.this.addMemberRow == -1 ? 9 : 6, 0, true);
+                    break;
+                case 11:
+                    textDetailCell = new EmptyCell(this.mContext, 36);
+                    break;
+                case 12:
+                    textDetailCell = new View(this.mContext) {
+                        private int lastListViewHeight = 0;
+                        private int lastPaddingHeight = 0;
+
+                        /* Access modifiers changed, original: protected */
+                        public void onMeasure(int i, int i2) {
+                            if (this.lastListViewHeight != ProfileActivity.this.listView.getMeasuredHeight()) {
+                                this.lastPaddingHeight = 0;
+                            }
+                            this.lastListViewHeight = ProfileActivity.this.listView.getMeasuredHeight();
+                            i = ProfileActivity.this.listView.getChildCount();
+                            if (i == ProfileActivity.this.listAdapter.getItemCount()) {
+                                int i3 = 0;
+                                for (i2 = 0; i2 < i; i2++) {
+                                    if (ProfileActivity.this.listView.getChildAdapterPosition(ProfileActivity.this.listView.getChildAt(i2)) != ProfileActivity.this.bottomPaddingRow) {
+                                        i3 += ProfileActivity.this.listView.getChildAt(i2).getMeasuredHeight();
+                                    }
+                                }
+                                i = ((ProfileActivity.this.fragmentView.getMeasuredHeight() - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.statusBarHeight) - i3;
+                                if (i > AndroidUtilities.dp(88.0f)) {
+                                    i = 0;
+                                }
+                                if (i <= 0) {
+                                    i = 0;
+                                }
+                                i2 = ProfileActivity.this.listView.getMeasuredWidth();
+                                this.lastPaddingHeight = i;
+                                setMeasuredDimension(i2, i);
+                                return;
+                            }
+                            setMeasuredDimension(ProfileActivity.this.listView.getMeasuredWidth(), this.lastPaddingHeight);
+                        }
+                    };
+                    break;
+                default:
+                    textDetailCell = null;
+                    break;
             }
+            textDetailCell = headerCell;
             textDetailCell.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(textDetailCell);
         }
@@ -1167,7 +1204,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             goto L_0x02e5;
         L_0x024f:
             r3 = 3600; // 0xe10 float:5.045E-42 double:1.7786E-320;
-            r4 = NUM; // 0x7f0e0CLASSNAME float:1.8881278E38 double:1.053163677E-314;
+            r4 = NUM; // 0x7f0e0CLASSNAME float:1.8881282E38 double:1.053163678E-314;
             r5 = "WillUnmuteIn";
             if (r2 >= r3) goto L_0x026b;
         L_0x0258:
@@ -1970,7 +2007,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
         public boolean isEnabled(ViewHolder viewHolder) {
             int itemViewType = viewHolder.getItemViewType();
-            return (itemViewType == 1 || itemViewType == 5 || itemViewType == 7 || itemViewType == 9 || itemViewType == 10 || itemViewType == 11) ? false : true;
+            return (itemViewType == 1 || itemViewType == 5 || itemViewType == 7 || itemViewType == 9 || itemViewType == 10 || itemViewType == 11 || itemViewType == 12) ? false : true;
         }
 
         public int getItemCount() {
@@ -1999,11 +2036,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             if (i == ProfileActivity.this.infoSectionRow || i == ProfileActivity.this.sharedSectionRow || i == ProfileActivity.this.lastSectionRow || i == ProfileActivity.this.membersSectionRow || i == ProfileActivity.this.settingsSectionRow) {
                 return 7;
             }
-            if (i < ProfileActivity.this.membersStartRow || i >= ProfileActivity.this.membersEndRow) {
-                return i == ProfileActivity.this.emptyRow ? 11 : 0;
-            } else {
+            if (i >= ProfileActivity.this.membersStartRow && i < ProfileActivity.this.membersEndRow) {
                 return 8;
             }
+            if (i == ProfileActivity.this.emptyRow) {
+                return 11;
+            }
+            return i == ProfileActivity.this.bottomPaddingRow ? 12 : 0;
         }
     }
 
@@ -2092,6 +2131,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didReceiveNewMessages);
                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
+                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
                 updateRowsIds();
                 return true;
             }
@@ -2112,6 +2152,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didReceiveNewMessages);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagesDeleted);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
         ProfileGalleryView profileGalleryView = this.avatarsViewPager;
         if (profileGalleryView != null) {
             profileGalleryView.onDestroy();
@@ -2411,14 +2452,95 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setProfile(true);
         this.fragmentView = new FrameLayout(context2) {
+            private boolean firstLayout = true;
+            private boolean ignoreLayout;
+
             public boolean hasOverlappingRendering() {
                 return false;
             }
 
             /* Access modifiers changed, original: protected */
+            public void onMeasure(int i, int i2) {
+                Object obj;
+                int itemCount;
+                int makeMeasureSpec;
+                int currentActionBarHeight = (ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight();
+                if (ProfileActivity.this.listView != null) {
+                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) ProfileActivity.this.listView.getLayoutParams();
+                    if (layoutParams.topMargin != currentActionBarHeight) {
+                        layoutParams.topMargin = currentActionBarHeight;
+                    }
+                }
+                super.onMeasure(i, i2);
+                int currentActionBarHeight2 = ActionBar.getCurrentActionBarHeight() + (ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);
+                if (ProfileActivity.this.lastMeasuredContentWidth != getMeasuredWidth()) {
+                    obj = ProfileActivity.this.lastMeasuredContentWidth != 0 ? 1 : null;
+                    ProfileActivity.this.listContentHeight = 0;
+                    itemCount = ProfileActivity.this.listAdapter.getItemCount();
+                    ProfileActivity.this.lastMeasuredContentWidth = getMeasuredWidth();
+                    int makeMeasureSpec2 = MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM);
+                    makeMeasureSpec = MeasureSpec.makeMeasureSpec(0, 0);
+                    for (int i3 = 0; i3 < itemCount; i3++) {
+                        ViewHolder createViewHolder = ProfileActivity.this.listAdapter.createViewHolder(null, ProfileActivity.this.listAdapter.getItemViewType(i3));
+                        ProfileActivity.this.listAdapter.onBindViewHolder(createViewHolder, i3);
+                        createViewHolder.itemView.measure(makeMeasureSpec2, makeMeasureSpec);
+                        ProfileActivity profileActivity = ProfileActivity.this;
+                        profileActivity.listContentHeight = profileActivity.listContentHeight + createViewHolder.itemView.getMeasuredHeight();
+                        if ((ProfileActivity.this.listContentHeight + currentActionBarHeight2) + AndroidUtilities.dp(88.0f) >= ProfileActivity.this.fragmentView.getMeasuredHeight()) {
+                            break;
+                        }
+                    }
+                } else {
+                    obj = null;
+                }
+                if (!ProfileActivity.this.openAnimationInProgress && !this.firstLayout) {
+                    int top;
+                    this.ignoreLayout = true;
+                    if (ProfileActivity.this.isInLandscapeMode) {
+                        itemCount = AndroidUtilities.dp(88.0f);
+                        currentActionBarHeight2 = 0;
+                    } else {
+                        itemCount = ProfileActivity.this.listView.getMeasuredWidth() - currentActionBarHeight2;
+                        currentActionBarHeight2 = Math.max(0, ProfileActivity.this.fragmentView.getMeasuredHeight() - ((ProfileActivity.this.listContentHeight + currentActionBarHeight2) + AndroidUtilities.dp(88.0f)));
+                    }
+                    if (ProfileActivity.this.banFromGroup != 0) {
+                        currentActionBarHeight2 += AndroidUtilities.dp(48.0f);
+                        ProfileActivity.this.listView.setBottomGlowOffset(AndroidUtilities.dp(48.0f));
+                    } else {
+                        ProfileActivity.this.listView.setBottomGlowOffset(0);
+                    }
+                    int paddingTop = ProfileActivity.this.listView.getPaddingTop();
+                    View childAt = ProfileActivity.this.listView.getChildAt(0);
+                    if (childAt != null) {
+                        makeMeasureSpec = ProfileActivity.this.listView.findContainingViewHolder(childAt).getAdapterPosition();
+                        top = childAt.getTop();
+                    } else {
+                        top = 0;
+                        makeMeasureSpec = -1;
+                    }
+                    if (obj == null && makeMeasureSpec != -1) {
+                        ProfileActivity.this.layoutManager.scrollToPositionWithOffset(makeMeasureSpec, top - itemCount);
+                    }
+                    if (!(paddingTop == itemCount && ProfileActivity.this.listView.getPaddingBottom() == currentActionBarHeight2)) {
+                        ProfileActivity.this.listView.setPadding(0, itemCount, 0, currentActionBarHeight2);
+                        measureChildWithMargins(ProfileActivity.this.listView, i, 0, i2, 0);
+                        ProfileActivity.this.listView.layout(0, currentActionBarHeight, ProfileActivity.this.listView.getMeasuredWidth(), ProfileActivity.this.listView.getMeasuredHeight() + currentActionBarHeight);
+                    }
+                    this.ignoreLayout = false;
+                }
+            }
+
+            /* Access modifiers changed, original: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
+                this.firstLayout = false;
                 ProfileActivity.this.checkListViewScroll();
+            }
+
+            public void requestLayout() {
+                if (!this.ignoreLayout) {
+                    super.requestLayout();
+                }
             }
         };
         FrameLayout frameLayout = (FrameLayout) this.fragmentView;
@@ -2577,7 +2699,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     View findViewByPosition = ProfileActivity.this.layoutManager.findViewByPosition(0);
                     if (findViewByPosition != null) {
                         if (ProfileActivity.this.isPulledDown) {
-                            ProfileActivity.this.listView.smoothScrollBy(0, (findViewByPosition.getTop() - ProfileActivity.this.listView.getWidth()) + (ActionBar.getCurrentActionBarHeight() + (ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)), CubicBezierInterpolator.EASE_OUT_QUINT);
+                            ProfileActivity.this.listView.smoothScrollBy(0, (findViewByPosition.getTop() - ProfileActivity.this.listView.getMeasuredWidth()) + (ActionBar.getCurrentActionBarHeight() + (ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)), CubicBezierInterpolator.EASE_OUT_QUINT);
                         } else {
                             ProfileActivity.this.listView.smoothScrollBy(0, findViewByPosition.getTop() - AndroidUtilities.dp(88.0f), CubicBezierInterpolator.EASE_OUT_QUINT);
                         }
@@ -3740,7 +3862,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             float min = Math.min(1.0f, this.extraHeight / AndroidUtilities.dpf2(88.0f));
             this.listView.setTopGlowOffset((int) this.extraHeight);
             RecyclerListView recyclerListView2 = this.listView;
-            int i2 = (this.extraHeight <= ((float) AndroidUtilities.dp(88.0f)) || this.extraHeight >= ((float) (this.listView.getWidth() - currentActionBarHeight))) ? 0 : 2;
+            int i2 = (this.extraHeight <= ((float) AndroidUtilities.dp(88.0f)) || this.extraHeight >= ((float) (this.listView.getMeasuredWidth() - currentActionBarHeight))) ? 0 : 2;
             recyclerListView2.setOverScrollMode(i2);
             ImageView imageView = this.writeButton;
             if (imageView != null) {
@@ -3793,7 +3915,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             float f = AndroidUtilities.density;
             this.avatarY = (currentActionBarHeight2 - (21.0f * f)) + ((f * 27.0f) * min);
             if (this.extraHeight > AndroidUtilities.dpf2(88.0f) || this.isPulledDown) {
-                this.expandProgress = Math.max(0.0f, Math.min(1.0f, (this.extraHeight - AndroidUtilities.dpf2(88.0f)) / (((float) (this.listView.getWidth() - currentActionBarHeight)) - AndroidUtilities.dpf2(88.0f))));
+                this.expandProgress = Math.max(0.0f, Math.min(1.0f, (this.extraHeight - AndroidUtilities.dpf2(88.0f)) / (((float) (this.listView.getMeasuredWidth() - currentActionBarHeight)) - AndroidUtilities.dpf2(88.0f))));
                 this.avatarScale = AndroidUtilities.lerp(1.4285715f, 2.4285715f, Math.min(1.0f, this.expandProgress * 3.0f));
                 currentActionBarHeight2 = Math.min(AndroidUtilities.dpf2(2000.0f), Math.max(AndroidUtilities.dpf2(1100.0f), Math.abs(this.listViewVelocityY))) / AndroidUtilities.dpf2(1100.0f);
                 float f2;
@@ -3844,7 +3966,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         this.expandAnimator.start();
                     }
                     ViewGroup.LayoutParams layoutParams2 = this.avatarsViewPager.getLayoutParams();
-                    layoutParams2.width = this.listView.getWidth();
+                    layoutParams2.width = this.listView.getMeasuredWidth();
                     f2 = (float) currentActionBarHeight;
                     layoutParams2.height = (int) (this.extraHeight + f2);
                     this.avatarsViewPager.requestLayout();
@@ -3931,7 +4053,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
         if (this.isPulledDown || (this.overlaysView.animator != null && this.overlaysView.animator.isRunning())) {
             ViewGroup.LayoutParams layoutParams3 = this.overlaysView.getLayoutParams();
-            layoutParams3.width = this.listView.getWidth();
+            layoutParams3.width = this.listView.getMeasuredWidth();
             layoutParams3.height = (int) (this.extraHeight + ((float) currentActionBarHeight));
             this.overlaysView.requestLayout();
         }
@@ -3988,7 +4110,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         this.onlineTextView[1].setTextColor(ColorUtils.blendARGB(Theme.getColor(str), Color.argb(179, 255, 255, 255), lerp));
         if (this.extraHeight > AndroidUtilities.dpf2(88.0f)) {
             SimpleTextView[] simpleTextViewArr = this.nameTextView;
-            simpleTextViewArr[1].setPivotY(AndroidUtilities.lerp(0.0f, (float) simpleTextViewArr[1].getHeight(), lerp));
+            simpleTextViewArr[1].setPivotY(AndroidUtilities.lerp(0.0f, (float) simpleTextViewArr[1].getMeasuredHeight(), lerp));
             this.nameTextView[1].setScaleX(AndroidUtilities.lerp(1.12f, 1.67f, lerp));
             this.nameTextView[1].setScaleY(AndroidUtilities.lerp(1.12f, 1.67f, lerp));
         }
@@ -3997,17 +4119,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         this.actionBar.setItemsColor(ColorUtils.blendARGB(Theme.getColor("actionBarDefaultIcon"), -1, lerp), false);
         this.avatarImage.setForegroundAlpha(lerp);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.avatarImage.getLayoutParams();
-        layoutParams.width = (int) AndroidUtilities.lerp(AndroidUtilities.dpf2(42.0f), ((float) this.listView.getWidth()) / this.avatarScale, lerp);
+        layoutParams.width = (int) AndroidUtilities.lerp(AndroidUtilities.dpf2(42.0f), ((float) this.listView.getMeasuredWidth()) / this.avatarScale, lerp);
         layoutParams.height = (int) AndroidUtilities.lerp(AndroidUtilities.dpf2(42.0f), (this.extraHeight + f) / this.avatarScale, lerp);
         layoutParams.leftMargin = (int) AndroidUtilities.lerp(AndroidUtilities.dpf2(64.0f), 0.0f, lerp);
         this.avatarImage.requestLayout();
     }
 
     private void refreshNameAndOnlineXY() {
-        this.nameX = ((float) AndroidUtilities.dp(-21.0f)) + (((float) this.avatarImage.getWidth()) * (this.avatarScale - 1.4285715f));
-        this.nameY = ((((float) Math.floor((double) this.avatarY)) + ((float) AndroidUtilities.dp(1.3f))) + ((float) AndroidUtilities.dp(7.0f))) + ((((float) this.avatarImage.getHeight()) * (this.avatarScale - 1.4285715f)) / 2.0f);
-        this.onlineX = ((float) AndroidUtilities.dp(-21.0f)) + (((float) this.avatarImage.getWidth()) * (this.avatarScale - 1.4285715f));
-        this.onlineY = ((((float) Math.floor((double) this.avatarY)) + ((float) AndroidUtilities.dp(24.0f))) + ((float) Math.floor((double) (AndroidUtilities.density * 11.0f)))) + ((((float) this.avatarImage.getHeight()) * (this.avatarScale - 1.4285715f)) / 2.0f);
+        this.nameX = ((float) AndroidUtilities.dp(-21.0f)) + (((float) this.avatarImage.getMeasuredWidth()) * (this.avatarScale - 1.4285715f));
+        this.nameY = ((((float) Math.floor((double) this.avatarY)) + ((float) AndroidUtilities.dp(1.3f))) + ((float) AndroidUtilities.dp(7.0f))) + ((((float) this.avatarImage.getMeasuredHeight()) * (this.avatarScale - 1.4285715f)) / 2.0f);
+        this.onlineX = ((float) AndroidUtilities.dp(-21.0f)) + (((float) this.avatarImage.getMeasuredWidth()) * (this.avatarScale - 1.4285715f));
+        this.onlineY = ((((float) Math.floor((double) this.avatarY)) + ((float) AndroidUtilities.dp(24.0f))) + ((float) Math.floor((double) (AndroidUtilities.density * 11.0f)))) + ((((float) this.avatarImage.getMeasuredHeight()) * (this.avatarScale - 1.4285715f)) / 2.0f);
     }
 
     private void needLayoutText(float f) {
@@ -4061,69 +4183,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    private void fixListViewPaddings() {
-        if (!this.openAnimationInProgress && this.listView.getWidth() != 0) {
-            int i;
-            int dp;
-            int adapterPosition;
-            int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);
-            int i2 = 0;
-            for (i = 0; i < this.listView.getChildCount(); i++) {
-                i2 += this.listView.getChildAt(i).getHeight();
-            }
-            if (this.isInLandscapeMode) {
-                dp = AndroidUtilities.dp(88.0f);
-                currentActionBarHeight = 0;
-            } else {
-                dp = this.listView.getWidth() - currentActionBarHeight;
-                currentActionBarHeight = Math.max(0, this.fragmentView.getHeight() - ((i2 + currentActionBarHeight) + AndroidUtilities.dp(88.0f)));
-            }
-            if (this.banFromGroup != 0) {
-                currentActionBarHeight += AndroidUtilities.dp(48.0f);
-                this.listView.setBottomGlowOffset(AndroidUtilities.dp(48.0f));
-            } else {
-                this.listView.setBottomGlowOffset(0);
-            }
-            i = this.listView.getPaddingTop();
-            View childAt = this.listView.getChildAt(0);
-            if (childAt != null) {
-                adapterPosition = this.listView.findContainingViewHolder(childAt).getAdapterPosition();
-                i2 = childAt.getTop();
-            } else {
-                i2 = 0;
-                adapterPosition = -1;
-            }
-            if (!(i == dp && this.listView.getPaddingBottom() == currentActionBarHeight)) {
-                this.listView.setPadding(0, dp, 0, currentActionBarHeight);
-            }
-            if (adapterPosition != -1) {
-                this.layoutManager.scrollToPositionWithOffset(adapterPosition, i2 - dp);
-            }
-        }
-    }
-
-    private void fixListViewPaddingsOnPreDraw() {
-        RecyclerListView recyclerListView = this.listView;
-        if (recyclerListView != null) {
-            recyclerListView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    if (ProfileActivity.this.listView != null) {
-                        ProfileActivity.this.fixListViewPaddings();
-                        ProfileActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    }
-                    return true;
-                }
-            });
-        }
-    }
-
     private void fixLayout() {
         View view = this.fragmentView;
         if (view != null) {
             view.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
                 public boolean onPreDraw() {
                     if (ProfileActivity.this.fragmentView != null) {
-                        ProfileActivity.this.fixListViewPaddings();
                         ProfileActivity.this.checkListViewScroll();
                         ProfileActivity.this.needLayout();
                         ProfileActivity.this.fragmentView.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -4156,6 +4221,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         int i3 = i;
         Object[] objArr2 = objArr;
         int i4 = 0;
+        RecyclerListView recyclerListView;
         int i5;
         if (i3 == NotificationCenter.updateInterfaces) {
             i3 = ((Integer) objArr2[0]).intValue();
@@ -4164,7 +4230,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     updateProfileData();
                 }
                 if ((i3 & 1024) != 0) {
-                    RecyclerListView recyclerListView = this.listView;
+                    recyclerListView = this.listView;
                     if (recyclerListView != null) {
                         Holder holder = (Holder) recyclerListView.findViewHolderForPosition(this.phoneRow);
                         if (holder != null) {
@@ -4478,42 +4544,49 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         loadMediaCounts();
                     }
                 }
-            } else if (i3 == NotificationCenter.messagesDeleted && !((Boolean) objArr2[2]).booleanValue()) {
-                i3 = ((Integer) objArr2[1]).intValue();
-                if (ChatObject.isChannel(this.currentChat)) {
-                    if ((i3 != 0 || this.mergeDialogId == 0) && i3 != this.currentChat.id) {
+            } else if (i3 == NotificationCenter.messagesDeleted) {
+                if (!((Boolean) objArr2[2]).booleanValue()) {
+                    i3 = ((Integer) objArr2[1]).intValue();
+                    if (ChatObject.isChannel(this.currentChat)) {
+                        if ((i3 != 0 || this.mergeDialogId == 0) && i3 != this.currentChat.id) {
+                            return;
+                        }
+                    } else if (i3 != 0) {
                         return;
                     }
-                } else if (i3 != 0) {
-                    return;
-                }
-                ArrayList arrayList3 = (ArrayList) objArr2[0];
-                i5 = arrayList3.size();
-                i7 = 0;
-                Object obj = null;
-                while (i7 < i5) {
-                    Object obj2 = obj;
-                    int i8 = 0;
-                    while (true) {
-                        SharedMediaData[] sharedMediaDataArr = this.sharedMediaData;
-                        if (i8 >= sharedMediaDataArr.length) {
-                            break;
+                    ArrayList arrayList3 = (ArrayList) objArr2[0];
+                    i5 = arrayList3.size();
+                    i7 = 0;
+                    Object obj = null;
+                    while (i7 < i5) {
+                        Object obj2 = obj;
+                        int i8 = 0;
+                        while (true) {
+                            SharedMediaData[] sharedMediaDataArr = this.sharedMediaData;
+                            if (i8 >= sharedMediaDataArr.length) {
+                                break;
+                            }
+                            if (sharedMediaDataArr[i8].deleteMessage(((Integer) arrayList3.get(i7)).intValue(), 0)) {
+                                obj2 = 1;
+                            }
+                            i8++;
                         }
-                        if (sharedMediaDataArr[i8].deleteMessage(((Integer) arrayList3.get(i7)).intValue(), 0)) {
-                            obj2 = 1;
+                        i7++;
+                        obj = obj2;
+                    }
+                    if (obj != null) {
+                        MediaActivity mediaActivity = this.mediaActivity;
+                        if (mediaActivity != null) {
+                            mediaActivity.updateAdapters();
                         }
-                        i8++;
                     }
-                    i7++;
-                    obj = obj2;
+                    loadMediaCounts();
                 }
-                if (obj != null) {
-                    MediaActivity mediaActivity = this.mediaActivity;
-                    if (mediaActivity != null) {
-                        mediaActivity.updateAdapters();
-                    }
+            } else if (i3 == NotificationCenter.emojiDidLoad) {
+                recyclerListView = this.listView;
+                if (recyclerListView != null) {
+                    recyclerListView.invalidateViews();
                 }
-                loadMediaCounts();
             }
         }
     }
@@ -4840,14 +4913,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     /* Access modifiers changed, original: protected */
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
-            if (!z2) {
-                if (this.playProfileAnimation && this.allowProfileAnimation) {
-                    this.openAnimationInProgress = false;
-                    if (this.recreateMenuAfterAnimation) {
-                        createActionBarMenu();
-                    }
+            if (!z2 && this.playProfileAnimation && this.allowProfileAnimation) {
+                this.openAnimationInProgress = false;
+                if (this.recreateMenuAfterAnimation) {
+                    createActionBarMenu();
                 }
-                fixListViewPaddings();
             }
             NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(false);
         }
@@ -5299,703 +5369,744 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         return this.chat_id != 0;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01da  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x01d1  */
-    /* JADX WARNING: Missing block: B:61:0x013e, code skipped:
-            if (r2.common_chats_count != 0) goto L_0x0140;
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x01d3  */
+    /* JADX WARNING: Missing block: B:61:0x0140, code skipped:
+            if (r3.common_chats_count != 0) goto L_0x0142;
      */
     private void updateRowsIds() {
         /*
-        r12 = this;
-        r0 = 0;
-        r12.rowCount = r0;
-        r1 = -1;
-        r12.emptyRow = r1;
-        r12.infoHeaderRow = r1;
-        r12.phoneRow = r1;
-        r12.userInfoRow = r1;
-        r12.locationRow = r1;
-        r12.channelInfoRow = r1;
-        r12.usernameRow = r1;
-        r12.settingsTimerRow = r1;
-        r12.settingsKeyRow = r1;
-        r12.notificationsDividerRow = r1;
-        r12.notificationsRow = r1;
-        r12.infoSectionRow = r1;
-        r12.settingsSectionRow = r1;
-        r12.membersHeaderRow = r1;
-        r12.membersStartRow = r1;
-        r12.membersEndRow = r1;
-        r12.addMemberRow = r1;
-        r12.subscribersRow = r1;
-        r12.administratorsRow = r1;
-        r12.blockedUsersRow = r1;
-        r12.membersSectionRow = r1;
-        r12.sharedHeaderRow = r1;
-        r12.photosRow = r1;
-        r12.filesRow = r1;
-        r12.linksRow = r1;
-        r12.audioRow = r1;
-        r12.voiceRow = r1;
-        r12.groupsInCommonRow = r1;
-        r12.sharedSectionRow = r1;
-        r12.unblockRow = r1;
-        r12.startSecretChatRow = r1;
-        r12.leaveChannelRow = r1;
-        r12.joinRow = r1;
-        r12.lastSectionRow = r1;
-        r2 = 0;
-    L_0x0049:
-        r3 = r12.lastMediaCount;
-        r4 = r3.length;
-        r5 = 1;
-        if (r2 >= r4) goto L_0x0058;
-    L_0x004f:
-        r3 = r3[r2];
-        if (r3 <= 0) goto L_0x0055;
-    L_0x0053:
-        r2 = 1;
-        goto L_0x0059;
+        r13 = this;
+        r0 = r13.rowCount;
+        r1 = 0;
+        r13.rowCount = r1;
+        r2 = -1;
+        r13.emptyRow = r2;
+        r13.infoHeaderRow = r2;
+        r13.phoneRow = r2;
+        r13.userInfoRow = r2;
+        r13.locationRow = r2;
+        r13.channelInfoRow = r2;
+        r13.usernameRow = r2;
+        r13.settingsTimerRow = r2;
+        r13.settingsKeyRow = r2;
+        r13.notificationsDividerRow = r2;
+        r13.notificationsRow = r2;
+        r13.infoSectionRow = r2;
+        r13.settingsSectionRow = r2;
+        r13.membersHeaderRow = r2;
+        r13.membersStartRow = r2;
+        r13.membersEndRow = r2;
+        r13.addMemberRow = r2;
+        r13.subscribersRow = r2;
+        r13.administratorsRow = r2;
+        r13.blockedUsersRow = r2;
+        r13.membersSectionRow = r2;
+        r13.sharedHeaderRow = r2;
+        r13.photosRow = r2;
+        r13.filesRow = r2;
+        r13.linksRow = r2;
+        r13.audioRow = r2;
+        r13.voiceRow = r2;
+        r13.groupsInCommonRow = r2;
+        r13.sharedSectionRow = r2;
+        r13.unblockRow = r2;
+        r13.startSecretChatRow = r2;
+        r13.leaveChannelRow = r2;
+        r13.joinRow = r2;
+        r13.lastSectionRow = r2;
+        r3 = 0;
+    L_0x004b:
+        r4 = r13.lastMediaCount;
+        r5 = r4.length;
+        r6 = 1;
+        if (r3 >= r5) goto L_0x005a;
+    L_0x0051:
+        r4 = r4[r3];
+        if (r4 <= 0) goto L_0x0057;
     L_0x0055:
-        r2 = r2 + 1;
-        goto L_0x0049;
-    L_0x0058:
-        r2 = 0;
-    L_0x0059:
-        r3 = r12.user_id;
-        if (r3 == 0) goto L_0x0069;
-    L_0x005d:
-        r3 = org.telegram.messenger.LocaleController.isRTL;
-        if (r3 == 0) goto L_0x0069;
-    L_0x0061:
-        r3 = r12.rowCount;
-        r4 = r3 + 1;
-        r12.rowCount = r4;
-        r12.emptyRow = r3;
-    L_0x0069:
-        r3 = r12.user_id;
-        r4 = 2;
-        r6 = 4;
-        r7 = 3;
-        if (r3 == 0) goto L_0x01ec;
-    L_0x0070:
-        r3 = r12.currentAccount;
-        r3 = org.telegram.messenger.MessagesController.getInstance(r3);
-        r8 = r12.user_id;
-        r8 = java.lang.Integer.valueOf(r8);
-        r3 = r3.getUser(r8);
-        r8 = r12.userInfo;
-        if (r8 == 0) goto L_0x008c;
-    L_0x0084:
-        r8 = r8.about;
-        r8 = android.text.TextUtils.isEmpty(r8);
-        if (r8 == 0) goto L_0x0096;
-    L_0x008c:
-        if (r3 == 0) goto L_0x0098;
-    L_0x008e:
-        r8 = r3.username;
-        r8 = android.text.TextUtils.isEmpty(r8);
-        if (r8 != 0) goto L_0x0098;
-    L_0x0096:
-        r8 = 1;
-        goto L_0x0099;
-    L_0x0098:
-        r8 = 0;
-    L_0x0099:
-        if (r3 == 0) goto L_0x00a5;
-    L_0x009b:
-        r9 = r3.phone;
+        r3 = 1;
+        goto L_0x005b;
+    L_0x0057:
+        r3 = r3 + 1;
+        goto L_0x004b;
+    L_0x005a:
+        r3 = 0;
+    L_0x005b:
+        r4 = r13.user_id;
+        if (r4 == 0) goto L_0x006b;
+    L_0x005f:
+        r4 = org.telegram.messenger.LocaleController.isRTL;
+        if (r4 == 0) goto L_0x006b;
+    L_0x0063:
+        r4 = r13.rowCount;
+        r5 = r4 + 1;
+        r13.rowCount = r5;
+        r13.emptyRow = r4;
+    L_0x006b:
+        r4 = r13.user_id;
+        r5 = 2;
+        r7 = 4;
+        r8 = 3;
+        if (r4 == 0) goto L_0x01ee;
+    L_0x0072:
+        r4 = r13.currentAccount;
+        r4 = org.telegram.messenger.MessagesController.getInstance(r4);
+        r9 = r13.user_id;
+        r9 = java.lang.Integer.valueOf(r9);
+        r4 = r4.getUser(r9);
+        r9 = r13.userInfo;
+        if (r9 == 0) goto L_0x008e;
+    L_0x0086:
+        r9 = r9.about;
         r9 = android.text.TextUtils.isEmpty(r9);
-        if (r9 != 0) goto L_0x00a5;
-    L_0x00a3:
+        if (r9 == 0) goto L_0x0098;
+    L_0x008e:
+        if (r4 == 0) goto L_0x009a;
+    L_0x0090:
+        r9 = r4.username;
+        r9 = android.text.TextUtils.isEmpty(r9);
+        if (r9 != 0) goto L_0x009a;
+    L_0x0098:
         r9 = 1;
-        goto L_0x00a6;
-    L_0x00a5:
+        goto L_0x009b;
+    L_0x009a:
         r9 = 0;
-    L_0x00a6:
-        r10 = r12.rowCount;
-        r11 = r10 + 1;
-        r12.rowCount = r11;
-        r12.infoHeaderRow = r10;
-        r10 = r12.isBot;
-        if (r10 != 0) goto L_0x00c0;
-    L_0x00b2:
-        if (r9 != 0) goto L_0x00b8;
+    L_0x009b:
+        if (r4 == 0) goto L_0x00a7;
+    L_0x009d:
+        r10 = r4.phone;
+        r10 = android.text.TextUtils.isEmpty(r10);
+        if (r10 != 0) goto L_0x00a7;
+    L_0x00a5:
+        r10 = 1;
+        goto L_0x00a8;
+    L_0x00a7:
+        r10 = 0;
+    L_0x00a8:
+        r11 = r13.rowCount;
+        r12 = r11 + 1;
+        r13.rowCount = r12;
+        r13.infoHeaderRow = r11;
+        r11 = r13.isBot;
+        if (r11 != 0) goto L_0x00c2;
     L_0x00b4:
-        if (r9 != 0) goto L_0x00c0;
+        if (r10 != 0) goto L_0x00ba;
     L_0x00b6:
-        if (r8 != 0) goto L_0x00c0;
+        if (r10 != 0) goto L_0x00c2;
     L_0x00b8:
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.phoneRow = r8;
-    L_0x00c0:
-        r8 = r12.userInfo;
-        if (r8 == 0) goto L_0x00d4;
-    L_0x00c4:
-        r8 = r8.about;
-        r8 = android.text.TextUtils.isEmpty(r8);
-        if (r8 != 0) goto L_0x00d4;
-    L_0x00cc:
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.userInfoRow = r8;
-    L_0x00d4:
-        if (r3 == 0) goto L_0x00e6;
+        if (r9 != 0) goto L_0x00c2;
+    L_0x00ba:
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.phoneRow = r9;
+    L_0x00c2:
+        r9 = r13.userInfo;
+        if (r9 == 0) goto L_0x00d6;
+    L_0x00c6:
+        r9 = r9.about;
+        r9 = android.text.TextUtils.isEmpty(r9);
+        if (r9 != 0) goto L_0x00d6;
+    L_0x00ce:
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.userInfoRow = r9;
     L_0x00d6:
-        r8 = r3.username;
-        r8 = android.text.TextUtils.isEmpty(r8);
-        if (r8 != 0) goto L_0x00e6;
-    L_0x00de:
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.usernameRow = r8;
-    L_0x00e6:
-        r8 = r12.phoneRow;
-        if (r8 != r1) goto L_0x00f2;
-    L_0x00ea:
-        r8 = r12.userInfoRow;
-        if (r8 != r1) goto L_0x00f2;
-    L_0x00ee:
-        r8 = r12.usernameRow;
-        if (r8 == r1) goto L_0x00fa;
-    L_0x00f2:
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.notificationsDividerRow = r8;
-    L_0x00fa:
-        r8 = r12.user_id;
-        r9 = r12.currentAccount;
-        r9 = org.telegram.messenger.UserConfig.getInstance(r9);
-        r9 = r9.getClientUserId();
-        if (r8 == r9) goto L_0x0110;
-    L_0x0108:
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.notificationsRow = r8;
-    L_0x0110:
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.infoSectionRow = r8;
-        r8 = r12.currentEncryptedChat;
-        r8 = r8 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChat;
-        if (r8 == 0) goto L_0x0136;
-    L_0x011e:
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.settingsTimerRow = r8;
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.settingsKeyRow = r8;
-        r8 = r12.rowCount;
-        r9 = r8 + 1;
-        r12.rowCount = r9;
-        r12.settingsSectionRow = r8;
-    L_0x0136:
-        if (r2 != 0) goto L_0x0140;
+        if (r4 == 0) goto L_0x00e8;
+    L_0x00d8:
+        r9 = r4.username;
+        r9 = android.text.TextUtils.isEmpty(r9);
+        if (r9 != 0) goto L_0x00e8;
+    L_0x00e0:
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.usernameRow = r9;
+    L_0x00e8:
+        r9 = r13.phoneRow;
+        if (r9 != r2) goto L_0x00f4;
+    L_0x00ec:
+        r9 = r13.userInfoRow;
+        if (r9 != r2) goto L_0x00f4;
+    L_0x00f0:
+        r9 = r13.usernameRow;
+        if (r9 == r2) goto L_0x00fc;
+    L_0x00f4:
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.notificationsDividerRow = r9;
+    L_0x00fc:
+        r9 = r13.user_id;
+        r10 = r13.currentAccount;
+        r10 = org.telegram.messenger.UserConfig.getInstance(r10);
+        r10 = r10.getClientUserId();
+        if (r9 == r10) goto L_0x0112;
+    L_0x010a:
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.notificationsRow = r9;
+    L_0x0112:
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.infoSectionRow = r9;
+        r9 = r13.currentEncryptedChat;
+        r9 = r9 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChat;
+        if (r9 == 0) goto L_0x0138;
+    L_0x0120:
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.settingsTimerRow = r9;
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.settingsKeyRow = r9;
+        r9 = r13.rowCount;
+        r10 = r9 + 1;
+        r13.rowCount = r10;
+        r13.settingsSectionRow = r9;
     L_0x0138:
-        r2 = r12.userInfo;
-        if (r2 == 0) goto L_0x01b5;
-    L_0x013c:
-        r2 = r2.common_chats_count;
-        if (r2 == 0) goto L_0x01b5;
-    L_0x0140:
-        r2 = r12.rowCount;
-        r8 = r2 + 1;
-        r12.rowCount = r8;
-        r12.sharedHeaderRow = r2;
-        r2 = r12.lastMediaCount;
-        r0 = r2[r0];
-        if (r0 <= 0) goto L_0x0157;
-    L_0x014e:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.photosRow = r0;
-        goto L_0x0159;
-    L_0x0157:
-        r12.photosRow = r1;
+        if (r3 != 0) goto L_0x0142;
+    L_0x013a:
+        r3 = r13.userInfo;
+        if (r3 == 0) goto L_0x01b7;
+    L_0x013e:
+        r3 = r3.common_chats_count;
+        if (r3 == 0) goto L_0x01b7;
+    L_0x0142:
+        r3 = r13.rowCount;
+        r9 = r3 + 1;
+        r13.rowCount = r9;
+        r13.sharedHeaderRow = r3;
+        r3 = r13.lastMediaCount;
+        r3 = r3[r1];
+        if (r3 <= 0) goto L_0x0159;
+    L_0x0150:
+        r3 = r13.rowCount;
+        r9 = r3 + 1;
+        r13.rowCount = r9;
+        r13.photosRow = r3;
+        goto L_0x015b;
     L_0x0159:
-        r0 = r12.lastMediaCount;
-        r0 = r0[r5];
-        if (r0 <= 0) goto L_0x0168;
-    L_0x015f:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.filesRow = r0;
-        goto L_0x016a;
-    L_0x0168:
-        r12.filesRow = r1;
+        r13.photosRow = r2;
+    L_0x015b:
+        r3 = r13.lastMediaCount;
+        r3 = r3[r6];
+        if (r3 <= 0) goto L_0x016a;
+    L_0x0161:
+        r3 = r13.rowCount;
+        r6 = r3 + 1;
+        r13.rowCount = r6;
+        r13.filesRow = r3;
+        goto L_0x016c;
     L_0x016a:
-        r0 = r12.lastMediaCount;
-        r0 = r0[r7];
-        if (r0 <= 0) goto L_0x0179;
-    L_0x0170:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.linksRow = r0;
-        goto L_0x017b;
-    L_0x0179:
-        r12.linksRow = r1;
+        r13.filesRow = r2;
+    L_0x016c:
+        r3 = r13.lastMediaCount;
+        r3 = r3[r8];
+        if (r3 <= 0) goto L_0x017b;
+    L_0x0172:
+        r3 = r13.rowCount;
+        r6 = r3 + 1;
+        r13.rowCount = r6;
+        r13.linksRow = r3;
+        goto L_0x017d;
     L_0x017b:
-        r0 = r12.lastMediaCount;
-        r0 = r0[r6];
-        if (r0 <= 0) goto L_0x018a;
-    L_0x0181:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.audioRow = r0;
-        goto L_0x018c;
-    L_0x018a:
-        r12.audioRow = r1;
+        r13.linksRow = r2;
+    L_0x017d:
+        r3 = r13.lastMediaCount;
+        r3 = r3[r7];
+        if (r3 <= 0) goto L_0x018c;
+    L_0x0183:
+        r3 = r13.rowCount;
+        r6 = r3 + 1;
+        r13.rowCount = r6;
+        r13.audioRow = r3;
+        goto L_0x018e;
     L_0x018c:
-        r0 = r12.lastMediaCount;
-        r0 = r0[r4];
-        if (r0 <= 0) goto L_0x019b;
-    L_0x0192:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.voiceRow = r0;
-        goto L_0x019d;
-    L_0x019b:
-        r12.voiceRow = r1;
-    L_0x019d:
-        r0 = r12.userInfo;
-        if (r0 == 0) goto L_0x01ad;
-    L_0x01a1:
-        r0 = r0.common_chats_count;
-        if (r0 == 0) goto L_0x01ad;
-    L_0x01a5:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.groupsInCommonRow = r0;
-    L_0x01ad:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.sharedSectionRow = r0;
-    L_0x01b5:
-        if (r3 == 0) goto L_0x0450;
-    L_0x01b7:
-        r0 = r12.isBot;
-        if (r0 != 0) goto L_0x0450;
-    L_0x01bb:
-        r0 = r12.currentEncryptedChat;
-        if (r0 != 0) goto L_0x0450;
-    L_0x01bf:
-        r0 = r3.id;
-        r1 = r12.currentAccount;
-        r1 = org.telegram.messenger.UserConfig.getInstance(r1);
-        r1 = r1.getClientUserId();
-        if (r0 == r1) goto L_0x0450;
-    L_0x01cd:
-        r0 = r12.userBlocked;
-        if (r0 == 0) goto L_0x01da;
-    L_0x01d1:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.unblockRow = r0;
-        goto L_0x01e2;
-    L_0x01da:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.startSecretChatRow = r0;
-    L_0x01e2:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.lastSectionRow = r0;
-        goto L_0x0450;
-    L_0x01ec:
-        r3 = r12.chat_id;
-        if (r3 == 0) goto L_0x0450;
-    L_0x01f0:
-        if (r3 <= 0) goto L_0x0417;
-    L_0x01f2:
-        r3 = r12.chatInfo;
-        if (r3 == 0) goto L_0x0206;
-    L_0x01f6:
-        r3 = r3.about;
-        r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 == 0) goto L_0x0210;
-    L_0x01fe:
-        r3 = r12.chatInfo;
-        r3 = r3.location;
-        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_channelLocation;
-        if (r3 != 0) goto L_0x0210;
-    L_0x0206:
-        r3 = r12.currentChat;
-        r3 = r3.username;
-        r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 != 0) goto L_0x024e;
-    L_0x0210:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.infoHeaderRow = r3;
-        r3 = r12.chatInfo;
-        if (r3 == 0) goto L_0x023c;
-    L_0x021c:
-        r3 = r3.about;
-        r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 != 0) goto L_0x022c;
-    L_0x0224:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.channelInfoRow = r3;
-    L_0x022c:
-        r3 = r12.chatInfo;
-        r3 = r3.location;
-        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_channelLocation;
-        if (r3 == 0) goto L_0x023c;
-    L_0x0234:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.locationRow = r3;
-    L_0x023c:
-        r3 = r12.currentChat;
-        r3 = r3.username;
-        r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 != 0) goto L_0x024e;
-    L_0x0246:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.usernameRow = r3;
-    L_0x024e:
-        r3 = r12.infoHeaderRow;
-        if (r3 == r1) goto L_0x025a;
-    L_0x0252:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.notificationsDividerRow = r3;
-    L_0x025a:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.notificationsRow = r3;
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.infoSectionRow = r3;
-        r3 = r12.currentChat;
-        r3 = org.telegram.messenger.ChatObject.isChannel(r3);
-        if (r3 == 0) goto L_0x02b6;
-    L_0x0272:
-        r3 = r12.currentChat;
-        r8 = r3.megagroup;
-        if (r8 != 0) goto L_0x02b6;
-    L_0x0278:
-        r8 = r12.chatInfo;
-        if (r8 == 0) goto L_0x02b6;
-    L_0x027c:
-        r3 = r3.creator;
-        if (r3 != 0) goto L_0x0284;
-    L_0x0280:
-        r3 = r8.can_view_participants;
-        if (r3 == 0) goto L_0x02b6;
-    L_0x0284:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.membersHeaderRow = r3;
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.subscribersRow = r3;
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.administratorsRow = r3;
-        r3 = r12.chatInfo;
-        r8 = r3.banned_count;
-        if (r8 != 0) goto L_0x02a6;
-    L_0x02a2:
-        r3 = r3.kicked_count;
-        if (r3 == 0) goto L_0x02ae;
-    L_0x02a6:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.blockedUsersRow = r3;
-    L_0x02ae:
-        r3 = r12.rowCount;
-        r8 = r3 + 1;
-        r12.rowCount = r8;
-        r12.membersSectionRow = r3;
-    L_0x02b6:
-        if (r2 == 0) goto L_0x031d;
-    L_0x02b8:
-        r2 = r12.rowCount;
+        r13.audioRow = r2;
+    L_0x018e:
+        r3 = r13.lastMediaCount;
+        r3 = r3[r5];
+        if (r3 <= 0) goto L_0x019d;
+    L_0x0194:
+        r2 = r13.rowCount;
         r3 = r2 + 1;
-        r12.rowCount = r3;
-        r12.sharedHeaderRow = r2;
-        r2 = r12.lastMediaCount;
-        r0 = r2[r0];
-        if (r0 <= 0) goto L_0x02cf;
-    L_0x02c6:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.photosRow = r0;
-        goto L_0x02d1;
-    L_0x02cf:
-        r12.photosRow = r1;
+        r13.rowCount = r3;
+        r13.voiceRow = r2;
+        goto L_0x019f;
+    L_0x019d:
+        r13.voiceRow = r2;
+    L_0x019f:
+        r2 = r13.userInfo;
+        if (r2 == 0) goto L_0x01af;
+    L_0x01a3:
+        r2 = r2.common_chats_count;
+        if (r2 == 0) goto L_0x01af;
+    L_0x01a7:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.groupsInCommonRow = r2;
+    L_0x01af:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.sharedSectionRow = r2;
+    L_0x01b7:
+        if (r4 == 0) goto L_0x0452;
+    L_0x01b9:
+        r2 = r13.isBot;
+        if (r2 != 0) goto L_0x0452;
+    L_0x01bd:
+        r2 = r13.currentEncryptedChat;
+        if (r2 != 0) goto L_0x0452;
+    L_0x01c1:
+        r2 = r4.id;
+        r3 = r13.currentAccount;
+        r3 = org.telegram.messenger.UserConfig.getInstance(r3);
+        r3 = r3.getClientUserId();
+        if (r2 == r3) goto L_0x0452;
+    L_0x01cf:
+        r2 = r13.userBlocked;
+        if (r2 == 0) goto L_0x01dc;
+    L_0x01d3:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.unblockRow = r2;
+        goto L_0x01e4;
+    L_0x01dc:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.startSecretChatRow = r2;
+    L_0x01e4:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.lastSectionRow = r2;
+        goto L_0x0452;
+    L_0x01ee:
+        r4 = r13.chat_id;
+        if (r4 == 0) goto L_0x0452;
+    L_0x01f2:
+        if (r4 <= 0) goto L_0x0419;
+    L_0x01f4:
+        r4 = r13.chatInfo;
+        if (r4 == 0) goto L_0x0208;
+    L_0x01f8:
+        r4 = r4.about;
+        r4 = android.text.TextUtils.isEmpty(r4);
+        if (r4 == 0) goto L_0x0212;
+    L_0x0200:
+        r4 = r13.chatInfo;
+        r4 = r4.location;
+        r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_channelLocation;
+        if (r4 != 0) goto L_0x0212;
+    L_0x0208:
+        r4 = r13.currentChat;
+        r4 = r4.username;
+        r4 = android.text.TextUtils.isEmpty(r4);
+        if (r4 != 0) goto L_0x0250;
+    L_0x0212:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.infoHeaderRow = r4;
+        r4 = r13.chatInfo;
+        if (r4 == 0) goto L_0x023e;
+    L_0x021e:
+        r4 = r4.about;
+        r4 = android.text.TextUtils.isEmpty(r4);
+        if (r4 != 0) goto L_0x022e;
+    L_0x0226:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.channelInfoRow = r4;
+    L_0x022e:
+        r4 = r13.chatInfo;
+        r4 = r4.location;
+        r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_channelLocation;
+        if (r4 == 0) goto L_0x023e;
+    L_0x0236:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.locationRow = r4;
+    L_0x023e:
+        r4 = r13.currentChat;
+        r4 = r4.username;
+        r4 = android.text.TextUtils.isEmpty(r4);
+        if (r4 != 0) goto L_0x0250;
+    L_0x0248:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.usernameRow = r4;
+    L_0x0250:
+        r4 = r13.infoHeaderRow;
+        if (r4 == r2) goto L_0x025c;
+    L_0x0254:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.notificationsDividerRow = r4;
+    L_0x025c:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.notificationsRow = r4;
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.infoSectionRow = r4;
+        r4 = r13.currentChat;
+        r4 = org.telegram.messenger.ChatObject.isChannel(r4);
+        if (r4 == 0) goto L_0x02b8;
+    L_0x0274:
+        r4 = r13.currentChat;
+        r9 = r4.megagroup;
+        if (r9 != 0) goto L_0x02b8;
+    L_0x027a:
+        r9 = r13.chatInfo;
+        if (r9 == 0) goto L_0x02b8;
+    L_0x027e:
+        r4 = r4.creator;
+        if (r4 != 0) goto L_0x0286;
+    L_0x0282:
+        r4 = r9.can_view_participants;
+        if (r4 == 0) goto L_0x02b8;
+    L_0x0286:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.membersHeaderRow = r4;
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.subscribersRow = r4;
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.administratorsRow = r4;
+        r4 = r13.chatInfo;
+        r9 = r4.banned_count;
+        if (r9 != 0) goto L_0x02a8;
+    L_0x02a4:
+        r4 = r4.kicked_count;
+        if (r4 == 0) goto L_0x02b0;
+    L_0x02a8:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.blockedUsersRow = r4;
+    L_0x02b0:
+        r4 = r13.rowCount;
+        r9 = r4 + 1;
+        r13.rowCount = r9;
+        r13.membersSectionRow = r4;
+    L_0x02b8:
+        if (r3 == 0) goto L_0x031f;
+    L_0x02ba:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.sharedHeaderRow = r3;
+        r3 = r13.lastMediaCount;
+        r3 = r3[r1];
+        if (r3 <= 0) goto L_0x02d1;
+    L_0x02c8:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.photosRow = r3;
+        goto L_0x02d3;
     L_0x02d1:
-        r0 = r12.lastMediaCount;
-        r0 = r0[r5];
-        if (r0 <= 0) goto L_0x02e0;
-    L_0x02d7:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.filesRow = r0;
-        goto L_0x02e2;
-    L_0x02e0:
-        r12.filesRow = r1;
+        r13.photosRow = r2;
+    L_0x02d3:
+        r3 = r13.lastMediaCount;
+        r3 = r3[r6];
+        if (r3 <= 0) goto L_0x02e2;
+    L_0x02d9:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.filesRow = r3;
+        goto L_0x02e4;
     L_0x02e2:
-        r0 = r12.lastMediaCount;
-        r0 = r0[r7];
-        if (r0 <= 0) goto L_0x02f1;
-    L_0x02e8:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.linksRow = r0;
-        goto L_0x02f3;
-    L_0x02f1:
-        r12.linksRow = r1;
+        r13.filesRow = r2;
+    L_0x02e4:
+        r3 = r13.lastMediaCount;
+        r3 = r3[r8];
+        if (r3 <= 0) goto L_0x02f3;
+    L_0x02ea:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.linksRow = r3;
+        goto L_0x02f5;
     L_0x02f3:
-        r0 = r12.lastMediaCount;
-        r0 = r0[r6];
-        if (r0 <= 0) goto L_0x0302;
-    L_0x02f9:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.audioRow = r0;
-        goto L_0x0304;
-    L_0x0302:
-        r12.audioRow = r1;
+        r13.linksRow = r2;
+    L_0x02f5:
+        r3 = r13.lastMediaCount;
+        r3 = r3[r7];
+        if (r3 <= 0) goto L_0x0304;
+    L_0x02fb:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.audioRow = r3;
+        goto L_0x0306;
     L_0x0304:
-        r0 = r12.lastMediaCount;
-        r0 = r0[r4];
-        if (r0 <= 0) goto L_0x0313;
-    L_0x030a:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.voiceRow = r0;
-        goto L_0x0315;
-    L_0x0313:
-        r12.voiceRow = r1;
+        r13.audioRow = r2;
+    L_0x0306:
+        r3 = r13.lastMediaCount;
+        r3 = r3[r5];
+        if (r3 <= 0) goto L_0x0315;
+    L_0x030c:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.voiceRow = r3;
+        goto L_0x0317;
     L_0x0315:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.sharedSectionRow = r0;
-    L_0x031d:
-        r0 = r12.currentChat;
-        r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 == 0) goto L_0x03cd;
-    L_0x0325:
-        r0 = r12.currentChat;
-        r2 = r0.creator;
-        if (r2 != 0) goto L_0x0347;
-    L_0x032b:
-        r2 = r0.left;
-        if (r2 != 0) goto L_0x0347;
-    L_0x032f:
-        r2 = r0.kicked;
-        if (r2 != 0) goto L_0x0347;
-    L_0x0333:
-        r0 = r0.megagroup;
-        if (r0 != 0) goto L_0x0347;
-    L_0x0337:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.leaveChannelRow = r0;
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.lastSectionRow = r0;
-    L_0x0347:
-        r0 = r12.chatInfo;
-        if (r0 == 0) goto L_0x03ad;
-    L_0x034b:
-        r2 = r12.currentChat;
-        r2 = r2.megagroup;
-        if (r2 == 0) goto L_0x03ad;
-    L_0x0351:
-        r0 = r0.participants;
-        if (r0 == 0) goto L_0x03ad;
-    L_0x0355:
-        r0 = r0.participants;
-        r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x03ad;
-    L_0x035d:
-        r0 = r12.currentChat;
-        r0 = org.telegram.messenger.ChatObject.isNotInChat(r0);
-        if (r0 != 0) goto L_0x038a;
-    L_0x0365:
-        r0 = r12.currentChat;
-        r2 = r0.megagroup;
-        if (r2 == 0) goto L_0x038a;
-    L_0x036b:
-        r0 = org.telegram.messenger.ChatObject.canAddUsers(r0);
-        if (r0 == 0) goto L_0x038a;
-    L_0x0371:
-        r0 = r12.chatInfo;
-        if (r0 == 0) goto L_0x0381;
-    L_0x0375:
-        r0 = r0.participants_count;
-        r2 = r12.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r2 = r2.maxMegagroupCount;
-        if (r0 >= r2) goto L_0x038a;
-    L_0x0381:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.addMemberRow = r0;
-        goto L_0x0392;
-    L_0x038a:
-        r0 = r12.rowCount;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.membersHeaderRow = r0;
-    L_0x0392:
-        r0 = r12.rowCount;
-        r12.membersStartRow = r0;
-        r2 = r12.chatInfo;
+        r13.voiceRow = r2;
+    L_0x0317:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.sharedSectionRow = r3;
+    L_0x031f:
+        r3 = r13.currentChat;
+        r3 = org.telegram.messenger.ChatObject.isChannel(r3);
+        if (r3 == 0) goto L_0x03cf;
+    L_0x0327:
+        r3 = r13.currentChat;
+        r4 = r3.creator;
+        if (r4 != 0) goto L_0x0349;
+    L_0x032d:
+        r4 = r3.left;
+        if (r4 != 0) goto L_0x0349;
+    L_0x0331:
+        r4 = r3.kicked;
+        if (r4 != 0) goto L_0x0349;
+    L_0x0335:
+        r3 = r3.megagroup;
+        if (r3 != 0) goto L_0x0349;
+    L_0x0339:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.leaveChannelRow = r3;
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.lastSectionRow = r3;
+    L_0x0349:
+        r3 = r13.chatInfo;
+        if (r3 == 0) goto L_0x03af;
+    L_0x034d:
+        r4 = r13.currentChat;
+        r4 = r4.megagroup;
+        if (r4 == 0) goto L_0x03af;
+    L_0x0353:
+        r3 = r3.participants;
+        if (r3 == 0) goto L_0x03af;
+    L_0x0357:
+        r3 = r3.participants;
+        r3 = r3.isEmpty();
+        if (r3 != 0) goto L_0x03af;
+    L_0x035f:
+        r3 = r13.currentChat;
+        r3 = org.telegram.messenger.ChatObject.isNotInChat(r3);
+        if (r3 != 0) goto L_0x038c;
+    L_0x0367:
+        r3 = r13.currentChat;
+        r4 = r3.megagroup;
+        if (r4 == 0) goto L_0x038c;
+    L_0x036d:
+        r3 = org.telegram.messenger.ChatObject.canAddUsers(r3);
+        if (r3 == 0) goto L_0x038c;
+    L_0x0373:
+        r3 = r13.chatInfo;
+        if (r3 == 0) goto L_0x0383;
+    L_0x0377:
+        r3 = r3.participants_count;
+        r4 = r13.currentAccount;
+        r4 = org.telegram.messenger.MessagesController.getInstance(r4);
+        r4 = r4.maxMegagroupCount;
+        if (r3 >= r4) goto L_0x038c;
+    L_0x0383:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.addMemberRow = r3;
+        goto L_0x0394;
+    L_0x038c:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.membersHeaderRow = r3;
+    L_0x0394:
+        r3 = r13.rowCount;
+        r13.membersStartRow = r3;
+        r4 = r13.chatInfo;
+        r4 = r4.participants;
+        r4 = r4.participants;
+        r4 = r4.size();
+        r3 = r3 + r4;
+        r13.rowCount = r3;
+        r3 = r13.rowCount;
+        r13.membersEndRow = r3;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.membersSectionRow = r3;
+    L_0x03af:
+        r3 = r13.lastSectionRow;
+        if (r3 != r2) goto L_0x0452;
+    L_0x03b3:
+        r2 = r13.currentChat;
+        r3 = r2.left;
+        if (r3 == 0) goto L_0x0452;
+    L_0x03b9:
+        r2 = r2.kicked;
+        if (r2 != 0) goto L_0x0452;
+    L_0x03bd:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.joinRow = r2;
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.lastSectionRow = r2;
+        goto L_0x0452;
+    L_0x03cf:
+        r2 = r13.chatInfo;
+        if (r2 == 0) goto L_0x0452;
+    L_0x03d3:
         r2 = r2.participants;
+        r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden;
+        if (r2 != 0) goto L_0x0452;
+    L_0x03d9:
+        r2 = r13.currentChat;
+        r2 = org.telegram.messenger.ChatObject.canAddUsers(r2);
+        if (r2 != 0) goto L_0x03f5;
+    L_0x03e1:
+        r2 = r13.currentChat;
+        r2 = r2.default_banned_rights;
+        if (r2 == 0) goto L_0x03f5;
+    L_0x03e7:
+        r2 = r2.invite_users;
+        if (r2 != 0) goto L_0x03ec;
+    L_0x03eb:
+        goto L_0x03f5;
+    L_0x03ec:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.membersHeaderRow = r2;
+        goto L_0x03fd;
+    L_0x03f5:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.addMemberRow = r2;
+    L_0x03fd:
+        r2 = r13.rowCount;
+        r13.membersStartRow = r2;
+        r3 = r13.chatInfo;
+        r3 = r3.participants;
+        r3 = r3.participants;
+        r3 = r3.size();
+        r2 = r2 + r3;
+        r13.rowCount = r2;
+        r2 = r13.rowCount;
+        r13.membersEndRow = r2;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.membersSectionRow = r2;
+        goto L_0x0452;
+    L_0x0419:
+        r2 = r13.currentChat;
+        r2 = org.telegram.messenger.ChatObject.isChannel(r2);
+        if (r2 != 0) goto L_0x0452;
+    L_0x0421:
+        r2 = r13.chatInfo;
+        if (r2 == 0) goto L_0x0452;
+    L_0x0425:
+        r2 = r2.participants;
+        r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden;
+        if (r3 != 0) goto L_0x0452;
+    L_0x042b:
+        r3 = r13.rowCount;
+        r4 = r3 + 1;
+        r13.rowCount = r4;
+        r13.membersHeaderRow = r3;
+        r3 = r13.rowCount;
+        r13.membersStartRow = r3;
         r2 = r2.participants;
         r2 = r2.size();
+        r3 = r3 + r2;
+        r13.rowCount = r3;
+        r2 = r13.rowCount;
+        r13.membersEndRow = r2;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.membersSectionRow = r2;
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.addMemberRow = r2;
+    L_0x0452:
+        r2 = r13.rowCount;
+        r3 = r2 + 1;
+        r13.rowCount = r3;
+        r13.bottomPaddingRow = r2;
+        r2 = r13.actionBar;
+        if (r2 == 0) goto L_0x0470;
+    L_0x045e:
+        r2 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight();
+        r3 = r13.actionBar;
+        r3 = r3.getOccupyStatusBar();
+        if (r3 == 0) goto L_0x046d;
+    L_0x046a:
+        r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight;
+        goto L_0x046e;
+    L_0x046d:
+        r3 = 0;
+    L_0x046e:
+        r2 = r2 + r3;
+        goto L_0x0471;
+    L_0x0470:
+        r2 = 0;
+    L_0x0471:
+        r3 = r13.listView;
+        if (r3 == 0) goto L_0x048d;
+    L_0x0475:
+        r3 = r13.rowCount;
+        if (r0 > r3) goto L_0x048d;
+    L_0x0479:
+        r0 = r13.listContentHeight;
+        if (r0 == 0) goto L_0x048f;
+    L_0x047d:
         r0 = r0 + r2;
-        r12.rowCount = r0;
-        r0 = r12.rowCount;
-        r12.membersEndRow = r0;
-        r2 = r0 + 1;
-        r12.rowCount = r2;
-        r12.membersSectionRow = r0;
-    L_0x03ad:
-        r0 = r12.lastSectionRow;
-        if (r0 != r1) goto L_0x0450;
-    L_0x03b1:
-        r0 = r12.currentChat;
-        r1 = r0.left;
-        if (r1 == 0) goto L_0x0450;
-    L_0x03b7:
-        r0 = r0.kicked;
-        if (r0 != 0) goto L_0x0450;
-    L_0x03bb:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.joinRow = r0;
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.lastSectionRow = r0;
-        goto L_0x0450;
-    L_0x03cd:
-        r0 = r12.chatInfo;
-        if (r0 == 0) goto L_0x0450;
-    L_0x03d1:
-        r0 = r0.participants;
-        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden;
-        if (r0 != 0) goto L_0x0450;
-    L_0x03d7:
-        r0 = r12.currentChat;
-        r0 = org.telegram.messenger.ChatObject.canAddUsers(r0);
-        if (r0 != 0) goto L_0x03f3;
-    L_0x03df:
-        r0 = r12.currentChat;
-        r0 = r0.default_banned_rights;
-        if (r0 == 0) goto L_0x03f3;
-    L_0x03e5:
-        r0 = r0.invite_users;
-        if (r0 != 0) goto L_0x03ea;
-    L_0x03e9:
-        goto L_0x03f3;
-    L_0x03ea:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.membersHeaderRow = r0;
-        goto L_0x03fb;
-    L_0x03f3:
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.addMemberRow = r0;
-    L_0x03fb:
-        r0 = r12.rowCount;
-        r12.membersStartRow = r0;
-        r1 = r12.chatInfo;
-        r1 = r1.participants;
-        r1 = r1.participants;
-        r1 = r1.size();
-        r0 = r0 + r1;
-        r12.rowCount = r0;
-        r0 = r12.rowCount;
-        r12.membersEndRow = r0;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.membersSectionRow = r0;
-        goto L_0x0450;
-    L_0x0417:
-        r0 = r12.currentChat;
-        r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 != 0) goto L_0x0450;
-    L_0x041f:
-        r0 = r12.chatInfo;
-        if (r0 == 0) goto L_0x0450;
-    L_0x0423:
-        r0 = r0.participants;
-        r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden;
-        if (r1 != 0) goto L_0x0450;
-    L_0x0429:
-        r1 = r12.rowCount;
-        r2 = r1 + 1;
-        r12.rowCount = r2;
-        r12.membersHeaderRow = r1;
-        r1 = r12.rowCount;
-        r12.membersStartRow = r1;
-        r0 = r0.participants;
-        r0 = r0.size();
-        r1 = r1 + r0;
-        r12.rowCount = r1;
-        r0 = r12.rowCount;
-        r12.membersEndRow = r0;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.membersSectionRow = r0;
-        r0 = r12.rowCount;
-        r1 = r0 + 1;
-        r12.rowCount = r1;
-        r12.addMemberRow = r0;
-    L_0x0450:
-        r12.fixListViewPaddingsOnPreDraw();
+        r2 = NUM; // 0x42b00000 float:88.0 double:5.52775759E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r0 = r0 + r2;
+        r2 = r13.listView;
+        r2 = r2.getMeasuredHeight();
+        if (r0 >= r2) goto L_0x048f;
+    L_0x048d:
+        r13.lastMeasuredContentWidth = r1;
+    L_0x048f:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateRowsIds():void");

@@ -14,6 +14,6 @@ public final /* synthetic */ class -$$Lambda$AlertsCreator$LEkyy2uvzoVwagVSlDPe5
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$runLinkRequest$29$LaunchActivity(new LanguageSelectActivity());
+        this.f$0.lambda$runLinkRequest$28$LaunchActivity(new LanguageSelectActivity());
     }
 }

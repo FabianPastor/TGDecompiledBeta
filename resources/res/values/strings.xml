@@ -2947,7 +2947,6 @@
     <string name="WalletCreateInvoice">Create invoice</string>
     <string name="WalletCreateInvoiceTitle">Create Invoice</string>
     <string name="WalletCreated">Wallet Created</string>
-    <string name="WalletDate">Date</string>
     <string name="WalletDelete">Delete Wallet</string>
     <string name="WalletDeleteInfo">This will disconnect the wallet from this app. You will be able to restore your wallet using 24 secret words – or import another wallet.\10\10Wallets are located in the TON Blockchain, which is not controlled by Telegram. If you want a wallet to be deleted, simply transfer all the grams from it and leave it empty.</string>
     <string name="WalletDeleteTitle">Delete wallet</string>
@@ -2958,13 +2957,15 @@
     <string name="WalletExportConfirmContinue">Please confirm your credentials to continue.</string>
     <string name="WalletExportConfirmCredentials">Please confirm your credentials to export your wallet.</string>
     <string name="WalletFrom">from:</string>
+    <string name="WalletGramsToReceive">Number of Grams you expect to receive...</string>
+    <string name="WalletGramsToSend">Grams to send...</string>
     <string name="WalletImportAlertText">Sorry, you have entered incorrect secret words. Please double check and try again.</string>
     <string name="WalletImportAlertTitle">Incorrect words</string>
     <string name="WalletImportDontHave">I don’t have them</string>
     <string name="WalletImportInfo">You can restore access to your wallet by entering the 24 words you wrote down when creating the wallet.</string>
     <string name="WalletInsufficientGramsText">Unfortunately, your transfer couldn\'t be completed. You don\'t have enough grams.</string>
     <string name="WalletInsufficientGramsTitle">Insufficient Grams</string>
-    <string name="WalletInvoiceInfo">You can specify the amount and purpose of the payment to save the sender some time:</string>
+    <string name="WalletInvoiceInfo">You can specify the amount and purpose of the payment to save the sender some time.</string>
     <string name="WalletKeystoreInvalidated">Unfortunately, your wallet is no longer available because your of a change in your device\'s lockscreen parameters. Please use your secret words to restore the wallet.</string>
     <string name="WalletPasscodeLength">Your passcode contains %1$s.</string>
     <string name="WalletPendingTransactions">Pending</string>
@@ -3022,9 +3023,10 @@
     <string name="WalletShareAddress">Share Wallet Address</string>
     <string name="WalletShareInfo">Share this address with other Gram\10wallet owners to receive Grams from them.</string>
     <string name="WalletShareInvoiceUrl">Share Invoice URL</string>
-    <string name="WalletShareInvoiceUrlInfo">Share this link with other Gram wallet owners to receive **%1$s Grams** from them.</string>
+    <string name="WalletShareInvoiceUrlInfo">Share this address with other Gram wallet owners to receive Grams from them.</string>
     <string name="WalletShareQr">Share QR</string>
     <string name="WalletStorageFee">%1$s storage fee</string>
+    <string name="WalletStorageFeeHeader">Storage fee</string>
     <string name="WalletSwipeToRefresh">Swipe down to refresh</string>
     <string name="WalletTelegramLogout">Are you sure you want to log out?\10\10Logging out will cancel all your **secret chats** and **unlink your Gram wallet** from the app.\10\10You will be able to restore your wallet using 24 secret words – or import another wallet.</string>
     <string name="WalletTestTime">Test time!</string>
@@ -3048,8 +3050,9 @@
     <string name="WalletTransactionAddressCopied">Address copied to clipboard</string>
     <string name="WalletTransactionComment">Comment</string>
     <string name="WalletTransactionFee">%1$s transaction fee</string>
+    <string name="WalletTransactionFeeHeader">Transaction fee</string>
     <string name="WalletTransactionRecipient">Recipient</string>
-    <string name="WalletTransactionSendGrams">Send Grams to this Address</string>
+    <string name="WalletTransactionSendGrams">Send Grams</string>
     <string name="WalletTransactionSender">Sender</string>
     <string name="WalletUpdatedFewSecondsAgo">updated a few seconds ago</string>
     <string name="WalletUpdatedTimeAgo">updated %1$s ago</string>
@@ -3057,7 +3060,6 @@
     <string name="WalletView">View My Wallet</string>
     <string name="WalletYourAddress">Your wallet address</string>
     <string name="WalletYourBalance">Your balance</string>
-    <string name="WalletYourInvoice">Your Invoice</string>
     <string name="Warmth">Warmth</string>
     <string name="WebSessionsTitle">Logged in with Telegram</string>
     <string name="Weeks_few">%1$d weeks</string>

@@ -4108,7 +4108,6 @@
     <public type="string" name="WalletCreateInvoice" id="NUM" />
     <public type="string" name="WalletCreateInvoiceTitle" id="NUM" />
     <public type="string" name="WalletCreated" id="NUM" />
-    <public type="string" name="WalletDate" id="NUM" />
     <public type="string" name="WalletDelete" id="NUM" />
     <public type="string" name="WalletDeleteInfo" id="NUM" />
     <public type="string" name="WalletDeleteTitle" id="NUM" />
@@ -4119,6 +4118,8 @@
     <public type="string" name="WalletExportConfirmContinue" id="NUM" />
     <public type="string" name="WalletExportConfirmCredentials" id="NUM" />
     <public type="string" name="WalletFrom" id="NUM" />
+    <public type="string" name="WalletGramsToReceive" id="NUM" />
+    <public type="string" name="WalletGramsToSend" id="NUM" />
     <public type="string" name="WalletImportAlertText" id="NUM" />
     <public type="string" name="WalletImportAlertTitle" id="NUM" />
     <public type="string" name="WalletImportDontHave" id="NUM" />
@@ -4186,6 +4187,7 @@
     <public type="string" name="WalletShareInvoiceUrlInfo" id="NUM" />
     <public type="string" name="WalletShareQr" id="NUM" />
     <public type="string" name="WalletStorageFee" id="NUM" />
+    <public type="string" name="WalletStorageFeeHeader" id="NUM" />
     <public type="string" name="WalletSwipeToRefresh" id="NUM" />
     <public type="string" name="WalletTelegramLogout" id="NUM" />
     <public type="string" name="WalletTestTime" id="NUM" />
@@ -4209,6 +4211,7 @@
     <public type="string" name="WalletTransactionAddressCopied" id="NUM" />
     <public type="string" name="WalletTransactionComment" id="NUM" />
     <public type="string" name="WalletTransactionFee" id="NUM" />
+    <public type="string" name="WalletTransactionFeeHeader" id="NUM" />
     <public type="string" name="WalletTransactionRecipient" id="NUM" />
     <public type="string" name="WalletTransactionSendGrams" id="NUM" />
     <public type="string" name="WalletTransactionSender" id="NUM" />
@@ -4218,7 +4221,6 @@
     <public type="string" name="WalletView" id="NUM" />
     <public type="string" name="WalletYourAddress" id="NUM" />
     <public type="string" name="WalletYourBalance" id="NUM" />
-    <public type="string" name="WalletYourInvoice" id="NUM" />
     <public type="string" name="Warmth" id="NUM" />
     <public type="string" name="WebSessionsTitle" id="NUM" />
     <public type="string" name="Weeks_few" id="NUM" />

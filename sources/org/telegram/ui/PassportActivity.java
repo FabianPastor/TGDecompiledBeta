@@ -5329,7 +5329,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         r3 = org.telegram.ui.PassportActivity.this;
                         r3 = r3.inputFields;
                         r3 = r3[r7];
-                        r4 = NUM; // 0x7f0e0CLASSNAME float:1.8881285E38 double:1.0531636784E-314;
+                        r4 = NUM; // 0x7f0e0c0a float:1.8881289E38 double:1.0531636793E-314;
                         r5 = "WrongCountry";
                         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
                         r3.setText(r4);

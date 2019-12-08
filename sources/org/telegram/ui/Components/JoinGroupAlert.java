@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
@@ -164,7 +165,11 @@ public class JoinGroupAlert extends BottomSheet {
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(str3));
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", NUM));
+        if (obj.channel || (ChatObject.isChannel(obj.chat) && !obj.chat.megagroup)) {
+            pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ProfileJoinChannel", NUM).toUpperCase());
+        } else {
+            pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", NUM));
+        }
         pickerBottomLayout.doneButton.setOnClickListener(new -$$Lambda$JoinGroupAlert$MfRcTjxTXiGmJvnuSHx7GPUtAhw(this));
     }
 
