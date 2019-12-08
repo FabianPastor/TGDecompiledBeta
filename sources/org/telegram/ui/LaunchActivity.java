@@ -2892,11 +2892,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x09f3:
         r1 = 1;
         r2 = r0.get(r1);
-        r2 = (java.lang.String) r2;
+        r2 = (java.lang.CharSequence) r2;
         r7 = org.telegram.messenger.Utilities.parseInt(r2);
         r1 = 2;
         r0 = r0.get(r1);
-        r0 = (java.lang.String) r0;
+        r0 = (java.lang.CharSequence) r0;
         r0 = org.telegram.messenger.Utilities.parseInt(r0);
         r1 = r0.intValue();
         if (r1 == 0) goto L_0x0a1c;
@@ -2963,7 +2963,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         if (r2 <= r4) goto L_0x0a81;
     L_0x0a71:
         r1 = r1.get(r4);
-        r1 = (java.lang.String) r1;
+        r1 = (java.lang.CharSequence) r1;
         r1 = org.telegram.messenger.Utilities.parseInt(r1);
         r2 = r1.intValue();
         if (r2 != 0) goto L_0x0a85;
@@ -4258,7 +4258,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x01c2:
         r0 = "bot_id";
         r0 = r15.get(r0);
-        r0 = (java.lang.String) r0;
+        r0 = (java.lang.CharSequence) r0;
         r0 = org.telegram.messenger.Utilities.parseInt(r0);
         r0 = r0.intValue();
         if (r0 != 0) goto L_0x01d5;

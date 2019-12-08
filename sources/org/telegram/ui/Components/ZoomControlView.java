@@ -82,9 +82,22 @@ public class ZoomControlView extends View {
         return this.zoom;
     }
 
-    public void setZoom(float f) {
-        this.zoom = f;
-        invalidate();
+    public void setZoom(float f, boolean z) {
+        if (f != this.zoom) {
+            if (f < 0.0f) {
+                f = 0.0f;
+            } else if (f > 1.0f) {
+                f = 1.0f;
+            }
+            this.zoom = f;
+            if (z) {
+                ZoomControlViewDelegate zoomControlViewDelegate = this.delegate;
+                if (zoomControlViewDelegate != null) {
+                    zoomControlViewDelegate.didSetZoom(this.zoom);
+                }
+            }
+            invalidate();
+        }
     }
 
     public void setDelegate(ZoomControlViewDelegate zoomControlViewDelegate) {

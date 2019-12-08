@@ -2498,7 +2498,7 @@ public class TLRPC {
             r9 = r7.params;
             r0 = "legacy_layer";
             r9 = r9.get(r0);
-            r9 = (java.lang.String) r9;
+            r9 = (java.lang.CharSequence) r9;
             r9 = org.telegram.messenger.Utilities.parseInt(r9);
             r9 = r9.intValue();
             r7.layer = r9;

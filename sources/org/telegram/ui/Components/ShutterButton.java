@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import android.view.animation.DecelerateInterpolator;
+import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 
@@ -39,6 +40,8 @@ public class ShutterButton extends View {
     private Paint whitePaint = new Paint(1);
 
     public interface ShutterButtonDelegate {
+        boolean onTranslationChanged(float f, float f2);
+
         void shutterCancel();
 
         boolean shutterLongPressed();
@@ -71,18 +74,16 @@ public class ShutterButton extends View {
 
     private void setHighlighted(boolean z) {
         AnimatorSet animatorSet = new AnimatorSet();
-        String str = "scaleY";
-        String str2 = "scaleX";
         Animator[] animatorArr;
         if (z) {
             animatorArr = new Animator[2];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, str2, new float[]{1.06f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this, str, new float[]{1.06f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.06f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.06f});
             animatorSet.playTogether(animatorArr);
         } else {
             animatorArr = new Animator[2];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, str2, new float[]{1.0f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this, str, new float[]{1.0f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
             animatorSet.setStartDelay(40);
         }
@@ -91,6 +92,7 @@ public class ShutterButton extends View {
         animatorSet.start();
     }
 
+    @Keep
     public void setScaleX(float f) {
         super.setScaleX(f);
         invalidate();
@@ -141,7 +143,7 @@ public class ShutterButton extends View {
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
         float x = motionEvent.getX();
-        float x2 = motionEvent.getX();
+        float y = motionEvent.getY();
         int action = motionEvent.getAction();
         if (action == 0) {
             AndroidUtilities.runOnUIThread(this.longPressed, 800);
@@ -151,21 +153,29 @@ public class ShutterButton extends View {
         } else if (action == 1) {
             setHighlighted(false);
             AndroidUtilities.cancelRunOnUIThread(this.longPressed);
-            if (this.processRelease && x >= 0.0f && x2 >= 0.0f && x <= ((float) getMeasuredWidth()) && x2 <= ((float) getMeasuredHeight())) {
+            if (this.processRelease) {
                 this.delegate.shutterReleased();
             }
-        } else if (action != 2) {
-            if (action == 3) {
-                setHighlighted(false);
-                this.pressed = false;
+        } else if (action == 2) {
+            float f = 0.0f;
+            if (x >= 0.0f && x <= ((float) getMeasuredWidth())) {
+                x = 0.0f;
             }
-        } else if (x < 0.0f || x2 < 0.0f || x > ((float) getMeasuredWidth()) || x2 > ((float) getMeasuredHeight())) {
-            AndroidUtilities.cancelRunOnUIThread(this.longPressed);
-            if (this.state == State.RECORDING) {
-                setHighlighted(false);
-                this.delegate.shutterCancel();
-                setState(State.DEFAULT, true);
+            if (y < 0.0f || y > ((float) getMeasuredHeight())) {
+                f = y;
             }
+            if (this.delegate.onTranslationChanged(x, f)) {
+                AndroidUtilities.cancelRunOnUIThread(this.longPressed);
+                if (this.state == State.RECORDING) {
+                    this.processRelease = false;
+                    setHighlighted(false);
+                    this.delegate.shutterCancel();
+                    setState(State.DEFAULT, true);
+                }
+            }
+        } else if (action == 3) {
+            setHighlighted(false);
+            this.pressed = false;
         }
         return true;
     }

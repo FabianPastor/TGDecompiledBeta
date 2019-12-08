@@ -189,6 +189,7 @@ import org.telegram.ui.Components.SeekBar;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
 import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto;
 import org.telegram.ui.Components.StickersAlert;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanUserMentionPhotoViewer;
 import org.telegram.ui.Components.VideoForwardDrawable;
 import org.telegram.ui.Components.VideoForwardDrawable.VideoForwardDrawableDelegate;
@@ -790,11 +791,30 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
-    public static class LinkMovementMethodMy extends LinkMovementMethod {
+    private class LinkMovementMethodMy extends LinkMovementMethod {
+        private LinkMovementMethodMy() {
+        }
+
+        /* synthetic */ LinkMovementMethodMy(PhotoViewer photoViewer, AnonymousClass1 anonymousClass1) {
+            this();
+        }
+
         public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
             try {
                 boolean onTouchEvent = super.onTouchEvent(textView, spannable, motionEvent);
                 if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+                    URLSpanNoUnderline[] uRLSpanNoUnderlineArr = (URLSpanNoUnderline[]) spannable.getSpans(textView.getSelectionStart(), textView.getSelectionEnd(), URLSpanNoUnderline.class);
+                    if (uRLSpanNoUnderlineArr != null && uRLSpanNoUnderlineArr.length > 0) {
+                        String url = uRLSpanNoUnderlineArr[0].getURL();
+                        if (!(!url.startsWith("video") || PhotoViewer.this.videoPlayer == null || PhotoViewer.this.currentMessageObject == null)) {
+                            int intValue = Utilities.parseInt(url).intValue();
+                            if (PhotoViewer.this.videoPlayer.getDuration() == -9223372036854775807L) {
+                                PhotoViewer.this.seekToProgressPending = ((float) intValue) / ((float) PhotoViewer.this.currentMessageObject.getDuration());
+                            } else {
+                                PhotoViewer.this.videoPlayer.seekTo(((long) intValue) * 1000);
+                            }
+                        }
+                    }
                     Selection.removeSelection(spannable);
                 }
                 return onTouchEvent;
@@ -4595,9 +4615,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
             }
         };
-        anonymousClass23.setMovementMethod(new LinkMovementMethodMy());
+        anonymousClass23.setMovementMethod(new LinkMovementMethodMy(this, null));
         anonymousClass23.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
-        anonymousClass23.setLinkTextColor(-1);
+        anonymousClass23.setLinkTextColor(-8994063);
         anonymousClass23.setTextColor(-1);
         anonymousClass23.setHighlightColor(NUM);
         anonymousClass23.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
@@ -5397,8 +5417,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             PhotoViewer.this.switchingInlineMode = false;
                             if (VERSION.SDK_INT >= 21) {
                                 PhotoViewer.this.aspectRatioFrameLayout.getLocationInWindow(PhotoViewer.this.pipPosition);
-                                int[] access$11200 = PhotoViewer.this.pipPosition;
-                                access$11200[1] = (int) (((float) access$11200[1]) - PhotoViewer.this.containerView.getTranslationY());
+                                int[] access$11300 = PhotoViewer.this.pipPosition;
+                                access$11300[1] = (int) (((float) access$11300[1]) - PhotoViewer.this.containerView.getTranslationY());
                                 PhotoViewer.this.textureImageView.setTranslationX(PhotoViewer.this.textureImageView.getTranslationX() + ((float) PhotoViewer.this.getLeftInset()));
                                 PhotoViewer.this.videoTextureView.setTranslationX((PhotoViewer.this.videoTextureView.getTranslationX() + ((float) PhotoViewer.this.getLeftInset())) - PhotoViewer.this.aspectRatioFrameLayout.getX());
                                 AnimatorSet animatorSet = new AnimatorSet();
@@ -5440,6 +5460,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 this.videoTimelineView.setProgress(0.0f);
                 this.videoPlayerSeekbar.setBufferedProgress(0.0f);
                 this.videoPlayer.setPlayWhenReady(z);
+            }
+            MessageObject messageObject = this.currentMessageObject;
+            if (messageObject != null) {
+                float f = messageObject.forceSeekTo;
+                if (f >= 0.0f) {
+                    this.seekToProgressPending = f;
+                    messageObject.forceSeekTo = -1.0f;
+                }
             }
             BotInlineResult botInlineResult = this.currentBotInlineResult;
             if (botInlineResult == null || !(botInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
@@ -13210,7 +13238,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
         float y;
         float containerViewHeight;
-        int access$11500;
+        int access$11600;
         if (this.containerView.getTag() != null) {
             AspectRatioFrameLayout aspectRatioFrameLayout = this.aspectRatioFrameLayout;
             Object obj = (aspectRatioFrameLayout == null || aspectRatioFrameLayout.getVisibility() != 0) ? null : 1;
@@ -13231,8 +13259,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             }
             PhotoProgressView[] photoProgressViewArr = this.photoProgressViews;
             if (!(photoProgressViewArr[0] == null || this.containerView == null || obj != null)) {
-                access$11500 = photoProgressViewArr[0].backgroundState;
-                if (access$11500 > 0 && access$11500 <= 3 && x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
+                access$11600 = photoProgressViewArr[0].backgroundState;
+                if (access$11600 > 0 && access$11600 <= 3 && x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
                     onActionClick(true);
                     checkProgress(0, true);
                     return true;
@@ -13240,12 +13268,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             }
             toggleActionBar(this.isActionBarVisible ^ 1, true);
         } else {
-            access$11500 = this.sendPhotoType;
-            if (access$11500 != 0 && access$11500 != 4) {
+            access$11600 = this.sendPhotoType;
+            if (access$11600 != 0 && access$11600 != 4) {
                 BotInlineResult botInlineResult = this.currentBotInlineResult;
                 if (botInlineResult != null && (botInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
-                    access$11500 = this.photoProgressViews[0].backgroundState;
-                    if (access$11500 > 0 && access$11500 <= 3) {
+                    access$11600 = this.photoProgressViews[0].backgroundState;
+                    if (access$11600 > 0 && access$11600 <= 3) {
                         containerViewHeight = motionEvent.getX();
                         y = motionEvent.getY();
                         if (containerViewHeight >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && containerViewHeight <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
@@ -13583,26 +13611,26 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             public void onAnimationEnd(Animator animator) {
                 if (animator.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
                     PhotoViewer.this.qualityChooseViewAnimation = new AnimatorSet();
-                    AnimatorSet access$16000;
+                    AnimatorSet access$16100;
                     Animator[] animatorArr;
                     if (z) {
                         PhotoViewer.this.qualityChooseView.setVisibility(0);
                         PhotoViewer.this.qualityPicker.setVisibility(0);
-                        access$16000 = PhotoViewer.this.qualityChooseViewAnimation;
+                        access$16100 = PhotoViewer.this.qualityChooseViewAnimation;
                         animatorArr = new Animator[3];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityChooseView, View.TRANSLATION_Y, new float[]{0.0f});
                         animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityPicker, View.TRANSLATION_Y, new float[]{0.0f});
                         animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                        access$16000.playTogether(animatorArr);
+                        access$16100.playTogether(animatorArr);
                     } else {
                         PhotoViewer.this.qualityChooseView.setVisibility(4);
                         PhotoViewer.this.qualityPicker.setVisibility(4);
-                        access$16000 = PhotoViewer.this.qualityChooseViewAnimation;
+                        access$16100 = PhotoViewer.this.qualityChooseViewAnimation;
                         animatorArr = new Animator[3];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.pickerView, View.TRANSLATION_Y, new float[]{0.0f});
                         animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.pickerViewSendButton, View.TRANSLATION_Y, new float[]{0.0f});
                         animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                        access$16000.playTogether(animatorArr);
+                        access$16100.playTogether(animatorArr);
                     }
                     PhotoViewer.this.qualityChooseViewAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {

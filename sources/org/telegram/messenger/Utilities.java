@@ -98,36 +98,36 @@ public class Utilities {
         aesCbcEncryptionByteArray(bArr, bArr2, (byte[]) bArr3.clone(), i, i2, i3, i4);
     }
 
-    public static Integer parseInt(String str) {
-        Integer valueOf = Integer.valueOf(0);
-        if (str == null) {
-            return valueOf;
+    public static Integer parseInt(CharSequence charSequence) {
+        int i = 0;
+        if (charSequence == null) {
+            return Integer.valueOf(0);
         }
         try {
-            Matcher matcher = pattern.matcher(str);
+            Matcher matcher = pattern.matcher(charSequence);
             if (matcher.find()) {
-                valueOf = Integer.valueOf(Integer.parseInt(matcher.group(0)));
+                i = Integer.parseInt(matcher.group(0));
             }
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return valueOf;
+        return Integer.valueOf(i);
     }
 
     public static Long parseLong(String str) {
-        Long valueOf = Long.valueOf(0);
+        long j = 0;
         if (str == null) {
-            return valueOf;
+            return Long.valueOf(0);
         }
         try {
             Matcher matcher = pattern.matcher(str);
             if (matcher.find()) {
-                valueOf = Long.valueOf(Long.parseLong(matcher.group(0)));
+                j = Long.parseLong(matcher.group(0));
             }
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return valueOf;
+        return Long.valueOf(j);
     }
 
     public static String parseIntToString(String str) {

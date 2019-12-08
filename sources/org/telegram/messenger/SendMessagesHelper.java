@@ -5242,7 +5242,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     L_0x056c:
         r4 = "bot";
         r4 = r12.get(r4);	 Catch:{ Exception -> 0x0212 }
-        r4 = (java.lang.String) r4;	 Catch:{ Exception -> 0x0212 }
+        r4 = (java.lang.CharSequence) r4;	 Catch:{ Exception -> 0x0212 }
         r4 = org.telegram.messenger.Utilities.parseInt(r4);	 Catch:{ Exception -> 0x0212 }
         r4 = r4.intValue();	 Catch:{ Exception -> 0x0212 }
         r7.via_bot_id = r4;	 Catch:{ Exception -> 0x0212 }

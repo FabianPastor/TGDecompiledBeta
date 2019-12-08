@@ -407,8 +407,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         ChannelAdminLogActivity.this.createMenu(chatMessageCell);
                     }
 
-                    public void didPressUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z) {
+                    public void didPressUrl(ChatMessageCell chatMessageCell, CharacterStyle characterStyle, boolean z) {
                         if (characterStyle != null) {
+                            MessageObject messageObject = chatMessageCell.getMessageObject();
                             if (characterStyle instanceof URLSpanMono) {
                                 ((URLSpanMono) characterStyle).copyToClipboard();
                                 Toast.makeText(ChannelAdminLogActivity.this.getParentActivity(), LocaleController.getString("TextCopied", NUM), 0).show();

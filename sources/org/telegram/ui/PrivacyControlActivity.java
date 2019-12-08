@@ -225,8 +225,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     -CC.$default$didPressShare(this, chatMessageCell);
                 }
 
-                public /* synthetic */ void didPressUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z) {
-                    -CC.$default$didPressUrl(this, messageObject, characterStyle, z);
+                public /* synthetic */ void didPressUrl(ChatMessageCell chatMessageCell, CharacterStyle characterStyle, boolean z) {
+                    -CC.$default$didPressUrl(this, chatMessageCell, characterStyle, z);
                 }
 
                 public /* synthetic */ void didPressUserAvatar(ChatMessageCell chatMessageCell, User user, float f, float f2) {

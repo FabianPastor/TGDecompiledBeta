@@ -1101,8 +1101,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         return (ChatActivity.this.actionBar == null || ChatActivity.this.actionBar.isActionModeShowed()) ? false : true;
                     }
 
-                    public void didPressUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z) {
+                    public void didPressUrl(ChatMessageCell chatMessageCell, CharacterStyle characterStyle, boolean z) {
                         if (!(characterStyle == null || ChatActivity.this.getParentActivity() == null)) {
+                            MessageObject messageObject = chatMessageCell.getMessageObject();
                             boolean z2 = false;
                             if (characterStyle instanceof URLSpanMono) {
                                 ((URLSpanMono) characterStyle).copyToClipboard();
@@ -1115,11 +1116,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             } else {
                                 boolean z3 = true;
                                 String url;
+                                String toLowerCase;
                                 if (characterStyle instanceof URLSpanNoUnderline) {
                                     url = ((URLSpanNoUnderline) characterStyle).getURL();
                                     if (url.startsWith("@")) {
                                         User user2;
-                                        String toLowerCase = url.substring(1).toLowerCase();
+                                        toLowerCase = url.substring(1).toLowerCase();
                                         Chat chat = ChatActivity.this.currentChat;
                                         if (chat == null || TextUtils.isEmpty(chat.username) || !toLowerCase.equals(ChatActivity.this.currentChat.username.toLowerCase())) {
                                             user2 = ChatActivity.this.currentUser;
@@ -1155,33 +1157,38 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                             dialogsActivity.setSearchString(url);
                                             ChatActivity.this.presentFragment(dialogsActivity);
                                         }
-                                    } else if (url.startsWith("/") && URLSpanBotCommand.enabled) {
-                                        ChatActivity chatActivity2 = ChatActivity.this;
-                                        ChatActivityEnterView chatActivityEnterView = chatActivity2.chatActivityEnterView;
-                                        Chat chat3 = chatActivity2.currentChat;
-                                        if (chat3 == null || !chat3.megagroup) {
-                                            z3 = false;
+                                    } else if (url.startsWith("/")) {
+                                        if (URLSpanBotCommand.enabled) {
+                                            ChatActivity chatActivity2 = ChatActivity.this;
+                                            ChatActivityEnterView chatActivityEnterView = chatActivity2.chatActivityEnterView;
+                                            Chat chat3 = chatActivity2.currentChat;
+                                            if (chat3 == null || !chat3.megagroup) {
+                                                z3 = false;
+                                            }
+                                            chatActivityEnterView.setCommand(messageObject, url, z, z3);
+                                            if (!z && ChatActivity.this.chatActivityEnterView.getFieldText() == null) {
+                                                ChatActivity.this.hideFieldPanel(false);
+                                            }
                                         }
-                                        chatActivityEnterView.setCommand(messageObject, url, z, z3);
-                                        if (!z && ChatActivity.this.chatActivityEnterView.getFieldText() == null) {
-                                            ChatActivity.this.hideFieldPanel(false);
-                                        }
+                                    } else if (url.startsWith("video")) {
+                                        messageObject.forceSeekTo = ((float) Utilities.parseInt(url).intValue()) / ((float) messageObject.getDuration());
+                                        didPressImage(chatMessageCell, 0.0f, 0.0f);
                                     }
                                 } else {
-                                    String url2 = ((URLSpan) characterStyle).getURL();
+                                    toLowerCase = ((URLSpan) characterStyle).getURL();
                                     if (z) {
                                         Builder builder = new Builder(ChatActivity.this.getParentActivity());
-                                        builder.setTitle(url2);
-                                        builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new -$$Lambda$ChatActivity$ChatActivityAdapter$1$mvBU2f0l49KzASBTxcsB_CaLwnI(this, url2));
+                                        builder.setTitle(toLowerCase);
+                                        builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new -$$Lambda$ChatActivity$ChatActivityAdapter$1$mvBU2f0l49KzASBTxcsB_CaLwnI(this, toLowerCase));
                                         ChatActivity.this.showDialog(builder.create());
-                                    } else if ((characterStyle instanceof URLSpanReplacement) && (url2 == null || !url2.startsWith("mailto:"))) {
-                                        ChatActivity.this.showOpenUrlAlert(url2, true);
+                                    } else if ((characterStyle instanceof URLSpanReplacement) && (toLowerCase == null || !toLowerCase.startsWith("mailto:"))) {
+                                        ChatActivity.this.showOpenUrlAlert(toLowerCase, true);
                                     } else if (characterStyle instanceof URLSpan) {
                                         MessageMedia messageMedia = messageObject.messageOwner.media;
                                         if (messageMedia instanceof TL_messageMediaWebPage) {
                                             WebPage webPage = messageMedia.webpage;
                                             if (!(webPage == null || webPage.cached_page == null)) {
-                                                url = url2.toLowerCase();
+                                                url = toLowerCase.toLowerCase();
                                                 String toLowerCase2 = messageObject.messageOwner.media.webpage.url.toLowerCase();
                                                 if ((url.contains("telegram.org/blog") || url.contains("telegra.ph") || url.contains("t.me/iv")) && (url.contains(toLowerCase2) || toLowerCase2.contains(url))) {
                                                     ArticleViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity(), ChatActivity.this);
@@ -1194,7 +1201,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         if (ChatActivity.this.inlineReturn == 0) {
                                             z2 = true;
                                         }
-                                        Browser.openUrl(parentActivity, url2, z2);
+                                        Browser.openUrl(parentActivity, toLowerCase, z2);
                                     } else if (characterStyle instanceof ClickableSpan) {
                                         ((ClickableSpan) characterStyle).onClick(ChatActivity.this.fragmentView);
                                     }
