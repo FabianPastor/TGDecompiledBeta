@@ -1977,6 +1977,10 @@ public class MessagesController extends BaseController implements NotificationCe
         return (String) sparseArray.get(i2);
     }
 
+    public boolean isChannelAdminsLoaded(int i) {
+        return this.channelAdmins.get(i) != null;
+    }
+
     public void loadChannelAdmins(int i, boolean z) {
         if (SystemClock.uptimeMillis() - ((long) this.loadingChannelAdmins.get(i)) >= 60) {
             this.loadingChannelAdmins.put(i, (int) (SystemClock.uptimeMillis() / 1000));
@@ -9566,7 +9570,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             } catch (Exception e) {
                 FileLog.e(e);
             }
-            AlertsCreator.processError(this.currentAccount, tL_error, baseFragment, tL_messages_migrateChat, new Object[0]);
+            AlertsCreator.processError(this.currentAccount, tL_error, baseFragment, tL_messages_migrateChat, Boolean.valueOf(false));
         }
     }
 

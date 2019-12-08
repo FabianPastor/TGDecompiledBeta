@@ -67,6 +67,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private Runnable uiRunnableGenerateCache;
     private Runnable uiRunnableLastFrame;
     private Runnable uiRunnableNoFrame;
+    private HashMap<Integer, Integer> vibrationPattern;
     private int width;
 
     private static native long create(String str, int[] iArr, boolean z);
@@ -219,19 +220,17 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             if (RLottieDrawable.this.autoRepeat == 3) {
                                 RLottieDrawable.this.nextFrameIsLast = true;
                                 RLottieDrawable.this.autoRepeatPlayCount = RLottieDrawable.this.autoRepeatPlayCount + 1;
-                            } else if (RLottieDrawable.this.autoRepeatPlayCount <= 0 || RLottieDrawable.this.autoRepeat != 2 || RLottieDrawable.this.currentFrame <= 0) {
+                            } else {
                                 RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
                                 rLottieDrawable2.currentFrame = rLottieDrawable2.currentFrame + i;
                                 RLottieDrawable.this.nextFrameIsLast = false;
-                            } else {
-                                RLottieDrawable.this.nextFrameIsLast = true;
                             }
                         } else if (RLottieDrawable.this.autoRepeat == 1) {
                             RLottieDrawable.this.currentFrame = 0;
                             RLottieDrawable.this.nextFrameIsLast = false;
                         } else if (RLottieDrawable.this.autoRepeat == 2) {
                             RLottieDrawable.this.currentFrame = 0;
-                            RLottieDrawable.this.nextFrameIsLast = false;
+                            RLottieDrawable.this.nextFrameIsLast = true;
                             RLottieDrawable.this.autoRepeatPlayCount = RLottieDrawable.this.autoRepeatPlayCount + 1;
                         } else {
                             RLottieDrawable.this.nextFrameIsLast = true;
@@ -425,12 +424,18 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    public void restart() {
-        if (this.autoRepeat >= 2 && this.autoRepeatPlayCount != 0) {
-            this.autoRepeatPlayCount = 0;
-            this.autoRepeat = 2;
-            start();
+    public boolean restart() {
+        if (this.autoRepeat < 2 || this.autoRepeatPlayCount == 0) {
+            return false;
         }
+        this.autoRepeatPlayCount = 0;
+        this.autoRepeat = 2;
+        start();
+        return true;
+    }
+
+    public void setVibrationPattern(HashMap<Integer, Integer> hashMap) {
+        this.vibrationPattern = hashMap;
     }
 
     public void beginApplyLayerColors() {
@@ -599,6 +604,13 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 if (this.renderingBitmap == null && this.nextRenderingBitmap == null) {
                     scheduleNextGetFrame();
                 } else if (this.nextRenderingBitmap != null && ((this.renderingBitmap == null || abs >= ((long) (this.timeBetweenFrames - 6))) && isCurrentParentViewMaster())) {
+                    HashMap hashMap = this.vibrationPattern;
+                    if (!(hashMap == null || this.currentParentView == null)) {
+                        Integer num = (Integer) hashMap.get(Integer.valueOf(this.currentFrame - 1));
+                        if (num != null) {
+                            this.currentParentView.performHapticFeedback(num.intValue() == 1 ? 0 : 3, 2);
+                        }
+                    }
                     this.backgroundBitmap = this.renderingBitmap;
                     this.renderingBitmap = this.nextRenderingBitmap;
                     if (this.nextFrameIsLast) {

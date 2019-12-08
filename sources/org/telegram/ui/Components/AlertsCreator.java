@@ -149,6 +149,7 @@ public class AlertsCreator {
         TL_error tL_error2 = tL_error;
         BaseFragment baseFragment2 = baseFragment;
         TLObject tLObject2 = tLObject;
+        Object[] objArr2 = objArr;
         int i2 = tL_error2.code;
         if (i2 != 406) {
             String str = tL_error2.text;
@@ -178,7 +179,9 @@ public class AlertsCreator {
                     }
                 } else if ((tLObject2 instanceof TL_channels_joinChannel) || (tLObject2 instanceof TL_channels_editAdmin) || (tLObject2 instanceof TL_channels_inviteToChannel) || (tLObject2 instanceof TL_messages_addChatUser) || (tLObject2 instanceof TL_messages_startBot) || (tLObject2 instanceof TL_channels_editBanned) || (tLObject2 instanceof TL_messages_editChatDefaultBannedRights) || (tLObject2 instanceof TL_messages_editChatAdmin) || (tLObject2 instanceof TL_messages_migrateChat)) {
                     if (baseFragment2 != null) {
-                        showAddUserAlert(tL_error2.text, baseFragment2, ((Boolean) objArr[0]).booleanValue());
+                        String str8 = tL_error2.text;
+                        boolean booleanValue = (objArr2 == null || objArr2.length <= 0) ? false : ((Boolean) objArr2[0]).booleanValue();
+                        showAddUserAlert(str8, baseFragment2, booleanValue);
                     } else if (tL_error2.text.equals("PEER_FLOOD")) {
                         NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(1));
                     }
@@ -217,13 +220,13 @@ public class AlertsCreator {
                         showSimpleAlert(baseFragment2, LocaleController.getString("JoinToGroupErrorNotExist", NUM));
                     }
                 } else if (!(tLObject2 instanceof TL_messages_getAttachedStickers)) {
-                    String str8 = "PHONE_CODE_INVALID";
-                    String str9 = "InvalidCode";
-                    String str10 = "PHONE_CODE_EMPTY";
+                    String str9 = "PHONE_CODE_INVALID";
+                    String str10 = "InvalidCode";
+                    String str11 = "PHONE_CODE_EMPTY";
                     int i3;
                     if ((tLObject2 instanceof TL_account_confirmPhone) || (tLObject2 instanceof TL_account_verifyPhone) || (tLObject2 instanceof TL_account_verifyEmail)) {
-                        if (tL_error2.text.contains(str10) || tL_error2.text.contains(str8) || tL_error2.text.contains("CODE_INVALID") || tL_error2.text.contains("CODE_EMPTY")) {
-                            return showSimpleAlert(baseFragment2, LocaleController.getString(str9, NUM));
+                        if (tL_error2.text.contains(str11) || tL_error2.text.contains(str9) || tL_error2.text.contains("CODE_INVALID") || tL_error2.text.contains("CODE_EMPTY")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString(str10, NUM));
                         }
                         if (tL_error2.text.contains("PHONE_CODE_EXPIRED") || tL_error2.text.contains("EMAIL_VERIFY_EXPIRED")) {
                             return showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
@@ -236,8 +239,8 @@ public class AlertsCreator {
                         if (str.contains(str4)) {
                             return showSimpleAlert(baseFragment2, LocaleController.getString(str3, NUM));
                         }
-                        if (tL_error2.text.contains(str10) || tL_error2.text.contains(str8)) {
-                            return showSimpleAlert(baseFragment2, LocaleController.getString(str9, NUM));
+                        if (tL_error2.text.contains(str11) || tL_error2.text.contains(str9)) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString(str10, NUM));
                         }
                         if (tL_error2.text.contains("PHONE_CODE_EXPIRED")) {
                             return showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
@@ -265,8 +268,8 @@ public class AlertsCreator {
                     } else if (tLObject2 instanceof TL_account_changePhone) {
                         if (str.contains(str4)) {
                             showSimpleAlert(baseFragment2, LocaleController.getString(str3, NUM));
-                        } else if (tL_error2.text.contains(str10) || tL_error2.text.contains(str8)) {
-                            showSimpleAlert(baseFragment2, LocaleController.getString(str9, NUM));
+                        } else if (tL_error2.text.contains(str11) || tL_error2.text.contains(str9)) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString(str10, NUM));
                         } else if (tL_error2.text.contains("PHONE_CODE_EXPIRED")) {
                             showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
                         } else if (tL_error2.text.startsWith(str7)) {
@@ -277,14 +280,14 @@ public class AlertsCreator {
                     } else if (tLObject2 instanceof TL_account_sendChangePhoneCode) {
                         if (str.contains(str4)) {
                             showSimpleAlert(baseFragment2, LocaleController.getString(str3, NUM));
-                        } else if (tL_error2.text.contains(str10) || tL_error2.text.contains(str8)) {
-                            showSimpleAlert(baseFragment2, LocaleController.getString(str9, NUM));
+                        } else if (tL_error2.text.contains(str11) || tL_error2.text.contains(str9)) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString(str10, NUM));
                         } else if (tL_error2.text.contains("PHONE_CODE_EXPIRED")) {
                             showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
                         } else if (tL_error2.text.startsWith(str7)) {
                             showSimpleAlert(baseFragment2, LocaleController.getString(str6, NUM));
                         } else if (tL_error2.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
-                            showSimpleAlert(baseFragment2, LocaleController.formatString("ChangePhoneNumberOccupied", NUM, (String) objArr[0]));
+                            showSimpleAlert(baseFragment2, LocaleController.formatString("ChangePhoneNumberOccupied", NUM, (String) objArr2[0]));
                         } else {
                             showSimpleAlert(baseFragment2, LocaleController.getString(str5, NUM));
                         }
@@ -339,10 +342,7 @@ public class AlertsCreator {
                             showSimpleToast(baseFragment2, LocaleController.getString("PaymentFailed", NUM));
                         }
                     } else if (tLObject2 instanceof TL_payments_validateRequestedInfo) {
-                        Object obj = -1;
-                        if (str.hashCode() == NUM && str.equals("SHIPPING_NOT_AVAILABLE")) {
-                            obj = null;
-                        }
+                        Object obj = (str.hashCode() == NUM && str.equals("SHIPPING_NOT_AVAILABLE")) ? null : -1;
                         if (obj != null) {
                             showSimpleToast(baseFragment2, tL_error2.text);
                         } else {

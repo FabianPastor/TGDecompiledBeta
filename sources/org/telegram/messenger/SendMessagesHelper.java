@@ -1025,22 +1025,23 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         ArrayList<MessageObject> arrayList2 = arrayList;
         ArrayList arrayList3 = new ArrayList();
         ArrayList arrayList4 = new ArrayList();
+        ArrayList arrayList5 = new ArrayList();
         int i2 = 0;
         boolean z = false;
         int i3 = 0;
         while (i2 < arrayList.size()) {
             MessageObject messageObject = (MessageObject) arrayList2.get(i2);
-            arrayList4.add(Integer.valueOf(messageObject.getId()));
+            arrayList5.add(Integer.valueOf(messageObject.getId()));
             int i4 = messageObject.messageOwner.to_id.channel_id;
             Message removeFromSendingMessages = removeFromSendingMessages(messageObject.getId());
             if (removeFromSendingMessages != null) {
                 getConnectionsManager().cancelRequest(removeFromSendingMessages.reqId, true);
             }
             for (Entry entry : this.delayedMessages.entrySet()) {
-                ArrayList arrayList5 = (ArrayList) entry.getValue();
+                ArrayList arrayList6 = (ArrayList) entry.getValue();
                 int i5 = 0;
-                while (i5 < arrayList5.size()) {
-                    DelayedMessage delayedMessage = (DelayedMessage) arrayList5.get(i5);
+                while (i5 < arrayList6.size()) {
+                    DelayedMessage delayedMessage = (DelayedMessage) arrayList6.get(i5);
                     if (delayedMessage.type == 4) {
                         i = -1;
                         Object obj = null;
@@ -1073,23 +1074,25 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                 delayedMessage.sendDelayedRequests();
                             } else {
                                 if (delayedMessage.finalGroupMessage == messageObject.getId()) {
-                                    ArrayList arrayList6 = delayedMessage.messageObjects;
-                                    MessageObject messageObject2 = (MessageObject) arrayList6.get(arrayList6.size() - 1);
+                                    ArrayList arrayList7 = delayedMessage.messageObjects;
+                                    MessageObject messageObject2 = (MessageObject) arrayList7.get(arrayList7.size() - 1);
                                     delayedMessage.finalGroupMessage = messageObject2.getId();
                                     messageObject2.messageOwner.params.put("final", "1");
                                     messages_Messages tL_messages_messages = new TL_messages_messages();
                                     tL_messages_messages.messages.add(messageObject2.messageOwner);
                                     getMessagesStorage().putMessages(tL_messages_messages, delayedMessage.peer, -2, 0, false);
                                 }
-                                sendReadyToSendGroup(delayedMessage, false, true);
+                                if (!arrayList4.contains(delayedMessage)) {
+                                    arrayList4.add(delayedMessage);
+                                }
                             }
                         }
                     } else if (delayedMessage.obj.getId() == messageObject.getId()) {
                         removeFromUploadingMessages(messageObject.getId());
-                        arrayList5.remove(i5);
+                        arrayList6.remove(i5);
                         delayedMessage.sendDelayedRequests();
                         MediaController.getInstance().cancelVideoConvert(delayedMessage.obj);
-                        if (arrayList5.size() == 0) {
+                        if (arrayList6.size() == 0) {
                             arrayList3.add(entry.getKey());
                             if (delayedMessage.sendEncryptedRequest != null) {
                                 z = true;
@@ -1113,10 +1116,14 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             stopVideoService(str2);
             this.delayedMessages.remove(str2);
         }
+        int size = arrayList4.size();
+        for (i = 0; i < size; i++) {
+            sendReadyToSendGroup((DelayedMessage) arrayList4.get(i), false, true);
+        }
         if (arrayList.size() == 1 && ((MessageObject) arrayList2.get(0)).isEditing() && ((MessageObject) arrayList2.get(0)).previousMedia != null) {
             revertEditingMessageObject((MessageObject) arrayList2.get(0));
         } else {
-            getMessagesController().deleteMessages(arrayList4, null, null, i3, false);
+            getMessagesController().deleteMessages(arrayList5, null, null, i3, false);
         }
     }
 
@@ -8133,7 +8140,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 str2 = FileLoader.getPathToAttach(delayedMessage2.photoSize).toString();
                 putToDelayedMessages(str2, delayedMessage2);
                 getFileLoader().uploadFile(str2, false, true, 16777216);
-                putToUploadingMessages(delayedMessage);
+                putToUploadingMessages(delayedMessage2.obj);
             } else {
                 str2 = FileLoader.getPathToAttach(delayedMessage2.photoSize).toString();
                 if (!(delayedMessage2.sendEncryptedRequest == null || delayedMessage2.photoSize.location.dc_id == 0)) {
@@ -8150,7 +8157,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 }
                 putToDelayedMessages(str2, delayedMessage2);
                 getFileLoader().uploadFile(str2, true, true, 16777216);
-                putToUploadingMessages(delayedMessage);
+                putToUploadingMessages(delayedMessage2.obj);
             }
         } else {
             String str3 = ".jpg";
@@ -8225,7 +8232,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             } else {
                                 getFileLoader().uploadFile(str7, false, false, document.size, 33554432);
                             }
-                            putToUploadingMessages(delayedMessage);
+                            putToUploadingMessages(delayedMessage2.obj);
                         } else {
                             stringBuilder2 = new StringBuilder();
                             stringBuilder2.append(FileLoader.getDirectory(4));
@@ -8237,7 +8244,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             str2 = stringBuilder2.toString();
                             putToDelayedMessages(str2, delayedMessage2);
                             getFileLoader().uploadFile(str2, false, true, 16777216);
-                            putToUploadingMessages(delayedMessage);
+                            putToUploadingMessages(delayedMessage2.obj);
                         }
                     } else {
                         messageObject = delayedMessage2.obj;
@@ -8260,7 +8267,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             } else {
                                 getFileLoader().uploadFile(str7, true, false, document.size, 33554432);
                             }
-                            putToUploadingMessages(delayedMessage);
+                            putToUploadingMessages(delayedMessage2.obj);
                         } else {
                             putToDelayedMessages(FileLoader.getAttachFileName(document), delayedMessage2);
                             getFileLoader().loadFile(document, delayedMessage2.parentObject, 2, 0);
@@ -8281,7 +8288,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 }
                 putToDelayedMessages(str, delayedMessage2);
                 MediaController.getInstance().scheduleVideoConvert(delayedMessage2.obj);
-                putToUploadingMessages(delayedMessage);
+                putToUploadingMessages(delayedMessage2.obj);
             } else if (i2 == 2) {
                 str2 = delayedMessage2.httpLocation;
                 if (str2 != null) {
@@ -8305,7 +8312,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                 z2 = false;
                             }
                             fileLoader.uploadFile(str2, z2, false, 67108864);
-                            putToUploadingMessages(delayedMessage);
+                            putToUploadingMessages(delayedMessage2.obj);
                         } else if (inputMedia.thumb == null && delayedMessage2.photoSize != null) {
                             stringBuilder2 = new StringBuilder();
                             stringBuilder2.append(FileLoader.getDirectory(4));
@@ -8317,7 +8324,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             str2 = stringBuilder2.toString();
                             putToDelayedMessages(str2, delayedMessage2);
                             getFileLoader().uploadFile(str2, false, true, 16777216);
-                            putToUploadingMessages(delayedMessage);
+                            putToUploadingMessages(delayedMessage2.obj);
                         }
                     } else {
                         messageObject = delayedMessage2.obj;
@@ -8326,7 +8333,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         if (delayedMessage2.sendEncryptedRequest == null || document.dc_id == 0 || new File(str8).exists()) {
                             putToDelayedMessages(str8, delayedMessage2);
                             getFileLoader().uploadFile(str8, true, false, 67108864);
-                            putToUploadingMessages(delayedMessage);
+                            putToUploadingMessages(delayedMessage2.obj);
                         } else {
                             putToDelayedMessages(FileLoader.getAttachFileName(document), delayedMessage2);
                             getFileLoader().loadFile(document, delayedMessage2.parentObject, 2, 0);
@@ -8341,12 +8348,12 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     z = true;
                 }
                 fileLoader2.uploadFile(str2, z, true, 50331648);
-                putToUploadingMessages(delayedMessage);
+                putToUploadingMessages(delayedMessage2.obj);
             } else if (i2 == 4) {
                 boolean z3;
                 boolean z4 = i < 0;
+                boolean z5;
                 if (delayedMessage2.performMediaUpload) {
-                    boolean z5;
                     int size = i < 0 ? delayedMessage2.messageObjects.size() - 1 : i;
                     MessageObject messageObject3 = (MessageObject) delayedMessage2.messageObjects.get(size);
                     if (messageObject3.getDocument() != null) {
@@ -8381,7 +8388,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             }
                             MediaController.getInstance().scheduleVideoConvert(messageObject3);
                             delayedMessage2.obj = messageObject3;
-                            putToUploadingMessages(delayedMessage);
+                            putToUploadingMessages(messageObject3);
                         } else {
                             MessageObject messageObject4;
                             Document document3 = messageObject3.getDocument();
@@ -8426,7 +8433,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                     } else {
                                         getFileLoader().uploadFile(str9, false, false, document3.size, 33554432);
                                     }
-                                    putToUploadingMessages(delayedMessage);
+                                    putToUploadingMessages(messageObject3);
                                 } else {
                                     messageObject3 = messageObject4;
                                     stringBuilder = new StringBuilder();
@@ -8446,7 +8453,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                     delayedMessage2.extraHashMap.put(messageObject3, str);
                                     delayedMessage2.extraHashMap.put(str, inputMedia2);
                                     getFileLoader().uploadFile(str, false, true, 16777216);
-                                    putToUploadingMessages(delayedMessage);
+                                    putToUploadingMessages(messageObject3);
                                 }
                             } else {
                                 messageObject3 = messageObject4;
@@ -8472,7 +8479,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                 } else {
                                     getFileLoader().uploadFile(str9, true, false, document3.size, 33554432);
                                 }
-                                putToUploadingMessages(delayedMessage);
+                                putToUploadingMessages(messageObject3);
                             }
                         }
                         delayedMessage2.videoEditedInfo = null;
@@ -8499,7 +8506,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             delayedMessage2.extraHashMap.put(messageObject3, str8);
                             z3 = true;
                             getFileLoader().uploadFile(str8, delayedMessage2.sendEncryptedRequest != null, true, 16777216);
-                            putToUploadingMessages(delayedMessage);
+                            putToUploadingMessages(messageObject3);
                             delayedMessage2.photoSize = null;
                             z5 = false;
                             delayedMessage2.performMediaUpload = z5;
@@ -8509,10 +8516,15 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     z3 = true;
                     delayedMessage2.performMediaUpload = z5;
                 } else {
+                    z5 = false;
                     z3 = true;
                     if (!delayedMessage2.messageObjects.isEmpty()) {
                         ArrayList arrayList = delayedMessage2.messageObjects;
-                        putToSendingMessages(((MessageObject) arrayList.get(arrayList.size() - 1)).messageOwner);
+                        Message message = ((MessageObject) arrayList.get(arrayList.size() - 1)).messageOwner;
+                        if (delayedMessage2.finalGroupMessage != 0) {
+                            z5 = true;
+                        }
+                        putToSendingMessages(message, z5);
                     }
                 }
                 sendReadyToSendGroup(delayedMessage2, z4, z3);
@@ -8732,6 +8744,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
 
     /* Access modifiers changed, original: protected */
     public void putToSendingMessages(Message message) {
+        putToSendingMessages(message, true);
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void putToSendingMessages(Message message, boolean z) {
         Object obj = this.sendingMessages.indexOfKey(message.id) >= 0 ? 1 : null;
         removeFromUploadingMessages(message.id);
         this.sendingMessages.put(message.id, message);
@@ -8739,7 +8756,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             long dialogId = MessageObject.getDialogId(message);
             LongSparseArray longSparseArray = this.sendingMessagesIdDialogs;
             longSparseArray.put(dialogId, Integer.valueOf(((Integer) longSparseArray.get(dialogId, Integer.valueOf(0))).intValue() + 1));
-            getNotificationCenter().postNotificationName(NotificationCenter.sendingMessagesChanged, new Object[0]);
+            if (z) {
+                getNotificationCenter().postNotificationName(NotificationCenter.sendingMessagesChanged, new Object[0]);
+            }
         }
     }
 
@@ -8782,19 +8801,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     /* Access modifiers changed, original: protected */
-    public void putToUploadingMessages(DelayedMessage delayedMessage) {
-        if (delayedMessage != null) {
-            MessageObject messageObject = delayedMessage.obj;
-            if (messageObject != null) {
-                Message message = messageObject.messageOwner;
-                Object obj = this.uploadMessages.indexOfKey(message.id) >= 0 ? 1 : null;
-                this.uploadMessages.put(message.id, message);
-                if (obj == null) {
-                    long dialogId = MessageObject.getDialogId(message);
-                    LongSparseArray longSparseArray = this.uploadingMessagesIdDialogs;
-                    longSparseArray.put(dialogId, Integer.valueOf(((Integer) longSparseArray.get(dialogId, Integer.valueOf(0))).intValue() + 1));
-                    getNotificationCenter().postNotificationName(NotificationCenter.sendingMessagesChanged, new Object[0]);
-                }
+    public void putToUploadingMessages(MessageObject messageObject) {
+        if (messageObject != null) {
+            Message message = messageObject.messageOwner;
+            Object obj = this.uploadMessages.indexOfKey(message.id) >= 0 ? 1 : null;
+            this.uploadMessages.put(message.id, message);
+            if (obj == null) {
+                long dialogId = MessageObject.getDialogId(message);
+                LongSparseArray longSparseArray = this.uploadingMessagesIdDialogs;
+                longSparseArray.put(dialogId, Integer.valueOf(((Integer) longSparseArray.get(dialogId, Integer.valueOf(0))).intValue() + 1));
+                getNotificationCenter().postNotificationName(NotificationCenter.sendingMessagesChanged, new Object[0]);
             }
         }
     }

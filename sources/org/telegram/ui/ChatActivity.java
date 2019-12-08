@@ -2954,6 +2954,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         if (this.currentChat != null) {
             this.chatInfo = getMessagesController().getChatFull(this.currentChat.id);
+            if (this.currentChat.megagroup && !getMessagesController().isChannelAdminsLoaded(this.currentChat.id)) {
+                getMessagesController().loadChannelAdmins(this.currentChat.id, true);
+            }
             ChatFull loadChatInfo = getMessagesStorage().loadChatInfo(this.currentChat.id, this.isBroadcast ? new CountDownLatch(1) : null, true, false);
             if (this.chatInfo == null) {
                 this.chatInfo = loadChatInfo;
@@ -22464,36 +22467,72 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7.scrimView = r10;
         r0 = r7.scrimView;
         r1 = r0 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r1 == 0) goto L_0x109d;
+        if (r1 == 0) goto L_0x1105;
     L_0x1076:
         r0 = (org.telegram.ui.Cells.ChatMessageCell) r0;
         r1 = 1;
         r0.setInvalidatesParent(r1);
-        r1 = r9.isAnimatedEmoji();
-        if (r1 != 0) goto L_0x1090;
-    L_0x1082:
         r1 = r9.getDocument();
+        r2 = r9.isAnimatedEmoji();
+        if (r2 != 0) goto L_0x1090;
+    L_0x1086:
         r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1);
-        if (r1 == 0) goto L_0x109d;
+        if (r1 == 0) goto L_0x1105;
     L_0x108c:
         r1 = org.telegram.messenger.SharedConfig.loopStickers;
-        if (r1 != 0) goto L_0x109d;
+        if (r1 != 0) goto L_0x1105;
     L_0x1090:
         r0 = r0.getPhotoImage();
         r0 = r0.getLottieAnimation();
-        if (r0 == 0) goto L_0x109d;
+        if (r0 == 0) goto L_0x1105;
     L_0x109a:
         r0.restart();
-    L_0x109d:
+        r1 = r9.isAnimatedEmoji();
+        if (r1 == 0) goto L_0x1105;
+    L_0x10a3:
+        r1 = r9.getStickerEmoji();
+        r2 = "❤";
+        r1 = r2.equals(r1);
+        if (r1 == 0) goto L_0x1105;
+    L_0x10af:
+        r1 = new java.util.HashMap;
+        r1.<init>();
+        r2 = 1;
+        r3 = java.lang.Integer.valueOf(r2);
+        r4 = java.lang.Integer.valueOf(r2);
+        r1.put(r3, r4);
+        r3 = 13;
+        r3 = java.lang.Integer.valueOf(r3);
+        r4 = 0;
+        r5 = java.lang.Integer.valueOf(r4);
+        r1.put(r3, r5);
+        r3 = 59;
+        r3 = java.lang.Integer.valueOf(r3);
+        r5 = java.lang.Integer.valueOf(r2);
+        r1.put(r3, r5);
+        r3 = 71;
+        r3 = java.lang.Integer.valueOf(r3);
+        r5 = java.lang.Integer.valueOf(r4);
+        r1.put(r3, r5);
+        r3 = 128; // 0x80 float:1.794E-43 double:6.32E-322;
+        r3 = java.lang.Integer.valueOf(r3);
+        r5 = java.lang.Integer.valueOf(r2);
+        r1.put(r3, r5);
+        r2 = 140; // 0x8c float:1.96E-43 double:6.9E-322;
+        r2 = java.lang.Integer.valueOf(r2);
+        r3 = java.lang.Integer.valueOf(r4);
+        r1.put(r2, r3);
+        r0.setVibrationPattern(r1);
+    L_0x1105:
         r0 = r7.contentView;
         r0.invalidate();
         r0 = r7.chatListView;
         r0.invalidate();
         r0 = r7.scrimAnimatorSet;
-        if (r0 == 0) goto L_0x10ae;
-    L_0x10ab:
+        if (r0 == 0) goto L_0x1116;
+    L_0x1113:
         r0.cancel();
-    L_0x10ae:
+    L_0x1116:
         r0 = new android.animation.AnimatorSet;
         r0.<init>();
         r7.scrimAnimatorSet = r0;
@@ -22508,8 +22547,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0.add(r1);
         r1 = r7.pagedownButton;
         r1 = r1.getTag();
-        if (r1 == 0) goto L_0x10e5;
-    L_0x10d3:
+        if (r1 == 0) goto L_0x114d;
+    L_0x113b:
         r1 = r7.pagedownButton;
         r2 = android.view.View.ALPHA;
         r3 = 1;
@@ -22519,11 +22558,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4[r5] = r3;
         r1 = android.animation.ObjectAnimator.ofFloat(r1, r2, r4);
         r0.add(r1);
-    L_0x10e5:
+    L_0x114d:
         r1 = r7.mentiondownButton;
         r1 = r1.getTag();
-        if (r1 == 0) goto L_0x10ff;
-    L_0x10ed:
+        if (r1 == 0) goto L_0x1167;
+    L_0x1155:
         r1 = r7.mentiondownButton;
         r2 = android.view.View.ALPHA;
         r3 = 1;
@@ -22533,7 +22572,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3[r5] = r4;
         r1 = android.animation.ObjectAnimator.ofFloat(r1, r2, r3);
         r0.add(r1);
-    L_0x10ff:
+    L_0x1167:
         r1 = r7.scrimAnimatorSet;
         r1.playTogether(r0);
         r0 = r7.scrimAnimatorSet;
@@ -22542,37 +22581,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.scrimAnimatorSet;
         r0.start();
         r0 = r7.forwardHintView;
-        if (r0 == 0) goto L_0x1117;
-    L_0x1114:
+        if (r0 == 0) goto L_0x117f;
+    L_0x117c:
         r0.hide();
-    L_0x1117:
+    L_0x117f:
         r0 = r7.noSoundHintView;
-        if (r0 == 0) goto L_0x111e;
-    L_0x111b:
+        if (r0 == 0) goto L_0x1186;
+    L_0x1183:
         r0.hide();
-    L_0x111e:
+    L_0x1186:
         r0 = r7.slowModeHint;
-        if (r0 == 0) goto L_0x1125;
-    L_0x1122:
+        if (r0 == 0) goto L_0x118d;
+    L_0x118a:
         r0.hide();
-    L_0x1125:
+    L_0x118d:
         r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x1131;
-    L_0x1129:
+        if (r0 == 0) goto L_0x1199;
+    L_0x1191:
         r0 = r0.getEditField();
         r1 = 0;
         r0.setAllowDrawCursor(r1);
-    L_0x1131:
+    L_0x1199:
         r0 = android.os.Build.VERSION.SDK_INT;
         r1 = 19;
-        if (r0 < r1) goto L_0x1147;
-    L_0x1137:
+        if (r0 < r1) goto L_0x11af;
+    L_0x119f:
         r0 = r21.getParentActivity();
         r0 = r0.getWindow();
         r0 = r0.getDecorView();
         r1 = 4;
         r0.setImportantForAccessibility(r1);
-    L_0x1147:
+    L_0x11af:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.createMenu(android.view.View, boolean, boolean, float, float, boolean):void");
