@@ -654,20 +654,20 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             }
         }
 
-        /* JADX WARNING: Missing exception handler attribute for start block: B:50:0x00d1 */
-        /* JADX WARNING: Removed duplicated region for block: B:45:0x00aa A:{Catch:{ Exception -> 0x00f6 }} */
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x00a9 A:{RETURN, Catch:{ Exception -> 0x00f6 }} */
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x00ae A:{Catch:{ Exception -> 0x00fa }} */
+        /* JADX WARNING: Removed duplicated region for block: B:44:0x00ad A:{RETURN, Catch:{ Exception -> 0x00fa }} */
         /* JADX WARNING: Removed duplicated region for block: B:26:0x0071 A:{SYNTHETIC, Splitter:B:26:0x0071} */
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x00a9 A:{RETURN, Catch:{ Exception -> 0x00f6 }} */
-        /* JADX WARNING: Removed duplicated region for block: B:45:0x00aa A:{Catch:{ Exception -> 0x00f6 }} */
+        /* JADX WARNING: Removed duplicated region for block: B:44:0x00ad A:{RETURN, Catch:{ Exception -> 0x00fa }} */
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x00ae A:{Catch:{ Exception -> 0x00fa }} */
         /* JADX WARNING: Removed duplicated region for block: B:31:0x007c A:{SYNTHETIC, Splitter:B:31:0x007c} */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:50:0x00d5 */
         /* JADX WARNING: Can't wrap try/catch for region: R(4:48|49|50|51) */
         public /* synthetic */ void lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme.ThemeInfo r4, android.content.DialogInterface r5, int r6) {
             /*
             r3 = this;
             r5 = 0;
             r0 = 1;
-            if (r6 != 0) goto L_0x00fc;
+            if (r6 != 0) goto L_0x0100;
         L_0x0004:
             r6 = r4.pathToFile;
             if (r6 != 0) goto L_0x0085;
@@ -756,56 +756,57 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r5 = 4;
             r5 = org.telegram.messenger.FileLoader.getDirectory(r5);
             r1 = r6.getName();
+            r1 = org.telegram.messenger.FileLoader.fixFileName(r1);
             r4.<init>(r5, r1);
-            r5 = org.telegram.messenger.AndroidUtilities.copyFile(r6, r4);	 Catch:{ Exception -> 0x00f6 }
-            if (r5 != 0) goto L_0x00aa;
-        L_0x00a9:
+            r5 = org.telegram.messenger.AndroidUtilities.copyFile(r6, r4);	 Catch:{ Exception -> 0x00fa }
+            if (r5 != 0) goto L_0x00ae;
+        L_0x00ad:
             return;
-        L_0x00aa:
-            r5 = new android.content.Intent;	 Catch:{ Exception -> 0x00f6 }
+        L_0x00ae:
+            r5 = new android.content.Intent;	 Catch:{ Exception -> 0x00fa }
             r6 = "android.intent.action.SEND";
-            r5.<init>(r6);	 Catch:{ Exception -> 0x00f6 }
+            r5.<init>(r6);	 Catch:{ Exception -> 0x00fa }
             r6 = "text/xml";
-            r5.setType(r6);	 Catch:{ Exception -> 0x00f6 }
-            r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00f6 }
+            r5.setType(r6);	 Catch:{ Exception -> 0x00fa }
+            r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00fa }
             r1 = 24;
             r2 = "android.intent.extra.STREAM";
-            if (r6 < r1) goto L_0x00d9;
-        L_0x00be:
-            r6 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00d1 }
-            r6 = r6.getParentActivity();	 Catch:{ Exception -> 0x00d1 }
+            if (r6 < r1) goto L_0x00dd;
+        L_0x00c2:
+            r6 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00d5 }
+            r6 = r6.getParentActivity();	 Catch:{ Exception -> 0x00d5 }
             r1 = "org.telegram.messenger.provider";
-            r6 = androidx.core.content.FileProvider.getUriForFile(r6, r1, r4);	 Catch:{ Exception -> 0x00d1 }
-            r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x00d1 }
-            r5.setFlags(r0);	 Catch:{ Exception -> 0x00d1 }
-            goto L_0x00e0;
-        L_0x00d1:
-            r4 = android.net.Uri.fromFile(r4);	 Catch:{ Exception -> 0x00f6 }
-            r5.putExtra(r2, r4);	 Catch:{ Exception -> 0x00f6 }
-            goto L_0x00e0;
-        L_0x00d9:
-            r4 = android.net.Uri.fromFile(r4);	 Catch:{ Exception -> 0x00f6 }
-            r5.putExtra(r2, r4);	 Catch:{ Exception -> 0x00f6 }
-        L_0x00e0:
-            r4 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f6 }
+            r6 = androidx.core.content.FileProvider.getUriForFile(r6, r1, r4);	 Catch:{ Exception -> 0x00d5 }
+            r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x00d5 }
+            r5.setFlags(r0);	 Catch:{ Exception -> 0x00d5 }
+            goto L_0x00e4;
+        L_0x00d5:
+            r4 = android.net.Uri.fromFile(r4);	 Catch:{ Exception -> 0x00fa }
+            r5.putExtra(r2, r4);	 Catch:{ Exception -> 0x00fa }
+            goto L_0x00e4;
+        L_0x00dd:
+            r4 = android.net.Uri.fromFile(r4);	 Catch:{ Exception -> 0x00fa }
+            r5.putExtra(r2, r4);	 Catch:{ Exception -> 0x00fa }
+        L_0x00e4:
+            r4 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00fa }
             r6 = "ShareFile";
             r0 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
-            r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x00f6 }
-            r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x00f6 }
+            r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x00fa }
+            r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x00fa }
             r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
-            r4.startActivityForResult(r5, r6);	 Catch:{ Exception -> 0x00f6 }
-            goto L_0x0175;
-        L_0x00f6:
+            r4.startActivityForResult(r5, r6);	 Catch:{ Exception -> 0x00fa }
+            goto L_0x0179;
+        L_0x00fa:
             r4 = move-exception;
             org.telegram.messenger.FileLog.e(r4);
-            goto L_0x0175;
-        L_0x00fc:
-            if (r6 != r0) goto L_0x0123;
-        L_0x00fe:
+            goto L_0x0179;
+        L_0x0100:
+            if (r6 != r0) goto L_0x0127;
+        L_0x0102:
             r5 = org.telegram.ui.ThemeActivity.this;
             r5 = r5.parentLayout;
-            if (r5 == 0) goto L_0x0175;
-        L_0x0106:
+            if (r5 == 0) goto L_0x0179;
+        L_0x010a:
             org.telegram.ui.ActionBar.Theme.applyTheme(r4);
             r5 = org.telegram.ui.ThemeActivity.this;
             r5 = r5.parentLayout;
@@ -816,14 +817,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r6 = r6.getParentActivity();
             r4 = r4.name;
             r5.show(r6, r4);
-            goto L_0x0175;
-        L_0x0123:
+            goto L_0x0179;
+        L_0x0127:
             r6 = org.telegram.ui.ThemeActivity.this;
             r6 = r6.getParentActivity();
-            if (r6 != 0) goto L_0x012c;
-        L_0x012b:
+            if (r6 != 0) goto L_0x0130;
+        L_0x012f:
             return;
-        L_0x012c:
+        L_0x0130:
             r6 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
             r0 = org.telegram.ui.ThemeActivity.this;
             r0 = r0.getParentActivity();
@@ -849,7 +850,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r4 = org.telegram.ui.ThemeActivity.this;
             r5 = r6.create();
             r4.showDialog(r5);
-        L_0x0175:
+        L_0x0179:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeActivity$ListAdapter.lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme$ThemeInfo, android.content.DialogInterface, int):void");

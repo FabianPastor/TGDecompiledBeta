@@ -1969,26 +1969,25 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r5 = 0;
             L_0x0196:
                 r6 = 32;
-                if (r5 >= r4) goto L_0x021d;
+                if (r5 >= r4) goto L_0x0214;
             L_0x019a:
                 r8 = r0.get(r5);
                 r8 = (org.telegram.tgnet.TLRPC.TL_messages_stickerSet) r8;
                 r9 = r8.set;
                 r9 = r9.title;
-                r9 = r9.toLowerCase();
                 r10 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r10 = r10.searchQuery;
-                r9 = r9.indexOf(r10);
-                if (r9 < 0) goto L_0x01dc;
-            L_0x01b4:
-                if (r9 == 0) goto L_0x01c2;
-            L_0x01b6:
+                r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r9, r10);
+                if (r9 < 0) goto L_0x01d8;
+            L_0x01b0:
+                if (r9 == 0) goto L_0x01be;
+            L_0x01b2:
                 r10 = r8.set;
                 r10 = r10.title;
                 r11 = r9 + -1;
                 r10 = r10.charAt(r11);
-                if (r10 != r6) goto L_0x0219;
-            L_0x01c2:
+                if (r10 != r6) goto L_0x0211;
+            L_0x01be:
                 r13.clear();
                 r6 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r6 = r6.localPacks;
@@ -1997,26 +1996,25 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r6 = r6.localPacksByName;
                 r9 = java.lang.Integer.valueOf(r9);
                 r6.put(r8, r9);
-                goto L_0x0219;
-            L_0x01dc:
+                goto L_0x0211;
+            L_0x01d8:
                 r9 = r8.set;
                 r9 = r9.short_name;
-                if (r9 == 0) goto L_0x0219;
-            L_0x01e2:
-                r9 = r9.toLowerCase();
+                if (r9 == 0) goto L_0x0211;
+            L_0x01de:
                 r10 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r10 = r10.searchQuery;
-                r9 = r9.indexOf(r10);
-                if (r9 < 0) goto L_0x0219;
-            L_0x01f2:
-                if (r9 == 0) goto L_0x0200;
-            L_0x01f4:
+                r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r9, r10);
+                if (r9 < 0) goto L_0x0211;
+            L_0x01ea:
+                if (r9 == 0) goto L_0x01f8;
+            L_0x01ec:
                 r10 = r8.set;
                 r10 = r10.short_name;
                 r9 = r9 + -1;
                 r9 = r10.charAt(r9);
-                if (r9 != r6) goto L_0x0219;
-            L_0x0200:
+                if (r9 != r6) goto L_0x0211;
+            L_0x01f8:
                 r13.clear();
                 r6 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r6 = r6.localPacks;
@@ -2025,10 +2023,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r6 = r6.localPacksByShortName;
                 r9 = java.lang.Boolean.valueOf(r7);
                 r6.put(r8, r9);
-            L_0x0219:
+            L_0x0211:
                 r5 = r5 + 1;
                 goto L_0x0196;
-            L_0x021d:
+            L_0x0214:
                 r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r0 = org.telegram.ui.Components.EmojiView.this;
                 r0 = r0.currentAccount;
@@ -2037,27 +2035,26 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r0 = r0.getStickerSets(r4);
                 r4 = r0.size();
                 r5 = 0;
-            L_0x0233:
-                if (r5 >= r4) goto L_0x02b8;
-            L_0x0235:
+            L_0x022a:
+                if (r5 >= r4) goto L_0x02a6;
+            L_0x022c:
                 r8 = r0.get(r5);
                 r8 = (org.telegram.tgnet.TLRPC.TL_messages_stickerSet) r8;
                 r9 = r8.set;
                 r9 = r9.title;
-                r9 = r9.toLowerCase();
                 r10 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r10 = r10.searchQuery;
-                r9 = r9.indexOf(r10);
-                if (r9 < 0) goto L_0x0277;
-            L_0x024f:
-                if (r9 == 0) goto L_0x025d;
-            L_0x0251:
+                r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r9, r10);
+                if (r9 < 0) goto L_0x026a;
+            L_0x0242:
+                if (r9 == 0) goto L_0x0250;
+            L_0x0244:
                 r10 = r8.set;
                 r10 = r10.title;
                 r11 = r9 + -1;
                 r10 = r10.charAt(r11);
-                if (r10 != r6) goto L_0x02b4;
-            L_0x025d:
+                if (r10 != r6) goto L_0x02a3;
+            L_0x0250:
                 r13.clear();
                 r10 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r10 = r10.localPacks;
@@ -2066,26 +2063,25 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r10 = r10.localPacksByName;
                 r9 = java.lang.Integer.valueOf(r9);
                 r10.put(r8, r9);
-                goto L_0x02b4;
-            L_0x0277:
+                goto L_0x02a3;
+            L_0x026a:
                 r9 = r8.set;
                 r9 = r9.short_name;
-                if (r9 == 0) goto L_0x02b4;
-            L_0x027d:
-                r9 = r9.toLowerCase();
+                if (r9 == 0) goto L_0x02a3;
+            L_0x0270:
                 r10 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r10 = r10.searchQuery;
-                r9 = r9.indexOf(r10);
-                if (r9 < 0) goto L_0x02b4;
-            L_0x028d:
-                if (r9 == 0) goto L_0x029b;
-            L_0x028f:
+                r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r9, r10);
+                if (r9 < 0) goto L_0x02a3;
+            L_0x027c:
+                if (r9 == 0) goto L_0x028a;
+            L_0x027e:
                 r10 = r8.set;
                 r10 = r10.short_name;
                 r9 = r9 + -1;
                 r9 = r10.charAt(r9);
-                if (r9 != r6) goto L_0x02b4;
-            L_0x029b:
+                if (r9 != r6) goto L_0x02a3;
+            L_0x028a:
                 r13.clear();
                 r9 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r9 = r9.localPacks;
@@ -2094,20 +2090,20 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r9 = r9.localPacksByShortName;
                 r10 = java.lang.Boolean.valueOf(r7);
                 r9.put(r8, r10);
-            L_0x02b4:
+            L_0x02a3:
                 r5 = r5 + 1;
-                goto L_0x0233;
-            L_0x02b8:
+                goto L_0x022a;
+            L_0x02a6:
                 r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r0 = r0.localPacks;
                 r0 = r0.isEmpty();
-                if (r0 == 0) goto L_0x02d0;
-            L_0x02c4:
+                if (r0 == 0) goto L_0x02be;
+            L_0x02b2:
                 r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r0 = r0.emojiStickers;
                 r0 = r0.isEmpty();
-                if (r0 != 0) goto L_0x02f9;
-            L_0x02d0:
+                if (r0 != 0) goto L_0x02e7;
+            L_0x02be:
                 r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r0 = org.telegram.ui.Components.EmojiView.this;
                 r0 = r0.stickersGridView;
@@ -2115,8 +2111,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r4 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r4 = org.telegram.ui.Components.EmojiView.this;
                 r4 = r4.stickersSearchGridAdapter;
-                if (r0 == r4) goto L_0x02f9;
-            L_0x02e6:
+                if (r0 == r4) goto L_0x02e7;
+            L_0x02d4:
                 r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r0 = org.telegram.ui.Components.EmojiView.this;
                 r0 = r0.stickersGridView;
@@ -2124,7 +2120,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r4 = org.telegram.ui.Components.EmojiView.this;
                 r4 = r4.stickersSearchGridAdapter;
                 r0.setAdapter(r4);
-            L_0x02f9:
+            L_0x02e7:
                 r0 = new org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets;
                 r0.<init>();
                 r4 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
@@ -2141,8 +2137,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r0 = r0.searchQuery;
                 r0 = org.telegram.messenger.Emoji.isValidEmoji(r0);
-                if (r0 == 0) goto L_0x0351;
-            L_0x032a:
+                if (r0 == 0) goto L_0x033f;
+            L_0x0318:
                 r0 = new org.telegram.tgnet.TLRPC$TL_messages_getStickers;
                 r0.<init>();
                 r4 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
@@ -2157,7 +2153,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r5.<init>(r13, r0, r2, r3);
                 r0 = r4.sendRequest(r0, r5);
                 r1.reqId2 = r0;
-            L_0x0351:
+            L_0x033f:
                 r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this;
                 r0.notifyDataSetChanged();
                 return;
@@ -2418,13 +2414,13 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         z = false;
                     }
                     featuredStickerSetInfoCell.setDrawProgress(z);
-                    itemViewType = TextUtils.isEmpty(this.searchQuery) ? -1 : stickerSetCovered.set.title.toLowerCase().indexOf(this.searchQuery);
+                    itemViewType = TextUtils.isEmpty(this.searchQuery) ? -1 : AndroidUtilities.indexOfIgnoreCase(stickerSetCovered.set.title, this.searchQuery);
                     if (itemViewType >= 0) {
                         featuredStickerSetInfoCell.setStickerSet(stickerSetCovered, false, itemViewType, this.searchQuery.length());
                         return;
                     }
                     featuredStickerSetInfoCell.setStickerSet(stickerSetCovered, false);
-                    if (!TextUtils.isEmpty(this.searchQuery) && stickerSetCovered.set.short_name.toLowerCase().startsWith(this.searchQuery)) {
+                    if (!TextUtils.isEmpty(this.searchQuery) && AndroidUtilities.indexOfIgnoreCase(stickerSetCovered.set.short_name, this.searchQuery) == 0) {
                         featuredStickerSetInfoCell.setUrl(stickerSetCovered.set.short_name, this.searchQuery.length());
                         return;
                     }
@@ -2686,7 +2682,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     measuredWidth = 1080;
                 }
             }
-            this.stickersPerRow = Math.max(1, measuredWidth / AndroidUtilities.dp(72.0f));
+            this.stickersPerRow = Math.max(5, measuredWidth / AndroidUtilities.dp(72.0f));
             EmojiView.this.trendingLayoutManager.setSpanCount(this.stickersPerRow);
             if (!EmojiView.this.trendingLoaded) {
                 this.cache.clear();
@@ -2695,39 +2691,44 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 this.totalItems = 0;
                 ArrayList featuredStickerSets = MediaDataController.getInstance(EmojiView.this.currentAccount).getFeaturedStickerSets();
                 int i2 = 0;
-                for (int i3 = 0; i3 < featuredStickerSets.size(); i3++) {
-                    StickerSetCovered stickerSetCovered = (StickerSetCovered) featuredStickerSets.get(i3);
+                int i3 = 0;
+                while (true) {
+                    int i4 = 1;
+                    if (i2 >= featuredStickerSets.size()) {
+                        break;
+                    }
+                    StickerSetCovered stickerSetCovered = (StickerSetCovered) featuredStickerSets.get(i2);
                     if (!(MediaDataController.getInstance(EmojiView.this.currentAccount).isStickerPackInstalled(stickerSetCovered.set.id) || (stickerSetCovered.covers.isEmpty() && stickerSetCovered.cover == null))) {
-                        int i4;
+                        int i5;
                         this.sets.add(stickerSetCovered);
                         this.positionsToSets.put(this.totalItems, stickerSetCovered);
                         SparseArray sparseArray = this.cache;
-                        int i5 = this.totalItems;
-                        this.totalItems = i5 + 1;
-                        int i6 = i2 + 1;
-                        sparseArray.put(i5, Integer.valueOf(i2));
-                        i2 = this.totalItems / this.stickersPerRow;
+                        int i6 = this.totalItems;
+                        this.totalItems = i6 + 1;
+                        int i7 = i3 + 1;
+                        sparseArray.put(i6, Integer.valueOf(i3));
+                        i3 = this.totalItems / this.stickersPerRow;
                         if (stickerSetCovered.covers.isEmpty()) {
                             this.cache.put(this.totalItems, stickerSetCovered.cover);
-                            i2 = 1;
                         } else {
-                            i2 = (int) Math.ceil((double) (((float) stickerSetCovered.covers.size()) / ((float) this.stickersPerRow)));
-                            for (i4 = 0; i4 < stickerSetCovered.covers.size(); i4++) {
-                                this.cache.put(this.totalItems + i4, stickerSetCovered.covers.get(i4));
+                            i4 = (int) Math.ceil((double) (((float) stickerSetCovered.covers.size()) / ((float) this.stickersPerRow)));
+                            for (i3 = 0; i3 < stickerSetCovered.covers.size(); i3++) {
+                                this.cache.put(this.totalItems + i3, stickerSetCovered.covers.get(i3));
                             }
                         }
-                        i4 = 0;
+                        i3 = 0;
                         while (true) {
                             i5 = this.stickersPerRow;
-                            if (i4 >= i2 * i5) {
+                            if (i3 >= i4 * i5) {
                                 break;
                             }
-                            this.positionsToSets.put(this.totalItems + i4, stickerSetCovered);
-                            i4++;
+                            this.positionsToSets.put(this.totalItems + i3, stickerSetCovered);
+                            i3++;
                         }
-                        this.totalItems += i2 * i5;
-                        i2 = i6;
+                        this.totalItems += i4 * i5;
+                        i3 = i7;
                     }
+                    i2++;
                 }
                 if (this.totalItems != 0) {
                     EmojiView.this.trendingLoaded = true;

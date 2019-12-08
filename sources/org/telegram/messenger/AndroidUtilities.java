@@ -3189,4 +3189,24 @@ public class AndroidUtilities {
         i = Color.alpha(i);
         return Color.argb((int) ((((float) i) + (((float) (i2 - i)) * f)) * f2), (int) (((float) red2) + (((float) (red - red2)) * f)), (int) (((float) green2) + (((float) (green - green2)) * f)), (int) (((float) blue2) + (((float) (blue - blue2)) * f)));
     }
+
+    public static int indexOfIgnoreCase(String str, String str2) {
+        if (str2.isEmpty() || str.isEmpty()) {
+            return str.indexOf(str2);
+        }
+        int i = 0;
+        while (i < str.length() && str2.length() + i <= str.length()) {
+            int i2 = i;
+            int i3 = 0;
+            while (i2 < str.length() && i3 < str2.length() && Character.toLowerCase(str.charAt(i2)) == Character.toLowerCase(str2.charAt(i3))) {
+                i3++;
+                i2++;
+            }
+            if (i3 == str2.length()) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
 }

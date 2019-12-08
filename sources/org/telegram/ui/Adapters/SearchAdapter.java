@@ -430,15 +430,15 @@ public class SearchAdapter extends SelectionAdapter {
                         charSequence2 = new SpannableStringBuilder();
                         charSequence2.append(str2);
                         charSequence2.append(str);
-                        int indexOf = str.toLowerCase().indexOf(lastFoundUsername);
-                        if (indexOf != -1) {
+                        int indexOfIgnoreCase = AndroidUtilities.indexOfIgnoreCase(str, lastFoundUsername);
+                        if (indexOfIgnoreCase != -1) {
                             int length = lastFoundUsername.length();
-                            if (indexOf == 0) {
+                            if (indexOfIgnoreCase == 0) {
                                 length++;
                             } else {
-                                indexOf++;
+                                indexOfIgnoreCase++;
                             }
-                            charSequence2.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOf, length + indexOf, 33);
+                            charSequence2.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOfIgnoreCase, length + indexOfIgnoreCase, 33);
                         }
                         charSequence = null;
                     } catch (Exception e) {
