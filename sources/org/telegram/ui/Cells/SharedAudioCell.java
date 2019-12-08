@@ -64,10 +64,9 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         this.radialProgress.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         setWillNotDraw(false);
-        this.checkBox = new CheckBox2(context);
+        this.checkBox = new CheckBox2(context, 21);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(null, "windowBackgroundWhite", "checkboxCheck");
-        this.checkBox.setSize(21);
         this.checkBox.setDrawUnchecked(false);
         int i = 3;
         this.checkBox.setDrawBackgroundAsArc(3);

@@ -7,15 +7,12 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -138,7 +135,8 @@ public class Theme {
     public static Paint chat_actionBackgroundPaint = null;
     public static TextPaint chat_actionTextPaint = null;
     public static TextPaint chat_adminPaint = null;
-    public static Drawable[] chat_attachButtonDrawables = new Drawable[10];
+    public static Drawable[] chat_attachButtonDrawables = new Drawable[6];
+    public static Drawable chat_attachEmptyDrawable = null;
     public static TextPaint chat_audioPerformerPaint = null;
     public static TextPaint chat_audioTimePaint = null;
     public static TextPaint chat_audioTitlePaint = null;
@@ -384,32 +382,29 @@ public class Theme {
     public static final String key_chat_addContact = "chat_addContact";
     public static final String key_chat_adminSelectedText = "chat_adminSelectedText";
     public static final String key_chat_adminText = "chat_adminText";
+    public static final String key_chat_attachActiveTab = "chat_attachActiveTab";
     public static final String key_chat_attachAudioBackground = "chat_attachAudioBackground";
     public static final String key_chat_attachAudioIcon = "chat_attachAudioIcon";
-    public static final String key_chat_attachCameraIcon1 = "chat_attachCameraIcon1";
-    public static final String key_chat_attachCameraIcon2 = "chat_attachCameraIcon2";
-    public static final String key_chat_attachCameraIcon3 = "chat_attachCameraIcon3";
-    public static final String key_chat_attachCameraIcon4 = "chat_attachCameraIcon4";
-    public static final String key_chat_attachCameraIcon5 = "chat_attachCameraIcon5";
-    public static final String key_chat_attachCameraIcon6 = "chat_attachCameraIcon6";
+    public static final String key_chat_attachCheckBoxBackground = "chat_attachCheckBoxBackground";
+    public static final String key_chat_attachCheckBoxCheck = "chat_attachCheckBoxCheck";
     public static final String key_chat_attachContactBackground = "chat_attachContactBackground";
     public static final String key_chat_attachContactIcon = "chat_attachContactIcon";
+    public static final String key_chat_attachEmptyImage = "chat_attachEmptyImage";
     public static final String key_chat_attachFileBackground = "chat_attachFileBackground";
     public static final String key_chat_attachFileIcon = "chat_attachFileIcon";
     public static final String key_chat_attachGalleryBackground = "chat_attachGalleryBackground";
     public static final String key_chat_attachGalleryIcon = "chat_attachGalleryIcon";
-    public static final String key_chat_attachHideBackground = "chat_attachHideBackground";
-    public static final String key_chat_attachHideIcon = "chat_attachHideIcon";
     public static final String key_chat_attachLocationBackground = "chat_attachLocationBackground";
     public static final String key_chat_attachLocationIcon = "chat_attachLocationIcon";
     public static final String key_chat_attachMediaBanBackground = "chat_attachMediaBanBackground";
     public static final String key_chat_attachMediaBanText = "chat_attachMediaBanText";
+    public static final String key_chat_attachPermissionImage = "chat_attachPermissionImage";
+    public static final String key_chat_attachPermissionMark = "chat_attachPermissionMark";
+    public static final String key_chat_attachPermissionText = "chat_attachPermissionText";
+    public static final String key_chat_attachPhotoBackground = "chat_attachPhotoBackground";
     public static final String key_chat_attachPollBackground = "chat_attachPollBackground";
     public static final String key_chat_attachPollIcon = "chat_attachPollIcon";
-    public static final String key_chat_attachSendBackground = "chat_attachSendBackground";
-    public static final String key_chat_attachSendIcon = "chat_attachSendIcon";
-    public static final String key_chat_attachVideoBackground = "chat_attachVideoBackground";
-    public static final String key_chat_attachVideoIcon = "chat_attachVideoIcon";
+    public static final String key_chat_attachUnactiveTab = "chat_attachUnactiveTab";
     public static final String key_chat_botButtonText = "chat_botButtonText";
     public static final String key_chat_botKeyboardButtonBackground = "chat_botKeyboardButtonBackground";
     public static final String key_chat_botKeyboardButtonBackgroundPressed = "chat_botKeyboardButtonBackgroundPressed";
@@ -534,6 +529,7 @@ public class Theme {
     public static final String key_chat_messagePanelHint = "chat_messagePanelHint";
     public static final String key_chat_messagePanelIcons = "chat_messagePanelIcons";
     public static final String key_chat_messagePanelSend = "chat_messagePanelSend";
+    public static final String key_chat_messagePanelSendPressed = "chat_messagePanelPressedSend";
     public static final String key_chat_messagePanelShadow = "chat_messagePanelShadow";
     public static final String key_chat_messagePanelText = "chat_messagePanelText";
     public static final String key_chat_messagePanelVoiceBackground = "chat_messagePanelVoiceBackground";
@@ -974,72 +970,6 @@ public class Theme {
     private static Drawable wallpaper;
     private static final Object wallpaperSync = new Object();
 
-    private static class AttachCameraDrawable extends Drawable {
-        private Paint paint = new Paint(1);
-        private Path segment;
-
-        public int getOpacity() {
-            return -2;
-        }
-
-        public void setAlpha(int i) {
-        }
-
-        public AttachCameraDrawable() {
-            float dp = (float) AndroidUtilities.dp(54.0f);
-            RectF rectF = new RectF(0.0f, 0.0f, dp, dp);
-            this.segment = new Path();
-            this.segment.moveTo((float) AndroidUtilities.dp(23.0f), (float) AndroidUtilities.dp(20.0f));
-            this.segment.lineTo((float) AndroidUtilities.dp(23.0f), 0.0f);
-            this.segment.arcTo(rectF, -98.0f, 50.0f, false);
-            this.segment.close();
-        }
-
-        public void draw(Canvas canvas) {
-            canvas.save();
-            float dp = (float) AndroidUtilities.dp(27.0f);
-            canvas.rotate(-90.0f, dp, dp);
-            for (int i = 0; i < 6; i++) {
-                if (i == 0) {
-                    this.paint.setColor(Theme.getColor("chat_attachCameraIcon1"));
-                } else if (i == 1) {
-                    this.paint.setColor(Theme.getColor("chat_attachCameraIcon2"));
-                } else if (i == 2) {
-                    this.paint.setColor(Theme.getColor("chat_attachCameraIcon3"));
-                } else if (i == 3) {
-                    this.paint.setColor(Theme.getColor("chat_attachCameraIcon4"));
-                } else if (i == 4) {
-                    this.paint.setColor(Theme.getColor("chat_attachCameraIcon5"));
-                } else if (i == 5) {
-                    this.paint.setColor(Theme.getColor("chat_attachCameraIcon6"));
-                }
-                canvas.rotate(60.0f, dp, dp);
-                canvas.drawPath(this.segment, this.paint);
-            }
-            canvas.restore();
-        }
-
-        public void setColorFilter(ColorFilter colorFilter) {
-            invalidateSelf();
-        }
-
-        public int getIntrinsicWidth() {
-            return AndroidUtilities.dp(54.0f);
-        }
-
-        public int getIntrinsicHeight() {
-            return AndroidUtilities.dp(54.0f);
-        }
-
-        public int getMinimumWidth() {
-            return AndroidUtilities.dp(54.0f);
-        }
-
-        public int getMinimumHeight() {
-            return AndroidUtilities.dp(54.0f);
-        }
-    }
-
     public static class ThemeInfo {
         public String assetName;
         public String name;
@@ -1373,36 +1303,33 @@ public class Theme {
         defaultColors.put("chats_actionUnreadBackground", valueOf);
         defaultColors.put("chats_actionUnreadPressedBackground", Integer.valueOf(-855310));
         defaultColors.put("chats_menuTopBackgroundCats", Integer.valueOf(-10907718));
-        defaultColors.put("chat_attachCameraIcon1", Integer.valueOf(-33488));
-        defaultColors.put("chat_attachCameraIcon2", Integer.valueOf(-1353648));
-        defaultColors.put("chat_attachCameraIcon3", Integer.valueOf(-12342798));
-        defaultColors.put("chat_attachCameraIcon4", Integer.valueOf(-4958752));
-        defaultColors.put("chat_attachCameraIcon5", Integer.valueOf(-10366879));
-        defaultColors.put("chat_attachCameraIcon6", Integer.valueOf(-81627));
         defaultColors.put("chat_attachMediaBanBackground", Integer.valueOf(-12171706));
         defaultColors.put("chat_attachMediaBanText", valueOf);
-        defaultColors.put("chat_attachGalleryBackground", Integer.valueOf(-5997863));
+        defaultColors.put("chat_attachCheckBoxCheck", valueOf);
+        defaultColors.put("chat_attachCheckBoxBackground", Integer.valueOf(-12995849));
+        defaultColors.put("chat_attachPhotoBackground", Integer.valueOf(NUM));
+        defaultColors.put("chat_attachActiveTab", Integer.valueOf(-13391883));
+        defaultColors.put("chat_attachUnactiveTab", Integer.valueOf(-7169634));
+        defaultColors.put("chat_attachPermissionImage", Integer.valueOf(-13421773));
+        defaultColors.put("chat_attachPermissionMark", Integer.valueOf(-1945520));
+        defaultColors.put("chat_attachPermissionText", Integer.valueOf(-9472134));
+        defaultColors.put("chat_attachEmptyImage", Integer.valueOf(-3355444));
+        defaultColors.put("chat_attachGalleryBackground", Integer.valueOf(-12214795));
         defaultColors.put("chat_attachGalleryIcon", valueOf);
-        defaultColors.put("chat_attachVideoBackground", Integer.valueOf(-1871495));
-        defaultColors.put("chat_attachVideoIcon", valueOf);
-        defaultColors.put("chat_attachAudioBackground", Integer.valueOf(-620719));
+        defaultColors.put("chat_attachAudioBackground", Integer.valueOf(-1351584));
         defaultColors.put("chat_attachAudioIcon", valueOf);
-        defaultColors.put("chat_attachFileBackground", Integer.valueOf(-13328140));
+        defaultColors.put("chat_attachFileBackground", Integer.valueOf(-13321743));
         defaultColors.put("chat_attachFileIcon", valueOf);
-        defaultColors.put("chat_attachContactBackground", Integer.valueOf(-12664838));
+        defaultColors.put("chat_attachContactBackground", Integer.valueOf(-868277));
         defaultColors.put("chat_attachContactIcon", valueOf);
-        defaultColors.put("chat_attachLocationBackground", Integer.valueOf(-12597126));
+        defaultColors.put("chat_attachLocationBackground", Integer.valueOf(-13187226));
         defaultColors.put("chat_attachLocationIcon", valueOf);
-        defaultColors.put("chat_attachHideBackground", Integer.valueOf(-5330248));
-        defaultColors.put("chat_attachHideIcon", valueOf);
-        defaultColors.put("chat_attachSendBackground", Integer.valueOf(-12664838));
-        defaultColors.put("chat_attachPollBackground", Integer.valueOf(-670899));
+        defaultColors.put("chat_attachPollBackground", Integer.valueOf(-868277));
         defaultColors.put("chat_attachPollIcon", valueOf);
         defaultColors.put("chat_status", Integer.valueOf(-2758409));
         defaultColors.put("chat_inDownCall", Integer.valueOf(-16725933));
         defaultColors.put("chat_inUpCall", Integer.valueOf(-47032));
         defaultColors.put("chat_outUpCall", Integer.valueOf(-16725933));
-        defaultColors.put("chat_attachSendIcon", valueOf);
         defaultColors.put("chat_shareBackground", Integer.valueOf(NUM));
         defaultColors.put("chat_shareBackgroundSelected", Integer.valueOf(-NUM));
         defaultColors.put("chat_lockIcon", valueOf);
@@ -1612,6 +1539,7 @@ public class Theme {
         defaultColors.put("chat_recordedVoiceProgressInner", valueOf);
         defaultColors.put("chat_recordVoiceCancel", Integer.valueOf(-6710887));
         defaultColors.put("chat_messagePanelSend", Integer.valueOf(-10309397));
+        defaultColors.put("chat_messagePanelPressedSend", valueOf);
         defaultColors.put("key_chat_messagePanelVoiceLock", Integer.valueOf(-5987164));
         defaultColors.put("key_chat_messagePanelVoiceLockBackground", valueOf);
         defaultColors.put("key_chat_messagePanelVoiceLockShadow", valueOf4);
@@ -1831,6 +1759,11 @@ public class Theme {
         fallbackKeys.put("actionBarTabSelector", "actionBarDefaultSelector");
         fallbackKeys.put("profile_status", "avatar_subtitleInProfileBlue");
         fallbackKeys.put("chats_menuTopBackgroundCats", "avatar_backgroundActionBarBlue");
+        fallbackKeys.put("chat_messagePanelPressedSend", "chat_messagePanelVoicePressed");
+        fallbackKeys.put("chat_attachPermissionImage", "dialogTextBlack");
+        fallbackKeys.put("chat_attachPermissionMark", "chat_sentError");
+        fallbackKeys.put("chat_attachPermissionText", "dialogTextBlack");
+        fallbackKeys.put("chat_attachEmptyImage", "emptyListPlaceholder");
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         themeInfo.previewBackgroundColor = -3155485;
@@ -2395,18 +2328,22 @@ public class Theme {
     }
 
     public static Drawable createSelectorDrawable(int i) {
-        return createSelectorDrawable(i, 1);
+        return createSelectorDrawable(i, 1, -1);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x004d  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x004d  */
-    public static android.graphics.drawable.Drawable createSelectorDrawable(int r10, final int r11) {
+    public static Drawable createSelectorDrawable(int i, int i2) {
+        return createSelectorDrawable(i, i2, -1);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0053  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0053  */
+    public static android.graphics.drawable.Drawable createSelectorDrawable(int r10, final int r11, int r12) {
         /*
         r0 = android.os.Build.VERSION.SDK_INT;
         r1 = 0;
         r2 = 1;
         r3 = 21;
-        if (r0 < r3) goto L_0x005f;
+        if (r0 < r3) goto L_0x0067;
     L_0x0008:
         r0 = 23;
         r3 = -1;
@@ -2420,32 +2357,38 @@ public class Theme {
         if (r6 < r0) goto L_0x0017;
     L_0x0015:
         r6 = r5;
-        goto L_0x0035;
+        goto L_0x003b;
     L_0x0017:
-        if (r11 == r2) goto L_0x002b;
+        if (r11 == r2) goto L_0x0031;
     L_0x0019:
         r6 = 3;
-        if (r11 == r6) goto L_0x002b;
+        if (r11 == r6) goto L_0x0031;
     L_0x001c:
         r6 = 4;
-        if (r11 == r6) goto L_0x002b;
+        if (r11 == r6) goto L_0x0031;
     L_0x001f:
-        if (r11 != r4) goto L_0x0022;
+        if (r11 == r4) goto L_0x0031;
     L_0x0021:
-        goto L_0x002b;
-    L_0x0022:
+        r6 = 6;
+        if (r11 == r6) goto L_0x0031;
+    L_0x0024:
+        r6 = 7;
+        if (r11 != r6) goto L_0x0028;
+    L_0x0027:
+        goto L_0x0031;
+    L_0x0028:
         r6 = 2;
         if (r11 != r6) goto L_0x0015;
-    L_0x0025:
+    L_0x002b:
         r6 = new android.graphics.drawable.ColorDrawable;
         r6.<init>(r3);
-        goto L_0x0035;
-    L_0x002b:
+        goto L_0x003b;
+    L_0x0031:
         r6 = maskPaint;
         r6.setColor(r3);
         r6 = new org.telegram.ui.ActionBar.Theme$6;
         r6.<init>(r11);
-    L_0x0035:
+    L_0x003b:
         r7 = new android.content.res.ColorStateList;
         r8 = new int[r2][];
         r9 = android.util.StateSet.WILD_CARD;
@@ -2456,42 +2399,45 @@ public class Theme {
         r10 = new android.graphics.drawable.RippleDrawable;
         r10.<init>(r7, r5, r6);
         r1 = android.os.Build.VERSION.SDK_INT;
-        if (r1 < r0) goto L_0x005e;
-    L_0x004d:
-        if (r11 != r2) goto L_0x0059;
-    L_0x004f:
+        if (r1 < r0) goto L_0x0066;
+    L_0x0053:
+        if (r11 != r2) goto L_0x0061;
+    L_0x0055:
+        if (r12 > 0) goto L_0x005d;
+    L_0x0057:
         r11 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);
-        r10.setRadius(r11);
-        goto L_0x005e;
-    L_0x0059:
-        if (r11 != r4) goto L_0x005e;
-    L_0x005b:
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r11);
+    L_0x005d:
+        r10.setRadius(r12);
+        goto L_0x0066;
+    L_0x0061:
+        if (r11 != r4) goto L_0x0066;
+    L_0x0063:
         r10.setRadius(r3);
-    L_0x005e:
+    L_0x0066:
         return r10;
-    L_0x005f:
+    L_0x0067:
         r11 = new android.graphics.drawable.StateListDrawable;
         r11.<init>();
-        r0 = new int[r2];
-        r3 = 16842919; // 0x10100a7 float:2.3694026E-38 double:8.3215077E-317;
-        r0[r1] = r3;
-        r3 = new android.graphics.drawable.ColorDrawable;
-        r3.<init>(r10);
-        r11.addState(r0, r3);
-        r0 = new int[r2];
-        r2 = 16842913; // 0x10100a1 float:2.369401E-38 double:8.3215047E-317;
-        r0[r1] = r2;
-        r2 = new android.graphics.drawable.ColorDrawable;
-        r2.<init>(r10);
-        r11.addState(r0, r2);
-        r10 = android.util.StateSet.WILD_CARD;
+        r12 = new int[r2];
+        r0 = 16842919; // 0x10100a7 float:2.3694026E-38 double:8.3215077E-317;
+        r12[r1] = r0;
         r0 = new android.graphics.drawable.ColorDrawable;
-        r0.<init>(r1);
-        r11.addState(r10, r0);
+        r0.<init>(r10);
+        r11.addState(r12, r0);
+        r12 = new int[r2];
+        r0 = 16842913; // 0x10100a1 float:2.369401E-38 double:8.3215047E-317;
+        r12[r1] = r0;
+        r0 = new android.graphics.drawable.ColorDrawable;
+        r0.<init>(r10);
+        r11.addState(r12, r0);
+        r10 = android.util.StateSet.WILD_CARD;
+        r12 = new android.graphics.drawable.ColorDrawable;
+        r12.<init>(r1);
+        r11.addState(r10, r12);
         return r11;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createSelectorDrawable(int, int):android.graphics.drawable.Drawable");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createSelectorDrawable(int, int, int):android.graphics.drawable.Drawable");
     }
 
     public static void applyPreviousTheme() {
@@ -3534,45 +3480,45 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0a8b */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0a53 */
     /* JADX WARNING: Can't wrap try/catch for region: R(9:12|13|(4:15|(1:17)(1:18)|19|20)|37|21|22|23|24|25) */
     public static void createChatResources(android.content.Context r14, boolean r15) {
         /*
         r0 = sync;
         monitor-enter(r0);
-        r1 = chat_msgTextPaint;	 Catch:{ all -> 0x0c2f }
+        r1 = chat_msgTextPaint;	 Catch:{ all -> 0x0bf7 }
         r2 = 1;
         if (r1 != 0) goto L_0x003d;
     L_0x0008:
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0c2f }
-        r1.<init>(r2);	 Catch:{ all -> 0x0c2f }
-        chat_msgTextPaint = r1;	 Catch:{ all -> 0x0c2f }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0c2f }
-        r1.<init>(r2);	 Catch:{ all -> 0x0c2f }
-        chat_msgGameTextPaint = r1;	 Catch:{ all -> 0x0c2f }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0c2f }
-        r1.<init>(r2);	 Catch:{ all -> 0x0c2f }
-        chat_msgTextPaintOneEmoji = r1;	 Catch:{ all -> 0x0c2f }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0c2f }
-        r1.<init>(r2);	 Catch:{ all -> 0x0c2f }
-        chat_msgTextPaintTwoEmoji = r1;	 Catch:{ all -> 0x0c2f }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0c2f }
-        r1.<init>(r2);	 Catch:{ all -> 0x0c2f }
-        chat_msgTextPaintThreeEmoji = r1;	 Catch:{ all -> 0x0c2f }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0c2f }
-        r1.<init>(r2);	 Catch:{ all -> 0x0c2f }
-        chat_msgBotButtonPaint = r1;	 Catch:{ all -> 0x0c2f }
-        r1 = chat_msgBotButtonPaint;	 Catch:{ all -> 0x0c2f }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
+        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
+        chat_msgTextPaint = r1;	 Catch:{ all -> 0x0bf7 }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
+        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
+        chat_msgGameTextPaint = r1;	 Catch:{ all -> 0x0bf7 }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
+        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
+        chat_msgTextPaintOneEmoji = r1;	 Catch:{ all -> 0x0bf7 }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
+        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
+        chat_msgTextPaintTwoEmoji = r1;	 Catch:{ all -> 0x0bf7 }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
+        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
+        chat_msgTextPaintThreeEmoji = r1;	 Catch:{ all -> 0x0bf7 }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
+        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
+        chat_msgBotButtonPaint = r1;	 Catch:{ all -> 0x0bf7 }
+        r1 = chat_msgBotButtonPaint;	 Catch:{ all -> 0x0bf7 }
         r3 = "fonts/rmedium.ttf";
-        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);	 Catch:{ all -> 0x0c2f }
-        r1.setTypeface(r3);	 Catch:{ all -> 0x0c2f }
+        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);	 Catch:{ all -> 0x0bf7 }
+        r1.setTypeface(r3);	 Catch:{ all -> 0x0bf7 }
     L_0x003d:
-        monitor-exit(r0);	 Catch:{ all -> 0x0c2f }
+        monitor-exit(r0);	 Catch:{ all -> 0x0bf7 }
         r0 = 2;
-        if (r15 != 0) goto L_0x0a95;
+        if (r15 != 0) goto L_0x0a5d;
     L_0x0041:
         r1 = chat_msgInDrawable;
-        if (r1 != 0) goto L_0x0a95;
+        if (r1 != 0) goto L_0x0a5d;
     L_0x0045:
         r1 = new android.text.TextPaint;
         r1.<init>(r2);
@@ -3778,7 +3724,7 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.794589E38 double:1.0529358227E-314;
+        r3 = NUM; // 0x7var_b float:1.7945898E38 double:1.0529358247E-314;
         r3 = r1.getDrawable(r3);
         chat_msgNoSoundDrawable = r3;
         r3 = NUM; // 0x7var_ float:1.794539E38 double:1.0529357007E-314;
@@ -3857,26 +3803,21 @@ public class Theme {
         r3 = r3.mutate();
         chat_msgStickerClockDrawable = r3;
         r3 = NUM; // 0x7var_b0 float:1.7945454E38 double:1.0529357165E-314;
-        r3 = r1.getDrawable(r3);
-        r3 = r3.mutate();
-        chat_msgInViewsDrawable = r3;
-        r3 = NUM; // 0x7var_b0 float:1.7945454E38 double:1.0529357165E-314;
-        r3 = r1.getDrawable(r3);
-        r3 = r3.mutate();
-        chat_msgInViewsSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_b0 float:1.7945454E38 double:1.0529357165E-314;
-        r3 = r1.getDrawable(r3);
-        r3 = r3.mutate();
-        chat_msgOutViewsDrawable = r3;
-        r3 = NUM; // 0x7var_b0 float:1.7945454E38 double:1.0529357165E-314;
-        r3 = r1.getDrawable(r3);
-        r3 = r3.mutate();
-        chat_msgOutViewsSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_b0 float:1.7945454E38 double:1.0529357165E-314;
-        r3 = r1.getDrawable(r3);
-        r3 = r3.mutate();
-        chat_msgMediaViewsDrawable = r3;
-        r3 = NUM; // 0x7var_b0 float:1.7945454E38 double:1.0529357165E-314;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgInViewsDrawable = r4;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgInViewsSelectedDrawable = r4;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgOutViewsDrawable = r4;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgOutViewsSelectedDrawable = r4;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgMediaViewsDrawable = r4;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerViewsDrawable = r3;
@@ -3896,7 +3837,7 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMenuSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945876E38 double:1.052935819E-314;
+        r3 = NUM; // 0x7var_ float:1.7945884E38 double:1.052935821E-314;
         r3 = r1.getDrawable(r3);
         chat_msgMediaMenuDrawable = r3;
         r3 = NUM; // 0x7var_ float:1.7945363E38 double:1.052935694E-314;
@@ -4004,7 +3945,7 @@ public class Theme {
         r3 = NUM; // 0x7var_ float:1.7944677E38 double:1.052935527E-314;
         r3 = r1.getDrawable(r3);
         chat_botInlineDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945821E38 double:1.052935806E-314;
+        r3 = NUM; // 0x7var_ float:1.794583E38 double:1.052935808E-314;
         r3 = r1.getDrawable(r3);
         chat_systemDrawable = r3;
         r3 = NUM; // 0x7var_a2 float:1.7944907E38 double:1.052935583E-314;
@@ -4012,63 +3953,48 @@ public class Theme {
         r3 = r3.mutate();
         chat_contextResult_shadowUnderSwitchDrawable = r3;
         r3 = chat_attachButtonDrawables;
-        r4 = new org.telegram.ui.ActionBar.Theme$AttachCameraDrawable;
-        r4.<init>();
+        r4 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r5 = NUM; // 0x7var_ float:1.7944623E38 double:1.052935514E-314;
+        r4 = createCircleDrawableWithIcon(r4, r5);
         r5 = 0;
         r3[r5] = r4;
         r3 = chat_attachButtonDrawables;
-        r4 = NUM; // 0x42580000 float:54.0 double:5.499263994E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r7 = NUM; // 0x7var_ float:1.7944623E38 double:1.052935514E-314;
-        r6 = createCircleDrawableWithIcon(r6, r7);
-        r3[r2] = r6;
-        r3 = chat_attachButtonDrawables;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r7 = NUM; // 0x7var_a float:1.794463E38 double:1.052935516E-314;
-        r6 = createCircleDrawableWithIcon(r6, r7);
-        r3[r0] = r6;
-        r3 = chat_attachButtonDrawables;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r7 = NUM; // 0x7var_ float:1.7944614E38 double:1.052935512E-314;
-        r6 = createCircleDrawableWithIcon(r6, r7);
-        r7 = 3;
-        r3[r7] = r6;
-        r3 = chat_attachButtonDrawables;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r8 = NUM; // 0x7var_ float:1.794462E38 double:1.0529355134E-314;
-        r6 = createCircleDrawableWithIcon(r6, r8);
-        r8 = 4;
-        r3[r8] = r6;
-        r3 = chat_attachButtonDrawables;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r9 = NUM; // 0x7var_ float:1.7944619E38 double:1.052935513E-314;
-        r6 = createCircleDrawableWithIcon(r6, r9);
-        r9 = 5;
-        r3[r9] = r6;
-        r3 = chat_attachButtonDrawables;
-        r6 = 6;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r11 = NUM; // 0x7var_ float:1.7944625E38 double:1.0529355144E-314;
-        r10 = createCircleDrawableWithIcon(r10, r11);
-        r3[r6] = r10;
-        r3 = chat_attachButtonDrawables;
-        r6 = 7;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r11 = NUM; // 0x7var_ float:1.7944616E38 double:1.0529355124E-314;
-        r10 = createCircleDrawableWithIcon(r10, r11);
-        r3[r6] = r10;
-        r3 = chat_attachButtonDrawables;
-        r6 = 8;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r11 = NUM; // 0x7var_ float:1.7944629E38 double:1.0529355154E-314;
-        r10 = createCircleDrawableWithIcon(r10, r11);
-        r3[r6] = r10;
-        r3 = chat_attachButtonDrawables;
-        r6 = 9;
+        r4 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_ float:1.7944627E38 double:1.052935515E-314;
-        r4 = createCircleDrawableWithIcon(r4, r10);
+        r6 = NUM; // 0x7var_ float:1.7944614E38 double:1.052935512E-314;
+        r4 = createCircleDrawableWithIcon(r4, r6);
+        r3[r2] = r4;
+        r3 = chat_attachButtonDrawables;
+        r4 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r6 = NUM; // 0x7var_ float:1.794462E38 double:1.0529355134E-314;
+        r4 = createCircleDrawableWithIcon(r4, r6);
+        r3[r0] = r4;
+        r3 = chat_attachButtonDrawables;
+        r4 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r6 = NUM; // 0x7var_ float:1.7944619E38 double:1.052935513E-314;
+        r4 = createCircleDrawableWithIcon(r4, r6);
+        r6 = 3;
         r3[r6] = r4;
+        r3 = chat_attachButtonDrawables;
+        r4 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r7 = NUM; // 0x7var_ float:1.7944625E38 double:1.0529355144E-314;
+        r4 = createCircleDrawableWithIcon(r4, r7);
+        r7 = 4;
+        r3[r7] = r4;
+        r3 = chat_attachButtonDrawables;
+        r4 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r8 = NUM; // 0x7var_ float:1.7944627E38 double:1.052935515E-314;
+        r4 = createCircleDrawableWithIcon(r4, r8);
+        r8 = 5;
+        r3[r8] = r4;
+        r3 = NUM; // 0x7var_c0 float:1.7945487E38 double:1.0529357244E-314;
+        r3 = r1.getDrawable(r3);
+        chat_attachEmptyDrawable = r3;
         r3 = chat_cornerOuter;
         r4 = NUM; // 0x7var_ float:1.794482E38 double:1.052935562E-314;
         r4 = r1.getDrawable(r4);
@@ -4084,7 +4010,7 @@ public class Theme {
         r3 = chat_cornerOuter;
         r4 = NUM; // 0x7var_ float:1.7944815E38 double:1.052935561E-314;
         r4 = r1.getDrawable(r4);
-        r3[r7] = r4;
+        r3[r6] = r4;
         r3 = chat_cornerInner;
         r4 = NUM; // 0x7var_ float:1.7944813E38 double:1.0529355603E-314;
         r4 = r1.getDrawable(r4);
@@ -4100,11 +4026,11 @@ public class Theme {
         r3 = chat_cornerInner;
         r4 = NUM; // 0x7var_ float:1.7944807E38 double:1.052935559E-314;
         r4 = r1.getDrawable(r4);
-        r3[r7] = r4;
-        r3 = NUM; // 0x7var_ float:1.7945718E38 double:1.0529357807E-314;
+        r3[r6] = r4;
+        r3 = NUM; // 0x7var_ float:1.7945726E38 double:1.0529357827E-314;
         r3 = r1.getDrawable(r3);
         chat_shareDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945716E38 double:1.05293578E-314;
+        r3 = NUM; // 0x7var_ float:1.7945724E38 double:1.052935782E-314;
         r3 = r1.getDrawable(r3);
         chat_shareIconDrawable = r3;
         r3 = NUM; // 0x7var_e float:1.7944834E38 double:1.0529355653E-314;
@@ -4116,70 +4042,70 @@ public class Theme {
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r5];
         r4 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r10 = NUM; // 0x7var_b float:1.7944633E38 double:1.0529355164E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r5];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r2];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r10 = NUM; // 0x7var_c float:1.7944635E38 double:1.052935517E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r2];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r0];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r10 = NUM; // 0x7var_b float:1.7944633E38 double:1.0529355164E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r0];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileMiniStatesDrawable;
-        r3 = r3[r7];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r3 = r3[r6];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r10 = NUM; // 0x7var_c float:1.7944635E38 double:1.052935517E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
+        r3 = chat_fileMiniStatesDrawable;
+        r3 = r3[r6];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r7];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r10 = NUM; // 0x7var_ float:1.7945892E38 double:1.052935823E-314;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
+        r3 = chat_fileMiniStatesDrawable;
+        r3 = r3[r7];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r8];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_ float:1.7945884E38 double:1.052935821E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r10 = NUM; // 0x7var_ float:1.7945894E38 double:1.0529358237E-314;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r8];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
-        r3 = chat_fileMiniStatesDrawable;
-        r3 = r3[r9];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_ float:1.7945886E38 double:1.0529358217E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
-        r3 = chat_fileMiniStatesDrawable;
-        r3 = r3[r9];
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = NUM; // 0x7var_ float:1.7945886E38 double:1.0529358217E-314;
-        r4 = createCircleDrawableWithIcon(r4, r6);
+        r9 = NUM; // 0x7var_ float:1.7945894E38 double:1.0529358237E-314;
+        r4 = createCircleDrawableWithIcon(r4, r9);
         r3[r2] = r4;
         r3 = NUM; // 0x7var_d float:1.7945416E38 double:1.052935707E-314;
         r3 = r1.getDrawable(r3);
@@ -4196,247 +4122,247 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r5];
         r4 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r10 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
         r3 = r3[r5];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileStatesDrawable;
         r3 = r3[r2];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r10 = NUM; // 0x7var_a0 float:1.7945422E38 double:1.0529357086E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
         r3 = r3[r2];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileStatesDrawable;
         r3 = r3[r0];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r10 = NUM; // 0x7var_f float:1.794542E38 double:1.052935708E-314;
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
         r3 = r3[r0];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileStatesDrawable;
-        r3 = r3[r7];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r3 = r3[r6];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r11 = NUM; // 0x7var_d float:1.7945416E38 double:1.052935707E-314;
-        r6 = createCircleDrawableWithIcon(r6, r11);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r11);
+        r3[r5] = r9;
+        r3 = chat_fileStatesDrawable;
+        r3 = r3[r6];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r11);
+        r3[r2] = r9;
         r3 = chat_fileStatesDrawable;
         r3 = r3[r7];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r11);
-        r3[r2] = r6;
-        r3 = chat_fileStatesDrawable;
-        r3 = r3[r8];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r11 = NUM; // 0x7var_c float:1.7945414E38 double:1.0529357066E-314;
-        r6 = createCircleDrawableWithIcon(r6, r11);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r11);
+        r3[r5] = r9;
+        r3 = chat_fileStatesDrawable;
+        r3 = r3[r7];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r11);
+        r3[r2] = r9;
         r3 = chat_fileStatesDrawable;
         r3 = r3[r8];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r11);
-        r3[r2] = r6;
-        r3 = chat_fileStatesDrawable;
-        r3 = r3[r9];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r12 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
-        r6 = createCircleDrawableWithIcon(r6, r12);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r12);
+        r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
+        r3 = r3[r8];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r12);
+        r3[r2] = r9;
+        r3 = chat_fileStatesDrawable;
+        r9 = 6;
         r3 = r3[r9];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r12);
-        r3[r2] = r6;
-        r3 = chat_fileStatesDrawable;
-        r6 = 6;
-        r3 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r12 = NUM; // 0x7var_a0 float:1.7945422E38 double:1.0529357086E-314;
-        r6 = createCircleDrawableWithIcon(r6, r12);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r12);
+        r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
-        r6 = 6;
-        r3 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r12);
-        r3[r2] = r6;
+        r9 = 6;
+        r3 = r3[r9];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r12);
+        r3[r2] = r9;
         r3 = chat_fileStatesDrawable;
-        r6 = 7;
-        r3 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r5] = r6;
+        r9 = 7;
+        r3 = r3[r9];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
-        r6 = 7;
-        r3 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r10);
-        r3[r2] = r6;
+        r9 = 7;
+        r3 = r3[r9];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r10);
+        r3[r2] = r9;
         r3 = chat_fileStatesDrawable;
-        r6 = 8;
-        r3 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = 8;
+        r3 = r3[r9];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r12 = NUM; // 0x7var_d float:1.7945416E38 double:1.052935707E-314;
-        r6 = createCircleDrawableWithIcon(r6, r12);
-        r3[r5] = r6;
+        r9 = createCircleDrawableWithIcon(r9, r12);
+        r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
-        r6 = 8;
-        r3 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r12);
-        r3[r2] = r6;
+        r9 = 8;
+        r3 = r3[r9];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r12);
+        r3[r2] = r9;
         r3 = chat_fileStatesDrawable;
-        r6 = 9;
-        r3 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r11);
-        r3[r5] = r6;
+        r9 = 9;
+        r3 = r3[r9];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r11);
+        r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
-        r6 = 9;
-        r3 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = createCircleDrawableWithIcon(r6, r11);
-        r3[r2] = r6;
+        r9 = 9;
+        r3 = r3[r9];
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r9 = createCircleDrawableWithIcon(r9, r11);
+        r3[r2] = r9;
         r3 = chat_photoStatesDrawables;
         r3 = r3[r5];
-        r6 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r9 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r12 = createCircleDrawableWithIcon(r12, r10);
         r3[r5] = r12;
         r3 = chat_photoStatesDrawables;
         r3 = r3[r5];
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r12 = createCircleDrawableWithIcon(r12, r10);
         r3[r2] = r12;
         r3 = chat_photoStatesDrawables;
         r3 = r3[r2];
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r12 = createCircleDrawableWithIcon(r12, r11);
         r3[r5] = r12;
         r3 = chat_photoStatesDrawables;
         r3 = r3[r2];
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r12 = createCircleDrawableWithIcon(r12, r11);
         r3[r2] = r12;
         r3 = chat_photoStatesDrawables;
         r3 = r3[r0];
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r13 = NUM; // 0x7var_e float:1.7945418E38 double:1.0529357076E-314;
         r12 = createCircleDrawableWithIcon(r12, r13);
         r3[r5] = r12;
         r3 = chat_photoStatesDrawables;
         r3 = r3[r0];
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r12 = createCircleDrawableWithIcon(r12, r13);
         r3[r2] = r12;
         r3 = chat_photoStatesDrawables;
-        r3 = r3[r7];
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r3 = r3[r6];
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r13 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
         r12 = createCircleDrawableWithIcon(r12, r13);
         r3[r5] = r12;
         r3 = chat_photoStatesDrawables;
-        r3 = r3[r7];
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r12 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
-        r7 = createCircleDrawableWithIcon(r7, r12);
+        r6 = createCircleDrawableWithIcon(r6, r12);
+        r3[r2] = r6;
+        r3 = chat_photoStatesDrawables;
+        r6 = r3[r7];
+        r3 = r3[r7];
+        r7 = NUM; // 0x7var_c float:1.79447E38 double:1.0529355327E-314;
+        r7 = r1.getDrawable(r7);
         r3[r2] = r7;
+        r6[r5] = r7;
         r3 = chat_photoStatesDrawables;
-        r7 = r3[r8];
+        r6 = r3[r8];
         r3 = r3[r8];
-        r8 = NUM; // 0x7var_c float:1.79447E38 double:1.0529355327E-314;
-        r8 = r1.getDrawable(r8);
-        r3[r2] = r8;
-        r7[r5] = r8;
+        r7 = NUM; // 0x7var_ float:1.7944752E38 double:1.0529355455E-314;
+        r7 = r1.getDrawable(r7);
+        r3[r2] = r7;
+        r6[r5] = r7;
         r3 = chat_photoStatesDrawables;
-        r7 = r3[r9];
-        r3 = r3[r9];
-        r8 = NUM; // 0x7var_ float:1.7944752E38 double:1.0529355455E-314;
-        r8 = r1.getDrawable(r8);
-        r3[r2] = r8;
-        r7[r5] = r8;
-        r3 = chat_photoStatesDrawables;
+        r6 = 6;
+        r6 = r3[r6];
         r7 = 6;
-        r7 = r3[r7];
-        r8 = 6;
-        r3 = r3[r8];
-        r8 = NUM; // 0x7var_f3 float:1.794559E38 double:1.0529357496E-314;
-        r8 = r1.getDrawable(r8);
-        r3[r2] = r8;
-        r7[r5] = r8;
-        r3 = chat_photoStatesDrawables;
-        r7 = 7;
         r3 = r3[r7];
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = createCircleDrawableWithIcon(r7, r10);
-        r3[r5] = r7;
-        r3 = chat_photoStatesDrawables;
-        r7 = 7;
-        r3 = r3[r7];
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = createCircleDrawableWithIcon(r7, r10);
-        r3[r2] = r7;
-        r3 = chat_photoStatesDrawables;
-        r7 = 8;
-        r3 = r3[r7];
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = createCircleDrawableWithIcon(r7, r11);
-        r3[r5] = r7;
-        r3 = chat_photoStatesDrawables;
-        r7 = 8;
-        r3 = r3[r7];
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = createCircleDrawableWithIcon(r7, r11);
-        r3[r2] = r7;
-        r3 = chat_photoStatesDrawables;
-        r7 = 9;
-        r3 = r3[r7];
-        r7 = NUM; // 0x7var_b float:1.7944827E38 double:1.052935564E-314;
+        r7 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
         r7 = r1.getDrawable(r7);
-        r7 = r7.mutate();
-        r3[r5] = r7;
-        r3 = chat_photoStatesDrawables;
-        r7 = 9;
-        r3 = r3[r7];
-        r7 = NUM; // 0x7var_b float:1.7944827E38 double:1.052935564E-314;
-        r7 = r1.getDrawable(r7);
-        r7 = r7.mutate();
         r3[r2] = r7;
+        r6[r5] = r7;
         r3 = chat_photoStatesDrawables;
-        r7 = 10;
-        r3 = r3[r7];
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = createCircleDrawableWithIcon(r7, r10);
-        r3[r5] = r7;
+        r6 = 7;
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r6 = createCircleDrawableWithIcon(r6, r10);
+        r3[r5] = r6;
         r3 = chat_photoStatesDrawables;
-        r7 = 10;
-        r3 = r3[r7];
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = createCircleDrawableWithIcon(r7, r10);
-        r3[r2] = r7;
+        r6 = 7;
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r6 = createCircleDrawableWithIcon(r6, r10);
+        r3[r2] = r6;
         r3 = chat_photoStatesDrawables;
-        r7 = 11;
-        r3 = r3[r7];
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = createCircleDrawableWithIcon(r7, r11);
-        r3[r5] = r7;
+        r6 = 8;
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r6 = createCircleDrawableWithIcon(r6, r11);
+        r3[r5] = r6;
         r3 = chat_photoStatesDrawables;
-        r7 = 11;
-        r3 = r3[r7];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r6 = 8;
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r6 = createCircleDrawableWithIcon(r6, r11);
+        r3[r2] = r6;
+        r3 = chat_photoStatesDrawables;
+        r6 = 9;
+        r3 = r3[r6];
+        r6 = NUM; // 0x7var_b float:1.7944827E38 double:1.052935564E-314;
+        r6 = r1.getDrawable(r6);
+        r6 = r6.mutate();
+        r3[r5] = r6;
+        r3 = chat_photoStatesDrawables;
+        r6 = 9;
+        r3 = r3[r6];
+        r6 = NUM; // 0x7var_b float:1.7944827E38 double:1.052935564E-314;
+        r6 = r1.getDrawable(r6);
+        r6 = r6.mutate();
+        r3[r2] = r6;
+        r3 = chat_photoStatesDrawables;
+        r6 = 10;
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r6 = createCircleDrawableWithIcon(r6, r10);
+        r3[r5] = r6;
+        r3 = chat_photoStatesDrawables;
+        r6 = 10;
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r6 = createCircleDrawableWithIcon(r6, r10);
+        r3[r2] = r6;
+        r3 = chat_photoStatesDrawables;
+        r6 = 11;
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r6 = createCircleDrawableWithIcon(r6, r11);
+        r3[r5] = r6;
+        r3 = chat_photoStatesDrawables;
+        r6 = 11;
+        r3 = r3[r6];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
         r6 = createCircleDrawableWithIcon(r6, r11);
         r3[r2] = r6;
         r3 = chat_photoStatesDrawables;
@@ -4478,65 +4404,65 @@ public class Theme {
         r1 = NUM; // 0x7var_e float:1.7944801E38 double:1.0529355574E-314;
         r14 = r14.getDrawable(r1);
         chat_composeShadowDrawable = r14;
-        r14 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ Throwable -> 0x0a92 }
+        r14 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ Throwable -> 0x0a5a }
         r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);	 Catch:{ Throwable -> 0x0a92 }
+        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);	 Catch:{ Throwable -> 0x0a5a }
         r14 = r14 + r1;
-        r1 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x0a92 }
-        r1 = android.graphics.Bitmap.createBitmap(r14, r14, r1);	 Catch:{ Throwable -> 0x0a92 }
-        r3 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x0a92 }
-        r3.<init>(r1);	 Catch:{ Throwable -> 0x0a92 }
-        r4 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x0a92 }
-        r4.<init>(r2);	 Catch:{ Throwable -> 0x0a92 }
-        r4.setColor(r5);	 Catch:{ Throwable -> 0x0a92 }
-        r6 = android.graphics.Paint.Style.FILL;	 Catch:{ Throwable -> 0x0a92 }
-        r4.setStyle(r6);	 Catch:{ Throwable -> 0x0a92 }
-        r6 = new android.graphics.PorterDuffXfermode;	 Catch:{ Throwable -> 0x0a92 }
-        r7 = android.graphics.PorterDuff.Mode.CLEAR;	 Catch:{ Throwable -> 0x0a92 }
-        r6.<init>(r7);	 Catch:{ Throwable -> 0x0a92 }
-        r4.setXfermode(r6);	 Catch:{ Throwable -> 0x0a92 }
-        r6 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x0a92 }
-        r6.<init>(r2);	 Catch:{ Throwable -> 0x0a92 }
+        r1 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x0a5a }
+        r1 = android.graphics.Bitmap.createBitmap(r14, r14, r1);	 Catch:{ Throwable -> 0x0a5a }
+        r3 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x0a5a }
+        r3.<init>(r1);	 Catch:{ Throwable -> 0x0a5a }
+        r4 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x0a5a }
+        r4.<init>(r2);	 Catch:{ Throwable -> 0x0a5a }
+        r4.setColor(r5);	 Catch:{ Throwable -> 0x0a5a }
+        r6 = android.graphics.Paint.Style.FILL;	 Catch:{ Throwable -> 0x0a5a }
+        r4.setStyle(r6);	 Catch:{ Throwable -> 0x0a5a }
+        r6 = new android.graphics.PorterDuffXfermode;	 Catch:{ Throwable -> 0x0a5a }
+        r7 = android.graphics.PorterDuff.Mode.CLEAR;	 Catch:{ Throwable -> 0x0a5a }
+        r6.<init>(r7);	 Catch:{ Throwable -> 0x0a5a }
+        r4.setXfermode(r6);	 Catch:{ Throwable -> 0x0a5a }
+        r6 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x0a5a }
+        r6.<init>(r2);	 Catch:{ Throwable -> 0x0a5a }
         r2 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Throwable -> 0x0a92 }
-        r2 = (float) r2;	 Catch:{ Throwable -> 0x0a92 }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Throwable -> 0x0a5a }
+        r2 = (float) r2;	 Catch:{ Throwable -> 0x0a5a }
         r7 = 0;
         r8 = 0;
         r9 = NUM; // 0x5var_ float:9.223372E18 double:7.874593756E-315;
-        r6.setShadowLayer(r2, r7, r8, r9);	 Catch:{ Throwable -> 0x0a92 }
-    L_0x0a69:
-        if (r5 >= r0) goto L_0x0a87;
-    L_0x0a6b:
+        r6.setShadowLayer(r2, r7, r8, r9);	 Catch:{ Throwable -> 0x0a5a }
+    L_0x0a31:
+        if (r5 >= r0) goto L_0x0a4f;
+    L_0x0a33:
         r2 = r14 / 2;
-        r2 = (float) r2;	 Catch:{ Throwable -> 0x0a92 }
+        r2 = (float) r2;	 Catch:{ Throwable -> 0x0a5a }
         r7 = r14 / 2;
-        r7 = (float) r7;	 Catch:{ Throwable -> 0x0a92 }
-        r8 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ Throwable -> 0x0a92 }
+        r7 = (float) r7;	 Catch:{ Throwable -> 0x0a5a }
+        r8 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ Throwable -> 0x0a5a }
         r8 = r8 / r0;
         r9 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);	 Catch:{ Throwable -> 0x0a92 }
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);	 Catch:{ Throwable -> 0x0a5a }
         r8 = r8 - r9;
-        r8 = (float) r8;	 Catch:{ Throwable -> 0x0a92 }
-        if (r5 != 0) goto L_0x0a80;
-    L_0x0a7e:
+        r8 = (float) r8;	 Catch:{ Throwable -> 0x0a5a }
+        if (r5 != 0) goto L_0x0a48;
+    L_0x0a46:
         r9 = r6;
-        goto L_0x0a81;
-    L_0x0a80:
+        goto L_0x0a49;
+    L_0x0a48:
         r9 = r4;
-    L_0x0a81:
-        r3.drawCircle(r2, r7, r8, r9);	 Catch:{ Throwable -> 0x0a92 }
+    L_0x0a49:
+        r3.drawCircle(r2, r7, r8, r9);	 Catch:{ Throwable -> 0x0a5a }
         r5 = r5 + 1;
-        goto L_0x0a69;
-    L_0x0a87:
+        goto L_0x0a31;
+    L_0x0a4f:
         r14 = 0;
-        r3.setBitmap(r14);	 Catch:{ Exception -> 0x0a8b }
-    L_0x0a8b:
-        r14 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ Throwable -> 0x0a92 }
-        r14.<init>(r1);	 Catch:{ Throwable -> 0x0a92 }
-        chat_roundVideoShadow = r14;	 Catch:{ Throwable -> 0x0a92 }
-    L_0x0a92:
+        r3.setBitmap(r14);	 Catch:{ Exception -> 0x0a53 }
+    L_0x0a53:
+        r14 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ Throwable -> 0x0a5a }
+        r14.<init>(r1);	 Catch:{ Throwable -> 0x0a5a }
+        chat_roundVideoShadow = r14;	 Catch:{ Throwable -> 0x0a5a }
+    L_0x0a5a:
         applyChatTheme(r15);
-    L_0x0a95:
+    L_0x0a5d:
         r14 = chat_msgTextPaintOneEmoji;
         r1 = NUM; // 0x41e00000 float:28.0 double:5.46040909E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
@@ -4568,11 +4494,11 @@ public class Theme {
         r2 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r2 = (float) r2;
         r14.setTextSize(r2);
-        if (r15 != 0) goto L_0x0c2e;
-    L_0x0ae0:
+        if (r15 != 0) goto L_0x0bf6;
+    L_0x0aa8:
         r14 = chat_botProgressPaint;
-        if (r14 == 0) goto L_0x0c2e;
-    L_0x0ae4:
+        if (r14 == 0) goto L_0x0bf6;
+    L_0x0aac:
         r15 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
         r15 = (float) r15;
@@ -4709,16 +4635,16 @@ public class Theme {
         r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
         r15 = (float) r15;
         r14.setStrokeWidth(r15);
-    L_0x0c2e:
+    L_0x0bf6:
         return;
-    L_0x0c2f:
+    L_0x0bf7:
         r14 = move-exception;
-        monitor-exit(r0);	 Catch:{ all -> 0x0c2f }
-        goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+        monitor-exit(r0);	 Catch:{ all -> 0x0bf7 }
+        goto L_0x0bfb;
+    L_0x0bfa:
         throw r14;
-    L_0x0CLASSNAME:
-        goto L_0x0CLASSNAME;
+    L_0x0bfb:
+        goto L_0x0bfa;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createChatResources(android.content.Context, boolean):void");
     }
@@ -4752,14 +4678,16 @@ public class Theme {
             setDrawableColorByKey(chat_msgInShadowDrawable, str4);
             String str5 = "chat_outBubble";
             setDrawableColorByKey(chat_msgOutDrawable, str5);
-            setDrawableColorByKey(chat_msgOutSelectedDrawable, "chat_outBubbleSelected");
-            setDrawableColorByKey(chat_msgOutShadowDrawable, "chat_outBubbleShadow");
+            String str6 = "chat_outBubbleSelected";
+            setDrawableColorByKey(chat_msgOutSelectedDrawable, str6);
+            String str7 = "chat_outBubbleShadow";
+            setDrawableColorByKey(chat_msgOutShadowDrawable, str7);
             setDrawableColorByKey(chat_msgInMediaDrawable, str2);
             setDrawableColorByKey(chat_msgInMediaSelectedDrawable, str3);
             setDrawableColorByKey(chat_msgInMediaShadowDrawable, str4);
             setDrawableColorByKey(chat_msgOutMediaDrawable, str5);
-            setDrawableColorByKey(chat_msgOutMediaSelectedDrawable, "chat_outBubbleSelected");
-            setDrawableColorByKey(chat_msgOutMediaShadowDrawable, "chat_outBubbleShadow");
+            setDrawableColorByKey(chat_msgOutMediaSelectedDrawable, str6);
+            setDrawableColorByKey(chat_msgOutMediaShadowDrawable, str7);
             setDrawableColorByKey(chat_msgOutCheckDrawable, "chat_outSentCheck");
             setDrawableColorByKey(chat_msgOutCheckSelectedDrawable, "chat_outSentCheckSelected");
             setDrawableColorByKey(chat_msgOutHalfCheckDrawable, "chat_outSentCheck");
@@ -4871,24 +4799,19 @@ public class Theme {
             setCombinedDrawableColor(chat_locationDrawable[1], getColor("chat_outLocationBackground"), false);
             setCombinedDrawableColor(chat_locationDrawable[1], getColor("chat_outLocationIcon"), true);
             setDrawableColorByKey(chat_composeShadowDrawable, "chat_messagePanelShadow");
-            setCombinedDrawableColor(chat_attachButtonDrawables[1], getColor("chat_attachGalleryBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[1], getColor("chat_attachGalleryIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[2], getColor("chat_attachVideoBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[2], getColor("chat_attachVideoIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[3], getColor("chat_attachAudioBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[3], getColor("chat_attachAudioIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[4], getColor("chat_attachFileBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[4], getColor("chat_attachFileIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[5], getColor("chat_attachContactBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[5], getColor("chat_attachContactIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[6], getColor("chat_attachLocationBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[6], getColor("chat_attachLocationIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[7], getColor("chat_attachHideBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[7], getColor("chat_attachHideIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[8], getColor("chat_attachSendBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[8], getColor("chat_attachSendIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[9], getColor("chat_attachPollBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[9], getColor("chat_attachPollIcon"), true);
+            setCombinedDrawableColor(chat_attachButtonDrawables[0], getColor("chat_attachGalleryBackground"), false);
+            setCombinedDrawableColor(chat_attachButtonDrawables[0], getColor("chat_attachGalleryIcon"), true);
+            setCombinedDrawableColor(chat_attachButtonDrawables[1], getColor("chat_attachAudioBackground"), false);
+            setCombinedDrawableColor(chat_attachButtonDrawables[1], getColor("chat_attachAudioIcon"), true);
+            setCombinedDrawableColor(chat_attachButtonDrawables[2], getColor("chat_attachFileBackground"), false);
+            setCombinedDrawableColor(chat_attachButtonDrawables[2], getColor("chat_attachFileIcon"), true);
+            setCombinedDrawableColor(chat_attachButtonDrawables[3], getColor("chat_attachContactBackground"), false);
+            setCombinedDrawableColor(chat_attachButtonDrawables[3], getColor("chat_attachContactIcon"), true);
+            setCombinedDrawableColor(chat_attachButtonDrawables[4], getColor("chat_attachLocationBackground"), false);
+            setCombinedDrawableColor(chat_attachButtonDrawables[4], getColor("chat_attachLocationIcon"), true);
+            setCombinedDrawableColor(chat_attachButtonDrawables[5], getColor("chat_attachPollBackground"), false);
+            setCombinedDrawableColor(chat_attachButtonDrawables[5], getColor("chat_attachPollIcon"), true);
+            setDrawableColor(chat_attachEmptyDrawable, getColor("chat_attachEmptyImage"));
             applyChatServiceMessageColor();
         }
     }

@@ -28,9 +28,11 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
+import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -166,6 +168,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
     public void setStickersSet(StickerSetCovered stickerSetCovered, boolean z, boolean z2) {
         boolean z3;
         Object obj;
+        boolean z4;
         StickerSetCovered stickerSetCovered2 = stickerSetCovered;
         if (stickerSetCovered2 == this.stickersSet && this.wasLayout) {
             z3 = z;
@@ -179,7 +182,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.lastUpdateTime = System.currentTimeMillis();
         setWillNotDraw(this.needDivider ^ 1);
         AnimatorSet animatorSet = this.currentAnimation;
-        PhotoSize photoSize = null;
+        TLObject tLObject = null;
         if (animatorSet != null) {
             animatorSet.cancel();
             this.currentAnimation = null;
@@ -222,37 +225,45 @@ public class FeaturedStickerSetCell extends FrameLayout {
             this.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", stickerSetCovered2.set.count));
-        Document document = stickerSetCovered2.cover;
-        if (document != null) {
-            photoSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
+        TLObject tLObject2 = stickerSetCovered2.cover;
+        if (tLObject2 != null) {
+            tLObject = tLObject2;
+        } else if (!stickerSetCovered2.covers.isEmpty()) {
+            tLObject = (Document) stickerSetCovered2.covers.get(0);
         }
-        if (photoSize == null || photoSize.location == null) {
-            if (stickerSetCovered2.covers.isEmpty()) {
-                this.imageView.setImage(null, null, "webp", null, (Object) stickerSetCovered);
-            } else {
-                document = (Document) stickerSetCovered2.covers.get(0);
-                photoSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
-                if (MessageObject.canAutoplayAnimatedSticker(document)) {
-                    this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(photoSize, document), null, 0, stickerSetCovered);
-                } else {
-                    this.imageView.setImage(ImageLocation.getForDocument(photoSize, document), null, "webp", null, (Object) stickerSetCovered);
-                }
+        if (tLObject != null) {
+            ImageLocation forDocument;
+            PhotoSize photoSize = stickerSetCovered2.set.thumb;
+            if (!(photoSize instanceof TL_photoSize)) {
+                photoSize = tLObject;
             }
-        } else if (MessageObject.canAutoplayAnimatedSticker(stickerSetCovered2.cover)) {
-            this.imageView.setImage(ImageLocation.getForDocument(stickerSetCovered2.cover), "80_80", ImageLocation.getForDocument(photoSize, stickerSetCovered2.cover), null, 0, stickerSetCovered);
+            z4 = photoSize instanceof Document;
+            if (z4) {
+                forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLObject.thumbs, 90), tLObject);
+            } else {
+                forDocument = ImageLocation.getForSticker(photoSize, tLObject);
+            }
+            ImageLocation imageLocation = forDocument;
+            if (z4 && MessageObject.isAnimatedStickerDocument(tLObject)) {
+                this.imageView.setImage(ImageLocation.getForDocument(tLObject), "50_50", imageLocation, null, 0, stickerSetCovered);
+            } else if (imageLocation == null || !imageLocation.lottieAnimation) {
+                this.imageView.setImage(imageLocation, "50_50", "webp", null, (Object) stickerSetCovered);
+            } else {
+                this.imageView.setImage(imageLocation, "50_50", "tgs", null, (Object) stickerSetCovered);
+            }
         } else {
-            this.imageView.setImage(ImageLocation.getForDocument(photoSize, stickerSetCovered2.cover), null, "webp", null, (Object) stickerSetCovered);
+            this.imageView.setImage(null, null, "webp", null, (Object) stickerSetCovered);
         }
-        boolean z4;
+        boolean z5;
         if (obj != null) {
-            z4 = this.isInstalled;
-            boolean isStickerPackInstalled = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered2.set.id);
-            this.isInstalled = isStickerPackInstalled;
+            z5 = this.isInstalled;
+            z4 = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered2.set.id);
+            this.isInstalled = z4;
             String str = "scaleY";
             String str2 = "scaleX";
             String str3 = "alpha";
-            if (isStickerPackInstalled) {
-                if (!z4) {
+            if (z4) {
+                if (!z5) {
                     this.checkImage.setVisibility(0);
                     this.addButton.setClickable(false);
                     this.currentAnimation = new AnimatorSet();
@@ -275,7 +286,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                     return;
                 }
                 return;
-            } else if (z4) {
+            } else if (z5) {
                 this.addButton.setVisibility(0);
                 this.addButton.setClickable(true);
                 this.currentAnimation = new AnimatorSet();
@@ -300,9 +311,9 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 return;
             }
         }
-        z4 = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered2.set.id);
-        this.isInstalled = z4;
-        if (z4) {
+        z5 = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered2.set.id);
+        this.isInstalled = z5;
+        if (z5) {
             this.addButton.setVisibility(4);
             this.addButton.setClickable(false);
             this.checkImage.setVisibility(0);

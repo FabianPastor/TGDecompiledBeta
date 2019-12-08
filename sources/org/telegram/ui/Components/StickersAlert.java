@@ -8,11 +8,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.Selection;
 import android.text.Spannable;
@@ -103,7 +100,6 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private Document selectedSticker;
     private View[] shadow;
     private AnimatorSet[] shadowAnimation;
-    private Drawable shadowDrawable;
     private boolean showEmoji;
     private TextView stickerEmojiTextView;
     private BackupImageView stickerImageView;
@@ -438,9 +434,6 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
 
     private void init(Context context) {
         Context context2 = context;
-        this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
-        String str = "dialogBackground";
-        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
         this.containerView = new FrameLayout(context2) {
             private boolean fullHeight;
             private int lastNotifyWidth;
@@ -469,7 +462,6 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     setPadding(StickersAlert.this.backgroundPaddingLeft, AndroidUtilities.statusBarHeight, StickersAlert.this.backgroundPaddingLeft, 0);
                     StickersAlert.this.ignoreLayout = false;
                 }
-                getMeasuredWidth();
                 StickersAlert.this.itemSize = (MeasureSpec.getSize(i) - AndroidUtilities.dp(36.0f)) / 5;
                 if (StickersAlert.this.stickerSetCovereds != null) {
                     dp = ((AndroidUtilities.dp(56.0f) + (AndroidUtilities.dp(60.0f) * StickersAlert.this.stickerSetCovereds.size())) + (StickersAlert.this.adapter.stickersRowCount * AndroidUtilities.dp(82.0f))) + StickersAlert.this.backgroundPaddingTop;
@@ -738,8 +730,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         LayoutParams layoutParams = new LayoutParams(-1, AndroidUtilities.getShadowHeight(), 51);
         layoutParams.topMargin = AndroidUtilities.dp(48.0f);
         this.shadow[0] = new View(context2);
-        String str2 = "dialogShadowLine";
-        this.shadow[0].setBackgroundColor(Theme.getColor(str2));
+        String str = "dialogShadowLine";
+        this.shadow[0].setBackgroundColor(Theme.getColor(str));
         this.shadow[0].setAlpha(0.0f);
         this.shadow[0].setVisibility(4);
         this.shadow[0].setTag(Integer.valueOf(1));
@@ -815,8 +807,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.titleTextView.setEllipsize(TruncateAt.END);
         this.titleTextView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         this.titleTextView.setGravity(16);
-        String str3 = "fonts/rmedium.ttf";
-        this.titleTextView.setTypeface(AndroidUtilities.getTypeface(str3));
+        String str2 = "fonts/rmedium.ttf";
+        this.titleTextView.setTypeface(AndroidUtilities.getTypeface(str2));
         this.containerView.addView(this.titleTextView, LayoutHelper.createFrame(-1, 50.0f, 51, 0.0f, 0.0f, 40.0f, 0.0f));
         this.optionsButton = new ActionBarMenuItem(context2, null, 0, Theme.getColor("key_sheet_other"));
         this.optionsButton.setLongClickEnabled(false);
@@ -834,19 +826,20 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         layoutParams = new LayoutParams(-1, AndroidUtilities.getShadowHeight(), 83);
         layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
         this.shadow[1] = new View(context2);
-        this.shadow[1].setBackgroundColor(Theme.getColor(str2));
+        this.shadow[1].setBackgroundColor(Theme.getColor(str));
         this.containerView.addView(this.shadow[1], layoutParams);
         this.pickerBottomLayout = new TextView(context2);
-        this.pickerBottomLayout.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor(str), Theme.getColor("listSelectorSDK21")));
+        String str3 = "dialogBackground";
+        this.pickerBottomLayout.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor(str3), Theme.getColor("listSelectorSDK21")));
         String str4 = "dialogTextBlue2";
         this.pickerBottomLayout.setTextColor(Theme.getColor(str4));
         this.pickerBottomLayout.setTextSize(1, 14.0f);
         this.pickerBottomLayout.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        this.pickerBottomLayout.setTypeface(AndroidUtilities.getTypeface(str3));
+        this.pickerBottomLayout.setTypeface(AndroidUtilities.getTypeface(str2));
         this.pickerBottomLayout.setGravity(17);
         this.containerView.addView(this.pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         this.stickerPreviewLayout = new FrameLayout(context2);
-        this.stickerPreviewLayout.setBackgroundColor(Theme.getColor(str) & -NUM);
+        this.stickerPreviewLayout.setBackgroundColor(Theme.getColor(str3) & -NUM);
         this.stickerPreviewLayout.setVisibility(8);
         this.stickerPreviewLayout.setSoundEffectsEnabled(false);
         this.containerView.addView(this.stickerPreviewLayout, LayoutHelper.createFrame(-1, -1.0f));
@@ -863,15 +856,15 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.previewSendButton.setTextSize(1, 14.0f);
         this.previewSendButton.setTextColor(Theme.getColor(str4));
         this.previewSendButton.setGravity(17);
-        this.previewSendButton.setBackgroundColor(Theme.getColor(str));
+        this.previewSendButton.setBackgroundColor(Theme.getColor(str3));
         this.previewSendButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
-        this.previewSendButton.setTypeface(AndroidUtilities.getTypeface(str3));
+        this.previewSendButton.setTypeface(AndroidUtilities.getTypeface(str2));
         this.stickerPreviewLayout.addView(this.previewSendButton, LayoutHelper.createFrame(-1, 48, 83));
         this.previewSendButton.setOnClickListener(new -$$Lambda$StickersAlert$BjajSs_-vXEFUr5UZfKatrtPlkU(this));
         layoutParams = new LayoutParams(-1, AndroidUtilities.getShadowHeight(), 83);
         layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
         this.previewSendButtonShadow = new View(context2);
-        this.previewSendButtonShadow.setBackgroundColor(Theme.getColor(str2));
+        this.previewSendButtonShadow.setBackgroundColor(Theme.getColor(str));
         this.stickerPreviewLayout.addView(this.previewSendButtonShadow, layoutParams);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         updateFields();
@@ -1215,7 +1208,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r1 = r0.set;
         r1 = r1.masks;
-        r6 = NUM; // 0x7f0d08af float:1.8746624E38 double:1.053130876E-314;
+        r6 = NUM; // 0x7f0d08c6 float:1.874667E38 double:1.053130887E-314;
         r7 = "RemoveStickersCount";
         if (r1 == 0) goto L_0x00d0;
     L_0x00b9:
@@ -1287,7 +1280,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0.notifyDataSetChanged();
         goto L_0x016f;
     L_0x0156:
-        r0 = NUM; // 0x7f0d02df float:1.8743605E38 double:1.0531301407E-314;
+        r0 = NUM; // 0x7f0d02e0 float:1.8743608E38 double:1.053130141E-314;
         r2 = "Close";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = r0.toUpperCase();

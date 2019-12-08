@@ -890,7 +890,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 AndroidUtilities.runOnUIThread(new -$$Lambda$ChatLinkActivity$97kBY0LYAi0P-kzDEVlDTHmupZw(this, alertDialogArr, getConnectionsManager().sendRequest(tL_channels_setDiscussionGroup, new -$$Lambda$ChatLinkActivity$Tjh48No2Z3EZ2EiDDrohPMflh_A(this, alertDialogArr, chat, baseFragment))), 500);
                 return;
             }
-            MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), chat.id, new -$$Lambda$ChatLinkActivity$KB-csNS4ZyyV341Vg7wZcvTIREM(this, baseFragment));
+            MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), chat.id, this, new -$$Lambda$ChatLinkActivity$KB-csNS4ZyyV341Vg7wZcvTIREM(this, baseFragment));
         }
     }
 

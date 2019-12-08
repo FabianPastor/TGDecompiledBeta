@@ -139,13 +139,13 @@ public class Browser {
     /* JADX WARNING: Removed duplicated region for block: B:65:0x013a A:{Catch:{ Exception -> 0x01ad }} */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x0111 A:{Catch:{ Exception -> 0x01ad }} */
     /* JADX WARNING: Removed duplicated region for block: B:76:0x0179 A:{Catch:{ Exception -> 0x01ad }} */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0081 A:{Catch:{ Exception -> 0x0222 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0078 A:{Catch:{ Exception -> 0x0222 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0081 A:{Catch:{ Exception -> 0x021d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0078 A:{Catch:{ Exception -> 0x021d }} */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x00d8 A:{Catch:{ Exception -> 0x0102 }} */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x0111 A:{Catch:{ Exception -> 0x01ad }} */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x013a A:{Catch:{ Exception -> 0x01ad }} */
     /* JADX WARNING: Removed duplicated region for block: B:76:0x0179 A:{Catch:{ Exception -> 0x01ad }} */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x022d A:{Catch:{ Exception -> 0x0252 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x0228 A:{Catch:{ Exception -> 0x024d }} */
     /* JADX WARNING: Missing exception handler attribute for start block: B:12:0x0072 */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x013a A:{Catch:{ Exception -> 0x01ad }} */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x0111 A:{Catch:{ Exception -> 0x01ad }} */
@@ -160,11 +160,11 @@ public class Browser {
         r7 = r16;
         r8 = r17;
         r9 = "android.intent.action.VIEW";
-        if (r7 == 0) goto L_0x0256;
+        if (r7 == 0) goto L_0x0251;
     L_0x0008:
         if (r8 != 0) goto L_0x000c;
     L_0x000a:
-        goto L_0x0256;
+        goto L_0x0251;
     L_0x000c:
         r3 = org.telegram.messenger.UserConfig.selectedAccount;
         r10 = 1;
@@ -212,22 +212,22 @@ public class Browser {
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2, r0);	 Catch:{ Exception -> 0x0072 }
         return;
     L_0x0072:
-        r0 = r17.getScheme();	 Catch:{ Exception -> 0x0222 }
+        r0 = r17.getScheme();	 Catch:{ Exception -> 0x021d }
         if (r0 == 0) goto L_0x0081;
     L_0x0078:
-        r0 = r17.getScheme();	 Catch:{ Exception -> 0x0222 }
-        r0 = r0.toLowerCase();	 Catch:{ Exception -> 0x0222 }
+        r0 = r17.getScheme();	 Catch:{ Exception -> 0x021d }
+        r0 = r0.toLowerCase();	 Catch:{ Exception -> 0x021d }
         goto L_0x0083;
     L_0x0081:
         r0 = "";
     L_0x0083:
         r1 = r0;
         r0 = "http";
-        r0 = r0.equals(r1);	 Catch:{ Exception -> 0x0222 }
+        r0 = r0.equals(r1);	 Catch:{ Exception -> 0x021d }
         if (r0 != 0) goto L_0x0094;
     L_0x008c:
         r0 = "https";
-        r0 = r0.equals(r1);	 Catch:{ Exception -> 0x0222 }
+        r0 = r0.equals(r1);	 Catch:{ Exception -> 0x021d }
         if (r0 == 0) goto L_0x009f;
     L_0x0094:
         r0 = r17.normalizeScheme();	 Catch:{ Exception -> 0x009a }
@@ -236,18 +236,18 @@ public class Browser {
     L_0x009a:
         r0 = move-exception;
         r2 = r0;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x0222 }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x021d }
     L_0x009f:
-        if (r18 == 0) goto L_0x0226;
+        if (r18 == 0) goto L_0x0221;
     L_0x00a1:
-        r0 = org.telegram.messenger.SharedConfig.customTabs;	 Catch:{ Exception -> 0x0222 }
-        if (r0 == 0) goto L_0x0226;
+        r0 = org.telegram.messenger.SharedConfig.customTabs;	 Catch:{ Exception -> 0x021d }
+        if (r0 == 0) goto L_0x0221;
     L_0x00a5:
-        if (r13 != 0) goto L_0x0226;
+        if (r13 != 0) goto L_0x0221;
     L_0x00a7:
         r0 = "tel";
-        r0 = r1.equals(r0);	 Catch:{ Exception -> 0x0222 }
-        if (r0 != 0) goto L_0x0226;
+        r0 = r1.equals(r0);	 Catch:{ Exception -> 0x021d }
+        if (r0 != 0) goto L_0x0221;
     L_0x00af:
         r0 = 0;
         r1 = new android.content.Intent;	 Catch:{ Exception -> 0x0101 }
@@ -381,79 +381,78 @@ public class Browser {
         r1 = r1 + 1;
         goto L_0x017a;
     L_0x01ad:
-        r1 = r11[r12];	 Catch:{ Exception -> 0x0222 }
+        r1 = r11[r12];	 Catch:{ Exception -> 0x021d }
         if (r1 != 0) goto L_0x01b9;
     L_0x01b1:
         if (r0 == 0) goto L_0x01b9;
     L_0x01b3:
-        r0 = r0.isEmpty();	 Catch:{ Exception -> 0x0222 }
-        if (r0 == 0) goto L_0x0226;
+        r0 = r0.isEmpty();	 Catch:{ Exception -> 0x021d }
+        if (r0 == 0) goto L_0x0221;
     L_0x01b9:
-        r0 = new android.content.Intent;	 Catch:{ Exception -> 0x0222 }
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0222 }
+        r0 = new android.content.Intent;	 Catch:{ Exception -> 0x021d }
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x021d }
         r2 = org.telegram.messenger.ShareBroadcastReceiver.class;
-        r0.<init>(r1, r2);	 Catch:{ Exception -> 0x0222 }
+        r0.<init>(r1, r2);	 Catch:{ Exception -> 0x021d }
         r1 = "android.intent.action.SEND";
-        r0.setAction(r1);	 Catch:{ Exception -> 0x0222 }
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0222 }
-        r2 = new android.content.Intent;	 Catch:{ Exception -> 0x0222 }
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0222 }
+        r0.setAction(r1);	 Catch:{ Exception -> 0x021d }
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x021d }
+        r2 = new android.content.Intent;	 Catch:{ Exception -> 0x021d }
+        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x021d }
         r4 = org.telegram.messenger.CustomTabsCopyReceiver.class;
-        r2.<init>(r3, r4);	 Catch:{ Exception -> 0x0222 }
+        r2.<init>(r3, r4);	 Catch:{ Exception -> 0x021d }
         r3 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
-        r1 = android.app.PendingIntent.getBroadcast(r1, r12, r2, r3);	 Catch:{ Exception -> 0x0222 }
-        r2 = new org.telegram.messenger.support.customtabs.CustomTabsIntent$Builder;	 Catch:{ Exception -> 0x0222 }
-        r3 = getSession();	 Catch:{ Exception -> 0x0222 }
-        r2.<init>(r3);	 Catch:{ Exception -> 0x0222 }
+        r1 = android.app.PendingIntent.getBroadcast(r1, r12, r2, r3);	 Catch:{ Exception -> 0x021d }
+        r2 = new org.telegram.messenger.support.customtabs.CustomTabsIntent$Builder;	 Catch:{ Exception -> 0x021d }
+        r3 = getSession();	 Catch:{ Exception -> 0x021d }
+        r2.<init>(r3);	 Catch:{ Exception -> 0x021d }
         r3 = "CopyLink";
-        r4 = NUM; // 0x7f0d030e float:1.87437E38 double:1.053130164E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0222 }
-        r2.addMenuItem(r3, r1);	 Catch:{ Exception -> 0x0222 }
-        r1 = "actionBarDefault";
-        r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);	 Catch:{ Exception -> 0x0222 }
-        r2.setToolbarColor(r1);	 Catch:{ Exception -> 0x0222 }
+        r4 = NUM; // 0x7f0d030f float:1.8743703E38 double:1.0531301644E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x021d }
+        r2.addMenuItem(r3, r1);	 Catch:{ Exception -> 0x021d }
+        r1 = -1;
+        r2.setToolbarColor(r1);	 Catch:{ Exception -> 0x021d }
         r1 = 1;
-        r2.setShowTitle(r1);	 Catch:{ Exception -> 0x0222 }
-        r1 = r16.getResources();	 Catch:{ Exception -> 0x0222 }
+        r2.setShowTitle(r1);	 Catch:{ Exception -> 0x021d }
+        r1 = r16.getResources();	 Catch:{ Exception -> 0x021d }
         r3 = NUM; // 0x7var_ float:1.794458E38 double:1.0529355035E-314;
-        r1 = android.graphics.BitmapFactory.decodeResource(r1, r3);	 Catch:{ Exception -> 0x0222 }
+        r1 = android.graphics.BitmapFactory.decodeResource(r1, r3);	 Catch:{ Exception -> 0x021d }
         r3 = "ShareFile";
-        r4 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0222 }
-        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0222 }
-        r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12);	 Catch:{ Exception -> 0x0222 }
-        r2.setActionButton(r1, r3, r0, r12);	 Catch:{ Exception -> 0x0222 }
-        r0 = r2.build();	 Catch:{ Exception -> 0x0222 }
-        r0.setUseNewTask();	 Catch:{ Exception -> 0x0222 }
-        r0.launchUrl(r7, r8);	 Catch:{ Exception -> 0x0222 }
+        r4 = NUM; // 0x7f0d0991 float:1.8747082E38 double:1.0531309875E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x021d }
+        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x021d }
+        r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12);	 Catch:{ Exception -> 0x021d }
+        r2.setActionButton(r1, r3, r0, r12);	 Catch:{ Exception -> 0x021d }
+        r0 = r2.build();	 Catch:{ Exception -> 0x021d }
+        r0.setUseNewTask();	 Catch:{ Exception -> 0x021d }
+        r0.launchUrl(r7, r8);	 Catch:{ Exception -> 0x021d }
         return;
-    L_0x0222:
+    L_0x021d:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0226:
-        r0 = new android.content.Intent;	 Catch:{ Exception -> 0x0252 }
-        r0.<init>(r9, r8);	 Catch:{ Exception -> 0x0252 }
-        if (r13 == 0) goto L_0x023f;
-    L_0x022d:
-        r1 = new android.content.ComponentName;	 Catch:{ Exception -> 0x0252 }
-        r2 = r16.getPackageName();	 Catch:{ Exception -> 0x0252 }
+    L_0x0221:
+        r0 = new android.content.Intent;	 Catch:{ Exception -> 0x024d }
+        r0.<init>(r9, r8);	 Catch:{ Exception -> 0x024d }
+        if (r13 == 0) goto L_0x023a;
+    L_0x0228:
+        r1 = new android.content.ComponentName;	 Catch:{ Exception -> 0x024d }
+        r2 = r16.getPackageName();	 Catch:{ Exception -> 0x024d }
         r3 = org.telegram.ui.LaunchActivity.class;
-        r3 = r3.getName();	 Catch:{ Exception -> 0x0252 }
-        r1.<init>(r2, r3);	 Catch:{ Exception -> 0x0252 }
-        r0.setComponent(r1);	 Catch:{ Exception -> 0x0252 }
-    L_0x023f:
+        r3 = r3.getName();	 Catch:{ Exception -> 0x024d }
+        r1.<init>(r2, r3);	 Catch:{ Exception -> 0x024d }
+        r0.setComponent(r1);	 Catch:{ Exception -> 0x024d }
+    L_0x023a:
         r1 = "create_new_tab";
         r2 = 1;
-        r0.putExtra(r1, r2);	 Catch:{ Exception -> 0x0252 }
+        r0.putExtra(r1, r2);	 Catch:{ Exception -> 0x024d }
         r1 = "com.android.browser.application_id";
-        r2 = r16.getPackageName();	 Catch:{ Exception -> 0x0252 }
-        r0.putExtra(r1, r2);	 Catch:{ Exception -> 0x0252 }
-        r7.startActivity(r0);	 Catch:{ Exception -> 0x0252 }
-        goto L_0x0256;
-    L_0x0252:
+        r2 = r16.getPackageName();	 Catch:{ Exception -> 0x024d }
+        r0.putExtra(r1, r2);	 Catch:{ Exception -> 0x024d }
+        r7.startActivity(r0);	 Catch:{ Exception -> 0x024d }
+        goto L_0x0251;
+    L_0x024d:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0256:
+    L_0x0251:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.browser.Browser.openUrl(android.content.Context, android.net.Uri, boolean, boolean):void");

@@ -191,19 +191,15 @@ public class UserCell extends FrameLayout {
         }
     }
 
-    public void setIsAdmin(int i) {
+    public void setAdminRole(String str) {
         TextView textView = this.adminTextView;
         if (textView != null) {
-            textView.setVisibility(i != 0 ? 0 : 8);
-            if (i == 1) {
-                this.adminTextView.setText(LocaleController.getString("ChannelCreator", NUM));
-            } else if (i == 2) {
-                this.adminTextView.setText(LocaleController.getString("ChannelAdmin", NUM));
-            }
-            if (i != 0) {
+            textView.setVisibility(str != null ? 0 : 8);
+            this.adminTextView.setText(str);
+            if (str != null) {
                 CharSequence text = this.adminTextView.getText();
-                i = (int) Math.ceil((double) this.adminTextView.getPaint().measureText(text, 0, text.length()));
-                this.nameTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(6.0f) + i : 0, 0, !LocaleController.isRTL ? i + AndroidUtilities.dp(6.0f) : 0, 0);
+                int ceil = (int) Math.ceil((double) this.adminTextView.getPaint().measureText(text, 0, text.length()));
+                this.nameTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(6.0f) + ceil : 0, 0, !LocaleController.isRTL ? ceil + AndroidUtilities.dp(6.0f) : 0, 0);
             } else {
                 this.nameTextView.setPadding(0, 0, 0, 0);
             }
@@ -658,7 +654,7 @@ public class UserCell extends FrameLayout {
         r2 = r12.statusOnlineColor;
         r13.setTextColor(r2);
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d06dd float:1.8745678E38 double:1.0531306456E-314;
+        r2 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r5 = "Online";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);
@@ -699,15 +695,20 @@ public class UserCell extends FrameLayout {
         r2 = org.telegram.messenger.ImageLocation.getForUser(r0, r4);
         r3 = r12.avatarDrawable;
         r1.setImage(r2, r13, r3, r0);
-        goto L_0x01dc;
+        goto L_0x01e4;
     L_0x01cf:
-        if (r3 == 0) goto L_0x01dc;
+        if (r3 == 0) goto L_0x01dd;
     L_0x01d1:
         r0 = r12.avatarImageView;
         r1 = org.telegram.messenger.ImageLocation.getForChat(r3, r4);
         r2 = r12.avatarDrawable;
         r0.setImage(r1, r13, r2, r3);
-    L_0x01dc:
+        goto L_0x01e4;
+    L_0x01dd:
+        r13 = r12.avatarImageView;
+        r0 = r12.avatarDrawable;
+        r13.setImageDrawable(r0);
+    L_0x01e4:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell.update(int):void");

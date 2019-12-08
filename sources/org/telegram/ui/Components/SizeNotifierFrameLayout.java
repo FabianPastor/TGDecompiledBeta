@@ -110,9 +110,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public int getKeyboardHeight() {
         View rootView = getRootView();
         getWindowVisibleDisplayFrame(this.rect);
-        int height = (rootView.getHeight() - (this.rect.top != 0 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.getViewInset(rootView);
         Rect rect = this.rect;
-        return height - (rect.bottom - rect.top);
+        if (rect.bottom == 0 && rect.top == 0) {
+            return 0;
+        }
+        int height = (rootView.getHeight() - (this.rect.top != 0 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.getViewInset(rootView);
+        Rect rect2 = this.rect;
+        return Math.max(0, height - (rect2.bottom - rect2.top));
     }
 
     public void notifyHeightChanged() {

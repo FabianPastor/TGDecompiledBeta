@@ -34,7 +34,8 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarMenuItem extends FrameLayout {
-    private int additionalOffset;
+    private int additionalXOffset;
+    private int additionalYOffset;
     private boolean allowCloseAnimation;
     private boolean animateClear;
     private boolean animationEnabled;
@@ -287,6 +288,13 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public void removeAllSubItems() {
+        ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
+        if (actionBarPopupWindowLayout != null) {
+            actionBarPopupWindowLayout.removeInnerViews();
+        }
+    }
+
     public void addSubItem(View view, int i, int i2) {
         createPopupLayout();
         this.popupLayout.addView(view, new LayoutParams(i, i2));
@@ -335,6 +343,8 @@ public class ActionBarMenuItem extends FrameLayout {
         textView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
         textView.setTextSize(1, 16.0f);
         textView.setMinWidth(AndroidUtilities.dp(196.0f));
+        textView.setSingleLine(true);
+        textView.setEllipsize(TruncateAt.END);
         textView.setTag(Integer.valueOf(i));
         textView.setText(charSequence);
         this.popupLayout.addView(textView);
@@ -676,6 +686,13 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public void onSearchPressed() {
+        ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = this.listener;
+        if (actionBarMenuItemSearchListener != null) {
+            actionBarMenuItemSearchListener.onSearchPressed(this.searchField);
+        }
+    }
+
     public EditTextBoldCursor getSearchField() {
         return this.searchField;
     }
@@ -962,8 +979,12 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public void setAdditionalOffset(int i) {
-        this.additionalOffset = i;
+    public void setAdditionalYOffset(int i) {
+        this.additionalYOffset = i;
+    }
+
+    public void setAdditionalXOffset(int i) {
+        this.additionalXOffset = i;
     }
 
     private void updateOrShowPopup(boolean z, boolean z2) {
@@ -976,7 +997,7 @@ public class ActionBarMenuItem extends FrameLayout {
         } else {
             float scaleY = getScaleY();
             top = -((int) ((((float) getMeasuredHeight()) * scaleY) - ((this.subMenuOpenSide != 2 ? getTranslationY() : 0.0f) / scaleY)));
-            paddingTop = this.additionalOffset;
+            paddingTop = this.additionalYOffset;
         }
         int i = (top + paddingTop) + this.yOffset;
         if (z) {
@@ -1009,25 +1030,25 @@ public class ActionBarMenuItem extends FrameLayout {
             if (getParent() != null) {
                 View view = (View) getParent();
                 if (z) {
-                    this.popupWindow.showAsDropDown(view, (getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), i);
+                    this.popupWindow.showAsDropDown(view, ((getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + this.additionalXOffset, i);
                 }
                 if (z2) {
-                    this.popupWindow.update(view, (getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), i, -1, -1);
+                    this.popupWindow.update(view, ((getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + this.additionalXOffset, i, -1, -1);
                 }
             }
         } else if (top == 1) {
             if (z) {
-                this.popupWindow.showAsDropDown(this, -AndroidUtilities.dp(8.0f), i);
+                this.popupWindow.showAsDropDown(this, (-AndroidUtilities.dp(8.0f)) + this.additionalXOffset, i);
             }
             if (z2) {
-                this.popupWindow.update(this, -AndroidUtilities.dp(8.0f), i, -1, -1);
+                this.popupWindow.update(this, (-AndroidUtilities.dp(8.0f)) + this.additionalXOffset, i, -1, -1);
             }
         } else {
             if (z) {
-                this.popupWindow.showAsDropDown(this, getMeasuredWidth() - this.popupLayout.getMeasuredWidth(), i);
+                this.popupWindow.showAsDropDown(this, (getMeasuredWidth() - this.popupLayout.getMeasuredWidth()) + this.additionalXOffset, i);
             }
             if (z2) {
-                this.popupWindow.update(this, getMeasuredWidth() - this.popupLayout.getMeasuredWidth(), i, -1, -1);
+                this.popupWindow.update(this, (getMeasuredWidth() - this.popupLayout.getMeasuredWidth()) + this.additionalXOffset, i, -1, -1);
             }
         }
     }

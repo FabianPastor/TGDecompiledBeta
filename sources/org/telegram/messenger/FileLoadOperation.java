@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
@@ -108,6 +109,7 @@ public class FileLoadOperation {
     private int preloadTempBufferCount;
     private SparseArray<PreloadRange> preloadedBytesRanges;
     private int priority;
+    private RequestInfo priorityRequestInfo;
     private int renameRetryCount;
     private ArrayList<RequestInfo> requestInfos;
     private int requestedBytesCount;
@@ -120,6 +122,7 @@ public class FileLoadOperation {
     private volatile int state;
     private File storePath;
     private ArrayList<FileLoadOperationStream> streamListeners;
+    private int streamPriorityStartOffset;
     private int streamStartOffset;
     private boolean supportsPreloading;
     private File tempPath;
@@ -516,27 +519,42 @@ public class FileLoadOperation {
             Object obj;
             int size = arrayList.size();
             int i3 = 0;
-            while (true) {
-                obj = 1;
-                if (i3 >= size) {
-                    obj = null;
-                    break;
-                }
-                Range range = (Range) arrayList.get(i3);
+            int i4 = 0;
+            while (i4 < size) {
+                Range range = (Range) arrayList.get(i4);
                 if (i == range.end) {
                     range.end = i2;
-                    break;
                 } else if (i2 == range.start) {
                     range.start = i;
-                    break;
                 } else {
-                    i3++;
+                    i4++;
                 }
+                obj = 1;
+            }
+            obj = null;
+            Collections.sort(arrayList, -$$Lambda$FileLoadOperation$o7auaauybhlDahYpH2ZCMglGb9Q.INSTANCE);
+            while (i3 < arrayList.size() - 1) {
+                Range range2 = (Range) arrayList.get(i3);
+                int i5 = i3 + 1;
+                Range range3 = (Range) arrayList.get(i5);
+                if (range2.end == range3.start) {
+                    range2.end = range3.end;
+                    arrayList.remove(i5);
+                    i3--;
+                }
+                i3++;
             }
             if (obj == null) {
                 arrayList.add(new Range(i, i2));
             }
         }
+    }
+
+    static /* synthetic */ int lambda$removePart$0(Range range, Range range2) {
+        if (range.start > range2.start) {
+            return 1;
+        }
+        return range.start < range2.start ? -1 : 0;
     }
 
     private void addPart(ArrayList<Range> arrayList, int i, int i2, boolean z) {
@@ -610,7 +628,7 @@ public class FileLoadOperation {
     public File getCurrentFile() {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         File[] fileArr = new File[1];
-        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$sszlpx-7B35gY8yLDFGHhHn8Nio(this, fileArr, countDownLatch));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$wamhg3zXe9K1fjSuz0X9oOjrnnI(this, fileArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -619,7 +637,7 @@ public class FileLoadOperation {
         return fileArr[0];
     }
 
-    public /* synthetic */ void lambda$getCurrentFile$0$FileLoadOperation(File[] fileArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getCurrentFile$1$FileLoadOperation(File[] fileArr, CountDownLatch countDownLatch) {
         if (this.state == 3) {
             fileArr[0] = this.cacheFileFinal;
         } else {
@@ -668,7 +686,7 @@ public class FileLoadOperation {
     public int getDownloadedLengthFromOffset(int i, int i2) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         int[] iArr = new int[1];
-        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$7ur7HYEmrvSDh4lwc7_mdrw1G5A(this, iArr, i, i2, countDownLatch));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$8QL_G37hjhL6ox5f8VqjmOQNcPI(this, iArr, i, i2, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception unused) {
@@ -676,7 +694,7 @@ public class FileLoadOperation {
         return iArr[0];
     }
 
-    public /* synthetic */ void lambda$getDownloadedLengthFromOffset$1$FileLoadOperation(int[] iArr, int i, int i2, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getDownloadedLengthFromOffset$2$FileLoadOperation(int[] iArr, int i, int i2, CountDownLatch countDownLatch) {
         iArr[0] = getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, i, i2);
         countDownLatch.countDown();
     }
@@ -701,14 +719,14 @@ public class FileLoadOperation {
     }
 
     /* Access modifiers changed, original: protected */
-    public void removeStreamListener(FileStreamLoadOperation fileStreamLoadOperation) {
-        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$pRXavC_xR0CSUF8u1ykitHqvWcY(this, fileStreamLoadOperation));
+    public void removeStreamListener(FileLoadOperationStream fileLoadOperationStream) {
+        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$gpU_9Y3L-u2SbrKXr1zQ9VNewHA(this, fileLoadOperationStream));
     }
 
-    public /* synthetic */ void lambda$removeStreamListener$2$FileLoadOperation(FileStreamLoadOperation fileStreamLoadOperation) {
+    public /* synthetic */ void lambda$removeStreamListener$3$FileLoadOperation(FileLoadOperationStream fileLoadOperationStream) {
         ArrayList arrayList = this.streamListeners;
         if (arrayList != null) {
-            arrayList.remove(fileStreamLoadOperation);
+            arrayList.remove(fileLoadOperationStream);
         }
     }
 
@@ -726,1095 +744,1147 @@ public class FileLoadOperation {
     }
 
     public boolean start() {
-        return start(null, 0);
+        return start(null, 0, false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x056e  */
-    /* JADX WARNING: Removed duplicated region for block: B:222:0x062b  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x05d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x0653  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x067f  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x06bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x072d A:{Catch:{ Exception -> 0x0736 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:270:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x073e  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x054e A:{SYNTHETIC, Splitter:B:185:0x054e} */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x056e  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x05d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:222:0x062b  */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x0653  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x067f  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x06bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x072d A:{Catch:{ Exception -> 0x0736 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x073e  */
-    /* JADX WARNING: Removed duplicated region for block: B:270:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x054e A:{SYNTHETIC, Splitter:B:185:0x054e} */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x056e  */
-    /* JADX WARNING: Removed duplicated region for block: B:222:0x062b  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x05d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x0653  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x067f  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x06bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x072d A:{Catch:{ Exception -> 0x0736 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:270:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x073e  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x0445 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x056e  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x05d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:222:0x062b  */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x0653  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x067f  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x06bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x072d A:{Catch:{ Exception -> 0x0736 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x073e  */
-    /* JADX WARNING: Removed duplicated region for block: B:270:0x0743  */
-    public boolean start(org.telegram.messenger.FileLoadOperationStream r24, int r25) {
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x0556 A:{SYNTHETIC, Splitter:B:185:0x0556} */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x063c  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x05e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0663  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x068f  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x073c A:{Catch:{ Exception -> 0x0745 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x0751  */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x074d  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x0556 A:{SYNTHETIC, Splitter:B:185:0x0556} */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x05db  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x0576  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x05e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x063c  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0663  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x068f  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x073c A:{Catch:{ Exception -> 0x0745 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x074d  */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x0751  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x0556 A:{SYNTHETIC, Splitter:B:185:0x0556} */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x0576  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x05db  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x063c  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x05e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0663  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x068f  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x073c A:{Catch:{ Exception -> 0x0745 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x0751  */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x074d  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x05db  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x0576  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x05e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x063c  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0663  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x068f  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x073c A:{Catch:{ Exception -> 0x0745 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x074d  */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x0751  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x044c A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x0576  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x05db  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x063c  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x05e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0663  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x068f  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x073c A:{Catch:{ Exception -> 0x0745 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x0751  */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x074d  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x05e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x063c  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0663  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x068f  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x073c A:{Catch:{ Exception -> 0x0745 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x074d  */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x0751  */
+    public boolean start(org.telegram.messenger.FileLoadOperationStream r24, int r25, boolean r26) {
         /*
         r23 = this;
-        r1 = r23;
-        r0 = r24;
-        r2 = r25;
-        r3 = r1.currentDownloadChunkSize;
-        if (r3 != 0) goto L_0x001f;
-    L_0x000a:
-        r3 = r1.totalBytesCount;
-        r4 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
-        if (r3 < r4) goto L_0x0013;
-    L_0x0010:
-        r3 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
-        goto L_0x0016;
-    L_0x0013:
-        r3 = 32768; // 0x8000 float:4.5918E-41 double:1.61895E-319;
-    L_0x0016:
-        r1.currentDownloadChunkSize = r3;
-        r3 = r1.totalBytesCount;
-        r4 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
-        r3 = 4;
-        r1.currentMaxDownloadRequests = r3;
-    L_0x001f:
-        r3 = r1.state;
-        r4 = 1;
-        r5 = 0;
-        if (r3 == 0) goto L_0x0027;
-    L_0x0025:
-        r3 = 1;
-        goto L_0x0028;
-    L_0x0027:
-        r3 = 0;
-    L_0x0028:
-        r6 = r1.paused;
-        r1.paused = r5;
-        if (r0 == 0) goto L_0x0039;
-    L_0x002e:
-        r7 = org.telegram.messenger.Utilities.stageQueue;
-        r8 = new org.telegram.messenger.-$$Lambda$FileLoadOperation$LZcjmIEbWfyJMJubpJYFWtYZ3uM;
-        r8.<init>(r1, r2, r0, r3);
-        r7.postRunnable(r8);
-        goto L_0x0047;
-    L_0x0039:
-        if (r6 == 0) goto L_0x0047;
-    L_0x003b:
-        if (r3 == 0) goto L_0x0047;
-    L_0x003d:
-        r0 = org.telegram.messenger.Utilities.stageQueue;
-        r7 = new org.telegram.messenger.-$$Lambda$HfxdqGkDOxPIykHiS0VM1dK9UjM;
-        r7.<init>(r1);
-        r0.postRunnable(r7);
-    L_0x0047:
-        if (r3 == 0) goto L_0x004a;
-    L_0x0049:
-        return r6;
-    L_0x004a:
-        r0 = r1.location;
-        if (r0 != 0) goto L_0x0056;
-    L_0x004e:
-        r0 = r1.webLocation;
-        if (r0 != 0) goto L_0x0056;
-    L_0x0052:
-        r1.onFail(r4, r5);
-        return r5;
-    L_0x0056:
-        r0 = r1.currentDownloadChunkSize;
-        r2 = r2 / r0;
-        r2 = r2 * r0;
-        r1.streamStartOffset = r2;
-        r2 = r1.allowDisordererFileSave;
-        if (r2 == 0) goto L_0x0075;
-    L_0x0061:
-        r2 = r1.totalBytesCount;
-        if (r2 <= 0) goto L_0x0075;
-    L_0x0065:
-        if (r2 <= r0) goto L_0x0075;
-    L_0x0067:
+        r7 = r23;
+        r0 = r7.currentDownloadChunkSize;
+        if (r0 != 0) goto L_0x001b;
+    L_0x0006:
+        r0 = r7.totalBytesCount;
+        r1 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
+        if (r0 < r1) goto L_0x000f;
+    L_0x000c:
+        r0 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
+        goto L_0x0012;
+    L_0x000f:
+        r0 = 32768; // 0x8000 float:4.5918E-41 double:1.61895E-319;
+    L_0x0012:
+        r7.currentDownloadChunkSize = r0;
+        r0 = r7.totalBytesCount;
+        r1 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
+        r0 = 4;
+        r7.currentMaxDownloadRequests = r0;
+    L_0x001b:
+        r0 = r7.state;
+        r8 = 1;
+        r9 = 0;
+        if (r0 == 0) goto L_0x0023;
+    L_0x0021:
+        r0 = 1;
+        goto L_0x0024;
+    L_0x0023:
+        r0 = 0;
+    L_0x0024:
+        r10 = r7.paused;
+        r7.paused = r9;
+        if (r24 == 0) goto L_0x003f;
+    L_0x002a:
+        r11 = org.telegram.messenger.Utilities.stageQueue;
+        r12 = new org.telegram.messenger.-$$Lambda$FileLoadOperation$ueOLhTDJvcCHBhZ6A3pTvCfLNBQ;
+        r1 = r12;
+        r2 = r23;
+        r3 = r26;
+        r4 = r25;
+        r5 = r24;
+        r6 = r0;
+        r1.<init>(r2, r3, r4, r5, r6);
+        r11.postRunnable(r12);
+        goto L_0x004d;
+    L_0x003f:
+        if (r10 == 0) goto L_0x004d;
+    L_0x0041:
+        if (r0 == 0) goto L_0x004d;
+    L_0x0043:
+        r1 = org.telegram.messenger.Utilities.stageQueue;
+        r2 = new org.telegram.messenger.-$$Lambda$HfxdqGkDOxPIykHiS0VM1dK9UjM;
+        r2.<init>(r7);
+        r1.postRunnable(r2);
+    L_0x004d:
+        if (r0 == 0) goto L_0x0050;
+    L_0x004f:
+        return r10;
+    L_0x0050:
+        r0 = r7.location;
+        if (r0 != 0) goto L_0x005c;
+    L_0x0054:
+        r0 = r7.webLocation;
+        if (r0 != 0) goto L_0x005c;
+    L_0x0058:
+        r7.onFail(r8, r9);
+        return r9;
+    L_0x005c:
+        r0 = r7.currentDownloadChunkSize;
+        r1 = r25 / r0;
+        r1 = r1 * r0;
+        r7.streamStartOffset = r1;
+        r1 = r7.allowDisordererFileSave;
+        if (r1 == 0) goto L_0x007c;
+    L_0x0068:
+        r1 = r7.totalBytesCount;
+        if (r1 <= 0) goto L_0x007c;
+    L_0x006c:
+        if (r1 <= r0) goto L_0x007c;
+    L_0x006e:
         r0 = new java.util.ArrayList;
         r0.<init>();
-        r1.notLoadedBytesRanges = r0;
+        r7.notLoadedBytesRanges = r0;
         r0 = new java.util.ArrayList;
         r0.<init>();
-        r1.notRequestedBytesRanges = r0;
-    L_0x0075:
-        r0 = r1.webLocation;
-        r2 = ".iv.enc";
-        r3 = ".iv";
-        r6 = ".enc";
-        r7 = ".temp.enc";
-        r8 = ".temp";
-        r9 = ".";
+        r7.notRequestedBytesRanges = r0;
+    L_0x007c:
+        r0 = r7.webLocation;
+        r1 = ".iv.enc";
+        r2 = ".iv";
+        r3 = ".enc";
+        r4 = ".temp.enc";
+        r5 = ".temp";
+        r6 = ".";
         r10 = 0;
-        if (r0 == 0) goto L_0x0111;
-    L_0x0087:
-        r0 = r1.webFile;
+        if (r0 == 0) goto L_0x0118;
+    L_0x008e:
+        r0 = r7.webFile;
         r0 = r0.url;
         r0 = org.telegram.messenger.Utilities.MD5(r0);
-        r13 = r1.encryptFile;
-        if (r13 == 0) goto L_0x00d0;
-    L_0x0093:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r3.append(r0);
-        r3.append(r7);
-        r3 = r3.toString();
-        r7 = new java.lang.StringBuilder;
-        r7.<init>();
-        r7.append(r0);
-        r7.append(r9);
-        r8 = r1.ext;
-        r7.append(r8);
-        r7.append(r6);
-        r6 = r7.toString();
-        r7 = r1.key;
-        if (r7 == 0) goto L_0x00ce;
-    L_0x00bd:
-        r7 = new java.lang.StringBuilder;
-        r7.<init>();
-        r7.append(r0);
-        r7.append(r2);
-        r0 = r7.toString();
-        r2 = r3;
-        goto L_0x0108;
-    L_0x00ce:
-        r2 = r3;
-        goto L_0x0107;
-    L_0x00d0:
+        r13 = r7.encryptFile;
+        if (r13 == 0) goto L_0x00d7;
+    L_0x009a:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r2.append(r0);
-        r2.append(r8);
+        r2.append(r4);
         r2 = r2.toString();
-        r6 = new java.lang.StringBuilder;
-        r6.<init>();
-        r6.append(r0);
-        r6.append(r9);
-        r7 = r1.ext;
-        r6.append(r7);
-        r6 = r6.toString();
-        r7 = r1.key;
-        if (r7 == 0) goto L_0x0107;
-    L_0x00f7:
-        r7 = new java.lang.StringBuilder;
-        r7.<init>();
-        r7.append(r0);
-        r7.append(r3);
-        r0 = r7.toString();
-        goto L_0x0108;
-    L_0x0107:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r4.append(r0);
+        r4.append(r6);
+        r5 = r7.ext;
+        r4.append(r5);
+        r4.append(r3);
+        r3 = r4.toString();
+        r4 = r7.key;
+        if (r4 == 0) goto L_0x00d5;
+    L_0x00c4:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r4.append(r0);
+        r4.append(r1);
+        r0 = r4.toString();
+        r1 = r2;
+        goto L_0x010f;
+    L_0x00d5:
+        r1 = r2;
+        goto L_0x010e;
+    L_0x00d7:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r1.append(r0);
+        r1.append(r5);
+        r1 = r1.toString();
+        r3 = new java.lang.StringBuilder;
+        r3.<init>();
+        r3.append(r0);
+        r3.append(r6);
+        r4 = r7.ext;
+        r3.append(r4);
+        r3 = r3.toString();
+        r4 = r7.key;
+        if (r4 == 0) goto L_0x010e;
+    L_0x00fe:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r4.append(r0);
+        r4.append(r2);
+        r0 = r4.toString();
+        goto L_0x010f;
+    L_0x010e:
         r0 = 0;
-    L_0x0108:
-        r3 = 0;
+    L_0x010f:
+        r2 = 0;
         r12 = 0;
-        r22 = r2;
-        r2 = r0;
+        r22 = r1;
+        r1 = r0;
         r0 = r22;
-        goto L_0x0357;
-    L_0x0111:
-        r0 = r1.location;
+        goto L_0x035e;
+    L_0x0118:
+        r0 = r7.location;
         r13 = r0.volume_id;
         r15 = "_";
         r16 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1));
-        if (r16 == 0) goto L_0x0245;
-    L_0x011b:
+        if (r16 == 0) goto L_0x024c;
+    L_0x0122:
         r0 = r0.local_id;
-        if (r0 == 0) goto L_0x0245;
-    L_0x011f:
-        r0 = r1.datacenterId;
+        if (r0 == 0) goto L_0x024c;
+    L_0x0126:
+        r0 = r7.datacenterId;
         r12 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        if (r0 == r12) goto L_0x0241;
-    L_0x0125:
+        if (r0 == r12) goto L_0x0248;
+    L_0x012c:
         r16 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r12 = (r13 > r16 ? 1 : (r13 == r16 ? 0 : -1));
-        if (r12 == 0) goto L_0x0241;
-    L_0x012c:
-        if (r0 != 0) goto L_0x0130;
-    L_0x012e:
-        goto L_0x0241;
-    L_0x0130:
-        r0 = r1.encryptFile;
-        if (r0 == 0) goto L_0x0199;
-    L_0x0134:
+        if (r12 == 0) goto L_0x0248;
+    L_0x0133:
+        if (r0 != 0) goto L_0x0137;
+    L_0x0135:
+        goto L_0x0248;
+    L_0x0137:
+        r0 = r7.encryptFile;
+        if (r0 == 0) goto L_0x01a0;
+    L_0x013b:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r3 = r1.location;
-        r12 = r3.volume_id;
+        r2 = r7.location;
+        r12 = r2.volume_id;
         r0.append(r12);
         r0.append(r15);
-        r3 = r1.location;
-        r3 = r3.local_id;
-        r0.append(r3);
-        r0.append(r7);
-        r0 = r0.toString();
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r7 = r1.location;
-        r7 = r7.volume_id;
-        r3.append(r7);
-        r3.append(r15);
-        r7 = r1.location;
-        r7 = r7.local_id;
-        r3.append(r7);
-        r3.append(r9);
-        r7 = r1.ext;
-        r3.append(r7);
-        r3.append(r6);
-        r6 = r3.toString();
-        r3 = r1.key;
-        if (r3 == 0) goto L_0x02b3;
-    L_0x017a:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r7 = r1.location;
-        r7 = r7.volume_id;
-        r3.append(r7);
-        r3.append(r15);
-        r7 = r1.location;
-        r7 = r7.local_id;
-        r3.append(r7);
-        r3.append(r2);
-        r12 = r3.toString();
-        goto L_0x02b1;
-    L_0x0199:
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r2 = r1.location;
-        r6 = r2.volume_id;
-        r0.append(r6);
-        r0.append(r15);
-        r2 = r1.location;
+        r2 = r7.location;
         r2 = r2.local_id;
         r0.append(r2);
-        r0.append(r8);
-        r2 = r0.toString();
+        r0.append(r4);
+        r0 = r0.toString();
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r4 = r7.location;
+        r4 = r4.volume_id;
+        r2.append(r4);
+        r2.append(r15);
+        r4 = r7.location;
+        r4 = r4.local_id;
+        r2.append(r4);
+        r2.append(r6);
+        r4 = r7.ext;
+        r2.append(r4);
+        r2.append(r3);
+        r3 = r2.toString();
+        r2 = r7.key;
+        if (r2 == 0) goto L_0x02ba;
+    L_0x0181:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r4 = r7.location;
+        r4 = r4.volume_id;
+        r2.append(r4);
+        r2.append(r15);
+        r4 = r7.location;
+        r4 = r4.local_id;
+        r2.append(r4);
+        r2.append(r1);
+        r12 = r2.toString();
+        goto L_0x02b8;
+    L_0x01a0:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r6 = r1.location;
-        r6 = r6.volume_id;
-        r0.append(r6);
-        r0.append(r15);
-        r6 = r1.location;
-        r6 = r6.local_id;
-        r0.append(r6);
-        r0.append(r9);
-        r6 = r1.ext;
-        r0.append(r6);
-        r6 = r0.toString();
-        r0 = r1.key;
-        if (r0 == 0) goto L_0x01fa;
-    L_0x01dc:
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r7 = r1.location;
-        r7 = r7.volume_id;
-        r0.append(r7);
-        r0.append(r15);
-        r7 = r1.location;
-        r7 = r7.local_id;
-        r0.append(r7);
+        r1 = r7.location;
+        r3 = r1.volume_id;
         r0.append(r3);
-        r12 = r0.toString();
-        goto L_0x01fb;
-    L_0x01fa:
-        r12 = 0;
-    L_0x01fb:
-        r0 = r1.notLoadedBytesRanges;
-        if (r0 == 0) goto L_0x021f;
-    L_0x01ff:
+        r0.append(r15);
+        r1 = r7.location;
+        r1 = r1.local_id;
+        r0.append(r1);
+        r0.append(r5);
+        r1 = r0.toString();
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r3 = r1.location;
-        r7 = r3.volume_id;
-        r0.append(r7);
+        r3 = r7.location;
+        r3 = r3.volume_id;
+        r0.append(r3);
         r0.append(r15);
-        r3 = r1.location;
+        r3 = r7.location;
         r3 = r3.local_id;
         r0.append(r3);
-        r3 = ".pt";
+        r0.append(r6);
+        r3 = r7.ext;
         r0.append(r3);
+        r3 = r0.toString();
+        r0 = r7.key;
+        if (r0 == 0) goto L_0x0201;
+    L_0x01e3:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r4 = r7.location;
+        r4 = r4.volume_id;
+        r0.append(r4);
+        r0.append(r15);
+        r4 = r7.location;
+        r4 = r4.local_id;
+        r0.append(r4);
+        r0.append(r2);
+        r12 = r0.toString();
+        goto L_0x0202;
+    L_0x0201:
+        r12 = 0;
+    L_0x0202:
+        r0 = r7.notLoadedBytesRanges;
+        if (r0 == 0) goto L_0x0226;
+    L_0x0206:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r2 = r7.location;
+        r4 = r2.volume_id;
+        r0.append(r4);
+        r0.append(r15);
+        r2 = r7.location;
+        r2 = r2.local_id;
+        r0.append(r2);
+        r2 = ".pt";
+        r0.append(r2);
         r0 = r0.toString();
-        goto L_0x0220;
-    L_0x021f:
+        goto L_0x0227;
+    L_0x0226:
         r0 = 0;
-    L_0x0220:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r7 = r1.location;
-        r7 = r7.volume_id;
-        r3.append(r7);
-        r3.append(r15);
-        r7 = r1.location;
-        r7 = r7.local_id;
-        r3.append(r7);
-        r7 = ".preload";
-        r3.append(r7);
-        r3 = r3.toString();
-        goto L_0x0351;
-    L_0x0241:
-        r1.onFail(r4, r5);
-        return r5;
-    L_0x0245:
-        r0 = r1.datacenterId;
-        if (r0 == 0) goto L_0x075d;
-    L_0x0249:
-        r0 = r1.location;
+    L_0x0227:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r4 = r7.location;
+        r4 = r4.volume_id;
+        r2.append(r4);
+        r2.append(r15);
+        r4 = r7.location;
+        r4 = r4.local_id;
+        r2.append(r4);
+        r4 = ".preload";
+        r2.append(r4);
+        r2 = r2.toString();
+        goto L_0x0358;
+    L_0x0248:
+        r7.onFail(r8, r9);
+        return r9;
+    L_0x024c:
+        r0 = r7.datacenterId;
+        if (r0 == 0) goto L_0x0768;
+    L_0x0250:
+        r0 = r7.location;
         r12 = r0.id;
         r0 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1));
-        if (r0 != 0) goto L_0x0253;
-    L_0x0251:
-        goto L_0x075d;
-    L_0x0253:
-        r0 = r1.encryptFile;
-        if (r0 == 0) goto L_0x02b8;
-    L_0x0257:
+        if (r0 != 0) goto L_0x025a;
+    L_0x0258:
+        goto L_0x0768;
+    L_0x025a:
+        r0 = r7.encryptFile;
+        if (r0 == 0) goto L_0x02bf;
+    L_0x025e:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r3 = r1.datacenterId;
-        r0.append(r3);
-        r0.append(r15);
-        r3 = r1.location;
-        r8 = r3.id;
-        r0.append(r8);
-        r0.append(r7);
-        r0 = r0.toString();
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r7 = r1.datacenterId;
-        r3.append(r7);
-        r3.append(r15);
-        r7 = r1.location;
-        r7 = r7.id;
-        r3.append(r7);
-        r7 = r1.ext;
-        r3.append(r7);
-        r3.append(r6);
-        r6 = r3.toString();
-        r3 = r1.key;
-        if (r3 == 0) goto L_0x02b3;
-    L_0x0296:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r7 = r1.datacenterId;
-        r3.append(r7);
-        r3.append(r15);
-        r7 = r1.location;
-        r7 = r7.id;
-        r3.append(r7);
-        r3.append(r2);
-        r12 = r3.toString();
-    L_0x02b1:
-        r2 = r12;
-        goto L_0x02b4;
-    L_0x02b3:
-        r2 = 0;
-    L_0x02b4:
-        r3 = 0;
-        r12 = 0;
-        goto L_0x0357;
-    L_0x02b8:
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r2 = r1.datacenterId;
+        r2 = r7.datacenterId;
         r0.append(r2);
         r0.append(r15);
-        r2 = r1.location;
-        r6 = r2.id;
-        r0.append(r6);
-        r0.append(r8);
-        r2 = r0.toString();
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r6 = r1.datacenterId;
-        r0.append(r6);
-        r0.append(r15);
-        r6 = r1.location;
-        r6 = r6.id;
-        r0.append(r6);
-        r6 = r1.ext;
-        r0.append(r6);
-        r6 = r0.toString();
-        r0 = r1.key;
-        if (r0 == 0) goto L_0x0310;
-    L_0x02f4:
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r7 = r1.datacenterId;
-        r0.append(r7);
-        r0.append(r15);
-        r7 = r1.location;
-        r7 = r7.id;
-        r0.append(r7);
-        r0.append(r3);
-        r12 = r0.toString();
-        goto L_0x0311;
-    L_0x0310:
-        r12 = 0;
-    L_0x0311:
-        r0 = r1.notLoadedBytesRanges;
-        if (r0 == 0) goto L_0x0333;
-    L_0x0315:
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r3 = r1.datacenterId;
-        r0.append(r3);
-        r0.append(r15);
-        r3 = r1.location;
-        r7 = r3.id;
-        r0.append(r7);
-        r3 = ".pt";
-        r0.append(r3);
+        r2 = r7.location;
+        r5 = r2.id;
+        r0.append(r5);
+        r0.append(r4);
         r0 = r0.toString();
-        goto L_0x0334;
-    L_0x0333:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r4 = r7.datacenterId;
+        r2.append(r4);
+        r2.append(r15);
+        r4 = r7.location;
+        r4 = r4.id;
+        r2.append(r4);
+        r4 = r7.ext;
+        r2.append(r4);
+        r2.append(r3);
+        r3 = r2.toString();
+        r2 = r7.key;
+        if (r2 == 0) goto L_0x02ba;
+    L_0x029d:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r4 = r7.datacenterId;
+        r2.append(r4);
+        r2.append(r15);
+        r4 = r7.location;
+        r4 = r4.id;
+        r2.append(r4);
+        r2.append(r1);
+        r12 = r2.toString();
+    L_0x02b8:
+        r1 = r12;
+        goto L_0x02bb;
+    L_0x02ba:
+        r1 = 0;
+    L_0x02bb:
+        r2 = 0;
+        r12 = 0;
+        goto L_0x035e;
+    L_0x02bf:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r1 = r7.datacenterId;
+        r0.append(r1);
+        r0.append(r15);
+        r1 = r7.location;
+        r3 = r1.id;
+        r0.append(r3);
+        r0.append(r5);
+        r1 = r0.toString();
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r3 = r7.datacenterId;
+        r0.append(r3);
+        r0.append(r15);
+        r3 = r7.location;
+        r3 = r3.id;
+        r0.append(r3);
+        r3 = r7.ext;
+        r0.append(r3);
+        r3 = r0.toString();
+        r0 = r7.key;
+        if (r0 == 0) goto L_0x0317;
+    L_0x02fb:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r4 = r7.datacenterId;
+        r0.append(r4);
+        r0.append(r15);
+        r4 = r7.location;
+        r4 = r4.id;
+        r0.append(r4);
+        r0.append(r2);
+        r12 = r0.toString();
+        goto L_0x0318;
+    L_0x0317:
+        r12 = 0;
+    L_0x0318:
+        r0 = r7.notLoadedBytesRanges;
+        if (r0 == 0) goto L_0x033a;
+    L_0x031c:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r2 = r7.datacenterId;
+        r0.append(r2);
+        r0.append(r15);
+        r2 = r7.location;
+        r4 = r2.id;
+        r0.append(r4);
+        r2 = ".pt";
+        r0.append(r2);
+        r0 = r0.toString();
+        goto L_0x033b;
+    L_0x033a:
         r0 = 0;
-    L_0x0334:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r7 = r1.datacenterId;
-        r3.append(r7);
-        r3.append(r15);
-        r7 = r1.location;
-        r7 = r7.id;
-        r3.append(r7);
-        r7 = ".preload";
-        r3.append(r7);
-        r3 = r3.toString();
-    L_0x0351:
+    L_0x033b:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r4 = r7.datacenterId;
+        r2.append(r4);
+        r2.append(r15);
+        r4 = r7.location;
+        r4 = r4.id;
+        r2.append(r4);
+        r4 = ".preload";
+        r2.append(r4);
+        r2 = r2.toString();
+    L_0x0358:
         r22 = r12;
         r12 = r0;
-        r0 = r2;
-        r2 = r22;
-    L_0x0357:
-        r7 = new java.util.ArrayList;
-        r8 = r1.currentMaxDownloadRequests;
-        r7.<init>(r8);
-        r1.requestInfos = r7;
-        r7 = new java.util.ArrayList;
-        r8 = r1.currentMaxDownloadRequests;
-        r8 = r8 - r4;
-        r7.<init>(r8);
-        r1.delayedRequestInfos = r7;
-        r1.state = r4;
-        r7 = new java.io.File;
-        r8 = r1.storePath;
-        r7.<init>(r8, r6);
-        r1.cacheFileFinal = r7;
-        r7 = r1.cacheFileFinal;
-        r7 = r7.exists();
-        if (r7 == 0) goto L_0x0392;
-    L_0x037d:
-        r8 = r1.totalBytesCount;
-        if (r8 == 0) goto L_0x0392;
-    L_0x0381:
-        r8 = (long) r8;
-        r13 = r1.cacheFileFinal;
+        r0 = r1;
+        r1 = r22;
+    L_0x035e:
+        r4 = new java.util.ArrayList;
+        r5 = r7.currentMaxDownloadRequests;
+        r4.<init>(r5);
+        r7.requestInfos = r4;
+        r4 = new java.util.ArrayList;
+        r5 = r7.currentMaxDownloadRequests;
+        r5 = r5 - r8;
+        r4.<init>(r5);
+        r7.delayedRequestInfos = r4;
+        r7.state = r8;
+        r4 = new java.io.File;
+        r5 = r7.storePath;
+        r4.<init>(r5, r3);
+        r7.cacheFileFinal = r4;
+        r4 = r7.cacheFileFinal;
+        r4 = r4.exists();
+        if (r4 == 0) goto L_0x0399;
+    L_0x0384:
+        r5 = r7.totalBytesCount;
+        if (r5 == 0) goto L_0x0399;
+    L_0x0388:
+        r5 = (long) r5;
+        r13 = r7.cacheFileFinal;
         r13 = r13.length();
-        r15 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1));
-        if (r15 == 0) goto L_0x0392;
-    L_0x038c:
-        r7 = r1.cacheFileFinal;
-        r7.delete();
-        r7 = 0;
-    L_0x0392:
-        if (r7 != 0) goto L_0x0752;
-    L_0x0394:
-        r7 = new java.io.File;
-        r8 = r1.tempPath;
-        r7.<init>(r8, r0);
-        r1.cacheFileTemp = r7;
-        r7 = r1.ungzip;
-        if (r7 == 0) goto L_0x03bb;
-    L_0x03a1:
-        r7 = new java.io.File;
-        r8 = r1.tempPath;
-        r9 = new java.lang.StringBuilder;
-        r9.<init>();
-        r9.append(r0);
+        r15 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1));
+        if (r15 == 0) goto L_0x0399;
+    L_0x0393:
+        r4 = r7.cacheFileFinal;
+        r4.delete();
+        r4 = 0;
+    L_0x0399:
+        if (r4 != 0) goto L_0x075e;
+    L_0x039b:
+        r4 = new java.io.File;
+        r5 = r7.tempPath;
+        r4.<init>(r5, r0);
+        r7.cacheFileTemp = r4;
+        r4 = r7.ungzip;
+        if (r4 == 0) goto L_0x03c2;
+    L_0x03a8:
+        r4 = new java.io.File;
+        r5 = r7.tempPath;
+        r6 = new java.lang.StringBuilder;
+        r6.<init>();
+        r6.append(r0);
         r0 = ".gz";
-        r9.append(r0);
-        r0 = r9.toString();
-        r7.<init>(r8, r0);
-        r1.cacheFileGzipTemp = r7;
-    L_0x03bb:
-        r0 = r1.encryptFile;
-        r7 = 32;
-        r8 = "rws";
-        if (r0 == 0) goto L_0x043a;
-    L_0x03c3:
+        r6.append(r0);
+        r0 = r6.toString();
+        r4.<init>(r5, r0);
+        r7.cacheFileGzipTemp = r4;
+    L_0x03c2:
+        r0 = r7.encryptFile;
+        r4 = 32;
+        r5 = "rws";
+        if (r0 == 0) goto L_0x0441;
+    L_0x03ca:
         r0 = new java.io.File;
-        r9 = org.telegram.messenger.FileLoader.getInternalCacheDir();
+        r6 = org.telegram.messenger.FileLoader.getInternalCacheDir();
         r13 = new java.lang.StringBuilder;
         r13.<init>();
-        r13.append(r6);
-        r6 = ".key";
-        r13.append(r6);
-        r6 = r13.toString();
-        r0.<init>(r9, r6);
-        r6 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0434 }
-        r6.<init>(r0, r8);	 Catch:{ Exception -> 0x0434 }
-        r13 = r0.length();	 Catch:{ Exception -> 0x0434 }
-        r0 = new byte[r7];	 Catch:{ Exception -> 0x0434 }
-        r1.encryptKey = r0;	 Catch:{ Exception -> 0x0434 }
+        r13.append(r3);
+        r3 = ".key";
+        r13.append(r3);
+        r3 = r13.toString();
+        r0.<init>(r6, r3);
+        r3 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x043b }
+        r3.<init>(r0, r5);	 Catch:{ Exception -> 0x043b }
+        r13 = r0.length();	 Catch:{ Exception -> 0x043b }
+        r0 = new byte[r4];	 Catch:{ Exception -> 0x043b }
+        r7.encryptKey = r0;	 Catch:{ Exception -> 0x043b }
         r0 = 16;
-        r0 = new byte[r0];	 Catch:{ Exception -> 0x0434 }
-        r1.encryptIv = r0;	 Catch:{ Exception -> 0x0434 }
+        r0 = new byte[r0];	 Catch:{ Exception -> 0x043b }
+        r7.encryptIv = r0;	 Catch:{ Exception -> 0x043b }
         r0 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0409;
-    L_0x03f4:
+        if (r0 <= 0) goto L_0x0410;
+    L_0x03fb:
         r15 = 48;
         r13 = r13 % r15;
         r0 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1));
-        if (r0 != 0) goto L_0x0409;
-    L_0x03fb:
-        r0 = r1.encryptKey;	 Catch:{ Exception -> 0x0434 }
-        r6.read(r0, r5, r7);	 Catch:{ Exception -> 0x0434 }
-        r0 = r1.encryptIv;	 Catch:{ Exception -> 0x0434 }
-        r9 = 16;
-        r6.read(r0, r5, r9);	 Catch:{ Exception -> 0x0434 }
-        r9 = 0;
-        goto L_0x0422;
-    L_0x0409:
-        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x0434 }
-        r9 = r1.encryptKey;	 Catch:{ Exception -> 0x0434 }
-        r0.nextBytes(r9);	 Catch:{ Exception -> 0x0434 }
-        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x0434 }
-        r9 = r1.encryptIv;	 Catch:{ Exception -> 0x0434 }
-        r0.nextBytes(r9);	 Catch:{ Exception -> 0x0434 }
-        r0 = r1.encryptKey;	 Catch:{ Exception -> 0x0434 }
-        r6.write(r0);	 Catch:{ Exception -> 0x0434 }
-        r0 = r1.encryptIv;	 Catch:{ Exception -> 0x0434 }
-        r6.write(r0);	 Catch:{ Exception -> 0x0434 }
-        r9 = 1;
-    L_0x0422:
-        r0 = r6.getChannel();	 Catch:{ Exception -> 0x042a }
-        r0.close();	 Catch:{ Exception -> 0x042a }
-        goto L_0x042e;
-    L_0x042a:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0432 }
-    L_0x042e:
-        r6.close();	 Catch:{ Exception -> 0x0432 }
-        goto L_0x043b;
-    L_0x0432:
-        r0 = move-exception;
-        goto L_0x0436;
-    L_0x0434:
-        r0 = move-exception;
-        r9 = 0;
-    L_0x0436:
-        org.telegram.messenger.FileLog.e(r0);
-        goto L_0x043b;
-    L_0x043a:
-        r9 = 0;
-    L_0x043b:
-        r6 = new boolean[r4];
-        r6[r5] = r5;
-        r0 = r1.supportsPreloading;
-        r13 = 4;
-        if (r0 == 0) goto L_0x056a;
-    L_0x0445:
-        if (r3 == 0) goto L_0x056a;
-    L_0x0447:
-        r0 = new java.io.File;
-        r15 = r1.tempPath;
-        r0.<init>(r15, r3);
-        r1.cacheFilePreload = r0;
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0539 }
-        r3 = r1.cacheFilePreload;	 Catch:{ Exception -> 0x0539 }
-        r0.<init>(r3, r8);	 Catch:{ Exception -> 0x0539 }
-        r1.preloadStream = r0;	 Catch:{ Exception -> 0x0539 }
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0539 }
-        r15 = r0.length();	 Catch:{ Exception -> 0x0539 }
-        r1.preloadStreamFileOffset = r4;	 Catch:{ Exception -> 0x0539 }
-        r10 = (long) r5;	 Catch:{ Exception -> 0x0539 }
-        r10 = r15 - r10;
-        r18 = 1;
-        r0 = (r10 > r18 ? 1 : (r10 == r18 ? 0 : -1));
-        if (r0 <= 0) goto L_0x052c;
-    L_0x046a:
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0539 }
-        r0 = r0.readByte();	 Catch:{ Exception -> 0x0539 }
-        if (r0 == 0) goto L_0x0474;
-    L_0x0472:
-        r0 = 1;
-        goto L_0x0475;
-    L_0x0474:
-        r0 = 0;
-    L_0x0475:
-        r6[r5] = r0;	 Catch:{ Exception -> 0x0539 }
-        r0 = 1;
-    L_0x0478:
-        r10 = (long) r0;	 Catch:{ Exception -> 0x0539 }
-        r3 = (r10 > r15 ? 1 : (r10 == r15 ? 0 : -1));
-        if (r3 >= 0) goto L_0x052c;
-    L_0x047d:
-        r10 = r15 - r10;
-        r3 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
-        if (r3 >= 0) goto L_0x0485;
-    L_0x0483:
-        goto L_0x052c;
-    L_0x0485:
-        r3 = r1.preloadStream;	 Catch:{ Exception -> 0x0539 }
-        r3 = r3.readInt();	 Catch:{ Exception -> 0x0539 }
-        r0 = r0 + 4;
-        r10 = (long) r0;	 Catch:{ Exception -> 0x0539 }
-        r10 = r15 - r10;
-        r18 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
-        if (r18 < 0) goto L_0x052c;
-    L_0x0494:
-        if (r3 < 0) goto L_0x052c;
-    L_0x0496:
-        r10 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0539 }
-        if (r3 <= r10) goto L_0x049c;
-    L_0x049a:
-        goto L_0x052c;
-    L_0x049c:
-        r10 = r1.preloadStream;	 Catch:{ Exception -> 0x0539 }
-        r10 = r10.readInt();	 Catch:{ Exception -> 0x0539 }
-        r0 = r0 + 4;
-        r18 = r6;
-        r5 = (long) r0;
-        r5 = r15 - r5;
-        r13 = (long) r10;
-        r20 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1));
-        if (r20 < 0) goto L_0x052e;
-    L_0x04ae:
-        r5 = r1.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0537 }
-        if (r10 <= r5) goto L_0x04b4;
-    L_0x04b2:
-        goto L_0x052e;
-    L_0x04b4:
-        r5 = new org.telegram.messenger.FileLoadOperation$PreloadRange;	 Catch:{ Exception -> 0x0537 }
+        if (r0 != 0) goto L_0x0410;
+    L_0x0402:
+        r0 = r7.encryptKey;	 Catch:{ Exception -> 0x043b }
+        r3.read(r0, r9, r4);	 Catch:{ Exception -> 0x043b }
+        r0 = r7.encryptIv;	 Catch:{ Exception -> 0x043b }
+        r6 = 16;
+        r3.read(r0, r9, r6);	 Catch:{ Exception -> 0x043b }
         r6 = 0;
-        r5.<init>(r0, r3, r10);	 Catch:{ Exception -> 0x0537 }
+        goto L_0x0429;
+    L_0x0410:
+        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x043b }
+        r6 = r7.encryptKey;	 Catch:{ Exception -> 0x043b }
+        r0.nextBytes(r6);	 Catch:{ Exception -> 0x043b }
+        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x043b }
+        r6 = r7.encryptIv;	 Catch:{ Exception -> 0x043b }
+        r0.nextBytes(r6);	 Catch:{ Exception -> 0x043b }
+        r0 = r7.encryptKey;	 Catch:{ Exception -> 0x043b }
+        r3.write(r0);	 Catch:{ Exception -> 0x043b }
+        r0 = r7.encryptIv;	 Catch:{ Exception -> 0x043b }
+        r3.write(r0);	 Catch:{ Exception -> 0x043b }
+        r6 = 1;
+    L_0x0429:
+        r0 = r3.getChannel();	 Catch:{ Exception -> 0x0431 }
+        r0.close();	 Catch:{ Exception -> 0x0431 }
+        goto L_0x0435;
+    L_0x0431:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0439 }
+    L_0x0435:
+        r3.close();	 Catch:{ Exception -> 0x0439 }
+        goto L_0x0442;
+    L_0x0439:
+        r0 = move-exception;
+        goto L_0x043d;
+    L_0x043b:
+        r0 = move-exception;
+        r6 = 0;
+    L_0x043d:
+        org.telegram.messenger.FileLog.e(r0);
+        goto L_0x0442;
+    L_0x0441:
+        r6 = 0;
+    L_0x0442:
+        r3 = new boolean[r8];
+        r3[r9] = r9;
+        r0 = r7.supportsPreloading;
+        r13 = 4;
+        if (r0 == 0) goto L_0x0572;
+    L_0x044c:
+        if (r2 == 0) goto L_0x0572;
+    L_0x044e:
+        r0 = new java.io.File;
+        r15 = r7.tempPath;
+        r0.<init>(r15, r2);
+        r7.cacheFilePreload = r0;
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0541 }
+        r2 = r7.cacheFilePreload;	 Catch:{ Exception -> 0x0541 }
+        r0.<init>(r2, r5);	 Catch:{ Exception -> 0x0541 }
+        r7.preloadStream = r0;	 Catch:{ Exception -> 0x0541 }
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0541 }
+        r15 = r0.length();	 Catch:{ Exception -> 0x0541 }
+        r7.preloadStreamFileOffset = r8;	 Catch:{ Exception -> 0x0541 }
+        r10 = (long) r9;	 Catch:{ Exception -> 0x0541 }
+        r10 = r15 - r10;
+        r17 = 1;
+        r0 = (r10 > r17 ? 1 : (r10 == r17 ? 0 : -1));
+        if (r0 <= 0) goto L_0x0534;
+    L_0x0471:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0541 }
+        r0 = r0.readByte();	 Catch:{ Exception -> 0x0541 }
+        if (r0 == 0) goto L_0x047b;
+    L_0x0479:
+        r0 = 1;
+        goto L_0x047c;
+    L_0x047b:
+        r0 = 0;
+    L_0x047c:
+        r3[r9] = r0;	 Catch:{ Exception -> 0x0541 }
+        r0 = 1;
+    L_0x047f:
+        r10 = (long) r0;	 Catch:{ Exception -> 0x0541 }
+        r2 = (r10 > r15 ? 1 : (r10 == r15 ? 0 : -1));
+        if (r2 >= 0) goto L_0x0534;
+    L_0x0484:
+        r10 = r15 - r10;
+        r2 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
+        if (r2 >= 0) goto L_0x048c;
+    L_0x048a:
+        goto L_0x0534;
+    L_0x048c:
+        r2 = r7.preloadStream;	 Catch:{ Exception -> 0x0541 }
+        r2 = r2.readInt();	 Catch:{ Exception -> 0x0541 }
+        r0 = r0 + 4;
+        r10 = (long) r0;	 Catch:{ Exception -> 0x0541 }
+        r10 = r15 - r10;
+        r17 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
+        if (r17 < 0) goto L_0x0534;
+    L_0x049b:
+        if (r2 < 0) goto L_0x0534;
+    L_0x049d:
+        r10 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0541 }
+        if (r2 <= r10) goto L_0x04a3;
+    L_0x04a1:
+        goto L_0x0534;
+    L_0x04a3:
+        r10 = r7.preloadStream;	 Catch:{ Exception -> 0x0541 }
+        r10 = r10.readInt();	 Catch:{ Exception -> 0x0541 }
+        r0 = r0 + 4;
+        r13 = (long) r0;
+        r13 = r15 - r13;
+        r19 = r5;
+        r4 = (long) r10;
+        r20 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1));
+        if (r20 < 0) goto L_0x0536;
+    L_0x04b5:
+        r4 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x053f }
+        if (r10 <= r4) goto L_0x04bb;
+    L_0x04b9:
+        goto L_0x0536;
+    L_0x04bb:
+        r4 = new org.telegram.messenger.FileLoadOperation$PreloadRange;	 Catch:{ Exception -> 0x053f }
+        r5 = 0;
+        r4.<init>(r0, r2, r10);	 Catch:{ Exception -> 0x053f }
         r0 = r0 + r10;
-        r6 = r1.preloadStream;	 Catch:{ Exception -> 0x0537 }
-        r13 = (long) r0;	 Catch:{ Exception -> 0x0537 }
-        r6.seek(r13);	 Catch:{ Exception -> 0x0537 }
+        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x053f }
+        r13 = (long) r0;	 Catch:{ Exception -> 0x053f }
+        r5.seek(r13);	 Catch:{ Exception -> 0x053f }
         r13 = r15 - r13;
         r20 = 12;
-        r6 = (r13 > r20 ? 1 : (r13 == r20 ? 0 : -1));
-        if (r6 >= 0) goto L_0x04ca;
-    L_0x04c9:
-        goto L_0x052e;
-    L_0x04ca:
-        r6 = r1.preloadStream;	 Catch:{ Exception -> 0x0537 }
-        r6 = r6.readInt();	 Catch:{ Exception -> 0x0537 }
-        r1.foundMoovSize = r6;	 Catch:{ Exception -> 0x0537 }
-        r6 = r1.foundMoovSize;	 Catch:{ Exception -> 0x0537 }
-        if (r6 == 0) goto L_0x04e7;
-    L_0x04d6:
-        r6 = r1.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0537 }
-        r13 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0537 }
+        r5 = (r13 > r20 ? 1 : (r13 == r20 ? 0 : -1));
+        if (r5 >= 0) goto L_0x04d1;
+    L_0x04d0:
+        goto L_0x0536;
+    L_0x04d1:
+        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x053f }
+        r5 = r5.readInt();	 Catch:{ Exception -> 0x053f }
+        r7.foundMoovSize = r5;	 Catch:{ Exception -> 0x053f }
+        r5 = r7.foundMoovSize;	 Catch:{ Exception -> 0x053f }
+        if (r5 == 0) goto L_0x04ee;
+    L_0x04dd:
+        r5 = r7.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x053f }
+        r13 = r7.totalBytesCount;	 Catch:{ Exception -> 0x053f }
         r13 = r13 / 2;
-        if (r6 <= r13) goto L_0x04e0;
-    L_0x04de:
-        r6 = 2;
-        goto L_0x04e1;
-    L_0x04e0:
-        r6 = 1;
-    L_0x04e1:
-        r1.moovFound = r6;	 Catch:{ Exception -> 0x0537 }
-        r6 = r1.foundMoovSize;	 Catch:{ Exception -> 0x0537 }
-        r1.preloadNotRequestedBytesCount = r6;	 Catch:{ Exception -> 0x0537 }
+        if (r5 <= r13) goto L_0x04e7;
+    L_0x04e5:
+        r5 = 2;
+        goto L_0x04e8;
     L_0x04e7:
-        r6 = r1.preloadStream;	 Catch:{ Exception -> 0x0537 }
-        r6 = r6.readInt();	 Catch:{ Exception -> 0x0537 }
-        r1.nextPreloadDownloadOffset = r6;	 Catch:{ Exception -> 0x0537 }
-        r6 = r1.preloadStream;	 Catch:{ Exception -> 0x0537 }
-        r6 = r6.readInt();	 Catch:{ Exception -> 0x0537 }
-        r1.nextAtomOffset = r6;	 Catch:{ Exception -> 0x0537 }
+        r5 = 1;
+    L_0x04e8:
+        r7.moovFound = r5;	 Catch:{ Exception -> 0x053f }
+        r5 = r7.foundMoovSize;	 Catch:{ Exception -> 0x053f }
+        r7.preloadNotRequestedBytesCount = r5;	 Catch:{ Exception -> 0x053f }
+    L_0x04ee:
+        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x053f }
+        r5 = r5.readInt();	 Catch:{ Exception -> 0x053f }
+        r7.nextPreloadDownloadOffset = r5;	 Catch:{ Exception -> 0x053f }
+        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x053f }
+        r5 = r5.readInt();	 Catch:{ Exception -> 0x053f }
+        r7.nextAtomOffset = r5;	 Catch:{ Exception -> 0x053f }
         r0 = r0 + 12;
-        r6 = r1.preloadedBytesRanges;	 Catch:{ Exception -> 0x0537 }
-        if (r6 != 0) goto L_0x0504;
-    L_0x04fd:
-        r6 = new android.util.SparseArray;	 Catch:{ Exception -> 0x0537 }
-        r6.<init>();	 Catch:{ Exception -> 0x0537 }
-        r1.preloadedBytesRanges = r6;	 Catch:{ Exception -> 0x0537 }
+        r5 = r7.preloadedBytesRanges;	 Catch:{ Exception -> 0x053f }
+        if (r5 != 0) goto L_0x050b;
     L_0x0504:
-        r6 = r1.requestedPreloadedBytesRanges;	 Catch:{ Exception -> 0x0537 }
-        if (r6 != 0) goto L_0x050f;
-    L_0x0508:
-        r6 = new android.util.SparseIntArray;	 Catch:{ Exception -> 0x0537 }
-        r6.<init>();	 Catch:{ Exception -> 0x0537 }
-        r1.requestedPreloadedBytesRanges = r6;	 Catch:{ Exception -> 0x0537 }
+        r5 = new android.util.SparseArray;	 Catch:{ Exception -> 0x053f }
+        r5.<init>();	 Catch:{ Exception -> 0x053f }
+        r7.preloadedBytesRanges = r5;	 Catch:{ Exception -> 0x053f }
+    L_0x050b:
+        r5 = r7.requestedPreloadedBytesRanges;	 Catch:{ Exception -> 0x053f }
+        if (r5 != 0) goto L_0x0516;
     L_0x050f:
-        r6 = r1.preloadedBytesRanges;	 Catch:{ Exception -> 0x0537 }
-        r6.put(r3, r5);	 Catch:{ Exception -> 0x0537 }
-        r5 = r1.requestedPreloadedBytesRanges;	 Catch:{ Exception -> 0x0537 }
-        r5.put(r3, r4);	 Catch:{ Exception -> 0x0537 }
-        r3 = r1.totalPreloadedBytes;	 Catch:{ Exception -> 0x0537 }
-        r3 = r3 + r10;
-        r1.totalPreloadedBytes = r3;	 Catch:{ Exception -> 0x0537 }
-        r3 = r1.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0537 }
+        r5 = new android.util.SparseIntArray;	 Catch:{ Exception -> 0x053f }
+        r5.<init>();	 Catch:{ Exception -> 0x053f }
+        r7.requestedPreloadedBytesRanges = r5;	 Catch:{ Exception -> 0x053f }
+    L_0x0516:
+        r5 = r7.preloadedBytesRanges;	 Catch:{ Exception -> 0x053f }
+        r5.put(r2, r4);	 Catch:{ Exception -> 0x053f }
+        r4 = r7.requestedPreloadedBytesRanges;	 Catch:{ Exception -> 0x053f }
+        r4.put(r2, r8);	 Catch:{ Exception -> 0x053f }
+        r2 = r7.totalPreloadedBytes;	 Catch:{ Exception -> 0x053f }
+        r2 = r2 + r10;
+        r7.totalPreloadedBytes = r2;	 Catch:{ Exception -> 0x053f }
+        r2 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x053f }
         r10 = r10 + 20;
-        r3 = r3 + r10;
-        r1.preloadStreamFileOffset = r3;	 Catch:{ Exception -> 0x0537 }
-        r6 = r18;
-        r5 = 0;
+        r2 = r2 + r10;
+        r7.preloadStreamFileOffset = r2;	 Catch:{ Exception -> 0x053f }
+        r5 = r19;
+        r4 = 32;
         r13 = 4;
-        goto L_0x0478;
-    L_0x052c:
-        r18 = r6;
-    L_0x052e:
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0537 }
-        r3 = r1.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0537 }
-        r5 = (long) r3;	 Catch:{ Exception -> 0x0537 }
-        r0.seek(r5);	 Catch:{ Exception -> 0x0537 }
-        goto L_0x053f;
-    L_0x0537:
-        r0 = move-exception;
-        goto L_0x053c;
-    L_0x0539:
-        r0 = move-exception;
-        r18 = r6;
-    L_0x053c:
-        org.telegram.messenger.FileLog.e(r0);
+        goto L_0x047f;
+    L_0x0534:
+        r19 = r5;
+    L_0x0536:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x053f }
+        r2 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x053f }
+        r4 = (long) r2;	 Catch:{ Exception -> 0x053f }
+        r0.seek(r4);	 Catch:{ Exception -> 0x053f }
+        goto L_0x0547;
     L_0x053f:
-        r0 = r1.isPreloadVideoOperation;
-        if (r0 != 0) goto L_0x056c;
-    L_0x0543:
-        r0 = r1.preloadedBytesRanges;
-        if (r0 != 0) goto L_0x056c;
+        r0 = move-exception;
+        goto L_0x0544;
+    L_0x0541:
+        r0 = move-exception;
+        r19 = r5;
+    L_0x0544:
+        org.telegram.messenger.FileLog.e(r0);
     L_0x0547:
-        r3 = 0;
-        r1.cacheFilePreload = r3;
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0565 }
-        if (r0 == 0) goto L_0x056c;
-    L_0x054e:
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0558 }
-        r0 = r0.getChannel();	 Catch:{ Exception -> 0x0558 }
-        r0.close();	 Catch:{ Exception -> 0x0558 }
-        goto L_0x055c;
-    L_0x0558:
+        r0 = r7.isPreloadVideoOperation;
+        if (r0 != 0) goto L_0x0574;
+    L_0x054b:
+        r0 = r7.preloadedBytesRanges;
+        if (r0 != 0) goto L_0x0574;
+    L_0x054f:
+        r2 = 0;
+        r7.cacheFilePreload = r2;
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x056d }
+        if (r0 == 0) goto L_0x0574;
+    L_0x0556:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0560 }
+        r0 = r0.getChannel();	 Catch:{ Exception -> 0x0560 }
+        r0.close();	 Catch:{ Exception -> 0x0560 }
+        goto L_0x0564;
+    L_0x0560:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0565 }
-    L_0x055c:
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0565 }
-        r0.close();	 Catch:{ Exception -> 0x0565 }
-        r3 = 0;
-        r1.preloadStream = r3;	 Catch:{ Exception -> 0x0565 }
-        goto L_0x056c;
-    L_0x0565:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x056d }
+    L_0x0564:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x056d }
+        r0.close();	 Catch:{ Exception -> 0x056d }
+        r2 = 0;
+        r7.preloadStream = r2;	 Catch:{ Exception -> 0x056d }
+        goto L_0x0574;
+    L_0x056d:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x056c;
-    L_0x056a:
-        r18 = r6;
-    L_0x056c:
-        if (r12 == 0) goto L_0x05ca;
-    L_0x056e:
+        goto L_0x0574;
+    L_0x0572:
+        r19 = r5;
+    L_0x0574:
+        if (r12 == 0) goto L_0x05db;
+    L_0x0576:
         r0 = new java.io.File;
-        r3 = r1.tempPath;
-        r0.<init>(r3, r12);
-        r1.cacheFileParts = r0;
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x05c6 }
-        r3 = r1.cacheFileParts;	 Catch:{ Exception -> 0x05c6 }
-        r0.<init>(r3, r8);	 Catch:{ Exception -> 0x05c6 }
-        r1.filePartsStream = r0;	 Catch:{ Exception -> 0x05c6 }
-        r0 = r1.filePartsStream;	 Catch:{ Exception -> 0x05c6 }
-        r5 = r0.length();	 Catch:{ Exception -> 0x05c6 }
-        r12 = 8;
-        r12 = r5 % r12;
-        r14 = 4;
-        r0 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1));
-        if (r0 != 0) goto L_0x05ca;
-    L_0x0590:
-        r5 = r5 - r14;
-        r0 = r1.filePartsStream;	 Catch:{ Exception -> 0x05c6 }
-        r0 = r0.readInt();	 Catch:{ Exception -> 0x05c6 }
-        r12 = (long) r0;	 Catch:{ Exception -> 0x05c6 }
-        r14 = 2;
-        r5 = r5 / r14;
-        r3 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1));
-        if (r3 > 0) goto L_0x05ca;
-    L_0x059f:
-        r3 = 0;
-    L_0x05a0:
-        if (r3 >= r0) goto L_0x05ca;
-    L_0x05a2:
-        r5 = r1.filePartsStream;	 Catch:{ Exception -> 0x05c6 }
-        r5 = r5.readInt();	 Catch:{ Exception -> 0x05c6 }
-        r6 = r1.filePartsStream;	 Catch:{ Exception -> 0x05c6 }
-        r6 = r6.readInt();	 Catch:{ Exception -> 0x05c6 }
-        r10 = r1.notLoadedBytesRanges;	 Catch:{ Exception -> 0x05c6 }
-        r12 = new org.telegram.messenger.FileLoadOperation$Range;	 Catch:{ Exception -> 0x05c6 }
-        r13 = 0;
-        r12.<init>(r5, r6);	 Catch:{ Exception -> 0x05c6 }
-        r10.add(r12);	 Catch:{ Exception -> 0x05c6 }
-        r10 = r1.notRequestedBytesRanges;	 Catch:{ Exception -> 0x05c6 }
-        r12 = new org.telegram.messenger.FileLoadOperation$Range;	 Catch:{ Exception -> 0x05c6 }
-        r12.<init>(r5, r6);	 Catch:{ Exception -> 0x05c6 }
-        r10.add(r12);	 Catch:{ Exception -> 0x05c6 }
-        r3 = r3 + 1;
-        goto L_0x05a0;
-    L_0x05c6:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-    L_0x05ca:
-        r0 = r1.cacheFileTemp;
-        r0 = r0.exists();
-        if (r0 == 0) goto L_0x062b;
+        r2 = r7.tempPath;
+        r0.<init>(r2, r12);
+        r7.cacheFileParts = r0;
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x05d4 }
+        r2 = r7.cacheFileParts;	 Catch:{ Exception -> 0x05d4 }
+        r4 = r19;
+        r0.<init>(r2, r4);	 Catch:{ Exception -> 0x05d2 }
+        r7.filePartsStream = r0;	 Catch:{ Exception -> 0x05d2 }
+        r0 = r7.filePartsStream;	 Catch:{ Exception -> 0x05d2 }
+        r12 = r0.length();	 Catch:{ Exception -> 0x05d2 }
+        r14 = 8;
+        r14 = r12 % r14;
+        r16 = 4;
+        r0 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1));
+        if (r0 != 0) goto L_0x05dd;
+    L_0x059a:
+        r12 = r12 - r16;
+        r0 = r7.filePartsStream;	 Catch:{ Exception -> 0x05d2 }
+        r0 = r0.readInt();	 Catch:{ Exception -> 0x05d2 }
+        r14 = (long) r0;	 Catch:{ Exception -> 0x05d2 }
+        r16 = 2;
+        r12 = r12 / r16;
+        r2 = (r14 > r12 ? 1 : (r14 == r12 ? 0 : -1));
+        if (r2 > 0) goto L_0x05dd;
+    L_0x05ab:
+        r2 = 0;
+    L_0x05ac:
+        if (r2 >= r0) goto L_0x05dd;
+    L_0x05ae:
+        r5 = r7.filePartsStream;	 Catch:{ Exception -> 0x05d2 }
+        r5 = r5.readInt();	 Catch:{ Exception -> 0x05d2 }
+        r10 = r7.filePartsStream;	 Catch:{ Exception -> 0x05d2 }
+        r10 = r10.readInt();	 Catch:{ Exception -> 0x05d2 }
+        r12 = r7.notLoadedBytesRanges;	 Catch:{ Exception -> 0x05d2 }
+        r13 = new org.telegram.messenger.FileLoadOperation$Range;	 Catch:{ Exception -> 0x05d2 }
+        r14 = 0;
+        r13.<init>(r5, r10);	 Catch:{ Exception -> 0x05d2 }
+        r12.add(r13);	 Catch:{ Exception -> 0x05d2 }
+        r12 = r7.notRequestedBytesRanges;	 Catch:{ Exception -> 0x05d2 }
+        r13 = new org.telegram.messenger.FileLoadOperation$Range;	 Catch:{ Exception -> 0x05d2 }
+        r13.<init>(r5, r10);	 Catch:{ Exception -> 0x05d2 }
+        r12.add(r13);	 Catch:{ Exception -> 0x05d2 }
+        r2 = r2 + 1;
+        goto L_0x05ac;
     L_0x05d2:
-        if (r9 == 0) goto L_0x05db;
+        r0 = move-exception;
+        goto L_0x05d7;
     L_0x05d4:
-        r0 = r1.cacheFileTemp;
-        r0.delete();
-        goto L_0x064f;
+        r0 = move-exception;
+        r4 = r19;
+    L_0x05d7:
+        org.telegram.messenger.FileLog.e(r0);
+        goto L_0x05dd;
     L_0x05db:
-        r0 = r1.cacheFileTemp;
-        r5 = r0.length();
-        if (r2 == 0) goto L_0x05f3;
-    L_0x05e3:
-        r0 = r1.currentDownloadChunkSize;
-        r12 = (long) r0;
-        r5 = r5 % r12;
-        r12 = 0;
-        r0 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1));
-        if (r0 == 0) goto L_0x05f3;
+        r4 = r19;
+    L_0x05dd:
+        r0 = r7.cacheFileTemp;
+        r0 = r0.exists();
+        if (r0 == 0) goto L_0x063c;
+    L_0x05e5:
+        if (r6 == 0) goto L_0x05ed;
+    L_0x05e7:
+        r0 = r7.cacheFileTemp;
+        r0.delete();
+        goto L_0x065f;
     L_0x05ed:
-        r3 = 0;
-        r1.downloadedBytes = r3;
-        r1.requestedBytesCount = r3;
-        goto L_0x0603;
-    L_0x05f3:
-        r0 = r1.cacheFileTemp;
-        r5 = r0.length();
-        r0 = (int) r5;
-        r3 = r1.currentDownloadChunkSize;
-        r0 = r0 / r3;
-        r0 = r0 * r3;
-        r1.downloadedBytes = r0;
-        r1.requestedBytesCount = r0;
-    L_0x0603:
-        r0 = r1.notLoadedBytesRanges;
-        if (r0 == 0) goto L_0x064f;
-    L_0x0607:
+        r0 = r7.cacheFileTemp;
+        r12 = r0.length();
+        if (r1 == 0) goto L_0x0604;
+    L_0x05f5:
+        r0 = r7.currentDownloadChunkSize;
+        r14 = (long) r0;
+        r12 = r12 % r14;
+        r14 = 0;
+        r0 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1));
+        if (r0 == 0) goto L_0x0604;
+    L_0x05ff:
+        r7.downloadedBytes = r9;
+        r7.requestedBytesCount = r9;
+        goto L_0x0614;
+    L_0x0604:
+        r0 = r7.cacheFileTemp;
+        r12 = r0.length();
+        r0 = (int) r12;
+        r2 = r7.currentDownloadChunkSize;
+        r0 = r0 / r2;
+        r0 = r0 * r2;
+        r7.downloadedBytes = r0;
+        r7.requestedBytesCount = r0;
+    L_0x0614:
+        r0 = r7.notLoadedBytesRanges;
+        if (r0 == 0) goto L_0x065f;
+    L_0x0618:
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x064f;
-    L_0x060d:
-        r0 = r1.notLoadedBytesRanges;
-        r3 = new org.telegram.messenger.FileLoadOperation$Range;
-        r5 = r1.downloadedBytes;
-        r6 = r1.totalBytesCount;
-        r10 = 0;
-        r3.<init>(r5, r6);
-        r0.add(r3);
-        r0 = r1.notRequestedBytesRanges;
-        r3 = new org.telegram.messenger.FileLoadOperation$Range;
-        r5 = r1.downloadedBytes;
-        r6 = r1.totalBytesCount;
-        r3.<init>(r5, r6);
-        r0.add(r3);
-        goto L_0x064f;
-    L_0x062b:
-        r0 = r1.notLoadedBytesRanges;
-        if (r0 == 0) goto L_0x064f;
-    L_0x062f:
+        if (r0 == 0) goto L_0x065f;
+    L_0x061e:
+        r0 = r7.notLoadedBytesRanges;
+        r2 = new org.telegram.messenger.FileLoadOperation$Range;
+        r5 = r7.downloadedBytes;
+        r10 = r7.totalBytesCount;
+        r12 = 0;
+        r2.<init>(r5, r10);
+        r0.add(r2);
+        r0 = r7.notRequestedBytesRanges;
+        r2 = new org.telegram.messenger.FileLoadOperation$Range;
+        r5 = r7.downloadedBytes;
+        r10 = r7.totalBytesCount;
+        r2.<init>(r5, r10);
+        r0.add(r2);
+        goto L_0x065f;
+    L_0x063c:
+        r0 = r7.notLoadedBytesRanges;
+        if (r0 == 0) goto L_0x065f;
+    L_0x0640:
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x064f;
-    L_0x0635:
-        r0 = r1.notLoadedBytesRanges;
-        r3 = new org.telegram.messenger.FileLoadOperation$Range;
-        r5 = r1.totalBytesCount;
-        r6 = 0;
+        if (r0 == 0) goto L_0x065f;
+    L_0x0646:
+        r0 = r7.notLoadedBytesRanges;
+        r2 = new org.telegram.messenger.FileLoadOperation$Range;
+        r5 = r7.totalBytesCount;
         r10 = 0;
-        r3.<init>(r10, r5);
-        r0.add(r3);
-        r0 = r1.notRequestedBytesRanges;
-        r3 = new org.telegram.messenger.FileLoadOperation$Range;
-        r5 = r1.totalBytesCount;
-        r3.<init>(r10, r5);
-        r0.add(r3);
-    L_0x064f:
-        r0 = r1.notLoadedBytesRanges;
-        if (r0 == 0) goto L_0x067b;
-    L_0x0653:
-        r3 = r1.totalBytesCount;
-        r1.downloadedBytes = r3;
+        r2.<init>(r9, r5);
+        r0.add(r2);
+        r0 = r7.notRequestedBytesRanges;
+        r2 = new org.telegram.messenger.FileLoadOperation$Range;
+        r5 = r7.totalBytesCount;
+        r2.<init>(r9, r5);
+        r0.add(r2);
+    L_0x065f:
+        r0 = r7.notLoadedBytesRanges;
+        if (r0 == 0) goto L_0x068b;
+    L_0x0663:
+        r2 = r7.totalBytesCount;
+        r7.downloadedBytes = r2;
         r0 = r0.size();
-        r3 = 0;
-    L_0x065c:
-        if (r3 >= r0) goto L_0x0677;
-    L_0x065e:
-        r5 = r1.notLoadedBytesRanges;
-        r5 = r5.get(r3);
+        r2 = 0;
+    L_0x066c:
+        if (r2 >= r0) goto L_0x0687;
+    L_0x066e:
+        r5 = r7.notLoadedBytesRanges;
+        r5 = r5.get(r2);
         r5 = (org.telegram.messenger.FileLoadOperation.Range) r5;
-        r6 = r1.downloadedBytes;
-        r10 = r5.end;
+        r10 = r7.downloadedBytes;
+        r12 = r5.end;
         r5 = r5.start;
-        r10 = r10 - r5;
-        r6 = r6 - r10;
-        r1.downloadedBytes = r6;
-        r3 = r3 + 1;
-        goto L_0x065c;
-    L_0x0677:
-        r0 = r1.downloadedBytes;
-        r1.requestedBytesCount = r0;
-    L_0x067b:
+        r12 = r12 - r5;
+        r10 = r10 - r12;
+        r7.downloadedBytes = r10;
+        r2 = r2 + 1;
+        goto L_0x066c;
+    L_0x0687:
+        r0 = r7.downloadedBytes;
+        r7.requestedBytesCount = r0;
+    L_0x068b:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x06ba;
-    L_0x067f:
-        r0 = r1.isPreloadVideoOperation;
-        if (r0 == 0) goto L_0x069a;
-    L_0x0683:
+        if (r0 == 0) goto L_0x06ca;
+    L_0x068f:
+        r0 = r7.isPreloadVideoOperation;
+        if (r0 == 0) goto L_0x06aa;
+    L_0x0693:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r3 = "start preloading file to temp = ";
-        r0.append(r3);
-        r3 = r1.cacheFileTemp;
-        r0.append(r3);
+        r2 = "start preloading file to temp = ";
+        r0.append(r2);
+        r2 = r7.cacheFileTemp;
+        r0.append(r2);
         r0 = r0.toString();
         org.telegram.messenger.FileLog.d(r0);
-        goto L_0x06ba;
-    L_0x069a:
+        goto L_0x06ca;
+    L_0x06aa:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r3 = "start loading file to temp = ";
-        r0.append(r3);
-        r3 = r1.cacheFileTemp;
-        r0.append(r3);
-        r3 = " final = ";
-        r0.append(r3);
-        r3 = r1.cacheFileFinal;
-        r0.append(r3);
+        r2 = "start loading file to temp = ";
+        r0.append(r2);
+        r2 = r7.cacheFileTemp;
+        r0.append(r2);
+        r2 = " final = ";
+        r0.append(r2);
+        r2 = r7.cacheFileFinal;
+        r0.append(r2);
         r0 = r0.toString();
         org.telegram.messenger.FileLog.d(r0);
-    L_0x06ba:
-        if (r2 == 0) goto L_0x06ff;
-    L_0x06bc:
+    L_0x06ca:
+        if (r1 == 0) goto L_0x070e;
+    L_0x06cc:
         r0 = new java.io.File;
-        r3 = r1.tempPath;
-        r0.<init>(r3, r2);
-        r1.cacheIvTemp = r0;
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x06f6 }
-        r2 = r1.cacheIvTemp;	 Catch:{ Exception -> 0x06f6 }
-        r0.<init>(r2, r8);	 Catch:{ Exception -> 0x06f6 }
-        r1.fiv = r0;	 Catch:{ Exception -> 0x06f6 }
-        r0 = r1.downloadedBytes;	 Catch:{ Exception -> 0x06f6 }
-        if (r0 == 0) goto L_0x06ff;
-    L_0x06d2:
-        if (r9 != 0) goto L_0x06ff;
-    L_0x06d4:
-        r0 = r1.cacheIvTemp;	 Catch:{ Exception -> 0x06f6 }
-        r2 = r0.length();	 Catch:{ Exception -> 0x06f6 }
+        r2 = r7.tempPath;
+        r0.<init>(r2, r1);
+        r7.cacheIvTemp = r0;
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0706 }
+        r1 = r7.cacheIvTemp;	 Catch:{ Exception -> 0x0706 }
+        r0.<init>(r1, r4);	 Catch:{ Exception -> 0x0706 }
+        r7.fiv = r0;	 Catch:{ Exception -> 0x0706 }
+        r0 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0706 }
+        if (r0 == 0) goto L_0x070e;
+    L_0x06e2:
+        if (r6 != 0) goto L_0x070e;
+    L_0x06e4:
+        r0 = r7.cacheIvTemp;	 Catch:{ Exception -> 0x0706 }
+        r0 = r0.length();	 Catch:{ Exception -> 0x0706 }
         r5 = 0;
-        r0 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1));
-        if (r0 <= 0) goto L_0x06f0;
-    L_0x06e0:
-        r9 = 32;
-        r2 = r2 % r9;
-        r0 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1));
-        if (r0 != 0) goto L_0x06f0;
-    L_0x06e7:
-        r0 = r1.fiv;	 Catch:{ Exception -> 0x06f6 }
-        r2 = r1.iv;	 Catch:{ Exception -> 0x06f6 }
-        r3 = 0;
-        r0.read(r2, r3, r7);	 Catch:{ Exception -> 0x06f6 }
-        goto L_0x06ff;
+        r2 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
+        if (r2 <= 0) goto L_0x0701;
     L_0x06f0:
-        r2 = 0;
-        r1.downloadedBytes = r2;	 Catch:{ Exception -> 0x06f6 }
-        r1.requestedBytesCount = r2;	 Catch:{ Exception -> 0x06f6 }
-        goto L_0x06ff;
-    L_0x06f6:
+        r12 = 32;
+        r0 = r0 % r12;
+        r2 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
+        if (r2 != 0) goto L_0x0701;
+    L_0x06f7:
+        r0 = r7.fiv;	 Catch:{ Exception -> 0x0706 }
+        r1 = r7.iv;	 Catch:{ Exception -> 0x0706 }
+        r2 = 32;
+        r0.read(r1, r9, r2);	 Catch:{ Exception -> 0x0706 }
+        goto L_0x070e;
+    L_0x0701:
+        r7.downloadedBytes = r9;	 Catch:{ Exception -> 0x0706 }
+        r7.requestedBytesCount = r9;	 Catch:{ Exception -> 0x0706 }
+        goto L_0x070e;
+    L_0x0706:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        r2 = 0;
-        r1.downloadedBytes = r2;
-        r1.requestedBytesCount = r2;
-    L_0x06ff:
-        r0 = r1.isPreloadVideoOperation;
-        if (r0 != 0) goto L_0x0720;
-    L_0x0703:
-        r0 = r1.downloadedBytes;
-        if (r0 == 0) goto L_0x0720;
-    L_0x0707:
-        r0 = r1.totalBytesCount;
-        if (r0 <= 0) goto L_0x0720;
-    L_0x070b:
+        r7.downloadedBytes = r9;
+        r7.requestedBytesCount = r9;
+    L_0x070e:
+        r0 = r7.isPreloadVideoOperation;
+        if (r0 != 0) goto L_0x072f;
+    L_0x0712:
+        r0 = r7.downloadedBytes;
+        if (r0 == 0) goto L_0x072f;
+    L_0x0716:
+        r0 = r7.totalBytesCount;
+        if (r0 <= 0) goto L_0x072f;
+    L_0x071a:
         r23.copyNotLoadedRanges();
-        r0 = r1.delegate;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3 = r1.downloadedBytes;
-        r3 = (float) r3;
-        r5 = r1.totalBytesCount;
+        r0 = r7.delegate;
+        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r2 = r7.downloadedBytes;
+        r2 = (float) r2;
+        r5 = r7.totalBytesCount;
         r5 = (float) r5;
-        r3 = r3 / r5;
-        r2 = java.lang.Math.min(r2, r3);
-        r0.didChangedLoadProgress(r1, r2);
-    L_0x0720:
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0736 }
-        r2 = r1.cacheFileTemp;	 Catch:{ Exception -> 0x0736 }
-        r0.<init>(r2, r8);	 Catch:{ Exception -> 0x0736 }
-        r1.fileOutputStream = r0;	 Catch:{ Exception -> 0x0736 }
-        r0 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0736 }
-        if (r0 == 0) goto L_0x073a;
-    L_0x072d:
-        r0 = r1.fileOutputStream;	 Catch:{ Exception -> 0x0736 }
-        r2 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0736 }
-        r2 = (long) r2;	 Catch:{ Exception -> 0x0736 }
-        r0.seek(r2);	 Catch:{ Exception -> 0x0736 }
-        goto L_0x073a;
-    L_0x0736:
+        r2 = r2 / r5;
+        r1 = java.lang.Math.min(r1, r2);
+        r0.didChangedLoadProgress(r7, r1);
+    L_0x072f:
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0745 }
+        r1 = r7.cacheFileTemp;	 Catch:{ Exception -> 0x0745 }
+        r0.<init>(r1, r4);	 Catch:{ Exception -> 0x0745 }
+        r7.fileOutputStream = r0;	 Catch:{ Exception -> 0x0745 }
+        r0 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0745 }
+        if (r0 == 0) goto L_0x0749;
+    L_0x073c:
+        r0 = r7.fileOutputStream;	 Catch:{ Exception -> 0x0745 }
+        r1 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0745 }
+        r1 = (long) r1;	 Catch:{ Exception -> 0x0745 }
+        r0.seek(r1);	 Catch:{ Exception -> 0x0745 }
+        goto L_0x0749;
+    L_0x0745:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x073a:
-        r0 = r1.fileOutputStream;
-        if (r0 != 0) goto L_0x0743;
-    L_0x073e:
-        r2 = 0;
-        r1.onFail(r4, r2);
-        return r2;
-    L_0x0743:
-        r1.started = r4;
+    L_0x0749:
+        r0 = r7.fileOutputStream;
+        if (r0 != 0) goto L_0x0751;
+    L_0x074d:
+        r7.onFail(r8, r9);
+        return r9;
+    L_0x0751:
+        r7.started = r8;
         r0 = org.telegram.messenger.Utilities.stageQueue;
-        r2 = new org.telegram.messenger.-$$Lambda$FileLoadOperation$zWcnXiI1arbfnF_-ZxDNUNllncs;
-        r3 = r18;
-        r2.<init>(r1, r3);
-        r0.postRunnable(r2);
-        goto L_0x075c;
-    L_0x0752:
-        r2 = 0;
-        r1.started = r4;
-        r1.onFinishLoadingFile(r2);	 Catch:{ Exception -> 0x0759 }
-        goto L_0x075c;
-    L_0x0759:
-        r1.onFail(r4, r2);
-    L_0x075c:
-        return r4;
-    L_0x075d:
-        r2 = 0;
-        r1.onFail(r4, r2);
-        return r2;
+        r1 = new org.telegram.messenger.-$$Lambda$FileLoadOperation$pnBGbN7TnymWdMGyH-sNRrKnKro;
+        r1.<init>(r7, r3);
+        r0.postRunnable(r1);
+        goto L_0x0767;
+    L_0x075e:
+        r7.started = r8;
+        r7.onFinishLoadingFile(r9);	 Catch:{ Exception -> 0x0764 }
+        goto L_0x0767;
+    L_0x0764:
+        r7.onFail(r8, r9);
+    L_0x0767:
+        return r8;
+    L_0x0768:
+        r7.onFail(r8, r9);
+        return r9;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoadOperation.start(org.telegram.messenger.FileLoadOperationStream, int):boolean");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoadOperation.start(org.telegram.messenger.FileLoadOperationStream, int, boolean):boolean");
     }
 
-    public /* synthetic */ void lambda$start$3$FileLoadOperation(int i, FileLoadOperationStream fileLoadOperationStream, boolean z) {
+    public /* synthetic */ void lambda$start$4$FileLoadOperation(boolean z, int i, FileLoadOperationStream fileLoadOperationStream, boolean z2) {
         if (this.streamListeners == null) {
             this.streamListeners = new ArrayList();
         }
-        int i2 = this.currentDownloadChunkSize;
-        this.streamStartOffset = (i / i2) * i2;
-        this.streamListeners.add(fileLoadOperationStream);
+        int i2;
         if (z) {
+            i2 = this.currentDownloadChunkSize;
+            i = (i / i2) * i2;
+            RequestInfo requestInfo = this.priorityRequestInfo;
+            if (!(requestInfo == null || requestInfo.offset == i)) {
+                this.requestInfos.remove(this.priorityRequestInfo);
+                this.requestedBytesCount -= this.currentDownloadChunkSize;
+                removePart(this.notRequestedBytesRanges, this.priorityRequestInfo.offset, this.priorityRequestInfo.offset + this.currentDownloadChunkSize);
+                if (this.priorityRequestInfo.requestToken != 0) {
+                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.priorityRequestInfo.requestToken, true);
+                    this.requestsCount--;
+                }
+                if (BuildVars.DEBUG_VERSION) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("frame get cancel request at offset ");
+                    stringBuilder.append(this.priorityRequestInfo.offset);
+                    FileLog.d(stringBuilder.toString());
+                }
+                this.priorityRequestInfo = null;
+            }
+            if (this.priorityRequestInfo == null) {
+                this.streamPriorityStartOffset = i;
+            }
+        } else {
+            i2 = this.currentDownloadChunkSize;
+            this.streamStartOffset = (i / i2) * i2;
+        }
+        this.streamListeners.add(fileLoadOperationStream);
+        if (z2) {
             if (!(this.preloadedBytesRanges == null || getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, this.streamStartOffset, 1) != 0 || this.preloadedBytesRanges.get(this.streamStartOffset) == null)) {
                 this.nextPartWasPreloaded = true;
             }
@@ -1823,7 +1893,7 @@ public class FileLoadOperation {
         }
     }
 
-    public /* synthetic */ void lambda$start$4$FileLoadOperation(boolean[] zArr) {
+    public /* synthetic */ void lambda$start$5$FileLoadOperation(boolean[] zArr) {
         if (this.totalBytesCount == 0 || !((this.isPreloadVideoOperation && zArr[0]) || this.downloadedBytes == this.totalBytesCount)) {
             startDownloadRequest();
             return;
@@ -1854,13 +1924,13 @@ public class FileLoadOperation {
             this.preloadFinished = false;
             start();
         } else if (this.state == 1) {
-            Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$dCUC8Z2YsvYYD1fE6icyc8raIws(this, z));
+            Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$nc5Q9zp5V-Wm8rlOOmtozGXmKXw(this, z));
         } else {
             this.isPreloadVideoOperation = z;
         }
     }
 
-    public /* synthetic */ void lambda$setIsPreloadVideoOperation$5$FileLoadOperation(boolean z) {
+    public /* synthetic */ void lambda$setIsPreloadVideoOperation$6$FileLoadOperation(boolean z) {
         this.requestedBytesCount = 0;
         clearOperaion(null, true);
         this.isPreloadVideoOperation = z;
@@ -1876,10 +1946,10 @@ public class FileLoadOperation {
     }
 
     public void cancel() {
-        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$J6yoj3V6lUrD2GOh_IqPARM2LhA(this));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$yUSq18W9rnsNzIHP9ZjuCLK1pQs(this));
     }
 
-    public /* synthetic */ void lambda$cancel$6$FileLoadOperation() {
+    public /* synthetic */ void lambda$cancel$7$FileLoadOperation() {
         if (this.state != 3 && this.state != 2) {
             if (this.requestInfos != null) {
                 for (int i = 0; i < this.requestInfos.size(); i++) {
@@ -2047,7 +2117,7 @@ public class FileLoadOperation {
                         this.renameRetryCount++;
                         if (this.renameRetryCount < 3) {
                             this.state = 1;
-                            Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$Pg1188DV6hLAQ13wzfrMjXc2Ie0(this, z), 200);
+                            Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$OSevL5HT97P9D6Q-MYEqFdlPu-o(this, z), 200);
                             return;
                         }
                         this.cacheFileFinal = this.cacheFileTemp;
@@ -2076,7 +2146,7 @@ public class FileLoadOperation {
         }
     }
 
-    public /* synthetic */ void lambda$onFinishLoadingFile$7$FileLoadOperation(boolean z) {
+    public /* synthetic */ void lambda$onFinishLoadingFile$8$FileLoadOperation(boolean z) {
         try {
             onFinishLoadingFile(z);
         } catch (Exception unused) {
@@ -2146,11 +2216,11 @@ public class FileLoadOperation {
             TL_upload_getCdnFileHashes tL_upload_getCdnFileHashes = new TL_upload_getCdnFileHashes();
             tL_upload_getCdnFileHashes.file_token = this.cdnToken;
             tL_upload_getCdnFileHashes.offset = i;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_upload_getCdnFileHashes, new -$$Lambda$FileLoadOperation$AloCOvGHlndklEjA6lccwgvlez8(this), null, null, 0, this.datacenterId, 1, true);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_upload_getCdnFileHashes, new -$$Lambda$FileLoadOperation$nd2MBtmX1swxMm7OU6PKqeg0bEQ(this), null, null, 0, this.datacenterId, 1, true);
         }
     }
 
-    public /* synthetic */ void lambda$requestFileOffsets$8$FileLoadOperation(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$requestFileOffsets$9$FileLoadOperation(TLObject tLObject, TL_error tL_error) {
         if (tL_error != null) {
             onFail(false, 0);
             return;
@@ -2977,13 +3047,13 @@ public class FileLoadOperation {
         cleanup();
         this.state = 2;
         if (z) {
-            Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$9spswKeKfAcOLWXDEy_zgCWBTtA(this, i));
+            Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$pXgjdvEV2cEy0KoNhcKFGIwQAyM(this, i));
         } else {
             this.delegate.didFailedLoadingFile(this, i);
         }
     }
 
-    public /* synthetic */ void lambda$onFail$9$FileLoadOperation(int i) {
+    public /* synthetic */ void lambda$onFail$10$FileLoadOperation(int i) {
         this.delegate.didFailedLoadingFile(this, i);
     }
 
@@ -3051,134 +3121,129 @@ public class FileLoadOperation {
 
     /* Access modifiers changed, original: protected */
     public void startDownloadRequest() {
-        if (!this.paused && this.state == 1 && ((this.nextPartWasPreloaded || this.requestInfos.size() + this.delayedRequestInfos.size() < this.currentMaxDownloadRequests) && (!this.isPreloadVideoOperation || (this.requestedBytesCount <= 2097152 && (this.moovFound == 0 || this.requestInfos.size() <= 0))))) {
-            int max = (this.nextPartWasPreloaded || ((this.isPreloadVideoOperation && this.moovFound == 0) || this.totalBytesCount <= 0)) ? 1 : Math.max(0, this.currentMaxDownloadRequests - this.requestInfos.size());
+        if (!this.paused && this.state == 1 && (this.streamPriorityStartOffset != 0 || ((this.nextPartWasPreloaded || this.requestInfos.size() + this.delayedRequestInfos.size() < this.currentMaxDownloadRequests) && (!this.isPreloadVideoOperation || (this.requestedBytesCount <= 2097152 && (this.moovFound == 0 || this.requestInfos.size() <= 0)))))) {
+            int max = (this.streamPriorityStartOffset != 0 || this.nextPartWasPreloaded || ((this.isPreloadVideoOperation && this.moovFound == 0) || this.totalBytesCount <= 0)) ? 1 : Math.max(0, this.currentMaxDownloadRequests - this.requestInfos.size());
             int i = 0;
             while (i < max) {
-                int size;
                 int i2;
                 int i3;
                 int i4;
+                if (this.isPreloadVideoOperation) {
+                    if (this.moovFound == 0 || this.preloadNotRequestedBytesCount > 0) {
+                        i2 = this.nextPreloadDownloadOffset;
+                        if (i2 == -1) {
+                            Object obj;
+                            i3 = 0;
+                            for (i2 = (2097152 / this.currentDownloadChunkSize) + 2; i2 != 0; i2--) {
+                                if (this.requestedPreloadedBytesRanges.get(i3, 0) == 0) {
+                                    obj = 1;
+                                    break;
+                                }
+                                int i5 = this.currentDownloadChunkSize;
+                                i3 += i5;
+                                i4 = this.totalBytesCount;
+                                if (i3 > i4) {
+                                    break;
+                                }
+                                if (this.moovFound == 2 && i3 == i5 * 8) {
+                                    i3 = ((i4 - 1048576) / i5) * i5;
+                                }
+                            }
+                            obj = null;
+                            if (obj == null && this.requestInfos.isEmpty()) {
+                                onFinishLoadingFile(false);
+                            }
+                            i2 = i3;
+                        }
+                        if (this.requestedPreloadedBytesRanges == null) {
+                            this.requestedPreloadedBytesRanges = new SparseIntArray();
+                        }
+                        this.requestedPreloadedBytesRanges.put(i2, 1);
+                        if (BuildVars.DEBUG_VERSION) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("start next preload from ");
+                            stringBuilder.append(i2);
+                            stringBuilder.append(" size ");
+                            stringBuilder.append(this.totalBytesCount);
+                            stringBuilder.append(" for ");
+                            stringBuilder.append(this.cacheFilePreload);
+                            FileLog.d(stringBuilder.toString());
+                        }
+                        this.preloadNotRequestedBytesCount -= this.currentDownloadChunkSize;
+                    } else {
+                        return;
+                    }
+                } else if (this.notRequestedBytesRanges != null) {
+                    i2 = this.streamPriorityStartOffset;
+                    if (i2 == 0) {
+                        i2 = this.streamStartOffset;
+                    }
+                    i3 = this.notRequestedBytesRanges.size();
+                    int i6 = Integer.MAX_VALUE;
+                    int i7 = Integer.MAX_VALUE;
+                    for (i4 = 0; i4 < i3; i4++) {
+                        Range range = (Range) this.notRequestedBytesRanges.get(i4);
+                        if (i2 != 0) {
+                            if (range.start <= i2 && range.end > i2) {
+                                i7 = Integer.MAX_VALUE;
+                                break;
+                            } else if (i2 < range.start && range.start < i6) {
+                                i6 = range.start;
+                            }
+                        }
+                        i7 = Math.min(i7, range.start);
+                    }
+                    i2 = i6;
+                    if (i2 == Integer.MAX_VALUE) {
+                        if (i7 == Integer.MAX_VALUE) {
+                            break;
+                        }
+                        i2 = i7;
+                    }
+                } else {
+                    i2 = this.requestedBytesCount;
+                }
                 if (!this.isPreloadVideoOperation) {
                     ArrayList arrayList = this.notRequestedBytesRanges;
                     if (arrayList != null) {
-                        size = arrayList.size();
-                        i3 = Integer.MAX_VALUE;
-                        int i5 = Integer.MAX_VALUE;
-                        for (i4 = 0; i4 < size; i4++) {
-                            Range range = (Range) this.notRequestedBytesRanges.get(i4);
-                            if (this.streamStartOffset != 0) {
-                                if (range.start <= this.streamStartOffset) {
-                                    int access$000 = range.end;
-                                    int i6 = this.streamStartOffset;
-                                    if (access$000 > i6) {
-                                        i3 = i6;
-                                        i5 = Integer.MAX_VALUE;
-                                        break;
-                                    }
-                                }
-                                if (this.streamStartOffset < range.start && range.start < r10) {
-                                    i3 = range.start;
-                                }
-                            }
-                            i5 = Math.min(i5, range.start);
-                        }
-                        if (i3 == Integer.MAX_VALUE) {
-                            if (i5 == Integer.MAX_VALUE) {
-                                break;
-                            }
-                            size = i5;
-                        } else {
-                            size = i3;
-                        }
-                    } else {
-                        size = this.requestedBytesCount;
-                    }
-                } else if (this.moovFound == 0 || this.preloadNotRequestedBytesCount > 0) {
-                    size = this.nextPreloadDownloadOffset;
-                    if (size == -1) {
-                        Object obj;
-                        i2 = 0;
-                        for (size = (2097152 / this.currentDownloadChunkSize) + 2; size != 0; size--) {
-                            if (this.requestedPreloadedBytesRanges.get(i2, 0) == 0) {
-                                obj = 1;
-                                break;
-                            }
-                            i4 = this.currentDownloadChunkSize;
-                            i2 += i4;
-                            i3 = this.totalBytesCount;
-                            if (i2 > i3) {
-                                break;
-                            }
-                            if (this.moovFound == 2 && i2 == i4 * 8) {
-                                i2 = ((i3 - 1048576) / i4) * i4;
-                            }
-                        }
-                        obj = null;
-                        if (obj == null && this.requestInfos.isEmpty()) {
-                            onFinishLoadingFile(false);
-                        }
-                        size = i2;
-                    }
-                    if (this.requestedPreloadedBytesRanges == null) {
-                        this.requestedPreloadedBytesRanges = new SparseIntArray();
-                    }
-                    this.requestedPreloadedBytesRanges.put(size, 1);
-                    if (BuildVars.DEBUG_VERSION) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("start next preload from ");
-                        stringBuilder.append(size);
-                        stringBuilder.append(" size ");
-                        stringBuilder.append(this.totalBytesCount);
-                        stringBuilder.append(" for ");
-                        stringBuilder.append(this.cacheFilePreload);
-                        FileLog.d(stringBuilder.toString());
-                    }
-                    this.preloadNotRequestedBytesCount -= this.currentDownloadChunkSize;
-                } else {
-                    return;
-                }
-                if (!this.isPreloadVideoOperation) {
-                    ArrayList arrayList2 = this.notRequestedBytesRanges;
-                    if (arrayList2 != null) {
-                        addPart(arrayList2, size, this.currentDownloadChunkSize + size, false);
+                        addPart(arrayList, i2, this.currentDownloadChunkSize + i2, false);
                     }
                 }
-                i2 = this.totalBytesCount;
-                if (i2 > 0 && size >= i2) {
+                i3 = this.totalBytesCount;
+                if (i3 > 0 && i2 >= i3) {
                     break;
                 }
                 TLObject tL_upload_getCdnFile;
-                i2 = this.totalBytesCount;
-                boolean z = i2 <= 0 || i == max - 1 || (i2 > 0 && this.currentDownloadChunkSize + size >= i2);
-                int i7 = this.requestsCount % 2 == 0 ? 2 : 65538;
-                int i8 = this.isForceRequest ? 32 : 0;
+                i3 = this.totalBytesCount;
+                boolean z = i3 <= 0 || i == max - 1 || (i3 > 0 && this.currentDownloadChunkSize + i2 >= i3);
+                int i8 = this.requestsCount % 2 == 0 ? 2 : 65538;
+                int i9 = this.isForceRequest ? 32 : 0;
                 if (!(this.webLocation instanceof TL_inputWebFileGeoPointLocation)) {
-                    i8 |= 2;
+                    i9 |= 2;
                 }
                 if (this.isCdn) {
                     tL_upload_getCdnFile = new TL_upload_getCdnFile();
                     tL_upload_getCdnFile.file_token = this.cdnToken;
-                    tL_upload_getCdnFile.offset = size;
+                    tL_upload_getCdnFile.offset = i2;
                     tL_upload_getCdnFile.limit = this.currentDownloadChunkSize;
-                    i8 |= 1;
+                    i9 |= 1;
                 } else if (this.webLocation != null) {
                     tL_upload_getCdnFile = new TL_upload_getWebFile();
                     tL_upload_getCdnFile.location = this.webLocation;
-                    tL_upload_getCdnFile.offset = size;
+                    tL_upload_getCdnFile.offset = i2;
                     tL_upload_getCdnFile.limit = this.currentDownloadChunkSize;
                 } else {
                     tL_upload_getCdnFile = new TL_upload_getFile();
                     tL_upload_getCdnFile.location = this.location;
-                    tL_upload_getCdnFile.offset = size;
+                    tL_upload_getCdnFile.offset = i2;
                     tL_upload_getCdnFile.limit = this.currentDownloadChunkSize;
                 }
-                int i9 = i8;
+                int i10 = i9;
                 TLObject tLObject = tL_upload_getCdnFile;
                 this.requestedBytesCount += this.currentDownloadChunkSize;
                 RequestInfo requestInfo = new RequestInfo();
                 this.requestInfos.add(requestInfo);
-                requestInfo.offset = size;
+                requestInfo.offset = i2;
                 if (!(this.isPreloadVideoOperation || !this.supportsPreloading || this.preloadStream == null)) {
                     SparseArray sparseArray = this.preloadedBytesRanges;
                     if (sparseArray != null) {
@@ -3191,27 +3256,46 @@ public class FileLoadOperation {
                                 this.preloadStream.getChannel().read(nativeByteBuffer.buffer);
                                 nativeByteBuffer.buffer.position(0);
                                 requestInfo.response.bytes = nativeByteBuffer;
-                                Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$CkXyQ6ScRYNY6TMd6qRPWNLnxAA(this, requestInfo));
+                                Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$_a8OwTWoM7783M1Mt0pXbFF_RXY(this, requestInfo));
                             } catch (Exception unused) {
                             }
                             i++;
                         }
                     }
                 }
-                requestInfo.requestToken = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLObject, new -$$Lambda$FileLoadOperation$pLwgbN71WnWYsTs7i_Ie2IK-Sjs(this, requestInfo, tLObject), null, null, i9, this.isCdn ? this.cdnDatacenterId : this.datacenterId, i7, z);
+                if (this.streamPriorityStartOffset != 0) {
+                    if (BuildVars.DEBUG_VERSION) {
+                        StringBuilder stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append("frame get offset = ");
+                        stringBuilder2.append(this.streamPriorityStartOffset);
+                        FileLog.d(stringBuilder2.toString());
+                    }
+                    this.streamPriorityStartOffset = 0;
+                    this.priorityRequestInfo = requestInfo;
+                }
+                requestInfo.requestToken = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLObject, new -$$Lambda$FileLoadOperation$q0OPLp-rp7G0uazoY5pveJXhQSk(this, requestInfo, tLObject), null, null, i10, this.isCdn ? this.cdnDatacenterId : this.datacenterId, i8, z);
                 this.requestsCount++;
                 i++;
             }
         }
     }
 
-    public /* synthetic */ void lambda$startDownloadRequest$10$FileLoadOperation(RequestInfo requestInfo) {
+    public /* synthetic */ void lambda$startDownloadRequest$11$FileLoadOperation(RequestInfo requestInfo) {
         processRequestResult(requestInfo, null);
         requestInfo.response.freeResources();
     }
 
-    public /* synthetic */ void lambda$startDownloadRequest$12$FileLoadOperation(RequestInfo requestInfo, TLObject tLObject, TLObject tLObject2, TL_error tL_error) {
+    public /* synthetic */ void lambda$startDownloadRequest$13$FileLoadOperation(RequestInfo requestInfo, TLObject tLObject, TLObject tLObject2, TL_error tL_error) {
         if (this.requestInfos.contains(requestInfo)) {
+            if (requestInfo == this.priorityRequestInfo) {
+                if (BuildVars.DEBUG_VERSION) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("frame get request completed ");
+                    stringBuilder.append(this.priorityRequestInfo.offset);
+                    FileLog.d(stringBuilder.toString());
+                }
+                this.priorityRequestInfo = null;
+            }
             if (tL_error != null) {
                 if (FileRefController.isFileRefError(tL_error.text)) {
                     requestReference(requestInfo);
@@ -3287,12 +3371,12 @@ public class FileLoadOperation {
                 TL_upload_reuploadCdnFile tL_upload_reuploadCdnFile = new TL_upload_reuploadCdnFile();
                 tL_upload_reuploadCdnFile.file_token = this.cdnToken;
                 tL_upload_reuploadCdnFile.request_token = tL_upload_cdnFileReuploadNeeded.request_token;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_upload_reuploadCdnFile, new -$$Lambda$FileLoadOperation$_RANhbuGWnPnpbUnhksdq4cjW2c(this, requestInfo), null, null, 0, this.datacenterId, 1, true);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_upload_reuploadCdnFile, new -$$Lambda$FileLoadOperation$EDtaFymnkH324onISgCX13bWiFE(this, requestInfo), null, null, 0, this.datacenterId, 1, true);
             }
         }
     }
 
-    public /* synthetic */ void lambda$null$11$FileLoadOperation(RequestInfo requestInfo, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$null$12$FileLoadOperation(RequestInfo requestInfo, TLObject tLObject, TL_error tL_error) {
         int i = 0;
         this.reuploadingCdn = false;
         if (tL_error == null) {

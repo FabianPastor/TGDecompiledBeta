@@ -489,8 +489,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                         -CC.$default$didPressShare(this, chatMessageCell);
                     }
 
-                    public /* synthetic */ void didPressUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z) {
-                        -CC.$default$didPressUrl(this, messageObject, characterStyle, z);
+                    public /* synthetic */ void didPressUrl(ChatMessageCell chatMessageCell, CharacterStyle characterStyle, boolean z) {
+                        -CC.$default$didPressUrl(this, chatMessageCell, characterStyle, z);
                     }
 
                     public /* synthetic */ void didPressUserAvatar(ChatMessageCell chatMessageCell, User user, float f, float f2) {
@@ -509,8 +509,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                         -CC.$default$didStartVideoStream(this, messageObject);
                     }
 
-                    public /* synthetic */ boolean isChatAdminCell(int i) {
-                        return -CC.$default$isChatAdminCell(this, i);
+                    public /* synthetic */ String getAdminRank(int i) {
+                        return -CC.$default$getAdminRank(this, i);
                     }
 
                     public /* synthetic */ void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2) {
@@ -519,6 +519,14 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
                     public /* synthetic */ boolean needPlayMessage(MessageObject messageObject) {
                         return -CC.$default$needPlayMessage(this, messageObject);
+                    }
+
+                    public /* synthetic */ void setShouldNotRepeatSticker(MessageObject messageObject) {
+                        -CC.$default$setShouldNotRepeatSticker(this, messageObject);
+                    }
+
+                    public /* synthetic */ boolean shouldRepeatSticker(MessageObject messageObject) {
+                        return -CC.$default$shouldRepeatSticker(this, messageObject);
                     }
 
                     public /* synthetic */ void videoTimerReached() {

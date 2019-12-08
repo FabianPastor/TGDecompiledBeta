@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -79,7 +77,6 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SRPHelper;
-import org.telegram.messenger.SmsReceiver;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -112,7 +109,9 @@ import org.telegram.tgnet.TLRPC.TL_auth_signIn;
 import org.telegram.tgnet.TLRPC.TL_auth_signUp;
 import org.telegram.tgnet.TLRPC.TL_codeSettings;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_help_getNearestDc;
 import org.telegram.tgnet.TLRPC.TL_help_termsOfService;
+import org.telegram.tgnet.TLRPC.TL_nearestDc;
 import org.telegram.tgnet.TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow;
 import org.telegram.tgnet.TLRPC.auth_CodeType;
 import org.telegram.tgnet.TLRPC.auth_SentCodeType;
@@ -506,7 +505,7 @@ public class LoginActivity extends BaseFragment {
                 }
             }
             this.this$0.needHideProgress(false);
-            if (tL_error == null) {
+            if (tLObject instanceof TL_auth_authorization) {
                 this.this$0.onAuthSuccess((TL_auth_authorization) tLObject);
             } else if (tL_error.text.equals("PASSWORD_HASH_INVALID")) {
                 onPasscodeError(true);
@@ -721,14 +720,14 @@ public class LoginActivity extends BaseFragment {
         }
 
         public /* synthetic */ void lambda$onNextPressed$5$LoginActivity$LoginActivityRecoverView(TLObject tLObject, TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$LoginActivityRecoverView$xRlt0wartDC6mNUMeJ3SO5QPoI50(this, tL_error, tLObject));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$LoginActivityRecoverView$ZsV5PKFT-uJ58EfwgKYtDIlx8iE(this, tLObject, tL_error));
         }
 
-        public /* synthetic */ void lambda$null$4$LoginActivity$LoginActivityRecoverView(TL_error tL_error, TLObject tLObject) {
+        public /* synthetic */ void lambda$null$4$LoginActivity$LoginActivityRecoverView(TLObject tLObject, TL_error tL_error) {
             this.this$0.needHideProgress(false);
             this.nextPressed = false;
             String str = "AppName";
-            if (tL_error == null) {
+            if (tLObject instanceof TL_auth_authorization) {
                 Builder builder = new Builder(this.this$0.getParentActivity());
                 builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$LoginActivity$LoginActivityRecoverView$I1bQ5rEP_TTiI07Nb2wIWAeHEMM(this, tLObject));
                 builder.setMessage(LocaleController.getString("PasswordReset", NUM));
@@ -1191,7 +1190,6 @@ public class LoginActivity extends BaseFragment {
                 if (this.this$0.currentTermsOfService == null || !this.this$0.currentTermsOfService.popup) {
                     this.nextPressed = true;
                     TL_auth_signUp tL_auth_signUp = new TL_auth_signUp();
-                    tL_auth_signUp.phone_code = this.phoneCode;
                     tL_auth_signUp.phone_code_hash = this.phoneHash;
                     tL_auth_signUp.phone_number = this.requestPhone;
                     tL_auth_signUp.first_name = this.firstNameField.getText().toString();
@@ -1205,13 +1203,13 @@ public class LoginActivity extends BaseFragment {
         }
 
         public /* synthetic */ void lambda$onNextPressed$13$LoginActivity$LoginActivityRegisterView(TLObject tLObject, TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$LoginActivityRegisterView$7BLOUX6Psn1I67qrNVHHeqDT7F0(this, tL_error, tLObject));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$LoginActivityRegisterView$GUjj7GNgjYH3p7ne-ofr5Gv7B2I(this, tLObject, tL_error));
         }
 
-        public /* synthetic */ void lambda$null$12$LoginActivity$LoginActivityRegisterView(TL_error tL_error, TLObject tLObject) {
+        public /* synthetic */ void lambda$null$12$LoginActivity$LoginActivityRegisterView(TLObject tLObject, TL_error tL_error) {
             this.nextPressed = false;
             this.this$0.needHideProgress(false);
-            if (tL_error == null) {
+            if (tLObject instanceof TL_auth_authorization) {
                 this.this$0.onAuthSuccess((TL_auth_authorization) tLObject);
                 if (this.avatarBig != null) {
                     MessagesController.getInstance(this.this$0.currentAccount).uploadAndApplyUserAvatar(this.avatarBig);
@@ -1930,6 +1928,7 @@ public class LoginActivity extends BaseFragment {
                         TextView textView;
                         String str2 = "SmsText";
                         String str3 = "CallText";
+                        CharSequence charSequence2 = null;
                         if (i == 3) {
                             i = this.nextType;
                             if (i == 4 || i == 2) {
@@ -1941,14 +1940,24 @@ public class LoginActivity extends BaseFragment {
                                 } else if (i == 2) {
                                     this.timeText.setText(LocaleController.formatString(str2, NUM, Integer.valueOf(1), Integer.valueOf(0)));
                                 }
-                                format = this.catchedPhone;
-                                if (format != null) {
+                                if (this.isRestored) {
+                                    charSequence2 = AndroidUtilities.obtainLoginPhoneCall(this.pattern);
+                                }
+                                if (charSequence2 != null) {
                                     this.ignoreOnTextChange = true;
-                                    this.codeField[0].setText(format);
+                                    this.codeField[0].setText(charSequence2);
                                     this.ignoreOnTextChange = false;
                                     onNextPressed();
                                 } else {
-                                    createTimer();
+                                    format = this.catchedPhone;
+                                    if (format != null) {
+                                        this.ignoreOnTextChange = true;
+                                        this.codeField[0].setText(format);
+                                        this.ignoreOnTextChange = false;
+                                        onNextPressed();
+                                    } else {
+                                        createTimer();
+                                    }
                                 }
                             }
                         }
@@ -1963,7 +1972,6 @@ public class LoginActivity extends BaseFragment {
                                 }
                                 textView.setVisibility(i3);
                                 SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                                charSequence = null;
                                 String string = sharedPreferences.getString("sms_hash", null);
                                 if (!TextUtils.isEmpty(string)) {
                                     format = sharedPreferences.getString("sms_hash_code", null);
@@ -1972,12 +1980,12 @@ public class LoginActivity extends BaseFragment {
                                         stringBuilder.append(string);
                                         stringBuilder.append("|");
                                         if (format.contains(stringBuilder.toString())) {
-                                            charSequence = format.substring(format.indexOf(124) + 1);
+                                            charSequence2 = format.substring(format.indexOf(124) + 1);
                                         }
                                     }
                                 }
-                                if (charSequence != null) {
-                                    this.codeField[0].setText(charSequence);
+                                if (charSequence2 != null) {
+                                    this.codeField[0].setText(charSequence2);
                                     onNextPressed();
                                 } else {
                                     createTimer();
@@ -2204,20 +2212,20 @@ public class LoginActivity extends BaseFragment {
             AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$LoginActivitySmsView$KDcbJgHhkQhO0H1lUrS7lHNHtoc(this, tL_error, tLObject, tL_auth_signIn));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:27:0x00b6  */
-        /* JADX WARNING: Removed duplicated region for block: B:26:0x00a9  */
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x00ca  */
-        /* JADX WARNING: Removed duplicated region for block: B:26:0x00a9  */
-        /* JADX WARNING: Removed duplicated region for block: B:27:0x00b6  */
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x00ca  */
-        /* JADX WARNING: Missing block: B:13:0x008e, code skipped:
-            if (r7 != 2) goto L_0x0090;
+        /* JADX WARNING: Removed duplicated region for block: B:30:0x00b0  */
+        /* JADX WARNING: Removed duplicated region for block: B:29:0x00a3  */
+        /* JADX WARNING: Removed duplicated region for block: B:34:0x00c4  */
+        /* JADX WARNING: Removed duplicated region for block: B:29:0x00a3  */
+        /* JADX WARNING: Removed duplicated region for block: B:30:0x00b0  */
+        /* JADX WARNING: Removed duplicated region for block: B:34:0x00c4  */
+        /* JADX WARNING: Missing block: B:16:0x0088, code skipped:
+            if (r7 != 2) goto L_0x008a;
      */
-        /* JADX WARNING: Missing block: B:18:0x0098, code skipped:
-            if (r7 != 3) goto L_0x009a;
+        /* JADX WARNING: Missing block: B:21:0x0092, code skipped:
+            if (r7 != 3) goto L_0x0094;
      */
-        /* JADX WARNING: Missing block: B:22:0x00a0, code skipped:
-            if (r5.nextType == 2) goto L_0x00a2;
+        /* JADX WARNING: Missing block: B:25:0x009a, code skipped:
+            if (r5.nextType == 2) goto L_0x009c;
      */
         public /* synthetic */ void lambda$null$7$LoginActivity$LoginActivitySmsView(org.telegram.tgnet.TLRPC.TL_error r6, org.telegram.tgnet.TLObject r7, org.telegram.tgnet.TLRPC.TL_auth_signIn r8) {
             /*
@@ -2226,25 +2234,22 @@ public class LoginActivity extends BaseFragment {
             r5.nextPressed = r0;
             r1 = 3;
             r2 = 1;
-            if (r6 != 0) goto L_0x001b;
+            if (r6 != 0) goto L_0x004c;
         L_0x0007:
             r6 = r5.this$0;
             r6.needHideProgress(r0);
             r5.destroyTimer();
             r5.destroyCodeTimer();
-            r6 = r5.this$0;
-            r7 = (org.telegram.tgnet.TLRPC.TL_auth_authorization) r7;
-            r6.onAuthSuccess(r7);
-            goto L_0x0196;
-        L_0x001b:
-            r7 = r6.text;
-            r5.lastError = r7;
-            r3 = "PHONE_NUMBER_UNOCCUPIED";
-            r7 = r7.contains(r3);
-            if (r7 == 0) goto L_0x0054;
-        L_0x0027:
-            r6 = r5.this$0;
-            r6.needHideProgress(r0);
+            r6 = r7 instanceof org.telegram.tgnet.TLRPC.TL_auth_authorizationSignUpRequired;
+            if (r6 == 0) goto L_0x0043;
+        L_0x0016:
+            r7 = (org.telegram.tgnet.TLRPC.TL_auth_authorizationSignUpRequired) r7;
+            r6 = r7.terms_of_service;
+            if (r6 == 0) goto L_0x0021;
+        L_0x001c:
+            r7 = r5.this$0;
+            r7.currentTermsOfService = r6;
+        L_0x0021:
             r6 = new android.os.Bundle;
             r6.<init>();
             r7 = r5.requestPhone;
@@ -2259,15 +2264,19 @@ public class LoginActivity extends BaseFragment {
             r7 = r5.this$0;
             r8 = 5;
             r7.setPage(r8, r2, r6, r0);
-            r5.destroyTimer();
-            r5.destroyCodeTimer();
-            goto L_0x0196;
-        L_0x0054:
+            goto L_0x0190;
+        L_0x0043:
+            r6 = r5.this$0;
+            r7 = (org.telegram.tgnet.TLRPC.TL_auth_authorization) r7;
+            r6.onAuthSuccess(r7);
+            goto L_0x0190;
+        L_0x004c:
             r7 = r6.text;
+            r5.lastError = r7;
             r3 = "SESSION_PASSWORD_NEEDED";
             r7 = r7.contains(r3);
-            if (r7 == 0) goto L_0x007f;
-        L_0x005e:
+            if (r7 == 0) goto L_0x0079;
+        L_0x0058:
             r6 = new org.telegram.tgnet.TLRPC$TL_account_getPassword;
             r6.<init>();
             r7 = r5.this$0;
@@ -2279,118 +2288,118 @@ public class LoginActivity extends BaseFragment {
             r7.sendRequest(r6, r0, r8);
             r5.destroyTimer();
             r5.destroyCodeTimer();
-            goto L_0x0196;
-        L_0x007f:
+            goto L_0x0190;
+        L_0x0079:
             r7 = r5.this$0;
             r7.needHideProgress(r0);
             r7 = r5.currentType;
             r8 = 4;
             r3 = 2;
-            if (r7 != r1) goto L_0x0090;
+            if (r7 != r1) goto L_0x008a;
+        L_0x0084:
+            r7 = r5.nextType;
+            if (r7 == r8) goto L_0x009c;
+        L_0x0088:
+            if (r7 == r3) goto L_0x009c;
         L_0x008a:
-            r7 = r5.nextType;
-            if (r7 == r8) goto L_0x00a2;
+            r7 = r5.currentType;
+            if (r7 != r3) goto L_0x0094;
         L_0x008e:
-            if (r7 == r3) goto L_0x00a2;
-        L_0x0090:
-            r7 = r5.currentType;
-            if (r7 != r3) goto L_0x009a;
+            r7 = r5.nextType;
+            if (r7 == r8) goto L_0x009c;
+        L_0x0092:
+            if (r7 == r1) goto L_0x009c;
         L_0x0094:
-            r7 = r5.nextType;
-            if (r7 == r8) goto L_0x00a2;
+            r7 = r5.currentType;
+            if (r7 != r8) goto L_0x009f;
         L_0x0098:
-            if (r7 == r1) goto L_0x00a2;
-        L_0x009a:
-            r7 = r5.currentType;
-            if (r7 != r8) goto L_0x00a5;
-        L_0x009e:
             r7 = r5.nextType;
-            if (r7 != r3) goto L_0x00a5;
-        L_0x00a2:
+            if (r7 != r3) goto L_0x009f;
+        L_0x009c:
             r5.createTimer();
-        L_0x00a5:
+        L_0x009f:
             r7 = r5.currentType;
-            if (r7 != r3) goto L_0x00b6;
-        L_0x00a9:
+            if (r7 != r3) goto L_0x00b0;
+        L_0x00a3:
             org.telegram.messenger.AndroidUtilities.setWaitingForSms(r2);
             r7 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
             r8 = org.telegram.messenger.NotificationCenter.didReceiveSmsCode;
             r7.addObserver(r5, r8);
-            goto L_0x00c4;
-        L_0x00b6:
-            if (r7 != r1) goto L_0x00c4;
-        L_0x00b8:
+            goto L_0x00be;
+        L_0x00b0:
+            if (r7 != r1) goto L_0x00be;
+        L_0x00b2:
             org.telegram.messenger.AndroidUtilities.setWaitingForCall(r2);
             r7 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
             r8 = org.telegram.messenger.NotificationCenter.didReceiveCall;
             r7.addObserver(r5, r8);
-        L_0x00c4:
+        L_0x00be:
             r5.waitingForEvent = r2;
             r7 = r5.currentType;
-            if (r7 == r1) goto L_0x0195;
-        L_0x00ca:
+            if (r7 == r1) goto L_0x018f;
+        L_0x00c4:
             r7 = r6.text;
             r8 = "PHONE_NUMBER_INVALID";
             r7 = r7.contains(r8);
             r8 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
             r3 = "AppName";
-            if (r7 == 0) goto L_0x00ed;
-        L_0x00d9:
+            if (r7 == 0) goto L_0x00e7;
+        L_0x00d3:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d0523 float:1.8744782E38 double:1.053130427E-314;
+            r8 = NUM; // 0x7f0d052c float:1.87448E38 double:1.0531304317E-314;
             r2 = "InvalidPhoneNumber";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
-            goto L_0x0195;
-        L_0x00ed:
+            goto L_0x018f;
+        L_0x00e7:
             r7 = r6.text;
             r4 = "PHONE_CODE_EMPTY";
             r7 = r7.contains(r4);
-            if (r7 != 0) goto L_0x016e;
-        L_0x00f7:
+            if (r7 != 0) goto L_0x0168;
+        L_0x00f1:
             r7 = r6.text;
             r4 = "PHONE_CODE_INVALID";
             r7 = r7.contains(r4);
-            if (r7 == 0) goto L_0x0102;
-        L_0x0101:
-            goto L_0x016e;
-        L_0x0102:
+            if (r7 == 0) goto L_0x00fc;
+        L_0x00fb:
+            goto L_0x0168;
+        L_0x00fc:
             r7 = r6.text;
             r4 = "PHONE_CODE_EXPIRED";
             r7 = r7.contains(r4);
-            if (r7 == 0) goto L_0x0128;
-        L_0x010c:
+            if (r7 == 0) goto L_0x0122;
+        L_0x0106:
             r5.onBackPressed(r2);
             r6 = r5.this$0;
             r7 = 0;
             r6.setPage(r0, r2, r7, r2);
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d02e2 float:1.8743612E38 double:1.053130142E-314;
+            r8 = NUM; // 0x7f0d02e3 float:1.8743614E38 double:1.0531301427E-314;
             r2 = "CodeExpired";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
-            goto L_0x0195;
-        L_0x0128:
+            goto L_0x018f;
+        L_0x0122:
             r7 = r6.text;
             r2 = "FLOOD_WAIT";
             r7 = r7.startsWith(r2);
-            if (r7 == 0) goto L_0x0145;
-        L_0x0132:
+            if (r7 == 0) goto L_0x013f;
+        L_0x012c:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d046e float:1.8744415E38 double:1.053130338E-314;
+            r8 = NUM; // 0x7f0d0474 float:1.8744427E38 double:1.053130341E-314;
             r2 = "FloodWait";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
-            goto L_0x0195;
-        L_0x0145:
+            goto L_0x018f;
+        L_0x013f:
             r7 = r5.this$0;
             r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
             r2 = new java.lang.StringBuilder;
             r2.<init>();
-            r3 = NUM; // 0x7f0d03f3 float:1.8744165E38 double:1.053130277E-314;
+            r3 = NUM; // 0x7f0d03f5 float:1.874417E38 double:1.053130278E-314;
             r4 = "ErrorOccurred";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r2.append(r3);
@@ -2400,38 +2409,38 @@ public class LoginActivity extends BaseFragment {
             r2.append(r6);
             r6 = r2.toString();
             r7.needShowAlert(r8, r6);
-            goto L_0x0195;
-        L_0x016e:
+            goto L_0x018f;
+        L_0x0168:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d0520 float:1.8744776E38 double:1.053130426E-314;
+            r8 = NUM; // 0x7f0d0529 float:1.8744794E38 double:1.05313043E-314;
             r2 = "InvalidCode";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
             r6 = 0;
-        L_0x0181:
+        L_0x017b:
             r7 = r5.codeField;
             r8 = r7.length;
-            if (r6 >= r8) goto L_0x0190;
-        L_0x0186:
+            if (r6 >= r8) goto L_0x018a;
+        L_0x0180:
             r7 = r7[r6];
             r8 = "";
             r7.setText(r8);
             r6 = r6 + 1;
-            goto L_0x0181;
-        L_0x0190:
+            goto L_0x017b;
+        L_0x018a:
             r6 = r7[r0];
             r6.requestFocus();
-        L_0x0195:
+        L_0x018f:
             r2 = 0;
-        L_0x0196:
-            if (r2 == 0) goto L_0x019f;
-        L_0x0198:
+        L_0x0190:
+            if (r2 == 0) goto L_0x0199;
+        L_0x0192:
             r6 = r5.currentType;
-            if (r6 != r1) goto L_0x019f;
-        L_0x019c:
+            if (r6 != r1) goto L_0x0199;
+        L_0x0196:
             org.telegram.messenger.AndroidUtilities.endIncomingCall();
-        L_0x019f:
+        L_0x0199:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity$LoginActivitySmsView.lambda$null$7$LoginActivity$LoginActivitySmsView(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_auth_signIn):void");
@@ -2980,22 +2989,12 @@ public class LoginActivity extends BaseFragment {
                 FileLog.e(e);
             }
             Collections.sort(this.countriesArray, -$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE);
-            Object obj = null;
             try {
                 TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-                if (telephonyManager != null) {
-                    obj = telephonyManager.getSimCountryIso().toUpperCase();
-                }
             } catch (Exception e2) {
                 FileLog.e(e2);
             }
-            if (obj != null) {
-                String str2 = (String) hashMap.get(obj);
-                if (!(str2 == null || this.countriesArray.indexOf(str2) == -1)) {
-                    this.codeField.setText((CharSequence) this.countriesMap.get(str2));
-                    this.countryState = 0;
-                }
-            }
+            loginActivity.getAccountInstance().getConnectionsManager().sendRequest(new TL_help_getNearestDc(), new -$$Lambda$LoginActivity$PhoneView$w7_kYbY4pRrWACLASSNAMExO5d-AXHa18(this, hashMap), 10);
             if (this.codeField.length() == 0) {
                 this.countryButton.setText(LocaleController.getString("ChooseCountry", NUM));
                 this.phoneField.setHintText(null);
@@ -3057,6 +3056,19 @@ public class LoginActivity extends BaseFragment {
             return true;
         }
 
+        public /* synthetic */ void lambda$new$7$LoginActivity$PhoneView(HashMap hashMap, TLObject tLObject, TL_error tL_error) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$PhoneView$8N-9x5OyTcoij1cAYvw9kO6AGws(this, tLObject, hashMap));
+        }
+
+        public /* synthetic */ void lambda$null$6$LoginActivity$PhoneView(TLObject tLObject, HashMap hashMap) {
+            if (tLObject != null) {
+                TL_nearestDc tL_nearestDc = (TL_nearestDc) tLObject;
+                if (this.codeField.length() == 0) {
+                    setCountry(hashMap, tL_nearestDc.country.toUpperCase());
+                }
+            }
+        }
+
         public void selectCountry(String str, String str2) {
             if (this.countriesArray.indexOf(str) != -1) {
                 this.ignoreOnTextChange = true;
@@ -3067,6 +3079,14 @@ public class LoginActivity extends BaseFragment {
                 this.phoneField.setHintText(str != null ? str.replace('X', 8211) : null);
                 this.countryState = 0;
                 this.ignoreOnTextChange = false;
+            }
+        }
+
+        private void setCountry(HashMap<String, String> hashMap, String str) {
+            String str2 = (String) hashMap.get(str);
+            if (str2 != null && this.countriesArray.indexOf(str2) != -1) {
+                this.codeField.setText((CharSequence) this.countriesMap.get(str2));
+                this.countryState = 0;
             }
         }
 
@@ -3085,61 +3105,72 @@ public class LoginActivity extends BaseFragment {
         }
 
         public void onNextPressed() {
+            String str = "ephone";
             if (!(this.this$0.getParentActivity() == null || this.nextPressed)) {
-                StringBuilder stringBuilder;
                 Object obj;
-                String str = "phone";
-                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(str);
+                Object obj2;
+                Object obj3;
+                String str2 = "phone";
+                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(str2);
                 if (BuildVars.DEBUG_VERSION) {
-                    stringBuilder = new StringBuilder();
+                    StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("sim status = ");
                     stringBuilder.append(telephonyManager.getSimState());
                     FileLog.d(stringBuilder.toString());
                 }
                 int simState = telephonyManager.getSimState();
-                Object obj2 = (simState == 1 || simState == 0 || telephonyManager.getPhoneType() == 0 || AndroidUtilities.isAirplaneModeOn()) ? null : 1;
-                String str2 = "OK";
-                String str3 = "AppName";
-                if (VERSION.SDK_INT < 23 || obj2 == null) {
+                Object obj4 = (simState == 1 || simState == 0 || telephonyManager.getPhoneType() == 0 || AndroidUtilities.isAirplaneModeOn()) ? null : 1;
+                String str3 = "OK";
+                String str4 = "AppName";
+                if (VERSION.SDK_INT < 23 || obj4 == null) {
                     obj = 1;
+                    obj2 = 1;
+                    obj3 = 1;
                 } else {
-                    String str4 = "android.permission.READ_PHONE_STATE";
-                    obj = this.this$0.getParentActivity().checkSelfPermission(str4) == 0 ? 1 : null;
-                    String str5 = "android.permission.CALL_PHONE";
-                    Object obj3 = this.this$0.getParentActivity().checkSelfPermission(str5) == 0 ? 1 : null;
+                    String str5 = "android.permission.READ_PHONE_STATE";
+                    obj = this.this$0.getParentActivity().checkSelfPermission(str5) == 0 ? 1 : null;
+                    String str6 = "android.permission.CALL_PHONE";
+                    obj3 = this.this$0.getParentActivity().checkSelfPermission(str6) == 0 ? 1 : null;
+                    String str7 = "android.permission.READ_CALL_LOG";
+                    obj2 = (VERSION.SDK_INT < 28 || this.this$0.getParentActivity().checkSelfPermission(str7) == 0) ? 1 : null;
                     if (this.this$0.checkPermissions) {
                         this.this$0.permissionsItems.clear();
                         if (obj == null) {
-                            this.this$0.permissionsItems.add(str4);
-                        }
-                        if (obj3 == null) {
                             this.this$0.permissionsItems.add(str5);
                         }
+                        if (obj3 == null) {
+                            this.this$0.permissionsItems.add(str6);
+                        }
+                        if (obj2 == null) {
+                            this.this$0.permissionsItems.add(str7);
+                        }
                         if (!this.this$0.permissionsItems.isEmpty()) {
-                            Object obj4;
+                            Object obj5;
                             SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-                            if (obj3 != null || obj == null) {
-                                String str6 = "firstlogin";
-                                if (globalMainSettings.getBoolean(str6, true) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str4)) {
-                                    globalMainSettings.edit().putBoolean(str6, false).commit();
-                                    Builder builder = new Builder(this.this$0.getParentActivity());
-                                    builder.setTitle(LocaleController.getString(str3, NUM));
-                                    builder.setPositiveButton(LocaleController.getString(str2, NUM), null);
-                                    builder.setMessage(LocaleController.getString("AllowReadCall", NUM));
-                                    LoginActivity loginActivity = this.this$0;
-                                    loginActivity.permissionsDialog = loginActivity.showDialog(builder.create());
+                            str6 = "firstlogin";
+                            if (globalMainSettings.getBoolean(str6, true) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str5) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str7)) {
+                                globalMainSettings.edit().putBoolean(str6, false).commit();
+                                Builder builder = new Builder(this.this$0.getParentActivity());
+                                builder.setTitle(LocaleController.getString(str4, NUM));
+                                builder.setPositiveButton(LocaleController.getString(str3, NUM), null);
+                                if (obj == null && (obj3 == null || obj2 == null)) {
+                                    builder.setMessage(LocaleController.getString("AllowReadCallAndLog", NUM));
+                                } else if (obj3 == null || obj2 == null) {
+                                    builder.setMessage(LocaleController.getString("AllowReadCallLog", NUM));
                                 } else {
-                                    try {
-                                        this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[0]), 6);
-                                    } catch (Exception unused) {
-                                        obj4 = null;
-                                    }
+                                    builder.setMessage(LocaleController.getString("AllowReadCall", NUM));
                                 }
+                                LoginActivity loginActivity = this.this$0;
+                                loginActivity.permissionsDialog = loginActivity.showDialog(builder.create());
                             } else {
-                                this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[0]), 6);
+                                try {
+                                    this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[0]), 6);
+                                } catch (Exception unused) {
+                                    obj5 = null;
+                                }
                             }
-                            obj4 = 1;
-                            if (obj4 != null) {
+                            obj5 = 1;
+                            if (obj5 != null) {
                                 return;
                             }
                         }
@@ -3147,11 +3178,11 @@ public class LoginActivity extends BaseFragment {
                 }
                 int i = this.countryState;
                 if (i == 1) {
-                    this.this$0.needShowAlert(LocaleController.getString(str3, NUM), LocaleController.getString("ChooseCountry", NUM));
+                    this.this$0.needShowAlert(LocaleController.getString(str4, NUM), LocaleController.getString("ChooseCountry", NUM));
                 } else if (i == 2 && !BuildVars.DEBUG_VERSION) {
-                    this.this$0.needShowAlert(LocaleController.getString(str3, NUM), LocaleController.getString("WrongCountry", NUM));
+                    this.this$0.needShowAlert(LocaleController.getString(str4, NUM), LocaleController.getString("WrongCountry", NUM));
                 } else if (this.codeField.length() == 0) {
-                    this.this$0.needShowAlert(LocaleController.getString(str3, NUM), LocaleController.getString("InvalidPhoneNumber", NUM));
+                    this.this$0.needShowAlert(LocaleController.getString(str4, NUM), LocaleController.getString("InvalidPhoneNumber", NUM));
                 } else {
                     StringBuilder stringBuilder2 = new StringBuilder();
                     stringBuilder2.append("");
@@ -3163,10 +3194,10 @@ public class LoginActivity extends BaseFragment {
                             UserConfig instance = UserConfig.getInstance(i2);
                             if (instance.isClientActivated() && PhoneNumberUtils.compare(stripExceptNumbers, instance.getCurrentUser().phone)) {
                                 Builder builder2 = new Builder(this.this$0.getParentActivity());
-                                builder2.setTitle(LocaleController.getString(str3, NUM));
+                                builder2.setTitle(LocaleController.getString(str4, NUM));
                                 builder2.setMessage(LocaleController.getString("AccountAlreadyLoggedIn", NUM));
-                                builder2.setPositiveButton(LocaleController.getString("AccountSwitch", NUM), new -$$Lambda$LoginActivity$PhoneView$cUnbbQpCdT7SsTR9k7MHJwteqf4(this, i2));
-                                builder2.setNegativeButton(LocaleController.getString(str2, NUM), null);
+                                builder2.setPositiveButton(LocaleController.getString("AccountSwitch", NUM), new -$$Lambda$LoginActivity$PhoneView$dpjhAtsGXirSFaKNuV4Bo6d-RDQ(this, i2));
+                                builder2.setNegativeButton(LocaleController.getString(str3, NUM), null);
                                 this.this$0.showDialog(builder2.create());
                                 return;
                             }
@@ -3179,29 +3210,11 @@ public class LoginActivity extends BaseFragment {
                     tL_auth_sendCode.phone_number = stripExceptNumbers;
                     tL_auth_sendCode.settings = new TL_codeSettings();
                     TL_codeSettings tL_codeSettings = tL_auth_sendCode.settings;
-                    boolean z = (obj2 == null || obj == null) ? false : true;
+                    boolean z = (obj4 == null || obj == null || obj3 == null || obj2 == null) ? false : true;
                     tL_codeSettings.allow_flashcall = z;
-                    if (VERSION.SDK_INT >= 26) {
-                        try {
-                            tL_auth_sendCode.settings.app_hash = SmsManager.getDefault().createAppSpecificSmsToken(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, SmsReceiver.class), NUM));
-                        } catch (Throwable th) {
-                            FileLog.e(th);
-                        }
-                    } else {
-                        TL_codeSettings tL_codeSettings2 = tL_auth_sendCode.settings;
-                        tL_codeSettings2.app_hash = BuildVars.SMS_HASH;
-                        tL_codeSettings2.app_hash_persistent = true;
-                    }
-                    SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                    String str7 = "sms_hash";
-                    if (TextUtils.isEmpty(tL_auth_sendCode.settings.app_hash)) {
-                        sharedPreferences.edit().remove(str7).commit();
-                    } else {
-                        TL_codeSettings tL_codeSettings3 = tL_auth_sendCode.settings;
-                        tL_codeSettings3.flags |= 8;
-                        sharedPreferences.edit().putString(str7, tL_auth_sendCode.settings.app_hash).commit();
-                    }
-                    if (tL_auth_sendCode.settings.allow_flashcall) {
+                    TL_codeSettings tL_codeSettings2 = tL_auth_sendCode.settings;
+                    tL_codeSettings2.allow_app_hash = ApplicationLoader.hasPlayServices;
+                    if (tL_codeSettings2.allow_flashcall) {
                         try {
                             String line1Number = telephonyManager.getLine1Number();
                             if (!TextUtils.isEmpty(line1Number)) {
@@ -3214,53 +3227,53 @@ public class LoginActivity extends BaseFragment {
                             } else {
                                 tL_auth_sendCode.settings.current_number = false;
                             }
-                        } catch (Exception th2) {
+                        } catch (Exception e) {
                             tL_auth_sendCode.settings.allow_flashcall = false;
-                            FileLog.e(th2);
+                            FileLog.e(e);
                         }
                     }
                     Bundle bundle = new Bundle();
-                    stringBuilder = new StringBuilder();
+                    StringBuilder stringBuilder3 = new StringBuilder();
                     String str8 = "+";
-                    stringBuilder.append(str8);
-                    stringBuilder.append(this.codeField.getText());
+                    stringBuilder3.append(str8);
+                    stringBuilder3.append(this.codeField.getText());
                     String str9 = " ";
-                    stringBuilder.append(str9);
-                    stringBuilder.append(this.phoneField.getText());
-                    bundle.putString(str, stringBuilder.toString());
+                    stringBuilder3.append(str9);
+                    stringBuilder3.append(this.phoneField.getText());
+                    bundle.putString(str2, stringBuilder3.toString());
                     try {
-                        StringBuilder stringBuilder3 = new StringBuilder();
+                        stringBuilder3 = new StringBuilder();
                         stringBuilder3.append(str8);
                         stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()));
                         stringBuilder3.append(str9);
                         stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
-                        bundle.putString("ephone", stringBuilder3.toString());
-                    } catch (Exception th22) {
-                        FileLog.e(th22);
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append(str8);
-                        stringBuilder.append(stripExceptNumbers);
-                        bundle.putString("ephone", stringBuilder.toString());
+                        bundle.putString(str, stringBuilder3.toString());
+                    } catch (Exception e2) {
+                        FileLog.e(e2);
+                        stringBuilder3 = new StringBuilder();
+                        stringBuilder3.append(str8);
+                        stringBuilder3.append(stripExceptNumbers);
+                        bundle.putString(str, stringBuilder3.toString());
                     }
                     bundle.putString("phoneFormated", stripExceptNumbers);
                     this.nextPressed = true;
-                    this.this$0.needShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_sendCode, new -$$Lambda$LoginActivity$PhoneView$S6zazpVdhFP3KhISZlgIZLho1x0(this, bundle, tL_auth_sendCode), 27));
+                    this.this$0.needShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_sendCode, new -$$Lambda$LoginActivity$PhoneView$D6rb0YYZK8N7UnvplgUPvar_wHHA(this, bundle, tL_auth_sendCode), 27));
                 }
             }
         }
 
-        public /* synthetic */ void lambda$onNextPressed$6$LoginActivity$PhoneView(int i, DialogInterface dialogInterface, int i2) {
+        public /* synthetic */ void lambda$onNextPressed$8$LoginActivity$PhoneView(int i, DialogInterface dialogInterface, int i2) {
             if (UserConfig.selectedAccount != i) {
                 ((LaunchActivity) this.this$0.getParentActivity()).switchToAccount(i, false);
             }
             this.this$0.finishFragment();
         }
 
-        public /* synthetic */ void lambda$onNextPressed$8$LoginActivity$PhoneView(Bundle bundle, TL_auth_sendCode tL_auth_sendCode, TLObject tLObject, TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$PhoneView$DSakaMh06N5zmC_tflw8hLJmtyA(this, tL_error, bundle, tLObject, tL_auth_sendCode));
+        public /* synthetic */ void lambda$onNextPressed$10$LoginActivity$PhoneView(Bundle bundle, TL_auth_sendCode tL_auth_sendCode, TLObject tLObject, TL_error tL_error) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$PhoneView$wW0KLTORoTF7Ey-ULvar_AiQdzqo(this, tL_error, bundle, tLObject, tL_auth_sendCode));
         }
 
-        public /* synthetic */ void lambda$null$7$LoginActivity$PhoneView(TL_error tL_error, Bundle bundle, TLObject tLObject, TL_auth_sendCode tL_auth_sendCode) {
+        public /* synthetic */ void lambda$null$9$LoginActivity$PhoneView(TL_error tL_error, Bundle bundle, TLObject tLObject, TL_auth_sendCode tL_auth_sendCode) {
             this.nextPressed = false;
             if (tL_error == null) {
                 this.this$0.fillNextCodeParams(bundle, (TL_auth_sentCode) tLObject);
@@ -3369,10 +3382,10 @@ public class LoginActivity extends BaseFragment {
             if (checkBoxCell != null) {
                 checkBoxCell.setChecked(this.this$0.syncContacts, false);
             }
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$PhoneView$ZQIaTW7Tg9LzS3TQpAKWHToO67M(this), 100);
+            AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$PhoneView$L2TZSNi6mTJFJwu7mU6H2Fczcd4(this), 100);
         }
 
-        public /* synthetic */ void lambda$onShow$9$LoginActivity$PhoneView() {
+        public /* synthetic */ void lambda$onShow$11$LoginActivity$PhoneView() {
             if (this.phoneField == null) {
                 return;
             }
@@ -4015,17 +4028,12 @@ public class LoginActivity extends BaseFragment {
         MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(arrayList, null, true, true);
         MessagesController.getInstance(this.currentAccount).putUser(tL_auth_authorization.user, false);
         ContactsController.getInstance(this.currentAccount).checkAppAccount();
-        MessagesController.getInstance(this.currentAccount).getBlockedUsers(true);
         MessagesController.getInstance(this.currentAccount).checkProxyInfo(true);
         ConnectionsManager.getInstance(this.currentAccount).updateDcSettings();
         needFinishActivity();
     }
 
     private void fillNextCodeParams(Bundle bundle, TL_auth_sentCode tL_auth_sentCode) {
-        TL_help_termsOfService tL_help_termsOfService = tL_auth_sentCode.terms_of_service;
-        if (tL_help_termsOfService != null) {
-            this.currentTermsOfService = tL_help_termsOfService;
-        }
         bundle.putString("phoneHash", tL_auth_sentCode.phone_code_hash);
         auth_CodeType auth_codetype = tL_auth_sentCode.next_type;
         String str = "nextType";

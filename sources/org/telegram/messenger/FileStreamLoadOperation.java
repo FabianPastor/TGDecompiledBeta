@@ -62,7 +62,7 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         Object obj = this.parentObject;
         int i = (int) dataSpec.position;
         this.currentOffset = i;
-        this.loadOperation = instance.loadStreamFile(this, document, obj, i);
+        this.loadOperation = instance.loadStreamFile(this, document, obj, i, false);
         long j = dataSpec.length;
         if (j == -1) {
             j = ((long) this.document.size) - dataSpec.position;
@@ -82,7 +82,6 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
     }
 
     public int read(byte[] bArr, int i, int i2) throws IOException {
-        int i3 = 0;
         if (i2 == 0) {
             return 0;
         }
@@ -93,15 +92,16 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         if (j < ((long) i2)) {
             i2 = (int) j;
         }
-        while (i3 == 0) {
+        int i3 = i2;
+        i2 = 0;
+        while (i2 == 0) {
             try {
-                i3 = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, i2);
-                if (i3 == 0) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("not found bytes ");
-                    stringBuilder.append(i);
-                    FileLog.d(stringBuilder.toString());
-                    FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.parentObject, this.currentOffset);
+                if (!this.opened) {
+                    break;
+                }
+                i2 = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, i3);
+                if (i2 == 0) {
+                    FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.parentObject, this.currentOffset, false);
                     this.countDownLatch = new CountDownLatch(1);
                     this.countDownLatch.await();
                 }
@@ -109,11 +109,14 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
                 throw new IOException(e);
             }
         }
-        this.file.readFully(bArr, i, i3);
-        this.currentOffset += i3;
-        this.bytesRemaining -= (long) i3;
-        bytesTransferred(i3);
-        return i3;
+        if (!this.opened) {
+            return 0;
+        }
+        this.file.readFully(bArr, i, i2);
+        this.currentOffset += i2;
+        this.bytesRemaining -= (long) i2;
+        bytesTransferred(i2);
+        return i2;
     }
 
     public Uri getUri() {
@@ -124,10 +127,6 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         FileLoadOperation fileLoadOperation = this.loadOperation;
         if (fileLoadOperation != null) {
             fileLoadOperation.removeStreamListener(this);
-        }
-        CountDownLatch countDownLatch = this.countDownLatch;
-        if (countDownLatch != null) {
-            countDownLatch.countDown();
         }
         RandomAccessFile randomAccessFile = this.file;
         if (randomAccessFile != null) {
@@ -142,6 +141,10 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         if (this.opened) {
             this.opened = false;
             transferEnded();
+        }
+        CountDownLatch countDownLatch = this.countDownLatch;
+        if (countDownLatch != null) {
+            countDownLatch.countDown();
         }
     }
 

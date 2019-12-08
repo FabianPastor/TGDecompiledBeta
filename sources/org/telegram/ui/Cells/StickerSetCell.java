@@ -21,9 +21,11 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
+import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -46,13 +48,14 @@ public class StickerSetCell extends FrameLayout {
         this.textView = new TextView(context2);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
+        this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
         int i3 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 9.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
         this.valueTextView = new TextView(context2);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
@@ -60,11 +63,11 @@ public class StickerSetCell extends FrameLayout {
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
+        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 32.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
         this.imageView = new BackupImageView(context2);
         this.imageView.setAspectFit(true);
         this.imageView.setLayerNum(1);
-        addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 13.0f, 9.0f, LocaleController.isRTL ? 13.0f : 0.0f, 0.0f));
         if (i2 == 2) {
             this.progressView = new RadialProgressView(getContext());
             this.progressView.setProgressColor(Theme.getColor("dialogProgressCircle"));
@@ -73,7 +76,7 @@ public class StickerSetCell extends FrameLayout {
             if (!LocaleController.isRTL) {
                 i3 = 3;
             }
-            addView(radialProgressView, LayoutHelper.createFrame(48, 48.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+            addView(radialProgressView, LayoutHelper.createFrame(48, 48.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 12.0f, 5.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         } else if (i2 != 0) {
             this.optionsButton = new ImageView(context2);
             int i4 = 0;
@@ -88,7 +91,7 @@ public class StickerSetCell extends FrameLayout {
                 if (LocaleController.isRTL) {
                     i3 = 3;
                 }
-                addView(imageView, LayoutHelper.createFrame(40, 40, i3 | 48));
+                addView(imageView, LayoutHelper.createFrame(40, 40, i3 | 16));
             } else if (i2 == 3) {
                 this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
                 this.optionsButton.setImageResource(NUM);
@@ -101,14 +104,14 @@ public class StickerSetCell extends FrameLayout {
                 if (!LocaleController.isRTL) {
                     i4 = 10;
                 }
-                addView(imageView, LayoutHelper.createFrame(40, 40.0f, i5, f, 12.0f, (float) i4, 0.0f));
+                addView(imageView, LayoutHelper.createFrame(40, 40.0f, i5, f, 9.0f, (float) i4, 0.0f));
             }
         }
     }
 
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f) + this.needDivider, NUM));
     }
 
     public void setText(String str, String str2, int i, boolean z) {
@@ -163,14 +166,26 @@ public class StickerSetCell extends FrameLayout {
             this.valueTextView.setText(LocaleController.formatPluralString(str, 0));
             return;
         }
+        ImageLocation forDocument;
         this.valueTextView.setText(LocaleController.formatPluralString(str, arrayList.size()));
-        Document document = (Document) arrayList.get(0);
-        PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
-        if (MessageObject.canAutoplayAnimatedSticker(document)) {
-            this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, document), null, 0, tL_messages_stickerSet);
-            return;
+        TLObject tLObject = (Document) arrayList.get(0);
+        PhotoSize photoSize = tL_messages_stickerSet.set.thumb;
+        if (!(photoSize instanceof TL_photoSize)) {
+            photoSize = tLObject;
         }
-        this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document), null, "webp", null, (Object) tL_messages_stickerSet);
+        boolean z2 = photoSize instanceof Document;
+        if (z2) {
+            forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLObject.thumbs, 90), tLObject);
+        } else {
+            forDocument = ImageLocation.getForSticker(photoSize, tLObject);
+        }
+        if (z2 && MessageObject.isAnimatedStickerDocument(tLObject)) {
+            this.imageView.setImage(ImageLocation.getForDocument(tLObject), "50_50", forDocument, null, 0, tL_messages_stickerSet);
+        } else if (forDocument == null || !forDocument.lottieAnimation) {
+            this.imageView.setImage(forDocument, "50_50", "webp", null, (Object) tL_messages_stickerSet);
+        } else {
+            this.imageView.setImage(forDocument, "50_50", "tgs", null, (Object) tL_messages_stickerSet);
+        }
     }
 
     public void setChecked(boolean z) {

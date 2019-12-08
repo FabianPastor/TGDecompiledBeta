@@ -57,6 +57,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ChatActivityEnterView;
 import org.telegram.ui.Components.ChatActivityEnterView.ChatActivityEnterViewDelegate;
+import org.telegram.ui.Components.ChatActivityEnterView.ChatActivityEnterViewDelegate.-CC;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PlayingGameDrawable;
 import org.telegram.ui.Components.RecordStatusDrawable;
@@ -421,7 +422,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             public void onTextSpansChanged(CharSequence charSequence) {
             }
 
+            public void onUpdateSlowModeButton(View view, boolean z, CharSequence charSequence) {
+            }
+
             public void onWindowSizeChanged(int i) {
+            }
+
+            public /* synthetic */ void scrollToSendingMessage() {
+                -CC.$default$scrollToSendingMessage(this);
             }
 
             public void onMessageSend(CharSequence charSequence) {

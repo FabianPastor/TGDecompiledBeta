@@ -6,18 +6,27 @@ import android.view.View;
 import org.telegram.ui.Components.CheckBoxBase.ProgressDelegate;
 
 public class CheckBox2 extends View {
-    private CheckBoxBase checkBoxBase = new CheckBoxBase(this);
+    private CheckBoxBase checkBoxBase;
 
-    public CheckBox2(Context context) {
+    public CheckBox2(Context context, int i) {
         super(context);
+        this.checkBoxBase = new CheckBoxBase(this, i);
     }
 
     public void setProgressDelegate(ProgressDelegate progressDelegate) {
         this.checkBoxBase.setProgressDelegate(progressDelegate);
     }
 
+    public void setChecked(int i, boolean z, boolean z2) {
+        this.checkBoxBase.setChecked(i, z, z2);
+    }
+
     public void setChecked(boolean z, boolean z2) {
         this.checkBoxBase.setChecked(z, z2);
+    }
+
+    public void setNum(int i) {
+        this.checkBoxBase.setNum(i);
     }
 
     public boolean isChecked() {
@@ -26,10 +35,6 @@ public class CheckBox2 extends View {
 
     public void setColor(String str, String str2, String str3) {
         this.checkBoxBase.setColor(str, str2, str3);
-    }
-
-    public void setSize(int i) {
-        this.checkBoxBase.setSize(i);
     }
 
     public void setEnabled(boolean z) {

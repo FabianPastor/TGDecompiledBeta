@@ -32,6 +32,7 @@ public class ApplicationLoader extends Application {
     private static ConnectivityManager connectivityManager = null;
     public static volatile NetworkInfo currentNetworkInfo = null;
     public static volatile boolean externalInterfacePaused = true;
+    public static boolean hasPlayServices = false;
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
@@ -116,7 +117,6 @@ public class ApplicationLoader extends Application {
                 User currentUser = UserConfig.getInstance(i).getCurrentUser();
                 if (currentUser != null) {
                     MessagesController.getInstance(i).putUser(currentUser, true);
-                    MessagesController.getInstance(i).getBlockedUsers(true);
                     SendMessagesHelper.getInstance(i).checkUnsentMessages();
                 }
             }
@@ -181,7 +181,9 @@ public class ApplicationLoader extends Application {
     }
 
     public /* synthetic */ void lambda$initPlayServices$3$ApplicationLoader() {
-        if (checkPlayServices()) {
+        boolean checkPlayServices = checkPlayServices();
+        hasPlayServices = checkPlayServices;
+        if (checkPlayServices) {
             String str = SharedConfig.pushString;
             if (TextUtils.isEmpty(str)) {
                 if (BuildVars.LOGS_ENABLED) {

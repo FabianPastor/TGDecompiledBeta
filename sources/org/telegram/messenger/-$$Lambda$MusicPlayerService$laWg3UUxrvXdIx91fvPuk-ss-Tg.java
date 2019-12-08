@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate;
+import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate.-CC;
 
 /* compiled from: lambda */
 public final /* synthetic */ class -$$Lambda$MusicPlayerService$laWg3UUxrvXdIx91fvPuk-ss-Tg implements ImageReceiverDelegate {
@@ -12,5 +13,9 @@ public final /* synthetic */ class -$$Lambda$MusicPlayerService$laWg3UUxrvXdIx91
 
     public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2) {
         this.f$0.lambda$onCreate$0$MusicPlayerService(imageReceiver, z, z2);
+    }
+
+    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
+        -CC.$default$onAnimationReady(this, imageReceiver);
     }
 }

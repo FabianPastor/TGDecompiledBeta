@@ -13,6 +13,6 @@ public final /* synthetic */ class -$$Lambda$SendMessagesHelper$dOHb6o3Y0EVpuMmt
     }
 
     public final void run() {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$SendMessagesHelper$MPqGoDszyDfCR_UiZLHAVdnFvz8(this.f$0, this.f$1, this.f$2));
+        SendMessagesHelper.lambda$null$52(this.f$0, this.f$1, this.f$2);
     }
 }

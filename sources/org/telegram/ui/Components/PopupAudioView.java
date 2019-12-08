@@ -20,6 +20,7 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.BaseCell;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
+import org.telegram.ui.Components.SeekBar.SeekBarDelegate.-CC;
 
 public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDownloadProgressListener {
     private int TAG;
@@ -41,6 +42,10 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     private boolean wasLayout = false;
 
     public void onProgressUpload(String str, float f, boolean z) {
+    }
+
+    public /* synthetic */ void onSeekBarContinuousDrag(float f) {
+        -CC.$default$onSeekBarContinuousDrag(this, f);
     }
 
     public PopupAudioView(Context context) {

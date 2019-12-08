@@ -212,8 +212,8 @@
     <string name="AllowCustomQuickReply">Allow Custom</string>
     <string name="AllowFillNumber">Please allow Telegram to receive calls so that we can automatically confirm your phone number.</string>
     <string name="AllowReadCall">Please allow Telegram to receive calls so that we can automatically enter your code for you.</string>
-    <string name="AllowReadCallAndSms">Please allow Telegram to receive calls so that we can automatically confirm your phone number.</string>
-    <string name="AllowReadSms">Please allow Telegram to receive SMS so that we can automatically enter your code for you.</string>
+    <string name="AllowReadCallAndLog">Please allow Telegram to receive calls and read the call log so that we can automatically enter your code for you.</string>
+    <string name="AllowReadCallLog">Please allow Telegram to read the call log so that we can automatically enter your code for you.</string>
     <string name="AlternativeOptions">Alternative options</string>
     <string name="AlwaysAllow">Always Allow</string>
     <string name="AlwaysShareWith">Always Share With</string>
@@ -502,6 +502,7 @@
     <string name="Calls">Calls</string>
     <string name="CallsDataUsage">Calls</string>
     <string name="CallsTotalTime">Total time</string>
+    <string name="CameraPermissionText">Tap to allow access to your Camera</string>
     <string name="Cancel">Cancel</string>
     <string name="CancelAccountReset">Cancel account reset</string>
     <string name="CancelAccountResetInfo">Somebody with access to your phone number **%1$s** has requested to delete your Telegram account and reset your 2-Step Verification password.\10\10If this wasn\'t you, please enter the code we\'ve just sent you via SMS to your number.</string>
@@ -941,6 +942,8 @@
     <string name="EditAdminPinMessages">Pin Messages</string>
     <string name="EditAdminPostMessages">Post Messages</string>
     <string name="EditAdminPromotedBy">Promoted by %1$s</string>
+    <string name="EditAdminRank">Custom title</string>
+    <string name="EditAdminRankInfo">A custom title that will be shown to all members instead of \'%1$s\'.</string>
     <string name="EditAdminRemoveAdmin">Dismiss Admin</string>
     <string name="EditAdminRights">Edit admin rights</string>
     <string name="EditAdminTransferAlertText">You can transfer this group to **%1$s** only if you have:</string>
@@ -976,7 +979,6 @@
     <string name="Emoji6">Objects</string>
     <string name="Emoji7">Symbols</string>
     <string name="Emoji8">Flags</string>
-    <string name="EmojiBigSize">Draw single big emoji</string>
     <string name="EmojiSuggestions">Emoji suggestions</string>
     <string name="EmojiSuggestionsInfo">**Telegram** lets you find emoji by thousands of keywords, but there is always something missing. If you want to suggest a new emoji replacement, you can help us by visiting:</string>
     <string name="EmojiSuggestionsUrl">https://translations.telegram.org/%1$s/emoji</string>
@@ -1080,6 +1082,8 @@
     <string name="EventLogPromotedEditMessages">Edit messages</string>
     <string name="EventLogPromotedPinMessages">Pin messages</string>
     <string name="EventLogPromotedPostMessages">Post messages</string>
+    <string name="EventLogPromotedRemovedTitle">Title</string>
+    <string name="EventLogPromotedTitle">Title: %1$s</string>
     <string name="EventLogRemovedChannelLink">un1 removed the channel link</string>
     <string name="EventLogRemovedChannelPhoto">un1 removed the channel photo</string>
     <string name="EventLogRemovedGroupLink">un1 removed the group link</string>
@@ -1106,6 +1110,8 @@
     <string name="EventLogToggledInvitesOn">un1 enabled group invites</string>
     <string name="EventLogToggledSignaturesOff">un1 disabled signatures</string>
     <string name="EventLogToggledSignaturesOn">un1 enabled signatures</string>
+    <string name="EventLogToggledSlowmodeOff">un1 disabled the slow mode</string>
+    <string name="EventLogToggledSlowmodeOn">un1 set the slow mode timer to %1$s</string>
     <string name="EventLogUnpinnedMessages">un1 unpinned message</string>
     <string name="Events">Events</string>
     <string name="Exception_few">%1$d exceptions</string>
@@ -1227,9 +1233,11 @@
     <string name="FromYou">You</string>
     <string name="Gallery">Gallery</string>
     <string name="GalleryInfo">To send images without compression</string>
+    <string name="GalleryPermissionText">Tap to allow access to your Gallery</string>
     <string name="General">General</string>
     <string name="GettingLinkInfo">Getting Link Info...</string>
     <string name="GifCaption">GIF Caption</string>
+    <string name="GifsTab">GIFS</string>
     <string name="GlobalAttachGifRestricted">GIFs aren\'t allowed in this group.</string>
     <string name="GlobalAttachInlineRestricted">Inline bots aren\'t allowed in this group.</string>
     <string name="GlobalAttachMediaRestricted">Sending media isn\'t allowed in this group.</string>
@@ -1297,6 +1305,7 @@
     <string name="Hours_two">%1$d hours</string>
     <string name="Hours_zero">%1$d hours</string>
     <string name="Hybrid">Hybrid</string>
+    <string name="ImagesTab">IMAGES</string>
     <string name="ImportContacts">Import Contacts</string>
     <string name="InAppNotifications">In-app notifications</string>
     <string name="InAppPreview">In-App Preview</string>
@@ -1369,6 +1378,7 @@
     <string name="LanguageUnknownTitle">Insufficient data</string>
     <string name="LanguageUnofficial">Unofficial languages</string>
     <string name="LanguageUnsupportedError">There is no such language.</string>
+    <string name="LargeEmoji">Large Emoji</string>
     <string name="LastName">Last name (optional)</string>
     <string name="LastSeen">last seen</string>
     <string name="LastSeenContacts">My Contacts</string>
@@ -1433,6 +1443,7 @@
     <string name="LoginPassword">Password</string>
     <string name="LoginPasswordText">You have enabled Two-Step Verification, so your account is protected with an additional password.</string>
     <string name="Long">Long</string>
+    <string name="LoopAnimatedStickers">Loop Animated Stickers</string>
     <string name="LowDiskSpaceMessage">Your device is almost out of disk space. To free some space, you can set up Telegram to cache only recent media.</string>
     <string name="LowDiskSpaceNeverRemove">Never remove</string>
     <string name="LowDiskSpaceTitle">Attention</string>
@@ -1461,6 +1472,12 @@
     <string name="MasksInfo">You can add masks to photos you send. To do this, open the photo editor before sending a photo.</string>
     <string name="MasksRemoved">Masks removed</string>
     <string name="May">May</string>
+    <string name="MediaSelected_few">%1$d media selected</string>
+    <string name="MediaSelected_many">%1$d media selected</string>
+    <string name="MediaSelected_one">%1$d media selected</string>
+    <string name="MediaSelected_other">%1$d media selected</string>
+    <string name="MediaSelected_two">%1$d media selected</string>
+    <string name="MediaSelected_zero">%1$d media selected</string>
     <string name="Media_few">%1$d media</string>
     <string name="Media_many">%1$d media</string>
     <string name="Media_one">%1$d media</string>
@@ -2102,6 +2119,12 @@
     <string name="PhoneOther">Other</string>
     <string name="PhoneWork">Work</string>
     <string name="PhotoCaption">Photo Caption</string>
+    <string name="PhotosSelected_few">%1$d photos selected</string>
+    <string name="PhotosSelected_many">%1$d photos selected</string>
+    <string name="PhotosSelected_one">%1$d photo selected</string>
+    <string name="PhotosSelected_other">%1$d photos selected</string>
+    <string name="PhotosSelected_two">%1$d photos selected</string>
+    <string name="PhotosSelected_zero">%1$d photos selected</string>
     <string name="Photos_few">%1$d photos</string>
     <string name="Photos_many">%1$d photos</string>
     <string name="Photos_one">%1$d photo</string>
@@ -2324,7 +2347,7 @@
     <string name="SearchFriends">Search contacts</string>
     <string name="SearchFrom">from:</string>
     <string name="SearchGifs">FIND GIFS</string>
-    <string name="SearchGifsTitle">Search GIFs</string>
+    <string name="SearchGifsTitle">Search Giphy</string>
     <string name="SearchImages">FIND IMAGES</string>
     <string name="SearchImagesInfo">WEB SEARCH</string>
     <string name="SearchImagesTitle">Search web</string>
@@ -2384,6 +2407,9 @@
     <string name="SendSelectedLocation">Send selected location</string>
     <string name="SendSticker">SEND STICKER</string>
     <string name="SendStickerPreview">Send Sticker</string>
+    <string name="SendWithoutCompression">Send without compression</string>
+    <string name="SendWithoutGrouping">Send without grouping</string>
+    <string name="SendWithoutSound">Send without sound</string>
     <string name="SendingAudio">sending audio...</string>
     <string name="SendingFile">sending a file...</string>
     <string name="SendingGame">playing a game...</string>
@@ -2465,6 +2491,17 @@
     <string name="SignUp">Sign Up</string>
     <string name="SinglePhotosHelp">Show media as separate messages</string>
     <string name="SlideToCancel">SLIDE TO CANCEL</string>
+    <string name="SlowModeHint">Slow Mode is enabled. You can send\10your next message in %1$s</string>
+    <string name="Slowmode">Slow Mode</string>
+    <string name="SlowmodeHours">%1$dh</string>
+    <string name="SlowmodeInfoOff">Choose how often members can send a message.</string>
+    <string name="SlowmodeInfoSelected">Members will be able to send only one message every %1$s.</string>
+    <string name="SlowmodeMinutes">%1$dm</string>
+    <string name="SlowmodeOff">Off</string>
+    <string name="SlowmodeSeconds">%1$ds</string>
+    <string name="SlowmodeSelectSendError">Slow Mode is enabled. You can\'t select more items.</string>
+    <string name="SlowmodeSendError">Slow Mode is enabled. You can\'t send more than one message at once.</string>
+    <string name="SlowmodeSendErrorTooLong">Sorry, this text is too long to send as one message.\10\10Slow Mode is enabled. You can\'t send more than one message at once.</string>
     <string name="SmartNotifications">Smart Notifications</string>
     <string name="SmartNotificationsAlert">Sound Alert Frequency</string>
     <string name="SmartNotificationsDetail">%1$s within %2$s</string>
@@ -2536,6 +2573,7 @@
     <string name="SyncContactsOff">Contacts from this device will not be added to this account.</string>
     <string name="SyncContactsOn">Contacts from this device will be added to this account.</string>
     <string name="SystemRoot">System Root</string>
+    <string name="TapForVideo">Tap for photo, hold for video</string>
     <string name="TapHereGifs">Tap here to access saved GIFs</string>
     <string name="TapToChange">Tap to change</string>
     <string name="TapToChangePhone">Tap to change phone number</string>
@@ -2728,6 +2766,12 @@
     <string name="VideoCaption">Video Caption</string>
     <string name="VideoDoesNotSupportStreaming">This video is not optimized for streaming. You may need to download it in full to play it.</string>
     <string name="VideoMessagesAutodownload">Video messages</string>
+    <string name="VideosSelected_few">%1$d videos selected</string>
+    <string name="VideosSelected_many">%1$d videos selected</string>
+    <string name="VideosSelected_one">%1$d video selected</string>
+    <string name="VideosSelected_other">%1$d videos selected</string>
+    <string name="VideosSelected_two">%1$d videos selected</string>
+    <string name="VideosSelected_zero">%1$d videos selected</string>
     <string name="Videos_few">%1$d videos</string>
     <string name="Videos_many">%1$d videos</string>
     <string name="Videos_one">%1$d video</string>

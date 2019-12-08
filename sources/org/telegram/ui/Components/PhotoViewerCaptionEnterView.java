@@ -425,8 +425,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     -CC.$default$onClearEmojiRecent(this);
                 }
 
-                public /* synthetic */ void onGifSelected(Object obj, Object obj2) {
-                    -CC.$default$onGifSelected(this, obj, obj2);
+                public /* synthetic */ void onGifSelected(View view, Object obj, Object obj2) {
+                    -CC.$default$onGifSelected(this, view, obj, obj2);
                 }
 
                 public /* synthetic */ void onSearchOpenClose(int i) {
@@ -437,8 +437,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     -CC.$default$onShowStickerSet(this, stickerSet, inputStickerSet);
                 }
 
-                public /* synthetic */ void onStickerSelected(Document document, Object obj) {
-                    -CC.$default$onStickerSelected(this, document, obj);
+                public /* synthetic */ void onStickerSelected(View view, Document document, Object obj) {
+                    -CC.$default$onStickerSelected(this, view, document, obj);
                 }
 
                 public /* synthetic */ void onStickerSetAdd(StickerSetCovered stickerSetCovered) {

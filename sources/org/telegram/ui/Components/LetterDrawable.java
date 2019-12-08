@@ -35,9 +35,6 @@ public class LetterDrawable extends Drawable {
         return -2;
     }
 
-    public void setAlpha(int i) {
-    }
-
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
@@ -94,5 +91,10 @@ public class LetterDrawable extends Drawable {
             }
             canvas.restore();
         }
+    }
+
+    public void setAlpha(int i) {
+        namePaint.setAlpha(i);
+        paint.setAlpha(i);
     }
 }

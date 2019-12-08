@@ -127,11 +127,6 @@ public class SimpleTextView extends View implements Callback {
             boolean z = false;
             this.textWidth = (int) Math.ceil((double) this.layout.getLineWidth(0));
             this.textHeight = this.layout.getLineBottom(0);
-            if ((this.gravity & 112) == 16) {
-                this.offsetY = (getMeasuredHeight() - this.textHeight) / 2;
-            } else {
-                this.offsetY = 0;
-            }
             if ((this.gravity & 7) == 3) {
                 this.offsetX = -((int) this.layout.getLineLeft(0));
             } else if (this.layout.getLineLeft(0) == 0.0f) {
@@ -192,6 +187,11 @@ public class SimpleTextView extends View implements Callback {
             size = this.textHeight;
         }
         setMeasuredDimension(i, size);
+        if ((this.gravity & 112) == 16) {
+            this.offsetY = (getMeasuredHeight() - this.textHeight) / 2;
+        } else {
+            this.offsetY = 0;
+        }
     }
 
     /* Access modifiers changed, original: protected */
@@ -312,11 +312,17 @@ public class SimpleTextView extends View implements Callback {
     }
 
     private boolean recreateLayoutMaybe() {
-        if (this.wasLayout && getMeasuredHeight() != 0) {
-            return createLayout(getMeasuredWidth());
+        if (!this.wasLayout || getMeasuredHeight() == 0) {
+            requestLayout();
+            return true;
         }
-        requestLayout();
-        return true;
+        boolean createLayout = createLayout((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight());
+        if ((this.gravity & 112) == 16) {
+            this.offsetY = (getMeasuredHeight() - this.textHeight) / 2;
+        } else {
+            this.offsetY = 0;
+        }
+        return createLayout;
     }
 
     public CharSequence getText() {

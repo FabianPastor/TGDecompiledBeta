@@ -185,7 +185,7 @@ public class UserCell2 extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8  */
     /* JADX WARNING: Removed duplicated region for block: B:87:0x00fc  */
     /* JADX WARNING: Removed duplicated region for block: B:86:0x00ec  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x0256  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x025e  */
     /* JADX WARNING: Removed duplicated region for block: B:16:0x002c  */
     /* JADX WARNING: Removed duplicated region for block: B:60:0x008d  */
     /* JADX WARNING: Removed duplicated region for block: B:63:0x0092  */
@@ -194,7 +194,7 @@ public class UserCell2 extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:76:0x00d0  */
     /* JADX WARNING: Removed duplicated region for block: B:86:0x00ec  */
     /* JADX WARNING: Removed duplicated region for block: B:87:0x00fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x0256  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x025e  */
     /* JADX WARNING: Missing block: B:30:0x004f, code skipped:
             if (r5.local_id != r1.local_id) goto L_0x0051;
      */
@@ -399,7 +399,7 @@ public class UserCell2 extends FrameLayout {
         r13 = r12.statusTextView;
         r0 = r12.currrntStatus;
         r13.setText(r0);
-        goto L_0x0235;
+        goto L_0x023d;
     L_0x00fc:
         r13 = "50_50";
         if (r0 == 0) goto L_0x0197;
@@ -465,7 +465,7 @@ public class UserCell2 extends FrameLayout {
         r2 = r12.statusOnlineColor;
         r1.setTextColor(r2);
         r1 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d06dd float:1.8745678E38 double:1.0531306456E-314;
+        r2 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r3 = "Online";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -474,9 +474,9 @@ public class UserCell2 extends FrameLayout {
         r2 = org.telegram.messenger.ImageLocation.getForUser(r0, r4);
         r3 = r12.avatarDrawable;
         r1.setImage(r2, r13, r3, r0);
-        goto L_0x0235;
+        goto L_0x023d;
     L_0x0197:
-        if (r3 == 0) goto L_0x0235;
+        if (r3 == 0) goto L_0x0236;
     L_0x0199:
         r0 = r12.statusTextView;
         r1 = r12.statusColor;
@@ -501,14 +501,14 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x01d1;
     L_0x01c2:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0d0259 float:1.8743334E38 double:1.0531300745E-314;
+        r1 = NUM; // 0x7f0d025a float:1.8743336E38 double:1.053130075E-314;
         r2 = "ChannelPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
         goto L_0x0228;
     L_0x01d1:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0d025c float:1.874334E38 double:1.053130076E-314;
+        r1 = NUM; // 0x7f0d025d float:1.8743342E38 double:1.0531300765E-314;
         r2 = "ChannelPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -527,7 +527,7 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x0203;
     L_0x01f4:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0d05c1 float:1.8745102E38 double:1.0531305053E-314;
+        r1 = NUM; // 0x7f0d05d2 float:1.8745137E38 double:1.0531305137E-314;
         r2 = "MegaLocation";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -538,14 +538,14 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x021a;
     L_0x020b:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0d05c2 float:1.8745104E38 double:1.053130506E-314;
+        r1 = NUM; // 0x7f0d05d3 float:1.8745139E38 double:1.053130514E-314;
         r2 = "MegaPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
         goto L_0x0228;
     L_0x021a:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0d05c5 float:1.874511E38 double:1.0531305073E-314;
+        r1 = NUM; // 0x7f0d05d6 float:1.8745145E38 double:1.0531305157E-314;
         r2 = "MegaPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -555,35 +555,40 @@ public class UserCell2 extends FrameLayout {
         r2 = r12.avatarDrawable;
         r3 = r12.currentObject;
         r0.setImage(r1, r13, r2, r3);
-    L_0x0235:
+        goto L_0x023d;
+    L_0x0236:
+        r13 = r12.avatarImageView;
+        r0 = r12.avatarDrawable;
+        r13.setImageDrawable(r0);
+    L_0x023d:
         r13 = r12.imageView;
         r13 = r13.getVisibility();
         r0 = 8;
-        if (r13 != 0) goto L_0x0243;
-    L_0x023f:
+        if (r13 != 0) goto L_0x024b;
+    L_0x0247:
         r13 = r12.currentDrawable;
-        if (r13 == 0) goto L_0x024f;
-    L_0x0243:
+        if (r13 == 0) goto L_0x0257;
+    L_0x024b:
         r13 = r12.imageView;
         r13 = r13.getVisibility();
-        if (r13 != r0) goto L_0x0261;
-    L_0x024b:
+        if (r13 != r0) goto L_0x0269;
+    L_0x0253:
         r13 = r12.currentDrawable;
-        if (r13 == 0) goto L_0x0261;
-    L_0x024f:
+        if (r13 == 0) goto L_0x0269;
+    L_0x0257:
         r13 = r12.imageView;
         r1 = r12.currentDrawable;
-        if (r1 != 0) goto L_0x0256;
-    L_0x0255:
-        goto L_0x0257;
-    L_0x0256:
+        if (r1 != 0) goto L_0x025e;
+    L_0x025d:
+        goto L_0x025f;
+    L_0x025e:
         r0 = 0;
-    L_0x0257:
+    L_0x025f:
         r13.setVisibility(r0);
         r13 = r12.imageView;
         r0 = r12.currentDrawable;
         r13.setImageResource(r0);
-    L_0x0261:
+    L_0x0269:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell2.update(int):void");

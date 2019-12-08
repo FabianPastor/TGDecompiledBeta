@@ -1442,6 +1442,11 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 }
             }
         } else {
+            if (!this.drawLinkImageView || PhotoViewer.isShowingImage(this.inlineResult)) {
+                this.letterDrawable.setAlpha(255);
+            } else {
+                this.letterDrawable.setAlpha((int) ((1.0f - this.linkImageView.getCurrentAlpha()) * 255.0f));
+            }
             intrinsicWidth = this.documentAttachType;
             if (intrinsicWidth == 3 || intrinsicWidth == 5) {
                 this.radialProgress.setProgressColor(Theme.getColor(this.buttonPressed ? "chat_inAudioSelectedProgress" : "chat_inAudioProgress"));

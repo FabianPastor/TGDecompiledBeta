@@ -41,6 +41,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.StickerSetCell;
+import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
@@ -59,6 +60,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
+    private int loopRow;
     private int masksInfoRow;
     private int masksRow;
     private boolean needReorder;
@@ -196,6 +198,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         } else if (i == StickersActivity.this.suggestInfoRow) {
                             viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
                         }
+                    } else if (itemViewType == 4 && i == StickersActivity.this.loopRow) {
+                        ((TextCheckCell) viewHolder.itemView).setTextAndCheck(LocaleController.getString("LoopAnimatedStickers", NUM), SharedConfig.loopStickers, true);
                     }
                 } else if (i == StickersActivity.this.featuredRow) {
                     i = MediaDataController.getInstance(StickersActivity.this.currentAccount).getUnreadStickerSets().size();
@@ -260,7 +264,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         public boolean isEnabled(ViewHolder viewHolder) {
             int itemViewType = viewHolder.getItemViewType();
-            return itemViewType == 0 || itemViewType == 2;
+            return itemViewType == 0 || itemViewType == 2 || itemViewType == 4;
         }
 
         public /* synthetic */ void lambda$onCreateViewHolder$1$StickersActivity$ListAdapter(View view) {
@@ -304,28 +308,29 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View textInfoPrivacyCell;
-            View textSettingsCell;
+            View view;
             String str = "windowBackgroundWhite";
-            if (i != 0) {
-                if (i == 1) {
-                    textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                } else if (i != 2) {
-                    textInfoPrivacyCell = i != 3 ? null : new ShadowSectionCell(this.mContext);
-                } else {
-                    textSettingsCell = new TextSettingsCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                }
-                textInfoPrivacyCell.setLayoutParams(new LayoutParams(-1, -2));
-                return new Holder(textInfoPrivacyCell);
+            if (i == 0) {
+                View stickerSetCell = new StickerSetCell(this.mContext, 1);
+                stickerSetCell.setBackgroundColor(Theme.getColor(str));
+                stickerSetCell.setOnOptionsClick(new -$$Lambda$StickersActivity$ListAdapter$xPbh5swVjrfEVlhBcsKoz2sSeSI(this));
+                view = stickerSetCell;
+            } else if (i == 1) {
+                view = new TextInfoPrivacyCell(this.mContext);
+                view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+            } else if (i == 2) {
+                view = new TextSettingsCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor(str));
+            } else if (i == 3) {
+                view = new ShadowSectionCell(this.mContext);
+            } else if (i != 4) {
+                view = null;
+            } else {
+                view = new TextCheckCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor(str));
             }
-            textSettingsCell = new StickerSetCell(this.mContext, 1);
-            textSettingsCell.setBackgroundColor(Theme.getColor(str));
-            textSettingsCell.setOnOptionsClick(new -$$Lambda$StickersActivity$ListAdapter$xPbh5swVjrfEVlhBcsKoz2sSeSI(this));
-            textInfoPrivacyCell = textSettingsCell;
-            textInfoPrivacyCell.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(textInfoPrivacyCell);
+            view.setLayoutParams(new LayoutParams(-1, -2));
+            return new Holder(view);
         }
 
         public int getItemViewType(int i) {
@@ -340,6 +345,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
             if (i == StickersActivity.this.stickersShadowRow || i == StickersActivity.this.suggestInfoRow) {
                 return 3;
+            }
+            if (i == StickersActivity.this.loopRow) {
+                return 4;
             }
             return 0;
         }
@@ -437,6 +445,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             builder.setTitle(LocaleController.getString("SuggestStickers", NUM));
             builder.setItems(new CharSequence[]{LocaleController.getString("SuggestStickersAll", NUM), LocaleController.getString("SuggestStickersInstalled", NUM), LocaleController.getString("SuggestStickersNone", NUM)}, new -$$Lambda$StickersActivity$43apBJTj1nQwZFS8l5r8_cQqass(this));
             showDialog(builder.create());
+        } else if (i == this.loopRow) {
+            SharedConfig.toggleLoopStickers();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(SharedConfig.loopStickers);
+            }
         }
     }
 
@@ -478,10 +491,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private void updateRows() {
         int i;
         this.rowCount = 0;
+        this.suggestInfoRow = -1;
         if (this.currentType == 0) {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.suggestRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.loopRow = i;
             i = this.rowCount;
             this.rowCount = i + 1;
             this.featuredRow = i;
@@ -499,6 +516,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.featuredInfoRow = -1;
             this.masksRow = -1;
             this.masksInfoRow = -1;
+            this.loopRow = -1;
         }
         if (MediaDataController.getInstance(this.currentAccount).getArchivedStickersCount(this.currentType) != 0) {
             i = this.rowCount;
@@ -521,9 +539,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.stickersStartRow = i2;
             this.stickersEndRow = i2 + stickerSets.size();
             this.rowCount += stickerSets.size();
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.stickersShadowRow = i;
+            i2 = this.rowCount;
+            this.rowCount = i2 + 1;
+            this.stickersShadowRow = i2;
         }
         ListAdapter listAdapter = this.listAdapter;
         if (listAdapter != null) {
@@ -540,39 +558,46 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[19];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{StickerSetCell.class, TextSettingsCell.class}, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1 = new ThemeDescription[22];
+        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{StickerSetCell.class, TextSettingsCell.class, TextCheckCell.class}, null, null, null, "windowBackgroundWhite");
+        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
+        r1[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
+        r1[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
+        r1[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
+        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
+        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        r1[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        r1[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
         View view = this.listView;
-        Class[] clsArr = new Class[]{TextInfoPrivacyCell.class};
+        Class[] clsArr = new Class[]{TextCheckCell.class};
         String[] strArr = new String[1];
         strArr[0] = "textView";
-        themeDescriptionArr[10] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayText4");
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteLinkText");
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[9] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlackText");
+        view = this.listView;
+        clsArr = new Class[]{TextCheckCell.class};
+        strArr = new String[1];
+        strArr[0] = "checkBox";
+        r1[10] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "switchTrack");
+        r1[11] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
+        r1[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1[13] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        r1[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteLinkText");
+        r1[15] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
         view = this.listView;
         clsArr = new Class[]{TextSettingsCell.class};
         strArr = new String[1];
         strArr[0] = "valueTextView";
-        themeDescriptionArr[13] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteValueText");
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
+        r1[16] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteValueText");
+        r1[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1[18] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[19] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
         view = this.listView;
         int i = ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE;
         clsArr = new Class[]{StickerSetCell.class};
         strArr = new String[1];
         strArr[0] = "optionsButton";
-        themeDescriptionArr[17] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "stickers_menuSelector");
-        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"optionsButton"}, null, null, null, "stickers_menu");
-        return themeDescriptionArr;
+        r1[20] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "stickers_menuSelector");
+        r1[21] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"optionsButton"}, null, null, null, "stickers_menu");
+        return r1;
     }
 }

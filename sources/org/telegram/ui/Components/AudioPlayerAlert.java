@@ -542,11 +542,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.avatarContainer.setSubtitle(LocaleController.getString("AudioTitle", NUM));
         this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
         ActionBarMenu createMenu = this.actionBar.createMenu();
-        createMenu.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         this.menuItem = createMenu.addItem(0, NUM);
         this.menuItem.addSubItem(1, NUM, LocaleController.getString("Forward", NUM));
         this.menuItem.addSubItem(2, NUM, LocaleController.getString("ShareFile", NUM));
         this.menuItem.addSubItem(4, NUM, LocaleController.getString("ShowInChat", NUM));
+        this.menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         this.menuItem.setTranslationX((float) AndroidUtilities.dp(48.0f));
         this.menuItem.setAlpha(0.0f);
         this.searchItem = createMenu.addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
@@ -654,7 +654,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.optionsButton = new ActionBarMenuItem(context2, null, 0, Theme.getColor("player_actionBarItems"));
         this.optionsButton.setLongClickEnabled(false);
         this.optionsButton.setIcon(NUM);
-        this.optionsButton.setAdditionalOffset(-AndroidUtilities.dp(120.0f));
+        this.optionsButton.setAdditionalYOffset(-AndroidUtilities.dp(120.0f));
         this.playerLayout.addView(this.optionsButton, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, 19.0f, 10.0f, 0.0f));
         this.optionsButton.addSubItem(1, NUM, LocaleController.getString("Forward", NUM));
         this.optionsButton.addSubItem(2, NUM, LocaleController.getString("ShareFile", NUM));
@@ -697,7 +697,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.shuffleButton = actionBarMenuItem;
         viewArr[0] = actionBarMenuItem;
         this.shuffleButton.setLongClickEnabled(false);
-        this.shuffleButton.setAdditionalOffset(-AndroidUtilities.dp(10.0f));
+        this.shuffleButton.setAdditionalYOffset(-AndroidUtilities.dp(10.0f));
         anonymousClass6.addView(this.shuffleButton, LayoutHelper.createFrame(48, 48, 51));
         this.shuffleButton.setOnClickListener(new -$$Lambda$AudioPlayerAlert$vDsQnotDAAYl8VqVL3Roz4WO8JM(this));
         TextView addSubItem = this.shuffleButton.addSubItem(1, LocaleController.getString("ReverseOrder", NUM));
@@ -998,9 +998,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.isInFullMode ^= 1;
         this.listView.setScrollEnabled(false);
         if (this.isInFullMode) {
-            this.shuffleButton.setAdditionalOffset(-AndroidUtilities.dp(68.0f));
+            this.shuffleButton.setAdditionalYOffset(-AndroidUtilities.dp(68.0f));
         } else {
-            this.shuffleButton.setAdditionalOffset(-AndroidUtilities.dp(10.0f));
+            this.shuffleButton.setAdditionalYOffset(-AndroidUtilities.dp(10.0f));
         }
     }
 
@@ -1174,7 +1174,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     L_0x00b3:
         r7 = r6.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r0 = "ShareFile";
-        r2 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
+        r2 = NUM; // 0x7f0d0991 float:1.8747082E38 double:1.0531309875E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r0 = android.content.Intent.createChooser(r1, r0);	 Catch:{ Exception -> 0x00f9 }
         r1 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -1189,11 +1189,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r7.setTitle(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "OK";
-        r2 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
+        r2 = NUM; // 0x7f0d06eb float:1.8745707E38 double:1.0531306525E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r7.setPositiveButton(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r0 = "PleaseDownload";
-        r1 = NUM; // 0x7f0d0849 float:1.8746417E38 double:1.0531308255E-314;
+        r1 = NUM; // 0x7f0d0860 float:1.8746463E38 double:1.053130837E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r7.setMessage(r0);	 Catch:{ Exception -> 0x00f9 }
         r7.show();	 Catch:{ Exception -> 0x00f9 }

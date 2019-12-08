@@ -128,6 +128,7 @@ public class NotificationCenter {
     public static final int replaceMessagesObjects;
     public static final int replyMessagesDidLoad;
     public static final int screenshotTook;
+    public static final int sendingMessagesChanged;
     public static final int startAllHeavyOperations;
     public static final int stickersDidLoad;
     public static final int stopAllHeavyOperations;
@@ -396,6 +397,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         startAllHeavyOperations = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        sendingMessagesChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoad = i;

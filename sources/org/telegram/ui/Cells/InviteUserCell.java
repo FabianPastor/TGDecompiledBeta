@@ -45,9 +45,8 @@ public class InviteUserCell extends FrameLayout {
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
         if (z) {
-            this.checkBox = new CheckBox2(context2);
+            this.checkBox = new CheckBox2(context2, 21);
             this.checkBox.setColor(null, "windowBackgroundWhite", "checkboxCheck");
-            this.checkBox.setSize(21);
             this.checkBox.setDrawUnchecked(false);
             this.checkBox.setDrawBackgroundAsArc(3);
             CheckBox2 checkBox2 = this.checkBox;

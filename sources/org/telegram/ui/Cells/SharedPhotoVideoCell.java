@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build.VERSION;
+import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -89,10 +90,9 @@ public class SharedPhotoVideoCell extends FrameLayout {
             this.selector = new View(context);
             this.selector.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             addView(this.selector, LayoutHelper.createFrame(-1, -1.0f));
-            this.checkBox = new CheckBox2(context);
+            this.checkBox = new CheckBox2(context, 21);
             this.checkBox.setVisibility(4);
             this.checkBox.setColor(null, "sharedMedia_photoPlaceholder", "checkboxCheck");
-            this.checkBox.setSize(21);
             this.checkBox.setDrawUnchecked(false);
             this.checkBox.setDrawBackgroundAsArc(1);
             addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 1.0f, 1.0f, 0.0f));
@@ -121,16 +121,18 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 AnimatorSet animatorSet2 = this.animator;
                 Animator[] animatorArr = new Animator[2];
                 FrameLayout frameLayout = this.container;
+                Property property = View.SCALE_X;
                 float[] fArr = new float[1];
                 fArr[0] = z ? 0.81f : 1.0f;
-                animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, "scaleX", fArr);
+                animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
                 frameLayout = this.container;
+                property = View.SCALE_Y;
                 fArr = new float[1];
                 if (z) {
                     f = 0.81f;
                 }
                 fArr[0] = f;
-                animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, "scaleY", fArr);
+                animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
                 animatorSet2.playTogether(animatorArr);
                 this.animator.setDuration(200);
                 this.animator.addListener(new AnimatorListenerAdapter() {

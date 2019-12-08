@@ -153,7 +153,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public void sendSticker(Document document, Object obj) {
-            EmojiView.this.delegate.onStickerSelected(document, obj);
+            EmojiView.this.delegate.onStickerSelected(null, document, obj);
         }
 
         public void openSet(InputStickerSet inputStickerSet, boolean z) {
@@ -164,9 +164,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
         public void sendGif(Object obj) {
             if (EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifAdapter) {
-                EmojiView.this.delegate.onGifSelected(obj, "gif");
+                EmojiView.this.delegate.onGifSelected(null, obj, "gif");
             } else if (EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifSearchAdapter) {
-                EmojiView.this.delegate.onGifSelected(obj, EmojiView.this.gifSearchAdapter.bot);
+                EmojiView.this.delegate.onGifSelected(null, obj, EmojiView.this.gifSearchAdapter.bot);
             }
         }
 
@@ -479,7 +479,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             public static void $default$onClearEmojiRecent(EmojiViewDelegate emojiViewDelegate) {
             }
 
-            public static void $default$onGifSelected(EmojiViewDelegate emojiViewDelegate, Object obj, Object obj2) {
+            public static void $default$onGifSelected(EmojiViewDelegate emojiViewDelegate, View view, Object obj, Object obj2) {
             }
 
             public static void $default$onSearchOpenClose(EmojiViewDelegate emojiViewDelegate, int i) {
@@ -488,7 +488,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             public static void $default$onShowStickerSet(EmojiViewDelegate emojiViewDelegate, StickerSet stickerSet, InputStickerSet inputStickerSet) {
             }
 
-            public static void $default$onStickerSelected(EmojiViewDelegate emojiViewDelegate, Document document, Object obj) {
+            public static void $default$onStickerSelected(EmojiViewDelegate emojiViewDelegate, View view, Document document, Object obj) {
             }
 
             public static void $default$onStickerSetAdd(EmojiViewDelegate emojiViewDelegate, StickerSetCovered stickerSetCovered) {
@@ -517,13 +517,13 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
         void onEmojiSelected(String str);
 
-        void onGifSelected(Object obj, Object obj2);
+        void onGifSelected(View view, Object obj, Object obj2);
 
         void onSearchOpenClose(int i);
 
         void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet);
 
-        void onStickerSelected(Document document, Object obj);
+        void onStickerSelected(View view, Document document, Object obj);
 
         void onStickerSetAdd(StickerSetCovered stickerSetCovered);
 
@@ -4173,7 +4173,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 Adapter adapter = this.gifGridView.getAdapter();
                 Adapter adapter2 = this.gifSearchAdapter;
                 if (adapter == adapter2 && i >= 0 && i < adapter2.results.size()) {
-                    this.delegate.onGifSelected(this.gifSearchAdapter.results.get(i), this.gifSearchAdapter.bot);
+                    this.delegate.onGifSelected(view, this.gifSearchAdapter.results.get(i), this.gifSearchAdapter.bot);
                     this.recentGifs = MediaDataController.getInstance(this.currentAccount).getRecentGifs();
                     GifAdapter gifAdapter = this.gifAdapter;
                     if (gifAdapter != null) {
@@ -4181,7 +4181,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     }
                 }
             } else if (i >= 0 && i < this.recentGifs.size()) {
-                this.delegate.onGifSelected(this.recentGifs.get(i), "gif");
+                this.delegate.onGifSelected(view, this.recentGifs.get(i), "gif");
             }
         }
     }
@@ -4205,7 +4205,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
             if (!stickerEmojiCell.isDisabled()) {
                 stickerEmojiCell.disable();
-                this.delegate.onStickerSelected(stickerEmojiCell.getSticker(), stickerEmojiCell.getParentObject());
+                this.delegate.onStickerSelected(stickerEmojiCell, stickerEmojiCell.getSticker(), stickerEmojiCell.getParentObject());
             }
         }
     }
@@ -5388,27 +5388,26 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
     }
 
-    public void updateUIColors() {
+    public void updateColors() {
         Drawable[] drawableArr;
         String str;
-        String str2;
-        String str3 = "chat_emojiPanelBackground";
+        String str2 = "chat_emojiPanelBackground";
         if (AndroidUtilities.isInMultiwindow || this.forseMultiwindowLayout) {
             Drawable background = getBackground();
             if (background != null) {
-                background.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str3), Mode.MULTIPLY));
+                background.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str2), Mode.MULTIPLY));
             }
         } else {
-            setBackgroundColor(Theme.getColor(str3));
+            setBackgroundColor(Theme.getColor(str2));
             if (this.needEmojiSearch) {
-                this.bottomTabContainerBackground.setBackgroundColor(Theme.getColor(str3));
+                this.bottomTabContainerBackground.setBackgroundColor(Theme.getColor(str2));
             }
         }
         ScrollSlidingTabStrip scrollSlidingTabStrip = this.emojiTabs;
-        String str4 = "chat_emojiPanelShadowLine";
+        String str3 = "chat_emojiPanelShadowLine";
         if (scrollSlidingTabStrip != null) {
-            scrollSlidingTabStrip.setBackgroundColor(Theme.getColor(str3));
-            this.emojiTabsShadow.setBackgroundColor(Theme.getColor(str4));
+            scrollSlidingTabStrip.setBackgroundColor(Theme.getColor(str2));
+            this.emojiTabsShadow.setBackgroundColor(Theme.getColor(str3));
         }
         for (int i = 0; i < 3; i++) {
             SearchField searchField;
@@ -5420,14 +5419,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 searchField = this.gifSearchField;
             }
             if (searchField != null) {
-                searchField.backgroundView.setBackgroundColor(Theme.getColor(str3));
-                searchField.shadowView.setBackgroundColor(Theme.getColor(str4));
-                String str5 = "chat_emojiSearchIcon";
-                searchField.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str5), Mode.MULTIPLY));
-                searchField.searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str5), Mode.MULTIPLY));
+                searchField.backgroundView.setBackgroundColor(Theme.getColor(str2));
+                searchField.shadowView.setBackgroundColor(Theme.getColor(str3));
+                String str4 = "chat_emojiSearchIcon";
+                searchField.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str4), Mode.MULTIPLY));
+                searchField.searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str4), Mode.MULTIPLY));
                 Theme.setDrawableColorByKey(searchField.searchBackground.getBackground(), "chat_emojiSearchBackground");
                 searchField.searchBackground.invalidate();
-                searchField.searchEditText.setHintTextColor(Theme.getColor(str5));
+                searchField.searchEditText.setHintTextColor(Theme.getColor(str4));
                 searchField.searchEditText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             }
         }
@@ -5437,38 +5436,40 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
         RecyclerListView recyclerListView = this.emojiGridView;
         if (recyclerListView != null) {
-            recyclerListView.setGlowColor(Theme.getColor(str3));
+            recyclerListView.setGlowColor(Theme.getColor(str2));
         }
         recyclerListView = this.stickersGridView;
         if (recyclerListView != null) {
-            recyclerListView.setGlowColor(Theme.getColor(str3));
+            recyclerListView.setGlowColor(Theme.getColor(str2));
         }
         recyclerListView = this.trendingGridView;
         if (recyclerListView != null) {
-            recyclerListView.setGlowColor(Theme.getColor(str3));
+            recyclerListView.setGlowColor(Theme.getColor(str2));
         }
         ScrollSlidingTabStrip scrollSlidingTabStrip2 = this.stickersTab;
         if (scrollSlidingTabStrip2 != null) {
             scrollSlidingTabStrip2.setIndicatorColor(Theme.getColor("chat_emojiPanelStickerPackSelectorLine"));
-            this.stickersTab.setUnderlineColor(Theme.getColor(str4));
-            this.stickersTab.setBackgroundColor(Theme.getColor(str3));
+            this.stickersTab.setUnderlineColor(Theme.getColor(str3));
+            this.stickersTab.setBackgroundColor(Theme.getColor(str2));
         }
         ImageView imageView = this.backspaceButton;
-        String str6 = "chat_emojiPanelBackspace";
+        String str5 = "chat_emojiPanelBackspace";
         if (imageView != null) {
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str6), Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str5), Mode.MULTIPLY));
+            Theme.setSelectorDrawableColor(this.backspaceButton.getBackground(), Theme.getColor(str2), false);
+            Theme.setSelectorDrawableColor(this.backspaceButton.getBackground(), Theme.getColor(str2), true);
         }
-        imageView = this.stickerSettingsButton;
-        if (imageView != null) {
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str6), Mode.MULTIPLY));
+        ImageView imageView2 = this.stickerSettingsButton;
+        if (imageView2 != null) {
+            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str5), Mode.MULTIPLY));
         }
-        imageView = this.searchButton;
-        if (imageView != null) {
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str6), Mode.MULTIPLY));
+        imageView2 = this.searchButton;
+        if (imageView2 != null) {
+            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str5), Mode.MULTIPLY));
         }
         View view = this.shadowLine;
         if (view != null) {
-            view.setBackgroundColor(Theme.getColor(str4));
+            view.setBackgroundColor(Theme.getColor(str3));
         }
         TextView textView = this.mediaBanTooltip;
         if (textView != null) {
@@ -5484,31 +5485,31 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         int i2 = 0;
         while (true) {
             drawableArr = this.tabIcons;
-            str = "chat_emojiPanelIconSelected";
+            str5 = "chat_emojiPanelIconSelected";
             if (i2 >= drawableArr.length) {
                 break;
             }
             Theme.setEmojiDrawableColor(drawableArr[i2], Theme.getColor("chat_emojiBottomPanelIcon"), false);
-            Theme.setEmojiDrawableColor(this.tabIcons[i2], Theme.getColor(str), true);
+            Theme.setEmojiDrawableColor(this.tabIcons[i2], Theme.getColor(str5), true);
             i2++;
         }
         i2 = 0;
         while (true) {
             drawableArr = this.emojiIcons;
-            str2 = "chat_emojiPanelIcon";
+            str = "chat_emojiPanelIcon";
             if (i2 >= drawableArr.length) {
                 break;
             }
-            Theme.setEmojiDrawableColor(drawableArr[i2], Theme.getColor(str2), false);
-            Theme.setEmojiDrawableColor(this.emojiIcons[i2], Theme.getColor(str), true);
+            Theme.setEmojiDrawableColor(drawableArr[i2], Theme.getColor(str), false);
+            Theme.setEmojiDrawableColor(this.emojiIcons[i2], Theme.getColor(str5), true);
             i2++;
         }
         i2 = 0;
         while (true) {
             drawableArr = this.stickerIcons;
             if (i2 < drawableArr.length) {
-                Theme.setEmojiDrawableColor(drawableArr[i2], Theme.getColor(str2), false);
-                Theme.setEmojiDrawableColor(this.stickerIcons[i2], Theme.getColor(str), true);
+                Theme.setEmojiDrawableColor(drawableArr[i2], Theme.getColor(str), false);
+                Theme.setEmojiDrawableColor(this.stickerIcons[i2], Theme.getColor(str5), true);
                 i2++;
             } else {
                 return;

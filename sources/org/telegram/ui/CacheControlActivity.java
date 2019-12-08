@@ -1,11 +1,7 @@
 package org.telegram.ui;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -14,14 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.ClearCacheService;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -104,7 +99,8 @@ public class CacheControlActivity extends BaseFragment {
                     }
                 } else if (i == CacheControlActivity.this.keepMediaRow) {
                     String formatPluralString;
-                    i = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
+                    MessagesController.getGlobalMainSettings();
+                    i = SharedConfig.keepMedia;
                     if (i == 0) {
                         formatPluralString = LocaleController.formatPluralString("Weeks", 1);
                     } else if (i == 1) {
@@ -476,28 +472,20 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$null$4$CacheControlActivity(DialogInterface dialogInterface, int i) {
-        Editor edit = MessagesController.getGlobalMainSettings().edit();
-        String str = "keep_media";
         if (i == 0) {
-            edit.putInt(str, 3);
+            SharedConfig.setKeepMedia(3);
         } else if (i == 1) {
-            edit.putInt(str, 0);
+            SharedConfig.setKeepMedia(0);
         } else if (i == 2) {
-            edit.putInt(str, 1);
+            SharedConfig.setKeepMedia(1);
         } else if (i == 3) {
-            edit.putInt(str, 2);
+            SharedConfig.setKeepMedia(2);
         }
-        edit.commit();
         ListAdapter listAdapter = this.listAdapter;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
-        PendingIntent service = PendingIntent.getService(ApplicationLoader.applicationContext, 1, new Intent(ApplicationLoader.applicationContext, ClearCacheService.class), 0);
-        AlarmManager alarmManager = (AlarmManager) ApplicationLoader.applicationContext.getSystemService("alarm");
-        alarmManager.cancel(service);
-        if (i != 3) {
-            alarmManager.setInexactRepeating(0, 0, 86400000, service);
-        }
+        SharedConfig.checkKeepMedia();
     }
 
     public /* synthetic */ void lambda$null$7$CacheControlActivity(DialogInterface dialogInterface, int i) {
@@ -511,8 +499,8 @@ public class CacheControlActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e5 A:{Catch:{ Exception -> 0x0240, all -> 0x023c }} */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e5 A:{Catch:{ Exception -> 0x0240, all -> 0x023c }} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01ef A:{Catch:{ Exception -> 0x0240, all -> 0x023c }} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x023c A:{Splitter:B:18:0x0083, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x023c A:{Splitter:B:18:0x0083, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x023c A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:18:0x0083} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x023c A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:18:0x0083} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:40:0x0117, code skipped:
             r0 = e;

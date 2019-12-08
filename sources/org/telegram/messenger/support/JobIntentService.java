@@ -17,6 +17,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.telegram.messenger.FileLog;
 
 public abstract class JobIntentService extends Service {
     static final boolean DEBUG = false;
@@ -43,7 +44,10 @@ public abstract class JobIntentService extends Service {
                     return null;
                 }
                 JobIntentService.this.onHandleWork(dequeueWork.getIntent());
-                dequeueWork.complete();
+                try {
+                    dequeueWork.complete();
+                } catch (Throwable unused) {
+                }
             }
         }
 
@@ -155,8 +159,13 @@ public abstract class JobIntentService extends Service {
             synchronized (this) {
                 if (!this.mServiceProcessing) {
                     this.mServiceProcessing = true;
-                    this.mRunWakeLock.acquire(120000);
-                    this.mLaunchWakeLock.release();
+                    try {
+                        this.mRunWakeLock.acquire(120000);
+                        this.mLaunchWakeLock.release();
+                    } catch (Throwable th) {
+                        FileLog.e(th);
+                        this.mServiceProcessing = false;
+                    }
                 }
             }
         }

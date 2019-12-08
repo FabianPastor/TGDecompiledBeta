@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
@@ -142,6 +143,9 @@ public class PollEditTextCell extends FrameLayout {
             imageView.setTag(null);
         }
         this.textView.setText(str);
+        if (!TextUtils.isEmpty(str)) {
+            this.textView.setSelection(str.length());
+        }
         this.textView.setHint(str2);
         this.needDivider = z;
         setWillNotDraw(z ^ 1);

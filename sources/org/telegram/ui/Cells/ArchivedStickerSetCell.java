@@ -14,9 +14,11 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
+import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -92,25 +94,34 @@ public class ArchivedStickerSetCell extends FrameLayout {
         setWillNotDraw(this.needDivider ^ 1);
         this.textView.setText(this.stickersSet.set.title);
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", stickerSetCovered.set.count));
-        Document document = stickerSetCovered.cover;
-        PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90) : null;
-        if (closestPhotoSizeWithSize == null || closestPhotoSizeWithSize.location == null) {
-            if (stickerSetCovered.covers.isEmpty()) {
-                this.imageView.setImage(null, null, "webp", null, (Object) stickerSetCovered);
+        TLObject tLObject = stickerSetCovered.cover;
+        if (tLObject == null) {
+            tLObject = !stickerSetCovered.covers.isEmpty() ? (Document) stickerSetCovered.covers.get(0) : null;
+        }
+        if (tLObject != null) {
+            ImageLocation forDocument;
+            PhotoSize photoSize = stickerSetCovered.set.thumb;
+            if (!(photoSize instanceof TL_photoSize)) {
+                photoSize = tLObject;
+            }
+            boolean z2 = photoSize instanceof Document;
+            if (z2) {
+                forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLObject.thumbs, 90), tLObject);
+            } else {
+                forDocument = ImageLocation.getForSticker(photoSize, tLObject);
+            }
+            if (z2 && MessageObject.isAnimatedStickerDocument(tLObject)) {
+                this.imageView.setImage(ImageLocation.getForDocument(tLObject), "50_50", forDocument, null, 0, stickerSetCovered);
+                return;
+            } else if (forDocument == null || !forDocument.lottieAnimation) {
+                this.imageView.setImage(forDocument, "50_50", "webp", null, (Object) stickerSetCovered);
+                return;
+            } else {
+                this.imageView.setImage(forDocument, "50_50", "tgs", null, (Object) stickerSetCovered);
                 return;
             }
-            document = (Document) stickerSetCovered.covers.get(0);
-            PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
-            if (MessageObject.canAutoplayAnimatedSticker(document)) {
-                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), null, 0, stickerSetCovered);
-            } else {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), null, "webp", null, (Object) stickerSetCovered);
-            }
-        } else if (MessageObject.canAutoplayAnimatedSticker(stickerSetCovered.cover)) {
-            this.imageView.setImage(ImageLocation.getForDocument(stickerSetCovered.cover), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, stickerSetCovered.cover), null, 0, stickerSetCovered);
-        } else {
-            this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, stickerSetCovered.cover), null, "webp", null, (Object) stickerSetCovered);
         }
+        this.imageView.setImage(null, null, "webp", null, (Object) stickerSetCovered);
     }
 
     public void setOnCheckClick(OnCheckedChangeListener onCheckedChangeListener) {

@@ -107,6 +107,10 @@ public class CheckBox extends View {
         }
     }
 
+    public void setStrokeWidth(int i) {
+        backgroundPaint.setStrokeWidth((float) i);
+    }
+
     public float getProgress() {
         return this.progress;
     }

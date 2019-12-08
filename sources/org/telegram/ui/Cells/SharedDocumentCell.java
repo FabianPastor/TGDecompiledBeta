@@ -108,10 +108,9 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         this.progressView = new LineProgressView(context2);
         this.progressView.setProgressColor(Theme.getColor(str2));
         addView(this.progressView, LayoutHelper.createFrame(-1, 2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 72.0f, 54.0f, LocaleController.isRTL ? 72.0f : 0.0f, 0.0f));
-        this.checkBox = new CheckBox2(context2);
+        this.checkBox = new CheckBox2(context2, 21);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(null, "windowBackgroundWhite", "checkboxCheck");
-        this.checkBox.setSize(21);
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(2);
         CheckBox2 checkBox2 = this.checkBox;

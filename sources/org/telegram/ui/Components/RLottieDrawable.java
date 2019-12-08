@@ -32,7 +32,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private static final Handler uiHandler = new Handler(Looper.getMainLooper());
     private boolean applyTransformation;
     private boolean applyingLayerColors;
-    private boolean autoRepeat;
+    private int autoRepeat;
+    private int autoRepeatPlayCount;
     private volatile Bitmap backgroundBitmap;
     private Runnable cacheGenerateTask;
     private int currentFrame;
@@ -66,9 +67,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private Runnable uiRunnableGenerateCache;
     private Runnable uiRunnableLastFrame;
     private Runnable uiRunnableNoFrame;
+    private HashMap<Integer, Integer> vibrationPattern;
     private int width;
 
-    private static native long create(String str, int[] iArr, boolean z);
+    private static native long create(String str, int[] iArr, boolean z, int[] iArr2);
 
     private static native void createCache(long j, Bitmap bitmap, int i, int i2, int i3);
 
@@ -125,10 +127,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2) {
+        this(file, i, i2, z, z2, null);
+    }
+
+    public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2, int[] iArr) {
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap();
         this.pendingColorUpdates = new HashMap();
-        this.autoRepeat = true;
+        this.autoRepeat = 1;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
         this.dstRect = new Rect();
@@ -200,30 +206,39 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             RLottieDrawable.this.needGenerateCache = false;
                             return;
                         }
-                        if (!RLottieDrawable.this.pendingColorUpdates.isEmpty()) {
-                            for (Entry entry : RLottieDrawable.this.pendingColorUpdates.entrySet()) {
-                                RLottieDrawable.setLayerColor(RLottieDrawable.this.nativePtr, (String) entry.getKey(), ((Integer) entry.getValue()).intValue());
+                        try {
+                            if (!RLottieDrawable.this.pendingColorUpdates.isEmpty()) {
+                                for (Entry entry : RLottieDrawable.this.pendingColorUpdates.entrySet()) {
+                                    RLottieDrawable.setLayerColor(RLottieDrawable.this.nativePtr, (String) entry.getKey(), ((Integer) entry.getValue()).intValue());
+                                }
+                                RLottieDrawable.this.pendingColorUpdates.clear();
                             }
-                            RLottieDrawable.this.pendingColorUpdates.clear();
+                        } catch (Exception unused) {
                         }
                         RLottieDrawable.getFrame(RLottieDrawable.this.nativePtr, RLottieDrawable.this.currentFrame, RLottieDrawable.this.backgroundBitmap, RLottieDrawable.this.width, RLottieDrawable.this.height, RLottieDrawable.this.backgroundBitmap.getRowBytes());
-                        int i = 2;
                         if (RLottieDrawable.this.metaData[2] != 0) {
                             RLottieDrawable.this.needGenerateCache = true;
                             RLottieDrawable.this.metaData[2] = 0;
                         }
                         RLottieDrawable rLottieDrawable = RLottieDrawable.this;
                         rLottieDrawable.nextRenderingBitmap = rLottieDrawable.backgroundBitmap;
-                        if (!RLottieDrawable.this.shouldLimitFps) {
-                            i = 1;
-                        }
+                        int i = RLottieDrawable.this.shouldLimitFps ? 2 : 1;
                         if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.metaData[0]) {
-                            rLottieDrawable = RLottieDrawable.this;
-                            rLottieDrawable.currentFrame = rLottieDrawable.currentFrame + i;
-                            RLottieDrawable.this.nextFrameIsLast = false;
-                        } else if (RLottieDrawable.this.autoRepeat) {
+                            if (RLottieDrawable.this.autoRepeat == 3) {
+                                RLottieDrawable.this.nextFrameIsLast = true;
+                                RLottieDrawable.this.autoRepeatPlayCount = RLottieDrawable.this.autoRepeatPlayCount + 1;
+                            } else {
+                                RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
+                                rLottieDrawable2.currentFrame = rLottieDrawable2.currentFrame + i;
+                                RLottieDrawable.this.nextFrameIsLast = false;
+                            }
+                        } else if (RLottieDrawable.this.autoRepeat == 1) {
                             RLottieDrawable.this.currentFrame = 0;
                             RLottieDrawable.this.nextFrameIsLast = false;
+                        } else if (RLottieDrawable.this.autoRepeat == 2) {
+                            RLottieDrawable.this.currentFrame = 0;
+                            RLottieDrawable.this.nextFrameIsLast = true;
+                            RLottieDrawable.this.autoRepeatPlayCount = RLottieDrawable.this.autoRepeatPlayCount + 1;
                         } else {
                             RLottieDrawable.this.nextFrameIsLast = true;
                         }
@@ -236,7 +251,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.height = i2;
         this.shouldLimitFps = z2;
         getPaint().setFlags(2);
-        this.nativePtr = create(file.getAbsolutePath(), this.metaData, z);
+        this.nativePtr = create(file.getAbsolutePath(), this.metaData, z, iArr);
         if (z && lottieCacheGenerateQueue == null) {
             lottieCacheGenerateQueue = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue());
         }
@@ -257,7 +272,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap();
         this.pendingColorUpdates = new HashMap();
-        this.autoRepeat = true;
+        this.autoRepeat = 1;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
         this.dstRect = new Rect();
@@ -292,7 +307,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             getPaint().setFlags(2);
             this.nativePtr = createWithJson(str2, str, this.metaData);
             this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
-            this.autoRepeat = false;
+            this.autoRepeat = 0;
             if (z) {
                 setAllowDecodeSingleFrame(true);
             }
@@ -391,8 +406,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.destroyWhenDone = true;
     }
 
-    public void setAutoRepeat(boolean z) {
-        this.autoRepeat = z;
+    public void setAutoRepeat(int i) {
+        if (this.autoRepeat != 2 || i != 3 || this.currentFrame == 0) {
+            this.autoRepeat = i;
+        }
     }
 
     /* Access modifiers changed, original: protected */
@@ -406,10 +423,26 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public void start() {
         if (!this.isRunning) {
-            this.isRunning = true;
-            scheduleNextGetFrame();
-            invalidateInternal();
+            if (this.autoRepeat < 2 || this.autoRepeatPlayCount == 0) {
+                this.isRunning = true;
+                scheduleNextGetFrame();
+                invalidateInternal();
+            }
         }
+    }
+
+    public boolean restart() {
+        if (this.autoRepeat < 2 || this.autoRepeatPlayCount == 0) {
+            return false;
+        }
+        this.autoRepeatPlayCount = 0;
+        this.autoRepeat = 2;
+        start();
+        return true;
+    }
+
+    public void setVibrationPattern(HashMap<Integer, Integer> hashMap) {
+        this.vibrationPattern = hashMap;
     }
 
     public void beginApplyLayerColors() {
@@ -578,6 +611,13 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 if (this.renderingBitmap == null && this.nextRenderingBitmap == null) {
                     scheduleNextGetFrame();
                 } else if (this.nextRenderingBitmap != null && ((this.renderingBitmap == null || abs >= ((long) (this.timeBetweenFrames - 6))) && isCurrentParentViewMaster())) {
+                    HashMap hashMap = this.vibrationPattern;
+                    if (!(hashMap == null || this.currentParentView == null)) {
+                        Integer num = (Integer) hashMap.get(Integer.valueOf(this.currentFrame - 1));
+                        if (num != null) {
+                            this.currentParentView.performHapticFeedback(num.intValue() == 1 ? 0 : 3, 2);
+                        }
+                    }
                     this.backgroundBitmap = this.renderingBitmap;
                     this.renderingBitmap = this.nextRenderingBitmap;
                     if (this.nextFrameIsLast) {

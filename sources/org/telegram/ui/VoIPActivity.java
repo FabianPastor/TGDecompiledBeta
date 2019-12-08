@@ -66,6 +66,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.ImageReceiver.BitmapHolder;
 import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate;
+import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate.-CC;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -257,6 +258,10 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         this.user = VoIPService.getSharedInstance().getUser();
         if (this.user.photo != null) {
             this.photoView.getImageReceiver().setDelegate(new ImageReceiverDelegate() {
+                public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
+                    -CC.$default$onAnimationReady(this, imageReceiver);
+                }
+
                 public void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2) {
                     BitmapHolder bitmapSafe = imageReceiver.getBitmapSafe();
                     if (bitmapSafe != null) {

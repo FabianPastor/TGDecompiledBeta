@@ -375,7 +375,7 @@ public class ManageChatUserCell extends FrameLayout {
         r4 = r12.statusOnlineColor;
         r13.setTextColor(r4);
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d06dd float:1.8745678E38 double:1.0531306456E-314;
+        r4 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
         r5 = "Online";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);
@@ -505,7 +505,7 @@ public class ManageChatUserCell extends FrameLayout {
         if (r13 == 0) goto L_0x0201;
     L_0x01f2:
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d05c1 float:1.8745102E38 double:1.0531305053E-314;
+        r4 = NUM; // 0x7f0d05d2 float:1.8745137E38 double:1.0531305137E-314;
         r5 = "MegaLocation";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);
@@ -516,14 +516,14 @@ public class ManageChatUserCell extends FrameLayout {
         if (r13 == 0) goto L_0x0218;
     L_0x0209:
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d05c2 float:1.8745104E38 double:1.053130506E-314;
+        r4 = NUM; // 0x7f0d05d3 float:1.8745139E38 double:1.053130514E-314;
         r5 = "MegaPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);
         goto L_0x0226;
     L_0x0218:
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d05c5 float:1.874511E38 double:1.0531305073E-314;
+        r4 = NUM; // 0x7f0d05d6 float:1.8745145E38 double:1.0531305157E-314;
         r5 = "MegaPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);

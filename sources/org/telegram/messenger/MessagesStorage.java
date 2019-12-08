@@ -92,7 +92,7 @@ import org.telegram.tgnet.TLRPC.photos_Photos;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 60;
+    private static final int LAST_DB_VERSION = 62;
     private File cacheFile;
     private SQLiteDatabase database;
     private int lastDateValue = 0;
@@ -303,7 +303,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages ON messages(uid, date, mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages ON messages(mid, out);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages ON messages(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages ON messages(mid, send_state, date) WHERE mid < 0 AND send_state = 1;").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages2 ON messages(mid, send_state, date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, parent TEXT, PRIMARY KEY (uid, type));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
@@ -344,10 +344,9 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE chats(uid INTEGER PRIMARY KEY, name TEXT, data BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE enc_chats(uid INTEGER PRIMARY KEY, user INTEGER, name TEXT, data BLOB, g BLOB, authkey BLOB, ttl INTEGER, layer INTEGER, seq_in INTEGER, seq_out INTEGER, use_count INTEGER, exchange_id INTEGER, key_date INTEGER, fprint INTEGER, fauthkey BLOB, khash BLOB, in_seq_no INTEGER, admin_id INTEGER, mtproto_seq INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE channel_admins(did INTEGER, uid INTEGER, PRIMARY KEY(did, uid))").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE channel_admins_v2(did INTEGER, uid INTEGER, rank TEXT, PRIMARY KEY(did, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE contacts(uid INTEGER PRIMARY KEY, mutual INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE blocked_users(uid INTEGER PRIMARY KEY)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE web_recent_v3(id TEXT, type INTEGER, image_url TEXT, thumb_url TEXT, local_url TEXT, width INTEGER, height INTEGER, size INTEGER, date INTEGER, document BLOB, PRIMARY KEY (id, type));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash TEXT);").stepThis().dispose();
@@ -372,7 +371,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 60").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 62").stepThis().dispose();
                 loadUnreadMessages();
                 loadPendingTasks();
                 try {
@@ -418,7 +417,7 @@ public class MessagesStorage extends BaseController {
                         FileLog.e(e2);
                     }
                 }
-                if (intValue < 60) {
+                if (intValue < 62) {
                     updateDbToLastVersion(intValue);
                 }
                 loadUnreadMessages();
@@ -468,11 +467,9 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v6(sphone, deleted);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_idx_randoms ON randoms(mid);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE IF NOT EXISTS sent_files_v2(uid TEXT, type INTEGER, data BLOB, PRIMARY KEY (uid, type))").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE IF NOT EXISTS blocked_users(uid INTEGER PRIMARY KEY)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE IF NOT EXISTS download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, PRIMARY KEY (uid, type));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE IF NOT EXISTS dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages ON messages(mid, send_state, date) WHERE mid < 0 AND send_state = 1;").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
                 this.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid < 0 AND send_state = 1").stepThis().dispose();
                 fixNotificationSettings();
@@ -737,7 +734,6 @@ public class MessagesStorage extends BaseController {
             i = 43;
         }
         if (i == 43) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins(did INTEGER, uid INTEGER, PRIMARY KEY(did, uid))").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
             i = 44;
         }
@@ -829,6 +825,19 @@ public class MessagesStorage extends BaseController {
             this.database.executeFast("ALTER TABLE dialogs ADD COLUMN data BLOB default NULL").stepThis().dispose();
             this.database.executeFast("CREATE INDEX IF NOT EXISTS folder_id_idx_dialogs ON dialogs(folder_id);").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 60").stepThis().dispose();
+            i = 60;
+        }
+        if (i == 60) {
+            this.database.executeFast("DROP TABLE IF EXISTS channel_admins;").stepThis().dispose();
+            this.database.executeFast("DROP TABLE IF EXISTS blocked_users;").stepThis().dispose();
+            this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins_v2(did INTEGER, uid INTEGER, rank TEXT, PRIMARY KEY(did, uid))").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 61").stepThis().dispose();
+            i = 61;
+        }
+        if (i == 61) {
+            this.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages;").stepThis().dispose();
+            this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages2 ON messages(mid, send_state, date);").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 62").stepThis().dispose();
         }
     }
 
@@ -1867,25 +1876,25 @@ public class MessagesStorage extends BaseController {
                     while (i4 < arrayList12.size()) {
                         ArrayList arrayList16;
                         Chat chat = (Chat) arrayList12.get(i4);
-                        if (chat == null || (!chat.left && chat.migrated_to == null)) {
+                        if (chat == null || (!ChatObject.isNotInChat(chat) && chat.migrated_to == null)) {
                             longSparseArray = longSparseArray3;
                             arrayList16 = arrayList4;
                         } else {
                             long j2 = (long) (-chat.id);
-                            sQLiteDatabase2 = this.database;
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("UPDATE dialogs SET unread_count = 0 WHERE did = ");
-                            stringBuilder.append(j2);
-                            sQLiteDatabase2.executeFast(stringBuilder.toString()).stepThis().dispose();
+                            SQLiteDatabase sQLiteDatabase3 = this.database;
+                            StringBuilder stringBuilder3 = new StringBuilder();
+                            stringBuilder3.append("UPDATE dialogs SET unread_count = 0 WHERE did = ");
+                            stringBuilder3.append(j2);
+                            sQLiteDatabase3.executeFast(stringBuilder3.toString()).stepThis().dispose();
                             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = 3 WHERE uid = %d AND mid > 0 AND read_state IN(0,2) AND out = 0", new Object[]{Long.valueOf(j2)})).stepThis().dispose();
                             arrayList12.remove(i4);
                             i4--;
                             longSparseArray = longSparseArray3;
-                            longSparseArray.remove((long) (-chat.id));
+                            longSparseArray.remove(j2);
                             int i8 = 0;
                             while (i8 < arrayList4.size()) {
                                 arrayList16 = arrayList4;
-                                if (((Message) arrayList16.get(i8)).dialog_id == ((long) (-chat.id))) {
+                                if (((Message) arrayList16.get(i8)).dialog_id == j2) {
                                     arrayList16.remove(i8);
                                     i8--;
                                 }
@@ -1895,8 +1904,8 @@ public class MessagesStorage extends BaseController {
                             arrayList16 = arrayList4;
                         }
                         i4++;
-                        arrayList4 = arrayList16;
                         longSparseArray3 = longSparseArray;
+                        arrayList4 = arrayList16;
                     }
                     longSparseArray = longSparseArray3;
                 }
@@ -2136,82 +2145,11 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void getBlockedUsers() {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$4q7FLepIWnDxVXQ6fo32wEXrjW8(this));
-    }
-
-    public /* synthetic */ void lambda$getBlockedUsers$38$MessagesStorage() {
-        try {
-            SparseIntArray sparseIntArray = new SparseIntArray();
-            ArrayList arrayList = new ArrayList();
-            SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT * FROM blocked_users WHERE 1", new Object[0]);
-            StringBuilder stringBuilder = new StringBuilder();
-            while (queryFinalized.next()) {
-                int intValue = queryFinalized.intValue(0);
-                sparseIntArray.put(intValue, 1);
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(",");
-                }
-                stringBuilder.append(intValue);
-            }
-            queryFinalized.dispose();
-            if (stringBuilder.length() != 0) {
-                getUsersInternal(stringBuilder.toString(), arrayList);
-            }
-            getMessagesController().processLoadedBlockedUsers(sparseIntArray, arrayList, true);
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-    }
-
-    public void deleteBlockedUser(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0TaEdYhzl8U-O7oEChUGdj3lNyw(this, i));
-    }
-
-    public /* synthetic */ void lambda$deleteBlockedUser$39$MessagesStorage(int i) {
-        try {
-            SQLiteDatabase sQLiteDatabase = this.database;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("DELETE FROM blocked_users WHERE uid = ");
-            stringBuilder.append(i);
-            sQLiteDatabase.executeFast(stringBuilder.toString()).stepThis().dispose();
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-    }
-
-    public void putBlockedUsers(SparseIntArray sparseIntArray, boolean z) {
-        if (sparseIntArray != null && sparseIntArray.size() != 0) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$a-e0LwnKknlA9E0BfJ3sY5J_dD0(this, z, sparseIntArray));
-        }
-    }
-
-    public /* synthetic */ void lambda$putBlockedUsers$40$MessagesStorage(boolean z, SparseIntArray sparseIntArray) {
-        if (z) {
-            try {
-                this.database.executeFast("DELETE FROM blocked_users WHERE 1").stepThis().dispose();
-            } catch (Exception e) {
-                FileLog.e(e);
-                return;
-            }
-        }
-        this.database.beginTransaction();
-        SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO blocked_users VALUES(?)");
-        int size = sparseIntArray.size();
-        for (int i = 0; i < size; i++) {
-            executeFast.requery();
-            executeFast.bindInteger(1, sparseIntArray.keyAt(i));
-            executeFast.step();
-        }
-        executeFast.dispose();
-        this.database.commitTransaction();
-    }
-
     public void deleteUserChannelHistory(int i, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$_PQj73otok1WW_acAxeuk_40Zls(this, i, i2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$3jQ0GNP_T0igRcNLlYcKgDYQ0dg(this, i, i2));
     }
 
-    public /* synthetic */ void lambda$deleteUserChannelHistory$43$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$deleteUserChannelHistory$40$MessagesStorage(int i, int i2) {
         long j = (long) (-i);
         try {
             ArrayList arrayList = new ArrayList();
@@ -2261,33 +2199,33 @@ public class MessagesStorage extends BaseController {
                 }
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$xrBSRE4KqhYgXVff8wvLv1PWOjc(this, arrayList, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$cPR5xMVYMtmyGYhYkqRZT2XUJMg(this, arrayList, i));
             markMessagesAsDeletedInternal(arrayList, i);
             updateDialogsWithDeletedMessagesInternal(arrayList, null, i);
             getFileLoader().deleteFiles(arrayList2, 0);
             if (!arrayList.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$rtGvHc_Nh4AQF_VvLc0WZKhzEHE(this, arrayList, i));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$v2uVbmQ0FBcQTbwwzD5Ge9t6SKQ(this, arrayList, i));
             }
         } catch (Exception e2) {
             FileLog.e(e2);
         }
     }
 
-    public /* synthetic */ void lambda$null$41$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$null$38$MessagesStorage(ArrayList arrayList, int i) {
         getMessagesController().markChannelDialogMessageAsDeleted(arrayList, i);
     }
 
-    public /* synthetic */ void lambda$null$42$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$null$39$MessagesStorage(ArrayList arrayList, int i) {
         getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, Integer.valueOf(i));
     }
 
     public void deleteDialog(long j, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$gHn5_xuiEvlIe5KWph9-QlfcuBk(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$PCvjtni2lFtHY5xx730KMSURCtw(this, i, j));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:85:0x0296 A:{Catch:{ Exception -> 0x0037 }} */
     /* JADX WARNING: Removed duplicated region for block: B:85:0x0296 A:{Catch:{ Exception -> 0x0037 }} */
-    public /* synthetic */ void lambda$deleteDialog$45$MessagesStorage(int r21, long r22) {
+    public /* synthetic */ void lambda$deleteDialog$42$MessagesStorage(int r21, long r22) {
         /*
         r20 = this;
         r1 = r20;
@@ -2764,7 +2702,7 @@ public class MessagesStorage extends BaseController {
         r0 = r20.getMediaDataController();	 Catch:{ Exception -> 0x0037 }
         r2 = 0;
         r0.clearBotKeyboard(r3, r2);	 Catch:{ Exception -> 0x0037 }
-        r0 = new org.telegram.messenger.-$$Lambda$MessagesStorage$eGNSKWDegqojiFgkCHhM4t6KPc8;	 Catch:{ Exception -> 0x0037 }
+        r0 = new org.telegram.messenger.-$$Lambda$MessagesStorage$taft69qXFHZ_1bEqsgURAe7JeTY;	 Catch:{ Exception -> 0x0037 }
         r0.<init>(r1);	 Catch:{ Exception -> 0x0037 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);	 Catch:{ Exception -> 0x0037 }
         goto L_0x0464;
@@ -2773,18 +2711,18 @@ public class MessagesStorage extends BaseController {
     L_0x0464:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteDialog$45$MessagesStorage(int, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteDialog$42$MessagesStorage(int, long):void");
     }
 
-    public /* synthetic */ void lambda$null$44$MessagesStorage() {
+    public /* synthetic */ void lambda$null$41$MessagesStorage() {
         getNotificationCenter().postNotificationName(NotificationCenter.needReloadRecentDialogsSearch, new Object[0]);
     }
 
     public void onDeleteQueryComplete(long j) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$9qnT2TxRdf9DxlCuMWJHZarRSno(this, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$l9YnvyCT2k4rQ6LtdN_b4yA5kC0(this, j));
     }
 
-    public /* synthetic */ void lambda$onDeleteQueryComplete$46$MessagesStorage(long j) {
+    public /* synthetic */ void lambda$onDeleteQueryComplete$43$MessagesStorage(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -2797,10 +2735,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getDialogPhotos(int i, int i2, long j, int i3) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$cZWPpHEko_cU5qbg57W0VB3uiqc(this, j, i, i2, i3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$W8lz_r0CI0wcBl4i7DvQpsQQqa8(this, j, i, i2, i3));
     }
 
-    public /* synthetic */ void lambda$getDialogPhotos$48$MessagesStorage(long j, int i, int i2, int i3) {
+    public /* synthetic */ void lambda$getDialogPhotos$45$MessagesStorage(long j, int i, int i2, int i3) {
         SQLiteCursor queryFinalized;
         if (j != 0) {
             try {
@@ -2821,18 +2759,18 @@ public class MessagesStorage extends BaseController {
             }
         }
         queryFinalized.dispose();
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesStorage$zh0hyL16UA2rjMCYsqbazYBjD4g(this, tL_photos_photos, i, i2, j, i3));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesStorage$oa6KZckQmC6yjYJ52qBSz2gUGvA(this, tL_photos_photos, i, i2, j, i3));
     }
 
-    public /* synthetic */ void lambda$null$47$MessagesStorage(photos_Photos photos_photos, int i, int i2, long j, int i3) {
+    public /* synthetic */ void lambda$null$44$MessagesStorage(photos_Photos photos_photos, int i, int i2, long j, int i3) {
         getMessagesController().processLoadedUserPhotos(photos_photos, i, i2, j, true, i3);
     }
 
     public void clearUserPhotos(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$1fRs_OhnqRmo_7LJUTfMP7QEmPg(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$6xDh4yAXlOKrnbJ1oAplhd5XKxc(this, i));
     }
 
-    public /* synthetic */ void lambda$clearUserPhotos$49$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$clearUserPhotos$46$MessagesStorage(int i) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -2845,10 +2783,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void clearUserPhoto(int i, long j) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Cj9Zle7GEzC4ItOsJHnwvLaRg2g(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$SZ9jbCeYmbRr44qpmB6ho-qi4sw(this, i, j));
     }
 
-    public /* synthetic */ void lambda$clearUserPhoto$50$MessagesStorage(int i, long j) {
+    public /* synthetic */ void lambda$clearUserPhoto$47$MessagesStorage(int i, long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -2863,10 +2801,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void resetDialogs(messages_Dialogs messages_dialogs, int i, int i2, int i3, int i4, int i5, LongSparseArray<Dialog> longSparseArray, LongSparseArray<MessageObject> longSparseArray2, Message message, int i6) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Rsj_LL8Uz4Bh77DLk8Q7Jiw37h4(this, messages_dialogs, i6, i2, i3, i4, i5, message, i, longSparseArray, longSparseArray2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Lj84DfNt9J3vj65vYWkLH7VYVvU(this, messages_dialogs, i6, i2, i3, i4, i5, message, i, longSparseArray, longSparseArray2));
     }
 
-    public /* synthetic */ void lambda$resetDialogs$52$MessagesStorage(messages_Dialogs messages_dialogs, int i, int i2, int i3, int i4, int i5, Message message, int i6, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+    public /* synthetic */ void lambda$resetDialogs$49$MessagesStorage(messages_Dialogs messages_dialogs, int i, int i2, int i3, int i4, int i5, Message message, int i6, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         messages_Dialogs messages_dialogs2 = messages_dialogs;
         Message message2 = message;
         try {
@@ -2900,7 +2838,7 @@ public class MessagesStorage extends BaseController {
                     }
                 }
             }
-            Collections.sort(arrayList2, new -$$Lambda$MessagesStorage$k30A8i0EMAqCRpnk5v4RsWWhCoc(longSparseArray3));
+            Collections.sort(arrayList2, new -$$Lambda$MessagesStorage$9DYXcI0QEFw93jimOp1ua4TiOXo(longSparseArray3));
             while (arrayList2.size() < size) {
                 arrayList2.add(0, Long.valueOf(0));
             }
@@ -3042,7 +2980,7 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    static /* synthetic */ int lambda$null$51(LongSparseArray longSparseArray, Long l, Long l2) {
+    static /* synthetic */ int lambda$null$48(LongSparseArray longSparseArray, Long l, Long l2) {
         Integer num = (Integer) longSparseArray.get(l.longValue());
         Integer num2 = (Integer) longSparseArray.get(l2.longValue());
         if (num.intValue() < num2.intValue()) {
@@ -3053,11 +2991,11 @@ public class MessagesStorage extends BaseController {
 
     public void putDialogPhotos(int i, photos_Photos photos_photos) {
         if (photos_photos != null && !photos_photos.photos.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$L4Om6tbm2x7Gby-R4CSBHE04Yg4(this, i, photos_photos));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$dmBaoEBVUXAfkurWt4XN1ZU7znw(this, i, photos_photos));
         }
     }
 
-    public /* synthetic */ void lambda$putDialogPhotos$53$MessagesStorage(int i, photos_Photos photos_photos) {
+    public /* synthetic */ void lambda$putDialogPhotos$50$MessagesStorage(int i, photos_Photos photos_photos) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -3086,10 +3024,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void emptyMessagesMedia(ArrayList<Integer> arrayList) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$bzcgnKbuFLtWEX1lODvqWEyFuDo(this, arrayList));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$JuuPaXTqDHxyOHyZv3yqLysoaxA(this, arrayList));
     }
 
-    public /* synthetic */ void lambda$emptyMessagesMedia$55$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$emptyMessagesMedia$52$MessagesStorage(ArrayList arrayList) {
         try {
             Message TLdeserialize;
             int size;
@@ -3163,7 +3101,7 @@ public class MessagesStorage extends BaseController {
                     nativeByteBuffer.reuse();
                 }
                 executeFast.dispose();
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$nCnRqYOQtwzaZ2ZNInxhVBzA2As(this, arrayList3));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$P9-5g7-aJ7QBqc_VJ5jZ0esuH0c(this, arrayList3));
             }
             getFileLoader().deleteFiles(arrayList2, 0);
         } catch (Exception e) {
@@ -3171,17 +3109,17 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$null$54$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$51$MessagesStorage(ArrayList arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             getNotificationCenter().postNotificationName(NotificationCenter.updateMessageMedia, arrayList.get(i));
         }
     }
 
     public void updateMessagePollResults(long j, TL_poll tL_poll, TL_pollResults tL_pollResults) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$zk6IBPLI4pOBatA30WuVm-5FFz4(this, j, tL_poll, tL_pollResults));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$2IwIgVnWW5Vs7XUL6n8u7Fprya0(this, j, tL_poll, tL_pollResults));
     }
 
-    public /* synthetic */ void lambda$updateMessagePollResults$56$MessagesStorage(long j, TL_poll tL_poll, TL_pollResults tL_pollResults) {
+    public /* synthetic */ void lambda$updateMessagePollResults$53$MessagesStorage(long j, TL_poll tL_poll, TL_pollResults tL_pollResults) {
         ArrayList arrayList = null;
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM polls WHERE id = %d", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -3236,10 +3174,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getNewTask(ArrayList<Integer> arrayList, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$SkcFNBx8pL2j8q0UCSVux88XNjo(this, arrayList));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$FTgTVajChXZ68bOKWpTrJMU_d_4(this, arrayList));
     }
 
-    public /* synthetic */ void lambda$getNewTask$57$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$getNewTask$54$MessagesStorage(ArrayList arrayList) {
         if (arrayList != null) {
             try {
                 String join = TextUtils.join(",", arrayList);
@@ -3272,10 +3210,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void markMentionMessageAsRead(int i, int i2, long j) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$s2Q7bjKkmqsnurRGdapKRuUwrkY(this, i, i2, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$NdiRUhIfM2_omUwC7FXbkC7OzGU(this, i, i2, j));
     }
 
-    public /* synthetic */ void lambda$markMentionMessageAsRead$58$MessagesStorage(int i, int i2, long j) {
+    public /* synthetic */ void lambda$markMentionMessageAsRead$55$MessagesStorage(int i, int i2, long j) {
         long j2 = (long) i;
         if (i2 != 0) {
             j2 |= ((long) i2) << 32;
@@ -3299,10 +3237,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void markMessageAsMention(long j) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$G2AR1YES2RX33l0g8yjj7MWOmwU(this, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7e91SgaCx3Tvuefq7j0Wss_4Grg(this, j));
     }
 
-    public /* synthetic */ void lambda$markMessageAsMention$59$MessagesStorage(long j) {
+    public /* synthetic */ void lambda$markMessageAsMention$56$MessagesStorage(long j) {
         try {
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET mention = 1, read_state = read_state & ~2 WHERE mid = %d", new Object[]{Long.valueOf(j)})).stepThis().dispose();
         } catch (Exception e) {
@@ -3311,10 +3249,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void resetMentionsCount(long j, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$QZA58f-xBct34Cb7F3baqareFec(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$oYdXH4GPpZucm58TC-q3bCmR46I(this, i, j));
     }
 
-    public /* synthetic */ void lambda$resetMentionsCount$60$MessagesStorage(int i, long j) {
+    public /* synthetic */ void lambda$resetMentionsCount$57$MessagesStorage(int i, long j) {
         if (i == 0) {
             try {
                 this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(j)})).stepThis().dispose();
@@ -3330,10 +3268,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void createTaskForMid(int i, int i2, int i3, int i4, int i5, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$KFVjweRV_KgXgJdzwgxmQRw4vps(this, i3, i4, i5, i, i2, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ZFchkNQfjY6PI9H93K3e_OqpvBI(this, i3, i4, i5, i, i2, z));
     }
 
-    public /* synthetic */ void lambda$createTaskForMid$62$MessagesStorage(int i, int i2, int i3, int i4, int i5, boolean z) {
+    public /* synthetic */ void lambda$createTaskForMid$59$MessagesStorage(int i, int i2, int i3, int i4, int i5, boolean z) {
         if (i <= i2) {
             i = i2;
         }
@@ -3347,7 +3285,7 @@ public class MessagesStorage extends BaseController {
             }
             arrayList.add(Long.valueOf(j));
             sparseArray.put(i, arrayList);
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$LSwW05o0cOEMiYABF_G0tFfSKZ0(this, z, arrayList));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$Cr8bLmThr8qfKRO5b1tbCS8nTYU(this, z, arrayList));
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
             for (i5 = 0; i5 < sparseArray.size(); i5++) {
                 int keyAt = sparseArray.keyAt(i5);
@@ -3367,7 +3305,7 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$null$61$MessagesStorage(boolean z, ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$58$MessagesStorage(boolean z, ArrayList arrayList) {
         if (!z) {
             markMessagesContentAsRead(arrayList, 0);
         }
@@ -3375,10 +3313,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void createTaskForSecretChat(int i, int i2, int i3, int i4, ArrayList<Long> arrayList) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0iUmdZ5k8jYla2OxXvPUMMd0G6M(this, arrayList, i, i4, i2, i3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$6Xpb1ARqvCA75HKnKlpk1c-S4-A(this, arrayList, i, i4, i2, i3));
     }
 
-    public /* synthetic */ void lambda$createTaskForSecretChat$64$MessagesStorage(ArrayList arrayList, int i, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$createTaskForSecretChat$61$MessagesStorage(ArrayList arrayList, int i, int i2, int i3, int i4) {
         ArrayList arrayList2 = arrayList;
         int i5 = Integer.MAX_VALUE;
         try {
@@ -3423,7 +3361,7 @@ public class MessagesStorage extends BaseController {
             }
             queryFinalized.dispose();
             if (arrayList2 != null) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$G_UdIl2qzLo-3dKfcoBBLIQUVS8(this, arrayList4));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$HaNGZilYB-ZCBxdRbbZWq9G6MCE(this, arrayList4));
             }
             if (sparseArray.size() != 0) {
                 this.database.beginTransaction();
@@ -3448,7 +3386,7 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$null$63$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$60$MessagesStorage(ArrayList arrayList) {
         markMessagesContentAsRead(arrayList, 0);
         getNotificationCenter().postNotificationName(NotificationCenter.messagesReadContent, arrayList);
     }
@@ -3648,24 +3586,24 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void updateDialogsWithReadMessages(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, ArrayList<Long> arrayList, boolean z) {
         if (!isEmpty(sparseLongArray) || !isEmpty((List) arrayList)) {
             if (z) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$IgPbgy6-ebqi0So-m2IdijRNQZs(this, sparseLongArray, sparseLongArray2, arrayList));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$nN3HdiEbpm1IQMdW7V3cpBVVldE(this, sparseLongArray, sparseLongArray2, arrayList));
             } else {
                 updateDialogsWithReadMessagesInternal(null, sparseLongArray, sparseLongArray2, arrayList);
             }
         }
     }
 
-    public /* synthetic */ void lambda$updateDialogsWithReadMessages$65$MessagesStorage(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateDialogsWithReadMessages$62$MessagesStorage(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, ArrayList arrayList) {
         updateDialogsWithReadMessagesInternal(null, sparseLongArray, sparseLongArray2, arrayList);
     }
 
     public void updateChatParticipants(ChatParticipants chatParticipants) {
         if (chatParticipants != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ul28E39n2CqjyGu1NrRVaRUiBf8(this, chatParticipants));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$D_ASTDdhwnJFq83QrFGrOPbuhQw(this, chatParticipants));
         }
     }
 
-    public /* synthetic */ void lambda$updateChatParticipants$67$MessagesStorage(ChatParticipants chatParticipants) {
+    public /* synthetic */ void lambda$updateChatParticipants$64$MessagesStorage(ChatParticipants chatParticipants) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -3686,7 +3624,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             queryFinalized.dispose();
             if (chatFull instanceof TL_chatFull) {
                 chatFull.participants = chatParticipants;
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$nxqnJkYq3vw5KhxgpTpnuTR0WR8(this, chatFull));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$RSCfHUqNo1GyDNuwKXrOvxwWC2A(this, chatFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(chatFull.getObjectSize());
                 chatFull.serializeToStream(nativeByteBuffer);
@@ -3703,50 +3641,51 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$66$MessagesStorage(ChatFull chatFull) {
+    public /* synthetic */ void lambda$null$63$MessagesStorage(ChatFull chatFull) {
         getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, chatFull, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public void loadChannelAdmins(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Vnf-RLnltCEPaLdbkpbktxt0AFA(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$zWGYKlEbE3oxegAeAsXD1kylfA0(this, i));
     }
 
-    public /* synthetic */ void lambda$loadChannelAdmins$68$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$loadChannelAdmins$65$MessagesStorage(int i) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("SELECT uid FROM channel_admins WHERE did = ");
+            stringBuilder.append("SELECT uid, rank FROM channel_admins_v2 WHERE did = ");
             stringBuilder.append(i);
             SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized(stringBuilder.toString(), new Object[0]);
-            ArrayList arrayList = new ArrayList();
+            SparseArray sparseArray = new SparseArray();
             while (queryFinalized.next()) {
-                arrayList.add(Integer.valueOf(queryFinalized.intValue(0)));
+                sparseArray.put(queryFinalized.intValue(0), queryFinalized.stringValue(1));
             }
             queryFinalized.dispose();
-            getMessagesController().processLoadedChannelAdmins(arrayList, i, true);
+            getMessagesController().processLoadedChannelAdmins(sparseArray, i, true);
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    public void putChannelAdmins(int i, ArrayList<Integer> arrayList) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$mAd0DJIW27tlUDIOzW0wIDeqyuE(this, i, arrayList));
+    public void putChannelAdmins(int i, SparseArray<String> sparseArray) {
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$--jBiop6ROXWTt-Wbj_B5J9yz6c(this, i, sparseArray));
     }
 
-    public /* synthetic */ void lambda$putChannelAdmins$69$MessagesStorage(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putChannelAdmins$66$MessagesStorage(int i, SparseArray sparseArray) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("DELETE FROM channel_admins WHERE did = ");
+            stringBuilder.append("DELETE FROM channel_admins_v2 WHERE did = ");
             stringBuilder.append(i);
             sQLiteDatabase.executeFast(stringBuilder.toString()).stepThis().dispose();
             this.database.beginTransaction();
-            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO channel_admins VALUES(?, ?)");
+            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO channel_admins_v2 VALUES(?, ?, ?)");
             long currentTimeMillis = System.currentTimeMillis() / 1000;
-            for (int i2 = 0; i2 < arrayList.size(); i2++) {
+            for (int i2 = 0; i2 < sparseArray.size(); i2++) {
                 executeFast.requery();
                 executeFast.bindInteger(1, i);
-                executeFast.bindInteger(2, ((Integer) arrayList.get(i2)).intValue());
+                executeFast.bindInteger(2, sparseArray.keyAt(i2));
+                executeFast.bindString(3, (String) sparseArray.valueAt(i2));
                 executeFast.step();
             }
             executeFast.dispose();
@@ -3757,10 +3696,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateChannelUsers(int i, ArrayList<ChannelParticipant> arrayList) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$dK1QMDFhAiUhe4t4z2CkJFVPwJo(this, i, arrayList));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$gmh9sF-88S52zsqmaJlAuBxOllA(this, i, arrayList));
     }
 
-    public /* synthetic */ void lambda$updateChannelUsers$70$MessagesStorage(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateChannelUsers$67$MessagesStorage(int i, ArrayList arrayList) {
         long j = (long) (-i);
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -3794,11 +3733,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void saveBotCache(String str, TLObject tLObject) {
         if (tLObject != null && !TextUtils.isEmpty(str)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7VZ_XJgDXdzbLiASsmURuo-C9GM(this, tLObject, str));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$g0GDbKbBJBo4Mk-5LCkQxd1psZM(this, tLObject, str));
         }
     }
 
-    public /* synthetic */ void lambda$saveBotCache$71$MessagesStorage(TLObject tLObject, String str) {
+    public /* synthetic */ void lambda$saveBotCache$68$MessagesStorage(TLObject tLObject, String str) {
         try {
             int i;
             SQLitePreparedStatement executeFast;
@@ -3837,11 +3776,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void getBotCache(String str, RequestDelegate requestDelegate) {
         if (str != null && requestDelegate != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$cYU0WnBJxesdCVkll0wOXZ3U0RE(this, getConnectionsManager().getCurrentTime(), str, requestDelegate));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$YmYOyjs0tsBC1kvjpoQ8AIm3mXg(this, getConnectionsManager().getCurrentTime(), str, requestDelegate));
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{Splitter:B:1:0x0001, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:1:0x0001} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:21:0x005d, code skipped:
             r5 = th;
@@ -3855,7 +3794,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:24:0x0061, code skipped:
             r1 = null;
      */
-    public /* synthetic */ void lambda$getBotCache$72$MessagesStorage(int r5, java.lang.String r6, org.telegram.tgnet.RequestDelegate r7) {
+    public /* synthetic */ void lambda$getBotCache$69$MessagesStorage(int r5, java.lang.String r6, org.telegram.tgnet.RequestDelegate r7) {
         /*
         r4 = this;
         r0 = 0;
@@ -3928,16 +3867,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7.run(r1, r0);
         throw r5;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getBotCache$72$MessagesStorage(int, java.lang.String, org.telegram.tgnet.RequestDelegate):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getBotCache$69$MessagesStorage(int, java.lang.String, org.telegram.tgnet.RequestDelegate):void");
     }
 
     public void loadUserInfo(User user, boolean z, int i) {
         if (user != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$YgCXdrvaSdGA1hf5LiH9nJofnsg(this, user, z, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$tq7IpBeCYjYkwzm5phDtrpzCLmM(this, user, z, i));
         }
     }
 
-    public /* synthetic */ void lambda$loadUserInfo$73$MessagesStorage(User user, boolean z, int i) {
+    public /* synthetic */ void lambda$loadUserInfo$70$MessagesStorage(User user, boolean z, int i) {
         UserFull userFull;
         Throwable e;
         User user2 = user;
@@ -3989,10 +3928,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateUserInfo(UserFull userFull, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$VXYkBnXA4FUiRp4wxPHJnwfBAPc(this, z, userFull));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$qUGoyr9OJRn0n887IISd6C5U99I(this, z, userFull));
     }
 
-    public /* synthetic */ void lambda$updateUserInfo$74$MessagesStorage(boolean z, UserFull userFull) {
+    public /* synthetic */ void lambda$updateUserInfo$71$MessagesStorage(boolean z, UserFull userFull) {
         if (z) {
             try {
                 SQLiteDatabase sQLiteDatabase = this.database;
@@ -4021,10 +3960,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateChatInfo(ChatFull chatFull, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$d0gfmXVoBhLfPpsJm2PNGRtagwc(this, chatFull, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$OKeP4q1v4z3JZ1_XKv68_dbHcic(this, chatFull, z));
     }
 
-    public /* synthetic */ void lambda$updateChatInfo$75$MessagesStorage(ChatFull chatFull, boolean z) {
+    public /* synthetic */ void lambda$updateChatInfo$72$MessagesStorage(ChatFull chatFull, boolean z) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4072,10 +4011,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateUserPinnedMessage(int i, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$g1iuRG0K-i5oYkMy9HCpNOf8FqU(this, i, i2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$JKTvar_IvqTKc0Qzs6wno7V8SYZ4(this, i, i2));
     }
 
-    public /* synthetic */ void lambda$updateUserPinnedMessage$77$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$updateUserPinnedMessage$74$MessagesStorage(int i, int i2) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4095,7 +4034,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (userFull instanceof UserFull) {
                 userFull.pinned_msg_id = i2;
                 userFull.flags |= 64;
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$6oEVGdM2xXW3N6wtIglBSuDFLWE(this, i, userFull));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$N8JJaRJQ-XeOxmqOmE1N4vyrUOw(this, i, userFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO user_settings VALUES(?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(userFull.getObjectSize());
                 userFull.serializeToStream(nativeByteBuffer);
@@ -4111,15 +4050,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$76$MessagesStorage(int i, UserFull userFull) {
+    public /* synthetic */ void lambda$null$73$MessagesStorage(int i, UserFull userFull) {
         getNotificationCenter().postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(i), userFull, null);
     }
 
     public void updateChatOnlineCount(int i, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$JoSxg9ZlDCLASSNAMEvVq_9Ro7-_Ct4Kk(this, i2, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$BICna-7VAaCSPqIfWWrzjWQ0ZfM(this, i2, i));
     }
 
-    public /* synthetic */ void lambda$updateChatOnlineCount$78$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$updateChatOnlineCount$75$MessagesStorage(int i, int i2) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE chat_settings_v2 SET online = ? WHERE uid = ?");
             executeFast.requery();
@@ -4133,10 +4072,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateChatPinnedMessage(int i, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ZKAInF8vAaa7ZvlZcI-h3lCnx34(this, i, i2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ztmgJOylrHzKLmmfzc_zHyaG2N8(this, i, i2));
     }
 
-    public /* synthetic */ void lambda$updateChatPinnedMessage$80$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$updateChatPinnedMessage$77$MessagesStorage(int i, int i2) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4162,7 +4101,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     chatFull.pinned_msg_id = i2;
                     chatFull.flags |= 64;
                 }
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$NxZU0dQWFf1s1Ei7lgvtohw5Sqw(this, chatFull));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$ZGUW3NfKCxYo6AlfLx9rvvpfRDk(this, chatFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(chatFull.getObjectSize());
                 chatFull.serializeToStream(nativeByteBuffer);
@@ -4179,15 +4118,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$79$MessagesStorage(ChatFull chatFull) {
+    public /* synthetic */ void lambda$null$76$MessagesStorage(ChatFull chatFull) {
         getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, chatFull, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public void updateChatInfo(int i, int i2, int i3, int i4, int i5) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$KNbNa8I6iljUtQSIcsWsYI2Eqos(this, i, i3, i2, i4, i5));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$LEdNU3Qn_un_qpBfsAic2DM_-_U(this, i, i3, i2, i4, i5));
     }
 
-    public /* synthetic */ void lambda$updateChatInfo$82$MessagesStorage(int i, int i2, int i3, int i4, int i5) {
+    public /* synthetic */ void lambda$updateChatInfo$79$MessagesStorage(int i, int i2, int i3, int i4, int i5) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4251,7 +4190,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     }
                 }
                 chatFull.participants.version = i5;
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$OhB9rklUh_vaW5jSFjxvzZmL4rA(this, chatFull));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$vSUND9_zfjgvr5DwoG-QrQICRyA(this, chatFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(chatFull.getObjectSize());
                 chatFull.serializeToStream(nativeByteBuffer);
@@ -4268,14 +4207,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$81$MessagesStorage(ChatFull chatFull) {
+    public /* synthetic */ void lambda$null$78$MessagesStorage(ChatFull chatFull) {
         getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, chatFull, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public boolean isMigratedChat(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$vt3IkrkFUG3bfsSimMlmGH84kQo(this, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$96p47CIy_y9hYQtLjW2J811S5Nk(this, i, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -4284,7 +4223,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return zArr[0];
     }
 
-    public /* synthetic */ void lambda$isMigratedChat$83$MessagesStorage(int i, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$isMigratedChat$80$MessagesStorage(int i, boolean[] zArr, CountDownLatch countDownLatch) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4323,290 +4262,288 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         countDownLatch.countDown();
     }
 
-    public void loadChatInfo(int i, CountDownLatch countDownLatch, boolean z, boolean z2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$VOppcN16yRL668WP3aQYIlU1CXM(this, i, countDownLatch, z, z2));
+    public ChatFull loadChatInfo(int i, CountDownLatch countDownLatch, boolean z, boolean z2) {
+        ChatFull[] chatFullArr = new ChatFull[1];
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$dIozo8kfsDHYuHDxJ-yMkb7emM0(this, i, chatFullArr, z, z2, countDownLatch));
+        if (countDownLatch != null) {
+            try {
+                countDownLatch.await();
+            } catch (Throwable unused) {
+            }
+        }
+        return chatFullArr[0];
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x0098 A:{Catch:{ Exception -> 0x0190 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x005e A:{SYNTHETIC, Splitter:B:19:0x005e} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0161 A:{Catch:{ Exception -> 0x0190 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x0176 A:{Catch:{ Exception -> 0x0190 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x0174 A:{Catch:{ Exception -> 0x0190 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:105:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:106:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:106:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x01c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x01c0  */
-    public /* synthetic */ void lambda$loadChatInfo$84$MessagesStorage(int r17, java.util.concurrent.CountDownLatch r18, boolean r19, boolean r20) {
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x008f A:{Catch:{ Exception -> 0x0186 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:13:0x0055 A:{SYNTHETIC, Splitter:B:13:0x0055} */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0168 A:{Catch:{ Exception -> 0x0186 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0166 A:{Catch:{ Exception -> 0x0186 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:97:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x01bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:? A:{SYNTHETIC, RETURN} */
+    public /* synthetic */ void lambda$loadChatInfo$81$MessagesStorage(int r18, org.telegram.tgnet.TLRPC.ChatFull[] r19, boolean r20, boolean r21, java.util.concurrent.CountDownLatch r22) {
         /*
-        r16 = this;
-        r1 = r16;
-        r3 = r17;
+        r17 = this;
+        r1 = r17;
+        r3 = r18;
         r5 = new java.util.ArrayList;
         r5.<init>();
         r2 = 0;
+        r4 = 0;
         r9 = 0;
-        r0 = r1.database;	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r4.<init>();	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r6 = "SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = ";
-        r4.append(r6);	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r4.append(r3);	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r4 = r4.toString();	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r6 = 0;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r0 = r0.queryFinalized(r4, r7);	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r4 = r0.next();	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
+        r0 = r1.database;	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r6.<init>();	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r7 = "SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = ";
+        r6.append(r7);	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r6.append(r3);	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r6 = r6.toString();	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r7 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r0 = r0.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r6 = r0.next();	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
         r7 = 2;
         r8 = 1;
-        if (r4 == 0) goto L_0x0054;
+        if (r6 == 0) goto L_0x004b;
     L_0x002d:
-        r4 = r0.byteBufferValue(r6);	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        if (r4 == 0) goto L_0x0054;
+        r6 = r0.byteBufferValue(r4);	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        if (r6 == 0) goto L_0x004b;
     L_0x0033:
-        r10 = r4.readInt32(r6);	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r10 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r4, r10, r6);	 Catch:{ Exception -> 0x0195, all -> 0x0192 }
-        r4.reuse();	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r4 = r0.intValue(r8);	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r10.pinned_msg_id = r4;	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r4 = r0.intValue(r7);	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r10.online_count = r4;	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r4 = r10;
-        goto L_0x0055;
+        r10 = r6.readInt32(r4);	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r10 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r6, r10, r4);	 Catch:{ Exception -> 0x018b, all -> 0x0188 }
+        r6.reuse();	 Catch:{ Exception -> 0x0186 }
+        r6 = r0.intValue(r8);	 Catch:{ Exception -> 0x0186 }
+        r10.pinned_msg_id = r6;	 Catch:{ Exception -> 0x0186 }
+        r6 = r0.intValue(r7);	 Catch:{ Exception -> 0x0186 }
+        r10.online_count = r6;	 Catch:{ Exception -> 0x0186 }
+        goto L_0x004c;
+    L_0x004b:
+        r10 = r2;
     L_0x004c:
-        r0 = move-exception;
-        r4 = r10;
-        goto L_0x01af;
-    L_0x0050:
-        r0 = move-exception;
-        r4 = r10;
-        goto L_0x0197;
-    L_0x0054:
-        r4 = r2;
+        r0.dispose();	 Catch:{ Exception -> 0x0186 }
+        r0 = r10 instanceof org.telegram.tgnet.TLRPC.TL_chatFull;	 Catch:{ Exception -> 0x0186 }
+        r6 = ",";
+        if (r0 == 0) goto L_0x008f;
     L_0x0055:
-        r0.dispose();	 Catch:{ Exception -> 0x0190 }
-        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_chatFull;	 Catch:{ Exception -> 0x0190 }
-        r10 = ",";
-        if (r0 == 0) goto L_0x0098;
-    L_0x005e:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0190 }
-        r0.<init>();	 Catch:{ Exception -> 0x0190 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0186 }
+        r0.<init>();	 Catch:{ Exception -> 0x0186 }
         r2 = 0;
-    L_0x0064:
-        r7 = r4.participants;	 Catch:{ Exception -> 0x0190 }
-        r7 = r7.participants;	 Catch:{ Exception -> 0x0190 }
-        r7 = r7.size();	 Catch:{ Exception -> 0x0190 }
-        if (r2 >= r7) goto L_0x0089;
-    L_0x006e:
-        r7 = r4.participants;	 Catch:{ Exception -> 0x0190 }
-        r7 = r7.participants;	 Catch:{ Exception -> 0x0190 }
-        r7 = r7.get(r2);	 Catch:{ Exception -> 0x0190 }
-        r7 = (org.telegram.tgnet.TLRPC.ChatParticipant) r7;	 Catch:{ Exception -> 0x0190 }
-        r8 = r0.length();	 Catch:{ Exception -> 0x0190 }
-        if (r8 == 0) goto L_0x0081;
-    L_0x007e:
-        r0.append(r10);	 Catch:{ Exception -> 0x0190 }
-    L_0x0081:
-        r7 = r7.user_id;	 Catch:{ Exception -> 0x0190 }
-        r0.append(r7);	 Catch:{ Exception -> 0x0190 }
+    L_0x005b:
+        r7 = r10.participants;	 Catch:{ Exception -> 0x0186 }
+        r7 = r7.participants;	 Catch:{ Exception -> 0x0186 }
+        r7 = r7.size();	 Catch:{ Exception -> 0x0186 }
+        if (r2 >= r7) goto L_0x0080;
+    L_0x0065:
+        r7 = r10.participants;	 Catch:{ Exception -> 0x0186 }
+        r7 = r7.participants;	 Catch:{ Exception -> 0x0186 }
+        r7 = r7.get(r2);	 Catch:{ Exception -> 0x0186 }
+        r7 = (org.telegram.tgnet.TLRPC.ChatParticipant) r7;	 Catch:{ Exception -> 0x0186 }
+        r8 = r0.length();	 Catch:{ Exception -> 0x0186 }
+        if (r8 == 0) goto L_0x0078;
+    L_0x0075:
+        r0.append(r6);	 Catch:{ Exception -> 0x0186 }
+    L_0x0078:
+        r7 = r7.user_id;	 Catch:{ Exception -> 0x0186 }
+        r0.append(r7);	 Catch:{ Exception -> 0x0186 }
         r2 = r2 + 1;
-        goto L_0x0064;
-    L_0x0089:
-        r2 = r0.length();	 Catch:{ Exception -> 0x0190 }
-        if (r2 == 0) goto L_0x015f;
+        goto L_0x005b;
+    L_0x0080:
+        r2 = r0.length();	 Catch:{ Exception -> 0x0186 }
+        if (r2 == 0) goto L_0x0156;
+    L_0x0086:
+        r0 = r0.toString();	 Catch:{ Exception -> 0x0186 }
+        r1.getUsersInternal(r0, r5);	 Catch:{ Exception -> 0x0186 }
+        goto L_0x0156;
     L_0x008f:
-        r0 = r0.toString();	 Catch:{ Exception -> 0x0190 }
-        r1.getUsersInternal(r0, r5);	 Catch:{ Exception -> 0x0190 }
-        goto L_0x015f;
-    L_0x0098:
-        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0190 }
-        if (r0 == 0) goto L_0x015f;
-    L_0x009c:
-        r0 = r1.database;	 Catch:{ Exception -> 0x0190 }
-        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0190 }
-        r11.<init>();	 Catch:{ Exception -> 0x0190 }
+        r0 = r10 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0186 }
+        if (r0 == 0) goto L_0x0156;
+    L_0x0093:
+        r0 = r1.database;	 Catch:{ Exception -> 0x0186 }
+        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0186 }
+        r11.<init>();	 Catch:{ Exception -> 0x0186 }
         r12 = "SELECT us.data, us.status, cu.data, cu.date FROM channel_users_v2 as cu LEFT JOIN users as us ON us.uid = cu.uid WHERE cu.did = ";
-        r11.append(r12);	 Catch:{ Exception -> 0x0190 }
+        r11.append(r12);	 Catch:{ Exception -> 0x0186 }
         r12 = -r3;
-        r11.append(r12);	 Catch:{ Exception -> 0x0190 }
+        r11.append(r12);	 Catch:{ Exception -> 0x0186 }
         r12 = " ORDER BY cu.date DESC";
-        r11.append(r12);	 Catch:{ Exception -> 0x0190 }
-        r11 = r11.toString();	 Catch:{ Exception -> 0x0190 }
-        r12 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0190 }
-        r11 = r0.queryFinalized(r11, r12);	 Catch:{ Exception -> 0x0190 }
-        r0 = new org.telegram.tgnet.TLRPC$TL_chatParticipants;	 Catch:{ Exception -> 0x0190 }
-        r0.<init>();	 Catch:{ Exception -> 0x0190 }
-        r4.participants = r0;	 Catch:{ Exception -> 0x0190 }
-    L_0x00c2:
-        r0 = r11.next();	 Catch:{ Exception -> 0x0190 }
-        if (r0 == 0) goto L_0x0128;
-    L_0x00c8:
-        r0 = r11.byteBufferValue(r6);	 Catch:{ Exception -> 0x0123 }
-        if (r0 == 0) goto L_0x00da;
-    L_0x00ce:
-        r12 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0123 }
-        r12 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r0, r12, r6);	 Catch:{ Exception -> 0x0123 }
-        r0.reuse();	 Catch:{ Exception -> 0x0123 }
-        goto L_0x00db;
-    L_0x00da:
+        r11.append(r12);	 Catch:{ Exception -> 0x0186 }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x0186 }
+        r12 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0186 }
+        r11 = r0.queryFinalized(r11, r12);	 Catch:{ Exception -> 0x0186 }
+        r0 = new org.telegram.tgnet.TLRPC$TL_chatParticipants;	 Catch:{ Exception -> 0x0186 }
+        r0.<init>();	 Catch:{ Exception -> 0x0186 }
+        r10.participants = r0;	 Catch:{ Exception -> 0x0186 }
+    L_0x00b9:
+        r0 = r11.next();	 Catch:{ Exception -> 0x0186 }
+        if (r0 == 0) goto L_0x011f;
+    L_0x00bf:
+        r0 = r11.byteBufferValue(r4);	 Catch:{ Exception -> 0x011a }
+        if (r0 == 0) goto L_0x00d1;
+    L_0x00c5:
+        r12 = r0.readInt32(r4);	 Catch:{ Exception -> 0x011a }
+        r12 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r0, r12, r4);	 Catch:{ Exception -> 0x011a }
+        r0.reuse();	 Catch:{ Exception -> 0x011a }
+        goto L_0x00d2;
+    L_0x00d1:
         r12 = r2;
-    L_0x00db:
-        r0 = r11.byteBufferValue(r7);	 Catch:{ Exception -> 0x0123 }
-        if (r0 == 0) goto L_0x00ed;
-    L_0x00e1:
-        r13 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0123 }
-        r13 = org.telegram.tgnet.TLRPC.ChannelParticipant.TLdeserialize(r0, r13, r6);	 Catch:{ Exception -> 0x0123 }
-        r0.reuse();	 Catch:{ Exception -> 0x0123 }
-        goto L_0x00ee;
-    L_0x00ed:
+    L_0x00d2:
+        r0 = r11.byteBufferValue(r7);	 Catch:{ Exception -> 0x011a }
+        if (r0 == 0) goto L_0x00e4;
+    L_0x00d8:
+        r13 = r0.readInt32(r4);	 Catch:{ Exception -> 0x011a }
+        r13 = org.telegram.tgnet.TLRPC.ChannelParticipant.TLdeserialize(r0, r13, r4);	 Catch:{ Exception -> 0x011a }
+        r0.reuse();	 Catch:{ Exception -> 0x011a }
+        goto L_0x00e5;
+    L_0x00e4:
         r13 = r2;
-    L_0x00ee:
-        if (r12 == 0) goto L_0x00c2;
-    L_0x00f0:
-        if (r13 == 0) goto L_0x00c2;
-    L_0x00f2:
-        r0 = r12.status;	 Catch:{ Exception -> 0x0123 }
-        if (r0 == 0) goto L_0x00fe;
-    L_0x00f6:
-        r0 = r12.status;	 Catch:{ Exception -> 0x0123 }
-        r14 = r11.intValue(r8);	 Catch:{ Exception -> 0x0123 }
-        r0.expires = r14;	 Catch:{ Exception -> 0x0123 }
-    L_0x00fe:
-        r5.add(r12);	 Catch:{ Exception -> 0x0123 }
+    L_0x00e5:
+        if (r12 == 0) goto L_0x00b9;
+    L_0x00e7:
+        if (r13 == 0) goto L_0x00b9;
+    L_0x00e9:
+        r0 = r12.status;	 Catch:{ Exception -> 0x011a }
+        if (r0 == 0) goto L_0x00f5;
+    L_0x00ed:
+        r0 = r12.status;	 Catch:{ Exception -> 0x011a }
+        r14 = r11.intValue(r8);	 Catch:{ Exception -> 0x011a }
+        r0.expires = r14;	 Catch:{ Exception -> 0x011a }
+    L_0x00f5:
+        r5.add(r12);	 Catch:{ Exception -> 0x011a }
         r0 = 3;
-        r0 = r11.intValue(r0);	 Catch:{ Exception -> 0x0123 }
-        r13.date = r0;	 Catch:{ Exception -> 0x0123 }
-        r0 = new org.telegram.tgnet.TLRPC$TL_chatChannelParticipant;	 Catch:{ Exception -> 0x0123 }
-        r0.<init>();	 Catch:{ Exception -> 0x0123 }
-        r12 = r13.user_id;	 Catch:{ Exception -> 0x0123 }
-        r0.user_id = r12;	 Catch:{ Exception -> 0x0123 }
-        r12 = r13.date;	 Catch:{ Exception -> 0x0123 }
-        r0.date = r12;	 Catch:{ Exception -> 0x0123 }
-        r12 = r13.inviter_id;	 Catch:{ Exception -> 0x0123 }
-        r0.inviter_id = r12;	 Catch:{ Exception -> 0x0123 }
-        r0.channelParticipant = r13;	 Catch:{ Exception -> 0x0123 }
-        r12 = r4.participants;	 Catch:{ Exception -> 0x0123 }
-        r12 = r12.participants;	 Catch:{ Exception -> 0x0123 }
-        r12.add(r0);	 Catch:{ Exception -> 0x0123 }
-        goto L_0x00c2;
-    L_0x0123:
+        r0 = r11.intValue(r0);	 Catch:{ Exception -> 0x011a }
+        r13.date = r0;	 Catch:{ Exception -> 0x011a }
+        r0 = new org.telegram.tgnet.TLRPC$TL_chatChannelParticipant;	 Catch:{ Exception -> 0x011a }
+        r0.<init>();	 Catch:{ Exception -> 0x011a }
+        r12 = r13.user_id;	 Catch:{ Exception -> 0x011a }
+        r0.user_id = r12;	 Catch:{ Exception -> 0x011a }
+        r12 = r13.date;	 Catch:{ Exception -> 0x011a }
+        r0.date = r12;	 Catch:{ Exception -> 0x011a }
+        r12 = r13.inviter_id;	 Catch:{ Exception -> 0x011a }
+        r0.inviter_id = r12;	 Catch:{ Exception -> 0x011a }
+        r0.channelParticipant = r13;	 Catch:{ Exception -> 0x011a }
+        r12 = r10.participants;	 Catch:{ Exception -> 0x011a }
+        r12 = r12.participants;	 Catch:{ Exception -> 0x011a }
+        r12.add(r0);	 Catch:{ Exception -> 0x011a }
+        goto L_0x00b9;
+    L_0x011a:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0190 }
-        goto L_0x00c2;
-    L_0x0128:
-        r11.dispose();	 Catch:{ Exception -> 0x0190 }
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0190 }
-        r0.<init>();	 Catch:{ Exception -> 0x0190 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0186 }
+        goto L_0x00b9;
+    L_0x011f:
+        r11.dispose();	 Catch:{ Exception -> 0x0186 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0186 }
+        r0.<init>();	 Catch:{ Exception -> 0x0186 }
         r2 = 0;
-    L_0x0131:
-        r7 = r4.bot_info;	 Catch:{ Exception -> 0x0190 }
-        r7 = r7.size();	 Catch:{ Exception -> 0x0190 }
-        if (r2 >= r7) goto L_0x0152;
-    L_0x0139:
-        r7 = r4.bot_info;	 Catch:{ Exception -> 0x0190 }
-        r7 = r7.get(r2);	 Catch:{ Exception -> 0x0190 }
-        r7 = (org.telegram.tgnet.TLRPC.BotInfo) r7;	 Catch:{ Exception -> 0x0190 }
-        r8 = r0.length();	 Catch:{ Exception -> 0x0190 }
-        if (r8 == 0) goto L_0x014a;
-    L_0x0147:
-        r0.append(r10);	 Catch:{ Exception -> 0x0190 }
-    L_0x014a:
-        r7 = r7.user_id;	 Catch:{ Exception -> 0x0190 }
-        r0.append(r7);	 Catch:{ Exception -> 0x0190 }
+    L_0x0128:
+        r7 = r10.bot_info;	 Catch:{ Exception -> 0x0186 }
+        r7 = r7.size();	 Catch:{ Exception -> 0x0186 }
+        if (r2 >= r7) goto L_0x0149;
+    L_0x0130:
+        r7 = r10.bot_info;	 Catch:{ Exception -> 0x0186 }
+        r7 = r7.get(r2);	 Catch:{ Exception -> 0x0186 }
+        r7 = (org.telegram.tgnet.TLRPC.BotInfo) r7;	 Catch:{ Exception -> 0x0186 }
+        r8 = r0.length();	 Catch:{ Exception -> 0x0186 }
+        if (r8 == 0) goto L_0x0141;
+    L_0x013e:
+        r0.append(r6);	 Catch:{ Exception -> 0x0186 }
+    L_0x0141:
+        r7 = r7.user_id;	 Catch:{ Exception -> 0x0186 }
+        r0.append(r7);	 Catch:{ Exception -> 0x0186 }
         r2 = r2 + 1;
-        goto L_0x0131;
-    L_0x0152:
-        r2 = r0.length();	 Catch:{ Exception -> 0x0190 }
-        if (r2 == 0) goto L_0x015f;
+        goto L_0x0128;
+    L_0x0149:
+        r2 = r0.length();	 Catch:{ Exception -> 0x0186 }
+        if (r2 == 0) goto L_0x0156;
+    L_0x014f:
+        r0 = r0.toString();	 Catch:{ Exception -> 0x0186 }
+        r1.getUsersInternal(r0, r5);	 Catch:{ Exception -> 0x0186 }
+    L_0x0156:
+        if (r10 == 0) goto L_0x0172;
     L_0x0158:
-        r0 = r0.toString();	 Catch:{ Exception -> 0x0190 }
-        r1.getUsersInternal(r0, r5);	 Catch:{ Exception -> 0x0190 }
-    L_0x015f:
-        if (r18 == 0) goto L_0x0164;
-    L_0x0161:
-        r18.countDown();	 Catch:{ Exception -> 0x0190 }
-    L_0x0164:
-        if (r4 == 0) goto L_0x017f;
-    L_0x0166:
-        r0 = r4.pinned_msg_id;	 Catch:{ Exception -> 0x0190 }
-        if (r0 == 0) goto L_0x017f;
-    L_0x016a:
-        r10 = r16.getMediaDataController();	 Catch:{ Exception -> 0x0190 }
+        r0 = r10.pinned_msg_id;	 Catch:{ Exception -> 0x0186 }
+        if (r0 == 0) goto L_0x0172;
+    L_0x015c:
+        r11 = r17.getMediaDataController();	 Catch:{ Exception -> 0x0186 }
         r0 = -r3;
-        r11 = (long) r0;	 Catch:{ Exception -> 0x0190 }
-        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0190 }
-        if (r0 == 0) goto L_0x0176;
-    L_0x0174:
-        r13 = r3;
-        goto L_0x0177;
-    L_0x0176:
-        r13 = 0;
-    L_0x0177:
-        r14 = r4.pinned_msg_id;	 Catch:{ Exception -> 0x0190 }
-        r15 = 0;
-        r0 = r10.loadPinnedMessage(r11, r13, r14, r15);	 Catch:{ Exception -> 0x0190 }
+        r12 = (long) r0;	 Catch:{ Exception -> 0x0186 }
+        r0 = r10 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0186 }
+        if (r0 == 0) goto L_0x0168;
+    L_0x0166:
+        r14 = r3;
+        goto L_0x0169;
+    L_0x0168:
+        r14 = 0;
+    L_0x0169:
+        r15 = r10.pinned_msg_id;	 Catch:{ Exception -> 0x0186 }
+        r16 = 0;
+        r0 = r11.loadPinnedMessage(r12, r14, r15, r16);	 Catch:{ Exception -> 0x0186 }
         r9 = r0;
-    L_0x017f:
-        r2 = r16.getMessagesController();
+    L_0x0172:
+        r19[r4] = r10;
+        r2 = r17.getMessagesController();
         r6 = 1;
-        r3 = r17;
-        r7 = r19;
-        r8 = r20;
+        r3 = r18;
+        r4 = r10;
+        r7 = r20;
+        r8 = r21;
         r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
-        if (r18 == 0) goto L_0x01ad;
-    L_0x018f:
-        goto L_0x01aa;
-    L_0x0190:
+        if (r22 == 0) goto L_0x01a6;
+    L_0x0185:
+        goto L_0x01a3;
+    L_0x0186:
         r0 = move-exception;
-        goto L_0x0197;
-    L_0x0192:
+        goto L_0x018d;
+    L_0x0188:
         r0 = move-exception;
-        r4 = r2;
-        goto L_0x01af;
-    L_0x0195:
+        r10 = r2;
+        goto L_0x01a8;
+    L_0x018b:
         r0 = move-exception;
-        r4 = r2;
-    L_0x0197:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x01ae }
-        r2 = r16.getMessagesController();
+        r10 = r2;
+    L_0x018d:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x01a7 }
+        r19[r4] = r10;
+        r2 = r17.getMessagesController();
         r6 = 1;
-        r3 = r17;
-        r7 = r19;
-        r8 = r20;
+        r3 = r18;
+        r4 = r10;
+        r7 = r20;
+        r8 = r21;
         r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
-        if (r18 == 0) goto L_0x01ad;
-    L_0x01aa:
-        r18.countDown();
-    L_0x01ad:
+        if (r22 == 0) goto L_0x01a6;
+    L_0x01a3:
+        r22.countDown();
+    L_0x01a6:
         return;
-    L_0x01ae:
+    L_0x01a7:
         r0 = move-exception;
-    L_0x01af:
-        r2 = r16.getMessagesController();
+    L_0x01a8:
+        r19[r4] = r10;
+        r2 = r17.getMessagesController();
         r6 = 1;
         r9 = 0;
-        r3 = r17;
-        r7 = r19;
-        r8 = r20;
+        r3 = r18;
+        r4 = r10;
+        r7 = r20;
+        r8 = r21;
         r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
-        if (r18 == 0) goto L_0x01c3;
+        if (r22 == 0) goto L_0x01bf;
+    L_0x01bc:
+        r22.countDown();
+    L_0x01bf:
+        goto L_0x01c1;
     L_0x01c0:
-        r18.countDown();
-    L_0x01c3:
-        goto L_0x01c5;
-    L_0x01c4:
         throw r0;
-    L_0x01c5:
-        goto L_0x01c4;
+    L_0x01c1:
+        goto L_0x01c0;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadChatInfo$84$MessagesStorage(int, java.util.concurrent.CountDownLatch, boolean, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadChatInfo$81$MessagesStorage(int, org.telegram.tgnet.TLRPC$ChatFull[], boolean, boolean, java.util.concurrent.CountDownLatch):void");
     }
 
     public void processPendingRead(long j, long j2, long j3, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$mrG9ITUKGTDUR5C5aGPIWaHe95o(this, j, j2, z, this.lastSavedDate, j3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Zr2KjobVaHBebDYy8lG0JDq4N14(this, j, j2, z, this.lastSavedDate, j3));
     }
 
-    public /* synthetic */ void lambda$processPendingRead$85$MessagesStorage(long j, long j2, boolean z, int i, long j3) {
+    public /* synthetic */ void lambda$processPendingRead$82$MessagesStorage(long j, long j2, boolean z, int i, long j3) {
         long j4 = j;
         try {
             int intValue;
@@ -4691,11 +4628,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putContacts(ArrayList<TL_contact> arrayList, boolean z) {
         if (!arrayList.isEmpty() || z) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$VIjx98VFT9EYmnJ8mUO_SiJ4810(this, z, new ArrayList(arrayList)));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$O2JlfG9dSBl-P6Tes40TM0sWrhY(this, z, new ArrayList(arrayList)));
         }
     }
 
-    public /* synthetic */ void lambda$putContacts$86$MessagesStorage(boolean z, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putContacts$83$MessagesStorage(boolean z, ArrayList arrayList) {
         if (z) {
             try {
                 this.database.executeFast("DELETE FROM contacts WHERE 1").stepThis().dispose();
@@ -4723,11 +4660,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void deleteContacts(ArrayList<Integer> arrayList) {
         if (arrayList != null && !arrayList.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$GMUC_3wWZaXGMALhkVNJZ4ROQdc(this, arrayList));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$V08xw7bRitoFTLsjmAh4o_aL_J8(this, arrayList));
         }
     }
 
-    public /* synthetic */ void lambda$deleteContacts$87$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$deleteContacts$84$MessagesStorage(ArrayList arrayList) {
         try {
             String join = TextUtils.join(",", arrayList);
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -4743,11 +4680,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void applyPhoneBookUpdates(String str, String str2) {
         if (!TextUtils.isEmpty(str)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$OreTmYrmWTgoW8Zk3cD5yTn7vp0(this, str, str2));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CnEmXA6U_R4qXRXXhvRrbR0s9eU(this, str, str2));
         }
     }
 
-    public /* synthetic */ void lambda$applyPhoneBookUpdates$88$MessagesStorage(String str, String str2) {
+    public /* synthetic */ void lambda$applyPhoneBookUpdates$85$MessagesStorage(String str, String str2) {
         try {
             if (str.length() != 0) {
                 this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 0 WHERE sphone IN(%s)", new Object[]{str})).stepThis().dispose();
@@ -4765,11 +4702,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             return;
         }
         if (!hashMap.isEmpty() || z || z2) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$d0CKfJCWUy1j7KfKMh-A2PiSqHA(this, hashMap, z));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CYVrzStZJIUelApaffNB8fdYJyQ(this, hashMap, z));
         }
     }
 
-    public /* synthetic */ void lambda$putCachedPhoneBook$89$MessagesStorage(HashMap hashMap, boolean z) {
+    public /* synthetic */ void lambda$putCachedPhoneBook$86$MessagesStorage(HashMap hashMap, boolean z) {
         try {
             if (BuildVars.LOGS_ENABLED) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -4825,7 +4762,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getCachedPhoneBook(boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$IEfB3sC9k_J4K6n4lzcQAX4QVAM(this, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$NTXmmyOdj1DXBWjwk-eh67iEfZc(this, z));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
@@ -4849,7 +4786,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x0195 A:{Catch:{ Exception -> 0x0216, all -> 0x0214 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{Splitter:B:62:0x00fd, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:62:0x00fd} */
     /* JADX WARNING: Removed duplicated region for block: B:95:0x015e  */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
@@ -4858,7 +4795,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x0195 A:{Catch:{ Exception -> 0x0216, all -> 0x0214 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{Splitter:B:62:0x00fd, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:62:0x00fd} */
     /* JADX WARNING: Removed duplicated region for block: B:58:0x00ee  */
     /* JADX WARNING: Removed duplicated region for block: B:80:0x013c  */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x0103 A:{Catch:{ Throwable -> 0x014b, all -> 0x0148 }} */
@@ -4893,7 +4830,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:144:0x0248, code skipped:
             r3.dispose();
      */
-    public /* synthetic */ void lambda$getCachedPhoneBook$90$MessagesStorage(boolean r27) {
+    public /* synthetic */ void lambda$getCachedPhoneBook$87$MessagesStorage(boolean r27) {
         /*
         r26 = this;
         r1 = r26;
@@ -5254,14 +5191,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0254:
         goto L_0x0253;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$90$MessagesStorage(boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$87$MessagesStorage(boolean):void");
     }
 
     public void getContacts() {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$c0C_JwfaP_juJcmhUEmKrLugWTs(this));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$QBiuXeXpe1yiBm-Hc4D28Gmtx4k(this));
     }
 
-    public /* synthetic */ void lambda$getContacts$91$MessagesStorage() {
+    public /* synthetic */ void lambda$getContacts$88$MessagesStorage() {
         ArrayList arrayList = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
         try {
@@ -5291,10 +5228,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getUnsentMessages(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$51EbzaU3YUe50I1L4RRCcEF-Asw(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$mlAKLyZGNpqEJyAzLc0TujAy5OQ(this, i));
     }
 
-    public /* synthetic */ void lambda$getUnsentMessages$92$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$getUnsentMessages$89$MessagesStorage(int i) {
         try {
             int i2;
             SparseArray sparseArray = new SparseArray();
@@ -5397,7 +5334,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public boolean checkMessageByRandomId(long j) {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$d1ma4ral7Pvbl0aQnDGt6um4wvc(this, j, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ArrsTVIv3CTVEFBEj2jJUP-GaNI(this, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -5408,45 +5345,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /*  JADX ERROR: NullPointerException in pass: ProcessVariables
         java.lang.NullPointerException
-        	at jadx.core.dex.visitors.regions.ProcessVariables.addToUsageMap(ProcessVariables.java:278)
-        	at jadx.core.dex.visitors.regions.ProcessVariables.access$000(ProcessVariables.java:31)
-        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processInsn(ProcessVariables.java:163)
-        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processBlockTraced(ProcessVariables.java:129)
-        	at jadx.core.dex.visitors.regions.TracedRegionVisitor.processBlock(TracedRegionVisitor.java:23)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:53)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:18)
-        	at jadx.core.dex.visitors.regions.ProcessVariables.visit(ProcessVariables.java:183)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
-    public /* synthetic */ void lambda$checkMessageByRandomId$93$MessagesStorage(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageByRandomId$90$MessagesStorage(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
         /*
         r6 = this;
         r0 = 0;
@@ -5488,13 +5388,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x003a:
         throw r7;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$93$MessagesStorage(long, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$90$MessagesStorage(long, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public boolean checkMessageId(long j, int i) {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0gsEtoIKwqYGtFeFeKyba-2TLjY(this, j, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Q2UrE6O36L99_JtVOjx_eT8r4k0(this, j, i, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -5505,45 +5405,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /*  JADX ERROR: NullPointerException in pass: ProcessVariables
         java.lang.NullPointerException
-        	at jadx.core.dex.visitors.regions.ProcessVariables.addToUsageMap(ProcessVariables.java:278)
-        	at jadx.core.dex.visitors.regions.ProcessVariables.access$000(ProcessVariables.java:31)
-        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processInsn(ProcessVariables.java:163)
-        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processBlockTraced(ProcessVariables.java:129)
-        	at jadx.core.dex.visitors.regions.TracedRegionVisitor.processBlock(TracedRegionVisitor.java:23)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:53)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:18)
-        	at jadx.core.dex.visitors.regions.ProcessVariables.visit(ProcessVariables.java:183)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
-    public /* synthetic */ void lambda$checkMessageId$94$MessagesStorage(long r6, int r8, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageId$91$MessagesStorage(long r6, int r8, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
         /*
         r5 = this;
         r0 = 0;
@@ -5588,14 +5451,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0041:
         throw r6;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$94$MessagesStorage(long, int, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$91$MessagesStorage(long, int, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public void getUnreadMention(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$l8MwXwE6wtta48AYjWKC3wBXwIo(this, j, intCallback));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$wf9l8PLpCsSFk1bfVCDmcB5ggTs(this, j, intCallback));
     }
 
-    public /* synthetic */ void lambda$getUnreadMention$96$MessagesStorage(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getUnreadMention$93$MessagesStorage(long j, IntCallback intCallback) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             Object[] objArr = new Object[1];
@@ -5606,17 +5469,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 i = queryFinalized.intValue(0);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$-im1wcrbOwH0G5dj6QGJ2KPPUzg(intCallback, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$uKoT1QRUcZ9KZW59r0X9RxYbAXY(intCallback, i));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
     public void getMessagesCount(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$4QgjEUgSmRBJDMucSQiTE5AXnrw(this, j, intCallback));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$BszdeX1wX_jSM-SB-hXRjrxJyEA(this, j, intCallback));
     }
 
-    public /* synthetic */ void lambda$getMessagesCount$98$MessagesStorage(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getMessagesCount$95$MessagesStorage(long j, IntCallback intCallback) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             Object[] objArr = new Object[1];
@@ -5627,14 +5490,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 i = queryFinalized.intValue(0);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$u4y7AHI70oFXeY4qAMVbfOCvhKs(intCallback, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$nXMoCrqLrakLlqQgsAWkSviQJ_c(intCallback, i));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
     public void getMessages(long j, int i, int i2, int i3, int i4, int i5, int i6, boolean z, int i7) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$07SM_wPgrIcj52iujRCXFFg5cuY(this, i, i2, z, j, i6, i4, i3, i5, i7));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$i87mOcxqGGIL0PIMCYcmnHioK4o(this, i, i2, z, j, i6, i4, i3, i5, i7));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:390:0x0917  */
@@ -5652,9 +5515,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:714:0x10d7 A:{SYNTHETIC, Splitter:B:714:0x10d7} */
     /* JADX WARNING: Removed duplicated region for block: B:813:0x1306 A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
     /* JADX WARNING: Removed duplicated region for block: B:842:0x13ba A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x1209 A:{Splitter:B:631:0x0var_, PHI: r11 r27 r29 r30 r31 r33 r39 r44 , ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Splitter:B:711:0x10d1, Catch:{ Exception -> 0x1214, all -> 0x1209 }, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Splitter:B:711:0x10d1, Catch:{ Exception -> 0x1214, all -> 0x1209 }, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:760:0x1209 A:{ExcHandler: all (th java.lang.Throwable), PHI: r11 r27 r29 r30 r31 r33 r39 r44 , Splitter:B:631:0x0var_} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{ExcHandler: all (th java.lang.Throwable), Catch:{ Exception -> 0x1214, all -> 0x1209 }, Splitter:B:711:0x10d1} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{ExcHandler: all (th java.lang.Throwable), Catch:{ Exception -> 0x1214, all -> 0x1209 }, Splitter:B:711:0x10d1} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -5706,7 +5569,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:762:0x1214, code skipped:
             r0 = e;
      */
-    public /* synthetic */ void lambda$getMessages$100$MessagesStorage(int r38, int r39, boolean r40, long r41, int r43, int r44, int r45, int r46, int r47) {
+    public /* synthetic */ void lambda$getMessages$97$MessagesStorage(int r38, int r39, boolean r40, long r41, int r43, int r44, int r45, int r46, int r47) {
         /*
         r37 = this;
         r1 = r37;
@@ -8518,7 +8381,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
     L_0x1273:
         r3 = r11.messages;	 Catch:{ Exception -> 0x1497, all -> 0x1482 }
-        r6 = org.telegram.messenger.-$$Lambda$MessagesStorage$uP79ldjP3q94L4VwFQlIBmWYlV0.INSTANCE;	 Catch:{ Exception -> 0x1497, all -> 0x1482 }
+        r6 = org.telegram.messenger.-$$Lambda$MessagesStorage$CLASSNAMELZFrTLl65dkoQewWuR5V0NSU.INSTANCE;	 Catch:{ Exception -> 0x1497, all -> 0x1482 }
         java.util.Collections.sort(r3, r6);	 Catch:{ Exception -> 0x1497, all -> 0x1482 }
         if (r28 == 0) goto L_0x12bc;
     L_0x127c:
@@ -8994,10 +8857,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x1566:
         goto L_0x1565;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getMessages$100$MessagesStorage(int, int, boolean, long, int, int, int, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getMessages$97$MessagesStorage(int, int, boolean, long, int, int, int, int, int):void");
     }
 
-    static /* synthetic */ int lambda$null$99(Message message, Message message2) {
+    static /* synthetic */ int lambda$null$96(Message message, Message message2) {
         int i;
         int i2 = message.id;
         if (i2 > 0) {
@@ -9037,10 +8900,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void clearSentMedia() {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$4rfOeATzWNWfd2pWwZkHIx6T8OU(this));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$hEMt8kVa7_9jVBI_OcKzsRTNYfs(this));
     }
 
-    public /* synthetic */ void lambda$clearSentMedia$101$MessagesStorage() {
+    public /* synthetic */ void lambda$clearSentMedia$98$MessagesStorage() {
         try {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
         } catch (Exception e) {
@@ -9054,7 +8917,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Object[] objArr = new Object[2];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7jw738vBdzQ8x4ji7riWY5uMZu8(this, str, i, objArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$QWdrq-4g4JYfZwNZOjI7cCjbrHw(this, str, i, objArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -9066,7 +8929,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return null;
     }
 
-    public /* synthetic */ void lambda$getSentFile$102$MessagesStorage(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getSentFile$99$MessagesStorage(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
         try {
             if (Utilities.MD5(str) != null) {
                 SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data, parent FROM sent_files_v2 WHERE uid = '%s' AND type = %d", new Object[]{str, Integer.valueOf(i)}), new Object[0]);
@@ -9097,7 +8960,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putSentFile(String str, TLObject tLObject, int i, String str2) {
         if (str != null && tLObject != null && str2 != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0ihTGohq3QJed2BJHkvrASib2fM(this, str, tLObject, i, str2));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$xOcZGzs7NnxvCNaEtCc4rdeSwRk(this, str, tLObject, i, str2));
         }
     }
 
@@ -9113,7 +8976,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:21:0x006d, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$putSentFile$103$MessagesStorage(java.lang.String r5, org.telegram.tgnet.TLObject r6, int r7, java.lang.String r8) {
+    public /* synthetic */ void lambda$putSentFile$100$MessagesStorage(java.lang.String r5, org.telegram.tgnet.TLObject r6, int r7, java.lang.String r8) {
         /*
         r4 = this;
         r0 = 0;
@@ -9195,16 +9058,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0075:
         goto L_0x0074;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$103$MessagesStorage(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$100$MessagesStorage(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
     }
 
     public void updateEncryptedChatSeq(EncryptedChat encryptedChat, boolean z) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$9zeOYi8rbx6eRgRL0h0GGgHo_pM(this, encryptedChat, z));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$esm2dGC2pXSFo51wo7BrznSXZJM(this, encryptedChat, z));
         }
     }
 
-    public /* synthetic */ void lambda$updateEncryptedChatSeq$104$MessagesStorage(EncryptedChat encryptedChat, boolean z) {
+    public /* synthetic */ void lambda$updateEncryptedChatSeq$101$MessagesStorage(EncryptedChat encryptedChat, boolean z) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?");
@@ -9238,11 +9101,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void updateEncryptedChatTTL(EncryptedChat encryptedChat) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$va5klSdwmh7kuOLCLASSNAMENT0kZlbDY(this, encryptedChat));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$y5RQnW721KWh7voiDNWU2ZjRBjk(this, encryptedChat));
         }
     }
 
-    public /* synthetic */ void lambda$updateEncryptedChatTTL$105$MessagesStorage(EncryptedChat encryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChatTTL$102$MessagesStorage(EncryptedChat encryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET ttl = ? WHERE uid = ?");
@@ -9268,11 +9131,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void updateEncryptedChatLayer(EncryptedChat encryptedChat) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$8Zp97g2M9CG9f-Df_BLJuu2zQDo(this, encryptedChat));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$6MH-H3xeSx6r2by_lHmByy3IDXY(this, encryptedChat));
         }
     }
 
-    public /* synthetic */ void lambda$updateEncryptedChatLayer$106$MessagesStorage(EncryptedChat encryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChatLayer$103$MessagesStorage(EncryptedChat encryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET layer = ? WHERE uid = ?");
@@ -9298,11 +9161,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void updateEncryptedChat(EncryptedChat encryptedChat) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Xb58sIGp8srP4NjwJOAz4ujR9zM(this, encryptedChat));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$YCSJgh405BoGE1vmmitbFzOGAi8(this, encryptedChat));
         }
     }
 
-    public /* synthetic */ void lambda$updateEncryptedChat$107$MessagesStorage(EncryptedChat encryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChat$104$MessagesStorage(EncryptedChat encryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             if ((encryptedChat.key_hash == null || encryptedChat.key_hash.length < 16) && encryptedChat.auth_key != null) {
@@ -9370,7 +9233,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public boolean isDialogHasMessages(long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$oKBMd5Lq6aDT-odvjSMscCvar_k(this, j, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$qIo_fG8walbFTkecJLzGBbX26tk(this, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -9379,7 +9242,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return zArr[0];
     }
 
-    public /* synthetic */ void lambda$isDialogHasMessages$108$MessagesStorage(long j, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$isDialogHasMessages$105$MessagesStorage(long j, boolean[] zArr, CountDownLatch countDownLatch) {
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages WHERE uid = %d LIMIT 1", new Object[]{Long.valueOf(j)}), new Object[0]);
             zArr[0] = queryFinalized.next();
@@ -9395,7 +9258,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public boolean hasAuthMessage(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$DRnJSL-cQzMMXDYp016D_2ih2II(this, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$bENBORpUff-a_gNxIeqUyafFs_U(this, i, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -9404,7 +9267,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return zArr[0];
     }
 
-    public /* synthetic */ void lambda$hasAuthMessage$109$MessagesStorage(int i, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$hasAuthMessage$106$MessagesStorage(int i, boolean[] zArr, CountDownLatch countDownLatch) {
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages WHERE uid = 777000 AND date = %d AND mid < 0 LIMIT 1", new Object[]{Integer.valueOf(i)}), new Object[0]);
             zArr[0] = queryFinalized.next();
@@ -9419,11 +9282,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void getEncryptedChat(int i, CountDownLatch countDownLatch, ArrayList<TLObject> arrayList) {
         if (countDownLatch != null && arrayList != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$T3CnFGNE_u1NlDHvs1A5BarAi2Q(this, i, arrayList, countDownLatch));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$D7qP0aL0P-pp7eont4fHIfs6kco(this, i, arrayList, countDownLatch));
         }
     }
 
-    public /* synthetic */ void lambda$getEncryptedChat$110$MessagesStorage(int i, ArrayList arrayList, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getEncryptedChat$107$MessagesStorage(int i, ArrayList arrayList, CountDownLatch countDownLatch) {
         try {
             ArrayList arrayList2 = new ArrayList();
             ArrayList arrayList3 = new ArrayList();
@@ -9449,11 +9312,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putEncryptedChat(EncryptedChat encryptedChat, User user, Dialog dialog) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$wWMmlnBYX7ztuC-F9UPquAEbR-s(this, encryptedChat, user, dialog));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Jr00C9mxclVVnBu_VvDFU5PvtcQ(this, encryptedChat, user, dialog));
         }
     }
 
-    public /* synthetic */ void lambda$putEncryptedChat$111$MessagesStorage(EncryptedChat encryptedChat, User user, Dialog dialog) {
+    public /* synthetic */ void lambda$putEncryptedChat$108$MessagesStorage(EncryptedChat encryptedChat, User user, Dialog dialog) {
         EncryptedChat encryptedChat2 = encryptedChat;
         User user2 = user;
         Dialog dialog2 = dialog;
@@ -9616,11 +9479,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void updateChatDefaultBannedRights(int i, TL_chatBannedRights tL_chatBannedRights, int i2) {
         if (tL_chatBannedRights != null && i != 0) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$9hiJJNQirqjcrHEWZID3qqycfH0(this, i, i2, tL_chatBannedRights));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$q8e3IRJkycqkklVOmKbVmcIbgbw(this, i, i2, tL_chatBannedRights));
         }
     }
 
-    public /* synthetic */ void lambda$updateChatDefaultBannedRights$112$MessagesStorage(int i, int i2, TL_chatBannedRights tL_chatBannedRights) {
+    public /* synthetic */ void lambda$updateChatDefaultBannedRights$109$MessagesStorage(int i, int i2, TL_chatBannedRights tL_chatBannedRights) {
         Chat chat = null;
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM chats WHERE uid = %d", new Object[]{Integer.valueOf(i)}), new Object[0]);
@@ -9826,22 +9689,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void putUsersAndChats(ArrayList<User> arrayList, ArrayList<Chat> arrayList2, boolean z, boolean z2) {
         if (arrayList == null || !arrayList.isEmpty() || arrayList2 == null || !arrayList2.isEmpty()) {
             if (z2) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$MmeBiywJvVY_laiR4XDpwGlLSH4(this, arrayList, arrayList2, z));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$43l1cpCRu2AD5GNncWPj-W6jQss(this, arrayList, arrayList2, z));
             } else {
                 putUsersAndChatsInternal(arrayList, arrayList2, z);
             }
         }
     }
 
-    public /* synthetic */ void lambda$putUsersAndChats$113$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, boolean z) {
+    public /* synthetic */ void lambda$putUsersAndChats$110$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, boolean z) {
         putUsersAndChatsInternal(arrayList, arrayList2, z);
     }
 
     public void removeFromDownloadQueue(long j, int i, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$uX9RNDdADQA1Zb0x7WR8P7gNoZY(this, z, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$mSG0ikw8BxLc-Rvndm9n2kBCzwE(this, z, i, j));
     }
 
-    public /* synthetic */ void lambda$removeFromDownloadQueue$114$MessagesStorage(boolean z, int i, long j) {
+    public /* synthetic */ void lambda$removeFromDownloadQueue$111$MessagesStorage(boolean z, int i, long j) {
         if (z) {
             try {
                 SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT min(date) FROM download_queue WHERE type = %d", new Object[]{Integer.valueOf(i)}), new Object[0]);
@@ -9861,10 +9724,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void clearDownloadQueue(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$cshF-4Ao69vigcUys96seLmbz8c(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$jzQZHn2jZ6v27wU-Wrzs01lTzXo(this, i));
     }
 
-    public /* synthetic */ void lambda$clearDownloadQueue$115$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$clearDownloadQueue$112$MessagesStorage(int i) {
         if (i == 0) {
             try {
                 this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
@@ -9878,10 +9741,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getDownloadQueue(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$65MKjebMe2zja-JD-jfTGLf_uoQ(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$9n3v8Fq21ITuCZdQBgDiWwqN8gs(this, i));
     }
 
-    public /* synthetic */ void lambda$getDownloadQueue$117$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$getDownloadQueue$114$MessagesStorage(int i) {
         try {
             ArrayList arrayList = new ArrayList();
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, type, data, parent FROM download_queue WHERE type = %d ORDER BY date DESC LIMIT 3", new Object[]{Integer.valueOf(i)}), new Object[0]);
@@ -9906,13 +9769,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 arrayList.add(downloadObject);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$Xx8Nz7OOyNon0F2YF8EKYC-WRxQ(this, i, arrayList));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$Gr96UcRkWeFDbifkO2SHN3-XHfA(this, i, arrayList));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    public /* synthetic */ void lambda$null$116$MessagesStorage(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$113$MessagesStorage(int i, ArrayList arrayList) {
         getDownloadController().processDownloadObjects(i, arrayList);
     }
 
@@ -9997,11 +9860,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putWebPages(LongSparseArray<WebPage> longSparseArray) {
         if (!isEmpty((LongSparseArray) longSparseArray)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$fzFvY5cznRt5WEudcaJ9_2Km0iI(this, longSparseArray));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ZCLASSNAMEBg__blruiuNfZet6xS5RP-A(this, longSparseArray));
         }
     }
 
-    public /* synthetic */ void lambda$putWebPages$119$MessagesStorage(LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$putWebPages$116$MessagesStorage(LongSparseArray longSparseArray) {
         try {
             ArrayList arrayList = new ArrayList();
             int i = 0;
@@ -10061,26 +9924,26 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 executeFast.dispose();
                 executeFast2.dispose();
                 this.database.commitTransaction();
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$b6-_z_rbTOVbfauOuDqwtjBSV3I(this, arrayList));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$BWvcTxjLTEmmf8bv5a97fVBp6sQ(this, arrayList));
             }
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    public /* synthetic */ void lambda$null$118$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$115$MessagesStorage(ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.didReceivedWebpages, arrayList);
     }
 
     public void overwriteChannel(int i, TL_updates_channelDifferenceTooLong tL_updates_channelDifferenceTooLong, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7ABQwwpjiNBfDEzyTxSwMP9s-yY(this, i, i2, tL_updates_channelDifferenceTooLong));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$FcyfVSniBlbpWaGZXrc5XL_EKhE(this, i, i2, tL_updates_channelDifferenceTooLong));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:12:0x0115 A:{Catch:{ Exception -> 0x0146 }} */
     /* JADX WARNING: Removed duplicated region for block: B:11:0x0113 A:{Catch:{ Exception -> 0x0146 }} */
     /* JADX WARNING: Removed duplicated region for block: B:21:? A:{SYNTHETIC, RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:15:0x0134 A:{Catch:{ Exception -> 0x0146 }} */
-    public /* synthetic */ void lambda$overwriteChannel$121$MessagesStorage(int r11, int r12, org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong r13) {
+    public /* synthetic */ void lambda$overwriteChannel$118$MessagesStorage(int r11, int r12, org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong r13) {
         /*
         r10 = this;
         r0 = -r11;
@@ -10207,7 +10070,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0146 }
         r13.<init>();	 Catch:{ Exception -> 0x0146 }
         r10.updateDialogsWithDeletedMessages(r13, r7, r4, r11);	 Catch:{ Exception -> 0x0146 }
-        r13 = new org.telegram.messenger.-$$Lambda$MessagesStorage$TPsnCynXq6cUdHl-MSOW_ayG0w0;	 Catch:{ Exception -> 0x0146 }
+        r13 = new org.telegram.messenger.-$$Lambda$MessagesStorage$Ukt2MAzbTE2JKV5RgnN4f2A92KY;	 Catch:{ Exception -> 0x0146 }
         r13.<init>(r10, r0);	 Catch:{ Exception -> 0x0146 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r13);	 Catch:{ Exception -> 0x0146 }
         if (r6 == 0) goto L_0x014a;
@@ -10227,20 +10090,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x014a:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$121$MessagesStorage(int, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$118$MessagesStorage(int, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");
     }
 
-    public /* synthetic */ void lambda$null$120$MessagesStorage(long j) {
+    public /* synthetic */ void lambda$null$117$MessagesStorage(long j) {
         getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), Boolean.valueOf(true));
     }
 
     public void putChannelViews(SparseArray<SparseIntArray> sparseArray, boolean z) {
         if (!isEmpty((SparseArray) sparseArray)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5OIyS9FCXd0SoEseA3Ut7Uei2nc(this, sparseArray, z));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$_6d_mfmmRnodELRFw_V86A87quA(this, sparseArray, z));
         }
     }
 
-    public /* synthetic */ void lambda$putChannelViews$122$MessagesStorage(SparseArray sparseArray, boolean z) {
+    public /* synthetic */ void lambda$putChannelViews$119$MessagesStorage(SparseArray sparseArray, boolean z) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE messages SET media = max((SELECT media FROM messages WHERE mid = ?), ?) WHERE mid = ?");
@@ -11580,7 +11443,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2.processDialogsUpdateRead(r3, r11);	 Catch:{ Exception -> 0x0045 }
         if (r35 == 0) goto L_0x0954;
     L_0x0941:
-        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$EDTDSO5ZD7EJWhgiA72HtAyXwnM;	 Catch:{ Exception -> 0x0045 }
+        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$kEM836O7XHnidmvk_F_LTvf7NK4;	 Catch:{ Exception -> 0x0045 }
         r5 = r35;
         r2.<init>(r1, r5);	 Catch:{ Exception -> 0x0045 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0045 }
@@ -11597,7 +11460,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.putMessagesInternal(java.util.ArrayList, boolean, boolean, int, boolean):void");
     }
 
-    public /* synthetic */ void lambda$putMessagesInternal$123$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$putMessagesInternal$120$MessagesStorage(int i) {
         getDownloadController().newDownloadObjectsAvailable(i);
     }
 
@@ -11608,22 +11471,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void putMessages(ArrayList<Message> arrayList, boolean z, boolean z2, boolean z3, int i, boolean z4) {
         if (arrayList.size() != 0) {
             if (z2) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Zbl8iyH6cJ1Eo71mteogwoPbxxQ(this, arrayList, z, z3, i, z4));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$C5MdBeaFh--zdZ5yyOm4jthA7xI(this, arrayList, z, z3, i, z4));
             } else {
                 putMessagesInternal(arrayList, z, z3, i, z4);
             }
         }
     }
 
-    public /* synthetic */ void lambda$putMessages$124$MessagesStorage(ArrayList arrayList, boolean z, boolean z2, int i, boolean z3) {
+    public /* synthetic */ void lambda$putMessages$121$MessagesStorage(ArrayList arrayList, boolean z, boolean z2, int i, boolean z3) {
         putMessagesInternal(arrayList, z, z2, i, z3);
     }
 
     public void markMessageAsSendError(Message message) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CDdpxNeQptYiAHzuKy4PuE-KUXI(this, message));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$U1zBGSD7nENssAbAXgrCmtYpcyg(this, message));
     }
 
-    public /* synthetic */ void lambda$markMessageAsSendError$125$MessagesStorage(Message message) {
+    public /* synthetic */ void lambda$markMessageAsSendError$122$MessagesStorage(Message message) {
         try {
             long j = (long) message.id;
             if (message.to_id.channel_id != 0) {
@@ -11640,10 +11503,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void setMessageSeq(int i, int i2, int i3) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$I_Nkh3lDe-kxZ_-U4jy8HVjamUk(this, i, i2, i3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$G8zL9NB-Fitb5bCdEHpkzqox5bg(this, i, i2, i3));
     }
 
-    public /* synthetic */ void lambda$setMessageSeq$126$MessagesStorage(int i, int i2, int i3) {
+    public /* synthetic */ void lambda$setMessageSeq$123$MessagesStorage(int i, int i2, int i3) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO messages_seq VALUES(?, ?, ?)");
             executeFast.requery();
@@ -12076,13 +11939,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.updateMessageStateAndIdInternal(long, java.lang.Integer, int, int, int):long[]");
     }
 
-    public /* synthetic */ void lambda$updateMessageStateAndId$127$MessagesStorage(long j, Integer num, int i, int i2, int i3) {
+    public /* synthetic */ void lambda$updateMessageStateAndId$124$MessagesStorage(long j, Integer num, int i, int i2, int i3) {
         updateMessageStateAndIdInternal(j, num, i, i2, i3);
     }
 
     public long[] updateMessageStateAndId(long j, Integer num, int i, int i2, boolean z, int i3) {
         if (z) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$cHj3_heIm7v3yVK5WTcTNH3ovCc(this, j, num, i, i2, i3));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$WU_EaXX3SitcS_mgxT2w3G1G8N8(this, j, num, i, i2, i3));
             return null;
         }
         return updateMessageStateAndIdInternal(j, num, i, i2, i3);
@@ -12167,14 +12030,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void updateUsers(ArrayList<User> arrayList, boolean z, boolean z2, boolean z3) {
         if (arrayList != null && !arrayList.isEmpty()) {
             if (z3) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$KhcIchuE4KJbeKdTaRAB8CWDcM0(this, arrayList, z, z2));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$F8boba5oNhoqWMrqWxfVJfns2vk(this, arrayList, z, z2));
             } else {
                 updateUsersInternal(arrayList, z, z2);
             }
         }
     }
 
-    public /* synthetic */ void lambda$updateUsers$128$MessagesStorage(ArrayList arrayList, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$updateUsers$125$MessagesStorage(ArrayList arrayList, boolean z, boolean z2) {
         updateUsersInternal(arrayList, z, z2);
     }
 
@@ -12225,11 +12088,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void markMessagesContentAsRead(ArrayList<Long> arrayList, int i) {
         if (!isEmpty((List) arrayList)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Kd-7KIl84Ykan0Xx9_cq5K-0a4k(this, arrayList, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$tfugjIkfK7nBtnBOpdzgghpbtc8(this, arrayList, i));
         }
     }
 
-    public /* synthetic */ void lambda$markMessagesContentAsRead$129$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$markMessagesContentAsRead$126$MessagesStorage(ArrayList arrayList, int i) {
         try {
             String join = TextUtils.join(",", arrayList);
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE mid IN (%s)", new Object[]{join})).stepThis().dispose();
@@ -12252,13 +12115,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$markMessagesAsRead$130$MessagesStorage(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray) {
+    public /* synthetic */ void lambda$markMessagesAsRead$127$MessagesStorage(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray) {
         markMessagesAsReadInternal(sparseLongArray, sparseLongArray2, sparseIntArray);
     }
 
     public void markMessagesAsRead(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray, boolean z) {
         if (z) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7M1fsQyOLqfQ09O_qH6xF5Wf9zk(this, sparseLongArray, sparseLongArray2, sparseIntArray));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ZKMHEKHuJ6dOsqeHAeNsC8jKMsA(this, sparseLongArray, sparseLongArray2, sparseIntArray));
         } else {
             markMessagesAsReadInternal(sparseLongArray, sparseLongArray2, sparseIntArray);
         }
@@ -12266,11 +12129,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void markMessagesAsDeletedByRandoms(ArrayList<Long> arrayList) {
         if (!arrayList.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5tLDgdMiD0B9gd7akTqO-XaBigI(this, arrayList));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$6zxGoXepQVJrSJhl_6ShJc-tecw(this, arrayList));
         }
     }
 
-    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$132$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$129$MessagesStorage(ArrayList arrayList) {
         try {
             String join = TextUtils.join(",", arrayList);
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM randoms WHERE random_id IN(%s)", new Object[]{join}), new Object[0]);
@@ -12280,7 +12143,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
             queryFinalized.dispose();
             if (!arrayList2.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$rsCXiHk-OsORnUcNu-gkN3X9obQ(this, arrayList2));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$luZOLUxYa704MNzM5dy271V47WU(this, arrayList2));
                 updateDialogsWithReadMessagesInternal(arrayList2, null, null, null);
                 markMessagesAsDeletedInternal(arrayList2, 0);
                 updateDialogsWithDeletedMessagesInternal(arrayList2, null, 0);
@@ -12290,7 +12153,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$131$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$128$MessagesStorage(ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, Integer.valueOf(0));
     }
 
@@ -12956,14 +12819,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void updateDialogsWithDeletedMessages(ArrayList<Integer> arrayList, ArrayList<Long> arrayList2, boolean z, int i) {
         if (!arrayList.isEmpty() || i != 0) {
             if (z) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$MA7HhVEAT2vamXfRirkyxddYYBE(this, arrayList, arrayList2, i));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ofWf0XUDnI-6IkGXY1H2v-H0H4Q(this, arrayList, arrayList2, i));
             } else {
                 updateDialogsWithDeletedMessagesInternal(arrayList, arrayList2, i);
             }
         }
     }
 
-    public /* synthetic */ void lambda$updateDialogsWithDeletedMessages$133$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i) {
+    public /* synthetic */ void lambda$updateDialogsWithDeletedMessages$130$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i) {
         updateDialogsWithDeletedMessagesInternal(arrayList, arrayList2, i);
     }
 
@@ -12974,11 +12837,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (!z) {
             return markMessagesAsDeletedInternal((ArrayList) arrayList, i);
         }
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CwczV_sujyFOSEA_5BEgE4G3Gcw(this, arrayList, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ptTzJX6Pd_VNvDwScsxIkJSDi2g(this, arrayList, i));
         return null;
     }
 
-    public /* synthetic */ void lambda$markMessagesAsDeleted$134$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$markMessagesAsDeleted$131$MessagesStorage(ArrayList arrayList, int i) {
         markMessagesAsDeletedInternal(arrayList, i);
     }
 
@@ -13093,7 +12956,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$markMessagesAsDeleted$135$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$markMessagesAsDeleted$132$MessagesStorage(int i, int i2) {
         markMessagesAsDeletedInternal(i, i2);
     }
 
@@ -13101,7 +12964,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (!z) {
             return markMessagesAsDeletedInternal(i, i2);
         }
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$G8wlamTxGBm2te-IIW2_2dxQkB8(this, i, i2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$_8iebYtJdUIIvi0ekYJ9L0BlhVg(this, i, i2));
         return null;
     }
 
@@ -13111,13 +12974,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (messageMedia instanceof TL_messageMediaUnsupported_old) {
                 if (messageMedia.bytes.length == 0) {
                     messageMedia.bytes = new byte[1];
-                    messageMedia.bytes[0] = (byte) 103;
+                    messageMedia.bytes[0] = (byte) 104;
                 }
             } else if (messageMedia instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 messageMedia = message.media;
                 messageMedia.bytes = new byte[1];
-                messageMedia.bytes[0] = (byte) 103;
+                messageMedia.bytes[0] = (byte) 104;
                 message.flags |= 512;
             }
         }
@@ -13417,7 +13280,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void replaceMessageIfExists(Message message, int i, ArrayList<User> arrayList, ArrayList<Chat> arrayList2, boolean z) {
         if (message != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$pND7SeCnHWGSkCmeT8Uq6NOWqtE(this, message, z, arrayList, arrayList2, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$KKkC2sGsXN_t6FMiw008La2Z6Ic(this, message, z, arrayList, arrayList2, i));
         }
     }
 
@@ -13537,9 +13400,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r2 = new org.telegram.messenger.MessageObject(r20, r16, r5, r0, true);
             r0 = new java.util.ArrayList();
             r0.add(r2);
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.-$$Lambda$MessagesStorage$gjhvLB2dNIvHmzW5tkQ7jymYeFU(r15, r2, r0));
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.-$$Lambda$MessagesStorage$7AwElT-DLipQXVyMJVyZGZ2nitE(r15, r2, r0));
      */
-    public /* synthetic */ void lambda$replaceMessageIfExists$137$MessagesStorage(org.telegram.tgnet.TLRPC.Message r16, boolean r17, java.util.ArrayList r18, java.util.ArrayList r19, int r20) {
+    public /* synthetic */ void lambda$replaceMessageIfExists$134$MessagesStorage(org.telegram.tgnet.TLRPC.Message r16, boolean r17, java.util.ArrayList r18, java.util.ArrayList r19, int r20) {
         /*
         r15 = this;
         r1 = r15;
@@ -13727,7 +13590,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0171 }
         r0.<init>();	 Catch:{ Exception -> 0x0171 }
         r0.add(r8);	 Catch:{ Exception -> 0x0171 }
-        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$gjhvLB2dNIvHmzW5tkQ7jymYeFU;	 Catch:{ Exception -> 0x0171 }
+        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$7AwElT-DLipQXVyMJVyZGZ2nitE;	 Catch:{ Exception -> 0x0171 }
         r2.<init>(r15, r8, r0);	 Catch:{ Exception -> 0x0171 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0171 }
         goto L_0x0175;
@@ -13743,19 +13606,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0175:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$137$MessagesStorage(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$134$MessagesStorage(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList, int):void");
     }
 
-    public /* synthetic */ void lambda$null$136$MessagesStorage(MessageObject messageObject, ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$133$MessagesStorage(MessageObject messageObject, ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, Long.valueOf(messageObject.getDialogId()), arrayList);
     }
 
     public void putMessages(messages_Messages messages_messages, long j, int i, int i2, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$6OdG59RQk4gtHeSIVwqv0igXK90(this, messages_messages, i, j, i2, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0xu66QqOThg83pHODpCeoxHE76o(this, messages_messages, i, j, i2, z));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:67:0x01cc A:{Catch:{ Exception -> 0x044a }} */
-    public /* synthetic */ void lambda$putMessages$138$MessagesStorage(org.telegram.tgnet.TLRPC.messages_Messages r30, int r31, long r32, int r34, boolean r35) {
+    public /* synthetic */ void lambda$putMessages$135$MessagesStorage(org.telegram.tgnet.TLRPC.messages_Messages r30, int r31, long r32, int r34, boolean r35) {
         /*
         r29 = this;
         r7 = r29;
@@ -14371,7 +14234,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x044e:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$138$MessagesStorage(org.telegram.tgnet.TLRPC$messages_Messages, int, long, int, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$135$MessagesStorage(org.telegram.tgnet.TLRPC$messages_Messages, int, long, int, boolean):void");
     }
 
     public static void addUsersAndChatsFromMessage(Message message, ArrayList<Integer> arrayList, ArrayList<Integer> arrayList2) {
@@ -14466,7 +14329,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getDialogs(int i, int i2, int i3) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$xgSn2rhYdKpJx8E6odU-ONY7l64(this, i, i2, i3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$t0jaETfRSmP2LwBaraRxDHoXRvQ(this, i, i2, i3));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:128:0x02a1 A:{Catch:{ Exception -> 0x03aa }} */
@@ -14483,7 +14346,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:116:0x0265 A:{Catch:{ Exception -> 0x03aa }} */
     /* JADX WARNING: Removed duplicated region for block: B:116:0x0265 A:{Catch:{ Exception -> 0x03aa }} */
     /* JADX WARNING: Removed duplicated region for block: B:128:0x02a1 A:{Catch:{ Exception -> 0x03aa }} */
-    public /* synthetic */ void lambda$getDialogs$139$MessagesStorage(int r20, int r21, int r22) {
+    public /* synthetic */ void lambda$getDialogs$136$MessagesStorage(int r20, int r21, int r22) {
         /*
         r19 = this;
         r1 = r19;
@@ -15030,7 +14893,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x03db:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogs$139$MessagesStorage(int, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogs$136$MessagesStorage(int, int, int):void");
     }
 
     public static void createFirstHoles(long j, SQLitePreparedStatement sQLitePreparedStatement, SQLitePreparedStatement sQLitePreparedStatement2, int i) throws Exception {
@@ -15481,15 +15344,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getDialogFolderId(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$SkuV6Hpjk5GQ4ZDcr1sIT7ixm50(this, j, intCallback));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$t_jq6Paav5KKR5kzd1LlVrcehvI(this, j, intCallback));
     }
 
-    public /* synthetic */ void lambda$getDialogFolderId$141$MessagesStorage(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getDialogFolderId$138$MessagesStorage(long j, IntCallback intCallback) {
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT folder_id FROM dialogs WHERE did = ?", Long.valueOf(j));
             int intValue = queryFinalized.next() ? queryFinalized.intValue(0) : -1;
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$xdTHE1xxbNeC9wpGamcxi56OJSI(intCallback, intValue));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$XsoFtSzS0YToICW3cjox1fH80xY(intCallback, intValue));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -15497,11 +15360,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void setDialogsFolderId(ArrayList<TL_folderPeer> arrayList, ArrayList<TL_inputFolderPeer> arrayList2, long j, int i) {
         if (arrayList != null || arrayList2 != null || j != 0) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$vU3H4O_uMIIPLYpg8QUqZEOJanU(this, arrayList, arrayList2, i, j));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$R773_K8RtbzYzQJ4L6bSJxmWu-I(this, arrayList, arrayList2, i, j));
         }
     }
 
-    public /* synthetic */ void lambda$setDialogsFolderId$142$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
+    public /* synthetic */ void lambda$setDialogsFolderId$139$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET folder_id = ? WHERE did = ?");
@@ -15546,7 +15409,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT did FROM dialogs WHERE folder_id = ?", Integer.valueOf(i));
             if (!queryFinalized.next()) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$PjPiLXNm6_EsiAsuc-msXC__TJg(this, i));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$pS4-TFYlNVgaHrQVJbRd8fOrGwo(this, i));
                 SQLiteDatabase sQLiteDatabase = this.database;
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("DELETE FROM dialogs WHERE did = ");
@@ -15559,23 +15422,23 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$143$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$140$MessagesStorage(int i) {
         getMessagesController().onFolderEmpty(i);
     }
 
     public void checkIfFolderEmpty(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$icwTQAKHt7cMla2SxcMIgCt-hLo(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$XOiv1SwjzIOrCmL5Vk0FOP6bXno(this, i));
     }
 
-    public /* synthetic */ void lambda$checkIfFolderEmpty$144$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$checkIfFolderEmpty$141$MessagesStorage(int i) {
         checkIfFolderEmptyInternal(i);
     }
 
     public void unpinAllDialogsExceptNew(ArrayList<Long> arrayList, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$UNG3O_q0_n6IbfxTyxeEDWN4wjc(this, arrayList, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Ddew0CEJ_p2AJHgB5NoeH3eCdQw(this, arrayList, i));
     }
 
-    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$145$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$142$MessagesStorage(ArrayList arrayList, int i) {
         try {
             long longValue;
             ArrayList arrayList2 = new ArrayList();
@@ -15604,7 +15467,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void setDialogUnread(long j, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$YR6_-nj0nsdVFY6J-MW9CHpRtYs(this, j, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CKiP2jQhP3bMHRkic2tVwmgJfig(this, j, z));
     }
 
     /* JADX WARNING: Missing block: B:5:0x0025, code skipped:
@@ -15635,7 +15498,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:25:?, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$setDialogUnread$146$MessagesStorage(long r6, boolean r8) {
+    public /* synthetic */ void lambda$setDialogUnread$143$MessagesStorage(long r6, boolean r8) {
         /*
         r5 = this;
         r0 = 0;
@@ -15697,14 +15560,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x005c:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$146$MessagesStorage(long, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$143$MessagesStorage(long, boolean):void");
     }
 
     public void setDialogPinned(long j, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$pydpGfyEJY86wZVM-5gk1G5enLU(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$AiDYTHRLDJEhuW3_82Vb-TsqO_c(this, i, j));
     }
 
-    public /* synthetic */ void lambda$setDialogPinned$147$MessagesStorage(int i, long j) {
+    public /* synthetic */ void lambda$setDialogPinned$144$MessagesStorage(int i, long j) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
             executeFast.bindInteger(1, i);
@@ -15718,11 +15581,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putDialogs(messages_Dialogs messages_dialogs, int i) {
         if (!messages_dialogs.dialogs.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$hry9IvsaQDnemeIROZgTEzWio5I(this, messages_dialogs, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$SP4NWDIhBs89x83JhEQbPgHfl_0(this, messages_dialogs, i));
         }
     }
 
-    public /* synthetic */ void lambda$putDialogs$148$MessagesStorage(messages_Dialogs messages_dialogs, int i) {
+    public /* synthetic */ void lambda$putDialogs$145$MessagesStorage(messages_Dialogs messages_dialogs, int i) {
         putDialogsInternal(messages_dialogs, i);
         try {
             loadUnreadMessages();
@@ -15734,7 +15597,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public int getDialogReadMax(boolean z, long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$NotrdRfLQ2qAM8nf7f6dNfZC9LQ(this, z, j, numArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$oo0v__1RdN_rO0e5kqW6A04D4Ao(this, z, j, numArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15745,38 +15608,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /*  JADX ERROR: NullPointerException in pass: ProcessVariables
         java.lang.NullPointerException
-        	at jadx.core.dex.visitors.regions.ProcessVariables.addToUsageMap(ProcessVariables.java:278)
-        	at jadx.core.dex.visitors.regions.ProcessVariables.access$000(ProcessVariables.java:31)
-        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processInsn(ProcessVariables.java:163)
-        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processBlockTraced(ProcessVariables.java:129)
-        	at jadx.core.dex.visitors.regions.TracedRegionVisitor.processBlock(TracedRegionVisitor.java:23)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:53)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:18)
-        	at jadx.core.dex.visitors.regions.ProcessVariables.visit(ProcessVariables.java:183)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
-    public /* synthetic */ void lambda$getDialogReadMax$149$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
+    public /* synthetic */ void lambda$getDialogReadMax$146$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
         /*
         r4 = this;
         r0 = 0;
@@ -15834,13 +15667,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x005f:
         throw r5;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$149$MessagesStorage(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$146$MessagesStorage(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public int getChannelPtsSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5zCr421jp6BG9VEI5v5DJ7UN8Ng(this, i, numArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$dKOeLXgsGhw-RvlccPAsrIwQZqA(this, i, numArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15851,43 +15684,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /*  JADX ERROR: NullPointerException in pass: ProcessVariables
         java.lang.NullPointerException
-        	at jadx.core.dex.visitors.regions.ProcessVariables.addToUsageMap(ProcessVariables.java:278)
-        	at jadx.core.dex.visitors.regions.ProcessVariables.access$000(ProcessVariables.java:31)
-        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processInsn(ProcessVariables.java:163)
-        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processBlockTraced(ProcessVariables.java:129)
-        	at jadx.core.dex.visitors.regions.TracedRegionVisitor.processBlock(TracedRegionVisitor.java:23)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:53)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
-        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:18)
-        	at jadx.core.dex.visitors.regions.ProcessVariables.visit(ProcessVariables.java:183)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
     /* JADX WARNING: Removed duplicated region for block: B:11:0x003c A:{SYNTHETIC, Splitter:B:11:0x003c} */
     /* JADX WARNING: Removed duplicated region for block: B:18:? A:{SYNTHETIC, RETURN} */
@@ -15907,7 +15703,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:19:?, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$getChannelPtsSync$150$MessagesStorage(int r5, java.lang.Integer[] r6, java.util.concurrent.CountDownLatch r7) {
+    public /* synthetic */ void lambda$getChannelPtsSync$147$MessagesStorage(int r5, java.lang.Integer[] r6, java.util.concurrent.CountDownLatch r7) {
         /*
         r4 = this;
         r0 = 0;
@@ -15958,13 +15754,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004a:
         throw r5;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$150$MessagesStorage(int, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$147$MessagesStorage(int, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public User getUserSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         User[] userArr = new User[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$OGtMr0HOJdFgtGCQ7p3NBahgzn8(this, userArr, i, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$LtS-FKOcgVH3YBCZPLDRfDpE-FQ(this, userArr, i, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15973,7 +15769,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return userArr[0];
     }
 
-    public /* synthetic */ void lambda$getUserSync$151$MessagesStorage(User[] userArr, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getUserSync$148$MessagesStorage(User[] userArr, int i, CountDownLatch countDownLatch) {
         userArr[0] = getUser(i);
         countDownLatch.countDown();
     }
@@ -15981,7 +15777,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public Chat getChatSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Chat[] chatArr = new Chat[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$coeKkTQyQbVSBUMnXP7SoD3ukxc(this, chatArr, i, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CdZ7E32u1n6P7Cpm7mlm0LMfBhM(this, chatArr, i, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15990,7 +15786,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return chatArr[0];
     }
 
-    public /* synthetic */ void lambda$getChatSync$152$MessagesStorage(Chat[] chatArr, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getChatSync$149$MessagesStorage(Chat[] chatArr, int i, CountDownLatch countDownLatch) {
         chatArr[0] = getChat(i);
         countDownLatch.countDown();
     }

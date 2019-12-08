@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
+import android.util.Property;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -40,6 +42,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -56,6 +59,7 @@ public class BottomSheet extends Dialog {
     protected ViewGroup containerView;
     protected int currentAccount = UserConfig.selectedAccount;
     protected AnimatorSet currentSheetAnimation;
+    protected int currentSheetAnimationType;
     private View customView;
     private BottomSheetDelegateInterface delegate;
     private boolean dimBehind = true;
@@ -71,7 +75,8 @@ public class BottomSheet extends Dialog {
     private int layoutCount;
     protected View nestedScrollChild;
     private OnClickListener onClickListener;
-    private Drawable shadowDrawable;
+    protected Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
+    protected Drawable shadowDrawable;
     private boolean showWithoutAnimation;
     private Runnable startAnimationRunnable;
     private int tag;
@@ -917,6 +922,26 @@ public class BottomSheet extends Dialog {
         dismissWithButtonClick(((Integer) view.getTag()).intValue());
     }
 
+    public boolean isFocusable() {
+        return this.focusable;
+    }
+
+    public void setFocusable(boolean z) {
+        if (this.focusable != z) {
+            this.focusable = z;
+            Window window = getWindow();
+            WindowManager.LayoutParams attributes = window.getAttributes();
+            if (this.focusable) {
+                attributes.softInputMode = 16;
+                attributes.flags &= -131073;
+            } else {
+                attributes.softInputMode = 48;
+                attributes.flags |= 131072;
+            }
+            window.setAttributes(attributes);
+        }
+    }
+
     public void setShowWithoutAnimation(boolean z) {
         this.showWithoutAnimation = z;
     }
@@ -996,6 +1021,7 @@ public class BottomSheet extends Dialog {
         if (animatorSet != null) {
             animatorSet.cancel();
             this.currentSheetAnimation = null;
+            this.currentSheetAnimationType = 0;
         }
     }
 
@@ -1008,23 +1034,27 @@ public class BottomSheet extends Dialog {
                 }
                 ViewGroup viewGroup = this.containerView;
                 viewGroup.setTranslationY((float) viewGroup.getMeasuredHeight());
-                AnimatorSet animatorSet = new AnimatorSet();
+                this.currentSheetAnimationType = 1;
+                this.currentSheetAnimation = new AnimatorSet();
+                AnimatorSet animatorSet = this.currentSheetAnimation;
                 Animator[] animatorArr = new Animator[2];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "translationY", new float[]{0.0f});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, View.TRANSLATION_Y, new float[]{0.0f});
                 ColorDrawable colorDrawable = this.backDrawable;
+                Property property = AnimationProperties.COLOR_DRAWABLE_ALPHA;
                 int[] iArr = new int[1];
                 iArr[0] = this.dimBehind ? 51 : 0;
-                animatorArr[1] = ObjectAnimator.ofInt(colorDrawable, "alpha", iArr);
+                animatorArr[1] = ObjectAnimator.ofInt(colorDrawable, property, iArr);
                 animatorSet.playTogether(animatorArr);
-                animatorSet.setDuration(400);
-                animatorSet.setStartDelay(20);
-                animatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
-                animatorSet.addListener(new AnimatorListenerAdapter() {
+                this.currentSheetAnimation.setDuration(400);
+                this.currentSheetAnimation.setStartDelay(20);
+                this.currentSheetAnimation.setInterpolator(this.openInterpolator);
+                this.currentSheetAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
                         if (animatorSet != null && animatorSet.equals(animator)) {
                             BottomSheet bottomSheet = BottomSheet.this;
                             bottomSheet.currentSheetAnimation = null;
+                            bottomSheet.currentSheetAnimationType = 0;
                             if (bottomSheet.delegate != null) {
                                 BottomSheet.this.delegate.onOpenAnimationEnd();
                             }
@@ -1044,13 +1074,14 @@ public class BottomSheet extends Dialog {
                     public void onAnimationCancel(Animator animator) {
                         AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
                         if (animatorSet != null && animatorSet.equals(animator)) {
-                            BottomSheet.this.currentSheetAnimation = null;
+                            BottomSheet bottomSheet = BottomSheet.this;
+                            bottomSheet.currentSheetAnimation = null;
+                            bottomSheet.currentSheetAnimationType = 0;
                         }
                     }
                 });
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
-                animatorSet.start();
-                this.currentSheetAnimation = animatorSet;
+                this.currentSheetAnimation.start();
             }
         }
     }
@@ -1110,19 +1141,22 @@ public class BottomSheet extends Dialog {
         if (!this.dismissed) {
             this.dismissed = true;
             cancelSheetAnimation();
-            AnimatorSet animatorSet = new AnimatorSet();
+            this.currentSheetAnimationType = 2;
+            this.currentSheetAnimation = new AnimatorSet();
+            AnimatorSet animatorSet = this.currentSheetAnimation;
             Animator[] animatorArr = new Animator[2];
             animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "translationY", new float[]{(float) (this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f))});
             animatorArr[1] = ObjectAnimator.ofInt(this.backDrawable, "alpha", new int[]{0});
             animatorSet.playTogether(animatorArr);
-            animatorSet.setDuration(180);
-            animatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-            animatorSet.addListener(new AnimatorListenerAdapter() {
+            this.currentSheetAnimation.setDuration(180);
+            this.currentSheetAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+            this.currentSheetAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
                     if (animatorSet != null && animatorSet.equals(animator)) {
                         BottomSheet bottomSheet = BottomSheet.this;
                         bottomSheet.currentSheetAnimation = null;
+                        bottomSheet.currentSheetAnimationType = 0;
                         if (bottomSheet.onClickListener != null) {
                             BottomSheet.this.onClickListener.onClick(BottomSheet.this, i);
                         }
@@ -1142,13 +1176,14 @@ public class BottomSheet extends Dialog {
                 public void onAnimationCancel(Animator animator) {
                     AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
                     if (animatorSet != null && animatorSet.equals(animator)) {
-                        BottomSheet.this.currentSheetAnimation = null;
+                        BottomSheet bottomSheet = BottomSheet.this;
+                        bottomSheet.currentSheetAnimation = null;
+                        bottomSheet.currentSheetAnimationType = 0;
                     }
                 }
             });
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
-            animatorSet.start();
-            this.currentSheetAnimation = animatorSet;
+            this.currentSheetAnimation.start();
         }
     }
 
@@ -1158,24 +1193,28 @@ public class BottomSheet extends Dialog {
             this.dismissed = true;
             cancelSheetAnimation();
             if (!(this.allowCustomAnimation && onCustomCloseAnimation())) {
-                AnimatorSet animatorSet = new AnimatorSet();
+                this.currentSheetAnimationType = 2;
+                this.currentSheetAnimation = new AnimatorSet();
+                AnimatorSet animatorSet = this.currentSheetAnimation;
                 Animator[] animatorArr = new Animator[2];
                 animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "translationY", new float[]{(float) (this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f))});
                 animatorArr[1] = ObjectAnimator.ofInt(this.backDrawable, "alpha", new int[]{0});
                 animatorSet.playTogether(animatorArr);
                 if (this.useFastDismiss) {
                     float measuredHeight = (float) this.containerView.getMeasuredHeight();
-                    animatorSet.setDuration((long) Math.max(60, (int) (((measuredHeight - this.containerView.getTranslationY()) * 180.0f) / measuredHeight)));
+                    this.currentSheetAnimation.setDuration((long) Math.max(60, (int) (((measuredHeight - this.containerView.getTranslationY()) * 180.0f) / measuredHeight)));
                     this.useFastDismiss = false;
                 } else {
-                    animatorSet.setDuration(180);
+                    this.currentSheetAnimation.setDuration(180);
                 }
-                animatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-                animatorSet.addListener(new AnimatorListenerAdapter() {
+                this.currentSheetAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+                this.currentSheetAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
                         if (animatorSet != null && animatorSet.equals(animator)) {
-                            BottomSheet.this.currentSheetAnimation = null;
+                            BottomSheet bottomSheet = BottomSheet.this;
+                            bottomSheet.currentSheetAnimation = null;
+                            bottomSheet.currentSheetAnimationType = 0;
                             AndroidUtilities.runOnUIThread(new -$$Lambda$BottomSheet$6$VTgE-oeIT2bQ5t-sdXAKcokhgP8(this));
                         }
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(512));
@@ -1192,13 +1231,14 @@ public class BottomSheet extends Dialog {
                     public void onAnimationCancel(Animator animator) {
                         AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
                         if (animatorSet != null && animatorSet.equals(animator)) {
-                            BottomSheet.this.currentSheetAnimation = null;
+                            BottomSheet bottomSheet = BottomSheet.this;
+                            bottomSheet.currentSheetAnimation = null;
+                            bottomSheet.currentSheetAnimationType = 0;
                         }
                     }
                 });
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
-                animatorSet.start();
-                this.currentSheetAnimation = animatorSet;
+                this.currentSheetAnimation.start();
             }
         }
     }

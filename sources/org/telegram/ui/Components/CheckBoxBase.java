@@ -15,34 +15,37 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.text.TextPaint;
 import android.view.View;
 import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 
 public class CheckBoxBase {
-    private static Paint backgroundPaint;
-    private static Paint checkPaint;
     private static Paint eraser;
     private static Paint paint;
     private boolean attachedToWindow;
     private String background2ColorKey;
-    private float backgroundAlpha = 1.0f;
+    private float backgroundAlpha;
     private String backgroundColorKey;
+    private Paint backgroundPaint;
     private Canvas bitmapCanvas;
-    private Rect bounds = new Rect();
+    private Rect bounds;
     private ObjectAnimator checkAnimator;
-    private String checkColorKey = "checkboxCheck";
+    private String checkColorKey;
+    private Paint checkPaint;
+    private String checkedText;
     private int drawBackgroundAsArc;
     private Bitmap drawBitmap;
     private boolean drawUnchecked;
-    private boolean enabled = true;
+    private boolean enabled;
     private boolean isChecked;
     private View parentView;
-    private Path path = new Path();
+    private Path path;
     private float progress;
     private ProgressDelegate progressDelegate;
-    private RectF rect = new RectF();
+    private RectF rect;
     private float size;
+    private TextPaint textPaint;
     private boolean useDefaultCheck;
 
     public interface ProgressDelegate {
@@ -50,26 +53,37 @@ public class CheckBoxBase {
     }
 
     public CheckBoxBase(View view) {
+        this(view, 21);
+    }
+
+    public CheckBoxBase(View view, int i) {
+        this.bounds = new Rect();
+        this.rect = new RectF();
+        this.path = new Path();
+        this.enabled = true;
+        this.backgroundAlpha = 1.0f;
+        this.checkColorKey = "checkboxCheck";
         String str = "chat_serviceBackground";
         this.backgroundColorKey = str;
         this.background2ColorKey = str;
         this.drawUnchecked = true;
         this.size = 21.0f;
         this.parentView = view;
+        this.size = (float) i;
         if (paint == null) {
             paint = new Paint(1);
             eraser = new Paint(1);
             eraser.setColor(0);
             eraser.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
-            backgroundPaint = new Paint(1);
-            backgroundPaint.setStyle(Style.STROKE);
-            checkPaint = new Paint(1);
-            checkPaint.setStrokeCap(Cap.ROUND);
-            checkPaint.setStyle(Style.STROKE);
-            checkPaint.setStrokeJoin(Join.ROUND);
         }
-        checkPaint.setStrokeWidth((float) AndroidUtilities.dp(1.9f));
-        backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.2f));
+        this.checkPaint = new Paint(1);
+        this.checkPaint.setStrokeCap(Cap.ROUND);
+        this.checkPaint.setStyle(Style.STROKE);
+        this.checkPaint.setStrokeJoin(Join.ROUND);
+        this.checkPaint.setStrokeWidth((float) AndroidUtilities.dp(1.9f));
+        this.backgroundPaint = new Paint(1);
+        this.backgroundPaint.setStyle(Style.STROKE);
+        this.backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.2f));
         this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(this.size), AndroidUtilities.dp(this.size), Config.ARGB_4444);
         this.bitmapCanvas = new Canvas(this.drawBitmap);
     }
@@ -98,10 +112,7 @@ public class CheckBoxBase {
     public void setProgress(float f) {
         if (this.progress != f) {
             this.progress = f;
-            if (this.parentView.getParent() != null) {
-                ((View) this.parentView.getParent()).invalidate();
-            }
-            this.parentView.invalidate();
+            invalidate();
             ProgressDelegate progressDelegate = this.progressDelegate;
             if (progressDelegate != null) {
                 progressDelegate.setProgress(f);
@@ -109,12 +120,15 @@ public class CheckBoxBase {
         }
     }
 
-    public void setProgressDelegate(ProgressDelegate progressDelegate) {
-        this.progressDelegate = progressDelegate;
+    private void invalidate() {
+        if (this.parentView.getParent() != null) {
+            ((View) this.parentView.getParent()).invalidate();
+        }
+        this.parentView.invalidate();
     }
 
-    public void setSize(int i) {
-        this.size = (float) i;
+    public void setProgressDelegate(ProgressDelegate progressDelegate) {
+        this.progressDelegate = progressDelegate;
     }
 
     public float getProgress() {
@@ -132,14 +146,14 @@ public class CheckBoxBase {
     public void setDrawBackgroundAsArc(int i) {
         this.drawBackgroundAsArc = i;
         if (i == 4 || i == 5) {
-            backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.9f));
+            this.backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.9f));
             if (i == 5) {
-                checkPaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
+                this.checkPaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
             }
         } else if (i == 3) {
-            backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.2f));
+            this.backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.2f));
         } else if (i != 0) {
-            backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
+            this.backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
         }
     }
 
@@ -159,6 +173,9 @@ public class CheckBoxBase {
             public void onAnimationEnd(Animator animator) {
                 if (animator.equals(CheckBoxBase.this.checkAnimator)) {
                     CheckBoxBase.this.checkAnimator = null;
+                }
+                if (!CheckBoxBase.this.isChecked) {
+                    CheckBoxBase.this.checkedText = null;
                 }
             }
         });
@@ -181,7 +198,30 @@ public class CheckBoxBase {
         this.backgroundAlpha = f;
     }
 
+    public void setNum(int i) {
+        if (i >= 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("");
+            stringBuilder.append(i + 1);
+            this.checkedText = stringBuilder.toString();
+        } else if (this.checkAnimator == null) {
+            this.checkedText = null;
+        }
+        invalidate();
+    }
+
     public void setChecked(boolean z, boolean z2) {
+        setChecked(-1, z, z2);
+    }
+
+    public void setChecked(int i, boolean z, boolean z2) {
+        if (i >= 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("");
+            stringBuilder.append(i + 1);
+            this.checkedText = stringBuilder.toString();
+            invalidate();
+        }
         if (z != this.isChecked) {
             this.isChecked = z;
             if (this.attachedToWindow && z2) {
@@ -193,14 +233,13 @@ public class CheckBoxBase {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x01bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x014c  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x01bf  */
-    public void draw(android.graphics.Canvas r17) {
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0263  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x01b3  */
+    public void draw(android.graphics.Canvas r19) {
         /*
-        r16 = this;
-        r0 = r16;
-        r7 = r17;
+        r18 = this;
+        r0 = r18;
+        r7 = r19;
         r1 = r0.drawBitmap;
         if (r1 != 0) goto L_0x0009;
     L_0x0008:
@@ -244,34 +283,34 @@ public class CheckBoxBase {
         r4 = 16777215; // 0xffffff float:2.3509886E-38 double:8.2890456E-317;
         if (r3 == 0) goto L_0x007f;
     L_0x0049:
-        r2 = r0.drawUnchecked;
-        if (r2 == 0) goto L_0x0066;
+        r3 = r0.drawUnchecked;
+        if (r3 == 0) goto L_0x0066;
     L_0x004d:
-        r2 = paint;
-        r3 = org.telegram.ui.ActionBar.Theme.getServiceMessageColor();
-        r3 = r3 & r4;
-        r4 = NUM; // 0x28000000 float:7.1054274E-15 double:3.315618423E-315;
-        r3 = r3 | r4;
-        r2.setColor(r3);
-        r2 = backgroundPaint;
-        r3 = r0.checkColorKey;
-        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
-        r2.setColor(r3);
+        r3 = paint;
+        r5 = org.telegram.ui.ActionBar.Theme.getServiceMessageColor();
+        r4 = r4 & r5;
+        r5 = NUM; // 0x28000000 float:7.1054274E-15 double:3.315618423E-315;
+        r4 = r4 | r5;
+        r3.setColor(r4);
+        r3 = r0.backgroundPaint;
+        r4 = r0.checkColorKey;
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
+        r3.setColor(r4);
         goto L_0x00c0;
     L_0x0066:
-        r2 = backgroundPaint;
-        r3 = r0.background2ColorKey;
-        if (r3 == 0) goto L_0x006d;
+        r3 = r0.backgroundPaint;
+        r5 = r0.background2ColorKey;
+        if (r5 == 0) goto L_0x006d;
     L_0x006c:
         goto L_0x006f;
     L_0x006d:
-        r3 = r0.checkColorKey;
+        r5 = r0.checkColorKey;
     L_0x006f:
-        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
-        r5 = r0.progress;
-        r6 = r0.backgroundAlpha;
-        r3 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r4, r3, r5, r6);
-        r2.setColor(r3);
+        r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
+        r6 = r0.progress;
+        r15 = r0.backgroundAlpha;
+        r4 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r4, r5, r6, r15);
+        r3.setColor(r4);
         goto L_0x00c0;
     L_0x007f:
         r3 = r0.drawUnchecked;
@@ -282,142 +321,242 @@ public class CheckBoxBase {
         r5 = r0.backgroundAlpha;
         r5 = r5 * r4;
         r4 = (int) r5;
-        r2 = android.graphics.Color.argb(r4, r2, r2, r2);
-        r3.setColor(r2);
-        r2 = backgroundPaint;
-        r3 = -1;
-        r4 = r0.checkColorKey;
-        r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
-        r5 = r0.progress;
-        r6 = r0.backgroundAlpha;
-        r3 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r3, r4, r5, r6);
-        r2.setColor(r3);
+        r4 = android.graphics.Color.argb(r4, r2, r2, r2);
+        r3.setColor(r4);
+        r3 = r0.backgroundPaint;
+        r4 = -1;
+        r5 = r0.checkColorKey;
+        r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
+        r6 = r0.progress;
+        r15 = r0.backgroundAlpha;
+        r4 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r4, r5, r6, r15);
+        r3.setColor(r4);
         goto L_0x00c0;
     L_0x00a8:
-        r2 = backgroundPaint;
-        r3 = r0.background2ColorKey;
-        if (r3 == 0) goto L_0x00af;
+        r3 = r0.backgroundPaint;
+        r5 = r0.background2ColorKey;
+        if (r5 == 0) goto L_0x00af;
     L_0x00ae:
         goto L_0x00b1;
     L_0x00af:
-        r3 = r0.checkColorKey;
+        r5 = r0.checkColorKey;
     L_0x00b1:
-        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
-        r5 = r0.progress;
-        r6 = r0.backgroundAlpha;
-        r3 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r4, r3, r5, r6);
-        r2.setColor(r3);
+        r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
+        r6 = r0.progress;
+        r15 = r0.backgroundAlpha;
+        r4 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r4, r5, r6, r15);
+        r3.setColor(r4);
     L_0x00c0:
-        r2 = r0.drawUnchecked;
-        if (r2 == 0) goto L_0x00cb;
-    L_0x00c4:
+        r3 = r0.drawUnchecked;
+        r15 = NUM; // 0x3fCLASSNAME float:1.5 double:5.28426686E-315;
+        r6 = 7;
+        r5 = 6;
+        if (r3 == 0) goto L_0x00f1;
+    L_0x00c8:
+        r3 = r0.drawBackgroundAsArc;
+        if (r3 == r5) goto L_0x00d7;
+    L_0x00cc:
+        if (r3 != r6) goto L_0x00cf;
+    L_0x00ce:
+        goto L_0x00d7;
+    L_0x00cf:
+        r3 = (float) r13;
+        r4 = (float) r14;
+        r2 = paint;
+        r7.drawCircle(r3, r4, r9, r2);
+        goto L_0x00f1;
+    L_0x00d7:
         r2 = (float) r13;
         r3 = (float) r14;
-        r4 = paint;
-        r7.drawCircle(r2, r3, r9, r4);
-    L_0x00cb:
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r4 = (float) r4;
+        r4 = r9 - r4;
+        r8 = paint;
+        r7.drawCircle(r2, r3, r4, r8);
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r4 = (float) r4;
+        r4 = r9 - r4;
+        r8 = r0.backgroundPaint;
+        r7.drawCircle(r2, r3, r4, r8);
+    L_0x00f1:
         r2 = paint;
         r3 = r0.checkColorKey;
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r2.setColor(r3);
         r2 = r0.drawBackgroundAsArc;
-        if (r2 != 0) goto L_0x00e2;
-    L_0x00da:
+        r8 = 1;
+        if (r2 == r6) goto L_0x01ac;
+    L_0x0101:
+        if (r2 != 0) goto L_0x010c;
+    L_0x0103:
         r1 = (float) r13;
         r2 = (float) r14;
-        r3 = backgroundPaint;
+        r3 = r0.backgroundPaint;
         r7.drawCircle(r1, r2, r9, r3);
-        goto L_0x0115;
-    L_0x00e2:
+        goto L_0x01ac;
+    L_0x010c:
         r2 = r0.rect;
         r3 = (float) r13;
         r4 = r3 - r1;
-        r5 = (float) r14;
-        r6 = r5 - r1;
+        r6 = (float) r14;
+        r15 = r6 - r1;
         r3 = r3 + r1;
-        r5 = r5 + r1;
-        r2.set(r4, r6, r3, r5);
+        r6 = r6 + r1;
+        r2.set(r4, r15, r3, r6);
         r1 = r0.drawBackgroundAsArc;
-        r2 = 1;
-        if (r1 != r2) goto L_0x00fb;
-    L_0x00f4:
-        r1 = -90;
-        r2 = -NUM; // 0xffffffffCLASSNAME float:-270.0 double:NaN;
+        if (r1 != r5) goto L_0x0126;
+    L_0x011d:
+        r1 = -NUM; // 0xffffffffc3b40000 float:-360.0 double:NaN;
+        r2 = r0.progress;
+        r2 = r2 * r1;
+        r1 = (int) r2;
+        r2 = 0;
+        goto L_0x0138;
+    L_0x0126:
+        if (r1 != r8) goto L_0x012f;
+    L_0x0128:
+        r2 = -90;
+        r1 = -NUM; // 0xffffffffCLASSNAME float:-270.0 double:NaN;
         r3 = r0.progress;
-        goto L_0x0101;
-    L_0x00fb:
-        r1 = 90;
-        r2 = NUM; // 0x43870000 float:270.0 double:5.597372625E-315;
+        goto L_0x0135;
+    L_0x012f:
+        r2 = 90;
+        r1 = NUM; // 0x43870000 float:270.0 double:5.597372625E-315;
         r3 = r0.progress;
-    L_0x0101:
-        r3 = r3 * r2;
-        r2 = (int) r3;
+    L_0x0135:
+        r3 = r3 * r1;
+        r1 = (int) r3;
+    L_0x0138:
+        r3 = r0.drawBackgroundAsArc;
+        if (r3 != r5) goto L_0x0198;
+    L_0x013c:
+        r3 = "dialogBackground";
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
+        r4 = android.graphics.Color.alpha(r3);
+        r6 = r0.backgroundPaint;
+        r6.setColor(r3);
+        r3 = r0.backgroundPaint;
+        r4 = (float) r4;
+        r6 = r0.progress;
+        r4 = r4 * r6;
+        r4 = (int) r4;
+        r3.setAlpha(r4);
         r3 = r0.rect;
-        r4 = (float) r1;
-        r5 = (float) r2;
+        r15 = (float) r2;
+        r6 = (float) r1;
+        r16 = 0;
+        r4 = r0.backgroundPaint;
+        r1 = r19;
+        r2 = r3;
+        r3 = r15;
+        r17 = r4;
+        r4 = r6;
+        r8 = 6;
+        r5 = r16;
+        r16 = r6;
+        r10 = 7;
+        r6 = r17;
+        r1.drawArc(r2, r3, r4, r5, r6);
+        r1 = "chat_attachPhotoBackground";
+        r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
+        r2 = android.graphics.Color.alpha(r1);
+        r3 = r0.backgroundPaint;
+        r3.setColor(r1);
+        r1 = r0.backgroundPaint;
+        r2 = (float) r2;
+        r3 = r0.progress;
+        r2 = r2 * r3;
+        r2 = (int) r2;
+        r1.setAlpha(r2);
+        r2 = r0.rect;
+        r5 = 0;
+        r6 = r0.backgroundPaint;
+        r1 = r19;
+        r3 = r15;
+        r4 = r16;
+        r1.drawArc(r2, r3, r4, r5, r6);
+        goto L_0x01ae;
+    L_0x0198:
+        r8 = 6;
+        r10 = 7;
+        r3 = r0.rect;
+        r4 = (float) r2;
+        r5 = (float) r1;
         r6 = 0;
-        r15 = backgroundPaint;
-        r1 = r17;
+        r15 = r0.backgroundPaint;
+        r1 = r19;
         r2 = r3;
         r3 = r4;
         r4 = r5;
         r5 = r6;
         r6 = r15;
         r1.drawArc(r2, r3, r4, r5, r6);
-    L_0x0115:
+        goto L_0x01ae;
+    L_0x01ac:
+        r8 = 6;
+        r10 = 7;
+    L_0x01ae:
         r1 = 0;
         r2 = (r12 > r1 ? 1 : (r12 == r1 ? 0 : -1));
-        if (r2 <= 0) goto L_0x021e;
-    L_0x011a:
+        if (r2 <= 0) goto L_0x032e;
+    L_0x01b3:
         r2 = r0.progress;
         r3 = (r2 > r11 ? 1 : (r2 == r11 ? 0 : -1));
-        if (r3 >= 0) goto L_0x0122;
-    L_0x0120:
+        if (r3 >= 0) goto L_0x01bb;
+    L_0x01b9:
         r2 = 0;
-        goto L_0x0124;
-    L_0x0122:
+        goto L_0x01bd;
+    L_0x01bb:
         r2 = r2 - r11;
         r2 = r2 / r11;
-    L_0x0124:
+    L_0x01bd:
+        r3 = r0.drawBackgroundAsArc;
+        if (r3 == r8) goto L_0x01df;
+    L_0x01c1:
+        if (r3 == r10) goto L_0x01df;
+    L_0x01c3:
         r3 = r0.drawUnchecked;
-        if (r3 != 0) goto L_0x0136;
-    L_0x0128:
+        if (r3 != 0) goto L_0x01cc;
+    L_0x01c7:
         r3 = r0.backgroundColorKey;
-        if (r3 == 0) goto L_0x0136;
-    L_0x012c:
-        r4 = paint;
-        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
-        r4.setColor(r3);
-        goto L_0x0148;
-    L_0x0136:
+        if (r3 == 0) goto L_0x01cc;
+    L_0x01cb:
+        goto L_0x01df;
+    L_0x01cc:
         r3 = paint;
         r4 = r0.enabled;
-        if (r4 == 0) goto L_0x013f;
-    L_0x013c:
+        if (r4 == 0) goto L_0x01d5;
+    L_0x01d2:
         r4 = "checkbox";
-        goto L_0x0141;
-    L_0x013f:
+        goto L_0x01d7;
+    L_0x01d5:
         r4 = "checkboxDisabled";
-    L_0x0141:
+    L_0x01d7:
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
         r3.setColor(r4);
-    L_0x0148:
+        goto L_0x01ea;
+    L_0x01df:
+        r3 = paint;
+        r4 = r0.backgroundColorKey;
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
+        r3.setColor(r4);
+    L_0x01ea:
         r3 = r0.useDefaultCheck;
-        if (r3 != 0) goto L_0x015a;
-    L_0x014c:
+        if (r3 != 0) goto L_0x01fc;
+    L_0x01ee:
         r3 = r0.checkColorKey;
-        if (r3 == 0) goto L_0x015a;
-    L_0x0150:
-        r4 = checkPaint;
+        if (r3 == 0) goto L_0x01fc;
+    L_0x01f2:
+        r4 = r0.checkPaint;
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r4.setColor(r3);
-        goto L_0x0165;
-    L_0x015a:
-        r3 = checkPaint;
+        goto L_0x0207;
+    L_0x01fc:
+        r3 = r0.checkPaint;
         r4 = "checkboxCheck";
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
         r3.setColor(r4);
-    L_0x0165:
+    L_0x0207:
         r3 = org.telegram.messenger.AndroidUtilities.dp(r11);
         r3 = (float) r3;
         r9 = r9 - r3;
@@ -441,8 +580,9 @@ public class CheckBoxBase {
         r5 = r5.getWidth();
         r5 = r5 / 2;
         r5 = (float) r5;
-        r6 = r10 - r12;
-        r9 = r9 * r6;
+        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r10 = r6 - r12;
+        r9 = r9 * r10;
         r6 = eraser;
         r3.drawCircle(r4, r5, r9, r6);
         r3 = r0.drawBitmap;
@@ -458,24 +598,74 @@ public class CheckBoxBase {
         r6 = 0;
         r7.drawBitmap(r3, r4, r5, r6);
         r1 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1));
-        if (r1 == 0) goto L_0x021e;
-    L_0x01bf:
+        if (r1 == 0) goto L_0x032e;
+    L_0x0263:
+        r1 = r0.checkedText;
+        if (r1 == 0) goto L_0x02c6;
+    L_0x0267:
+        r1 = r0.textPaint;
+        if (r1 != 0) goto L_0x027e;
+    L_0x026b:
+        r1 = new android.text.TextPaint;
+        r3 = 1;
+        r1.<init>(r3);
+        r0.textPaint = r1;
+        r1 = r0.textPaint;
+        r3 = "fonts/rmedium.ttf";
+        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);
+        r1.setTypeface(r3);
+    L_0x027e:
+        r1 = r0.checkColorKey;
+        r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
+        android.graphics.Color.alpha(r1);
+        r3 = r0.textPaint;
+        r3.setColor(r1);
+        r1 = r0.textPaint;
+        r3 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r3 = (float) r3;
+        r1.setTextSize(r3);
+        r1 = r0.textPaint;
+        r3 = r0.checkedText;
+        r1 = r1.measureText(r3);
+        r3 = (double) r1;
+        r3 = java.lang.Math.ceil(r3);
+        r1 = (int) r3;
+        r19.save();
+        r3 = (float) r13;
+        r4 = (float) r14;
+        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r7.scale(r2, r6, r3, r4);
+        r2 = r0.checkedText;
+        r1 = r1 / 2;
+        r13 = r13 - r1;
+        r1 = (float) r13;
+        r3 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r3 = (float) r3;
+        r4 = r0.textPaint;
+        r7.drawText(r2, r1, r3, r4);
+        r19.restore();
+        goto L_0x032e;
+    L_0x02c6:
+        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r1 = r0.path;
         r1.reset();
         r1 = r0.drawBackgroundAsArc;
         r3 = 5;
-        if (r1 != r3) goto L_0x01cc;
-    L_0x01c9:
+        if (r1 != r3) goto L_0x02d8;
+    L_0x02d2:
         r10 = NUM; // 0x3f4ccccd float:0.8 double:5.246966156E-315;
-    L_0x01cc:
+        r6 = NUM; // 0x3f4ccccd float:0.8 double:5.246966156E-315;
+    L_0x02d8:
         r1 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r1 = r1 * r10;
+        r1 = r1 * r6;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = (float) r1;
         r1 = r1 * r2;
         r3 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r10 = r10 * r3;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r6 = r6 * r3;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = (float) r4;
         r4 = r4 * r2;
         r2 = NUM; // 0x3fCLASSNAME float:1.5 double:5.28426686E-315;
@@ -484,7 +674,8 @@ public class CheckBoxBase {
         r2 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r14 = r14 + r2;
         r4 = r4 * r4;
-        r4 = r4 / r8;
+        r2 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r4 = r4 / r2;
         r2 = (double) r4;
         r2 = java.lang.Math.sqrt(r2);
         r2 = (float) r2;
@@ -497,7 +688,8 @@ public class CheckBoxBase {
         r2 = r0.path;
         r2.lineTo(r4, r6);
         r1 = r1 * r1;
-        r1 = r1 / r8;
+        r2 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r1 = r1 / r2;
         r1 = (double) r1;
         r1 = java.lang.Math.sqrt(r1);
         r1 = (float) r1;
@@ -506,9 +698,9 @@ public class CheckBoxBase {
         r6 = r6 - r1;
         r2.lineTo(r4, r6);
         r1 = r0.path;
-        r2 = checkPaint;
+        r2 = r0.checkPaint;
         r7.drawPath(r1, r2);
-    L_0x021e:
+    L_0x032e:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.CheckBoxBase.draw(android.graphics.Canvas):void");

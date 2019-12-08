@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.SparseArray;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -38,16 +39,18 @@ public class SharedConfig {
     public static int distanceSystemType = 0;
     public static boolean drawDialogIcons = false;
     public static int fontSize = AndroidUtilities.dp(16.0f);
-    public static boolean groupPhotosEnabled = true;
     public static boolean hasCameraCache = false;
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter = false;
+    public static int keepMedia = 2;
     public static long lastAppPauseTime = 0;
+    public static int lastKeepMediaCheckTime = 0;
     private static int lastLocalId = -210000;
     public static int lastPauseTime = 0;
     public static String lastUpdateVersion = null;
     public static long lastUptimeMillis = 0;
     private static final Object localIdSync = new Object();
+    public static boolean loopStickers = false;
     public static int mapPreviewType = 2;
     public static boolean noSoundHintShowed = false;
     public static String passcodeHash = "";
@@ -209,7 +212,6 @@ public class SharedConfig {
             inappCamera = sharedPreferences.getBoolean("inappCamera", true);
             hasCameraCache = sharedPreferences.contains("cameraCache");
             roundCamera16to9 = true;
-            groupPhotosEnabled = sharedPreferences.getBoolean("groupPhotosEnabled", true);
             repeatMode = sharedPreferences.getInt("repeatMode", 0);
             fontSize = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
             allowBigEmoji = sharedPreferences.getBoolean("allowBigEmoji", true);
@@ -226,6 +228,9 @@ public class SharedConfig {
             archiveHidden = sharedPreferences.getBoolean("archiveHidden", false);
             distanceSystemType = sharedPreferences.getInt("distanceSystemType", 0);
             devicePerformanceClass = sharedPreferences.getInt("devicePerformanceClass", -1);
+            loopStickers = sharedPreferences.getBoolean("loopStickers", true);
+            keepMedia = sharedPreferences.getInt("keep_media", 2);
+            lastKeepMediaCheckTime = sharedPreferences.getInt("lastKeepMediaCheckTime", 0);
             showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
             configLoaded = true;
         }
@@ -339,6 +344,54 @@ public class SharedConfig {
         suggestStickers = i;
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("suggestStickers", suggestStickers);
+        edit.commit();
+    }
+
+    public static void setKeepMedia(int i) {
+        keepMedia = i;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("keep_media", keepMedia);
+        edit.commit();
+    }
+
+    public static void checkKeepMedia() {
+        int currentTimeMillis = (int) (System.currentTimeMillis() / 1000);
+        if (keepMedia != 2 && Math.abs(currentTimeMillis - lastKeepMediaCheckTime) >= 86400) {
+            lastKeepMediaCheckTime = currentTimeMillis;
+            Utilities.globalQueue.postRunnable(new -$$Lambda$SharedConfig$8EIGCb-XX-RAcunveaeflDZAeM8(currentTimeMillis));
+        }
+    }
+
+    static /* synthetic */ void lambda$checkKeepMedia$0(int i) {
+        int i2 = keepMedia;
+        i2 = i2 == 0 ? 7 : i2 == 1 ? 30 : 3;
+        long j = (long) (i - (i2 * 86400));
+        SparseArray createMediaPaths = ImageLoader.getInstance().createMediaPaths();
+        for (int i3 = 0; i3 < createMediaPaths.size(); i3++) {
+            if (createMediaPaths.keyAt(i3) != 4) {
+                try {
+                    Utilities.clearDir(((File) createMediaPaths.valueAt(i3)).getAbsolutePath(), 0, j);
+                } catch (Throwable th) {
+                    FileLog.e(th);
+                }
+            }
+        }
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("lastKeepMediaCheckTime", lastKeepMediaCheckTime);
+        edit.commit();
+    }
+
+    public static void toggleLoopStickers() {
+        loopStickers ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("loopStickers", loopStickers);
+        edit.commit();
+    }
+
+    public static void toggleBigEmoji() {
+        allowBigEmoji ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("allowBigEmoji", allowBigEmoji);
         edit.commit();
     }
 
@@ -489,13 +542,6 @@ public class SharedConfig {
         roundCamera16to9 ^= 1;
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("roundCamera16to9", roundCamera16to9);
-        edit.commit();
-    }
-
-    public static void toggleGroupPhotosEnabled() {
-        groupPhotosEnabled ^= 1;
-        Editor edit = MessagesController.getGlobalMainSettings().edit();
-        edit.putBoolean("groupPhotosEnabled", groupPhotosEnabled);
         edit.commit();
     }
 

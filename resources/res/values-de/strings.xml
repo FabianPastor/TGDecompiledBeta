@@ -96,7 +96,7 @@
     <string name="ActionAddUserSelfMega">un1 ist der Gruppe beigetreten</string>
     <string name="ActionAddUserSelfYou">Du bist in die Gruppe zurückgekehrt</string>
     <string name="ActionAddUserYou">un1 hat dich hinzugefügt</string>
-    <string name="ActionBotAllowed">Du hast diesem Bot erlaubt, dich anschreiben, als du dich auf %1$s angemeldet hast.</string>
+    <string name="ActionBotAllowed">Du hast diesem Bot erlaubt, dich anzuschreiben, als du dich auf %1$s angemeldet hast.</string>
     <string name="ActionBotDocumentAddress">Adresse</string>
     <string name="ActionBotDocumentBankStatement">Kontoauszug</string>
     <string name="ActionBotDocumentDriverLicence">Führerschein</string>
@@ -157,7 +157,7 @@
     <string name="ActionYouScoredInGame">Du hast %1$s bei un2 erzielt</string>
     <string name="Add">Hinzufügen</string>
     <string name="AddAccount">Konto hinzufügen</string>
-    <string name="AddAdminErrorBlacklisted">Du kannst diesen Nutzer nicht als Admin festlegen, da er sich in der Sperrliste befindet und du ihn nicht entsperren darfst.</string>
+    <string name="AddAdminErrorBlacklisted">Du kannst diesen Nutzer nicht als Admin festlegen, da er sich in der Liste \"Entfernte Nutzer\" befindet und du ihn nicht entfernen darfst.</string>
     <string name="AddAdminErrorNotAMember">Du kannst diesen Nutzer nicht als Admin festlegen, da er kein Mitglied dieser Gruppe ist oder du keine Erlaubnis hast, ihn einzuladen.</string>
     <string name="AddAnOption">Option hinzufügen</string>
     <string name="AddAnOptionInfo">Noch %1$s</string>
@@ -212,8 +212,8 @@
     <string name="AllowCustomQuickReply">Eigene erlauben</string>
     <string name="AllowFillNumber">Bitte erlaube Telegram, Anrufe zu empfangen, damit wir deine Telefonnummer automatisch bestätigen können.</string>
     <string name="AllowReadCall">Bitte erlaube Telegram den Zugriff auf Anrufe, so dass wir den Code automatisch in der App eingeben können.</string>
-    <string name="AllowReadCallAndSms">Bitte erlaube Telegram Anrufe zu empfangen, damit wir deine Telefonnummer automatisch bestätigen können.</string>
-    <string name="AllowReadSms">Bitte erlaube Telegram den Zugriff auf SMS, so dass wir den Code automatisch in der App für dich eingeben können.</string>
+    <string name="AllowReadCallAndLog">Bitte erlaube Telegram, Anrufe zu empfangen und die Anrufliste einzusehen , so dass wir den Code automatisch für dich eingeben können.</string>
+    <string name="AllowReadCallLog">Bitte erlaube Telegram auf die Anrufliste zuzugreifen, so dass wir den Code für dich automatisch eingeben können.</string>
     <string name="AlternativeOptions">Alternative Optionen</string>
     <string name="AlwaysAllow">Immer erlauben</string>
     <string name="AlwaysShareWith">Immer teilen mit</string>
@@ -502,6 +502,7 @@
     <string name="Calls">Anrufe</string>
     <string name="CallsDataUsage">Anrufe</string>
     <string name="CallsTotalTime">Zeit insgesamt</string>
+    <string name="CameraPermissionText">Antippen, um Zugriff auf deine Kamera zu erlauben</string>
     <string name="Cancel">Abbrechen</string>
     <string name="CancelAccountReset">Zurücksetzung abbrechen</string>
     <string name="CancelAccountResetInfo">Jemand mit Zugang zu deiner Telefonnummer **%1$s** hat die Kontolöschung und Zurücksetzung der zweistufigen Bestätigung beantragt. Wenn du das nicht selbst gewesen bist, tippe den Code der SMS ein, den wir dir gerade gesendet haben.</string>
@@ -530,7 +531,7 @@
     <string name="ChangePhoneNumberOccupied">Die Telefonnummer %1$s ist bereits ein Telegram Konto. Bitte lösche es, bevor du mit der Übertragung auf das neue Konto startest.</string>
     <string name="ChangePublicLimitReached">Du hast leider zu viele öffentliche Benutzernamen erstellt. Du kannst jederzeit den Link einer älteren Gruppe oder eines Kanals entfernen.</string>
     <string name="ChangeRecoveryEmail">E‑Mail-Adresse ändern</string>
-    <string name="ChannelAddAdmin">Administrator hinzufügen</string>
+    <string name="ChannelAddAdmin">Admin hinzufügen</string>
     <string name="ChannelAddException">Ausnahme hinzufügen</string>
     <string name="ChannelAddMembers">Mitglieder hinzufügen</string>
     <string name="ChannelAddTo">%1$s zum Kanal hinzufügen?</string>
@@ -842,7 +843,7 @@
     <string name="DebugSendLogs">Protokolldateien senden</string>
     <string name="December">Dezember</string>
     <string name="Decline">Ablehnen</string>
-    <string name="DeclineDeactivate">Ablehnen &amp; Deaktivieren</string>
+    <string name="DeclineDeactivate">Ablehnen &amp; Löschen</string>
     <string name="Default">Standard</string>
     <string name="DefaultRingtone">Standard</string>
     <string name="Delete">Löschen</string>
@@ -941,6 +942,8 @@
     <string name="EditAdminPinMessages">Nachrichten anheften</string>
     <string name="EditAdminPostMessages">Nachrichten senden</string>
     <string name="EditAdminPromotedBy">Befördert von %1$s</string>
+    <string name="EditAdminRank">Eigene Bezeichnung</string>
+    <string name="EditAdminRankInfo">Diese Bezeichnung wird anstatt \'%1$s\' angezeigt.</string>
     <string name="EditAdminRemoveAdmin">Admin entlassen</string>
     <string name="EditAdminRights">Adminrechte bearbeiten</string>
     <string name="EditAdminTransferAlertText">Du kannst die Gruppe **%1$s** nur übertragen, wenn:</string>
@@ -976,7 +979,6 @@
     <string name="Emoji6">Objekte</string>
     <string name="Emoji7">Symbole</string>
     <string name="Emoji8">Flaggen</string>
-    <string name="EmojiBigSize">Draw single big emoji</string>
     <string name="EmojiSuggestions">Emoji-Vorschläge</string>
     <string name="EmojiSuggestionsInfo">**Telegram** ermöglicht dir die Suche nach tausenden Emoji anhand von Wörtern. Hier und da fehlen jedoch einige. Wenn du Emoji-Ersetzungen vorschlagen möchtest, besuche bitte diese Seite: </string>
     <string name="EmojiSuggestionsUrl">https://translations.telegram.org/%1$s/emoji</string>
@@ -1080,6 +1082,8 @@
     <string name="EventLogPromotedEditMessages">Nachrichten bearbeiten</string>
     <string name="EventLogPromotedPinMessages">Nachrichten anheften</string>
     <string name="EventLogPromotedPostMessages">Nachrichten senden</string>
+    <string name="EventLogPromotedRemovedTitle">Bezeichnung</string>
+    <string name="EventLogPromotedTitle">Bezeichnung: %1$s</string>
     <string name="EventLogRemovedChannelLink">un1 hat Kanal-Link entfernt</string>
     <string name="EventLogRemovedChannelPhoto">un1 hat das Kanalbild entfernt</string>
     <string name="EventLogRemovedGroupLink">un1 hat Gruppen-Link entfernt</string>
@@ -1106,6 +1110,8 @@
     <string name="EventLogToggledInvitesOn">un1 hat Gruppeneinladungen aktiviert</string>
     <string name="EventLogToggledSignaturesOff">un1 hat Unterschriften deaktiviert</string>
     <string name="EventLogToggledSignaturesOn">un1 hat Unterschriften aktiviert</string>
+    <string name="EventLogToggledSlowmodeOff">un1 hat den langsamen Modus deaktiviert</string>
+    <string name="EventLogToggledSlowmodeOn">un1 hat den Timer des langsamen Modus auf %1$s gestellt</string>
     <string name="EventLogUnpinnedMessages">un1 hat angeheftete Nachricht entfernt</string>
     <string name="Events">Ereignisse</string>
     <string name="Exception_few">%1$d Ausnahmen</string>
@@ -1227,9 +1233,11 @@
     <string name="FromYou">Du</string>
     <string name="Gallery">Galerie</string>
     <string name="GalleryInfo">Bilder ohne Komprimierung senden</string>
+    <string name="GalleryPermissionText">Antippen, um Zugriff auf deine Galerie zu erlauben</string>
     <string name="General">Allgemein</string>
     <string name="GettingLinkInfo">Lade Linkvorschau...</string>
     <string name="GifCaption">GIF Beschriftung</string>
+    <string name="GifsTab">GIFS</string>
     <string name="GlobalAttachGifRestricted">GIFs sind in dieser Gruppe nicht erlaubt.</string>
     <string name="GlobalAttachInlineRestricted">Inline-Bots sind in dieser Gruppe nicht erlaubt.</string>
     <string name="GlobalAttachMediaRestricted">Versand von Medien ist hier nicht erlaubt.</string>
@@ -1264,7 +1272,7 @@
     <string name="GroupUserCantAdd">Du kannst diesen Nutzer nicht hinzufügen.</string>
     <string name="GroupUserCantAdmin">Es gibt bereits zu viele Administratoren.</string>
     <string name="GroupUserCantBot">Es gibt bereits zu viele Bots.</string>
-    <string name="GroupUserLeftError">Dieser Nutzer hat die Gruppe verlassen, deshalb kannst du ihn nicht wieder hinzufügen.</string>
+    <string name="GroupUserLeftError">Wenn jemand eine Gruppe verlassen hat, musst du in der Kontaktliste der Person sein, um sie wieder hinzufügen zu können.\10\10Man kann die Gruppe auch über einen Einladungslink betreten, so lange die Person nicht in der Liste \"Entfernte Nutzer\" der Gruppe steht.</string>
     <string name="GroupsAndChannels">Gruppen</string>
     <string name="GroupsAndChannelsHelp">Ändere, wer dich in Gruppen und Kanäle einladen kann.</string>
     <string name="GroupsInCommon">Gemeinsame Gruppen</string>
@@ -1297,6 +1305,7 @@
     <string name="Hours_two">%1$d Stunden</string>
     <string name="Hours_zero">%1$d Stunden</string>
     <string name="Hybrid">Hybrid</string>
+    <string name="ImagesTab">BILDER</string>
     <string name="ImportContacts">Kontakte importieren</string>
     <string name="InAppNotifications">In-App </string>
     <string name="InAppPreview">In-App-Vorschau</string>
@@ -1369,6 +1378,7 @@
     <string name="LanguageUnknownTitle">Unzureichende Daten</string>
     <string name="LanguageUnofficial">Inoffizielle Sprachen</string>
     <string name="LanguageUnsupportedError">Diese Sprache gibt es nicht.</string>
+    <string name="LargeEmoji">Große Emoji</string>
     <string name="LastName">Nachname (optional)</string>
     <string name="LastSeen">zul. online</string>
     <string name="LastSeenContacts">Meine Kontakte</string>
@@ -1433,6 +1443,7 @@
     <string name="LoginPassword">Passwort</string>
     <string name="LoginPasswordText">Du hast die zweistufige Bestätigung aktiviert. Dein Konto ist mit einem zusätzlichen Passwort geschützt.</string>
     <string name="Long">Lang</string>
+    <string name="LoopAnimatedStickers">Animationen wiederholen</string>
     <string name="LowDiskSpaceMessage">Du hast kaum noch freien Speicher. Lege fest, ob du nur kürzlich erhaltene Medien im Cache behalten willst.</string>
     <string name="LowDiskSpaceNeverRemove">Niemals entfernen</string>
     <string name="LowDiskSpaceTitle">Achtung</string>
@@ -1461,6 +1472,12 @@
     <string name="MasksInfo">Masken lassen sich Bildern hinzufügen. Öffne dazu vor dem Versand einfach den Editor.</string>
     <string name="MasksRemoved">Masken entfernt</string>
     <string name="May">Mai</string>
+    <string name="MediaSelected_few">%1$d Medien ausgewählt</string>
+    <string name="MediaSelected_many">%1$d Medien ausgewählt</string>
+    <string name="MediaSelected_one">%1$d Medium ausgewählt</string>
+    <string name="MediaSelected_other">%1$d Medien ausgewählt</string>
+    <string name="MediaSelected_two">%1$d Medien ausgewählt</string>
+    <string name="MediaSelected_zero">%1$d Medien ausgewählt</string>
     <string name="Media_few">%1$d Medien</string>
     <string name="Media_many">%1$d Medien</string>
     <string name="Media_one">%1$d Medium</string>
@@ -1578,7 +1595,7 @@
     <string name="NoEmojiFound">Kein Emoji gefunden</string>
     <string name="NoExceptions">Deine angepassten Benachrichtigungen werden in diesem Bereich angezeigt.\10\10Um Benachrichtigungen anzupassen, Chat mit dem Gesprächspartner öffnen, Profilbild antippen, dann \'Mitteilungen\' und \'Anpassen\'.</string>
     <string name="NoGIFsFound">Kein GIF gefunden</string>
-    <string name="NoGroupsInCommon">Noch keine gemeinsamen Gruppen</string>
+    <string name="NoGroupsInCommon">Keine gemeinsamen Gruppen</string>
     <string name="NoHandleAppInstalled">Du hast keine Applikationen, die den Dateityp \'%1$s\' öffnen könnten. Bitte installiere eine entsprechende Anwendung um fortzufahren.</string>
     <string name="NoMailInstalled">Bitte sende eine E-Mail an sms@stel.com mit einer Beschreibung des Problems.</string>
     <string name="NoMasks">Noch keine Masken</string>
@@ -1788,7 +1805,7 @@
     <string name="Option_zero">%1$d weitere Optionen möglich.</string>
     <string name="Orange">Orange</string>
     <string name="OtherLoginCode">Dein Anmeldecode lautet **%1$s**. Gebe ihn in der Telegram-App ein, bei der du dich anmelden möchtest.\10\10Den Code niemals weitergeben.</string>
-    <string name="OtherSessions">Andere Sitzungen</string>
+    <string name="OtherSessions">Aktive Sitzungen</string>
     <string name="OtherWebSessions">Verbundene Webseiten</string>
     <string name="OutgoingCalls">Ausgehende Anrufe</string>
     <string name="P2PContacts">Meine Kontakte</string>
@@ -1856,19 +1873,19 @@
     <string name="PassportCity">Stadt</string>
     <string name="PassportCorrectErrors">Antippen zum Korrigieren.</string>
     <string name="PassportCountry">Land</string>
-    <string name="PassportDeleteAddressAlert">Deine Adressinformationen wirklich löschen?</string>
+    <string name="PassportDeleteAddressAlert">Möchtest du deine Adressdaten löschen?</string>
     <string name="PassportDeleteDocument">Dokument löschen</string>
     <string name="PassportDeleteDocumentAddress">Adressinformationen löschen</string>
-    <string name="PassportDeleteDocumentAlert">Bist du sicher, dass du dieses Dokument wirklich löschen willst?</string>
+    <string name="PassportDeleteDocumentAlert">Möchtest du dieses Dokument löschen?</string>
     <string name="PassportDeleteDocumentPersonal">Persönliche Daten löschen</string>
     <string name="PassportDeleteEmailAlert">E-Mail löschen?</string>
     <string name="PassportDeleteInfo">Löschen</string>
     <string name="PassportDeletePersonalAlert">Möchtest du wirklich deine persönlichen Daten löschen?</string>
     <string name="PassportDeletePhoneAlert">Telefonnummer löschen?</string>
     <string name="PassportDeleteScan">Scan löschen?</string>
-    <string name="PassportDeleteScanAlert">Möchtest du diesen Scan wirklich löschen?</string>
+    <string name="PassportDeleteScanAlert">Möchtest du diesen Scan löschen?</string>
     <string name="PassportDeleteSelfie">Selfie löschen?</string>
-    <string name="PassportDeleteSelfieAlert">Möchtest du dieses Selfie wirklich löschen?</string>
+    <string name="PassportDeleteSelfieAlert">Möchtest du dieses Selfie löschen?</string>
     <string name="PassportDiscard">Verwerfen</string>
     <string name="PassportDiscardChanges">Möchtest du wirklich alle eingegeben Informationen verwerfen?</string>
     <string name="PassportDocument">Angaben zum Dokument</string>
@@ -2102,6 +2119,12 @@
     <string name="PhoneOther">Sonstiges</string>
     <string name="PhoneWork">Arbeit</string>
     <string name="PhotoCaption">Bildbeschriftung</string>
+    <string name="PhotosSelected_few">%1$d Bilder ausgewählt</string>
+    <string name="PhotosSelected_many">%1$d Bilder ausgewählt</string>
+    <string name="PhotosSelected_one">%1$d Bild ausgewählt</string>
+    <string name="PhotosSelected_other">%1$d Bilder ausgewählt</string>
+    <string name="PhotosSelected_two">%1$d Bilder ausgewählt</string>
+    <string name="PhotosSelected_zero">%1$d Bilder ausgewählt</string>
     <string name="Photos_few">%1$d Bilder</string>
     <string name="Photos_many">%1$d Bilder</string>
     <string name="Photos_one">%1$d Bild</string>
@@ -2115,7 +2138,7 @@
     <string name="PinMessageAlertTitle">Nachricht anheften</string>
     <string name="PinNotify">Mitglieder benachrichtigen</string>
     <string name="PinToTop">Oben anheften</string>
-    <string name="PinToTopLimitReached">Mehr als %1$s kann man leider nicht oben anheften.</string>
+    <string name="PinToTopLimitReached">Bis zu %1$s kann man in der Chatliste oben anheften.\10\10Wenn du mehr Ordnung brauchst, versuche einige Chats zu archivieren. Der Ordner \"Archivierte Chats\" erlaubt das Anheften von beliebig vielen Chats.</string>
     <string name="Ping">Ping: %1$d ms</string>
     <string name="Pink">Rosa</string>
     <string name="PinnedMessage">Angeheftete Nachricht</string>
@@ -2312,7 +2335,7 @@
     <string name="SavedMessagesInfo">Weiterleiten zum Speichern</string>
     <string name="ScamMessage">BETRUG</string>
     <string name="ScreenCapture">App-Inhalte nach Sperrung anzeigen</string>
-    <string name="ScreenCaptureAlert">Das wird die Inhalte der Chatliste oder Chats in der Liste der geöffneten Apps verstecken, du wirst jedch keine Bildschirmfotos aufnehmen können. \10\10Du wirst die App nach der Änderung neu starten müssen.</string>
+    <string name="ScreenCaptureAlert">Das wird die Inhalte der Chatliste oder Chats in der Liste der geöffneten Apps verstecken, du wirst jedoch keine Bildschirmfotos aufnehmen können. \10\10Du wirst die App nach der Änderung neu starten müssen.</string>
     <string name="ScreenCaptureInfo">Wenn du diese Funktion deaktivierst, wirst du keine Bildschirmfotos mehr in der App aufnehmen können und Chatinhalte werden in der Liste der geöffneten App ausgeblendet.</string>
     <string name="SdCard">SD-Karte</string>
     <string name="Search">Suche</string>
@@ -2384,6 +2407,9 @@
     <string name="SendSelectedLocation">Diesen Standort senden</string>
     <string name="SendSticker">STICKER SENDEN</string>
     <string name="SendStickerPreview">Sticker senden</string>
+    <string name="SendWithoutCompression">Ohne Komprimierung senden</string>
+    <string name="SendWithoutGrouping">Ohne Gruppierung senden</string>
+    <string name="SendWithoutSound">Ohne Ton senden</string>
     <string name="SendingAudio">schickt Audio...</string>
     <string name="SendingFile">schickt Datei...</string>
     <string name="SendingGame">spielt ein Spiel...</string>
@@ -2391,7 +2417,7 @@
     <string name="SendingPhoto">schickt Bild...</string>
     <string name="SendingSms">SMS wird gesendet...</string>
     <string name="SendingVideo">Sende Video...</string>
-    <string name="SendingVideoStatus">schickt Video...</string>
+    <string name="SendingVideoStatus">sendet ein Video...</string>
     <string name="SentAppCode">Code wurde dir per **Telegram** an deine aktive App geschickt.</string>
     <string name="SentAppCodeTitle">Prüfe deine Telegram-Nachrichten</string>
     <string name="SentCallCode">Wir rufen dich jetzt unter **%1$s** an.\10\10Bitte den Anruf nicht annehmen, Telegram kümmert sich um alles.</string>
@@ -2465,6 +2491,17 @@
     <string name="SignUp">Registrieren</string>
     <string name="SinglePhotosHelp">Zeigt Medien als einzelne Nachrichten</string>
     <string name="SlideToCancel">WISCHEN UM ABZUBRECHEN</string>
+    <string name="SlowModeHint">Langsamer Modus aktiv.\10Bitte warte %1$s.</string>
+    <string name="Slowmode">Langsamer Modus</string>
+    <string name="SlowmodeHours">%1$dh</string>
+    <string name="SlowmodeInfoOff">Wie lange jedes Mitglied warten muss, bevor es seine nächste Nachricht senden darf.</string>
+    <string name="SlowmodeInfoSelected">Intervall zwischen einzelnen Nachrichten: %1$s</string>
+    <string name="SlowmodeMinutes">%1$dm</string>
+    <string name="SlowmodeOff">Aus</string>
+    <string name="SlowmodeSeconds">%1$ds</string>
+    <string name="SlowmodeSelectSendError">Langsamer Modus ist aktiv, du kannst nicht mehr Elemente auswählen.</string>
+    <string name="SlowmodeSendError">Langsamer Modus ist aktiv, du kannst nicht mehr als eine Nachricht gleichzeitig senden.</string>
+    <string name="SlowmodeSendErrorTooLong">Dieser Text ist für eine einzelne Nachricht leider zu lang.\10\10Langsamer Modus ist aktiv, du kannst nicht mehr als eine gleichzeitig senden.</string>
     <string name="SmartNotifications">Schlaue Benachrichtigungen</string>
     <string name="SmartNotificationsAlert">Anzahl Benachrichtigungen</string>
     <string name="SmartNotificationsDetail">%1$s innerhalb %2$s</string>
@@ -2536,6 +2573,7 @@
     <string name="SyncContactsOff">Kontakte von diesem Gerät werden deinem Konto nicht hinzugefügt.</string>
     <string name="SyncContactsOn">Kontakte von diesem Gerät werden deinem Konto hinzugefügt.</string>
     <string name="SystemRoot">Systemverzeichnis</string>
+    <string name="TapForVideo">Tippen für Foto, halten für Video</string>
     <string name="TapHereGifs">Hier tippen um gespeicherte GIFs zu sehen</string>
     <string name="TapToChange">Antippen zum Ändern</string>
     <string name="TapToChangePhone">Antippen, um Nummer zu ändern</string>
@@ -2681,7 +2719,7 @@
     <string name="UserRestrictionsBlock">Sperren und aus der Gruppe entfernen</string>
     <string name="UserRestrictionsCanDo">Was kann dieser Nutzer machen?</string>
     <string name="UserRestrictionsChangeInfo">Chat-Info ändern</string>
-    <string name="UserRestrictionsCustom">Custom</string>
+    <string name="UserRestrictionsCustom">Eigener</string>
     <string name="UserRestrictionsDisabled">In den Gruppenberechtigungen ist diese Option für alle deaktiviert worden</string>
     <string name="UserRestrictionsDuration">Dauer</string>
     <string name="UserRestrictionsEmbedLinks">Linkvorschau senden</string>
@@ -2728,6 +2766,12 @@
     <string name="VideoCaption">Videobeschriftung</string>
     <string name="VideoDoesNotSupportStreaming">Dieses Video ist nicht für Streaming optimiert. Du musst es vollständig herunterladen, um es abzuspielen.</string>
     <string name="VideoMessagesAutodownload">Videonachrichten</string>
+    <string name="VideosSelected_few">%1$d Videos ausgewählt</string>
+    <string name="VideosSelected_many">%1$d Videos ausgewählt</string>
+    <string name="VideosSelected_one">%1$d Video ausgewählt</string>
+    <string name="VideosSelected_other">%1$d Videos ausgewählt</string>
+    <string name="VideosSelected_two">%1$d Videos ausgewählt</string>
+    <string name="VideosSelected_zero">%1$d Videos ausgewählt</string>
     <string name="Videos_few">%1$d Videos</string>
     <string name="Videos_many">%1$d Videos</string>
     <string name="Videos_one">%1$d Video</string>

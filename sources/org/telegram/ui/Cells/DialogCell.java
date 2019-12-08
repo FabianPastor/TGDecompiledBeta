@@ -172,9 +172,8 @@ public class DialogCell extends BaseCell {
         this.avatarImage.setRoundRadius(AndroidUtilities.dp(28.0f));
         this.useForceThreeLines = z2;
         if (z) {
-            this.checkBox = new CheckBox2(context);
+            this.checkBox = new CheckBox2(context, 21);
             this.checkBox.setColor(null, "windowBackgroundWhite", "checkboxCheck");
-            this.checkBox.setSize(21);
             this.checkBox.setDrawUnchecked(false);
             this.checkBox.setDrawBackgroundAsArc(3);
             addView(this.checkBox);
@@ -856,7 +855,7 @@ public class DialogCell extends BaseCell {
         r5 = r0.type;
         if (r5 != r6) goto L_0x02e5;
     L_0x0265:
-        r0 = NUM; // 0x7f0d04c8 float:1.8744597E38 double:1.0531303823E-314;
+        r0 = NUM; // 0x7f0d04ce float:1.874461E38 double:1.053130385E-314;
         r5 = "FromYou";
         r0 = org.telegram.messenger.LocaleController.getString(r5, r0);
         r5 = r1.customDialog;
@@ -1402,7 +1401,7 @@ public class DialogCell extends BaseCell {
         r0 = r1.draftMessage;
         if (r0 == 0) goto L_0x06b8;
     L_0x060d:
-        r0 = NUM; // 0x7f0d039b float:1.8743987E38 double:1.0531302336E-314;
+        r0 = NUM; // 0x7f0d039c float:1.8743989E38 double:1.053130234E-314;
         r6 = "Draft";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
         r6 = r1.draftMessage;
@@ -1496,7 +1495,7 @@ public class DialogCell extends BaseCell {
         if (r0 == 0) goto L_0x06ce;
     L_0x06be:
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_messagePrintingPaint;
-        r0 = NUM; // 0x7f0d0500 float:1.874471E38 double:1.05313041E-314;
+        r0 = NUM; // 0x7f0d0508 float:1.8744727E38 double:1.053130414E-314;
         r6 = "HistoryCleared";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
     L_0x06c9:
@@ -1515,7 +1514,7 @@ public class DialogCell extends BaseCell {
         r6 = r0 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChatRequested;
         if (r6 == 0) goto L_0x06e6;
     L_0x06dc:
-        r0 = NUM; // 0x7f0d03e7 float:1.874414E38 double:1.053130271E-314;
+        r0 = NUM; // 0x7f0d03e9 float:1.8744145E38 double:1.053130272E-314;
         r6 = "EncryptionProcessing";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
         goto L_0x06c9;
@@ -1548,7 +1547,7 @@ public class DialogCell extends BaseCell {
         r6 = r0 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChatDiscarded;
         if (r6 == 0) goto L_0x071e;
     L_0x0714:
-        r0 = NUM; // 0x7f0d03e8 float:1.8744143E38 double:1.0531302716E-314;
+        r0 = NUM; // 0x7f0d03ea float:1.8744147E38 double:1.0531302726E-314;
         r6 = "EncryptionRejected";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
         goto L_0x06c9;
@@ -1568,7 +1567,7 @@ public class DialogCell extends BaseCell {
         r0 = r0.first_name;
         if (r0 == 0) goto L_0x0747;
     L_0x0738:
-        r6 = NUM; // 0x7f0d03dc float:1.8744119E38 double:1.0531302657E-314;
+        r6 = NUM; // 0x7f0d03de float:1.8744123E38 double:1.0531302667E-314;
         r7 = 1;
         r8 = new java.lang.Object[r7];
         r8[r2] = r0;
@@ -1577,14 +1576,14 @@ public class DialogCell extends BaseCell {
         goto L_0x06c9;
     L_0x0747:
         r7 = 1;
-        r0 = NUM; // 0x7f0d03dc float:1.8744119E38 double:1.0531302657E-314;
+        r0 = NUM; // 0x7f0d03de float:1.8744123E38 double:1.0531302667E-314;
         r6 = new java.lang.Object[r7];
         r6[r2] = r12;
         r7 = "EncryptedChatStartedOutgoing";
         r0 = org.telegram.messenger.LocaleController.formatString(r7, r0, r6);
         goto L_0x06c9;
     L_0x0757:
-        r0 = NUM; // 0x7f0d03db float:1.8744117E38 double:1.053130265E-314;
+        r0 = NUM; // 0x7f0d03dd float:1.874412E38 double:1.053130266E-314;
         r6 = "EncryptedChatStartedIncoming";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
         goto L_0x06c9;
@@ -1628,7 +1627,7 @@ public class DialogCell extends BaseCell {
         r7 = org.telegram.messenger.UserObject.isUserSelf(r7);
         if (r7 == 0) goto L_0x07bb;
     L_0x07aa:
-        r0 = NUM; // 0x7f0d0905 float:1.8746798E38 double:1.0531309183E-314;
+        r0 = NUM; // 0x7f0d091c float:1.8746845E38 double:1.0531309297E-314;
         r5 = "SavedMessagesInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r5, r0);
         r6 = r0;
@@ -1700,7 +1699,7 @@ public class DialogCell extends BaseCell {
         r7 = r7.isOutOwner();
         if (r7 == 0) goto L_0x0817;
     L_0x080c:
-        r0 = NUM; // 0x7f0d04c8 float:1.8744597E38 double:1.0531303823E-314;
+        r0 = NUM; // 0x7f0d04ce float:1.874461E38 double:1.053130385E-314;
         r6 = "FromYou";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
     L_0x0815:
@@ -1725,7 +1724,7 @@ public class DialogCell extends BaseCell {
         r0 = org.telegram.messenger.UserObject.isDeleted(r6);
         if (r0 == 0) goto L_0x083d;
     L_0x0833:
-        r0 = NUM; // 0x7f0d04fd float:1.8744705E38 double:1.0531304085E-314;
+        r0 = NUM; // 0x7f0d0505 float:1.8744721E38 double:1.0531304124E-314;
         r6 = "HiddenName";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
         goto L_0x0815;
@@ -2318,7 +2317,7 @@ public class DialogCell extends BaseCell {
         if (r5 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         r1.drawPinBackground = r13;
-        r5 = NUM; // 0x7f0d0a65 float:1.8747512E38 double:1.0531310923E-314;
+        r5 = NUM; // 0x7f0d0a8b float:1.8747589E38 double:1.053131111E-314;
         r9 = "UseProxySponsor";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         goto L_0x0CLASSNAME;
@@ -2356,7 +2355,7 @@ public class DialogCell extends BaseCell {
         r9 = 1;
         r1.drawPinBackground = r9;
     L_0x0CLASSNAME:
-        r9 = NUM; // 0x7f0d0904 float:1.8746796E38 double:1.053130918E-314;
+        r9 = NUM; // 0x7f0d091b float:1.8746843E38 double:1.053130929E-314;
         r13 = "SavedMessages";
         r9 = org.telegram.messenger.LocaleController.getString(r13, r9);
         goto L_0x0CLASSNAME;
@@ -2370,7 +2369,7 @@ public class DialogCell extends BaseCell {
         r13 = r9.length();
         if (r13 != 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
-        r9 = NUM; // 0x7f0d04fd float:1.8744705E38 double:1.0531304085E-314;
+        r9 = NUM; // 0x7f0d0505 float:1.8744721E38 double:1.0531304124E-314;
         r13 = "HiddenName";
         r9 = org.telegram.messenger.LocaleController.getString(r13, r9);
         goto L_0x0CLASSNAME;
@@ -4252,7 +4251,7 @@ public class DialogCell extends BaseCell {
     L_0x008f:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r17);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r3 = NUM; // 0x7f0d0a39 float:1.8747423E38 double:1.0531310705E-314;
+        r3 = NUM; // 0x7f0d0a5f float:1.87475E38 double:1.0531310893E-314;
         r4 = "UnhideFromTop";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_unpinArchiveDrawable;
@@ -4261,7 +4260,7 @@ public class DialogCell extends BaseCell {
     L_0x00a5:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r16);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r17);
-        r3 = NUM; // 0x7f0d04fe float:1.8744707E38 double:1.053130409E-314;
+        r3 = NUM; // 0x7f0d0506 float:1.8744723E38 double:1.053130413E-314;
         r4 = "HideOnTop";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_pinArchiveDrawable;
@@ -4282,7 +4281,7 @@ public class DialogCell extends BaseCell {
     L_0x00d5:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r17);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r3 = NUM; // 0x7f0d0a30 float:1.8747404E38 double:1.053131066E-314;
+        r3 = NUM; // 0x7f0d0a56 float:1.8747481E38 double:1.053131085E-314;
         r4 = "Unarchive";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_unarchiveDrawable;

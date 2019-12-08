@@ -1011,8 +1011,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                         -CC.$default$didPressShare(this, chatMessageCell);
                     }
 
-                    public /* synthetic */ void didPressUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z) {
-                        -CC.$default$didPressUrl(this, messageObject, characterStyle, z);
+                    public /* synthetic */ void didPressUrl(ChatMessageCell chatMessageCell, CharacterStyle characterStyle, boolean z) {
+                        -CC.$default$didPressUrl(this, chatMessageCell, characterStyle, z);
                     }
 
                     public /* synthetic */ void didPressUserAvatar(ChatMessageCell chatMessageCell, User user, float f, float f2) {
@@ -1031,8 +1031,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                         -CC.$default$didStartVideoStream(this, messageObject);
                     }
 
-                    public /* synthetic */ boolean isChatAdminCell(int i) {
-                        return -CC.$default$isChatAdminCell(this, i);
+                    public /* synthetic */ String getAdminRank(int i) {
+                        return -CC.$default$getAdminRank(this, i);
                     }
 
                     public /* synthetic */ void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2) {
@@ -1041,6 +1041,14 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
 
                     public /* synthetic */ boolean needPlayMessage(MessageObject messageObject) {
                         return -CC.$default$needPlayMessage(this, messageObject);
+                    }
+
+                    public /* synthetic */ void setShouldNotRepeatSticker(MessageObject messageObject) {
+                        -CC.$default$setShouldNotRepeatSticker(this, messageObject);
+                    }
+
+                    public /* synthetic */ boolean shouldRepeatSticker(MessageObject messageObject) {
+                        return -CC.$default$shouldRepeatSticker(this, messageObject);
                     }
 
                     public /* synthetic */ void videoTimerReached() {
@@ -1440,7 +1448,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r11 = org.telegram.ui.ActionBar.Theme.getColor(r14);
         r9.setTextColor(r11);
         r9 = r6.bottomOverlayChatText;
-        r11 = NUM; // 0x7f0d0967 float:1.8746997E38 double:1.053130967E-314;
+        r11 = NUM; // 0x7f0d0981 float:1.874705E38 double:1.0531309796E-314;
         r10 = "SetBackground";
         r10 = org.telegram.messenger.LocaleController.getString(r10, r11);
         r9.setText(r10);
@@ -1720,7 +1728,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r4.setTextColor(r5);
         r4 = r6.patternsCancelButton;
         r4 = r4[r2];
-        r5 = NUM; // 0x7f0d01f6 float:1.8743133E38 double:1.0531300256E-314;
+        r5 = NUM; // 0x7f0d01f7 float:1.8743135E38 double:1.053130026E-314;
         r10 = "Cancel";
         r5 = org.telegram.messenger.LocaleController.getString(r10, r5);
         r5 = r5.toUpperCase();
@@ -1774,7 +1782,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.setTextColor(r8);
         r3 = r6.patternsSaveButton;
         r3 = r3[r2];
-        r8 = NUM; // 0x7f0d08fd float:1.8746782E38 double:1.0531309144E-314;
+        r8 = NUM; // 0x7f0d0914 float:1.8746828E38 double:1.0531309258E-314;
         r10 = "Save";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r8 = r8.toUpperCase();

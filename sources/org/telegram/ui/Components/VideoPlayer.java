@@ -48,6 +48,7 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
     private SimpleExoPlayer audioPlayer;
     private boolean audioPlayerReady;
     private boolean autoplay;
+    private Uri currentUri;
     private VideoPlayerDelegate delegate;
     private boolean isStreaming;
     private boolean lastReportedPlayWhenReady;
@@ -226,123 +227,118 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         this.audioPlayer.prepare(mediaSource2, true, true);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0093  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0055  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0055  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0093  */
-    /* JADX WARNING: Missing block: B:13:0x003b, code skipped:
-            if (r1.equals("dash") == false) goto L_0x0052;
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0086  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x0053  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x0053  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0086  */
+    /* JADX WARNING: Missing block: B:13:0x0039, code skipped:
+            if (r10.equals("dash") == false) goto L_0x0050;
      */
-    public void preparePlayer(android.net.Uri r21, java.lang.String r22) {
+    public void preparePlayer(android.net.Uri r9, java.lang.String r10) {
         /*
-        r20 = this;
-        r0 = r20;
-        r1 = r22;
+        r8 = this;
         r2 = 0;
-        r0.videoPlayerReady = r2;
-        r0.mixedAudio = r2;
-        r3 = r21.getScheme();
-        r4 = 1;
-        if (r3 == 0) goto L_0x001a;
-    L_0x0010:
-        r5 = "file";
-        r3 = r3.startsWith(r5);
-        if (r3 != 0) goto L_0x001a;
-    L_0x0018:
+        r8.videoPlayerReady = r2;
+        r8.mixedAudio = r2;
+        r8.currentUri = r9;
+        r3 = r9.getScheme();
+        r6 = 1;
+        if (r3 == 0) goto L_0x0018;
+    L_0x000e:
+        r4 = "file";
+        r3 = r3.startsWith(r4);
+        if (r3 != 0) goto L_0x0018;
+    L_0x0016:
         r3 = 1;
-        goto L_0x001b;
-    L_0x001a:
+        goto L_0x0019;
+    L_0x0018:
         r3 = 0;
-    L_0x001b:
-        r0.isStreaming = r3;
-        r20.ensurePleyaerCreated();
+    L_0x0019:
+        r8.isStreaming = r3;
+        r8.ensurePleyaerCreated();
         r3 = -1;
-        r5 = r22.hashCode();
-        r6 = 3680; // 0xe60 float:5.157E-42 double:1.818E-320;
+        r4 = r10.hashCode();
+        r5 = 3680; // 0xe60 float:5.157E-42 double:1.818E-320;
         r7 = 2;
-        if (r5 == r6) goto L_0x0048;
-    L_0x002a:
-        r6 = 103407; // 0x193ef float:1.44904E-40 double:5.109E-319;
-        if (r5 == r6) goto L_0x003e;
-    L_0x002f:
-        r6 = 3075986; // 0x2eevar_ float:4.310374E-39 double:1.519739E-317;
-        if (r5 == r6) goto L_0x0035;
-    L_0x0034:
-        goto L_0x0052;
-    L_0x0035:
-        r5 = "dash";
-        r1 = r1.equals(r5);
-        if (r1 == 0) goto L_0x0052;
-    L_0x003d:
-        goto L_0x0053;
-    L_0x003e:
+        if (r4 == r5) goto L_0x0046;
+    L_0x0028:
+        r5 = 103407; // 0x193ef float:1.44904E-40 double:5.109E-319;
+        if (r4 == r5) goto L_0x003c;
+    L_0x002d:
+        r5 = 3075986; // 0x2eevar_ float:4.310374E-39 double:1.519739E-317;
+        if (r4 == r5) goto L_0x0033;
+    L_0x0032:
+        goto L_0x0050;
+    L_0x0033:
+        r4 = "dash";
+        r0 = r10.equals(r4);
+        if (r0 == 0) goto L_0x0050;
+    L_0x003b:
+        goto L_0x0051;
+    L_0x003c:
         r2 = "hls";
-        r1 = r1.equals(r2);
-        if (r1 == 0) goto L_0x0052;
-    L_0x0046:
+        r0 = r10.equals(r2);
+        if (r0 == 0) goto L_0x0050;
+    L_0x0044:
         r2 = 1;
-        goto L_0x0053;
-    L_0x0048:
+        goto L_0x0051;
+    L_0x0046:
         r2 = "ss";
-        r1 = r1.equals(r2);
-        if (r1 == 0) goto L_0x0052;
-    L_0x0050:
+        r0 = r10.equals(r2);
+        if (r0 == 0) goto L_0x0050;
+    L_0x004e:
         r2 = 2;
-        goto L_0x0053;
-    L_0x0052:
+        goto L_0x0051;
+    L_0x0050:
         r2 = -1;
+    L_0x0051:
+        if (r2 == 0) goto L_0x0086;
     L_0x0053:
-        if (r2 == 0) goto L_0x0093;
+        if (r2 == r6) goto L_0x007b;
     L_0x0055:
-        if (r2 == r4) goto L_0x0086;
+        if (r2 == r7) goto L_0x0069;
     L_0x0057:
-        if (r2 == r7) goto L_0x006c;
-    L_0x0059:
-        r1 = new com.google.android.exoplayer2.source.ExtractorMediaSource;
-        r10 = r0.mediaDataSourceFactory;
-        r11 = new com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-        r11.<init>();
-        r12 = r0.mainHandler;
-        r13 = 0;
-        r8 = r1;
-        r9 = r21;
-        r8.<init>(r9, r10, r11, r12, r13);
-        goto L_0x00a5;
-    L_0x006c:
-        r1 = new com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
-        r2 = r0.mediaDataSourceFactory;
+        r7 = new com.google.android.exoplayer2.source.ExtractorMediaSource;
+        r2 = r8.mediaDataSourceFactory;
+        r3 = new com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+        r3.<init>();
+        r4 = r8.mainHandler;
+        r5 = 0;
+        r0 = r7;
+        r1 = r9;
+        r0.<init>(r1, r2, r3, r4, r5);
+        goto L_0x0097;
+    L_0x0069:
+        r7 = new com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
+        r2 = r8.mediaDataSourceFactory;
         r3 = new com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory;
         r3.<init>(r2);
-        r5 = r0.mainHandler;
-        r19 = 0;
-        r14 = r1;
-        r15 = r21;
-        r16 = r2;
-        r17 = r3;
-        r18 = r5;
-        r14.<init>(r15, r16, r17, r18, r19);
-        goto L_0x00a5;
-    L_0x0086:
-        r1 = new com.google.android.exoplayer2.source.hls.HlsMediaSource;
-        r2 = r0.mediaDataSourceFactory;
-        r3 = r0.mainHandler;
+        r4 = r8.mainHandler;
         r5 = 0;
-        r7 = r21;
-        r1.<init>(r7, r2, r3, r5);
-        goto L_0x00a5;
-    L_0x0093:
-        r7 = r21;
-        r1 = new com.google.android.exoplayer2.source.dash.DashMediaSource;
-        r8 = r0.mediaDataSourceFactory;
-        r9 = new com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory;
-        r9.<init>(r8);
-        r10 = r0.mainHandler;
-        r11 = 0;
-        r6 = r1;
-        r6.<init>(r7, r8, r9, r10, r11);
-    L_0x00a5:
-        r2 = r0.player;
-        r2.prepare(r1, r4, r4);
+        r0 = r7;
+        r1 = r9;
+        r0.<init>(r1, r2, r3, r4, r5);
+        goto L_0x0097;
+    L_0x007b:
+        r7 = new com.google.android.exoplayer2.source.hls.HlsMediaSource;
+        r0 = r8.mediaDataSourceFactory;
+        r2 = r8.mainHandler;
+        r3 = 0;
+        r7.<init>(r9, r0, r2, r3);
+        goto L_0x0097;
+    L_0x0086:
+        r7 = new com.google.android.exoplayer2.source.dash.DashMediaSource;
+        r2 = r8.mediaDataSourceFactory;
+        r3 = new com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory;
+        r3.<init>(r2);
+        r4 = r8.mainHandler;
+        r5 = 0;
+        r0 = r7;
+        r1 = r9;
+        r0.<init>(r1, r2, r3, r4, r5);
+    L_0x0097:
+        r0 = r8.player;
+        r0.prepare(r7, r6, r6);
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.VideoPlayer.preparePlayer(android.net.Uri, java.lang.String):void");
@@ -382,6 +378,10 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
 
     public int getPlaybackState() {
         return this.player.getPlaybackState();
+    }
+
+    public Uri getCurrentUri() {
+        return this.currentUri;
     }
 
     public void play() {
