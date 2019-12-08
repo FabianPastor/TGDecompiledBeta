@@ -43,6 +43,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private int currentConnectionState;
     private boolean[] isOnline = new boolean[1];
     private CharSequence lastSubtitle;
+    private String lastSubtitleColorKey;
     private boolean occupyStatusBar = true;
     private int onlineCount = -1;
     private ChatActivity parentFragment;
@@ -290,7 +291,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
                 return;
             }
-            String replace;
             Chat currentChat = this.parentFragment.getCurrentChat();
             CharSequence charSequence = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(this.parentFragment.getDialogId());
             CharSequence charSequence2 = "";
@@ -299,6 +299,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 charSequence = TextUtils.replace(charSequence, new String[]{"..."}, new String[]{charSequence2});
             }
             if (charSequence == null || charSequence.length() == 0 || (ChatObject.isChannel(currentChat) && !currentChat.megagroup)) {
+                String replace;
                 setTypingAnimation(false);
                 int i2;
                 if (currentChat != null) {
@@ -391,11 +392,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 setTypingAnimation(true);
                 charSequence2 = charSequence;
             }
+            this.lastSubtitleColorKey = i != 0 ? "chat_status" : "actionBarDefaultSubtitle";
             if (this.lastSubtitle == null) {
                 this.subtitleTextView.setText(charSequence2);
-                replace = i != 0 ? "chat_status" : "actionBarDefaultSubtitle";
-                this.subtitleTextView.setTextColor(Theme.getColor(replace));
-                this.subtitleTextView.setTag(replace);
+                this.subtitleTextView.setTextColor(Theme.getColor(this.lastSubtitleColorKey));
+                this.subtitleTextView.setTag(this.lastSubtitleColorKey);
             } else {
                 this.lastSubtitle = charSequence2;
             }
@@ -525,11 +526,22 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             if (string != null) {
                 this.subtitleTextView.setText(string);
                 this.lastSubtitle = null;
+                String str = this.lastSubtitleColorKey;
+                if (str != null) {
+                    this.subtitleTextView.setTextColor(Theme.getColor(str));
+                    this.subtitleTextView.setTag(this.lastSubtitleColorKey);
+                    return;
+                }
                 return;
             }
             return;
         }
-        this.lastSubtitle = this.subtitleTextView.getText();
+        if (this.lastSubtitle == null) {
+            this.lastSubtitle = this.subtitleTextView.getText();
+        }
         this.subtitleTextView.setText(string);
+        String str2 = "actionBarDefaultSubtitle";
+        this.subtitleTextView.setTextColor(Theme.getColor(str2));
+        this.subtitleTextView.setTag(str2);
     }
 }

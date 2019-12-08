@@ -371,7 +371,7 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$createView$2$ProxySettingsActivity(View view) {
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         String obj = this.inputFields[0].getText().toString();
         String obj2 = this.inputFields[3].getText().toString();
         String obj3 = this.inputFields[2].getText().toString();
@@ -537,6 +537,6 @@ public class ProxySettingsActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(this.bottomCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription(this.bottomCell, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{r6}, null, null, null, "windowBackgroundWhiteGrayText4"));
         arrayList.add(new ThemeDescription(this.bottomCell, ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{r6}, null, null, null, "windowBackgroundWhiteLinkText"));
-        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[arrayList.size()]);
+        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
     }
 }

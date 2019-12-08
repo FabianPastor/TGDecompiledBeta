@@ -116,11 +116,11 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     public void notifyHeightChanged() {
+        WallpaperParallaxEffect wallpaperParallaxEffect = this.parallaxEffect;
+        if (wallpaperParallaxEffect != null) {
+            this.parallaxScale = wallpaperParallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
+        }
         if (this.delegate != null) {
-            WallpaperParallaxEffect wallpaperParallaxEffect = this.parallaxEffect;
-            if (wallpaperParallaxEffect != null) {
-                this.parallaxScale = wallpaperParallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
-            }
             this.keyboardHeight = getKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
             post(new -$$Lambda$SizeNotifierFrameLayout$k4g_DFX6SvnMtnN4qrfdhEQSo18(this, point.x > point.y));

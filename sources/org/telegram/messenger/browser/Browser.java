@@ -415,10 +415,10 @@ public class Browser {
         r1 = 1;
         r2.setShowTitle(r1);	 Catch:{ Exception -> 0x0222 }
         r1 = r16.getResources();	 Catch:{ Exception -> 0x0222 }
-        r3 = NUM; // 0x7var_e float:1.7944639E38 double:1.052935518E-314;
+        r3 = NUM; // 0x7var_ float:1.794458E38 double:1.0529355035E-314;
         r1 = android.graphics.BitmapFactory.decodeResource(r1, r3);	 Catch:{ Exception -> 0x0222 }
         r3 = "ShareFile";
-        r4 = NUM; // 0x7f0d096f float:1.8747013E38 double:1.0531309707E-314;
+        r4 = NUM; // 0x7f0d0979 float:1.8747033E38 double:1.0531309757E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0222 }
         r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0222 }
         r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12);	 Catch:{ Exception -> 0x0222 }

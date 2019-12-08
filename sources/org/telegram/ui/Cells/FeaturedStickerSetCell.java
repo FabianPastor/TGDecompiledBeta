@@ -26,6 +26,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -81,6 +82,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 100.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 100.0f, 0.0f));
         this.imageView = new BackupImageView(context);
         this.imageView.setAspectFit(true);
+        this.imageView.setLayerNum(1);
         addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         this.addButton = new TextView(context) {
             /* Access modifiers changed, original: protected */
@@ -224,13 +226,22 @@ public class FeaturedStickerSetCell extends FrameLayout {
         if (document != null) {
             photoSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
         }
-        if (photoSize != null && photoSize.location != null) {
-            this.imageView.setImage(ImageLocation.getForDocument(photoSize, stickerSetCovered2.cover), null, "webp", null, (Object) stickerSetCovered);
-        } else if (stickerSetCovered2.covers.isEmpty()) {
-            this.imageView.setImage(null, null, "webp", null, (Object) stickerSetCovered);
+        if (photoSize == null || photoSize.location == null) {
+            if (stickerSetCovered2.covers.isEmpty()) {
+                this.imageView.setImage(null, null, "webp", null, (Object) stickerSetCovered);
+            } else {
+                document = (Document) stickerSetCovered2.covers.get(0);
+                photoSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
+                if (MessageObject.canAutoplayAnimatedSticker(document)) {
+                    this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(photoSize, document), null, 0, stickerSetCovered);
+                } else {
+                    this.imageView.setImage(ImageLocation.getForDocument(photoSize, document), null, "webp", null, (Object) stickerSetCovered);
+                }
+            }
+        } else if (MessageObject.canAutoplayAnimatedSticker(stickerSetCovered2.cover)) {
+            this.imageView.setImage(ImageLocation.getForDocument(stickerSetCovered2.cover), "80_80", ImageLocation.getForDocument(photoSize, stickerSetCovered2.cover), null, 0, stickerSetCovered);
         } else {
-            document = (Document) stickerSetCovered2.covers.get(0);
-            this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90), document), null, "webp", null, (Object) stickerSetCovered);
+            this.imageView.setImage(ImageLocation.getForDocument(photoSize, stickerSetCovered2.cover), null, "webp", null, (Object) stickerSetCovered);
         }
         boolean z4;
         if (obj != null) {

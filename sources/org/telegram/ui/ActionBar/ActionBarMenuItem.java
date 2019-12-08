@@ -506,7 +506,7 @@ public class ActionBarMenuItem extends FrameLayout {
         goto L_0x005a;
     L_0x0052:
         r0 = r6.popupWindow;
-        r3 = NUM; // 0x7f0e00b1 float:1.8875397E38 double:1.053162244E-314;
+        r3 = NUM; // 0x7f0e0007 float:1.8875052E38 double:1.05316216E-314;
         r0.setAnimationStyle(r3);
     L_0x005a:
         r0 = r6.animationEnabled;

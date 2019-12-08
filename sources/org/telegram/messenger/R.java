@@ -3,18 +3,6 @@ package org.telegram.messenger;
 public final class R {
 
     public static final class anim {
-        public static final int abc_fade_in = NUM;
-        public static final int abc_fade_out = NUM;
-        public static final int abc_grow_fade_in_from_bottom = NUM;
-        public static final int abc_popup_enter = NUM;
-        public static final int abc_popup_exit = NUM;
-        public static final int abc_shrink_fade_out_from_bottom = NUM;
-        public static final int abc_slide_in_bottom = NUM;
-        public static final int abc_slide_in_top = NUM;
-        public static final int abc_slide_out_bottom = NUM;
-        public static final int abc_slide_out_top = NUM;
-        public static final int abc_tooltip_enter = NUM;
-        public static final int abc_tooltip_exit = NUM;
         public static final int no_animation = NUM;
         public static final int popup_context_in = NUM;
         public static final int popup_in = NUM;
@@ -26,77 +14,10 @@ public final class R {
     }
 
     public static final class attr {
-        public static final int actionBarDivider = NUM;
-        public static final int actionBarItemBackground = NUM;
-        public static final int actionBarPopupTheme = NUM;
-        public static final int actionBarSize = NUM;
-        public static final int actionBarSplitStyle = NUM;
-        public static final int actionBarStyle = NUM;
-        public static final int actionBarTabBarStyle = NUM;
-        public static final int actionBarTabStyle = NUM;
-        public static final int actionBarTabTextStyle = NUM;
-        public static final int actionBarTheme = NUM;
-        public static final int actionBarWidgetTheme = NUM;
-        public static final int actionButtonStyle = NUM;
-        public static final int actionDropDownStyle = NUM;
-        public static final int actionLayout = NUM;
-        public static final int actionMenuTextAppearance = NUM;
-        public static final int actionMenuTextColor = NUM;
-        public static final int actionModeBackground = NUM;
-        public static final int actionModeCloseButtonStyle = NUM;
-        public static final int actionModeCloseDrawable = NUM;
-        public static final int actionModeCopyDrawable = NUM;
-        public static final int actionModeCutDrawable = NUM;
-        public static final int actionModeFindDrawable = NUM;
-        public static final int actionModePasteDrawable = NUM;
-        public static final int actionModePopupWindowStyle = NUM;
-        public static final int actionModeSelectAllDrawable = NUM;
-        public static final int actionModeShareDrawable = NUM;
-        public static final int actionModeSplitBackground = NUM;
-        public static final int actionModeStyle = NUM;
-        public static final int actionModeWebSearchDrawable = NUM;
-        public static final int actionOverflowButtonStyle = NUM;
-        public static final int actionOverflowMenuStyle = NUM;
-        public static final int actionProviderClass = NUM;
-        public static final int actionViewClass = NUM;
-        public static final int activityChooserViewStyle = NUM;
-        public static final int alertDialogButtonGroupStyle = NUM;
-        public static final int alertDialogCenterButtons = NUM;
-        public static final int alertDialogStyle = NUM;
-        public static final int alertDialogTheme = NUM;
-        public static final int allowStacking = NUM;
         public static final int alpha = NUM;
-        public static final int alphabeticModifiers = NUM;
         public static final int ambientEnabled = NUM;
         public static final int appTheme = NUM;
-        public static final int arrowHeadLength = NUM;
-        public static final int arrowShaftLength = NUM;
-        public static final int autoCompleteTextViewStyle = NUM;
-        public static final int autoSizeMaxTextSize = NUM;
-        public static final int autoSizeMinTextSize = NUM;
-        public static final int autoSizePresetSizes = NUM;
-        public static final int autoSizeStepGranularity = NUM;
-        public static final int autoSizeTextType = NUM;
-        public static final int background = NUM;
-        public static final int backgroundSplit = NUM;
-        public static final int backgroundStacked = NUM;
-        public static final int backgroundTint = NUM;
-        public static final int backgroundTintMode = NUM;
-        public static final int barLength = NUM;
-        public static final int borderlessButtonStyle = NUM;
-        public static final int buttonBarButtonStyle = NUM;
-        public static final int buttonBarNegativeButtonStyle = NUM;
-        public static final int buttonBarNeutralButtonStyle = NUM;
-        public static final int buttonBarPositiveButtonStyle = NUM;
-        public static final int buttonBarStyle = NUM;
-        public static final int buttonGravity = NUM;
-        public static final int buttonIconDimen = NUM;
-        public static final int buttonPanelSideLayout = NUM;
         public static final int buttonSize = NUM;
-        public static final int buttonStyle = NUM;
-        public static final int buttonStyleSmall = NUM;
-        public static final int buttonTint = NUM;
-        public static final int buttonTintMode = NUM;
         public static final int buyButtonAppearance = NUM;
         public static final int buyButtonHeight = NUM;
         public static final int buyButtonText = NUM;
@@ -108,59 +29,12 @@ public final class R {
         public static final int cameraTargetLng = NUM;
         public static final int cameraTilt = NUM;
         public static final int cameraZoom = NUM;
-        public static final int checkboxStyle = NUM;
-        public static final int checkedTextViewStyle = NUM;
         public static final int circleCrop = NUM;
-        public static final int closeIcon = NUM;
-        public static final int closeItemLayout = NUM;
-        public static final int collapseContentDescription = NUM;
-        public static final int collapseIcon = NUM;
-        public static final int color = NUM;
-        public static final int colorAccent = NUM;
-        public static final int colorBackgroundFloating = NUM;
-        public static final int colorButtonNormal = NUM;
-        public static final int colorControlActivated = NUM;
-        public static final int colorControlHighlight = NUM;
-        public static final int colorControlNormal = NUM;
-        public static final int colorError = NUM;
-        public static final int colorPrimary = NUM;
-        public static final int colorPrimaryDark = NUM;
         public static final int colorScheme = NUM;
-        public static final int colorSwitchThumbNormal = NUM;
-        public static final int commitIcon = NUM;
-        public static final int contentDescription = NUM;
-        public static final int contentInsetEnd = NUM;
-        public static final int contentInsetEndWithActions = NUM;
-        public static final int contentInsetLeft = NUM;
-        public static final int contentInsetRight = NUM;
-        public static final int contentInsetStart = NUM;
-        public static final int contentInsetStartWithNavigation = NUM;
-        public static final int controlBackground = NUM;
         public static final int coordinatorLayoutStyle = NUM;
-        public static final int customNavigationLayout = NUM;
         public static final int customThemeStyle = NUM;
-        public static final int defaultQueryHint = NUM;
-        public static final int dialogCornerRadius = NUM;
-        public static final int dialogPreferredPadding = NUM;
-        public static final int dialogTheme = NUM;
-        public static final int displayOptions = NUM;
-        public static final int divider = NUM;
-        public static final int dividerHorizontal = NUM;
-        public static final int dividerPadding = NUM;
-        public static final int dividerVertical = NUM;
-        public static final int drawableSize = NUM;
-        public static final int drawerArrowStyle = NUM;
-        public static final int dropDownListViewStyle = NUM;
-        public static final int dropdownListPreferredItemHeight = NUM;
-        public static final int editTextBackground = NUM;
-        public static final int editTextColor = NUM;
-        public static final int editTextStyle = NUM;
-        public static final int elevation = NUM;
         public static final int environment = NUM;
-        public static final int expandActivityOverflowButtonDrawable = NUM;
-        public static final int firstBaselineToTopHeight = NUM;
         public static final int font = NUM;
-        public static final int fontFamily = NUM;
         public static final int fontProviderAuthority = NUM;
         public static final int fontProviderCerts = NUM;
         public static final int fontProviderFetchStrategy = NUM;
@@ -172,65 +46,20 @@ public final class R {
         public static final int fontWeight = NUM;
         public static final int fragmentMode = NUM;
         public static final int fragmentStyle = NUM;
-        public static final int gapBetweenBars = NUM;
-        public static final int goIcon = NUM;
-        public static final int height = NUM;
-        public static final int hideOnContentScroll = NUM;
-        public static final int homeAsUpIndicator = NUM;
-        public static final int homeLayout = NUM;
-        public static final int icon = NUM;
-        public static final int iconTint = NUM;
-        public static final int iconTintMode = NUM;
-        public static final int iconifiedByDefault = NUM;
         public static final int imageAspectRatio = NUM;
         public static final int imageAspectRatioAdjust = NUM;
-        public static final int imageButtonStyle = NUM;
-        public static final int indeterminateProgressStyle = NUM;
-        public static final int initialActivityCount = NUM;
-        public static final int isLightTheme = NUM;
-        public static final int itemPadding = NUM;
         public static final int keylines = NUM;
-        public static final int lastBaselineToBottomHeight = NUM;
         public static final int latLngBoundsNorthEastLatitude = NUM;
         public static final int latLngBoundsNorthEastLongitude = NUM;
         public static final int latLngBoundsSouthWestLatitude = NUM;
         public static final int latLngBoundsSouthWestLongitude = NUM;
-        public static final int layout = NUM;
         public static final int layout_anchor = NUM;
         public static final int layout_anchorGravity = NUM;
         public static final int layout_behavior = NUM;
         public static final int layout_dodgeInsetEdges = NUM;
         public static final int layout_insetEdge = NUM;
         public static final int layout_keyline = NUM;
-        public static final int lineHeight = NUM;
-        public static final int listChoiceBackgroundIndicator = NUM;
-        public static final int listDividerAlertDialog = NUM;
-        public static final int listItemLayout = NUM;
-        public static final int listLayout = NUM;
-        public static final int listMenuViewStyle = NUM;
-        public static final int listPopupWindowStyle = NUM;
-        public static final int listPreferredItemHeight = NUM;
-        public static final int listPreferredItemHeightLarge = NUM;
-        public static final int listPreferredItemHeightSmall = NUM;
-        public static final int listPreferredItemPaddingLeft = NUM;
-        public static final int listPreferredItemPaddingRight = NUM;
         public static final int liteMode = NUM;
-        public static final int logo = NUM;
-        public static final int logoDescription = NUM;
-        public static final int lottie_autoPlay = NUM;
-        public static final int lottie_colorFilter = NUM;
-        public static final int lottie_enableMergePathsForKitKatAndAbove = NUM;
-        public static final int lottie_fileName = NUM;
-        public static final int lottie_imageAssetsFolder = NUM;
-        public static final int lottie_loop = NUM;
-        public static final int lottie_progress = NUM;
-        public static final int lottie_rawRes = NUM;
-        public static final int lottie_renderMode = NUM;
-        public static final int lottie_repeatCount = NUM;
-        public static final int lottie_repeatMode = NUM;
-        public static final int lottie_scale = NUM;
-        public static final int lottie_speed = NUM;
-        public static final int lottie_url = NUM;
         public static final int mapType = NUM;
         public static final int maskedWalletDetailsBackground = NUM;
         public static final int maskedWalletDetailsButtonBackground = NUM;
@@ -239,103 +68,9 @@ public final class R {
         public static final int maskedWalletDetailsLogoImageType = NUM;
         public static final int maskedWalletDetailsLogoTextColor = NUM;
         public static final int maskedWalletDetailsTextAppearance = NUM;
-        public static final int maxButtonHeight = NUM;
-        public static final int measureWithLargestChild = NUM;
-        public static final int multiChoiceItemLayout = NUM;
-        public static final int navigationContentDescription = NUM;
-        public static final int navigationIcon = NUM;
-        public static final int navigationMode = NUM;
-        public static final int numericModifiers = NUM;
-        public static final int overlapAnchor = NUM;
-        public static final int paddingBottomNoButtons = NUM;
-        public static final int paddingEnd = NUM;
-        public static final int paddingStart = NUM;
-        public static final int paddingTopNoTitle = NUM;
-        public static final int panelBackground = NUM;
-        public static final int panelMenuListTheme = NUM;
-        public static final int panelMenuListWidth = NUM;
-        public static final int popupMenuStyle = NUM;
-        public static final int popupTheme = NUM;
-        public static final int popupWindowStyle = NUM;
-        public static final int preserveIconSpacing = NUM;
-        public static final int progressBarPadding = NUM;
-        public static final int progressBarStyle = NUM;
-        public static final int queryBackground = NUM;
-        public static final int queryHint = NUM;
-        public static final int radioButtonStyle = NUM;
-        public static final int ratingBarStyle = NUM;
-        public static final int ratingBarStyleIndicator = NUM;
-        public static final int ratingBarStyleSmall = NUM;
         public static final int scopeUris = NUM;
-        public static final int searchHintIcon = NUM;
-        public static final int searchIcon = NUM;
-        public static final int searchViewStyle = NUM;
-        public static final int seekBarStyle = NUM;
-        public static final int selectableItemBackground = NUM;
-        public static final int selectableItemBackgroundBorderless = NUM;
-        public static final int showAsAction = NUM;
-        public static final int showDividers = NUM;
-        public static final int showText = NUM;
-        public static final int showTitle = NUM;
-        public static final int singleChoiceItemLayout = NUM;
-        public static final int spinBars = NUM;
-        public static final int spinnerDropDownItemStyle = NUM;
-        public static final int spinnerStyle = NUM;
-        public static final int splitTrack = NUM;
-        public static final int srcCompat = NUM;
-        public static final int state_above_anchor = NUM;
         public static final int statusBarBackground = NUM;
-        public static final int subMenuArrow = NUM;
-        public static final int submitBackground = NUM;
-        public static final int subtitle = NUM;
-        public static final int subtitleTextAppearance = NUM;
-        public static final int subtitleTextColor = NUM;
-        public static final int subtitleTextStyle = NUM;
-        public static final int suggestionRowLayout = NUM;
-        public static final int switchMinWidth = NUM;
-        public static final int switchPadding = NUM;
-        public static final int switchStyle = NUM;
-        public static final int switchTextAppearance = NUM;
-        public static final int textAllCaps = NUM;
-        public static final int textAppearanceLargePopupMenu = NUM;
-        public static final int textAppearanceListItem = NUM;
-        public static final int textAppearanceListItemSecondary = NUM;
-        public static final int textAppearanceListItemSmall = NUM;
-        public static final int textAppearancePopupMenuHeader = NUM;
-        public static final int textAppearanceSearchResultSubtitle = NUM;
-        public static final int textAppearanceSearchResultTitle = NUM;
-        public static final int textAppearanceSmallPopupMenu = NUM;
-        public static final int textColorAlertDialogListItem = NUM;
-        public static final int textColorSearchUrl = NUM;
-        public static final int theme = NUM;
-        public static final int thickness = NUM;
-        public static final int thumbTextPadding = NUM;
-        public static final int thumbTint = NUM;
-        public static final int thumbTintMode = NUM;
-        public static final int tickMark = NUM;
-        public static final int tickMarkTint = NUM;
-        public static final int tickMarkTintMode = NUM;
-        public static final int tint = NUM;
-        public static final int tintMode = NUM;
-        public static final int title = NUM;
-        public static final int titleMargin = NUM;
-        public static final int titleMarginBottom = NUM;
-        public static final int titleMarginEnd = NUM;
-        public static final int titleMarginStart = NUM;
-        public static final int titleMarginTop = NUM;
-        public static final int titleMargins = NUM;
-        public static final int titleTextAppearance = NUM;
-        public static final int titleTextColor = NUM;
-        public static final int titleTextStyle = NUM;
-        public static final int toolbarNavigationButtonStyle = NUM;
-        public static final int toolbarStyle = NUM;
         public static final int toolbarTextColorStyle = NUM;
-        public static final int tooltipForegroundColor = NUM;
-        public static final int tooltipFrameBackground = NUM;
-        public static final int tooltipText = NUM;
-        public static final int track = NUM;
-        public static final int trackTint = NUM;
-        public static final int trackTintMode = NUM;
         public static final int ttcIndex = NUM;
         public static final int uiCompass = NUM;
         public static final int uiMapToolbar = NUM;
@@ -346,69 +81,16 @@ public final class R {
         public static final int uiZoomControls = NUM;
         public static final int uiZoomGestures = NUM;
         public static final int useViewLifecycle = NUM;
-        public static final int viewInflaterClass = NUM;
-        public static final int voiceIcon = NUM;
-        public static final int windowActionBar = NUM;
-        public static final int windowActionBarOverlay = NUM;
-        public static final int windowActionModeOverlay = NUM;
-        public static final int windowFixedHeightMajor = NUM;
-        public static final int windowFixedHeightMinor = NUM;
-        public static final int windowFixedWidthMajor = NUM;
-        public static final int windowFixedWidthMinor = NUM;
-        public static final int windowMinWidthMajor = NUM;
-        public static final int windowMinWidthMinor = NUM;
-        public static final int windowNoTitle = NUM;
         public static final int windowTransitionStyle = NUM;
         public static final int zOrderOnTop = NUM;
     }
 
     public static final class bool {
-        public static final int abc_action_bar_embed_tabs = NUM;
-        public static final int abc_allow_stacked_button_bar = NUM;
-        public static final int abc_config_actionMenuItemAllCaps = NUM;
         public static final int isTablet = NUM;
         public static final int useHardwareAcceleration = NUM;
     }
 
     public static final class color {
-        public static final int abc_background_cache_hint_selector_material_dark = NUM;
-        public static final int abc_background_cache_hint_selector_material_light = NUM;
-        public static final int abc_btn_colored_borderless_text_material = NUM;
-        public static final int abc_btn_colored_text_material = NUM;
-        public static final int abc_color_highlight_material = NUM;
-        public static final int abc_hint_foreground_material_dark = NUM;
-        public static final int abc_hint_foreground_material_light = NUM;
-        public static final int abc_input_method_navigation_guard = NUM;
-        public static final int abc_primary_text_disable_only_material_dark = NUM;
-        public static final int abc_primary_text_disable_only_material_light = NUM;
-        public static final int abc_primary_text_material_dark = NUM;
-        public static final int abc_primary_text_material_light = NUM;
-        public static final int abc_search_url_text = NUM;
-        public static final int abc_search_url_text_normal = NUM;
-        public static final int abc_search_url_text_pressed = NUM;
-        public static final int abc_search_url_text_selected = NUM;
-        public static final int abc_secondary_text_material_dark = NUM;
-        public static final int abc_secondary_text_material_light = NUM;
-        public static final int abc_tint_btn_checkable = NUM;
-        public static final int abc_tint_default = NUM;
-        public static final int abc_tint_edittext = NUM;
-        public static final int abc_tint_seek_thumb = NUM;
-        public static final int abc_tint_spinner = NUM;
-        public static final int abc_tint_switch_track = NUM;
-        public static final int accent_material_dark = NUM;
-        public static final int accent_material_light = NUM;
-        public static final int background_floating_material_dark = NUM;
-        public static final int background_floating_material_light = NUM;
-        public static final int background_material_dark = NUM;
-        public static final int background_material_light = NUM;
-        public static final int bright_foreground_disabled_material_dark = NUM;
-        public static final int bright_foreground_disabled_material_light = NUM;
-        public static final int bright_foreground_inverse_material_dark = NUM;
-        public static final int bright_foreground_inverse_material_light = NUM;
-        public static final int bright_foreground_material_dark = NUM;
-        public static final int bright_foreground_material_light = NUM;
-        public static final int button_material_dark = NUM;
-        public static final int button_material_light = NUM;
         public static final int common_google_signin_btn_text_dark = NUM;
         public static final int common_google_signin_btn_text_dark_default = NUM;
         public static final int common_google_signin_btn_text_dark_disabled = NUM;
@@ -420,17 +102,7 @@ public final class R {
         public static final int common_google_signin_btn_text_light_focused = NUM;
         public static final int common_google_signin_btn_text_light_pressed = NUM;
         public static final int common_google_signin_btn_tint = NUM;
-        public static final int dim_foreground_disabled_material_dark = NUM;
-        public static final int dim_foreground_disabled_material_light = NUM;
-        public static final int dim_foreground_material_dark = NUM;
-        public static final int dim_foreground_material_light = NUM;
         public static final int divider = NUM;
-        public static final int error_color_material_dark = NUM;
-        public static final int error_color_material_light = NUM;
-        public static final int foreground_material_dark = NUM;
-        public static final int foreground_material_light = NUM;
-        public static final int highlighted_text_material_dark = NUM;
-        public static final int highlighted_text_material_light = NUM;
         public static final int hockeyapp_background_header = NUM;
         public static final int hockeyapp_background_light = NUM;
         public static final int hockeyapp_background_white = NUM;
@@ -441,42 +113,10 @@ public final class R {
         public static final int hockeyapp_text_light = NUM;
         public static final int hockeyapp_text_normal = NUM;
         public static final int hockeyapp_text_white = NUM;
-        public static final int material_blue_grey_800 = NUM;
-        public static final int material_blue_grey_900 = NUM;
-        public static final int material_blue_grey_950 = NUM;
-        public static final int material_deep_teal_200 = NUM;
-        public static final int material_deep_teal_500 = NUM;
-        public static final int material_grey_100 = NUM;
-        public static final int material_grey_300 = NUM;
-        public static final int material_grey_50 = NUM;
-        public static final int material_grey_600 = NUM;
-        public static final int material_grey_800 = NUM;
-        public static final int material_grey_850 = NUM;
-        public static final int material_grey_900 = NUM;
         public static final int notification_action_color_filter = NUM;
         public static final int notification_icon_bg_color = NUM;
-        public static final int primary_dark_material_dark = NUM;
-        public static final int primary_dark_material_light = NUM;
-        public static final int primary_material_dark = NUM;
-        public static final int primary_material_light = NUM;
-        public static final int primary_text_default_material_dark = NUM;
-        public static final int primary_text_default_material_light = NUM;
-        public static final int primary_text_disabled_material_dark = NUM;
-        public static final int primary_text_disabled_material_light = NUM;
-        public static final int ripple_material_dark = NUM;
         public static final int ripple_material_light = NUM;
-        public static final int secondary_text_default_material_dark = NUM;
         public static final int secondary_text_default_material_light = NUM;
-        public static final int secondary_text_disabled_material_dark = NUM;
-        public static final int secondary_text_disabled_material_light = NUM;
-        public static final int switch_thumb_disabled_material_dark = NUM;
-        public static final int switch_thumb_disabled_material_light = NUM;
-        public static final int switch_thumb_material_dark = NUM;
-        public static final int switch_thumb_material_light = NUM;
-        public static final int switch_thumb_normal_material_dark = NUM;
-        public static final int switch_thumb_normal_material_light = NUM;
-        public static final int tooltip_background_dark = NUM;
-        public static final int tooltip_background_light = NUM;
         public static final int wallet_bright_foreground_disabled_holo_light = NUM;
         public static final int wallet_bright_foreground_holo_dark = NUM;
         public static final int wallet_bright_foreground_holo_light = NUM;
@@ -493,81 +133,6 @@ public final class R {
     }
 
     public static final class dimen {
-        public static final int abc_action_bar_content_inset_material = NUM;
-        public static final int abc_action_bar_content_inset_with_nav = NUM;
-        public static final int abc_action_bar_default_height_material = NUM;
-        public static final int abc_action_bar_default_padding_end_material = NUM;
-        public static final int abc_action_bar_default_padding_start_material = NUM;
-        public static final int abc_action_bar_elevation_material = NUM;
-        public static final int abc_action_bar_icon_vertical_padding_material = NUM;
-        public static final int abc_action_bar_overflow_padding_end_material = NUM;
-        public static final int abc_action_bar_overflow_padding_start_material = NUM;
-        public static final int abc_action_bar_stacked_max_height = NUM;
-        public static final int abc_action_bar_stacked_tab_max_width = NUM;
-        public static final int abc_action_bar_subtitle_bottom_margin_material = NUM;
-        public static final int abc_action_bar_subtitle_top_margin_material = NUM;
-        public static final int abc_action_button_min_height_material = NUM;
-        public static final int abc_action_button_min_width_material = NUM;
-        public static final int abc_action_button_min_width_overflow_material = NUM;
-        public static final int abc_alert_dialog_button_bar_height = NUM;
-        public static final int abc_alert_dialog_button_dimen = NUM;
-        public static final int abc_button_inset_horizontal_material = NUM;
-        public static final int abc_button_inset_vertical_material = NUM;
-        public static final int abc_button_padding_horizontal_material = NUM;
-        public static final int abc_button_padding_vertical_material = NUM;
-        public static final int abc_cascading_menus_min_smallest_width = NUM;
-        public static final int abc_config_prefDialogWidth = NUM;
-        public static final int abc_control_corner_material = NUM;
-        public static final int abc_control_inset_material = NUM;
-        public static final int abc_control_padding_material = NUM;
-        public static final int abc_dialog_corner_radius_material = NUM;
-        public static final int abc_dialog_fixed_height_major = NUM;
-        public static final int abc_dialog_fixed_height_minor = NUM;
-        public static final int abc_dialog_fixed_width_major = NUM;
-        public static final int abc_dialog_fixed_width_minor = NUM;
-        public static final int abc_dialog_list_padding_bottom_no_buttons = NUM;
-        public static final int abc_dialog_list_padding_top_no_title = NUM;
-        public static final int abc_dialog_min_width_major = NUM;
-        public static final int abc_dialog_min_width_minor = NUM;
-        public static final int abc_dialog_padding_material = NUM;
-        public static final int abc_dialog_padding_top_material = NUM;
-        public static final int abc_dialog_title_divider_material = NUM;
-        public static final int abc_disabled_alpha_material_dark = NUM;
-        public static final int abc_disabled_alpha_material_light = NUM;
-        public static final int abc_dropdownitem_icon_width = NUM;
-        public static final int abc_dropdownitem_text_padding_left = NUM;
-        public static final int abc_dropdownitem_text_padding_right = NUM;
-        public static final int abc_edit_text_inset_bottom_material = NUM;
-        public static final int abc_edit_text_inset_horizontal_material = NUM;
-        public static final int abc_edit_text_inset_top_material = NUM;
-        public static final int abc_floating_window_z = NUM;
-        public static final int abc_list_item_padding_horizontal_material = NUM;
-        public static final int abc_panel_menu_list_width = NUM;
-        public static final int abc_progress_bar_height_material = NUM;
-        public static final int abc_search_view_preferred_height = NUM;
-        public static final int abc_search_view_preferred_width = NUM;
-        public static final int abc_seekbar_track_background_height_material = NUM;
-        public static final int abc_seekbar_track_progress_height_material = NUM;
-        public static final int abc_select_dialog_padding_start_material = NUM;
-        public static final int abc_switch_padding = NUM;
-        public static final int abc_text_size_body_1_material = NUM;
-        public static final int abc_text_size_body_2_material = NUM;
-        public static final int abc_text_size_button_material = NUM;
-        public static final int abc_text_size_caption_material = NUM;
-        public static final int abc_text_size_display_1_material = NUM;
-        public static final int abc_text_size_display_2_material = NUM;
-        public static final int abc_text_size_display_3_material = NUM;
-        public static final int abc_text_size_display_4_material = NUM;
-        public static final int abc_text_size_headline_material = NUM;
-        public static final int abc_text_size_large_material = NUM;
-        public static final int abc_text_size_medium_material = NUM;
-        public static final int abc_text_size_menu_header_material = NUM;
-        public static final int abc_text_size_menu_material = NUM;
-        public static final int abc_text_size_small_material = NUM;
-        public static final int abc_text_size_subhead_material = NUM;
-        public static final int abc_text_size_subtitle_material_toolbar = NUM;
-        public static final int abc_text_size_title_material = NUM;
-        public static final int abc_text_size_title_material_toolbar = NUM;
         public static final int compat_button_inset_horizontal_material = NUM;
         public static final int compat_button_inset_vertical_material = NUM;
         public static final int compat_button_padding_horizontal_material = NUM;
@@ -576,15 +141,6 @@ public final class R {
         public static final int compat_notification_large_icon_max_height = NUM;
         public static final int compat_notification_large_icon_max_width = NUM;
         public static final int custom_notification_corner_radius = NUM;
-        public static final int disabled_alpha_material_dark = NUM;
-        public static final int disabled_alpha_material_light = NUM;
-        public static final int highlight_alpha_material_colored = NUM;
-        public static final int highlight_alpha_material_dark = NUM;
-        public static final int highlight_alpha_material_light = NUM;
-        public static final int hint_alpha_material_dark = NUM;
-        public static final int hint_alpha_material_light = NUM;
-        public static final int hint_pressed_alpha_material_dark = NUM;
-        public static final int hint_pressed_alpha_material_light = NUM;
         public static final int notification_action_icon_size = NUM;
         public static final int notification_action_text_size = NUM;
         public static final int notification_big_circle_margin = NUM;
@@ -600,102 +156,11 @@ public final class R {
         public static final int notification_subtext_size = NUM;
         public static final int notification_top_pad = NUM;
         public static final int notification_top_pad_large_text = NUM;
-        public static final int tooltip_corner_radius = NUM;
-        public static final int tooltip_horizontal_padding = NUM;
-        public static final int tooltip_margin = NUM;
-        public static final int tooltip_precise_anchor_extra_offset = NUM;
-        public static final int tooltip_precise_anchor_threshold = NUM;
-        public static final int tooltip_vertical_padding = NUM;
-        public static final int tooltip_y_offset_non_touch = NUM;
-        public static final int tooltip_y_offset_touch = NUM;
     }
 
     public static final class drawable {
         public static final int ab_progress = NUM;
-        public static final int abc_ab_share_pack_mtrl_alpha = NUM;
-        public static final int abc_action_bar_item_background_material = NUM;
-        public static final int abc_btn_borderless_material = NUM;
-        public static final int abc_btn_check_material = NUM;
-        public static final int abc_btn_check_to_on_mtrl_000 = NUM;
-        public static final int abc_btn_check_to_on_mtrl_015 = NUM;
-        public static final int abc_btn_colored_material = NUM;
-        public static final int abc_btn_default_mtrl_shape = NUM;
-        public static final int abc_btn_radio_material = NUM;
-        public static final int abc_btn_radio_to_on_mtrl_000 = NUM;
-        public static final int abc_btn_radio_to_on_mtrl_015 = NUM;
-        public static final int abc_btn_switch_to_on_mtrl_00001 = NUM;
-        public static final int abc_btn_switch_to_on_mtrl_00012 = NUM;
-        public static final int abc_cab_background_internal_bg = NUM;
-        public static final int abc_cab_background_top_material = NUM;
-        public static final int abc_cab_background_top_mtrl_alpha = NUM;
-        public static final int abc_control_background_material = NUM;
-        public static final int abc_dialog_material_background = NUM;
-        public static final int abc_edit_text_material = NUM;
-        public static final int abc_ic_ab_back_material = NUM;
-        public static final int abc_ic_arrow_drop_right_black_24dp = NUM;
-        public static final int abc_ic_clear_material = NUM;
-        public static final int abc_ic_commit_search_api_mtrl_alpha = NUM;
-        public static final int abc_ic_go_search_api_material = NUM;
-        public static final int abc_ic_menu_copy_mtrl_am_alpha = NUM;
-        public static final int abc_ic_menu_cut_mtrl_alpha = NUM;
-        public static final int abc_ic_menu_overflow_material = NUM;
-        public static final int abc_ic_menu_paste_mtrl_am_alpha = NUM;
-        public static final int abc_ic_menu_selectall_mtrl_alpha = NUM;
         public static final int abc_ic_menu_share_mtrl_alpha = NUM;
-        public static final int abc_ic_search_api_material = NUM;
-        public static final int abc_ic_star_black_16dp = NUM;
-        public static final int abc_ic_star_black_36dp = NUM;
-        public static final int abc_ic_star_black_48dp = NUM;
-        public static final int abc_ic_star_half_black_16dp = NUM;
-        public static final int abc_ic_star_half_black_36dp = NUM;
-        public static final int abc_ic_star_half_black_48dp = NUM;
-        public static final int abc_ic_voice_search_api_material = NUM;
-        public static final int abc_item_background_holo_dark = NUM;
-        public static final int abc_item_background_holo_light = NUM;
-        public static final int abc_list_divider_material = NUM;
-        public static final int abc_list_divider_mtrl_alpha = NUM;
-        public static final int abc_list_focused_holo = NUM;
-        public static final int abc_list_longpressed_holo = NUM;
-        public static final int abc_list_pressed_holo_dark = NUM;
-        public static final int abc_list_pressed_holo_light = NUM;
-        public static final int abc_list_selector_background_transition_holo_dark = NUM;
-        public static final int abc_list_selector_background_transition_holo_light = NUM;
-        public static final int abc_list_selector_disabled_holo_dark = NUM;
-        public static final int abc_list_selector_disabled_holo_light = NUM;
-        public static final int abc_list_selector_holo_dark = NUM;
-        public static final int abc_list_selector_holo_light = NUM;
-        public static final int abc_menu_hardkey_panel_mtrl_mult = NUM;
-        public static final int abc_popup_background_mtrl_mult = NUM;
-        public static final int abc_ratingbar_indicator_material = NUM;
-        public static final int abc_ratingbar_material = NUM;
-        public static final int abc_ratingbar_small_material = NUM;
-        public static final int abc_scrubber_control_off_mtrl_alpha = NUM;
-        public static final int abc_scrubber_control_to_pressed_mtrl_000 = NUM;
-        public static final int abc_scrubber_control_to_pressed_mtrl_005 = NUM;
-        public static final int abc_scrubber_primary_mtrl_alpha = NUM;
-        public static final int abc_scrubber_track_mtrl_alpha = NUM;
-        public static final int abc_seekbar_thumb_material = NUM;
-        public static final int abc_seekbar_tick_mark_material = NUM;
-        public static final int abc_seekbar_track_material = NUM;
-        public static final int abc_spinner_mtrl_am_alpha = NUM;
-        public static final int abc_spinner_textfield_background_material = NUM;
-        public static final int abc_switch_thumb_material = NUM;
-        public static final int abc_switch_track_mtrl_alpha = NUM;
-        public static final int abc_tab_indicator_material = NUM;
-        public static final int abc_tab_indicator_mtrl_alpha = NUM;
-        public static final int abc_text_cursor_material = NUM;
-        public static final int abc_text_select_handle_left_mtrl_dark = NUM;
-        public static final int abc_text_select_handle_left_mtrl_light = NUM;
-        public static final int abc_text_select_handle_middle_mtrl_dark = NUM;
-        public static final int abc_text_select_handle_middle_mtrl_light = NUM;
-        public static final int abc_text_select_handle_right_mtrl_dark = NUM;
-        public static final int abc_text_select_handle_right_mtrl_light = NUM;
-        public static final int abc_textfield_activated_mtrl_alpha = NUM;
-        public static final int abc_textfield_default_mtrl_alpha = NUM;
-        public static final int abc_textfield_search_activated_mtrl_alpha = NUM;
-        public static final int abc_textfield_search_default_mtrl_alpha = NUM;
-        public static final int abc_textfield_search_material = NUM;
-        public static final int abc_vector_test = NUM;
         public static final int account_add = NUM;
         public static final int account_check = NUM;
         public static final int actions_addadmin = NUM;
@@ -1324,8 +789,6 @@ public final class R {
         public static final int tool_rotate = NUM;
         public static final int tooltip_arrow = NUM;
         public static final int tooltip_arrow_up = NUM;
-        public static final int tooltip_frame_dark = NUM;
-        public static final int tooltip_frame_light = NUM;
         public static final int tooltip_sound = NUM;
         public static final int transparent = NUM;
         public static final int update = NUM;
@@ -1354,12 +817,6 @@ public final class R {
     }
 
     public static final class id {
-        public static final int ALT = NUM;
-        public static final int CTRL = NUM;
-        public static final int FUNCTION = NUM;
-        public static final int META = NUM;
-        public static final int SHIFT = NUM;
-        public static final int SYM = NUM;
         public static final int acc_action_msg_options = NUM;
         public static final int acc_action_open_photo = NUM;
         public static final int acc_action_small_button = NUM;
@@ -1396,31 +853,14 @@ public final class R {
         public static final int accessibility_custom_action_7 = NUM;
         public static final int accessibility_custom_action_8 = NUM;
         public static final int accessibility_custom_action_9 = NUM;
-        public static final int action_bar = NUM;
-        public static final int action_bar_activity_content = NUM;
-        public static final int action_bar_container = NUM;
-        public static final int action_bar_root = NUM;
-        public static final int action_bar_spinner = NUM;
-        public static final int action_bar_subtitle = NUM;
-        public static final int action_bar_title = NUM;
         public static final int action_container = NUM;
-        public static final int action_context_bar = NUM;
         public static final int action_divider = NUM;
         public static final int action_image = NUM;
-        public static final int action_menu_divider = NUM;
-        public static final int action_menu_presenter = NUM;
-        public static final int action_mode_bar = NUM;
-        public static final int action_mode_bar_stub = NUM;
-        public static final int action_mode_close_button = NUM;
         public static final int action_text = NUM;
         public static final int actions = NUM;
-        public static final int activity_chooser_view_content = NUM;
-        public static final int add = NUM;
         public static final int adjust_height = NUM;
         public static final int adjust_width = NUM;
-        public static final int alertTitle = NUM;
         public static final int all = NUM;
-        public static final int always = NUM;
         public static final int android_pay = NUM;
         public static final int android_pay_dark = NUM;
         public static final int android_pay_light = NUM;
@@ -1429,12 +869,9 @@ public final class R {
         public static final int answer_text = NUM;
         public static final int async = NUM;
         public static final int auto = NUM;
-        public static final int automatic = NUM;
-        public static final int beginning = NUM;
         public static final int blocking = NUM;
         public static final int book_now = NUM;
         public static final int bottom = NUM;
-        public static final int buttonPanel = NUM;
         public static final int button_add_response = NUM;
         public static final int button_attachment = NUM;
         public static final int button_login = NUM;
@@ -1449,30 +886,18 @@ public final class R {
         public static final int center = NUM;
         public static final int center_horizontal = NUM;
         public static final int center_vertical = NUM;
-        public static final int checkbox = NUM;
         public static final int chronometer = NUM;
         public static final int classic = NUM;
         public static final int clip_horizontal = NUM;
         public static final int clip_vertical = NUM;
-        public static final int collapseActionView = NUM;
-        public static final int content = NUM;
-        public static final int contentPanel = NUM;
         public static final int current_animation = NUM;
-        public static final int custom = NUM;
-        public static final int customPanel = NUM;
         public static final int dark = NUM;
         public static final int decline_btn = NUM;
         public static final int decline_text = NUM;
-        public static final int decor_content_parent = NUM;
-        public static final int default_activity_button = NUM;
         public static final int dialog_button = NUM;
-        public static final int disableHome = NUM;
         public static final int donate_with = NUM;
         public static final int donate_with_google = NUM;
-        public static final int edit_query = NUM;
         public static final int end = NUM;
-        public static final int expand_activities_button = NUM;
-        public static final int expanded_menu = NUM;
         public static final int fill = NUM;
         public static final int fill_horizontal = NUM;
         public static final int fill_vertical = NUM;
@@ -1482,18 +907,12 @@ public final class R {
         public static final int google_wallet_grayscale = NUM;
         public static final int google_wallet_monochrome = NUM;
         public static final int grayscale = NUM;
-        public static final int group_divider = NUM;
-        public static final int hardware = NUM;
         public static final int holo_dark = NUM;
         public static final int holo_light = NUM;
-        public static final int home = NUM;
-        public static final int homeAsUp = NUM;
         public static final int hybrid = NUM;
         public static final int icon = NUM;
         public static final int icon_group = NUM;
         public static final int icon_only = NUM;
-        public static final int ifRoom = NUM;
-        public static final int image = NUM;
         public static final int info = NUM;
         public static final int input_email = NUM;
         public static final int input_message = NUM;
@@ -1512,12 +931,9 @@ public final class R {
         public static final int light = NUM;
         public static final int line1 = NUM;
         public static final int line3 = NUM;
-        public static final int listMode = NUM;
         public static final int list_attachments = NUM;
         public static final int list_feedback_messages = NUM;
-        public static final int list_item = NUM;
         public static final int logo_only = NUM;
-        public static final int lottie_layer_name = NUM;
         public static final int match_parent = NUM;
         public static final int material = NUM;
         public static final int menu_bold = NUM;
@@ -1528,19 +944,14 @@ public final class R {
         public static final int menu_regular = NUM;
         public static final int menu_strike = NUM;
         public static final int menu_underline = NUM;
-        public static final int message = NUM;
-        public static final int middle = NUM;
         public static final int monochrome = NUM;
-        public static final int multiply = NUM;
         public static final int name = NUM;
-        public static final int never = NUM;
         public static final int none = NUM;
         public static final int normal = NUM;
         public static final int notification_background = NUM;
         public static final int notification_main_column = NUM;
         public static final int notification_main_column_container = NUM;
         public static final int object_tag = NUM;
-        public static final int parentPanel = NUM;
         public static final int parent_tag = NUM;
         public static final int passcode_btn_0 = NUM;
         public static final int passcode_btn_1 = NUM;
@@ -1565,50 +976,17 @@ public final class R {
         public static final int player_progress_bar = NUM;
         public static final int player_song_name = NUM;
         public static final int production = NUM;
-        public static final int progress_circular = NUM;
-        public static final int progress_horizontal = NUM;
-        public static final int radio = NUM;
-        public static final int restart = NUM;
-        public static final int reverse = NUM;
         public static final int right = NUM;
         public static final int right_icon = NUM;
         public static final int right_side = NUM;
         public static final int sandbox = NUM;
         public static final int satellite = NUM;
-        public static final int screen = NUM;
-        public static final int scrollIndicatorDown = NUM;
-        public static final int scrollIndicatorUp = NUM;
-        public static final int scrollView = NUM;
-        public static final int search_badge = NUM;
-        public static final int search_bar = NUM;
-        public static final int search_button = NUM;
-        public static final int search_close_btn = NUM;
-        public static final int search_edit_frame = NUM;
-        public static final int search_go_btn = NUM;
-        public static final int search_mag_icon = NUM;
-        public static final int search_plate = NUM;
-        public static final int search_src_text = NUM;
-        public static final int search_voice_btn = NUM;
-        public static final int select_dialog_listview = NUM;
         public static final int selectionDetails = NUM;
-        public static final int shortcut = NUM;
-        public static final int showCustom = NUM;
-        public static final int showHome = NUM;
-        public static final int showTitle = NUM;
         public static final int slide = NUM;
-        public static final int software = NUM;
-        public static final int spacer = NUM;
-        public static final int split_action_bar = NUM;
-        public static final int src_atop = NUM;
-        public static final int src_in = NUM;
-        public static final int src_over = NUM;
         public static final int standard = NUM;
         public static final int start = NUM;
         public static final int strict_sandbox = NUM;
-        public static final int submenuarrow = NUM;
-        public static final int submit_area = NUM;
         public static final int subtitle = NUM;
-        public static final int tabMode = NUM;
         public static final int tag_accessibility_actions = NUM;
         public static final int tag_accessibility_clickable_spans = NUM;
         public static final int tag_accessibility_heading = NUM;
@@ -1621,23 +999,14 @@ public final class R {
         public static final int test = NUM;
         public static final int text = NUM;
         public static final int text2 = NUM;
-        public static final int textSpacerNoButtons = NUM;
-        public static final int textSpacerNoTitle = NUM;
         public static final int text_headline = NUM;
         public static final int text_wrap = NUM;
         public static final int time = NUM;
         public static final int title = NUM;
-        public static final int titleDividerNoCustom = NUM;
-        public static final int title_template = NUM;
         public static final int top = NUM;
-        public static final int topPanel = NUM;
-        public static final int uniform = NUM;
-        public static final int up = NUM;
-        public static final int useLogo = NUM;
         public static final int view_header = NUM;
         public static final int web_update_details = NUM;
         public static final int wide = NUM;
-        public static final int withText = NUM;
         public static final int wrap_content = NUM;
         public static final int wrapper_attachments = NUM;
         public static final int wrapper_feedback = NUM;
@@ -1647,43 +1016,11 @@ public final class R {
     }
 
     public static final class integer {
-        public static final int abc_config_activityDefaultDur = NUM;
-        public static final int abc_config_activityShortDur = NUM;
-        public static final int cancel_button_image_alpha = NUM;
-        public static final int config_tooltipAnimTime = NUM;
         public static final int google_play_services_version = NUM;
         public static final int status_bar_notification_info_maxnum = NUM;
     }
 
     public static final class layout {
-        public static final int abc_action_bar_title_item = NUM;
-        public static final int abc_action_bar_up_container = NUM;
-        public static final int abc_action_menu_item_layout = NUM;
-        public static final int abc_action_menu_layout = NUM;
-        public static final int abc_action_mode_bar = NUM;
-        public static final int abc_action_mode_close_item_material = NUM;
-        public static final int abc_activity_chooser_view = NUM;
-        public static final int abc_activity_chooser_view_list_item = NUM;
-        public static final int abc_alert_dialog_button_bar_material = NUM;
-        public static final int abc_alert_dialog_material = NUM;
-        public static final int abc_alert_dialog_title_material = NUM;
-        public static final int abc_cascading_menu_item_layout = NUM;
-        public static final int abc_dialog_title_material = NUM;
-        public static final int abc_expanded_menu_layout = NUM;
-        public static final int abc_list_menu_item_checkbox = NUM;
-        public static final int abc_list_menu_item_icon = NUM;
-        public static final int abc_list_menu_item_layout = NUM;
-        public static final int abc_list_menu_item_radio = NUM;
-        public static final int abc_popup_menu_header_item_layout = NUM;
-        public static final int abc_popup_menu_item_layout = NUM;
-        public static final int abc_screen_content_include = NUM;
-        public static final int abc_screen_simple = NUM;
-        public static final int abc_screen_simple_overlay_action_mode = NUM;
-        public static final int abc_screen_toolbar = NUM;
-        public static final int abc_search_dropdown_item_icons_2line = NUM;
-        public static final int abc_search_view = NUM;
-        public static final int abc_select_dialog_material = NUM;
-        public static final int abc_tooltip = NUM;
         public static final int call_notification = NUM;
         public static final int call_notification_rtl = NUM;
         public static final int custom_dialog = NUM;
@@ -1700,10 +1037,6 @@ public final class R {
         public static final int notification_template_part_time = NUM;
         public static final int player_big_notification = NUM;
         public static final int player_small_notification = NUM;
-        public static final int select_dialog_item_material = NUM;
-        public static final int select_dialog_multichoice_material = NUM;
-        public static final int select_dialog_singlechoice_material = NUM;
-        public static final int support_simple_spinner_dropdown_item = NUM;
         public static final int wallet_test_layout = NUM;
     }
 
@@ -2652,6 +1985,11 @@ public final class R {
         public static final int DiscussionUnlinkChannelAlert = NUM;
         public static final int DiscussionUnlinkGroup = NUM;
         public static final int DiscussionUnlinkGroupAlert = NUM;
+        public static final int DistanceUnits = NUM;
+        public static final int DistanceUnitsAutomatic = NUM;
+        public static final int DistanceUnitsKilometers = NUM;
+        public static final int DistanceUnitsMiles = NUM;
+        public static final int DistanceUnitsTitle = NUM;
         public static final int DocumentsTitle = NUM;
         public static final int Done = NUM;
         public static final int Draft = NUM;
@@ -2873,6 +2211,7 @@ public final class R {
         public static final int FontSizePreviewLine2 = NUM;
         public static final int FontSizePreviewName = NUM;
         public static final int FontSizePreviewReply = NUM;
+        public static final int FootsAway = NUM;
         public static final int ForgotPassword = NUM;
         public static final int Forward = NUM;
         public static final int ForwardTo = NUM;
@@ -3080,7 +2419,7 @@ public final class R {
         public static final int July = NUM;
         public static final int JumpToDate = NUM;
         public static final int June = NUM;
-        public static final int KMetersAway = NUM;
+        public static final int KMetersAway2 = NUM;
         public static final int KeepMedia = NUM;
         public static final int KeepMediaForever = NUM;
         public static final int KeepMediaInfo = NUM;
@@ -3226,17 +2565,19 @@ public final class R {
         public static final int MessageLifetimeRemoved = NUM;
         public static final int MessageLifetimeVideo = NUM;
         public static final int MessageLifetimeYouRemoved = NUM;
+        public static final int MessageNotFound = NUM;
         public static final int MessageNotifications = NUM;
         public static final int MessagePreview = NUM;
         public static final int MessagesDataUsage = NUM;
         public static final int MessagesSettings = NUM;
-        public static final int MetersAway = NUM;
+        public static final int MetersAway2 = NUM;
         public static final int Meters_few = NUM;
         public static final int Meters_many = NUM;
         public static final int Meters_one = NUM;
         public static final int Meters_other = NUM;
         public static final int Meters_two = NUM;
         public static final int Meters_zero = NUM;
+        public static final int MilesAway = NUM;
         public static final int MinutesBold_few = NUM;
         public static final int MinutesBold_many = NUM;
         public static final int MinutesBold_one = NUM;
@@ -4409,6 +3750,7 @@ public final class R {
         public static final int UserRestrictionsBlock = NUM;
         public static final int UserRestrictionsCanDo = NUM;
         public static final int UserRestrictionsChangeInfo = NUM;
+        public static final int UserRestrictionsCustom = NUM;
         public static final int UserRestrictionsDisabled = NUM;
         public static final int UserRestrictionsDuration = NUM;
         public static final int UserRestrictionsEmbedLinks = NUM;
@@ -4569,45 +3911,6 @@ public final class R {
         public static final int YourPasswordSuccess = NUM;
         public static final int YourPasswordSuccessText = NUM;
         public static final int YourPhone = NUM;
-        public static final int abc_action_bar_home_description = NUM;
-        public static final int abc_action_bar_up_description = NUM;
-        public static final int abc_action_menu_overflow_description = NUM;
-        public static final int abc_action_mode_done = NUM;
-        public static final int abc_activity_chooser_view_see_all = NUM;
-        public static final int abc_activitychooserview_choose_application = NUM;
-        public static final int abc_capital_off = NUM;
-        public static final int abc_capital_on = NUM;
-        public static final int abc_font_family_body_1_material = NUM;
-        public static final int abc_font_family_body_2_material = NUM;
-        public static final int abc_font_family_button_material = NUM;
-        public static final int abc_font_family_caption_material = NUM;
-        public static final int abc_font_family_display_1_material = NUM;
-        public static final int abc_font_family_display_2_material = NUM;
-        public static final int abc_font_family_display_3_material = NUM;
-        public static final int abc_font_family_display_4_material = NUM;
-        public static final int abc_font_family_headline_material = NUM;
-        public static final int abc_font_family_menu_material = NUM;
-        public static final int abc_font_family_subhead_material = NUM;
-        public static final int abc_font_family_title_material = NUM;
-        public static final int abc_menu_alt_shortcut_label = NUM;
-        public static final int abc_menu_ctrl_shortcut_label = NUM;
-        public static final int abc_menu_delete_shortcut_label = NUM;
-        public static final int abc_menu_enter_shortcut_label = NUM;
-        public static final int abc_menu_function_shortcut_label = NUM;
-        public static final int abc_menu_meta_shortcut_label = NUM;
-        public static final int abc_menu_shift_shortcut_label = NUM;
-        public static final int abc_menu_space_shortcut_label = NUM;
-        public static final int abc_menu_sym_shortcut_label = NUM;
-        public static final int abc_prepend_shortcut_label = NUM;
-        public static final int abc_search_hint = NUM;
-        public static final int abc_searchview_description_clear = NUM;
-        public static final int abc_searchview_description_query = NUM;
-        public static final int abc_searchview_description_search = NUM;
-        public static final int abc_searchview_description_submit = NUM;
-        public static final int abc_searchview_description_voice = NUM;
-        public static final int abc_shareactionprovider_share_with = NUM;
-        public static final int abc_shareactionprovider_share_with_application = NUM;
-        public static final int abc_toolbar_collapse_description = NUM;
         public static final int chatDate = NUM;
         public static final int chatFullDate = NUM;
         public static final int common_google_play_services_enable_button = NUM;
@@ -4751,7 +4054,6 @@ public final class R {
         public static final int messages_two = NUM;
         public static final int messages_zero = NUM;
         public static final int project_id = NUM;
-        public static final int search_menu_title = NUM;
         public static final int status_bar_notification_info_overflow = NUM;
         public static final int wallet_buy_button_place_holder = NUM;
     }
@@ -4759,284 +4061,18 @@ public final class R {
     public static final class style {
         public static final int ActionBar_Transparent_TMessages_Item = NUM;
         public static final int ActionBar_Transparent_TMessages_Start = NUM;
-        public static final int AlertDialog_AppCompat = NUM;
-        public static final int AlertDialog_AppCompat_Light = NUM;
-        public static final int Animation_AppCompat_Dialog = NUM;
-        public static final int Animation_AppCompat_DropDownUp = NUM;
-        public static final int Animation_AppCompat_Tooltip = NUM;
-        public static final int Base_AlertDialog_AppCompat = NUM;
-        public static final int Base_AlertDialog_AppCompat_Light = NUM;
-        public static final int Base_Animation_AppCompat_Dialog = NUM;
-        public static final int Base_Animation_AppCompat_DropDownUp = NUM;
-        public static final int Base_Animation_AppCompat_Tooltip = NUM;
-        public static final int Base_DialogWindowTitleBackground_AppCompat = NUM;
-        public static final int Base_DialogWindowTitle_AppCompat = NUM;
-        public static final int Base_TextAppearance_AppCompat = NUM;
-        public static final int Base_TextAppearance_AppCompat_Body1 = NUM;
-        public static final int Base_TextAppearance_AppCompat_Body2 = NUM;
-        public static final int Base_TextAppearance_AppCompat_Button = NUM;
-        public static final int Base_TextAppearance_AppCompat_Caption = NUM;
-        public static final int Base_TextAppearance_AppCompat_Display1 = NUM;
-        public static final int Base_TextAppearance_AppCompat_Display2 = NUM;
-        public static final int Base_TextAppearance_AppCompat_Display3 = NUM;
-        public static final int Base_TextAppearance_AppCompat_Display4 = NUM;
-        public static final int Base_TextAppearance_AppCompat_Headline = NUM;
-        public static final int Base_TextAppearance_AppCompat_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Large = NUM;
-        public static final int Base_TextAppearance_AppCompat_Large_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Light_Widget_PopupMenu_Large = NUM;
-        public static final int Base_TextAppearance_AppCompat_Light_Widget_PopupMenu_Small = NUM;
-        public static final int Base_TextAppearance_AppCompat_Medium = NUM;
-        public static final int Base_TextAppearance_AppCompat_Medium_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Menu = NUM;
-        public static final int Base_TextAppearance_AppCompat_SearchResult = NUM;
-        public static final int Base_TextAppearance_AppCompat_SearchResult_Subtitle = NUM;
-        public static final int Base_TextAppearance_AppCompat_SearchResult_Title = NUM;
-        public static final int Base_TextAppearance_AppCompat_Small = NUM;
-        public static final int Base_TextAppearance_AppCompat_Small_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Subhead = NUM;
-        public static final int Base_TextAppearance_AppCompat_Subhead_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Title = NUM;
-        public static final int Base_TextAppearance_AppCompat_Title_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Tooltip = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_ActionBar_Menu = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_ActionBar_Subtitle = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_ActionBar_Subtitle_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_ActionBar_Title = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_ActionBar_Title_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_ActionMode_Subtitle = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_ActionMode_Title = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_Button = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_Button_Borderless_Colored = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_Button_Colored = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_Button_Inverse = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_DropDownItem = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_PopupMenu_Header = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_PopupMenu_Large = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_PopupMenu_Small = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_Switch = NUM;
-        public static final int Base_TextAppearance_AppCompat_Widget_TextView_SpinnerItem = NUM;
-        public static final int Base_TextAppearance_Widget_AppCompat_ExpandedMenu_Item = NUM;
-        public static final int Base_TextAppearance_Widget_AppCompat_Toolbar_Subtitle = NUM;
-        public static final int Base_TextAppearance_Widget_AppCompat_Toolbar_Title = NUM;
-        public static final int Base_ThemeOverlay_AppCompat = NUM;
-        public static final int Base_ThemeOverlay_AppCompat_ActionBar = NUM;
-        public static final int Base_ThemeOverlay_AppCompat_Dark = NUM;
-        public static final int Base_ThemeOverlay_AppCompat_Dark_ActionBar = NUM;
-        public static final int Base_ThemeOverlay_AppCompat_Dialog = NUM;
-        public static final int Base_ThemeOverlay_AppCompat_Dialog_Alert = NUM;
-        public static final int Base_ThemeOverlay_AppCompat_Light = NUM;
-        public static final int Base_Theme_AppCompat = NUM;
-        public static final int Base_Theme_AppCompat_CompactMenu = NUM;
-        public static final int Base_Theme_AppCompat_Dialog = NUM;
-        public static final int Base_Theme_AppCompat_DialogWhenLarge = NUM;
-        public static final int Base_Theme_AppCompat_Dialog_Alert = NUM;
-        public static final int Base_Theme_AppCompat_Dialog_FixedSize = NUM;
-        public static final int Base_Theme_AppCompat_Dialog_MinWidth = NUM;
-        public static final int Base_Theme_AppCompat_Light = NUM;
-        public static final int Base_Theme_AppCompat_Light_DarkActionBar = NUM;
-        public static final int Base_Theme_AppCompat_Light_Dialog = NUM;
-        public static final int Base_Theme_AppCompat_Light_DialogWhenLarge = NUM;
-        public static final int Base_Theme_AppCompat_Light_Dialog_Alert = NUM;
-        public static final int Base_Theme_AppCompat_Light_Dialog_FixedSize = NUM;
-        public static final int Base_Theme_AppCompat_Light_Dialog_MinWidth = NUM;
-        public static final int Base_V21_ThemeOverlay_AppCompat_Dialog = NUM;
-        public static final int Base_V21_Theme_AppCompat = NUM;
-        public static final int Base_V21_Theme_AppCompat_Dialog = NUM;
-        public static final int Base_V21_Theme_AppCompat_Light = NUM;
-        public static final int Base_V21_Theme_AppCompat_Light_Dialog = NUM;
-        public static final int Base_V22_Theme_AppCompat = NUM;
-        public static final int Base_V22_Theme_AppCompat_Light = NUM;
-        public static final int Base_V23_Theme_AppCompat = NUM;
-        public static final int Base_V23_Theme_AppCompat_Light = NUM;
-        public static final int Base_V26_Theme_AppCompat = NUM;
-        public static final int Base_V26_Theme_AppCompat_Light = NUM;
-        public static final int Base_V26_Widget_AppCompat_Toolbar = NUM;
-        public static final int Base_V28_Theme_AppCompat = NUM;
-        public static final int Base_V28_Theme_AppCompat_Light = NUM;
-        public static final int Base_V7_ThemeOverlay_AppCompat_Dialog = NUM;
-        public static final int Base_V7_Theme_AppCompat = NUM;
-        public static final int Base_V7_Theme_AppCompat_Dialog = NUM;
-        public static final int Base_V7_Theme_AppCompat_Light = NUM;
-        public static final int Base_V7_Theme_AppCompat_Light_Dialog = NUM;
-        public static final int Base_V7_Widget_AppCompat_AutoCompleteTextView = NUM;
-        public static final int Base_V7_Widget_AppCompat_EditText = NUM;
-        public static final int Base_V7_Widget_AppCompat_Toolbar = NUM;
-        public static final int Base_Widget_AppCompat_ActionBar = NUM;
-        public static final int Base_Widget_AppCompat_ActionBar_Solid = NUM;
-        public static final int Base_Widget_AppCompat_ActionBar_TabBar = NUM;
-        public static final int Base_Widget_AppCompat_ActionBar_TabText = NUM;
-        public static final int Base_Widget_AppCompat_ActionBar_TabView = NUM;
-        public static final int Base_Widget_AppCompat_ActionButton = NUM;
-        public static final int Base_Widget_AppCompat_ActionButton_CloseMode = NUM;
-        public static final int Base_Widget_AppCompat_ActionButton_Overflow = NUM;
-        public static final int Base_Widget_AppCompat_ActionMode = NUM;
-        public static final int Base_Widget_AppCompat_ActivityChooserView = NUM;
-        public static final int Base_Widget_AppCompat_AutoCompleteTextView = NUM;
-        public static final int Base_Widget_AppCompat_Button = NUM;
-        public static final int Base_Widget_AppCompat_ButtonBar = NUM;
-        public static final int Base_Widget_AppCompat_ButtonBar_AlertDialog = NUM;
-        public static final int Base_Widget_AppCompat_Button_Borderless = NUM;
-        public static final int Base_Widget_AppCompat_Button_Borderless_Colored = NUM;
-        public static final int Base_Widget_AppCompat_Button_ButtonBar_AlertDialog = NUM;
-        public static final int Base_Widget_AppCompat_Button_Colored = NUM;
-        public static final int Base_Widget_AppCompat_Button_Small = NUM;
-        public static final int Base_Widget_AppCompat_CompoundButton_CheckBox = NUM;
-        public static final int Base_Widget_AppCompat_CompoundButton_RadioButton = NUM;
-        public static final int Base_Widget_AppCompat_CompoundButton_Switch = NUM;
-        public static final int Base_Widget_AppCompat_DrawerArrowToggle = NUM;
-        public static final int Base_Widget_AppCompat_DrawerArrowToggle_Common = NUM;
-        public static final int Base_Widget_AppCompat_DropDownItem_Spinner = NUM;
-        public static final int Base_Widget_AppCompat_EditText = NUM;
-        public static final int Base_Widget_AppCompat_ImageButton = NUM;
-        public static final int Base_Widget_AppCompat_Light_ActionBar = NUM;
-        public static final int Base_Widget_AppCompat_Light_ActionBar_Solid = NUM;
-        public static final int Base_Widget_AppCompat_Light_ActionBar_TabBar = NUM;
-        public static final int Base_Widget_AppCompat_Light_ActionBar_TabText = NUM;
-        public static final int Base_Widget_AppCompat_Light_ActionBar_TabText_Inverse = NUM;
-        public static final int Base_Widget_AppCompat_Light_ActionBar_TabView = NUM;
-        public static final int Base_Widget_AppCompat_Light_PopupMenu = NUM;
-        public static final int Base_Widget_AppCompat_Light_PopupMenu_Overflow = NUM;
-        public static final int Base_Widget_AppCompat_ListMenuView = NUM;
-        public static final int Base_Widget_AppCompat_ListPopupWindow = NUM;
-        public static final int Base_Widget_AppCompat_ListView = NUM;
-        public static final int Base_Widget_AppCompat_ListView_DropDown = NUM;
-        public static final int Base_Widget_AppCompat_ListView_Menu = NUM;
-        public static final int Base_Widget_AppCompat_PopupMenu = NUM;
-        public static final int Base_Widget_AppCompat_PopupMenu_Overflow = NUM;
-        public static final int Base_Widget_AppCompat_PopupWindow = NUM;
-        public static final int Base_Widget_AppCompat_ProgressBar = NUM;
-        public static final int Base_Widget_AppCompat_ProgressBar_Horizontal = NUM;
-        public static final int Base_Widget_AppCompat_RatingBar = NUM;
-        public static final int Base_Widget_AppCompat_RatingBar_Indicator = NUM;
-        public static final int Base_Widget_AppCompat_RatingBar_Small = NUM;
-        public static final int Base_Widget_AppCompat_SearchView = NUM;
-        public static final int Base_Widget_AppCompat_SearchView_ActionBar = NUM;
-        public static final int Base_Widget_AppCompat_SeekBar = NUM;
-        public static final int Base_Widget_AppCompat_SeekBar_Discrete = NUM;
-        public static final int Base_Widget_AppCompat_Spinner = NUM;
-        public static final int Base_Widget_AppCompat_Spinner_Underlined = NUM;
-        public static final int Base_Widget_AppCompat_TextView_SpinnerItem = NUM;
-        public static final int Base_Widget_AppCompat_Toolbar = NUM;
-        public static final int Base_Widget_AppCompat_Toolbar_Button_Navigation = NUM;
         public static final int DialogNoAnimation = NUM;
         public static final int HockeyApp_ButtonStyle = NUM;
         public static final int HockeyApp_EditTextStyle = NUM;
         public static final int HockeyApp_SingleLineInputStyle = NUM;
         public static final int MyTextViewStyle = NUM;
-        public static final int Platform_AppCompat = NUM;
-        public static final int Platform_AppCompat_Light = NUM;
-        public static final int Platform_ThemeOverlay_AppCompat = NUM;
-        public static final int Platform_ThemeOverlay_AppCompat_Dark = NUM;
-        public static final int Platform_ThemeOverlay_AppCompat_Light = NUM;
-        public static final int Platform_V21_AppCompat = NUM;
-        public static final int Platform_V21_AppCompat_Light = NUM;
-        public static final int Platform_V25_AppCompat = NUM;
-        public static final int Platform_V25_AppCompat_Light = NUM;
-        public static final int Platform_Widget_AppCompat_Spinner = NUM;
         public static final int PopupAnimation = NUM;
         public static final int PopupContextAnimation = NUM;
-        public static final int RtlOverlay_DialogWindowTitle_AppCompat = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_ActionBar_TitleItem = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_DialogTitle_Icon = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_PopupMenuItem = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_PopupMenuItem_InternalGroup = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_PopupMenuItem_Shortcut = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_PopupMenuItem_SubmenuArrow = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_PopupMenuItem_Text = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_PopupMenuItem_Title = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_SearchView_MagIcon = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_Search_DropDown = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_Search_DropDown_Icon1 = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_Search_DropDown_Icon2 = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_Search_DropDown_Query = NUM;
-        public static final int RtlOverlay_Widget_AppCompat_Search_DropDown_Text = NUM;
-        public static final int RtlUnderlay_Widget_AppCompat_ActionButton = NUM;
-        public static final int RtlUnderlay_Widget_AppCompat_ActionButton_Overflow = NUM;
-        public static final int TextAppearance_AppCompat = NUM;
-        public static final int TextAppearance_AppCompat_Body1 = NUM;
-        public static final int TextAppearance_AppCompat_Body2 = NUM;
-        public static final int TextAppearance_AppCompat_Button = NUM;
-        public static final int TextAppearance_AppCompat_Caption = NUM;
-        public static final int TextAppearance_AppCompat_Display1 = NUM;
-        public static final int TextAppearance_AppCompat_Display2 = NUM;
-        public static final int TextAppearance_AppCompat_Display3 = NUM;
-        public static final int TextAppearance_AppCompat_Display4 = NUM;
-        public static final int TextAppearance_AppCompat_Headline = NUM;
-        public static final int TextAppearance_AppCompat_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Large = NUM;
-        public static final int TextAppearance_AppCompat_Large_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Light_SearchResult_Subtitle = NUM;
-        public static final int TextAppearance_AppCompat_Light_SearchResult_Title = NUM;
-        public static final int TextAppearance_AppCompat_Light_Widget_PopupMenu_Large = NUM;
-        public static final int TextAppearance_AppCompat_Light_Widget_PopupMenu_Small = NUM;
-        public static final int TextAppearance_AppCompat_Medium = NUM;
-        public static final int TextAppearance_AppCompat_Medium_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Menu = NUM;
-        public static final int TextAppearance_AppCompat_SearchResult_Subtitle = NUM;
-        public static final int TextAppearance_AppCompat_SearchResult_Title = NUM;
-        public static final int TextAppearance_AppCompat_Small = NUM;
-        public static final int TextAppearance_AppCompat_Small_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Subhead = NUM;
-        public static final int TextAppearance_AppCompat_Subhead_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Title = NUM;
-        public static final int TextAppearance_AppCompat_Title_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Tooltip = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionBar_Menu = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionBar_Subtitle = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionBar_Subtitle_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionBar_Title = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionBar_Title_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionMode_Subtitle = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionMode_Subtitle_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionMode_Title = NUM;
-        public static final int TextAppearance_AppCompat_Widget_ActionMode_Title_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Widget_Button = NUM;
-        public static final int TextAppearance_AppCompat_Widget_Button_Borderless_Colored = NUM;
-        public static final int TextAppearance_AppCompat_Widget_Button_Colored = NUM;
-        public static final int TextAppearance_AppCompat_Widget_Button_Inverse = NUM;
-        public static final int TextAppearance_AppCompat_Widget_DropDownItem = NUM;
-        public static final int TextAppearance_AppCompat_Widget_PopupMenu_Header = NUM;
-        public static final int TextAppearance_AppCompat_Widget_PopupMenu_Large = NUM;
-        public static final int TextAppearance_AppCompat_Widget_PopupMenu_Small = NUM;
-        public static final int TextAppearance_AppCompat_Widget_Switch = NUM;
-        public static final int TextAppearance_AppCompat_Widget_TextView_SpinnerItem = NUM;
         public static final int TextAppearance_Compat_Notification = NUM;
         public static final int TextAppearance_Compat_Notification_Info = NUM;
         public static final int TextAppearance_Compat_Notification_Line2 = NUM;
         public static final int TextAppearance_Compat_Notification_Time = NUM;
         public static final int TextAppearance_Compat_Notification_Title = NUM;
-        public static final int TextAppearance_Widget_AppCompat_ExpandedMenu_Item = NUM;
-        public static final int TextAppearance_Widget_AppCompat_Toolbar_Subtitle = NUM;
-        public static final int TextAppearance_Widget_AppCompat_Toolbar_Title = NUM;
-        public static final int ThemeOverlay_AppCompat = NUM;
-        public static final int ThemeOverlay_AppCompat_ActionBar = NUM;
-        public static final int ThemeOverlay_AppCompat_Dark = NUM;
-        public static final int ThemeOverlay_AppCompat_Dark_ActionBar = NUM;
-        public static final int ThemeOverlay_AppCompat_Dialog = NUM;
-        public static final int ThemeOverlay_AppCompat_Dialog_Alert = NUM;
-        public static final int ThemeOverlay_AppCompat_Light = NUM;
-        public static final int Theme_AppCompat = NUM;
-        public static final int Theme_AppCompat_CompactMenu = NUM;
-        public static final int Theme_AppCompat_DayNight = NUM;
-        public static final int Theme_AppCompat_DayNight_DarkActionBar = NUM;
-        public static final int Theme_AppCompat_DayNight_Dialog = NUM;
-        public static final int Theme_AppCompat_DayNight_DialogWhenLarge = NUM;
-        public static final int Theme_AppCompat_DayNight_Dialog_Alert = NUM;
-        public static final int Theme_AppCompat_DayNight_Dialog_MinWidth = NUM;
-        public static final int Theme_AppCompat_DayNight_NoActionBar = NUM;
-        public static final int Theme_AppCompat_Dialog = NUM;
-        public static final int Theme_AppCompat_DialogWhenLarge = NUM;
-        public static final int Theme_AppCompat_Dialog_Alert = NUM;
-        public static final int Theme_AppCompat_Dialog_MinWidth = NUM;
-        public static final int Theme_AppCompat_Light = NUM;
-        public static final int Theme_AppCompat_Light_DarkActionBar = NUM;
-        public static final int Theme_AppCompat_Light_Dialog = NUM;
-        public static final int Theme_AppCompat_Light_DialogWhenLarge = NUM;
-        public static final int Theme_AppCompat_Light_Dialog_Alert = NUM;
-        public static final int Theme_AppCompat_Light_Dialog_MinWidth = NUM;
-        public static final int Theme_AppCompat_Light_NoActionBar = NUM;
-        public static final int Theme_AppCompat_NoActionBar = NUM;
         public static final int Theme_TMessages = NUM;
         public static final int Theme_TMessages_BorderLessButton = NUM;
         public static final int Theme_TMessages_CalendarView = NUM;
@@ -5054,78 +4090,6 @@ public final class R {
         public static final int WalletFragmentDefaultDetailsHeaderTextAppearance = NUM;
         public static final int WalletFragmentDefaultDetailsTextAppearance = NUM;
         public static final int WalletFragmentDefaultStyle = NUM;
-        public static final int Widget_AppCompat_ActionBar = NUM;
-        public static final int Widget_AppCompat_ActionBar_Solid = NUM;
-        public static final int Widget_AppCompat_ActionBar_TabBar = NUM;
-        public static final int Widget_AppCompat_ActionBar_TabText = NUM;
-        public static final int Widget_AppCompat_ActionBar_TabView = NUM;
-        public static final int Widget_AppCompat_ActionButton = NUM;
-        public static final int Widget_AppCompat_ActionButton_CloseMode = NUM;
-        public static final int Widget_AppCompat_ActionButton_Overflow = NUM;
-        public static final int Widget_AppCompat_ActionMode = NUM;
-        public static final int Widget_AppCompat_ActivityChooserView = NUM;
-        public static final int Widget_AppCompat_AutoCompleteTextView = NUM;
-        public static final int Widget_AppCompat_Button = NUM;
-        public static final int Widget_AppCompat_ButtonBar = NUM;
-        public static final int Widget_AppCompat_ButtonBar_AlertDialog = NUM;
-        public static final int Widget_AppCompat_Button_Borderless = NUM;
-        public static final int Widget_AppCompat_Button_Borderless_Colored = NUM;
-        public static final int Widget_AppCompat_Button_ButtonBar_AlertDialog = NUM;
-        public static final int Widget_AppCompat_Button_Colored = NUM;
-        public static final int Widget_AppCompat_Button_Small = NUM;
-        public static final int Widget_AppCompat_CompoundButton_CheckBox = NUM;
-        public static final int Widget_AppCompat_CompoundButton_RadioButton = NUM;
-        public static final int Widget_AppCompat_CompoundButton_Switch = NUM;
-        public static final int Widget_AppCompat_DrawerArrowToggle = NUM;
-        public static final int Widget_AppCompat_DropDownItem_Spinner = NUM;
-        public static final int Widget_AppCompat_EditText = NUM;
-        public static final int Widget_AppCompat_ImageButton = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar_Solid = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar_Solid_Inverse = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar_TabBar = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar_TabBar_Inverse = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar_TabText = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar_TabText_Inverse = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar_TabView = NUM;
-        public static final int Widget_AppCompat_Light_ActionBar_TabView_Inverse = NUM;
-        public static final int Widget_AppCompat_Light_ActionButton = NUM;
-        public static final int Widget_AppCompat_Light_ActionButton_CloseMode = NUM;
-        public static final int Widget_AppCompat_Light_ActionButton_Overflow = NUM;
-        public static final int Widget_AppCompat_Light_ActionMode_Inverse = NUM;
-        public static final int Widget_AppCompat_Light_ActivityChooserView = NUM;
-        public static final int Widget_AppCompat_Light_AutoCompleteTextView = NUM;
-        public static final int Widget_AppCompat_Light_DropDownItem_Spinner = NUM;
-        public static final int Widget_AppCompat_Light_ListPopupWindow = NUM;
-        public static final int Widget_AppCompat_Light_ListView_DropDown = NUM;
-        public static final int Widget_AppCompat_Light_PopupMenu = NUM;
-        public static final int Widget_AppCompat_Light_PopupMenu_Overflow = NUM;
-        public static final int Widget_AppCompat_Light_SearchView = NUM;
-        public static final int Widget_AppCompat_Light_Spinner_DropDown_ActionBar = NUM;
-        public static final int Widget_AppCompat_ListMenuView = NUM;
-        public static final int Widget_AppCompat_ListPopupWindow = NUM;
-        public static final int Widget_AppCompat_ListView = NUM;
-        public static final int Widget_AppCompat_ListView_DropDown = NUM;
-        public static final int Widget_AppCompat_ListView_Menu = NUM;
-        public static final int Widget_AppCompat_PopupMenu = NUM;
-        public static final int Widget_AppCompat_PopupMenu_Overflow = NUM;
-        public static final int Widget_AppCompat_PopupWindow = NUM;
-        public static final int Widget_AppCompat_ProgressBar = NUM;
-        public static final int Widget_AppCompat_ProgressBar_Horizontal = NUM;
-        public static final int Widget_AppCompat_RatingBar = NUM;
-        public static final int Widget_AppCompat_RatingBar_Indicator = NUM;
-        public static final int Widget_AppCompat_RatingBar_Small = NUM;
-        public static final int Widget_AppCompat_SearchView = NUM;
-        public static final int Widget_AppCompat_SearchView_ActionBar = NUM;
-        public static final int Widget_AppCompat_SeekBar = NUM;
-        public static final int Widget_AppCompat_SeekBar_Discrete = NUM;
-        public static final int Widget_AppCompat_Spinner = NUM;
-        public static final int Widget_AppCompat_Spinner_DropDown = NUM;
-        public static final int Widget_AppCompat_Spinner_DropDown_ActionBar = NUM;
-        public static final int Widget_AppCompat_Spinner_Underlined = NUM;
-        public static final int Widget_AppCompat_TextView_SpinnerItem = NUM;
-        public static final int Widget_AppCompat_Toolbar = NUM;
-        public static final int Widget_AppCompat_Toolbar_Button_Navigation = NUM;
         public static final int Widget_Compat_NotificationActionContainer = NUM;
         public static final int Widget_Compat_NotificationActionText = NUM;
         public static final int Widget_Support_CoordinatorLayout = NUM;
@@ -5137,806 +4101,29 @@ public final class R {
         /* renamed from: ActionBar.Transparent.TMessages.Start */
         public static final int f1ActionBar.Transparent.TMessages.Start = NUM;
         /* added by JADX */
-        /* renamed from: AlertDialog.AppCompat */
-        public static final int f2AlertDialog.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: AlertDialog.AppCompat.Light */
-        public static final int f3AlertDialog.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Animation.AppCompat.Dialog */
-        public static final int f4Animation.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Animation.AppCompat.DropDownUp */
-        public static final int f5Animation.AppCompat.DropDownUp = NUM;
-        /* added by JADX */
-        /* renamed from: Animation.AppCompat.Tooltip */
-        public static final int f6Animation.AppCompat.Tooltip = NUM;
-        /* added by JADX */
-        /* renamed from: Base.AlertDialog.AppCompat */
-        public static final int f7Base.AlertDialog.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.AlertDialog.AppCompat.Light */
-        public static final int f8Base.AlertDialog.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Animation.AppCompat.Dialog */
-        public static final int f9Base.Animation.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Animation.AppCompat.DropDownUp */
-        public static final int var_Base.Animation.AppCompat.DropDownUp = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Animation.AppCompat.Tooltip */
-        public static final int var_Base.Animation.AppCompat.Tooltip = NUM;
-        /* added by JADX */
-        /* renamed from: Base.DialogWindowTitle.AppCompat */
-        public static final int var_Base.DialogWindowTitle.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.DialogWindowTitleBackground.AppCompat */
-        public static final int var_Base.DialogWindowTitleBackground.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat */
-        public static final int var_Base.TextAppearance.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Body1 */
-        public static final int var_Base.TextAppearance.AppCompat.Body1 = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Body2 */
-        public static final int var_Base.TextAppearance.AppCompat.Body2 = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Button */
-        public static final int var_Base.TextAppearance.AppCompat.Button = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Caption */
-        public static final int var_Base.TextAppearance.AppCompat.Caption = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Display1 */
-        public static final int var_Base.TextAppearance.AppCompat.Display1 = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Display2 */
-        public static final int var_Base.TextAppearance.AppCompat.Display2 = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Display3 */
-        public static final int var_Base.TextAppearance.AppCompat.Display3 = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Display4 */
-        public static final int var_Base.TextAppearance.AppCompat.Display4 = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Headline */
-        public static final int var_Base.TextAppearance.AppCompat.Headline = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Large */
-        public static final int var_Base.TextAppearance.AppCompat.Large = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Large.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Large.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Large */
-        public static final int var_Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Large = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small */
-        public static final int var_Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Medium */
-        public static final int var_Base.TextAppearance.AppCompat.Medium = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Medium.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Medium.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Menu */
-        public static final int var_Base.TextAppearance.AppCompat.Menu = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.SearchResult */
-        public static final int var_Base.TextAppearance.AppCompat.SearchResult = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.SearchResult.Subtitle */
-        public static final int var_Base.TextAppearance.AppCompat.SearchResult.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.SearchResult.Title */
-        public static final int var_Base.TextAppearance.AppCompat.SearchResult.Title = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Small */
-        public static final int var_Base.TextAppearance.AppCompat.Small = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Small.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Small.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Subhead */
-        public static final int var_Base.TextAppearance.AppCompat.Subhead = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Subhead.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Subhead.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Title */
-        public static final int var_Base.TextAppearance.AppCompat.Title = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Title.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Title.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Tooltip */
-        public static final int var_Base.TextAppearance.AppCompat.Tooltip = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.ActionBar.Menu */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.ActionBar.Menu = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.ActionBar.Title */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.ActionBar.Title = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.ActionMode.Title */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.ActionMode.Title = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.Button */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.Button = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.Button.Colored */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.Button.Colored = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.Button.Inverse */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.Button.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.DropDownItem */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.DropDownItem = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.PopupMenu.Header */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.PopupMenu.Header = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.PopupMenu.Large */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.PopupMenu.Large = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.PopupMenu.Small */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.PopupMenu.Small = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.Switch */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.Switch = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem */
-        public static final int var_Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.Widget.AppCompat.ExpandedMenu.Item */
-        public static final int var_Base.TextAppearance.Widget.AppCompat.ExpandedMenu.Item = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle */
-        public static final int var_Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: Base.TextAppearance.Widget.AppCompat.Toolbar.Title */
-        public static final int var_Base.TextAppearance.Widget.AppCompat.Toolbar.Title = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat */
-        public static final int var_Base.Theme.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.CompactMenu */
-        public static final int var_Base.Theme.AppCompat.CompactMenu = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Dialog */
-        public static final int var_Base.Theme.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Dialog.Alert */
-        public static final int var_Base.Theme.AppCompat.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Dialog.FixedSize */
-        public static final int var_Base.Theme.AppCompat.Dialog.FixedSize = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Dialog.MinWidth */
-        public static final int var_Base.Theme.AppCompat.Dialog.MinWidth = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.DialogWhenLarge */
-        public static final int var_Base.Theme.AppCompat.DialogWhenLarge = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Light */
-        public static final int var_Base.Theme.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Light.DarkActionBar */
-        public static final int var_Base.Theme.AppCompat.Light.DarkActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Light.Dialog */
-        public static final int var_Base.Theme.AppCompat.Light.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Light.Dialog.Alert */
-        public static final int var_Base.Theme.AppCompat.Light.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Light.Dialog.FixedSize */
-        public static final int var_Base.Theme.AppCompat.Light.Dialog.FixedSize = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Light.Dialog.MinWidth */
-        public static final int var_Base.Theme.AppCompat.Light.Dialog.MinWidth = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Theme.AppCompat.Light.DialogWhenLarge */
-        public static final int var_Base.Theme.AppCompat.Light.DialogWhenLarge = NUM;
-        /* added by JADX */
-        /* renamed from: Base.ThemeOverlay.AppCompat */
-        public static final int var_Base.ThemeOverlay.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.ThemeOverlay.AppCompat.ActionBar */
-        public static final int var_Base.ThemeOverlay.AppCompat.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.ThemeOverlay.AppCompat.Dark */
-        public static final int var_Base.ThemeOverlay.AppCompat.Dark = NUM;
-        /* added by JADX */
-        /* renamed from: Base.ThemeOverlay.AppCompat.Dark.ActionBar */
-        public static final int var_Base.ThemeOverlay.AppCompat.Dark.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.ThemeOverlay.AppCompat.Dialog */
-        public static final int var_Base.ThemeOverlay.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.ThemeOverlay.AppCompat.Dialog.Alert */
-        public static final int var_Base.ThemeOverlay.AppCompat.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: Base.ThemeOverlay.AppCompat.Light */
-        public static final int var_Base.ThemeOverlay.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V21.Theme.AppCompat */
-        public static final int var_Base.V21.Theme.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V21.Theme.AppCompat.Dialog */
-        public static final int var_Base.V21.Theme.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V21.Theme.AppCompat.Light */
-        public static final int var_Base.V21.Theme.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V21.Theme.AppCompat.Light.Dialog */
-        public static final int var_Base.V21.Theme.AppCompat.Light.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V21.ThemeOverlay.AppCompat.Dialog */
-        public static final int var_Base.V21.ThemeOverlay.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V22.Theme.AppCompat */
-        public static final int var_Base.V22.Theme.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V22.Theme.AppCompat.Light */
-        public static final int var_Base.V22.Theme.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V23.Theme.AppCompat */
-        public static final int var_Base.V23.Theme.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V23.Theme.AppCompat.Light */
-        public static final int var_Base.V23.Theme.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V26.Theme.AppCompat */
-        public static final int var_Base.V26.Theme.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V26.Theme.AppCompat.Light */
-        public static final int var_Base.V26.Theme.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V26.Widget.AppCompat.Toolbar */
-        public static final int var_Base.V26.Widget.AppCompat.Toolbar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V28.Theme.AppCompat */
-        public static final int var_Base.V28.Theme.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V28.Theme.AppCompat.Light */
-        public static final int var_Base.V28.Theme.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V7.Theme.AppCompat */
-        public static final int var_Base.V7.Theme.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V7.Theme.AppCompat.Dialog */
-        public static final int var_Base.V7.Theme.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V7.Theme.AppCompat.Light */
-        public static final int var_Base.V7.Theme.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V7.Theme.AppCompat.Light.Dialog */
-        public static final int var_Base.V7.Theme.AppCompat.Light.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V7.ThemeOverlay.AppCompat.Dialog */
-        public static final int var_Base.V7.ThemeOverlay.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V7.Widget.AppCompat.AutoCompleteTextView */
-        public static final int var_Base.V7.Widget.AppCompat.AutoCompleteTextView = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V7.Widget.AppCompat.EditText */
-        public static final int var_Base.V7.Widget.AppCompat.EditText = NUM;
-        /* added by JADX */
-        /* renamed from: Base.V7.Widget.AppCompat.Toolbar */
-        public static final int var_Base.V7.Widget.AppCompat.Toolbar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionBar */
-        public static final int var_Base.Widget.AppCompat.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionBar.Solid */
-        public static final int var_Base.Widget.AppCompat.ActionBar.Solid = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionBar.TabBar */
-        public static final int var_Base.Widget.AppCompat.ActionBar.TabBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionBar.TabText */
-        public static final int var_Base.Widget.AppCompat.ActionBar.TabText = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionBar.TabView */
-        public static final int var_Base.Widget.AppCompat.ActionBar.TabView = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionButton */
-        public static final int var_Base.Widget.AppCompat.ActionButton = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionButton.CloseMode */
-        public static final int var_Base.Widget.AppCompat.ActionButton.CloseMode = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionButton.Overflow */
-        public static final int var_Base.Widget.AppCompat.ActionButton.Overflow = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActionMode */
-        public static final int var_Base.Widget.AppCompat.ActionMode = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ActivityChooserView */
-        public static final int var_Base.Widget.AppCompat.ActivityChooserView = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.AutoCompleteTextView */
-        public static final int var_Base.Widget.AppCompat.AutoCompleteTextView = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Button */
-        public static final int var_Base.Widget.AppCompat.Button = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Button.Borderless */
-        public static final int var_Base.Widget.AppCompat.Button.Borderless = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Button.Borderless.Colored */
-        public static final int var_Base.Widget.AppCompat.Button.Borderless.Colored = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Button.ButtonBar.AlertDialog */
-        public static final int var_Base.Widget.AppCompat.Button.ButtonBar.AlertDialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Button.Colored */
-        public static final int var_Base.Widget.AppCompat.Button.Colored = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Button.Small */
-        public static final int var_Base.Widget.AppCompat.Button.Small = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ButtonBar */
-        public static final int var_Base.Widget.AppCompat.ButtonBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ButtonBar.AlertDialog */
-        public static final int var_Base.Widget.AppCompat.ButtonBar.AlertDialog = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.CompoundButton.CheckBox */
-        public static final int var_Base.Widget.AppCompat.CompoundButton.CheckBox = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.CompoundButton.RadioButton */
-        public static final int var_Base.Widget.AppCompat.CompoundButton.RadioButton = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.CompoundButton.Switch */
-        public static final int var_Base.Widget.AppCompat.CompoundButton.Switch = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.DrawerArrowToggle */
-        public static final int var_Base.Widget.AppCompat.DrawerArrowToggle = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.DrawerArrowToggle.Common */
-        public static final int var_Base.Widget.AppCompat.DrawerArrowToggle.Common = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.DropDownItem.Spinner */
-        public static final int var_Base.Widget.AppCompat.DropDownItem.Spinner = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.EditText */
-        public static final int var_Base.Widget.AppCompat.EditText = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ImageButton */
-        public static final int var_Base.Widget.AppCompat.ImageButton = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Light.ActionBar */
-        public static final int var_Base.Widget.AppCompat.Light.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Light.ActionBar.Solid */
-        public static final int var_Base.Widget.AppCompat.Light.ActionBar.Solid = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Light.ActionBar.TabBar */
-        public static final int var_Base.Widget.AppCompat.Light.ActionBar.TabBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Light.ActionBar.TabText */
-        public static final int var_Base.Widget.AppCompat.Light.ActionBar.TabText = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Light.ActionBar.TabText.Inverse */
-        public static final int var_Base.Widget.AppCompat.Light.ActionBar.TabText.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Light.ActionBar.TabView */
-        public static final int var_Base.Widget.AppCompat.Light.ActionBar.TabView = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Light.PopupMenu */
-        public static final int var_Base.Widget.AppCompat.Light.PopupMenu = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Light.PopupMenu.Overflow */
-        public static final int var_Base.Widget.AppCompat.Light.PopupMenu.Overflow = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ListMenuView */
-        public static final int var_Base.Widget.AppCompat.ListMenuView = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ListPopupWindow */
-        public static final int var_Base.Widget.AppCompat.ListPopupWindow = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ListView */
-        public static final int var_Base.Widget.AppCompat.ListView = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ListView.DropDown */
-        public static final int var_Base.Widget.AppCompat.ListView.DropDown = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ListView.Menu */
-        public static final int var_Base.Widget.AppCompat.ListView.Menu = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.PopupMenu */
-        public static final int var_Base.Widget.AppCompat.PopupMenu = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.PopupMenu.Overflow */
-        public static final int var_Base.Widget.AppCompat.PopupMenu.Overflow = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.PopupWindow */
-        public static final int var_Base.Widget.AppCompat.PopupWindow = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ProgressBar */
-        public static final int var_Base.Widget.AppCompat.ProgressBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.ProgressBar.Horizontal */
-        public static final int var_Base.Widget.AppCompat.ProgressBar.Horizontal = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.RatingBar */
-        public static final int var_Base.Widget.AppCompat.RatingBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.RatingBar.Indicator */
-        public static final int var_Base.Widget.AppCompat.RatingBar.Indicator = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.RatingBar.Small */
-        public static final int var_Base.Widget.AppCompat.RatingBar.Small = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.SearchView */
-        public static final int var_Base.Widget.AppCompat.SearchView = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.SearchView.ActionBar */
-        public static final int var_Base.Widget.AppCompat.SearchView.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.SeekBar */
-        public static final int var_Base.Widget.AppCompat.SeekBar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.SeekBar.Discrete */
-        public static final int var_Base.Widget.AppCompat.SeekBar.Discrete = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Spinner */
-        public static final int var_Base.Widget.AppCompat.Spinner = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Spinner.Underlined */
-        public static final int var_Base.Widget.AppCompat.Spinner.Underlined = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.TextView.SpinnerItem */
-        public static final int var_Base.Widget.AppCompat.TextView.SpinnerItem = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Toolbar */
-        public static final int var_Base.Widget.AppCompat.Toolbar = NUM;
-        /* added by JADX */
-        /* renamed from: Base.Widget.AppCompat.Toolbar.Button.Navigation */
-        public static final int var_Base.Widget.AppCompat.Toolbar.Button.Navigation = NUM;
-        /* added by JADX */
         /* renamed from: HockeyApp.ButtonStyle */
-        public static final int var_HockeyApp.ButtonStyle = NUM;
+        public static final int f2HockeyApp.ButtonStyle = NUM;
         /* added by JADX */
         /* renamed from: HockeyApp.EditTextStyle */
-        public static final int var_HockeyApp.EditTextStyle = NUM;
+        public static final int f3HockeyApp.EditTextStyle = NUM;
         /* added by JADX */
         /* renamed from: HockeyApp.SingleLineInputStyle */
-        public static final int var_HockeyApp.SingleLineInputStyle = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.AppCompat */
-        public static final int var_Platform.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.AppCompat.Light */
-        public static final int var_Platform.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.ThemeOverlay.AppCompat */
-        public static final int var_Platform.ThemeOverlay.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.ThemeOverlay.AppCompat.Dark */
-        public static final int var_Platform.ThemeOverlay.AppCompat.Dark = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.ThemeOverlay.AppCompat.Light */
-        public static final int var_Platform.ThemeOverlay.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.V21.AppCompat */
-        public static final int var_Platform.V21.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.V21.AppCompat.Light */
-        public static final int var_Platform.V21.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.V25.AppCompat */
-        public static final int var_Platform.V25.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.V25.AppCompat.Light */
-        public static final int var_Platform.V25.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Platform.Widget.AppCompat.Spinner */
-        public static final int var_Platform.Widget.AppCompat.Spinner = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.DialogWindowTitle.AppCompat */
-        public static final int var_RtlOverlay.DialogWindowTitle.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.ActionBar.TitleItem */
-        public static final int var_RtlOverlay.Widget.AppCompat.ActionBar.TitleItem = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.DialogTitle.Icon */
-        public static final int var_RtlOverlay.Widget.AppCompat.DialogTitle.Icon = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.PopupMenuItem */
-        public static final int var_RtlOverlay.Widget.AppCompat.PopupMenuItem = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.PopupMenuItem.InternalGroup */
-        public static final int var_RtlOverlay.Widget.AppCompat.PopupMenuItem.InternalGroup = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.PopupMenuItem.Shortcut */
-        public static final int var_RtlOverlay.Widget.AppCompat.PopupMenuItem.Shortcut = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.PopupMenuItem.SubmenuArrow */
-        public static final int var_RtlOverlay.Widget.AppCompat.PopupMenuItem.SubmenuArrow = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.PopupMenuItem.Text */
-        public static final int var_RtlOverlay.Widget.AppCompat.PopupMenuItem.Text = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.PopupMenuItem.Title */
-        public static final int var_RtlOverlay.Widget.AppCompat.PopupMenuItem.Title = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.Search.DropDown */
-        public static final int var_RtlOverlay.Widget.AppCompat.Search.DropDown = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.Search.DropDown.Icon1 */
-        public static final int var_RtlOverlay.Widget.AppCompat.Search.DropDown.Icon1 = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.Search.DropDown.Icon2 */
-        public static final int var_RtlOverlay.Widget.AppCompat.Search.DropDown.Icon2 = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.Search.DropDown.Query */
-        public static final int var_RtlOverlay.Widget.AppCompat.Search.DropDown.Query = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.Search.DropDown.Text */
-        public static final int var_RtlOverlay.Widget.AppCompat.Search.DropDown.Text = NUM;
-        /* added by JADX */
-        /* renamed from: RtlOverlay.Widget.AppCompat.SearchView.MagIcon */
-        public static final int var_RtlOverlay.Widget.AppCompat.SearchView.MagIcon = NUM;
-        /* added by JADX */
-        /* renamed from: RtlUnderlay.Widget.AppCompat.ActionButton */
-        public static final int var_RtlUnderlay.Widget.AppCompat.ActionButton = NUM;
-        /* added by JADX */
-        /* renamed from: RtlUnderlay.Widget.AppCompat.ActionButton.Overflow */
-        public static final int var_RtlUnderlay.Widget.AppCompat.ActionButton.Overflow = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat */
-        public static final int var_TextAppearance.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Body1 */
-        public static final int var_TextAppearance.AppCompat.Body1 = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Body2 */
-        public static final int var_TextAppearance.AppCompat.Body2 = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Button */
-        public static final int var_TextAppearance.AppCompat.Button = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Caption */
-        public static final int var_TextAppearance.AppCompat.Caption = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Display1 */
-        public static final int var_TextAppearance.AppCompat.Display1 = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Display2 */
-        public static final int var_TextAppearance.AppCompat.Display2 = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Display3 */
-        public static final int var_TextAppearance.AppCompat.Display3 = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Display4 */
-        public static final int var_TextAppearance.AppCompat.Display4 = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Headline */
-        public static final int var_TextAppearance.AppCompat.Headline = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Inverse */
-        public static final int var_TextAppearance.AppCompat.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Large */
-        public static final int var_TextAppearance.AppCompat.Large = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Large.Inverse */
-        public static final int var_TextAppearance.AppCompat.Large.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Light.SearchResult.Subtitle */
-        public static final int var_TextAppearance.AppCompat.Light.SearchResult.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Light.SearchResult.Title */
-        public static final int var_TextAppearance.AppCompat.Light.SearchResult.Title = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Light.Widget.PopupMenu.Large */
-        public static final int var_TextAppearance.AppCompat.Light.Widget.PopupMenu.Large = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Light.Widget.PopupMenu.Small */
-        public static final int var_TextAppearance.AppCompat.Light.Widget.PopupMenu.Small = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Medium */
-        public static final int var_TextAppearance.AppCompat.Medium = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Medium.Inverse */
-        public static final int var_TextAppearance.AppCompat.Medium.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Menu */
-        public static final int var_TextAppearance.AppCompat.Menu = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.SearchResult.Subtitle */
-        public static final int var_TextAppearance.AppCompat.SearchResult.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.SearchResult.Title */
-        public static final int var_TextAppearance.AppCompat.SearchResult.Title = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Small */
-        public static final int var_TextAppearance.AppCompat.Small = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Small.Inverse */
-        public static final int var_TextAppearance.AppCompat.Small.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Subhead */
-        public static final int var_TextAppearance.AppCompat.Subhead = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Subhead.Inverse */
-        public static final int var_TextAppearance.AppCompat.Subhead.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Title */
-        public static final int var_TextAppearance.AppCompat.Title = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Title.Inverse */
-        public static final int var_TextAppearance.AppCompat.Title.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Tooltip */
-        public static final int var_TextAppearance.AppCompat.Tooltip = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionBar.Menu */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionBar.Menu = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionBar.Subtitle */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionBar.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionBar.Title */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionBar.Title = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionMode.Subtitle */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionMode.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionMode.Subtitle.Inverse */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionMode.Subtitle.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionMode.Title */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionMode.Title = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.ActionMode.Title.Inverse */
-        public static final int var_TextAppearance.AppCompat.Widget.ActionMode.Title.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.Button */
-        public static final int var_TextAppearance.AppCompat.Widget.Button = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.Button.Borderless.Colored */
-        public static final int var_TextAppearance.AppCompat.Widget.Button.Borderless.Colored = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.Button.Colored */
-        public static final int var_TextAppearance.AppCompat.Widget.Button.Colored = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.Button.Inverse */
-        public static final int var_TextAppearance.AppCompat.Widget.Button.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.DropDownItem */
-        public static final int var_TextAppearance.AppCompat.Widget.DropDownItem = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.PopupMenu.Header */
-        public static final int var_TextAppearance.AppCompat.Widget.PopupMenu.Header = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.PopupMenu.Large */
-        public static final int var_TextAppearance.AppCompat.Widget.PopupMenu.Large = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.PopupMenu.Small */
-        public static final int var_TextAppearance.AppCompat.Widget.PopupMenu.Small = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.Switch */
-        public static final int var_TextAppearance.AppCompat.Widget.Switch = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.AppCompat.Widget.TextView.SpinnerItem */
-        public static final int var_TextAppearance.AppCompat.Widget.TextView.SpinnerItem = NUM;
+        public static final int f4HockeyApp.SingleLineInputStyle = NUM;
         /* added by JADX */
         /* renamed from: TextAppearance.Compat.Notification */
-        public static final int var_TextAppearance.Compat.Notification = NUM;
+        public static final int f5TextAppearance.Compat.Notification = NUM;
         /* added by JADX */
         /* renamed from: TextAppearance.Compat.Notification.Info */
-        public static final int var_TextAppearance.Compat.Notification.Info = NUM;
+        public static final int f6TextAppearance.Compat.Notification.Info = NUM;
         /* added by JADX */
         /* renamed from: TextAppearance.Compat.Notification.Line2 */
-        public static final int var_TextAppearance.Compat.Notification.Line2 = NUM;
+        public static final int f7TextAppearance.Compat.Notification.Line2 = NUM;
         /* added by JADX */
         /* renamed from: TextAppearance.Compat.Notification.Time */
-        public static final int var_TextAppearance.Compat.Notification.Time = NUM;
+        public static final int f8TextAppearance.Compat.Notification.Time = NUM;
         /* added by JADX */
         /* renamed from: TextAppearance.Compat.Notification.Title */
-        public static final int var_TextAppearance.Compat.Notification.Title = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Widget.AppCompat.ExpandedMenu.Item */
-        public static final int var_TextAppearance.Widget.AppCompat.ExpandedMenu.Item = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Widget.AppCompat.Toolbar.Subtitle */
-        public static final int var_TextAppearance.Widget.AppCompat.Toolbar.Subtitle = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Widget.AppCompat.Toolbar.Title */
-        public static final int var_TextAppearance.Widget.AppCompat.Toolbar.Title = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat */
-        public static final int var_Theme.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.CompactMenu */
-        public static final int var_Theme.AppCompat.CompactMenu = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.DayNight */
-        public static final int var_Theme.AppCompat.DayNight = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.DayNight.DarkActionBar */
-        public static final int var_Theme.AppCompat.DayNight.DarkActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.DayNight.Dialog */
-        public static final int var_Theme.AppCompat.DayNight.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.DayNight.Dialog.Alert */
-        public static final int var_Theme.AppCompat.DayNight.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.DayNight.Dialog.MinWidth */
-        public static final int var_Theme.AppCompat.DayNight.Dialog.MinWidth = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.DayNight.DialogWhenLarge */
-        public static final int var_Theme.AppCompat.DayNight.DialogWhenLarge = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.DayNight.NoActionBar */
-        public static final int var_Theme.AppCompat.DayNight.NoActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Dialog */
-        public static final int var_Theme.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Dialog.Alert */
-        public static final int var_Theme.AppCompat.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Dialog.MinWidth */
-        public static final int var_Theme.AppCompat.Dialog.MinWidth = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.DialogWhenLarge */
-        public static final int var_Theme.AppCompat.DialogWhenLarge = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Light */
-        public static final int var_Theme.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Light.DarkActionBar */
-        public static final int var_Theme.AppCompat.Light.DarkActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Light.Dialog */
-        public static final int var_Theme.AppCompat.Light.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Light.Dialog.Alert */
-        public static final int var_Theme.AppCompat.Light.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Light.Dialog.MinWidth */
-        public static final int var_Theme.AppCompat.Light.Dialog.MinWidth = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Light.DialogWhenLarge */
-        public static final int var_Theme.AppCompat.Light.DialogWhenLarge = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.Light.NoActionBar */
-        public static final int var_Theme.AppCompat.Light.NoActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.AppCompat.NoActionBar */
-        public static final int var_Theme.AppCompat.NoActionBar = NUM;
+        public static final int f9TextAppearance.Compat.Notification.Title = NUM;
         /* added by JADX */
         /* renamed from: Theme.TMessages */
         public static final int var_Theme.TMessages = NUM;
@@ -5974,243 +4161,6 @@ public final class R {
         /* renamed from: Theme.TMessages.TransparentWithAlerts */
         public static final int var_Theme.TMessages.TransparentWithAlerts = NUM;
         /* added by JADX */
-        /* renamed from: ThemeOverlay.AppCompat */
-        public static final int var_ThemeOverlay.AppCompat = NUM;
-        /* added by JADX */
-        /* renamed from: ThemeOverlay.AppCompat.ActionBar */
-        public static final int var_ThemeOverlay.AppCompat.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: ThemeOverlay.AppCompat.Dark */
-        public static final int var_ThemeOverlay.AppCompat.Dark = NUM;
-        /* added by JADX */
-        /* renamed from: ThemeOverlay.AppCompat.Dark.ActionBar */
-        public static final int var_ThemeOverlay.AppCompat.Dark.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: ThemeOverlay.AppCompat.Dialog */
-        public static final int var_ThemeOverlay.AppCompat.Dialog = NUM;
-        /* added by JADX */
-        /* renamed from: ThemeOverlay.AppCompat.Dialog.Alert */
-        public static final int var_ThemeOverlay.AppCompat.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: ThemeOverlay.AppCompat.Light */
-        public static final int var_ThemeOverlay.AppCompat.Light = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionBar */
-        public static final int var_Widget.AppCompat.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionBar.Solid */
-        public static final int var_Widget.AppCompat.ActionBar.Solid = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionBar.TabBar */
-        public static final int var_Widget.AppCompat.ActionBar.TabBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionBar.TabText */
-        public static final int var_Widget.AppCompat.ActionBar.TabText = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionBar.TabView */
-        public static final int var_Widget.AppCompat.ActionBar.TabView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionButton */
-        public static final int var_Widget.AppCompat.ActionButton = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionButton.CloseMode */
-        public static final int var_Widget.AppCompat.ActionButton.CloseMode = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionButton.Overflow */
-        public static final int var_Widget.AppCompat.ActionButton.Overflow = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActionMode */
-        public static final int var_Widget.AppCompat.ActionMode = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ActivityChooserView */
-        public static final int var_Widget.AppCompat.ActivityChooserView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.AutoCompleteTextView */
-        public static final int var_Widget.AppCompat.AutoCompleteTextView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Button */
-        public static final int var_Widget.AppCompat.Button = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Button.Borderless */
-        public static final int var_Widget.AppCompat.Button.Borderless = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Button.Borderless.Colored */
-        public static final int var_Widget.AppCompat.Button.Borderless.Colored = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Button.ButtonBar.AlertDialog */
-        public static final int var_Widget.AppCompat.Button.ButtonBar.AlertDialog = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Button.Colored */
-        public static final int var_Widget.AppCompat.Button.Colored = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Button.Small */
-        public static final int var_Widget.AppCompat.Button.Small = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ButtonBar */
-        public static final int var_Widget.AppCompat.ButtonBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ButtonBar.AlertDialog */
-        public static final int var_Widget.AppCompat.ButtonBar.AlertDialog = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.CompoundButton.CheckBox */
-        public static final int var_Widget.AppCompat.CompoundButton.CheckBox = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.CompoundButton.RadioButton */
-        public static final int var_Widget.AppCompat.CompoundButton.RadioButton = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.CompoundButton.Switch */
-        public static final int var_Widget.AppCompat.CompoundButton.Switch = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.DrawerArrowToggle */
-        public static final int var_Widget.AppCompat.DrawerArrowToggle = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.DropDownItem.Spinner */
-        public static final int var_Widget.AppCompat.DropDownItem.Spinner = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.EditText */
-        public static final int var_Widget.AppCompat.EditText = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ImageButton */
-        public static final int var_Widget.AppCompat.ImageButton = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar */
-        public static final int var_Widget.AppCompat.Light.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar.Solid */
-        public static final int var_Widget.AppCompat.Light.ActionBar.Solid = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar.Solid.Inverse */
-        public static final int var_Widget.AppCompat.Light.ActionBar.Solid.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar.TabBar */
-        public static final int var_Widget.AppCompat.Light.ActionBar.TabBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar.TabBar.Inverse */
-        public static final int var_Widget.AppCompat.Light.ActionBar.TabBar.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar.TabText */
-        public static final int var_Widget.AppCompat.Light.ActionBar.TabText = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar.TabText.Inverse */
-        public static final int var_Widget.AppCompat.Light.ActionBar.TabText.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar.TabView */
-        public static final int var_Widget.AppCompat.Light.ActionBar.TabView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionBar.TabView.Inverse */
-        public static final int var_Widget.AppCompat.Light.ActionBar.TabView.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionButton */
-        public static final int var_Widget.AppCompat.Light.ActionButton = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionButton.CloseMode */
-        public static final int var_Widget.AppCompat.Light.ActionButton.CloseMode = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionButton.Overflow */
-        public static final int var_Widget.AppCompat.Light.ActionButton.Overflow = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActionMode.Inverse */
-        public static final int var_Widget.AppCompat.Light.ActionMode.Inverse = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ActivityChooserView */
-        public static final int var_Widget.AppCompat.Light.ActivityChooserView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.AutoCompleteTextView */
-        public static final int var_Widget.AppCompat.Light.AutoCompleteTextView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.DropDownItem.Spinner */
-        public static final int var_Widget.AppCompat.Light.DropDownItem.Spinner = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ListPopupWindow */
-        public static final int var_Widget.AppCompat.Light.ListPopupWindow = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.ListView.DropDown */
-        public static final int var_Widget.AppCompat.Light.ListView.DropDown = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.PopupMenu */
-        public static final int var_Widget.AppCompat.Light.PopupMenu = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.PopupMenu.Overflow */
-        public static final int var_Widget.AppCompat.Light.PopupMenu.Overflow = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.SearchView */
-        public static final int var_Widget.AppCompat.Light.SearchView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Light.Spinner.DropDown.ActionBar */
-        public static final int var_Widget.AppCompat.Light.Spinner.DropDown.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ListMenuView */
-        public static final int var_Widget.AppCompat.ListMenuView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ListPopupWindow */
-        public static final int var_Widget.AppCompat.ListPopupWindow = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ListView */
-        public static final int var_Widget.AppCompat.ListView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ListView.DropDown */
-        public static final int var_Widget.AppCompat.ListView.DropDown = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ListView.Menu */
-        public static final int var_Widget.AppCompat.ListView.Menu = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.PopupMenu */
-        public static final int var_Widget.AppCompat.PopupMenu = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.PopupMenu.Overflow */
-        public static final int var_Widget.AppCompat.PopupMenu.Overflow = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.PopupWindow */
-        public static final int var_Widget.AppCompat.PopupWindow = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ProgressBar */
-        public static final int var_Widget.AppCompat.ProgressBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.ProgressBar.Horizontal */
-        public static final int var_Widget.AppCompat.ProgressBar.Horizontal = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.RatingBar */
-        public static final int var_Widget.AppCompat.RatingBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.RatingBar.Indicator */
-        public static final int var_Widget.AppCompat.RatingBar.Indicator = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.RatingBar.Small */
-        public static final int var_Widget.AppCompat.RatingBar.Small = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.SearchView */
-        public static final int var_Widget.AppCompat.SearchView = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.SearchView.ActionBar */
-        public static final int var_Widget.AppCompat.SearchView.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.SeekBar */
-        public static final int var_Widget.AppCompat.SeekBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.SeekBar.Discrete */
-        public static final int var_Widget.AppCompat.SeekBar.Discrete = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Spinner */
-        public static final int var_Widget.AppCompat.Spinner = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Spinner.DropDown */
-        public static final int var_Widget.AppCompat.Spinner.DropDown = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Spinner.DropDown.ActionBar */
-        public static final int var_Widget.AppCompat.Spinner.DropDown.ActionBar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Spinner.Underlined */
-        public static final int var_Widget.AppCompat.Spinner.Underlined = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.TextView.SpinnerItem */
-        public static final int var_Widget.AppCompat.TextView.SpinnerItem = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Toolbar */
-        public static final int var_Widget.AppCompat.Toolbar = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.AppCompat.Toolbar.Button.Navigation */
-        public static final int var_Widget.AppCompat.Toolbar.Button.Navigation = NUM;
-        /* added by JADX */
         /* renamed from: Widget.Compat.NotificationActionContainer */
         public static final int var_Widget.Compat.NotificationActionContainer = NUM;
         /* added by JADX */
@@ -6222,237 +4172,10 @@ public final class R {
     }
 
     public static final class styleable {
-        public static final int[] ActionBar = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int[] ActionBarLayout = new int[]{16842931};
-        public static final int ActionBarLayout_android_layout_gravity = 0;
-        public static final int ActionBar_background = 0;
-        public static final int ActionBar_backgroundSplit = 1;
-        public static final int ActionBar_backgroundStacked = 2;
-        public static final int ActionBar_contentInsetEnd = 3;
-        public static final int ActionBar_contentInsetEndWithActions = 4;
-        public static final int ActionBar_contentInsetLeft = 5;
-        public static final int ActionBar_contentInsetRight = 6;
-        public static final int ActionBar_contentInsetStart = 7;
-        public static final int ActionBar_contentInsetStartWithNavigation = 8;
-        public static final int ActionBar_customNavigationLayout = 9;
-        public static final int ActionBar_displayOptions = 10;
-        public static final int ActionBar_divider = 11;
-        public static final int ActionBar_elevation = 12;
-        public static final int ActionBar_height = 13;
-        public static final int ActionBar_hideOnContentScroll = 14;
-        public static final int ActionBar_homeAsUpIndicator = 15;
-        public static final int ActionBar_homeLayout = 16;
-        public static final int ActionBar_icon = 17;
-        public static final int ActionBar_indeterminateProgressStyle = 18;
-        public static final int ActionBar_itemPadding = 19;
-        public static final int ActionBar_logo = 20;
-        public static final int ActionBar_navigationMode = 21;
-        public static final int ActionBar_popupTheme = 22;
-        public static final int ActionBar_progressBarPadding = 23;
-        public static final int ActionBar_progressBarStyle = 24;
-        public static final int ActionBar_subtitle = 25;
-        public static final int ActionBar_subtitleTextStyle = 26;
-        public static final int ActionBar_title = 27;
-        public static final int ActionBar_titleTextStyle = 28;
-        public static final int[] ActionMenuItemView = new int[]{16843071};
-        public static final int ActionMenuItemView_android_minWidth = 0;
-        public static final int[] ActionMenuView = new int[0];
-        public static final int[] ActionMode = new int[]{NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int ActionMode_background = 0;
-        public static final int ActionMode_backgroundSplit = 1;
-        public static final int ActionMode_closeItemLayout = 2;
-        public static final int ActionMode_height = 3;
-        public static final int ActionMode_subtitleTextStyle = 4;
-        public static final int ActionMode_titleTextStyle = 5;
-        public static final int[] ActivityChooserView = new int[]{NUM, NUM};
-        public static final int ActivityChooserView_expandActivityOverflowButtonDrawable = 0;
-        public static final int ActivityChooserView_initialActivityCount = 1;
-        public static final int[] AlertDialog = new int[]{16842994, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int AlertDialog_android_layout = 0;
-        public static final int AlertDialog_buttonIconDimen = 1;
-        public static final int AlertDialog_buttonPanelSideLayout = 2;
-        public static final int AlertDialog_listItemLayout = 3;
-        public static final int AlertDialog_listLayout = 4;
-        public static final int AlertDialog_multiChoiceItemLayout = 5;
-        public static final int AlertDialog_showTitle = 6;
-        public static final int AlertDialog_singleChoiceItemLayout = 7;
-        public static final int[] AnimatedStateListDrawableCompat = new int[]{16843036, 16843156, 16843157, 16843158, 16843532, 16843533};
-        public static final int AnimatedStateListDrawableCompat_android_constantSize = 3;
-        public static final int AnimatedStateListDrawableCompat_android_dither = 0;
-        public static final int AnimatedStateListDrawableCompat_android_enterFadeDuration = 4;
-        public static final int AnimatedStateListDrawableCompat_android_exitFadeDuration = 5;
-        public static final int AnimatedStateListDrawableCompat_android_variablePadding = 2;
-        public static final int AnimatedStateListDrawableCompat_android_visible = 1;
-        public static final int[] AnimatedStateListDrawableItem = new int[]{16842960, 16843161};
-        public static final int AnimatedStateListDrawableItem_android_drawable = 1;
-        public static final int AnimatedStateListDrawableItem_android_id = 0;
-        public static final int[] AnimatedStateListDrawableTransition = new int[]{16843161, 16843849, 16843850, 16843851};
-        public static final int AnimatedStateListDrawableTransition_android_drawable = 0;
-        public static final int AnimatedStateListDrawableTransition_android_fromId = 2;
-        public static final int AnimatedStateListDrawableTransition_android_reversible = 3;
-        public static final int AnimatedStateListDrawableTransition_android_toId = 1;
-        public static final int[] AppCompatImageView = new int[]{16843033, NUM, NUM, NUM};
-        public static final int AppCompatImageView_android_src = 0;
-        public static final int AppCompatImageView_srcCompat = 1;
-        public static final int AppCompatImageView_tint = 2;
-        public static final int AppCompatImageView_tintMode = 3;
-        public static final int[] AppCompatSeekBar = new int[]{16843074, NUM, NUM, NUM};
-        public static final int AppCompatSeekBar_android_thumb = 0;
-        public static final int AppCompatSeekBar_tickMark = 1;
-        public static final int AppCompatSeekBar_tickMarkTint = 2;
-        public static final int AppCompatSeekBar_tickMarkTintMode = 3;
-        public static final int[] AppCompatTextHelper = new int[]{16842804, 16843117, 16843118, 16843119, 16843120, 16843666, 16843667};
-        public static final int AppCompatTextHelper_android_drawableBottom = 2;
-        public static final int AppCompatTextHelper_android_drawableEnd = 6;
-        public static final int AppCompatTextHelper_android_drawableLeft = 3;
-        public static final int AppCompatTextHelper_android_drawableRight = 4;
-        public static final int AppCompatTextHelper_android_drawableStart = 5;
-        public static final int AppCompatTextHelper_android_drawableTop = 1;
-        public static final int AppCompatTextHelper_android_textAppearance = 0;
-        public static final int[] AppCompatTextView = new int[]{16842804, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int AppCompatTextView_android_textAppearance = 0;
-        public static final int AppCompatTextView_autoSizeMaxTextSize = 1;
-        public static final int AppCompatTextView_autoSizeMinTextSize = 2;
-        public static final int AppCompatTextView_autoSizePresetSizes = 3;
-        public static final int AppCompatTextView_autoSizeStepGranularity = 4;
-        public static final int AppCompatTextView_autoSizeTextType = 5;
-        public static final int AppCompatTextView_firstBaselineToTopHeight = 6;
-        public static final int AppCompatTextView_fontFamily = 7;
-        public static final int AppCompatTextView_lastBaselineToBottomHeight = 8;
-        public static final int AppCompatTextView_lineHeight = 9;
-        public static final int AppCompatTextView_textAllCaps = 10;
-        public static final int[] AppCompatTheme = new int[]{16842839, 16842926, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int AppCompatTheme_actionBarDivider = 2;
-        public static final int AppCompatTheme_actionBarItemBackground = 3;
-        public static final int AppCompatTheme_actionBarPopupTheme = 4;
-        public static final int AppCompatTheme_actionBarSize = 5;
-        public static final int AppCompatTheme_actionBarSplitStyle = 6;
-        public static final int AppCompatTheme_actionBarStyle = 7;
-        public static final int AppCompatTheme_actionBarTabBarStyle = 8;
-        public static final int AppCompatTheme_actionBarTabStyle = 9;
-        public static final int AppCompatTheme_actionBarTabTextStyle = 10;
-        public static final int AppCompatTheme_actionBarTheme = 11;
-        public static final int AppCompatTheme_actionBarWidgetTheme = 12;
-        public static final int AppCompatTheme_actionButtonStyle = 13;
-        public static final int AppCompatTheme_actionDropDownStyle = 14;
-        public static final int AppCompatTheme_actionMenuTextAppearance = 15;
-        public static final int AppCompatTheme_actionMenuTextColor = 16;
-        public static final int AppCompatTheme_actionModeBackground = 17;
-        public static final int AppCompatTheme_actionModeCloseButtonStyle = 18;
-        public static final int AppCompatTheme_actionModeCloseDrawable = 19;
-        public static final int AppCompatTheme_actionModeCopyDrawable = 20;
-        public static final int AppCompatTheme_actionModeCutDrawable = 21;
-        public static final int AppCompatTheme_actionModeFindDrawable = 22;
-        public static final int AppCompatTheme_actionModePasteDrawable = 23;
-        public static final int AppCompatTheme_actionModePopupWindowStyle = 24;
-        public static final int AppCompatTheme_actionModeSelectAllDrawable = 25;
-        public static final int AppCompatTheme_actionModeShareDrawable = 26;
-        public static final int AppCompatTheme_actionModeSplitBackground = 27;
-        public static final int AppCompatTheme_actionModeStyle = 28;
-        public static final int AppCompatTheme_actionModeWebSearchDrawable = 29;
-        public static final int AppCompatTheme_actionOverflowButtonStyle = 30;
-        public static final int AppCompatTheme_actionOverflowMenuStyle = 31;
-        public static final int AppCompatTheme_activityChooserViewStyle = 32;
-        public static final int AppCompatTheme_alertDialogButtonGroupStyle = 33;
-        public static final int AppCompatTheme_alertDialogCenterButtons = 34;
-        public static final int AppCompatTheme_alertDialogStyle = 35;
-        public static final int AppCompatTheme_alertDialogTheme = 36;
-        public static final int AppCompatTheme_android_windowAnimationStyle = 1;
-        public static final int AppCompatTheme_android_windowIsFloating = 0;
-        public static final int AppCompatTheme_autoCompleteTextViewStyle = 37;
-        public static final int AppCompatTheme_borderlessButtonStyle = 38;
-        public static final int AppCompatTheme_buttonBarButtonStyle = 39;
-        public static final int AppCompatTheme_buttonBarNegativeButtonStyle = 40;
-        public static final int AppCompatTheme_buttonBarNeutralButtonStyle = 41;
-        public static final int AppCompatTheme_buttonBarPositiveButtonStyle = 42;
-        public static final int AppCompatTheme_buttonBarStyle = 43;
-        public static final int AppCompatTheme_buttonStyle = 44;
-        public static final int AppCompatTheme_buttonStyleSmall = 45;
-        public static final int AppCompatTheme_checkboxStyle = 46;
-        public static final int AppCompatTheme_checkedTextViewStyle = 47;
-        public static final int AppCompatTheme_colorAccent = 48;
-        public static final int AppCompatTheme_colorBackgroundFloating = 49;
-        public static final int AppCompatTheme_colorButtonNormal = 50;
-        public static final int AppCompatTheme_colorControlActivated = 51;
-        public static final int AppCompatTheme_colorControlHighlight = 52;
-        public static final int AppCompatTheme_colorControlNormal = 53;
-        public static final int AppCompatTheme_colorError = 54;
-        public static final int AppCompatTheme_colorPrimary = 55;
-        public static final int AppCompatTheme_colorPrimaryDark = 56;
-        public static final int AppCompatTheme_colorSwitchThumbNormal = 57;
-        public static final int AppCompatTheme_controlBackground = 58;
-        public static final int AppCompatTheme_dialogCornerRadius = 59;
-        public static final int AppCompatTheme_dialogPreferredPadding = 60;
-        public static final int AppCompatTheme_dialogTheme = 61;
-        public static final int AppCompatTheme_dividerHorizontal = 62;
-        public static final int AppCompatTheme_dividerVertical = 63;
-        public static final int AppCompatTheme_dropDownListViewStyle = 64;
-        public static final int AppCompatTheme_dropdownListPreferredItemHeight = 65;
-        public static final int AppCompatTheme_editTextBackground = 66;
-        public static final int AppCompatTheme_editTextColor = 67;
-        public static final int AppCompatTheme_editTextStyle = 68;
-        public static final int AppCompatTheme_homeAsUpIndicator = 69;
-        public static final int AppCompatTheme_imageButtonStyle = 70;
-        public static final int AppCompatTheme_listChoiceBackgroundIndicator = 71;
-        public static final int AppCompatTheme_listDividerAlertDialog = 72;
-        public static final int AppCompatTheme_listMenuViewStyle = 73;
-        public static final int AppCompatTheme_listPopupWindowStyle = 74;
-        public static final int AppCompatTheme_listPreferredItemHeight = 75;
-        public static final int AppCompatTheme_listPreferredItemHeightLarge = 76;
-        public static final int AppCompatTheme_listPreferredItemHeightSmall = 77;
-        public static final int AppCompatTheme_listPreferredItemPaddingLeft = 78;
-        public static final int AppCompatTheme_listPreferredItemPaddingRight = 79;
-        public static final int AppCompatTheme_panelBackground = 80;
-        public static final int AppCompatTheme_panelMenuListTheme = 81;
-        public static final int AppCompatTheme_panelMenuListWidth = 82;
-        public static final int AppCompatTheme_popupMenuStyle = 83;
-        public static final int AppCompatTheme_popupWindowStyle = 84;
-        public static final int AppCompatTheme_radioButtonStyle = 85;
-        public static final int AppCompatTheme_ratingBarStyle = 86;
-        public static final int AppCompatTheme_ratingBarStyleIndicator = 87;
-        public static final int AppCompatTheme_ratingBarStyleSmall = 88;
-        public static final int AppCompatTheme_searchViewStyle = 89;
-        public static final int AppCompatTheme_seekBarStyle = 90;
-        public static final int AppCompatTheme_selectableItemBackground = 91;
-        public static final int AppCompatTheme_selectableItemBackgroundBorderless = 92;
-        public static final int AppCompatTheme_spinnerDropDownItemStyle = 93;
-        public static final int AppCompatTheme_spinnerStyle = 94;
-        public static final int AppCompatTheme_switchStyle = 95;
-        public static final int AppCompatTheme_textAppearanceLargePopupMenu = 96;
-        public static final int AppCompatTheme_textAppearanceListItem = 97;
-        public static final int AppCompatTheme_textAppearanceListItemSecondary = 98;
-        public static final int AppCompatTheme_textAppearanceListItemSmall = 99;
-        public static final int AppCompatTheme_textAppearancePopupMenuHeader = 100;
-        public static final int AppCompatTheme_textAppearanceSearchResultSubtitle = 101;
-        public static final int AppCompatTheme_textAppearanceSearchResultTitle = 102;
-        public static final int AppCompatTheme_textAppearanceSmallPopupMenu = 103;
-        public static final int AppCompatTheme_textColorAlertDialogListItem = 104;
-        public static final int AppCompatTheme_textColorSearchUrl = 105;
-        public static final int AppCompatTheme_toolbarNavigationButtonStyle = 106;
-        public static final int AppCompatTheme_toolbarStyle = 107;
-        public static final int AppCompatTheme_tooltipForegroundColor = 108;
-        public static final int AppCompatTheme_tooltipFrameBackground = 109;
-        public static final int AppCompatTheme_viewInflaterClass = 110;
-        public static final int AppCompatTheme_windowActionBar = 111;
-        public static final int AppCompatTheme_windowActionBarOverlay = 112;
-        public static final int AppCompatTheme_windowActionModeOverlay = 113;
-        public static final int AppCompatTheme_windowFixedHeightMajor = 114;
-        public static final int AppCompatTheme_windowFixedHeightMinor = 115;
-        public static final int AppCompatTheme_windowFixedWidthMajor = 116;
-        public static final int AppCompatTheme_windowFixedWidthMinor = 117;
-        public static final int AppCompatTheme_windowMinWidthMajor = 118;
-        public static final int AppCompatTheme_windowMinWidthMinor = 119;
-        public static final int AppCompatTheme_windowNoTitle = 120;
-        public static final int[] ButtonBarLayout = new int[]{NUM};
-        public static final int ButtonBarLayout_allowStacking = 0;
         public static final int[] ColorStateListItem = new int[]{16843173, 16843551, NUM};
         public static final int ColorStateListItem_alpha = 2;
         public static final int ColorStateListItem_android_alpha = 1;
         public static final int ColorStateListItem_android_color = 0;
-        public static final int[] CompoundButton = new int[]{16843015, NUM, NUM};
-        public static final int CompoundButton_android_button = 0;
-        public static final int CompoundButton_buttonTint = 1;
-        public static final int CompoundButton_buttonTintMode = 2;
         public static final int[] CoordinatorLayout = new int[]{NUM, NUM};
         public static final int[] CoordinatorLayout_Layout = new int[]{16842931, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int CoordinatorLayout_Layout_android_layout_gravity = 0;
@@ -6468,15 +4191,6 @@ public final class R {
         public static final int CustomWalletTheme_customThemeStyle = 0;
         public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
         public static final int CustomWalletTheme_windowTransitionStyle = 2;
-        public static final int[] DrawerArrowToggle = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int DrawerArrowToggle_arrowHeadLength = 0;
-        public static final int DrawerArrowToggle_arrowShaftLength = 1;
-        public static final int DrawerArrowToggle_barLength = 2;
-        public static final int DrawerArrowToggle_color = 3;
-        public static final int DrawerArrowToggle_drawableSize = 4;
-        public static final int DrawerArrowToggle_gapBetweenBars = 5;
-        public static final int DrawerArrowToggle_spinBars = 6;
-        public static final int DrawerArrowToggle_thickness = 7;
         public static final int[] FontFamily = new int[]{NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, 16844143, 16844144, NUM, NUM, NUM, NUM, NUM};
         public static final int FontFamilyFont_android_font = 0;
@@ -6511,43 +4225,10 @@ public final class R {
         public static final int GradientColor_android_startY = 9;
         public static final int GradientColor_android_tileMode = 6;
         public static final int GradientColor_android_type = 2;
-        public static final int[] LinearLayoutCompat = new int[]{16842927, 16842948, 16843046, 16843047, 16843048, NUM, NUM, NUM, NUM};
-        public static final int[] LinearLayoutCompat_Layout = new int[]{16842931, 16842996, 16842997, 16843137};
-        public static final int LinearLayoutCompat_Layout_android_layout_gravity = 0;
-        public static final int LinearLayoutCompat_Layout_android_layout_height = 2;
-        public static final int LinearLayoutCompat_Layout_android_layout_weight = 3;
-        public static final int LinearLayoutCompat_Layout_android_layout_width = 1;
-        public static final int LinearLayoutCompat_android_baselineAligned = 2;
-        public static final int LinearLayoutCompat_android_baselineAlignedChildIndex = 3;
-        public static final int LinearLayoutCompat_android_gravity = 0;
-        public static final int LinearLayoutCompat_android_orientation = 1;
-        public static final int LinearLayoutCompat_android_weightSum = 4;
-        public static final int LinearLayoutCompat_divider = 5;
-        public static final int LinearLayoutCompat_dividerPadding = 6;
-        public static final int LinearLayoutCompat_measureWithLargestChild = 7;
-        public static final int LinearLayoutCompat_showDividers = 8;
-        public static final int[] ListPopupWindow = new int[]{16843436, 16843437};
-        public static final int ListPopupWindow_android_dropDownHorizontalOffset = 0;
-        public static final int ListPopupWindow_android_dropDownVerticalOffset = 1;
         public static final int[] LoadingImageView = new int[]{NUM, NUM, NUM};
         public static final int LoadingImageView_circleCrop = 0;
         public static final int LoadingImageView_imageAspectRatio = 1;
         public static final int LoadingImageView_imageAspectRatioAdjust = 2;
-        public static final int[] LottieAnimationView = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int LottieAnimationView_lottie_autoPlay = 0;
-        public static final int LottieAnimationView_lottie_colorFilter = 1;
-        public static final int LottieAnimationView_lottie_enableMergePathsForKitKatAndAbove = 2;
-        public static final int LottieAnimationView_lottie_fileName = 3;
-        public static final int LottieAnimationView_lottie_imageAssetsFolder = 4;
-        public static final int LottieAnimationView_lottie_loop = 5;
-        public static final int LottieAnimationView_lottie_progress = 6;
-        public static final int LottieAnimationView_lottie_rawRes = 7;
-        public static final int LottieAnimationView_lottie_renderMode = 8;
-        public static final int LottieAnimationView_lottie_repeatCount = 9;
-        public static final int LottieAnimationView_lottie_repeatMode = 10;
-        public static final int LottieAnimationView_lottie_scale = 11;
-        public static final int LottieAnimationView_lottie_speed = 12;
-        public static final int LottieAnimationView_lottie_url = 13;
         public static final int[] MapAttrs = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int MapAttrs_ambientEnabled = 0;
         public static final int MapAttrs_cameraBearing = 1;
@@ -6573,166 +4254,10 @@ public final class R {
         public static final int MapAttrs_uiZoomGestures = 21;
         public static final int MapAttrs_useViewLifecycle = 22;
         public static final int MapAttrs_zOrderOnTop = 23;
-        public static final int[] MenuGroup = new int[]{16842766, 16842960, 16843156, 16843230, 16843231, 16843232};
-        public static final int MenuGroup_android_checkableBehavior = 5;
-        public static final int MenuGroup_android_enabled = 0;
-        public static final int MenuGroup_android_id = 1;
-        public static final int MenuGroup_android_menuCategory = 3;
-        public static final int MenuGroup_android_orderInCategory = 4;
-        public static final int MenuGroup_android_visible = 2;
-        public static final int[] MenuItem = new int[]{16842754, 16842766, 16842960, 16843014, 16843156, 16843230, 16843231, 16843233, 16843234, 16843235, 16843236, 16843237, 16843375, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int MenuItem_actionLayout = 13;
-        public static final int MenuItem_actionProviderClass = 14;
-        public static final int MenuItem_actionViewClass = 15;
-        public static final int MenuItem_alphabeticModifiers = 16;
-        public static final int MenuItem_android_alphabeticShortcut = 9;
-        public static final int MenuItem_android_checkable = 11;
-        public static final int MenuItem_android_checked = 3;
-        public static final int MenuItem_android_enabled = 1;
-        public static final int MenuItem_android_icon = 0;
-        public static final int MenuItem_android_id = 2;
-        public static final int MenuItem_android_menuCategory = 5;
-        public static final int MenuItem_android_numericShortcut = 10;
-        public static final int MenuItem_android_onClick = 12;
-        public static final int MenuItem_android_orderInCategory = 6;
-        public static final int MenuItem_android_title = 7;
-        public static final int MenuItem_android_titleCondensed = 8;
-        public static final int MenuItem_android_visible = 4;
-        public static final int MenuItem_contentDescription = 17;
-        public static final int MenuItem_iconTint = 18;
-        public static final int MenuItem_iconTintMode = 19;
-        public static final int MenuItem_numericModifiers = 20;
-        public static final int MenuItem_showAsAction = 21;
-        public static final int MenuItem_tooltipText = 22;
-        public static final int[] MenuView = new int[]{16842926, 16843052, 16843053, 16843054, 16843055, 16843056, 16843057, NUM, NUM};
-        public static final int MenuView_android_headerBackground = 4;
-        public static final int MenuView_android_horizontalDivider = 2;
-        public static final int MenuView_android_itemBackground = 5;
-        public static final int MenuView_android_itemIconDisabledAlpha = 6;
-        public static final int MenuView_android_itemTextAppearance = 1;
-        public static final int MenuView_android_verticalDivider = 3;
-        public static final int MenuView_android_windowAnimationStyle = 0;
-        public static final int MenuView_preserveIconSpacing = 7;
-        public static final int MenuView_subMenuArrow = 8;
-        public static final int[] PopupWindow = new int[]{16843126, 16843465, NUM};
-        public static final int[] PopupWindowBackgroundState = new int[]{NUM};
-        public static final int PopupWindowBackgroundState_state_above_anchor = 0;
-        public static final int PopupWindow_android_popupAnimationStyle = 1;
-        public static final int PopupWindow_android_popupBackground = 0;
-        public static final int PopupWindow_overlapAnchor = 2;
-        public static final int[] RecycleListView = new int[]{NUM, NUM};
-        public static final int RecycleListView_paddingBottomNoButtons = 0;
-        public static final int RecycleListView_paddingTopNoTitle = 1;
-        public static final int[] SearchView = new int[]{16842970, 16843039, 16843296, 16843364, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int SearchView_android_focusable = 0;
-        public static final int SearchView_android_imeOptions = 3;
-        public static final int SearchView_android_inputType = 2;
-        public static final int SearchView_android_maxWidth = 1;
-        public static final int SearchView_closeIcon = 4;
-        public static final int SearchView_commitIcon = 5;
-        public static final int SearchView_defaultQueryHint = 6;
-        public static final int SearchView_goIcon = 7;
-        public static final int SearchView_iconifiedByDefault = 8;
-        public static final int SearchView_layout = 9;
-        public static final int SearchView_queryBackground = 10;
-        public static final int SearchView_queryHint = 11;
-        public static final int SearchView_searchHintIcon = 12;
-        public static final int SearchView_searchIcon = 13;
-        public static final int SearchView_submitBackground = 14;
-        public static final int SearchView_suggestionRowLayout = 15;
-        public static final int SearchView_voiceIcon = 16;
         public static final int[] SignInButton = new int[]{NUM, NUM, NUM};
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] Spinner = new int[]{16842930, 16843126, 16843131, 16843362, NUM};
-        public static final int Spinner_android_dropDownWidth = 3;
-        public static final int Spinner_android_entries = 0;
-        public static final int Spinner_android_popupBackground = 1;
-        public static final int Spinner_android_prompt = 2;
-        public static final int Spinner_popupTheme = 4;
-        public static final int[] StateListDrawable = new int[]{16843036, 16843156, 16843157, 16843158, 16843532, 16843533};
-        public static final int[] StateListDrawableItem = new int[]{16843161};
-        public static final int StateListDrawableItem_android_drawable = 0;
-        public static final int StateListDrawable_android_constantSize = 3;
-        public static final int StateListDrawable_android_dither = 0;
-        public static final int StateListDrawable_android_enterFadeDuration = 4;
-        public static final int StateListDrawable_android_exitFadeDuration = 5;
-        public static final int StateListDrawable_android_variablePadding = 2;
-        public static final int StateListDrawable_android_visible = 1;
-        public static final int[] SwitchCompat = new int[]{16843044, 16843045, 16843074, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int SwitchCompat_android_textOff = 1;
-        public static final int SwitchCompat_android_textOn = 0;
-        public static final int SwitchCompat_android_thumb = 2;
-        public static final int SwitchCompat_showText = 3;
-        public static final int SwitchCompat_splitTrack = 4;
-        public static final int SwitchCompat_switchMinWidth = 5;
-        public static final int SwitchCompat_switchPadding = 6;
-        public static final int SwitchCompat_switchTextAppearance = 7;
-        public static final int SwitchCompat_thumbTextPadding = 8;
-        public static final int SwitchCompat_thumbTint = 9;
-        public static final int SwitchCompat_thumbTintMode = 10;
-        public static final int SwitchCompat_track = 11;
-        public static final int SwitchCompat_trackTint = 12;
-        public static final int SwitchCompat_trackTintMode = 13;
-        public static final int[] TextAppearance = new int[]{16842901, 16842902, 16842903, 16842904, 16842906, 16842907, 16843105, 16843106, 16843107, 16843108, 16843692, NUM, NUM};
-        public static final int TextAppearance_android_fontFamily = 10;
-        public static final int TextAppearance_android_shadowColor = 6;
-        public static final int TextAppearance_android_shadowDx = 7;
-        public static final int TextAppearance_android_shadowDy = 8;
-        public static final int TextAppearance_android_shadowRadius = 9;
-        public static final int TextAppearance_android_textColor = 3;
-        public static final int TextAppearance_android_textColorHint = 4;
-        public static final int TextAppearance_android_textColorLink = 5;
-        public static final int TextAppearance_android_textSize = 0;
-        public static final int TextAppearance_android_textStyle = 2;
-        public static final int TextAppearance_android_typeface = 1;
-        public static final int TextAppearance_fontFamily = 11;
-        public static final int TextAppearance_textAllCaps = 12;
-        public static final int[] Toolbar = new int[]{16842927, 16843072, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int Toolbar_android_gravity = 0;
-        public static final int Toolbar_android_minHeight = 1;
-        public static final int Toolbar_buttonGravity = 2;
-        public static final int Toolbar_collapseContentDescription = 3;
-        public static final int Toolbar_collapseIcon = 4;
-        public static final int Toolbar_contentInsetEnd = 5;
-        public static final int Toolbar_contentInsetEndWithActions = 6;
-        public static final int Toolbar_contentInsetLeft = 7;
-        public static final int Toolbar_contentInsetRight = 8;
-        public static final int Toolbar_contentInsetStart = 9;
-        public static final int Toolbar_contentInsetStartWithNavigation = 10;
-        public static final int Toolbar_logo = 11;
-        public static final int Toolbar_logoDescription = 12;
-        public static final int Toolbar_maxButtonHeight = 13;
-        public static final int Toolbar_navigationContentDescription = 14;
-        public static final int Toolbar_navigationIcon = 15;
-        public static final int Toolbar_popupTheme = 16;
-        public static final int Toolbar_subtitle = 17;
-        public static final int Toolbar_subtitleTextAppearance = 18;
-        public static final int Toolbar_subtitleTextColor = 19;
-        public static final int Toolbar_title = 20;
-        public static final int Toolbar_titleMargin = 21;
-        public static final int Toolbar_titleMarginBottom = 22;
-        public static final int Toolbar_titleMarginEnd = 23;
-        public static final int Toolbar_titleMarginStart = 24;
-        public static final int Toolbar_titleMarginTop = 25;
-        public static final int Toolbar_titleMargins = 26;
-        public static final int Toolbar_titleTextAppearance = 27;
-        public static final int Toolbar_titleTextColor = 28;
-        public static final int[] View = new int[]{16842752, 16842970, NUM, NUM, NUM};
-        public static final int[] ViewBackgroundHelper = new int[]{16842964, NUM, NUM};
-        public static final int ViewBackgroundHelper_android_background = 0;
-        public static final int ViewBackgroundHelper_backgroundTint = 1;
-        public static final int ViewBackgroundHelper_backgroundTintMode = 2;
-        public static final int[] ViewStubCompat = new int[]{16842960, 16842994, 16842995};
-        public static final int ViewStubCompat_android_id = 0;
-        public static final int ViewStubCompat_android_inflatedId = 2;
-        public static final int ViewStubCompat_android_layout = 1;
-        public static final int View_android_focusable = 1;
-        public static final int View_android_theme = 0;
-        public static final int View_paddingEnd = 2;
-        public static final int View_paddingStart = 3;
-        public static final int View_theme = 4;
         public static final int[] WalletFragmentOptions = new int[]{NUM, NUM, NUM, NUM};
         public static final int WalletFragmentOptions_appTheme = 0;
         public static final int WalletFragmentOptions_environment = 1;

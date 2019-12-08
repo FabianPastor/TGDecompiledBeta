@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
@@ -86,6 +87,7 @@ public class BottomSheet extends Dialog {
 
         public BottomSheetCell(Context context, int i) {
             super(context);
+            setBackground(null);
             setBackgroundDrawable(Theme.getSelectorDrawable(false));
             this.imageView = new ImageView(context);
             this.imageView.setScaleType(ScaleType.CENTER);
@@ -362,8 +364,10 @@ public class BottomSheet extends Dialog {
                     if (ContainerView.this.currentAnimation != null && ContainerView.this.currentAnimation.equals(animator)) {
                         ContainerView.this.currentAnimation = null;
                     }
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(512));
                 }
             });
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
             this.currentAnimation.start();
         }
 
@@ -1034,6 +1038,7 @@ public class BottomSheet extends Dialog {
                                 BottomSheet.this.getWindow().setAttributes(attributes);
                             }
                         }
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(512));
                     }
 
                     public void onAnimationCancel(Animator animator) {
@@ -1043,6 +1048,7 @@ public class BottomSheet extends Dialog {
                         }
                     }
                 });
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
                 animatorSet.start();
                 this.currentSheetAnimation = animatorSet;
             }
@@ -1122,6 +1128,7 @@ public class BottomSheet extends Dialog {
                         }
                         AndroidUtilities.runOnUIThread(new -$$Lambda$BottomSheet$5$CikgvDyZEWn0favL4ZqbmH9PuGE(this));
                     }
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(512));
                 }
 
                 public /* synthetic */ void lambda$onAnimationEnd$0$BottomSheet$5() {
@@ -1139,6 +1146,7 @@ public class BottomSheet extends Dialog {
                     }
                 }
             });
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
             animatorSet.start();
             this.currentSheetAnimation = animatorSet;
         }
@@ -1170,6 +1178,7 @@ public class BottomSheet extends Dialog {
                             BottomSheet.this.currentSheetAnimation = null;
                             AndroidUtilities.runOnUIThread(new -$$Lambda$BottomSheet$6$VTgE-oeIT2bQ5t-sdXAKcokhgP8(this));
                         }
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(512));
                     }
 
                     public /* synthetic */ void lambda$onAnimationEnd$0$BottomSheet$6() {
@@ -1187,6 +1196,7 @@ public class BottomSheet extends Dialog {
                         }
                     }
                 });
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
                 animatorSet.start();
                 this.currentSheetAnimation = animatorSet;
             }

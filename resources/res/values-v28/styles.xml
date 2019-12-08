@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Base.Theme.AppCompat">
-    </style>
-    <style name="Base.Theme.AppCompat.Light">
-    </style>
-    <style name="Base.V28.Theme.AppCompat">
-        <item name="dialogCornerRadius">?unknown_attr_ref: 1010571</item>
-    </style>
-    <style name="Base.V28.Theme.AppCompat.Light">
-        <item name="dialogCornerRadius">?unknown_attr_ref: 1010571</item>
-    </style>
     <style name="Theme.TMessages">
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>

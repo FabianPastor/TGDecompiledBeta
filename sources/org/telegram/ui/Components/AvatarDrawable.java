@@ -8,10 +8,6 @@ import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import com.airbnb.lottie.LottieProperty;
-import com.airbnb.lottie.SimpleColorFilter;
-import com.airbnb.lottie.model.KeyPath;
-import com.airbnb.lottie.value.LottieValueCallback;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
@@ -253,22 +249,26 @@ public class AvatarDrawable extends Drawable {
             int intrinsicHeight;
             int i2;
             if (i == 3) {
-                String str = "Arrow2";
-                String str2 = "Arrow1";
-                String str3 = "**";
+                String str = "Arrow2.**";
+                String str2 = "Arrow1.**";
+                String str3;
                 if (this.archivedAvatarProgress != 0.0f) {
-                    String str4 = "avatar_backgroundArchived";
-                    Theme.avatar_backgroundPaint.setColor(Theme.getColor(str4));
+                    str3 = "avatar_backgroundArchived";
+                    Theme.avatar_backgroundPaint.setColor(Theme.getColor(str3));
                     canvas.drawCircle(f2, f2, this.archivedAvatarProgress * f2, Theme.avatar_backgroundPaint);
                     if (Theme.dialogs_archiveAvatarDrawableRecolored) {
-                        Theme.dialogs_archiveAvatarDrawable.addValueCallback(new KeyPath(str2, str3), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(Theme.getColor(str4))));
-                        Theme.dialogs_archiveAvatarDrawable.addValueCallback(new KeyPath(str, str3), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(Theme.getColor(str4))));
+                        Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
+                        Theme.dialogs_archiveAvatarDrawable.setLayerColor(str2, Theme.getColor(str3));
+                        Theme.dialogs_archiveAvatarDrawable.setLayerColor(str, Theme.getColor(str3));
+                        Theme.dialogs_archiveAvatarDrawable.commitApplyLayerColors();
                         Theme.dialogs_archiveAvatarDrawableRecolored = false;
                     }
                 } else if (!Theme.dialogs_archiveAvatarDrawableRecolored) {
-                    String str5 = "avatar_backgroundArchivedHidden";
-                    Theme.dialogs_archiveAvatarDrawable.addValueCallback(new KeyPath(str2, str3), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(Theme.getColor(str5))));
-                    Theme.dialogs_archiveAvatarDrawable.addValueCallback(new KeyPath(str, str3), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(Theme.getColor(str5))));
+                    Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
+                    str3 = "avatar_backgroundArchivedHidden";
+                    Theme.dialogs_archiveAvatarDrawable.setLayerColor(str2, Theme.getColor(str3));
+                    Theme.dialogs_archiveAvatarDrawable.setLayerColor(str, Theme.getColor(str3));
+                    Theme.dialogs_archiveAvatarDrawable.commitApplyLayerColors();
                     Theme.dialogs_archiveAvatarDrawableRecolored = true;
                 }
                 intrinsicWidth = Theme.dialogs_archiveAvatarDrawable.getIntrinsicWidth();
@@ -276,7 +276,6 @@ public class AvatarDrawable extends Drawable {
                 i2 = (width - intrinsicWidth) / 2;
                 width = (width - intrinsicHeight) / 2;
                 canvas.save();
-                canvas.translate((float) i2, (float) width);
                 Theme.dialogs_archiveAvatarDrawable.setBounds(i2, width, intrinsicWidth + i2, intrinsicHeight + width);
                 Theme.dialogs_archiveAvatarDrawable.draw(canvas);
                 canvas.restore();

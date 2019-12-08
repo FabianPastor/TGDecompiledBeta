@@ -1344,7 +1344,6 @@
     <string name="July">julho</string>
     <string name="JumpToDate">Ir para Data</string>
     <string name="June">junho</string>
-    <string name="KMetersAway">km de distância</string>
     <string name="KeepMedia">Manter Mídias</string>
     <string name="KeepMediaForever">Permanentemente</string>
     <string name="KeepMediaInfo">Fotos, vídeos e outros arquivos da nuvem que você **não acessou** durante esse período serão removidos deste dispositivo para economizar espaço em disco.\10\10Todas as mídias permanecerão na nuvem do Telegram e poderão ser baixadas novamente conforme necessário.</string>
@@ -1494,7 +1493,6 @@
     <string name="MessagePreview">Prévia da Mensagem</string>
     <string name="MessagesDataUsage">Mensagens e outros dados</string>
     <string name="MessagesSettings">Mensagens</string>
-    <string name="MetersAway">m de distância</string>
     <string name="Meters_few">%1$d metros</string>
     <string name="Meters_many">%1$d metros</string>
     <string name="Meters_one">%1$d metro</string>
@@ -2833,33 +2831,6 @@
     <string name="YourPasswordSuccess">Tudo certo!</string>
     <string name="YourPasswordSuccessText">A sua senha para a verificação em duas etapas está ativada.</string>
     <string name="YourPhone">Seu Número</string>
-    <string name="abc_action_bar_home_description">Navegar para a página inicial</string>
-    <string name="abc_action_bar_up_description">Navegar para cima</string>
-    <string name="abc_action_menu_overflow_description">Mais opções</string>
-    <string name="abc_action_mode_done">Concluído</string>
-    <string name="abc_activity_chooser_view_see_all">Ver tudo</string>
-    <string name="abc_activitychooserview_choose_application">Selecione um app</string>
-    <string name="abc_capital_off">DESATIVAR</string>
-    <string name="abc_capital_on">ATIVAR</string>
-    <string name="abc_menu_alt_shortcut_label">Alt+</string>
-    <string name="abc_menu_ctrl_shortcut_label">Ctrl+</string>
-    <string name="abc_menu_delete_shortcut_label">delete</string>
-    <string name="abc_menu_enter_shortcut_label">enter</string>
-    <string name="abc_menu_function_shortcut_label">Function+</string>
-    <string name="abc_menu_meta_shortcut_label">Meta+</string>
-    <string name="abc_menu_shift_shortcut_label">Shift+</string>
-    <string name="abc_menu_space_shortcut_label">espaço</string>
-    <string name="abc_menu_sym_shortcut_label">Sym+</string>
-    <string name="abc_prepend_shortcut_label">Menu+</string>
-    <string name="abc_search_hint">Pesquisar...</string>
-    <string name="abc_searchview_description_clear">Limpar consulta</string>
-    <string name="abc_searchview_description_query">Consulta de pesquisa</string>
-    <string name="abc_searchview_description_search">Pesquisar</string>
-    <string name="abc_searchview_description_submit">Enviar consulta</string>
-    <string name="abc_searchview_description_voice">Pesquisa por voz</string>
-    <string name="abc_shareactionprovider_share_with">Compartilhar com</string>
-    <string name="abc_shareactionprovider_share_with_application">Compartilhar com %s</string>
-    <string name="abc_toolbar_collapse_description">Recolher</string>
     <string name="chatDate">d \'de\' MMMM</string>
     <string name="chatFullDate">d \'de\' MMMM \'de\' yyyy</string>
     <string name="common_google_play_services_enable_button">Ativar</string>
@@ -2909,7 +2880,6 @@
     <string name="messages_other">%1$d mensagens</string>
     <string name="messages_two">%1$d mensagens</string>
     <string name="messages_zero">%1$d mensagens</string>
-    <string name="search_menu_title">Pesquisar</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Comprar com o Google</string>
 </resources>

@@ -178,7 +178,7 @@ public class ApplicationLoader extends Application {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("GCM Registration not found.");
                 }
-            } else if (BuildVars.LOGS_ENABLED) {
+            } else if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("GCM regId = ");
                 stringBuilder.append(str);

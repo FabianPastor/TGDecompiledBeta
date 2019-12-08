@@ -1344,7 +1344,6 @@
     <string name="July">7월</string>
     <string name="JumpToDate">날짜로 이동</string>
     <string name="June">6월</string>
-    <string name="KMetersAway">km 떨어짐</string>
     <string name="KeepMedia">미디어 저장 기간</string>
     <string name="KeepMediaForever">영원히</string>
     <string name="KeepMediaInfo">이 기간 동안 회원님이 **접근하시지 않은** 클라우드 대화방의 사진, 동영상과 그 밖의 파일들이 디스크 공간을 절약하기 위해 이 기기에서 제거됩니다.\10\10모든 미디어는 텔레그램 클라우드에 남으며 언제든지 다시 다운로드하실 수 있습니다.</string>
@@ -1494,7 +1493,6 @@
     <string name="MessagePreview">메시지 미리보기</string>
     <string name="MessagesDataUsage">메시지 및 기타 데이터</string>
     <string name="MessagesSettings">메시지</string>
-    <string name="MetersAway">m 떨어짐</string>
     <string name="Meters_few">%1$d 미터</string>
     <string name="Meters_many">%1$d 미터</string>
     <string name="Meters_one">%1$d 미터</string>
@@ -2833,33 +2831,6 @@
     <string name="YourPasswordSuccess">성공!</string>
     <string name="YourPasswordSuccessText">2단계 인증 비밀번호가 활성화되었습니다.</string>
     <string name="YourPhone">휴대전화</string>
-    <string name="abc_action_bar_home_description">홈 탐색</string>
-    <string name="abc_action_bar_up_description">위로 탐색</string>
-    <string name="abc_action_menu_overflow_description">옵션 더보기</string>
-    <string name="abc_action_mode_done">완료</string>
-    <string name="abc_activity_chooser_view_see_all">전체 보기</string>
-    <string name="abc_activitychooserview_choose_application">앱 선택</string>
-    <string name="abc_capital_off">사용 안함</string>
-    <string name="abc_capital_on">사용</string>
-    <string name="abc_menu_alt_shortcut_label">Alt+</string>
-    <string name="abc_menu_ctrl_shortcut_label">Ctrl+</string>
-    <string name="abc_menu_delete_shortcut_label">삭제</string>
-    <string name="abc_menu_enter_shortcut_label">입력</string>
-    <string name="abc_menu_function_shortcut_label">Function+</string>
-    <string name="abc_menu_meta_shortcut_label">Meta+</string>
-    <string name="abc_menu_shift_shortcut_label">Shift+</string>
-    <string name="abc_menu_space_shortcut_label">스페이스바</string>
-    <string name="abc_menu_sym_shortcut_label">Sym+</string>
-    <string name="abc_prepend_shortcut_label">Menu+</string>
-    <string name="abc_search_hint">검색...</string>
-    <string name="abc_searchview_description_clear">검색어 삭제</string>
-    <string name="abc_searchview_description_query">검색어</string>
-    <string name="abc_searchview_description_search">검색</string>
-    <string name="abc_searchview_description_submit">검색어 보내기</string>
-    <string name="abc_searchview_description_voice">음성 검색</string>
-    <string name="abc_shareactionprovider_share_with">공유 대상</string>
-    <string name="abc_shareactionprovider_share_with_application">%s와(과) 공유</string>
-    <string name="abc_toolbar_collapse_description">접기</string>
     <string name="chatDate">M\'월\' d\'일\' EEEE</string>
     <string name="chatFullDate">yyyy년 MMMM d일</string>
     <string name="common_google_play_services_enable_button">사용 설정</string>
@@ -2909,7 +2880,6 @@
     <string name="messages_other">메시지 %1$d개</string>
     <string name="messages_two">메시지 %1$d개</string>
     <string name="messages_zero">메시지 %1$d개</string>
-    <string name="search_menu_title">검색</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google로 구매</string>
 </resources>

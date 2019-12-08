@@ -602,8 +602,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:100:0x00fc A:{SYNTHETIC, EDGE_INSN: B:100:0x00fc->B:39:0x00fc ?: BREAK  } */
-        /* JADX WARNING: Removed duplicated region for block: B:32:0x00c9  */
+        /* JADX WARNING: Removed duplicated region for block: B:100:0x00fb A:{SYNTHETIC, EDGE_INSN: B:100:0x00fb->B:39:0x00fb ?: BREAK  } */
+        /* JADX WARNING: Removed duplicated region for block: B:32:0x00c8  */
         private void handleAudioFrameAvailable(org.telegram.ui.Components.InstantCameraView.AudioBufferInfo r17) {
             /*
             r16 = this;
@@ -621,27 +621,27 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r7 = 0;
             r8 = 1;
             r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-            if (r0 != 0) goto L_0x00fc;
+            if (r0 != 0) goto L_0x00fb;
         L_0x0018:
             r3 = r1.videoFirst;
             r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-            if (r0 != 0) goto L_0x0029;
+            if (r0 != 0) goto L_0x0028;
         L_0x001e:
             r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r0 == 0) goto L_0x0028;
+            if (r0 == 0) goto L_0x0027;
         L_0x0022:
             r0 = "video record not yet started";
             org.telegram.messenger.FileLog.d(r0);
-        L_0x0028:
+        L_0x0027:
             return;
-        L_0x0029:
+        L_0x0028:
             r0 = 0;
-        L_0x002a:
+        L_0x0029:
             r3 = r2.results;
-            if (r0 >= r3) goto L_0x00c6;
-        L_0x002e:
-            if (r0 != 0) goto L_0x006a;
-        L_0x0030:
+            if (r0 >= r3) goto L_0x00c5;
+        L_0x002d:
+            if (r0 != 0) goto L_0x0069;
+        L_0x002f:
             r3 = r1.videoFirst;
             r9 = r2.offset;
             r10 = r9[r0];
@@ -649,8 +649,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r3 = java.lang.Math.abs(r3);
             r9 = 10000000; // 0x989680 float:1.4012985E-38 double:4.9406565E-317;
             r11 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1));
-            if (r11 <= 0) goto L_0x006a;
-        L_0x0042:
+            if (r11 <= 0) goto L_0x0069;
+        L_0x0041:
             r3 = r1.videoFirst;
             r9 = r2.offset;
             r10 = r9[r0];
@@ -659,8 +659,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r3 = r9[r0];
             r1.audioFirst = r3;
             r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r0 == 0) goto L_0x009e;
-        L_0x0053:
+            if (r0 == 0) goto L_0x009d;
+        L_0x0052:
             r0 = new java.lang.StringBuilder;
             r0.<init>();
             r3 = "detected desync between audio and video ";
@@ -669,21 +669,21 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r0.append(r3);
             r0 = r0.toString();
             org.telegram.messenger.FileLog.d(r0);
-            goto L_0x009e;
-        L_0x006a:
+            goto L_0x009d;
+        L_0x0069:
             r3 = r2.offset;
             r9 = r3[r0];
             r11 = r1.videoFirst;
             r4 = " timestamp = ";
             r13 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
-            if (r13 < 0) goto L_0x00a0;
-        L_0x0076:
+            if (r13 < 0) goto L_0x009f;
+        L_0x0075:
             r2.lastWroteBuffer = r0;
             r9 = r3[r0];
             r1.audioFirst = r9;
             r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r3 == 0) goto L_0x009e;
-        L_0x0080:
+            if (r3 == 0) goto L_0x009d;
+        L_0x007f:
             r3 = new java.lang.StringBuilder;
             r3.<init>();
             r9 = "found first audio frame at ";
@@ -695,13 +695,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r3.append(r9);
             r0 = r3.toString();
             org.telegram.messenger.FileLog.d(r0);
-        L_0x009e:
+        L_0x009d:
             r0 = 1;
-            goto L_0x00c7;
-        L_0x00a0:
+            goto L_0x00c6;
+        L_0x009f:
             r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r3 == 0) goto L_0x00c2;
-        L_0x00a4:
+            if (r3 == 0) goto L_0x00c1;
+        L_0x00a3:
             r3 = new java.lang.StringBuilder;
             r3.<init>();
             r9 = "ignore first audio frame at ";
@@ -713,17 +713,17 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r3.append(r9);
             r3 = r3.toString();
             org.telegram.messenger.FileLog.d(r3);
-        L_0x00c2:
+        L_0x00c1:
             r0 = r0 + 1;
-            goto L_0x002a;
-        L_0x00c6:
+            goto L_0x0029;
+        L_0x00c5:
             r0 = 0;
-        L_0x00c7:
-            if (r0 != 0) goto L_0x00fc;
-        L_0x00c9:
+        L_0x00c6:
+            if (r0 != 0) goto L_0x00fb;
+        L_0x00c8:
             r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r0 == 0) goto L_0x00e3;
-        L_0x00cd:
+            if (r0 == 0) goto L_0x00e2;
+        L_0x00cc:
             r0 = new java.lang.StringBuilder;
             r0.<init>();
             r3 = "first audio frame not found, removing buffers ";
@@ -732,208 +732,208 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r0.append(r3);
             r0 = r0.toString();
             org.telegram.messenger.FileLog.d(r0);
-        L_0x00e3:
+        L_0x00e2:
             r0 = r1.buffersToWrite;
             r0.remove(r2);
             r0 = r1.buffersToWrite;
             r0 = r0.isEmpty();
-            if (r0 != 0) goto L_0x00fb;
-        L_0x00f0:
+            if (r0 != 0) goto L_0x00fa;
+        L_0x00ef:
             r0 = r1.buffersToWrite;
             r0 = r0.get(r7);
             r2 = r0;
             r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2;
-            goto L_0x0029;
-        L_0x00fb:
+            goto L_0x0028;
+        L_0x00fa:
             return;
-        L_0x00fc:
+        L_0x00fb:
             r3 = r1.audioStartTime;
             r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-            if (r0 != 0) goto L_0x010a;
-        L_0x0102:
+            if (r0 != 0) goto L_0x0109;
+        L_0x0101:
             r0 = r2.offset;
             r3 = r2.lastWroteBuffer;
             r3 = r0[r3];
             r1.audioStartTime = r3;
-        L_0x010a:
+        L_0x0109:
             r0 = r1.buffersToWrite;
             r0 = r0.size();
-            if (r0 <= r8) goto L_0x011b;
-        L_0x0112:
+            if (r0 <= r8) goto L_0x011a;
+        L_0x0111:
             r0 = r1.buffersToWrite;
             r0 = r0.get(r7);
             r2 = r0;
             r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2;
-        L_0x011b:
-            r1.drainEncoder(r7);	 Catch:{ Exception -> 0x011f }
-            goto L_0x0124;
-        L_0x011f:
+        L_0x011a:
+            r1.drainEncoder(r7);	 Catch:{ Exception -> 0x011e }
+            goto L_0x0123;
+        L_0x011e:
             r0 = move-exception;
             r3 = r0;
             org.telegram.messenger.FileLog.e(r3);
-        L_0x0124:
+        L_0x0123:
             r0 = 0;
-        L_0x0125:
-            if (r2 == 0) goto L_0x0216;
-        L_0x0127:
-            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0212 }
+        L_0x0124:
+            if (r2 == 0) goto L_0x0215;
+        L_0x0126:
+            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0211 }
             r4 = 0;
-            r10 = r3.dequeueInputBuffer(r4);	 Catch:{ Throwable -> 0x0212 }
-            if (r10 < 0) goto L_0x020c;
-        L_0x0131:
-            r3 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x0212 }
+            r10 = r3.dequeueInputBuffer(r4);	 Catch:{ Throwable -> 0x0211 }
+            if (r10 < 0) goto L_0x020b;
+        L_0x0130:
+            r3 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x0211 }
             r6 = 21;
-            if (r3 < r6) goto L_0x013e;
-        L_0x0137:
-            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0212 }
-            r3 = r3.getInputBuffer(r10);	 Catch:{ Throwable -> 0x0212 }
-            goto L_0x0149;
-        L_0x013e:
-            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0212 }
-            r3 = r3.getInputBuffers();	 Catch:{ Throwable -> 0x0212 }
-            r3 = r3[r10];	 Catch:{ Throwable -> 0x0212 }
-            r3.clear();	 Catch:{ Throwable -> 0x0212 }
-        L_0x0149:
-            r6 = r2.offset;	 Catch:{ Throwable -> 0x0212 }
-            r9 = r2.lastWroteBuffer;	 Catch:{ Throwable -> 0x0212 }
-            r11 = r6[r9];	 Catch:{ Throwable -> 0x0212 }
-            r6 = r2.lastWroteBuffer;	 Catch:{ Throwable -> 0x0212 }
-        L_0x0151:
-            r9 = r2.results;	 Catch:{ Throwable -> 0x0212 }
+            if (r3 < r6) goto L_0x013d;
+        L_0x0136:
+            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0211 }
+            r3 = r3.getInputBuffer(r10);	 Catch:{ Throwable -> 0x0211 }
+            goto L_0x0148;
+        L_0x013d:
+            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0211 }
+            r3 = r3.getInputBuffers();	 Catch:{ Throwable -> 0x0211 }
+            r3 = r3[r10];	 Catch:{ Throwable -> 0x0211 }
+            r3.clear();	 Catch:{ Throwable -> 0x0211 }
+        L_0x0148:
+            r6 = r2.offset;	 Catch:{ Throwable -> 0x0211 }
+            r9 = r2.lastWroteBuffer;	 Catch:{ Throwable -> 0x0211 }
+            r11 = r6[r9];	 Catch:{ Throwable -> 0x0211 }
+            r6 = r2.lastWroteBuffer;	 Catch:{ Throwable -> 0x0211 }
+        L_0x0150:
+            r9 = r2.results;	 Catch:{ Throwable -> 0x0211 }
             r13 = 0;
-            if (r6 > r9) goto L_0x01ea;
-        L_0x0156:
-            r9 = r2.results;	 Catch:{ Throwable -> 0x0212 }
-            if (r6 >= r9) goto L_0x01b5;
-        L_0x015a:
-            r9 = r1.running;	 Catch:{ Throwable -> 0x0212 }
-            if (r9 != 0) goto L_0x019c;
-        L_0x015e:
-            r9 = r2.offset;	 Catch:{ Throwable -> 0x0212 }
-            r14 = r9[r6];	 Catch:{ Throwable -> 0x0212 }
-            r4 = r1.videoLast;	 Catch:{ Throwable -> 0x0212 }
-            r7 = r1.desyncTime;	 Catch:{ Throwable -> 0x0212 }
+            if (r6 > r9) goto L_0x01e9;
+        L_0x0155:
+            r9 = r2.results;	 Catch:{ Throwable -> 0x0211 }
+            if (r6 >= r9) goto L_0x01b4;
+        L_0x0159:
+            r9 = r1.running;	 Catch:{ Throwable -> 0x0211 }
+            if (r9 != 0) goto L_0x019b;
+        L_0x015d:
+            r9 = r2.offset;	 Catch:{ Throwable -> 0x0211 }
+            r14 = r9[r6];	 Catch:{ Throwable -> 0x0211 }
+            r4 = r1.videoLast;	 Catch:{ Throwable -> 0x0211 }
+            r7 = r1.desyncTime;	 Catch:{ Throwable -> 0x0211 }
             r4 = r4 - r7;
             r7 = (r14 > r4 ? 1 : (r14 == r4 ? 0 : -1));
-            if (r7 < 0) goto L_0x019c;
-        L_0x016b:
-            r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Throwable -> 0x0212 }
-            if (r0 == 0) goto L_0x0191;
-        L_0x016f:
-            r0 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0212 }
-            r0.<init>();	 Catch:{ Throwable -> 0x0212 }
+            if (r7 < 0) goto L_0x019b;
+        L_0x016a:
+            r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Throwable -> 0x0211 }
+            if (r0 == 0) goto L_0x0190;
+        L_0x016e:
+            r0 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0211 }
+            r0.<init>();	 Catch:{ Throwable -> 0x0211 }
             r4 = "stop audio encoding because of stoped video recording at ";
-            r0.append(r4);	 Catch:{ Throwable -> 0x0212 }
-            r2 = r2.offset;	 Catch:{ Throwable -> 0x0212 }
-            r4 = r2[r6];	 Catch:{ Throwable -> 0x0212 }
-            r0.append(r4);	 Catch:{ Throwable -> 0x0212 }
+            r0.append(r4);	 Catch:{ Throwable -> 0x0211 }
+            r2 = r2.offset;	 Catch:{ Throwable -> 0x0211 }
+            r4 = r2[r6];	 Catch:{ Throwable -> 0x0211 }
+            r0.append(r4);	 Catch:{ Throwable -> 0x0211 }
             r2 = " last video ";
-            r0.append(r2);	 Catch:{ Throwable -> 0x0212 }
-            r4 = r1.videoLast;	 Catch:{ Throwable -> 0x0212 }
-            r0.append(r4);	 Catch:{ Throwable -> 0x0212 }
-            r0 = r0.toString();	 Catch:{ Throwable -> 0x0212 }
-            org.telegram.messenger.FileLog.d(r0);	 Catch:{ Throwable -> 0x0212 }
-        L_0x0191:
+            r0.append(r2);	 Catch:{ Throwable -> 0x0211 }
+            r4 = r1.videoLast;	 Catch:{ Throwable -> 0x0211 }
+            r0.append(r4);	 Catch:{ Throwable -> 0x0211 }
+            r0 = r0.toString();	 Catch:{ Throwable -> 0x0211 }
+            org.telegram.messenger.FileLog.d(r0);	 Catch:{ Throwable -> 0x0211 }
+        L_0x0190:
             r2 = 1;
-            r1.audioStopedByTime = r2;	 Catch:{ Throwable -> 0x0212 }
-            r0 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0212 }
-            r0.clear();	 Catch:{ Throwable -> 0x0212 }
+            r1.audioStopedByTime = r2;	 Catch:{ Throwable -> 0x0211 }
+            r0 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0211 }
+            r0.clear();	 Catch:{ Throwable -> 0x0211 }
             r2 = r13;
             r0 = 1;
-            goto L_0x01ea;
-        L_0x019c:
-            r4 = r3.remaining();	 Catch:{ Throwable -> 0x0212 }
-            r5 = r2.read;	 Catch:{ Throwable -> 0x0212 }
-            r5 = r5[r6];	 Catch:{ Throwable -> 0x0212 }
-            if (r4 >= r5) goto L_0x01aa;
-        L_0x01a6:
-            r2.lastWroteBuffer = r6;	 Catch:{ Throwable -> 0x0212 }
+            goto L_0x01e9;
+        L_0x019b:
+            r4 = r3.remaining();	 Catch:{ Throwable -> 0x0211 }
+            r5 = r2.read;	 Catch:{ Throwable -> 0x0211 }
+            r5 = r5[r6];	 Catch:{ Throwable -> 0x0211 }
+            if (r4 >= r5) goto L_0x01a9;
+        L_0x01a5:
+            r2.lastWroteBuffer = r6;	 Catch:{ Throwable -> 0x0211 }
             r2 = r13;
-            goto L_0x01ea;
-        L_0x01aa:
-            r4 = r2.buffer;	 Catch:{ Throwable -> 0x0212 }
+            goto L_0x01e9;
+        L_0x01a9:
+            r4 = r2.buffer;	 Catch:{ Throwable -> 0x0211 }
             r5 = r6 * 2048;
-            r7 = r2.read;	 Catch:{ Throwable -> 0x0212 }
-            r7 = r7[r6];	 Catch:{ Throwable -> 0x0212 }
-            r3.put(r4, r5, r7);	 Catch:{ Throwable -> 0x0212 }
-        L_0x01b5:
-            r4 = r2.results;	 Catch:{ Throwable -> 0x0212 }
+            r7 = r2.read;	 Catch:{ Throwable -> 0x0211 }
+            r7 = r7[r6];	 Catch:{ Throwable -> 0x0211 }
+            r3.put(r4, r5, r7);	 Catch:{ Throwable -> 0x0211 }
+        L_0x01b4:
+            r4 = r2.results;	 Catch:{ Throwable -> 0x0211 }
             r5 = 1;
             r4 = r4 - r5;
-            if (r6 < r4) goto L_0x01e1;
-        L_0x01bb:
-            r4 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0212 }
-            r4.remove(r2);	 Catch:{ Throwable -> 0x0212 }
-            r4 = r1.running;	 Catch:{ Throwable -> 0x0212 }
-            if (r4 == 0) goto L_0x01c9;
-        L_0x01c4:
-            r4 = r1.buffers;	 Catch:{ Throwable -> 0x0212 }
-            r4.put(r2);	 Catch:{ Throwable -> 0x0212 }
-        L_0x01c9:
-            r4 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0212 }
-            r4 = r4.isEmpty();	 Catch:{ Throwable -> 0x0212 }
-            if (r4 != 0) goto L_0x01db;
-        L_0x01d1:
-            r2 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0212 }
+            if (r6 < r4) goto L_0x01e0;
+        L_0x01ba:
+            r4 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0211 }
+            r4.remove(r2);	 Catch:{ Throwable -> 0x0211 }
+            r4 = r1.running;	 Catch:{ Throwable -> 0x0211 }
+            if (r4 == 0) goto L_0x01c8;
+        L_0x01c3:
+            r4 = r1.buffers;	 Catch:{ Throwable -> 0x0211 }
+            r4.put(r2);	 Catch:{ Throwable -> 0x0211 }
+        L_0x01c8:
+            r4 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0211 }
+            r4 = r4.isEmpty();	 Catch:{ Throwable -> 0x0211 }
+            if (r4 != 0) goto L_0x01da;
+        L_0x01d0:
+            r2 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0211 }
             r4 = 0;
-            r2 = r2.get(r4);	 Catch:{ Throwable -> 0x0212 }
-            r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2;	 Catch:{ Throwable -> 0x0212 }
-            goto L_0x01e2;
-        L_0x01db:
+            r2 = r2.get(r4);	 Catch:{ Throwable -> 0x0211 }
+            r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2;	 Catch:{ Throwable -> 0x0211 }
+            goto L_0x01e1;
+        L_0x01da:
             r4 = 0;
-            r8 = r2.last;	 Catch:{ Throwable -> 0x0212 }
+            r8 = r2.last;	 Catch:{ Throwable -> 0x0211 }
             r0 = r8;
             r2 = r13;
-            goto L_0x01ec;
-        L_0x01e1:
+            goto L_0x01eb;
+        L_0x01e0:
             r4 = 0;
-        L_0x01e2:
+        L_0x01e1:
             r6 = r6 + 1;
             r4 = 0;
             r7 = 0;
             r8 = 1;
-            goto L_0x0151;
-        L_0x01ea:
+            goto L_0x0150;
+        L_0x01e9:
             r4 = 0;
             r5 = 1;
-        L_0x01ec:
-            r9 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0212 }
+        L_0x01eb:
+            r9 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0211 }
             r6 = 0;
-            r3 = r3.position();	 Catch:{ Throwable -> 0x0212 }
+            r3 = r3.position();	 Catch:{ Throwable -> 0x0211 }
             r7 = 0;
             r13 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1));
-            if (r13 != 0) goto L_0x01fb;
-        L_0x01f9:
+            if (r13 != 0) goto L_0x01fa;
+        L_0x01f8:
             r13 = r7;
-            goto L_0x0200;
-        L_0x01fb:
-            r7 = r1.audioStartTime;	 Catch:{ Throwable -> 0x0212 }
+            goto L_0x01ff;
+        L_0x01fa:
+            r7 = r1.audioStartTime;	 Catch:{ Throwable -> 0x0211 }
             r7 = r11 - r7;
-            goto L_0x01f9;
-        L_0x0200:
-            if (r0 == 0) goto L_0x0205;
-        L_0x0202:
+            goto L_0x01f8;
+        L_0x01ff:
+            if (r0 == 0) goto L_0x0204;
+        L_0x0201:
             r7 = 4;
             r15 = 4;
-            goto L_0x0206;
-        L_0x0205:
+            goto L_0x0205;
+        L_0x0204:
             r15 = 0;
-        L_0x0206:
+        L_0x0205:
             r11 = r6;
             r12 = r3;
-            r9.queueInputBuffer(r10, r11, r12, r13, r15);	 Catch:{ Throwable -> 0x0212 }
-            goto L_0x020e;
-        L_0x020c:
+            r9.queueInputBuffer(r10, r11, r12, r13, r15);	 Catch:{ Throwable -> 0x0211 }
+            goto L_0x020d;
+        L_0x020b:
             r4 = 0;
             r5 = 1;
-        L_0x020e:
+        L_0x020d:
             r7 = 0;
             r8 = 1;
-            goto L_0x0125;
-        L_0x0212:
+            goto L_0x0124;
+        L_0x0211:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-        L_0x0216:
+        L_0x0215:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView$VideoRecorder.handleAudioFrameAvailable(org.telegram.ui.Components.InstantCameraView$AudioBufferInfo):void");

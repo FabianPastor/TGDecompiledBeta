@@ -36,6 +36,7 @@ public class StickerEmojiCell extends FrameLayout {
         super(context);
         this.imageView = new BackupImageView(context);
         this.imageView.setAspectFit(true);
+        this.imageView.setLayerNum(1);
         addView(this.imageView, LayoutHelper.createFrame(66, 66, 17));
         this.emojiTextView = new TextView(context);
         this.emojiTextView.setTextSize(1, 16.0f);
@@ -63,24 +64,49 @@ public class StickerEmojiCell extends FrameLayout {
         setSticker(document, obj, null, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x009a  */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x009a  */
-    public void setSticker(org.telegram.tgnet.TLRPC.Document r17, java.lang.Object r18, java.lang.String r19, boolean r20) {
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00c7  */
+    public void setSticker(org.telegram.tgnet.TLRPC.Document r19, java.lang.Object r20, java.lang.String r21, boolean r22) {
         /*
-        r16 = this;
-        r0 = r16;
-        r1 = r17;
-        r2 = r19;
-        if (r1 == 0) goto L_0x00cb;
+        r18 = this;
+        r0 = r18;
+        r1 = r19;
+        r2 = r21;
+        if (r1 == 0) goto L_0x00f8;
     L_0x0008:
         r0.sticker = r1;
-        r3 = r18;
+        r3 = r20;
         r0.parentObject = r3;
         r3 = r1.thumbs;
         r4 = 90;
         r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r4);
-        if (r3 == 0) goto L_0x0029;
-    L_0x0018:
+        r4 = org.telegram.messenger.MessageObject.canAutoplayAnimatedSticker(r19);
+        if (r4 == 0) goto L_0x0045;
+    L_0x001c:
+        if (r3 == 0) goto L_0x0032;
+    L_0x001e:
+        r5 = r0.imageView;
+        r6 = org.telegram.messenger.ImageLocation.getForDocument(r19);
+        r8 = org.telegram.messenger.ImageLocation.getForDocument(r3, r1);
+        r9 = 0;
+        r10 = 0;
+        r11 = r0.parentObject;
+        r7 = "80_80";
+        r5.setImage(r6, r7, r8, r9, r10, r11);
+        goto L_0x0066;
+    L_0x0032:
+        r12 = r0.imageView;
+        r13 = org.telegram.messenger.ImageLocation.getForDocument(r19);
+        r15 = 0;
+        r16 = 0;
+        r3 = r0.parentObject;
+        r14 = "80_80";
+        r17 = r3;
+        r12.setImage(r13, r14, r15, r16, r17);
+        goto L_0x0066;
+    L_0x0045:
+        if (r3 == 0) goto L_0x0057;
+    L_0x0047:
         r4 = r0.imageView;
         r5 = org.telegram.messenger.ImageLocation.getForDocument(r3, r1);
         r6 = 0;
@@ -88,20 +114,20 @@ public class StickerEmojiCell extends FrameLayout {
         r9 = r0.parentObject;
         r7 = "webp";
         r4.setImage(r5, r6, r7, r8, r9);
-        goto L_0x0039;
-    L_0x0029:
+        goto L_0x0066;
+    L_0x0057:
         r10 = r0.imageView;
-        r11 = org.telegram.messenger.ImageLocation.getForDocument(r17);
+        r11 = org.telegram.messenger.ImageLocation.getForDocument(r19);
         r12 = 0;
         r14 = 0;
         r15 = r0.parentObject;
         r13 = "webp";
         r10.setImage(r11, r12, r13, r14, r15);
-    L_0x0039:
+    L_0x0066:
         r3 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
         r4 = 0;
-        if (r2 == 0) goto L_0x005a;
-    L_0x003e:
+        if (r2 == 0) goto L_0x0087;
+    L_0x006b:
         r1 = r0.emojiTextView;
         r5 = r1.getPaint();
         r5 = r5.getFontMetricsInt();
@@ -110,28 +136,28 @@ public class StickerEmojiCell extends FrameLayout {
         r1.setText(r2);
         r1 = r0.emojiTextView;
         r1.setVisibility(r4);
-        goto L_0x00cb;
-    L_0x005a:
-        if (r20 == 0) goto L_0x00c5;
-    L_0x005c:
+        goto L_0x00f8;
+    L_0x0087:
+        if (r22 == 0) goto L_0x00f2;
+    L_0x0089:
         r2 = 0;
-    L_0x005d:
+    L_0x008a:
         r5 = r1.attributes;
         r5 = r5.size();
-        if (r2 >= r5) goto L_0x0097;
-    L_0x0065:
+        if (r2 >= r5) goto L_0x00c4;
+    L_0x0092:
         r5 = r1.attributes;
         r5 = r5.get(r2);
         r5 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r5;
         r6 = r5 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
-        if (r6 == 0) goto L_0x0094;
-    L_0x0071:
+        if (r6 == 0) goto L_0x00c1;
+    L_0x009e:
         r1 = r5.alt;
-        if (r1 == 0) goto L_0x0097;
-    L_0x0075:
+        if (r1 == 0) goto L_0x00c4;
+    L_0x00a2:
         r1 = r1.length();
-        if (r1 <= 0) goto L_0x0097;
-    L_0x007b:
+        if (r1 <= 0) goto L_0x00c4;
+    L_0x00a8:
         r1 = r0.emojiTextView;
         r2 = r5.alt;
         r5 = r1.getPaint();
@@ -140,15 +166,15 @@ public class StickerEmojiCell extends FrameLayout {
         r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r5, r6, r4);
         r1.setText(r2);
         r1 = 1;
-        goto L_0x0098;
-    L_0x0094:
+        goto L_0x00c5;
+    L_0x00c1:
         r2 = r2 + 1;
-        goto L_0x005d;
-    L_0x0097:
+        goto L_0x008a;
+    L_0x00c4:
         r1 = 0;
-    L_0x0098:
-        if (r1 != 0) goto L_0x00bf;
-    L_0x009a:
+    L_0x00c5:
+        if (r1 != 0) goto L_0x00ec;
+    L_0x00c7:
         r1 = r0.emojiTextView;
         r2 = r0.currentAccount;
         r2 = org.telegram.messenger.MediaDataController.getInstance(r2);
@@ -161,15 +187,15 @@ public class StickerEmojiCell extends FrameLayout {
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r5, r3, r4);
         r1.setText(r2);
-    L_0x00bf:
+    L_0x00ec:
         r1 = r0.emojiTextView;
         r1.setVisibility(r4);
-        goto L_0x00cb;
-    L_0x00c5:
+        goto L_0x00f8;
+    L_0x00f2:
         r1 = r0.emojiTextView;
         r2 = 4;
         r1.setVisibility(r2);
-    L_0x00cb:
+    L_0x00f8:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.StickerEmojiCell.setSticker(org.telegram.tgnet.TLRPC$Document, java.lang.Object, java.lang.String, boolean):void");
@@ -197,6 +223,10 @@ public class StickerEmojiCell extends FrameLayout {
 
     public boolean showingBitmap() {
         return this.imageView.getImageReceiver().getBitmap() != null;
+    }
+
+    public BackupImageView getImageView() {
+        return this.imageView;
     }
 
     public void invalidate() {

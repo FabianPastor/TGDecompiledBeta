@@ -19,12 +19,6 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.viewpager.widget.ViewPager;
-import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieDrawable;
-import com.airbnb.lottie.LottieProperty;
-import com.airbnb.lottie.SimpleColorFilter;
-import com.airbnb.lottie.model.KeyPath;
-import com.airbnb.lottie.value.LottieValueCallback;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +40,8 @@ import org.telegram.ui.Components.LetterDrawable;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.MessageBackgroundDrawable;
 import org.telegram.ui.Components.NumberTextView;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RadioButton;
 import org.telegram.ui.Components.RecyclerListView;
@@ -138,11 +134,11 @@ public class ThemeDescription {
         }
     }
 
-    public ThemeDescription(View view, int i, Class[] clsArr, LottieDrawable[] lottieDrawableArr, String str, String str2) {
+    public ThemeDescription(View view, int i, Class[] clsArr, RLottieDrawable[] rLottieDrawableArr, String str, String str2) {
         this.previousIsDefault = new boolean[1];
         this.currentKey = str2;
         this.lottieLayerName = str;
-        this.drawablesToUpdate = lottieDrawableArr;
+        this.drawablesToUpdate = rLottieDrawableArr;
         this.viewToInvalidate = view;
         this.changeFlags = i;
         this.listClasses = clsArr;
@@ -240,9 +236,13 @@ public class ThemeDescription {
                 if (drawableArr[i2] != null) {
                     if (drawableArr[i2] instanceof ScamDrawable) {
                         ((ScamDrawable) drawableArr[i2]).setColor(i);
-                    } else if (drawableArr[i2] instanceof LottieDrawable) {
+                    } else if (drawableArr[i2] instanceof RLottieDrawable) {
                         if (this.lottieLayerName != null) {
-                            ((LottieDrawable) drawableArr[i2]).addValueCallback(new KeyPath(this.lottieLayerName, "**"), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(i)));
+                            RLottieDrawable rLottieDrawable = (RLottieDrawable) drawableArr[i2];
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append(this.lottieLayerName);
+                            stringBuilder.append(".**");
+                            rLottieDrawable.setLayerColor(stringBuilder.toString(), i);
                         }
                     } else if (drawableArr[i2] instanceof CombinedDrawable) {
                         if ((this.changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
@@ -576,8 +576,12 @@ public class ThemeDescription {
                                             if (obj2 instanceof View) {
                                                 ((View) obj2).invalidate();
                                             }
-                                            if (this.lottieLayerName != null && (obj2 instanceof LottieAnimationView)) {
-                                                ((LottieAnimationView) obj2).addValueCallback(new KeyPath(this.lottieLayerName, "**"), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(i)));
+                                            if (this.lottieLayerName != null && (obj2 instanceof RLottieImageView)) {
+                                                RLottieImageView rLottieImageView = (RLottieImageView) obj2;
+                                                StringBuilder stringBuilder3 = new StringBuilder();
+                                                stringBuilder3.append(this.lottieLayerName);
+                                                stringBuilder3.append(".**");
+                                                rLottieImageView.setLayerColor(stringBuilder3.toString(), i);
                                             }
                                             if ((this.changeFlags & FLAG_USEBACKGROUNDDRAWABLE) != 0 && (obj2 instanceof View)) {
                                                 obj2 = ((View) obj2).getBackground();

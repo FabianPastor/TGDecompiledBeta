@@ -29,6 +29,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.WebFile;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
@@ -824,6 +825,7 @@ public class ContentPreviewViewer {
     public void setParentActivity(Activity activity) {
         this.currentAccount = UserConfig.selectedAccount;
         this.centerImage.setCurrentAccount(this.currentAccount);
+        this.centerImage.setLayerNum(7);
         if (this.parentActivity != activity) {
             this.parentActivity = activity;
             this.slideUpDrawable = this.parentActivity.getResources().getDrawable(NUM);
@@ -977,6 +979,7 @@ public class ContentPreviewViewer {
                 this.currentMoveY = 0.0f;
                 this.moveY = 0.0f;
                 this.lastUpdateTime = System.currentTimeMillis();
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(4));
             }
         }
     }
@@ -1003,6 +1006,7 @@ public class ContentPreviewViewer {
             this.currentStickerSet = null;
             this.delegate = null;
             this.isVisible = false;
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(4));
         }
     }
 
@@ -1031,6 +1035,7 @@ public class ContentPreviewViewer {
                     FileLog.e(e2);
                 }
                 Instance = null;
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(4));
             }
         }
     }
@@ -1047,21 +1052,21 @@ public class ContentPreviewViewer {
     /* JADX WARNING: Removed duplicated region for block: B:13:0x006b  */
     /* JADX WARNING: Removed duplicated region for block: B:12:0x0054  */
     /* JADX WARNING: Removed duplicated region for block: B:16:0x0094  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x00b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x012b  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x017a  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0155  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x00d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0123  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0172  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x014d  */
     @android.annotation.SuppressLint({"DrawAllocation"})
     private void onDraw(android.graphics.Canvas r10) {
         /*
         r9 = this;
         r0 = r9.containerView;
-        if (r0 == 0) goto L_0x01d5;
+        if (r0 == 0) goto L_0x01cc;
     L_0x0004:
         r0 = r9.backgroundDrawable;
         if (r0 != 0) goto L_0x000a;
     L_0x0008:
-        goto L_0x01d5;
+        goto L_0x01cc;
     L_0x000a:
         r1 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
         r2 = r9.showProgress;
@@ -1145,32 +1150,28 @@ public class ContentPreviewViewer {
         r0 = (float) r0;
         r7 = r7 + r0;
         r10.translate(r6, r7);
-        r0 = r9.centerImage;
-        r0 = r0.getBitmap();
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        if (r0 == 0) goto L_0x0127;
-    L_0x00b8:
         r0 = r9.showProgress;
-        r3 = NUM; // 0x3f4ccccd float:0.8 double:5.246966156E-315;
-        r4 = r0 * r3;
-        r4 = r4 / r3;
-        r2 = (float) r2;
-        r2 = r2 * r4;
-        r2 = (int) r2;
-        r3 = r9.centerImage;
-        r3.setAlpha(r0);
+        r1 = NUM; // 0x3f4ccccd float:0.8 double:5.246966156E-315;
+        r3 = r0 * r1;
+        r3 = r3 / r1;
+        r1 = (float) r2;
+        r1 = r1 * r3;
+        r1 = (int) r1;
+        r2 = r9.centerImage;
+        r2.setAlpha(r0);
         r0 = r9.centerImage;
-        r3 = -r2;
-        r3 = r3 / 2;
-        r0.setImageCoords(r3, r3, r2, r2);
+        r2 = -r1;
+        r2 = r2 / 2;
+        r0.setImageCoords(r2, r2, r1, r1);
         r0 = r9.centerImage;
         r0.draw(r10);
         r0 = r9.currentContentType;
-        if (r0 != r5) goto L_0x0127;
-    L_0x00da:
+        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        if (r0 != r5) goto L_0x011f;
+    L_0x00d2:
         r0 = r9.slideUpDrawable;
-        if (r0 == 0) goto L_0x0127;
-    L_0x00de:
+        if (r0 == 0) goto L_0x011f;
+    L_0x00d6:
         r0 = r0.getIntrinsicWidth();
         r2 = r9.slideUpDrawable;
         r2 = r2.getIntrinsicHeight();
@@ -1206,10 +1207,10 @@ public class ContentPreviewViewer {
         r4.setBounds(r5, r2, r0, r3);
         r0 = r9.slideUpDrawable;
         r0.draw(r10);
-    L_0x0127:
+    L_0x011f:
         r0 = r9.stickerEmojiLayout;
-        if (r0 == 0) goto L_0x014c;
-    L_0x012b:
+        if (r0 == 0) goto L_0x0144;
+    L_0x0123:
         r0 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r0 = -r0;
@@ -1225,16 +1226,16 @@ public class ContentPreviewViewer {
         r10.translate(r0, r2);
         r0 = r9.stickerEmojiLayout;
         r0.draw(r10);
-    L_0x014c:
+    L_0x0144:
         r10.restore();
         r10 = r9.isVisible;
         r0 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
-        if (r10 == 0) goto L_0x017a;
-    L_0x0155:
+        if (r10 == 0) goto L_0x0172;
+    L_0x014d:
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 == 0) goto L_0x01d5;
-    L_0x015b:
+        if (r10 == 0) goto L_0x01cc;
+    L_0x0153:
         r2 = java.lang.System.currentTimeMillis();
         r4 = r9.lastUpdateTime;
         r4 = r2 - r4;
@@ -1248,16 +1249,16 @@ public class ContentPreviewViewer {
         r10.invalidate();
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 <= 0) goto L_0x01d5;
-    L_0x0177:
+        if (r10 <= 0) goto L_0x01cc;
+    L_0x016f:
         r9.showProgress = r1;
-        goto L_0x01d5;
-    L_0x017a:
+        goto L_0x01cc;
+    L_0x0172:
         r10 = r9.showProgress;
         r1 = 0;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 == 0) goto L_0x01d5;
-    L_0x0181:
+        if (r10 == 0) goto L_0x01cc;
+    L_0x0179:
         r2 = java.lang.System.currentTimeMillis();
         r4 = r9.lastUpdateTime;
         r4 = r2 - r4;
@@ -1271,14 +1272,14 @@ public class ContentPreviewViewer {
         r10.invalidate();
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 >= 0) goto L_0x019f;
-    L_0x019d:
+        if (r10 >= 0) goto L_0x0197;
+    L_0x0195:
         r9.showProgress = r1;
-    L_0x019f:
+    L_0x0197:
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 != 0) goto L_0x01d5;
-    L_0x01a5:
+        if (r10 != 0) goto L_0x01cc;
+    L_0x019d:
         r10 = r9.centerImage;
         r0 = 0;
         r10.setImageBitmap(r0);
@@ -1287,21 +1288,21 @@ public class ContentPreviewViewer {
         r10 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$3zyytvnhTcdtAb2UIfBrX-cZ_go;
         r10.<init>(r9);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);
-        r10 = r9.windowView;	 Catch:{ Exception -> 0x01d1 }
-        r10 = r10.getParent();	 Catch:{ Exception -> 0x01d1 }
-        if (r10 == 0) goto L_0x01d5;
-    L_0x01c0:
-        r10 = r9.parentActivity;	 Catch:{ Exception -> 0x01d1 }
+        r10 = r9.windowView;	 Catch:{ Exception -> 0x01c8 }
+        r10 = r10.getParent();	 Catch:{ Exception -> 0x01c8 }
+        if (r10 == 0) goto L_0x01cc;
+    L_0x01b8:
+        r10 = r9.parentActivity;	 Catch:{ Exception -> 0x01c8 }
         r0 = "window";
-        r10 = r10.getSystemService(r0);	 Catch:{ Exception -> 0x01d1 }
-        r10 = (android.view.WindowManager) r10;	 Catch:{ Exception -> 0x01d1 }
-        r0 = r9.windowView;	 Catch:{ Exception -> 0x01d1 }
-        r10.removeView(r0);	 Catch:{ Exception -> 0x01d1 }
-        goto L_0x01d5;
-    L_0x01d1:
+        r10 = r10.getSystemService(r0);	 Catch:{ Exception -> 0x01c8 }
+        r10 = (android.view.WindowManager) r10;	 Catch:{ Exception -> 0x01c8 }
+        r0 = r9.windowView;	 Catch:{ Exception -> 0x01c8 }
+        r10.removeView(r0);	 Catch:{ Exception -> 0x01c8 }
+        goto L_0x01cc;
+    L_0x01c8:
         r10 = move-exception;
         org.telegram.messenger.FileLog.e(r10);
-    L_0x01d5:
+    L_0x01cc:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onDraw(android.graphics.Canvas):void");

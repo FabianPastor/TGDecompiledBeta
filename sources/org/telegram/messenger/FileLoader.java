@@ -1644,6 +1644,7 @@ public class FileLoader extends BaseController {
                 Thread.yield();
                 fileOutputStream.write(bArr, 0, read);
             } else {
+                fileOutputStream.getFD().sync();
                 fileOutputStream.close();
                 return true;
             }

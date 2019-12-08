@@ -950,6 +950,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             imageView = new ImageView(getContext());
             imageView.setImageResource(NUM);
             imageView.setScaleType(ScaleType.CENTER);
+            imageView.setColorFilter(new PorterDuffColorFilter(-13660983, Mode.MULTIPLY));
             frameLayout.addView(imageView, LayoutHelper.createFrame(50, -1.0f));
         }
         return frameLayout;
@@ -1020,6 +1021,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             ImageView imageView = new ImageView(getContext());
             imageView.setImageResource(NUM);
             imageView.setScaleType(ScaleType.CENTER);
+            imageView.setColorFilter(new PorterDuffColorFilter(-13660983, Mode.MULTIPLY));
             anonymousClass9.addView(imageView, LayoutHelper.createFrame(50, -1.0f));
         }
         return anonymousClass9;

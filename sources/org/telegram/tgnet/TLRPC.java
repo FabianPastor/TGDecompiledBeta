@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 public class TLRPC {
     public static final int CHAT_FLAG_IS_PUBLIC = 64;
-    public static final int LAYER = 102;
+    public static final int LAYER = 103;
     public static final int MESSAGE_FLAG_EDITED = 32768;
     public static final int MESSAGE_FLAG_FWD = 4;
     public static final int MESSAGE_FLAG_HAS_BOT_ID = 2048;
@@ -2278,7 +2278,7 @@ public class TLRPC {
 
         /* JADX WARNING: Removed duplicated region for block: B:28:0x0045  */
         /* JADX WARNING: Removed duplicated region for block: B:37:0x0057  */
-        /* JADX WARNING: Removed duplicated region for block: B:57:0x00a0  */
+        /* JADX WARNING: Removed duplicated region for block: B:57:0x009f  */
         /* JADX WARNING: Missing block: B:34:0x0051, code skipped:
             if (r6 == r9) goto L_0x0053;
      */
@@ -2364,22 +2364,22 @@ public class TLRPC {
             if (r9 == r5) goto L_0x0061;
         L_0x005d:
             r9 = r7.legacy;
-            if (r9 == 0) goto L_0x0111;
+            if (r9 == 0) goto L_0x010f;
         L_0x0061:
             r9 = 2;
-            if (r0 == 0) goto L_0x009a;
+            if (r0 == 0) goto L_0x0099;
         L_0x0064:
-            if (r3 == 0) goto L_0x009a;
+            if (r3 == 0) goto L_0x0099;
         L_0x0066:
             r0 = r7.message;
             r0 = r0.length();
             r3 = 6;
-            if (r0 <= r3) goto L_0x008a;
+            if (r0 <= r3) goto L_0x0089;
         L_0x006f:
             r0 = r7.message;
             r0 = r0.charAt(r9);
             r3 = 95;
-            if (r0 != r3) goto L_0x008a;
+            if (r0 != r3) goto L_0x0089;
         L_0x0079:
             r0 = new java.util.HashMap;
             r0.<init>();
@@ -2388,77 +2388,77 @@ public class TLRPC {
             r3 = r7.message;
             r4 = "ve";
             r0.put(r4, r3);
-        L_0x008a:
+        L_0x0089:
             r0 = r7.params;
-            if (r0 != 0) goto L_0x0096;
-        L_0x008e:
+            if (r0 != 0) goto L_0x0095;
+        L_0x008d:
             r0 = r7.message;
             r0 = r0.length();
-            if (r0 != r9) goto L_0x009a;
-        L_0x0096:
+            if (r0 != r9) goto L_0x0099;
+        L_0x0095:
             r0 = "";
             r7.message = r0;
-        L_0x009a:
+        L_0x0099:
             r0 = r8.remaining();
-            if (r0 <= 0) goto L_0x0111;
-        L_0x00a0:
+            if (r0 <= 0) goto L_0x010f;
+        L_0x009f:
             r0 = r8.readString(r1);
             r7.attachPath = r0;
             r0 = r7.id;
-            if (r0 < 0) goto L_0x00b2;
-        L_0x00aa:
+            if (r0 < 0) goto L_0x00b1;
+        L_0x00a9:
             r0 = r7.send_state;
-            if (r0 == r5) goto L_0x00b2;
-        L_0x00ae:
+            if (r0 == r5) goto L_0x00b1;
+        L_0x00ad:
             r0 = r7.legacy;
-            if (r0 == 0) goto L_0x0111;
-        L_0x00b2:
+            if (r0 == 0) goto L_0x010f;
+        L_0x00b1:
             r0 = r7.attachPath;
             r3 = "||";
             r0 = r0.startsWith(r3);
-            if (r0 == 0) goto L_0x0111;
-        L_0x00bd:
+            if (r0 == 0) goto L_0x010f;
+        L_0x00bb:
             r0 = r7.attachPath;
             r3 = "\\|\\|";
             r0 = r0.split(r3);
             r3 = r0.length;
-            if (r3 <= 0) goto L_0x0111;
-        L_0x00c8:
+            if (r3 <= 0) goto L_0x010f;
+        L_0x00c6:
             r3 = r7.params;
-            if (r3 != 0) goto L_0x00d3;
-        L_0x00cc:
+            if (r3 != 0) goto L_0x00d1;
+        L_0x00ca:
             r3 = new java.util.HashMap;
             r3.<init>();
             r7.params = r3;
-        L_0x00d3:
+        L_0x00d1:
             r3 = 1;
-        L_0x00d4:
+        L_0x00d2:
             r4 = r0.length;
             r4 = r4 - r2;
-            if (r3 >= r4) goto L_0x00ef;
-        L_0x00d8:
+            if (r3 >= r4) goto L_0x00ed;
+        L_0x00d6:
             r4 = r0[r3];
             r5 = "\\|=\\|";
             r4 = r4.split(r5);
             r5 = r4.length;
-            if (r5 != r9) goto L_0x00ec;
-        L_0x00e3:
+            if (r5 != r9) goto L_0x00ea;
+        L_0x00e1:
             r5 = r7.params;
             r6 = r4[r1];
             r4 = r4[r2];
             r5.put(r6, r4);
-        L_0x00ec:
+        L_0x00ea:
             r3 = r3 + 1;
-            goto L_0x00d4;
-        L_0x00ef:
+            goto L_0x00d2;
+        L_0x00ed:
             r9 = r0.length;
             r9 = r9 - r2;
             r9 = r0[r9];
             r9 = r9.trim();
             r7.attachPath = r9;
             r9 = r7.legacy;
-            if (r9 == 0) goto L_0x0111;
-        L_0x00fd:
+            if (r9 == 0) goto L_0x010f;
+        L_0x00fb:
             r9 = r7.params;
             r0 = "legacy_layer";
             r9 = r9.get(r0);
@@ -2466,17 +2466,17 @@ public class TLRPC {
             r9 = org.telegram.messenger.Utilities.parseInt(r9);
             r9 = r9.intValue();
             r7.layer = r9;
-        L_0x0111:
+        L_0x010f:
             r9 = r7.flags;
             r9 = r9 & 4;
-            if (r9 == 0) goto L_0x0121;
-        L_0x0117:
+            if (r9 == 0) goto L_0x011f;
+        L_0x0115:
             r9 = r7.id;
-            if (r9 >= 0) goto L_0x0121;
-        L_0x011b:
+            if (r9 >= 0) goto L_0x011f;
+        L_0x0119:
             r8 = r8.readInt32(r1);
             r7.fwd_msg_id = r8;
-        L_0x0121:
+        L_0x011f:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, int):void");
@@ -2521,8 +2521,8 @@ public class TLRPC {
                 if (this.params == null) {
                     this.params = new HashMap();
                 }
-                this.layer = 102;
-                this.params.put("legacy_layer", "102");
+                this.layer = 103;
+                this.params.put("legacy_layer", "103");
             }
             if (this.id < 0 || this.send_state == 3 || this.legacy) {
                 hashMap = this.params;
@@ -5017,6 +5017,8 @@ public class TLRPC {
     public static class TL_account_registerDevice extends TLObject {
         public static int constructor = NUM;
         public boolean app_sandbox;
+        public int flags;
+        public boolean no_muted;
         public ArrayList<Integer> other_uids = new ArrayList();
         public byte[] secret;
         public String token;
@@ -5028,6 +5030,8 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
             abstractSerializedData.writeInt32(constructor);
+            this.flags = this.no_muted ? this.flags | 1 : this.flags & -2;
+            abstractSerializedData.writeInt32(this.flags);
             abstractSerializedData.writeInt32(this.token_type);
             abstractSerializedData.writeString(this.token);
             abstractSerializedData.writeBool(this.app_sandbox);

@@ -99,18 +99,18 @@ public class GroupCreateUserCell extends FrameLayout {
         this.avatarImageView.getImageReceiver().cancelLoadImage();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x0057  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0054  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x005c  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x007b A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0194 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x018f  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0194 A:{RETURN} */
-    /* JADX WARNING: Missing block: B:24:0x003f, code skipped:
-            if (r7.local_id != r1.local_id) goto L_0x0041;
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0056  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0053  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x005b  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x007a A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x0192 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x018d  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x0192 A:{RETURN} */
+    /* JADX WARNING: Missing block: B:24:0x003e, code skipped:
+            if (r7.local_id != r1.local_id) goto L_0x0040;
      */
-    /* JADX WARNING: Missing block: B:99:0x0175, code skipped:
-            if (r7.local_id != r1.local_id) goto L_0x0177;
+    /* JADX WARNING: Missing block: B:99:0x0173, code skipped:
+            if (r7.local_id != r1.local_id) goto L_0x0175;
      */
     public void update(int r14) {
         /*
@@ -126,135 +126,135 @@ public class GroupCreateUserCell extends FrameLayout {
         r4 = 0;
         r5 = "windowBackgroundWhiteGrayText";
         r6 = 1;
-        if (r1 == 0) goto L_0x0147;
-    L_0x0011:
+        if (r1 == 0) goto L_0x0145;
+    L_0x0010:
         r0 = (org.telegram.tgnet.TLRPC.User) r0;
         r1 = r0.photo;
-        if (r1 == 0) goto L_0x001a;
-    L_0x0017:
+        if (r1 == 0) goto L_0x0019;
+    L_0x0016:
         r1 = r1.photo_small;
-        goto L_0x001b;
-    L_0x001a:
+        goto L_0x001a;
+    L_0x0019:
         r1 = r3;
-    L_0x001b:
-        if (r14 == 0) goto L_0x007c;
-    L_0x001d:
+    L_0x001a:
+        if (r14 == 0) goto L_0x007b;
+    L_0x001c:
         r7 = r14 & 2;
-        if (r7 == 0) goto L_0x0043;
-    L_0x0021:
+        if (r7 == 0) goto L_0x0042;
+    L_0x0020:
         r7 = r13.lastAvatar;
-        if (r7 == 0) goto L_0x0027;
-    L_0x0025:
-        if (r1 == 0) goto L_0x0041;
-    L_0x0027:
+        if (r7 == 0) goto L_0x0026;
+    L_0x0024:
+        if (r1 == 0) goto L_0x0040;
+    L_0x0026:
         r7 = r13.lastAvatar;
-        if (r7 != 0) goto L_0x002d;
-    L_0x002b:
-        if (r1 != 0) goto L_0x0041;
-    L_0x002d:
+        if (r7 != 0) goto L_0x002c;
+    L_0x002a:
+        if (r1 != 0) goto L_0x0040;
+    L_0x002c:
         r7 = r13.lastAvatar;
-        if (r7 == 0) goto L_0x0043;
-    L_0x0031:
-        if (r1 == 0) goto L_0x0043;
-    L_0x0033:
+        if (r7 == 0) goto L_0x0042;
+    L_0x0030:
+        if (r1 == 0) goto L_0x0042;
+    L_0x0032:
         r8 = r7.volume_id;
         r10 = r1.volume_id;
         r12 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r12 != 0) goto L_0x0041;
-    L_0x003b:
+        if (r12 != 0) goto L_0x0040;
+    L_0x003a:
         r7 = r7.local_id;
         r1 = r1.local_id;
-        if (r7 == r1) goto L_0x0043;
-    L_0x0041:
+        if (r7 == r1) goto L_0x0042;
+    L_0x0040:
         r1 = 1;
-        goto L_0x0044;
-    L_0x0043:
+        goto L_0x0043;
+    L_0x0042:
         r1 = 0;
-    L_0x0044:
-        if (r0 == 0) goto L_0x005d;
-    L_0x0046:
+    L_0x0043:
+        if (r0 == 0) goto L_0x005c;
+    L_0x0045:
         r7 = r13.currentStatus;
-        if (r7 != 0) goto L_0x005d;
-    L_0x004a:
-        if (r1 != 0) goto L_0x005d;
-    L_0x004c:
+        if (r7 != 0) goto L_0x005c;
+    L_0x0049:
+        if (r1 != 0) goto L_0x005c;
+    L_0x004b:
         r7 = r14 & 4;
-        if (r7 == 0) goto L_0x005d;
-    L_0x0050:
+        if (r7 == 0) goto L_0x005c;
+    L_0x004f:
         r7 = r0.status;
-        if (r7 == 0) goto L_0x0057;
-    L_0x0054:
+        if (r7 == 0) goto L_0x0056;
+    L_0x0053:
         r7 = r7.expires;
-        goto L_0x0058;
-    L_0x0057:
+        goto L_0x0057;
+    L_0x0056:
         r7 = 0;
-    L_0x0058:
+    L_0x0057:
         r8 = r13.lastStatus;
-        if (r7 == r8) goto L_0x005d;
-    L_0x005c:
+        if (r7 == r8) goto L_0x005c;
+    L_0x005b:
         r1 = 1;
-    L_0x005d:
-        if (r1 != 0) goto L_0x0078;
-    L_0x005f:
+    L_0x005c:
+        if (r1 != 0) goto L_0x0077;
+    L_0x005e:
         r7 = r13.currentName;
-        if (r7 != 0) goto L_0x0078;
-    L_0x0063:
+        if (r7 != 0) goto L_0x0077;
+    L_0x0062:
         r7 = r13.lastName;
-        if (r7 == 0) goto L_0x0078;
-    L_0x0067:
+        if (r7 == 0) goto L_0x0077;
+    L_0x0066:
         r14 = r14 & r6;
-        if (r14 == 0) goto L_0x0078;
-    L_0x006a:
+        if (r14 == 0) goto L_0x0077;
+    L_0x0069:
         r14 = org.telegram.messenger.UserObject.getUserName(r0);
         r7 = r13.lastName;
         r7 = r14.equals(r7);
-        if (r7 != 0) goto L_0x0079;
-    L_0x0076:
+        if (r7 != 0) goto L_0x0078;
+    L_0x0075:
         r1 = 1;
-        goto L_0x0079;
+        goto L_0x0078;
+    L_0x0077:
+        r14 = r3;
     L_0x0078:
-        r14 = r3;
-    L_0x0079:
-        if (r1 != 0) goto L_0x007d;
-    L_0x007b:
+        if (r1 != 0) goto L_0x007c;
+    L_0x007a:
         return;
-    L_0x007c:
+    L_0x007b:
         r14 = r3;
-    L_0x007d:
+    L_0x007c:
         r1 = r13.avatarDrawable;
         r1.setInfo(r0);
         r1 = r0.status;
-        if (r1 == 0) goto L_0x0089;
-    L_0x0086:
+        if (r1 == 0) goto L_0x0088;
+    L_0x0085:
         r1 = r1.expires;
-        goto L_0x008a;
-    L_0x0089:
+        goto L_0x0089;
+    L_0x0088:
         r1 = 0;
-    L_0x008a:
+    L_0x0089:
         r13.lastStatus = r1;
         r1 = r13.currentName;
-        if (r1 == 0) goto L_0x0098;
-    L_0x0090:
+        if (r1 == 0) goto L_0x0097;
+    L_0x008f:
         r13.lastName = r3;
         r14 = r13.nameTextView;
         r14.setText(r1, r6);
-        goto L_0x00a7;
-    L_0x0098:
-        if (r14 != 0) goto L_0x009e;
-    L_0x009a:
+        goto L_0x00a6;
+    L_0x0097:
+        if (r14 != 0) goto L_0x009d;
+    L_0x0099:
         r14 = org.telegram.messenger.UserObject.getUserName(r0);
-    L_0x009e:
+    L_0x009d:
         r13.lastName = r14;
         r14 = r13.nameTextView;
         r1 = r13.lastName;
         r14.setText(r1);
-    L_0x00a7:
+    L_0x00a6:
         r14 = r13.currentStatus;
-        if (r14 != 0) goto L_0x013a;
-    L_0x00ab:
+        if (r14 != 0) goto L_0x0138;
+    L_0x00aa:
         r14 = r0.bot;
-        if (r14 == 0) goto L_0x00cc;
-    L_0x00af:
+        if (r14 == 0) goto L_0x00cb;
+    L_0x00ae:
         r14 = r13.statusTextView;
         r14.setTag(r5);
         r14 = r13.statusTextView;
@@ -265,33 +265,33 @@ public class GroupCreateUserCell extends FrameLayout {
         r3 = "Bot";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
-        goto L_0x013a;
-    L_0x00cc:
+        goto L_0x0138;
+    L_0x00cb:
         r14 = r0.id;
         r1 = r13.currentAccount;
         r1 = org.telegram.messenger.UserConfig.getInstance(r1);
         r1 = r1.getClientUserId();
-        if (r14 == r1) goto L_0x011b;
-    L_0x00da:
+        if (r14 == r1) goto L_0x011a;
+    L_0x00d9:
         r14 = r0.status;
-        if (r14 == 0) goto L_0x00ec;
-    L_0x00de:
+        if (r14 == 0) goto L_0x00eb;
+    L_0x00dd:
         r14 = r14.expires;
         r1 = r13.currentAccount;
         r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
         r1 = r1.getCurrentTime();
-        if (r14 > r1) goto L_0x011b;
-    L_0x00ec:
+        if (r14 > r1) goto L_0x011a;
+    L_0x00eb:
         r14 = r13.currentAccount;
         r14 = org.telegram.messenger.MessagesController.getInstance(r14);
         r14 = r14.onlinePrivacy;
         r1 = r0.id;
         r1 = java.lang.Integer.valueOf(r1);
         r14 = r14.containsKey(r1);
-        if (r14 == 0) goto L_0x0101;
+        if (r14 == 0) goto L_0x0100;
+    L_0x00ff:
+        goto L_0x011a;
     L_0x0100:
-        goto L_0x011b;
-    L_0x0101:
         r14 = r13.statusTextView;
         r14.setTag(r5);
         r14 = r13.statusTextView;
@@ -301,8 +301,8 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = r13.currentAccount;
         r1 = org.telegram.messenger.LocaleController.formatUserStatus(r1, r0);
         r14.setText(r1);
-        goto L_0x013a;
-    L_0x011b:
+        goto L_0x0138;
+    L_0x011a:
         r14 = r13.statusTextView;
         r1 = "windowBackgroundWhiteBlueText";
         r14.setTag(r1);
@@ -310,157 +310,157 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d06d5 float:1.8745662E38 double:1.0531306417E-314;
+        r1 = NUM; // 0x7f0d06df float:1.8745682E38 double:1.0531306466E-314;
         r3 = "Online";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
-    L_0x013a:
+    L_0x0138:
         r14 = r13.avatarImageView;
         r1 = org.telegram.messenger.ImageLocation.getForUser(r0, r4);
         r3 = r13.avatarDrawable;
         r14.setImage(r1, r2, r3, r0);
-        goto L_0x0219;
-    L_0x0147:
+        goto L_0x0217;
+    L_0x0145:
         r0 = (org.telegram.tgnet.TLRPC.Chat) r0;
         r1 = r0.photo;
-        if (r1 == 0) goto L_0x0150;
-    L_0x014d:
+        if (r1 == 0) goto L_0x014e;
+    L_0x014b:
         r1 = r1.photo_small;
-        goto L_0x0151;
-    L_0x0150:
+        goto L_0x014f;
+    L_0x014e:
         r1 = r3;
+    L_0x014f:
+        if (r14 == 0) goto L_0x0193;
     L_0x0151:
-        if (r14 == 0) goto L_0x0195;
-    L_0x0153:
         r7 = r14 & 2;
-        if (r7 == 0) goto L_0x0179;
-    L_0x0157:
+        if (r7 == 0) goto L_0x0177;
+    L_0x0155:
         r7 = r13.lastAvatar;
-        if (r7 == 0) goto L_0x015d;
+        if (r7 == 0) goto L_0x015b;
+    L_0x0159:
+        if (r1 == 0) goto L_0x0175;
     L_0x015b:
-        if (r1 == 0) goto L_0x0177;
-    L_0x015d:
         r7 = r13.lastAvatar;
-        if (r7 != 0) goto L_0x0163;
+        if (r7 != 0) goto L_0x0161;
+    L_0x015f:
+        if (r1 != 0) goto L_0x0175;
     L_0x0161:
-        if (r1 != 0) goto L_0x0177;
-    L_0x0163:
         r7 = r13.lastAvatar;
-        if (r7 == 0) goto L_0x0179;
+        if (r7 == 0) goto L_0x0177;
+    L_0x0165:
+        if (r1 == 0) goto L_0x0177;
     L_0x0167:
-        if (r1 == 0) goto L_0x0179;
-    L_0x0169:
         r8 = r7.volume_id;
         r10 = r1.volume_id;
         r12 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r12 != 0) goto L_0x0177;
-    L_0x0171:
+        if (r12 != 0) goto L_0x0175;
+    L_0x016f:
         r7 = r7.local_id;
         r1 = r1.local_id;
-        if (r7 == r1) goto L_0x0179;
-    L_0x0177:
+        if (r7 == r1) goto L_0x0177;
+    L_0x0175:
         r1 = 1;
-        goto L_0x017a;
-    L_0x0179:
+        goto L_0x0178;
+    L_0x0177:
         r1 = 0;
+    L_0x0178:
+        if (r1 != 0) goto L_0x018f;
     L_0x017a:
-        if (r1 != 0) goto L_0x0191;
-    L_0x017c:
         r7 = r13.currentName;
-        if (r7 != 0) goto L_0x0191;
-    L_0x0180:
+        if (r7 != 0) goto L_0x018f;
+    L_0x017e:
         r7 = r13.lastName;
-        if (r7 == 0) goto L_0x0191;
-    L_0x0184:
+        if (r7 == 0) goto L_0x018f;
+    L_0x0182:
         r14 = r14 & r6;
-        if (r14 == 0) goto L_0x0191;
-    L_0x0187:
+        if (r14 == 0) goto L_0x018f;
+    L_0x0185:
         r14 = r0.title;
         r7 = r14.equals(r7);
-        if (r7 != 0) goto L_0x0192;
-    L_0x018f:
+        if (r7 != 0) goto L_0x0190;
+    L_0x018d:
         r1 = 1;
-        goto L_0x0192;
-    L_0x0191:
+        goto L_0x0190;
+    L_0x018f:
         r14 = r3;
+    L_0x0190:
+        if (r1 != 0) goto L_0x0194;
     L_0x0192:
-        if (r1 != 0) goto L_0x0196;
-    L_0x0194:
         return;
-    L_0x0195:
+    L_0x0193:
         r14 = r3;
-    L_0x0196:
+    L_0x0194:
         r1 = r13.avatarDrawable;
         r1.setInfo(r0);
         r1 = r13.currentName;
-        if (r1 == 0) goto L_0x01a7;
-    L_0x019f:
+        if (r1 == 0) goto L_0x01a5;
+    L_0x019d:
         r13.lastName = r3;
         r14 = r13.nameTextView;
         r14.setText(r1, r6);
-        goto L_0x01b4;
+        goto L_0x01b2;
+    L_0x01a5:
+        if (r14 != 0) goto L_0x01a9;
     L_0x01a7:
-        if (r14 != 0) goto L_0x01ab;
-    L_0x01a9:
         r14 = r0.title;
-    L_0x01ab:
+    L_0x01a9:
         r13.lastName = r14;
         r14 = r13.nameTextView;
         r1 = r13.lastName;
         r14.setText(r1);
-    L_0x01b4:
+    L_0x01b2:
         r14 = r13.currentStatus;
-        if (r14 != 0) goto L_0x020e;
-    L_0x01b8:
+        if (r14 != 0) goto L_0x020c;
+    L_0x01b6:
         r14 = r13.statusTextView;
         r14.setTag(r5);
         r14 = r13.statusTextView;
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r14.setTextColor(r1);
         r14 = r0.participants_count;
-        if (r14 == 0) goto L_0x01d6;
-    L_0x01ca:
+        if (r14 == 0) goto L_0x01d4;
+    L_0x01c8:
         r1 = r13.statusTextView;
         r3 = "Members";
         r14 = org.telegram.messenger.LocaleController.formatPluralString(r3, r14);
         r1.setText(r14);
-        goto L_0x020e;
-    L_0x01d6:
+        goto L_0x020c;
+    L_0x01d4:
         r14 = r0.has_geo;
-        if (r14 == 0) goto L_0x01e9;
-    L_0x01da:
+        if (r14 == 0) goto L_0x01e7;
+    L_0x01d8:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d05bb float:1.874509E38 double:1.0531305023E-314;
+        r1 = NUM; // 0x7f0d05c2 float:1.8745104E38 double:1.053130506E-314;
         r3 = "MegaLocation";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
-        goto L_0x020e;
-    L_0x01e9:
+        goto L_0x020c;
+    L_0x01e7:
         r14 = r0.username;
         r14 = android.text.TextUtils.isEmpty(r14);
-        if (r14 == 0) goto L_0x0200;
-    L_0x01f1:
+        if (r14 == 0) goto L_0x01fe;
+    L_0x01ef:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d05bc float:1.8745092E38 double:1.053130503E-314;
+        r1 = NUM; // 0x7f0d05c3 float:1.8745106E38 double:1.0531305063E-314;
         r3 = "MegaPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
-        goto L_0x020e;
-    L_0x0200:
+        goto L_0x020c;
+    L_0x01fe:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d05bf float:1.8745098E38 double:1.0531305043E-314;
+        r1 = NUM; // 0x7f0d05c6 float:1.8745112E38 double:1.053130508E-314;
         r3 = "MegaPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
-    L_0x020e:
+    L_0x020c:
         r14 = r13.avatarImageView;
         r1 = org.telegram.messenger.ImageLocation.getForChat(r0, r4);
         r3 = r13.avatarDrawable;
         r14.setImage(r1, r2, r3, r0);
-    L_0x0219:
+    L_0x0217:
         r14 = r13.currentStatus;
-        if (r14 == 0) goto L_0x0230;
-    L_0x021d:
+        if (r14 == 0) goto L_0x022e;
+    L_0x021b:
         r0 = r13.statusTextView;
         r0.setText(r14, r6);
         r14 = r13.statusTextView;
@@ -468,7 +468,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r14 = r13.statusTextView;
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r14.setTextColor(r0);
-    L_0x0230:
+    L_0x022e:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.GroupCreateUserCell.update(int):void");

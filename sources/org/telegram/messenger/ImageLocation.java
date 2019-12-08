@@ -28,6 +28,7 @@ public class ImageLocation {
     public byte[] iv;
     public byte[] key;
     public TL_fileLocationToBeDeprecated location;
+    public boolean lottieAnimation;
     public String path;
     public Photo photo;
     public long photoId;
@@ -165,7 +166,11 @@ public class ImageLocation {
             if (inputStickerSet == null) {
                 return null;
             }
-            return getForPhoto(photoSize.location, photoSize.size, null, null, null, false, document.dc_id, inputStickerSet, photoSize.type);
+            ImageLocation forPhoto = getForPhoto(photoSize.location, photoSize.size, null, null, null, false, document.dc_id, inputStickerSet, photoSize.type);
+            if (MessageObject.isAnimatedStickerDocument(document)) {
+                forPhoto.lottieAnimation = true;
+            }
+            return forPhoto;
         }
     }
 

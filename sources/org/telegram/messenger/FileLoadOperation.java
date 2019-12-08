@@ -249,6 +249,7 @@ public class FileLoadOperation {
             }
             this.allowDisordererFileSave = true;
         }
+        this.ungzip = imageLocation.lottieAnimation;
         int i2 = imageLocation.dc_id;
         this.datacenterId = i2;
         this.initialDatacenterId = i2;

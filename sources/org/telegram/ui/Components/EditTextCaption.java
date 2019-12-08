@@ -97,7 +97,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:8:0x00c2  */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x00be  */
     public void makeSelectedUrl() {
         /*
         r9 = this;
@@ -120,7 +120,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r1.setTextColor(r3);
         r3 = "URL";
-        r4 = NUM; // 0x7f0d0a27 float:1.8747386E38 double:1.0531310616E-314;
+        r4 = NUM; // 0x7f0d0a31 float:1.8747406E38 double:1.0531310666E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r1.setHintText(r3);
         r3 = "windowBackgroundWhiteBlueHeader";
@@ -145,20 +145,20 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1.setPadding(r4, r4, r4, r4);
         r0.setView(r1);
         r5 = r9.selectionStart;
-        if (r5 < 0) goto L_0x0089;
-    L_0x007f:
+        if (r5 < 0) goto L_0x0085;
+    L_0x007b:
         r6 = r9.selectionEnd;
-        if (r6 < 0) goto L_0x0089;
-    L_0x0083:
+        if (r6 < 0) goto L_0x0085;
+    L_0x007f:
         r7 = -1;
         r9.selectionEnd = r7;
         r9.selectionStart = r7;
-        goto L_0x0091;
-    L_0x0089:
+        goto L_0x008d;
+    L_0x0085:
         r5 = r9.getSelectionStart();
         r6 = r9.getSelectionEnd();
-    L_0x0091:
-        r7 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+    L_0x008d:
+        r7 = NUM; // 0x7f0d06dc float:1.8745676E38 double:1.053130645E-314;
         r8 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r8 = new org.telegram.ui.Components.-$$Lambda$EditTextCaption$BQIhHIR0EWfMGyyXmJJ-pkFKO1Y;
@@ -174,15 +174,15 @@ public class EditTextCaption extends EditTextBoldCursor {
         r0.setOnShowListener(r3);
         r0 = r1.getLayoutParams();
         r0 = (android.view.ViewGroup.MarginLayoutParams) r0;
-        if (r0 == 0) goto L_0x00e0;
-    L_0x00c2:
+        if (r0 == 0) goto L_0x00dc;
+    L_0x00be:
         r3 = r0 instanceof android.widget.FrameLayout.LayoutParams;
-        if (r3 == 0) goto L_0x00cb;
-    L_0x00c6:
+        if (r3 == 0) goto L_0x00c7;
+    L_0x00c2:
         r3 = r0;
         r3 = (android.widget.FrameLayout.LayoutParams) r3;
         r3.gravity = r2;
-    L_0x00cb:
+    L_0x00c7:
         r2 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.leftMargin = r2;
@@ -191,7 +191,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.height = r2;
         r1.setLayoutParams(r0);
-    L_0x00e0:
+    L_0x00dc:
         r0 = r1.getText();
         r0 = r0.length();
         r1.setSelection(r4, r0);
@@ -241,7 +241,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:10:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:8:0x0026  */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x0023  */
     private void applyTextStyleToSelection(org.telegram.ui.Components.TextStyleSpan r5) {
         /*
         r4 = this;
@@ -259,15 +259,14 @@ public class EditTextCaption extends EditTextBoldCursor {
         r0 = r4.getSelectionStart();
         r1 = r4.getSelectionEnd();
     L_0x0016:
-        r4.getText();
         r2 = r4.getText();
         r3 = r4.allowTextEntitiesIntersection;
         org.telegram.messenger.MediaDataController.addStyleToText(r5, r0, r1, r2, r3);
         r5 = r4.delegate;
-        if (r5 == 0) goto L_0x0029;
-    L_0x0026:
+        if (r5 == 0) goto L_0x0026;
+    L_0x0023:
         r5.onSpansChanged();
-    L_0x0029:
+    L_0x0026:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EditTextCaption.applyTextStyleToSelection(org.telegram.ui.Components.TextStyleSpan):void");

@@ -181,11 +181,17 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View featuredStickerSetInfoCell = i != 0 ? i != 1 ? i != 2 ? null : new FeaturedStickerSetInfoCell(this.context, 8) : new EmptyCell(this.context) : new StickerEmojiCell(this.context) {
-                public void onMeasure(int i, int i2) {
-                    super.onMeasure(MeasureSpec.makeMeasureSpec(StickersAlert.this.itemSize, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
-                }
-            };
+            View featuredStickerSetInfoCell;
+            if (i != 0) {
+                featuredStickerSetInfoCell = i != 1 ? i != 2 ? null : new FeaturedStickerSetInfoCell(this.context, 8) : new EmptyCell(this.context);
+            } else {
+                featuredStickerSetInfoCell = new StickerEmojiCell(this.context) {
+                    public void onMeasure(int i, int i2) {
+                        super.onMeasure(MeasureSpec.makeMeasureSpec(StickersAlert.this.itemSize, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
+                    }
+                };
+                featuredStickerSetInfoCell.getImageView().setLayerNum(3);
+            }
             return new Holder(featuredStickerSetInfoCell);
         }
 
@@ -371,6 +377,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.parentFragment = baseFragment;
         loadStickerSet();
         init(context);
+    }
+
+    public void show() {
+        super.show();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(2));
     }
 
     public void setClearsInputField(boolean z) {
@@ -842,6 +853,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.stickerPreviewLayout.setOnClickListener(new -$$Lambda$StickersAlert$nsigcALZ-A8eXyilWi1cmTZCn2o(this));
         this.stickerImageView = new BackupImageView(context2);
         this.stickerImageView.setAspectFit(true);
+        this.stickerImageView.setLayerNum(3);
         this.stickerPreviewLayout.addView(this.stickerImageView);
         this.stickerEmojiTextView = new TextView(context2);
         this.stickerEmojiTextView.setTextSize(1, 30.0f);
@@ -883,7 +895,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r12 = r12.positionsToSets;
         r12 = r12.get(r13);
         r12 = (org.telegram.tgnet.TLRPC.StickerSetCovered) r12;
-        if (r12 == 0) goto L_0x011b;
+        if (r12 == 0) goto L_0x011a;
     L_0x0012:
         r11.dismiss();
         r3 = new org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
@@ -901,18 +913,18 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r12;
         r0.<init>(r1, r2, r3, r4, r5);
         r12.show();
-        goto L_0x011b;
+        goto L_0x011a;
     L_0x0035:
         r12 = r11.stickerSet;
-        if (r12 == 0) goto L_0x011b;
+        if (r12 == 0) goto L_0x011a;
     L_0x0039:
-        if (r13 < 0) goto L_0x011b;
+        if (r13 < 0) goto L_0x011a;
     L_0x003b:
         r12 = r12.documents;
         r12 = r12.size();
         if (r13 < r12) goto L_0x0045;
     L_0x0043:
-        goto L_0x011b;
+        goto L_0x011a;
     L_0x0045:
         r12 = r11.stickerSet;
         r12 = r12.documents;
@@ -1011,7 +1023,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r13.setDuration(r0);
         r13.start();
-    L_0x011b:
+    L_0x011a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.lambda$init$6$StickersAlert(android.view.View, int):void");
@@ -1203,7 +1215,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r1 = r0.set;
         r1 = r1.masks;
-        r6 = NUM; // 0x7f0d08a7 float:1.8746607E38 double:1.053130872E-314;
+        r6 = NUM; // 0x7f0d08b1 float:1.8746628E38 double:1.053130877E-314;
         r7 = "RemoveStickersCount";
         if (r1 == 0) goto L_0x00d0;
     L_0x00b9:
@@ -1449,6 +1461,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             this.reqId = 0;
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(2));
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
