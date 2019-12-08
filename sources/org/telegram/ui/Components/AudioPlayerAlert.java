@@ -1111,7 +1111,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r0.<init>(r5, r6);
         r1.setDelegate(r0);
         r6 = r5.parentActivity;
-        r6.lambda$runLinkRequest$29$LaunchActivity(r1);
+        r6.lambda$runLinkRequest$28$LaunchActivity(r1);
         r5.dismiss();
         goto L_0x0174;
     L_0x004b:

@@ -418,6 +418,9 @@ public class EditTextBoldCursor extends EditText {
     }
 
     public void setHintText(CharSequence charSequence) {
+        if (charSequence == null) {
+            charSequence = "";
+        }
         this.hintLayout = new StaticLayout(charSequence, getPaint(), AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
     }
 

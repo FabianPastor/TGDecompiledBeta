@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver;
+import androidx.recyclerview.widget.RecyclerView.ItemAnimator;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener;
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
@@ -44,6 +45,7 @@ import org.telegram.ui.ActionBar.Theme;
 public class RecyclerListView extends RecyclerView {
     private static int[] attributes;
     private static boolean gotAttributes;
+    private boolean allowItemsInteractionDuringAnimation = true;
     private Runnable clickRunnable;
     private int currentChildPosition;
     private View currentChildView;
@@ -746,7 +748,8 @@ public class RecyclerListView extends RecyclerView {
                 float x = motionEvent.getX();
                 float y = motionEvent.getY();
                 RecyclerListView.this.longPressCalled = false;
-                if (RecyclerListView.this.allowSelectChildAtPosition(x, y)) {
+                ItemAnimator itemAnimator = RecyclerListView.this.getItemAnimator();
+                if ((RecyclerListView.this.allowItemsInteractionDuringAnimation || itemAnimator == null || !itemAnimator.isRunning()) && RecyclerListView.this.allowSelectChildAtPosition(x, y)) {
                     RecyclerListView recyclerListView2 = RecyclerListView.this;
                     recyclerListView2.currentChildView = recyclerListView2.findChildViewUnder(x, y);
                 }
@@ -1663,6 +1666,10 @@ public class RecyclerListView extends RecyclerView {
                 this.selectorDrawable.setHotspot(f, f2);
             }
         }
+    }
+
+    public void setAllowItemsInteractionDuringAnimation(boolean z) {
+        this.allowItemsInteractionDuringAnimation = z;
     }
 
     public void hideSelector(boolean z) {

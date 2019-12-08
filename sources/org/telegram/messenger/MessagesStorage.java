@@ -92,7 +92,7 @@ import org.telegram.tgnet.TLRPC.photos_Photos;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 63;
+    private static final int LAST_DB_VERSION = 64;
     private File cacheFile;
     private SQLiteDatabase database;
     private int lastDateValue = 0;
@@ -374,7 +374,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 63").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 64").stepThis().dispose();
                 loadUnreadMessages();
                 loadPendingTasks();
                 try {
@@ -420,7 +420,7 @@ public class MessagesStorage extends BaseController {
                         FileLog.e(e2);
                     }
                 }
-                if (intValue < 63) {
+                if (intValue < 64) {
                     updateDbToLastVersion(intValue);
                 }
                 loadUnreadMessages();
@@ -655,9 +655,10 @@ public class MessagesStorage extends BaseController {
             this.database.executeFast("PRAGMA user_version = 28").stepThis().dispose();
             i = 28;
         }
+        String str = "DELETE FROM download_queue WHERE 1";
         if (i == 28 || i == 29) {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
-            this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
+            this.database.executeFast(str).stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 30").stepThis().dispose();
             i = 30;
         }
@@ -779,7 +780,7 @@ public class MessagesStorage extends BaseController {
         if (i == 50) {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
             this.database.executeFast("ALTER TABLE sent_files_v2 ADD COLUMN parent TEXT").stepThis().dispose();
-            this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
+            this.database.executeFast(str).stepThis().dispose();
             this.database.executeFast("ALTER TABLE download_queue ADD COLUMN parent TEXT").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 51").stepThis().dispose();
             i = 51;
@@ -848,6 +849,11 @@ public class MessagesStorage extends BaseController {
             this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages ON scheduled_messages(mid, send_state, date);").stepThis().dispose();
             this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages ON scheduled_messages(uid, date);").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 63").stepThis().dispose();
+            i = 63;
+        }
+        if (i == 63) {
+            this.database.executeFast(str).stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 64").stepThis().dispose();
         }
     }
 
@@ -5861,9 +5867,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:901:0x1506 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
     /* JADX WARNING: Removed duplicated region for block: B:968:0x165c  */
     /* JADX WARNING: Removed duplicated region for block: B:932:0x15a0 A:{SYNTHETIC, Splitter:B:932:0x15a0} */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261} */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261} */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261} */
+    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 , Splitter:B:754:0x1261} */
+    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 , Splitter:B:754:0x1261} */
+    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 , Splitter:B:754:0x1261} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -9851,7 +9857,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             sQLitePreparedStatement.bindInteger(5, encryptedChat.mtproto_seq);
             sQLitePreparedStatement.bindInteger(6, encryptedChat.id);
             sQLitePreparedStatement.step();
-            if (z) {
+            if (z && encryptedChat.in_seq_no != 0) {
                 long j = ((long) encryptedChat.id) << 32;
                 this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid IN (SELECT m.mid FROM messages as m LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.uid = %d AND m.date = 0 AND m.mid < 0 AND s.seq_out <= %d)", new Object[]{Long.valueOf(j), Integer.valueOf(encryptedChat.in_seq_no)})).stepThis().dispose();
             }

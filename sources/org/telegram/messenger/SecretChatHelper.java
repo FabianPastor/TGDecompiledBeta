@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 import java.io.File;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -114,6 +115,8 @@ public class SecretChatHelper extends BaseController {
     private SparseArray<EncryptedChat> acceptingChats = new SparseArray();
     public ArrayList<Update> delayedEncryptedChatUpdates = new ArrayList();
     private ArrayList<Long> pendingEncMessagesToDelete = new ArrayList();
+    private SparseArray<ArrayList<Update>> pendingSecretMessages = new SparseArray();
+    private SparseArray<SparseIntArray> requestedHoles = new SparseArray();
     private SparseArray<ArrayList<TL_decryptedMessageHolder>> secretHolesQueue = new SparseArray();
     private ArrayList<Integer> sendingNotifyLayer = new ArrayList();
     private boolean startingSecretChat = false;
@@ -177,6 +180,8 @@ public class SecretChatHelper extends BaseController {
         this.sendingNotifyLayer.clear();
         this.acceptingChats.clear();
         this.secretHolesQueue.clear();
+        this.pendingSecretMessages.clear();
+        this.requestedHoles.clear();
         this.delayedEncryptedChatUpdates.clear();
         this.pendingEncMessagesToDelete.clear();
         this.startingSecretChat = false;
@@ -452,6 +457,32 @@ public class SecretChatHelper extends BaseController {
             Message message2 = message;
             tL_decryptedMessageService.random_id = message2.random_id;
             performSendEncryptedRequest(tL_decryptedMessageService, message2, encryptedChat, null, null, null);
+        }
+    }
+
+    public void sendResendMessage(EncryptedChat encryptedChat, int i, int i2, Message message) {
+        if (encryptedChat instanceof TL_encryptedChat) {
+            SparseIntArray sparseIntArray = (SparseIntArray) this.requestedHoles.get(encryptedChat.id);
+            if (sparseIntArray == null || sparseIntArray.indexOfKey(i) < 0) {
+                if (sparseIntArray == null) {
+                    sparseIntArray = new SparseIntArray();
+                    this.requestedHoles.put(encryptedChat.id, sparseIntArray);
+                }
+                sparseIntArray.put(i, i2);
+                TL_decryptedMessageService tL_decryptedMessageService = new TL_decryptedMessageService();
+                if (message != null) {
+                    tL_decryptedMessageService.action = message.action.encryptedAction;
+                } else {
+                    tL_decryptedMessageService.action = new TL_decryptedMessageActionResend();
+                    DecryptedMessageAction decryptedMessageAction = tL_decryptedMessageService.action;
+                    decryptedMessageAction.start_seq_no = i;
+                    decryptedMessageAction.end_seq_no = i2;
+                    message = createServiceSecretMessage(encryptedChat, decryptedMessageAction);
+                }
+                Message message2 = message;
+                tL_decryptedMessageService.random_id = message2.random_id;
+                performSendEncryptedRequest(tL_decryptedMessageService, message2, encryptedChat, null, null, null);
+            }
         }
     }
 
@@ -1526,7 +1557,7 @@ public class SecretChatHelper extends BaseController {
                 SparseArray sparseArray = new SparseArray();
                 ArrayList arrayList2 = new ArrayList();
                 int i9 = i2;
-                for (i8 = i3; i8 < i9; i8 += 2) {
+                for (i8 = i3; i8 <= i9; i8 += 2) {
                     sparseArray.put(i8, null);
                 }
                 SQLiteCursor queryFinalized2 = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT m.data, r.random_id, s.seq_in, s.seq_out, m.ttl, s.mid FROM messages_seq as s LEFT JOIN randoms as r ON r.mid = s.mid LEFT JOIN messages as m ON m.mid = s.mid WHERE m.uid = %d AND m.out = 1 AND s.seq_out >= %d AND s.seq_out <= %d ORDER BY seq_out ASC", new Object[]{Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(i2)}), new Object[0]);
@@ -1573,7 +1604,8 @@ public class SecretChatHelper extends BaseController {
                 queryFinalized2.dispose();
                 if (sparseArray.size() != 0) {
                     for (i4 = 0; i4 < sparseArray.size(); i4++) {
-                        arrayList.add(createDeleteMessage(getUserConfig().getNewMessageId(), sparseArray.keyAt(i4), 0, Utilities.random.nextLong(), encryptedChat));
+                        int keyAt = sparseArray.keyAt(i4);
+                        arrayList.add(createDeleteMessage(getUserConfig().getNewMessageId(), keyAt, keyAt + 1, Utilities.random.nextLong(), encryptedChat));
                     }
                     getUserConfig().saveConfig(false);
                 }
@@ -1689,10 +1721,10 @@ public class SecretChatHelper extends BaseController {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x005b A:{Catch:{ Exception -> 0x0258 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0059 A:{Catch:{ Exception -> 0x0258 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x023e A:{Catch:{ Exception -> 0x0258 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x005e A:{Catch:{ Exception -> 0x0258 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x0082 A:{Catch:{ Exception -> 0x0288 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0080 A:{Catch:{ Exception -> 0x0288 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x026e A:{Catch:{ Exception -> 0x0288 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0085 A:{Catch:{ Exception -> 0x0288 }} */
     public java.util.ArrayList<org.telegram.tgnet.TLRPC.Message> decryptMessage(org.telegram.tgnet.TLRPC.EncryptedMessage r22) {
         /*
         r21 = this;
@@ -1704,83 +1736,104 @@ public class SecretChatHelper extends BaseController {
         r10 = 1;
         r11 = r1.getEncryptedChatDB(r2, r10);
         r12 = 0;
-        if (r11 == 0) goto L_0x025c;
+        if (r11 == 0) goto L_0x028c;
     L_0x0014:
         r1 = r11 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChatDiscarded;
         if (r1 == 0) goto L_0x001a;
     L_0x0018:
-        goto L_0x025c;
+        goto L_0x028c;
     L_0x001a:
-        r13 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0258 }
-        r1 = r0.bytes;	 Catch:{ Exception -> 0x0258 }
-        r1 = r1.length;	 Catch:{ Exception -> 0x0258 }
-        r13.<init>(r1);	 Catch:{ Exception -> 0x0258 }
-        r1 = r0.bytes;	 Catch:{ Exception -> 0x0258 }
-        r13.writeBytes(r1);	 Catch:{ Exception -> 0x0258 }
+        r1 = r11 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChatWaiting;	 Catch:{ Exception -> 0x0288 }
+        if (r1 == 0) goto L_0x0041;
+    L_0x001e:
+        r1 = r8.pendingSecretMessages;	 Catch:{ Exception -> 0x0288 }
+        r2 = r11.id;	 Catch:{ Exception -> 0x0288 }
+        r1 = r1.get(r2);	 Catch:{ Exception -> 0x0288 }
+        r1 = (java.util.ArrayList) r1;	 Catch:{ Exception -> 0x0288 }
+        if (r1 != 0) goto L_0x0036;
+    L_0x002a:
+        r1 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0288 }
+        r1.<init>();	 Catch:{ Exception -> 0x0288 }
+        r2 = r8.pendingSecretMessages;	 Catch:{ Exception -> 0x0288 }
+        r3 = r11.id;	 Catch:{ Exception -> 0x0288 }
+        r2.put(r3, r1);	 Catch:{ Exception -> 0x0288 }
+    L_0x0036:
+        r2 = new org.telegram.tgnet.TLRPC$TL_updateNewEncryptedMessage;	 Catch:{ Exception -> 0x0288 }
+        r2.<init>();	 Catch:{ Exception -> 0x0288 }
+        r2.message = r0;	 Catch:{ Exception -> 0x0288 }
+        r1.add(r2);	 Catch:{ Exception -> 0x0288 }
+        return r12;
+    L_0x0041:
+        r13 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0288 }
+        r1 = r0.bytes;	 Catch:{ Exception -> 0x0288 }
+        r1 = r1.length;	 Catch:{ Exception -> 0x0288 }
+        r13.<init>(r1);	 Catch:{ Exception -> 0x0288 }
+        r1 = r0.bytes;	 Catch:{ Exception -> 0x0288 }
+        r13.writeBytes(r1);	 Catch:{ Exception -> 0x0288 }
         r14 = 0;
-        r13.position(r14);	 Catch:{ Exception -> 0x0258 }
-        r1 = r13.readInt64(r14);	 Catch:{ Exception -> 0x0258 }
-        r3 = r11.key_fingerprint;	 Catch:{ Exception -> 0x0258 }
+        r13.position(r14);	 Catch:{ Exception -> 0x0288 }
+        r1 = r13.readInt64(r14);	 Catch:{ Exception -> 0x0288 }
+        r3 = r11.key_fingerprint;	 Catch:{ Exception -> 0x0288 }
         r5 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1));
-        if (r5 != 0) goto L_0x0039;
-    L_0x0035:
-        r3 = r11.auth_key;	 Catch:{ Exception -> 0x0258 }
+        if (r5 != 0) goto L_0x0060;
+    L_0x005c:
+        r3 = r11.auth_key;	 Catch:{ Exception -> 0x0288 }
         r15 = r3;
-        goto L_0x004d;
-    L_0x0039:
-        r3 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x0258 }
+        goto L_0x0074;
+    L_0x0060:
+        r3 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x0288 }
         r5 = 0;
         r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r7 == 0) goto L_0x004c;
-    L_0x0041:
-        r3 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x0258 }
+        if (r7 == 0) goto L_0x0073;
+    L_0x0068:
+        r3 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x0288 }
         r5 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1));
-        if (r5 != 0) goto L_0x004c;
-    L_0x0047:
-        r3 = r11.future_auth_key;	 Catch:{ Exception -> 0x0258 }
+        if (r5 != 0) goto L_0x0073;
+    L_0x006e:
+        r3 = r11.future_auth_key;	 Catch:{ Exception -> 0x0288 }
         r15 = r3;
         r7 = 1;
-        goto L_0x004e;
-    L_0x004c:
-        r15 = r12;
-    L_0x004d:
-        r7 = 0;
-    L_0x004e:
-        r3 = r11.layer;	 Catch:{ Exception -> 0x0258 }
-        r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3);	 Catch:{ Exception -> 0x0258 }
-        r4 = 73;
-        r6 = 2;
-        if (r3 < r4) goto L_0x005b;
-    L_0x0059:
-        r5 = 2;
-        goto L_0x005c;
-    L_0x005b:
-        r5 = 1;
-    L_0x005c:
-        if (r15 == 0) goto L_0x023e;
-    L_0x005e:
-        r1 = 16;
-        r16 = r13.readData(r1, r14);	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.admin_id;	 Catch:{ Exception -> 0x0258 }
-        r2 = r21.getUserConfig();	 Catch:{ Exception -> 0x0258 }
-        r2 = r2.getClientUserId();	 Catch:{ Exception -> 0x0258 }
-        if (r1 != r2) goto L_0x0073;
-    L_0x0070:
-        r17 = 1;
         goto L_0x0075;
     L_0x0073:
-        r17 = 0;
+        r15 = r12;
+    L_0x0074:
+        r7 = 0;
     L_0x0075:
-        if (r5 != r6) goto L_0x007e;
-    L_0x0077:
-        r1 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0258 }
-        if (r1 == 0) goto L_0x007e;
-    L_0x007b:
-        r18 = 0;
-        goto L_0x0080;
-    L_0x007e:
-        r18 = 1;
+        r3 = r11.layer;	 Catch:{ Exception -> 0x0288 }
+        r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3);	 Catch:{ Exception -> 0x0288 }
+        r4 = 73;
+        r6 = 2;
+        if (r3 < r4) goto L_0x0082;
     L_0x0080:
+        r5 = 2;
+        goto L_0x0083;
+    L_0x0082:
+        r5 = 1;
+    L_0x0083:
+        if (r15 == 0) goto L_0x026e;
+    L_0x0085:
+        r1 = 16;
+        r16 = r13.readData(r1, r14);	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.admin_id;	 Catch:{ Exception -> 0x0288 }
+        r2 = r21.getUserConfig();	 Catch:{ Exception -> 0x0288 }
+        r2 = r2.getClientUserId();	 Catch:{ Exception -> 0x0288 }
+        if (r1 != r2) goto L_0x009a;
+    L_0x0097:
+        r17 = 1;
+        goto L_0x009c;
+    L_0x009a:
+        r17 = 0;
+    L_0x009c:
+        if (r5 != r6) goto L_0x00a5;
+    L_0x009e:
+        r1 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0288 }
+        if (r1 == 0) goto L_0x00a5;
+    L_0x00a2:
+        r18 = 0;
+        goto L_0x00a7;
+    L_0x00a5:
+        r18 = 1;
+    L_0x00a7:
         r1 = r21;
         r2 = r13;
         r3 = r15;
@@ -1790,14 +1843,14 @@ public class SecretChatHelper extends BaseController {
         r6 = r17;
         r20 = r7;
         r7 = r18;
-        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0258 }
+        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0288 }
         r6 = r19;
-        if (r1 != 0) goto L_0x00c2;
-    L_0x0097:
-        if (r6 != r10) goto L_0x00af;
-    L_0x0099:
-        if (r18 == 0) goto L_0x00ae;
-    L_0x009b:
+        if (r1 != 0) goto L_0x00e9;
+    L_0x00be:
+        if (r6 != r10) goto L_0x00d6;
+    L_0x00c0:
+        if (r18 == 0) goto L_0x00d5;
+    L_0x00c2:
         r5 = 1;
         r7 = 0;
         r1 = r21;
@@ -1805,16 +1858,16 @@ public class SecretChatHelper extends BaseController {
         r3 = r15;
         r4 = r16;
         r6 = r17;
-        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0258 }
-        if (r1 != 0) goto L_0x00ac;
-    L_0x00ab:
-        goto L_0x00ae;
-    L_0x00ac:
+        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0288 }
+        if (r1 != 0) goto L_0x00d3;
+    L_0x00d2:
+        goto L_0x00d5;
+    L_0x00d3:
         r6 = 1;
-        goto L_0x00c2;
-    L_0x00ae:
+        goto L_0x00e9;
+    L_0x00d5:
         return r12;
-    L_0x00af:
+    L_0x00d6:
         r5 = 2;
         r1 = r21;
         r2 = r13;
@@ -1822,243 +1875,248 @@ public class SecretChatHelper extends BaseController {
         r4 = r16;
         r6 = r17;
         r7 = r18;
-        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0258 }
-        if (r1 != 0) goto L_0x00c1;
-    L_0x00c0:
+        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0288 }
+        if (r1 != 0) goto L_0x00e8;
+    L_0x00e7:
         return r12;
-    L_0x00c1:
+    L_0x00e8:
         r6 = 2;
-    L_0x00c2:
-        r1 = org.telegram.tgnet.TLClassStore.Instance();	 Catch:{ Exception -> 0x0258 }
-        r2 = r13.readInt32(r14);	 Catch:{ Exception -> 0x0258 }
-        r1 = r1.TLdeserialize(r13, r2, r14);	 Catch:{ Exception -> 0x0258 }
-        r13.reuse();	 Catch:{ Exception -> 0x0258 }
+    L_0x00e9:
+        r1 = org.telegram.tgnet.TLClassStore.Instance();	 Catch:{ Exception -> 0x0288 }
+        r2 = r13.readInt32(r14);	 Catch:{ Exception -> 0x0288 }
+        r1 = r1.TLdeserialize(r13, r2, r14);	 Catch:{ Exception -> 0x0288 }
+        r13.reuse();	 Catch:{ Exception -> 0x0288 }
         r14 = r20;
-        if (r14 != 0) goto L_0x00e6;
-    L_0x00d5:
-        r2 = r11.layer;	 Catch:{ Exception -> 0x0258 }
-        r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);	 Catch:{ Exception -> 0x0258 }
+        if (r14 != 0) goto L_0x010d;
+    L_0x00fc:
+        r2 = r11.layer;	 Catch:{ Exception -> 0x0288 }
+        r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);	 Catch:{ Exception -> 0x0288 }
         r3 = 20;
-        if (r2 < r3) goto L_0x00e6;
-    L_0x00df:
-        r2 = r11.key_use_count_in;	 Catch:{ Exception -> 0x0258 }
+        if (r2 < r3) goto L_0x010d;
+    L_0x0106:
+        r2 = r11.key_use_count_in;	 Catch:{ Exception -> 0x0288 }
         r3 = 1;
         r2 = r2 + r3;
-        r2 = (short) r2;	 Catch:{ Exception -> 0x0258 }
-        r11.key_use_count_in = r2;	 Catch:{ Exception -> 0x0258 }
-    L_0x00e6:
-        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageLayer;	 Catch:{ Exception -> 0x0258 }
-        if (r2 == 0) goto L_0x0214;
-    L_0x00ea:
-        r1 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageLayer) r1;	 Catch:{ Exception -> 0x0258 }
-        r2 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
-        if (r2 != 0) goto L_0x010a;
-    L_0x00f0:
-        r2 = r11.seq_out;	 Catch:{ Exception -> 0x0258 }
-        if (r2 != 0) goto L_0x010a;
-    L_0x00f4:
-        r2 = r11.admin_id;	 Catch:{ Exception -> 0x0258 }
-        r3 = r21.getUserConfig();	 Catch:{ Exception -> 0x0258 }
-        r3 = r3.getClientUserId();	 Catch:{ Exception -> 0x0258 }
-        if (r2 != r3) goto L_0x0107;
-    L_0x0100:
-        r2 = 1;
-        r11.seq_out = r2;	 Catch:{ Exception -> 0x0258 }
-        r2 = -2;
-        r11.seq_in = r2;	 Catch:{ Exception -> 0x0258 }
-        goto L_0x010a;
-    L_0x0107:
-        r2 = -1;
-        r11.seq_in = r2;	 Catch:{ Exception -> 0x0258 }
-    L_0x010a:
-        r2 = r1.random_bytes;	 Catch:{ Exception -> 0x0258 }
-        r2 = r2.length;	 Catch:{ Exception -> 0x0258 }
-        r3 = 15;
-        if (r2 >= r3) goto L_0x011b;
+        r2 = (short) r2;	 Catch:{ Exception -> 0x0288 }
+        r11.key_use_count_in = r2;	 Catch:{ Exception -> 0x0288 }
+    L_0x010d:
+        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageLayer;	 Catch:{ Exception -> 0x0288 }
+        if (r2 == 0) goto L_0x0244;
     L_0x0111:
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0258 }
-        if (r0 == 0) goto L_0x011a;
-    L_0x0115:
-        r0 = "got random bytes less than needed";
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0258 }
-    L_0x011a:
-        return r12;
+        r1 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageLayer) r1;	 Catch:{ Exception -> 0x0288 }
+        r2 = r11.seq_in;	 Catch:{ Exception -> 0x0288 }
+        if (r2 != 0) goto L_0x0131;
+    L_0x0117:
+        r2 = r11.seq_out;	 Catch:{ Exception -> 0x0288 }
+        if (r2 != 0) goto L_0x0131;
     L_0x011b:
-        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0258 }
-        if (r2 == 0) goto L_0x015b;
-    L_0x011f:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0258 }
-        r2.<init>();	 Catch:{ Exception -> 0x0258 }
-        r3 = "current chat in_seq = ";
-        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
-        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
-        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
-        r2.append(r9);	 Catch:{ Exception -> 0x0258 }
-        r3 = r11.seq_out;	 Catch:{ Exception -> 0x0258 }
-        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0258 }
-        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0258 }
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0258 }
-        r2.<init>();	 Catch:{ Exception -> 0x0258 }
-        r3 = "got message with in_seq = ";
-        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
-        r3 = r1.in_seq_no;	 Catch:{ Exception -> 0x0258 }
-        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
-        r2.append(r9);	 Catch:{ Exception -> 0x0258 }
-        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
-        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0258 }
-        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0258 }
-    L_0x015b:
-        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
-        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
-        if (r2 > r3) goto L_0x0162;
-    L_0x0161:
-        return r12;
-    L_0x0162:
+        r2 = r11.admin_id;	 Catch:{ Exception -> 0x0288 }
+        r3 = r21.getUserConfig();	 Catch:{ Exception -> 0x0288 }
+        r3 = r3.getClientUserId();	 Catch:{ Exception -> 0x0288 }
+        if (r2 != r3) goto L_0x012e;
+    L_0x0127:
         r2 = 1;
-        if (r6 != r2) goto L_0x0170;
-    L_0x0165:
-        r2 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0258 }
-        if (r2 == 0) goto L_0x0170;
-    L_0x0169:
-        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
-        r3 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0258 }
-        if (r2 < r3) goto L_0x0170;
-    L_0x016f:
+        r11.seq_out = r2;	 Catch:{ Exception -> 0x0288 }
+        r2 = -2;
+        r11.seq_in = r2;	 Catch:{ Exception -> 0x0288 }
+        goto L_0x0131;
+    L_0x012e:
+        r2 = -1;
+        r11.seq_in = r2;	 Catch:{ Exception -> 0x0288 }
+    L_0x0131:
+        r2 = r1.random_bytes;	 Catch:{ Exception -> 0x0288 }
+        r2 = r2.length;	 Catch:{ Exception -> 0x0288 }
+        r3 = 15;
+        if (r2 >= r3) goto L_0x0142;
+    L_0x0138:
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0288 }
+        if (r0 == 0) goto L_0x0141;
+    L_0x013c:
+        r0 = "got random bytes less than needed";
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0288 }
+    L_0x0141:
         return r12;
-    L_0x0170:
-        r2 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
-        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
-        r3 = r3 - r10;
-        if (r2 == r3) goto L_0x01f0;
-    L_0x0177:
-        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0258 }
-        if (r2 == 0) goto L_0x0180;
-    L_0x017b:
-        r2 = "got hole";
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x0258 }
-    L_0x0180:
-        r2 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0258 }
-        r3 = r11.id;	 Catch:{ Exception -> 0x0258 }
-        r2 = r2.get(r3);	 Catch:{ Exception -> 0x0258 }
-        r2 = (java.util.ArrayList) r2;	 Catch:{ Exception -> 0x0258 }
-        if (r2 != 0) goto L_0x0198;
+    L_0x0142:
+        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0288 }
+        if (r2 == 0) goto L_0x0182;
+    L_0x0146:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0288 }
+        r2.<init>();	 Catch:{ Exception -> 0x0288 }
+        r3 = "current chat in_seq = ";
+        r2.append(r3);	 Catch:{ Exception -> 0x0288 }
+        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0288 }
+        r2.append(r3);	 Catch:{ Exception -> 0x0288 }
+        r2.append(r9);	 Catch:{ Exception -> 0x0288 }
+        r3 = r11.seq_out;	 Catch:{ Exception -> 0x0288 }
+        r2.append(r3);	 Catch:{ Exception -> 0x0288 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0288 }
+        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0288 }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0288 }
+        r2.<init>();	 Catch:{ Exception -> 0x0288 }
+        r3 = "got message with in_seq = ";
+        r2.append(r3);	 Catch:{ Exception -> 0x0288 }
+        r3 = r1.in_seq_no;	 Catch:{ Exception -> 0x0288 }
+        r2.append(r3);	 Catch:{ Exception -> 0x0288 }
+        r2.append(r9);	 Catch:{ Exception -> 0x0288 }
+        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x0288 }
+        r2.append(r3);	 Catch:{ Exception -> 0x0288 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0288 }
+        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0288 }
+    L_0x0182:
+        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0288 }
+        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0288 }
+        if (r2 > r3) goto L_0x0189;
+    L_0x0188:
+        return r12;
+    L_0x0189:
+        r2 = 1;
+        if (r6 != r2) goto L_0x0197;
     L_0x018c:
-        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0258 }
-        r2.<init>();	 Catch:{ Exception -> 0x0258 }
-        r3 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0258 }
-        r4 = r11.id;	 Catch:{ Exception -> 0x0258 }
-        r3.put(r4, r2);	 Catch:{ Exception -> 0x0258 }
-    L_0x0198:
-        r3 = r2.size();	 Catch:{ Exception -> 0x0258 }
+        r2 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0288 }
+        if (r2 == 0) goto L_0x0197;
+    L_0x0190:
+        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0288 }
+        r3 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0288 }
+        if (r2 < r3) goto L_0x0197;
+    L_0x0196:
+        return r12;
+    L_0x0197:
+        r2 = r11.seq_in;	 Catch:{ Exception -> 0x0288 }
+        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x0288 }
+        r3 = r3 - r10;
+        if (r2 == r3) goto L_0x0220;
+    L_0x019e:
+        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0288 }
+        if (r2 == 0) goto L_0x01a7;
+    L_0x01a2:
+        r2 = "got hole";
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x0288 }
+    L_0x01a7:
+        r2 = r11.seq_in;	 Catch:{ Exception -> 0x0288 }
+        r2 = r2 + r10;
+        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x0288 }
+        r3 = r3 - r10;
+        r8.sendResendMessage(r11, r2, r3, r12);	 Catch:{ Exception -> 0x0288 }
+        r2 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0288 }
+        r3 = r11.id;	 Catch:{ Exception -> 0x0288 }
+        r2 = r2.get(r3);	 Catch:{ Exception -> 0x0288 }
+        r2 = (java.util.ArrayList) r2;	 Catch:{ Exception -> 0x0288 }
+        if (r2 != 0) goto L_0x01c8;
+    L_0x01bc:
+        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0288 }
+        r2.<init>();	 Catch:{ Exception -> 0x0288 }
+        r3 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0288 }
+        r4 = r11.id;	 Catch:{ Exception -> 0x0288 }
+        r3.put(r4, r2);	 Catch:{ Exception -> 0x0288 }
+    L_0x01c8:
+        r3 = r2.size();	 Catch:{ Exception -> 0x0288 }
         r4 = 4;
-        if (r3 < r4) goto L_0x01d9;
-    L_0x019f:
-        r0 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.id;	 Catch:{ Exception -> 0x0258 }
-        r0.remove(r1);	 Catch:{ Exception -> 0x0258 }
-        r0 = new org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded;	 Catch:{ Exception -> 0x0258 }
-        r0.<init>();	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.id;	 Catch:{ Exception -> 0x0258 }
-        r0.id = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.user_id;	 Catch:{ Exception -> 0x0258 }
-        r0.user_id = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.auth_key;	 Catch:{ Exception -> 0x0258 }
-        r0.auth_key = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.key_create_date;	 Catch:{ Exception -> 0x0258 }
-        r0.key_create_date = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.key_use_count_in;	 Catch:{ Exception -> 0x0258 }
-        r0.key_use_count_in = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.key_use_count_out;	 Catch:{ Exception -> 0x0258 }
-        r0.key_use_count_out = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
-        r0.seq_in = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = r11.seq_out;	 Catch:{ Exception -> 0x0258 }
-        r0.seq_out = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$y_-QKcAzTtKUDu-WddTe8KbVDxY;	 Catch:{ Exception -> 0x0258 }
-        r1.<init>(r8, r0);	 Catch:{ Exception -> 0x0258 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ Exception -> 0x0258 }
-        r0 = r11.id;	 Catch:{ Exception -> 0x0258 }
-        r8.declineSecretChat(r0);	 Catch:{ Exception -> 0x0258 }
+        if (r3 < r4) goto L_0x0209;
+    L_0x01cf:
+        r0 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.id;	 Catch:{ Exception -> 0x0288 }
+        r0.remove(r1);	 Catch:{ Exception -> 0x0288 }
+        r0 = new org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded;	 Catch:{ Exception -> 0x0288 }
+        r0.<init>();	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.id;	 Catch:{ Exception -> 0x0288 }
+        r0.id = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.user_id;	 Catch:{ Exception -> 0x0288 }
+        r0.user_id = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.auth_key;	 Catch:{ Exception -> 0x0288 }
+        r0.auth_key = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.key_create_date;	 Catch:{ Exception -> 0x0288 }
+        r0.key_create_date = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.key_use_count_in;	 Catch:{ Exception -> 0x0288 }
+        r0.key_use_count_in = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.key_use_count_out;	 Catch:{ Exception -> 0x0288 }
+        r0.key_use_count_out = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.seq_in;	 Catch:{ Exception -> 0x0288 }
+        r0.seq_in = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = r11.seq_out;	 Catch:{ Exception -> 0x0288 }
+        r0.seq_out = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$y_-QKcAzTtKUDu-WddTe8KbVDxY;	 Catch:{ Exception -> 0x0288 }
+        r1.<init>(r8, r0);	 Catch:{ Exception -> 0x0288 }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ Exception -> 0x0288 }
+        r0 = r11.id;	 Catch:{ Exception -> 0x0288 }
+        r8.declineSecretChat(r0);	 Catch:{ Exception -> 0x0288 }
         return r12;
-    L_0x01d9:
-        r3 = new org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder;	 Catch:{ Exception -> 0x0258 }
-        r3.<init>();	 Catch:{ Exception -> 0x0258 }
-        r3.layer = r1;	 Catch:{ Exception -> 0x0258 }
-        r1 = r0.file;	 Catch:{ Exception -> 0x0258 }
-        r3.file = r1;	 Catch:{ Exception -> 0x0258 }
-        r0 = r0.date;	 Catch:{ Exception -> 0x0258 }
-        r3.date = r0;	 Catch:{ Exception -> 0x0258 }
-        r3.new_key_used = r14;	 Catch:{ Exception -> 0x0258 }
-        r3.decryptedWithVersion = r6;	 Catch:{ Exception -> 0x0258 }
-        r2.add(r3);	 Catch:{ Exception -> 0x0258 }
+    L_0x0209:
+        r3 = new org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder;	 Catch:{ Exception -> 0x0288 }
+        r3.<init>();	 Catch:{ Exception -> 0x0288 }
+        r3.layer = r1;	 Catch:{ Exception -> 0x0288 }
+        r1 = r0.file;	 Catch:{ Exception -> 0x0288 }
+        r3.file = r1;	 Catch:{ Exception -> 0x0288 }
+        r0 = r0.date;	 Catch:{ Exception -> 0x0288 }
+        r3.date = r0;	 Catch:{ Exception -> 0x0288 }
+        r3.new_key_used = r14;	 Catch:{ Exception -> 0x0288 }
+        r3.decryptedWithVersion = r6;	 Catch:{ Exception -> 0x0288 }
+        r2.add(r3);	 Catch:{ Exception -> 0x0288 }
         return r12;
-    L_0x01f0:
-        if (r6 != r10) goto L_0x01fc;
-    L_0x01f2:
-        r2 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0258 }
-        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
-        r2 = java.lang.Math.min(r2, r3);	 Catch:{ Exception -> 0x0258 }
-        r11.mtproto_seq = r2;	 Catch:{ Exception -> 0x0258 }
-    L_0x01fc:
-        r2 = r1.layer;	 Catch:{ Exception -> 0x0258 }
-        r8.applyPeerLayer(r11, r2);	 Catch:{ Exception -> 0x0258 }
-        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
-        r11.seq_in = r2;	 Catch:{ Exception -> 0x0258 }
-        r2 = r1.in_seq_no;	 Catch:{ Exception -> 0x0258 }
-        r11.in_seq_no = r2;	 Catch:{ Exception -> 0x0258 }
-        r2 = r21.getMessagesStorage();	 Catch:{ Exception -> 0x0258 }
-        r3 = 1;
-        r2.updateEncryptedChatSeq(r11, r3);	 Catch:{ Exception -> 0x0258 }
-        r1 = r1.message;	 Catch:{ Exception -> 0x0258 }
-        goto L_0x0222;
-    L_0x0214:
-        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageService;	 Catch:{ Exception -> 0x0258 }
-        if (r2 == 0) goto L_0x023d;
-    L_0x0218:
-        r2 = r1;
-        r2 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageService) r2;	 Catch:{ Exception -> 0x0258 }
-        r2 = r2.action;	 Catch:{ Exception -> 0x0258 }
-        r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageActionNotifyLayer;	 Catch:{ Exception -> 0x0258 }
-        if (r2 != 0) goto L_0x0222;
-    L_0x0221:
-        goto L_0x023d;
+    L_0x0220:
+        if (r6 != r10) goto L_0x022c;
     L_0x0222:
+        r2 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0288 }
+        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0288 }
+        r2 = java.lang.Math.min(r2, r3);	 Catch:{ Exception -> 0x0288 }
+        r11.mtproto_seq = r2;	 Catch:{ Exception -> 0x0288 }
+    L_0x022c:
+        r2 = r1.layer;	 Catch:{ Exception -> 0x0288 }
+        r8.applyPeerLayer(r11, r2);	 Catch:{ Exception -> 0x0288 }
+        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0288 }
+        r11.seq_in = r2;	 Catch:{ Exception -> 0x0288 }
+        r2 = r1.in_seq_no;	 Catch:{ Exception -> 0x0288 }
+        r11.in_seq_no = r2;	 Catch:{ Exception -> 0x0288 }
+        r2 = r21.getMessagesStorage();	 Catch:{ Exception -> 0x0288 }
+        r3 = 1;
+        r2.updateEncryptedChatSeq(r11, r3);	 Catch:{ Exception -> 0x0288 }
+        r1 = r1.message;	 Catch:{ Exception -> 0x0288 }
+        goto L_0x0252;
+    L_0x0244:
+        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageService;	 Catch:{ Exception -> 0x0288 }
+        if (r2 == 0) goto L_0x026d;
+    L_0x0248:
+        r2 = r1;
+        r2 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageService) r2;	 Catch:{ Exception -> 0x0288 }
+        r2 = r2.action;	 Catch:{ Exception -> 0x0288 }
+        r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageActionNotifyLayer;	 Catch:{ Exception -> 0x0288 }
+        if (r2 != 0) goto L_0x0252;
+    L_0x0251:
+        goto L_0x026d;
+    L_0x0252:
         r5 = r1;
-        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0258 }
-        r7.<init>();	 Catch:{ Exception -> 0x0258 }
-        r3 = r0.file;	 Catch:{ Exception -> 0x0258 }
-        r4 = r0.date;	 Catch:{ Exception -> 0x0258 }
+        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0288 }
+        r7.<init>();	 Catch:{ Exception -> 0x0288 }
+        r3 = r0.file;	 Catch:{ Exception -> 0x0288 }
+        r4 = r0.date;	 Catch:{ Exception -> 0x0288 }
         r1 = r21;
         r2 = r11;
         r6 = r14;
-        r0 = r1.processDecryptedObject(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0258 }
-        if (r0 == 0) goto L_0x0239;
-    L_0x0236:
-        r7.add(r0);	 Catch:{ Exception -> 0x0258 }
-    L_0x0239:
-        r8.checkSecretHoles(r11, r7);	 Catch:{ Exception -> 0x0258 }
+        r0 = r1.processDecryptedObject(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0288 }
+        if (r0 == 0) goto L_0x0269;
+    L_0x0266:
+        r7.add(r0);	 Catch:{ Exception -> 0x0288 }
+    L_0x0269:
+        r8.checkSecretHoles(r11, r7);	 Catch:{ Exception -> 0x0288 }
         return r7;
-    L_0x023d:
+    L_0x026d:
         return r12;
-    L_0x023e:
-        r13.reuse();	 Catch:{ Exception -> 0x0258 }
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0258 }
-        if (r0 == 0) goto L_0x025c;
-    L_0x0245:
+    L_0x026e:
+        r13.reuse();	 Catch:{ Exception -> 0x0288 }
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0288 }
+        if (r0 == 0) goto L_0x028c;
+    L_0x0275:
         r0 = "fingerprint mismatch %x";
         r3 = 1;
-        r3 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x0258 }
-        r1 = java.lang.Long.valueOf(r1);	 Catch:{ Exception -> 0x0258 }
-        r3[r14] = r1;	 Catch:{ Exception -> 0x0258 }
-        r0 = java.lang.String.format(r0, r3);	 Catch:{ Exception -> 0x0258 }
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0258 }
-        goto L_0x025c;
-    L_0x0258:
+        r3 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x0288 }
+        r1 = java.lang.Long.valueOf(r1);	 Catch:{ Exception -> 0x0288 }
+        r3[r14] = r1;	 Catch:{ Exception -> 0x0288 }
+        r0 = java.lang.String.format(r0, r3);	 Catch:{ Exception -> 0x0288 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0288 }
+        goto L_0x028c;
+    L_0x0288:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x025c:
+    L_0x028c:
         return r12;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SecretChatHelper.decryptMessage(org.telegram.tgnet.TLRPC$EncryptedMessage):java.util.ArrayList");
@@ -2116,6 +2174,11 @@ public class SecretChatHelper extends BaseController {
                 encryptedChat.seq_out = 1;
                 getMessagesStorage().updateEncryptedChat(encryptedChat);
                 getMessagesController().putEncryptedChat(encryptedChat, false);
+                ArrayList arrayList = (ArrayList) this.pendingSecretMessages.get(encryptedChat.id);
+                if (arrayList != null) {
+                    getMessagesController().processUpdateArray(arrayList, null, null, false, 0);
+                    this.pendingSecretMessages.remove(encryptedChat.id);
+                }
                 AndroidUtilities.runOnUIThread(new -$$Lambda$SecretChatHelper$tDKre2aQQBiVO0S8VAHIlXCNFCM(this, encryptedChat));
             } else {
                 TL_encryptedChatDiscarded tL_encryptedChatDiscarded = new TL_encryptedChatDiscarded();
@@ -2221,7 +2284,7 @@ public class SecretChatHelper extends BaseController {
                 tL_inputEncryptedChat.chat_id = encryptedChat.id;
                 tL_inputEncryptedChat.access_hash = encryptedChat.access_hash;
                 tL_messages_acceptEncryption.key_fingerprint = Utilities.bytesToLong(bArr3);
-                getConnectionsManager().sendRequest(tL_messages_acceptEncryption, new -$$Lambda$SecretChatHelper$48_HP_7TQqG7f2oWszU7R3aCenM(this, encryptedChat));
+                getConnectionsManager().sendRequest(tL_messages_acceptEncryption, new -$$Lambda$SecretChatHelper$48_HP_7TQqG7f2oWszU7R3aCenM(this, encryptedChat), 64);
             } else {
                 this.acceptingChats.remove(encryptedChat.id);
                 declineSecretChat(encryptedChat.id);

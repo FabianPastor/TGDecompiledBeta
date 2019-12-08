@@ -943,14 +943,14 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x00b5 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x00ad  */
-    public void processDownloadObjects(int r20, java.util.ArrayList<org.telegram.messenger.DownloadObject> r21) {
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x00b8 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x00b0  */
+    public void processDownloadObjects(int r21, java.util.ArrayList<org.telegram.messenger.DownloadObject> r22) {
         /*
-        r19 = this;
-        r0 = r19;
-        r1 = r20;
-        r2 = r21.isEmpty();
+        r20 = this;
+        r0 = r20;
+        r1 = r21;
+        r2 = r22.isEmpty();
         if (r2 == 0) goto L_0x000b;
     L_0x000a:
         return;
@@ -985,10 +985,10 @@ public class DownloadController extends BaseController implements NotificationCe
         r5 = 0;
         r6 = 0;
     L_0x0028:
-        r7 = r21.size();
-        if (r6 >= r7) goto L_0x00b9;
+        r7 = r22.size();
+        if (r6 >= r7) goto L_0x00bc;
     L_0x002e:
-        r7 = r21;
+        r7 = r22;
         r8 = r7.get(r6);
         r8 = (org.telegram.messenger.DownloadObject) r8;
         r9 = r8.object;
@@ -998,87 +998,89 @@ public class DownloadController extends BaseController implements NotificationCe
         r9 = (org.telegram.tgnet.TLRPC.Document) r9;
         r9 = org.telegram.messenger.FileLoader.getAttachFileName(r9);
         r10 = r3;
-        goto L_0x005d;
+        goto L_0x0060;
     L_0x0044:
         r10 = r9 instanceof org.telegram.tgnet.TLRPC.Photo;
-        if (r10 == 0) goto L_0x005b;
+        if (r10 == 0) goto L_0x005e;
     L_0x0048:
-        r9 = org.telegram.messenger.FileLoader.getAttachFileName(r9);
-        r10 = r8.object;
-        r10 = (org.telegram.tgnet.TLRPC.Photo) r10;
-        r10 = r10.sizes;
-        r11 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
-        r10 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r10, r11);
-        goto L_0x005d;
-    L_0x005b:
+        r9 = (org.telegram.tgnet.TLRPC.Photo) r9;
+        r9 = r9.sizes;
+        r10 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
+        r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r10);
+        r10 = org.telegram.messenger.FileLoader.getAttachFileName(r9);
+        r19 = r10;
+        r10 = r9;
+        r9 = r19;
+        goto L_0x0060;
+    L_0x005e:
         r9 = r3;
         r10 = r9;
-    L_0x005d:
-        if (r9 == 0) goto L_0x00b5;
-    L_0x005f:
+    L_0x0060:
+        if (r9 == 0) goto L_0x00b8;
+    L_0x0062:
         r11 = r0.downloadQueueKeys;
         r11 = r11.containsKey(r9);
-        if (r11 == 0) goto L_0x0068;
-    L_0x0067:
-        goto L_0x00b5;
-    L_0x0068:
-        if (r10 == 0) goto L_0x0090;
+        if (r11 == 0) goto L_0x006b;
     L_0x006a:
+        goto L_0x00b8;
+    L_0x006b:
+        if (r10 == 0) goto L_0x0093;
+    L_0x006d:
         r11 = r8.object;
         r11 = (org.telegram.tgnet.TLRPC.Photo) r11;
         r12 = r8.secret;
-        if (r12 == 0) goto L_0x0075;
-    L_0x0072:
-        r18 = 2;
-        goto L_0x007e;
+        if (r12 == 0) goto L_0x0078;
     L_0x0075:
+        r18 = 2;
+        goto L_0x0081;
+    L_0x0078:
         r12 = r8.forceCache;
-        if (r12 == 0) goto L_0x007c;
-    L_0x0079:
-        r18 = 1;
-        goto L_0x007e;
+        if (r12 == 0) goto L_0x007f;
     L_0x007c:
+        r18 = 1;
+        goto L_0x0081;
+    L_0x007f:
         r18 = 0;
-    L_0x007e:
-        r13 = r19.getFileLoader();
+    L_0x0081:
+        r13 = r20.getFileLoader();
         r14 = org.telegram.messenger.ImageLocation.getForPhoto(r10, r11);
         r15 = r8.parent;
         r16 = 0;
         r17 = 0;
         r13.loadFile(r14, r15, r16, r17, r18);
-        goto L_0x00a8;
-    L_0x0090:
+        goto L_0x00ab;
+    L_0x0093:
         r10 = r8.object;
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.Document;
-        if (r11 == 0) goto L_0x00aa;
-    L_0x0096:
+        if (r11 == 0) goto L_0x00ad;
+    L_0x0099:
         r10 = (org.telegram.tgnet.TLRPC.Document) r10;
-        r11 = r19.getFileLoader();
+        r11 = r20.getFileLoader();
         r12 = r8.parent;
         r13 = r8.secret;
-        if (r13 == 0) goto L_0x00a4;
-    L_0x00a2:
-        r13 = 2;
-        goto L_0x00a5;
-    L_0x00a4:
-        r13 = 0;
+        if (r13 == 0) goto L_0x00a7;
     L_0x00a5:
-        r11.loadFile(r10, r12, r5, r13);
+        r13 = 2;
+        goto L_0x00a8;
+    L_0x00a7:
+        r13 = 0;
     L_0x00a8:
-        r10 = 1;
-        goto L_0x00ab;
-    L_0x00aa:
-        r10 = 0;
+        r11.loadFile(r10, r12, r5, r13);
     L_0x00ab:
-        if (r10 == 0) goto L_0x00b5;
+        r10 = 1;
+        goto L_0x00ae;
     L_0x00ad:
+        r10 = 0;
+    L_0x00ae:
+        if (r10 == 0) goto L_0x00b8;
+    L_0x00b0:
         r1.add(r8);
         r10 = r0.downloadQueueKeys;
         r10.put(r9, r8);
-    L_0x00b5:
+    L_0x00b8:
         r6 = r6 + 1;
         goto L_0x0028;
-    L_0x00b9:
+    L_0x00bc:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.processDownloadObjects(int, java.util.ArrayList):void");

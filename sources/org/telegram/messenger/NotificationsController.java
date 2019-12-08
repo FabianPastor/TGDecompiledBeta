@@ -397,21 +397,21 @@ public class NotificationsController extends BaseController {
     }
 
     public /* synthetic */ void lambda$removeDeletedMessagesFromNotifications$8$NotificationsController(SparseArray sparseArray, ArrayList arrayList) {
-        boolean z;
         SparseArray sparseArray2 = sparseArray;
         ArrayList arrayList2 = arrayList;
         int i = this.total_unread_count;
         getAccountInstance().getNotificationsSettings();
         Integer valueOf = Integer.valueOf(0);
         int i2 = 0;
-        while (true) {
-            z = true;
-            if (i2 >= sparseArray.size()) {
-                break;
-            }
-            ArrayList arrayList3 = (ArrayList) sparseArray2.get(sparseArray2.keyAt(i2));
-            for (int i3 = 0; i3 < arrayList3.size(); i3++) {
+        while (i2 < sparseArray.size()) {
+            int keyAt = sparseArray2.keyAt(i2);
+            ArrayList arrayList3 = (ArrayList) sparseArray2.get(keyAt);
+            int i3 = 0;
+            while (i3 < arrayList3.size()) {
                 long intValue = (long) ((Integer) arrayList3.get(i3)).intValue();
+                if (keyAt != 0) {
+                    intValue |= ((long) keyAt) << 32;
+                }
                 MessageObject messageObject = (MessageObject) this.pushMessagesDict.get(intValue);
                 if (messageObject != null) {
                     Integer num;
@@ -444,9 +444,13 @@ public class NotificationsController extends BaseController {
                     }
                     arrayList2.add(messageObject);
                 }
+                i3++;
+                sparseArray2 = sparseArray;
             }
             i2++;
+            sparseArray2 = sparseArray;
         }
+        boolean z = true;
         if (!arrayList.isEmpty()) {
             AndroidUtilities.runOnUIThread(new -$$Lambda$NotificationsController$uUrKIQpuu_OHFjMyR7HGe660wQk(this, arrayList2));
         }

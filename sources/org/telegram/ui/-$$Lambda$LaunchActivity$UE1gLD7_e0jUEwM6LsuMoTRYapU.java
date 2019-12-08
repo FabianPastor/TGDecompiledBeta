@@ -20,6 +20,6 @@ public final /* synthetic */ class -$$Lambda$LaunchActivity$UE1gLD7_e0jUEwM6LsuM
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        ContactsController.getInstance(this.f$0).syncPhoneBookByAlert(this.f$1, this.f$2, this.f$3, false);
+        ContactsController.getInstance(this.f$0).syncPhoneBookByAlert(this.f$1, this.f$2, this.f$3, true);
     }
 }

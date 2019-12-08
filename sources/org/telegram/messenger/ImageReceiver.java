@@ -2158,7 +2158,30 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     public void setRoundRadius(int i) {
-        this.roundRadius = i;
+        if (this.roundRadius != i) {
+            this.roundRadius = i;
+            if (this.roundRadius != 0) {
+                Drawable drawable = this.currentImageDrawable;
+                if (drawable != null && this.imageShader == null) {
+                    updateDrawableRadius(drawable);
+                }
+                drawable = this.currentMediaDrawable;
+                if (drawable != null && this.mediaShader == null) {
+                    updateDrawableRadius(drawable);
+                }
+                if (this.thumbShader == null) {
+                    drawable = this.currentThumbDrawable;
+                    if (drawable != null) {
+                        updateDrawableRadius(drawable);
+                        return;
+                    }
+                    drawable = this.staticThumbDrawable;
+                    if (drawable != null) {
+                        updateDrawableRadius(drawable);
+                    }
+                }
+            }
+        }
     }
 
     public void setCurrentAccount(int i) {

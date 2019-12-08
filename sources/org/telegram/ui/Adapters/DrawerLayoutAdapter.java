@@ -5,6 +5,7 @@ import android.os.Build.VERSION;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.recyclerview.widget.RecyclerView.ItemAnimator;
 import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 public class DrawerLayoutAdapter extends SelectionAdapter {
     private ArrayList<Integer> accountNumbers = new ArrayList();
     private boolean accountsShowed;
+    private ItemAnimator itemAnimator;
     private ArrayList<Item> items = new ArrayList(11);
     private Context mContext;
     private DrawerProfileCell profileCell;
@@ -46,8 +48,9 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         }
     }
 
-    public DrawerLayoutAdapter(Context context) {
+    public DrawerLayoutAdapter(Context context, ItemAnimator itemAnimator) {
         this.mContext = context;
+        this.itemAnimator = itemAnimator;
         boolean z = true;
         if (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShowed", true)) {
             z = false;
@@ -68,7 +71,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     public void setAccountsShowed(boolean z, boolean z2) {
-        if (this.accountsShowed != z) {
+        if (this.accountsShowed != z && !this.itemAnimator.isRunning()) {
             this.accountsShowed = z;
             DrawerProfileCell drawerProfileCell = this.profileCell;
             if (drawerProfileCell != null) {
