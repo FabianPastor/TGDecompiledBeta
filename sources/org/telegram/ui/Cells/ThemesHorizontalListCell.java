@@ -40,7 +40,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -1100,15 +1099,19 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     /* Access modifiers changed, original: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileDidFailToLoad);
+        for (int i = 0; i < 3; i++) {
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileDidFailToLoad);
+        }
     }
 
     /* Access modifiers changed, original: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+        for (int i = 0; i < 3; i++) {
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+        }
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
