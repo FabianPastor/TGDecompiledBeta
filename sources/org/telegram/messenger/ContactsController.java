@@ -735,7 +735,7 @@ public class ContactsController extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:205:0x0345 A:{Catch:{ all -> 0x0356 }} */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x034a A:{SYNTHETIC, Splitter:B:207:0x034a} */
     /* JADX WARNING: Removed duplicated region for block: B:210:0x0350  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x01f9 A:{Splitter:B:18:0x0055, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x01f9 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:18:0x0055} */
     /* JADX WARNING: Removed duplicated region for block: B:205:0x0345 A:{Catch:{ all -> 0x0356 }} */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x034a A:{SYNTHETIC, Splitter:B:207:0x034a} */
     /* JADX WARNING: Removed duplicated region for block: B:210:0x0350  */

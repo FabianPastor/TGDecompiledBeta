@@ -65,6 +65,7 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Cells.UserCell2;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
@@ -470,7 +471,9 @@ public class ChatRightsEditActivity extends BaseFragment {
                         string = LocaleController.getString(str2, NUM);
                     }
                     this.ignoreTextChange = true;
-                    pollEditTextCell.getTextView().setEnabled(ChatRightsEditActivity.this.canEdit);
+                    EditTextBoldCursor textView = pollEditTextCell.getTextView();
+                    boolean z3 = ChatRightsEditActivity.this.canEdit || ChatRightsEditActivity.this.currentChat.creator;
+                    textView.setEnabled(z3);
                     pollEditTextCell.getTextView().setSingleLine(true);
                     pollEditTextCell.getTextView().setImeOptions(6);
                     pollEditTextCell.setTextAndHint(ChatRightsEditActivity.this.currentRank, string, false);
