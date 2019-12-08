@@ -411,6 +411,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     SharedConfig.passcodeHash = "";
                     SharedConfig.appLocked = false;
                     SharedConfig.saveConfig();
+                    getMediaDataController().buildShortcuts();
                     i = this.listView.getChildCount();
                     for (int i2 = 0; i2 < i; i2++) {
                         View childAt = this.listView.getChildAt(i2);
@@ -661,6 +662,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 SharedConfig.allowScreenCapture = true;
                 SharedConfig.passcodeType = this.currentPasswordType;
                 SharedConfig.saveConfig();
+                getMediaDataController().buildShortcuts();
                 finishFragment();
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
                 this.passwordEditText.clearFocus();

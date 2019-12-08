@@ -129,9 +129,9 @@ public class VideoTimelinePlayView extends View {
             if (this.mediaMetadataRetriever == null) {
                 return false;
             }
-            dp4 = AndroidUtilities.dp(12.0f);
+            dp4 = AndroidUtilities.dp(16.0f);
             measuredWidth = AndroidUtilities.dp(8.0f);
-            if (((float) (dp2 - measuredWidth)) <= x && x <= ((float) (measuredWidth + dp2)) && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
+            if (dp3 != dp && ((float) (dp2 - measuredWidth)) <= x && x <= ((float) (measuredWidth + dp2)) && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
                 videoTimelineViewDelegate = this.delegate;
                 if (videoTimelineViewDelegate != null) {
                     videoTimelineViewDelegate.didStartDragging();
@@ -140,7 +140,7 @@ public class VideoTimelinePlayView extends View {
                 this.pressDx = (float) ((int) (x - ((float) dp2)));
                 invalidate();
                 return true;
-            } else if (((float) (dp - dp4)) <= x && x <= ((float) (dp + dp4)) && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
+            } else if (((float) (dp - dp4)) <= x && x <= ((float) Math.min(dp + dp4, dp3)) && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
                 videoTimelineViewDelegate = this.delegate;
                 if (videoTimelineViewDelegate != null) {
                     videoTimelineViewDelegate.didStartDragging();
@@ -156,6 +156,16 @@ public class VideoTimelinePlayView extends View {
                 }
                 this.pressedRight = true;
                 this.pressDx = (float) ((int) (x - ((float) dp3)));
+                invalidate();
+                return true;
+            } else if (((float) dp) <= x && x <= ((float) dp3) && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
+                videoTimelineViewDelegate = this.delegate;
+                if (videoTimelineViewDelegate != null) {
+                    videoTimelineViewDelegate.didStartDragging();
+                }
+                this.pressedPlay = true;
+                this.playProgress = ((float) (((int) x) - dp)) / ((float) (dp3 - dp));
+                this.pressDx = 0.0f;
                 invalidate();
                 return true;
             }

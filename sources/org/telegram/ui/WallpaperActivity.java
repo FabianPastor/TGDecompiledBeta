@@ -372,7 +372,11 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
 
         public void onFailedDownload(String str, boolean z) {
-            WallpaperActivity.this.updateButtonState(this.radialProgress, this.currentPattern, this, true, z);
+            if (z) {
+                this.radialProgress.setIcon(4, false, true);
+            } else {
+                WallpaperActivity.this.updateButtonState(this.radialProgress, this.currentPattern, this, true, z);
+            }
         }
 
         public void onSuccessDownload(String str) {
@@ -434,7 +438,6 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             tL_message.flags = 265;
             tL_message.from_id = 0;
             tL_message.id = 1;
-            tL_message.reply_to_msg_id = 5;
             tL_message.media = new TL_messageMediaEmpty();
             tL_message.out = false;
             tL_message.to_id = new TL_peerUser();
@@ -779,668 +782,687 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.wallpapersNeedReload);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x00c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x00c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x019f  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x017d  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x01ba A:{LOOP_END, LOOP:0: B:27:0x01b7->B:29:0x01ba} */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x01df  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x02a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0507  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0514  */
-    public android.view.View createView(android.content.Context r28) {
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x00ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x00c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x01a3  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0181  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x01be A:{LOOP_END, LOOP:0: B:27:0x01bb->B:29:0x01be} */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x01dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x027d  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0547  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0554  */
+    public android.view.View createView(android.content.Context r33) {
         /*
-        r27 = this;
-        r6 = r27;
-        r0 = r28;
-        r1 = r6.actionBar;
-        r2 = NUM; // 0x7var_e9 float:1.794505E38 double:1.052935618E-314;
-        r1.setBackButtonImage(r2);
-        r1 = r6.actionBar;
-        r7 = 1;
-        r1.setAllowOverlayTitle(r7);
-        r1 = r6.actionBar;
-        r2 = "BackgroundPreview";
-        r3 = NUM; // 0x7f0e01b6 float:1.8875926E38 double:1.053162373E-314;
-        r2 = org.telegram.messenger.LocaleController.getString(r2, r3);
-        r1.setTitle(r2);
-        r1 = r6.actionBar;
-        r2 = new org.telegram.ui.WallpaperActivity$1;
-        r2.<init>();
-        r1.setActionBarMenuOnItemClick(r2);
-        r1 = r6.currentWallpaper;
-        r2 = r1 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r2 != 0) goto L_0x0034;
+        r32 = this;
+        r6 = r32;
+        r7 = r33;
+        r0 = r6.actionBar;
+        r1 = NUM; // 0x7var_f0 float:1.7945065E38 double:1.0529356216E-314;
+        r0.setBackButtonImage(r1);
+        r0 = r6.actionBar;
+        r8 = 1;
+        r0.setAllowOverlayTitle(r8);
+        r0 = r6.actionBar;
+        r1 = "BackgroundPreview";
+        r2 = NUM; // 0x7f0e01c4 float:1.8875954E38 double:1.05316238E-314;
+        r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
+        r0.setTitle(r1);
+        r0 = r6.actionBar;
+        r1 = new org.telegram.ui.WallpaperActivity$1;
+        r1.<init>();
+        r0.setActionBarMenuOnItemClick(r1);
+        r0 = r6.currentWallpaper;
+        r1 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
+        if (r1 != 0) goto L_0x0034;
     L_0x0030:
-        r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
-        if (r1 == 0) goto L_0x0040;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
+        if (r0 == 0) goto L_0x0040;
     L_0x0034:
-        r1 = r6.actionBar;
-        r1 = r1.createMenu();
-        r2 = NUM; // 0x7var_ float:1.7945166E38 double:1.0529356463E-314;
-        r1.addItem(r7, r2);
+        r0 = r6.actionBar;
+        r0 = r0.createMenu();
+        r1 = NUM; // 0x7var_ float:1.7945176E38 double:1.052935649E-314;
+        r0.addItem(r8, r1);
     L_0x0040:
-        r1 = new android.widget.FrameLayout;
-        r1.<init>(r0);
-        r6.fragmentView = r1;
-        r6.hasOwnBackground = r7;
-        r2 = new org.telegram.ui.WallpaperActivity$2;
-        r2.<init>(r0);
-        r6.backgroundImage = r2;
-        r2 = r6.currentWallpaper;
-        r2 = r2 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        r3 = 2;
-        r4 = 0;
-        if (r2 == 0) goto L_0x006b;
+        r9 = new android.widget.FrameLayout;
+        r9.<init>(r7);
+        r6.fragmentView = r9;
+        r6.hasOwnBackground = r8;
+        r0 = new org.telegram.ui.WallpaperActivity$2;
+        r0.<init>(r7);
+        r6.backgroundImage = r0;
+        r0 = r6.currentWallpaper;
+        r0 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
+        r10 = 2;
+        r11 = 0;
+        if (r0 == 0) goto L_0x006b;
     L_0x0058:
-        r2 = 3;
-        r5 = r6.patterns;
-        if (r5 == 0) goto L_0x005f;
+        r0 = 3;
+        r1 = r6.patterns;
+        if (r1 == 0) goto L_0x005f;
     L_0x005d:
-        r5 = 0;
+        r1 = 0;
         goto L_0x0060;
     L_0x005f:
-        r5 = 2;
+        r1 = 2;
     L_0x0060:
-        r8 = r6.patterns;
-        if (r8 != 0) goto L_0x006d;
+        r2 = r6.patterns;
+        if (r2 != 0) goto L_0x006d;
     L_0x0064:
-        r8 = r6.selectedPattern;
-        if (r8 == 0) goto L_0x0069;
+        r2 = r6.selectedPattern;
+        if (r2 == 0) goto L_0x0069;
     L_0x0068:
         goto L_0x006d;
     L_0x0069:
-        r8 = 0;
+        r2 = 0;
         goto L_0x006e;
     L_0x006b:
-        r2 = 2;
-        r5 = 0;
+        r0 = 2;
+        r1 = 0;
     L_0x006d:
-        r8 = 1;
+        r2 = 1;
     L_0x006e:
-        r9 = r6.backgroundImage;
-        r10 = -1;
-        r11 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
-        r12 = 51;
-        r13 = 0;
-        r14 = 0;
+        r3 = r6.backgroundImage;
+        r12 = -1;
+        r13 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r14 = 51;
         r15 = 0;
-        r16 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-        r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16);
-        r1.addView(r9, r10);
-        r9 = r6.backgroundImage;
-        r9 = r9.getImageReceiver();
-        r10 = new org.telegram.ui.-$$Lambda$WallpaperActivity$DLrQAr4_n4zrBNqOkPDVZ2ql9yg;
-        r10.<init>(r6);
-        r9.setDelegate(r10);
-        r9 = new org.telegram.ui.Components.RadialProgress2;
-        r10 = r6.backgroundImage;
-        r9.<init>(r10);
-        r6.radialProgress = r9;
-        r9 = r6.radialProgress;
-        r10 = "chat_serviceText";
-        r11 = "chat_serviceBackground";
-        r9.setColors(r11, r11, r10, r10);
-        r9 = new org.telegram.ui.Components.RecyclerListView;
-        r9.<init>(r0);
-        r6.listView = r9;
-        r9 = r6.listView;
-        r10 = new androidx.recyclerview.widget.LinearLayoutManager;
-        r10.<init>(r0, r7, r7);
-        r9.setLayoutManager(r10);
-        r9 = r6.listView;
-        r9.setOverScrollMode(r3);
-        r9 = r6.listView;
-        r10 = new org.telegram.ui.WallpaperActivity$ListAdapter;
-        r10.<init>(r0);
-        r9.setAdapter(r10);
-        r9 = r6.listView;
-        if (r8 == 0) goto L_0x00c8;
-    L_0x00c5:
-        r10 = NUM; // 0x42800000 float:64.0 double:5.51221563E-315;
-        goto L_0x00ca;
-    L_0x00c8:
-        r10 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        r16 = 0;
+        r17 = 0;
+        r18 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18);
+        r9.addView(r3, r4);
+        r3 = r6.backgroundImage;
+        r3 = r3.getImageReceiver();
+        r4 = new org.telegram.ui.-$$Lambda$WallpaperActivity$DLrQAr4_n4zrBNqOkPDVZ2ql9yg;
+        r4.<init>(r6);
+        r3.setDelegate(r4);
+        r3 = new org.telegram.ui.Components.RadialProgress2;
+        r4 = r6.backgroundImage;
+        r3.<init>(r4);
+        r6.radialProgress = r3;
+        r3 = r6.radialProgress;
+        r4 = "chat_serviceText";
+        r5 = "chat_serviceBackground";
+        r3.setColors(r5, r5, r4, r4);
+        r3 = new org.telegram.ui.Components.RecyclerListView;
+        r3.<init>(r7);
+        r6.listView = r3;
+        r3 = r6.listView;
+        r4 = new androidx.recyclerview.widget.LinearLayoutManager;
+        r4.<init>(r7, r8, r8);
+        r3.setLayoutManager(r4);
+        r3 = r6.listView;
+        r3.setOverScrollMode(r10);
+        r3 = r6.listView;
+        r4 = new org.telegram.ui.WallpaperActivity$ListAdapter;
+        r4.<init>(r7);
+        r3.setAdapter(r4);
+        r3 = r6.listView;
+        if (r2 == 0) goto L_0x00ca;
+    L_0x00c7:
+        r4 = NUM; // 0x42800000 float:64.0 double:5.51221563E-315;
+        goto L_0x00cc;
     L_0x00ca:
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r9.setPadding(r4, r4, r4, r10);
-        r9 = r6.listView;
-        r10 = -1;
-        r11 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
-        r12 = 51;
-        r13 = 0;
-        r14 = 0;
+        r4 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+    L_0x00cc:
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r3.setPadding(r11, r11, r11, r4);
+        r3 = r6.listView;
+        r12 = -1;
+        r13 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r14 = 51;
         r15 = 0;
-        r16 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-        r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16);
-        r1.addView(r9, r10);
-        r9 = new org.telegram.ui.WallpaperActivity$3;
-        r9.<init>(r0);
-        r6.bottomOverlayChat = r9;
-        r9 = r6.bottomOverlayChat;
-        r9.setWillNotDraw(r4);
-        r9 = r6.bottomOverlayChat;
-        r10 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r9.setPadding(r4, r11, r4, r4);
-        r9 = r6.bottomOverlayChat;
-        r11 = 80;
-        r13 = -1;
-        r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r12, r11);
-        r1.addView(r9, r14);
-        r9 = r6.bottomOverlayChat;
-        r14 = new org.telegram.ui.-$$Lambda$WallpaperActivity$1kBuywjigfsWiHQkwiP2IyEMOss;
-        r14.<init>(r6);
-        r9.setOnClickListener(r14);
-        r9 = new android.widget.TextView;
-        r9.<init>(r0);
-        r6.bottomOverlayChatText = r9;
-        r9 = r6.bottomOverlayChatText;
-        r14 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
-        r9.setTextSize(r7, r14);
-        r9 = r6.bottomOverlayChatText;
-        r15 = "fonts/rmedium.ttf";
-        r14 = org.telegram.messenger.AndroidUtilities.getTypeface(r15);
-        r9.setTypeface(r14);
-        r9 = r6.bottomOverlayChatText;
-        r14 = "chat_fieldOverlayText";
-        r11 = org.telegram.ui.ActionBar.Theme.getColor(r14);
-        r9.setTextColor(r11);
-        r9 = r6.bottomOverlayChatText;
-        r11 = NUM; // 0x7f0e09e0 float:1.8880165E38 double:1.0531634056E-314;
-        r10 = "SetBackground";
-        r10 = org.telegram.messenger.LocaleController.getString(r10, r11);
-        r9.setText(r10);
-        r9 = r6.bottomOverlayChat;
-        r10 = r6.bottomOverlayChatText;
-        r11 = 17;
+        r16 = 0;
+        r17 = 0;
+        r18 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18);
+        r9.addView(r3, r4);
+        r3 = new org.telegram.ui.WallpaperActivity$3;
+        r3.<init>(r7);
+        r6.bottomOverlayChat = r3;
+        r3 = r6.bottomOverlayChat;
+        r3.setWillNotDraw(r11);
+        r3 = r6.bottomOverlayChat;
+        r12 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r12);
+        r3.setPadding(r11, r4, r11, r11);
+        r3 = r6.bottomOverlayChat;
+        r13 = 80;
+        r15 = -1;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r14, r13);
+        r9.addView(r3, r4);
+        r3 = r6.bottomOverlayChat;
+        r4 = new org.telegram.ui.-$$Lambda$WallpaperActivity$1kBuywjigfsWiHQkwiP2IyEMOss;
+        r4.<init>(r6);
+        r3.setOnClickListener(r4);
+        r3 = new android.widget.TextView;
+        r3.<init>(r7);
+        r6.bottomOverlayChatText = r3;
+        r3 = r6.bottomOverlayChatText;
+        r5 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
+        r3.setTextSize(r8, r5);
+        r3 = r6.bottomOverlayChatText;
+        r16 = "fonts/rmedium.ttf";
+        r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r16);
+        r3.setTypeface(r4);
+        r3 = r6.bottomOverlayChatText;
+        r17 = "chat_fieldOverlayText";
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r3.setTextColor(r4);
+        r3 = r6.bottomOverlayChatText;
+        r4 = NUM; // 0x7f0e0a0b float:1.8880252E38 double:1.053163427E-314;
+        r5 = "SetBackground";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r3.setText(r4);
+        r3 = r6.bottomOverlayChat;
+        r4 = r6.bottomOverlayChatText;
+        r5 = 17;
         r13 = -2;
-        r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r13, r11);
-        r9.addView(r10, r12);
-        r9 = new android.widget.FrameLayout;
-        r9.<init>(r0);
-        r6.buttonsContainer = r9;
-        r9 = r6.buttonsContainer;
-        r17 = -2;
-        r18 = NUM; // 0x42000000 float:32.0 double:5.4707704E-315;
-        r19 = 81;
-        r20 = 0;
-        r21 = 0;
+        r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r13, r5);
+        r3.addView(r4, r12);
+        r3 = new android.widget.FrameLayout;
+        r3.<init>(r7);
+        r6.buttonsContainer = r3;
+        r3 = r6.buttonsContainer;
+        r19 = -2;
+        r20 = NUM; // 0x42000000 float:32.0 double:5.4707704E-315;
+        r21 = 81;
         r22 = 0;
-        r23 = NUM; // 0x42840000 float:66.0 double:5.51351079E-315;
-        r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23);
-        r1.addView(r9, r10);
-        r9 = new java.lang.String[r2];
-        r10 = new int[r2];
-        r12 = new org.telegram.ui.WallpaperActivity.CheckBoxView[r2];
+        r23 = 0;
+        r24 = 0;
+        r25 = NUM; // 0x42840000 float:66.0 double:5.51351079E-315;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r9.addView(r3, r4);
+        r3 = new java.lang.String[r0];
+        r4 = new int[r0];
+        r12 = new org.telegram.ui.WallpaperActivity.CheckBoxView[r0];
         r6.checkBoxView = r12;
         r12 = r6.currentWallpaper;
         r12 = r12 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r12 == 0) goto L_0x019f;
-    L_0x017d:
-        r12 = NUM; // 0x7f0e01ad float:1.8875908E38 double:1.0531623686E-314;
-        r11 = "BackgroundColor";
-        r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
-        r9[r4] = r11;
-        r11 = NUM; // 0x7f0e01b5 float:1.8875924E38 double:1.0531623725E-314;
+        if (r12 == 0) goto L_0x01a3;
+    L_0x0181:
+        r12 = NUM; // 0x7f0e01bb float:1.8875936E38 double:1.0531623755E-314;
+        r5 = "BackgroundColor";
+        r5 = org.telegram.messenger.LocaleController.getString(r5, r12);
+        r3[r11] = r5;
+        r5 = NUM; // 0x7f0e01c3 float:1.8875952E38 double:1.0531623795E-314;
         r12 = "BackgroundPattern";
-        r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
-        r9[r7] = r11;
-        r11 = NUM; // 0x7f0e01b4 float:1.8875922E38 double:1.053162372E-314;
+        r5 = org.telegram.messenger.LocaleController.getString(r12, r5);
+        r3[r8] = r5;
+        r5 = NUM; // 0x7f0e01c2 float:1.887595E38 double:1.053162379E-314;
         r12 = "BackgroundMotion";
-        r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
-        r9[r3] = r11;
-        goto L_0x01b5;
-    L_0x019f:
-        r11 = NUM; // 0x7f0e01ab float:1.8875904E38 double:1.0531623676E-314;
+        r5 = org.telegram.messenger.LocaleController.getString(r12, r5);
+        r3[r10] = r5;
+        goto L_0x01b9;
+    L_0x01a3:
+        r5 = NUM; // 0x7f0e01b9 float:1.8875932E38 double:1.0531623745E-314;
         r12 = "BackgroundBlurred";
-        r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
-        r9[r4] = r11;
-        r11 = NUM; // 0x7f0e01b4 float:1.8875922E38 double:1.053162372E-314;
+        r5 = org.telegram.messenger.LocaleController.getString(r12, r5);
+        r3[r11] = r5;
+        r5 = NUM; // 0x7f0e01c2 float:1.887595E38 double:1.053162379E-314;
         r12 = "BackgroundMotion";
-        r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
-        r9[r7] = r11;
-    L_0x01b5:
-        r11 = 0;
+        r5 = org.telegram.messenger.LocaleController.getString(r12, r5);
+        r3[r8] = r5;
+    L_0x01b9:
+        r5 = 0;
         r12 = 0;
-    L_0x01b7:
-        r13 = r9.length;
-        if (r11 >= r13) goto L_0x01d9;
-    L_0x01ba:
-        r13 = r6.textPaint;
-        r3 = r9[r11];
-        r3 = r13.measureText(r3);
-        r20 = r5;
-        r4 = (double) r3;
-        r3 = java.lang.Math.ceil(r4);
-        r3 = (int) r3;
-        r10[r11] = r3;
-        r3 = r10[r11];
-        r12 = java.lang.Math.max(r12, r3);
-        r11 = r11 + 1;
-        r5 = r20;
-        r3 = 2;
-        r4 = 0;
-        goto L_0x01b7;
+    L_0x01bb:
+        r15 = r3.length;
+        if (r5 >= r15) goto L_0x01d9;
+    L_0x01be:
+        r15 = r6.textPaint;
+        r14 = r3[r5];
+        r14 = r15.measureText(r14);
+        r14 = (double) r14;
+        r14 = java.lang.Math.ceil(r14);
+        r14 = (int) r14;
+        r4[r5] = r14;
+        r14 = r4[r5];
+        r12 = java.lang.Math.max(r12, r14);
+        r5 = r5 + 1;
+        r14 = 51;
+        goto L_0x01bb;
     L_0x01d9:
-        r20 = r5;
-        r3 = r20;
-    L_0x01dd:
-        if (r3 >= r2) goto L_0x0283;
-    L_0x01df:
-        r4 = r6.checkBoxView;
-        r5 = new org.telegram.ui.WallpaperActivity$CheckBoxView;
-        r11 = r6.currentWallpaper;
-        r11 = r11 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r11 == 0) goto L_0x01ee;
+        r5 = r1;
+    L_0x01da:
+        if (r5 >= r0) goto L_0x027b;
+    L_0x01dc:
+        r14 = r6.checkBoxView;
+        r15 = new org.telegram.ui.WallpaperActivity$CheckBoxView;
+        r13 = r6.currentWallpaper;
+        r13 = r13 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
+        if (r13 == 0) goto L_0x01eb;
+    L_0x01e6:
+        if (r5 == 0) goto L_0x01e9;
+    L_0x01e8:
+        goto L_0x01eb;
     L_0x01e9:
-        if (r3 == 0) goto L_0x01ec;
-    L_0x01eb:
-        goto L_0x01ee;
-    L_0x01ec:
-        r11 = 0;
-        goto L_0x01ef;
-    L_0x01ee:
-        r11 = 1;
-    L_0x01ef:
-        r5.<init>(r0, r11);
-        r4[r3] = r5;
-        r4 = r6.checkBoxView;
-        r4 = r4[r3];
-        r5 = r9[r3];
-        r11 = r10[r3];
-        r4.setText(r5, r11, r12);
-        r4 = r6.currentWallpaper;
-        r4 = r4 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r4 == 0) goto L_0x0226;
-    L_0x0205:
-        if (r3 != r7) goto L_0x0218;
-    L_0x0207:
-        r4 = r6.checkBoxView;
-        r4 = r4[r3];
-        r5 = r6.selectedPattern;
-        if (r5 == 0) goto L_0x0212;
-    L_0x020f:
-        r5 = 0;
-        r13 = 1;
-        goto L_0x0214;
-    L_0x0212:
-        r5 = 0;
         r13 = 0;
-    L_0x0214:
-        r4.setChecked(r13, r5);
-        goto L_0x0235;
-    L_0x0218:
-        r4 = 2;
-        r5 = 0;
-        if (r3 != r4) goto L_0x0235;
-    L_0x021c:
-        r4 = r6.checkBoxView;
-        r4 = r4[r3];
-        r11 = r6.isMotion;
-        r4.setChecked(r11, r5);
-        goto L_0x0235;
-    L_0x0226:
-        r5 = 0;
-        r4 = r6.checkBoxView;
-        r4 = r4[r3];
-        if (r3 != 0) goto L_0x0230;
+        goto L_0x01ec;
+    L_0x01eb:
+        r13 = 1;
+    L_0x01ec:
+        r15.<init>(r7, r13);
+        r14[r5] = r15;
+        r13 = r6.checkBoxView;
+        r13 = r13[r5];
+        r14 = r3[r5];
+        r15 = r4[r5];
+        r13.setText(r14, r15, r12);
+        r13 = r6.currentWallpaper;
+        r13 = r13 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
+        if (r13 == 0) goto L_0x021f;
+    L_0x0202:
+        if (r5 != r8) goto L_0x0213;
+    L_0x0204:
+        r13 = r6.checkBoxView;
+        r13 = r13[r5];
+        r14 = r6.selectedPattern;
+        if (r14 == 0) goto L_0x020e;
+    L_0x020c:
+        r14 = 1;
+        goto L_0x020f;
+    L_0x020e:
+        r14 = 0;
+    L_0x020f:
+        r13.setChecked(r14, r11);
+        goto L_0x022d;
+    L_0x0213:
+        if (r5 != r10) goto L_0x022d;
+    L_0x0215:
+        r13 = r6.checkBoxView;
+        r13 = r13[r5];
+        r14 = r6.isMotion;
+        r13.setChecked(r14, r11);
+        goto L_0x022d;
+    L_0x021f:
+        r13 = r6.checkBoxView;
+        r13 = r13[r5];
+        if (r5 != 0) goto L_0x0228;
+    L_0x0225:
+        r14 = r6.isBlurred;
+        goto L_0x022a;
+    L_0x0228:
+        r14 = r6.isMotion;
+    L_0x022a:
+        r13.setChecked(r14, r11);
     L_0x022d:
-        r11 = r6.isBlurred;
-        goto L_0x0232;
-    L_0x0230:
-        r11 = r6.isMotion;
-    L_0x0232:
-        r4.setChecked(r11, r5);
-    L_0x0235:
-        r4 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = r4 + r12;
-        r5 = new android.widget.FrameLayout$LayoutParams;
-        r11 = -2;
-        r5.<init>(r11, r4);
-        r11 = 51;
-        r5.gravity = r11;
-        if (r3 != r7) goto L_0x0250;
+        r13 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
+        r13 = org.telegram.messenger.AndroidUtilities.dp(r13);
+        r13 = r13 + r12;
+        r14 = new android.widget.FrameLayout$LayoutParams;
+        r15 = -2;
+        r14.<init>(r15, r13);
+        r15 = 51;
+        r14.gravity = r15;
+        if (r5 != r8) goto L_0x0248;
+    L_0x0240:
+        r15 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
+        r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r13 = r13 + r15;
+        goto L_0x0249;
     L_0x0248:
-        r11 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);
-        r4 = r4 + r11;
-        goto L_0x0251;
-    L_0x0250:
-        r4 = 0;
-    L_0x0251:
-        r5.leftMargin = r4;
-        r4 = r6.buttonsContainer;
-        r11 = r6.checkBoxView;
-        r11 = r11[r3];
-        r4.addView(r11, r5);
-        r4 = r6.checkBoxView;
-        r5 = r4[r3];
-        r4 = r4[r3];
-        r11 = new org.telegram.ui.-$$Lambda$WallpaperActivity$1-TCmIiY1WoqCaRaze9MxJF8Hq4;
-        r11.<init>(r6, r3, r5);
-        r4.setOnClickListener(r11);
-        if (r20 != 0) goto L_0x027f;
-    L_0x026c:
-        r4 = 2;
-        if (r3 != r4) goto L_0x027f;
-    L_0x026f:
-        r4 = r6.checkBoxView;
-        r4 = r4[r3];
-        r5 = 0;
-        r4.setAlpha(r5);
-        r4 = r6.checkBoxView;
-        r4 = r4[r3];
-        r5 = 4;
-        r4.setVisibility(r5);
-    L_0x027f:
-        r3 = r3 + 1;
-        goto L_0x01dd;
-    L_0x0283:
-        if (r8 != 0) goto L_0x028c;
-    L_0x0285:
-        r2 = r6.buttonsContainer;
-        r3 = 8;
-        r2.setVisibility(r3);
-    L_0x028c:
-        r2 = new org.telegram.ui.Components.WallpaperParallaxEffect;
-        r2.<init>(r0);
-        r6.parallaxEffect = r2;
-        r2 = r6.parallaxEffect;
-        r3 = new org.telegram.ui.-$$Lambda$WallpaperActivity$PNT8mBRP7gH3N8qVf5B9a9cTbAY;
-        r3.<init>(r6);
-        r2.setCallback(r3);
-        r2 = r6.currentWallpaper;
-        r2 = r2 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r2 == 0) goto L_0x04ec;
-    L_0x02a3:
-        r2 = 0;
-        r6.isBlurred = r2;
-        r2 = 0;
-    L_0x02a7:
-        r3 = 2;
-        if (r2 >= r3) goto L_0x04ec;
-    L_0x02aa:
-        r4 = r6.patternLayout;
-        r5 = new org.telegram.ui.WallpaperActivity$4;
-        r5.<init>(r0);
-        r4[r2] = r5;
-        r4 = r6.patternLayout;
-        r4 = r4[r2];
-        r5 = 4;
-        r4.setVisibility(r5);
-        r4 = r6.patternLayout;
-        r4 = r4[r2];
-        r5 = 0;
-        r4.setWillNotDraw(r5);
-        r4 = r6.patternLayout;
-        r4 = r4[r2];
-        if (r2 != 0) goto L_0x02cc;
-    L_0x02c9:
-        r5 = 390; // 0x186 float:5.47E-43 double:1.927E-321;
-        goto L_0x02ce;
-    L_0x02cc:
-        r5 = 242; // 0xf2 float:3.39E-43 double:1.196E-321;
-    L_0x02ce:
-        r8 = 83;
-        r9 = -1;
-        r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r5, r8);
-        r1.addView(r4, r5);
-        r4 = r6.patternsButtonsContainer;
-        r5 = new org.telegram.ui.WallpaperActivity$5;
-        r5.<init>(r0);
-        r4[r2] = r5;
-        r4 = r6.patternsButtonsContainer;
-        r4 = r4[r2];
-        r5 = 0;
-        r4.setWillNotDraw(r5);
-        r4 = r6.patternsButtonsContainer;
-        r4 = r4[r2];
-        r8 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r8);
-        r4.setPadding(r5, r9, r5, r5);
-        r4 = r6.patternLayout;
-        r4 = r4[r2];
-        r5 = r6.patternsButtonsContainer;
-        r5 = r5[r2];
-        r9 = 80;
-        r10 = 51;
-        r11 = -1;
-        r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10, r9);
-        r4.addView(r5, r12);
+        r13 = 0;
+    L_0x0249:
+        r14.leftMargin = r13;
+        r13 = r6.buttonsContainer;
+        r15 = r6.checkBoxView;
+        r15 = r15[r5];
+        r13.addView(r15, r14);
+        r13 = r6.checkBoxView;
+        r14 = r13[r5];
+        r13 = r13[r5];
+        r15 = new org.telegram.ui.-$$Lambda$WallpaperActivity$1-TCmIiY1WoqCaRaze9MxJF8Hq4;
+        r15.<init>(r6, r5, r14);
+        r13.setOnClickListener(r15);
+        if (r1 != 0) goto L_0x0276;
+    L_0x0264:
+        if (r5 != r10) goto L_0x0276;
+    L_0x0266:
+        r13 = r6.checkBoxView;
+        r13 = r13[r5];
+        r14 = 0;
+        r13.setAlpha(r14);
+        r13 = r6.checkBoxView;
+        r13 = r13[r5];
+        r14 = 4;
+        r13.setVisibility(r14);
+    L_0x0276:
+        r5 = r5 + 1;
+        r13 = -2;
+        goto L_0x01da;
+    L_0x027b:
+        if (r2 != 0) goto L_0x0284;
+    L_0x027d:
+        r0 = r6.buttonsContainer;
+        r1 = 8;
+        r0.setVisibility(r1);
+    L_0x0284:
+        r0 = new org.telegram.ui.Components.WallpaperParallaxEffect;
+        r0.<init>(r7);
+        r6.parallaxEffect = r0;
+        r0 = r6.parallaxEffect;
+        r1 = new org.telegram.ui.-$$Lambda$WallpaperActivity$PNT8mBRP7gH3N8qVf5B9a9cTbAY;
+        r1.<init>(r6);
+        r0.setCallback(r1);
+        r0 = r6.currentWallpaper;
+        r0 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
+        if (r0 == 0) goto L_0x052c;
+    L_0x029b:
+        r6.isBlurred = r11;
+        r12 = new android.graphics.Rect;
+        r12.<init>();
+        r0 = r33.getResources();
+        r1 = NUM; // 0x7var_ float:1.794592E38 double:1.05293583E-314;
+        r0 = r0.getDrawable(r1);
+        r13 = r0.mutate();
+        r13.getPadding(r12);
+        r0 = new android.graphics.PorterDuffColorFilter;
+        r1 = "windowBackgroundWhite";
+        r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
+        r2 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r0.<init>(r1, r2);
+        r13.setColorFilter(r0);
+        r14 = 0;
+    L_0x02c6:
+        if (r14 >= r10) goto L_0x052c;
+    L_0x02c8:
+        r15 = r6.patternLayout;
+        r23 = new org.telegram.ui.WallpaperActivity$4;
+        r0 = r23;
+        r1 = r32;
+        r2 = r33;
+        r3 = r14;
+        r4 = r13;
+        r10 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
+        r5 = r12;
+        r0.<init>(r2, r3, r4, r5);
+        r15[r14] = r23;
+        r0 = r6.patternLayout;
+        r0 = r0[r14];
+        r1 = 4;
+        r0.setVisibility(r1);
+        r0 = r6.patternLayout;
+        r0 = r0[r14];
+        r0.setWillNotDraw(r11);
+        if (r14 != 0) goto L_0x02f0;
+    L_0x02ed:
+        r0 = 342; // 0x156 float:4.79E-43 double:1.69E-321;
+        goto L_0x02f2;
+    L_0x02f0:
+        r0 = 242; // 0xf2 float:3.39E-43 double:1.196E-321;
+    L_0x02f2:
+        r1 = 83;
+        r2 = -1;
+        r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r0, r1);
+        if (r14 != 0) goto L_0x0319;
+    L_0x02fb:
+        r1 = r0.height;
+        r2 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r3 = r12.top;
+        r2 = r2 + r3;
+        r1 = r1 + r2;
+        r0.height = r1;
+        r1 = r6.patternLayout;
+        r1 = r1[r14];
+        r2 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r3 = r12.top;
+        r2 = r2 + r3;
+        r1.setPadding(r11, r2, r11, r11);
+    L_0x0319:
+        r1 = r6.patternLayout;
+        r1 = r1[r14];
+        r9.addView(r1, r0);
+        r0 = r6.patternsButtonsContainer;
+        r1 = new org.telegram.ui.WallpaperActivity$5;
+        r1.<init>(r7);
+        r0[r14] = r1;
+        r0 = r6.patternsButtonsContainer;
+        r0 = r0[r14];
+        r0.setWillNotDraw(r11);
+        r0 = r6.patternsButtonsContainer;
+        r0 = r0[r14];
+        r1 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r1);
+        r0.setPadding(r11, r2, r11, r11);
+        r0 = r6.patternLayout;
+        r0 = r0[r14];
+        r2 = r6.patternsButtonsContainer;
+        r2 = r2[r14];
+        r3 = 80;
+        r4 = 51;
+        r5 = -1;
+        r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r4, r3);
+        r0.addView(r2, r15);
+        r0 = r6.patternsCancelButton;
+        r2 = new android.widget.TextView;
+        r2.<init>(r7);
+        r0[r14] = r2;
+        r0 = r6.patternsCancelButton;
+        r0 = r0[r14];
+        r0.setTextSize(r8, r10);
+        r0 = r6.patternsCancelButton;
+        r0 = r0[r14];
+        r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r16);
+        r0.setTypeface(r2);
+        r0 = r6.patternsCancelButton;
+        r0 = r0[r14];
+        r2 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r0.setTextColor(r2);
+        r0 = r6.patternsCancelButton;
+        r0 = r0[r14];
+        r2 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
+        r4 = "Cancel";
+        r2 = org.telegram.messenger.LocaleController.getString(r4, r2);
+        r2 = r2.toUpperCase();
+        r0.setText(r2);
+        r0 = r6.patternsCancelButton;
+        r0 = r0[r14];
+        r2 = 17;
+        r0.setGravity(r2);
+        r0 = r6.patternsCancelButton;
+        r0 = r0[r14];
+        r2 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r0.setPadding(r4, r11, r5, r11);
+        r0 = r6.patternsCancelButton;
+        r0 = r0[r14];
+        r4 = "listSelectorSDK21";
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
+        r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r11);
+        r0.setBackgroundDrawable(r4);
+        r0 = r6.patternsButtonsContainer;
+        r0 = r0[r14];
         r4 = r6.patternsCancelButton;
-        r5 = new android.widget.TextView;
-        r5.<init>(r0);
-        r4[r2] = r5;
-        r4 = r6.patternsCancelButton;
-        r4 = r4[r2];
-        r5 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
-        r4.setTextSize(r7, r5);
-        r4 = r6.patternsCancelButton;
-        r4 = r4[r2];
-        r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r15);
-        r4.setTypeface(r5);
-        r4 = r6.patternsCancelButton;
-        r4 = r4[r2];
-        r5 = org.telegram.ui.ActionBar.Theme.getColor(r14);
-        r4.setTextColor(r5);
-        r4 = r6.patternsCancelButton;
-        r4 = r4[r2];
-        r5 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
-        r10 = "Cancel";
-        r5 = org.telegram.messenger.LocaleController.getString(r10, r5);
-        r5 = r5.toUpperCase();
-        r4.setText(r5);
-        r4 = r6.patternsCancelButton;
-        r4 = r4[r2];
-        r5 = 17;
-        r4.setGravity(r5);
-        r4 = r6.patternsCancelButton;
-        r4 = r4[r2];
-        r5 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r12 = 0;
-        r4.setPadding(r10, r12, r11, r12);
-        r4 = r6.patternsCancelButton;
-        r4 = r4[r2];
-        r10 = "listSelectorSDK21";
-        r10 = org.telegram.ui.ActionBar.Theme.getColor(r10);
-        r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10, r12);
-        r4.setBackgroundDrawable(r10);
-        r4 = r6.patternsButtonsContainer;
-        r4 = r4[r2];
-        r10 = r6.patternsCancelButton;
-        r10 = r10[r2];
-        r3 = -1;
-        r11 = 51;
-        r12 = -2;
-        r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r3, r11);
-        r4.addView(r10, r8);
-        r3 = r6.patternsCancelButton;
-        r3 = r3[r2];
-        r4 = new org.telegram.ui.-$$Lambda$WallpaperActivity$25btyyl2ojPzi3umZx_yVj0JTsE;
-        r4.<init>(r6, r2);
-        r3.setOnClickListener(r4);
-        r3 = r6.patternsSaveButton;
-        r4 = new android.widget.TextView;
-        r4.<init>(r0);
-        r3[r2] = r4;
-        r3 = r6.patternsSaveButton;
-        r3 = r3[r2];
-        r4 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
-        r3.setTextSize(r7, r4);
-        r3 = r6.patternsSaveButton;
-        r3 = r3[r2];
-        r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r15);
-        r3.setTypeface(r8);
-        r3 = r6.patternsSaveButton;
-        r3 = r3[r2];
-        r8 = org.telegram.ui.ActionBar.Theme.getColor(r14);
-        r3.setTextColor(r8);
-        r3 = r6.patternsSaveButton;
-        r3 = r3[r2];
-        r8 = NUM; // 0x7f0e0966 float:1.8879917E38 double:1.0531633454E-314;
-        r10 = "Save";
-        r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
-        r8 = r8.toUpperCase();
-        r3.setText(r8);
-        r3 = r6.patternsSaveButton;
-        r3 = r3[r2];
-        r8 = 17;
-        r3.setGravity(r8);
-        r3 = r6.patternsSaveButton;
-        r3 = r3[r2];
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r12 = 0;
-        r3.setPadding(r10, r12, r5, r12);
-        r3 = r6.patternsSaveButton;
-        r3 = r3[r2];
-        r5 = "listSelectorSDK21";
-        r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
-        r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r5, r12);
-        r3.setBackgroundDrawable(r5);
-        r3 = r6.patternsButtonsContainer;
-        r3 = r3[r2];
-        r5 = r6.patternsSaveButton;
-        r5 = r5[r2];
-        r10 = 53;
-        r4 = -1;
-        r12 = -2;
-        r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r4, r10);
-        r3.addView(r5, r10);
-        r3 = r6.patternsSaveButton;
-        r3 = r3[r2];
-        r5 = new org.telegram.ui.-$$Lambda$WallpaperActivity$rqsIbe4XDaEpSOIXXh5TVdi7z9A;
-        r5.<init>(r6, r2);
-        r3.setOnClickListener(r5);
-        if (r2 != r7) goto L_0x04c0;
-    L_0x0418:
-        r3 = new org.telegram.ui.WallpaperActivity$6;
-        r3.<init>(r0);
-        r6.patternsListView = r3;
-        r3 = r6.patternsListView;
-        r5 = new androidx.recyclerview.widget.LinearLayoutManager;
-        r10 = 0;
-        r5.<init>(r0, r10, r10);
-        r6.patternsLayoutManager = r5;
-        r3.setLayoutManager(r5);
-        r3 = r6.patternsListView;
-        r5 = new org.telegram.ui.WallpaperActivity$PatternsAdapter;
-        r5.<init>(r0);
-        r6.patternsAdapter = r5;
-        r3.setAdapter(r5);
-        r3 = r6.patternsListView;
-        r5 = new org.telegram.ui.WallpaperActivity$7;
-        r5.<init>();
-        r3.addItemDecoration(r5);
-        r3 = r6.patternLayout;
-        r3 = r3[r2];
-        r5 = r6.patternsListView;
-        r20 = -1;
-        r21 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r22 = 51;
-        r23 = 0;
-        r24 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r25 = 0;
-        r26 = 0;
-        r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26);
-        r3.addView(r5, r13);
-        r3 = r6.patternsListView;
-        r5 = new org.telegram.ui.-$$Lambda$WallpaperActivity$yS3bJtjNmGQ30kYj94XwI29Szdc;
-        r5.<init>(r6);
-        r3.setOnItemClickListener(r5);
-        r3 = new org.telegram.ui.Cells.HeaderCell;
-        r3.<init>(r0);
-        r6.intensityCell = r3;
-        r3 = r6.intensityCell;
-        r5 = NUM; // 0x7f0e01b3 float:1.887592E38 double:1.0531623715E-314;
-        r13 = "BackgroundIntensity";
-        r5 = org.telegram.messenger.LocaleController.getString(r13, r5);
-        r3.setText(r5);
-        r3 = r6.patternLayout;
-        r3 = r3[r2];
-        r5 = r6.intensityCell;
-        r21 = -NUM; // 0xffffffffCLASSNAME float:-2.0 double:NaN;
-        r24 = NUM; // 0x42e20000 float:113.0 double:5.543947133E-315;
-        r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26);
-        r3.addView(r5, r13);
-        r3 = new org.telegram.ui.WallpaperActivity$8;
-        r3.<init>(r0);
-        r6.intensitySeekBar = r3;
-        r3 = r6.intensitySeekBar;
-        r5 = r6.currentIntensity;
-        r3.setProgress(r5);
-        r3 = r6.intensitySeekBar;
-        r3.setReportChanges(r7);
-        r3 = r6.intensitySeekBar;
-        r5 = new org.telegram.ui.WallpaperActivity$9;
-        r5.<init>();
-        r3.setDelegate(r5);
-        r3 = r6.patternLayout;
-        r3 = r3[r2];
-        r5 = r6.intensitySeekBar;
-        r21 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
-        r23 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r24 = NUM; // 0x43190000 float:153.0 double:5.56175563E-315;
-        r25 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26);
-        r3.addView(r5, r13);
-        goto L_0x04e8;
-    L_0x04c0:
-        r10 = 0;
-        r3 = new org.telegram.ui.Components.ColorPicker;
-        r5 = new org.telegram.ui.-$$Lambda$WallpaperActivity$zSvQbauZnhDK6wRRSmJlbMMUtgg;
-        r5.<init>(r6);
-        r3.<init>(r0, r5);
-        r6.colorPicker = r3;
-        r3 = r6.patternLayout;
-        r3 = r3[r2];
-        r5 = r6.colorPicker;
-        r20 = -1;
-        r21 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
-        r22 = 1;
-        r23 = 0;
-        r24 = 0;
-        r25 = 0;
-        r26 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-        r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26);
-        r3.addView(r5, r13);
-    L_0x04e8:
-        r2 = r2 + 1;
-        goto L_0x02a7;
-    L_0x04ec:
-        r6.setCurrentImage(r7);
+        r4 = r4[r14];
+        r1 = -1;
+        r5 = 51;
+        r15 = -2;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r1, r5);
+        r0.addView(r4, r3);
+        r0 = r6.patternsCancelButton;
+        r0 = r0[r14];
+        r1 = new org.telegram.ui.-$$Lambda$WallpaperActivity$25btyyl2ojPzi3umZx_yVj0JTsE;
+        r1.<init>(r6, r14);
+        r0.setOnClickListener(r1);
+        r0 = r6.patternsSaveButton;
+        r1 = new android.widget.TextView;
+        r1.<init>(r7);
+        r0[r14] = r1;
+        r0 = r6.patternsSaveButton;
+        r0 = r0[r14];
+        r0.setTextSize(r8, r10);
+        r0 = r6.patternsSaveButton;
+        r0 = r0[r14];
+        r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r16);
+        r0.setTypeface(r1);
+        r0 = r6.patternsSaveButton;
+        r0 = r0[r14];
+        r1 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r0.setTextColor(r1);
+        r0 = r6.patternsSaveButton;
+        r0 = r0[r14];
+        r1 = NUM; // 0x7f0e098e float:1.8879999E38 double:1.053163365E-314;
+        r3 = "Save";
+        r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
+        r1 = r1.toUpperCase();
+        r0.setText(r1);
+        r0 = r6.patternsSaveButton;
+        r0 = r0[r14];
+        r1 = 17;
+        r0.setGravity(r1);
+        r0 = r6.patternsSaveButton;
+        r0 = r0[r14];
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r0.setPadding(r3, r11, r2, r11);
+        r0 = r6.patternsSaveButton;
+        r0 = r0[r14];
+        r2 = "listSelectorSDK21";
+        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
+        r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r11);
+        r0.setBackgroundDrawable(r2);
+        r0 = r6.patternsButtonsContainer;
+        r0 = r0[r14];
+        r2 = r6.patternsSaveButton;
+        r2 = r2[r14];
+        r3 = 53;
+        r4 = -2;
+        r15 = -1;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r15, r3);
+        r0.addView(r2, r3);
+        r0 = r6.patternsSaveButton;
+        r0 = r0[r14];
+        r2 = new org.telegram.ui.-$$Lambda$WallpaperActivity$rqsIbe4XDaEpSOIXXh5TVdi7z9A;
+        r2.<init>(r6, r14);
+        r0.setOnClickListener(r2);
+        if (r14 != r8) goto L_0x0500;
+    L_0x0459:
+        r0 = new org.telegram.ui.WallpaperActivity$6;
+        r0.<init>(r7);
+        r6.patternsListView = r0;
+        r0 = r6.patternsListView;
+        r2 = new androidx.recyclerview.widget.LinearLayoutManager;
+        r2.<init>(r7, r11, r11);
+        r6.patternsLayoutManager = r2;
+        r0.setLayoutManager(r2);
+        r0 = r6.patternsListView;
+        r2 = new org.telegram.ui.WallpaperActivity$PatternsAdapter;
+        r2.<init>(r7);
+        r6.patternsAdapter = r2;
+        r0.setAdapter(r2);
+        r0 = r6.patternsListView;
+        r2 = new org.telegram.ui.WallpaperActivity$7;
+        r2.<init>();
+        r0.addItemDecoration(r2);
+        r0 = r6.patternLayout;
+        r0 = r0[r14];
+        r2 = r6.patternsListView;
+        r25 = -1;
+        r26 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
+        r27 = 51;
+        r28 = 0;
+        r29 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
+        r30 = 0;
+        r31 = 0;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31);
+        r0.addView(r2, r3);
+        r0 = r6.patternsListView;
+        r2 = new org.telegram.ui.-$$Lambda$WallpaperActivity$yS3bJtjNmGQ30kYj94XwI29Szdc;
+        r2.<init>(r6);
+        r0.setOnItemClickListener(r2);
+        r0 = new org.telegram.ui.Cells.HeaderCell;
+        r0.<init>(r7);
+        r6.intensityCell = r0;
+        r0 = r6.intensityCell;
+        r2 = NUM; // 0x7f0e01c1 float:1.8875948E38 double:1.0531623785E-314;
+        r3 = "BackgroundIntensity";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r0.setText(r2);
+        r0 = r6.patternLayout;
+        r0 = r0[r14];
+        r2 = r6.intensityCell;
+        r26 = -NUM; // 0xffffffffCLASSNAME float:-2.0 double:NaN;
+        r29 = NUM; // 0x42e20000 float:113.0 double:5.543947133E-315;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31);
+        r0.addView(r2, r3);
+        r0 = new org.telegram.ui.WallpaperActivity$8;
+        r0.<init>(r7);
+        r6.intensitySeekBar = r0;
+        r0 = r6.intensitySeekBar;
+        r2 = r6.currentIntensity;
+        r0.setProgress(r2);
+        r0 = r6.intensitySeekBar;
+        r0.setReportChanges(r8);
+        r0 = r6.intensitySeekBar;
+        r2 = new org.telegram.ui.WallpaperActivity$9;
+        r2.<init>();
+        r0.setDelegate(r2);
+        r0 = r6.patternLayout;
+        r0 = r0[r14];
+        r2 = r6.intensitySeekBar;
+        r26 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
+        r28 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
+        r29 = NUM; // 0x43190000 float:153.0 double:5.56175563E-315;
+        r30 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31);
+        r0.addView(r2, r3);
+        goto L_0x0527;
+    L_0x0500:
+        r0 = new org.telegram.ui.Components.ColorPicker;
+        r2 = new org.telegram.ui.-$$Lambda$WallpaperActivity$p0o1Hwb9gTd7jrru2NyNxNi1jhs;
+        r2.<init>(r6);
+        r0.<init>(r7, r2);
+        r6.colorPicker = r0;
+        r0 = r6.patternLayout;
+        r0 = r0[r14];
+        r2 = r6.colorPicker;
+        r25 = -1;
+        r26 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r27 = 1;
+        r28 = 0;
+        r29 = 0;
+        r30 = 0;
+        r31 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31);
+        r0.addView(r2, r3);
+    L_0x0527:
+        r14 = r14 + 1;
+        r10 = 2;
+        goto L_0x02c6;
+    L_0x052c:
+        r6.setCurrentImage(r8);
         r1 = r6.radialProgress;
         r2 = 0;
         r4 = 0;
         r5 = 0;
-        r0 = r27;
-        r3 = r27;
+        r0 = r32;
+        r3 = r32;
         r0.updateButtonState(r1, r2, r3, r4, r5);
         r0 = r6.backgroundImage;
         r0 = r0.getImageReceiver();
         r0 = r0.hasBitmapImage();
-        if (r0 != 0) goto L_0x050e;
-    L_0x0507:
+        if (r0 != 0) goto L_0x054e;
+    L_0x0547:
         r0 = r6.fragmentView;
         r1 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r0.setBackgroundColor(r1);
-    L_0x050e:
+    L_0x054e:
         r0 = r6.currentWallpaper;
         r0 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r0 != 0) goto L_0x0526;
-    L_0x0514:
+        if (r0 != 0) goto L_0x0566;
+    L_0x0554:
         r0 = r6.backgroundImage;
         r0 = r0.getImageReceiver();
-        r0.setCrossfadeWithOldImage(r7);
+        r0.setCrossfadeWithOldImage(r8);
         r0 = r6.backgroundImage;
         r0 = r0.getImageReceiver();
-        r0.setForceCrossfade(r7);
-    L_0x0526:
+        r0.setForceCrossfade(r8);
+    L_0x0566:
         r0 = r6.fragmentView;
         return r0;
         */
@@ -1472,20 +1494,20 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0116 A:{SYNTHETIC, Splitter:B:60:0x0116} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0153  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x013b  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:102:0x020e  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x028a  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0116 A:{SYNTHETIC, Splitter:B:60:0x0116} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x013b  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0153  */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:102:0x020e  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x028a  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0118 A:{SYNTHETIC, Splitter:B:60:0x0118} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0155  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x013d  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0210  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x028c  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0118 A:{SYNTHETIC, Splitter:B:60:0x0118} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x013d  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0155  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0210  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x028c  */
     public /* synthetic */ void lambda$createView$1$WallpaperActivity(android.view.View r33) {
         /*
         r32 = this;
@@ -1494,13 +1516,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r0 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
         r3 = r1.isBlurred;
         r4 = "wallpaper.jpg";
-        if (r3 == 0) goto L_0x0011;
-    L_0x000e:
+        if (r3 == 0) goto L_0x0013;
+    L_0x000f:
         r3 = "wallpaper_original.jpg";
-        goto L_0x0012;
-    L_0x0011:
+        goto L_0x0014;
+    L_0x0013:
         r3 = r4;
-    L_0x0012:
+    L_0x0014:
         r2.<init>(r0, r3);
         r0 = r1.currentWallpaper;
         r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
@@ -1508,175 +1530,175 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r6 = -2;
         r8 = 87;
         r10 = 1;
-        if (r3 == 0) goto L_0x0058;
-    L_0x0022:
-        r0 = r1.backgroundImage;	 Catch:{ Exception -> 0x003b }
-        r0 = r0.getImageReceiver();	 Catch:{ Exception -> 0x003b }
-        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x003b }
-        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x003b }
-        r3.<init>(r2);	 Catch:{ Exception -> 0x003b }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x003b }
-        r0.compress(r11, r8, r3);	 Catch:{ Exception -> 0x003b }
-        r3.close();	 Catch:{ Exception -> 0x003b }
+        if (r3 == 0) goto L_0x005a;
+    L_0x0024:
+        r0 = r1.backgroundImage;	 Catch:{ Exception -> 0x003d }
+        r0 = r0.getImageReceiver();	 Catch:{ Exception -> 0x003d }
+        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x003d }
+        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x003d }
+        r3.<init>(r2);	 Catch:{ Exception -> 0x003d }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x003d }
+        r0.compress(r11, r8, r3);	 Catch:{ Exception -> 0x003d }
+        r3.close();	 Catch:{ Exception -> 0x003d }
         r0 = 1;
-        goto L_0x0040;
-    L_0x003b:
+        goto L_0x0042;
+    L_0x003d:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x0040:
-        if (r0 != 0) goto L_0x00b8;
     L_0x0042:
+        if (r0 != 0) goto L_0x00ba;
+    L_0x0044:
         r0 = r1.currentWallpaper;
         r0 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r0;
         r0 = r0.document;
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r10);
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x0051 }
-        goto L_0x00b8;
-    L_0x0051:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x0053 }
+        goto L_0x00ba;
+    L_0x0053:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-        goto L_0x0110;
-    L_0x0058:
+        goto L_0x0112;
+    L_0x005a:
         r3 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r3 == 0) goto L_0x00ba;
-    L_0x005c:
+        if (r3 == 0) goto L_0x00bc;
+    L_0x005e:
         r3 = r1.selectedPattern;
-        if (r3 == 0) goto L_0x00b7;
-    L_0x0060:
-        r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0;	 Catch:{ all -> 0x00b2 }
-        r0 = r1.backgroundImage;	 Catch:{ all -> 0x00b2 }
-        r0 = r0.getImageReceiver();	 Catch:{ all -> 0x00b2 }
-        r0 = r0.getBitmap();	 Catch:{ all -> 0x00b2 }
-        r3 = r0.getWidth();	 Catch:{ all -> 0x00b2 }
-        r11 = r0.getHeight();	 Catch:{ all -> 0x00b2 }
-        r12 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x00b2 }
-        r3 = android.graphics.Bitmap.createBitmap(r3, r11, r12);	 Catch:{ all -> 0x00b2 }
-        r11 = new android.graphics.Canvas;	 Catch:{ all -> 0x00b2 }
-        r11.<init>(r3);	 Catch:{ all -> 0x00b2 }
-        r12 = r1.backgroundColor;	 Catch:{ all -> 0x00b2 }
-        r11.drawColor(r12);	 Catch:{ all -> 0x00b2 }
-        r12 = new android.graphics.Paint;	 Catch:{ all -> 0x00b2 }
+        if (r3 == 0) goto L_0x00b9;
+    L_0x0062:
+        r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0;	 Catch:{ all -> 0x00b4 }
+        r0 = r1.backgroundImage;	 Catch:{ all -> 0x00b4 }
+        r0 = r0.getImageReceiver();	 Catch:{ all -> 0x00b4 }
+        r0 = r0.getBitmap();	 Catch:{ all -> 0x00b4 }
+        r3 = r0.getWidth();	 Catch:{ all -> 0x00b4 }
+        r11 = r0.getHeight();	 Catch:{ all -> 0x00b4 }
+        r12 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x00b4 }
+        r3 = android.graphics.Bitmap.createBitmap(r3, r11, r12);	 Catch:{ all -> 0x00b4 }
+        r11 = new android.graphics.Canvas;	 Catch:{ all -> 0x00b4 }
+        r11.<init>(r3);	 Catch:{ all -> 0x00b4 }
+        r12 = r1.backgroundColor;	 Catch:{ all -> 0x00b4 }
+        r11.drawColor(r12);	 Catch:{ all -> 0x00b4 }
+        r12 = new android.graphics.Paint;	 Catch:{ all -> 0x00b4 }
         r13 = 2;
-        r12.<init>(r13);	 Catch:{ all -> 0x00b2 }
-        r13 = new android.graphics.PorterDuffColorFilter;	 Catch:{ all -> 0x00b2 }
-        r14 = r1.patternColor;	 Catch:{ all -> 0x00b2 }
-        r15 = r1.blendMode;	 Catch:{ all -> 0x00b2 }
-        r13.<init>(r14, r15);	 Catch:{ all -> 0x00b2 }
-        r12.setColorFilter(r13);	 Catch:{ all -> 0x00b2 }
+        r12.<init>(r13);	 Catch:{ all -> 0x00b4 }
+        r13 = new android.graphics.PorterDuffColorFilter;	 Catch:{ all -> 0x00b4 }
+        r14 = r1.patternColor;	 Catch:{ all -> 0x00b4 }
+        r15 = r1.blendMode;	 Catch:{ all -> 0x00b4 }
+        r13.<init>(r14, r15);	 Catch:{ all -> 0x00b4 }
+        r12.setColorFilter(r13);	 Catch:{ all -> 0x00b4 }
         r13 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
-        r14 = r1.currentIntensity;	 Catch:{ all -> 0x00b2 }
+        r14 = r1.currentIntensity;	 Catch:{ all -> 0x00b4 }
         r14 = r14 * r13;
-        r13 = (int) r14;	 Catch:{ all -> 0x00b2 }
-        r12.setAlpha(r13);	 Catch:{ all -> 0x00b2 }
+        r13 = (int) r14;	 Catch:{ all -> 0x00b4 }
+        r12.setAlpha(r13);	 Catch:{ all -> 0x00b4 }
         r13 = 0;
-        r11.drawBitmap(r0, r13, r13, r12);	 Catch:{ all -> 0x00b2 }
-        r0 = new java.io.FileOutputStream;	 Catch:{ all -> 0x00b2 }
-        r0.<init>(r2);	 Catch:{ all -> 0x00b2 }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x00b2 }
-        r3.compress(r11, r8, r0);	 Catch:{ all -> 0x00b2 }
-        r0.close();	 Catch:{ all -> 0x00b2 }
-        goto L_0x00b7;
-    L_0x00b2:
+        r11.drawBitmap(r0, r13, r13, r12);	 Catch:{ all -> 0x00b4 }
+        r0 = new java.io.FileOutputStream;	 Catch:{ all -> 0x00b4 }
+        r0.<init>(r2);	 Catch:{ all -> 0x00b4 }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x00b4 }
+        r3.compress(r11, r8, r0);	 Catch:{ all -> 0x00b4 }
+        r0.close();	 Catch:{ all -> 0x00b4 }
+        goto L_0x00b9;
+    L_0x00b4:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x0110;
-    L_0x00b7:
-        r0 = 1;
-    L_0x00b8:
-        r3 = 0;
         goto L_0x0112;
+    L_0x00b9:
+        r0 = 1;
     L_0x00ba:
+        r3 = 0;
+        goto L_0x0114;
+    L_0x00bc:
         r3 = r0 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
-        if (r3 == 0) goto L_0x00e9;
-    L_0x00be:
+        if (r3 == 0) goto L_0x00eb;
+    L_0x00c0:
         r0 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r0;
         r3 = r0.resId;
-        if (r3 != 0) goto L_0x00b7;
-    L_0x00c4:
+        if (r3 != 0) goto L_0x00b9;
+    L_0x00c6:
         r11 = (long) r3;
         r3 = (r11 > r6 ? 1 : (r11 == r6 ? 0 : -1));
-        if (r3 != 0) goto L_0x00ca;
-    L_0x00c9:
-        goto L_0x00b7;
-    L_0x00ca:
-        r3 = r0.originalPath;	 Catch:{ Exception -> 0x00e2 }
-        if (r3 == 0) goto L_0x00d1;
-    L_0x00ce:
-        r0 = r0.originalPath;	 Catch:{ Exception -> 0x00e2 }
-        goto L_0x00d3;
-    L_0x00d1:
-        r0 = r0.path;	 Catch:{ Exception -> 0x00e2 }
+        if (r3 != 0) goto L_0x00cc;
+    L_0x00cb:
+        goto L_0x00b9;
+    L_0x00cc:
+        r3 = r0.originalPath;	 Catch:{ Exception -> 0x00e4 }
+        if (r3 == 0) goto L_0x00d3;
+    L_0x00d0:
+        r0 = r0.originalPath;	 Catch:{ Exception -> 0x00e4 }
+        goto L_0x00d5;
     L_0x00d3:
-        r3 = r0.equals(r2);	 Catch:{ Exception -> 0x00e2 }
-        if (r3 == 0) goto L_0x00db;
-    L_0x00d9:
-        r0 = 1;
-        goto L_0x0112;
+        r0 = r0.path;	 Catch:{ Exception -> 0x00e4 }
+    L_0x00d5:
+        r3 = r0.equals(r2);	 Catch:{ Exception -> 0x00e4 }
+        if (r3 == 0) goto L_0x00dd;
     L_0x00db:
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x00e0 }
-        goto L_0x0112;
-    L_0x00e0:
-        r0 = move-exception;
-        goto L_0x00e4;
+        r0 = 1;
+        goto L_0x0114;
+    L_0x00dd:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x00e2 }
+        goto L_0x0114;
     L_0x00e2:
         r0 = move-exception;
-        r3 = 0;
+        goto L_0x00e6;
     L_0x00e4:
+        r0 = move-exception;
+        r3 = 0;
+    L_0x00e6:
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-        goto L_0x0112;
-    L_0x00e9:
+        goto L_0x0114;
+    L_0x00eb:
         r3 = r0 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r3 == 0) goto L_0x0110;
-    L_0x00ed:
+        if (r3 == 0) goto L_0x0112;
+    L_0x00ef:
         r0 = (org.telegram.messenger.MediaController.SearchImage) r0;
         r3 = r0.photo;
-        if (r3 == 0) goto L_0x0100;
-    L_0x00f3:
+        if (r3 == 0) goto L_0x0102;
+    L_0x00f5:
         r0 = r3.sizes;
         r3 = r1.maxWallpaperSize;
         r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3, r10);
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r10);
-        goto L_0x0106;
-    L_0x0100:
+        goto L_0x0108;
+    L_0x0102:
         r0 = r0.imageUrl;
         r0 = org.telegram.messenger.ImageLoader.getHttpFilePath(r0, r5);
-    L_0x0106:
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x010b }
-        goto L_0x00b8;
-    L_0x010b:
+    L_0x0108:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x010d }
+        goto L_0x00ba;
+    L_0x010d:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-    L_0x0110:
-        r0 = 0;
-        goto L_0x00b8;
     L_0x0112:
+        r0 = 0;
+        goto L_0x00ba;
+    L_0x0114:
         r11 = r1.isBlurred;
-        if (r11 == 0) goto L_0x0135;
-    L_0x0116:
-        r0 = new java.io.File;	 Catch:{ all -> 0x0130 }
-        r11 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x0130 }
-        r0.<init>(r11, r4);	 Catch:{ all -> 0x0130 }
-        r4 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0130 }
-        r4.<init>(r0);	 Catch:{ all -> 0x0130 }
-        r0 = r1.blurredBitmap;	 Catch:{ all -> 0x0130 }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0130 }
-        r0.compress(r11, r8, r4);	 Catch:{ all -> 0x0130 }
-        r4.close();	 Catch:{ all -> 0x0130 }
+        if (r11 == 0) goto L_0x0137;
+    L_0x0118:
+        r0 = new java.io.File;	 Catch:{ all -> 0x0132 }
+        r11 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x0132 }
+        r0.<init>(r11, r4);	 Catch:{ all -> 0x0132 }
+        r4 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0132 }
+        r4.<init>(r0);	 Catch:{ all -> 0x0132 }
+        r0 = r1.blurredBitmap;	 Catch:{ all -> 0x0132 }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0132 }
+        r0.compress(r11, r8, r4);	 Catch:{ all -> 0x0132 }
+        r4.close();	 Catch:{ all -> 0x0132 }
         r0 = 1;
-        goto L_0x0135;
-    L_0x0130:
+        goto L_0x0137;
+    L_0x0132:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x0135:
+    L_0x0137:
         r4 = r1.currentWallpaper;
         r8 = r4 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
-        if (r8 == 0) goto L_0x0153;
-    L_0x013b:
+        if (r8 == 0) goto L_0x0155;
+    L_0x013d:
         r4 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r4;
         r12 = r4.id;
         r16 = r12;
@@ -1689,63 +1711,63 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r6 = 1;
         r14 = 0;
         r19 = 0;
-        goto L_0x01e6;
-    L_0x0153:
+        goto L_0x01e8;
+    L_0x0155:
         r8 = r4 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r8 == 0) goto L_0x019f;
-    L_0x0157:
+        if (r8 == 0) goto L_0x01a1;
+    L_0x0159:
         r4 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r4;
         r5 = r1.selectedPattern;
-        if (r5 == 0) goto L_0x018b;
-    L_0x015d:
+        if (r5 == 0) goto L_0x018d;
+    L_0x015f:
         r12 = r5.id;
         r6 = r5.access_hash;
         r14 = r4.id;
         r9 = r4.patternId;
         r5 = (r14 > r9 ? 1 : (r14 == r9 ? 0 : -1));
-        if (r5 != 0) goto L_0x017e;
-    L_0x0169:
+        if (r5 != 0) goto L_0x0180;
+    L_0x016b:
         r5 = r1.backgroundColor;
         r9 = r4.color;
-        if (r5 != r9) goto L_0x017e;
-    L_0x016f:
+        if (r5 != r9) goto L_0x0180;
+    L_0x0171:
         r4 = r4.intensity;
         r5 = r1.currentIntensity;
         r4 = r4 - r5;
         r5 = NUM; // 0x3a83126f float:0.001 double:4.85008663E-315;
         r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
-        if (r4 > 0) goto L_0x017e;
-    L_0x017b:
+        if (r4 > 0) goto L_0x0180;
+    L_0x017d:
         r16 = r12;
-        goto L_0x0180;
-    L_0x017e:
-        r16 = -1;
+        goto L_0x0182;
     L_0x0180:
+        r16 = -1;
+    L_0x0182:
         r4 = r1.selectedPattern;
         r14 = r4.id;
         r4 = r4.slug;
         r9 = r14;
         r14 = r12;
         r12 = r16;
-        goto L_0x0194;
-    L_0x018b:
+        goto L_0x0196;
+    L_0x018d:
         r4 = 0;
         r6 = 0;
         r9 = 0;
         r12 = -1;
         r14 = 0;
-    L_0x0194:
+    L_0x0196:
         r5 = r1.backgroundColor;
         r23 = r6;
         r20 = r14;
         r6 = 1;
         r19 = 0;
         r14 = r9;
-        goto L_0x01e6;
-    L_0x019f:
+        goto L_0x01e8;
+    L_0x01a1:
         r6 = r4 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
-        if (r6 == 0) goto L_0x01b5;
-    L_0x01a3:
+        if (r6 == 0) goto L_0x01b7;
+    L_0x01a5:
         r4 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r4;
         r12 = r4.id;
         r4 = r4.path;
@@ -1753,46 +1775,46 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r4 = 0;
         r5 = 0;
         r6 = 1;
-    L_0x01ae:
-        r14 = 0;
     L_0x01b0:
+        r14 = 0;
+    L_0x01b2:
         r20 = 0;
         r23 = 0;
-        goto L_0x01e6;
-    L_0x01b5:
+        goto L_0x01e8;
+    L_0x01b7:
         r6 = r4 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r6 == 0) goto L_0x01dc;
-    L_0x01b9:
+        if (r6 == 0) goto L_0x01de;
+    L_0x01bb:
         r4 = (org.telegram.messenger.MediaController.SearchImage) r4;
         r6 = r4.photo;
-        if (r6 == 0) goto L_0x01cd;
-    L_0x01bf:
+        if (r6 == 0) goto L_0x01cf;
+    L_0x01c1:
         r4 = r6.sizes;
         r5 = r1.maxWallpaperSize;
         r6 = 1;
         r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5, r6);
         r4 = org.telegram.messenger.FileLoader.getPathToAttach(r4, r6);
-        goto L_0x01d4;
-    L_0x01cd:
+        goto L_0x01d6;
+    L_0x01cf:
         r6 = 1;
         r4 = r4.imageUrl;
         r4 = org.telegram.messenger.ImageLoader.getHttpFilePath(r4, r5);
-    L_0x01d4:
+    L_0x01d6:
         r11 = r4;
         r19 = r11;
         r4 = 0;
         r5 = 0;
         r12 = -1;
-        goto L_0x01ae;
-    L_0x01dc:
+        goto L_0x01b0;
+    L_0x01de:
         r6 = 1;
         r4 = 0;
         r5 = 0;
         r12 = 0;
         r14 = 0;
         r19 = 0;
-        goto L_0x01b0;
-    L_0x01e6:
+        goto L_0x01b2;
+    L_0x01e8:
         r7 = r1.currentAccount;
         r18 = org.telegram.messenger.MessagesController.getInstance(r7);
         r7 = r1.isBlurred;
@@ -1800,13 +1822,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r10 = r1.currentIntensity;
         r16 = 0;
         r11 = (r23 > r16 ? 1 : (r23 == r16 ? 0 : -1));
-        if (r11 == 0) goto L_0x01fb;
-    L_0x01f8:
+        if (r11 == 0) goto L_0x01fd;
+    L_0x01fa:
         r29 = 1;
-        goto L_0x01fd;
-    L_0x01fb:
-        r29 = 0;
+        goto L_0x01ff;
     L_0x01fd:
+        r29 = 0;
+    L_0x01ff:
         r30 = 0;
         r22 = r4;
         r25 = r7;
@@ -1814,8 +1836,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r27 = r5;
         r28 = r10;
         r18.saveWallpaperToServer(r19, r20, r22, r23, r25, r26, r27, r28, r29, r30);
-        if (r0 == 0) goto L_0x0286;
-    L_0x020e:
+        if (r0 == 0) goto L_0x0288;
+    L_0x0210:
         r0 = "chat_serviceBackground";
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
         org.telegram.ui.ActionBar.Theme.serviceMessageColorBackup = r0;
@@ -1825,13 +1847,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r0.putLong(r7, r12);
         r7 = android.text.TextUtils.isEmpty(r4);
         r9 = "selectedBackgroundSlug";
-        if (r7 != 0) goto L_0x022f;
-    L_0x022b:
+        if (r7 != 0) goto L_0x0231;
+    L_0x022d:
         r0.putString(r9, r4);
-        goto L_0x0232;
-    L_0x022f:
+        goto L_0x0234;
+    L_0x0231:
         r0.remove(r9);
-    L_0x0232:
+    L_0x0234:
         r4 = r1.isBlurred;
         r7 = "selectedBackgroundBlurred";
         r0.putBoolean(r7, r4);
@@ -1847,18 +1869,18 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r0.putLong(r4, r14);
         r4 = -2;
         r7 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1));
-        if (r7 == 0) goto L_0x0258;
-    L_0x0257:
-        goto L_0x0259;
-    L_0x0258:
-        r6 = 0;
+        if (r7 == 0) goto L_0x025a;
     L_0x0259:
+        goto L_0x025b;
+    L_0x025a:
+        r6 = 0;
+    L_0x025b:
         r4 = "overrideThemeWallpaper";
         r0.putBoolean(r4, r6);
         r0.commit();
         org.telegram.ui.ActionBar.Theme.reloadWallpaper();
-        if (r3 != 0) goto L_0x0286;
-    L_0x0266:
+        if (r3 != 0) goto L_0x0288;
+    L_0x0268:
         r0 = org.telegram.messenger.ImageLoader.getInstance();
         r3 = new java.lang.StringBuilder;
         r3.<init>();
@@ -1869,12 +1891,12 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.append(r2);
         r2 = r3.toString();
         r0.removeImage(r2);
-    L_0x0286:
+    L_0x0288:
         r0 = r1.delegate;
-        if (r0 == 0) goto L_0x028d;
-    L_0x028a:
+        if (r0 == 0) goto L_0x028f;
+    L_0x028c:
         r0.didSetNewBackground();
-    L_0x028d:
+    L_0x028f:
         r32.finishFragment();
         return;
         */
@@ -1930,7 +1952,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
 
     public /* synthetic */ void lambda$createView$4$WallpaperActivity(int i, View view) {
         if (i == 0) {
-            setBackgroundColor(this.previousBackgroundColor);
+            setBackgroundColor(this.previousBackgroundColor, 0, true);
         } else {
             this.selectedPattern = this.previousSelectedPattern;
             TL_wallPaper tL_wallPaper = this.selectedPattern;
@@ -2228,7 +2250,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             if (i3 == 0) {
                 i2 = this.backgroundColor;
                 this.previousBackgroundColor = i2;
-                this.colorPicker.setColor(i2);
+                this.colorPicker.setColor(i2, 0);
             } else {
                 this.previousSelectedPattern = this.selectedPattern;
                 this.previousIntensity = this.currentIntensity;
@@ -2333,22 +2355,22 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         this.motionAnimation.start();
     }
 
-    private void setBackgroundColor(int i) {
+    private void setBackgroundColor(int i, int i2, boolean z) {
         this.backgroundColor = i;
         this.backgroundImage.setBackgroundColor(this.backgroundColor);
         CheckBoxView[] checkBoxViewArr = this.checkBoxView;
-        int i2 = 0;
+        i2 = 0;
         if (checkBoxViewArr[0] != null) {
             checkBoxViewArr[0].invalidate();
         }
         this.patternColor = AndroidUtilities.getPatternColor(this.backgroundColor);
-        r5 = new int[4];
+        r3 = new int[4];
         int i3 = this.patternColor;
-        r5[0] = i3;
-        r5[1] = i3;
-        r5[2] = i3;
-        r5[3] = i3;
-        Theme.applyChatServiceMessageColor(r5);
+        r3[0] = i3;
+        r3[1] = i3;
+        r3[2] = i3;
+        r3[3] = i3;
+        Theme.applyChatServiceMessageColor(r3);
         BackupImageView backupImageView = this.backgroundImage;
         if (backupImageView != null) {
             backupImageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(this.patternColor, this.blendMode));
@@ -2385,7 +2407,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             }
             this.backgroundImage.setImage(ImageLocation.getForDocument(tL_wallPaper.document), this.imageFilter, ImageLocation.getForDocument(photoSize, tL_wallPaper.document), "100_100_b", "jpg", tL_wallPaper.document.size, 1, tL_wallPaper);
         } else if (obj instanceof ColorWallpaper) {
-            setBackgroundColor(((ColorWallpaper) obj).color);
+            setBackgroundColor(((ColorWallpaper) obj).color, 0, true);
             TL_wallPaper tL_wallPaper2 = this.selectedPattern;
             if (tL_wallPaper2 != null) {
                 BackupImageView backupImageView = this.backgroundImage;

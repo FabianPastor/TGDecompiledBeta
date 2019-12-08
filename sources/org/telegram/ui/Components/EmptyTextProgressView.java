@@ -14,7 +14,7 @@ import org.telegram.ui.ActionBar.Theme;
 public class EmptyTextProgressView extends FrameLayout {
     private boolean inLayout;
     private RadialProgressView progressBar;
-    private boolean showAtCenter;
+    private int showAtPos;
     private TextView textView;
 
     public boolean hasOverlappingRendering() {
@@ -77,7 +77,11 @@ public class EmptyTextProgressView extends FrameLayout {
     }
 
     public void setShowAtCenter(boolean z) {
-        this.showAtCenter = z;
+        this.showAtPos = z;
+    }
+
+    public void setShowAtTop(boolean z) {
+        this.showAtPos = z ? 2 : 0;
     }
 
     /* Access modifiers changed, original: protected */
@@ -85,22 +89,25 @@ public class EmptyTextProgressView extends FrameLayout {
         this.inLayout = true;
         i3 -= i;
         i4 -= i2;
-        int childCount = getChildCount();
-        for (i2 = 0; i2 < childCount; i2++) {
-            View childAt = getChildAt(i2);
+        i = getChildCount();
+        for (int i5 = 0; i5 < i; i5++) {
+            View childAt = getChildAt(i5);
             if (childAt.getVisibility() != 8) {
-                int measuredHeight;
                 int paddingTop;
                 int measuredWidth = (i3 - childAt.getMeasuredWidth()) / 2;
-                if (this.showAtCenter) {
-                    measuredHeight = ((i4 / 2) - childAt.getMeasuredHeight()) / 2;
+                int i6 = this.showAtPos;
+                if (i6 == 2) {
+                    i6 = (AndroidUtilities.dp(100.0f) - childAt.getMeasuredHeight()) / 2;
+                    paddingTop = getPaddingTop();
+                } else if (i6 == 1) {
+                    i6 = ((i4 / 2) - childAt.getMeasuredHeight()) / 2;
                     paddingTop = getPaddingTop();
                 } else {
-                    measuredHeight = (i4 - childAt.getMeasuredHeight()) / 2;
+                    i6 = (i4 - childAt.getMeasuredHeight()) / 2;
                     paddingTop = getPaddingTop();
                 }
-                measuredHeight += paddingTop;
-                childAt.layout(measuredWidth, measuredHeight, childAt.getMeasuredWidth() + measuredWidth, childAt.getMeasuredHeight() + measuredHeight);
+                i6 += paddingTop;
+                childAt.layout(measuredWidth, i6, childAt.getMeasuredWidth() + measuredWidth, childAt.getMeasuredHeight() + i6);
             }
         }
         this.inLayout = false;

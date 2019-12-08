@@ -447,7 +447,7 @@ public class MediaDataController extends BaseController {
         if (r1 == 0) goto L_0x006b;
     L_0x0058:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0e0917 float:1.8879757E38 double:1.0531633063E-314;
+        r3 = NUM; // 0x7f0e093f float:1.8879838E38 double:1.053163326E-314;
         r4 = "RemovedFromFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r9);
@@ -455,7 +455,7 @@ public class MediaDataController extends BaseController {
         goto L_0x007d;
     L_0x006b:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0e00ce float:1.8875455E38 double:1.0531622584E-314;
+        r3 = NUM; // 0x7f0e00d1 float:1.8875461E38 double:1.05316226E-314;
         r4 = "AddedToFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r9);
@@ -2630,7 +2630,7 @@ public class MediaDataController extends BaseController {
                 int size = ((messages_messages instanceof TL_messages_messagesSlice) || (messages_messages instanceof TL_messages_channelMessages)) ? messages_messages.count : messages_messages.messages.size();
                 iArr[i4] = size;
                 if (this.searchResultMessages.isEmpty()) {
-                    getNotificationCenter().postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i2), Integer.valueOf(0), Integer.valueOf(getMask()), Long.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Boolean.valueOf(false));
+                    getNotificationCenter().postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i2), Integer.valueOf(0), Integer.valueOf(getMask()), Long.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Boolean.valueOf(z));
                 } else if (obj != null) {
                     if (this.lastReturnedNum >= this.searchResultMessages.size()) {
                         this.lastReturnedNum = this.searchResultMessages.size() - 1;
@@ -3483,10 +3483,12 @@ public class MediaDataController extends BaseController {
     public void buildShortcuts() {
         if (VERSION.SDK_INT >= 25) {
             ArrayList arrayList = new ArrayList();
-            for (int i = 0; i < this.hints.size(); i++) {
-                arrayList.add(this.hints.get(i));
-                if (arrayList.size() == 3) {
-                    break;
+            if (SharedConfig.passcodeHash.length() <= 0) {
+                for (int i = 0; i < this.hints.size(); i++) {
+                    arrayList.add(this.hints.get(i));
+                    if (arrayList.size() == 3) {
+                        break;
+                    }
                 }
             }
             Utilities.globalQueue.postRunnable(new -$$Lambda$MediaDataController$Nwg4fd44B2-ly9gmoENE_Nh_w78(this, arrayList));
@@ -3619,13 +3621,13 @@ public class MediaDataController extends BaseController {
         r10 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ all -> 0x02b7 }
         r11 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b7 }
         r10.<init>(r11, r9);	 Catch:{ all -> 0x02b7 }
-        r11 = NUM; // 0x7f0e065b float:1.8878337E38 double:1.0531629605E-314;
+        r11 = NUM; // 0x7f0e0676 float:1.8878392E38 double:1.053162974E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ all -> 0x02b7 }
         r10 = r10.setShortLabel(r12);	 Catch:{ all -> 0x02b7 }
         r0 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ all -> 0x02b7 }
         r0 = r10.setLongLabel(r0);	 Catch:{ all -> 0x02b7 }
         r10 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b7 }
-        r11 = NUM; // 0x7var_c float:1.79459E38 double:1.052935825E-314;
+        r11 = NUM; // 0x7var_ float:1.7945923E38 double:1.0529358306E-314;
         r10 = android.graphics.drawable.Icon.createWithResource(r10, r11);	 Catch:{ all -> 0x02b7 }
         r0 = r0.setIcon(r10);	 Catch:{ all -> 0x02b7 }
         r0 = r0.setIntent(r3);	 Catch:{ all -> 0x02b7 }
@@ -3857,7 +3859,7 @@ public class MediaDataController extends BaseController {
         goto L_0x029a;
     L_0x028e:
         r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b7 }
-        r6 = NUM; // 0x7var_d float:1.7945902E38 double:1.0529358257E-314;
+        r6 = NUM; // 0x7var_ float:1.7945925E38 double:1.052935831E-314;
         r3 = android.graphics.drawable.Icon.createWithResource(r3, r6);	 Catch:{ all -> 0x02b7 }
         r1.setIcon(r3);	 Catch:{ all -> 0x02b7 }
     L_0x029a:
@@ -4366,7 +4368,7 @@ public class MediaDataController extends BaseController {
         if (r8 == 0) goto L_0x006b;
     L_0x005e:
         r8 = "SavedMessages";
-        r9 = NUM; // 0x7f0e096d float:1.8879932E38 double:1.053163349E-314;
+        r9 = NUM; // 0x7f0e0995 float:1.8880013E38 double:1.0531633686E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);	 Catch:{ Exception -> 0x023d }
         r9 = r4;
         r10 = r8;
@@ -4478,7 +4480,7 @@ public class MediaDataController extends BaseController {
     L_0x0120:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x014f }
         r0 = r0.getResources();	 Catch:{ all -> 0x014f }
-        r8 = NUM; // 0x7var_ float:1.794479E38 double:1.052935555E-314;
+        r8 = NUM; // 0x7var_a float:1.7944793E38 double:1.0529355554E-314;
         r0 = r0.getDrawable(r8);	 Catch:{ all -> 0x014f }
         r8 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ all -> 0x014f }
@@ -4503,10 +4505,10 @@ public class MediaDataController extends BaseController {
     L_0x0153:
         r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x023d }
         r8 = 26;
-        r11 = NUM; // 0x7var_ float:1.7944787E38 double:1.052935554E-314;
-        r12 = NUM; // 0x7var_ float:1.7944789E38 double:1.0529355544E-314;
-        r13 = NUM; // 0x7var_ float:1.7944785E38 double:1.0529355534E-314;
-        r14 = NUM; // 0x7var_a float:1.7944793E38 double:1.0529355554E-314;
+        r11 = NUM; // 0x7var_ float:1.7944789E38 double:1.0529355544E-314;
+        r12 = NUM; // 0x7var_ float:1.794479E38 double:1.052935555E-314;
+        r13 = NUM; // 0x7var_ float:1.7944787E38 double:1.052935554E-314;
+        r14 = NUM; // 0x7var_b float:1.7944795E38 double:1.052935556E-314;
         if (r0 < r8) goto L_0x01da;
     L_0x0165:
         r0 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ Exception -> 0x023d }
@@ -5074,7 +5076,7 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    public void loadReplyMessagesForMessages(ArrayList<MessageObject> arrayList, long j, boolean z) {
+    public void loadReplyMessagesForMessages(ArrayList<MessageObject> arrayList, long j, boolean z, Runnable runnable) {
         ArrayList<MessageObject> arrayList2 = arrayList;
         int i = 0;
         ArrayList arrayList3;
@@ -5099,49 +5101,56 @@ public class MediaDataController extends BaseController {
                 }
                 i++;
             }
-            if (!arrayList3.isEmpty()) {
-                getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MediaDataController$9HunpxjIAo_6OSplvvM0lciXK4o(this, arrayList3, j, longSparseArray));
-            } else {
+            if (arrayList3.isEmpty()) {
+                if (runnable != null) {
+                    runnable.run();
+                }
                 return;
             }
-        }
-        arrayList3 = new ArrayList();
-        SparseArray sparseArray = new SparseArray();
-        StringBuilder stringBuilder = new StringBuilder();
-        int i2 = 0;
-        while (i < arrayList.size()) {
-            messageObject = (MessageObject) arrayList2.get(i);
-            if (messageObject.getId() > 0 && messageObject.isReply() && messageObject.replyMessageObject == null) {
-                Message message = messageObject.messageOwner;
-                int i3 = message.reply_to_msg_id;
-                long j3 = (long) i3;
-                int i4 = message.to_id.channel_id;
-                if (i4 != 0) {
-                    j3 |= ((long) i4) << 32;
-                    i2 = i4;
+            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MediaDataController$dEcj51Uqt91WK4teb2rEC0HMYNo(this, arrayList3, j, longSparseArray, runnable));
+        } else {
+            arrayList3 = new ArrayList();
+            SparseArray sparseArray = new SparseArray();
+            StringBuilder stringBuilder = new StringBuilder();
+            int i2 = 0;
+            while (i < arrayList.size()) {
+                messageObject = (MessageObject) arrayList2.get(i);
+                if (messageObject.getId() > 0 && messageObject.isReply() && messageObject.replyMessageObject == null) {
+                    Message message = messageObject.messageOwner;
+                    int i3 = message.reply_to_msg_id;
+                    long j3 = (long) i3;
+                    int i4 = message.to_id.channel_id;
+                    if (i4 != 0) {
+                        j3 |= ((long) i4) << 32;
+                        i2 = i4;
+                    }
+                    if (stringBuilder.length() > 0) {
+                        stringBuilder.append(',');
+                    }
+                    stringBuilder.append(j3);
+                    arrayList4 = (ArrayList) sparseArray.get(i3);
+                    if (arrayList4 == null) {
+                        arrayList4 = new ArrayList();
+                        sparseArray.put(i3, arrayList4);
+                    }
+                    arrayList4.add(messageObject);
+                    if (!arrayList3.contains(Integer.valueOf(i3))) {
+                        arrayList3.add(Integer.valueOf(i3));
+                    }
                 }
-                if (stringBuilder.length() > 0) {
-                    stringBuilder.append(',');
-                }
-                stringBuilder.append(j3);
-                arrayList4 = (ArrayList) sparseArray.get(i3);
-                if (arrayList4 == null) {
-                    arrayList4 = new ArrayList();
-                    sparseArray.put(i3, arrayList4);
-                }
-                arrayList4.add(messageObject);
-                if (!arrayList3.contains(Integer.valueOf(i3))) {
-                    arrayList3.add(Integer.valueOf(i3));
-                }
+                i++;
             }
-            i++;
-        }
-        if (!arrayList3.isEmpty()) {
-            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MediaDataController$jlNDOQP2VJfXmHpCRXcLyvLdSBg(this, stringBuilder, j, arrayList3, sparseArray, i2, z));
+            if (arrayList3.isEmpty()) {
+                if (runnable != null) {
+                    runnable.run();
+                }
+                return;
+            }
+            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MediaDataController$7jM5bxuUXUD_bIjzWfYWOhL4BDQ(this, stringBuilder, j, arrayList3, sparseArray, i2, z, runnable));
         }
     }
 
-    public /* synthetic */ void lambda$loadReplyMessagesForMessages$93$MediaDataController(ArrayList arrayList, long j, LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$loadReplyMessagesForMessages$93$MediaDataController(ArrayList arrayList, long j, LongSparseArray longSparseArray, Runnable runnable) {
         try {
             ArrayList arrayList2;
             int i;
@@ -5182,6 +5191,9 @@ public class MediaDataController extends BaseController {
                 }
             }
             AndroidUtilities.runOnUIThread(new -$$Lambda$MediaDataController$W5UnfwVXgtKpu_r4i2Nql8idbJM(this, j));
+            if (runnable != null) {
+                runnable.run();
+            }
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -5191,7 +5203,7 @@ public class MediaDataController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j));
     }
 
-    public /* synthetic */ void lambda$loadReplyMessagesForMessages$96$MediaDataController(StringBuilder stringBuilder, long j, ArrayList arrayList, SparseArray sparseArray, int i, boolean z) {
+    public /* synthetic */ void lambda$loadReplyMessagesForMessages$96$MediaDataController(StringBuilder stringBuilder, long j, ArrayList arrayList, SparseArray sparseArray, int i, boolean z, Runnable runnable) {
         ArrayList arrayList2 = arrayList;
         int i2 = i;
         try {
@@ -5228,42 +5240,48 @@ public class MediaDataController extends BaseController {
                 getMessagesStorage().getChatsInternal(TextUtils.join(str, arrayList7), arrayList5);
             }
             broadcastReplyMessages(arrayList3, sparseArray, arrayList4, arrayList5, j, true);
-            if (!arrayList.isEmpty()) {
-                if (i2 != 0) {
-                    TL_channels_getMessages tL_channels_getMessages = new TL_channels_getMessages();
-                    tL_channels_getMessages.channel = getMessagesController().getInputChannel(i2);
-                    tL_channels_getMessages.id = arrayList2;
-                    getConnectionsManager().sendRequest(tL_channels_getMessages, new -$$Lambda$MediaDataController$N23yXE6vnF4OvuhxrAImvu9Xmo8(this, sparseArray, j, z));
-                    return;
+            if (arrayList.isEmpty()) {
+                if (runnable != null) {
+                    AndroidUtilities.runOnUIThread(runnable);
                 }
+            } else if (i2 != 0) {
+                TL_channels_getMessages tL_channels_getMessages = new TL_channels_getMessages();
+                tL_channels_getMessages.channel = getMessagesController().getInputChannel(i2);
+                tL_channels_getMessages.id = arrayList2;
+                getConnectionsManager().sendRequest(tL_channels_getMessages, new -$$Lambda$MediaDataController$QQYKonEm-9KDOm-sVln8txkOTU0(this, sparseArray, j, z, runnable));
+            } else {
                 TL_messages_getMessages tL_messages_getMessages = new TL_messages_getMessages();
                 tL_messages_getMessages.id = arrayList2;
-                getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$MediaDataController$ZxzfDpi-FX2c6BmdS9IWQvzycIc(this, sparseArray, j, z));
+                getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$MediaDataController$LXNvesRV73M8Th_uo8wE7kp1kKo(this, sparseArray, j, z, runnable));
             }
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    public /* synthetic */ void lambda$null$94$MediaDataController(SparseArray sparseArray, long j, boolean z, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$null$94$MediaDataController(SparseArray sparseArray, long j, boolean z, Runnable runnable, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             messages_Messages messages_messages = (messages_Messages) tLObject;
-            removeEmptyMessages(messages_messages.messages);
             ImageLoader.saveMessagesThumbs(messages_messages.messages);
             broadcastReplyMessages(messages_messages.messages, sparseArray, messages_messages.users, messages_messages.chats, j, false);
             getMessagesStorage().putUsersAndChats(messages_messages.users, messages_messages.chats, true, true);
             saveReplyMessages(sparseArray, messages_messages.messages, z);
         }
+        if (runnable != null) {
+            AndroidUtilities.runOnUIThread(runnable);
+        }
     }
 
-    public /* synthetic */ void lambda$null$95$MediaDataController(SparseArray sparseArray, long j, boolean z, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$null$95$MediaDataController(SparseArray sparseArray, long j, boolean z, Runnable runnable, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             messages_Messages messages_messages = (messages_Messages) tLObject;
-            removeEmptyMessages(messages_messages.messages);
             ImageLoader.saveMessagesThumbs(messages_messages.messages);
             broadcastReplyMessages(messages_messages.messages, sparseArray, messages_messages.users, messages_messages.chats, j, false);
             getMessagesStorage().putUsersAndChats(messages_messages.users, messages_messages.chats, true, true);
             saveReplyMessages(sparseArray, messages_messages.messages, z);
+        }
+        if (runnable != null) {
+            AndroidUtilities.runOnUIThread(runnable);
         }
     }
 

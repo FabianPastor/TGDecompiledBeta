@@ -362,7 +362,6 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         this.passwordEditText.setTypeface(Typeface.DEFAULT);
         this.passwordEditText.setCursorColor(Theme.getColor(str3));
-        this.passwordEditText.setCursorSize(AndroidUtilities.dp(20.0f));
         this.passwordEditText.setCursorWidth(1.5f);
         linearLayout.addView(this.passwordEditText, LayoutHelper.createLinear(-1, 36, 51, 40, 32, 40, 0));
         this.passwordEditText.setOnEditorActionListener(new -$$Lambda$TwoStepVerificationActivity$YWYhM6syo7BDAVMlJEwwl5l8lR0(this));
@@ -453,8 +452,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             this.fragmentView.setBackgroundColor(Theme.getColor(str));
             this.fragmentView.setTag(str);
         } else {
-            this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-            this.fragmentView.setTag("windowBackgroundGray");
+            String str4 = "windowBackgroundGray";
+            this.fragmentView.setBackgroundColor(Theme.getColor(str4));
+            this.fragmentView.setTag(str4);
         }
         return this.fragmentView;
     }
@@ -1308,7 +1308,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         return;
     L_0x0022:
         r3.needHideProgress();
-        r0 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
+        r0 = NUM; // 0x7f0e0756 float:1.8878847E38 double:1.0531630845E-314;
         r1 = "OK";
         r2 = 0;
         if (r4 != 0) goto L_0x00ac;
@@ -1351,18 +1351,18 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r5 = r5.has_password;
         if (r5 == 0) goto L_0x0082;
     L_0x0075:
-        r5 = NUM; // 0x7f0e0CLASSNAME float:1.8881512E38 double:1.0531637337E-314;
+        r5 = NUM; // 0x7f0e0ca8 float:1.888161E38 double:1.0531637574E-314;
         r6 = "YourEmailSuccessText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
         goto L_0x008e;
     L_0x0082:
-        r5 = NUM; // 0x7f0e0c7d float:1.8881522E38 double:1.053163736E-314;
+        r5 = NUM; // 0x7f0e0cad float:1.888162E38 double:1.05316376E-314;
         r6 = "YourPasswordSuccessText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
     L_0x008e:
-        r5 = NUM; // 0x7f0e0c7c float:1.888152E38 double:1.0531637357E-314;
+        r5 = NUM; // 0x7f0e0cac float:1.8881617E38 double:1.0531637594E-314;
         r6 = "YourPasswordSuccess";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setTitle(r5);
@@ -1391,12 +1391,12 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r5 = r4.text;
         r6 = "EMAIL_INVALID";
         r5 = r6.equals(r5);
-        r6 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
+        r6 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
         r7 = "AppName";
         if (r5 == 0) goto L_0x00e4;
     L_0x00d2:
         r4 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r5 = NUM; // 0x7f0e082c float:1.887928E38 double:1.05316319E-314;
+        r5 = NUM; // 0x7f0e0852 float:1.8879358E38 double:1.053163209E-314;
         r6 = "PasswordEmailInvalid";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.showAlertWithText(r4, r5);
@@ -1422,7 +1422,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r4);
     L_0x010a:
         r5 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r6 = NUM; // 0x7f0e049d float:1.8877433E38 double:1.05316274E-314;
+        r6 = NUM; // 0x7f0e04b4 float:1.887748E38 double:1.0531627515E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r7[r2] = r4;
@@ -1448,11 +1448,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r6 = new org.telegram.ui.-$$Lambda$TwoStepVerificationActivity$dZl6L7A3pdg7u0zh2dz9t60mIJU;
         r6.<init>(r3, r7, r8);
         r4.setPositiveButton(r5, r6);
-        r5 = NUM; // 0x7f0e0CLASSNAME float:1.8881497E38 double:1.05316373E-314;
+        r5 = NUM; // 0x7f0e0ca1 float:1.8881595E38 double:1.053163754E-314;
         r6 = "YourEmailAlmostThereText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
-        r5 = NUM; // 0x7f0e0CLASSNAME float:1.8881495E38 double:1.0531637297E-314;
+        r5 = NUM; // 0x7f0e0ca0 float:1.8881593E38 double:1.0531637535E-314;
         r6 = "YourEmailAlmostThere";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setTitle(r5);

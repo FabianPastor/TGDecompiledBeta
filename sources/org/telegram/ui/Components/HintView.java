@@ -23,6 +23,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 
 public class HintView extends FrameLayout {
+    public static final int TYPE_SEARCH_AS_LIST = 3;
     private AnimatorSet animatorSet;
     private ImageView arrowImageView;
     private int currentType;
@@ -39,37 +40,47 @@ public class HintView extends FrameLayout {
     }
 
     public HintView(Context context, int i, boolean z) {
+        Context context2 = context;
+        int i2 = i;
+        boolean z2 = z;
         super(context);
-        this.currentType = i;
-        this.isTopArrow = z;
-        this.textView = new CorrectlyMeasuringTextView(context);
+        this.currentType = i2;
+        this.isTopArrow = z2;
+        this.textView = new CorrectlyMeasuringTextView(context2);
         String str = "chat_gifSaveHintText";
         this.textView.setTextColor(Theme.getColor(str));
         this.textView.setTextSize(1, 14.0f);
         this.textView.setMaxLines(2);
         this.textView.setMaxWidth(AndroidUtilities.dp(250.0f));
-        this.textView.setGravity(51);
         String str2 = "chat_gifSaveHintBackground";
-        this.textView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(str2)));
-        int i2 = this.currentType;
-        if (i2 == 2) {
-            this.textView.setPadding(AndroidUtilities.dp(7.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f));
+        if (this.currentType == 3) {
+            this.textView.setGravity(19);
+            this.textView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(5.0f), Theme.getColor(str2)));
+            this.textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+            addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 51, 0.0f, z2 ? 6.0f : 0.0f, 0.0f, z2 ? 0.0f : 6.0f));
         } else {
-            this.textView.setPadding(AndroidUtilities.dp(i2 == 0 ? 54.0f : 5.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(7.0f));
+            this.textView.setGravity(51);
+            this.textView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(str2)));
+            int i3 = this.currentType;
+            if (i3 == 2) {
+                this.textView.setPadding(AndroidUtilities.dp(7.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f));
+            } else {
+                this.textView.setPadding(AndroidUtilities.dp(i3 == 0 ? 54.0f : 5.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(7.0f));
+            }
+            addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, z2 ? 6.0f : 0.0f, 0.0f, z2 ? 0.0f : 6.0f));
         }
-        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, z ? 6.0f : 0.0f, 0.0f, z ? 0.0f : 6.0f));
-        if (i == 0) {
+        if (i2 == 0) {
             this.textView.setText(LocaleController.getString("AutoplayVideoInfo", NUM));
-            this.imageView = new ImageView(context);
+            this.imageView = new ImageView(context2);
             this.imageView.setImageResource(NUM);
             this.imageView.setScaleType(ScaleType.CENTER);
             this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
             addView(this.imageView, LayoutHelper.createFrame(38, 34.0f, 51, 7.0f, 7.0f, 0.0f, 0.0f));
         }
-        this.arrowImageView = new ImageView(context);
-        this.arrowImageView.setImageResource(z ? NUM : NUM);
+        this.arrowImageView = new ImageView(context2);
+        this.arrowImageView.setImageResource(z2 ? NUM : NUM);
         this.arrowImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str2), Mode.MULTIPLY));
-        addView(this.arrowImageView, LayoutHelper.createFrame(14, 6.0f, (z ? 48 : 80) | 3, 0.0f, 0.0f, 0.0f, 0.0f));
+        addView(this.arrowImageView, LayoutHelper.createFrame(14, 6.0f, (z2 ? 48 : 80) | 3, 0.0f, 0.0f, 0.0f, 0.0f));
     }
 
     public void setOverrideText(String str) {
@@ -193,6 +204,7 @@ public class HintView extends FrameLayout {
         if (this.currentView == view || getTag() != null) {
             return false;
         }
+        int measuredWidth;
         Runnable runnable = this.hideRunnable;
         if (runnable != null) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
@@ -201,8 +213,12 @@ public class HintView extends FrameLayout {
         measure(MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE));
         int[] iArr = new int[2];
         view.getLocationInWindow(iArr);
-        int measuredWidth = iArr[0] + (view.getMeasuredWidth() / 2);
         int dp = iArr[1] - AndroidUtilities.dp(4.0f);
+        if (this.currentType == 3) {
+            measuredWidth = (iArr[0] + view.getMeasuredWidth()) - AndroidUtilities.dp(20.0f);
+        } else {
+            measuredWidth = iArr[0] + (view.getMeasuredWidth() / 2);
+        }
         View view2 = (View) getParent();
         view2.getLocationInWindow(iArr);
         measuredWidth -= iArr[0];
@@ -218,7 +234,11 @@ public class HintView extends FrameLayout {
         }
         dp = AndroidUtilities.dp(19.0f);
         if (measuredWidth > view2.getMeasuredWidth() / 2) {
-            measuredWidth2 = (measuredWidth2 - getMeasuredWidth()) - AndroidUtilities.dp(28.0f);
+            if (this.currentType == 3) {
+                measuredWidth2 = (int) (((float) measuredWidth2) - (((float) getMeasuredWidth()) * 1.5f));
+            } else {
+                measuredWidth2 = (measuredWidth2 - getMeasuredWidth()) - AndroidUtilities.dp(28.0f);
+            }
             setTranslationX((float) measuredWidth2);
             dp += measuredWidth2;
         } else {

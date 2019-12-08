@@ -1564,7 +1564,6 @@
     <string name="NearbyCreateGroup">Crea un gruppo locale</string>
     <string name="NearbyCreateGroupInfo">Chiunque si trovi in ​​questa posizione (vicini, colleghi, studenti, partecipanti ad un evento, visitatori) vedrà il tuo gruppo nella sezione Persone vicine.</string>
     <string name="NearbyCreateGroupInfo2">Se avvii un gruppo non legato a questa posizione, potresti essere limitato nella creazione di nuovi gruppi basati sulla posizione.</string>
-    <string name="NearbyPlaces">O scegli un luogo</string>
     <string name="NearbyStartGroup">Avvia gruppo</string>
     <string name="NetworkUsage">Utilizzo dati</string>
     <string name="NetworkUsageMobile">RETE CELLULARE</string>
@@ -1624,7 +1623,6 @@
     <string name="NoPopup">Nessun popup</string>
     <string name="NoRecent">Nessun recente</string>
     <string name="NoRecentGIFs">Nessuna GIF recente</string>
-    <string name="NoRecentPhotos">Nessuna foto recente</string>
     <string name="NoResult">Nessun risultato</string>
     <string name="NoScheduledMessages">Ancora nessun messaggio programmato qui...</string>
     <string name="NoSharedAudio">Condividi musica in questa chat e accedi ad essa da ogni tuo dispositivo.</string>
@@ -2515,7 +2513,6 @@
     <string name="ShowAllMedia">Mostra tutti i media</string>
     <string name="ShowAllThemes">Mostra tutti i temi</string>
     <string name="ShowInChat">Visualizza in chat</string>
-    <string name="ShowNearbyPlaces">Tira su per vedere i luoghi vicini</string>
     <string name="ShowNotificationsFor">Mostra notifiche da</string>
     <string name="ShowNotificationsForInfo">Disattiva se vuoi ricevere notifiche solo dal tuo account attivo.</string>
     <string name="Shuffle">Casuale</string>
@@ -2977,6 +2974,8 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
+    <string name="google_assistant_verification_channel_name">Assistant verifier</string>
+    <string name="google_assistant_verification_notification_title">L\'Assistente Google sta inviando il messaggio</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Questa app</string>
     <string name="hockeyapp_crash_dialog_message">Vuoi inviare un report in modo anonimo così possiamo risolvere il problema?</string>
     <string name="hockeyapp_crash_dialog_negative_button">Non inviare</string>

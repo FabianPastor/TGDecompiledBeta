@@ -21,6 +21,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -1000,7 +1001,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
                 if (ChatActivityEnterView.this.isInScheduleMode()) {
-                    AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, UserObject.isUserSelf(ChatActivityEnterView.this.parentFragment.getCurrentUser()), new -$$Lambda$ChatActivityEnterView$10$doUQjSBnuyZZBZH7YkL67pRZ85w(this, inputContentInfoCompat));
+                    AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), new -$$Lambda$ChatActivityEnterView$10$doUQjSBnuyZZBZH7YkL67pRZ85w(this, inputContentInfoCompat));
                 } else {
                     send(inputContentInfoCompat, true, 0);
                 }
@@ -1699,7 +1700,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.doneButtonContainer.setVisibility(8);
         this.textFieldContainer.addView(this.doneButtonContainer, LayoutHelper.createLinear(48, 48, 80));
         this.doneButtonContainer.setOnClickListener(new -$$Lambda$ChatActivityEnterView$9mFCDdWzowA7_Vky86OkFCUavNc(this));
-        Drawable createCircleDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), Theme.getColor("chat_messagePanelSend"));
+        ShapeDrawable createCircleDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), Theme.getColor("chat_messagePanelSend"));
         Drawable mutate3 = activity.getResources().getDrawable(NUM).mutate();
         mutate3.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelVoicePressed"), Mode.MULTIPLY));
         CombinedDrawable combinedDrawable2 = new CombinedDrawable(createCircleDrawable, mutate3, 0, AndroidUtilities.dp(1.0f));
@@ -1849,7 +1850,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.startedDraggingX = -1.0f;
                     if (!this.hasRecordVideo || this.videoSendButton.getTag() == null) {
                         if (this.recordingAudioVideo && isInScheduleMode()) {
-                            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, UserObject.isUserSelf(this.parentFragment.getCurrentUser()), -$$Lambda$ChatActivityEnterView$fVsV039hfSbWEXZK0z4VKo4VzTY.INSTANCE, -$$Lambda$ChatActivityEnterView$_c9ye99difEKRRO05psDolLw5uU.INSTANCE);
+                            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), -$$Lambda$ChatActivityEnterView$fVsV039hfSbWEXZK0z4VKo4VzTY.INSTANCE, -$$Lambda$ChatActivityEnterView$_c9ye99difEKRRO05psDolLw5uU.INSTANCE);
                         }
                         this.delegate.needStartRecordAudio(0);
                         MediaController instance = MediaController.getInstance();
@@ -1897,7 +1898,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.startedDraggingX = -1.0f;
                 if (!this.hasRecordVideo || this.videoSendButton.getTag() == null) {
                     if (this.recordingAudioVideo && isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, UserObject.isUserSelf(this.parentFragment.getCurrentUser()), -$$Lambda$ChatActivityEnterView$bbN64eZurKUvgp0IAMBkXVy3foY.INSTANCE, -$$Lambda$ChatActivityEnterView$cYQEOux9T0ign7UCS-0M-hNsaHk.INSTANCE);
+                        AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), -$$Lambda$ChatActivityEnterView$bbN64eZurKUvgp0IAMBkXVy3foY.INSTANCE, -$$Lambda$ChatActivityEnterView$cYQEOux9T0ign7UCS-0M-hNsaHk.INSTANCE);
                     }
                     this.delegate.needStartRecordAudio(0);
                     MediaController instance2 = MediaController.getInstance();
@@ -2098,7 +2099,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
                         this.sendPopupLayout.addView(actionBarMenuSubItem, LayoutHelper.createFrame(-1, 48.0f, LocaleController.isRTL ? 5 : 3, 0.0f, (float) (i * 48), 0.0f, 0.0f));
-                        actionBarMenuSubItem.setOnClickListener(new -$$Lambda$ChatActivityEnterView$DLRz0ef3Tin9oFNJgoDm_d_egpU(this, i, currentUser));
+                        actionBarMenuSubItem.setOnClickListener(new -$$Lambda$ChatActivityEnterView$690LP7tIuhU2MMHr9U3lgTPmKXU(this, i));
                     }
                 }
                 this.sendPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
@@ -2149,13 +2150,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    public /* synthetic */ void lambda$onSendLongClick$21$ChatActivityEnterView(int i, User user, View view) {
+    public /* synthetic */ void lambda$onSendLongClick$21$ChatActivityEnterView(int i, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
         }
         if (i == 0) {
-            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, UserObject.isUserSelf(user), new -$$Lambda$ChatActivityEnterView$HYedsDwyi9KUQvm0fCLASSNAMEO6pzfJ0(this));
+            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), new -$$Lambda$ChatActivityEnterView$HYedsDwyi9KUQvm0fCLASSNAMEO6pzfJ0(this));
         } else if (i == 1) {
             sendMessageInternal(false, 0);
         }
@@ -3089,7 +3090,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void sendMessage() {
         if (isInScheduleMode()) {
-            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, UserObject.isUserSelf(this.parentFragment.getCurrentUser()), new -$$Lambda$ChatActivityEnterView$HYedsDwyi9KUQvm0fCLASSNAMEO6pzfJ0(this));
+            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), new -$$Lambda$ChatActivityEnterView$HYedsDwyi9KUQvm0fCLASSNAMEO6pzfJ0(this));
         } else {
             sendMessageInternal(true, 0);
         }
@@ -4313,6 +4314,30 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return this.emojiView;
     }
 
+    public void updateColors() {
+        EmojiView emojiView = this.emojiView;
+        if (emojiView != null) {
+            emojiView.updateColors();
+        }
+        ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.sendPopupLayout;
+        if (actionBarPopupWindowLayout != null) {
+            int childCount = actionBarPopupWindowLayout.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = this.sendPopupLayout.getChildAt(i);
+                if (childAt instanceof ActionBarMenuSubItem) {
+                    ActionBarMenuSubItem actionBarMenuSubItem = (ActionBarMenuSubItem) childAt;
+                    actionBarMenuSubItem.setColors(Theme.getColor("actionBarDefaultSubmenuItem"), Theme.getColor("actionBarDefaultSubmenuItemIcon"));
+                    actionBarMenuSubItem.setSelectorColor(Theme.getColor("dialogButtonSelector"));
+                }
+            }
+            this.sendPopupLayout.setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuBackground"));
+            ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
+            if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
+                this.sendPopupLayout.invalidate();
+            }
+        }
+    }
+
     public void setFieldText(CharSequence charSequence) {
         setFieldText(charSequence, true);
     }
@@ -4507,10 +4532,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r4 = r13.silent;
         if (r4 == 0) goto L_0x0061;
     L_0x005d:
-        r4 = NUM; // 0x7var_ float:1.7945209E38 double:1.0529356567E-314;
+        r4 = NUM; // 0x7var_ float:1.7945213E38 double:1.0529356577E-314;
         goto L_0x0064;
     L_0x0061:
-        r4 = NUM; // 0x7var_ float:1.794521E38 double:1.052935657E-314;
+        r4 = NUM; // 0x7var_a float:1.7945215E38 double:1.052935658E-314;
     L_0x0064:
         r1.setImageResource(r4);
         goto L_0x0069;
@@ -5211,7 +5236,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     Object obj4 = obj2;
                     int i2 = i;
                     if (isInScheduleMode() && i2 == 0) {
-                        AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, UserObject.isUserSelf(ChatActivityEnterView.this.parentFragment.getCurrentUser()), new -$$Lambda$ChatActivityEnterView$35$qA9baYgZSc5H94fpDOPQhgegFHQ(this, view2, obj3, obj4));
+                        AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), new -$$Lambda$ChatActivityEnterView$35$qA9baYgZSc5H94fpDOPQhgegFHQ(this, view2, obj3, obj4));
                     } else if (ChatActivityEnterView.this.slowModeTimer <= 0 || isInScheduleMode()) {
                         if (ChatActivityEnterView.this.stickersExpanded) {
                             if (ChatActivityEnterView.this.searchingType != 0) {
@@ -5423,7 +5448,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* renamed from: onStickerSelected */
     public void lambda$onStickerSelected$27$ChatActivityEnterView(Document document, Object obj, boolean z, boolean z2, int i) {
         if (isInScheduleMode() && i == 0) {
-            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, UserObject.isUserSelf(this.parentFragment.getCurrentUser()), new -$$Lambda$ChatActivityEnterView$f0V3X4ZqkkxYVwPpugUT__2f3kU(this, document, obj, z));
+            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), new -$$Lambda$ChatActivityEnterView$f0V3X4ZqkkxYVwPpugUT__2f3kU(this, document, obj, z));
         } else if (this.slowModeTimer <= 0 || isInScheduleMode()) {
             if (this.searchingType != 0) {
                 this.searchingType = 0;

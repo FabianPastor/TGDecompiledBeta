@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">Conectați-vă</string>
     <string name="common_signin_button_text_long">Conectați-vă cu Google</string>
     <string name="fcm_fallback_notification_channel_label">Diverse</string>
+    <string name="google_assistant_verification_channel_name">Verificator pentru Asistent</string>
+    <string name="google_assistant_verification_notification_title">Asistentul Google trimite un mesaj</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Cumpărați cu Google</string>
 </resources>

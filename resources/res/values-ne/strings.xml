@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">साइन इन गर्नुहोस्</string>
     <string name="common_signin_button_text_long">Google मार्फत साइन‍ इन गर्नुहोस्</string>
     <string name="fcm_fallback_notification_channel_label">विविध</string>
+    <string name="google_assistant_verification_channel_name">सहायकको प्रमाणक</string>
+    <string name="google_assistant_verification_notification_title">Google सहायकले सन्देश पठाउँदै छ</string>
     <string name="status_bar_notification_info_overflow">९९९+</string>
     <string name="wallet_buy_button_place_holder">Google मार्फत किन्नुहोस्</string>
 </resources>

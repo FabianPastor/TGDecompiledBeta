@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">Log masuk</string>
     <string name="common_signin_button_text_long">Log masuk dengan Google</string>
     <string name="fcm_fallback_notification_channel_label">Pelbagai</string>
+    <string name="google_assistant_verification_channel_name">Pengesah Assistant</string>
+    <string name="google_assistant_verification_notification_title">Google Assistant menghantar mesej</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Beli dengan Google</string>
 </resources>

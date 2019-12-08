@@ -1497,22 +1497,22 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:19:0x0068  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0251  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x0252  */
     /* JADX WARNING: Removed duplicated region for block: B:22:0x0072  */
     public void closePhoto(boolean r18, boolean r19) {
         /*
         r17 = this;
         r0 = r17;
         r1 = r0.parentActivity;
-        if (r1 == 0) goto L_0x02be;
+        if (r1 == 0) goto L_0x02bf;
     L_0x0006:
         r1 = r0.isPhotoVisible;
-        if (r1 == 0) goto L_0x02be;
+        if (r1 == 0) goto L_0x02bf;
     L_0x000a:
         r1 = r17.checkPhotoAnimation();
         if (r1 == 0) goto L_0x0012;
     L_0x0010:
-        goto L_0x02be;
+        goto L_0x02bf;
     L_0x0012:
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.NotificationCenter.getInstance(r1);
@@ -1568,7 +1568,7 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
         r8 = "alpha";
         r9 = 2;
         r10 = 0;
-        if (r18 == 0) goto L_0x0251;
+        if (r18 == 0) goto L_0x0252;
     L_0x0072:
         r0.photoAnimationInProgress = r7;
         r11 = r0.containerView;
@@ -1745,7 +1745,7 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
         r3 = r0.isVideo;
         r5 = "animationValue";
         r6 = 5;
-        if (r3 == 0) goto L_0x01cd;
+        if (r3 == 0) goto L_0x01ce;
     L_0x0185:
         r0.videoCrossfadeStarted = r1;
         r0.textureUploaded = r1;
@@ -1777,8 +1777,8 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
         r4 = 4;
         r6[r4] = r1;
         r3.playTogether(r6);
-        goto L_0x0217;
-    L_0x01cd:
+        goto L_0x0218;
+    L_0x01ce:
         r3 = r0.centerImage;
         r3.setManualAlphaAnimator(r4);
         r3 = r0.imageMoveAnimation;
@@ -1810,7 +1810,7 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
         r4 = 4;
         r6[r4] = r1;
         r3.playTogether(r6);
-    L_0x0217:
+    L_0x0218:
         r1 = new org.telegram.ui.-$$Lambda$SecretMediaViewer$FsmwJiUXxyTDqbCVCkGBtpTvcxw;
         r1.<init>(r0, r2);
         r0.photoAnimationEndRunnable = r1;
@@ -1829,16 +1829,16 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
         r0.photoTransitionAnimationStartTime = r1;
         r1 = android.os.Build.VERSION.SDK_INT;
         r2 = 18;
-        if (r1 < r2) goto L_0x024b;
-    L_0x0245:
+        if (r1 < r2) goto L_0x024c;
+    L_0x0246:
         r1 = r0.containerView;
         r2 = 0;
         r1.setLayerType(r9, r2);
-    L_0x024b:
+    L_0x024c:
         r1 = r0.imageMoveAnimation;
         r1.start();
-        goto L_0x02be;
-    L_0x0251:
+        goto L_0x02bf;
+    L_0x0252:
         r3 = new android.animation.AnimatorSet;
         r3.<init>();
         r5 = 4;
@@ -1880,14 +1880,14 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
         r0.photoTransitionAnimationStartTime = r1;
         r1 = android.os.Build.VERSION.SDK_INT;
         r2 = 18;
-        if (r1 < r2) goto L_0x02bb;
-    L_0x02b5:
+        if (r1 < r2) goto L_0x02bc;
+    L_0x02b6:
         r1 = r0.containerView;
         r2 = 0;
         r1.setLayerType(r9, r2);
-    L_0x02bb:
+    L_0x02bc:
         r3.start();
-    L_0x02be:
+    L_0x02bf:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.SecretMediaViewer.closePhoto(boolean, boolean):void");

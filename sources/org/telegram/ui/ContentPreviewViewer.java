@@ -219,7 +219,7 @@ public class ContentPreviewViewer {
                 } else if (((Integer) arrayList.get(i)).intValue() == 3) {
                     Document access$300 = ContentPreviewViewer.this.currentDocument;
                     Object access$1500 = ContentPreviewViewer.this.parentObject;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, false, new -$$Lambda$ContentPreviewViewer$1$VeEKHdYoA5-UzCB0iok2LPLcTCo(ContentPreviewViewer.this.delegate, access$300, access$1500));
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, 0, new -$$Lambda$ContentPreviewViewer$1$VeEKHdYoA5-UzCB0iok2LPLcTCo(ContentPreviewViewer.this.delegate, access$300, access$1500));
                 }
             }
         }
@@ -244,7 +244,7 @@ public class ContentPreviewViewer {
                     Document access$300 = ContentPreviewViewer.this.currentDocument;
                     BotInlineResult access$1400 = ContentPreviewViewer.this.inlineResult;
                     ContentPreviewViewer.this.parentObject;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, false, new -$$Lambda$ContentPreviewViewer$1$OPsVklic0vV-NhdYCfmrpeZgJyo(ContentPreviewViewer.this.delegate, access$300, access$1400));
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, 0, new -$$Lambda$ContentPreviewViewer$1$OPsVklic0vV-NhdYCfmrpeZgJyo(ContentPreviewViewer.this.delegate, access$300, access$1400));
                 }
             }
         }
@@ -1112,12 +1112,12 @@ public class ContentPreviewViewer {
         /*
         r9 = this;
         r0 = r9.containerView;
-        if (r0 == 0) goto L_0x01cc;
+        if (r0 == 0) goto L_0x01cd;
     L_0x0004:
         r0 = r9.backgroundDrawable;
         if (r0 != 0) goto L_0x000a;
     L_0x0008:
-        goto L_0x01cc;
+        goto L_0x01cd;
     L_0x000a:
         r1 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
         r2 = r9.showProgress;
@@ -1285,7 +1285,7 @@ public class ContentPreviewViewer {
     L_0x014d:
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 == 0) goto L_0x01cc;
+        if (r10 == 0) goto L_0x01cd;
     L_0x0153:
         r2 = java.lang.System.currentTimeMillis();
         r4 = r9.lastUpdateTime;
@@ -1300,15 +1300,15 @@ public class ContentPreviewViewer {
         r10.invalidate();
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 <= 0) goto L_0x01cc;
+        if (r10 <= 0) goto L_0x01cd;
     L_0x016f:
         r9.showProgress = r1;
-        goto L_0x01cc;
+        goto L_0x01cd;
     L_0x0172:
         r10 = r9.showProgress;
         r1 = 0;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 == 0) goto L_0x01cc;
+        if (r10 == 0) goto L_0x01cd;
     L_0x0179:
         r2 = java.lang.System.currentTimeMillis();
         r4 = r9.lastUpdateTime;
@@ -1329,7 +1329,7 @@ public class ContentPreviewViewer {
     L_0x0197:
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 != 0) goto L_0x01cc;
+        if (r10 != 0) goto L_0x01cd;
     L_0x019d:
         r10 = r9.centerImage;
         r0 = 0;
@@ -1339,21 +1339,21 @@ public class ContentPreviewViewer {
         r10 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$3zyytvnhTcdtAb2UIfBrX-cZ_go;
         r10.<init>(r9);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);
-        r10 = r9.windowView;	 Catch:{ Exception -> 0x01c8 }
-        r10 = r10.getParent();	 Catch:{ Exception -> 0x01c8 }
-        if (r10 == 0) goto L_0x01cc;
+        r10 = r9.windowView;	 Catch:{ Exception -> 0x01c9 }
+        r10 = r10.getParent();	 Catch:{ Exception -> 0x01c9 }
+        if (r10 == 0) goto L_0x01cd;
     L_0x01b8:
-        r10 = r9.parentActivity;	 Catch:{ Exception -> 0x01c8 }
+        r10 = r9.parentActivity;	 Catch:{ Exception -> 0x01c9 }
         r0 = "window";
-        r10 = r10.getSystemService(r0);	 Catch:{ Exception -> 0x01c8 }
-        r10 = (android.view.WindowManager) r10;	 Catch:{ Exception -> 0x01c8 }
-        r0 = r9.windowView;	 Catch:{ Exception -> 0x01c8 }
-        r10.removeView(r0);	 Catch:{ Exception -> 0x01c8 }
-        goto L_0x01cc;
-    L_0x01c8:
+        r10 = r10.getSystemService(r0);	 Catch:{ Exception -> 0x01c9 }
+        r10 = (android.view.WindowManager) r10;	 Catch:{ Exception -> 0x01c9 }
+        r0 = r9.windowView;	 Catch:{ Exception -> 0x01c9 }
+        r10.removeView(r0);	 Catch:{ Exception -> 0x01c9 }
+        goto L_0x01cd;
+    L_0x01c9:
         r10 = move-exception;
         org.telegram.messenger.FileLog.e(r10);
-    L_0x01cc:
+    L_0x01cd:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onDraw(android.graphics.Canvas):void");

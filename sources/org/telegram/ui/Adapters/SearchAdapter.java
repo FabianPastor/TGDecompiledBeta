@@ -16,10 +16,12 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
+import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
@@ -35,6 +37,7 @@ public class SearchAdapter extends SelectionAdapter {
     private boolean allowBots;
     private boolean allowChats;
     private boolean allowPhoneNumbers;
+    private boolean allowSelf;
     private boolean allowUsernameSearch;
     private int channelId;
     private SparseArray<?> checkedMap;
@@ -47,7 +50,7 @@ public class SearchAdapter extends SelectionAdapter {
     private Timer searchTimer;
     private boolean useUserCell;
 
-    public SearchAdapter(Context context, SparseArray<User> sparseArray, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, int i) {
+    public SearchAdapter(Context context, SparseArray<User> sparseArray, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, boolean z6, int i) {
         this.mContext = context;
         this.ignoreUsers = sparseArray;
         this.onlyMutual = z2;
@@ -55,7 +58,8 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowChats = z3;
         this.allowBots = z4;
         this.channelId = i;
-        this.allowPhoneNumbers = z5;
+        this.allowSelf = z5;
+        this.allowPhoneNumbers = z6;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
             public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
@@ -91,7 +95,7 @@ public class SearchAdapter extends SelectionAdapter {
             this.searchResult.clear();
             this.searchResultNames.clear();
             if (this.allowUsernameSearch) {
-                this.searchAdapterHelper.queryServerSearch(null, true, this.allowChats, this.allowBots, true, this.channelId, this.allowPhoneNumbers, 0);
+                this.searchAdapterHelper.queryServerSearch(null, true, this.allowChats, this.allowBots, this.allowSelf, this.channelId, this.allowPhoneNumbers, 0);
             }
             notifyDataSetChanged();
             return;
@@ -116,198 +120,106 @@ public class SearchAdapter extends SelectionAdapter {
 
     public /* synthetic */ void lambda$processSearch$1$SearchAdapter(String str) {
         if (this.allowUsernameSearch) {
-            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, true, this.channelId, this.allowPhoneNumbers, -1);
+            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, this.channelId, this.allowPhoneNumbers, -1);
         }
         int i = UserConfig.selectedAccount;
         Utilities.searchQueue.postRunnable(new -$$Lambda$SearchAdapter$MJ9cur0I3ZiqQGm3sZTS0MY0LdM(this, str, new ArrayList(ContactsController.getInstance(i).contacts), i));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0136 A:{LOOP_END, LOOP:1: B:33:0x00aa->B:54:0x0136} */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x00f9 A:{SYNTHETIC} */
-    /* JADX WARNING: Missing block: B:42:0x00e6, code skipped:
-            if (r11.contains(r3.toString()) != false) goto L_0x00f6;
-     */
-    public /* synthetic */ void lambda$null$0$SearchAdapter(java.lang.String r18, java.util.ArrayList r19, int r20) {
-        /*
-        r17 = this;
-        r0 = r17;
-        r1 = r18.trim();
-        r1 = r1.toLowerCase();
-        r2 = r1.length();
-        if (r2 != 0) goto L_0x001e;
-    L_0x0010:
-        r1 = new java.util.ArrayList;
-        r1.<init>();
-        r2 = new java.util.ArrayList;
-        r2.<init>();
-        r0.updateSearchResults(r1, r2);
-        return;
-    L_0x001e:
-        r2 = org.telegram.messenger.LocaleController.getInstance();
-        r2 = r2.getTranslitString(r1);
-        r3 = r1.equals(r2);
-        if (r3 != 0) goto L_0x0032;
-    L_0x002c:
-        r3 = r2.length();
-        if (r3 != 0) goto L_0x0033;
-    L_0x0032:
-        r2 = 0;
-    L_0x0033:
-        r3 = 0;
-        r5 = 1;
-        if (r2 == 0) goto L_0x0039;
-    L_0x0037:
-        r6 = 1;
-        goto L_0x003a;
-    L_0x0039:
-        r6 = 0;
-    L_0x003a:
-        r6 = r6 + r5;
-        r6 = new java.lang.String[r6];
-        r6[r3] = r1;
-        if (r2 == 0) goto L_0x0043;
-    L_0x0041:
-        r6[r5] = r2;
-    L_0x0043:
-        r1 = new java.util.ArrayList;
-        r1.<init>();
-        r2 = new java.util.ArrayList;
-        r2.<init>();
-        r7 = 0;
-    L_0x004e:
-        r8 = r19.size();
-        if (r7 >= r8) goto L_0x0142;
-    L_0x0054:
-        r8 = r19;
-        r9 = r8.get(r7);
-        r9 = (org.telegram.tgnet.TLRPC.TL_contact) r9;
-        r10 = org.telegram.messenger.MessagesController.getInstance(r20);
-        r11 = r9.user_id;
-        r11 = java.lang.Integer.valueOf(r11);
-        r10 = r10.getUser(r11);
-        r11 = r10.id;
-        r12 = org.telegram.messenger.UserConfig.getInstance(r20);
-        r12 = r12.getClientUserId();
-        if (r11 == r12) goto L_0x013c;
-    L_0x0076:
-        r11 = r0.onlyMutual;
-        if (r11 == 0) goto L_0x007e;
-    L_0x007a:
-        r11 = r10.mutual_contact;
-        if (r11 == 0) goto L_0x013c;
-    L_0x007e:
-        r11 = r0.ignoreUsers;
-        if (r11 == 0) goto L_0x008c;
-    L_0x0082:
-        r9 = r9.user_id;
-        r9 = r11.indexOfKey(r9);
-        if (r9 < 0) goto L_0x008c;
-    L_0x008a:
-        goto L_0x013c;
-    L_0x008c:
-        r9 = r10.first_name;
-        r11 = r10.last_name;
-        r9 = org.telegram.messenger.ContactsController.formatName(r9, r11);
-        r9 = r9.toLowerCase();
-        r11 = org.telegram.messenger.LocaleController.getInstance();
-        r11 = r11.getTranslitString(r9);
-        r12 = r9.equals(r11);
-        if (r12 == 0) goto L_0x00a7;
-    L_0x00a6:
-        r11 = 0;
-    L_0x00a7:
-        r12 = r6.length;
-        r13 = 0;
-        r14 = 0;
-    L_0x00aa:
-        if (r13 >= r12) goto L_0x013c;
-    L_0x00ac:
-        r15 = r6[r13];
-        r16 = r9.startsWith(r15);
-        if (r16 != 0) goto L_0x00f6;
-    L_0x00b4:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r4 = " ";
-        r3.append(r4);
-        r3.append(r15);
-        r3 = r3.toString();
-        r3 = r9.contains(r3);
-        if (r3 != 0) goto L_0x00f6;
-    L_0x00cb:
-        if (r11 == 0) goto L_0x00e9;
-    L_0x00cd:
-        r3 = r11.startsWith(r15);
-        if (r3 != 0) goto L_0x00f6;
-    L_0x00d3:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r3.append(r4);
-        r3.append(r15);
-        r3 = r3.toString();
-        r3 = r11.contains(r3);
-        if (r3 == 0) goto L_0x00e9;
-    L_0x00e8:
-        goto L_0x00f6;
-    L_0x00e9:
-        r3 = r10.username;
-        if (r3 == 0) goto L_0x00f7;
-    L_0x00ed:
-        r3 = r3.startsWith(r15);
-        if (r3 == 0) goto L_0x00f7;
-    L_0x00f3:
-        r3 = 2;
-        r14 = 2;
-        goto L_0x00f7;
-    L_0x00f6:
-        r14 = 1;
-    L_0x00f7:
-        if (r14 == 0) goto L_0x0136;
-    L_0x00f9:
-        if (r14 != r5) goto L_0x0108;
-    L_0x00fb:
-        r3 = r10.first_name;
-        r4 = r10.last_name;
-        r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r4, r15);
-        r2.add(r3);
-        r15 = 0;
-        goto L_0x0132;
-    L_0x0108:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r4 = "@";
-        r3.append(r4);
-        r9 = r10.username;
-        r3.append(r9);
-        r3 = r3.toString();
-        r9 = new java.lang.StringBuilder;
-        r9.<init>();
-        r9.append(r4);
-        r9.append(r15);
-        r4 = r9.toString();
-        r15 = 0;
-        r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r15, r4);
-        r2.add(r3);
-    L_0x0132:
-        r1.add(r10);
-        goto L_0x013d;
-    L_0x0136:
-        r15 = 0;
-        r13 = r13 + 1;
-        r3 = 0;
-        goto L_0x00aa;
-    L_0x013c:
-        r15 = 0;
-    L_0x013d:
-        r7 = r7 + 1;
-        r3 = 0;
-        goto L_0x004e;
-    L_0x0142:
-        r0.updateSearchResults(r1, r2);
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.SearchAdapter.lambda$null$0$SearchAdapter(java.lang.String, java.util.ArrayList, int):void");
-    }
+    public /* synthetic */ void lambda$null$0$SearchAdapter(String str, ArrayList arrayList, int i) {
+        String toLowerCase = str.trim().toLowerCase();
+        if (toLowerCase.length() == 0) {
+            updateSearchResults(new ArrayList(), new ArrayList());
+            return;
+        }
+        String translitString = LocaleController.getInstance().getTranslitString(toLowerCase);
+        String str2 = null;
+        if (toLowerCase.equals(translitString) || translitString.length() == 0) {
+            translitString = null;
+        }
+        int i2 = 0;
+        int i3 = 1;
+        String[] strArr = new String[((translitString != null ? 1 : 0) + 1)];
+        strArr[0] = toLowerCase;
+        if (translitString != null) {
+            strArr[1] = translitString;
+        }
+        ArrayList arrayList2 = new ArrayList();
+        ArrayList arrayList3 = new ArrayList();
+        int i4 = 0;
+        while (i4 < arrayList.size()) {
+            String str3;
+            TL_contact tL_contact = (TL_contact) arrayList.get(i4);
+            User user = MessagesController.getInstance(i).getUser(Integer.valueOf(tL_contact.user_id));
+            if ((this.allowSelf || !user.self) && (!this.onlyMutual || user.mutual_contact)) {
+                SparseArray sparseArray = this.ignoreUsers;
+                if (sparseArray == null || sparseArray.indexOfKey(tL_contact.user_id) < 0) {
+                    String[] strArr2 = new String[3];
+                    strArr2[i2] = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
+                    strArr2[i3] = LocaleController.getInstance().getTranslitString(strArr2[i2]);
+                    if (strArr2[i2].equals(strArr2[i3])) {
+                        strArr2[i3] = str2;
+                    }
+                    if (user.self) {
+                        strArr2[2] = LocaleController.getString("SavedMessages", NUM).toLowerCase();
+                    }
+                    int length = strArr.length;
+                    int i5 = 0;
+                    Object obj = null;
+                    while (i5 < length) {
+                        StringBuilder stringBuilder;
+                        String str4 = strArr[i5];
+                        for (i2 = 
+/*
+Method generation error in method: org.telegram.ui.Adapters.SearchAdapter.lambda$null$0$SearchAdapter(java.lang.String, java.util.ArrayList, int):void, dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r3_5 'i2' int) = (r3_3 'i2' int), (r3_11 'i2' int) binds: {(r3_3 'i2' int)=B:38:0x00ca, (r3_11 'i2' int)=B:63:0x0149} in method: org.telegram.ui.Adapters.SearchAdapter.lambda$null$0$SearchAdapter(java.lang.String, java.util.ArrayList, int):void, dex: classes.dex
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
+	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
+	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:220)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
+	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:120)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:59)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
+	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:120)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:59)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
+	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:220)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:183)
+	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:321)
+	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:259)
+	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:221)
+	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:111)
+	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:77)
+	at jadx.core.codegen.CodeGen.visit(CodeGen.java:10)
+	at jadx.core.ProcessClass.process(ProcessClass.java:38)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
+Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in fallback mode
+	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:539)
+	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:511)
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:222)
+	... 39 more
+
+*/
 
     private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
         AndroidUtilities.runOnUIThread(new -$$Lambda$SearchAdapter$6uwOh4k7ujlooXYRN4wvar_fqlek(this, arrayList, arrayList2));
@@ -365,7 +277,7 @@ public class SearchAdapter extends SelectionAdapter {
         View textCell;
         if (i != 0) {
             if (i != 1) {
-                textCell = new TextCell(this.mContext, 16);
+                textCell = new TextCell(this.mContext, 16, false);
             } else {
                 textCell = new GraySectionCell(this.mContext);
             }
@@ -383,25 +295,32 @@ public class SearchAdapter extends SelectionAdapter {
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
+        CharSequence charSequence = null;
         boolean z = false;
         boolean z2 = true;
         if (itemViewType == 0) {
             TLObject tLObject = (TLObject) getItem(i);
             if (tLObject != null) {
                 String str;
-                CharSequence charSequence;
+                int i2;
+                boolean z3;
                 CharSequence charSequence2;
                 if (tLObject instanceof User) {
                     User user = (User) tLObject;
                     str = user.username;
-                    itemViewType = user.id;
-                } else if (tLObject instanceof Chat) {
-                    Chat chat = (Chat) tLObject;
-                    str = chat.username;
-                    itemViewType = chat.id;
+                    i2 = user.id;
+                    z3 = user.self;
+                    itemViewType = i2;
                 } else {
-                    str = null;
-                    itemViewType = 0;
+                    if (tLObject instanceof Chat) {
+                        Chat chat = (Chat) tLObject;
+                        str = chat.username;
+                        itemViewType = chat.id;
+                    } else {
+                        str = null;
+                        itemViewType = 0;
+                    }
+                    z3 = false;
                 }
                 String str2 = "@";
                 if (i < this.searchResult.size()) {
@@ -412,15 +331,13 @@ public class SearchAdapter extends SelectionAdapter {
                         stringBuilder.append(str2);
                         stringBuilder.append(str);
                         if (charSequence4.startsWith(stringBuilder.toString())) {
-                            charSequence = null;
                             charSequence2 = charSequence3;
                         }
                     }
                     charSequence2 = null;
                     charSequence = charSequence3;
                 } else if (i <= this.searchResult.size() || str == null) {
-                    charSequence = null;
-                    charSequence2 = charSequence;
+                    charSequence2 = null;
                 } else {
                     String lastFoundUsername = this.searchAdapterHelper.getLastFoundUsername();
                     if (lastFoundUsername.startsWith(str2)) {
@@ -432,18 +349,16 @@ public class SearchAdapter extends SelectionAdapter {
                         charSequence2.append(str);
                         int indexOfIgnoreCase = AndroidUtilities.indexOfIgnoreCase(str, lastFoundUsername);
                         if (indexOfIgnoreCase != -1) {
-                            int length = lastFoundUsername.length();
+                            i2 = lastFoundUsername.length();
                             if (indexOfIgnoreCase == 0) {
-                                length++;
+                                i2++;
                             } else {
                                 indexOfIgnoreCase++;
                             }
-                            charSequence2.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOfIgnoreCase, length + indexOfIgnoreCase, 33);
+                            charSequence2.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOfIgnoreCase, i2 + indexOfIgnoreCase, 33);
                         }
-                        charSequence = null;
                     } catch (Exception e) {
                         FileLog.e(e);
-                        charSequence = null;
                         charSequence2 = str;
                     }
                 }
@@ -461,7 +376,7 @@ public class SearchAdapter extends SelectionAdapter {
                     return;
                 }
                 ProfileSearchCell profileSearchCell = (ProfileSearchCell) viewHolder.itemView;
-                profileSearchCell.setData(tLObject, null, charSequence, charSequence2, false, false);
+                profileSearchCell.setData(tLObject, null, z3 ? LocaleController.getString("SavedMessages", NUM) : charSequence, charSequence2, false, z3);
                 if (!(i == getItemCount() - 1 || i == this.searchResult.size() - 1)) {
                     z = true;
                 }

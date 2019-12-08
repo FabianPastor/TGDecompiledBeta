@@ -69,6 +69,7 @@ public class ProfileGalleryView extends ViewPager implements NotificationCenterD
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         this.parentActivity = profileActivity;
         this.parentListView = this.parentActivity.getListView();
+        setOffscreenPageLimit(2);
         this.gestureDetector = new GestureDetector(context, new OnGestureListener() {
             public boolean onDown(MotionEvent motionEvent) {
                 return false;
@@ -118,7 +119,7 @@ public class ProfileGalleryView extends ViewPager implements NotificationCenterD
             }
 
             public boolean isViewFromObject(View view, Object obj) {
-                return ((Item) view.getTag()) == ((Item) obj);
+                return ((Item) view.getTag(NUM)) == ((Item) obj);
             }
 
             public int getItemPosition(Object obj) {
@@ -187,7 +188,7 @@ public class ProfileGalleryView extends ViewPager implements NotificationCenterD
                             this.radialProgress.setOverrideAlpha(AndroidUtilities.lerp(this.radialProgressHideAnimatorStartValue, 0.0f, valueAnimator.getAnimatedFraction()));
                         }
                     };
-                    item.imageView.setTag(item);
+                    item.imageView.setTag(NUM, item);
                 }
                 viewGroup.removeView(item.imageView);
                 viewGroup.addView(item.imageView);

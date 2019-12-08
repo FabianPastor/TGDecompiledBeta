@@ -1,0 +1,18 @@
+package org.telegram.ui.Adapters;
+
+import org.telegram.tgnet.TLObject;
+
+/* compiled from: lambda */
+public final /* synthetic */ class -$$Lambda$BaseLocationAdapter$8XXcylBQyklzy9fKLPpuyJeZxWw implements Runnable {
+    private final /* synthetic */ BaseLocationAdapter f$0;
+    private final /* synthetic */ TLObject f$1;
+
+    public /* synthetic */ -$$Lambda$BaseLocationAdapter$8XXcylBQyklzy9fKLPpuyJeZxWw(BaseLocationAdapter baseLocationAdapter, TLObject tLObject) {
+        this.f$0 = baseLocationAdapter;
+        this.f$1 = tLObject;
+    }
+
+    public final void run() {
+        this.f$0.lambda$null$2$BaseLocationAdapter(this.f$1);
+    }
+}

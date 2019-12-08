@@ -1443,9 +1443,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         /* Access modifiers changed, original: protected|varargs */
-        /* JADX WARNING: Removed duplicated region for block: B:158:0x03d8  */
-        /* JADX WARNING: Removed duplicated region for block: B:119:0x02d8  */
-        /* JADX WARNING: Missing block: B:91:0x0252, code skipped:
+        /* JADX WARNING: Removed duplicated region for block: B:158:0x03da  */
+        /* JADX WARNING: Removed duplicated region for block: B:119:0x02da  */
+        /* JADX WARNING: Missing block: B:91:0x0254, code skipped:
             return null;
      */
         public java.lang.String[] doInBackground(java.lang.Void... r24) {
@@ -1477,34 +1477,34 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r5 = "&ps=default&gl=US&hl=en";
             r0.append(r5);
             r5 = r0.toString();
-            r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0069 }
-            r0.<init>();	 Catch:{ Exception -> 0x0069 }
-            r0.append(r5);	 Catch:{ Exception -> 0x0069 }
+            r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x006a }
+            r0.<init>();	 Catch:{ Exception -> 0x006a }
+            r0.append(r5);	 Catch:{ Exception -> 0x006a }
             r6 = "&eurl=";
-            r0.append(r6);	 Catch:{ Exception -> 0x0069 }
-            r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0069 }
-            r6.<init>();	 Catch:{ Exception -> 0x0069 }
+            r0.append(r6);	 Catch:{ Exception -> 0x006a }
+            r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x006a }
+            r6.<init>();	 Catch:{ Exception -> 0x006a }
             r7 = "https://youtube.googleapis.com/v/";
-            r6.append(r7);	 Catch:{ Exception -> 0x0069 }
-            r7 = r1.videoId;	 Catch:{ Exception -> 0x0069 }
-            r6.append(r7);	 Catch:{ Exception -> 0x0069 }
-            r6 = r6.toString();	 Catch:{ Exception -> 0x0069 }
-            r6 = java.net.URLEncoder.encode(r6, r2);	 Catch:{ Exception -> 0x0069 }
-            r0.append(r6);	 Catch:{ Exception -> 0x0069 }
-            r5 = r0.toString();	 Catch:{ Exception -> 0x0069 }
-            goto L_0x006d;
-        L_0x0069:
+            r6.append(r7);	 Catch:{ Exception -> 0x006a }
+            r7 = r1.videoId;	 Catch:{ Exception -> 0x006a }
+            r6.append(r7);	 Catch:{ Exception -> 0x006a }
+            r6 = r6.toString();	 Catch:{ Exception -> 0x006a }
+            r6 = java.net.URLEncoder.encode(r6, r2);	 Catch:{ Exception -> 0x006a }
+            r0.append(r6);	 Catch:{ Exception -> 0x006a }
+            r5 = r0.toString();	 Catch:{ Exception -> 0x006a }
+            goto L_0x006e;
+        L_0x006a:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-        L_0x006d:
-            if (r3 == 0) goto L_0x00af;
-        L_0x006f:
+        L_0x006e:
+            if (r3 == 0) goto L_0x00b0;
+        L_0x0070:
             r0 = org.telegram.ui.Components.WebPlayerView.stsPattern;
             r0 = r0.matcher(r3);
             r6 = r0.find();
             r7 = "&sts=";
-            if (r6 == 0) goto L_0x00a0;
-        L_0x007f:
+            if (r6 == 0) goto L_0x00a1;
+        L_0x0080:
             r6 = new java.lang.StringBuilder;
             r6.<init>();
             r6.append(r5);
@@ -1515,14 +1515,14 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r0 = r3.substring(r5, r0);
             r6.append(r0);
             r5 = r6.toString();
-            goto L_0x00af;
-        L_0x00a0:
+            goto L_0x00b0;
+        L_0x00a1:
             r0 = new java.lang.StringBuilder;
             r0.<init>();
             r0.append(r5);
             r0.append(r7);
             r5 = r0.toString();
-        L_0x00af:
+        L_0x00b0:
             r0 = r1.result;
             r6 = 1;
             r7 = "dash";
@@ -1546,11 +1546,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r0 = r4;
             r11 = 0;
             r12 = 0;
-        L_0x00d4:
+        L_0x00d5:
             r13 = r7.length;
             r14 = "/s/";
-            if (r11 >= r13) goto L_0x025f;
-        L_0x00d9:
+            if (r11 >= r13) goto L_0x0261;
+        L_0x00da:
             r13 = org.telegram.ui.Components.WebPlayerView.this;
             r15 = new java.lang.StringBuilder;
             r15.<init>();
@@ -1562,12 +1562,12 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r10 = r15.toString();
             r10 = r13.downloadUrlContent(r1, r10);
             r13 = r23.isCancelled();
-            if (r13 == 0) goto L_0x00fc;
-        L_0x00fb:
-            return r4;
+            if (r13 == 0) goto L_0x00fd;
         L_0x00fc:
-            if (r10 == 0) goto L_0x0235;
-        L_0x00fe:
+            return r4;
+        L_0x00fd:
+            if (r10 == 0) goto L_0x0237;
+        L_0x00ff:
             r13 = "&";
             r10 = r10.split(r13);
             r18 = r0;
@@ -1576,246 +1576,246 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r12 = 0;
             r13 = 0;
             r17 = 0;
-        L_0x010d:
+        L_0x010e:
             r0 = r10.length;
-            if (r12 >= r0) goto L_0x0230;
-        L_0x0110:
+            if (r12 >= r0) goto L_0x0232;
+        L_0x0111:
             r0 = r10[r12];
             r4 = "dashmpd";
             r0 = r0.startsWith(r4);
             r4 = "=";
-            if (r0 == 0) goto L_0x0138;
-        L_0x011c:
+            if (r0 == 0) goto L_0x0139;
+        L_0x011d:
             r0 = r10[r12];
             r0 = r0.split(r4);
             r4 = r0.length;
-            if (r4 != r9) goto L_0x0134;
-        L_0x0125:
-            r4 = r1.result;	 Catch:{ Exception -> 0x0130 }
-            r0 = r0[r6];	 Catch:{ Exception -> 0x0130 }
-            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x0130 }
-            r4[r8] = r0;	 Catch:{ Exception -> 0x0130 }
-            goto L_0x0134;
-        L_0x0130:
+            if (r4 != r9) goto L_0x0135;
+        L_0x0126:
+            r4 = r1.result;	 Catch:{ Exception -> 0x0131 }
+            r0 = r0[r6];	 Catch:{ Exception -> 0x0131 }
+            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x0131 }
+            r4[r8] = r0;	 Catch:{ Exception -> 0x0131 }
+            goto L_0x0135;
+        L_0x0131:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-        L_0x0134:
+        L_0x0135:
             r17 = 1;
-            goto L_0x0228;
-        L_0x0138:
+            goto L_0x022a;
+        L_0x0139:
             r0 = r10[r12];
             r8 = "url_encoded_fmt_stream_map";
             r0 = r0.startsWith(r8);
-            if (r0 == 0) goto L_0x01bc;
-        L_0x0142:
+            if (r0 == 0) goto L_0x01be;
+        L_0x0143:
             r0 = r10[r12];
             r0 = r0.split(r4);
             r8 = r0.length;
-            if (r8 != r9) goto L_0x0228;
-        L_0x014b:
-            r0 = r0[r6];	 Catch:{ Exception -> 0x01b7 }
-            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x01b7 }
+            if (r8 != r9) goto L_0x022a;
+        L_0x014c:
+            r0 = r0[r6];	 Catch:{ Exception -> 0x01b9 }
+            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x01b9 }
             r8 = "[&,]";
-            r0 = r0.split(r8);	 Catch:{ Exception -> 0x01b7 }
+            r0 = r0.split(r8);	 Catch:{ Exception -> 0x01b9 }
             r8 = 0;
             r20 = 0;
             r21 = 0;
-        L_0x015c:
-            r9 = r0.length;	 Catch:{ Exception -> 0x01b7 }
-            if (r8 >= r9) goto L_0x0228;
-        L_0x015f:
-            r9 = r0[r8];	 Catch:{ Exception -> 0x01b7 }
-            r9 = r9.split(r4);	 Catch:{ Exception -> 0x01b7 }
+        L_0x015d:
+            r9 = r0.length;	 Catch:{ Exception -> 0x01b9 }
+            if (r8 >= r9) goto L_0x022a;
+        L_0x0160:
+            r9 = r0[r8];	 Catch:{ Exception -> 0x01b9 }
+            r9 = r9.split(r4);	 Catch:{ Exception -> 0x01b9 }
             r19 = 0;
-            r6 = r9[r19];	 Catch:{ Exception -> 0x01b7 }
+            r6 = r9[r19];	 Catch:{ Exception -> 0x01b9 }
             r22 = r0;
             r0 = "type";
-            r0 = r6.startsWith(r0);	 Catch:{ Exception -> 0x01b7 }
-            if (r0 == 0) goto L_0x0185;
-        L_0x0173:
+            r0 = r6.startsWith(r0);	 Catch:{ Exception -> 0x01b9 }
+            if (r0 == 0) goto L_0x0187;
+        L_0x0174:
             r6 = 1;
-            r0 = r9[r6];	 Catch:{ Exception -> 0x01b7 }
-            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x01b7 }
+            r0 = r9[r6];	 Catch:{ Exception -> 0x01b9 }
+            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x01b9 }
             r6 = "video/mp4";
-            r0 = r0.contains(r6);	 Catch:{ Exception -> 0x01b7 }
-            if (r0 == 0) goto L_0x01a9;
-        L_0x0182:
+            r0 = r0.contains(r6);	 Catch:{ Exception -> 0x01b9 }
+            if (r0 == 0) goto L_0x01ab;
+        L_0x0184:
             r20 = 1;
-            goto L_0x01a9;
-        L_0x0185:
+            goto L_0x01ab;
+        L_0x0187:
             r6 = 0;
-            r0 = r9[r6];	 Catch:{ Exception -> 0x01b7 }
+            r0 = r9[r6];	 Catch:{ Exception -> 0x01b9 }
             r6 = "url";
-            r0 = r0.startsWith(r6);	 Catch:{ Exception -> 0x01b7 }
-            if (r0 == 0) goto L_0x019a;
-        L_0x0190:
+            r0 = r0.startsWith(r6);	 Catch:{ Exception -> 0x01b9 }
+            if (r0 == 0) goto L_0x019c;
+        L_0x0192:
             r6 = 1;
-            r0 = r9[r6];	 Catch:{ Exception -> 0x01b7 }
-            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x01b7 }
+            r0 = r9[r6];	 Catch:{ Exception -> 0x01b9 }
+            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x01b9 }
             r21 = r0;
-            goto L_0x01a9;
-        L_0x019a:
+            goto L_0x01ab;
+        L_0x019c:
             r6 = 0;
-            r0 = r9[r6];	 Catch:{ Exception -> 0x01b7 }
+            r0 = r9[r6];	 Catch:{ Exception -> 0x01b9 }
             r6 = "itag";
-            r0 = r0.startsWith(r6);	 Catch:{ Exception -> 0x01b7 }
-            if (r0 == 0) goto L_0x01a9;
-        L_0x01a5:
+            r0 = r0.startsWith(r6);	 Catch:{ Exception -> 0x01b9 }
+            if (r0 == 0) goto L_0x01ab;
+        L_0x01a7:
             r20 = 0;
             r21 = 0;
-        L_0x01a9:
-            if (r20 == 0) goto L_0x01b1;
         L_0x01ab:
-            if (r21 == 0) goto L_0x01b1;
+            if (r20 == 0) goto L_0x01b3;
         L_0x01ad:
+            if (r21 == 0) goto L_0x01b3;
+        L_0x01af:
             r18 = r21;
-            goto L_0x0228;
-        L_0x01b1:
+            goto L_0x022a;
+        L_0x01b3:
             r8 = r8 + 1;
             r0 = r22;
             r6 = 1;
-            goto L_0x015c;
-        L_0x01b7:
+            goto L_0x015d;
+        L_0x01b9:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-            goto L_0x0228;
-        L_0x01bc:
+            goto L_0x022a;
+        L_0x01be:
             r0 = r10[r12];
             r6 = "use_cipher_signature";
             r0 = r0.startsWith(r6);
-            if (r0 == 0) goto L_0x01e2;
-        L_0x01c6:
+            if (r0 == 0) goto L_0x01e4;
+        L_0x01c8:
             r0 = r10[r12];
             r0 = r0.split(r4);
             r4 = r0.length;
             r6 = 2;
-            if (r4 != r6) goto L_0x0228;
-        L_0x01d0:
+            if (r4 != r6) goto L_0x022a;
+        L_0x01d2:
             r4 = 1;
             r0 = r0[r4];
             r0 = r0.toLowerCase();
             r4 = "true";
             r0 = r0.equals(r4);
-            if (r0 == 0) goto L_0x0228;
-        L_0x01df:
+            if (r0 == 0) goto L_0x022a;
+        L_0x01e1:
             r16 = 1;
-            goto L_0x0228;
-        L_0x01e2:
+            goto L_0x022a;
+        L_0x01e4:
             r0 = r10[r12];
             r6 = "hlsvp";
             r0 = r0.startsWith(r6);
-            if (r0 == 0) goto L_0x0204;
-        L_0x01ec:
+            if (r0 == 0) goto L_0x0206;
+        L_0x01ee:
             r0 = r10[r12];
             r0 = r0.split(r4);
             r4 = r0.length;
             r6 = 2;
-            if (r4 != r6) goto L_0x0228;
-        L_0x01f6:
+            if (r4 != r6) goto L_0x022a;
+        L_0x01f8:
             r4 = 1;
-            r0 = r0[r4];	 Catch:{ Exception -> 0x01ff }
-            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x01ff }
+            r0 = r0[r4];	 Catch:{ Exception -> 0x0201 }
+            r0 = java.net.URLDecoder.decode(r0, r2);	 Catch:{ Exception -> 0x0201 }
             r15 = r0;
-            goto L_0x0228;
-        L_0x01ff:
+            goto L_0x022a;
+        L_0x0201:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-            goto L_0x0228;
-        L_0x0204:
+            goto L_0x022a;
+        L_0x0206:
             r0 = r10[r12];
             r6 = "livestream";
             r0 = r0.startsWith(r6);
-            if (r0 == 0) goto L_0x0228;
-        L_0x020e:
+            if (r0 == 0) goto L_0x022a;
+        L_0x0210:
             r0 = r10[r12];
             r0 = r0.split(r4);
             r4 = r0.length;
             r6 = 2;
-            if (r4 != r6) goto L_0x0228;
-        L_0x0218:
+            if (r4 != r6) goto L_0x022a;
+        L_0x021a:
             r4 = 1;
             r0 = r0[r4];
             r0 = r0.toLowerCase();
             r4 = "1";
             r0 = r0.equals(r4);
-            if (r0 == 0) goto L_0x0228;
-        L_0x0227:
+            if (r0 == 0) goto L_0x022a;
+        L_0x0229:
             r13 = 1;
-        L_0x0228:
+        L_0x022a:
             r12 = r12 + 1;
             r4 = 0;
             r6 = 1;
             r8 = 0;
             r9 = 2;
-            goto L_0x010d;
-        L_0x0230:
+            goto L_0x010e;
+        L_0x0232:
             r12 = r16;
             r0 = r18;
-            goto L_0x0239;
-        L_0x0235:
+            goto L_0x023b;
+        L_0x0237:
             r13 = 0;
             r15 = 0;
             r17 = 0;
-        L_0x0239:
-            if (r13 == 0) goto L_0x0253;
         L_0x023b:
-            if (r15 == 0) goto L_0x0251;
+            if (r13 == 0) goto L_0x0255;
         L_0x023d:
-            if (r12 != 0) goto L_0x0251;
+            if (r15 == 0) goto L_0x0253;
         L_0x023f:
+            if (r12 != 0) goto L_0x0253;
+        L_0x0241:
             r4 = r15.contains(r14);
-            if (r4 == 0) goto L_0x0246;
-        L_0x0245:
-            goto L_0x0251;
-        L_0x0246:
+            if (r4 == 0) goto L_0x0248;
+        L_0x0247:
+            goto L_0x0253;
+        L_0x0248:
             r4 = r1.result;
             r6 = 0;
             r4[r6] = r15;
             r6 = "hls";
             r8 = 1;
             r4[r8] = r6;
-            goto L_0x0253;
-        L_0x0251:
+            goto L_0x0255;
+        L_0x0253:
             r2 = 0;
             return r2;
-        L_0x0253:
-            if (r17 == 0) goto L_0x0256;
         L_0x0255:
-            goto L_0x025f;
-        L_0x0256:
+            if (r17 == 0) goto L_0x0258;
+        L_0x0257:
+            goto L_0x0261;
+        L_0x0258:
             r11 = r11 + 1;
             r4 = 0;
             r6 = 1;
             r8 = 0;
             r9 = 2;
             r10 = 3;
-            goto L_0x00d4;
-        L_0x025f:
+            goto L_0x00d5;
+        L_0x0261:
             r6 = r12;
             r2 = r1.result;
             r4 = 0;
             r5 = r2[r4];
-            if (r5 != 0) goto L_0x0270;
-        L_0x0267:
-            if (r0 == 0) goto L_0x0270;
+            if (r5 != 0) goto L_0x0272;
         L_0x0269:
+            if (r0 == 0) goto L_0x0272;
+        L_0x026b:
             r2[r4] = r0;
             r0 = "other";
             r5 = 1;
             r2[r5] = r0;
-        L_0x0270:
+        L_0x0272:
             r0 = r1.result;
             r2 = r0[r4];
-            if (r2 == 0) goto L_0x044d;
-        L_0x0276:
-            if (r6 != 0) goto L_0x0280;
+            if (r2 == 0) goto L_0x0450;
         L_0x0278:
+            if (r6 != 0) goto L_0x0282;
+        L_0x027a:
             r0 = r0[r4];
             r0 = r0.contains(r14);
-            if (r0 == 0) goto L_0x044d;
-        L_0x0280:
-            if (r3 == 0) goto L_0x044d;
+            if (r0 == 0) goto L_0x0450;
         L_0x0282:
+            if (r3 == 0) goto L_0x0450;
+        L_0x0284:
             r0 = r1.result;
             r0 = r0[r4];
             r0 = r0.indexOf(r14);
@@ -1825,14 +1825,14 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r6 = r0 + 10;
             r2 = r2.indexOf(r5, r6);
             r5 = -1;
-            if (r0 == r5) goto L_0x0449;
-        L_0x0299:
-            if (r2 != r5) goto L_0x02a3;
+            if (r0 == r5) goto L_0x044c;
         L_0x029b:
+            if (r2 != r5) goto L_0x02a5;
+        L_0x029d:
             r2 = r1.result;
             r2 = r2[r4];
             r2 = r2.length();
-        L_0x02a3:
+        L_0x02a5:
             r5 = r1.result;
             r5 = r5[r4];
             r0 = r5.substring(r0, r2);
@@ -1840,32 +1840,32 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r0 = org.telegram.ui.Components.WebPlayerView.jsPattern;
             r0 = r0.matcher(r3);
             r2 = r0.find();
-            if (r2 == 0) goto L_0x02d5;
-        L_0x02bb:
-            r2 = new org.json.JSONTokener;	 Catch:{ Exception -> 0x02d1 }
+            if (r2 == 0) goto L_0x02d7;
+        L_0x02bd:
+            r2 = new org.json.JSONTokener;	 Catch:{ Exception -> 0x02d3 }
             r3 = 1;
-            r0 = r0.group(r3);	 Catch:{ Exception -> 0x02d1 }
-            r2.<init>(r0);	 Catch:{ Exception -> 0x02d1 }
-            r0 = r2.nextValue();	 Catch:{ Exception -> 0x02d1 }
-            r2 = r0 instanceof java.lang.String;	 Catch:{ Exception -> 0x02d1 }
-            if (r2 == 0) goto L_0x02d5;
-        L_0x02cd:
-            r0 = (java.lang.String) r0;	 Catch:{ Exception -> 0x02d1 }
+            r0 = r0.group(r3);	 Catch:{ Exception -> 0x02d3 }
+            r2.<init>(r0);	 Catch:{ Exception -> 0x02d3 }
+            r0 = r2.nextValue();	 Catch:{ Exception -> 0x02d3 }
+            r2 = r0 instanceof java.lang.String;	 Catch:{ Exception -> 0x02d3 }
+            if (r2 == 0) goto L_0x02d7;
+        L_0x02cf:
+            r0 = (java.lang.String) r0;	 Catch:{ Exception -> 0x02d3 }
             r4 = r0;
-            goto L_0x02d6;
-        L_0x02d1:
+            goto L_0x02d8;
+        L_0x02d3:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-        L_0x02d5:
+        L_0x02d7:
             r4 = 0;
-        L_0x02d6:
-            if (r4 == 0) goto L_0x0449;
         L_0x02d8:
+            if (r4 == 0) goto L_0x044c;
+        L_0x02da:
             r0 = org.telegram.ui.Components.WebPlayerView.playerIdPattern;
             r0 = r0.matcher(r4);
             r2 = r0.find();
-            if (r2 == 0) goto L_0x0300;
-        L_0x02e6:
+            if (r2 == 0) goto L_0x0302;
+        L_0x02e8:
             r2 = new java.lang.StringBuilder;
             r2.<init>();
             r3 = 1;
@@ -1875,17 +1875,17 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r0 = r0.group(r3);
             r2.append(r0);
             r0 = r2.toString();
-            goto L_0x0301;
-        L_0x0300:
+            goto L_0x0303;
+        L_0x0302:
             r0 = 0;
-        L_0x0301:
+        L_0x0303:
             r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
             r3 = "youtubecode";
             r5 = 0;
             r2 = r2.getSharedPreferences(r3, r5);
             r3 = "n";
-            if (r0 == 0) goto L_0x0328;
-        L_0x030f:
+            if (r0 == 0) goto L_0x032a;
+        L_0x0311:
             r6 = 0;
             r7 = r2.getString(r0, r6);
             r8 = new java.lang.StringBuilder;
@@ -1894,102 +1894,102 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r8.append(r3);
             r8 = r8.toString();
             r8 = r2.getString(r8, r6);
-            goto L_0x032a;
-        L_0x0328:
+            goto L_0x032c;
+        L_0x032a:
             r7 = 0;
             r8 = 0;
-        L_0x032a:
-            if (r7 != 0) goto L_0x03d0;
         L_0x032c:
+            if (r7 != 0) goto L_0x03d2;
+        L_0x032e:
             r6 = "//";
             r6 = r4.startsWith(r6);
-            if (r6 == 0) goto L_0x0346;
-        L_0x0334:
+            if (r6 == 0) goto L_0x0348;
+        L_0x0336:
             r6 = new java.lang.StringBuilder;
             r6.<init>();
             r9 = "https:";
             r6.append(r9);
             r6.append(r4);
             r4 = r6.toString();
-            goto L_0x035f;
-        L_0x0346:
+            goto L_0x0361;
+        L_0x0348:
             r6 = "/";
             r6 = r4.startsWith(r6);
-            if (r6 == 0) goto L_0x035f;
-        L_0x034e:
+            if (r6 == 0) goto L_0x0361;
+        L_0x0350:
             r6 = new java.lang.StringBuilder;
             r6.<init>();
             r9 = "https://www.youtube.com";
             r6.append(r9);
             r6.append(r4);
             r4 = r6.toString();
-        L_0x035f:
+        L_0x0361:
             r6 = org.telegram.ui.Components.WebPlayerView.this;
             r4 = r6.downloadUrlContent(r1, r4);
             r6 = r23.isCancelled();
-            if (r6 == 0) goto L_0x036d;
-        L_0x036b:
-            r9 = 0;
-            return r9;
+            if (r6 == 0) goto L_0x036f;
         L_0x036d:
             r9 = 0;
-            if (r4 == 0) goto L_0x03d1;
-        L_0x0370:
+            return r9;
+        L_0x036f:
+            r9 = 0;
+            if (r4 == 0) goto L_0x03d3;
+        L_0x0372:
             r6 = org.telegram.ui.Components.WebPlayerView.sigPattern;
             r6 = r6.matcher(r4);
             r10 = r6.find();
-            if (r10 == 0) goto L_0x0384;
-        L_0x037e:
+            if (r10 == 0) goto L_0x0386;
+        L_0x0380:
             r10 = 1;
             r8 = r6.group(r10);
-            goto L_0x0397;
-        L_0x0384:
+            goto L_0x0399;
+        L_0x0386:
             r10 = 1;
             r6 = org.telegram.ui.Components.WebPlayerView.sigPattern2;
             r6 = r6.matcher(r4);
             r11 = r6.find();
-            if (r11 == 0) goto L_0x0397;
-        L_0x0393:
+            if (r11 == 0) goto L_0x0399;
+        L_0x0395:
             r8 = r6.group(r10);
-        L_0x0397:
-            if (r8 == 0) goto L_0x03d2;
         L_0x0399:
-            r6 = new org.telegram.ui.Components.WebPlayerView$JSExtractor;	 Catch:{ Exception -> 0x03cb }
-            r11 = org.telegram.ui.Components.WebPlayerView.this;	 Catch:{ Exception -> 0x03cb }
-            r6.<init>(r4);	 Catch:{ Exception -> 0x03cb }
-            r7 = r6.extractFunction(r8);	 Catch:{ Exception -> 0x03cb }
-            r4 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Exception -> 0x03cb }
-            if (r4 != 0) goto L_0x03d2;
-        L_0x03aa:
-            if (r0 == 0) goto L_0x03d2;
+            if (r8 == 0) goto L_0x03d4;
+        L_0x039b:
+            r6 = new org.telegram.ui.Components.WebPlayerView$JSExtractor;	 Catch:{ Exception -> 0x03cd }
+            r11 = org.telegram.ui.Components.WebPlayerView.this;	 Catch:{ Exception -> 0x03cd }
+            r6.<init>(r4);	 Catch:{ Exception -> 0x03cd }
+            r7 = r6.extractFunction(r8);	 Catch:{ Exception -> 0x03cd }
+            r4 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Exception -> 0x03cd }
+            if (r4 != 0) goto L_0x03d4;
         L_0x03ac:
-            r2 = r2.edit();	 Catch:{ Exception -> 0x03cb }
-            r2 = r2.putString(r0, r7);	 Catch:{ Exception -> 0x03cb }
-            r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x03cb }
-            r4.<init>();	 Catch:{ Exception -> 0x03cb }
-            r4.append(r0);	 Catch:{ Exception -> 0x03cb }
-            r4.append(r3);	 Catch:{ Exception -> 0x03cb }
-            r0 = r4.toString();	 Catch:{ Exception -> 0x03cb }
-            r0 = r2.putString(r0, r8);	 Catch:{ Exception -> 0x03cb }
-            r0.commit();	 Catch:{ Exception -> 0x03cb }
-            goto L_0x03d2;
-        L_0x03cb:
+            if (r0 == 0) goto L_0x03d4;
+        L_0x03ae:
+            r2 = r2.edit();	 Catch:{ Exception -> 0x03cd }
+            r2 = r2.putString(r0, r7);	 Catch:{ Exception -> 0x03cd }
+            r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x03cd }
+            r4.<init>();	 Catch:{ Exception -> 0x03cd }
+            r4.append(r0);	 Catch:{ Exception -> 0x03cd }
+            r4.append(r3);	 Catch:{ Exception -> 0x03cd }
+            r0 = r4.toString();	 Catch:{ Exception -> 0x03cd }
+            r0 = r2.putString(r0, r8);	 Catch:{ Exception -> 0x03cd }
+            r0.commit();	 Catch:{ Exception -> 0x03cd }
+            goto L_0x03d4;
+        L_0x03cd:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-            goto L_0x03d2;
-        L_0x03d0:
-            r9 = 0;
-        L_0x03d1:
-            r10 = 1;
+            goto L_0x03d4;
         L_0x03d2:
+            r9 = 0;
+        L_0x03d3:
+            r10 = 1;
+        L_0x03d4:
             r0 = android.text.TextUtils.isEmpty(r7);
-            if (r0 != 0) goto L_0x044b;
-        L_0x03d8:
+            if (r0 != 0) goto L_0x044e;
+        L_0x03da:
             r0 = android.os.Build.VERSION.SDK_INT;
             r2 = 21;
             r3 = "('";
-            if (r0 < r2) goto L_0x0402;
-        L_0x03e0:
+            if (r0 < r2) goto L_0x0404;
+        L_0x03e2:
             r0 = new java.lang.StringBuilder;
             r0.<init>();
             r0.append(r7);
@@ -2002,8 +2002,8 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r2 = "');";
             r0.append(r2);
             r0 = r0.toString();
-            goto L_0x0436;
-        L_0x0402:
+            goto L_0x0439;
+        L_0x0404:
             r0 = new java.lang.StringBuilder;
             r0.<init>();
             r0.append(r7);
@@ -2023,39 +2023,39 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r2 = "'));";
             r0.append(r2);
             r0 = r0.toString();
-        L_0x0436:
-            r2 = new org.telegram.ui.Components.-$$Lambda$WebPlayerView$YoutubeVideoTask$GMLQkdVjUFyM84BTj7n250BCLASSNAMEg;	 Catch:{ Exception -> 0x0444 }
-            r2.<init>(r1, r0);	 Catch:{ Exception -> 0x0444 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0444 }
-            r0 = r1.countDownLatch;	 Catch:{ Exception -> 0x0444 }
-            r0.await();	 Catch:{ Exception -> 0x0444 }
-            goto L_0x044f;
-        L_0x0444:
+        L_0x0439:
+            r2 = new org.telegram.ui.Components.-$$Lambda$WebPlayerView$YoutubeVideoTask$GMLQkdVjUFyM84BTj7n250BCLASSNAMEg;	 Catch:{ Exception -> 0x0447 }
+            r2.<init>(r1, r0);	 Catch:{ Exception -> 0x0447 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0447 }
+            r0 = r1.countDownLatch;	 Catch:{ Exception -> 0x0447 }
+            r0.await();	 Catch:{ Exception -> 0x0447 }
+            goto L_0x0452;
+        L_0x0447:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-            goto L_0x044b;
-        L_0x0449:
+            goto L_0x044e;
+        L_0x044c:
             r9 = 0;
             r10 = 1;
-        L_0x044b:
+        L_0x044e:
             r5 = 1;
-            goto L_0x044f;
-        L_0x044d:
+            goto L_0x0452;
+        L_0x0450:
             r9 = 0;
             r5 = r6;
-        L_0x044f:
+        L_0x0452:
             r0 = r23.isCancelled();
-            if (r0 != 0) goto L_0x045b;
-        L_0x0455:
-            if (r5 == 0) goto L_0x0458;
-        L_0x0457:
-            goto L_0x045b;
+            if (r0 != 0) goto L_0x045e;
         L_0x0458:
-            r4 = r1.result;
-            goto L_0x045c;
+            if (r5 == 0) goto L_0x045b;
+        L_0x045a:
+            goto L_0x045e;
         L_0x045b:
+            r4 = r1.result;
+            goto L_0x045f;
+        L_0x045e:
             r4 = r9;
-        L_0x045c:
+        L_0x045f:
             return r4;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask.doInBackground(java.lang.Void[]):java.lang.String[]");

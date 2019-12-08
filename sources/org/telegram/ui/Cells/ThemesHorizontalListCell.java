@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapShader;
@@ -35,6 +36,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -959,6 +961,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 return;
             }
         } else if (access$600 != Theme.getCurrentTheme()) {
+            Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0).edit();
+            edit.putString(access$600.isDark() ? "lastDarkTheme" : "lastDayTheme", access$600.getKey());
+            edit.commit();
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, access$600, Boolean.valueOf(false));
         } else {
             return;

@@ -165,10 +165,10 @@ public class JoinGroupAlert extends BottomSheet {
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(str3));
-        if (obj.channel || (ChatObject.isChannel(obj.chat) && !obj.chat.megagroup)) {
-            pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ProfileJoinChannel", NUM).toUpperCase());
-        } else {
+        if ((!obj.channel || obj.megagroup) && (!ChatObject.isChannel(obj.chat) || obj.chat.megagroup)) {
             pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", NUM));
+        } else {
+            pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ProfileJoinChannel", NUM).toUpperCase());
         }
         pickerBottomLayout.doneButton.setOnClickListener(new -$$Lambda$JoinGroupAlert$MfRcTjxTXiGmJvnuSHx7GPUtAhw(this));
     }

@@ -92,7 +92,6 @@ public class PipVideoView {
                 addView(this.playButton, LayoutHelper.createFrame(48, 48, 17));
                 this.playButton.setOnClickListener(new -$$Lambda$PipVideoView$MiniControlsView$1JTbmkeJbI8PQhj0gt64f8TrJNY(this));
             }
-            setOnTouchListener(-$$Lambda$PipVideoView$MiniControlsView$jKPELGvyg4VHgdM0XCb-ZaGLO4U.INSTANCE);
             updatePlayButton();
             show(false, false);
         }
@@ -212,6 +211,13 @@ public class PipVideoView {
             return super.onInterceptTouchEvent(motionEvent);
         }
 
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            if (this.currentAnimation != null) {
+                return true;
+            }
+            return super.onTouchEvent(motionEvent);
+        }
+
         public void requestDisallowInterceptTouchEvent(boolean z) {
             super.requestDisallowInterceptTouchEvent(z);
             checkNeedHide();
@@ -279,10 +285,6 @@ public class PipVideoView {
                 return super.onInterceptTouchEvent(motionEvent);
             }
 
-            public void requestDisallowInterceptTouchEvent(boolean z) {
-                super.requestDisallowInterceptTouchEvent(z);
-            }
-
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (!this.dragging) {
                     return false;
@@ -324,7 +326,7 @@ public class PipVideoView {
                     this.dragging = false;
                     PipVideoView.this.animateToBoundsMaybe();
                 }
-                return true;
+                return super.onTouchEvent(motionEvent);
             }
         };
         if (f > 1.0f) {

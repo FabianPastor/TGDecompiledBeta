@@ -1412,7 +1412,7 @@ public class ActionBarLayout extends FrameLayout {
         return this.themeAnimationValue;
     }
 
-    public void animateThemedValues(ThemeInfo themeInfo, boolean z) {
+    public void animateThemedValues(ThemeInfo themeInfo, boolean z, boolean z2) {
         if (this.transitionAnimationInProgress || this.startedTracking) {
             this.animateThemeAfterAnimation = true;
             this.animateSetThemeAfterAnimation = themeInfo;
@@ -1424,55 +1424,77 @@ public class ActionBarLayout extends FrameLayout {
             animatorSet.cancel();
             this.themeAnimatorSet = null;
         }
+        int i = 0;
         Object obj = null;
-        for (int i = 0; i < 2; i++) {
+        for (int i2 = 0; i2 < 2; i2++) {
             BaseFragment lastFragment;
-            if (i == 0) {
+            if (i2 == 0) {
                 lastFragment = getLastFragment();
             } else if ((this.inPreviewMode || this.transitionAnimationPreviewMode) && this.fragmentsStack.size() > 1) {
                 ArrayList arrayList = this.fragmentsStack;
                 lastFragment = (BaseFragment) arrayList.get(arrayList.size() - 2);
             } else {
-                this.themeAnimatorDescriptions[i] = null;
-                this.animateStartColors[i] = null;
-                this.animateEndColors[i] = null;
-                this.themeAnimatorDelegate[i] = null;
+                this.themeAnimatorDescriptions[i2] = null;
+                this.animateStartColors[i2] = null;
+                this.animateEndColors[i2] = null;
+                this.themeAnimatorDelegate[i2] = null;
             }
             if (lastFragment != null) {
                 ThemeDescription[][] themeDescriptionArr;
-                this.themeAnimatorDescriptions[i] = lastFragment.getThemeDescriptions();
-                this.animateStartColors[i] = new int[this.themeAnimatorDescriptions[i].length];
-                int i2 = 0;
+                this.themeAnimatorDescriptions[i2] = lastFragment.getThemeDescriptions();
+                this.animateStartColors[i2] = new int[this.themeAnimatorDescriptions[i2].length];
+                int i3 = 0;
                 while (true) {
                     themeDescriptionArr = this.themeAnimatorDescriptions;
-                    if (i2 >= themeDescriptionArr[i].length) {
+                    if (i3 >= themeDescriptionArr[i2].length) {
                         break;
                     }
-                    this.animateStartColors[i][i2] = themeDescriptionArr[i][i2].getSetColor();
-                    ThemeDescriptionDelegate delegateDisabled = this.themeAnimatorDescriptions[i][i2].setDelegateDisabled();
+                    this.animateStartColors[i2][i3] = themeDescriptionArr[i2][i3].getSetColor();
+                    ThemeDescriptionDelegate delegateDisabled = this.themeAnimatorDescriptions[i2][i3].setDelegateDisabled();
                     ThemeDescriptionDelegate[] themeDescriptionDelegateArr = this.themeAnimatorDelegate;
-                    if (themeDescriptionDelegateArr[i] == null && delegateDisabled != null) {
-                        themeDescriptionDelegateArr[i] = delegateDisabled;
+                    if (themeDescriptionDelegateArr[i2] == null && delegateDisabled != null) {
+                        themeDescriptionDelegateArr[i2] = delegateDisabled;
                     }
-                    i2++;
+                    i3++;
                 }
-                if (i == 0) {
+                if (i2 == 0) {
                     Theme.applyTheme(themeInfo, z);
                 }
-                this.animateEndColors[i] = new int[this.themeAnimatorDescriptions[i].length];
-                i2 = 0;
+                this.animateEndColors[i2] = new int[this.themeAnimatorDescriptions[i2].length];
+                i3 = 0;
                 while (true) {
                     themeDescriptionArr = this.themeAnimatorDescriptions;
-                    if (i2 >= themeDescriptionArr[i].length) {
+                    if (i3 >= themeDescriptionArr[i2].length) {
                         break;
                     }
-                    this.animateEndColors[i][i2] = themeDescriptionArr[i][i2].getSetColor();
-                    i2++;
+                    this.animateEndColors[i2][i3] = themeDescriptionArr[i2][i3].getSetColor();
+                    i3++;
                 }
                 obj = 1;
             }
         }
         if (obj != null) {
+            int size = this.fragmentsStack.size();
+            int i4 = (this.inPreviewMode || this.transitionAnimationPreviewMode) ? 2 : 1;
+            size -= i4;
+            for (i4 = 0; i4 < size; i4++) {
+                BaseFragment baseFragment = (BaseFragment) this.fragmentsStack.get(i4);
+                baseFragment.clearViews();
+                baseFragment.setParentLayout(this);
+            }
+            if (z2) {
+                setThemeAnimationValue(1.0f);
+                while (i < 2) {
+                    this.themeAnimatorDescriptions[i] = null;
+                    this.animateStartColors[i] = null;
+                    this.animateEndColors[i] = null;
+                    this.themeAnimatorDelegate[i] = null;
+                    i++;
+                }
+                this.presentingFragmentDescriptions = null;
+                return;
+            }
+            Theme.setAnimatingColor(true);
             this.themeAnimatorSet = new AnimatorSet();
             this.themeAnimatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
@@ -1503,15 +1525,6 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 }
             });
-            int size = this.fragmentsStack.size();
-            int i3 = (this.inPreviewMode || this.transitionAnimationPreviewMode) ? 2 : 1;
-            size -= i3;
-            for (i3 = 0; i3 < size; i3++) {
-                BaseFragment baseFragment = (BaseFragment) this.fragmentsStack.get(i3);
-                baseFragment.clearViews();
-                baseFragment.setParentLayout(this);
-            }
-            Theme.setAnimatingColor(true);
             AnimatorSet animatorSet2 = this.themeAnimatorSet;
             Animator[] animatorArr = new Animator[1];
             animatorArr[0] = ObjectAnimator.ofFloat(this, "themeAnimationValue", new float[]{0.0f, 1.0f});
@@ -1593,7 +1606,7 @@ public class ActionBarLayout extends FrameLayout {
             rebuildAllFragmentViews(this.rebuildLastAfterAnimation, this.showLastAfterAnimation);
             this.rebuildAfterAnimation = false;
         } else if (this.animateThemeAfterAnimation) {
-            animateThemedValues(this.animateSetThemeAfterAnimation, this.animateSetThemeNightAfterAnimation);
+            animateThemedValues(this.animateSetThemeAfterAnimation, this.animateSetThemeNightAfterAnimation, false);
             this.animateSetThemeAfterAnimation = null;
             this.animateThemeAfterAnimation = false;
         }

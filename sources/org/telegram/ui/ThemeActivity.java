@@ -605,7 +605,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x012d:
             r8 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x0143 }
             r10 = "ShareFile";
-            r0 = NUM; // 0x7f0e09f9 float:1.8880216E38 double:1.053163418E-314;
+            r0 = NUM; // 0x7f0e0a25 float:1.8880305E38 double:1.0531634397E-314;
             r10 = org.telegram.messenger.LocaleController.getString(r10, r0);	 Catch:{ Exception -> 0x0143 }
             r9 = android.content.Intent.createChooser(r9, r10);	 Catch:{ Exception -> 0x0143 }
             r10 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -654,21 +654,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r0 = org.telegram.ui.ThemeActivity.this;
             r0 = r0.getParentActivity();
             r10.<init>(r0);
-            r0 = NUM; // 0x7f0e038d float:1.8876881E38 double:1.0531626057E-314;
+            r0 = NUM; // 0x7f0e03a1 float:1.8876922E38 double:1.0531626156E-314;
             r1 = "DeleteThemeTitle";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r10.setTitle(r0);
-            r0 = NUM; // 0x7f0e038c float:1.887688E38 double:1.053162605E-314;
+            r0 = NUM; // 0x7f0e03a0 float:1.887692E38 double:1.053162615E-314;
             r1 = "DeleteThemeAlert";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r10.setMessage(r0);
-            r0 = NUM; // 0x7f0e0363 float:1.8876796E38 double:1.053162585E-314;
+            r0 = NUM; // 0x7f0e0377 float:1.8876837E38 double:1.053162595E-314;
             r1 = "Delete";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r1 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw;
             r1.<init>(r7, r8);
             r10.setPositiveButton(r0, r1);
-            r8 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
+            r8 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
             r0 = "Cancel";
             r8 = org.telegram.messenger.LocaleController.getString(r0, r8);
             r10.setNegativeButton(r8, r9);
@@ -821,6 +821,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 accentColor = themeAccentsListAdapter.getAccentColor(i);
                 if (currentNightTheme.accentColor != accentColor) {
                     Theme.saveThemeAccent(currentNightTheme, accentColor);
+                    Theme.saveThemeMyMessagesAccent(currentNightTheme, 0, 0);
+                    Theme.saveThemeBackgroundColors(currentNightTheme, 0, 0);
                     NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
                     i = NotificationCenter.needSetDayNightTheme;
                     Object[] objArr = new Object[2];
@@ -1863,7 +1865,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         if (this.listAdapter != null) {
             updateRows(true);
         }
-        AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationEnd(boolean z, boolean z2) {
+        if (z) {
+            AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
+        }
     }
 
     private void openThemeCreate() {

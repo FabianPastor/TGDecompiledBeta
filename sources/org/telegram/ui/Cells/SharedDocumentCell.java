@@ -10,7 +10,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.io.File;
 import java.util.Date;
+import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
@@ -18,6 +20,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController.PhotoEntry;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.Document;
@@ -33,11 +36,12 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 
 public class SharedDocumentCell extends FrameLayout implements FileDownloadProgressListener {
-    private int TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
+    private int TAG;
     private CheckBox2 checkBox;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     private TextView dateTextView;
     private TextView extTextView;
+    private boolean isPickerCell;
     private boolean loaded;
     private boolean loading;
     private MessageObject message;
@@ -52,11 +56,22 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     }
 
     public SharedDocumentCell(Context context) {
+        this(context, false);
+    }
+
+    public SharedDocumentCell(Context context, boolean z) {
         Context context2 = context;
         super(context);
+        this.currentAccount = UserConfig.selectedAccount;
+        this.isPickerCell = z;
+        this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         this.placeholderImageView = new ImageView(context2);
         int i = 5;
-        addView(this.placeholderImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        if (this.isPickerCell) {
+            addView(this.placeholderImageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 12.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
+        } else {
+            addView(this.placeholderImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        }
         this.extTextView = new TextView(context2);
         this.extTextView.setTextColor(Theme.getColor("files_iconText"));
         this.extTextView.setTextSize(1, 14.0f);
@@ -68,7 +83,11 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         this.extTextView.setGravity(17);
         this.extTextView.setEllipsize(TruncateAt.END);
         this.extTextView.setImportantForAccessibility(2);
-        addView(this.extTextView, LayoutHelper.createFrame(32, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 22.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+        if (this.isPickerCell) {
+            addView(this.extTextView, LayoutHelper.createFrame(32, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 20.0f, 28.0f, LocaleController.isRTL ? 20.0f : 0.0f, 0.0f));
+        } else {
+            addView(this.extTextView, LayoutHelper.createFrame(32, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 22.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+        }
         this.thumbImageView = new BackupImageView(context2) {
             /* Access modifiers changed, original: protected */
             public void onDraw(Canvas canvas) {
@@ -82,53 +101,82 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             }
         };
         this.thumbImageView.setRoundRadius(AndroidUtilities.dp(4.0f));
-        addView(this.thumbImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        if (this.isPickerCell) {
+            addView(this.thumbImageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+        } else {
+            addView(this.thumbImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        }
         this.nameTextView = new TextView(context2);
         this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(1, 16.0f);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface(str));
-        this.nameTextView.setMaxLines(2);
         this.nameTextView.setEllipsize(TruncateAt.END);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 5.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        if (this.isPickerCell) {
+            this.nameTextView.setLines(1);
+            this.nameTextView.setMaxLines(1);
+            this.nameTextView.setSingleLine(true);
+            addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 9.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        } else {
+            this.nameTextView.setMaxLines(2);
+            addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 5.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        }
         this.statusImageView = new ImageView(context2);
         this.statusImageView.setVisibility(4);
-        String str2 = "sharedMedia_startStopLoadIcon";
-        this.statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str2), Mode.MULTIPLY));
-        addView(this.statusImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 35.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        this.statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("sharedMedia_startStopLoadIcon"), Mode.MULTIPLY));
+        if (this.isPickerCell) {
+            addView(this.statusImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        } else {
+            addView(this.statusImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 35.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        }
         this.dateTextView = new TextView(context2);
         this.dateTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
-        this.dateTextView.setTextSize(1, 14.0f);
         this.dateTextView.setLines(1);
         this.dateTextView.setMaxLines(1);
         this.dateTextView.setSingleLine(true);
         this.dateTextView.setEllipsize(TruncateAt.END);
         this.dateTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addView(this.dateTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 30.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        if (this.isPickerCell) {
+            this.dateTextView.setTextSize(1, 13.0f);
+            addView(this.dateTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 34.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        } else {
+            this.dateTextView.setTextSize(1, 14.0f);
+            addView(this.dateTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 30.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        }
         this.progressView = new LineProgressView(context2);
-        this.progressView.setProgressColor(Theme.getColor(str2));
+        this.progressView.setProgressColor(Theme.getColor("sharedMedia_startStopLoadIcon"));
         addView(this.progressView, LayoutHelper.createFrame(-1, 2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 72.0f, 54.0f, LocaleController.isRTL ? 72.0f : 0.0f, 0.0f));
         this.checkBox = new CheckBox2(context2, 21);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(null, "windowBackgroundWhite", "checkboxCheck");
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(2);
-        CheckBox2 checkBox2 = this.checkBox;
+        CheckBox2 checkBox2;
+        if (this.isPickerCell) {
+            checkBox2 = this.checkBox;
+            if (!LocaleController.isRTL) {
+                i = 3;
+            }
+            addView(checkBox2, LayoutHelper.createFrame(24, 24.0f, i | 48, LocaleController.isRTL ? 0.0f : 38.0f, 36.0f, LocaleController.isRTL ? 38.0f : 0.0f, 0.0f));
+            return;
+        }
+        checkBox2 = this.checkBox;
         if (!LocaleController.isRTL) {
             i = 3;
         }
         addView(checkBox2, LayoutHelper.createFrame(24, 24.0f, i | 48, LocaleController.isRTL ? 0.0f : 33.0f, 28.0f, LocaleController.isRTL ? 33.0f : 0.0f, 0.0f));
     }
 
-    public void setTextAndValueAndTypeAndThumb(String str, String str2, String str3, String str4, int i) {
+    public void setTextAndValueAndTypeAndThumb(String str, String str2, String str3, String str4, int i, boolean z) {
         this.nameTextView.setText(str);
         this.dateTextView.setText(str2);
         if (str3 != null) {
             this.extTextView.setVisibility(0);
-            this.extTextView.setText(str3);
+            this.extTextView.setText(str3.toLowerCase());
         } else {
             this.extTextView.setVisibility(4);
         }
+        this.needDivider = z;
         if (i == 0) {
             this.placeholderImageView.setImageResource(AndroidUtilities.getThumbForNameOrMime(str, str3, false));
             this.placeholderImageView.setVisibility(0);
@@ -140,17 +188,99 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             this.placeholderImageView.setAlpha(1.0f);
             this.thumbImageView.setImageBitmap(null);
             this.thumbImageView.setVisibility(4);
-            return;
-        }
-        if (str4 != null) {
-            this.thumbImageView.setImage(str4, "40_40", null);
         } else {
-            CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), i);
-            Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor("files_folderIconBackground"), false);
-            Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor("files_folderIcon"), true);
-            this.thumbImageView.setImageDrawable(createCircleDrawableWithIcon);
+            if (str4 != null) {
+                this.thumbImageView.setImage(str4, "42_42", null);
+            } else {
+                CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(42.0f), i);
+                if (i == NUM) {
+                    str3 = "chat_attachLocationBackground";
+                    str4 = "chat_attachLocationIcon";
+                } else if (i == NUM) {
+                    str3 = "chat_attachContactBackground";
+                    str4 = "chat_attachContactIcon";
+                } else if (i == NUM) {
+                    str3 = "chat_attachAudioBackground";
+                    str4 = "chat_attachAudioIcon";
+                } else if (i == NUM) {
+                    str3 = "chat_attachGalleryBackground";
+                    str4 = "chat_attachGalleryIcon";
+                } else {
+                    str3 = "files_folderIconBackground";
+                    str4 = "files_folderIcon";
+                }
+                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor(str3), false);
+                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor(str4), true);
+                this.thumbImageView.setImageDrawable(createCircleDrawableWithIcon);
+            }
+            this.thumbImageView.setVisibility(0);
         }
-        this.thumbImageView.setVisibility(0);
+        setWillNotDraw(1 ^ this.needDivider);
+    }
+
+    public void setPhotoEntry(PhotoEntry photoEntry) {
+        String str = photoEntry.thumbPath;
+        if (str != null) {
+            this.thumbImageView.setImage(str, null, Theme.chat_attachEmptyDrawable);
+            str = photoEntry.thumbPath;
+        } else if (photoEntry.path != null) {
+            String str2 = ":";
+            BackupImageView backupImageView;
+            StringBuilder stringBuilder;
+            if (photoEntry.isVideo) {
+                this.thumbImageView.setOrientation(0, true);
+                backupImageView = this.thumbImageView;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("vthumb://");
+                stringBuilder.append(photoEntry.imageId);
+                stringBuilder.append(str2);
+                stringBuilder.append(photoEntry.path);
+                backupImageView.setImage(stringBuilder.toString(), null, Theme.chat_attachEmptyDrawable);
+            } else {
+                this.thumbImageView.setOrientation(photoEntry.orientation, true);
+                backupImageView = this.thumbImageView;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("thumb://");
+                stringBuilder.append(photoEntry.imageId);
+                stringBuilder.append(str2);
+                stringBuilder.append(photoEntry.path);
+                backupImageView.setImage(stringBuilder.toString(), null, Theme.chat_attachEmptyDrawable);
+            }
+            str = photoEntry.path;
+        } else {
+            this.thumbImageView.setImageDrawable(Theme.chat_attachEmptyDrawable);
+            str = "";
+        }
+        File file = new File(str);
+        this.nameTextView.setText(file.getName());
+        FileLoader.getFileExtension(file);
+        StringBuilder stringBuilder2 = new StringBuilder();
+        this.extTextView.setVisibility(8);
+        String str3 = ", ";
+        if (!(photoEntry.width == 0 || photoEntry.height == 0)) {
+            if (stringBuilder2.length() > 0) {
+                stringBuilder2.append(str3);
+            }
+            stringBuilder2.append(String.format(Locale.US, "%dx%d", new Object[]{Integer.valueOf(photoEntry.width), Integer.valueOf(photoEntry.height)}));
+        }
+        if (photoEntry.isVideo) {
+            if (stringBuilder2.length() > 0) {
+                stringBuilder2.append(str3);
+            }
+            stringBuilder2.append(AndroidUtilities.formatShortDuration(photoEntry.duration));
+        }
+        if (photoEntry.size != 0) {
+            if (stringBuilder2.length() > 0) {
+                stringBuilder2.append(str3);
+            }
+            stringBuilder2.append(AndroidUtilities.formatFileSize(photoEntry.size));
+        }
+        if (stringBuilder2.length() > 0) {
+            stringBuilder2.append(str3);
+        }
+        stringBuilder2.append(LocaleController.getInstance().formatterStats.format(photoEntry.dateTaken));
+        this.dateTextView.setText(stringBuilder2);
+        this.placeholderImageView.setVisibility(8);
     }
 
     /* Access modifiers changed, original: protected */
@@ -314,6 +444,10 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
 
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
+        if (this.isPickerCell) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
+            return;
+        }
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
         setMeasuredDimension(getMeasuredWidth(), (AndroidUtilities.dp(34.0f) + this.nameTextView.getMeasuredHeight()) + this.needDivider);
     }
@@ -321,7 +455,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     /* Access modifiers changed, original: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
-        if (this.nameTextView.getLineCount() > 1) {
+        if (!this.isPickerCell && this.nameTextView.getLineCount() > 1) {
             int measuredHeight = this.nameTextView.getMeasuredHeight() - AndroidUtilities.dp(22.0f);
             TextView textView = this.dateTextView;
             textView.layout(textView.getLeft(), this.dateTextView.getTop() + measuredHeight, this.dateTextView.getRight(), this.dateTextView.getBottom() + measuredHeight);

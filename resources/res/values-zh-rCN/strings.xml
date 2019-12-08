@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">登录</string>
     <string name="common_signin_button_text_long">使用 Google 帐号登录</string>
     <string name="fcm_fallback_notification_channel_label">其他</string>
+    <string name="google_assistant_verification_channel_name">Google 助理验证程序</string>
+    <string name="google_assistant_verification_notification_title">Google 助理正在发送消息</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">通过 Google 购买</string>
 </resources>

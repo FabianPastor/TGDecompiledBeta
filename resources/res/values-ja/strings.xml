@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">ログイン</string>
     <string name="common_signin_button_text_long">Googleにログイン</string>
     <string name="fcm_fallback_notification_channel_label">その他</string>
+    <string name="google_assistant_verification_channel_name">アシスタント ベリファイア</string>
+    <string name="google_assistant_verification_notification_title">Google アシスタントがメッセージを送信中</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Googleで購入</string>
 </resources>

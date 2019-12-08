@@ -272,7 +272,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
             locationActivity.setDelegate(new -$$Lambda$FragmentContextView$z_fnb_TazpUpwkTqfofStIvH9G8(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
-            launchActivity.lambda$runLinkRequest$28$LaunchActivity(locationActivity);
+            launchActivity.lambda$runLinkRequest$29$LaunchActivity(locationActivity);
         }
     }
 

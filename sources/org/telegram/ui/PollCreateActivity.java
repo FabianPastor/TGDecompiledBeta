@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPoll;
 import org.telegram.tgnet.TLRPC.TL_poll;
 import org.telegram.tgnet.TLRPC.TL_pollAnswer;
@@ -395,7 +394,7 @@ public class PollCreateActivity extends BaseFragment {
                     }
                     tL_messageMediaPoll.results = new TL_pollResults();
                     if (PollCreateActivity.this.parentFragment.isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), UserObject.isUserSelf(PollCreateActivity.this.parentFragment.getCurrentUser()), new -$$Lambda$PollCreateActivity$1$Hyg15oY-N3LaZD41EVZTjJmamHg(this, tL_messageMediaPoll));
+                        AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new -$$Lambda$PollCreateActivity$1$Hyg15oY-N3LaZD41EVZTjJmamHg(this, tL_messageMediaPoll));
                         return;
                     }
                     PollCreateActivity.this.delegate.sendPoll(tL_messageMediaPoll, true, 0);

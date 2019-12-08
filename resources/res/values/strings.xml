@@ -82,6 +82,8 @@
     <string name="AccDescrSwitchCamera">Switch camera</string>
     <string name="AccDescrTakeMorePics">Take one more picture</string>
     <string name="AccDescrUserOptions">User options</string>
+    <string name="AccDescrVideoCompressHigh">Higher quality</string>
+    <string name="AccDescrVideoCompressLow">Smaller size</string>
     <string name="AccDescrVideoMessage">Record video message</string>
     <string name="AccDescrVideoQuality">Video quality</string>
     <string name="AccDescrVoiceMessage">Record voice message</string>
@@ -174,6 +176,7 @@
     <string name="AddContactByPhone">Add %1$s</string>
     <string name="AddContactChat">ADD CONTACT</string>
     <string name="AddContactFullChat">ADD %1$s TO CONTACTS</string>
+    <string name="AddContactPhonebookTitle">Add Contact</string>
     <string name="AddContactTitle">Add contact</string>
     <string name="AddExceptions">Add exceptions</string>
     <string name="AddMasks">Add Masks</string>
@@ -243,6 +246,7 @@
     <string name="AndOther_zero">and %1$d others</string>
     <string name="AnonymousPoll">Anonymous Poll</string>
     <string name="ApkRestricted">APK installation is restricted for this app. You can enable this in system settings.</string>
+    <string name="AppFolderInfo">Browse the app\'s folder</string>
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram Beta</string>
     <string name="Appearance">Appearance</string>
@@ -354,6 +358,15 @@
     <string name="AudioUnknownArtist">Unknown artist</string>
     <string name="AudioUnknownTitle">Unknown title</string>
     <string name="August">August</string>
+    <string name="AuthAnotherClient">Login by QR Code</string>
+    <string name="AuthAnotherClientDownloadClientUrl">https://desktop.telegram.org/</string>
+    <string name="AuthAnotherClientInfo1">*Download Telegram* on your computer.</string>
+    <string name="AuthAnotherClientInfo2">Run Telegram Desktop to get the QR code.</string>
+    <string name="AuthAnotherClientInfo3">Scan the QR code to connect your account.</string>
+    <string name="AuthAnotherClientNotFound">No auth token found</string>
+    <string name="AuthAnotherClientOk">Auth successfull</string>
+    <string name="AuthAnotherClientScan">Scan QR Code</string>
+    <string name="AuthAnotherClientTokenError">Token invalid or already expired.</string>
     <string name="AutoDownloadAudioInfo">Voice messages are tiny, so they\'re always downloaded automatically.</string>
     <string name="AutoDownloadChannels">Channels</string>
     <string name="AutoDownloadContacts">Contacts</string>
@@ -402,6 +415,7 @@
     <string name="AutoNightDisabled">Disabled</string>
     <string name="AutoNightFrom">From</string>
     <string name="AutoNightLocation">Use Local Sunset &amp; Sunrise</string>
+    <string name="AutoNightModeOff">Auto-Night Mode is off</string>
     <string name="AutoNightPreferred">Preferred night theme</string>
     <string name="AutoNightSchedule">Schedule</string>
     <string name="AutoNightScheduled">Scheduled</string>
@@ -543,6 +557,7 @@
     <string name="ChangePhoneNumberOccupied">The number %1$s is already connected to a Telegram account. Please delete that account before migrating to the new number.</string>
     <string name="ChangePublicLimitReached">Sorry, you have reserved too many public usernames. You can revoke the link from one of your older groups or channels, or create a private entity instead.</string>
     <string name="ChangeRecoveryEmail">Change Recovery Email</string>
+    <string name="ChangeWallpaperToColor">Are you sure you want to change your chat wallpaper to a color?</string>
     <string name="ChannelAddAdmin">Add Administrator</string>
     <string name="ChannelAddException">Add Exception</string>
     <string name="ChannelAddMembers">Add members</string>
@@ -760,6 +775,11 @@
     <string name="ColorDark">Dark</string>
     <string name="ColorGreen">Green</string>
     <string name="ColorOrange">Orange</string>
+    <string name="ColorPickerBackground">Background</string>
+    <string name="ColorPickerMainColor">Main Color</string>
+    <string name="ColorPickerMyMessages">My Messages</string>
+    <string name="ColorPickerReset">RESET</string>
+    <string name="ColorPickerResetAll">RESET ALL</string>
     <string name="ColorPink">Pink</string>
     <string name="ColorRed">Red</string>
     <string name="ColorSepia">Sepia</string>
@@ -912,6 +932,7 @@
     <string name="DescriptionInfo">You can provide an optional description for your channel.</string>
     <string name="DescriptionOptionalPlaceholder">Description (optional)</string>
     <string name="DescriptionPlaceholder">Description</string>
+    <string name="Devices">Devices</string>
     <string name="DidNotGetTheCode">Didn\'t get the code?</string>
     <string name="DidNotGetTheCodeSms">Send the code as an SMS</string>
     <string name="Digits_few">%1$d digits</string>
@@ -922,6 +943,7 @@
     <string name="Digits_zero">%1$d digits</string>
     <string name="DirectShare">Direct Share</string>
     <string name="DirectShareInfo">Show recent chats in Android share menu</string>
+    <string name="Directions">Directions</string>
     <string name="Disable">Disable</string>
     <string name="DisappearingGif">Secret GIF</string>
     <string name="DisappearingPhoto">Secret Photo</string>
@@ -1158,6 +1180,7 @@
     <string name="Exception_zero">%1$d exceptions</string>
     <string name="ExportTheme">Export</string>
     <string name="Exposure">Exposure</string>
+    <string name="ExternalFolderInfo">Browse your external storage</string>
     <string name="ExternalStorage">External Storage</string>
     <string name="Fade">Fade</string>
     <string name="FavoriteStickers">Favorites</string>
@@ -1185,6 +1208,7 @@
     <string name="FontSizePreviewLine2">It\'s morning in Tokyo ��</string>
     <string name="FontSizePreviewName">Bob Harris</string>
     <string name="FontSizePreviewReply">Good morning! ��</string>
+    <string name="FontType">Font Type</string>
     <string name="FootsAway">%1$s ft away</string>
     <string name="ForgotPassword">Forgot password?</string>
     <string name="Forward">Forward</string>
@@ -1269,7 +1293,7 @@
     <string name="FromGalley">From gallery</string>
     <string name="FromYou">You</string>
     <string name="Gallery">Gallery</string>
-    <string name="GalleryInfo">To send images without compression</string>
+    <string name="GalleryInfo">Send images without compression</string>
     <string name="GalleryPermissionText">Tap to allow access to your Gallery</string>
     <string name="General">General</string>
     <string name="GettingLinkInfo">Getting Link Info...</string>
@@ -1326,7 +1350,7 @@
     <string name="Hashtags">HASHTAGS</string>
     <string name="HidAccount">The account was hidden by the user</string>
     <string name="HiddenName">Deleted Account</string>
-    <string name="HideAboveTheList">Hide Above the List</string>
+    <string name="HideAboveTheList">Hide above the list</string>
     <string name="HideOnTop">Hide</string>
     <string name="Highlights">Highlights</string>
     <string name="HistoryCleared">History was cleared</string>
@@ -1362,6 +1386,7 @@
     <string name="InstantView">INSTANT VIEW</string>
     <string name="InstantViewNightMode">The dark theme will turn automatically during night time</string>
     <string name="InstantViewReference">Reference</string>
+    <string name="InternalFolderInfo">Browse your file system</string>
     <string name="InternalStorage">Internal Storage</string>
     <string name="InvalidCode">Invalid code</string>
     <string name="InvalidFirstName">Invalid first name</string>
@@ -1568,6 +1593,7 @@
     <string name="MessageScheduledLimitReached">Sorry, you can not schedule more than 100 messages.</string>
     <string name="MessageScheduledOn">Scheduled for %1$s</string>
     <string name="MessageScheduledReminderNotification">�� Reminder</string>
+    <string name="MessageScheduledUntilOnline">Scheduled until online</string>
     <string name="MessageScheduledVote">Voting will become available after the message is published.</string>
     <string name="MessagesDataUsage">Messages and other data</string>
     <string name="MessagesSettings">Messages</string>
@@ -1602,15 +1628,15 @@
     <string name="Months_two">%1$d months</string>
     <string name="Months_zero">%1$d months</string>
     <string name="MoreInfo">More info</string>
-    <string name="MusicInfo">To send music files</string>
+    <string name="MusicInfo">Send audio files</string>
     <string name="MuteDisable">Disable</string>
     <string name="MuteFor">Mute for %1$s</string>
     <string name="MuteNotifications">Mute notifications</string>
     <string name="NearbyCreateGroup">Create a Local Group</string>
     <string name="NearbyCreateGroupInfo">Anyone close to this location (neighbors, co-workers, fellow students, event attendees, visitors of a venue) will be able to see your group in the People Nearby section.</string>
     <string name="NearbyCreateGroupInfo2">If you start an unrelated group at this location, you may lose the ability to create location-based groups.</string>
-    <string name="NearbyPlaces">Or choose a place</string>
     <string name="NearbyStartGroup">Start Group</string>
+    <string name="NearbyVenue">Or choose a venue</string>
     <string name="NetworkUsage">Data Usage</string>
     <string name="NetworkUsageMobile">MOBILE</string>
     <string name="NetworkUsageRoaming">ROAMING</string>
@@ -1655,6 +1681,9 @@
     <string name="NoContacts">No contacts yet</string>
     <string name="NoEmojiFound">No emoji found</string>
     <string name="NoExceptions">This section will list all chats with non-default notification settings.\10\10You can customize notifications for a chat by opening its profile and choosing \'Notifications\'.</string>
+    <string name="NoFilesFound">No results found</string>
+    <string name="NoFilesFoundInfo">There are no matches with **%1$s** in current directory.</string>
+    <string name="NoFilesInfo">This folder is empty.</string>
     <string name="NoGIFsFound">No GIFs found</string>
     <string name="NoGroupsInCommon">No common groups yet</string>
     <string name="NoHandleAppInstalled">You don\'t have applications that can handle the file type \'%1$s\', please install one to continue</string>
@@ -1669,11 +1698,13 @@
     <string name="NoOtherWebSessions">No active logins.</string>
     <string name="NoOtherWebSessionsInfo">You can log in on websites that support signing in with Telegram.</string>
     <string name="NoPhotos">No photos yet</string>
+    <string name="NoPlacesFound">No places found</string>
+    <string name="NoPlacesFoundInfo">There are no matches with **%1$s** near you.</string>
     <string name="NoPlayerInstalled">You don\'t have a video player, please install one to continue</string>
     <string name="NoPopup">No popup</string>
     <string name="NoRecent">No recent</string>
     <string name="NoRecentGIFs">No recent GIFs</string>
-    <string name="NoRecentPhotos">No recent photos</string>
+    <string name="NoRecentSearches">No recent searches</string>
     <string name="NoResult">No results</string>
     <string name="NoScheduledMessages">No scheduled messages here yet...</string>
     <string name="NoSharedAudio">Share music in this chat and access it on any of your devices.</string>
@@ -1742,6 +1773,10 @@
     <string name="NotificationGroupKickMember">%1$s removed %3$s from the group %2$s</string>
     <string name="NotificationGroupKickYou">%1$s removed you from the group %2$s</string>
     <string name="NotificationGroupLeftMember">%1$s has left the group %2$s</string>
+    <string name="NotificationHiddenChatName">Telegram</string>
+    <string name="NotificationHiddenChatUserName">User</string>
+    <string name="NotificationHiddenMessage">New message</string>
+    <string name="NotificationHiddenName">Telegram</string>
     <string name="NotificationInvitedToGroup">%1$s invited you to the group %2$s</string>
     <string name="NotificationInvitedToGroupByLink">%1$s joined to the group %2$s via invite link</string>
     <string name="NotificationMessageAlbum">%1$s sent you an album</string>
@@ -1838,6 +1873,7 @@
     <string name="OK">OK</string>
     <string name="October">October</string>
     <string name="Of">%1$d of %2$d</string>
+    <string name="OfResults">%1$d of %2$d results</string>
     <string name="Online">online</string>
     <string name="OnlineCount_few">%1$d online</string>
     <string name="OnlineCount_many">%1$d online</string>
@@ -2091,6 +2127,7 @@
     <string name="PasswordHintText">Create a hint for your password</string>
     <string name="PasswordRecovery">Password Recovery</string>
     <string name="PasswordReset">Password deactivated</string>
+    <string name="PasteFromClipboard">Paste from clipboard</string>
     <string name="PaymentBillingAddress">Billing address</string>
     <string name="PaymentCardCvv">Security Code (CVV)</string>
     <string name="PaymentCardExpireDate">MM/YY</string>
@@ -2196,7 +2233,7 @@
     <string name="Photos_other">%1$d photos</string>
     <string name="Photos_two">%1$d photos</string>
     <string name="Photos_zero">%1$d photos</string>
-    <string name="PinInTheList">Pin in the List</string>
+    <string name="PinInTheList">Pin in the list</string>
     <string name="PinMessage">Pin</string>
     <string name="PinMessageAlert">Do you want to pin this message in this group?</string>
     <string name="PinMessageAlertChannel">Do you want to pin this message in this channel?</string>
@@ -2300,6 +2337,7 @@
     <string name="RateCallSilentRemote">The other side couldn\'t hear me</string>
     <string name="ReEnterYourPasscode">Re-enter your new passcode</string>
     <string name="Recent">Recent</string>
+    <string name="RecentFiles">Recent files</string>
     <string name="RecentStickers">Recently Used</string>
     <string name="RecentlyViewed">Recently viewed</string>
     <string name="RecentlyViewedHide">HIDE</string>
@@ -2412,6 +2450,7 @@
     <string name="ScamMessage">SCAM</string>
     <string name="Schedule">Schedule</string>
     <string name="ScheduleMessage">Schedule message</string>
+    <string name="ScheduleWhenOnline">Send when %1$s is online</string>
     <string name="ScheduledMessages">Scheduled messages</string>
     <string name="ScreenCapture">Show App Content in Task Switcher</string>
     <string name="ScreenCaptureAlert">This will hide the contents of your chats or chat list from the task switcher, but you will not be able to take screenshots on Telegram.\10\10You may need to restart the app for this to take effect.</string>
@@ -2433,6 +2472,7 @@
     <string name="SearchInSettings">Search Settings and FAQ</string>
     <string name="SearchMembers">Search members</string>
     <string name="SearchMessages">Messages</string>
+    <string name="SearchRecentFiles">Search Recent Files</string>
     <string name="SearchStickersHint">Search sticker sets</string>
     <string name="SecondsBold_few">**%1$d** seconds</string>
     <string name="SecondsBold_many">**%1$d** seconds</string>
@@ -2479,6 +2519,7 @@
     <string name="SendLiveLocationFor1h">for 1 hour</string>
     <string name="SendLiveLocationFor8h">for 8 hours</string>
     <string name="SendLiveLocationInfo">Updated in real time as you move</string>
+    <string name="SendLiveLocationMenu">Share my Live Location</string>
     <string name="SendLocation">Send my current location</string>
     <string name="SendMessageRestricted">The admins of this group have restricted you from writing here until %1$s</string>
     <string name="SendMessageRestrictedForever">The admins of this group have restricted you from writing here.</string>
@@ -2541,6 +2582,7 @@
     <string name="Shadows">Shadows</string>
     <string name="ShareComment">Write a comment...</string>
     <string name="ShareContact">Share</string>
+    <string name="ShareContactTitle">Share Contact</string>
     <string name="ShareFile">Share</string>
     <string name="ShareLink">Share Link</string>
     <string name="ShareLocation">Location</string>
@@ -2575,8 +2617,9 @@
     <string name="ShowAllFiles">Show all files</string>
     <string name="ShowAllMedia">Show all media</string>
     <string name="ShowAllThemes">Show all Themes</string>
+    <string name="ShowAsGrid">Show as grid</string>
+    <string name="ShowAsList">Show as list</string>
     <string name="ShowInChat">Show in chat</string>
-    <string name="ShowNearbyPlaces">Pull up to see places nearby</string>
     <string name="ShowNotificationsFor">Show notifications for</string>
     <string name="ShowNotificationsForInfo">Turn this off if you want to receive notifications only from your active account.</string>
     <string name="Shuffle">Shuffle</string>
@@ -2667,12 +2710,14 @@
     <string name="SyncContactsInfoOn">Contacts from this device will be added to your account.</string>
     <string name="SyncContactsOff">Contacts from this device will not be added to this account.</string>
     <string name="SyncContactsOn">Contacts from this device will be added to this account.</string>
-    <string name="SystemRoot">System Root</string>
+    <string name="SystemRoot">Browse your root folder</string>
     <string name="TapForVideo">Tap for photo, hold for video</string>
     <string name="TapHereGifs">Tap here to access saved GIFs</string>
     <string name="TapToChange">Tap to change</string>
     <string name="TapToChangePhone">Tap to change phone number</string>
     <string name="TapToDownload">Tap to download</string>
+    <string name="TapToSendLocation">Tap to send this location</string>
+    <string name="TapToViewAsList">Tap to view as a list.</string>
     <string name="Teal">Teal</string>
     <string name="TelegramContacts_few">%1$d contacts on Telegram</string>
     <string name="TelegramContacts_many">%1$d contacts on Telegram</string>
@@ -3225,6 +3270,8 @@
     <string name="gcm_defaultSenderId">760348033671</string>
     <string name="google_api_key">AIzaSyAijSIM_t8bfdRrn2-mCumXRu37pPslqkU</string>
     <string name="google_app_id">1:760348033671:android:dCLASSNAMECLASSNAMEa16c</string>
+    <string name="google_assistant_verification_channel_name">Assistant verifier</string>
+    <string name="google_assistant_verification_notification_title">Google Assistant sending message</string>
     <string name="google_crash_reporting_api_key">AIzaSyAijSIM_t8bfdRrn2-mCumXRu37pPslqkU</string>
     <string name="google_storage_bucket">tmessages2.appspot.com</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">This app</string>

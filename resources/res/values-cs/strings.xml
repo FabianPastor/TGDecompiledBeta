@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">Přihlásit se</string>
     <string name="common_signin_button_text_long">Přihlásit se k účtu Google</string>
     <string name="fcm_fallback_notification_channel_label">Různé</string>
+    <string name="google_assistant_verification_channel_name">Ověření Asistenta</string>
+    <string name="google_assistant_verification_notification_title">Asistent Google odesílá zprávu</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Koupit pomocí Googlu</string>
 </resources>

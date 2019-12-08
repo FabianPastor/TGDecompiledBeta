@@ -19,4 +19,6 @@
     <string name="common_signin_button_text">ছাইন ইন কৰক</string>
     <string name="common_signin_button_text_long">Googleৰ জৰিয়তে ছাইন ইন কৰক</string>
     <string name="fcm_fallback_notification_channel_label">বিবিধ</string>
+    <string name="google_assistant_verification_channel_name">Assistant verifier</string>
+    <string name="google_assistant_verification_notification_title">Google Assistant sending message</string>
 </resources>

@@ -80,6 +80,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     private int passwordSessionsEndRow;
     private int passwordSessionsSectionRow;
     private int passwordSessionsStartRow;
+    private int qrCodeRow;
     private int rowCount;
     private ArrayList<TLObject> sessions = new ArrayList();
     private int terminateAllSessionsDetailRow;
@@ -96,7 +97,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
         public boolean isEnabled(ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
-            return adapterPosition == SessionsActivity.this.terminateAllSessionsRow || ((adapterPosition >= SessionsActivity.this.otherSessionsStartRow && adapterPosition < SessionsActivity.this.otherSessionsEndRow) || (adapterPosition >= SessionsActivity.this.passwordSessionsStartRow && adapterPosition < SessionsActivity.this.passwordSessionsEndRow));
+            return adapterPosition == SessionsActivity.this.terminateAllSessionsRow || adapterPosition == SessionsActivity.this.qrCodeRow || ((adapterPosition >= SessionsActivity.this.otherSessionsStartRow && adapterPosition < SessionsActivity.this.otherSessionsEndRow) || (adapterPosition >= SessionsActivity.this.passwordSessionsStartRow && adapterPosition < SessionsActivity.this.passwordSessionsEndRow));
         }
 
         public int getItemCount() {
@@ -128,37 +129,47 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             int i2 = 0;
             if (itemViewType == 0) {
                 TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
+                String str;
                 if (i == SessionsActivity.this.terminateAllSessionsRow) {
-                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText2"));
+                    str = "windowBackgroundWhiteRedText2";
+                    textSettingsCell.setTextColor(Theme.getColor(str));
+                    textSettingsCell.setTag(str);
                     if (SessionsActivity.this.currentType == 0) {
                         textSettingsCell.setText(LocaleController.getString("TerminateAllSessions", NUM), false);
                     } else {
                         textSettingsCell.setText(LocaleController.getString("TerminateAllWebSessions", NUM), false);
                     }
+                } else if (i == SessionsActivity.this.qrCodeRow) {
+                    str = "windowBackgroundWhiteBlueText4";
+                    textSettingsCell.setTextColor(Theme.getColor(str));
+                    textSettingsCell.setTag(str);
+                    textSettingsCell.setText(LocaleController.getString("AuthAnotherClient", NUM), SessionsActivity.this.sessions.isEmpty() ^ 1);
                 }
             } else if (itemViewType == 1) {
                 TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                String str = "windowBackgroundGrayShadow";
+                String str2 = "windowBackgroundGrayShadow";
                 if (i == SessionsActivity.this.terminateAllSessionsDetailRow) {
                     if (SessionsActivity.this.currentType == 0) {
                         textInfoPrivacyCell.setText(LocaleController.getString("ClearOtherSessionsHelp", NUM));
                     } else {
                         textInfoPrivacyCell.setText(LocaleController.getString("ClearOtherWebSessionsHelp", NUM));
                     }
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
+                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str2));
                 } else if (i == SessionsActivity.this.otherSessionsTerminateDetail) {
-                    if (SessionsActivity.this.currentType == 0) {
-                        textInfoPrivacyCell.setText(LocaleController.getString("TerminateSessionInfo", NUM));
-                    } else {
+                    if (SessionsActivity.this.currentType != 0) {
                         textInfoPrivacyCell.setText(LocaleController.getString("TerminateWebSessionInfo", NUM));
+                    } else if (SessionsActivity.this.sessions.isEmpty()) {
+                        textInfoPrivacyCell.setText("");
+                    } else {
+                        textInfoPrivacyCell.setText(LocaleController.getString("TerminateSessionInfo", NUM));
                     }
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
+                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str2));
                 } else if (i == SessionsActivity.this.passwordSessionsDetailRow) {
                     textInfoPrivacyCell.setText(LocaleController.getString("LoginAttemptsInfo", NUM));
                     if (SessionsActivity.this.otherSessionsTerminateDetail == -1) {
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
+                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str2));
                     } else {
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
+                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str2));
                     }
                 }
             } else if (itemViewType == 2) {
@@ -179,11 +190,11 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 boolean z;
                 TLObject tLObject;
                 if (i == SessionsActivity.this.currentSessionRow) {
-                    TL_authorization access$1600 = SessionsActivity.this.currentSession;
-                    if (!(SessionsActivity.this.sessions.isEmpty() && SessionsActivity.this.passwordSessions.isEmpty())) {
+                    TL_authorization access$1800 = SessionsActivity.this.currentSession;
+                    if (!(SessionsActivity.this.sessions.isEmpty() && SessionsActivity.this.passwordSessions.isEmpty() && SessionsActivity.this.qrCodeRow == -1)) {
                         z = true;
                     }
-                    sessionCell.setSession(access$1600, z);
+                    sessionCell.setSession(access$1800, z);
                 } else if (i >= SessionsActivity.this.otherSessionsStartRow && i < SessionsActivity.this.otherSessionsEndRow) {
                     tLObject = (TLObject) SessionsActivity.this.sessions.get(i - SessionsActivity.this.otherSessionsStartRow);
                     if (i != SessionsActivity.this.otherSessionsEndRow - 1) {
@@ -201,7 +212,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 LayoutParams layoutParams = SessionsActivity.this.emptyLayout.getLayoutParams();
                 if (layoutParams != null) {
                     i = AndroidUtilities.dp(220.0f);
-                    itemViewType = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(128.0f);
+                    itemViewType = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp((float) ((SessionsActivity.this.qrCodeRow == -1 ? 0 : 30) + 128));
                     if (VERSION.SDK_INT >= 21) {
                         i2 = AndroidUtilities.statusBarHeight;
                     }
@@ -212,7 +223,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
 
         public int getItemViewType(int i) {
-            if (i == SessionsActivity.this.terminateAllSessionsRow) {
+            if (i == SessionsActivity.this.terminateAllSessionsRow || i == SessionsActivity.this.qrCodeRow) {
                 return 0;
             }
             if (i == SessionsActivity.this.terminateAllSessionsDetailRow || i == SessionsActivity.this.otherSessionsTerminateDetail || i == SessionsActivity.this.passwordSessionsDetailRow) {
@@ -319,67 +330,71 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$createView$11$SessionsActivity(View view, int i) {
         int i2 = i;
-        String str = "dialogTextRed2";
-        String str2 = "Cancel";
-        String str3 = "Terminate";
-        String str4 = "Disconnect";
-        AlertDialog create;
-        TextView textView;
-        if (i2 == this.terminateAllSessionsRow) {
-            if (getParentActivity() != null) {
-                CharSequence string;
-                Builder builder = new Builder(getParentActivity());
-                if (this.currentType == 0) {
-                    builder.setMessage(LocaleController.getString("AreYouSureSessions", NUM));
-                    builder.setTitle(LocaleController.getString("AreYouSureSessionsTitle", NUM));
-                    string = LocaleController.getString(str3, NUM);
-                } else {
-                    builder.setMessage(LocaleController.getString("AreYouSureWebSessions", NUM));
-                    builder.setTitle(LocaleController.getString("TerminateWebSessionsTitle", NUM));
-                    string = LocaleController.getString(str4, NUM);
+        if (i2 == this.qrCodeRow) {
+            presentFragment(new ActionIntroActivity(5));
+        } else {
+            String str = "dialogTextRed2";
+            String str2 = "Cancel";
+            String str3 = "Terminate";
+            String str4 = "Disconnect";
+            AlertDialog create;
+            TextView textView;
+            if (i2 == this.terminateAllSessionsRow) {
+                if (getParentActivity() != null) {
+                    CharSequence string;
+                    Builder builder = new Builder(getParentActivity());
+                    if (this.currentType == 0) {
+                        builder.setMessage(LocaleController.getString("AreYouSureSessions", NUM));
+                        builder.setTitle(LocaleController.getString("AreYouSureSessionsTitle", NUM));
+                        string = LocaleController.getString(str3, NUM);
+                    } else {
+                        builder.setMessage(LocaleController.getString("AreYouSureWebSessions", NUM));
+                        builder.setTitle(LocaleController.getString("TerminateWebSessionsTitle", NUM));
+                        string = LocaleController.getString(str4, NUM);
+                    }
+                    builder.setPositiveButton(string, new -$$Lambda$SessionsActivity$oaaWYlgt897yPsbKGRVtpZZB0Zw(this));
+                    builder.setNegativeButton(LocaleController.getString(str2, NUM), null);
+                    create = builder.create();
+                    showDialog(create);
+                    textView = (TextView) create.getButton(-1);
+                    if (textView != null) {
+                        textView.setTextColor(Theme.getColor(str));
+                    }
                 }
-                builder.setPositiveButton(string, new -$$Lambda$SessionsActivity$oaaWYlgt897yPsbKGRVtpZZB0Zw(this));
-                builder.setNegativeButton(LocaleController.getString(str2, NUM), null);
-                create = builder.create();
+            } else if (((i2 >= this.otherSessionsStartRow && i2 < this.otherSessionsEndRow) || (i2 >= this.passwordSessionsStartRow && i2 < this.passwordSessionsEndRow)) && getParentActivity() != null) {
+                CharSequence string2;
+                Builder builder2 = new Builder(getParentActivity());
+                boolean[] zArr = new boolean[1];
+                if (this.currentType == 0) {
+                    builder2.setMessage(LocaleController.getString("TerminateSessionText", NUM));
+                    builder2.setTitle(LocaleController.getString("AreYouSureSessionTitle", NUM));
+                    string2 = LocaleController.getString(str3, NUM);
+                } else {
+                    builder2.setMessage(LocaleController.formatString("TerminateWebSessionText", NUM, ((TL_webAuthorization) this.sessions.get(i2 - this.otherSessionsStartRow)).domain));
+                    builder2.setTitle(LocaleController.getString("TerminateWebSessionTitle", NUM));
+                    str3 = LocaleController.getString(str4, NUM);
+                    FrameLayout frameLayout = new FrameLayout(getParentActivity());
+                    User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(r8.bot_id));
+                    str4 = "";
+                    String firstName = user != null ? UserObject.getFirstName(user) : str4;
+                    CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), 1);
+                    checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                    checkBoxCell.setText(LocaleController.formatString("TerminateWebSessionStop", NUM, firstName), str4, false, false);
+                    checkBoxCell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
+                    frameLayout.addView(checkBoxCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                    checkBoxCell.setOnClickListener(new -$$Lambda$SessionsActivity$fTHr4kOeCS_36_P5G_qrJ-UGaNE(zArr));
+                    builder2.setCustomViewOffset(16);
+                    builder2.setView(frameLayout);
+                    string2 = str3;
+                }
+                builder2.setPositiveButton(string2, new -$$Lambda$SessionsActivity$Rp5LHvaMpCLASSNAMEOI5FKrDiSKjtcrQ(this, i2, zArr));
+                builder2.setNegativeButton(LocaleController.getString(str2, NUM), null);
+                create = builder2.create();
                 showDialog(create);
                 textView = (TextView) create.getButton(-1);
                 if (textView != null) {
                     textView.setTextColor(Theme.getColor(str));
                 }
-            }
-        } else if (((i2 >= this.otherSessionsStartRow && i2 < this.otherSessionsEndRow) || (i2 >= this.passwordSessionsStartRow && i2 < this.passwordSessionsEndRow)) && getParentActivity() != null) {
-            CharSequence string2;
-            Builder builder2 = new Builder(getParentActivity());
-            boolean[] zArr = new boolean[1];
-            if (this.currentType == 0) {
-                builder2.setMessage(LocaleController.getString("TerminateSessionText", NUM));
-                builder2.setTitle(LocaleController.getString("AreYouSureSessionTitle", NUM));
-                string2 = LocaleController.getString(str3, NUM);
-            } else {
-                builder2.setMessage(LocaleController.formatString("TerminateWebSessionText", NUM, ((TL_webAuthorization) this.sessions.get(i2 - this.otherSessionsStartRow)).domain));
-                builder2.setTitle(LocaleController.getString("TerminateWebSessionTitle", NUM));
-                str3 = LocaleController.getString(str4, NUM);
-                FrameLayout frameLayout = new FrameLayout(getParentActivity());
-                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(r8.bot_id));
-                str4 = "";
-                String firstName = user != null ? UserObject.getFirstName(user) : str4;
-                CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), 1);
-                checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                checkBoxCell.setText(LocaleController.formatString("TerminateWebSessionStop", NUM, firstName), str4, false, false);
-                checkBoxCell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
-                frameLayout.addView(checkBoxCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                checkBoxCell.setOnClickListener(new -$$Lambda$SessionsActivity$fTHr4kOeCS_36_P5G_qrJ-UGaNE(zArr));
-                builder2.setCustomViewOffset(16);
-                builder2.setView(frameLayout);
-                string2 = str3;
-            }
-            builder2.setPositiveButton(string2, new -$$Lambda$SessionsActivity$Rp5LHvaMpCLASSNAMEOI5FKrDiSKjtcrQ(this, i2, zArr));
-            builder2.setNegativeButton(LocaleController.getString(str2, NUM), null);
-            create = builder2.create();
-            showDialog(create);
-            textView = (TextView) create.getButton(-1);
-            if (textView != null) {
-                textView.setTextColor(Theme.getColor(str));
             }
         }
     }
@@ -583,7 +598,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     private void updateRows() {
         int i;
+        int i2 = 0;
         this.rowCount = 0;
+        this.qrCodeRow = -1;
         if (this.currentSession != null) {
             i = this.rowCount;
             this.rowCount = i + 1;
@@ -595,9 +612,17 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             this.currentSessionRow = -1;
             this.currentSessionSectionRow = -1;
         }
+        if (this.currentType == 0 && getMessagesController().qrLoginCamera) {
+            i2 = 1;
+        }
         if (this.passwordSessions.isEmpty() && this.sessions.isEmpty()) {
             this.terminateAllSessionsRow = -1;
             this.terminateAllSessionsDetailRow = -1;
+            if (i2 != 0) {
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.qrCodeRow = i;
+            }
             if (this.currentType == 1 || this.currentSession != null) {
                 i = this.rowCount;
                 this.rowCount = i + 1;
@@ -638,50 +663,57 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             this.otherSessionsTerminateDetail = -1;
             return;
         }
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.otherSessionsSectionRow = i;
+        int i3 = this.rowCount;
+        this.rowCount = i3 + 1;
+        this.otherSessionsSectionRow = i3;
+        if (i2 != 0) {
+            i2 = this.rowCount;
+            this.rowCount = i2 + 1;
+            this.qrCodeRow = i2;
+        }
         this.otherSessionsStartRow = this.otherSessionsSectionRow + 1;
         this.otherSessionsEndRow = this.otherSessionsStartRow + this.sessions.size();
         this.rowCount += this.sessions.size();
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.otherSessionsTerminateDetail = i;
+        i2 = this.rowCount;
+        this.rowCount = i2 + 1;
+        this.otherSessionsTerminateDetail = i2;
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r1 = new ThemeDescription[22];
-        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class, SessionCell.class}, null, null, null, "windowBackgroundWhite");
-        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        r1[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        r1[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        r1[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        r1[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        r1[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        r1[9] = new ThemeDescription(this.imageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "sessions_devicesImage");
-        r1[10] = new ThemeDescription(this.textView1, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText2");
-        r1[11] = new ThemeDescription(this.textView2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText2");
-        r1[12] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[23];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class, SessionCell.class}, null, null, null, "windowBackgroundWhite");
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
+        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        themeDescriptionArr[9] = new ThemeDescription(this.imageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "sessions_devicesImage");
+        themeDescriptionArr[10] = new ThemeDescription(this.textView1, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText2");
+        themeDescriptionArr[11] = new ThemeDescription(this.textView2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText2");
+        themeDescriptionArr[12] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
         View view = this.listView;
+        int i = ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG;
         Class[] clsArr = new Class[]{TextSettingsCell.class};
         String[] strArr = new String[1];
         strArr[0] = "textView";
-        r1[13] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteRedText2");
-        r1[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        r1[15] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        r1[16] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
-        r1[17] = new ThemeDescription(this.listView, 0, new Class[]{SessionCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[13] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteRedText2");
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueText4");
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{SessionCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
         view = this.listView;
-        int i = ThemeDescription.FLAG_CHECKTAG;
+        i = ThemeDescription.FLAG_CHECKTAG;
         clsArr = new Class[]{SessionCell.class};
         strArr = new String[1];
         strArr[0] = "onlineTextView";
-        r1[18] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteValueText");
-        r1[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{SessionCell.class}, new String[]{"onlineTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
-        r1[20] = new ThemeDescription(this.listView, 0, new Class[]{SessionCell.class}, new String[]{"detailTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r1[21] = new ThemeDescription(this.listView, 0, new Class[]{SessionCell.class}, new String[]{"detailExTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
-        return r1;
+        themeDescriptionArr[19] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteValueText");
+        themeDescriptionArr[20] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{SessionCell.class}, new String[]{"onlineTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
+        themeDescriptionArr[21] = new ThemeDescription(this.listView, 0, new Class[]{SessionCell.class}, new String[]{"detailTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[22] = new ThemeDescription(this.listView, 0, new Class[]{SessionCell.class}, new String[]{"detailExTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
+        return themeDescriptionArr;
     }
 }

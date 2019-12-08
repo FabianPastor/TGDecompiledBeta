@@ -415,7 +415,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentDocumentsDidLoad);
         AndroidUtilities.runOnUIThread(new -$$Lambda$StickerMasksView$77XyfxOn3O_qUeajE-5-7BnPFnM(this));
     }
 

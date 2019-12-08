@@ -12,7 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
 import android.text.Layout;
@@ -35,7 +34,6 @@ import androidx.annotation.Keep;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
@@ -43,11 +41,13 @@ import org.telegram.ui.ActionBar.FloatingToolbar;
 public class EditTextBoldCursor extends EditText {
     private static Class editorClass;
     private static Method getVerticalOffsetMethod;
+    private static Field mCursorDrawableResField;
     private static Field mEditor;
     private static Field mScrollYField;
     private static Field mShowCursorField;
     private int activeLineColor;
     private boolean allowDrawCursor = true;
+    private View attachedToWindow;
     private boolean currentDrawHintAsHeader;
     private int cursorSize;
     private float cursorWidth = 2.0f;
@@ -70,6 +70,14 @@ public class EditTextBoldCursor extends EditText {
     private boolean hintVisible = true;
     private int ignoreBottomCount;
     private int ignoreTopCount;
+    private Runnable invalidateRunnable = new Runnable() {
+        public void run() {
+            EditTextBoldCursor.this.invalidate();
+            if (EditTextBoldCursor.this.attachedToWindow != null) {
+                AndroidUtilities.runOnUIThread(this, 500);
+            }
+        }
+    };
     private long lastUpdateTime;
     private int lineColor;
     private Paint linePaint;
@@ -143,46 +151,125 @@ public class EditTextBoldCursor extends EditText {
         init();
     }
 
-    @SuppressLint({"PrivateApi"})
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x00b3 A:{Catch:{ all -> 0x00d2 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x00c6 A:{Catch:{ all -> 0x00d2 }} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:20:0x00af */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Can't wrap try/catch for region: R(20:0|(1:2)|3|4|(1:6)|7|9|10|(1:12)|15|16|(1:18)|19|20|21|(1:23)|24|(1:26)|27|29) */
+    @android.annotation.SuppressLint({"PrivateApi"})
     private void init() {
-        String str = "mShowCursor";
-        this.linePaint = new Paint();
-        this.errorPaint = new TextPaint(1);
-        this.errorPaint.setTextSize((float) AndroidUtilities.dp(11.0f));
-        if (VERSION.SDK_INT >= 26) {
-            setImportantForAutofill(2);
-        }
-        try {
-            if (mScrollYField == null) {
-                mScrollYField = View.class.getDeclaredField("mScrollY");
-                mScrollYField.setAccessible(true);
-            }
-        } catch (Throwable unused) {
-        }
-        try {
-            if (editorClass == null) {
-                mEditor = TextView.class.getDeclaredField("mEditor");
-                mEditor.setAccessible(true);
-                editorClass = Class.forName("android.widget.Editor");
-                mShowCursorField = editorClass.getDeclaredField(str);
-                mShowCursorField.setAccessible(true);
-                getVerticalOffsetMethod = TextView.class.getDeclaredMethod("getVerticalOffset", new Class[]{Boolean.TYPE});
-                getVerticalOffsetMethod.setAccessible(true);
-                mShowCursorField = editorClass.getDeclaredField(str);
-                mShowCursorField.setAccessible(true);
-            }
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
-        try {
-            this.gradientDrawable = new GradientDrawable(Orientation.TOP_BOTTOM, new int[]{-11230757, -11230757});
-            if (VERSION.SDK_INT >= 29) {
-                setTextCursorDrawable(this.gradientDrawable);
-            }
-            this.editor = mEditor.get(this);
-        } catch (Throwable unused2) {
-        }
-        this.cursorSize = AndroidUtilities.dp(24.0f);
+        /*
+        r8 = this;
+        r0 = "mShowCursor";
+        r1 = new android.graphics.Paint;
+        r1.<init>();
+        r8.linePaint = r1;
+        r1 = new android.text.TextPaint;
+        r2 = 1;
+        r1.<init>(r2);
+        r8.errorPaint = r1;
+        r1 = r8.errorPaint;
+        r3 = NUM; // 0x41300000 float:11.0 double:5.4034219E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r3 = (float) r3;
+        r1.setTextSize(r3);
+        r1 = android.os.Build.VERSION.SDK_INT;
+        r3 = 2;
+        r4 = 26;
+        if (r1 < r4) goto L_0x0027;
+    L_0x0024:
+        r8.setImportantForAutofill(r3);
+    L_0x0027:
+        r1 = mScrollYField;	 Catch:{ all -> 0x003a }
+        if (r1 != 0) goto L_0x003a;
+    L_0x002b:
+        r1 = android.view.View.class;
+        r4 = "mScrollY";
+        r1 = r1.getDeclaredField(r4);	 Catch:{ all -> 0x003a }
+        mScrollYField = r1;	 Catch:{ all -> 0x003a }
+        r1 = mScrollYField;	 Catch:{ all -> 0x003a }
+        r1.setAccessible(r2);	 Catch:{ all -> 0x003a }
+    L_0x003a:
+        r1 = 0;
+        r4 = editorClass;	 Catch:{ all -> 0x0086 }
+        if (r4 != 0) goto L_0x008a;
+    L_0x003f:
+        r4 = android.widget.TextView.class;
+        r5 = "mEditor";
+        r4 = r4.getDeclaredField(r5);	 Catch:{ all -> 0x0086 }
+        mEditor = r4;	 Catch:{ all -> 0x0086 }
+        r4 = mEditor;	 Catch:{ all -> 0x0086 }
+        r4.setAccessible(r2);	 Catch:{ all -> 0x0086 }
+        r4 = "android.widget.Editor";
+        r4 = java.lang.Class.forName(r4);	 Catch:{ all -> 0x0086 }
+        editorClass = r4;	 Catch:{ all -> 0x0086 }
+        r4 = editorClass;	 Catch:{ all -> 0x0086 }
+        r4 = r4.getDeclaredField(r0);	 Catch:{ all -> 0x0086 }
+        mShowCursorField = r4;	 Catch:{ all -> 0x0086 }
+        r4 = mShowCursorField;	 Catch:{ all -> 0x0086 }
+        r4.setAccessible(r2);	 Catch:{ all -> 0x0086 }
+        r4 = android.widget.TextView.class;
+        r5 = "getVerticalOffset";
+        r6 = new java.lang.Class[r2];	 Catch:{ all -> 0x0086 }
+        r7 = java.lang.Boolean.TYPE;	 Catch:{ all -> 0x0086 }
+        r6[r1] = r7;	 Catch:{ all -> 0x0086 }
+        r4 = r4.getDeclaredMethod(r5, r6);	 Catch:{ all -> 0x0086 }
+        getVerticalOffsetMethod = r4;	 Catch:{ all -> 0x0086 }
+        r4 = getVerticalOffsetMethod;	 Catch:{ all -> 0x0086 }
+        r4.setAccessible(r2);	 Catch:{ all -> 0x0086 }
+        r4 = editorClass;	 Catch:{ all -> 0x0086 }
+        r0 = r4.getDeclaredField(r0);	 Catch:{ all -> 0x0086 }
+        mShowCursorField = r0;	 Catch:{ all -> 0x0086 }
+        r0 = mShowCursorField;	 Catch:{ all -> 0x0086 }
+        r0.setAccessible(r2);	 Catch:{ all -> 0x0086 }
+        goto L_0x008a;
+    L_0x0086:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x008a:
+        r0 = new android.graphics.drawable.GradientDrawable;	 Catch:{ all -> 0x00af }
+        r4 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM;	 Catch:{ all -> 0x00af }
+        r3 = new int[r3];	 Catch:{ all -> 0x00af }
+        r5 = -11230757; // 0xfffffffffvar_a1db float:-2.8263674E38 double:NaN;
+        r3[r1] = r5;	 Catch:{ all -> 0x00af }
+        r3[r2] = r5;	 Catch:{ all -> 0x00af }
+        r0.<init>(r4, r3);	 Catch:{ all -> 0x00af }
+        r8.gradientDrawable = r0;	 Catch:{ all -> 0x00af }
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ all -> 0x00af }
+        r1 = 29;
+        if (r0 < r1) goto L_0x00a7;
+    L_0x00a2:
+        r0 = r8.gradientDrawable;	 Catch:{ all -> 0x00af }
+        r8.setTextCursorDrawable(r0);	 Catch:{ all -> 0x00af }
+    L_0x00a7:
+        r0 = mEditor;	 Catch:{ all -> 0x00af }
+        r0 = r0.get(r8);	 Catch:{ all -> 0x00af }
+        r8.editor = r0;	 Catch:{ all -> 0x00af }
+    L_0x00af:
+        r0 = mCursorDrawableResField;	 Catch:{ all -> 0x00d2 }
+        if (r0 != 0) goto L_0x00c2;
+    L_0x00b3:
+        r0 = android.widget.TextView.class;
+        r1 = "mCursorDrawableRes";
+        r0 = r0.getDeclaredField(r1);	 Catch:{ all -> 0x00d2 }
+        mCursorDrawableResField = r0;	 Catch:{ all -> 0x00d2 }
+        r0 = mCursorDrawableResField;	 Catch:{ all -> 0x00d2 }
+        r0.setAccessible(r2);	 Catch:{ all -> 0x00d2 }
+    L_0x00c2:
+        r0 = mCursorDrawableResField;	 Catch:{ all -> 0x00d2 }
+        if (r0 == 0) goto L_0x00d2;
+    L_0x00c6:
+        r0 = mCursorDrawableResField;	 Catch:{ all -> 0x00d2 }
+        r1 = NUM; // 0x7var_bb float:1.7944957E38 double:1.0529355954E-314;
+        r1 = java.lang.Integer.valueOf(r1);	 Catch:{ all -> 0x00d2 }
+        r0.set(r8, r1);	 Catch:{ all -> 0x00d2 }
+    L_0x00d2:
+        r0 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
+        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
+        r8.cursorSize = r0;
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EditTextBoldCursor.init():void");
     }
 
     @SuppressLint({"PrivateApi"})
@@ -655,8 +742,22 @@ public class EditTextBoldCursor extends EditText {
         }
     }
 
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.attachedToWindow = getRootView();
+        AndroidUtilities.runOnUIThread(this.invalidateRunnable);
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        this.attachedToWindow = null;
+        AndroidUtilities.cancelRunOnUIThread(this.invalidateRunnable);
+    }
+
     public ActionMode startActionMode(Callback callback) {
-        if (VERSION.SDK_INT < 23 || this.windowView == null) {
+        if (VERSION.SDK_INT < 23 || (this.windowView == null && this.attachedToWindow == null)) {
             return super.startActionMode(callback);
         }
         FloatingActionMode floatingActionMode = this.floatingActionMode;
@@ -664,7 +765,12 @@ public class EditTextBoldCursor extends EditText {
             floatingActionMode.finish();
         }
         cleanupFloatingActionModeViews();
-        this.floatingToolbar = new FloatingToolbar(getContext(), this.windowView, getActionModeStyle());
+        Context context = getContext();
+        View view = this.windowView;
+        if (view == null) {
+            view = this.attachedToWindow;
+        }
+        this.floatingToolbar = new FloatingToolbar(context, view, getActionModeStyle());
         this.floatingActionMode = new FloatingActionMode(getContext(), new ActionModeCallback2Wrapper(callback), this, this.floatingToolbar);
         this.floatingToolbarPreDrawListener = new -$$Lambda$EditTextBoldCursor$xTYV8NPdhWD9vABtK8op5OnAwKw(this);
         floatingActionMode = this.floatingActionMode;
@@ -683,7 +789,7 @@ public class EditTextBoldCursor extends EditText {
     }
 
     public ActionMode startActionMode(Callback callback, int i) {
-        if (VERSION.SDK_INT < 23 || this.windowView == null) {
+        if (VERSION.SDK_INT < 23 || (this.windowView == null && this.attachedToWindow == null)) {
             return super.startActionMode(callback, i);
         }
         return startActionMode(callback);

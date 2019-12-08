@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">Logi sisse</string>
     <string name="common_signin_button_text_long">Logi sisse Google\'i kontoga</string>
     <string name="fcm_fallback_notification_channel_label">Muu</string>
+    <string name="google_assistant_verification_channel_name">Assistendi kinnitaja</string>
+    <string name="google_assistant_verification_notification_title">Google\'i assistent saadab sõnumi</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Osta Google\'iga</string>
 </resources>

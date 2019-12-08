@@ -78,16 +78,16 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private AnimatorSet animatorSet;
     private ArrayList<AudioEntry> audioEntries = new ArrayList();
     private ChatActivity chatActivity;
-    protected EditTextEmoji commentTextView;
+    private EditTextEmoji commentTextView;
     private AudioSelectActivityDelegate delegate;
     private ImageView emptyImageView;
     private TextView emptySubtitleTextView;
     private TextView emptyTitleTextView;
     private LinearLayout emptyView;
-    protected FrameLayout frameLayout2;
+    private FrameLayout frameLayout2;
     private ActionBarMenuSubItem[] itemCells;
+    private ListAdapter listAdapter;
     private RecyclerListView listView;
-    private ListAdapter listViewAdapter;
     private boolean loadingAudio;
     private Paint paint = new Paint(1);
     private MessageObject playingAudio;
@@ -98,15 +98,15 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private boolean searchWas;
     private boolean searching;
     private LongSparseArray<AudioEntry> selectedAudios = new LongSparseArray();
-    protected View selectedCountView;
+    private View selectedCountView;
     private ActionBarPopupWindowLayout sendPopupLayout;
     private ActionBarPopupWindow sendPopupWindow;
     private boolean sendPressed;
-    protected View shadow;
+    private View shadow;
     private SizeNotifierFrameLayout sizeNotifierFrameLayout;
     private TextPaint textPaint = new TextPaint(1);
     private ImageView writeButton;
-    protected FrameLayout writeButtonContainer;
+    private FrameLayout writeButtonContainer;
 
     public interface AudioSelectActivityDelegate {
         void didSelectAudio(ArrayList<MessageObject> arrayList, CharSequence charSequence, boolean z, int i);
@@ -194,8 +194,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 if (!this.searchResult.isEmpty()) {
                     this.searchResult.clear();
                 }
-                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listViewAdapter) {
-                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listViewAdapter);
+                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listAdapter) {
+                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listAdapter);
                 }
                 notifyDataSetChanged();
                 return;
@@ -327,6 +327,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public View createView(Context context) {
         Context context2 = context;
+        this.searchWas = false;
         this.searching = false;
         String str = "dialogBackground";
         this.actionBar.setBackgroundColor(Theme.getColor(str));
@@ -350,9 +351,10 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             }
 
             public void onSearchCollapse() {
+                AudioSelectActivity.this.searchWas = false;
                 AudioSelectActivity.this.searching = false;
-                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listViewAdapter) {
-                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listViewAdapter);
+                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listAdapter) {
+                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listAdapter);
                 }
                 AudioSelectActivity.this.updateEmptyView();
                 AudioSelectActivity.this.searchAdapter.search(null);
@@ -380,26 +382,21 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 int size2 = MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
                 int i3 = 0;
-                if (getKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
-                    EditTextEmoji editTextEmoji = AudioSelectActivity.this.commentTextView;
-                    if (editTextEmoji != null) {
-                        this.ignoreLayout = true;
-                        editTextEmoji.hideEmojiView();
-                        this.ignoreLayout = false;
-                    }
-                } else if (!AndroidUtilities.isInMultiwindow) {
-                    AudioSelectActivity audioSelectActivity = AudioSelectActivity.this;
-                    if (audioSelectActivity.commentTextView != null && audioSelectActivity.frameLayout2.getParent() == this) {
+                if (getKeyboardHeight() <= AndroidUtilities.dp(20.0f)) {
+                    if (!(AndroidUtilities.isInMultiwindow || AudioSelectActivity.this.commentTextView == null || AudioSelectActivity.this.frameLayout2.getParent() != this)) {
                         size2 -= AudioSelectActivity.this.commentTextView.getEmojiPadding();
                         i2 = MeasureSpec.makeMeasureSpec(size2, NUM);
                     }
+                } else if (AudioSelectActivity.this.commentTextView != null) {
+                    this.ignoreLayout = true;
+                    AudioSelectActivity.this.commentTextView.hideEmojiView();
+                    this.ignoreLayout = false;
                 }
                 int childCount = getChildCount();
                 while (i3 < childCount) {
                     View childAt = getChildAt(i3);
                     if (!(childAt == null || childAt.getVisibility() == 8)) {
-                        EditTextEmoji editTextEmoji2 = AudioSelectActivity.this.commentTextView;
-                        if (editTextEmoji2 == null || !editTextEmoji2.isPopupView(childAt)) {
+                        if (AudioSelectActivity.this.commentTextView == null || !AudioSelectActivity.this.commentTextView.isPopupView(childAt)) {
                             measureChildWithMargins(childAt, i, 0, i2, 0);
                         } else if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
                             childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
@@ -414,12 +411,12 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             }
 
             /* Access modifiers changed, original: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:52:0x00ed  */
-            /* JADX WARNING: Removed duplicated region for block: B:51:0x00e4  */
-            /* JADX WARNING: Removed duplicated region for block: B:43:0x00c5  */
-            /* JADX WARNING: Removed duplicated region for block: B:36:0x00ab  */
-            /* JADX WARNING: Removed duplicated region for block: B:51:0x00e4  */
-            /* JADX WARNING: Removed duplicated region for block: B:52:0x00ed  */
+            /* JADX WARNING: Removed duplicated region for block: B:52:0x00fd  */
+            /* JADX WARNING: Removed duplicated region for block: B:51:0x00f4  */
+            /* JADX WARNING: Removed duplicated region for block: B:43:0x00cd  */
+            /* JADX WARNING: Removed duplicated region for block: B:36:0x00b3  */
+            /* JADX WARNING: Removed duplicated region for block: B:51:0x00f4  */
+            /* JADX WARNING: Removed duplicated region for block: B:52:0x00fd  */
             public void onLayout(boolean r9, int r10, int r11, int r12, int r13) {
                 /*
                 r8 = this;
@@ -443,104 +440,105 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             L_0x0024:
                 r9 = r8.getChildCount();
                 r10 = org.telegram.ui.AudioSelectActivity.this;
-                r0 = r10.commentTextView;
-                r1 = 0;
-                if (r0 == 0) goto L_0x0056;
-            L_0x002f:
+                r10 = r10.commentTextView;
+                r0 = 0;
+                if (r10 == 0) goto L_0x005e;
+            L_0x0031:
+                r10 = org.telegram.ui.AudioSelectActivity.this;
                 r10 = r10.frameLayout2;
                 r10 = r10.getParent();
-                if (r10 != r8) goto L_0x0056;
-            L_0x0037:
+                if (r10 != r8) goto L_0x005e;
+            L_0x003d:
                 r10 = r8.getKeyboardHeight();
-                r0 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-                r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
-                if (r10 > r0) goto L_0x0056;
-            L_0x0043:
+                r1 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+                r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
+                if (r10 > r1) goto L_0x005e;
+            L_0x0049:
                 r10 = org.telegram.messenger.AndroidUtilities.isInMultiwindow;
-                if (r10 != 0) goto L_0x0056;
-            L_0x0047:
-                r10 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r10 != 0) goto L_0x0056;
+                if (r10 != 0) goto L_0x005e;
             L_0x004d:
+                r10 = org.telegram.messenger.AndroidUtilities.isTablet();
+                if (r10 != 0) goto L_0x005e;
+            L_0x0053:
                 r10 = org.telegram.ui.AudioSelectActivity.this;
                 r10 = r10.commentTextView;
                 r10 = r10.getEmojiPadding();
-                goto L_0x0057;
-            L_0x0056:
+                goto L_0x005f;
+            L_0x005e:
                 r10 = 0;
-            L_0x0057:
+            L_0x005f:
                 r8.setBottomClip(r10);
-            L_0x005a:
-                if (r1 >= r9) goto L_0x0104;
-            L_0x005c:
-                r0 = r8.getChildAt(r1);
-                r2 = r0.getVisibility();
+            L_0x0062:
+                if (r0 >= r9) goto L_0x0114;
+            L_0x0064:
+                r1 = r8.getChildAt(r0);
+                r2 = r1.getVisibility();
                 r3 = 8;
-                if (r2 != r3) goto L_0x006a;
-            L_0x0068:
-                goto L_0x0100;
-            L_0x006a:
-                r2 = r0.getLayoutParams();
+                if (r2 != r3) goto L_0x0072;
+            L_0x0070:
+                goto L_0x0110;
+            L_0x0072:
+                r2 = r1.getLayoutParams();
                 r2 = (android.widget.FrameLayout.LayoutParams) r2;
-                r3 = r0.getMeasuredWidth();
-                r4 = r0.getMeasuredHeight();
+                r3 = r1.getMeasuredWidth();
+                r4 = r1.getMeasuredHeight();
                 r5 = r2.gravity;
                 r6 = -1;
-                if (r5 != r6) goto L_0x007f;
-            L_0x007d:
+                if (r5 != r6) goto L_0x0087;
+            L_0x0085:
                 r5 = 51;
-            L_0x007f:
+            L_0x0087:
                 r6 = r5 & 7;
                 r5 = r5 & 112;
                 r6 = r6 & 7;
                 r7 = 1;
-                if (r6 == r7) goto L_0x009d;
-            L_0x0088:
+                if (r6 == r7) goto L_0x00a5;
+            L_0x0090:
                 r7 = 5;
-                if (r6 == r7) goto L_0x0093;
-            L_0x008b:
+                if (r6 == r7) goto L_0x009b;
+            L_0x0093:
                 r6 = r2.leftMargin;
                 r7 = r8.getPaddingLeft();
                 r6 = r6 + r7;
-                goto L_0x00a7;
-            L_0x0093:
+                goto L_0x00af;
+            L_0x009b:
                 r6 = r12 - r3;
                 r7 = r2.rightMargin;
                 r6 = r6 - r7;
                 r7 = r8.getPaddingRight();
-                goto L_0x00a6;
-            L_0x009d:
+                goto L_0x00ae;
+            L_0x00a5:
                 r6 = r12 - r3;
                 r6 = r6 / 2;
                 r7 = r2.leftMargin;
                 r6 = r6 + r7;
                 r7 = r2.rightMargin;
-            L_0x00a6:
+            L_0x00ae:
                 r6 = r6 - r7;
-            L_0x00a7:
-                r7 = 16;
-                if (r5 == r7) goto L_0x00c5;
-            L_0x00ab:
-                r7 = 48;
-                if (r5 == r7) goto L_0x00bd;
             L_0x00af:
-                r7 = 80;
-                if (r5 == r7) goto L_0x00b6;
+                r7 = 16;
+                if (r5 == r7) goto L_0x00cd;
             L_0x00b3:
+                r7 = 48;
+                if (r5 == r7) goto L_0x00c5;
+            L_0x00b7:
+                r7 = 80;
+                if (r5 == r7) goto L_0x00be;
+            L_0x00bb:
                 r2 = r2.topMargin;
-                goto L_0x00d2;
-            L_0x00b6:
+                goto L_0x00da;
+            L_0x00be:
                 r5 = r13 - r10;
                 r5 = r5 - r11;
                 r5 = r5 - r4;
                 r2 = r2.bottomMargin;
-                goto L_0x00d0;
-            L_0x00bd:
+                goto L_0x00d8;
+            L_0x00c5:
                 r2 = r2.topMargin;
                 r5 = r8.getPaddingTop();
                 r2 = r2 + r5;
-                goto L_0x00d2;
-            L_0x00c5:
+                goto L_0x00da;
+            L_0x00cd:
                 r5 = r13 - r10;
                 r5 = r5 - r11;
                 r5 = r5 - r4;
@@ -548,37 +546,39 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 r7 = r2.topMargin;
                 r5 = r5 + r7;
                 r2 = r2.bottomMargin;
-            L_0x00d0:
+            L_0x00d8:
                 r2 = r5 - r2;
-            L_0x00d2:
+            L_0x00da:
                 r5 = org.telegram.ui.AudioSelectActivity.this;
                 r5 = r5.commentTextView;
-                if (r5 == 0) goto L_0x00fb;
-            L_0x00d8:
-                r5 = r5.isPopupView(r0);
-                if (r5 == 0) goto L_0x00fb;
-            L_0x00de:
+                if (r5 == 0) goto L_0x010b;
+            L_0x00e2:
+                r5 = org.telegram.ui.AudioSelectActivity.this;
+                r5 = r5.commentTextView;
+                r5 = r5.isPopupView(r1);
+                if (r5 == 0) goto L_0x010b;
+            L_0x00ee:
                 r2 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r2 == 0) goto L_0x00ed;
-            L_0x00e4:
+                if (r2 == 0) goto L_0x00fd;
+            L_0x00f4:
                 r2 = r8.getMeasuredHeight();
-                r5 = r0.getMeasuredHeight();
-                goto L_0x00fa;
-            L_0x00ed:
+                r5 = r1.getMeasuredHeight();
+                goto L_0x010a;
+            L_0x00fd:
                 r2 = r8.getMeasuredHeight();
                 r5 = r8.getKeyboardHeight();
                 r2 = r2 + r5;
-                r5 = r0.getMeasuredHeight();
-            L_0x00fa:
+                r5 = r1.getMeasuredHeight();
+            L_0x010a:
                 r2 = r2 - r5;
-            L_0x00fb:
+            L_0x010b:
                 r3 = r3 + r6;
                 r4 = r4 + r2;
-                r0.layout(r6, r2, r3, r4);
-            L_0x0100:
-                r1 = r1 + 1;
-                goto L_0x005a;
-            L_0x0104:
+                r1.layout(r6, r2, r3, r4);
+            L_0x0110:
+                r0 = r0 + 1;
+                goto L_0x0062;
+            L_0x0114:
                 r8.notifyHeightChanged();
                 return;
                 */
@@ -607,15 +607,14 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), Mode.MULTIPLY));
         this.emptyView.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
         this.emptyTitleTextView = new TextView(context2);
-        String str4 = "dialogEmptyText";
-        this.emptyTitleTextView.setTextColor(Theme.getColor(str4));
+        this.emptyTitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
         this.emptyTitleTextView.setGravity(17);
         this.emptyTitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.emptyTitleTextView.setTextSize(1, 17.0f);
         this.emptyTitleTextView.setPadding(AndroidUtilities.dp(40.0f), 0, AndroidUtilities.dp(40.0f), 0);
         this.emptyView.addView(this.emptyTitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 11, 0, 0));
         this.emptySubtitleTextView = new TextView(context2);
-        this.emptySubtitleTextView.setTextColor(Theme.getColor(str4));
+        this.emptySubtitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
         this.emptySubtitleTextView.setGravity(17);
         this.emptySubtitleTextView.setTextSize(1, 15.0f);
         this.emptyView.addView(this.emptySubtitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 6, 0, 0));
@@ -625,10 +624,9 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false));
         RecyclerListView recyclerListView = this.listView;
         ListAdapter listAdapter = new ListAdapter(context2);
-        this.listViewAdapter = listAdapter;
+        this.listAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(50.0f));
+        this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.searchAdapter = new SearchAdapter(context2);
         this.listView.setOnItemClickListener(new -$$Lambda$AudioSelectActivity$udgf5SVc7GntWL9Gfvar_UulPGZU(this));
@@ -668,7 +666,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.writeButtonContainer.setScaleY(0.2f);
         this.writeButtonContainer.setAlpha(0.0f);
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
-        this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 6.0f, 10.0f));
+        this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
         this.writeButtonContainer.setOnClickListener(new -$$Lambda$AudioSelectActivity$yCkpzfYdMW7ExlFmoo7A5yK5n7o(this));
         this.writeButtonContainer.setOnLongClickListener(new -$$Lambda$AudioSelectActivity$op1868hUHQ4ktj1ACa-ggMteGuo(this));
         this.writeButton = new ImageView(context2);
@@ -719,7 +717,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.selectedCountView.setAlpha(0.0f);
         this.selectedCountView.setScaleX(0.2f);
         this.selectedCountView.setScaleY(0.2f);
-        this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -8.0f, 9.0f));
+        this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));
         updateEmptyView();
         updateCountButton(0);
         return this.fragmentView;
@@ -739,7 +737,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         if (chatActivity == null || !chatActivity.isInScheduleMode()) {
             sendSelectedAudios(true, 0);
         } else {
-            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), UserObject.isUserSelf(this.chatActivity.getCurrentUser()), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
+            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
         }
     }
 
@@ -824,7 +822,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             this.sendPopupWindow.dismiss();
         }
         if (i == 0) {
-            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), UserObject.isUserSelf(this.chatActivity.getCurrentUser()), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
+            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
         } else if (i == 1) {
             sendSelectedAudios(true, 0);
         }
@@ -1314,7 +1312,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             this.searchItem.setVisibility(8);
         }
         updateEmptyView();
-        this.listViewAdapter.notifyDataSetChanged();
+        this.listAdapter.notifyDataSetChanged();
     }
 
     public ThemeDescription[] getThemeDescriptions() {

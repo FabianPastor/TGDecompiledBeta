@@ -1155,7 +1155,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native int native_getTimeDifference(int i);
 
-    public static native void native_init(int i, int i2, int i3, int i4, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, int i5, boolean z, boolean z2, int i6);
+    public static native void native_init(int i, int i2, int i3, int i4, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, int i5, boolean z, boolean z2, int i6);
 
     public static native int native_isTestBackend(int i);
 
@@ -1274,7 +1274,7 @@ public class ConnectionsManager extends BaseController {
         if (TextUtils.isEmpty(toLowerCase) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
             toLowerCase = SharedConfig.pushStringStatus;
         }
-        init(BuildVars.BUILD_VERSION, 106, BuildVars.APP_ID, str5, toLowerCase2, stringBuilder, str, str6, file2, FileLog.getNetworkLogPath(), toLowerCase, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 107, BuildVars.APP_ID, str5, toLowerCase2, stringBuilder, str, str6, file2, FileLog.getNetworkLogPath(), toLowerCase, AndroidUtilities.getCertificateSHA256Fingerprint(), getUserConfig().getClientUserId(), isPushConnectionEnabled);
         i2 = this.currentAccount;
         if (i2 == 0 && BuildVars.DEBUG_PRIVATE_VERSION) {
             new MozillaDnsLoadTask(i2).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
@@ -1443,18 +1443,18 @@ public class ConnectionsManager extends BaseController {
         native_setPushConnectionEnabled(this.currentAccount, z);
     }
 
-    public void init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, int i4, boolean z) {
+    public void init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, int i4, boolean z) {
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-        String str9 = "";
-        String string = sharedPreferences.getString("proxy_ip", str9);
-        String string2 = sharedPreferences.getString("proxy_user", str9);
-        String string3 = sharedPreferences.getString("proxy_pass", str9);
-        String string4 = sharedPreferences.getString("proxy_secret", str9);
+        String str10 = "";
+        String string = sharedPreferences.getString("proxy_ip", str10);
+        String string2 = sharedPreferences.getString("proxy_user", str10);
+        String string3 = sharedPreferences.getString("proxy_pass", str10);
+        String string4 = sharedPreferences.getString("proxy_secret", str10);
         int i5 = sharedPreferences.getInt("proxy_port", 1080);
         if (sharedPreferences.getBoolean("proxy_enabled", false) && !TextUtils.isEmpty(string)) {
             native_setProxySettings(this.currentAccount, string, i5, string2, string3, string4);
         }
-        native_init(this.currentAccount, i, i2, i3, str, str2, str3, str4, str5, str6, str7, str8, i4, z, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
+        native_init(this.currentAccount, i, i2, i3, str, str2, str3, str4, str5, str6, str7, str8, str9, i4, z, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
         checkConnection();
     }
 

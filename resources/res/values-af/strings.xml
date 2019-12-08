@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">Meld aan</string>
     <string name="common_signin_button_text_long">Meld aan met Google</string>
     <string name="fcm_fallback_notification_channel_label">Diverse</string>
+    <string name="google_assistant_verification_channel_name">Assistent-verifieerder</string>
+    <string name="google_assistant_verification_notification_title">Google Assistant stuur tans boodskap</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Koop met Google</string>
 </resources>

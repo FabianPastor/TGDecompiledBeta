@@ -19,6 +19,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.LongSparseArray;
 import android.util.Property;
@@ -81,7 +82,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private AnimatorSet animatorSet;
     private EditTextEmoji commentTextView;
     private boolean copyLinkOnEnd;
-    private int currentAccount = UserConfig.selectedAccount;
     private ShareAlertDelegate delegate;
     private TL_exportedMessageLink exportedMessageLink;
     private FrameLayout frameLayout;
@@ -366,9 +366,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             MessagesStorage.getInstance(ShareAlert.this.currentAccount).getStorageQueue().postRunnable(new -$$Lambda$ShareAlert$ShareSearchAdapter$-0pnpfSXHTiImTPZ850FgfY7mkY(this, str, i));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, LOOP:2: B:46:0x0114->B:76:0x01d3, Catch:{ Exception -> 0x0414 }} */
+        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:2: B:46:0x0114->B:76:0x01d3} */
         /* JADX WARNING: Removed duplicated region for block: B:190:0x0165 A:{SYNTHETIC} */
-        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, LOOP:7: B:144:0x0342->B:172:0x03f8, Catch:{ Exception -> 0x0414 }} */
+        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:7: B:144:0x0342->B:172:0x03f8} */
         /* JADX WARNING: Removed duplicated region for block: B:215:0x038c A:{SYNTHETIC} */
         public /* synthetic */ void lambda$searchDialogsInternal$1$ShareAlert$ShareSearchAdapter(java.lang.String r21, int r22) {
             /*
@@ -1000,7 +1000,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                     Utilities.searchQueue.cancelRunnable(this.searchRunnable);
                     this.searchRunnable = null;
                 }
-                if (str == null || str.length() == 0) {
+                if (TextUtils.isEmpty(str)) {
                     this.searchResult.clear();
                     ShareAlert shareAlert = ShareAlert.this;
                     shareAlert.topBeforeSwitch = shareAlert.getCurrentTop();

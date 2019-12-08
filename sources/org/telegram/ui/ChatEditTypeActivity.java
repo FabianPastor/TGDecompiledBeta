@@ -527,7 +527,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         r5 = this;
         r0 = r5.isPrivate;
         r1 = 0;
-        if (r0 != 0) goto L_0x0050;
+        if (r0 != 0) goto L_0x0051;
     L_0x0005:
         r0 = r5.currentChat;
         r0 = r0.username;
@@ -539,60 +539,60 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     L_0x0013:
         r0 = r5.currentChat;
         r0 = r0.username;
-        if (r0 == 0) goto L_0x0050;
+        if (r0 == 0) goto L_0x0051;
     L_0x0019:
         r2 = r5.usernameTextView;
         r2 = r2.getText();
         r2 = r2.toString();
         r0 = r0.equalsIgnoreCase(r2);
-        if (r0 != 0) goto L_0x0050;
+        if (r0 != 0) goto L_0x0051;
     L_0x0029:
         r0 = r5.usernameTextView;
         r0 = r0.length();
-        if (r0 == 0) goto L_0x0050;
+        if (r0 == 0) goto L_0x0051;
     L_0x0031:
         r0 = r5.lastNameAvailable;
-        if (r0 != 0) goto L_0x0050;
+        if (r0 != 0) goto L_0x0051;
     L_0x0035:
         r0 = r5.getParentActivity();
         r2 = "vibrator";
         r0 = r0.getSystemService(r2);
         r0 = (android.os.Vibrator) r0;
-        if (r0 == 0) goto L_0x0048;
-    L_0x0043:
+        if (r0 == 0) goto L_0x0049;
+    L_0x0044:
         r2 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r0.vibrate(r2);
-    L_0x0048:
+    L_0x0049:
         r0 = r5.checkTextView;
         r2 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         org.telegram.messenger.AndroidUtilities.shakeView(r0, r2, r1);
         return r1;
-    L_0x0050:
+    L_0x0051:
         r0 = r5.currentChat;
         r0 = r0.username;
         r2 = "";
-        if (r0 == 0) goto L_0x0059;
-    L_0x0058:
-        goto L_0x005a;
+        if (r0 == 0) goto L_0x005a;
     L_0x0059:
-        r0 = r2;
+        goto L_0x005b;
     L_0x005a:
+        r0 = r2;
+    L_0x005b:
         r3 = r5.isPrivate;
-        if (r3 == 0) goto L_0x005f;
-    L_0x005e:
-        goto L_0x0069;
+        if (r3 == 0) goto L_0x0060;
     L_0x005f:
+        goto L_0x006a;
+    L_0x0060:
         r2 = r5.usernameTextView;
         r2 = r2.getText();
         r2 = r2.toString();
-    L_0x0069:
+    L_0x006a:
         r0 = r0.equals(r2);
-        if (r0 != 0) goto L_0x0097;
-    L_0x006f:
+        if (r0 != 0) goto L_0x0098;
+    L_0x0070:
         r0 = r5.currentChat;
         r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 != 0) goto L_0x008a;
-    L_0x0077:
+        if (r0 != 0) goto L_0x008b;
+    L_0x0078:
         r0 = r5.getMessagesController();
         r2 = r5.getParentActivity();
         r3 = r5.chatId;
@@ -600,13 +600,13 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         r4.<init>(r5);
         r0.convertToMegaGroup(r2, r3, r5, r4);
         return r1;
-    L_0x008a:
+    L_0x008b:
         r0 = r5.getMessagesController();
         r1 = r5.chatId;
         r0.updateChannelUserName(r1, r2);
         r0 = r5.currentChat;
         r0.username = r2;
-    L_0x0097:
+    L_0x0098:
         r0 = 1;
         return r0;
         */

@@ -1,13 +1,13 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Locale;
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.LocationFetchCallback;
@@ -16,13 +16,17 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.TL_channelLocation;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmptyCell;
-import org.telegram.ui.Cells.GraySectionCell;
+import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.LocationCell;
+import org.telegram.ui.Cells.LocationDirectionCell;
 import org.telegram.ui.Cells.LocationLoadingCell;
 import org.telegram.ui.Cells.LocationPoweredCell;
 import org.telegram.ui.Cells.SendLocationCell;
+import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharingLiveLocationCell;
+import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.LocationActivity.LiveLocation;
 
@@ -40,9 +44,12 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     private Context mContext;
     private int overScrollHeight;
     private Location previousFetchedLocation;
-    private boolean pulledUp;
     private SendLocationCell sendLocationCell;
     private int shareLiveLocationPotistion = -1;
+
+    /* Access modifiers changed, original: protected */
+    public void onDirectionClick() {
+    }
 
     public LocationActivityAdapter(Context context, int i, long j) {
         this.mContext = context;
@@ -113,13 +120,14 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         SendLocationCell sendLocationCell = this.sendLocationCell;
         if (sendLocationCell != null) {
             String str = "Loading";
-            String str2 = "(%f,%f)";
-            if (this.locationType == 4) {
+            String str2;
+            if (this.locationType == 4 || this.customLocation != null) {
                 String str3 = this.addressName;
                 if (str3 == null) {
                     if ((this.customLocation == null && this.gpsLocation == null) || this.fetchingLocation) {
                         str3 = LocaleController.getString(str, NUM);
                     } else {
+                        str2 = "(%f,%f)";
                         if (this.customLocation != null) {
                             str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.customLocation.getLongitude())});
                         } else {
@@ -131,20 +139,23 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                         }
                     }
                 }
-                this.sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", NUM), str3);
-            } else if (this.customLocation != null) {
-                sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", NUM), String.format(Locale.US, str2, new Object[]{Double.valueOf(this.customLocation.getLatitude()), Double.valueOf(this.customLocation.getLongitude())}));
-            } else {
-                String str4 = "SendLocation";
-                if (this.gpsLocation != null) {
-                    String string = LocaleController.getString(str4, NUM);
-                    Object[] objArr = new Object[1];
-                    objArr[0] = LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy());
-                    sendLocationCell.setText(string, LocaleController.formatString("AccurateTo", NUM, objArr));
+                if (this.locationType == 4) {
+                    this.sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", NUM), str3);
+                    return;
+                } else {
+                    this.sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", NUM), str3);
                     return;
                 }
-                sendLocationCell.setText(LocaleController.getString(str4, NUM), LocaleController.getString(str, NUM));
             }
+            str2 = "SendLocation";
+            if (this.gpsLocation != null) {
+                String string = LocaleController.getString(str2, NUM);
+                Object[] objArr = new Object[1];
+                objArr[0] = LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy());
+                sendLocationCell.setText(string, LocaleController.formatString("AccurateTo", NUM, objArr));
+                return;
+            }
+            sendLocationCell.setText(LocaleController.getString(str2, NUM), LocaleController.getString(str, NUM));
         }
     }
 
@@ -159,45 +170,36 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         updateCell();
     }
 
-    /* JADX WARNING: Missing block: B:6:0x000d, code skipped:
-            if (r0 != null) goto L_0x000f;
-     */
     public void fetchLocationAddress() {
-        /*
-        r3 = this;
-        r0 = r3.locationType;
-        r1 = 4;
-        if (r0 == r1) goto L_0x0006;
-    L_0x0005:
-        return;
-    L_0x0006:
-        r0 = r3.customLocation;
-        if (r0 == 0) goto L_0x000b;
-    L_0x000a:
-        goto L_0x000f;
-    L_0x000b:
-        r0 = r3.gpsLocation;
-        if (r0 == 0) goto L_0x0029;
-    L_0x000f:
-        r1 = r3.previousFetchedLocation;
-        if (r1 == 0) goto L_0x001d;
-    L_0x0013:
-        r1 = r1.distanceTo(r0);
-        r2 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 <= 0) goto L_0x0020;
-    L_0x001d:
-        r1 = 0;
-        r3.addressName = r1;
-    L_0x0020:
-        r3.updateCell();
-        r1 = 1;
-        r3.fetchingLocation = r1;
-        org.telegram.messenger.LocationController.fetchLocationAddress(r0, r3);
-    L_0x0029:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.LocationActivityAdapter.fetchLocationAddress():void");
+        Location location;
+        Location location2;
+        if (this.locationType == 4) {
+            location = this.customLocation;
+            if (location == null) {
+                location = this.gpsLocation;
+                if (location == null) {
+                    return;
+                }
+            }
+            location2 = this.previousFetchedLocation;
+            if (location2 == null || location2.distanceTo(location) > 100.0f) {
+                this.addressName = null;
+            }
+            this.fetchingLocation = true;
+            updateCell();
+            LocationController.fetchLocationAddress(location, this);
+        } else {
+            location = this.customLocation;
+            if (location != null) {
+                location2 = this.previousFetchedLocation;
+                if (location2 == null || location2.distanceTo(location) > 20.0f) {
+                    this.addressName = null;
+                }
+                this.fetchingLocation = true;
+                updateCell();
+                LocationController.fetchLocationAddress(location, this);
+            }
+        }
     }
 
     public int getItemCount() {
@@ -206,39 +208,48 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         if (i == 5 || i == 4) {
             return 2;
         }
+        int i3 = 1;
         if (this.currentMessageObject != null) {
-            return (this.currentLiveLocations.isEmpty() ? 0 : this.currentLiveLocations.size() + 2) + 2;
+            if (!this.currentLiveLocations.isEmpty()) {
+                i3 = this.currentLiveLocations.size() + 3;
+            }
+            return i3 + 2;
         } else if (i == 2) {
             return this.currentLiveLocations.size() + 2;
         } else {
             boolean z = this.searching;
             if (z || (!z && this.places.isEmpty())) {
-                if (this.locationType == 0) {
-                    i2 = 4;
+                if (this.locationType != 0) {
+                    i2 = 6;
                 }
                 return i2;
             } else if (this.locationType == 1) {
-                return (this.places.size() + 4) + (1 ^ this.places.isEmpty());
+                return (this.places.size() + 5) + (this.places.isEmpty() ^ 1);
             } else {
-                return (this.places.size() + 3) + (1 ^ this.places.isEmpty());
+                return (this.places.size() + 4) + (this.places.isEmpty() ^ 1);
             }
         }
     }
 
+    public /* synthetic */ void lambda$onCreateViewHolder$0$LocationActivityAdapter(View view) {
+        onDirectionClick();
+    }
+
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View emptyCell;
+        View sendLocationCell;
         switch (i) {
             case 0:
                 emptyCell = new EmptyCell(this.mContext);
                 break;
             case 1:
-                emptyCell = new SendLocationCell(this.mContext, false);
+                sendLocationCell = new SendLocationCell(this.mContext, false);
                 break;
             case 2:
-                emptyCell = new GraySectionCell(this.mContext);
+                emptyCell = new HeaderCell(this.mContext);
                 break;
             case 3:
-                emptyCell = new LocationCell(this.mContext);
+                sendLocationCell = new LocationCell(this.mContext, false);
                 break;
             case 4:
                 emptyCell = new LocationLoadingCell(this.mContext);
@@ -250,29 +261,25 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 emptyCell = new SendLocationCell(this.mContext, true);
                 emptyCell.setDialogId(this.dialogId);
                 break;
-            default:
+            case 7:
                 Context context = this.mContext;
                 int i2 = this.locationType;
                 i2 = (i2 == 4 || i2 == 5) ? 16 : 54;
                 emptyCell = new SharingLiveLocationCell(context, true, i2);
                 break;
+            case 8:
+                emptyCell = new LocationDirectionCell(this.mContext);
+                emptyCell.setOnButtonClick(new -$$Lambda$LocationActivityAdapter$ZI5zffERDWGSr7GTCgcNce6b1mE(this));
+                break;
+            default:
+                emptyCell = new ShadowSectionCell(this.mContext);
+                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                combinedDrawable.setFullsize(true);
+                emptyCell.setBackgroundDrawable(combinedDrawable);
+                break;
         }
+        emptyCell = sendLocationCell;
         return new Holder(emptyCell);
-    }
-
-    public void setPulledUp() {
-        if (!this.pulledUp) {
-            this.pulledUp = true;
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LocationActivityAdapter$kPn2n4u9DAIYsBitfbC-1mB05AA(this));
-        }
-    }
-
-    public /* synthetic */ void lambda$setPulledUp$0$LocationActivityAdapter() {
-        notifyItemChanged(this.locationType == 0 ? 2 : 3);
-    }
-
-    public boolean isPulledUp() {
-        return this.pulledUp;
     }
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
@@ -281,56 +288,49 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
             boolean z = true;
             if (itemViewType != 1) {
                 int i2 = 2;
-                if (itemViewType != 2) {
-                    if (itemViewType != 3) {
-                        if (itemViewType == 4) {
-                            ((LocationLoadingCell) viewHolder.itemView).setLoading(this.searching);
-                            return;
-                        } else if (itemViewType == 6) {
-                            SendLocationCell sendLocationCell = (SendLocationCell) viewHolder.itemView;
-                            if (this.gpsLocation == null) {
-                                z = false;
-                            }
-                            sendLocationCell.setHasLocation(z);
-                            return;
-                        } else if (itemViewType == 7) {
-                            SharingLiveLocationCell sharingLiveLocationCell = (SharingLiveLocationCell) viewHolder.itemView;
-                            TL_channelLocation tL_channelLocation = this.chatLocation;
-                            if (tL_channelLocation != null) {
-                                sharingLiveLocationCell.setDialog(this.dialogId, tL_channelLocation);
-                                return;
-                            }
-                            MessageObject messageObject = this.currentMessageObject;
-                            if (messageObject == null || i != 1) {
-                                ArrayList arrayList = this.currentLiveLocations;
-                                if (this.currentMessageObject != null) {
-                                    i2 = 4;
-                                }
-                                sharingLiveLocationCell.setDialog((LiveLocation) arrayList.get(i - i2), this.gpsLocation);
-                                return;
-                            }
-                            sharingLiveLocationCell.setDialog(messageObject, this.gpsLocation);
-                            return;
-                        } else {
-                            return;
-                        }
-                    } else if (this.locationType == 0) {
-                        i -= 3;
-                        ((LocationCell) viewHolder.itemView).setLocation((TL_messageMediaVenue) this.places.get(i), (String) this.iconUrls.get(i), true);
+                if (itemViewType == 2) {
+                    HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                    if (this.currentMessageObject != null) {
+                        headerCell.setText(LocaleController.getString("LiveLocations", NUM));
                         return;
                     } else {
-                        i -= 4;
-                        ((LocationCell) viewHolder.itemView).setLocation((TL_messageMediaVenue) this.places.get(i), (String) this.iconUrls.get(i), true);
+                        headerCell.setText(LocaleController.getString("NearbyVenue", NUM));
                         return;
                     }
-                } else if (this.currentMessageObject != null) {
-                    ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("LiveLocations", NUM));
+                } else if (itemViewType == 3) {
+                    LocationCell locationCell = (LocationCell) viewHolder.itemView;
+                    i = this.locationType == 0 ? i - 4 : i - 5;
+                    locationCell.setLocation((TL_messageMediaVenue) this.places.get(i), (String) this.iconUrls.get(i), i, true);
                     return;
-                } else if (this.pulledUp) {
-                    ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("NearbyPlaces", NUM));
+                } else if (itemViewType == 4) {
+                    ((LocationLoadingCell) viewHolder.itemView).setLoading(this.searching);
+                    return;
+                } else if (itemViewType == 6) {
+                    SendLocationCell sendLocationCell = (SendLocationCell) viewHolder.itemView;
+                    if (this.gpsLocation == null) {
+                        z = false;
+                    }
+                    sendLocationCell.setHasLocation(z);
+                    return;
+                } else if (itemViewType == 7) {
+                    SharingLiveLocationCell sharingLiveLocationCell = (SharingLiveLocationCell) viewHolder.itemView;
+                    TL_channelLocation tL_channelLocation = this.chatLocation;
+                    if (tL_channelLocation != null) {
+                        sharingLiveLocationCell.setDialog(this.dialogId, tL_channelLocation);
+                        return;
+                    }
+                    MessageObject messageObject = this.currentMessageObject;
+                    if (messageObject == null || i != 1) {
+                        ArrayList arrayList = this.currentLiveLocations;
+                        if (this.currentMessageObject != null) {
+                            i2 = 5;
+                        }
+                        sharingLiveLocationCell.setDialog((LiveLocation) arrayList.get(i - i2), this.gpsLocation);
+                        return;
+                    }
+                    sharingLiveLocationCell.setDialog(messageObject, this.gpsLocation);
                     return;
                 } else {
-                    ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("ShowNearbyPlaces", NUM));
                     return;
                 }
             }
@@ -349,8 +349,8 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 if (i == 1) {
                     return messageObject;
                 }
-                if (i > 3 && i < this.places.size() + 3) {
-                    return this.currentLiveLocations.get(i - 4);
+                if (i > 4 && i < this.places.size() + 4) {
+                    return this.currentLiveLocations.get(i - 5);
                 }
             } else if (i2 == 2) {
                 if (i >= 2) {
@@ -358,11 +358,11 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 }
                 return null;
             } else if (i2 == 1) {
-                if (i > 3 && i < this.places.size() + 4) {
-                    return this.places.get(i - 4);
+                if (i > 4 && i < this.places.size() + 5) {
+                    return this.places.get(i - 5);
                 }
-            } else if (i > 2 && i < this.places.size() + 3) {
-                return this.places.get(i - 3);
+            } else if (i > 3 && i < this.places.size() + 4) {
+                return this.places.get(i - 4);
             }
             return null;
         } else if (this.addressName == null) {
@@ -398,14 +398,22 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
             return 1;
         }
         if (this.currentMessageObject != null) {
-            if (i == 2) {
-                return 2;
+            if (this.currentLiveLocations.isEmpty()) {
+                if (i == 2) {
+                    return 8;
+                }
+            } else if (i == 2) {
+                return 9;
+            } else {
+                if (i == 3) {
+                    return 2;
+                }
+                if (i == 4) {
+                    this.shareLiveLocationPotistion = i;
+                    return 6;
+                }
             }
-            if (i != 3) {
-                return 7;
-            }
-            this.shareLiveLocationPotistion = i;
-            return 6;
+            return 7;
         } else if (i2 != 2) {
             boolean z;
             if (i2 == 1) {
@@ -416,13 +424,16 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                     this.shareLiveLocationPotistion = i;
                     return 6;
                 } else if (i == 3) {
-                    return 2;
+                    return 9;
                 } else {
+                    if (i == 4) {
+                        return 2;
+                    }
                     z = this.searching;
                     if (z || (!z && this.places.isEmpty())) {
                         return 4;
                     }
-                    if (i == this.places.size() + 4) {
+                    if (i == this.places.size() + 5) {
                         return 5;
                     }
                 }
@@ -430,13 +441,16 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 return 1;
             } else {
                 if (i == 2) {
+                    return 9;
+                }
+                if (i == 3) {
                     return 2;
                 }
                 z = this.searching;
                 if (z || (!z && this.places.isEmpty())) {
                     return 4;
                 }
-                if (i == this.places.size() + 3) {
+                if (i == this.places.size() + 4) {
                     return 5;
                 }
             }

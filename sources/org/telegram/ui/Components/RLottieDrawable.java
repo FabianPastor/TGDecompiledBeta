@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 
@@ -741,12 +742,18 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public void draw(Canvas canvas) {
         if (this.nativePtr != 0 && !this.destroyWhenDone) {
+            int i;
             long uptimeMillis = SystemClock.uptimeMillis();
             long abs = Math.abs(uptimeMillis - this.lastFrameTime);
+            if (AndroidUtilities.screenRefreshRate <= 60.0f) {
+                i = this.timeBetweenFrames - 6;
+            } else {
+                i = this.timeBetweenFrames;
+            }
             if (this.isRunning) {
                 if (this.renderingBitmap == null && this.nextRenderingBitmap == null) {
                     scheduleNextGetFrame();
-                } else if (this.nextRenderingBitmap != null && ((this.renderingBitmap == null || abs >= ((long) (this.timeBetweenFrames - 6))) && isCurrentParentViewMaster())) {
+                } else if (this.nextRenderingBitmap != null && ((this.renderingBitmap == null || abs >= ((long) i)) && isCurrentParentViewMaster())) {
                     HashMap hashMap = this.vibrationPattern;
                     if (!(hashMap == null || this.currentParentView == null)) {
                         Integer num = (Integer) hashMap.get(Integer.valueOf(this.currentFrame - 1));
@@ -762,16 +769,24 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                     this.loadFrameTask = null;
                     this.singleFrameDecoded = true;
                     this.nextRenderingBitmap = null;
-                    this.lastFrameTime = uptimeMillis;
+                    if (AndroidUtilities.screenRefreshRate <= 60.0f) {
+                        this.lastFrameTime = uptimeMillis;
+                    } else {
+                        this.lastFrameTime = uptimeMillis - Math.min(16, abs - ((long) i));
+                    }
                     scheduleNextGetFrame();
                 }
-            } else if ((this.forceFrameRedraw || (this.decodeSingleFrame && abs >= ((long) (this.timeBetweenFrames - 6)))) && this.nextRenderingBitmap != null) {
+            } else if ((this.forceFrameRedraw || (this.decodeSingleFrame && abs >= ((long) i))) && this.nextRenderingBitmap != null) {
                 this.backgroundBitmap = this.renderingBitmap;
                 this.renderingBitmap = this.nextRenderingBitmap;
                 this.loadFrameTask = null;
                 this.singleFrameDecoded = true;
                 this.nextRenderingBitmap = null;
-                this.lastFrameTime = uptimeMillis;
+                if (AndroidUtilities.screenRefreshRate <= 60.0f) {
+                    this.lastFrameTime = uptimeMillis;
+                } else {
+                    this.lastFrameTime = uptimeMillis - Math.min(16, abs - ((long) i));
+                }
                 if (this.forceFrameRedraw) {
                     this.singleFrameDecoded = false;
                     this.forceFrameRedraw = false;

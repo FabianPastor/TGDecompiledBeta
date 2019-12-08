@@ -311,17 +311,51 @@ public class ActionBar extends FrameLayout {
         this.subtitleTextView.setTextColor(i);
     }
 
-    public void setPopupItemsColor(int i, boolean z) {
-        ActionBarMenu actionBarMenu = this.menu;
-        if (actionBarMenu != null) {
-            actionBarMenu.setPopupItemsColor(i, z);
+    public void setPopupItemsColor(int i, boolean z, boolean z2) {
+        if (z2) {
+            ActionBarMenu actionBarMenu = this.actionMode;
+            if (actionBarMenu != null) {
+                actionBarMenu.setPopupItemsColor(i, z);
+                return;
+            }
+        }
+        if (!z2) {
+            ActionBarMenu actionBarMenu2 = this.menu;
+            if (actionBarMenu2 != null) {
+                actionBarMenu2.setPopupItemsColor(i, z);
+            }
         }
     }
 
-    public void setPopupBackgroundColor(int i) {
-        ActionBarMenu actionBarMenu = this.menu;
-        if (actionBarMenu != null) {
-            actionBarMenu.redrawPopup(i);
+    public void setPopupItemsSelectorColor(int i, boolean z) {
+        if (z) {
+            ActionBarMenu actionBarMenu = this.actionMode;
+            if (actionBarMenu != null) {
+                actionBarMenu.setPopupItemsSelectorColor(i);
+                return;
+            }
+        }
+        if (!z) {
+            ActionBarMenu actionBarMenu2 = this.menu;
+            if (actionBarMenu2 != null) {
+                actionBarMenu2.setPopupItemsSelectorColor(i);
+            }
+        }
+    }
+
+    public void setPopupBackgroundColor(int i, boolean z) {
+        if (z) {
+            ActionBarMenu actionBarMenu = this.actionMode;
+            if (actionBarMenu != null) {
+                actionBarMenu.redrawPopup(i);
+                return;
+            }
+        }
+        if (!z) {
+            ActionBarMenu actionBarMenu2 = this.menu;
+            if (actionBarMenu2 != null) {
+                actionBarMenu2.redrawPopup(i);
+            }
         }
     }
 

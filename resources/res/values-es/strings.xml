@@ -1564,7 +1564,6 @@
     <string name="NearbyCreateGroup">Crear un grupo local</string>
     <string name="NearbyCreateGroupInfo">Quienes estén cerca de esta ubicación (vecinos, compañeros de trabajo o de estudio, asistentes a eventos, visitantes de un lugar) verán tu grupo en la sección Personas cerca.</string>
     <string name="NearbyCreateGroupInfo2">Si inicias un grupo no relacionado en esta ubicación, podrías ser restringido de crear grupos por ubicación.</string>
-    <string name="NearbyPlaces">O elige un lugar</string>
     <string name="NearbyStartGroup">Iniciar grupo</string>
     <string name="NetworkUsage">Uso de datos</string>
     <string name="NetworkUsageMobile">MÓVIL</string>
@@ -1624,7 +1623,6 @@
     <string name="NoPopup">Desactivadas</string>
     <string name="NoRecent">No hay recientes</string>
     <string name="NoRecentGIFs">No hay GIF recientes</string>
-    <string name="NoRecentPhotos">No hay fotos recientes</string>
     <string name="NoResult">Sin resultados</string>
     <string name="NoScheduledMessages">Aún no hay mensajes programados…</string>
     <string name="NoSharedAudio">Comparte música en este chat y accede a ella desde cualquier dispositivo.</string>
@@ -2515,7 +2513,6 @@
     <string name="ShowAllMedia">Mostrar toda la multimedia</string>
     <string name="ShowAllThemes">Mostrar todos los temas</string>
     <string name="ShowInChat">Mostrar en el chat</string>
-    <string name="ShowNearbyPlaces">Levanta para ver lugares cercanos</string>
     <string name="ShowNotificationsFor">Mostrar notificaciones para</string>
     <string name="ShowNotificationsForInfo">Desactívalo si quieres recibir notificaciones sólo de tu cuenta activa.</string>
     <string name="Shuffle">Aleatorio</string>
@@ -2977,6 +2974,10 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
+    <string name="google_assistant_verification_channel_name">Verificador del Asistente</string>
+    <string name="google_assistant_verification_channel_name">Verificador del Asistente</string>
+    <string name="google_assistant_verification_notification_title">El Asistente de Google está enviando el mensaje</string>
+    <string name="google_assistant_verification_notification_title">El Asistente de Google está enviando el mensaje</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Esta aplicación</string>
     <string name="hockeyapp_crash_dialog_message">¿Te gustaría enviar un informe anónimo para que podamos arreglar el problema?</string>
     <string name="hockeyapp_crash_dialog_negative_button">No enviar</string>

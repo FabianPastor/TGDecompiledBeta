@@ -341,11 +341,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
 
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
-        if (AndroidUtilities.isTablet()) {
-            i2 = (AndroidUtilities.dp(490.0f) - ((this.itemsCount - 1) * AndroidUtilities.dp(2.0f))) / this.itemsCount;
-        } else {
-            i2 = (AndroidUtilities.displaySize.x - ((this.itemsCount - 1) * AndroidUtilities.dp(2.0f))) / this.itemsCount;
-        }
+        i2 = getItemSize(this.itemsCount);
         this.ignoreLayout = true;
         int i3 = 0;
         for (int i4 = 0; i4 < this.itemsCount; i4++) {
@@ -368,5 +364,12 @@ public class SharedPhotoVideoCell extends FrameLayout {
             i3 = AndroidUtilities.dp(2.0f);
         }
         super.onMeasure(i, MeasureSpec.makeMeasureSpec(i3 + i2, NUM));
+    }
+
+    public static int getItemSize(int i) {
+        if (AndroidUtilities.isTablet()) {
+            return (AndroidUtilities.dp(490.0f) - ((i - 1) * AndroidUtilities.dp(2.0f))) / i;
+        }
+        return (AndroidUtilities.displaySize.x - ((i - 1) * AndroidUtilities.dp(2.0f))) / i;
     }
 }

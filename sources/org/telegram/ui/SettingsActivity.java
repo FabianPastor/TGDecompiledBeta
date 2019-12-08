@@ -162,6 +162,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int bioRow;
     private int chatRow;
     private int dataRow;
+    private int devicesRow;
     private int emptyRow;
     private EmptyTextProgressView emptyView;
     private int extraHeight;
@@ -296,6 +297,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     textCell.setTextAndIcon(LocaleController.getString("ChatSettings", NUM), NUM, true);
                 } else if (i == SettingsActivity.this.helpRow) {
                     textCell.setTextAndIcon(LocaleController.getString("SettingsHelp", NUM), NUM, false);
+                } else if (i == SettingsActivity.this.devicesRow) {
+                    textCell.setTextAndIcon(LocaleController.getString("Devices", NUM), NUM, true);
                 }
             } else if (itemViewType != 4) {
                 if (itemViewType == 6) {
@@ -346,7 +349,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         public boolean isEnabled(ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
-            return adapterPosition == SettingsActivity.this.notificationRow || adapterPosition == SettingsActivity.this.numberRow || adapterPosition == SettingsActivity.this.privacyRow || adapterPosition == SettingsActivity.this.languageRow || adapterPosition == SettingsActivity.this.usernameRow || adapterPosition == SettingsActivity.this.bioRow || adapterPosition == SettingsActivity.this.versionRow || adapterPosition == SettingsActivity.this.dataRow || adapterPosition == SettingsActivity.this.chatRow || adapterPosition == SettingsActivity.this.helpRow;
+            return adapterPosition == SettingsActivity.this.notificationRow || adapterPosition == SettingsActivity.this.numberRow || adapterPosition == SettingsActivity.this.privacyRow || adapterPosition == SettingsActivity.this.languageRow || adapterPosition == SettingsActivity.this.usernameRow || adapterPosition == SettingsActivity.this.bioRow || adapterPosition == SettingsActivity.this.versionRow || adapterPosition == SettingsActivity.this.dataRow || adapterPosition == SettingsActivity.this.chatRow || adapterPosition == SettingsActivity.this.helpRow || adapterPosition == SettingsActivity.this.devicesRow;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -431,7 +434,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (i == SettingsActivity.this.settingsSectionRow) {
                 return 1;
             }
-            if (i == SettingsActivity.this.notificationRow || i == SettingsActivity.this.privacyRow || i == SettingsActivity.this.languageRow || i == SettingsActivity.this.dataRow || i == SettingsActivity.this.chatRow || i == SettingsActivity.this.helpRow) {
+            if (i == SettingsActivity.this.notificationRow || i == SettingsActivity.this.privacyRow || i == SettingsActivity.this.languageRow || i == SettingsActivity.this.dataRow || i == SettingsActivity.this.chatRow || i == SettingsActivity.this.helpRow || i == SettingsActivity.this.devicesRow) {
                 return 2;
             }
             if (i == SettingsActivity.this.versionRow) {
@@ -1514,6 +1517,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.chatRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
+        this.devicesRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
         this.languageRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
@@ -1780,6 +1786,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.emptyView.setTextSize(18);
         this.emptyView.setVisibility(8);
         this.emptyView.setShowAtCenter(true);
+        this.emptyView.setPadding(0, AndroidUtilities.dp(50.0f), 0, 0);
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.topView = new TopView(context2);
         this.topView.setBackgroundColor(Theme.getColor(str2));
@@ -1900,6 +1907,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             presentFragment(new DataSettingsActivity());
         } else if (i == this.chatRow) {
             presentFragment(new ThemeActivity(0));
+        } else if (i == this.devicesRow) {
+            presentFragment(new SessionsActivity(0));
         } else if (i == this.helpRow) {
             showHelpAlert();
         } else if (i == this.languageRow) {

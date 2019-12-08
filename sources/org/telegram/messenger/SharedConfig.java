@@ -42,6 +42,7 @@ public class SharedConfig {
     public static boolean hasCameraCache = false;
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter = false;
+    public static int ivFontSize = AndroidUtilities.dp(16.0f);
     public static int keepMedia = 2;
     public static int lastKeepMediaCheckTime = 0;
     private static int lastLocalId = -210000;
@@ -72,6 +73,8 @@ public class SharedConfig {
     public static boolean saveIncomingPhotos = false;
     public static boolean saveStreamMedia = true;
     public static boolean saveToGallery = false;
+    public static int searchMessagesAsListHintShows = 0;
+    public static boolean searchMessagesAsListUsed = false;
     public static boolean showNotificationsForAllAccounts = true;
     public static boolean shuffleMusic = false;
     public static boolean sortContactsByName = false;
@@ -213,6 +216,7 @@ public class SharedConfig {
             roundCamera16to9 = true;
             repeatMode = sharedPreferences.getInt("repeatMode", 0);
             fontSize = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+            ivFontSize = sharedPreferences.getInt("iv_font_size", fontSize);
             allowBigEmoji = sharedPreferences.getBoolean("allowBigEmoji", true);
             useSystemEmoji = sharedPreferences.getBoolean("useSystemEmoji", false);
             streamMedia = sharedPreferences.getBoolean("streamMedia", true);
@@ -231,6 +235,8 @@ public class SharedConfig {
             loopStickers = sharedPreferences.getBoolean("loopStickers", true);
             keepMedia = sharedPreferences.getInt("keep_media", 2);
             lastKeepMediaCheckTime = sharedPreferences.getInt("lastKeepMediaCheckTime", 0);
+            searchMessagesAsListHintShows = sharedPreferences.getInt("searchMessagesAsListHintShows", 0);
+            searchMessagesAsListUsed = sharedPreferences.getBoolean("searchMessagesAsListUsed", false);
             showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
             configLoaded = true;
         }
@@ -344,6 +350,21 @@ public class SharedConfig {
         suggestStickers = i;
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("suggestStickers", suggestStickers);
+        edit.commit();
+    }
+
+    public static void setSearchMessagesAsListUsed(boolean z) {
+        searchMessagesAsListUsed = z;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("searchMessagesAsListUsed", z);
+        edit.commit();
+    }
+
+    public static void increaseSearchAsListHintShows() {
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        int i = searchMessagesAsListHintShows + 1;
+        searchMessagesAsListHintShows = i;
+        edit.putInt("searchMessagesAsListHintShows", i);
         edit.commit();
     }
 

@@ -423,7 +423,7 @@ public class CacheControlActivity extends BaseFragment {
         r4 = "Months";
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7);
         r2[r3] = r4;
-        r3 = NUM; // 0x7f0e057f float:1.8877891E38 double:1.053162852E-314;
+        r3 = NUM; // 0x7f0e0598 float:1.8877942E38 double:1.053162864E-314;
         r4 = "KeepMediaForever";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2[r5] = r3;
@@ -432,7 +432,7 @@ public class CacheControlActivity extends BaseFragment {
         r1.setItems(r2, r3);
         r1 = r1.create();
         r0.showDialog(r1);
-        goto L_0x01ce;
+        goto L_0x01cf;
     L_0x0053:
         r2 = r0.databaseRow;
         r8 = 0;
@@ -442,19 +442,19 @@ public class CacheControlActivity extends BaseFragment {
         r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r2 = r16.getParentActivity();
         r1.<init>(r2);
-        r2 = NUM; // 0x7f0e05c0 float:1.8878023E38 double:1.053162884E-314;
+        r2 = NUM; // 0x7f0e05d9 float:1.8878074E38 double:1.053162896E-314;
         r3 = "LocalDatabaseClearTextTitle";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setTitle(r2);
-        r2 = NUM; // 0x7f0e05bf float:1.8878021E38 double:1.0531628834E-314;
+        r2 = NUM; // 0x7f0e05d8 float:1.8878072E38 double:1.0531628958E-314;
         r3 = "LocalDatabaseClearText";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setMessage(r2);
-        r2 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
+        r2 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
         r3 = "Cancel";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setNegativeButton(r2, r8);
-        r2 = NUM; // 0x7f0e01e9 float:1.887603E38 double:1.053162398E-314;
+        r2 = NUM; // 0x7f0e01f7 float:1.8876058E38 double:1.053162405E-314;
         r3 = "CacheClear";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r3 = new org.telegram.ui.-$$Lambda$CacheControlActivity$OxPoOxpLG_g1G1jasfpkphw5fag;
@@ -464,25 +464,25 @@ public class CacheControlActivity extends BaseFragment {
         r0.showDialog(r1);
         r1 = r1.getButton(r9);
         r1 = (android.widget.TextView) r1;
-        if (r1 == 0) goto L_0x01ce;
+        if (r1 == 0) goto L_0x01cf;
     L_0x00a6:
         r2 = "dialogTextRed2";
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setTextColor(r2);
-        goto L_0x01ce;
+        goto L_0x01cf;
     L_0x00b1:
         r2 = r0.cacheRow;
-        if (r1 != r2) goto L_0x01ce;
+        if (r1 != r2) goto L_0x01cf;
     L_0x00b5:
         r1 = r0.totalSize;
         r10 = 0;
         r12 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1));
-        if (r12 <= 0) goto L_0x01ce;
+        if (r12 <= 0) goto L_0x01cf;
     L_0x00bd:
         r1 = r16.getParentActivity();
         if (r1 != 0) goto L_0x00c5;
     L_0x00c3:
-        goto L_0x01ce;
+        goto L_0x01cf;
     L_0x00c5:
         r1 = new org.telegram.ui.ActionBar.BottomSheet$Builder;
         r2 = r16.getParentActivity();
@@ -501,7 +501,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != 0) goto L_0x00f2;
     L_0x00e5:
         r8 = r0.photoSize;
-        r15 = NUM; // 0x7f0e05c5 float:1.8878033E38 double:1.0531628864E-314;
+        r15 = NUM; // 0x7f0e05de float:1.8878084E38 double:1.0531628987E-314;
         r13 = "LocalPhotoCache";
         r13 = org.telegram.messenger.LocaleController.getString(r13, r15);
     L_0x00f0:
@@ -511,7 +511,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r7) goto L_0x0100;
     L_0x00f4:
         r8 = r0.videoSize;
-        r13 = NUM; // 0x7f0e05c6 float:1.8878035E38 double:1.053162887E-314;
+        r13 = NUM; // 0x7f0e05df float:1.8878086E38 double:1.053162899E-314;
         r15 = "LocalVideoCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -519,7 +519,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r3) goto L_0x010e;
     L_0x0102:
         r8 = r0.documentsSize;
-        r13 = NUM; // 0x7f0e05c2 float:1.8878027E38 double:1.053162885E-314;
+        r13 = NUM; // 0x7f0e05db float:1.8878078E38 double:1.053162897E-314;
         r15 = "LocalDocumentCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -527,7 +527,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r5) goto L_0x011c;
     L_0x0110:
         r8 = r0.musicSize;
-        r13 = NUM; // 0x7f0e05c4 float:1.8878031E38 double:1.053162886E-314;
+        r13 = NUM; // 0x7f0e05dd float:1.8878082E38 double:1.053162898E-314;
         r15 = "LocalMusicCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -535,7 +535,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r4) goto L_0x012a;
     L_0x011e:
         r8 = r0.audioSize;
-        r13 = NUM; // 0x7f0e05bb float:1.8878013E38 double:1.0531628814E-314;
+        r13 = NUM; // 0x7f0e05d4 float:1.8878064E38 double:1.053162894E-314;
         r15 = "LocalAudioCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -544,7 +544,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r8) goto L_0x0139;
     L_0x012d:
         r8 = r0.cacheSize;
-        r13 = NUM; // 0x7f0e05bc float:1.8878015E38 double:1.053162882E-314;
+        r13 = NUM; // 0x7f0e05d5 float:1.8878066E38 double:1.0531628943E-314;
         r15 = "LocalCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -594,7 +594,7 @@ public class CacheControlActivity extends BaseFragment {
         r3.<init>(r4, r7);
         r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r6);
         r3.setBackgroundDrawable(r4);
-        r4 = NUM; // 0x7f0e02ea float:1.887655E38 double:1.053162525E-314;
+        r4 = NUM; // 0x7f0e02f9 float:1.8876581E38 double:1.0531625326E-314;
         r5 = "ClearMediaCache";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r4 = r4.toUpperCase();
@@ -611,7 +611,7 @@ public class CacheControlActivity extends BaseFragment {
         r1.setCustomView(r2);
         r1 = r1.create();
         r0.showDialog(r1);
-    L_0x01ce:
+    L_0x01cf:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CacheControlActivity.lambda$createView$10$CacheControlActivity(android.view.View, int):void");

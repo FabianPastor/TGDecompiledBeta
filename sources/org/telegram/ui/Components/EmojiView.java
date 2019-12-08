@@ -5692,7 +5692,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.newEmojiSuggestionsAvailable);
         if (this.stickersGridAdapter != null) {
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoad);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentDocumentsDidLoad);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoad);
             AndroidUtilities.runOnUIThread(new -$$Lambda$EmojiView$nydI8RFLQx0Boo3VLUW9Gt2FzYg(this));

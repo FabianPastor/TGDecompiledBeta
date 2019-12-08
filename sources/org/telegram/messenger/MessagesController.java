@@ -465,6 +465,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private Dialog proxyDialog;
     private String proxyDialogAddress;
     private long proxyDialogId;
+    public boolean qrLoginCamera;
     public int ratingDecay;
     private ArrayList<ReadTask> readTasks = new ArrayList();
     private LongSparseArray<ReadTask> readTasksMap = new LongSparseArray();
@@ -527,22 +528,34 @@ public class MessagesController extends BaseController implements NotificationCe
 
         private ReadTask() {
         }
+
+        /* synthetic */ ReadTask(MessagesController messagesController, AnonymousClass1 anonymousClass1) {
+            this();
+        }
     }
 
     private class UserActionUpdatesPts extends Updates {
         private UserActionUpdatesPts() {
+        }
+
+        /* synthetic */ UserActionUpdatesPts(MessagesController messagesController, AnonymousClass1 anonymousClass1) {
+            this();
         }
     }
 
     private class UserActionUpdatesSeq extends Updates {
         private UserActionUpdatesSeq() {
         }
+
+        /* synthetic */ UserActionUpdatesSeq(MessagesController messagesController, AnonymousClass1 anonymousClass1) {
+            this();
+        }
     }
 
     static /* synthetic */ void lambda$blockUser$47(TLObject tLObject, TL_error tL_error) {
     }
 
-    static /* synthetic */ void lambda$completeReadTask$162(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$completeReadTask$163(TLObject tLObject, TL_error tL_error) {
     }
 
     static /* synthetic */ void lambda$deleteUserPhoto$68(TLObject tLObject, TL_error tL_error) {
@@ -557,16 +570,16 @@ public class MessagesController extends BaseController implements NotificationCe
     static /* synthetic */ void lambda$installTheme$72(TLObject tLObject, TL_error tL_error) {
     }
 
-    static /* synthetic */ void lambda$markMentionMessageAsRead$157(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$markMentionMessageAsRead$158(TLObject tLObject, TL_error tL_error) {
     }
 
-    static /* synthetic */ void lambda$markMentionsAsRead$164(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$markMentionsAsRead$165(TLObject tLObject, TL_error tL_error) {
     }
 
-    static /* synthetic */ void lambda$markMessageContentAsRead$155(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$markMessageContentAsRead$156(TLObject tLObject, TL_error tL_error) {
     }
 
-    static /* synthetic */ void lambda$processUpdates$253(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$processUpdates$254(TLObject tLObject, TL_error tL_error) {
     }
 
     static /* synthetic */ void lambda$reportSpam$34(TLObject tLObject, TL_error tL_error) {
@@ -581,7 +594,7 @@ public class MessagesController extends BaseController implements NotificationCe
     static /* synthetic */ void lambda$unblockUser$63(TLObject tLObject, TL_error tL_error) {
     }
 
-    static /* synthetic */ void lambda$unregistedPush$200(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$unregistedPush$201(TLObject tLObject, TL_error tL_error) {
     }
 
     public /* synthetic */ void lambda$new$0$MessagesController() {
@@ -830,6 +843,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.webFileDatacenterId = sharedPreferences.getInt("webFileDatacenterId", i2);
         this.suggestedLangCode = this.mainPreferences.getString("suggestedLangCode", "en");
         this.animatedEmojisZoom = this.mainPreferences.getFloat("animatedEmojisZoom", 0.625f);
+        this.qrLoginCamera = this.mainPreferences.getBoolean("qrLoginCamera", false);
     }
 
     public /* synthetic */ void lambda$new$3$MessagesController() {
@@ -917,6 +931,17 @@ public class MessagesController extends BaseController implements NotificationCe
                                                 edit.putBoolean("keepAliveService", this.keepAliveService);
                                             }
                                         }
+                                    } else {
+                                        if ("qr_login_camera".equals(tL_jsonObjectValue.key)) {
+                                            jSONValue = tL_jsonObjectValue.value;
+                                            if (jSONValue instanceof TL_jsonBool) {
+                                                z = ((TL_jsonBool) jSONValue).value;
+                                                if (z != this.qrLoginCamera) {
+                                                    this.qrLoginCamera = z;
+                                                    edit.putBoolean("qrLoginCamera", this.qrLoginCamera);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 obj = 1;
@@ -957,6 +982,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$updateConfig$6$MessagesController(TL_config tL_config) {
         String str;
+        String str2;
         getDownloadController().loadAutoDownloadConfig(false);
         loadAppConfig();
         this.maxMegagroupCount = tL_config.megagroup_size_max;
@@ -1003,20 +1029,27 @@ public class MessagesController extends BaseController implements NotificationCe
         this.blockedCountry = tL_config.blocked_mode;
         this.dcDomainName = tL_config.dc_txt_domain_name;
         this.webFileDatacenterId = tL_config.webfile_dc_id;
-        str = this.suggestedLangCode;
-        if (str == null || !str.equals(tL_config.suggested_lang_code)) {
-            this.suggestedLangCode = tL_config.suggested_lang_code;
-            LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
+        str = tL_config.suggested_lang_code;
+        if (str != null) {
+            str2 = this.suggestedLangCode;
+            if (str2 == null || !str2.equals(str)) {
+                this.suggestedLangCode = tL_config.suggested_lang_code;
+                LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
+            }
         }
         Theme.loadRemoteThemes(this.currentAccount, false);
         Theme.checkCurrentRemoteTheme(false);
-        String str2 = "google";
+        str2 = "telegram";
         if (tL_config.static_maps_provider == null) {
             tL_config.static_maps_provider = str2;
         }
         this.mapKey = null;
-        this.mapProvider = 0;
+        this.mapProvider = 2;
         this.availableMapProviders = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("map providers = ");
+        stringBuilder.append(tL_config.static_maps_provider);
+        FileLog.d(stringBuilder.toString());
         String[] split = tL_config.static_maps_provider.split(",");
         for (int i = 0; i < split.length; i++) {
             String[] split2 = split[i].split("\\+");
@@ -1032,17 +1065,17 @@ public class MessagesController extends BaseController implements NotificationCe
                             }
                         }
                         this.availableMapProviders |= 4;
-                    } else if (str2.equals(split3[0])) {
-                        if (i == 0 && split2.length > 1) {
-                            this.mapProvider = 4;
-                        }
-                        this.availableMapProviders |= 1;
                     } else {
-                        if ("telegram".equals(split3[0])) {
+                        if ("google".equals(split3[0])) {
+                            if (i == 0 && split2.length > 1) {
+                                this.mapProvider = 4;
+                            }
+                            this.availableMapProviders |= 1;
+                        } else if (str2.equals(split3[0])) {
                             if (i == 0) {
                                 this.mapProvider = 2;
                             }
-                            this.availableMapProviders = 2 | this.availableMapProviders;
+                            this.availableMapProviders |= 2;
                         }
                     }
                     if (split3.length > 1) {
@@ -2733,7 +2766,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (j == 0) {
                     this.updatesStartWaitTimeChannels.put(i3, System.currentTimeMillis());
                 }
-                UserActionUpdatesPts userActionUpdatesPts = new UserActionUpdatesPts();
+                UserActionUpdatesPts userActionUpdatesPts = new UserActionUpdatesPts(this, null);
                 userActionUpdatesPts.pts = i;
                 userActionUpdatesPts.pts_count = i2;
                 userActionUpdatesPts.chat_id = i3;
@@ -2784,7 +2817,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     if (this.updatesStartWaitTimePts == 0) {
                         this.updatesStartWaitTimePts = System.currentTimeMillis();
                     }
-                    UserActionUpdatesPts userActionUpdatesPts = new UserActionUpdatesPts();
+                    UserActionUpdatesPts userActionUpdatesPts = new UserActionUpdatesPts(this, null);
                     userActionUpdatesPts.pts = i2;
                     userActionUpdatesPts.pts_count = i4;
                     this.updatesQueuePts.add(userActionUpdatesPts);
@@ -2817,7 +2850,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (this.updatesStartWaitTimeSeq == 0) {
                     this.updatesStartWaitTimeSeq = System.currentTimeMillis();
                 }
-                UserActionUpdatesSeq userActionUpdatesSeq = new UserActionUpdatesSeq();
+                UserActionUpdatesSeq userActionUpdatesSeq = new UserActionUpdatesSeq(this, null);
                 userActionUpdatesSeq.seq = i;
                 this.updatesQueueSeq.add(userActionUpdatesSeq);
                 return;
@@ -5675,17 +5708,17 @@ public class MessagesController extends BaseController implements NotificationCe
             int i20 = i10;
             boolean z8 = z5;
         }
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$x85q2w9-luD1YVlpfesIxu10Yns(this, messages_messages, j, z4, z, i, i9, z5, i5, i2, i3, i4, i6, z2, i10, i7, i8, i11, z3));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$u7NBKcciX4Bdp0eVOizI37kmoL4(this, messages_messages, j, z4, z, i, i9, z5, i5, i2, i3, i4, i6, z2, i10, i7, i8, i11, z3));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x030b A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:161:0x030b A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02c9  */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02c9  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x030b A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:161:0x030b A:{SYNTHETIC} */
     /* JADX WARNING: Missing block: B:117:0x02b0, code skipped:
-            if (r3[0] < (byte) 106) goto L_0x02b7;
+            if (r3[0] < (byte) 107) goto L_0x02b7;
      */
-    public /* synthetic */ void lambda$processLoadedMessages$123$MessagesController(org.telegram.tgnet.TLRPC.messages_Messages r26, long r27, boolean r29, boolean r30, int r31, int r32, boolean r33, int r34, int r35, int r36, int r37, int r38, boolean r39, int r40, int r41, int r42, int r43, boolean r44) {
+    public /* synthetic */ void lambda$processLoadedMessages$124$MessagesController(org.telegram.tgnet.TLRPC.messages_Messages r26, long r27, boolean r29, boolean r30, int r31, int r32, boolean r33, int r34, int r35, int r36, int r37, int r38, boolean r39, int r40, int r41, int r42, int r43, boolean r44) {
         /*
         r25 = this;
         r15 = r25;
@@ -6071,7 +6104,7 @@ public class MessagesController extends BaseController implements NotificationCe
     L_0x0286:
         r2 = r24;
         r3 = r2.legacy;
-        r4 = 106; // 0x6a float:1.49E-43 double:5.24E-322;
+        r4 = 107; // 0x6b float:1.5E-43 double:5.3E-322;
         if (r3 == 0) goto L_0x029c;
     L_0x028e:
         r3 = r2.layer;
@@ -6164,7 +6197,38 @@ public class MessagesController extends BaseController implements NotificationCe
         goto L_0x025a;
     L_0x0313:
         r15 = r6;
-        r22 = new org.telegram.messenger.-$$Lambda$MessagesController$16RHpu2Fb-Sswwrxh8-Ypcw4Xso;
+        r1 = 5;
+        r6 = r32;
+        if (r6 != r1) goto L_0x0341;
+    L_0x0319:
+        if (r30 == 0) goto L_0x0341;
+    L_0x031b:
+        r1 = r7.size();
+        r9 = r31;
+        if (r1 >= r9) goto L_0x0343;
+    L_0x0323:
+        if (r44 != 0) goto L_0x0343;
+    L_0x0325:
+        r6 = 0;
+        r7 = 0;
+        r10 = 0;
+        r0 = r25;
+        r1 = r27;
+        r3 = r31;
+        r4 = r35;
+        r5 = r36;
+        r8 = r37;
+        r9 = r10;
+        r10 = r38;
+        r11 = r39;
+        r12 = r29;
+        r13 = r40;
+        r0.loadMessages(r1, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13);
+        return;
+    L_0x0341:
+        r9 = r31;
+    L_0x0343:
+        r22 = new org.telegram.messenger.-$$Lambda$MessagesController$wg-aA8iCrSooaLRWqrgjxDJgHQs;
         r20 = r0;
         r0 = r22;
         r1 = r25;
@@ -6190,7 +6254,7 @@ public class MessagesController extends BaseController implements NotificationCe
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r22);
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processLoadedMessages$123$MessagesController(org.telegram.tgnet.TLRPC$messages_Messages, long, boolean, boolean, int, int, boolean, int, int, int, int, int, boolean, int, int, int, int, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processLoadedMessages$124$MessagesController(org.telegram.tgnet.TLRPC$messages_Messages, long, boolean, boolean, int, int, boolean, int, int, int, int, int, boolean, int, int, int, int, boolean):void");
     }
 
     public /* synthetic */ void lambda$null$121$MessagesController(long j, int i, int i2, boolean z, int i3, int i4, int i5, int i6, int i7, int i8, boolean z2, boolean z3, int i9, int i10, int i11, int i12) {
@@ -6198,71 +6262,89 @@ public class MessagesController extends BaseController implements NotificationCe
         loadMessages(j, i, i13, i5, false, i6, i7, i2, i8, z2, z3, i9, i3, i10, i11, z, i12);
     }
 
-    public /* synthetic */ void lambda$null$122$MessagesController(messages_Messages messages_messages, boolean z, boolean z2, boolean z3, int i, int i2, int i3, long j, ArrayList arrayList, int i4, int i5, int i6, boolean z4, int i7, int i8, int i9, int i10, ArrayList arrayList2, HashMap hashMap) {
+    public /* synthetic */ void lambda$null$123$MessagesController(messages_Messages messages_messages, boolean z, boolean z2, boolean z3, int i, int i2, int i3, long j, ArrayList arrayList, int i4, int i5, int i6, boolean z4, int i7, int i8, int i9, int i10, ArrayList arrayList2, HashMap hashMap) {
         int i11;
-        messages_Messages messages_messages2 = messages_messages;
-        boolean z5 = z;
-        boolean z6 = z2;
-        long j2 = j;
-        putUsers(messages_messages2.users, z5);
-        putChats(messages_messages2.chats, z5);
         int i12;
-        if (z6) {
-            i12 = i;
+        MessagesController messagesController;
+        boolean z5;
+        long j2;
+        messages_Messages messages_messages2 = messages_messages;
+        boolean z6 = z;
+        boolean z7 = z2;
+        long j3 = j;
+        putUsers(messages_messages2.users, z6);
+        putChats(messages_messages2.chats, z6);
+        int i13;
+        if (z7) {
+            i13 = i;
             i11 = 0;
         } else {
-            int i13;
-            i12 = i;
-            if (z3 && i12 == 2) {
-                i11 = Integer.MAX_VALUE;
-                for (int i14 = 0; i14 < messages_messages2.messages.size(); i14++) {
-                    Message message = (Message) messages_messages2.messages.get(i14);
+            int i14;
+            int i15;
+            i13 = i;
+            if (z3 && i13 == 2) {
+                i14 = Integer.MAX_VALUE;
+                for (i12 = 0; i12 < messages_messages2.messages.size(); i12++) {
+                    Message message = (Message) messages_messages2.messages.get(i12);
                     if (!message.out || message.from_scheduled) {
-                        int i15 = message.id;
-                        if (i15 > i2 && i15 < r11) {
-                            i11 = i15;
+                        i11 = message.id;
+                        if (i11 > i2 && i11 < r5) {
+                            i14 = i11;
                         }
                     } else {
-                        i13 = i2;
+                        i15 = i2;
                     }
                 }
-                i13 = i2;
+                i15 = i2;
             } else {
-                i13 = i2;
-                i11 = Integer.MAX_VALUE;
+                i15 = i2;
+                i14 = Integer.MAX_VALUE;
             }
-            if (i11 == Integer.MAX_VALUE) {
-                i11 = i13;
-            }
+            i11 = i14 == Integer.MAX_VALUE ? i15 : i14;
         }
-        int i16 = i3;
-        if (z6 && i16 == 1) {
+        i12 = i3;
+        if (z7 && i12 == 1) {
             getNotificationCenter().postNotificationName(NotificationCenter.scheduledMessagesUpdated, Long.valueOf(j), Integer.valueOf(arrayList.size()));
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.messagesDidLoad, Long.valueOf(j), Integer.valueOf(i3), arrayList, Boolean.valueOf(z), Integer.valueOf(i11), Integer.valueOf(i4), Integer.valueOf(i5), Integer.valueOf(i6), Integer.valueOf(i), Boolean.valueOf(z4), Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i9), Integer.valueOf(i10), Boolean.valueOf(z2));
-        if (!arrayList2.isEmpty()) {
-            reloadMessages(arrayList2, j2, z6);
+        if (((int) j3) != 0) {
+            getMediaDataController().loadReplyMessagesForMessages(arrayList, j, z2, new -$$Lambda$MessagesController$2oa59EuoFdVEjVtLd4W7MN2k9-g(this, j, i3, arrayList, z, i11, i4, i5, i6, i, z4, i7, i8, i9, i10, z2));
+        } else {
+            getNotificationCenter().postNotificationName(NotificationCenter.messagesDidLoad, Long.valueOf(j), Integer.valueOf(i3), arrayList, Boolean.valueOf(z), Integer.valueOf(i11), Integer.valueOf(i4), Integer.valueOf(i5), Integer.valueOf(i6), Integer.valueOf(i), Boolean.valueOf(z4), Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i9), Integer.valueOf(i10), Boolean.valueOf(z2));
+        }
+        if (arrayList2.isEmpty()) {
+            messagesController = this;
+            z5 = z2;
+            j2 = j;
+        } else {
+            messagesController = this;
+            z5 = z2;
+            j2 = j;
+            messagesController.reloadMessages(arrayList2, j2, z5);
         }
         if (!hashMap.isEmpty()) {
-            reloadWebPages(j2, hashMap, z6);
+            messagesController.reloadWebPages(j2, hashMap, z5);
         }
+    }
+
+    public /* synthetic */ void lambda$null$122$MessagesController(long j, int i, ArrayList arrayList, boolean z, int i2, int i3, int i4, int i5, int i6, boolean z2, int i7, int i8, int i9, int i10, boolean z3) {
+        getNotificationCenter().postNotificationName(NotificationCenter.messagesDidLoad, Long.valueOf(j), Integer.valueOf(i), arrayList, Boolean.valueOf(z), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(i5), Integer.valueOf(i6), Boolean.valueOf(z2), Integer.valueOf(i7), Integer.valueOf(i8), Integer.valueOf(i9), Integer.valueOf(i10), Boolean.valueOf(z3));
     }
 
     public void loadHintDialogs() {
         if (this.hintDialogs.isEmpty() && !TextUtils.isEmpty(this.installReferer)) {
             TL_help_getRecentMeUrls tL_help_getRecentMeUrls = new TL_help_getRecentMeUrls();
             tL_help_getRecentMeUrls.referer = this.installReferer;
-            getConnectionsManager().sendRequest(tL_help_getRecentMeUrls, new -$$Lambda$MessagesController$LaCEFIsgE_jKwu1XjVALcvXr1AI(this));
+            getConnectionsManager().sendRequest(tL_help_getRecentMeUrls, new -$$Lambda$MessagesController$Vd0MyZ-XGsgi_hRvHOtKEvj4jaE(this));
         }
     }
 
-    public /* synthetic */ void lambda$loadHintDialogs$125$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$loadHintDialogs$126$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$-TDfrnhcPbKEmCccLRaU4D3R63I(this, tLObject));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$fKtPxjUO0MO9_QVdDv94oKFhhHI(this, tLObject));
         }
     }
 
-    public /* synthetic */ void lambda$null$124$MessagesController(TLObject tLObject) {
+    public /* synthetic */ void lambda$null$125$MessagesController(TLObject tLObject) {
         TL_help_recentMeUrls tL_help_recentMeUrls = (TL_help_recentMeUrls) tLObject;
         putUsers(tL_help_recentMeUrls.users, false);
         putChats(tL_help_recentMeUrls.chats, false);
@@ -6329,10 +6411,10 @@ public class MessagesController extends BaseController implements NotificationCe
             removeFolder(i);
             return;
         }
-        loadDialogs(i, 0, 10, false, new -$$Lambda$MessagesController$6wFiaYSvkfpgXMrx7EE1KVW_PIo(this, i));
+        loadDialogs(i, 0, 10, false, new -$$Lambda$MessagesController$AV4EQ_8mh3ctt0OFIffEg5ZTyuU(this, i));
     }
 
-    public /* synthetic */ void lambda$onFolderEmpty$126$MessagesController(int i) {
+    public /* synthetic */ void lambda$onFolderEmpty$127$MessagesController(int i) {
         removeFolder(i);
     }
 
@@ -6534,7 +6616,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (r4 != 0) goto L_0x0141;
     L_0x0127:
         r4 = r21.getConnectionsManager();
-        r5 = new org.telegram.messenger.-$$Lambda$MessagesController$V8fZup4ioZ_r02qxwmjTn8YZJzw;
+        r5 = new org.telegram.messenger.-$$Lambda$MessagesController$9CMnchx8bWEDM7ecBj10XAUeG70;
         r5.<init>(r1, r2);
         r4.sendRequest(r9, r5);
         r2 = r21.getMessagesStorage();
@@ -6560,7 +6642,7 @@ public class MessagesController extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.addDialogToFolder(java.util.ArrayList, int, int, java.util.ArrayList, long):int");
     }
 
-    public /* synthetic */ void lambda$addDialogToFolder$127$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$addDialogToFolder$128$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             processUpdates((Updates) tLObject, false);
         }
@@ -6784,7 +6866,7 @@ public class MessagesController extends BaseController implements NotificationCe
         r12.offset_peer = r14;
     L_0x015f:
         r14 = r10.getConnectionsManager();
-        r0 = new org.telegram.messenger.-$$Lambda$MessagesController$krA7rlrAczwuoflozUuOTFM-p-I;
+        r0 = new org.telegram.messenger.-$$Lambda$MessagesController$INiSSH41hlqDqoaByzQ3Bgb39Ik;
         r0.<init>(r10, r11, r13, r15);
         r14.sendRequest(r12, r0);
     L_0x016b:
@@ -6793,7 +6875,7 @@ public class MessagesController extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.loadDialogs(int, int, int, boolean, java.lang.Runnable):void");
     }
 
-    public /* synthetic */ void lambda$loadDialogs$128$MessagesController(int i, int i2, Runnable runnable, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$loadDialogs$129$MessagesController(int i, int i2, Runnable runnable, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             messages_Dialogs messages_dialogs = (messages_Dialogs) tLObject;
             processLoadedDialogs(messages_dialogs, null, i, 0, i2, 0, false, false, false);
@@ -6842,7 +6924,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 } else if (i == 2) {
                     tL_account_getNotifySettings.peer = new TL_inputNotifyBroadcasts();
                 }
-                getConnectionsManager().sendRequest(tL_account_getNotifySettings, new -$$Lambda$MessagesController$fu-nLVFeGg_2jeJ1hhYVdxgKaqc(this, i));
+                getConnectionsManager().sendRequest(tL_account_getNotifySettings, new -$$Lambda$MessagesController$RkowpjYYcnodZj8wIt40IaTw_Yc(this, i));
             }
         }
         if (!getUserConfig().notificationsSignUpSettingsLoaded) {
@@ -6850,11 +6932,11 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    public /* synthetic */ void lambda$loadGlobalNotificationsSettings$130$MessagesController(int i, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$8PcCGCLASSNAMEaKYuW7Ce30Exb7Jxng0(this, tLObject, i));
+    public /* synthetic */ void lambda$loadGlobalNotificationsSettings$131$MessagesController(int i, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$CLASSNAMEHCoSp-pBn8PC_7bTc9qJYfzo(this, tLObject, i));
     }
 
-    public /* synthetic */ void lambda$null$129$MessagesController(TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$null$130$MessagesController(TLObject tLObject, int i) {
         if (tLObject != null) {
             this.loadingNotificationSettings--;
             TL_peerNotifySettings tL_peerNotifySettings = (TL_peerNotifySettings) tLObject;
@@ -6892,15 +6974,15 @@ public class MessagesController extends BaseController implements NotificationCe
     public void loadSignUpNotificationsSettings() {
         if (!this.loadingNotificationSignUpSettings) {
             this.loadingNotificationSignUpSettings = true;
-            getConnectionsManager().sendRequest(new TL_account_getContactSignUpNotification(), new -$$Lambda$MessagesController$wSkGi0z5JB9DDXqte3y9wyLsqT4(this));
+            getConnectionsManager().sendRequest(new TL_account_getContactSignUpNotification(), new -$$Lambda$MessagesController$4gQxOrHgxQ8Ex09epPhIw20QSsc(this));
         }
     }
 
-    public /* synthetic */ void lambda$loadSignUpNotificationsSettings$132$MessagesController(TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$GXB5rT0xTvh_-19jgx8mkpps0Lk(this, tLObject));
+    public /* synthetic */ void lambda$loadSignUpNotificationsSettings$133$MessagesController(TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$j1nx6xmI11ctk3o-Ieu303nN-NM(this, tLObject));
     }
 
-    public /* synthetic */ void lambda$null$131$MessagesController(TLObject tLObject) {
+    public /* synthetic */ void lambda$null$132$MessagesController(TLObject tLObject) {
         this.loadingNotificationSignUpSettings = false;
         Editor edit = this.notificationsPreferences.edit();
         this.enableJoined = tLObject instanceof TL_boolFalse;
@@ -6947,16 +7029,16 @@ public class MessagesController extends BaseController implements NotificationCe
                         nativeByteBuffer = null;
                         FileLog.e(e);
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$Ii-GWVaLn39L7hgp5ex9ms8_xUU(this, j, peerDialogId));
+                        getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$awovyvi5MjQ1qPBmM2TJlmCgHOA(this, j, peerDialogId));
                     }
                     j = getMessagesStorage().createPendingTask(nativeByteBuffer);
                 }
-                getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$Ii-GWVaLn39L7hgp5ex9ms8_xUU(this, j, peerDialogId));
+                getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$awovyvi5MjQ1qPBmM2TJlmCgHOA(this, j, peerDialogId));
             }
         }
     }
 
-    public /* synthetic */ void lambda$loadUnknownDialog$133$MessagesController(long j, long j2, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$loadUnknownDialog$134$MessagesController(long j, long j2, TLObject tLObject, TL_error tL_error) {
         long j3 = j;
         if (tLObject != null) {
             TL_messages_peerDialogs tL_messages_peerDialogs = (TL_messages_peerDialogs) tLObject;
@@ -7060,7 +7142,7 @@ public class MessagesController extends BaseController implements NotificationCe
         r8 = new org.telegram.tgnet.TLRPC$TL_messages_getPinnedDialogs;
         r8.<init>();
         r9 = r25.getConnectionsManager();
-        r10 = new org.telegram.messenger.-$$Lambda$MessagesController$oDaJBMfZ5FWgtLiRrHMTpaIL0vQ;
+        r10 = new org.telegram.messenger.-$$Lambda$MessagesController$21H1u-9Jbe7vowKHvar_GydIFa3A;
         r0 = r10;
         r1 = r25;
         r2 = r27;
@@ -7078,7 +7160,7 @@ public class MessagesController extends BaseController implements NotificationCe
         r0.<init>();
         r8.offset_peer = r0;
         r7 = r25.getConnectionsManager();
-        r9 = new org.telegram.messenger.-$$Lambda$MessagesController$21H1u-9Jbe7vowKHvar_GydIFa3A;
+        r9 = new org.telegram.messenger.-$$Lambda$MessagesController$Xy2QmS0LrWUNcEUvdEjkSFNDIYU;
         r0 = r9;
         r0.<init>(r1, r2, r3, r4, r5);
         r7.sendRequest(r8, r9);
@@ -7447,7 +7529,7 @@ public class MessagesController extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.resetDialogs(boolean, int, int, int, int):void");
     }
 
-    public /* synthetic */ void lambda$resetDialogs$134$MessagesController(int i, int i2, int i3, int i4, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$resetDialogs$135$MessagesController(int i, int i2, int i3, int i4, TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
             this.resetDialogsPinned = (TL_messages_peerDialogs) tLObject;
             for (int i5 = 0; i5 < this.resetDialogsPinned.dialogs.size(); i5++) {
@@ -7457,7 +7539,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    public /* synthetic */ void lambda$resetDialogs$135$MessagesController(int i, int i2, int i3, int i4, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$resetDialogs$136$MessagesController(int i, int i2, int i3, int i4, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             this.resetDialogsAll = (messages_Dialogs) tLObject;
             resetDialogs(false, i, i2, i3, i4);
@@ -7466,19 +7548,19 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* Access modifiers changed, original: protected */
     public void completeDialogsReset(messages_Dialogs messages_dialogs, int i, int i2, int i3, int i4, int i5, LongSparseArray<Dialog> longSparseArray, LongSparseArray<MessageObject> longSparseArray2, Message message) {
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$_lueWNyI1LCqJDqaM9CcumHk6k8(this, i3, i4, i5, messages_dialogs, longSparseArray, longSparseArray2));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$32iz76H0s2glYDHdx6oIz6RKn0E(this, i3, i4, i5, messages_dialogs, longSparseArray, longSparseArray2));
     }
 
-    public /* synthetic */ void lambda$completeDialogsReset$137$MessagesController(int i, int i2, int i3, messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+    public /* synthetic */ void lambda$completeDialogsReset$138$MessagesController(int i, int i2, int i3, messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.gettingDifference = false;
         getMessagesStorage().setLastPtsValue(i);
         getMessagesStorage().setLastDateValue(i2);
         getMessagesStorage().setLastQtsValue(i3);
         getDifference();
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$KfSHLFOvi9vN0JJmWQT3IRmk98E(this, messages_dialogs, longSparseArray, longSparseArray2));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$1A7fFT93S3M-PzwriJpeVFK04wI(this, messages_dialogs, longSparseArray, longSparseArray2));
     }
 
-    public /* synthetic */ void lambda$null$136$MessagesController(messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+    public /* synthetic */ void lambda$null$137$MessagesController(messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         int i;
         Dialog dialog;
         long j;
@@ -7572,19 +7654,19 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 tL_messages_getDialogs.offset_peer.access_hash = j;
             }
-            getConnectionsManager().sendRequest(tL_messages_getDialogs, new -$$Lambda$MessagesController$UaWgqIT15RLfdCnIdO_VcSrpnyI(this, i));
+            getConnectionsManager().sendRequest(tL_messages_getDialogs, new -$$Lambda$MessagesController$72DV-O9Yw2rrUo6FOYwpQyg_MC8(this, i));
         }
     }
 
-    public /* synthetic */ void lambda$migrateDialogs$141$MessagesController(int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$migrateDialogs$142$MessagesController(int i, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
-            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$KwvPWTn6vXNKSr-MPXXeGIc_4mI(this, (messages_Dialogs) tLObject, i));
+            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$y3CZ2c8ybp_53uKHi5ny6w7jDdM(this, (messages_Dialogs) tLObject, i));
             return;
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$E-29ic6WtsnAoPu-3Ou68_C2aYQ(this));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$rdkMY26ook-WJ-1ozERnO4tC4II(this));
     }
 
-    public /* synthetic */ void lambda$null$139$MessagesController(messages_Dialogs messages_dialogs, int i) {
+    public /* synthetic */ void lambda$null$140$MessagesController(messages_Dialogs messages_dialogs, int i) {
         messages_Dialogs messages_dialogs2 = messages_dialogs;
         int i2 = i;
         try {
@@ -7695,8 +7777,8 @@ public class MessagesController extends BaseController implements NotificationCe
                             i8 = 0;
                             for (i6 = 
 /*
-Method generation error in method: org.telegram.messenger.MessagesController.lambda$null$139$MessagesController(org.telegram.tgnet.TLRPC$messages_Dialogs, int):void, dex: classes.dex
-jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r6_8 'i6' int) = (r6_7 'i6' int), (r6_13 'i6' int) binds: {(r6_7 'i6' int)=B:58:0x01cd, (r6_13 'i6' int)=B:78:0x028c} in method: org.telegram.messenger.MessagesController.lambda$null$139$MessagesController(org.telegram.tgnet.TLRPC$messages_Dialogs, int):void, dex: classes.dex
+Method generation error in method: org.telegram.messenger.MessagesController.lambda$null$140$MessagesController(org.telegram.tgnet.TLRPC$messages_Dialogs, int):void, dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r6_8 'i6' int) = (r6_7 'i6' int), (r6_13 'i6' int) binds: {(r6_7 'i6' int)=B:58:0x01cd, (r6_13 'i6' int)=B:78:0x028c} in method: org.telegram.messenger.MessagesController.lambda$null$140$MessagesController(org.telegram.tgnet.TLRPC$messages_Dialogs, int):void, dex: classes.dex
 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
 	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
 	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
@@ -7750,16 +7832,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
 */
 
-    public /* synthetic */ void lambda$null$138$MessagesController() {
+    public /* synthetic */ void lambda$null$139$MessagesController() {
         this.migratingDialogs = false;
     }
 
-    public /* synthetic */ void lambda$null$140$MessagesController() {
+    public /* synthetic */ void lambda$null$141$MessagesController() {
         this.migratingDialogs = false;
     }
 
     public void processLoadedDialogs(messages_Dialogs messages_dialogs, ArrayList<EncryptedChat> arrayList, int i, int i2, int i3, int i4, boolean z, boolean z2, boolean z3) {
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$paSfouhF4cOmomp1ZUCbDhPTThQ(this, i, i4, messages_dialogs, z, i3, arrayList, i2, z3, z2));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$Rbz1xGAbFVY31e5a-fVma9dqn5I(this, i, i4, messages_dialogs, z, i3, arrayList, i2, z3, z2));
     }
 
     /* JADX WARNING: Missing block: B:120:0x0289, code skipped:
@@ -7771,7 +7853,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:150:0x02f6, code skipped:
             if (r3.migrated_to != null) goto L_0x028b;
      */
-    public /* synthetic */ void lambda$processLoadedDialogs$144$MessagesController(int r24, int r25, org.telegram.tgnet.TLRPC.messages_Dialogs r26, boolean r27, int r28, java.util.ArrayList r29, int r30, boolean r31, boolean r32) {
+    public /* synthetic */ void lambda$processLoadedDialogs$145$MessagesController(int r24, int r25, org.telegram.tgnet.TLRPC.messages_Dialogs r26, boolean r27, int r28, java.util.ArrayList r29, int r30, boolean r31, boolean r32) {
         /*
         r23 = this;
         r14 = r23;
@@ -7817,7 +7899,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r0.size();
         if (r0 != 0) goto L_0x0070;
     L_0x005c:
-        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$8ByUO_dN8BrXHUo6Z9CyTSqM3zk;
+        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$vOgC1dbJNkwBHosi0gHFLsn36x8;
         r0 = r7;
         r1 = r23;
         r2 = r26;
@@ -8425,7 +8507,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r0.id;
         r14.checkChannelInviter(r0);
     L_0x042c:
-        r16 = new org.telegram.messenger.-$$Lambda$MessagesController$vVkJdb5avF7UAQQt5Tq-ADdhTlw;
+        r16 = new org.telegram.messenger.-$$Lambda$MessagesController$Ako6wVf0S5HYHkh7BQByfSq2n88;
         r0 = r16;
         r1 = r23;
         r2 = r25;
@@ -8443,10 +8525,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r16);
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processLoadedDialogs$144$MessagesController(int, int, org.telegram.tgnet.TLRPC$messages_Dialogs, boolean, int, java.util.ArrayList, int, boolean, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processLoadedDialogs$145$MessagesController(int, int, org.telegram.tgnet.TLRPC$messages_Dialogs, boolean, int, java.util.ArrayList, int, boolean, boolean):void");
     }
 
-    public /* synthetic */ void lambda$null$142$MessagesController(messages_Dialogs messages_dialogs, int i, boolean z, int[] iArr, int i2) {
+    public /* synthetic */ void lambda$null$143$MessagesController(messages_Dialogs messages_dialogs, int i, boolean z, int[] iArr, int i2) {
         putUsers(messages_dialogs.users, true);
         this.loadingDialogs.put(i, false);
         if (z) {
@@ -8461,7 +8543,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$null$143$MessagesController(int i, messages_Dialogs messages_dialogs, ArrayList arrayList, boolean z, int i2, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, SparseArray sparseArray, int i3, boolean z2, int i4, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$null$144$MessagesController(int i, messages_Dialogs messages_dialogs, ArrayList arrayList, boolean z, int i2, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, SparseArray sparseArray, int i3, boolean z2, int i4, ArrayList arrayList2) {
         int i5;
         int i6;
         Object obj;
@@ -8829,24 +8911,24 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void reloadMentionsCountForChannels(ArrayList<Integer> arrayList) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$tx-Hm5lNel9r783FNwngnqjmzHg(this, arrayList));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$knnzDPoxWeJ_3JhzhjM0dfYX6Lg(this, arrayList));
     }
 
-    public /* synthetic */ void lambda$reloadMentionsCountForChannels$147$MessagesController(ArrayList arrayList) {
+    public /* synthetic */ void lambda$reloadMentionsCountForChannels$148$MessagesController(ArrayList arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             long j = (long) (-((Integer) arrayList.get(i)).intValue());
             TL_messages_getUnreadMentions tL_messages_getUnreadMentions = new TL_messages_getUnreadMentions();
             tL_messages_getUnreadMentions.peer = getInputPeer((int) j);
             tL_messages_getUnreadMentions.limit = 1;
-            getConnectionsManager().sendRequest(tL_messages_getUnreadMentions, new -$$Lambda$MessagesController$Y0dAZ3vl1oM7YDDmuUKIiJ8E6Uc(this, j));
+            getConnectionsManager().sendRequest(tL_messages_getUnreadMentions, new -$$Lambda$MessagesController$OaKPy0Z_yQq4h6ds5pvGsfUMiCs(this, j));
         }
     }
 
-    public /* synthetic */ void lambda$null$146$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$RCDQsC8thDaNX27sEmYf9QDjeV0(this, tLObject, j));
+    public /* synthetic */ void lambda$null$147$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$6zprsSWWT0r7SIFUYKMS_HpuPeQ(this, tLObject, j));
     }
 
-    public /* synthetic */ void lambda$null$145$MessagesController(TLObject tLObject, long j) {
+    public /* synthetic */ void lambda$null$146$MessagesController(TLObject tLObject, long j) {
         messages_Messages messages_messages = (messages_Messages) tLObject;
         if (messages_messages != null) {
             int i = messages_messages.count;
@@ -8858,12 +8940,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void processDialogsUpdateRead(LongSparseArray<Integer> longSparseArray, LongSparseArray<Integer> longSparseArray2) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$4kms84n2e5OLY36KpKV1tivRtIE(this, longSparseArray, longSparseArray2));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$ZyC4F8DQNhvd-ST1nW3IC1RXFJI(this, longSparseArray, longSparseArray2));
     }
 
-    public /* synthetic */ void lambda$processDialogsUpdateRead$148$MessagesController(LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+    public /* synthetic */ void lambda$processDialogsUpdateRead$149$MessagesController(LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+        Object obj;
         int i;
         if (longSparseArray != null) {
+            obj = null;
             for (i = 0; i < longSparseArray.size(); i++) {
                 long keyAt = longSparseArray.keyAt(i);
                 Dialog dialog = (Dialog) this.dialogs_dict.get(keyAt);
@@ -8875,8 +8959,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     } else if (!(i2 != 0 || dialog.unread_mark || dialog.unread_count == 0 || isDialogMuted(keyAt))) {
                         this.unreadUnmutedDialogs++;
                     }
+                    if (dialog.folder_id == 1) {
+                        obj = 1;
+                    }
                 }
             }
+        } else {
+            obj = null;
         }
         if (longSparseArray2 != null) {
             for (i = 0; i < longSparseArray2.size(); i++) {
@@ -8889,9 +8978,41 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
             }
         }
+        if (obj != null) {
+            updateFolderUnreadCounter();
+        }
         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(256));
         if (longSparseArray != null) {
             getNotificationsController().processDialogsUpdateRead(longSparseArray);
+        }
+    }
+
+    private void updateFolderUnreadCounter() {
+        Dialog dialog = (Dialog) this.dialogs_dict.get(DialogObject.makeFolderDialogId(1));
+        if (dialog instanceof TL_dialogFolder) {
+            int i = 0;
+            dialog.unread_count = 0;
+            dialog.unread_mentions_count = 0;
+            ArrayList arrayList = (ArrayList) this.dialogsByFolder.get(1);
+            if (arrayList != null) {
+                boolean z = getNotificationsController().showBadgeMessages;
+                int size = arrayList.size();
+                while (i < size) {
+                    Dialog dialog2 = (Dialog) arrayList.get(i);
+                    if (z) {
+                        if (isDialogMuted(dialog2.id)) {
+                            dialog.unread_count += dialog2.unread_count;
+                        } else {
+                            dialog.unread_mentions_count += dialog2.unread_count;
+                        }
+                    } else if (isDialogMuted(dialog2.id)) {
+                        dialog.unread_count++;
+                    } else {
+                        dialog.unread_mentions_count++;
+                    }
+                    i++;
+                }
+            }
         }
     }
 
@@ -8937,21 +9058,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         e = th;
                         FileLog.e(e);
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tL_messages_getHistory, new -$$Lambda$MessagesController$9goMHps4vcUnXcLVLUkEn9GeTGE(this, i, dialog, j));
+                        getConnectionsManager().sendRequest(tL_messages_getHistory, new -$$Lambda$MessagesController$4Jwx_5HhsGiQxe4xTNN54kOTaDA(this, i, dialog, j));
                     }
                     j = getMessagesStorage().createPendingTask(nativeByteBuffer);
                 }
-                getConnectionsManager().sendRequest(tL_messages_getHistory, new -$$Lambda$MessagesController$9goMHps4vcUnXcLVLUkEn9GeTGE(this, i, dialog, j));
+                getConnectionsManager().sendRequest(tL_messages_getHistory, new -$$Lambda$MessagesController$4Jwx_5HhsGiQxe4xTNN54kOTaDA(this, i, dialog, j));
             }
         }
     }
 
-    public /* synthetic */ void lambda$checkLastDialogMessage$151$MessagesController(int i, Dialog dialog, long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$checkLastDialogMessage$152$MessagesController(int i, Dialog dialog, long j, TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
             messages_Messages messages_messages = (messages_Messages) tLObject;
             removeDeletedMessagesFromArray((long) i, messages_messages.messages);
             if (messages_messages.messages.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$fsdxfZMEuckyn4KdpqF3RNu0xBg(this, dialog));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$ppNjsWd8EkGI25R6xpToCuUgugU(this, dialog));
             } else {
                 TL_messages_dialogs tL_messages_dialogs = new TL_messages_dialogs();
                 Message message = (Message) messages_messages.messages.get(0);
@@ -8984,25 +9105,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (j != 0) {
             getMessagesStorage().removePendingTask(j);
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$SYsY6TdSNp7SrJRIjfQGp_O5aaQ(this, i));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$0bKonyMt3MYMdfaGZLwlSU3meJc(this, i));
     }
 
-    public /* synthetic */ void lambda$null$149$MessagesController(Dialog dialog) {
+    public /* synthetic */ void lambda$null$150$MessagesController(Dialog dialog) {
         Dialog dialog2 = (Dialog) this.dialogs_dict.get(dialog.id);
         if (dialog2 != null && dialog2.top_message == 0) {
             deleteDialog(dialog.id, 3);
         }
     }
 
-    public /* synthetic */ void lambda$null$150$MessagesController(int i) {
+    public /* synthetic */ void lambda$null$151$MessagesController(int i) {
         this.checkingLastMessagesDialogs.delete(i);
     }
 
     public void processDialogsUpdate(messages_Dialogs messages_dialogs, ArrayList<EncryptedChat> arrayList) {
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$xNiru4jHWkIq1iLebWwtvCDtbxg(this, messages_dialogs));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$a1aBMa6MoHu0lc3G2UwgqOGPRE0(this, messages_dialogs));
     }
 
-    public /* synthetic */ void lambda$processDialogsUpdate$153$MessagesController(messages_Dialogs messages_dialogs) {
+    public /* synthetic */ void lambda$processDialogsUpdate$154$MessagesController(messages_Dialogs messages_dialogs) {
         int i;
         long j;
         Chat chat;
@@ -9097,10 +9218,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             i2++;
             j = 0;
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$2ED1Yvx_hYjiKPHXOhRNdGY1acQ(this, messages_dialogs, longSparseArray, longSparseArray2, longSparseArray3));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$4ggpwfv3Bv60WmG67IQ4uiOonCY(this, messages_dialogs, longSparseArray, longSparseArray2, longSparseArray3));
     }
 
-    public /* synthetic */ void lambda$null$152$MessagesController(messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3) {
+    public /* synthetic */ void lambda$null$153$MessagesController(messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3) {
         messages_Dialogs messages_dialogs2 = messages_dialogs;
         LongSparseArray longSparseArray4 = longSparseArray;
         LongSparseArray longSparseArray5 = longSparseArray2;
@@ -9190,10 +9311,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void addToViewsQueue(MessageObject messageObject) {
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$rr0sdWux_YVA5ofFnYun2i8xJDY(this, messageObject));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$hBv6ms07sgln27IYlqIEJB2IUyc(this, messageObject));
     }
 
-    public /* synthetic */ void lambda$addToViewsQueue$154$MessagesController(MessageObject messageObject) {
+    public /* synthetic */ void lambda$addToViewsQueue$155$MessagesController(MessageObject messageObject) {
         int dialogId = (int) messageObject.getDialogId();
         int id = messageObject.getId();
         ArrayList arrayList = (ArrayList) this.channelViewsToSend.get(dialogId);
@@ -9255,17 +9376,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 tL_channels_readMessageContents.channel = getInputChannel(messageObject.messageOwner.to_id.channel_id);
                 if (tL_channels_readMessageContents.channel != null) {
                     tL_channels_readMessageContents.id.add(Integer.valueOf(messageObject.getId()));
-                    getConnectionsManager().sendRequest(tL_channels_readMessageContents, -$$Lambda$MessagesController$Jgi_tEEk_EEC_N2GFX9eynQPOfo.INSTANCE);
+                    getConnectionsManager().sendRequest(tL_channels_readMessageContents, -$$Lambda$MessagesController$P3-y_yXlYAcq9BY9lnJVB8baeIk.INSTANCE);
                 }
             } else {
                 TL_messages_readMessageContents tL_messages_readMessageContents = new TL_messages_readMessageContents();
                 tL_messages_readMessageContents.id.add(Integer.valueOf(messageObject.getId()));
-                getConnectionsManager().sendRequest(tL_messages_readMessageContents, new -$$Lambda$MessagesController$ZGge9o1Z9R7H4raaOLxwiFBK_2Q(this));
+                getConnectionsManager().sendRequest(tL_messages_readMessageContents, new -$$Lambda$MessagesController$lIb6mZS9ujMaDiVr0Qc2e8yAgtU(this));
             }
         }
     }
 
-    public /* synthetic */ void lambda$markMessageContentAsRead$156$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$markMessageContentAsRead$157$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             TL_messages_affectedMessages tL_messages_affectedMessages = (TL_messages_affectedMessages) tLObject;
             processNewDifferenceParams(-1, tL_messages_affectedMessages.pts, -1, tL_messages_affectedMessages.pts_count);
@@ -9279,17 +9400,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             tL_channels_readMessageContents.channel = getInputChannel(i2);
             if (tL_channels_readMessageContents.channel != null) {
                 tL_channels_readMessageContents.id.add(Integer.valueOf(i));
-                getConnectionsManager().sendRequest(tL_channels_readMessageContents, -$$Lambda$MessagesController$pgwzpweYL-lhFQhSee8lhKf-igc.INSTANCE);
+                getConnectionsManager().sendRequest(tL_channels_readMessageContents, -$$Lambda$MessagesController$bKyWz4d9RqjIgwxMvWTMoX7LgpQ.INSTANCE);
             } else {
                 return;
             }
         }
         TL_messages_readMessageContents tL_messages_readMessageContents = new TL_messages_readMessageContents();
         tL_messages_readMessageContents.id.add(Integer.valueOf(i));
-        getConnectionsManager().sendRequest(tL_messages_readMessageContents, new -$$Lambda$MessagesController$oc-CaOWLfXkI8QC6f3uDhiyAY2I(this));
+        getConnectionsManager().sendRequest(tL_messages_readMessageContents, new -$$Lambda$MessagesController$CUgfRSEY4CyHmzYsBtb7aXCT5RU(this));
     }
 
-    public /* synthetic */ void lambda$markMentionMessageAsRead$158$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$markMentionMessageAsRead$159$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             TL_messages_affectedMessages tL_messages_affectedMessages = (TL_messages_affectedMessages) tLObject;
             processNewDifferenceParams(-1, tL_messages_affectedMessages.pts, -1, tL_messages_affectedMessages.pts_count);
@@ -9375,7 +9496,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = java.lang.Integer.valueOf(r10);
         r12.add(r10);
         r10 = r9.getConnectionsManager();
-        r12 = new org.telegram.messenger.-$$Lambda$MessagesController$SoWzDcB7kSG__EPEa_cvAR-w5QI;
+        r12 = new org.telegram.messenger.-$$Lambda$MessagesController$a8AfI5PchvJOW7BJMH5vX8bjCw0;
         r12.<init>(r9, r14);
         r10.sendRequest(r11, r12);
         goto L_0x009a;
@@ -9386,7 +9507,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = java.lang.Integer.valueOf(r10);
         r12.add(r10);
         r10 = r9.getConnectionsManager();
-        r12 = new org.telegram.messenger.-$$Lambda$MessagesController$a8AfI5PchvJOW7BJMH5vX8bjCw0;
+        r12 = new org.telegram.messenger.-$$Lambda$MessagesController$L2Rh9QgSg-jXaF9a3gzsXr_ZEb0;
         r12.<init>(r9, r14);
         r10.sendRequest(r11, r12);
     L_0x009a:
@@ -9395,13 +9516,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.markMessageAsRead(int, int, org.telegram.tgnet.TLRPC$InputChannel, int, long):void");
     }
 
-    public /* synthetic */ void lambda$markMessageAsRead$159$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$markMessageAsRead$160$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
         if (j != 0) {
             getMessagesStorage().removePendingTask(j);
         }
     }
 
-    public /* synthetic */ void lambda$markMessageAsRead$160$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$markMessageAsRead$161$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             TL_messages_affectedMessages tL_messages_affectedMessages = (TL_messages_affectedMessages) tLObject;
             processNewDifferenceParams(-1, tL_messages_affectedMessages.pts, -1, tL_messages_affectedMessages.pts_count);
@@ -9446,7 +9567,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 tL_messages_readHistory.max_id = readTask.maxId;
                 tL_channels_readHistory = tL_messages_readHistory;
             }
-            getConnectionsManager().sendRequest(tL_channels_readHistory, new -$$Lambda$MessagesController$Yx2z9bxVqBpDoXGLDDs-qcwEaus(this));
+            getConnectionsManager().sendRequest(tL_channels_readHistory, new -$$Lambda$MessagesController$mms-IBNoBdN67tH76zAO3xKUj68(this));
             return;
         }
         EncryptedChat encryptedChat = getEncryptedChat(Integer.valueOf(i2));
@@ -9458,11 +9579,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             tL_inputEncryptedChat.chat_id = encryptedChat.id;
             tL_inputEncryptedChat.access_hash = encryptedChat.access_hash;
             tL_messages_readEncryptedHistory.max_date = readTask.maxDate;
-            getConnectionsManager().sendRequest(tL_messages_readEncryptedHistory, -$$Lambda$MessagesController$WNefRv74qynzPsn_w__r0A_GjNo.INSTANCE);
+            getConnectionsManager().sendRequest(tL_messages_readEncryptedHistory, -$$Lambda$MessagesController$bYov51MvuGxaMsqkwIdfIApFdI0.INSTANCE);
         }
     }
 
-    public /* synthetic */ void lambda$completeReadTask$161$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$completeReadTask$162$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tL_error == null && (tLObject instanceof TL_messages_affectedMessages)) {
             TL_messages_affectedMessages tL_messages_affectedMessages = (TL_messages_affectedMessages) tLObject;
             processNewDifferenceParams(-1, tL_messages_affectedMessages.pts, -1, tL_messages_affectedMessages.pts_count);
@@ -9487,10 +9608,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void markDialogAsReadNow(long j) {
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$2vbGVHVTGYXCcdrQLh8fJ0VDGEY(this, j));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$7Yx77W8GTCRBiWJmBfHwaxMs-rU(this, j));
     }
 
-    public /* synthetic */ void lambda$markDialogAsReadNow$163$MessagesController(long j) {
+    public /* synthetic */ void lambda$markDialogAsReadNow$164$MessagesController(long j) {
         ReadTask readTask = (ReadTask) this.readTasksMap.get(j);
         if (readTask != null) {
             completeReadTask(readTask);
@@ -9505,7 +9626,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             getMessagesStorage().resetMentionsCount(j, 0);
             TL_messages_readMentions tL_messages_readMentions = new TL_messages_readMentions();
             tL_messages_readMentions.peer = getInputPeer(i);
-            getConnectionsManager().sendRequest(tL_messages_readMentions, -$$Lambda$MessagesController$-WVTY6_RdUIMPb49C4mJ2VjWV4g.INSTANCE);
+            getConnectionsManager().sendRequest(tL_messages_readMentions, -$$Lambda$MessagesController$WKod0JD8yhqRRb3q2XGhKTgK1JI.INSTANCE);
         }
     }
 
@@ -9576,7 +9697,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.processPendingRead(r1, r3, r5, r7, r8);
         r0 = r17.getMessagesStorage();
         r8 = r0.getStorageQueue();
-        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$exFD4MGKbWHHI2LvO4ZsOCDDjmg;
+        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$XwgyweEtDE07QZ0DyXMbifsq5Ak;
         r0 = r7;
         r1 = r17;
         r2 = r18;
@@ -9590,10 +9711,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
         if (r12 == r0) goto L_0x0092;
     L_0x0091:
-        goto L_0x00ed;
+        goto L_0x00ee;
     L_0x0092:
         r16 = 0;
-        goto L_0x00ed;
+        goto L_0x00ee;
     L_0x0095:
         if (r14 != 0) goto L_0x0098;
     L_0x0097:
@@ -9611,7 +9732,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.processPendingRead(r1, r3, r5, r7, r8);
         r0 = r17.getMessagesStorage();
         r8 = r0.getStorageQueue();
-        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$dOF-vB6o6L8zhfD6WBiCIPhvfvw;
+        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$_ziRmGsp8OtorSdwXBpuudGlD6c;
         r0 = r7;
         r1 = r17;
         r2 = r18;
@@ -9624,25 +9745,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r8 = r15;
         r0.<init>(r1, r2, r4, r5, r6, r7, r8);
         r11.postRunnable(r10);
-        if (r9 == 0) goto L_0x00ed;
+        if (r9 == 0) goto L_0x00ee;
     L_0x00d1:
         r0 = r9.ttl;
-        if (r0 <= 0) goto L_0x00ed;
+        if (r0 <= 0) goto L_0x00ee;
     L_0x00d5:
         r0 = r17.getConnectionsManager();
         r0 = r0.getCurrentTime();
-        r4 = java.lang.Math.max(r0, r14);
-        r1 = r17.getMessagesStorage();
-        r2 = r9.id;
+        r3 = java.lang.Math.max(r0, r14);
+        r0 = r17.getMessagesStorage();
+        r1 = r9.id;
+        r4 = 0;
         r5 = 0;
-        r6 = 0;
-        r3 = r4;
-        r1.createTaskForSecretChat(r2, r3, r4, r5, r6);
-    L_0x00ed:
-        if (r16 == 0) goto L_0x0104;
-    L_0x00ef:
+        r2 = r22;
+        r0.createTaskForSecretChat(r1, r2, r3, r4, r5);
+    L_0x00ee:
+        if (r16 == 0) goto L_0x0105;
+    L_0x00f0:
         r7 = org.telegram.messenger.Utilities.stageQueue;
-        r8 = new org.telegram.messenger.-$$Lambda$MessagesController$dtYjKApvTcyKzmegabJ8l6kpRnI;
+        r8 = new org.telegram.messenger.-$$Lambda$MessagesController$PG02LYk94FZTZxqn2NcjESCdKK0;
         r0 = r8;
         r1 = r17;
         r2 = r18;
@@ -9651,17 +9772,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r20;
         r0.<init>(r1, r2, r4, r5, r6);
         r7.postRunnable(r8);
-    L_0x0104:
+    L_0x0105:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.markDialogAsRead(long, int, int, int, boolean, int, boolean, int):void");
     }
 
-    public /* synthetic */ void lambda$markDialogAsRead$166$MessagesController(long j, int i, int i2, boolean z, boolean z2) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$HgfXGuLBaOIPVhd-pORJ_rRLbj0(this, j, i, i2, z, z2));
+    public /* synthetic */ void lambda$markDialogAsRead$167$MessagesController(long j, int i, int i2, boolean z, boolean z2) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$EdMKJdZCqb5YyMuGpKZ9c_04Zts(this, j, i, i2, z, z2));
     }
 
-    public /* synthetic */ void lambda$null$165$MessagesController(long j, int i, int i2, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$null$166$MessagesController(long j, int i, int i2, boolean z, boolean z2) {
         long j2 = j;
         int i3 = i2;
         Dialog dialog = (Dialog) this.dialogs_dict.get(j2);
@@ -9722,11 +9843,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getNotificationsController().processDialogsUpdateRead(longSparseArray);
     }
 
-    public /* synthetic */ void lambda$markDialogAsRead$168$MessagesController(long j, int i, boolean z, int i2, int i3, boolean z2) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$5G-bprVXgq7RqJ-dJnO7xrwOXz0(this, j, i, z, i2, i3, z2));
+    public /* synthetic */ void lambda$markDialogAsRead$169$MessagesController(long j, int i, boolean z, int i2, int i3, boolean z2) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$JRlJDjJHdwLyJ8ZhgSOgXvzFvZY(this, j, i, z, i2, i3, z2));
     }
 
-    public /* synthetic */ void lambda$null$167$MessagesController(long j, int i, boolean z, int i2, int i3, boolean z2) {
+    public /* synthetic */ void lambda$null$168$MessagesController(long j, int i, boolean z, int i2, int i3, boolean z2) {
         getNotificationsController().processReadMessages(null, j, i, 0, z);
         Dialog dialog = (Dialog) this.dialogs_dict.get(j);
         if (dialog != null) {
@@ -9776,10 +9897,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getNotificationsController().processDialogsUpdateRead(longSparseArray);
     }
 
-    public /* synthetic */ void lambda$markDialogAsRead$169$MessagesController(long j, boolean z, int i, int i2) {
+    public /* synthetic */ void lambda$markDialogAsRead$170$MessagesController(long j, boolean z, int i, int i2) {
         ReadTask readTask = (ReadTask) this.readTasksMap.get(j);
         if (readTask == null) {
-            readTask = new ReadTask();
+            readTask = new ReadTask(this, null);
             readTask.dialogId = j;
             readTask.sendRequestTime = SystemClock.elapsedRealtime() + 5000;
             if (!z) {
@@ -9806,7 +9927,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
                 i2++;
             }
-            return getConnectionsManager().sendRequest(tL_messages_createChat, new -$$Lambda$MessagesController$cGnDeaxgFzQVVFb9eWxuvZMpCzI(this, baseFragment, tL_messages_createChat), 2);
+            return getConnectionsManager().sendRequest(tL_messages_createChat, new -$$Lambda$MessagesController$r3wD9q76lxTAxcXy9dXig5NB57g(this, baseFragment, tL_messages_createChat), 2);
         } else if (i != 2 && i != 4) {
             return 0;
         } else {
@@ -9828,26 +9949,26 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 tL_channels_createChannel.address = str3;
                 tL_channels_createChannel.flags |= 4;
             }
-            return getConnectionsManager().sendRequest(tL_channels_createChannel, new -$$Lambda$MessagesController$zQe72RbkAPf3tJGOYlhQL9qt82Q(this, baseFragment, tL_channels_createChannel), 2);
+            return getConnectionsManager().sendRequest(tL_channels_createChannel, new -$$Lambda$MessagesController$MZI51303j9kgOvMiGNoRK-3TYT8(this, baseFragment, tL_channels_createChannel), 2);
         }
     }
 
-    public /* synthetic */ void lambda$createChat$172$MessagesController(BaseFragment baseFragment, TL_messages_createChat tL_messages_createChat, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$createChat$173$MessagesController(BaseFragment baseFragment, TL_messages_createChat tL_messages_createChat, TLObject tLObject, TL_error tL_error) {
         if (tL_error != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$WLwjGVrwlrvDjffczPPgLw02tbM(this, tL_error, baseFragment, tL_messages_createChat));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$uV_uSmHhcqeLOfX2TVxl6Ikziuk(this, tL_error, baseFragment, tL_messages_createChat));
             return;
         }
         Updates updates = (Updates) tLObject;
         processUpdates(updates, false);
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$Ms4ahgy3EssN_BSdYAoVheMmVV0(this, updates));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$uGadu6X9bU7DjRjsZZR5X-1qsw4(this, updates));
     }
 
-    public /* synthetic */ void lambda$null$170$MessagesController(TL_error tL_error, BaseFragment baseFragment, TL_messages_createChat tL_messages_createChat) {
+    public /* synthetic */ void lambda$null$171$MessagesController(TL_error tL_error, BaseFragment baseFragment, TL_messages_createChat tL_messages_createChat) {
         AlertsCreator.processError(this.currentAccount, tL_error, baseFragment, tL_messages_createChat, new Object[0]);
         getNotificationCenter().postNotificationName(NotificationCenter.chatDidFailCreate, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$null$171$MessagesController(Updates updates) {
+    public /* synthetic */ void lambda$null$172$MessagesController(Updates updates) {
         putUsers(updates.users, false);
         putChats(updates.chats, false);
         ArrayList arrayList = updates.chats;
@@ -9858,22 +9979,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getNotificationCenter().postNotificationName(NotificationCenter.chatDidCreated, Integer.valueOf(((Chat) updates.chats.get(0)).id));
     }
 
-    public /* synthetic */ void lambda$createChat$175$MessagesController(BaseFragment baseFragment, TL_channels_createChannel tL_channels_createChannel, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$createChat$176$MessagesController(BaseFragment baseFragment, TL_channels_createChannel tL_channels_createChannel, TLObject tLObject, TL_error tL_error) {
         if (tL_error != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$9xOHNhtj2X608R8-Ia3GimxPNaM(this, tL_error, baseFragment, tL_channels_createChannel));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$O4I7bv1C0H8usVqd1V74wInWygM(this, tL_error, baseFragment, tL_channels_createChannel));
             return;
         }
         Updates updates = (Updates) tLObject;
         processUpdates(updates, false);
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$kgbX0RFMixKGd9R8-BGb_4WEeXI(this, updates));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$wlPPOB5XUIJO9ihJQlC-B1OONNM(this, updates));
     }
 
-    public /* synthetic */ void lambda$null$173$MessagesController(TL_error tL_error, BaseFragment baseFragment, TL_channels_createChannel tL_channels_createChannel) {
+    public /* synthetic */ void lambda$null$174$MessagesController(TL_error tL_error, BaseFragment baseFragment, TL_channels_createChannel tL_channels_createChannel) {
         AlertsCreator.processError(this.currentAccount, tL_error, baseFragment, tL_channels_createChannel, new Object[0]);
         getNotificationCenter().postNotificationName(NotificationCenter.chatDidFailCreate, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$null$174$MessagesController(Updates updates) {
+    public /* synthetic */ void lambda$null$175$MessagesController(Updates updates) {
         putUsers(updates.users, false);
         putChats(updates.chats, false);
         ArrayList arrayList = updates.chats;
@@ -9888,25 +10009,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         TL_messages_migrateChat tL_messages_migrateChat = new TL_messages_migrateChat();
         tL_messages_migrateChat.chat_id = i;
         AlertDialog alertDialog = new AlertDialog(context, 3);
-        alertDialog.setOnCancelListener(new -$$Lambda$MessagesController$xyfduQAmv7xMLtJeszlsMcyOybU(this, getConnectionsManager().sendRequest(tL_messages_migrateChat, new -$$Lambda$MessagesController$w9yJSRtMDtOsa0YOK3ozFAMGbDM(this, context, alertDialog, intCallback, baseFragment, tL_messages_migrateChat))));
+        alertDialog.setOnCancelListener(new -$$Lambda$MessagesController$oh6CukXQ8QlNochvMhltLF9gL7A(this, getConnectionsManager().sendRequest(tL_messages_migrateChat, new -$$Lambda$MessagesController$czc7XB56RIdWENUz2klB0eiLdOk(this, context, alertDialog, intCallback, baseFragment, tL_messages_migrateChat))));
         try {
             alertDialog.show();
         } catch (Exception unused) {
         }
     }
 
-    public /* synthetic */ void lambda$convertToMegaGroup$179$MessagesController(Context context, AlertDialog alertDialog, IntCallback intCallback, BaseFragment baseFragment, TL_messages_migrateChat tL_messages_migrateChat, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$convertToMegaGroup$180$MessagesController(Context context, AlertDialog alertDialog, IntCallback intCallback, BaseFragment baseFragment, TL_messages_migrateChat tL_messages_migrateChat, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$oQ6Ek_oBydJwksOAT4_2wsgS-YE(context, alertDialog));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$n5_27WXa8J2JwW2tbYMRGnfcvck(context, alertDialog));
             Updates updates = (Updates) tLObject;
             processUpdates(updates, false);
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$-_YKCwdwI1fsNcEtkE7BslLDtLw(intCallback, updates));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$gyfvQkMWv4yBSfc0n_us4Q2AvCo(intCallback, updates));
             return;
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$vgxjWOZCUkW2PcfzcLgNjDaS8kM(this, context, alertDialog, tL_error, baseFragment, tL_messages_migrateChat));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$wjlb2UsKFc6f-xmKweM_XHqheM4(this, context, alertDialog, tL_error, baseFragment, tL_messages_migrateChat));
     }
 
-    static /* synthetic */ void lambda$null$176(Context context, AlertDialog alertDialog) {
+    static /* synthetic */ void lambda$null$177(Context context, AlertDialog alertDialog) {
         if (!((Activity) context).isFinishing()) {
             try {
                 alertDialog.dismiss();
@@ -9916,7 +10037,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    static /* synthetic */ void lambda$null$177(IntCallback intCallback, Updates updates) {
+    static /* synthetic */ void lambda$null$178(IntCallback intCallback, Updates updates) {
         if (intCallback != null) {
             for (int i = 0; i < updates.chats.size(); i++) {
                 Chat chat = (Chat) updates.chats.get(i);
@@ -9928,7 +10049,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$178$MessagesController(Context context, AlertDialog alertDialog, TL_error tL_error, BaseFragment baseFragment, TL_messages_migrateChat tL_messages_migrateChat) {
+    public /* synthetic */ void lambda$null$179$MessagesController(Context context, AlertDialog alertDialog, TL_error tL_error, BaseFragment baseFragment, TL_messages_migrateChat tL_messages_migrateChat) {
         if (!((Activity) context).isFinishing()) {
             try {
                 alertDialog.dismiss();
@@ -9939,7 +10060,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$convertToMegaGroup$180$MessagesController(int i, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$convertToMegaGroup$181$MessagesController(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
     }
 
@@ -9948,19 +10069,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             TL_channels_inviteToChannel tL_channels_inviteToChannel = new TL_channels_inviteToChannel();
             tL_channels_inviteToChannel.channel = getInputChannel(i);
             tL_channels_inviteToChannel.users = arrayList;
-            getConnectionsManager().sendRequest(tL_channels_inviteToChannel, new -$$Lambda$MessagesController$yMTBKv1vsL39XPT-_LSba8CDIn0(this, baseFragment, tL_channels_inviteToChannel));
+            getConnectionsManager().sendRequest(tL_channels_inviteToChannel, new -$$Lambda$MessagesController$ke5Z5q29twLCLASSNAMEQsUOsql8ulQ9k(this, baseFragment, tL_channels_inviteToChannel));
         }
     }
 
-    public /* synthetic */ void lambda$addUsersToChannel$182$MessagesController(BaseFragment baseFragment, TL_channels_inviteToChannel tL_channels_inviteToChannel, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$addUsersToChannel$183$MessagesController(BaseFragment baseFragment, TL_channels_inviteToChannel tL_channels_inviteToChannel, TLObject tLObject, TL_error tL_error) {
         if (tL_error != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$v4bjK_rrFplxot0FRwZ1FeXl9co(this, tL_error, baseFragment, tL_channels_inviteToChannel));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$QZql8klvtXKdFpnIpfYEcWGlDzc(this, tL_error, baseFragment, tL_channels_inviteToChannel));
         } else {
             processUpdates((Updates) tLObject, false);
         }
     }
 
-    public /* synthetic */ void lambda$null$181$MessagesController(TL_error tL_error, BaseFragment baseFragment, TL_channels_inviteToChannel tL_channels_inviteToChannel) {
+    public /* synthetic */ void lambda$null$182$MessagesController(TL_error tL_error, BaseFragment baseFragment, TL_channels_inviteToChannel tL_channels_inviteToChannel) {
         AlertsCreator.processError(this.currentAccount, tL_error, baseFragment, tL_channels_inviteToChannel, Boolean.valueOf(true));
     }
 
@@ -9968,17 +10089,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         TL_channels_toggleSignatures tL_channels_toggleSignatures = new TL_channels_toggleSignatures();
         tL_channels_toggleSignatures.channel = getInputChannel(i);
         tL_channels_toggleSignatures.enabled = z;
-        getConnectionsManager().sendRequest(tL_channels_toggleSignatures, new -$$Lambda$MessagesController$dHk5mIrTgjoEqkrxLWGYCLASSNAMEDNIQ(this), 64);
+        getConnectionsManager().sendRequest(tL_channels_toggleSignatures, new -$$Lambda$MessagesController$RFCOvaflyGcJJWP-Rg3POoMtLh0(this), 64);
     }
 
-    public /* synthetic */ void lambda$toogleChannelSignatures$184$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$toogleChannelSignatures$185$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
             processUpdates((Updates) tLObject, false);
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$bOQJg60wfKbbZ6EvG5QZ9K7ax9k(this));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$SHco2piQnrrWB-Q26mvar_Mp3SCM(this));
         }
     }
 
-    public /* synthetic */ void lambda$null$183$MessagesController() {
+    public /* synthetic */ void lambda$null$184$MessagesController() {
         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(8192));
     }
 
@@ -9986,17 +10107,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         TL_channels_togglePreHistoryHidden tL_channels_togglePreHistoryHidden = new TL_channels_togglePreHistoryHidden();
         tL_channels_togglePreHistoryHidden.channel = getInputChannel(i);
         tL_channels_togglePreHistoryHidden.enabled = z;
-        getConnectionsManager().sendRequest(tL_channels_togglePreHistoryHidden, new -$$Lambda$MessagesController$brnDumBv0Km1_LMaK03euhOShHQ(this), 64);
+        getConnectionsManager().sendRequest(tL_channels_togglePreHistoryHidden, new -$$Lambda$MessagesController$vBdgJGjpntw4_Oz4XD5m_FNLCI0(this), 64);
     }
 
-    public /* synthetic */ void lambda$toogleChannelInvitesHistory$186$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$toogleChannelInvitesHistory$187$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
             processUpdates((Updates) tLObject, false);
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$fdO7Z-Cf7_WL2ZiO_J9TmhUCM4Q(this));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$Bo76FNkO_sGRMcv0x-fDF4EUsic(this));
         }
     }
 
-    public /* synthetic */ void lambda$null$185$MessagesController() {
+    public /* synthetic */ void lambda$null$186$MessagesController() {
         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(8192));
     }
 
@@ -10005,17 +10126,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             TL_messages_editChatAbout tL_messages_editChatAbout = new TL_messages_editChatAbout();
             tL_messages_editChatAbout.peer = getInputPeer(-i);
             tL_messages_editChatAbout.about = str;
-            getConnectionsManager().sendRequest(tL_messages_editChatAbout, new -$$Lambda$MessagesController$sighe1GpjtY4tpZEhAi-jIjGdrQ(this, chatFull, str), 64);
+            getConnectionsManager().sendRequest(tL_messages_editChatAbout, new -$$Lambda$MessagesController$UaS8d69PVm6G7sNt_6Cl76DNyew(this, chatFull, str), 64);
         }
     }
 
-    public /* synthetic */ void lambda$updateChatAbout$188$MessagesController(ChatFull chatFull, String str, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$updateChatAbout$189$MessagesController(ChatFull chatFull, String str, TLObject tLObject, TL_error tL_error) {
         if (tLObject instanceof TL_boolTrue) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$09HKyDJFIdp20idkxPRPUuYYY2M(this, chatFull, str));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$xzpTlIAYH3JV8VeovjKP4cH_Lz0(this, chatFull, str));
         }
     }
 
-    public /* synthetic */ void lambda$null$187$MessagesController(ChatFull chatFull, String str) {
+    public /* synthetic */ void lambda$null$188$MessagesController(ChatFull chatFull, String str) {
         chatFull.about = str;
         getMessagesStorage().updateChatInfo(chatFull, false);
         getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, chatFull, Integer.valueOf(0), Boolean.valueOf(false), null);
@@ -10025,16 +10146,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         TL_channels_updateUsername tL_channels_updateUsername = new TL_channels_updateUsername();
         tL_channels_updateUsername.channel = getInputChannel(i);
         tL_channels_updateUsername.username = str;
-        getConnectionsManager().sendRequest(tL_channels_updateUsername, new -$$Lambda$MessagesController$EVXDAW1rfpWzHcxLW7TH_pkewgs(this, i, str), 64);
+        getConnectionsManager().sendRequest(tL_channels_updateUsername, new -$$Lambda$MessagesController$ZtYSn6QPfcnY5VXufJnW-lcLfiY(this, i, str), 64);
     }
 
-    public /* synthetic */ void lambda$updateChannelUserName$190$MessagesController(int i, String str, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$updateChannelUserName$191$MessagesController(int i, String str, TLObject tLObject, TL_error tL_error) {
         if (tLObject instanceof TL_boolTrue) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$Tn0VflgJfMlobXxwsJhsQ6BHx3Q(this, i, str));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$8Illx-FQm-vdGMgA7pMKLgJHkyg(this, i, str));
         }
     }
 
-    public /* synthetic */ void lambda$null$189$MessagesController(int i, String str) {
+    public /* synthetic */ void lambda$null$190$MessagesController(int i, String str) {
         Chat chat = getChat(Integer.valueOf(i));
         if (str.length() != 0) {
             chat.flags |= 64;
@@ -10055,11 +10176,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             tL_messages_startBot.peer = getInputPeer(user.id);
             tL_messages_startBot.start_param = str;
             tL_messages_startBot.random_id = Utilities.random.nextLong();
-            getConnectionsManager().sendRequest(tL_messages_startBot, new -$$Lambda$MessagesController$eqfa3xJxgbT2BM7TTI7sUbukyX4(this));
+            getConnectionsManager().sendRequest(tL_messages_startBot, new -$$Lambda$MessagesController$lyQxbb4WWrIYmuFcx85XLe0uaz4(this));
         }
     }
 
-    public /* synthetic */ void lambda$sendBotStart$191$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$sendBotStart$192$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             processUpdates((Updates) tLObject, false);
         }
@@ -10108,7 +10229,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     return;
                 }
                 TLObject tLObject = tL_messages_startBot;
-                getConnectionsManager().sendRequest(tLObject, new -$$Lambda$MessagesController$nIWgCxbmHC6WE3be1y7Ln54Kmek(this, isChannel, inputUser, i, baseFragment, tLObject, z, runnable));
+                getConnectionsManager().sendRequest(tLObject, new -$$Lambda$MessagesController$VLQQD_L7rWydtqdkTepxBzSikLA(this, isChannel, inputUser, i, baseFragment, tLObject, z, runnable));
             } else if (chatFull2 instanceof TL_chatFull) {
                 int i4 = 0;
                 while (i4 < chatFull2.participants.participants.size()) {
@@ -10135,14 +10256,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$addUserToChat$195$MessagesController(boolean z, InputUser inputUser, int i, BaseFragment baseFragment, TLObject tLObject, boolean z2, Runnable runnable, TLObject tLObject2, TL_error tL_error) {
+    public /* synthetic */ void lambda$addUserToChat$196$MessagesController(boolean z, InputUser inputUser, int i, BaseFragment baseFragment, TLObject tLObject, boolean z2, Runnable runnable, TLObject tLObject2, TL_error tL_error) {
         InputUser inputUser2 = inputUser;
         int i2 = i;
         if (z && (inputUser2 instanceof TL_inputUserSelf)) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$BZGJ1Uu31KB8_v48Af0MIlqvw6Y(this, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$ZhNCt-uNnHNeQsj7xtYhyJU8X04(this, i));
         }
         if (tL_error != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$97nmHPY5y2RWr5tPN_CvfODpDGc(this, tL_error, baseFragment, tLObject, z, z2, inputUser));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$OuJgh3-kXwqXZTZASvVy4G9EEb0(this, tL_error, baseFragment, tLObject, z, z2, inputUser));
             return;
         }
         Object obj;
@@ -10160,7 +10281,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (obj == null && (inputUser2 instanceof TL_inputUserSelf)) {
                 generateJoinMessage(i, true);
             }
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$RXsN_dD516MLuCIMqhAjTGa_Xy8(this, i), 1000);
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$P9VGjaQBqi4tfYW7UT22Hf8vDSU(this, i), 1000);
         }
         if (z && (inputUser2 instanceof TL_inputUserSelf)) {
             getMessagesStorage().updateDialogsWithDeletedMessages(new ArrayList(), null, true, i);
@@ -10170,11 +10291,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$192$MessagesController(int i) {
+    public /* synthetic */ void lambda$null$193$MessagesController(int i) {
         this.joiningToChannels.remove(Integer.valueOf(i));
     }
 
-    public /* synthetic */ void lambda$null$193$MessagesController(TL_error tL_error, BaseFragment baseFragment, TLObject tLObject, boolean z, boolean z2, InputUser inputUser) {
+    public /* synthetic */ void lambda$null$194$MessagesController(TL_error tL_error, BaseFragment baseFragment, TLObject tLObject, boolean z, boolean z2, InputUser inputUser) {
         int i = this.currentAccount;
         Object[] objArr = new Object[1];
         z2 = z && !z2;
@@ -10185,7 +10306,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$194$MessagesController(int i) {
+    public /* synthetic */ void lambda$null$195$MessagesController(int i) {
         loadFullChat(i, 0, true);
     }
 
@@ -10232,7 +10353,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (user.id == getUserConfig().getClientUserId()) {
                     deleteDialog((long) (-i), 0, z2);
                 }
-                getConnectionsManager().sendRequest(tL_messages_deleteChatUser, new -$$Lambda$MessagesController$TvEl3kDuoeLY7MIthhrI3Gpz7VM(this, isChannel, inputUser, i), 64);
+                getConnectionsManager().sendRequest(tL_messages_deleteChatUser, new -$$Lambda$MessagesController$P-liPLC_3IVRpqiHlrqdxeDAwTU(this, isChannel, inputUser, i), 64);
             } else if (chatFull instanceof TL_chatFull) {
                 Object obj;
                 Chat chat2 = getChat(Integer.valueOf(i));
@@ -10257,16 +10378,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$deleteUserFromChat$197$MessagesController(boolean z, InputUser inputUser, int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$deleteUserFromChat$198$MessagesController(boolean z, InputUser inputUser, int i, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             processUpdates((Updates) tLObject, false);
             if (z && !(inputUser instanceof TL_inputUserSelf)) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$XfauDevpMy5gwsuJfI0xlUPu2og(this, i), 1000);
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$WRXGiw2nH0NbeRvUB9l1WOb1I2o(this, i), 1000);
             }
         }
     }
 
-    public /* synthetic */ void lambda$null$196$MessagesController(int i) {
+    public /* synthetic */ void lambda$null$197$MessagesController(int i) {
         loadFullChat(i, 0, true);
     }
 
@@ -10282,7 +10403,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 tL_channels_editTitle.chat_id = i;
                 tL_channels_editTitle.title = str;
             }
-            getConnectionsManager().sendRequest(tL_channels_editTitle, new -$$Lambda$MessagesController$LUWOOOeAe5Jp9VtFttIVWV7UI90(this), 64);
+            getConnectionsManager().sendRequest(tL_channels_editTitle, new -$$Lambda$MessagesController$eeEoncUtImD3KY99RbahhTT8gY8(this), 64);
             return;
         }
         Chat chat = getChat(Integer.valueOf(i));
@@ -10294,7 +10415,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(16));
     }
 
-    public /* synthetic */ void lambda$changeChatTitle$198$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$changeChatTitle$199$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             processUpdates((Updates) tLObject, false);
         }
@@ -10321,10 +10442,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 tL_channels_editPhoto.photo = new TL_inputChatPhotoEmpty();
             }
         }
-        getConnectionsManager().sendRequest(tL_channels_editPhoto, new -$$Lambda$MessagesController$ps7aUxupqJbxZ3-iGATiAv6ZnH8(this, fileLocation, fileLocation2), 64);
+        getConnectionsManager().sendRequest(tL_channels_editPhoto, new -$$Lambda$MessagesController$wy09bZPmqKXvxXv6-hJzlanOWGw(this, fileLocation, fileLocation2), 64);
     }
 
-    public /* synthetic */ void lambda$changeChatAvatar$199$MessagesController(FileLocation fileLocation, FileLocation fileLocation2, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$changeChatAvatar$200$MessagesController(FileLocation fileLocation, FileLocation fileLocation2, TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             Photo photo;
             Updates updates = (Updates) tLObject;
@@ -10396,7 +10517,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     tL_account_unregisterDevice.other_uids.add(Integer.valueOf(instance.getClientUserId()));
                 }
             }
-            getConnectionsManager().sendRequest(tL_account_unregisterDevice, -$$Lambda$MessagesController$MgYgVuJC6xVMbBpVhDbS84HPJ7Y.INSTANCE);
+            getConnectionsManager().sendRequest(tL_account_unregisterDevice, -$$Lambda$MessagesController$Qu0A-rHMVMrsMl5O52igKgpwq98.INSTANCE);
         }
     }
 
@@ -10404,7 +10525,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         boolean z = true;
         if (i == 1) {
             unregistedPush();
-            getConnectionsManager().sendRequest(new TL_auth_logOut(), new -$$Lambda$MessagesController$c7bHLvwn4O88T0YqJYQmSyjLQKc(this));
+            getConnectionsManager().sendRequest(new TL_auth_logOut(), new -$$Lambda$MessagesController$M0pZMVLHuA4M7EZu9xjksMf4U_0(this));
         } else {
             ConnectionsManager connectionsManager = getConnectionsManager();
             if (i != 2) {
@@ -10419,7 +10540,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getContactsController().deleteUnknownAppAccounts();
     }
 
-    public /* synthetic */ void lambda$performLogout$201$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$performLogout$202$MessagesController(TLObject tLObject, TL_error tL_error) {
         getConnectionsManager().cleanup(false);
     }
 
@@ -10429,12 +10550,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (str != null && !str.equals(BuildVars.BUILD_VERSION_STRING)) {
                 TL_help_getAppChangelog tL_help_getAppChangelog = new TL_help_getAppChangelog();
                 tL_help_getAppChangelog.prev_app_version = SharedConfig.lastUpdateVersion;
-                getConnectionsManager().sendRequest(tL_help_getAppChangelog, new -$$Lambda$MessagesController$goOx5WBCLqtaS0OVLZ1TBuoOfr4(this));
+                getConnectionsManager().sendRequest(tL_help_getAppChangelog, new -$$Lambda$MessagesController$QeK7l_WXxzXocN29ig8T7oPOy24(this));
             }
         }
     }
 
-    public /* synthetic */ void lambda$generateUpdateMessage$202$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$generateUpdateMessage$203$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tL_error == null) {
             SharedConfig.lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
             SharedConfig.saveConfig();
@@ -10475,11 +10596,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
                 i++;
             }
-            getConnectionsManager().sendRequest(tL_account_registerDevice, new -$$Lambda$MessagesController$yemf2Rbmn6u4Ks3hESdBGTVTRTI(this, str));
+            getConnectionsManager().sendRequest(tL_account_registerDevice, new -$$Lambda$MessagesController$J3fJIuCnmq3QhQ3RoOcIcK4I8PU(this, str));
         }
     }
 
-    public /* synthetic */ void lambda$registerForPush$204$MessagesController(String str, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$registerForPush$205$MessagesController(String str, TLObject tLObject, TL_error tL_error) {
         if (tLObject instanceof TL_boolTrue) {
             if (BuildVars.LOGS_ENABLED) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -10492,21 +10613,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             SharedConfig.pushString = str;
             getUserConfig().saveConfig(false);
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$mAA3yIijbZCLASSNAMEqTljFZdXBWdshw(this));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$zpDKEoH-qpL3YM5Wh2uHoUsFVMA(this));
     }
 
-    public /* synthetic */ void lambda$null$203$MessagesController() {
+    public /* synthetic */ void lambda$null$204$MessagesController() {
         this.registeringForPush = false;
     }
 
     public void loadCurrentState() {
         if (!this.updatingState) {
             this.updatingState = true;
-            getConnectionsManager().sendRequest(new TL_updates_getState(), new -$$Lambda$MessagesController$WXhPW557LQQ6Sp6iffcTNIQ_hOM(this));
+            getConnectionsManager().sendRequest(new TL_updates_getState(), new -$$Lambda$MessagesController$lHXWXIfmxKsjzfeH5HmTsCyV03c(this));
         }
     }
 
-    public /* synthetic */ void lambda$loadCurrentState$205$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$loadCurrentState$206$MessagesController(TLObject tLObject, TL_error tL_error) {
         int i = 0;
         this.updatingState = false;
         if (tL_error == null) {
@@ -10583,7 +10704,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 return;
             }
             StringBuilder stringBuilder;
-            Collections.sort(arrayList, -$$Lambda$MessagesController$tJ3bWEuWlp4A6o4NctxCTApO7Bo.INSTANCE);
+            Collections.sort(arrayList, -$$Lambda$MessagesController$iWcS0cq_95jswayvvTaTSKnQLGc.INSTANCE);
             if (i2 == 2) {
                 this.channelsPts.put(i, ((Updates) arrayList.get(0)).pts);
             }
@@ -10643,13 +10764,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         ArrayList arrayList;
         if (i == 0) {
             arrayList = this.updatesQueueSeq;
-            Collections.sort(arrayList, new -$$Lambda$MessagesController$pIcEUCvar_c6n3YM9mIGrsl8URMQ(this));
+            Collections.sort(arrayList, new -$$Lambda$MessagesController$8j3wq1ibflq2Rv7QdRqXJvvwxBc(this));
         } else if (i == 1) {
             arrayList = this.updatesQueuePts;
-            Collections.sort(arrayList, -$$Lambda$MessagesController$QenytTpZDqk6_PCLF-z0rgui6Bk.INSTANCE);
+            Collections.sort(arrayList, -$$Lambda$MessagesController$hGUHFGlJkXICR41QitU5GeMfKbg.INSTANCE);
         } else if (i == 2) {
             arrayList = this.updatesQueueQts;
-            Collections.sort(arrayList, -$$Lambda$MessagesController$hGUHFGlJkXICR41QitU5GeMfKbg.INSTANCE);
+            Collections.sort(arrayList, -$$Lambda$MessagesController$r6viuXq_dpBF5FJFu8L7BQA0K6U.INSTANCE);
         } else {
             arrayList = null;
         }
@@ -10700,7 +10821,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         setUpdatesStartTime(i, 0);
     }
 
-    public /* synthetic */ int lambda$processUpdatesQueue$207$MessagesController(Updates updates, Updates updates2) {
+    public /* synthetic */ int lambda$processUpdatesQueue$208$MessagesController(Updates updates, Updates updates2) {
         return AndroidUtilities.compare(getUpdateSeq(updates), getUpdateSeq(updates2));
     }
 
@@ -10737,21 +10858,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         nativeByteBuffer = nativeByteBuffer3;
                         FileLog.e(e);
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$y1t72jPbG3yOG4Wz_D5YBlSVRu0(this, j, chat));
+                        getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$ALfjuWLEEaIIRIil9HudCsfImpU(this, j, chat));
                     }
                 } catch (Exception e3) {
                     e = e3;
                     FileLog.e(e);
                     j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                    getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$y1t72jPbG3yOG4Wz_D5YBlSVRu0(this, j, chat));
+                    getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$ALfjuWLEEaIIRIil9HudCsfImpU(this, j, chat));
                 }
                 j = getMessagesStorage().createPendingTask(nativeByteBuffer);
             }
-            getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$y1t72jPbG3yOG4Wz_D5YBlSVRu0(this, j, chat));
+            getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$ALfjuWLEEaIIRIil9HudCsfImpU(this, j, chat));
         }
     }
 
-    public /* synthetic */ void lambda$loadUnknownChannel$210$MessagesController(long j, Chat chat, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$loadUnknownChannel$211$MessagesController(long j, Chat chat, TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
             TL_messages_peerDialogs tL_messages_peerDialogs = (TL_messages_peerDialogs) tLObject;
             if (!(tL_messages_peerDialogs.dialogs.isEmpty() || tL_messages_peerDialogs.chats.isEmpty())) {
@@ -10771,10 +10892,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void startShortPoll(Chat chat, boolean z) {
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$jsxpGcctdHHGEuDXWhV3a-FBhwU(this, z, chat));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$HhZY7Xvm7NS06gDNX9yqgS8WW3E(this, z, chat));
     }
 
-    public /* synthetic */ void lambda$startShortPoll$211$MessagesController(boolean z, Chat chat) {
+    public /* synthetic */ void lambda$startShortPoll$212$MessagesController(boolean z, Chat chat) {
         if (z) {
             this.needShortPollChannels.delete(chat.id);
             if (chat.megagroup) {
@@ -11047,7 +11168,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         org.telegram.messenger.FileLog.d(r1);
     L_0x00db:
         r8 = r15.getConnectionsManager();
-        r9 = new org.telegram.messenger.-$$Lambda$MessagesController$OW4Kiz5sKsskga3TVrgXhgWeOlU;
+        r9 = new org.telegram.messenger.-$$Lambda$MessagesController$x5i0ne0KceS-W4h5GT2Mo-qkysQ;
         r1 = r9;
         r2 = r15;
         r3 = r16;
@@ -11068,7 +11189,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.getChannelDifference(int, int, long, org.telegram.tgnet.TLRPC$InputChannel):void");
     }
 
-    public /* synthetic */ void lambda$getChannelDifference$220$MessagesController(int i, int i2, long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$getChannelDifference$221$MessagesController(int i, int i2, long j, TLObject tLObject, TL_error tL_error) {
         int i3 = i;
         long j2 = j;
         TL_error tL_error2 = tL_error;
@@ -11101,10 +11222,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
             }
             getMessagesStorage().putUsersAndChats(updates_channeldifference.users, updates_channeldifference.chats, true, true);
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$j8LJlE0r5uCj0lguJynqw-IOeiQ(this, updates_channeldifference));
-            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$2ut6qGfxUCeko2PBJaVW8jelR4Y(this, arrayList, i, updates_channeldifference, chat, sparseArray, i2, j));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$hWWXVtytRP4kZnjctiKBgzZknGY(this, updates_channeldifference));
+            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$ndqtob1Ekjw6srKD0BkMfYTUr9Y(this, arrayList, i, updates_channeldifference, chat, sparseArray, i2, j));
         } else if (tL_error2 != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$v38gQk7XZqciyXECte4IiKh2D2c(this, tL_error2, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$hqshPJNycm3SZUGHbDrcQpKEKgY(this, tL_error2, i));
             this.gettingDifferenceChannels.delete(i);
             if (j2 != 0) {
                 getMessagesStorage().removePendingTask(j2);
@@ -11112,12 +11233,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$212$MessagesController(updates_ChannelDifference updates_channeldifference) {
+    public /* synthetic */ void lambda$null$213$MessagesController(updates_ChannelDifference updates_channeldifference) {
         putUsers(updates_channeldifference.users, false);
         putChats(updates_channeldifference.chats, false);
     }
 
-    public /* synthetic */ void lambda$null$218$MessagesController(ArrayList arrayList, int i, updates_ChannelDifference updates_channeldifference, Chat chat, SparseArray sparseArray, int i2, long j) {
+    public /* synthetic */ void lambda$null$219$MessagesController(ArrayList arrayList, int i, updates_ChannelDifference updates_channeldifference, Chat chat, SparseArray sparseArray, int i2, long j) {
         if (!arrayList.isEmpty()) {
             SparseArray sparseArray2 = new SparseArray();
             Iterator it = arrayList.iterator();
@@ -11129,14 +11250,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
             }
             if (sparseArray2.size() != 0) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$uiXsMXkt0qZHXlViozwZIo-yZ_s(this, sparseArray2));
-                Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$e49IKsyhe4ojSofLmQ7VZd8yzMc(this, updates_channeldifference, i, chat, sparseArray, i2, j));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$K0ZNRvyUXYTS8CICZPhAmiK2Qgs(this, sparseArray2));
+                Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$JOpCQs3kpDZ8TlZPGIkUgIT2nAY(this, updates_channeldifference, i, chat, sparseArray, i2, j));
             }
         }
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$e49IKsyhe4ojSofLmQ7VZd8yzMc(this, updates_channeldifference, i, chat, sparseArray, i2, j));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$JOpCQs3kpDZ8TlZPGIkUgIT2nAY(this, updates_channeldifference, i, chat, sparseArray, i2, j));
     }
 
-    public /* synthetic */ void lambda$null$213$MessagesController(SparseArray sparseArray) {
+    public /* synthetic */ void lambda$null$214$MessagesController(SparseArray sparseArray) {
         for (int i = 0; i < sparseArray.size(); i++) {
             int keyAt = sparseArray.keyAt(i);
             getSendMessagesHelper().processSentMessage((int) ((long[]) sparseArray.valueAt(i))[1]);
@@ -11146,7 +11267,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /* JADX WARNING: Removed duplicated region for block: B:100:0x018f A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:75:0x0187  */
-    public /* synthetic */ void lambda$null$217$MessagesController(org.telegram.tgnet.TLRPC.updates_ChannelDifference r17, int r18, org.telegram.tgnet.TLRPC.Chat r19, android.util.SparseArray r20, int r21, long r22) {
+    public /* synthetic */ void lambda$null$218$MessagesController(org.telegram.tgnet.TLRPC.updates_ChannelDifference r17, int r18, org.telegram.tgnet.TLRPC.Chat r19, android.util.SparseArray r20, int r21, long r22) {
         /*
         r16 = this;
         r6 = r16;
@@ -11377,12 +11498,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = 0;
         goto L_0x0115;
     L_0x019d:
-        r0 = new org.telegram.messenger.-$$Lambda$MessagesController$5bGMVajTTztX5CJ01mPxJJesx_4;
+        r0 = new org.telegram.messenger.-$$Lambda$MessagesController$l0dMSZgmN0gECx0z-m67_Y-by64;
         r0.<init>(r6, r1);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
         r0 = r16.getMessagesStorage();
         r0 = r0.getStorageQueue();
-        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$HQcIgvmzRNn6khjL2KefRQgk7Xk;
+        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$cgs0OFAJnqEUItiFpqM9coCMvSw;
         r1.<init>(r6, r4, r7);
         r0.postRunnable(r1);
     L_0x01b5:
@@ -11480,28 +11601,28 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0281:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$null$217$MessagesController(org.telegram.tgnet.TLRPC$updates_ChannelDifference, int, org.telegram.tgnet.TLRPC$Chat, android.util.SparseArray, int, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$null$218$MessagesController(org.telegram.tgnet.TLRPC$updates_ChannelDifference, int, org.telegram.tgnet.TLRPC$Chat, android.util.SparseArray, int, long):void");
     }
 
-    public /* synthetic */ void lambda$null$214$MessagesController(LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$null$215$MessagesController(LongSparseArray longSparseArray) {
         for (int i = 0; i < longSparseArray.size(); i++) {
             updateInterfaceWithMessages(longSparseArray.keyAt(i), (ArrayList) longSparseArray.valueAt(i), false);
         }
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$null$216$MessagesController(ArrayList arrayList, updates_ChannelDifference updates_channeldifference) {
+    public /* synthetic */ void lambda$null$217$MessagesController(ArrayList arrayList, updates_ChannelDifference updates_channeldifference) {
         if (!arrayList.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$RYB-E9dHjNkoPJrvoLAH4riEHJY(this, arrayList));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$4t4R22kvGWYTZlq64vMfnqYWtp4(this, arrayList));
         }
         getMessagesStorage().putMessages(updates_channeldifference.new_messages, true, false, false, getDownloadController().getAutodownloadMask(), false);
     }
 
-    public /* synthetic */ void lambda$null$215$MessagesController(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$216$MessagesController(ArrayList arrayList) {
         getNotificationsController().processNewMessages(arrayList, true, false, null);
     }
 
-    public /* synthetic */ void lambda$null$219$MessagesController(TL_error tL_error, int i) {
+    public /* synthetic */ void lambda$null$220$MessagesController(TL_error tL_error, int i) {
         checkChannelError(tL_error.text, i);
     }
 
@@ -11631,16 +11752,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 FileLog.d(stringBuilder.toString());
             }
             getConnectionsManager().setIsUpdating(true);
-            getConnectionsManager().sendRequest(tL_updates_getDifference, new -$$Lambda$MessagesController$CiIUfwK03t-zvR6KkWuufvwDwf8(this, i2, i3));
+            getConnectionsManager().sendRequest(tL_updates_getDifference, new -$$Lambda$MessagesController$H_gKtly08Uv9YVoJa22dTqzjblY(this, i2, i3));
         }
     }
 
-    public /* synthetic */ void lambda$getDifference$229$MessagesController(int i, int i2, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$getDifference$230$MessagesController(int i, int i2, TLObject tLObject, TL_error tL_error) {
         int i3 = 0;
         if (tL_error == null) {
             updates_Difference updates_difference = (updates_Difference) tLObject;
             if (updates_difference instanceof TL_updates_differenceTooLong) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$LEs7seQ_OpzECZlm_0F8rOVS7T0(this, updates_difference, i, i2));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$GkTZK_YKBghdm0zA46jQwiLTegc(this, updates_difference, i, i2));
                 return;
             }
             if (updates_difference instanceof TL_updates_differenceSlice) {
@@ -11684,28 +11805,28 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     i3++;
                 }
             }
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$YDlY2SEQzfCy4C0CjSGL9gQk0ao(this, updates_difference));
-            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$db9vjfQiHObue224aFucyc8skuw(this, updates_difference, arrayList, sparseArray, sparseArray2));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$j30_vRokDUWjGxcUsZfUTuvLGXA(this, updates_difference));
+            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$JMCJfeum9hip-1YKndqXXJFRRks(this, updates_difference, arrayList, sparseArray, sparseArray2));
             return;
         }
         this.gettingDifference = false;
         getConnectionsManager().setIsUpdating(false);
     }
 
-    public /* synthetic */ void lambda$null$221$MessagesController(updates_Difference updates_difference, int i, int i2) {
+    public /* synthetic */ void lambda$null$222$MessagesController(updates_Difference updates_difference, int i, int i2) {
         this.loadedFullUsers.clear();
         this.loadedFullChats.clear();
         resetDialogs(true, getMessagesStorage().getLastSeqValue(), updates_difference.pts, i, i2);
     }
 
-    public /* synthetic */ void lambda$null$222$MessagesController(updates_Difference updates_difference) {
+    public /* synthetic */ void lambda$null$223$MessagesController(updates_Difference updates_difference) {
         this.loadedFullUsers.clear();
         this.loadedFullChats.clear();
         putUsers(updates_difference.users, false);
         putChats(updates_difference.chats, false);
     }
 
-    public /* synthetic */ void lambda$null$228$MessagesController(updates_Difference updates_difference, ArrayList arrayList, SparseArray sparseArray, SparseArray sparseArray2) {
+    public /* synthetic */ void lambda$null$229$MessagesController(updates_Difference updates_difference, ArrayList arrayList, SparseArray sparseArray, SparseArray sparseArray2) {
         updates_Difference updates_difference2 = updates_difference;
         int i = 0;
         getMessagesStorage().putUsersAndChats(updates_difference2.users, updates_difference2.chats, true, false);
@@ -11720,13 +11841,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 i++;
             }
             if (sparseArray3.size() != 0) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$08QrurBlbE2RC8XeNou7EKBIx3g(this, sparseArray3));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$4ZIkuJvP7jhBlT_0zccRGZ_7NBM(this, sparseArray3));
             }
         }
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$8kEJe4WEA965CY8-zzNnmFWHYUM(this, updates_difference2, sparseArray, sparseArray2));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$V3pFgXlrywa1ZnDkAcixr5nAFN0(this, updates_difference2, sparseArray, sparseArray2));
     }
 
-    public /* synthetic */ void lambda$null$223$MessagesController(SparseArray sparseArray) {
+    public /* synthetic */ void lambda$null$224$MessagesController(SparseArray sparseArray) {
         for (int i = 0; i < sparseArray.size(); i++) {
             int keyAt = sparseArray.keyAt(i);
             getSendMessagesHelper().processSentMessage((int) ((long[]) sparseArray.valueAt(i))[1]);
@@ -11734,7 +11855,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$227$MessagesController(updates_Difference updates_difference, SparseArray sparseArray, SparseArray sparseArray2) {
+    public /* synthetic */ void lambda$null$228$MessagesController(updates_Difference updates_difference, SparseArray sparseArray, SparseArray sparseArray2) {
         updates_Difference updates_difference2 = updates_difference;
         int i = 0;
         if (!(updates_difference2.new_messages.isEmpty() && updates_difference2.new_encrypted_messages.isEmpty())) {
@@ -11806,8 +11927,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
                 arrayList2.add(messageObject);
             }
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$jlCTCLASSNAMEL1qdXs-hSfOxCCfFuV-o(this, longSparseArray));
-            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$JW3N6j9iIKXcnkQAmRm405g_-lA(this, arrayList, updates_difference2));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$TT-ggbvUIZp2v4t2BF3J6hO_OpY(this, longSparseArray));
+            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$bREMH_Fm8aJlnszx3lWybcIEEb4(this, arrayList, updates_difference2));
             getSecretChatHelper().processPendingEncMessages();
         }
         if (!updates_difference2.other_updates.isEmpty()) {
@@ -11859,21 +11980,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$224$MessagesController(LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$null$225$MessagesController(LongSparseArray longSparseArray) {
         for (int i = 0; i < longSparseArray.size(); i++) {
             updateInterfaceWithMessages(longSparseArray.keyAt(i), (ArrayList) longSparseArray.valueAt(i), false);
         }
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$null$226$MessagesController(ArrayList arrayList, updates_Difference updates_difference) {
+    public /* synthetic */ void lambda$null$227$MessagesController(ArrayList arrayList, updates_Difference updates_difference) {
         if (!arrayList.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$UnvLyAJmFzBEuG0HAagHZyXV8mI(this, arrayList, updates_difference));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$JW3N6j9iIKXcnkQAmRm405g_-lA(this, arrayList, updates_difference));
         }
         getMessagesStorage().putMessages(updates_difference.new_messages, true, false, false, getDownloadController().getAutodownloadMask(), false);
     }
 
-    public /* synthetic */ void lambda$null$225$MessagesController(ArrayList arrayList, updates_Difference updates_difference) {
+    public /* synthetic */ void lambda$null$226$MessagesController(ArrayList arrayList, updates_Difference updates_difference) {
         getNotificationsController().processNewMessages(arrayList, (updates_difference instanceof TL_updates_differenceSlice) ^ 1, false, null);
     }
 
@@ -11915,16 +12036,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         nativeByteBuffer = null;
                         FileLog.e(e);
                         j2 = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tL_messages_markDialogUnread, new -$$Lambda$MessagesController$OGw3JB_4LOC2VD3GxNVVsXoG0XM(this, j2));
+                        getConnectionsManager().sendRequest(tL_messages_markDialogUnread, new -$$Lambda$MessagesController$ogOlVqMSd80uly1J7n2CUQmKC1c(this, j2));
                     }
                     j2 = getMessagesStorage().createPendingTask(nativeByteBuffer);
                 }
-                getConnectionsManager().sendRequest(tL_messages_markDialogUnread, new -$$Lambda$MessagesController$OGw3JB_4LOC2VD3GxNVVsXoG0XM(this, j2));
+                getConnectionsManager().sendRequest(tL_messages_markDialogUnread, new -$$Lambda$MessagesController$ogOlVqMSd80uly1J7n2CUQmKC1c(this, j2));
             }
         }
     }
 
-    public /* synthetic */ void lambda$markDialogAsUnread$230$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$markDialogAsUnread$231$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
         if (j != 0) {
             getMessagesStorage().removePendingTask(j);
         }
@@ -11933,15 +12054,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void loadUnreadDialogs() {
         if (!this.loadingUnreadDialogs && !getUserConfig().unreadDialogsLoaded) {
             this.loadingUnreadDialogs = true;
-            getConnectionsManager().sendRequest(new TL_messages_getDialogUnreadMarks(), new -$$Lambda$MessagesController$pQDg6Wj5QluFCzZKnXmXQKQhdoM(this));
+            getConnectionsManager().sendRequest(new TL_messages_getDialogUnreadMarks(), new -$$Lambda$MessagesController$1GMsZef_kXIpzxVik9GSRjuDB04(this));
         }
     }
 
-    public /* synthetic */ void lambda$loadUnreadDialogs$232$MessagesController(TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$DnPJzpENGnqBI8AZYy2vKenxi20(this, tLObject));
+    public /* synthetic */ void lambda$loadUnreadDialogs$233$MessagesController(TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$NPxxwP8Wb-UfA2cTQt0hr7yfKpM(this, tLObject));
     }
 
-    public /* synthetic */ void lambda$null$231$MessagesController(TLObject tLObject) {
+    public /* synthetic */ void lambda$null$232$MessagesController(TLObject tLObject) {
         if (tLObject != null) {
             Vector vector = (Vector) tLObject;
             int size = vector.objects.size();
@@ -12023,14 +12144,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         e = e2;
                         FileLog.e(e);
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                        getConnectionsManager().sendRequest(tL_messages_reorderPinnedDialogs, new -$$Lambda$MessagesController$hZ4GXQXOtUpOoZLj7n1fT9d6m-Y(this, j));
+                        getConnectionsManager().sendRequest(tL_messages_reorderPinnedDialogs, new -$$Lambda$MessagesController$2UxGM8_hLfdPLZYEYv2tbgKaXR8(this, j));
                     }
                 } catch (Exception e3) {
                     e = e3;
                     nativeByteBuffer = null;
                     FileLog.e(e);
                     j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                    getConnectionsManager().sendRequest(tL_messages_reorderPinnedDialogs, new -$$Lambda$MessagesController$hZ4GXQXOtUpOoZLj7n1fT9d6m-Y(this, j));
+                    getConnectionsManager().sendRequest(tL_messages_reorderPinnedDialogs, new -$$Lambda$MessagesController$2UxGM8_hLfdPLZYEYv2tbgKaXR8(this, j));
                 }
                 j = getMessagesStorage().createPendingTask(nativeByteBuffer);
             } else {
@@ -12038,10 +12159,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
         }
         tL_messages_reorderPinnedDialogs.order = arrayList;
-        getConnectionsManager().sendRequest(tL_messages_reorderPinnedDialogs, new -$$Lambda$MessagesController$hZ4GXQXOtUpOoZLj7n1fT9d6m-Y(this, j));
+        getConnectionsManager().sendRequest(tL_messages_reorderPinnedDialogs, new -$$Lambda$MessagesController$2UxGM8_hLfdPLZYEYv2tbgKaXR8(this, j));
     }
 
-    public /* synthetic */ void lambda$reorderPinnedDialogs$233$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$reorderPinnedDialogs$234$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
         if (j != 0) {
             getMessagesStorage().removePendingTask(j);
         }
@@ -12111,7 +12232,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     nativeByteBuffer = null;
                     FileLog.e(e);
                     createPendingTask = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                    getConnectionsManager().sendRequest(tL_messages_toggleDialogPin, new -$$Lambda$MessagesController$ZUDuOvrM2QUzUafvQsnuGslROME(this, createPendingTask));
+                    getConnectionsManager().sendRequest(tL_messages_toggleDialogPin, new -$$Lambda$MessagesController$xuFb0M7mhEtv83d6hivGvz0xR9o(this, createPendingTask));
                     getMessagesStorage().setDialogPinned(j3, dialog.pinnedNum);
                     return true;
                 }
@@ -12119,13 +12240,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             } else {
                 createPendingTask = j2;
             }
-            getConnectionsManager().sendRequest(tL_messages_toggleDialogPin, new -$$Lambda$MessagesController$ZUDuOvrM2QUzUafvQsnuGslROME(this, createPendingTask));
+            getConnectionsManager().sendRequest(tL_messages_toggleDialogPin, new -$$Lambda$MessagesController$xuFb0M7mhEtv83d6hivGvz0xR9o(this, createPendingTask));
         }
         getMessagesStorage().setDialogPinned(j3, dialog.pinnedNum);
         return true;
     }
 
-    public /* synthetic */ void lambda$pinDialog$234$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$pinDialog$235$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
         if (j != 0) {
             getMessagesStorage().removePendingTask(j);
         }
@@ -12136,11 +12257,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.loadingPinnedDialogs.put(i, 1);
             TL_messages_getPinnedDialogs tL_messages_getPinnedDialogs = new TL_messages_getPinnedDialogs();
             tL_messages_getPinnedDialogs.folder_id = i;
-            getConnectionsManager().sendRequest(tL_messages_getPinnedDialogs, new -$$Lambda$MessagesController$k5DhEx0rPUoug_6rIu8qjnMrXXc(this, i));
+            getConnectionsManager().sendRequest(tL_messages_getPinnedDialogs, new -$$Lambda$MessagesController$el7q39IJ2-GCPFy2Gfb1L8wQRnM(this, i));
         }
     }
 
-    public /* synthetic */ void lambda$loadPinnedDialogs$237$MessagesController(int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$loadPinnedDialogs$238$MessagesController(int i, TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
             int i2;
             Chat chat;
@@ -12219,15 +12340,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
                 this.dialogs_read_outbox_max.put(Long.valueOf(dialog.id), Integer.valueOf(Math.max(num.intValue(), dialog.read_outbox_max_id)));
             }
-            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$uqeuJxZIblmq1Ywq8gDS_Zf1qIo(this, i, arrayList, z, tL_messages_peerDialogs, longSparseArray, tL_messages_dialogs));
+            getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$w4_lB0Qdt5ko3PiAjP1Zc2MNL1E(this, i, arrayList, z, tL_messages_peerDialogs, longSparseArray, tL_messages_dialogs));
         }
     }
 
-    public /* synthetic */ void lambda$null$236$MessagesController(int i, ArrayList arrayList, boolean z, TL_messages_peerDialogs tL_messages_peerDialogs, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$P46essumNDrLENHP1egM6NIu2ZI(this, i, arrayList, z, tL_messages_peerDialogs, longSparseArray, tL_messages_dialogs));
+    public /* synthetic */ void lambda$null$237$MessagesController(int i, ArrayList arrayList, boolean z, TL_messages_peerDialogs tL_messages_peerDialogs, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$uqeuJxZIblmq1Ywq8gDS_Zf1qIo(this, i, arrayList, z, tL_messages_peerDialogs, longSparseArray, tL_messages_dialogs));
     }
 
-    public /* synthetic */ void lambda$null$235$MessagesController(int i, ArrayList arrayList, boolean z, TL_messages_peerDialogs tL_messages_peerDialogs, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
+    public /* synthetic */ void lambda$null$236$MessagesController(int i, ArrayList arrayList, boolean z, TL_messages_peerDialogs tL_messages_peerDialogs, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
         int i2;
         Dialog dialog;
         Object obj;
@@ -12340,38 +12461,38 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 ArrayList arrayList2 = new ArrayList();
                 arrayList2.add(tL_messageService);
                 arrayList.add(new MessageObject(this.currentAccount, tL_messageService, true));
-                getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$zHbbP6fK5JJkWVxAq24NZfF2NbQ(this, arrayList));
+                getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$hzi_rdpISd9nft1780cpiel2Yxg(this, arrayList));
                 getMessagesStorage().putMessages(arrayList2, true, true, false, 0, false);
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$orWgPaqdswNFMqmt3ApYoNbMaYo(this, i, arrayList));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$gxJvzQ3-UemGYE3KrbjJj4xnB58(this, i, arrayList));
             }
         }
     }
 
-    public /* synthetic */ void lambda$generateJoinMessage$239$MessagesController(ArrayList arrayList) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$04QeHMvle81-xrrWfWNwztS3g3o(this, arrayList));
+    public /* synthetic */ void lambda$generateJoinMessage$240$MessagesController(ArrayList arrayList) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$4tVE-BALjMccrqcV1uR_YeYp9k4(this, arrayList));
     }
 
-    public /* synthetic */ void lambda$null$238$MessagesController(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$239$MessagesController(ArrayList arrayList) {
         getNotificationsController().processNewMessages(arrayList, true, false, null);
     }
 
-    public /* synthetic */ void lambda$generateJoinMessage$240$MessagesController(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$generateJoinMessage$241$MessagesController(int i, ArrayList arrayList) {
         updateInterfaceWithMessages((long) (-i), arrayList, false);
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
     /* Access modifiers changed, original: protected */
     public void deleteMessagesByPush(long j, ArrayList<Integer> arrayList, int i) {
-        getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$nKs7i4EVICboKTM7F5hPQHDG0WE(this, arrayList, i, j));
+        getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$7KM21XZqEmZ2kaanTV07CK3A6zo(this, arrayList, i, j));
     }
 
-    public /* synthetic */ void lambda$deleteMessagesByPush$242$MessagesController(ArrayList arrayList, int i, long j) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$lEC8KktwR3acxrX-wKbS7UANpzc(this, arrayList, i));
+    public /* synthetic */ void lambda$deleteMessagesByPush$243$MessagesController(ArrayList arrayList, int i, long j) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$FBa7l6ujLgWMIh3Cs8BHdrnxN48(this, arrayList, i));
         getMessagesStorage().deletePushMessages(j, arrayList);
         getMessagesStorage().updateDialogsWithDeletedMessages(arrayList, getMessagesStorage().markMessagesAsDeleted(arrayList, false, i, true, false), false, i);
     }
 
-    public /* synthetic */ void lambda$null$241$MessagesController(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$null$242$MessagesController(ArrayList arrayList, int i) {
         NotificationCenter notificationCenter = getNotificationCenter();
         int i2 = NotificationCenter.messagesDeleted;
         r2 = new Object[3];
@@ -12405,25 +12526,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void checkChannelInviter(int i) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$2OWHaua29ygz9CqNhDXZr_pBPlA(this, i));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$WUcsXG8lPvar_RZqxFka1Ha4dTL0(this, i));
     }
 
-    public /* synthetic */ void lambda$checkChannelInviter$248$MessagesController(int i) {
+    public /* synthetic */ void lambda$checkChannelInviter$249$MessagesController(int i) {
         Chat chat = getChat(Integer.valueOf(i));
         if (chat != null && ChatObject.isChannel(i, this.currentAccount) && !chat.creator) {
             TL_channels_getParticipant tL_channels_getParticipant = new TL_channels_getParticipant();
             tL_channels_getParticipant.channel = getInputChannel(i);
             tL_channels_getParticipant.user_id = new TL_inputUserSelf();
-            getConnectionsManager().sendRequest(tL_channels_getParticipant, new -$$Lambda$MessagesController$uL79ZsHJWxFGMhibwCKF9NHy0KY(this, chat, i));
+            getConnectionsManager().sendRequest(tL_channels_getParticipant, new -$$Lambda$MessagesController$w5ObUHWa_1lAGv3jG-dJAsJESDY(this, chat, i));
         }
     }
 
-    public /* synthetic */ void lambda$null$247$MessagesController(Chat chat, int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$null$248$MessagesController(Chat chat, int i, TLObject tLObject, TL_error tL_error) {
         TL_channels_channelParticipant tL_channels_channelParticipant = (TL_channels_channelParticipant) tLObject;
         if (tL_channels_channelParticipant != null) {
             ChannelParticipant channelParticipant = tL_channels_channelParticipant.participant;
             if ((channelParticipant instanceof TL_channelParticipantSelf) && channelParticipant.inviter_id != getUserConfig().getClientUserId() && (!chat.megagroup || !getMessagesStorage().isMigratedChat(chat.id))) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$j08jDqpgRNlpkLrsnbxlzCjI298(this, tL_channels_channelParticipant));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$yRdevvzPb5CiHCrpy0gu0nQ3OEA(this, tL_channels_channelParticipant));
                 getMessagesStorage().putUsersAndChats(tL_channels_channelParticipant.users, null, true, true);
                 Message tL_messageService = new TL_messageService();
                 tL_messageService.media_unread = true;
@@ -12455,26 +12576,26 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
                 arrayList2.add(tL_messageService);
                 arrayList.add(new MessageObject(this.currentAccount, tL_messageService, concurrentHashMap, true));
-                getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$n3Rm6l3qze3tvyBpL2P81kfLBOg(this, arrayList));
+                getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$MessagesController$wC7rqtVcAfymedoa-ZshP2BMxtc(this, arrayList));
                 getMessagesStorage().putMessages(arrayList2, true, true, false, 0, false);
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$hi5uIvcvdh-7jgXiHtKPgO9ML5M(this, i, arrayList));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$1t-1GuhSm0vSvNxRqh_Y6FYgvEY(this, i, arrayList));
             }
         }
     }
 
-    public /* synthetic */ void lambda$null$243$MessagesController(TL_channels_channelParticipant tL_channels_channelParticipant) {
+    public /* synthetic */ void lambda$null$244$MessagesController(TL_channels_channelParticipant tL_channels_channelParticipant) {
         putUsers(tL_channels_channelParticipant.users, false);
     }
 
-    public /* synthetic */ void lambda$null$244$MessagesController(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$245$MessagesController(ArrayList arrayList) {
         getNotificationsController().processNewMessages(arrayList, true, false, null);
     }
 
-    public /* synthetic */ void lambda$null$245$MessagesController(ArrayList arrayList) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$C4rRzL3XbhcTq3487s-diR-40t4(this, arrayList));
+    public /* synthetic */ void lambda$null$246$MessagesController(ArrayList arrayList) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$n3Rm6l3qze3tvyBpL2P81kfLBOg(this, arrayList));
     }
 
-    public /* synthetic */ void lambda$null$246$MessagesController(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$247$MessagesController(int i, ArrayList arrayList) {
         updateInterfaceWithMessages((long) (-i), arrayList, false);
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
@@ -13880,7 +14001,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x087a:
         r23.updatePrintingStrings();
     L_0x087d:
-        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$l6vl4ytDOs4YsZyr45gwrMH9Piw;
+        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$eEjbksoOfkx6xTQV2_OzG5pnRpU;
         r1.<init>(r6, r2, r0, r4);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);
         goto L_0x089b;
@@ -13893,7 +14014,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0890:
         r23.updatePrintingStrings();
     L_0x0893:
-        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$JTbd7JHqhItU3yr1b7Vdqlh83pA;
+        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$YKPZ7XgAhwef5KnSIvIkaDgL_A0;
         r1.<init>(r6, r0, r7, r4);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);
     L_0x089b:
@@ -13902,7 +14023,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x08a1:
         r0 = r23.getMessagesStorage();
         r0 = r0.getStorageQueue();
-        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$tI-n3m4-z_CB0ObFGr5XhFkzi_k;
+        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$W3uVVOb0uoxODPQw9DMQq3gOXyM;
         r1.<init>(r6, r4);
         r0.postRunnable(r1);
     L_0x08b1:
@@ -14029,12 +14150,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r2.getLastQtsValue();
         r1.max_qts = r2;
         r2 = r23.getConnectionsManager();
-        r3 = org.telegram.messenger.-$$Lambda$MessagesController$RswXx7Yb0XRitHXPL4hWUa47Pog.INSTANCE;
+        r3 = org.telegram.messenger.-$$Lambda$MessagesController$41Nrry903aXeWspe_mkLTT84RF4.INSTANCE;
         r2.sendRequest(r1, r3);
     L_0x0994:
         if (r0 == 0) goto L_0x099e;
     L_0x0996:
-        r0 = new org.telegram.messenger.-$$Lambda$MessagesController$LexYFWgNwNlfysIf9Xe1OJauqSU;
+        r0 = new org.telegram.messenger.-$$Lambda$MessagesController$guZRpI4v5zfmsZAbWkFbheWJ3nw;
         r0.<init>(r6);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
     L_0x099e:
@@ -14053,7 +14174,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.processUpdates(org.telegram.tgnet.TLRPC$Updates, boolean):void");
     }
 
-    public /* synthetic */ void lambda$processUpdates$249$MessagesController(boolean z, int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$processUpdates$250$MessagesController(boolean z, int i, ArrayList arrayList) {
         if (z) {
             getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(64));
         }
@@ -14061,7 +14182,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$processUpdates$250$MessagesController(boolean z, Updates updates, ArrayList arrayList) {
+    public /* synthetic */ void lambda$processUpdates$251$MessagesController(boolean z, Updates updates, ArrayList arrayList) {
         if (z) {
             getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(64));
         }
@@ -14069,15 +14190,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$null$251$MessagesController(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$252$MessagesController(ArrayList arrayList) {
         getNotificationsController().processNewMessages(arrayList, true, false, null);
     }
 
-    public /* synthetic */ void lambda$processUpdates$252$MessagesController(ArrayList arrayList) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$bJ9UYoc3bPZxlP1e8Wv6R8v5pyw(this, arrayList));
+    public /* synthetic */ void lambda$processUpdates$253$MessagesController(ArrayList arrayList) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$MBeO8uG9BPtJw2AvXmlkxninBBk(this, arrayList));
     }
 
-    public /* synthetic */ void lambda$processUpdates$254$MessagesController() {
+    public /* synthetic */ void lambda$processUpdates$255$MessagesController() {
         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(4));
     }
 
@@ -14132,7 +14253,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x000f:
         if (r1 == 0) goto L_0x0019;
     L_0x0011:
-        r2 = new org.telegram.messenger.-$$Lambda$MessagesController$bEWZESrRjQiI6TbaMUCPbrXhY-I;
+        r2 = new org.telegram.messenger.-$$Lambda$MessagesController$96FGA5dNZDEhfxY_JPUPryeGAxo;
         r2.<init>(r12, r0, r1);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);
     L_0x0019:
@@ -14196,7 +14317,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0070:
         if (r1 == 0) goto L_0x007a;
     L_0x0072:
-        r5 = new org.telegram.messenger.-$$Lambda$MessagesController$96FGA5dNZDEhfxY_JPUPryeGAxo;
+        r5 = new org.telegram.messenger.-$$Lambda$MessagesController$Rnq16UxMC9aNdrPpQ47iT5M3qV0;
         r5.<init>(r12, r0, r1);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r5);
     L_0x007a:
@@ -15015,7 +15136,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = (org.telegram.tgnet.TLRPC.TL_updateUserBlocked) r14;
         r1 = r52.getMessagesStorage();
         r1 = r1.getStorageQueue();
-        r2 = new org.telegram.messenger.-$$Lambda$MessagesController$xbGWCxzhNbKpmSx2bVzVJIUvouk;
+        r2 = new org.telegram.messenger.-$$Lambda$MessagesController$Gnr81CP5OzSDaKQVyhrL4AOWsFU;
         r2.<init>(r12, r14);
         r1.postRunnable(r2);
         goto L_0x05b8;
@@ -15047,7 +15168,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r1.length();
         if (r1 <= 0) goto L_0x064f;
     L_0x0647:
-        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$TnYN7DB0fVLoGs8fBZ2DYqXHSLU;
+        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$u9vf8aXfatYjuDXmDkbXgB2qhzw;
         r1.<init>(r12, r14);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);
     L_0x064f:
@@ -15806,7 +15927,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r1 == 0) goto L_0x0b60;
     L_0x0b54:
         r14 = (org.telegram.tgnet.TLRPC.TL_updateLangPack) r14;
-        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$TQtNmb5VDwzyrKfMR7efuLS_Jr4;
+        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$TGaV3j0rMT2kXtICENm7gz6gqZw;
         r1.<init>(r12, r14);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);
         goto L_0x0a3e;
@@ -17060,7 +17181,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x136a:
         r0 = r52.getMessagesStorage();
         r0 = r0.getStorageQueue();
-        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$qsfkr9TxdjvM0vhKDQIV38mRNhc;
+        r1 = new org.telegram.messenger.-$$Lambda$MessagesController$Zv5FRAVG-J53wGTHAwMM5uE87Wo;
         r6 = r21;
         r1.<init>(r12, r6);
         r0.postRunnable(r1);
@@ -17135,7 +17256,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = 1;
         r0.putChannelViews(r15, r1);
     L_0x140f:
-        r14 = new org.telegram.messenger.-$$Lambda$MessagesController$mhNxg0ahZySgjQbulke2onHI_-c;
+        r14 = new org.telegram.messenger.-$$Lambda$MessagesController$-RdEIiszsSTahbqs-Pyiwbh6MAs;
         r0 = r14;
         r1 = r52;
         r11 = r32;
@@ -17158,7 +17279,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r14);
         r0 = r52.getMessagesStorage();
         r9 = r0.getStorageQueue();
-        r10 = new org.telegram.messenger.-$$Lambda$MessagesController$Fe6gCKpZXcvUQ22h30h7qRuTYu8;
+        r10 = new org.telegram.messenger.-$$Lambda$MessagesController$xcy_je40mQkkPrT8kyD_ok5QRUE;
         r0 = r10;
         r2 = r37;
         r3 = r30;
@@ -17228,7 +17349,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = (java.util.ArrayList) r4;
         r5 = r52.getMessagesStorage();
         r5 = r5.getStorageQueue();
-        r6 = new org.telegram.messenger.-$$Lambda$MessagesController$nFqa-jJIpa57p4scXuL_DlA60OI;
+        r6 = new org.telegram.messenger.-$$Lambda$MessagesController$RP3wwVIGzm9hBA1N9dWlKNUkaFQ;
         r6.<init>(r12, r4, r3);
         r5.postRunnable(r6);
         r2 = r2 + 1;
@@ -17267,7 +17388,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r1.valueAt(r2);
         r5 = r52.getMessagesStorage();
         r5 = r5.getStorageQueue();
-        r6 = new org.telegram.messenger.-$$Lambda$MessagesController$kLmABGU1yvQEwreZbMtio8MpnEo;
+        r6 = new org.telegram.messenger.-$$Lambda$MessagesController$YpS3d6nStkAeVus78dbY1P4pSWY;
         r6.<init>(r12, r3, r4);
         r5.postRunnable(r6);
         r2 = r2 + 1;
@@ -17299,21 +17420,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.processUpdateArray(java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, boolean, int):boolean");
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$255$MessagesController(ArrayList arrayList, ArrayList arrayList2) {
-        putUsers(arrayList, false);
-        putChats(arrayList2, false);
-    }
-
     public /* synthetic */ void lambda$processUpdateArray$256$MessagesController(ArrayList arrayList, ArrayList arrayList2) {
         putUsers(arrayList, false);
         putChats(arrayList2, false);
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$258$MessagesController(TL_updateUserBlocked tL_updateUserBlocked) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$o69sgrsDCAmJ46uvt6Btwjnx6tA(this, tL_updateUserBlocked));
+    public /* synthetic */ void lambda$processUpdateArray$257$MessagesController(ArrayList arrayList, ArrayList arrayList2) {
+        putUsers(arrayList, false);
+        putChats(arrayList2, false);
     }
 
-    public /* synthetic */ void lambda$null$257$MessagesController(TL_updateUserBlocked tL_updateUserBlocked) {
+    public /* synthetic */ void lambda$processUpdateArray$259$MessagesController(TL_updateUserBlocked tL_updateUserBlocked) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$EcJBpmISndhLJkR5Fk6vuEZQdPY(this, tL_updateUserBlocked));
+    }
+
+    public /* synthetic */ void lambda$null$258$MessagesController(TL_updateUserBlocked tL_updateUserBlocked) {
         if (!tL_updateUserBlocked.blocked) {
             this.blockedUsers.delete(tL_updateUserBlocked.user_id);
         } else if (this.blockedUsers.indexOfKey(tL_updateUserBlocked.user_id) < 0) {
@@ -17322,34 +17443,34 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$259$MessagesController(TL_updateServiceNotification tL_updateServiceNotification) {
+    public /* synthetic */ void lambda$processUpdateArray$260$MessagesController(TL_updateServiceNotification tL_updateServiceNotification) {
         getNotificationCenter().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(2), tL_updateServiceNotification.message, tL_updateServiceNotification.type);
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$260$MessagesController(TL_updateLangPack tL_updateLangPack) {
+    public /* synthetic */ void lambda$processUpdateArray$261$MessagesController(TL_updateLangPack tL_updateLangPack) {
         LocaleController.getInstance().saveRemoteLocaleStringsForCurrentLocale(tL_updateLangPack.difference, this.currentAccount);
     }
 
-    public /* synthetic */ void lambda$null$261$MessagesController(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$262$MessagesController(ArrayList arrayList) {
         getNotificationsController().processNewMessages(arrayList, true, false, null);
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$262$MessagesController(ArrayList arrayList) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$dql4NbvME1V9jdiV1mL8wjyvVe0(this, arrayList));
+    public /* synthetic */ void lambda$processUpdateArray$263$MessagesController(ArrayList arrayList) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$uO7I-mlxQHl5Ek93CeE8oQ77KXo(this, arrayList));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:420:0x0974  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0a35  */
+    /* JADX WARNING: Removed duplicated region for block: B:451:0x0a3d  */
     /* JADX WARNING: Removed duplicated region for block: B:424:0x098e  */
-    /* JADX WARNING: Removed duplicated region for block: B:453:0x0a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0a45  */
-    /* JADX WARNING: Removed duplicated region for block: B:457:0x0a49  */
-    /* JADX WARNING: Removed duplicated region for block: B:460:0x0a51  */
-    /* JADX WARNING: Removed duplicated region for block: B:465:0x0a7a  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0a6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:453:0x0a40  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0a4d  */
+    /* JADX WARNING: Removed duplicated region for block: B:457:0x0a51  */
+    /* JADX WARNING: Removed duplicated region for block: B:460:0x0a59  */
+    /* JADX WARNING: Removed duplicated region for block: B:465:0x0a82  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0a72  */
     /* JADX WARNING: Removed duplicated region for block: B:503:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:467:0x0a7e  */
-    public /* synthetic */ void lambda$processUpdateArray$267$MessagesController(int r30, java.util.ArrayList r31, android.util.LongSparseArray r32, android.util.LongSparseArray r33, android.util.LongSparseArray r34, android.util.LongSparseArray r35, boolean r36, java.util.ArrayList r37, java.util.ArrayList r38, android.util.SparseArray r39) {
+    /* JADX WARNING: Removed duplicated region for block: B:467:0x0a86  */
+    public /* synthetic */ void lambda$processUpdateArray$268$MessagesController(int r30, java.util.ArrayList r31, android.util.LongSparseArray r32, android.util.LongSparseArray r33, android.util.LongSparseArray r34, android.util.LongSparseArray r35, boolean r36, java.util.ArrayList r37, java.util.ArrayList r38, android.util.SparseArray r39) {
         /*
         r29 = this;
         r8 = r29;
@@ -17359,8 +17480,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12 = r34;
         r13 = r35;
         r14 = r38;
-        r2 = 1;
-        r3 = 0;
+        r2 = 0;
+        r3 = 1;
         if (r9 == 0) goto L_0x0870;
     L_0x0012:
         r1 = new java.util.ArrayList;
@@ -17387,7 +17508,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x003b:
         r7 = r29.getContactsController();
         r0 = r0.rules;
-        r7.setPrivacyRules(r0, r3);
+        r7.setPrivacyRules(r0, r2);
     L_0x0044:
         r7 = 2;
         goto L_0x00ae;
@@ -17397,7 +17518,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004a:
         r7 = r29.getContactsController();
         r0 = r0.rules;
-        r7.setPrivacyRules(r0, r2);
+        r7.setPrivacyRules(r0, r3);
         goto L_0x0044;
     L_0x0054:
         r7 = r15 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyPhoneCall;
@@ -17765,7 +17886,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r0.phone;
         r1.phone = r3;
         r3 = org.telegram.messenger.Utilities.phoneBookQueue;
-        r4 = new org.telegram.messenger.-$$Lambda$MessagesController$orL3eusXChPxn8zV535AX_tdrSU;
+        r4 = new org.telegram.messenger.-$$Lambda$MessagesController$k7hEf2Sqkmp6V-chvj_ni0sdttw;
         r4.<init>(r8, r1);
         r3.postRunnable(r4);
         r1 = org.telegram.messenger.UserObject.isUserSelf(r1);
@@ -18052,7 +18173,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r4 != 0) goto L_0x04cb;
     L_0x04c0:
         r1 = org.telegram.messenger.Utilities.stageQueue;
-        r3 = new org.telegram.messenger.-$$Lambda$MessagesController$jJjB19X4NnEf-XbaTU04jgk9iDo;
+        r3 = new org.telegram.messenger.-$$Lambda$MessagesController$wJ5JalVVW9yaNMkgKt1IKwZClNY;
         r3.<init>(r8, r0);
         r1.postRunnable(r3);
         goto L_0x04e4;
@@ -18103,7 +18224,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x050c:
         r0 = r0.default_banned_rights;
         r1.default_banned_rights = r0;
-        r0 = new org.telegram.messenger.-$$Lambda$MessagesController$8URXJnwcmMkw6KtOiC9SKx69v04;
+        r0 = new org.telegram.messenger.-$$Lambda$MessagesController$-_A-zPdho0WiN66Q5g4H70UkDlI;
         r0.<init>(r8, r1);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
         goto L_0x0839;
@@ -18113,9 +18234,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x051e:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateStickerSets) r0;
         r0 = r29.getMediaDataController();
-        r1 = 1;
-        r4 = 0;
-        r0.loadStickers(r4, r4, r1);
+        r1 = 0;
+        r4 = 1;
+        r0.loadStickers(r1, r1, r4);
         goto L_0x0839;
     L_0x052b:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateStickerSetsOrder;
@@ -18133,9 +18254,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0542:
         r0 = r29.getMediaDataController();
         r1 = 2;
-        r4 = 1;
-        r5 = 0;
-        r0.loadRecents(r1, r5, r5, r4);
+        r4 = 0;
+        r5 = 1;
+        r0.loadRecents(r1, r4, r4, r5);
         goto L_0x0839;
     L_0x054e:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateContactsReset;
@@ -18370,7 +18491,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.<init>();
         r1.reason = r0;
         r0 = r29.getConnectionsManager();
-        r4 = new org.telegram.messenger.-$$Lambda$MessagesController$_4EQr3AqwdjsuD-05Egs0-7_z2I;
+        r4 = new org.telegram.messenger.-$$Lambda$MessagesController$KwSrP312VOB27NH519srqu8bVm0;
         r4.<init>(r8);
         r0.sendRequest(r1, r4);
         goto L_0x0839;
@@ -18588,8 +18709,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r2;
         r6 = r9;
         r5 = r16;
-        r2 = 1;
-        r3 = 0;
+        r2 = 0;
+        r3 = 1;
         r9 = r31;
         goto L_0x0027;
     L_0x0849:
@@ -18782,13 +18903,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r2 + 1;
         goto L_0x0979;
     L_0x098c:
-        if (r13 == 0) goto L_0x0a35;
+        if (r13 == 0) goto L_0x0a3d;
     L_0x098e:
         r1 = r35.size();
         r2 = r0;
         r0 = 0;
     L_0x0994:
-        if (r0 >= r1) goto L_0x0a32;
+        if (r0 >= r1) goto L_0x0a3a;
     L_0x0996:
         r4 = r13.keyAt(r0);
         r6 = r13.valueAt(r0);
@@ -18854,63 +18975,67 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = r10 + 1;
         goto L_0x09af;
     L_0x0a0a:
-        r7 = r29.getMediaDataController();
-        r9 = 0;
-        r7.loadReplyMessagesForMessages(r6, r4, r9);
+        r21 = r29.getMediaDataController();
+        r25 = 0;
+        r26 = 0;
+        r22 = r6;
+        r23 = r4;
+        r21.loadReplyMessagesForMessages(r22, r23, r25, r26);
         r7 = r29.getNotificationCenter();
-        r10 = org.telegram.messenger.NotificationCenter.replaceMessagesObjects;
-        r12 = 3;
-        r14 = new java.lang.Object[r12];
+        r9 = org.telegram.messenger.NotificationCenter.replaceMessagesObjects;
+        r10 = 3;
+        r12 = new java.lang.Object[r10];
         r4 = java.lang.Long.valueOf(r4);
-        r14[r9] = r4;
+        r5 = 0;
+        r12[r5] = r4;
         r4 = 1;
-        r14[r4] = r6;
-        r4 = java.lang.Boolean.valueOf(r9);
-        r5 = 2;
-        r14[r5] = r4;
-        r7.postNotificationName(r10, r14);
+        r12[r4] = r6;
+        r4 = java.lang.Boolean.valueOf(r5);
+        r6 = 2;
+        r12[r6] = r4;
+        r7.postNotificationName(r9, r12);
         r0 = r0 + 1;
         goto L_0x0994;
-    L_0x0a32:
-        r9 = 0;
+    L_0x0a3a:
+        r5 = 0;
         r0 = r2;
-        goto L_0x0a36;
-    L_0x0a35:
-        r9 = 0;
-    L_0x0a36:
-        if (r0 == 0) goto L_0x0a43;
-    L_0x0a38:
+        goto L_0x0a3e;
+    L_0x0a3d:
+        r5 = 0;
+    L_0x0a3e:
+        if (r0 == 0) goto L_0x0a4b;
+    L_0x0a40:
         r0 = r29.getNotificationCenter();
         r1 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
-        r2 = new java.lang.Object[r9];
+        r2 = new java.lang.Object[r5];
         r0.postNotificationName(r1, r2);
-    L_0x0a43:
-        if (r36 == 0) goto L_0x0a47;
-    L_0x0a45:
+    L_0x0a4b:
+        if (r36 == 0) goto L_0x0a4f;
+    L_0x0a4d:
         r3 = r3 | 64;
-    L_0x0a47:
-        if (r37 == 0) goto L_0x0a4d;
-    L_0x0a49:
+    L_0x0a4f:
+        if (r37 == 0) goto L_0x0a55;
+    L_0x0a51:
         r0 = r3 | 1;
         r3 = r0 | 128;
-    L_0x0a4d:
+    L_0x0a55:
         r1 = r38;
-        if (r1 == 0) goto L_0x0a68;
-    L_0x0a51:
+        if (r1 == 0) goto L_0x0a70;
+    L_0x0a59:
         r0 = r38.size();
         r2 = 0;
-    L_0x0a56:
-        if (r2 >= r0) goto L_0x0a68;
-    L_0x0a58:
+    L_0x0a5e:
+        if (r2 >= r0) goto L_0x0a70;
+    L_0x0a60:
         r4 = r1.get(r2);
         r4 = (org.telegram.tgnet.TLRPC.ChatParticipants) r4;
         r5 = r29.getMessagesStorage();
         r5.updateChatParticipants(r4);
         r2 = r2 + 1;
-        goto L_0x0a56;
-    L_0x0a68:
-        if (r39 == 0) goto L_0x0a7a;
-    L_0x0a6a:
+        goto L_0x0a5e;
+    L_0x0a70:
+        if (r39 == 0) goto L_0x0a82;
+    L_0x0a72:
         r0 = r29.getNotificationCenter();
         r1 = org.telegram.messenger.NotificationCenter.didUpdatedMessagesViews;
         r2 = 1;
@@ -18918,48 +19043,48 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r5 = 0;
         r4[r5] = r39;
         r0.postNotificationName(r1, r4);
-        goto L_0x0a7c;
-    L_0x0a7a:
+        goto L_0x0a84;
+    L_0x0a82:
         r2 = 1;
         r5 = 0;
-    L_0x0a7c:
-        if (r3 == 0) goto L_0x0a8f;
-    L_0x0a7e:
+    L_0x0a84:
+        if (r3 == 0) goto L_0x0a97;
+    L_0x0a86:
         r0 = r29.getNotificationCenter();
         r1 = org.telegram.messenger.NotificationCenter.updateInterfaces;
         r2 = new java.lang.Object[r2];
         r3 = java.lang.Integer.valueOf(r3);
         r2[r5] = r3;
         r0.postNotificationName(r1, r2);
-    L_0x0a8f:
+    L_0x0a97:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$267$MessagesController(int, java.util.ArrayList, android.util.LongSparseArray, android.util.LongSparseArray, android.util.LongSparseArray, android.util.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, android.util.SparseArray):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$268$MessagesController(int, java.util.ArrayList, android.util.LongSparseArray, android.util.LongSparseArray, android.util.LongSparseArray, android.util.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, android.util.SparseArray):void");
     }
 
-    public /* synthetic */ void lambda$null$263$MessagesController(User user) {
+    public /* synthetic */ void lambda$null$264$MessagesController(User user) {
         getContactsController().addContactToPhoneBook(user, true);
     }
 
-    public /* synthetic */ void lambda$null$264$MessagesController(TL_updateChannel tL_updateChannel) {
+    public /* synthetic */ void lambda$null$265$MessagesController(TL_updateChannel tL_updateChannel) {
         getChannelDifference(tL_updateChannel.channel_id, 1, 0, null);
     }
 
-    public /* synthetic */ void lambda$null$265$MessagesController(Chat chat) {
+    public /* synthetic */ void lambda$null$266$MessagesController(Chat chat) {
         getNotificationCenter().postNotificationName(NotificationCenter.channelRightsUpdated, chat);
     }
 
-    public /* synthetic */ void lambda$null$266$MessagesController(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$null$267$MessagesController(TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
             processUpdates((Updates) tLObject, false);
         }
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$269$MessagesController(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray, ArrayList arrayList, SparseArray sparseArray, SparseArray sparseArray2, SparseIntArray sparseIntArray2) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$JMsgUKflS49C5tkdBEFWCG_duCc(this, sparseLongArray, sparseLongArray2, sparseIntArray, arrayList, sparseArray, sparseArray2, sparseIntArray2));
+    public /* synthetic */ void lambda$processUpdateArray$270$MessagesController(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray, ArrayList arrayList, SparseArray sparseArray, SparseArray sparseArray2, SparseIntArray sparseIntArray2) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$TFMHyEQhvK3azU3au9tRhwnpNmA(this, sparseLongArray, sparseLongArray2, sparseIntArray, arrayList, sparseArray, sparseArray2, sparseIntArray2));
     }
 
-    public /* synthetic */ void lambda$null$268$MessagesController(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray, ArrayList arrayList, SparseArray sparseArray, SparseArray sparseArray2, SparseIntArray sparseIntArray2) {
+    public /* synthetic */ void lambda$null$269$MessagesController(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray, ArrayList arrayList, SparseArray sparseArray, SparseArray sparseArray2, SparseIntArray sparseIntArray2) {
         int size;
         int i;
         int i2;
@@ -19111,11 +19236,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$270$MessagesController(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$processUpdateArray$271$MessagesController(ArrayList arrayList, int i) {
         getMessagesStorage().updateDialogsWithDeletedMessages(arrayList, getMessagesStorage().markMessagesAsDeleted(arrayList, false, i, true, false), false, i);
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$271$MessagesController(int i, int i2) {
+    public /* synthetic */ void lambda$processUpdateArray$272$MessagesController(int i, int i2) {
         getMessagesStorage().updateDialogsWithDeletedMessages(new ArrayList(), getMessagesStorage().markMessagesAsDeleted(i, i2, false, true), false, i);
     }
 
@@ -19185,444 +19310,447 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x030c  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x0312  */
-    public void updateInterfaceWithMessages(long r23, java.util.ArrayList<org.telegram.messenger.MessageObject> r25, boolean r26) {
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x030f  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x0315  */
+    public void updateInterfaceWithMessages(long r27, java.util.ArrayList<org.telegram.messenger.MessageObject> r29, boolean r30) {
         /*
-        r22 = this;
-        r0 = r22;
-        r1 = r23;
-        r3 = r25;
-        r4 = r26;
-        if (r3 == 0) goto L_0x0319;
-    L_0x000a:
-        r5 = r25.isEmpty();
-        if (r5 == 0) goto L_0x0012;
+        r26 = this;
+        r0 = r26;
+        r7 = r27;
+        r9 = r29;
+        if (r9 == 0) goto L_0x031c;
+    L_0x0008:
+        r1 = r29.isEmpty();
+        if (r1 == 0) goto L_0x0010;
+    L_0x000e:
+        goto L_0x031c;
     L_0x0010:
-        goto L_0x0319;
-    L_0x0012:
-        r5 = (int) r1;
-        r7 = 0;
-        if (r5 != 0) goto L_0x0018;
+        r1 = (int) r7;
+        r11 = 0;
+        if (r1 != 0) goto L_0x0016;
+    L_0x0014:
+        r1 = 1;
+        goto L_0x0017;
     L_0x0016:
-        r5 = 1;
-        goto L_0x0019;
-    L_0x0018:
-        r5 = 0;
+        r1 = 0;
+    L_0x0017:
+        if (r30 != 0) goto L_0x00d5;
     L_0x0019:
-        if (r4 != 0) goto L_0x00d3;
-    L_0x001b:
-        r9 = 0;
-        r10 = 0;
-        r11 = 0;
-        r12 = 0;
-        r13 = 0;
-    L_0x0020:
-        r14 = r25.size();
-        if (r9 >= r14) goto L_0x00d7;
-    L_0x0026:
-        r14 = r3.get(r9);
-        r14 = (org.telegram.messenger.MessageObject) r14;
-        if (r10 == 0) goto L_0x005c;
-    L_0x002e:
-        if (r5 != 0) goto L_0x003a;
-    L_0x0030:
-        r15 = r14.getId();
-        r8 = r10.getId();
-        if (r15 > r8) goto L_0x005c;
-    L_0x003a:
-        if (r5 != 0) goto L_0x0048;
-    L_0x003c:
-        r8 = r14.getId();
-        if (r8 >= 0) goto L_0x0052;
-    L_0x0042:
-        r8 = r10.getId();
-        if (r8 >= 0) goto L_0x0052;
-    L_0x0048:
-        r8 = r14.getId();
-        r15 = r10.getId();
-        if (r8 < r15) goto L_0x005c;
-    L_0x0052:
-        r8 = r14.messageOwner;
-        r8 = r8.date;
-        r15 = r10.messageOwner;
-        r15 = r15.date;
-        if (r8 <= r15) goto L_0x0066;
-    L_0x005c:
-        r8 = r14.messageOwner;
-        r8 = r8.to_id;
-        r8 = r8.channel_id;
-        if (r8 == 0) goto L_0x0065;
-    L_0x0064:
-        r12 = r8;
-    L_0x0065:
-        r10 = r14;
-    L_0x0066:
-        if (r11 != 0) goto L_0x006f;
-    L_0x0068:
-        r8 = r14.isOut();
-        if (r8 != 0) goto L_0x006f;
-    L_0x006e:
-        r11 = 1;
-    L_0x006f:
-        r8 = r14.isOut();
-        if (r8 == 0) goto L_0x00c2;
-    L_0x0075:
-        r8 = r14.isSending();
-        if (r8 != 0) goto L_0x00c2;
-    L_0x007b:
-        r8 = r14.isForwarded();
-        if (r8 != 0) goto L_0x00c2;
-    L_0x0081:
-        r8 = r14.isNewGif();
-        if (r8 == 0) goto L_0x0097;
-    L_0x0087:
-        r8 = r22.getMediaDataController();
-        r15 = r14.messageOwner;
-        r6 = r15.media;
-        r6 = r6.document;
-        r15 = r15.date;
-        r8.addRecentGif(r6, r15);
-        goto L_0x00c2;
-    L_0x0097:
-        r6 = r14.isAnimatedEmoji();
-        if (r6 != 0) goto L_0x00c2;
-    L_0x009d:
-        r6 = r14.isSticker();
-        if (r6 != 0) goto L_0x00a9;
-    L_0x00a3:
-        r6 = r14.isAnimatedSticker();
-        if (r6 == 0) goto L_0x00c2;
-    L_0x00a9:
-        r15 = r22.getMediaDataController();
-        r16 = 0;
-        r6 = r14.messageOwner;
-        r8 = r6.media;
-        r8 = r8.document;
-        r6 = r6.date;
-        r20 = 0;
-        r17 = r14;
-        r18 = r8;
-        r19 = r6;
-        r15.addRecentSticker(r16, r17, r18, r19, r20);
-    L_0x00c2:
-        r6 = r14.isOut();
-        if (r6 == 0) goto L_0x00cf;
-    L_0x00c8:
-        r6 = r14.isSent();
-        if (r6 == 0) goto L_0x00cf;
-    L_0x00ce:
-        r13 = 1;
-    L_0x00cf:
-        r9 = r9 + 1;
-        goto L_0x0020;
-    L_0x00d3:
-        r10 = 0;
-        r11 = 0;
-        r12 = 0;
-        r13 = 0;
-    L_0x00d7:
-        r5 = r22.getMediaDataController();
-        r5.loadReplyMessagesForMessages(r3, r1, r4);
-        r5 = r22.getNotificationCenter();
-        r6 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages;
-        r8 = 3;
-        r8 = new java.lang.Object[r8];
-        r9 = java.lang.Long.valueOf(r23);
-        r8[r7] = r9;
-        r9 = 1;
-        r8[r9] = r3;
-        r3 = 2;
-        r9 = java.lang.Boolean.valueOf(r26);
-        r8[r3] = r9;
-        r5.postNotificationName(r6, r8);
-        if (r10 == 0) goto L_0x0319;
-    L_0x00fc:
-        if (r4 == 0) goto L_0x0100;
-    L_0x00fe:
-        goto L_0x0319;
-    L_0x0100:
-        r3 = r0.dialogs_dict;
-        r3 = r3.get(r1);
-        r3 = (org.telegram.tgnet.TLRPC.TL_dialog) r3;
-        r4 = r10.messageOwner;
-        r4 = r4.action;
-        r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
-        r5 = 0;
-        if (r4 == 0) goto L_0x01b4;
-    L_0x0112:
-        if (r3 == 0) goto L_0x01b3;
-    L_0x0114:
-        r1 = r0.allDialogs;
-        r1.remove(r3);
-        r1 = r0.dialogsServerOnly;
-        r1.remove(r3);
-        r1 = r0.dialogsCanAddUsers;
-        r1.remove(r3);
-        r1 = r0.dialogsChannelsOnly;
-        r1.remove(r3);
-        r1 = r0.dialogsGroupsOnly;
-        r1.remove(r3);
-        r1 = r0.dialogsUsersOnly;
-        r1.remove(r3);
-        r1 = r0.dialogsForward;
-        r1.remove(r3);
-        r1 = r0.dialogs_dict;
-        r8 = r3.id;
-        r1.remove(r8);
-        r1 = r0.dialogs_read_inbox_max;
-        r8 = r3.id;
-        r2 = java.lang.Long.valueOf(r8);
-        r1.remove(r2);
-        r1 = r0.dialogs_read_outbox_max;
-        r8 = r3.id;
-        r2 = java.lang.Long.valueOf(r8);
-        r1.remove(r2);
-        r1 = r0.nextDialogsCacheOffset;
-        r2 = r3.folder_id;
-        r1 = r1.get(r2, r7);
-        if (r1 <= 0) goto L_0x0167;
-    L_0x015e:
-        r2 = r0.nextDialogsCacheOffset;
-        r4 = r3.folder_id;
-        r8 = 1;
-        r1 = r1 - r8;
-        r2.put(r4, r1);
-    L_0x0167:
-        r1 = r0.dialogMessage;
-        r8 = r3.id;
-        r1.remove(r8);
-        r1 = r0.dialogsByFolder;
-        r2 = r3.folder_id;
-        r1 = r1.get(r2);
-        r1 = (java.util.ArrayList) r1;
-        if (r1 == 0) goto L_0x017d;
-    L_0x017a:
-        r1.remove(r3);
-    L_0x017d:
-        r1 = r0.dialogMessagesByIds;
-        r2 = r3.top_message;
-        r1 = r1.get(r2);
-        r1 = (org.telegram.messenger.MessageObject) r1;
-        r2 = r0.dialogMessagesByIds;
-        r4 = r3.top_message;
-        r2.remove(r4);
-        if (r1 == 0) goto L_0x019d;
-    L_0x0190:
-        r1 = r1.messageOwner;
-        r1 = r1.random_id;
-        r4 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
-        if (r4 == 0) goto L_0x019d;
-    L_0x0198:
-        r4 = r0.dialogMessagesByRandomIds;
-        r4.remove(r1);
-    L_0x019d:
-        r3.top_message = r7;
-        r1 = r22.getNotificationsController();
-        r2 = r3.id;
-        r1.removeNotificationsForDialog(r2);
-        r1 = r22.getNotificationCenter();
-        r2 = org.telegram.messenger.NotificationCenter.needReloadRecentDialogsSearch;
-        r3 = new java.lang.Object[r7];
-        r1.postNotificationName(r2, r3);
-    L_0x01b3:
-        return;
-    L_0x01b4:
-        if (r3 != 0) goto L_0x0255;
-    L_0x01b6:
-        r3 = java.lang.Integer.valueOf(r12);
-        r3 = r0.getChat(r3);
-        if (r12 == 0) goto L_0x01c2;
-    L_0x01c0:
-        if (r3 == 0) goto L_0x01ca;
-    L_0x01c2:
-        if (r3 == 0) goto L_0x01cb;
-    L_0x01c4:
-        r4 = org.telegram.messenger.ChatObject.isNotInChat(r3);
-        if (r4 == 0) goto L_0x01cb;
-    L_0x01ca:
-        return;
-    L_0x01cb:
-        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r4 == 0) goto L_0x01ff;
-    L_0x01cf:
-        r4 = new java.lang.StringBuilder;
-        r4.<init>();
-        r8 = "not found dialog with id ";
-        r4.append(r8);
-        r4.append(r1);
-        r8 = " dictCount = ";
-        r4.append(r8);
-        r8 = r0.dialogs_dict;
-        r8 = r8.size();
-        r4.append(r8);
-        r8 = " allCount = ";
-        r4.append(r8);
-        r8 = r0.allDialogs;
-        r8 = r8.size();
-        r4.append(r8);
-        r4 = r4.toString();
-        org.telegram.messenger.FileLog.d(r4);
-    L_0x01ff:
-        r4 = new org.telegram.tgnet.TLRPC$TL_dialog;
-        r4.<init>();
-        r4.id = r1;
-        r4.unread_count = r7;
-        r7 = r10.getId();
-        r4.top_message = r7;
-        r7 = r10.messageOwner;
-        r7 = r7.date;
-        r4.last_message_date = r7;
-        r3 = org.telegram.messenger.ChatObject.isChannel(r3);
-        r4.flags = r3;
-        r3 = r0.dialogs_dict;
-        r3.put(r1, r4);
-        r3 = r0.allDialogs;
-        r3.add(r4);
-        r3 = r0.dialogMessage;
-        r3.put(r1, r10);
-        r3 = r10.messageOwner;
-        r3 = r3.to_id;
-        r3 = r3.channel_id;
-        if (r3 != 0) goto L_0x0247;
-    L_0x0231:
-        r3 = r0.dialogMessagesByIds;
-        r7 = r10.getId();
-        r3.put(r7, r10);
-        r3 = r10.messageOwner;
-        r7 = r3.random_id;
-        r3 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));
-        if (r3 == 0) goto L_0x0247;
-    L_0x0242:
-        r3 = r0.dialogMessagesByRandomIds;
-        r3.put(r7, r10);
-    L_0x0247:
-        r3 = r22.getMessagesStorage();
-        r5 = new org.telegram.messenger.-$$Lambda$MessagesController$CLASSNAMEh0Kefe1aByk21NXrHFWwTbRA;
-        r5.<init>(r0, r4, r1);
-        r3.getDialogFolderId(r1, r5);
-        goto L_0x0308;
-    L_0x0255:
-        if (r11 == 0) goto L_0x027c;
-    L_0x0257:
-        r4 = r3.folder_id;
-        r9 = 1;
-        if (r4 != r9) goto L_0x027d;
-    L_0x025c:
-        r11 = r3.id;
-        r4 = r0.isDialogMuted(r11);
-        if (r4 != 0) goto L_0x027d;
-    L_0x0264:
-        r3.folder_id = r7;
-        r3.pinned = r7;
-        r3.pinnedNum = r7;
-        r14 = r22.getMessagesStorage();
-        r15 = 0;
-        r16 = 0;
-        r7 = r3.id;
-        r19 = 0;
-        r17 = r7;
-        r14.setDialogsFolderId(r15, r16, r17, r19);
-        r7 = 1;
-        goto L_0x027d;
-    L_0x027c:
-        r9 = 1;
-    L_0x027d:
-        r4 = r3.top_message;
-        if (r4 <= 0) goto L_0x028f;
-    L_0x0281:
-        r4 = r10.getId();
-        if (r4 <= 0) goto L_0x028f;
-    L_0x0287:
-        r4 = r10.getId();
-        r8 = r3.top_message;
-        if (r4 > r8) goto L_0x02b9;
-    L_0x028f:
-        r4 = r3.top_message;
-        if (r4 >= 0) goto L_0x02a1;
-    L_0x0293:
-        r4 = r10.getId();
-        if (r4 >= 0) goto L_0x02a1;
-    L_0x0299:
-        r4 = r10.getId();
-        r8 = r3.top_message;
-        if (r4 < r8) goto L_0x02b9;
-    L_0x02a1:
-        r4 = r0.dialogMessage;
-        r4 = r4.indexOfKey(r1);
-        if (r4 < 0) goto L_0x02b9;
-    L_0x02a9:
-        r4 = r3.top_message;
-        if (r4 < 0) goto L_0x02b9;
-    L_0x02ad:
-        r4 = r3.last_message_date;
-        r8 = r10.messageOwner;
-        r8 = r8.date;
-        if (r4 > r8) goto L_0x02b6;
-    L_0x02b5:
-        goto L_0x02b9;
-    L_0x02b6:
-        r21 = r7;
-        goto L_0x030a;
-    L_0x02b9:
-        r4 = r0.dialogMessagesByIds;
-        r7 = r3.top_message;
-        r4 = r4.get(r7);
-        r4 = (org.telegram.messenger.MessageObject) r4;
-        r7 = r0.dialogMessagesByIds;
-        r8 = r3.top_message;
-        r7.remove(r8);
-        if (r4 == 0) goto L_0x02d9;
-    L_0x02cc:
-        r4 = r4.messageOwner;
-        r7 = r4.random_id;
-        r4 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));
-        if (r4 == 0) goto L_0x02d9;
-    L_0x02d4:
-        r4 = r0.dialogMessagesByRandomIds;
-        r4.remove(r7);
-    L_0x02d9:
-        r4 = r10.getId();
-        r3.top_message = r4;
-        r4 = r10.messageOwner;
-        r4 = r4.date;
-        r3.last_message_date = r4;
-        r3 = r0.dialogMessage;
-        r3.put(r1, r10);
-        r3 = r10.messageOwner;
-        r3 = r3.to_id;
-        r3 = r3.channel_id;
-        if (r3 != 0) goto L_0x0308;
-    L_0x02f2:
-        r3 = r0.dialogMessagesByIds;
-        r4 = r10.getId();
-        r3.put(r4, r10);
-        r3 = r10.messageOwner;
-        r3 = r3.random_id;
-        r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r7 == 0) goto L_0x0308;
-    L_0x0303:
-        r5 = r0.dialogMessagesByRandomIds;
-        r5.put(r3, r10);
-    L_0x0308:
-        r21 = 1;
-    L_0x030a:
-        if (r21 == 0) goto L_0x0310;
-    L_0x030c:
+        r2 = 0;
         r3 = 0;
-        r0.sortDialogs(r3);
-    L_0x0310:
-        if (r13 == 0) goto L_0x0319;
-    L_0x0312:
-        r3 = r22.getMediaDataController();
-        r3.increasePeerRaiting(r1);
-    L_0x0319:
+        r4 = 0;
+        r5 = 0;
+        r6 = 0;
+    L_0x001e:
+        r13 = r29.size();
+        if (r2 >= r13) goto L_0x00d0;
+    L_0x0024:
+        r13 = r9.get(r2);
+        r13 = (org.telegram.messenger.MessageObject) r13;
+        if (r3 == 0) goto L_0x005a;
+    L_0x002c:
+        if (r1 != 0) goto L_0x0038;
+    L_0x002e:
+        r14 = r13.getId();
+        r15 = r3.getId();
+        if (r14 > r15) goto L_0x005a;
+    L_0x0038:
+        if (r1 != 0) goto L_0x0046;
+    L_0x003a:
+        r14 = r13.getId();
+        if (r14 >= 0) goto L_0x0050;
+    L_0x0040:
+        r14 = r3.getId();
+        if (r14 >= 0) goto L_0x0050;
+    L_0x0046:
+        r14 = r13.getId();
+        r15 = r3.getId();
+        if (r14 < r15) goto L_0x005a;
+    L_0x0050:
+        r14 = r13.messageOwner;
+        r14 = r14.date;
+        r15 = r3.messageOwner;
+        r15 = r15.date;
+        if (r14 <= r15) goto L_0x0064;
+    L_0x005a:
+        r3 = r13.messageOwner;
+        r3 = r3.to_id;
+        r3 = r3.channel_id;
+        if (r3 == 0) goto L_0x0063;
+    L_0x0062:
+        r5 = r3;
+    L_0x0063:
+        r3 = r13;
+    L_0x0064:
+        if (r4 != 0) goto L_0x006d;
+    L_0x0066:
+        r14 = r13.isOut();
+        if (r14 != 0) goto L_0x006d;
+    L_0x006c:
+        r4 = 1;
+    L_0x006d:
+        r14 = r13.isOut();
+        if (r14 == 0) goto L_0x00bf;
+    L_0x0073:
+        r14 = r13.isSending();
+        if (r14 != 0) goto L_0x00bf;
+    L_0x0079:
+        r14 = r13.isForwarded();
+        if (r14 != 0) goto L_0x00bf;
+    L_0x007f:
+        r14 = r13.isNewGif();
+        if (r14 == 0) goto L_0x0095;
+    L_0x0085:
+        r14 = r26.getMediaDataController();
+        r15 = r13.messageOwner;
+        r12 = r15.media;
+        r12 = r12.document;
+        r15 = r15.date;
+        r14.addRecentGif(r12, r15);
+        goto L_0x00bf;
+    L_0x0095:
+        r12 = r13.isAnimatedEmoji();
+        if (r12 != 0) goto L_0x00bf;
+    L_0x009b:
+        r12 = r13.isSticker();
+        if (r12 != 0) goto L_0x00a7;
+    L_0x00a1:
+        r12 = r13.isAnimatedSticker();
+        if (r12 == 0) goto L_0x00bf;
+    L_0x00a7:
+        r14 = r26.getMediaDataController();
+        r15 = 0;
+        r12 = r13.messageOwner;
+        r10 = r12.media;
+        r10 = r10.document;
+        r12 = r12.date;
+        r19 = 0;
+        r16 = r13;
+        r17 = r10;
+        r18 = r12;
+        r14.addRecentSticker(r15, r16, r17, r18, r19);
+    L_0x00bf:
+        r10 = r13.isOut();
+        if (r10 == 0) goto L_0x00cc;
+    L_0x00c5:
+        r10 = r13.isSent();
+        if (r10 == 0) goto L_0x00cc;
+    L_0x00cb:
+        r6 = 1;
+    L_0x00cc:
+        r2 = r2 + 1;
+        goto L_0x001e;
+    L_0x00d0:
+        r10 = r3;
+        r12 = r4;
+        r13 = r5;
+        r14 = r6;
+        goto L_0x00d9;
+    L_0x00d5:
+        r10 = 0;
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+    L_0x00d9:
+        r1 = r26.getMediaDataController();
+        r6 = 0;
+        r2 = r29;
+        r3 = r27;
+        r5 = r30;
+        r1.loadReplyMessagesForMessages(r2, r3, r5, r6);
+        r1 = r26.getNotificationCenter();
+        r2 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages;
+        r3 = 3;
+        r3 = new java.lang.Object[r3];
+        r4 = java.lang.Long.valueOf(r27);
+        r3[r11] = r4;
+        r4 = 1;
+        r3[r4] = r9;
+        r4 = 2;
+        r5 = java.lang.Boolean.valueOf(r30);
+        r3[r4] = r5;
+        r1.postNotificationName(r2, r3);
+        if (r10 == 0) goto L_0x031c;
+    L_0x0105:
+        if (r30 == 0) goto L_0x0109;
+    L_0x0107:
+        goto L_0x031c;
+    L_0x0109:
+        r1 = r0.dialogs_dict;
+        r1 = r1.get(r7);
+        r1 = (org.telegram.tgnet.TLRPC.TL_dialog) r1;
+        r2 = r10.messageOwner;
+        r2 = r2.action;
+        r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
+        r3 = 0;
+        if (r2 == 0) goto L_0x01bd;
+    L_0x011b:
+        if (r1 == 0) goto L_0x01bc;
+    L_0x011d:
+        r2 = r0.allDialogs;
+        r2.remove(r1);
+        r2 = r0.dialogsServerOnly;
+        r2.remove(r1);
+        r2 = r0.dialogsCanAddUsers;
+        r2.remove(r1);
+        r2 = r0.dialogsChannelsOnly;
+        r2.remove(r1);
+        r2 = r0.dialogsGroupsOnly;
+        r2.remove(r1);
+        r2 = r0.dialogsUsersOnly;
+        r2.remove(r1);
+        r2 = r0.dialogsForward;
+        r2.remove(r1);
+        r2 = r0.dialogs_dict;
+        r5 = r1.id;
+        r2.remove(r5);
+        r2 = r0.dialogs_read_inbox_max;
+        r5 = r1.id;
+        r5 = java.lang.Long.valueOf(r5);
+        r2.remove(r5);
+        r2 = r0.dialogs_read_outbox_max;
+        r5 = r1.id;
+        r5 = java.lang.Long.valueOf(r5);
+        r2.remove(r5);
+        r2 = r0.nextDialogsCacheOffset;
+        r5 = r1.folder_id;
+        r2 = r2.get(r5, r11);
+        if (r2 <= 0) goto L_0x0170;
+    L_0x0167:
+        r5 = r0.nextDialogsCacheOffset;
+        r6 = r1.folder_id;
+        r7 = 1;
+        r2 = r2 - r7;
+        r5.put(r6, r2);
+    L_0x0170:
+        r2 = r0.dialogMessage;
+        r5 = r1.id;
+        r2.remove(r5);
+        r2 = r0.dialogsByFolder;
+        r5 = r1.folder_id;
+        r2 = r2.get(r5);
+        r2 = (java.util.ArrayList) r2;
+        if (r2 == 0) goto L_0x0186;
+    L_0x0183:
+        r2.remove(r1);
+    L_0x0186:
+        r2 = r0.dialogMessagesByIds;
+        r5 = r1.top_message;
+        r2 = r2.get(r5);
+        r2 = (org.telegram.messenger.MessageObject) r2;
+        r5 = r0.dialogMessagesByIds;
+        r6 = r1.top_message;
+        r5.remove(r6);
+        if (r2 == 0) goto L_0x01a6;
+    L_0x0199:
+        r2 = r2.messageOwner;
+        r5 = r2.random_id;
+        r2 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1));
+        if (r2 == 0) goto L_0x01a6;
+    L_0x01a1:
+        r2 = r0.dialogMessagesByRandomIds;
+        r2.remove(r5);
+    L_0x01a6:
+        r1.top_message = r11;
+        r2 = r26.getNotificationsController();
+        r3 = r1.id;
+        r2.removeNotificationsForDialog(r3);
+        r1 = r26.getNotificationCenter();
+        r2 = org.telegram.messenger.NotificationCenter.needReloadRecentDialogsSearch;
+        r3 = new java.lang.Object[r11];
+        r1.postNotificationName(r2, r3);
+    L_0x01bc:
+        return;
+    L_0x01bd:
+        if (r1 != 0) goto L_0x025c;
+    L_0x01bf:
+        r1 = java.lang.Integer.valueOf(r13);
+        r1 = r0.getChat(r1);
+        if (r13 == 0) goto L_0x01cb;
+    L_0x01c9:
+        if (r1 == 0) goto L_0x01d3;
+    L_0x01cb:
+        if (r1 == 0) goto L_0x01d4;
+    L_0x01cd:
+        r2 = org.telegram.messenger.ChatObject.isNotInChat(r1);
+        if (r2 == 0) goto L_0x01d4;
+    L_0x01d3:
+        return;
+    L_0x01d4:
+        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r2 == 0) goto L_0x0208;
+    L_0x01d8:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r5 = "not found dialog with id ";
+        r2.append(r5);
+        r2.append(r7);
+        r5 = " dictCount = ";
+        r2.append(r5);
+        r5 = r0.dialogs_dict;
+        r5 = r5.size();
+        r2.append(r5);
+        r5 = " allCount = ";
+        r2.append(r5);
+        r5 = r0.allDialogs;
+        r5 = r5.size();
+        r2.append(r5);
+        r2 = r2.toString();
+        org.telegram.messenger.FileLog.d(r2);
+    L_0x0208:
+        r2 = new org.telegram.tgnet.TLRPC$TL_dialog;
+        r2.<init>();
+        r2.id = r7;
+        r5 = r10.getId();
+        r2.top_message = r5;
+        r5 = r10.messageOwner;
+        r5 = r5.date;
+        r2.last_message_date = r5;
+        r1 = org.telegram.messenger.ChatObject.isChannel(r1);
+        r2.flags = r1;
+        r1 = r0.dialogs_dict;
+        r1.put(r7, r2);
+        r1 = r0.allDialogs;
+        r1.add(r2);
+        r1 = r0.dialogMessage;
+        r1.put(r7, r10);
+        r1 = r10.messageOwner;
+        r1 = r1.to_id;
+        r1 = r1.channel_id;
+        if (r1 != 0) goto L_0x024e;
+    L_0x0238:
+        r1 = r0.dialogMessagesByIds;
+        r5 = r10.getId();
+        r1.put(r5, r10);
+        r1 = r10.messageOwner;
+        r5 = r1.random_id;
+        r1 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1));
+        if (r1 == 0) goto L_0x024e;
+    L_0x0249:
+        r1 = r0.dialogMessagesByRandomIds;
+        r1.put(r5, r10);
+    L_0x024e:
+        r1 = r26.getMessagesStorage();
+        r3 = new org.telegram.messenger.-$$Lambda$MessagesController$Ji4MTx4hnSHDwbZ4kj_JP_rllDU;
+        r3.<init>(r0, r2, r7);
+        r1.getDialogFolderId(r7, r3);
+        goto L_0x030c;
+    L_0x025c:
+        if (r12 == 0) goto L_0x0284;
+    L_0x025e:
+        r2 = r1.folder_id;
+        r5 = 1;
+        if (r2 != r5) goto L_0x0285;
+    L_0x0263:
+        r12 = r1.id;
+        r2 = r0.isDialogMuted(r12);
+        if (r2 != 0) goto L_0x0285;
+    L_0x026b:
+        r1.folder_id = r11;
+        r1.pinned = r11;
+        r1.pinnedNum = r11;
+        r20 = r26.getMessagesStorage();
+        r21 = 0;
+        r22 = 0;
+        r11 = r1.id;
+        r25 = 0;
+        r23 = r11;
+        r20.setDialogsFolderId(r21, r22, r23, r25);
+        r11 = 1;
+        goto L_0x0285;
+    L_0x0284:
+        r5 = 1;
+    L_0x0285:
+        r2 = r1.top_message;
+        if (r2 <= 0) goto L_0x0297;
+    L_0x0289:
+        r2 = r10.getId();
+        if (r2 <= 0) goto L_0x0297;
+    L_0x028f:
+        r2 = r10.getId();
+        r6 = r1.top_message;
+        if (r2 > r6) goto L_0x02bd;
+    L_0x0297:
+        r2 = r1.top_message;
+        if (r2 >= 0) goto L_0x02a9;
+    L_0x029b:
+        r2 = r10.getId();
+        if (r2 >= 0) goto L_0x02a9;
+    L_0x02a1:
+        r2 = r10.getId();
+        r6 = r1.top_message;
+        if (r2 < r6) goto L_0x02bd;
+    L_0x02a9:
+        r2 = r0.dialogMessage;
+        r2 = r2.indexOfKey(r7);
+        if (r2 < 0) goto L_0x02bd;
+    L_0x02b1:
+        r2 = r1.top_message;
+        if (r2 < 0) goto L_0x02bd;
+    L_0x02b5:
+        r2 = r1.last_message_date;
+        r6 = r10.messageOwner;
+        r6 = r6.date;
+        if (r2 > r6) goto L_0x030d;
+    L_0x02bd:
+        r2 = r0.dialogMessagesByIds;
+        r6 = r1.top_message;
+        r2 = r2.get(r6);
+        r2 = (org.telegram.messenger.MessageObject) r2;
+        r6 = r0.dialogMessagesByIds;
+        r9 = r1.top_message;
+        r6.remove(r9);
+        if (r2 == 0) goto L_0x02dd;
+    L_0x02d0:
+        r2 = r2.messageOwner;
+        r11 = r2.random_id;
+        r2 = (r11 > r3 ? 1 : (r11 == r3 ? 0 : -1));
+        if (r2 == 0) goto L_0x02dd;
+    L_0x02d8:
+        r2 = r0.dialogMessagesByRandomIds;
+        r2.remove(r11);
+    L_0x02dd:
+        r2 = r10.getId();
+        r1.top_message = r2;
+        r2 = r10.messageOwner;
+        r2 = r2.date;
+        r1.last_message_date = r2;
+        r1 = r0.dialogMessage;
+        r1.put(r7, r10);
+        r1 = r10.messageOwner;
+        r1 = r1.to_id;
+        r1 = r1.channel_id;
+        if (r1 != 0) goto L_0x030c;
+    L_0x02f6:
+        r1 = r0.dialogMessagesByIds;
+        r2 = r10.getId();
+        r1.put(r2, r10);
+        r1 = r10.messageOwner;
+        r1 = r1.random_id;
+        r6 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
+        if (r6 == 0) goto L_0x030c;
+    L_0x0307:
+        r3 = r0.dialogMessagesByRandomIds;
+        r3.put(r1, r10);
+    L_0x030c:
+        r11 = 1;
+    L_0x030d:
+        if (r11 == 0) goto L_0x0313;
+    L_0x030f:
+        r1 = 0;
+        r0.sortDialogs(r1);
+    L_0x0313:
+        if (r14 == 0) goto L_0x031c;
+    L_0x0315:
+        r1 = r26.getMediaDataController();
+        r1.increasePeerRaiting(r7);
+    L_0x031c:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.updateInterfaceWithMessages(long, java.util.ArrayList, boolean):void");
     }
 
-    public /* synthetic */ void lambda$updateInterfaceWithMessages$272$MessagesController(Dialog dialog, long j, int i) {
+    public /* synthetic */ void lambda$updateInterfaceWithMessages$273$MessagesController(Dialog dialog, long j, int i) {
         if (i == -1) {
             int i2 = (int) j;
             if (i2 != 0) {
@@ -20074,7 +20202,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         tL_messages_getMessages.channel = getInputChannel(chat2);
                         tL_messages_getMessages.id.add(Integer.valueOf(messageObject.getId()));
                     }
-                    alertDialog.setOnCancelListener(new -$$Lambda$MessagesController$Yvtd1TBBimeMoI1iihdh8TaGmmw(this, getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$MessagesController$BifyxU1Cuf9FuMmTWtiwMLZuXjs(this, alertDialog, baseFragment, bundle)), baseFragment));
+                    alertDialog.setOnCancelListener(new -$$Lambda$MessagesController$Q3gE4D6e8Y_f7KoqBc8WY4mTi3Y(this, getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$MessagesController$Fxut3hB2IXEcZhR2QyK02YJccCA(this, alertDialog, baseFragment, bundle)), baseFragment));
                     baseFragment.setVisibleDialog(alertDialog);
                     alertDialog.show();
                     return false;
@@ -20084,13 +20212,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return true;
     }
 
-    public /* synthetic */ void lambda$checkCanOpenChat$274$MessagesController(AlertDialog alertDialog, BaseFragment baseFragment, Bundle bundle, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$checkCanOpenChat$275$MessagesController(AlertDialog alertDialog, BaseFragment baseFragment, Bundle bundle, TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$dhD8_KR-_sBCZRatCae0gaaMwWg(this, alertDialog, tLObject, baseFragment, bundle));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$2-Bhk_UWyZArYWu-nj4FX6qA7uw(this, alertDialog, tLObject, baseFragment, bundle));
         }
     }
 
-    public /* synthetic */ void lambda$null$273$MessagesController(AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
+    public /* synthetic */ void lambda$null$274$MessagesController(AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -20103,7 +20231,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         baseFragment.presentFragment(new ChatActivity(bundle), true);
     }
 
-    public /* synthetic */ void lambda$checkCanOpenChat$275$MessagesController(int i, BaseFragment baseFragment, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$checkCanOpenChat$276$MessagesController(int i, BaseFragment baseFragment, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
         if (baseFragment != null) {
             baseFragment.setVisibleDialog(null);
@@ -20212,10 +20340,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.<init>();
         r1.username = r6;
         r6 = r5.getConnectionsManager();
-        r2 = new org.telegram.messenger.-$$Lambda$MessagesController$xzHol19QoQ_wZXoh8_WHj_R6SIM;
+        r2 = new org.telegram.messenger.-$$Lambda$MessagesController$E9I-rOP2XDEloKCu7sFp3jhnG60;
         r2.<init>(r5, r0, r7, r8);
         r6 = r6.sendRequest(r1, r2);
-        r8 = new org.telegram.messenger.-$$Lambda$MessagesController$jcDL3otLBX6NnwGzoLKUrQ8En_A;
+        r8 = new org.telegram.messenger.-$$Lambda$MessagesController$g4XyDsaZinAOpJNBuk94VuSsZ40;
         r8.<init>(r5, r0, r6, r7);
         r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r6);
@@ -20225,11 +20353,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.openByUserName(java.lang.String, org.telegram.ui.ActionBar.BaseFragment, int):void");
     }
 
-    public /* synthetic */ void lambda$openByUserName$277$MessagesController(AlertDialog[] alertDialogArr, BaseFragment baseFragment, int i, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$ph-DIpw5lxP0CXxtvAp74oOoDJI(this, alertDialogArr, baseFragment, tL_error, tLObject, i));
+    public /* synthetic */ void lambda$openByUserName$278$MessagesController(AlertDialog[] alertDialogArr, BaseFragment baseFragment, int i, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$EcDsojm7HZX6hAL2a4ylImFm3OM(this, alertDialogArr, baseFragment, tL_error, tLObject, i));
     }
 
-    public /* synthetic */ void lambda$null$276$MessagesController(AlertDialog[] alertDialogArr, BaseFragment baseFragment, TL_error tL_error, TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$null$277$MessagesController(AlertDialog[] alertDialogArr, BaseFragment baseFragment, TL_error tL_error, TLObject tLObject, int i) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Exception unused) {
@@ -20255,14 +20383,45 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$openByUserName$279$MessagesController(AlertDialog[] alertDialogArr, int i, BaseFragment baseFragment) {
+    public /* synthetic */ void lambda$openByUserName$280$MessagesController(AlertDialog[] alertDialogArr, int i, BaseFragment baseFragment) {
         if (alertDialogArr[0] != null) {
-            alertDialogArr[0].setOnCancelListener(new -$$Lambda$MessagesController$5flcfCM_wS-mBpfwCOg0ERAs134(this, i));
+            alertDialogArr[0].setOnCancelListener(new -$$Lambda$MessagesController$TVBsyBlQ-_w0esFlKEWtcE8iKzA(this, i));
             baseFragment.showDialog(alertDialogArr[0]);
         }
     }
 
-    public /* synthetic */ void lambda$null$278$MessagesController(int i, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$null$279$MessagesController(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
+    }
+
+    public void ensureMessagesLoaded(long j, Runnable runnable) {
+        SharedPreferences notificationsSettings = getNotificationsSettings(this.currentAccount);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("diditem");
+        stringBuilder.append(j);
+        int i = notificationsSettings.getInt(stringBuilder.toString(), 0);
+        if (i == 0 || !MessagesStorage.getInstance(0).checkMessageId(j, i)) {
+            MessagesStorage.getInstance(0).getMessagesCount(j, new -$$Lambda$MessagesController$giNmHlRa_5kqtGWuY0622e5Jzzg(this, runnable, j, i));
+        } else {
+            runnable.run();
+        }
+    }
+
+    public /* synthetic */ void lambda$ensureMessagesLoaded$281$MessagesController(Runnable runnable, long j, int i, int i2) {
+        if (i2 > 0) {
+            runnable.run();
+            return;
+        }
+        final int generateClassGuid = ConnectionsManager.generateClassGuid();
+        final Runnable runnable2 = runnable;
+        getNotificationCenter().addObserver(new NotificationCenterDelegate() {
+            public void didReceivedNotification(int i, int i2, Object... objArr) {
+                if (i == NotificationCenter.messagesDidLoad && ((Integer) objArr[10]).intValue() == generateClassGuid) {
+                    MessagesController.this.getNotificationCenter().removeObserver(this, NotificationCenter.didReceiveNewMessages);
+                    runnable2.run();
+                }
+            }
+        }, NotificationCenter.messagesDidLoad);
+        loadMessages(j, 30, 0, 0, false, 0, generateClassGuid, 0, i, false, false, 0);
     }
 }

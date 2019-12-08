@@ -83,6 +83,7 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
     private ImageView flashButton;
     private ImageView galleryButton;
     private Handler handler;
+    private boolean needGalleryButton;
     private Paint paint = new Paint();
     private Path path = new Path();
     private QRCodeReader qrReader;
@@ -106,11 +107,14 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
         void didFindQr(String str);
     }
 
-    public static ActionBarLayout[] showAsSheet(BaseFragment baseFragment, final CameraScanActivityDelegate cameraScanActivityDelegate) {
+    public static ActionBarLayout[] showAsSheet(BaseFragment baseFragment, boolean z, CameraScanActivityDelegate cameraScanActivityDelegate) {
         if (baseFragment == null || baseFragment.getParentActivity() == null) {
             return null;
         }
-        final ActionBarLayout[] actionBarLayoutArr = new ActionBarLayout[]{new ActionBarLayout(baseFragment.getParentActivity())};
+        ActionBarLayout[] actionBarLayoutArr = new ActionBarLayout[]{new ActionBarLayout(baseFragment.getParentActivity())};
+        final ActionBarLayout[] actionBarLayoutArr2 = actionBarLayoutArr;
+        final boolean z2 = z;
+        final CameraScanActivityDelegate cameraScanActivityDelegate2 = cameraScanActivityDelegate;
         new BottomSheet(baseFragment.getParentActivity(), false) {
             /* Access modifiers changed, original: protected */
             public boolean canDismissWithSwipe() {
@@ -118,17 +122,17 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
             }
 
             public void onBackPressed() {
-                ActionBarLayout[] actionBarLayoutArr = actionBarLayoutArr;
+                ActionBarLayout[] actionBarLayoutArr = actionBarLayoutArr2;
                 if (actionBarLayoutArr[0] == null || actionBarLayoutArr[0].fragmentsStack.size() <= 1) {
                     super.onBackPressed();
                 } else {
-                    actionBarLayoutArr[0].onBackPressed();
+                    actionBarLayoutArr2[0].onBackPressed();
                 }
             }
 
             public void dismiss() {
                 super.dismiss();
-                actionBarLayoutArr[0] = null;
+                actionBarLayoutArr2[0] = null;
             }
         }.show();
         return actionBarLayoutArr;
@@ -199,7 +203,9 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
                 } else {
                     CameraScanActivity.this.cameraView.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(size2, NUM));
                     CameraScanActivity.this.recognizedMrzView.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(size2, 0));
-                    CameraScanActivity.this.galleryButton.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
+                    if (CameraScanActivity.this.galleryButton != null) {
+                        CameraScanActivity.this.galleryButton.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
+                    }
                     CameraScanActivity.this.flashButton.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
                 }
                 CameraScanActivity.this.titleTextView.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(size2, 0));
@@ -225,11 +231,17 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
                     i2 = (((CameraScanActivity.this.cameraView.getMeasuredHeight() - i5) / 2) - CameraScanActivity.this.titleTextView.getMeasuredHeight()) - AndroidUtilities.dp(30.0f);
                     CameraScanActivity.this.titleTextView.layout(0, i2, CameraScanActivity.this.titleTextView.getMeasuredWidth(), CameraScanActivity.this.titleTextView.getMeasuredHeight() + i2);
                     CameraScanActivity.this.recognizedMrzView.layout(0, getMeasuredHeight() - CameraScanActivity.this.recognizedMrzView.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
-                    i = (CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) + AndroidUtilities.dp(35.0f);
+                    if (CameraScanActivity.this.needGalleryButton) {
+                        i = (CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) + AndroidUtilities.dp(35.0f);
+                    } else {
+                        i = (CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) - (CameraScanActivity.this.flashButton.getMeasuredWidth() / 2);
+                    }
                     int measuredHeight = (((CameraScanActivity.this.cameraView.getMeasuredHeight() - i5) / 2) + i5) + AndroidUtilities.dp(30.0f);
                     CameraScanActivity.this.flashButton.layout(i, measuredHeight, CameraScanActivity.this.flashButton.getMeasuredWidth() + i, CameraScanActivity.this.flashButton.getMeasuredHeight() + measuredHeight);
-                    i5 = ((CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) - AndroidUtilities.dp(35.0f)) - CameraScanActivity.this.galleryButton.getMeasuredWidth();
-                    CameraScanActivity.this.galleryButton.layout(i5, measuredHeight, CameraScanActivity.this.galleryButton.getMeasuredWidth() + i5, CameraScanActivity.this.galleryButton.getMeasuredHeight() + measuredHeight);
+                    if (CameraScanActivity.this.galleryButton != null) {
+                        i5 = ((CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) - AndroidUtilities.dp(35.0f)) - CameraScanActivity.this.galleryButton.getMeasuredWidth();
+                        CameraScanActivity.this.galleryButton.layout(i5, measuredHeight, CameraScanActivity.this.galleryButton.getMeasuredWidth() + i5, CameraScanActivity.this.galleryButton.getMeasuredHeight() + measuredHeight);
+                    }
                 }
                 i5 = (int) (((float) i4) * 0.74f);
                 i = (int) (((float) i3) * 0.05f);
@@ -330,18 +342,28 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
             this.recognizedMrzView.setTypeface(Typeface.MONOSPACE);
             this.cameraView.addView(this.recognizedMrzView);
         } else {
-            this.titleTextView.setText(LocaleController.getString("WalletScanCode", NUM));
+            if (this.needGalleryButton) {
+                this.titleTextView.setText(LocaleController.getString("WalletScanCode", NUM));
+            } else {
+                this.titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
+            }
             this.titleTextView.setTextColor(-1);
             this.recognizedMrzView.setTextSize(1, 16.0f);
             this.recognizedMrzView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
-            this.recognizedMrzView.setText(LocaleController.getString("WalletScanCodeNotFound", NUM));
+            if (this.needGalleryButton) {
+                this.recognizedMrzView.setText(LocaleController.getString("WalletScanCodeNotFound", NUM));
+            } else {
+                this.recognizedMrzView.setText(LocaleController.getString("AuthAnotherClientNotFound", NUM));
+            }
             anonymousClass3.addView(this.recognizedMrzView);
-            this.galleryButton = new ImageView(context);
-            this.galleryButton.setScaleType(ScaleType.CENTER);
-            this.galleryButton.setImageResource(NUM);
-            this.galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM), Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM)));
-            anonymousClass3.addView(this.galleryButton);
-            this.galleryButton.setOnClickListener(new -$$Lambda$CameraScanActivity$elYH43-16s4YXL1e30sBSwZ-5V8(this));
+            if (this.needGalleryButton) {
+                this.galleryButton = new ImageView(context);
+                this.galleryButton.setScaleType(ScaleType.CENTER);
+                this.galleryButton.setImageResource(NUM);
+                this.galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM), Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM)));
+                anonymousClass3.addView(this.galleryButton);
+                this.galleryButton.setOnClickListener(new -$$Lambda$CameraScanActivity$elYH43-16s4YXL1e30sBSwZ-5V8(this));
+            }
             this.flashButton = new ImageView(context);
             this.flashButton.setScaleType(ScaleType.CENTER);
             this.flashButton.setImageResource(NUM);
@@ -374,10 +396,10 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
                             SendingMediaInfo sendingMediaInfo = (SendingMediaInfo) arrayList.get(0);
                             if (sendingMediaInfo.path != null) {
                                 Point realScreenSize = AndroidUtilities.getRealScreenSize();
-                                String access$1700 = CameraScanActivity.this.tryReadQr(null, null, 0, 0, 0, ImageLoader.loadBitmap(sendingMediaInfo.path, null, (float) realScreenSize.x, (float) realScreenSize.y, true));
-                                if (access$1700 != null) {
+                                String access$1800 = CameraScanActivity.this.tryReadQr(null, null, 0, 0, 0, ImageLoader.loadBitmap(sendingMediaInfo.path, null, (float) realScreenSize.x, (float) realScreenSize.y, true));
+                                if (access$1800 != null) {
                                     if (CameraScanActivity.this.delegate != null) {
-                                        CameraScanActivity.this.delegate.didFindQr(access$1700);
+                                        CameraScanActivity.this.delegate.didFindQr(access$1800);
                                     }
                                     CameraScanActivity.this.removeSelfFromStack();
                                 }
@@ -605,16 +627,21 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
             if (TextUtils.isEmpty(charSequence)) {
                 onNoQrFound(bitmap2 != null);
                 return null;
-            } else if (charSequence.startsWith("ton://transfer/")) {
-                if (getTonController().isValidWalletAddress(Uri.parse(charSequence).getPath().replace("/", ""))) {
-                    return charSequence;
+            }
+            if (this.needGalleryButton) {
+                if (charSequence.startsWith("ton://transfer/")) {
+                    if (!getTonController().isValidWalletAddress(Uri.parse(charSequence).getPath().replace("/", ""))) {
+                        onNoWalletFound(bitmap2 != null);
+                        return null;
+                    }
                 }
                 onNoWalletFound(bitmap2 != null);
                 return null;
-            } else {
-                onNoWalletFound(bitmap2 != null);
+            } else if (!charSequence.startsWith("tg_login/")) {
+                onNoWalletFound(false);
                 return null;
             }
+            return charSequence;
         } catch (Throwable unused) {
             if (bitmap2 == null) {
                 z = false;

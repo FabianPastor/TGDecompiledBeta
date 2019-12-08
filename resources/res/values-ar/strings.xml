@@ -1564,7 +1564,6 @@
     <string name="NearbyCreateGroup">إنشاء مجموعة محلية</string>
     <string name="NearbyCreateGroupInfo">أي شخص قريب من هذا الموقع (الجيران، زملاء العمل، الطلاب، الزوار، السُيّاح) سيرى مجموعتك في قسم الأشخاص القريبون.</string>
     <string name="NearbyCreateGroupInfo2">في حال قمت بإنشاء مجموعة غير متعلقة بهذا الموقع، قد يتم منعك من إنشاء مجموعات محلية جديدة.</string>
-    <string name="NearbyPlaces">أو اختر مكانًا</string>
     <string name="NearbyStartGroup">إنشاء مجموعة</string>
     <string name="NetworkUsage">استهلاك البيانات</string>
     <string name="NetworkUsageMobile">الخلوية</string>
@@ -1624,7 +1623,6 @@
     <string name="NoPopup">بدون إشعارات منبثقة</string>
     <string name="NoRecent">لا توجد رسائل أحدث</string>
     <string name="NoRecentGIFs">لا يوجد صور متحركة حديثة</string>
-    <string name="NoRecentPhotos">لا توجد صور حديثة</string>
     <string name="NoResult">ما من نتائج</string>
     <string name="NoScheduledMessages">ما من رسائل مجدولة هنا بعد...</string>
     <string name="NoSharedAudio">قم بإرسال مقاطع صوتية إلى هذه المحادثة لتتمكن من الوصول إليها عبر أجهزتك الأخرى.</string>
@@ -2515,7 +2513,6 @@
     <string name="ShowAllMedia">عرض كافة الوسائط</string>
     <string name="ShowAllThemes">عرض جميع الأنماط</string>
     <string name="ShowInChat">إظهار في المحادثة</string>
-    <string name="ShowNearbyPlaces">اسحب للأعلى لمشاهدة الأماكن القريبة</string>
     <string name="ShowNotificationsFor">إظهار الإشعارات من</string>
     <string name="ShowNotificationsForInfo">قم بتعطيل هذا الخيار لاستلام الإشعارات فقط من حسابك النشط.</string>
     <string name="Shuffle">عشوائي</string>
@@ -2977,6 +2974,8 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">yy.MM.dd</string>
     <string name="formatterYearMax">yyyy.MM.dd</string>
+    <string name="google_assistant_verification_channel_name">‏أداة التحقق في خدمة \"مساعد Google\"</string>
+    <string name="google_assistant_verification_notification_title">‏\"مساعد Google\" يرسل رسالة</string>
     <string name="items_few">%1$d عناصر</string>
     <string name="items_many">%1$d عنصرًا</string>
     <string name="items_one">عنصر واحد</string>

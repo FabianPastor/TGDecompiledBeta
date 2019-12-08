@@ -19,5 +19,7 @@
     <string name="common_signin_button_text">Увайсцi</string>
     <string name="common_signin_button_text_long">Увайсці праз Google</string>
     <string name="fcm_fallback_notification_channel_label">Рознае</string>
+    <string name="google_assistant_verification_channel_name">Інструмент праверкі Памочніка</string>
+    <string name="google_assistant_verification_notification_title">Памочнік Google адпраўляе паведамленне</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

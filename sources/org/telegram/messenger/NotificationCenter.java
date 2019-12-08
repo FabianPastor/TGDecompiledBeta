@@ -119,7 +119,6 @@ public class NotificationCenter {
     public static final int proxySettingsChanged;
     public static final int pushMessagesUpdated;
     public static final int recentDocumentsDidLoad;
-    public static final int recentImagesDidLoad;
     public static final int recordProgressChanged;
     public static final int recordStartError;
     public static final int recordStarted;
@@ -280,9 +279,6 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         updateMessageMedia = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        recentImagesDidLoad = i;
         i = totalEvents;
         totalEvents = i + 1;
         replaceMessagesObjects = i;

@@ -1564,7 +1564,6 @@
     <string name="NearbyCreateGroup">지역 그룹 만들기</string>
     <string name="NearbyCreateGroupInfo">이 근처에 있는 사람들(이웃이나 직장 동료, 친구, 학생, 행사 참석자, 방문객)이 회원님의 그룹을 \'주변 사람\' 탭에서 볼 수 있습니다.</string>
     <string name="NearbyCreateGroupInfo2">이 위치와 관계 없는 그룹을 만든다면, 앞으로 위치 기반 그룹을 못 만드시게 될 수도 있습니다.</string>
-    <string name="NearbyPlaces">아니면 장소 선택</string>
     <string name="NearbyStartGroup">그룹하기</string>
     <string name="NetworkUsage">데이터 사용량</string>
     <string name="NetworkUsageMobile">모바일</string>
@@ -1624,7 +1623,6 @@
     <string name="NoPopup">사용 안 함</string>
     <string name="NoRecent">최근 이모지 없음</string>
     <string name="NoRecentGIFs">최근 GIF 없음</string>
-    <string name="NoRecentPhotos">최근 사진 없음</string>
     <string name="NoResult">결과 없음</string>
     <string name="NoScheduledMessages">No scheduled messages here yet...</string>
     <string name="NoSharedAudio">이 대화방에 음악을 공유해두면 회원님의 모든 기기에서 접근하실 수 있습니다.</string>
@@ -2515,7 +2513,6 @@
     <string name="ShowAllMedia">모든 미디어 보기</string>
     <string name="ShowAllThemes">모든 테마 보기</string>
     <string name="ShowInChat">대화 속에서 보기</string>
-    <string name="ShowNearbyPlaces">근처 장소를 보려면 쓸어 올리세요</string>
     <string name="ShowNotificationsFor">다음으로 알림 보내기</string>
     <string name="ShowNotificationsForInfo">이용하고 계신 계정에만 알림을 받고 싶다면 이 설정을 끄세요.</string>
     <string name="Shuffle">섞기</string>
@@ -2977,6 +2974,8 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">yy.MM.dd.</string>
     <string name="formatterYearMax">yyyy.MM.dd.</string>
+    <string name="google_assistant_verification_channel_name">어시스턴트 인증자</string>
+    <string name="google_assistant_verification_notification_title">Google 어시스턴트가 메시지를 전송하는 중</string>
     <string name="items_few">%1$d개 아이템</string>
     <string name="items_many">%1$d개 아이템</string>
     <string name="items_one">%1$d개 아이템</string>

@@ -2,20 +2,16 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_updateProfile;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -33,6 +29,9 @@ public class ChangeNameActivity extends BaseFragment {
     private EditTextBoldCursor firstNameField;
     private View headerLabelView;
     private EditTextBoldCursor lastNameField;
+
+    static /* synthetic */ void lambda$saveName$3(TLObject tLObject, TL_error tL_error) {
+    }
 
     public View createView(Context context) {
         Context context2 = context;
@@ -58,11 +57,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.fragmentView = linearLayout;
         this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return true;
-            }
-        });
+        this.fragmentView.setOnTouchListener(-$$Lambda$ChangeNameActivity$2QrIPiMPNtI7lMzO9NvXqRR4gnI.INSTANCE);
         this.firstNameField = new EditTextBoldCursor(context2);
         this.firstNameField.setTextSize(1, 18.0f);
         String str = "windowBackgroundWhiteHintText";
@@ -82,16 +77,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        this.firstNameField.setOnEditorActionListener(new OnEditorActionListener() {
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i != 5) {
-                    return false;
-                }
-                ChangeNameActivity.this.lastNameField.requestFocus();
-                ChangeNameActivity.this.lastNameField.setSelection(ChangeNameActivity.this.lastNameField.length());
-                return true;
-            }
-        });
+        this.firstNameField.setOnEditorActionListener(new -$$Lambda$ChangeNameActivity$HCFxbNoqKBZg_OwtuYz3uOJOvar_(this));
         this.lastNameField = new EditTextBoldCursor(context2);
         this.lastNameField.setTextSize(1, 18.0f);
         this.lastNameField.setHintTextColor(Theme.getColor(str));
@@ -112,15 +98,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.lastNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
-        this.lastNameField.setOnEditorActionListener(new OnEditorActionListener() {
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i != 6) {
-                    return false;
-                }
-                ChangeNameActivity.this.doneButton.performClick();
-                return true;
-            }
-        });
+        this.lastNameField.setOnEditorActionListener(new -$$Lambda$ChangeNameActivity$RU433-caUULCMDGX8A7zDHwHNE8(this));
         if (user != null) {
             this.firstNameField.setText(user.first_name);
             editTextBoldCursor = this.firstNameField;
@@ -128,6 +106,24 @@ public class ChangeNameActivity extends BaseFragment {
             this.lastNameField.setText(user.last_name);
         }
         return this.fragmentView;
+    }
+
+    public /* synthetic */ boolean lambda$createView$1$ChangeNameActivity(TextView textView, int i, KeyEvent keyEvent) {
+        if (i != 5) {
+            return false;
+        }
+        this.lastNameField.requestFocus();
+        EditTextBoldCursor editTextBoldCursor = this.lastNameField;
+        editTextBoldCursor.setSelection(editTextBoldCursor.length());
+        return true;
+    }
+
+    public /* synthetic */ boolean lambda$createView$2$ChangeNameActivity(TextView textView, int i, KeyEvent keyEvent) {
+        if (i != 6) {
+            return false;
+        }
+        this.doneButton.performClick();
+        return true;
     }
 
     public void onResume() {
@@ -164,20 +160,17 @@ public class ChangeNameActivity extends BaseFragment {
             UserConfig.getInstance(this.currentAccount).saveConfig(true);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateProfile, new RequestDelegate() {
-                public void run(TLObject tLObject, TL_error tL_error) {
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateProfile, -$$Lambda$ChangeNameActivity$6bo7pFwsMx83tkMlu0ygZxpDMfM.INSTANCE);
         }
     }
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangeNameActivity$EvUw0TzJV_f3lPaYO2DcFGi13KM(this), 100);
+            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangeNameActivity$RkEShxl_q_DfVMxuXiDrwtAfdUU(this), 100);
         }
     }
 
-    public /* synthetic */ void lambda$onTransitionAnimationEnd$0$ChangeNameActivity() {
+    public /* synthetic */ void lambda$onTransitionAnimationEnd$4$ChangeNameActivity() {
         EditTextBoldCursor editTextBoldCursor = this.firstNameField;
         if (editTextBoldCursor != null) {
             editTextBoldCursor.requestFocus();

@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">Iniciar sesión</string>
     <string name="common_signin_button_text_long">Iniciar sesión con Google</string>
     <string name="fcm_fallback_notification_channel_label">Varios</string>
+    <string name="google_assistant_verification_channel_name">Verificador do Asistente</string>
+    <string name="google_assistant_verification_notification_title">O Asistente de Google está enviando unha mensaxe</string>
     <string name="status_bar_notification_info_overflow">&gt;999</string>
     <string name="wallet_buy_button_place_holder">Comprar con Google</string>
 </resources>

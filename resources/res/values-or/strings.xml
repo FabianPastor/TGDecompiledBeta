@@ -19,5 +19,7 @@
     <string name="common_signin_button_text">ସାଇନ୍‌-ଇନ୍ କରନ୍ତୁ</string>
     <string name="common_signin_button_text_long">Google ସହ ସାଇନ୍‌-ଇନ୍ କରନ୍ତୁ</string>
     <string name="fcm_fallback_notification_channel_label">ଅନ୍ୟାନ୍ୟ</string>
+    <string name="google_assistant_verification_channel_name">Assistant verifier</string>
+    <string name="google_assistant_verification_notification_title">Google Assistant sending message</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

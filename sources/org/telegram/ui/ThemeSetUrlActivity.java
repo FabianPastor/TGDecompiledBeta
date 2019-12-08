@@ -429,8 +429,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    /* JADX WARNING: Missing block: B:55:0x00e3, code skipped:
-            if (r13 != null) goto L_0x00e8;
+    /* JADX WARNING: Missing block: B:55:0x00e4, code skipped:
+            if (r13 != null) goto L_0x00e9;
      */
     private boolean checkUrl(java.lang.String r12, boolean r13) {
         /*
@@ -454,133 +454,133 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     L_0x001e:
         r0 = 0;
         r11.lastNameAvailable = r0;
-        r2 = NUM; // 0x7f0e0aa2 float:1.8880558E38 double:1.0531635015E-314;
+        r2 = NUM; // 0x7f0e0ad2 float:1.8880656E38 double:1.053163525E-314;
         r3 = "Theme";
         r4 = "windowBackgroundWhiteRedText4";
-        if (r12 == 0) goto L_0x00ac;
-    L_0x002a:
+        if (r12 == 0) goto L_0x00ad;
+    L_0x002b:
         r5 = "_";
         r6 = r12.startsWith(r5);
-        r7 = NUM; // 0x7f0e09ea float:1.8880185E38 double:1.0531634106E-314;
+        r7 = NUM; // 0x7f0e0a15 float:1.8880272E38 double:1.053163432E-314;
         r8 = "SetUrlInvalid";
-        if (r6 != 0) goto L_0x00a4;
-    L_0x0037:
+        if (r6 != 0) goto L_0x00a5;
+    L_0x0038:
         r5 = r12.endsWith(r5);
-        if (r5 == 0) goto L_0x003e;
-    L_0x003d:
-        goto L_0x00a4;
+        if (r5 == 0) goto L_0x003f;
     L_0x003e:
-        r5 = 0;
+        goto L_0x00a5;
     L_0x003f:
+        r5 = 0;
+    L_0x0040:
         r6 = r12.length();
-        if (r5 >= r6) goto L_0x00ac;
-    L_0x0045:
+        if (r5 >= r6) goto L_0x00ad;
+    L_0x0046:
         r6 = r12.charAt(r5);
         r9 = 57;
         r10 = 48;
-        if (r5 != 0) goto L_0x0073;
-    L_0x004f:
-        if (r6 < r10) goto L_0x0073;
-    L_0x0051:
-        if (r6 > r9) goto L_0x0073;
-    L_0x0053:
-        if (r13 == 0) goto L_0x0066;
-    L_0x0055:
+        if (r5 != 0) goto L_0x0074;
+    L_0x0050:
+        if (r6 < r10) goto L_0x0074;
+    L_0x0052:
+        if (r6 > r9) goto L_0x0074;
+    L_0x0054:
+        if (r13 == 0) goto L_0x0067;
+    L_0x0056:
         r12 = org.telegram.messenger.LocaleController.getString(r3, r2);
-        r13 = NUM; // 0x7f0e09ed float:1.8880191E38 double:1.053163412E-314;
+        r13 = NUM; // 0x7f0e0a18 float:1.8880279E38 double:1.0531634333E-314;
         r1 = "SetUrlInvalidStartNumber";
         r13 = org.telegram.messenger.LocaleController.getString(r1, r13);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r12, r13);
-        goto L_0x0072;
-    L_0x0066:
-        r12 = NUM; // 0x7f0e09ed float:1.8880191E38 double:1.053163412E-314;
+        goto L_0x0073;
+    L_0x0067:
+        r12 = NUM; // 0x7f0e0a18 float:1.8880279E38 double:1.0531634333E-314;
         r13 = "SetUrlInvalidStartNumber";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r11.setCheckText(r12, r4);
-    L_0x0072:
-        return r0;
     L_0x0073:
-        if (r6 < r10) goto L_0x0077;
-    L_0x0075:
-        if (r6 <= r9) goto L_0x00a1;
-    L_0x0077:
+        return r0;
+    L_0x0074:
+        if (r6 < r10) goto L_0x0078;
+    L_0x0076:
+        if (r6 <= r9) goto L_0x00a2;
+    L_0x0078:
         r9 = 97;
-        if (r6 < r9) goto L_0x007f;
-    L_0x007b:
+        if (r6 < r9) goto L_0x0080;
+    L_0x007c:
         r9 = 122; // 0x7a float:1.71E-43 double:6.03E-322;
-        if (r6 <= r9) goto L_0x00a1;
-    L_0x007f:
+        if (r6 <= r9) goto L_0x00a2;
+    L_0x0080:
         r9 = 65;
-        if (r6 < r9) goto L_0x0087;
-    L_0x0083:
+        if (r6 < r9) goto L_0x0088;
+    L_0x0084:
         r9 = 90;
-        if (r6 <= r9) goto L_0x00a1;
-    L_0x0087:
+        if (r6 <= r9) goto L_0x00a2;
+    L_0x0088:
         r9 = 95;
-        if (r6 == r9) goto L_0x00a1;
-    L_0x008b:
-        if (r13 == 0) goto L_0x0099;
-    L_0x008d:
+        if (r6 == r9) goto L_0x00a2;
+    L_0x008c:
+        if (r13 == 0) goto L_0x009a;
+    L_0x008e:
         r12 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r13 = org.telegram.messenger.LocaleController.getString(r8, r7);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r12, r13);
-        goto L_0x00a0;
-    L_0x0099:
+        goto L_0x00a1;
+    L_0x009a:
         r12 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r11.setCheckText(r12, r4);
-    L_0x00a0:
-        return r0;
     L_0x00a1:
+        return r0;
+    L_0x00a2:
         r5 = r5 + 1;
-        goto L_0x003f;
-    L_0x00a4:
+        goto L_0x0040;
+    L_0x00a5:
         r12 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r11.setCheckText(r12, r4);
         return r0;
-    L_0x00ac:
-        if (r12 == 0) goto L_0x0120;
-    L_0x00ae:
+    L_0x00ad:
+        if (r12 == 0) goto L_0x0123;
+    L_0x00af:
         r5 = r12.length();
         r6 = 5;
-        if (r5 >= r6) goto L_0x00b6;
-    L_0x00b5:
-        goto L_0x0120;
+        if (r5 >= r6) goto L_0x00b7;
     L_0x00b6:
+        goto L_0x0123;
+    L_0x00b7:
         r5 = r12.length();
         r6 = 64;
-        if (r5 <= r6) goto L_0x00d9;
-    L_0x00be:
-        r12 = NUM; // 0x7f0e09eb float:1.8880187E38 double:1.053163411E-314;
+        if (r5 <= r6) goto L_0x00da;
+    L_0x00bf:
+        r12 = NUM; // 0x7f0e0a16 float:1.8880274E38 double:1.0531634323E-314;
         r1 = "SetUrlInvalidLong";
-        if (r13 == 0) goto L_0x00d1;
-    L_0x00c5:
+        if (r13 == 0) goto L_0x00d2;
+    L_0x00c6:
         r13 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r13, r12);
-        goto L_0x00d8;
-    L_0x00d1:
+        goto L_0x00d9;
+    L_0x00d2:
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         r11.setCheckText(r12, r4);
-    L_0x00d8:
-        return r0;
     L_0x00d9:
-        if (r13 != 0) goto L_0x011f;
-    L_0x00db:
+        return r0;
+    L_0x00da:
+        if (r13 != 0) goto L_0x0122;
+    L_0x00dc:
         r13 = r11.themeInfo;
-        if (r13 == 0) goto L_0x00e6;
-    L_0x00df:
+        if (r13 == 0) goto L_0x00e7;
+    L_0x00e0:
         r13 = r13.info;
         r13 = r13.slug;
-        if (r13 == 0) goto L_0x00e6;
-    L_0x00e5:
-        goto L_0x00e8;
+        if (r13 == 0) goto L_0x00e7;
     L_0x00e6:
+        goto L_0x00e9;
+    L_0x00e7:
         r13 = "";
-    L_0x00e8:
+    L_0x00e9:
         r13 = r12.equals(r13);
-        if (r13 == 0) goto L_0x0101;
-    L_0x00ee:
-        r13 = NUM; // 0x7f0e09e7 float:1.888018E38 double:1.053163409E-314;
+        if (r13 == 0) goto L_0x0103;
+    L_0x00ef:
+        r13 = NUM; // 0x7f0e0a12 float:1.8880266E38 double:1.0531634303E-314;
         r2 = new java.lang.Object[r1];
         r2[r0] = r12;
         r12 = "SetUrlAvailable";
@@ -588,8 +588,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r13 = "windowBackgroundWhiteGreenText";
         r11.setCheckText(r12, r13);
         return r1;
-    L_0x0101:
-        r13 = NUM; // 0x7f0e09e8 float:1.8880181E38 double:1.0531634096E-314;
+    L_0x0103:
+        r13 = NUM; // 0x7f0e0a13 float:1.8880268E38 double:1.053163431E-314;
         r0 = "SetUrlChecking";
         r13 = org.telegram.messenger.LocaleController.getString(r0, r13);
         r0 = "windowBackgroundWhiteGrayText8";
@@ -601,21 +601,21 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r12 = r11.checkRunnable;
         r2 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r12, r2);
-    L_0x011f:
+    L_0x0122:
         return r1;
-    L_0x0120:
-        r12 = NUM; // 0x7f0e09ec float:1.888019E38 double:1.0531634116E-314;
+    L_0x0123:
+        r12 = NUM; // 0x7f0e0a17 float:1.8880276E38 double:1.053163433E-314;
         r1 = "SetUrlInvalidShort";
-        if (r13 == 0) goto L_0x0133;
-    L_0x0127:
+        if (r13 == 0) goto L_0x0136;
+    L_0x012a:
         r13 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r13, r12);
-        goto L_0x013a;
-    L_0x0133:
+        goto L_0x013d;
+    L_0x0136:
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         r11.setCheckText(r12, r4);
-    L_0x013a:
+    L_0x013d:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeSetUrlActivity.checkUrl(java.lang.String, boolean):boolean");
@@ -634,7 +634,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     }
 
     /* JADX WARNING: Missing block: B:8:0x0021, code skipped:
-            if ("THEME_SLUG_OCCUPIED".equals(r5.text) == false) goto L_0x0035;
+            if ("THEME_SLUG_OCCUPIED".equals(r5.text) == false) goto L_0x0036;
      */
     public /* synthetic */ void lambda$null$6$ThemeSetUrlActivity(java.lang.String r4, org.telegram.tgnet.TLRPC.TL_error r5) {
         /*
@@ -642,12 +642,12 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r0 = 0;
         r3.checkReqId = r0;
         r1 = r3.lastCheckName;
-        if (r1 == 0) goto L_0x004a;
+        if (r1 == 0) goto L_0x004c;
     L_0x0007:
         r1 = r1.equals(r4);
-        if (r1 == 0) goto L_0x004a;
+        if (r1 == 0) goto L_0x004c;
     L_0x000d:
-        if (r5 == 0) goto L_0x0035;
+        if (r5 == 0) goto L_0x0036;
     L_0x000f:
         r1 = r5.text;
         r2 = "THEME_SLUG_INVALID";
@@ -659,17 +659,17 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r5 = r1.equals(r5);
         if (r5 != 0) goto L_0x0024;
     L_0x0023:
-        goto L_0x0035;
+        goto L_0x0036;
     L_0x0024:
-        r4 = NUM; // 0x7f0e09e9 float:1.8880183E38 double:1.05316341E-314;
+        r4 = NUM; // 0x7f0e0a14 float:1.888027E38 double:1.0531634313E-314;
         r5 = "SetUrlInUse";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "windowBackgroundWhiteRedText4";
         r3.setCheckText(r4, r5);
         r3.lastNameAvailable = r0;
-        goto L_0x004a;
-    L_0x0035:
-        r5 = NUM; // 0x7f0e09e7 float:1.888018E38 double:1.053163409E-314;
+        goto L_0x004c;
+    L_0x0036:
+        r5 = NUM; // 0x7f0e0a12 float:1.8880266E38 double:1.0531634303E-314;
         r1 = 1;
         r2 = new java.lang.Object[r1];
         r2[r0] = r4;
@@ -678,7 +678,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r5 = "windowBackgroundWhiteGreenText";
         r3.setCheckText(r4, r5);
         r3.lastNameAvailable = r1;
-    L_0x004a:
+    L_0x004c:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeSetUrlActivity.lambda$null$6$ThemeSetUrlActivity(java.lang.String, org.telegram.tgnet.TLRPC$TL_error):void");

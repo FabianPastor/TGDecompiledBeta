@@ -484,15 +484,15 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             return new Holder(groupCreateSectionCell);
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:62:0x013c  */
-        /* JADX WARNING: Removed duplicated region for block: B:61:0x0137  */
+        /* JADX WARNING: Removed duplicated region for block: B:62:0x013d  */
+        /* JADX WARNING: Removed duplicated region for block: B:61:0x0138  */
         /* JADX WARNING: Removed duplicated region for block: B:83:? A:{SYNTHETIC, RETURN} */
-        /* JADX WARNING: Removed duplicated region for block: B:67:0x0149  */
+        /* JADX WARNING: Removed duplicated region for block: B:67:0x014a  */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r11, int r12) {
             /*
             r10 = this;
             r0 = r11.getItemViewType();
-            if (r0 == 0) goto L_0x017a;
+            if (r0 == 0) goto L_0x017b;
         L_0x0006:
             r1 = 0;
             r2 = 1;
@@ -501,31 +501,31 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r12 = 2;
             if (r0 == r12) goto L_0x000f;
         L_0x000d:
-            goto L_0x018e;
+            goto L_0x018f;
         L_0x000f:
             r11 = r11.itemView;
             r11 = (org.telegram.ui.Cells.TextCell) r11;
             r0 = r10.inviteViaLink;
-            r2 = NUM; // 0x7var_ float:1.7945827E38 double:1.0529358074E-314;
+            r2 = NUM; // 0x7var_ float:1.7945856E38 double:1.0529358143E-314;
             if (r0 != r12) goto L_0x0028;
         L_0x001a:
-            r12 = NUM; // 0x7f0e0244 float:1.8876214E38 double:1.053162443E-314;
+            r12 = NUM; // 0x7f0e0253 float:1.8876244E38 double:1.0531624506E-314;
             r0 = "ChannelInviteViaLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
-            goto L_0x018e;
+            goto L_0x018f;
         L_0x0028:
-            r12 = NUM; // 0x7f0e0568 float:1.8877845E38 double:1.0531628404E-314;
+            r12 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
             r0 = "InviteToGroupByLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
-            goto L_0x018e;
+            goto L_0x018f;
         L_0x0036:
             r11 = r11.itemView;
             r11 = (org.telegram.ui.Cells.GroupCreateUserCell) r11;
             r0 = r10.searching;
             r3 = 0;
-            if (r0 == 0) goto L_0x0123;
+            if (r0 == 0) goto L_0x0124;
         L_0x003f:
             r0 = r10.searchResult;
             r0 = r0.size();
@@ -574,7 +574,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         L_0x0094:
             r4 = r3;
         L_0x0095:
-            if (r4 == 0) goto L_0x012f;
+            if (r4 == 0) goto L_0x0130;
         L_0x0097:
             r5 = r4 instanceof org.telegram.tgnet.TLRPC.User;
             if (r5 == 0) goto L_0x00a1;
@@ -594,10 +594,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r0 = r10.searchResultNames;
             r12 = r0.get(r12);
             r12 = (java.lang.CharSequence) r12;
-            if (r12 == 0) goto L_0x0130;
+            if (r12 == 0) goto L_0x0131;
         L_0x00b4:
             r0 = android.text.TextUtils.isEmpty(r5);
-            if (r0 != 0) goto L_0x0130;
+            if (r0 != 0) goto L_0x0131;
         L_0x00ba:
             r0 = r12.toString();
             r7 = new java.lang.StringBuilder;
@@ -606,17 +606,17 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r7.append(r5);
             r5 = r7.toString();
             r0 = r0.startsWith(r5);
-            if (r0 == 0) goto L_0x0130;
+            if (r0 == 0) goto L_0x0131;
         L_0x00d3:
             r9 = r3;
             r3 = r12;
             r12 = r9;
-            goto L_0x0130;
+            goto L_0x0131;
         L_0x00d7:
-            if (r12 <= r0) goto L_0x012f;
+            if (r12 <= r0) goto L_0x0130;
         L_0x00d9:
             r12 = android.text.TextUtils.isEmpty(r5);
-            if (r12 != 0) goto L_0x012f;
+            if (r12 != 0) goto L_0x0130;
         L_0x00df:
             r12 = r10.searchAdapterHelper;
             r12 = r12.getLastFoundUsername();
@@ -625,15 +625,15 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         L_0x00eb:
             r12 = r12.substring(r2);
         L_0x00ef:
-            r0 = new android.text.SpannableStringBuilder;	 Catch:{ Exception -> 0x0120 }
-            r0.<init>();	 Catch:{ Exception -> 0x0120 }
-            r0.append(r6);	 Catch:{ Exception -> 0x0120 }
-            r0.append(r5);	 Catch:{ Exception -> 0x0120 }
-            r6 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r5, r12);	 Catch:{ Exception -> 0x0120 }
+            r0 = new android.text.SpannableStringBuilder;	 Catch:{ Exception -> 0x0121 }
+            r0.<init>();	 Catch:{ Exception -> 0x0121 }
+            r0.append(r6);	 Catch:{ Exception -> 0x0121 }
+            r0.append(r5);	 Catch:{ Exception -> 0x0121 }
+            r6 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r5, r12);	 Catch:{ Exception -> 0x0121 }
             r7 = -1;
-            if (r6 == r7) goto L_0x011d;
+            if (r6 == r7) goto L_0x011e;
         L_0x0101:
-            r12 = r12.length();	 Catch:{ Exception -> 0x0120 }
+            r12 = r12.length();	 Catch:{ Exception -> 0x0121 }
             if (r6 != 0) goto L_0x010a;
         L_0x0107:
             r12 = r12 + 1;
@@ -641,88 +641,88 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         L_0x010a:
             r6 = r6 + 1;
         L_0x010c:
-            r7 = new android.text.style.ForegroundColorSpan;	 Catch:{ Exception -> 0x0120 }
+            r7 = new android.text.style.ForegroundColorSpan;	 Catch:{ Exception -> 0x0121 }
             r8 = "windowBackgroundWhiteBlueText4";
-            r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);	 Catch:{ Exception -> 0x0120 }
-            r7.<init>(r8);	 Catch:{ Exception -> 0x0120 }
+            r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);	 Catch:{ Exception -> 0x0121 }
+            r7.<init>(r8);	 Catch:{ Exception -> 0x0121 }
             r12 = r12 + r6;
             r8 = 33;
-            r0.setSpan(r7, r6, r12, r8);	 Catch:{ Exception -> 0x0120 }
-        L_0x011d:
+            r0.setSpan(r7, r6, r12, r8);	 Catch:{ Exception -> 0x0121 }
+        L_0x011e:
             r12 = r3;
             r3 = r0;
-            goto L_0x0130;
-        L_0x0120:
+            goto L_0x0131;
+        L_0x0121:
             r12 = r3;
             r3 = r5;
-            goto L_0x0130;
-        L_0x0123:
+            goto L_0x0131;
+        L_0x0124:
             r0 = r10.contacts;
             r4 = r10.usersStartRow;
             r12 = r12 - r4;
             r12 = r0.get(r12);
             r4 = r12;
             r4 = (org.telegram.tgnet.TLObject) r4;
-        L_0x012f:
-            r12 = r3;
         L_0x0130:
+            r12 = r3;
+        L_0x0131:
             r11.setObject(r4, r12, r3);
             r12 = r4 instanceof org.telegram.tgnet.TLRPC.User;
-            if (r12 == 0) goto L_0x013c;
-        L_0x0137:
+            if (r12 == 0) goto L_0x013d;
+        L_0x0138:
             r4 = (org.telegram.tgnet.TLRPC.User) r4;
             r12 = r4.id;
-            goto L_0x0147;
-        L_0x013c:
+            goto L_0x0148;
+        L_0x013d:
             r12 = r4 instanceof org.telegram.tgnet.TLRPC.Chat;
-            if (r12 == 0) goto L_0x0146;
-        L_0x0140:
+            if (r12 == 0) goto L_0x0147;
+        L_0x0141:
             r4 = (org.telegram.tgnet.TLRPC.Chat) r4;
             r12 = r4.id;
             r12 = -r12;
-            goto L_0x0147;
-        L_0x0146:
-            r12 = 0;
+            goto L_0x0148;
         L_0x0147:
-            if (r12 == 0) goto L_0x018e;
-        L_0x0149:
+            r12 = 0;
+        L_0x0148:
+            if (r12 == 0) goto L_0x018f;
+        L_0x014a:
             r0 = org.telegram.ui.GroupCreateActivity.this;
             r0 = r0.ignoreUsers;
-            if (r0 == 0) goto L_0x0164;
-        L_0x0151:
+            if (r0 == 0) goto L_0x0165;
+        L_0x0152:
             r0 = org.telegram.ui.GroupCreateActivity.this;
             r0 = r0.ignoreUsers;
             r0 = r0.indexOfKey(r12);
-            if (r0 < 0) goto L_0x0164;
-        L_0x015d:
+            if (r0 < 0) goto L_0x0165;
+        L_0x015e:
             r11.setChecked(r2, r1);
             r11.setCheckBoxEnabled(r1);
-            goto L_0x018e;
-        L_0x0164:
+            goto L_0x018f;
+        L_0x0165:
             r0 = org.telegram.ui.GroupCreateActivity.this;
             r0 = r0.selectedContacts;
             r12 = r0.indexOfKey(r12);
-            if (r12 < 0) goto L_0x0172;
-        L_0x0170:
+            if (r12 < 0) goto L_0x0173;
+        L_0x0171:
             r12 = 1;
-            goto L_0x0173;
-        L_0x0172:
-            r12 = 0;
+            goto L_0x0174;
         L_0x0173:
+            r12 = 0;
+        L_0x0174:
             r11.setChecked(r12, r1);
             r11.setCheckBoxEnabled(r2);
-            goto L_0x018e;
-        L_0x017a:
+            goto L_0x018f;
+        L_0x017b:
             r11 = r11.itemView;
             r11 = (org.telegram.ui.Cells.GroupCreateSectionCell) r11;
             r12 = r10.searching;
-            if (r12 == 0) goto L_0x018e;
-        L_0x0182:
-            r12 = NUM; // 0x7f0e0502 float:1.8877638E38 double:1.05316279E-314;
+            if (r12 == 0) goto L_0x018f;
+        L_0x0183:
+            r12 = NUM; // 0x7f0e051a float:1.8877686E38 double:1.053162802E-314;
             r0 = "GlobalSearch";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
-        L_0x018e:
+        L_0x018f:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

@@ -447,16 +447,16 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r0.<init>(r8);
         r8 = 3;
         r3 = new java.lang.CharSequence[r8];
-        r4 = NUM; // 0x7f0e0b81 float:1.888101E38 double:1.0531636117E-314;
+        r4 = NUM; // 0x7f0e0bb1 float:1.8881108E38 double:1.0531636354E-314;
         r5 = "VoipAudioRoutingBluetooth";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = 0;
         r3[r5] = r4;
-        r4 = NUM; // 0x7f0e0b82 float:1.8881013E38 double:1.053163612E-314;
+        r4 = NUM; // 0x7f0e0bb2 float:1.888111E38 double:1.053163636E-314;
         r6 = "VoipAudioRoutingEarpiece";
         r4 = org.telegram.messenger.LocaleController.getString(r6, r4);
         r3[r2] = r4;
-        r2 = NUM; // 0x7f0e0b83 float:1.8881015E38 double:1.0531636126E-314;
+        r2 = NUM; // 0x7f0e0bb3 float:1.8881112E38 double:1.0531636364E-314;
         r4 = "VoipAudioRoutingSpeaker";
         r2 = org.telegram.messenger.LocaleController.getString(r4, r2);
         r3[r1] = r2;
@@ -926,23 +926,23 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r1.<init>(r4, r2, r2);	 Catch:{ Exception -> 0x0105 }
         r6.soundPool = r1;	 Catch:{ Exception -> 0x0105 }
         r1 = r6.soundPool;	 Catch:{ Exception -> 0x0105 }
-        r5 = NUM; // 0x7f0d000c float:1.874214E38 double:1.0531297835E-314;
+        r5 = NUM; // 0x7f0d000e float:1.8742143E38 double:1.0531297845E-314;
         r1 = r1.load(r6, r5, r4);	 Catch:{ Exception -> 0x0105 }
         r6.spConnectingId = r1;	 Catch:{ Exception -> 0x0105 }
         r1 = r6.soundPool;	 Catch:{ Exception -> 0x0105 }
-        r5 = NUM; // 0x7f0d000f float:1.8742145E38 double:1.053129785E-314;
+        r5 = NUM; // 0x7f0d0011 float:1.874215E38 double:1.053129786E-314;
         r1 = r1.load(r6, r5, r4);	 Catch:{ Exception -> 0x0105 }
         r6.spRingbackID = r1;	 Catch:{ Exception -> 0x0105 }
         r1 = r6.soundPool;	 Catch:{ Exception -> 0x0105 }
-        r5 = NUM; // 0x7f0d000e float:1.8742143E38 double:1.0531297845E-314;
+        r5 = NUM; // 0x7f0d0010 float:1.8742147E38 double:1.0531297854E-314;
         r1 = r1.load(r6, r5, r4);	 Catch:{ Exception -> 0x0105 }
         r6.spFailedID = r1;	 Catch:{ Exception -> 0x0105 }
         r1 = r6.soundPool;	 Catch:{ Exception -> 0x0105 }
-        r5 = NUM; // 0x7f0d000d float:1.8742141E38 double:1.053129784E-314;
+        r5 = NUM; // 0x7f0d000f float:1.8742145E38 double:1.053129785E-314;
         r1 = r1.load(r6, r5, r4);	 Catch:{ Exception -> 0x0105 }
         r6.spEndId = r1;	 Catch:{ Exception -> 0x0105 }
         r1 = r6.soundPool;	 Catch:{ Exception -> 0x0105 }
-        r5 = NUM; // 0x7f0d000b float:1.8742137E38 double:1.053129783E-314;
+        r5 = NUM; // 0x7f0d000d float:1.8742141E38 double:1.053129784E-314;
         r1 = r1.load(r6, r5, r4);	 Catch:{ Exception -> 0x0105 }
         r6.spBusyId = r1;	 Catch:{ Exception -> 0x0105 }
         r1 = new android.content.ComponentName;	 Catch:{ Exception -> 0x0105 }
@@ -1365,12 +1365,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r4.addFlags(r5);
         r5 = new android.app.Notification$Builder;
         r5.<init>(r0);
-        r6 = NUM; // 0x7f0e0b8e float:1.8881037E38 double:1.053163618E-314;
+        r6 = NUM; // 0x7f0e0bbe float:1.8881134E38 double:1.053163642E-314;
         r7 = "VoipInCallBranding";
         r8 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r5 = r5.setContentTitle(r8);
         r5 = r5.setContentText(r1);
-        r8 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
+        r8 = NUM; // 0x7var_b float:1.7945671E38 double:1.0529357693E-314;
         r5 = r5.setSmallIcon(r8);
         r5 = r5.setSubText(r2);
         r8 = 0;
@@ -1460,7 +1460,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r11.append(r13);
         r11.append(r15);
         r11 = r11.toString();
-        r12 = NUM; // 0x7f0e054e float:1.8877792E38 double:1.0531628276E-314;
+        r12 = NUM; // 0x7f0e0566 float:1.887784E38 double:1.0531628394E-314;
         r14 = "IncomingCalls";
         r12 = org.telegram.messenger.LocaleController.getString(r14, r12);
         r14 = 4;
@@ -1499,7 +1499,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r8 = r16.getCallID();
         r10 = "call_id";
         r6.putExtra(r10, r8);
-        r8 = NUM; // 0x7f0e0b87 float:1.8881023E38 double:1.0531636146E-314;
+        r8 = NUM; // 0x7f0e0bb7 float:1.888112E38 double:1.0531636383E-314;
         r9 = "VoipDeclineCall";
         r11 = org.telegram.messenger.LocaleController.getString(r9, r8);
         r12 = android.os.Build.VERSION.SDK_INT;
@@ -1521,7 +1521,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     L_0x017f:
         r12 = NUM; // 0x10000000 float:2.5243549E-29 double:1.32624737E-315;
         r6 = android.app.PendingIntent.getBroadcast(r0, r15, r6, r12);
-        r14 = NUM; // 0x7var_fe float:1.7945093E38 double:1.0529356285E-314;
+        r14 = NUM; // 0x7var_ float:1.7945107E38 double:1.052935632E-314;
         r5.addAction(r14, r11, r6);
         r11 = new android.content.Intent;
         r14 = org.telegram.messenger.voip.VoIPActionsReceiver.class;
@@ -1536,7 +1536,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r11.setAction(r14);
         r14 = r16.getCallID();
         r11.putExtra(r10, r14);
-        r10 = NUM; // 0x7f0e0b7f float:1.8881007E38 double:1.0531636107E-314;
+        r10 = NUM; // 0x7f0e0baf float:1.8881104E38 double:1.0531636344E-314;
         r14 = "VoipAnswerCall";
         r10 = org.telegram.messenger.LocaleController.getString(r14, r10);
         r14 = android.os.Build.VERSION.SDK_INT;
@@ -1556,7 +1556,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r15 = 0;
     L_0x01d6:
         r11 = android.app.PendingIntent.getBroadcast(r0, r15, r11, r12);
-        r12 = NUM; // 0x7var_fd float:1.7945091E38 double:1.052935628E-314;
+        r12 = NUM; // 0x7var_ float:1.7945105E38 double:1.0529356315E-314;
         r5.addAction(r12, r10, r11);
         r10 = 2;
         r5.setPriority(r10);
@@ -1629,7 +1629,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.UserConfig.getInstance(r1);
         r1 = r1.getCurrentUser();
-        r7 = NUM; // 0x7f0e0b8f float:1.888104E38 double:1.0531636186E-314;
+        r7 = NUM; // 0x7f0e0bbf float:1.8881136E38 double:1.0531636423E-314;
         r2 = new java.lang.Object[r2];
         r13 = r1.first_name;
         r1 = r1.last_name;
@@ -1641,7 +1641,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r10.setTextViewText(r12, r1);
         goto L_0x02cd;
     L_0x028f:
-        r1 = NUM; // 0x7f0e0b8e float:1.8881037E38 double:1.053163618E-314;
+        r1 = NUM; // 0x7f0e0bbe float:1.8881134E38 double:1.053163642E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r7, r1);
         r10.setTextViewText(r12, r1);
         goto L_0x02cd;
@@ -1653,7 +1653,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.UserConfig.getInstance(r1);
         r1 = r1.getCurrentUser();
-        r14 = NUM; // 0x7f0e0b80 float:1.8881009E38 double:1.053163611E-314;
+        r14 = NUM; // 0x7f0e0bb0 float:1.8881106E38 double:1.053163635E-314;
         r7 = new java.lang.Object[r7];
         r15 = r1.first_name;
         r1 = r1.last_name;
@@ -1672,7 +1672,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     L_0x02cd:
         r1 = r0.getRoundAvatarBitmap(r3);
         r2 = NUM; // 0x7var_ float:1.80776E38 double:1.0529679063E-314;
-        r3 = NUM; // 0x7f0e0b7f float:1.8881007E38 double:1.0531636107E-314;
+        r3 = NUM; // 0x7f0e0baf float:1.8881104E38 double:1.0531636344E-314;
         r7 = "VoipAnswerCall";
         r3 = org.telegram.messenger.LocaleController.getString(r7, r3);
         r10.setTextViewText(r2, r3);
@@ -1979,8 +1979,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         return phoneAccountHandle;
     }
 
-    /* JADX WARNING: Missing block: B:20:0x0062, code skipped:
-            if (org.telegram.messenger.MessagesController.getGlobalMainSettings().getBoolean("dbg_force_connection_service", false) == false) goto L_0x0065;
+    /* JADX WARNING: Missing block: B:20:0x0063, code skipped:
+            if (org.telegram.messenger.MessagesController.getGlobalMainSettings().getBoolean("dbg_force_connection_service", false) == false) goto L_0x0066;
      */
     private static boolean isDeviceCompatibleWithConnectionServiceAPI() {
         /*
@@ -1994,50 +1994,50 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r0 = android.os.Build.PRODUCT;
         r2 = "angler";
         r0 = r2.equals(r0);
-        if (r0 != 0) goto L_0x0064;
+        if (r0 != 0) goto L_0x0065;
     L_0x0012:
         r0 = android.os.Build.PRODUCT;
         r2 = "bullhead";
         r0 = r2.equals(r0);
-        if (r0 != 0) goto L_0x0064;
+        if (r0 != 0) goto L_0x0065;
     L_0x001c:
         r0 = android.os.Build.PRODUCT;
         r2 = "sailfish";
         r0 = r2.equals(r0);
-        if (r0 != 0) goto L_0x0064;
+        if (r0 != 0) goto L_0x0065;
     L_0x0026:
         r0 = android.os.Build.PRODUCT;
         r2 = "marlin";
         r0 = r2.equals(r0);
-        if (r0 != 0) goto L_0x0064;
+        if (r0 != 0) goto L_0x0065;
     L_0x0030:
         r0 = android.os.Build.PRODUCT;
         r2 = "walleye";
         r0 = r2.equals(r0);
-        if (r0 != 0) goto L_0x0064;
-    L_0x003a:
+        if (r0 != 0) goto L_0x0065;
+    L_0x003b:
         r0 = android.os.Build.PRODUCT;
         r2 = "taimen";
         r0 = r2.equals(r0);
-        if (r0 != 0) goto L_0x0064;
-    L_0x0044:
+        if (r0 != 0) goto L_0x0065;
+    L_0x0045:
         r0 = android.os.Build.PRODUCT;
         r2 = "blueline";
         r0 = r2.equals(r0);
-        if (r0 != 0) goto L_0x0064;
-    L_0x004e:
+        if (r0 != 0) goto L_0x0065;
+    L_0x004f:
         r0 = android.os.Build.PRODUCT;
         r2 = "crosshatch";
         r0 = r2.equals(r0);
-        if (r0 != 0) goto L_0x0064;
-    L_0x0058:
+        if (r0 != 0) goto L_0x0065;
+    L_0x0059:
         r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
         r2 = "dbg_force_connection_service";
         r0 = r0.getBoolean(r2, r1);
-        if (r0 == 0) goto L_0x0065;
-    L_0x0064:
-        r1 = 1;
+        if (r0 == 0) goto L_0x0066;
     L_0x0065:
+        r1 = 1;
+    L_0x0066:
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPBaseService.isDeviceCompatibleWithConnectionServiceAPI():boolean");

@@ -67,12 +67,12 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
         r9 = this;
         r0 = "r";
         r11 = r0.equals(r11);
-        if (r11 == 0) goto L_0x00ef;
+        if (r11 == 0) goto L_0x0101;
     L_0x0008:
         r11 = matcher;
         r11 = r11.match(r10);
         r0 = 1;
-        if (r11 != r0) goto L_0x00e7;
+        if (r11 != r0) goto L_0x00f9;
     L_0x0011:
         r11 = r10.getPathSegments();
         r0 = r11.get(r0);
@@ -90,7 +90,7 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
         org.telegram.messenger.ApplicationLoader.postInitApplication();
         r0 = android.net.Uri.fromFile(r1);
         r0 = org.telegram.messenger.AndroidUtilities.isInternalUri(r0);
-        if (r0 != 0) goto L_0x00df;
+        if (r0 != 0) goto L_0x00f1;
     L_0x0043:
         r0 = r1.exists();
         r2 = NUM; // 0x10000000 float:2.5243549E-29 double:1.32624737E-315;
@@ -174,27 +174,36 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
         monitor-exit(r0);	 Catch:{ all -> 0x00d7 }
         throw r10;
     L_0x00da:
+        r10 = android.net.Uri.fromFile(r1);
+        r10 = org.telegram.messenger.AndroidUtilities.isInternalUri(r10);
+        if (r10 != 0) goto L_0x00e9;
+    L_0x00e4:
         r10 = android.os.ParcelFileDescriptor.open(r1, r2);
         return r10;
-    L_0x00df:
+    L_0x00e9:
         r10 = new java.lang.SecurityException;
         r11 = "trying to read internal file";
         r10.<init>(r11);
         throw r10;
-    L_0x00e7:
+    L_0x00f1:
+        r10 = new java.lang.SecurityException;
+        r11 = "trying to read internal file";
+        r10.<init>(r11);
+        throw r10;
+    L_0x00f9:
         r10 = new java.io.FileNotFoundException;
         r11 = "Invalid URI";
         r10.<init>(r11);
         throw r10;
-    L_0x00ef:
+    L_0x0101:
         r10 = new java.lang.SecurityException;
         r11 = "Can only open files for read";
         r10.<init>(r11);
-        goto L_0x00f8;
-    L_0x00f7:
+        goto L_0x010a;
+    L_0x0109:
         throw r10;
-    L_0x00f8:
-        goto L_0x00f7;
+    L_0x010a:
+        goto L_0x0109;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationImageProvider.openFile(android.net.Uri, java.lang.String):android.os.ParcelFileDescriptor");
     }

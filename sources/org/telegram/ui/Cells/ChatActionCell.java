@@ -95,16 +95,18 @@ public class ChatActionCell extends BaseCell {
 
     public void setCustomDate(int i, boolean z) {
         if (this.customDate != i) {
-            CharSequence formatString;
-            if (z) {
-                formatString = LocaleController.formatString("MessageScheduledOn", NUM, LocaleController.formatDateChat((long) i));
+            CharSequence formatDateChat;
+            if (!z) {
+                formatDateChat = LocaleController.formatDateChat((long) i);
+            } else if (i == NUM) {
+                formatDateChat = LocaleController.getString("MessageScheduledUntilOnline", NUM);
             } else {
-                formatString = LocaleController.formatDateChat((long) i);
+                formatDateChat = LocaleController.formatString("MessageScheduledOn", NUM, LocaleController.formatDateChat((long) i));
             }
             CharSequence charSequence = this.customText;
-            if (charSequence == null || !TextUtils.equals(formatString, charSequence)) {
+            if (charSequence == null || !TextUtils.equals(formatDateChat, charSequence)) {
                 this.customDate = i;
-                this.customText = formatString;
+                this.customText = formatDateChat;
                 if (getMeasuredWidth() != 0) {
                     createLayout(this.customText, getMeasuredWidth());
                     invalidate();

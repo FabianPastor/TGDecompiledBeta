@@ -3,7 +3,6 @@ package org.telegram.messenger;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
@@ -12,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -259,9 +257,6 @@ public class Emoji {
             Options options = new Options();
             options.inJustDecodeBounds = false;
             options.inSampleSize = i3;
-            if (VERSION.SDK_INT >= 26) {
-                options.inPreferredConfig = Config.HARDWARE;
-            }
             bitmap = BitmapFactory.decodeStream(open, null, options);
             open.close();
         } catch (Throwable th2) {

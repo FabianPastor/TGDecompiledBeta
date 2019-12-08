@@ -348,10 +348,10 @@ public class ThemeDescription {
             }
             i3 = this.changeFlags;
             if ((FLAG_AB_SUBMENUITEM & i3) != 0) {
-                ((ActionBar) this.viewToInvalidate).setPopupItemsColor(i, (i3 & FLAG_IMAGECOLOR) != 0);
+                ((ActionBar) this.viewToInvalidate).setPopupItemsColor(i, (i3 & FLAG_IMAGECOLOR) != 0, false);
             }
             if ((this.changeFlags & FLAG_AB_SUBMENUBACKGROUND) != 0) {
-                ((ActionBar) this.viewToInvalidate).setPopupBackgroundColor(i);
+                ((ActionBar) this.viewToInvalidate).setPopupBackgroundColor(i, false);
             }
         }
         view = this.viewToInvalidate;

@@ -83,6 +83,7 @@ import drinkless.org.ton.TonApi.OnLiteServerQueryError;
 import drinkless.org.ton.TonApi.OnLiteServerQueryResult;
 import drinkless.org.ton.TonApi.UpdateSendLiteServerQuery;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -92,11 +93,14 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -150,6 +154,8 @@ public class AndroidUtilities {
     private static final Object callLock = new Object();
     private static ContentObserver callLogContentObserver;
     private static CallReceiver callReceiver;
+    private static char[] characters = new char[]{' ', '!', '\"', '#', '%', '&', '\'', '(', ')', '*', ',', '-', '.', '/', ':', ';', '?', '@', '[', '\\', ']', '_', '{', '}', 161, 167, 171, 182, 183, 187, 191, 894, 903, 1370, 1371, 1372, 1373, 1374, 1375, 1417, 1418, 1470, 1472, 1475, 1478, 1523, 1524, 1545, 1546, 1548, 1549, 1563, 1566, 1567, 1642, 1643, 1644, 1645, 1748, 1792, 1793, 1794, 1795, 1796, 1797, 1798, 1799, 1800, 1801, 1802, 1803, 1804, 1805, 2039, 2040, 2041, 2096, 2097, 2098, 2099, 2100, 2101, 2102, 2103, 2104, 2105, 2106, 2107, 2108, 2109, 2110, 2142, 2404, 2405, 2416, 2557, 2678, 2800, 3191, 3204, 3572, 3663, 3674, 3675, 3844, 3845, 3846, 3847, 3848, 3849, 3850, 3851, 3852, 3853, 3854, 3855, 3856, 3857, 3858, 3860, 3898, 3899, 3900, 3901, 3973, 4048, 4049, 4050, 4051, 4052, 4057, 4058, 4170, 4171, 4172, 4173, 4174, 4175, 4347, 4960, 4961, 4962, 4963, 4964, 4965, 4966, 4967, 4968, 5120, 5742, 5787, 5788, 5867, 5868, 5869, 5941, 5942, 6100, 6101, 6102, 6104, 6105, 6106, 6144, 6145, 6146, 6147, 6148, 6149, 6150, 6151, 6152, 6153, 6154, 6468, 6469, 6686, 6687, 6816, 6817, 6818, 6819, 6820, 6821, 6822, 6824, 6825, 6826, 6827, 6828, 6829, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7164, 7165, 7166, 7167, 7227, 7228, 7229, 7230, 7231, 7294, 7295, 7360, 7361, 7362, 7363, 7364, 7365, 7366, 7367, 7379, 8208, 8209, 8210, 8211, 8212, 8213, 8214, 8215, 8216, 8217, 8218, 8219, 8220, 8221, 8222, 8223, 8224, 8225, 8226, 8227, 8228, 8229, 8230, 8231, 8240, 8241, 8242, 8243, 8244, 8245, 8246, 8247, 8248, 8249, 8250, 8251, 8252, 8253, 8254, 8255, 8256, 8257, 8258, 8259, 8261, 8262, 8263, 8264, 8265, 8266, 8267, 8268, 8269, 8270, 8271, 8272, 8273, 8275, 8276, 8277, 8278, 8279, 8280, 8281, 8282, 8283, 8284, 8285, 8286, 8317, 8318, 8333, 8334, 8968, 8969, 8970, 8971, 9001, 9002, 10088, 10089, 10090, 10091, 10092, 10093, 10094, 10095, 10096, 10097, 10098, 10099, 10100, 10101, 10181, 10182, 10214, 10215, 10216, 10217, 10218, 10219, 10220, 10221, 10222, 10223, 10627, 10628, 10629, 10630, 10631, 10632, 10633, 10634, 10635, 10636, 10637, 10638, 10639, 10640, 10641, 10642, 10643, 10644, 10645, 10646, 10647, 10648, 10712, 10713, 10714, 10715, 10748, 10749, 11513, 11514, 11515, 11516, 11518, 11519, 11632, 11776, 11777, 11778, 11779, 11780, 11781, 11782, 11783, 11784, 11785, 11786, 11787, 11788, 11789, 11790, 11791, 11792, 11793, 11794, 11795, 11796, 11797, 11798, 11799, 11800, 11801, 11802, 11803, 11804, 11805, 11806, 11807, 11808, 11809, 11810, 11811, 11812, 11813, 11814, 11815, 11816, 11817, 11818, 11819, 11820, 11821, 11822, 11824, 11825, 11826, 11827, 11828, 11829, 11830, 11831, 11832, 11833, 11834, 11835, 11836, 11837, 11838, 11839, 11840, 11841, 11842, 11843, 11844, 11845, 11846, 11847, 11848, 11849, 11850, 11851, 11852, 11853, 11854, 11855, 12289, 12290, 12291, 12296, 12297, 12298, 12299, 12300, 12301, 12302, 12303, 12304, 12305, 12308, 12309, 12310, 12311, 12312, 12313, 12314, 12315, 12316, 12317, 12318, 12319, 12336, 12349, 12448, 12539, 42238, 42239, 42509, 42510, 42511, 42611, 42622, 42738, 42739, 42740, 42741, 42742, 42743, 43124, 43125, 43126, 43127, 43214, 43215, 43256, 43257, 43258, 43260, 43310, 43311, 43359, 43457, 43458, 43459, 43460, 43461, 43462, 43463, 43464, 43465, 43466, 43467, 43468, 43469, 43486, 43487, 43612, 43613, 43614, 43615, 43742, 43743, 43760, 43761, 44011, 64830, 64831, 65040, 65041, 65042, 65043, 65044, 65045, 65046, 65047, 65048, 65049, 65072, 65073, 65074, 65075, 65076, 65077, 65078, 65079, 65080, 65081, 65082, 65083, 65084, 65085, 65086, 65087, 65088, 65089, 65090, 65091, 65092, 65093, 65094, 65095, 65096, 65097, 65098, 65099, 65100, 65101, 65102, 65103, 65104, 65105, 65106, 65108, 65109, 65110, 65111, 65112, 65113, 65114, 65115, 65116, 65117, 65118, 65119, 65120, 65121, 65123, 65128, 65130, 65131, 65281, 65282, 65283, 65285, 65286, 65287, 65288, 65289, 65290, 65292, 65293, 65294, 65295, 65306, 65307, 65311, 65312, 65339, 65340, 65341, 65343, 65371, 65373, 65375, 65376, 65377, 65378, 65379, 65380, 65381};
+    private static HashSet<Character> charactersMap;
     public static DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     public static float density = 1.0f;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -168,9 +174,11 @@ public class AndroidUtilities {
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
     public static Integer photoSize = null;
     private static int prevOrientation = -10;
+    public static int roundMessageInset;
     public static int roundMessageSize;
     private static Paint roundPaint;
     public static final MatchFilter sUrlMatchFilter = -$$Lambda$AndroidUtilities$69khgLSl9NZ64odrZ1S3Vo9PGBk.INSTANCE;
+    public static float screenRefreshRate = 60.0f;
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable();
@@ -721,6 +729,10 @@ public class AndroidUtilities {
         return iArr;
     }
 
+    public static double[] rgbToHsv(int i) {
+        return rgbToHsv(Color.red(i), Color.green(i), Color.blue(i));
+    }
+
     public static double[] rgbToHsv(int i, int i2, int i3) {
         double d = (double) i;
         Double.isNaN(d);
@@ -754,7 +766,12 @@ public class AndroidUtilities {
         return new double[]{d7, d8, d3};
     }
 
-    private static int[] hsvToRgb(double d, double d2, double d3) {
+    public static int hsvToColor(double d, double d2, double d3) {
+        int[] hsvToRgb = hsvToRgb(d, d2, d3);
+        return Color.argb(255, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
+    }
+
+    public static int[] hsvToRgb(double d, double d2, double d3) {
         double d4 = 6.0d * d;
         double floor = (double) ((int) Math.floor(d4));
         Double.isNaN(floor);
@@ -845,7 +862,7 @@ public class AndroidUtilities {
         return iArr;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0059 A:{SYNTHETIC, Splitter:B:22:0x0059} */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x005a A:{SYNTHETIC, Splitter:B:22:0x005a} */
     public static boolean isInternalUri(android.net.Uri r5) {
         /*
         r5 = r5.getPath();
@@ -868,60 +885,60 @@ public class AndroidUtilities {
         r1.append(r2);
         r1 = r1.toString();
         r1 = r5.matches(r1);
-        if (r1 == 0) goto L_0x0035;
-    L_0x0034:
-        return r0;
+        if (r1 == 0) goto L_0x0036;
     L_0x0035:
-        r1 = 0;
+        return r0;
     L_0x0036:
+        r1 = 0;
+    L_0x0037:
         r2 = 1;
-        if (r5 == 0) goto L_0x0042;
-    L_0x0039:
+        if (r5 == 0) goto L_0x0043;
+    L_0x003a:
         r3 = r5.length();
         r4 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
-        if (r3 <= r4) goto L_0x0042;
-    L_0x0041:
-        return r2;
+        if (r3 <= r4) goto L_0x0043;
     L_0x0042:
-        r3 = org.telegram.messenger.Utilities.readlink(r5);	 Catch:{ all -> 0x009b }
-        if (r3 == 0) goto L_0x0057;
-    L_0x0048:
+        return r2;
+    L_0x0043:
+        r3 = org.telegram.messenger.Utilities.readlink(r5);	 Catch:{ all -> 0x009c }
+        if (r3 == 0) goto L_0x0058;
+    L_0x0049:
         r4 = r3.equals(r5);
-        if (r4 == 0) goto L_0x004f;
-    L_0x004e:
-        goto L_0x0057;
+        if (r4 == 0) goto L_0x0050;
     L_0x004f:
+        goto L_0x0058;
+    L_0x0050:
         r1 = r1 + r2;
         r5 = 10;
-        if (r1 < r5) goto L_0x0055;
-    L_0x0054:
-        return r2;
+        if (r1 < r5) goto L_0x0056;
     L_0x0055:
+        return r2;
+    L_0x0056:
         r5 = r3;
-        goto L_0x0036;
-    L_0x0057:
-        if (r5 == 0) goto L_0x006d;
-    L_0x0059:
-        r1 = new java.io.File;	 Catch:{ Exception -> 0x0066 }
-        r1.<init>(r5);	 Catch:{ Exception -> 0x0066 }
-        r1 = r1.getCanonicalPath();	 Catch:{ Exception -> 0x0066 }
-        if (r1 == 0) goto L_0x006d;
-    L_0x0064:
+        goto L_0x0037;
+    L_0x0058:
+        if (r5 == 0) goto L_0x006e;
+    L_0x005a:
+        r1 = new java.io.File;	 Catch:{ Exception -> 0x0067 }
+        r1.<init>(r5);	 Catch:{ Exception -> 0x0067 }
+        r1 = r1.getCanonicalPath();	 Catch:{ Exception -> 0x0067 }
+        if (r1 == 0) goto L_0x006e;
+    L_0x0065:
         r5 = r1;
-        goto L_0x006d;
-    L_0x0066:
+        goto L_0x006e;
+    L_0x0067:
         r1 = "/./";
         r3 = "/";
         r5.replace(r1, r3);
-    L_0x006d:
+    L_0x006e:
         r1 = ".attheme";
         r1 = r5.endsWith(r1);
-        if (r1 == 0) goto L_0x0076;
-    L_0x0075:
-        return r0;
+        if (r1 == 0) goto L_0x0077;
     L_0x0076:
-        if (r5 == 0) goto L_0x009a;
-    L_0x0078:
+        return r0;
+    L_0x0077:
+        if (r5 == 0) goto L_0x009b;
+    L_0x0079:
         r5 = r5.toLowerCase();
         r1 = new java.lang.StringBuilder;
         r1.<init>();
@@ -932,12 +949,12 @@ public class AndroidUtilities {
         r1.append(r3);
         r1 = r1.toString();
         r5 = r5.contains(r1);
-        if (r5 == 0) goto L_0x009a;
-    L_0x0099:
-        r0 = 1;
+        if (r5 == 0) goto L_0x009b;
     L_0x009a:
-        return r0;
+        r0 = 1;
     L_0x009b:
+        return r0;
+    L_0x009c:
         return r2;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.isInternalUri(android.net.Uri):boolean");
@@ -1503,6 +1520,7 @@ public class AndroidUtilities {
                 if (defaultDisplay != null) {
                     defaultDisplay.getMetrics(displayMetrics);
                     defaultDisplay.getSize(displaySize);
+                    screenRefreshRate = defaultDisplay.getRefreshRate();
                 }
             }
             if (configuration.screenWidthDp != 0) {
@@ -1523,6 +1541,7 @@ public class AndroidUtilities {
                 } else {
                     roundMessageSize = (int) (((float) Math.min(displaySize.x, displaySize.y)) * 0.6f);
                 }
+                roundMessageInset = dp(2.0f);
             }
             if (BuildVars.LOGS_ENABLED) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -2248,10 +2267,10 @@ public class AndroidUtilities {
     }
 
     public static File generatePicturePath() {
-        return generatePicturePath(false);
+        return generatePicturePath(false, null);
     }
 
-    public static File generatePicturePath(boolean z) {
+    public static File generatePicturePath(boolean z, String str) {
         try {
             File albumDir = getAlbumDir(z);
             Date date = new Date();
@@ -2260,7 +2279,11 @@ public class AndroidUtilities {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("IMG_");
             stringBuilder.append(format);
-            stringBuilder.append(".jpg");
+            stringBuilder.append(".");
+            if (TextUtils.isEmpty(str)) {
+                str = "jpg";
+            }
+            stringBuilder.append(str);
             return new File(albumDir, stringBuilder.toString());
         } catch (Exception e) {
             FileLog.e(e);
@@ -2641,9 +2664,9 @@ public class AndroidUtilities {
         r7 = r5.exists();
         if (r7 == 0) goto L_0x015c;
     L_0x004d:
-        r7 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
+        r7 = NUM; // 0x7f0e0756 float:1.8878847E38 double:1.0531630845E-314;
         r8 = "OK";
-        r9 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
+        r9 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
         r10 = "AppName";
         r11 = 1;
         if (r2 == 0) goto L_0x00a6;
@@ -2667,7 +2690,7 @@ public class AndroidUtilities {
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0550 float:1.8877796E38 double:1.0531628286E-314;
+        r1 = NUM; // 0x7f0e0568 float:1.8877845E38 double:1.0531628404E-314;
         r3 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
@@ -2764,7 +2787,7 @@ public class AndroidUtilities {
         r3.setTitle(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.setPositiveButton(r1, r6);
-        r1 = NUM; // 0x7f0e067f float:1.887841E38 double:1.0531629783E-314;
+        r1 = NUM; // 0x7f0e069d float:1.8878471E38 double:1.053162993E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r5 = 0;
@@ -2886,21 +2909,21 @@ public class AndroidUtilities {
     L_0x0092:
         r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r8.<init>(r9);
-        r0 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
+        r0 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
         r1 = "AppName";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setTitle(r0);
-        r0 = NUM; // 0x7f0e00f3 float:1.887553E38 double:1.0531622767E-314;
+        r0 = NUM; // 0x7f0e00f6 float:1.8875536E38 double:1.053162278E-314;
         r1 = "ApkRestricted";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setMessage(r0);
-        r0 = NUM; // 0x7f0e087c float:1.8879443E38 double:1.0531632297E-314;
+        r0 = NUM; // 0x7f0e08a3 float:1.8879522E38 double:1.053163249E-314;
         r1 = "PermissionOpenSettings";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw;
         r1.<init>(r9);
         r8.setPositiveButton(r0, r1);
-        r9 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
+        r9 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
         r0 = "Cancel";
         r9 = org.telegram.messenger.LocaleController.getString(r0, r9);
         r8.setNegativeButton(r9, r2);
@@ -3688,5 +3711,29 @@ public class AndroidUtilities {
 
     public static File getSharingDirectory() {
         return new File(FileLoader.getDirectory(4), "sharing/");
+    }
+
+    public static String getCertificateSHA256Fingerprint() {
+        try {
+            return Utilities.bytesToHex(Utilities.computeSHA256(((X509Certificate) CertificateFactory.getInstance("X509").generateCertificate(new ByteArrayInputStream(ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 64).signatures[0].toByteArray()))).getEncoded()));
+        } catch (Throwable unused) {
+            return "";
+        }
+    }
+
+    public static boolean isPunctuationCharacter(char c) {
+        if (charactersMap == null) {
+            charactersMap = new HashSet();
+            int i = 0;
+            while (true) {
+                char[] cArr = characters;
+                if (i >= cArr.length) {
+                    break;
+                }
+                charactersMap.add(Character.valueOf(cArr[i]));
+                i++;
+            }
+        }
+        return charactersMap.contains(Character.valueOf(c));
     }
 }

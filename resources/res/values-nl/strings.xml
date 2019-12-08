@@ -1564,7 +1564,6 @@
     <string name="NearbyCreateGroup">Maak een lokale groep</string>
     <string name="NearbyCreateGroupInfo">Iedereen die hier dichtbij is (buren, collega\'s, medestudenten, etc.) zien je groep in de \"Mensen dichtbij\"-sectie.</string>
     <string name="NearbyCreateGroupInfo2">Als je een ongerelateerde groep op deze plek start kun je beperkt worden in het maken van nieuwe lokatie-afhankelijke groepen.</string>
-    <string name="NearbyPlaces">Of kies een plek</string>
     <string name="NearbyStartGroup">Groep starten</string>
     <string name="NetworkUsage">Datagebruik</string>
     <string name="NetworkUsageMobile">MOBIEL</string>
@@ -1624,7 +1623,6 @@
     <string name="NoPopup">Geen pop-up</string>
     <string name="NoRecent">Niets recents</string>
     <string name="NoRecentGIFs">Niets recents</string>
-    <string name="NoRecentPhotos">Niets recents</string>
     <string name="NoResult">Geen resultaten</string>
     <string name="NoScheduledMessages">Nog geen geplande berichten</string>
     <string name="NoSharedAudio">Deel muziek in deze chat om er vanaf al je apparaten gebruik van te maken.</string>
@@ -2515,7 +2513,6 @@
     <string name="ShowAllMedia">Alle media weergeven</string>
     <string name="ShowAllThemes">Alle thema\'s weergeven</string>
     <string name="ShowInChat">In chat weergeven</string>
-    <string name="ShowNearbyPlaces">Veeg omhoog voor plekken dichtbij</string>
     <string name="ShowNotificationsFor">Meldingen weergeven van</string>
     <string name="ShowNotificationsForInfo">Uitschakelen als je alleen meldingen wilt ontvangen voor je actieve account.</string>
     <string name="Shuffle">Shuffle</string>
@@ -2977,6 +2974,8 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd-MM-yy</string>
     <string name="formatterYearMax">dd-MM-yyyy</string>
+    <string name="google_assistant_verification_channel_name">Assistent-verificatie</string>
+    <string name="google_assistant_verification_notification_title">Google Assistent verzendt bericht</string>
     <string name="items_few">%1$d items</string>
     <string name="items_many">%1$d items</string>
     <string name="items_one">%1$d item</string>

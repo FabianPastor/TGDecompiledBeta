@@ -127,6 +127,7 @@ import org.telegram.ui.Components.AdminLogFilterAlert;
 import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.PhonebookShareAlert;
 import org.telegram.ui.Components.PipRoundVideoView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
@@ -483,8 +484,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         EmbedBottomSheet.show(ChatActivityAdapter.this.mContext, str2, str3, str4, str, i, i2);
                     }
 
-                    /* JADX WARNING: Missing block: B:49:0x0101, code skipped:
-            if (r9.exists() != false) goto L_0x0105;
+                    /* JADX WARNING: Missing block: B:49:0x0102, code skipped:
+            if (r9.exists() != false) goto L_0x0106;
      */
                     public void didPressImage(org.telegram.ui.Cells.ChatMessageCell r9, float r10, float r11) {
                         /*
@@ -506,94 +507,94 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r2 = r10;
                         r2.<init>(r3, r4, r5, r6, r7);
                         r9.showDialog(r10);
-                        goto L_0x01d2;
+                        goto L_0x01d3;
                     L_0x0027:
                         r9 = r1.isVideo();
-                        if (r9 != 0) goto L_0x01b0;
+                        if (r9 != 0) goto L_0x01b1;
                     L_0x002d:
                         r9 = r1.type;
                         r10 = 1;
-                        if (r9 == r10) goto L_0x01b0;
+                        if (r9 == r10) goto L_0x01b1;
                     L_0x0032:
                         if (r9 != 0) goto L_0x003a;
                     L_0x0034:
                         r9 = r1.isWebpageDocument();
-                        if (r9 == 0) goto L_0x01b0;
+                        if (r9 == 0) goto L_0x01b1;
                     L_0x003a:
                         r9 = r1.isGif();
                         if (r9 == 0) goto L_0x0042;
                     L_0x0040:
-                        goto L_0x01b0;
+                        goto L_0x01b1;
                     L_0x0042:
                         r9 = r1.type;
                         r11 = 3;
                         r0 = 0;
-                        if (r9 != r11) goto L_0x00b2;
+                        if (r9 != r11) goto L_0x00b3;
                     L_0x0048:
-                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00a9 }
+                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00aa }
                         if (r9 == 0) goto L_0x0061;
                     L_0x004e:
-                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r9.length();	 Catch:{ Exception -> 0x00a9 }
+                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r9.length();	 Catch:{ Exception -> 0x00aa }
                         if (r9 == 0) goto L_0x0061;
                     L_0x0058:
-                        r0 = new java.io.File;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00a9 }
-                        r0.<init>(r9);	 Catch:{ Exception -> 0x00a9 }
+                        r0 = new java.io.File;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00aa }
+                        r0.<init>(r9);	 Catch:{ Exception -> 0x00aa }
                     L_0x0061:
                         if (r0 == 0) goto L_0x0069;
                     L_0x0063:
-                        r9 = r0.exists();	 Catch:{ Exception -> 0x00a9 }
+                        r9 = r0.exists();	 Catch:{ Exception -> 0x00aa }
                         if (r9 != 0) goto L_0x006f;
                     L_0x0069:
-                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00a9 }
-                        r0 = org.telegram.messenger.FileLoader.getPathToMessage(r9);	 Catch:{ Exception -> 0x00a9 }
+                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00aa }
+                        r0 = org.telegram.messenger.FileLoader.getPathToMessage(r9);	 Catch:{ Exception -> 0x00aa }
                     L_0x006f:
-                        r9 = new android.content.Intent;	 Catch:{ Exception -> 0x00a9 }
+                        r9 = new android.content.Intent;	 Catch:{ Exception -> 0x00aa }
                         r11 = "android.intent.action.VIEW";
-                        r9.<init>(r11);	 Catch:{ Exception -> 0x00a9 }
-                        r11 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00a9 }
+                        r9.<init>(r11);	 Catch:{ Exception -> 0x00aa }
+                        r11 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00aa }
                         r2 = 24;
                         r3 = "video/mp4";
-                        if (r11 < r2) goto L_0x0093;
-                    L_0x007e:
-                        r9.setFlags(r10);	 Catch:{ Exception -> 0x00a9 }
-                        r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00a9 }
-                        r10 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x00a9 }
-                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00a9 }
+                        if (r11 < r2) goto L_0x0094;
+                    L_0x007f:
+                        r9.setFlags(r10);	 Catch:{ Exception -> 0x00aa }
+                        r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00aa }
+                        r10 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x00aa }
+                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00aa }
                         r11 = "org.telegram.messenger.beta.provider";
-                        r10 = androidx.core.content.FileProvider.getUriForFile(r10, r11, r0);	 Catch:{ Exception -> 0x00a9 }
-                        r9.setDataAndType(r10, r3);	 Catch:{ Exception -> 0x00a9 }
-                        goto L_0x009a;
-                    L_0x0093:
-                        r10 = android.net.Uri.fromFile(r0);	 Catch:{ Exception -> 0x00a9 }
-                        r9.setDataAndType(r10, r3);	 Catch:{ Exception -> 0x00a9 }
-                    L_0x009a:
-                        r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00a9 }
-                        r10 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x00a9 }
-                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00a9 }
+                        r10 = androidx.core.content.FileProvider.getUriForFile(r10, r11, r0);	 Catch:{ Exception -> 0x00aa }
+                        r9.setDataAndType(r10, r3);	 Catch:{ Exception -> 0x00aa }
+                        goto L_0x009b;
+                    L_0x0094:
+                        r10 = android.net.Uri.fromFile(r0);	 Catch:{ Exception -> 0x00aa }
+                        r9.setDataAndType(r10, r3);	 Catch:{ Exception -> 0x00aa }
+                    L_0x009b:
+                        r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00aa }
+                        r10 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x00aa }
+                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00aa }
                         r11 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
-                        r10.startActivityForResult(r9, r11);	 Catch:{ Exception -> 0x00a9 }
-                        goto L_0x01d2;
-                    L_0x00a9:
+                        r10.startActivityForResult(r9, r11);	 Catch:{ Exception -> 0x00aa }
+                        goto L_0x01d3;
+                    L_0x00aa:
                         r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r9.alertUserOpenError(r1);
-                        goto L_0x01d2;
-                    L_0x00b2:
+                        goto L_0x01d3;
+                    L_0x00b3:
                         r11 = 4;
-                        if (r9 != r11) goto L_0x00d2;
-                    L_0x00b5:
+                        if (r9 != r11) goto L_0x00d3;
+                    L_0x00b6:
                         r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r9 = org.telegram.messenger.AndroidUtilities.isGoogleMapsInstalled(r9);
-                        if (r9 != 0) goto L_0x00c0;
-                    L_0x00bf:
-                        return;
+                        if (r9 != 0) goto L_0x00c1;
                     L_0x00c0:
+                        return;
+                    L_0x00c1:
                         r9 = new org.telegram.ui.LocationActivity;
                         r10 = 0;
                         r9.<init>(r10);
@@ -601,52 +602,52 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r10 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r10.presentFragment(r9);
-                        goto L_0x01d2;
-                    L_0x00d2:
+                        goto L_0x01d3;
+                    L_0x00d3:
                         r11 = 9;
-                        if (r9 == r11) goto L_0x00d8;
-                    L_0x00d6:
-                        if (r9 != 0) goto L_0x01d2;
-                    L_0x00d8:
+                        if (r9 == r11) goto L_0x00d9;
+                    L_0x00d7:
+                        if (r9 != 0) goto L_0x01d3;
+                    L_0x00d9:
                         r9 = r1.getDocumentName();
                         r9 = r9.toLowerCase();
                         r11 = "attheme";
                         r9 = r9.endsWith(r11);
-                        if (r9 == 0) goto L_0x019c;
-                    L_0x00e8:
+                        if (r9 == 0) goto L_0x019d;
+                    L_0x00e9:
                         r9 = r1.messageOwner;
                         r9 = r9.attachPath;
-                        if (r9 == 0) goto L_0x0104;
-                    L_0x00ee:
+                        if (r9 == 0) goto L_0x0105;
+                    L_0x00ef:
                         r9 = r9.length();
-                        if (r9 == 0) goto L_0x0104;
-                    L_0x00f4:
+                        if (r9 == 0) goto L_0x0105;
+                    L_0x00f5:
                         r9 = new java.io.File;
                         r11 = r1.messageOwner;
                         r11 = r11.attachPath;
                         r9.<init>(r11);
                         r11 = r9.exists();
-                        if (r11 == 0) goto L_0x0104;
-                    L_0x0103:
-                        goto L_0x0105;
+                        if (r11 == 0) goto L_0x0105;
                     L_0x0104:
-                        r9 = r0;
+                        goto L_0x0106;
                     L_0x0105:
-                        if (r9 != 0) goto L_0x0114;
-                    L_0x0107:
+                        r9 = r0;
+                    L_0x0106:
+                        if (r9 != 0) goto L_0x0115;
+                    L_0x0108:
                         r11 = r1.messageOwner;
                         r11 = org.telegram.messenger.FileLoader.getPathToMessage(r11);
                         r2 = r11.exists();
-                        if (r2 == 0) goto L_0x0114;
-                    L_0x0113:
-                        r9 = r11;
+                        if (r2 == 0) goto L_0x0115;
                     L_0x0114:
+                        r9 = r11;
+                    L_0x0115:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11 = r11.chatLayoutManager;
                         r2 = -1;
-                        if (r11 == 0) goto L_0x017e;
-                    L_0x011f:
+                        if (r11 == 0) goto L_0x017f;
+                    L_0x0120:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11 = r11.chatLayoutManager;
@@ -656,8 +657,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r3 = r3.chatLayoutManager;
                         r3 = r3.getItemCount();
                         r3 = r3 - r10;
-                        if (r11 >= r3) goto L_0x0177;
-                    L_0x013a:
+                        if (r11 >= r3) goto L_0x0178;
+                    L_0x013b:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r3 = r11.chatLayoutManager;
@@ -671,50 +672,50 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r3 = r3.scrollToPositionOnRecreate;
                         r11 = r11.findViewHolderForAdapterPosition(r3);
                         r11 = (org.telegram.ui.Components.RecyclerListView.Holder) r11;
-                        if (r11 == 0) goto L_0x016f;
-                    L_0x0161:
+                        if (r11 == 0) goto L_0x0170;
+                    L_0x0162:
                         r3 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r3 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11 = r11.itemView;
                         r11 = r11.getTop();
                         r3.scrollToOffsetOnRecreate = r11;
-                        goto L_0x017e;
-                    L_0x016f:
+                        goto L_0x017f;
+                    L_0x0170:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11.scrollToPositionOnRecreate = r2;
-                        goto L_0x017e;
-                    L_0x0177:
+                        goto L_0x017f;
+                    L_0x0178:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11.scrollToPositionOnRecreate = r2;
-                    L_0x017e:
+                    L_0x017f:
                         r11 = r1.getDocumentName();
                         r9 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r9, r11, r0, r10);
-                        if (r9 == 0) goto L_0x0195;
-                    L_0x0188:
+                        if (r9 == 0) goto L_0x0196;
+                    L_0x0189:
                         r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r10 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11 = new org.telegram.ui.ThemePreviewActivity;
                         r11.<init>(r9);
                         r10.presentFragment(r11);
                         return;
-                    L_0x0195:
+                    L_0x0196:
                         r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r9.scrollToPositionOnRecreate = r2;
-                    L_0x019c:
-                        r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x01a8 }
-                        r9 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x01a8 }
-                        r9 = r9.getParentActivity();	 Catch:{ Exception -> 0x01a8 }
-                        org.telegram.messenger.AndroidUtilities.openForView(r1, r9);	 Catch:{ Exception -> 0x01a8 }
-                        goto L_0x01d2;
-                    L_0x01a8:
+                    L_0x019d:
+                        r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x01a9 }
+                        r9 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x01a9 }
+                        r9 = r9.getParentActivity();	 Catch:{ Exception -> 0x01a9 }
+                        org.telegram.messenger.AndroidUtilities.openForView(r1, r9);	 Catch:{ Exception -> 0x01a9 }
+                        goto L_0x01d3;
+                    L_0x01a9:
                         r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r9.alertUserOpenError(r1);
-                        goto L_0x01d2;
-                    L_0x01b0:
+                        goto L_0x01d3;
+                    L_0x01b1:
                         r9 = org.telegram.ui.PhotoViewer.getInstance();
                         r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r10 = org.telegram.ui.ChannelAdminLogActivity.this;
@@ -727,7 +728,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r6 = r9.provider;
                         r0.openPhoto(r1, r2, r4, r6);
-                    L_0x01d2:
+                    L_0x01d3:
                         return;
                         */
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$AnonymousClass1.didPressImage(org.telegram.ui.Cells.ChatMessageCell, float, float):void");
@@ -747,8 +748,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             }
                         } else if (i == 5) {
                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
+                            User user = channelAdminLogActivity.getMessagesController().getUser(Integer.valueOf(messageObject.messageOwner.media.user_id));
                             MessageMedia messageMedia2 = messageObject.messageOwner.media;
-                            channelAdminLogActivity.openVCard(messageMedia2.vcard, messageMedia2.first_name, messageMedia2.last_name);
+                            channelAdminLogActivity.openVCard(user, messageMedia2.vcard, messageMedia2.first_name, messageMedia2.last_name);
                         } else {
                             messageMedia = messageObject.messageOwner.media;
                             if (messageMedia != null && messageMedia.webpage != null) {
@@ -2415,7 +2417,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fb:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0e09f9 float:1.8880216E38 double:1.053163418E-314;
+        r3 = NUM; // 0x7f0e0a25 float:1.8880305E38 double:1.0531634397E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);
@@ -2457,9 +2459,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r1 = r1.toLowerCase();
         r2 = "attheme";
         r1 = r1.endsWith(r2);
-        r2 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
+        r2 = NUM; // 0x7f0e0756 float:1.8878847E38 double:1.0531630845E-314;
         r3 = "OK";
-        r4 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
+        r4 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
         r5 = "AppName";
         if (r1 == 0) goto L_0x02de;
     L_0x025d:
@@ -2514,7 +2516,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0550 float:1.8877796E38 double:1.0531628286E-314;
+        r1 = NUM; // 0x7f0e0568 float:1.8877845E38 double:1.0531628404E-314;
         r4 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2545,7 +2547,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e054f float:1.8877794E38 double:1.053162828E-314;
+        r1 = NUM; // 0x7f0e0567 float:1.8877843E38 double:1.05316284E-314;
         r4 = "IncorrectLocalization";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2970,7 +2972,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.wasPaused = true;
     }
 
-    public void openVCard(String str, String str2, String str3) {
+    public void openVCard(User user, String str, String str2, String str3) {
         try {
             File file = new File(FileLoader.getDirectory(4), "sharing/");
             file.mkdirs();
@@ -2978,7 +2980,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file2));
             bufferedWriter.write(str);
             bufferedWriter.close();
-            presentFragment(new PhonebookShareActivity(null, null, file2, ContactsController.formatName(str2, str3)));
+            showDialog(new PhonebookShareAlert(this, null, user, null, file2, ContactsController.formatName(str2, str3)));
         } catch (Exception e) {
             FileLog.e(e);
         }

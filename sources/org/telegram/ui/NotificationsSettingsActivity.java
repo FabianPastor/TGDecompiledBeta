@@ -95,6 +95,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     private int privateRow;
     private int repeatRow;
     private int resetNotificationsRow;
+    private int resetNotificationsSectionRow;
     private int resetSection2Row;
     private int resetSectionRow;
     private boolean reseting = false;
@@ -116,7 +117,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
 
         public boolean isEnabled(ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
-            return (adapterPosition == NotificationsSettingsActivity.this.notificationsSectionRow || adapterPosition == NotificationsSettingsActivity.this.notificationsSection2Row || adapterPosition == NotificationsSettingsActivity.this.inappSectionRow || adapterPosition == NotificationsSettingsActivity.this.eventsSectionRow || adapterPosition == NotificationsSettingsActivity.this.otherSectionRow || adapterPosition == NotificationsSettingsActivity.this.resetSectionRow || adapterPosition == NotificationsSettingsActivity.this.badgeNumberSection || adapterPosition == NotificationsSettingsActivity.this.otherSection2Row || adapterPosition == NotificationsSettingsActivity.this.resetSection2Row || adapterPosition == NotificationsSettingsActivity.this.callsSection2Row || adapterPosition == NotificationsSettingsActivity.this.callsSectionRow || adapterPosition == NotificationsSettingsActivity.this.badgeNumberSection2Row || adapterPosition == NotificationsSettingsActivity.this.accountsSectionRow || adapterPosition == NotificationsSettingsActivity.this.accountsInfoRow) ? false : true;
+            return (adapterPosition == NotificationsSettingsActivity.this.notificationsSectionRow || adapterPosition == NotificationsSettingsActivity.this.notificationsSection2Row || adapterPosition == NotificationsSettingsActivity.this.inappSectionRow || adapterPosition == NotificationsSettingsActivity.this.eventsSectionRow || adapterPosition == NotificationsSettingsActivity.this.otherSectionRow || adapterPosition == NotificationsSettingsActivity.this.resetSectionRow || adapterPosition == NotificationsSettingsActivity.this.badgeNumberSection || adapterPosition == NotificationsSettingsActivity.this.otherSection2Row || adapterPosition == NotificationsSettingsActivity.this.resetSection2Row || adapterPosition == NotificationsSettingsActivity.this.callsSection2Row || adapterPosition == NotificationsSettingsActivity.this.callsSectionRow || adapterPosition == NotificationsSettingsActivity.this.badgeNumberSection2Row || adapterPosition == NotificationsSettingsActivity.this.accountsSectionRow || adapterPosition == NotificationsSettingsActivity.this.accountsInfoRow || adapterPosition == NotificationsSettingsActivity.this.resetNotificationsSectionRow) ? false : true;
         }
 
         public int getItemCount() {
@@ -155,14 +156,43 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         }
 
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType != 0) {
-                String str = "Vibrate";
-                boolean z = false;
-                SharedPreferences notificationsSettings;
-                String str2;
-                String str3;
-                if (itemViewType == 1) {
+            String str = "Vibrate";
+            boolean z = false;
+            SharedPreferences notificationsSettings;
+            String str2;
+            String str3;
+            int currentTime;
+            switch (viewHolder.getItemViewType()) {
+                case 0:
+                    HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                    if (i == NotificationsSettingsActivity.this.notificationsSectionRow) {
+                        headerCell.setText(LocaleController.getString("NotificationsForChats", NUM));
+                        return;
+                    } else if (i == NotificationsSettingsActivity.this.inappSectionRow) {
+                        headerCell.setText(LocaleController.getString("InAppNotifications", NUM));
+                        return;
+                    } else if (i == NotificationsSettingsActivity.this.eventsSectionRow) {
+                        headerCell.setText(LocaleController.getString("Events", NUM));
+                        return;
+                    } else if (i == NotificationsSettingsActivity.this.otherSectionRow) {
+                        headerCell.setText(LocaleController.getString("NotificationsOther", NUM));
+                        return;
+                    } else if (i == NotificationsSettingsActivity.this.resetSectionRow) {
+                        headerCell.setText(LocaleController.getString("Reset", NUM));
+                        return;
+                    } else if (i == NotificationsSettingsActivity.this.callsSectionRow) {
+                        headerCell.setText(LocaleController.getString("VoipNotificationSettings", NUM));
+                        return;
+                    } else if (i == NotificationsSettingsActivity.this.badgeNumberSection) {
+                        headerCell.setText(LocaleController.getString("BadgeNumber", NUM));
+                        return;
+                    } else if (i == NotificationsSettingsActivity.this.accountsSectionRow) {
+                        headerCell.setText(LocaleController.getString("ShowNotificationsFor", NUM));
+                        return;
+                    } else {
+                        return;
+                    }
+                case 1:
                     TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
                     notificationsSettings = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
                     if (i == NotificationsSettingsActivity.this.inappSoundRow) {
@@ -215,7 +245,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else {
                         return;
                     }
-                } else if (itemViewType == 2) {
+                case 2:
                     TextDetailSettingsCell textDetailSettingsCell = (TextDetailSettingsCell) viewHolder.itemView;
                     textDetailSettingsCell.setMultilineDetail(true);
                     if (i == NotificationsSettingsActivity.this.resetNotificationsRow) {
@@ -223,37 +253,37 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         return;
                     }
                     return;
-                } else if (itemViewType == 3) {
+                case 3:
                     String string;
-                    ArrayList access$4000;
+                    ArrayList access$4100;
                     int i2;
                     NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) viewHolder.itemView;
                     notificationsSettings = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
-                    itemViewType = ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).getCurrentTime();
+                    currentTime = ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).getCurrentTime();
                     if (i == NotificationsSettingsActivity.this.privateRow) {
                         string = LocaleController.getString("NotificationsPrivateChats", NUM);
-                        access$4000 = NotificationsSettingsActivity.this.exceptionUsers;
+                        access$4100 = NotificationsSettingsActivity.this.exceptionUsers;
                         i2 = notificationsSettings.getInt("EnableAll2", 0);
                     } else if (i == NotificationsSettingsActivity.this.groupRow) {
                         string = LocaleController.getString("NotificationsGroups", NUM);
-                        access$4000 = NotificationsSettingsActivity.this.exceptionChats;
+                        access$4100 = NotificationsSettingsActivity.this.exceptionChats;
                         i2 = notificationsSettings.getInt("EnableGroup2", 0);
                     } else {
                         string = LocaleController.getString("NotificationsChannels", NUM);
-                        access$4000 = NotificationsSettingsActivity.this.exceptionChannels;
+                        access$4100 = NotificationsSettingsActivity.this.exceptionChannels;
                         i2 = notificationsSettings.getInt("EnableChannel2", 0);
                     }
                     String str4 = string;
-                    boolean z2 = i2 < itemViewType;
-                    int i3 = (!z2 && i2 - 31536000 < itemViewType) ? 2 : 0;
+                    boolean z2 = i2 < currentTime;
+                    int i3 = (!z2 && i2 - 31536000 < currentTime) ? 2 : 0;
                     StringBuilder stringBuilder = new StringBuilder();
-                    if (access$4000 == null || access$4000.isEmpty()) {
+                    if (access$4100 == null || access$4100.isEmpty()) {
                         stringBuilder.append(LocaleController.getString("TapToChange", NUM));
                     } else {
-                        z2 = i2 < itemViewType;
+                        z2 = i2 < currentTime;
                         if (z2) {
                             stringBuilder.append(LocaleController.getString("NotificationsOn", NUM));
-                        } else if (i2 - 31536000 >= itemViewType) {
+                        } else if (i2 - 31536000 >= currentTime) {
                             stringBuilder.append(LocaleController.getString("NotificationsOff", NUM));
                         } else {
                             stringBuilder.append(LocaleController.formatString("NotificationsOffUntil", NUM, LocaleController.stringForMessageListDate((long) i2)));
@@ -261,11 +291,20 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         if (stringBuilder.length() != 0) {
                             stringBuilder.append(", ");
                         }
-                        stringBuilder.append(LocaleController.formatPluralString("Exception", access$4000.size()));
+                        stringBuilder.append(LocaleController.formatPluralString("Exception", access$4100.size()));
                     }
                     notificationsCheckCell.setTextAndValueAndCheck(str4, stringBuilder, z2, i3, i != NotificationsSettingsActivity.this.channelsRow);
                     return;
-                } else if (itemViewType == 5) {
+                case 4:
+                    String str5 = "windowBackgroundGrayShadow";
+                    if (i == NotificationsSettingsActivity.this.resetNotificationsSectionRow) {
+                        viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str5));
+                        return;
+                    } else {
+                        viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str5));
+                        return;
+                    }
+                case 5:
                     TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
                     SharedPreferences notificationsSettings2 = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
                     if (i == NotificationsSettingsActivity.this.callsRingtoneRow) {
@@ -299,47 +338,28 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             return;
                         }
                     } else if (i == NotificationsSettingsActivity.this.repeatRow) {
-                        itemViewType = notificationsSettings2.getInt("repeat_messages", 60);
-                        if (itemViewType == 0) {
+                        currentTime = notificationsSettings2.getInt("repeat_messages", 60);
+                        if (currentTime == 0) {
                             str3 = LocaleController.getString("RepeatNotificationsNever", NUM);
-                        } else if (itemViewType < 60) {
-                            str3 = LocaleController.formatPluralString("Minutes", itemViewType);
+                        } else if (currentTime < 60) {
+                            str3 = LocaleController.formatPluralString("Minutes", currentTime);
                         } else {
-                            str3 = LocaleController.formatPluralString("Hours", itemViewType / 60);
+                            str3 = LocaleController.formatPluralString("Hours", currentTime / 60);
                         }
                         textSettingsCell.setTextAndValue(LocaleController.getString("RepeatNotifications", NUM), str3, false);
                         return;
                     } else {
                         return;
                     }
-                } else if (itemViewType == 6) {
+                case 6:
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
                     if (i == NotificationsSettingsActivity.this.accountsInfoRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("ShowNotificationsForInfo", NUM));
                         return;
                     }
                     return;
-                } else {
+                default:
                     return;
-                }
-            }
-            HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-            if (i == NotificationsSettingsActivity.this.notificationsSectionRow) {
-                headerCell.setText(LocaleController.getString("NotificationsForChats", NUM));
-            } else if (i == NotificationsSettingsActivity.this.inappSectionRow) {
-                headerCell.setText(LocaleController.getString("InAppNotifications", NUM));
-            } else if (i == NotificationsSettingsActivity.this.eventsSectionRow) {
-                headerCell.setText(LocaleController.getString("Events", NUM));
-            } else if (i == NotificationsSettingsActivity.this.otherSectionRow) {
-                headerCell.setText(LocaleController.getString("NotificationsOther", NUM));
-            } else if (i == NotificationsSettingsActivity.this.resetSectionRow) {
-                headerCell.setText(LocaleController.getString("Reset", NUM));
-            } else if (i == NotificationsSettingsActivity.this.callsSectionRow) {
-                headerCell.setText(LocaleController.getString("VoipNotificationSettings", NUM));
-            } else if (i == NotificationsSettingsActivity.this.badgeNumberSection) {
-                headerCell.setText(LocaleController.getString("BadgeNumber", NUM));
-            } else if (i == NotificationsSettingsActivity.this.accountsSectionRow) {
-                headerCell.setText(LocaleController.getString("ShowNotificationsFor", NUM));
             }
         }
 
@@ -356,7 +376,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             if (i == NotificationsSettingsActivity.this.privateRow || i == NotificationsSettingsActivity.this.groupRow || i == NotificationsSettingsActivity.this.channelsRow) {
                 return 3;
             }
-            if (i == NotificationsSettingsActivity.this.eventsSection2Row || i == NotificationsSettingsActivity.this.notificationsSection2Row || i == NotificationsSettingsActivity.this.otherSection2Row || i == NotificationsSettingsActivity.this.resetSection2Row || i == NotificationsSettingsActivity.this.callsSection2Row || i == NotificationsSettingsActivity.this.badgeNumberSection2Row) {
+            if (i == NotificationsSettingsActivity.this.eventsSection2Row || i == NotificationsSettingsActivity.this.notificationsSection2Row || i == NotificationsSettingsActivity.this.otherSection2Row || i == NotificationsSettingsActivity.this.resetSection2Row || i == NotificationsSettingsActivity.this.callsSection2Row || i == NotificationsSettingsActivity.this.badgeNumberSection2Row || i == NotificationsSettingsActivity.this.resetNotificationsSectionRow) {
                 return 4;
             }
             return i == NotificationsSettingsActivity.this.accountsInfoRow ? 6 : 5;
@@ -486,6 +506,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         i = this.rowCount;
         this.rowCount = i + 1;
         this.resetNotificationsRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.resetNotificationsSectionRow = i;
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.notificationsSettingsUpdated);
         return super.onFragmentCreate();
     }
@@ -1346,7 +1369,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r5 = 1;
         if (r3 != r5) goto L_0x0072;
     L_0x005d:
-        r3 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
+        r3 = NUM; // 0x7f0e0736 float:1.8878782E38 double:1.0531630687E-314;
         r5 = new java.lang.Object[r5];
         r5[r4] = r0;
         r0 = "NotificationsExceptionsSingleAlert";
@@ -1355,7 +1378,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r2.setMessage(r0);
         goto L_0x0086;
     L_0x0072:
-        r3 = NUM; // 0x7f0e0710 float:1.8878705E38 double:1.05316305E-314;
+        r3 = NUM; // 0x7f0e0735 float:1.887878E38 double:1.053163068E-314;
         r5 = new java.lang.Object[r5];
         r5[r4] = r0;
         r0 = "NotificationsExceptionsAlert";
@@ -1363,17 +1386,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0);
         r2.setMessage(r0);
     L_0x0086:
-        r0 = NUM; // 0x7f0e070f float:1.8878703E38 double:1.0531630494E-314;
+        r0 = NUM; // 0x7f0e0734 float:1.8878778E38 double:1.0531630677E-314;
         r3 = "NotificationsExceptions";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r2.setTitle(r0);
-        r0 = NUM; // 0x7f0e0b7c float:1.8881E38 double:1.053163609E-314;
+        r0 = NUM; // 0x7f0e0bac float:1.8881098E38 double:1.053163633E-314;
         r3 = "ViewExceptions";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r3 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$9FhV71oy8_vyXyR3LWFGjX-RReE;
         r3.<init>(r6, r7);
         r2.setNeutralButton(r0, r3);
-        r7 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
+        r7 = NUM; // 0x7f0e0756 float:1.8878847E38 double:1.0531630845E-314;
         r0 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r2.setNegativeButton(r7, r1);

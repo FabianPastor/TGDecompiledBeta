@@ -1564,7 +1564,6 @@
     <string name="NearbyCreateGroup">Criar um Grupo Local</string>
     <string name="NearbyCreateGroupInfo">Qualquer pessoa próxima a este local (vizinhos, colegas de trabalho ou de classe, participantes do evento, visitantes de um local) verá seu grupo na seção Pessoas Próximas.</string>
     <string name="NearbyCreateGroupInfo2">Se você iniciar um grupo não relacionado com este local, poderá ficar restrito e não poderá criar novos grupos baseados em localização.</string>
-    <string name="NearbyPlaces">Ou escolha um lugar</string>
     <string name="NearbyStartGroup">Iniciar Grupo</string>
     <string name="NetworkUsage">Uso de Dados</string>
     <string name="NetworkUsageMobile">DADOS MÓVEIS</string>
@@ -1624,7 +1623,6 @@
     <string name="NoPopup">Sem pop-up</string>
     <string name="NoRecent">Nada recente</string>
     <string name="NoRecentGIFs">Nenhum GIF recente</string>
-    <string name="NoRecentPhotos">Nenhuma foto recente</string>
     <string name="NoResult">Nenhum resultado.</string>
     <string name="NoScheduledMessages">Não há mensagens agendadas aqui ainda...</string>
     <string name="NoSharedAudio">Compartilhe músicas neste chat e acesse-as de qualquer um de seus dispositivos.</string>
@@ -2515,7 +2513,6 @@
     <string name="ShowAllMedia">Mostrar todas as mídias</string>
     <string name="ShowAllThemes">Mostrar Todos os Temas</string>
     <string name="ShowInChat">Mostrar na conversa</string>
-    <string name="ShowNearbyPlaces">Deslize para ver lugares próximos</string>
     <string name="ShowNotificationsFor">Mostrar notificações de</string>
     <string name="ShowNotificationsForInfo">Desative essa opção se quiser receber notificações apenas da sua conta ativa.</string>
     <string name="Shuffle">Aleatório</string>
@@ -2977,6 +2974,8 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
+    <string name="google_assistant_verification_channel_name">Verificador do Assistente</string>
+    <string name="google_assistant_verification_notification_title">O Google Assistente está enviando a mensagem</string>
     <string name="items_few">%1$d itens</string>
     <string name="items_many">%1$d itens</string>
     <string name="items_one">%1$d item</string>

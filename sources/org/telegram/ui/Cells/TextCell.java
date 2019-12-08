@@ -23,20 +23,20 @@ public class TextCell extends FrameLayout {
     private SimpleTextView valueTextView;
 
     public TextCell(Context context) {
-        this(context, 23);
+        this(context, 23, false);
     }
 
-    public TextCell(Context context, int i) {
+    public TextCell(Context context, int i, boolean z) {
         super(context);
         this.leftPadding = i;
         this.textView = new SimpleTextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(16);
         int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
         this.valueTextView = new SimpleTextView(context);
-        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteValueText"));
+        this.valueTextView.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText"));
         this.valueTextView.setTextSize(16);
         SimpleTextView simpleTextView = this.valueTextView;
         if (LocaleController.isRTL) {
@@ -46,7 +46,7 @@ public class TextCell extends FrameLayout {
         addView(this.valueTextView);
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
         addView(this.imageView);
         this.valueImageView = new ImageView(context);
         this.valueImageView.setScaleType(ScaleType.CENTER);
