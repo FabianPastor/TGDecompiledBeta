@@ -4630,6 +4630,16 @@ public class ImageLoader {
         }
     }
 
+    public static class MessageThumb {
+        BitmapDrawable drawable;
+        String key;
+
+        public MessageThumb(String str, BitmapDrawable bitmapDrawable) {
+            this.key = str;
+            this.drawable = bitmapDrawable;
+        }
+    }
+
     private class ThumbGenerateInfo {
         private boolean big;
         private String filter;
@@ -4904,6 +4914,12 @@ public class ImageLoader {
                 ((ImageReceiver) arrayList.get(i)).setImageBitmapByKey(bitmapDrawable, str, 0, false, ((Integer) arrayList2.get(i)).intValue());
             }
             ImageLoader.this.memCache.put(str, bitmapDrawable);
+        }
+    }
+
+    public void putThumbsToCache(ArrayList<MessageThumb> arrayList) {
+        for (int i = 0; i < arrayList.size(); i++) {
+            putImageToCache(((MessageThumb) arrayList.get(i)).drawable, ((MessageThumb) arrayList.get(i)).key);
         }
     }
 
@@ -7994,73 +8010,36 @@ public class ImageLoader {
     }
 
     public static void saveMessageThumbs(Message message) {
-        Message message2 = message;
-        MessageMedia messageMedia = message2.media;
-        if (messageMedia != null) {
-            int size;
-            PhotoSize photoSize;
-            Bitmap loadBitmap;
-            int size2;
-            int i;
-            if (messageMedia instanceof TL_messageMediaPhoto) {
-                size = messageMedia.photo.sizes.size();
-                for (i = 0; i < size; i++) {
-                    photoSize = (PhotoSize) message2.media.photo.sizes.get(i);
-                    if (photoSize instanceof TL_photoCachedSize) {
-                        break;
-                    }
-                }
-            } else if (messageMedia instanceof TL_messageMediaDocument) {
-                size = messageMedia.document.thumbs.size();
-                for (i = 0; i < size; i++) {
-                    photoSize = (PhotoSize) message2.media.document.thumbs.get(i);
-                    if (photoSize instanceof TL_photoCachedSize) {
-                        break;
-                    }
-                }
-            } else if (messageMedia instanceof TL_messageMediaWebPage) {
-                Photo photo = messageMedia.webpage.photo;
-                if (photo != null) {
-                    size = photo.sizes.size();
-                    for (i = 0; i < size; i++) {
-                        photoSize = (PhotoSize) message2.media.webpage.photo.sizes.get(i);
-                        if (photoSize instanceof TL_photoCachedSize) {
-                            break;
-                        }
-                    }
-                }
-            }
-            photoSize = null;
-            if (photoSize != null) {
-                byte[] bArr = photoSize.bytes;
+        if (message.media != null) {
+            PhotoSize findPhotoCachedSize = findPhotoCachedSize(message);
+            if (findPhotoCachedSize != null) {
+                byte[] bArr = findPhotoCachedSize.bytes;
                 if (bArr != null && bArr.length != 0) {
-                    File file;
-                    Object obj;
-                    FileLocation fileLocation = photoSize.location;
+                    FileLocation fileLocation = findPhotoCachedSize.location;
                     if (fileLocation == null || (fileLocation instanceof TL_fileLocationUnavailable)) {
-                        photoSize.location = new TL_fileLocationToBeDeprecated();
-                        fileLocation = photoSize.location;
+                        findPhotoCachedSize.location = new TL_fileLocationToBeDeprecated();
+                        fileLocation = findPhotoCachedSize.location;
                         fileLocation.volume_id = -2147483648L;
                         fileLocation.local_id = SharedConfig.getLastLocalId();
                     }
-                    File pathToAttach = FileLoader.getPathToAttach(photoSize, true);
+                    boolean z = true;
+                    File pathToAttach = FileLoader.getPathToAttach(findPhotoCachedSize, true);
+                    int i = 0;
                     if (MessageObject.shouldEncryptPhotoOrVideo(message)) {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(pathToAttach.getAbsolutePath());
                         stringBuilder.append(".enc");
-                        file = new File(stringBuilder.toString());
-                        obj = 1;
+                        pathToAttach = new File(stringBuilder.toString());
                     } else {
-                        file = pathToAttach;
-                        obj = null;
+                        z = false;
                     }
-                    if (!file.exists()) {
+                    if (!pathToAttach.exists()) {
                         String str = "rws";
-                        if (obj != null) {
+                        if (z) {
                             try {
                                 File internalCacheDir = FileLoader.getInternalCacheDir();
                                 StringBuilder stringBuilder2 = new StringBuilder();
-                                stringBuilder2.append(file.getName());
+                                stringBuilder2.append(pathToAttach.getName());
                                 stringBuilder2.append(".key");
                                 RandomAccessFile randomAccessFile = new RandomAccessFile(new File(internalCacheDir, stringBuilder2.toString()), str);
                                 long length = randomAccessFile.length();
@@ -8076,116 +8055,96 @@ public class ImageLoader {
                                     randomAccessFile.read(bArr3, 0, 16);
                                 }
                                 randomAccessFile.close();
-                                Utilities.aesCtrDecryptionByteArray(photoSize.bytes, bArr2, bArr3, 0, photoSize.bytes.length, 0);
+                                Utilities.aesCtrDecryptionByteArray(findPhotoCachedSize.bytes, bArr2, bArr3, 0, findPhotoCachedSize.bytes.length, 0);
                             } catch (Exception e) {
                                 FileLog.e(e);
                             }
                         }
-                        RandomAccessFile randomAccessFile2 = new RandomAccessFile(file, str);
-                        randomAccessFile2.write(photoSize.bytes);
+                        RandomAccessFile randomAccessFile2 = new RandomAccessFile(pathToAttach, str);
+                        randomAccessFile2.write(findPhotoCachedSize.bytes);
                         randomAccessFile2.close();
                     }
                     TL_photoSize tL_photoSize = new TL_photoSize();
-                    tL_photoSize.w = photoSize.w;
-                    tL_photoSize.h = photoSize.h;
-                    tL_photoSize.location = photoSize.location;
-                    tL_photoSize.size = photoSize.size;
-                    tL_photoSize.type = photoSize.type;
-                    if (file.exists() && message2.grouped_id == 0) {
-                        Point messageSize = ChatMessageCell.getMessageSize(photoSize.w, photoSize.h);
-                        String format = String.format(Locale.US, "%d_%d@%d_%d_b", new Object[]{Long.valueOf(photoSize.location.volume_id), Integer.valueOf(photoSize.location.local_id), Integer.valueOf((int) (messageSize.x / AndroidUtilities.density)), Integer.valueOf((int) (messageSize.y / AndroidUtilities.density))});
-                        if (!getInstance().isInMemCache(format, false)) {
-                            String path = file.getPath();
-                            float f = messageSize.x;
-                            float f2 = AndroidUtilities.density;
-                            loadBitmap = loadBitmap(path, null, (float) ((int) (f / f2)), (float) ((int) (messageSize.y / f2)), false);
-                            if (loadBitmap != null) {
-                                Utilities.blurBitmap(loadBitmap, 3, 1, loadBitmap.getWidth(), loadBitmap.getHeight(), loadBitmap.getRowBytes());
-                                f = messageSize.x;
-                                f2 = AndroidUtilities.density;
-                                Bitmap createScaledBitmap = Bitmaps.createScaledBitmap(loadBitmap, (int) (f / f2), (int) (messageSize.y / f2), true);
-                                if (createScaledBitmap != loadBitmap) {
-                                    loadBitmap.recycle();
-                                } else {
-                                    createScaledBitmap = loadBitmap;
-                                }
-                                getInstance().memCache.put(format, new BitmapDrawable(createScaledBitmap));
-                            }
-                        }
-                    }
-                    MessageMedia messageMedia2 = message2.media;
-                    int i2;
-                    if (messageMedia2 instanceof TL_messageMediaPhoto) {
-                        size2 = messageMedia2.photo.sizes.size();
-                        for (i2 = 0; i2 < size2; i2++) {
-                            if (((PhotoSize) message2.media.photo.sizes.get(i2)) instanceof TL_photoCachedSize) {
-                                message2.media.photo.sizes.set(i2, tL_photoSize);
+                    tL_photoSize.w = findPhotoCachedSize.w;
+                    tL_photoSize.h = findPhotoCachedSize.h;
+                    tL_photoSize.location = findPhotoCachedSize.location;
+                    tL_photoSize.size = findPhotoCachedSize.size;
+                    tL_photoSize.type = findPhotoCachedSize.type;
+                    MessageMedia messageMedia = message.media;
+                    int size;
+                    if (messageMedia instanceof TL_messageMediaPhoto) {
+                        size = messageMedia.photo.sizes.size();
+                        while (i < size) {
+                            if (((PhotoSize) message.media.photo.sizes.get(i)) instanceof TL_photoCachedSize) {
+                                message.media.photo.sizes.set(i, tL_photoSize);
                                 break;
                             }
+                            i++;
                         }
-                    } else if (messageMedia2 instanceof TL_messageMediaDocument) {
-                        size2 = messageMedia2.document.thumbs.size();
-                        for (i2 = 0; i2 < size2; i2++) {
-                            if (((PhotoSize) message2.media.document.thumbs.get(i2)) instanceof TL_photoCachedSize) {
-                                message2.media.document.thumbs.set(i2, tL_photoSize);
+                    } else if (messageMedia instanceof TL_messageMediaDocument) {
+                        size = messageMedia.document.thumbs.size();
+                        while (i < size) {
+                            if (((PhotoSize) message.media.document.thumbs.get(i)) instanceof TL_photoCachedSize) {
+                                message.media.document.thumbs.set(i, tL_photoSize);
                                 break;
                             }
+                            i++;
                         }
-                    } else if (messageMedia2 instanceof TL_messageMediaWebPage) {
-                        size2 = messageMedia2.webpage.photo.sizes.size();
-                        for (i2 = 0; i2 < size2; i2++) {
-                            if (((PhotoSize) message2.media.webpage.photo.sizes.get(i2)) instanceof TL_photoCachedSize) {
-                                message2.media.webpage.photo.sizes.set(i2, tL_photoSize);
+                    } else if (messageMedia instanceof TL_messageMediaWebPage) {
+                        size = messageMedia.webpage.photo.sizes.size();
+                        while (i < size) {
+                            if (((PhotoSize) message.media.webpage.photo.sizes.get(i)) instanceof TL_photoCachedSize) {
+                                message.media.webpage.photo.sizes.set(i, tL_photoSize);
                                 break;
                             }
-                        }
-                    }
-                }
-            }
-            messageMedia = message2.media;
-            if (messageMedia instanceof TL_messageMediaDocument) {
-                size = messageMedia.document.thumbs.size();
-                for (size2 = 0; size2 < size; size2++) {
-                    photoSize = (PhotoSize) message2.media.document.thumbs.get(size2);
-                    if (photoSize instanceof TL_photoStrippedSize) {
-                        int i3;
-                        int i4;
-                        PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(message2.media.document.thumbs, 320);
-                        if (closestPhotoSizeWithSize != null) {
-                            i3 = closestPhotoSizeWithSize.h;
-                            i4 = closestPhotoSizeWithSize.w;
-                        } else {
-                            for (i4 = 0; i4 < message2.media.document.attributes.size(); i4++) {
-                                if (message2.media.document.attributes.get(i4) instanceof TL_documentAttributeVideo) {
-                                    TL_documentAttributeVideo tL_documentAttributeVideo = (TL_documentAttributeVideo) message2.media.document.attributes.get(i4);
-                                    i3 = tL_documentAttributeVideo.h;
-                                    i4 = tL_documentAttributeVideo.w;
-                                    break;
-                                }
-                            }
-                            i4 = 0;
-                            i3 = 0;
-                        }
-                        Point messageSize2 = ChatMessageCell.getMessageSize(i4, i3);
-                        String format2 = String.format(Locale.US, "%s_false@%d_%d_b", new Object[]{ImageLocation.getStippedKey(message2, message2, photoSize), Integer.valueOf((int) (messageSize2.x / AndroidUtilities.density)), Integer.valueOf((int) (messageSize2.y / AndroidUtilities.density))});
-                        if (!getInstance().memCache.contains(format2)) {
-                            Bitmap strippedPhotoBitmap = getStrippedPhotoBitmap(photoSize.bytes, null);
-                            if (strippedPhotoBitmap != null) {
-                                Utilities.blurBitmap(strippedPhotoBitmap, 3, 1, strippedPhotoBitmap.getWidth(), strippedPhotoBitmap.getHeight(), strippedPhotoBitmap.getRowBytes());
-                                float f3 = messageSize2.x;
-                                float f4 = AndroidUtilities.density;
-                                loadBitmap = Bitmaps.createScaledBitmap(strippedPhotoBitmap, (int) (f3 / f4), (int) (messageSize2.y / f4), true);
-                                if (loadBitmap != strippedPhotoBitmap) {
-                                    strippedPhotoBitmap.recycle();
-                                    strippedPhotoBitmap = loadBitmap;
-                                }
-                                getInstance().putImageToCache(new BitmapDrawable(strippedPhotoBitmap), format2);
-                            }
+                            i++;
                         }
                     }
                 }
             }
         }
+    }
+
+    private static PhotoSize findPhotoCachedSize(Message message) {
+        PhotoSize photoSize;
+        MessageMedia messageMedia = message.media;
+        int i = 0;
+        int size;
+        if (messageMedia instanceof TL_messageMediaPhoto) {
+            size = messageMedia.photo.sizes.size();
+            while (i < size) {
+                photoSize = (PhotoSize) message.media.photo.sizes.get(i);
+                if (!(photoSize instanceof TL_photoCachedSize)) {
+                    i++;
+                }
+            }
+            return null;
+        } else if (messageMedia instanceof TL_messageMediaDocument) {
+            size = messageMedia.document.thumbs.size();
+            while (i < size) {
+                photoSize = (PhotoSize) message.media.document.thumbs.get(i);
+                if (!(photoSize instanceof TL_photoCachedSize)) {
+                    i++;
+                }
+            }
+            return null;
+        } else if (!(messageMedia instanceof TL_messageMediaWebPage)) {
+            return null;
+        } else {
+            Photo photo = messageMedia.webpage.photo;
+            if (photo == null) {
+                return null;
+            }
+            size = photo.sizes.size();
+            while (i < size) {
+                photoSize = (PhotoSize) message.media.webpage.photo.sizes.get(i);
+                if (!(photoSize instanceof TL_photoCachedSize)) {
+                    i++;
+                }
+            }
+            return null;
+        }
+        return photoSize;
     }
 
     public static void saveMessagesThumbs(ArrayList<Message> arrayList) {
@@ -8194,5 +8153,93 @@ public class ImageLoader {
                 saveMessageThumbs((Message) arrayList.get(i));
             }
         }
+    }
+
+    public static MessageThumb generateMessageThumb(Message message) {
+        Bitmap createScaledBitmap;
+        Message message2 = message;
+        PhotoSize findPhotoCachedSize = findPhotoCachedSize(message);
+        if (findPhotoCachedSize != null) {
+            byte[] bArr = findPhotoCachedSize.bytes;
+            if (!(bArr == null || bArr.length == 0)) {
+                File pathToAttach = FileLoader.getPathToAttach(findPhotoCachedSize, true);
+                TL_photoSize tL_photoSize = new TL_photoSize();
+                tL_photoSize.w = findPhotoCachedSize.w;
+                tL_photoSize.h = findPhotoCachedSize.h;
+                tL_photoSize.location = findPhotoCachedSize.location;
+                tL_photoSize.size = findPhotoCachedSize.size;
+                tL_photoSize.type = findPhotoCachedSize.type;
+                if (pathToAttach.exists() && message2.grouped_id == 0) {
+                    Point messageSize = ChatMessageCell.getMessageSize(findPhotoCachedSize.w, findPhotoCachedSize.h);
+                    String format = String.format(Locale.US, "%d_%d@%d_%d_b", new Object[]{Long.valueOf(findPhotoCachedSize.location.volume_id), Integer.valueOf(findPhotoCachedSize.location.local_id), Integer.valueOf((int) (messageSize.x / AndroidUtilities.density)), Integer.valueOf((int) (messageSize.y / AndroidUtilities.density))});
+                    if (!getInstance().isInMemCache(format, false)) {
+                        String path = pathToAttach.getPath();
+                        float f = messageSize.x;
+                        float f2 = AndroidUtilities.density;
+                        Bitmap loadBitmap = loadBitmap(path, null, (float) ((int) (f / f2)), (float) ((int) (messageSize.y / f2)), false);
+                        if (loadBitmap != null) {
+                            Utilities.blurBitmap(loadBitmap, 3, 1, loadBitmap.getWidth(), loadBitmap.getHeight(), loadBitmap.getRowBytes());
+                            f = messageSize.x;
+                            float f3 = AndroidUtilities.density;
+                            createScaledBitmap = Bitmaps.createScaledBitmap(loadBitmap, (int) (f / f3), (int) (messageSize.y / f3), true);
+                            if (createScaledBitmap != loadBitmap) {
+                                loadBitmap.recycle();
+                            } else {
+                                createScaledBitmap = loadBitmap;
+                            }
+                            return new MessageThumb(format, new BitmapDrawable(createScaledBitmap));
+                        }
+                    }
+                }
+                return null;
+            }
+        }
+        MessageMedia messageMedia = message2.media;
+        if (messageMedia instanceof TL_messageMediaDocument) {
+            int size = messageMedia.document.thumbs.size();
+            for (int i = 0; i < size; i++) {
+                PhotoSize photoSize = (PhotoSize) message2.media.document.thumbs.get(i);
+                if (photoSize instanceof TL_photoStrippedSize) {
+                    int i2;
+                    int i3;
+                    PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(message2.media.document.thumbs, 320);
+                    if (closestPhotoSizeWithSize != null) {
+                        i2 = closestPhotoSizeWithSize.h;
+                        i3 = closestPhotoSizeWithSize.w;
+                    } else {
+                        for (i3 = 0; i3 < message2.media.document.attributes.size(); i3++) {
+                            if (message2.media.document.attributes.get(i3) instanceof TL_documentAttributeVideo) {
+                                TL_documentAttributeVideo tL_documentAttributeVideo = (TL_documentAttributeVideo) message2.media.document.attributes.get(i3);
+                                i2 = tL_documentAttributeVideo.h;
+                                i3 = tL_documentAttributeVideo.w;
+                                break;
+                            }
+                        }
+                        i3 = 0;
+                        i2 = 0;
+                    }
+                    Point messageSize2 = ChatMessageCell.getMessageSize(i3, i2);
+                    String format2 = String.format(Locale.US, "%s_false@%d_%d_b", new Object[]{ImageLocation.getStippedKey(message2, message2, photoSize), Integer.valueOf((int) (messageSize2.x / AndroidUtilities.density)), Integer.valueOf((int) (messageSize2.y / AndroidUtilities.density))});
+                    if (getInstance().memCache.contains(format2)) {
+                        continue;
+                    } else {
+                        Bitmap strippedPhotoBitmap = getStrippedPhotoBitmap(photoSize.bytes, null);
+                        if (strippedPhotoBitmap != null) {
+                            Utilities.blurBitmap(strippedPhotoBitmap, 3, 1, strippedPhotoBitmap.getWidth(), strippedPhotoBitmap.getHeight(), strippedPhotoBitmap.getRowBytes());
+                            float f4 = messageSize2.x;
+                            float f5 = AndroidUtilities.density;
+                            createScaledBitmap = Bitmaps.createScaledBitmap(strippedPhotoBitmap, (int) (f4 / f5), (int) (messageSize2.y / f5), true);
+                            if (createScaledBitmap != strippedPhotoBitmap) {
+                                strippedPhotoBitmap.recycle();
+                            } else {
+                                createScaledBitmap = strippedPhotoBitmap;
+                            }
+                            return new MessageThumb(format2, new BitmapDrawable(createScaledBitmap));
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

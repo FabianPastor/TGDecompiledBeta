@@ -699,21 +699,21 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         super.onFragmentDestroy();
     }
 
-    /* JADX WARNING: Missing block: B:65:0x0482, code skipped:
-            if (r1 != 1) goto L_0x0489;
+    /* JADX WARNING: Missing block: B:69:0x0489, code skipped:
+            if (r1 != 1) goto L_0x0490;
      */
-    /* JADX WARNING: Missing block: B:67:0x0486, code skipped:
-            if (r0.allowOrder != false) goto L_0x048a;
+    /* JADX WARNING: Missing block: B:71:0x048d, code skipped:
+            if (r0.allowOrder != false) goto L_0x0491;
      */
-    /* JADX WARNING: Missing block: B:68:0x0489, code skipped:
+    /* JADX WARNING: Missing block: B:72:0x0490, code skipped:
             r9 = false;
      */
-    /* JADX WARNING: Missing block: B:69:0x048a, code skipped:
+    /* JADX WARNING: Missing block: B:73:0x0491, code skipped:
             r0.allowIndices = r9;
             r0.listView.setEmptyView(r0.emptyView);
             updatePhotosButton(0);
      */
-    /* JADX WARNING: Missing block: B:70:0x0499, code skipped:
+    /* JADX WARNING: Missing block: B:74:0x04a0, code skipped:
             return r0.fragmentView;
      */
     public android.view.View createView(android.content.Context r20) {
@@ -743,7 +743,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r3.setBackButtonImage(r6);
         r3 = r0.selectedAlbum;
         r6 = "SearchGifsTitle";
-        r7 = NUM; // 0x7f0e09ac float:1.888006E38 double:1.05316338E-314;
+        r7 = NUM; // 0x7f0e09b2 float:1.8880072E38 double:1.053163383E-314;
         r8 = "SearchImagesTitle";
         r9 = 1;
         if (r3 == 0) goto L_0x004d;
@@ -764,7 +764,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (r3 != r9) goto L_0x0069;
     L_0x005d:
         r3 = r0.actionBar;
-        r10 = NUM; // 0x7f0e09a9 float:1.8880053E38 double:1.0531633785E-314;
+        r10 = NUM; // 0x7f0e09af float:1.8880066E38 double:1.0531633814E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r6, r10);
         r3.setTitle(r10);
     L_0x0069:
@@ -783,14 +783,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r10.<init>(r0);
         r3.setSubMenuDelegate(r10);
         r10 = NUM; // 0x7var_df float:1.794555E38 double:1.0529357397E-314;
-        r11 = NUM; // 0x7f0e0a48 float:1.8880376E38 double:1.053163457E-314;
+        r11 = NUM; // 0x7f0e0a4e float:1.8880388E38 double:1.05316346E-314;
         r12 = "ShowAsList";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r10 = r3.addSubItem(r9, r10, r11);
         r0.showAsListItem = r10;
         r10 = 2;
         r11 = NUM; // 0x7var_e8 float:1.7945568E38 double:1.052935744E-314;
-        r12 = NUM; // 0x7f0e076a float:1.8878887E38 double:1.0531630944E-314;
+        r12 = NUM; // 0x7f0e0770 float:1.88789E38 double:1.0531630973E-314;
         r13 = "OpenInExternalApp";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r3.addSubItem(r10, r11, r12);
@@ -831,7 +831,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (r3 != r9) goto L_0x010b;
     L_0x00ff:
         r3 = r0.searchItem;
-        r5 = NUM; // 0x7f0e09a9 float:1.8880053E38 double:1.0531633785E-314;
+        r5 = NUM; // 0x7f0e09af float:1.8880066E38 double:1.0531633814E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setSearchFieldHint(r5);
     L_0x010b:
@@ -922,7 +922,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r3 = r0.emptyView;
         r3.setShowAtCenter(r2);
         r3 = r0.emptyView;
-        r6 = NUM; // 0x7f0e06a8 float:1.8878494E38 double:1.0531629985E-314;
+        r6 = NUM; // 0x7f0e06ae float:1.8878506E38 double:1.0531630015E-314;
         r8 = "NoPhotos";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r3.setText(r6);
@@ -935,7 +935,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r3.setPadding(r2, r6, r2, r2);
         r3 = r0.emptyView;
-        r6 = NUM; // 0x7f0e06b0 float:1.887851E38 double:1.0531630025E-314;
+        r6 = NUM; // 0x7f0e06b6 float:1.8878522E38 double:1.0531630054E-314;
         r8 = "NoRecentSearches";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r3.setText(r6);
@@ -970,7 +970,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r19.updateSearchInterface();
     L_0x023c:
         r3 = r0.needsBottomLayout;
-        if (r3 == 0) goto L_0x047a;
+        if (r3 == 0) goto L_0x0481;
     L_0x0240:
         r3 = new android.view.View;
         r3.<init>(r1);
@@ -1079,7 +1079,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r3 = r0.writeButtonContainer;
         r3.setAlpha(r2);
         r3 = r0.writeButtonContainer;
-        r5 = NUM; // 0x7f0e09ce float:1.8880128E38 double:1.0531633967E-314;
+        r5 = NUM; // 0x7f0e09d4 float:1.888014E38 double:1.0531633997E-314;
         r6 = "Send";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setContentDescription(r5);
@@ -1094,14 +1094,6 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r16 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
         r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16);
         r3.addView(r5, r6);
-        r3 = r0.writeButtonContainer;
-        r5 = new org.telegram.ui.-$$Lambda$PhotoPickerActivity$dTiSUg75sRfWPRlo26sk1jZD--Q;
-        r5.<init>(r0);
-        r3.setOnClickListener(r5);
-        r3 = r0.writeButtonContainer;
-        r5 = new org.telegram.ui.-$$Lambda$PhotoPickerActivity$yQRzD-ZVwuD6b-bsifVLsGopz0U;
-        r5.<init>(r0);
-        r3.setOnLongClickListener(r5);
         r3 = new android.widget.ImageView;
         r3.<init>(r1);
         r0.writeButton = r3;
@@ -1109,92 +1101,107 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r5 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r6 = "dialogFloatingButton";
         r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
+        r7 = android.os.Build.VERSION.SDK_INT;
+        r8 = 21;
+        if (r7 < r8) goto L_0x0376;
+    L_0x0373:
         r7 = "dialogFloatingButtonPressed";
+        goto L_0x0378;
+    L_0x0376:
+        r7 = "dialogFloatingButton";
+    L_0x0378:
         r7 = org.telegram.ui.ActionBar.Theme.getColor(r7);
         r5 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r5, r6, r7);
         r0.writeButtonDrawable = r5;
         r5 = android.os.Build.VERSION.SDK_INT;
-        r6 = 21;
-        if (r5 >= r6) goto L_0x03c3;
-    L_0x0393:
+        if (r5 >= r8) goto L_0x03b6;
+    L_0x0386:
         r5 = r20.getResources();
-        r7 = NUM; // 0x7var_cd float:1.7944994E38 double:1.0529356043E-314;
-        r5 = r5.getDrawable(r7);
+        r6 = NUM; // 0x7var_cd float:1.7944994E38 double:1.0529356043E-314;
+        r5 = r5.getDrawable(r6);
         r5 = r5.mutate();
-        r7 = new android.graphics.PorterDuffColorFilter;
-        r8 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
+        r6 = new android.graphics.PorterDuffColorFilter;
+        r7 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r10 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r7.<init>(r8, r10);
-        r5.setColorFilter(r7);
-        r7 = new org.telegram.ui.Components.CombinedDrawable;
-        r8 = r0.writeButtonDrawable;
-        r10 = 0;
-        r7.<init>(r5, r8, r10, r10);
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r8 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r7.setIconSize(r5, r8);
-        r0.writeButtonDrawable = r7;
-    L_0x03c3:
-        r5 = r0.writeButton;
+        r6.<init>(r7, r10);
+        r5.setColorFilter(r6);
+        r6 = new org.telegram.ui.Components.CombinedDrawable;
         r7 = r0.writeButtonDrawable;
-        r5.setBackgroundDrawable(r7);
+        r10 = 0;
+        r6.<init>(r5, r7, r10, r10);
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r6.setIconSize(r5, r7);
+        r0.writeButtonDrawable = r6;
+    L_0x03b6:
         r5 = r0.writeButton;
-        r7 = NUM; // 0x7var_ float:1.794475E38 double:1.052935545E-314;
-        r5.setImageResource(r7);
+        r6 = r0.writeButtonDrawable;
+        r5.setBackgroundDrawable(r6);
         r5 = r0.writeButton;
-        r7 = new android.graphics.PorterDuffColorFilter;
-        r8 = "dialogFloatingIcon";
-        r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);
+        r6 = NUM; // 0x7var_ float:1.794475E38 double:1.052935545E-314;
+        r5.setImageResource(r6);
+        r5 = r0.writeButton;
+        r6 = new android.graphics.PorterDuffColorFilter;
+        r7 = "dialogFloatingIcon";
+        r7 = org.telegram.ui.ActionBar.Theme.getColor(r7);
         r10 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r7.<init>(r8, r10);
-        r5.setColorFilter(r7);
+        r6.<init>(r7, r10);
+        r5.setColorFilter(r6);
         r5 = r0.writeButton;
-        r7 = android.widget.ImageView.ScaleType.CENTER;
-        r5.setScaleType(r7);
+        r6 = android.widget.ImageView.ScaleType.CENTER;
+        r5.setScaleType(r6);
         r5 = android.os.Build.VERSION.SDK_INT;
-        if (r5 < r6) goto L_0x03f9;
-    L_0x03ef:
+        if (r5 < r8) goto L_0x03ec;
+    L_0x03e2:
         r5 = r0.writeButton;
-        r7 = new org.telegram.ui.PhotoPickerActivity$11;
-        r7.<init>();
-        r5.setOutlineProvider(r7);
-    L_0x03f9:
+        r6 = new org.telegram.ui.PhotoPickerActivity$10;
+        r6.<init>();
+        r5.setOutlineProvider(r6);
+    L_0x03ec:
         r5 = r0.writeButtonContainer;
-        r7 = r0.writeButton;
-        r8 = android.os.Build.VERSION.SDK_INT;
-        if (r8 < r6) goto L_0x0406;
-    L_0x0401:
-        r8 = 56;
+        r6 = r0.writeButton;
+        r7 = android.os.Build.VERSION.SDK_INT;
+        if (r7 < r8) goto L_0x03f9;
+    L_0x03f4:
+        r7 = 56;
         r10 = 56;
-        goto L_0x040a;
-    L_0x0406:
-        r8 = 60;
+        goto L_0x03fd;
+    L_0x03f9:
+        r7 = 60;
         r10 = 60;
-    L_0x040a:
-        r8 = android.os.Build.VERSION.SDK_INT;
-        if (r8 < r6) goto L_0x0411;
-    L_0x040e:
+    L_0x03fd:
+        r7 = android.os.Build.VERSION.SDK_INT;
+        if (r7 < r8) goto L_0x0404;
+    L_0x0401:
         r11 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
-        goto L_0x0415;
-    L_0x0411:
+        goto L_0x0408;
+    L_0x0404:
         r3 = NUM; // 0x42700000 float:60.0 double:5.507034975E-315;
         r11 = NUM; // 0x42700000 float:60.0 double:5.507034975E-315;
-    L_0x0415:
+    L_0x0408:
         r12 = 51;
         r3 = android.os.Build.VERSION.SDK_INT;
-        if (r3 < r6) goto L_0x0420;
-    L_0x041b:
+        if (r3 < r8) goto L_0x0413;
+    L_0x040e:
         r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r13 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        goto L_0x0421;
-    L_0x0420:
+        goto L_0x0414;
+    L_0x0413:
         r13 = 0;
-    L_0x0421:
+    L_0x0414:
         r14 = 0;
         r15 = 0;
         r16 = 0;
         r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16);
-        r5.addView(r7, r3);
+        r5.addView(r6, r3);
+        r3 = r0.writeButton;
+        r5 = new org.telegram.ui.-$$Lambda$PhotoPickerActivity$dTiSUg75sRfWPRlo26sk1jZD--Q;
+        r5.<init>(r0);
+        r3.setOnClickListener(r5);
+        r3 = r0.writeButton;
+        r5 = new org.telegram.ui.-$$Lambda$PhotoPickerActivity$yQRzD-ZVwuD6b-bsifVLsGopz0U;
+        r5.<init>(r0);
+        r3.setOnLongClickListener(r5);
         r3 = r0.textPaint;
         r5 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
@@ -1224,27 +1231,27 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16);
         r1.addView(r2, r3);
         r1 = r0.selectPhotoType;
-        if (r1 == 0) goto L_0x047a;
-    L_0x0473:
+        if (r1 == 0) goto L_0x0481;
+    L_0x047a:
         r1 = r0.commentTextView;
         r2 = 8;
         r1.setVisibility(r2);
-    L_0x047a:
+    L_0x0481:
         r1 = r0.selectedAlbum;
-        if (r1 != 0) goto L_0x0484;
-    L_0x047e:
+        if (r1 != 0) goto L_0x048b;
+    L_0x0485:
         r1 = r0.type;
-        if (r1 == 0) goto L_0x0484;
-    L_0x0482:
-        if (r1 != r9) goto L_0x0489;
-    L_0x0484:
-        r1 = r0.allowOrder;
-        if (r1 == 0) goto L_0x0489;
-    L_0x0488:
-        goto L_0x048a;
+        if (r1 == 0) goto L_0x048b;
     L_0x0489:
+        if (r1 != r9) goto L_0x0490;
+    L_0x048b:
+        r1 = r0.allowOrder;
+        if (r1 == 0) goto L_0x0490;
+    L_0x048f:
+        goto L_0x0491;
+    L_0x0490:
         r9 = 0;
-    L_0x048a:
+    L_0x0491:
         r0.allowIndices = r9;
         r1 = r0.listView;
         r2 = r0.emptyView;
@@ -1313,7 +1320,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 AndroidUtilities.hideKeyboard(actionBarMenuItem.getSearchField());
             }
             if (this.listSort) {
-                onListItemClick(view, this.searchResult.get(i));
+                onListItemClick(view, arrayList2.get(i));
             } else {
                 int i2 = this.selectPhotoType;
                 int i3 = i2 == 1 ? 1 : i2 == 2 ? 3 : i2 == 10 ? 10 : this.chatActivity == null ? 4 : 0;

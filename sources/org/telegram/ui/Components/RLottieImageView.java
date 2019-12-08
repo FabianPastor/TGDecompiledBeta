@@ -29,11 +29,22 @@ public class RLottieImageView extends ImageView {
         }
     }
 
+    public void replaceColors(int[] iArr) {
+        RLottieDrawable rLottieDrawable = this.drawable;
+        if (rLottieDrawable != null) {
+            rLottieDrawable.replaceColors(iArr);
+        }
+    }
+
     public void setAnimation(int i, int i2, int i3) {
+        setAnimation(i, i2, i3, null);
+    }
+
+    public void setAnimation(int i, int i2, int i3, int[] iArr) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("");
         stringBuilder.append(i);
-        this.drawable = new RLottieDrawable(i, stringBuilder.toString(), AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false);
+        this.drawable = new RLottieDrawable(i, stringBuilder.toString(), AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false, iArr);
         if (this.autoRepeat) {
             this.drawable.setAutoRepeat(1);
         }

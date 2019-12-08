@@ -239,7 +239,11 @@ public class RecyclerAnimationScrollHelper {
                         }
                     });
                     RecyclerAnimationScrollHelper.this.recyclerView.removeOnLayoutChangeListener(this);
-                    RecyclerAnimationScrollHelper.this.animator.setDuration((long) (((float) bottom) / 6.4f));
+                    long j = (long) (((float) bottom) / 6.4f);
+                    if (j < 280) {
+                        j = 280;
+                    }
+                    RecyclerAnimationScrollHelper.this.animator.setDuration(j);
                     RecyclerAnimationScrollHelper.this.animator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                     RecyclerAnimationScrollHelper.this.animator.start();
                 }

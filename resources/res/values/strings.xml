@@ -820,6 +820,12 @@
     <string name="ConvertGroupMenu">Convert to supergroup</string>
     <string name="Copy">Copy</string>
     <string name="CopyLink">Copy Link</string>
+    <string name="CountOfResults_few">%1$d of %2$d results</string>
+    <string name="CountOfResults_many">%1$d of %2$d results</string>
+    <string name="CountOfResults_one">%1$d of %2$d results</string>
+    <string name="CountOfResults_other">%1$d of %2$d results</string>
+    <string name="CountOfResults_two">%1$d of %2$d results</string>
+    <string name="CountOfResults_zero">%1$d of %2$d results</string>
     <string name="CountReceived">Received</string>
     <string name="CountSent">Sent</string>
     <string name="Create">Create</string>
@@ -1873,7 +1879,7 @@
     <string name="OK">OK</string>
     <string name="October">October</string>
     <string name="Of">%1$d of %2$d</string>
-    <string name="OfResults">%1$d of %2$d results</string>
+    <string name="OneResult">1 result</string>
     <string name="Online">online</string>
     <string name="OnlineCount_few">%1$d online</string>
     <string name="OnlineCount_many">%1$d online</string>
@@ -2955,6 +2961,7 @@
     <string name="VideoCaption">Video Caption</string>
     <string name="VideoDoesNotSupportStreaming">This video is not optimized for streaming. You may need to download it in full to play it.</string>
     <string name="VideoMessagesAutodownload">Video messages</string>
+    <string name="VideoQualityIsTooLow">Video quality is too low to change compression settings.</string>
     <string name="VideosSelected_few">%1$d videos selected</string>
     <string name="VideosSelected_many">%1$d videos selected</string>
     <string name="VideosSelected_one">%1$d video selected</string>

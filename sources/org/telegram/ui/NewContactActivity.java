@@ -91,7 +91,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r1.editDoneItem = r2;
         r2 = r1.editDoneItem;
         r4 = "Done";
-        r6 = NUM; // 0x7f0e03d7 float:1.8877031E38 double:1.0531626423E-314;
+        r6 = NUM; // 0x7f0e03dd float:1.8877043E38 double:1.0531626453E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r2.setContentDescription(r4);
         r2 = new org.telegram.ui.Components.ContextProgressView;
@@ -189,7 +189,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r4.setImeOptions(r5);
         r4 = r1.firstNameField;
         r13 = "FirstName";
-        r14 = NUM; // 0x7f0e04b2 float:1.8877475E38 double:1.0531627505E-314;
+        r14 = NUM; // 0x7f0e04b8 float:1.8877488E38 double:1.0531627535E-314;
         r13 = org.telegram.messenger.LocaleController.getString(r13, r14);
         r4.setHint(r13);
         r4 = r1.firstNameField;
@@ -249,7 +249,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r4.setImeOptions(r5);
         r4 = r1.lastNameField;
         r5 = "LastName";
-        r15 = NUM; // 0x7f0e05aa float:1.8877978E38 double:1.053162873E-314;
+        r15 = NUM; // 0x7f0e05b0 float:1.887799E38 double:1.053162876E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r15);
         r4.setHint(r5);
         r4 = r1.lastNameField;

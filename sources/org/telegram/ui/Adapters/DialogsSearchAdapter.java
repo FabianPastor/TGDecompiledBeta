@@ -630,7 +630,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r24 = this;
         r1 = r24;
         r0 = "SavedMessages";
-        r2 = NUM; // 0x7f0e0995 float:1.8880013E38 double:1.0531633686E-314;
+        r2 = NUM; // 0x7f0e099b float:1.8880025E38 double:1.0531633715E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x0697 }
         r0 = r0.toLowerCase();	 Catch:{ Exception -> 0x0697 }
         r2 = r25.trim();	 Catch:{ Exception -> 0x0697 }
@@ -2066,7 +2066,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r0.setText(r2);
         goto L_0x0379;
     L_0x00dc:
-        r2 = NUM; // 0x7f0e0928 float:1.8879792E38 double:1.0531633147E-314;
+        r2 = NUM; // 0x7f0e092e float:1.8879804E38 double:1.0531633177E-314;
         r3 = "Recent";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r3 = org.telegram.messenger.LocaleController.getString(r8, r5);
@@ -2079,7 +2079,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r3 = r3.isEmpty();
         if (r3 != 0) goto L_0x0112;
     L_0x00fb:
-        r2 = NUM; // 0x7f0e0547 float:1.8877778E38 double:1.053162824E-314;
+        r2 = NUM; // 0x7f0e054d float:1.887779E38 double:1.053162827E-314;
         r3 = "Hashtags";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r3 = org.telegram.messenger.LocaleController.getString(r8, r5);
@@ -2121,7 +2121,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     L_0x0151:
         if (r2 >= r8) goto L_0x0161;
     L_0x0153:
-        r2 = NUM; // 0x7f0e08b1 float:1.887955E38 double:1.053163256E-314;
+        r2 = NUM; // 0x7f0e08b7 float:1.8879563E38 double:1.053163259E-314;
         r3 = "PhoneNumberSearch";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
@@ -2132,13 +2132,13 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     L_0x0164:
         if (r2 >= r6) goto L_0x0174;
     L_0x0166:
-        r2 = NUM; // 0x7f0e051a float:1.8877686E38 double:1.053162802E-314;
+        r2 = NUM; // 0x7f0e0520 float:1.8877699E38 double:1.053162805E-314;
         r3 = "GlobalSearch";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
         goto L_0x0379;
     L_0x0174:
-        r2 = NUM; // 0x7f0e09af float:1.8880066E38 double:1.0531633814E-314;
+        r2 = NUM; // 0x7f0e09b5 float:1.8880078E38 double:1.0531633844E-314;
         r3 = "SearchMessages";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
@@ -2393,7 +2393,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r10 = r1.selfUserId;
         if (r2 != r10) goto L_0x0328;
     L_0x031c:
-        r0 = NUM; // 0x7f0e0995 float:1.8880013E38 double:1.0531633686E-314;
+        r0 = NUM; // 0x7f0e099b float:1.8880025E38 double:1.0531633715E-314;
         r2 = "SavedMessages";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r5 = 0;

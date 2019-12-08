@@ -255,6 +255,9 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     /* JADX WARNING: Missing block: B:24:0x005b, code skipped:
             if (r5.charAt(r7) != 9794) goto L_0x0078;
      */
+    /* JADX WARNING: Missing block: B:106:0x01fa, code skipped:
+            if (r15.isEmpty() == false) goto L_0x0206;
+     */
     public void loadStikersForEmoji(java.lang.CharSequence r14, boolean r15) {
         /*
         r13 = this;
@@ -385,8 +388,8 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     L_0x00f4:
         if (r15 != 0) goto L_0x01e8;
     L_0x00f6:
-        r15 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r15 == r6) goto L_0x01e8;
+        r2 = org.telegram.messenger.SharedConfig.suggestStickers;
+        if (r2 == r6) goto L_0x01e8;
     L_0x00fa:
         if (r14 != 0) goto L_0x00fe;
     L_0x00fc:
@@ -526,24 +529,29 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     L_0x01e7:
         return;
     L_0x01e8:
-        r15 = r13.visible;
-        if (r15 == 0) goto L_0x0200;
+        r0 = r13.visible;
+        if (r0 == 0) goto L_0x0206;
     L_0x01ec:
+        if (r15 != 0) goto L_0x01fc;
+    L_0x01ee:
+        r15 = org.telegram.messenger.SharedConfig.suggestStickers;
+        if (r15 == r6) goto L_0x01fc;
+    L_0x01f2:
         r15 = r13.keywordResults;
-        if (r15 == 0) goto L_0x01f6;
-    L_0x01f0:
-        r15 = r15.isEmpty();
-        if (r15 == 0) goto L_0x0200;
+        if (r15 == 0) goto L_0x01fc;
     L_0x01f6:
+        r15 = r15.isEmpty();
+        if (r15 == 0) goto L_0x0206;
+    L_0x01fc:
         r13.visible = r1;
         r15 = r13.delegate;
         r15.needChangePanelVisibility(r1);
         r13.notifyDataSetChanged();
-    L_0x0200:
-        if (r14 != 0) goto L_0x0205;
-    L_0x0202:
+    L_0x0206:
+        if (r14 != 0) goto L_0x020b;
+    L_0x0208:
         r13.searchEmojiByKeyword();
-    L_0x0205:
+    L_0x020b:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.StickersAdapter.loadStikersForEmoji(java.lang.CharSequence, boolean):void");

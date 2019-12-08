@@ -1982,10 +1982,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         this.writeButtonContainer.setAlpha(0.0f);
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
         this.containerView.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 6.0f, 10.0f));
-        this.writeButtonContainer.setOnClickListener(new -$$Lambda$ChatAttachAlert$oB8CYoYcB7iIWh1dkLqBzyIkh8Y(this, baseFragment2));
-        this.writeButtonContainer.setOnLongClickListener(new -$$Lambda$ChatAttachAlert$QKyi0HLLA-qrKnznWIASX4wQREg(this));
         this.writeButton = new ImageView(context2);
-        this.writeButtonDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor("dialogFloatingButtonPressed"));
+        this.writeButtonDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
         if (VERSION.SDK_INT < 21) {
             Drawable mutate = context.getResources().getDrawable(NUM).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
@@ -2006,6 +2004,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             });
         }
         this.writeButtonContainer.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 51, VERSION.SDK_INT >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
+        this.writeButton.setOnClickListener(new -$$Lambda$ChatAttachAlert$oB8CYoYcB7iIWh1dkLqBzyIkh8Y(this, baseFragment2));
+        this.writeButton.setOnLongClickListener(new -$$Lambda$ChatAttachAlert$QKyi0HLLA-qrKnznWIASX4wQREg(this));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface(str2));
         this.selectedCountView = new View(context2) {
@@ -3215,8 +3215,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     this.sendPopupLayout.invalidate();
                 }
             }
-            Theme.setSelectorDrawableColor(this.writeButtonDrawable, Theme.getColor("dialogFloatingButton"), false);
-            Theme.setSelectorDrawableColor(this.writeButtonDrawable, Theme.getColor("dialogFloatingButtonPressed"), true);
+            String str5 = "dialogFloatingButton";
+            Theme.setSelectorDrawableColor(this.writeButtonDrawable, Theme.getColor(str5), false);
+            Drawable drawable = this.writeButtonDrawable;
+            if (VERSION.SDK_INT >= 21) {
+                str5 = "dialogFloatingButtonPressed";
+            }
+            Theme.setSelectorDrawableColor(drawable, Theme.getColor(str5), true);
             this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), Mode.MULTIPLY));
             this.dropDown.setTextColor(Theme.getColor(str));
             this.dropDownContainer.setPopupItemsColor(Theme.getColor(str3), false);

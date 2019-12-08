@@ -264,7 +264,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.currentType == 0) {
-            this.actionBar.setTitle(LocaleController.getString("SessionsTitle", NUM));
+            this.actionBar.setTitle(LocaleController.getString("Devices", NUM));
         } else {
             this.actionBar.setTitle(LocaleController.getString("WebSessionsTitle", NUM));
         }
@@ -671,8 +671,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             this.rowCount = i2 + 1;
             this.qrCodeRow = i2;
         }
-        this.otherSessionsStartRow = this.otherSessionsSectionRow + 1;
-        this.otherSessionsEndRow = this.otherSessionsStartRow + this.sessions.size();
+        i2 = this.rowCount;
+        this.otherSessionsStartRow = i2;
+        this.otherSessionsEndRow = i2 + this.sessions.size();
         this.rowCount += this.sessions.size();
         i2 = this.rowCount;
         this.rowCount = i2 + 1;

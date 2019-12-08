@@ -3846,7 +3846,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{Splitter:B:1:0x0001, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:1:0x0001} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:21:0x005d, code skipped:
             r5 = th;
@@ -5577,10 +5577,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$88$MessagesStorage(long, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
-    public boolean checkMessageId(long j, int i) {
+    public boolean checkMessageId(long j, boolean z, int i) {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$yW41FAXn22ibzKRmuu0Kbaa0Cu8(this, j, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$h0vkrdxti-V1B_YELNc1_e0rGWw(this, i, z, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -5629,52 +5629,60 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         	at jadx.api.JavaClass.decompile(JavaClass.java:62)
         	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
-    public /* synthetic */ void lambda$checkMessageId$89$MessagesStorage(long r6, int r8, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageId$89$MessagesStorage(int r6, boolean r7, long r8, boolean[] r10, java.util.concurrent.CountDownLatch r11) {
         /*
         r5 = this;
-        r0 = 0;
-        r1 = r5.database;	 Catch:{ Exception -> 0x002f }
-        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x002f }
-        r3 = "SELECT mid FROM messages WHERE uid = %d AND mid = %d";	 Catch:{ Exception -> 0x002f }
-        r4 = 2;	 Catch:{ Exception -> 0x002f }
-        r4 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x002f }
-        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x002f }
-        r7 = 0;	 Catch:{ Exception -> 0x002f }
-        r4[r7] = r6;	 Catch:{ Exception -> 0x002f }
-        r6 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x002f }
-        r8 = 1;	 Catch:{ Exception -> 0x002f }
-        r4[r8] = r6;	 Catch:{ Exception -> 0x002f }
-        r6 = java.lang.String.format(r2, r3, r4);	 Catch:{ Exception -> 0x002f }
-        r2 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x002f }
-        r0 = r1.queryFinalized(r6, r2);	 Catch:{ Exception -> 0x002f }
-        r6 = r0.next();	 Catch:{ Exception -> 0x002f }
-        if (r6 == 0) goto L_0x002a;	 Catch:{ Exception -> 0x002f }
-    L_0x0028:
-        r9[r7] = r8;	 Catch:{ Exception -> 0x002f }
-    L_0x002a:
-        if (r0 == 0) goto L_0x0038;
-    L_0x002c:
-        goto L_0x0035;
-    L_0x002d:
-        r6 = move-exception;
-        goto L_0x003c;
-    L_0x002f:
-        r6 = move-exception;
-        org.telegram.messenger.FileLog.e(r6);	 Catch:{ all -> 0x002d }
-        if (r0 == 0) goto L_0x0038;
+        r0 = (long) r6;
+        if (r7 == 0) goto L_0x0008;
+    L_0x0003:
+        r6 = -r8;
+        r2 = 32;
+        r6 = r6 << r2;
+        r0 = r0 | r6;
+    L_0x0008:
+        r6 = 0;
+        r7 = r5.database;	 Catch:{ Exception -> 0x0037 }
+        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x0037 }
+        r3 = "SELECT mid FROM messages WHERE uid = %d AND mid = %d";	 Catch:{ Exception -> 0x0037 }
+        r4 = 2;	 Catch:{ Exception -> 0x0037 }
+        r4 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0037 }
+        r8 = java.lang.Long.valueOf(r8);	 Catch:{ Exception -> 0x0037 }
+        r9 = 0;	 Catch:{ Exception -> 0x0037 }
+        r4[r9] = r8;	 Catch:{ Exception -> 0x0037 }
+        r8 = java.lang.Long.valueOf(r0);	 Catch:{ Exception -> 0x0037 }
+        r0 = 1;	 Catch:{ Exception -> 0x0037 }
+        r4[r0] = r8;	 Catch:{ Exception -> 0x0037 }
+        r8 = java.lang.String.format(r2, r3, r4);	 Catch:{ Exception -> 0x0037 }
+        r1 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0037 }
+        r6 = r7.queryFinalized(r8, r1);	 Catch:{ Exception -> 0x0037 }
+        r7 = r6.next();	 Catch:{ Exception -> 0x0037 }
+        if (r7 == 0) goto L_0x0032;	 Catch:{ Exception -> 0x0037 }
+    L_0x0030:
+        r10[r9] = r0;	 Catch:{ Exception -> 0x0037 }
+    L_0x0032:
+        if (r6 == 0) goto L_0x0040;
+    L_0x0034:
+        goto L_0x003d;
     L_0x0035:
-        r0.dispose();
-    L_0x0038:
-        r10.countDown();
+        r7 = move-exception;
+        goto L_0x0044;
+    L_0x0037:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x0035 }
+        if (r6 == 0) goto L_0x0040;
+    L_0x003d:
+        r6.dispose();
+    L_0x0040:
+        r11.countDown();
         return;
-    L_0x003c:
-        if (r0 == 0) goto L_0x0041;
-    L_0x003e:
-        r0.dispose();
-    L_0x0041:
-        throw r6;
+    L_0x0044:
+        if (r6 == 0) goto L_0x0049;
+    L_0x0046:
+        r6.dispose();
+    L_0x0049:
+        throw r7;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$89$MessagesStorage(long, int, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$89$MessagesStorage(int, boolean, long, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public void getUnreadMention(long j, IntCallback intCallback) {
@@ -5769,9 +5777,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:904:0x1509 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
     /* JADX WARNING: Removed duplicated region for block: B:971:0x165f  */
     /* JADX WARNING: Removed duplicated region for block: B:935:0x15a3 A:{SYNTHETIC, Splitter:B:935:0x15a3} */
-    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{Splitter:B:724:0x11d0, ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 } */
-    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{Splitter:B:724:0x11d0, ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 } */
-    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{Splitter:B:724:0x11d0, ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 } */
+    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:724:0x11d0, PHI: r3 r22 r43 r44 r50 } */
+    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:724:0x11d0, PHI: r3 r22 r43 r44 r50 } */
+    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:724:0x11d0, PHI: r3 r22 r43 r44 r50 } */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */

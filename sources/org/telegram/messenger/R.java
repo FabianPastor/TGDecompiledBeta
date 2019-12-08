@@ -2095,6 +2095,12 @@ public final class R {
         public static final int ConvertGroupMenu = NUM;
         public static final int Copy = NUM;
         public static final int CopyLink = NUM;
+        public static final int CountOfResults_few = NUM;
+        public static final int CountOfResults_many = NUM;
+        public static final int CountOfResults_one = NUM;
+        public static final int CountOfResults_other = NUM;
+        public static final int CountOfResults_two = NUM;
+        public static final int CountOfResults_zero = NUM;
         public static final int CountReceived = NUM;
         public static final int CountSent = NUM;
         public static final int Create = NUM;
@@ -3148,7 +3154,7 @@ public final class R {
         public static final int OK = NUM;
         public static final int October = NUM;
         public static final int Of = NUM;
-        public static final int OfResults = NUM;
+        public static final int OneResult = NUM;
         public static final int Online = NUM;
         public static final int OnlineCount_few = NUM;
         public static final int OnlineCount_many = NUM;
@@ -4230,6 +4236,7 @@ public final class R {
         public static final int VideoCaption = NUM;
         public static final int VideoDoesNotSupportStreaming = NUM;
         public static final int VideoMessagesAutodownload = NUM;
+        public static final int VideoQualityIsTooLow = NUM;
         public static final int VideosSelected_few = NUM;
         public static final int VideosSelected_many = NUM;
         public static final int VideosSelected_one = NUM;

@@ -987,7 +987,7 @@ public class ContactsController extends BaseController {
         r1 = 0;
         r2 = java.lang.Integer.valueOf(r1);	 Catch:{ all -> 0x01ed }
         r0.add(r2);	 Catch:{ all -> 0x01ed }
-        r0 = NUM; // 0x7f0e08ab float:1.8879538E38 double:1.053163253E-314;
+        r0 = NUM; // 0x7f0e08b1 float:1.887955E38 double:1.053163256E-314;
         r1 = "PhoneMobile";
         if (r14 != 0) goto L_0x0182;
     L_0x016f:
@@ -1009,7 +1009,7 @@ public class ContactsController extends BaseController {
     L_0x0185:
         r0 = r13.phoneTypes;	 Catch:{ all -> 0x01ed }
         r1 = "PhoneHome";
-        r3 = NUM; // 0x7f0e08a9 float:1.8879534E38 double:1.053163252E-314;
+        r3 = NUM; // 0x7f0e08af float:1.8879546E38 double:1.053163255E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ all -> 0x01ed }
         r0.add(r1);	 Catch:{ all -> 0x01ed }
         goto L_0x01d4;
@@ -1027,7 +1027,7 @@ public class ContactsController extends BaseController {
     L_0x01a4:
         r0 = r13.phoneTypes;	 Catch:{ all -> 0x01ed }
         r1 = "PhoneWork";
-        r3 = NUM; // 0x7f0e08b3 float:1.8879554E38 double:1.053163257E-314;
+        r3 = NUM; // 0x7f0e08b9 float:1.8879567E38 double:1.05316326E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ all -> 0x01ed }
         r0.add(r1);	 Catch:{ all -> 0x01ed }
         goto L_0x01d4;
@@ -1037,14 +1037,14 @@ public class ContactsController extends BaseController {
     L_0x01b7:
         r0 = r13.phoneTypes;	 Catch:{ all -> 0x01ed }
         r1 = "PhoneMain";
-        r3 = NUM; // 0x7f0e08aa float:1.8879536E38 double:1.0531632525E-314;
+        r3 = NUM; // 0x7f0e08b0 float:1.8879548E38 double:1.0531632554E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ all -> 0x01ed }
         r0.add(r1);	 Catch:{ all -> 0x01ed }
         goto L_0x01d4;
     L_0x01c6:
         r0 = r13.phoneTypes;	 Catch:{ all -> 0x01ed }
         r1 = "PhoneOther";
-        r3 = NUM; // 0x7f0e08b2 float:1.8879552E38 double:1.0531632564E-314;
+        r3 = NUM; // 0x7f0e08b8 float:1.8879565E38 double:1.0531632594E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ all -> 0x01ed }
         r0.add(r1);	 Catch:{ all -> 0x01ed }
     L_0x01d4:

@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -51,10 +53,12 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private volatile long nativePtr;
     private boolean needGenerateCache;
     private HashMap<String, Integer> newColorUpdates;
+    private int[] newReplaceColors;
     private volatile boolean nextFrameIsLast;
     private volatile Bitmap nextRenderingBitmap;
     private ArrayList<WeakReference<View>> parentViews;
     private volatile HashMap<String, Integer> pendingColorUpdates;
+    private int[] pendingReplaceColors;
     private volatile Bitmap renderingBitmap;
     private float scaleX;
     private float scaleY;
@@ -73,11 +77,13 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     private static native void createCache(long j, Bitmap bitmap, int i, int i2, int i3);
 
-    private static native long createWithJson(String str, String str2, int[] iArr);
+    private static native long createWithJson(String str, String str2, int[] iArr, int[] iArr2);
 
     private static native void destroy(long j);
 
     private static native int getFrame(long j, int i, Bitmap bitmap, int i2, int i3, int i4);
+
+    private static native void replaceColors(long j, int[] iArr);
 
     private static native void setLayerColor(long j, String str, int i);
 
@@ -182,208 +188,70 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             }
         };
         this.loadFrameRunnable = new Runnable() {
-            /* JADX WARNING: Removed duplicated region for block: B:30:0x00eb A:{Catch:{ Exception -> 0x0176 }} */
-            /* JADX WARNING: Removed duplicated region for block: B:34:0x010d A:{Catch:{ Exception -> 0x0176 }} */
-            /* JADX WARNING: Removed duplicated region for block: B:33:0x010b A:{Catch:{ Exception -> 0x0176 }} */
-            /* JADX WARNING: Removed duplicated region for block: B:41:0x0145 A:{Catch:{ Exception -> 0x0176 }} */
-            /* JADX WARNING: Removed duplicated region for block: B:37:0x011f A:{Catch:{ Exception -> 0x0176 }} */
-            /* JADX WARNING: Missing exception handler attribute for start block: B:27:0x00b4 */
-            /* JADX WARNING: Failed to process nested try/catch */
-            /* JADX WARNING: Can't wrap try/catch for region: R(10:19|20|(4:22|(2:25|23)|52|26)|27|28|(1:30)|31|(1:33)(1:34)|35|(2:37|(1:39)(1:40))(2:41|(1:43)(2:44|(1:46)(1:47)))) */
-            /* JADX WARNING: Missing block: B:48:0x0176, code skipped:
-            r0 = move-exception;
-     */
-            /* JADX WARNING: Missing block: B:49:0x0177, code skipped:
-            org.telegram.messenger.FileLog.e(r0);
-     */
             public void run() {
-                /*
-                r9 = this;
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;
-                r0 = r0.isRecycled;
-                if (r0 == 0) goto L_0x0009;
-            L_0x0008:
-                return;
-            L_0x0009:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;
-                r0 = r0.nativePtr;
-                r2 = 0;
-                r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-                if (r4 != 0) goto L_0x0023;
-            L_0x0015:
-                r0 = org.telegram.ui.Components.RLottieDrawable.uiHandler;
-                r1 = org.telegram.ui.Components.RLottieDrawable.this;
-                r1 = r1.uiRunnableNoFrame;
-                r0.post(r1);
-                return;
-            L_0x0023:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;
-                r0 = r0.backgroundBitmap;
-                if (r0 != 0) goto L_0x0047;
-            L_0x002b:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ all -> 0x0043 }
-                r1 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ all -> 0x0043 }
-                r1 = r1.width;	 Catch:{ all -> 0x0043 }
-                r2 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ all -> 0x0043 }
-                r2 = r2.height;	 Catch:{ all -> 0x0043 }
-                r3 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0043 }
-                r1 = android.graphics.Bitmap.createBitmap(r1, r2, r3);	 Catch:{ all -> 0x0043 }
-                r0.backgroundBitmap = r1;	 Catch:{ all -> 0x0043 }
-                goto L_0x0047;
-            L_0x0043:
-                r0 = move-exception;
-                org.telegram.messenger.FileLog.e(r0);
-            L_0x0047:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;
-                r0 = r0.backgroundBitmap;
-                if (r0 == 0) goto L_0x017a;
-            L_0x004f:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;
-                r0 = r0.needGenerateCache;
-                r1 = 0;
-                if (r0 == 0) goto L_0x006b;
-            L_0x0058:
-                r0 = org.telegram.ui.Components.RLottieDrawable.uiHandler;
-                r2 = org.telegram.ui.Components.RLottieDrawable.this;
-                r2 = r2.uiRunnableGenerateCache;
-                r0.post(r2);
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;
-                r0.needGenerateCache = r1;
-                return;
-            L_0x006b:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x00b4 }
-                r0 = r0.pendingColorUpdates;	 Catch:{ Exception -> 0x00b4 }
-                r0 = r0.isEmpty();	 Catch:{ Exception -> 0x00b4 }
-                if (r0 != 0) goto L_0x00b4;
-            L_0x0077:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x00b4 }
-                r0 = r0.pendingColorUpdates;	 Catch:{ Exception -> 0x00b4 }
-                r0 = r0.entrySet();	 Catch:{ Exception -> 0x00b4 }
-                r0 = r0.iterator();	 Catch:{ Exception -> 0x00b4 }
-            L_0x0085:
-                r2 = r0.hasNext();	 Catch:{ Exception -> 0x00b4 }
-                if (r2 == 0) goto L_0x00ab;
-            L_0x008b:
-                r2 = r0.next();	 Catch:{ Exception -> 0x00b4 }
-                r2 = (java.util.Map.Entry) r2;	 Catch:{ Exception -> 0x00b4 }
-                r3 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x00b4 }
-                r3 = r3.nativePtr;	 Catch:{ Exception -> 0x00b4 }
-                r5 = r2.getKey();	 Catch:{ Exception -> 0x00b4 }
-                r5 = (java.lang.String) r5;	 Catch:{ Exception -> 0x00b4 }
-                r2 = r2.getValue();	 Catch:{ Exception -> 0x00b4 }
-                r2 = (java.lang.Integer) r2;	 Catch:{ Exception -> 0x00b4 }
-                r2 = r2.intValue();	 Catch:{ Exception -> 0x00b4 }
-                org.telegram.ui.Components.RLottieDrawable.setLayerColor(r3, r5, r2);	 Catch:{ Exception -> 0x00b4 }
-                goto L_0x0085;
-            L_0x00ab:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x00b4 }
-                r0 = r0.pendingColorUpdates;	 Catch:{ Exception -> 0x00b4 }
-                r0.clear();	 Catch:{ Exception -> 0x00b4 }
-            L_0x00b4:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r2 = r0.nativePtr;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r4 = r0.currentFrame;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r5 = r0.backgroundBitmap;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r6 = r0.width;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r7 = r0.height;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0 = r0.backgroundBitmap;	 Catch:{ Exception -> 0x0176 }
-                r8 = r0.getRowBytes();	 Catch:{ Exception -> 0x0176 }
-                org.telegram.ui.Components.RLottieDrawable.getFrame(r2, r4, r5, r6, r7, r8);	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0 = r0.metaData;	 Catch:{ Exception -> 0x0176 }
-                r2 = 2;
-                r0 = r0[r2];	 Catch:{ Exception -> 0x0176 }
-                r3 = 1;
-                if (r0 == 0) goto L_0x00f8;
-            L_0x00eb:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.needGenerateCache = r3;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0 = r0.metaData;	 Catch:{ Exception -> 0x0176 }
-                r0[r2] = r1;	 Catch:{ Exception -> 0x0176 }
-            L_0x00f8:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r4 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r4 = r4.backgroundBitmap;	 Catch:{ Exception -> 0x0176 }
-                r0.nextRenderingBitmap = r4;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0 = r0.shouldLimitFps;	 Catch:{ Exception -> 0x0176 }
-                if (r0 == 0) goto L_0x010d;
-            L_0x010b:
-                r0 = 2;
-                goto L_0x010e;
-            L_0x010d:
-                r0 = 1;
-            L_0x010e:
-                r4 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r4 = r4.currentFrame;	 Catch:{ Exception -> 0x0176 }
-                r4 = r4 + r0;
-                r5 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r5 = r5.metaData;	 Catch:{ Exception -> 0x0176 }
-                r5 = r5[r1];	 Catch:{ Exception -> 0x0176 }
-                if (r4 >= r5) goto L_0x0145;
-            L_0x011f:
-                r2 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r2 = r2.autoRepeat;	 Catch:{ Exception -> 0x0176 }
-                r4 = 3;
-                if (r2 != r4) goto L_0x0133;
-            L_0x0128:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.nextFrameIsLast = r3;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.autoRepeatPlayCount = r0.autoRepeatPlayCount + 1;	 Catch:{ Exception -> 0x0176 }
-                goto L_0x017a;
-            L_0x0133:
-                r2 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r3 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r3 = r3.currentFrame;	 Catch:{ Exception -> 0x0176 }
-                r3 = r3 + r0;
-                r2.currentFrame = r3;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.nextFrameIsLast = r1;	 Catch:{ Exception -> 0x0176 }
-                goto L_0x017a;
-            L_0x0145:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0 = r0.autoRepeat;	 Catch:{ Exception -> 0x0176 }
-                if (r0 != r3) goto L_0x0158;
-            L_0x014d:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.currentFrame = r1;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.nextFrameIsLast = r1;	 Catch:{ Exception -> 0x0176 }
-                goto L_0x017a;
-            L_0x0158:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0 = r0.autoRepeat;	 Catch:{ Exception -> 0x0176 }
-                if (r0 != r2) goto L_0x0170;
-            L_0x0160:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.currentFrame = r1;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.nextFrameIsLast = r3;	 Catch:{ Exception -> 0x0176 }
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.autoRepeatPlayCount = r0.autoRepeatPlayCount + 1;	 Catch:{ Exception -> 0x0176 }
-                goto L_0x017a;
-            L_0x0170:
-                r0 = org.telegram.ui.Components.RLottieDrawable.this;	 Catch:{ Exception -> 0x0176 }
-                r0.nextFrameIsLast = r3;	 Catch:{ Exception -> 0x0176 }
-                goto L_0x017a;
-            L_0x0176:
-                r0 = move-exception;
-                org.telegram.messenger.FileLog.e(r0);
-            L_0x017a:
-                r0 = org.telegram.ui.Components.RLottieDrawable.uiHandler;
-                r1 = org.telegram.ui.Components.RLottieDrawable.this;
-                r1 = r1.uiRunnable;
-                r0.post(r1);
-                return;
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RLottieDrawable$AnonymousClass6.run():void");
+                if (!RLottieDrawable.this.isRecycled) {
+                    if (RLottieDrawable.this.nativePtr == 0) {
+                        RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableNoFrame);
+                        return;
+                    }
+                    if (RLottieDrawable.this.backgroundBitmap == null) {
+                        try {
+                            RLottieDrawable.this.backgroundBitmap = Bitmap.createBitmap(RLottieDrawable.this.width, RLottieDrawable.this.height, Config.ARGB_8888);
+                        } catch (Throwable th) {
+                            FileLog.e(th);
+                        }
+                    }
+                    if (RLottieDrawable.this.backgroundBitmap != null) {
+                        if (RLottieDrawable.this.needGenerateCache) {
+                            RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableGenerateCache);
+                            RLottieDrawable.this.needGenerateCache = false;
+                            return;
+                        }
+                        try {
+                            if (!RLottieDrawable.this.pendingColorUpdates.isEmpty()) {
+                                for (Entry entry : RLottieDrawable.this.pendingColorUpdates.entrySet()) {
+                                    RLottieDrawable.setLayerColor(RLottieDrawable.this.nativePtr, (String) entry.getKey(), ((Integer) entry.getValue()).intValue());
+                                }
+                                RLottieDrawable.this.pendingColorUpdates.clear();
+                            }
+                        } catch (Exception unused) {
+                        }
+                        if (RLottieDrawable.this.pendingReplaceColors != null) {
+                            RLottieDrawable.replaceColors(RLottieDrawable.this.nativePtr, RLottieDrawable.this.pendingReplaceColors);
+                            RLottieDrawable.this.pendingReplaceColors = null;
+                        }
+                        try {
+                            RLottieDrawable.getFrame(RLottieDrawable.this.nativePtr, RLottieDrawable.this.currentFrame, RLottieDrawable.this.backgroundBitmap, RLottieDrawable.this.width, RLottieDrawable.this.height, RLottieDrawable.this.backgroundBitmap.getRowBytes());
+                            if (RLottieDrawable.this.metaData[2] != 0) {
+                                RLottieDrawable.this.needGenerateCache = true;
+                                RLottieDrawable.this.metaData[2] = 0;
+                            }
+                            RLottieDrawable.this.nextRenderingBitmap = RLottieDrawable.this.backgroundBitmap;
+                            int i = RLottieDrawable.this.shouldLimitFps ? 2 : 1;
+                            if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.metaData[0]) {
+                                if (RLottieDrawable.this.autoRepeat == 3) {
+                                    RLottieDrawable.this.nextFrameIsLast = true;
+                                    RLottieDrawable.this.autoRepeatPlayCount = RLottieDrawable.this.autoRepeatPlayCount + 1;
+                                } else {
+                                    RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
+                                    RLottieDrawable.this.nextFrameIsLast = false;
+                                }
+                            } else if (RLottieDrawable.this.autoRepeat == 1) {
+                                RLottieDrawable.this.currentFrame = 0;
+                                RLottieDrawable.this.nextFrameIsLast = false;
+                            } else if (RLottieDrawable.this.autoRepeat == 2) {
+                                RLottieDrawable.this.currentFrame = 0;
+                                RLottieDrawable.this.nextFrameIsLast = true;
+                                RLottieDrawable.this.autoRepeatPlayCount = RLottieDrawable.this.autoRepeatPlayCount + 1;
+                            } else {
+                                RLottieDrawable.this.nextFrameIsLast = true;
+                            }
+                        } catch (Exception th2) {
+                            FileLog.e(th2);
+                        }
+                    }
+                    RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnable);
+                }
             }
         };
         this.width = i;
@@ -404,10 +272,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public RLottieDrawable(int i, String str, int i2, int i3) {
-        this(i, str, i2, i3, true);
+        this(i, str, i2, i3, true, null);
     }
 
-    public RLottieDrawable(int i, String str, int i2, int i3, boolean z) {
+    public RLottieDrawable(int i, String str, int i2, int i3, boolean z, int[] iArr) {
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap();
         this.pendingColorUpdates = new HashMap();
@@ -444,7 +312,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             this.width = i2;
             this.height = i3;
             getPaint().setFlags(2);
-            this.nativePtr = createWithJson(str2, str, this.metaData);
+            this.nativePtr = createWithJson(str2, str, this.metaData, iArr);
             this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
             this.autoRepeat = 0;
             if (z) {
@@ -605,8 +473,17 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
+    public void replaceColors(int[] iArr) {
+        this.newReplaceColors = iArr;
+        requestRedrawColors();
+    }
+
     public void setLayerColor(String str, int i) {
         this.newColorUpdates.put(str, Integer.valueOf(i));
+        requestRedrawColors();
+    }
+
+    private void requestRedrawColors() {
         if (!(this.applyingLayerColors || this.isRunning || !this.decodeSingleFrame)) {
             if (this.currentFrame <= 2) {
                 this.currentFrame = 0;
@@ -627,34 +504,34 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         /*
         r5 = this;
         r0 = r5.cacheGenerateTask;
-        if (r0 != 0) goto L_0x0046;
+        if (r0 != 0) goto L_0x004f;
     L_0x0004:
         r0 = r5.loadFrameTask;
-        if (r0 != 0) goto L_0x0046;
+        if (r0 != 0) goto L_0x004f;
     L_0x0008:
         r0 = r5.nextRenderingBitmap;
-        if (r0 != 0) goto L_0x0046;
+        if (r0 != 0) goto L_0x004f;
     L_0x000c:
         r0 = r5.nativePtr;
         r2 = 0;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 == 0) goto L_0x0046;
+        if (r4 == 0) goto L_0x004f;
     L_0x0014:
         r0 = r5.destroyWhenDone;
-        if (r0 != 0) goto L_0x0046;
+        if (r0 != 0) goto L_0x004f;
     L_0x0018:
         r0 = r5.isRunning;
         if (r0 != 0) goto L_0x0027;
     L_0x001c:
         r0 = r5.decodeSingleFrame;
-        if (r0 == 0) goto L_0x0046;
+        if (r0 == 0) goto L_0x004f;
     L_0x0020:
         if (r0 == 0) goto L_0x0027;
     L_0x0022:
         r0 = r5.singleFrameDecoded;
         if (r0 == 0) goto L_0x0027;
     L_0x0026:
-        goto L_0x0046;
+        goto L_0x004f;
     L_0x0027:
         r0 = r5.newColorUpdates;
         r0 = r0.isEmpty();
@@ -666,13 +543,20 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         r0 = r5.newColorUpdates;
         r0.clear();
     L_0x003b:
+        r0 = r5.newReplaceColors;
+        if (r0 == 0) goto L_0x0044;
+    L_0x003f:
+        r5.pendingReplaceColors = r0;
+        r0 = 0;
+        r5.newReplaceColors = r0;
+    L_0x0044:
         r0 = loadFrameRunnableQueue;
         r1 = r5.loadFrameRunnable;
         r5.loadFrameTask = r1;
         r0.execute(r1);
         r0 = 1;
         return r0;
-    L_0x0046:
+    L_0x004f:
         r0 = 0;
         return r0;
         */

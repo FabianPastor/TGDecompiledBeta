@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Build.VERSION;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -158,7 +159,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             public void setSelected(boolean z) {
                 super.setSelected(z);
                 Drawable background = getBackground();
-                if (background != null) {
+                if (VERSION.SDK_INT >= 21 && background != null) {
                     int color = Theme.getColor(z ? "chat_emojiPanelIconSelected" : "chat_emojiBottomPanelIcon");
                     Theme.setSelectorDrawableColor(background, Color.argb(30, Color.red(color), Color.green(color), Color.blue(color)), true);
                 }
@@ -167,7 +168,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         boolean z = true;
         anonymousClass2.setFocusable(true);
         if (VERSION.SDK_INT >= 21) {
-            anonymousClass2.setBackground(Theme.createSelectorDrawable(Theme.getColor("chat_emojiBottomPanelIcon")));
+            RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(Theme.getColor("chat_emojiBottomPanelIcon"));
+            Theme.setRippleDrawableForceSoftware(rippleDrawable);
+            anonymousClass2.setBackground(rippleDrawable);
         }
         anonymousClass2.setImageDrawable(drawable);
         anonymousClass2.setScaleType(ScaleType.CENTER);

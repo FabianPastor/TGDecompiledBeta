@@ -189,6 +189,20 @@ public class ImageReceiver implements NotificationCenterDelegate {
             return (this.imageLocation == null && this.thumbLocation == null && this.mediaLocation == null && this.thumb == null) ? false : true;
         }
 
+        private boolean isWebfileSet() {
+            ImageLocation imageLocation = this.imageLocation;
+            if (imageLocation == null || (imageLocation.webFile == null && imageLocation.path == null)) {
+                imageLocation = this.thumbLocation;
+                if (imageLocation == null || (imageLocation.webFile == null && imageLocation.path == null)) {
+                    imageLocation = this.mediaLocation;
+                    if (imageLocation == null || (imageLocation.webFile == null && imageLocation.path == null)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         private void clear() {
             this.imageLocation = null;
             this.thumbLocation = null;
@@ -335,7 +349,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r10 = r0.setImageBackup;
         if (r10 == 0) goto L_0x0025;
     L_0x001c:
-        r10 = r10.isSet();
+        r10 = r10.isWebfileSet();
         if (r10 == 0) goto L_0x0025;
     L_0x0022:
         r19.setBackupImage();

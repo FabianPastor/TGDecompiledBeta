@@ -667,10 +667,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.writeButtonContainer.setAlpha(0.0f);
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
         this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
-        this.writeButtonContainer.setOnClickListener(new -$$Lambda$AudioSelectActivity$yCkpzfYdMW7ExlFmoo7A5yK5n7o(this));
-        this.writeButtonContainer.setOnLongClickListener(new -$$Lambda$AudioSelectActivity$op1868hUHQ4ktj1ACa-ggMteGuo(this));
         this.writeButton = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor("dialogFloatingButtonPressed"));
+        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
         if (VERSION.SDK_INT < 21) {
             Drawable mutate = context.getResources().getDrawable(NUM).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
@@ -691,6 +689,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             });
         }
         this.writeButtonContainer.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 51, VERSION.SDK_INT >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
+        this.writeButton.setOnClickListener(new -$$Lambda$AudioSelectActivity$yCkpzfYdMW7ExlFmoo7A5yK5n7o(this));
+        this.writeButton.setOnLongClickListener(new -$$Lambda$AudioSelectActivity$op1868hUHQ4ktj1ACa-ggMteGuo(this));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedCountView = new View(context2) {
@@ -1331,7 +1331,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         r1[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_descriptionTextPaint, null, null, "windowBackgroundWhiteGrayText2");
         r1[20] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "dialogFloatingIcon");
         r1[21] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "dialogFloatingButton");
-        r1[22] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "dialogFloatingButtonPressed");
+        r1[22] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton");
         return r1;
     }
 }

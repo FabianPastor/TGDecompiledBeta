@@ -1995,6 +1995,12 @@
     <public type="string" name="ConvertGroupMenu" id="NUM" />
     <public type="string" name="Copy" id="NUM" />
     <public type="string" name="CopyLink" id="NUM" />
+    <public type="string" name="CountOfResults_few" id="NUM" />
+    <public type="string" name="CountOfResults_many" id="NUM" />
+    <public type="string" name="CountOfResults_one" id="NUM" />
+    <public type="string" name="CountOfResults_other" id="NUM" />
+    <public type="string" name="CountOfResults_two" id="NUM" />
+    <public type="string" name="CountOfResults_zero" id="NUM" />
     <public type="string" name="CountReceived" id="NUM" />
     <public type="string" name="CountSent" id="NUM" />
     <public type="string" name="Create" id="NUM" />
@@ -3048,7 +3054,7 @@
     <public type="string" name="OK" id="NUM" />
     <public type="string" name="October" id="NUM" />
     <public type="string" name="Of" id="NUM" />
-    <public type="string" name="OfResults" id="NUM" />
+    <public type="string" name="OneResult" id="NUM" />
     <public type="string" name="Online" id="NUM" />
     <public type="string" name="OnlineCount_few" id="NUM" />
     <public type="string" name="OnlineCount_many" id="NUM" />
@@ -4130,6 +4136,7 @@
     <public type="string" name="VideoCaption" id="NUM" />
     <public type="string" name="VideoDoesNotSupportStreaming" id="NUM" />
     <public type="string" name="VideoMessagesAutodownload" id="NUM" />
+    <public type="string" name="VideoQualityIsTooLow" id="NUM" />
     <public type="string" name="VideosSelected_few" id="NUM" />
     <public type="string" name="VideosSelected_many" id="NUM" />
     <public type="string" name="VideosSelected_one" id="NUM" />

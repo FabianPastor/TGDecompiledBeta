@@ -454,14 +454,14 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     L_0x001e:
         r0 = 0;
         r11.lastNameAvailable = r0;
-        r2 = NUM; // 0x7f0e0ad2 float:1.8880656E38 double:1.053163525E-314;
+        r2 = NUM; // 0x7f0e0ad8 float:1.8880668E38 double:1.053163528E-314;
         r3 = "Theme";
         r4 = "windowBackgroundWhiteRedText4";
         if (r12 == 0) goto L_0x00ad;
     L_0x002b:
         r5 = "_";
         r6 = r12.startsWith(r5);
-        r7 = NUM; // 0x7f0e0a15 float:1.8880272E38 double:1.053163432E-314;
+        r7 = NUM; // 0x7f0e0a1b float:1.8880285E38 double:1.053163435E-314;
         r8 = "SetUrlInvalid";
         if (r6 != 0) goto L_0x00a5;
     L_0x0038:
@@ -487,13 +487,13 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (r13 == 0) goto L_0x0067;
     L_0x0056:
         r12 = org.telegram.messenger.LocaleController.getString(r3, r2);
-        r13 = NUM; // 0x7f0e0a18 float:1.8880279E38 double:1.0531634333E-314;
+        r13 = NUM; // 0x7f0e0a1e float:1.888029E38 double:1.0531634363E-314;
         r1 = "SetUrlInvalidStartNumber";
         r13 = org.telegram.messenger.LocaleController.getString(r1, r13);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r12, r13);
         goto L_0x0073;
     L_0x0067:
-        r12 = NUM; // 0x7f0e0a18 float:1.8880279E38 double:1.0531634333E-314;
+        r12 = NUM; // 0x7f0e0a1e float:1.888029E38 double:1.0531634363E-314;
         r13 = "SetUrlInvalidStartNumber";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r11.setCheckText(r12, r4);
@@ -550,7 +550,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r6 = 64;
         if (r5 <= r6) goto L_0x00da;
     L_0x00bf:
-        r12 = NUM; // 0x7f0e0a16 float:1.8880274E38 double:1.0531634323E-314;
+        r12 = NUM; // 0x7f0e0a1c float:1.8880287E38 double:1.0531634353E-314;
         r1 = "SetUrlInvalidLong";
         if (r13 == 0) goto L_0x00d2;
     L_0x00c6:
@@ -580,7 +580,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r13 = r12.equals(r13);
         if (r13 == 0) goto L_0x0103;
     L_0x00ef:
-        r13 = NUM; // 0x7f0e0a12 float:1.8880266E38 double:1.0531634303E-314;
+        r13 = NUM; // 0x7f0e0a18 float:1.8880279E38 double:1.0531634333E-314;
         r2 = new java.lang.Object[r1];
         r2[r0] = r12;
         r12 = "SetUrlAvailable";
@@ -589,7 +589,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r11.setCheckText(r12, r13);
         return r1;
     L_0x0103:
-        r13 = NUM; // 0x7f0e0a13 float:1.8880268E38 double:1.053163431E-314;
+        r13 = NUM; // 0x7f0e0a19 float:1.888028E38 double:1.053163434E-314;
         r0 = "SetUrlChecking";
         r13 = org.telegram.messenger.LocaleController.getString(r0, r13);
         r0 = "windowBackgroundWhiteGrayText8";
@@ -604,7 +604,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     L_0x0122:
         return r1;
     L_0x0123:
-        r12 = NUM; // 0x7f0e0a17 float:1.8880276E38 double:1.053163433E-314;
+        r12 = NUM; // 0x7f0e0a1d float:1.8880289E38 double:1.053163436E-314;
         r1 = "SetUrlInvalidShort";
         if (r13 == 0) goto L_0x0136;
     L_0x012a:
@@ -661,7 +661,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     L_0x0023:
         goto L_0x0036;
     L_0x0024:
-        r4 = NUM; // 0x7f0e0a14 float:1.888027E38 double:1.0531634313E-314;
+        r4 = NUM; // 0x7f0e0a1a float:1.8880283E38 double:1.0531634343E-314;
         r5 = "SetUrlInUse";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "windowBackgroundWhiteRedText4";
@@ -669,7 +669,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r3.lastNameAvailable = r0;
         goto L_0x004c;
     L_0x0036:
-        r5 = NUM; // 0x7f0e0a12 float:1.8880266E38 double:1.0531634303E-314;
+        r5 = NUM; // 0x7f0e0a18 float:1.8880279E38 double:1.0531634333E-314;
         r1 = 1;
         r2 = new java.lang.Object[r1];
         r2[r0] = r4;

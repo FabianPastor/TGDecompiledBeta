@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.view.KeyEvent;
@@ -129,16 +130,18 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
         this.emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), Mode.MULTIPLY));
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
         if (i == 0) {
-            this.emojiButton.setPadding(0, 0, 0, AndroidUtilities.dp(7.0f));
             this.emojiButton.setImageResource(NUM);
             ImageView imageView = this.emojiButton;
             if (LocaleController.isRTL) {
                 i2 = 3;
             }
-            addView(imageView, LayoutHelper.createFrame(48, 48.0f, i2 | 16, 0.0f, 0.0f, 0.0f, 0.0f));
+            addView(imageView, LayoutHelper.createFrame(48, 48.0f, i2 | 16, 0.0f, 0.0f, 0.0f, 7.0f));
         } else {
             this.emojiButton.setImageResource(NUM);
             addView(this.emojiButton, LayoutHelper.createFrame(48, 48.0f, 19, 0.0f, 0.0f, 0.0f, 0.0f));
+        }
+        if (VERSION.SDK_INT >= 21) {
+            this.emojiButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         }
         this.emojiButton.setOnClickListener(new -$$Lambda$EditTextEmoji$2rCQ8jv3el2lKWMAASuH1xjI9xg(this));
         this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));

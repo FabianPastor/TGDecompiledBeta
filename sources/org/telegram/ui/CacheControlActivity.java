@@ -423,7 +423,7 @@ public class CacheControlActivity extends BaseFragment {
         r4 = "Months";
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7);
         r2[r3] = r4;
-        r3 = NUM; // 0x7f0e0598 float:1.8877942E38 double:1.053162864E-314;
+        r3 = NUM; // 0x7f0e059e float:1.8877954E38 double:1.053162867E-314;
         r4 = "KeepMediaForever";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2[r5] = r3;
@@ -442,11 +442,11 @@ public class CacheControlActivity extends BaseFragment {
         r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r2 = r16.getParentActivity();
         r1.<init>(r2);
-        r2 = NUM; // 0x7f0e05d9 float:1.8878074E38 double:1.053162896E-314;
+        r2 = NUM; // 0x7f0e05df float:1.8878086E38 double:1.053162899E-314;
         r3 = "LocalDatabaseClearTextTitle";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setTitle(r2);
-        r2 = NUM; // 0x7f0e05d8 float:1.8878072E38 double:1.0531628958E-314;
+        r2 = NUM; // 0x7f0e05de float:1.8878084E38 double:1.0531628987E-314;
         r3 = "LocalDatabaseClearText";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setMessage(r2);
@@ -501,7 +501,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != 0) goto L_0x00f2;
     L_0x00e5:
         r8 = r0.photoSize;
-        r15 = NUM; // 0x7f0e05de float:1.8878084E38 double:1.0531628987E-314;
+        r15 = NUM; // 0x7f0e05e4 float:1.8878096E38 double:1.0531629017E-314;
         r13 = "LocalPhotoCache";
         r13 = org.telegram.messenger.LocaleController.getString(r13, r15);
     L_0x00f0:
@@ -511,7 +511,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r7) goto L_0x0100;
     L_0x00f4:
         r8 = r0.videoSize;
-        r13 = NUM; // 0x7f0e05df float:1.8878086E38 double:1.053162899E-314;
+        r13 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r15 = "LocalVideoCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -519,7 +519,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r3) goto L_0x010e;
     L_0x0102:
         r8 = r0.documentsSize;
-        r13 = NUM; // 0x7f0e05db float:1.8878078E38 double:1.053162897E-314;
+        r13 = NUM; // 0x7f0e05e1 float:1.887809E38 double:1.0531629E-314;
         r15 = "LocalDocumentCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -527,7 +527,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r5) goto L_0x011c;
     L_0x0110:
         r8 = r0.musicSize;
-        r13 = NUM; // 0x7f0e05dd float:1.8878082E38 double:1.053162898E-314;
+        r13 = NUM; // 0x7f0e05e3 float:1.8878094E38 double:1.053162901E-314;
         r15 = "LocalMusicCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -535,7 +535,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r4) goto L_0x012a;
     L_0x011e:
         r8 = r0.audioSize;
-        r13 = NUM; // 0x7f0e05d4 float:1.8878064E38 double:1.053162894E-314;
+        r13 = NUM; // 0x7f0e05da float:1.8878076E38 double:1.0531628967E-314;
         r15 = "LocalAudioCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -544,7 +544,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r8) goto L_0x0139;
     L_0x012d:
         r8 = r0.cacheSize;
-        r13 = NUM; // 0x7f0e05d5 float:1.8878066E38 double:1.0531628943E-314;
+        r13 = NUM; // 0x7f0e05db float:1.8878078E38 double:1.053162897E-314;
         r15 = "LocalCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -647,8 +647,8 @@ public class CacheControlActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01ea A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
     /* JADX WARNING: Missing block: B:53:0x0237, code skipped:
             r0 = th;
      */

@@ -63,6 +63,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
     public static final int ACTION_TYPE_QR_LOGIN = 5;
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 34;
     private TextView buttonTextView;
+    private int[] colors;
     private String currentGroupCreateAddress;
     private String currentGroupCreateDisplayAddress;
     private Location currentGroupCreateLocation;
@@ -550,7 +551,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
             this.descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", NUM));
             this.buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", NUM));
         } else if (i6 == 5) {
-            this.imageView.setAnimation(NUM, 334, 334);
+            this.colors = new int[8];
+            updateColors();
+            this.imageView.setAnimation(NUM, 334, 334, this.colors);
             this.imageView.setScaleType(ScaleType.CENTER);
             this.titleTextView.setText(LocaleController.getString("AuthAnotherClient", NUM));
             this.buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
@@ -670,6 +673,23 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
                 FileLog.e(e);
             }
         }
+    }
+
+    private void updateColors() {
+        int[] iArr = this.colors;
+        iArr[0] = 3355443;
+        iArr[1] = Theme.getColor("windowBackgroundWhiteBlackText");
+        iArr = this.colors;
+        iArr[2] = 16777215;
+        String str = "windowBackgroundWhite";
+        iArr[3] = Theme.getColor(str);
+        iArr = this.colors;
+        iArr[4] = 5285866;
+        iArr[5] = Theme.getColor("featuredStickers_addButton");
+        iArr = this.colors;
+        iArr[6] = 2170912;
+        iArr[7] = Theme.getColor(str);
+        this.imageView.replaceColors(this.colors);
     }
 
     public void setGroupCreateAddress(String str, String str2, Location location) {
@@ -874,26 +894,27 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[19];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText2");
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarWhiteSelector");
-        themeDescriptionArr[4] = new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[5] = new ThemeDescription(this.subtitleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[6] = new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6");
-        themeDescriptionArr[7] = new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "featuredStickers_buttonText");
-        themeDescriptionArr[8] = new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, null, "featuredStickers_addButton");
-        themeDescriptionArr[9] = new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "featuredStickers_addButtonPressed");
-        themeDescriptionArr[10] = new ThemeDescription(this.desctiptionLines[0], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[11] = new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[12] = new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_LINKCOLOR, null, null, null, null, "windowBackgroundWhiteLinkText");
-        themeDescriptionArr[13] = new ThemeDescription(this.desctiptionLines[2], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[14] = new ThemeDescription(this.desctiptionLines[3], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[15] = new ThemeDescription(this.desctiptionLines[4], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[16] = new ThemeDescription(this.desctiptionLines[5], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[17] = new ThemeDescription(null, ThemeDescription.FLAG_TEXTCOLOR, null, null, new Drawable[]{this.drawable1}, null, "changephoneinfo_image");
-        themeDescriptionArr[18] = new ThemeDescription(null, ThemeDescription.FLAG_TEXTCOLOR, null, null, new Drawable[]{this.drawable2}, null, "changephoneinfo_image2");
-        return themeDescriptionArr;
+        -$$Lambda$ActionIntroActivity$fpGyZfwg0FJCkfDsWOrkKaY77lo -__lambda_actionintroactivity_fpgyzfwg0fjckfdsworkkay77lo = new -$$Lambda$ActionIntroActivity$fpGyZfwg0FJCkfDsWOrkKaY77lo(this);
+        r10 = new ThemeDescription[19];
+        r10[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, -__lambda_actionintroactivity_fpgyzfwg0fjckfdsworkkay77lo, "windowBackgroundWhite");
+        r10[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
+        r10[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText2");
+        r10[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarWhiteSelector");
+        r10[4] = new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, -__lambda_actionintroactivity_fpgyzfwg0fjckfdsworkkay77lo, "windowBackgroundWhiteBlackText");
+        r10[5] = new ThemeDescription(this.subtitleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[6] = new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6");
+        r10[7] = new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "featuredStickers_buttonText");
+        r10[8] = new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, -__lambda_actionintroactivity_fpgyzfwg0fjckfdsworkkay77lo, "featuredStickers_addButton");
+        r10[9] = new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, null, "featuredStickers_addButtonPressed");
+        r10[10] = new ThemeDescription(this.desctiptionLines[0], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[11] = new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[12] = new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_LINKCOLOR, null, null, null, null, "windowBackgroundWhiteLinkText");
+        r10[13] = new ThemeDescription(this.desctiptionLines[2], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[14] = new ThemeDescription(this.desctiptionLines[3], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[15] = new ThemeDescription(this.desctiptionLines[4], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[16] = new ThemeDescription(this.desctiptionLines[5], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[17] = new ThemeDescription(null, ThemeDescription.FLAG_TEXTCOLOR, null, null, new Drawable[]{this.drawable1}, null, "changephoneinfo_image");
+        r10[18] = new ThemeDescription(null, ThemeDescription.FLAG_TEXTCOLOR, null, null, new Drawable[]{this.drawable2}, null, "changephoneinfo_image2");
+        return r10;
     }
 }

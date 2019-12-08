@@ -5,11 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,50 +19,33 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
 import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.util.Property;
-import android.view.ActionMode;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.AccessibilityDelegate;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 import androidx.annotation.Keep;
-import androidx.core.os.BuildCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
-import androidx.core.view.inputmethod.EditorInfoCompat;
-import androidx.core.view.inputmethod.InputConnectionCompat;
-import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.customview.widget.ExploreByTouchHelper;
 import java.io.File;
 import java.util.ArrayList;
@@ -84,7 +65,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -148,7 +128,6 @@ import org.telegram.ui.Components.EmojiView.EmojiViewDelegate;
 import org.telegram.ui.Components.SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate;
 import org.telegram.ui.Components.StickersAlert.StickersAlertDelegate;
 import org.telegram.ui.Components.TextStyleSpan.TextStyleRun;
-import org.telegram.ui.Components.VideoTimelineView.VideoTimelineViewDelegate;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.GroupStickersActivity;
 import org.telegram.ui.LaunchActivity;
@@ -196,6 +175,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private MessageObject editingMessageObject;
     private int editingMessageReqId;
     private ImageView[] emojiButton = new ImageView[2];
+    private ImageView emojiButton1;
+    private ImageView emojiButton2;
     private AnimatorSet emojiButtonAnimation;
     private int emojiPadding;
     private boolean emojiTabOpen;
@@ -888,837 +869,1332 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return false;
     }
 
-    @SuppressLint({"ClickableViewAccessibility"})
-    public ChatActivityEnterView(Activity activity, SizeNotifierFrameLayout sizeNotifierFrameLayout, ChatActivity chatActivity, boolean z) {
-        String str;
-        Activity activity2 = activity;
-        ChatActivity chatActivity2 = chatActivity;
-        super(activity);
-        int i = UserConfig.selectedAccount;
-        this.currentAccount = i;
-        this.accountInstance = AccountInstance.getInstance(i);
-        this.dotPaint.setColor(Theme.getColor("chat_emojiPanelNewTrending"));
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-        setWillNotDraw(false);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recordStarted);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recordStartError);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recordStopped);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recordProgressChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.audioDidSent);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.audioRouteChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messageReceivedByServer);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.sendingMessagesChanged);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
-        this.parentActivity = activity2;
-        this.parentFragment = chatActivity2;
-        if (chatActivity2 != null) {
-            this.recordingGuid = this.parentFragment.getClassGuid();
-        }
-        this.sizeNotifierLayout = sizeNotifierFrameLayout;
-        this.sizeNotifierLayout.setDelegate(this);
-        this.sendByEnter = MessagesController.getGlobalMainSettings().getBoolean("send_by_enter", false);
-        this.textFieldContainer = new LinearLayout(activity2);
-        this.textFieldContainer.setOrientation(0);
-        this.textFieldContainer.setClipChildren(false);
-        this.textFieldContainer.setClipToPadding(false);
-        addView(this.textFieldContainer, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 2.0f, 0.0f, 0.0f));
-        AnonymousClass8 anonymousClass8 = new FrameLayout(activity2) {
-            /* Access modifiers changed, original: protected */
-            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                super.onLayout(z, i, i2, i3, i4);
-                if (ChatActivityEnterView.this.scheduledButton != null) {
-                    int measuredWidth = getMeasuredWidth();
-                    float f = (ChatActivityEnterView.this.botButton == null || ChatActivityEnterView.this.botButton.getVisibility() != 0) ? 48.0f : 96.0f;
-                    measuredWidth = (measuredWidth - AndroidUtilities.dp(f)) - AndroidUtilities.dp(48.0f);
-                    ChatActivityEnterView.this.scheduledButton.layout(measuredWidth, ChatActivityEnterView.this.scheduledButton.getTop(), ChatActivityEnterView.this.scheduledButton.getMeasuredWidth() + measuredWidth, ChatActivityEnterView.this.scheduledButton.getBottom());
-                }
-            }
-        };
-        this.textFieldContainer.addView(anonymousClass8, LayoutHelper.createLinear(0, -2, 1.0f, 80));
-        int i2 = 0;
-        while (true) {
-            str = "chat_messagePanelIcons";
-            if (i2 >= 2) {
-                break;
-            }
-            this.emojiButton[i2] = new ImageView(activity2) {
-                /* Access modifiers changed, original: protected */
-                public void onDraw(Canvas canvas) {
-                    super.onDraw(canvas);
-                    if (getTag() != null && ChatActivityEnterView.this.attachLayout != null && !ChatActivityEnterView.this.emojiViewVisible && !MediaDataController.getInstance(ChatActivityEnterView.this.currentAccount).getUnreadStickerSets().isEmpty() && ChatActivityEnterView.this.dotPaint != null) {
-                        canvas.drawCircle((float) ((getWidth() / 2) + AndroidUtilities.dp(9.0f)), (float) ((getHeight() / 2) - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(5.0f), ChatActivityEnterView.this.dotPaint);
-                    }
-                }
-            };
-            this.emojiButton[i2].setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-            this.emojiButton[i2].setScaleType(ScaleType.CENTER_INSIDE);
-            anonymousClass8.addView(this.emojiButton[i2], LayoutHelper.createFrame(48, 48.0f, 83, 3.0f, 0.0f, 0.0f, 0.0f));
-            this.emojiButton[i2].setOnClickListener(new -$$Lambda$ChatActivityEnterView$jlpojNCIsF-c7hlFcVLHdouZye4(this));
-            this.emojiButton[i2].setContentDescription(LocaleController.getString("AccDescrEmojiButton", NUM));
-            if (i2 == 1) {
-                this.emojiButton[i2].setVisibility(4);
-                this.emojiButton[i2].setAlpha(0.0f);
-                this.emojiButton[i2].setScaleX(0.1f);
-                this.emojiButton[i2].setScaleY(0.1f);
-            }
-            i2++;
-        }
-        setEmojiButtonImage(false, false);
-        this.messageEditText = new EditTextCaption(activity2) {
-            private void send(InputContentInfoCompat inputContentInfoCompat, boolean z, int i) {
-                if (inputContentInfoCompat.getDescription().hasMimeType("image/gif")) {
-                    SendMessagesHelper.prepareSendingDocument(ChatActivityEnterView.this.accountInstance, null, null, inputContentInfoCompat.getContentUri(), null, "image/gif", ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, inputContentInfoCompat, null, z, 0);
-                } else {
-                    SendMessagesHelper.prepareSendingPhoto(ChatActivityEnterView.this.accountInstance, null, inputContentInfoCompat.getContentUri(), ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, null, null, null, inputContentInfoCompat, 0, null, z, 0);
-                }
-                if (ChatActivityEnterView.this.delegate != null) {
-                    ChatActivityEnterView.this.delegate.onMessageSend(null, true, i);
-                }
-            }
-
-            public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
-                InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
-                try {
-                    EditorInfoCompat.setContentMimeTypes(editorInfo, new String[]{"image/gif", "image/*", "image/jpg", "image/png"});
-                    return InputConnectionCompat.createWrapper(onCreateInputConnection, editorInfo, new -$$Lambda$ChatActivityEnterView$10$tdJx8gOjPcn_RZ63vmI8LA_zoFw(this));
-                } catch (Throwable th) {
-                    FileLog.e(th);
-                    return onCreateInputConnection;
-                }
-            }
-
-            public /* synthetic */ boolean lambda$onCreateInputConnection$1$ChatActivityEnterView$10(InputContentInfoCompat inputContentInfoCompat, int i, Bundle bundle) {
-                if (BuildCompat.isAtLeastNMR1() && (i & 1) != 0) {
-                    try {
-                        inputContentInfoCompat.requestPermission();
-                    } catch (Exception unused) {
-                        return false;
-                    }
-                }
-                if (ChatActivityEnterView.this.isInScheduleMode()) {
-                    AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), new -$$Lambda$ChatActivityEnterView$10$doUQjSBnuyZZBZH7YkL67pRZ85w(this, inputContentInfoCompat));
-                } else {
-                    send(inputContentInfoCompat, true, 0);
-                }
-                return true;
-            }
-
-            public /* synthetic */ void lambda$null$0$ChatActivityEnterView$10(InputContentInfoCompat inputContentInfoCompat, boolean z, int i) {
-                send(inputContentInfoCompat, z, i);
-            }
-
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                if (ChatActivityEnterView.this.isPopupShowing() && motionEvent.getAction() == 0) {
-                    if (ChatActivityEnterView.this.searchingType != 0) {
-                        ChatActivityEnterView.this.searchingType = 0;
-                        ChatActivityEnterView.this.emojiView.closeSearch(false);
-                    }
-                    ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, 0);
-                    ChatActivityEnterView.this.openKeyboardInternal();
-                }
-                try {
-                    return super.onTouchEvent(motionEvent);
-                } catch (Exception e) {
-                    FileLog.e(e);
-                    return false;
-                }
-            }
-
-            /* Access modifiers changed, original: protected */
-            public void onSelectionChanged(int i, int i2) {
-                super.onSelectionChanged(i, i2);
-                if (ChatActivityEnterView.this.delegate != null) {
-                    ChatActivityEnterView.this.delegate.onTextSelectionChanged(i, i2);
-                }
-            }
-
-            /* Access modifiers changed, original: protected */
-            public void extendActionMode(ActionMode actionMode, Menu menu) {
-                if (ChatActivityEnterView.this.parentFragment != null) {
-                    ChatActivityEnterView.this.parentFragment.extendActionMode(menu);
-                }
-            }
-        };
-        this.messageEditText.setDelegate(new -$$Lambda$ChatActivityEnterView$YXzMuZPPiDr1K7R7cpN8afDWrUQ(this));
-        this.messageEditText.setWindowView(this.parentActivity.getWindow().getDecorView());
-        ChatActivity chatActivity3 = this.parentFragment;
-        EncryptedChat currentEncryptedChat = chatActivity3 != null ? chatActivity3.getCurrentEncryptedChat() : null;
-        this.messageEditText.setAllowTextEntitiesIntersection(supportsSendingNewEntities());
-        updateFieldHint();
-        int i3 = NUM;
-        if (currentEncryptedChat != null) {
-            i3 = NUM;
-        }
-        this.messageEditText.setImeOptions(i3);
-        EditTextCaption editTextCaption = this.messageEditText;
-        editTextCaption.setInputType((editTextCaption.getInputType() | 16384) | 131072);
-        this.messageEditText.setSingleLine(false);
-        this.messageEditText.setMaxLines(6);
-        this.messageEditText.setTextSize(1, 18.0f);
-        this.messageEditText.setGravity(80);
-        this.messageEditText.setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(12.0f));
-        this.messageEditText.setBackgroundDrawable(null);
-        this.messageEditText.setTextColor(Theme.getColor("chat_messagePanelText"));
-        this.messageEditText.setHintColor(Theme.getColor("chat_messagePanelHint"));
-        this.messageEditText.setHintTextColor(Theme.getColor("chat_messagePanelHint"));
-        this.messageEditText.setCursorColor(Theme.getColor("chat_messagePanelCursor"));
-        anonymousClass8.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 80, 52.0f, 0.0f, z ? 50.0f : 2.0f, 0.0f));
-        this.messageEditText.setOnKeyListener(new OnKeyListener() {
-            boolean ctrlPressed = false;
-
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                boolean z = false;
-                if (i == 4 && !ChatActivityEnterView.this.keyboardVisible && ChatActivityEnterView.this.isPopupShowing()) {
-                    if (keyEvent.getAction() == 1) {
-                        if (ChatActivityEnterView.this.currentPopupContentType == 1 && ChatActivityEnterView.this.botButtonsMessageObject != null) {
-                            Editor edit = MessagesController.getMainSettings(ChatActivityEnterView.this.currentAccount).edit();
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append("hidekeyboard_");
-                            stringBuilder.append(ChatActivityEnterView.this.dialog_id);
-                            edit.putInt(stringBuilder.toString(), ChatActivityEnterView.this.botButtonsMessageObject.getId()).commit();
-                        }
-                        if (ChatActivityEnterView.this.searchingType != 0) {
-                            ChatActivityEnterView.this.searchingType = 0;
-                            ChatActivityEnterView.this.emojiView.closeSearch(true);
-                            ChatActivityEnterView.this.messageEditText.requestFocus();
-                        } else {
-                            ChatActivityEnterView.this.showPopup(0, 0);
-                        }
-                    }
-                    return true;
-                } else if (i == 66 && ((this.ctrlPressed || ChatActivityEnterView.this.sendByEnter) && keyEvent.getAction() == 0 && ChatActivityEnterView.this.editingMessageObject == null)) {
-                    ChatActivityEnterView.this.sendMessage();
-                    return true;
-                } else if (i != 113 && i != 114) {
-                    return false;
-                } else {
-                    if (keyEvent.getAction() == 0) {
-                        z = true;
-                    }
-                    this.ctrlPressed = z;
-                    return true;
-                }
-            }
-        });
-        this.messageEditText.setOnEditorActionListener(new OnEditorActionListener() {
-            boolean ctrlPressed = false;
-
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == 4) {
-                    ChatActivityEnterView.this.sendMessage();
-                    return true;
-                }
-                boolean z = false;
-                if (keyEvent != null && i == 0) {
-                    if ((this.ctrlPressed || ChatActivityEnterView.this.sendByEnter) && keyEvent.getAction() == 0 && ChatActivityEnterView.this.editingMessageObject == null) {
-                        ChatActivityEnterView.this.sendMessage();
-                        return true;
-                    } else if (i == 113 || i == 114) {
-                        if (keyEvent.getAction() == 0) {
-                            z = true;
-                        }
-                        this.ctrlPressed = z;
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-        this.messageEditText.addTextChangedListener(new TextWatcher() {
-            boolean processChange = false;
-
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            }
-
-            /* JADX WARNING: Missing block: B:45:0x00eb, code skipped:
-            if (org.telegram.ui.Components.ChatActivityEnterView.access$4900(r4.this$0).getMessagesController().onlinePrivacy.containsKey(java.lang.Integer.valueOf(r6.id)) == false) goto L_0x00ed;
-     */
-            public void onTextChanged(java.lang.CharSequence r5, int r6, int r7, int r8) {
-                /*
-                r4 = this;
-                r6 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r6 = r6.innerTextChange;
-                r0 = 1;
-                if (r6 != r0) goto L_0x000a;
-            L_0x0009:
-                return;
-            L_0x000a:
-                r6 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r6.checkSendButton(r0);
-                r6 = r5.toString();
-                r6 = org.telegram.messenger.AndroidUtilities.getTrimmedString(r6);
-                r1 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r1 = r1.delegate;
-                r2 = 2;
-                if (r1 == 0) goto L_0x004c;
-            L_0x0020:
-                r1 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r1 = r1.ignoreTextChange;
-                if (r1 != 0) goto L_0x004c;
-            L_0x0028:
-                if (r8 > r2) goto L_0x0032;
-            L_0x002a:
-                if (r5 == 0) goto L_0x0032;
-            L_0x002c:
-                r1 = r5.length();
-                if (r1 != 0) goto L_0x0037;
-            L_0x0032:
-                r1 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r1.messageWebPageSearch = r0;
-            L_0x0037:
-                r1 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r1 = r1.delegate;
-                r3 = r8 + 1;
-                if (r7 > r3) goto L_0x0048;
-            L_0x0041:
-                r3 = r8 - r7;
-                if (r3 <= r2) goto L_0x0046;
-            L_0x0045:
-                goto L_0x0048;
-            L_0x0046:
-                r3 = 0;
-                goto L_0x0049;
-            L_0x0048:
-                r3 = 1;
-            L_0x0049:
-                r1.onTextChanged(r5, r3);
-            L_0x004c:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.innerTextChange;
-                if (r5 == r2) goto L_0x0059;
-            L_0x0054:
-                r8 = r8 - r7;
-                if (r8 <= r0) goto L_0x0059;
-            L_0x0057:
-                r4.processChange = r0;
-            L_0x0059:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.editingMessageObject;
-                if (r5 != 0) goto L_0x0108;
-            L_0x0061:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.canWriteToChannel;
-                if (r5 != 0) goto L_0x0108;
-            L_0x0069:
-                r5 = r6.length();
-                if (r5 == 0) goto L_0x0108;
-            L_0x006f:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.lastTypingTimeSend;
-                r7 = java.lang.System.currentTimeMillis();
-                r0 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
-                r7 = r7 - r0;
-                r0 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1));
-                if (r0 >= 0) goto L_0x0108;
-            L_0x0080:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.ignoreTextChange;
-                if (r5 != 0) goto L_0x0108;
-            L_0x0088:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.currentAccount;
-                r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r5);
-                r5 = r5.getCurrentTime();
-                r6 = 0;
-                r7 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r7 = r7.dialog_id;
-                r8 = (int) r7;
-                if (r8 <= 0) goto L_0x00b9;
-            L_0x00a0:
-                r6 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r6 = r6.accountInstance;
-                r6 = r6.getMessagesController();
-                r7 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r7 = r7.dialog_id;
-                r8 = (int) r7;
-                r7 = java.lang.Integer.valueOf(r8);
-                r6 = r6.getUser(r7);
-            L_0x00b9:
-                if (r6 == 0) goto L_0x00ee;
-            L_0x00bb:
-                r7 = r6.id;
-                r8 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r8 = r8.currentAccount;
-                r8 = org.telegram.messenger.UserConfig.getInstance(r8);
-                r8 = r8.getClientUserId();
-                if (r7 == r8) goto L_0x00ed;
-            L_0x00cd:
-                r7 = r6.status;
-                if (r7 == 0) goto L_0x00ee;
-            L_0x00d1:
-                r7 = r7.expires;
-                if (r7 >= r5) goto L_0x00ee;
-            L_0x00d5:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.accountInstance;
-                r5 = r5.getMessagesController();
-                r5 = r5.onlinePrivacy;
-                r6 = r6.id;
-                r6 = java.lang.Integer.valueOf(r6);
-                r5 = r5.containsKey(r6);
-                if (r5 != 0) goto L_0x00ee;
-            L_0x00ed:
-                return;
-            L_0x00ee:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r6 = java.lang.System.currentTimeMillis();
-                r5.lastTypingTimeSend = r6;
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.delegate;
-                if (r5 == 0) goto L_0x0108;
-            L_0x00ff:
-                r5 = org.telegram.ui.Components.ChatActivityEnterView.this;
-                r5 = r5.delegate;
-                r5.needSendTyping();
-            L_0x0108:
-                return;
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView$AnonymousClass13.onTextChanged(java.lang.CharSequence, int, int, int):void");
-            }
-
-            public void afterTextChanged(Editable editable) {
-                if (ChatActivityEnterView.this.innerTextChange == 0) {
-                    if (ChatActivityEnterView.this.sendByEnter && editable.length() > 0 && editable.charAt(editable.length() - 1) == 10 && ChatActivityEnterView.this.editingMessageObject == null) {
-                        ChatActivityEnterView.this.sendMessage();
-                    }
-                    if (this.processChange) {
-                        ImageSpan[] imageSpanArr = (ImageSpan[]) editable.getSpans(0, editable.length(), ImageSpan.class);
-                        for (Object removeSpan : imageSpanArr) {
-                            editable.removeSpan(removeSpan);
-                        }
-                        Emoji.replaceEmoji(editable, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-                        this.processChange = false;
-                    }
-                }
-            }
-        });
-        if (z) {
-            int i4;
-            String str2;
-            if (this.parentFragment != null) {
-                Drawable mutate = activity.getResources().getDrawable(NUM).mutate();
-                Drawable mutate2 = activity.getResources().getDrawable(NUM).mutate();
-                mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-                mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_recordedVoiceDot"), Mode.MULTIPLY));
-                CombinedDrawable combinedDrawable = new CombinedDrawable(mutate, mutate2);
-                this.scheduledButton = new ImageView(activity2);
-                this.scheduledButton.setImageDrawable(combinedDrawable);
-                this.scheduledButton.setVisibility(8);
-                this.scheduledButton.setContentDescription(LocaleController.getString("ScheduledMessages", NUM));
-                this.scheduledButton.setScaleType(ScaleType.CENTER);
-                anonymousClass8.addView(this.scheduledButton, LayoutHelper.createFrame(48, 48, 85));
-                this.scheduledButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$ePEXGP4V8TnztLq_2EEcKkpts_k(this));
-            }
-            this.attachLayout = new LinearLayout(activity2);
-            this.attachLayout.setOrientation(0);
-            this.attachLayout.setEnabled(false);
-            this.attachLayout.setPivotX((float) AndroidUtilities.dp(48.0f));
-            anonymousClass8.addView(this.attachLayout, LayoutHelper.createFrame(-2, 48, 85));
-            this.botButton = new ImageView(activity2);
-            this.botButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-            this.botButton.setImageResource(NUM);
-            this.botButton.setScaleType(ScaleType.CENTER);
-            this.botButton.setVisibility(8);
-            this.attachLayout.addView(this.botButton, LayoutHelper.createLinear(48, 48));
-            this.botButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$sA9S70ZL3Nng90HptN-7RpznwZo(this));
-            this.notifyButton = new ImageView(activity2);
-            this.notifyButton.setImageResource(this.silent ? NUM : NUM);
-            ImageView imageView = this.notifyButton;
-            if (this.silent) {
-                i4 = NUM;
-                str2 = "AccDescrChanSilentOn";
-            } else {
-                i4 = NUM;
-                str2 = "AccDescrChanSilentOff";
-            }
-            imageView.setContentDescription(LocaleController.getString(str2, i4));
-            this.notifyButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-            this.notifyButton.setScaleType(ScaleType.CENTER);
-            imageView = this.notifyButton;
-            if (this.canWriteToChannel) {
-                ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
-                if (chatActivityEnterViewDelegate == null || !chatActivityEnterViewDelegate.hasScheduledMessages()) {
-                    i4 = 0;
-                    imageView.setVisibility(i4);
-                    this.attachLayout.addView(this.notifyButton, LayoutHelper.createLinear(48, 48));
-                    this.notifyButton.setOnClickListener(new OnClickListener() {
-                        private Toast visibleToast;
-
-                        public void onClick(View view) {
-                            int i;
-                            String str;
-                            ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
-                            chatActivityEnterView.silent = chatActivityEnterView.silent ^ 1;
-                            ChatActivityEnterView.this.notifyButton.setImageResource(ChatActivityEnterView.this.silent ? NUM : NUM);
-                            Editor edit = MessagesController.getNotificationsSettings(ChatActivityEnterView.this.currentAccount).edit();
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append("silent_");
-                            stringBuilder.append(ChatActivityEnterView.this.dialog_id);
-                            edit.putBoolean(stringBuilder.toString(), ChatActivityEnterView.this.silent).commit();
-                            NotificationsController.getInstance(ChatActivityEnterView.this.currentAccount).updateServerNotificationsSettings(ChatActivityEnterView.this.dialog_id);
-                            try {
-                                if (this.visibleToast != null) {
-                                    this.visibleToast.cancel();
-                                }
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                            if (ChatActivityEnterView.this.silent) {
-                                this.visibleToast = Toast.makeText(ChatActivityEnterView.this.parentActivity, LocaleController.getString("ChannelNotifyMembersInfoOff", NUM), 0);
-                                this.visibleToast.show();
-                            } else {
-                                this.visibleToast = Toast.makeText(ChatActivityEnterView.this.parentActivity, LocaleController.getString("ChannelNotifyMembersInfoOn", NUM), 0);
-                                this.visibleToast.show();
-                            }
-                            ImageView access$6300 = ChatActivityEnterView.this.notifyButton;
-                            if (ChatActivityEnterView.this.silent) {
-                                i = NUM;
-                                str = "AccDescrChanSilentOn";
-                            } else {
-                                i = NUM;
-                                str = "AccDescrChanSilentOff";
-                            }
-                            access$6300.setContentDescription(LocaleController.getString(str, i));
-                            ChatActivityEnterView.this.updateFieldHint();
-                        }
-                    });
-                    this.attachButton = new ImageView(activity2);
-                    this.attachButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-                    this.attachButton.setImageResource(NUM);
-                    this.attachButton.setScaleType(ScaleType.CENTER);
-                    this.attachLayout.addView(this.attachButton, LayoutHelper.createLinear(48, 48));
-                    this.attachButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$pQGz59T4TelJWdtUhc7Wjoj7V9g(this));
-                    this.attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", NUM));
-                }
-            }
-            i4 = 8;
-            imageView.setVisibility(i4);
-            this.attachLayout.addView(this.notifyButton, LayoutHelper.createLinear(48, 48));
-            this.notifyButton.setOnClickListener(/* anonymous class already generated */);
-            this.attachButton = new ImageView(activity2);
-            this.attachButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-            this.attachButton.setImageResource(NUM);
-            this.attachButton.setScaleType(ScaleType.CENTER);
-            this.attachLayout.addView(this.attachButton, LayoutHelper.createLinear(48, 48));
-            this.attachButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$pQGz59T4TelJWdtUhc7Wjoj7V9g(this));
-            this.attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", NUM));
-        }
-        this.recordedAudioPanel = new FrameLayout(activity2);
-        this.recordedAudioPanel.setVisibility(this.audioToSend == null ? 8 : 0);
-        String str3 = "chat_messagePanelBackground";
-        this.recordedAudioPanel.setBackgroundColor(Theme.getColor(str3));
-        this.recordedAudioPanel.setFocusable(true);
-        this.recordedAudioPanel.setFocusableInTouchMode(true);
-        this.recordedAudioPanel.setClickable(true);
-        anonymousClass8.addView(this.recordedAudioPanel, LayoutHelper.createFrame(-1, 48, 80));
-        this.recordDeleteImageView = new ImageView(activity2);
-        this.recordDeleteImageView.setScaleType(ScaleType.CENTER);
-        this.recordDeleteImageView.setImageResource(NUM);
-        this.recordDeleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelVoiceDelete"), Mode.MULTIPLY));
-        this.recordDeleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
-        this.recordedAudioPanel.addView(this.recordDeleteImageView, LayoutHelper.createFrame(48, 48.0f));
-        this.recordDeleteImageView.setOnClickListener(new -$$Lambda$ChatActivityEnterView$0PqxYA4Sm4DXenEKSdETEwDwen0(this));
-        this.videoTimelineView = new VideoTimelineView(activity2);
-        this.videoTimelineView.setColor(Theme.getColor("chat_messagePanelVideoFrame"));
-        this.videoTimelineView.setRoundFrames(true);
-        this.videoTimelineView.setDelegate(new VideoTimelineViewDelegate() {
-            public void onLeftProgressChanged(float f) {
-                if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
-                    ChatActivityEnterView.this.videoToSendMessageObject.startTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * f);
-                    ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, f);
-                }
-            }
-
-            public void onRightProgressChanged(float f) {
-                if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
-                    ChatActivityEnterView.this.videoToSendMessageObject.endTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * f);
-                    ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, f);
-                }
-            }
-
-            public void didStartDragging() {
-                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(1, 0.0f);
-            }
-
-            public void didStopDragging() {
-                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(0, 0.0f);
-            }
-        });
-        this.recordedAudioPanel.addView(this.videoTimelineView, LayoutHelper.createFrame(-1, 32.0f, 19, 40.0f, 0.0f, 0.0f, 0.0f));
-        this.recordedAudioBackground = new View(activity2);
-        this.recordedAudioBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("chat_recordedVoiceBackground")));
-        this.recordedAudioPanel.addView(this.recordedAudioBackground, LayoutHelper.createFrame(-1, 36.0f, 19, 48.0f, 0.0f, 0.0f, 0.0f));
-        this.recordedAudioSeekBar = new SeekBarWaveformView(activity2);
-        this.recordedAudioPanel.addView(this.recordedAudioSeekBar, LayoutHelper.createFrame(-1, 32.0f, 19, 92.0f, 0.0f, 52.0f, 0.0f));
-        this.playDrawable = Theme.createSimpleSelectorDrawable(activity2, NUM, Theme.getColor("chat_recordedVoicePlayPause"), Theme.getColor("chat_recordedVoicePlayPausePressed"));
-        this.pauseDrawable = Theme.createSimpleSelectorDrawable(activity2, NUM, Theme.getColor("chat_recordedVoicePlayPause"), Theme.getColor("chat_recordedVoicePlayPausePressed"));
-        this.recordedAudioPlayButton = new ImageView(activity2);
-        this.recordedAudioPlayButton.setImageDrawable(this.playDrawable);
-        this.recordedAudioPlayButton.setScaleType(ScaleType.CENTER);
-        this.recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
-        this.recordedAudioPanel.addView(this.recordedAudioPlayButton, LayoutHelper.createFrame(48, 48.0f, 83, 48.0f, 0.0f, 0.0f, 0.0f));
-        this.recordedAudioPlayButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$H5pZkFIP6ktOW7HudlRmk-xmmkM(this));
-        this.recordedAudioTimeTextView = new TextView(activity2);
-        this.recordedAudioTimeTextView.setTextColor(Theme.getColor("chat_messagePanelVoiceDuration"));
-        this.recordedAudioTimeTextView.setTextSize(1, 13.0f);
-        this.recordedAudioPanel.addView(this.recordedAudioTimeTextView, LayoutHelper.createFrame(-2, -2.0f, 21, 0.0f, 0.0f, 13.0f, 0.0f));
-        this.recordPanel = new FrameLayout(activity2);
-        this.recordPanel.setVisibility(8);
-        this.recordPanel.setBackgroundColor(Theme.getColor(str3));
-        anonymousClass8.addView(this.recordPanel, LayoutHelper.createFrame(-1, 48, 80));
-        this.recordPanel.setOnTouchListener(-$$Lambda$ChatActivityEnterView$Uo3sK08hLv7NAPRSM5RagKUbmWg.INSTANCE);
-        this.slideText = new LinearLayout(activity2);
-        this.slideText.setOrientation(0);
-        this.recordPanel.addView(this.slideText, LayoutHelper.createFrame(-2, -2.0f, 17, 30.0f, 0.0f, 0.0f, 0.0f));
-        this.recordCancelImage = new ImageView(activity2);
-        this.recordCancelImage.setImageResource(NUM);
-        this.recordCancelImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_recordVoiceCancel"), Mode.MULTIPLY));
-        this.slideText.addView(this.recordCancelImage, LayoutHelper.createLinear(-2, -2, 16, 0, 1, 0, 0));
-        this.recordCancelText = new TextView(activity2);
-        this.recordCancelText.setText(LocaleController.getString("SlideToCancel", NUM));
-        this.recordCancelText.setTextColor(Theme.getColor("chat_recordVoiceCancel"));
-        this.recordCancelText.setTextSize(1, 12.0f);
-        this.slideText.addView(this.recordCancelText, LayoutHelper.createLinear(-2, -2, 16, 6, 0, 0, 0));
-        this.recordSendText = new TextView(activity2);
-        this.recordSendText.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        this.recordSendText.setTextColor(Theme.getColor("chat_fieldOverlayText"));
-        this.recordSendText.setTextSize(1, 16.0f);
-        this.recordSendText.setGravity(17);
-        this.recordSendText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.recordSendText.setAlpha(0.0f);
-        this.recordSendText.setPadding(AndroidUtilities.dp(36.0f), 0, 0, 0);
-        this.recordSendText.setOnClickListener(new -$$Lambda$ChatActivityEnterView$O75UMeYLEo03AAko_H9ah1gZ_GY(this));
-        this.recordPanel.addView(this.recordSendText, LayoutHelper.createFrame(-2, -1.0f, 49, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.recordTimeContainer = new LinearLayout(activity2);
-        this.recordTimeContainer.setOrientation(0);
-        this.recordTimeContainer.setPadding(AndroidUtilities.dp(13.0f), 0, 0, 0);
-        this.recordTimeContainer.setBackgroundColor(Theme.getColor(str3));
-        this.recordPanel.addView(this.recordTimeContainer, LayoutHelper.createFrame(-2, -2, 16));
-        this.recordDot = new RecordDot(activity2);
-        this.recordTimeContainer.addView(this.recordDot, LayoutHelper.createLinear(11, 11, 16, 0, 1, 0, 0));
-        this.recordTimeText = new TextView(activity2);
-        this.recordTimeText.setTextColor(Theme.getColor("chat_recordTime"));
-        this.recordTimeText.setTextSize(1, 16.0f);
-        this.recordTimeContainer.addView(this.recordTimeText, LayoutHelper.createLinear(-2, -2, 16, 6, 0, 0, 0));
-        this.sendButtonContainer = new FrameLayout(activity2);
-        this.sendButtonContainer.setClipChildren(false);
-        this.sendButtonContainer.setClipToPadding(false);
-        this.textFieldContainer.addView(this.sendButtonContainer, LayoutHelper.createLinear(48, 48, 80));
-        this.audioVideoButtonContainer = new FrameLayout(activity2);
-        this.audioVideoButtonContainer.setBackgroundColor(Theme.getColor(str3));
-        this.audioVideoButtonContainer.setSoundEffectsEnabled(false);
-        this.sendButtonContainer.addView(this.audioVideoButtonContainer, LayoutHelper.createFrame(48, 48.0f));
-        this.audioVideoButtonContainer.setOnTouchListener(new -$$Lambda$ChatActivityEnterView$gEbPm1kOxgvg0eNfia8B92v9dV4(this));
-        this.audioSendButton = new ImageView(activity2);
-        this.audioSendButton.setScaleType(ScaleType.CENTER_INSIDE);
-        this.audioSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-        this.audioSendButton.setImageResource(NUM);
-        this.audioSendButton.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
-        this.audioSendButton.setContentDescription(LocaleController.getString("AccDescrVoiceMessage", NUM));
-        this.audioSendButton.setFocusable(true);
-        this.audioSendButton.setAccessibilityDelegate(this.mediaMessageButtonsDelegate);
-        this.audioVideoButtonContainer.addView(this.audioSendButton, LayoutHelper.createFrame(48, 48.0f));
-        if (z) {
-            this.videoSendButton = new ImageView(activity2);
-            this.videoSendButton.setScaleType(ScaleType.CENTER_INSIDE);
-            this.videoSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-            this.videoSendButton.setImageResource(NUM);
-            this.videoSendButton.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
-            this.videoSendButton.setContentDescription(LocaleController.getString("AccDescrVideoMessage", NUM));
-            this.videoSendButton.setFocusable(true);
-            this.videoSendButton.setAccessibilityDelegate(this.mediaMessageButtonsDelegate);
-            this.audioVideoButtonContainer.addView(this.videoSendButton, LayoutHelper.createFrame(48, 48.0f));
-        }
-        this.recordCircle = new RecordCircle(activity2);
-        this.recordCircle.setVisibility(8);
-        this.sizeNotifierLayout.addView(this.recordCircle, LayoutHelper.createFrame(124, 194.0f, 85, 0.0f, 0.0f, -36.0f, 0.0f));
-        this.cancelBotButton = new ImageView(activity2);
-        this.cancelBotButton.setVisibility(4);
-        this.cancelBotButton.setScaleType(ScaleType.CENTER_INSIDE);
-        ImageView imageView2 = this.cancelBotButton;
-        CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
-        this.progressDrawable = closeProgressDrawable2;
-        imageView2.setImageDrawable(closeProgressDrawable2);
-        this.cancelBotButton.setContentDescription(LocaleController.getString("Cancel", NUM));
-        this.progressDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelCancelInlineBot"), Mode.MULTIPLY));
-        this.cancelBotButton.setSoundEffectsEnabled(false);
-        this.cancelBotButton.setScaleX(0.1f);
-        this.cancelBotButton.setScaleY(0.1f);
-        this.cancelBotButton.setAlpha(0.0f);
-        this.sendButtonContainer.addView(this.cancelBotButton, LayoutHelper.createFrame(48, 48.0f));
-        this.cancelBotButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$rXJQBzkQ-6_4ly_28Plp5SExQgU(this));
-        if (isInScheduleMode()) {
-            this.sendButtonDrawable = activity.getResources().getDrawable(NUM).mutate();
-            this.sendButtonInverseDrawable = activity.getResources().getDrawable(NUM).mutate();
-            this.inactinveSendButtonDrawable = activity.getResources().getDrawable(NUM).mutate();
-        } else {
-            this.sendButtonDrawable = activity.getResources().getDrawable(NUM).mutate();
-            this.sendButtonInverseDrawable = activity.getResources().getDrawable(NUM).mutate();
-            this.inactinveSendButtonDrawable = activity.getResources().getDrawable(NUM).mutate();
-        }
-        this.sendButton = new View(activity2) {
-            private float animateBounce;
-            private float animationDuration;
-            private float animationProgress;
-            private int drawableColor;
-            private long lastAnimationTime;
-
-            /* Access modifiers changed, original: protected */
-            public void onDraw(Canvas canvas) {
-                int color;
-                int measuredWidth = (getMeasuredWidth() - ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicWidth()) / 2;
-                int measuredHeight = (getMeasuredHeight() - ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicHeight()) / 2;
-                if (ChatActivityEnterView.this.isInScheduleMode()) {
-                    measuredHeight -= AndroidUtilities.dp(1.0f);
-                } else {
-                    measuredWidth += AndroidUtilities.dp(2.0f);
-                }
-                Object obj = (ChatActivityEnterView.this.sendPopupWindow == null || !ChatActivityEnterView.this.sendPopupWindow.isShowing()) ? null : 1;
-                String str = "chat_messagePanelVoicePressed";
-                String str2 = "chat_messagePanelSend";
-                if (obj != null) {
-                    color = Theme.getColor(str);
-                } else {
-                    color = Theme.getColor(str2);
-                }
-                if (color != this.drawableColor) {
-                    this.lastAnimationTime = SystemClock.uptimeMillis();
-                    if (obj != null) {
-                        this.animationProgress = 0.0f;
-                        this.animationDuration = 200.0f;
-                    } else if (this.drawableColor != 0) {
-                        this.animationProgress = 0.0f;
-                        this.animationDuration = 120.0f;
-                    } else {
-                        this.animationProgress = 1.0f;
-                    }
-                    this.drawableColor = color;
-                    ChatActivityEnterView.this.sendButtonDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str2), Mode.MULTIPLY));
-                    color = Theme.getColor("chat_messagePanelIcons");
-                    ChatActivityEnterView.this.inactinveSendButtonDrawable.setColorFilter(new PorterDuffColorFilter(Color.argb(180, Color.red(color), Color.green(color), Color.blue(color)), Mode.MULTIPLY));
-                    ChatActivityEnterView.this.sendButtonInverseDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-                }
-                if (this.animationProgress < 1.0f) {
-                    long uptimeMillis = SystemClock.uptimeMillis();
-                    this.animationProgress += ((float) (uptimeMillis - this.lastAnimationTime)) / this.animationDuration;
-                    if (this.animationProgress > 1.0f) {
-                        this.animationProgress = 1.0f;
-                    }
-                    this.lastAnimationTime = uptimeMillis;
-                    invalidate();
-                }
-                if (obj == null) {
-                    if (ChatActivityEnterView.this.slowModeTimer != Integer.MAX_VALUE || ChatActivityEnterView.this.isInScheduleMode()) {
-                        ChatActivityEnterView.this.sendButtonDrawable.setBounds(measuredWidth, measuredHeight, ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicWidth() + measuredWidth, ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicHeight() + measuredHeight);
-                        ChatActivityEnterView.this.sendButtonDrawable.draw(canvas);
-                    } else {
-                        ChatActivityEnterView.this.inactinveSendButtonDrawable.setBounds(measuredWidth, measuredHeight, ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicWidth() + measuredWidth, ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicHeight() + measuredHeight);
-                        ChatActivityEnterView.this.inactinveSendButtonDrawable.draw(canvas);
-                    }
-                }
-                if (obj != null || this.animationProgress != 1.0f) {
-                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(str2));
-                    int dp = AndroidUtilities.dp(20.0f);
-                    int dp2;
-                    if (obj != null) {
-                        float f;
-                        float dp3;
-                        ChatActivityEnterView.this.sendButtonInverseDrawable.setAlpha(255);
-                        float f2 = this.animationProgress;
-                        if (f2 <= 0.25f) {
-                            f = (float) dp;
-                            dp3 = ((float) AndroidUtilities.dp(2.0f)) * CubicBezierInterpolator.EASE_IN.getInterpolation(f2 / 0.25f);
-                        } else {
-                            f2 -= 0.25f;
-                            if (f2 <= 0.5f) {
-                                f = (float) dp;
-                                dp3 = ((float) AndroidUtilities.dp(2.0f)) - (((float) AndroidUtilities.dp(3.0f)) * CubicBezierInterpolator.EASE_IN.getInterpolation(f2 / 0.5f));
-                            } else {
-                                dp2 = (int) (((float) dp) + (((float) (-AndroidUtilities.dp(1.0f))) + (((float) AndroidUtilities.dp(1.0f)) * CubicBezierInterpolator.EASE_IN.getInterpolation((f2 - 0.5f) / 0.25f))));
-                                dp = dp2;
-                            }
-                        }
-                        dp2 = (int) (f + dp3);
-                        dp = dp2;
-                    } else {
-                        dp2 = (int) ((1.0f - this.animationProgress) * 255.0f);
-                        Theme.dialogs_onlineCirclePaint.setAlpha(dp2);
-                        ChatActivityEnterView.this.sendButtonInverseDrawable.setAlpha(dp2);
-                    }
-                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) dp, Theme.dialogs_onlineCirclePaint);
-                    ChatActivityEnterView.this.sendButtonInverseDrawable.setBounds(measuredWidth, measuredHeight, ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicWidth() + measuredWidth, ChatActivityEnterView.this.sendButtonDrawable.getIntrinsicHeight() + measuredHeight);
-                    ChatActivityEnterView.this.sendButtonInverseDrawable.draw(canvas);
-                }
-            }
-        };
-        this.sendButton.setVisibility(4);
-        int color = Theme.getColor("chat_messagePanelSend");
-        this.sendButton.setContentDescription(LocaleController.getString("Send", NUM));
-        this.sendButton.setSoundEffectsEnabled(false);
-        this.sendButton.setScaleX(0.1f);
-        this.sendButton.setScaleY(0.1f);
-        this.sendButton.setAlpha(0.0f);
-        if (VERSION.SDK_INT >= 21) {
-            this.sendButton.setBackgroundDrawable(Theme.createSelectorDrawable(Color.argb(24, Color.red(color), Color.green(color), Color.blue(color)), 1));
-        }
-        this.sendButtonContainer.addView(this.sendButton, LayoutHelper.createFrame(48, 48.0f));
-        this.sendButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$HKRsckUXlNj7cZuyU8v3eg-vryE(this));
-        this.sendButton.setOnLongClickListener(new -$$Lambda$ChatActivityEnterView$nEg_Vj2QPwH3tdG2rclMcvQTAgo(this));
-        this.slowModeButton = new SimpleTextView(activity2);
-        this.slowModeButton.setTextSize(18);
-        this.slowModeButton.setVisibility(4);
-        this.slowModeButton.setSoundEffectsEnabled(false);
-        this.slowModeButton.setScaleX(0.1f);
-        this.slowModeButton.setScaleY(0.1f);
-        this.slowModeButton.setAlpha(0.0f);
-        this.slowModeButton.setPadding(0, 0, AndroidUtilities.dp(13.0f), 0);
-        this.slowModeButton.setGravity(21);
-        this.slowModeButton.setTextColor(Theme.getColor(str));
-        this.sendButtonContainer.addView(this.slowModeButton, LayoutHelper.createFrame(64, 48, 53));
-        this.slowModeButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$7Ap7L1yuDmfLj_OdpsYRD0llSyY(this));
-        this.slowModeButton.setOnLongClickListener(new -$$Lambda$ChatActivityEnterView$pHTgHSAKpIysTcIE-dI2T8MJcPA(this));
-        this.expandStickersButton = new ImageView(activity2);
-        this.expandStickersButton.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
-        this.expandStickersButton.setScaleType(ScaleType.CENTER);
-        imageView2 = this.expandStickersButton;
-        AnimatedArrowDrawable animatedArrowDrawable = new AnimatedArrowDrawable(Theme.getColor(str), false);
-        this.stickersArrow = animatedArrowDrawable;
-        imageView2.setImageDrawable(animatedArrowDrawable);
-        this.expandStickersButton.setVisibility(8);
-        this.expandStickersButton.setScaleX(0.1f);
-        this.expandStickersButton.setScaleY(0.1f);
-        this.expandStickersButton.setAlpha(0.0f);
-        this.sendButtonContainer.addView(this.expandStickersButton, LayoutHelper.createFrame(48, 48.0f));
-        this.expandStickersButton.setOnClickListener(new -$$Lambda$ChatActivityEnterView$PClI0M3N-bvhUiGON6_IxSsaURQ(this));
-        this.expandStickersButton.setContentDescription(LocaleController.getString("AccDescrExpandPanel", NUM));
-        this.doneButtonContainer = new FrameLayout(activity2);
-        this.doneButtonContainer.setVisibility(8);
-        this.textFieldContainer.addView(this.doneButtonContainer, LayoutHelper.createLinear(48, 48, 80));
-        this.doneButtonContainer.setOnClickListener(new -$$Lambda$ChatActivityEnterView$9mFCDdWzowA7_Vky86OkFCUavNc(this));
-        ShapeDrawable createCircleDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), Theme.getColor("chat_messagePanelSend"));
-        Drawable mutate3 = activity.getResources().getDrawable(NUM).mutate();
-        mutate3.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelVoicePressed"), Mode.MULTIPLY));
-        CombinedDrawable combinedDrawable2 = new CombinedDrawable(createCircleDrawable, mutate3, 0, AndroidUtilities.dp(1.0f));
-        combinedDrawable2.setCustomSize(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
-        this.doneButtonImage = new ImageView(activity2);
-        this.doneButtonImage.setScaleType(ScaleType.CENTER);
-        this.doneButtonImage.setImageDrawable(combinedDrawable2);
-        this.doneButtonImage.setContentDescription(LocaleController.getString("Done", NUM));
-        this.doneButtonContainer.addView(this.doneButtonImage, LayoutHelper.createFrame(48, 48.0f));
-        this.doneButtonProgress = new ContextProgressView(activity2, 0);
-        this.doneButtonProgress.setVisibility(4);
-        this.doneButtonContainer.addView(this.doneButtonProgress, LayoutHelper.createFrame(-1, -1.0f));
-        SharedPreferences globalEmojiSettings = MessagesController.getGlobalEmojiSettings();
-        this.keyboardHeight = globalEmojiSettings.getInt("kbd_height", AndroidUtilities.dp(200.0f));
-        this.keyboardHeightLand = globalEmojiSettings.getInt("kbd_height_land3", AndroidUtilities.dp(200.0f));
-        setRecordVideoButtonVisible(false, false);
-        checkSendButton(false);
-        checkChannelRights();
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x04e0  */
+    @android.annotation.SuppressLint({"ClickableViewAccessibility"})
+    public ChatActivityEnterView(android.app.Activity r27, org.telegram.ui.Components.SizeNotifierFrameLayout r28, org.telegram.ui.ChatActivity r29, boolean r30) {
+        /*
+        r26 = this;
+        r0 = r26;
+        r1 = r27;
+        r2 = r29;
+        r26.<init>(r27);
+        r3 = org.telegram.messenger.UserConfig.selectedAccount;
+        r0.currentAccount = r3;
+        r3 = org.telegram.messenger.AccountInstance.getInstance(r3);
+        r0.accountInstance = r3;
+        r3 = new org.telegram.ui.Components.ChatActivityEnterView$1;
+        r3.<init>();
+        r0.mediaMessageButtonsDelegate = r3;
+        r3 = 2;
+        r3 = new android.widget.ImageView[r3];
+        r0.emojiButton = r3;
+        r3 = -1;
+        r0.currentPopupContentType = r3;
+        r0.currentEmojiIcon = r3;
+        r4 = 1;
+        r0.isPaused = r4;
+        r5 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r0.startedDraggingX = r5;
+        r5 = NUM; // 0x42a00000 float:80.0 double:5.522576936E-315;
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        r5 = (float) r5;
+        r0.distCanMove = r5;
+        r0.messageWebPageSearch = r4;
+        r5 = new org.telegram.ui.Components.ChatActivityEnterView$2;
+        r5.<init>();
+        r0.openKeyboardRunnable = r5;
+        r5 = new org.telegram.ui.Components.ChatActivityEnterView$3;
+        r5.<init>();
+        r0.updateExpandabilityRunnable = r5;
+        r5 = new org.telegram.ui.Components.ChatActivityEnterView$4;
+        r6 = java.lang.Integer.class;
+        r7 = "translationY";
+        r5.<init>(r6, r7);
+        r0.roundedTranslationYProperty = r5;
+        r5 = new org.telegram.ui.Components.ChatActivityEnterView$5;
+        r6 = java.lang.Float.class;
+        r7 = "scale";
+        r5.<init>(r6, r7);
+        r0.recordCircleScale = r5;
+        r5 = new android.graphics.Paint;
+        r5.<init>(r4);
+        r0.redDotPaint = r5;
+        r5 = new org.telegram.ui.Components.ChatActivityEnterView$6;
+        r5.<init>();
+        r0.onFinishInitCameraRunnable = r5;
+        r5 = new org.telegram.ui.Components.ChatActivityEnterView$7;
+        r5.<init>();
+        r0.recordAudioVideoRunnable = r5;
+        r5 = new android.graphics.Paint;
+        r5.<init>(r4);
+        r0.paint = r5;
+        r5 = new android.graphics.Paint;
+        r5.<init>(r4);
+        r0.paintRecord = r5;
+        r5 = new android.graphics.RectF;
+        r5.<init>();
+        r0.rect = r5;
+        r5 = new android.graphics.Paint;
+        r5.<init>(r4);
+        r0.dotPaint = r5;
+        r5 = r0.dotPaint;
+        r6 = "chat_emojiPanelNewTrending";
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
+        r5.setColor(r6);
+        r0.setFocusable(r4);
+        r0.setFocusableInTouchMode(r4);
+        r5 = 0;
+        r0.setWillNotDraw(r5);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.recordStarted;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.recordStartError;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.recordStopped;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.recordProgressChanged;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.closeChats;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.audioDidSent;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.audioRouteChanged;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.featuredStickersDidLoad;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.messageReceivedByServer;
+        r6.addObserver(r0, r7);
+        r6 = r0.currentAccount;
+        r6 = org.telegram.messenger.NotificationCenter.getInstance(r6);
+        r7 = org.telegram.messenger.NotificationCenter.sendingMessagesChanged;
+        r6.addObserver(r0, r7);
+        r6 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r7 = org.telegram.messenger.NotificationCenter.emojiDidLoad;
+        r6.addObserver(r0, r7);
+        r0.parentActivity = r1;
+        r0.parentFragment = r2;
+        if (r2 == 0) goto L_0x013b;
+    L_0x0133:
+        r2 = r0.parentFragment;
+        r2 = r2.getClassGuid();
+        r0.recordingGuid = r2;
+    L_0x013b:
+        r2 = r28;
+        r0.sizeNotifierLayout = r2;
+        r2 = r0.sizeNotifierLayout;
+        r2.setDelegate(r0);
+        r2 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
+        r6 = "send_by_enter";
+        r2 = r2.getBoolean(r6, r5);
+        r0.sendByEnter = r2;
+        r2 = new android.widget.LinearLayout;
+        r2.<init>(r1);
+        r0.textFieldContainer = r2;
+        r2 = r0.textFieldContainer;
+        r2.setOrientation(r5);
+        r2 = r0.textFieldContainer;
+        r2.setClipChildren(r5);
+        r2 = r0.textFieldContainer;
+        r2.setClipToPadding(r5);
+        r2 = r0.textFieldContainer;
+        r6 = -1;
+        r7 = -NUM; // 0xffffffffCLASSNAME float:-2.0 double:NaN;
+        r8 = 83;
+        r9 = 0;
+        r10 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r11 = 0;
+        r12 = 0;
+        r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7, r8, r9, r10, r11, r12);
+        r0.addView(r2, r6);
+        r2 = new org.telegram.ui.Components.ChatActivityEnterView$8;
+        r2.<init>(r1);
+        r6 = r0.textFieldContainer;
+        r7 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r8 = -2;
+        r9 = 80;
+        r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r5, r8, r7, r9);
+        r6.addView(r2, r7);
+        r6 = 0;
+    L_0x018d:
+        r7 = 2;
+        r10 = 4;
+        r11 = 0;
+        r12 = "listSelectorSDK21";
+        r13 = "chat_messagePanelIcons";
+        r14 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r15 = 21;
+        if (r6 >= r7) goto L_0x0238;
+    L_0x019b:
+        r7 = r0.emojiButton;
+        r3 = new org.telegram.ui.Components.ChatActivityEnterView$9;
+        r3.<init>(r1);
+        r7[r6] = r3;
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r7 = new android.graphics.PorterDuffColorFilter;
+        r13 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r13, r8);
+        r3.setColorFilter(r7);
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r7 = android.widget.ImageView.ScaleType.CENTER_INSIDE;
+        r3.setScaleType(r7);
+        r3 = android.os.Build.VERSION.SDK_INT;
+        if (r3 < r15) goto L_0x01d2;
+    L_0x01c3:
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r7 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r7 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7);
+        r3.setBackgroundDrawable(r7);
+    L_0x01d2:
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r16 = 48;
+        r17 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r18 = 83;
+        r19 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
+        r20 = 0;
+        r21 = 0;
+        r22 = 0;
+        r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22);
+        r2.addView(r3, r7);
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r7 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$jlpojNCIsF-c7hlFcVLHdouZye4;
+        r7.<init>(r0);
+        r3.setOnClickListener(r7);
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r7 = NUM; // 0x7f0e0020 float:1.8875102E38 double:1.0531621724E-314;
+        r8 = "AccDescrEmojiButton";
+        r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
+        r3.setContentDescription(r7);
+        if (r6 != r4) goto L_0x022c;
+    L_0x0209:
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r3.setVisibility(r10);
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r3.setAlpha(r11);
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r3.setScaleX(r14);
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r3.setScaleY(r14);
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r0.emojiButton2 = r3;
+        goto L_0x0232;
+    L_0x022c:
+        r3 = r0.emojiButton;
+        r3 = r3[r6];
+        r0.emojiButton1 = r3;
+    L_0x0232:
+        r6 = r6 + 1;
+        r3 = -1;
+        r8 = -2;
+        goto L_0x018d;
+    L_0x0238:
+        r0.setEmojiButtonImage(r5, r5);
+        r3 = new org.telegram.ui.Components.ChatActivityEnterView$10;
+        r3.<init>(r1);
+        r0.messageEditText = r3;
+        r3 = r0.messageEditText;
+        r6 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$YXzMuZPPiDr1K7R7cpN8afDWrUQ;
+        r6.<init>(r0);
+        r3.setDelegate(r6);
+        r3 = r0.messageEditText;
+        r6 = r0.parentActivity;
+        r6 = r6.getWindow();
+        r6 = r6.getDecorView();
+        r3.setWindowView(r6);
+        r3 = r0.parentFragment;
+        if (r3 == 0) goto L_0x0264;
+    L_0x025f:
+        r3 = r3.getCurrentEncryptedChat();
+        goto L_0x0265;
+    L_0x0264:
+        r3 = 0;
+    L_0x0265:
+        r6 = r0.messageEditText;
+        r7 = r26.supportsSendingNewEntities();
+        r6.setAllowTextEntitiesIntersection(r7);
+        r26.updateFieldHint();
+        r6 = NUM; // 0x10000000 float:2.5243549E-29 double:1.32624737E-315;
+        if (r3 == 0) goto L_0x0277;
+    L_0x0275:
+        r6 = NUM; // 0x11000000 float:1.00974196E-28 double:1.40913783E-315;
+    L_0x0277:
+        r3 = r0.messageEditText;
+        r3.setImeOptions(r6);
+        r3 = r0.messageEditText;
+        r6 = r3.getInputType();
+        r6 = r6 | 16384;
+        r7 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
+        r6 = r6 | r7;
+        r3.setInputType(r6);
+        r3 = r0.messageEditText;
+        r3.setSingleLine(r5);
+        r3 = r0.messageEditText;
+        r6 = 6;
+        r3.setMaxLines(r6);
+        r3 = r0.messageEditText;
+        r6 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+        r3.setTextSize(r4, r6);
+        r3 = r0.messageEditText;
+        r3.setGravity(r9);
+        r3 = r0.messageEditText;
+        r6 = NUM; // 0x41300000 float:11.0 double:5.4034219E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r7 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r3.setPadding(r5, r6, r5, r7);
+        r3 = r0.messageEditText;
+        r6 = 0;
+        r3.setBackgroundDrawable(r6);
+        r3 = r0.messageEditText;
+        r6 = "chat_messagePanelText";
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
+        r3.setTextColor(r6);
+        r3 = r0.messageEditText;
+        r6 = "chat_messagePanelHint";
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
+        r3.setHintColor(r6);
+        r3 = r0.messageEditText;
+        r6 = "chat_messagePanelHint";
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
+        r3.setHintTextColor(r6);
+        r3 = r0.messageEditText;
+        r6 = "chat_messagePanelCursor";
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
+        r3.setCursorColor(r6);
+        r3 = r0.messageEditText;
+        r16 = -1;
+        r17 = -NUM; // 0xffffffffCLASSNAME float:-2.0 double:NaN;
+        r18 = 80;
+        r19 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;
+        r20 = 0;
+        if (r30 == 0) goto L_0x02f7;
+    L_0x02f2:
+        r6 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
+        r21 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
+        goto L_0x02fb;
+    L_0x02f7:
+        r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r21 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+    L_0x02fb:
+        r22 = 0;
+        r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22);
+        r2.addView(r3, r6);
+        r3 = r0.messageEditText;
+        r6 = new org.telegram.ui.Components.ChatActivityEnterView$11;
+        r6.<init>();
+        r3.setOnKeyListener(r6);
+        r3 = r0.messageEditText;
+        r6 = new org.telegram.ui.Components.ChatActivityEnterView$12;
+        r6.<init>();
+        r3.setOnEditorActionListener(r6);
+        r3 = r0.messageEditText;
+        r6 = new org.telegram.ui.Components.ChatActivityEnterView$13;
+        r6.<init>();
+        r3.addTextChangedListener(r6);
+        r3 = 8;
+        r6 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r7 = 48;
+        if (r30 == 0) goto L_0x0510;
+    L_0x032a:
+        r8 = r0.parentFragment;
+        if (r8 == 0) goto L_0x03bb;
+    L_0x032e:
+        r8 = r27.getResources();
+        r14 = NUM; // 0x7var_ float:1.7945197E38 double:1.0529356537E-314;
+        r8 = r8.getDrawable(r14);
+        r8 = r8.mutate();
+        r14 = r27.getResources();
+        r10 = NUM; // 0x7var_ float:1.7945199E38 double:1.052935654E-314;
+        r10 = r14.getDrawable(r10);
+        r10 = r10.mutate();
+        r14 = new android.graphics.PorterDuffColorFilter;
+        r11 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r14.<init>(r11, r9);
+        r8.setColorFilter(r14);
+        r9 = new android.graphics.PorterDuffColorFilter;
+        r11 = "chat_recordedVoiceDot";
+        r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);
+        r14 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r9.<init>(r11, r14);
+        r10.setColorFilter(r9);
+        r9 = new org.telegram.ui.Components.CombinedDrawable;
+        r9.<init>(r8, r10);
+        r8 = new android.widget.ImageView;
+        r8.<init>(r1);
+        r0.scheduledButton = r8;
+        r8 = r0.scheduledButton;
+        r8.setImageDrawable(r9);
+        r8 = r0.scheduledButton;
+        r8.setVisibility(r3);
+        r8 = r0.scheduledButton;
+        r9 = NUM; // 0x7f0e09a1 float:1.8880037E38 double:1.0531633745E-314;
+        r10 = "ScheduledMessages";
+        r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
+        r8.setContentDescription(r9);
+        r8 = r0.scheduledButton;
+        r9 = android.widget.ImageView.ScaleType.CENTER;
+        r8.setScaleType(r9);
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r15) goto L_0x03a6;
+    L_0x0399:
+        r8 = r0.scheduledButton;
+        r9 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r9 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9);
+        r8.setBackgroundDrawable(r9);
+    L_0x03a6:
+        r8 = r0.scheduledButton;
+        r9 = 85;
+        r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r9);
+        r2.addView(r8, r9);
+        r8 = r0.scheduledButton;
+        r9 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$ePEXGP4V8TnztLq_2EEcKkpts_k;
+        r9.<init>(r0);
+        r8.setOnClickListener(r9);
+    L_0x03bb:
+        r8 = new android.widget.LinearLayout;
+        r8.<init>(r1);
+        r0.attachLayout = r8;
+        r8 = r0.attachLayout;
+        r8.setOrientation(r5);
+        r8 = r0.attachLayout;
+        r8.setEnabled(r5);
+        r8 = r0.attachLayout;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r9 = (float) r9;
+        r8.setPivotX(r9);
+        r8 = r0.attachLayout;
+        r9 = 85;
+        r10 = -2;
+        r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r7, r9);
+        r2.addView(r8, r9);
+        r8 = new android.widget.ImageView;
+        r8.<init>(r1);
+        r0.botButton = r8;
+        r8 = r0.botButton;
+        r9 = new android.graphics.PorterDuffColorFilter;
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r11 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r9.<init>(r10, r11);
+        r8.setColorFilter(r9);
+        r8 = r0.botButton;
+        r9 = NUM; // 0x7var_ float:1.7945195E38 double:1.052935653E-314;
+        r8.setImageResource(r9);
+        r8 = r0.botButton;
+        r9 = android.widget.ImageView.ScaleType.CENTER;
+        r8.setScaleType(r9);
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r15) goto L_0x0419;
+    L_0x040c:
+        r8 = r0.botButton;
+        r9 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r9 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9);
+        r8.setBackgroundDrawable(r9);
+    L_0x0419:
+        r8 = r0.botButton;
+        r8.setVisibility(r3);
+        r8 = r0.attachLayout;
+        r9 = r0.botButton;
+        r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r7);
+        r8.addView(r9, r10);
+        r8 = r0.botButton;
+        r9 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$sA9S70ZL3Nng90HptN-7RpznwZo;
+        r9.<init>(r0);
+        r8.setOnClickListener(r9);
+        r8 = new android.widget.ImageView;
+        r8.<init>(r1);
+        r0.notifyButton = r8;
+        r8 = r0.notifyButton;
+        r9 = r0.silent;
+        if (r9 == 0) goto L_0x0444;
+    L_0x0440:
+        r9 = NUM; // 0x7var_ float:1.7945213E38 double:1.0529356577E-314;
+        goto L_0x0447;
+    L_0x0444:
+        r9 = NUM; // 0x7var_a float:1.7945215E38 double:1.052935658E-314;
+    L_0x0447:
+        r8.setImageResource(r9);
+        r8 = r0.notifyButton;
+        r9 = r0.silent;
+        if (r9 == 0) goto L_0x0456;
+    L_0x0450:
+        r9 = NUM; // 0x7f0e0019 float:1.8875088E38 double:1.053162169E-314;
+        r10 = "AccDescrChanSilentOn";
+        goto L_0x045b;
+    L_0x0456:
+        r9 = NUM; // 0x7f0e0018 float:1.8875086E38 double:1.0531621685E-314;
+        r10 = "AccDescrChanSilentOff";
+    L_0x045b:
+        r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
+        r8.setContentDescription(r9);
+        r8 = r0.notifyButton;
+        r9 = new android.graphics.PorterDuffColorFilter;
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r11 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r9.<init>(r10, r11);
+        r8.setColorFilter(r9);
+        r8 = r0.notifyButton;
+        r9 = android.widget.ImageView.ScaleType.CENTER;
+        r8.setScaleType(r9);
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r15) goto L_0x048a;
+    L_0x047d:
+        r8 = r0.notifyButton;
+        r9 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r9 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9);
+        r8.setBackgroundDrawable(r9);
+    L_0x048a:
+        r8 = r0.notifyButton;
+        r9 = r0.canWriteToChannel;
+        if (r9 == 0) goto L_0x049c;
+    L_0x0490:
+        r9 = r0.delegate;
+        if (r9 == 0) goto L_0x049a;
+    L_0x0494:
+        r9 = r9.hasScheduledMessages();
+        if (r9 != 0) goto L_0x049c;
+    L_0x049a:
+        r9 = 0;
+        goto L_0x049e;
+    L_0x049c:
+        r9 = 8;
+    L_0x049e:
+        r8.setVisibility(r9);
+        r8 = r0.attachLayout;
+        r9 = r0.notifyButton;
+        r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r7);
+        r8.addView(r9, r10);
+        r8 = r0.notifyButton;
+        r9 = new org.telegram.ui.Components.ChatActivityEnterView$14;
+        r9.<init>();
+        r8.setOnClickListener(r9);
+        r8 = new android.widget.ImageView;
+        r8.<init>(r1);
+        r0.attachButton = r8;
+        r8 = r0.attachButton;
+        r9 = new android.graphics.PorterDuffColorFilter;
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r11 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r9.<init>(r10, r11);
+        r8.setColorFilter(r9);
+        r8 = r0.attachButton;
+        r9 = NUM; // 0x7var_e float:1.794519E38 double:1.052935652E-314;
+        r8.setImageResource(r9);
+        r8 = r0.attachButton;
+        r9 = android.widget.ImageView.ScaleType.CENTER;
+        r8.setScaleType(r9);
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r15) goto L_0x04ed;
+    L_0x04e0:
+        r8 = r0.attachButton;
+        r9 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r9 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9);
+        r8.setBackgroundDrawable(r9);
+    L_0x04ed:
+        r8 = r0.attachLayout;
+        r9 = r0.attachButton;
+        r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r7);
+        r8.addView(r9, r10);
+        r8 = r0.attachButton;
+        r9 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$pQGz59T4TelJWdtUhc7Wjoj7V9g;
+        r9.<init>(r0);
+        r8.setOnClickListener(r9);
+        r8 = r0.attachButton;
+        r9 = NUM; // 0x7f0e000e float:1.8875066E38 double:1.0531621635E-314;
+        r10 = "AccDescrAttachButton";
+        r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
+        r8.setContentDescription(r9);
+    L_0x0510:
+        r8 = new android.widget.FrameLayout;
+        r8.<init>(r1);
+        r0.recordedAudioPanel = r8;
+        r8 = r0.recordedAudioPanel;
+        r9 = r0.audioToSend;
+        if (r9 != 0) goto L_0x0520;
+    L_0x051d:
+        r9 = 8;
+        goto L_0x0521;
+    L_0x0520:
+        r9 = 0;
+    L_0x0521:
+        r8.setVisibility(r9);
+        r8 = r0.recordedAudioPanel;
+        r9 = "chat_messagePanelBackground";
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r9);
+        r8.setBackgroundColor(r10);
+        r8 = r0.recordedAudioPanel;
+        r8.setFocusable(r4);
+        r8 = r0.recordedAudioPanel;
+        r8.setFocusableInTouchMode(r4);
+        r8 = r0.recordedAudioPanel;
+        r8.setClickable(r4);
+        r8 = r0.recordedAudioPanel;
+        r10 = -1;
+        r11 = 80;
+        r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r7, r11);
+        r2.addView(r8, r14);
+        r8 = new android.widget.ImageView;
+        r8.<init>(r1);
+        r0.recordDeleteImageView = r8;
+        r8 = r0.recordDeleteImageView;
+        r10 = android.widget.ImageView.ScaleType.CENTER;
+        r8.setScaleType(r10);
+        r8 = r0.recordDeleteImageView;
+        r10 = NUM; // 0x7var_cd float:1.7945513E38 double:1.052935731E-314;
+        r8.setImageResource(r10);
+        r8 = r0.recordDeleteImageView;
+        r10 = new android.graphics.PorterDuffColorFilter;
+        r11 = "chat_messagePanelVoiceDelete";
+        r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);
+        r14 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r10.<init>(r11, r14);
+        r8.setColorFilter(r10);
+        r8 = r0.recordDeleteImageView;
+        r10 = NUM; // 0x7f0e037d float:1.8876849E38 double:1.053162598E-314;
+        r11 = "Delete";
+        r10 = org.telegram.messenger.LocaleController.getString(r11, r10);
+        r8.setContentDescription(r10);
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r15) goto L_0x0591;
+    L_0x0584:
+        r8 = r0.recordDeleteImageView;
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10);
+        r8.setBackgroundDrawable(r10);
+    L_0x0591:
+        r8 = r0.recordedAudioPanel;
+        r10 = r0.recordDeleteImageView;
+        r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r8.addView(r10, r11);
+        r8 = r0.recordDeleteImageView;
+        r10 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$0PqxYA4Sm4DXenEKSdETEwDwen0;
+        r10.<init>(r0);
+        r8.setOnClickListener(r10);
+        r8 = new org.telegram.ui.Components.VideoTimelineView;
+        r8.<init>(r1);
+        r0.videoTimelineView = r8;
+        r8 = r0.videoTimelineView;
+        r10 = "chat_messagePanelVideoFrame";
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r10);
+        r8.setColor(r10);
+        r8 = r0.videoTimelineView;
+        r8.setRoundFrames(r4);
+        r8 = r0.videoTimelineView;
+        r10 = new org.telegram.ui.Components.ChatActivityEnterView$15;
+        r10.<init>();
+        r8.setDelegate(r10);
+        r8 = r0.recordedAudioPanel;
+        r10 = r0.videoTimelineView;
+        r19 = -1;
+        r20 = NUM; // 0x42000000 float:32.0 double:5.4707704E-315;
+        r21 = 19;
+        r22 = NUM; // 0x42200000 float:40.0 double:5.481131706E-315;
+        r23 = 0;
+        r24 = 0;
+        r25 = 0;
+        r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r8.addView(r10, r11);
+        r8 = new android.view.View;
+        r8.<init>(r1);
+        r0.recordedAudioBackground = r8;
+        r8 = r0.recordedAudioBackground;
+        r10 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r11 = "chat_recordedVoiceBackground";
+        r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);
+        r10 = org.telegram.ui.ActionBar.Theme.createRoundRectDrawable(r10, r11);
+        r8.setBackgroundDrawable(r10);
+        r8 = r0.recordedAudioPanel;
+        r10 = r0.recordedAudioBackground;
+        r20 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
+        r22 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r8.addView(r10, r11);
+        r8 = new org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView;
+        r8.<init>(r1);
+        r0.recordedAudioSeekBar = r8;
+        r8 = r0.recordedAudioPanel;
+        r10 = r0.recordedAudioSeekBar;
+        r20 = NUM; // 0x42000000 float:32.0 double:5.4707704E-315;
+        r22 = NUM; // 0x42b80000 float:92.0 double:5.530347917E-315;
+        r24 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;
+        r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r8.addView(r10, r11);
+        r8 = NUM; // 0x7var_ float:1.7945888E38 double:1.052935822E-314;
+        r10 = "chat_recordedVoicePlayPause";
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r10);
+        r11 = "chat_recordedVoicePlayPausePressed";
+        r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);
+        r8 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorDrawable(r1, r8, r10, r11);
+        r0.playDrawable = r8;
+        r8 = NUM; // 0x7var_ float:1.7945886E38 double:1.0529358217E-314;
+        r10 = "chat_recordedVoicePlayPause";
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r10);
+        r11 = "chat_recordedVoicePlayPausePressed";
+        r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);
+        r8 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorDrawable(r1, r8, r10, r11);
+        r0.pauseDrawable = r8;
+        r8 = new android.widget.ImageView;
+        r8.<init>(r1);
+        r0.recordedAudioPlayButton = r8;
+        r8 = r0.recordedAudioPlayButton;
+        r10 = r0.playDrawable;
+        r8.setImageDrawable(r10);
+        r8 = r0.recordedAudioPlayButton;
+        r10 = android.widget.ImageView.ScaleType.CENTER;
+        r8.setScaleType(r10);
+        r8 = r0.recordedAudioPlayButton;
+        r10 = NUM; // 0x7f0e000a float:1.8875058E38 double:1.0531621616E-314;
+        r11 = "AccActionPlay";
+        r10 = org.telegram.messenger.LocaleController.getString(r11, r10);
+        r8.setContentDescription(r10);
+        r8 = r0.recordedAudioPanel;
+        r10 = r0.recordedAudioPlayButton;
+        r19 = 48;
+        r20 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r21 = 83;
+        r22 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r24 = 0;
+        r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r8.addView(r10, r11);
+        r8 = r0.recordedAudioPlayButton;
+        r10 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$H5pZkFIP6ktOW7HudlRmk-xmmkM;
+        r10.<init>(r0);
+        r8.setOnClickListener(r10);
+        r8 = new android.widget.TextView;
+        r8.<init>(r1);
+        r0.recordedAudioTimeTextView = r8;
+        r8 = r0.recordedAudioTimeTextView;
+        r10 = "chat_messagePanelVoiceDuration";
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r10);
+        r8.setTextColor(r10);
+        r8 = r0.recordedAudioTimeTextView;
+        r10 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
+        r8.setTextSize(r4, r10);
+        r8 = r0.recordedAudioPanel;
+        r10 = r0.recordedAudioTimeTextView;
+        r19 = -2;
+        r20 = -NUM; // 0xffffffffCLASSNAME float:-2.0 double:NaN;
+        r21 = 21;
+        r22 = 0;
+        r24 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
+        r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r8.addView(r10, r11);
+        r8 = new android.widget.FrameLayout;
+        r8.<init>(r1);
+        r0.recordPanel = r8;
+        r8 = r0.recordPanel;
+        r8.setVisibility(r3);
+        r8 = r0.recordPanel;
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r9);
+        r8.setBackgroundColor(r10);
+        r8 = r0.recordPanel;
+        r10 = -1;
+        r11 = 80;
+        r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r7, r11);
+        r2.addView(r8, r14);
+        r2 = r0.recordPanel;
+        r8 = org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$Uo3sK08hLv7NAPRSM5RagKUbmWg.INSTANCE;
+        r2.setOnTouchListener(r8);
+        r2 = new android.widget.LinearLayout;
+        r2.<init>(r1);
+        r0.slideText = r2;
+        r2 = r0.slideText;
+        r2.setOrientation(r5);
+        r2 = r0.recordPanel;
+        r8 = r0.slideText;
+        r21 = 17;
+        r22 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
+        r24 = 0;
+        r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r2.addView(r8, r10);
+        r2 = new android.widget.ImageView;
+        r2.<init>(r1);
+        r0.recordCancelImage = r2;
+        r2 = r0.recordCancelImage;
+        r8 = NUM; // 0x7var_d float:1.7945935E38 double:1.0529358336E-314;
+        r2.setImageResource(r8);
+        r2 = r0.recordCancelImage;
+        r8 = new android.graphics.PorterDuffColorFilter;
+        r10 = "chat_recordVoiceCancel";
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r10);
+        r11 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r8.<init>(r10, r11);
+        r2.setColorFilter(r8);
+        r2 = r0.slideText;
+        r8 = r0.recordCancelImage;
+        r20 = -2;
+        r21 = 16;
+        r22 = 0;
+        r23 = 1;
+        r24 = 0;
+        r25 = 0;
+        r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r19, r20, r21, r22, r23, r24, r25);
+        r2.addView(r8, r10);
+        r2 = new android.widget.TextView;
+        r2.<init>(r1);
+        r0.recordCancelText = r2;
+        r2 = r0.recordCancelText;
+        r8 = NUM; // 0x7f0e0a56 float:1.8880404E38 double:1.053163464E-314;
+        r10 = "SlideToCancel";
+        r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
+        r2.setText(r8);
+        r2 = r0.recordCancelText;
+        r8 = "chat_recordVoiceCancel";
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);
+        r2.setTextColor(r8);
+        r2 = r0.recordCancelText;
+        r8 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
+        r2.setTextSize(r4, r8);
+        r2 = r0.slideText;
+        r8 = r0.recordCancelText;
+        r22 = 6;
+        r23 = 0;
+        r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r19, r20, r21, r22, r23, r24, r25);
+        r2.addView(r8, r10);
+        r2 = new android.widget.TextView;
+        r2.<init>(r1);
+        r0.recordSendText = r2;
+        r2 = r0.recordSendText;
+        r8 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
+        r10 = "Cancel";
+        r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
+        r8 = r8.toUpperCase();
+        r2.setText(r8);
+        r2 = r0.recordSendText;
+        r8 = "chat_fieldOverlayText";
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);
+        r2.setTextColor(r8);
+        r2 = r0.recordSendText;
+        r8 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r2.setTextSize(r4, r8);
+        r2 = r0.recordSendText;
+        r8 = 17;
+        r2.setGravity(r8);
+        r2 = r0.recordSendText;
+        r8 = "fonts/rmedium.ttf";
+        r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r8);
+        r2.setTypeface(r8);
+        r2 = r0.recordSendText;
+        r8 = 0;
+        r2.setAlpha(r8);
+        r2 = r0.recordSendText;
+        r8 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r2.setPadding(r8, r5, r5, r5);
+        r2 = r0.recordSendText;
+        r8 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$O75UMeYLEo03AAko_H9ah1gZ_GY;
+        r8.<init>(r0);
+        r2.setOnClickListener(r8);
+        r2 = r0.recordPanel;
+        r8 = r0.recordSendText;
+        r20 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r21 = 49;
+        r22 = 0;
+        r23 = 0;
+        r24 = 0;
+        r25 = 0;
+        r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r2.addView(r8, r10);
+        r2 = new android.widget.LinearLayout;
+        r2.<init>(r1);
+        r0.recordTimeContainer = r2;
+        r2 = r0.recordTimeContainer;
+        r2.setOrientation(r5);
+        r2 = r0.recordTimeContainer;
+        r8 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r2.setPadding(r8, r5, r5, r5);
+        r2 = r0.recordTimeContainer;
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r9);
+        r2.setBackgroundColor(r8);
+        r2 = r0.recordPanel;
+        r8 = r0.recordTimeContainer;
+        r10 = 16;
+        r11 = -2;
+        r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r11, r10);
+        r2.addView(r8, r10);
+        r2 = new org.telegram.ui.Components.ChatActivityEnterView$RecordDot;
+        r2.<init>(r1);
+        r0.recordDot = r2;
+        r2 = r0.recordTimeContainer;
+        r8 = r0.recordDot;
+        r19 = 11;
+        r20 = 11;
+        r21 = 16;
+        r22 = 0;
+        r23 = 1;
+        r24 = 0;
+        r25 = 0;
+        r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r19, r20, r21, r22, r23, r24, r25);
+        r2.addView(r8, r10);
+        r2 = new android.widget.TextView;
+        r2.<init>(r1);
+        r0.recordTimeText = r2;
+        r2 = r0.recordTimeText;
+        r8 = "chat_recordTime";
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);
+        r2.setTextColor(r8);
+        r2 = r0.recordTimeText;
+        r8 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r2.setTextSize(r4, r8);
+        r2 = r0.recordTimeContainer;
+        r8 = r0.recordTimeText;
+        r19 = -2;
+        r20 = -2;
+        r22 = 6;
+        r23 = 0;
+        r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r19, r20, r21, r22, r23, r24, r25);
+        r2.addView(r8, r10);
+        r2 = new android.widget.FrameLayout;
+        r2.<init>(r1);
+        r0.sendButtonContainer = r2;
+        r2 = r0.sendButtonContainer;
+        r2.setClipChildren(r5);
+        r2 = r0.sendButtonContainer;
+        r2.setClipToPadding(r5);
+        r2 = r0.textFieldContainer;
+        r8 = r0.sendButtonContainer;
+        r10 = 80;
+        r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r7, r10);
+        r2.addView(r8, r11);
+        r2 = new android.widget.FrameLayout;
+        r2.<init>(r1);
+        r0.audioVideoButtonContainer = r2;
+        r2 = r0.audioVideoButtonContainer;
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r9);
+        r2.setBackgroundColor(r8);
+        r2 = r0.audioVideoButtonContainer;
+        r2.setSoundEffectsEnabled(r5);
+        r2 = r0.sendButtonContainer;
+        r8 = r0.audioVideoButtonContainer;
+        r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r2.addView(r8, r9);
+        r2 = r0.audioVideoButtonContainer;
+        r8 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$gEbPm1kOxgvg0eNfia8B92v9dV4;
+        r8.<init>(r0);
+        r2.setOnTouchListener(r8);
+        r2 = new android.widget.ImageView;
+        r2.<init>(r1);
+        r0.audioSendButton = r2;
+        r2 = r0.audioSendButton;
+        r8 = android.widget.ImageView.ScaleType.CENTER_INSIDE;
+        r2.setScaleType(r8);
+        r2 = r0.audioSendButton;
+        r8 = new android.graphics.PorterDuffColorFilter;
+        r9 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r10 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r8.<init>(r9, r10);
+        r2.setColorFilter(r8);
+        r2 = r0.audioSendButton;
+        r8 = NUM; // 0x7var_ float:1.794521E38 double:1.052935657E-314;
+        r2.setImageResource(r8);
+        r2 = r0.audioSendButton;
+        r8 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r2.setPadding(r5, r5, r8, r5);
+        r2 = r0.audioSendButton;
+        r8 = NUM; // 0x7f0e0056 float:1.8875212E38 double:1.053162199E-314;
+        r9 = "AccDescrVoiceMessage";
+        r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
+        r2.setContentDescription(r8);
+        r2 = r0.audioSendButton;
+        r2.setFocusable(r4);
+        r2 = r0.audioSendButton;
+        r8 = r0.mediaMessageButtonsDelegate;
+        r2.setAccessibilityDelegate(r8);
+        r2 = r0.audioVideoButtonContainer;
+        r8 = r0.audioSendButton;
+        r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r2.addView(r8, r9);
+        if (r30 == 0) goto L_0x094f;
+    L_0x08f9:
+        r2 = new android.widget.ImageView;
+        r2.<init>(r1);
+        r0.videoSendButton = r2;
+        r2 = r0.videoSendButton;
+        r8 = android.widget.ImageView.ScaleType.CENTER_INSIDE;
+        r2.setScaleType(r8);
+        r2 = r0.videoSendButton;
+        r8 = new android.graphics.PorterDuffColorFilter;
+        r9 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r10 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r8.<init>(r9, r10);
+        r2.setColorFilter(r8);
+        r2 = r0.videoSendButton;
+        r8 = NUM; // 0x7var_f float:1.7945225E38 double:1.0529356606E-314;
+        r2.setImageResource(r8);
+        r2 = r0.videoSendButton;
+        r8 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r2.setPadding(r5, r5, r8, r5);
+        r2 = r0.videoSendButton;
+        r8 = NUM; // 0x7f0e0054 float:1.8875208E38 double:1.053162198E-314;
+        r9 = "AccDescrVideoMessage";
+        r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
+        r2.setContentDescription(r8);
+        r2 = r0.videoSendButton;
+        r2.setFocusable(r4);
+        r2 = r0.videoSendButton;
+        r8 = r0.mediaMessageButtonsDelegate;
+        r2.setAccessibilityDelegate(r8);
+        r2 = r0.audioVideoButtonContainer;
+        r8 = r0.videoSendButton;
+        r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r2.addView(r8, r9);
+    L_0x094f:
+        r2 = new org.telegram.ui.Components.ChatActivityEnterView$RecordCircle;
+        r2.<init>(r1);
+        r0.recordCircle = r2;
+        r2 = r0.recordCircle;
+        r2.setVisibility(r3);
+        r2 = r0.sizeNotifierLayout;
+        r8 = r0.recordCircle;
+        r19 = 124; // 0x7c float:1.74E-43 double:6.13E-322;
+        r20 = NUM; // 0x43420000 float:194.0 double:5.575031056E-315;
+        r21 = 85;
+        r22 = 0;
+        r23 = 0;
+        r24 = -NUM; // 0xffffffffCLASSNAME float:-36.0 double:NaN;
+        r25 = 0;
+        r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r2.addView(r8, r9);
+        r2 = new android.widget.ImageView;
+        r2.<init>(r1);
+        r0.cancelBotButton = r2;
+        r2 = r0.cancelBotButton;
+        r8 = 4;
+        r2.setVisibility(r8);
+        r2 = r0.cancelBotButton;
+        r8 = android.widget.ImageView.ScaleType.CENTER_INSIDE;
+        r2.setScaleType(r8);
+        r2 = r0.cancelBotButton;
+        r8 = new org.telegram.ui.Components.CloseProgressDrawable2;
+        r8.<init>();
+        r0.progressDrawable = r8;
+        r2.setImageDrawable(r8);
+        r2 = r0.cancelBotButton;
+        r8 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
+        r9 = "Cancel";
+        r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
+        r2.setContentDescription(r8);
+        r2 = r0.progressDrawable;
+        r8 = new android.graphics.PorterDuffColorFilter;
+        r9 = "chat_messagePanelCancelInlineBot";
+        r9 = org.telegram.ui.ActionBar.Theme.getColor(r9);
+        r10 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r8.<init>(r9, r10);
+        r2.setColorFilter(r8);
+        r2 = r0.cancelBotButton;
+        r2.setSoundEffectsEnabled(r5);
+        r2 = r0.cancelBotButton;
+        r8 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r2.setScaleX(r8);
+        r2 = r0.cancelBotButton;
+        r2.setScaleY(r8);
+        r2 = r0.cancelBotButton;
+        r8 = 0;
+        r2.setAlpha(r8);
+        r2 = android.os.Build.VERSION.SDK_INT;
+        if (r2 < r15) goto L_0x09dd;
+    L_0x09d0:
+        r2 = r0.cancelBotButton;
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r8 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r8);
+        r2.setBackgroundDrawable(r8);
+    L_0x09dd:
+        r2 = r0.sendButtonContainer;
+        r8 = r0.cancelBotButton;
+        r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r2.addView(r8, r9);
+        r2 = r0.cancelBotButton;
+        r8 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$rXJQBzkQ-6_4ly_28Plp5SExQgU;
+        r8.<init>(r0);
+        r2.setOnClickListener(r8);
+        r2 = r26.isInScheduleMode();
+        if (r2 == 0) goto L_0x0a26;
+    L_0x09f8:
+        r2 = r27.getResources();
+        r8 = NUM; // 0x7var_c float:1.7945219E38 double:1.052935659E-314;
+        r2 = r2.getDrawable(r8);
+        r2 = r2.mutate();
+        r0.sendButtonDrawable = r2;
+        r2 = r27.getResources();
+        r2 = r2.getDrawable(r8);
+        r2 = r2.mutate();
+        r0.sendButtonInverseDrawable = r2;
+        r2 = r27.getResources();
+        r2 = r2.getDrawable(r8);
+        r2 = r2.mutate();
+        r0.inactinveSendButtonDrawable = r2;
+        goto L_0x0a53;
+    L_0x0a26:
+        r2 = r27.getResources();
+        r8 = NUM; // 0x7var_ float:1.7945172E38 double:1.052935648E-314;
+        r2 = r2.getDrawable(r8);
+        r2 = r2.mutate();
+        r0.sendButtonDrawable = r2;
+        r2 = r27.getResources();
+        r2 = r2.getDrawable(r8);
+        r2 = r2.mutate();
+        r0.sendButtonInverseDrawable = r2;
+        r2 = r27.getResources();
+        r2 = r2.getDrawable(r8);
+        r2 = r2.mutate();
+        r0.inactinveSendButtonDrawable = r2;
+    L_0x0a53:
+        r2 = new org.telegram.ui.Components.ChatActivityEnterView$16;
+        r2.<init>(r1);
+        r0.sendButton = r2;
+        r2 = r0.sendButton;
+        r8 = 4;
+        r2.setVisibility(r8);
+        r2 = "chat_messagePanelSend";
+        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
+        r8 = r0.sendButton;
+        r9 = NUM; // 0x7f0e09d4 float:1.888014E38 double:1.0531633997E-314;
+        r10 = "Send";
+        r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
+        r8.setContentDescription(r9);
+        r8 = r0.sendButton;
+        r8.setSoundEffectsEnabled(r5);
+        r8 = r0.sendButton;
+        r9 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r8.setScaleX(r9);
+        r8 = r0.sendButton;
+        r8.setScaleY(r9);
+        r8 = r0.sendButton;
+        r9 = 0;
+        r8.setAlpha(r9);
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r15) goto L_0x0aab;
+    L_0x0a90:
+        r8 = r0.sendButton;
+        r9 = 24;
+        r10 = android.graphics.Color.red(r2);
+        r11 = android.graphics.Color.green(r2);
+        r2 = android.graphics.Color.blue(r2);
+        r2 = android.graphics.Color.argb(r9, r10, r11, r2);
+        r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4);
+        r8.setBackgroundDrawable(r2);
+    L_0x0aab:
+        r2 = r0.sendButtonContainer;
+        r4 = r0.sendButton;
+        r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r2.addView(r4, r8);
+        r2 = r0.sendButton;
+        r4 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$HKRsckUXlNj7cZuyU8v3eg-vryE;
+        r4.<init>(r0);
+        r2.setOnClickListener(r4);
+        r2 = r0.sendButton;
+        r4 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$nEg_Vj2QPwH3tdG2rclMcvQTAgo;
+        r4.<init>(r0);
+        r2.setOnLongClickListener(r4);
+        r2 = new org.telegram.ui.ActionBar.SimpleTextView;
+        r2.<init>(r1);
+        r0.slowModeButton = r2;
+        r2 = r0.slowModeButton;
+        r4 = 18;
+        r2.setTextSize(r4);
+        r2 = r0.slowModeButton;
+        r4 = 4;
+        r2.setVisibility(r4);
+        r2 = r0.slowModeButton;
+        r2.setSoundEffectsEnabled(r5);
+        r2 = r0.slowModeButton;
+        r4 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r2.setScaleX(r4);
+        r2 = r0.slowModeButton;
+        r2.setScaleY(r4);
+        r2 = r0.slowModeButton;
+        r4 = 0;
+        r2.setAlpha(r4);
+        r2 = r0.slowModeButton;
+        r4 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r2.setPadding(r5, r5, r4, r5);
+        r2 = r0.slowModeButton;
+        r2.setGravity(r15);
+        r2 = r0.slowModeButton;
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r2.setTextColor(r4);
+        r2 = r0.sendButtonContainer;
+        r4 = r0.slowModeButton;
+        r8 = 64;
+        r9 = 53;
+        r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r7, r9);
+        r2.addView(r4, r8);
+        r2 = r0.slowModeButton;
+        r4 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$7Ap7L1yuDmfLj_OdpsYRD0llSyY;
+        r4.<init>(r0);
+        r2.setOnClickListener(r4);
+        r2 = r0.slowModeButton;
+        r4 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$pHTgHSAKpIysTcIE-dI2T8MJcPA;
+        r4.<init>(r0);
+        r2.setOnLongClickListener(r4);
+        r2 = new android.widget.ImageView;
+        r2.<init>(r1);
+        r0.expandStickersButton = r2;
+        r2 = r0.expandStickersButton;
+        r4 = android.widget.ImageView.ScaleType.CENTER;
+        r2.setScaleType(r4);
+        r2 = r0.expandStickersButton;
+        r4 = new org.telegram.ui.Components.AnimatedArrowDrawable;
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r13);
+        r4.<init>(r8, r5);
+        r0.stickersArrow = r4;
+        r2.setImageDrawable(r4);
+        r2 = r0.expandStickersButton;
+        r2.setVisibility(r3);
+        r2 = r0.expandStickersButton;
+        r4 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r2.setScaleX(r4);
+        r2 = r0.expandStickersButton;
+        r2.setScaleY(r4);
+        r2 = r0.expandStickersButton;
+        r4 = 0;
+        r2.setAlpha(r4);
+        r2 = android.os.Build.VERSION.SDK_INT;
+        if (r2 < r15) goto L_0x0b79;
+    L_0x0b6c:
+        r2 = r0.expandStickersButton;
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4);
+        r2.setBackgroundDrawable(r4);
+    L_0x0b79:
+        r2 = r0.sendButtonContainer;
+        r4 = r0.expandStickersButton;
+        r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r2.addView(r4, r8);
+        r2 = r0.expandStickersButton;
+        r4 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$PClI0M3N-bvhUiGON6_IxSsaURQ;
+        r4.<init>(r0);
+        r2.setOnClickListener(r4);
+        r2 = r0.expandStickersButton;
+        r4 = NUM; // 0x7f0e0021 float:1.8875104E38 double:1.053162173E-314;
+        r8 = "AccDescrExpandPanel";
+        r4 = org.telegram.messenger.LocaleController.getString(r8, r4);
+        r2.setContentDescription(r4);
+        r2 = new android.widget.FrameLayout;
+        r2.<init>(r1);
+        r0.doneButtonContainer = r2;
+        r2 = r0.doneButtonContainer;
+        r2.setVisibility(r3);
+        r2 = r0.textFieldContainer;
+        r3 = r0.doneButtonContainer;
+        r4 = 80;
+        r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r7, r4);
+        r2.addView(r3, r4);
+        r2 = r0.doneButtonContainer;
+        r3 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$9mFCDdWzowA7_Vky86OkFCUavNc;
+        r3.<init>(r0);
+        r2.setOnClickListener(r3);
+        r2 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r3 = "chat_messagePanelSend";
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
+        r2 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r2, r3);
+        r3 = r27.getResources();
+        r4 = NUM; // 0x7var_ float:1.7945203E38 double:1.052935655E-314;
+        r3 = r3.getDrawable(r4);
+        r3 = r3.mutate();
+        r4 = new android.graphics.PorterDuffColorFilter;
+        r8 = "chat_messagePanelVoicePressed";
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);
+        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r4.<init>(r8, r9);
+        r3.setColorFilter(r4);
+        r4 = new org.telegram.ui.Components.CombinedDrawable;
+        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r4.<init>(r2, r3, r5, r8);
+        r2 = NUM; // 0x42000000 float:32.0 double:5.4707704E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r3 = NUM; // 0x42000000 float:32.0 double:5.4707704E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r4.setCustomSize(r2, r3);
+        r2 = new android.widget.ImageView;
+        r2.<init>(r1);
+        r0.doneButtonImage = r2;
+        r2 = r0.doneButtonImage;
+        r3 = android.widget.ImageView.ScaleType.CENTER;
+        r2.setScaleType(r3);
+        r2 = r0.doneButtonImage;
+        r2.setImageDrawable(r4);
+        r2 = r0.doneButtonImage;
+        r3 = NUM; // 0x7f0e03dd float:1.8877043E38 double:1.0531626453E-314;
+        r4 = "Done";
+        r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
+        r2.setContentDescription(r3);
+        r2 = r0.doneButtonContainer;
+        r3 = r0.doneButtonImage;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r2.addView(r3, r4);
+        r2 = new org.telegram.ui.Components.ContextProgressView;
+        r2.<init>(r1, r5);
+        r0.doneButtonProgress = r2;
+        r1 = r0.doneButtonProgress;
+        r2 = 4;
+        r1.setVisibility(r2);
+        r1 = r0.doneButtonContainer;
+        r2 = r0.doneButtonProgress;
+        r3 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r4 = -1;
+        r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3);
+        r1.addView(r2, r3);
+        r1 = org.telegram.messenger.MessagesController.getGlobalEmojiSettings();
+        r2 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r3 = "kbd_height";
+        r2 = r1.getInt(r3, r2);
+        r0.keyboardHeight = r2;
+        r2 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r3 = "kbd_height_land3";
+        r1 = r1.getInt(r3, r2);
+        r0.keyboardHeightLand = r1;
+        r0.setRecordVideoButtonVisible(r5, r5);
+        r0.checkSendButton(r5);
+        r26.checkChannelRights();
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.<init>(android.app.Activity, org.telegram.ui.Components.SizeNotifierFrameLayout, org.telegram.ui.ChatActivity, boolean):void");
     }
 
     public /* synthetic */ void lambda$new$0$ChatActivityEnterView(View view) {

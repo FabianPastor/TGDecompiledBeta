@@ -809,10 +809,8 @@ public class DocumentSelectActivity extends BaseFragment {
         this.writeButtonContainer.setAlpha(0.0f);
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
         this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
-        this.writeButtonContainer.setOnClickListener(new -$$Lambda$DocumentSelectActivity$qhRC1y2bieE94R9c_ZacTxqjRzs(this));
-        this.writeButtonContainer.setOnLongClickListener(new -$$Lambda$DocumentSelectActivity$wEPxYGnkp_eiNGh_hQ1VsbHolfw(this));
         this.writeButton = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor("dialogFloatingButtonPressed"));
+        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
         if (VERSION.SDK_INT < 21) {
             Drawable mutate = context.getResources().getDrawable(NUM).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
@@ -833,6 +831,8 @@ public class DocumentSelectActivity extends BaseFragment {
             });
         }
         this.writeButtonContainer.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 51, VERSION.SDK_INT >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
+        this.writeButton.setOnClickListener(new -$$Lambda$DocumentSelectActivity$qhRC1y2bieE94R9c_ZacTxqjRzs(this));
+        this.writeButton.setOnLongClickListener(new -$$Lambda$DocumentSelectActivity$wEPxYGnkp_eiNGh_hQ1VsbHolfw(this));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedCountView = new View(context2) {
@@ -1597,10 +1597,10 @@ public class DocumentSelectActivity extends BaseFragment {
         r4 = android.os.Environment.getExternalStorageState();
         r5 = "mounted";
         r5 = r4.equals(r5);
-        r6 = NUM; // 0x7f0e049f float:1.8877437E38 double:1.053162741E-314;
+        r6 = NUM; // 0x7f0e04a5 float:1.887745E38 double:1.053162744E-314;
         r7 = "ExternalFolderInfo";
         r8 = NUM; // 0x7var_bf float:1.7944965E38 double:1.0529355974E-314;
-        r9 = NUM; // 0x7f0e099f float:1.8880033E38 double:1.0531633735E-314;
+        r9 = NUM; // 0x7f0e09a5 float:1.8880045E38 double:1.0531633765E-314;
         r10 = "SdCard";
         if (r5 != 0) goto L_0x003e;
     L_0x0036:
@@ -1620,13 +1620,13 @@ public class DocumentSelectActivity extends BaseFragment {
         r4.subtitle = r5;
         goto L_0x0073;
     L_0x0058:
-        r5 = NUM; // 0x7f0e056f float:1.8877859E38 double:1.053162844E-314;
+        r5 = NUM; // 0x7f0e0575 float:1.887787E38 double:1.053162847E-314;
         r11 = "InternalStorage";
         r5 = org.telegram.messenger.LocaleController.getString(r11, r5);
         r4.title = r5;
         r5 = NUM; // 0x7var_c1 float:1.794497E38 double:1.0529355984E-314;
         r4.icon = r5;
-        r5 = NUM; // 0x7f0e056e float:1.8877857E38 double:1.0531628434E-314;
+        r5 = NUM; // 0x7f0e0574 float:1.8877869E38 double:1.0531628463E-314;
         r11 = "InternalFolderInfo";
         r5 = org.telegram.messenger.LocaleController.getString(r11, r5);
         r4.subtitle = r5;
@@ -1733,7 +1733,7 @@ public class DocumentSelectActivity extends BaseFragment {
         goto L_0x014e;
     L_0x0143:
         r11 = "ExternalStorage";
-        r12 = NUM; // 0x7f0e04a0 float:1.8877439E38 double:1.0531627416E-314;
+        r12 = NUM; // 0x7f0e04a6 float:1.8877451E38 double:1.0531627446E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r11, r12);	 Catch:{ Exception -> 0x0164 }
         r5.title = r11;	 Catch:{ Exception -> 0x0164 }
     L_0x014e:
@@ -1777,7 +1777,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r2.<init>(r13, r1);
         r3 = "/";
         r2.title = r3;
-        r4 = NUM; // 0x7f0e0aa9 float:1.8880573E38 double:1.053163505E-314;
+        r4 = NUM; // 0x7f0e0aaf float:1.8880585E38 double:1.053163508E-314;
         r5 = "SystemRoot";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.subtitle = r4;
@@ -1812,11 +1812,11 @@ public class DocumentSelectActivity extends BaseFragment {
     L_0x01d7:
         r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
         r0.<init>(r13, r1);
-        r2 = NUM; // 0x7f0e050f float:1.8877664E38 double:1.0531627964E-314;
+        r2 = NUM; // 0x7f0e0515 float:1.8877676E38 double:1.0531627994E-314;
         r3 = "Gallery";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0e0510 float:1.8877666E38 double:1.053162797E-314;
+        r2 = NUM; // 0x7f0e0516 float:1.8877678E38 double:1.0531628E-314;
         r3 = "GalleryInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
@@ -1834,7 +1834,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r3 = "AttachMusic";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0e0661 float:1.887835E38 double:1.0531629634E-314;
+        r2 = NUM; // 0x7f0e0667 float:1.8878362E38 double:1.0531629664E-314;
         r3 = "MusicInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
@@ -1892,28 +1892,31 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r1 = new ThemeDescription[24];
-        r1[13] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        r1[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r1[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"dateTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
+        r1 = new ThemeDescription[26];
+        r1[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGray");
+        r1[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        r1[15] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        r1[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"dateTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
         View view = this.listView;
         int i = ThemeDescription.FLAG_CHECKBOX;
         Class[] clsArr = new Class[]{SharedDocumentCell.class};
         String[] strArr = new String[1];
         strArr[0] = "checkBox";
-        r1[16] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "checkbox");
-        r1[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, "checkboxCheck");
+        r1[18] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "checkbox");
+        r1[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, "checkboxCheck");
         view = this.listView;
         i = ThemeDescription.FLAG_IMAGECOLOR;
         clsArr = new Class[]{SharedDocumentCell.class};
         strArr = new String[1];
         strArr[0] = "thumbImageView";
-        r1[18] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "files_folderIcon");
-        r1[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null, null, "files_folderIconBackground");
-        r1[20] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, null, null, null, "files_iconText");
-        r1[21] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "dialogFloatingIcon");
-        r1[22] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "dialogFloatingButton");
-        r1[23] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "dialogFloatingButtonPressed");
+        r1[20] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "files_folderIcon");
+        r1[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null, null, "files_folderIconBackground");
+        r1[22] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, null, null, null, "files_iconText");
+        r1[23] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "dialogFloatingIcon");
+        r1[24] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "dialogFloatingButton");
+        r1[25] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton");
         return r1;
     }
 }

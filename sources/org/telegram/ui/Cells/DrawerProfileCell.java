@@ -3,8 +3,11 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
@@ -80,6 +83,11 @@ public class DrawerProfileCell extends FrameLayout {
         this.darkThemeView = new ImageView(context);
         this.darkThemeView.setScaleType(ScaleType.CENTER);
         this.darkThemeView.setImageResource(NUM);
+        this.darkThemeView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuName"), Mode.MULTIPLY));
+        if (VERSION.SDK_INT >= 21) {
+            this.darkThemeView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
+            Theme.setRippleDrawableForceSoftware((RippleDrawable) this.darkThemeView.getBackground());
+        }
         this.darkThemeView.setOnClickListener(new -$$Lambda$DrawerProfileCell$pk7OtSp6Yma6Wl0p63ZBsLElrNY(this));
         addView(this.darkThemeView, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 6.0f, 90.0f));
         if (Theme.getEventType() == 0) {
@@ -92,7 +100,7 @@ public class DrawerProfileCell extends FrameLayout {
         boolean isDark = Theme.getCurrentTheme().isDark();
         if (Theme.selectedAutoNightType != 0) {
             isDark = Theme.isCurrentThemeNight();
-            Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", NUM), 1).show();
+            Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", NUM), 0).show();
             Theme.selectedAutoNightType = 0;
             Theme.saveAutoNightThemeConfig();
             Theme.cancelAutoNightThemeCallbacks();
@@ -112,11 +120,11 @@ public class DrawerProfileCell extends FrameLayout {
                 theme = Theme.getTheme(str);
             }
         }
-        r3 = new int[2];
-        this.darkThemeView.getLocationInWindow(r3);
-        r3[0] = r3[0] + (this.darkThemeView.getMeasuredWidth() / 2);
-        r3[1] = r3[1] + (this.darkThemeView.getMeasuredHeight() / 2);
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, theme, Boolean.valueOf(false), r3);
+        r2 = new int[2];
+        this.darkThemeView.getLocationInWindow(r2);
+        r2[0] = r2[0] + (this.darkThemeView.getMeasuredWidth() / 2);
+        r2[1] = r2[1] + (this.darkThemeView.getMeasuredHeight() / 2);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, theme, Boolean.valueOf(false), r2);
     }
 
     /* Access modifiers changed, original: protected */

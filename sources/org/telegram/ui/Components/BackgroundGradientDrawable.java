@@ -9,6 +9,7 @@ public class BackgroundGradientDrawable extends GradientDrawable {
     public BackgroundGradientDrawable(Orientation orientation, int[] iArr) {
         super(orientation, iArr);
         this.colors = iArr;
+        setDither(true);
     }
 
     public int[] getColorsList() {

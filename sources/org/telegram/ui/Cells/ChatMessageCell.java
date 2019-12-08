@@ -6573,7 +6573,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4 + 1;
         goto L_0x0584;
     L_0x05ac:
-        r0 = NUM; // 0x7f0e0758 float:1.887885E38 double:1.0531630855E-314;
+        r0 = NUM; // 0x7f0e075e float:1.8878863E38 double:1.0531630884E-314;
         r4 = new java.lang.Object[r9];
         r7 = java.lang.Integer.valueOf(r13);
         r4[r12] = r7;
@@ -9387,7 +9387,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4 & 4;
         if (r4 == 0) goto L_0x17f2;
     L_0x17e4:
-        r3 = NUM; // 0x7f0e087c float:1.8879443E38 double:1.0531632297E-314;
+        r3 = NUM; // 0x7f0e0882 float:1.8879455E38 double:1.0531632327E-314;
         r4 = "PaymentReceipt";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r3 = r3.toUpperCase();
@@ -9396,13 +9396,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3.test;
         if (r3 == 0) goto L_0x1804;
     L_0x17f6:
-        r3 = NUM; // 0x7f0e088e float:1.887948E38 double:1.0531632386E-314;
+        r3 = NUM; // 0x7f0e0894 float:1.8879492E38 double:1.0531632416E-314;
         r4 = "PaymentTestInvoice";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r3 = r3.toUpperCase();
         goto L_0x1811;
     L_0x1804:
-        r3 = NUM; // 0x7f0e086f float:1.8879417E38 double:1.0531632233E-314;
+        r3 = NUM; // 0x7f0e0875 float:1.8879429E38 double:1.0531632263E-314;
         r4 = "PaymentInvoice";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r3 = r3.toUpperCase();
@@ -9836,7 +9836,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r2.format(r0);
         goto L_0x1b16;
     L_0x1b54:
-        r0 = NUM; // 0x7f0e0755 float:1.8878845E38 double:1.053163084E-314;
+        r0 = NUM; // 0x7f0e075b float:1.8878857E38 double:1.053163087E-314;
         r2 = "NumberUnknown";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         goto L_0x1b16;
@@ -10178,7 +10178,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4.closed;
         if (r4 == 0) goto L_0x1de6;
     L_0x1de0:
-        r4 = NUM; // 0x7f0e04ae float:1.8877467E38 double:1.0531627485E-314;
+        r4 = NUM; // 0x7f0e04b4 float:1.887748E38 double:1.0531627515E-314;
         r5 = "FinalResults";
         goto L_0x1deb;
     L_0x1de6:
@@ -10252,7 +10252,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4.total_voters;
         if (r4 != 0) goto L_0x1e6e;
     L_0x1e64:
-        r4 = NUM; // 0x7f0e06bf float:1.887854E38 double:1.05316301E-314;
+        r4 = NUM; // 0x7f0e06c5 float:1.8878552E38 double:1.053163013E-314;
         r5 = "NoVotes";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x1e74;
@@ -14617,7 +14617,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = r9 & 4;
         if (r9 == 0) goto L_0x3ba4;
     L_0x3b9a:
-        r9 = NUM; // 0x7f0e087c float:1.8879443E38 double:1.0531632297E-314;
+        r9 = NUM; // 0x7f0e0882 float:1.8879455E38 double:1.0531632327E-314;
         r10 = "PaymentReceipt";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         goto L_0x3bc9;
@@ -21934,7 +21934,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x00f7:
         r3 = new java.lang.StringBuilder;
         r3.<init>();
-        r4 = NUM; // 0x7f0e0403 float:1.887712E38 double:1.053162664E-314;
+        r4 = NUM; // 0x7f0e0409 float:1.8877133E38 double:1.053162667E-314;
         r7 = "EditedMessage";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r3.append(r4);
@@ -22365,7 +22365,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.namesOffset = r5;
         r0 = r2.messageOwner;
         r6 = r0.via_bot_id;
-        r7 = NUM; // 0x7f0e0b98 float:1.8881057E38 double:1.053163623E-314;
+        r7 = NUM; // 0x7f0e0b9e float:1.888107E38 double:1.053163626E-314;
         r8 = "ViaBot";
         r9 = 2;
         if (r6 == 0) goto L_0x0108;
@@ -22509,7 +22509,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4.isForwardedChannelPost();
         if (r4 == 0) goto L_0x01d0;
     L_0x01af:
-        r4 = NUM; // 0x7f0e03be float:1.887698E38 double:1.05316263E-314;
+        r4 = NUM; // 0x7f0e03c4 float:1.8876993E38 double:1.053162633E-314;
         r9 = "DiscussChannel";
         r4 = org.telegram.messenger.LocaleController.getString(r9, r4);
         r9 = org.telegram.ui.ActionBar.Theme.chat_adminPaint;
@@ -22633,7 +22633,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
     L_0x0287:
         r8 = r21;
-        r7 = NUM; // 0x7f0e0b98 float:1.8881057E38 double:1.053163623E-314;
+        r7 = NUM; // 0x7f0e0b9e float:1.888107E38 double:1.053163626E-314;
         goto L_0x029f;
     L_0x028d:
         r4 = r1.currentMessageObject;
@@ -22909,10 +22909,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0491:
         r0 = r39.getMaxNameWidth();
         r1.forwardedNameWidth = r0;
-        r0 = NUM; // 0x7f0e0504 float:1.8877642E38 double:1.053162791E-314;
+        r0 = NUM; // 0x7f0e050a float:1.8877654E38 double:1.053162794E-314;
         r3 = "From";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
-        r3 = NUM; // 0x7f0e050c float:1.8877658E38 double:1.053162795E-314;
+        r3 = NUM; // 0x7f0e0512 float:1.887767E38 double:1.053162798E-314;
         r4 = "FromFormatted";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = "%1$s";
@@ -22954,7 +22954,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = 3;
         r10 = new java.lang.Object[r10];
         r10[r5] = r9;
-        r11 = NUM; // 0x7f0e0b98 float:1.8881057E38 double:1.053163623E-314;
+        r11 = NUM; // 0x7f0e0b9e float:1.888107E38 double:1.053163626E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);
         r11 = 1;
         r10[r11] = r8;
@@ -23039,7 +23039,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = 1;
         r0[r4] = r3;	 Catch:{ Exception -> 0x062c }
         r0 = "ForwardedMessage";
-        r3 = NUM; // 0x7f0e04d8 float:1.8877553E38 double:1.0531627693E-314;
+        r3 = NUM; // 0x7f0e04de float:1.8877565E38 double:1.053162772E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r3);	 Catch:{ Exception -> 0x062c }
         r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0);	 Catch:{ Exception -> 0x062c }
         r3 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;	 Catch:{ Exception -> 0x062c }
@@ -23318,7 +23318,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x07ac:
         if (r0 != 0) goto L_0x07b7;
     L_0x07ae:
-        r0 = NUM; // 0x7f0e05d2 float:1.887806E38 double:1.053162893E-314;
+        r0 = NUM; // 0x7f0e05d8 float:1.8878072E38 double:1.0531628958E-314;
         r7 = "Loading";
         r0 = org.telegram.messenger.LocaleController.getString(r7, r0);
     L_0x07b7:

@@ -515,7 +515,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r11.setTextAndIcon(r12, r2, r1);
             goto L_0x018f;
         L_0x0028:
-            r12 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+            r12 = NUM; // 0x7f0e0587 float:1.8877908E38 double:1.0531628557E-314;
             r0 = "InviteToGroupByLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
@@ -718,7 +718,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r12 = r10.searching;
             if (r12 == 0) goto L_0x018f;
         L_0x0183:
-            r12 = NUM; // 0x7f0e051a float:1.8877686E38 double:1.053162802E-314;
+            r12 = NUM; // 0x7f0e0520 float:1.8877699E38 double:1.053162805E-314;
             r0 = "GlobalSearch";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);

@@ -3248,7 +3248,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = r12 + r16;
         if (r12 <= r4) goto L_0x0232;
     L_0x0124:
-        r0 = NUM; // 0x7f0e08c9 float:1.88796E38 double:1.053163268E-314;
+        r0 = NUM; // 0x7f0e08cf float:1.8879611E38 double:1.0531632707E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -3286,7 +3286,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x01a1;
     L_0x016d:
-        r3 = NUM; // 0x7f0e038c float:1.887688E38 double:1.053162605E-314;
+        r3 = NUM; // 0x7f0e0392 float:1.8876891E38 double:1.053162608E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3298,7 +3298,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e0377 float:1.8876837E38 double:1.053162595E-314;
+        r1 = NUM; // 0x7f0e037d float:1.8876849E38 double:1.053162598E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$4jeFfbPa00Dvar_qyJvj0h0oI_X4;
@@ -4756,6 +4756,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chat_serviceBackground"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuTopShadow"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuTopShadowCats"));
+        View view2 = this.sideMenu;
+        int i2 = ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE;
+        Class[] clsArr2 = new Class[]{DrawerProfileCell.class};
+        String[] strArr = new String[1];
+        strArr[0] = "darkThemeView";
+        arrayList.add(new ThemeDescription(view2, i2, clsArr2, strArr, null, null, null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerProfileCell.class}, new String[]{"darkThemeView"}, null, null, null, "chats_menuName"));
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, null, null, -__lambda_dialogsactivity_iy3fofqmgrbrmjxefbyhefg9ov02, "chats_menuTopBackgroundCats"));
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, null, null, -__lambda_dialogsactivity_iy3fofqmgrbrmjxefbyhefg9ov02, "chats_menuTopBackground"));
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerActionCell.class}, new String[]{str2}, null, null, null, "chats_menuItemIcon"));
@@ -4769,7 +4776,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DividerCell.class}, Theme.dividerPaint, null, null, "divider"));
         arrayList.add(new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle"));
         DialogsAdapter dialogsAdapter = this.dialogsAdapter;
-        View view2 = null;
+        View view3 = null;
         arrayList.add(new ThemeDescription(dialogsAdapter != null ? dialogsAdapter.getArchiveHintCellPager() : null, 0, new Class[]{ArchiveHintInnerCell.class}, new String[]{"imageView"}, null, null, null, "chats_nameMessage_threeLines"));
         dialogsAdapter = this.dialogsAdapter;
         arrayList.add(new ThemeDescription(dialogsAdapter != null ? dialogsAdapter.getArchiveHintCellPager() : null, 0, new Class[]{ArchiveHintInnerCell.class}, new String[]{"imageView2"}, null, null, null, "chats_unreadCounter"));
@@ -4791,22 +4798,22 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         arrayList.add(new ThemeDescription(dialogsSearchAdapter != null ? dialogsSearchAdapter.getInnerListView() : null, 0, new Class[]{HintDialogCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText"));
         dialogsSearchAdapter = this.dialogsSearchAdapter;
         if (dialogsSearchAdapter != null) {
-            view2 = dialogsSearchAdapter.getInnerListView();
+            view3 = dialogsSearchAdapter.getInnerListView();
         }
-        arrayList.add(new ThemeDescription(view2, 0, new Class[]{HintDialogCell.class}, null, null, null, "chats_onlineCircle"));
-        View view3 = this.fragmentView;
-        int i2 = ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG;
-        Class[] clsArr2 = new Class[]{FragmentContextView.class};
-        String[] strArr = new String[1];
+        arrayList.add(new ThemeDescription(view3, 0, new Class[]{HintDialogCell.class}, null, null, null, "chats_onlineCircle"));
+        view2 = this.fragmentView;
+        int i3 = ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG;
+        clsArr2 = new Class[]{FragmentContextView.class};
+        strArr = new String[1];
         strArr[0] = "frameLayout";
-        arrayList.add(new ThemeDescription(view3, i2, clsArr2, strArr, null, null, null, "inappPlayerBackground"));
+        arrayList.add(new ThemeDescription(view2, i3, clsArr2, strArr, null, null, null, "inappPlayerBackground"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, "inappPlayerPlayPause"));
-        view3 = this.fragmentView;
-        int i3 = ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG;
+        view2 = this.fragmentView;
+        int i4 = ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG;
         clsArr2 = new Class[]{FragmentContextView.class};
         strArr = new String[1];
         strArr[0] = "titleTextView";
-        arrayList.add(new ThemeDescription(view3, i3, clsArr2, strArr, null, null, null, "inappPlayerTitle"));
+        arrayList.add(new ThemeDescription(view2, i4, clsArr2, strArr, null, null, null, "inappPlayerTitle"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_FASTSCROLL, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "inappPlayerPerformer"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, "inappPlayerClose"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, "returnToCallBackground"));

@@ -23,7 +23,7 @@ import org.telegram.ui.Components.TypefaceSpan;
 
 public class WalletBalanceCell extends FrameLayout {
     private Typeface defaultTypeFace;
-    private RLottieDrawable gemDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f), false);
+    private RLottieDrawable gemDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f), false, null);
     private FrameLayout receiveButton;
     private Drawable receiveDrawable;
     private SimpleTextView receiveTextView;

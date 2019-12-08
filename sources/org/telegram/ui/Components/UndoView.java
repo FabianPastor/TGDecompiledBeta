@@ -270,7 +270,7 @@ public class UndoView extends FrameLayout {
     L_0x004c:
         r2 = r20;
         r2 = (org.telegram.tgnet.TLRPC.User) r2;
-        r3 = NUM; // 0x7f0e0754 float:1.8878843E38 double:1.0531630835E-314;
+        r3 = NUM; // 0x7f0e075a float:1.8878855E38 double:1.0531630865E-314;
         r5 = new java.lang.Object[r4];
         r2 = org.telegram.messenger.UserObject.getFirstName(r2);
         r5[r15] = r2;
@@ -322,7 +322,7 @@ public class UndoView extends FrameLayout {
         r5 = (org.telegram.tgnet.TLRPC.User) r5;
         if (r3 != r2) goto L_0x00ca;
     L_0x00b4:
-        r2 = NUM; // 0x7f0e03f4 float:1.887709E38 double:1.0531626566E-314;
+        r2 = NUM; // 0x7f0e03fa float:1.8877102E38 double:1.0531626596E-314;
         r3 = new java.lang.Object[r4];
         r5 = org.telegram.messenger.UserObject.getFirstName(r5);
         r3[r15] = r5;
@@ -331,7 +331,7 @@ public class UndoView extends FrameLayout {
         r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2);
         goto L_0x00df;
     L_0x00ca:
-        r2 = NUM; // 0x7f0e03f5 float:1.8877092E38 double:1.053162657E-314;
+        r2 = NUM; // 0x7f0e03fb float:1.8877104E38 double:1.05316266E-314;
         r3 = new java.lang.Object[r4];
         r5 = org.telegram.messenger.UserObject.getFirstName(r5);
         r3[r15] = r5;
@@ -427,7 +427,7 @@ public class UndoView extends FrameLayout {
         if (r3 != 0) goto L_0x01ac;
     L_0x019d:
         r3 = r0.infoTextView;
-        r5 = NUM; // 0x7f0e054e float:1.8877792E38 double:1.0531628276E-314;
+        r5 = NUM; // 0x7f0e0554 float:1.8877804E38 double:1.0531628305E-314;
         r6 = "HistoryClearedUndo";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setText(r5);
@@ -455,7 +455,7 @@ public class UndoView extends FrameLayout {
         goto L_0x01f4;
     L_0x01d7:
         r3 = r0.infoTextView;
-        r5 = NUM; // 0x7f0e0527 float:1.8877713E38 double:1.0531628083E-314;
+        r5 = NUM; // 0x7f0e052d float:1.8877725E38 double:1.0531628113E-314;
         r6 = "GroupDeletedUndo";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setText(r5);

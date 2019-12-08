@@ -1495,7 +1495,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0 = r13.globalStartRow;
             if (r15 != r0) goto L_0x0076;
         L_0x0068:
-            r15 = NUM; // 0x7f0e051a float:1.8877686E38 double:1.053162802E-314;
+            r15 = NUM; // 0x7f0e0520 float:1.8877699E38 double:1.053162805E-314;
             r0 = "GlobalSearch";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -2239,7 +2239,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         goto L_0x00fd;
     L_0x00ef:
         r5 = r9.searchItem;
-        r6 = NUM; // 0x7f0e09a0 float:1.8880035E38 double:1.053163374E-314;
+        r6 = NUM; // 0x7f0e09a6 float:1.8880047E38 double:1.053163377E-314;
         r7 = "Search";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r5.setSearchFieldHint(r6);
@@ -2250,7 +2250,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r5 = NUM; // 0x7var_d float:1.7945124E38 double:1.052935636E-314;
         r6 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = NUM; // 0x7f0e03d7 float:1.8877031E38 double:1.0531626423E-314;
+        r7 = NUM; // 0x7f0e03dd float:1.8877043E38 double:1.0531626453E-314;
         r8 = "Done";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r1 = r1.addItemWithWidth(r2, r5, r6, r7);
@@ -2276,7 +2276,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r5 != r4) goto L_0x014d;
     L_0x013f:
         r4 = r9.emptyView;
-        r5 = NUM; // 0x7f0e06b1 float:1.8878512E38 double:1.053163003E-314;
+        r5 = NUM; // 0x7f0e06b7 float:1.8878524E38 double:1.053163006E-314;
         r6 = "NoResult";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setText(r5);
@@ -2535,7 +2535,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r0 != r1) goto L_0x0134;
     L_0x011f:
         r0 = r21.getParentActivity();
-        r1 = NUM; // 0x7f0e03fa float:1.8877102E38 double:1.0531626596E-314;
+        r1 = NUM; // 0x7f0e0400 float:1.8877114E38 double:1.0531626626E-314;
         r2 = "EditCantEditPermissionsPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0 = android.widget.Toast.makeText(r0, r1, r3);
@@ -2543,7 +2543,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         goto L_0x0148;
     L_0x0134:
         r0 = r21.getParentActivity();
-        r1 = NUM; // 0x7f0e03f9 float:1.88771E38 double:1.053162659E-314;
+        r1 = NUM; // 0x7f0e03ff float:1.8877112E38 double:1.053162662E-314;
         r2 = "EditCantEditPermissions";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0 = android.widget.Toast.makeText(r0, r1, r3);
@@ -2991,7 +2991,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r3 = "AdminWillBeRemoved";
         r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r1);
         r11.setMessage(r0);
-        r0 = NUM; // 0x7f0e0756 float:1.8878847E38 double:1.0531630845E-314;
+        r0 = NUM; // 0x7f0e075c float:1.8878859E38 double:1.0531630875E-314;
         r1 = "OK";
         r12 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r14 = new org.telegram.ui.-$$Lambda$ChatUsersActivity$QBAiFB7vQBVLCLASSNAMElkUtoQa9r6rI;
@@ -3620,11 +3620,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     L_0x00d1:
         if (r0 == 0) goto L_0x00db;
     L_0x00d3:
-        r0 = NUM; // 0x7f0e03ed float:1.8877076E38 double:1.053162653E-314;
+        r0 = NUM; // 0x7f0e03f3 float:1.8877088E38 double:1.053162656E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r12, r0);
         goto L_0x00e4;
     L_0x00db:
-        r0 = NUM; // 0x7f0e0a0a float:1.888025E38 double:1.0531634264E-314;
+        r0 = NUM; // 0x7f0e0a10 float:1.8880262E38 double:1.0531634293E-314;
         r2 = "SetAsAdmin";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
     L_0x00e4:
@@ -3670,7 +3670,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r15 = java.lang.Integer.valueOf(r12);
         r0.add(r15);
     L_0x0139:
-        r12 = NUM; // 0x7f0e059b float:1.8877948E38 double:1.0531628656E-314;
+        r12 = NUM; // 0x7f0e05a1 float:1.887796E38 double:1.0531628686E-314;
         r15 = "KickFromGroup";
         r12 = org.telegram.messenger.LocaleController.getString(r15, r12);
         r1.add(r12);
@@ -3874,7 +3874,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r1 = 2;
     L_0x0297:
         r7 = new java.lang.CharSequence[r1];
-        r13 = NUM; // 0x7f0e03ed float:1.8877076E38 double:1.053162653E-314;
+        r13 = NUM; // 0x7f0e03f3 float:1.8877088E38 double:1.053162656E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r12, r13);
         r7[r5] = r12;
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
