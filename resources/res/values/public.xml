@@ -792,6 +792,7 @@
     <public type="drawable" name="video_muted" id="NUM" />
     <public type="drawable" name="video_pip" id="NUM" />
     <public type="drawable" name="video_png" id="NUM" />
+    <public type="drawable" name="videopreview" id="NUM" />
     <public type="drawable" name="voice2x" id="NUM" />
     <public type="drawable" name="volume_off" id="NUM" />
     <public type="drawable" name="volume_on" id="NUM" />

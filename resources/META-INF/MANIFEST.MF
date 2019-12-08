@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.4.2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 7FDidWZTyQaJdVJW9BBrCnCxIQI=
+SHA1-Digest: b/BV8mgNDbXQTzqnPjUfFoMafAM=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -222,7 +222,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: IOXHror0moweDa+MgoWvnpTukDI=
+SHA1-Digest: yFHBXgwk0SzogFuJm0IWhjQ/5Ag=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: FHlRDdxccFhBf1l94YXJ1DBcfcA=
@@ -2142,6 +2142,9 @@ SHA1-Digest: nD4stvbdol1lqNpviSBwU5iMJco=
 Name: res/drawable-hdpi-v4/video_pip.png
 SHA1-Digest: ZSUtIjuZ7CDmmpMovFBBknXfsOM=
 
+Name: res/drawable-hdpi-v4/videopreview.9.png
+SHA1-Digest: 9TfE+zUMXjoDkJzIh/V1Iy/MWAA=
+
 Name: res/drawable-hdpi-v4/voice2x.png
 SHA1-Digest: ZYf+C2aIUGVIJU7Avj3xD2+fdFc=
 
@@ -3957,6 +3960,9 @@ SHA1-Digest: XvTiLtsWMsMHbuxjIAkFlCAsNsE=
 
 Name: res/drawable-mdpi-v4/video_pip.png
 SHA1-Digest: 3WAg/cVkmyYlOliLGBHbgIATnfc=
+
+Name: res/drawable-mdpi-v4/videopreview.9.png
+SHA1-Digest: qL8MfE0SVbnWGzuevf4zISXkImQ=
 
 Name: res/drawable-mdpi-v4/voice2x.png
 SHA1-Digest: Si7MrpxVQSOMND+lLqat4Bx6OT4=
@@ -5810,6 +5816,9 @@ SHA1-Digest: XAyNyEGxutkcM8ABPrzik2jcGeg=
 Name: res/drawable-xhdpi-v4/video_png.png
 SHA1-Digest: BGW1Z9f++wGxBKIRYODiNk5fYJI=
 
+Name: res/drawable-xhdpi-v4/videopreview.9.png
+SHA1-Digest: JlFE601lf8qwXbaUoxbZIX+gTos=
+
 Name: res/drawable-xhdpi-v4/voice2x.png
 SHA1-Digest: aE6cwMwuKbrZWcipceC8ZZYB/RU=
 
@@ -7602,6 +7611,9 @@ SHA1-Digest: ARE102984FGCTqmoWxC+r4IfX7A=
 Name: res/drawable-xxhdpi-v4/video_pip.png
 SHA1-Digest: TNbsr4I0fSXcnlDn6FyPB7gjSyE=
 
+Name: res/drawable-xxhdpi-v4/videopreview.9.png
+SHA1-Digest: C7lyB9iA8ipy0Vo6ao7eDGG6wMg=
+
 Name: res/drawable-xxhdpi-v4/voice2x.png
 SHA1-Digest: aXpxE0DVHNb/Q/p3JtSQ6M53SWA=
 
@@ -8044,7 +8056,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: usb8V5FXE+f9GMLBgIv3OvS4tCI=
+SHA1-Digest: 8NYMbYip/a0SugEnCuaYFeDobbo=
 
 Name: version.txt
 SHA1-Digest: J/nihzJRxlZEj3lPEgpfeoTyk98=

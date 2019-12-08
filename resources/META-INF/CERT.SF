@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: 3qyIExbcPuRreAiVBvMS15rnss4=
+SHA1-Digest-Manifest: p1C0wYjq5ECpEFU+YI+KvAJmmuA=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: g64lbwRwDKCbqEYDTJue0Ldhizc=
+SHA1-Digest: 7EsrXb+GE2NOAZn94PJk46y9OYc=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -223,7 +223,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: ++9HPEcrSgefHiTbKB/vpAyNC2Y=
+SHA1-Digest: hh1iGfb3LrvgQhrLxIdHXLgkOXA=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: meJMBKLUSTmOentmkKD9WbS/j5I=
@@ -2143,6 +2143,9 @@ SHA1-Digest: qttMWixPhaBVrmdp1FTmmy7Ch7c=
 Name: res/drawable-hdpi-v4/video_pip.png
 SHA1-Digest: i6WVMLpaqNs366UU0adSawxKOcQ=
 
+Name: res/drawable-hdpi-v4/videopreview.9.png
+SHA1-Digest: uXst1j3dVhTesy8kqyCz47CXkyE=
+
 Name: res/drawable-hdpi-v4/voice2x.png
 SHA1-Digest: pzsLCNjMAF+omlyu4EafGrhZ+tE=
 
@@ -3958,6 +3961,9 @@ SHA1-Digest: MonFHkai8lVMImGmyDv/Zxus7fI=
 
 Name: res/drawable-mdpi-v4/video_pip.png
 SHA1-Digest: lndgyXFTv9x/mdFIYfBGtNvbrZI=
+
+Name: res/drawable-mdpi-v4/videopreview.9.png
+SHA1-Digest: oB6nAMJ6jI4k2RueBknl0Uv+u/k=
 
 Name: res/drawable-mdpi-v4/voice2x.png
 SHA1-Digest: Hi2z2uEoaGso6taFFyvE7WgtqE8=
@@ -5811,6 +5817,9 @@ SHA1-Digest: RABSmpnR+TbpbesylX5YzJd288I=
 Name: res/drawable-xhdpi-v4/video_png.png
 SHA1-Digest: tNpWYkmaDNzuaW44WccMLPEzQDE=
 
+Name: res/drawable-xhdpi-v4/videopreview.9.png
+SHA1-Digest: FmgXjbbMS09d184BW5hLb2hXdr4=
+
 Name: res/drawable-xhdpi-v4/voice2x.png
 SHA1-Digest: 9A7U5TwpkxQclW9Lj3HLtxPZPhg=
 
@@ -7603,6 +7612,9 @@ SHA1-Digest: nVsvlecY2r0k3VY4Lf+F1V4SSGE=
 Name: res/drawable-xxhdpi-v4/video_pip.png
 SHA1-Digest: BIdaLPOOo5+TfEqAa/XYP96VysU=
 
+Name: res/drawable-xxhdpi-v4/videopreview.9.png
+SHA1-Digest: P6OpXaJc11k4xskcfKfpgbXRMVY=
+
 Name: res/drawable-xxhdpi-v4/voice2x.png
 SHA1-Digest: nuvGJXO8EIB6W1hKje2C12+Vtkk=
 
@@ -8045,7 +8057,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: BYxGaiS+R1L1q/Do5uMTj9D+jq0=
+SHA1-Digest: V5RWGgBU4Lcnq5c9TpHbaR/Um1c=
 
 Name: version.txt
 SHA1-Digest: N6saYwG9YKFIhHj+jH0ssSY5RCQ=

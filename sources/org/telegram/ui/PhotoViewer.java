@@ -7415,7 +7415,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r10.setVisibility(r14);
         r0.muteVideo = r8;
         r10 = r0.muteItem;
-        r13 = NUM; // 0x7var_ float:1.7945908E38 double:1.052935827E-314;
+        r13 = NUM; // 0x7var_ float:1.794591E38 double:1.0529358276E-314;
         r10.setImageResource(r13);
         r10 = r0.editorDoneLayout;
         r10.setVisibility(r14);

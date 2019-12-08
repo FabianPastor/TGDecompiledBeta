@@ -813,6 +813,7 @@ public final class R {
         public static final int video_muted = NUM;
         public static final int video_pip = NUM;
         public static final int video_png = NUM;
+        public static final int videopreview = NUM;
         public static final int voice2x = NUM;
         public static final int volume_off = NUM;
         public static final int volume_on = NUM;

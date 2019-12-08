@@ -3,14 +3,17 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Shader.TileMode;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.TextPaint;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Bitmaps;
@@ -21,21 +24,30 @@ import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeFilename;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 
-public class VideoSeekPreviewImage extends ImageView {
+public class VideoSeekPreviewImage extends View {
     private Bitmap backgroundBitmap;
+    private Paint bitmapPaint = new Paint(2);
+    private RectF bitmapRect = new RectF();
+    private BitmapShader bitmapShader;
+    private Bitmap bitmapToDraw;
     private Bitmap bitmapToRecycle;
     private int currentPixel = -1;
     private VideoSeekPreviewImageDelegate delegate;
     private RectF dstR = new RectF();
     private long duration;
     private AnimatedFileDrawable fileDrawable;
+    private Drawable frameDrawable;
+    private String frameTime;
     private float lastReuqestedProgress;
     private Runnable loadRunnable;
+    private Matrix matrix = new Matrix();
     private Paint paint = new Paint(2);
     private float pendingProgress;
     private int pixelWidth;
     private Runnable progressRunnable;
     private boolean ready;
+    private TextPaint textPaint = new TextPaint(1);
+    private int timeWidth;
     private Uri videoUri;
 
     public interface VideoSeekPreviewImageDelegate {
@@ -45,6 +57,9 @@ public class VideoSeekPreviewImage extends ImageView {
     public VideoSeekPreviewImage(Context context, VideoSeekPreviewImageDelegate videoSeekPreviewImageDelegate) {
         super(context);
         setVisibility(4);
+        this.frameDrawable = context.getResources().getDrawable(NUM);
+        this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
+        this.textPaint.setColor(-1);
         this.delegate = videoSeekPreviewImageDelegate;
     }
 
@@ -58,6 +73,11 @@ public class VideoSeekPreviewImage extends ImageView {
                 return;
             }
         }
+        long j = (long) (((float) this.duration) * f);
+        int i2 = ((int) (j - ((long) ((((int) ((j / 60) / 1000)) * 60) * 1000)))) / 1000;
+        this.frameTime = String.format("%d:%02d", new Object[]{Integer.valueOf((int) ((j / 60) / 1000)), Integer.valueOf(i2)});
+        this.timeWidth = (int) Math.ceil((double) this.textPaint.measureText(this.frameTime));
+        invalidate();
         if (this.progressRunnable != null) {
             Utilities.globalQueue.cancelRunnable(this.progressRunnable);
         }
@@ -66,17 +86,16 @@ public class VideoSeekPreviewImage extends ImageView {
             animatedFileDrawable.resetStream(false);
         }
         DispatchQueue dispatchQueue = Utilities.globalQueue;
-        -$$Lambda$VideoSeekPreviewImage$_Nn9KqOWSzxdI-3Avy3USN7gN_c -__lambda_videoseekpreviewimage__nn9kqowszxdi-3avy3usn7gn_c = new -$$Lambda$VideoSeekPreviewImage$_Nn9KqOWSzxdI-3Avy3USN7gN_c(this, f);
-        this.progressRunnable = -__lambda_videoseekpreviewimage__nn9kqowszxdi-3avy3usn7gn_c;
-        dispatchQueue.postRunnable(-__lambda_videoseekpreviewimage__nn9kqowszxdi-3avy3usn7gn_c);
+        -$$Lambda$VideoSeekPreviewImage$Os3KazHQPmAT5faayq_HBEMpGLU -__lambda_videoseekpreviewimage_os3kazhqpmat5faayq_hbempglu = new -$$Lambda$VideoSeekPreviewImage$Os3KazHQPmAT5faayq_HBEMpGLU(this, f, j);
+        this.progressRunnable = -__lambda_videoseekpreviewimage_os3kazhqpmat5faayq_hbempglu;
+        dispatchQueue.postRunnable(-__lambda_videoseekpreviewimage_os3kazhqpmat5faayq_hbempglu);
     }
 
-    public /* synthetic */ void lambda$setProgress$1$VideoSeekPreviewImage(float f) {
+    public /* synthetic */ void lambda$setProgress$1$VideoSeekPreviewImage(float f, long j) {
         if (this.fileDrawable == null) {
             this.pendingProgress = f;
             return;
         }
-        long j = (long) (((float) this.duration) * f);
         int max = Math.max(200, AndroidUtilities.dp(100.0f));
         Bitmap frameAtTime = this.fileDrawable.getFrameAtTime(j);
         if (frameAtTime != null) {
@@ -113,15 +132,20 @@ public class VideoSeekPreviewImage extends ImageView {
     public /* synthetic */ void lambda$null$0$VideoSeekPreviewImage(Bitmap bitmap) {
         if (bitmap != null) {
             int i;
-            Drawable drawable = getDrawable();
-            if (drawable instanceof BitmapDrawable) {
+            if (this.bitmapToDraw != null) {
                 Bitmap bitmap2 = this.bitmapToRecycle;
                 if (bitmap2 != null) {
                     bitmap2.recycle();
                 }
-                this.bitmapToRecycle = ((BitmapDrawable) drawable).getBitmap();
+                this.bitmapToRecycle = this.bitmapToDraw;
             }
-            setImageBitmap(bitmap);
+            this.bitmapToDraw = bitmap;
+            Bitmap bitmap3 = this.bitmapToDraw;
+            TileMode tileMode = TileMode.CLAMP;
+            this.bitmapShader = new BitmapShader(bitmap3, tileMode, tileMode);
+            this.bitmapShader.setLocalMatrix(this.matrix);
+            this.bitmapPaint.setShader(this.bitmapShader);
+            invalidate();
             int dp = AndroidUtilities.dp(150.0f);
             float width = ((float) bitmap.getWidth()) / ((float) bitmap.getHeight());
             if (width > 1.0f) {
@@ -211,9 +235,15 @@ public class VideoSeekPreviewImage extends ImageView {
             bitmap.recycle();
             this.bitmapToRecycle = null;
         }
-        try {
-            super.onDraw(canvas);
-        } catch (Throwable unused) {
+        if (this.bitmapToDraw != null && this.bitmapShader != null) {
+            this.matrix.reset();
+            float measuredWidth = ((float) getMeasuredWidth()) / ((float) this.bitmapToDraw.getWidth());
+            this.matrix.preScale(measuredWidth, measuredWidth);
+            this.bitmapRect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+            canvas.drawRoundRect(this.bitmapRect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.bitmapPaint);
+            this.frameDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            this.frameDrawable.draw(canvas);
+            canvas.drawText(this.frameTime, (float) ((getMeasuredWidth() - this.timeWidth) / 2), (float) (getMeasuredHeight() - AndroidUtilities.dp(9.0f)), this.textPaint);
         }
     }
 
@@ -232,15 +262,15 @@ public class VideoSeekPreviewImage extends ImageView {
         }
         Utilities.globalQueue.postRunnable(new -$$Lambda$VideoSeekPreviewImage$8K7QnWcf3CoeFLmHeaIUHXjugzI(this));
         setVisibility(4);
-        Drawable drawable = getDrawable();
-        if (drawable instanceof BitmapDrawable) {
+        if (this.bitmapToDraw != null) {
             Bitmap bitmap = this.bitmapToRecycle;
             if (bitmap != null) {
                 bitmap.recycle();
             }
-            this.bitmapToRecycle = ((BitmapDrawable) drawable).getBitmap();
+            this.bitmapToRecycle = this.bitmapToDraw;
         }
-        setImageDrawable(null);
+        this.bitmapToDraw = null;
+        this.bitmapShader = null;
         this.currentPixel = -1;
         this.videoUri = null;
         this.ready = false;

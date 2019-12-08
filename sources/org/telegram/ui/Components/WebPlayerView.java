@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -679,7 +680,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 stringBuilder.setCharAt(i, toLowerCase);
             }
             try {
-                return new String(Base64.decode(stringBuilder.toString(), 0), "UTF-8");
+                return new String(Base64.decode(stringBuilder.toString(), 0), StandardCharsets.UTF_8);
             } catch (Exception unused) {
                 return null;
             }
@@ -2070,7 +2071,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 stringBuilder.append("<script>");
                 stringBuilder.append(str);
                 stringBuilder.append("</script>");
-                str = Base64.encodeToString(stringBuilder.toString().getBytes("UTF-8"), 0);
+                str = Base64.encodeToString(stringBuilder.toString().getBytes(StandardCharsets.UTF_8), 0);
                 WebView access$2100 = WebPlayerView.this.webView;
                 StringBuilder stringBuilder2 = new StringBuilder();
                 stringBuilder2.append("data:text/html;charset=utf-8;base64,");
@@ -2409,7 +2410,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         r1 = r3;
     L_0x0169:
         r3 = new java.lang.String;	 Catch:{ Exception -> 0x017d }
-        r4 = "UTF-8";
+        r4 = java.nio.charset.StandardCharsets.UTF_8;	 Catch:{ Exception -> 0x017d }
         r5 = 0;
         r3.<init>(r0, r5, r2, r4);	 Catch:{ Exception -> 0x0175 }
         r1.append(r3);	 Catch:{ Exception -> 0x0175 }
@@ -3128,6 +3129,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
 
     public boolean isInFullscreen() {
         return this.inFullscreen;
+    }
+
+    public String getYouTubeVideoId(String str) {
+        Matcher matcher = youtubeIdRegex.matcher(str);
+        return matcher.find() ? matcher.group(1) : null;
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:91:0x0147  */

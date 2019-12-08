@@ -15,6 +15,7 @@ public class SeekBar {
     private int cacheColor;
     private int circleColor;
     private SeekBarDelegate delegate;
+    private int dragStartX;
     private int height;
     private int lineHeight = AndroidUtilities.dp(2.0f);
     private boolean pressed = false;
@@ -58,6 +59,7 @@ public class SeekBar {
             if (((float) (i4 - i3)) <= f && f <= ((float) ((i2 + i4) + i3)) && f2 >= 0.0f && f2 <= ((float) i)) {
                 this.pressed = true;
                 this.thumbDX = (int) (f - ((float) i4));
+                this.dragStartX = i4;
                 return true;
             }
         } else if (i == 1 || i == 3) {
@@ -174,11 +176,7 @@ public class SeekBar {
         }
         rectF = this.rect;
         i = thumbWidth;
-        f = (float) (i / 2);
-        i2 = this.height;
-        i3 = i2 / 2;
-        i4 = this.lineHeight;
-        rectF.set(f, (float) (i3 - (i4 / 2)), (float) ((i / 2) + this.thumbX), (float) ((i2 / 2) + (i4 / 2)));
+        rectF.set((float) (i / 2), (float) ((this.height / 2) - (this.lineHeight / 2)), (float) ((i / 2) + (this.pressed ? this.dragStartX : this.thumbX)), (float) ((this.height / 2) + (this.lineHeight / 2)));
         paint.setColor(this.progressColor);
         rectF = this.rect;
         i = thumbWidth;

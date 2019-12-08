@@ -690,6 +690,20 @@ public class EmbedBottomSheet extends BottomSheet {
                 }
             }
         };
+        if (this.videoView.getYouTubeVideoId(this.embedUrl) != null) {
+            this.progressBar.setVisibility(0);
+            this.webView.setVisibility(0);
+            this.imageButtonsContainer.setVisibility(0);
+            this.progressBarBlackBackground.setVisibility(0);
+            this.copyTextButton.setVisibility(4);
+            this.webView.setKeepScreenOn(true);
+            this.videoView.setVisibility(4);
+            this.videoView.getControlsView().setVisibility(4);
+            this.videoView.getTextureView().setVisibility(4);
+            if (this.videoView.getTextureImageView() != null) {
+                this.videoView.getTextureImageView().setVisibility(4);
+            }
+        }
         if (this.orientationEventListener.canDetectOrientation()) {
             this.orientationEventListener.enable();
         } else {
