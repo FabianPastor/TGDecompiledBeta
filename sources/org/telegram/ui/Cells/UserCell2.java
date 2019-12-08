@@ -414,14 +414,14 @@ public class UserCell2 extends FrameLayout {
         if (r1 == 0) goto L_0x011e;
     L_0x010f:
         r1 = r12.statusTextView;
-        r2 = NUM; // 0x7f0e01d9 float:1.8875997E38 double:1.0531623903E-314;
+        r2 = NUM; // 0x7f0e01e2 float:1.8876015E38 double:1.053162395E-314;
         r3 = "BotStatusRead";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
         goto L_0x018a;
     L_0x011e:
         r1 = r12.statusTextView;
-        r2 = NUM; // 0x7f0e01d8 float:1.8875995E38 double:1.05316239E-314;
+        r2 = NUM; // 0x7f0e01e1 float:1.8876013E38 double:1.0531623943E-314;
         r3 = "BotStatusCantRead";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -465,7 +465,7 @@ public class UserCell2 extends FrameLayout {
         r2 = r12.statusOnlineColor;
         r1.setTextColor(r2);
         r1 = r12.statusTextView;
-        r2 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
+        r2 = NUM; // 0x7f0e0734 float:1.8878778E38 double:1.0531630677E-314;
         r3 = "Online";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -501,14 +501,14 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x01d1;
     L_0x01c2:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e025d float:1.8876265E38 double:1.0531624555E-314;
+        r1 = NUM; // 0x7f0e0267 float:1.8876285E38 double:1.0531624605E-314;
         r2 = "ChannelPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
         goto L_0x0228;
     L_0x01d1:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e0260 float:1.887627E38 double:1.053162457E-314;
+        r1 = NUM; // 0x7f0e026a float:1.887629E38 double:1.053162462E-314;
         r2 = "ChannelPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -527,7 +527,7 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x0203;
     L_0x01f4:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
+        r1 = NUM; // 0x7f0e0604 float:1.8878161E38 double:1.0531629175E-314;
         r2 = "MegaLocation";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -538,14 +538,14 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x021a;
     L_0x020b:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e05e6 float:1.88781E38 double:1.0531629027E-314;
+        r1 = NUM; // 0x7f0e0605 float:1.8878163E38 double:1.053162918E-314;
         r2 = "MegaPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
         goto L_0x0228;
     L_0x021a:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e05e9 float:1.8878106E38 double:1.053162904E-314;
+        r1 = NUM; // 0x7f0e0608 float:1.887817E38 double:1.0531629195E-314;
         r2 = "MegaPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);

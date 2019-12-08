@@ -1,7 +1,6 @@
 package org.telegram.messenger.camera;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -14,11 +13,13 @@ import android.hardware.Camera;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 
 @SuppressLint({"NewApi"})
 public class CameraView extends FrameLayout implements SurfaceTextureListener {
@@ -39,11 +40,13 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private long lastDrawTime;
     private Matrix matrix = new Matrix();
     private boolean mirror;
+    private boolean optimizeForBarcode;
     private float outerAlpha;
     private Paint outerPaint = new Paint(1);
     private Size previewSize;
     private TextureView textureView;
     private Matrix txform = new Matrix();
+    private boolean useMaxPreview;
 
     public interface CameraViewDelegate {
         void onCameraCreated(Camera camera);
@@ -69,6 +72,14 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.innerPaint.setColor(Integer.MAX_VALUE);
     }
 
+    public void setOptimizeForBarcode(boolean z) {
+        this.optimizeForBarcode = z;
+        CameraSession cameraSession = this.cameraSession;
+        if (cameraSession != null) {
+            cameraSession.setOptimizeForBarcode(true);
+        }
+    }
+
     /* Access modifiers changed, original: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
@@ -85,6 +96,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
 
     public TextureView getTextureView() {
         return this.textureView;
+    }
+
+    public void setUseMaxPreview(boolean z) {
+        this.useMaxPreview = z;
     }
 
     public boolean hasFrontFaceCamera() {
@@ -107,8 +122,9 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         initCamera();
     }
 
-    /* JADX WARNING: Missing block: B:42:0x00e7, code skipped:
-            if (r0.getHeight() >= 1280) goto L_0x00ea;
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0122  */
+    /* JADX WARNING: Missing block: B:46:0x00f6, code skipped:
+            if (r0.getHeight() >= 1280) goto L_0x00f9;
      */
     public void initCamera() {
         /*
@@ -194,16 +210,26 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     L_0x007e:
         r12 = r15.textureView;
         r12 = r12.getWidth();
-        if (r12 <= 0) goto L_0x00ad;
+        if (r12 <= 0) goto L_0x00bc;
     L_0x0086:
         r12 = r15.textureView;
         r12 = r12.getHeight();
-        if (r12 <= 0) goto L_0x00ad;
+        if (r12 <= 0) goto L_0x00bc;
     L_0x008e:
+        r12 = r15.useMaxPreview;
+        if (r12 == 0) goto L_0x009d;
+    L_0x0092:
+        r12 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r13 = r12.x;
+        r12 = r12.y;
+        r12 = java.lang.Math.max(r13, r12);
+        goto L_0x00a7;
+    L_0x009d:
         r12 = org.telegram.messenger.AndroidUtilities.displaySize;
         r13 = r12.x;
         r12 = r12.y;
         r12 = java.lang.Math.min(r13, r12);
+    L_0x00a7:
         r13 = r3.getHeight();
         r13 = r13 * r12;
         r14 = r3.getWidth();
@@ -211,46 +237,46 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         r14 = r2.getPreviewSizes();
         r12 = org.telegram.messenger.camera.CameraController.chooseOptimalSize(r14, r12, r13, r3);
         r15.previewSize = r12;
-    L_0x00ad:
+    L_0x00bc:
         r12 = r2.getPictureSizes();
         r3 = org.telegram.messenger.camera.CameraController.chooseOptimalSize(r12, r10, r11, r3);
         r12 = r3.getWidth();
-        if (r12 < r9) goto L_0x00ea;
-    L_0x00bb:
+        if (r12 < r9) goto L_0x00f9;
+    L_0x00ca:
         r12 = r3.getHeight();
-        if (r12 < r9) goto L_0x00ea;
-    L_0x00c1:
+        if (r12 < r9) goto L_0x00f9;
+    L_0x00d0:
         r1 = r1 - r0;
         r0 = java.lang.Math.abs(r1);
         r0 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1));
-        if (r0 >= 0) goto L_0x00d0;
-    L_0x00ca:
+        if (r0 >= 0) goto L_0x00df;
+    L_0x00d9:
         r0 = new org.telegram.messenger.camera.Size;
         r0.<init>(r4, r5);
-        goto L_0x00d5;
-    L_0x00d0:
+        goto L_0x00e4;
+    L_0x00df:
         r0 = new org.telegram.messenger.camera.Size;
         r0.<init>(r7, r8);
-    L_0x00d5:
+    L_0x00e4:
         r1 = r2.getPictureSizes();
         r0 = org.telegram.messenger.camera.CameraController.chooseOptimalSize(r1, r11, r10, r0);
         r1 = r0.getWidth();
-        if (r1 < r9) goto L_0x00eb;
-    L_0x00e3:
+        if (r1 < r9) goto L_0x00fa;
+    L_0x00f2:
         r1 = r0.getHeight();
-        if (r1 >= r9) goto L_0x00ea;
-    L_0x00e9:
-        goto L_0x00eb;
-    L_0x00ea:
+        if (r1 >= r9) goto L_0x00f9;
+    L_0x00f8:
+        goto L_0x00fa;
+    L_0x00f9:
         r0 = r3;
-    L_0x00eb:
+    L_0x00fa:
         r1 = r15.textureView;
         r1 = r1.getSurfaceTexture();
         r3 = r15.previewSize;
-        if (r3 == 0) goto L_0x0122;
-    L_0x00f5:
-        if (r1 == 0) goto L_0x0122;
-    L_0x00f7:
+        if (r3 == 0) goto L_0x013a;
+    L_0x0104:
+        if (r1 == 0) goto L_0x013a;
+    L_0x0106:
         r3 = r3.getWidth();
         r4 = r15.previewSize;
         r4 = r4.getHeight();
@@ -260,6 +286,12 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         r5 = 256; // 0x100 float:3.59E-43 double:1.265E-321;
         r3.<init>(r2, r4, r0, r5);
         r15.cameraSession = r3;
+        r0 = r15.optimizeForBarcode;
+        if (r0 == 0) goto L_0x0127;
+    L_0x0122:
+        r2 = r15.cameraSession;
+        r2.setOptimizeForBarcode(r0);
+    L_0x0127:
         r0 = org.telegram.messenger.camera.CameraController.getInstance();
         r2 = r15.cameraSession;
         r3 = new org.telegram.messenger.camera.-$$Lambda$CameraView$p1Q9XvCpkKK5Re9wn8tNGeDQ4vs;
@@ -267,7 +299,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         r4 = new org.telegram.messenger.camera.-$$Lambda$CameraView$l4G-1k9CLASSNAMEfFIDGX-fnY3ljxHc0;
         r4.<init>(r15);
         r0.open(r2, r1, r3, r4);
-    L_0x0122:
+    L_0x013a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraView.initCamera():void");
@@ -329,9 +361,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     private void checkPreviewMatrix() {
-        Size size = this.previewSize;
-        if (size != null) {
-            adjustAspectRatio(size.getWidth(), this.previewSize.getHeight(), ((Activity) getContext()).getWindowManager().getDefaultDisplay().getRotation());
+        if (this.previewSize != null) {
+            adjustAspectRatio(this.previewSize.getWidth(), this.previewSize.getHeight(), ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation());
         }
     }
 
@@ -369,7 +400,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         }
         this.textureView.setTransform(this.txform);
         Matrix matrix = new Matrix();
-        matrix.postRotate((float) this.cameraSession.getDisplayOrientation());
+        CameraSession cameraSession = this.cameraSession;
+        if (cameraSession != null) {
+            matrix.postRotate((float) cameraSession.getDisplayOrientation());
+        }
         matrix.postScale(f3 / 2000.0f, f4 / 2000.0f);
         matrix.postTranslate(f3 / 2.0f, f4 / 2.0f);
         matrix.invert(this.matrix);

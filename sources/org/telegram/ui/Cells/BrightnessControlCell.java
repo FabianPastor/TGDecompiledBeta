@@ -11,6 +11,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SeekBarView;
+import org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate;
 
 public class BrightnessControlCell extends FrameLayout {
     private ImageView leftImageView;
@@ -35,7 +36,14 @@ public class BrightnessControlCell extends FrameLayout {
             }
         };
         this.seekBarView.setReportChanges(true);
-        this.seekBarView.setDelegate(new -$$Lambda$GN4ZDAm3ZJLTBxjR6_2pFIyDFuo(this));
+        this.seekBarView.setDelegate(new SeekBarViewDelegate() {
+            public void onSeekBarPressed(boolean z) {
+            }
+
+            public void onSeekBarDrag(boolean z, float f) {
+                BrightnessControlCell.this.didChangedValue(f);
+            }
+        });
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 58.0f, 9.0f, 58.0f, 0.0f));
         this.rightImageView = new ImageView(context);
         this.rightImageView.setImageResource(NUM);

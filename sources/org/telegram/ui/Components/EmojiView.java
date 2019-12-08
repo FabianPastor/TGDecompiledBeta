@@ -2312,11 +2312,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 if (featuredStickerSetInfoCell.isInstalled()) {
                     EmojiView.this.removingStickerSets.put(stickerSet.set.id, stickerSet);
                     EmojiView.this.delegate.onStickerSetRemove(featuredStickerSetInfoCell.getStickerSet());
-                } else {
-                    EmojiView.this.installingStickerSets.put(stickerSet.set.id, stickerSet);
-                    EmojiView.this.delegate.onStickerSetAdd(featuredStickerSetInfoCell.getStickerSet());
+                    return;
                 }
-                featuredStickerSetInfoCell.setDrawProgress(true);
+                EmojiView.this.installingStickerSets.put(stickerSet.set.id, stickerSet);
+                EmojiView.this.delegate.onStickerSetAdd(featuredStickerSetInfoCell.getStickerSet());
             }
         }
 
@@ -2427,23 +2426,19 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     StickerSetCovered stickerSetCovered = (StickerSetCovered) this.cache.get(i);
                     FeaturedStickerSetInfoCell featuredStickerSetInfoCell = (FeaturedStickerSetInfoCell) viewHolder.itemView;
                     Object obj2 = EmojiView.this.installingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0 ? 1 : null;
-                    Object obj3 = EmojiView.this.removingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0 ? 1 : null;
-                    if (!(obj2 == null && obj3 == null)) {
-                        if (obj2 != null && featuredStickerSetInfoCell.isInstalled()) {
-                            EmojiView.this.installingStickerSets.remove(stickerSetCovered.set.id);
-                            obj2 = null;
-                        } else if (!(obj3 == null || featuredStickerSetInfoCell.isInstalled())) {
-                            EmojiView.this.removingStickerSets.remove(stickerSetCovered.set.id);
-                            obj3 = null;
-                        }
-                    }
-                    if (obj2 == null && obj3 == null) {
+                    if (EmojiView.this.removingStickerSets.indexOfKey(stickerSetCovered.set.id) < 0) {
                         z = false;
                     }
-                    featuredStickerSetInfoCell.setDrawProgress(z);
-                    itemViewType = TextUtils.isEmpty(this.searchQuery) ? -1 : AndroidUtilities.indexOfIgnoreCase(stickerSetCovered.set.title, this.searchQuery);
-                    if (itemViewType >= 0) {
-                        featuredStickerSetInfoCell.setStickerSet(stickerSetCovered, false, itemViewType, this.searchQuery.length());
+                    if (obj2 != null || z) {
+                        if (obj2 != null && featuredStickerSetInfoCell.isInstalled()) {
+                            EmojiView.this.installingStickerSets.remove(stickerSetCovered.set.id);
+                        } else if (z && !featuredStickerSetInfoCell.isInstalled()) {
+                            EmojiView.this.removingStickerSets.remove(stickerSetCovered.set.id);
+                        }
+                    }
+                    int indexOfIgnoreCase = TextUtils.isEmpty(this.searchQuery) ? -1 : AndroidUtilities.indexOfIgnoreCase(stickerSetCovered.set.title, this.searchQuery);
+                    if (indexOfIgnoreCase >= 0) {
+                        featuredStickerSetInfoCell.setStickerSet(stickerSetCovered, false, false, indexOfIgnoreCase, this.searchQuery.length());
                         return;
                     }
                     featuredStickerSetInfoCell.setStickerSet(stickerSetCovered, false);
@@ -2650,11 +2645,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 if (featuredStickerSetInfoCell.isInstalled()) {
                     EmojiView.this.removingStickerSets.put(stickerSet.set.id, stickerSet);
                     EmojiView.this.delegate.onStickerSetRemove(featuredStickerSetInfoCell.getStickerSet());
-                } else {
-                    EmojiView.this.installingStickerSets.put(stickerSet.set.id, stickerSet);
-                    EmojiView.this.delegate.onStickerSetAdd(featuredStickerSetInfoCell.getStickerSet());
+                    return;
                 }
-                featuredStickerSetInfoCell.setDrawProgress(true);
+                EmojiView.this.installingStickerSets.put(stickerSet.set.id, stickerSet);
+                EmojiView.this.delegate.onStickerSetAdd(featuredStickerSetInfoCell.getStickerSet());
             }
         }
 
@@ -2675,20 +2669,17 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     MediaDataController.getInstance(EmojiView.this.currentAccount).markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
                 }
                 Object obj = EmojiView.this.installingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0 ? 1 : null;
-                Object obj2 = EmojiView.this.removingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0 ? 1 : null;
-                if (!(obj == null && obj2 == null)) {
-                    if (obj != null && featuredStickerSetInfoCell.isInstalled()) {
-                        EmojiView.this.installingStickerSets.remove(stickerSetCovered.set.id);
-                        obj = null;
-                    } else if (!(obj2 == null || featuredStickerSetInfoCell.isInstalled())) {
-                        EmojiView.this.removingStickerSets.remove(stickerSetCovered.set.id);
-                        obj2 = null;
-                    }
-                }
-                if (!(obj == null && obj2 == null)) {
+                if (EmojiView.this.removingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0) {
                     z = true;
                 }
-                featuredStickerSetInfoCell.setDrawProgress(z);
+                if (obj == null && !z) {
+                    return;
+                }
+                if (obj != null && featuredStickerSetInfoCell.isInstalled()) {
+                    EmojiView.this.installingStickerSets.remove(stickerSetCovered.set.id);
+                } else if (z && !featuredStickerSetInfoCell.isInstalled()) {
+                    EmojiView.this.removingStickerSets.remove(stickerSetCovered.set.id);
+                }
             }
         }
 
@@ -5175,7 +5166,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             r0[8] = LocaleController.getString("Emoji8", NUM);
             while (i2 < this.emojiIcons.length) {
                 if (i2 != 0 || !Emoji.recentEmoji.isEmpty()) {
-                    this.emojiTabs.addIconTab(this.emojiIcons[i2]).setContentDescription(r0[i2]);
+                    this.emojiTabs.addIconTab(i2, this.emojiIcons[i2]).setContentDescription(r0[i2]);
                 }
                 i2++;
             }
@@ -5193,12 +5184,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             this.trendingTabNum = -2;
             this.stickersTabOffset = 0;
             int currentPosition = scrollSlidingTabStrip.getCurrentPosition();
-            this.stickersTab.removeTabs();
+            ScrollSlidingTabStrip scrollSlidingTabStrip2 = this.stickersTab;
+            int i2 = 1;
+            boolean z = (getParent() == null || getVisibility() != 0 || (this.installingStickerSets.size() == 0 && this.removingStickerSets.size() == 0)) ? false : true;
+            scrollSlidingTabStrip2.beginUpdate(z);
             ArrayList unreadStickerSets = MediaDataController.getInstance(this.currentAccount).getUnreadStickerSets();
             TrendingGridAdapter trendingGridAdapter = this.trendingGridAdapter;
-            int i2 = 2;
             if (!(trendingGridAdapter == null || trendingGridAdapter.getItemCount() == 0 || unreadStickerSets.isEmpty())) {
-                this.stickersCounter = this.stickersTab.addIconTabWithCounter(this.stickerIcons[2]);
+                this.stickersCounter = this.stickersTab.addIconTabWithCounter(3, this.stickerIcons[2]);
                 i = this.stickersTabOffset;
                 this.trendingTabNum = i;
                 this.stickersTabOffset = i + 1;
@@ -5210,14 +5203,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 i = this.stickersTabOffset;
                 this.favTabBum = i;
                 this.stickersTabOffset = i + 1;
-                this.stickersTab.addIconTab(this.stickerIcons[1]).setContentDescription(LocaleController.getString("FavoriteStickers", NUM));
+                this.stickersTab.addIconTab(1, this.stickerIcons[1]).setContentDescription(LocaleController.getString("FavoriteStickers", NUM));
                 obj = 1;
             }
             if (!this.recentStickers.isEmpty()) {
                 i = this.stickersTabOffset;
                 this.recentTabBum = i;
                 this.stickersTabOffset = i + 1;
-                this.stickersTab.addIconTab(this.stickerIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", NUM));
+                this.stickersTab.addIconTab(0, this.stickerIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", NUM));
                 obj = 1;
             }
             this.stickerSets.clear();
@@ -5318,8 +5311,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             trendingGridAdapter = this.trendingGridAdapter;
             if (!(trendingGridAdapter == null || trendingGridAdapter.getItemCount() == 0 || !unreadStickerSets.isEmpty())) {
                 this.trendingTabNum = this.stickersTabOffset + this.stickerSets.size();
-                this.stickersTab.addIconTab(this.stickerIcons[2]).setContentDescription(LocaleController.getString("FeaturedStickers", NUM));
+                this.stickersTab.addIconTab(2, this.stickerIcons[2]).setContentDescription(LocaleController.getString("FeaturedStickers", NUM));
             }
+            this.stickersTab.commitUpdate();
             this.stickersTab.updateTabStyles();
             if (currentPosition != 0) {
                 this.stickersTab.onPageScrolled(currentPosition, currentPosition);
@@ -5328,8 +5322,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             if ((obj2 == null || (this.trendingTabNum == 0 && MediaDataController.getInstance(this.currentAccount).areAllTrendingStickerSetsUnread())) && this.trendingTabNum >= 0) {
                 if (this.scrolledToTrending == 0) {
                     showTrendingTab(true);
-                    if (obj2 == null) {
-                        i2 = 1;
+                    if (obj2 != null) {
+                        i2 = 2;
                     }
                     this.scrolledToTrending = i2;
                 }
@@ -5903,27 +5897,21 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             StickerSetCovered stickerSet = featuredStickerSetInfoCell.getStickerSet();
                             boolean z = true;
                             boolean z2 = unreadStickerSets != null && unreadStickerSets.contains(Long.valueOf(stickerSet.set.id));
-                            featuredStickerSetInfoCell.setStickerSet(stickerSet, z2);
+                            featuredStickerSetInfoCell.setStickerSet(stickerSet, z2, true);
                             if (z2) {
                                 MediaDataController.getInstance(this.currentAccount).markFaturedStickersByIdAsRead(stickerSet.set.id);
                             }
                             Object obj = this.installingStickerSets.indexOfKey(stickerSet.set.id) >= 0 ? 1 : null;
-                            Object obj2 = this.removingStickerSets.indexOfKey(stickerSet.set.id) >= 0 ? 1 : null;
-                            if (!(obj == null && obj2 == null)) {
+                            if (this.removingStickerSets.indexOfKey(stickerSet.set.id) < 0) {
+                                z = false;
+                            }
+                            if (obj != null || z) {
                                 if (obj != null && featuredStickerSetInfoCell.isInstalled()) {
                                     this.installingStickerSets.remove(stickerSet.set.id);
-                                    obj = null;
-                                } else if (!(obj2 == null || featuredStickerSetInfoCell.isInstalled())) {
+                                } else if (z && !featuredStickerSetInfoCell.isInstalled()) {
                                     this.removingStickerSets.remove(stickerSet.set.id);
-                                    obj2 = null;
                                 }
                             }
-                            if (obj == null) {
-                                if (obj2 == null) {
-                                    z = false;
-                                }
-                            }
-                            featuredStickerSetInfoCell.setDrawProgress(z);
                         }
                     }
                 }
@@ -5940,6 +5928,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         int i3 = 0;
         if (i == NotificationCenter.stickersDidLoad) {
             if (((Integer) objArr[0]).intValue() == 0) {
+                updateStickerTabs();
                 TrendingGridAdapter trendingGridAdapter = this.trendingGridAdapter;
                 if (trendingGridAdapter != null) {
                     if (this.trendingLoaded) {
@@ -5948,7 +5937,6 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         trendingGridAdapter.notifyDataSetChanged();
                     }
                 }
-                updateStickerTabs();
                 reloadStickersAdapter();
                 checkPanels();
             }

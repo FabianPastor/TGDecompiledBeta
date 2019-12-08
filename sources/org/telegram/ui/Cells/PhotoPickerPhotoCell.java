@@ -127,9 +127,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
             StringBuilder stringBuilder;
             if (this.photoEntry.isVideo) {
                 this.videoInfoContainer.setVisibility(0);
-                int i = this.photoEntry.duration;
-                i -= (i / 60) * 60;
-                this.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(r5), Integer.valueOf(i)}));
+                this.videoTextView.setText(AndroidUtilities.formatShortDuration(this.photoEntry.duration));
                 StringBuilder stringBuilder2 = new StringBuilder();
                 stringBuilder2.append(LocaleController.getString("AttachVideo", NUM));
                 stringBuilder2.append(", ");

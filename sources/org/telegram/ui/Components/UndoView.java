@@ -246,9 +246,9 @@ public class UndoView extends FrameLayout {
         r0.lastUpdateTime = r5;
         r5 = r16.isTooltipAction();
         r6 = 0;
-        r7 = NUM; // 0x7f0e0281 float:1.8876338E38 double:1.0531624733E-314;
+        r7 = NUM; // 0x7f0e028d float:1.8876362E38 double:1.0531624793E-314;
         r8 = "ChatArchived";
-        r9 = NUM; // 0x7f0e02a2 float:1.8876405E38 double:1.0531624896E-314;
+        r9 = NUM; // 0x7f0e02ae float:1.8876429E38 double:1.0531624956E-314;
         r10 = "ChatsArchived";
         r11 = NUM; // 0x42680000 float:58.0 double:5.50444465E-315;
         r12 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
@@ -270,7 +270,7 @@ public class UndoView extends FrameLayout {
     L_0x004c:
         r2 = r20;
         r2 = (org.telegram.tgnet.TLRPC.User) r2;
-        r3 = NUM; // 0x7f0e070c float:1.8878696E38 double:1.053163048E-314;
+        r3 = NUM; // 0x7f0e072f float:1.8878767E38 double:1.053163065E-314;
         r5 = new java.lang.Object[r4];
         r2 = org.telegram.messenger.UserObject.getFirstName(r2);
         r5[r15] = r2;
@@ -281,10 +281,10 @@ public class UndoView extends FrameLayout {
         r1 = 6;
         if (r3 != r1) goto L_0x007e;
     L_0x0066:
-        r1 = NUM; // 0x7f0e00f9 float:1.8875543E38 double:1.0531622797E-314;
+        r1 = NUM; // 0x7f0e00fc float:1.8875549E38 double:1.053162281E-314;
         r2 = "ArchiveHidden";
         r2 = org.telegram.messenger.LocaleController.getString(r2, r1);
-        r1 = NUM; // 0x7f0e00fa float:1.8875545E38 double:1.05316228E-314;
+        r1 = NUM; // 0x7f0e00fd float:1.887555E38 double:1.0531622816E-314;
         r3 = "ArchiveHiddenInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = NUM; // 0x7f0d0005 float:1.8742125E38 double:1.05312978E-314;
@@ -294,10 +294,10 @@ public class UndoView extends FrameLayout {
         r1 = 7;
         if (r3 != r1) goto L_0x0097;
     L_0x0081:
-        r1 = NUM; // 0x7f0e0101 float:1.8875559E38 double:1.0531622836E-314;
+        r1 = NUM; // 0x7f0e0104 float:1.8875565E38 double:1.053162285E-314;
         r2 = "ArchivePinned";
         r2 = org.telegram.messenger.LocaleController.getString(r2, r1);
-        r1 = NUM; // 0x7f0e0102 float:1.887556E38 double:1.053162284E-314;
+        r1 = NUM; // 0x7f0e0105 float:1.8875567E38 double:1.0531622856E-314;
         r3 = "ArchivePinnedInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
     L_0x0093:
@@ -313,7 +313,7 @@ public class UndoView extends FrameLayout {
         r1 = org.telegram.messenger.LocaleController.getString(r10, r9);
     L_0x00a3:
         r2 = r1;
-        r1 = NUM; // 0x7f0e0282 float:1.887634E38 double:1.053162474E-314;
+        r1 = NUM; // 0x7f0e028e float:1.8876364E38 double:1.0531624797E-314;
         r3 = "ChatArchivedInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         goto L_0x0093;
@@ -322,7 +322,7 @@ public class UndoView extends FrameLayout {
         r5 = (org.telegram.tgnet.TLRPC.User) r5;
         if (r3 != r2) goto L_0x00ca;
     L_0x00b4:
-        r2 = NUM; // 0x7f0e03c6 float:1.8876997E38 double:1.053162634E-314;
+        r2 = NUM; // 0x7f0e03de float:1.8877045E38 double:1.053162646E-314;
         r3 = new java.lang.Object[r4];
         r5 = org.telegram.messenger.UserObject.getFirstName(r5);
         r3[r15] = r5;
@@ -331,7 +331,7 @@ public class UndoView extends FrameLayout {
         r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2);
         goto L_0x00df;
     L_0x00ca:
-        r2 = NUM; // 0x7f0e03c7 float:1.8876999E38 double:1.0531626344E-314;
+        r2 = NUM; // 0x7f0e03df float:1.8877048E38 double:1.0531626462E-314;
         r3 = new java.lang.Object[r4];
         r5 = org.telegram.messenger.UserObject.getFirstName(r5);
         r3[r15] = r5;
@@ -427,7 +427,7 @@ public class UndoView extends FrameLayout {
         if (r3 != 0) goto L_0x01ac;
     L_0x019d:
         r3 = r0.infoTextView;
-        r5 = NUM; // 0x7f0e051b float:1.8877688E38 double:1.0531628024E-314;
+        r5 = NUM; // 0x7f0e0536 float:1.8877743E38 double:1.0531628157E-314;
         r6 = "HistoryClearedUndo";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setText(r5);
@@ -448,21 +448,21 @@ public class UndoView extends FrameLayout {
         if (r3 != 0) goto L_0x01d7;
     L_0x01c8:
         r3 = r0.infoTextView;
-        r5 = NUM; // 0x7f0e0235 float:1.8876183E38 double:1.053162436E-314;
+        r5 = NUM; // 0x7f0e023f float:1.8876204E38 double:1.0531624407E-314;
         r6 = "ChannelDeletedUndo";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setText(r5);
         goto L_0x01f4;
     L_0x01d7:
         r3 = r0.infoTextView;
-        r5 = NUM; // 0x7f0e04f5 float:1.8877611E38 double:1.0531627836E-314;
+        r5 = NUM; // 0x7f0e050f float:1.8877664E38 double:1.0531627964E-314;
         r6 = "GroupDeletedUndo";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setText(r5);
         goto L_0x01f4;
     L_0x01e6:
         r3 = r0.infoTextView;
-        r5 = NUM; // 0x7f0e0285 float:1.8876346E38 double:1.0531624753E-314;
+        r5 = NUM; // 0x7f0e0291 float:1.887637E38 double:1.053162481E-314;
         r6 = "ChatDeletedUndo";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setText(r5);

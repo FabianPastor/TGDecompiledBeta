@@ -200,7 +200,6 @@
     <string name="AddToStickers">Toevoegen aan stickers</string>
     <string name="AddToTheGroup">%1$s toevoegen aan de groep?</string>
     <string name="AddToTheGroupForwardCount">Aantal recente berichten om door te sturen:</string>
-    <string name="AddToTheGroupTitle">%1$s toevoegen aan de groep %2$s?</string>
     <string name="AddedToFavorites">Sticker toegevoegd aan favorieten</string>
     <string name="AdminWillBeRemoved">%1$s zal verwijderd worden als beheerder als je een beperking oplegt.</string>
     <string name="Agree">Akkoord</string>
@@ -710,7 +709,6 @@
     <string name="ChooseFromGallery">Uploaden uit galerij</string>
     <string name="ChooseFromSearch">Online zoeken</string>
     <string name="ChooseFromYourStickers">Kies uit je stickers</string>
-    <string name="ChooseMapPreviewProvider">Kies kaartvoorvertoning</string>
     <string name="ChoosePhoto">Afbeelding kiezen</string>
     <string name="ChooseStickerSet">KIES STICKERBUNDEL</string>
     <string name="ChooseStickerSetMy">Je kunt persoonlijke stickerbundels maken via de bot @stickers.</string>
@@ -869,7 +867,6 @@
     <string name="DeleteForUser">Verwijder voor %1$s</string>
     <string name="DeleteFromFavorites">Verwijder uit favorieten</string>
     <string name="DeleteGif">GIF verwijderen?</string>
-    <string name="DeleteLocalization">Vertaling verwijderen?</string>
     <string name="DeleteMega">Groep verwijderen</string>
     <string name="DeleteMegaMenu">Groep verwijderen</string>
     <string name="DeleteMessagesOption">Mijn berichten intrekken</string>
@@ -1250,7 +1247,6 @@
     <string name="GlobalSearch">Wereldwijd zoeken</string>
     <string name="GlobalSendMessageRestricted">Berichten schrijven is niet toegestaan in deze groep.</string>
     <string name="GotAQuestion">Heb je een vraag\10over Telegram?</string>
-    <string name="GpsDisabledAlert">GPS lijkt uitgeschakeld, schakel GPS in om locatiegebaseerde functies te gebruiken.</string>
     <string name="Grain">Korrel</string>
     <string name="Gray">Grijs</string>
     <string name="Green">Groen</string>
@@ -1429,7 +1425,6 @@
     <string name="LocalAudioCache">Spraak/Video-berichten</string>
     <string name="LocalCache">Overige bestanden</string>
     <string name="LocalDatabase">Lokale database</string>
-    <string name="LocalDatabaseClear">Gecachet tekstberichten wissen?</string>
     <string name="LocalDatabaseInfo">Het opschonen van de lokale database zal de tekst van gecachet berichten verwijderen en de database comprimeren om ruimte te besparen. Telegram heeft wat ruimte nodig om te kunnen functioneren, dus de databasegrootte zal nooit nul worden.\10\10Dit kan enkele minuten duren.</string>
     <string name="LocalDocumentCache">Bestanden</string>
     <string name="LocalGifCache">GIFs</string>
@@ -1600,7 +1595,6 @@
     <string name="NewThemePreviewReply">Good morning! ��</string>
     <string name="NewThemeTitle">New Theme</string>
     <string name="Next">Volgende</string>
-    <string name="NoAudio">Voeg bestanden toe aan de muziekbibliotheek op je apparaat om ze hier te zien.</string>
     <string name="NoBlocked">Geen geblokkeerde gebruikers</string>
     <string name="NoBlockedChannel2">Gebruikers verwijderd door beheerders kunnen geen lid worden via uitnodigingslinks</string>
     <string name="NoBlockedGroup2">Gebruikers verwijderd door beheerders kunnen geen lid worden via uitnodigingslinks</string>
@@ -2418,12 +2412,8 @@
     <string name="SendAsFile">Als bestand</string>
     <string name="SendAsFiles">Als bestand</string>
     <string name="SendByEnter">Versturen met Enter</string>
-    <string name="SendContactTo">Contact delen met %1$s?</string>
-    <string name="SendContactToGroup">Contact delen met %1$s?</string>
     <string name="SendDayAt">\'Stuur op\' d MMM \'om\' HH:mm</string>
     <string name="SendDayYearAt">\'Stuur op\' d MMM yyyy \'om\' HH:mm</string>
-    <string name="SendGameTo">Spel delen met %1$s?</string>
-    <string name="SendGameToGroup">Spel delen met %1$s?</string>
     <string name="SendGifPreview">GIF sturen</string>
     <string name="SendItems">%1$s versturen</string>
     <string name="SendLiveLocation">Deel mijn live-locatie</string>
@@ -2435,8 +2425,6 @@
     <string name="SendMessageRestricted">Je bent beperkt in het plaatsen van berichten door de groepsbeheerders tot%1$s</string>
     <string name="SendMessageRestrictedForever">Je bent beperkt in het plaatsen van berichten door de groepsbeheerders.</string>
     <string name="SendMessageTo">Mensen toevoegen</string>
-    <string name="SendMessagesTo">Berichten naar %1$s versturen?</string>
-    <string name="SendMessagesToGroup">Berichten naar %1$s versturen?</string>
     <string name="SendSelectedLocation">Geselecteerde locatie sturen</string>
     <string name="SendSticker">STICKER STUREN</string>
     <string name="SendStickerPreview">Sticker sturen</string>
@@ -2581,9 +2569,6 @@
     <string name="StopAllLocationSharings">ALLES STOPPEN</string>
     <string name="StopDownload">Stop download</string>
     <string name="StopLiveLocation">Delen van locatie stoppen</string>
-    <string name="StopLiveLocationAlertAll">Echt stoppen met het delen van je live-locatie?</string>
-    <string name="StopLiveLocationAlertToGroup">Echt stoppen met het delen van je live-locatie met %1$s?</string>
-    <string name="StopLiveLocationAlertToUser">Echt stoppen met het delen van je live-locatie met %1$s?</string>
     <string name="StopLoading">Stopped met laden?</string>
     <string name="StopPoll">Poll stoppen</string>
     <string name="StopPollAlertText">Als je deze poll nu stopt kan niemand meer stemmen. Deze actie kan niet ongedaan worden gemaakt.</string>
@@ -2610,7 +2595,6 @@
     <string name="SyncContacts">Contacten synchroniseren</string>
     <string name="SyncContactsAdded">Contacten van dit apparaat zijn aan je account toegevoegd.</string>
     <string name="SyncContactsDelete">Wis gesynchroniseerde contacten</string>
-    <string name="SyncContactsDeleteInfo">Hiermee verwijder je je contacten van de Telegram-servers.\10Als \'Contacten Synchroniseren\' is ingeschakeld worden je contacten opnieuw gesynchroniseerd.</string>
     <string name="SyncContactsInfoOff">Inschakelen om contacten continu naar je account te synchroniseren</string>
     <string name="SyncContactsInfoOn">Contacten van dit apparaat worden aan je account toegevoegd.</string>
     <string name="SyncContactsOff">Contacten van dit apparaat worden niet aan dit account toegevoegd.</string>
@@ -2642,7 +2626,6 @@
     <string name="TerminateSessionInfo">Tik op een sessie om deze te beëindigen.</string>
     <string name="TerminateSessionQuestion">Deze sessie beëindigen?</string>
     <string name="TerminateWebSessionInfo">Tik om de verbinding met je Telegram-account te verbreken.</string>
-    <string name="TerminateWebSessionQuestion">Verbinding met %1$s verbreken?</string>
     <string name="TerminateWebSessionStop">%1$s blokkeren</string>
     <string name="TermsOfService">Gebruiksvoorwaarden</string>
     <string name="TermsOfServiceLogin">Door aan te melden ga je akkoord \10met onze *Gebruiksvoorwaarden*.</string>

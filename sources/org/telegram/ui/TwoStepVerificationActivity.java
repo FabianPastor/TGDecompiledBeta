@@ -500,19 +500,22 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$null$2$TwoStepVerificationActivity(TL_error tL_error, TLObject tLObject) {
         needHideProgress();
-        String str = "AppName";
         if (tL_error == null) {
             TL_auth_passwordRecovery tL_auth_passwordRecovery = (TL_auth_passwordRecovery) tLObject;
             Builder builder = new Builder(getParentActivity());
             builder.setMessage(LocaleController.formatString("RestoreEmailSent", NUM, tL_auth_passwordRecovery.email_pattern));
-            builder.setTitle(LocaleController.getString(str, NUM));
+            builder.setTitle(LocaleController.getString("RestoreEmailSentTitle", NUM));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$TwoStepVerificationActivity$o3LczIT3DtDztCPkC-aGamfNhzE(this, tL_auth_passwordRecovery));
             Dialog showDialog = showDialog(builder.create());
             if (showDialog != null) {
                 showDialog.setCanceledOnTouchOutside(false);
                 showDialog.setCancelable(false);
+                return;
             }
-        } else if (tL_error.text.startsWith("FLOOD_WAIT")) {
+            return;
+        }
+        String str = "AppName";
+        if (tL_error.text.startsWith("FLOOD_WAIT")) {
             String formatPluralString;
             int intValue = Utilities.parseInt(tL_error.text).intValue();
             if (intValue < 60) {
@@ -521,9 +524,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 formatPluralString = LocaleController.formatPluralString("Minutes", intValue / 60);
             }
             showAlertWithText(LocaleController.getString(str, NUM), LocaleController.formatString("FloodWaitTime", NUM, formatPluralString));
-        } else {
-            showAlertWithText(LocaleController.getString(str, NUM), tL_error.text);
+            return;
         }
+        showAlertWithText(LocaleController.getString(str, NUM), tL_error.text);
     }
 
     public /* synthetic */ void lambda$null$1$TwoStepVerificationActivity(TL_auth_passwordRecovery tL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
@@ -551,6 +554,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$createView$9$TwoStepVerificationActivity(View view, int i) {
         TwoStepVerificationActivity twoStepVerificationActivity;
+        Builder builder;
         if (i == this.setPasswordRow || i == this.changePasswordRow) {
             twoStepVerificationActivity = new TwoStepVerificationActivity(this.currentAccount, 1);
             twoStepVerificationActivity.currentPasswordHash = this.currentPasswordHash;
@@ -567,43 +571,49 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             twoStepVerificationActivity.emailOnly = true;
             twoStepVerificationActivity.passwordSetState = 3;
             presentFragment(twoStepVerificationActivity);
-        } else {
-            String str = "OK";
-            String str2 = "AppName";
-            Builder builder;
-            if (i == this.turnPasswordOffRow || i == this.abortPasswordRow) {
-                CharSequence string;
-                builder = new Builder(getParentActivity());
-                if (i == this.abortPasswordRow) {
-                    TL_account_password tL_account_password = this.currentPassword;
-                    if (tL_account_password == null || !tL_account_password.has_password) {
-                        string = LocaleController.getString("CancelPasswordQuestion", NUM);
-                    } else {
-                        string = LocaleController.getString("CancelEmailQuestion", NUM);
-                    }
+        } else if (i == this.turnPasswordOffRow || i == this.abortPasswordRow) {
+            CharSequence string;
+            CharSequence string2;
+            CharSequence string3;
+            builder = new Builder(getParentActivity());
+            if (i == this.abortPasswordRow) {
+                TL_account_password tL_account_password = this.currentPassword;
+                if (tL_account_password == null || !tL_account_password.has_password) {
+                    string = LocaleController.getString("CancelPasswordQuestion", NUM);
                 } else {
-                    string = LocaleController.getString("TurnPasswordOffQuestion", NUM);
-                    if (this.currentPassword.has_secure_values) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(string);
-                        stringBuilder.append("\n\n");
-                        stringBuilder.append(LocaleController.getString("TurnPasswordOffPassport", NUM));
-                        string = stringBuilder.toString();
-                    }
+                    string = LocaleController.getString("CancelEmailQuestion", NUM);
                 }
-                builder.setMessage(string);
-                builder.setTitle(LocaleController.getString(str2, NUM));
-                builder.setPositiveButton(LocaleController.getString(str, NUM), new -$$Lambda$TwoStepVerificationActivity$10etTYa5XWjUNmwZWDDim1g1lNY(this));
-                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                showDialog(builder.create());
-            } else if (i == this.resendCodeRow) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_resendPasswordEmail(), -$$Lambda$TwoStepVerificationActivity$4F6YJgV3MBVhnoAYE2KFt09BlNg.INSTANCE);
-                builder = new Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString("ResendCodeInfo", NUM));
-                builder.setTitle(LocaleController.getString(str2, NUM));
-                builder.setPositiveButton(LocaleController.getString(str, NUM), null);
-                showDialog(builder.create());
+                string2 = LocaleController.getString("CancelEmailQuestionTitle", NUM);
+                string3 = LocaleController.getString("Abort", NUM);
+            } else {
+                string = LocaleController.getString("TurnPasswordOffQuestion", NUM);
+                if (this.currentPassword.has_secure_values) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(string);
+                    stringBuilder.append("\n\n");
+                    stringBuilder.append(LocaleController.getString("TurnPasswordOffPassport", NUM));
+                    string = stringBuilder.toString();
+                }
+                string2 = LocaleController.getString("TurnPasswordOffQuestionTitle", NUM);
+                string3 = LocaleController.getString("Disable", NUM);
             }
+            builder.setMessage(string);
+            builder.setTitle(string2);
+            builder.setPositiveButton(string3, new -$$Lambda$TwoStepVerificationActivity$10etTYa5XWjUNmwZWDDim1g1lNY(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+            AlertDialog create = builder.create();
+            showDialog(create);
+            TextView textView = (TextView) create.getButton(-1);
+            if (textView != null) {
+                textView.setTextColor(Theme.getColor("dialogTextRed2"));
+            }
+        } else if (i == this.resendCodeRow) {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_resendPasswordEmail(), -$$Lambda$TwoStepVerificationActivity$4F6YJgV3MBVhnoAYE2KFt09BlNg.INSTANCE);
+            builder = new Builder(getParentActivity());
+            builder.setMessage(LocaleController.getString("ResendCodeInfo", NUM));
+            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
+            showDialog(builder.create());
         }
     }
 
@@ -1296,7 +1306,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         return;
     L_0x0022:
         r3.needHideProgress();
-        r0 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r0 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r1 = "OK";
         r2 = 0;
         if (r4 != 0) goto L_0x00ac;
@@ -1339,18 +1349,18 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r5 = r5.has_password;
         if (r5 == 0) goto L_0x0082;
     L_0x0075:
-        r5 = NUM; // 0x7f0e0CLASSNAME float:1.8881345E38 double:1.053163693E-314;
+        r5 = NUM; // 0x7f0e0CLASSNAME float:1.8881512E38 double:1.0531637337E-314;
         r6 = "YourEmailSuccessText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
         goto L_0x008e;
     L_0x0082:
-        r5 = NUM; // 0x7f0e0c2b float:1.8881356E38 double:1.0531636956E-314;
+        r5 = NUM; // 0x7f0e0c7d float:1.8881522E38 double:1.053163736E-314;
         r6 = "YourPasswordSuccessText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
     L_0x008e:
-        r5 = NUM; // 0x7f0e0c2a float:1.8881353E38 double:1.053163695E-314;
+        r5 = NUM; // 0x7f0e0c7c float:1.888152E38 double:1.0531637357E-314;
         r6 = "YourPasswordSuccess";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setTitle(r5);
@@ -1379,12 +1389,12 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r5 = r4.text;
         r6 = "EMAIL_INVALID";
         r5 = r6.equals(r5);
-        r6 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r6 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r7 = "AppName";
         if (r5 == 0) goto L_0x00e4;
     L_0x00d2:
         r4 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r5 = NUM; // 0x7f0e0809 float:1.887921E38 double:1.053163173E-314;
+        r5 = NUM; // 0x7f0e082c float:1.887928E38 double:1.05316319E-314;
         r6 = "PasswordEmailInvalid";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.showAlertWithText(r4, r5);
@@ -1410,7 +1420,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r4);
     L_0x010a:
         r5 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r6 = NUM; // 0x7f0e0485 float:1.8877384E38 double:1.0531627283E-314;
+        r6 = NUM; // 0x7f0e049d float:1.8877433E38 double:1.05316274E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r7[r2] = r4;
@@ -1436,11 +1446,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r6 = new org.telegram.ui.-$$Lambda$TwoStepVerificationActivity$dZl6L7A3pdg7u0zh2dz9t60mIJU;
         r6.<init>(r3, r7, r8);
         r4.setPositiveButton(r5, r6);
-        r5 = NUM; // 0x7f0e0c1f float:1.8881331E38 double:1.0531636897E-314;
+        r5 = NUM; // 0x7f0e0CLASSNAME float:1.8881497E38 double:1.05316373E-314;
         r6 = "YourEmailAlmostThereText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
-        r5 = NUM; // 0x7f0e0c1e float:1.888133E38 double:1.053163689E-314;
+        r5 = NUM; // 0x7f0e0CLASSNAME float:1.8881495E38 double:1.0531637297E-314;
         r6 = "YourEmailAlmostThere";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setTitle(r5);

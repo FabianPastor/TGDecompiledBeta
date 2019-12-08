@@ -132,13 +132,24 @@ public class WalletBalanceCell extends FrameLayout {
     }
 
     public void setBalance(long j) {
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(TonController.formatCurrency(j));
-        int indexOf = TextUtils.indexOf(spannableStringBuilder, '.');
-        if (indexOf >= 0) {
-            spannableStringBuilder.setSpan(new TypefaceSpan(this.defaultTypeFace, AndroidUtilities.dp(27.0f)), indexOf + 1, spannableStringBuilder.length(), 33);
+        int i = 0;
+        if (j >= 0) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(TonController.formatCurrency(j));
+            int indexOf = TextUtils.indexOf(spannableStringBuilder, '.');
+            if (indexOf >= 0) {
+                spannableStringBuilder.setSpan(new TypefaceSpan(this.defaultTypeFace, AndroidUtilities.dp(27.0f)), indexOf + 1, spannableStringBuilder.length(), 33);
+            }
+            this.valueTextView.setText(spannableStringBuilder);
+            this.valueTextView.setTranslationX(0.0f);
+            this.yourBalanceTextView.setVisibility(0);
+        } else {
+            this.valueTextView.setText("");
+            this.valueTextView.setTranslationX((float) (-AndroidUtilities.dp(4.0f)));
+            this.yourBalanceTextView.setVisibility(8);
         }
-        this.valueTextView.setText(spannableStringBuilder);
-        int i = j <= 0 ? 8 : 0;
+        if (j <= 0) {
+            i = 8;
+        }
         if (this.sendButton.getVisibility() != i) {
             this.sendButton.setVisibility(i);
         }

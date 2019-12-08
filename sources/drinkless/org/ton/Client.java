@@ -105,7 +105,7 @@ public final class Client implements Runnable {
 
     public static Client create(ResultHandler resultHandler, ExceptionHandler exceptionHandler, ExceptionHandler exceptionHandler2) {
         Client client = new Client(resultHandler, exceptionHandler, exceptionHandler2);
-        new Thread(client, "TDLib thread").start();
+        new Thread(client, "tonlib thread").start();
         return client;
     }
 

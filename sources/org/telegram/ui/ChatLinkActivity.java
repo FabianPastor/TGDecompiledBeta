@@ -426,12 +426,14 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$updateSearchResults$3$ChatLinkActivity$SearchAdapter(ArrayList arrayList, ArrayList arrayList2) {
-            this.searchResult = arrayList;
-            this.searchResultNames = arrayList2;
-            if (ChatLinkActivity.this.listView.getAdapter() == ChatLinkActivity.this.searchAdapter) {
-                ChatLinkActivity.this.emptyView.showTextView();
+            if (ChatLinkActivity.this.searching) {
+                this.searchResult = arrayList;
+                this.searchResultNames = arrayList2;
+                if (ChatLinkActivity.this.listView.getAdapter() == ChatLinkActivity.this.searchAdapter) {
+                    ChatLinkActivity.this.emptyView.showTextView();
+                }
+                notifyDataSetChanged();
             }
-            notifyDataSetChanged();
         }
 
         public boolean isEnabled(ViewHolder viewHolder) {

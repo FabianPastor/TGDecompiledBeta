@@ -1047,17 +1047,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.messageEditText.setWindowView(this.parentActivity.getWindow().getDecorView());
         ChatActivity chatActivity3 = this.parentFragment;
         EncryptedChat currentEncryptedChat = chatActivity3 != null ? chatActivity3.getCurrentEncryptedChat() : null;
-        EditTextCaption editTextCaption = this.messageEditText;
-        boolean z2 = currentEncryptedChat == null || (currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101);
-        editTextCaption.setAllowTextEntitiesIntersection(z2);
+        this.messageEditText.setAllowTextEntitiesIntersection(supportsSendingNewEntities());
         updateFieldHint();
         int i3 = NUM;
         if (currentEncryptedChat != null) {
             i3 = NUM;
         }
         this.messageEditText.setImeOptions(i3);
-        EditTextCaption editTextCaption2 = this.messageEditText;
-        editTextCaption2.setInputType((editTextCaption2.getInputType() | 16384) | 131072);
+        EditTextCaption editTextCaption = this.messageEditText;
+        editTextCaption.setInputType((editTextCaption.getInputType() | 16384) | 131072);
         this.messageEditText.setSingleLine(false);
         this.messageEditText.setMaxLines(6);
         this.messageEditText.setTextSize(1, 18.0f);
@@ -2450,14 +2448,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return this.slowModeTimer > 0 ? this.slowModeButton.getText() : null;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:39:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00c8  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00b1  */
     /* JADX WARNING: Removed duplicated region for block: B:25:0x0080 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:? A:{SYNTHETIC, RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:25:0x0080 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:39:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00c8  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00b1  */
     private void updateSlowModeText() {
         /*
         r8 = this;
@@ -2528,50 +2526,35 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r0 = r1 - r0;
     L_0x007c:
         r1 = r8.slowModeTimer;
-        if (r1 == 0) goto L_0x00c0;
+        if (r1 == 0) goto L_0x00a9;
     L_0x0080:
-        if (r0 <= 0) goto L_0x00c0;
+        if (r0 <= 0) goto L_0x00a9;
     L_0x0082:
-        r1 = r0 / 60;
-        r2 = r1 * 60;
-        r0 = r0 - r2;
-        if (r1 != 0) goto L_0x008c;
-    L_0x0089:
-        if (r0 != 0) goto L_0x008c;
-    L_0x008b:
-        r0 = 1;
-    L_0x008c:
-        r2 = r8.slowModeButton;
-        r5 = 2;
-        r5 = new java.lang.Object[r5];
-        r1 = java.lang.Integer.valueOf(r1);
-        r5[r4] = r1;
-        r0 = java.lang.Integer.valueOf(r0);
-        r5[r3] = r0;
-        r0 = "%d:%02d";
-        r0 = java.lang.String.format(r0, r5);
-        r2.setText(r0);
+        r1 = r8.slowModeButton;
+        r0 = java.lang.Math.max(r3, r0);
+        r0 = org.telegram.messenger.AndroidUtilities.formatShortDuration(r0);
+        r1.setText(r0);
         r0 = r8.delegate;
-        if (r0 == 0) goto L_0x00b3;
-    L_0x00aa:
+        if (r0 == 0) goto L_0x009c;
+    L_0x0093:
         r1 = r8.slowModeButton;
         r2 = r1.getText();
         r0.onUpdateSlowModeButton(r1, r4, r2);
-    L_0x00b3:
+    L_0x009c:
         r0 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$X9J0gVteYqpfLVW9jaFB4fp2jQc;
         r0.<init>(r8);
         r8.updateSlowModeRunnable = r0;
         r1 = 100;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1);
-        goto L_0x00c2;
-    L_0x00c0:
+        goto L_0x00ab;
+    L_0x00a9:
         r8.slowModeTimer = r4;
-    L_0x00c2:
+    L_0x00ab:
         r0 = r8.isInScheduleMode();
-        if (r0 != 0) goto L_0x00cb;
-    L_0x00c8:
+        if (r0 != 0) goto L_0x00b4;
+    L_0x00b1:
         r8.checkSendButton(r3);
-    L_0x00cb:
+    L_0x00b4:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.updateSlowModeText():void");
@@ -3199,7 +3182,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.delegate.onMessageEditEnd(true);
             showEditDoneProgress(true, true);
             CharSequence[] charSequenceArr = new CharSequence[]{this.messageEditText.getText()};
-            ArrayList entities = MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr);
+            ArrayList entities = MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, supportsSendingNewEntities());
             SendMessagesHelper instance = SendMessagesHelper.getInstance(this.currentAccount);
             MessageObject messageObject = this.editingMessageObject;
             String charSequence = charSequenceArr[0].toString();
@@ -3217,6 +3200,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public boolean processSendingText(CharSequence charSequence, boolean z, int i) {
         CharSequence trimmedString = AndroidUtilities.getTrimmedString(charSequence);
+        boolean supportsSendingNewEntities = supportsSendingNewEntities();
         int i2 = this.accountInstance.getMessagesController().maxMessageLength;
         if (trimmedString.length() == 0) {
             return false;
@@ -3228,9 +3212,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             int i4 = i3 * i2;
             i3++;
             charSequenceArr[0] = trimmedString.subSequence(i4, Math.min(i3 * i2, trimmedString.length()));
-            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0].toString(), this.dialog_id, this.replyingMessageObject, this.messageWebPage, this.messageWebPageSearch, MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr), null, null, z, i);
+            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0].toString(), this.dialog_id, this.replyingMessageObject, this.messageWebPage, this.messageWebPageSearch, MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, supportsSendingNewEntities), null, null, z, i);
         }
         return true;
+    }
+
+    private boolean supportsSendingNewEntities() {
+        ChatActivity chatActivity = this.parentFragment;
+        EncryptedChat currentEncryptedChat = chatActivity != null ? chatActivity.getCurrentEncryptedChat() : null;
+        return currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101;
     }
 
     private void checkSendButton(boolean z) {
@@ -5982,7 +5972,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                         documentAttribute2.waveform = MediaController.getInstance().getWaveform(this.audioToSendPath);
                                     }
                                     this.recordedAudioSeekBar.setWaveform(documentAttribute2.waveform);
-                                    this.recordedAudioTimeTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(i / 60), Integer.valueOf(i % 60)}));
+                                    this.recordedAudioTimeTextView.setText(AndroidUtilities.formatShortDuration(i));
                                     closeKeyboard();
                                     hidePopup(false);
                                     checkSendButton(false);
@@ -5990,7 +5980,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                     i2++;
                                 }
                             }
-                            this.recordedAudioTimeTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(i / 60), Integer.valueOf(i % 60)}));
+                            this.recordedAudioTimeTextView.setText(AndroidUtilities.formatShortDuration(i));
                             closeKeyboard();
                             hidePopup(false);
                             checkSendButton(false);

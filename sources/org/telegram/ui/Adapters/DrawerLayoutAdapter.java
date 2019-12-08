@@ -177,7 +177,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         Collections.sort(this.accountNumbers, -$$Lambda$DrawerLayoutAdapter$mi1sw6PViLc4Y6s0MqsHrA-JKuc.INSTANCE);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
-            if (!(VERSION.SDK_INT < 18 || TextUtils.isEmpty(MessagesController.getInstance(UserConfig.selectedAccount).walletConfig) || TextUtils.isEmpty(MessagesController.getInstance(UserConfig.selectedAccount).walletBlockchainName))) {
+            if (!(VERSION.SDK_INT < 18 || TextUtils.isEmpty(UserConfig.getInstance(UserConfig.selectedAccount).walletConfig) || TextUtils.isEmpty(UserConfig.getInstance(UserConfig.selectedAccount).walletBlockchainName))) {
                 obj = 1;
             }
             String str = "SavedMessages";

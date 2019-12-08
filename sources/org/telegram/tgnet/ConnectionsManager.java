@@ -42,6 +42,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.StatsController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC.TL_config;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -1234,7 +1235,7 @@ public class ConnectionsManager extends BaseController {
             filesDirFixed = file;
         }
         String file2 = filesDirFixed.toString();
-        boolean z = MessagesController.getGlobalNotificationsSettings().getBoolean("pushConnection", true);
+        boolean isPushConnectionEnabled = isPushConnectionEnabled();
         try {
             toLowerCase = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             toLowerCase2 = LocaleController.getLocaleStringIso639().toLowerCase();
@@ -1273,11 +1274,20 @@ public class ConnectionsManager extends BaseController {
         if (TextUtils.isEmpty(toLowerCase) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
             toLowerCase = SharedConfig.pushStringStatus;
         }
-        init(BuildVars.BUILD_VERSION, 106, BuildVars.APP_ID, str5, toLowerCase2, stringBuilder, str, str6, file2, FileLog.getNetworkLogPath(), toLowerCase, getUserConfig().getClientUserId(), z);
+        init(BuildVars.BUILD_VERSION, 106, BuildVars.APP_ID, str5, toLowerCase2, stringBuilder, str, str6, file2, FileLog.getNetworkLogPath(), toLowerCase, getUserConfig().getClientUserId(), isPushConnectionEnabled);
         i2 = this.currentAccount;
         if (i2 == 0 && BuildVars.DEBUG_PRIVATE_VERSION) {
             new MozillaDnsLoadTask(i2).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
         }
+    }
+
+    public boolean isPushConnectionEnabled() {
+        SharedPreferences globalNotificationsSettings = MessagesController.getGlobalNotificationsSettings();
+        String str = "pushConnection";
+        if (globalNotificationsSettings.contains(str)) {
+            return globalNotificationsSettings.getBoolean(str, true);
+        }
+        return MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("backgroundConnection", false);
     }
 
     public long getCurrentTimeMillis() {

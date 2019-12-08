@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
@@ -18,6 +19,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -210,16 +212,15 @@ public class LogoutActivity extends BaseFragment {
     public /* synthetic */ void lambda$createView$1$LogoutActivity(View view, int i, float f, float f2) {
         int i2 = 0;
         if (i == this.addAccountRow) {
-            int i3 = -1;
             while (i2 < 3) {
                 if (!UserConfig.getInstance(i2).isClientActivated()) {
-                    i3 = i2;
                     break;
                 }
                 i2++;
             }
-            if (i3 >= 0) {
-                presentFragment(new LoginActivity(i3));
+            i2 = -1;
+            if (i2 >= 0) {
+                presentFragment(new LoginActivity(i2));
             }
         } else if (i == this.passcodeRow) {
             presentFragment(new PasscodeActivity(0));
@@ -237,10 +238,16 @@ public class LogoutActivity extends BaseFragment {
             } else {
                 builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("WalletTelegramLogout", NUM)));
             }
-            builder.setTitle(LocaleController.getString("LogOut", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$LogoutActivity$j4TP2hjvfLt3Pmf-Vc0G6Kn6GSI(this));
+            String str = "LogOut";
+            builder.setTitle(LocaleController.getString(str, NUM));
+            builder.setPositiveButton(LocaleController.getString(str, NUM), new -$$Lambda$LogoutActivity$j4TP2hjvfLt3Pmf-Vc0G6Kn6GSI(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-            showDialog(builder.create());
+            AlertDialog create = builder.create();
+            showDialog(create);
+            TextView textView = (TextView) create.getButton(-1);
+            if (textView != null) {
+                textView.setTextColor(Theme.getColor("dialogTextRed2"));
+            }
         }
     }
 

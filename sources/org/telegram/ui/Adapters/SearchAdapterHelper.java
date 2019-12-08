@@ -518,6 +518,17 @@ public class SearchAdapterHelper {
         }
     }
 
+    public void removeUserId(int i) {
+        Object obj = this.globalSearchMap.get(i);
+        if (obj != null) {
+            this.globalSearch.remove(obj);
+        }
+        Object obj2 = this.groupSearchMap.get(i);
+        if (obj2 != null) {
+            this.groupSearch.remove(obj2);
+        }
+    }
+
     public ArrayList<TLObject> getGlobalSearch() {
         return this.globalSearch;
     }

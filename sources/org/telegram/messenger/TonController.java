@@ -27,6 +27,7 @@ import drinkless.org.ton.TonApi.DeleteAllKeys;
 import drinkless.org.ton.TonApi.Error;
 import drinkless.org.ton.TonApi.ExportKey;
 import drinkless.org.ton.TonApi.ExportedKey;
+import drinkless.org.ton.TonApi.Fees;
 import drinkless.org.ton.TonApi.Function;
 import drinkless.org.ton.TonApi.GenericAccountState;
 import drinkless.org.ton.TonApi.GenericAccountStateRaw;
@@ -34,37 +35,47 @@ import drinkless.org.ton.TonApi.GenericAccountStateTestGiver;
 import drinkless.org.ton.TonApi.GenericAccountStateTestWallet;
 import drinkless.org.ton.TonApi.GenericAccountStateUninited;
 import drinkless.org.ton.TonApi.GenericAccountStateWallet;
+import drinkless.org.ton.TonApi.GenericAccountStateWalletV3;
+import drinkless.org.ton.TonApi.GenericCreateSendGramsQuery;
 import drinkless.org.ton.TonApi.GenericGetAccountState;
-import drinkless.org.ton.TonApi.GenericSendGrams;
 import drinkless.org.ton.TonApi.GetBip39Hints;
 import drinkless.org.ton.TonApi.ImportKey;
 import drinkless.org.ton.TonApi.Init;
 import drinkless.org.ton.TonApi.InputKey;
+import drinkless.org.ton.TonApi.InputKeyFake;
+import drinkless.org.ton.TonApi.InputKeyRegular;
 import drinkless.org.ton.TonApi.InternalTransactionId;
 import drinkless.org.ton.TonApi.KeyStoreTypeDirectory;
 import drinkless.org.ton.TonApi.LogStreamFile;
 import drinkless.org.ton.TonApi.Object;
 import drinkless.org.ton.TonApi.Ok;
-import drinkless.org.ton.TonApi.OnLiteServerQueryError;
-import drinkless.org.ton.TonApi.OnLiteServerQueryResult;
 import drinkless.org.ton.TonApi.Options;
+import drinkless.org.ton.TonApi.OptionsConfigInfo;
 import drinkless.org.ton.TonApi.OptionsSetConfig;
+import drinkless.org.ton.TonApi.OptionsValidateConfig;
+import drinkless.org.ton.TonApi.QueryEstimateFees;
+import drinkless.org.ton.TonApi.QueryFees;
+import drinkless.org.ton.TonApi.QueryInfo;
+import drinkless.org.ton.TonApi.QuerySend;
 import drinkless.org.ton.TonApi.RawAccountState;
 import drinkless.org.ton.TonApi.RawGetTransactions;
 import drinkless.org.ton.TonApi.RawMessage;
 import drinkless.org.ton.TonApi.RawTransaction;
 import drinkless.org.ton.TonApi.RawTransactions;
-import drinkless.org.ton.TonApi.SendGramsResult;
 import drinkless.org.ton.TonApi.SetLogStream;
+import drinkless.org.ton.TonApi.SyncState;
+import drinkless.org.ton.TonApi.SyncStateDone;
+import drinkless.org.ton.TonApi.SyncStateInProgress;
 import drinkless.org.ton.TonApi.TestGiverAccountState;
 import drinkless.org.ton.TonApi.TestWalletAccountState;
 import drinkless.org.ton.TonApi.UninitedAccountState;
 import drinkless.org.ton.TonApi.UnpackAccountAddress;
 import drinkless.org.ton.TonApi.UnpackedAccountAddress;
-import drinkless.org.ton.TonApi.UpdateSendLiteServerQuery;
+import drinkless.org.ton.TonApi.UpdateSyncState;
 import drinkless.org.ton.TonApi.WalletAccountState;
-import drinkless.org.ton.TonApi.WalletGetAccountAddress;
-import drinkless.org.ton.TonApi.WalletInitialAccountState;
+import drinkless.org.ton.TonApi.WalletV3AccountState;
+import drinkless.org.ton.TonApi.WalletV3GetAccountAddress;
+import drinkless.org.ton.TonApi.WalletV3InitialAccountState;
 import java.io.File;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -87,24 +98,19 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource.PSpecified;
 import javax.security.auth.x500.X500Principal;
-import org.telegram.messenger.MessagesStorage.BooleanCallback;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_wallet_getKeySecretSalt;
-import org.telegram.tgnet.TLRPC.TL_wallet_liteResponse;
-import org.telegram.tgnet.TLRPC.TL_wallet_secretSalt;
-import org.telegram.tgnet.TLRPC.TL_wallet_sendLiteRequest;
+import org.telegram.ui.Wallet.WalletConfigLoader;
 
 @TargetApi(18)
 public class TonController extends BaseController {
     public static final int CIPHER_INIT_FAILED = 0;
     public static final int CIPHER_INIT_KEY_INVALIDATED = 2;
     public static final int CIPHER_INIT_OK = 1;
+    public static final int CONFIG_TYPE_JSON = 1;
+    public static final int CONFIG_TYPE_URL = 0;
     private static volatile TonController[] Instance = new TonController[3];
     public static final int KEY_PROTECTION_TYPE_BIOMETRIC = 2;
     public static final int KEY_PROTECTION_TYPE_LOCKSCREEN = 1;
     public static final int KEY_PROTECTION_TYPE_NONE = 0;
-    private static final boolean USE_MTPROTO = true;
     private static Cipher cipher;
     private static KeyPairGenerator keyGenerator;
     private static KeyStore keyStore;
@@ -117,6 +123,8 @@ public class TonController extends BaseController {
     private byte[] creatingPasscodeSalt;
     private int creatingPasscodeType;
     private String creatingPublicKey;
+    private String currentSetConfig;
+    private String currentSetConfigName;
     private boolean initied;
     private boolean isPrealodingWallet;
     private File keyDirectoty;
@@ -124,10 +132,22 @@ public class TonController extends BaseController {
     private ArrayList<RawTransaction> pendingTransactions = new ArrayList();
     private Runnable shortPollRunnable;
     private boolean shortPollingInProgress;
+    private int syncProgress;
     private SharedPreferences tonCache;
+    private GetTransactionsCallback uiTransactionCallback;
+    private long walletId;
+    private boolean walletLoaded;
 
     public interface AccountStateCallback {
         void run(GenericAccountState genericAccountState);
+    }
+
+    public interface BooleanCallback {
+        void run(boolean z);
+    }
+
+    public interface BytesCallback {
+        void run(byte[] bArr);
     }
 
     public interface DangerousCallback {
@@ -138,8 +158,12 @@ public class TonController extends BaseController {
         void run(String str, Error error);
     }
 
+    public interface FeeCallback {
+        void run(long j);
+    }
+
     public interface GetTransactionsCallback {
-        void run(ArrayList<RawTransaction> arrayList);
+        void run(boolean z, ArrayList<RawTransaction> arrayList);
     }
 
     public interface StringCallback {
@@ -200,24 +224,32 @@ public class TonController extends BaseController {
         if (BuildVars.LOGS_ENABLED) {
             this.client.send(new SetLogStream(new LogStreamFile(FileLog.getTonlibLogPath(), 5242880)), null);
         }
+        loadTonConfigFromUrl();
     }
 
     public /* synthetic */ void lambda$new$1$TonController(Object object) {
-        if (object instanceof UpdateSendLiteServerQuery) {
-            UpdateSendLiteServerQuery updateSendLiteServerQuery = (UpdateSendLiteServerQuery) object;
-            long j = updateSendLiteServerQuery.id;
-            TL_wallet_sendLiteRequest tL_wallet_sendLiteRequest = new TL_wallet_sendLiteRequest();
-            tL_wallet_sendLiteRequest.body = updateSendLiteServerQuery.data;
-            getConnectionsManager().sendRequest(tL_wallet_sendLiteRequest, new -$$Lambda$TonController$qEOaK4JBeIF9VugRRfBThCKBn3k(this, j), 8);
+        if (object instanceof UpdateSyncState) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$EL_P00Sg4K1AN4gF7roMYLMLFxo(this, object));
+        } else {
+            AndroidUtilities.processTonUpdate(this.currentAccount, this.client, object);
         }
     }
 
-    public /* synthetic */ void lambda$null$0$TonController(long j, TLObject tLObject, TL_error tL_error) {
-        if (tLObject instanceof TL_wallet_liteResponse) {
-            this.client.send(new OnLiteServerQueryResult(j, ((TL_wallet_liteResponse) tLObject).response), null);
-        } else if (tL_error != null) {
-            this.client.send(new OnLiteServerQueryError(j, new Error(tL_error.code, tL_error.text)), null);
+    public /* synthetic */ void lambda$null$0$TonController(Object object) {
+        SyncState syncState = ((UpdateSyncState) object).syncState;
+        if (syncState instanceof SyncStateDone) {
+            this.syncProgress = 100;
+        } else if (syncState instanceof SyncStateInProgress) {
+            SyncStateInProgress syncStateInProgress = (SyncStateInProgress) syncState;
+            int i = syncStateInProgress.currentSeqno;
+            int i2 = syncStateInProgress.fromSeqno;
+            double d = (double) (i - i2);
+            double d2 = (double) (syncStateInProgress.toSeqno - i2);
+            Double.isNaN(d);
+            Double.isNaN(d2);
+            this.syncProgress = (int) ((d / d2) * 100.0d);
         }
+        getNotificationCenter().postNotificationName(NotificationCenter.walletSyncProgressChanged, Integer.valueOf(this.syncProgress));
     }
 
     private void loadCache() {
@@ -235,29 +267,36 @@ public class TonController extends BaseController {
                 StringBuilder stringBuilder;
                 String string;
                 String string2;
-                StringBuilder stringBuilder2;
                 long j;
                 byte[] decode;
-                String stringBuilder3;
-                StringBuilder stringBuilder4;
+                this.walletLoaded = true;
                 int i = this.tonCache.getInt("state.type", 0);
                 long j2 = this.tonCache.getLong("state.balance", 0);
                 int i2 = this.tonCache.getInt("state.seqno", 0);
+                long j3 = this.tonCache.getLong("state.walletId", 0);
+                int i3 = i;
                 InternalTransactionId internalTransactionId = new InternalTransactionId(this.tonCache.getLong("transaction.lt", 0), Base64.decode(this.tonCache.getString("transaction.hash", null), 0));
-                long j3 = this.tonCache.getLong("syncUtime", 0);
-                if (i == 0) {
-                    this.cachedAccountState = new GenericAccountStateRaw(new RawAccountState(j2, null, null, internalTransactionId, null, j3));
-                } else if (i == 1) {
-                    this.cachedAccountState = new GenericAccountStateTestWallet(new TestWalletAccountState(j2, i2, internalTransactionId, j3));
-                } else if (i == 2) {
-                    this.cachedAccountState = new GenericAccountStateTestGiver(new TestGiverAccountState(j2, i2, internalTransactionId, j3));
-                } else if (i == 3) {
-                    this.cachedAccountState = new GenericAccountStateUninited(new UninitedAccountState(j2, internalTransactionId, null, j3));
-                } else if (i == 4) {
-                    this.cachedAccountState = new GenericAccountStateWallet(new WalletAccountState(j2, i2, internalTransactionId, j3));
+                long j4 = this.tonCache.getLong("syncUtime", 0);
+                if (i3 == 0) {
+                    RawAccountState rawAccountState = r10;
+                    RawAccountState rawAccountState2 = new RawAccountState(j2, null, null, internalTransactionId, null, j4);
+                    this.cachedAccountState = new GenericAccountStateRaw(rawAccountState);
+                } else {
+                    int i4 = i3;
+                    if (i4 == 1) {
+                        this.cachedAccountState = new GenericAccountStateTestWallet(new TestWalletAccountState(j2, i2, internalTransactionId, j4));
+                    } else if (i4 == 2) {
+                        this.cachedAccountState = new GenericAccountStateTestGiver(new TestGiverAccountState(j2, i2, internalTransactionId, j4));
+                    } else if (i4 == 3) {
+                        this.cachedAccountState = new GenericAccountStateUninited(new UninitedAccountState(j2, internalTransactionId, null, j4));
+                    } else if (i4 == 4) {
+                        this.cachedAccountState = new GenericAccountStateWallet(new WalletAccountState(j2, i2, internalTransactionId, j4));
+                    } else if (i4 == 5) {
+                        this.cachedAccountState = new GenericAccountStateWalletV3(new WalletV3AccountState(j2, j3, i2, internalTransactionId, j4));
+                    }
                 }
-                i = this.tonCache.getInt("transactionsCount", 0);
-                int i3 = 0;
+                int i5 = this.tonCache.getInt("transactionsCount", 0);
+                i = 0;
                 while (true) {
                     str3 = "inMsg.message";
                     str4 = "inMsg.bodyHash";
@@ -266,221 +305,212 @@ public class TonController extends BaseController {
                     str7 = "inMsg.destination";
                     str8 = "inMsg.source";
                     str9 = ".";
-                    if (i3 >= i) {
+                    if (i >= i5) {
                         break;
                     }
                     SharedPreferences sharedPreferences;
-                    long j4;
+                    StringBuilder stringBuilder2;
+                    StringBuilder stringBuilder3;
+                    StringBuilder stringBuilder4;
                     long j5;
                     long j6;
+                    long j7;
                     StringBuilder stringBuilder5;
                     RawMessage rawMessage;
-                    int i4;
                     RawMessage[] rawMessageArr;
-                    StringBuilder stringBuilder6 = new StringBuilder();
-                    stringBuilder6.append("transaction");
-                    stringBuilder6.append(i3);
-                    stringBuilder6.append(str9);
-                    String stringBuilder7 = stringBuilder6.toString();
-                    SharedPreferences sharedPreferences2 = this.tonCache;
                     stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder7);
-                    stringBuilder.append(str8);
-                    if (sharedPreferences2.contains(stringBuilder.toString())) {
-                        sharedPreferences = this.tonCache;
-                        stringBuilder6 = new StringBuilder();
-                        stringBuilder6.append(stringBuilder7);
-                        stringBuilder6.append(str8);
-                        string = sharedPreferences.getString(stringBuilder6.toString(), str2);
-                        sharedPreferences = this.tonCache;
+                    stringBuilder.append("transaction");
+                    stringBuilder.append(i);
+                    stringBuilder.append(str9);
+                    String stringBuilder6 = stringBuilder.toString();
+                    SharedPreferences sharedPreferences2 = this.tonCache;
+                    StringBuilder stringBuilder7 = new StringBuilder();
+                    stringBuilder7.append(stringBuilder6);
+                    stringBuilder7.append(str8);
+                    if (sharedPreferences2.contains(stringBuilder7.toString())) {
+                        SharedPreferences sharedPreferences3 = this.tonCache;
                         StringBuilder stringBuilder8 = new StringBuilder();
-                        stringBuilder8.append(stringBuilder7);
-                        stringBuilder8.append(str7);
-                        string2 = sharedPreferences.getString(stringBuilder8.toString(), str2);
+                        stringBuilder8.append(stringBuilder6);
+                        stringBuilder8.append(str8);
+                        string = sharedPreferences3.getString(stringBuilder8.toString(), null);
                         sharedPreferences = this.tonCache;
                         stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append(stringBuilder7);
-                        stringBuilder2.append(str5);
-                        j = sharedPreferences.getLong(stringBuilder2.toString(), 0);
+                        stringBuilder2.append(stringBuilder6);
+                        stringBuilder2.append(str7);
+                        string2 = sharedPreferences.getString(stringBuilder2.toString(), null);
                         sharedPreferences = this.tonCache;
-                        StringBuilder stringBuilder9 = new StringBuilder();
-                        stringBuilder9.append(stringBuilder7);
-                        stringBuilder9.append("inMsg.fwdFee");
-                        j4 = sharedPreferences.getLong(stringBuilder9.toString(), 0);
+                        stringBuilder3 = new StringBuilder();
+                        stringBuilder3.append(stringBuilder6);
+                        stringBuilder3.append(str5);
+                        j = sharedPreferences.getLong(stringBuilder3.toString(), 0);
                         sharedPreferences = this.tonCache;
-                        stringBuilder9 = new StringBuilder();
-                        stringBuilder9.append(stringBuilder7);
-                        stringBuilder9.append("inMsg.ihrFee");
-                        j5 = sharedPreferences.getLong(stringBuilder9.toString(), 0);
+                        stringBuilder4 = new StringBuilder();
+                        stringBuilder4.append(stringBuilder6);
+                        stringBuilder4.append("inMsg.fwdFee");
+                        j5 = sharedPreferences.getLong(stringBuilder4.toString(), 0);
                         sharedPreferences = this.tonCache;
-                        stringBuilder9 = new StringBuilder();
-                        stringBuilder9.append(stringBuilder7);
-                        stringBuilder9.append("inMsg.createdLt");
-                        j6 = sharedPreferences.getLong(stringBuilder9.toString(), 0);
+                        stringBuilder4 = new StringBuilder();
+                        stringBuilder4.append(stringBuilder6);
+                        stringBuilder4.append("inMsg.ihrFee");
+                        j6 = sharedPreferences.getLong(stringBuilder4.toString(), 0);
                         sharedPreferences = this.tonCache;
-                        stringBuilder9 = new StringBuilder();
-                        stringBuilder9.append(stringBuilder7);
-                        stringBuilder9.append(str4);
-                        decode = Base64.decode(sharedPreferences.getString(stringBuilder9.toString(), str2), 0);
+                        stringBuilder4 = new StringBuilder();
+                        stringBuilder4.append(stringBuilder6);
+                        stringBuilder4.append("inMsg.createdLt");
+                        j7 = sharedPreferences.getLong(stringBuilder4.toString(), 0);
+                        sharedPreferences = this.tonCache;
+                        stringBuilder4 = new StringBuilder();
+                        stringBuilder4.append(stringBuilder6);
+                        stringBuilder4.append(str4);
+                        decode = Base64.decode(sharedPreferences.getString(stringBuilder4.toString(), null), 0);
                         sharedPreferences = this.tonCache;
                         stringBuilder5 = new StringBuilder();
-                        stringBuilder5.append(stringBuilder7);
+                        stringBuilder5.append(stringBuilder6);
                         stringBuilder5.append(str3);
-                        rawMessage = new RawMessage(string, string2, j, j4, j5, j6, decode, Base64.decode(sharedPreferences.getString(stringBuilder5.toString(), str2), 0));
+                        rawMessage = new RawMessage(string, string2, j, j5, j6, j7, decode, Base64.decode(sharedPreferences.getString(stringBuilder5.toString(), null), 0));
                     } else {
-                        rawMessage = str2;
+                        rawMessage = null;
                     }
-                    SharedPreferences sharedPreferences3 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder7);
-                    stringBuilder.append(str);
-                    if (sharedPreferences3.contains(stringBuilder.toString())) {
-                        sharedPreferences3 = this.tonCache;
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append(stringBuilder7);
-                        stringBuilder.append(str);
-                        RawMessage[] rawMessageArr2 = new RawMessage[sharedPreferences3.getInt(stringBuilder.toString(), 0)];
-                        int i5 = 0;
-                        while (i5 < rawMessageArr2.length) {
-                            StringBuilder stringBuilder10 = new StringBuilder();
-                            stringBuilder10.append(stringBuilder7);
-                            stringBuilder10.append("outMsg");
-                            stringBuilder10.append(i5);
-                            stringBuilder10.append(str9);
-                            stringBuilder3 = stringBuilder10.toString();
+                    sharedPreferences = this.tonCache;
+                    StringBuilder stringBuilder9 = new StringBuilder();
+                    stringBuilder9.append(stringBuilder6);
+                    stringBuilder9.append(str);
+                    if (sharedPreferences.contains(stringBuilder9.toString())) {
+                        sharedPreferences = this.tonCache;
+                        stringBuilder9 = new StringBuilder();
+                        stringBuilder9.append(stringBuilder6);
+                        stringBuilder9.append(str);
+                        RawMessage[] rawMessageArr2 = new RawMessage[sharedPreferences.getInt(stringBuilder9.toString(), 0)];
+                        for (int i6 = 0; i6 < rawMessageArr2.length; i6++) {
+                            stringBuilder5 = new StringBuilder();
+                            stringBuilder5.append(stringBuilder6);
+                            stringBuilder5.append("outMsg");
+                            stringBuilder5.append(i6);
+                            stringBuilder5.append(str9);
+                            str4 = stringBuilder5.toString();
                             SharedPreferences sharedPreferences4 = this.tonCache;
                             stringBuilder2 = new StringBuilder();
-                            stringBuilder2.append(stringBuilder3);
+                            stringBuilder2.append(str4);
                             stringBuilder2.append("source");
-                            string = sharedPreferences4.getString(stringBuilder2.toString(), str2);
+                            string = sharedPreferences4.getString(stringBuilder2.toString(), null);
                             sharedPreferences4 = this.tonCache;
                             stringBuilder2 = new StringBuilder();
-                            stringBuilder2.append(stringBuilder3);
+                            stringBuilder2.append(str4);
                             stringBuilder2.append("destination");
-                            string2 = sharedPreferences4.getString(stringBuilder2.toString(), str2);
+                            string2 = sharedPreferences4.getString(stringBuilder2.toString(), null);
                             sharedPreferences4 = this.tonCache;
                             stringBuilder2 = new StringBuilder();
-                            stringBuilder2.append(stringBuilder3);
+                            stringBuilder2.append(str4);
                             stringBuilder2.append("value");
-                            i4 = i;
                             j = sharedPreferences4.getLong(stringBuilder2.toString(), 0);
-                            SharedPreferences sharedPreferences5 = this.tonCache;
-                            stringBuilder4 = new StringBuilder();
-                            stringBuilder4.append(stringBuilder3);
-                            stringBuilder4.append("fwdFee");
-                            j4 = sharedPreferences5.getLong(stringBuilder4.toString(), 0);
-                            sharedPreferences5 = this.tonCache;
-                            stringBuilder4 = new StringBuilder();
-                            stringBuilder4.append(stringBuilder3);
-                            stringBuilder4.append("ihrFee");
-                            j5 = sharedPreferences5.getLong(stringBuilder4.toString(), 0);
-                            sharedPreferences5 = this.tonCache;
-                            stringBuilder4 = new StringBuilder();
-                            stringBuilder4.append(stringBuilder3);
-                            stringBuilder4.append("createdLt");
-                            j6 = sharedPreferences5.getLong(stringBuilder4.toString(), 0);
-                            sharedPreferences5 = this.tonCache;
-                            stringBuilder4 = new StringBuilder();
-                            stringBuilder4.append(stringBuilder3);
-                            stringBuilder4.append("bodyHash");
-                            decode = Base64.decode(sharedPreferences5.getString(stringBuilder4.toString(), null), 0);
-                            sharedPreferences5 = this.tonCache;
-                            stringBuilder4 = new StringBuilder();
-                            stringBuilder4.append(stringBuilder3);
-                            stringBuilder4.append("message");
-                            rawMessageArr2[i5] = new RawMessage(string, string2, j, j4, j5, j6, decode, Base64.decode(sharedPreferences5.getString(stringBuilder4.toString(), null), 0));
-                            i5++;
-                            i = i4;
-                            str2 = null;
+                            sharedPreferences4 = this.tonCache;
+                            stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append(str4);
+                            stringBuilder2.append("fwdFee");
+                            j5 = sharedPreferences4.getLong(stringBuilder2.toString(), 0);
+                            sharedPreferences4 = this.tonCache;
+                            stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append(str4);
+                            stringBuilder2.append("ihrFee");
+                            j6 = sharedPreferences4.getLong(stringBuilder2.toString(), 0);
+                            sharedPreferences4 = this.tonCache;
+                            stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append(str4);
+                            stringBuilder2.append("createdLt");
+                            j7 = sharedPreferences4.getLong(stringBuilder2.toString(), 0);
+                            sharedPreferences4 = this.tonCache;
+                            stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append(str4);
+                            stringBuilder2.append("bodyHash");
+                            decode = Base64.decode(sharedPreferences4.getString(stringBuilder2.toString(), null), 0);
+                            sharedPreferences4 = this.tonCache;
+                            stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append(str4);
+                            stringBuilder2.append("message");
+                            rawMessageArr2[i6] = new RawMessage(string, string2, j, j5, j6, j7, decode, Base64.decode(sharedPreferences4.getString(stringBuilder2.toString(), null), 0));
                         }
-                        i4 = i;
                         rawMessageArr = rawMessageArr2;
                     } else {
-                        i4 = i;
                         rawMessageArr = null;
                     }
-                    SharedPreferences sharedPreferences6 = this.tonCache;
-                    StringBuilder stringBuilder11 = new StringBuilder();
-                    stringBuilder11.append(stringBuilder7);
-                    stringBuilder11.append(str6);
-                    long j7 = sharedPreferences6.getLong(stringBuilder11.toString(), 0);
-                    sharedPreferences6 = this.tonCache;
-                    stringBuilder11 = new StringBuilder();
-                    stringBuilder11.append(stringBuilder7);
-                    stringBuilder11.append("data");
-                    byte[] decode2 = Base64.decode(sharedPreferences6.getString(stringBuilder11.toString(), null), 0);
-                    sharedPreferences3 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder7);
-                    stringBuilder.append("lt");
-                    long j8 = sharedPreferences3.getLong(stringBuilder.toString(), 0);
-                    sharedPreferences = this.tonCache;
+                    SharedPreferences sharedPreferences5 = this.tonCache;
                     stringBuilder5 = new StringBuilder();
-                    stringBuilder5.append(stringBuilder7);
-                    stringBuilder5.append("hash");
-                    InternalTransactionId internalTransactionId2 = new InternalTransactionId(j8, Base64.decode(sharedPreferences.getString(stringBuilder5.toString(), null), 0));
-                    sharedPreferences3 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder7);
-                    stringBuilder.append("fee");
-                    long j9 = sharedPreferences3.getLong(stringBuilder.toString(), 0);
-                    sharedPreferences3 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder7);
-                    stringBuilder.append("storageFee");
-                    long j10 = sharedPreferences3.getLong(stringBuilder.toString(), 0);
-                    sharedPreferences3 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder7);
-                    stringBuilder.append("otherFee");
-                    this.cachedTransactions.add(new RawTransaction(j7, decode2, internalTransactionId2, j9, j10, sharedPreferences3.getLong(stringBuilder.toString(), 0), rawMessage, rawMessageArr));
-                    i3++;
-                    i = i4;
-                    str2 = null;
-                }
-                int i6 = this.tonCache.getInt("pendingCount", 0);
-                int i7 = 0;
-                while (i7 < i6) {
+                    stringBuilder5.append(stringBuilder6);
+                    stringBuilder5.append(str6);
+                    long j8 = sharedPreferences5.getLong(stringBuilder5.toString(), 0);
+                    sharedPreferences5 = this.tonCache;
+                    stringBuilder5 = new StringBuilder();
+                    stringBuilder5.append(stringBuilder6);
+                    stringBuilder5.append("data");
+                    byte[] decode2 = Base64.decode(sharedPreferences5.getString(stringBuilder5.toString(), null), 0);
+                    SharedPreferences sharedPreferences6 = this.tonCache;
                     stringBuilder4 = new StringBuilder();
-                    stringBuilder4.append("pending");
-                    stringBuilder4.append(i7);
-                    stringBuilder4.append(str9);
-                    String stringBuilder12 = stringBuilder4.toString();
+                    stringBuilder4.append(stringBuilder6);
+                    stringBuilder4.append("lt");
+                    long j9 = sharedPreferences6.getLong(stringBuilder4.toString(), 0);
                     SharedPreferences sharedPreferences7 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder12);
-                    stringBuilder.append(str8);
-                    string = sharedPreferences7.getString(stringBuilder.toString(), null);
-                    sharedPreferences7 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder12);
-                    stringBuilder.append(str7);
-                    string2 = sharedPreferences7.getString(stringBuilder.toString(), null);
-                    sharedPreferences7 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder12);
-                    stringBuilder.append(str5);
-                    String str10 = str7;
-                    stringBuilder3 = str8;
-                    j = sharedPreferences7.getLong(stringBuilder.toString(), 0);
-                    sharedPreferences7 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder12);
-                    stringBuilder.append(str4);
-                    decode = Base64.decode(sharedPreferences7.getString(stringBuilder.toString(), null), 0);
-                    sharedPreferences7 = this.tonCache;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder12);
-                    stringBuilder.append(str3);
-                    RawMessage rawMessage2 = new RawMessage(string, string2, j, 0, 0, 0, decode, Base64.decode(sharedPreferences7.getString(stringBuilder.toString(), null), 0));
+                    stringBuilder3 = new StringBuilder();
+                    stringBuilder3.append(stringBuilder6);
+                    stringBuilder3.append("hash");
+                    internalTransactionId = new InternalTransactionId(j9, Base64.decode(sharedPreferences7.getString(stringBuilder3.toString(), null), 0));
+                    sharedPreferences6 = this.tonCache;
+                    stringBuilder4 = new StringBuilder();
+                    stringBuilder4.append(stringBuilder6);
+                    stringBuilder4.append("fee");
+                    long j10 = sharedPreferences6.getLong(stringBuilder4.toString(), 0);
+                    sharedPreferences6 = this.tonCache;
+                    stringBuilder4 = new StringBuilder();
+                    stringBuilder4.append(stringBuilder6);
+                    stringBuilder4.append("storageFee");
+                    long j11 = sharedPreferences6.getLong(stringBuilder4.toString(), 0);
+                    sharedPreferences6 = this.tonCache;
+                    stringBuilder4 = new StringBuilder();
+                    stringBuilder4.append(stringBuilder6);
+                    stringBuilder4.append("otherFee");
+                    this.cachedTransactions.add(new RawTransaction(j8, decode2, internalTransactionId, j10, j11, sharedPreferences6.getLong(stringBuilder4.toString(), 0), rawMessage, rawMessageArr));
+                    i++;
+                }
+                int i7 = this.tonCache.getInt("pendingCount", 0);
+                i5 = 0;
+                while (i5 < i7) {
+                    StringBuilder stringBuilder10 = new StringBuilder();
+                    stringBuilder10.append("pending");
+                    stringBuilder10.append(i5);
+                    stringBuilder10.append(str9);
+                    String stringBuilder11 = stringBuilder10.toString();
                     SharedPreferences sharedPreferences8 = this.tonCache;
-                    stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append(stringBuilder12);
-                    stringBuilder2.append(str6);
-                    this.pendingTransactions.add(new RawTransaction(sharedPreferences8.getLong(stringBuilder2.toString(), 0), new byte[0], new InternalTransactionId(), 0, 0, 0, rawMessage2, new RawMessage[0]));
-                    i7++;
-                    str8 = stringBuilder3;
-                    str7 = str10;
+                    StringBuilder stringBuilder12 = new StringBuilder();
+                    stringBuilder12.append(stringBuilder11);
+                    stringBuilder12.append(str8);
+                    string = sharedPreferences8.getString(stringBuilder12.toString(), str2);
+                    sharedPreferences8 = this.tonCache;
+                    stringBuilder12 = new StringBuilder();
+                    stringBuilder12.append(stringBuilder11);
+                    stringBuilder12.append(str7);
+                    string2 = sharedPreferences8.getString(stringBuilder12.toString(), str2);
+                    sharedPreferences8 = this.tonCache;
+                    stringBuilder12 = new StringBuilder();
+                    stringBuilder12.append(stringBuilder11);
+                    stringBuilder12.append(str5);
+                    i3 = i5;
+                    j = sharedPreferences8.getLong(stringBuilder12.toString(), 0);
+                    SharedPreferences sharedPreferences9 = this.tonCache;
+                    StringBuilder stringBuilder13 = new StringBuilder();
+                    stringBuilder13.append(stringBuilder11);
+                    stringBuilder13.append(str4);
+                    decode = Base64.decode(sharedPreferences9.getString(stringBuilder13.toString(), null), 0);
+                    sharedPreferences9 = this.tonCache;
+                    stringBuilder13 = new StringBuilder();
+                    stringBuilder13.append(stringBuilder11);
+                    stringBuilder13.append(str3);
+                    RawMessage rawMessage2 = new RawMessage(string, string2, j, 0, 0, 0, decode, Base64.decode(sharedPreferences9.getString(stringBuilder13.toString(), null), 0));
+                    SharedPreferences sharedPreferences10 = this.tonCache;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append(stringBuilder11);
+                    stringBuilder.append(str6);
+                    this.pendingTransactions.add(new RawTransaction(sharedPreferences10.getLong(stringBuilder.toString(), 0), new byte[0], new InternalTransactionId(), 0, 0, 0, rawMessage2, new RawMessage[0]));
+                    i5 = i3 + 1;
+                    str2 = null;
                 }
             }
         } catch (Exception e) {
@@ -499,6 +529,7 @@ public class TonController extends BaseController {
                 InternalTransactionId internalTransactionId;
                 long j2;
                 int i2;
+                int i3;
                 String str;
                 String str2;
                 String str3;
@@ -507,30 +538,31 @@ public class TonController extends BaseController {
                 String str6;
                 String str7;
                 StringBuilder stringBuilder;
-                int length;
                 StringBuilder stringBuilder2;
                 Editor edit = tonController.tonCache.edit();
                 edit.clear();
-                long j3;
+                long j3 = 0;
+                long j4;
                 InternalTransactionId internalTransactionId2;
+                InternalTransactionId internalTransactionId3;
                 if (tonController.cachedAccountState instanceof GenericAccountStateRaw) {
                     GenericAccountStateRaw genericAccountStateRaw = (GenericAccountStateRaw) tonController.cachedAccountState;
-                    j3 = genericAccountStateRaw.accountState.balance;
-                    InternalTransactionId internalTransactionId3 = genericAccountStateRaw.accountState.lastTransactionId;
+                    j4 = genericAccountStateRaw.accountState.balance;
+                    internalTransactionId2 = genericAccountStateRaw.accountState.lastTransactionId;
                     j = genericAccountStateRaw.accountState.syncUtime;
                     i = 0;
-                    internalTransactionId = internalTransactionId3;
-                    j2 = j3;
+                    internalTransactionId = internalTransactionId2;
+                    j2 = j4;
                     i2 = 0;
                 } else if (tonController.cachedAccountState instanceof GenericAccountStateTestWallet) {
                     GenericAccountStateTestWallet genericAccountStateTestWallet = (GenericAccountStateTestWallet) tonController.cachedAccountState;
-                    j3 = genericAccountStateTestWallet.accountState.balance;
-                    int i3 = genericAccountStateTestWallet.accountState.seqno;
-                    internalTransactionId2 = genericAccountStateTestWallet.accountState.lastTransactionId;
+                    j4 = genericAccountStateTestWallet.accountState.balance;
+                    int i4 = genericAccountStateTestWallet.accountState.seqno;
+                    internalTransactionId3 = genericAccountStateTestWallet.accountState.lastTransactionId;
                     j = genericAccountStateTestWallet.accountState.syncUtime;
-                    internalTransactionId = internalTransactionId2;
-                    i = i3;
-                    j2 = j3;
+                    internalTransactionId = internalTransactionId3;
+                    i = i4;
+                    j2 = j4;
                     i2 = 1;
                 } else if (tonController.cachedAccountState instanceof GenericAccountStateTestGiver) {
                     GenericAccountStateTestGiver genericAccountStateTestGiver = (GenericAccountStateTestGiver) tonController.cachedAccountState;
@@ -543,9 +575,9 @@ public class TonController extends BaseController {
                     GenericAccountStateUninited genericAccountStateUninited = (GenericAccountStateUninited) tonController.cachedAccountState;
                     i2 = 3;
                     j2 = genericAccountStateUninited.accountState.balance;
-                    internalTransactionId2 = genericAccountStateUninited.accountState.lastTransactionId;
+                    internalTransactionId3 = genericAccountStateUninited.accountState.lastTransactionId;
                     j = genericAccountStateUninited.accountState.syncUtime;
-                    internalTransactionId = internalTransactionId2;
+                    internalTransactionId = internalTransactionId3;
                     i = 0;
                 } else if (tonController.cachedAccountState instanceof GenericAccountStateWallet) {
                     GenericAccountStateWallet genericAccountStateWallet = (GenericAccountStateWallet) tonController.cachedAccountState;
@@ -554,18 +586,31 @@ public class TonController extends BaseController {
                     i = genericAccountStateWallet.accountState.seqno;
                     internalTransactionId = genericAccountStateWallet.accountState.lastTransactionId;
                     j = genericAccountStateWallet.accountState.syncUtime;
+                } else if (tonController.cachedAccountState instanceof GenericAccountStateWalletV3) {
+                    GenericAccountStateWalletV3 genericAccountStateWalletV3 = (GenericAccountStateWalletV3) tonController.cachedAccountState;
+                    j4 = genericAccountStateWalletV3.accountState.balance;
+                    i3 = genericAccountStateWalletV3.accountState.seqno;
+                    internalTransactionId2 = genericAccountStateWalletV3.accountState.lastTransactionId;
+                    long j5 = genericAccountStateWalletV3.accountState.syncUtime;
+                    i = i3;
+                    internalTransactionId = internalTransactionId2;
+                    j3 = genericAccountStateWalletV3.accountState.walletId;
+                    j2 = j4;
+                    j = j5;
+                    i2 = 5;
                 } else {
                     return;
                 }
                 edit.putInt("state.type", i2);
                 edit.putLong("state.balance", j2);
                 edit.putInt("state.seqno", i);
+                edit.putLong("state.walletId", j3);
                 edit.putLong("transaction.lt", internalTransactionId.lt);
                 edit.putString("transaction.hash", Base64.encodeToString(internalTransactionId.hash, 0));
                 edit.putLong("syncUtime", j);
                 int min = Math.min(10, tonController.cachedTransactions.size());
                 edit.putInt("transactionsCount", min);
-                i2 = 0;
+                int i5 = 0;
                 while (true) {
                     str = "inMsg.message";
                     str2 = "inMsg.bodyHash";
@@ -574,165 +619,168 @@ public class TonController extends BaseController {
                     str5 = "utime";
                     str6 = "inMsg.source";
                     str7 = ".";
-                    if (i2 >= min) {
+                    if (i5 >= min) {
                         break;
                     }
-                    StringBuilder stringBuilder3;
                     stringBuilder = new StringBuilder();
                     stringBuilder.append("transaction");
-                    stringBuilder.append(i2);
+                    stringBuilder.append(i5);
                     stringBuilder.append(str7);
-                    String stringBuilder4 = stringBuilder.toString();
-                    RawTransaction rawTransaction = (RawTransaction) tonController.cachedTransactions.get(i2);
+                    String stringBuilder3 = stringBuilder.toString();
+                    RawTransaction rawTransaction = (RawTransaction) tonController.cachedTransactions.get(i5);
                     if (rawTransaction.inMsg != null) {
+                        StringBuilder stringBuilder4 = new StringBuilder();
+                        stringBuilder4.append(stringBuilder3);
+                        stringBuilder4.append(str6);
+                        edit.putString(stringBuilder4.toString(), rawTransaction.inMsg.source);
                         StringBuilder stringBuilder5 = new StringBuilder();
-                        stringBuilder5.append(stringBuilder4);
-                        stringBuilder5.append(str6);
-                        edit.putString(stringBuilder5.toString(), rawTransaction.inMsg.source);
+                        stringBuilder5.append(stringBuilder3);
+                        stringBuilder5.append(str4);
+                        edit.putString(stringBuilder5.toString(), rawTransaction.inMsg.destination);
                         StringBuilder stringBuilder6 = new StringBuilder();
-                        stringBuilder6.append(stringBuilder4);
-                        stringBuilder6.append(str4);
-                        edit.putString(stringBuilder6.toString(), rawTransaction.inMsg.destination);
-                        StringBuilder stringBuilder7 = new StringBuilder();
-                        stringBuilder7.append(stringBuilder4);
-                        stringBuilder7.append(str3);
-                        edit.putLong(stringBuilder7.toString(), rawTransaction.inMsg.value);
-                        stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(stringBuilder4);
-                        stringBuilder3.append("inMsg.fwdFee");
-                        edit.putLong(stringBuilder3.toString(), rawTransaction.inMsg.fwdFee);
-                        stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(stringBuilder4);
-                        stringBuilder3.append("inMsg.ihrFee");
-                        edit.putLong(stringBuilder3.toString(), rawTransaction.inMsg.ihrFee);
-                        stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(stringBuilder4);
-                        stringBuilder3.append("inMsg.createdLt");
-                        edit.putLong(stringBuilder3.toString(), rawTransaction.inMsg.createdLt);
-                        stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(stringBuilder4);
-                        stringBuilder3.append(str2);
-                        edit.putString(stringBuilder3.toString(), Base64.encodeToString(rawTransaction.inMsg.bodyHash, 0));
-                        stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(stringBuilder4);
-                        stringBuilder3.append(str);
-                        edit.putString(stringBuilder3.toString(), Base64.encodeToString(rawTransaction.inMsg.message, 0));
+                        stringBuilder6.append(stringBuilder3);
+                        stringBuilder6.append(str3);
+                        edit.putLong(stringBuilder6.toString(), rawTransaction.inMsg.value);
+                        stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append(stringBuilder3);
+                        stringBuilder2.append("inMsg.fwdFee");
+                        edit.putLong(stringBuilder2.toString(), rawTransaction.inMsg.fwdFee);
+                        stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append(stringBuilder3);
+                        stringBuilder2.append("inMsg.ihrFee");
+                        edit.putLong(stringBuilder2.toString(), rawTransaction.inMsg.ihrFee);
+                        stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append(stringBuilder3);
+                        stringBuilder2.append("inMsg.createdLt");
+                        edit.putLong(stringBuilder2.toString(), rawTransaction.inMsg.createdLt);
+                        stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append(stringBuilder3);
+                        stringBuilder2.append(str2);
+                        edit.putString(stringBuilder2.toString(), Base64.encodeToString(rawTransaction.inMsg.bodyHash, 0));
+                        stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append(stringBuilder3);
+                        stringBuilder2.append(str);
+                        edit.putString(stringBuilder2.toString(), Base64.encodeToString(rawTransaction.inMsg.message, 0));
                     }
                     if (rawTransaction.outMsgs != null) {
-                        length = rawTransaction.outMsgs.length;
+                        i3 = rawTransaction.outMsgs.length;
                         stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append(stringBuilder4);
+                        stringBuilder2.append(stringBuilder3);
                         stringBuilder2.append("outMsgCount");
-                        edit.putInt(stringBuilder2.toString(), length);
-                        for (int i4 = 0; i4 < length; i4++) {
-                            StringBuilder stringBuilder8 = new StringBuilder();
-                            stringBuilder8.append(stringBuilder4);
-                            stringBuilder8.append("outMsg");
-                            stringBuilder8.append(i4);
-                            stringBuilder8.append(str7);
-                            str = stringBuilder8.toString();
+                        edit.putInt(stringBuilder2.toString(), i3);
+                        for (int i6 = 0; i6 < i3; i6++) {
+                            StringBuilder stringBuilder7 = new StringBuilder();
+                            stringBuilder7.append(stringBuilder3);
+                            stringBuilder7.append("outMsg");
+                            stringBuilder7.append(i6);
+                            stringBuilder7.append(str7);
+                            String stringBuilder8 = stringBuilder7.toString();
                             StringBuilder stringBuilder9 = new StringBuilder();
-                            stringBuilder9.append(str);
+                            stringBuilder9.append(stringBuilder8);
                             stringBuilder9.append("source");
-                            edit.putString(stringBuilder9.toString(), rawTransaction.outMsgs[i4].source);
+                            edit.putString(stringBuilder9.toString(), rawTransaction.outMsgs[i6].source);
                             stringBuilder9 = new StringBuilder();
-                            stringBuilder9.append(str);
+                            stringBuilder9.append(stringBuilder8);
                             stringBuilder9.append("destination");
-                            edit.putString(stringBuilder9.toString(), rawTransaction.outMsgs[i4].destination);
+                            edit.putString(stringBuilder9.toString(), rawTransaction.outMsgs[i6].destination);
                             stringBuilder9 = new StringBuilder();
-                            stringBuilder9.append(str);
+                            stringBuilder9.append(stringBuilder8);
                             stringBuilder9.append("value");
-                            edit.putLong(stringBuilder9.toString(), rawTransaction.outMsgs[i4].value);
+                            edit.putLong(stringBuilder9.toString(), rawTransaction.outMsgs[i6].value);
                             stringBuilder9 = new StringBuilder();
-                            stringBuilder9.append(str);
+                            stringBuilder9.append(stringBuilder8);
                             stringBuilder9.append("fwdFee");
-                            edit.putLong(stringBuilder9.toString(), rawTransaction.outMsgs[i4].fwdFee);
+                            edit.putLong(stringBuilder9.toString(), rawTransaction.outMsgs[i6].fwdFee);
                             stringBuilder9 = new StringBuilder();
-                            stringBuilder9.append(str);
+                            stringBuilder9.append(stringBuilder8);
                             stringBuilder9.append("ihrFee");
-                            edit.putLong(stringBuilder9.toString(), rawTransaction.outMsgs[i4].ihrFee);
+                            edit.putLong(stringBuilder9.toString(), rawTransaction.outMsgs[i6].ihrFee);
                             stringBuilder9 = new StringBuilder();
-                            stringBuilder9.append(str);
+                            stringBuilder9.append(stringBuilder8);
                             stringBuilder9.append("createdLt");
-                            edit.putLong(stringBuilder9.toString(), rawTransaction.outMsgs[i4].createdLt);
+                            edit.putLong(stringBuilder9.toString(), rawTransaction.outMsgs[i6].createdLt);
                             stringBuilder9 = new StringBuilder();
-                            stringBuilder9.append(str);
+                            stringBuilder9.append(stringBuilder8);
                             stringBuilder9.append("bodyHash");
-                            edit.putString(stringBuilder9.toString(), Base64.encodeToString(rawTransaction.outMsgs[i4].bodyHash, 0));
+                            edit.putString(stringBuilder9.toString(), Base64.encodeToString(rawTransaction.outMsgs[i6].bodyHash, 0));
                             stringBuilder9 = new StringBuilder();
-                            stringBuilder9.append(str);
+                            stringBuilder9.append(stringBuilder8);
                             stringBuilder9.append("message");
-                            edit.putString(stringBuilder9.toString(), Base64.encodeToString(rawTransaction.outMsgs[i4].message, 0));
+                            edit.putString(stringBuilder9.toString(), Base64.encodeToString(rawTransaction.outMsgs[i6].message, 0));
                         }
                     }
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(stringBuilder4);
-                    stringBuilder3.append(str5);
-                    edit.putLong(stringBuilder3.toString(), rawTransaction.utime);
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(stringBuilder4);
-                    stringBuilder3.append("data");
-                    edit.putString(stringBuilder3.toString(), Base64.encodeToString(rawTransaction.data, 0));
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(stringBuilder4);
-                    stringBuilder3.append("lt");
-                    edit.putLong(stringBuilder3.toString(), rawTransaction.transactionId.lt);
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(stringBuilder4);
-                    stringBuilder3.append("hash");
-                    edit.putString(stringBuilder3.toString(), Base64.encodeToString(rawTransaction.transactionId.hash, 0));
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(stringBuilder4);
-                    stringBuilder3.append("fee");
-                    edit.putLong(stringBuilder3.toString(), rawTransaction.fee);
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(stringBuilder4);
-                    stringBuilder3.append("storageFee");
-                    edit.putLong(stringBuilder3.toString(), rawTransaction.storageFee);
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(stringBuilder4);
-                    stringBuilder3.append("otherFee");
-                    edit.putLong(stringBuilder3.toString(), rawTransaction.otherFee);
-                    i2++;
+                    StringBuilder stringBuilder10 = new StringBuilder();
+                    stringBuilder10.append(stringBuilder3);
+                    stringBuilder10.append(str5);
+                    edit.putLong(stringBuilder10.toString(), rawTransaction.utime);
+                    stringBuilder10 = new StringBuilder();
+                    stringBuilder10.append(stringBuilder3);
+                    stringBuilder10.append("data");
+                    edit.putString(stringBuilder10.toString(), Base64.encodeToString(rawTransaction.data, 0));
+                    stringBuilder10 = new StringBuilder();
+                    stringBuilder10.append(stringBuilder3);
+                    stringBuilder10.append("lt");
+                    edit.putLong(stringBuilder10.toString(), rawTransaction.transactionId.lt);
+                    stringBuilder10 = new StringBuilder();
+                    stringBuilder10.append(stringBuilder3);
+                    stringBuilder10.append("hash");
+                    edit.putString(stringBuilder10.toString(), Base64.encodeToString(rawTransaction.transactionId.hash, 0));
+                    stringBuilder10 = new StringBuilder();
+                    stringBuilder10.append(stringBuilder3);
+                    stringBuilder10.append("fee");
+                    edit.putLong(stringBuilder10.toString(), rawTransaction.fee);
+                    stringBuilder10 = new StringBuilder();
+                    stringBuilder10.append(stringBuilder3);
+                    stringBuilder10.append("storageFee");
+                    edit.putLong(stringBuilder10.toString(), rawTransaction.storageFee);
+                    stringBuilder10 = new StringBuilder();
+                    stringBuilder10.append(stringBuilder3);
+                    stringBuilder10.append("otherFee");
+                    edit.putLong(stringBuilder10.toString(), rawTransaction.otherFee);
+                    i5++;
                 }
                 min = tonController.pendingTransactions.size();
                 edit.putInt("pendingCount", min);
-                length = 0;
-                while (length < min) {
+                i5 = 0;
+                while (i5 < min) {
                     stringBuilder2 = new StringBuilder();
                     stringBuilder2.append("pending");
-                    stringBuilder2.append(length);
+                    stringBuilder2.append(i5);
                     stringBuilder2.append(str7);
-                    String stringBuilder10 = stringBuilder2.toString();
-                    RawTransaction rawTransaction2 = (RawTransaction) tonController.pendingTransactions.get(length);
+                    String stringBuilder11 = stringBuilder2.toString();
+                    RawTransaction rawTransaction2 = (RawTransaction) tonController.pendingTransactions.get(i5);
                     stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder10);
+                    stringBuilder.append(stringBuilder11);
                     stringBuilder.append(str6);
                     edit.putString(stringBuilder.toString(), rawTransaction2.inMsg.source);
                     stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder10);
+                    stringBuilder.append(stringBuilder11);
                     stringBuilder.append(str4);
                     edit.putString(stringBuilder.toString(), rawTransaction2.inMsg.destination);
                     stringBuilder = new StringBuilder();
-                    stringBuilder.append(stringBuilder10);
+                    stringBuilder.append(stringBuilder11);
                     stringBuilder.append(str3);
-                    int i5 = min;
+                    int i7 = min;
                     edit.putLong(stringBuilder.toString(), rawTransaction2.inMsg.value);
-                    StringBuilder stringBuilder11 = new StringBuilder();
-                    stringBuilder11.append(stringBuilder10);
-                    stringBuilder11.append(str2);
-                    edit.putString(stringBuilder11.toString(), Base64.encodeToString(rawTransaction2.inMsg.bodyHash, 0));
-                    stringBuilder11 = new StringBuilder();
-                    stringBuilder11.append(stringBuilder10);
-                    stringBuilder11.append(str);
-                    edit.putString(stringBuilder11.toString(), Base64.encodeToString(rawTransaction2.inMsg.message, 0));
-                    stringBuilder11 = new StringBuilder();
-                    stringBuilder11.append(stringBuilder10);
-                    stringBuilder11.append(str5);
-                    edit.putLong(stringBuilder11.toString(), rawTransaction2.utime);
-                    length++;
+                    StringBuilder stringBuilder12 = new StringBuilder();
+                    stringBuilder12.append(stringBuilder11);
+                    stringBuilder12.append(str2);
+                    edit.putString(stringBuilder12.toString(), Base64.encodeToString(rawTransaction2.inMsg.bodyHash, 0));
+                    stringBuilder12 = new StringBuilder();
+                    stringBuilder12.append(stringBuilder11);
+                    stringBuilder12.append(str);
+                    edit.putString(stringBuilder12.toString(), Base64.encodeToString(rawTransaction2.inMsg.message, 0));
+                    stringBuilder12 = new StringBuilder();
+                    stringBuilder12.append(stringBuilder11);
+                    stringBuilder12.append(str5);
+                    edit.putLong(stringBuilder12.toString(), rawTransaction2.utime);
+                    stringBuilder12 = new StringBuilder();
+                    stringBuilder12.append(stringBuilder11);
+                    stringBuilder12.append("validUntil");
+                    edit.putLong(stringBuilder12.toString(), rawTransaction2.otherFee);
+                    i5++;
                     tonController = this;
-                    min = i5;
+                    min = i7;
                 }
                 edit.putBoolean("hasCache", true);
                 edit.commit();
@@ -764,6 +812,7 @@ public class TonController extends BaseController {
         this.creatingPublicKey = null;
         this.creatingPasscodeType = -1;
         this.creatingPasscodeSalt = null;
+        this.walletLoaded = false;
     }
 
     public ArrayList<RawTransaction> getCachedTransactions() {
@@ -973,26 +1022,50 @@ public class TonController extends BaseController {
         if (this.initied) {
             return true;
         }
+        Config config = getConfig();
+        Object sendRequest = sendRequest(new OptionsValidateConfig(config), true);
+        if (!(sendRequest instanceof OptionsConfigInfo)) {
+            return false;
+        }
+        this.walletId = ((OptionsConfigInfo) sendRequest).defaultWalletId;
         File filesDirFixed = ApplicationLoader.getFilesDirFixed();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("ton");
         stringBuilder.append(this.currentAccount);
         this.keyDirectoty = new File(filesDirFixed, stringBuilder.toString());
         this.keyDirectoty.mkdirs();
-        boolean z = sendRequest(new Init(new Options(getConfig(), new KeyStoreTypeDirectory(this.keyDirectoty.getAbsolutePath()))), true) instanceof Ok;
+        this.currentSetConfig = config.config;
+        this.currentSetConfigName = config.blockchainName;
+        boolean z = sendRequest(new Init(new Options(config, new KeyStoreTypeDirectory(this.keyDirectoty.getAbsolutePath()))), true) instanceof Ok;
         this.initied = z;
         return z;
     }
 
     private Config getConfig() {
-        return new Config(getMessagesController().walletConfig, getMessagesController().walletBlockchainName, true, false);
+        UserConfig userConfig = getUserConfig();
+        if (userConfig.walletConfigType == 0) {
+            return new Config(userConfig.walletConfigFromUrl, userConfig.walletBlockchainName, BuildVars.TON_WALLET_STANDALONE ^ 1, false);
+        }
+        return new Config(userConfig.walletConfig, userConfig.walletBlockchainName, BuildVars.TON_WALLET_STANDALONE ^ 1, false);
     }
 
-    /* Access modifiers changed, original: protected */
-    public void onTonConfigUpdated() {
-        if (this.initied) {
-            sendRequest(new OptionsSetConfig(getConfig()), false);
+    public boolean onTonConfigUpdated() {
+        if (!this.initied) {
+            return true;
         }
+        Config config = getConfig();
+        if (TextUtils.equals(this.currentSetConfig, config.config) && TextUtils.equals(this.currentSetConfigName, config.blockchainName)) {
+            return true;
+        }
+        Object sendRequest = sendRequest(new OptionsValidateConfig(config), true);
+        if (!(sendRequest instanceof OptionsConfigInfo)) {
+            return false;
+        }
+        this.walletId = ((OptionsConfigInfo) sendRequest).defaultWalletId;
+        this.currentSetConfig = config.config;
+        this.currentSetConfigName = config.blockchainName;
+        sendRequest(new OptionsSetConfig(config), false);
+        return true;
     }
 
     private void onFinishWalletCreate(String[] strArr, WordsCallback wordsCallback, byte[] bArr, TonApi.Key key) {
@@ -1053,11 +1126,33 @@ public class TonController extends BaseController {
         if (genericAccountState instanceof GenericAccountStateUninited) {
             return ((GenericAccountStateUninited) genericAccountState).accountState.lastTransactionId;
         }
-        return genericAccountState instanceof GenericAccountStateWallet ? ((GenericAccountStateWallet) genericAccountState).accountState.lastTransactionId : null;
+        if (genericAccountState instanceof GenericAccountStateWallet) {
+            return ((GenericAccountStateWallet) genericAccountState).accountState.lastTransactionId;
+        }
+        return genericAccountState instanceof GenericAccountStateWalletV3 ? ((GenericAccountStateWalletV3) genericAccountState).accountState.lastTransactionId : null;
+    }
+
+    public static long getLastSyncTime(GenericAccountState genericAccountState) {
+        if (genericAccountState instanceof GenericAccountStateRaw) {
+            return ((GenericAccountStateRaw) genericAccountState).accountState.syncUtime;
+        }
+        if (genericAccountState instanceof GenericAccountStateTestWallet) {
+            return ((GenericAccountStateTestWallet) genericAccountState).accountState.syncUtime;
+        }
+        if (genericAccountState instanceof GenericAccountStateTestGiver) {
+            return ((GenericAccountStateTestGiver) genericAccountState).accountState.syncUtime;
+        }
+        if (genericAccountState instanceof GenericAccountStateUninited) {
+            return ((GenericAccountStateUninited) genericAccountState).accountState.syncUtime;
+        }
+        if (genericAccountState instanceof GenericAccountStateWallet) {
+            return ((GenericAccountStateWallet) genericAccountState).accountState.syncUtime;
+        }
+        return genericAccountState instanceof GenericAccountStateWalletV3 ? ((GenericAccountStateWalletV3) genericAccountState).accountState.syncUtime : 0;
     }
 
     public static long getBalance(GenericAccountState genericAccountState) {
-        long j = genericAccountState instanceof GenericAccountStateRaw ? ((GenericAccountStateRaw) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateTestWallet ? ((GenericAccountStateTestWallet) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateTestGiver ? ((GenericAccountStateTestGiver) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateUninited ? ((GenericAccountStateUninited) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateWallet ? ((GenericAccountStateWallet) genericAccountState).accountState.balance : 0;
+        long j = genericAccountState instanceof GenericAccountStateRaw ? ((GenericAccountStateRaw) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateTestWallet ? ((GenericAccountStateTestWallet) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateTestGiver ? ((GenericAccountStateTestGiver) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateUninited ? ((GenericAccountStateUninited) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateWallet ? ((GenericAccountStateWallet) genericAccountState).accountState.balance : genericAccountState instanceof GenericAccountStateWalletV3 ? ((GenericAccountStateWalletV3) genericAccountState).accountState.balance : 0;
         if (j >= 0) {
             return j;
         }
@@ -1069,28 +1164,25 @@ public class TonController extends BaseController {
     }
 
     public void isKeyStoreInvalidated(BooleanCallback booleanCallback) {
-        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$vCQCM8brXT-96q69kGpxplSzY7s(this, booleanCallback));
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$sQAfp6v27aGkxmVjdx96RQm5IYE(this, booleanCallback));
     }
 
     public /* synthetic */ void lambda$isKeyStoreInvalidated$5$TonController(BooleanCallback booleanCallback) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$3uIz0mTgTAuBU5pCmZJJOhE_7YY(booleanCallback, initCipher(2) == 2));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$kQUHKz4hyFcAYU8txACWltCsDRc(booleanCallback, initCipher(2) == 2));
     }
 
     public void createWallet(String[] strArr, boolean z, WordsCallback wordsCallback, ErrorCallback errorCallback) {
-        getConnectionsManager().sendRequest(new TL_wallet_getKeySecretSalt(), new -$$Lambda$TonController$Sp7YTFNvZxWEIiCU697PpZ7K9s8(this, errorCallback, z, strArr, wordsCallback));
+        AndroidUtilities.getTonWalletSalt(this.currentAccount, new -$$Lambda$TonController$y4rzsuU0HEOkbZyV__GESg9CTVs(this, errorCallback, z, strArr, wordsCallback));
     }
 
-    public /* synthetic */ void lambda$createWallet$13$TonController(ErrorCallback errorCallback, boolean z, String[] strArr, WordsCallback wordsCallback, TLObject tLObject, TL_error tL_error) {
-        if (tLObject instanceof TL_wallet_secretSalt) {
-            Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$XaUipB1ZHuqlXTVv0aidGpEzZzw(this, tLObject, errorCallback, z, strArr, wordsCallback));
-        } else {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$j-02fxwQTvT3M7lq3c6yrY1npPM(errorCallback));
-        }
+    public /* synthetic */ void lambda$createWallet$13$TonController(ErrorCallback errorCallback, boolean z, String[] strArr, WordsCallback wordsCallback, byte[] bArr) {
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$0--ntOaxpsvx5ZLt9wRtQ0zpvRY(this, bArr, errorCallback, z, strArr, wordsCallback));
     }
 
-    public /* synthetic */ void lambda$null$11$TonController(TLObject tLObject, ErrorCallback errorCallback, boolean z, String[] strArr, WordsCallback wordsCallback) {
-        TL_wallet_secretSalt tL_wallet_secretSalt = (TL_wallet_secretSalt) tLObject;
-        if (initTonLib()) {
+    public /* synthetic */ void lambda$null$12$TonController(byte[] bArr, ErrorCallback errorCallback, boolean z, String[] strArr, WordsCallback wordsCallback) {
+        if (bArr == null) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$-yNeuXCa6X7NtFGX5BoWfxv3aLM(errorCallback));
+        } else if (initTonLib()) {
             sendRequest(new DeleteAllKeys(), true);
             if (keyStore == null) {
                 AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$0Qs3PCw-0U216Kbo9EpY5a0gfUU(errorCallback));
@@ -1104,38 +1196,40 @@ public class TonController extends BaseController {
             userConfig.tonKeyName = stringBuilder.toString();
             if (isKeyCreated(z)) {
                 Object sendRequest;
-                byte[] bArr = new byte[64];
-                byte[] bArr2 = new byte[32];
-                Utilities.random.nextBytes(bArr);
+                byte[] bArr2 = new byte[64];
+                byte[] bArr3 = new byte[32];
                 Utilities.random.nextBytes(bArr2);
-                System.arraycopy(tL_wallet_secretSalt.salt, 0, bArr, 32, 32);
-                Arrays.fill(tL_wallet_secretSalt.salt, (byte) 0);
+                Utilities.random.nextBytes(bArr3);
+                if (bArr.length == 32) {
+                    System.arraycopy(bArr, 0, bArr2, 32, 32);
+                    Arrays.fill(bArr, (byte) 0);
+                }
                 if (strArr == null) {
-                    sendRequest = sendRequest(new CreateNewKey(bArr, new byte[0], bArr2), true);
+                    sendRequest = sendRequest(new CreateNewKey(bArr2, new byte[0], bArr3), true);
                 } else {
-                    sendRequest = sendRequest(new ImportKey(bArr, new byte[0], new ExportedKey(strArr)), true);
+                    sendRequest = sendRequest(new ImportKey(bArr2, new byte[0], new ExportedKey(strArr)), true);
                 }
                 if (sendRequest instanceof TonApi.Key) {
                     TonApi.Key key = (TonApi.Key) sendRequest;
                     if (strArr == null) {
-                        Object sendRequest2 = sendRequest(new ExportKey(new InputKey(key, bArr)), true);
+                        Object sendRequest2 = sendRequest(new ExportKey(new InputKeyRegular(key, bArr2)), true);
                         if (sendRequest2 instanceof ExportedKey) {
-                            onFinishWalletCreate(((ExportedKey) sendRequest2).wordList, wordsCallback, bArr, key);
+                            onFinishWalletCreate(((ExportedKey) sendRequest2).wordList, wordsCallback, bArr2, key);
                         } else {
                             AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$o6TLWvPOQs_Ed6E-tlxgN0EmvOk(this, errorCallback, sendRequest2));
                         }
                     } else {
-                        onFinishWalletCreate(null, wordsCallback, bArr, key);
+                        onFinishWalletCreate(null, wordsCallback, bArr2, key);
                     }
                 } else {
                     AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$nol4SDV7Xq2g28zLuViVPJF_Hd8(this, errorCallback, sendRequest));
                 }
             } else {
                 AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$A_GCvar_k9IFPgwfloPcNNJckftE(errorCallback));
-                return;
             }
+        } else {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$5ff7B1hIQjt-6fKSdaIpimgRCNM(errorCallback));
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$5ff7B1hIQjt-6fKSdaIpimgRCNM(errorCallback));
     }
 
     public /* synthetic */ void lambda$null$8$TonController(ErrorCallback errorCallback, Object obj) {
@@ -1211,77 +1305,67 @@ public class TonController extends BaseController {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:12:0x006d */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:9:0x005a */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
     public static void shareBitmap(android.app.Activity r4, android.view.View r5, java.lang.String r6) {
         /*
-        r5 = (android.widget.ImageView) r5;	 Catch:{ Exception -> 0x008f }
-        r5 = r5.getDrawable();	 Catch:{ Exception -> 0x008f }
-        r5 = (android.graphics.drawable.BitmapDrawable) r5;	 Catch:{ Exception -> 0x008f }
-        r0 = new java.io.File;	 Catch:{ Exception -> 0x008f }
-        r1 = 4;
-        r1 = org.telegram.messenger.FileLoader.getDirectory(r1);	 Catch:{ Exception -> 0x008f }
-        r2 = "sharing/";
-        r0.<init>(r1, r2);	 Catch:{ Exception -> 0x008f }
-        r0.mkdirs();	 Catch:{ Exception -> 0x008f }
-        r1 = new java.io.File;	 Catch:{ Exception -> 0x008f }
+        r5 = (android.widget.ImageView) r5;	 Catch:{ Exception -> 0x007c }
+        r5 = r5.getDrawable();	 Catch:{ Exception -> 0x007c }
+        r5 = (android.graphics.drawable.BitmapDrawable) r5;	 Catch:{ Exception -> 0x007c }
+        r0 = org.telegram.messenger.AndroidUtilities.getSharingDirectory();	 Catch:{ Exception -> 0x007c }
+        r0.mkdirs();	 Catch:{ Exception -> 0x007c }
+        r1 = new java.io.File;	 Catch:{ Exception -> 0x007c }
         r2 = "qr.jpg";
-        r1.<init>(r0, r2);	 Catch:{ Exception -> 0x008f }
-        r0 = android.net.Uri.fromFile(r1);	 Catch:{ Exception -> 0x008f }
-        r0 = org.telegram.messenger.AndroidUtilities.isInternalUri(r0);	 Catch:{ Exception -> 0x008f }
-        if (r0 == 0) goto L_0x0029;
-    L_0x0028:
-        return;
-    L_0x0029:
-        r0 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x008f }
-        r2 = r1.getAbsolutePath();	 Catch:{ Exception -> 0x008f }
-        r0.<init>(r2);	 Catch:{ Exception -> 0x008f }
-        r5 = r5.getBitmap();	 Catch:{ Exception -> 0x008f }
-        r2 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x008f }
+        r1.<init>(r0, r2);	 Catch:{ Exception -> 0x007c }
+        r0 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x007c }
+        r2 = r1.getAbsolutePath();	 Catch:{ Exception -> 0x007c }
+        r0.<init>(r2);	 Catch:{ Exception -> 0x007c }
+        r5 = r5.getBitmap();	 Catch:{ Exception -> 0x007c }
+        r2 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x007c }
         r3 = 87;
-        r5.compress(r2, r3, r0);	 Catch:{ Exception -> 0x008f }
-        r0.close();	 Catch:{ Exception -> 0x008f }
-        r5 = new android.content.Intent;	 Catch:{ Exception -> 0x008f }
+        r5.compress(r2, r3, r0);	 Catch:{ Exception -> 0x007c }
+        r0.close();	 Catch:{ Exception -> 0x007c }
+        r5 = new android.content.Intent;	 Catch:{ Exception -> 0x007c }
         r0 = "android.intent.action.SEND";
-        r5.<init>(r0);	 Catch:{ Exception -> 0x008f }
+        r5.<init>(r0);	 Catch:{ Exception -> 0x007c }
         r0 = "image/jpeg";
-        r5.setType(r0);	 Catch:{ Exception -> 0x008f }
-        r0 = android.text.TextUtils.isEmpty(r6);	 Catch:{ Exception -> 0x008f }
-        if (r0 != 0) goto L_0x0057;
-    L_0x0052:
+        r5.setType(r0);	 Catch:{ Exception -> 0x007c }
+        r0 = android.text.TextUtils.isEmpty(r6);	 Catch:{ Exception -> 0x007c }
+        if (r0 != 0) goto L_0x0044;
+    L_0x003f:
         r0 = "android.intent.extra.TEXT";
-        r5.putExtra(r0, r6);	 Catch:{ Exception -> 0x008f }
-    L_0x0057:
-        r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x008f }
+        r5.putExtra(r0, r6);	 Catch:{ Exception -> 0x007c }
+    L_0x0044:
+        r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x007c }
         r0 = 24;
         r2 = "android.intent.extra.STREAM";
-        if (r6 < r0) goto L_0x0075;
-    L_0x005f:
+        if (r6 < r0) goto L_0x0062;
+    L_0x004c:
         r6 = "org.telegram.messenger.provider";
-        r6 = androidx.core.content.FileProvider.getUriForFile(r4, r6, r1);	 Catch:{ Exception -> 0x006d }
-        r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x006d }
+        r6 = androidx.core.content.FileProvider.getUriForFile(r4, r6, r1);	 Catch:{ Exception -> 0x005a }
+        r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x005a }
         r6 = 1;
-        r5.setFlags(r6);	 Catch:{ Exception -> 0x006d }
-        goto L_0x007c;
-    L_0x006d:
-        r6 = android.net.Uri.fromFile(r1);	 Catch:{ Exception -> 0x008f }
-        r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x008f }
-        goto L_0x007c;
-    L_0x0075:
-        r6 = android.net.Uri.fromFile(r1);	 Catch:{ Exception -> 0x008f }
-        r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x008f }
-    L_0x007c:
+        r5.setFlags(r6);	 Catch:{ Exception -> 0x005a }
+        goto L_0x0069;
+    L_0x005a:
+        r6 = android.net.Uri.fromFile(r1);	 Catch:{ Exception -> 0x007c }
+        r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x007c }
+        goto L_0x0069;
+    L_0x0062:
+        r6 = android.net.Uri.fromFile(r1);	 Catch:{ Exception -> 0x007c }
+        r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x007c }
+    L_0x0069:
         r6 = "WalletShareQr";
-        r0 = NUM; // 0x7f0e0bd0 float:1.888117E38 double:1.0531636507E-314;
-        r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x008f }
-        r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x008f }
+        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881333E38 double:1.05316369E-314;
+        r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x007c }
+        r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x007c }
         r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
-        r4.startActivityForResult(r5, r6);	 Catch:{ Exception -> 0x008f }
-        goto L_0x0093;
-    L_0x008f:
+        r4.startActivityForResult(r5, r6);	 Catch:{ Exception -> 0x007c }
+        goto L_0x0080;
+    L_0x007c:
         r4 = move-exception;
         org.telegram.messenger.FileLog.e(r4);
-    L_0x0093:
+    L_0x0080:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.TonController.shareBitmap(android.app.Activity, android.view.View, java.lang.String):void");
@@ -1299,7 +1383,7 @@ public class TonController extends BaseController {
             return accountAddress.accountAddress;
         }
         initTonLib();
-        Object sendRequest = sendRequest(new WalletGetAccountAddress(new WalletInitialAccountState(str)), true);
+        Object sendRequest = sendRequest(new WalletV3GetAccountAddress(new WalletV3InitialAccountState(str, this.walletId)), true);
         if (!(sendRequest instanceof AccountAddress)) {
             return null;
         }
@@ -1308,28 +1392,63 @@ public class TonController extends BaseController {
         return accountAddress2.accountAddress;
     }
 
-    public void getTransactions(boolean z, InternalTransactionId internalTransactionId, GetTransactionsCallback getTransactionsCallback) {
-        sendRequest(new RawGetTransactions(this.accountAddress, internalTransactionId), new -$$Lambda$TonController$xKzbV46Tvstv6HDePaU3KQi61Fc(this, z, getTransactionsCallback));
-    }
-
-    public /* synthetic */ void lambda$getTransactions$17$TonController(boolean z, GetTransactionsCallback getTransactionsCallback, Object obj) {
-        if (obj instanceof RawTransactions) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$vzgwuH2JLJf2Svz9kAwPm6yC8gw(this, new ArrayList(Arrays.asList(((RawTransactions) obj).transactions)), z, getTransactionsCallback));
-        } else if (getTransactionsCallback != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$tSYjV4eYPmxo38iPvsGvtQxADDY(getTransactionsCallback));
+    public void checkPendingTransactionsForFailure(GenericAccountState genericAccountState) {
+        if (genericAccountState != null && !this.pendingTransactions.isEmpty()) {
+            long lastSyncTime = getLastSyncTime(genericAccountState);
+            int size = this.pendingTransactions.size();
+            int i = 0;
+            Object obj = null;
+            while (i < size) {
+                if (((RawTransaction) this.pendingTransactions.get(i)).otherFee <= lastSyncTime) {
+                    this.pendingTransactions.remove(i);
+                    size--;
+                    i--;
+                    obj = 1;
+                }
+                i++;
+            }
+            if (this.onPendingTransactionsEmpty != null && this.pendingTransactions.isEmpty()) {
+                this.onPendingTransactionsEmpty.run();
+                this.onPendingTransactionsEmpty = null;
+            }
+            if (obj != null) {
+                saveCache();
+                getNotificationCenter().postNotificationName(NotificationCenter.walletPendingTransactionsChanged, new Object[0]);
+            }
         }
     }
 
-    public /* synthetic */ void lambda$null$15$TonController(ArrayList arrayList, boolean z, GetTransactionsCallback getTransactionsCallback) {
+    public void setTransactionCallback(GetTransactionsCallback getTransactionsCallback) {
+        this.uiTransactionCallback = getTransactionsCallback;
+    }
+
+    public void getTransactions(boolean z, InternalTransactionId internalTransactionId) {
+        getTransactions(z, internalTransactionId, null);
+    }
+
+    private void getTransactions(boolean z, InternalTransactionId internalTransactionId, Runnable runnable) {
+        sendRequest(new RawGetTransactions(this.accountAddress, internalTransactionId), new -$$Lambda$TonController$eW4FMIDfYCJnmFSRipIHNW5Mu0g(this, z, runnable));
+    }
+
+    public /* synthetic */ void lambda$getTransactions$17$TonController(boolean z, Runnable runnable, Object obj) {
+        if (obj instanceof RawTransactions) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$vfluoB1yoC4E8fiJI5ZoE2BbJYw(this, new ArrayList(Arrays.asList(((RawTransactions) obj).transactions)), z, runnable));
+        } else if (runnable != null || this.uiTransactionCallback != null) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$47O8iWCtlur9nCF-Q9JGSCnjiHo(this, runnable, z));
+        }
+    }
+
+    public /* synthetic */ void lambda$null$15$TonController(ArrayList arrayList, boolean z, Runnable runnable) {
+        this.walletLoaded = true;
         Object obj = null;
         if (!this.pendingTransactions.isEmpty()) {
             int size = this.pendingTransactions.size();
             int i = 0;
             Object obj2 = null;
             while (i < size) {
+                RawTransaction rawTransaction = (RawTransaction) this.pendingTransactions.get(i);
                 int size2 = arrayList.size();
                 for (int i2 = 0; i2 < size2; i2++) {
-                    RawTransaction rawTransaction = (RawTransaction) this.pendingTransactions.get(i);
                     RawMessage rawMessage = ((RawTransaction) arrayList.get(i2)).inMsg;
                     if (rawMessage != null && Arrays.equals(rawTransaction.inMsg.bodyHash, rawMessage.bodyHash)) {
                         this.pendingTransactions.remove(i);
@@ -1354,8 +1473,22 @@ public class TonController extends BaseController {
         } else if (obj != null) {
             saveCache();
         }
+        if (runnable != null) {
+            runnable.run();
+        }
+        GetTransactionsCallback getTransactionsCallback = this.uiTransactionCallback;
         if (getTransactionsCallback != null) {
-            getTransactionsCallback.run(arrayList);
+            getTransactionsCallback.run(z, arrayList);
+        }
+    }
+
+    public /* synthetic */ void lambda$null$16$TonController(Runnable runnable, boolean z) {
+        if (runnable != null) {
+            runnable.run();
+        }
+        GetTransactionsCallback getTransactionsCallback = this.uiTransactionCallback;
+        if (getTransactionsCallback != null) {
+            getTransactionsCallback.run(z, null);
         }
     }
 
@@ -1370,19 +1503,21 @@ public class TonController extends BaseController {
     public /* synthetic */ void lambda$preloadWallet$19$TonController(GenericAccountState genericAccountState) {
         if (genericAccountState == null) {
             this.isPrealodingWallet = false;
-            getNotificationCenter().postNotificationName(NotificationCenter.finishedWalletPreloading, new Object[0]);
-            return;
+        } else {
+            getTransactions(true, getLastTransactionId(genericAccountState), new -$$Lambda$TonController$9XjiN4RwqYFaKtdlWzOcTwPp2tM(this));
         }
-        getTransactions(true, getLastTransactionId(genericAccountState), new -$$Lambda$TonController$CRZLVtl9XkpTwMIVgNlCLASSNAMEkpyoc(this));
     }
 
-    public /* synthetic */ void lambda$null$18$TonController(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$18$TonController() {
         this.isPrealodingWallet = false;
-        getNotificationCenter().postNotificationName(NotificationCenter.finishedWalletPreloading, new Object[0]);
     }
 
-    public boolean isPreloadingWallet() {
-        return this.isPrealodingWallet;
+    public boolean isWalletLoaded() {
+        return this.walletLoaded;
+    }
+
+    public int getSyncProgress() {
+        return this.syncProgress;
     }
 
     public void getAccountState(AccountStateCallback accountStateCallback) {
@@ -1431,7 +1566,7 @@ public class TonController extends BaseController {
                 this.creatingDataForLaterEncrypt = decrypt;
                 this.creatingPublicKey = userConfig.tonPublicKey;
             }
-            return new InputKey(new TonApi.Key(userConfig.tonPublicKey, bArr4), bArr3);
+            return new InputKeyRegular(new TonApi.Key(userConfig.tonPublicKey, bArr4), bArr3);
         }
         if (TextUtils.isEmpty(str)) {
             AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$3-4CkmOmoT2bO3dO2BASk7HXPCU(errorCallback2));
@@ -1475,47 +1610,91 @@ public class TonController extends BaseController {
         errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
     }
 
-    public void sendGrams(String str, Cipher cipher, InputKey inputKey, String str2, String str3, long j, String str4, Runnable runnable, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback, ErrorCallback errorCallback) {
-        DispatchQueue dispatchQueue = Utilities.globalQueue;
-        -$$Lambda$TonController$LACzhOYWYTXLVgjY9gdId5UtvFo -__lambda_toncontroller_laczhoywytxlvgjy9gdid5utvfo = r1;
-        -$$Lambda$TonController$LACzhOYWYTXLVgjY9gdId5UtvFo -__lambda_toncontroller_laczhoywytxlvgjy9gdid5utvfo2 = new -$$Lambda$TonController$LACzhOYWYTXLVgjY9gdId5UtvFo(this, inputKey, str, cipher, runnable, errorCallback, str2, str3, j, str4, runnable3, runnable2, dangerousCallback);
-        dispatchQueue.postRunnable(-__lambda_toncontroller_laczhoywytxlvgjy9gdid5utvfo);
+    public void getSendFee(String str, String str2, long j, String str3, FeeCallback feeCallback) {
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$rmj6RWruILMIDwXKtOj3iIZRsvg(this, str, str2, j, str3, feeCallback));
     }
 
-    public /* synthetic */ void lambda$sendGrams$34$TonController(InputKey inputKey, String str, Cipher cipher, Runnable runnable, ErrorCallback errorCallback, String str2, String str3, long j, String str4, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback) {
+    public /* synthetic */ void lambda$getSendFee$36$TonController(String str, String str2, long j, String str3, FeeCallback feeCallback) {
+        String str4 = str;
+        str4 = str2;
+        sendRequest(new GenericCreateSendGramsQuery(new InputKeyFake(), new AccountAddress(str), new AccountAddress(str2), j, 0, true, str3 != null ? str3.getBytes() : new byte[0]), new -$$Lambda$TonController$ILzap0prykOf_bDUayUNWbm8ApI(this, feeCallback));
+    }
+
+    public /* synthetic */ void lambda$null$35$TonController(FeeCallback feeCallback, Object obj) {
+        if (obj instanceof QueryInfo) {
+            sendRequest(new QueryEstimateFees(((QueryInfo) obj).id, true), new -$$Lambda$TonController$daXwKtNSaWy7G7M57zYWYvar_vzg(feeCallback));
+        } else {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$fc0s7xgfYzLacWIYqaNny0X45p4(feeCallback));
+        }
+    }
+
+    static /* synthetic */ void lambda$null$33(FeeCallback feeCallback, Object obj) {
+        if (obj instanceof QueryFees) {
+            Fees fees = ((QueryFees) obj).sourceFees;
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$gx970w2d8N8gkzu44QDyYZdfNUY(feeCallback, ((fees.fwdFee + fees.gasFee) + fees.inFwdFee) + fees.storageFee));
+            return;
+        }
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$jW6wtjLesOuYuNx0zBEds91eiMM(feeCallback));
+    }
+
+    public void sendGrams(String str, Cipher cipher, InputKey inputKey, String str2, String str3, long j, String str4, Runnable runnable, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback, ErrorCallback errorCallback) {
+        DispatchQueue dispatchQueue = Utilities.globalQueue;
+        -$$Lambda$TonController$lGl0uwBvLFIb85clhMRSWxdFQHo -__lambda_toncontroller_lgl0uwbvlfib85clhmrswxdfqho = r1;
+        -$$Lambda$TonController$lGl0uwBvLFIb85clhMRSWxdFQHo -__lambda_toncontroller_lgl0uwbvlfib85clhmrswxdfqho2 = new -$$Lambda$TonController$lGl0uwBvLFIb85clhMRSWxdFQHo(this, inputKey, str, cipher, runnable, errorCallback, str2, str3, j, str4, runnable3, runnable2, dangerousCallback);
+        dispatchQueue.postRunnable(-__lambda_toncontroller_lgl0uwbvlfib85clhmrswxdfqho);
+    }
+
+    public /* synthetic */ void lambda$sendGrams$42$TonController(InputKey inputKey, String str, Cipher cipher, Runnable runnable, ErrorCallback errorCallback, String str2, String str3, long j, String str4, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback) {
         InputKey decryptTonData = inputKey == null ? decryptTonData(str, cipher, runnable, errorCallback, false) : inputKey;
         if (decryptTonData != null) {
             long j2 = j;
-            Function genericSendGrams = new GenericSendGrams(decryptTonData, new AccountAddress(str2), new AccountAddress(str3), j2, 0, true, str4 != null ? str4.getBytes() : new byte[0]);
-            TonLibCallback -__lambda_toncontroller_qiferhhjkja_l70bdu_6bt4u0mc = new -$$Lambda$TonController$QIFeRhHjkJA_l70Bdu_6bT4U0mc(this, str2, str3, j2, str4, runnable2, runnable3, dangerousCallback, decryptTonData, errorCallback);
-            sendRequest(genericSendGrams, -__lambda_toncontroller_qiferhhjkja_l70bdu_6bt4u0mc);
+            Function genericCreateSendGramsQuery = new GenericCreateSendGramsQuery(decryptTonData, new AccountAddress(str2), new AccountAddress(str3), j2, 0, true, str4 != null ? str4.getBytes() : new byte[0]);
+            TonLibCallback -__lambda_toncontroller_yuecot-fm_kv3rlii_kh71p7bie = new -$$Lambda$TonController$yUECOT-FM_Kv3rLiI_KH71P7BiE(this, str2, str3, j2, str4, runnable2, runnable3, errorCallback, dangerousCallback, decryptTonData);
+            sendRequest(genericCreateSendGramsQuery, -__lambda_toncontroller_yuecot-fm_kv3rlii_kh71p7bie);
         }
     }
 
-    public /* synthetic */ void lambda$null$33$TonController(String str, String str2, long j, String str3, Runnable runnable, Runnable runnable2, DangerousCallback dangerousCallback, InputKey inputKey, ErrorCallback errorCallback, Object obj) {
-        if (obj instanceof SendGramsResult) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$MwWG4jo1UnBeZTlf4c_Dd_4QCcA(this, obj, str, str2, j, str3, runnable, runnable2));
-        } else {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$TkyDfizMrTGiHx3pu7apJKfwdmM(this, obj, dangerousCallback, inputKey, errorCallback));
+    public /* synthetic */ void lambda$null$41$TonController(String str, String str2, long j, String str3, Runnable runnable, Runnable runnable2, ErrorCallback errorCallback, DangerousCallback dangerousCallback, InputKey inputKey, Object obj) {
+        Object obj2 = obj;
+        if (obj2 instanceof QueryInfo) {
+            QueryInfo queryInfo = (QueryInfo) obj2;
+            Function querySend = new QuerySend(queryInfo.id);
+            TonLibCallback -__lambda_toncontroller_dmqqck7xxfuyq7rk-qrcrsjghau = new -$$Lambda$TonController$dmqQcK7xXFUyq7rK-qrcrSJghAU(this, str, str2, j, str3, queryInfo, runnable, runnable2, errorCallback);
+            sendRequest(querySend, -__lambda_toncontroller_dmqqck7xxfuyq7rk-qrcrsjghau);
+            return;
         }
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$QlgABM4m-WzQMPhpS-Kj0ErK0Nw(this, obj, dangerousCallback, inputKey, errorCallback));
     }
 
-    public /* synthetic */ void lambda$null$31$TonController(Object obj, String str, String str2, long j, String str3, Runnable runnable, Runnable runnable2) {
-        SendGramsResult sendGramsResult = (SendGramsResult) obj;
+    public /* synthetic */ void lambda$null$39$TonController(String str, String str2, long j, String str3, QueryInfo queryInfo, Runnable runnable, Runnable runnable2, ErrorCallback errorCallback, Object obj) {
+        Object obj2 = obj;
+        if (obj2 instanceof Ok) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$Peu8-5DSueZpb_27JpN0qoMvBqc(this, str, str2, j, str3, queryInfo, runnable, runnable2));
+            return;
+        }
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$2eEZy_v8fKhoVNoONuTQuOtJvmc(this, errorCallback, obj2));
+    }
+
+    public /* synthetic */ void lambda$null$37$TonController(String str, String str2, long j, String str3, QueryInfo queryInfo, Runnable runnable, Runnable runnable2) {
+        QueryInfo queryInfo2 = queryInfo;
         RawMessage rawMessage = new RawMessage();
         rawMessage.source = str;
         rawMessage.destination = str2;
         rawMessage.value = -j;
         rawMessage.message = str3 != null ? str3.getBytes() : new byte[0];
-        rawMessage.bodyHash = sendGramsResult.bodyHash;
-        this.pendingTransactions.add(0, new RawTransaction(System.currentTimeMillis() / 1000, new byte[0], new InternalTransactionId(), 0, 0, 0, rawMessage, new RawMessage[0]));
+        rawMessage.bodyHash = queryInfo2.bodyHash;
+        this.pendingTransactions.add(0, new RawTransaction(System.currentTimeMillis() / 1000, new byte[0], new InternalTransactionId(), 0, 0, queryInfo2.validUntil, rawMessage, new RawMessage[0]));
         saveCache();
         getNotificationCenter().postNotificationName(NotificationCenter.walletPendingTransactionsChanged, new Object[0]);
         this.onPendingTransactionsEmpty = runnable;
         runnable2.run();
     }
 
-    public /* synthetic */ void lambda$null$32$TonController(Object obj, DangerousCallback dangerousCallback, InputKey inputKey, ErrorCallback errorCallback) {
+    public /* synthetic */ void lambda$null$38$TonController(ErrorCallback errorCallback, Object obj) {
+        errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
+    }
+
+    public /* synthetic */ void lambda$null$40$TonController(Object obj, DangerousCallback dangerousCallback, InputKey inputKey, ErrorCallback errorCallback) {
         Error tonApiErrorSafe = getTonApiErrorSafe(obj);
         if (tonApiErrorSafe == null || !tonApiErrorSafe.message.startsWith("DANGEROUS_TRANSACTION")) {
             errorCallback.run("TONLIB_FAIL", tonApiErrorSafe);
@@ -1527,23 +1706,67 @@ public class TonController extends BaseController {
     private void runShortPolling() {
         if (!this.shortPollingInProgress && !this.pendingTransactions.isEmpty()) {
             this.shortPollingInProgress = true;
-            getAccountState(new -$$Lambda$TonController$RJupFG7ruVYFOeDFSlIAU1gcAD4(this));
+            getAccountState(new -$$Lambda$TonController$Km29l-ktaYYDRq7V_ySesd3emDs(this, this.cachedAccountState));
         }
     }
 
-    public /* synthetic */ void lambda$runShortPolling$36$TonController(GenericAccountState genericAccountState) {
-        if (genericAccountState != null) {
-            getTransactions(true, getLastTransactionId(genericAccountState), new -$$Lambda$TonController$UKUZGf4hmg7yXgAQn7dXPjFBr7A(this));
-            return;
-        }
-        this.shortPollRunnable = null;
-        this.shortPollingInProgress = false;
-        scheduleShortPoll();
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x002c  */
+    /* JADX WARNING: Removed duplicated region for block: B:11:0x001f  */
+    /* JADX WARNING: Missing block: B:7:0x0018, code skipped:
+            if (r8.lt == r2.lt) goto L_0x001c;
+     */
+    public /* synthetic */ void lambda$runShortPolling$44$TonController(drinkless.org.ton.TonApi.GenericAccountState r8, drinkless.org.ton.TonApi.GenericAccountState r9) {
+        /*
+        r7 = this;
+        r0 = 1;
+        r1 = 0;
+        if (r9 == 0) goto L_0x001c;
+    L_0x0004:
+        if (r8 == 0) goto L_0x001a;
+    L_0x0006:
+        r8 = getLastTransactionId(r8);
+        r2 = getLastTransactionId(r9);
+        if (r8 == 0) goto L_0x001a;
+    L_0x0010:
+        if (r2 == 0) goto L_0x001a;
+    L_0x0012:
+        r3 = r8.lt;
+        r5 = r2.lt;
+        r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
+        if (r8 == 0) goto L_0x001c;
+    L_0x001a:
+        r8 = 1;
+        goto L_0x001d;
+    L_0x001c:
+        r8 = 0;
+    L_0x001d:
+        if (r8 == 0) goto L_0x002c;
+    L_0x001f:
+        r8 = getLastTransactionId(r9);
+        r1 = new org.telegram.messenger.-$$Lambda$TonController$t00t6QI4nlspHGaD-6kGZWJKt7s;
+        r1.<init>(r7, r9);
+        r7.getTransactions(r0, r8, r1);
+        goto L_0x003f;
+    L_0x002c:
+        r8 = 0;
+        r7.shortPollRunnable = r8;
+        r7.shortPollingInProgress = r1;
+        r7.checkPendingTransactionsForFailure(r9);
+        r8 = r7.pendingTransactions;
+        r8 = r8.isEmpty();
+        if (r8 != 0) goto L_0x003f;
+    L_0x003c:
+        r7.scheduleShortPoll();
+    L_0x003f:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.TonController.lambda$runShortPolling$44$TonController(drinkless.org.ton.TonApi$GenericAccountState, drinkless.org.ton.TonApi$GenericAccountState):void");
     }
 
-    public /* synthetic */ void lambda$null$35$TonController(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$43$TonController(GenericAccountState genericAccountState) {
         this.shortPollRunnable = null;
         this.shortPollingInProgress = false;
+        checkPendingTransactionsForFailure(genericAccountState);
         if (!this.pendingTransactions.isEmpty()) {
             scheduleShortPoll();
         }
@@ -1567,19 +1790,34 @@ public class TonController extends BaseController {
         this.shortPollingInProgress = false;
     }
 
+    public boolean hasPendingTransactions() {
+        return this.pendingTransactions.isEmpty() ^ 1;
+    }
+
     public static CharSequence formatCurrency(long j) {
         if (j == 0) {
             return "0";
         }
-        Locale locale = Locale.US;
-        Object[] objArr = new Object[1];
-        double d = (double) j;
-        Double.isNaN(d);
-        objArr[0] = Double.valueOf(d / 1.0E9d);
-        StringBuilder stringBuilder = new StringBuilder(String.format(locale, "%.9f", objArr));
+        String str = j < 0 ? "-" : "";
+        StringBuilder stringBuilder = new StringBuilder(String.format(Locale.US, "%s%d.%09d", new Object[]{str, Long.valueOf(Math.abs(j / NUM)), Long.valueOf(Math.abs(j % NUM))}));
         while (stringBuilder.length() > 1 && stringBuilder.charAt(stringBuilder.length() - 1) == '0' && stringBuilder.charAt(stringBuilder.length() - 2) != '.') {
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         }
         return stringBuilder;
+    }
+
+    private void loadTonConfigFromUrl() {
+        UserConfig userConfig = getUserConfig();
+        if (userConfig.walletConfigType == 0) {
+            WalletConfigLoader.loadConfig(userConfig.walletConfigUrl, new -$$Lambda$TonController$VOuIbtTEE2aV8W0SGQKLGpsihu0(this, userConfig));
+        }
+    }
+
+    public /* synthetic */ void lambda$loadTonConfigFromUrl$45$TonController(UserConfig userConfig, String str) {
+        if (!(TextUtils.isEmpty(str) || TextUtils.equals(userConfig.walletConfigFromUrl, str))) {
+            userConfig.walletConfigFromUrl = str;
+            userConfig.saveConfig(false);
+            onTonConfigUpdated();
+        }
     }
 }

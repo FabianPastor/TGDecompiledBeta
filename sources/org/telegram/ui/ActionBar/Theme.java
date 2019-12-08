@@ -780,6 +780,8 @@ public class Theme {
     public static final String key_dialogCheckboxSquareCheck = "dialogCheckboxSquareCheck";
     public static final String key_dialogCheckboxSquareDisabled = "dialogCheckboxSquareDisabled";
     public static final String key_dialogCheckboxSquareUnchecked = "dialogCheckboxSquareUnchecked";
+    public static final String key_dialogEmptyImage = "dialogEmptyImage";
+    public static final String key_dialogEmptyText = "dialogEmptyText";
     public static final String key_dialogFloatingButton = "dialogFloatingButton";
     public static final String key_dialogFloatingButtonPressed = "dialogFloatingButtonPressed";
     public static final String key_dialogFloatingIcon = "dialogFloatingIcon";
@@ -829,8 +831,7 @@ public class Theme {
     public static final String key_featuredStickers_addedIcon = "featuredStickers_addedIcon";
     public static final String key_featuredStickers_buttonProgress = "featuredStickers_buttonProgress";
     public static final String key_featuredStickers_buttonText = "featuredStickers_buttonText";
-    public static final String key_featuredStickers_delButton = "featuredStickers_delButton";
-    public static final String key_featuredStickers_delButtonPressed = "featuredStickers_delButtonPressed";
+    public static final String key_featuredStickers_removeButtonText = "featuredStickers_removeButtonText";
     public static final String key_featuredStickers_unread = "featuredStickers_unread";
     public static final String key_files_folderIcon = "files_folderIcon";
     public static final String key_files_folderIconBackground = "files_folderIconBackground";
@@ -1356,10 +1357,10 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x2476  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x2473  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x2473  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x2476  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x249f  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x249c  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x249c  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x249f  */
     static {
         /*
         r0 = new java.lang.Object;
@@ -1711,6 +1712,16 @@ public class Theme {
         r10 = NUM; // 0x12000000 float:4.0389678E-28 double:1.49202829E-315;
         r10 = java.lang.Integer.valueOf(r10);
         r11 = "dialogShadowLine";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -6314840; // 0xffffffffff9fa4a8 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogEmptyImage";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -7565164; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogEmptyText";
         r6.put(r11, r10);
         r6 = defaultColors;
         r10 = "windowBackgroundWhite";
@@ -3530,7 +3541,7 @@ public class Theme {
         r5 = "chat_recordedVoiceDot";
         r3.put(r5, r4);
         r3 = defaultColors;
-        r4 = -11165981; // 0xfffffffffvar_ee3 float:-2.8395055E38 double:NaN;
+        r4 = -9981205; // 0xfffffffffvar_b2eb float:-3.0798066E38 double:NaN;
         r4 = java.lang.Integer.valueOf(r4);
         r5 = "chat_recordedVoiceBackground";
         r3.put(r5, r4);
@@ -3949,14 +3960,9 @@ public class Theme {
         r5 = "featuredStickers_addButtonPressed";
         r3.put(r5, r4);
         r3 = defaultColors;
-        r4 = -2533545; // 0xffffffffffd95757 float:NaN double:NaN;
+        r4 = -11496493; // 0xfffffffffvar_d3 float:-2.7724697E38 double:NaN;
         r4 = java.lang.Integer.valueOf(r4);
-        r5 = "featuredStickers_delButton";
-        r3.put(r5, r4);
-        r3 = defaultColors;
-        r4 = -3782327; // 0xffffffffffCLASSNAME float:NaN double:NaN;
-        r4 = java.lang.Integer.valueOf(r4);
-        r5 = "featuredStickers_delButtonPressed";
+        r5 = "featuredStickers_removeButtonText";
         r3.put(r5, r4);
         r3 = defaultColors;
         r4 = "featuredStickers_buttonText";
@@ -4612,6 +4618,18 @@ public class Theme {
         r3 = "avatar_backgroundArchivedHidden";
         r4 = "avatar_backgroundSaved";
         r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "featuredStickers_removeButtonText";
+        r4 = "featuredStickers_addButtonPressed";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogEmptyImage";
+        r4 = "chats_archivePinBackground";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogEmptyText";
+        r4 = "player_time";
+        r0.put(r3, r4);
         r0 = themeAccentExclusionKeys;
         r3 = keys_avatar_background;
         r3 = java.util.Arrays.asList(r3);
@@ -4707,8 +4725,8 @@ public class Theme {
         r4 = "Dark Blue";
         r3.put(r4, r0);
         r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r0 == 0) goto L_0x2278;
-    L_0x224d:
+        if (r0 == 0) goto L_0x22a1;
+    L_0x2276:
         r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
         r0.<init>();
         r3 = "Graphite";
@@ -4728,7 +4746,7 @@ public class Theme {
         r3 = themesDict;
         r4 = "Graphite";
         r3.put(r4, r0);
-    L_0x2278:
+    L_0x22a1:
         r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
         r0.<init>();
         r3 = "Arctic Blue";
@@ -4764,51 +4782,51 @@ public class Theme {
         r4 = r0.getInt(r4, r1);
         lastLoadingThemesTime = r4;
         r4 = android.text.TextUtils.isEmpty(r3);
-        if (r4 != 0) goto L_0x2300;
-    L_0x22cf:
-        r0 = new org.json.JSONArray;	 Catch:{ Exception -> 0x22fb }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x22fb }
-        r3 = 0;
-    L_0x22d5:
-        r4 = r0.length();	 Catch:{ Exception -> 0x22fb }
-        if (r3 >= r4) goto L_0x2346;
-    L_0x22db:
-        r4 = r0.getJSONObject(r3);	 Catch:{ Exception -> 0x22fb }
-        r4 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r4);	 Catch:{ Exception -> 0x22fb }
-        if (r4 == 0) goto L_0x22f8;
-    L_0x22e5:
-        r5 = otherThemes;	 Catch:{ Exception -> 0x22fb }
-        r5.add(r4);	 Catch:{ Exception -> 0x22fb }
-        r5 = themes;	 Catch:{ Exception -> 0x22fb }
-        r5.add(r4);	 Catch:{ Exception -> 0x22fb }
-        r5 = themesDict;	 Catch:{ Exception -> 0x22fb }
-        r6 = r4.getKey();	 Catch:{ Exception -> 0x22fb }
-        r5.put(r6, r4);	 Catch:{ Exception -> 0x22fb }
+        if (r4 != 0) goto L_0x2329;
     L_0x22f8:
+        r0 = new org.json.JSONArray;	 Catch:{ Exception -> 0x2324 }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x2324 }
+        r3 = 0;
+    L_0x22fe:
+        r4 = r0.length();	 Catch:{ Exception -> 0x2324 }
+        if (r3 >= r4) goto L_0x236f;
+    L_0x2304:
+        r4 = r0.getJSONObject(r3);	 Catch:{ Exception -> 0x2324 }
+        r4 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r4);	 Catch:{ Exception -> 0x2324 }
+        if (r4 == 0) goto L_0x2321;
+    L_0x230e:
+        r5 = otherThemes;	 Catch:{ Exception -> 0x2324 }
+        r5.add(r4);	 Catch:{ Exception -> 0x2324 }
+        r5 = themes;	 Catch:{ Exception -> 0x2324 }
+        r5.add(r4);	 Catch:{ Exception -> 0x2324 }
+        r5 = themesDict;	 Catch:{ Exception -> 0x2324 }
+        r6 = r4.getKey();	 Catch:{ Exception -> 0x2324 }
+        r5.put(r6, r4);	 Catch:{ Exception -> 0x2324 }
+    L_0x2321:
         r3 = r3 + 1;
-        goto L_0x22d5;
-    L_0x22fb:
+        goto L_0x22fe;
+    L_0x2324:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x2346;
-    L_0x2300:
+        goto L_0x236f;
+    L_0x2329:
         r3 = 0;
         r4 = "themes";
         r3 = r0.getString(r4, r3);
         r4 = android.text.TextUtils.isEmpty(r3);
-        if (r4 != 0) goto L_0x2335;
-    L_0x230d:
+        if (r4 != 0) goto L_0x235e;
+    L_0x2336:
         r4 = "&";
         r3 = r3.split(r4);
         r4 = 0;
-    L_0x2314:
+    L_0x233d:
         r5 = r3.length;
-        if (r4 >= r5) goto L_0x2335;
-    L_0x2317:
+        if (r4 >= r5) goto L_0x235e;
+    L_0x2340:
         r5 = r3[r4];
         r5 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r5);
-        if (r5 == 0) goto L_0x2332;
-    L_0x231f:
+        if (r5 == 0) goto L_0x235b;
+    L_0x2348:
         r6 = otherThemes;
         r6.add(r5);
         r6 = themes;
@@ -4816,170 +4834,170 @@ public class Theme {
         r6 = themesDict;
         r7 = r5.getKey();
         r6.put(r7, r5);
-    L_0x2332:
+    L_0x235b:
         r4 = r4 + 1;
-        goto L_0x2314;
-    L_0x2335:
+        goto L_0x233d;
+    L_0x235e:
         r3 = 1;
         saveOtherThemes(r3);
         r0 = r0.edit();
         r3 = "themes";
         r0 = r0.remove(r3);
         r0.commit();
-    L_0x2346:
+    L_0x236f:
         sortThemes();
         r3 = 0;
-        r0 = themesDict;	 Catch:{ Exception -> 0x246d }
+        r0 = themesDict;	 Catch:{ Exception -> 0x2496 }
         r4 = "Dark Blue";
-        r0 = r0.get(r4);	 Catch:{ Exception -> 0x246d }
+        r0 = r0.get(r4);	 Catch:{ Exception -> 0x2496 }
         r4 = r0;
-        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;	 Catch:{ Exception -> 0x246d }
-        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x246d }
+        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;	 Catch:{ Exception -> 0x2496 }
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x2496 }
         r5 = "theme";
         r6 = 0;
-        r5 = r0.getString(r5, r6);	 Catch:{ Exception -> 0x246d }
+        r5 = r0.getString(r5, r6);	 Catch:{ Exception -> 0x2496 }
         r6 = "Dark";
-        r6 = r6.equals(r5);	 Catch:{ Exception -> 0x246d }
-        if (r6 == 0) goto L_0x2374;
-    L_0x2368:
+        r6 = r6.equals(r5);	 Catch:{ Exception -> 0x2496 }
+        if (r6 == 0) goto L_0x239d;
+    L_0x2391:
         r3 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
-        r4.setAccentColor(r3);	 Catch:{ Exception -> 0x2370 }
+        r4.setAccentColor(r3);	 Catch:{ Exception -> 0x2399 }
         r3 = r4;
-        goto L_0x237f;
-    L_0x2370:
+        goto L_0x23a8;
+    L_0x2399:
         r0 = move-exception;
         r3 = r4;
-        goto L_0x246e;
-    L_0x2374:
-        if (r5 == 0) goto L_0x237f;
-    L_0x2376:
-        r6 = themesDict;	 Catch:{ Exception -> 0x246d }
-        r5 = r6.get(r5);	 Catch:{ Exception -> 0x246d }
-        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;	 Catch:{ Exception -> 0x246d }
+        goto L_0x2497;
+    L_0x239d:
+        if (r5 == 0) goto L_0x23a8;
+    L_0x239f:
+        r6 = themesDict;	 Catch:{ Exception -> 0x2496 }
+        r5 = r6.get(r5);	 Catch:{ Exception -> 0x2496 }
+        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;	 Catch:{ Exception -> 0x2496 }
         r3 = r5;
-    L_0x237f:
+    L_0x23a8:
         r5 = "nighttheme";
         r6 = 0;
-        r5 = r0.getString(r5, r6);	 Catch:{ Exception -> 0x246d }
+        r5 = r0.getString(r5, r6);	 Catch:{ Exception -> 0x2496 }
         r6 = "Dark";
-        r6 = r6.equals(r5);	 Catch:{ Exception -> 0x246d }
-        if (r6 == 0) goto L_0x2397;
-    L_0x238e:
-        currentNightTheme = r4;	 Catch:{ Exception -> 0x246d }
+        r6 = r6.equals(r5);	 Catch:{ Exception -> 0x2496 }
+        if (r6 == 0) goto L_0x23c0;
+    L_0x23b7:
+        currentNightTheme = r4;	 Catch:{ Exception -> 0x2496 }
         r5 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
-        r4.setAccentColor(r5);	 Catch:{ Exception -> 0x246d }
-        goto L_0x23a5;
-    L_0x2397:
-        if (r5 == 0) goto L_0x23a5;
-    L_0x2399:
-        r4 = themesDict;	 Catch:{ Exception -> 0x246d }
-        r4 = r4.get(r5);	 Catch:{ Exception -> 0x246d }
-        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;	 Catch:{ Exception -> 0x246d }
-        if (r4 == 0) goto L_0x23a5;
-    L_0x23a3:
-        currentNightTheme = r4;	 Catch:{ Exception -> 0x246d }
-    L_0x23a5:
-        r4 = themesDict;	 Catch:{ Exception -> 0x246d }
-        r4 = r4.values();	 Catch:{ Exception -> 0x246d }
-        r4 = r4.iterator();	 Catch:{ Exception -> 0x246d }
-    L_0x23af:
-        r5 = r4.hasNext();	 Catch:{ Exception -> 0x246d }
-        if (r5 == 0) goto L_0x23e0;
-    L_0x23b5:
-        r5 = r4.next();	 Catch:{ Exception -> 0x246d }
-        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;	 Catch:{ Exception -> 0x246d }
-        r6 = r5.assetName;	 Catch:{ Exception -> 0x246d }
-        if (r6 == 0) goto L_0x23af;
-    L_0x23bf:
-        r6 = r5.accentBaseColor;	 Catch:{ Exception -> 0x246d }
-        if (r6 == 0) goto L_0x23af;
-    L_0x23c3:
-        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x246d }
-        r6.<init>();	 Catch:{ Exception -> 0x246d }
+        r4.setAccentColor(r5);	 Catch:{ Exception -> 0x2496 }
+        goto L_0x23ce;
+    L_0x23c0:
+        if (r5 == 0) goto L_0x23ce;
+    L_0x23c2:
+        r4 = themesDict;	 Catch:{ Exception -> 0x2496 }
+        r4 = r4.get(r5);	 Catch:{ Exception -> 0x2496 }
+        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;	 Catch:{ Exception -> 0x2496 }
+        if (r4 == 0) goto L_0x23ce;
+    L_0x23cc:
+        currentNightTheme = r4;	 Catch:{ Exception -> 0x2496 }
+    L_0x23ce:
+        r4 = themesDict;	 Catch:{ Exception -> 0x2496 }
+        r4 = r4.values();	 Catch:{ Exception -> 0x2496 }
+        r4 = r4.iterator();	 Catch:{ Exception -> 0x2496 }
+    L_0x23d8:
+        r5 = r4.hasNext();	 Catch:{ Exception -> 0x2496 }
+        if (r5 == 0) goto L_0x2409;
+    L_0x23de:
+        r5 = r4.next();	 Catch:{ Exception -> 0x2496 }
+        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;	 Catch:{ Exception -> 0x2496 }
+        r6 = r5.assetName;	 Catch:{ Exception -> 0x2496 }
+        if (r6 == 0) goto L_0x23d8;
+    L_0x23e8:
+        r6 = r5.accentBaseColor;	 Catch:{ Exception -> 0x2496 }
+        if (r6 == 0) goto L_0x23d8;
+    L_0x23ec:
+        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2496 }
+        r6.<init>();	 Catch:{ Exception -> 0x2496 }
         r7 = "accent_for_";
-        r6.append(r7);	 Catch:{ Exception -> 0x246d }
-        r7 = r5.assetName;	 Catch:{ Exception -> 0x246d }
-        r6.append(r7);	 Catch:{ Exception -> 0x246d }
-        r6 = r6.toString();	 Catch:{ Exception -> 0x246d }
-        r7 = r5.accentColor;	 Catch:{ Exception -> 0x246d }
-        r6 = r0.getInt(r6, r7);	 Catch:{ Exception -> 0x246d }
-        r5.setAccentColor(r6);	 Catch:{ Exception -> 0x246d }
-        goto L_0x23af;
-    L_0x23e0:
+        r6.append(r7);	 Catch:{ Exception -> 0x2496 }
+        r7 = r5.assetName;	 Catch:{ Exception -> 0x2496 }
+        r6.append(r7);	 Catch:{ Exception -> 0x2496 }
+        r6 = r6.toString();	 Catch:{ Exception -> 0x2496 }
+        r7 = r5.accentColor;	 Catch:{ Exception -> 0x2496 }
+        r6 = r0.getInt(r6, r7);	 Catch:{ Exception -> 0x2496 }
+        r5.setAccentColor(r6);	 Catch:{ Exception -> 0x2496 }
+        goto L_0x23d8;
+    L_0x2409:
         r4 = "selectedAutoNightType";
-        r4 = r0.getInt(r4, r1);	 Catch:{ Exception -> 0x246d }
-        selectedAutoNightType = r4;	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getInt(r4, r1);	 Catch:{ Exception -> 0x2496 }
+        selectedAutoNightType = r4;	 Catch:{ Exception -> 0x2496 }
         r4 = "autoNightScheduleByLocation";
-        r4 = r0.getBoolean(r4, r1);	 Catch:{ Exception -> 0x246d }
-        autoNightScheduleByLocation = r4;	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getBoolean(r4, r1);	 Catch:{ Exception -> 0x2496 }
+        autoNightScheduleByLocation = r4;	 Catch:{ Exception -> 0x2496 }
         r4 = "autoNightBrighnessThreshold";
         r5 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
-        r4 = r0.getFloat(r4, r5);	 Catch:{ Exception -> 0x246d }
-        autoNightBrighnessThreshold = r4;	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getFloat(r4, r5);	 Catch:{ Exception -> 0x2496 }
+        autoNightBrighnessThreshold = r4;	 Catch:{ Exception -> 0x2496 }
         r4 = "autoNightDayStartTime";
         r5 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x246d }
-        autoNightDayStartTime = r4;	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x2496 }
+        autoNightDayStartTime = r4;	 Catch:{ Exception -> 0x2496 }
         r4 = "autoNightDayEndTime";
         r5 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x246d }
-        autoNightDayEndTime = r4;	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x2496 }
+        autoNightDayEndTime = r4;	 Catch:{ Exception -> 0x2496 }
         r4 = "autoNightSunsetTime";
         r5 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x246d }
-        autoNightSunsetTime = r4;	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x2496 }
+        autoNightSunsetTime = r4;	 Catch:{ Exception -> 0x2496 }
         r4 = "autoNightSunriseTime";
         r5 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x246d }
-        autoNightSunriseTime = r4;	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x2496 }
+        autoNightSunriseTime = r4;	 Catch:{ Exception -> 0x2496 }
         r4 = "autoNightCityName";
         r5 = "";
-        r4 = r0.getString(r4, r5);	 Catch:{ Exception -> 0x246d }
-        autoNightCityName = r4;	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getString(r4, r5);	 Catch:{ Exception -> 0x2496 }
+        autoNightCityName = r4;	 Catch:{ Exception -> 0x2496 }
         r4 = "autoNightLocationLatitude3";
         r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r4 = r0.getLong(r4, r5);	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getLong(r4, r5);	 Catch:{ Exception -> 0x2496 }
         r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
         r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r8 == 0) goto L_0x2441;
-    L_0x243a:
-        r4 = java.lang.Double.longBitsToDouble(r4);	 Catch:{ Exception -> 0x246d }
-        autoNightLocationLatitude = r4;	 Catch:{ Exception -> 0x246d }
-        goto L_0x2448;
-    L_0x2441:
+        if (r8 == 0) goto L_0x246a;
+    L_0x2463:
+        r4 = java.lang.Double.longBitsToDouble(r4);	 Catch:{ Exception -> 0x2496 }
+        autoNightLocationLatitude = r4;	 Catch:{ Exception -> 0x2496 }
+        goto L_0x2471;
+    L_0x246a:
         r4 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLatitude = r4;	 Catch:{ Exception -> 0x246d }
-    L_0x2448:
+        autoNightLocationLatitude = r4;	 Catch:{ Exception -> 0x2496 }
+    L_0x2471:
         r4 = "autoNightLocationLongitude3";
         r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r4 = r0.getLong(r4, r5);	 Catch:{ Exception -> 0x246d }
+        r4 = r0.getLong(r4, r5);	 Catch:{ Exception -> 0x2496 }
         r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
         r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r8 == 0) goto L_0x245d;
-    L_0x2456:
-        r4 = java.lang.Double.longBitsToDouble(r4);	 Catch:{ Exception -> 0x246d }
-        autoNightLocationLongitude = r4;	 Catch:{ Exception -> 0x246d }
-        goto L_0x2464;
-    L_0x245d:
+        if (r8 == 0) goto L_0x2486;
+    L_0x247f:
+        r4 = java.lang.Double.longBitsToDouble(r4);	 Catch:{ Exception -> 0x2496 }
+        autoNightLocationLongitude = r4;	 Catch:{ Exception -> 0x2496 }
+        goto L_0x248d;
+    L_0x2486:
         r4 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLongitude = r4;	 Catch:{ Exception -> 0x246d }
-    L_0x2464:
+        autoNightLocationLongitude = r4;	 Catch:{ Exception -> 0x2496 }
+    L_0x248d:
         r4 = "autoNightLastSunCheckDay";
-        r0 = r0.getInt(r4, r2);	 Catch:{ Exception -> 0x246d }
-        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x246d }
-        goto L_0x2471;
-    L_0x246d:
+        r0 = r0.getInt(r4, r2);	 Catch:{ Exception -> 0x2496 }
+        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x2496 }
+        goto L_0x249a;
+    L_0x2496:
         r0 = move-exception;
-    L_0x246e:
+    L_0x2497:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x2471:
-        if (r3 != 0) goto L_0x2476;
-    L_0x2473:
+    L_0x249a:
+        if (r3 != 0) goto L_0x249f;
+    L_0x249c:
         r3 = defaultTheme;
-        goto L_0x2478;
-    L_0x2476:
+        goto L_0x24a1;
+    L_0x249f:
         currentDayTheme = r3;
-    L_0x2478:
+    L_0x24a1:
         applyTheme(r3, r1, r1, r1);
         r0 = org.telegram.ui.ActionBar.-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I.INSTANCE;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
@@ -5190,7 +5208,7 @@ public class Theme {
     L_0x005f:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r0 = r0.getResources();
-        r1 = NUM; // 0x7var_ float:1.794562E38 double:1.052935757E-314;
+        r1 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r0 = r0.getDrawable(r1);
         dialogs_holidayDrawable = r0;
         r0 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -7387,39 +7405,39 @@ public class Theme {
         r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
         r4 = r4.getResources();	 Catch:{ all -> 0x0437 }
         r17 = r15;
-        r15 = NUM; // 0x7var_a float:1.7945799E38 double:1.0529358005E-314;
+        r15 = NUM; // 0x7var_b float:1.79458E38 double:1.052935801E-314;
         r4 = r4.getDrawable(r15);	 Catch:{ all -> 0x0437 }
         r4 = r4.mutate();	 Catch:{ all -> 0x0437 }
         setDrawableColor(r4, r8);	 Catch:{ all -> 0x0437 }
         r15 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
         r15 = r15.getResources();	 Catch:{ all -> 0x0437 }
         r18 = r4;
-        r4 = NUM; // 0x7var_c float:1.7945803E38 double:1.0529358014E-314;
+        r4 = NUM; // 0x7var_d float:1.7945805E38 double:1.052935802E-314;
         r4 = r15.getDrawable(r4);	 Catch:{ all -> 0x0437 }
         r4 = r4.mutate();	 Catch:{ all -> 0x0437 }
         setDrawableColor(r4, r8);	 Catch:{ all -> 0x0437 }
         r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
         r8 = r8.getResources();	 Catch:{ all -> 0x0437 }
-        r15 = NUM; // 0x7var_ float:1.7945813E38 double:1.052935804E-314;
+        r15 = NUM; // 0x7var_ float:1.7945815E38 double:1.0529358044E-314;
         r8 = r8.getDrawable(r15);	 Catch:{ all -> 0x0437 }
         r15 = r8.mutate();	 Catch:{ all -> 0x0437 }
         setDrawableColor(r15, r9);	 Catch:{ all -> 0x0437 }
         r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
         r8 = r8.getResources();	 Catch:{ all -> 0x0437 }
         r19 = r15;
-        r15 = NUM; // 0x7var_d float:1.7945805E38 double:1.052935802E-314;
+        r15 = NUM; // 0x7var_e float:1.7945807E38 double:1.0529358024E-314;
         r8 = r8.getDrawable(r15);	 Catch:{ all -> 0x0437 }
         r15 = r8.mutate();	 Catch:{ all -> 0x0437 }
         setDrawableColor(r15, r9);	 Catch:{ all -> 0x0437 }
         r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
         r8 = r8.getResources();	 Catch:{ all -> 0x0437 }
-        r9 = NUM; // 0x7var_e float:1.7945807E38 double:1.0529358024E-314;
+        r9 = NUM; // 0x7var_f float:1.794581E38 double:1.052935803E-314;
         r8 = r8.getDrawable(r9);	 Catch:{ all -> 0x0437 }
         r9 = r8.mutate();	 Catch:{ all -> 0x0437 }
         setDrawableColor(r9, r10);	 Catch:{ all -> 0x0437 }
         r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
         r8 = r8.getResources();	 Catch:{ all -> 0x0437 }
-        r10 = NUM; // 0x7var_f float:1.794581E38 double:1.052935803E-314;
+        r10 = NUM; // 0x7var_ float:1.7945811E38 double:1.0529358034E-314;
         r8 = r8.getDrawable(r10);	 Catch:{ all -> 0x0437 }
         r10 = r8.mutate();	 Catch:{ all -> 0x0437 }
         setDrawableColor(r10, r11);	 Catch:{ all -> 0x0437 }
@@ -8528,7 +8546,7 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_de float:1.7946067E38 double:1.0529358657E-314;
+        r3 = NUM; // 0x7var_df float:1.7946069E38 double:1.052935866E-314;
         r3 = r1.getDrawable(r3);
         chat_msgNoSoundDrawable = r3;
         r3 = NUM; // 0x7var_d9 float:1.7945537E38 double:1.0529357367E-314;
@@ -8649,7 +8667,7 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMenuSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_d7 float:1.7946052E38 double:1.052935862E-314;
+        r3 = NUM; // 0x7var_d8 float:1.7946055E38 double:1.0529358627E-314;
         r3 = r1.getDrawable(r3);
         chat_msgMediaMenuDrawable = r3;
         r3 = NUM; // 0x7var_cc float:1.794551E38 double:1.0529357303E-314;
@@ -8757,7 +8775,7 @@ public class Theme {
         r3 = NUM; // 0x7var_c float:1.7944797E38 double:1.0529355564E-314;
         r3 = r1.getDrawable(r3);
         chat_botInlineDrawable = r3;
-        r3 = NUM; // 0x7var_bb float:1.7945996E38 double:1.0529358484E-314;
+        r3 = NUM; // 0x7var_bc float:1.7945998E38 double:1.052935849E-314;
         r3 = r1.getDrawable(r3);
         chat_systemDrawable = r3;
         r3 = NUM; // 0x7var_e6 float:1.7945044E38 double:1.0529356167E-314;
@@ -8804,7 +8822,7 @@ public class Theme {
         r4 = createCircleDrawableWithIcon(r4, r8);
         r8 = 5;
         r3[r8] = r4;
-        r3 = NUM; // 0x7var_a float:1.7945637E38 double:1.052935761E-314;
+        r3 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
         r3 = r1.getDrawable(r3);
         chat_attachEmptyDrawable = r3;
         r3 = chat_cornerOuter;
@@ -8839,10 +8857,10 @@ public class Theme {
         r4 = NUM; // 0x7var_ac float:1.7944927E38 double:1.052935588E-314;
         r4 = r1.getDrawable(r4);
         r3[r6] = r4;
-        r3 = NUM; // 0x7var_ float:1.7945892E38 double:1.052935823E-314;
+        r3 = NUM; // 0x7var_ float:1.7945894E38 double:1.0529358237E-314;
         r3 = r1.getDrawable(r3);
         chat_shareDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.794589E38 double:1.0529358227E-314;
+        r3 = NUM; // 0x7var_ float:1.7945892E38 double:1.052935823E-314;
         r3 = r1.getDrawable(r3);
         chat_shareIconDrawable = r3;
         r3 = NUM; // 0x7var_b9 float:1.7944953E38 double:1.0529355944E-314;
@@ -8899,7 +8917,7 @@ public class Theme {
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r7];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_db float:1.794606E38 double:1.052935864E-314;
+        r10 = NUM; // 0x7var_dc float:1.7946063E38 double:1.0529358647E-314;
         r9 = createCircleDrawableWithIcon(r9, r10);
         r3[r5] = r9;
         r3 = chat_fileMiniStatesDrawable;
@@ -8910,13 +8928,13 @@ public class Theme {
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r8];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_dc float:1.7946063E38 double:1.0529358647E-314;
+        r10 = NUM; // 0x7var_dd float:1.7946065E38 double:1.052935865E-314;
         r9 = createCircleDrawableWithIcon(r9, r10);
         r3[r5] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r8];
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r9 = NUM; // 0x7var_dc float:1.7946063E38 double:1.0529358647E-314;
+        r9 = NUM; // 0x7var_dd float:1.7946065E38 double:1.052935865E-314;
         r4 = createCircleDrawableWithIcon(r4, r9);
         r3[r2] = r4;
         r3 = NUM; // 0x7var_e6 float:1.7945564E38 double:1.052935743E-314;
@@ -9111,7 +9129,7 @@ public class Theme {
         r6 = r3[r6];
         r7 = 6;
         r3 = r3[r7];
-        r7 = NUM; // 0x7var_ float:1.794575E38 double:1.0529357886E-314;
+        r7 = NUM; // 0x7var_ float:1.7945752E38 double:1.052935789E-314;
         r7 = r1.getDrawable(r7);
         r3[r2] = r7;
         r6[r5] = r7;

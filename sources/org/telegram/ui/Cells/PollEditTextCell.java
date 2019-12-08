@@ -7,6 +7,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -53,6 +54,13 @@ public class PollEditTextCell extends FrameLayout {
             public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 PollEditTextCell.this.onEditTextDraw(this, canvas);
+            }
+
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                if (isEnabled()) {
+                    return super.onTouchEvent(motionEvent);
+                }
+                return false;
             }
         };
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));

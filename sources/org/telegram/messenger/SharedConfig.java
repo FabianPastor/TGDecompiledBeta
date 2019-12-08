@@ -43,7 +43,6 @@ public class SharedConfig {
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter = false;
     public static int keepMedia = 2;
-    public static long lastAppPauseTime = 0;
     public static int lastKeepMediaCheckTime = 0;
     private static int lastLocalId = -210000;
     public static int lastPauseTime = 0;
@@ -76,6 +75,7 @@ public class SharedConfig {
     public static boolean showNotificationsForAllAccounts = true;
     public static boolean shuffleMusic = false;
     public static boolean sortContactsByName = false;
+    public static boolean sortFilesByName = false;
     public static boolean streamAllVideo = false;
     public static boolean streamMedia = true;
     public static boolean streamMkv = false;
@@ -137,7 +137,6 @@ public class SharedConfig {
                 edit.putInt("badPasscodeTries", badPasscodeTries);
                 edit.putInt("autoLockIn", autoLockIn);
                 edit.putInt("lastPauseTime", lastPauseTime);
-                edit.putLong("lastAppPauseTime", lastAppPauseTime);
                 edit.putString("lastUpdateVersion2", lastUpdateVersion);
                 edit.putBoolean("useFingerprint", useFingerprint);
                 edit.putBoolean("allowScreenCapture", allowScreenCapture);
@@ -147,6 +146,7 @@ public class SharedConfig {
                 edit.putString("passportConfigJson", passportConfigJson);
                 edit.putInt("passportConfigHash", passportConfigHash);
                 edit.putBoolean("sortContactsByName", sortContactsByName);
+                edit.putBoolean("sortFilesByName", sortFilesByName);
                 edit.commit();
             } catch (Exception e) {
                 FileLog.e(e);
@@ -178,7 +178,6 @@ public class SharedConfig {
             badPasscodeTries = sharedPreferences.getInt("badPasscodeTries", 0);
             autoLockIn = sharedPreferences.getInt("autoLockIn", 3600);
             lastPauseTime = sharedPreferences.getInt("lastPauseTime", 0);
-            lastAppPauseTime = sharedPreferences.getLong("lastAppPauseTime", 0);
             useFingerprint = sharedPreferences.getBoolean("useFingerprint", true);
             lastUpdateVersion = sharedPreferences.getString("lastUpdateVersion2", "3.5");
             allowScreenCapture = sharedPreferences.getBoolean("allowScreenCapture", false);
@@ -222,6 +221,7 @@ public class SharedConfig {
             streamMkv = sharedPreferences.getBoolean("streamMkv", false);
             suggestStickers = sharedPreferences.getInt("suggestStickers", 0);
             sortContactsByName = sharedPreferences.getBoolean("sortContactsByName", false);
+            sortFilesByName = sharedPreferences.getBoolean("sortFilesByName", false);
             noSoundHintShowed = sharedPreferences.getBoolean("noSoundHintShowed", false);
             directShareHash = sharedPreferences.getLong("directShareHash", 0);
             useThreeLinesLayout = sharedPreferences.getBoolean("useThreeLinesLayout", false);
@@ -507,6 +507,13 @@ public class SharedConfig {
         sortContactsByName ^= 1;
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("sortContactsByName", sortContactsByName);
+        edit.commit();
+    }
+
+    public static void toggleSortFilesByName() {
+        sortFilesByName ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("sortFilesByName", sortFilesByName);
         edit.commit();
     }
 

@@ -744,11 +744,16 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 } else if (i == 4) {
                     if (WallpapersListActivity.this.getParentActivity() != null) {
                         Builder builder = new Builder(WallpapersListActivity.this.getParentActivity());
+                        builder.setTitle(LocaleController.formatPluralString("DeleteBackground", WallpapersListActivity.this.selectedWallPapers.size()));
                         builder.setMessage(LocaleController.formatString("DeleteChatBackgroundsAlert", NUM, new Object[0]));
-                        builder.setTitle(LocaleController.getString("AppName", NUM));
-                        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$WallpapersListActivity$2$K8aHn505ku1qQXr9dNGqIjZPpyE(this));
+                        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new -$$Lambda$WallpapersListActivity$2$K8aHn505ku1qQXr9dNGqIjZPpyE(this));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                        WallpapersListActivity.this.showDialog(builder.create());
+                        AlertDialog create = builder.create();
+                        WallpapersListActivity.this.showDialog(create);
+                        TextView textView = (TextView) create.getButton(-1);
+                        if (textView != null) {
+                            textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                        }
                     }
                 } else if (i == 3) {
                     Bundle bundle = new Bundle();

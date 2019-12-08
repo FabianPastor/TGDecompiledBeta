@@ -1723,6 +1723,15 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    public boolean onBackPressed() {
+        EditTextEmoji editTextEmoji = this.commentTextView;
+        if (editTextEmoji == null || !editTextEmoji.isPopupShowing()) {
+            return super.onBackPressed();
+        }
+        this.commentTextView.hidePopup(true);
+        return false;
+    }
+
     public void updatePhotosButton(int i) {
         boolean z = true;
         if (this.selectedPhotos.size() == 0) {

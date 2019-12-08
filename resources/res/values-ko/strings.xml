@@ -200,7 +200,6 @@
     <string name="AddToStickers">스티커에 추가</string>
     <string name="AddToTheGroup">%1$s 님을 그룹에 추가할까요?</string>
     <string name="AddToTheGroupForwardCount">전달할 최근 메시지 개수:</string>
-    <string name="AddToTheGroupTitle">%2$s 대화방에 %1$s 님을 추가할까요?</string>
     <string name="AddedToFavorites">스티커가 즐겨찾기에 추가되었습니다</string>
     <string name="AdminWillBeRemoved">%1$s 님을 제한하시면 이 사용자가 관리자에서 제명됩니다.</string>
     <string name="Agree">동의</string>
@@ -710,7 +709,6 @@
     <string name="ChooseFromGallery">갤러리</string>
     <string name="ChooseFromSearch">웹 검색</string>
     <string name="ChooseFromYourStickers">내 스티커에서 선택</string>
-    <string name="ChooseMapPreviewProvider">지도 미리보기 제공 기관을 선택하세요</string>
     <string name="ChoosePhoto">사진 선택</string>
     <string name="ChooseStickerSet">스티커 묶음 선택</string>
     <string name="ChooseStickerSetMy">@stickers 봇으로 회원님만의 스티커 묶음을 만드실 수 있습니다.</string>
@@ -869,7 +867,6 @@
     <string name="DeleteForUser">%1$s 님에게서 삭제</string>
     <string name="DeleteFromFavorites">즐겨찾기에서 삭제</string>
     <string name="DeleteGif">GIF를 삭제할까요?</string>
-    <string name="DeleteLocalization">언어를 삭제할까요?</string>
     <string name="DeleteMega">그룹 삭제</string>
     <string name="DeleteMegaMenu">그룹 삭제</string>
     <string name="DeleteMessagesOption">보낸 메시지 회수</string>
@@ -1250,7 +1247,6 @@
     <string name="GlobalSearch">전체 검색</string>
     <string name="GlobalSendMessageRestricted">이 그룹에서는 메시지를 작성하실 수 없습니다.</string>
     <string name="GotAQuestion">텔레그램에 관해\10궁금한 점이 있으신가요?</string>
-    <string name="GpsDisabledAlert">GPS가 꺼져 있습니다. 위치 기반 서비스를 사용하려면 GPS를 켜 주세요.</string>
     <string name="Grain">그레인</string>
     <string name="Gray">회색</string>
     <string name="Green">초록색</string>
@@ -1429,7 +1425,6 @@
     <string name="LocalAudioCache">음성/동영상 메시지</string>
     <string name="LocalCache">다른 파일</string>
     <string name="LocalDatabase">로컬 데이터베이스</string>
-    <string name="LocalDatabaseClear">캐시가 된 문자 메시지를 비울까요?</string>
     <string name="LocalDatabaseInfo">로컬 데이터베이스를 비우면 캐시된 메시지의 글을 지우고 데이터베이스를 압축해 내장 디스크 공간을 절약합니다. 텔레그램이 작동하는데 데이터가 어느 정도 필요하므로 데이터베이스 크기는 0이 되지 않습니다.\10\10이 작업은 완료되기까지 몇 분 정도 걸릴 수 있습니다.</string>
     <string name="LocalDocumentCache">문서</string>
     <string name="LocalGifCache">GIF</string>
@@ -1600,7 +1595,6 @@
     <string name="NewThemePreviewReply">Good morning! ��</string>
     <string name="NewThemeTitle">New Theme</string>
     <string name="Next">다음</string>
-    <string name="NoAudio">여기서 파일을 보려면 기기의 음악 라이브러리에 파일을 추가하세요.</string>
     <string name="NoBlocked">차단된 사용자 없음</string>
     <string name="NoBlockedChannel2">관리자가 채널에서 추방시킨 사용자는 초대 링크를 통해 다시 들어올 수 없습니다.</string>
     <string name="NoBlockedGroup2">관리자가 그룹에서 추방시킨 사용자는 초대 링크를 통해 다시 들어올 수 없습니다.</string>
@@ -2418,12 +2412,8 @@
     <string name="SendAsFile">파일로 보내기</string>
     <string name="SendAsFiles">파일로 보내기</string>
     <string name="SendByEnter">엔터 키로 보내기</string>
-    <string name="SendContactTo">%1$s 님에게 연락처를 보낼까요?</string>
-    <string name="SendContactToGroup">%1$s 님에게 연락처를 보낼까요?</string>
     <string name="SendDayAt">\'Send on\' MMM d \'at\' HH:mm</string>
     <string name="SendDayYearAt">\'Send on\' MMM d yyyy \'at\' HH:mm</string>
-    <string name="SendGameTo">%1$s 님에게 게임을 공유할까요?</string>
-    <string name="SendGameToGroup">%1$s 님에게 게임을 공유할까요?</string>
     <string name="SendGifPreview">GIF 보내기</string>
     <string name="SendItems">보내기 %1$s</string>
     <string name="SendLiveLocation">내 실시간 위치 공유...</string>
@@ -2435,8 +2425,6 @@
     <string name="SendMessageRestricted">그룹 관리자의 제한으로 메시지를 %1$s까지 작성하실 수 없습니다</string>
     <string name="SendMessageRestrictedForever">그룹 관리자의 제한으로 메시지를 작성하실 수 없습니다.</string>
     <string name="SendMessageTo">사람들을 추가하세요...</string>
-    <string name="SendMessagesTo">%1$s 님에게 메시지를 보낼까요?</string>
-    <string name="SendMessagesToGroup">%1$s 그룹에 메시지를 보낼까요?</string>
     <string name="SendSelectedLocation">선택한 위치 보내기</string>
     <string name="SendSticker">스티커 보내기</string>
     <string name="SendStickerPreview">스티커 보내기</string>
@@ -2581,9 +2569,6 @@
     <string name="StopAllLocationSharings">모두 중단</string>
     <string name="StopDownload">다운로드 중지</string>
     <string name="StopLiveLocation">위치 공유 중단</string>
-    <string name="StopLiveLocationAlertAll">정말로 실시간 위치 공유를 중단하시겠습니까?</string>
-    <string name="StopLiveLocationAlertToGroup">정말로 %1$s 님과 실시간 위치 공유를 중단하시겠습니까?</string>
-    <string name="StopLiveLocationAlertToUser">정말로 %1$s 님과 실시간 위치 공유를 중단하시겠습니까?</string>
     <string name="StopLoading">불러오기를 중단할까요?</string>
     <string name="StopPoll">설문 마감</string>
     <string name="StopPollAlertText">지금 설문을 마감하시면, 더 이상 다른 사람이 투표할 수 없습니다. 이 작업은 되돌릴 수 없습니다.</string>
@@ -2610,7 +2595,6 @@
     <string name="SyncContacts">연락처 동기화</string>
     <string name="SyncContactsAdded">기기에 있는 연락처가 계정에 추가되었습니다.</string>
     <string name="SyncContactsDelete">동기화된 연락처 삭제</string>
-    <string name="SyncContactsDeleteInfo">가지고 계신 연락처가 텔레그램 서버에서 제거됩니다. \'연락처 동기화\'를 켜시면, 연락처가 다시 동기화됩니다.</string>
     <string name="SyncContactsInfoOff">기기에 있는 연락처를 계정과 계속 동기화하려면 켜 주세요.</string>
     <string name="SyncContactsInfoOn">이 기기에 있는 연락처가 계정에 추가됩니다.</string>
     <string name="SyncContactsOff">사용중인 계정에 기기에 있는 연락처가 추가가 되지 않을 예정입니다.</string>
@@ -2642,7 +2626,6 @@
     <string name="TerminateSessionInfo">세션을 종료하려면 짧게 누르세요.</string>
     <string name="TerminateSessionQuestion">이 세션을 종료할까요?</string>
     <string name="TerminateWebSessionInfo">텔레그램 계정과 연결을 끊으려면 짧게 누르세요.</string>
-    <string name="TerminateWebSessionQuestion">%1$s과(와) 연결을 끊을까요?</string>
     <string name="TerminateWebSessionStop">%1$s 차단</string>
     <string name="TermsOfService">이용 약관</string>
     <string name="TermsOfServiceLogin">가입함으로써 귀하는 *이용 약관*에 동의하게 됩니다.</string>

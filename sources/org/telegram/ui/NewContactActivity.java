@@ -67,7 +67,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2.setAllowOverlayTitle(r3);
         r2 = r1.actionBar;
         r4 = "AddContactTitle";
-        r5 = NUM; // 0x7f0e00ad float:1.8875388E38 double:1.053162242E-314;
+        r5 = NUM; // 0x7f0e00ae float:1.887539E38 double:1.0531622426E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r2.setTitle(r4);
         r2 = r1.actionBar;
@@ -90,7 +90,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r1.editDoneItem = r2;
         r2 = r1.editDoneItem;
         r4 = "Done";
-        r6 = NUM; // 0x7f0e03a9 float:1.8876938E38 double:1.0531626196E-314;
+        r6 = NUM; // 0x7f0e03c1 float:1.8876987E38 double:1.0531626314E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r2.setContentDescription(r4);
         r2 = new org.telegram.ui.Components.ContextProgressView;
@@ -182,7 +182,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r9.setImeOptions(r5);
         r9 = r1.firstNameField;
         r14 = "FirstName";
-        r15 = NUM; // 0x7f0e0483 float:1.887738E38 double:1.0531627273E-314;
+        r15 = NUM; // 0x7f0e049b float:1.8877429E38 double:1.053162739E-314;
         r14 = org.telegram.messenger.LocaleController.getString(r14, r15);
         r9.setHint(r14);
         r9 = r1.firstNameField;
@@ -242,7 +242,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r6.setImeOptions(r5);
         r5 = r1.lastNameField;
         r6 = "LastName";
-        r9 = NUM; // 0x7f0e0576 float:1.8877873E38 double:1.0531628473E-314;
+        r9 = NUM; // 0x7f0e0591 float:1.8877928E38 double:1.0531628607E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r9);
         r5.setHint(r6);
         r5 = r1.lastNameField;
@@ -291,7 +291,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r4 = r1.countryButton;
         r4.setGravity(r13);
         r4 = r1.countryButton;
-        r5 = NUM; // 0x7var_ad float:1.7945967E38 double:1.0529358415E-314;
+        r5 = NUM; // 0x7var_ae float:1.794597E38 double:1.052935842E-314;
         r4.setBackgroundResource(r5);
         r4 = r1.countryButton;
         r17 = 36;
@@ -546,7 +546,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         if (r0 != 0) goto L_0x04b9;
     L_0x04a4:
         r0 = r1.countryButton;
-        r2 = NUM; // 0x7f0e02c5 float:1.8876476E38 double:1.053162507E-314;
+        r2 = NUM; // 0x7f0e02d1 float:1.88765E38 double:1.053162513E-314;
         r5 = "ChooseCountry";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r0.setText(r2);

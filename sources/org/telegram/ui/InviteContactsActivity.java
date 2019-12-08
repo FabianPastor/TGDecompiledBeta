@@ -536,9 +536,11 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         }
 
         public /* synthetic */ void lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter(ArrayList arrayList, ArrayList arrayList2) {
-            this.searchResult = arrayList;
-            this.searchResultNames = arrayList2;
-            notifyDataSetChanged();
+            if (this.searching) {
+                this.searchResult = arrayList;
+                this.searchResultNames = arrayList2;
+                notifyDataSetChanged();
+            }
         }
 
         public void notifyDataSetChanged() {

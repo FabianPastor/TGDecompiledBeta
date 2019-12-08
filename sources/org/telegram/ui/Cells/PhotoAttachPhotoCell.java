@@ -180,9 +180,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         if (this.photoEntry.isVideo) {
             this.imageView.setOrientation(0, true);
             this.videoInfoContainer.setVisibility(0);
-            int i2 = this.photoEntry.duration;
-            i2 -= (i2 / 60) * 60;
-            this.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(r1), Integer.valueOf(i2)}));
+            this.videoTextView.setText(AndroidUtilities.formatShortDuration(this.photoEntry.duration));
         } else {
             this.videoInfoContainer.setVisibility(4);
         }

@@ -172,6 +172,10 @@ public class BiometricPromtHelper {
                     if (fingerprintManagerOrNull != null) {
                         fingerprintManagerOrNull.authenticate(new FingerprintManager.CryptoObject(cipher2), this.cancellationSignal, 0, new FingerprintManager.AuthenticationCallback() {
                             public void onAuthenticationError(int i, CharSequence charSequence) {
+                                if (i == 10) {
+                                    BiometricPromtHelper.this.bottomSheet.dismiss();
+                                    return;
+                                }
                                 BiometricPromtHelper.this.updateState(2);
                                 BiometricPromtHelper.this.showTemporaryMessage(charSequence);
                             }

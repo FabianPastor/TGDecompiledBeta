@@ -37,6 +37,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
     private int buttonX;
     private int buttonY;
     private CheckBox2 checkBox;
+    private boolean checkForButtonPress;
     private int currentAccount = UserConfig.selectedAccount;
     private MessageObject currentMessageObject;
     private StaticLayout descriptionLayout;
@@ -133,6 +134,10 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         this.checkBox.setChecked(z, z2);
     }
 
+    public void setCheckForButtonPress(boolean z) {
+        this.checkForButtonPress = z;
+    }
+
     /* Access modifiers changed, original: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -155,7 +160,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         this.radialProgress.initMiniIcons();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0048  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x0068  */
     /* JADX WARNING: Removed duplicated region for block: B:14:0x0039  */
     private boolean checkAudioMotionEvent(android.view.MotionEvent r9) {
         /*
@@ -181,67 +186,96 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         r6 = r6 + r2;
         if (r0 > r6) goto L_0x0032;
     L_0x0026:
-        r0 = r8.buttonY;
-        r6 = r0 + r3;
-        if (r1 < r6) goto L_0x0032;
+        r6 = r8.buttonY;
+        r7 = r6 + r3;
+        if (r1 < r7) goto L_0x0032;
     L_0x002c:
-        r0 = r0 + r3;
-        r0 = r0 + r2;
-        if (r1 > r0) goto L_0x0032;
+        r6 = r6 + r3;
+        r6 = r6 + r2;
+        if (r1 > r6) goto L_0x0032;
     L_0x0030:
-        r0 = 1;
+        r2 = 1;
         goto L_0x0033;
     L_0x0032:
-        r0 = 0;
+        r2 = 0;
     L_0x0033:
-        r1 = r9.getAction();
-        if (r1 != 0) goto L_0x0048;
+        r3 = r9.getAction();
+        if (r3 != 0) goto L_0x0068;
     L_0x0039:
-        if (r0 == 0) goto L_0x0080;
+        if (r2 == 0) goto L_0x0049;
     L_0x003b:
         r8.miniButtonPressed = r4;
         r9 = r8.radialProgress;
         r0 = r8.miniButtonPressed;
         r9.setPressed(r0, r4);
         r8.invalidate();
-        goto L_0x0081;
-    L_0x0048:
-        r1 = r8.miniButtonPressed;
-        if (r1 == 0) goto L_0x0080;
-    L_0x004c:
-        r1 = r9.getAction();
-        if (r1 != r4) goto L_0x005e;
-    L_0x0052:
+    L_0x0047:
+        r5 = 1;
+        goto L_0x00af;
+    L_0x0049:
+        r9 = r8.checkForButtonPress;
+        if (r9 == 0) goto L_0x00af;
+    L_0x004d:
+        r9 = r8.radialProgress;
+        r9 = r9.getProgressRect();
+        r0 = (float) r0;
+        r1 = (float) r1;
+        r9 = r9.contains(r0, r1);
+        if (r9 == 0) goto L_0x00af;
+    L_0x005b:
+        r8.buttonPressed = r4;
+        r9 = r8.radialProgress;
+        r0 = r8.buttonPressed;
+        r9.setPressed(r0, r5);
+        r8.invalidate();
+        goto L_0x0047;
+    L_0x0068:
+        r0 = r9.getAction();
+        if (r0 != r4) goto L_0x008e;
+    L_0x006e:
+        r9 = r8.miniButtonPressed;
+        if (r9 == 0) goto L_0x007e;
+    L_0x0072:
         r8.miniButtonPressed = r5;
         r8.playSoundEffect(r5);
         r8.didPressedMiniButton(r4);
         r8.invalidate();
-        goto L_0x0079;
-    L_0x005e:
-        r1 = r9.getAction();
-        r2 = 3;
-        if (r1 != r2) goto L_0x006b;
-    L_0x0065:
-        r8.miniButtonPressed = r5;
+        goto L_0x00af;
+    L_0x007e:
+        r9 = r8.buttonPressed;
+        if (r9 == 0) goto L_0x00af;
+    L_0x0082:
+        r8.buttonPressed = r5;
+        r8.playSoundEffect(r5);
+        r8.didPressedButton();
         r8.invalidate();
-        goto L_0x0079;
-    L_0x006b:
+        goto L_0x00af;
+    L_0x008e:
+        r0 = r9.getAction();
+        r1 = 3;
+        if (r0 != r1) goto L_0x009d;
+    L_0x0095:
+        r8.miniButtonPressed = r5;
+        r8.buttonPressed = r5;
+        r8.invalidate();
+        goto L_0x00af;
+    L_0x009d:
         r9 = r9.getAction();
-        r1 = 2;
-        if (r9 != r1) goto L_0x0079;
-    L_0x0072:
-        if (r0 != 0) goto L_0x0079;
-    L_0x0074:
+        r0 = 2;
+        if (r9 != r0) goto L_0x00af;
+    L_0x00a4:
+        if (r2 != 0) goto L_0x00af;
+    L_0x00a6:
+        r9 = r8.miniButtonPressed;
+        if (r9 == 0) goto L_0x00af;
+    L_0x00aa:
         r8.miniButtonPressed = r5;
         r8.invalidate();
-    L_0x0079:
+    L_0x00af:
         r9 = r8.radialProgress;
         r0 = r8.miniButtonPressed;
         r9.setPressed(r0, r4);
-    L_0x0080:
-        r4 = 0;
-    L_0x0081:
-        return r4;
+        return r5;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.SharedAudioCell.checkAudioMotionEvent(android.view.MotionEvent):boolean");
     }

@@ -200,7 +200,6 @@
     <string name="AddToStickers">إضافة إلى الملصقات</string>
     <string name="AddToTheGroup">إضافة %1$s للمجموعة؟</string>
     <string name="AddToTheGroupForwardCount">عدد الرسائل اﻷخيرة المراد تحويلها:</string>
-    <string name="AddToTheGroupTitle">هل ترغب بإضافة %1$s للمحادثة %2$s؟</string>
     <string name="AddedToFavorites">تمت إضافة الملصق للمفضلة</string>
     <string name="AdminWillBeRemoved">سيتم إزالة %1$s من المشرفين إذا قمت بتقييده.</string>
     <string name="Agree">موافق</string>
@@ -710,7 +709,6 @@
     <string name="ChooseFromGallery">الاختيار من المعرض</string>
     <string name="ChooseFromSearch">البحث في الويب</string>
     <string name="ChooseFromYourStickers">اختر من ملصقاتك</string>
-    <string name="ChooseMapPreviewProvider">اختيار مزود معاينة الخرائط</string>
     <string name="ChoosePhoto">اختر صورة</string>
     <string name="ChooseStickerSet">اختيار حزمة ملصقات</string>
     <string name="ChooseStickerSetMy">يمكنك إنشاء حزم الملصقات الخاصة بك عن طريق البوت stickers@.</string>
@@ -869,7 +867,6 @@
     <string name="DeleteForUser">حذف من عند %1$s</string>
     <string name="DeleteFromFavorites">احذف من المفضلة</string>
     <string name="DeleteGif">هل ترغب بحذف الصورة المتحركة؟</string>
-    <string name="DeleteLocalization">حذف التعريب؟</string>
     <string name="DeleteMega">حذف المجموعة</string>
     <string name="DeleteMegaMenu">حذف المجموعة</string>
     <string name="DeleteMessagesOption">التراجع عن إرسال رسائلي</string>
@@ -1250,7 +1247,6 @@
     <string name="GlobalSearch">البحث العام</string>
     <string name="GlobalSendMessageRestricted">لا يُسمحُ بكتابة الرسائل في هذه المجموعة.</string>
     <string name="GotAQuestion">هل لديك سؤالٌ ما\10حول تيليجرام؟</string>
-    <string name="GpsDisabledAlert">يبدو أن تحديد المواقع معطَّل لديك، يرجى تفعيله لاستخدام ميزات تيليجرام التي تحتاجه.</string>
     <string name="Grain">حبوب</string>
     <string name="Gray">الرمادي</string>
     <string name="Green">الأخضر</string>
@@ -1429,7 +1425,6 @@
     <string name="LocalAudioCache">الرسائل الصوتية/المرئية</string>
     <string name="LocalCache">الملفات الأخرى</string>
     <string name="LocalDatabase">قاعدة البيانات على الجهاز</string>
-    <string name="LocalDatabaseClear">هل ترغب في مسح الرسائل النصية من الذاكرة المؤقتة؟</string>
     <string name="LocalDatabaseInfo">مسح قاعدة البيانات على الجهاز سيحذف الرسائل التي تم تنزيلها على جهازك ويقوم بضغط قاعدة البيانات لتوفير مساحة على جهازك. تيليجرام يحتاج لبعض البيانات ليعمل، لذلك حجم قاعدة البيانات لن يصل إلى صفر.\10\10هذه العملية ربما تأخذ عدة دقائق لتتم.</string>
     <string name="LocalDocumentCache">المستندات</string>
     <string name="LocalGifCache">الصور المتحركة</string>
@@ -1600,7 +1595,6 @@
     <string name="NewThemePreviewReply">Good morning! ��</string>
     <string name="NewThemeTitle">New Theme</string>
     <string name="Next">التالي</string>
-    <string name="NoAudio">فضلًا قم بإضافة ملفات لمكتبتك الصوتية على جهازك لتتمكن من مشاهدتها هنا.</string>
     <string name="NoBlocked">لا يوجد مستخدمون محظورون بعد</string>
     <string name="NoBlockedChannel2">لن يتمكن المستخدمون الذين أزالهم المشرفون من القناة من الانضمام إليها حتى عبر روابط الدعوة الخاصة.</string>
     <string name="NoBlockedGroup2">لن يتمكن المستخدمون الذين أزالهم المشرفون من المجموعة إعادة الإنضمام عبر روابط الدعوة.</string>
@@ -2418,12 +2412,8 @@
     <string name="SendAsFile">إرسال دون ضغط</string>
     <string name="SendAsFiles">إرسال بدون ضغط</string>
     <string name="SendByEnter">إرسال بمفتاح الإدخال</string>
-    <string name="SendContactTo">إرسال جهة الاتصال إلى %1$s؟</string>
-    <string name="SendContactToGroup">إرسال جهة الاتصال إلى %1$s؟</string>
     <string name="SendDayAt">\'إرسال بتاريخ\' d MMM \'عند\' HH:mm</string>
     <string name="SendDayYearAt">\'إرسال بتاريخ\' d MMM yyyy \'عند\' HH:mm</string>
-    <string name="SendGameTo">هل ترغب في مشاركة اللعبة مع %1$s؟</string>
-    <string name="SendGameToGroup">هل ترغب في مشاركة اللعبة مع %1$s؟</string>
     <string name="SendGifPreview">إرسال الصورة المتحركة</string>
     <string name="SendItems">إرسال %1$s</string>
     <string name="SendLiveLocation">شارك موقعي الحي لمدة...</string>
@@ -2435,8 +2425,6 @@
     <string name="SendMessageRestricted">مشرفو هذه المجموعة قيدوك من الكتابة فيها حتى %1$s</string>
     <string name="SendMessageRestrictedForever">قام مشرفو هذه المجموعة بتقييدك من الكتابة هنا.</string>
     <string name="SendMessageTo">إضافة أشخاص...</string>
-    <string name="SendMessagesTo">إرسال الرسائل إلى %1$s؟</string>
-    <string name="SendMessagesToGroup">إرسال الرسائل إلى %1$s؟</string>
     <string name="SendSelectedLocation">إرسال الموقع المختار</string>
     <string name="SendSticker">إرسال الملصق</string>
     <string name="SendStickerPreview">إرسال الملصق</string>
@@ -2581,9 +2569,6 @@
     <string name="StopAllLocationSharings">إيقاف الكل</string>
     <string name="StopDownload">إيقاف التنزيل</string>
     <string name="StopLiveLocation">إيقاف مشاركة الموقع</string>
-    <string name="StopLiveLocationAlertAll">هل ترغب حقًا في إيقاف مشاركة موقعك الحي؟</string>
-    <string name="StopLiveLocationAlertToGroup">هل ترغب حقًا في إيقاف مشاركة موقعك الحي مع %1$s؟</string>
-    <string name="StopLiveLocationAlertToUser">هل ترغب حقًا في إيقاف مشاركة موقعك الحي مع %1$s؟</string>
     <string name="StopLoading">إيقاف التحميل؟</string>
     <string name="StopPoll">إيقاف الاستفتاء</string>
     <string name="StopPollAlertText">إذا قمت بإيقاف الاستفتاء الآنَ فلن يتمكن أي أحد من التصويت عليه، لا يمكنك التراجع عن هذا القرار.</string>
@@ -2610,7 +2595,6 @@
     <string name="SyncContacts">مزامنة جهات الاتصال</string>
     <string name="SyncContactsAdded">تمت إضافة جهات اتصال جهازك إلى حسابك.</string>
     <string name="SyncContactsDelete">حذف الجهات المزامَنة</string>
-    <string name="SyncContactsDeleteInfo">سيؤدي هذا إلى حذف جهات اتصالك من خوادم تيليجرام، إذا كان خيار «مزامنة جهات الاتصال» مفعَّلا فستتم إعادة مزامنتها تلقائيًا.</string>
     <string name="SyncContactsInfoOff">قم بالتفعيل لمزامنة جهات اتصال هذا الجهاز مع حسابك باستمرار.</string>
     <string name="SyncContactsInfoOn">ستتم إضافة جهات اتصال جهازك هذا إلى حسابك.</string>
     <string name="SyncContactsOff">لن يتم إضافة جهات اتصال هذا الجهاز إلى هذا الحساب.</string>
@@ -2642,7 +2626,6 @@
     <string name="TerminateSessionInfo">لإنهاء جلسة ما قم بالضغط عليها.</string>
     <string name="TerminateSessionQuestion">إنهاء هذه الجلسة؟</string>
     <string name="TerminateWebSessionInfo">اضغط لفك الارتباط من حسابك في تيليجرام.</string>
-    <string name="TerminateWebSessionQuestion">فك الارتباط مع %1$s؟</string>
     <string name="TerminateWebSessionStop">حظر %1$s</string>
     <string name="TermsOfService">شروط الخدمة</string>
     <string name="TermsOfServiceLogin">عبر تسجيلك\10أنت توافق على *شروط الخدمة*.</string>

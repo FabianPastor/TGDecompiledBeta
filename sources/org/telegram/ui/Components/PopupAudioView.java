@@ -297,20 +297,20 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
             if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
                 i = this.currentMessageObject.audioProgressSec;
             } else {
-                for (i = 0; i < this.currentMessageObject.getDocument().attributes.size(); i++) {
-                    DocumentAttribute documentAttribute = (DocumentAttribute) this.currentMessageObject.getDocument().attributes.get(i);
+                i = 0;
+                for (int i2 = 0; i2 < this.currentMessageObject.getDocument().attributes.size(); i2++) {
+                    DocumentAttribute documentAttribute = (DocumentAttribute) this.currentMessageObject.getDocument().attributes.get(i2);
                     if (documentAttribute instanceof TL_documentAttributeAudio) {
                         i = documentAttribute.duration;
                         break;
                     }
                 }
-                i = 0;
             }
-            String format = String.format("%02d:%02d", new Object[]{Integer.valueOf(i / 60), Integer.valueOf(i % 60)});
+            String formatLongDuration = AndroidUtilities.formatLongDuration(i);
             String str = this.lastTimeString;
-            if (str == null || !(str == null || str.equals(format))) {
-                this.timeWidth = (int) Math.ceil((double) this.timePaint.measureText(format));
-                this.timeLayout = new StaticLayout(format, this.timePaint, this.timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            if (str == null || !(str == null || str.equals(formatLongDuration))) {
+                this.timeWidth = (int) Math.ceil((double) this.timePaint.measureText(formatLongDuration));
+                this.timeLayout = new StaticLayout(formatLongDuration, this.timePaint, this.timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
             invalidate();
         }

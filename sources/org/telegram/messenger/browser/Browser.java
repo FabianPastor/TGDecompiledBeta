@@ -2,10 +2,13 @@ package org.telegram.messenger.browser;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import java.lang.ref.WeakReference;
+import java.util.List;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.support.customtabs.CustomTabsCallback;
@@ -406,7 +409,7 @@ public class Browser {
         r3 = getSession();	 Catch:{ Exception -> 0x0222 }
         r2.<init>(r3);	 Catch:{ Exception -> 0x0222 }
         r3 = "CopyLink";
-        r4 = NUM; // 0x7f0e0314 float:1.8876636E38 double:1.053162546E-314;
+        r4 = NUM; // 0x7f0e0321 float:1.8876662E38 double:1.0531625524E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0222 }
         r2.addMenuItem(r3, r1);	 Catch:{ Exception -> 0x0222 }
         r1 = "actionBarBrowser";
@@ -418,7 +421,7 @@ public class Browser {
         r3 = NUM; // 0x7var_b float:1.7944698E38 double:1.052935532E-314;
         r1 = android.graphics.BitmapFactory.decodeResource(r1, r3);	 Catch:{ Exception -> 0x0222 }
         r3 = "ShareFile";
-        r4 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
+        r4 = NUM; // 0x7f0e09f9 float:1.8880216E38 double:1.053163418E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0222 }
         r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0222 }
         r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12);	 Catch:{ Exception -> 0x0222 }
@@ -536,38 +539,43 @@ public class Browser {
         String host = uri.getHost();
         Object toLowerCase = host != null ? host.toLowerCase() : "";
         if ("ton".equals(uri.getScheme())) {
-            return true;
-        }
-        if ("tg".equals(uri.getScheme())) {
-            return true;
-        }
-        String str = "s/";
-        String str2 = "iv";
-        String path;
-        if ("telegram.dog".equals(toLowerCase)) {
-            path = uri.getPath();
-            if (path != null && path.length() > 1) {
-                path = path.substring(1).toLowerCase();
-                if (!path.startsWith("blog") && !path.equals(str2) && !path.startsWith("faq") && !path.equals("apps") && !path.startsWith(str)) {
-                    return true;
-                }
-                if (zArr != null) {
-                    zArr[0] = true;
-                }
-                return false;
+            try {
+                List queryIntentActivities = ApplicationLoader.applicationContext.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
+                return queryIntentActivities == null || queryIntentActivities.size() <= 1;
+            } catch (Exception unused) {
             }
-        } else if ("telegram.me".equals(toLowerCase) || "t.me".equals(toLowerCase)) {
-            path = uri.getPath();
-            if (path != null && path.length() > 1) {
-                path = path.substring(1).toLowerCase();
-                if (!path.equals(str2) && !path.startsWith(str)) {
-                    return true;
+        } else {
+            if ("tg".equals(uri.getScheme())) {
+                return true;
+            }
+            String str = "s/";
+            String str2 = "iv";
+            String path;
+            if ("telegram.dog".equals(toLowerCase)) {
+                path = uri.getPath();
+                if (path != null && path.length() > 1) {
+                    path = path.substring(1).toLowerCase();
+                    if (!path.startsWith("blog") && !path.equals(str2) && !path.startsWith("faq") && !path.equals("apps") && !path.startsWith(str)) {
+                        return true;
+                    }
+                    if (zArr != null) {
+                        zArr[0] = true;
+                    }
+                    return false;
                 }
-                if (zArr != null) {
-                    zArr[0] = true;
+            } else if ("telegram.me".equals(toLowerCase) || "t.me".equals(toLowerCase)) {
+                path = uri.getPath();
+                if (path != null && path.length() > 1) {
+                    path = path.substring(1).toLowerCase();
+                    if (!path.equals(str2) && !path.startsWith(str)) {
+                        return true;
+                    }
+                    if (zArr != null) {
+                        zArr[0] = true;
+                    }
                 }
             }
+            return false;
         }
-        return false;
     }
 }

@@ -260,7 +260,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e01ce float:1.8875975E38 double:1.053162385E-314;
+        r1 = NUM; // 0x7f0e01d7 float:1.8875993E38 double:1.0531623893E-314;
         r3 = "Bot";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -309,7 +309,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
+        r1 = NUM; // 0x7f0e0734 float:1.8878778E38 double:1.0531630677E-314;
         r3 = "Online";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -429,7 +429,7 @@ public class GroupCreateUserCell extends FrameLayout {
         if (r14 == 0) goto L_0x01e7;
     L_0x01d8:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
+        r1 = NUM; // 0x7f0e0604 float:1.8878161E38 double:1.0531629175E-314;
         r3 = "MegaLocation";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -440,14 +440,14 @@ public class GroupCreateUserCell extends FrameLayout {
         if (r14 == 0) goto L_0x01fe;
     L_0x01ef:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e05e6 float:1.88781E38 double:1.0531629027E-314;
+        r1 = NUM; // 0x7f0e0605 float:1.8878163E38 double:1.053162918E-314;
         r3 = "MegaPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
         goto L_0x020c;
     L_0x01fe:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e05e9 float:1.8878106E38 double:1.053162904E-314;
+        r1 = NUM; // 0x7f0e0608 float:1.887817E38 double:1.0531629195E-314;
         r3 = "MegaPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);

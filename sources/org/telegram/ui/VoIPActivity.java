@@ -999,15 +999,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
             public void run() {
                 if (!VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null) {
                     if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
-                        CharSequence format;
-                        long callDuration = VoIPService.getSharedInstance().getCallDuration() / 1000;
-                        TextView access$2800 = VoIPActivity.this.durationText;
-                        if (callDuration > 3600) {
-                            format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(callDuration / 3600), Long.valueOf((callDuration % 3600) / 60), Long.valueOf(callDuration % 60)});
-                        } else {
-                            format = String.format("%d:%02d", new Object[]{Long.valueOf(callDuration / 60), Long.valueOf(callDuration % 60)});
-                        }
-                        access$2800.setText(format);
+                        VoIPActivity.this.durationText.setText(AndroidUtilities.formatShortDuration((int) (VoIPService.getSharedInstance().getCallDuration() / 1000)));
                         VoIPActivity.this.durationText.postDelayed(this, 500);
                     }
                 }

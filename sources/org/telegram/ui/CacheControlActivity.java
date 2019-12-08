@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.io.File;
@@ -21,8 +20,6 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet.BottomSheetCell;
-import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.CheckBoxCell;
@@ -393,81 +390,231 @@ public class CacheControlActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    public /* synthetic */ void lambda$createView$10$CacheControlActivity(View view, int i) {
-        int i2 = i;
-        if (getParentActivity() != null) {
-            int i3 = 2;
-            int i4 = 4;
-            Builder builder;
-            if (i2 == this.keepMediaRow) {
-                builder = new Builder(getParentActivity());
-                builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", NUM)}, new -$$Lambda$CacheControlActivity$Z3kCWEOqHs90j5WRi-5avKV3MH4(this));
-                showDialog(builder.create());
-            } else if (i2 == this.databaseRow) {
-                AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
-                builder2.setTitle(LocaleController.getString("AppName", NUM));
-                builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                builder2.setMessage(LocaleController.getString("LocalDatabaseClear", NUM));
-                builder2.setPositiveButton(LocaleController.getString("CacheClear", NUM), new -$$Lambda$CacheControlActivity$OxPoOxpLG_g1G1jasfpkphw5fag(this));
-                showDialog(builder2.create());
-            } else if (i2 == this.cacheRow && this.totalSize > 0 && getParentActivity() != null) {
-                builder = new Builder(getParentActivity());
-                builder.setApplyBottomPadding(false);
-                LinearLayout linearLayout = new LinearLayout(getParentActivity());
-                linearLayout.setOrientation(1);
-                int i5 = 0;
-                while (i5 < 6) {
-                    CharSequence string;
-                    long j;
-                    if (i5 == 0) {
-                        long j2 = this.photoSize;
-                        string = LocaleController.getString("LocalPhotoCache", NUM);
-                        j = j2;
-                    } else if (i5 == 1) {
-                        j = this.videoSize;
-                        string = LocaleController.getString("LocalVideoCache", NUM);
-                    } else if (i5 == i3) {
-                        j = this.documentsSize;
-                        string = LocaleController.getString("LocalDocumentCache", NUM);
-                    } else if (i5 == 3) {
-                        j = this.musicSize;
-                        string = LocaleController.getString("LocalMusicCache", NUM);
-                    } else if (i5 == i4) {
-                        j = this.audioSize;
-                        string = LocaleController.getString("LocalAudioCache", NUM);
-                    } else if (i5 == 5) {
-                        j = this.cacheSize;
-                        string = LocaleController.getString("LocalCache", NUM);
-                    } else {
-                        string = null;
-                        j = 0;
-                    }
-                    if (j > 0) {
-                        this.clear[i5] = true;
-                        CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), 1, 21);
-                        checkBoxCell.setTag(Integer.valueOf(i5));
-                        checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 50));
-                        checkBoxCell.setText(string, AndroidUtilities.formatFileSize(j), true, true);
-                        checkBoxCell.setTextColor(Theme.getColor("dialogTextBlack"));
-                        checkBoxCell.setOnClickListener(new -$$Lambda$CacheControlActivity$nToR5mmUsDX6DDZcwMPXsRZbyZs(this));
-                    } else {
-                        this.clear[i5] = false;
-                    }
-                    i5++;
-                    i3 = 2;
-                    i4 = 4;
-                }
-                BottomSheetCell bottomSheetCell = new BottomSheetCell(getParentActivity(), 1);
-                bottomSheetCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                bottomSheetCell.setTextAndIcon(LocaleController.getString("ClearMediaCache", NUM).toUpperCase(), 0);
-                bottomSheetCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText"));
-                bottomSheetCell.setOnClickListener(new -$$Lambda$CacheControlActivity$xjCzZWiHEv1HCRKFRUbJfrKMn_g(this));
-                linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50));
-                builder.setCustomView(linearLayout);
-                showDialog(builder.create());
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x017e  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x013f  */
+    public /* synthetic */ void lambda$createView$10$CacheControlActivity(android.view.View r17, int r18) {
+        /*
+        r16 = this;
+        r0 = r16;
+        r1 = r18;
+        r2 = r16.getParentActivity();
+        if (r2 != 0) goto L_0x000b;
+    L_0x000a:
+        return;
+    L_0x000b:
+        r2 = r0.keepMediaRow;
+        r3 = 2;
+        r4 = 4;
+        r5 = 3;
+        r6 = 0;
+        r7 = 1;
+        if (r1 != r2) goto L_0x0053;
+    L_0x0014:
+        r1 = new org.telegram.ui.ActionBar.BottomSheet$Builder;
+        r2 = r16.getParentActivity();
+        r1.<init>(r2);
+        r2 = new java.lang.CharSequence[r4];
+        r4 = "Days";
+        r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r5);
+        r2[r6] = r4;
+        r4 = "Weeks";
+        r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7);
+        r2[r7] = r4;
+        r4 = "Months";
+        r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7);
+        r2[r3] = r4;
+        r3 = NUM; // 0x7f0e057f float:1.8877891E38 double:1.053162852E-314;
+        r4 = "KeepMediaForever";
+        r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
+        r2[r5] = r3;
+        r3 = new org.telegram.ui.-$$Lambda$CacheControlActivity$Z3kCWEOqHs90j5WRi-5avKV3MH4;
+        r3.<init>(r0);
+        r1.setItems(r2, r3);
+        r1 = r1.create();
+        r0.showDialog(r1);
+        goto L_0x01ce;
+    L_0x0053:
+        r2 = r0.databaseRow;
+        r8 = 0;
+        r9 = -1;
+        if (r1 != r2) goto L_0x00b1;
+    L_0x0059:
+        r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
+        r2 = r16.getParentActivity();
+        r1.<init>(r2);
+        r2 = NUM; // 0x7f0e05c0 float:1.8878023E38 double:1.053162884E-314;
+        r3 = "LocalDatabaseClearTextTitle";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r1.setTitle(r2);
+        r2 = NUM; // 0x7f0e05bf float:1.8878021E38 double:1.0531628834E-314;
+        r3 = "LocalDatabaseClearText";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r1.setMessage(r2);
+        r2 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
+        r3 = "Cancel";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r1.setNegativeButton(r2, r8);
+        r2 = NUM; // 0x7f0e01e9 float:1.887603E38 double:1.053162398E-314;
+        r3 = "CacheClear";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r3 = new org.telegram.ui.-$$Lambda$CacheControlActivity$OxPoOxpLG_g1G1jasfpkphw5fag;
+        r3.<init>(r0);
+        r1.setPositiveButton(r2, r3);
+        r1 = r1.create();
+        r0.showDialog(r1);
+        r1 = r1.getButton(r9);
+        r1 = (android.widget.TextView) r1;
+        if (r1 == 0) goto L_0x01ce;
+    L_0x00a6:
+        r2 = "dialogTextRed2";
+        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
+        r1.setTextColor(r2);
+        goto L_0x01ce;
+    L_0x00b1:
+        r2 = r0.cacheRow;
+        if (r1 != r2) goto L_0x01ce;
+    L_0x00b5:
+        r1 = r0.totalSize;
+        r10 = 0;
+        r12 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1));
+        if (r12 <= 0) goto L_0x01ce;
+    L_0x00bd:
+        r1 = r16.getParentActivity();
+        if (r1 != 0) goto L_0x00c5;
+    L_0x00c3:
+        goto L_0x01ce;
+    L_0x00c5:
+        r1 = new org.telegram.ui.ActionBar.BottomSheet$Builder;
+        r2 = r16.getParentActivity();
+        r1.<init>(r2);
+        r1.setApplyBottomPadding(r6);
+        r2 = new android.widget.LinearLayout;
+        r12 = r16.getParentActivity();
+        r2.<init>(r12);
+        r2.setOrientation(r7);
+        r12 = 0;
+    L_0x00de:
+        r13 = 6;
+        r14 = 50;
+        if (r12 >= r13) goto L_0x018a;
+    L_0x00e3:
+        if (r12 != 0) goto L_0x00f2;
+    L_0x00e5:
+        r8 = r0.photoSize;
+        r15 = NUM; // 0x7f0e05c5 float:1.8878033E38 double:1.0531628864E-314;
+        r13 = "LocalPhotoCache";
+        r13 = org.telegram.messenger.LocaleController.getString(r13, r15);
+    L_0x00f0:
+        r15 = r13;
+        goto L_0x013b;
+    L_0x00f2:
+        if (r12 != r7) goto L_0x0100;
+    L_0x00f4:
+        r8 = r0.videoSize;
+        r13 = NUM; // 0x7f0e05c6 float:1.8878035E38 double:1.053162887E-314;
+        r15 = "LocalVideoCache";
+        r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
+        goto L_0x00f0;
+    L_0x0100:
+        if (r12 != r3) goto L_0x010e;
+    L_0x0102:
+        r8 = r0.documentsSize;
+        r13 = NUM; // 0x7f0e05c2 float:1.8878027E38 double:1.053162885E-314;
+        r15 = "LocalDocumentCache";
+        r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
+        goto L_0x00f0;
+    L_0x010e:
+        if (r12 != r5) goto L_0x011c;
+    L_0x0110:
+        r8 = r0.musicSize;
+        r13 = NUM; // 0x7f0e05c4 float:1.8878031E38 double:1.053162886E-314;
+        r15 = "LocalMusicCache";
+        r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
+        goto L_0x00f0;
+    L_0x011c:
+        if (r12 != r4) goto L_0x012a;
+    L_0x011e:
+        r8 = r0.audioSize;
+        r13 = NUM; // 0x7f0e05bb float:1.8878013E38 double:1.0531628814E-314;
+        r15 = "LocalAudioCache";
+        r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
+        goto L_0x00f0;
+    L_0x012a:
+        r8 = 5;
+        if (r12 != r8) goto L_0x0139;
+    L_0x012d:
+        r8 = r0.cacheSize;
+        r13 = NUM; // 0x7f0e05bc float:1.8878015E38 double:1.053162882E-314;
+        r15 = "LocalCache";
+        r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
+        goto L_0x00f0;
+    L_0x0139:
+        r8 = r10;
+        r15 = 0;
+    L_0x013b:
+        r13 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
+        if (r13 <= 0) goto L_0x017e;
+    L_0x013f:
+        r13 = r0.clear;
+        r13[r12] = r7;
+        r13 = new org.telegram.ui.Cells.CheckBoxCell;
+        r3 = r16.getParentActivity();
+        r4 = 21;
+        r13.<init>(r3, r7, r4);
+        r3 = java.lang.Integer.valueOf(r12);
+        r13.setTag(r3);
+        r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r6);
+        r13.setBackgroundDrawable(r3);
+        r3 = -1;
+        r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r14);
+        r3 = r13;
+        r2.addView(r3, r4);
+        r4 = org.telegram.messenger.AndroidUtilities.formatFileSize(r8);
+        r3.setText(r15, r4, r7, r7);
+        r4 = "dialogTextBlack";
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
+        r3.setTextColor(r4);
+        r4 = new org.telegram.ui.-$$Lambda$CacheControlActivity$nToR5mmUsDX6DDZcwMPXsRZbyZs;
+        r4.<init>(r0);
+        r3.setOnClickListener(r4);
+        goto L_0x0182;
+    L_0x017e:
+        r3 = r0.clear;
+        r3[r12] = r6;
+    L_0x0182:
+        r12 = r12 + 1;
+        r3 = 2;
+        r4 = 4;
+        r8 = 0;
+        r9 = -1;
+        goto L_0x00de;
+    L_0x018a:
+        r3 = new org.telegram.ui.ActionBar.BottomSheet$BottomSheetCell;
+        r4 = r16.getParentActivity();
+        r3.<init>(r4, r7);
+        r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r6);
+        r3.setBackgroundDrawable(r4);
+        r4 = NUM; // 0x7f0e02ea float:1.887655E38 double:1.053162525E-314;
+        r5 = "ClearMediaCache";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r4 = r4.toUpperCase();
+        r3.setTextAndIcon(r4, r6);
+        r4 = "windowBackgroundWhiteRedText";
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
+        r3.setTextColor(r4);
+        r4 = new org.telegram.ui.-$$Lambda$CacheControlActivity$xjCzZWiHEv1HCRKFRUbJfrKMn_g;
+        r4.<init>(r0);
+        r3.setOnClickListener(r4);
+        r4 = -1;
+        r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r14);
+        r2.addView(r3, r4);
+        r1.setCustomView(r2);
+        r1 = r1.create();
+        r0.showDialog(r1);
+    L_0x01ce:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CacheControlActivity.lambda$createView$10$CacheControlActivity(android.view.View, int):void");
     }
 
     public /* synthetic */ void lambda$null$4$CacheControlActivity(DialogInterface dialogInterface, int i) {
@@ -500,8 +647,8 @@ public class CacheControlActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01ea A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
     /* JADX WARNING: Missing block: B:53:0x0237, code skipped:
             r0 = th;
      */

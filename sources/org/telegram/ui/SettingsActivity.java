@@ -1756,7 +1756,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (i == 9) {
                     ((LaunchActivity) SettingsActivity.this.getParentActivity()).checkAppUpdate(true);
                 } else if (i == 10) {
-                    MessagesStorage.getInstance(SettingsActivity.this.currentAccount).readAllDialogs();
+                    MessagesStorage.getInstance(SettingsActivity.this.currentAccount).readAllDialogs(-1);
                 }
             }
         });
