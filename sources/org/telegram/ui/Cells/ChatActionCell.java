@@ -93,7 +93,7 @@ public class ChatActionCell extends BaseCell {
         this.delegate = chatActionCellDelegate;
     }
 
-    public void setCustomDate(int i, boolean z) {
+    public void setCustomDate(int i, boolean z, boolean z2) {
         if (this.customDate != i) {
             CharSequence formatDateChat;
             if (!z) {
@@ -113,8 +113,10 @@ public class ChatActionCell extends BaseCell {
                 }
                 if (this.wasLayout) {
                     buildLayout();
-                } else {
+                } else if (z2) {
                     AndroidUtilities.runOnUIThread(new -$$Lambda$W3vgGEA8PP4iykiyHwC5GJEFtAc(this));
+                } else {
+                    requestLayout();
                 }
             }
         }

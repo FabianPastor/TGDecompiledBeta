@@ -473,12 +473,14 @@ public class LocationController extends BaseController implements NotificationCe
                 i++;
             }
             if (this.started) {
-                if (this.lastLocationByGoogleMaps || Math.abs(this.lastLocationStartTime - SystemClock.uptimeMillis()) > 10000 || shouldSendLocationNow()) {
+                long uptimeMillis = SystemClock.uptimeMillis();
+                if (this.lastLocationByGoogleMaps || Math.abs(this.lastLocationStartTime - uptimeMillis) > 10000 || shouldSendLocationNow()) {
                     this.lastLocationByGoogleMaps = false;
                     this.locationSentSinceLastGoogleMapUpdate = true;
                     if (SystemClock.uptimeMillis() - this.lastLocationSendTime > 2000) {
                         z = true;
                     }
+                    this.lastLocationStartTime = uptimeMillis;
                     this.lastLocationSendTime = SystemClock.uptimeMillis();
                     broadcastLastKnownLocation(z);
                 }

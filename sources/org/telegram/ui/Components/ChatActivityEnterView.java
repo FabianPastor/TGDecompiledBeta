@@ -4386,6 +4386,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         EditTextCaption editTextCaption = this.messageEditText;
         if (editTextCaption != null && this.editingMessageObject == null) {
             LayoutParams layoutParams = (LayoutParams) editTextCaption.getLayoutParams();
+            int i2 = layoutParams.rightMargin;
             ImageView imageView;
             if (i == 1) {
                 imageView = this.botButton;
@@ -4419,7 +4420,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 layoutParams.rightMargin = AndroidUtilities.dp(98.0f);
             }
-            this.messageEditText.setLayoutParams(layoutParams);
+            if (i2 != layoutParams.rightMargin) {
+                this.messageEditText.setLayoutParams(layoutParams);
+            }
         }
     }
 

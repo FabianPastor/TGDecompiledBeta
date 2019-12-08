@@ -2884,7 +2884,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     playingMessageObject = ((ChatActionCell) view).getMessageObject();
                 }
                 z = false;
-                this.floatingDateView.setCustomDate(playingMessageObject.messageOwner.date, false);
+                this.floatingDateView.setCustomDate(playingMessageObject.messageOwner.date, false, true);
             } else {
                 z = false;
             }

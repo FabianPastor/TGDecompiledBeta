@@ -39,6 +39,7 @@ public class SimpleTextView extends View implements Callback {
     private Layout layout;
     private Drawable leftDrawable;
     private int leftDrawableTopPadding;
+    private int minWidth;
     private int offsetX;
     private int offsetY;
     private Drawable rightDrawable;
@@ -54,6 +55,7 @@ public class SimpleTextView extends View implements Callback {
     private int textWidth;
     private int totalWidth;
     private boolean wasLayout;
+    private Drawable wrapBackgroundDrawable;
 
     public boolean hasOverlappingRendering() {
         return false;
@@ -192,9 +194,9 @@ public class SimpleTextView extends View implements Callback {
         }
         setMeasuredDimension(i, size);
         if ((this.gravity & 112) == 16) {
-            this.offsetY = (getMeasuredHeight() - this.textHeight) / 2;
+            this.offsetY = ((getMeasuredHeight() - this.textHeight) / 2) + getPaddingTop();
         } else {
-            this.offsetY = 0;
+            this.offsetY = getPaddingTop();
         }
     }
 
@@ -225,6 +227,22 @@ public class SimpleTextView extends View implements Callback {
 
     public void setRightDrawable(int i) {
         setRightDrawable(i == 0 ? null : getContext().getResources().getDrawable(i));
+    }
+
+    public void setMinWidth(int i) {
+        this.minWidth = i;
+    }
+
+    public void setBackgroundDrawable(Drawable drawable) {
+        this.wrapBackgroundDrawable = drawable;
+    }
+
+    public Drawable getBackground() {
+        Drawable drawable = this.wrapBackgroundDrawable;
+        if (drawable != null) {
+            return drawable;
+        }
+        return super.getBackground();
     }
 
     public void setLeftDrawable(Drawable drawable) {
@@ -326,9 +344,9 @@ public class SimpleTextView extends View implements Callback {
         }
         boolean createLayout = createLayout((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight());
         if ((this.gravity & 112) == 16) {
-            this.offsetY = (getMeasuredHeight() - this.textHeight) / 2;
+            this.offsetY = ((getMeasuredHeight() - this.textHeight) / 2) + getPaddingTop();
         } else {
-            this.offsetY = 0;
+            this.offsetY = getPaddingTop();
         }
         return createLayout;
     }
@@ -368,6 +386,7 @@ public class SimpleTextView extends View implements Callback {
         int i2;
         Drawable drawable;
         int i3;
+        int i4;
         this.totalWidth = this.textWidth;
         if (this.leftDrawable != null) {
             i = (int) (-this.scrollingOffset);
@@ -396,7 +415,7 @@ public class SimpleTextView extends View implements Callback {
             i = 0;
         }
         if (this.rightDrawable != null) {
-            int i4;
+            int i5;
             measuredHeight = ((this.textWidth + i) + this.drawablePadding) + ((int) (-this.scrollingOffset));
             i2 = this.gravity;
             if ((i2 & 7) == 1) {
@@ -407,16 +426,16 @@ public class SimpleTextView extends View implements Callback {
                 }
                 i3 = (int) (((float) this.rightDrawable.getIntrinsicWidth()) * this.rightDrawableScale);
                 i2 = (int) (((float) this.rightDrawable.getIntrinsicHeight()) * this.rightDrawableScale);
-                i4 = ((this.textHeight - i2) / 2) + this.rightDrawableTopPadding;
-                this.rightDrawable.setBounds(measuredHeight, i4, measuredHeight + i3, i2 + i4);
+                i5 = ((this.textHeight - i2) / 2) + this.rightDrawableTopPadding;
+                this.rightDrawable.setBounds(measuredHeight, i5, measuredHeight + i3, i2 + i5);
                 this.rightDrawable.draw(canvas);
                 this.totalWidth += this.drawablePadding + i3;
             }
             measuredHeight += i3;
             i3 = (int) (((float) this.rightDrawable.getIntrinsicWidth()) * this.rightDrawableScale);
             i2 = (int) (((float) this.rightDrawable.getIntrinsicHeight()) * this.rightDrawableScale);
-            i4 = ((this.textHeight - i2) / 2) + this.rightDrawableTopPadding;
-            this.rightDrawable.setBounds(measuredHeight, i4, measuredHeight + i3, i2 + i4);
+            i5 = ((this.textHeight - i2) / 2) + this.rightDrawableTopPadding;
+            this.rightDrawable.setBounds(measuredHeight, i5, measuredHeight + i3, i2 + i5);
             this.rightDrawable.draw(canvas);
             this.totalWidth += this.drawablePadding + i3;
         }
@@ -434,14 +453,23 @@ public class SimpleTextView extends View implements Callback {
             }
             drawable = this.rightDrawable;
             if (drawable != null) {
-                int i5 = (((this.textWidth + i) + this.drawablePadding) + ((int) (-this.scrollingOffset))) + i3;
+                i4 = (((this.textWidth + i) + this.drawablePadding) + ((int) (-this.scrollingOffset))) + i3;
                 intrinsicHeight = ((this.textHeight - drawable.getIntrinsicHeight()) / 2) + this.rightDrawableTopPadding;
                 drawable = this.rightDrawable;
-                drawable.setBounds(i5, intrinsicHeight, drawable.getIntrinsicWidth() + i5, this.rightDrawable.getIntrinsicHeight() + intrinsicHeight);
+                drawable.setBounds(i4, intrinsicHeight, drawable.getIntrinsicWidth() + i4, this.rightDrawable.getIntrinsicHeight() + intrinsicHeight);
                 this.rightDrawable.draw(canvas);
             }
         }
         if (this.layout != null) {
+            if (this.wrapBackgroundDrawable != null) {
+                i2 = (int) (((float) (this.offsetX + i)) - this.scrollingOffset);
+                i4 = this.textWidth;
+                i2 += i4 / 2;
+                i4 = Math.max((i4 + getPaddingLeft()) + getPaddingRight(), this.minWidth);
+                i2 -= i4 / 2;
+                this.wrapBackgroundDrawable.setBounds(i2, 0, i4 + i2, getMeasuredHeight());
+                this.wrapBackgroundDrawable.draw(canvas);
+            }
             if (!(this.offsetX + i == 0 && this.offsetY == 0 && this.scrollingOffset == 0.0f)) {
                 canvas.save();
                 canvas.translate(((float) (this.offsetX + i)) - this.scrollingOffset, (float) this.offsetY);
