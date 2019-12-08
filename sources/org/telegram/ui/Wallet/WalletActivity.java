@@ -6,13 +6,17 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Build.VERSION;
+import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,7 +44,10 @@ import drinkless.org.ton.TonApi.RawTransaction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MrzRecognizer.Result;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.TonController;
@@ -49,11 +56,13 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.CameraScanActivity;
+import org.telegram.ui.CameraScanActivity.CameraScanActivityDelegate;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PullForegroundDrawable;
@@ -61,8 +70,11 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
 import org.telegram.ui.Components.ShareAlert;
+import org.telegram.ui.Wallet.WalletActionSheet.WalletActionSheetDelegate;
+import org.telegram.ui.Wallet.WalletActionSheet.WalletActionSheetDelegate.-CC;
 
 public class WalletActivity extends BaseFragment implements NotificationCenterDelegate {
+    public static final int CAMERA_PERMISSION_REQUEST_CODE = 34;
     private static final String PENDING_KEY = "pending";
     private static final int SHORT_POLL_DELAY = 3000;
     private static final int menu_settings = 1;
@@ -71,7 +83,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
     private boolean accountStateLoaded;
     private Adapter adapter;
     private GradientDrawable backgroundDrawable;
-    private Paint blackPaint = new Paint();
+    private Paint blackPaint;
     private boolean canShowHiddenPull;
     private AlertDialog keyInvalidDialog;
     private RawTransaction lastTransaction;
@@ -80,23 +92,21 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
     private PullRecyclerView listView;
     private boolean loadingAccountState;
     private boolean loadingTransactions;
+    private String openTransferAfterOpen;
     private View paddingView;
     private Drawable pinnedHeaderShadowDrawable;
     private PullForegroundDrawable pullForegroundDrawable;
     private float[] radii;
-    private HashMap<String, ArrayList<RawTransaction>> sectionArrays = new HashMap();
-    private ArrayList<String> sections = new ArrayList();
-    private Runnable shortPollRunnable = new Runnable() {
-        public void run() {
-            WalletActivity.this.loadAccountState();
-            AndroidUtilities.runOnUIThread(WalletActivity.this.shortPollRunnable, 3000);
-        }
-    };
+    private WalletActionSheet savedWalletActionSheet;
+    private HashMap<String, ArrayList<RawTransaction>> sectionArrays;
+    private ArrayList<String> sections;
+    private Runnable shortPollRunnable;
     private long startArchivePullingTime;
     private SimpleTextView statusTextView;
-    private HashMap<Long, RawTransaction> transactionsDict = new HashMap();
+    private HashMap<Long, RawTransaction> transactionsDict;
     private boolean transactionsEndReached;
-    private Runnable updateTimeRunnable = new -$$Lambda$WalletActivity$JbR_f3lgnrp3kgfDQnFSBGZNQwI(this);
+    private Runnable updateTimeRunnable;
+    private WalletActionSheet walletActionSheet;
     private String walletAddress;
     private boolean wasPulled;
 
@@ -129,125 +139,46 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                 anonymousClass1 = new WalletBalanceCell(this.context) {
                     /* Access modifiers changed, original: protected */
                     public void onReceivePressed() {
-                        Builder builder = new Builder(Adapter.this.context);
-                        builder.setApplyBottomPadding(false);
-                        builder.setApplyTopPadding(false);
-                        builder.setUseFullWidth(false);
-                        AnonymousClass1 anonymousClass1 = new FrameLayout(Adapter.this.context) {
-                            /* Access modifiers changed, original: protected */
-                            public void onMeasure(int i, int i2) {
-                                super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(472.0f), NUM));
-                            }
-                        };
-                        String str = "dialogTextBlack";
-                        ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(Adapter.this.context, null, 0, Theme.getColor(str));
-                        actionBarMenuItem.setLongClickEnabled(false);
-                        actionBarMenuItem.setIcon(NUM);
-                        actionBarMenuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
-                        actionBarMenuItem.addSubItem(1, LocaleController.getString("WalletCopyAddress", NUM));
-                        actionBarMenuItem.addSubItem(2, LocaleController.getString("WalletCreateInvoice", NUM));
-                        actionBarMenuItem.setSubMenuOpenSide(2);
-                        actionBarMenuItem.setDelegate(new -$$Lambda$WalletActivity$Adapter$1$8W2rdFTTImIt1RW0bcrsdz9gi1Q(this, builder));
-                        actionBarMenuItem.setTranslationX((float) AndroidUtilities.dp(6.0f));
-                        actionBarMenuItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 6));
-                        anonymousClass1.addView(actionBarMenuItem, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 12.0f, 10.0f, 0.0f));
-                        actionBarMenuItem.setOnClickListener(new -$$Lambda$WalletActivity$Adapter$1$wIKIfH9eMhC8H1b2e3axPPqXQ5c(actionBarMenuItem));
-                        TextView textView = new TextView(getContext());
-                        textView.setLines(1);
-                        textView.setSingleLine(true);
-                        textView.setText(LocaleController.getString("WalletReceiveYourAddress", NUM));
-                        textView.setTextColor(Theme.getColor(str));
-                        textView.setTextSize(1, 20.0f);
-                        String str2 = "fonts/rmedium.ttf";
-                        textView.setTypeface(AndroidUtilities.getTypeface(str2));
-                        textView.setEllipsize(TruncateAt.END);
-                        textView.setGravity(16);
-                        anonymousClass1.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 21.0f, 22.0f, 21.0f, 0.0f));
-                        LinearLayout linearLayout = new LinearLayout(getContext());
-                        linearLayout.setOrientation(1);
-                        anonymousClass1.addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
-                        TextView textView2 = new TextView(Adapter.this.context);
-                        textView2.setTextColor(Theme.getColor("dialogTextGray2"));
-                        textView2.setGravity(1);
-                        textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-                        textView2.setTextSize(1, 14.0f);
-                        textView2.setText(LocaleController.getString("WalletShareInfo", NUM));
-                        textView2.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
-                        linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 49, 0, 0, 0, 0));
-                        textView2 = new TextView(Adapter.this.context);
-                        ImageView imageView = new ImageView(Adapter.this.context);
-                        imageView.setImageBitmap(WalletActivity.this.getTonController().createTonQR(Adapter.this.context, WalletActivity.this.getTonUrl(), null));
-                        linearLayout.addView(imageView, LayoutHelper.createLinear(190, 190, 49, 0, 16, 0, 0));
-                        imageView.setOnLongClickListener(new -$$Lambda$WalletActivity$Adapter$1$0O46dSAinUuAaH3tp7nHtMiH-Ew(this, textView2));
-                        textView2.setTextSize(1, 17.0f);
-                        textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmono.ttf"));
-                        textView2.setTextColor(Theme.getColor(str));
-                        StringBuilder stringBuilder = new StringBuilder(WalletActivity.this.walletAddress);
-                        stringBuilder.insert(stringBuilder.length() / 2, 10);
-                        textView2.setText(stringBuilder);
-                        linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
-                        textView2.setOnLongClickListener(new -$$Lambda$WalletActivity$Adapter$1$D2CFM7cphGt52x6oeA-KuGV7IYs(this, textView2));
-                        TextView textView3 = new TextView(Adapter.this.context);
-                        textView3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-                        textView3.setGravity(17);
-                        textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-                        textView3.setTextSize(1, 14.0f);
-                        textView3.setText(LocaleController.getString("WalletShareAddress", NUM));
-                        textView3.setTypeface(AndroidUtilities.getTypeface(str2));
-                        textView3.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-                        linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 42.0f, 51, 16.0f, 20.0f, 16.0f, 16.0f));
-                        textView3.setOnClickListener(new -$$Lambda$WalletActivity$Adapter$1$0y5_Jga2halHiCWg4aj2oA6EuTU(this));
-                        ScrollView scrollView = new ScrollView(Adapter.this.context);
-                        scrollView.setVerticalScrollBarEnabled(false);
-                        scrollView.addView(anonymousClass1, LayoutHelper.createScroll(-1, -2, 51));
-                        if (VERSION.SDK_INT >= 21) {
-                            scrollView.setNestedScrollingEnabled(true);
-                        }
-                        builder.setCustomView(scrollView);
-                        BottomSheet create = builder.create();
-                        create.setCanDismissWithSwipe(false);
-                        WalletActivity.this.showDialog(create);
-                    }
-
-                    public /* synthetic */ void lambda$onReceivePressed$0$WalletActivity$Adapter$1(Builder builder, int i) {
-                        builder.getDismissRunnable().run();
-                        if (i == 1) {
-                            AndroidUtilities.addToClipboard(WalletActivity.this.getTonUrl());
-                            Toast.makeText(WalletActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
-                        } else if (i == 2) {
-                            WalletActivity walletActivity = WalletActivity.this;
-                            walletActivity.presentFragment(new WalletActionActivity(1, walletActivity.walletAddress));
-                        }
-                    }
-
-                    public /* synthetic */ boolean lambda$onReceivePressed$2$WalletActivity$Adapter$1(TextView textView, View view) {
-                        Activity parentActivity = WalletActivity.this.getParentActivity();
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("ton://transfer/");
-                        stringBuilder.append(textView.getText().toString().replace("\n", ""));
-                        TonController.shareBitmap(parentActivity, view, stringBuilder.toString());
-                        return true;
-                    }
-
-                    public /* synthetic */ boolean lambda$onReceivePressed$3$WalletActivity$Adapter$1(TextView textView, View view) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("ton://transfer/");
-                        stringBuilder.append(textView.getText().toString().replace("\n", ""));
-                        AndroidUtilities.addToClipboard(stringBuilder.toString());
-                        Toast.makeText(WalletActivity.this.getParentActivity(), LocaleController.getString("WalletTransactionAddressCopied", NUM), 0).show();
-                        return true;
-                    }
-
-                    public /* synthetic */ void lambda$onReceivePressed$4$WalletActivity$Adapter$1(View view) {
-                        String access$2200 = WalletActivity.this.getTonUrl();
                         WalletActivity walletActivity = WalletActivity.this;
-                        walletActivity.showDialog(new ShareAlert(walletActivity.getParentActivity(), null, access$2200, false, access$2200, false));
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("ton://transfer/");
+                        stringBuilder.append(WalletActivity.this.walletAddress);
+                        walletActivity.showInvoiceSheet(stringBuilder.toString(), 0);
                     }
 
                     /* Access modifiers changed, original: protected */
                     public void onSendPressed() {
                         WalletActivity walletActivity = WalletActivity.this;
-                        walletActivity.presentFragment(new WalletActionActivity(0, walletActivity.walletAddress));
+                        walletActivity.walletActionSheet = new WalletActionSheet(walletActivity, 0, walletActivity.walletAddress);
+                        WalletActivity.this.walletActionSheet.setDelegate(new WalletActionSheetDelegate() {
+                            public /* synthetic */ void openInvoice(String str, long j) {
+                                -CC.$default$openInvoice(this, str, j);
+                            }
+
+                            public /* synthetic */ void openSendToAddress(String str) {
+                                -CC.$default$openSendToAddress(this, str);
+                            }
+
+                            public void openQrReader() {
+                                if (WalletActivity.this.getParentActivity() != null) {
+                                    if (VERSION.SDK_INT >= 23) {
+                                        if (WalletActivity.this.getParentActivity().checkSelfPermission("android.permission.CAMERA") != 0) {
+                                            WalletActivity.this.getParentActivity().requestPermissions(new String[]{r1}, 34);
+                                            return;
+                                        }
+                                    }
+                                    WalletActivity.this.processOpenQrReader();
+                                }
+                            }
+                        });
+                        walletActivity = WalletActivity.this;
+                        walletActivity.showDialog(walletActivity.walletActionSheet, new -$$Lambda$WalletActivity$Adapter$1$hpVEDtMablSLzgEdhjXH4iOoeOQ(this));
+                    }
+
+                    public /* synthetic */ void lambda$onSendPressed$0$WalletActivity$Adapter$1(DialogInterface dialogInterface) {
+                        if (WalletActivity.this.walletActionSheet == dialogInterface) {
+                            WalletActivity.this.walletActionSheet = null;
+                        }
                     }
                 };
             } else if (i == 1) {
@@ -510,6 +441,22 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
     }
 
     public WalletActivity() {
+        this(null);
+    }
+
+    public WalletActivity(String str) {
+        this.blackPaint = new Paint();
+        this.transactionsDict = new HashMap();
+        this.sections = new ArrayList();
+        this.sectionArrays = new HashMap();
+        this.updateTimeRunnable = new -$$Lambda$WalletActivity$JbR_f3lgnrp3kgfDQnFSBGZNQwI(this);
+        this.shortPollRunnable = new Runnable() {
+            public void run() {
+                WalletActivity.this.loadAccountState();
+                AndroidUtilities.runOnUIThread(WalletActivity.this.shortPollRunnable, 3000);
+            }
+        };
+        this.openTransferAfterOpen = str;
         loadAccountState();
     }
 
@@ -932,28 +879,62 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                 }
             }
         });
-        this.listView.setOnItemClickListener(new -$$Lambda$WalletActivity$AdwaE6FUbC5bTRoO5_7tVR4wDsU(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$WalletActivity$NcjmhwaO2FXifkw9nSz7gIZIBLw(this));
         updateTime(false);
         return this.fragmentView;
     }
 
-    public /* synthetic */ void lambda$createView$1$WalletActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$2$WalletActivity(View view, int i) {
         if (getParentActivity() != null && (view instanceof WalletTransactionCell)) {
             WalletTransactionCell walletTransactionCell = (WalletTransactionCell) view;
             if (!walletTransactionCell.isEmpty()) {
-                showDialog(new WalletTransactionSheet(this, this.walletAddress, walletTransactionCell.getAddress(), walletTransactionCell.getComment(), walletTransactionCell.getAmount(), walletTransactionCell.getDate(), walletTransactionCell.getStorageFee(), walletTransactionCell.getTransactionFee()));
+                this.walletActionSheet = new WalletActionSheet(this, this.walletAddress, walletTransactionCell.getAddress(), walletTransactionCell.getComment(), walletTransactionCell.getAmount(), walletTransactionCell.getDate(), walletTransactionCell.getStorageFee(), walletTransactionCell.getTransactionFee());
+                this.walletActionSheet.setDelegate(new WalletActionSheetDelegate() {
+                    public /* synthetic */ void openInvoice(String str, long j) {
+                        -CC.$default$openInvoice(this, str, j);
+                    }
+
+                    public /* synthetic */ void openQrReader() {
+                        -CC.$default$openQrReader(this);
+                    }
+
+                    public void openSendToAddress(String str) {
+                        WalletActivity walletActivity = WalletActivity.this;
+                        walletActivity.walletActionSheet = new WalletActionSheet(walletActivity, 0, walletActivity.walletAddress);
+                        WalletActivity.this.walletActionSheet.setRecipientString(str, true);
+                        WalletActivity walletActivity2 = WalletActivity.this;
+                        walletActivity2.showDialog(walletActivity2.walletActionSheet, new -$$Lambda$WalletActivity$8$FIN2pw8q8qgjPgXhXrMdAjGgANc(this));
+                    }
+
+                    public /* synthetic */ void lambda$openSendToAddress$0$WalletActivity$8(DialogInterface dialogInterface) {
+                        if (WalletActivity.this.walletActionSheet == dialogInterface) {
+                            WalletActivity.this.walletActionSheet = null;
+                        }
+                    }
+                });
+                showDialog(this.walletActionSheet, new -$$Lambda$WalletActivity$VdhbaqAvwCsPGoiWmFwkdjPM2zU(this));
             }
+        }
+    }
+
+    public /* synthetic */ void lambda$null$1$WalletActivity(DialogInterface dialogInterface) {
+        if (this.walletActionSheet == dialogInterface) {
+            this.walletActionSheet = null;
         }
     }
 
     public void onResume() {
         super.onResume();
-        getTonController().isKeyStoreInvalidated(new -$$Lambda$WalletActivity$ghVqqP4FI4q1tdbIinmQH6y9ZCs(this));
+        getTonController().isKeyStoreInvalidated(new -$$Lambda$WalletActivity$LKQTvN18R-HlLAI0UXbryjklAHA(this));
+        WalletActionSheet walletActionSheet = this.walletActionSheet;
+        if (walletActionSheet != null) {
+            walletActionSheet.onResume();
+        }
     }
 
-    public /* synthetic */ void lambda$onResume$2$WalletActivity(boolean z) {
+    public /* synthetic */ void lambda$onResume$3$WalletActivity(boolean z) {
         if (z && getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            Builder builder = new Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("Wallet", NUM));
             builder.setMessage(LocaleController.getString("WalletKeystoreInvalidated", NUM));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
@@ -965,6 +946,91 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
 
     public void onPause() {
         super.onPause();
+        WalletActionSheet walletActionSheet = this.walletActionSheet;
+        if (walletActionSheet != null) {
+            walletActionSheet.onPause();
+        }
+    }
+
+    public void onActivityResultFragment(int i, int i2, Intent intent) {
+        WalletActionSheet walletActionSheet = this.walletActionSheet;
+        if (walletActionSheet != null) {
+            walletActionSheet.onActivityResultFragment(i, i2, intent);
+        }
+    }
+
+    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
+        if (getParentActivity() != null && i == 34) {
+            if (iArr.length <= 0 || iArr[0] != 0) {
+                Builder builder = new Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setMessage(LocaleController.getString("WalletPermissionNoCamera", NUM));
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$WalletActivity$Xk2t3CfKq-oCnmaXGQq5oimIBAs(this));
+                builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
+                builder.show();
+            } else {
+                processOpenQrReader();
+            }
+        }
+    }
+
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$4$WalletActivity(DialogInterface dialogInterface, int i) {
+        try {
+            Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("package:");
+            stringBuilder.append(ApplicationLoader.applicationContext.getPackageName());
+            intent.setData(Uri.parse(stringBuilder.toString()));
+            getParentActivity().startActivity(intent);
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationEnd(boolean z, boolean z2) {
+        if (z && !z2 && !TextUtils.isEmpty(this.openTransferAfterOpen)) {
+            this.walletActionSheet = new WalletActionSheet(this, 0, this.walletAddress);
+            this.walletActionSheet.parseTonUrl(null, this.openTransferAfterOpen);
+            showDialog(this.walletActionSheet, new -$$Lambda$WalletActivity$VufTS87_xYs03HgifUAEVg5zPEM(this));
+            this.openTransferAfterOpen = null;
+        }
+    }
+
+    public /* synthetic */ void lambda$onTransitionAnimationEnd$5$WalletActivity(DialogInterface dialogInterface) {
+        if (this.walletActionSheet == dialogInterface) {
+            this.walletActionSheet = null;
+        }
+    }
+
+    private void processOpenQrReader() {
+        WalletActionSheet walletActionSheet = this.walletActionSheet;
+        if (walletActionSheet != null) {
+            this.savedWalletActionSheet = walletActionSheet;
+            walletActionSheet.dismiss();
+            CameraScanActivity cameraScanActivity = new CameraScanActivity(1);
+            cameraScanActivity.setDelegate(new CameraScanActivityDelegate() {
+                public /* synthetic */ void didFindMrzInfo(Result result) {
+                    CameraScanActivityDelegate.-CC.$default$didFindMrzInfo(this, result);
+                }
+
+                public void didFindQr(String str) {
+                    WalletActivity walletActivity = WalletActivity.this;
+                    walletActivity.walletActionSheet = walletActivity.savedWalletActionSheet;
+                    WalletActivity.this.walletActionSheet.parseTonUrl(null, str);
+                    WalletActivity walletActivity2 = WalletActivity.this;
+                    walletActivity2.showDialog(walletActivity2.walletActionSheet, new -$$Lambda$WalletActivity$9$CUDzKSWV46i0lkROX5mm7F1tlg8(this));
+                    WalletActivity.this.savedWalletActionSheet = null;
+                }
+
+                public /* synthetic */ void lambda$didFindQr$0$WalletActivity$9(DialogInterface dialogInterface) {
+                    if (WalletActivity.this.walletActionSheet == dialogInterface) {
+                        WalletActivity.this.walletActionSheet = null;
+                    }
+                }
+            });
+            presentFragment(cameraScanActivity);
+        }
     }
 
     /* Access modifiers changed, original: protected */
@@ -1058,7 +1124,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                 fillTransactions(getTonController().getCachedTransactions(), false);
             }
             this.walletAddress = getTonController().getWalletAddress(getUserConfig().tonPublicKey);
-            getTonController().getAccountState(new -$$Lambda$WalletActivity$DRsPr-qhBjTgCLASSNAMEMKi1w3nVnTH8(this));
+            getTonController().getAccountState(new -$$Lambda$WalletActivity$cCYpz4ZkKDPH_jjfd4V_RWAcs9U(this));
             Adapter adapter = this.adapter;
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
@@ -1068,7 +1134,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
 
     /* JADX WARNING: Removed duplicated region for block: B:20:0x005f  */
     /* JADX WARNING: Removed duplicated region for block: B:19:0x005b  */
-    public /* synthetic */ void lambda$loadAccountState$3$WalletActivity(drinkless.org.ton.TonApi.GenericAccountState r9) {
+    public /* synthetic */ void lambda$loadAccountState$6$WalletActivity(drinkless.org.ton.TonApi.GenericAccountState r9) {
         /*
         r8 = this;
         r0 = 0;
@@ -1136,7 +1202,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
     L_0x0071:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Wallet.WalletActivity.lambda$loadAccountState$3$WalletActivity(drinkless.org.ton.TonApi$GenericAccountState):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Wallet.WalletActivity.lambda$loadAccountState$6$WalletActivity(drinkless.org.ton.TonApi$GenericAccountState):void");
     }
 
     private void onFinishGettingAccountState() {
@@ -1360,11 +1426,11 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
     private void loadTransactions(boolean z) {
         if (!this.loadingTransactions && this.accountStateLoaded) {
             this.loadingTransactions = true;
-            getTonController().getTransactions(z, getLastTransactionId(z), new -$$Lambda$WalletActivity$PkhskOdzX-UYRFCdTegzQkxUPLQ(this, z));
+            getTonController().getTransactions(z, getLastTransactionId(z), new -$$Lambda$WalletActivity$occZ8oAPj7HwE4RGCYXQ49eXwLs(this, z));
         }
     }
 
-    public /* synthetic */ void lambda$loadTransactions$4$WalletActivity(boolean z, ArrayList arrayList) {
+    public /* synthetic */ void lambda$loadTransactions$7$WalletActivity(boolean z, ArrayList arrayList) {
         if (z) {
             onFinishGettingAccountState();
         }
@@ -1384,10 +1450,147 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
         }
     }
 
-    private String getTonUrl() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ton://transfer/");
-        stringBuilder.append(this.walletAddress);
-        return stringBuilder.toString();
+    private void showInvoiceSheet(String str, long j) {
+        String str2 = str;
+        if (getParentActivity() != null) {
+            Activity parentActivity = getParentActivity();
+            BottomSheet.Builder builder = new BottomSheet.Builder(parentActivity);
+            builder.setApplyBottomPadding(false);
+            builder.setApplyTopPadding(false);
+            builder.setUseFullWidth(false);
+            AnonymousClass10 anonymousClass10 = new FrameLayout(parentActivity) {
+                /* Access modifiers changed, original: protected */
+                public void onMeasure(int i, int i2) {
+                    super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(472.0f), NUM));
+                }
+            };
+            String str3 = "dialogTextBlack";
+            if (j == 0) {
+                ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(parentActivity, null, 0, Theme.getColor(str3));
+                actionBarMenuItem.setLongClickEnabled(false);
+                actionBarMenuItem.setIcon(NUM);
+                actionBarMenuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+                actionBarMenuItem.addSubItem(1, LocaleController.getString("WalletCopyAddress", NUM));
+                actionBarMenuItem.addSubItem(2, LocaleController.getString("WalletCreateInvoice", NUM));
+                actionBarMenuItem.setSubMenuOpenSide(2);
+                actionBarMenuItem.setDelegate(new -$$Lambda$WalletActivity$Dhw3b2KOZYT7WwJghUhGE2cpUnk(this, builder, str2));
+                actionBarMenuItem.setTranslationX((float) AndroidUtilities.dp(6.0f));
+                actionBarMenuItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 6));
+                anonymousClass10.addView(actionBarMenuItem, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 12.0f, 10.0f, 0.0f));
+                actionBarMenuItem.setOnClickListener(new -$$Lambda$WalletActivity$n13qDg6B0QqgOZf8tU2gzZtxOpY(actionBarMenuItem));
+            }
+            TextView textView = new TextView(parentActivity);
+            textView.setLines(1);
+            textView.setSingleLine(true);
+            if (j == 0) {
+                textView.setText(LocaleController.getString("WalletReceiveYourAddress", NUM));
+            } else {
+                textView.setText(LocaleController.getString("WalletYourInvoice", NUM));
+            }
+            textView.setTextColor(Theme.getColor(str3));
+            textView.setTextSize(1, 20.0f);
+            String str4 = "fonts/rmedium.ttf";
+            textView.setTypeface(AndroidUtilities.getTypeface(str4));
+            textView.setEllipsize(TruncateAt.END);
+            textView.setGravity(16);
+            anonymousClass10.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 21.0f, 22.0f, 21.0f, 0.0f));
+            LinearLayout linearLayout = new LinearLayout(parentActivity);
+            linearLayout.setOrientation(1);
+            anonymousClass10.addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
+            TextView textView2 = new TextView(parentActivity);
+            textView2.setTextColor(Theme.getColor("dialogTextGray2"));
+            textView2.setGravity(1);
+            textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            textView2.setTextSize(1, 14.0f);
+            if (j == 0) {
+                textView2.setText(LocaleController.getString("WalletShareInfo", NUM));
+            } else {
+                textView2.setText(AndroidUtilities.replaceTags(LocaleController.formatString("WalletShareInvoiceUrlInfo", NUM, TonController.formatCurrency(j))));
+            }
+            textView2.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
+            linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 49, 0, 0, 0, 0));
+            TextView textView3 = new TextView(parentActivity);
+            ImageView imageView = new ImageView(parentActivity);
+            imageView.setImageBitmap(getTonController().createTonQR(parentActivity, str2, null));
+            linearLayout.addView(imageView, LayoutHelper.createLinear(190, 190, 49, 0, 16, 0, 0));
+            imageView.setOnLongClickListener(new -$$Lambda$WalletActivity$nipm73LTXFMYUfMpK0rVPXFbddE(this, str2));
+            textView3.setTextSize(1, 17.0f);
+            textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmono.ttf"));
+            textView3.setTextColor(Theme.getColor(str3));
+            StringBuilder stringBuilder = new StringBuilder(this.walletAddress);
+            stringBuilder.insert(stringBuilder.length() / 2, 10);
+            textView3.setText(stringBuilder);
+            linearLayout.addView(textView3, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
+            textView3.setOnLongClickListener(new -$$Lambda$WalletActivity$xe-rvVOa-uaGihadyWRFqXeD2jk(this, str2));
+            TextView textView4 = new TextView(parentActivity);
+            textView4.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+            textView4.setGravity(17);
+            textView4.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+            textView4.setTextSize(1, 14.0f);
+            if (j == 0) {
+                textView4.setText(LocaleController.getString("WalletShareAddress", NUM));
+            } else {
+                textView4.setText(LocaleController.getString("WalletShareInvoiceUrl", NUM));
+            }
+            textView4.setTypeface(AndroidUtilities.getTypeface(str4));
+            textView4.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+            linearLayout.addView(textView4, LayoutHelper.createLinear(-1, 42, 51, 16, 20, 16, 16));
+            textView4.setOnClickListener(new -$$Lambda$WalletActivity$0ZIeXrYi9fCEMLFigPQ5az8A67I(this, str2));
+            ScrollView scrollView = new ScrollView(parentActivity);
+            scrollView.setVerticalScrollBarEnabled(false);
+            scrollView.addView(anonymousClass10, LayoutHelper.createScroll(-1, -2, 51));
+            if (VERSION.SDK_INT >= 21) {
+                scrollView.setNestedScrollingEnabled(true);
+            }
+            builder.setCustomView(scrollView);
+            BottomSheet create = builder.create();
+            create.setCanDismissWithSwipe(false);
+            showDialog(create);
+        }
+    }
+
+    public /* synthetic */ void lambda$showInvoiceSheet$9$WalletActivity(BottomSheet.Builder builder, String str, int i) {
+        builder.getDismissRunnable().run();
+        if (i == 1) {
+            AndroidUtilities.addToClipboard(str);
+            Toast.makeText(getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
+        } else if (i == 2) {
+            this.walletActionSheet = new WalletActionSheet(this, 1, this.walletAddress);
+            this.walletActionSheet.setDelegate(new WalletActionSheetDelegate() {
+                public /* synthetic */ void openQrReader() {
+                    -CC.$default$openQrReader(this);
+                }
+
+                public /* synthetic */ void openSendToAddress(String str) {
+                    -CC.$default$openSendToAddress(this, str);
+                }
+
+                public void openInvoice(String str, long j) {
+                    WalletActivity.this.showInvoiceSheet(str, j);
+                }
+            });
+            showDialog(this.walletActionSheet, new -$$Lambda$WalletActivity$aJSllkDk_F3N2TH9-nHyL4Klmc0(this));
+        }
+    }
+
+    public /* synthetic */ void lambda$null$8$WalletActivity(DialogInterface dialogInterface) {
+        if (this.walletActionSheet == dialogInterface) {
+            this.walletActionSheet = null;
+        }
+    }
+
+    public /* synthetic */ boolean lambda$showInvoiceSheet$11$WalletActivity(String str, View view) {
+        TonController.shareBitmap(getParentActivity(), view, str);
+        return true;
+    }
+
+    public /* synthetic */ boolean lambda$showInvoiceSheet$12$WalletActivity(String str, View view) {
+        AndroidUtilities.addToClipboard(str);
+        Toast.makeText(getParentActivity(), LocaleController.getString("WalletTransactionAddressCopied", NUM), 0).show();
+        return true;
+    }
+
+    public /* synthetic */ void lambda$showInvoiceSheet$13$WalletActivity(String str, View view) {
+        showDialog(new ShareAlert(getParentActivity(), null, str, false, str, false));
     }
 }

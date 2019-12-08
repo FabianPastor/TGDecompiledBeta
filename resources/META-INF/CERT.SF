@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: ts5KfvF5KsY0xWfjQx3hiR7ttiQ=
+SHA1-Digest-Manifest: PqwM2XTmmhglW8G3Z9SfB2TCQSE=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: kgwIcOscTD9iL+wJXFKs1x21UlU=
+SHA1-Digest: BQBsYUlKNlLeplJdbwUMJd8KhxU=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -223,7 +223,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: W+10DUKR0RK3Im1CTp8wgfwFHPE=
+SHA1-Digest: qnwPebFjlYJKZRX9FWxun1jAL7s=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: meJMBKLUSTmOentmkKD9WbS/j5I=
@@ -8339,13 +8339,13 @@ Name: res/interpolator/ft_avd_toarrow_animation_interpolator_5.xml
 SHA1-Digest: LgcbwMW3ZUoeSMjioiuOSX7WYLM=
 
 Name: res/layout-land/hockeyapp_fragment_update.xml
-SHA1-Digest: PO1zaG3X6XJt86nhWGBMuKFpHrs=
+SHA1-Digest: y7IgvdP1/8oBeIaLXGH1jiiSl4o=
 
 Name: res/layout-v16/notification_template_custom_big.xml
 SHA1-Digest: ZbN/sz/k405O5hNm+SLM4F6waG8=
 
 Name: res/layout-v17/hockeyapp_activity_feedback.xml
-SHA1-Digest: f8s/OANF6VLLwOBpcJthBmnbWjk=
+SHA1-Digest: XL+WSGd2GuRLsjj7qzLzls1+6QY=
 
 Name: res/layout-v17/notification_action.xml
 SHA1-Digest: 94n77PwKPxxLaycptDeklLHsJLk=
@@ -8381,13 +8381,13 @@ Name: res/layout/hockeyapp_activity_expiry_info.xml
 SHA1-Digest: Ce31w+CSBlA+YJY9oUNQ3bmOCVs=
 
 Name: res/layout/hockeyapp_activity_feedback.xml
-SHA1-Digest: 6QZjVqlkpKtJR+ADZJK0THVLQ38=
+SHA1-Digest: HgR/M5rvTO94BTXyNyHNLQFY9II=
 
 Name: res/layout/hockeyapp_activity_login.xml
-SHA1-Digest: zCdNHkcoJ8PFg5vT22vMQyuyZwY=
+SHA1-Digest: L1y+CKj3RuSaSs3MzQVY+e/kDyw=
 
 Name: res/layout/hockeyapp_fragment_update.xml
-SHA1-Digest: q6OV0R34FhKK8ATnTDOqzLMW+TQ=
+SHA1-Digest: l026/3eeqW6ukDY+DqU9pN9Nuww=
 
 Name: res/layout/hockeyapp_view_feedback_message.xml
 SHA1-Digest: /dzxYf++6+0EFX7qN/hTeqL9cdk=
@@ -8612,7 +8612,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: C9UbQ93w48z3pH6Yvi8oCWh8Nlo=
+SHA1-Digest: 4sqGz7zB/gjEjRP/owqDfLpb7YA=
 
 Name: version.txt
 SHA1-Digest: N6saYwG9YKFIhHj+jH0ssSY5RCQ=

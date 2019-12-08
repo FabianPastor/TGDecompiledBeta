@@ -397,21 +397,21 @@ public class NotificationsController extends BaseController {
     }
 
     public /* synthetic */ void lambda$removeDeletedMessagesFromNotifications$8$NotificationsController(SparseArray sparseArray, ArrayList arrayList) {
-        boolean z;
         SparseArray sparseArray2 = sparseArray;
         ArrayList arrayList2 = arrayList;
         int i = this.total_unread_count;
         getAccountInstance().getNotificationsSettings();
         Integer valueOf = Integer.valueOf(0);
         int i2 = 0;
-        while (true) {
-            z = true;
-            if (i2 >= sparseArray.size()) {
-                break;
-            }
-            ArrayList arrayList3 = (ArrayList) sparseArray2.get(sparseArray2.keyAt(i2));
-            for (int i3 = 0; i3 < arrayList3.size(); i3++) {
+        while (i2 < sparseArray.size()) {
+            int keyAt = sparseArray2.keyAt(i2);
+            ArrayList arrayList3 = (ArrayList) sparseArray2.get(keyAt);
+            int i3 = 0;
+            while (i3 < arrayList3.size()) {
                 long intValue = (long) ((Integer) arrayList3.get(i3)).intValue();
+                if (keyAt != 0) {
+                    intValue |= ((long) keyAt) << 32;
+                }
                 MessageObject messageObject = (MessageObject) this.pushMessagesDict.get(intValue);
                 if (messageObject != null) {
                     Integer num;
@@ -444,9 +444,13 @@ public class NotificationsController extends BaseController {
                     }
                     arrayList2.add(messageObject);
                 }
+                i3++;
+                sparseArray2 = sparseArray;
             }
             i2++;
+            sparseArray2 = sparseArray;
         }
+        boolean z = true;
         if (!arrayList.isEmpty()) {
             AndroidUtilities.runOnUIThread(new -$$Lambda$NotificationsController$uUrKIQpuu_OHFjMyR7HGe660wQk(this, arrayList2));
         }
@@ -2306,7 +2310,7 @@ public class NotificationsController extends BaseController {
         if (r4 != 0) goto L_0x0184;
     L_0x0178:
         r18[r1] = r9;
-        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881317E38 double:1.0531636863E-314;
+        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881313E38 double:1.0531636853E-314;
         r1 = "YouHaveNewMessage";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         return r0;
@@ -2376,7 +2380,7 @@ public class NotificationsController extends BaseController {
         r8 = 3;
         if (r4 == 0) goto L_0x023f;
     L_0x01e5:
-        r2 = NUM; // 0x7f0e0CLASSNAME float:1.8881406E38 double:1.053163708E-314;
+        r2 = NUM; // 0x7f0e0CLASSNAME float:1.8881402E38 double:1.053163707E-314;
         r3 = new java.lang.Object[r13];
         r4 = org.telegram.messenger.LocaleController.getInstance();
         r4 = r4.formatterYear;
@@ -3638,7 +3642,7 @@ public class NotificationsController extends BaseController {
         r0 = org.telegram.messenger.LocaleController.getString(r11, r0);
         return r0;
     L_0x0b78:
-        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881317E38 double:1.0531636863E-314;
+        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881313E38 double:1.0531636853E-314;
         r1 = "YouHaveNewMessage";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         return r0;
@@ -3865,7 +3869,7 @@ public class NotificationsController extends BaseController {
         r4 = (int) r3;
         if (r4 != 0) goto L_0x0163;
     L_0x0158:
-        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881317E38 double:1.0531636863E-314;
+        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881313E38 double:1.0531636853E-314;
         r1 = "YouHaveNewMessage";
         r11 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x11fc;
@@ -3912,7 +3916,7 @@ public class NotificationsController extends BaseController {
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messageActionLoginUnknownLocation;
         if (r3 == 0) goto L_0x0206;
     L_0x01a9:
-        r2 = NUM; // 0x7f0e0CLASSNAME float:1.8881406E38 double:1.053163708E-314;
+        r2 = NUM; // 0x7f0e0CLASSNAME float:1.8881402E38 double:1.053163707E-314;
         r3 = 2;
         r4 = new java.lang.Object[r3];
         r3 = org.telegram.messenger.LocaleController.getInstance();
@@ -6060,7 +6064,7 @@ public class NotificationsController extends BaseController {
     L_0x11fc:
         return r11;
     L_0x11fd:
-        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881317E38 double:1.0531636863E-314;
+        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881313E38 double:1.0531636853E-314;
         r1 = "YouHaveNewMessage";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         return r0;

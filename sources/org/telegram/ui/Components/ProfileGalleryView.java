@@ -186,6 +186,7 @@ public class ProfileGalleryView extends ViewPager implements NotificationCenterD
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogPhotosLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) this.parentActivity.getAvatarDialogId(), 80, 0, true, this.parentActivity.getClassGuid());
     }
 
     public void onDestroy() {

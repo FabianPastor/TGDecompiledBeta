@@ -2928,7 +2928,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x16f2;
     L_0x097f:
         r7 = "YouHaveNewMessage";
-        r8 = NUM; // 0x7f0e0CLASSNAME float:1.8881317E38 double:1.0531636863E-314;
+        r8 = NUM; // 0x7f0e0CLASSNAME float:1.8881313E38 double:1.0531636853E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x0455 }
         r8 = "SecretChatName";
         r10 = NUM; // 0x7f0e096e float:1.8879934E38 double:1.0531633493E-314;

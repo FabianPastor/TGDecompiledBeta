@@ -229,12 +229,14 @@ public class ActionBarLayout extends FrameLayout {
     public void onConfigurationChanged(Configuration configuration) {
         super.onConfigurationChanged(configuration);
         if (!this.fragmentsStack.isEmpty()) {
-            ArrayList arrayList = this.fragmentsStack;
-            BaseFragment baseFragment = (BaseFragment) arrayList.get(arrayList.size() - 1);
-            baseFragment.onConfigurationChanged(configuration);
-            Dialog dialog = baseFragment.visibleDialog;
-            if (dialog instanceof BottomSheet) {
-                ((BottomSheet) dialog).onConfigurationChanged(configuration);
+            int size = this.fragmentsStack.size();
+            for (int i = 0; i < size; i++) {
+                BaseFragment baseFragment = (BaseFragment) this.fragmentsStack.get(i);
+                baseFragment.onConfigurationChanged(configuration);
+                Dialog dialog = baseFragment.visibleDialog;
+                if (dialog instanceof BottomSheet) {
+                    ((BottomSheet) dialog).onConfigurationChanged(configuration);
+                }
             }
         }
     }

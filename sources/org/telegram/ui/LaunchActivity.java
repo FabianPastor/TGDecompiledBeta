@@ -120,7 +120,6 @@ import org.telegram.ui.Components.TermsOfServiceView.TermsOfServiceViewDelegate;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
-import org.telegram.ui.Wallet.WalletActionActivity;
 import org.telegram.ui.Wallet.WalletActivity;
 import org.telegram.ui.Wallet.WalletCreateActivity;
 import org.telegram.ui.WallpapersListActivity.ColorWallpaper;
@@ -1193,9 +1192,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } else if (TextUtils.isEmpty(str)) {
             return new WalletActivity();
         } else {
-            BaseFragment walletActionActivity = new WalletActionActivity(0, null);
-            walletActionActivity.setRecipientString(str, false);
-            return walletActionActivity;
+            return new WalletActivity(str);
         }
     }
 

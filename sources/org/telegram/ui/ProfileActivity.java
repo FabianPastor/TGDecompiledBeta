@@ -1167,7 +1167,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             goto L_0x02e5;
         L_0x024f:
             r3 = 3600; // 0xe10 float:5.045E-42 double:1.7786E-320;
-            r4 = NUM; // 0x7f0e0CLASSNAME float:1.8881282E38 double:1.053163678E-314;
+            r4 = NUM; // 0x7f0e0CLASSNAME float:1.8881278E38 double:1.053163677E-314;
             r5 = "WillUnmuteIn";
             if (r2 >= r3) goto L_0x026b;
         L_0x0258:
@@ -4063,18 +4063,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
     private void fixListViewPaddings() {
         if (!this.openAnimationInProgress && this.listView.getWidth() != 0) {
+            int i;
             int dp;
+            int adapterPosition;
             int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);
-            int i = 0;
-            for (int i2 = 0; i2 < this.listView.getChildCount(); i2++) {
-                i += this.listView.getChildAt(i2).getHeight();
+            int i2 = 0;
+            for (i = 0; i < this.listView.getChildCount(); i++) {
+                i2 += this.listView.getChildAt(i).getHeight();
             }
             if (this.isInLandscapeMode) {
                 dp = AndroidUtilities.dp(88.0f);
                 currentActionBarHeight = 0;
             } else {
                 dp = this.listView.getWidth() - currentActionBarHeight;
-                currentActionBarHeight = Math.max(0, this.fragmentView.getHeight() - ((i + currentActionBarHeight) + AndroidUtilities.dp(88.0f)));
+                currentActionBarHeight = Math.max(0, this.fragmentView.getHeight() - ((i2 + currentActionBarHeight) + AndroidUtilities.dp(88.0f)));
             }
             if (this.banFromGroup != 0) {
                 currentActionBarHeight += AndroidUtilities.dp(48.0f);
@@ -4082,7 +4084,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             } else {
                 this.listView.setBottomGlowOffset(0);
             }
-            this.listView.setPadding(0, dp, 0, currentActionBarHeight);
+            i = this.listView.getPaddingTop();
+            View childAt = this.listView.getChildAt(0);
+            if (childAt != null) {
+                adapterPosition = this.listView.findContainingViewHolder(childAt).getAdapterPosition();
+                i2 = childAt.getTop();
+            } else {
+                i2 = 0;
+                adapterPosition = -1;
+            }
+            if (!(i == dp && this.listView.getPaddingBottom() == currentActionBarHeight)) {
+                this.listView.setPadding(0, dp, 0, currentActionBarHeight);
+            }
+            if (adapterPosition != -1) {
+                this.layoutManager.scrollToPositionWithOffset(adapterPosition, i2 - dp);
+            }
         }
     }
 
@@ -6009,24 +6025,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         return this.verifiedCrossfadeDrawable;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x01f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x0208  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0203  */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x022f  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x020b  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x04fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x0494  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x01e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x01f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x021e  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x01fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x04eb  */
+    /* JADX WARNING: Removed duplicated region for block: B:214:0x0483  */
     private void updateProfileData() {
         /*
         r21 = this;
         r0 = r21;
         r1 = r0.avatarImage;
-        if (r1 == 0) goto L_0x059b;
+        if (r1 == 0) goto L_0x0577;
     L_0x0006:
         r1 = r0.nameTextView;
         if (r1 != 0) goto L_0x000c;
     L_0x000a:
-        goto L_0x059b;
+        goto L_0x0577;
     L_0x000c:
         r1 = r0.currentAccount;
         r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
@@ -6068,7 +6084,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r5 = r0.user_id;
         r6 = "50_50";
         r7 = 0;
-        if (r5 == 0) goto L_0x0264;
+        if (r5 == 0) goto L_0x0253;
     L_0x0052:
         r5 = r0.currentAccount;
         r5 = org.telegram.messenger.MessagesController.getInstance(r5);
@@ -6099,20 +6115,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r14 = 1;
         r11 = r5;
         r9.loadFile(r10, r11, r12, r13, r14);
-        r6 = r0.currentAccount;
-        r9 = org.telegram.messenger.MessagesController.getInstance(r6);
-        r10 = r0.user_id;
-        r11 = 80;
-        r12 = 0;
-        r15 = r0.classGuid;
-        r9.loadDialogPhotos(r10, r11, r12, r14, r15);
         r6 = org.telegram.messenger.UserObject.getUserName(r5);
         r9 = r5.id;
         r10 = r0.currentAccount;
         r10 = org.telegram.messenger.UserConfig.getInstance(r10);
         r10 = r10.getClientUserId();
-        if (r9 != r10) goto L_0x00cc;
-    L_0x00b3:
+        if (r9 != r10) goto L_0x00bb;
+    L_0x00a2:
         r6 = NUM; // 0x7f0e029b float:1.887639E38 double:1.053162486E-314;
         r9 = "ChatYourSelf";
         r6 = org.telegram.messenger.LocaleController.getString(r9, r6);
@@ -6122,121 +6131,121 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r20 = r9;
         r9 = r6;
         r6 = r20;
-        goto L_0x0137;
-    L_0x00cc:
+        goto L_0x0126;
+    L_0x00bb:
         r9 = r5.id;
         r10 = 333000; // 0x514c8 float:4.66632E-40 double:1.64524E-318;
-        if (r9 == r10) goto L_0x012e;
-    L_0x00d3:
+        if (r9 == r10) goto L_0x011d;
+    L_0x00c2:
         r10 = 777000; // 0xbdb28 float:1.088809E-39 double:3.83889E-318;
-        if (r9 == r10) goto L_0x012e;
-    L_0x00d8:
+        if (r9 == r10) goto L_0x011d;
+    L_0x00c7:
         r10 = 42777; // 0xa719 float:5.9943E-41 double:2.11346E-319;
-        if (r9 != r10) goto L_0x00de;
-    L_0x00dd:
-        goto L_0x012e;
-    L_0x00de:
+        if (r9 != r10) goto L_0x00cd;
+    L_0x00cc:
+        goto L_0x011d;
+    L_0x00cd:
         r9 = org.telegram.messenger.MessagesController.isSupportUser(r5);
-        if (r9 == 0) goto L_0x00ee;
-    L_0x00e4:
+        if (r9 == 0) goto L_0x00dd;
+    L_0x00d3:
         r9 = NUM; // 0x7f0e0a3c float:1.8880352E38 double:1.053163451E-314;
         r10 = "SupportStatus";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
-        goto L_0x0137;
-    L_0x00ee:
+        goto L_0x0126;
+    L_0x00dd:
         r9 = r0.isBot;
-        if (r9 == 0) goto L_0x00fc;
-    L_0x00f2:
+        if (r9 == 0) goto L_0x00eb;
+    L_0x00e1:
         r9 = NUM; // 0x7f0e01ce float:1.8875975E38 double:1.053162385E-314;
         r10 = "Bot";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
-        goto L_0x0137;
-    L_0x00fc:
+        goto L_0x0126;
+    L_0x00eb:
         r9 = r0.isOnline;
         r9[r7] = r7;
         r10 = r0.currentAccount;
         r9 = org.telegram.messenger.LocaleController.formatUserStatus(r10, r5, r9);
         r10 = r0.onlineTextView;
         r10 = r10[r4];
-        if (r10 == 0) goto L_0x0137;
-    L_0x010c:
+        if (r10 == 0) goto L_0x0126;
+    L_0x00fb:
         r10 = r0.isOnline;
         r10 = r10[r7];
-        if (r10 == 0) goto L_0x0115;
-    L_0x0112:
+        if (r10 == 0) goto L_0x0104;
+    L_0x0101:
         r10 = "profile_status";
-        goto L_0x0117;
-    L_0x0115:
+        goto L_0x0106;
+    L_0x0104:
         r10 = "avatar_subtitleInProfileBlue";
-    L_0x0117:
+    L_0x0106:
         r11 = r0.onlineTextView;
         r11 = r11[r4];
         r11.setTag(r10);
         r11 = r0.isPulledDown;
-        if (r11 != 0) goto L_0x0137;
-    L_0x0122:
+        if (r11 != 0) goto L_0x0126;
+    L_0x0111:
         r11 = r0.onlineTextView;
         r11 = r11[r4];
         r10 = org.telegram.ui.ActionBar.Theme.getColor(r10);
         r11.setTextColor(r10);
-        goto L_0x0137;
-    L_0x012e:
+        goto L_0x0126;
+    L_0x011d:
         r9 = NUM; // 0x7f0e09a9 float:1.8880053E38 double:1.0531633785E-314;
         r10 = "ServiceNotifications";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
-    L_0x0137:
+    L_0x0126:
         r10 = 0;
-    L_0x0138:
-        if (r10 >= r2) goto L_0x0254;
-    L_0x013a:
+    L_0x0127:
+        if (r10 >= r2) goto L_0x0243;
+    L_0x0129:
         r11 = r0.nameTextView;
         r11 = r11[r10];
-        if (r11 != 0) goto L_0x0142;
-    L_0x0140:
-        goto L_0x0250;
-    L_0x0142:
-        if (r10 != 0) goto L_0x01c9;
-    L_0x0144:
+        if (r11 != 0) goto L_0x0131;
+    L_0x012f:
+        goto L_0x023f;
+    L_0x0131:
+        if (r10 != 0) goto L_0x01b8;
+    L_0x0133:
         r11 = r5.id;
         r12 = r0.currentAccount;
         r12 = org.telegram.messenger.UserConfig.getInstance(r12);
         r12 = r12.getClientUserId();
-        if (r11 == r12) goto L_0x01c9;
-    L_0x0152:
+        if (r11 == r12) goto L_0x01b8;
+    L_0x0141:
         r11 = r5.id;
         r12 = r11 / 1000;
         r13 = 777; // 0x309 float:1.089E-42 double:3.84E-321;
-        if (r12 == r13) goto L_0x01c9;
-    L_0x015a:
+        if (r12 == r13) goto L_0x01b8;
+    L_0x0149:
         r11 = r11 / 1000;
         r12 = 333; // 0x14d float:4.67E-43 double:1.645E-321;
-        if (r11 == r12) goto L_0x01c9;
-    L_0x0160:
+        if (r11 == r12) goto L_0x01b8;
+    L_0x014f:
         r11 = r5.phone;
-        if (r11 == 0) goto L_0x01c9;
-    L_0x0164:
+        if (r11 == 0) goto L_0x01b8;
+    L_0x0153:
         r11 = r11.length();
-        if (r11 == 0) goto L_0x01c9;
-    L_0x016a:
+        if (r11 == 0) goto L_0x01b8;
+    L_0x0159:
         r11 = r0.currentAccount;
         r11 = org.telegram.messenger.ContactsController.getInstance(r11);
         r11 = r11.contactsDict;
         r12 = r5.id;
         r12 = java.lang.Integer.valueOf(r12);
         r11 = r11.get(r12);
-        if (r11 != 0) goto L_0x01c9;
-    L_0x017e:
+        if (r11 != 0) goto L_0x01b8;
+    L_0x016d:
         r11 = r0.currentAccount;
         r11 = org.telegram.messenger.ContactsController.getInstance(r11);
         r11 = r11.contactsDict;
         r11 = r11.size();
-        if (r11 != 0) goto L_0x0198;
-    L_0x018c:
+        if (r11 != 0) goto L_0x0187;
+    L_0x017b:
         r11 = r0.currentAccount;
         r11 = org.telegram.messenger.ContactsController.getInstance(r11);
         r11 = r11.isLoadingContacts();
-        if (r11 != 0) goto L_0x01c9;
-    L_0x0198:
+        if (r11 != 0) goto L_0x01b8;
+    L_0x0187:
         r11 = org.telegram.PhoneFormat.PhoneFormat.getInstance();
         r12 = new java.lang.StringBuilder;
         r12.<init>();
@@ -6250,122 +6259,122 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r12 = r12[r10];
         r12 = r12.getText();
         r12 = r12.equals(r11);
-        if (r12 != 0) goto L_0x01de;
-    L_0x01c1:
+        if (r12 != 0) goto L_0x01cd;
+    L_0x01b0:
         r12 = r0.nameTextView;
         r12 = r12[r10];
         r12.setText(r11);
-        goto L_0x01de;
-    L_0x01c9:
+        goto L_0x01cd;
+    L_0x01b8:
         r11 = r0.nameTextView;
         r11 = r11[r10];
         r11 = r11.getText();
         r11 = r11.equals(r6);
-        if (r11 != 0) goto L_0x01de;
-    L_0x01d7:
+        if (r11 != 0) goto L_0x01cd;
+    L_0x01c6:
         r11 = r0.nameTextView;
         r11 = r11[r10];
         r11.setText(r6);
-    L_0x01de:
-        if (r10 != 0) goto L_0x01ea;
-    L_0x01e0:
-        if (r1 == 0) goto L_0x01ea;
-    L_0x01e2:
+    L_0x01cd:
+        if (r10 != 0) goto L_0x01d9;
+    L_0x01cf:
+        if (r1 == 0) goto L_0x01d9;
+    L_0x01d1:
         r11 = r0.onlineTextView;
         r11 = r11[r10];
         r11.setText(r1);
-        goto L_0x01ff;
-    L_0x01ea:
+        goto L_0x01ee;
+    L_0x01d9:
         r11 = r0.onlineTextView;
         r11 = r11[r10];
         r11 = r11.getText();
         r11 = r11.equals(r9);
-        if (r11 != 0) goto L_0x01ff;
-    L_0x01f8:
+        if (r11 != 0) goto L_0x01ee;
+    L_0x01e7:
         r11 = r0.onlineTextView;
         r11 = r11[r10];
         r11.setText(r9);
-    L_0x01ff:
+    L_0x01ee:
         r11 = r0.currentEncryptedChat;
-        if (r11 == 0) goto L_0x0208;
-    L_0x0203:
+        if (r11 == 0) goto L_0x01f7;
+    L_0x01f2:
         r11 = r21.getLockIconDrawable();
-        goto L_0x0209;
-    L_0x0208:
+        goto L_0x01f8;
+    L_0x01f7:
         r11 = 0;
-    L_0x0209:
-        if (r10 != 0) goto L_0x022f;
-    L_0x020b:
+    L_0x01f8:
+        if (r10 != 0) goto L_0x021e;
+    L_0x01fa:
         r12 = r5.scam;
-        if (r12 == 0) goto L_0x0214;
-    L_0x020f:
+        if (r12 == 0) goto L_0x0203;
+    L_0x01fe:
         r12 = r21.getScamDrawable();
-        goto L_0x0242;
-    L_0x0214:
+        goto L_0x0231;
+    L_0x0203:
         r12 = r0.currentAccount;
         r12 = org.telegram.messenger.MessagesController.getInstance(r12);
         r13 = r0.dialog_id;
         r15 = 0;
         r17 = (r13 > r15 ? 1 : (r13 == r15 ? 0 : -1));
-        if (r17 == 0) goto L_0x0223;
-    L_0x0222:
-        goto L_0x0226;
-    L_0x0223:
+        if (r17 == 0) goto L_0x0212;
+    L_0x0211:
+        goto L_0x0215;
+    L_0x0212:
         r13 = r0.user_id;
         r13 = (long) r13;
-    L_0x0226:
+    L_0x0215:
         r12 = r12.isDialogMuted(r13);
-        if (r12 == 0) goto L_0x0241;
-    L_0x022c:
+        if (r12 == 0) goto L_0x0230;
+    L_0x021b:
         r12 = org.telegram.ui.ActionBar.Theme.chat_muteIconDrawable;
-        goto L_0x0242;
-    L_0x022f:
+        goto L_0x0231;
+    L_0x021e:
         r12 = r5.scam;
-        if (r12 == 0) goto L_0x0238;
-    L_0x0233:
+        if (r12 == 0) goto L_0x0227;
+    L_0x0222:
         r12 = r21.getScamDrawable();
-        goto L_0x0242;
-    L_0x0238:
+        goto L_0x0231;
+    L_0x0227:
         r12 = r5.verified;
-        if (r12 == 0) goto L_0x0241;
-    L_0x023c:
+        if (r12 == 0) goto L_0x0230;
+    L_0x022b:
         r12 = r21.getVerifiedCrossfadeDrawable();
-        goto L_0x0242;
-    L_0x0241:
+        goto L_0x0231;
+    L_0x0230:
         r12 = 0;
-    L_0x0242:
+    L_0x0231:
         r13 = r0.nameTextView;
         r13 = r13[r10];
         r13.setLeftDrawable(r11);
         r11 = r0.nameTextView;
         r11 = r11[r10];
         r11.setRightDrawable(r12);
-    L_0x0250:
+    L_0x023f:
         r10 = r10 + 1;
-        goto L_0x0138;
-    L_0x0254:
+        goto L_0x0127;
+    L_0x0243:
         r1 = r0.avatarImage;
         r1 = r1.getImageReceiver();
         r2 = org.telegram.ui.PhotoViewer.isShowingImage(r8);
         r2 = r2 ^ r4;
         r1.setVisible(r2, r7);
-        goto L_0x059b;
-    L_0x0264:
+        goto L_0x0577;
+    L_0x0253:
         r5 = r0.chat_id;
-        if (r5 == 0) goto L_0x059b;
-    L_0x0268:
+        if (r5 == 0) goto L_0x0577;
+    L_0x0257:
         r5 = r0.currentAccount;
         r5 = org.telegram.messenger.MessagesController.getInstance(r5);
         r8 = r0.chat_id;
         r8 = java.lang.Integer.valueOf(r8);
         r5 = r5.getChat(r8);
-        if (r5 == 0) goto L_0x027d;
-    L_0x027a:
+        if (r5 == 0) goto L_0x026c;
+    L_0x0269:
         r0.currentChat = r5;
-        goto L_0x027f;
-    L_0x027d:
+        goto L_0x026e;
+    L_0x026c:
         r5 = r0.currentChat;
-    L_0x027f:
+    L_0x026e:
         r10 = r5;
         r5 = org.telegram.messenger.ChatObject.isChannel(r10);
         r8 = "MegaPublic";
@@ -6375,38 +6384,38 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r15 = "OnlineCount";
         r3 = "%s, %s";
         r9 = "Members";
-        if (r5 == 0) goto L_0x0375;
-    L_0x0294:
+        if (r5 == 0) goto L_0x0364;
+    L_0x0283:
         r5 = r0.chatInfo;
-        if (r5 == 0) goto L_0x033f;
-    L_0x0298:
+        if (r5 == 0) goto L_0x032e;
+    L_0x0287:
         r12 = r0.currentChat;
         r7 = r12.megagroup;
-        if (r7 != 0) goto L_0x02b0;
-    L_0x029e:
+        if (r7 != 0) goto L_0x029f;
+    L_0x028d:
         r5 = r5.participants_count;
-        if (r5 == 0) goto L_0x033f;
-    L_0x02a2:
+        if (r5 == 0) goto L_0x032e;
+    L_0x0291:
         r5 = org.telegram.messenger.ChatObject.hasAdminRights(r12);
-        if (r5 != 0) goto L_0x033f;
-    L_0x02a8:
+        if (r5 != 0) goto L_0x032e;
+    L_0x0297:
         r5 = r0.chatInfo;
         r5 = r5.can_view_participants;
-        if (r5 == 0) goto L_0x02b0;
-    L_0x02ae:
-        goto L_0x033f;
-    L_0x02b0:
+        if (r5 == 0) goto L_0x029f;
+    L_0x029d:
+        goto L_0x032e;
+    L_0x029f:
         r5 = r0.currentChat;
         r5 = r5.megagroup;
-        if (r5 == 0) goto L_0x031e;
-    L_0x02b6:
+        if (r5 == 0) goto L_0x030d;
+    L_0x02a5:
         r5 = r0.onlineCount;
-        if (r5 <= r4) goto L_0x02df;
-    L_0x02ba:
+        if (r5 <= r4) goto L_0x02ce;
+    L_0x02a9:
         r5 = r0.chatInfo;
         r5 = r5.participants_count;
-        if (r5 == 0) goto L_0x02df;
-    L_0x02c0:
+        if (r5 == 0) goto L_0x02ce;
+    L_0x02af:
         r7 = new java.lang.Object[r2];
         r5 = org.telegram.messenger.LocaleController.formatPluralString(r9, r5);
         r12 = 0;
@@ -6418,94 +6427,94 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r5 = org.telegram.messenger.LocaleController.formatPluralString(r15, r5);
         r7[r4] = r5;
         r3 = java.lang.String.format(r3, r7);
-        goto L_0x03a3;
-    L_0x02df:
+        goto L_0x0392;
+    L_0x02ce:
         r3 = r0.chatInfo;
         r3 = r3.participants_count;
-        if (r3 != 0) goto L_0x0318;
-    L_0x02e5:
+        if (r3 != 0) goto L_0x0307;
+    L_0x02d4:
         r3 = r10.has_geo;
-        if (r3 == 0) goto L_0x02f6;
-    L_0x02e9:
+        if (r3 == 0) goto L_0x02e5;
+    L_0x02d8:
         r3 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r3 = r5.toLowerCase();
-        goto L_0x03a3;
-    L_0x02f6:
+        goto L_0x0392;
+    L_0x02e5:
         r3 = r10.username;
         r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 != 0) goto L_0x030b;
-    L_0x02fe:
+        if (r3 != 0) goto L_0x02fa;
+    L_0x02ed:
         r3 = NUM; // 0x7f0e05e9 float:1.8878106E38 double:1.053162904E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r8, r3);
         r3 = r3.toLowerCase();
-        goto L_0x03a3;
-    L_0x030b:
+        goto L_0x0392;
+    L_0x02fa:
         r3 = NUM; // 0x7f0e05e6 float:1.88781E38 double:1.0531629027E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r11, r3);
         r3 = r5.toLowerCase();
-        goto L_0x03a3;
-    L_0x0318:
+        goto L_0x0392;
+    L_0x0307:
         r3 = org.telegram.messenger.LocaleController.formatPluralString(r9, r3);
-        goto L_0x03a3;
-    L_0x031e:
+        goto L_0x0392;
+    L_0x030d:
         r3 = new int[r4];
         r5 = r0.chatInfo;
         r5 = r5.participants_count;
         org.telegram.messenger.LocaleController.formatShortNumber(r5, r3);
         r3 = r0.currentChat;
         r3 = r3.megagroup;
-        if (r3 == 0) goto L_0x0336;
-    L_0x032d:
+        if (r3 == 0) goto L_0x0325;
+    L_0x031c:
         r3 = r0.chatInfo;
         r3 = r3.participants_count;
         r3 = org.telegram.messenger.LocaleController.formatPluralString(r9, r3);
-        goto L_0x03a3;
-    L_0x0336:
+        goto L_0x0392;
+    L_0x0325:
         r3 = r0.chatInfo;
         r3 = r3.participants_count;
         r3 = org.telegram.messenger.LocaleController.formatPluralString(r14, r3);
-        goto L_0x03a3;
-    L_0x033f:
+        goto L_0x0392;
+    L_0x032e:
         r3 = r0.currentChat;
         r3 = r3.megagroup;
-        if (r3 == 0) goto L_0x0353;
-    L_0x0345:
+        if (r3 == 0) goto L_0x0342;
+    L_0x0334:
         r3 = NUM; // 0x7f0e059e float:1.8877954E38 double:1.053162867E-314;
         r5 = "Loading";
         r3 = org.telegram.messenger.LocaleController.getString(r5, r3);
         r3 = r3.toLowerCase();
-        goto L_0x03a3;
-    L_0x0353:
+        goto L_0x0392;
+    L_0x0342:
         r3 = r10.flags;
         r3 = r3 & 64;
-        if (r3 == 0) goto L_0x0367;
-    L_0x0359:
+        if (r3 == 0) goto L_0x0356;
+    L_0x0348:
         r3 = NUM; // 0x7f0e0260 float:1.887627E38 double:1.053162457E-314;
         r5 = "ChannelPublic";
         r3 = org.telegram.messenger.LocaleController.getString(r5, r3);
         r3 = r3.toLowerCase();
-        goto L_0x03a3;
-    L_0x0367:
+        goto L_0x0392;
+    L_0x0356:
         r3 = NUM; // 0x7f0e025d float:1.8876265E38 double:1.0531624555E-314;
         r5 = "ChannelPrivate";
         r3 = org.telegram.messenger.LocaleController.getString(r5, r3);
         r3 = r3.toLowerCase();
-        goto L_0x03a3;
-    L_0x0375:
+        goto L_0x0392;
+    L_0x0364:
         r5 = r10.participants_count;
         r7 = r0.chatInfo;
-        if (r7 == 0) goto L_0x0383;
-    L_0x037b:
+        if (r7 == 0) goto L_0x0372;
+    L_0x036a:
         r5 = r7.participants;
         r5 = r5.participants;
         r5 = r5.size();
-    L_0x0383:
-        if (r5 == 0) goto L_0x039f;
-    L_0x0385:
+    L_0x0372:
+        if (r5 == 0) goto L_0x038e;
+    L_0x0374:
         r7 = r0.onlineCount;
-        if (r7 <= r4) goto L_0x039f;
-    L_0x0389:
+        if (r7 <= r4) goto L_0x038e;
+    L_0x0378:
         r7 = new java.lang.Object[r2];
         r5 = org.telegram.messenger.LocaleController.formatPluralString(r9, r5);
         r12 = 0;
@@ -6514,82 +6523,82 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r5 = org.telegram.messenger.LocaleController.formatPluralString(r15, r5);
         r7[r4] = r5;
         r3 = java.lang.String.format(r3, r7);
-        goto L_0x03a3;
-    L_0x039f:
+        goto L_0x0392;
+    L_0x038e:
         r3 = org.telegram.messenger.LocaleController.formatPluralString(r9, r5);
-    L_0x03a3:
+    L_0x0392:
         r7 = r3;
         r3 = 0;
         r5 = 0;
-    L_0x03a6:
-        if (r3 >= r2) goto L_0x0544;
-    L_0x03a8:
+    L_0x0395:
+        if (r3 >= r2) goto L_0x0533;
+    L_0x0397:
         r12 = r0.nameTextView;
         r15 = r12[r3];
-        if (r15 != 0) goto L_0x03b2;
-    L_0x03ae:
+        if (r15 != 0) goto L_0x03a1;
+    L_0x039d:
         r19 = r1;
-        goto L_0x053c;
-    L_0x03b2:
+        goto L_0x052b;
+    L_0x03a1:
         r15 = r10.title;
-        if (r15 == 0) goto L_0x03d1;
-    L_0x03b6:
+        if (r15 == 0) goto L_0x03c0;
+    L_0x03a5:
         r12 = r12[r3];
         r12 = r12.getText();
         r15 = r10.title;
         r12 = r12.equals(r15);
-        if (r12 != 0) goto L_0x03d1;
-    L_0x03c4:
+        if (r12 != 0) goto L_0x03c0;
+    L_0x03b3:
         r12 = r0.nameTextView;
         r12 = r12[r3];
         r15 = r10.title;
         r12 = r12.setText(r15);
-        if (r12 == 0) goto L_0x03d1;
-    L_0x03d0:
+        if (r12 == 0) goto L_0x03c0;
+    L_0x03bf:
         r5 = 1;
-    L_0x03d1:
+    L_0x03c0:
         r12 = r0.nameTextView;
         r12 = r12[r3];
         r15 = 0;
         r12.setLeftDrawable(r15);
-        if (r3 == 0) goto L_0x0404;
-    L_0x03db:
+        if (r3 == 0) goto L_0x03f3;
+    L_0x03ca:
         r12 = r10.scam;
-        if (r12 == 0) goto L_0x03eb;
-    L_0x03df:
+        if (r12 == 0) goto L_0x03da;
+    L_0x03ce:
         r12 = r0.nameTextView;
         r12 = r12[r3];
         r15 = r21.getScamDrawable();
         r12.setRightDrawable(r15);
-        goto L_0x0414;
-    L_0x03eb:
+        goto L_0x0403;
+    L_0x03da:
         r12 = r10.verified;
-        if (r12 == 0) goto L_0x03fb;
-    L_0x03ef:
+        if (r12 == 0) goto L_0x03ea;
+    L_0x03de:
         r12 = r0.nameTextView;
         r12 = r12[r3];
         r15 = r21.getVerifiedCrossfadeDrawable();
         r12.setRightDrawable(r15);
-        goto L_0x0414;
-    L_0x03fb:
+        goto L_0x0403;
+    L_0x03ea:
         r12 = r0.nameTextView;
         r12 = r12[r3];
         r15 = 0;
         r12.setRightDrawable(r15);
-        goto L_0x0414;
-    L_0x0404:
+        goto L_0x0403;
+    L_0x03f3:
         r15 = 0;
         r12 = r10.scam;
-        if (r12 == 0) goto L_0x0417;
-    L_0x0409:
+        if (r12 == 0) goto L_0x0406;
+    L_0x03f8:
         r12 = r0.nameTextView;
         r12 = r12[r3];
         r2 = r21.getScamDrawable();
         r12.setRightDrawable(r2);
-    L_0x0414:
+    L_0x0403:
         r18 = r5;
-        goto L_0x0434;
-    L_0x0417:
+        goto L_0x0423;
+    L_0x0406:
         r2 = r0.nameTextView;
         r2 = r2[r3];
         r12 = r0.currentAccount;
@@ -6599,66 +6608,66 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r18 = r5;
         r4 = (long) r15;
         r4 = r12.isDialogMuted(r4);
-        if (r4 == 0) goto L_0x0430;
-    L_0x042d:
+        if (r4 == 0) goto L_0x041f;
+    L_0x041c:
         r4 = org.telegram.ui.ActionBar.Theme.chat_muteIconDrawable;
-        goto L_0x0431;
-    L_0x0430:
+        goto L_0x0420;
+    L_0x041f:
         r4 = 0;
-    L_0x0431:
+    L_0x0420:
         r2.setRightDrawable(r4);
-    L_0x0434:
-        if (r3 != 0) goto L_0x0443;
-    L_0x0436:
-        if (r1 == 0) goto L_0x0443;
-    L_0x0438:
+    L_0x0423:
+        if (r3 != 0) goto L_0x0432;
+    L_0x0425:
+        if (r1 == 0) goto L_0x0432;
+    L_0x0427:
         r2 = r0.onlineTextView;
         r2 = r2[r3];
         r2.setText(r1);
-    L_0x043f:
+    L_0x042e:
         r19 = r1;
-        goto L_0x053a;
-    L_0x0443:
+        goto L_0x0529;
+    L_0x0432:
         r2 = r0.currentChat;
         r2 = r2.megagroup;
-        if (r2 == 0) goto L_0x0467;
-    L_0x0449:
+        if (r2 == 0) goto L_0x0456;
+    L_0x0438:
         r2 = r0.chatInfo;
-        if (r2 == 0) goto L_0x0467;
-    L_0x044d:
+        if (r2 == 0) goto L_0x0456;
+    L_0x043c:
         r2 = r0.onlineCount;
-        if (r2 <= 0) goto L_0x0467;
-    L_0x0451:
+        if (r2 <= 0) goto L_0x0456;
+    L_0x0440:
         r2 = r0.onlineTextView;
         r2 = r2[r3];
         r2 = r2.getText();
         r2 = r2.equals(r7);
-        if (r2 != 0) goto L_0x043f;
-    L_0x045f:
+        if (r2 != 0) goto L_0x042e;
+    L_0x044e:
         r2 = r0.onlineTextView;
         r2 = r2[r3];
         r2.setText(r7);
-        goto L_0x043f;
-    L_0x0467:
-        if (r3 != 0) goto L_0x0523;
-    L_0x0469:
+        goto L_0x042e;
+    L_0x0456:
+        if (r3 != 0) goto L_0x0512;
+    L_0x0458:
         r2 = r0.currentChat;
         r2 = org.telegram.messenger.ChatObject.isChannel(r2);
-        if (r2 == 0) goto L_0x0523;
-    L_0x0471:
+        if (r2 == 0) goto L_0x0512;
+    L_0x0460:
         r2 = r0.chatInfo;
-        if (r2 == 0) goto L_0x0523;
-    L_0x0475:
+        if (r2 == 0) goto L_0x0512;
+    L_0x0464:
         r2 = r2.participants_count;
-        if (r2 == 0) goto L_0x0523;
-    L_0x0479:
+        if (r2 == 0) goto L_0x0512;
+    L_0x0468:
         r2 = r0.currentChat;
         r4 = r2.megagroup;
-        if (r4 != 0) goto L_0x0483;
-    L_0x047f:
+        if (r4 != 0) goto L_0x0472;
+    L_0x046e:
         r2 = r2.broadcast;
-        if (r2 == 0) goto L_0x0523;
-    L_0x0483:
+        if (r2 == 0) goto L_0x0512;
+    L_0x0472:
         r2 = 1;
         r4 = new int[r2];
         r2 = r0.chatInfo;
@@ -6666,35 +6675,35 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = org.telegram.messenger.LocaleController.formatShortNumber(r2, r4);
         r5 = r0.currentChat;
         r5 = r5.megagroup;
-        if (r5 == 0) goto L_0x04fc;
-    L_0x0494:
+        if (r5 == 0) goto L_0x04eb;
+    L_0x0483:
         r5 = r0.chatInfo;
         r5 = r5.participants_count;
-        if (r5 != 0) goto L_0x04cf;
-    L_0x049a:
+        if (r5 != 0) goto L_0x04be;
+    L_0x0489:
         r2 = r10.has_geo;
-        if (r2 == 0) goto L_0x04aa;
-    L_0x049e:
+        if (r2 == 0) goto L_0x0499;
+    L_0x048d:
         r12 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r7 = r2.toLowerCase();
-        goto L_0x043f;
-    L_0x04aa:
+        goto L_0x042e;
+    L_0x0499:
         r12 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r2 = r10.username;
         r2 = android.text.TextUtils.isEmpty(r2);
-        if (r2 != 0) goto L_0x04c2;
-    L_0x04b5:
+        if (r2 != 0) goto L_0x04b1;
+    L_0x04a4:
         r2 = NUM; // 0x7f0e05e9 float:1.8878106E38 double:1.053162904E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r8, r2);
         r7 = r2.toLowerCase();
-        goto L_0x043f;
-    L_0x04c2:
+        goto L_0x042e;
+    L_0x04b1:
         r15 = NUM; // 0x7f0e05e6 float:1.88781E38 double:1.0531629027E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r11, r15);
         r7 = r2.toLowerCase();
-        goto L_0x043f;
-    L_0x04cf:
+        goto L_0x042e;
+    L_0x04be:
         r12 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r15 = NUM; // 0x7f0e05e6 float:1.88781E38 double:1.0531629027E-314;
         r5 = r0.onlineTextView;
@@ -6712,8 +6721,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r1 = java.lang.String.format(r4, r1);
         r1 = r12.replace(r1, r2);
         r5.setText(r1);
-        goto L_0x053a;
-    L_0x04fc:
+        goto L_0x0529;
+    L_0x04eb:
         r19 = r1;
         r17 = 0;
         r1 = r0.onlineTextView;
@@ -6729,39 +6738,39 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r4 = java.lang.String.format(r4, r15);
         r2 = r5.replace(r4, r2);
         r1.setText(r2);
-        goto L_0x053a;
-    L_0x0523:
+        goto L_0x0529;
+    L_0x0512:
         r19 = r1;
         r1 = r0.onlineTextView;
         r1 = r1[r3];
         r1 = r1.getText();
         r1 = r1.equals(r7);
-        if (r1 != 0) goto L_0x053a;
-    L_0x0533:
+        if (r1 != 0) goto L_0x0529;
+    L_0x0522:
         r1 = r0.onlineTextView;
         r1 = r1[r3];
         r1.setText(r7);
-    L_0x053a:
+    L_0x0529:
         r5 = r18;
-    L_0x053c:
+    L_0x052b:
         r3 = r3 + 1;
         r1 = r19;
         r2 = 2;
         r4 = 1;
-        goto L_0x03a6;
-    L_0x0544:
-        if (r5 == 0) goto L_0x0549;
-    L_0x0546:
+        goto L_0x0395;
+    L_0x0533:
+        if (r5 == 0) goto L_0x0538;
+    L_0x0535:
         r21.needLayout();
-    L_0x0549:
+    L_0x0538:
         r1 = r10.photo;
-        if (r1 == 0) goto L_0x0550;
-    L_0x054d:
+        if (r1 == 0) goto L_0x053f;
+    L_0x053c:
         r3 = r1.photo_big;
-        goto L_0x0551;
-    L_0x0550:
+        goto L_0x0540;
+    L_0x053f:
         r3 = 0;
-    L_0x0551:
+    L_0x0540:
         r1 = r0.avatarDrawable;
         r1.setInfo(r10);
         r1 = 1;
@@ -6779,15 +6788,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r12 = 0;
         r13 = 1;
         r8.loadFile(r9, r10, r11, r12, r13);
-        r1 = r0.currentAccount;
-        r4 = org.telegram.messenger.MessagesController.getInstance(r1);
-        r1 = r0.chat_id;
-        r5 = -r1;
-        r6 = 80;
-        r7 = 0;
-        r9 = 1;
-        r10 = r0.classGuid;
-        r4.loadDialogPhotos(r5, r6, r7, r9, r10);
         r1 = r0.avatarImage;
         r1 = r1.getImageReceiver();
         r2 = org.telegram.ui.PhotoViewer.isShowingImage(r3);
@@ -6795,7 +6795,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = r2 ^ r3;
         r3 = 0;
         r1.setVisible(r2, r3);
-    L_0x059b:
+    L_0x0577:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateProfileData():void");

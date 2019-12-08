@@ -4208,6 +4208,7 @@ public final class R {
         public static final int WalletCreateInvoice = NUM;
         public static final int WalletCreateInvoiceTitle = NUM;
         public static final int WalletCreated = NUM;
+        public static final int WalletDate = NUM;
         public static final int WalletDelete = NUM;
         public static final int WalletDeleteInfo = NUM;
         public static final int WalletDeleteTitle = NUM;
@@ -4218,8 +4219,6 @@ public final class R {
         public static final int WalletExportConfirmContinue = NUM;
         public static final int WalletExportConfirmCredentials = NUM;
         public static final int WalletFrom = NUM;
-        public static final int WalletGramsToReceive = NUM;
-        public static final int WalletGramsToSend = NUM;
         public static final int WalletImportAlertText = NUM;
         public static final int WalletImportAlertTitle = NUM;
         public static final int WalletImportDontHave = NUM;
@@ -4287,7 +4286,6 @@ public final class R {
         public static final int WalletShareInvoiceUrlInfo = NUM;
         public static final int WalletShareQr = NUM;
         public static final int WalletStorageFee = NUM;
-        public static final int WalletStorageFeeHeader = NUM;
         public static final int WalletSwipeToRefresh = NUM;
         public static final int WalletTelegramLogout = NUM;
         public static final int WalletTestTime = NUM;
@@ -4311,7 +4309,6 @@ public final class R {
         public static final int WalletTransactionAddressCopied = NUM;
         public static final int WalletTransactionComment = NUM;
         public static final int WalletTransactionFee = NUM;
-        public static final int WalletTransactionFeeHeader = NUM;
         public static final int WalletTransactionRecipient = NUM;
         public static final int WalletTransactionSendGrams = NUM;
         public static final int WalletTransactionSender = NUM;
@@ -4321,6 +4318,7 @@ public final class R {
         public static final int WalletView = NUM;
         public static final int WalletYourAddress = NUM;
         public static final int WalletYourBalance = NUM;
+        public static final int WalletYourInvoice = NUM;
         public static final int Warmth = NUM;
         public static final int WebSessionsTitle = NUM;
         public static final int Weeks_few = NUM;

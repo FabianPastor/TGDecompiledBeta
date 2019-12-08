@@ -2765,49 +2765,49 @@ public class LocaleController {
         r7 = 1;
     L_0x0076:
         nameDisplayOrder = r7;
-        r7 = NUM; // 0x7f0e0c4d float:1.8881424E38 double:1.0531637124E-314;
+        r7 = NUM; // 0x7f0e0c4b float:1.888142E38 double:1.0531637115E-314;
         r8 = "formatterMonth";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "dd MMM";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterDayMonth = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881437E38 double:1.0531637154E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881433E38 double:1.0531637144E-314;
         r8 = "formatterYear";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "dd.MM.yy";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterYear = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881439E38 double:1.053163716E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881435E38 double:1.053163715E-314;
         r8 = "formatterYearMax";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "dd.MM.yyyy";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterYearMax = r7;
-        r7 = NUM; // 0x7f0e0c2d float:1.888136E38 double:1.0531636966E-314;
+        r7 = NUM; // 0x7f0e0c2b float:1.8881356E38 double:1.0531636956E-314;
         r8 = "chatDate";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "d MMMM";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.chatDate = r7;
-        r7 = NUM; // 0x7f0e0c2e float:1.8881362E38 double:1.053163697E-314;
+        r7 = NUM; // 0x7f0e0c2c float:1.8881358E38 double:1.053163696E-314;
         r8 = "chatFullDate";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "d MMMM yyyy";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.chatFullDate = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881435E38 double:1.053163715E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.888143E38 double:1.053163714E-314;
         r8 = "formatterWeek";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "EEE";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterWeek = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881408E38 double:1.0531637085E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881404E38 double:1.0531637075E-314;
         r8 = "formatDateSchedule";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "MMM d";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterScheduleDay = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.888141E38 double:1.053163709E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881406E38 double:1.053163708E-314;
         r8 = "formatDateScheduleYear";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "MMM d yyyy";
@@ -2831,11 +2831,11 @@ public class LocaleController {
         r2 = is24HourFormat;
         if (r2 == 0) goto L_0x0123;
     L_0x011d:
-        r2 = NUM; // 0x7f0e0c4c float:1.8881422E38 double:1.053163712E-314;
+        r2 = NUM; // 0x7f0e0c4a float:1.8881418E38 double:1.053163711E-314;
         r4 = "formatterDay24H";
         goto L_0x0128;
     L_0x0123:
-        r2 = NUM; // 0x7f0e0c4b float:1.888142E38 double:1.0531637115E-314;
+        r2 = NUM; // 0x7f0e0CLASSNAME float:1.8881416E38 double:1.0531637105E-314;
         r4 = "formatterDay12H";
     L_0x0128:
         r2 = r9.getStringInternal(r4, r2);
@@ -2852,11 +2852,11 @@ public class LocaleController {
         r1 = is24HourFormat;
         if (r1 == 0) goto L_0x0145;
     L_0x013f:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881433E38 double:1.0531637144E-314;
+        r1 = NUM; // 0x7f0e0c4f float:1.8881429E38 double:1.0531637134E-314;
         r2 = "formatterStats24H";
         goto L_0x014a;
     L_0x0145:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.888143E38 double:1.053163714E-314;
+        r1 = NUM; // 0x7f0e0c4e float:1.8881426E38 double:1.053163713E-314;
         r2 = "formatterStats12H";
     L_0x014a:
         r1 = r9.getStringInternal(r2, r1);
@@ -2875,11 +2875,11 @@ public class LocaleController {
         r1 = is24HourFormat;
         if (r1 == 0) goto L_0x0169;
     L_0x0163:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881414E38 double:1.05316371E-314;
+        r1 = NUM; // 0x7f0e0CLASSNAME float:1.888141E38 double:1.053163709E-314;
         r2 = "formatterBannedUntil24H";
         goto L_0x016e;
     L_0x0169:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881412E38 double:1.0531637095E-314;
+        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881408E38 double:1.0531637085E-314;
         r2 = "formatterBannedUntil12H";
     L_0x016e:
         r1 = r9.getStringInternal(r2, r1);
@@ -2895,11 +2895,11 @@ public class LocaleController {
         r1 = is24HourFormat;
         if (r1 == 0) goto L_0x0188;
     L_0x0182:
-        r1 = NUM; // 0x7f0e0c4a float:1.8881418E38 double:1.053163711E-314;
+        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881414E38 double:1.05316371E-314;
         r2 = "formatterBannedUntilThisYear24H";
         goto L_0x018d;
     L_0x0188:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881416E38 double:1.0531637105E-314;
+        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881412E38 double:1.0531637095E-314;
         r2 = "formatterBannedUntilThisYear12H";
     L_0x018d:
         r1 = r9.getStringInternal(r2, r1);
