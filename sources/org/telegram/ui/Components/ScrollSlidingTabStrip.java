@@ -234,7 +234,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             }
             if (forDocument != null) {
                 BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
-                if (z && MessageObject.isAnimatedStickerDocument(document)) {
+                if (z && MessageObject.isAnimatedStickerDocument(document, true)) {
                     backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
                 } else if (forDocument.lottieAnimation) {
                     backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
@@ -249,14 +249,14 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     /* Access modifiers changed, original: protected */
     public void onScrollChanged(int i, int i2, int i3, int i4) {
         super.onScrollChanged(i, i2, i3, i4);
-        i2 = AndroidUtilities.dp(52.0f);
-        i3 /= i2;
-        i /= i2;
-        i2 = ((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) i2)))) + 1;
-        i4 = Math.max(0, Math.min(i3, i));
-        i3 = Math.min(this.tabsContainer.getChildCount(), Math.max(i3, i) + i2);
-        while (i4 < i3) {
-            View childAt = this.tabsContainer.getChildAt(i4);
+        int dp = AndroidUtilities.dp(52.0f);
+        int i5 = i3 / dp;
+        int i6 = i / dp;
+        dp = ((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) dp)))) + 1;
+        int max = Math.max(0, Math.min(i5, i6));
+        i5 = Math.min(this.tabsContainer.getChildCount(), Math.max(i5, i6) + dp);
+        while (max < i5) {
+            View childAt = this.tabsContainer.getChildAt(max);
             if (childAt != null) {
                 ImageLocation forDocument;
                 Object tag = childAt.getTag();
@@ -270,9 +270,9 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 }
                 if (forDocument != null) {
                     BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
-                    if (i4 < i || i4 >= i + i2) {
+                    if (max < i6 || max >= i6 + dp) {
                         backupImageView.setImageDrawable(null);
-                    } else if (z && MessageObject.isAnimatedStickerDocument(document)) {
+                    } else if (z && MessageObject.isAnimatedStickerDocument(document, true)) {
                         backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
                     } else if (forDocument.lottieAnimation) {
                         backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
@@ -281,7 +281,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     }
                 }
             }
-            i4++;
+            max++;
         }
     }
 

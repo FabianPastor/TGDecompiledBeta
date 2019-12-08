@@ -244,7 +244,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 forDocument = ImageLocation.getForSticker(photoSize, tLObject);
             }
             ImageLocation imageLocation = forDocument;
-            if (z4 && MessageObject.isAnimatedStickerDocument(tLObject)) {
+            if (z4 && MessageObject.isAnimatedStickerDocument(tLObject, true)) {
                 this.imageView.setImage(ImageLocation.getForDocument(tLObject), "50_50", imageLocation, null, 0, stickerSetCovered);
             } else if (imageLocation == null || !imageLocation.lottieAnimation) {
                 this.imageView.setImage(imageLocation, "50_50", "webp", null, (Object) stickerSetCovered);

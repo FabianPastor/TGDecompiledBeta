@@ -434,7 +434,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (r0 != 0) goto L_0x01aa;
     L_0x0190:
         r0 = r1.documentAttach;
-        r0 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r0);
+        r0 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r0, r7);
         if (r0 == 0) goto L_0x0199;
     L_0x0198:
         goto L_0x01aa;
@@ -1031,7 +1031,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             }
         } else if (MessageObject.isGifDocument(document)) {
             this.documentAttachType = 2;
-        } else if (MessageObject.isStickerDocument(this.documentAttach) || MessageObject.isAnimatedStickerDocument(this.documentAttach)) {
+        } else if (MessageObject.isStickerDocument(this.documentAttach) || MessageObject.isAnimatedStickerDocument(this.documentAttach, true)) {
             this.documentAttachType = 6;
         } else if (MessageObject.isMusicDocument(this.documentAttach)) {
             this.documentAttachType = 5;

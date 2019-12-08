@@ -179,7 +179,7 @@ public class StickerSetCell extends FrameLayout {
         } else {
             forDocument = ImageLocation.getForSticker(photoSize, tLObject);
         }
-        if (z2 && MessageObject.isAnimatedStickerDocument(tLObject)) {
+        if (z2 && MessageObject.isAnimatedStickerDocument(tLObject, true)) {
             this.imageView.setImage(ImageLocation.getForDocument(tLObject), "50_50", forDocument, null, 0, tL_messages_stickerSet);
         } else if (forDocument == null || !forDocument.lottieAnimation) {
             this.imageView.setImage(forDocument, "50_50", "webp", null, (Object) tL_messages_stickerSet);

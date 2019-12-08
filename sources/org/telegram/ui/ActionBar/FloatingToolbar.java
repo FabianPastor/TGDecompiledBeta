@@ -253,13 +253,13 @@ public final class FloatingToolbar {
             this.mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563661);
             this.mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563662);
             this.mFastOutLinearInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563663);
-            this.mArrow = this.mContext.getResources().getDrawable(NUM).mutate();
+            this.mArrow = this.mContext.getDrawable(NUM).mutate();
             this.mArrow.setAutoMirrored(true);
-            this.mOverflow = this.mContext.getResources().getDrawable(NUM).mutate();
+            this.mOverflow = this.mContext.getDrawable(NUM).mutate();
             this.mOverflow.setAutoMirrored(true);
-            this.mToArrow = (AnimatedVectorDrawable) this.mContext.getResources().getDrawable(NUM).mutate();
+            this.mToArrow = (AnimatedVectorDrawable) this.mContext.getDrawable(NUM).mutate();
             this.mToArrow.setAutoMirrored(true);
-            this.mToOverflow = (AnimatedVectorDrawable) this.mContext.getResources().getDrawable(NUM).mutate();
+            this.mToOverflow = (AnimatedVectorDrawable) this.mContext.getDrawable(NUM).mutate();
             this.mToOverflow.setAutoMirrored(true);
             this.mOverflowButton = createOverflowButton();
             this.mOverflowButtonSize = measure(this.mOverflowButton);

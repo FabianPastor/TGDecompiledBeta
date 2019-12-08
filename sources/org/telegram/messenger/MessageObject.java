@@ -8420,9 +8420,12 @@ public class MessageObject {
         return false;
     }
 
-    public static boolean isAnimatedStickerDocument(Document document) {
+    public static boolean isAnimatedStickerDocument(Document document, boolean z) {
         if (document != null) {
             if ("application/x-tgsticker".equals(document.mime_type) && !document.thumbs.isEmpty()) {
+                if (z) {
+                    return true;
+                }
                 int size = document.attributes.size();
                 for (int i = 0; i < size; i++) {
                     DocumentAttribute documentAttribute = (DocumentAttribute) document.attributes.get(i);
@@ -8439,7 +8442,7 @@ public class MessageObject {
     }
 
     public static boolean canAutoplayAnimatedSticker(Document document) {
-        return isAnimatedStickerDocument(document) && SharedConfig.getDevicePerfomanceClass() != 0;
+        return isAnimatedStickerDocument(document, true) && SharedConfig.getDevicePerfomanceClass() != 0;
     }
 
     public static boolean isMaskDocument(Document document) {
@@ -8565,7 +8568,7 @@ public class MessageObject {
 
     public static boolean isAnimatedStickerMessage(Message message) {
         MessageMedia messageMedia = message.media;
-        return messageMedia != null && isAnimatedStickerDocument(messageMedia.document);
+        return messageMedia != null && isAnimatedStickerDocument(messageMedia.document, DialogObject.isSecretDialogId(message.dialog_id) ^ 1);
     }
 
     public static boolean isLocationMessage(Message message) {
@@ -8859,10 +8862,14 @@ public class MessageObject {
 
     public boolean isAnimatedSticker() {
         int i = this.type;
+        boolean z = true;
         if (i == 1000) {
-            return isAnimatedStickerDocument(getDocument());
+            return isAnimatedStickerDocument(getDocument(), 1 ^ DialogObject.isSecretDialogId(getDialogId()));
         }
-        return i == 15;
+        if (i != 15) {
+            z = false;
+        }
+        return z;
     }
 
     public boolean isAnyKindOfSticker() {
@@ -9367,7 +9374,7 @@ public class MessageObject {
     public static boolean canEditMessageAnytime(int i, Message message, Chat chat) {
         if (!(message == null || message.to_id == null)) {
             MessageMedia messageMedia = message.media;
-            if (messageMedia == null || !(isRoundVideoDocument(messageMedia.document) || isStickerDocument(message.media.document) || isAnimatedStickerDocument(message.media.document))) {
+            if (messageMedia == null || !(isRoundVideoDocument(messageMedia.document) || isStickerDocument(message.media.document) || isAnimatedStickerDocument(message.media.document, true))) {
                 MessageAction messageAction = message.action;
                 if ((messageAction == null || (messageAction instanceof TL_messageActionEmpty)) && !isForwardedMessage(message) && message.via_bot_id == 0 && message.id >= 0) {
                     int i2 = message.from_id;
@@ -9456,51 +9463,51 @@ public class MessageObject {
         if (r1 == 0) goto L_0x0163;
     L_0x0023:
         r1 = r5.media;
-        if (r1 == 0) goto L_0x0049;
-    L_0x0027:
+        r2 = 1;
+        if (r1 == 0) goto L_0x004a;
+    L_0x0028:
         r1 = r1.document;
         r1 = isRoundVideoDocument(r1);
         if (r1 != 0) goto L_0x0163;
-    L_0x002f:
+    L_0x0030:
         r1 = r5.media;
         r1 = r1.document;
         r1 = isStickerDocument(r1);
         if (r1 != 0) goto L_0x0163;
-    L_0x0039:
+    L_0x003a:
         r1 = r5.media;
         r1 = r1.document;
-        r1 = isAnimatedStickerDocument(r1);
+        r1 = isAnimatedStickerDocument(r1, r2);
         if (r1 != 0) goto L_0x0163;
-    L_0x0043:
+    L_0x0044:
         r1 = isLocationMessage(r5);
         if (r1 != 0) goto L_0x0163;
-    L_0x0049:
+    L_0x004a:
         r1 = r5.action;
-        if (r1 == 0) goto L_0x0051;
-    L_0x004d:
+        if (r1 == 0) goto L_0x0052;
+    L_0x004e:
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
         if (r1 == 0) goto L_0x0163;
-    L_0x0051:
+    L_0x0052:
         r1 = isForwardedMessage(r5);
         if (r1 != 0) goto L_0x0163;
-    L_0x0057:
+    L_0x0058:
         r1 = r5.via_bot_id;
         if (r1 != 0) goto L_0x0163;
-    L_0x005b:
+    L_0x005c:
         r1 = r5.id;
-        if (r1 >= 0) goto L_0x0061;
-    L_0x005f:
+        if (r1 >= 0) goto L_0x0062;
+    L_0x0060:
         goto L_0x0163;
-    L_0x0061:
+    L_0x0062:
         r1 = r5.from_id;
-        r2 = r5.to_id;
-        r2 = r2.user_id;
-        r3 = 1;
-        if (r1 != r2) goto L_0x0081;
+        r3 = r5.to_id;
+        r3 = r3.user_id;
+        if (r1 != r3) goto L_0x0081;
     L_0x006a:
-        r2 = org.telegram.messenger.UserConfig.getInstance(r4);
-        r2 = r2.getClientUserId();
-        if (r1 != r2) goto L_0x0081;
+        r3 = org.telegram.messenger.UserConfig.getInstance(r4);
+        r3 = r3.getClientUserId();
+        if (r1 != r3) goto L_0x0081;
     L_0x0074:
         r1 = isLiveLocationMessage(r5);
         if (r1 != 0) goto L_0x0081;
@@ -9509,7 +9516,7 @@ public class MessageObject {
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaContact;
         if (r1 != 0) goto L_0x0081;
     L_0x0080:
-        return r3;
+        return r2;
     L_0x0081:
         if (r6 != 0) goto L_0x009c;
     L_0x0083:
@@ -9529,14 +9536,14 @@ public class MessageObject {
         r1 = r5.media;
         if (r1 == 0) goto L_0x00b1;
     L_0x00a0:
-        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
-        if (r2 != 0) goto L_0x00b1;
+        r3 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
+        if (r3 != 0) goto L_0x00b1;
     L_0x00a4:
-        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
-        if (r2 != 0) goto L_0x00b1;
+        r3 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
+        if (r3 != 0) goto L_0x00b1;
     L_0x00a8:
-        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
-        if (r2 != 0) goto L_0x00b1;
+        r3 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
+        if (r3 != 0) goto L_0x00b1;
     L_0x00ac:
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
         if (r1 != 0) goto L_0x00b1;
@@ -9560,7 +9567,7 @@ public class MessageObject {
         r1 = r1.pin_messages;
         if (r1 == 0) goto L_0x00c8;
     L_0x00c7:
-        return r3;
+        return r2;
     L_0x00c8:
         if (r7 != 0) goto L_0x00e2;
     L_0x00ca:
@@ -9662,7 +9669,7 @@ public class MessageObject {
     L_0x0160:
         if (r4 != 0) goto L_0x0163;
     L_0x0162:
-        return r3;
+        return r2;
     L_0x0163:
         return r0;
         */

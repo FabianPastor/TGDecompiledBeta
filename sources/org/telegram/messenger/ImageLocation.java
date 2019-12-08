@@ -167,7 +167,7 @@ public class ImageLocation {
                 return null;
             }
             ImageLocation forPhoto = getForPhoto(photoSize.location, photoSize.size, null, null, null, false, document.dc_id, inputStickerSet, photoSize.type);
-            if (MessageObject.isAnimatedStickerDocument(document)) {
+            if (MessageObject.isAnimatedStickerDocument(document, true)) {
                 forPhoto.lottieAnimation = true;
             }
             return forPhoto;
