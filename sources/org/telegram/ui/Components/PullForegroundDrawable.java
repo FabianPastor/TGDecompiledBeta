@@ -27,7 +27,6 @@ import org.telegram.ui.ActionBar.Theme;
 public class PullForegroundDrawable {
     public static final float SNAP_HEIGHT = 0.85f;
     public static final float endPullParallax = 0.25f;
-    public static final float maxOverScroll = ((float) AndroidUtilities.dp(72.0f));
     public static final long minPullingTime = 200;
     public static final float startPullOverScroll = 0.2f;
     public static final float startPullParallax = 0.45f;
@@ -52,7 +51,6 @@ public class PullForegroundDrawable {
     private View cell;
     private boolean changeAvatarColor = true;
     private final Path circleClipPath = new Path();
-    private int diameter = AndroidUtilities.dp(18.0f);
     private boolean isOut;
     private RecyclerListView listView;
     private AnimatorSet outAnimator;
@@ -67,12 +65,9 @@ public class PullForegroundDrawable {
     private final Paint paintWhite = new Paint(1);
     public float pullProgress;
     private String pullTooltip;
-    private int radius = AndroidUtilities.dp(9.0f);
     private final RectF rectF = new RectF();
     private String releaseTooltip;
     public int scrollDy;
-    private int smallMargin = AndroidUtilities.dp(8.0f);
-    private int startPadding = AndroidUtilities.dp(28.0f);
     private float textInProgress;
     Runnable textInRunnable = new Runnable() {
         public void run() {
@@ -99,8 +94,9 @@ public class PullForegroundDrawable {
     private boolean willDraw;
 
     private class ArrowDrawable extends Drawable {
-        Paint paint = new Paint(1);
-        Path path = new Path();
+        private float lastDensity;
+        private Paint paint = new Paint(1);
+        private Path path = new Path();
 
         public int getOpacity() {
             return 0;
@@ -113,7 +109,12 @@ public class PullForegroundDrawable {
         }
 
         public ArrowDrawable() {
+            updatePath();
+        }
+
+        private void updatePath() {
             int dp = AndroidUtilities.dp(18.0f);
+            this.path.reset();
             float f = (float) (dp >> 1);
             this.path.moveTo(f, AndroidUtilities.dpf2(4.98f));
             this.path.lineTo(AndroidUtilities.dpf2(4.95f), AndroidUtilities.dpf2(9.0f));
@@ -122,6 +123,7 @@ public class PullForegroundDrawable {
             this.paint.setStyle(Style.FILL_AND_STROKE);
             this.paint.setStrokeJoin(Join.ROUND);
             this.paint.setStrokeWidth(AndroidUtilities.dpf2(1.0f));
+            this.lastDensity = AndroidUtilities.density;
         }
 
         public void setColor(int i) {
@@ -137,6 +139,9 @@ public class PullForegroundDrawable {
         }
 
         public void draw(Canvas canvas) {
+            if (this.lastDensity != AndroidUtilities.density) {
+                updatePath();
+            }
             canvas.save();
             canvas.translate((float) getBounds().left, (float) getBounds().top);
             canvas.drawPath(this.path, this.paint);
@@ -176,6 +181,10 @@ public class PullForegroundDrawable {
         this.releaseTooltip = str2;
     }
 
+    public static int getMaxOverscroll() {
+        return AndroidUtilities.dp(72.0f);
+    }
+
     public void setColors(String str, String str2) {
         this.backgroundColorKey = str;
         this.backgroundActiveColorKey = str2;
@@ -213,108 +222,133 @@ public class PullForegroundDrawable {
     public void draw(Canvas canvas, boolean z) {
         Canvas canvas2 = canvas;
         if (!(!this.willDraw || this.isOut || this.cell == null || this.listView == null)) {
+            int i;
+            int i2;
+            int i3;
+            int i4;
             float f;
             float f2;
+            float width;
             float f3;
-            int i;
+            float f4;
+            int dp = AndroidUtilities.dp(28.0f);
+            int dp2 = AndroidUtilities.dp(8.0f);
+            int dp3 = AndroidUtilities.dp(9.0f);
+            int dp4 = AndroidUtilities.dp(18.0f);
             int viewOffset = (int) getViewOffset();
             int height = (int) (((float) this.cell.getHeight()) * this.pullProgress);
-            float f4 = this.bounceIn ? (this.bounceProgress * 0.07f) - 0.05f : this.bounceProgress * 0.02f;
+            float f5 = this.bounceIn ? (this.bounceProgress * 0.07f) - 0.05f : this.bounceProgress * 0.02f;
             updateTextProgress(this.pullProgress);
-            float f5 = this.outProgress * 2.0f;
-            if (f5 > 1.0f) {
-                f5 = 1.0f;
+            float f6 = this.outProgress * 2.0f;
+            float f7 = 1.0f;
+            if (f6 > 1.0f) {
+                f6 = 1.0f;
             }
-            float f6 = this.outCx;
-            float f7 = this.outCy;
+            float f8 = this.outCx;
+            float f9 = this.outCy;
             if (z) {
-                f7 += (float) viewOffset;
+                f9 += (float) viewOffset;
             }
-            int i2 = this.startPadding + this.radius;
-            int measuredHeight = (this.cell.getMeasuredHeight() - this.smallMargin) - this.radius;
+            int i5 = dp + dp3;
+            int measuredHeight = (this.cell.getMeasuredHeight() - dp2) - dp3;
             if (z) {
                 measuredHeight += viewOffset;
             }
-            int i3 = this.diameter;
-            int i4 = this.smallMargin;
-            float f8 = height > (i4 * 2) + i3 ? 1.0f : ((float) height) / ((float) (i3 + (i4 * 2)));
+            int i6 = dp4 + (dp2 * 2);
+            if (height > i6) {
+                i = dp3;
+            } else {
+                i = dp3;
+                f7 = ((float) height) / ((float) i6);
+            }
             canvas.save();
             if (z) {
+                i2 = dp4;
+                i3 = viewOffset;
                 canvas2.clipRect(0, 0, this.listView.getMeasuredWidth(), viewOffset + 1);
+            } else {
+                i2 = dp4;
+                i3 = viewOffset;
             }
-            if (this.outProgress != 0.0f) {
-                f = this.outRadius;
-                float width = (float) this.cell.getWidth();
-                f2 = this.outRadius;
-                f = (f + ((width - f2) * (1.0f - this.outProgress))) + (f2 * f4);
+            if (this.outProgress == 0.0f) {
                 if (!(this.accentRevalProgress == 1.0f || this.accentRevalProgressOut == 1.0f)) {
-                    canvas2.drawCircle(f6, f7, f, this.backgroundPaint);
+                    canvas2.drawPaint(this.backgroundPaint);
+                }
+                i4 = dp2;
+                f = f5;
+            } else {
+                f2 = this.outRadius;
+                width = (float) this.cell.getWidth();
+                f3 = this.outRadius;
+                i4 = dp2;
+                f2 = (f2 + ((width - f3) * (1.0f - this.outProgress))) + (f3 * f5);
+                if (!(this.accentRevalProgress == 1.0f || this.accentRevalProgressOut == 1.0f)) {
+                    canvas2.drawCircle(f8, f9, f2, this.backgroundPaint);
                 }
                 this.circleClipPath.reset();
-                this.rectF.set(f6 - f, f7 - f, f6 + f, f + f7);
+                f = f5;
+                this.rectF.set(f8 - f2, f9 - f2, f8 + f2, f2 + f9);
                 this.circleClipPath.addOval(this.rectF, Direction.CW);
                 canvas2.clipPath(this.circleClipPath);
-            } else if (!(this.accentRevalProgress == 1.0f || this.accentRevalProgressOut == 1.0f)) {
-                canvas2.drawPaint(this.backgroundPaint);
             }
-            float f9;
             if (this.animateToColorize) {
                 if (this.accentRevalProgressOut > this.accentRevalProgress) {
                     canvas.save();
-                    f2 = (float) i2;
-                    f9 = f6 - f2;
-                    f = this.outProgress;
-                    f3 = (float) measuredHeight;
-                    canvas2.translate(f9 * f, (f7 - f3) * f);
-                    canvas2.drawCircle(f2, f3, ((float) this.cell.getWidth()) * this.accentRevalProgressOut, this.backgroundPaint);
+                    f4 = (float) i5;
+                    f2 = f8 - f4;
+                    f3 = this.outProgress;
+                    width = (float) measuredHeight;
+                    canvas2.translate(f2 * f3, (f9 - width) * f3);
+                    canvas2.drawCircle(f4, width, ((float) this.cell.getWidth()) * this.accentRevalProgressOut, this.backgroundPaint);
                     canvas.restore();
                 }
                 if (this.accentRevalProgress > 0.0f) {
                     canvas.save();
-                    f2 = (float) i2;
-                    f9 = f6 - f2;
-                    f = this.outProgress;
-                    f3 = (float) measuredHeight;
-                    canvas2.translate(f9 * f, (f7 - f3) * f);
-                    canvas2.drawCircle(f2, f3, ((float) this.cell.getWidth()) * this.accentRevalProgress, this.paintBackgroundAccent);
+                    f4 = (float) i5;
+                    f2 = f8 - f4;
+                    f3 = this.outProgress;
+                    width = (float) measuredHeight;
+                    canvas2.translate(f2 * f3, (f9 - width) * f3);
+                    canvas2.drawCircle(f4, width, ((float) this.cell.getWidth()) * this.accentRevalProgress, this.paintBackgroundAccent);
                     canvas.restore();
                 }
             } else {
                 if (this.accentRevalProgress > this.accentRevalProgressOut) {
                     canvas.save();
-                    f2 = (float) i2;
-                    f9 = f6 - f2;
-                    f = this.outProgress;
-                    f3 = (float) measuredHeight;
-                    canvas2.translate(f9 * f, (f7 - f3) * f);
-                    canvas2.drawCircle(f2, f3, ((float) this.cell.getWidth()) * this.accentRevalProgress, this.paintBackgroundAccent);
+                    f4 = (float) i5;
+                    f2 = f8 - f4;
+                    f3 = this.outProgress;
+                    width = (float) measuredHeight;
+                    canvas2.translate(f2 * f3, (f9 - width) * f3);
+                    canvas2.drawCircle(f4, width, ((float) this.cell.getWidth()) * this.accentRevalProgress, this.paintBackgroundAccent);
                     canvas.restore();
                 }
                 if (this.accentRevalProgressOut > 0.0f) {
                     canvas.save();
-                    f2 = (float) i2;
-                    f9 = f6 - f2;
-                    f = this.outProgress;
-                    f3 = (float) measuredHeight;
-                    canvas2.translate(f9 * f, (f7 - f3) * f);
-                    canvas2.drawCircle(f2, f3, ((float) this.cell.getWidth()) * this.accentRevalProgressOut, this.backgroundPaint);
+                    f4 = (float) i5;
+                    f2 = f8 - f4;
+                    f3 = this.outProgress;
+                    width = (float) measuredHeight;
+                    canvas2.translate(f2 * f3, (f9 - width) * f3);
+                    canvas2.drawCircle(f4, width, ((float) this.cell.getWidth()) * this.accentRevalProgressOut, this.backgroundPaint);
                     canvas.restore();
                 }
             }
-            if (height > this.diameter + (this.smallMargin * 2)) {
-                this.paintSecondary.setAlpha((int) ((((1.0f - f5) * 0.4f) * f8) * 255.0f));
+            if (height > i6) {
+                this.paintSecondary.setAlpha((int) ((((1.0f - f6) * 0.4f) * f7) * 255.0f));
                 if (z) {
-                    RectF rectF = this.rectF;
-                    i = this.startPadding;
-                    f2 = (float) i;
-                    i4 = this.smallMargin;
-                    rectF.set(f2, (float) i4, (float) (i + this.diameter), (float) ((i4 + viewOffset) + this.radius));
+                    viewOffset = i4;
+                    this.rectF.set((float) dp, (float) viewOffset, (float) (dp + i2), (float) ((viewOffset + i3) + i));
                 } else {
-                    this.rectF.set((float) this.startPadding, (float) (((this.cell.getHeight() - height) + this.smallMargin) - viewOffset), (float) (this.startPadding + this.diameter), (float) (this.cell.getHeight() - this.smallMargin));
+                    viewOffset = i4;
+                    this.rectF.set((float) dp, (float) (((this.cell.getHeight() - height) + viewOffset) - i3), (float) (dp + i2), (float) (this.cell.getHeight() - viewOffset));
                 }
-                RectF rectF2 = this.rectF;
-                height = this.radius;
-                canvas2.drawRoundRect(rectF2, (float) height, (float) height, this.paintSecondary);
+                dp3 = i;
+                f3 = (float) dp3;
+                canvas2.drawRoundRect(this.rectF, f3, f3, this.paintSecondary);
+            } else {
+                dp3 = i;
+                viewOffset = i4;
             }
             if (z) {
                 canvas.restore();
@@ -325,49 +359,55 @@ public class PullForegroundDrawable {
             float var_;
             float var_;
             if (this.outProgress == 0.0f) {
-                this.paintWhite.setAlpha((int) (f8 * 255.0f));
-                var_ = (float) i2;
-                f5 = (float) measuredHeight;
-                canvas2.drawCircle(var_, f5, (float) this.radius, this.paintWhite);
-                i4 = this.arrowDrawable.getIntrinsicWidth() >> 1;
+                this.paintWhite.setAlpha((int) (f7 * 255.0f));
+                var_ = (float) i5;
+                var_ = (float) measuredHeight;
+                canvas2.drawCircle(var_, var_, (float) dp3, this.paintWhite);
+                int intrinsicWidth = this.arrowDrawable.getIntrinsicWidth() >> 1;
+                var_ = f9;
                 int intrinsicHeight = this.arrowDrawable.getIntrinsicHeight() >> 1;
-                this.arrowDrawable.setBounds(i2 - i4, measuredHeight - intrinsicHeight, i2 + i4, measuredHeight + intrinsicHeight);
+                this.arrowDrawable.setBounds(i5 - intrinsicWidth, measuredHeight - intrinsicHeight, intrinsicWidth + i5, measuredHeight + intrinsicHeight);
                 f3 = 1.0f - this.arrowRotateProgress;
                 if (f3 < 0.0f) {
                     f3 = 0.0f;
                 }
                 var_ = 1.0f - f3;
                 canvas.save();
-                canvas2.rotate(180.0f * var_, var_, f5);
+                canvas2.rotate(180.0f * var_, var_, var_);
                 canvas2.translate(0.0f, (AndroidUtilities.dpf2(1.0f) * 1.0f) - var_);
                 this.arrowDrawable.setColor(this.animateToColorize ? this.paintBackgroundAccent.getColor() : Theme.getColor(this.backgroundColorKey));
                 this.arrowDrawable.draw(canvas2);
                 canvas.restore();
+            } else {
+                var_ = f9;
             }
             if (this.pullProgress > 0.0f) {
                 textIn();
             }
-            var_ = (((float) this.cell.getHeight()) - (((float) (this.diameter + (this.smallMargin * 2))) / 2.0f)) + ((float) AndroidUtilities.dp(6.0f));
-            this.tooltipTextPaint.setAlpha((int) (((this.textSwappingProgress * 255.0f) * f8) * this.textInProgress));
+            var_ = (((float) this.cell.getHeight()) - (((float) i6) / 2.0f)) + ((float) AndroidUtilities.dp(6.0f));
+            this.tooltipTextPaint.setAlpha((int) (((this.textSwappingProgress * 255.0f) * f7) * this.textInProgress));
             var_ = (((float) this.cell.getWidth()) / 2.0f) - ((float) AndroidUtilities.dp(2.0f));
-            f5 = this.textSwappingProgress;
-            if (f5 > 0.0f && f5 < 1.0f) {
+            f4 = this.textSwappingProgress;
+            if (f4 <= 0.0f || f4 >= 1.0f) {
+                f6 = 1.0f;
+            } else {
                 canvas.save();
                 var_ = (this.textSwappingProgress * 0.2f) + 0.8f;
+                f6 = 1.0f;
                 canvas2.scale(var_, var_, var_, (((float) AndroidUtilities.dp(16.0f)) * (1.0f - this.textSwappingProgress)) + var_);
             }
-            canvas2.drawText(this.pullTooltip, var_, (((float) AndroidUtilities.dp(8.0f)) * (1.0f - this.textSwappingProgress)) + var_, this.tooltipTextPaint);
-            f5 = this.textSwappingProgress;
-            if (f5 > 0.0f && f5 < 1.0f) {
+            canvas2.drawText(this.pullTooltip, var_, (((float) AndroidUtilities.dp(8.0f)) * (f6 - this.textSwappingProgress)) + var_, this.tooltipTextPaint);
+            f4 = this.textSwappingProgress;
+            if (f4 > 0.0f && f4 < f6) {
                 canvas.restore();
             }
-            f5 = this.textSwappingProgress;
-            if (f5 > 0.0f && f5 < 1.0f) {
+            f4 = this.textSwappingProgress;
+            if (f4 > 0.0f && f4 < f6) {
                 canvas.save();
-                var_ = ((1.0f - this.textSwappingProgress) * 0.1f) + 0.9f;
+                var_ = ((f6 - this.textSwappingProgress) * 0.1f) + 0.9f;
                 canvas2.scale(var_, var_, var_, var_ - (((float) AndroidUtilities.dp(8.0f)) * this.textSwappingProgress));
             }
-            this.tooltipTextPaint.setAlpha((int) ((((1.0f - this.textSwappingProgress) * 255.0f) * f8) * this.textInProgress));
+            this.tooltipTextPaint.setAlpha((int) ((((1.0f - this.textSwappingProgress) * 255.0f) * f7) * this.textInProgress));
             canvas2.drawText(this.releaseTooltip, var_, var_ - (((float) AndroidUtilities.dp(8.0f)) * this.textSwappingProgress), this.tooltipTextPaint);
             var_ = this.textSwappingProgress;
             if (var_ > 0.0f && var_ < 1.0f) {
@@ -376,15 +416,15 @@ public class PullForegroundDrawable {
             canvas.restore();
             if (this.changeAvatarColor && this.outProgress > 0.0f) {
                 canvas.save();
-                height = this.startPadding + this.radius;
-                i = (this.cell.getHeight() - this.smallMargin) - this.radius;
+                measuredHeight = (this.cell.getHeight() - viewOffset) - dp3;
                 var_ = (float) Theme.dialogs_archiveAvatarDrawable.getIntrinsicWidth();
-                f2 = ((float) AndroidUtilities.dp(24.0f)) / var_;
-                var_ = 1.0f - f2;
-                var_ = this.outProgress;
-                f2 = (f2 + (var_ * var_)) + f4;
-                canvas2.translate((((float) height) - f6) * (1.0f - var_), (((float) i) - f7) * (1.0f - var_));
-                canvas2.scale(f2, f2, f6, f7);
+                f4 = ((float) AndroidUtilities.dp(24.0f)) / var_;
+                f7 = 1.0f - f4;
+                f3 = this.outProgress;
+                f4 = (f4 + (f7 * f3)) + f;
+                canvas2.translate((((float) i5) - f8) * (1.0f - f3), (((float) measuredHeight) - var_) * (1.0f - f3));
+                f9 = var_;
+                canvas2.scale(f4, f4, f8, f9);
                 Theme.dialogs_archiveAvatarDrawable.setProgress(0.0f);
                 if (!Theme.dialogs_archiveAvatarDrawableRecolored) {
                     Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
@@ -394,7 +434,7 @@ public class PullForegroundDrawable {
                     Theme.dialogs_archiveAvatarDrawableRecolored = true;
                 }
                 var_ /= 2.0f;
-                Theme.dialogs_archiveAvatarDrawable.setBounds((int) (f6 - var_), (int) (f7 - var_), (int) (f6 + var_), (int) (f7 + var_));
+                Theme.dialogs_archiveAvatarDrawable.setBounds((int) (f8 - var_), (int) (f9 - var_), (int) (f8 + var_), (int) (f9 + var_));
                 Theme.dialogs_archiveAvatarDrawable.draw(canvas2);
                 canvas.restore();
             }

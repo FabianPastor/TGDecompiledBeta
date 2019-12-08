@@ -837,7 +837,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         if (DialogsActivity.this.listView.getViewOffset() != 0.0f) {
                             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{DialogsActivity.this.listView.getViewOffset(), 0.0f});
                             ofFloat.addUpdateListener(new -$$Lambda$DialogsActivity$DialogsRecyclerView$50BTyBCPpkWzj4s4ajQQMlb12OI(this));
-                            ofFloat.setDuration((long) (350.0f - ((DialogsActivity.this.listView.getViewOffset() / PullForegroundDrawable.maxOverScroll) * 120.0f)));
+                            ofFloat.setDuration((long) (350.0f - ((DialogsActivity.this.listView.getViewOffset() / ((float) PullForegroundDrawable.getMaxOverscroll())) * 120.0f)));
                             ofFloat.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                             DialogsActivity.this.listView.setScrollEnabled(false);
                             ofFloat.addListener(new AnimatorListenerAdapter() {
@@ -1417,11 +1417,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             L_0x0132:
                 r4 = org.telegram.ui.DialogsActivity.this;
                 r4 = r4.archivePullViewState;
-                if (r4 == 0) goto L_0x0262;
+                if (r4 == 0) goto L_0x0265;
             L_0x013a:
                 r4 = org.telegram.ui.DialogsActivity.this;
                 r4 = r4.hasHiddenArchive();
-                if (r4 == 0) goto L_0x0262;
+                if (r4 == 0) goto L_0x0265;
             L_0x0142:
                 r14 = super.scrollVerticallyBy(r3, r14, r15);
                 r15 = org.telegram.ui.DialogsActivity.this;
@@ -1441,14 +1441,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 r4 = r4.findViewByPosition(r15);
             L_0x0165:
                 r8 = 0;
-                if (r15 != 0) goto L_0x0237;
+                if (r15 != 0) goto L_0x023a;
             L_0x0169:
-                if (r4 == 0) goto L_0x0237;
+                if (r4 == 0) goto L_0x023a;
             L_0x016b:
                 r15 = r4.getBottom();
                 r10 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
                 r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-                if (r15 < r10) goto L_0x0237;
+                if (r15 < r10) goto L_0x023a;
             L_0x0177:
                 r15 = org.telegram.ui.DialogsActivity.this;
                 r10 = r15.startArchivePullingTime;
@@ -1516,19 +1516,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             L_0x01ee:
                 r1 = org.telegram.ui.DialogsActivity.this;
                 r1 = r1.archivePullViewState;
-                if (r1 != r5) goto L_0x0227;
+                if (r1 != r5) goto L_0x022a;
             L_0x01f6:
                 r3 = r3 - r14;
-                if (r3 == 0) goto L_0x0227;
+                if (r3 == 0) goto L_0x022a;
             L_0x01f9:
-                if (r13 >= 0) goto L_0x0227;
+                if (r13 >= 0) goto L_0x022a;
             L_0x01fb:
-                if (r0 == 0) goto L_0x0227;
+                if (r0 == 0) goto L_0x022a;
             L_0x01fd:
                 r0 = org.telegram.ui.DialogsActivity.this;
                 r0 = r0.listView;
                 r0 = r0.getViewOffset();
-                r1 = org.telegram.ui.Components.PullForegroundDrawable.maxOverScroll;
+                r1 = org.telegram.ui.Components.PullForegroundDrawable.getMaxOverscroll();
+                r1 = (float) r1;
                 r0 = r0 / r1;
                 r6 = r6 - r0;
                 r0 = org.telegram.ui.DialogsActivity.this;
@@ -1542,16 +1543,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 r13 = org.telegram.ui.DialogsActivity.this;
                 r13 = r13.listView;
                 r13.setViewsOffset(r0);
-            L_0x0227:
+            L_0x022a:
                 r13 = org.telegram.ui.DialogsActivity.this;
                 r0 = r13.pullForegroundDrawable;
-                if (r0 == 0) goto L_0x025c;
-            L_0x022d:
+                if (r0 == 0) goto L_0x025f;
+            L_0x0230:
                 r0.pullProgress = r15;
                 r13 = r13.listView;
                 r0.setListView(r13);
-                goto L_0x025c;
-            L_0x0237:
+                goto L_0x025f;
+            L_0x023a:
                 r13 = org.telegram.ui.DialogsActivity.this;
                 r13.startArchivePullingTime = r8;
                 r13 = org.telegram.ui.DialogsActivity.this;
@@ -1560,21 +1561,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 r13.archivePullViewState = r5;
                 r13 = org.telegram.ui.DialogsActivity.this;
                 r13 = r13.pullForegroundDrawable;
-                if (r13 == 0) goto L_0x025c;
-            L_0x024c:
+                if (r13 == 0) goto L_0x025f;
+            L_0x024f:
                 r13.resetText();
                 r13 = org.telegram.ui.DialogsActivity.this;
                 r15 = r13.pullForegroundDrawable;
                 r15.pullProgress = r7;
                 r13 = r13.listView;
                 r15.setListView(r13);
-            L_0x025c:
-                if (r4 == 0) goto L_0x0261;
-            L_0x025e:
-                r4.invalidate();
+            L_0x025f:
+                if (r4 == 0) goto L_0x0264;
             L_0x0261:
+                r4.invalidate();
+            L_0x0264:
                 return r14;
-            L_0x0262:
+            L_0x0265:
                 r13 = super.scrollVerticallyBy(r3, r14, r15);
                 return r13;
                 */
@@ -2722,7 +2723,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 return;
             }
         }
-        if (this.archivePullViewState == 2 && this.layoutManager.findFirstVisibleItemPosition() == 0) {
+        if (this.archivePullViewState == 2 && this.layoutManager.findFirstVisibleItemPosition() == 0 && hasHiddenArchive()) {
             this.layoutManager.scrollToPositionWithOffset(1, 0);
         }
     }

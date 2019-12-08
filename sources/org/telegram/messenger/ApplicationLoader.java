@@ -268,6 +268,24 @@ public class ApplicationLoader extends Application {
         return false;
     }
 
+    public static int getAutodownloadNetworkType() {
+        try {
+            ConnectivityManager connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
+            NetworkInfo networkInfo = connectivityManager.getNetworkInfo(1);
+            if (networkInfo != null && networkInfo.getState() == State.CONNECTED) {
+                return connectivityManager.isActiveNetworkMetered() ? 0 : 1;
+            } else {
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (activeNetworkInfo != null && activeNetworkInfo.isRoaming()) {
+                    return 2;
+                }
+                return 0;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
     public static boolean isConnectedToWiFi() {
         try {
             NetworkInfo networkInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);

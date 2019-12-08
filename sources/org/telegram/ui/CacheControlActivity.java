@@ -500,8 +500,8 @@ public class CacheControlActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01ea A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Missing block: B:53:0x0237, code skipped:
             r0 = th;
      */

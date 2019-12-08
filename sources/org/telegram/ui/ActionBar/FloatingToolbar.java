@@ -7,6 +7,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Outline;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Region;
@@ -26,10 +27,10 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnLayoutChangeListener;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
+import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
@@ -170,8 +171,13 @@ public final class FloatingToolbar {
             OverflowPanel(FloatingToolbarPopup floatingToolbarPopup) {
                 super(floatingToolbarPopup.mContext);
                 this.mPopup = floatingToolbarPopup;
-                setScrollBarDefaultDelayBeforeFade(ViewConfiguration.getScrollDefaultDelay() * 3);
-                setScrollIndicators(3);
+                setVerticalScrollBarEnabled(false);
+                setOutlineProvider(new ViewOutlineProvider(FloatingToolbarPopup.this) {
+                    public void getOutline(View view, Outline outline) {
+                        outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
+                    }
+                });
+                setClipToOutline(true);
             }
 
             /* Access modifiers changed, original: protected */
