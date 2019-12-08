@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 
 public class ActionBarMenu extends LinearLayout {
     protected boolean isActionMode;
@@ -178,8 +179,12 @@ public class ActionBarMenu extends LinearLayout {
             if (childAt instanceof ActionBarMenuItem) {
                 ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
                 if (actionBarMenuItem.isSearchField()) {
-                    this.parentActionBar.onSearchFieldVisibilityChanged(false);
-                    actionBarMenuItem.toggleSearch(z);
+                    ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = actionBarMenuItem.listener;
+                    if (actionBarMenuItemSearchListener == null || actionBarMenuItemSearchListener.canCollapseSearch()) {
+                        this.parentActionBar.onSearchFieldVisibilityChanged(false);
+                        actionBarMenuItem.toggleSearch(z);
+                        return;
+                    }
                     return;
                 }
             }

@@ -188,7 +188,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r8.searching = r6;
         r8.searchWas = r6;
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7var_a5 float:1.7944913E38 double:1.0529355845E-314;
+        r1 = NUM; // 0x7var_e8 float:1.7945048E38 double:1.0529356177E-314;
         r0.setBackButtonImage(r1);
         r0 = r8.actionBar;
         r5 = 1;
@@ -200,7 +200,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x002e;
     L_0x001f:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d0969 float:1.8747E38 double:1.0531309677E-314;
+        r1 = NUM; // 0x7f0e0977 float:1.8879952E38 double:1.0531633538E-314;
         r2 = "SelectContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -210,21 +210,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x0041;
     L_0x0032:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d0638 float:1.8745344E38 double:1.053130564E-314;
+        r1 = NUM; // 0x7f0e0646 float:1.8878295E38 double:1.05316295E-314;
         r2 = "NewSecretChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0041:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d0630 float:1.8745327E38 double:1.05313056E-314;
+        r1 = NUM; // 0x7f0e063e float:1.8878279E38 double:1.053162946E-314;
         r2 = "NewMessageTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0050:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0d0302 float:1.8743676E38 double:1.053130158E-314;
+        r1 = NUM; // 0x7f0e0305 float:1.8876605E38 double:1.0531625385E-314;
         r2 = "Contacts";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -235,13 +235,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r0.setActionBarMenuOnItemClick(r1);
         r0 = r8.actionBar;
         r0 = r0.createMenu();
-        r1 = NUM; // 0x7var_af float:1.7944933E38 double:1.0529355895E-314;
+        r1 = NUM; // 0x7var_f2 float:1.7945069E38 double:1.0529356226E-314;
         r1 = r0.addItem(r6, r1);
         r1 = r1.setIsSearchField(r5);
         r2 = new org.telegram.ui.ContactsActivity$2;
         r2.<init>();
         r1 = r1.setActionBarMenuItemSearchListener(r2);
-        r2 = NUM; // 0x7f0d0941 float:1.874692E38 double:1.053130948E-314;
+        r2 = NUM; // 0x7f0e094f float:1.887987E38 double:1.053163334E-314;
         r3 = "Search";
         r4 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setSearchFieldHint(r4);
@@ -256,15 +256,15 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = r8.sortByName;
         if (r1 == 0) goto L_0x00a5;
     L_0x00a1:
-        r1 = NUM; // 0x7var_ float:1.7944805E38 double:1.0529355584E-314;
+        r1 = NUM; // 0x7var_aa float:1.7944923E38 double:1.052935587E-314;
         goto L_0x00a8;
     L_0x00a5:
-        r1 = NUM; // 0x7var_f float:1.7944803E38 double:1.052935558E-314;
+        r1 = NUM; // 0x7var_a9 float:1.794492E38 double:1.0529355865E-314;
     L_0x00a8:
         r0 = r0.addItem(r5, r1);
         r8.sortItem = r0;
         r0 = r8.sortItem;
-        r1 = NUM; // 0x7f0d001d float:1.8742174E38 double:1.053129792E-314;
+        r1 = NUM; // 0x7f0e001d float:1.8875096E38 double:1.053162171E-314;
         r2 = "AccDescrContactSorting";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setContentDescription(r1);
@@ -374,7 +374,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = r8.emptyView;
         r1.setShowAtCenter(r15);
         r1 = r8.emptyView;
-        r2 = NUM; // 0x7f0d0649 float:1.8745378E38 double:1.0531305725E-314;
+        r2 = NUM; // 0x7f0e0657 float:1.887833E38 double:1.0531629585E-314;
         r3 = "NoContacts";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -499,7 +499,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r2 >= r5) goto L_0x028f;
     L_0x0263:
         r2 = r25.getResources();
-        r6 = NUM; // 0x7var_ float:1.7944854E38 double:1.05293557E-314;
+        r6 = NUM; // 0x7var_c4 float:1.7944975E38 double:1.0529356E-314;
         r2 = r2.getDrawable(r6);
         r2 = r2.mutate();
         r6 = new android.graphics.PorterDuffColorFilter;
@@ -524,10 +524,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1.<init>(r2, r6);
         r0.setColorFilter(r1);
         r0 = r8.floatingButton;
-        r1 = NUM; // 0x7var_d float:1.7944604E38 double:1.0529355095E-314;
+        r1 = NUM; // 0x7var_ float:1.7944722E38 double:1.052935538E-314;
         r0.setImageResource(r1);
         r0 = r8.floatingButtonContainer;
-        r1 = NUM; // 0x7f0d0318 float:1.8743721E38 double:1.053130169E-314;
+        r1 = NUM; // 0x7f0e031d float:1.8876654E38 double:1.0531625504E-314;
         r2 = "CreateNewContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setContentDescription(r1);

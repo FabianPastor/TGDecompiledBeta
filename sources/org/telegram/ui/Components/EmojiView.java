@@ -2857,7 +2857,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r11 = this;
                 r0 = org.telegram.ui.Components.EmojiView.this;
                 r0 = r0.emojiTouchedView;
-                if (r0 == 0) goto L_0x019c;
+                if (r0 == 0) goto L_0x01a1;
             L_0x0008:
                 r0 = r12.getAction();
                 r1 = 2;
@@ -2873,7 +2873,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 goto L_0x00c8;
             L_0x001d:
                 r0 = r12.getAction();
-                if (r0 != r1) goto L_0x019b;
+                if (r0 != r1) goto L_0x01a0;
             L_0x0023:
                 r0 = org.telegram.ui.Components.EmojiView.this;
                 r0 = r0.emojiTouchedX;
@@ -2912,7 +2912,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             L_0x006c:
                 r0 = 0;
             L_0x006d:
-                if (r0 != 0) goto L_0x019b;
+                if (r0 != 0) goto L_0x01a0;
             L_0x006f:
                 r0 = org.telegram.ui.Components.EmojiView.this;
                 r0 = r0.location;
@@ -2956,17 +2956,17 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r0 = org.telegram.ui.Components.EmojiView.this;
                 r0 = r0.pickerView;
                 r0.setSelection(r12);
-                goto L_0x019b;
+                goto L_0x01a0;
             L_0x00c8:
                 r12 = org.telegram.ui.Components.EmojiView.this;
                 r12 = r12.pickerViewPopup;
                 r0 = 0;
-                if (r12 == 0) goto L_0x018c;
+                if (r12 == 0) goto L_0x0191;
             L_0x00d1:
                 r12 = org.telegram.ui.Components.EmojiView.this;
                 r12 = r12.pickerViewPopup;
                 r12 = r12.isShowing();
-                if (r12 == 0) goto L_0x018c;
+                if (r12 == 0) goto L_0x0191;
             L_0x00dd:
                 r12 = org.telegram.ui.Components.EmojiView.this;
                 r12 = r12.pickerViewPopup;
@@ -2979,34 +2979,34 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r8 = "🏽";
                 r9 = "🏼";
                 r10 = "🏻";
-                if (r12 == r5) goto L_0x010f;
-            L_0x00fc:
-                if (r12 == r1) goto L_0x010d;
-            L_0x00fe:
-                if (r12 == r2) goto L_0x010b;
-            L_0x0100:
-                r1 = 4;
-                if (r12 == r1) goto L_0x0109;
+                if (r12 == r5) goto L_0x0114;
+            L_0x0101:
+                if (r12 == r1) goto L_0x0112;
             L_0x0103:
-                if (r12 == r3) goto L_0x0107;
+                if (r12 == r2) goto L_0x0110;
             L_0x0105:
+                r1 = 4;
+                if (r12 == r1) goto L_0x010e;
+            L_0x0108:
+                if (r12 == r3) goto L_0x010c;
+            L_0x010a:
                 r12 = r0;
-                goto L_0x0110;
-            L_0x0107:
+                goto L_0x0115;
+            L_0x010c:
                 r12 = r6;
-                goto L_0x0110;
-            L_0x0109:
+                goto L_0x0115;
+            L_0x010e:
                 r12 = r7;
-                goto L_0x0110;
-            L_0x010b:
-                r12 = r8;
-                goto L_0x0110;
-            L_0x010d:
-                r12 = r9;
-                goto L_0x0110;
-            L_0x010f:
-                r12 = r10;
+                goto L_0x0115;
             L_0x0110:
+                r12 = r8;
+                goto L_0x0115;
+            L_0x0112:
+                r12 = r9;
+                goto L_0x0115;
+            L_0x0114:
+                r12 = r10;
+            L_0x0115:
                 r1 = org.telegram.ui.Components.EmojiView.this;
                 r1 = r1.emojiTouchedView;
                 r1 = r1.getTag();
@@ -3014,18 +3014,18 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r2 = org.telegram.ui.Components.EmojiView.this;
                 r2 = r2.emojiTouchedView;
                 r2 = r2.isRecent;
-                if (r2 != 0) goto L_0x015d;
-            L_0x0128:
-                if (r12 == 0) goto L_0x0134;
-            L_0x012a:
+                if (r2 != 0) goto L_0x0162;
+            L_0x012d:
+                if (r12 == 0) goto L_0x0139;
+            L_0x012f:
                 r2 = org.telegram.messenger.Emoji.emojiColor;
                 r2.put(r1, r12);
                 r1 = org.telegram.ui.Components.EmojiView.addColorToCode(r1, r12);
-                goto L_0x0139;
-            L_0x0134:
+                goto L_0x013e;
+            L_0x0139:
                 r12 = org.telegram.messenger.Emoji.emojiColor;
                 r12.remove(r1);
-            L_0x0139:
+            L_0x013e:
                 r12 = org.telegram.ui.Components.EmojiView.this;
                 r12 = r12.emojiTouchedView;
                 r1 = org.telegram.messenger.Emoji.getEmojiBigDrawable(r1);
@@ -3037,35 +3037,35 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r12 = r12.emojiTouchedView;
                 r12.sendEmoji(r0);
                 org.telegram.messenger.Emoji.saveEmojiColors();
-                goto L_0x018c;
-            L_0x015d:
+                goto L_0x0191;
+            L_0x0162:
                 r2 = "";
                 r1 = r1.replace(r10, r2);
                 r1 = r1.replace(r9, r2);
                 r1 = r1.replace(r8, r2);
                 r1 = r1.replace(r7, r2);
                 r1 = r1.replace(r6, r2);
-                if (r12 == 0) goto L_0x0183;
-            L_0x0175:
+                if (r12 == 0) goto L_0x0188;
+            L_0x017a:
                 r2 = org.telegram.ui.Components.EmojiView.this;
                 r2 = r2.emojiTouchedView;
                 r12 = org.telegram.ui.Components.EmojiView.addColorToCode(r1, r12);
                 r2.sendEmoji(r12);
-                goto L_0x018c;
-            L_0x0183:
+                goto L_0x0191;
+            L_0x0188:
                 r12 = org.telegram.ui.Components.EmojiView.this;
                 r12 = r12.emojiTouchedView;
                 r12.sendEmoji(r1);
-            L_0x018c:
+            L_0x0191:
                 r12 = org.telegram.ui.Components.EmojiView.this;
                 r12.emojiTouchedView = r0;
                 r12 = org.telegram.ui.Components.EmojiView.this;
                 r12.emojiTouchedX = r4;
                 r12 = org.telegram.ui.Components.EmojiView.this;
                 r12.emojiTouchedY = r4;
-            L_0x019b:
+            L_0x01a0:
                 return r5;
-            L_0x019c:
+            L_0x01a1:
                 r0 = org.telegram.ui.Components.EmojiView.this;
                 r1 = r12.getX();
                 r0.emojiLastX = r1;
@@ -3151,9 +3151,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
         });
         this.emojiGridView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            /* JADX WARNING: Removed duplicated region for block: B:75:0x018c  */
-            /* JADX WARNING: Removed duplicated region for block: B:79:0x019f  */
-            /* JADX WARNING: Removed duplicated region for block: B:78:0x019c  */
+            /* JADX WARNING: Removed duplicated region for block: B:75:0x0191  */
+            /* JADX WARNING: Removed duplicated region for block: B:79:0x01a4  */
+            /* JADX WARNING: Removed duplicated region for block: B:78:0x01a1  */
             public boolean onItemClick(android.view.View r18, int r19) {
                 /*
                 r17 = this;
@@ -3161,7 +3161,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r1 = r18;
                 r2 = r1 instanceof org.telegram.ui.Components.EmojiView.ImageViewEmoji;
                 r3 = 0;
-                if (r2 == 0) goto L_0x0218;
+                if (r2 == 0) goto L_0x021d;
             L_0x0009:
                 r2 = r1;
                 r2 = (org.telegram.ui.Components.EmojiView.ImageViewEmoji) r2;
@@ -3171,47 +3171,47 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r6 = "🏻";
                 r7 = "";
                 r8 = r4.replace(r6, r7);
-                if (r8 == r4) goto L_0x001e;
-            L_0x001d:
-                r5 = r6;
+                if (r8 == r4) goto L_0x001f;
             L_0x001e:
+                r5 = r6;
+            L_0x001f:
                 r9 = "🏼";
-                if (r5 != 0) goto L_0x0029;
-            L_0x0022:
+                if (r5 != 0) goto L_0x002b;
+            L_0x0024:
                 r8 = r4.replace(r9, r7);
-                if (r8 == r4) goto L_0x0029;
-            L_0x0028:
+                if (r8 == r4) goto L_0x002b;
+            L_0x002a:
                 r5 = r9;
-            L_0x0029:
+            L_0x002b:
                 r10 = "🏽";
-                if (r5 != 0) goto L_0x0034;
-            L_0x002d:
+                if (r5 != 0) goto L_0x0037;
+            L_0x0030:
                 r8 = r4.replace(r10, r7);
-                if (r8 == r4) goto L_0x0034;
-            L_0x0033:
+                if (r8 == r4) goto L_0x0037;
+            L_0x0036:
                 r5 = r10;
-            L_0x0034:
+            L_0x0037:
                 r11 = "🏾";
-                if (r5 != 0) goto L_0x003f;
-            L_0x0038:
+                if (r5 != 0) goto L_0x0043;
+            L_0x003c:
                 r8 = r4.replace(r11, r7);
-                if (r8 == r4) goto L_0x003f;
-            L_0x003e:
+                if (r8 == r4) goto L_0x0043;
+            L_0x0042:
                 r5 = r11;
-            L_0x003f:
-                r12 = "🏿";
-                if (r5 != 0) goto L_0x004a;
             L_0x0043:
+                r12 = "🏿";
+                if (r5 != 0) goto L_0x004f;
+            L_0x0048:
                 r8 = r4.replace(r12, r7);
-                if (r8 == r4) goto L_0x004a;
-            L_0x0049:
+                if (r8 == r4) goto L_0x004f;
+            L_0x004e:
                 r5 = r12;
-            L_0x004a:
+            L_0x004f:
                 r4 = org.telegram.messenger.EmojiData.emojiColoredMap;
                 r4 = r4.containsKey(r8);
                 r7 = 1;
-                if (r4 == 0) goto L_0x01f0;
-            L_0x0053:
+                if (r4 == 0) goto L_0x01f5;
+            L_0x0058:
                 r4 = org.telegram.ui.Components.EmojiView.this;
                 r4.emojiTouchedView = r2;
                 r4 = org.telegram.ui.Components.EmojiView.this;
@@ -3220,107 +3220,107 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r4 = org.telegram.ui.Components.EmojiView.this;
                 r13 = r4.emojiLastY;
                 r4.emojiTouchedY = r13;
-                if (r5 != 0) goto L_0x007b;
-            L_0x006c:
+                if (r5 != 0) goto L_0x0080;
+            L_0x0071:
                 r4 = r2.isRecent;
-                if (r4 != 0) goto L_0x007b;
-            L_0x0072:
+                if (r4 != 0) goto L_0x0080;
+            L_0x0077:
                 r4 = org.telegram.messenger.Emoji.emojiColor;
                 r4 = r4.get(r8);
                 r5 = r4;
                 r5 = (java.lang.String) r5;
-            L_0x007b:
+            L_0x0080:
                 r4 = 5;
                 r13 = 2;
                 r14 = 4;
-                if (r5 == 0) goto L_0x00ef;
-            L_0x0080:
+                if (r5 == 0) goto L_0x00f4;
+            L_0x0085:
                 r16 = r5.hashCode();
                 r15 = 3;
                 switch(r16) {
-                    case 1773375: goto L_0x00a9;
-                    case 1773376: goto L_0x00a1;
-                    case 1773377: goto L_0x0099;
-                    case 1773378: goto L_0x0091;
-                    case 1773379: goto L_0x0089;
-                    default: goto L_0x0088;
+                    case 1773375: goto L_0x00ae;
+                    case 1773376: goto L_0x00a6;
+                    case 1773377: goto L_0x009e;
+                    case 1773378: goto L_0x0096;
+                    case 1773379: goto L_0x008e;
+                    default: goto L_0x008d;
                 };
-            L_0x0088:
-                goto L_0x00b1;
-            L_0x0089:
+            L_0x008d:
+                goto L_0x00b6;
+            L_0x008e:
                 r5 = r5.equals(r12);
-                if (r5 == 0) goto L_0x00b1;
-            L_0x008f:
+                if (r5 == 0) goto L_0x00b6;
+            L_0x0094:
                 r5 = 4;
-                goto L_0x00b2;
-            L_0x0091:
+                goto L_0x00b7;
+            L_0x0096:
                 r5 = r5.equals(r11);
-                if (r5 == 0) goto L_0x00b1;
-            L_0x0097:
+                if (r5 == 0) goto L_0x00b6;
+            L_0x009c:
                 r5 = 3;
-                goto L_0x00b2;
-            L_0x0099:
+                goto L_0x00b7;
+            L_0x009e:
                 r5 = r5.equals(r10);
-                if (r5 == 0) goto L_0x00b1;
-            L_0x009f:
+                if (r5 == 0) goto L_0x00b6;
+            L_0x00a4:
                 r5 = 2;
-                goto L_0x00b2;
-            L_0x00a1:
+                goto L_0x00b7;
+            L_0x00a6:
                 r5 = r5.equals(r9);
-                if (r5 == 0) goto L_0x00b1;
-            L_0x00a7:
+                if (r5 == 0) goto L_0x00b6;
+            L_0x00ac:
                 r5 = 1;
-                goto L_0x00b2;
-            L_0x00a9:
+                goto L_0x00b7;
+            L_0x00ae:
                 r5 = r5.equals(r6);
-                if (r5 == 0) goto L_0x00b1;
-            L_0x00af:
-                r5 = 0;
-                goto L_0x00b2;
-            L_0x00b1:
-                r5 = -1;
-            L_0x00b2:
-                if (r5 == 0) goto L_0x00e5;
+                if (r5 == 0) goto L_0x00b6;
             L_0x00b4:
-                if (r5 == r7) goto L_0x00db;
+                r5 = 0;
+                goto L_0x00b7;
             L_0x00b6:
-                if (r5 == r13) goto L_0x00d1;
-            L_0x00b8:
-                if (r5 == r15) goto L_0x00c7;
-            L_0x00ba:
-                if (r5 == r14) goto L_0x00bd;
-            L_0x00bc:
-                goto L_0x00f8;
+                r5 = -1;
+            L_0x00b7:
+                if (r5 == 0) goto L_0x00ea;
+            L_0x00b9:
+                if (r5 == r7) goto L_0x00e0;
+            L_0x00bb:
+                if (r5 == r13) goto L_0x00d6;
             L_0x00bd:
+                if (r5 == r15) goto L_0x00cc;
+            L_0x00bf:
+                if (r5 == r14) goto L_0x00c2;
+            L_0x00c1:
+                goto L_0x00fd;
+            L_0x00c2:
                 r5 = org.telegram.ui.Components.EmojiView.this;
                 r5 = r5.pickerView;
                 r5.setSelection(r4);
-                goto L_0x00f8;
-            L_0x00c7:
+                goto L_0x00fd;
+            L_0x00cc:
                 r5 = org.telegram.ui.Components.EmojiView.this;
                 r5 = r5.pickerView;
                 r5.setSelection(r14);
-                goto L_0x00f8;
-            L_0x00d1:
+                goto L_0x00fd;
+            L_0x00d6:
                 r5 = org.telegram.ui.Components.EmojiView.this;
                 r5 = r5.pickerView;
                 r5.setSelection(r15);
-                goto L_0x00f8;
-            L_0x00db:
+                goto L_0x00fd;
+            L_0x00e0:
                 r5 = org.telegram.ui.Components.EmojiView.this;
                 r5 = r5.pickerView;
                 r5.setSelection(r13);
-                goto L_0x00f8;
-            L_0x00e5:
+                goto L_0x00fd;
+            L_0x00ea:
                 r5 = org.telegram.ui.Components.EmojiView.this;
                 r5 = r5.pickerView;
                 r5.setSelection(r7);
-                goto L_0x00f8;
-            L_0x00ef:
+                goto L_0x00fd;
+            L_0x00f4:
                 r5 = org.telegram.ui.Components.EmojiView.this;
                 r5 = r5.pickerView;
                 r5.setSelection(r3);
-            L_0x00f8:
+            L_0x00fd:
                 r5 = org.telegram.ui.Components.EmojiView.this;
                 r5 = r5.location;
                 r2.getLocationOnScreen(r5);
@@ -3335,12 +3335,12 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r6 = r6.getSelection();
                 r6 = r6 * 4;
                 r9 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r9 == 0) goto L_0x0126;
-            L_0x0125:
-                goto L_0x0127;
-            L_0x0126:
+                if (r9 == 0) goto L_0x012b;
+            L_0x012a:
+                goto L_0x012c;
+            L_0x012b:
                 r4 = 1;
-            L_0x0127:
+            L_0x012c:
                 r6 = r6 - r4;
                 r4 = (float) r6;
                 r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
@@ -3351,18 +3351,18 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r4 = r4 - r5;
                 r6 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
                 r9 = org.telegram.messenger.AndroidUtilities.dp(r6);
-                if (r4 >= r9) goto L_0x014f;
-            L_0x013f:
+                if (r4 >= r9) goto L_0x0154;
+            L_0x0144:
                 r4 = org.telegram.ui.Components.EmojiView.this;
                 r4 = r4.location;
                 r4 = r4[r3];
                 r4 = r4 - r5;
                 r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
                 r4 = r4 - r6;
-            L_0x014d:
+            L_0x0152:
                 r5 = r5 + r4;
-                goto L_0x0185;
-            L_0x014f:
+                goto L_0x018a;
+            L_0x0154:
                 r4 = org.telegram.ui.Components.EmojiView.this;
                 r4 = r4.location;
                 r4 = r4[r3];
@@ -3374,8 +3374,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r9 = r9.x;
                 r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
                 r9 = r9 - r10;
-                if (r4 <= r9) goto L_0x0185;
-            L_0x016a:
+                if (r4 <= r9) goto L_0x018a;
+            L_0x016f:
                 r4 = org.telegram.ui.Components.EmojiView.this;
                 r4 = r4.location;
                 r4 = r4[r3];
@@ -3388,24 +3388,24 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
                 r9 = r9 - r6;
                 r4 = r4 - r9;
-                goto L_0x014d;
-            L_0x0185:
+                goto L_0x0152;
+            L_0x018a:
                 r4 = -r5;
                 r5 = r2.getTop();
-                if (r5 >= 0) goto L_0x0190;
-            L_0x018c:
+                if (r5 >= 0) goto L_0x0195;
+            L_0x0191:
                 r3 = r2.getTop();
-            L_0x0190:
+            L_0x0195:
                 r2 = org.telegram.ui.Components.EmojiView.this;
                 r2 = r2.pickerView;
                 r5 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r5 == 0) goto L_0x019f;
-            L_0x019c:
-                r5 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
-                goto L_0x01a1;
-            L_0x019f:
-                r5 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
+                if (r5 == 0) goto L_0x01a4;
             L_0x01a1:
+                r5 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
+                goto L_0x01a6;
+            L_0x01a4:
+                r5 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
+            L_0x01a6:
                 r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
                 r5 = r5 - r4;
                 r6 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
@@ -3436,28 +3436,28 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r1.requestDisallowInterceptTouchEvent(r7);
                 r1 = org.telegram.ui.Components.EmojiView.this;
                 r1 = r1.emojiGridView;
-                r1.hideSelector();
+                r1.hideSelector(r7);
                 return r7;
-            L_0x01f0:
+            L_0x01f5:
                 r2 = r2.isRecent;
-                if (r2 == 0) goto L_0x0218;
-            L_0x01f6:
+                if (r2 == 0) goto L_0x021d;
+            L_0x01fb:
                 r2 = org.telegram.ui.Components.EmojiView.this;
                 r2 = r2.emojiGridView;
                 r1 = r2.findContainingViewHolder(r1);
-                if (r1 == 0) goto L_0x0217;
-            L_0x0202:
+                if (r1 == 0) goto L_0x021c;
+            L_0x0207:
                 r1 = r1.getAdapterPosition();
                 r2 = org.telegram.messenger.Emoji.recentEmoji;
                 r2 = r2.size();
-                if (r1 > r2) goto L_0x0217;
-            L_0x020e:
+                if (r1 > r2) goto L_0x021c;
+            L_0x0213:
                 r1 = org.telegram.ui.Components.EmojiView.this;
                 r1 = r1.delegate;
                 r1.onClearEmojiRecent();
-            L_0x0217:
+            L_0x021c:
                 return r7;
-            L_0x0218:
+            L_0x021d:
                 return r3;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView$AnonymousClass7.onItemClick(android.view.View, int):boolean");

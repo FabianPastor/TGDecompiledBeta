@@ -112,7 +112,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     public SharingLocationsAlert(Context context, SharingLocationsAlertDelegate sharingLocationsAlertDelegate) {
-        super(context, false, 0);
+        super(context, false);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
         this.delegate = sharingLocationsAlertDelegate;
         this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();

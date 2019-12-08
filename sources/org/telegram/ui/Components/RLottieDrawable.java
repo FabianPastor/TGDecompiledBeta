@@ -548,12 +548,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
         this.currentFrame = (int) (((float) this.metaData[0]) * f);
         this.nextFrameIsLast = false;
-        invalidateSelf();
-    }
-
-    public void setCurrentFrame(int i) {
-        this.currentFrame = i;
-        this.nextFrameIsLast = false;
+        this.singleFrameDecoded = false;
+        if (!scheduleNextGetFrame()) {
+            this.forceFrameRedraw = true;
+        }
         invalidateSelf();
     }
 
@@ -645,6 +643,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                     this.scaleY = ((float) this.dstRect.height()) / ((float) this.height);
                     this.applyTransformation = false;
                 }
+                canvas.save();
                 Rect rect = this.dstRect;
                 canvas.translate((float) rect.left, (float) rect.top);
                 canvas.scale(this.scaleX, this.scaleY);
@@ -652,6 +651,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 if (this.isRunning) {
                     invalidateInternal();
                 }
+                canvas.restore();
             }
         }
     }

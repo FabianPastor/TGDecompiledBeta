@@ -55,6 +55,8 @@ public class BottomSheet extends Dialog {
     protected ColorDrawable backDrawable = new ColorDrawable(-16777216);
     protected int backgroundPaddingLeft;
     protected int backgroundPaddingTop;
+    private boolean bigTitle;
+    private boolean canDismissWithSwipe = true;
     protected ContainerView container;
     protected ViewGroup containerView;
     protected int currentAccount = UserConfig.selectedAccount;
@@ -136,21 +138,42 @@ public class BottomSheet extends Dialog {
         }
 
         public void setTextAndIcon(CharSequence charSequence, int i) {
+            setTextAndIcon(charSequence, i, false);
+        }
+
+        public void setTextAndIcon(CharSequence charSequence, int i, boolean z) {
             this.textView.setText(charSequence);
-            float f = 16.0f;
+            float f = 21.0f;
             if (i != 0) {
                 this.imageView.setImageResource(i);
                 this.imageView.setVisibility(0);
-                TextView textView = this.textView;
-                int dp = AndroidUtilities.dp(LocaleController.isRTL ? 16.0f : 72.0f);
-                if (LocaleController.isRTL) {
-                    f = 72.0f;
+                float f2 = 72.0f;
+                if (z) {
+                    TextView textView = this.textView;
+                    int dp = AndroidUtilities.dp(LocaleController.isRTL ? 21.0f : 72.0f);
+                    if (LocaleController.isRTL) {
+                        f = 72.0f;
+                    }
+                    textView.setPadding(dp, 0, AndroidUtilities.dp(f), 0);
+                    this.imageView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(5.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(5.0f) : 5, 0);
+                    return;
                 }
-                textView.setPadding(dp, 0, AndroidUtilities.dp(f), 0);
+                TextView textView2 = this.textView;
+                int dp2 = AndroidUtilities.dp(LocaleController.isRTL ? 16.0f : 72.0f);
+                if (!LocaleController.isRTL) {
+                    f2 = 16.0f;
+                }
+                textView2.setPadding(dp2, 0, AndroidUtilities.dp(f2), 0);
+                this.imageView.setPadding(0, 0, 0, 0);
                 return;
             }
             this.imageView.setVisibility(4);
-            this.textView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
+            TextView textView3 = this.textView;
+            int dp3 = AndroidUtilities.dp(z ? 21.0f : 16.0f);
+            if (!z) {
+                f = 16.0f;
+            }
+            textView3.setPadding(dp3, 0, AndroidUtilities.dp(f), 0);
         }
     }
 
@@ -165,16 +188,12 @@ public class BottomSheet extends Dialog {
     public static class Builder {
         private BottomSheet bottomSheet;
 
-        public Builder(Context context, boolean z, int i) {
-            this.bottomSheet = new BottomSheet(context, z, i);
-        }
-
         public Builder(Context context) {
-            this.bottomSheet = new BottomSheet(context, false, 0);
+            this.bottomSheet = new BottomSheet(context, false);
         }
 
         public Builder(Context context, boolean z) {
-            this.bottomSheet = new BottomSheet(context, z, 0);
+            this.bottomSheet = new BottomSheet(context, z);
         }
 
         public Builder setItems(CharSequence[] charSequenceArr, OnClickListener onClickListener) {
@@ -196,7 +215,12 @@ public class BottomSheet extends Dialog {
         }
 
         public Builder setTitle(CharSequence charSequence) {
+            return setTitle(charSequence, false);
+        }
+
+        public Builder setTitle(CharSequence charSequence, boolean z) {
             this.bottomSheet.title = charSequence;
+            this.bottomSheet.bigTitle = z;
             return this;
         }
 
@@ -726,13 +750,12 @@ public class BottomSheet extends Dialog {
     }
 
     /* Access modifiers changed, original: protected */
-    public boolean canDismissWithSwipe() {
+    public boolean canDismissWithTouchOutside() {
         return true;
     }
 
-    /* Access modifiers changed, original: protected */
-    public boolean canDismissWithTouchOutside() {
-        return true;
+    public ThemeDescription[] getThemeDescriptions() {
+        return null;
     }
 
     public void onConfigurationChanged(Configuration configuration) {
@@ -781,18 +804,14 @@ public class BottomSheet extends Dialog {
         }
     }
 
-    public BottomSheet(Context context, boolean z, int i) {
+    public BottomSheet(Context context, boolean z) {
         super(context, NUM);
         if (VERSION.SDK_INT >= 21) {
             getWindow().addFlags(-NUM);
         }
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         Rect rect = new Rect();
-        if (i == 0) {
-            this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
-        } else if (i == 1) {
-            this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
-        }
+        this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), Mode.MULTIPLY));
         this.shadowDrawable.getPadding(rect);
         this.backgroundPaddingLeft = rect.left;
@@ -855,10 +874,17 @@ public class BottomSheet extends Dialog {
             this.titleView.setLines(1);
             this.titleView.setSingleLine(true);
             this.titleView.setText(this.title);
-            this.titleView.setTextColor(Theme.getColor("dialogTextGray2"));
-            this.titleView.setTextSize(1, 16.0f);
+            if (this.bigTitle) {
+                this.titleView.setTextColor(Theme.getColor("dialogTextBlack"));
+                this.titleView.setTextSize(1, 20.0f);
+                this.titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                this.titleView.setPadding(AndroidUtilities.dp(21.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f));
+            } else {
+                this.titleView.setTextColor(Theme.getColor("dialogTextGray2"));
+                this.titleView.setTextSize(1, 16.0f);
+                this.titleView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), AndroidUtilities.dp(8.0f));
+            }
             this.titleView.setEllipsize(TruncateAt.MIDDLE);
-            this.titleView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), AndroidUtilities.dp(8.0f));
             this.titleView.setGravity(16);
             this.containerView.addView(this.titleView, LayoutHelper.createFrame(-1, 48.0f));
             this.titleView.setOnTouchListener(-$$Lambda$BottomSheet$bysjO3P7kPXgYfq-9zd4-H2r0_8.INSTANCE);
@@ -884,7 +910,7 @@ public class BottomSheet extends Dialog {
                     BottomSheetCell bottomSheetCell = new BottomSheetCell(getContext(), 0);
                     CharSequence charSequence = this.items[i];
                     int[] iArr = this.itemIcons;
-                    bottomSheetCell.setTextAndIcon(charSequence, iArr != null ? iArr[i] : 0);
+                    bottomSheetCell.setTextAndIcon(charSequence, iArr != null ? iArr[i] : 0, this.bigTitle);
                     this.containerView.addView(bottomSheetCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) i2, 0.0f, 0.0f));
                     i2 += 48;
                     bottomSheetCell.setTag(Integer.valueOf(i));
@@ -996,12 +1022,26 @@ public class BottomSheet extends Dialog {
         }
     }
 
+    /* Access modifiers changed, original: protected */
+    public boolean canDismissWithSwipe() {
+        return this.canDismissWithSwipe;
+    }
+
+    public void setCanDismissWithSwipe(boolean z) {
+        this.canDismissWithSwipe = z;
+    }
+
     public void setCustomView(View view) {
         this.customView = view;
     }
 
     public void setTitle(CharSequence charSequence) {
+        setTitle(charSequence, false);
+    }
+
+    public void setTitle(CharSequence charSequence, boolean z) {
         this.title = charSequence;
+        this.bigTitle = z;
     }
 
     public void setApplyTopPadding(boolean z) {

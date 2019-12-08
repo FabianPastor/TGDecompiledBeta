@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -230,8 +231,13 @@ public class LogoutActivity extends BaseFragment {
             showDialog(AlertsCreator.createSupportAlert(this));
         } else if (i == this.logoutRow && getParentActivity() != null) {
             Builder builder = new Builder(getParentActivity());
-            builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
-            builder.setTitle(LocaleController.getString("AppName", NUM));
+            UserConfig userConfig = getUserConfig();
+            if (TextUtils.isEmpty(userConfig.tonEncryptedData) || !userConfig.tonCreationFinished) {
+                builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
+            } else {
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("WalletTelegramLogout", NUM)));
+            }
+            builder.setTitle(LocaleController.getString("LogOut", NUM));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$LogoutActivity$j4TP2hjvfLt3Pmf-Vc0G6Kn6GSI(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
             showDialog(builder.create());

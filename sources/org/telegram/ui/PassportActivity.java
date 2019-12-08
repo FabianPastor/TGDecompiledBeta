@@ -177,6 +177,8 @@ import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.CameraScanActivity.CameraScanActivityDelegate;
+import org.telegram.ui.CameraScanActivity.CameraScanActivityDelegate.-CC;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
@@ -196,7 +198,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgress;
 import org.telegram.ui.Components.SlideView;
 import org.telegram.ui.DocumentSelectActivity.DocumentSelectActivityDelegate;
-import org.telegram.ui.DocumentSelectActivity.DocumentSelectActivityDelegate.-CC;
 import org.telegram.ui.PhotoAlbumPickerActivity.PhotoAlbumPickerActivityDelegate;
 import org.telegram.ui.PhotoViewer.EmptyPhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
@@ -549,7 +550,6 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         private int length;
         private boolean nextPressed;
         private int nextType;
-        private int openTime;
         private String pattern = "*";
         private String phone;
         private String phoneHash;
@@ -828,7 +828,6 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 i2 = bundle2.getInt("timeout");
                 this.time = i2;
                 this.timeout = i2;
-                this.openTime = (int) (System.currentTimeMillis() / 1000);
                 this.nextType = bundle2.getInt("nextType");
                 this.pattern = bundle2.getString("pattern");
                 this.length = bundle2.getInt("length");
@@ -2270,7 +2269,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r1 = org.telegram.ui.PassportActivity.this;
                 r1 = r1.inputFields;
                 r1 = r1[r12];
-                r2 = NUM; // 0x7f0d07f7 float:1.874625E38 double:1.053130785E-314;
+                r2 = NUM; // 0x7f0e0805 float:1.8879202E38 double:1.053163171E-314;
                 r3 = "PassportUseLatinOnly";
                 r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
                 r1.setErrorText(r2);
@@ -2349,7 +2348,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0 = org.telegram.ui.PassportActivity.this;
                 r0 = r0.getParentActivity();
                 r13.<init>(r0);
-                r0 = NUM; // 0x7f0d07c1 float:1.874614E38 double:1.0531307583E-314;
+                r0 = NUM; // 0x7f0e07cf float:1.8879092E38 double:1.0531631443E-314;
                 r1 = new java.lang.Object[r9];
                 r1[r8] = r2;
                 r1[r11] = r3;
@@ -2357,11 +2356,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r5 = "PassportNameCheckAlert";
                 r0 = org.telegram.messenger.LocaleController.formatString(r5, r0, r1);
                 r13.setMessage(r0);
-                r0 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+                r0 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
                 r1 = "AppName";
                 r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
                 r13.setTitle(r0);
-                r0 = NUM; // 0x7f0d039e float:1.8743993E38 double:1.053130235E-314;
+                r0 = NUM; // 0x7f0e03a9 float:1.8876938E38 double:1.0531626196E-314;
                 r1 = "Done";
                 r14 = org.telegram.messenger.LocaleController.getString(r1, r0);
                 r15 = new org.telegram.ui.-$$Lambda$PassportActivity$3$hBvwZ-d4QGDnNuXdFnmSB9952Bs;
@@ -2371,7 +2370,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r6 = r27;
                 r0.<init>(r1, r2, r3, r4, r5, r6);
                 r13.setPositiveButton(r14, r15);
-                r0 = NUM; // 0x7f0d03a0 float:1.8743997E38 double:1.053130236E-314;
+                r0 = NUM; // 0x7f0e03ab float:1.8876942E38 double:1.0531626206E-314;
                 r1 = "Edit";
                 r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
                 r1 = new org.telegram.ui.-$$Lambda$PassportActivity$3$tZIb58L3Zb4a9cJUHmxI2DCu8M8;
@@ -2748,7 +2747,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r2 = org.telegram.ui.PassportActivity.this;
                 r2 = r2.getParentActivity();
                 r1.<init>(r2);
-                r2 = NUM; // 0x7f0d0789 float:1.8746027E38 double:1.0531307306E-314;
+                r2 = NUM; // 0x7f0e0797 float:1.8878978E38 double:1.0531631166E-314;
                 r7 = "PassportInfo2";
                 r2 = org.telegram.messenger.LocaleController.getString(r7, r2);
                 r7 = new android.text.SpannableStringBuilder;
@@ -2766,7 +2765,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r3 = r9 + 1;
                 r7.replace(r9, r3, r8);
                 r3 = new org.telegram.ui.PassportActivity$3$1;
-                r8 = NUM; // 0x7f0d078b float:1.8746031E38 double:1.0531307316E-314;
+                r8 = NUM; // 0x7f0e0799 float:1.8878982E38 double:1.0531631176E-314;
                 r10 = "PassportInfoUrl";
                 r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
                 r3.<init>(r8);
@@ -2798,11 +2797,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r3 = r3.getParentActivity();
                 r2.<init>(r3);
                 r2.setView(r1);
-                r1 = NUM; // 0x7f0d078a float:1.874603E38 double:1.053130731E-314;
+                r1 = NUM; // 0x7f0e0798 float:1.887898E38 double:1.053163117E-314;
                 r3 = "PassportInfoTitle";
                 r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
                 r2.setTitle(r1);
-                r1 = NUM; // 0x7f0d02e2 float:1.8743612E38 double:1.053130142E-314;
+                r1 = NUM; // 0x7f0e02e5 float:1.887654E38 double:1.0531625227E-314;
                 r3 = "Close";
                 r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
                 r2.setNegativeButton(r1, r5);
@@ -4384,20 +4383,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = (android.widget.FrameLayout) r0;
         r0 = r6.actionBar;
         r1 = "TelegramPassport";
-        r2 = NUM; // 0x7f0d0a47 float:1.8747451E38 double:1.0531310774E-314;
+        r2 = NUM; // 0x7f0e0a55 float:1.8880402E38 double:1.0531634634E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setTitle(r1);
         r0 = r6.actionBar;
         r0 = r0.createMenu();
         r8 = 1;
-        r1 = NUM; // 0x7var_ float:1.7945681E38 double:1.052935772E-314;
+        r1 = NUM; // 0x7var_ float:1.7945821E38 double:1.052935806E-314;
         r0.addItem(r8, r1);
         r0 = new org.telegram.ui.Cells.HeaderCell;
         r0.<init>(r7);
         r6.headerCell = r0;
         r0 = r6.headerCell;
         r1 = "PassportProvidedInformation";
-        r2 = NUM; // 0x7f0d07d9 float:1.874619E38 double:1.05313077E-314;
+        r2 = NUM; // 0x7f0e07e7 float:1.887914E38 double:1.053163156E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setText(r1);
         r0 = r6.headerCell;
@@ -4415,7 +4414,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r6.sectionCell = r0;
         r0 = r6.sectionCell;
         r1 = "windowBackgroundGrayShadow";
-        r4 = NUM; // 0x7var_ float:1.7944874E38 double:1.052935575E-314;
+        r4 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
         r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r7, r4, r1);
         r0.setBackgroundDrawable(r4);
         r0 = r6.linearLayout2;
@@ -4429,7 +4428,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8);
         r0.setBackgroundDrawable(r4);
         r0 = r6.addDocumentCell;
-        r4 = NUM; // 0x7f0d07c8 float:1.8746155E38 double:1.0531307617E-314;
+        r4 = NUM; // 0x7f0e07d6 float:1.8879106E38 double:1.0531631477E-314;
         r5 = "PassportNoDocumentsAdd";
         r9 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setText(r9, r8);
@@ -4453,7 +4452,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.setBackgroundDrawable(r9);
         r0 = r6.deletePassportCell;
         r9 = "TelegramPassportDelete";
-        r10 = NUM; // 0x7f0d0a4a float:1.8747457E38 double:1.053131079E-314;
+        r10 = NUM; // 0x7f0e0a58 float:1.8880408E38 double:1.053163465E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r9, r10);
         r10 = 0;
         r0.setText(r9, r10);
@@ -4469,7 +4468,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.<init>(r7);
         r6.addDocumentSectionCell = r0;
         r0 = r6.addDocumentSectionCell;
-        r9 = NUM; // 0x7var_ float:1.7944876E38 double:1.0529355757E-314;
+        r9 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
         r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r7, r9, r1);
         r0.setBackgroundDrawable(r11);
         r0 = r6.linearLayout2;
@@ -4515,7 +4514,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.<init>(r7);
         r6.emptyImageView = r0;
         r0 = r6.emptyImageView;
-        r1 = NUM; // 0x7var_be float:1.7945483E38 double:1.0529357234E-314;
+        r1 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r0.setImageResource(r1);
         r0 = r6.emptyImageView;
         r1 = new android.graphics.PorterDuffColorFilter;
@@ -4545,7 +4544,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);
         r0.setTypeface(r9);
         r0 = r6.emptyTextView1;
-        r9 = NUM; // 0x7f0d07c7 float:1.8746153E38 double:1.053130761E-314;
+        r9 = NUM; // 0x7f0e07d5 float:1.8879104E38 double:1.053163147E-314;
         r12 = "PassportNoDocuments";
         r9 = org.telegram.messenger.LocaleController.getString(r12, r9);
         r0.setText(r9);
@@ -4577,7 +4576,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r0.setPadding(r9, r10, r1, r10);
         r0 = r6.emptyTextView2;
-        r1 = NUM; // 0x7f0d07c9 float:1.8746157E38 double:1.053130762E-314;
+        r1 = NUM; // 0x7f0e07d7 float:1.8879108E38 double:1.053163148E-314;
         r9 = "PassportNoDocumentsInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r9, r1);
         r0.setText(r1);
@@ -5201,7 +5200,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         r1 = r1[r2];
                         r1 = (org.telegram.ui.Components.HintEditText) r1;
                         r3 = r12.length();
-                        r4 = NUM; // 0x7f0d082e float:1.8746362E38 double:1.053130812E-314;
+                        r4 = NUM; // 0x7f0e083c float:1.8879313E38 double:1.053163198E-314;
                         r5 = "PaymentShippingPhoneNumber";
                         r6 = 0;
                         r7 = 0;
@@ -5213,7 +5212,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         r12 = org.telegram.ui.PassportActivity.this;
                         r12 = r12.inputFields;
                         r12 = r12[r7];
-                        r0 = NUM; // 0x7f0d02c2 float:1.8743547E38 double:1.0531301264E-314;
+                        r0 = NUM; // 0x7f0e02c5 float:1.8876476E38 double:1.053162507E-314;
                         r1 = "ChooseCountry";
                         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
                         r12.setText(r0);
@@ -5330,7 +5329,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         r3 = org.telegram.ui.PassportActivity.this;
                         r3 = r3.inputFields;
                         r3 = r3[r7];
-                        r4 = NUM; // 0x7f0d0b79 float:1.8748072E38 double:1.0531312286E-314;
+                        r4 = NUM; // 0x7f0e0CLASSNAME float:1.8881285E38 double:1.0531636784E-314;
                         r5 = "WrongCountry";
                         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
                         r3.setText(r4);
@@ -6737,7 +6736,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.scanDocumentCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
             this.scanDocumentCell.setText(LocaleController.getString("PassportScanPassport", NUM), false);
             this.linearLayout2.addView(this.scanDocumentCell, LayoutHelper.createLinear(-1, -2));
-            this.scanDocumentCell.setOnClickListener(new -$$Lambda$PassportActivity$76809PrGNfIFwFdK4EfyZ7l0wQM(this));
+            this.scanDocumentCell.setOnClickListener(new -$$Lambda$PassportActivity$CIH8TL09dyi-qIly_4D0tlrui2A(this));
             this.bottomCell = new TextInfoPrivacyCell(context2);
             this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, str));
             this.bottomCell.setText(LocaleController.getString("PassportScanPassportInfo", NUM));
@@ -6762,7 +6761,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (i4 < i3) {
                 final EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
                 this.inputFields[i4] = editTextBoldCursor;
-                AnonymousClass14 anonymousClass14 = new FrameLayout(context2) {
+                AnonymousClass15 anonymousClass15 = new FrameLayout(context2) {
                     private StaticLayout errorLayout;
                     private float offsetX;
 
@@ -6805,16 +6804,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         }
                     }
                 };
-                anonymousClass14.setWillNotDraw(z);
-                this.linearLayout2.addView(anonymousClass14, LayoutHelper.createLinear(i, 64));
-                anonymousClass14.setBackgroundColor(Theme.getColor(str2));
+                anonymousClass15.setWillNotDraw(z);
+                this.linearLayout2.addView(anonymousClass15, LayoutHelper.createLinear(i, 64));
+                anonymousClass15.setBackgroundColor(Theme.getColor(str2));
                 if (i4 == i3 - 1) {
                     this.extraBackgroundView = new View(context2);
                     this.extraBackgroundView.setBackgroundColor(Theme.getColor(str2));
                     this.linearLayout2.addView(this.extraBackgroundView, LayoutHelper.createLinear(i, 6));
                 }
                 if (this.documentOnly && this.currentDocumentsType != null && i4 < i2) {
-                    anonymousClass14.setVisibility(8);
+                    anonymousClass15.setVisibility(8);
                     View view = this.extraBackgroundView;
                     if (view != null) {
                         view.setVisibility(8);
@@ -6833,14 +6832,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.inputFields[i4].setCursorWidth(1.5f);
                 this.inputFields[i4].setLineColors(Theme.getColor("windowBackgroundWhiteInputField"), Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Theme.getColor(readLine));
                 if (i4 == 5 || i4 == 6) {
-                    this.inputFields[i4].setOnTouchListener(new -$$Lambda$PassportActivity$BkWsiGp0SACn1vJ9h8YBMYKkLVM(this));
+                    this.inputFields[i4].setOnTouchListener(new -$$Lambda$PassportActivity$ow949Zv7R6W952Vqf3n-6Z8uJOY(this));
                     this.inputFields[i4].setInputType(0);
                 } else if (i4 == 3 || i4 == 8) {
-                    this.inputFields[i4].setOnTouchListener(new -$$Lambda$PassportActivity$TcnlWpKn54098zIjNVHAKGv7mPQ(this, context2));
+                    this.inputFields[i4].setOnTouchListener(new -$$Lambda$PassportActivity$WJJ2tEIkKv31bR3tm8G3xDQIOL0(this, context2));
                     this.inputFields[i4].setInputType(0);
                     this.inputFields[i4].setFocusable(false);
                 } else if (i4 == 4) {
-                    this.inputFields[i4].setOnTouchListener(new -$$Lambda$PassportActivity$-CPWpKIngk2P0GwmkCG7jNpTBgM(this));
+                    this.inputFields[i4].setOnTouchListener(new -$$Lambda$PassportActivity$4EIT_7VBkJ3Ft8SITyRBhPB6mTQ(this));
                     this.inputFields[i4].setInputType(0);
                     this.inputFields[i4].setFocusable(false);
                 } else {
@@ -6963,8 +6962,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
                 this.inputFields[i4].setPadding(0, 0, 0, 0);
                 this.inputFields[i4].setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-                anonymousClass14.addView(this.inputFields[i4], LayoutHelper.createFrame(-1, -1.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
-                this.inputFields[i4].setOnEditorActionListener(new -$$Lambda$PassportActivity$IUKnReQZFqjMBZyTSuqCOeb27jI(this));
+                anonymousClass15.addView(this.inputFields[i4], LayoutHelper.createFrame(-1, -1.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
+                this.inputFields[i4].setOnEditorActionListener(new -$$Lambda$PassportActivity$7gHP3rqtxrliQd6Hi-4RFh2SjSo(this));
                 i4++;
                 z = false;
                 i = -1;
@@ -6981,7 +6980,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 while (i5 < i3) {
                     final EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context2);
                     this.inputExtraFields[i5] = editTextBoldCursor2;
-                    AnonymousClass17 anonymousClass17 = new FrameLayout(context2) {
+                    AnonymousClass18 anonymousClass18 = new FrameLayout(context2) {
                         private StaticLayout errorLayout;
                         private float offsetX;
 
@@ -7024,9 +7023,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             }
                         }
                     };
-                    anonymousClass17.setWillNotDraw(false);
-                    this.linearLayout2.addView(anonymousClass17, LayoutHelper.createLinear(-1, 64));
-                    anonymousClass17.setBackgroundColor(Theme.getColor(str2));
+                    anonymousClass18.setWillNotDraw(false);
+                    this.linearLayout2.addView(anonymousClass18, LayoutHelper.createLinear(-1, 64));
+                    anonymousClass18.setBackgroundColor(Theme.getColor(str2));
                     if (i5 == 2) {
                         this.extraBackgroundView2 = new View(context2);
                         this.extraBackgroundView2.setBackgroundColor(Theme.getColor(str2));
@@ -7081,8 +7080,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                     this.inputExtraFields[i5].setPadding(0, 0, 0, 0);
                     this.inputExtraFields[i5].setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-                    anonymousClass17.addView(this.inputExtraFields[i5], LayoutHelper.createFrame(-1, -1.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
-                    this.inputExtraFields[i5].setOnEditorActionListener(new -$$Lambda$PassportActivity$2R-VniY9bMOiViEoeO5veQ3eJ7w(this));
+                    anonymousClass18.addView(this.inputExtraFields[i5], LayoutHelper.createFrame(-1, -1.0f, 51, 21.0f, 0.0f, 21.0f, 0.0f));
+                    this.inputExtraFields[i5].setOnEditorActionListener(new -$$Lambda$PassportActivity$IUKnReQZFqjMBZyTSuqCOeb27jI(this));
                     i5++;
                     i3 = 3;
                 }
@@ -7117,7 +7116,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         textSettingsCell.setText(LocaleController.getString("PassportDeleteDocument", NUM), false);
                     }
                     this.linearLayout2.addView(textSettingsCell, LayoutHelper.createLinear(-1, -2));
-                    textSettingsCell.setOnClickListener(new -$$Lambda$PassportActivity$gpc1SNZjQfFOYB3jBSNPORk4F_s(this));
+                    textSettingsCell.setOnClickListener(new -$$Lambda$PassportActivity$WJlrsHWmbcLVOhaE2-okRbJs_gk(this));
                     this.nativeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, str));
                     this.sectionCell = new ShadowSectionCell(context2);
                     this.sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, str));
@@ -7150,71 +7149,75 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         openAttachMenu();
     }
 
-    public /* synthetic */ void lambda$createIdentityInterface$45$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createIdentityInterface$44$PassportActivity(View view) {
         if (VERSION.SDK_INT >= 23) {
             if (getParentActivity().checkSelfPermission("android.permission.CAMERA") != 0) {
-                getParentActivity().requestPermissions(new String[]{r0}, 22);
+                getParentActivity().requestPermissions(new String[]{r1}, 22);
                 return;
             }
         }
-        MrzCameraActivity mrzCameraActivity = new MrzCameraActivity();
-        mrzCameraActivity.setDelegate(new -$$Lambda$PassportActivity$jIvyCfLzFIjgzntur0HgCfk6_Pc(this));
-        presentFragment(mrzCameraActivity);
+        CameraScanActivity cameraScanActivity = new CameraScanActivity(0);
+        cameraScanActivity.setDelegate(new CameraScanActivityDelegate() {
+            public /* synthetic */ void didFindQr(String str) {
+                -CC.$default$didFindQr(this, str);
+            }
+
+            public void didFindMrzInfo(Result result) {
+                String str;
+                if (!TextUtils.isEmpty(result.firstName)) {
+                    PassportActivity.this.inputFields[0].setText(result.firstName);
+                }
+                if (!TextUtils.isEmpty(result.middleName)) {
+                    PassportActivity.this.inputFields[1].setText(result.middleName);
+                }
+                if (!TextUtils.isEmpty(result.lastName)) {
+                    PassportActivity.this.inputFields[2].setText(result.lastName);
+                }
+                int i = result.gender;
+                if (i != 0) {
+                    if (i == 1) {
+                        PassportActivity.this.currentGender = "male";
+                        PassportActivity.this.inputFields[4].setText(LocaleController.getString("PassportMale", NUM));
+                    } else if (i == 2) {
+                        PassportActivity.this.currentGender = "female";
+                        PassportActivity.this.inputFields[4].setText(LocaleController.getString("PassportFemale", NUM));
+                    }
+                }
+                if (!TextUtils.isEmpty(result.nationality)) {
+                    PassportActivity.this.currentCitizeship = result.nationality;
+                    str = (String) PassportActivity.this.languageMap.get(PassportActivity.this.currentCitizeship);
+                    if (str != null) {
+                        PassportActivity.this.inputFields[5].setText(str);
+                    }
+                }
+                if (!TextUtils.isEmpty(result.issuingCountry)) {
+                    PassportActivity.this.currentResidence = result.issuingCountry;
+                    str = (String) PassportActivity.this.languageMap.get(PassportActivity.this.currentResidence);
+                    if (str != null) {
+                        PassportActivity.this.inputFields[6].setText(str);
+                    }
+                }
+                if (result.birthDay > 0 && result.birthMonth > 0 && result.birthYear > 0) {
+                    PassportActivity.this.inputFields[3].setText(String.format(Locale.US, "%02d.%02d.%d", new Object[]{Integer.valueOf(result.birthDay), Integer.valueOf(result.birthMonth), Integer.valueOf(result.birthYear)}));
+                }
+            }
+        });
+        presentFragment(cameraScanActivity);
     }
 
-    public /* synthetic */ void lambda$null$44$PassportActivity(Result result) {
-        String str;
-        if (!TextUtils.isEmpty(result.firstName)) {
-            this.inputFields[0].setText(result.firstName);
-        }
-        if (!TextUtils.isEmpty(result.middleName)) {
-            this.inputFields[1].setText(result.middleName);
-        }
-        if (!TextUtils.isEmpty(result.lastName)) {
-            this.inputFields[2].setText(result.lastName);
-        }
-        int i = result.gender;
-        if (i != 0) {
-            if (i == 1) {
-                this.currentGender = "male";
-                this.inputFields[4].setText(LocaleController.getString("PassportMale", NUM));
-            } else if (i == 2) {
-                this.currentGender = "female";
-                this.inputFields[4].setText(LocaleController.getString("PassportFemale", NUM));
-            }
-        }
-        if (!TextUtils.isEmpty(result.nationality)) {
-            this.currentCitizeship = result.nationality;
-            str = (String) this.languageMap.get(this.currentCitizeship);
-            if (str != null) {
-                this.inputFields[5].setText(str);
-            }
-        }
-        if (!TextUtils.isEmpty(result.issuingCountry)) {
-            this.currentResidence = result.issuingCountry;
-            str = (String) this.languageMap.get(this.currentResidence);
-            if (str != null) {
-                this.inputFields[6].setText(str);
-            }
-        }
-        if (result.birthDay > 0 && result.birthMonth > 0 && result.birthYear > 0) {
-            this.inputFields[3].setText(String.format(Locale.US, "%02d.%02d.%d", new Object[]{Integer.valueOf(i), Integer.valueOf(result.birthMonth), Integer.valueOf(result.birthYear)}));
-        }
-    }
-
-    public /* synthetic */ boolean lambda$createIdentityInterface$47$PassportActivity(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$46$PassportActivity(View view, MotionEvent motionEvent) {
         if (getParentActivity() == null) {
             return false;
         }
         if (motionEvent.getAction() == 1) {
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
-            countrySelectActivity.setCountrySelectActivityDelegate(new -$$Lambda$PassportActivity$bEhtGHiukso4FocfB8ZhvxICXI8(this, view));
+            countrySelectActivity.setCountrySelectActivityDelegate(new -$$Lambda$PassportActivity$Z-YlmJaxJ5njYIm4iUI084DrCAE(this, view));
             presentFragment(countrySelectActivity);
         }
         return true;
     }
 
-    public /* synthetic */ void lambda$null$46$PassportActivity(View view, String str, String str2) {
+    public /* synthetic */ void lambda$null$45$PassportActivity(View view, String str, String str2) {
         int intValue = ((Integer) view.getTag()).intValue();
         EditText editText = this.inputFields[intValue];
         if (intValue == 5) {
@@ -7225,7 +7228,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         editText.setText(str);
     }
 
-    public /* synthetic */ boolean lambda$createIdentityInterface$50$PassportActivity(Context context, View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$49$PassportActivity(Context context, View view, MotionEvent motionEvent) {
         if (getParentActivity() == null) {
             return false;
         }
@@ -7267,9 +7270,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     i5 = -1;
                     intValue = -1;
                 }
-                Builder createDatePickerDialog = AlertsCreator.createDatePickerDialog(context, i, i2, i3, i4, i5, intValue, string, intValue2 == 8, new -$$Lambda$PassportActivity$PBoR-i1NCFH_2XahUVDKl9oJw5I(this, intValue2, editTextBoldCursor));
+                Builder createDatePickerDialog = AlertsCreator.createDatePickerDialog(context, i, i2, i3, i4, i5, intValue, string, intValue2 == 8, new -$$Lambda$PassportActivity$P10T5kXtx9T7oOLbqDYgVm7EE8A(this, intValue2, editTextBoldCursor));
                 if (intValue2 == 8) {
-                    createDatePickerDialog.setNegativeButton(LocaleController.getString("PassportSelectNotExpire", NUM), new -$$Lambda$PassportActivity$hkQKt9FoeeVbVy2IQ1nJvNtE5mU(this, editTextBoldCursor));
+                    createDatePickerDialog.setNegativeButton(LocaleController.getString("PassportSelectNotExpire", NUM), new -$$Lambda$PassportActivity$HCa0var_lAYMpv3AScM17lwReamM(this, editTextBoldCursor));
                 }
                 showDialog(createDatePickerDialog.create());
             } catch (Exception e) {
@@ -7279,7 +7282,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         return true;
     }
 
-    public /* synthetic */ void lambda$null$48$PassportActivity(int i, EditTextBoldCursor editTextBoldCursor, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$null$47$PassportActivity(int i, EditTextBoldCursor editTextBoldCursor, int i2, int i3, int i4) {
         if (i == 8) {
             int[] iArr = this.currentExpireDate;
             iArr[0] = i2;
@@ -7289,7 +7292,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         editTextBoldCursor.setText(String.format(Locale.US, "%02d.%02d.%d", new Object[]{Integer.valueOf(i4), Integer.valueOf(i3 + 1), Integer.valueOf(i2)}));
     }
 
-    public /* synthetic */ void lambda$null$49$PassportActivity(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$48$PassportActivity(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i) {
         int[] iArr = this.currentExpireDate;
         iArr[2] = 0;
         iArr[1] = 0;
@@ -7297,21 +7300,21 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         editTextBoldCursor.setText(LocaleController.getString("PassportNoExpireDate", NUM));
     }
 
-    public /* synthetic */ boolean lambda$createIdentityInterface$52$PassportActivity(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$51$PassportActivity(View view, MotionEvent motionEvent) {
         if (getParentActivity() == null) {
             return false;
         }
         if (motionEvent.getAction() == 1) {
             Builder builder = new Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("PassportSelectGender", NUM));
-            builder.setItems(new CharSequence[]{LocaleController.getString("PassportMale", NUM), LocaleController.getString("PassportFemale", NUM)}, new -$$Lambda$PassportActivity$xyrt_3Facds-cGPGxpzwS2nYi4s(this));
+            builder.setItems(new CharSequence[]{LocaleController.getString("PassportMale", NUM), LocaleController.getString("PassportFemale", NUM)}, new -$$Lambda$PassportActivity$Wuk7lBzGVppXHqk7cXUUmWpDK2Y(this));
             builder.setPositiveButton(LocaleController.getString("Cancel", NUM), null);
             showDialog(builder.create());
         }
         return true;
     }
 
-    public /* synthetic */ void lambda$null$51$PassportActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$50$PassportActivity(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             this.currentGender = "male";
             this.inputFields[4].setText(LocaleController.getString("PassportMale", NUM));
@@ -7321,7 +7324,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ boolean lambda$createIdentityInterface$53$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$52$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -7339,7 +7342,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         return true;
     }
 
-    public /* synthetic */ boolean lambda$createIdentityInterface$54$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createIdentityInterface$53$PassportActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -7357,7 +7360,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         return true;
     }
 
-    public /* synthetic */ void lambda$createIdentityInterface$55$PassportActivity(View view) {
+    public /* synthetic */ void lambda$createIdentityInterface$54$PassportActivity(View view) {
         createDocumentDeleteAlert();
     }
 
@@ -7381,9 +7384,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     private void updateUploadText(int r9) {
         /*
         r8 = this;
-        r0 = NUM; // 0x7f0d07f3 float:1.8746242E38 double:1.053130783E-314;
+        r0 = NUM; // 0x7f0e0801 float:1.8879193E38 double:1.053163169E-314;
         r1 = "PassportUploadAdditinalDocument";
-        r2 = NUM; // 0x7f0d07f4 float:1.8746244E38 double:1.0531307835E-314;
+        r2 = NUM; // 0x7f0e0802 float:1.8879195E38 double:1.0531631695E-314;
         r3 = "PassportUploadDocument";
         r4 = 1;
         r5 = 0;
@@ -7482,20 +7485,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         goto L_0x00ac;
     L_0x0094:
         r9 = r8.uploadFrontCell;
-        r0 = NUM; // 0x7f0d0780 float:1.8746009E38 double:1.053130726E-314;
+        r0 = NUM; // 0x7f0e078e float:1.887896E38 double:1.053163112E-314;
         r1 = "PassportFrontSide";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
-        r1 = NUM; // 0x7f0d0781 float:1.874601E38 double:1.0531307266E-314;
+        r1 = NUM; // 0x7f0e078f float:1.8878962E38 double:1.0531631126E-314;
         r2 = "PassportFrontSideInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r9.setTextAndValue(r0, r1, r4);
         goto L_0x00c3;
     L_0x00ac:
         r9 = r8.uploadFrontCell;
-        r0 = NUM; // 0x7f0d07ba float:1.8746127E38 double:1.053130755E-314;
+        r0 = NUM; // 0x7f0e07c8 float:1.8879078E38 double:1.053163141E-314;
         r1 = "PassportMainPage";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
-        r1 = NUM; // 0x7f0d07bb float:1.8746129E38 double:1.0531307553E-314;
+        r1 = NUM; // 0x7f0e07c9 float:1.887908E38 double:1.0531631413E-314;
         r2 = "PassportMainPageInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r9.setTextAndValue(r0, r1, r4);
@@ -7712,7 +7715,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r7[r3] = r4;
         r7[r5] = r4;
         r7[r4] = r4;
-        r7 = NUM; // 0x7f0d07ca float:1.874616E38 double:1.0531307627E-314;
+        r7 = NUM; // 0x7f0e07d8 float:1.887911E38 double:1.0531631487E-314;
         r0 = "PassportNoExpireDate";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r8.setText(r7);
@@ -7723,7 +7726,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x00b6;
     L_0x00a7:
         r6.currentGender = r7;
-        r7 = NUM; // 0x7f0d07bc float:1.874613E38 double:1.053130756E-314;
+        r7 = NUM; // 0x7f0e07ca float:1.8879082E38 double:1.053163142E-314;
         r0 = "PassportMale";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r8.setText(r7);
@@ -7734,7 +7737,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x00f0;
     L_0x00be:
         r6.currentGender = r7;
-        r7 = NUM; // 0x7f0d077f float:1.8746007E38 double:1.0531307257E-314;
+        r7 = NUM; // 0x7f0e078d float:1.8878958E38 double:1.0531631117E-314;
         r0 = "PassportFemale";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r8.setText(r7);
@@ -7881,19 +7884,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         secureDocumentCell.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText3"));
                         this.errorsValues.put(str2, "");
                         secureDocumentCell.setTextAndValueAndImage(string, charSequence, secureDocument);
-                        secureDocumentCell.setOnClickListener(new -$$Lambda$PassportActivity$c_SivFsgu6h4BCXz5VeKlb47xZU(this, i));
-                        secureDocumentCell.setOnLongClickListener(new -$$Lambda$PassportActivity$eMgihqVNJqkr7oPmUY-yq5VUzi4(this, i, secureDocument, secureDocumentCell, str2));
+                        secureDocumentCell.setOnClickListener(new -$$Lambda$PassportActivity$iFl4FvM0dO6VZeXLDYKUYIS1cfs(this, i));
+                        secureDocumentCell.setOnLongClickListener(new -$$Lambda$PassportActivity$RiKhLWF7-bmBy1TPoBk73twqlHI(this, i, secureDocument, secureDocumentCell, str2));
                     }
                 }
             }
             charSequence = LocaleController.formatDateForBan((long) secureDocument.secureFile.date);
             secureDocumentCell.setTextAndValueAndImage(string, charSequence, secureDocument);
-            secureDocumentCell.setOnClickListener(new -$$Lambda$PassportActivity$c_SivFsgu6h4BCXz5VeKlb47xZU(this, i));
-            secureDocumentCell.setOnLongClickListener(new -$$Lambda$PassportActivity$eMgihqVNJqkr7oPmUY-yq5VUzi4(this, i, secureDocument, secureDocumentCell, str2));
+            secureDocumentCell.setOnClickListener(new -$$Lambda$PassportActivity$iFl4FvM0dO6VZeXLDYKUYIS1cfs(this, i));
+            secureDocumentCell.setOnLongClickListener(new -$$Lambda$PassportActivity$RiKhLWF7-bmBy1TPoBk73twqlHI(this, i, secureDocument, secureDocumentCell, str2));
         }
     }
 
-    public /* synthetic */ void lambda$addDocumentView$56$PassportActivity(int i, View view) {
+    public /* synthetic */ void lambda$addDocumentView$55$PassportActivity(int i, View view) {
         this.uploadingFileType = i;
         if (i == 1) {
             this.currentPhotoViewerLayout = this.selfieLayout;
@@ -7921,7 +7924,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         instance.openPhoto(arrayList, arrayList.indexOf(secureDocument), this.provider);
     }
 
-    public /* synthetic */ boolean lambda$addDocumentView$58$PassportActivity(int i, SecureDocument secureDocument, SecureDocumentCell secureDocumentCell, String str, View view) {
+    public /* synthetic */ boolean lambda$addDocumentView$57$PassportActivity(int i, SecureDocument secureDocument, SecureDocumentCell secureDocumentCell, String str, View view) {
         Builder builder = new Builder(getParentActivity());
         if (i == 1) {
             builder.setMessage(LocaleController.getString("PassportDeleteSelfie", NUM));
@@ -7930,12 +7933,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$PassportActivity$Aj-Wenld4quF9ly9Ap8983X-MQo(this, secureDocument, i, secureDocumentCell, str));
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$PassportActivity$1qgSM8U02l0fQnayGy0c0ZpUpCE(this, secureDocument, i, secureDocumentCell, str));
         showDialog(builder.create());
         return true;
     }
 
-    public /* synthetic */ void lambda$null$57$PassportActivity(SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$null$56$PassportActivity(SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str, DialogInterface dialogInterface, int i2) {
         this.documentsCells.remove(secureDocument);
         if (i == 1) {
             this.selfieDocument = null;
@@ -8227,7 +8230,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r3 = 0;
         r7.languageMap = r3;
     L_0x00cb:
-        r5 = NUM; // 0x7f0d0778 float:1.8745993E38 double:1.053130722E-314;
+        r5 = NUM; // 0x7f0e0786 float:1.8878944E38 double:1.053163108E-314;
         r14 = "PassportDocuments";
         if (r9 == 0) goto L_0x010b;
     L_0x00d2:
@@ -8643,7 +8646,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r4 == 0) goto L_0x034d;
     L_0x0340:
         r2 = "PassportMale";
-        r4 = NUM; // 0x7f0d07bc float:1.874613E38 double:1.053130756E-314;
+        r4 = NUM; // 0x7f0e07ca float:1.8879082E38 double:1.053163142E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r4);	 Catch:{ Exception -> 0x037b }
         r12.append(r2);	 Catch:{ Exception -> 0x037b }
         goto L_0x0378;
@@ -8653,7 +8656,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r2 == 0) goto L_0x0378;
     L_0x0355:
         r2 = "PassportFemale";
-        r4 = NUM; // 0x7f0d077f float:1.8746007E38 double:1.0531307257E-314;
+        r4 = NUM; // 0x7f0e078d float:1.8878958E38 double:1.0531631117E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r4);	 Catch:{ Exception -> 0x037b }
         r12.append(r2);	 Catch:{ Exception -> 0x037b }
         goto L_0x0378;
@@ -8790,7 +8793,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     L_0x042a:
         if (r11 != 0) goto L_0x043a;
     L_0x042c:
-        r0 = NUM; // 0x7f0d07ce float:1.8746167E38 double:1.0531307647E-314;
+        r0 = NUM; // 0x7f0e07dc float:1.8879118E38 double:1.0531631507E-314;
         r1 = "PassportPersonalDetailsInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
     L_0x0435:
@@ -8803,7 +8806,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r1 != r2) goto L_0x044a;
     L_0x0440:
         r2 = r25;
-        r1 = NUM; // 0x7f0d0778 float:1.8745993E38 double:1.053130722E-314;
+        r1 = NUM; // 0x7f0e0786 float:1.8878944E38 double:1.053163108E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r2, r1);
         goto L_0x0435;
     L_0x044a:
@@ -8815,7 +8818,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypePassport;
         if (r2 == 0) goto L_0x045f;
     L_0x0455:
-        r0 = NUM; // 0x7f0d0788 float:1.8746025E38 double:1.05313073E-314;
+        r0 = NUM; // 0x7f0e0796 float:1.8878976E38 double:1.053163116E-314;
         r1 = "PassportIdentityPassport";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0435;
@@ -8823,7 +8826,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeInternalPassport;
         if (r2 == 0) goto L_0x046d;
     L_0x0463:
-        r0 = NUM; // 0x7f0d0787 float:1.8746023E38 double:1.0531307296E-314;
+        r0 = NUM; // 0x7f0e0795 float:1.8878974E38 double:1.0531631156E-314;
         r1 = "PassportIdentityInternalPassport";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0435;
@@ -8831,7 +8834,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeDriverLicense;
         if (r2 == 0) goto L_0x047b;
     L_0x0471:
-        r0 = NUM; // 0x7f0d0785 float:1.874602E38 double:1.0531307286E-314;
+        r0 = NUM; // 0x7f0e0793 float:1.887897E38 double:1.0531631146E-314;
         r1 = "PassportIdentityDriverLicence";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0435;
@@ -8839,12 +8842,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeIdentityCard;
         if (r1 == 0) goto L_0x0493;
     L_0x047f:
-        r0 = NUM; // 0x7f0d0786 float:1.8746021E38 double:1.053130729E-314;
+        r0 = NUM; // 0x7f0e0794 float:1.8878972E38 double:1.053163115E-314;
         r1 = "PassportIdentityID";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0435;
     L_0x0489:
-        r0 = NUM; // 0x7f0d0784 float:1.8746017E38 double:1.053130728E-314;
+        r0 = NUM; // 0x7f0e0792 float:1.8878968E38 double:1.053163114E-314;
         r1 = "PassportIdentityDocumentInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0435;
@@ -8862,7 +8865,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     L_0x04a4:
         if (r11 != 0) goto L_0x04b0;
     L_0x04a6:
-        r0 = NUM; // 0x7f0d0760 float:1.8745944E38 double:1.0531307103E-314;
+        r0 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
         r1 = "PassportAddressNoUploadInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x0435;
@@ -8871,7 +8874,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = 8;
         if (r1 != r4) goto L_0x04bf;
     L_0x04b6:
-        r1 = NUM; // 0x7f0d0778 float:1.8745993E38 double:1.053130722E-314;
+        r1 = NUM; // 0x7f0e0786 float:1.8878944E38 double:1.053163108E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r2, r1);
         goto L_0x0435;
     L_0x04bf:
@@ -8882,7 +8885,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeRentalAgreement;
         if (r2 == 0) goto L_0x04d3;
     L_0x04c8:
-        r0 = NUM; // 0x7f0d0746 float:1.8745891E38 double:1.0531306975E-314;
+        r0 = NUM; // 0x7f0e0754 float:1.8878843E38 double:1.0531630835E-314;
         r1 = "PassportAddAgreementInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x053d;
@@ -8890,7 +8893,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeUtilityBill;
         if (r2 == 0) goto L_0x04e1;
     L_0x04d7:
-        r0 = NUM; // 0x7f0d074a float:1.87459E38 double:1.0531306995E-314;
+        r0 = NUM; // 0x7f0e0758 float:1.887885E38 double:1.0531630855E-314;
         r1 = "PassportAddBillInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x053d;
@@ -8898,7 +8901,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypePassportRegistration;
         if (r2 == 0) goto L_0x04ef;
     L_0x04e5:
-        r0 = NUM; // 0x7f0d0754 float:1.874592E38 double:1.0531307044E-314;
+        r0 = NUM; // 0x7f0e0762 float:1.887887E38 double:1.0531630904E-314;
         r1 = "PassportAddPassportRegistrationInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x053d;
@@ -8906,7 +8909,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeTemporaryRegistration;
         if (r2 == 0) goto L_0x04fd;
     L_0x04f3:
-        r0 = NUM; // 0x7f0d0756 float:1.8745924E38 double:1.0531307054E-314;
+        r0 = NUM; // 0x7f0e0764 float:1.8878875E38 double:1.0531630914E-314;
         r1 = "PassportAddTemporaryRegistrationInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x053d;
@@ -8914,12 +8917,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeBankStatement;
         if (r1 == 0) goto L_0x053d;
     L_0x0501:
-        r0 = NUM; // 0x7f0d0748 float:1.8745895E38 double:1.0531306985E-314;
+        r0 = NUM; // 0x7f0e0756 float:1.8878847E38 double:1.0531630845E-314;
         r1 = "PassportAddBankInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x053d;
     L_0x050b:
-        r0 = NUM; // 0x7f0d075f float:1.8745942E38 double:1.05313071E-314;
+        r0 = NUM; // 0x7f0e076d float:1.8878893E38 double:1.053163096E-314;
         r1 = "PassportAddressInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x053d;
@@ -8931,7 +8934,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = android.text.TextUtils.isEmpty(r0);
         if (r1 == 0) goto L_0x053d;
     L_0x0520:
-        r0 = NUM; // 0x7f0d07d1 float:1.8746173E38 double:1.053130766E-314;
+        r0 = NUM; // 0x7f0e07df float:1.8879124E38 double:1.053163152E-314;
         r1 = "PassportPhoneInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x053d;
@@ -8942,7 +8945,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = android.text.TextUtils.isEmpty(r0);
         if (r1 == 0) goto L_0x053d;
     L_0x0534:
-        r0 = NUM; // 0x7f0d077b float:1.8745999E38 double:1.0531307237E-314;
+        r0 = NUM; // 0x7f0e0789 float:1.887895E38 double:1.0531631097E-314;
         r1 = "PassportEmailInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
     L_0x053d:
@@ -9065,7 +9068,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
                 if (z) {
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$HspRKy4cKNBUybT-ED_XvHWEg3g(this));
+                    AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$zqsTjYFcZZJYv3TC-jxWzaoeKKI(this));
                 }
             } else if (this.nativeInfoCell.getVisibility() != 8) {
                 this.nativeInfoCell.setVisibility(8);
@@ -9088,7 +9091,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$checkNativeFields$59$PassportActivity() {
+    public /* synthetic */ void lambda$checkNativeFields$58$PassportActivity() {
         EditTextBoldCursor[] editTextBoldCursorArr = this.inputExtraFields;
         if (editTextBoldCursorArr != null) {
             scrollToField(editTextBoldCursorArr[0]);
@@ -9360,7 +9363,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 tLObject2 = tL_account_saveSecureValue;
                                 runnable2 = runnable;
                                 anonymousClass12 = new RequestDelegate(this) {
-                                    final /* synthetic */ AnonymousClass19 this$1;
+                                    final /* synthetic */ AnonymousClass20 this$1;
 
                                     private void onResult(TL_error tL_error, TL_secureValue tL_secureValue, TL_secureValue tL_secureValue2) {
                                         TL_error tL_error2 = tL_error;
@@ -9369,13 +9372,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         ErrorRunnable errorRunnable = errorRunnable2;
                                         String str = str4;
                                         TL_account_saveSecureValue tL_account_saveSecureValue = tLObject;
-                                        AnonymousClass19 anonymousClass19 = this.this$1;
-                                        AnonymousClass19 anonymousClass192 = anonymousClass19;
-                                        AnonymousClass19 anonymousClass193 = anonymousClass192;
-                                        AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$19$1$0kRj7ir3NwvnbVVMIq70mwI_7cA(this, tL_error, errorRunnable, str, tL_account_saveSecureValue, z2, tL_secureRequiredType4, tL_secureRequiredType3, tL_secureValue3, tL_secureValue4, arrayList3, secureDocument4, secureDocument5, secureDocument6, arrayList4, str5, str6, size, runnable2));
+                                        AnonymousClass20 anonymousClass20 = this.this$1;
+                                        AnonymousClass20 anonymousClass202 = anonymousClass20;
+                                        AnonymousClass20 anonymousClass203 = anonymousClass202;
+                                        AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$20$1$Uic1dLmY_p3uaQ9tNTNsydinsac(this, tL_error, errorRunnable, str, tL_account_saveSecureValue, z2, tL_secureRequiredType4, tL_secureRequiredType3, tL_secureValue3, tL_secureValue4, arrayList3, secureDocument4, secureDocument5, secureDocument6, arrayList4, str5, str6, size, runnable2));
                                     }
 
-                                    public /* synthetic */ void lambda$onResult$0$PassportActivity$19$1(TL_error tL_error, ErrorRunnable errorRunnable, String str, TL_account_saveSecureValue tL_account_saveSecureValue, boolean z, TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, TL_secureValue tL_secureValue, TL_secureValue tL_secureValue2, ArrayList arrayList, SecureDocument secureDocument, SecureDocument secureDocument2, SecureDocument secureDocument3, ArrayList arrayList2, String str2, String str3, int i, Runnable runnable) {
+                                    public /* synthetic */ void lambda$onResult$0$PassportActivity$20$1(TL_error tL_error, ErrorRunnable errorRunnable, String str, TL_account_saveSecureValue tL_account_saveSecureValue, boolean z, TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, TL_secureValue tL_secureValue, TL_secureValue tL_secureValue2, ArrayList arrayList, SecureDocument secureDocument, SecureDocument secureDocument2, SecureDocument secureDocument3, ArrayList arrayList2, String str2, String str3, int i, Runnable runnable) {
                                         TL_error tL_error2 = tL_error;
                                         ErrorRunnable errorRunnable2 = errorRunnable;
                                         String str4 = str;
@@ -9502,10 +9505,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                             if (tL_error.text.equals("EMAIL_VERIFICATION_NEEDED")) {
                                                 TL_account_sendVerifyEmailCode tL_account_sendVerifyEmailCode = new TL_account_sendVerifyEmailCode();
                                                 tL_account_sendVerifyEmailCode.email = str4;
-                                                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(tL_account_sendVerifyEmailCode, new -$$Lambda$PassportActivity$19$1$z2A8tnBlw-sIzEUvPsIbORU04FQ(this, str4, tL_secureRequiredType3, this, errorRunnable2));
+                                                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(tL_account_sendVerifyEmailCode, new -$$Lambda$PassportActivity$20$1$xXbPSJhnMuKvf4CdbZ3dXntNgPc(this, str4, tL_secureRequiredType3, this, errorRunnable2));
                                                 return;
                                             } else if (tL_error.text.equals("PHONE_VERIFICATION_NEEDED")) {
-                                                AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$19$1$PRLUYjV8ZrO0HoPOz4GspIpM-8g(errorRunnable2, tL_error, str4));
+                                                AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$20$1$DA8klWTUN5YyRShFH-4ud5Y30Sg(errorRunnable2, tL_error, str4));
                                                 return;
                                             }
                                         }
@@ -9516,15 +9519,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                             TL_account_saveSecureValue tL_account_saveSecureValue = new TL_account_saveSecureValue();
                                             tL_account_saveSecureValue.value = tL_inputSecureValue3;
                                             tL_account_saveSecureValue.secure_secret_id = PassportActivity.this.secureSecretId;
-                                            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(tL_account_saveSecureValue, new -$$Lambda$PassportActivity$19$1$seC_3uNPyiW1J2ZXyiE5PktGlCs(this, tL_secureValue));
+                                            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(tL_account_saveSecureValue, new -$$Lambda$PassportActivity$20$1$RNBudqlw2hRjBnfew1me0QiF7Ho(this, tL_secureValue));
                                         }
                                     }
 
-                                    public /* synthetic */ void lambda$run$2$PassportActivity$19$1(String str, TL_secureRequiredType tL_secureRequiredType, PassportActivityDelegate passportActivityDelegate, ErrorRunnable errorRunnable, TLObject tLObject, TL_error tL_error) {
-                                        AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$19$1$20EqXlc4T1xja88z5UaATcwnhKs(this, tLObject, str, tL_secureRequiredType, passportActivityDelegate, tL_error, errorRunnable));
+                                    public /* synthetic */ void lambda$run$2$PassportActivity$20$1(String str, TL_secureRequiredType tL_secureRequiredType, PassportActivityDelegate passportActivityDelegate, ErrorRunnable errorRunnable, TLObject tLObject, TL_error tL_error) {
+                                        AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$20$1$RLCHh_-MgQ1hoS4C2TlelWtsOYg(this, tLObject, str, tL_secureRequiredType, passportActivityDelegate, tL_error, errorRunnable));
                                     }
 
-                                    public /* synthetic */ void lambda$null$1$PassportActivity$19$1(TLObject tLObject, String str, TL_secureRequiredType tL_secureRequiredType, PassportActivityDelegate passportActivityDelegate, TL_error tL_error, ErrorRunnable errorRunnable) {
+                                    public /* synthetic */ void lambda$null$1$PassportActivity$20$1(TLObject tLObject, String str, TL_secureRequiredType tL_secureRequiredType, PassportActivityDelegate passportActivityDelegate, TL_error tL_error, ErrorRunnable errorRunnable) {
                                         String str2 = str;
                                         TL_error tL_error2 = tL_error;
                                         ErrorRunnable errorRunnable2 = errorRunnable;
@@ -9548,7 +9551,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         }
                                     }
 
-                                    public /* synthetic */ void lambda$run$4$PassportActivity$19$1(TL_secureValue tL_secureValue, TLObject tLObject, TL_error tL_error) {
+                                    public /* synthetic */ void lambda$run$4$PassportActivity$20$1(TL_secureValue tL_secureValue, TLObject tLObject, TL_error tL_error) {
                                         onResult(tL_error, (TL_secureValue) tLObject, tL_secureValue);
                                     }
                                 };
@@ -9646,19 +9649,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             } else {
                 tL_account_deleteSecureValue.types.add(tL_secureRequiredType4.type);
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_deleteSecureValue, new -$$Lambda$PassportActivity$yqjIwJxQHVRYAcsusKtM70xYOHo(this, errorRunnable, z2, tL_secureRequiredType2, tL_secureRequiredType, z, arrayList, runnable));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_deleteSecureValue, new -$$Lambda$PassportActivity$wh4XBcIYYsYXASYVxRv0U0OZ3bo(this, errorRunnable, z2, tL_secureRequiredType2, tL_secureRequiredType, z, arrayList, runnable));
         }
     }
 
-    public /* synthetic */ void lambda$deleteValueInternal$61$PassportActivity(ErrorRunnable errorRunnable, boolean z, TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$b8qjtHw-SwhVCQIFBk7EnKFy_9c(this, tL_error, errorRunnable, z, tL_secureRequiredType, tL_secureRequiredType2, z2, arrayList, runnable));
+    public /* synthetic */ void lambda$deleteValueInternal$60$PassportActivity(ErrorRunnable errorRunnable, boolean z, TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$mNUMe7wKm78vrkjVOFaRvh7of_ZE(this, tL_error, errorRunnable, z, tL_secureRequiredType, tL_secureRequiredType2, z2, arrayList, runnable));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:36:0x00ab  */
     /* JADX WARNING: Removed duplicated region for block: B:35:0x00a2  */
     /* JADX WARNING: Removed duplicated region for block: B:35:0x00a2  */
     /* JADX WARNING: Removed duplicated region for block: B:36:0x00ab  */
-    public /* synthetic */ void lambda$null$60$PassportActivity(org.telegram.tgnet.TLRPC.TL_error r12, org.telegram.ui.PassportActivity.ErrorRunnable r13, boolean r14, org.telegram.tgnet.TLRPC.TL_secureRequiredType r15, org.telegram.tgnet.TLRPC.TL_secureRequiredType r16, boolean r17, java.util.ArrayList r18, java.lang.Runnable r19) {
+    public /* synthetic */ void lambda$null$59$PassportActivity(org.telegram.tgnet.TLRPC.TL_error r12, org.telegram.ui.PassportActivity.ErrorRunnable r13, boolean r14, org.telegram.tgnet.TLRPC.TL_secureRequiredType r15, org.telegram.tgnet.TLRPC.TL_secureRequiredType r16, boolean r17, java.util.ArrayList r18, java.lang.Runnable r19) {
         /*
         r11 = this;
         r8 = r11;
@@ -9675,7 +9678,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = r0.text;
         r13.onError(r2, r5);
     L_0x0012:
-        r1 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+        r1 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
         r2 = "AppName";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0 = r0.text;
@@ -9835,7 +9838,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     L_0x00ff:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.lambda$null$60$PassportActivity(org.telegram.tgnet.TLRPC$TL_error, org.telegram.ui.PassportActivity$ErrorRunnable, boolean, org.telegram.tgnet.TLRPC$TL_secureRequiredType, org.telegram.tgnet.TLRPC$TL_secureRequiredType, boolean, java.util.ArrayList, java.lang.Runnable):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.lambda$null$59$PassportActivity(org.telegram.tgnet.TLRPC$TL_error, org.telegram.ui.PassportActivity$ErrorRunnable, boolean, org.telegram.tgnet.TLRPC$TL_secureRequiredType, org.telegram.tgnet.TLRPC$TL_secureRequiredType, boolean, java.util.ArrayList, java.lang.Runnable):void");
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:60:0x018e  */
@@ -9863,7 +9866,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r9.setBackgroundDrawable(r4);
         r4 = r1.type;
         r5 = r4 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypePersonalDetails;
-        r10 = NUM; // 0x7f0d07f2 float:1.874624E38 double:1.0531307825E-314;
+        r10 = NUM; // 0x7f0e0800 float:1.8879191E38 double:1.0531631685E-314;
         r11 = "PassportTwoDocuments";
         r12 = 2;
         r13 = "";
@@ -9906,12 +9909,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4);
         goto L_0x008b;
     L_0x0078:
-        r4 = NUM; // 0x7f0d0783 float:1.8746015E38 double:1.0531307276E-314;
+        r4 = NUM; // 0x7f0e0791 float:1.8878966E38 double:1.0531631136E-314;
         r5 = "PassportIdentityDocument";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x008b;
     L_0x0082:
-        r4 = NUM; // 0x7f0d07cd float:1.8746165E38 double:1.053130764E-314;
+        r4 = NUM; // 0x7f0e07db float:1.8879116E38 double:1.05316315E-314;
         r5 = "PassportPersonalDetails";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
     L_0x008b:
@@ -9959,12 +9962,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4);
         goto L_0x00f2;
     L_0x00df:
-        r4 = NUM; // 0x7f0d07df float:1.8746202E38 double:1.053130773E-314;
+        r4 = NUM; // 0x7f0e07ed float:1.8879153E38 double:1.053163159E-314;
         r5 = "PassportResidentialAddress";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x00f2;
     L_0x00e9:
-        r4 = NUM; // 0x7f0d075d float:1.8745938E38 double:1.053130709E-314;
+        r4 = NUM; // 0x7f0e076b float:1.887889E38 double:1.053163095E-314;
         r5 = "PassportAddress";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
     L_0x00f2:
@@ -9975,7 +9978,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r5 = r4 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypePhone;
         if (r5 == 0) goto L_0x010b;
     L_0x00fc:
-        r4 = NUM; // 0x7f0d07d0 float:1.8746171E38 double:1.0531307657E-314;
+        r4 = NUM; // 0x7f0e07de float:1.8879122E38 double:1.0531631517E-314;
         r5 = "PassportPhone";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = r21 ^ 1;
@@ -9985,7 +9988,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_secureValueTypeEmail;
         if (r4 == 0) goto L_0x011d;
     L_0x010f:
-        r4 = NUM; // 0x7f0d0779 float:1.8745995E38 double:1.0531307227E-314;
+        r4 = NUM; // 0x7f0e0787 float:1.8878946E38 double:1.0531631087E-314;
         r5 = "PassportEmail";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = r21 ^ 1;
@@ -10008,7 +10011,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10);
         r4.addView(r9, r5);
     L_0x013e:
-        r4 = new org.telegram.ui.-$$Lambda$PassportActivity$5Sry1zhVbDTBEYl5VpIUjvovUNY;
+        r4 = new org.telegram.ui.-$$Lambda$PassportActivity$az74Dx11TJywMyS7RnmkdOtTd_Q;
         r4.<init>(r8, r0, r1, r6);
         r9.setOnClickListener(r4);
         r4 = r8.typesViews;
@@ -10125,7 +10128,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.addField(android.content.Context, org.telegram.tgnet.TLRPC$TL_secureRequiredType, java.util.ArrayList, boolean, boolean):org.telegram.ui.PassportActivity$TextDetailSecureCell");
     }
 
-    public /* synthetic */ void lambda$addField$65$PassportActivity(ArrayList arrayList, TL_secureRequiredType tL_secureRequiredType, boolean z, View view) {
+    public /* synthetic */ void lambda$addField$64$PassportActivity(ArrayList arrayList, TL_secureRequiredType tL_secureRequiredType, boolean z, View view) {
         int i;
         TL_secureRequiredType tL_secureRequiredType2;
         if (arrayList != null) {
@@ -10146,7 +10149,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 int i2;
                 String str2;
                 Builder builder = new Builder(getParentActivity());
-                builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$PassportActivity$SBPx7fdXp-MbcirnzsQkO7Z6gg0(this, tL_secureRequiredType, z));
+                builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$PassportActivity$kbdWZjEbWzdp771-jIbXtinEP_o(this, tL_secureRequiredType, z));
                 builder.setNegativeButton(LocaleController.getString(str, NUM), null);
                 builder.setTitle(LocaleController.getString("AppName", NUM));
                 if (z2) {
@@ -10193,23 +10196,23 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     arrayList2.add(LocaleController.getString("PassportAddPassportRegistration", NUM));
                 }
             }
-            builder2.setItems((CharSequence[]) arrayList2.toArray(new CharSequence[0]), new -$$Lambda$PassportActivity$oX34r1oAXwJXLUOfYXGW2rjRrMs(this, tL_secureRequiredType, arrayList, z));
+            builder2.setItems((CharSequence[]) arrayList2.toArray(new CharSequence[0]), new -$$Lambda$PassportActivity$XmDAwRSThNhHZUr1ANhGnZmNrB8(this, tL_secureRequiredType, arrayList, z));
             showDialog(builder2.create());
             return;
         }
         openTypeActivity(tL_secureRequiredType, tL_secureRequiredType2, arrayList, z);
     }
 
-    public /* synthetic */ void lambda$null$62$PassportActivity(TL_secureRequiredType tL_secureRequiredType, ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$61$PassportActivity(TL_secureRequiredType tL_secureRequiredType, ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
         openTypeActivity(tL_secureRequiredType, (TL_secureRequiredType) arrayList.get(i), arrayList, z);
     }
 
-    public /* synthetic */ void lambda$null$64$PassportActivity(TL_secureRequiredType tL_secureRequiredType, boolean z, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$63$PassportActivity(TL_secureRequiredType tL_secureRequiredType, boolean z, DialogInterface dialogInterface, int i) {
         needShowProgress();
-        deleteValueInternal(tL_secureRequiredType, null, null, true, new -$$Lambda$7J3LPgacD3LbZtGqatVXuN86YjY(this), new -$$Lambda$PassportActivity$3vC5Cf8HrMsDxrDg3Ea7D_w0Ct0(this), z);
+        deleteValueInternal(tL_secureRequiredType, null, null, true, new -$$Lambda$7J3LPgacD3LbZtGqatVXuN86YjY(this), new -$$Lambda$PassportActivity$eagO4V1pHcIZkkgas91xE4p9U18(this), z);
     }
 
-    public /* synthetic */ void lambda$null$63$PassportActivity(String str, String str2) {
+    public /* synthetic */ void lambda$null$62$PassportActivity(String str, String str2) {
         needHideProgress();
     }
 
@@ -10467,14 +10470,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 FileLog.e(e);
             }
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_sendVerifyPhoneCode, new -$$Lambda$PassportActivity$ziNY0SahWhkV1q9_2nyx-UlZ-Kc(this, str, passportActivityDelegate, tL_account_sendVerifyPhoneCode), 2);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_sendVerifyPhoneCode, new -$$Lambda$PassportActivity$G2baGoNcqgSkil2rxy0T_agogpM(this, str, passportActivityDelegate, tL_account_sendVerifyPhoneCode), 2);
     }
 
-    public /* synthetic */ void lambda$startPhoneVerification$67$PassportActivity(String str, PassportActivityDelegate passportActivityDelegate, TL_account_sendVerifyPhoneCode tL_account_sendVerifyPhoneCode, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$XlPMKsspvXmLOvP8do731SElFP8(this, tL_error, str, passportActivityDelegate, tLObject, tL_account_sendVerifyPhoneCode));
+    public /* synthetic */ void lambda$startPhoneVerification$66$PassportActivity(String str, PassportActivityDelegate passportActivityDelegate, TL_account_sendVerifyPhoneCode tL_account_sendVerifyPhoneCode, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$hLGy5GY7nr8K5LZQ5mUFeMfHUjQ(this, tL_error, str, passportActivityDelegate, tLObject, tL_account_sendVerifyPhoneCode));
     }
 
-    public /* synthetic */ void lambda$null$66$PassportActivity(TL_error tL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TL_account_sendVerifyPhoneCode tL_account_sendVerifyPhoneCode) {
+    public /* synthetic */ void lambda$null$65$PassportActivity(TL_error tL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TL_account_sendVerifyPhoneCode tL_account_sendVerifyPhoneCode) {
         String str2 = str;
         if (tL_error == null) {
             HashMap hashMap = new HashMap();
@@ -10724,7 +10727,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (this.presentAfterAnimation != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$l67xseKhR4lQtrsyuaJeoxN_jJM(this));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$OhvfFJsfn1Ho0zPpOd0uc_RHBys(this));
         }
         int i = this.currentActivityType;
         if (i == 5) {
@@ -10756,7 +10759,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$onTransitionAnimationEnd$68$PassportActivity() {
+    public /* synthetic */ void lambda$onTransitionAnimationEnd$67$PassportActivity() {
         presentFragment(this.presentAfterAnimation, true);
         this.presentAfterAnimation = null;
     }
@@ -10801,7 +10804,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             Builder builder = new Builder(getParentActivity());
                             builder.setTitle(LocaleController.getString("AppName", NUM));
                             builder.setMessage(LocaleController.getString("PermissionNoAudioVideo", NUM));
-                            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$PassportActivity$saEsQ-rHD2skXoYwyq-hN_ao-V8(this));
+                            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$PassportActivity$IKarRRXNpKlUS1FtA1cTLG17Uv8(this));
                             builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
                             builder.show();
                         }
@@ -10822,7 +10825,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$69$PassportActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$68$PassportActivity(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             StringBuilder stringBuilder = new StringBuilder();
@@ -11123,7 +11126,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     documentSelectActivity.setMaxSelectedFiles(getMaxSelectedDocuments());
                     documentSelectActivity.setDelegate(new DocumentSelectActivityDelegate() {
                         public /* synthetic */ void startMusicSelectActivity(BaseFragment baseFragment) {
-                            -CC.$default$startMusicSelectActivity(this, baseFragment);
+                            DocumentSelectActivityDelegate.-CC.$default$startMusicSelectActivity(this, baseFragment);
                         }
 
                         public void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList, boolean z, int i) {
@@ -11225,7 +11228,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             return false;
         }
         Builder builder = new Builder(getParentActivity());
-        builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new -$$Lambda$PassportActivity$Z4N0XgwepebvvcdAUdqH_Rebz4Y(this));
+        builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new -$$Lambda$PassportActivity$z_5h380GpBKbVqT4qgY94NjsWOs(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         builder.setTitle(LocaleController.getString("DiscardChanges", NUM));
         builder.setMessage(LocaleController.getString("PassportDiscardChanges", NUM));
@@ -11233,7 +11236,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         return true;
     }
 
-    public /* synthetic */ void lambda$checkDiscard$70$PassportActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$69$PassportActivity(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
@@ -11256,11 +11259,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             }
-            Utilities.globalQueue.postRunnable(new -$$Lambda$PassportActivity$fufT8Jcf6nimD7xnbctUJqRi2PE(this, arrayList, this.uploadingFileType, z));
+            Utilities.globalQueue.postRunnable(new -$$Lambda$PassportActivity$VFUF5NGaIcrb7nCRPLcEDBy1Ens(this, arrayList, this.uploadingFileType, z));
         }
     }
 
-    public /* synthetic */ void lambda$processSelectedFiles$73$PassportActivity(ArrayList arrayList, int i, boolean z) {
+    public /* synthetic */ void lambda$processSelectedFiles$72$PassportActivity(ArrayList arrayList, int i, boolean z) {
         Throwable th;
         int i2 = i;
         int i3 = this.uploadingFileType;
@@ -11280,13 +11283,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     tL_secureFile.date = (int) (System.currentTimeMillis() / 1000);
                     SecureDocument saveFile = this.delegate.saveFile(tL_secureFile);
                     saveFile.type = i2;
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$2i-R1Bni7j2ywjhyD3jD3ME3dwM(this, saveFile, i2));
+                    AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$-YJXCeSkHUwUh2fvw2lHGINsRyg(this, saveFile, i2));
                     if (z && obj == null) {
                         try {
                             Result recognize = MrzRecognizer.recognize(loadBitmap, this.currentDocumentsType.type instanceof TL_secureValueTypeDriverLicense);
                             if (recognize != null) {
                                 try {
-                                    AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$BRwn9uK4ua32ZIGkCWaMIr8OwBQ(this, recognize));
+                                    AndroidUtilities.runOnUIThread(new -$$Lambda$PassportActivity$md8Jrv8oe-xPLzjO0J26yy5r9GY(this, recognize));
                                     obj = 1;
                                 } catch (Throwable th2) {
                                     th = th2;
@@ -11305,7 +11308,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         SharedConfig.saveConfig();
     }
 
-    public /* synthetic */ void lambda$null$71$PassportActivity(SecureDocument secureDocument, int i) {
+    public /* synthetic */ void lambda$null$70$PassportActivity(SecureDocument secureDocument, int i) {
         int i2 = this.uploadingFileType;
         SecureDocument secureDocument2;
         SecureDocumentCell secureDocumentCell;
@@ -11351,7 +11354,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         updateUploadText(i);
     }
 
-    public /* synthetic */ void lambda$null$72$PassportActivity(Result result) {
+    public /* synthetic */ void lambda$null$71$PassportActivity(Result result) {
         String str;
         int i = result.type;
         int i2;

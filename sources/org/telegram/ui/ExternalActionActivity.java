@@ -8,6 +8,7 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,12 +90,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
         super.onCreate(bundle);
         if (SharedConfig.passcodeHash.length() != 0 && SharedConfig.appLocked) {
-            SharedConfig.lastPauseTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
+            SharedConfig.lastPauseTime = (int) (SystemClock.uptimeMillis() / 1000);
         }
-        int identifier = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (identifier > 0) {
-            AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(identifier);
-        }
+        AndroidUtilities.fillStatusBarHeight(this);
         Theme.createDialogsResources(this);
         Theme.createChatResources(this, false);
         this.actionBarLayout = new ActionBarLayout(this);
@@ -536,7 +534,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             this.lockRunnable = null;
         }
         if (SharedConfig.passcodeHash.length() != 0) {
-            SharedConfig.lastPauseTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
+            SharedConfig.lastPauseTime = (int) (SystemClock.uptimeMillis() / 1000);
             this.lockRunnable = new Runnable() {
                 public void run() {
                     if (ExternalActionActivity.this.lockRunnable == this) {

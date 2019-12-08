@@ -32,6 +32,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.TonController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -556,6 +557,10 @@ public class BaseFragment {
 
     public MediaController getMediaController() {
         return MediaController.getInstance();
+    }
+
+    public TonController getTonController() {
+        return getAccountInstance().getTonController();
     }
 
     public UserConfig getUserConfig() {

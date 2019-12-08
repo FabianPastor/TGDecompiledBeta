@@ -1080,7 +1080,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     public ChatAttachAlert(Context context, BaseFragment baseFragment) {
         Context context2 = context;
         final BaseFragment baseFragment2 = baseFragment;
-        super(context2, false, 1);
+        super(context2, false);
         this.baseFragment = baseFragment2;
         setDelegate(this);
         checkCamera(false);
@@ -1881,7 +1881,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
 
             public void onStartStopSelection(boolean z) {
                 ChatAttachAlert.this.alertOnlyOnce = z;
-                ChatAttachAlert.this.gridView.hideSelector();
+                ChatAttachAlert.this.gridView.hideSelector(true);
             }
         });
         this.gridView.addOnItemTouchListener(this.itemRangeSelector);
@@ -3320,25 +3320,25 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x003a:
         goto L_0x0073;
     L_0x003b:
-        r6 = NUM; // 0x7var_ float:1.794484E38 double:1.052935567E-314;
+        r6 = NUM; // 0x7var_bd float:1.7944961E38 double:1.0529355964E-314;
         r5.setImageResource(r6);
-        r6 = NUM; // 0x7f0d0011 float:1.874215E38 double:1.053129786E-314;
+        r6 = NUM; // 0x7f0e0011 float:1.8875072E38 double:1.053162165E-314;
         r0 = "AccDescrCameraFlashAuto";
         r6 = org.telegram.messenger.LocaleController.getString(r0, r6);
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x004e:
-        r6 = NUM; // 0x7var_ float:1.7944844E38 double:1.0529355677E-314;
+        r6 = NUM; // 0x7var_bf float:1.7944965E38 double:1.0529355974E-314;
         r5.setImageResource(r6);
-        r6 = NUM; // 0x7f0d0013 float:1.8742153E38 double:1.053129787E-314;
+        r6 = NUM; // 0x7f0e0013 float:1.8875076E38 double:1.053162166E-314;
         r0 = "AccDescrCameraFlashOn";
         r6 = org.telegram.messenger.LocaleController.getString(r0, r6);
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x0061:
-        r6 = NUM; // 0x7var_ float:1.7944842E38 double:1.0529355673E-314;
+        r6 = NUM; // 0x7var_be float:1.7944963E38 double:1.052935597E-314;
         r5.setImageResource(r6);
-        r6 = NUM; // 0x7f0d0012 float:1.8742151E38 double:1.0531297864E-314;
+        r6 = NUM; // 0x7f0e0012 float:1.8875074E38 double:1.0531621655E-314;
         r0 = "AccDescrCameraFlashOff";
         r6 = org.telegram.messenger.LocaleController.getString(r0, r6);
         r5.setContentDescription(r6);

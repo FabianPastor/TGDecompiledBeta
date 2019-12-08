@@ -1,7 +1,5 @@
 package org.telegram.ui;
 
-import android.animation.ObjectAnimator;
-import android.animation.StateListAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -12,7 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Parcelable;
@@ -51,6 +48,7 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_langPackString;
 import org.telegram.tgnet.TLRPC.TL_langpack_getStrings;
 import org.telegram.tgnet.TLRPC.Vector;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BottomPagesView;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -62,20 +60,22 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     private boolean destroyed;
     private boolean dragging;
     private EGLThread eglThread;
+    private FrameLayout frameLayout2;
     private boolean justCreated = false;
     private boolean justEndDragging;
     private int lastPage = 0;
     private LocaleInfo localeInfo;
     private String[] messages;
     private int startDragX;
+    private TextView startMessagingButton;
     private boolean startPressed = false;
     private TextView textView;
     private String[] titles;
     private ViewPager viewPager;
 
     public class EGLThread extends DispatchQueue {
-        private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
-        private final int EGL_OPENGL_ES2_BIT = 4;
+        private static final int EGL_CONTEXT_CLIENT_VERSION = 12440;
+        private static final int EGL_OPENGL_ES2_BIT = 4;
         private Runnable drawRunnable = new Runnable() {
             public void run() {
                 if (!EGLThread.this.initied) {
@@ -110,9 +110,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         private GL gl;
         private boolean initied;
         private long lastRenderCallTime;
-        private int surfaceHeight;
         private SurfaceTexture surfaceTexture;
-        private int surfaceWidth;
         private int[] textures = new int[23];
 
         public EGLThread(SurfaceTexture surfaceTexture) {
@@ -292,9 +290,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
 
         public void setSurfaceTextureSize(int i, int i2) {
-            this.surfaceWidth = i;
-            this.surfaceHeight = i2;
-            Intro.onSurfaceChanged(i, i2, Math.min(((float) this.surfaceWidth) / 150.0f, ((float) this.surfaceHeight) / 150.0f), 0);
+            Intro.onSurfaceChanged(i, i2, Math.min(((float) i) / 150.0f, ((float) i2) / 150.0f), 0);
         }
 
         public void run() {
@@ -323,21 +319,33 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
 
         public Object instantiateItem(ViewGroup viewGroup, int i) {
-            FrameLayout frameLayout = new FrameLayout(viewGroup.getContext());
-            TextView textView = new TextView(viewGroup.getContext());
+            final TextView textView = new TextView(viewGroup.getContext());
+            final TextView textView2 = new TextView(viewGroup.getContext());
+            AnonymousClass1 anonymousClass1 = new FrameLayout(viewGroup.getContext()) {
+                /* Access modifiers changed, original: protected */
+                public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                    i4 = (((((i4 - i2) / 4) * 3) - AndroidUtilities.dp(275.0f)) / 2) + AndroidUtilities.dp(166.0f);
+                    int dp = AndroidUtilities.dp(18.0f);
+                    TextView textView = textView;
+                    textView.layout(dp, i4, textView.getMeasuredWidth() + dp, textView.getMeasuredHeight() + i4);
+                    i4 += AndroidUtilities.dp(42.0f);
+                    dp = AndroidUtilities.dp(16.0f);
+                    textView = textView2;
+                    textView.layout(dp, i4, textView.getMeasuredWidth() + dp, textView2.getMeasuredHeight() + i4);
+                }
+            };
             textView.setTextColor(-14606047);
             textView.setTextSize(1, 26.0f);
             textView.setGravity(17);
-            frameLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 244.0f, 18.0f, 0.0f));
-            TextView textView2 = new TextView(viewGroup.getContext());
+            anonymousClass1.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 244.0f, 18.0f, 0.0f));
             textView2.setTextColor(-8355712);
             textView2.setTextSize(1, 15.0f);
             textView2.setGravity(17);
-            frameLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 286.0f, 16.0f, 0.0f));
-            viewGroup.addView(frameLayout, 0);
+            anonymousClass1.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 286.0f, 16.0f, 0.0f));
+            viewGroup.addView(anonymousClass1, 0);
             textView.setText(IntroActivity.this.titles[i]);
             textView2.setText(AndroidUtilities.replaceTags(IntroActivity.this.messages[i]));
-            return frameLayout;
+            return anonymousClass1;
         }
 
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
@@ -371,13 +379,32 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         this.messages = new String[]{LocaleController.getString("Page1Message", NUM), LocaleController.getString("Page2Message", NUM), LocaleController.getString("Page3Message", NUM), LocaleController.getString("Page5Message", NUM), LocaleController.getString("Page4Message", NUM), LocaleController.getString("Page6Message", NUM)};
         ScrollView scrollView = new ScrollView(this);
         scrollView.setFillViewport(true);
-        FrameLayout frameLayout = new FrameLayout(this);
-        frameLayout.setBackgroundColor(-1);
-        scrollView.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
-        FrameLayout frameLayout2 = new FrameLayout(this);
-        frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
+        AnonymousClass1 anonymousClass1 = new FrameLayout(this) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                super.onLayout(z, i, i2, i3, i4);
+                i4 = (i4 - i2) / 4;
+                int i5 = i4 * 3;
+                i = (i5 - AndroidUtilities.dp(275.0f)) / 2;
+                IntroActivity.this.frameLayout2.layout(0, i, IntroActivity.this.frameLayout2.getMeasuredWidth(), IntroActivity.this.frameLayout2.getMeasuredHeight() + i);
+                i += AndroidUtilities.dp(272.0f);
+                i2 = (getMeasuredWidth() - IntroActivity.this.bottomPages.getMeasuredWidth()) / 2;
+                IntroActivity.this.bottomPages.layout(i2, i, IntroActivity.this.bottomPages.getMeasuredWidth() + i2, IntroActivity.this.bottomPages.getMeasuredHeight() + i);
+                IntroActivity.this.viewPager.layout(0, 0, IntroActivity.this.viewPager.getMeasuredWidth(), IntroActivity.this.viewPager.getMeasuredHeight());
+                i5 += (i4 - IntroActivity.this.startMessagingButton.getMeasuredHeight()) / 2;
+                i = (getMeasuredWidth() - IntroActivity.this.startMessagingButton.getMeasuredWidth()) / 2;
+                IntroActivity.this.startMessagingButton.layout(i, i5, IntroActivity.this.startMessagingButton.getMeasuredWidth() + i, IntroActivity.this.startMessagingButton.getMeasuredHeight() + i5);
+                i5 -= AndroidUtilities.dp(30.0f);
+                i = (getMeasuredWidth() - IntroActivity.this.textView.getMeasuredWidth()) / 2;
+                IntroActivity.this.textView.layout(i, i5 - IntroActivity.this.textView.getMeasuredHeight(), IntroActivity.this.textView.getMeasuredWidth() + i, i5);
+            }
+        };
+        anonymousClass1.setBackgroundColor(-1);
+        scrollView.addView(anonymousClass1, LayoutHelper.createScroll(-1, -2, 51));
+        this.frameLayout2 = new FrameLayout(this);
+        anonymousClass1.addView(this.frameLayout2, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
         TextureView textureView = new TextureView(this);
-        frameLayout2.addView(textureView, LayoutHelper.createFrame(200, 150, 17));
+        this.frameLayout2.addView(textureView, LayoutHelper.createFrame(200, 150, 17));
         textureView.setSurfaceTextureListener(new SurfaceTextureListener() {
             public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
             }
@@ -387,11 +414,11 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                     IntroActivity introActivity = IntroActivity.this;
                     introActivity.eglThread = new EGLThread(surfaceTexture);
                     IntroActivity.this.eglThread.setSurfaceTextureSize(i, i2);
-                    IntroActivity.this.eglThread.postRunnable(new -$$Lambda$IntroActivity$1$ziO_g9IlcqOuWLJOlD4I6EuEo50(this));
+                    IntroActivity.this.eglThread.postRunnable(new -$$Lambda$IntroActivity$2$URUK1fqEwJXQIUQEi_Jx6E7c8mo(this));
                 }
             }
 
-            public /* synthetic */ void lambda$onSurfaceTextureAvailable$0$IntroActivity$1() {
+            public /* synthetic */ void lambda$onSurfaceTextureAvailable$0$IntroActivity$2() {
                 IntroActivity.this.eglThread.drawRunnable.run();
             }
 
@@ -413,7 +440,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         this.viewPager.setAdapter(new IntroAdapter(this, null));
         this.viewPager.setPageMargin(0);
         this.viewPager.setOffscreenPageLimit(1);
-        frameLayout.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
+        anonymousClass1.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
         this.viewPager.addOnPageChangeListener(new OnPageChangeListener() {
             public void onPageScrolled(int i, float f, int i2) {
                 IntroActivity.this.bottomPages.setPageOffset(i, f);
@@ -445,46 +472,40 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 }
             }
         });
-        TextView textView = new TextView(this);
-        textView.setText(LocaleController.getString("StartMessaging", NUM).toUpperCase());
-        textView.setGravity(17);
-        textView.setTextColor(-1);
-        textView.setTextSize(1, 16.0f);
-        textView.setBackgroundResource(NUM);
-        if (VERSION.SDK_INT >= 21) {
-            StateListAnimator stateListAnimator = new StateListAnimator();
-            String str = "translationZ";
-            stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(textView, str, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(textView, str, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
-            textView.setStateListAnimator(stateListAnimator);
-        }
-        textView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
-        frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 81, 10.0f, 0.0f, 10.0f, 76.0f));
-        textView.setOnClickListener(new -$$Lambda$IntroActivity$Kg_leHKna32gZHR3CZT09b4whCI(this));
+        this.startMessagingButton = new TextView(this);
+        this.startMessagingButton.setText(LocaleController.getString("StartMessaging", NUM));
+        this.startMessagingButton.setGravity(17);
+        this.startMessagingButton.setTextColor(-1);
+        this.startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.startMessagingButton.setTextSize(1, 14.0f);
+        this.startMessagingButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), -11491093, -12346402));
+        this.startMessagingButton.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        anonymousClass1.addView(this.startMessagingButton, LayoutHelper.createFrame(-2, 42.0f, 81, 10.0f, 0.0f, 10.0f, 76.0f));
+        this.startMessagingButton.setOnClickListener(new -$$Lambda$IntroActivity$Kg_leHKna32gZHR3CZT09b4whCI(this));
         if (BuildVars.DEBUG_VERSION) {
-            textView.setOnLongClickListener(new -$$Lambda$IntroActivity$iyZ2QRC4zfDIPF0e6T1a3cQJl5Y(this));
+            this.startMessagingButton.setOnLongClickListener(new -$$Lambda$IntroActivity$iyZ2QRC4zfDIPF0e6T1a3cQJl5Y(this));
         }
         this.bottomPages = new BottomPagesView(this, this.viewPager, 6);
-        frameLayout.addView(this.bottomPages, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
+        anonymousClass1.addView(this.bottomPages, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
         this.textView = new TextView(this);
         this.textView.setTextColor(-15494190);
         this.textView.setGravity(17);
         this.textView.setTextSize(1, 16.0f);
-        frameLayout.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
+        anonymousClass1.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
         this.textView.setOnClickListener(new -$$Lambda$IntroActivity$3V-J2Y1xEuzoe0ERCQjOPYz9JM8(this));
         if (AndroidUtilities.isTablet()) {
-            FrameLayout frameLayout3 = new FrameLayout(this);
-            setContentView(frameLayout3);
+            FrameLayout frameLayout = new FrameLayout(this);
+            setContentView(frameLayout);
             ImageView imageView = new ImageView(this);
             BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(NUM);
             TileMode tileMode = TileMode.REPEAT;
             bitmapDrawable.setTileModeXY(tileMode, tileMode);
             imageView.setBackgroundDrawable(bitmapDrawable);
-            frameLayout3.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
-            frameLayout = new FrameLayout(this);
-            frameLayout.setBackgroundResource(NUM);
-            frameLayout.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
-            frameLayout3.addView(frameLayout, LayoutHelper.createFrame(498, 528, 17));
+            frameLayout.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
+            FrameLayout frameLayout2 = new FrameLayout(this);
+            frameLayout2.setBackgroundResource(NUM);
+            frameLayout2.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
+            frameLayout.addView(frameLayout2, LayoutHelper.createFrame(498, 528, 17));
         } else {
             setRequestedOrientation(1);
             setContentView(scrollView);

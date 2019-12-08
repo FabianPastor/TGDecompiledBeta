@@ -8,7 +8,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.widget.TextView;
 import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 import java.io.File;
@@ -89,7 +88,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
             CharSequence[] charSequenceArr;
             int[] iArr;
             Builder builder = new Builder(this.parentFragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("ChoosePhoto", NUM));
+            builder.setTitle(LocaleController.getString("ChoosePhoto", NUM), true);
             String str = "DeletePhoto";
             String str2 = "ChooseFromGallery";
             String str3 = "ChooseTakePhoto";
@@ -113,12 +112,6 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
             builder.setItems(charSequenceArr, iArr, new -$$Lambda$ImageUpdater$ZfeU_OSr8fUwIgo0j9MadtpPCLASSNAME(this, runnable));
             BottomSheet create = builder.create();
             this.parentFragment.showDialog(create);
-            TextView titleView = create.getTitleView();
-            if (titleView != null) {
-                titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                titleView.setTextSize(1, 18.0f);
-                titleView.setTextColor(Theme.getColor("dialogTextBlack"));
-            }
             if (!this.searchAvailable) {
                 i = 2;
             }
@@ -327,7 +320,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$27$LaunchActivity(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$29$LaunchActivity(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e(e);

@@ -165,6 +165,7 @@ import org.telegram.tgnet.TLRPC.TL_inputWallPaperSlug;
 import org.telegram.tgnet.TLRPC.TL_jsonNumber;
 import org.telegram.tgnet.TLRPC.TL_jsonObject;
 import org.telegram.tgnet.TLRPC.TL_jsonObjectValue;
+import org.telegram.tgnet.TLRPC.TL_jsonString;
 import org.telegram.tgnet.TLRPC.TL_messageActionChannelCreate;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
@@ -506,6 +507,8 @@ public class MessagesController extends BaseController implements NotificationCe
     public String venueSearchBot;
     private ArrayList<Long> visibleDialogMainThreadIds = new ArrayList();
     private ArrayList<Long> visibleScheduledDialogMainThreadIds = new ArrayList();
+    public String walletBlockchainName;
+    public String walletConfig;
     public int webFileDatacenterId;
 
     public static class PrintingUser {
@@ -821,6 +824,8 @@ public class MessagesController extends BaseController implements NotificationCe
         this.webFileDatacenterId = sharedPreferences.getInt("webFileDatacenterId", i2);
         this.suggestedLangCode = this.mainPreferences.getString("suggestedLangCode", "en");
         this.animatedEmojisZoom = this.mainPreferences.getFloat("animatedEmojisZoom", 0.625f);
+        this.walletConfig = this.mainPreferences.getString("walletConfig", null);
+        this.walletBlockchainName = this.mainPreferences.getString("walletBlockchainName", null);
     }
 
     public /* synthetic */ void lambda$new$3$MessagesController() {
@@ -850,10 +855,12 @@ public class MessagesController extends BaseController implements NotificationCe
             TL_jsonObject tL_jsonObject = (TL_jsonObject) tLObject;
             int size = tL_jsonObject.value.size();
             Object obj = null;
+            Object obj2 = null;
             for (int i = 0; i < size; i++) {
                 TL_jsonObjectValue tL_jsonObjectValue = (TL_jsonObjectValue) tL_jsonObject.value.get(i);
+                JSONValue jSONValue;
                 if ("emojies_animated_zoom".equals(tL_jsonObjectValue.key)) {
-                    JSONValue jSONValue = tL_jsonObjectValue.value;
+                    jSONValue = tL_jsonObjectValue.value;
                     if (jSONValue instanceof TL_jsonNumber) {
                         double d = (double) this.animatedEmojisZoom;
                         double d2 = ((TL_jsonNumber) jSONValue).value;
@@ -863,10 +870,38 @@ public class MessagesController extends BaseController implements NotificationCe
                             obj = 1;
                         }
                     }
+                } else {
+                    TL_jsonString tL_jsonString;
+                    if ("wallet_config".equals(tL_jsonObjectValue.key)) {
+                        jSONValue = tL_jsonObjectValue.value;
+                        if (jSONValue instanceof TL_jsonString) {
+                            tL_jsonString = (TL_jsonString) jSONValue;
+                            if (!tL_jsonString.value.equals(this.walletConfig)) {
+                                this.walletConfig = tL_jsonString.value;
+                                edit.putString("walletConfig", this.walletConfig);
+                            }
+                        }
+                    } else {
+                        if ("wallet_blockchain_name".equals(tL_jsonObjectValue.key)) {
+                            jSONValue = tL_jsonObjectValue.value;
+                            if (jSONValue instanceof TL_jsonString) {
+                                tL_jsonString = (TL_jsonString) jSONValue;
+                                if (!tL_jsonString.value.equals(this.walletBlockchainName)) {
+                                    this.walletBlockchainName = tL_jsonString.value;
+                                    edit.putString("walletBlockchainName", this.walletBlockchainName);
+                                }
+                            }
+                        }
+                    }
+                    obj2 = 1;
                 }
             }
-            if (obj != null) {
+            if (!(obj == null && obj2 == null)) {
                 edit.commit();
+            }
+            if (obj2 != null) {
+                getTonController().onTonConfigUpdated();
+                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
             }
         }
         this.loadingAppConfig = false;
@@ -1386,6 +1421,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getSecretChatHelper().cleanup();
         getLocationController().cleanup();
         getMediaDataController().cleanup();
+        getTonController().cleanup();
         DialogsActivity.dialogsLoaded[this.currentAccount] = false;
         this.notificationsPreferences.edit().clear().commit();
         this.emojiPreferences.edit().putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).commit();
@@ -2920,6 +2956,10 @@ public class MessagesController extends BaseController implements NotificationCe
             } else {
                 getMediaDataController().removePeer(i);
             }
+            i = this.totalBlockedCount;
+            if (i >= 0) {
+                this.totalBlockedCount = i + 1;
+            }
             getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
             TL_contacts_block tL_contacts_block = new TL_contacts_block();
             tL_contacts_block.id = getInputUser(user);
@@ -3065,6 +3105,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TL_contacts_unblock tL_contacts_unblock = new TL_contacts_unblock();
         User user = getUser(Integer.valueOf(i));
         if (user != null) {
+            this.totalBlockedCount--;
             this.blockedUsers.delete(user.id);
             tL_contacts_unblock.id = getInputUser(user);
             getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
@@ -5598,7 +5639,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02c9  */
     /* JADX WARNING: Removed duplicated region for block: B:152:0x030b A:{SYNTHETIC} */
     /* JADX WARNING: Missing block: B:117:0x02b0, code skipped:
-            if (r3[0] < (byte) 105) goto L_0x02b7;
+            if (r3[0] < (byte) 106) goto L_0x02b7;
      */
     public /* synthetic */ void lambda$processLoadedMessages$123$MessagesController(org.telegram.tgnet.TLRPC.messages_Messages r26, long r27, boolean r29, boolean r30, int r31, int r32, boolean r33, int r34, int r35, int r36, int r37, int r38, boolean r39, int r40, int r41, int r42, int r43, boolean r44) {
         /*
@@ -5986,7 +6027,7 @@ public class MessagesController extends BaseController implements NotificationCe
     L_0x0286:
         r2 = r24;
         r3 = r2.legacy;
-        r4 = 105; // 0x69 float:1.47E-43 double:5.2E-322;
+        r4 = 106; // 0x6a float:1.49E-43 double:5.24E-322;
         if (r3 == 0) goto L_0x029c;
     L_0x028e:
         r3 = r2.layer;

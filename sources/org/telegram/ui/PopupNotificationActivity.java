@@ -137,16 +137,13 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Theme.createChatResources(this, false);
-        int identifier = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (identifier > 0) {
-            AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(identifier);
-        }
-        for (identifier = 0; identifier < 3; identifier++) {
-            NotificationCenter.getInstance(identifier).addObserver(this, NotificationCenter.appDidLogout);
-            NotificationCenter.getInstance(identifier).addObserver(this, NotificationCenter.updateInterfaces);
-            NotificationCenter.getInstance(identifier).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-            NotificationCenter.getInstance(identifier).addObserver(this, NotificationCenter.messagePlayingDidReset);
-            NotificationCenter.getInstance(identifier).addObserver(this, NotificationCenter.contactsDidLoad);
+        AndroidUtilities.fillStatusBarHeight(this);
+        for (int i = 0; i < 3; i++) {
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.appDidLogout);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.updateInterfaces);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingDidReset);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.contactsDidLoad);
         }
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.pushMessagesUpdated);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);

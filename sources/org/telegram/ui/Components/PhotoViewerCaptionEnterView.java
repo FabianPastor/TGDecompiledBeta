@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
@@ -15,10 +14,8 @@ import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.view.ActionMode;
-import android.view.ActionMode.Callback;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -50,7 +47,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     float animationProgress = 0.0f;
     private int audioInterfaceState;
     private int captionMaxLength = 1024;
-    private ActionMode currentActionMode;
     private PhotoViewerCaptionEnterViewDelegate delegate;
     private ImageView emojiButton;
     private int emojiPadding;
@@ -80,6 +76,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         void onWindowSizeChanged(int i);
     }
 
+    /* Access modifiers changed, original: protected */
+    public void extendActionMode(ActionMode actionMode, Menu menu) {
+    }
+
+    public boolean hideActionMode() {
+        return false;
+    }
+
     public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view) {
         Context context2 = context;
         super(context);
@@ -98,6 +102,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.emojiButton.setImageResource(NUM);
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
+        this.emojiButton.setAlpha(0.58f);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
         this.emojiButton.setOnClickListener(new -$$Lambda$PhotoViewerCaptionEnterView$ZqTKgld1Ygi5nBpyMN-nLjvd2fU(this));
         this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));
@@ -106,6 +111,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.lengthTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.lengthTextPaint.setColor(-2500135);
         this.messageEditText = new EditTextCaption(context2) {
+            /* Access modifiers changed, original: protected */
+            public int getActionModeStyle() {
+                return 2;
+            }
+
             /* Access modifiers changed, original: protected */
             public void onMeasure(int i, int i2) {
                 try {
@@ -125,55 +135,13 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     fixHandleView(true);
                 }
             }
+
+            /* Access modifiers changed, original: protected */
+            public void extendActionMode(ActionMode actionMode, Menu menu) {
+                PhotoViewerCaptionEnterView.this.extendActionMode(actionMode, menu);
+            }
         };
-        if (VERSION.SDK_INT >= 23 && this.windowView != null) {
-            this.messageEditText.setCustomSelectionActionModeCallback(new Callback() {
-                public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                    return false;
-                }
-
-                public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                    PhotoViewerCaptionEnterView.this.currentActionMode = actionMode;
-                    return true;
-                }
-
-                public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                    if (VERSION.SDK_INT >= 23) {
-                        PhotoViewerCaptionEnterView.this.fixActionMode(actionMode);
-                    }
-                    return true;
-                }
-
-                public void onDestroyActionMode(ActionMode actionMode) {
-                    if (PhotoViewerCaptionEnterView.this.currentActionMode == actionMode) {
-                        PhotoViewerCaptionEnterView.this.currentActionMode = null;
-                    }
-                }
-            });
-            this.messageEditText.setCustomInsertionActionModeCallback(new Callback() {
-                public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                    return false;
-                }
-
-                public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                    PhotoViewerCaptionEnterView.this.currentActionMode = actionMode;
-                    return true;
-                }
-
-                public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                    if (VERSION.SDK_INT >= 23) {
-                        PhotoViewerCaptionEnterView.this.fixActionMode(actionMode);
-                    }
-                    return true;
-                }
-
-                public void onDestroyActionMode(ActionMode actionMode) {
-                    if (PhotoViewerCaptionEnterView.this.currentActionMode == actionMode) {
-                        PhotoViewerCaptionEnterView.this.currentActionMode = null;
-                    }
-                }
-            });
-        }
+        this.messageEditText.setWindowView(this.windowView);
         this.messageEditText.setHint(LocaleController.getString("AddCaption", NUM));
         this.messageEditText.setImeOptions(NUM);
         EditTextCaption editTextCaption = this.messageEditText;
@@ -187,6 +155,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setCursorColor(-1);
         this.messageEditText.setCursorSize(AndroidUtilities.dp(20.0f));
         this.messageEditText.setTextColor(-1);
+        this.messageEditText.setHighlightColor(NUM);
         this.messageEditText.setHintTextColor(-NUM);
         this.messageEditText.setFilters(new InputFilter[]{new LengthFilter(this.captionMaxLength)});
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 52.0f, 0.0f, 6.0f, 0.0f));
@@ -203,7 +172,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     if (PhotoViewerCaptionEnterView.this.delegate != null) {
                         PhotoViewerCaptionEnterView.this.delegate.onTextChanged(charSequence);
                     }
-                    if (i2 != i3 && i3 - i2 > 1) {
+                    if (i3 - i2 > 1) {
                         this.processChange = true;
                     }
                 }
@@ -290,22 +259,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public void setForceFloatingEmoji(boolean z) {
         this.forceFloatingEmoji = z;
-    }
-
-    public boolean hideActionMode() {
-        if (VERSION.SDK_INT >= 23) {
-            ActionMode actionMode = this.currentActionMode;
-            if (actionMode != null) {
-                try {
-                    actionMode.finish();
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-                this.currentActionMode = null;
-                return true;
-            }
-        }
-        return false;
     }
 
     @SuppressLint({"PrivateApi"})

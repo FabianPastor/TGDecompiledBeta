@@ -57,6 +57,7 @@ public class RecyclerListView extends RecyclerView {
     private ArrayList<View> headers;
     private ArrayList<View> headersCache;
     private boolean hiddenByEmptyView;
+    private boolean hideIfEmpty = true;
     private boolean ignoreOnScroll;
     private boolean instantClick;
     private boolean interceptedByChild;
@@ -100,9 +101,9 @@ public class RecyclerListView extends RecyclerView {
     private int sectionsCount;
     private int sectionsType;
     private Runnable selectChildRunnable;
-    private Drawable selectorDrawable;
-    private int selectorPosition;
-    private Rect selectorRect = new Rect();
+    protected Drawable selectorDrawable;
+    protected int selectorPosition;
+    protected Rect selectorRect = new Rect();
     private boolean selfOnLayout;
     private int startSection;
     private boolean wasPressed;
@@ -786,13 +787,14 @@ public class RecyclerListView extends RecyclerView {
                     if (RecyclerListView.this.currentChildView.isEnabled()) {
                         recyclerListView = RecyclerListView.this;
                         recyclerListView.positionSelector(recyclerListView.currentChildPosition, RecyclerListView.this.currentChildView);
-                        if (RecyclerListView.this.selectorDrawable != null) {
-                            Drawable current = RecyclerListView.this.selectorDrawable.getCurrent();
-                            if (current instanceof TransitionDrawable) {
+                        Drawable drawable = RecyclerListView.this.selectorDrawable;
+                        if (drawable != null) {
+                            drawable = drawable.getCurrent();
+                            if (drawable instanceof TransitionDrawable) {
                                 if (RecyclerListView.this.onItemLongClickListener == null && RecyclerListView.this.onItemClickListenerExtended == null) {
-                                    ((TransitionDrawable) current).resetTransition();
+                                    ((TransitionDrawable) drawable).resetTransition();
                                 } else {
-                                    ((TransitionDrawable) current).startTransition(ViewConfiguration.getLongPressTimeout());
+                                    ((TransitionDrawable) drawable).startTransition(ViewConfiguration.getLongPressTimeout());
                                 }
                             }
                             if (VERSION.SDK_INT >= 21) {
@@ -1150,12 +1152,14 @@ public class RecyclerListView extends RecyclerView {
                 if (RecyclerListView.this.onScrollListener != null) {
                     RecyclerListView.this.onScrollListener.onScrolled(recyclerView, i, i2);
                 }
-                if (RecyclerListView.this.selectorPosition != -1) {
-                    RecyclerListView.this.selectorRect.offset(-i, -i2);
-                    RecyclerListView.this.selectorDrawable.setBounds(RecyclerListView.this.selectorRect);
+                RecyclerListView recyclerListView = RecyclerListView.this;
+                if (recyclerListView.selectorPosition != -1) {
+                    recyclerListView.selectorRect.offset(-i, -i2);
+                    recyclerListView = RecyclerListView.this;
+                    recyclerListView.selectorDrawable.setBounds(recyclerListView.selectorRect);
                     RecyclerListView.this.invalidate();
                 } else {
-                    RecyclerListView.this.selectorRect.setEmpty();
+                    recyclerListView.selectorRect.setEmpty();
                 }
                 RecyclerListView.this.checkSection();
             }
@@ -1360,6 +1364,9 @@ public class RecyclerListView extends RecyclerView {
                                         if (i >= 0) {
                                             if (this.currentFirst != i || this.pinnedHeader == null) {
                                                 this.pinnedHeader = getSectionHeaderView(i, this.pinnedHeader);
+                                                this.pinnedHeader.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), 0));
+                                                View view3 = this.pinnedHeader;
+                                                view3.layout(0, 0, view3.getMeasuredWidth(), this.pinnedHeader.getMeasuredHeight());
                                                 this.currentFirst = i;
                                             }
                                             if (!(this.pinnedHeader == null || obj == null || obj.getClass() == this.pinnedHeader.getClass())) {
@@ -1555,11 +1562,13 @@ public class RecyclerListView extends RecyclerView {
         }
         Object obj = getAdapter().getItemCount() == 0 ? 1 : null;
         this.emptyView.setVisibility(obj != null ? 0 : 8);
-        if (obj != null) {
-            i = 4;
+        if (this.hideIfEmpty) {
+            if (obj != null) {
+                i = 4;
+            }
+            setVisibility(i);
+            this.hiddenByEmptyView = true;
         }
-        setVisibility(i);
-        this.hiddenByEmptyView = true;
     }
 
     public void setVisibility(int i) {
@@ -1571,6 +1580,10 @@ public class RecyclerListView extends RecyclerView {
 
     public void setOnScrollListener(OnScrollListener onScrollListener) {
         this.onScrollListener = onScrollListener;
+    }
+
+    public void setHideIfEmpty(boolean z) {
+        this.hideIfEmpty = z;
     }
 
     public OnScrollListener getOnScrollListener() {
@@ -1652,12 +1665,17 @@ public class RecyclerListView extends RecyclerView {
         }
     }
 
-    public void hideSelector() {
+    public void hideSelector(boolean z) {
         View view = this.currentChildView;
         if (view != null) {
             onChildPressed(view, false);
             this.currentChildView = null;
-            removeSelection(view, null);
+            if (z) {
+                removeSelection(view, null);
+                return;
+            }
+            this.selectorDrawable.setState(StateSet.NOTHING);
+            this.selectorRect.setEmpty();
         }
     }
 
@@ -1779,23 +1797,25 @@ public class RecyclerListView extends RecyclerView {
     }
 
     private void ensurePinnedHeaderLayout(View view, boolean z) {
-        if (view.isLayoutRequested() || z) {
-            int i = this.sectionsType;
-            if (i == 1) {
-                LayoutParams layoutParams = view.getLayoutParams();
-                try {
-                    view.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, NUM), MeasureSpec.makeMeasureSpec(layoutParams.height, NUM));
-                } catch (Exception e) {
-                    FileLog.e(e);
+        if (view != null) {
+            if (view.isLayoutRequested() || z) {
+                int i = this.sectionsType;
+                if (i == 1) {
+                    LayoutParams layoutParams = view.getLayoutParams();
+                    try {
+                        view.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, NUM), MeasureSpec.makeMeasureSpec(layoutParams.height, NUM));
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                } else if (i == 2) {
+                    try {
+                        view.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+                    } catch (Exception e2) {
+                        FileLog.e(e2);
+                    }
                 }
-            } else if (i == 2) {
-                try {
-                    view.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(0, 0));
-                } catch (Exception e2) {
-                    FileLog.e(e2);
-                }
+                view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
             }
-            view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         }
     }
 
@@ -1820,6 +1840,10 @@ public class RecyclerListView extends RecyclerView {
     /* Access modifiers changed, original: protected */
     public void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
+        if (!this.selectorRect.isEmpty()) {
+            this.selectorDrawable.setBounds(this.selectorRect);
+            this.selectorDrawable.draw(canvas);
+        }
         int i = this.sectionsType;
         float f = 0.0f;
         if (i == 1) {
@@ -1832,11 +1856,10 @@ public class RecyclerListView extends RecyclerView {
                     view.draw(canvas);
                     canvas.restoreToCount(save);
                 }
-            } else {
-                return;
             }
-        } else if (i == 2) {
-            if (this.sectionsAdapter != null && this.pinnedHeader != null) {
+        } else if (i == 2 && this.sectionsAdapter != null) {
+            View view2 = this.pinnedHeader;
+            if (view2 != null && view2.getAlpha() != 0.0f) {
                 i = canvas.save();
                 int intValue = ((Integer) this.pinnedHeader.getTag()).intValue();
                 if (LocaleController.isRTL) {
@@ -1851,18 +1874,18 @@ public class RecyclerListView extends RecyclerView {
                     long uptimeMillis = SystemClock.uptimeMillis();
                     long min = Math.min(20, uptimeMillis - this.lastAlphaAnimationTime);
                     this.lastAlphaAnimationTime = uptimeMillis;
-                    f = this.pinnedHeaderShadowAlpha;
-                    float f2 = this.pinnedHeaderShadowTargetAlpha;
-                    if (f < f2) {
-                        this.pinnedHeaderShadowAlpha = f + (((float) min) / 180.0f);
-                        if (this.pinnedHeaderShadowAlpha > f2) {
-                            this.pinnedHeaderShadowAlpha = f2;
+                    float f2 = this.pinnedHeaderShadowAlpha;
+                    f = this.pinnedHeaderShadowTargetAlpha;
+                    if (f2 < f) {
+                        this.pinnedHeaderShadowAlpha = f2 + (((float) min) / 180.0f);
+                        if (this.pinnedHeaderShadowAlpha > f) {
+                            this.pinnedHeaderShadowAlpha = f;
                         }
                         invalidate();
-                    } else if (f > f2) {
-                        this.pinnedHeaderShadowAlpha = f - (((float) min) / 180.0f);
-                        if (this.pinnedHeaderShadowAlpha < f2) {
-                            this.pinnedHeaderShadowAlpha = f2;
+                    } else if (f2 > f) {
+                        this.pinnedHeaderShadowAlpha = f2 - (((float) min) / 180.0f);
+                        if (this.pinnedHeaderShadowAlpha < f) {
+                            this.pinnedHeaderShadowAlpha = f;
                         }
                         invalidate();
                     }
@@ -1870,13 +1893,7 @@ public class RecyclerListView extends RecyclerView {
                 canvas.clipRect(0, 0, getWidth(), this.pinnedHeader.getMeasuredHeight());
                 this.pinnedHeader.draw(canvas);
                 canvas.restoreToCount(i);
-            } else {
-                return;
             }
-        }
-        if (!this.selectorRect.isEmpty()) {
-            this.selectorDrawable.setBounds(this.selectorRect);
-            this.selectorDrawable.draw(canvas);
         }
     }
 

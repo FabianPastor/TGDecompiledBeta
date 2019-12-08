@@ -19,6 +19,12 @@ import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.view.ActionMode;
+import android.view.ActionMode.Callback;
+import android.view.ActionMode.Callback2;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
@@ -29,6 +35,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.FloatingActionMode;
+import org.telegram.ui.ActionBar.FloatingToolbar;
 
 public class EditTextBoldCursor extends EditText {
     private static Class editorClass;
@@ -49,6 +57,9 @@ public class EditTextBoldCursor extends EditText {
     private TextPaint errorPaint;
     private CharSequence errorText;
     private boolean fixed;
+    private FloatingActionMode floatingActionMode;
+    private FloatingToolbar floatingToolbar;
+    private OnPreDrawListener floatingToolbarPreDrawListener;
     private GradientDrawable gradientDrawable;
     private float headerAnimationProgress;
     private int headerHintColor;
@@ -71,6 +82,52 @@ public class EditTextBoldCursor extends EditText {
     private int scrollY;
     private boolean supportRtlHint;
     private boolean transformHintToHeader;
+    private View windowView;
+
+    @TargetApi(23)
+    private class ActionModeCallback2Wrapper extends Callback2 {
+        private final Callback mWrapped;
+
+        public ActionModeCallback2Wrapper(Callback callback) {
+            this.mWrapped = callback;
+        }
+
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            return this.mWrapped.onCreateActionMode(actionMode, menu);
+        }
+
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return this.mWrapped.onPrepareActionMode(actionMode, menu);
+        }
+
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            return this.mWrapped.onActionItemClicked(actionMode, menuItem);
+        }
+
+        public void onDestroyActionMode(ActionMode actionMode) {
+            this.mWrapped.onDestroyActionMode(actionMode);
+            EditTextBoldCursor.this.cleanupFloatingActionModeViews();
+            EditTextBoldCursor.this.floatingActionMode = null;
+        }
+
+        public void onGetContentRect(ActionMode actionMode, View view, Rect rect) {
+            Callback callback = this.mWrapped;
+            if (callback instanceof Callback2) {
+                ((Callback2) callback).onGetContentRect(actionMode, view, rect);
+            } else {
+                super.onGetContentRect(actionMode, view, rect);
+            }
+        }
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void extendActionMode(ActionMode actionMode, Menu menu) {
+    }
+
+    /* Access modifiers changed, original: protected */
+    public int getActionModeStyle() {
+        return 1;
+    }
 
     @TargetApi(26)
     public int getAutofillType() {
@@ -213,7 +270,7 @@ public class EditTextBoldCursor extends EditText {
         if (r0 == 0) goto L_0x00ff;
     L_0x00f3:
         r0 = mCursorDrawableResField;	 Catch:{ all -> 0x00ff }
-        r1 = NUM; // 0x7var_f float:1.7944836E38 double:1.052935566E-314;
+        r1 = NUM; // 0x7var_b9 float:1.7944953E38 double:1.0529355944E-314;
         r1 = java.lang.Integer.valueOf(r1);	 Catch:{ all -> 0x00ff }
         r0.set(r8, r1);	 Catch:{ all -> 0x00ff }
     L_0x00ff:
@@ -583,6 +640,55 @@ public class EditTextBoldCursor extends EditText {
             }
             canvas.drawRect((float) getScrollX(), (float) ((int) this.lineY), (float) (getScrollX() + getMeasuredWidth()), this.lineY + ((float) extendedPaddingTop), this.linePaint);
         }
+    }
+
+    public void setWindowView(View view) {
+        this.windowView = view;
+    }
+
+    private void cleanupFloatingActionModeViews() {
+        FloatingToolbar floatingToolbar = this.floatingToolbar;
+        if (floatingToolbar != null) {
+            floatingToolbar.dismiss();
+            this.floatingToolbar = null;
+        }
+        if (this.floatingToolbarPreDrawListener != null) {
+            getViewTreeObserver().removeOnPreDrawListener(this.floatingToolbarPreDrawListener);
+            this.floatingToolbarPreDrawListener = null;
+        }
+    }
+
+    public ActionMode startActionMode(Callback callback) {
+        if (VERSION.SDK_INT < 23 || this.windowView == null) {
+            return super.startActionMode(callback);
+        }
+        FloatingActionMode floatingActionMode = this.floatingActionMode;
+        if (floatingActionMode != null) {
+            floatingActionMode.finish();
+        }
+        cleanupFloatingActionModeViews();
+        this.floatingToolbar = new FloatingToolbar(getContext(), this.windowView, getActionModeStyle());
+        this.floatingActionMode = new FloatingActionMode(getContext(), new ActionModeCallback2Wrapper(callback), this, this.floatingToolbar);
+        this.floatingToolbarPreDrawListener = new -$$Lambda$EditTextBoldCursor$xTYV8NPdhWD9vABtK8op5OnAwKw(this);
+        floatingActionMode = this.floatingActionMode;
+        callback.onCreateActionMode(floatingActionMode, floatingActionMode.getMenu());
+        FloatingActionMode floatingActionMode2 = this.floatingActionMode;
+        extendActionMode(floatingActionMode2, floatingActionMode2.getMenu());
+        this.floatingActionMode.invalidate();
+        getViewTreeObserver().addOnPreDrawListener(this.floatingToolbarPreDrawListener);
+        return this.floatingActionMode;
+    }
+
+    public /* synthetic */ boolean lambda$startActionMode$0$EditTextBoldCursor() {
+        this.floatingActionMode.updateViewLocationInWindow();
+        return true;
+    }
+
+    public ActionMode startActionMode(Callback callback, int i) {
+        if (VERSION.SDK_INT < 23 || this.windowView == null) {
+            return super.startActionMode(callback, i);
+        }
+        return startActionMode(callback);
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

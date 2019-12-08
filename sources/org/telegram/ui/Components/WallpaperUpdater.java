@@ -51,7 +51,7 @@ public class WallpaperUpdater {
         CharSequence[] charSequenceArr;
         int[] iArr;
         Builder builder = new Builder(this.parentActivity);
-        builder.setTitle(LocaleController.getString("ChoosePhoto", NUM));
+        builder.setTitle(LocaleController.getString("ChoosePhoto", NUM), true);
         String str = "SelectFromGallery";
         String str2 = "ChooseTakePhoto";
         if (z) {

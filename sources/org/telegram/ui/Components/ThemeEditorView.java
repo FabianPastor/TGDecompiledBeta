@@ -1198,7 +1198,7 @@ public class ThemeEditorView {
             final ThemeEditorView themeEditorView2 = themeEditorView;
             Context context2 = context;
             this.this$0 = themeEditorView2;
-            super(context2, true, 1);
+            super(context2, true);
             this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
             this.containerView = new FrameLayout(context2) {
                 private boolean ignoreLayout = false;

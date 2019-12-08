@@ -450,7 +450,7 @@ public class ProfileSearchCell extends BaseCell {
         r2 = r2.format(r3);
         goto L_0x01dc;
     L_0x01d3:
-        r2 = NUM; // 0x7f0d050a float:1.8744731E38 double:1.053130415E-314;
+        r2 = NUM; // 0x7f0e0517 float:1.887768E38 double:1.0531628004E-314;
         r3 = "HiddenName";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
     L_0x01dc:
@@ -668,13 +668,13 @@ public class ProfileSearchCell extends BaseCell {
         r4 = android.text.TextUtils.isEmpty(r4);
         if (r4 == 0) goto L_0x0371;
     L_0x0363:
-        r4 = NUM; // 0x7f0d025a float:1.8743336E38 double:1.053130075E-314;
+        r4 = NUM; // 0x7f0e025d float:1.8876265E38 double:1.0531624555E-314;
         r7 = "ChannelPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
         goto L_0x03b4;
     L_0x0371:
-        r4 = NUM; // 0x7f0d025d float:1.8743342E38 double:1.0531300765E-314;
+        r4 = NUM; // 0x7f0e0260 float:1.887627E38 double:1.053162457E-314;
         r7 = "ChannelPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
@@ -684,7 +684,7 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r4.has_geo;
         if (r7 == 0) goto L_0x038f;
     L_0x0385:
-        r4 = NUM; // 0x7f0d05d7 float:1.8745147E38 double:1.053130516E-314;
+        r4 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r7 = "MegaLocation";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x03b4;
@@ -693,13 +693,13 @@ public class ProfileSearchCell extends BaseCell {
         r4 = android.text.TextUtils.isEmpty(r4);
         if (r4 == 0) goto L_0x03a5;
     L_0x0397:
-        r4 = NUM; // 0x7f0d05d8 float:1.874515E38 double:1.0531305167E-314;
+        r4 = NUM; // 0x7f0e05e6 float:1.88781E38 double:1.0531629027E-314;
         r7 = "MegaPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
         goto L_0x03b4;
     L_0x03a5:
-        r4 = NUM; // 0x7f0d05db float:1.8745155E38 double:1.053130518E-314;
+        r4 = NUM; // 0x7f0e05e9 float:1.8878106E38 double:1.053162904E-314;
         r7 = "MegaPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
@@ -722,7 +722,7 @@ public class ProfileSearchCell extends BaseCell {
         r4 = org.telegram.messenger.MessagesController.isSupportUser(r4);
         if (r4 == 0) goto L_0x03d6;
     L_0x03cc:
-        r4 = NUM; // 0x7f0d0a2e float:1.87474E38 double:1.053131065E-314;
+        r4 = NUM; // 0x7f0e0a3c float:1.8880352E38 double:1.053163451E-314;
         r7 = "SupportStatus";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x0436;
@@ -731,7 +731,7 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r4.bot;
         if (r7 == 0) goto L_0x03e6;
     L_0x03dc:
-        r4 = NUM; // 0x7f0d01cb float:1.8743046E38 double:1.0531300043E-314;
+        r4 = NUM; // 0x7f0e01ce float:1.8875975E38 double:1.053162385E-314;
         r7 = "Bot";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x0436;
@@ -767,12 +767,12 @@ public class ProfileSearchCell extends BaseCell {
         if (r4 <= r7) goto L_0x0436;
     L_0x041f:
         r2 = org.telegram.ui.ActionBar.Theme.dialogs_onlinePaint;
-        r4 = NUM; // 0x7f0d0703 float:1.8745755E38 double:1.0531306644E-314;
+        r4 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
         r7 = "Online";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x0436;
     L_0x042b:
-        r4 = NUM; // 0x7f0d099b float:1.8747102E38 double:1.0531309925E-314;
+        r4 = NUM; // 0x7f0e09a9 float:1.8880053E38 double:1.0531633785E-314;
         r7 = "ServiceNotifications";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x0436;

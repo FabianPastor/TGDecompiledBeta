@@ -141,7 +141,7 @@ public class EmbedBottomSheet extends BottomSheet {
     private EmbedBottomSheet(Context context, String str, String str2, String str3, String str4, int i, int i2, int i3) {
         Context context2 = context;
         String str5 = str2;
-        super(context2, false, 0);
+        super(context2, false);
         setApplyTopPadding(false);
         setApplyBottomPadding(false);
         this.seekTimeOverride = i3;

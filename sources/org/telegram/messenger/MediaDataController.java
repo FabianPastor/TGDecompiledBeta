@@ -168,10 +168,13 @@ public class MediaDataController extends BaseController {
     private boolean inTransaction;
     public ArrayList<TL_topPeer> inlineBots = new ArrayList();
     private LongSparseArray<TL_messages_stickerSet> installedStickerSetsById = new LongSparseArray();
+    private long lastDialogId;
+    private int lastGuid;
     private long lastMergeDialogId;
     private int lastReqId;
     private int lastReturnedNum;
     private String lastSearchQuery;
+    private User lastSearchUser;
     private int[] loadDate = new int[5];
     private int loadFeaturedDate;
     private int loadFeaturedHash;
@@ -180,6 +183,7 @@ public class MediaDataController extends BaseController {
     boolean loading;
     private boolean loadingDrafts;
     private boolean loadingFeaturedStickers;
+    private boolean loadingMoreSearchMessages;
     private boolean loadingRecentGifs;
     private boolean[] loadingRecentStickers = new boolean[3];
     private boolean[] loadingStickers = new boolean[5];
@@ -373,12 +377,12 @@ public class MediaDataController extends BaseController {
         return false;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x00af  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0050  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x00c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x00e8  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x0056  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00cb  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x0101  */
     public void addRecentSticker(int r14, java.lang.Object r15, org.telegram.tgnet.TLRPC.Document r16, int r17, boolean r18) {
         /*
         r13 = this;
@@ -387,19 +391,22 @@ public class MediaDataController extends BaseController {
         r0 = r16;
         r1 = r18;
         r2 = org.telegram.messenger.MessageObject.isStickerDocument(r16);
-        if (r2 != 0) goto L_0x000d;
+        if (r2 != 0) goto L_0x0013;
     L_0x000c:
+        r2 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r16);
+        if (r2 != 0) goto L_0x0013;
+    L_0x0012:
         return;
-    L_0x000d:
+    L_0x0013:
         r8 = 0;
         r2 = 0;
-    L_0x000f:
+    L_0x0015:
         r3 = r6.recentStickers;
         r3 = r3[r7];
         r3 = r3.size();
         r9 = 1;
-        if (r2 >= r3) goto L_0x0041;
-    L_0x001a:
+        if (r2 >= r3) goto L_0x0047;
+    L_0x0020:
         r3 = r6.recentStickers;
         r3 = r3[r7];
         r3 = r3.get(r2);
@@ -407,53 +414,53 @@ public class MediaDataController extends BaseController {
         r4 = r3.id;
         r10 = r0.id;
         r12 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
-        if (r12 != 0) goto L_0x003e;
-    L_0x002c:
+        if (r12 != 0) goto L_0x0044;
+    L_0x0032:
         r4 = r6.recentStickers;
         r4 = r4[r7];
         r4.remove(r2);
-        if (r1 != 0) goto L_0x003c;
-    L_0x0035:
+        if (r1 != 0) goto L_0x0042;
+    L_0x003b:
         r2 = r6.recentStickers;
         r2 = r2[r7];
         r2.add(r8, r3);
-    L_0x003c:
-        r2 = 1;
-        goto L_0x0042;
-    L_0x003e:
-        r2 = r2 + 1;
-        goto L_0x000f;
-    L_0x0041:
-        r2 = 0;
     L_0x0042:
-        if (r2 != 0) goto L_0x004d;
+        r2 = 1;
+        goto L_0x0048;
     L_0x0044:
-        if (r1 != 0) goto L_0x004d;
-    L_0x0046:
+        r2 = r2 + 1;
+        goto L_0x0015;
+    L_0x0047:
+        r2 = 0;
+    L_0x0048:
+        if (r2 != 0) goto L_0x0053;
+    L_0x004a:
+        if (r1 != 0) goto L_0x0053;
+    L_0x004c:
         r2 = r6.recentStickers;
         r2 = r2[r7];
         r2.add(r8, r0);
-    L_0x004d:
+    L_0x0053:
         r10 = 2;
-        if (r7 != r10) goto L_0x00af;
-    L_0x0050:
-        if (r1 == 0) goto L_0x0065;
-    L_0x0052:
+        if (r7 != r10) goto L_0x00b5;
+    L_0x0056:
+        if (r1 == 0) goto L_0x006b;
+    L_0x0058:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0d08e3 float:1.874673E38 double:1.0531309015E-314;
+        r3 = NUM; // 0x7f0e08f1 float:1.887968E38 double:1.0531632875E-314;
         r4 = "RemovedFromFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r8);
         r2.show();
-        goto L_0x0077;
-    L_0x0065:
+        goto L_0x007d;
+    L_0x006b:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0d00c9 float:1.8742522E38 double:1.053129877E-314;
+        r3 = NUM; // 0x7f0e00cb float:1.887545E38 double:1.053162257E-314;
         r4 = "AddedToFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r8);
         r2.show();
-    L_0x0077:
+    L_0x007d:
         r2 = new org.telegram.tgnet.TLRPC$TL_messages_faveSticker;
         r2.<init>();
         r3 = new org.telegram.tgnet.TLRPC$TL_inputDocument;
@@ -467,11 +474,11 @@ public class MediaDataController extends BaseController {
         r4 = r0.file_reference;
         r3.file_reference = r4;
         r4 = r3.file_reference;
-        if (r4 != 0) goto L_0x0099;
-    L_0x0095:
+        if (r4 != 0) goto L_0x009f;
+    L_0x009b:
         r4 = new byte[r8];
         r3.file_reference = r4;
-    L_0x0099:
+    L_0x009f:
         r2.unfave = r1;
         r3 = r13.getConnectionsManager();
         r4 = new org.telegram.messenger.-$$Lambda$MediaDataController$N40tY5XCjLdrkCjrt1TrAyUNxuI;
@@ -480,23 +487,23 @@ public class MediaDataController extends BaseController {
         r3.sendRequest(r2, r4);
         r2 = r13.getMessagesController();
         r2 = r2.maxFaveStickersCount;
-        goto L_0x00b5;
-    L_0x00af:
+        goto L_0x00bb;
+    L_0x00b5:
         r2 = r13.getMessagesController();
         r2 = r2.maxRecentStickersCount;
-    L_0x00b5:
+    L_0x00bb:
         r3 = r6.recentStickers;
         r3 = r3[r7];
         r3 = r3.size();
-        if (r3 > r2) goto L_0x00c1;
-    L_0x00bf:
-        if (r1 == 0) goto L_0x00e6;
-    L_0x00c1:
-        if (r1 == 0) goto L_0x00c5;
-    L_0x00c3:
-        r2 = r0;
-        goto L_0x00d6;
+        if (r3 > r2) goto L_0x00c7;
     L_0x00c5:
+        if (r1 == 0) goto L_0x00ec;
+    L_0x00c7:
+        if (r1 == 0) goto L_0x00cb;
+    L_0x00c9:
+        r2 = r0;
+        goto L_0x00dc;
+    L_0x00cb:
         r2 = r6.recentStickers;
         r3 = r2[r7];
         r2 = r2[r7];
@@ -504,15 +511,15 @@ public class MediaDataController extends BaseController {
         r2 = r2 - r9;
         r2 = r3.remove(r2);
         r2 = (org.telegram.tgnet.TLRPC.Document) r2;
-    L_0x00d6:
+    L_0x00dc:
         r3 = r13.getMessagesStorage();
         r3 = r3.getStorageQueue();
         r4 = new org.telegram.messenger.-$$Lambda$MediaDataController$ApMTf7BSKef7cNrXIdksWSeKDDA;
         r4.<init>(r13, r14, r2);
         r3.postRunnable(r4);
-    L_0x00e6:
-        if (r1 != 0) goto L_0x00f9;
-    L_0x00e8:
+    L_0x00ec:
+        if (r1 != 0) goto L_0x00ff;
+    L_0x00ee:
         r2 = new java.util.ArrayList;
         r2.<init>();
         r2.add(r0);
@@ -522,9 +529,9 @@ public class MediaDataController extends BaseController {
         r1 = r14;
         r4 = r17;
         r0.processLoadedRecentDocuments(r1, r2, r3, r4, r5);
-    L_0x00f9:
-        if (r7 != r10) goto L_0x0112;
-    L_0x00fb:
+    L_0x00ff:
+        if (r7 != r10) goto L_0x0118;
+    L_0x0101:
         r0 = r13.getNotificationCenter();
         r1 = org.telegram.messenger.NotificationCenter.recentDocumentsDidLoad;
         r2 = new java.lang.Object[r10];
@@ -533,7 +540,7 @@ public class MediaDataController extends BaseController {
         r3 = java.lang.Integer.valueOf(r14);
         r2[r9] = r3;
         r0.postNotificationName(r1, r2);
-    L_0x0112:
+    L_0x0118:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.addRecentSticker(int, java.lang.Object, org.telegram.tgnet.TLRPC$Document, int, boolean):void");
@@ -2365,19 +2372,52 @@ public class MediaDataController extends BaseController {
         return this.lastReturnedNum > 0 ? i | 2 : i;
     }
 
+    public ArrayList<MessageObject> getFoundMessageObjects() {
+        return this.searchResultMessages;
+    }
+
     public boolean isMessageFound(int i, boolean z) {
         return this.searchResultMessagesMap[z].indexOfKey(i) >= 0;
     }
 
     public void searchMessagesInChat(String str, long j, long j2, int i, int i2, User user) {
-        searchMessagesInChat(str, j, j2, i, i2, false, user);
+        searchMessagesInChat(str, j, j2, i, i2, false, user, true);
     }
 
-    private void searchMessagesInChat(String str, long j, long j2, int i, int i2, boolean z, User user) {
+    public void jumpToSearchedMessage(int i, int i2) {
+        if (i2 >= 0 && i2 < this.searchResultMessages.size()) {
+            this.lastReturnedNum = i2;
+            MessageObject messageObject = (MessageObject) this.searchResultMessages.get(this.lastReturnedNum);
+            NotificationCenter notificationCenter = getNotificationCenter();
+            int i3 = NotificationCenter.chatSearchResultsAvailable;
+            r2 = new Object[7];
+            int[] iArr = this.messagesSearchCount;
+            r2[5] = Integer.valueOf(iArr[0] + iArr[1]);
+            r2[6] = Boolean.valueOf(true);
+            notificationCenter.postNotificationName(i3, r2);
+        }
+    }
+
+    public void loadMoreSearchMessages() {
+        if (!this.loadingMoreSearchMessages) {
+            boolean[] zArr = this.messagesSearchEndReached;
+            if (!zArr[0] || this.lastMergeDialogId != 0 || !zArr[1]) {
+                int size = this.searchResultMessages.size();
+                this.lastReturnedNum = this.searchResultMessages.size();
+                searchMessagesInChat(null, this.lastDialogId, this.lastMergeDialogId, this.lastGuid, 1, false, this.lastSearchUser, false);
+                this.lastReturnedNum = size;
+                this.loadingMoreSearchMessages = true;
+            }
+        }
+    }
+
+    private void searchMessagesInChat(String str, long j, long j2, int i, int i2, boolean z, User user, boolean z2) {
         String str2;
         long j3;
         int i3;
-        long j4 = j2;
+        long j4;
+        long j5 = j;
+        long j6 = j2;
         int i4 = i2;
         User user2 = user;
         int i5 = z ^ 1;
@@ -2389,46 +2429,43 @@ public class MediaDataController extends BaseController {
             getConnectionsManager().cancelRequest(this.mergeReqId, true);
             this.mergeReqId = 0;
         }
-        int[] iArr;
         if (str != null) {
             if (i5 != 0) {
-                getNotificationCenter().postNotificationName(NotificationCenter.chatSearchResultsLoading, Integer.valueOf(i));
                 boolean[] zArr = this.messagesSearchEndReached;
                 zArr[1] = false;
                 zArr[0] = false;
-                iArr = this.messagesSearchCount;
+                int[] iArr = this.messagesSearchCount;
                 iArr[1] = 0;
                 iArr[0] = 0;
                 this.searchResultMessages.clear();
                 this.searchResultMessagesMap[0].clear();
                 this.searchResultMessagesMap[1].clear();
+                getNotificationCenter().postNotificationName(NotificationCenter.chatSearchResultsLoading, Integer.valueOf(i));
             }
             str2 = str;
-            j3 = j;
+            j3 = j5;
             i3 = 0;
         } else if (!this.searchResultMessages.isEmpty()) {
             MessageObject messageObject;
             NotificationCenter notificationCenter;
+            int i6;
             Object[] objArr;
+            int[] iArr2;
             if (i4 == 1) {
                 this.lastReturnedNum++;
                 if (this.lastReturnedNum < this.searchResultMessages.size()) {
                     messageObject = (MessageObject) this.searchResultMessages.get(this.lastReturnedNum);
                     notificationCenter = getNotificationCenter();
-                    i4 = NotificationCenter.chatSearchResultsAvailable;
-                    objArr = new Object[6];
-                    objArr[0] = Integer.valueOf(i);
-                    objArr[1] = Integer.valueOf(messageObject.getId());
-                    objArr[2] = Integer.valueOf(getMask());
-                    objArr[3] = Long.valueOf(messageObject.getDialogId());
-                    objArr[4] = Integer.valueOf(this.lastReturnedNum);
-                    iArr = this.messagesSearchCount;
-                    objArr[5] = Integer.valueOf(iArr[0] + iArr[1]);
-                    notificationCenter.postNotificationName(i4, objArr);
+                    i6 = NotificationCenter.chatSearchResultsAvailable;
+                    objArr = new Object[7];
+                    iArr2 = this.messagesSearchCount;
+                    objArr[5] = Integer.valueOf(iArr2[0] + iArr2[1]);
+                    objArr[6] = Boolean.valueOf(z2);
+                    notificationCenter.postNotificationName(i6, objArr);
                     return;
                 }
                 boolean[] zArr2 = this.messagesSearchEndReached;
-                if (zArr2[0] && j4 == 0 && zArr2[1]) {
+                if (zArr2[0] && j6 == 0 && zArr2[1]) {
                     this.lastReturnedNum--;
                     return;
                 }
@@ -2436,13 +2473,13 @@ public class MediaDataController extends BaseController {
                 String str3 = this.lastSearchQuery;
                 ArrayList arrayList = this.searchResultMessages;
                 MessageObject messageObject2 = (MessageObject) arrayList.get(arrayList.size() - 1);
-                if (messageObject2.getDialogId() != j || this.messagesSearchEndReached[0]) {
-                    id = messageObject2.getDialogId() == j4 ? messageObject2.getId() : 0;
+                if (messageObject2.getDialogId() != j5 || this.messagesSearchEndReached[0]) {
+                    id = messageObject2.getDialogId() == j6 ? messageObject2.getId() : 0;
                     this.messagesSearchEndReached[1] = false;
-                    j3 = j4;
+                    j3 = j6;
                 } else {
                     id = messageObject2.getId();
-                    j3 = j;
+                    j3 = j5;
                 }
                 i3 = id;
                 str2 = str3;
@@ -2450,26 +2487,22 @@ public class MediaDataController extends BaseController {
             } else {
                 if (i4 == 2) {
                     this.lastReturnedNum--;
-                    int i6 = this.lastReturnedNum;
-                    if (i6 < 0) {
+                    i5 = this.lastReturnedNum;
+                    if (i5 < 0) {
                         this.lastReturnedNum = 0;
                         return;
                     }
-                    if (i6 >= this.searchResultMessages.size()) {
+                    if (i5 >= this.searchResultMessages.size()) {
                         this.lastReturnedNum = this.searchResultMessages.size() - 1;
                     }
                     messageObject = (MessageObject) this.searchResultMessages.get(this.lastReturnedNum);
                     notificationCenter = getNotificationCenter();
-                    i4 = NotificationCenter.chatSearchResultsAvailable;
-                    objArr = new Object[6];
-                    objArr[0] = Integer.valueOf(i);
-                    objArr[1] = Integer.valueOf(messageObject.getId());
-                    objArr[2] = Integer.valueOf(getMask());
-                    objArr[3] = Long.valueOf(messageObject.getDialogId());
-                    objArr[4] = Integer.valueOf(this.lastReturnedNum);
-                    iArr = this.messagesSearchCount;
-                    objArr[5] = Integer.valueOf(iArr[0] + iArr[1]);
-                    notificationCenter.postNotificationName(i4, objArr);
+                    i6 = NotificationCenter.chatSearchResultsAvailable;
+                    objArr = new Object[7];
+                    iArr2 = this.messagesSearchCount;
+                    objArr[5] = Integer.valueOf(iArr2[0] + iArr2[1]);
+                    objArr[6] = Boolean.valueOf(z2);
+                    notificationCenter.postNotificationName(i6, objArr);
                 }
                 return;
             }
@@ -2477,31 +2510,36 @@ public class MediaDataController extends BaseController {
             return;
         }
         boolean[] zArr3 = this.messagesSearchEndReached;
-        if (!(!zArr3[0] || zArr3[1] || j4 == 0)) {
-            j3 = j4;
+        if (!zArr3[0] || zArr3[1]) {
+            j4 = 0;
+        } else {
+            j4 = 0;
+            if (j6 != 0) {
+                j3 = j6;
+            }
         }
         String str4 = "";
-        if (j3 == j && i5 != 0) {
-            if (j4 != 0) {
-                InputPeer inputPeer = getMessagesController().getInputPeer((int) j4);
+        if (j3 == j5 && i5 != 0) {
+            if (j6 != j4) {
+                InputPeer inputPeer = getMessagesController().getInputPeer((int) j6);
                 if (inputPeer != null) {
                     TL_messages_search tL_messages_search = new TL_messages_search();
                     tL_messages_search.peer = inputPeer;
-                    this.lastMergeDialogId = j4;
+                    this.lastMergeDialogId = j6;
                     tL_messages_search.limit = 1;
-                    if (str2 != null) {
-                        str4 = str2;
+                    if (str2 == null) {
+                        str2 = str4;
                     }
-                    tL_messages_search.q = str4;
+                    tL_messages_search.q = str2;
                     if (user2 != null) {
                         tL_messages_search.from_id = getMessagesController().getInputUser(user2);
                         tL_messages_search.flags = 1 | tL_messages_search.flags;
                     }
                     tL_messages_search.filter = new TL_inputMessagesFilterEmpty();
+                    -$$Lambda$MediaDataController$t79sCOgH_BK1vZD02BGoObpZyqs -__lambda_mediadatacontroller_t79scogh_bk1vzd02bgoobpzyqs = r0;
                     ConnectionsManager connectionsManager = getConnectionsManager();
-                    -$$Lambda$MediaDataController$IvdygKTMAa7cAXTE8kBe7fMOMpY -__lambda_mediadatacontroller_ivdygktmaa7caxte8kbe7fmompy = r0;
-                    -$$Lambda$MediaDataController$IvdygKTMAa7cAXTE8kBe7fMOMpY -__lambda_mediadatacontroller_ivdygktmaa7caxte8kbe7fmompy2 = new -$$Lambda$MediaDataController$IvdygKTMAa7cAXTE8kBe7fMOMpY(this, j2, tL_messages_search, j, i, i2, user);
-                    this.mergeReqId = connectionsManager.sendRequest(tL_messages_search, -__lambda_mediadatacontroller_ivdygktmaa7caxte8kbe7fmompy, 2);
+                    -$$Lambda$MediaDataController$t79sCOgH_BK1vZD02BGoObpZyqs -__lambda_mediadatacontroller_t79scogh_bk1vzd02bgoobpzyqs2 = new -$$Lambda$MediaDataController$t79sCOgH_BK1vZD02BGoObpZyqs(this, j2, tL_messages_search, j, i, i2, user, z2);
+                    this.mergeReqId = connectionsManager.sendRequest(tL_messages_search, -__lambda_mediadatacontroller_t79scogh_bk1vzd02bgoobpzyqs, 2);
                     return;
                 }
                 return;
@@ -2510,14 +2548,14 @@ public class MediaDataController extends BaseController {
             this.messagesSearchEndReached[1] = true;
             this.messagesSearchCount[1] = 0;
         }
-        TLObject tL_messages_search2 = new TL_messages_search();
+        TL_messages_search tL_messages_search2 = new TL_messages_search();
         tL_messages_search2.peer = getMessagesController().getInputPeer((int) j3);
         if (tL_messages_search2.peer != null) {
+            this.lastGuid = i;
+            this.lastDialogId = j5;
+            this.lastSearchUser = user2;
             tL_messages_search2.limit = 21;
-            if (str2 != null) {
-                str4 = str2;
-            }
-            tL_messages_search2.q = str4;
+            tL_messages_search2.q = str2 != null ? str2 : str4;
             tL_messages_search2.offset_id = i3;
             if (user2 != null) {
                 tL_messages_search2.from_id = getMessagesController().getInputUser(user2);
@@ -2527,33 +2565,39 @@ public class MediaDataController extends BaseController {
             int i7 = this.lastReqId + 1;
             this.lastReqId = i7;
             this.lastSearchQuery = str2;
-            this.reqId = getConnectionsManager().sendRequest(tL_messages_search2, new -$$Lambda$MediaDataController$TpgNOhYbc5rGwY7F2C1jsnJq70M(this, i7, tL_messages_search2, j3, j, i, j2, user), 2);
+            ConnectionsManager connectionsManager2 = getConnectionsManager();
+            -$$Lambda$MediaDataController$izlKhgh4yxwJmdtmpj3x85lX1ms -__lambda_mediadatacontroller_izlkhgh4yxwjmdtmpj3x85lx1ms = r0;
+            -$$Lambda$MediaDataController$izlKhgh4yxwJmdtmpj3x85lX1ms -__lambda_mediadatacontroller_izlkhgh4yxwjmdtmpj3x85lx1ms2 = new -$$Lambda$MediaDataController$izlKhgh4yxwJmdtmpj3x85lX1ms(this, i7, z2, tL_messages_search2, j3, j, i, j2, user);
+            this.reqId = connectionsManager2.sendRequest(tL_messages_search2, -__lambda_mediadatacontroller_izlkhgh4yxwjmdtmpj3x85lx1ms, 2);
         }
     }
 
-    public /* synthetic */ void lambda$searchMessagesInChat$51$MediaDataController(long j, TL_messages_search tL_messages_search, long j2, int i, int i2, User user, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MediaDataController$VWSG6yP647DM43009N5eXIKMVDo(this, j, tLObject, tL_messages_search, j2, i, i2, user));
+    public /* synthetic */ void lambda$searchMessagesInChat$51$MediaDataController(long j, TL_messages_search tL_messages_search, long j2, int i, int i2, User user, boolean z, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MediaDataController$ApkY38e2HherfRSM8RvcClmvJp8(this, j, tLObject, tL_messages_search, j2, i, i2, user, z));
     }
 
-    public /* synthetic */ void lambda$null$50$MediaDataController(long j, TLObject tLObject, TL_messages_search tL_messages_search, long j2, int i, int i2, User user) {
+    public /* synthetic */ void lambda$null$50$MediaDataController(long j, TLObject tLObject, TL_messages_search tL_messages_search, long j2, int i, int i2, User user, boolean z) {
         if (this.lastMergeDialogId == j) {
             this.mergeReqId = 0;
             if (tLObject != null) {
                 messages_Messages messages_messages = (messages_Messages) tLObject;
                 this.messagesSearchEndReached[1] = messages_messages.messages.isEmpty();
                 this.messagesSearchCount[1] = messages_messages instanceof TL_messages_messagesSlice ? messages_messages.count : messages_messages.messages.size();
-                searchMessagesInChat(tL_messages_search.q, j2, j, i, i2, true, user);
+                searchMessagesInChat(tL_messages_search.q, j2, j, i, i2, true, user, z);
             }
         }
     }
 
-    public /* synthetic */ void lambda$searchMessagesInChat$53$MediaDataController(int i, TL_messages_search tL_messages_search, long j, long j2, int i2, long j3, User user, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MediaDataController$DkfEnQBE92XCIhaSZu1D-OEydlo(this, i, tLObject, tL_messages_search, j, j2, i2, j3, user));
+    public /* synthetic */ void lambda$searchMessagesInChat$53$MediaDataController(int i, boolean z, TL_messages_search tL_messages_search, long j, long j2, int i2, long j3, User user, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MediaDataController$HHvzeuj1j0FxojNyrqC1i5fkU1Y(this, i, z, tLObject, tL_messages_search, j, j2, i2, j3, user));
     }
 
-    public /* synthetic */ void lambda$null$52$MediaDataController(int i, TLObject tLObject, TL_messages_search tL_messages_search, long j, long j2, int i2, long j3, User user) {
+    public /* synthetic */ void lambda$null$52$MediaDataController(int i, boolean z, TLObject tLObject, TL_messages_search tL_messages_search, long j, long j2, int i2, long j3, User user) {
         if (i == this.lastReqId) {
             this.reqId = 0;
+            if (!z) {
+                this.loadingMoreSearchMessages = false;
+            }
             if (tLObject != null) {
                 messages_Messages messages_messages = (messages_Messages) tLObject;
                 int i3 = 0;
@@ -2590,7 +2634,7 @@ public class MediaDataController extends BaseController {
                 int size = ((messages_messages instanceof TL_messages_messagesSlice) || (messages_messages instanceof TL_messages_channelMessages)) ? messages_messages.count : messages_messages.messages.size();
                 iArr[i4] = size;
                 if (this.searchResultMessages.isEmpty()) {
-                    getNotificationCenter().postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i2), Integer.valueOf(0), Integer.valueOf(getMask()), Long.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
+                    getNotificationCenter().postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i2), Integer.valueOf(0), Integer.valueOf(getMask()), Long.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Boolean.valueOf(false));
                 } else if (obj != null) {
                     if (this.lastReturnedNum >= this.searchResultMessages.size()) {
                         this.lastReturnedNum = this.searchResultMessages.size() - 1;
@@ -2598,20 +2642,16 @@ public class MediaDataController extends BaseController {
                     MessageObject messageObject2 = (MessageObject) this.searchResultMessages.get(this.lastReturnedNum);
                     NotificationCenter notificationCenter = getNotificationCenter();
                     int i5 = NotificationCenter.chatSearchResultsAvailable;
-                    Object[] objArr = new Object[6];
-                    objArr[0] = Integer.valueOf(i2);
-                    objArr[1] = Integer.valueOf(messageObject2.getId());
-                    objArr[2] = Integer.valueOf(getMask());
-                    objArr[3] = Long.valueOf(messageObject2.getDialogId());
-                    objArr[4] = Integer.valueOf(this.lastReturnedNum);
+                    r12 = new Object[7];
                     int[] iArr2 = this.messagesSearchCount;
-                    objArr[5] = Integer.valueOf(iArr2[0] + iArr2[1]);
-                    notificationCenter.postNotificationName(i5, objArr);
+                    r12[5] = Integer.valueOf(iArr2[0] + iArr2[1]);
+                    r12[6] = Boolean.valueOf(z);
+                    notificationCenter.postNotificationName(i5, r12);
                 }
                 if (j == j2) {
                     boolean[] zArr = this.messagesSearchEndReached;
                     if (zArr[0] && j3 != 0 && !zArr[1]) {
-                        searchMessagesInChat(this.lastSearchQuery, j2, j3, i2, 0, true, user);
+                        searchMessagesInChat(this.lastSearchQuery, j2, j3, i2, 0, true, user, z);
                     }
                 }
             }
@@ -3583,13 +3623,13 @@ public class MediaDataController extends BaseController {
         r10 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ all -> 0x02b7 }
         r11 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b7 }
         r10.<init>(r11, r9);	 Catch:{ all -> 0x02b7 }
-        r11 = NUM; // 0x7f0d062e float:1.8745323E38 double:1.053130559E-314;
+        r11 = NUM; // 0x7f0e063c float:1.8878275E38 double:1.053162945E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ all -> 0x02b7 }
         r10 = r10.setShortLabel(r12);	 Catch:{ all -> 0x02b7 }
         r0 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ all -> 0x02b7 }
         r0 = r10.setLongLabel(r0);	 Catch:{ all -> 0x02b7 }
         r10 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b7 }
-        r11 = NUM; // 0x7var_ float:1.7945754E38 double:1.0529357896E-314;
+        r11 = NUM; // 0x7var_a float:1.7945896E38 double:1.052935824E-314;
         r10 = android.graphics.drawable.Icon.createWithResource(r10, r11);	 Catch:{ all -> 0x02b7 }
         r0 = r0.setIcon(r10);	 Catch:{ all -> 0x02b7 }
         r0 = r0.setIntent(r3);	 Catch:{ all -> 0x02b7 }
@@ -3821,7 +3861,7 @@ public class MediaDataController extends BaseController {
         goto L_0x029a;
     L_0x028e:
         r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b7 }
-        r6 = NUM; // 0x7var_ float:1.7945756E38 double:1.05293579E-314;
+        r6 = NUM; // 0x7var_b float:1.7945898E38 double:1.0529358247E-314;
         r3 = android.graphics.drawable.Icon.createWithResource(r3, r6);	 Catch:{ all -> 0x02b7 }
         r1.setIcon(r3);	 Catch:{ all -> 0x02b7 }
     L_0x029a:
@@ -4330,7 +4370,7 @@ public class MediaDataController extends BaseController {
         if (r8 == 0) goto L_0x006b;
     L_0x005e:
         r8 = "SavedMessages";
-        r9 = NUM; // 0x7f0d0937 float:1.87469E38 double:1.053130943E-314;
+        r9 = NUM; // 0x7f0e0945 float:1.887985E38 double:1.053163329E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);	 Catch:{ Exception -> 0x023d }
         r9 = r4;
         r10 = r8;
@@ -4442,7 +4482,7 @@ public class MediaDataController extends BaseController {
     L_0x0120:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x014f }
         r0 = r0.getResources();	 Catch:{ all -> 0x014f }
-        r8 = NUM; // 0x7var_e float:1.7944671E38 double:1.052935526E-314;
+        r8 = NUM; // 0x7var_ float:1.7944789E38 double:1.0529355544E-314;
         r0 = r0.getDrawable(r8);	 Catch:{ all -> 0x014f }
         r8 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ all -> 0x014f }
@@ -4467,10 +4507,10 @@ public class MediaDataController extends BaseController {
     L_0x0153:
         r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x023d }
         r8 = 26;
-        r11 = NUM; // 0x7var_c float:1.7944667E38 double:1.052935525E-314;
-        r12 = NUM; // 0x7var_d float:1.794467E38 double:1.0529355253E-314;
-        r13 = NUM; // 0x7var_b float:1.7944665E38 double:1.0529355243E-314;
-        r14 = NUM; // 0x7var_f float:1.7944673E38 double:1.0529355262E-314;
+        r11 = NUM; // 0x7var_ float:1.7944785E38 double:1.0529355534E-314;
+        r12 = NUM; // 0x7var_ float:1.7944787E38 double:1.052935554E-314;
+        r13 = NUM; // 0x7var_ float:1.7944783E38 double:1.052935553E-314;
+        r14 = NUM; // 0x7var_ float:1.794479E38 double:1.052935555E-314;
         if (r0 < r8) goto L_0x01da;
     L_0x0165:
         r0 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ Exception -> 0x023d }

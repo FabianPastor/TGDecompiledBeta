@@ -278,7 +278,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     public StickersAlert(Context context, Object obj, Photo photo) {
-        super(context, false, 1);
+        super(context, false);
         this.shadowAnimation = new AnimatorSet[2];
         this.shadow = new View[2];
         this.previewDelegate = new ContentPreviewViewerDelegate() {
@@ -377,7 +377,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     public StickersAlert(Context context, BaseFragment baseFragment, InputStickerSet inputStickerSet, TL_messages_stickerSet tL_messages_stickerSet, StickersAlertDelegate stickersAlertDelegate) {
-        super(context, false, 1);
+        super(context, false);
         this.shadowAnimation = new AnimatorSet[2];
         this.shadow = new View[2];
         this.previewDelegate = /* anonymous class already generated */;
@@ -1222,7 +1222,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r1 = r0.set;
         r1 = r1.masks;
-        r6 = NUM; // 0x7f0d08e2 float:1.8746727E38 double:1.053130901E-314;
+        r6 = NUM; // 0x7f0e08f0 float:1.8879678E38 double:1.053163287E-314;
         r7 = "RemoveStickersCount";
         if (r1 == 0) goto L_0x00d0;
     L_0x00b9:
@@ -1264,7 +1264,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r6 = r0.set;
         r6 = r6.masks;
-        r7 = NUM; // 0x7f0d00bc float:1.8742496E38 double:1.0531298704E-314;
+        r7 = NUM; // 0x7f0e00be float:1.8875423E38 double:1.0531622505E-314;
         r8 = "AddStickersCount";
         if (r6 == 0) goto L_0x012e;
     L_0x0117:
@@ -1294,7 +1294,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0.notifyDataSetChanged();
         goto L_0x016f;
     L_0x0156:
-        r0 = NUM; // 0x7f0d02e2 float:1.8743612E38 double:1.053130142E-314;
+        r0 = NUM; // 0x7f0e02e5 float:1.887654E38 double:1.0531625227E-314;
         r2 = "Close";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = r0.toUpperCase();

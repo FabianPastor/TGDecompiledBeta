@@ -2212,20 +2212,20 @@ public class LoginActivity extends BaseFragment {
             AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$LoginActivitySmsView$KDcbJgHhkQhO0H1lUrS7lHNHtoc(this, tL_error, tLObject, tL_auth_signIn));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x00b0  */
-        /* JADX WARNING: Removed duplicated region for block: B:29:0x00a3  */
-        /* JADX WARNING: Removed duplicated region for block: B:34:0x00c4  */
-        /* JADX WARNING: Removed duplicated region for block: B:29:0x00a3  */
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x00b0  */
-        /* JADX WARNING: Removed duplicated region for block: B:34:0x00c4  */
-        /* JADX WARNING: Missing block: B:16:0x0088, code skipped:
-            if (r7 != 2) goto L_0x008a;
+        /* JADX WARNING: Removed duplicated region for block: B:30:0x00b2  */
+        /* JADX WARNING: Removed duplicated region for block: B:29:0x00a5  */
+        /* JADX WARNING: Removed duplicated region for block: B:34:0x00c6  */
+        /* JADX WARNING: Removed duplicated region for block: B:29:0x00a5  */
+        /* JADX WARNING: Removed duplicated region for block: B:30:0x00b2  */
+        /* JADX WARNING: Removed duplicated region for block: B:34:0x00c6  */
+        /* JADX WARNING: Missing block: B:16:0x008a, code skipped:
+            if (r7 != 2) goto L_0x008c;
      */
-        /* JADX WARNING: Missing block: B:21:0x0092, code skipped:
-            if (r7 != 3) goto L_0x0094;
+        /* JADX WARNING: Missing block: B:21:0x0094, code skipped:
+            if (r7 != 3) goto L_0x0096;
      */
-        /* JADX WARNING: Missing block: B:25:0x009a, code skipped:
-            if (r5.nextType == 2) goto L_0x009c;
+        /* JADX WARNING: Missing block: B:25:0x009c, code skipped:
+            if (r5.nextType == 2) goto L_0x009e;
      */
         public /* synthetic */ void lambda$null$7$LoginActivity$LoginActivitySmsView(org.telegram.tgnet.TLRPC.TL_error r6, org.telegram.tgnet.TLObject r7, org.telegram.tgnet.TLRPC.TL_auth_signIn r8) {
             /*
@@ -2264,12 +2264,12 @@ public class LoginActivity extends BaseFragment {
             r7 = r5.this$0;
             r8 = 5;
             r7.setPage(r8, r2, r6, r1);
-            goto L_0x0190;
+            goto L_0x0192;
         L_0x0043:
             r6 = r5.this$0;
             r7 = (org.telegram.tgnet.TLRPC.TL_auth_authorization) r7;
             r6.onAuthSuccess(r7);
-            goto L_0x0190;
+            goto L_0x0192;
         L_0x004c:
             r7 = r6.text;
             r5.lastError = r7;
@@ -2288,118 +2288,119 @@ public class LoginActivity extends BaseFragment {
             r7.sendRequest(r6, r1, r8);
             r5.destroyTimer();
             r5.destroyCodeTimer();
-            goto L_0x0190;
+            goto L_0x0192;
         L_0x0079:
+            r5.nextPressed = r1;
             r7 = r5.this$0;
             r7.needHideProgress(r1);
             r7 = r5.currentType;
             r8 = 4;
             r3 = 2;
-            if (r7 != r0) goto L_0x008a;
-        L_0x0084:
+            if (r7 != r0) goto L_0x008c;
+        L_0x0086:
             r7 = r5.nextType;
-            if (r7 == r8) goto L_0x009c;
-        L_0x0088:
-            if (r7 == r3) goto L_0x009c;
+            if (r7 == r8) goto L_0x009e;
         L_0x008a:
+            if (r7 == r3) goto L_0x009e;
+        L_0x008c:
             r7 = r5.currentType;
-            if (r7 != r3) goto L_0x0094;
-        L_0x008e:
+            if (r7 != r3) goto L_0x0096;
+        L_0x0090:
             r7 = r5.nextType;
-            if (r7 == r8) goto L_0x009c;
-        L_0x0092:
-            if (r7 == r0) goto L_0x009c;
+            if (r7 == r8) goto L_0x009e;
         L_0x0094:
+            if (r7 == r0) goto L_0x009e;
+        L_0x0096:
             r7 = r5.currentType;
-            if (r7 != r8) goto L_0x009f;
-        L_0x0098:
+            if (r7 != r8) goto L_0x00a1;
+        L_0x009a:
             r7 = r5.nextType;
-            if (r7 != r3) goto L_0x009f;
-        L_0x009c:
+            if (r7 != r3) goto L_0x00a1;
+        L_0x009e:
             r5.createTimer();
-        L_0x009f:
+        L_0x00a1:
             r7 = r5.currentType;
-            if (r7 != r3) goto L_0x00b0;
-        L_0x00a3:
+            if (r7 != r3) goto L_0x00b2;
+        L_0x00a5:
             org.telegram.messenger.AndroidUtilities.setWaitingForSms(r2);
             r7 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
             r8 = org.telegram.messenger.NotificationCenter.didReceiveSmsCode;
             r7.addObserver(r5, r8);
-            goto L_0x00be;
-        L_0x00b0:
-            if (r7 != r0) goto L_0x00be;
+            goto L_0x00c0;
         L_0x00b2:
+            if (r7 != r0) goto L_0x00c0;
+        L_0x00b4:
             org.telegram.messenger.AndroidUtilities.setWaitingForCall(r2);
             r7 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
             r8 = org.telegram.messenger.NotificationCenter.didReceiveCall;
             r7.addObserver(r5, r8);
-        L_0x00be:
+        L_0x00c0:
             r5.waitingForEvent = r2;
             r7 = r5.currentType;
-            if (r7 == r0) goto L_0x018f;
-        L_0x00c4:
+            if (r7 == r0) goto L_0x0191;
+        L_0x00c6:
             r7 = r6.text;
             r8 = "PHONE_NUMBER_INVALID";
             r7 = r7.contains(r8);
-            r8 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
+            r8 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
             r3 = "AppName";
-            if (r7 == 0) goto L_0x00e7;
-        L_0x00d3:
+            if (r7 == 0) goto L_0x00e9;
+        L_0x00d5:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d0531 float:1.874481E38 double:1.053130434E-314;
+            r8 = NUM; // 0x7f0e053f float:1.8877761E38 double:1.05316282E-314;
             r2 = "InvalidPhoneNumber";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
-            goto L_0x018f;
-        L_0x00e7:
+            goto L_0x0191;
+        L_0x00e9:
             r7 = r6.text;
             r4 = "PHONE_CODE_EMPTY";
             r7 = r7.contains(r4);
-            if (r7 != 0) goto L_0x0168;
-        L_0x00f1:
+            if (r7 != 0) goto L_0x016a;
+        L_0x00f3:
             r7 = r6.text;
             r4 = "PHONE_CODE_INVALID";
             r7 = r7.contains(r4);
-            if (r7 == 0) goto L_0x00fc;
-        L_0x00fb:
-            goto L_0x0168;
-        L_0x00fc:
+            if (r7 == 0) goto L_0x00fe;
+        L_0x00fd:
+            goto L_0x016a;
+        L_0x00fe:
             r7 = r6.text;
             r4 = "PHONE_CODE_EXPIRED";
             r7 = r7.contains(r4);
-            if (r7 == 0) goto L_0x0122;
-        L_0x0106:
+            if (r7 == 0) goto L_0x0124;
+        L_0x0108:
             r5.onBackPressed(r2);
             r6 = r5.this$0;
             r7 = 0;
             r6.setPage(r1, r2, r7, r2);
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d02e5 float:1.8743618E38 double:1.0531301436E-314;
+            r8 = NUM; // 0x7f0e02e8 float:1.8876547E38 double:1.053162524E-314;
             r2 = "CodeExpired";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
-            goto L_0x018f;
-        L_0x0122:
+            goto L_0x0191;
+        L_0x0124:
             r7 = r6.text;
             r2 = "FLOOD_WAIT";
             r7 = r7.startsWith(r2);
-            if (r7 == 0) goto L_0x013f;
-        L_0x012c:
+            if (r7 == 0) goto L_0x0141;
+        L_0x012e:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d0479 float:1.8744437E38 double:1.0531303432E-314;
+            r8 = NUM; // 0x7f0e0484 float:1.8877382E38 double:1.053162728E-314;
             r2 = "FloodWait";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
-            goto L_0x018f;
-        L_0x013f:
+            goto L_0x0191;
+        L_0x0141:
             r7 = r5.this$0;
             r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
             r2 = new java.lang.StringBuilder;
             r2.<init>();
-            r3 = NUM; // 0x7f0d03f9 float:1.8744177E38 double:1.05313028E-314;
+            r3 = NUM; // 0x7f0e0404 float:1.8877123E38 double:1.0531626645E-314;
             r4 = "ErrorOccurred";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r2.append(r3);
@@ -2409,38 +2410,38 @@ public class LoginActivity extends BaseFragment {
             r2.append(r6);
             r6 = r2.toString();
             r7.needShowAlert(r8, r6);
-            goto L_0x018f;
-        L_0x0168:
+            goto L_0x0191;
+        L_0x016a:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d052e float:1.8744804E38 double:1.0531304327E-314;
+            r8 = NUM; // 0x7f0e053c float:1.8877755E38 double:1.0531628187E-314;
             r2 = "InvalidCode";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
             r6 = 0;
-        L_0x017b:
+        L_0x017d:
             r7 = r5.codeField;
             r8 = r7.length;
-            if (r6 >= r8) goto L_0x018a;
-        L_0x0180:
+            if (r6 >= r8) goto L_0x018c;
+        L_0x0182:
             r7 = r7[r6];
             r8 = "";
             r7.setText(r8);
             r6 = r6 + 1;
-            goto L_0x017b;
-        L_0x018a:
+            goto L_0x017d;
+        L_0x018c:
             r6 = r7[r1];
             r6.requestFocus();
-        L_0x018f:
+        L_0x0191:
             r2 = 0;
-        L_0x0190:
-            if (r2 == 0) goto L_0x0199;
         L_0x0192:
+            if (r2 == 0) goto L_0x019b;
+        L_0x0194:
             r6 = r5.currentType;
-            if (r6 != r0) goto L_0x0199;
-        L_0x0196:
+            if (r6 != r0) goto L_0x019b;
+        L_0x0198:
             org.telegram.messenger.AndroidUtilities.endIncomingCall();
-        L_0x0199:
+        L_0x019b:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity$LoginActivitySmsView.lambda$null$7$LoginActivity$LoginActivitySmsView(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_auth_signIn):void");

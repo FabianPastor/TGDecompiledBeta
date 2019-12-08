@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContactsSource xmlns:android="http://schemas.android.com/apk/res/android">
+<ContactsSource xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
     <ContactsDataKind android:icon="@drawable/ic_launcher_dr" android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile" android:summaryColumn="data2" android:detailColumn="data3" android:detailSocialSummary="true"/>
 </ContactsSource>

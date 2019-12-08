@@ -678,8 +678,8 @@ public class DocumentSelectActivity extends BaseFragment {
         r4 = android.os.Environment.getExternalStorageState();
         r5 = "mounted";
         r5 = r4.equals(r5);
-        r6 = NUM; // 0x7var_c4 float:1.7944975E38 double:1.0529356E-314;
-        r7 = NUM; // 0x7f0d0940 float:1.8746918E38 double:1.0531309475E-314;
+        r6 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
+        r7 = NUM; // 0x7f0e094e float:1.8879869E38 double:1.0531633335E-314;
         r8 = "SdCard";
         if (r5 != 0) goto L_0x0036;
     L_0x002e:
@@ -697,11 +697,11 @@ public class DocumentSelectActivity extends BaseFragment {
         r4.icon = r6;
         goto L_0x005a;
     L_0x004a:
-        r5 = NUM; // 0x7f0d052d float:1.8744802E38 double:1.053130432E-314;
+        r5 = NUM; // 0x7f0e053b float:1.8877753E38 double:1.053162818E-314;
         r9 = "InternalStorage";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r4.title = r5;
-        r5 = NUM; // 0x7var_e0 float:1.7945032E38 double:1.0529356137E-314;
+        r5 = NUM; // 0x7var_ float:1.7945168E38 double:1.052935647E-314;
         r4.icon = r5;
     L_0x005a:
         r5 = r11.getRootSubtitle(r3);
@@ -808,7 +808,7 @@ public class DocumentSelectActivity extends BaseFragment {
         goto L_0x013a;
     L_0x012f:
         r9 = "ExternalStorage";
-        r10 = NUM; // 0x7f0d0466 float:1.8744399E38 double:1.053130334E-314;
+        r10 = NUM; // 0x7f0e0471 float:1.8877344E38 double:1.0531627184E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r9, r10);	 Catch:{ Exception -> 0x0150 }
         r5.title = r9;	 Catch:{ Exception -> 0x0150 }
     L_0x013a:
@@ -852,11 +852,11 @@ public class DocumentSelectActivity extends BaseFragment {
         r2.<init>(r11, r1);
         r3 = "/";
         r2.title = r3;
-        r4 = NUM; // 0x7f0d0a37 float:1.8747419E38 double:1.0531310695E-314;
+        r4 = NUM; // 0x7f0e0a45 float:1.888037E38 double:1.0531634555E-314;
         r5 = "SystemRoot";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.subtitle = r4;
-        r4 = NUM; // 0x7var_c2 float:1.7944971E38 double:1.052935599E-314;
+        r4 = NUM; // 0x7var_ float:1.7945107E38 double:1.052935632E-314;
         r2.icon = r4;
         r5 = new java.io.File;
         r5.<init>(r3);
@@ -885,15 +885,15 @@ public class DocumentSelectActivity extends BaseFragment {
     L_0x01be:
         r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
         r0.<init>(r11, r1);
-        r2 = NUM; // 0x7f0d04d4 float:1.8744622E38 double:1.053130388E-314;
+        r2 = NUM; // 0x7f0e04df float:1.8877567E38 double:1.0531627727E-314;
         r3 = "Gallery";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0d04d5 float:1.8744624E38 double:1.0531303887E-314;
+        r2 = NUM; // 0x7f0e04e0 float:1.8877569E38 double:1.053162773E-314;
         r3 = "GalleryInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
-        r2 = NUM; // 0x7var_e1 float:1.7945034E38 double:1.052935614E-314;
+        r2 = NUM; // 0x7var_ float:1.794517E38 double:1.0529356473E-314;
         r0.icon = r2;
         r0.file = r1;
         r2 = r11.items;
@@ -903,15 +903,15 @@ public class DocumentSelectActivity extends BaseFragment {
     L_0x01e9:
         r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
         r0.<init>(r11, r1);
-        r2 = NUM; // 0x7f0d014a float:1.8742784E38 double:1.0531299406E-314;
+        r2 = NUM; // 0x7f0e014c float:1.887571E38 double:1.0531623207E-314;
         r3 = "AttachMusic";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0d061a float:1.8745283E38 double:1.0531305493E-314;
+        r2 = NUM; // 0x7f0e0628 float:1.8878234E38 double:1.0531629353E-314;
         r3 = "MusicInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
-        r2 = NUM; // 0x7var_e2 float:1.7945036E38 double:1.0529356147E-314;
+        r2 = NUM; // 0x7var_ float:1.7945172E38 double:1.052935648E-314;
         r0.icon = r2;
         r0.file = r1;
         r1 = r11.items;

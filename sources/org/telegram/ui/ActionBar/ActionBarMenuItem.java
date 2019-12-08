@@ -1,5 +1,6 @@
 package org.telegram.ui.ActionBar;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
@@ -45,7 +46,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean ignoreOnTextChange;
     private boolean isSearchField;
     private boolean layoutInScreen;
-    private ActionBarMenuItemSearchListener listener;
+    protected ActionBarMenuItemSearchListener listener;
     private int[] location;
     private boolean longClickEnabled;
     protected boolean overrideMenuClick;
@@ -75,6 +76,10 @@ public class ActionBarMenuItem extends FrameLayout {
 
         public boolean forceShowClear() {
             return false;
+        }
+
+        public Animator getCustomToggleTransition() {
+            return null;
         }
 
         public void onCaptionCleared() {
@@ -516,7 +521,7 @@ public class ActionBarMenuItem extends FrameLayout {
         goto L_0x005a;
     L_0x0052:
         r0 = r6.popupWindow;
-        r3 = NUM; // 0x7f0e0007 float:1.8875052E38 double:1.05316216E-314;
+        r3 = NUM; // 0x7f0var_ float:1.9007975E38 double:1.053194539E-314;
         r0.setAnimationStyle(r3);
     L_0x005a:
         r0 = r6.animationEnabled;
@@ -599,26 +604,31 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public boolean toggleSearch(boolean z) {
-        FrameLayout frameLayout = this.searchContainer;
-        if (frameLayout == null) {
+        if (this.searchContainer == null) {
             return false;
         }
+        ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = this.listener;
         String str = "";
-        ActionBarMenuItemSearchListener actionBarMenuItemSearchListener;
-        if (frameLayout.getVisibility() == 0) {
-            ActionBarMenuItemSearchListener actionBarMenuItemSearchListener2 = this.listener;
-            if (actionBarMenuItemSearchListener2 == null || (actionBarMenuItemSearchListener2 != null && actionBarMenuItemSearchListener2.canCollapseSearch())) {
-                if (z) {
-                    AndroidUtilities.hideKeyboard(this.searchField);
-                }
+        if (actionBarMenuItemSearchListener != null) {
+            Animator customToggleTransition = actionBarMenuItemSearchListener.getCustomToggleTransition();
+            if (customToggleTransition != null) {
                 this.searchField.setText(str);
-                this.searchContainer.setVisibility(8);
-                this.searchField.clearFocus();
-                setVisibility(0);
-                actionBarMenuItemSearchListener = this.listener;
-                if (actionBarMenuItemSearchListener != null) {
-                    actionBarMenuItemSearchListener.onSearchCollapse();
-                }
+                customToggleTransition.start();
+                return true;
+            }
+        }
+        ActionBarMenuItemSearchListener actionBarMenuItemSearchListener2;
+        if (this.searchContainer.getVisibility() == 0) {
+            if (z) {
+                AndroidUtilities.hideKeyboard(this.searchField);
+            }
+            this.searchField.setText(str);
+            this.searchContainer.setVisibility(8);
+            this.searchField.clearFocus();
+            setVisibility(0);
+            actionBarMenuItemSearchListener2 = this.listener;
+            if (actionBarMenuItemSearchListener2 != null) {
+                actionBarMenuItemSearchListener2.onSearchCollapse();
             }
             return false;
         }
@@ -629,9 +639,9 @@ public class ActionBarMenuItem extends FrameLayout {
         if (z) {
             AndroidUtilities.showKeyboard(this.searchField);
         }
-        actionBarMenuItemSearchListener = this.listener;
-        if (actionBarMenuItemSearchListener != null) {
-            actionBarMenuItemSearchListener.onSearchExpand();
+        actionBarMenuItemSearchListener2 = this.listener;
+        if (actionBarMenuItemSearchListener2 != null) {
+            actionBarMenuItemSearchListener2.onSearchExpand();
         }
         return true;
     }
@@ -801,36 +811,42 @@ public class ActionBarMenuItem extends FrameLayout {
                         ActionBarMenuItem.this.ignoreOnTextChange = false;
                         return;
                     }
-                    if (ActionBarMenuItem.this.listener != null) {
-                        ActionBarMenuItem.this.listener.onTextChanged(ActionBarMenuItem.this.searchField);
+                    ActionBarMenuItem actionBarMenuItem = ActionBarMenuItem.this;
+                    ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = actionBarMenuItem.listener;
+                    if (actionBarMenuItemSearchListener != null) {
+                        actionBarMenuItemSearchListener.onTextChanged(actionBarMenuItem.searchField);
                     }
                     if (ActionBarMenuItem.this.clearButton != null) {
-                        if (!TextUtils.isEmpty(charSequence) || ((ActionBarMenuItem.this.listener != null && ActionBarMenuItem.this.listener.forceShowClear()) || (ActionBarMenuItem.this.searchFieldCaption != null && ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0))) {
-                            if (ActionBarMenuItem.this.clearButton.getTag() == null) {
-                                ActionBarMenuItem.this.clearButton.setTag(Integer.valueOf(1));
-                                ActionBarMenuItem.this.clearButton.clearAnimation();
-                                ActionBarMenuItem.this.clearButton.setVisibility(0);
-                                if (ActionBarMenuItem.this.animateClear) {
-                                    ActionBarMenuItem.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(1.0f).setDuration(180).scaleY(1.0f).scaleX(1.0f).rotation(0.0f).start();
-                                } else {
-                                    ActionBarMenuItem.this.clearButton.setAlpha(1.0f);
-                                    ActionBarMenuItem.this.clearButton.setRotation(0.0f);
-                                    ActionBarMenuItem.this.clearButton.setScaleX(1.0f);
-                                    ActionBarMenuItem.this.clearButton.setScaleY(1.0f);
-                                    ActionBarMenuItem.this.animateClear = true;
+                        if (TextUtils.isEmpty(charSequence)) {
+                            ActionBarMenuItemSearchListener actionBarMenuItemSearchListener2 = ActionBarMenuItem.this.listener;
+                            if ((actionBarMenuItemSearchListener2 == null || !actionBarMenuItemSearchListener2.forceShowClear()) && (ActionBarMenuItem.this.searchFieldCaption == null || ActionBarMenuItem.this.searchFieldCaption.getVisibility() != 0)) {
+                                if (ActionBarMenuItem.this.clearButton.getTag() != null) {
+                                    ActionBarMenuItem.this.clearButton.setTag(null);
+                                    ActionBarMenuItem.this.clearButton.clearAnimation();
+                                    if (ActionBarMenuItem.this.animateClear) {
+                                        ActionBarMenuItem.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new -$$Lambda$ActionBarMenuItem$4$WTfAvwLi4l2rOq09wt3w9zvbBZY(this)).start();
+                                    } else {
+                                        ActionBarMenuItem.this.clearButton.setAlpha(0.0f);
+                                        ActionBarMenuItem.this.clearButton.setRotation(45.0f);
+                                        ActionBarMenuItem.this.clearButton.setScaleX(0.0f);
+                                        ActionBarMenuItem.this.clearButton.setScaleY(0.0f);
+                                        ActionBarMenuItem.this.clearButton.setVisibility(4);
+                                        ActionBarMenuItem.this.animateClear = true;
+                                    }
                                 }
                             }
-                        } else if (ActionBarMenuItem.this.clearButton.getTag() != null) {
-                            ActionBarMenuItem.this.clearButton.setTag(null);
+                        }
+                        if (ActionBarMenuItem.this.clearButton.getTag() == null) {
+                            ActionBarMenuItem.this.clearButton.setTag(Integer.valueOf(1));
                             ActionBarMenuItem.this.clearButton.clearAnimation();
+                            ActionBarMenuItem.this.clearButton.setVisibility(0);
                             if (ActionBarMenuItem.this.animateClear) {
-                                ActionBarMenuItem.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new -$$Lambda$ActionBarMenuItem$4$WTfAvwLi4l2rOq09wt3w9zvbBZY(this)).start();
+                                ActionBarMenuItem.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(1.0f).setDuration(180).scaleY(1.0f).scaleX(1.0f).rotation(0.0f).start();
                             } else {
-                                ActionBarMenuItem.this.clearButton.setAlpha(0.0f);
-                                ActionBarMenuItem.this.clearButton.setRotation(45.0f);
-                                ActionBarMenuItem.this.clearButton.setScaleX(0.0f);
-                                ActionBarMenuItem.this.clearButton.setScaleY(0.0f);
-                                ActionBarMenuItem.this.clearButton.setVisibility(4);
+                                ActionBarMenuItem.this.clearButton.setAlpha(1.0f);
+                                ActionBarMenuItem.this.clearButton.setRotation(0.0f);
+                                ActionBarMenuItem.this.clearButton.setScaleX(1.0f);
+                                ActionBarMenuItem.this.clearButton.setScaleY(1.0f);
                                 ActionBarMenuItem.this.animateClear = true;
                             }
                         }
@@ -1084,6 +1100,22 @@ public class ActionBarMenuItem extends FrameLayout {
                 findViewWithTag.setVisibility(0);
             }
         }
+    }
+
+    public void requestFocusOnSearchView() {
+        if (this.searchContainer.getWidth() != 0 && !this.searchField.isFocused()) {
+            this.searchField.requestFocus();
+            AndroidUtilities.showKeyboard(this.searchField);
+        }
+    }
+
+    public void clearFocusOnSearchView() {
+        this.searchField.clearFocus();
+        AndroidUtilities.hideKeyboard(this.searchField);
+    }
+
+    public FrameLayout getSearchContainer() {
+        return this.searchContainer;
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

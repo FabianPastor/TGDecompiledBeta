@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.StateListAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -93,22 +92,15 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         frameLayout2.addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 44.0f, 0.0f, 0.0f));
         this.acceptButton = new FrameLayout(context2);
-        this.acceptButton.setBackgroundResource(NUM);
-        if (VERSION.SDK_INT >= 21) {
-            StateListAnimator stateListAnimator = new StateListAnimator();
-            String str3 = "translationZ";
-            stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.acceptButton, str3, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.acceptButton, str3, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
-            this.acceptButton.setStateListAnimator(stateListAnimator);
-        }
-        this.acceptButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        addView(this.acceptButton, LayoutHelper.createFrame(-2, 56.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
+        this.acceptButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), -11491093, -12346402));
+        this.acceptButton.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        addView(this.acceptButton, LayoutHelper.createFrame(-2, 42.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
         this.acceptButton.setOnClickListener(new -$$Lambda$BlockingUpdateView$58XjGl4nF8-_CcazfB65zVJEC_c(this));
         this.acceptTextView = new TextView(context2);
         this.acceptTextView.setGravity(17);
         this.acceptTextView.setTypeface(AndroidUtilities.getTypeface(str2));
         this.acceptTextView.setTextColor(-1);
-        this.acceptTextView.setTextSize(1, 16.0f);
+        this.acceptTextView.setTextSize(1, 14.0f);
         this.acceptButton.addView(this.acceptTextView, LayoutHelper.createFrame(-2, -2, 17));
         this.radialProgressView = new FrameLayout(context2) {
             /* Access modifiers changed, original: protected */
@@ -320,11 +312,11 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         if (tL_help_appUpdate.document instanceof TL_document) {
             TextView textView = this.acceptTextView;
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(LocaleController.getString(str, NUM).toUpperCase());
+            stringBuilder.append(LocaleController.getString(str, NUM));
             stringBuilder.append(String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) tL_help_appUpdate.document.size)}));
             textView.setText(stringBuilder.toString());
         } else {
-            this.acceptTextView.setText(LocaleController.getString(str, NUM).toUpperCase());
+            this.acceptTextView.setText(LocaleController.getString(str, NUM));
         }
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailToLoad);

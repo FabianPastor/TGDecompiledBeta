@@ -72,6 +72,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.EncryptionKeyEmojifier;
@@ -490,21 +491,21 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     }
 
     public /* synthetic */ void lambda$onCreate$2$VoIPActivity(View view) {
-        if (this.isIncomingWaiting) {
+        if (!this.isIncomingWaiting) {
+            Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("com.tmessages.openchat");
+            stringBuilder.append(Math.random());
+            stringBuilder.append(Integer.MAX_VALUE);
+            intent.setAction(stringBuilder.toString());
+            intent.putExtra("currentAccount", this.currentAccount);
+            intent.setFlags(32768);
+            intent.putExtra("userId", this.user.id);
+            startActivity(intent);
+            finish();
+        } else if (SharedConfig.passcodeHash.length() <= 0) {
             showMessagesSheet();
-            return;
         }
-        Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("com.tmessages.openchat");
-        stringBuilder.append(Math.random());
-        stringBuilder.append(Integer.MAX_VALUE);
-        intent.setAction(stringBuilder.toString());
-        intent.putExtra("currentAccount", this.currentAccount);
-        intent.setFlags(32768);
-        intent.putExtra("userId", this.user.id);
-        startActivity(intent);
-        finish();
     }
 
     private View createContentView() {
@@ -631,16 +632,15 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         this.micToggle = checkableImageView;
         frameLayout.addView(checkableImageView, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(0, -2, 1.0f));
-        ImageView imageView = new ImageView(this);
-        mutate = getResources().getDrawable(NUM).mutate();
-        mutate.setAlpha(204);
-        imageView.setImageDrawable(mutate);
-        imageView.setScaleType(ScaleType.CENTER);
-        imageView.setContentDescription(LocaleController.getString("AccDescrOpenChat", NUM));
-        frameLayout = new FrameLayout(this);
-        this.chatBtn = imageView;
-        frameLayout.addView(imageView, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
-        linearLayout.addView(frameLayout, LayoutHelper.createLinear(0, -2, 1.0f));
+        this.chatBtn = new ImageView(this);
+        Drawable mutate2 = getResources().getDrawable(NUM).mutate();
+        mutate2.setAlpha(204);
+        this.chatBtn.setImageDrawable(mutate2);
+        this.chatBtn.setScaleType(ScaleType.CENTER);
+        this.chatBtn.setContentDescription(LocaleController.getString("AccDescrOpenChat", NUM));
+        FrameLayout frameLayout2 = new FrameLayout(this);
+        frameLayout2.addView(this.chatBtn, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
+        linearLayout.addView(frameLayout2, LayoutHelper.createLinear(0, -2, 1.0f));
         checkableImageView = new CheckableImageView(this);
         checkableImageView.setBackgroundResource(NUM);
         mutate = getResources().getDrawable(NUM).mutate();
@@ -667,53 +667,53 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         linearLayout.addView(callSwipeView2, LayoutHelper.createLinear(-1, 70, 1.0f, -35, 4, 4, 4));
         this.swipeViewsWrap = linearLayout;
         anonymousClass8.addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 80, 20.0f, 0.0f, 20.0f, 68.0f));
-        ImageView imageView2 = new ImageView(this);
+        ImageView imageView = new ImageView(this);
         FabBackgroundDrawable fabBackgroundDrawable = new FabBackgroundDrawable();
         fabBackgroundDrawable.setColor(-12207027);
-        imageView2.setBackgroundDrawable(fabBackgroundDrawable);
-        imageView2.setImageResource(NUM);
-        imageView2.setScaleType(ScaleType.MATRIX);
+        imageView.setBackgroundDrawable(fabBackgroundDrawable);
+        imageView.setImageResource(NUM);
+        imageView.setScaleType(ScaleType.MATRIX);
         Matrix matrix = new Matrix();
         matrix.setTranslate((float) AndroidUtilities.dp(17.0f), (float) AndroidUtilities.dp(17.0f));
         matrix.postRotate(-135.0f, (float) AndroidUtilities.dp(35.0f), (float) AndroidUtilities.dp(35.0f));
-        imageView2.setImageMatrix(matrix);
-        this.acceptBtn = imageView2;
-        anonymousClass8.addView(imageView2, LayoutHelper.createFrame(78, 78.0f, 83, 20.0f, 0.0f, 0.0f, 68.0f));
-        ImageView imageView3 = new ImageView(this);
+        imageView.setImageMatrix(matrix);
+        this.acceptBtn = imageView;
+        anonymousClass8.addView(imageView, LayoutHelper.createFrame(78, 78.0f, 83, 20.0f, 0.0f, 0.0f, 68.0f));
+        ImageView imageView2 = new ImageView(this);
         FabBackgroundDrawable fabBackgroundDrawable2 = new FabBackgroundDrawable();
         fabBackgroundDrawable2.setColor(-1696188);
-        imageView3.setBackgroundDrawable(fabBackgroundDrawable2);
-        imageView3.setImageResource(NUM);
-        imageView3.setScaleType(ScaleType.CENTER);
-        this.declineBtn = imageView3;
-        anonymousClass8.addView(imageView3, LayoutHelper.createFrame(78, 78.0f, 85, 0.0f, 0.0f, 20.0f, 68.0f));
-        callSwipeView.setViewToDrag(imageView2, false);
-        callSwipeView2.setViewToDrag(imageView3, true);
-        FrameLayout frameLayout2 = new FrameLayout(this);
+        imageView2.setBackgroundDrawable(fabBackgroundDrawable2);
+        imageView2.setImageResource(NUM);
+        imageView2.setScaleType(ScaleType.CENTER);
+        this.declineBtn = imageView2;
+        anonymousClass8.addView(imageView2, LayoutHelper.createFrame(78, 78.0f, 85, 0.0f, 0.0f, 20.0f, 68.0f));
+        callSwipeView.setViewToDrag(imageView, false);
+        callSwipeView2.setViewToDrag(imageView2, true);
+        FrameLayout frameLayout3 = new FrameLayout(this);
         FabBackgroundDrawable fabBackgroundDrawable3 = new FabBackgroundDrawable();
         fabBackgroundDrawable3.setColor(-1696188);
         this.endBtnBg = fabBackgroundDrawable3;
-        frameLayout2.setBackgroundDrawable(fabBackgroundDrawable3);
+        frameLayout3.setBackgroundDrawable(fabBackgroundDrawable3);
+        ImageView imageView3 = new ImageView(this);
+        imageView3.setImageResource(NUM);
+        imageView3.setScaleType(ScaleType.CENTER);
+        this.endBtnIcon = imageView3;
+        frameLayout3.addView(imageView3, LayoutHelper.createFrame(70, 70.0f));
+        frameLayout3.setForeground(getResources().getDrawable(NUM));
+        frameLayout3.setContentDescription(LocaleController.getString("VoipEndCall", NUM));
+        this.endBtn = frameLayout3;
+        anonymousClass8.addView(frameLayout3, LayoutHelper.createFrame(78, 78.0f, 81, 0.0f, 0.0f, 0.0f, 68.0f));
         imageView = new ImageView(this);
-        imageView.setImageResource(NUM);
-        imageView.setScaleType(ScaleType.CENTER);
-        this.endBtnIcon = imageView;
-        frameLayout2.addView(imageView, LayoutHelper.createFrame(70, 70.0f));
-        frameLayout2.setForeground(getResources().getDrawable(NUM));
-        frameLayout2.setContentDescription(LocaleController.getString("VoipEndCall", NUM));
-        this.endBtn = frameLayout2;
-        anonymousClass8.addView(frameLayout2, LayoutHelper.createFrame(78, 78.0f, 81, 0.0f, 0.0f, 0.0f, 68.0f));
-        imageView2 = new ImageView(this);
         fabBackgroundDrawable3 = new FabBackgroundDrawable();
         fabBackgroundDrawable3.setColor(-1);
-        imageView2.setBackgroundDrawable(fabBackgroundDrawable3);
-        imageView2.setImageResource(NUM);
-        imageView2.setColorFilter(-NUM);
-        imageView2.setScaleType(ScaleType.CENTER);
-        imageView2.setVisibility(8);
-        imageView2.setContentDescription(LocaleController.getString("Cancel", NUM));
-        this.cancelBtn = imageView2;
-        anonymousClass8.addView(imageView2, LayoutHelper.createFrame(78, 78.0f, 83, 52.0f, 0.0f, 0.0f, 68.0f));
+        imageView.setBackgroundDrawable(fabBackgroundDrawable3);
+        imageView.setImageResource(NUM);
+        imageView.setColorFilter(-NUM);
+        imageView.setScaleType(ScaleType.CENTER);
+        imageView.setVisibility(8);
+        imageView.setContentDescription(LocaleController.getString("Cancel", NUM));
+        this.cancelBtn = imageView;
+        anonymousClass8.addView(imageView, LayoutHelper.createFrame(78, 78.0f, 83, 52.0f, 0.0f, 0.0f, 68.0f));
         this.emojiWrap = new LinearLayout(this);
         this.emojiWrap.setOrientation(0);
         this.emojiWrap.setClipToPadding(false);
@@ -722,10 +722,10 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         this.emojiWrap.setPadding(AndroidUtilities.dp(14.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(14.0f), AndroidUtilities.dp(10.0f));
         int i = 0;
         while (i < 4) {
-            imageView = new ImageView(this);
-            imageView.setScaleType(ScaleType.FIT_XY);
-            this.emojiWrap.addView(imageView, LayoutHelper.createLinear(22, 22, i == 0 ? 0.0f : 4.0f, 0.0f, 0.0f, 0.0f));
-            this.keyEmojiViews[i] = imageView;
+            imageView3 = new ImageView(this);
+            imageView3.setScaleType(ScaleType.FIT_XY);
+            this.emojiWrap.addView(imageView3, LayoutHelper.createLinear(22, 22, i == 0 ? 0.0f : 4.0f, 0.0f, 0.0f, 0.0f));
+            this.keyEmojiViews[i] = imageView3;
             i++;
         }
         this.emojiWrap.setOnClickListener(new OnClickListener() {
@@ -1570,7 +1570,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         r4[3] = sharedPreferences.getString("quick_reply_msg4", LocaleController.getString("QuickReplyDefault4", NUM));
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(1);
-        BottomSheet bottomSheet = new BottomSheet(this, true, 0);
+        BottomSheet bottomSheet = new BottomSheet(this, true);
         if (VERSION.SDK_INT >= 21) {
             getWindow().setNavigationBarColor(-13948117);
             bottomSheet.setOnDismissListener(new -$$Lambda$VoIPActivity$FNBtTABZY9SOl53qekJBUNNqq7k(this));

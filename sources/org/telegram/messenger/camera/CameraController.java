@@ -77,89 +77,95 @@ public class CameraController implements OnInfoListener {
     }
 
     public void initCamera(Runnable runnable) {
-        if (!(runnable == null || this.onFinishCameraInitRunnables.contains(runnable))) {
-            this.onFinishCameraInitRunnables.add(runnable);
-        }
-        if (!this.loadingCameras && !this.cameraInitied) {
-            this.loadingCameras = true;
-            this.threadPool.execute(new -$$Lambda$CameraController$MTo6g4R2dOVhEmQ7AM4dYTP1p5w(this));
+        initCamera(runnable, false);
+    }
+
+    private void initCamera(Runnable runnable, boolean z) {
+        if (!this.cameraInitied) {
+            if (!(runnable == null || this.onFinishCameraInitRunnables.contains(runnable))) {
+                this.onFinishCameraInitRunnables.add(runnable);
+            }
+            if (!(this.loadingCameras || this.cameraInitied)) {
+                this.loadingCameras = true;
+                this.threadPool.execute(new -$$Lambda$CameraController$ggbrNYdASCmrNMDDtuD6yOnkL70(this, z, runnable));
+            }
         }
     }
 
     /* JADX WARNING: Missing block: B:39:0x00db, code skipped:
             if (r15.height != 720) goto L_0x011b;
      */
-    public /* synthetic */ void lambda$initCamera$3$CameraController() {
+    public /* synthetic */ void lambda$initCamera$4$CameraController(boolean r20, java.lang.Runnable r21) {
         /*
         r19 = this;
-        r0 = r19;
-        r1 = "cameraCache";
-        r2 = r0.cameraInfos;	 Catch:{ Exception -> 0x0255 }
-        if (r2 != 0) goto L_0x024c;
+        r1 = r19;
+        r0 = "cameraCache";
+        r2 = r1.cameraInfos;	 Catch:{ Exception -> 0x0256 }
+        if (r2 != 0) goto L_0x024d;
     L_0x0008:
-        r2 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x0255 }
+        r2 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x0256 }
         r3 = 0;
-        r3 = r2.getString(r1, r3);	 Catch:{ Exception -> 0x0255 }
-        r4 = org.telegram.messenger.camera.-$$Lambda$CameraController$dwxNXb3SuNA_od-SPUyypaONvgM.INSTANCE;	 Catch:{ Exception -> 0x0255 }
-        r5 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0255 }
-        r5.<init>();	 Catch:{ Exception -> 0x0255 }
+        r3 = r2.getString(r0, r3);	 Catch:{ Exception -> 0x0256 }
+        r4 = org.telegram.messenger.camera.-$$Lambda$CameraController$dwxNXb3SuNA_od-SPUyypaONvgM.INSTANCE;	 Catch:{ Exception -> 0x0256 }
+        r5 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0256 }
+        r5.<init>();	 Catch:{ Exception -> 0x0256 }
         r6 = 0;
         if (r3 == 0) goto L_0x0085;
     L_0x001b:
-        r1 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x0255 }
-        r2 = android.util.Base64.decode(r3, r6);	 Catch:{ Exception -> 0x0255 }
-        r1.<init>(r2);	 Catch:{ Exception -> 0x0255 }
-        r2 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
+        r0 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x0256 }
+        r2 = android.util.Base64.decode(r3, r6);	 Catch:{ Exception -> 0x0256 }
+        r0.<init>(r2);	 Catch:{ Exception -> 0x0256 }
+        r2 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
         r3 = 0;
     L_0x0029:
         if (r3 >= r2) goto L_0x0080;
     L_0x002b:
-        r7 = new org.telegram.messenger.camera.CameraInfo;	 Catch:{ Exception -> 0x0255 }
-        r8 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
-        r9 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
-        r7.<init>(r8, r9);	 Catch:{ Exception -> 0x0255 }
-        r8 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
+        r7 = new org.telegram.messenger.camera.CameraInfo;	 Catch:{ Exception -> 0x0256 }
+        r8 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
+        r9 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
+        r7.<init>(r8, r9);	 Catch:{ Exception -> 0x0256 }
+        r8 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
         r9 = 0;
     L_0x003d:
         if (r9 >= r8) goto L_0x0054;
     L_0x003f:
-        r10 = r7.previewSizes;	 Catch:{ Exception -> 0x0255 }
-        r11 = new org.telegram.messenger.camera.Size;	 Catch:{ Exception -> 0x0255 }
-        r12 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
-        r13 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
-        r11.<init>(r12, r13);	 Catch:{ Exception -> 0x0255 }
-        r10.add(r11);	 Catch:{ Exception -> 0x0255 }
+        r10 = r7.previewSizes;	 Catch:{ Exception -> 0x0256 }
+        r11 = new org.telegram.messenger.camera.Size;	 Catch:{ Exception -> 0x0256 }
+        r12 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
+        r13 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
+        r11.<init>(r12, r13);	 Catch:{ Exception -> 0x0256 }
+        r10.add(r11);	 Catch:{ Exception -> 0x0256 }
         r9 = r9 + 1;
         goto L_0x003d;
     L_0x0054:
-        r8 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
+        r8 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
         r9 = 0;
     L_0x0059:
         if (r9 >= r8) goto L_0x0070;
     L_0x005b:
-        r10 = r7.pictureSizes;	 Catch:{ Exception -> 0x0255 }
-        r11 = new org.telegram.messenger.camera.Size;	 Catch:{ Exception -> 0x0255 }
-        r12 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
-        r13 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0255 }
-        r11.<init>(r12, r13);	 Catch:{ Exception -> 0x0255 }
-        r10.add(r11);	 Catch:{ Exception -> 0x0255 }
+        r10 = r7.pictureSizes;	 Catch:{ Exception -> 0x0256 }
+        r11 = new org.telegram.messenger.camera.Size;	 Catch:{ Exception -> 0x0256 }
+        r12 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
+        r13 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0256 }
+        r11.<init>(r12, r13);	 Catch:{ Exception -> 0x0256 }
+        r10.add(r11);	 Catch:{ Exception -> 0x0256 }
         r9 = r9 + 1;
         goto L_0x0059;
     L_0x0070:
-        r5.add(r7);	 Catch:{ Exception -> 0x0255 }
-        r8 = r7.previewSizes;	 Catch:{ Exception -> 0x0255 }
-        java.util.Collections.sort(r8, r4);	 Catch:{ Exception -> 0x0255 }
-        r7 = r7.pictureSizes;	 Catch:{ Exception -> 0x0255 }
-        java.util.Collections.sort(r7, r4);	 Catch:{ Exception -> 0x0255 }
+        r5.add(r7);	 Catch:{ Exception -> 0x0256 }
+        r8 = r7.previewSizes;	 Catch:{ Exception -> 0x0256 }
+        java.util.Collections.sort(r8, r4);	 Catch:{ Exception -> 0x0256 }
+        r7 = r7.pictureSizes;	 Catch:{ Exception -> 0x0256 }
+        java.util.Collections.sort(r7, r4);	 Catch:{ Exception -> 0x0256 }
         r3 = r3 + 1;
         goto L_0x0029;
     L_0x0080:
-        r1.cleanup();	 Catch:{ Exception -> 0x0255 }
+        r0.cleanup();	 Catch:{ Exception -> 0x0256 }
         goto L_0x0246;
     L_0x0085:
-        r3 = android.hardware.Camera.getNumberOfCameras();	 Catch:{ Exception -> 0x0255 }
-        r7 = new android.hardware.Camera$CameraInfo;	 Catch:{ Exception -> 0x0255 }
-        r7.<init>();	 Catch:{ Exception -> 0x0255 }
+        r3 = android.hardware.Camera.getNumberOfCameras();	 Catch:{ Exception -> 0x0256 }
+        r7 = new android.hardware.Camera$CameraInfo;	 Catch:{ Exception -> 0x0256 }
+        r7.<init>();	 Catch:{ Exception -> 0x0256 }
         r8 = 4;
         r8 = 0;
         r9 = 4;
@@ -173,15 +179,15 @@ public class CameraController implements OnInfoListener {
         r11 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused;	 Catch:{ Exception -> 0x0249 }
         if (r11 == 0) goto L_0x00ae;
     L_0x00a1:
-        r11 = org.telegram.messenger.ApplicationLoader.externalInterfacePaused;	 Catch:{ Exception -> 0x0255 }
+        r11 = org.telegram.messenger.ApplicationLoader.externalInterfacePaused;	 Catch:{ Exception -> 0x0256 }
         if (r11 != 0) goto L_0x00a6;
     L_0x00a5:
         goto L_0x00ae;
     L_0x00a6:
-        r1 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0255 }
-        r2 = "app paused";
-        r1.<init>(r2);	 Catch:{ Exception -> 0x0255 }
-        throw r1;	 Catch:{ Exception -> 0x0255 }
+        r0 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0256 }
+        r2 = "APP_PAUSED";
+        r0.<init>(r2);	 Catch:{ Exception -> 0x0256 }
+        throw r0;	 Catch:{ Exception -> 0x0256 }
     L_0x00ae:
         r11 = r10.getCameraId();	 Catch:{ Exception -> 0x0249 }
         r11 = android.hardware.Camera.open(r11);	 Catch:{ Exception -> 0x0249 }
@@ -201,7 +207,7 @@ public class CameraController implements OnInfoListener {
         r13 = r15.width;	 Catch:{ Exception -> 0x0249 }
         if (r13 != r7) goto L_0x00de;
     L_0x00d7:
-        r7 = r15.height;	 Catch:{ Exception -> 0x0255 }
+        r7 = r15.height;	 Catch:{ Exception -> 0x0256 }
         r13 = 720; // 0x2d0 float:1.009E-42 double:3.557E-321;
         if (r7 == r13) goto L_0x00de;
     L_0x00dd:
@@ -216,10 +222,10 @@ public class CameraController implements OnInfoListener {
     L_0x00e8:
         r7 = r10.previewSizes;	 Catch:{ Exception -> 0x0249 }
         r13 = new org.telegram.messenger.camera.Size;	 Catch:{ Exception -> 0x0249 }
-        r0 = r15.width;	 Catch:{ Exception -> 0x0249 }
-        r18 = r1;
-        r1 = r15.height;	 Catch:{ Exception -> 0x0249 }
-        r13.<init>(r0, r1);	 Catch:{ Exception -> 0x0249 }
+        r1 = r15.width;	 Catch:{ Exception -> 0x0249 }
+        r18 = r0;
+        r0 = r15.height;	 Catch:{ Exception -> 0x0249 }
+        r13.<init>(r1, r0);	 Catch:{ Exception -> 0x0249 }
         r7.add(r13);	 Catch:{ Exception -> 0x0249 }
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0249 }
         if (r0 == 0) goto L_0x011d;
@@ -237,17 +243,17 @@ public class CameraController implements OnInfoListener {
         org.telegram.messenger.FileLog.d(r0);	 Catch:{ Exception -> 0x0249 }
         goto L_0x011d;
     L_0x011b:
-        r18 = r1;
+        r18 = r0;
     L_0x011d:
         r14 = r14 + 1;
-        r6 = 0;
-        r0 = r19;
+        r1 = r19;
         r7 = r16;
         r13 = r17;
-        r1 = r18;
+        r0 = r18;
+        r6 = 0;
         goto L_0x00bf;
     L_0x0129:
-        r18 = r1;
+        r18 = r0;
         r0 = r12.getSupportedPictureSizes();	 Catch:{ Exception -> 0x0249 }
         r1 = 0;
     L_0x0130:
@@ -322,12 +328,12 @@ public class CameraController implements OnInfoListener {
         r9 = r9 + r0;
         r8 = r8 + 1;
         r6 = 0;
-        r0 = r19;
+        r1 = r19;
         r7 = r16;
-        r1 = r18;
+        r0 = r18;
         goto L_0x0091;
     L_0x01c5:
-        r18 = r1;
+        r18 = r0;
         r0 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x0249 }
         r0.<init>(r9);	 Catch:{ Exception -> 0x0249 }
         r1 = r5.size();	 Catch:{ Exception -> 0x0249 }
@@ -387,26 +393,31 @@ public class CameraController implements OnInfoListener {
         r1 = r1.putString(r3, r2);	 Catch:{ Exception -> 0x0249 }
         r1.commit();	 Catch:{ Exception -> 0x0249 }
         r0.cleanup();	 Catch:{ Exception -> 0x0249 }
-        r0 = r19;
+        r1 = r19;
     L_0x0246:
-        r0.cameraInfos = r5;	 Catch:{ Exception -> 0x0255 }
-        goto L_0x024c;
+        r1.cameraInfos = r5;	 Catch:{ Exception -> 0x0256 }
+        goto L_0x024d;
     L_0x0249:
-        r0 = r19;
-        goto L_0x0255;
-    L_0x024c:
-        r1 = new org.telegram.messenger.camera.-$$Lambda$CameraController$llC2aHeeX-BAOaFu9N7370RXqsE;	 Catch:{ Exception -> 0x0255 }
-        r1.<init>(r0);	 Catch:{ Exception -> 0x0255 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ Exception -> 0x0255 }
-        goto L_0x025d;
-    L_0x0255:
-        r1 = new org.telegram.messenger.camera.-$$Lambda$CameraController$swHPhGP8pVLLDtYLp0Z-CfPjXX4;
-        r1.<init>(r0);
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);
-    L_0x025d:
+        r0 = move-exception;
+        r1 = r19;
+        goto L_0x0257;
+    L_0x024d:
+        r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$llC2aHeeX-BAOaFu9N7370RXqsE;	 Catch:{ Exception -> 0x0256 }
+        r0.<init>(r1);	 Catch:{ Exception -> 0x0256 }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);	 Catch:{ Exception -> 0x0256 }
+        goto L_0x0263;
+    L_0x0256:
+        r0 = move-exception;
+    L_0x0257:
+        r2 = new org.telegram.messenger.camera.-$$Lambda$CameraController$88xHVzlx_IKS4IavCNfpJS9ZRAE;
+        r3 = r20;
+        r4 = r21;
+        r2.<init>(r1, r3, r0, r4);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);
+    L_0x0263:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.lambda$initCamera$3$CameraController():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.lambda$initCamera$4$CameraController(boolean, java.lang.Runnable):void");
     }
 
     static /* synthetic */ int lambda$null$0(Size size, Size size2) {
@@ -441,10 +452,19 @@ public class CameraController implements OnInfoListener {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.cameraInitied, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$null$2$CameraController() {
+    public /* synthetic */ void lambda$null$3$CameraController(boolean z, Exception exception, Runnable runnable) {
         this.onFinishCameraInitRunnables.clear();
         this.loadingCameras = false;
         this.cameraInitied = false;
+        if (!z) {
+            if ("APP_PAUSED".equals(exception.getMessage())) {
+                AndroidUtilities.runOnUIThread(new -$$Lambda$CameraController$ES-nh3SDMnEUzgixhCiAfadofL0(this, runnable), 1000);
+            }
+        }
+    }
+
+    public /* synthetic */ void lambda$null$2$CameraController(Runnable runnable) {
+        initCamera(runnable, true);
     }
 
     public boolean isCameraInitied() {
@@ -457,7 +477,7 @@ public class CameraController implements OnInfoListener {
 
     public void close(CameraSession cameraSession, CountDownLatch countDownLatch, Runnable runnable) {
         cameraSession.destroy();
-        this.threadPool.execute(new -$$Lambda$CameraController$Mku2q5OGwNan-h4puDdyST57U90(runnable, cameraSession, countDownLatch));
+        this.threadPool.execute(new -$$Lambda$CameraController$OPlkNPWb4gYZLA_NLxCoTx8pFu8(runnable, cameraSession, countDownLatch));
         if (countDownLatch != null) {
             try {
                 countDownLatch.await();
@@ -467,7 +487,7 @@ public class CameraController implements OnInfoListener {
         }
     }
 
-    static /* synthetic */ void lambda$close$4(Runnable runnable, CameraSession cameraSession, CountDownLatch countDownLatch) {
+    static /* synthetic */ void lambda$close$5(Runnable runnable, CameraSession cameraSession, CountDownLatch countDownLatch) {
         if (runnable != null) {
             runnable.run();
         }
@@ -485,9 +505,9 @@ public class CameraController implements OnInfoListener {
                 FileLog.e(e2);
             }
             cameraSession.cameraInfo.camera = null;
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-            }
+        }
+        if (countDownLatch != null) {
+            countDownLatch.countDown();
         }
     }
 
@@ -600,7 +620,7 @@ public class CameraController implements OnInfoListener {
         CameraInfo cameraInfo = cameraSession.cameraInfo;
         boolean isFlipFront = cameraSession.isFlipFront();
         try {
-            cameraInfo.camera.takePicture(null, null, new -$$Lambda$CameraController$Qbnmyb8uDsRl802IZhTfJAoPBlE(file, cameraInfo, isFlipFront, runnable));
+            cameraInfo.camera.takePicture(null, null, new -$$Lambda$CameraController$c9CThCYGhCTBXh4Mr7ku0l0BAnk(file, cameraInfo, isFlipFront, runnable));
             return true;
         } catch (Exception e) {
             FileLog.e(e);
@@ -608,7 +628,7 @@ public class CameraController implements OnInfoListener {
         }
     }
 
-    static /* synthetic */ void lambda$takePicture$5(File file, CameraInfo cameraInfo, boolean z, Runnable runnable, byte[] bArr, Camera camera) {
+    static /* synthetic */ void lambda$takePicture$6(File file, CameraInfo cameraInfo, boolean z, Runnable runnable, byte[] bArr, Camera camera) {
         Bitmap decodeByteArray;
         int photoSize = (int) (((float) AndroidUtilities.getPhotoSize()) / AndroidUtilities.density);
         String format = String.format(Locale.US, "%s@%d_%d", new Object[]{Utilities.MD5(file.getAbsolutePath()), Integer.valueOf(photoSize), Integer.valueOf(photoSize)});
@@ -672,11 +692,11 @@ public class CameraController implements OnInfoListener {
 
     public void startPreview(CameraSession cameraSession) {
         if (cameraSession != null) {
-            this.threadPool.execute(new -$$Lambda$CameraController$95vC3mtJ5YICFX1HGPyBSecWQH0(cameraSession));
+            this.threadPool.execute(new -$$Lambda$CameraController$L-F-rOx5-4PSuT2nsIojJf6WzoI(cameraSession));
         }
     }
 
-    static /* synthetic */ void lambda$startPreview$6(CameraSession cameraSession) {
+    static /* synthetic */ void lambda$startPreview$7(CameraSession cameraSession) {
         CameraInfo cameraInfo = cameraSession.cameraInfo;
         Camera camera = cameraInfo.camera;
         if (camera == null) {
@@ -698,11 +718,11 @@ public class CameraController implements OnInfoListener {
 
     public void stopPreview(CameraSession cameraSession) {
         if (cameraSession != null) {
-            this.threadPool.execute(new -$$Lambda$CameraController$TvlSt-eAGck2RVWXRxqaBNBbvno(cameraSession));
+            this.threadPool.execute(new -$$Lambda$CameraController$Sppc2sdna-XMD3CITaI1TGL0nUQ(cameraSession));
         }
     }
 
-    static /* synthetic */ void lambda$stopPreview$7(CameraSession cameraSession) {
+    static /* synthetic */ void lambda$stopPreview$8(CameraSession cameraSession) {
         CameraInfo cameraInfo = cameraSession.cameraInfo;
         Camera camera = cameraInfo.camera;
         if (camera == null) {
@@ -734,10 +754,10 @@ public class CameraController implements OnInfoListener {
             }
             return;
         }
-        this.threadPool.execute(new -$$Lambda$CameraController$ANuBkffO3J8bla21iFygwDfs5Ss(cameraSession, runnable2, surfaceTexture, runnable));
+        this.threadPool.execute(new -$$Lambda$CameraController$oNeYarP4kUSxbQehHxX4kN35IvE(cameraSession, runnable2, surfaceTexture, runnable));
     }
 
-    static /* synthetic */ void lambda$openRound$8(CameraSession cameraSession, Runnable runnable, SurfaceTexture surfaceTexture, Runnable runnable2) {
+    static /* synthetic */ void lambda$openRound$9(CameraSession cameraSession, Runnable runnable, SurfaceTexture surfaceTexture, Runnable runnable2) {
         Camera camera = cameraSession.cameraInfo.camera;
         try {
             if (BuildVars.LOGS_ENABLED) {
@@ -773,11 +793,11 @@ public class CameraController implements OnInfoListener {
 
     public void open(CameraSession cameraSession, SurfaceTexture surfaceTexture, Runnable runnable, Runnable runnable2) {
         if (cameraSession != null && surfaceTexture != null) {
-            this.threadPool.execute(new -$$Lambda$CameraController$nOnW1F7MY4Qrw4m6mXmkWXIiXBI(this, cameraSession, runnable2, surfaceTexture, runnable));
+            this.threadPool.execute(new -$$Lambda$CameraController$SyY9K-zIbzI3Sk7osY9JY9OVXaQ(this, cameraSession, runnable2, surfaceTexture, runnable));
         }
     }
 
-    public /* synthetic */ void lambda$open$9$CameraController(CameraSession cameraSession, Runnable runnable, SurfaceTexture surfaceTexture, Runnable runnable2) {
+    public /* synthetic */ void lambda$open$10$CameraController(CameraSession cameraSession, Runnable runnable, SurfaceTexture surfaceTexture, Runnable runnable2) {
         CameraInfo cameraInfo = cameraSession.cameraInfo;
         Camera camera = cameraInfo.camera;
         if (camera == null) {
@@ -819,11 +839,11 @@ public class CameraController implements OnInfoListener {
     public void recordVideo(CameraSession cameraSession, File file, VideoTakeCallback videoTakeCallback, Runnable runnable) {
         if (cameraSession != null) {
             CameraInfo cameraInfo = cameraSession.cameraInfo;
-            this.threadPool.execute(new -$$Lambda$CameraController$QhtYQbsLLWOPmfR7G2eDSElrRiU(this, cameraInfo.camera, cameraSession, file, cameraInfo, videoTakeCallback, runnable));
+            this.threadPool.execute(new -$$Lambda$CameraController$PsMXI_giaQVKK9Lkw8itFSRPhsU(this, cameraInfo.camera, cameraSession, file, cameraInfo, videoTakeCallback, runnable));
         }
     }
 
-    public /* synthetic */ void lambda$recordVideo$10$CameraController(Camera camera, CameraSession cameraSession, File file, CameraInfo cameraInfo, VideoTakeCallback videoTakeCallback, Runnable runnable) {
+    public /* synthetic */ void lambda$recordVideo$11$CameraController(Camera camera, CameraSession cameraSession, File file, CameraInfo cameraInfo, VideoTakeCallback videoTakeCallback, Runnable runnable) {
         if (camera != null) {
             try {
                 Parameters parameters = camera.getParameters();
@@ -948,7 +968,7 @@ public class CameraController implements OnInfoListener {
         org.telegram.messenger.FileLog.e(r0);
     L_0x007e:
         org.telegram.messenger.SharedConfig.saveConfig();
-        r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$5HicrJ12U2CLASSNAMEGyHfU8XHEFg--A;
+        r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$Z2e0QjeyPqVck_gD_FIZx1BqCLASSNAME;
         r3 = r0;
         r4 = r10;
         r3.<init>(r4, r5, r6, r7);
@@ -970,7 +990,7 @@ public class CameraController implements OnInfoListener {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.finishRecordingVideo():void");
     }
 
-    public /* synthetic */ void lambda$finishRecordingVideo$11$CameraController(File file, Bitmap bitmap, long j) {
+    public /* synthetic */ void lambda$finishRecordingVideo$12$CameraController(File file, Bitmap bitmap, long j) {
         if (this.onVideoTakeCallback != null) {
             String absolutePath = file.getAbsolutePath();
             if (bitmap != null) {
@@ -996,10 +1016,10 @@ public class CameraController implements OnInfoListener {
     }
 
     public void stopVideoRecording(CameraSession cameraSession, boolean z) {
-        this.threadPool.execute(new -$$Lambda$CameraController$L4S5_dxkHAFS7LzqMIp7eixEAXY(this, cameraSession, z));
+        this.threadPool.execute(new -$$Lambda$CameraController$Zappa2-Jg9Ryz3u1wD3YwAhMXaQ(this, cameraSession, z));
     }
 
-    public /* synthetic */ void lambda$stopVideoRecording$13$CameraController(CameraSession cameraSession, boolean z) {
+    public /* synthetic */ void lambda$stopVideoRecording$14$CameraController(CameraSession cameraSession, boolean z) {
         try {
             Camera camera = cameraSession.cameraInfo.camera;
             if (!(camera == null || this.recorder == null)) {
@@ -1034,7 +1054,7 @@ public class CameraController implements OnInfoListener {
             } catch (Exception e2222) {
                 FileLog.e(e2222);
             }
-            this.threadPool.execute(new -$$Lambda$CameraController$9retvXsm_Oz3JB3x45Buo-LxHfU(camera, cameraSession));
+            this.threadPool.execute(new -$$Lambda$CameraController$Wd0zMwxKwKvF9Nuyki-rVHJrIDw(camera, cameraSession));
             if (z || this.onVideoTakeCallback == null) {
                 this.onVideoTakeCallback = null;
             } else {
@@ -1044,7 +1064,7 @@ public class CameraController implements OnInfoListener {
         }
     }
 
-    static /* synthetic */ void lambda$null$12(Camera camera, CameraSession cameraSession) {
+    static /* synthetic */ void lambda$null$13(Camera camera, CameraSession cameraSession) {
         try {
             Parameters parameters = camera.getParameters();
             parameters.setFlashMode(cameraSession.getCurrentFlashMode());

@@ -141,7 +141,7 @@ public class ContentPreviewViewer {
                     boolean hasRecentGif;
                     ContentPreviewViewer.this.animateY = true;
                     ContentPreviewViewer contentPreviewViewer = ContentPreviewViewer.this;
-                    contentPreviewViewer.visibleDialog = new BottomSheet(contentPreviewViewer.parentActivity, false, 0) {
+                    contentPreviewViewer.visibleDialog = new BottomSheet(contentPreviewViewer.parentActivity, false) {
                         /* Access modifiers changed, original: protected */
                         public void onContainerTranslationYChanged(float f) {
                             if (ContentPreviewViewer.this.animateY) {
