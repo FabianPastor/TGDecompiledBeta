@@ -8252,39 +8252,37 @@ public class NotificationsController extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationsController.showOrUpdateNotification(boolean):void");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x0520  */
-    /* JADX WARNING: Removed duplicated region for block: B:200:0x04d9  */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x051e  */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x04d7  */
     /* JADX WARNING: Removed duplicated region for block: B:69:0x018f  */
     /* JADX WARNING: Removed duplicated region for block: B:138:0x0322  */
     /* JADX WARNING: Removed duplicated region for block: B:122:0x02d3  */
     /* JADX WARNING: Removed duplicated region for block: B:149:0x038f  */
     /* JADX WARNING: Removed duplicated region for block: B:148:0x037d  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x03d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:167:0x0444  */
-    /* JADX WARNING: Removed duplicated region for block: B:163:0x0409  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0454  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x044e  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x048e  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x0486  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x04a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:329:0x082b  */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x081a  */
-    /* JADX WARNING: Removed duplicated region for block: B:332:0x084b  */
-    /* JADX WARNING: Removed duplicated region for block: B:338:0x08da  */
-    /* JADX WARNING: Removed duplicated region for block: B:335:0x08a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:344:0x091d  */
-    /* JADX WARNING: Removed duplicated region for block: B:343:0x08fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:348:0x09f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:347:0x09e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:350:0x09f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:358:0x0a13  */
-    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a18  */
-    /* JADX WARNING: Removed duplicated region for block: B:367:0x0a2c  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0aea  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b3b A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:401:0x0b64 A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0b75 A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0b6f A:{SYNTHETIC, Splitter:B:404:0x0b6f} */
+    /* JADX WARNING: Removed duplicated region for block: B:169:0x0452  */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x048c  */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x0484  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x049e  */
+    /* JADX WARNING: Removed duplicated region for block: B:327:0x0829  */
+    /* JADX WARNING: Removed duplicated region for block: B:323:0x0818  */
+    /* JADX WARNING: Removed duplicated region for block: B:330:0x0849  */
+    /* JADX WARNING: Removed duplicated region for block: B:336:0x08d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:333:0x08a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:342:0x091b  */
+    /* JADX WARNING: Removed duplicated region for block: B:341:0x08f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:346:0x09ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:348:0x09f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:356:0x0a11  */
+    /* JADX WARNING: Removed duplicated region for block: B:358:0x0a16  */
+    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:388:0x0ae8  */
+    /* JADX WARNING: Removed duplicated region for block: B:397:0x0b39 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b62 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x0b73 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0b6d A:{SYNTHETIC, Splitter:B:402:0x0b6d} */
     /* JADX WARNING: Removed duplicated region for block: B:116:0x02b0  */
     /* JADX WARNING: Removed duplicated region for block: B:122:0x02d3  */
     /* JADX WARNING: Removed duplicated region for block: B:138:0x0322  */
@@ -8293,33 +8291,32 @@ public class NotificationsController extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:149:0x038f  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x03d1  */
     /* JADX WARNING: Removed duplicated region for block: B:157:0x03e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:163:0x0409  */
-    /* JADX WARNING: Removed duplicated region for block: B:167:0x0444  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x044e  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0454  */
-    /* JADX WARNING: Removed duplicated region for block: B:179:0x046d A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x0486  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x048e  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x04a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x081a  */
-    /* JADX WARNING: Removed duplicated region for block: B:329:0x082b  */
-    /* JADX WARNING: Removed duplicated region for block: B:332:0x084b  */
-    /* JADX WARNING: Removed duplicated region for block: B:335:0x08a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:338:0x08da  */
-    /* JADX WARNING: Removed duplicated region for block: B:343:0x08fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:344:0x091d  */
-    /* JADX WARNING: Removed duplicated region for block: B:347:0x09e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:348:0x09f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:350:0x09f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:353:0x0a03  */
-    /* JADX WARNING: Removed duplicated region for block: B:358:0x0a13  */
-    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a18  */
-    /* JADX WARNING: Removed duplicated region for block: B:367:0x0a2c  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0aea  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b3b A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:401:0x0b64 A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0b6f A:{SYNTHETIC, Splitter:B:404:0x0b6f} */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0b75 A:{Catch:{ JSONException -> 0x0b8d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:163:0x040f A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:169:0x0452  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x046b A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x0484  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x048c  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x049e  */
+    /* JADX WARNING: Removed duplicated region for block: B:323:0x0818  */
+    /* JADX WARNING: Removed duplicated region for block: B:327:0x0829  */
+    /* JADX WARNING: Removed duplicated region for block: B:330:0x0849  */
+    /* JADX WARNING: Removed duplicated region for block: B:333:0x08a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:336:0x08d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:341:0x08f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:342:0x091b  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:346:0x09ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:348:0x09f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:351:0x0a01  */
+    /* JADX WARNING: Removed duplicated region for block: B:356:0x0a11  */
+    /* JADX WARNING: Removed duplicated region for block: B:358:0x0a16  */
+    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:388:0x0ae8  */
+    /* JADX WARNING: Removed duplicated region for block: B:397:0x0b39 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b62 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0b6d A:{SYNTHETIC, Splitter:B:402:0x0b6d} */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x0b73 A:{Catch:{ JSONException -> 0x0b8b }} */
     /* JADX WARNING: Removed duplicated region for block: B:116:0x02b0  */
     /* JADX WARNING: Removed duplicated region for block: B:138:0x0322  */
     /* JADX WARNING: Removed duplicated region for block: B:122:0x02d3  */
@@ -8328,33 +8325,32 @@ public class NotificationsController extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:148:0x037d  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x03d1  */
     /* JADX WARNING: Removed duplicated region for block: B:157:0x03e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:167:0x0444  */
-    /* JADX WARNING: Removed duplicated region for block: B:163:0x0409  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0454  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x044e  */
-    /* JADX WARNING: Removed duplicated region for block: B:179:0x046d A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x048e  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x0486  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x04a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:329:0x082b  */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x081a  */
-    /* JADX WARNING: Removed duplicated region for block: B:332:0x084b  */
-    /* JADX WARNING: Removed duplicated region for block: B:338:0x08da  */
-    /* JADX WARNING: Removed duplicated region for block: B:335:0x08a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:344:0x091d  */
-    /* JADX WARNING: Removed duplicated region for block: B:343:0x08fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:348:0x09f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:347:0x09e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:350:0x09f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:353:0x0a03  */
-    /* JADX WARNING: Removed duplicated region for block: B:358:0x0a13  */
-    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a18  */
-    /* JADX WARNING: Removed duplicated region for block: B:367:0x0a2c  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0aea  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b3b A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:401:0x0b64 A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0b75 A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0b6f A:{SYNTHETIC, Splitter:B:404:0x0b6f} */
+    /* JADX WARNING: Removed duplicated region for block: B:163:0x040f A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:169:0x0452  */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x046b A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x048c  */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x0484  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x049e  */
+    /* JADX WARNING: Removed duplicated region for block: B:327:0x0829  */
+    /* JADX WARNING: Removed duplicated region for block: B:323:0x0818  */
+    /* JADX WARNING: Removed duplicated region for block: B:330:0x0849  */
+    /* JADX WARNING: Removed duplicated region for block: B:336:0x08d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:333:0x08a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:342:0x091b  */
+    /* JADX WARNING: Removed duplicated region for block: B:341:0x08f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:346:0x09ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:348:0x09f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:351:0x0a01  */
+    /* JADX WARNING: Removed duplicated region for block: B:356:0x0a11  */
+    /* JADX WARNING: Removed duplicated region for block: B:358:0x0a16  */
+    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:388:0x0ae8  */
+    /* JADX WARNING: Removed duplicated region for block: B:397:0x0b39 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b62 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x0b73 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0b6d A:{SYNTHETIC, Splitter:B:402:0x0b6d} */
     /* JADX WARNING: Removed duplicated region for block: B:116:0x02b0  */
     /* JADX WARNING: Removed duplicated region for block: B:122:0x02d3  */
     /* JADX WARNING: Removed duplicated region for block: B:138:0x0322  */
@@ -8363,33 +8359,32 @@ public class NotificationsController extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:149:0x038f  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x03d1  */
     /* JADX WARNING: Removed duplicated region for block: B:157:0x03e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:163:0x0409  */
-    /* JADX WARNING: Removed duplicated region for block: B:167:0x0444  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x044e  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0454  */
-    /* JADX WARNING: Removed duplicated region for block: B:179:0x046d A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x0486  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x048e  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x04a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x081a  */
-    /* JADX WARNING: Removed duplicated region for block: B:329:0x082b  */
-    /* JADX WARNING: Removed duplicated region for block: B:332:0x084b  */
-    /* JADX WARNING: Removed duplicated region for block: B:335:0x08a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:338:0x08da  */
-    /* JADX WARNING: Removed duplicated region for block: B:343:0x08fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:344:0x091d  */
-    /* JADX WARNING: Removed duplicated region for block: B:347:0x09e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:348:0x09f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:350:0x09f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:353:0x0a03  */
-    /* JADX WARNING: Removed duplicated region for block: B:358:0x0a13  */
-    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a18  */
-    /* JADX WARNING: Removed duplicated region for block: B:367:0x0a2c  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0aea  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b3b A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:401:0x0b64 A:{Catch:{ JSONException -> 0x0b8d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0b6f A:{SYNTHETIC, Splitter:B:404:0x0b6f} */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0b75 A:{Catch:{ JSONException -> 0x0b8d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:163:0x040f A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:169:0x0452  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x046b A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x0484  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x048c  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x049e  */
+    /* JADX WARNING: Removed duplicated region for block: B:323:0x0818  */
+    /* JADX WARNING: Removed duplicated region for block: B:327:0x0829  */
+    /* JADX WARNING: Removed duplicated region for block: B:330:0x0849  */
+    /* JADX WARNING: Removed duplicated region for block: B:333:0x08a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:336:0x08d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:341:0x08f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:342:0x091b  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:346:0x09ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:348:0x09f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:351:0x0a01  */
+    /* JADX WARNING: Removed duplicated region for block: B:356:0x0a11  */
+    /* JADX WARNING: Removed duplicated region for block: B:358:0x0a16  */
+    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:388:0x0ae8  */
+    /* JADX WARNING: Removed duplicated region for block: B:397:0x0b39 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b62 A:{Catch:{ JSONException -> 0x0b8b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0b6d A:{SYNTHETIC, Splitter:B:402:0x0b6d} */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x0b73 A:{Catch:{ JSONException -> 0x0b8b }} */
     /* JADX WARNING: Missing block: B:66:0x0189, code skipped:
             if (r14.local_id != 0) goto L_0x018d;
      */
@@ -8504,7 +8499,7 @@ public class NotificationsController extends BaseController {
         r13 = r3.size();
         r14 = 0;
     L_0x00c6:
-        if (r14 >= r13) goto L_0x0ba6;
+        if (r14 >= r13) goto L_0x0ba4;
     L_0x00c8:
         r15 = r3.get(r14);
         r15 = (java.lang.Long) r15;
@@ -8741,7 +8736,7 @@ public class NotificationsController extends BaseController {
         r5 = r20;
         r2 = 26;
         r3 = 0;
-        goto L_0x0b8f;
+        goto L_0x0b8d;
     L_0x026a:
         r2 = r62.getMessagesController();
         r3 = r1.user_id;
@@ -8969,73 +8964,71 @@ public class NotificationsController extends BaseController {
         r6 = (long) r12;
         r42 = r13.get(r6);
         r42 = (androidx.core.app.Person) r42;
-        if (r42 != 0) goto L_0x0444;
-    L_0x0409:
-        r14 = new androidx.core.app.Person$Builder;
-        r14.<init>();
+        r14 = android.os.Build.VERSION.SDK_INT;
         r45 = r10;
-        r10 = NUM; // 0x7f0e04f6 float:1.8877613E38 double:1.053162784E-314;
+        r10 = 28;
+        if (r14 < r10) goto L_0x0444;
+    L_0x040f:
+        if (r42 != 0) goto L_0x0444;
+    L_0x0411:
+        r10 = new androidx.core.app.Person$Builder;
+        r10.<init>();
+        r14 = NUM; // 0x7f0e04f6 float:1.8877613E38 double:1.053162784E-314;
         r46 = r5;
         r5 = "FromYou";
-        r5 = org.telegram.messenger.LocaleController.getString(r5, r10);
-        r14.setName(r5);
-        r5 = android.os.Build.VERSION.SDK_INT;
-        r10 = 28;
-        if (r5 < r10) goto L_0x043c;
-    L_0x0424:
+        r5 = org.telegram.messenger.LocaleController.getString(r5, r14);
+        r10.setName(r5);
         r5 = r62.getMessagesController();
-        r10 = java.lang.Integer.valueOf(r12);
-        r5 = r5.getUser(r10);
+        r14 = java.lang.Integer.valueOf(r12);
+        r5 = r5.getUser(r14);
         r5 = r5.photo;
         r5 = r5.photo_small;
-        r10 = 1;
-        r5 = org.telegram.messenger.FileLoader.getPathToAttach(r5, r10);
-        r0.loadRoundAvatar(r5, r14);
-    L_0x043c:
-        r5 = r14.build();
+        r14 = 1;
+        r5 = org.telegram.messenger.FileLoader.getPathToAttach(r5, r14);
+        r0.loadRoundAvatar(r5, r10);
+        r5 = r10.build();
         r13.put(r6, r5);
-        goto L_0x044a;
+        goto L_0x0448;
     L_0x0444:
         r46 = r5;
-        r45 = r10;
         r5 = r42;
-    L_0x044a:
+    L_0x0448:
         r10 = "";
-        if (r5 == 0) goto L_0x0454;
-    L_0x044e:
+        if (r5 == 0) goto L_0x0452;
+    L_0x044c:
         r14 = new androidx.core.app.NotificationCompat$MessagingStyle;
         r14.<init>(r5);
-        goto L_0x0459;
-    L_0x0454:
+        goto L_0x0457;
+    L_0x0452:
         r14 = new androidx.core.app.NotificationCompat$MessagingStyle;
         r14.<init>(r10);
-    L_0x0459:
+    L_0x0457:
         r5 = r14;
         r14 = android.os.Build.VERSION.SDK_INT;
         r42 = r12;
         r12 = 28;
-        if (r14 < r12) goto L_0x0466;
+        if (r14 < r12) goto L_0x0464;
+    L_0x0460:
+        if (r11 >= 0) goto L_0x0467;
     L_0x0462:
-        if (r11 >= 0) goto L_0x0469;
+        if (r3 != 0) goto L_0x0467;
     L_0x0464:
-        if (r3 != 0) goto L_0x0469;
-    L_0x0466:
         r5.setConversationTitle(r4);
-    L_0x0469:
+    L_0x0467:
         r4 = android.os.Build.VERSION.SDK_INT;
-        if (r4 < r12) goto L_0x0474;
+        if (r4 < r12) goto L_0x0472;
+    L_0x046b:
+        if (r3 != 0) goto L_0x0470;
     L_0x046d:
-        if (r3 != 0) goto L_0x0472;
+        if (r11 >= 0) goto L_0x0470;
     L_0x046f:
-        if (r11 >= 0) goto L_0x0472;
-    L_0x0471:
-        goto L_0x0474;
-    L_0x0472:
+        goto L_0x0472;
+    L_0x0470:
         r4 = 0;
-        goto L_0x0475;
-    L_0x0474:
+        goto L_0x0473;
+    L_0x0472:
         r4 = 1;
-    L_0x0475:
+    L_0x0473:
         r5.setGroupConversation(r4);
         r4 = new java.lang.StringBuilder;
         r4.<init>();
@@ -9043,24 +9036,24 @@ public class NotificationsController extends BaseController {
         r14 = new java.lang.String[r12];
         r47 = r1;
         r1 = new boolean[r12];
-        if (r36 == 0) goto L_0x048e;
-    L_0x0486:
+        if (r36 == 0) goto L_0x048c;
+    L_0x0484:
         r17 = new org.json.JSONArray;
         r17.<init>();
         r48 = r17;
-        goto L_0x0490;
-    L_0x048e:
+        goto L_0x048e;
+    L_0x048c:
         r48 = 0;
-    L_0x0490:
+    L_0x048e:
         r17 = r15.size();
         r49 = r17 + -1;
         r12 = r49;
         r50 = 0;
         r51 = 0;
-    L_0x049c:
+    L_0x049a:
         r52 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        if (r12 < 0) goto L_0x07de;
-    L_0x04a0:
+        if (r12 < 0) goto L_0x07dc;
+    L_0x049e:
         r49 = r15.get(r12);
         r54 = r15;
         r15 = r49;
@@ -9068,35 +9061,35 @@ public class NotificationsController extends BaseController {
         r49 = r12;
         r12 = r0.getShortStringForMessage(r15, r14, r1);
         r55 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
-        if (r55 != 0) goto L_0x04bb;
-    L_0x04b4:
+        if (r55 != 0) goto L_0x04b9;
+    L_0x04b2:
         r19 = 0;
         r14[r19] = r2;
         r55 = r2;
-        goto L_0x04d5;
-    L_0x04bb:
+        goto L_0x04d3;
+    L_0x04b9:
         r19 = 0;
         r55 = r2;
-        if (r11 >= 0) goto L_0x04d5;
-    L_0x04c1:
+        if (r11 >= 0) goto L_0x04d3;
+    L_0x04bf:
         r2 = r15.messageOwner;
         r2 = r2.from_scheduled;
-        if (r2 == 0) goto L_0x04d5;
-    L_0x04c7:
+        if (r2 == 0) goto L_0x04d3;
+    L_0x04c5:
         r2 = NUM; // 0x7f0e06fc float:1.8878664E38 double:1.05316304E-314;
         r56 = r5;
         r5 = "NotificationMessageScheduledName";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r14[r19] = r2;
-        goto L_0x04d7;
-    L_0x04d5:
+        goto L_0x04d5;
+    L_0x04d3:
         r56 = r5;
+    L_0x04d5:
+        if (r12 != 0) goto L_0x051e;
     L_0x04d7:
-        if (r12 != 0) goto L_0x0520;
-    L_0x04d9:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x0511;
-    L_0x04dd:
+        if (r2 == 0) goto L_0x050f;
+    L_0x04db:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r5 = "message text is null for ";
@@ -9117,8 +9110,8 @@ public class NotificationsController extends BaseController {
         r60 = r13;
         r1 = r48;
         r2 = r56;
-        goto L_0x07ca;
-    L_0x0511:
+        goto L_0x07c8;
+    L_0x050f:
         r44 = r1;
         r57 = r6;
         r60 = r13;
@@ -9126,24 +9119,24 @@ public class NotificationsController extends BaseController {
         r1 = r48;
         r2 = r56;
         r14 = r3;
-        goto L_0x07ca;
-    L_0x0520:
+        goto L_0x07c8;
+    L_0x051e:
         r5 = r14;
         r2 = r4.length();
-        if (r2 <= 0) goto L_0x052c;
-    L_0x0527:
+        if (r2 <= 0) goto L_0x052a;
+    L_0x0525:
         r2 = "\n\n";
         r4.append(r2);
-    L_0x052c:
+    L_0x052a:
         r2 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
-        if (r2 == 0) goto L_0x0558;
-    L_0x0530:
+        if (r2 == 0) goto L_0x0556;
+    L_0x052e:
         r2 = r15.messageOwner;
         r2 = r2.from_scheduled;
-        if (r2 == 0) goto L_0x0558;
+        if (r2 == 0) goto L_0x0556;
+    L_0x0534:
+        if (r11 <= 0) goto L_0x0556;
     L_0x0536:
-        if (r11 <= 0) goto L_0x0558;
-    L_0x0538:
         r2 = 2;
         r14 = new java.lang.Object[r2];
         r2 = r5;
@@ -9159,14 +9152,14 @@ public class NotificationsController extends BaseController {
         r6 = "%1$s: %2$s";
         r12 = java.lang.String.format(r6, r5);
         r4.append(r12);
-        goto L_0x0577;
-    L_0x0558:
+        goto L_0x0575;
+    L_0x0556:
         r2 = r5;
         r57 = r6;
         r7 = 0;
         r5 = r2[r7];
-        if (r5 == 0) goto L_0x0574;
-    L_0x0560:
+        if (r5 == 0) goto L_0x0572;
+    L_0x055e:
         r5 = 2;
         r6 = new java.lang.Object[r5];
         r5 = r2[r7];
@@ -9176,149 +9169,149 @@ public class NotificationsController extends BaseController {
         r5 = "%1$s: %2$s";
         r5 = java.lang.String.format(r5, r6);
         r4.append(r5);
-        goto L_0x0577;
-    L_0x0574:
+        goto L_0x0575;
+    L_0x0572:
         r4.append(r12);
+    L_0x0575:
+        if (r11 <= 0) goto L_0x0579;
     L_0x0577:
-        if (r11 <= 0) goto L_0x057b;
-    L_0x0579:
         r5 = (long) r11;
-        goto L_0x0588;
+        goto L_0x0586;
+    L_0x0579:
+        if (r3 == 0) goto L_0x057e;
     L_0x057b:
-        if (r3 == 0) goto L_0x0580;
-    L_0x057d:
         r5 = -r11;
-    L_0x057e:
+    L_0x057c:
         r5 = (long) r5;
-        goto L_0x0588;
+        goto L_0x0586;
+    L_0x057e:
+        if (r11 >= 0) goto L_0x0585;
     L_0x0580:
-        if (r11 >= 0) goto L_0x0587;
-    L_0x0582:
         r5 = r15.getFromId();
-        goto L_0x057e;
-    L_0x0587:
+        goto L_0x057c;
+    L_0x0585:
         r5 = r8;
-    L_0x0588:
+    L_0x0586:
         r7 = r13.get(r5);
         r7 = (androidx.core.app.Person) r7;
-        if (r7 != 0) goto L_0x0615;
-    L_0x0590:
+        if (r7 != 0) goto L_0x0613;
+    L_0x058e:
         r7 = new androidx.core.app.Person$Builder;
         r7.<init>();
         r19 = 0;
         r44 = r2[r19];
-        if (r44 != 0) goto L_0x059d;
-    L_0x059b:
+        if (r44 != 0) goto L_0x059b;
+    L_0x0599:
         r14 = r10;
-        goto L_0x05a1;
-    L_0x059d:
+        goto L_0x059f;
+    L_0x059b:
         r44 = r2[r19];
         r14 = r44;
-    L_0x05a1:
+    L_0x059f:
         r7.setName(r14);
         r14 = r1[r19];
-        if (r14 == 0) goto L_0x0608;
+        if (r14 == 0) goto L_0x0606;
+    L_0x05a6:
+        if (r11 == 0) goto L_0x0606;
     L_0x05a8:
-        if (r11 == 0) goto L_0x0608;
-    L_0x05aa:
         r14 = android.os.Build.VERSION.SDK_INT;
         r44 = r1;
         r1 = 28;
-        if (r14 < r1) goto L_0x060a;
+        if (r14 < r1) goto L_0x0608;
+    L_0x05b0:
+        if (r11 > 0) goto L_0x05fd;
     L_0x05b2:
-        if (r11 > 0) goto L_0x05ff;
+        if (r3 == 0) goto L_0x05b5;
     L_0x05b4:
-        if (r3 == 0) goto L_0x05b7;
-    L_0x05b6:
-        goto L_0x05ff;
+        goto L_0x05fd;
+    L_0x05b5:
+        if (r11 >= 0) goto L_0x05f8;
     L_0x05b7:
-        if (r11 >= 0) goto L_0x05fa;
-    L_0x05b9:
         r1 = r15.getFromId();
         r14 = r62.getMessagesController();
         r59 = r2;
         r2 = java.lang.Integer.valueOf(r1);
         r2 = r14.getUser(r2);
-        if (r2 != 0) goto L_0x05df;
-    L_0x05cd:
+        if (r2 != 0) goto L_0x05dd;
+    L_0x05cb:
         r2 = r62.getMessagesStorage();
         r2 = r2.getUserSync(r1);
-        if (r2 == 0) goto L_0x05df;
-    L_0x05d7:
+        if (r2 == 0) goto L_0x05dd;
+    L_0x05d5:
         r1 = r62.getMessagesController();
         r14 = 1;
         r1.putUser(r2, r14);
+    L_0x05dd:
+        if (r2 == 0) goto L_0x05fa;
     L_0x05df:
-        if (r2 == 0) goto L_0x05fc;
-    L_0x05e1:
         r1 = r2.photo;
-        if (r1 == 0) goto L_0x05fc;
-    L_0x05e5:
+        if (r1 == 0) goto L_0x05fa;
+    L_0x05e3:
         r1 = r1.photo_small;
-        if (r1 == 0) goto L_0x05fc;
-    L_0x05e9:
+        if (r1 == 0) goto L_0x05fa;
+    L_0x05e7:
         r14 = r3;
         r2 = r1.volume_id;
         r60 = (r2 > r24 ? 1 : (r2 == r24 ? 0 : -1));
-        if (r60 == 0) goto L_0x05fd;
-    L_0x05f0:
+        if (r60 == 0) goto L_0x05fb;
+    L_0x05ee:
         r2 = r1.local_id;
-        if (r2 == 0) goto L_0x05fd;
-    L_0x05f4:
+        if (r2 == 0) goto L_0x05fb;
+    L_0x05f2:
         r2 = 1;
         r1 = org.telegram.messenger.FileLoader.getPathToAttach(r1, r2);
-        goto L_0x0604;
-    L_0x05fa:
+        goto L_0x0602;
+    L_0x05f8:
         r59 = r2;
-    L_0x05fc:
+    L_0x05fa:
         r14 = r3;
-    L_0x05fd:
+    L_0x05fb:
         r1 = 0;
-        goto L_0x0604;
-    L_0x05ff:
+        goto L_0x0602;
+    L_0x05fd:
         r59 = r2;
         r14 = r3;
         r1 = r34;
-    L_0x0604:
+    L_0x0602:
         r0.loadRoundAvatar(r1, r7);
-        goto L_0x060d;
-    L_0x0608:
+        goto L_0x060b;
+    L_0x0606:
         r44 = r1;
-    L_0x060a:
+    L_0x0608:
         r59 = r2;
         r14 = r3;
-    L_0x060d:
+    L_0x060b:
         r7 = r7.build();
         r13.put(r5, r7);
-        goto L_0x061a;
-    L_0x0615:
+        goto L_0x0618;
+    L_0x0613:
         r44 = r1;
         r59 = r2;
         r14 = r3;
+    L_0x0618:
+        if (r11 == 0) goto L_0x075f;
     L_0x061a:
-        if (r11 == 0) goto L_0x0761;
-    L_0x061c:
         r1 = android.os.Build.VERSION.SDK_INT;
         r2 = 28;
-        if (r1 < r2) goto L_0x0714;
-    L_0x0622:
+        if (r1 < r2) goto L_0x0712;
+    L_0x0620:
         r1 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r3 = "activity";
         r1 = r1.getSystemService(r3);
         r1 = (android.app.ActivityManager) r1;
         r1 = r1.isLowRamDevice();
-        if (r1 != 0) goto L_0x0714;
-    L_0x0632:
+        if (r1 != 0) goto L_0x0712;
+    L_0x0630:
         r1 = r15.isSecretMedia();
-        if (r1 != 0) goto L_0x0705;
-    L_0x0638:
+        if (r1 != 0) goto L_0x0703;
+    L_0x0636:
         r1 = r15.type;
         r3 = 1;
-        if (r1 == r3) goto L_0x0643;
-    L_0x063d:
+        if (r1 == r3) goto L_0x0641;
+    L_0x063b:
         r1 = r15.isSticker();
-        if (r1 == 0) goto L_0x0705;
-    L_0x0643:
+        if (r1 == 0) goto L_0x0703;
+    L_0x0641:
         r1 = r15.messageOwner;
         r1 = org.telegram.messenger.FileLoader.getPathToMessage(r1);
         r3 = new androidx.core.app.NotificationCompat$MessagingStyle$Message;
@@ -9328,27 +9321,27 @@ public class NotificationsController extends BaseController {
         r5 = r5 * r52;
         r3.<init>(r12, r5, r7);
         r5 = r15.isSticker();
-        if (r5 == 0) goto L_0x065e;
-    L_0x065b:
+        if (r5 == 0) goto L_0x065c;
+    L_0x0659:
         r5 = "image/webp";
-        goto L_0x0660;
-    L_0x065e:
+        goto L_0x065e;
+    L_0x065c:
         r5 = "image/jpeg";
-    L_0x0660:
+    L_0x065e:
         r6 = r1.exists();
-        if (r6 == 0) goto L_0x0671;
-    L_0x0666:
+        if (r6 == 0) goto L_0x066f;
+    L_0x0664:
         r6 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r2 = "org.telegram.messenger.beta.provider";
         r1 = androidx.core.content.FileProvider.getUriForFile(r6, r2, r1);
         r60 = r13;
-        goto L_0x06c7;
-    L_0x0671:
+        goto L_0x06c5;
+    L_0x066f:
         r2 = r62.getFileLoader();
         r6 = r1.getName();
         r2 = r2.isLoadingFile(r6);
-        if (r2 == 0) goto L_0x06c4;
-    L_0x067f:
+        if (r2 == 0) goto L_0x06c2;
+    L_0x067d:
         r2 = new android.net.Uri$Builder;
         r2.<init>();
         r6 = "content";
@@ -9371,13 +9364,13 @@ public class NotificationsController extends BaseController {
         r6 = "final_path";
         r1 = r2.appendQueryParameter(r6, r1);
         r1 = r1.build();
-        goto L_0x06c7;
-    L_0x06c4:
+        goto L_0x06c5;
+    L_0x06c2:
         r60 = r13;
         r1 = 0;
+    L_0x06c5:
+        if (r1 == 0) goto L_0x06f6;
     L_0x06c7:
-        if (r1 == 0) goto L_0x06f8;
-    L_0x06c9:
         r3.setData(r5, r1);
         r2 = r56;
         r2.addMessage(r3);
@@ -9391,24 +9384,24 @@ public class NotificationsController extends BaseController {
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r5);
         r1 = r15.caption;
         r1 = android.text.TextUtils.isEmpty(r1);
-        if (r1 != 0) goto L_0x0722;
-    L_0x06eb:
+        if (r1 != 0) goto L_0x0720;
+    L_0x06e9:
         r1 = r15.caption;
         r3 = r15.messageOwner;
         r3 = r3.date;
         r5 = (long) r3;
         r5 = r5 * r52;
         r2.addMessage(r1, r5, r7);
-        goto L_0x0722;
-    L_0x06f8:
+        goto L_0x0720;
+    L_0x06f6:
         r2 = r56;
         r1 = r15.messageOwner;
         r1 = r1.date;
         r5 = (long) r1;
         r5 = r5 * r52;
         r2.addMessage(r12, r5, r7);
-        goto L_0x0722;
-    L_0x0705:
+        goto L_0x0720;
+    L_0x0703:
         r60 = r13;
         r2 = r56;
         r1 = r15.messageOwner;
@@ -9416,8 +9409,8 @@ public class NotificationsController extends BaseController {
         r5 = (long) r1;
         r5 = r5 * r52;
         r2.addMessage(r12, r5, r7);
-        goto L_0x0722;
-    L_0x0714:
+        goto L_0x0720;
+    L_0x0712:
         r60 = r13;
         r2 = r56;
         r1 = r15.messageOwner;
@@ -9425,32 +9418,32 @@ public class NotificationsController extends BaseController {
         r5 = (long) r1;
         r5 = r5 * r52;
         r2.addMessage(r12, r5, r7);
-    L_0x0722:
+    L_0x0720:
         r1 = r15.isVoice();
-        if (r1 == 0) goto L_0x076f;
-    L_0x0728:
+        if (r1 == 0) goto L_0x076d;
+    L_0x0726:
         r1 = r2.getMessages();
         r3 = r1.isEmpty();
-        if (r3 != 0) goto L_0x076f;
-    L_0x0732:
+        if (r3 != 0) goto L_0x076d;
+    L_0x0730:
         r3 = r15.messageOwner;
         r3 = org.telegram.messenger.FileLoader.getPathToMessage(r3);
         r5 = android.os.Build.VERSION.SDK_INT;
         r6 = 24;
-        if (r5 < r6) goto L_0x0749;
-    L_0x073e:
-        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0747 }
+        if (r5 < r6) goto L_0x0747;
+    L_0x073c:
+        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0745 }
         r6 = "org.telegram.messenger.beta.provider";
-        r3 = androidx.core.content.FileProvider.getUriForFile(r5, r6, r3);	 Catch:{ Exception -> 0x0747 }
-        goto L_0x074d;
-    L_0x0747:
+        r3 = androidx.core.content.FileProvider.getUriForFile(r5, r6, r3);	 Catch:{ Exception -> 0x0745 }
+        goto L_0x074b;
+    L_0x0745:
         r3 = 0;
-        goto L_0x074d;
-    L_0x0749:
+        goto L_0x074b;
+    L_0x0747:
         r3 = android.net.Uri.fromFile(r3);
+    L_0x074b:
+        if (r3 == 0) goto L_0x076d;
     L_0x074d:
-        if (r3 == 0) goto L_0x076f;
-    L_0x074f:
         r5 = r1.size();
         r6 = 1;
         r5 = r5 - r6;
@@ -9458,8 +9451,8 @@ public class NotificationsController extends BaseController {
         r1 = (androidx.core.app.NotificationCompat.MessagingStyle.Message) r1;
         r5 = "audio/ogg";
         r1.setData(r5, r3);
-        goto L_0x076f;
-    L_0x0761:
+        goto L_0x076d;
+    L_0x075f:
         r60 = r13;
         r2 = r56;
         r1 = r15.messageOwner;
@@ -9467,52 +9460,52 @@ public class NotificationsController extends BaseController {
         r5 = (long) r1;
         r5 = r5 * r52;
         r2.addMessage(r12, r5, r7);
-    L_0x076f:
+    L_0x076d:
         r1 = r48;
-        if (r1 == 0) goto L_0x07b3;
-    L_0x0773:
-        r3 = new org.json.JSONObject;	 Catch:{ JSONException -> 0x07b2 }
-        r3.<init>();	 Catch:{ JSONException -> 0x07b2 }
+        if (r1 == 0) goto L_0x07b1;
+    L_0x0771:
+        r3 = new org.json.JSONObject;	 Catch:{ JSONException -> 0x07b0 }
+        r3.<init>();	 Catch:{ JSONException -> 0x07b0 }
         r5 = "text";
-        r3.put(r5, r12);	 Catch:{ JSONException -> 0x07b2 }
+        r3.put(r5, r12);	 Catch:{ JSONException -> 0x07b0 }
         r5 = "date";
-        r6 = r15.messageOwner;	 Catch:{ JSONException -> 0x07b2 }
-        r6 = r6.date;	 Catch:{ JSONException -> 0x07b2 }
-        r3.put(r5, r6);	 Catch:{ JSONException -> 0x07b2 }
-        r5 = r15.isFromUser();	 Catch:{ JSONException -> 0x07b2 }
-        if (r5 == 0) goto L_0x07ae;
+        r6 = r15.messageOwner;	 Catch:{ JSONException -> 0x07b0 }
+        r6 = r6.date;	 Catch:{ JSONException -> 0x07b0 }
+        r3.put(r5, r6);	 Catch:{ JSONException -> 0x07b0 }
+        r5 = r15.isFromUser();	 Catch:{ JSONException -> 0x07b0 }
+        if (r5 == 0) goto L_0x07ac;
+    L_0x078a:
+        if (r11 >= 0) goto L_0x07ac;
     L_0x078c:
-        if (r11 >= 0) goto L_0x07ae;
-    L_0x078e:
-        r5 = r62.getMessagesController();	 Catch:{ JSONException -> 0x07b2 }
-        r6 = r15.getFromId();	 Catch:{ JSONException -> 0x07b2 }
-        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ JSONException -> 0x07b2 }
-        r5 = r5.getUser(r6);	 Catch:{ JSONException -> 0x07b2 }
-        if (r5 == 0) goto L_0x07ae;
-    L_0x07a0:
+        r5 = r62.getMessagesController();	 Catch:{ JSONException -> 0x07b0 }
+        r6 = r15.getFromId();	 Catch:{ JSONException -> 0x07b0 }
+        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ JSONException -> 0x07b0 }
+        r5 = r5.getUser(r6);	 Catch:{ JSONException -> 0x07b0 }
+        if (r5 == 0) goto L_0x07ac;
+    L_0x079e:
         r6 = "fname";
-        r7 = r5.first_name;	 Catch:{ JSONException -> 0x07b2 }
-        r3.put(r6, r7);	 Catch:{ JSONException -> 0x07b2 }
+        r7 = r5.first_name;	 Catch:{ JSONException -> 0x07b0 }
+        r3.put(r6, r7);	 Catch:{ JSONException -> 0x07b0 }
         r6 = "lname";
-        r5 = r5.last_name;	 Catch:{ JSONException -> 0x07b2 }
-        r3.put(r6, r5);	 Catch:{ JSONException -> 0x07b2 }
-    L_0x07ae:
-        r1.put(r3);	 Catch:{ JSONException -> 0x07b2 }
-        goto L_0x07b3;
-    L_0x07b3:
+        r5 = r5.last_name;	 Catch:{ JSONException -> 0x07b0 }
+        r3.put(r6, r5);	 Catch:{ JSONException -> 0x07b0 }
+    L_0x07ac:
+        r1.put(r3);	 Catch:{ JSONException -> 0x07b0 }
+        goto L_0x07b1;
+    L_0x07b1:
         r5 = 777000; // 0xbdb28 float:1.088809E-39 double:3.83889E-318;
         r3 = (r8 > r5 ? 1 : (r8 == r5 ? 0 : -1));
-        if (r3 != 0) goto L_0x07ca;
-    L_0x07ba:
+        if (r3 != 0) goto L_0x07c8;
+    L_0x07b8:
         r3 = r15.messageOwner;
         r3 = r3.reply_markup;
-        if (r3 == 0) goto L_0x07ca;
-    L_0x07c0:
+        if (r3 == 0) goto L_0x07c8;
+    L_0x07be:
         r3 = r3.rows;
         r5 = r15.getId();
         r50 = r3;
         r51 = r5;
-    L_0x07ca:
+    L_0x07c8:
         r12 = r49 + -1;
         r48 = r1;
         r5 = r2;
@@ -9523,8 +9516,8 @@ public class NotificationsController extends BaseController {
         r6 = r57;
         r14 = r59;
         r13 = r60;
-        goto L_0x049c;
-    L_0x07de:
+        goto L_0x049a;
+    L_0x07dc:
         r55 = r2;
         r14 = r3;
         r2 = r5;
@@ -9548,25 +9541,25 @@ public class NotificationsController extends BaseController {
         r3.setFlags(r5);
         r5 = "android.intent.category.LAUNCHER";
         r3.addCategory(r5);
-        if (r11 == 0) goto L_0x082b;
+        if (r11 == 0) goto L_0x0829;
+    L_0x0818:
+        if (r11 <= 0) goto L_0x0820;
     L_0x081a:
-        if (r11 <= 0) goto L_0x0822;
-    L_0x081c:
         r5 = "userId";
         r3.putExtra(r5, r11);
-        goto L_0x0828;
-    L_0x0822:
+        goto L_0x0826;
+    L_0x0820:
         r5 = -r11;
         r6 = "chatId";
         r3.putExtra(r6, r5);
-    L_0x0828:
+    L_0x0826:
         r6 = r35;
-        goto L_0x0832;
-    L_0x082b:
+        goto L_0x0830;
+    L_0x0829:
         r5 = "encId";
         r6 = r35;
         r3.putExtra(r5, r6);
-    L_0x0832:
+    L_0x0830:
         r5 = r0.currentAccount;
         r7 = r47;
         r3.putExtra(r7, r5);
@@ -9577,10 +9570,10 @@ public class NotificationsController extends BaseController {
         r5 = new androidx.core.app.NotificationCompat$WearableExtender;
         r5.<init>();
         r12 = r46;
-        if (r46 == 0) goto L_0x084e;
-    L_0x084b:
+        if (r46 == 0) goto L_0x084c;
+    L_0x0849:
         r5.addAction(r12);
-    L_0x084e:
+    L_0x084c:
         r13 = new android.content.Intent;
         r15 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r24 = r14;
@@ -9616,10 +9609,10 @@ public class NotificationsController extends BaseController {
         r12.setShowsUserInterface(r1);
         r1 = r12.build();
         r7 = "_";
-        if (r11 == 0) goto L_0x08da;
+        if (r11 == 0) goto L_0x08d8;
+    L_0x08a5:
+        if (r11 <= 0) goto L_0x08bf;
     L_0x08a7:
-        if (r11 <= 0) goto L_0x08c1;
-    L_0x08a9:
         r6 = new java.lang.StringBuilder;
         r6.<init>();
         r12 = "tguser";
@@ -9628,8 +9621,8 @@ public class NotificationsController extends BaseController {
         r6.append(r7);
         r6.append(r14);
         r6 = r6.toString();
-        goto L_0x08f9;
-    L_0x08c1:
+        goto L_0x08f7;
+    L_0x08bf:
         r6 = new java.lang.StringBuilder;
         r6.<init>();
         r12 = "tgchat";
@@ -9639,12 +9632,12 @@ public class NotificationsController extends BaseController {
         r6.append(r7);
         r6.append(r14);
         r6 = r6.toString();
-        goto L_0x08f9;
-    L_0x08da:
+        goto L_0x08f7;
+    L_0x08d8:
         r12 = globalSecretChatId;
         r15 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1));
-        if (r15 == 0) goto L_0x08f8;
-    L_0x08e0:
+        if (r15 == 0) goto L_0x08f6;
+    L_0x08de:
         r12 = new java.lang.StringBuilder;
         r12.<init>();
         r13 = "tgenc";
@@ -9653,12 +9646,12 @@ public class NotificationsController extends BaseController {
         r12.append(r7);
         r12.append(r14);
         r6 = r12.toString();
-        goto L_0x08f9;
-    L_0x08f8:
+        goto L_0x08f7;
+    L_0x08f6:
         r6 = 0;
+    L_0x08f7:
+        if (r6 == 0) goto L_0x091b;
     L_0x08f9:
-        if (r6 == 0) goto L_0x091d;
-    L_0x08fb:
         r5.setDismissalId(r6);
         r12 = new androidx.core.app.NotificationCompat$WearableExtender;
         r12.<init>();
@@ -9671,10 +9664,10 @@ public class NotificationsController extends BaseController {
         r12.setDismissalId(r6);
         r6 = r63;
         r6.extend(r12);
-        goto L_0x091f;
-    L_0x091d:
+        goto L_0x091d;
+    L_0x091b:
         r6 = r63;
-    L_0x091f:
+    L_0x091d:
         r12 = new java.lang.StringBuilder;
         r12.<init>();
         r13 = "tgaccount";
@@ -9750,73 +9743,73 @@ public class NotificationsController extends BaseController {
         r12 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
         r2 = android.app.PendingIntent.getBroadcast(r3, r10, r2, r12);
         r6.setDeleteIntent(r2);
-        if (r16 == 0) goto L_0x09f0;
-    L_0x09e6:
+        if (r16 == 0) goto L_0x09ee;
+    L_0x09e4:
         r2 = r0.notificationGroup;
         r6.setGroup(r2);
         r2 = 1;
         r6.setGroupAlertBehavior(r2);
-        goto L_0x09f1;
-    L_0x09f0:
+        goto L_0x09ef;
+    L_0x09ee:
         r2 = 1;
+    L_0x09ef:
+        if (r46 == 0) goto L_0x09f6;
     L_0x09f1:
-        if (r46 == 0) goto L_0x09f8;
-    L_0x09f3:
         r3 = r46;
         r6.addAction(r3);
-    L_0x09f8:
+    L_0x09f6:
         r6.addAction(r1);
         r1 = r0.pushDialogs;
         r1 = r1.size();
-        if (r1 != r2) goto L_0x0a0f;
-    L_0x0a03:
+        if (r1 != r2) goto L_0x0a0d;
+    L_0x0a01:
         r1 = android.text.TextUtils.isEmpty(r65);
-        if (r1 != 0) goto L_0x0a0f;
-    L_0x0a09:
+        if (r1 != 0) goto L_0x0a0d;
+    L_0x0a07:
         r1 = r65;
         r6.setSubText(r1);
-        goto L_0x0a11;
-    L_0x0a0f:
+        goto L_0x0a0f;
+    L_0x0a0d:
         r1 = r65;
+    L_0x0a0f:
+        if (r11 != 0) goto L_0x0a14;
     L_0x0a11:
-        if (r11 != 0) goto L_0x0a16;
-    L_0x0a13:
         r6.setLocalOnly(r2);
+    L_0x0a14:
+        if (r40 == 0) goto L_0x0a1b;
     L_0x0a16:
-        if (r40 == 0) goto L_0x0a1d;
-    L_0x0a18:
         r3 = r40;
         r6.setLargeIcon(r3);
-    L_0x0a1d:
+    L_0x0a1b:
         r3 = 0;
         r10 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r3);
-        if (r10 != 0) goto L_0x0abd;
-    L_0x0a24:
+        if (r10 != 0) goto L_0x0abb;
+    L_0x0a22:
         r3 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter;
-        if (r3 != 0) goto L_0x0abd;
-    L_0x0a28:
+        if (r3 != 0) goto L_0x0abb;
+    L_0x0a26:
         r3 = r50;
-        if (r3 == 0) goto L_0x0abd;
-    L_0x0a2c:
+        if (r3 == 0) goto L_0x0abb;
+    L_0x0a2a:
         r10 = r3.size();
         r12 = 0;
+    L_0x0a2f:
+        if (r12 >= r10) goto L_0x0abb;
     L_0x0a31:
-        if (r12 >= r10) goto L_0x0abd;
-    L_0x0a33:
         r13 = r3.get(r12);
         r13 = (org.telegram.tgnet.TLRPC.TL_keyboardButtonRow) r13;
         r14 = r13.buttons;
         r14 = r14.size();
         r15 = 0;
+    L_0x0a3e:
+        if (r15 >= r14) goto L_0x0aa5;
     L_0x0a40:
-        if (r15 >= r14) goto L_0x0aa7;
-    L_0x0a42:
         r2 = r13.buttons;
         r2 = r2.get(r15);
         r2 = (org.telegram.tgnet.TLRPC.KeyboardButton) r2;
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonCallback;
-        if (r1 == 0) goto L_0x0a8e;
-    L_0x0a4e:
+        if (r1 == 0) goto L_0x0a8c;
+    L_0x0a4c:
         r1 = new android.content.Intent;
         r30 = r3;
         r3 = org.telegram.messenger.ApplicationLoader.applicationContext;
@@ -9828,11 +9821,11 @@ public class NotificationsController extends BaseController {
         r3 = "did";
         r1.putExtra(r3, r8);
         r3 = r2.data;
-        if (r3 == 0) goto L_0x0a6e;
-    L_0x0a69:
+        if (r3 == 0) goto L_0x0a6c;
+    L_0x0a67:
         r10 = "data";
         r1.putExtra(r10, r3);
-    L_0x0a6e:
+    L_0x0a6c:
         r3 = "mid";
         r10 = r51;
         r1.putExtra(r3, r10);
@@ -9847,15 +9840,15 @@ public class NotificationsController extends BaseController {
         r1 = android.app.PendingIntent.getBroadcast(r3, r5, r1, r10);
         r3 = 0;
         r6.addAction(r3, r2, r1);
-        goto L_0x0a99;
-    L_0x0a8e:
+        goto L_0x0a97;
+    L_0x0a8c:
         r30 = r3;
         r47 = r5;
         r34 = r10;
         r35 = r51;
         r3 = 0;
         r10 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
-    L_0x0a99:
+    L_0x0a97:
         r15 = r15 + 1;
         r1 = r65;
         r3 = r30;
@@ -9863,8 +9856,8 @@ public class NotificationsController extends BaseController {
         r51 = r35;
         r5 = r47;
         r2 = 1;
-        goto L_0x0a40;
-    L_0x0aa7:
+        goto L_0x0a3e;
+    L_0x0aa5:
         r30 = r3;
         r47 = r5;
         r34 = r10;
@@ -9876,20 +9869,20 @@ public class NotificationsController extends BaseController {
         r3 = r30;
         r10 = r34;
         r2 = 1;
-        goto L_0x0a31;
-    L_0x0abd:
+        goto L_0x0a2f;
+    L_0x0abb:
         r3 = 0;
-        if (r32 != 0) goto L_0x0ae4;
+        if (r32 != 0) goto L_0x0ae2;
+    L_0x0abe:
+        if (r27 == 0) goto L_0x0ae2;
     L_0x0ac0:
-        if (r27 == 0) goto L_0x0ae4;
-    L_0x0ac2:
         r2 = r27;
         r1 = r2.phone;
-        if (r1 == 0) goto L_0x0ae4;
-    L_0x0ac8:
+        if (r1 == 0) goto L_0x0ae2;
+    L_0x0ac6:
         r1 = r1.length();
-        if (r1 <= 0) goto L_0x0ae4;
-    L_0x0ace:
+        if (r1 <= 0) goto L_0x0ae2;
+    L_0x0acc:
         r1 = new java.lang.StringBuilder;
         r1.<init>();
         r5 = "tel:+";
@@ -9898,20 +9891,20 @@ public class NotificationsController extends BaseController {
         r1.append(r2);
         r1 = r1.toString();
         r6.addPerson(r1);
-    L_0x0ae4:
+    L_0x0ae2:
         r1 = android.os.Build.VERSION.SDK_INT;
         r2 = 26;
-        if (r1 < r2) goto L_0x0af9;
+        if (r1 < r2) goto L_0x0af7;
+    L_0x0ae8:
+        if (r16 == 0) goto L_0x0af0;
     L_0x0aea:
-        if (r16 == 0) goto L_0x0af2;
-    L_0x0aec:
         r1 = OTHER_NOTIFICATIONS_CHANNEL;
         r6.setChannelId(r1);
-        goto L_0x0af9;
-    L_0x0af2:
+        goto L_0x0af7;
+    L_0x0af0:
         r1 = r31.getChannelId();
         r6.setChannelId(r1);
-    L_0x0af9:
+    L_0x0af7:
         r1 = new org.telegram.messenger.NotificationsController$1NotificationHolder;
         r5 = r41.intValue();
         r6 = r6.build();
@@ -9921,76 +9914,76 @@ public class NotificationsController extends BaseController {
         r1 = r0.wearNotificationsIds;
         r6 = r41;
         r1.put(r8, r6);
-        if (r11 == 0) goto L_0x0b8d;
+        if (r11 == 0) goto L_0x0b8b;
+    L_0x0b12:
+        if (r36 == 0) goto L_0x0b8b;
     L_0x0b14:
-        if (r36 == 0) goto L_0x0b8d;
-    L_0x0b16:
         r1 = "reply";
         r8 = r36;
         r6 = r39;
-        r8.put(r1, r6);	 Catch:{ JSONException -> 0x0b8d }
+        r8.put(r1, r6);	 Catch:{ JSONException -> 0x0b8b }
         r1 = "name";
-        r8.put(r1, r7);	 Catch:{ JSONException -> 0x0b8d }
+        r8.put(r1, r7);	 Catch:{ JSONException -> 0x0b8b }
         r6 = r43;
         r1 = r45;
-        r8.put(r6, r1);	 Catch:{ JSONException -> 0x0b8d }
+        r8.put(r6, r1);	 Catch:{ JSONException -> 0x0b8b }
         r1 = "max_date";
-        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8d }
+        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8b }
         r1 = "id";
-        r4 = java.lang.Math.abs(r11);	 Catch:{ JSONException -> 0x0b8d }
-        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8d }
-        if (r38 == 0) goto L_0x0b62;
-    L_0x0b3b:
+        r4 = java.lang.Math.abs(r11);	 Catch:{ JSONException -> 0x0b8b }
+        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8b }
+        if (r38 == 0) goto L_0x0b60;
+    L_0x0b39:
         r1 = "photo";
-        r4 = new java.lang.StringBuilder;	 Catch:{ JSONException -> 0x0b8d }
-        r4.<init>();	 Catch:{ JSONException -> 0x0b8d }
+        r4 = new java.lang.StringBuilder;	 Catch:{ JSONException -> 0x0b8b }
+        r4.<init>();	 Catch:{ JSONException -> 0x0b8b }
         r14 = r38;
-        r6 = r14.dc_id;	 Catch:{ JSONException -> 0x0b8d }
-        r4.append(r6);	 Catch:{ JSONException -> 0x0b8d }
+        r6 = r14.dc_id;	 Catch:{ JSONException -> 0x0b8b }
+        r4.append(r6);	 Catch:{ JSONException -> 0x0b8b }
         r6 = r33;
-        r4.append(r6);	 Catch:{ JSONException -> 0x0b8d }
-        r9 = r14.volume_id;	 Catch:{ JSONException -> 0x0b8d }
-        r4.append(r9);	 Catch:{ JSONException -> 0x0b8d }
-        r4.append(r6);	 Catch:{ JSONException -> 0x0b8d }
-        r6 = r14.secret;	 Catch:{ JSONException -> 0x0b8d }
-        r4.append(r6);	 Catch:{ JSONException -> 0x0b8d }
-        r4 = r4.toString();	 Catch:{ JSONException -> 0x0b8d }
-        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8d }
+        r4.append(r6);	 Catch:{ JSONException -> 0x0b8b }
+        r9 = r14.volume_id;	 Catch:{ JSONException -> 0x0b8b }
+        r4.append(r9);	 Catch:{ JSONException -> 0x0b8b }
+        r4.append(r6);	 Catch:{ JSONException -> 0x0b8b }
+        r6 = r14.secret;	 Catch:{ JSONException -> 0x0b8b }
+        r4.append(r6);	 Catch:{ JSONException -> 0x0b8b }
+        r4 = r4.toString();	 Catch:{ JSONException -> 0x0b8b }
+        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8b }
+    L_0x0b60:
+        if (r25 == 0) goto L_0x0b69;
     L_0x0b62:
-        if (r25 == 0) goto L_0x0b6b;
-    L_0x0b64:
         r1 = "msgs";
         r4 = r25;
-        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8d }
-    L_0x0b6b:
+        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8b }
+    L_0x0b69:
         r1 = "type";
-        if (r11 <= 0) goto L_0x0b75;
-    L_0x0b6f:
+        if (r11 <= 0) goto L_0x0b73;
+    L_0x0b6d:
         r4 = "user";
-        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8d }
-        goto L_0x0b87;
+        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8b }
+        goto L_0x0b85;
+    L_0x0b73:
+        if (r11 >= 0) goto L_0x0b85;
     L_0x0b75:
-        if (r11 >= 0) goto L_0x0b87;
+        if (r24 != 0) goto L_0x0b80;
     L_0x0b77:
-        if (r24 != 0) goto L_0x0b82;
+        if (r29 == 0) goto L_0x0b7a;
     L_0x0b79:
-        if (r29 == 0) goto L_0x0b7c;
-    L_0x0b7b:
-        goto L_0x0b82;
-    L_0x0b7c:
+        goto L_0x0b80;
+    L_0x0b7a:
         r4 = "group";
-        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8d }
-        goto L_0x0b87;
-    L_0x0b82:
+        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8b }
+        goto L_0x0b85;
+    L_0x0b80:
         r4 = "channel";
-        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8d }
-    L_0x0b87:
+        r8.put(r1, r4);	 Catch:{ JSONException -> 0x0b8b }
+    L_0x0b85:
         r7 = r18;
-        r7.put(r8);	 Catch:{ JSONException -> 0x0b8f }
-        goto L_0x0b8f;
+        r7.put(r8);	 Catch:{ JSONException -> 0x0b8d }
+        goto L_0x0b8d;
+    L_0x0b8b:
+        r7 = r18;
     L_0x0b8d:
-        r7 = r18;
-    L_0x0b8f:
         r14 = r28 + 1;
         r6 = r5;
         r9 = r16;
@@ -10004,18 +9997,18 @@ public class NotificationsController extends BaseController {
         r10 = 26;
         r11 = 1;
         goto L_0x00c6;
-    L_0x0ba6:
+    L_0x0ba4:
         r31 = r1;
         r26 = r2;
         r5 = r6;
         r16 = r9;
         r42 = r12;
         r3 = 0;
-        if (r16 == 0) goto L_0x0bd6;
-    L_0x0bb2:
+        if (r16 == 0) goto L_0x0bd4;
+    L_0x0bb0:
         r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r1 == 0) goto L_0x0bcc;
-    L_0x0bb6:
+        if (r1 == 0) goto L_0x0bca;
+    L_0x0bb4:
         r1 = new java.lang.StringBuilder;
         r1.<init>();
         r2 = "show summary with id ";
@@ -10024,31 +10017,31 @@ public class NotificationsController extends BaseController {
         r1.append(r2);
         r1 = r1.toString();
         org.telegram.messenger.FileLog.d(r1);
-    L_0x0bcc:
+    L_0x0bca:
         r1 = notificationManager;
         r2 = r0.notificationId;
         r4 = r31;
         r1.notify(r2, r4);
-        goto L_0x0bdd;
-    L_0x0bd6:
+        goto L_0x0bdb;
+    L_0x0bd4:
         r1 = notificationManager;
         r2 = r0.notificationId;
         r1.cancel(r2);
-    L_0x0bdd:
+    L_0x0bdb:
         r1 = r5.size();
         r2 = 0;
+    L_0x0be0:
+        if (r2 >= r1) goto L_0x0bee;
     L_0x0be2:
-        if (r2 >= r1) goto L_0x0bf0;
-    L_0x0be4:
         r4 = r5.get(r2);
         r4 = (org.telegram.messenger.NotificationsController.AnonymousClass1NotificationHolder) r4;
         r4.call();
         r2 = r2 + 1;
-        goto L_0x0be2;
-    L_0x0bf0:
+        goto L_0x0be0;
+    L_0x0bee:
         r1 = r26.size();
         if (r3 >= r1) goto L_0x0CLASSNAME;
-    L_0x0bf6:
+    L_0x0bf4:
         r1 = r26;
         r2 = r1.valueAt(r3);
         r2 = (java.lang.Integer) r2;
@@ -10068,7 +10061,7 @@ public class NotificationsController extends BaseController {
         r4.cancel(r2);
         r3 = r3 + 1;
         r26 = r1;
-        goto L_0x0bf0;
+        goto L_0x0bee;
     L_0x0CLASSNAME:
         if (r7 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:

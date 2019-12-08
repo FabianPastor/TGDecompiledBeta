@@ -4347,7 +4347,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         tL_secureCredentialsEncrypted.data = encryptData.encryptedData;
         try {
             RSAPublicKey rSAPublicKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.decode(this.currentPublicKey.replaceAll("\\n", str).replace("-----BEGIN PUBLIC KEY-----", str).replace("-----END PUBLIC KEY-----", str), 0)));
-            Cipher instance = Cipher.getInstance("RSA/NONE/OAEPWithSHA1AndMGF1Padding", "BC");
+            Cipher instance = Cipher.getInstance("RSA/NONE/OAEPWithSHA1AndMGF1Padding");
             instance.init(1, rSAPublicKey);
             tL_account_acceptAuthorization.credentials.secret = instance.doFinal(encryptData.decrypyedFileSecret);
         } catch (Exception e) {
