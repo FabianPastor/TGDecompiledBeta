@@ -6084,6 +6084,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     private void checkFreeDiscSpace() {
+        SharedConfig.checkKeepMedia();
         if (VERSION.SDK_INT < 26) {
             Utilities.globalQueue.postRunnable(new -$$Lambda$LaunchActivity$OhtB5MFVTEjvucCdsB03AKPPH2Y(this), 2000);
         }

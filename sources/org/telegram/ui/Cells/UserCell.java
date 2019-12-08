@@ -695,15 +695,20 @@ public class UserCell extends FrameLayout {
         r2 = org.telegram.messenger.ImageLocation.getForUser(r0, r4);
         r3 = r12.avatarDrawable;
         r1.setImage(r2, r13, r3, r0);
-        goto L_0x01dc;
+        goto L_0x01e4;
     L_0x01cf:
-        if (r3 == 0) goto L_0x01dc;
+        if (r3 == 0) goto L_0x01dd;
     L_0x01d1:
         r0 = r12.avatarImageView;
         r1 = org.telegram.messenger.ImageLocation.getForChat(r3, r4);
         r2 = r12.avatarDrawable;
         r0.setImage(r1, r13, r2, r3);
-    L_0x01dc:
+        goto L_0x01e4;
+    L_0x01dd:
+        r13 = r12.avatarImageView;
+        r0 = r12.avatarDrawable;
+        r13.setImageDrawable(r0);
+    L_0x01e4:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell.update(int):void");

@@ -2161,7 +2161,7 @@ public class AlertsCreator {
     public static Dialog createFreeSpaceDialog(LaunchActivity launchActivity) {
         Context context = launchActivity;
         int[] iArr = new int[1];
-        int i = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
+        int i = SharedConfig.keepMedia;
         int i2 = 3;
         if (i == 2) {
             iArr[0] = 3;

@@ -1878,7 +1878,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public /* synthetic */ boolean lambda$new$13$ChatActivityEnterView(View view) {
-        Chat currentChat = this.parentFragment.getCurrentChat();
+        ChatActivity chatActivity = this.parentFragment;
+        if (chatActivity == null) {
+            return false;
+        }
+        Chat currentChat = chatActivity.getCurrentChat();
         User currentUser = this.parentFragment.getCurrentUser();
         if (this.slowModeTimer <= 0 && this.parentFragment.getCurrentEncryptedChat() == null && ((!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !UserObject.isUserSelf(currentUser))) {
             int measuredHeight;

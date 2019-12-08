@@ -185,7 +185,7 @@ public class UserCell2 extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8  */
     /* JADX WARNING: Removed duplicated region for block: B:87:0x00fc  */
     /* JADX WARNING: Removed duplicated region for block: B:86:0x00ec  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x0256  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x025e  */
     /* JADX WARNING: Removed duplicated region for block: B:16:0x002c  */
     /* JADX WARNING: Removed duplicated region for block: B:60:0x008d  */
     /* JADX WARNING: Removed duplicated region for block: B:63:0x0092  */
@@ -194,7 +194,7 @@ public class UserCell2 extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:76:0x00d0  */
     /* JADX WARNING: Removed duplicated region for block: B:86:0x00ec  */
     /* JADX WARNING: Removed duplicated region for block: B:87:0x00fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x0256  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x025e  */
     /* JADX WARNING: Missing block: B:30:0x004f, code skipped:
             if (r5.local_id != r1.local_id) goto L_0x0051;
      */
@@ -399,7 +399,7 @@ public class UserCell2 extends FrameLayout {
         r13 = r12.statusTextView;
         r0 = r12.currrntStatus;
         r13.setText(r0);
-        goto L_0x0235;
+        goto L_0x023d;
     L_0x00fc:
         r13 = "50_50";
         if (r0 == 0) goto L_0x0197;
@@ -474,9 +474,9 @@ public class UserCell2 extends FrameLayout {
         r2 = org.telegram.messenger.ImageLocation.getForUser(r0, r4);
         r3 = r12.avatarDrawable;
         r1.setImage(r2, r13, r3, r0);
-        goto L_0x0235;
+        goto L_0x023d;
     L_0x0197:
-        if (r3 == 0) goto L_0x0235;
+        if (r3 == 0) goto L_0x0236;
     L_0x0199:
         r0 = r12.statusTextView;
         r1 = r12.statusColor;
@@ -555,35 +555,40 @@ public class UserCell2 extends FrameLayout {
         r2 = r12.avatarDrawable;
         r3 = r12.currentObject;
         r0.setImage(r1, r13, r2, r3);
-    L_0x0235:
+        goto L_0x023d;
+    L_0x0236:
+        r13 = r12.avatarImageView;
+        r0 = r12.avatarDrawable;
+        r13.setImageDrawable(r0);
+    L_0x023d:
         r13 = r12.imageView;
         r13 = r13.getVisibility();
         r0 = 8;
-        if (r13 != 0) goto L_0x0243;
-    L_0x023f:
+        if (r13 != 0) goto L_0x024b;
+    L_0x0247:
         r13 = r12.currentDrawable;
-        if (r13 == 0) goto L_0x024f;
-    L_0x0243:
+        if (r13 == 0) goto L_0x0257;
+    L_0x024b:
         r13 = r12.imageView;
         r13 = r13.getVisibility();
-        if (r13 != r0) goto L_0x0261;
-    L_0x024b:
+        if (r13 != r0) goto L_0x0269;
+    L_0x0253:
         r13 = r12.currentDrawable;
-        if (r13 == 0) goto L_0x0261;
-    L_0x024f:
+        if (r13 == 0) goto L_0x0269;
+    L_0x0257:
         r13 = r12.imageView;
         r1 = r12.currentDrawable;
-        if (r1 != 0) goto L_0x0256;
-    L_0x0255:
-        goto L_0x0257;
-    L_0x0256:
+        if (r1 != 0) goto L_0x025e;
+    L_0x025d:
+        goto L_0x025f;
+    L_0x025e:
         r0 = 0;
-    L_0x0257:
+    L_0x025f:
         r13.setVisibility(r0);
         r13 = r12.imageView;
         r0 = r12.currentDrawable;
         r13.setImageResource(r0);
-    L_0x0261:
+    L_0x0269:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell2.update(int):void");

@@ -3181,6 +3181,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         ChatAttachAlert.this.cameraAnimationInProgress = false;
+                        if (VERSION.SDK_INT >= 21) {
+                            ChatAttachAlert.this.cameraView.invalidateOutline();
+                        }
                         if (ChatAttachAlert.this.cameraOpened) {
                             ChatAttachAlert.this.delegate.onCameraOpened();
                         }
@@ -3524,6 +3527,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             ChatAttachAlert.this.cameraAnimationInProgress = false;
+                            if (VERSION.SDK_INT >= 21) {
+                                ChatAttachAlert.this.cameraView.invalidateOutline();
+                            }
                             ChatAttachAlert.this.cameraOpened = false;
                             if (ChatAttachAlert.this.cameraPanel != null) {
                                 ChatAttachAlert.this.cameraPanel.setVisibility(8);
@@ -4469,15 +4475,16 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         BaseFragment baseFragment = this.baseFragment;
         if (baseFragment != null) {
             boolean z2 = this.deviceHasGoodCamera;
+            boolean z3 = this.noCameraPermissions;
             if (!SharedConfig.inappCamera) {
                 this.deviceHasGoodCamera = false;
             } else if (VERSION.SDK_INT >= 23) {
-                boolean z3 = baseFragment.getParentActivity().checkSelfPermission("android.permission.CAMERA") != 0;
-                this.noCameraPermissions = z3;
-                if (z3) {
+                boolean z4 = baseFragment.getParentActivity().checkSelfPermission("android.permission.CAMERA") != 0;
+                this.noCameraPermissions = z4;
+                if (z4) {
                     if (z) {
                         try {
-                            this.baseFragment.getParentActivity().requestPermissions(new String[]{r2}, 17);
+                            this.baseFragment.getParentActivity().requestPermissions(new String[]{r3}, 17);
                         } catch (Exception unused) {
                         }
                     }
@@ -4494,7 +4501,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
                 this.deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
             }
-            if (z2 != this.deviceHasGoodCamera) {
+            if (!(z2 == this.deviceHasGoodCamera && z3 == this.noCameraPermissions)) {
                 PhotoAttachAdapter photoAttachAdapter = this.adapter;
                 if (photoAttachAdapter != null) {
                     photoAttachAdapter.notifyDataSetChanged();

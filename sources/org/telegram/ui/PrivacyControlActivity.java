@@ -257,6 +257,10 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     return -CC.$default$needPlayMessage(this, messageObject);
                 }
 
+                public /* synthetic */ void setShouldNotRepeatSticker(MessageObject messageObject) {
+                    -CC.$default$setShouldNotRepeatSticker(this, messageObject);
+                }
+
                 public /* synthetic */ boolean shouldRepeatSticker(MessageObject messageObject) {
                     return -CC.$default$shouldRepeatSticker(this, messageObject);
                 }

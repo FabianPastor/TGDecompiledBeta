@@ -1840,11 +1840,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
 
                     public boolean shouldRepeatSticker(MessageObject messageObject) {
-                        if (ChatActivity.this.alredyPlayedStickers.containsKey(messageObject)) {
-                            return false;
-                        }
+                        return ChatActivity.this.alredyPlayedStickers.containsKey(messageObject) ^ 1;
+                    }
+
+                    public void setShouldNotRepeatSticker(MessageObject messageObject) {
                         ChatActivity.this.alredyPlayedStickers.put(messageObject, Boolean.valueOf(true));
-                        return true;
                     }
                 });
                 if (ChatActivity.this.currentEncryptedChat == null) {
@@ -22464,35 +22464,36 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7.scrimView = r10;
         r0 = r7.scrimView;
         r1 = r0 instanceof org.telegram.ui.Cells.ChatMessageCell;
-        if (r1 == 0) goto L_0x1099;
+        if (r1 == 0) goto L_0x109d;
     L_0x1076:
         r0 = (org.telegram.ui.Cells.ChatMessageCell) r0;
         r1 = 1;
         r0.setInvalidatesParent(r1);
         r1 = r9.isAnimatedEmoji();
-        if (r1 != 0) goto L_0x108c;
+        if (r1 != 0) goto L_0x1090;
     L_0x1082:
-        r1 = r9.isAnimatedSticker();
-        if (r1 == 0) goto L_0x1099;
-    L_0x1088:
-        r1 = org.telegram.messenger.SharedConfig.loopStickers;
-        if (r1 != 0) goto L_0x1099;
+        r1 = r9.getDocument();
+        r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1);
+        if (r1 == 0) goto L_0x109d;
     L_0x108c:
+        r1 = org.telegram.messenger.SharedConfig.loopStickers;
+        if (r1 != 0) goto L_0x109d;
+    L_0x1090:
         r0 = r0.getPhotoImage();
         r0 = r0.getLottieAnimation();
-        if (r0 == 0) goto L_0x1099;
-    L_0x1096:
+        if (r0 == 0) goto L_0x109d;
+    L_0x109a:
         r0.restart();
-    L_0x1099:
+    L_0x109d:
         r0 = r7.contentView;
         r0.invalidate();
         r0 = r7.chatListView;
         r0.invalidate();
         r0 = r7.scrimAnimatorSet;
-        if (r0 == 0) goto L_0x10aa;
-    L_0x10a7:
+        if (r0 == 0) goto L_0x10ae;
+    L_0x10ab:
         r0.cancel();
-    L_0x10aa:
+    L_0x10ae:
         r0 = new android.animation.AnimatorSet;
         r0.<init>();
         r7.scrimAnimatorSet = r0;
@@ -22507,8 +22508,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0.add(r1);
         r1 = r7.pagedownButton;
         r1 = r1.getTag();
-        if (r1 == 0) goto L_0x10e1;
-    L_0x10cf:
+        if (r1 == 0) goto L_0x10e5;
+    L_0x10d3:
         r1 = r7.pagedownButton;
         r2 = android.view.View.ALPHA;
         r3 = 1;
@@ -22518,11 +22519,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4[r5] = r3;
         r1 = android.animation.ObjectAnimator.ofFloat(r1, r2, r4);
         r0.add(r1);
-    L_0x10e1:
+    L_0x10e5:
         r1 = r7.mentiondownButton;
         r1 = r1.getTag();
-        if (r1 == 0) goto L_0x10fb;
-    L_0x10e9:
+        if (r1 == 0) goto L_0x10ff;
+    L_0x10ed:
         r1 = r7.mentiondownButton;
         r2 = android.view.View.ALPHA;
         r3 = 1;
@@ -22532,7 +22533,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3[r5] = r4;
         r1 = android.animation.ObjectAnimator.ofFloat(r1, r2, r3);
         r0.add(r1);
-    L_0x10fb:
+    L_0x10ff:
         r1 = r7.scrimAnimatorSet;
         r1.playTogether(r0);
         r0 = r7.scrimAnimatorSet;
@@ -22541,37 +22542,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r7.scrimAnimatorSet;
         r0.start();
         r0 = r7.forwardHintView;
-        if (r0 == 0) goto L_0x1113;
-    L_0x1110:
+        if (r0 == 0) goto L_0x1117;
+    L_0x1114:
         r0.hide();
-    L_0x1113:
-        r0 = r7.noSoundHintView;
-        if (r0 == 0) goto L_0x111a;
     L_0x1117:
+        r0 = r7.noSoundHintView;
+        if (r0 == 0) goto L_0x111e;
+    L_0x111b:
         r0.hide();
-    L_0x111a:
-        r0 = r7.slowModeHint;
-        if (r0 == 0) goto L_0x1121;
     L_0x111e:
+        r0 = r7.slowModeHint;
+        if (r0 == 0) goto L_0x1125;
+    L_0x1122:
         r0.hide();
-    L_0x1121:
-        r0 = r7.chatActivityEnterView;
-        if (r0 == 0) goto L_0x112d;
     L_0x1125:
+        r0 = r7.chatActivityEnterView;
+        if (r0 == 0) goto L_0x1131;
+    L_0x1129:
         r0 = r0.getEditField();
         r1 = 0;
         r0.setAllowDrawCursor(r1);
-    L_0x112d:
+    L_0x1131:
         r0 = android.os.Build.VERSION.SDK_INT;
         r1 = 19;
-        if (r0 < r1) goto L_0x1143;
-    L_0x1133:
+        if (r0 < r1) goto L_0x1147;
+    L_0x1137:
         r0 = r21.getParentActivity();
         r0 = r0.getWindow();
         r0 = r0.getDecorView();
         r1 = 4;
         r0.setImportantForAccessibility(r1);
-    L_0x1143:
+    L_0x1147:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.createMenu(android.view.View, boolean, boolean, float, float, boolean):void");

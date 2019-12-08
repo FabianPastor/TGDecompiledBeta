@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.SparseArray;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -41,7 +42,9 @@ public class SharedConfig {
     public static boolean hasCameraCache = false;
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter = false;
+    public static int keepMedia = 2;
     public static long lastAppPauseTime = 0;
+    public static int lastKeepMediaCheckTime = 0;
     private static int lastLocalId = -210000;
     public static int lastPauseTime = 0;
     public static String lastUpdateVersion = null;
@@ -226,6 +229,8 @@ public class SharedConfig {
             distanceSystemType = sharedPreferences.getInt("distanceSystemType", 0);
             devicePerformanceClass = sharedPreferences.getInt("devicePerformanceClass", -1);
             loopStickers = sharedPreferences.getBoolean("loopStickers", true);
+            keepMedia = sharedPreferences.getInt("keep_media", 2);
+            lastKeepMediaCheckTime = sharedPreferences.getInt("lastKeepMediaCheckTime", 0);
             showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
             configLoaded = true;
         }
@@ -339,6 +344,40 @@ public class SharedConfig {
         suggestStickers = i;
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("suggestStickers", suggestStickers);
+        edit.commit();
+    }
+
+    public static void setKeepMedia(int i) {
+        keepMedia = i;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("keep_media", keepMedia);
+        edit.commit();
+    }
+
+    public static void checkKeepMedia() {
+        int currentTimeMillis = (int) (System.currentTimeMillis() / 1000);
+        if (keepMedia != 2 && Math.abs(currentTimeMillis - lastKeepMediaCheckTime) >= 86400) {
+            lastKeepMediaCheckTime = currentTimeMillis;
+            Utilities.globalQueue.postRunnable(new -$$Lambda$SharedConfig$8EIGCb-XX-RAcunveaeflDZAeM8(currentTimeMillis));
+        }
+    }
+
+    static /* synthetic */ void lambda$checkKeepMedia$0(int i) {
+        int i2 = keepMedia;
+        i2 = i2 == 0 ? 7 : i2 == 1 ? 30 : 3;
+        long j = (long) (i - (i2 * 86400));
+        SparseArray createMediaPaths = ImageLoader.getInstance().createMediaPaths();
+        for (int i3 = 0; i3 < createMediaPaths.size(); i3++) {
+            if (createMediaPaths.keyAt(i3) != 4) {
+                try {
+                    Utilities.clearDir(((File) createMediaPaths.valueAt(i3)).getAbsolutePath(), 0, j);
+                } catch (Throwable th) {
+                    FileLog.e(th);
+                }
+            }
+        }
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("lastKeepMediaCheckTime", lastKeepMediaCheckTime);
         edit.commit();
     }
 

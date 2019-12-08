@@ -1312,9 +1312,9 @@ public class MediaDataController extends BaseController {
 
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0095  */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0095  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0082 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0017} */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0082 A:{Splitter:B:3:0x0017, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0095  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0082 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0017} */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0082 A:{Splitter:B:3:0x0017, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00a3  */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -1812,10 +1812,10 @@ public class MediaDataController extends BaseController {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0083  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0071 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0023} */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0071 A:{Splitter:B:3:0x0023, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x0092  */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0083  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0071 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0023} */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0071 A:{Splitter:B:3:0x0023, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0083  */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */

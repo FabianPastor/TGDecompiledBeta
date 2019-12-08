@@ -340,6 +340,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         return -CC.$default$getAdminRank(this, i);
                     }
 
+                    public /* synthetic */ void setShouldNotRepeatSticker(MessageObject messageObject) {
+                        -CC.$default$setShouldNotRepeatSticker(this, messageObject);
+                    }
+
                     public /* synthetic */ boolean shouldRepeatSticker(MessageObject messageObject) {
                         return -CC.$default$shouldRepeatSticker(this, messageObject);
                     }

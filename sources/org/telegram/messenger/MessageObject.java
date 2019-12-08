@@ -6026,9 +6026,9 @@ public class MessageObject {
         return addEntitiesToText(charSequence, this.messageOwner.entities, isOutOwner(), this.type, true, z, z2);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0161  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x0201 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x01fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0169  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x0209 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0204  */
     public static boolean addEntitiesToText(java.lang.CharSequence r16, java.util.ArrayList<org.telegram.tgnet.TLRPC.MessageEntity> r17, boolean r18, int r19, boolean r20, boolean r21, boolean r22) {
         /*
         r0 = r16;
@@ -6082,20 +6082,20 @@ public class MessageObject {
         r11 = 0;
     L_0x0045:
         r13 = 0;
-        if (r11 >= r10) goto L_0x0206;
+        if (r11 >= r10) goto L_0x020e;
     L_0x0048:
         r14 = r9.get(r11);
         r14 = (org.telegram.tgnet.TLRPC.MessageEntity) r14;
         r15 = r14.length;
-        if (r15 <= 0) goto L_0x0200;
+        if (r15 <= 0) goto L_0x0208;
     L_0x0052:
         r15 = r14.offset;
-        if (r15 < 0) goto L_0x0200;
+        if (r15 < 0) goto L_0x0208;
     L_0x0056:
         r2 = r16.length();
         if (r15 < r2) goto L_0x005e;
     L_0x005c:
-        goto L_0x0200;
+        goto L_0x0208;
     L_0x005e:
         r2 = r14.offset;
         r15 = r14.length;
@@ -6108,75 +6108,78 @@ public class MessageObject {
         r2 = r2 - r15;
         r14.length = r2;
     L_0x0072:
-        if (r22 == 0) goto L_0x0098;
+        if (r22 == 0) goto L_0x009c;
     L_0x0074:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityBold;
-        if (r2 != 0) goto L_0x0098;
+        if (r2 != 0) goto L_0x009c;
     L_0x0078:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
-        if (r2 != 0) goto L_0x0098;
+        if (r2 != 0) goto L_0x009c;
     L_0x007c:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityStrike;
-        if (r2 != 0) goto L_0x0098;
+        if (r2 != 0) goto L_0x009c;
     L_0x0080:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityUnderline;
-        if (r2 != 0) goto L_0x0098;
+        if (r2 != 0) goto L_0x009c;
     L_0x0084:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityBlockquote;
-        if (r2 != 0) goto L_0x0098;
+        if (r2 != 0) goto L_0x009c;
     L_0x0088:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityCode;
-        if (r2 != 0) goto L_0x0098;
+        if (r2 != 0) goto L_0x009c;
     L_0x008c:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityPre;
-        if (r2 != 0) goto L_0x0098;
+        if (r2 != 0) goto L_0x009c;
     L_0x0090:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
-        if (r2 != 0) goto L_0x0098;
+        if (r2 != 0) goto L_0x009c;
     L_0x0094:
         r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
-        if (r2 == 0) goto L_0x00ce;
+        if (r2 != 0) goto L_0x009c;
     L_0x0098:
-        if (r3 == 0) goto L_0x00ce;
-    L_0x009a:
-        r2 = r3.length;
-        if (r2 <= 0) goto L_0x00ce;
-    L_0x009d:
-        r2 = 0;
+        r2 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
+        if (r2 == 0) goto L_0x00d2;
+    L_0x009c:
+        if (r3 == 0) goto L_0x00d2;
     L_0x009e:
-        r15 = r3.length;
-        if (r2 >= r15) goto L_0x00ce;
+        r2 = r3.length;
+        if (r2 <= 0) goto L_0x00d2;
     L_0x00a1:
-        r15 = r3[r2];
-        if (r15 != 0) goto L_0x00a6;
+        r2 = 0;
+    L_0x00a2:
+        r15 = r3.length;
+        if (r2 >= r15) goto L_0x00d2;
     L_0x00a5:
-        goto L_0x00cb;
-    L_0x00a6:
+        r15 = r3[r2];
+        if (r15 != 0) goto L_0x00aa;
+    L_0x00a9:
+        goto L_0x00cf;
+    L_0x00aa:
         r15 = r3[r2];
         r15 = r1.getSpanStart(r15);
         r12 = r3[r2];
         r12 = r1.getSpanEnd(r12);
         r6 = r14.offset;
-        if (r6 > r15) goto L_0x00bb;
-    L_0x00b6:
+        if (r6 > r15) goto L_0x00bf;
+    L_0x00ba:
         r4 = r14.length;
         r6 = r6 + r4;
-        if (r6 >= r15) goto L_0x00c4;
-    L_0x00bb:
-        r4 = r14.offset;
-        if (r4 > r12) goto L_0x00cb;
+        if (r6 >= r15) goto L_0x00c8;
     L_0x00bf:
+        r4 = r14.offset;
+        if (r4 > r12) goto L_0x00cf;
+    L_0x00c3:
         r6 = r14.length;
         r4 = r4 + r6;
-        if (r4 < r12) goto L_0x00cb;
-    L_0x00c4:
+        if (r4 < r12) goto L_0x00cf;
+    L_0x00c8:
         r4 = r3[r2];
         r1.removeSpan(r4);
         r3[r2] = r13;
-    L_0x00cb:
+    L_0x00cf:
         r2 = r2 + 1;
-        goto L_0x009e;
-    L_0x00ce:
+        goto L_0x00a2;
+    L_0x00d2:
         r2 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun;
         r2.<init>();
         r4 = r14.offset;
@@ -6186,125 +6189,128 @@ public class MessageObject {
         r4 = r4 + r6;
         r2.end = r4;
         r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityStrike;
-        if (r4 == 0) goto L_0x00e9;
-    L_0x00e2:
+        if (r4 == 0) goto L_0x00ed;
+    L_0x00e6:
         r4 = 8;
         r2.flags = r4;
-    L_0x00e6:
+    L_0x00ea:
         r4 = 2;
-        goto L_0x0159;
-    L_0x00e9:
-        r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityUnderline;
-        if (r4 == 0) goto L_0x00f2;
+        goto L_0x0161;
     L_0x00ed:
+        r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityUnderline;
+        if (r4 == 0) goto L_0x00f6;
+    L_0x00f1:
         r4 = 16;
         r2.flags = r4;
-        goto L_0x00e6;
-    L_0x00f2:
-        r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityBlockquote;
-        if (r4 == 0) goto L_0x00fb;
+        goto L_0x00ea;
     L_0x00f6:
+        r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityBlockquote;
+        if (r4 == 0) goto L_0x00ff;
+    L_0x00fa:
         r4 = 32;
         r2.flags = r4;
-        goto L_0x00e6;
-    L_0x00fb:
-        r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityBold;
-        if (r4 == 0) goto L_0x0103;
+        goto L_0x00ea;
     L_0x00ff:
+        r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityBold;
+        if (r4 == 0) goto L_0x0107;
+    L_0x0103:
         r4 = 1;
         r2.flags = r4;
-        goto L_0x00e6;
-    L_0x0103:
-        r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
-        if (r4 == 0) goto L_0x010b;
+        goto L_0x00ea;
     L_0x0107:
-        r4 = 2;
-        r2.flags = r4;
-        goto L_0x0159;
+        r4 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
+        if (r4 == 0) goto L_0x010f;
     L_0x010b:
         r4 = 2;
+        r2.flags = r4;
+        goto L_0x0161;
+    L_0x010f:
+        r4 = 2;
         r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityCode;
-        if (r6 != 0) goto L_0x0156;
-    L_0x0110:
-        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityPre;
-        if (r6 == 0) goto L_0x0115;
+        if (r6 != 0) goto L_0x015e;
     L_0x0114:
-        goto L_0x0156;
-    L_0x0115:
+        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityPre;
+        if (r6 == 0) goto L_0x0119;
+    L_0x0118:
+        goto L_0x015e;
+    L_0x0119:
         r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
         r12 = 64;
-        if (r6 == 0) goto L_0x0124;
-    L_0x011b:
-        if (r20 != 0) goto L_0x011f;
-    L_0x011d:
-        goto L_0x0200;
+        if (r6 == 0) goto L_0x0128;
     L_0x011f:
+        if (r20 != 0) goto L_0x0123;
+    L_0x0121:
+        goto L_0x0208;
+    L_0x0123:
         r2.flags = r12;
         r2.urlEntity = r14;
-        goto L_0x0159;
-    L_0x0124:
-        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
-        if (r6 == 0) goto L_0x0131;
+        goto L_0x0161;
     L_0x0128:
-        if (r20 != 0) goto L_0x012c;
-    L_0x012a:
-        goto L_0x0200;
+        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
+        if (r6 == 0) goto L_0x0135;
     L_0x012c:
+        if (r20 != 0) goto L_0x0130;
+    L_0x012e:
+        goto L_0x0208;
+    L_0x0130:
         r2.flags = r12;
         r2.urlEntity = r14;
-        goto L_0x0159;
-    L_0x0131:
-        if (r22 == 0) goto L_0x0135;
-    L_0x0133:
-        goto L_0x0200;
+        goto L_0x0161;
     L_0x0135:
-        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
-        if (r6 != 0) goto L_0x013d;
-    L_0x0139:
+        if (r22 == 0) goto L_0x013d;
+    L_0x0137:
         r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
-        if (r6 == 0) goto L_0x0147;
+        if (r6 != 0) goto L_0x013d;
+    L_0x013b:
+        goto L_0x0208;
     L_0x013d:
+        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
+        if (r6 != 0) goto L_0x0145;
+    L_0x0141:
+        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
+        if (r6 == 0) goto L_0x014f;
+    L_0x0145:
         r6 = r14.url;
         r6 = org.telegram.messenger.browser.Browser.isPassportUrl(r6);
-        if (r6 == 0) goto L_0x0147;
-    L_0x0145:
-        goto L_0x0200;
-    L_0x0147:
-        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityMention;
         if (r6 == 0) goto L_0x014f;
-    L_0x014b:
-        if (r20 != 0) goto L_0x014f;
     L_0x014d:
-        goto L_0x0200;
+        goto L_0x0208;
     L_0x014f:
+        r6 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityMention;
+        if (r6 == 0) goto L_0x0157;
+    L_0x0153:
+        if (r20 != 0) goto L_0x0157;
+    L_0x0155:
+        goto L_0x0208;
+    L_0x0157:
         r6 = 128; // 0x80 float:1.794E-43 double:6.32E-322;
         r2.flags = r6;
         r2.urlEntity = r14;
-        goto L_0x0159;
-    L_0x0156:
+        goto L_0x0161;
+    L_0x015e:
         r6 = 4;
         r2.flags = r6;
-    L_0x0159:
+    L_0x0161:
         r6 = r8.size();
         r12 = r6;
         r6 = 0;
-    L_0x015f:
-        if (r6 >= r12) goto L_0x01f5;
-    L_0x0161:
+    L_0x0167:
+        if (r6 >= r12) goto L_0x01fd;
+    L_0x0169:
         r13 = r8.get(r6);
         r13 = (org.telegram.ui.Components.TextStyleSpan.TextStyleRun) r13;
         r14 = r2.start;
         r15 = r13.start;
-        if (r14 <= r15) goto L_0x01b3;
-    L_0x016d:
+        if (r14 <= r15) goto L_0x01bb;
+    L_0x0175:
         r15 = r13.end;
-        if (r14 < r15) goto L_0x0172;
-    L_0x0171:
-        goto L_0x01b7;
-    L_0x0172:
+        if (r14 < r15) goto L_0x017a;
+    L_0x0179:
+        goto L_0x01bf;
+    L_0x017a:
         r14 = r2.end;
-        if (r14 >= r15) goto L_0x0195;
-    L_0x0176:
+        if (r14 >= r15) goto L_0x019d;
+    L_0x017e:
         r14 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun;
         r14.<init>(r2);
         r14.merge(r13);
@@ -6319,10 +6325,10 @@ public class MessageObject {
         r6 = r6 + r15;
         r12 = r12 + r15;
         r8.add(r6, r14);
-        goto L_0x01aa;
-    L_0x0195:
-        if (r14 < r15) goto L_0x01aa;
-    L_0x0197:
+        goto L_0x01b2;
+    L_0x019d:
+        if (r14 < r15) goto L_0x01b2;
+    L_0x019f:
         r14 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun;
         r14.<init>(r2);
         r14.merge(r13);
@@ -6331,27 +6337,27 @@ public class MessageObject {
         r6 = r6 + 1;
         r12 = r12 + 1;
         r8.add(r6, r14);
-    L_0x01aa:
+    L_0x01b2:
         r14 = r2.start;
         r15 = r13.end;
         r2.start = r15;
         r13.end = r14;
-        goto L_0x01b7;
-    L_0x01b3:
+        goto L_0x01bf;
+    L_0x01bb:
         r14 = r2.end;
-        if (r15 < r14) goto L_0x01b9;
-    L_0x01b7:
+        if (r15 < r14) goto L_0x01c1;
+    L_0x01bf:
         r4 = 1;
-        goto L_0x01f1;
-    L_0x01b9:
-        r4 = r13.end;
-        if (r14 != r4) goto L_0x01c1;
-    L_0x01bd:
-        r13.merge(r2);
-        goto L_0x01ee;
+        goto L_0x01f9;
     L_0x01c1:
-        if (r14 >= r4) goto L_0x01db;
-    L_0x01c3:
+        r4 = r13.end;
+        if (r14 != r4) goto L_0x01c9;
+    L_0x01c5:
+        r13.merge(r2);
+        goto L_0x01f6;
+    L_0x01c9:
+        if (r14 >= r4) goto L_0x01e3;
+    L_0x01cb:
         r4 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun;
         r4.<init>(r13);
         r4.merge(r2);
@@ -6362,8 +6368,8 @@ public class MessageObject {
         r8.add(r6, r4);
         r4 = r2.end;
         r13.start = r4;
-        goto L_0x01ee;
-    L_0x01db:
+        goto L_0x01f6;
+    L_0x01e3:
         r4 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun;
         r4.<init>(r2);
         r14 = r13.end;
@@ -6372,73 +6378,73 @@ public class MessageObject {
         r12 = r12 + 1;
         r8.add(r6, r4);
         r13.merge(r2);
-    L_0x01ee:
+    L_0x01f6:
         r2.end = r15;
-        goto L_0x01b7;
-    L_0x01f1:
+        goto L_0x01bf;
+    L_0x01f9:
         r6 = r6 + r4;
         r4 = 2;
-        goto L_0x015f;
-    L_0x01f5:
+        goto L_0x0167;
+    L_0x01fd:
         r4 = 1;
         r6 = r2.start;
         r12 = r2.end;
-        if (r6 >= r12) goto L_0x0201;
-    L_0x01fc:
+        if (r6 >= r12) goto L_0x0209;
+    L_0x0204:
         r8.add(r2);
-        goto L_0x0201;
-    L_0x0200:
+        goto L_0x0209;
+    L_0x0208:
         r4 = 1;
-    L_0x0201:
+    L_0x0209:
         r11 = r11 + 1;
         r2 = 0;
         goto L_0x0045;
-    L_0x0206:
+    L_0x020e:
         r4 = 1;
         r2 = r8.size();
         r3 = 0;
-    L_0x020c:
-        if (r3 >= r2) goto L_0x0395;
-    L_0x020e:
+    L_0x0214:
+        if (r3 >= r2) goto L_0x039d;
+    L_0x0216:
         r6 = r8.get(r3);
         r6 = (org.telegram.ui.Components.TextStyleSpan.TextStyleRun) r6;
         r9 = r6.urlEntity;
-        if (r9 == 0) goto L_0x0222;
-    L_0x0218:
+        if (r9 == 0) goto L_0x022a;
+    L_0x0220:
         r10 = r9.offset;
         r9 = r9.length;
         r9 = r9 + r10;
         r9 = android.text.TextUtils.substring(r0, r10, r9);
-        goto L_0x0223;
-    L_0x0222:
+        goto L_0x022b;
+    L_0x022a:
         r9 = r13;
-    L_0x0223:
+    L_0x022b:
         r10 = r6.urlEntity;
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityBotCommand;
         r12 = 33;
-        if (r11 == 0) goto L_0x0239;
-    L_0x022b:
+        if (r11 == 0) goto L_0x0241;
+    L_0x0233:
         r10 = new org.telegram.ui.Components.URLSpanBotCommand;
         r10.<init>(r9, r7, r6);
         r9 = r6.start;
         r6 = r6.end;
         r1.setSpan(r10, r9, r6, r12);
-        goto L_0x02b0;
-    L_0x0239:
-        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityHashtag;
-        if (r11 != 0) goto L_0x0384;
-    L_0x023d:
-        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityMention;
-        if (r11 != 0) goto L_0x0384;
+        goto L_0x02b8;
     L_0x0241:
-        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityCashtag;
-        if (r11 == 0) goto L_0x0247;
+        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityHashtag;
+        if (r11 != 0) goto L_0x038c;
     L_0x0245:
-        goto L_0x0384;
-    L_0x0247:
+        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityMention;
+        if (r11 != 0) goto L_0x038c;
+    L_0x0249:
+        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityCashtag;
+        if (r11 == 0) goto L_0x024f;
+    L_0x024d:
+        goto L_0x038c;
+    L_0x024f:
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityEmail;
-        if (r11 == 0) goto L_0x0269;
-    L_0x024b:
+        if (r11 == 0) goto L_0x0271;
+    L_0x0253:
         r10 = new org.telegram.ui.Components.URLSpanReplacement;
         r11 = new java.lang.StringBuilder;
         r11.<init>();
@@ -6450,21 +6456,21 @@ public class MessageObject {
         r9 = r6.start;
         r6 = r6.end;
         r1.setSpan(r10, r9, r6, r12);
-        goto L_0x02b0;
-    L_0x0269:
+        goto L_0x02b8;
+    L_0x0271:
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
-        if (r11 == 0) goto L_0x02b3;
-    L_0x026d:
+        if (r11 == 0) goto L_0x02bb;
+    L_0x0275:
         r5 = r9.toLowerCase();
         r10 = "http";
         r5 = r5.startsWith(r10);
-        if (r5 != 0) goto L_0x02a3;
-    L_0x0279:
+        if (r5 != 0) goto L_0x02ab;
+    L_0x0281:
         r5 = r9.toLowerCase();
         r10 = "tg://";
         r5 = r5.startsWith(r10);
-        if (r5 != 0) goto L_0x02a3;
-    L_0x0285:
+        if (r5 != 0) goto L_0x02ab;
+    L_0x028d:
         r5 = new org.telegram.ui.Components.URLSpanBrowser;
         r10 = new java.lang.StringBuilder;
         r10.<init>();
@@ -6476,33 +6482,33 @@ public class MessageObject {
         r9 = r6.start;
         r6 = r6.end;
         r1.setSpan(r5, r9, r6, r12);
-        goto L_0x02af;
-    L_0x02a3:
+        goto L_0x02b7;
+    L_0x02ab:
         r5 = new org.telegram.ui.Components.URLSpanBrowser;
         r5.<init>(r9, r6);
         r9 = r6.start;
         r6 = r6.end;
         r1.setSpan(r5, r9, r6, r12);
-    L_0x02af:
-        r5 = 1;
-    L_0x02b0:
-        r10 = 4;
-        goto L_0x0391;
-    L_0x02b3:
-        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityPhone;
-        if (r11 == 0) goto L_0x02f0;
     L_0x02b7:
+        r5 = 1;
+    L_0x02b8:
+        r10 = 4;
+        goto L_0x0399;
+    L_0x02bb:
+        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityPhone;
+        if (r11 == 0) goto L_0x02f8;
+    L_0x02bf:
         r5 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r9);
         r10 = "+";
         r9 = r9.startsWith(r10);
-        if (r9 == 0) goto L_0x02d2;
-    L_0x02c3:
+        if (r9 == 0) goto L_0x02da;
+    L_0x02cb:
         r9 = new java.lang.StringBuilder;
         r9.<init>();
         r9.append(r10);
         r9.append(r5);
         r5 = r9.toString();
-    L_0x02d2:
+    L_0x02da:
         r9 = new org.telegram.ui.Components.URLSpanBrowser;
         r10 = new java.lang.StringBuilder;
         r10.<init>();
@@ -6514,23 +6520,23 @@ public class MessageObject {
         r5 = r6.start;
         r6 = r6.end;
         r1.setSpan(r9, r5, r6, r12);
-        goto L_0x02af;
-    L_0x02f0:
+        goto L_0x02b7;
+    L_0x02f8:
         r9 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
-        if (r9 == 0) goto L_0x0303;
-    L_0x02f4:
+        if (r9 == 0) goto L_0x030b;
+    L_0x02fc:
         r9 = new org.telegram.ui.Components.URLSpanReplacement;
         r10 = r10.url;
         r9.<init>(r10, r6);
         r10 = r6.start;
         r6 = r6.end;
         r1.setSpan(r9, r10, r6, r12);
-        goto L_0x02b0;
-    L_0x0303:
+        goto L_0x02b8;
+    L_0x030b:
         r9 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
         r11 = "";
-        if (r9 == 0) goto L_0x032b;
-    L_0x0309:
+        if (r9 == 0) goto L_0x0333;
+    L_0x0311:
         r9 = new org.telegram.ui.Components.URLSpanUserMention;
         r10 = new java.lang.StringBuilder;
         r10.<init>();
@@ -6544,11 +6550,11 @@ public class MessageObject {
         r10 = r6.start;
         r6 = r6.end;
         r1.setSpan(r9, r10, r6, r12);
-        goto L_0x02b0;
-    L_0x032b:
+        goto L_0x02b8;
+    L_0x0333:
         r9 = r10 instanceof org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
-        if (r9 == 0) goto L_0x0354;
-    L_0x032f:
+        if (r9 == 0) goto L_0x035c;
+    L_0x0337:
         r9 = new org.telegram.ui.Components.URLSpanUserMention;
         r10 = new java.lang.StringBuilder;
         r10.<init>();
@@ -6563,13 +6569,13 @@ public class MessageObject {
         r10 = r6.start;
         r6 = r6.end;
         r1.setSpan(r9, r10, r6, r12);
-        goto L_0x02b0;
-    L_0x0354:
+        goto L_0x02b8;
+    L_0x035c:
         r9 = r6.flags;
         r10 = 4;
         r9 = r9 & r10;
-        if (r9 == 0) goto L_0x0377;
-    L_0x035a:
+        if (r9 == 0) goto L_0x037f;
+    L_0x0362:
         r9 = new org.telegram.ui.Components.URLSpanMono;
         r11 = r6.start;
         r14 = r6.end;
@@ -6583,25 +6589,25 @@ public class MessageObject {
         r11 = r6.start;
         r6 = r6.end;
         r1.setSpan(r9, r11, r6, r12);
-        goto L_0x0391;
-    L_0x0377:
+        goto L_0x0399;
+    L_0x037f:
         r9 = new org.telegram.ui.Components.TextStyleSpan;
         r9.<init>(r6);
         r11 = r6.start;
         r6 = r6.end;
         r1.setSpan(r9, r11, r6, r12);
-        goto L_0x0391;
-    L_0x0384:
+        goto L_0x0399;
+    L_0x038c:
         r10 = 4;
         r11 = new org.telegram.ui.Components.URLSpanNoUnderline;
         r11.<init>(r9, r6);
         r9 = r6.start;
         r6 = r6.end;
         r1.setSpan(r11, r9, r6, r12);
-    L_0x0391:
+    L_0x0399:
         r3 = r3 + 1;
-        goto L_0x020c;
-    L_0x0395:
+        goto L_0x0214;
+    L_0x039d:
         return r5;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.addEntitiesToText(java.lang.CharSequence, java.util.ArrayList, boolean, int, boolean, boolean, boolean):boolean");
@@ -8598,7 +8604,8 @@ public class MessageObject {
     }
 
     public boolean isNewGif() {
-        return isNewGifDocument(getDocument());
+        MessageMedia messageMedia = this.messageOwner.media;
+        return messageMedia != null && isNewGifDocument(messageMedia.document);
     }
 
     public String getMusicTitle() {

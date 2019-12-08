@@ -29,6 +29,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private static PorterDuffColorFilter selectedGroupColorFilter = new PorterDuffColorFilter(-4473925, Mode.MULTIPLY);
     private boolean allowDecodeSingleFrame;
     private boolean allowStartAnimation;
+    private boolean animationReadySent;
     private int autoRepeat;
     private RectF bitmapRect;
     private boolean canceledLoading;
@@ -156,7 +157,15 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     public interface ImageReceiverDelegate {
+
+        public final /* synthetic */ class -CC {
+            public static void $default$onAnimationReady(ImageReceiverDelegate imageReceiverDelegate, ImageReceiver imageReceiver) {
+            }
+        }
+
         void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2);
+
+        void onAnimationReady(ImageReceiver imageReceiver);
     }
 
     private class SetImageBackup {
@@ -1404,270 +1413,282 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x00ef A:{Catch:{ Exception -> 0x0142 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x00ef A:{Catch:{ Exception -> 0x0142 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x00ef A:{Catch:{ Exception -> 0x0142 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x00ef A:{Catch:{ Exception -> 0x0142 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x00ef A:{Catch:{ Exception -> 0x0142 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x0127 A:{Catch:{ Exception -> 0x0142 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0081 A:{Catch:{ Exception -> 0x0142 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0081 A:{Catch:{ Exception -> 0x0142 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x0127 A:{Catch:{ Exception -> 0x0142 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x00ff A:{Catch:{ Exception -> 0x0152 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x00ff A:{Catch:{ Exception -> 0x0152 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x00ff A:{Catch:{ Exception -> 0x0152 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x00ff A:{Catch:{ Exception -> 0x0152 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x00ff A:{Catch:{ Exception -> 0x0152 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x0137 A:{Catch:{ Exception -> 0x0152 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x0091 A:{Catch:{ Exception -> 0x0152 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x0091 A:{Catch:{ Exception -> 0x0152 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x0137 A:{Catch:{ Exception -> 0x0152 }} */
     public boolean draw(android.graphics.Canvas r14) {
         /*
         r13 = this;
         r7 = 0;
-        r0 = r13.getAnimation();	 Catch:{ Exception -> 0x0142 }
-        r1 = r13.getLottieAnimation();	 Catch:{ Exception -> 0x0142 }
+        r0 = r13.getAnimation();	 Catch:{ Exception -> 0x0152 }
+        r1 = r13.getLottieAnimation();	 Catch:{ Exception -> 0x0152 }
         r8 = 1;
         if (r0 == 0) goto L_0x0012;
     L_0x000c:
-        r0 = r0.hasBitmap();	 Catch:{ Exception -> 0x0142 }
-        if (r0 == 0) goto L_0x001a;
+        r2 = r0.hasBitmap();	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x001a;
     L_0x0012:
         if (r1 == 0) goto L_0x001c;
     L_0x0014:
-        r0 = r1.hasBitmap();	 Catch:{ Exception -> 0x0142 }
-        if (r0 != 0) goto L_0x001c;
+        r2 = r1.hasBitmap();	 Catch:{ Exception -> 0x0152 }
+        if (r2 != 0) goto L_0x001c;
     L_0x001a:
-        r0 = 1;
+        r2 = 1;
         goto L_0x001d;
     L_0x001c:
-        r0 = 0;
+        r2 = 0;
     L_0x001d:
         if (r1 == 0) goto L_0x0024;
     L_0x001f:
-        r2 = r13.parentView;	 Catch:{ Exception -> 0x0142 }
-        r1.setCurrentParentView(r2);	 Catch:{ Exception -> 0x0142 }
+        r3 = r13.parentView;	 Catch:{ Exception -> 0x0152 }
+        r1.setCurrentParentView(r3);	 Catch:{ Exception -> 0x0152 }
     L_0x0024:
-        r1 = r13.forcePreview;	 Catch:{ Exception -> 0x0142 }
-        r2 = 0;
-        if (r1 != 0) goto L_0x003a;
-    L_0x0029:
-        r1 = r13.currentMediaDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x003a;
-    L_0x002d:
-        if (r0 != 0) goto L_0x003a;
-    L_0x002f:
-        r1 = r13.currentMediaDrawable;	 Catch:{ Exception -> 0x0142 }
-        r3 = r13.mediaShader;	 Catch:{ Exception -> 0x0142 }
-        r4 = r13.imageOrientation;	 Catch:{ Exception -> 0x0142 }
+        if (r0 != 0) goto L_0x0028;
+    L_0x0026:
+        if (r1 == 0) goto L_0x0035;
+    L_0x0028:
+        if (r2 != 0) goto L_0x0035;
+    L_0x002a:
+        r0 = r13.animationReadySent;	 Catch:{ Exception -> 0x0152 }
+        if (r0 != 0) goto L_0x0035;
+    L_0x002e:
+        r13.animationReadySent = r8;	 Catch:{ Exception -> 0x0152 }
+        r0 = r13.delegate;	 Catch:{ Exception -> 0x0152 }
+        r0.onAnimationReady(r13);	 Catch:{ Exception -> 0x0152 }
     L_0x0035:
-        r9 = r0;
-        r0 = r1;
+        r0 = r13.forcePreview;	 Catch:{ Exception -> 0x0152 }
+        r1 = 0;
+        if (r0 != 0) goto L_0x004a;
+    L_0x003a:
+        r0 = r13.currentMediaDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == 0) goto L_0x004a;
+    L_0x003e:
+        if (r2 != 0) goto L_0x004a;
+    L_0x0040:
+        r0 = r13.currentMediaDrawable;	 Catch:{ Exception -> 0x0152 }
+        r3 = r13.mediaShader;	 Catch:{ Exception -> 0x0152 }
+        r4 = r13.imageOrientation;	 Catch:{ Exception -> 0x0152 }
+    L_0x0046:
+        r9 = r2;
         r10 = r3;
         r11 = r4;
-        goto L_0x007d;
-    L_0x003a:
-        r1 = r13.forcePreview;	 Catch:{ Exception -> 0x0142 }
-        if (r1 != 0) goto L_0x0052;
-    L_0x003e:
-        r1 = r13.currentImageDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x0052;
-    L_0x0042:
-        if (r0 == 0) goto L_0x0048;
-    L_0x0044:
-        r1 = r13.currentMediaDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x0052;
-    L_0x0048:
-        r0 = r13.currentImageDrawable;	 Catch:{ Exception -> 0x0142 }
-        r1 = r13.imageShader;	 Catch:{ Exception -> 0x0142 }
-        r3 = r13.imageOrientation;	 Catch:{ Exception -> 0x0142 }
-        r10 = r1;
+        goto L_0x008d;
+    L_0x004a:
+        r0 = r13.forcePreview;	 Catch:{ Exception -> 0x0152 }
+        if (r0 != 0) goto L_0x0062;
+    L_0x004e:
+        r0 = r13.currentImageDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == 0) goto L_0x0062;
+    L_0x0052:
+        if (r2 == 0) goto L_0x0058;
+    L_0x0054:
+        r0 = r13.currentMediaDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == 0) goto L_0x0062;
+    L_0x0058:
+        r0 = r13.currentImageDrawable;	 Catch:{ Exception -> 0x0152 }
+        r2 = r13.imageShader;	 Catch:{ Exception -> 0x0152 }
+        r3 = r13.imageOrientation;	 Catch:{ Exception -> 0x0152 }
+        r10 = r2;
         r11 = r3;
         r9 = 0;
-        goto L_0x007d;
-    L_0x0052:
-        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x0061;
-    L_0x0056:
-        r1 = r13.crossfadingWithThumb;	 Catch:{ Exception -> 0x0142 }
-        if (r1 != 0) goto L_0x0061;
-    L_0x005a:
-        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0142 }
-        r3 = r13.crossfadeShader;	 Catch:{ Exception -> 0x0142 }
-        r4 = r13.imageOrientation;	 Catch:{ Exception -> 0x0142 }
-        goto L_0x0035;
-    L_0x0061:
-        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        r1 = r1 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x006e;
-    L_0x0067:
-        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        r3 = r13.thumbShader;	 Catch:{ Exception -> 0x0142 }
-        r4 = r13.thumbOrientation;	 Catch:{ Exception -> 0x0142 }
-        goto L_0x0035;
-    L_0x006e:
-        r1 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x0079;
-    L_0x0072:
-        r1 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        r3 = r13.thumbShader;	 Catch:{ Exception -> 0x0142 }
-        r4 = r13.thumbOrientation;	 Catch:{ Exception -> 0x0142 }
-        goto L_0x0035;
-    L_0x0079:
-        r9 = r0;
-        r0 = r2;
-        r10 = r0;
-        r11 = 0;
-    L_0x007d:
-        r12 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
-        if (r0 == 0) goto L_0x0127;
-    L_0x0081:
-        r1 = r13.crossfadeAlpha;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x010d;
-    L_0x0085:
-        r1 = r13.crossfadeWithThumb;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x009a;
+        goto L_0x008d;
+    L_0x0062:
+        r0 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == 0) goto L_0x0071;
+    L_0x0066:
+        r0 = r13.crossfadingWithThumb;	 Catch:{ Exception -> 0x0152 }
+        if (r0 != 0) goto L_0x0071;
+    L_0x006a:
+        r0 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0152 }
+        r3 = r13.crossfadeShader;	 Catch:{ Exception -> 0x0152 }
+        r4 = r13.imageOrientation;	 Catch:{ Exception -> 0x0152 }
+        goto L_0x0046;
+    L_0x0071:
+        r0 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        r0 = r0 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == 0) goto L_0x007e;
+    L_0x0077:
+        r0 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        r3 = r13.thumbShader;	 Catch:{ Exception -> 0x0152 }
+        r4 = r13.thumbOrientation;	 Catch:{ Exception -> 0x0152 }
+        goto L_0x0046;
+    L_0x007e:
+        r0 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == 0) goto L_0x0089;
+    L_0x0082:
+        r0 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        r3 = r13.thumbShader;	 Catch:{ Exception -> 0x0152 }
+        r4 = r13.thumbOrientation;	 Catch:{ Exception -> 0x0152 }
+        goto L_0x0046;
     L_0x0089:
-        if (r9 == 0) goto L_0x009a;
-    L_0x008b:
-        r1 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0142 }
+        r0 = r1;
+        r10 = r0;
+        r9 = r2;
+        r11 = 0;
+    L_0x008d:
+        r12 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
+        if (r0 == 0) goto L_0x0137;
+    L_0x0091:
+        r2 = r13.crossfadeAlpha;	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x011d;
+    L_0x0095:
+        r2 = r13.crossfadeWithThumb;	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x00aa;
+    L_0x0099:
+        if (r9 == 0) goto L_0x00aa;
+    L_0x009b:
+        r1 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0152 }
         r1 = r1 * r12;
-        r4 = (int) r1;	 Catch:{ Exception -> 0x0142 }
+        r4 = (int) r1;	 Catch:{ Exception -> 0x0152 }
         r1 = r13;
         r2 = r14;
         r3 = r0;
         r5 = r10;
         r6 = r11;
-        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0142 }
-        goto L_0x011a;
-    L_0x009a:
-        r1 = r13.crossfadeWithThumb;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x00fb;
-    L_0x009e:
-        r1 = r13.currentAlpha;	 Catch:{ Exception -> 0x0142 }
-        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r1 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r1 == 0) goto L_0x00fb;
-    L_0x00a6:
-        r1 = r13.currentImageDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r0 == r1) goto L_0x00ce;
+        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0152 }
+        goto L_0x012a;
     L_0x00aa:
-        r1 = r13.currentMediaDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r0 != r1) goto L_0x00af;
+        r2 = r13.crossfadeWithThumb;	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x010b;
     L_0x00ae:
-        goto L_0x00ce;
-    L_0x00af:
-        r1 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r0 == r1) goto L_0x00c5;
-    L_0x00b3:
-        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0142 }
-        if (r0 != r1) goto L_0x00b8;
-    L_0x00b7:
-        goto L_0x00c5;
-    L_0x00b8:
-        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r0 != r1) goto L_0x00eb;
-    L_0x00bc:
-        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x00eb;
-    L_0x00c0:
-        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0142 }
-        r2 = r13.crossfadeShader;	 Catch:{ Exception -> 0x0142 }
-        goto L_0x00d6;
-    L_0x00c5:
-        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x00eb;
-    L_0x00c9:
-        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        r2 = r13.thumbShader;	 Catch:{ Exception -> 0x0142 }
-        goto L_0x00d6;
-    L_0x00ce:
-        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x00d9;
-    L_0x00d2:
-        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0142 }
-        r2 = r13.crossfadeShader;	 Catch:{ Exception -> 0x0142 }
-    L_0x00d6:
+        r2 = r13.currentAlpha;	 Catch:{ Exception -> 0x0152 }
+        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
+        if (r2 == 0) goto L_0x010b;
+    L_0x00b6:
+        r2 = r13.currentImageDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == r2) goto L_0x00de;
+    L_0x00ba:
+        r2 = r13.currentMediaDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 != r2) goto L_0x00bf;
+    L_0x00be:
+        goto L_0x00de;
+    L_0x00bf:
+        r2 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == r2) goto L_0x00d5;
+    L_0x00c3:
+        r2 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0152 }
+        if (r0 != r2) goto L_0x00c8;
+    L_0x00c7:
+        goto L_0x00d5;
+    L_0x00c8:
+        r2 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 != r2) goto L_0x00fb;
+    L_0x00cc:
+        r2 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x00fb;
+    L_0x00d0:
+        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0152 }
+        r2 = r13.crossfadeShader;	 Catch:{ Exception -> 0x0152 }
+        goto L_0x00e6;
+    L_0x00d5:
+        r2 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x00fb;
+    L_0x00d9:
+        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        r2 = r13.thumbShader;	 Catch:{ Exception -> 0x0152 }
+        goto L_0x00e6;
+    L_0x00de:
+        r2 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x00e9;
+    L_0x00e2:
+        r1 = r13.crossfadeImage;	 Catch:{ Exception -> 0x0152 }
+        r2 = r13.crossfadeShader;	 Catch:{ Exception -> 0x0152 }
+    L_0x00e6:
         r3 = r1;
         r5 = r2;
-        goto L_0x00ed;
-    L_0x00d9:
-        r1 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x00e2;
-    L_0x00dd:
-        r1 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        r2 = r13.thumbShader;	 Catch:{ Exception -> 0x0142 }
-        goto L_0x00d6;
-    L_0x00e2:
-        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r1 == 0) goto L_0x00eb;
-    L_0x00e6:
-        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        r2 = r13.thumbShader;	 Catch:{ Exception -> 0x0142 }
-        goto L_0x00d6;
-    L_0x00eb:
-        r3 = r2;
-        r5 = r3;
+        goto L_0x00fd;
+    L_0x00e9:
+        r2 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x00f2;
     L_0x00ed:
-        if (r3 == 0) goto L_0x00fb;
-    L_0x00ef:
-        r1 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0142 }
+        r1 = r13.currentThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        r2 = r13.thumbShader;	 Catch:{ Exception -> 0x0152 }
+        goto L_0x00e6;
+    L_0x00f2:
+        r2 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r2 == 0) goto L_0x00fb;
+    L_0x00f6:
+        r1 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        r2 = r13.thumbShader;	 Catch:{ Exception -> 0x0152 }
+        goto L_0x00e6;
+    L_0x00fb:
+        r3 = r1;
+        r5 = r3;
+    L_0x00fd:
+        if (r3 == 0) goto L_0x010b;
+    L_0x00ff:
+        r1 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0152 }
         r1 = r1 * r12;
-        r4 = (int) r1;	 Catch:{ Exception -> 0x0142 }
-        r6 = r13.thumbOrientation;	 Catch:{ Exception -> 0x0142 }
+        r4 = (int) r1;	 Catch:{ Exception -> 0x0152 }
+        r6 = r13.thumbOrientation;	 Catch:{ Exception -> 0x0152 }
         r1 = r13;
         r2 = r14;
-        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0142 }
-    L_0x00fb:
-        r1 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0142 }
-        r2 = r13.currentAlpha;	 Catch:{ Exception -> 0x0142 }
+        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0152 }
+    L_0x010b:
+        r1 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0152 }
+        r2 = r13.currentAlpha;	 Catch:{ Exception -> 0x0152 }
         r1 = r1 * r2;
         r1 = r1 * r12;
-        r4 = (int) r1;	 Catch:{ Exception -> 0x0142 }
+        r4 = (int) r1;	 Catch:{ Exception -> 0x0152 }
         r1 = r13;
         r2 = r14;
         r3 = r0;
         r5 = r10;
         r6 = r11;
-        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0142 }
-        goto L_0x011a;
-    L_0x010d:
-        r1 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0142 }
+        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0152 }
+        goto L_0x012a;
+    L_0x011d:
+        r1 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0152 }
         r1 = r1 * r12;
-        r4 = (int) r1;	 Catch:{ Exception -> 0x0142 }
+        r4 = (int) r1;	 Catch:{ Exception -> 0x0152 }
         r1 = r13;
         r2 = r14;
         r3 = r0;
         r5 = r10;
         r6 = r11;
-        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0142 }
-    L_0x011a:
-        if (r9 == 0) goto L_0x0122;
-    L_0x011c:
-        r0 = r13.crossfadeWithThumb;	 Catch:{ Exception -> 0x0142 }
-        if (r0 == 0) goto L_0x0122;
-    L_0x0120:
+        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0152 }
+    L_0x012a:
+        if (r9 == 0) goto L_0x0132;
+    L_0x012c:
+        r0 = r13.crossfadeWithThumb;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == 0) goto L_0x0132;
+    L_0x0130:
         r0 = 1;
-        goto L_0x0123;
-    L_0x0122:
+        goto L_0x0133;
+    L_0x0132:
         r0 = 0;
-    L_0x0123:
-        r13.checkAlphaAnimation(r0);	 Catch:{ Exception -> 0x0142 }
+    L_0x0133:
+        r13.checkAlphaAnimation(r0);	 Catch:{ Exception -> 0x0152 }
         return r8;
-    L_0x0127:
-        r0 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        if (r0 == 0) goto L_0x013e;
-    L_0x012b:
-        r3 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0142 }
-        r0 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0142 }
+    L_0x0137:
+        r0 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        if (r0 == 0) goto L_0x014e;
+    L_0x013b:
+        r3 = r13.staticThumbDrawable;	 Catch:{ Exception -> 0x0152 }
+        r0 = r13.overrideAlpha;	 Catch:{ Exception -> 0x0152 }
         r0 = r0 * r12;
-        r4 = (int) r0;	 Catch:{ Exception -> 0x0142 }
+        r4 = (int) r0;	 Catch:{ Exception -> 0x0152 }
         r5 = 0;
-        r6 = r13.thumbOrientation;	 Catch:{ Exception -> 0x0142 }
+        r6 = r13.thumbOrientation;	 Catch:{ Exception -> 0x0152 }
         r1 = r13;
         r2 = r14;
-        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0142 }
-        r13.checkAlphaAnimation(r9);	 Catch:{ Exception -> 0x0142 }
+        r1.drawDrawable(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0152 }
+        r13.checkAlphaAnimation(r9);	 Catch:{ Exception -> 0x0152 }
         return r8;
-    L_0x013e:
-        r13.checkAlphaAnimation(r9);	 Catch:{ Exception -> 0x0142 }
-        goto L_0x0146;
-    L_0x0142:
+    L_0x014e:
+        r13.checkAlphaAnimation(r9);	 Catch:{ Exception -> 0x0152 }
+        goto L_0x0156;
+    L_0x0152:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0146:
+    L_0x0156:
         return r7;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.draw(android.graphics.Canvas):boolean");
@@ -2288,14 +2309,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
         /*
         r5 = this;
         r0 = 0;
-        if (r6 == 0) goto L_0x0262;
+        if (r6 == 0) goto L_0x0266;
     L_0x0003:
-        if (r7 == 0) goto L_0x0262;
+        if (r7 == 0) goto L_0x0266;
     L_0x0005:
         r1 = r5.currentGuid;
         if (r1 == r10) goto L_0x000b;
     L_0x0009:
-        goto L_0x0262;
+        goto L_0x0266;
     L_0x000b:
         r10 = 0;
         r1 = 0;
@@ -2641,7 +2662,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r5.currentAlpha = r2;
     L_0x01ed:
         r7 = r6 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
-        if (r7 == 0) goto L_0x020a;
+        if (r7 == 0) goto L_0x020c;
     L_0x01f1:
         r6 = (org.telegram.ui.Components.AnimatedFileDrawable) r6;
         r7 = r5.parentView;
@@ -2655,32 +2676,34 @@ public class ImageReceiver implements NotificationCenterDelegate {
     L_0x0204:
         r7 = r5.allowDecodeSingleFrame;
         r6.setAllowDecodeSingleFrame(r7);
-        goto L_0x0224;
-    L_0x020a:
+        r5.animationReadySent = r0;
+        goto L_0x0228;
+    L_0x020c:
         r7 = r6 instanceof org.telegram.ui.Components.RLottieDrawable;
-        if (r7 == 0) goto L_0x0224;
-    L_0x020e:
+        if (r7 == 0) goto L_0x0228;
+    L_0x0210:
         r6 = (org.telegram.ui.Components.RLottieDrawable) r6;
         r7 = r5.parentView;
         r6.addParentView(r7);
         r7 = r5.currentOpenedLayerFlags;
-        if (r7 != 0) goto L_0x021c;
-    L_0x0219:
+        if (r7 != 0) goto L_0x021e;
+    L_0x021b:
         r6.start();
-    L_0x021c:
+    L_0x021e:
         r6.setAllowDecodeSingleFrame(r3);
         r7 = r5.autoRepeat;
         r6.setAutoRepeat(r7);
-    L_0x0224:
-        r6 = r5.parentView;
-        if (r6 == 0) goto L_0x023d;
+        r5.animationReadySent = r0;
     L_0x0228:
-        r7 = r5.invalidateAll;
-        if (r7 == 0) goto L_0x0230;
+        r6 = r5.parentView;
+        if (r6 == 0) goto L_0x0241;
     L_0x022c:
-        r6.invalidate();
-        goto L_0x023d;
+        r7 = r5.invalidateAll;
+        if (r7 == 0) goto L_0x0234;
     L_0x0230:
+        r6.invalidate();
+        goto L_0x0241;
+    L_0x0234:
         r7 = r5.imageX;
         r8 = r5.imageY;
         r9 = r5.imageW;
@@ -2688,41 +2711,41 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r10 = r5.imageH;
         r10 = r10 + r8;
         r6.invalidate(r7, r8, r9, r10);
-    L_0x023d:
-        r6 = r5.delegate;
-        if (r6 == 0) goto L_0x0261;
     L_0x0241:
-        r7 = r5.currentImageDrawable;
-        if (r7 != 0) goto L_0x0254;
+        r6 = r5.delegate;
+        if (r6 == 0) goto L_0x0265;
     L_0x0245:
-        r7 = r5.currentThumbDrawable;
-        if (r7 != 0) goto L_0x0254;
+        r7 = r5.currentImageDrawable;
+        if (r7 != 0) goto L_0x0258;
     L_0x0249:
-        r7 = r5.staticThumbDrawable;
-        if (r7 != 0) goto L_0x0254;
+        r7 = r5.currentThumbDrawable;
+        if (r7 != 0) goto L_0x0258;
     L_0x024d:
-        r7 = r5.currentMediaDrawable;
-        if (r7 == 0) goto L_0x0252;
+        r7 = r5.staticThumbDrawable;
+        if (r7 != 0) goto L_0x0258;
     L_0x0251:
-        goto L_0x0254;
-    L_0x0252:
-        r7 = 0;
-        goto L_0x0255;
-    L_0x0254:
-        r7 = 1;
+        r7 = r5.currentMediaDrawable;
+        if (r7 == 0) goto L_0x0256;
     L_0x0255:
-        r8 = r5.currentImageDrawable;
-        if (r8 != 0) goto L_0x025e;
+        goto L_0x0258;
+    L_0x0256:
+        r7 = 0;
+        goto L_0x0259;
+    L_0x0258:
+        r7 = 1;
     L_0x0259:
-        r8 = r5.currentMediaDrawable;
-        if (r8 != 0) goto L_0x025e;
+        r8 = r5.currentImageDrawable;
+        if (r8 != 0) goto L_0x0262;
     L_0x025d:
-        r0 = 1;
-    L_0x025e:
-        r6.didSetImage(r5, r7, r0);
+        r8 = r5.currentMediaDrawable;
+        if (r8 != 0) goto L_0x0262;
     L_0x0261:
-        return r3;
+        r0 = 1;
     L_0x0262:
+        r6.didSetImage(r5, r7, r0);
+    L_0x0265:
+        return r3;
+    L_0x0266:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setImageBitmapByKey(android.graphics.drawable.Drawable, java.lang.String, int, boolean, int):boolean");

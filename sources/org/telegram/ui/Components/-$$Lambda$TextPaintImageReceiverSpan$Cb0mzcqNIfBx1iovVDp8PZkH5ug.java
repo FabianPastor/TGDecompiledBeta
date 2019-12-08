@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate;
+import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate.-CC;
 
 /* compiled from: lambda */
 public final /* synthetic */ class -$$Lambda$TextPaintImageReceiverSpan$Cb0mzcqNIfBx1iovVDp8PZkH5ug implements ImageReceiverDelegate {
@@ -12,5 +13,9 @@ public final /* synthetic */ class -$$Lambda$TextPaintImageReceiverSpan$Cb0mzcqN
 
     public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2) {
         TextPaintImageReceiverSpan.lambda$new$0(imageReceiver, z, z2);
+    }
+
+    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
+        -CC.$default$onAnimationReady(this, imageReceiver);
     }
 }
