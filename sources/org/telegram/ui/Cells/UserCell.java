@@ -362,22 +362,22 @@ public class UserCell extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:62:0x0090  */
     /* JADX WARNING: Removed duplicated region for block: B:75:0x00ce  */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x00c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x00fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x00ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x01b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x01cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x01c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x0101  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x00f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x01b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x01d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:123:0x01ca  */
     /* JADX WARNING: Removed duplicated region for block: B:16:0x002c  */
     /* JADX WARNING: Removed duplicated region for block: B:60:0x008d  */
     /* JADX WARNING: Removed duplicated region for block: B:62:0x0090  */
     /* JADX WARNING: Removed duplicated region for block: B:66:0x00a1  */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x00c6  */
     /* JADX WARNING: Removed duplicated region for block: B:75:0x00ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x00ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x00fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x01b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x01c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x01cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x00f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x0101  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x01b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:123:0x01ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x01d6  */
     /* JADX WARNING: Missing block: B:30:0x004f, code skipped:
             if (r5.local_id != r1.local_id) goto L_0x0051;
      */
@@ -537,13 +537,13 @@ public class UserCell extends FrameLayout {
         r6 = r12.avatarDrawable;
         r7 = r12.currentId;
         r5 = r5.toString();
-        r6.setInfo(r7, r5, r2, r4);
+        r6.setInfo(r7, r5, r2);
         goto L_0x00c2;
     L_0x00b9:
         r5 = r12.avatarDrawable;
         r6 = r12.currentId;
         r7 = "#";
-        r5.setInfo(r6, r7, r2, r4);
+        r5.setInfo(r6, r7, r2);
     L_0x00c2:
         r5 = r12.currentName;
         if (r5 == 0) goto L_0x00ce;
@@ -551,7 +551,7 @@ public class UserCell extends FrameLayout {
         r12.lastName = r2;
         r13 = r12.nameTextView;
         r13.setText(r5);
-        goto L_0x00e6;
+        goto L_0x00ed;
     L_0x00ce:
         if (r0 == 0) goto L_0x00d9;
     L_0x00d0:
@@ -560,87 +560,93 @@ public class UserCell extends FrameLayout {
         r13 = org.telegram.messenger.UserObject.getUserName(r0);
     L_0x00d6:
         r12.lastName = r13;
-        goto L_0x00df;
+        goto L_0x00e6;
     L_0x00d9:
-        if (r13 != 0) goto L_0x00dd;
+        if (r3 == 0) goto L_0x00e2;
     L_0x00db:
-        r13 = r3.title;
+        if (r13 != 0) goto L_0x00df;
     L_0x00dd:
-        r12.lastName = r13;
+        r13 = r3.title;
     L_0x00df:
+        r12.lastName = r13;
+        goto L_0x00e6;
+    L_0x00e2:
+        r13 = "";
+        r12.lastName = r13;
+    L_0x00e6:
         r13 = r12.nameTextView;
         r2 = r12.lastName;
         r13.setText(r2);
-    L_0x00e6:
+    L_0x00ed:
         r13 = r12.currentStatus;
-        if (r13 == 0) goto L_0x00fa;
-    L_0x00ea:
+        if (r13 == 0) goto L_0x0101;
+    L_0x00f1:
         r13 = r12.statusTextView;
         r2 = r12.statusColor;
         r13.setTextColor(r2);
         r13 = r12.statusTextView;
         r2 = r12.currentStatus;
         r13.setText(r2);
-        goto L_0x0191;
-    L_0x00fa:
-        if (r0 == 0) goto L_0x0191;
-    L_0x00fc:
+        goto L_0x0198;
+    L_0x0101:
+        if (r0 == 0) goto L_0x0198;
+    L_0x0103:
         r13 = r0.bot;
-        if (r13 == 0) goto L_0x0134;
-    L_0x0100:
+        if (r13 == 0) goto L_0x013b;
+    L_0x0107:
         r13 = r12.statusTextView;
         r2 = r12.statusColor;
         r13.setTextColor(r2);
         r13 = r0.bot_chat_history;
-        if (r13 != 0) goto L_0x0125;
-    L_0x010b:
+        if (r13 != 0) goto L_0x012c;
+    L_0x0112:
         r13 = r12.adminTextView;
-        if (r13 == 0) goto L_0x0116;
-    L_0x010f:
-        r13 = r13.getVisibility();
-        if (r13 != 0) goto L_0x0116;
-    L_0x0115:
-        goto L_0x0125;
+        if (r13 == 0) goto L_0x011d;
     L_0x0116:
+        r13 = r13.getVisibility();
+        if (r13 != 0) goto L_0x011d;
+    L_0x011c:
+        goto L_0x012c;
+    L_0x011d:
         r13 = r12.statusTextView;
         r2 = NUM; // 0x7f0d01d5 float:1.8743066E38 double:1.0531300093E-314;
         r5 = "BotStatusCantRead";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);
-        goto L_0x0191;
-    L_0x0125:
+        goto L_0x0198;
+    L_0x012c:
         r13 = r12.statusTextView;
         r2 = NUM; // 0x7f0d01d6 float:1.8743068E38 double:1.05313001E-314;
         r5 = "BotStatusRead";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);
-        goto L_0x0191;
-    L_0x0134:
+        goto L_0x0198;
+    L_0x013b:
         r13 = r0.id;
         r2 = r12.currentAccount;
         r2 = org.telegram.messenger.UserConfig.getInstance(r2);
         r2 = r2.getClientUserId();
-        if (r13 == r2) goto L_0x017c;
-    L_0x0142:
+        if (r13 == r2) goto L_0x0183;
+    L_0x0149:
         r13 = r0.status;
-        if (r13 == 0) goto L_0x0154;
-    L_0x0146:
+        if (r13 == 0) goto L_0x015b;
+    L_0x014d:
         r13 = r13.expires;
         r2 = r12.currentAccount;
         r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2);
         r2 = r2.getCurrentTime();
-        if (r13 > r2) goto L_0x017c;
-    L_0x0154:
+        if (r13 > r2) goto L_0x0183;
+    L_0x015b:
         r13 = r12.currentAccount;
         r13 = org.telegram.messenger.MessagesController.getInstance(r13);
         r13 = r13.onlinePrivacy;
         r2 = r0.id;
         r2 = java.lang.Integer.valueOf(r2);
         r13 = r13.containsKey(r2);
-        if (r13 == 0) goto L_0x0169;
-    L_0x0168:
-        goto L_0x017c;
-    L_0x0169:
+        if (r13 == 0) goto L_0x0170;
+    L_0x016f:
+        goto L_0x0183;
+    L_0x0170:
         r13 = r12.statusTextView;
         r2 = r12.statusColor;
         r13.setTextColor(r2);
@@ -648,67 +654,67 @@ public class UserCell extends FrameLayout {
         r2 = r12.currentAccount;
         r2 = org.telegram.messenger.LocaleController.formatUserStatus(r2, r0);
         r13.setText(r2);
-        goto L_0x0191;
-    L_0x017c:
+        goto L_0x0198;
+    L_0x0183:
         r13 = r12.statusTextView;
         r2 = r12.statusOnlineColor;
         r13.setTextColor(r2);
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
+        r2 = NUM; // 0x7f0d0703 float:1.8745755E38 double:1.0531306644E-314;
         r5 = "Online";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);
-    L_0x0191:
+    L_0x0198:
         r13 = r12.imageView;
         r13 = r13.getVisibility();
         r2 = 8;
-        if (r13 != 0) goto L_0x019f;
-    L_0x019b:
+        if (r13 != 0) goto L_0x01a6;
+    L_0x01a2:
         r13 = r12.currentDrawable;
-        if (r13 == 0) goto L_0x01ab;
-    L_0x019f:
+        if (r13 == 0) goto L_0x01b2;
+    L_0x01a6:
         r13 = r12.imageView;
         r13 = r13.getVisibility();
-        if (r13 != r2) goto L_0x01bd;
-    L_0x01a7:
+        if (r13 != r2) goto L_0x01c4;
+    L_0x01ae:
         r13 = r12.currentDrawable;
-        if (r13 == 0) goto L_0x01bd;
-    L_0x01ab:
+        if (r13 == 0) goto L_0x01c4;
+    L_0x01b2:
         r13 = r12.imageView;
         r5 = r12.currentDrawable;
-        if (r5 != 0) goto L_0x01b2;
-    L_0x01b1:
-        goto L_0x01b3;
-    L_0x01b2:
+        if (r5 != 0) goto L_0x01b9;
+    L_0x01b8:
+        goto L_0x01ba;
+    L_0x01b9:
         r2 = 0;
-    L_0x01b3:
+    L_0x01ba:
         r13.setVisibility(r2);
         r13 = r12.imageView;
         r2 = r12.currentDrawable;
         r13.setImageResource(r2);
-    L_0x01bd:
+    L_0x01c4:
         r12.lastAvatar = r1;
         r13 = "50_50";
-        if (r0 == 0) goto L_0x01cf;
-    L_0x01c3:
+        if (r0 == 0) goto L_0x01d6;
+    L_0x01ca:
         r1 = r12.avatarImageView;
         r2 = org.telegram.messenger.ImageLocation.getForUser(r0, r4);
         r3 = r12.avatarDrawable;
         r1.setImage(r2, r13, r3, r0);
-        goto L_0x01e4;
-    L_0x01cf:
-        if (r3 == 0) goto L_0x01dd;
-    L_0x01d1:
+        goto L_0x01eb;
+    L_0x01d6:
+        if (r3 == 0) goto L_0x01e4;
+    L_0x01d8:
         r0 = r12.avatarImageView;
         r1 = org.telegram.messenger.ImageLocation.getForChat(r3, r4);
         r2 = r12.avatarDrawable;
         r0.setImage(r1, r13, r2, r3);
-        goto L_0x01e4;
-    L_0x01dd:
+        goto L_0x01eb;
+    L_0x01e4:
         r13 = r12.avatarImageView;
         r0 = r12.avatarDrawable;
         r13.setImageDrawable(r0);
-    L_0x01e4:
+    L_0x01eb:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell.update(int):void");

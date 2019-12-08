@@ -754,21 +754,21 @@ public class PhotoCropActivity extends BaseFragment {
             r0 = r0.drawable;
             if (r0 == 0) goto L_0x0035;
         L_0x0009:
-            r0 = org.telegram.ui.PhotoCropActivity.this;	 Catch:{ Throwable -> 0x002e }
-            r0 = r0.drawable;	 Catch:{ Throwable -> 0x002e }
-            r2 = r1.bitmapX;	 Catch:{ Throwable -> 0x002e }
-            r3 = r1.bitmapY;	 Catch:{ Throwable -> 0x002e }
-            r4 = r1.bitmapX;	 Catch:{ Throwable -> 0x002e }
-            r5 = r1.bitmapWidth;	 Catch:{ Throwable -> 0x002e }
+            r0 = org.telegram.ui.PhotoCropActivity.this;	 Catch:{ all -> 0x002e }
+            r0 = r0.drawable;	 Catch:{ all -> 0x002e }
+            r2 = r1.bitmapX;	 Catch:{ all -> 0x002e }
+            r3 = r1.bitmapY;	 Catch:{ all -> 0x002e }
+            r4 = r1.bitmapX;	 Catch:{ all -> 0x002e }
+            r5 = r1.bitmapWidth;	 Catch:{ all -> 0x002e }
             r4 = r4 + r5;
-            r5 = r1.bitmapY;	 Catch:{ Throwable -> 0x002e }
-            r6 = r1.bitmapHeight;	 Catch:{ Throwable -> 0x002e }
+            r5 = r1.bitmapY;	 Catch:{ all -> 0x002e }
+            r6 = r1.bitmapHeight;	 Catch:{ all -> 0x002e }
             r5 = r5 + r6;
-            r0.setBounds(r2, r3, r4, r5);	 Catch:{ Throwable -> 0x002e }
-            r0 = org.telegram.ui.PhotoCropActivity.this;	 Catch:{ Throwable -> 0x002e }
-            r0 = r0.drawable;	 Catch:{ Throwable -> 0x002e }
+            r0.setBounds(r2, r3, r4, r5);	 Catch:{ all -> 0x002e }
+            r0 = org.telegram.ui.PhotoCropActivity.this;	 Catch:{ all -> 0x002e }
+            r0 = r0.drawable;	 Catch:{ all -> 0x002e }
             r8 = r16;
-            r0.draw(r8);	 Catch:{ Throwable -> 0x002c }
+            r0.draw(r8);	 Catch:{ all -> 0x002c }
             goto L_0x0037;
         L_0x002c:
             r0 = move-exception;

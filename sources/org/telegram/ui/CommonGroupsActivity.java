@@ -262,7 +262,7 @@ public class CommonGroupsActivity extends BaseFragment {
         r10[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, "progressCircle");
         r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_namePaint, Theme.dialogs_searchNamePaint}, null, null, "chats_name");
         r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_nameEncryptedPaint, Theme.dialogs_searchNameEncryptedPaint}, null, null, "chats_secretName");
-        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$CommonGroupsActivity$CM0EpwYGPtlvUyQJ8b7pz0B-Dbw -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2 = -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw;
         r10[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundRed");
         r10[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundOrange");

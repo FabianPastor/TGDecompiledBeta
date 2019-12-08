@@ -133,7 +133,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     public interface StickersAlertDelegate {
-        void onStickerSelected(Document document, Object obj, boolean z);
+        boolean canSchedule();
+
+        boolean isInScheduleMode();
+
+        void onStickerSelected(Document document, Object obj, boolean z, boolean z2, int i);
     }
 
     public interface StickersAlertInstallDelegate {
@@ -289,13 +293,23 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             public void openSet(InputStickerSet inputStickerSet, boolean z) {
             }
 
-            public /* synthetic */ void sendGif(Object obj) {
-                -CC.$default$sendGif(this, obj);
+            public /* synthetic */ void sendGif(Object obj, boolean z, int i) {
+                -CC.$default$sendGif(this, obj, z, i);
             }
 
-            public void sendSticker(Document document, Object obj) {
-                StickersAlert.this.delegate.onStickerSelected(document, obj, StickersAlert.this.clearsInputField);
-                StickersAlert.this.dismiss();
+            public void sendSticker(Document document, Object obj, boolean z, int i) {
+                if (StickersAlert.this.delegate != null) {
+                    StickersAlert.this.delegate.onStickerSelected(document, obj, StickersAlert.this.clearsInputField, z, i);
+                    StickersAlert.this.dismiss();
+                }
+            }
+
+            public boolean canSchedule() {
+                return StickersAlert.this.delegate != null && StickersAlert.this.delegate.canSchedule();
+            }
+
+            public boolean isInScheduleMode() {
+                return StickersAlert.this.delegate != null && StickersAlert.this.delegate.isInScheduleMode();
             }
 
             public boolean needSend() {
@@ -1031,7 +1045,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     public /* synthetic */ void lambda$init$10$StickersAlert(View view) {
-        this.delegate.onStickerSelected(this.selectedSticker, this.stickerSet, this.clearsInputField);
+        this.delegate.onStickerSelected(this.selectedSticker, this.stickerSet, this.clearsInputField, true, 0);
         dismiss();
     }
 
@@ -1208,7 +1222,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r1 = r0.set;
         r1 = r1.masks;
-        r6 = NUM; // 0x7f0d08c6 float:1.874667E38 double:1.053130887E-314;
+        r6 = NUM; // 0x7f0d08e2 float:1.8746727E38 double:1.053130901E-314;
         r7 = "RemoveStickersCount";
         if (r1 == 0) goto L_0x00d0;
     L_0x00b9:
@@ -1280,7 +1294,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0.notifyDataSetChanged();
         goto L_0x016f;
     L_0x0156:
-        r0 = NUM; // 0x7f0d02e0 float:1.8743608E38 double:1.053130141E-314;
+        r0 = NUM; // 0x7f0d02e2 float:1.8743612E38 double:1.053130142E-314;
         r2 = "Close";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = r0.toUpperCase();

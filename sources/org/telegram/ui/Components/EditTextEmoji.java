@@ -101,13 +101,13 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
         editTextBoldCursor.setFocusable(editTextBoldCursor.isEnabled());
         this.editText.setCursorSize(AndroidUtilities.dp(20.0f));
         this.editText.setCursorWidth(1.5f);
+        String str = "windowBackgroundWhiteBlackText";
+        this.editText.setCursorColor(Theme.getColor(str));
         int i2 = 5;
         if (i == 0) {
             this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             this.editText.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.editText.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
-            String str = "windowBackgroundWhiteBlackText";
-            this.editText.setCursorColor(Theme.getColor(str));
             this.editText.setTextColor(Theme.getColor(str));
             this.editText.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(40.0f) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(40.0f), AndroidUtilities.dp(8.0f));
             EditTextBoldCursor editTextBoldCursor2 = this.editText;
@@ -159,6 +159,11 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
                 this.editText.requestFocus();
             }
         }
+    }
+
+    public void setSizeNotifierLayout(SizeNotifierFrameLayout sizeNotifierFrameLayout) {
+        this.sizeNotifierLayout = sizeNotifierFrameLayout;
+        this.sizeNotifierLayout.setDelegate(this);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -395,16 +400,24 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
                 this.emojiView.setForseMultiwindowLayout(true);
             }
             this.emojiView.setDelegate(new EmojiViewDelegate() {
+                public /* synthetic */ boolean canSchedule() {
+                    return -CC.$default$canSchedule(this);
+                }
+
                 public /* synthetic */ boolean isExpanded() {
                     return -CC.$default$isExpanded(this);
+                }
+
+                public /* synthetic */ boolean isInScheduleMode() {
+                    return -CC.$default$isInScheduleMode(this);
                 }
 
                 public /* synthetic */ boolean isSearchOpened() {
                     return -CC.$default$isSearchOpened(this);
                 }
 
-                public /* synthetic */ void onGifSelected(View view, Object obj, Object obj2) {
-                    -CC.$default$onGifSelected(this, view, obj, obj2);
+                public /* synthetic */ void onGifSelected(View view, Object obj, Object obj2, boolean z, int i) {
+                    -CC.$default$onGifSelected(this, view, obj, obj2, z, i);
                 }
 
                 public /* synthetic */ void onSearchOpenClose(int i) {
@@ -415,8 +428,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
                     -CC.$default$onShowStickerSet(this, stickerSet, inputStickerSet);
                 }
 
-                public /* synthetic */ void onStickerSelected(View view, Document document, Object obj) {
-                    -CC.$default$onStickerSelected(this, view, document, obj);
+                public /* synthetic */ void onStickerSelected(View view, Document document, Object obj, boolean z, int i) {
+                    -CC.$default$onStickerSelected(this, view, document, obj, z, i);
                 }
 
                 public /* synthetic */ void onStickerSetAdd(StickerSetCovered stickerSetCovered) {

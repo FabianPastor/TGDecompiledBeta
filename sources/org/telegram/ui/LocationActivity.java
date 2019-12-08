@@ -63,6 +63,7 @@ import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.GeoPoint;
@@ -71,6 +72,7 @@ import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.TL_channelLocation;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
+import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_messages_getRecentLocations;
@@ -93,6 +95,7 @@ import org.telegram.ui.Cells.LocationCell;
 import org.telegram.ui.Cells.LocationLoadingCell;
 import org.telegram.ui.Cells.LocationPoweredCell;
 import org.telegram.ui.Cells.SendLocationCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -140,6 +143,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private boolean onResumeCalled;
     private ActionBarMenuItem otherItem;
     private int overScrollHeight = ((AndroidUtilities.displaySize.x - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(66.0f));
+    private ChatActivity parentFragment;
     private ImageView routeButton;
     private LocationActivitySearchAdapter searchAdapter;
     private RecyclerListView searchListView;
@@ -159,10 +163,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     public interface LocationActivityDelegate {
-        void didSelectLocation(MessageMedia messageMedia, int i);
+        void didSelectLocation(MessageMedia messageMedia, int i, boolean z, int i2);
     }
 
-    static /* synthetic */ void lambda$getThemeDescriptions$18() {
+    static /* synthetic */ void lambda$getThemeDescriptions$21() {
     }
 
     public LocationActivity(int i) {
@@ -177,7 +181,6 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         MessageObject messageObject = this.messageObject;
         if (messageObject != null && messageObject.isLiveLocation()) {
             getNotificationCenter().addObserver(this, NotificationCenter.didReceiveNewMessages);
-            getNotificationCenter().addObserver(this, NotificationCenter.messagesDeleted);
             getNotificationCenter().addObserver(this, NotificationCenter.replaceMessagesObjects);
         }
         return true;
@@ -188,7 +191,6 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.locationPermissionGranted);
         getNotificationCenter().removeObserver(this, NotificationCenter.closeChats);
         getNotificationCenter().removeObserver(this, NotificationCenter.didReceiveNewMessages);
-        getNotificationCenter().removeObserver(this, NotificationCenter.messagesDeleted);
         getNotificationCenter().removeObserver(this, NotificationCenter.replaceMessagesObjects);
         try {
             if (this.googleMap != null) {
@@ -424,8 +426,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 LocationActivity.this.adapter.searchPlacesWithQuery(null, LocationActivity.this.myLocation, true);
             }
         });
-        this.listView.setOnItemClickListener(new -$$Lambda$LocationActivity$S5fuT9kSC5GcWeIpW8kQl94_IX8(this));
-        this.adapter.setDelegate(this.dialogId, new -$$Lambda$LocationActivity$r_Wpnop55OvVPbc8eZ9sGK8K64E(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$LocationActivity$3ZuEtEMOSdh5Ci0BsPodKsI3Wyo(this));
+        this.adapter.setDelegate(this.dialogId, new -$$Lambda$LocationActivity$NtWcIBHqOy4w4UYgRV-QpiBtBE8(this));
         this.adapter.setOverScrollHeight(this.overScrollHeight);
         frameLayout.addView(this.mapViewClip, LayoutHelper.createFrame(-1, -1, 51));
         this.mapView = new MapView(context2) {
@@ -475,7 +477,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 return super.onInterceptTouchEvent(motionEvent);
             }
         };
-        new Thread(new -$$Lambda$LocationActivity$u01J8VUJCRV_awAGjptIf5VYEI8(this, this.mapView)).start();
+        new Thread(new -$$Lambda$LocationActivity$kRAJeBbg2Ym7K8em4l4Pd9kMTUc(this, this.mapView)).start();
         View view = new View(context2);
         view.setBackgroundResource(NUM);
         this.mapViewClip.addView(view, LayoutHelper.createFrame(-1, 3, 83));
@@ -520,7 +522,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             });
-            this.searchListView.setOnItemClickListener(new -$$Lambda$LocationActivity$M5nzDQeX7UhAugxqRzy_QyMzpvk(this));
+            this.searchListView.setOnItemClickListener(new -$$Lambda$LocationActivity$3aEWKRVmFFczwCGULRKYkpzZ6Ac(this));
         } else {
             messageObject = this.messageObject;
             if (!((messageObject == null || messageObject.isLiveLocation()) && this.chatLocation == null)) {
@@ -550,7 +552,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     });
                 }
                 frameLayout.addView(this.routeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 37.0f));
-                this.routeButton.setOnClickListener(new -$$Lambda$LocationActivity$SN_iIIjoVBBKgPTov0bqjzWzDLo(this));
+                this.routeButton.setOnClickListener(new -$$Lambda$LocationActivity$0vuMAC0UTT1fhCHoXsMPQshzxPI(this));
                 TL_channelLocation tL_channelLocation = this.chatLocation;
                 if (tL_channelLocation != null) {
                     this.adapter.setChatLocation(tL_channelLocation);
@@ -568,7 +570,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } else {
             this.mapViewClip.addView(this.locationButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 43.0f));
         }
-        this.locationButton.setOnClickListener(new -$$Lambda$LocationActivity$FVyVPlApvStOdKCATEmAa4hueyE(this));
+        this.locationButton.setOnClickListener(new -$$Lambda$LocationActivity$skB9LwCh2ItrV0m_dOMOlJlUXlA(this));
         if (this.messageObject == null && this.chatLocation == null) {
             if (this.initialLocation == null) {
                 this.locationButton.setAlpha(0.0f);
@@ -580,244 +582,268 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return this.fragmentView;
     }
 
-    /* JADX WARNING: Missing block: B:55:0x0176, code skipped:
+    /* JADX WARNING: Missing block: B:59:0x0199, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$createView$4$LocationActivity(android.view.View r8, int r9) {
+    public /* synthetic */ void lambda$createView$6$LocationActivity(android.view.View r9, int r10) {
         /*
-        r7 = this;
-        r8 = r7.locationType;
+        r8 = this;
+        r9 = r8.locationType;
         r0 = 4;
         r1 = 3;
-        r2 = 1;
-        if (r8 != r0) goto L_0x007c;
-    L_0x0007:
-        if (r9 != r2) goto L_0x01ae;
-    L_0x0009:
-        r8 = r7.adapter;
-        r8 = r8.getItem(r9);
-        r8 = (org.telegram.tgnet.TLRPC.TL_messageMediaVenue) r8;
-        if (r8 != 0) goto L_0x0014;
-    L_0x0013:
-        return;
+        r2 = 0;
+        r3 = 1;
+        if (r9 != r0) goto L_0x007c;
+    L_0x0008:
+        if (r10 != r3) goto L_0x01ee;
+    L_0x000a:
+        r9 = r8.adapter;
+        r9 = r9.getItem(r10);
+        r9 = (org.telegram.tgnet.TLRPC.TL_messageMediaVenue) r9;
+        if (r9 != 0) goto L_0x0015;
     L_0x0014:
-        r3 = r7.dialogId;
-        r5 = 0;
-        r9 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r9 != 0) goto L_0x0026;
-    L_0x001c:
-        r9 = r7.delegate;
-        r9.didSelectLocation(r8, r0);
-        r7.finishFragment();
-        goto L_0x01ae;
-    L_0x0026:
-        r9 = new org.telegram.ui.ActionBar.AlertDialog[r2];
+        return;
+    L_0x0015:
+        r4 = r8.dialogId;
+        r6 = 0;
+        r10 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
+        if (r10 != 0) goto L_0x0027;
+    L_0x001d:
+        r10 = r8.delegate;
+        r10.didSelectLocation(r9, r0, r3, r2);
+        r8.finishFragment();
+        goto L_0x01ee;
+    L_0x0027:
+        r10 = new org.telegram.ui.ActionBar.AlertDialog[r3];
         r0 = new org.telegram.ui.ActionBar.AlertDialog;
-        r2 = r7.getParentActivity();
-        r0.<init>(r2, r1);
-        r1 = 0;
-        r9[r1] = r0;
+        r3 = r8.getParentActivity();
+        r0.<init>(r3, r1);
+        r10[r2] = r0;
         r0 = new org.telegram.tgnet.TLRPC$TL_channels_editLocation;
         r0.<init>();
-        r2 = r8.address;
-        r0.address = r2;
-        r2 = r7.getMessagesController();
-        r3 = r7.dialogId;
+        r1 = r9.address;
+        r0.address = r1;
+        r1 = r8.getMessagesController();
+        r3 = r8.dialogId;
         r4 = (int) r3;
         r3 = -r4;
-        r2 = r2.getInputChannel(r3);
-        r0.channel = r2;
-        r2 = new org.telegram.tgnet.TLRPC$TL_inputGeoPoint;
-        r2.<init>();
-        r0.geo_point = r2;
-        r2 = r0.geo_point;
-        r3 = r8.geo;
+        r1 = r1.getInputChannel(r3);
+        r0.channel = r1;
+        r1 = new org.telegram.tgnet.TLRPC$TL_inputGeoPoint;
+        r1.<init>();
+        r0.geo_point = r1;
+        r1 = r0.geo_point;
+        r3 = r9.geo;
         r4 = r3.lat;
-        r2.lat = r4;
+        r1.lat = r4;
         r3 = r3._long;
-        r2._long = r3;
-        r2 = r7.getConnectionsManager();
+        r1._long = r3;
+        r1 = r8.getConnectionsManager();
         r3 = new org.telegram.ui.-$$Lambda$LocationActivity$eTbcUM4Sn7VU43gkS_W-mbUaQEY;
-        r3.<init>(r7, r9, r8);
-        r8 = r2.sendRequest(r0, r3);
-        r0 = r9[r1];
-        r2 = new org.telegram.ui.-$$Lambda$LocationActivity$LnFEOAIDJMLhZmlmCTS4P1Oq0bU;
-        r2.<init>(r7, r8);
-        r0.setOnCancelListener(r2);
-        r8 = r9[r1];
-        r7.showDialog(r8);
-        goto L_0x01ae;
+        r3.<init>(r8, r10, r9);
+        r9 = r1.sendRequest(r0, r3);
+        r0 = r10[r2];
+        r1 = new org.telegram.ui.-$$Lambda$LocationActivity$LnFEOAIDJMLhZmlmCTS4P1Oq0bU;
+        r1.<init>(r8, r9);
+        r0.setOnCancelListener(r1);
+        r9 = r10[r2];
+        r8.showDialog(r9);
+        goto L_0x01ee;
     L_0x007c:
         r0 = 5;
-        r3 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        if (r8 != r0) goto L_0x00a2;
+        r4 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        if (r9 != r0) goto L_0x00a2;
     L_0x0081:
-        r8 = r7.googleMap;
-        if (r8 == 0) goto L_0x01ae;
+        r9 = r8.googleMap;
+        if (r9 == 0) goto L_0x01ee;
     L_0x0085:
-        r9 = new com.google.android.gms.maps.model.LatLng;
-        r0 = r7.chatLocation;
+        r10 = new com.google.android.gms.maps.model.LatLng;
+        r0 = r8.chatLocation;
         r0 = r0.geo_point;
         r1 = r0.lat;
-        r4 = r0._long;
-        r9.<init>(r1, r4);
-        r0 = r7.googleMap;
+        r5 = r0._long;
+        r10.<init>(r1, r5);
+        r0 = r8.googleMap;
         r0 = r0.getMaxZoomLevel();
-        r0 = r0 - r3;
-        r9 = com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(r9, r0);
-        r8.animateCamera(r9);
-        goto L_0x01ae;
+        r0 = r0 - r4;
+        r10 = com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(r10, r0);
+        r9.animateCamera(r10);
+        goto L_0x01ee;
     L_0x00a2:
-        if (r9 != r2) goto L_0x00d3;
+        if (r10 != r3) goto L_0x00d3;
     L_0x00a4:
-        r8 = r7.messageObject;
-        if (r8 == 0) goto L_0x00d3;
+        r9 = r8.messageObject;
+        if (r9 == 0) goto L_0x00d3;
     L_0x00a8:
-        r8 = r8.isLiveLocation();
-        if (r8 != 0) goto L_0x00d3;
+        r9 = r9.isLiveLocation();
+        if (r9 != 0) goto L_0x00d3;
     L_0x00ae:
-        r8 = r7.googleMap;
-        if (r8 == 0) goto L_0x01ae;
+        r9 = r8.googleMap;
+        if (r9 == 0) goto L_0x01ee;
     L_0x00b2:
-        r9 = new com.google.android.gms.maps.model.LatLng;
-        r0 = r7.messageObject;
+        r10 = new com.google.android.gms.maps.model.LatLng;
+        r0 = r8.messageObject;
         r0 = r0.messageOwner;
         r0 = r0.media;
         r0 = r0.geo;
         r1 = r0.lat;
-        r4 = r0._long;
-        r9.<init>(r1, r4);
-        r0 = r7.googleMap;
+        r5 = r0._long;
+        r10.<init>(r1, r5);
+        r0 = r8.googleMap;
         r0 = r0.getMaxZoomLevel();
-        r0 = r0 - r3;
-        r9 = com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(r9, r0);
-        r8.animateCamera(r9);
-        goto L_0x01ae;
+        r0 = r0 - r4;
+        r10 = com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(r10, r0);
+        r9.animateCamera(r10);
+        goto L_0x01ee;
     L_0x00d3:
-        r8 = 2;
-        if (r9 != r2) goto L_0x0116;
+        r9 = 2;
+        if (r10 != r3) goto L_0x0138;
     L_0x00d6:
-        r0 = r7.locationType;
-        if (r0 == r8) goto L_0x0116;
+        r0 = r8.locationType;
+        if (r0 == r9) goto L_0x0138;
     L_0x00da:
-        r8 = r7.delegate;
-        if (r8 == 0) goto L_0x0111;
+        r9 = r8.delegate;
+        if (r9 == 0) goto L_0x01ee;
     L_0x00de:
-        r8 = r7.userLocation;
-        if (r8 == 0) goto L_0x0111;
+        r9 = r8.userLocation;
+        if (r9 == 0) goto L_0x01ee;
     L_0x00e2:
-        r8 = new org.telegram.tgnet.TLRPC$TL_messageMediaGeo;
-        r8.<init>();
-        r9 = new org.telegram.tgnet.TLRPC$TL_geoPoint;
+        r9 = new org.telegram.tgnet.TLRPC$TL_messageMediaGeo;
         r9.<init>();
-        r8.geo = r9;
-        r9 = r8.geo;
-        r0 = r7.userLocation;
+        r10 = new org.telegram.tgnet.TLRPC$TL_geoPoint;
+        r10.<init>();
+        r9.geo = r10;
+        r10 = r9.geo;
+        r0 = r8.userLocation;
         r0 = r0.getLatitude();
         r0 = org.telegram.messenger.AndroidUtilities.fixLocationCoord(r0);
-        r9.lat = r0;
-        r9 = r8.geo;
-        r0 = r7.userLocation;
+        r10.lat = r0;
+        r10 = r9.geo;
+        r0 = r8.userLocation;
         r0 = r0.getLongitude();
         r0 = org.telegram.messenger.AndroidUtilities.fixLocationCoord(r0);
-        r9._long = r0;
-        r9 = r7.delegate;
-        r0 = r7.locationType;
-        r9.didSelectLocation(r8, r0);
-    L_0x0111:
-        r7.finishFragment();
-        goto L_0x01ae;
-    L_0x0116:
-        if (r9 != r8) goto L_0x011c;
-    L_0x0118:
-        r0 = r7.locationType;
-        if (r0 == r2) goto L_0x0128;
-    L_0x011c:
-        if (r9 != r2) goto L_0x0122;
-    L_0x011e:
-        r0 = r7.locationType;
-        if (r0 == r8) goto L_0x0128;
-    L_0x0122:
-        if (r9 != r1) goto L_0x0177;
-    L_0x0124:
-        r8 = r7.locationType;
-        if (r8 != r1) goto L_0x0177;
-    L_0x0128:
-        r8 = r7.getLocationController();
-        r0 = r7.dialogId;
-        r8 = r8.isSharingLocation(r0);
-        if (r8 == 0) goto L_0x0141;
-    L_0x0134:
-        r8 = r7.getLocationController();
-        r0 = r7.dialogId;
-        r8.removeSharingLocation(r0);
-        r7.finishFragment();
-        goto L_0x01ae;
-    L_0x0141:
-        r8 = r7.delegate;
-        if (r8 == 0) goto L_0x0176;
-    L_0x0145:
-        r8 = r7.getParentActivity();
-        if (r8 != 0) goto L_0x014c;
-    L_0x014b:
-        goto L_0x0176;
-    L_0x014c:
-        r8 = r7.myLocation;
-        if (r8 == 0) goto L_0x01ae;
-    L_0x0150:
-        r8 = 0;
-        r0 = r7.dialogId;
-        r9 = (int) r0;
-        if (r9 <= 0) goto L_0x0165;
+        r10._long = r0;
+        r10 = r8.parentFragment;
+        if (r10 == 0) goto L_0x012c;
+    L_0x010e:
+        r10 = r10.isInScheduleMode();
+        if (r10 == 0) goto L_0x012c;
+    L_0x0114:
+        r10 = r8.getParentActivity();
+        r0 = r8.parentFragment;
+        r0 = r0.getCurrentUser();
+        r0 = org.telegram.messenger.UserObject.isUserSelf(r0);
+        r1 = new org.telegram.ui.-$$Lambda$LocationActivity$S_gW1aUqJZbo1RA9hlk6cnI2yls;
+        r1.<init>(r8, r9);
+        org.telegram.ui.Components.AlertsCreator.createScheduleDatePickerDialog(r10, r0, r1);
+        goto L_0x01ee;
+    L_0x012c:
+        r10 = r8.delegate;
+        r0 = r8.locationType;
+        r10.didSelectLocation(r9, r0, r3, r2);
+        r8.finishFragment();
+        goto L_0x01ee;
+    L_0x0138:
+        if (r10 != r9) goto L_0x013e;
+    L_0x013a:
+        r0 = r8.locationType;
+        if (r0 == r3) goto L_0x014a;
+    L_0x013e:
+        if (r10 != r3) goto L_0x0144;
+    L_0x0140:
+        r0 = r8.locationType;
+        if (r0 == r9) goto L_0x014a;
+    L_0x0144:
+        if (r10 != r1) goto L_0x019a;
+    L_0x0146:
+        r9 = r8.locationType;
+        if (r9 != r1) goto L_0x019a;
+    L_0x014a:
+        r9 = r8.getLocationController();
+        r0 = r8.dialogId;
+        r9 = r9.isSharingLocation(r0);
+        if (r9 == 0) goto L_0x0164;
     L_0x0156:
-        r8 = r7.getMessagesController();
-        r0 = r7.dialogId;
-        r9 = (int) r0;
-        r9 = java.lang.Integer.valueOf(r9);
-        r8 = r8.getUser(r9);
-    L_0x0165:
-        r9 = r7.getParentActivity();
-        r0 = new org.telegram.ui.-$$Lambda$LocationActivity$SSFUzvTU1gQEcXIuEYMfEo537pk;
-        r0.<init>(r7);
-        r8 = org.telegram.ui.Components.AlertsCreator.createLocationUpdateDialog(r9, r8, r0);
-        r7.showDialog(r8);
-        goto L_0x01ae;
-    L_0x0176:
+        r9 = r8.getLocationController();
+        r0 = r8.dialogId;
+        r9.removeSharingLocation(r0);
+        r8.finishFragment();
+        goto L_0x01ee;
+    L_0x0164:
+        r9 = r8.delegate;
+        if (r9 == 0) goto L_0x0199;
+    L_0x0168:
+        r9 = r8.getParentActivity();
+        if (r9 != 0) goto L_0x016f;
+    L_0x016e:
+        goto L_0x0199;
+    L_0x016f:
+        r9 = r8.myLocation;
+        if (r9 == 0) goto L_0x01ee;
+    L_0x0173:
+        r9 = 0;
+        r0 = r8.dialogId;
+        r10 = (int) r0;
+        if (r10 <= 0) goto L_0x0188;
+    L_0x0179:
+        r9 = r8.getMessagesController();
+        r0 = r8.dialogId;
+        r10 = (int) r0;
+        r10 = java.lang.Integer.valueOf(r10);
+        r9 = r9.getUser(r10);
+    L_0x0188:
+        r10 = r8.getParentActivity();
+        r0 = new org.telegram.ui.-$$Lambda$LocationActivity$y-H_YdHAcjNzU40g5n2ffIy3l44;
+        r0.<init>(r8);
+        r9 = org.telegram.ui.Components.AlertsCreator.createLocationUpdateDialog(r10, r9, r0);
+        r8.showDialog(r9);
+        goto L_0x01ee;
+    L_0x0199:
         return;
-    L_0x0177:
-        r8 = r7.adapter;
-        r8 = r8.getItem(r9);
-        r9 = r8 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
-        if (r9 == 0) goto L_0x0192;
-    L_0x0181:
-        if (r8 == 0) goto L_0x018e;
-    L_0x0183:
-        r9 = r7.delegate;
-        if (r9 == 0) goto L_0x018e;
-    L_0x0187:
-        r8 = (org.telegram.tgnet.TLRPC.TL_messageMediaVenue) r8;
-        r0 = r7.locationType;
-        r9.didSelectLocation(r8, r0);
-    L_0x018e:
-        r7.finishFragment();
-        goto L_0x01ae;
-    L_0x0192:
-        r9 = r8 instanceof org.telegram.ui.LocationActivity.LiveLocation;
-        if (r9 == 0) goto L_0x01ae;
-    L_0x0196:
-        r8 = (org.telegram.ui.LocationActivity.LiveLocation) r8;
-        r9 = r7.googleMap;
-        r8 = r8.marker;
-        r8 = r8.getPosition();
-        r0 = r7.googleMap;
-        r0 = r0.getMaxZoomLevel();
-        r0 = r0 - r3;
-        r8 = com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(r8, r0);
-        r9.animateCamera(r8);
+    L_0x019a:
+        r9 = r8.adapter;
+        r9 = r9.getItem(r10);
+        r10 = r9 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
+        if (r10 == 0) goto L_0x01d2;
+    L_0x01a4:
+        r10 = r8.parentFragment;
+        if (r10 == 0) goto L_0x01c5;
+    L_0x01a8:
+        r10 = r10.isInScheduleMode();
+        if (r10 == 0) goto L_0x01c5;
     L_0x01ae:
+        r10 = r8.getParentActivity();
+        r0 = r8.parentFragment;
+        r0 = r0.getCurrentUser();
+        r0 = org.telegram.messenger.UserObject.isUserSelf(r0);
+        r1 = new org.telegram.ui.-$$Lambda$LocationActivity$-xlefUAlTwXwh9jaF5AoFfwPyZg;
+        r1.<init>(r8, r9);
+        org.telegram.ui.Components.AlertsCreator.createScheduleDatePickerDialog(r10, r0, r1);
+        goto L_0x01ee;
+    L_0x01c5:
+        r10 = r8.delegate;
+        r9 = (org.telegram.tgnet.TLRPC.TL_messageMediaVenue) r9;
+        r0 = r8.locationType;
+        r10.didSelectLocation(r9, r0, r3, r2);
+        r8.finishFragment();
+        goto L_0x01ee;
+    L_0x01d2:
+        r10 = r9 instanceof org.telegram.ui.LocationActivity.LiveLocation;
+        if (r10 == 0) goto L_0x01ee;
+    L_0x01d6:
+        r9 = (org.telegram.ui.LocationActivity.LiveLocation) r9;
+        r10 = r8.googleMap;
+        r9 = r9.marker;
+        r9 = r9.getPosition();
+        r0 = r8.googleMap;
+        r0 = r0.getMaxZoomLevel();
+        r0 = r0 - r4;
+        r9 = com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(r9, r0);
+        r10.animateCamera(r9);
+    L_0x01ee:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LocationActivity.lambda$createView$4$LocationActivity(android.view.View, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LocationActivity.lambda$createView$6$LocationActivity(android.view.View, int):void");
     }
 
     public /* synthetic */ void lambda$null$1$LocationActivity(AlertDialog[] alertDialogArr, TL_messageMediaVenue tL_messageMediaVenue, TLObject tLObject, TL_error tL_error) {
@@ -830,7 +856,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } catch (Throwable unused) {
         }
         alertDialogArr[0] = null;
-        this.delegate.didSelectLocation(tL_messageMediaVenue, 4);
+        this.delegate.didSelectLocation(tL_messageMediaVenue, 4, true, 0);
         finishFragment();
     }
 
@@ -838,37 +864,47 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         getConnectionsManager().cancelRequest(i, true);
     }
 
-    public /* synthetic */ void lambda$null$3$LocationActivity(int i) {
+    public /* synthetic */ void lambda$null$3$LocationActivity(TL_messageMediaGeo tL_messageMediaGeo, boolean z, int i) {
+        this.delegate.didSelectLocation(tL_messageMediaGeo, this.locationType, z, i);
+        finishFragment();
+    }
+
+    public /* synthetic */ void lambda$null$4$LocationActivity(int i) {
         TL_messageMediaGeoLive tL_messageMediaGeoLive = new TL_messageMediaGeoLive();
         tL_messageMediaGeoLive.geo = new TL_geoPoint();
         tL_messageMediaGeoLive.geo.lat = AndroidUtilities.fixLocationCoord(this.myLocation.getLatitude());
         tL_messageMediaGeoLive.geo._long = AndroidUtilities.fixLocationCoord(this.myLocation.getLongitude());
         tL_messageMediaGeoLive.period = i;
-        this.delegate.didSelectLocation(tL_messageMediaGeoLive, this.locationType);
+        this.delegate.didSelectLocation(tL_messageMediaGeoLive, this.locationType, true, 0);
         finishFragment();
     }
 
-    public /* synthetic */ void lambda$createView$5$LocationActivity(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$5$LocationActivity(Object obj, boolean z, int i) {
+        this.delegate.didSelectLocation((TL_messageMediaVenue) obj, this.locationType, z, i);
+        finishFragment();
+    }
+
+    public /* synthetic */ void lambda$createView$7$LocationActivity(ArrayList arrayList) {
         if (!(this.wasResults || arrayList.isEmpty())) {
             this.wasResults = true;
         }
         this.emptyView.showTextView();
     }
 
-    public /* synthetic */ void lambda$createView$8$LocationActivity(MapView mapView) {
+    public /* synthetic */ void lambda$createView$10$LocationActivity(MapView mapView) {
         try {
             mapView.onCreate(null);
         } catch (Exception unused) {
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$LocationActivity$Ytf8JcVz8uRswu1tQULRSOTL-6U(this, mapView));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$LocationActivity$d2e6Q_JsxG2BaEHYA1j6od8jEKw(this, mapView));
     }
 
-    public /* synthetic */ void lambda$null$7$LocationActivity(MapView mapView) {
+    public /* synthetic */ void lambda$null$9$LocationActivity(MapView mapView) {
         if (this.mapView != null && getParentActivity() != null) {
             try {
                 mapView.onCreate(null);
                 MapsInitializer.initialize(ApplicationLoader.applicationContext);
-                this.mapView.getMapAsync(new -$$Lambda$LocationActivity$rxAN16Hp-QCWiKRh5RnTz0qRmo0(this));
+                this.mapView.getMapAsync(new -$$Lambda$LocationActivity$nYJv5cWPYZ4MasIiIaWmUb5tLGQ(this));
                 this.mapsInitialized = true;
                 if (this.onResumeCalled) {
                     this.mapView.onResume();
@@ -879,24 +915,31 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$null$6$LocationActivity(GoogleMap googleMap) {
+    public /* synthetic */ void lambda$null$8$LocationActivity(GoogleMap googleMap) {
         this.googleMap = googleMap;
         this.googleMap.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
         onMapInit();
     }
 
-    public /* synthetic */ void lambda$createView$9$LocationActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$12$LocationActivity(View view, int i) {
         TL_messageMediaVenue item = this.searchAdapter.getItem(i);
-        if (item != null) {
-            LocationActivityDelegate locationActivityDelegate = this.delegate;
-            if (locationActivityDelegate != null) {
-                locationActivityDelegate.didSelectLocation(item, this.locationType);
+        if (item != null && this.delegate != null) {
+            ChatActivity chatActivity = this.parentFragment;
+            if (chatActivity == null || !chatActivity.isInScheduleMode()) {
+                this.delegate.didSelectLocation(item, this.locationType, true, 0);
+                finishFragment();
+                return;
             }
+            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), UserObject.isUserSelf(this.parentFragment.getCurrentUser()), new -$$Lambda$LocationActivity$0Eo_xWGFn0CLASSNAMEMjMoPV41J-G1B4(this, item));
         }
+    }
+
+    public /* synthetic */ void lambda$null$11$LocationActivity(TL_messageMediaVenue tL_messageMediaVenue, boolean z, int i) {
+        this.delegate.didSelectLocation(tL_messageMediaVenue, this.locationType, z, i);
         finishFragment();
     }
 
-    public /* synthetic */ void lambda$createView$10$LocationActivity(View view) {
+    public /* synthetic */ void lambda$createView$13$LocationActivity(View view) {
         if (VERSION.SDK_INT >= 23) {
             Activity parentActivity = getParentActivity();
             if (!(parentActivity == null || parentActivity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0)) {
@@ -921,7 +964,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$createView$11$LocationActivity(View view) {
+    public /* synthetic */ void lambda$createView$14$LocationActivity(View view) {
         if (VERSION.SDK_INT >= 23) {
             Activity parentActivity = getParentActivity();
             if (!(parentActivity == null || parentActivity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0)) {
@@ -1139,7 +1182,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
             this.googleMap.getUiSettings().setZoomControlsEnabled(false);
             this.googleMap.getUiSettings().setCompassEnabled(false);
-            this.googleMap.setOnMyLocationChangeListener(new -$$Lambda$LocationActivity$c8XP9pNrV9cMDGOUfVqDYSwxwls(this));
+            this.googleMap.setOnMyLocationChangeListener(new -$$Lambda$LocationActivity$n5ruFpUEwgnDDJzhX4rkCKjDMXw(this));
             Location lastLocation = getLastLocation();
             this.myLocation = lastLocation;
             positionMarker(lastLocation);
@@ -1151,7 +1194,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             Builder builder = new Builder(getParentActivity());
                             builder.setTitle(LocaleController.getString("AppName", NUM));
                             builder.setMessage(LocaleController.getString("GpsDisabledAlert", NUM));
-                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new -$$Lambda$LocationActivity$50tjKpwH5a9_hdjwVrVPzKea1O4(this));
+                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new -$$Lambda$LocationActivity$THwaiRnXnH4pqYDHVBK3BEyn4Yw(this));
                             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                             showDialog(builder.create());
                         }
@@ -1163,13 +1206,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$onMapInit$12$LocationActivity(Location location) {
+    public /* synthetic */ void lambda$onMapInit$15$LocationActivity(Location location) {
         positionMarker(location);
         getLocationController().setGoogleMapLocation(location, this.isFirstLocation);
         this.isFirstLocation = false;
     }
 
-    public /* synthetic */ void lambda$onMapInit$13$LocationActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onMapInit$16$LocationActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
                 getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
@@ -1187,13 +1230,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             } else {
                 builder.setMessage(LocaleController.getString("PermissionNoLocation", NUM));
             }
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$LocationActivity$lAiCIKUO0YgSCpPwQjOdpanoOZo(this));
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$LocationActivity$__Y9YObwAbB4mFrG8nu118LJw0g(this));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
             showDialog(builder.create());
         }
     }
 
-    public /* synthetic */ void lambda$showPermissionAlert$14$LocationActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showPermissionAlert$17$LocationActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
                 Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
@@ -1315,7 +1358,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     measuredHeight = (measuredHeight == 1 || measuredHeight == 2) ? 66 : 0;
                     linearLayoutManager.scrollToPositionWithOffset(0, -AndroidUtilities.dp((float) (32 + measuredHeight)));
                     updateClipView(this.layoutManager.findFirstVisibleItemPosition());
-                    this.listView.post(new -$$Lambda$LocationActivity$tQoOY5Ocj2kZjVSyCnGSeK9ItD8(this));
+                    this.listView.post(new -$$Lambda$LocationActivity$jAl7_qjp7LboFShPHexNbuYz8OQ(this));
                 } else {
                     updateClipView(this.layoutManager.findFirstVisibleItemPosition());
                 }
@@ -1323,7 +1366,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$fixLayoutInternal$15$LocationActivity() {
+    public /* synthetic */ void lambda$fixLayoutInternal$18$LocationActivity() {
         LinearLayoutManager linearLayoutManager = this.layoutManager;
         int i = this.locationType;
         i = (i == 1 || i == 2) ? 66 : 0;
@@ -1447,20 +1490,20 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         long dialogId = this.messageObject.getDialogId();
         tL_messages_getRecentLocations.peer = getMessagesController().getInputPeer((int) dialogId);
         tL_messages_getRecentLocations.limit = 100;
-        getConnectionsManager().sendRequest(tL_messages_getRecentLocations, new -$$Lambda$LocationActivity$D3WKfJWdqIkwzPGXO10yP5dl6eE(this, dialogId));
+        getConnectionsManager().sendRequest(tL_messages_getRecentLocations, new -$$Lambda$LocationActivity$10_gJYtZI1WBT9zW2NISAwbjMSQ(this, dialogId));
         if (arrayList != null) {
             z = true;
         }
         return z;
     }
 
-    public /* synthetic */ void lambda$getRecentLocations$17$LocationActivity(long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$getRecentLocations$20$LocationActivity(long j, TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LocationActivity$myrxIftf1anHCZz38wKdZZXkwEM(this, tLObject, j));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$LocationActivity$fv_kzLlSvHXBWIPxMmguf3j5Xvg(this, tLObject, j));
         }
     }
 
-    public /* synthetic */ void lambda$null$16$LocationActivity(TLObject tLObject, long j) {
+    public /* synthetic */ void lambda$null$19$LocationActivity(TLObject tLObject, long j) {
         if (this.googleMap != null) {
             messages_Messages messages_messages = (messages_Messages) tLObject;
             int i = 0;
@@ -1496,7 +1539,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             int i3 = 0;
             LocationActivityAdapter locationActivityAdapter;
             if (i == NotificationCenter.didReceiveNewMessages) {
-                if (((Long) objArr[0]).longValue() == this.dialogId && this.messageObject != null) {
+                if (!((Boolean) objArr[2]).booleanValue() && ((Long) objArr[0]).longValue() == this.dialogId && this.messageObject != null) {
                     ArrayList arrayList = (ArrayList) objArr[1];
                     Object obj = null;
                     while (i3 < arrayList.size()) {
@@ -1514,7 +1557,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         }
                     }
                 }
-            } else if (i != NotificationCenter.messagesDeleted && i == NotificationCenter.replaceMessagesObjects) {
+            } else if (i == NotificationCenter.replaceMessagesObjects) {
                 long longValue = ((Long) objArr[0]).longValue();
                 if (longValue == this.dialogId && this.messageObject != null) {
                     ArrayList arrayList2 = (ArrayList) objArr[1];
@@ -1604,6 +1647,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.delegate = locationActivityDelegate;
     }
 
+    public void setChatActivity(ChatActivity chatActivity) {
+        this.parentFragment = chatActivity;
+    }
+
     private void updateSearchInterface() {
         LocationActivityAdapter locationActivityAdapter = this.adapter;
         if (locationActivityAdapter != null) {
@@ -1612,7 +1659,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        -$$Lambda$LocationActivity$6T1naz31mS1Im932BQaqpcvQDcs -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs = -$$Lambda$LocationActivity$6T1naz31mS1Im932BQaqpcvQDcs.INSTANCE;
+        -$$Lambda$LocationActivity$WwhCA7YBxi7IkAuDR0iGxPPbxvQ -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq = -$$Lambda$LocationActivity$WwhCA7YBxi7IkAuDR0iGxPPbxvQ.INSTANCE;
         r10 = new ThemeDescription[52];
         r10[12] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
         r10[13] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
@@ -1629,46 +1676,46 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         strArr[0] = "textView";
         r10[21] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "key_graySectionText");
         r10[22] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, "graySection");
-        -$$Lambda$LocationActivity$6T1naz31mS1Im932BQaqpcvQDcs -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2 = -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs;
-        r10[23] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2, "avatar_text");
-        r10[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2, "avatar_backgroundRed");
-        r10[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2, "avatar_backgroundOrange");
-        r10[26] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2, "avatar_backgroundViolet");
-        r10[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2, "avatar_backgroundGreen");
-        r10[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2, "avatar_backgroundCyan");
-        r10[29] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2, "avatar_backgroundBlue");
-        r10[30] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_6t1naz31ms1im932bqaqpcvqdcs2, "avatar_backgroundPink");
+        -$$Lambda$LocationActivity$WwhCA7YBxi7IkAuDR0iGxPPbxvQ -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2 = -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq;
+        r10[23] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_savedDrawable}, -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2, "avatar_text");
+        r10[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2, "avatar_backgroundRed");
+        r10[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2, "avatar_backgroundOrange");
+        r10[26] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2, "avatar_backgroundViolet");
+        r10[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2, "avatar_backgroundGreen");
+        r10[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2, "avatar_backgroundCyan");
+        r10[29] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2, "avatar_backgroundBlue");
+        r10[30] = new ThemeDescription(null, 0, null, null, null, -__lambda_locationactivity_wwhca7ybxi7ikaudr0igxppbxvq2, "avatar_backgroundPink");
         r10[31] = new ThemeDescription(null, 0, null, null, null, null, "location_liveLocationProgress");
         r10[32] = new ThemeDescription(null, 0, null, null, null, null, "location_placeLocationBackground");
         r10[33] = new ThemeDescription(null, 0, null, null, null, null, "dialog_liveLocationProgress");
         view = this.listView;
         int i = ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_CHECKTAG;
-        Class[] clsArr2 = new Class[]{SendLocationCell.class};
-        String[] strArr2 = new String[1];
-        strArr2[0] = "imageView";
-        r10[34] = new ThemeDescription(view, i, clsArr2, strArr2, null, null, null, "location_sendLocationIcon");
+        clsArr = new Class[]{SendLocationCell.class};
+        strArr = new String[1];
+        strArr[0] = "imageView";
+        r10[34] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "location_sendLocationIcon");
         r10[35] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, "location_sendLiveLocationIcon");
         r10[36] = new ThemeDescription(this.listView, (ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE) | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, "location_sendLocationBackground");
         r10[37] = new ThemeDescription(this.listView, (ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE) | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, null, null, null, "location_sendLiveLocationBackground");
         r10[38] = new ThemeDescription(this.listView, 0, new Class[]{SendLocationCell.class}, new String[]{"accurateTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
         view = this.listView;
         i = ThemeDescription.FLAG_CHECKTAG;
-        clsArr2 = new Class[]{SendLocationCell.class};
-        strArr2 = new String[1];
-        strArr2[0] = "titleTextView";
-        r10[39] = new ThemeDescription(view, i, clsArr2, strArr2, null, null, null, "windowBackgroundWhiteRedText2");
+        clsArr = new Class[]{SendLocationCell.class};
+        strArr = new String[1];
+        strArr[0] = "titleTextView";
+        r10[39] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteRedText2");
         r10[40] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"titleTextView"}, null, null, null, "windowBackgroundWhiteBlueText7");
         r10[41] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LocationCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteGrayText3");
         view = this.listView;
-        clsArr2 = new Class[]{LocationCell.class};
-        strArr2 = new String[1];
-        strArr2[0] = "nameTextView";
-        r10[42] = new ThemeDescription(view, 0, clsArr2, strArr2, null, null, null, "windowBackgroundWhiteBlackText");
+        clsArr = new Class[]{LocationCell.class};
+        strArr = new String[1];
+        strArr[0] = "nameTextView";
+        r10[42] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlackText");
         view = this.listView;
-        clsArr2 = new Class[]{LocationCell.class};
-        strArr2 = new String[1];
-        strArr2[0] = "addressTextView";
-        r10[43] = new ThemeDescription(view, 0, clsArr2, strArr2, null, null, null, "windowBackgroundWhiteGrayText3");
+        clsArr = new Class[]{LocationCell.class};
+        strArr = new String[1];
+        strArr[0] = "addressTextView";
+        r10[43] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayText3");
         r10[44] = new ThemeDescription(this.searchListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LocationCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteGrayText3");
         r10[45] = new ThemeDescription(this.searchListView, 0, new Class[]{LocationCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
         r10[46] = new ThemeDescription(this.searchListView, 0, new Class[]{LocationCell.class}, new String[]{"addressTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");

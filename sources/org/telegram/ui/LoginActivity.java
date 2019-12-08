@@ -924,7 +924,7 @@ public class LoginActivity extends BaseFragment {
                 }
             };
             this.avatarImage.setRoundRadius(AndroidUtilities.dp(32.0f));
-            this.avatarDrawable.setInfo(5, null, null, false);
+            this.avatarDrawable.setInfo(5, null, null);
             this.avatarImage.setImageDrawable(this.avatarDrawable);
             frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 16.0f, 0.0f, 0.0f));
             final Paint paint = new Paint(1);
@@ -2183,7 +2183,7 @@ public class LoginActivity extends BaseFragment {
         }
 
         public void onNextPressed() {
-            if (!this.nextPressed) {
+            if (!this.nextPressed && this.this$0.currentViewNum >= 1 && this.this$0.currentViewNum <= 4) {
                 String code = getCode();
                 if (TextUtils.isEmpty(code)) {
                     AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
@@ -2230,14 +2230,14 @@ public class LoginActivity extends BaseFragment {
         public /* synthetic */ void lambda$null$7$LoginActivity$LoginActivitySmsView(org.telegram.tgnet.TLRPC.TL_error r6, org.telegram.tgnet.TLObject r7, org.telegram.tgnet.TLRPC.TL_auth_signIn r8) {
             /*
             r5 = this;
-            r0 = 0;
-            r5.nextPressed = r0;
-            r1 = 3;
+            r0 = 3;
+            r1 = 0;
             r2 = 1;
             if (r6 != 0) goto L_0x004c;
-        L_0x0007:
+        L_0x0005:
+            r5.nextPressed = r1;
             r6 = r5.this$0;
-            r6.needHideProgress(r0);
+            r6.needHideProgress(r1);
             r5.destroyTimer();
             r5.destroyCodeTimer();
             r6 = r7 instanceof org.telegram.tgnet.TLRPC.TL_auth_authorizationSignUpRequired;
@@ -2263,7 +2263,7 @@ public class LoginActivity extends BaseFragment {
             r6.putString(r8, r7);
             r7 = r5.this$0;
             r8 = 5;
-            r7.setPage(r8, r2, r6, r0);
+            r7.setPage(r8, r2, r6, r1);
             goto L_0x0190;
         L_0x0043:
             r6 = r5.this$0;
@@ -2282,20 +2282,20 @@ public class LoginActivity extends BaseFragment {
             r7 = r5.this$0;
             r7 = r7.currentAccount;
             r7 = org.telegram.tgnet.ConnectionsManager.getInstance(r7);
-            r0 = new org.telegram.ui.-$$Lambda$LoginActivity$LoginActivitySmsView$ClZInkb3pcX3d_IEp0qMTOZ0dwc;
-            r0.<init>(r5, r8);
+            r1 = new org.telegram.ui.-$$Lambda$LoginActivity$LoginActivitySmsView$ClZInkb3pcX3d_IEp0qMTOZ0dwc;
+            r1.<init>(r5, r8);
             r8 = 10;
-            r7.sendRequest(r6, r0, r8);
+            r7.sendRequest(r6, r1, r8);
             r5.destroyTimer();
             r5.destroyCodeTimer();
             goto L_0x0190;
         L_0x0079:
             r7 = r5.this$0;
-            r7.needHideProgress(r0);
+            r7.needHideProgress(r1);
             r7 = r5.currentType;
             r8 = 4;
             r3 = 2;
-            if (r7 != r1) goto L_0x008a;
+            if (r7 != r0) goto L_0x008a;
         L_0x0084:
             r7 = r5.nextType;
             if (r7 == r8) goto L_0x009c;
@@ -2308,7 +2308,7 @@ public class LoginActivity extends BaseFragment {
             r7 = r5.nextType;
             if (r7 == r8) goto L_0x009c;
         L_0x0092:
-            if (r7 == r1) goto L_0x009c;
+            if (r7 == r0) goto L_0x009c;
         L_0x0094:
             r7 = r5.currentType;
             if (r7 != r8) goto L_0x009f;
@@ -2327,7 +2327,7 @@ public class LoginActivity extends BaseFragment {
             r7.addObserver(r5, r8);
             goto L_0x00be;
         L_0x00b0:
-            if (r7 != r1) goto L_0x00be;
+            if (r7 != r0) goto L_0x00be;
         L_0x00b2:
             org.telegram.messenger.AndroidUtilities.setWaitingForCall(r2);
             r7 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
@@ -2336,7 +2336,7 @@ public class LoginActivity extends BaseFragment {
         L_0x00be:
             r5.waitingForEvent = r2;
             r7 = r5.currentType;
-            if (r7 == r1) goto L_0x018f;
+            if (r7 == r0) goto L_0x018f;
         L_0x00c4:
             r7 = r6.text;
             r8 = "PHONE_NUMBER_INVALID";
@@ -2347,7 +2347,7 @@ public class LoginActivity extends BaseFragment {
         L_0x00d3:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d052c float:1.87448E38 double:1.0531304317E-314;
+            r8 = NUM; // 0x7f0d0531 float:1.874481E38 double:1.053130434E-314;
             r2 = "InvalidPhoneNumber";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2373,10 +2373,10 @@ public class LoginActivity extends BaseFragment {
             r5.onBackPressed(r2);
             r6 = r5.this$0;
             r7 = 0;
-            r6.setPage(r0, r2, r7, r2);
+            r6.setPage(r1, r2, r7, r2);
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d02e3 float:1.8743614E38 double:1.0531301427E-314;
+            r8 = NUM; // 0x7f0d02e5 float:1.8743618E38 double:1.0531301436E-314;
             r2 = "CodeExpired";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2389,7 +2389,7 @@ public class LoginActivity extends BaseFragment {
         L_0x012c:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d0474 float:1.8744427E38 double:1.053130341E-314;
+            r8 = NUM; // 0x7f0d0479 float:1.8744437E38 double:1.0531303432E-314;
             r2 = "FloodWait";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2399,7 +2399,7 @@ public class LoginActivity extends BaseFragment {
             r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
             r2 = new java.lang.StringBuilder;
             r2.<init>();
-            r3 = NUM; // 0x7f0d03f5 float:1.874417E38 double:1.053130278E-314;
+            r3 = NUM; // 0x7f0d03f9 float:1.8744177E38 double:1.05313028E-314;
             r4 = "ErrorOccurred";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r2.append(r3);
@@ -2413,7 +2413,7 @@ public class LoginActivity extends BaseFragment {
         L_0x0168:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d0529 float:1.8744794E38 double:1.05313043E-314;
+            r8 = NUM; // 0x7f0d052e float:1.8744804E38 double:1.0531304327E-314;
             r2 = "InvalidCode";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2429,7 +2429,7 @@ public class LoginActivity extends BaseFragment {
             r6 = r6 + 1;
             goto L_0x017b;
         L_0x018a:
-            r6 = r7[r0];
+            r6 = r7[r1];
             r6.requestFocus();
         L_0x018f:
             r2 = 0;
@@ -2437,7 +2437,7 @@ public class LoginActivity extends BaseFragment {
             if (r2 == 0) goto L_0x0199;
         L_0x0192:
             r6 = r5.currentType;
-            if (r6 != r1) goto L_0x0199;
+            if (r6 != r0) goto L_0x0199;
         L_0x0196:
             org.telegram.messenger.AndroidUtilities.endIncomingCall();
         L_0x0199:
@@ -2451,6 +2451,7 @@ public class LoginActivity extends BaseFragment {
         }
 
         public /* synthetic */ void lambda$null$5$LoginActivity$LoginActivitySmsView(TL_error tL_error, TLObject tLObject, TL_auth_signIn tL_auth_signIn) {
+            this.nextPressed = false;
             this.this$0.needHideProgress(false);
             if (tL_error == null) {
                 TL_account_password tL_account_password = (TL_account_password) tLObject;
@@ -3110,8 +3111,9 @@ public class LoginActivity extends BaseFragment {
                 Object obj;
                 Object obj2;
                 Object obj3;
-                String str2 = "phone";
-                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(str2);
+                String str2;
+                String str3 = "phone";
+                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(str3);
                 if (BuildVars.DEBUG_VERSION) {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("sim status = ");
@@ -3120,15 +3122,15 @@ public class LoginActivity extends BaseFragment {
                 }
                 int simState = telephonyManager.getSimState();
                 Object obj4 = (simState == 1 || simState == 0 || telephonyManager.getPhoneType() == 0 || AndroidUtilities.isAirplaneModeOn()) ? null : 1;
-                String str3 = "OK";
-                String str4 = "AppName";
+                String str4 = "OK";
+                String str5 = "AppName";
                 if (VERSION.SDK_INT < 23 || obj4 == null) {
                     obj = 1;
                     obj2 = 1;
                     obj3 = 1;
                 } else {
-                    String str5 = "android.permission.READ_PHONE_STATE";
-                    obj = this.this$0.getParentActivity().checkSelfPermission(str5) == 0 ? 1 : null;
+                    str2 = "android.permission.READ_PHONE_STATE";
+                    obj = this.this$0.getParentActivity().checkSelfPermission(str2) == 0 ? 1 : null;
                     String str6 = "android.permission.CALL_PHONE";
                     obj3 = this.this$0.getParentActivity().checkSelfPermission(str6) == 0 ? 1 : null;
                     String str7 = "android.permission.READ_CALL_LOG";
@@ -3136,7 +3138,7 @@ public class LoginActivity extends BaseFragment {
                     if (this.this$0.checkPermissions) {
                         this.this$0.permissionsItems.clear();
                         if (obj == null) {
-                            this.this$0.permissionsItems.add(str5);
+                            this.this$0.permissionsItems.add(str2);
                         }
                         if (obj3 == null) {
                             this.this$0.permissionsItems.add(str6);
@@ -3147,12 +3149,11 @@ public class LoginActivity extends BaseFragment {
                         if (!this.this$0.permissionsItems.isEmpty()) {
                             Object obj5;
                             SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-                            str6 = "firstlogin";
-                            if (globalMainSettings.getBoolean(str6, true) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str5) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str7)) {
-                                globalMainSettings.edit().putBoolean(str6, false).commit();
+                            if (globalMainSettings.getBoolean("firstlogin", true) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str2) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str7)) {
+                                globalMainSettings.edit().putBoolean("firstlogin", false).commit();
                                 Builder builder = new Builder(this.this$0.getParentActivity());
-                                builder.setTitle(LocaleController.getString(str4, NUM));
-                                builder.setPositiveButton(LocaleController.getString(str3, NUM), null);
+                                builder.setTitle(LocaleController.getString(str5, NUM));
+                                builder.setPositiveButton(LocaleController.getString(str4, NUM), null);
                                 if (obj == null && (obj3 == null || obj2 == null)) {
                                     builder.setMessage(LocaleController.getString("AllowReadCallAndLog", NUM));
                                 } else if (obj3 == null || obj2 == null) {
@@ -3178,26 +3179,26 @@ public class LoginActivity extends BaseFragment {
                 }
                 int i = this.countryState;
                 if (i == 1) {
-                    this.this$0.needShowAlert(LocaleController.getString(str4, NUM), LocaleController.getString("ChooseCountry", NUM));
+                    this.this$0.needShowAlert(LocaleController.getString(str5, NUM), LocaleController.getString("ChooseCountry", NUM));
                 } else if (i == 2 && !BuildVars.DEBUG_VERSION) {
-                    this.this$0.needShowAlert(LocaleController.getString(str4, NUM), LocaleController.getString("WrongCountry", NUM));
+                    this.this$0.needShowAlert(LocaleController.getString(str5, NUM), LocaleController.getString("WrongCountry", NUM));
                 } else if (this.codeField.length() == 0) {
-                    this.this$0.needShowAlert(LocaleController.getString(str4, NUM), LocaleController.getString("InvalidPhoneNumber", NUM));
+                    this.this$0.needShowAlert(LocaleController.getString(str5, NUM), LocaleController.getString("InvalidPhoneNumber", NUM));
                 } else {
                     StringBuilder stringBuilder2 = new StringBuilder();
                     stringBuilder2.append("");
                     stringBuilder2.append(this.codeField.getText());
                     stringBuilder2.append(this.phoneField.getText());
-                    String stripExceptNumbers = PhoneFormat.stripExceptNumbers(stringBuilder2.toString());
+                    str2 = PhoneFormat.stripExceptNumbers(stringBuilder2.toString());
                     if (this.this$0.getParentActivity() instanceof LaunchActivity) {
                         for (int i2 = 0; i2 < 3; i2++) {
                             UserConfig instance = UserConfig.getInstance(i2);
-                            if (instance.isClientActivated() && PhoneNumberUtils.compare(stripExceptNumbers, instance.getCurrentUser().phone)) {
+                            if (instance.isClientActivated() && PhoneNumberUtils.compare(str2, instance.getCurrentUser().phone)) {
                                 Builder builder2 = new Builder(this.this$0.getParentActivity());
-                                builder2.setTitle(LocaleController.getString(str4, NUM));
+                                builder2.setTitle(LocaleController.getString(str5, NUM));
                                 builder2.setMessage(LocaleController.getString("AccountAlreadyLoggedIn", NUM));
                                 builder2.setPositiveButton(LocaleController.getString("AccountSwitch", NUM), new -$$Lambda$LoginActivity$PhoneView$dpjhAtsGXirSFaKNuV4Bo6d-RDQ(this, i2));
-                                builder2.setNegativeButton(LocaleController.getString(str3, NUM), null);
+                                builder2.setNegativeButton(LocaleController.getString(str4, NUM), null);
                                 this.this$0.showDialog(builder2.create());
                                 return;
                             }
@@ -3207,18 +3208,24 @@ public class LoginActivity extends BaseFragment {
                     TL_auth_sendCode tL_auth_sendCode = new TL_auth_sendCode();
                     tL_auth_sendCode.api_hash = BuildVars.APP_HASH;
                     tL_auth_sendCode.api_id = BuildVars.APP_ID;
-                    tL_auth_sendCode.phone_number = stripExceptNumbers;
+                    tL_auth_sendCode.phone_number = str2;
                     tL_auth_sendCode.settings = new TL_codeSettings();
                     TL_codeSettings tL_codeSettings = tL_auth_sendCode.settings;
                     boolean z = (obj4 == null || obj == null || obj3 == null || obj2 == null) ? false : true;
                     tL_codeSettings.allow_flashcall = z;
-                    TL_codeSettings tL_codeSettings2 = tL_auth_sendCode.settings;
-                    tL_codeSettings2.allow_app_hash = ApplicationLoader.hasPlayServices;
-                    if (tL_codeSettings2.allow_flashcall) {
+                    tL_auth_sendCode.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
+                    SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                    String str8 = "sms_hash";
+                    if (tL_auth_sendCode.settings.allow_app_hash) {
+                        sharedPreferences.edit().putString(str8, BuildVars.SMS_HASH).commit();
+                    } else {
+                        sharedPreferences.edit().remove(str8).commit();
+                    }
+                    if (tL_auth_sendCode.settings.allow_flashcall) {
                         try {
                             String line1Number = telephonyManager.getLine1Number();
                             if (!TextUtils.isEmpty(line1Number)) {
-                                tL_auth_sendCode.settings.current_number = PhoneNumberUtils.compare(stripExceptNumbers, line1Number);
+                                tL_auth_sendCode.settings.current_number = PhoneNumberUtils.compare(str2, line1Number);
                                 if (!tL_auth_sendCode.settings.current_number) {
                                     tL_auth_sendCode.settings.allow_flashcall = false;
                                 }
@@ -3234,28 +3241,28 @@ public class LoginActivity extends BaseFragment {
                     }
                     Bundle bundle = new Bundle();
                     StringBuilder stringBuilder3 = new StringBuilder();
-                    String str8 = "+";
-                    stringBuilder3.append(str8);
-                    stringBuilder3.append(this.codeField.getText());
-                    String str9 = " ";
+                    String str9 = "+";
                     stringBuilder3.append(str9);
+                    stringBuilder3.append(this.codeField.getText());
+                    String str10 = " ";
+                    stringBuilder3.append(str10);
                     stringBuilder3.append(this.phoneField.getText());
-                    bundle.putString(str2, stringBuilder3.toString());
+                    bundle.putString(str3, stringBuilder3.toString());
                     try {
                         stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(str8);
-                        stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()));
                         stringBuilder3.append(str9);
+                        stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()));
+                        stringBuilder3.append(str10);
                         stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
                         bundle.putString(str, stringBuilder3.toString());
                     } catch (Exception e2) {
                         FileLog.e(e2);
                         stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(str8);
-                        stringBuilder3.append(stripExceptNumbers);
+                        stringBuilder3.append(str9);
+                        stringBuilder3.append(str2);
                         bundle.putString(str, stringBuilder3.toString());
                     }
-                    bundle.putString("phoneFormated", stripExceptNumbers);
+                    bundle.putString("phoneFormated", str2);
                     this.nextPressed = true;
                     this.this$0.needShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_sendCode, new -$$Lambda$LoginActivity$PhoneView$D6rb0YYZK8N7UnvplgUPvar_wHHA(this, bundle, tL_auth_sendCode), 27));
                 }
@@ -3848,45 +3855,43 @@ public class LoginActivity extends BaseFragment {
         }
     }
 
-    private void showEditDoneProgress(boolean z) {
-        final boolean z2 = z;
+    private void showEditDoneProgress(final boolean z) {
         AnimatorSet animatorSet = this.doneItemAnimation;
         if (animatorSet != null) {
             animatorSet.cancel();
         }
         this.doneItemAnimation = new AnimatorSet();
-        String str = "alpha";
-        String str2 = "scaleY";
-        String str3 = "scaleX";
-        if (z2) {
+        AnimatorSet animatorSet2;
+        Animator[] animatorArr;
+        if (z) {
             this.doneProgressView.setTag(Integer.valueOf(1));
             this.doneProgressView.setVisibility(0);
-            animatorSet = this.doneItemAnimation;
-            Animator[] animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str3, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str2, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str, new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.doneProgressView, str3, new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.doneProgressView, str2, new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.doneProgressView, str, new float[]{1.0f});
-            animatorSet.playTogether(animatorArr);
+            animatorSet2 = this.doneItemAnimation;
+            animatorArr = new Animator[6];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_X, new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_Y, new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.ALPHA, new float[]{0.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_X, new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_Y, new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.doneProgressView, View.ALPHA, new float[]{1.0f});
+            animatorSet2.playTogether(animatorArr);
         } else {
             this.doneProgressView.setTag(null);
             this.doneItem.getContentView().setVisibility(0);
-            animatorSet = this.doneItemAnimation;
-            Animator[] animatorArr2 = new Animator[6];
-            animatorArr2[0] = ObjectAnimator.ofFloat(this.doneProgressView, str3, new float[]{0.1f});
-            animatorArr2[1] = ObjectAnimator.ofFloat(this.doneProgressView, str2, new float[]{0.1f});
-            animatorArr2[2] = ObjectAnimator.ofFloat(this.doneProgressView, str, new float[]{0.0f});
-            animatorArr2[3] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str3, new float[]{1.0f});
-            animatorArr2[4] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str2, new float[]{1.0f});
-            animatorArr2[5] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str, new float[]{1.0f});
-            animatorSet.playTogether(animatorArr2);
+            animatorSet2 = this.doneItemAnimation;
+            animatorArr = new Animator[6];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_X, new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_Y, new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.doneProgressView, View.ALPHA, new float[]{0.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_X, new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_Y, new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.ALPHA, new float[]{1.0f});
+            animatorSet2.playTogether(animatorArr);
         }
         this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (LoginActivity.this.doneItemAnimation != null && LoginActivity.this.doneItemAnimation.equals(animator)) {
-                    if (z2) {
+                    if (z) {
                         LoginActivity.this.doneItem.getContentView().setVisibility(4);
                     } else {
                         LoginActivity.this.doneProgressView.setVisibility(4);
@@ -3944,7 +3949,11 @@ public class LoginActivity extends BaseFragment {
             this.actionBar.setTitle(slideView2.getHeaderName());
             setParentActivityTitle(slideView2.getHeaderName());
             slideView2.onShow();
-            slideView2.setX((float) (z2 ? -AndroidUtilities.displaySize.x : AndroidUtilities.displaySize.x));
+            i = AndroidUtilities.displaySize.x;
+            if (z2) {
+                i = -i;
+            }
+            slideView2.setX((float) i);
             slideView2.setVisibility(0);
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.addListener(new AnimatorListenerAdapter() {

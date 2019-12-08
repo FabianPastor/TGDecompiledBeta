@@ -8,11 +8,11 @@ class StringMaker {
     static StringMaker shortStringMaker = new StringMaker();
     int cacheOffset;
     boolean includeArgs = true;
-    boolean includeEnclosingPoint = true;
-    boolean includeJoinPointTypeName = true;
+    boolean includeEnclosingPoint;
+    boolean includeJoinPointTypeName;
     boolean includeModifiers = false;
     boolean includeThrows = false;
-    boolean shortKindName = true;
+    boolean shortKindName;
     boolean shortPrimaryTypeNames = false;
     boolean shortTypeNames = true;
 

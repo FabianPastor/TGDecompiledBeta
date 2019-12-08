@@ -45,6 +45,7 @@ public class LocationSharingService extends Service implements NotificationCente
     }
 
     public void onDestroy() {
+        super.onDestroy();
         Handler handler = this.handler;
         if (handler != null) {
             handler.removeCallbacks(this.runnable);

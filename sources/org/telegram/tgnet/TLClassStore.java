@@ -29,12 +29,13 @@ public class TLClassStore {
     private SparseArray<Class> classStore = new SparseArray();
 
     public TLClassStore() {
+        Class cls = TL_decryptedMessage.class;
         this.classStore.put(TL_error.constructor, TL_error.class);
         this.classStore.put(TL_decryptedMessageService.constructor, TL_decryptedMessageService.class);
-        this.classStore.put(TL_decryptedMessage.constructor, TL_decryptedMessage.class);
+        this.classStore.put(TL_decryptedMessage.constructor, cls);
         this.classStore.put(TL_config.constructor, TL_config.class);
         this.classStore.put(TL_decryptedMessageLayer.constructor, TL_decryptedMessageLayer.class);
-        this.classStore.put(TL_decryptedMessage_layer17.constructor, TL_decryptedMessage.class);
+        this.classStore.put(TL_decryptedMessage_layer17.constructor, cls);
         this.classStore.put(TL_decryptedMessage_layer45.constructor, TL_decryptedMessage_layer45.class);
         this.classStore.put(TL_decryptedMessageService_layer8.constructor, TL_decryptedMessageService_layer8.class);
         this.classStore.put(TL_decryptedMessage_layer8.constructor, TL_decryptedMessage_layer8.class);

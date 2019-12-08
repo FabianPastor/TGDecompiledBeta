@@ -2145,7 +2145,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x00ef A:{Catch:{ Throwable -> 0x00fb }} */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x00ef A:{Catch:{ all -> 0x00fb }} */
     /* JADX WARNING: Removed duplicated region for block: B:42:0x00d9 A:{SYNTHETIC, Splitter:B:42:0x00d9} */
     /* JADX WARNING: Removed duplicated region for block: B:122:0x01a0  */
     /* JADX WARNING: Removed duplicated region for block: B:71:0x0136 A:{SYNTHETIC, Splitter:B:71:0x0136} */
@@ -2167,22 +2167,22 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     /* JADX WARNING: Removed duplicated region for block: B:71:0x0136 A:{SYNTHETIC, Splitter:B:71:0x0136} */
     /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x010d  */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x0106  */
     /* JADX WARNING: Removed duplicated region for block: B:71:0x0136 A:{SYNTHETIC, Splitter:B:71:0x0136} */
     /* JADX WARNING: Removed duplicated region for block: B:122:0x01a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x01a4  */
     /* JADX WARNING: Removed duplicated region for block: B:125:0x01ab  */
     /* JADX WARNING: Removed duplicated region for block: B:117:0x0195 A:{SYNTHETIC, Splitter:B:117:0x0195} */
@@ -2208,49 +2208,49 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         r6 = "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)";
         r7 = "User-Agent";
         r8 = 1;
-        r11 = new java.net.URL;	 Catch:{ Throwable -> 0x0100 }
+        r11 = new java.net.URL;	 Catch:{ all -> 0x0100 }
         r12 = r22;
-        r11.<init>(r12);	 Catch:{ Throwable -> 0x0100 }
-        r12 = r11.openConnection();	 Catch:{ Throwable -> 0x0100 }
-        r12.addRequestProperty(r7, r6);	 Catch:{ Throwable -> 0x00fe }
+        r11.<init>(r12);	 Catch:{ all -> 0x0100 }
+        r12 = r11.openConnection();	 Catch:{ all -> 0x0100 }
+        r12.addRequestProperty(r7, r6);	 Catch:{ all -> 0x00fe }
         r13 = "gzip, deflate";
         r14 = "Accept-Encoding";
         if (r24 == 0) goto L_0x0028;
     L_0x0025:
-        r12.addRequestProperty(r14, r13);	 Catch:{ Throwable -> 0x00fe }
+        r12.addRequestProperty(r14, r13);	 Catch:{ all -> 0x00fe }
     L_0x0028:
-        r12.addRequestProperty(r5, r4);	 Catch:{ Throwable -> 0x00fe }
-        r12.addRequestProperty(r3, r2);	 Catch:{ Throwable -> 0x00fe }
-        r12.addRequestProperty(r1, r0);	 Catch:{ Throwable -> 0x00fe }
+        r12.addRequestProperty(r5, r4);	 Catch:{ all -> 0x00fe }
+        r12.addRequestProperty(r3, r2);	 Catch:{ all -> 0x00fe }
+        r12.addRequestProperty(r1, r0);	 Catch:{ all -> 0x00fe }
         if (r23 == 0) goto L_0x005b;
     L_0x0033:
-        r15 = r23.entrySet();	 Catch:{ Throwable -> 0x00fe }
-        r15 = r15.iterator();	 Catch:{ Throwable -> 0x00fe }
+        r15 = r23.entrySet();	 Catch:{ all -> 0x00fe }
+        r15 = r15.iterator();	 Catch:{ all -> 0x00fe }
     L_0x003b:
-        r16 = r15.hasNext();	 Catch:{ Throwable -> 0x00fe }
+        r16 = r15.hasNext();	 Catch:{ all -> 0x00fe }
         if (r16 == 0) goto L_0x005b;
     L_0x0041:
-        r16 = r15.next();	 Catch:{ Throwable -> 0x00fe }
-        r16 = (java.util.Map.Entry) r16;	 Catch:{ Throwable -> 0x00fe }
-        r17 = r16.getKey();	 Catch:{ Throwable -> 0x00fe }
+        r16 = r15.next();	 Catch:{ all -> 0x00fe }
+        r16 = (java.util.Map.Entry) r16;	 Catch:{ all -> 0x00fe }
+        r17 = r16.getKey();	 Catch:{ all -> 0x00fe }
         r9 = r17;
-        r9 = (java.lang.String) r9;	 Catch:{ Throwable -> 0x00fe }
-        r16 = r16.getValue();	 Catch:{ Throwable -> 0x00fe }
+        r9 = (java.lang.String) r9;	 Catch:{ all -> 0x00fe }
+        r16 = r16.getValue();	 Catch:{ all -> 0x00fe }
         r10 = r16;
-        r10 = (java.lang.String) r10;	 Catch:{ Throwable -> 0x00fe }
-        r12.addRequestProperty(r9, r10);	 Catch:{ Throwable -> 0x00fe }
+        r10 = (java.lang.String) r10;	 Catch:{ all -> 0x00fe }
+        r12.addRequestProperty(r9, r10);	 Catch:{ all -> 0x00fe }
         goto L_0x003b;
     L_0x005b:
         r9 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
-        r12.setConnectTimeout(r9);	 Catch:{ Throwable -> 0x00fe }
-        r12.setReadTimeout(r9);	 Catch:{ Throwable -> 0x00fe }
-        r9 = r12 instanceof java.net.HttpURLConnection;	 Catch:{ Throwable -> 0x00fe }
+        r12.setConnectTimeout(r9);	 Catch:{ all -> 0x00fe }
+        r12.setReadTimeout(r9);	 Catch:{ all -> 0x00fe }
+        r9 = r12 instanceof java.net.HttpURLConnection;	 Catch:{ all -> 0x00fe }
         if (r9 == 0) goto L_0x00d3;
     L_0x0067:
         r9 = r12;
-        r9 = (java.net.HttpURLConnection) r9;	 Catch:{ Throwable -> 0x00fe }
-        r9.setInstanceFollowRedirects(r8);	 Catch:{ Throwable -> 0x00fe }
-        r10 = r9.getResponseCode();	 Catch:{ Throwable -> 0x00fe }
+        r9 = (java.net.HttpURLConnection) r9;	 Catch:{ all -> 0x00fe }
+        r9.setInstanceFollowRedirects(r8);	 Catch:{ all -> 0x00fe }
+        r10 = r9.getResponseCode();	 Catch:{ all -> 0x00fe }
         r15 = 302; // 0x12e float:4.23E-43 double:1.49E-321;
         if (r10 == r15) goto L_0x007d;
     L_0x0075:
@@ -2261,37 +2261,37 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         if (r10 != r15) goto L_0x00d3;
     L_0x007d:
         r10 = "Location";
-        r10 = r9.getHeaderField(r10);	 Catch:{ Throwable -> 0x00fe }
+        r10 = r9.getHeaderField(r10);	 Catch:{ all -> 0x00fe }
         r11 = "Set-Cookie";
-        r9 = r9.getHeaderField(r11);	 Catch:{ Throwable -> 0x00fe }
-        r11 = new java.net.URL;	 Catch:{ Throwable -> 0x00fe }
-        r11.<init>(r10);	 Catch:{ Throwable -> 0x00fe }
-        r10 = r11.openConnection();	 Catch:{ Throwable -> 0x00fe }
+        r9 = r9.getHeaderField(r11);	 Catch:{ all -> 0x00fe }
+        r11 = new java.net.URL;	 Catch:{ all -> 0x00fe }
+        r11.<init>(r10);	 Catch:{ all -> 0x00fe }
+        r10 = r11.openConnection();	 Catch:{ all -> 0x00fe }
         r12 = "Cookie";
-        r10.setRequestProperty(r12, r9);	 Catch:{ Throwable -> 0x00d0 }
-        r10.addRequestProperty(r7, r6);	 Catch:{ Throwable -> 0x00d0 }
+        r10.setRequestProperty(r12, r9);	 Catch:{ all -> 0x00d0 }
+        r10.addRequestProperty(r7, r6);	 Catch:{ all -> 0x00d0 }
         if (r24 == 0) goto L_0x009f;
     L_0x009c:
-        r10.addRequestProperty(r14, r13);	 Catch:{ Throwable -> 0x00d0 }
+        r10.addRequestProperty(r14, r13);	 Catch:{ all -> 0x00d0 }
     L_0x009f:
-        r10.addRequestProperty(r5, r4);	 Catch:{ Throwable -> 0x00d0 }
-        r10.addRequestProperty(r3, r2);	 Catch:{ Throwable -> 0x00d0 }
-        r10.addRequestProperty(r1, r0);	 Catch:{ Throwable -> 0x00d0 }
+        r10.addRequestProperty(r5, r4);	 Catch:{ all -> 0x00d0 }
+        r10.addRequestProperty(r3, r2);	 Catch:{ all -> 0x00d0 }
+        r10.addRequestProperty(r1, r0);	 Catch:{ all -> 0x00d0 }
         if (r23 == 0) goto L_0x00ce;
     L_0x00aa:
-        r0 = r23.entrySet();	 Catch:{ Throwable -> 0x00d0 }
-        r0 = r0.iterator();	 Catch:{ Throwable -> 0x00d0 }
+        r0 = r23.entrySet();	 Catch:{ all -> 0x00d0 }
+        r0 = r0.iterator();	 Catch:{ all -> 0x00d0 }
     L_0x00b2:
-        r1 = r0.hasNext();	 Catch:{ Throwable -> 0x00d0 }
+        r1 = r0.hasNext();	 Catch:{ all -> 0x00d0 }
         if (r1 == 0) goto L_0x00ce;
     L_0x00b8:
-        r1 = r0.next();	 Catch:{ Throwable -> 0x00d0 }
-        r1 = (java.util.Map.Entry) r1;	 Catch:{ Throwable -> 0x00d0 }
-        r2 = r1.getKey();	 Catch:{ Throwable -> 0x00d0 }
-        r2 = (java.lang.String) r2;	 Catch:{ Throwable -> 0x00d0 }
-        r1 = r1.getValue();	 Catch:{ Throwable -> 0x00d0 }
-        r1 = (java.lang.String) r1;	 Catch:{ Throwable -> 0x00d0 }
-        r10.addRequestProperty(r2, r1);	 Catch:{ Throwable -> 0x00d0 }
+        r1 = r0.next();	 Catch:{ all -> 0x00d0 }
+        r1 = (java.util.Map.Entry) r1;	 Catch:{ all -> 0x00d0 }
+        r2 = r1.getKey();	 Catch:{ all -> 0x00d0 }
+        r2 = (java.lang.String) r2;	 Catch:{ all -> 0x00d0 }
+        r1 = r1.getValue();	 Catch:{ all -> 0x00d0 }
+        r1 = (java.lang.String) r1;	 Catch:{ all -> 0x00d0 }
+        r10.addRequestProperty(r2, r1);	 Catch:{ all -> 0x00d0 }
         goto L_0x00b2;
     L_0x00ce:
         r9 = r10;
@@ -2303,7 +2303,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     L_0x00d3:
         r9 = r12;
     L_0x00d4:
-        r9.connect();	 Catch:{ Throwable -> 0x00fb }
+        r9.connect();	 Catch:{ all -> 0x00fb }
         if (r24 == 0) goto L_0x00ef;
     L_0x00d9:
         r0 = new java.util.zip.GZIPInputStream;	 Catch:{ Exception -> 0x00e3 }
@@ -2311,12 +2311,12 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         r0.<init>(r1);	 Catch:{ Exception -> 0x00e3 }
         goto L_0x00f3;
     L_0x00e3:
-        r9 = r11.openConnection();	 Catch:{ Throwable -> 0x00fb }
-        r9.connect();	 Catch:{ Throwable -> 0x00fb }
-        r0 = r9.getInputStream();	 Catch:{ Throwable -> 0x00fb }
+        r9 = r11.openConnection();	 Catch:{ all -> 0x00fb }
+        r9.connect();	 Catch:{ all -> 0x00fb }
+        r0 = r9.getInputStream();	 Catch:{ all -> 0x00fb }
         goto L_0x00f3;
     L_0x00ef:
-        r0 = r9.getInputStream();	 Catch:{ Throwable -> 0x00fb }
+        r0 = r9.getInputStream();	 Catch:{ all -> 0x00fb }
     L_0x00f3:
         r19 = r9;
         r9 = r0;
@@ -2391,10 +2391,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         if (r9 == 0) goto L_0x0190;
     L_0x014d:
         r0 = 32768; // 0x8000 float:4.5918E-41 double:1.61895E-319;
-        r0 = new byte[r0];	 Catch:{ Throwable -> 0x0189 }
+        r0 = new byte[r0];	 Catch:{ all -> 0x0189 }
         r1 = 0;
     L_0x0153:
-        r2 = r21.isCancelled();	 Catch:{ Throwable -> 0x0186 }
+        r2 = r21.isCancelled();	 Catch:{ all -> 0x0186 }
         if (r2 == 0) goto L_0x015b;
     L_0x0159:
         r5 = 0;
@@ -2429,7 +2429,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         r0 = move-exception;
         r5 = 0;
     L_0x017f:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Throwable -> 0x0184 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0184 }
     L_0x0182:
         r10 = r5;
         goto L_0x0193;
@@ -2455,7 +2455,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     L_0x0193:
         if (r9 == 0) goto L_0x019e;
     L_0x0195:
-        r9.close();	 Catch:{ Throwable -> 0x0199 }
+        r9.close();	 Catch:{ all -> 0x0199 }
         goto L_0x019e;
     L_0x0199:
         r0 = move-exception;

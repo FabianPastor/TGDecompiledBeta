@@ -1,6 +1,5 @@
 package org.telegram.ui.Components;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 
-@TargetApi(10)
 public class VideoTimelineView extends View {
     private static final Object sync = new Object();
     private AsyncTask<Integer, Integer, Bitmap> currentTask;
@@ -207,6 +205,7 @@ public class VideoTimelineView extends View {
 
     public void setColor(int i) {
         this.paint.setColor(i);
+        invalidate();
     }
 
     public void setVideoPath(String str) {

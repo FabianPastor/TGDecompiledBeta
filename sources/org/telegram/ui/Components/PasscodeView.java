@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
 import android.os.Vibrator;
@@ -990,7 +991,11 @@ public class PasscodeView extends FrameLayout {
         CancellationSignal cancellationSignal = this.cancellationSignal;
         if (cancellationSignal != null) {
             this.selfCancelled = true;
-            cancellationSignal.cancel();
+            try {
+                cancellationSignal.cancel();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
             this.cancellationSignal = null;
         }
     }
@@ -1203,8 +1208,8 @@ public class PasscodeView extends FrameLayout {
             Drawable drawable = this.backgroundDrawable;
             if (drawable == null) {
                 super.onDraw(canvas);
-            } else if (drawable instanceof ColorDrawable) {
-                drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            } else if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
+                this.backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 this.backgroundDrawable.draw(canvas);
             } else {
                 float measuredWidth = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());

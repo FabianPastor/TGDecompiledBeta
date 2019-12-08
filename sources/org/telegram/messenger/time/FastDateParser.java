@@ -168,8 +168,7 @@ public class FastDateParser implements DateParser, Serializable {
         public boolean addRegex(FastDateParser fastDateParser, StringBuilder stringBuilder) {
             stringBuilder.append('(');
             for (String access$100 : this.keyValues.keySet()) {
-                FastDateParser.escapeRegex(stringBuilder, access$100, false);
-                stringBuilder.append('|');
+                FastDateParser.escapeRegex(stringBuilder, access$100, false).append('|');
             }
             stringBuilder.setCharAt(stringBuilder.length() - 1, ')');
             return true;
@@ -225,8 +224,7 @@ public class FastDateParser implements DateParser, Serializable {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("(GMT[+\\-]\\d{0,1}\\d{2}|[+\\-]\\d{2}:?\\d{2}|");
             for (String access$100 : this.tzNames.keySet()) {
-                FastDateParser.escapeRegex(stringBuilder, access$100, false);
-                stringBuilder.append('|');
+                FastDateParser.escapeRegex(stringBuilder, access$100, false).append('|');
             }
             stringBuilder.setCharAt(stringBuilder.length() - 1, ')');
             this.validTimeZoneChars = stringBuilder.toString();

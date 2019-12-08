@@ -286,8 +286,8 @@ public class VoIPController {
         r4 = 16;
         if (r2 < r4) goto L_0x0017;
     L_0x000e:
-        r2 = android.media.audiofx.AcousticEchoCanceler.isAvailable();	 Catch:{ Throwable -> 0x0017 }
-        r4 = android.media.audiofx.NoiseSuppressor.isAvailable();	 Catch:{ Throwable -> 0x0018 }
+        r2 = android.media.audiofx.AcousticEchoCanceler.isAvailable();	 Catch:{ all -> 0x0017 }
+        r4 = android.media.audiofx.NoiseSuppressor.isAvailable();	 Catch:{ all -> 0x0018 }
         goto L_0x0019;
     L_0x0017:
         r2 = 0;

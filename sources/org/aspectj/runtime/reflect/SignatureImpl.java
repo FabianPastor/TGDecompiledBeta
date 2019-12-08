@@ -5,8 +5,6 @@ import java.util.StringTokenizer;
 import org.aspectj.lang.Signature;
 
 abstract class SignatureImpl implements Signature {
-    static Class[] EMPTY_CLASS_ARRAY = new Class[0];
-    static String[] EMPTY_STRING_ARRAY = new String[0];
     private static boolean useCache = true;
     Class declaringType;
     String declaringTypeName;
@@ -76,9 +74,9 @@ abstract class SignatureImpl implements Signature {
         r0 = r2.stringCache;
         if (r0 != 0) goto L_0x0014;
     L_0x0008:
-        r0 = new org.aspectj.runtime.reflect.SignatureImpl$CacheImpl;	 Catch:{ Throwable -> 0x0010 }
-        r0.<init>();	 Catch:{ Throwable -> 0x0010 }
-        r2.stringCache = r0;	 Catch:{ Throwable -> 0x0010 }
+        r0 = new org.aspectj.runtime.reflect.SignatureImpl$CacheImpl;	 Catch:{ all -> 0x0010 }
+        r0.<init>();	 Catch:{ all -> 0x0010 }
+        r2.stringCache = r0;	 Catch:{ all -> 0x0010 }
         goto L_0x001b;
     L_0x0010:
         r0 = 0;

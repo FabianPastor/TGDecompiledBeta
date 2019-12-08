@@ -406,7 +406,6 @@ public class SimpleTextView extends View implements Callback {
             if (!(this.offsetX + intrinsicWidth == 0 && this.offsetY == 0 && this.scrollingOffset == 0.0f)) {
                 canvas.save();
                 canvas.translate(((float) (this.offsetX + intrinsicWidth)) - this.scrollingOffset, (float) this.offsetY);
-                f = this.scrollingOffset;
             }
             this.layout.draw(canvas);
             if (this.scrollingOffset != 0.0f) {

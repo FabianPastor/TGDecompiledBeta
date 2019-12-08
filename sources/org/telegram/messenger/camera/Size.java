@@ -59,12 +59,10 @@ public final class Size {
             try {
                 return new Size(Integer.parseInt(str.substring(0, indexOf)), Integer.parseInt(str.substring(indexOf + 1)));
             } catch (NumberFormatException unused) {
-                invalidSize(str);
-                throw null;
+                throw invalidSize(str);
             }
         }
-        invalidSize(str);
-        throw null;
+        throw invalidSize(str);
     }
 
     public int hashCode() {

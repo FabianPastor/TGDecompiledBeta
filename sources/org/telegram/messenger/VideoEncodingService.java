@@ -22,7 +22,11 @@ public class VideoEncodingService extends Service implements NotificationCenterD
     }
 
     public void onDestroy() {
-        stopForeground(true);
+        super.onDestroy();
+        try {
+            stopForeground(true);
+        } catch (Throwable unused) {
+        }
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).cancel(4);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopEncodingService);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);

@@ -1786,10 +1786,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         Dialog dialog = (Dialog) this.listAdapter.dialogsMap.get(item.id);
                         if (dialog == null) {
                             this.listAdapter.dialogsMap.put(item.id, item);
-                            this.listAdapter.dialogs.add(1, item);
+                            this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ 1, item);
                         } else if (dialog.id != ((long) i2)) {
                             this.listAdapter.dialogs.remove(dialog);
-                            this.listAdapter.dialogs.add(1, dialog);
+                            this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ 1, dialog);
                         }
                         searchField.searchEditText.setText("");
                         this.gridView.setAdapter(this.listAdapter);
@@ -1834,18 +1834,18 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             while (i < this.selectedDialogs.size()) {
                 keyAt2 = this.selectedDialogs.keyAt(i);
                 if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, null, null, true, null, null, null);
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, null, null, true, null, null, null, true, 0);
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, true, 0);
                 i++;
             }
         } else if (this.sendingText != null) {
             while (i < this.selectedDialogs.size()) {
                 keyAt2 = this.selectedDialogs.keyAt(i);
                 if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, null, null, true, null, null, null);
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, null, null, true, null, null, null, true, 0);
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText, keyAt2, null, null, true, null, null, null);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText, keyAt2, null, null, true, null, null, null, true, 0);
                 i++;
             }
         }
@@ -2076,7 +2076,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             return;
         }
         this.selectedCountView.invalidate();
-        if (i == 0 || showCommentTextView(true)) {
+        if (showCommentTextView(true) || i == 0) {
             this.selectedCountView.setPivotX(0.0f);
             this.selectedCountView.setPivotY(0.0f);
             return;

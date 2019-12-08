@@ -99,10 +99,10 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0104  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0074  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x0127  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x010c  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0078  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x012f  */
     public void onDraw(android.graphics.Canvas r9) {
         /*
         r8 = this;
@@ -112,49 +112,52 @@ public class DrawerProfileCell extends FrameLayout {
         r3 = "chats_menuTopBackground";
         r2 = r2.equals(r3);
         r3 = 1;
-        if (r2 != 0) goto L_0x0022;
+        if (r2 != 0) goto L_0x0026;
     L_0x0012:
         r2 = org.telegram.ui.ActionBar.Theme.isCustomTheme();
-        if (r2 == 0) goto L_0x0022;
+        if (r2 == 0) goto L_0x0026;
     L_0x0018:
         r2 = org.telegram.ui.ActionBar.Theme.isPatternWallpaper();
-        if (r2 != 0) goto L_0x0022;
+        if (r2 != 0) goto L_0x0026;
     L_0x001e:
-        if (r0 == 0) goto L_0x0022;
+        if (r0 == 0) goto L_0x0026;
     L_0x0020:
+        r2 = r0 instanceof android.graphics.drawable.ColorDrawable;
+        if (r2 != 0) goto L_0x0026;
+    L_0x0024:
         r2 = 1;
-        goto L_0x0023;
-    L_0x0022:
+        goto L_0x0027;
+    L_0x0026:
         r2 = 0;
-    L_0x0023:
-        if (r2 != 0) goto L_0x0032;
-    L_0x0025:
+    L_0x0027:
+        if (r2 != 0) goto L_0x0036;
+    L_0x0029:
         r4 = "chats_menuTopShadowCats";
         r5 = org.telegram.ui.ActionBar.Theme.hasThemeKey(r4);
-        if (r5 == 0) goto L_0x0032;
-    L_0x002d:
+        if (r5 == 0) goto L_0x0036;
+    L_0x0031:
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
-        goto L_0x0047;
-    L_0x0032:
+        goto L_0x004b;
+    L_0x0036:
         r3 = "chats_menuTopShadow";
         r4 = org.telegram.ui.ActionBar.Theme.hasThemeKey(r3);
-        if (r4 == 0) goto L_0x003f;
-    L_0x003a:
+        if (r4 == 0) goto L_0x0043;
+    L_0x003e:
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r3);
-        goto L_0x0046;
-    L_0x003f:
+        goto L_0x004a;
+    L_0x0043:
         r3 = org.telegram.ui.ActionBar.Theme.getServiceMessageColor();
         r4 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r4 = r4 | r3;
-    L_0x0046:
+    L_0x004a:
         r3 = 0;
-    L_0x0047:
-        r5 = r8.currentColor;
-        if (r5 == 0) goto L_0x0051;
     L_0x004b:
+        r5 = r8.currentColor;
+        if (r5 == 0) goto L_0x0055;
+    L_0x004f:
         r5 = r5.intValue();
-        if (r5 == r4) goto L_0x0067;
-    L_0x0051:
+        if (r5 == r4) goto L_0x006b;
+    L_0x0055:
         r5 = java.lang.Integer.valueOf(r4);
         r8.currentColor = r5;
         r5 = r8.shadowView;
@@ -163,36 +166,35 @@ public class DrawerProfileCell extends FrameLayout {
         r7 = android.graphics.PorterDuff.Mode.MULTIPLY;
         r6.<init>(r4, r7);
         r5.setColorFilter(r6);
-    L_0x0067:
+    L_0x006b:
         r4 = r8.nameTextView;
         r5 = "chats_menuName";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r4.setTextColor(r5);
-        if (r2 == 0) goto L_0x0104;
-    L_0x0074:
+        if (r2 == 0) goto L_0x010c;
+    L_0x0078:
         r2 = r8.phoneTextView;
         r3 = "chats_menuPhone";
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r2.setTextColor(r3);
         r2 = r8.shadowView;
         r2 = r2.getVisibility();
-        if (r2 == 0) goto L_0x008c;
-    L_0x0087:
+        if (r2 == 0) goto L_0x0090;
+    L_0x008b:
         r2 = r8.shadowView;
         r2.setVisibility(r1);
-    L_0x008c:
-        r2 = r0 instanceof android.graphics.drawable.ColorDrawable;
-        if (r2 == 0) goto L_0x00a0;
     L_0x0090:
-        r2 = r8.getMeasuredWidth();
-        r3 = r8.getMeasuredHeight();
-        r0.setBounds(r1, r1, r2, r3);
-        r0.draw(r9);
-        goto L_0x0123;
-    L_0x00a0:
+        r2 = r0 instanceof android.graphics.drawable.ColorDrawable;
+        if (r2 != 0) goto L_0x00fd;
+    L_0x0094:
+        r2 = r0 instanceof android.graphics.drawable.GradientDrawable;
+        if (r2 == 0) goto L_0x0099;
+    L_0x0098:
+        goto L_0x00fd;
+    L_0x0099:
         r2 = r0 instanceof android.graphics.drawable.BitmapDrawable;
-        if (r2 == 0) goto L_0x0123;
-    L_0x00a4:
+        if (r2 == 0) goto L_0x012b;
+    L_0x009d:
         r0 = (android.graphics.drawable.BitmapDrawable) r0;
         r0 = r0.getBitmap();
         r2 = r8.getMeasuredWidth();
@@ -206,10 +208,10 @@ public class DrawerProfileCell extends FrameLayout {
         r4 = (float) r4;
         r3 = r3 / r4;
         r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
-        if (r4 >= 0) goto L_0x00c5;
-    L_0x00c4:
+        if (r4 >= 0) goto L_0x00be;
+    L_0x00bd:
         r2 = r3;
-    L_0x00c5:
+    L_0x00be:
         r3 = r8.getMeasuredWidth();
         r3 = (float) r3;
         r3 = r3 / r2;
@@ -232,40 +234,46 @@ public class DrawerProfileCell extends FrameLayout {
         r3 = r8.getMeasuredWidth();
         r4 = r8.getMeasuredHeight();
         r2.set(r1, r1, r3, r4);
-        r1 = r8.srcRect;	 Catch:{ Throwable -> 0x00ff }
-        r2 = r8.destRect;	 Catch:{ Throwable -> 0x00ff }
-        r3 = r8.paint;	 Catch:{ Throwable -> 0x00ff }
-        r9.drawBitmap(r0, r1, r2, r3);	 Catch:{ Throwable -> 0x00ff }
-        goto L_0x0123;
-    L_0x00ff:
+        r1 = r8.srcRect;	 Catch:{ all -> 0x00f8 }
+        r2 = r8.destRect;	 Catch:{ all -> 0x00f8 }
+        r3 = r8.paint;	 Catch:{ all -> 0x00f8 }
+        r9.drawBitmap(r0, r1, r2, r3);	 Catch:{ all -> 0x00f8 }
+        goto L_0x012b;
+    L_0x00f8:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x0123;
-    L_0x0104:
-        if (r3 == 0) goto L_0x0107;
-    L_0x0106:
-        goto L_0x0108;
-    L_0x0107:
+        goto L_0x012b;
+    L_0x00fd:
+        r2 = r8.getMeasuredWidth();
+        r3 = r8.getMeasuredHeight();
+        r0.setBounds(r1, r1, r2, r3);
+        r0.draw(r9);
+        goto L_0x012b;
+    L_0x010c:
+        if (r3 == 0) goto L_0x010f;
+    L_0x010e:
+        goto L_0x0110;
+    L_0x010f:
         r1 = 4;
-    L_0x0108:
-        r0 = r8.shadowView;
-        r0 = r0.getVisibility();
-        if (r0 == r1) goto L_0x0115;
     L_0x0110:
         r0 = r8.shadowView;
+        r0 = r0.getVisibility();
+        if (r0 == r1) goto L_0x011d;
+    L_0x0118:
+        r0 = r8.shadowView;
         r0.setVisibility(r1);
-    L_0x0115:
+    L_0x011d:
         r0 = r8.phoneTextView;
         r1 = "chats_menuPhoneCats";
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r0.setTextColor(r1);
         super.onDraw(r9);
-    L_0x0123:
+    L_0x012b:
         r0 = r8.snowflakesEffect;
-        if (r0 == 0) goto L_0x012a;
-    L_0x0127:
+        if (r0 == 0) goto L_0x0132;
+    L_0x012f:
         r0.onDraw(r8, r9);
-    L_0x012a:
+    L_0x0132:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DrawerProfileCell.onDraw(android.graphics.Canvas):void");

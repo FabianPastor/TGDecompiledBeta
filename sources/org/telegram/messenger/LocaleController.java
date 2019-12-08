@@ -69,6 +69,8 @@ public class LocaleController {
     public FastDateFormat formatterDay;
     public FastDateFormat formatterDayMonth;
     public FastDateFormat formatterScheduleDay;
+    public FastDateFormat[] formatterScheduleSend = new FastDateFormat[6];
+    public FastDateFormat formatterScheduleYear;
     public FastDateFormat formatterStats;
     public FastDateFormat formatterWeek;
     public FastDateFormat formatterYear;
@@ -105,32 +107,27 @@ public class LocaleController {
             if (str == null) {
                 str = "";
             }
-            String str2;
-            if (TextUtils.isEmpty(this.pluralLangCode)) {
-                str2 = this.shortName;
-            } else {
-                str2 = this.pluralLangCode;
-            }
+            boolean isEmpty = TextUtils.isEmpty(this.pluralLangCode);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(this.name);
-            String str3 = "|";
-            stringBuilder.append(str3);
+            String str2 = "|";
+            stringBuilder.append(str2);
             stringBuilder.append(this.nameEnglish);
-            stringBuilder.append(str3);
+            stringBuilder.append(str2);
             stringBuilder.append(this.shortName);
-            stringBuilder.append(str3);
+            stringBuilder.append(str2);
             stringBuilder.append(this.pathToFile);
-            stringBuilder.append(str3);
+            stringBuilder.append(str2);
             stringBuilder.append(this.version);
-            stringBuilder.append(str3);
+            stringBuilder.append(str2);
             stringBuilder.append(str);
-            stringBuilder.append(str3);
+            stringBuilder.append(str2);
             stringBuilder.append(this.pluralLangCode);
-            stringBuilder.append(str3);
+            stringBuilder.append(str2);
             stringBuilder.append(this.isRtl);
-            stringBuilder.append(str3);
+            stringBuilder.append(str2);
             stringBuilder.append(this.baseVersion);
-            stringBuilder.append(str3);
+            stringBuilder.append(str2);
             stringBuilder.append(this.serverIndex);
             return stringBuilder.toString();
         }
@@ -477,60 +474,60 @@ public class LocaleController {
         this.remoteLanguagesDict = new HashMap();
         this.languagesDict = new HashMap();
         this.otherLanguages = new ArrayList();
-        r2 = new String[56];
+        r3 = new String[56];
         String str = "en";
-        r2[5] = str;
-        r2[6] = "eo";
-        r2[7] = "es";
-        r2[8] = "et";
-        r2[9] = "fi";
-        r2[10] = "fo";
-        r2[11] = "gl";
-        r2[12] = "he";
-        r2[13] = "iw";
-        r2[14] = "it";
-        r2[15] = "nb";
-        r2[16] = "nl";
-        r2[17] = "nn";
-        r2[18] = "no";
-        r2[19] = "sv";
-        r2[20] = "af";
-        r2[21] = "bg";
-        r2[22] = "bn";
-        r2[23] = "ca";
-        r2[24] = "eu";
-        r2[25] = "fur";
-        r2[26] = "fy";
-        r2[27] = "gu";
-        r2[28] = "ha";
-        r2[29] = "is";
-        r2[30] = "ku";
-        r2[31] = "lb";
-        r2[32] = "ml";
-        r2[33] = "mr";
-        r2[34] = "nah";
-        r2[35] = "ne";
-        r2[36] = "om";
-        r2[37] = "or";
-        r2[38] = "pa";
-        r2[39] = "pap";
-        r2[40] = "ps";
-        r2[41] = "so";
-        r2[42] = "sq";
-        r2[43] = "sw";
-        r2[44] = "ta";
-        r2[45] = "te";
-        r2[46] = "tk";
-        r2[47] = "ur";
-        r2[48] = "zu";
-        r2[49] = "mn";
-        r2[50] = "gsw";
-        r2[51] = "chr";
-        r2[52] = "rm";
-        r2[53] = "pt";
-        r2[54] = "an";
-        r2[55] = "ast";
-        addRules(r2, new PluralRules_One());
+        r3[5] = str;
+        r3[6] = "eo";
+        r3[7] = "es";
+        r3[8] = "et";
+        r3[9] = "fi";
+        r3[10] = "fo";
+        r3[11] = "gl";
+        r3[12] = "he";
+        r3[13] = "iw";
+        r3[14] = "it";
+        r3[15] = "nb";
+        r3[16] = "nl";
+        r3[17] = "nn";
+        r3[18] = "no";
+        r3[19] = "sv";
+        r3[20] = "af";
+        r3[21] = "bg";
+        r3[22] = "bn";
+        r3[23] = "ca";
+        r3[24] = "eu";
+        r3[25] = "fur";
+        r3[26] = "fy";
+        r3[27] = "gu";
+        r3[28] = "ha";
+        r3[29] = "is";
+        r3[30] = "ku";
+        r3[31] = "lb";
+        r3[32] = "ml";
+        r3[33] = "mr";
+        r3[34] = "nah";
+        r3[35] = "ne";
+        r3[36] = "om";
+        r3[37] = "or";
+        r3[38] = "pa";
+        r3[39] = "pap";
+        r3[40] = "ps";
+        r3[41] = "so";
+        r3[42] = "sq";
+        r3[43] = "sw";
+        r3[44] = "ta";
+        r3[45] = "te";
+        r3[46] = "tk";
+        r3[47] = "ur";
+        r3[48] = "zu";
+        r3[49] = "mn";
+        r3[50] = "gsw";
+        r3[51] = "chr";
+        r3[52] = "rm";
+        r3[53] = "pt";
+        r3[54] = "an";
+        r3[55] = "ast";
+        addRules(r3, new PluralRules_One());
         addRules(new String[]{"cs", "sk"}, new PluralRules_Czech());
         addRules(new String[]{"ff", "fr", "kab"}, new PluralRules_French());
         addRules(new String[]{"hr", "ru", "sr", "uk", "be", "bs", "sh"}, new PluralRules_Balkan());
@@ -2464,13 +2461,20 @@ public class LocaleController {
     }
 
     public static String formatDateChat(long j) {
+        return formatDateChat(j, false);
+    }
+
+    public static String formatDateChat(long j, boolean z) {
         try {
+            Calendar instance = Calendar.getInstance();
+            instance.setTimeInMillis(System.currentTimeMillis());
+            int i = instance.get(1);
             j *= 1000;
-            Calendar.getInstance().setTimeInMillis(j);
-            if (Math.abs(System.currentTimeMillis() - j) < 31536000000L) {
-                return getInstance().chatDate.format(j);
+            instance.setTimeInMillis(j);
+            if ((!z || i != instance.get(1)) && (z || Math.abs(System.currentTimeMillis() - j) >= 31536000000L)) {
+                return getInstance().chatFullDate.format(j);
             }
-            return getInstance().chatFullDate.format(j);
+            return getInstance().chatDate.format(j);
         } catch (Exception e) {
             FileLog.e(e);
             return "LOC_ERR: formatDateChat";
@@ -2668,26 +2672,27 @@ public class LocaleController {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0072  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x010f  */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0109  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x011f  */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x011c  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x0131  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x012b  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0144  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0142  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0155  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x014f  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x0163  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0174  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x016e  */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x0184  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0181  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0075  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0073  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x0123  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x011d  */
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x0133  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0130  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0145  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x013f  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0158  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x0156  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0169  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0163  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x0177  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x0188  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0182  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0198  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0195  */
     public void recreateFormatters() {
         /*
-        r7 = this;
-        r0 = r7.currentLocale;
+        r9 = this;
+        r0 = r9.currentLocale;
         if (r0 != 0) goto L_0x0008;
     L_0x0004:
         r0 = java.util.Locale.getDefault();
@@ -2699,205 +2704,260 @@ public class LocaleController {
     L_0x0010:
         r1 = r1.toLowerCase();
         r2 = r1.length();
-        r3 = 1;
+        r3 = 0;
         r4 = "ar";
-        r5 = 2;
-        if (r2 != r5) goto L_0x003c;
-    L_0x001e:
+        r5 = 1;
+        r6 = 2;
+        if (r2 != r6) goto L_0x003d;
+    L_0x001f:
         r2 = r1.equals(r4);
-        if (r2 != 0) goto L_0x0067;
-    L_0x0024:
+        if (r2 != 0) goto L_0x0068;
+    L_0x0025:
         r2 = "fa";
         r2 = r1.equals(r2);
-        if (r2 != 0) goto L_0x0067;
-    L_0x002c:
+        if (r2 != 0) goto L_0x0068;
+    L_0x002d:
         r2 = "he";
         r2 = r1.equals(r2);
-        if (r2 != 0) goto L_0x0067;
-    L_0x0034:
+        if (r2 != 0) goto L_0x0068;
+    L_0x0035:
         r2 = "iw";
         r2 = r1.equals(r2);
-        if (r2 != 0) goto L_0x0067;
-    L_0x003c:
+        if (r2 != 0) goto L_0x0068;
+    L_0x003d:
         r2 = "ar_";
         r2 = r1.startsWith(r2);
-        if (r2 != 0) goto L_0x0067;
-    L_0x0044:
+        if (r2 != 0) goto L_0x0068;
+    L_0x0045:
         r2 = "fa_";
         r2 = r1.startsWith(r2);
-        if (r2 != 0) goto L_0x0067;
-    L_0x004c:
+        if (r2 != 0) goto L_0x0068;
+    L_0x004d:
         r2 = "he_";
         r2 = r1.startsWith(r2);
-        if (r2 != 0) goto L_0x0067;
-    L_0x0054:
+        if (r2 != 0) goto L_0x0068;
+    L_0x0055:
         r2 = "iw_";
         r2 = r1.startsWith(r2);
-        if (r2 != 0) goto L_0x0067;
-    L_0x005c:
-        r2 = r7.currentLocaleInfo;
-        if (r2 == 0) goto L_0x0065;
-    L_0x0060:
+        if (r2 != 0) goto L_0x0068;
+    L_0x005d:
+        r2 = r9.currentLocaleInfo;
+        if (r2 == 0) goto L_0x0066;
+    L_0x0061:
         r2 = r2.isRtl;
-        if (r2 == 0) goto L_0x0065;
-    L_0x0064:
-        goto L_0x0067;
+        if (r2 == 0) goto L_0x0066;
     L_0x0065:
-        r2 = 0;
         goto L_0x0068;
-    L_0x0067:
-        r2 = 1;
+    L_0x0066:
+        r2 = 0;
+        goto L_0x0069;
     L_0x0068:
+        r2 = 1;
+    L_0x0069:
         isRTL = r2;
         r2 = "ko";
-        r6 = r1.equals(r2);
-        if (r6 == 0) goto L_0x0073;
-    L_0x0072:
-        r3 = 2;
+        r7 = r1.equals(r2);
+        if (r7 == 0) goto L_0x0075;
     L_0x0073:
-        nameDisplayOrder = r3;
-        r3 = NUM; // 0x7f0d0b65 float:1.8748031E38 double:1.0531312187E-314;
-        r5 = "formatterMonth";
-        r3 = r7.getStringInternal(r5, r3);
-        r5 = "dd MMM";
-        r3 = r7.createFormatter(r0, r3, r5);
-        r7.formatterDayMonth = r3;
-        r3 = NUM; // 0x7f0d0b6b float:1.8748043E38 double:1.0531312217E-314;
-        r5 = "formatterYear";
-        r3 = r7.getStringInternal(r5, r3);
-        r5 = "dd.MM.yy";
-        r3 = r7.createFormatter(r0, r3, r5);
-        r7.formatterYear = r3;
-        r3 = NUM; // 0x7f0d0b6c float:1.8748045E38 double:1.053131222E-314;
-        r5 = "formatterYearMax";
-        r3 = r7.getStringInternal(r5, r3);
-        r5 = "dd.MM.yyyy";
-        r3 = r7.createFormatter(r0, r3, r5);
-        r7.formatterYearMax = r3;
-        r3 = NUM; // 0x7f0d0b46 float:1.8747968E38 double:1.0531312034E-314;
-        r5 = "chatDate";
-        r3 = r7.getStringInternal(r5, r3);
-        r5 = "d MMMM";
-        r3 = r7.createFormatter(r0, r3, r5);
-        r7.chatDate = r3;
-        r3 = NUM; // 0x7f0d0b47 float:1.874797E38 double:1.053131204E-314;
-        r5 = "chatFullDate";
-        r3 = r7.getStringInternal(r5, r3);
-        r5 = "d MMMM yyyy";
-        r3 = r7.createFormatter(r0, r3, r5);
-        r7.chatFullDate = r3;
-        r3 = NUM; // 0x7f0d0b6a float:1.8748041E38 double:1.053131221E-314;
-        r5 = "formatterWeek";
-        r3 = r7.getStringInternal(r5, r3);
-        r5 = "EEE";
-        r3 = r7.createFormatter(r0, r3, r5);
-        r7.formatterWeek = r3;
-        r3 = NUM; // 0x7f0d0b5e float:1.8748017E38 double:1.0531312153E-314;
-        r5 = "formatDateScheduleDay";
-        r3 = r7.getStringInternal(r5, r3);
-        r5 = "EEE MMM d";
-        r3 = r7.createFormatter(r0, r3, r5);
-        r7.formatterScheduleDay = r3;
-        r3 = r1.toLowerCase();
-        r3 = r3.equals(r4);
-        if (r3 != 0) goto L_0x0104;
-    L_0x00f6:
+        r7 = 2;
+        goto L_0x0076;
+    L_0x0075:
+        r7 = 1;
+    L_0x0076:
+        nameDisplayOrder = r7;
+        r7 = NUM; // 0x7f0d0bbc float:1.8748208E38 double:1.0531312617E-314;
+        r8 = "formatterMonth";
+        r7 = r9.getStringInternal(r8, r7);
+        r8 = "dd MMM";
+        r7 = r9.createFormatter(r0, r7, r8);
+        r9.formatterDayMonth = r7;
+        r7 = NUM; // 0x7f0d0bc2 float:1.874822E38 double:1.0531312647E-314;
+        r8 = "formatterYear";
+        r7 = r9.getStringInternal(r8, r7);
+        r8 = "dd.MM.yy";
+        r7 = r9.createFormatter(r0, r7, r8);
+        r9.formatterYear = r7;
+        r7 = NUM; // 0x7f0d0bc3 float:1.8748222E38 double:1.053131265E-314;
+        r8 = "formatterYearMax";
+        r7 = r9.getStringInternal(r8, r7);
+        r8 = "dd.MM.yyyy";
+        r7 = r9.createFormatter(r0, r7, r8);
+        r9.formatterYearMax = r7;
+        r7 = NUM; // 0x7f0d0b9c float:1.8748143E38 double:1.053131246E-314;
+        r8 = "chatDate";
+        r7 = r9.getStringInternal(r8, r7);
+        r8 = "d MMMM";
+        r7 = r9.createFormatter(r0, r7, r8);
+        r9.chatDate = r7;
+        r7 = NUM; // 0x7f0d0b9d float:1.8748145E38 double:1.0531312464E-314;
+        r8 = "chatFullDate";
+        r7 = r9.getStringInternal(r8, r7);
+        r8 = "d MMMM yyyy";
+        r7 = r9.createFormatter(r0, r7, r8);
+        r9.chatFullDate = r7;
+        r7 = NUM; // 0x7f0d0bc1 float:1.8748218E38 double:1.053131264E-314;
+        r8 = "formatterWeek";
+        r7 = r9.getStringInternal(r8, r7);
+        r8 = "EEE";
+        r7 = r9.createFormatter(r0, r7, r8);
+        r9.formatterWeek = r7;
+        r7 = NUM; // 0x7f0d0bb4 float:1.8748191E38 double:1.053131258E-314;
+        r8 = "formatDateSchedule";
+        r7 = r9.getStringInternal(r8, r7);
+        r8 = "MMM d";
+        r7 = r9.createFormatter(r0, r7, r8);
+        r9.formatterScheduleDay = r7;
+        r7 = NUM; // 0x7f0d0bb5 float:1.8748193E38 double:1.0531312583E-314;
+        r8 = "formatDateScheduleYear";
+        r7 = r9.getStringInternal(r8, r7);
+        r8 = "MMM d yyyy";
+        r7 = r9.createFormatter(r0, r7, r8);
+        r9.formatterScheduleYear = r7;
+        r7 = r1.toLowerCase();
+        r4 = r7.equals(r4);
+        if (r4 != 0) goto L_0x0118;
+    L_0x010a:
         r1 = r1.toLowerCase();
         r1 = r1.equals(r2);
-        if (r1 == 0) goto L_0x0101;
-    L_0x0100:
-        goto L_0x0104;
-    L_0x0101:
-        r1 = java.util.Locale.US;
-        goto L_0x0105;
-    L_0x0104:
-        r1 = r0;
-    L_0x0105:
-        r2 = is24HourFormat;
-        if (r2 == 0) goto L_0x010f;
-    L_0x0109:
-        r2 = NUM; // 0x7f0d0b64 float:1.874803E38 double:1.053131218E-314;
-        r3 = "formatterDay24H";
-        goto L_0x0114;
-    L_0x010f:
-        r2 = NUM; // 0x7f0d0b63 float:1.8748027E38 double:1.0531312177E-314;
-        r3 = "formatterDay12H";
+        if (r1 == 0) goto L_0x0115;
     L_0x0114:
-        r2 = r7.getStringInternal(r3, r2);
-        r3 = is24HourFormat;
-        if (r3 == 0) goto L_0x011f;
-    L_0x011c:
-        r3 = "HH:mm";
-        goto L_0x0121;
-    L_0x011f:
-        r3 = "h:mm a";
-    L_0x0121:
-        r1 = r7.createFormatter(r1, r2, r3);
-        r7.formatterDay = r1;
+        goto L_0x0118;
+    L_0x0115:
+        r1 = java.util.Locale.US;
+        goto L_0x0119;
+    L_0x0118:
+        r1 = r0;
+    L_0x0119:
+        r2 = is24HourFormat;
+        if (r2 == 0) goto L_0x0123;
+    L_0x011d:
+        r2 = NUM; // 0x7f0d0bbb float:1.8748206E38 double:1.053131261E-314;
+        r4 = "formatterDay24H";
+        goto L_0x0128;
+    L_0x0123:
+        r2 = NUM; // 0x7f0d0bba float:1.8748204E38 double:1.0531312607E-314;
+        r4 = "formatterDay12H";
+    L_0x0128:
+        r2 = r9.getStringInternal(r4, r2);
+        r4 = is24HourFormat;
+        if (r4 == 0) goto L_0x0133;
+    L_0x0130:
+        r4 = "HH:mm";
+        goto L_0x0135;
+    L_0x0133:
+        r4 = "h:mm a";
+    L_0x0135:
+        r1 = r9.createFormatter(r1, r2, r4);
+        r9.formatterDay = r1;
         r1 = is24HourFormat;
-        if (r1 == 0) goto L_0x0131;
-    L_0x012b:
-        r1 = NUM; // 0x7f0d0b69 float:1.874804E38 double:1.0531312207E-314;
+        if (r1 == 0) goto L_0x0145;
+    L_0x013f:
+        r1 = NUM; // 0x7f0d0bc0 float:1.8748216E38 double:1.0531312637E-314;
         r2 = "formatterStats24H";
-        goto L_0x0136;
-    L_0x0131:
-        r1 = NUM; // 0x7f0d0b68 float:1.8748037E38 double:1.05313122E-314;
-        r2 = "formatterStats12H";
-    L_0x0136:
-        r1 = r7.getStringInternal(r2, r1);
-        r2 = is24HourFormat;
-        r3 = "MMM dd yyyy, HH:mm";
-        r4 = "MMM dd yyyy, h:mm a";
-        if (r2 == 0) goto L_0x0144;
-    L_0x0142:
-        r2 = r3;
-        goto L_0x0145;
-    L_0x0144:
-        r2 = r4;
+        goto L_0x014a;
     L_0x0145:
-        r1 = r7.createFormatter(r0, r1, r2);
-        r7.formatterStats = r1;
-        r1 = is24HourFormat;
-        if (r1 == 0) goto L_0x0155;
-    L_0x014f:
-        r1 = NUM; // 0x7f0d0b60 float:1.874802E38 double:1.0531312163E-314;
-        r2 = "formatterBannedUntil24H";
-        goto L_0x015a;
-    L_0x0155:
-        r1 = NUM; // 0x7f0d0b5f float:1.8748019E38 double:1.053131216E-314;
-        r2 = "formatterBannedUntil12H";
-    L_0x015a:
-        r1 = r7.getStringInternal(r2, r1);
+        r1 = NUM; // 0x7f0d0bbf float:1.8748214E38 double:1.053131263E-314;
+        r2 = "formatterStats12H";
+    L_0x014a:
+        r1 = r9.getStringInternal(r2, r1);
         r2 = is24HourFormat;
-        if (r2 == 0) goto L_0x0163;
-    L_0x0162:
-        goto L_0x0164;
+        r4 = "MMM dd yyyy, HH:mm";
+        r7 = "MMM dd yyyy, h:mm a";
+        if (r2 == 0) goto L_0x0158;
+    L_0x0156:
+        r2 = r4;
+        goto L_0x0159;
+    L_0x0158:
+        r2 = r7;
+    L_0x0159:
+        r1 = r9.createFormatter(r0, r1, r2);
+        r9.formatterStats = r1;
+        r1 = is24HourFormat;
+        if (r1 == 0) goto L_0x0169;
     L_0x0163:
-        r3 = r4;
-    L_0x0164:
-        r1 = r7.createFormatter(r0, r1, r3);
-        r7.formatterBannedUntil = r1;
-        r1 = is24HourFormat;
-        if (r1 == 0) goto L_0x0174;
+        r1 = NUM; // 0x7f0d0bb7 float:1.8748197E38 double:1.0531312592E-314;
+        r2 = "formatterBannedUntil24H";
+        goto L_0x016e;
+    L_0x0169:
+        r1 = NUM; // 0x7f0d0bb6 float:1.8748195E38 double:1.053131259E-314;
+        r2 = "formatterBannedUntil12H";
     L_0x016e:
-        r1 = NUM; // 0x7f0d0b62 float:1.8748025E38 double:1.0531312173E-314;
-        r2 = "formatterBannedUntilThisYear24H";
-        goto L_0x0179;
-    L_0x0174:
-        r1 = NUM; // 0x7f0d0b61 float:1.8748023E38 double:1.053131217E-314;
-        r2 = "formatterBannedUntilThisYear12H";
-    L_0x0179:
-        r1 = r7.getStringInternal(r2, r1);
+        r1 = r9.getStringInternal(r2, r1);
         r2 = is24HourFormat;
-        if (r2 == 0) goto L_0x0184;
-    L_0x0181:
+        if (r2 == 0) goto L_0x0177;
+    L_0x0176:
+        goto L_0x0178;
+    L_0x0177:
+        r4 = r7;
+    L_0x0178:
+        r1 = r9.createFormatter(r0, r1, r4);
+        r9.formatterBannedUntil = r1;
+        r1 = is24HourFormat;
+        if (r1 == 0) goto L_0x0188;
+    L_0x0182:
+        r1 = NUM; // 0x7f0d0bb9 float:1.8748201E38 double:1.05313126E-314;
+        r2 = "formatterBannedUntilThisYear24H";
+        goto L_0x018d;
+    L_0x0188:
+        r1 = NUM; // 0x7f0d0bb8 float:1.87482E38 double:1.0531312597E-314;
+        r2 = "formatterBannedUntilThisYear12H";
+    L_0x018d:
+        r1 = r9.getStringInternal(r2, r1);
+        r2 = is24HourFormat;
+        if (r2 == 0) goto L_0x0198;
+    L_0x0195:
         r2 = "MMM dd, HH:mm";
-        goto L_0x0186;
-    L_0x0184:
+        goto L_0x019a;
+    L_0x0198:
         r2 = "MMM dd, h:mm a";
-    L_0x0186:
-        r0 = r7.createFormatter(r0, r1, r2);
-        r7.formatterBannedUntilThisYear = r0;
+    L_0x019a:
+        r1 = r9.createFormatter(r0, r1, r2);
+        r9.formatterBannedUntilThisYear = r1;
+        r1 = r9.formatterScheduleSend;
+        r2 = NUM; // 0x7f0d0988 float:1.8747064E38 double:1.053130983E-314;
+        r4 = "SendTodayAt";
+        r2 = r9.getStringInternal(r4, r2);
+        r4 = "'Send today at' HH:mm";
+        r2 = r9.createFormatter(r0, r2, r4);
+        r1[r3] = r2;
+        r1 = r9.formatterScheduleSend;
+        r2 = NUM; // 0x7f0d0974 float:1.8747023E38 double:1.053130973E-314;
+        r3 = "SendDayAt";
+        r2 = r9.getStringInternal(r3, r2);
+        r3 = "'Send on' MMM d 'at' HH:mm";
+        r2 = r9.createFormatter(r0, r2, r3);
+        r1[r5] = r2;
+        r1 = r9.formatterScheduleSend;
+        r2 = NUM; // 0x7f0d0975 float:1.8747025E38 double:1.0531309737E-314;
+        r3 = "SendDayYearAt";
+        r2 = r9.getStringInternal(r3, r2);
+        r3 = "'Send on' MMM d yyyy 'at' HH:mm";
+        r2 = r9.createFormatter(r0, r2, r3);
+        r1[r6] = r2;
+        r1 = r9.formatterScheduleSend;
+        r2 = 3;
+        r3 = NUM; // 0x7f0d08df float:1.874672E38 double:1.0531308996E-314;
+        r4 = "RemindTodayAt";
+        r3 = r9.getStringInternal(r4, r3);
+        r4 = "'Remind today at' HH:mm";
+        r3 = r9.createFormatter(r0, r3, r4);
+        r1[r2] = r3;
+        r1 = r9.formatterScheduleSend;
+        r2 = 4;
+        r3 = NUM; // 0x7f0d08dd float:1.8746717E38 double:1.0531308986E-314;
+        r4 = "RemindDayAt";
+        r3 = r9.getStringInternal(r4, r3);
+        r4 = "'Remind on' MMM d 'at' HH:mm";
+        r3 = r9.createFormatter(r0, r3, r4);
+        r1[r2] = r3;
+        r1 = r9.formatterScheduleSend;
+        r2 = 5;
+        r3 = NUM; // 0x7f0d08de float:1.8746719E38 double:1.053130899E-314;
+        r4 = "RemindDayYearAt";
+        r3 = r9.getStringInternal(r4, r3);
+        r4 = "'Remind on' MMM d yyyy 'at' HH:mm";
+        r0 = r9.createFormatter(r0, r3, r4);
+        r1[r2] = r0;
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.recreateFormatters():void");

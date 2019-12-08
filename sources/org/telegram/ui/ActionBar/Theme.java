@@ -7,6 +7,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
@@ -26,13 +27,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.StateSet;
 import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -40,17 +41,29 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.SerializedData;
+import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.InputFile;
+import org.telegram.tgnet.TLRPC.TL_account_getTheme;
+import org.telegram.tgnet.TLRPC.TL_account_getThemes;
+import org.telegram.tgnet.TLRPC.TL_inputTheme;
+import org.telegram.tgnet.TLRPC.TL_theme;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.ScamDrawable;
@@ -124,7 +137,6 @@ public class Theme {
     public static int autoNightSunriseTime = 0;
     public static int autoNightSunsetTime = 0;
     public static Paint avatar_backgroundPaint = null;
-    public static Drawable avatar_broadcastDrawable = null;
     public static Drawable avatar_ghostDrawable = null;
     public static Drawable avatar_savedDrawable = null;
     public static Drawable calllog_msgCallDownGreenDrawable = null;
@@ -213,6 +225,8 @@ public class Theme {
     public static Drawable chat_msgOutCallDrawable = null;
     public static Drawable chat_msgOutCallSelectedDrawable = null;
     public static Drawable chat_msgOutCheckDrawable = null;
+    public static Drawable chat_msgOutCheckReadDrawable = null;
+    public static Drawable chat_msgOutCheckReadSelectedDrawable = null;
     public static Drawable chat_msgOutCheckSelectedDrawable = null;
     public static Drawable chat_msgOutClockDrawable = null;
     public static Drawable chat_msgOutDrawable = null;
@@ -268,6 +282,7 @@ public class Theme {
     public static PorterDuffColorFilter colorPressedFilter2 = null;
     private static int currentColor = 0;
     private static HashMap<String, Integer> currentColors = new HashMap();
+    private static HashMap<String, Integer> currentColorsNoAccent = new HashMap();
     private static ThemeInfo currentDayTheme = null;
     private static ThemeInfo currentNightTheme = null;
     private static int currentSelectedColor = 0;
@@ -286,6 +301,7 @@ public class Theme {
     public static Drawable dialogs_botDrawable = null;
     public static Drawable dialogs_broadcastDrawable = null;
     public static Drawable dialogs_checkDrawable = null;
+    public static Drawable dialogs_checkReadDrawable = null;
     public static Drawable dialogs_clockDrawable = null;
     public static Paint dialogs_countGrayPaint = null;
     public static Paint dialogs_countPaint = null;
@@ -323,13 +339,16 @@ public class Theme {
     public static Drawable dialogs_verifiedDrawable = null;
     public static Paint dividerPaint = null;
     private static HashMap<String, String> fallbackKeys = new HashMap();
+    private static float[] hsv = new float[3];
     private static boolean isCustomTheme = false;
     private static boolean isPatternWallpaper = false;
     private static boolean isWallpaperMotion = false;
+    private static Boolean isWallpaperMotionPrev = null;
     public static final String key_actionBarActionModeDefault = "actionBarActionModeDefault";
     public static final String key_actionBarActionModeDefaultIcon = "actionBarActionModeDefaultIcon";
     public static final String key_actionBarActionModeDefaultSelector = "actionBarActionModeDefaultSelector";
     public static final String key_actionBarActionModeDefaultTop = "actionBarActionModeDefaultTop";
+    public static final String key_actionBarBrowser = "actionBarBrowser";
     public static final String key_actionBarDefault = "actionBarDefault";
     public static final String key_actionBarDefaultArchived = "actionBarDefaultArchived";
     public static final String key_actionBarDefaultArchivedIcon = "actionBarDefaultArchivedIcon";
@@ -526,12 +545,14 @@ public class Theme {
     public static final String key_chat_messageLinkOut = "chat_messageLinkOut";
     public static final String key_chat_messagePanelBackground = "chat_messagePanelBackground";
     public static final String key_chat_messagePanelCancelInlineBot = "chat_messagePanelCancelInlineBot";
+    public static final String key_chat_messagePanelCursor = "chat_messagePanelCursor";
     public static final String key_chat_messagePanelHint = "chat_messagePanelHint";
     public static final String key_chat_messagePanelIcons = "chat_messagePanelIcons";
     public static final String key_chat_messagePanelSend = "chat_messagePanelSend";
     public static final String key_chat_messagePanelSendPressed = "chat_messagePanelPressedSend";
     public static final String key_chat_messagePanelShadow = "chat_messagePanelShadow";
     public static final String key_chat_messagePanelText = "chat_messagePanelText";
+    public static final String key_chat_messagePanelVideoFrame = "chat_messagePanelVideoFrame";
     public static final String key_chat_messagePanelVoiceBackground = "chat_messagePanelVoiceBackground";
     public static final String key_chat_messagePanelVoiceDelete = "chat_messagePanelVoiceDelete";
     public static final String key_chat_messagePanelVoiceDuration = "chat_messagePanelVoiceDuration";
@@ -597,6 +618,8 @@ public class Theme {
     public static final String key_chat_outReplyMessageText = "chat_outReplyMessageText";
     public static final String key_chat_outReplyNameText = "chat_outReplyNameText";
     public static final String key_chat_outSentCheck = "chat_outSentCheck";
+    public static final String key_chat_outSentCheckRead = "chat_outSentCheckRead";
+    public static final String key_chat_outSentCheckReadSelected = "chat_outSentCheckReadSelected";
     public static final String key_chat_outSentCheckSelected = "chat_outSentCheckSelected";
     public static final String key_chat_outSentClock = "chat_outSentClock";
     public static final String key_chat_outSentClockSelected = "chat_outSentClockSelected";
@@ -660,6 +683,7 @@ public class Theme {
     public static final String key_chat_unreadMessagesStartBackground = "chat_unreadMessagesStartBackground";
     public static final String key_chat_unreadMessagesStartText = "chat_unreadMessagesStartText";
     public static final String key_chat_wallpaper = "chat_wallpaper";
+    public static final String key_chat_wallpaper_gradient_to = "chat_wallpaper_gradient_to";
     public static final String key_chats_actionBackground = "chats_actionBackground";
     public static final String key_chats_actionIcon = "chats_actionIcon";
     public static final String key_chats_actionMessage = "chats_actionMessage";
@@ -708,6 +732,7 @@ public class Theme {
     public static final String key_chats_sentClock = "chats_sentClock";
     public static final String key_chats_sentError = "chats_sentError";
     public static final String key_chats_sentErrorIcon = "chats_sentErrorIcon";
+    public static final String key_chats_sentReadCheck = "chats_sentReadCheck";
     public static final String key_chats_tabletSelectedOverlay = "chats_tabletSelectedOverlay";
     public static final String key_chats_unreadCounter = "chats_unreadCounter";
     public static final String key_chats_unreadCounterMuted = "chats_unreadCounterMuted";
@@ -927,11 +952,15 @@ public class Theme {
     public static String[] keys_avatar_nameInMessage = new String[]{"avatar_nameInMessageRed", "avatar_nameInMessageOrange", "avatar_nameInMessageViolet", "avatar_nameInMessageGreen", "avatar_nameInMessageCyan", "avatar_nameInMessageBlue", "avatar_nameInMessagePink"};
     private static float lastBrightnessValue = 1.0f;
     private static long lastHolidayCheckTime;
+    private static int lastLoadingCurrentThemeTime;
+    private static int lastLoadingThemesTime;
     private static long lastThemeSwitchTime;
     private static Sensor lightSensor;
     private static boolean lightSensorRegistered;
     public static Paint linkSelectionPaint;
     public static Drawable listSelector;
+    private static int loadingCurrentTheme;
+    private static boolean loadingRemoteThemes;
     private static Paint maskPaint = new Paint(1);
     public static Drawable moveUpDrawable;
     private static ArrayList<ThemeInfo> otherThemes = new ArrayList();
@@ -939,6 +968,7 @@ public class Theme {
     public static TextPaint profile_aboutTextPaint;
     public static Drawable profile_verifiedCheckDrawable;
     public static Drawable profile_verifiedDrawable;
+    private static int remoteThemesHash;
     public static int selectedAutoNightType;
     private static int selectedColor;
     private static SensorManager sensorManager;
@@ -962,28 +992,102 @@ public class Theme {
         }
     };
     private static boolean switchNightRunnableScheduled;
+    private static boolean switchingNightTheme;
     private static final Object sync = new Object();
+    private static HashSet<String> themeAccentExclusionKeys = new HashSet();
     private static Drawable themedWallpaper;
     private static int themedWallpaperFileOffset;
+    private static String themedWallpaperLink;
     public static ArrayList<ThemeInfo> themes = new ArrayList();
     private static HashMap<String, ThemeInfo> themesDict = new HashMap();
     private static Drawable wallpaper;
     private static final Object wallpaperSync = new Object();
 
-    public static class ThemeInfo {
+    public static class ThemeInfo implements NotificationCenterDelegate {
+        public int accentBaseColor;
+        final float[] accentBaseColorHsv;
+        public int accentColor;
+        final float[] accentColorHsv;
+        public int[] accentColorOptions;
+        public int account;
         public String assetName;
+        public boolean badWallpaper;
+        public TL_theme info;
+        public boolean isBlured;
+        public boolean isMotion;
+        public boolean loaded;
         public String name;
         public String pathToFile;
+        public String pathToWallpaper;
         public int previewBackgroundColor;
+        public int previewBackgroundGradientColor;
         public int previewInColor;
         public int previewOutColor;
+        public boolean previewParsed;
+        public int previewWallpaperOffset;
+        public String slug;
         public int sortIndex;
+        public boolean themeLoaded;
+        public InputFile uploadedFile;
+        public InputFile uploadedThumb;
+        public String uploadingFile;
+        public String uploadingThumb;
 
+        ThemeInfo() {
+            this.loaded = true;
+            this.themeLoaded = true;
+            this.accentBaseColorHsv = new float[3];
+            this.accentColorHsv = new float[3];
+        }
+
+        public ThemeInfo(ThemeInfo themeInfo) {
+            this.loaded = true;
+            this.themeLoaded = true;
+            this.accentBaseColorHsv = new float[3];
+            this.accentColorHsv = new float[3];
+            this.name = themeInfo.name;
+            this.pathToFile = themeInfo.pathToFile;
+            this.assetName = themeInfo.assetName;
+            this.sortIndex = themeInfo.sortIndex;
+            this.accentColorOptions = themeInfo.accentColorOptions;
+            this.accentBaseColor = themeInfo.accentBaseColor;
+            this.accentColor = themeInfo.accentColor;
+            this.info = themeInfo.info;
+            this.loaded = themeInfo.loaded;
+            this.uploadingThumb = themeInfo.uploadingThumb;
+            this.uploadingFile = themeInfo.uploadingFile;
+            this.uploadedThumb = themeInfo.uploadedThumb;
+            this.uploadedFile = themeInfo.uploadedFile;
+            this.account = themeInfo.account;
+            this.pathToWallpaper = themeInfo.pathToWallpaper;
+            this.slug = themeInfo.slug;
+            this.badWallpaper = themeInfo.badWallpaper;
+            this.isBlured = themeInfo.isBlured;
+            this.isMotion = themeInfo.isMotion;
+            this.previewBackgroundColor = themeInfo.previewBackgroundColor;
+            this.previewBackgroundGradientColor = themeInfo.previewBackgroundGradientColor;
+            this.previewWallpaperOffset = themeInfo.previewWallpaperOffset;
+            this.previewInColor = themeInfo.previewInColor;
+            this.previewOutColor = themeInfo.previewOutColor;
+            this.previewParsed = themeInfo.previewParsed;
+            this.themeLoaded = themeInfo.themeLoaded;
+            Color.colorToHSV(this.accentBaseColor, this.accentBaseColorHsv);
+            Color.colorToHSV(this.accentColor, this.accentColorHsv);
+        }
+
+        /* Access modifiers changed, original: 0000 */
         public JSONObject getSaveJson() {
             try {
                 JSONObject jSONObject = new JSONObject();
                 jSONObject.put("name", this.name);
                 jSONObject.put("path", this.pathToFile);
+                jSONObject.put("account", this.account);
+                if (this.info != null) {
+                    SerializedData serializedData = new SerializedData(this.info.getObjectSize());
+                    this.info.serializeToStream(serializedData);
+                    jSONObject.put("info", Utilities.bytesToHex(serializedData.toByteArray()));
+                }
+                jSONObject.put("loaded", this.loaded);
                 return jSONObject;
             } catch (Exception e) {
                 FileLog.e(e);
@@ -999,11 +1103,8 @@ public class Theme {
             if ("Blue".equals(this.name)) {
                 return LocaleController.getString("ThemeBlue", NUM);
             }
-            if ("Dark".equals(this.name)) {
-                return LocaleController.getString("ThemeDark", NUM);
-            }
             if ("Dark Blue".equals(this.name)) {
-                return LocaleController.getString("ThemeDarkBlue", NUM);
+                return LocaleController.getString("ThemeDark", NUM);
             }
             if ("Graphite".equals(this.name)) {
                 return LocaleController.getString("ThemeGraphite", NUM);
@@ -1011,15 +1112,14 @@ public class Theme {
             if ("Arctic Blue".equals(this.name)) {
                 return LocaleController.getString("ThemeArcticBlue", NUM);
             }
-            return this.name;
+            TL_theme tL_theme = this.info;
+            return tL_theme != null ? tL_theme.title : this.name;
         }
 
         public boolean isDark() {
-            if (!"Dark".equals(this.name)) {
-                if (!"Dark Blue".equals(this.name)) {
-                    if (!"Graphite".equals(this.name)) {
-                        return false;
-                    }
+            if (!"Dark Blue".equals(this.name)) {
+                if (!"Graphite".equals(this.name)) {
+                    return false;
                 }
             }
             return true;
@@ -1029,7 +1129,20 @@ public class Theme {
             return this.pathToFile == null && !isDark();
         }
 
-        public static ThemeInfo createWithJson(JSONObject jSONObject) {
+        public String getKey() {
+            if (this.info == null) {
+                return this.name;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("remote");
+            stringBuilder.append(this.info.id);
+            return stringBuilder.toString();
+        }
+
+        static ThemeInfo createWithJson(JSONObject jSONObject) {
+            String str = "loaded";
+            String str2 = "info";
+            String str3 = "account";
             if (jSONObject == null) {
                 return null;
             }
@@ -1037,6 +1150,20 @@ public class Theme {
                 ThemeInfo themeInfo = new ThemeInfo();
                 themeInfo.name = jSONObject.getString("name");
                 themeInfo.pathToFile = jSONObject.getString("path");
+                if (jSONObject.has(str3)) {
+                    themeInfo.account = jSONObject.getInt(str3);
+                }
+                if (jSONObject.has(str2)) {
+                    try {
+                        SerializedData serializedData = new SerializedData(Utilities.hexToBytes(jSONObject.getString(str2)));
+                        themeInfo.info = (TL_theme) org.telegram.tgnet.TLRPC.Theme.TLdeserialize(serializedData, serializedData.readInt32(true), true);
+                    } catch (Throwable th) {
+                        FileLog.e(th);
+                    }
+                }
+                if (jSONObject.has(str)) {
+                    themeInfo.loaded = jSONObject.getBoolean(str);
+                }
                 return themeInfo;
             } catch (Exception e) {
                 FileLog.e(e);
@@ -1044,7 +1171,7 @@ public class Theme {
             }
         }
 
-        public static ThemeInfo createWithString(String str) {
+        static ThemeInfo createWithString(String str) {
             if (TextUtils.isEmpty(str)) {
                 return null;
             }
@@ -1057,852 +1184,3589 @@ public class Theme {
             themeInfo.pathToFile = split[1];
             return themeInfo;
         }
+
+        /* Access modifiers changed, original: 0000 */
+        public void setAccentColorOptions(int[] iArr) {
+            this.accentColorOptions = iArr;
+            this.accentBaseColor = iArr[0];
+            Color.colorToHSV(this.accentBaseColor, this.accentBaseColorHsv);
+            setAccentColor(this.accentBaseColor);
+        }
+
+        /* Access modifiers changed, original: 0000 */
+        public void setAccentColor(int i) {
+            this.accentColor = i;
+            Color.colorToHSV(this.accentColor, this.accentColorHsv);
+        }
+
+        private void loadThemeDocument() {
+            this.loaded = false;
+            NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileDidFailToLoad);
+            FileLoader instance = FileLoader.getInstance(this.account);
+            TL_theme tL_theme = this.info;
+            instance.loadFile(tL_theme.document, tL_theme, 1, 1);
+        }
+
+        private void removeObservers() {
+            NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+        }
+
+        public void didReceivedNotification(int i, int i2, Object... objArr) {
+            if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.fileDidFailToLoad) {
+                String str = (String) objArr[0];
+                TL_theme tL_theme = this.info;
+                if (tL_theme != null) {
+                    Document document = tL_theme.document;
+                    if (document != null && str.equals(FileLoader.getAttachFileName(document))) {
+                        removeObservers();
+                        if (i == NotificationCenter.fileDidLoad) {
+                            boolean z = true;
+                            this.loaded = true;
+                            this.previewParsed = false;
+                            Theme.saveOtherThemes(true);
+                            if (this == Theme.currentTheme && Theme.previousTheme == null) {
+                                if (this != Theme.currentNightTheme) {
+                                    z = false;
+                                }
+                                Theme.applyTheme(this, z);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x235d  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x235a  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x235a  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x235d  */
     static {
-        ThemeInfo createWithJson;
-        selectedAutoNightType = 0;
-        autoNightBrighnessThreshold = 0.25f;
-        autoNightDayStartTime = 1320;
-        autoNightDayEndTime = 480;
-        autoNightSunsetTime = 1320;
-        Integer valueOf = Integer.valueOf(-1);
-        autoNightLastSunCheckDay = -1;
-        autoNightSunriseTime = 480;
-        autoNightCityName = "";
-        autoNightLocationLatitude = 10000.0d;
-        autoNightLocationLongitude = 10000.0d;
-        defaultColors.put("dialogBackground", valueOf);
-        defaultColors.put("dialogBackgroundGray", Integer.valueOf(-986896));
-        HashMap hashMap = defaultColors;
-        Integer valueOf2 = Integer.valueOf(-14540254);
-        hashMap.put("dialogTextBlack", valueOf2);
-        defaultColors.put("dialogTextLink", Integer.valueOf(-14255946));
-        defaultColors.put("dialogLinkSelection", Integer.valueOf(NUM));
-        defaultColors.put("dialogTextRed", Integer.valueOf(-3319206));
-        defaultColors.put("dialogTextRed2", Integer.valueOf(-2213318));
-        defaultColors.put("dialogTextBlue", Integer.valueOf(-13660983));
-        defaultColors.put("dialogTextBlue2", Integer.valueOf(-12937771));
-        defaultColors.put("dialogTextBlue3", Integer.valueOf(-12664327));
-        defaultColors.put("dialogTextBlue4", Integer.valueOf(-15095832));
-        defaultColors.put("dialogTextGray", Integer.valueOf(-13333567));
-        defaultColors.put("dialogTextGray2", Integer.valueOf(-9079435));
-        defaultColors.put("dialogTextGray3", Integer.valueOf(-6710887));
-        defaultColors.put("dialogTextGray4", Integer.valueOf(-5000269));
-        defaultColors.put("dialogTextHint", Integer.valueOf(-6842473));
-        defaultColors.put("dialogIcon", Integer.valueOf(-9999504));
-        defaultColors.put("dialogRedIcon", Integer.valueOf(-2011827));
-        defaultColors.put("dialogGrayLine", Integer.valueOf(-2960686));
-        defaultColors.put("dialogTopBackground", Integer.valueOf(-9456923));
-        defaultColors.put("dialogInputField", Integer.valueOf(-2368549));
-        defaultColors.put("dialogInputFieldActivated", Integer.valueOf(-13129232));
-        defaultColors.put("dialogCheckboxSquareBackground", Integer.valueOf(-12345121));
-        defaultColors.put("dialogCheckboxSquareCheck", valueOf);
-        defaultColors.put("dialogCheckboxSquareUnchecked", Integer.valueOf(-9211021));
-        defaultColors.put("dialogCheckboxSquareDisabled", Integer.valueOf(-5197648));
-        defaultColors.put("dialogRadioBackground", Integer.valueOf(-5000269));
-        defaultColors.put("dialogRadioBackgroundChecked", Integer.valueOf(-13129232));
-        defaultColors.put("dialogProgressCircle", Integer.valueOf(-11371101));
-        defaultColors.put("dialogLineProgress", Integer.valueOf(-11371101));
-        defaultColors.put("dialogLineProgressBackground", Integer.valueOf(-2368549));
-        defaultColors.put("dialogButton", Integer.valueOf(-11955764));
-        defaultColors.put("dialogButtonSelector", Integer.valueOf(NUM));
-        defaultColors.put("dialogScrollGlow", Integer.valueOf(-657673));
-        defaultColors.put("dialogRoundCheckBox", Integer.valueOf(-11750155));
-        defaultColors.put("dialogRoundCheckBoxCheck", valueOf);
-        defaultColors.put("dialogBadgeBackground", Integer.valueOf(-12664327));
-        defaultColors.put("dialogBadgeText", valueOf);
-        defaultColors.put("dialogCameraIcon", valueOf);
-        defaultColors.put("dialog_inlineProgressBackground", Integer.valueOf(-NUM));
-        defaultColors.put("dialog_inlineProgress", Integer.valueOf(-9735304));
-        defaultColors.put("dialogSearchBackground", Integer.valueOf(-854795));
-        defaultColors.put("dialogSearchHint", Integer.valueOf(-6774617));
-        defaultColors.put("dialogSearchIcon", Integer.valueOf(-6182737));
-        defaultColors.put("dialogSearchText", valueOf2);
-        defaultColors.put("dialogFloatingButton", Integer.valueOf(-11750155));
-        defaultColors.put("dialogFloatingButtonPressed", Integer.valueOf(-11750155));
-        defaultColors.put("dialogFloatingIcon", valueOf);
-        defaultColors.put("dialogShadowLine", Integer.valueOf(NUM));
-        defaultColors.put("windowBackgroundWhite", valueOf);
-        defaultColors.put("windowBackgroundUnchecked", Integer.valueOf(-6445135));
-        defaultColors.put("windowBackgroundChecked", Integer.valueOf(-11034919));
-        defaultColors.put("windowBackgroundCheckText", valueOf);
-        defaultColors.put("progressCircle", Integer.valueOf(-11371101));
-        defaultColors.put("windowBackgroundWhiteGrayIcon", Integer.valueOf(-8288629));
-        defaultColors.put("windowBackgroundWhiteBlueText", Integer.valueOf(-12545331));
-        defaultColors.put("windowBackgroundWhiteBlueText2", Integer.valueOf(-12937771));
-        defaultColors.put("windowBackgroundWhiteBlueText3", Integer.valueOf(-14255946));
-        defaultColors.put("windowBackgroundWhiteBlueText4", Integer.valueOf(-11697229));
-        defaultColors.put("windowBackgroundWhiteBlueText5", Integer.valueOf(-11759926));
-        hashMap = defaultColors;
-        Integer valueOf3 = Integer.valueOf(-12940081);
-        hashMap.put("windowBackgroundWhiteBlueText6", valueOf3);
-        defaultColors.put("windowBackgroundWhiteBlueText7", Integer.valueOf(-13141330));
-        defaultColors.put("windowBackgroundWhiteBlueButton", Integer.valueOf(-14776109));
-        defaultColors.put("windowBackgroundWhiteBlueIcon", Integer.valueOf(-13132315));
-        defaultColors.put("windowBackgroundWhiteGreenText", Integer.valueOf(-14248148));
-        defaultColors.put("windowBackgroundWhiteGreenText2", Integer.valueOf(-13129704));
-        defaultColors.put("windowBackgroundWhiteRedText", Integer.valueOf(-3319206));
-        defaultColors.put("windowBackgroundWhiteRedText2", Integer.valueOf(-2404015));
-        defaultColors.put("windowBackgroundWhiteRedText3", Integer.valueOf(-2995895));
-        defaultColors.put("windowBackgroundWhiteRedText4", Integer.valueOf(-3198928));
-        defaultColors.put("windowBackgroundWhiteRedText5", Integer.valueOf(-1230535));
-        defaultColors.put("windowBackgroundWhiteRedText6", Integer.valueOf(-39322));
-        defaultColors.put("windowBackgroundWhiteGrayText", Integer.valueOf(-8156010));
-        defaultColors.put("windowBackgroundWhiteGrayText2", Integer.valueOf(-7697782));
-        defaultColors.put("windowBackgroundWhiteGrayText3", Integer.valueOf(-6710887));
-        defaultColors.put("windowBackgroundWhiteGrayText4", Integer.valueOf(-8355712));
-        defaultColors.put("windowBackgroundWhiteGrayText5", Integer.valueOf(-6052957));
-        defaultColors.put("windowBackgroundWhiteGrayText6", Integer.valueOf(-9079435));
-        defaultColors.put("windowBackgroundWhiteGrayText7", Integer.valueOf(-3750202));
-        defaultColors.put("windowBackgroundWhiteGrayText8", Integer.valueOf(-9605774));
-        defaultColors.put("windowBackgroundWhiteGrayLine", Integer.valueOf(-2368549));
-        defaultColors.put("windowBackgroundWhiteBlackText", valueOf2);
-        defaultColors.put("windowBackgroundWhiteHintText", Integer.valueOf(-5723992));
-        defaultColors.put("windowBackgroundWhiteValueText", Integer.valueOf(-12937771));
-        defaultColors.put("windowBackgroundWhiteLinkText", Integer.valueOf(-14255946));
-        defaultColors.put("windowBackgroundWhiteLinkSelection", Integer.valueOf(NUM));
-        defaultColors.put("windowBackgroundWhiteBlueHeader", Integer.valueOf(-12937771));
-        defaultColors.put("windowBackgroundWhiteInputField", Integer.valueOf(-2368549));
-        defaultColors.put("windowBackgroundWhiteInputFieldActivated", Integer.valueOf(-13129232));
-        defaultColors.put("switchTrack", Integer.valueOf(-5196358));
-        defaultColors.put("switchTrackChecked", Integer.valueOf(-11358743));
-        defaultColors.put("switchTrackBlue", Integer.valueOf(-8221031));
-        defaultColors.put("switchTrackBlueChecked", Integer.valueOf(-12810041));
-        defaultColors.put("switchTrackBlueThumb", valueOf);
-        defaultColors.put("switchTrackBlueThumbChecked", valueOf);
-        defaultColors.put("switchTrackBlueSelector", Integer.valueOf(NUM));
-        defaultColors.put("switchTrackBlueSelectorChecked", Integer.valueOf(NUM));
-        defaultColors.put("switch2Track", Integer.valueOf(-688514));
-        defaultColors.put("switch2TrackChecked", Integer.valueOf(-11358743));
-        defaultColors.put("checkboxSquareBackground", Integer.valueOf(-12345121));
-        defaultColors.put("checkboxSquareCheck", valueOf);
-        defaultColors.put("checkboxSquareUnchecked", Integer.valueOf(-9211021));
-        defaultColors.put("checkboxSquareDisabled", Integer.valueOf(-5197648));
-        defaultColors.put("listSelectorSDK21", Integer.valueOf(NUM));
-        defaultColors.put("radioBackground", Integer.valueOf(-5000269));
-        defaultColors.put("radioBackgroundChecked", Integer.valueOf(-13129232));
-        defaultColors.put("windowBackgroundGray", Integer.valueOf(-986896));
-        hashMap = defaultColors;
-        Integer valueOf4 = Integer.valueOf(-16777216);
-        hashMap.put("windowBackgroundGrayShadow", valueOf4);
-        defaultColors.put("emptyListPlaceholder", Integer.valueOf(-6974059));
-        defaultColors.put("divider", Integer.valueOf(-2500135));
-        defaultColors.put("graySection", Integer.valueOf(-1117195));
-        defaultColors.put("key_graySectionText", Integer.valueOf(-8418927));
-        defaultColors.put("contextProgressInner1", Integer.valueOf(-4202506));
-        defaultColors.put("contextProgressOuter1", Integer.valueOf(-13920542));
-        defaultColors.put("contextProgressInner2", Integer.valueOf(-4202506));
-        defaultColors.put("contextProgressOuter2", valueOf);
-        defaultColors.put("contextProgressInner3", Integer.valueOf(-5000269));
-        defaultColors.put("contextProgressOuter3", valueOf);
-        defaultColors.put("contextProgressInner4", Integer.valueOf(-3486256));
-        hashMap = defaultColors;
-        Integer valueOf5 = Integer.valueOf(-13683656);
-        hashMap.put("contextProgressOuter4", valueOf5);
-        defaultColors.put("fastScrollActive", Integer.valueOf(-11361317));
-        defaultColors.put("fastScrollInactive", Integer.valueOf(-3551791));
-        defaultColors.put("fastScrollText", valueOf);
-        defaultColors.put("avatar_text", valueOf);
-        defaultColors.put("avatar_backgroundSaved", Integer.valueOf(-10043398));
-        defaultColors.put("avatar_backgroundArchived", Integer.valueOf(-5654847));
-        defaultColors.put("avatar_backgroundArchivedHidden", Integer.valueOf(-3749428));
-        defaultColors.put("avatar_backgroundRed", Integer.valueOf(-1743531));
-        defaultColors.put("avatar_backgroundOrange", Integer.valueOf(-881592));
-        defaultColors.put("avatar_backgroundViolet", Integer.valueOf(-7436818));
-        defaultColors.put("avatar_backgroundGreen", Integer.valueOf(-8992691));
-        defaultColors.put("avatar_backgroundCyan", Integer.valueOf(-10502443));
-        defaultColors.put("avatar_backgroundBlue", Integer.valueOf(-11232035));
-        defaultColors.put("avatar_backgroundPink", Integer.valueOf(-887654));
-        defaultColors.put("avatar_backgroundGroupCreateSpanBlue", Integer.valueOf(-1642505));
-        defaultColors.put("avatar_backgroundInProfileBlue", Integer.valueOf(-11500111));
-        defaultColors.put("avatar_backgroundActionBarBlue", Integer.valueOf(-10907718));
-        defaultColors.put("avatar_subtitleInProfileBlue", Integer.valueOf(-2626822));
-        defaultColors.put("avatar_actionBarSelectorBlue", Integer.valueOf(-11959891));
-        defaultColors.put("avatar_actionBarIconBlue", valueOf);
-        defaultColors.put("avatar_nameInMessageRed", Integer.valueOf(-3516848));
-        defaultColors.put("avatar_nameInMessageOrange", Integer.valueOf(-2589911));
-        defaultColors.put("avatar_nameInMessageViolet", Integer.valueOf(-11627828));
-        defaultColors.put("avatar_nameInMessageGreen", Integer.valueOf(-11488718));
-        defaultColors.put("avatar_nameInMessageCyan", Integer.valueOf(-13132104));
-        defaultColors.put("avatar_nameInMessageBlue", Integer.valueOf(-11627828));
-        defaultColors.put("avatar_nameInMessagePink", Integer.valueOf(-11627828));
-        defaultColors.put("actionBarDefault", Integer.valueOf(-11371101));
-        defaultColors.put("actionBarDefaultIcon", valueOf);
-        defaultColors.put("actionBarActionModeDefault", valueOf);
-        defaultColors.put("actionBarActionModeDefaultTop", Integer.valueOf(NUM));
-        defaultColors.put("actionBarActionModeDefaultIcon", Integer.valueOf(-9999761));
-        defaultColors.put("actionBarDefaultTitle", valueOf);
-        defaultColors.put("actionBarDefaultSubtitle", Integer.valueOf(-2758409));
-        defaultColors.put("actionBarDefaultSelector", Integer.valueOf(-12554860));
-        defaultColors.put("actionBarWhiteSelector", Integer.valueOf(NUM));
-        defaultColors.put("actionBarDefaultSearch", valueOf);
-        defaultColors.put("actionBarDefaultSearchPlaceholder", Integer.valueOf(-NUM));
-        defaultColors.put("actionBarDefaultSubmenuItem", valueOf2);
-        defaultColors.put("actionBarDefaultSubmenuItemIcon", Integer.valueOf(-9999504));
-        defaultColors.put("actionBarDefaultSubmenuBackground", valueOf);
-        defaultColors.put("actionBarActionModeDefaultSelector", Integer.valueOf(-986896));
-        defaultColors.put("actionBarTabActiveText", valueOf);
-        defaultColors.put("actionBarTabUnactiveText", Integer.valueOf(-2758409));
-        defaultColors.put("actionBarTabLine", valueOf);
-        defaultColors.put("actionBarTabSelector", Integer.valueOf(-12554860));
-        defaultColors.put("actionBarDefaultArchived", Integer.valueOf(-9471353));
-        defaultColors.put("actionBarDefaultArchivedSelector", Integer.valueOf(-10590350));
-        defaultColors.put("actionBarDefaultArchivedIcon", valueOf);
-        defaultColors.put("actionBarDefaultArchivedTitle", valueOf);
-        defaultColors.put("actionBarDefaultArchivedSearch", valueOf);
-        defaultColors.put("actionBarDefaultSearchArchivedPlaceholder", Integer.valueOf(-NUM));
-        defaultColors.put("chats_onlineCircle", Integer.valueOf(-11810020));
-        defaultColors.put("chats_unreadCounter", Integer.valueOf(-11613090));
-        defaultColors.put("chats_unreadCounterMuted", Integer.valueOf(-3749428));
-        defaultColors.put("chats_unreadCounterText", valueOf);
-        defaultColors.put("chats_archiveBackground", Integer.valueOf(-10049056));
-        defaultColors.put("chats_archivePinBackground", Integer.valueOf(-6313293));
-        defaultColors.put("chats_archiveIcon", valueOf);
-        defaultColors.put("chats_archiveText", valueOf);
-        defaultColors.put("chats_name", valueOf2);
-        defaultColors.put("chats_nameArchived", Integer.valueOf(-11382190));
-        defaultColors.put("chats_secretName", Integer.valueOf(-16734706));
-        defaultColors.put("chats_secretIcon", Integer.valueOf(-15093466));
-        defaultColors.put("chats_nameIcon", Integer.valueOf(-14408668));
-        defaultColors.put("chats_pinnedIcon", Integer.valueOf(-5723992));
-        defaultColors.put("chats_message", Integer.valueOf(-7631473));
-        defaultColors.put("chats_messageArchived", Integer.valueOf(-7237231));
-        defaultColors.put("chats_message_threeLines", Integer.valueOf(-7434095));
-        defaultColors.put("chats_draft", Integer.valueOf(-2274503));
-        defaultColors.put("chats_nameMessage", Integer.valueOf(-12812624));
-        defaultColors.put("chats_nameMessageArchived", Integer.valueOf(-7631473));
-        defaultColors.put("chats_nameMessage_threeLines", Integer.valueOf(-12434359));
-        defaultColors.put("chats_nameMessageArchived_threeLines", Integer.valueOf(-10592674));
-        defaultColors.put("chats_attachMessage", Integer.valueOf(-12812624));
-        defaultColors.put("chats_actionMessage", Integer.valueOf(-12812624));
-        defaultColors.put("chats_date", Integer.valueOf(-6973028));
-        defaultColors.put("chats_pinnedOverlay", Integer.valueOf(NUM));
-        defaultColors.put("chats_tabletSelectedOverlay", Integer.valueOf(NUM));
-        defaultColors.put("chats_sentCheck", Integer.valueOf(-12146122));
-        defaultColors.put("chats_sentClock", Integer.valueOf(-9061026));
-        defaultColors.put("chats_sentError", Integer.valueOf(-2796974));
-        defaultColors.put("chats_sentErrorIcon", valueOf);
-        defaultColors.put("chats_verifiedBackground", Integer.valueOf(-13391642));
-        defaultColors.put("chats_verifiedCheck", valueOf);
-        defaultColors.put("chats_muteIcon", Integer.valueOf(-4341308));
-        defaultColors.put("chats_mentionIcon", valueOf);
-        defaultColors.put("chats_menuBackground", valueOf);
-        defaultColors.put("chats_menuItemText", Integer.valueOf(-12303292));
-        defaultColors.put("chats_menuItemCheck", Integer.valueOf(-10907718));
-        defaultColors.put("chats_menuItemIcon", Integer.valueOf(-7827048));
-        defaultColors.put("chats_menuName", valueOf);
-        defaultColors.put("chats_menuPhone", valueOf);
-        defaultColors.put("chats_menuPhoneCats", Integer.valueOf(-4004353));
-        defaultColors.put("chats_menuCloud", valueOf);
-        defaultColors.put("chats_menuCloudBackgroundCats", Integer.valueOf(-12420183));
-        defaultColors.put("chats_actionIcon", valueOf);
-        defaultColors.put("chats_actionBackground", Integer.valueOf(-10114592));
-        defaultColors.put("chats_actionPressedBackground", Integer.valueOf(-11100714));
-        defaultColors.put("chats_actionUnreadIcon", Integer.valueOf(-9211021));
-        defaultColors.put("chats_actionUnreadBackground", valueOf);
-        defaultColors.put("chats_actionUnreadPressedBackground", Integer.valueOf(-855310));
-        defaultColors.put("chats_menuTopBackgroundCats", Integer.valueOf(-10907718));
-        defaultColors.put("chat_attachMediaBanBackground", Integer.valueOf(-12171706));
-        defaultColors.put("chat_attachMediaBanText", valueOf);
-        defaultColors.put("chat_attachCheckBoxCheck", valueOf);
-        defaultColors.put("chat_attachCheckBoxBackground", Integer.valueOf(-12995849));
-        defaultColors.put("chat_attachPhotoBackground", Integer.valueOf(NUM));
-        defaultColors.put("chat_attachActiveTab", Integer.valueOf(-13391883));
-        defaultColors.put("chat_attachUnactiveTab", Integer.valueOf(-7169634));
-        defaultColors.put("chat_attachPermissionImage", Integer.valueOf(-13421773));
-        defaultColors.put("chat_attachPermissionMark", Integer.valueOf(-1945520));
-        defaultColors.put("chat_attachPermissionText", Integer.valueOf(-9472134));
-        defaultColors.put("chat_attachEmptyImage", Integer.valueOf(-3355444));
-        defaultColors.put("chat_attachGalleryBackground", Integer.valueOf(-12214795));
-        defaultColors.put("chat_attachGalleryIcon", valueOf);
-        defaultColors.put("chat_attachAudioBackground", Integer.valueOf(-1351584));
-        defaultColors.put("chat_attachAudioIcon", valueOf);
-        defaultColors.put("chat_attachFileBackground", Integer.valueOf(-13321743));
-        defaultColors.put("chat_attachFileIcon", valueOf);
-        defaultColors.put("chat_attachContactBackground", Integer.valueOf(-868277));
-        defaultColors.put("chat_attachContactIcon", valueOf);
-        defaultColors.put("chat_attachLocationBackground", Integer.valueOf(-13187226));
-        defaultColors.put("chat_attachLocationIcon", valueOf);
-        defaultColors.put("chat_attachPollBackground", Integer.valueOf(-868277));
-        defaultColors.put("chat_attachPollIcon", valueOf);
-        defaultColors.put("chat_status", Integer.valueOf(-2758409));
-        defaultColors.put("chat_inDownCall", Integer.valueOf(-16725933));
-        defaultColors.put("chat_inUpCall", Integer.valueOf(-47032));
-        defaultColors.put("chat_outUpCall", Integer.valueOf(-16725933));
-        defaultColors.put("chat_shareBackground", Integer.valueOf(NUM));
-        defaultColors.put("chat_shareBackgroundSelected", Integer.valueOf(-NUM));
-        defaultColors.put("chat_lockIcon", valueOf);
-        defaultColors.put("chat_muteIcon", Integer.valueOf(-5124893));
-        defaultColors.put("chat_inBubble", valueOf);
-        defaultColors.put("chat_inBubbleSelected", Integer.valueOf(-1247235));
-        defaultColors.put("chat_inBubbleShadow", Integer.valueOf(-14862509));
-        defaultColors.put("chat_outBubble", Integer.valueOf(-1048610));
-        defaultColors.put("chat_outBubbleSelected", Integer.valueOf(-2492475));
-        defaultColors.put("chat_outBubbleShadow", Integer.valueOf(-14781172));
-        defaultColors.put("chat_inMediaIcon", valueOf);
-        defaultColors.put("chat_inMediaIconSelected", Integer.valueOf(-1050370));
-        defaultColors.put("chat_outMediaIcon", Integer.valueOf(-1048610));
-        defaultColors.put("chat_outMediaIconSelected", Integer.valueOf(-1967921));
-        defaultColors.put("chat_messageTextIn", valueOf4);
-        defaultColors.put("chat_messageTextOut", valueOf4);
-        defaultColors.put("chat_messageLinkIn", Integer.valueOf(-14255946));
-        defaultColors.put("chat_messageLinkOut", Integer.valueOf(-14255946));
-        defaultColors.put("chat_serviceText", valueOf);
-        defaultColors.put("chat_serviceLink", valueOf);
-        defaultColors.put("chat_serviceIcon", valueOf);
-        defaultColors.put("chat_mediaTimeBackground", Integer.valueOf(NUM));
-        defaultColors.put("chat_outSentCheck", Integer.valueOf(-10637232));
-        defaultColors.put("chat_outSentCheckSelected", Integer.valueOf(-10637232));
-        defaultColors.put("chat_outSentClock", Integer.valueOf(-9061026));
-        defaultColors.put("chat_outSentClockSelected", Integer.valueOf(-9061026));
-        hashMap = defaultColors;
-        Integer valueOf6 = Integer.valueOf(-6182221);
-        hashMap.put("chat_inSentClock", valueOf6);
-        defaultColors.put("chat_inSentClockSelected", Integer.valueOf(-7094838));
-        defaultColors.put("chat_mediaSentCheck", valueOf);
-        defaultColors.put("chat_mediaSentClock", valueOf);
-        defaultColors.put("chat_inViews", valueOf6);
-        defaultColors.put("chat_inViewsSelected", Integer.valueOf(-7094838));
-        defaultColors.put("chat_outViews", Integer.valueOf(-9522601));
-        defaultColors.put("chat_outViewsSelected", Integer.valueOf(-9522601));
-        defaultColors.put("chat_mediaViews", valueOf);
-        defaultColors.put("chat_inMenu", Integer.valueOf(-4801083));
-        defaultColors.put("chat_inMenuSelected", Integer.valueOf(-6766130));
-        defaultColors.put("chat_outMenu", Integer.valueOf(-7221634));
-        defaultColors.put("chat_outMenuSelected", Integer.valueOf(-7221634));
-        defaultColors.put("chat_mediaMenu", valueOf);
-        hashMap = defaultColors;
-        Integer valueOf7 = Integer.valueOf(-11162801);
-        hashMap.put("chat_outInstant", valueOf7);
-        defaultColors.put("chat_outInstantSelected", Integer.valueOf(-12019389));
-        defaultColors.put("chat_inInstant", valueOf3);
-        defaultColors.put("chat_inInstantSelected", Integer.valueOf(-13600331));
-        defaultColors.put("chat_sentError", Integer.valueOf(-2411211));
-        defaultColors.put("chat_sentErrorIcon", valueOf);
-        defaultColors.put("chat_selectedBackground", Integer.valueOf(NUM));
-        defaultColors.put("chat_previewDurationText", valueOf);
-        defaultColors.put("chat_previewGameText", valueOf);
-        defaultColors.put("chat_inPreviewInstantText", valueOf3);
-        defaultColors.put("chat_outPreviewInstantText", valueOf7);
-        defaultColors.put("chat_inPreviewInstantSelectedText", Integer.valueOf(-13600331));
-        defaultColors.put("chat_outPreviewInstantSelectedText", Integer.valueOf(-12019389));
-        defaultColors.put("chat_secretTimeText", Integer.valueOf(-1776928));
-        defaultColors.put("chat_stickerNameText", valueOf);
-        defaultColors.put("chat_botButtonText", valueOf);
-        defaultColors.put("chat_botProgress", valueOf);
-        defaultColors.put("chat_inForwardedNameText", Integer.valueOf(-13072697));
-        defaultColors.put("chat_outForwardedNameText", valueOf7);
-        defaultColors.put("chat_inViaBotNameText", valueOf3);
-        defaultColors.put("chat_outViaBotNameText", valueOf7);
-        defaultColors.put("chat_stickerViaBotNameText", valueOf);
-        defaultColors.put("chat_inReplyLine", Integer.valueOf(-10903592));
-        defaultColors.put("chat_outReplyLine", Integer.valueOf(-9520791));
-        defaultColors.put("chat_stickerReplyLine", valueOf);
-        defaultColors.put("chat_inReplyNameText", valueOf3);
-        defaultColors.put("chat_outReplyNameText", valueOf7);
-        defaultColors.put("chat_stickerReplyNameText", valueOf);
-        defaultColors.put("chat_inReplyMessageText", valueOf4);
-        defaultColors.put("chat_outReplyMessageText", valueOf4);
-        defaultColors.put("chat_inReplyMediaMessageText", valueOf6);
-        defaultColors.put("chat_outReplyMediaMessageText", Integer.valueOf(-10112933));
-        defaultColors.put("chat_inReplyMediaMessageSelectedText", Integer.valueOf(-7752511));
-        defaultColors.put("chat_outReplyMediaMessageSelectedText", Integer.valueOf(-10112933));
-        defaultColors.put("chat_stickerReplyMessageText", valueOf);
-        defaultColors.put("chat_inPreviewLine", Integer.valueOf(-9390872));
-        defaultColors.put("chat_outPreviewLine", Integer.valueOf(-7812741));
-        defaultColors.put("chat_inSiteNameText", valueOf3);
-        defaultColors.put("chat_outSiteNameText", valueOf7);
-        defaultColors.put("chat_inContactNameText", Integer.valueOf(-11625772));
-        defaultColors.put("chat_outContactNameText", valueOf7);
-        defaultColors.put("chat_inContactPhoneText", valueOf5);
-        defaultColors.put("chat_inContactPhoneSelectedText", valueOf5);
-        defaultColors.put("chat_outContactPhoneText", Integer.valueOf(-13286860));
-        defaultColors.put("chat_outContactPhoneSelectedText", Integer.valueOf(-13286860));
-        defaultColors.put("chat_mediaProgress", valueOf);
-        defaultColors.put("chat_inAudioProgress", valueOf);
-        defaultColors.put("chat_outAudioProgress", Integer.valueOf(-1048610));
-        defaultColors.put("chat_inAudioSelectedProgress", Integer.valueOf(-1050370));
-        defaultColors.put("chat_outAudioSelectedProgress", Integer.valueOf(-1967921));
-        defaultColors.put("chat_mediaTimeText", valueOf);
-        defaultColors.put("chat_inTimeText", valueOf6);
-        defaultColors.put("chat_outTimeText", Integer.valueOf(-9391780));
-        defaultColors.put("chat_adminText", Integer.valueOf(-4143413));
-        defaultColors.put("chat_adminSelectedText", Integer.valueOf(-7752511));
-        defaultColors.put("chat_inTimeSelectedText", Integer.valueOf(-7752511));
-        defaultColors.put("chat_outTimeSelectedText", Integer.valueOf(-9391780));
-        defaultColors.put("chat_inAudioPerfomerText", valueOf5);
-        defaultColors.put("chat_inAudioPerfomerSelectedText", valueOf5);
-        defaultColors.put("chat_outAudioPerfomerText", Integer.valueOf(-13286860));
-        defaultColors.put("chat_outAudioPerfomerSelectedText", Integer.valueOf(-13286860));
-        defaultColors.put("chat_inAudioTitleText", Integer.valueOf(-11625772));
-        defaultColors.put("chat_outAudioTitleText", valueOf7);
-        defaultColors.put("chat_inAudioDurationText", valueOf6);
-        defaultColors.put("chat_outAudioDurationText", Integer.valueOf(-10112933));
-        defaultColors.put("chat_inAudioDurationSelectedText", Integer.valueOf(-7752511));
-        defaultColors.put("chat_outAudioDurationSelectedText", Integer.valueOf(-10112933));
-        defaultColors.put("chat_inAudioSeekbar", Integer.valueOf(-1774864));
-        defaultColors.put("chat_inAudioCacheSeekbar", Integer.valueOf(NUM));
-        defaultColors.put("chat_outAudioSeekbar", Integer.valueOf(-4463700));
-        defaultColors.put("chat_outAudioCacheSeekbar", Integer.valueOf(NUM));
-        defaultColors.put("chat_inAudioSeekbarSelected", Integer.valueOf(-4399384));
-        defaultColors.put("chat_outAudioSeekbarSelected", Integer.valueOf(-5644906));
-        defaultColors.put("chat_inAudioSeekbarFill", Integer.valueOf(-9259544));
-        defaultColors.put("chat_outAudioSeekbarFill", Integer.valueOf(-8863118));
-        defaultColors.put("chat_inVoiceSeekbar", Integer.valueOf(-2169365));
-        defaultColors.put("chat_outVoiceSeekbar", Integer.valueOf(-4463700));
-        defaultColors.put("chat_inVoiceSeekbarSelected", Integer.valueOf(-4399384));
-        defaultColors.put("chat_outVoiceSeekbarSelected", Integer.valueOf(-5644906));
-        defaultColors.put("chat_inVoiceSeekbarFill", Integer.valueOf(-9259544));
-        defaultColors.put("chat_outVoiceSeekbarFill", Integer.valueOf(-8863118));
-        defaultColors.put("chat_inFileProgress", Integer.valueOf(-1314571));
-        defaultColors.put("chat_outFileProgress", Integer.valueOf(-2427453));
-        defaultColors.put("chat_inFileProgressSelected", Integer.valueOf(-3413258));
-        defaultColors.put("chat_outFileProgressSelected", Integer.valueOf(-3806041));
-        defaultColors.put("chat_inFileNameText", Integer.valueOf(-11625772));
-        defaultColors.put("chat_outFileNameText", valueOf7);
-        defaultColors.put("chat_inFileInfoText", valueOf6);
-        defaultColors.put("chat_outFileInfoText", Integer.valueOf(-10112933));
-        defaultColors.put("chat_inFileInfoSelectedText", Integer.valueOf(-7752511));
-        defaultColors.put("chat_outFileInfoSelectedText", Integer.valueOf(-10112933));
-        defaultColors.put("chat_inFileBackground", Integer.valueOf(-1314571));
-        defaultColors.put("chat_outFileBackground", Integer.valueOf(-2427453));
-        defaultColors.put("chat_inFileBackgroundSelected", Integer.valueOf(-3413258));
-        defaultColors.put("chat_outFileBackgroundSelected", Integer.valueOf(-3806041));
-        defaultColors.put("chat_inVenueInfoText", valueOf6);
-        defaultColors.put("chat_outVenueInfoText", Integer.valueOf(-10112933));
-        defaultColors.put("chat_inVenueInfoSelectedText", Integer.valueOf(-7752511));
-        defaultColors.put("chat_outVenueInfoSelectedText", Integer.valueOf(-10112933));
-        defaultColors.put("chat_mediaInfoText", valueOf);
-        defaultColors.put("chat_linkSelectBackground", Integer.valueOf(NUM));
-        defaultColors.put("chat_textSelectBackground", Integer.valueOf(NUM));
-        defaultColors.put("chat_emojiPanelBackground", Integer.valueOf(-986379));
-        defaultColors.put("chat_emojiPanelBadgeBackground", Integer.valueOf(-11688214));
-        defaultColors.put("chat_emojiPanelBadgeText", valueOf);
-        defaultColors.put("chat_emojiSearchBackground", Integer.valueOf(-1709586));
-        defaultColors.put("chat_emojiSearchIcon", Integer.valueOf(-7036497));
-        defaultColors.put("chat_emojiPanelShadowLine", Integer.valueOf(NUM));
-        defaultColors.put("chat_emojiPanelEmptyText", Integer.valueOf(-7038047));
-        defaultColors.put("chat_emojiPanelIcon", Integer.valueOf(-6445909));
-        defaultColors.put("chat_emojiBottomPanelIcon", Integer.valueOf(-7564905));
-        defaultColors.put("chat_emojiPanelIconSelected", Integer.valueOf(-13920286));
-        defaultColors.put("chat_emojiPanelStickerPackSelector", Integer.valueOf(-1907225));
-        defaultColors.put("chat_emojiPanelStickerPackSelectorLine", Integer.valueOf(-11097104));
-        defaultColors.put("chat_emojiPanelBackspace", Integer.valueOf(-7564905));
-        defaultColors.put("chat_emojiPanelMasksIcon", valueOf);
-        defaultColors.put("chat_emojiPanelMasksIconSelected", Integer.valueOf(-10305560));
-        defaultColors.put("chat_emojiPanelTrendingTitle", valueOf2);
-        defaultColors.put("chat_emojiPanelStickerSetName", Integer.valueOf(-8221804));
-        defaultColors.put("chat_emojiPanelStickerSetNameHighlight", Integer.valueOf(-14184997));
-        defaultColors.put("chat_emojiPanelStickerSetNameIcon", Integer.valueOf(-5130564));
-        defaultColors.put("chat_emojiPanelTrendingDescription", Integer.valueOf(-7697782));
-        defaultColors.put("chat_botKeyboardButtonText", Integer.valueOf(-13220017));
-        defaultColors.put("chat_botKeyboardButtonBackground", Integer.valueOf(-1775639));
-        defaultColors.put("chat_botKeyboardButtonBackgroundPressed", Integer.valueOf(-3354156));
-        defaultColors.put("chat_unreadMessagesStartArrowIcon", Integer.valueOf(-6113849));
-        defaultColors.put("chat_unreadMessagesStartText", Integer.valueOf(-11102772));
-        defaultColors.put("chat_unreadMessagesStartBackground", valueOf);
-        defaultColors.put("chat_inFileIcon", Integer.valueOf(-6113849));
-        defaultColors.put("chat_inFileSelectedIcon", Integer.valueOf(-7883067));
-        defaultColors.put("chat_outFileIcon", Integer.valueOf(-8011912));
-        defaultColors.put("chat_outFileSelectedIcon", Integer.valueOf(-8011912));
-        defaultColors.put("chat_inLocationBackground", Integer.valueOf(-1314571));
-        defaultColors.put("chat_inLocationIcon", Integer.valueOf(-6113849));
-        defaultColors.put("chat_outLocationBackground", Integer.valueOf(-2427453));
-        defaultColors.put("chat_outLocationIcon", Integer.valueOf(-7880840));
-        defaultColors.put("chat_inContactBackground", Integer.valueOf(-9259544));
-        defaultColors.put("chat_inContactIcon", valueOf);
-        defaultColors.put("chat_outContactBackground", Integer.valueOf(-8863118));
-        defaultColors.put("chat_outContactIcon", Integer.valueOf(-1048610));
-        defaultColors.put("chat_outBroadcast", Integer.valueOf(-12146122));
-        defaultColors.put("chat_mediaBroadcast", valueOf);
-        defaultColors.put("chat_searchPanelIcons", Integer.valueOf(-9999761));
-        defaultColors.put("chat_searchPanelText", Integer.valueOf(-9999761));
-        defaultColors.put("chat_secretChatStatusText", Integer.valueOf(-8421505));
-        defaultColors.put("chat_fieldOverlayText", valueOf3);
-        defaultColors.put("chat_stickersHintPanel", valueOf);
-        defaultColors.put("chat_replyPanelIcons", Integer.valueOf(-11032346));
-        defaultColors.put("chat_replyPanelClose", Integer.valueOf(-7432805));
-        defaultColors.put("chat_replyPanelName", valueOf3);
-        defaultColors.put("chat_replyPanelMessage", valueOf2);
-        defaultColors.put("chat_replyPanelLine", Integer.valueOf(-1513240));
-        defaultColors.put("chat_messagePanelBackground", valueOf);
-        defaultColors.put("chat_messagePanelText", valueOf4);
-        defaultColors.put("chat_messagePanelHint", Integer.valueOf(-5985101));
-        defaultColors.put("chat_messagePanelShadow", valueOf4);
-        defaultColors.put("chat_messagePanelIcons", Integer.valueOf(-7432805));
-        defaultColors.put("chat_recordedVoicePlayPause", valueOf);
-        defaultColors.put("chat_recordedVoicePlayPausePressed", Integer.valueOf(-2495749));
-        defaultColors.put("chat_recordedVoiceDot", Integer.valueOf(-2468275));
-        defaultColors.put("chat_recordedVoiceBackground", Integer.valueOf(-11165981));
-        defaultColors.put("chat_recordedVoiceProgress", Integer.valueOf(-6107400));
-        defaultColors.put("chat_recordedVoiceProgressInner", valueOf);
-        defaultColors.put("chat_recordVoiceCancel", Integer.valueOf(-6710887));
-        defaultColors.put("chat_messagePanelSend", Integer.valueOf(-10309397));
-        defaultColors.put("chat_messagePanelPressedSend", valueOf);
-        defaultColors.put("key_chat_messagePanelVoiceLock", Integer.valueOf(-5987164));
-        defaultColors.put("key_chat_messagePanelVoiceLockBackground", valueOf);
-        defaultColors.put("key_chat_messagePanelVoiceLockShadow", valueOf4);
-        defaultColors.put("chat_recordTime", Integer.valueOf(-11711413));
-        defaultColors.put("chat_emojiPanelNewTrending", Integer.valueOf(-11688214));
-        defaultColors.put("chat_gifSaveHintText", valueOf);
-        defaultColors.put("chat_gifSaveHintBackground", Integer.valueOf(-NUM));
-        defaultColors.put("chat_goDownButton", valueOf);
-        defaultColors.put("chat_goDownButtonShadow", valueOf4);
-        defaultColors.put("chat_goDownButtonIcon", Integer.valueOf(-7432805));
-        defaultColors.put("chat_goDownButtonCounter", valueOf);
-        defaultColors.put("chat_goDownButtonCounterBackground", Integer.valueOf(-11689240));
-        defaultColors.put("chat_messagePanelCancelInlineBot", Integer.valueOf(-5395027));
-        defaultColors.put("chat_messagePanelVoicePressed", valueOf);
-        defaultColors.put("chat_messagePanelVoiceBackground", Integer.valueOf(-11037236));
-        defaultColors.put("chat_messagePanelVoiceShadow", Integer.valueOf(NUM));
-        defaultColors.put("chat_messagePanelVoiceDelete", Integer.valueOf(-9211021));
-        defaultColors.put("chat_messagePanelVoiceDuration", valueOf);
-        defaultColors.put("chat_inlineResultIcon", Integer.valueOf(-11037236));
-        defaultColors.put("chat_topPanelBackground", valueOf);
-        defaultColors.put("chat_topPanelClose", Integer.valueOf(-7563878));
-        defaultColors.put("chat_topPanelLine", Integer.valueOf(-9658414));
-        defaultColors.put("chat_topPanelTitle", valueOf3);
-        defaultColors.put("chat_topPanelMessage", Integer.valueOf(-6710887));
-        defaultColors.put("chat_reportSpam", Integer.valueOf(-3188393));
-        defaultColors.put("chat_addContact", Integer.valueOf(-11894091));
-        defaultColors.put("chat_inLoader", Integer.valueOf(-9259544));
-        defaultColors.put("chat_inLoaderSelected", Integer.valueOf(-10114080));
-        defaultColors.put("chat_outLoader", Integer.valueOf(-8863118));
-        defaultColors.put("chat_outLoaderSelected", Integer.valueOf(-9783964));
-        defaultColors.put("chat_inLoaderPhoto", Integer.valueOf(-6113080));
-        defaultColors.put("chat_inLoaderPhotoSelected", Integer.valueOf(-6113849));
-        defaultColors.put("chat_inLoaderPhotoIcon", Integer.valueOf(-197380));
-        defaultColors.put("chat_inLoaderPhotoIconSelected", Integer.valueOf(-1314571));
-        defaultColors.put("chat_outLoaderPhoto", Integer.valueOf(-8011912));
-        defaultColors.put("chat_outLoaderPhotoSelected", Integer.valueOf(-8538000));
-        defaultColors.put("chat_outLoaderPhotoIcon", Integer.valueOf(-2427453));
-        defaultColors.put("chat_outLoaderPhotoIconSelected", Integer.valueOf(-4134748));
-        defaultColors.put("chat_mediaLoaderPhoto", Integer.valueOf(NUM));
-        defaultColors.put("chat_mediaLoaderPhotoSelected", Integer.valueOf(NUM));
-        defaultColors.put("chat_mediaLoaderPhotoIcon", valueOf);
-        defaultColors.put("chat_mediaLoaderPhotoIconSelected", Integer.valueOf(-2500135));
-        defaultColors.put("chat_secretTimerBackground", Integer.valueOf(-NUM));
-        defaultColors.put("chat_secretTimerText", valueOf);
-        defaultColors.put("profile_creatorIcon", Integer.valueOf(-12937771));
-        defaultColors.put("profile_actionIcon", Integer.valueOf(-8288630));
-        defaultColors.put("profile_actionBackground", valueOf);
-        defaultColors.put("profile_actionPressedBackground", Integer.valueOf(-855310));
-        defaultColors.put("profile_verifiedBackground", Integer.valueOf(-5056776));
-        defaultColors.put("profile_verifiedCheck", Integer.valueOf(-11959368));
-        defaultColors.put("profile_title", valueOf);
-        defaultColors.put("profile_status", Integer.valueOf(-2626822));
-        defaultColors.put("player_actionBar", valueOf);
-        defaultColors.put("player_actionBarSelector", Integer.valueOf(NUM));
-        defaultColors.put("player_actionBarTitle", valueOf5);
-        defaultColors.put("player_actionBarTop", Integer.valueOf(-NUM));
-        defaultColors.put("player_actionBarSubtitle", Integer.valueOf(-7697782));
-        defaultColors.put("player_actionBarItems", Integer.valueOf(-7697782));
-        defaultColors.put("player_background", valueOf);
-        defaultColors.put("player_time", Integer.valueOf(-7564650));
-        defaultColors.put("player_progressBackground", Integer.valueOf(-1445899));
-        defaultColors.put("key_player_progressCachedBackground", Integer.valueOf(-1445899));
-        defaultColors.put("player_progress", Integer.valueOf(-11821085));
-        defaultColors.put("player_placeholder", Integer.valueOf(-5723992));
-        defaultColors.put("player_placeholderBackground", Integer.valueOf(-986896));
-        defaultColors.put("player_button", Integer.valueOf(-13421773));
-        defaultColors.put("player_buttonActive", Integer.valueOf(-11753238));
-        defaultColors.put("key_sheet_scrollUp", Integer.valueOf(-1973016));
-        defaultColors.put("key_sheet_other", Integer.valueOf(-3551789));
-        defaultColors.put("files_folderIcon", Integer.valueOf(-6710887));
-        defaultColors.put("files_folderIconBackground", Integer.valueOf(-986896));
-        defaultColors.put("files_iconText", valueOf);
-        defaultColors.put("sessions_devicesImage", Integer.valueOf(-6908266));
-        defaultColors.put("passport_authorizeBackground", Integer.valueOf(-12211217));
-        defaultColors.put("passport_authorizeBackgroundSelected", Integer.valueOf(-12542501));
-        defaultColors.put("passport_authorizeText", valueOf);
-        defaultColors.put("location_sendLocationBackground", Integer.valueOf(-9592620));
-        defaultColors.put("location_sendLiveLocationBackground", Integer.valueOf(-39836));
-        defaultColors.put("location_sendLocationIcon", valueOf);
-        defaultColors.put("location_sendLiveLocationIcon", valueOf);
-        defaultColors.put("location_liveLocationProgress", Integer.valueOf(-13262875));
-        defaultColors.put("location_placeLocationBackground", Integer.valueOf(-11753238));
-        defaultColors.put("dialog_liveLocationProgress", Integer.valueOf(-13262875));
-        defaultColors.put("calls_callReceivedGreenIcon", Integer.valueOf(-16725933));
-        defaultColors.put("calls_callReceivedRedIcon", Integer.valueOf(-47032));
-        defaultColors.put("featuredStickers_addedIcon", Integer.valueOf(-11491093));
-        defaultColors.put("featuredStickers_buttonProgress", valueOf);
-        defaultColors.put("featuredStickers_addButton", Integer.valueOf(-11491093));
-        defaultColors.put("featuredStickers_addButtonPressed", Integer.valueOf(-12346402));
-        defaultColors.put("featuredStickers_delButton", Integer.valueOf(-2533545));
-        defaultColors.put("featuredStickers_delButtonPressed", Integer.valueOf(-3782327));
-        defaultColors.put("featuredStickers_buttonText", valueOf);
-        defaultColors.put("featuredStickers_unread", Integer.valueOf(-11688214));
-        defaultColors.put("inappPlayerPerformer", valueOf5);
-        defaultColors.put("inappPlayerTitle", valueOf5);
-        defaultColors.put("inappPlayerBackground", valueOf);
-        defaultColors.put("inappPlayerPlayPause", Integer.valueOf(-10309397));
-        defaultColors.put("inappPlayerClose", Integer.valueOf(-5723992));
-        defaultColors.put("returnToCallBackground", Integer.valueOf(-12279325));
-        defaultColors.put("returnToCallText", valueOf);
-        defaultColors.put("sharedMedia_startStopLoadIcon", Integer.valueOf(-13196562));
-        defaultColors.put("sharedMedia_linkPlaceholder", Integer.valueOf(-986123));
-        defaultColors.put("sharedMedia_linkPlaceholderText", Integer.valueOf(-4735293));
-        defaultColors.put("sharedMedia_photoPlaceholder", Integer.valueOf(-1182729));
-        defaultColors.put("sharedMedia_actionMode", Integer.valueOf(-12154957));
-        defaultColors.put("checkbox", Integer.valueOf(-10567099));
-        defaultColors.put("checkboxCheck", valueOf);
-        defaultColors.put("checkboxDisabled", Integer.valueOf(-5195326));
-        defaultColors.put("stickers_menu", Integer.valueOf(-4801083));
-        defaultColors.put("stickers_menuSelector", Integer.valueOf(NUM));
-        defaultColors.put("changephoneinfo_image", Integer.valueOf(-4669499));
-        defaultColors.put("changephoneinfo_image2", Integer.valueOf(-11491350));
-        defaultColors.put("groupcreate_hintText", valueOf6);
-        defaultColors.put("groupcreate_cursor", Integer.valueOf(-11361317));
-        defaultColors.put("groupcreate_sectionShadow", valueOf4);
-        defaultColors.put("groupcreate_sectionText", Integer.valueOf(-8617336));
-        defaultColors.put("groupcreate_spanText", valueOf2);
-        defaultColors.put("groupcreate_spanBackground", Integer.valueOf(-855310));
-        defaultColors.put("groupcreate_spanDelete", valueOf);
-        defaultColors.put("contacts_inviteBackground", Integer.valueOf(-11157919));
-        defaultColors.put("contacts_inviteText", valueOf);
-        defaultColors.put("login_progressInner", Integer.valueOf(-1971470));
-        defaultColors.put("login_progressOuter", Integer.valueOf(-10313520));
-        defaultColors.put("musicPicker_checkbox", Integer.valueOf(-14043401));
-        defaultColors.put("musicPicker_checkboxCheck", valueOf);
-        defaultColors.put("musicPicker_buttonBackground", Integer.valueOf(-10702870));
-        defaultColors.put("musicPicker_buttonIcon", valueOf);
-        defaultColors.put("picker_enabledButton", Integer.valueOf(-15095832));
-        defaultColors.put("picker_disabledButton", Integer.valueOf(-6710887));
-        defaultColors.put("picker_badge", Integer.valueOf(-14043401));
-        defaultColors.put("picker_badgeText", valueOf);
-        defaultColors.put("chat_botSwitchToInlineText", Integer.valueOf(-12348980));
-        defaultColors.put("undo_background", Integer.valueOf(-NUM));
-        defaultColors.put("undo_cancelColor", Integer.valueOf(-8008961));
-        defaultColors.put("undo_infoColor", valueOf);
-        fallbackKeys.put("chat_adminText", "chat_inTimeText");
-        fallbackKeys.put("chat_adminSelectedText", "chat_inTimeSelectedText");
-        fallbackKeys.put("key_player_progressCachedBackground", "player_progressBackground");
-        fallbackKeys.put("chat_inAudioCacheSeekbar", "chat_inAudioSeekbar");
-        fallbackKeys.put("chat_outAudioCacheSeekbar", "chat_outAudioSeekbar");
-        fallbackKeys.put("chat_emojiSearchBackground", "chat_emojiPanelStickerPackSelector");
-        fallbackKeys.put("location_sendLiveLocationIcon", "location_sendLocationIcon");
-        fallbackKeys.put("changephoneinfo_image2", "featuredStickers_addButton");
-        fallbackKeys.put("key_graySectionText", "windowBackgroundWhiteGrayText2");
-        fallbackKeys.put("chat_inMediaIcon", "chat_inBubble");
-        fallbackKeys.put("chat_outMediaIcon", "chat_outBubble");
-        fallbackKeys.put("chat_inMediaIconSelected", "chat_inBubbleSelected");
-        fallbackKeys.put("chat_outMediaIconSelected", "chat_outBubbleSelected");
-        fallbackKeys.put("chats_actionUnreadIcon", "profile_actionIcon");
-        fallbackKeys.put("chats_actionUnreadBackground", "profile_actionBackground");
-        fallbackKeys.put("chats_actionUnreadPressedBackground", "profile_actionPressedBackground");
-        fallbackKeys.put("dialog_inlineProgressBackground", "windowBackgroundGray");
-        fallbackKeys.put("dialog_inlineProgress", "chats_menuItemIcon");
-        fallbackKeys.put("groupcreate_spanDelete", "chats_actionIcon");
-        fallbackKeys.put("sharedMedia_photoPlaceholder", "windowBackgroundGray");
-        fallbackKeys.put("chat_attachPollBackground", "chat_attachAudioBackground");
-        fallbackKeys.put("chat_attachPollIcon", "chat_attachAudioIcon");
-        fallbackKeys.put("chats_onlineCircle", "windowBackgroundWhiteBlueText");
-        fallbackKeys.put("windowBackgroundWhiteBlueButton", "windowBackgroundWhiteValueText");
-        fallbackKeys.put("windowBackgroundWhiteBlueIcon", "windowBackgroundWhiteValueText");
-        fallbackKeys.put("undo_background", "chat_gifSaveHintBackground");
-        fallbackKeys.put("undo_cancelColor", "chat_gifSaveHintText");
-        fallbackKeys.put("undo_infoColor", "chat_gifSaveHintText");
-        fallbackKeys.put("windowBackgroundUnchecked", "windowBackgroundWhite");
-        fallbackKeys.put("windowBackgroundChecked", "windowBackgroundWhite");
-        fallbackKeys.put("switchTrackBlue", "switchTrack");
-        fallbackKeys.put("switchTrackBlueChecked", "switchTrackChecked");
-        fallbackKeys.put("switchTrackBlueThumb", "windowBackgroundWhite");
-        fallbackKeys.put("switchTrackBlueThumbChecked", "windowBackgroundWhite");
-        fallbackKeys.put("windowBackgroundCheckText", "windowBackgroundWhiteBlackText");
-        fallbackKeys.put("contextProgressInner4", "contextProgressInner1");
-        fallbackKeys.put("contextProgressOuter4", "contextProgressOuter1");
-        fallbackKeys.put("switchTrackBlueSelector", "listSelectorSDK21");
-        fallbackKeys.put("switchTrackBlueSelectorChecked", "listSelectorSDK21");
-        fallbackKeys.put("chat_emojiBottomPanelIcon", "chat_emojiPanelIcon");
-        fallbackKeys.put("chat_emojiSearchIcon", "chat_emojiPanelIcon");
-        fallbackKeys.put("chat_emojiPanelStickerSetNameHighlight", "windowBackgroundWhiteBlueText4");
-        fallbackKeys.put("chat_emojiPanelStickerPackSelectorLine", "chat_emojiPanelIconSelected");
-        fallbackKeys.put("sharedMedia_actionMode", "actionBarDefault");
-        fallbackKeys.put("key_sheet_scrollUp", "chat_emojiPanelStickerPackSelector");
-        fallbackKeys.put("key_sheet_other", "player_actionBarItems");
-        fallbackKeys.put("dialogSearchBackground", "chat_emojiPanelStickerPackSelector");
-        fallbackKeys.put("dialogSearchHint", "chat_emojiPanelIcon");
-        fallbackKeys.put("dialogSearchIcon", "chat_emojiPanelIcon");
-        fallbackKeys.put("dialogSearchText", "windowBackgroundWhiteBlackText");
-        fallbackKeys.put("dialogFloatingButton", "dialogRoundCheckBox");
-        fallbackKeys.put("dialogFloatingButtonPressed", "dialogRoundCheckBox");
-        fallbackKeys.put("dialogFloatingIcon", "dialogRoundCheckBoxCheck");
-        fallbackKeys.put("dialogShadowLine", "chat_emojiPanelShadowLine");
-        fallbackKeys.put("actionBarDefaultArchived", "actionBarDefault");
-        fallbackKeys.put("actionBarDefaultArchivedSelector", "actionBarDefaultSelector");
-        fallbackKeys.put("actionBarDefaultArchivedIcon", "actionBarDefaultIcon");
-        fallbackKeys.put("actionBarDefaultArchivedTitle", "actionBarDefaultTitle");
-        fallbackKeys.put("actionBarDefaultArchivedSearch", "actionBarDefaultSearch");
-        fallbackKeys.put("actionBarDefaultSearchArchivedPlaceholder", "actionBarDefaultSearchPlaceholder");
-        fallbackKeys.put("chats_message_threeLines", "chats_message");
-        fallbackKeys.put("chats_nameMessage_threeLines", "chats_nameMessage");
-        fallbackKeys.put("chats_nameArchived", "chats_name");
-        fallbackKeys.put("chats_nameMessageArchived", "chats_nameMessage");
-        fallbackKeys.put("chats_nameMessageArchived_threeLines", "chats_nameMessage");
-        fallbackKeys.put("chats_messageArchived", "chats_message");
-        fallbackKeys.put("avatar_backgroundArchived", "chats_unreadCounterMuted");
-        fallbackKeys.put("avatar_backgroundArchivedHidden", "chats_unreadCounterMuted");
-        fallbackKeys.put("chats_archiveBackground", "chats_actionBackground");
-        fallbackKeys.put("chats_archivePinBackground", "chats_unreadCounterMuted");
-        fallbackKeys.put("chats_archiveIcon", "chats_actionIcon");
-        fallbackKeys.put("chats_archiveText", "chats_actionIcon");
-        fallbackKeys.put("actionBarDefaultSubmenuItemIcon", "dialogIcon");
-        fallbackKeys.put("checkboxDisabled", "chats_unreadCounterMuted");
-        fallbackKeys.put("chat_status", "actionBarDefaultSubtitle");
-        fallbackKeys.put("chat_inDownCall", "calls_callReceivedGreenIcon");
-        fallbackKeys.put("chat_inUpCall", "calls_callReceivedRedIcon");
-        fallbackKeys.put("chat_outUpCall", "calls_callReceivedGreenIcon");
-        fallbackKeys.put("actionBarTabActiveText", "actionBarDefaultTitle");
-        fallbackKeys.put("actionBarTabUnactiveText", "actionBarDefaultSubtitle");
-        fallbackKeys.put("actionBarTabLine", "actionBarDefaultTitle");
-        fallbackKeys.put("actionBarTabSelector", "actionBarDefaultSelector");
-        fallbackKeys.put("profile_status", "avatar_subtitleInProfileBlue");
-        fallbackKeys.put("chats_menuTopBackgroundCats", "avatar_backgroundActionBarBlue");
-        fallbackKeys.put("chat_messagePanelPressedSend", "chat_messagePanelVoicePressed");
-        fallbackKeys.put("chat_attachPermissionImage", "dialogTextBlack");
-        fallbackKeys.put("chat_attachPermissionMark", "chat_sentError");
-        fallbackKeys.put("chat_attachPermissionText", "dialogTextBlack");
-        fallbackKeys.put("chat_attachEmptyImage", "emptyListPlaceholder");
-        ThemeInfo themeInfo = new ThemeInfo();
-        themeInfo.name = "Default";
-        themeInfo.previewBackgroundColor = -3155485;
-        themeInfo.previewInColor = -1;
-        themeInfo.previewOutColor = -983328;
-        themeInfo.sortIndex = 0;
-        ArrayList arrayList = themes;
-        defaultTheme = themeInfo;
-        currentTheme = themeInfo;
-        currentDayTheme = themeInfo;
-        arrayList.add(themeInfo);
-        themesDict.put("Default", defaultTheme);
-        themeInfo = new ThemeInfo();
-        themeInfo.name = "Dark";
-        themeInfo.assetName = "dark.attheme";
-        themeInfo.previewBackgroundColor = -10855071;
-        themeInfo.previewInColor = -9143676;
-        themeInfo.previewOutColor = -8214301;
-        themeInfo.sortIndex = 3;
-        themes.add(themeInfo);
-        themesDict.put("Dark", themeInfo);
-        themeInfo = new ThemeInfo();
-        themeInfo.name = "Blue";
-        themeInfo.assetName = "bluebubbles.attheme";
-        themeInfo.previewBackgroundColor = -6963476;
-        themeInfo.previewInColor = -1;
-        themeInfo.previewOutColor = -3086593;
-        themeInfo.sortIndex = 1;
-        themes.add(themeInfo);
-        themesDict.put("Blue", themeInfo);
-        themeInfo = new ThemeInfo();
-        themeInfo.name = "Dark Blue";
-        themeInfo.assetName = "darkblue.attheme";
-        themeInfo.previewBackgroundColor = -10523006;
-        themeInfo.previewInColor = -9009508;
-        themeInfo.previewOutColor = -8214301;
-        themeInfo.sortIndex = 2;
-        themes.add(themeInfo);
-        HashMap hashMap2 = themesDict;
-        currentNightTheme = themeInfo;
-        hashMap2.put("Dark Blue", themeInfo);
-        if (BuildVars.DEBUG_VERSION) {
-            themeInfo = new ThemeInfo();
-            themeInfo.name = "Graphite";
-            themeInfo.assetName = "graphite.attheme";
-            themeInfo.previewBackgroundColor = -8749431;
-            themeInfo.previewInColor = -6775901;
-            themeInfo.previewOutColor = -5980167;
-            themeInfo.sortIndex = 4;
-            themes.add(themeInfo);
-            themesDict.put("Graphite", themeInfo);
-        }
-        themeInfo = new ThemeInfo();
-        themeInfo.name = "Arctic Blue";
-        themeInfo.assetName = "arctic.attheme";
-        themeInfo.previewBackgroundColor = -1;
-        themeInfo.previewInColor = -1315084;
-        themeInfo.previewOutColor = -8604930;
-        themeInfo.sortIndex = 5;
-        themes.add(themeInfo);
-        themesDict.put("Arctic Blue", themeInfo);
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
-        String string = sharedPreferences.getString("themes2", null);
-        if (TextUtils.isEmpty(string)) {
-            string = sharedPreferences.getString("themes", null);
-            if (!TextUtils.isEmpty(string)) {
-                String[] split = string.split("&");
-                for (String createWithString : split) {
-                    ThemeInfo createWithString2 = ThemeInfo.createWithString(createWithString);
-                    if (createWithString2 != null) {
-                        otherThemes.add(createWithString2);
-                        themes.add(createWithString2);
-                        themesDict.put(createWithString2.name, createWithString2);
-                    }
-                }
-            }
-            saveOtherThemes();
-            sharedPreferences.edit().remove("themes").commit();
-        } else {
-            try {
-                JSONArray jSONArray = new JSONArray(string);
-                for (int i = 0; i < jSONArray.length(); i++) {
-                    createWithJson = ThemeInfo.createWithJson(jSONArray.getJSONObject(i));
-                    if (createWithJson != null) {
-                        otherThemes.add(createWithJson);
-                        themes.add(createWithJson);
-                        themesDict.put(createWithJson.name, createWithJson);
-                    }
-                }
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        }
+        /*
+        r0 = new java.lang.Object;
+        r0.<init>();
+        sync = r0;
+        r0 = new java.lang.Object;
+        r0.<init>();
+        wallpaperSync = r0;
+        r0 = new org.telegram.ui.ActionBar.Theme$1;
+        r0.<init>();
+        switchDayBrightnessRunnable = r0;
+        r0 = new org.telegram.ui.ActionBar.Theme$2;
+        r0.<init>();
+        switchNightBrightnessRunnable = r0;
+        r1 = 0;
+        selectedAutoNightType = r1;
+        r0 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
+        autoNightBrighnessThreshold = r0;
+        r0 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
+        autoNightDayStartTime = r0;
+        r0 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        autoNightDayEndTime = r0;
+        r0 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
+        autoNightSunsetTime = r0;
+        r2 = -1;
+        r0 = java.lang.Integer.valueOf(r2);
+        autoNightLastSunCheckDay = r2;
+        r3 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        autoNightSunriseTime = r3;
+        r3 = "";
+        autoNightCityName = r3;
+        r3 = NUM; // 0x40cNUM float:0.0 double:10000.0;
+        autoNightLocationLatitude = r3;
+        autoNightLocationLongitude = r3;
+        r3 = new android.graphics.Paint;
+        r4 = 1;
+        r3.<init>(r4);
+        maskPaint = r3;
+        r3 = 6;
+        r3 = new android.graphics.drawable.Drawable[r3];
+        chat_attachButtonDrawables = r3;
+        r3 = 2;
+        r5 = new android.graphics.drawable.Drawable[r3];
+        chat_locationDrawable = r5;
+        r5 = new android.graphics.drawable.Drawable[r3];
+        chat_contactDrawable = r5;
+        r5 = 4;
+        r6 = new android.graphics.drawable.Drawable[r5];
+        chat_cornerOuter = r6;
+        r6 = new android.graphics.drawable.Drawable[r5];
+        chat_cornerInner = r6;
+        r6 = 10;
+        r6 = new int[]{r6, r3};
+        r7 = android.graphics.drawable.Drawable.class;
+        r6 = java.lang.reflect.Array.newInstance(r7, r6);
+        r6 = (android.graphics.drawable.Drawable[][]) r6;
+        chat_fileStatesDrawable = r6;
+        r6 = 6;
+        r6 = new int[]{r6, r3};
+        r7 = org.telegram.ui.Components.CombinedDrawable.class;
+        r6 = java.lang.reflect.Array.newInstance(r7, r6);
+        r6 = (org.telegram.ui.Components.CombinedDrawable[][]) r6;
+        chat_fileMiniStatesDrawable = r6;
+        r6 = 13;
+        r6 = new int[]{r6, r3};
+        r7 = android.graphics.drawable.Drawable.class;
+        r6 = java.lang.reflect.Array.newInstance(r7, r6);
+        r6 = (android.graphics.drawable.Drawable[][]) r6;
+        chat_photoStatesDrawables = r6;
+        r6 = 7;
+        r6 = new java.lang.String[r6];
+        r7 = "avatar_backgroundRed";
+        r6[r1] = r7;
+        r7 = "avatar_backgroundOrange";
+        r6[r4] = r7;
+        r7 = "avatar_backgroundViolet";
+        r6[r3] = r7;
+        r7 = 3;
+        r8 = "avatar_backgroundGreen";
+        r6[r7] = r8;
+        r7 = "avatar_backgroundCyan";
+        r6[r5] = r7;
+        r7 = 5;
+        r8 = "avatar_backgroundBlue";
+        r6[r7] = r8;
+        r7 = 6;
+        r8 = "avatar_backgroundPink";
+        r6[r7] = r8;
+        keys_avatar_background = r6;
+        r6 = 7;
+        r6 = new java.lang.String[r6];
+        r7 = "avatar_nameInMessageRed";
+        r6[r1] = r7;
+        r7 = "avatar_nameInMessageOrange";
+        r6[r4] = r7;
+        r7 = "avatar_nameInMessageViolet";
+        r6[r3] = r7;
+        r7 = 3;
+        r8 = "avatar_nameInMessageGreen";
+        r6[r7] = r8;
+        r7 = "avatar_nameInMessageCyan";
+        r6[r5] = r7;
+        r7 = 5;
+        r8 = "avatar_nameInMessageBlue";
+        r6[r7] = r8;
+        r7 = 6;
+        r8 = "avatar_nameInMessagePink";
+        r6[r7] = r8;
+        keys_avatar_nameInMessage = r6;
+        r6 = new java.util.HashMap;
+        r6.<init>();
+        defaultColors = r6;
+        r6 = new java.util.HashMap;
+        r6.<init>();
+        fallbackKeys = r6;
+        r6 = new java.util.HashSet;
+        r6.<init>();
+        themeAccentExclusionKeys = r6;
+        r6 = 3;
+        r6 = new float[r6];
+        hsv = r6;
+        r6 = defaultColors;
+        r7 = "dialogBackground";
+        r6.put(r7, r0);
+        r6 = defaultColors;
+        r7 = -986896; // 0xfffffffffff0f0f0 float:NaN double:NaN;
+        r8 = java.lang.Integer.valueOf(r7);
+        r9 = "dialogBackgroundGray";
+        r6.put(r9, r8);
+        r6 = defaultColors;
+        r8 = -14540254; // 0xfffffffffvar_ float:-2.1551216E38 double:NaN;
+        r8 = java.lang.Integer.valueOf(r8);
+        r9 = "dialogTextBlack";
+        r6.put(r9, r8);
+        r6 = defaultColors;
+        r9 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextLink";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = NUM; // 0x3362a9e3 float:5.2774237E-8 double:4.25935987E-315;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogLinkSelection";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -3319206; // 0xffffffffffcd5a5a float:NaN double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextRed";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -2213318; // 0xffffffffffde3a3a float:NaN double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextRed2";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -13660983; // 0xffffffffff2f8cc9 float:-2.333459E38 double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextBlue";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextBlue2";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -12664327; // 0xffffffffff3ec1f9 float:-2.5356048E38 double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextBlue3";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -15095832; // 0xfffffffffvar_a7e8 float:-2.042437E38 double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextBlue4";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -13333567; // 0xfffffffffvar_bc1 float:-2.3998668E38 double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextGray";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -9079435; // 0xfffffffffvar_ float:-3.2627073E38 double:NaN;
+        r9 = java.lang.Integer.valueOf(r9);
+        r10 = "dialogTextGray2";
+        r6.put(r10, r9);
+        r6 = defaultColors;
+        r9 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r9);
+        r11 = "dialogTextGray3";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -5000269; // 0xffffffffffb3b3b3 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogTextGray4";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -6842473; // 0xfffffffffvar_ float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogTextHint";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -9999504; // 0xfffffffffvar_b70 float:-3.0760951E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogIcon";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -2011827; // 0xffffffffffe14d4d float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogRedIcon";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -2960686; // 0xffffffffffd2d2d2 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogGrayLine";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -9456923; // 0xffffffffff6fb2e5 float:-3.1861436E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogTopBackground";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -2368549; // 0xffffffffffdbdbdb float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogInputField";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -13129232; // 0xfffffffffvar_a9f0 float:-2.4413109E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogInputFieldActivated";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -12345121; // 0xfffffffffvar_a0df float:-2.6003475E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogCheckboxSquareBackground";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = "dialogCheckboxSquareCheck";
+        r6.put(r10, r0);
+        r6 = defaultColors;
+        r10 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogCheckboxSquareUnchecked";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -5197648; // 0xffffffffffb0b0b0 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogCheckboxSquareDisabled";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -5000269; // 0xffffffffffb3b3b3 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogRadioBackground";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -13129232; // 0xfffffffffvar_a9f0 float:-2.4413109E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogRadioBackgroundChecked";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -11371101; // 0xfffffffffvar_da3 float:-2.7979022E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogProgressCircle";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -11371101; // 0xfffffffffvar_da3 float:-2.7979022E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogLineProgress";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -2368549; // 0xffffffffffdbdbdb float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogLineProgressBackground";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -11955764; // 0xfffffffffvar_cc float:-2.6793185E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogButton";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogButtonSelector";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -657673; // 0xfffffffffff5f6f7 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogScrollGlow";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -11750155; // 0xffffffffff4cb4f5 float:-2.721021E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogRoundCheckBox";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = "dialogRoundCheckBoxCheck";
+        r6.put(r10, r0);
+        r6 = defaultColors;
+        r10 = -12664327; // 0xffffffffff3ec1f9 float:-2.5356048E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogBadgeBackground";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = "dialogBadgeText";
+        r6.put(r10, r0);
+        r6 = defaultColors;
+        r10 = "dialogCameraIcon";
+        r6.put(r10, r0);
+        r6 = defaultColors;
+        r10 = -NUM; // 0xfffffffff6f0f2f5 float:-2.4435137E33 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialog_inlineProgressBackground";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -9735304; // 0xffffffffff6b7378 float:-3.1296813E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialog_inlineProgress";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -854795; // 0xfffffffffff2f4f5 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogSearchBackground";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -6774617; // 0xfffffffffvar_a0a7 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogSearchHint";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -6182737; // 0xffffffffffa1a8af float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogSearchIcon";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = "dialogSearchText";
+        r6.put(r10, r8);
+        r6 = defaultColors;
+        r10 = -11750155; // 0xffffffffff4cb4f5 float:-2.721021E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogFloatingButton";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -11750155; // 0xffffffffff4cb4f5 float:-2.721021E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogFloatingButtonPressed";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = "dialogFloatingIcon";
+        r6.put(r10, r0);
+        r6 = defaultColors;
+        r10 = NUM; // 0x12000000 float:4.0389678E-28 double:1.49202829E-315;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "dialogShadowLine";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = "windowBackgroundWhite";
+        r6.put(r10, r0);
+        r6 = defaultColors;
+        r10 = -6445135; // 0xffffffffff9da7b1 float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundUnchecked";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -11034919; // 0xfffffffffvar_ed9 float:-2.866088E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundChecked";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = "windowBackgroundCheckText";
+        r6.put(r10, r0);
+        r6 = defaultColors;
+        r10 = -11371101; // 0xfffffffffvar_da3 float:-2.7979022E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "progressCircle";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -8288629; // 0xfffffffffvar_b float:NaN double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundWhiteGrayIcon";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -12545331; // 0xfffffffffvar_cd float:-2.55974E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundWhiteBlueText";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundWhiteBlueText2";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundWhiteBlueText3";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -11697229; // 0xffffffffff4d83b3 float:-2.7317556E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundWhiteBlueText4";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -11759926; // 0xffffffffff4c8eca float:-2.7190391E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundWhiteBlueText5";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r10 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
+        r10 = java.lang.Integer.valueOf(r10);
+        r11 = "windowBackgroundWhiteBlueText6";
+        r6.put(r11, r10);
+        r6 = defaultColors;
+        r11 = -13141330; // 0xfffffffffvar_aae float:-2.4388571E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteBlueText7";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -14776109; // 0xffffffffff1e88d3 float:-2.1072846E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteBlueButton";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -13132315; // 0xfffffffffvar_de5 float:-2.4406856E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteBlueIcon";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -14248148; // 0xfffffffffvar_c float:-2.2143678E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGreenText";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -13129704; // 0xfffffffffvar_a818 float:-2.4412152E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGreenText2";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -3319206; // 0xffffffffffcd5a5a float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteRedText";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -2404015; // 0xffffffffffdb5151 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteRedText2";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -2995895; // 0xffffffffffd24949 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteRedText3";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -3198928; // 0xffffffffffcvar_ float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteRedText4";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -1230535; // 0xffffffffffed3939 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteRedText5";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -39322; // 0xfffffffffffvar_ float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteRedText6";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -8156010; // 0xfffffffffvar_CLASSNAME float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGrayText";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGrayText2";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = java.lang.Integer.valueOf(r9);
+        r12 = "windowBackgroundWhiteGrayText3";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -8355712; // 0xfffffffffvar_ float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGrayText4";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -6052957; // 0xffffffffffa3a3a3 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGrayText5";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -9079435; // 0xfffffffffvar_ float:-3.2627073E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGrayText6";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -3750202; // 0xffffffffffc6c6c6 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGrayText7";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -9605774; // 0xffffffffff6d6d72 float:-3.155953E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGrayText8";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -2368549; // 0xffffffffffdbdbdb float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteGrayLine";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = "windowBackgroundWhiteBlackText";
+        r6.put(r11, r8);
+        r6 = defaultColors;
+        r11 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteHintText";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteValueText";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteLinkText";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = NUM; // 0x3362a9e3 float:5.2774237E-8 double:4.25935987E-315;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteLinkSelection";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteBlueHeader";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -2368549; // 0xffffffffffdbdbdb float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteInputField";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -13129232; // 0xfffffffffvar_a9f0 float:-2.4413109E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundWhiteInputFieldActivated";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -5196358; // 0xffffffffffb0b5ba float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "switchTrack";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -11358743; // 0xfffffffffvar_ade9 float:-2.8004087E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "switchTrackChecked";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -8221031; // 0xfffffffffvar_e99 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "switchTrackBlue";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -12810041; // 0xffffffffff3CLASSNAMEc7 float:-2.5060505E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "switchTrackBlueChecked";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = "switchTrackBlueThumb";
+        r6.put(r11, r0);
+        r6 = defaultColors;
+        r11 = "switchTrackBlueThumbChecked";
+        r6.put(r11, r0);
+        r6 = defaultColors;
+        r11 = NUM; // 0x17404a53 float:6.2132356E-25 double:1.927297214E-315;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "switchTrackBlueSelector";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = NUM; // 0x21024781 float:4.414035E-19 double:2.73612322E-315;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "switchTrackBlueSelectorChecked";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -688514; // 0xffffffffffvar_e7e float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "switch2Track";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -11358743; // 0xfffffffffvar_ade9 float:-2.8004087E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "switch2TrackChecked";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -12345121; // 0xfffffffffvar_a0df float:-2.6003475E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "checkboxSquareBackground";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = "checkboxSquareCheck";
+        r6.put(r11, r0);
+        r6 = defaultColors;
+        r11 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "checkboxSquareUnchecked";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -5197648; // 0xffffffffffb0b0b0 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "checkboxSquareDisabled";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "listSelectorSDK21";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -5000269; // 0xffffffffffb3b3b3 float:NaN double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "radioBackground";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -13129232; // 0xfffffffffvar_a9f0 float:-2.4413109E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "radioBackgroundChecked";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = java.lang.Integer.valueOf(r7);
+        r12 = "windowBackgroundGray";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r11 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
+        r11 = java.lang.Integer.valueOf(r11);
+        r12 = "windowBackgroundGrayShadow";
+        r6.put(r12, r11);
+        r6 = defaultColors;
+        r12 = -6974059; // 0xfffffffffvar_ float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "emptyListPlaceholder";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = -2500135; // 0xffffffffffd9d9d9 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "divider";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = -1117195; // 0xffffffffffeef3f5 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "graySection";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = -8418927; // 0xffffffffff7var_ float:-3.3966742E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "key_graySectionText";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = -4202506; // 0xffffffffffbfdff6 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "contextProgressInner1";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = -13920542; // 0xffffffffff2b96e2 float:-2.2808142E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "contextProgressOuter1";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = -4202506; // 0xffffffffffbfdff6 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "contextProgressInner2";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = "contextProgressOuter2";
+        r6.put(r12, r0);
+        r6 = defaultColors;
+        r12 = -5000269; // 0xffffffffffb3b3b3 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "contextProgressInner3";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = "contextProgressOuter3";
+        r6.put(r12, r0);
+        r6 = defaultColors;
+        r12 = -3486256; // 0xffffffffffcacdd0 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "contextProgressInner4";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r12 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r13 = "contextProgressOuter4";
+        r6.put(r13, r12);
+        r6 = defaultColors;
+        r13 = -11361317; // 0xfffffffffvar_a3db float:-2.7998867E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "fastScrollActive";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -3551791; // 0xffffffffffc9cdd1 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "fastScrollInactive";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "fastScrollText";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "avatar_text";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -10043398; // 0xfffffffffvar_bffa float:-3.0671924E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundSaved";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -5654847; // 0xffffffffffa9b6c1 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundArchived";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -3749428; // 0xffffffffffc6c9cc float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundArchivedHidden";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -1743531; // 0xffffffffffe56555 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundRed";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -881592; // 0xffffffffffvar_CLASSNAME float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundOrange";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -7436818; // 0xffffffffff8e85ee float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundViolet";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -8992691; // 0xfffffffffvar_CLASSNAMEd float:-3.280301E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundGreen";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10502443; // 0xffffffffff5fbed5 float:-2.974087E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundCyan";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11232035; // 0xfffffffffvar_cdd float:-2.8261082E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundBlue";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -887654; // 0xffffffffffvar_a float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundPink";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -1642505; // 0xffffffffffe6eff7 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundGroupCreateSpanBlue";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11500111; // 0xfffffffffvar_b1 float:-2.7717359E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundInProfileBlue";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_backgroundActionBarBlue";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -2626822; // 0xffffffffffd7eafa float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_subtitleInProfileBlue";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11959891; // 0xfffffffffvar_ad float:-2.6784814E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_actionBarSelectorBlue";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "avatar_actionBarIconBlue";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -3516848; // 0xffffffffffca5650 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_nameInMessageRed";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -2589911; // 0xffffffffffd87b29 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_nameInMessageOrange";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_nameInMessageViolet";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11488718; // 0xfffffffffvar_b232 float:-2.7740467E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_nameInMessageGreen";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -13132104; // 0xfffffffffvar_eb8 float:-2.4407284E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_nameInMessageCyan";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_nameInMessageBlue";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "avatar_nameInMessagePink";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11371101; // 0xfffffffffvar_da3 float:-2.7979022E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarDefault";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarDefaultIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "actionBarActionModeDefault";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = NUM; // 0x10000000 float:2.5243549E-29 double:1.32624737E-315;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarActionModeDefaultTop";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarActionModeDefaultIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarDefaultTitle";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarDefaultSubtitle";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12554860; // 0xfffffffffvar_d94 float:-2.5578074E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarDefaultSelector";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = NUM; // 0x2var_ float:1.1641532E-10 double:3.895851647E-315;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarWhiteSelector";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarDefaultSearch";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -NUM; // 0xfffffffvar_ffffff float:-1.5407439E-33 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarDefaultSearchPlaceholder";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarDefaultSubmenuItem";
+        r6.put(r13, r8);
+        r6 = defaultColors;
+        r13 = -9999504; // 0xfffffffffvar_b70 float:-3.0760951E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarDefaultSubmenuItemIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarDefaultSubmenuBackground";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = java.lang.Integer.valueOf(r7);
+        r14 = "actionBarActionModeDefaultSelector";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarTabActiveText";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarTabUnactiveText";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarTabLine";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -12554860; // 0xfffffffffvar_d94 float:-2.5578074E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarTabSelector";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarBrowser";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -9471353; // 0xffffffffff6f7a87 float:-3.1832169E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarDefaultArchived";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10590350; // 0xffffffffff5e6772 float:-2.9562573E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarDefaultArchivedSelector";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "actionBarDefaultArchivedIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "actionBarDefaultArchivedTitle";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "actionBarDefaultArchivedSearch";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -NUM; // 0xfffffffvar_ffffff float:-1.5407439E-33 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "actionBarDefaultSearchArchivedPlaceholder";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11810020; // 0xffffffffff4bcb1c float:-2.7088789E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_onlineCircle";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11613090; // 0xffffffffff4ecc5e float:-2.748821E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_unreadCounter";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -3749428; // 0xffffffffffc6c9cc float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_unreadCounterMuted";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_unreadCounterText";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -10049056; // 0xfffffffffvar_a9e0 float:-3.0660448E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_archiveBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -6313293; // 0xffffffffff9faab3 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_archivePinBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_archiveIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "chats_archiveText";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "chats_name";
+        r6.put(r13, r8);
+        r6 = defaultColors;
+        r13 = -11382190; // 0xfffffffffvar_ float:-2.7956531E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_nameArchived";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -16734706; // 0xfffffffffvar_a60e float:-1.7100339E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_secretName";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -15093466; // 0xfffffffffvar_b126 float:-2.042917E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_secretIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -14408668; // 0xfffffffffvar_ float:-2.1818104E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_nameIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_pinnedIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -7631473; // 0xffffffffff8b8d8f float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_message";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -7237231; // 0xfffffffffvar_ float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_messageArchived";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -7434095; // 0xffffffffff8e9091 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_message_threeLines";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -2274503; // 0xffffffffffdd4b39 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_draft";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_nameMessage";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -7631473; // 0xffffffffff8b8d8f float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_nameMessageArchived";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12434359; // 0xfffffffffvar_ float:-2.5822479E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_nameMessage_threeLines";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10592674; // 0xffffffffff5e5e5e float:-2.955786E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_nameMessageArchived_threeLines";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_attachMessage";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_actionMessage";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -6973028; // 0xfffffffffvar_c float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_date";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_pinnedOverlay";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_tabletSelectedOverlay";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_sentCheck";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_sentReadCheck";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_sentClock";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -2796974; // 0xffffffffffd55252 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_sentError";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_sentErrorIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -13391642; // 0xfffffffffvar_a8e6 float:-2.3880878E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_verifiedBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_verifiedCheck";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -4341308; // 0xffffffffffbdc1c4 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_muteIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_mentionIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "chats_menuBackground";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -12303292; // 0xfffffffffvar_ float:-2.6088314E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_menuItemText";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_menuItemCheck";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -7827048; // 0xfffffffffvar_ float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_menuItemIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_menuName";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "chats_menuPhone";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -4004353; // 0xffffffffffc2e5ff float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_menuPhoneCats";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_menuCloud";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -12420183; // 0xfffffffffvar_ba9 float:-2.5851231E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_menuCloudBackgroundCats";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_actionIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -10114592; // 0xfffffffffvar_a9e0 float:-3.0527525E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_actionBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -11100714; // 0xfffffffffvar_dd6 float:-2.8527432E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_actionPressedBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_actionUnreadIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chats_actionUnreadBackground";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_actionUnreadPressedBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chats_menuTopBackgroundCats";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12171706; // 0xfffffffffvar_ float:-2.6355202E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachMediaBanBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_attachMediaBanText";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "chat_attachCheckBoxCheck";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -12995849; // 0xfffffffffvar_b2f7 float:-2.4683642E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachCheckBoxBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachPhotoBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -13391883; // 0xfffffffffvar_a7f5 float:-2.388039E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachActiveTab";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -7169634; // 0xfffffffffvar_e float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachUnactiveTab";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -13421773; // 0xfffffffffvar_ float:-2.3819765E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachPermissionImage";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -1945520; // 0xffffffffffe25050 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachPermissionMark";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -9472134; // 0xffffffffff6var_a float:-3.1830585E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachPermissionText";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -3355444; // 0xffffffffffcccccc float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachEmptyImage";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -12214795; // 0xfffffffffvar_df5 float:-2.6267807E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachGalleryBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_attachGalleryIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -1351584; // 0xffffffffffeb6060 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachAudioBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_attachAudioIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -13321743; // 0xfffffffffvar_b9f1 float:-2.402265E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachFileBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_attachFileIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -868277; // 0xfffffffffff2CLASSNAMEb float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachContactBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_attachContactIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -13187226; // 0xfffffffffvar_CLASSNAME float:-2.4295483E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachLocationBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_attachLocationIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -868277; // 0xfffffffffff2CLASSNAMEb float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_attachPollBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_attachPollIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_status";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_inDownCall";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -47032; // 0xfffffffffffvar_ float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_inUpCall";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outUpCall";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = NUM; // 0x66728fa6 float:2.8636563E23 double:8.491920826E-315;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_shareBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -NUM; // 0xfffffffvar_fa6 float:-1.2540116E-23 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_shareBackgroundSelected";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_lockIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -5124893; // 0xffffffffffb1cce3 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_muteIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_inBubble";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -1247235; // 0xffffffffffecf7fd float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_inBubbleSelected";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -14862509; // 0xffffffffff1d3753 float:-2.0897606E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_inBubbleShadow";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outBubble";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -2492475; // 0xffffffffffd9f7c5 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outBubbleSelected";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -14781172; // 0xffffffffff1e750c float:-2.1062577E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outBubbleShadow";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_inMediaIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = -1050370; // 0xffffffffffeff8fe float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_inMediaIconSelected";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outMediaIcon";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -1967921; // 0xffffffffffe1f8cf float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outMediaIconSelected";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_messageTextIn";
+        r6.put(r13, r11);
+        r6 = defaultColors;
+        r13 = "chat_messageTextOut";
+        r6.put(r13, r11);
+        r6 = defaultColors;
+        r13 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_messageLinkIn";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_messageLinkOut";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = "chat_serviceText";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "chat_serviceLink";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = "chat_serviceIcon";
+        r6.put(r13, r0);
+        r6 = defaultColors;
+        r13 = NUM; // 0x66000000 float:1.5111573E23 double:8.45482698E-315;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_mediaTimeBackground";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outSentCheck";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outSentCheckSelected";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outSentCheckRead";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outSentCheckReadSelected";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outSentClock";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_outSentClockSelected";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "chat_inSentClock";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r14 = -7094838; // 0xfffffffffvar_bdca float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inSentClockSelected";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r14 = "chat_mediaSentCheck";
+        r6.put(r14, r0);
+        r6 = defaultColors;
+        r14 = "chat_mediaSentClock";
+        r6.put(r14, r0);
+        r6 = defaultColors;
+        r14 = "chat_inViews";
+        r6.put(r14, r13);
+        r6 = defaultColors;
+        r14 = -7094838; // 0xfffffffffvar_bdca float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inViewsSelected";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r14 = -9522601; // 0xffffffffff6eb257 float:-3.1728226E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outViews";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r14 = -9522601; // 0xffffffffff6eb257 float:-3.1728226E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outViewsSelected";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r14 = "chat_mediaViews";
+        r6.put(r14, r0);
+        r6 = defaultColors;
+        r14 = -4801083; // 0xffffffffffb6bdc5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inMenu";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r14 = -6766130; // 0xfffffffffvar_c1ce float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inMenuSelected";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r14 = -7221634; // 0xfffffffffvar_ce7e float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outMenu";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r14 = -7221634; // 0xfffffffffvar_ce7e float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outMenuSelected";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r14 = "chat_mediaMenu";
+        r6.put(r14, r0);
+        r6 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outInstant";
+        r6.put(r15, r14);
+        r6 = defaultColors;
+        r15 = -12019389; // 0xfffffffffvar_ float:-2.6664138E38 double:NaN;
+        r15 = java.lang.Integer.valueOf(r15);
+        r5 = "chat_outInstantSelected";
+        r6.put(r5, r15);
+        r5 = defaultColors;
+        r6 = "chat_inInstant";
+        r5.put(r6, r10);
+        r5 = defaultColors;
+        r6 = -13600331; // 0xfffffffffvar_b5 float:-2.3457607E38 double:NaN;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_inInstantSelected";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = -2411211; // 0xffffffffffdb3535 float:NaN double:NaN;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_sentError";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = "chat_sentErrorIcon";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = NUM; // 0x280a90f0 float:7.691967E-15 double:3.31903965E-315;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_selectedBackground";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = "chat_previewDurationText";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = "chat_previewGameText";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = "chat_inPreviewInstantText";
+        r5.put(r6, r10);
+        r5 = defaultColors;
+        r6 = "chat_outPreviewInstantText";
+        r5.put(r6, r14);
+        r5 = defaultColors;
+        r6 = -13600331; // 0xfffffffffvar_b5 float:-2.3457607E38 double:NaN;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_inPreviewInstantSelectedText";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = -12019389; // 0xfffffffffvar_ float:-2.6664138E38 double:NaN;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_outPreviewInstantSelectedText";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = -1776928; // 0xffffffffffe4e2e0 float:NaN double:NaN;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_secretTimeText";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = "chat_stickerNameText";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = "chat_botButtonText";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = "chat_botProgress";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = -13072697; // 0xfffffffffvar_c7 float:-2.4527776E38 double:NaN;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_inForwardedNameText";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = "chat_outForwardedNameText";
+        r5.put(r6, r14);
+        r5 = defaultColors;
+        r6 = "chat_inViaBotNameText";
+        r5.put(r6, r10);
+        r5 = defaultColors;
+        r6 = "chat_outViaBotNameText";
+        r5.put(r6, r14);
+        r5 = defaultColors;
+        r6 = "chat_stickerViaBotNameText";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = -10903592; // 0xfffffffffvar_fd8 float:-2.8927243E38 double:NaN;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_inReplyLine";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = -9520791; // 0xffffffffff6eb969 float:-3.1731897E38 double:NaN;
+        r6 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_outReplyLine";
+        r5.put(r15, r6);
+        r5 = defaultColors;
+        r6 = "chat_stickerReplyLine";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = "chat_inReplyNameText";
+        r5.put(r6, r10);
+        r5 = defaultColors;
+        r6 = "chat_outReplyNameText";
+        r5.put(r6, r14);
+        r5 = defaultColors;
+        r6 = "chat_stickerReplyNameText";
+        r5.put(r6, r0);
+        r5 = defaultColors;
+        r6 = "chat_inReplyMessageText";
+        r5.put(r6, r11);
+        r5 = defaultColors;
+        r6 = "chat_outReplyMessageText";
+        r5.put(r6, r11);
+        r5 = defaultColors;
+        r6 = "chat_inReplyMediaMessageText";
+        r5.put(r6, r13);
+        r5 = defaultColors;
+        r6 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r15 = java.lang.Integer.valueOf(r6);
+        r3 = "chat_outReplyMediaMessageText";
+        r5.put(r3, r15);
+        r3 = defaultColors;
+        r5 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
+        r15 = java.lang.Integer.valueOf(r5);
+        r4 = "chat_inReplyMediaMessageSelectedText";
+        r3.put(r4, r15);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_outReplyMediaMessageSelectedText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = "chat_stickerReplyMessageText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -9390872; // 0xfffffffffvar_b4e8 float:-3.1995404E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inPreviewLine";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -7812741; // 0xfffffffffvar_CLASSNAMEb float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outPreviewLine";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = "chat_inSiteNameText";
+        r3.put(r4, r10);
+        r3 = defaultColors;
+        r4 = "chat_outSiteNameText";
+        r3.put(r4, r14);
+        r3 = defaultColors;
+        r4 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inContactNameText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = "chat_outContactNameText";
+        r3.put(r4, r14);
+        r3 = defaultColors;
+        r4 = "chat_inContactPhoneText";
+        r3.put(r4, r12);
+        r3 = defaultColors;
+        r4 = "chat_inContactPhoneSelectedText";
+        r3.put(r4, r12);
+        r3 = defaultColors;
+        r4 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outContactPhoneText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outContactPhoneSelectedText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = "chat_mediaProgress";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = "chat_inAudioProgress";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outAudioProgress";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -1050370; // 0xffffffffffeff8fe float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inAudioSelectedProgress";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -1967921; // 0xffffffffffe1f8cf float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outAudioSelectedProgress";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = "chat_mediaTimeText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = "chat_inTimeText";
+        r3.put(r4, r13);
+        r3 = defaultColors;
+        r4 = -9391780; // 0xfffffffffvar_b15c float:-3.1993562E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outTimeText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -4143413; // 0xffffffffffc0c6cb float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_adminText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r5);
+        r15 = "chat_adminSelectedText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r5);
+        r15 = "chat_inTimeSelectedText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -9391780; // 0xfffffffffvar_b15c float:-3.1993562E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outTimeSelectedText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = "chat_inAudioPerfomerText";
+        r3.put(r4, r12);
+        r3 = defaultColors;
+        r4 = "chat_inAudioPerfomerSelectedText";
+        r3.put(r4, r12);
+        r3 = defaultColors;
+        r4 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outAudioPerfomerText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outAudioPerfomerSelectedText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inAudioTitleText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = "chat_outAudioTitleText";
+        r3.put(r4, r14);
+        r3 = defaultColors;
+        r4 = "chat_inAudioDurationText";
+        r3.put(r4, r13);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_outAudioDurationText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r5);
+        r15 = "chat_inAudioDurationSelectedText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r6);
+        r15 = "chat_outAudioDurationSelectedText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -1774864; // 0xffffffffffe4eaf0 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inAudioSeekbar";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = NUM; // 0x3fe4eaf0 float:1.7884197 double:5.296220484E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inAudioCacheSeekbar";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -4463700; // 0xffffffffffbbe3ac float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outAudioSeekbar";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = NUM; // 0x3fbbe3ac float:1.4678855 double:5.28293587E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outAudioCacheSeekbar";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -4399384; // 0xffffffffffbcdee8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inAudioSeekbarSelected";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -5644906; // 0xffffffffffa9dd96 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outAudioSeekbarSelected";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inAudioSeekbarFill";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outAudioSeekbarFill";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -2169365; // 0xffffffffffdee5eb float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inVoiceSeekbar";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -4463700; // 0xffffffffffbbe3ac float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outVoiceSeekbar";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -4399384; // 0xffffffffffbcdee8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inVoiceSeekbarSelected";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -5644906; // 0xffffffffffa9dd96 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outVoiceSeekbarSelected";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inVoiceSeekbarFill";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outVoiceSeekbarFill";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inFileProgress";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outFileProgress";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -3413258; // 0xffffffffffcbeaf6 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inFileProgressSelected";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -3806041; // 0xffffffffffc5eca7 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_outFileProgressSelected";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r15 = "chat_inFileNameText";
+        r3.put(r15, r4);
+        r3 = defaultColors;
+        r4 = "chat_outFileNameText";
+        r3.put(r4, r14);
+        r3 = defaultColors;
+        r4 = "chat_inFileInfoText";
+        r3.put(r4, r13);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r6);
+        r14 = "chat_outFileInfoText";
+        r3.put(r14, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r5);
+        r14 = "chat_inFileInfoSelectedText";
+        r3.put(r14, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r6);
+        r14 = "chat_outFileInfoSelectedText";
+        r3.put(r14, r4);
+        r3 = defaultColors;
+        r4 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r14 = "chat_inFileBackground";
+        r3.put(r14, r4);
+        r3 = defaultColors;
+        r4 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r14 = "chat_outFileBackground";
+        r3.put(r14, r4);
+        r3 = defaultColors;
+        r4 = -3413258; // 0xffffffffffcbeaf6 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r14 = "chat_inFileBackgroundSelected";
+        r3.put(r14, r4);
+        r3 = defaultColors;
+        r4 = -3806041; // 0xffffffffffc5eca7 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r14 = "chat_outFileBackgroundSelected";
+        r3.put(r14, r4);
+        r3 = defaultColors;
+        r4 = "chat_inVenueInfoText";
+        r3.put(r4, r13);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r6);
+        r14 = "chat_outVenueInfoText";
+        r3.put(r14, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r5);
+        r5 = "chat_inVenueInfoSelectedText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r6);
+        r5 = "chat_outVenueInfoSelectedText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_mediaInfoText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = NUM; // 0x3362a9e3 float:5.2774237E-8 double:4.25935987E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_linkSelectBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = NUM; // 0x6662a9e3 float:2.6759717E23 double:8.48677336E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_textSelectBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -986379; // 0xfffffffffff0f2f5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelBadgeBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_emojiPanelBadgeText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -1709586; // 0xffffffffffe5e9ee float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiSearchBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7036497; // 0xfffffffffvar_a1af float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiSearchIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = NUM; // 0x12000000 float:4.0389678E-28 double:1.49202829E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelShadowLine";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7038047; // 0xfffffffffvar_ba1 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelEmptyText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -6445909; // 0xffffffffff9da4ab float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7564905; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiBottomPanelIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -13920286; // 0xffffffffff2b97e2 float:-2.280866E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelIconSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1907225; // 0xffffffffffe2e5e7 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelStickerPackSelector";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11097104; // 0xfffffffffvar_abf0 float:-2.8534754E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelStickerPackSelectorLine";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7564905; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelBackspace";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_emojiPanelMasksIcon";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -10305560; // 0xfffffffffvar_bfe8 float:-3.0140196E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelMasksIconSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_emojiPanelTrendingTitle";
+        r3.put(r4, r8);
+        r3 = defaultColors;
+        r4 = -8221804; // 0xfffffffffvar_b94 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelStickerSetName";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -14184997; // 0xfffffffffvar_ddb float:-2.2271763E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelStickerSetNameHighlight";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -5130564; // 0xffffffffffb1b6bc float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelStickerSetNameIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelTrendingDescription";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -13220017; // 0xfffffffffvar_f float:-2.4228975E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_botKeyboardButtonText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1775639; // 0xffffffffffe4e7e9 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_botKeyboardButtonBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -3354156; // 0xffffffffffccd1d4 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_botKeyboardButtonBackgroundPressed";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_unreadMessagesStartArrowIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11102772; // 0xfffffffffvar_cc float:-2.8523258E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_unreadMessagesStartText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_unreadMessagesStartBackground";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inFileIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7883067; // 0xfffffffffvar_b6c5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inFileSelectedIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outFileIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outFileSelectedIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inLocationBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inLocationIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outLocationBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7880840; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outLocationIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inContactBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_inContactIcon";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outContactBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outContactIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outBroadcast";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_mediaBroadcast";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_searchPanelIcons";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_searchPanelText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -8421505; // 0xffffffffff7f7f7f float:-3.3961514E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_secretChatStatusText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_fieldOverlayText";
+        r3.put(r4, r10);
+        r3 = defaultColors;
+        r4 = "chat_stickersHintPanel";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -11032346; // 0xfffffffffvar_a8e6 float:-2.86661E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_replyPanelIcons";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_replyPanelClose";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_replyPanelName";
+        r3.put(r4, r10);
+        r3 = defaultColors;
+        r4 = "chat_replyPanelMessage";
+        r3.put(r4, r8);
+        r3 = defaultColors;
+        r4 = -1513240; // 0xffffffffffe8e8e8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_replyPanelLine";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_messagePanelBackground";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = "chat_messagePanelText";
+        r3.put(r4, r11);
+        r3 = defaultColors;
+        r4 = -5985101; // 0xffffffffffa4acb3 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelHint";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11230757; // 0xfffffffffvar_a1db float:-2.8263674E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelCursor";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_messagePanelShadow";
+        r3.put(r4, r11);
+        r3 = defaultColors;
+        r4 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelIcons";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11817481; // 0xffffffffff4badf7 float:-2.7073656E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelVideoFrame";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_recordedVoicePlayPause";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -2495749; // 0xffffffffffd9eafb float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_recordedVoicePlayPausePressed";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -2468275; // 0xffffffffffda564d float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_recordedVoiceDot";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11165981; // 0xfffffffffvar_ee3 float:-2.8395055E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_recordedVoiceBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -6107400; // 0xffffffffffa2cef8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_recordedVoiceProgress";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_recordedVoiceProgressInner";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r9);
+        r5 = "chat_recordVoiceCancel";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -10309397; // 0xfffffffffvar_b0eb float:-3.0132414E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelSend";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_messagePanelPressedSend";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -5987164; // 0xffffffffffa4a4a4 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "key_chat_messagePanelVoiceLock";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "key_chat_messagePanelVoiceLockBackground";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = "key_chat_messagePanelVoiceLockShadow";
+        r3.put(r4, r11);
+        r3 = defaultColors;
+        r4 = -11711413; // 0xffffffffff4d4c4b float:-2.7288787E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_recordTime";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_emojiPanelNewTrending";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_gifSaveHintText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -NUM; // 0xffffffffcCLASSNAME float:-3.8028356E7 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_gifSaveHintBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_goDownButton";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = "chat_goDownButtonShadow";
+        r3.put(r4, r11);
+        r3 = defaultColors;
+        r4 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_goDownButtonIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_goDownButtonCounter";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -11689240; // 0xffffffffff4da2e8 float:-2.733376E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_goDownButtonCounterBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -5395027; // 0xffffffffffadadad float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelCancelInlineBot";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_messagePanelVoicePressed";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -11037236; // 0xfffffffffvar_cc float:-2.865618E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelVoiceBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = NUM; // 0xd000000 float:3.9443045E-31 double:1.07757599E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelVoiceShadow";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_messagePanelVoiceDelete";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_messagePanelVoiceDuration";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -11037236; // 0xfffffffffvar_cc float:-2.865618E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inlineResultIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_topPanelBackground";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -7563878; // 0xffffffffff8CLASSNAMEa float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_topPanelClose";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -9658414; // 0xffffffffff6c9fd2 float:-3.1452764E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_topPanelLine";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_topPanelTitle";
+        r3.put(r4, r10);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r9);
+        r5 = "chat_topPanelMessage";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -3188393; // 0xffffffffffcvar_ float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_reportSpam";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11894091; // 0xffffffffff4a82b5 float:-2.6918272E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_addContact";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inLoader";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -10114080; // 0xfffffffffvar_abe0 float:-3.0528564E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inLoaderSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outLoader";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -9783964; // 0xffffffffff6ab564 float:-3.1198118E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outLoaderSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -6113080; // 0xffffffffffa2b8c8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inLoaderPhoto";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inLoaderPhotoSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -197380; // 0xfffffffffffcfcfc float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inLoaderPhotoIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_inLoaderPhotoIconSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outLoaderPhoto";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -8538000; // 0xffffffffff7db870 float:-3.3725234E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outLoaderPhotoSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outLoaderPhotoIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -4134748; // 0xffffffffffc0e8a4 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_outLoaderPhotoIconSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = NUM; // 0x66000000 float:1.5111573E23 double:8.45482698E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_mediaLoaderPhoto";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = NUM; // 0x7var_ float:1.7014118E38 double:1.0527088494E-314;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_mediaLoaderPhotoSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_mediaLoaderPhotoIcon";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -2500135; // 0xffffffffffd9d9d9 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_mediaLoaderPhotoIconSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -NUM; // 0xffffffffcc3e648e float:-4.9910328E7 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_secretTimerBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "chat_secretTimerText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "profile_creatorIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -8288630; // 0xfffffffffvar_a float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "profile_actionIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "profile_actionBackground";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "profile_actionPressedBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -5056776; // 0xffffffffffb2d6f8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "profile_verifiedBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11959368; // 0xfffffffffvar_b8 float:-2.6785875E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "profile_verifiedCheck";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "profile_title";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -2626822; // 0xffffffffffd7eafa float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "profile_status";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "player_actionBar";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_actionBarSelector";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "player_actionBarTitle";
+        r3.put(r4, r12);
+        r3 = defaultColors;
+        r4 = -NUM; // 0xfffffffvar_ float:-6.617445E-24 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_actionBarTop";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_actionBarSubtitle";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_actionBarItems";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "player_background";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -7564650; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_time";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1445899; // 0xffffffffffe9eff5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_progressBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1445899; // 0xffffffffffe9eff5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "key_player_progressCachedBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11821085; // 0xffffffffff4b9fe3 float:-2.7066346E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_progress";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_placeholder";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r7);
+        r5 = "player_placeholderBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -13421773; // 0xfffffffffvar_ float:-2.3819765E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_button";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11753238; // 0xffffffffff4ca8ea float:-2.7203956E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "player_buttonActive";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1973016; // 0xffffffffffe1e4e8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "key_sheet_scrollUp";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -3551789; // 0xffffffffffc9cdd3 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "key_sheet_other";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r9);
+        r5 = "files_folderIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r7);
+        r5 = "files_folderIconBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "files_iconText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -6908266; // 0xfffffffffvar_ float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "sessions_devicesImage";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -12211217; // 0xfffffffffvar_abef float:-2.6275065E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "passport_authorizeBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -12542501; // 0xfffffffffvar_ddb float:-2.560314E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "passport_authorizeBackgroundSelected";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "passport_authorizeText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -9592620; // 0xffffffffff6da0d4 float:-3.158621E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "location_sendLocationBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -39836; // 0xfffffffffffvar_ float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "location_sendLiveLocationBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "location_sendLocationIcon";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = "location_sendLiveLocationIcon";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -13262875; // 0xfffffffffvar_fe5 float:-2.4142049E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "location_liveLocationProgress";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11753238; // 0xffffffffff4ca8ea float:-2.7203956E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "location_placeLocationBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -13262875; // 0xfffffffffvar_fe5 float:-2.4142049E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "dialog_liveLocationProgress";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "calls_callReceivedGreenIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -47032; // 0xfffffffffffvar_ float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "calls_callReceivedRedIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11491093; // 0xfffffffffvar_a8eb float:-2.773565E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "featuredStickers_addedIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "featuredStickers_buttonProgress";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -11491093; // 0xfffffffffvar_a8eb float:-2.773565E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "featuredStickers_addButton";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -12346402; // 0xfffffffffvar_bde float:-2.6000877E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "featuredStickers_addButtonPressed";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -2533545; // 0xffffffffffd95757 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "featuredStickers_delButton";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -3782327; // 0xffffffffffCLASSNAME float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "featuredStickers_delButtonPressed";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "featuredStickers_buttonText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "featuredStickers_unread";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "inappPlayerPerformer";
+        r3.put(r4, r12);
+        r3 = defaultColors;
+        r4 = "inappPlayerTitle";
+        r3.put(r4, r12);
+        r3 = defaultColors;
+        r4 = "inappPlayerBackground";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -10309397; // 0xfffffffffvar_b0eb float:-3.0132414E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "inappPlayerPlayPause";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "inappPlayerClose";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -12279325; // 0xfffffffffvar_a1e3 float:-2.6136925E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "returnToCallBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "returnToCallText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -13196562; // 0xfffffffffvar_a2ee float:-2.4276547E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "sharedMedia_startStopLoadIcon";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -986123; // 0xfffffffffff0f3f5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "sharedMedia_linkPlaceholder";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -4735293; // 0xffffffffffb7bec3 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "sharedMedia_linkPlaceholderText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -1182729; // 0xffffffffffedf3f7 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "sharedMedia_photoPlaceholder";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -12154957; // 0xfffffffffvar_b3 float:-2.6389173E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "sharedMedia_actionMode";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -10567099; // 0xffffffffff5eCLASSNAME float:-2.9609732E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "checkbox";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "checkboxCheck";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -5195326; // 0xffffffffffb0b9c2 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "checkboxDisabled";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -4801083; // 0xffffffffffb6bdc5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "stickers_menu";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "stickers_menuSelector";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -4669499; // 0xffffffffffb8bfc5 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "changephoneinfo_image";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -11491350; // 0xfffffffffvar_a7ea float:-2.7735128E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "changephoneinfo_image2";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "groupcreate_hintText";
+        r3.put(r4, r13);
+        r3 = defaultColors;
+        r4 = -11361317; // 0xfffffffffvar_a3db float:-2.7998867E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "groupcreate_cursor";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "groupcreate_sectionShadow";
+        r3.put(r4, r11);
+        r3 = defaultColors;
+        r4 = -8617336; // 0xffffffffff7CLASSNAME float:-3.3564321E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "groupcreate_sectionText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "groupcreate_spanText";
+        r3.put(r4, r8);
+        r3 = defaultColors;
+        r4 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "groupcreate_spanBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "groupcreate_spanDelete";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -11157919; // 0xfffffffffvar_be61 float:-2.8411407E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "contacts_inviteBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "contacts_inviteText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -1971470; // 0xffffffffffe1eaf2 float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "login_progressInner";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -10313520; // 0xfffffffffvar_a0d0 float:-3.0124051E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "login_progressOuter";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -14043401; // 0xfffffffffvar_b6f7 float:-2.2558954E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "musicPicker_checkbox";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "musicPicker_checkboxCheck";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -10702870; // 0xffffffffff5cafea float:-2.9334356E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "musicPicker_buttonBackground";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "musicPicker_buttonIcon";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -15095832; // 0xfffffffffvar_a7e8 float:-2.042437E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "picker_enabledButton";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = java.lang.Integer.valueOf(r9);
+        r5 = "picker_disabledButton";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -14043401; // 0xfffffffffvar_b6f7 float:-2.2558954E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "picker_badge";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "picker_badgeText";
+        r3.put(r4, r0);
+        r3 = defaultColors;
+        r4 = -12348980; // 0xfffffffffvar_cc float:-2.5995648E38 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "chat_botSwitchToInlineText";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -NUM; // 0xffffffffea272var_ float:-5.05284E25 double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "undo_background";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = -8008961; // 0xfffffffffvar_caff float:NaN double:NaN;
+        r4 = java.lang.Integer.valueOf(r4);
+        r5 = "undo_cancelColor";
+        r3.put(r5, r4);
+        r3 = defaultColors;
+        r4 = "undo_infoColor";
+        r3.put(r4, r0);
+        r0 = fallbackKeys;
+        r3 = "chat_adminText";
+        r4 = "chat_inTimeText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_adminSelectedText";
+        r4 = "chat_inTimeSelectedText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "key_player_progressCachedBackground";
+        r4 = "player_progressBackground";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_inAudioCacheSeekbar";
+        r4 = "chat_inAudioSeekbar";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_outAudioCacheSeekbar";
+        r4 = "chat_outAudioSeekbar";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_emojiSearchBackground";
+        r4 = "chat_emojiPanelStickerPackSelector";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "location_sendLiveLocationIcon";
+        r4 = "location_sendLocationIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "changephoneinfo_image2";
+        r4 = "featuredStickers_addButton";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "key_graySectionText";
+        r4 = "windowBackgroundWhiteGrayText2";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_inMediaIcon";
+        r4 = "chat_inBubble";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_outMediaIcon";
+        r4 = "chat_outBubble";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_inMediaIconSelected";
+        r4 = "chat_inBubbleSelected";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_outMediaIconSelected";
+        r4 = "chat_outBubbleSelected";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_actionUnreadIcon";
+        r4 = "profile_actionIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_actionUnreadBackground";
+        r4 = "profile_actionBackground";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_actionUnreadPressedBackground";
+        r4 = "profile_actionPressedBackground";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialog_inlineProgressBackground";
+        r4 = "windowBackgroundGray";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialog_inlineProgress";
+        r4 = "chats_menuItemIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "groupcreate_spanDelete";
+        r4 = "chats_actionIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "sharedMedia_photoPlaceholder";
+        r4 = "windowBackgroundGray";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_attachPollBackground";
+        r4 = "chat_attachAudioBackground";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_attachPollIcon";
+        r4 = "chat_attachAudioIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_onlineCircle";
+        r4 = "windowBackgroundWhiteBlueText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "windowBackgroundWhiteBlueButton";
+        r4 = "windowBackgroundWhiteValueText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "windowBackgroundWhiteBlueIcon";
+        r4 = "windowBackgroundWhiteValueText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "undo_background";
+        r4 = "chat_gifSaveHintBackground";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "undo_cancelColor";
+        r4 = "chat_gifSaveHintText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "undo_infoColor";
+        r4 = "chat_gifSaveHintText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "windowBackgroundUnchecked";
+        r4 = "windowBackgroundWhite";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "windowBackgroundChecked";
+        r4 = "windowBackgroundWhite";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "switchTrackBlue";
+        r4 = "switchTrack";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "switchTrackBlueChecked";
+        r4 = "switchTrackChecked";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "switchTrackBlueThumb";
+        r4 = "windowBackgroundWhite";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "switchTrackBlueThumbChecked";
+        r4 = "windowBackgroundWhite";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "windowBackgroundCheckText";
+        r4 = "windowBackgroundWhiteBlackText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "contextProgressInner4";
+        r4 = "contextProgressInner1";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "contextProgressOuter4";
+        r4 = "contextProgressOuter1";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "switchTrackBlueSelector";
+        r4 = "listSelectorSDK21";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "switchTrackBlueSelectorChecked";
+        r4 = "listSelectorSDK21";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_emojiBottomPanelIcon";
+        r4 = "chat_emojiPanelIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_emojiSearchIcon";
+        r4 = "chat_emojiPanelIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_emojiPanelStickerSetNameHighlight";
+        r4 = "windowBackgroundWhiteBlueText4";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_emojiPanelStickerPackSelectorLine";
+        r4 = "chat_emojiPanelIconSelected";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "sharedMedia_actionMode";
+        r4 = "actionBarDefault";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "key_sheet_scrollUp";
+        r4 = "chat_emojiPanelStickerPackSelector";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "key_sheet_other";
+        r4 = "player_actionBarItems";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogSearchBackground";
+        r4 = "chat_emojiPanelStickerPackSelector";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogSearchHint";
+        r4 = "chat_emojiPanelIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogSearchIcon";
+        r4 = "chat_emojiPanelIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogSearchText";
+        r4 = "windowBackgroundWhiteBlackText";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogFloatingButton";
+        r4 = "dialogRoundCheckBox";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogFloatingButtonPressed";
+        r4 = "dialogRoundCheckBox";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogFloatingIcon";
+        r4 = "dialogRoundCheckBoxCheck";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "dialogShadowLine";
+        r4 = "chat_emojiPanelShadowLine";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarDefaultArchived";
+        r4 = "actionBarDefault";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarDefaultArchivedSelector";
+        r4 = "actionBarDefaultSelector";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarDefaultArchivedIcon";
+        r4 = "actionBarDefaultIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarDefaultArchivedTitle";
+        r4 = "actionBarDefaultTitle";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarDefaultArchivedSearch";
+        r4 = "actionBarDefaultSearch";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarDefaultSearchArchivedPlaceholder";
+        r4 = "actionBarDefaultSearchPlaceholder";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_message_threeLines";
+        r4 = "chats_message";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_nameMessage_threeLines";
+        r4 = "chats_nameMessage";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_nameArchived";
+        r4 = "chats_name";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_nameMessageArchived";
+        r4 = "chats_nameMessage";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_nameMessageArchived_threeLines";
+        r4 = "chats_nameMessage";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_messageArchived";
+        r4 = "chats_message";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "avatar_backgroundArchived";
+        r4 = "chats_unreadCounterMuted";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "avatar_backgroundArchivedHidden";
+        r4 = "chats_unreadCounterMuted";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_archiveBackground";
+        r4 = "chats_actionBackground";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_archivePinBackground";
+        r4 = "chats_unreadCounterMuted";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_archiveIcon";
+        r4 = "chats_actionIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_archiveText";
+        r4 = "chats_actionIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarDefaultSubmenuItemIcon";
+        r4 = "dialogIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "checkboxDisabled";
+        r4 = "chats_unreadCounterMuted";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_status";
+        r4 = "actionBarDefaultSubtitle";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_inDownCall";
+        r4 = "calls_callReceivedGreenIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_inUpCall";
+        r4 = "calls_callReceivedRedIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_outUpCall";
+        r4 = "calls_callReceivedGreenIcon";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarTabActiveText";
+        r4 = "actionBarDefaultTitle";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarTabUnactiveText";
+        r4 = "actionBarDefaultSubtitle";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarTabLine";
+        r4 = "actionBarDefaultTitle";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarTabSelector";
+        r4 = "actionBarDefaultSelector";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "profile_status";
+        r4 = "avatar_subtitleInProfileBlue";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_menuTopBackgroundCats";
+        r4 = "avatar_backgroundActionBarBlue";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_messagePanelPressedSend";
+        r4 = "chat_messagePanelVoicePressed";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_attachPermissionImage";
+        r4 = "dialogTextBlack";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_attachPermissionMark";
+        r4 = "chat_sentError";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_attachPermissionText";
+        r4 = "dialogTextBlack";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_attachEmptyImage";
+        r4 = "emptyListPlaceholder";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "actionBarBrowser";
+        r4 = "actionBarDefault";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chats_sentReadCheck";
+        r4 = "chats_sentCheck";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_outSentCheckRead";
+        r4 = "chat_outSentCheck";
+        r0.put(r3, r4);
+        r0 = fallbackKeys;
+        r3 = "chat_outSentCheckReadSelected";
+        r4 = "chat_outSentCheckSelected";
+        r0.put(r3, r4);
+        r0 = themeAccentExclusionKeys;
+        r3 = keys_avatar_background;
+        r3 = java.util.Arrays.asList(r3);
+        r0.addAll(r3);
+        r0 = themeAccentExclusionKeys;
+        r3 = keys_avatar_nameInMessage;
+        r3 = java.util.Arrays.asList(r3);
+        r0.addAll(r3);
+        r0 = themeAccentExclusionKeys;
+        r3 = "chat_attachFileBackground";
+        r0.add(r3);
+        r0 = themeAccentExclusionKeys;
+        r3 = "chat_attachGalleryBackground";
+        r0.add(r3);
+        r0 = new java.util.ArrayList;
+        r0.<init>();
+        themes = r0;
+        r0 = new java.util.ArrayList;
+        r0.<init>();
+        otherThemes = r0;
+        r0 = new java.util.HashMap;
+        r0.<init>();
+        themesDict = r0;
+        r0 = new java.util.HashMap;
+        r0.<init>();
+        currentColorsNoAccent = r0;
+        r0 = new java.util.HashMap;
+        r0.<init>();
+        currentColors = r0;
+        r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
+        r0.<init>();
+        r3 = "Default";
+        r0.name = r3;
+        r3 = -3155485; // 0xffffffffffcfd9e3 float:NaN double:NaN;
+        r0.previewBackgroundColor = r3;
+        r0.previewInColor = r2;
+        r3 = -983328; // 0xfffffffffff0fee0 float:NaN double:NaN;
+        r0.previewOutColor = r3;
+        r0.sortIndex = r1;
+        r3 = themes;
+        defaultTheme = r0;
+        currentTheme = r0;
+        currentDayTheme = r0;
+        r3.add(r0);
+        r0 = themesDict;
+        r3 = defaultTheme;
+        r4 = "Default";
+        r0.put(r4, r3);
+        r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
+        r0.<init>();
+        r3 = "Blue";
+        r0.name = r3;
+        r3 = "bluebubbles.attheme";
+        r0.assetName = r3;
+        r3 = -6963476; // 0xfffffffffvar_beec float:NaN double:NaN;
+        r0.previewBackgroundColor = r3;
+        r0.previewInColor = r2;
+        r3 = -3086593; // 0xffffffffffd0e6ff float:NaN double:NaN;
+        r0.previewOutColor = r3;
+        r3 = 1;
+        r0.sortIndex = r3;
+        r3 = 9;
+        r3 = new int[r3];
+        r3 = {-13464881, -12342073, -11359164, -3317869, -2981834, -8165684, -3256745, -2904512, -8681301};
+        r0.setAccentColorOptions(r3);
+        r3 = themes;
+        r3.add(r0);
+        r3 = themesDict;
+        r4 = "Blue";
+        r3.put(r4, r0);
+        r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
+        r0.<init>();
+        r3 = "Dark Blue";
+        r0.name = r3;
+        r3 = "darkblue.attheme";
+        r0.assetName = r3;
+        r3 = -10523006; // 0xffffffffff5f6e82 float:-2.9699163E38 double:NaN;
+        r0.previewBackgroundColor = r3;
+        r3 = -9009508; // 0xfffffffffvar_c float:-3.2768902E38 double:NaN;
+        r0.previewInColor = r3;
+        r3 = -8214301; // 0xfffffffffvar_a8e3 float:NaN double:NaN;
+        r0.previewOutColor = r3;
+        r3 = 2;
+        r0.sortIndex = r3;
+        r3 = 10;
+        r3 = new int[r3];
+        r3 = {-13203974, -12138259, -11880383, -1344335, -1142742, -6127120, -2931932, -1131212, -8417365, -13270557};
+        r0.setAccentColorOptions(r3);
+        r3 = themes;
+        r3.add(r0);
+        r3 = themesDict;
+        currentNightTheme = r0;
+        r4 = "Dark Blue";
+        r3.put(r4, r0);
+        r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
+        if (r0 == 0) goto L_0x215f;
+    L_0x2134:
+        r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
+        r0.<init>();
+        r3 = "Graphite";
+        r0.name = r3;
+        r3 = "graphite.attheme";
+        r0.assetName = r3;
+        r3 = -8749431; // 0xffffffffff7a7e89 float:-3.32964E38 double:NaN;
+        r0.previewBackgroundColor = r3;
+        r3 = -6775901; // 0xfffffffffvar_ba3 float:NaN double:NaN;
+        r0.previewInColor = r3;
+        r3 = -5980167; // 0xffffffffffa4bff9 float:NaN double:NaN;
+        r0.previewOutColor = r3;
+        r3 = 3;
+        r0.sortIndex = r3;
+        r3 = themes;
+        r3.add(r0);
+        r3 = themesDict;
+        r4 = "Graphite";
+        r3.put(r4, r0);
+    L_0x215f:
+        r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
+        r0.<init>();
+        r3 = "Arctic Blue";
+        r0.name = r3;
+        r3 = "arctic.attheme";
+        r0.assetName = r3;
+        r0.previewBackgroundColor = r2;
+        r3 = -1315084; // 0xffffffffffebeef4 float:NaN double:NaN;
+        r0.previewInColor = r3;
+        r3 = -8604930; // 0xffffffffff7cb2fe float:-3.3589484E38 double:NaN;
+        r0.previewOutColor = r3;
+        r3 = 4;
+        r0.sortIndex = r3;
+        r3 = 9;
+        r3 = new int[r3];
+        r3 = {-13332245, -12342073, -11359164, -3317869, -2981834, -8165684, -3256745, -2904512, -8681301};
+        r0.setAccentColorOptions(r3);
+        r3 = themes;
+        r3.add(r0);
+        r3 = themesDict;
+        r4 = "Arctic Blue";
+        r3.put(r4, r0);
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
+        r3 = "themeconfig";
+        r0 = r0.getSharedPreferences(r3, r1);
+        r3 = 0;
+        r4 = "themes2";
+        r3 = r0.getString(r4, r3);
+        r4 = "remoteThemesHash";
+        r4 = r0.getInt(r4, r1);
+        remoteThemesHash = r4;
+        r4 = "lastLoadingThemesTime";
+        r4 = r0.getInt(r4, r1);
+        lastLoadingThemesTime = r4;
+        r4 = android.text.TextUtils.isEmpty(r3);
+        if (r4 != 0) goto L_0x21e7;
+    L_0x21b6:
+        r0 = new org.json.JSONArray;	 Catch:{ Exception -> 0x21e2 }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x21e2 }
+        r3 = 0;
+    L_0x21bc:
+        r4 = r0.length();	 Catch:{ Exception -> 0x21e2 }
+        if (r3 >= r4) goto L_0x222d;
+    L_0x21c2:
+        r4 = r0.getJSONObject(r3);	 Catch:{ Exception -> 0x21e2 }
+        r4 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r4);	 Catch:{ Exception -> 0x21e2 }
+        if (r4 == 0) goto L_0x21df;
+    L_0x21cc:
+        r5 = otherThemes;	 Catch:{ Exception -> 0x21e2 }
+        r5.add(r4);	 Catch:{ Exception -> 0x21e2 }
+        r5 = themes;	 Catch:{ Exception -> 0x21e2 }
+        r5.add(r4);	 Catch:{ Exception -> 0x21e2 }
+        r5 = themesDict;	 Catch:{ Exception -> 0x21e2 }
+        r6 = r4.getKey();	 Catch:{ Exception -> 0x21e2 }
+        r5.put(r6, r4);	 Catch:{ Exception -> 0x21e2 }
+    L_0x21df:
+        r3 = r3 + 1;
+        goto L_0x21bc;
+    L_0x21e2:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+        goto L_0x222d;
+    L_0x21e7:
+        r3 = 0;
+        r4 = "themes";
+        r3 = r0.getString(r4, r3);
+        r4 = android.text.TextUtils.isEmpty(r3);
+        if (r4 != 0) goto L_0x221c;
+    L_0x21f4:
+        r4 = "&";
+        r3 = r3.split(r4);
+        r4 = 0;
+    L_0x21fb:
+        r5 = r3.length;
+        if (r4 >= r5) goto L_0x221c;
+    L_0x21fe:
+        r5 = r3[r4];
+        r5 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r5);
+        if (r5 == 0) goto L_0x2219;
+    L_0x2206:
+        r6 = otherThemes;
+        r6.add(r5);
+        r6 = themes;
+        r6.add(r5);
+        r6 = themesDict;
+        r7 = r5.getKey();
+        r6.put(r7, r5);
+    L_0x2219:
+        r4 = r4 + 1;
+        goto L_0x21fb;
+    L_0x221c:
+        r3 = 1;
+        saveOtherThemes(r3);
+        r0 = r0.edit();
+        r3 = "themes";
+        r0 = r0.remove(r3);
+        r0.commit();
+    L_0x222d:
         sortThemes();
-        ThemeInfo themeInfo2 = null;
-        try {
-            sharedPreferences = MessagesController.getGlobalMainSettings();
-            String string2 = sharedPreferences.getString("theme", null);
-            if (string2 != null) {
-                themeInfo2 = (ThemeInfo) themesDict.get(string2);
-            }
-            string2 = sharedPreferences.getString("nighttheme", null);
-            if (string2 != null) {
-                createWithJson = (ThemeInfo) themesDict.get(string2);
-                if (createWithJson != null) {
-                    currentNightTheme = createWithJson;
-                }
-            }
-            selectedAutoNightType = sharedPreferences.getInt("selectedAutoNightType", 0);
-            autoNightScheduleByLocation = sharedPreferences.getBoolean("autoNightScheduleByLocation", false);
-            autoNightBrighnessThreshold = sharedPreferences.getFloat("autoNightBrighnessThreshold", 0.25f);
-            autoNightDayStartTime = sharedPreferences.getInt("autoNightDayStartTime", 1320);
-            autoNightDayEndTime = sharedPreferences.getInt("autoNightDayEndTime", 480);
-            autoNightSunsetTime = sharedPreferences.getInt("autoNightSunsetTime", 1320);
-            autoNightSunriseTime = sharedPreferences.getInt("autoNightSunriseTime", 480);
-            autoNightCityName = sharedPreferences.getString("autoNightCityName", "");
-            long j = sharedPreferences.getLong("autoNightLocationLatitude3", 10000);
-            if (j != 10000) {
-                autoNightLocationLatitude = Double.longBitsToDouble(j);
-            } else {
-                autoNightLocationLatitude = 10000.0d;
-            }
-            j = sharedPreferences.getLong("autoNightLocationLongitude3", 10000);
-            if (j != 10000) {
-                autoNightLocationLongitude = Double.longBitsToDouble(j);
-            } else {
-                autoNightLocationLongitude = 10000.0d;
-            }
-            autoNightLastSunCheckDay = sharedPreferences.getInt("autoNightLastSunCheckDay", -1);
-        } catch (Exception e2) {
-            FileLog.e(e2);
-        }
-        if (themeInfo2 == null) {
-            themeInfo2 = defaultTheme;
-        } else {
-            currentDayTheme = themeInfo2;
-        }
-        applyTheme(themeInfo2, false, false, false);
-        AndroidUtilities.runOnUIThread(-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I.INSTANCE);
+        r3 = 0;
+        r0 = themesDict;	 Catch:{ Exception -> 0x2354 }
+        r4 = "Dark Blue";
+        r0 = r0.get(r4);	 Catch:{ Exception -> 0x2354 }
+        r4 = r0;
+        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;	 Catch:{ Exception -> 0x2354 }
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x2354 }
+        r5 = "theme";
+        r6 = 0;
+        r5 = r0.getString(r5, r6);	 Catch:{ Exception -> 0x2354 }
+        r6 = "Dark";
+        r6 = r6.equals(r5);	 Catch:{ Exception -> 0x2354 }
+        if (r6 == 0) goto L_0x225b;
+    L_0x224f:
+        r3 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
+        r4.setAccentColor(r3);	 Catch:{ Exception -> 0x2257 }
+        r3 = r4;
+        goto L_0x2266;
+    L_0x2257:
+        r0 = move-exception;
+        r3 = r4;
+        goto L_0x2355;
+    L_0x225b:
+        if (r5 == 0) goto L_0x2266;
+    L_0x225d:
+        r6 = themesDict;	 Catch:{ Exception -> 0x2354 }
+        r5 = r6.get(r5);	 Catch:{ Exception -> 0x2354 }
+        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;	 Catch:{ Exception -> 0x2354 }
+        r3 = r5;
+    L_0x2266:
+        r5 = "nighttheme";
+        r6 = 0;
+        r5 = r0.getString(r5, r6);	 Catch:{ Exception -> 0x2354 }
+        r6 = "Dark";
+        r6 = r6.equals(r5);	 Catch:{ Exception -> 0x2354 }
+        if (r6 == 0) goto L_0x227e;
+    L_0x2275:
+        currentNightTheme = r4;	 Catch:{ Exception -> 0x2354 }
+        r5 = -13270557; // 0xfffffffffvar_e3 float:-2.4126468E38 double:NaN;
+        r4.setAccentColor(r5);	 Catch:{ Exception -> 0x2354 }
+        goto L_0x228c;
+    L_0x227e:
+        if (r5 == 0) goto L_0x228c;
+    L_0x2280:
+        r4 = themesDict;	 Catch:{ Exception -> 0x2354 }
+        r4 = r4.get(r5);	 Catch:{ Exception -> 0x2354 }
+        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;	 Catch:{ Exception -> 0x2354 }
+        if (r4 == 0) goto L_0x228c;
+    L_0x228a:
+        currentNightTheme = r4;	 Catch:{ Exception -> 0x2354 }
+    L_0x228c:
+        r4 = themesDict;	 Catch:{ Exception -> 0x2354 }
+        r4 = r4.values();	 Catch:{ Exception -> 0x2354 }
+        r4 = r4.iterator();	 Catch:{ Exception -> 0x2354 }
+    L_0x2296:
+        r5 = r4.hasNext();	 Catch:{ Exception -> 0x2354 }
+        if (r5 == 0) goto L_0x22c7;
+    L_0x229c:
+        r5 = r4.next();	 Catch:{ Exception -> 0x2354 }
+        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;	 Catch:{ Exception -> 0x2354 }
+        r6 = r5.assetName;	 Catch:{ Exception -> 0x2354 }
+        if (r6 == 0) goto L_0x2296;
+    L_0x22a6:
+        r6 = r5.accentBaseColor;	 Catch:{ Exception -> 0x2354 }
+        if (r6 == 0) goto L_0x2296;
+    L_0x22aa:
+        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2354 }
+        r6.<init>();	 Catch:{ Exception -> 0x2354 }
+        r7 = "accent_for_";
+        r6.append(r7);	 Catch:{ Exception -> 0x2354 }
+        r7 = r5.assetName;	 Catch:{ Exception -> 0x2354 }
+        r6.append(r7);	 Catch:{ Exception -> 0x2354 }
+        r6 = r6.toString();	 Catch:{ Exception -> 0x2354 }
+        r7 = r5.accentColor;	 Catch:{ Exception -> 0x2354 }
+        r6 = r0.getInt(r6, r7);	 Catch:{ Exception -> 0x2354 }
+        r5.setAccentColor(r6);	 Catch:{ Exception -> 0x2354 }
+        goto L_0x2296;
+    L_0x22c7:
+        r4 = "selectedAutoNightType";
+        r4 = r0.getInt(r4, r1);	 Catch:{ Exception -> 0x2354 }
+        selectedAutoNightType = r4;	 Catch:{ Exception -> 0x2354 }
+        r4 = "autoNightScheduleByLocation";
+        r4 = r0.getBoolean(r4, r1);	 Catch:{ Exception -> 0x2354 }
+        autoNightScheduleByLocation = r4;	 Catch:{ Exception -> 0x2354 }
+        r4 = "autoNightBrighnessThreshold";
+        r5 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
+        r4 = r0.getFloat(r4, r5);	 Catch:{ Exception -> 0x2354 }
+        autoNightBrighnessThreshold = r4;	 Catch:{ Exception -> 0x2354 }
+        r4 = "autoNightDayStartTime";
+        r5 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
+        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x2354 }
+        autoNightDayStartTime = r4;	 Catch:{ Exception -> 0x2354 }
+        r4 = "autoNightDayEndTime";
+        r5 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x2354 }
+        autoNightDayEndTime = r4;	 Catch:{ Exception -> 0x2354 }
+        r4 = "autoNightSunsetTime";
+        r5 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
+        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x2354 }
+        autoNightSunsetTime = r4;	 Catch:{ Exception -> 0x2354 }
+        r4 = "autoNightSunriseTime";
+        r5 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r4 = r0.getInt(r4, r5);	 Catch:{ Exception -> 0x2354 }
+        autoNightSunriseTime = r4;	 Catch:{ Exception -> 0x2354 }
+        r4 = "autoNightCityName";
+        r5 = "";
+        r4 = r0.getString(r4, r5);	 Catch:{ Exception -> 0x2354 }
+        autoNightCityName = r4;	 Catch:{ Exception -> 0x2354 }
+        r4 = "autoNightLocationLatitude3";
+        r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r4 = r0.getLong(r4, r5);	 Catch:{ Exception -> 0x2354 }
+        r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
+        if (r8 == 0) goto L_0x2328;
+    L_0x2321:
+        r4 = java.lang.Double.longBitsToDouble(r4);	 Catch:{ Exception -> 0x2354 }
+        autoNightLocationLatitude = r4;	 Catch:{ Exception -> 0x2354 }
+        goto L_0x232f;
+    L_0x2328:
+        r4 = NUM; // 0x40cNUM float:0.0 double:10000.0;
+        autoNightLocationLatitude = r4;	 Catch:{ Exception -> 0x2354 }
+    L_0x232f:
+        r4 = "autoNightLocationLongitude3";
+        r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r4 = r0.getLong(r4, r5);	 Catch:{ Exception -> 0x2354 }
+        r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
+        if (r8 == 0) goto L_0x2344;
+    L_0x233d:
+        r4 = java.lang.Double.longBitsToDouble(r4);	 Catch:{ Exception -> 0x2354 }
+        autoNightLocationLongitude = r4;	 Catch:{ Exception -> 0x2354 }
+        goto L_0x234b;
+    L_0x2344:
+        r4 = NUM; // 0x40cNUM float:0.0 double:10000.0;
+        autoNightLocationLongitude = r4;	 Catch:{ Exception -> 0x2354 }
+    L_0x234b:
+        r4 = "autoNightLastSunCheckDay";
+        r0 = r0.getInt(r4, r2);	 Catch:{ Exception -> 0x2354 }
+        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x2354 }
+        goto L_0x2358;
+    L_0x2354:
+        r0 = move-exception;
+    L_0x2355:
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x2358:
+        if (r3 != 0) goto L_0x235d;
+    L_0x235a:
+        r3 = defaultTheme;
+        goto L_0x235f;
+    L_0x235d:
+        currentDayTheme = r3;
+    L_0x235f:
+        applyTheme(r3, r1, r1, r1);
+        r0 = org.telegram.ui.ActionBar.-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I.INSTANCE;
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
+        r0 = new org.telegram.ui.ActionBar.Theme$7;
+        r0.<init>();
+        ambientSensorListener = r0;
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.<clinit>():void");
     }
 
     public static void saveAutoNightThemeConfig() {
@@ -1921,7 +4785,7 @@ public class Theme {
         ThemeInfo themeInfo = currentNightTheme;
         String str = "nighttheme";
         if (themeInfo != null) {
-            edit.putString(str, themeInfo.name);
+            edit.putString(str, themeInfo.getKey());
         } else {
             edit.remove(str);
         }
@@ -1962,16 +4826,16 @@ public class Theme {
                 if (VERSION.SDK_INT >= 21) {
                     return super.selectDrawable(i);
                 }
-                Drawable access$300 = Theme.getStateDrawable(this, i);
+                Drawable access$700 = Theme.getStateDrawable(this, i);
                 ColorFilter colorFilter = null;
-                if (access$300 instanceof BitmapDrawable) {
-                    colorFilter = ((BitmapDrawable) access$300).getPaint().getColorFilter();
-                } else if (access$300 instanceof NinePatchDrawable) {
-                    colorFilter = ((NinePatchDrawable) access$300).getPaint().getColorFilter();
+                if (access$700 instanceof BitmapDrawable) {
+                    colorFilter = ((BitmapDrawable) access$700).getPaint().getColorFilter();
+                } else if (access$700 instanceof NinePatchDrawable) {
+                    colorFilter = ((NinePatchDrawable) access$700).getPaint().getColorFilter();
                 }
                 boolean selectDrawable = super.selectDrawable(i);
                 if (colorFilter != null) {
-                    access$300.setColorFilter(colorFilter);
+                    access$700.setColorFilter(colorFilter);
                 }
                 return selectDrawable;
             }
@@ -1994,16 +4858,16 @@ public class Theme {
                 if (VERSION.SDK_INT >= 21) {
                     return super.selectDrawable(i);
                 }
-                Drawable access$300 = Theme.getStateDrawable(this, i);
+                Drawable access$700 = Theme.getStateDrawable(this, i);
                 ColorFilter colorFilter = null;
-                if (access$300 instanceof BitmapDrawable) {
-                    colorFilter = ((BitmapDrawable) access$300).getPaint().getColorFilter();
-                } else if (access$300 instanceof NinePatchDrawable) {
-                    colorFilter = ((NinePatchDrawable) access$300).getPaint().getColorFilter();
+                if (access$700 instanceof BitmapDrawable) {
+                    colorFilter = ((BitmapDrawable) access$700).getPaint().getColorFilter();
+                } else if (access$700 instanceof NinePatchDrawable) {
+                    colorFilter = ((NinePatchDrawable) access$700).getPaint().getColorFilter();
                 }
                 boolean selectDrawable = super.selectDrawable(i);
                 if (colorFilter != null) {
-                    access$300.setColorFilter(colorFilter);
+                    access$700.setColorFilter(colorFilter);
                 }
                 return selectDrawable;
             }
@@ -2101,7 +4965,7 @@ public class Theme {
     L_0x005f:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r0 = r0.getResources();
-        r1 = NUM; // 0x7var_b8 float:1.794547E38 double:1.0529357204E-314;
+        r1 = NUM; // 0x7var_bc float:1.7945478E38 double:1.0529357224E-314;
         r0 = r0.getDrawable(r1);
         dialogs_holidayDrawable = r0;
         r0 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -2142,16 +5006,16 @@ public class Theme {
                 if (VERSION.SDK_INT >= 21) {
                     return super.selectDrawable(i);
                 }
-                Drawable access$300 = Theme.getStateDrawable(this, i);
+                Drawable access$700 = Theme.getStateDrawable(this, i);
                 ColorFilter colorFilter = null;
-                if (access$300 instanceof BitmapDrawable) {
-                    colorFilter = ((BitmapDrawable) access$300).getPaint().getColorFilter();
-                } else if (access$300 instanceof NinePatchDrawable) {
-                    colorFilter = ((NinePatchDrawable) access$300).getPaint().getColorFilter();
+                if (access$700 instanceof BitmapDrawable) {
+                    colorFilter = ((BitmapDrawable) access$700).getPaint().getColorFilter();
+                } else if (access$700 instanceof NinePatchDrawable) {
+                    colorFilter = ((NinePatchDrawable) access$700).getPaint().getColorFilter();
                 }
                 boolean selectDrawable = super.selectDrawable(i);
                 if (colorFilter != null) {
-                    access$300.setColorFilter(colorFilter);
+                    access$700.setColorFilter(colorFilter);
                 }
                 return selectDrawable;
             }
@@ -2441,9 +5305,16 @@ public class Theme {
     }
 
     public static void applyPreviousTheme() {
-        ThemeInfo themeInfo = previousTheme;
-        if (themeInfo != null) {
-            applyTheme(themeInfo, true, false, false);
+        if (previousTheme != null) {
+            if (isWallpaperMotionPrev != null) {
+                Editor edit = MessagesController.getGlobalMainSettings().edit();
+                boolean booleanValue = isWallpaperMotionPrev.booleanValue();
+                isWallpaperMotion = booleanValue;
+                edit.putBoolean("selectedBackgroundMotion", booleanValue);
+                edit.commit();
+            }
+            ThemeInfo themeInfo = previousTheme;
+            applyTheme(themeInfo, true, false, themeInfo == currentNightTheme);
             previousTheme = null;
             checkAutoNightThemeConditions();
         }
@@ -2463,43 +5334,114 @@ public class Theme {
         return themeInfo.name.compareTo(themeInfo2.name);
     }
 
-    public static ThemeInfo applyThemeFile(File file, String str, boolean z) {
+    public static void applyThemeTemporary(ThemeInfo themeInfo) {
+        previousTheme = isCurrentThemeNight() ? getCurrentNightTheme() : getCurrentTheme();
+        applyTheme(themeInfo, false, false, false);
+    }
+
+    public static ThemeInfo fillThemeValues(File file, String str, TL_theme tL_theme) {
         try {
-            if (!(str.equals("Default") || str.equals("Dark") || str.equals("Blue") || str.equals("Dark Blue") || str.equals("Graphite"))) {
-                if (!str.equals("Arctic Blue")) {
-                    File file2 = new File(ApplicationLoader.getFilesDirFixed(), str);
-                    if (!AndroidUtilities.copyFile(file, file2)) {
-                        return null;
-                    }
-                    Object obj;
-                    Object obj2;
-                    ThemeInfo themeInfo = (ThemeInfo) themesDict.get(str);
-                    if (themeInfo == null) {
-                        themeInfo = new ThemeInfo();
-                        themeInfo.name = str;
-                        themeInfo.pathToFile = file2.getAbsolutePath();
-                        obj = themeInfo;
-                        obj2 = 1;
-                    } else {
-                        obj = themeInfo;
-                        obj2 = null;
-                    }
-                    if (z) {
-                        previousTheme = currentTheme;
-                    } else {
-                        previousTheme = null;
-                        if (obj2 != null) {
-                            themes.add(obj);
-                            themesDict.put(obj.name, obj);
-                            otherThemes.add(obj);
-                            sortThemes();
-                            saveOtherThemes();
+            ThemeInfo themeInfo = new ThemeInfo();
+            themeInfo.name = str;
+            themeInfo.info = tL_theme;
+            themeInfo.pathToFile = file.getAbsolutePath();
+            themeInfo.account = UserConfig.selectedAccount;
+            String[] strArr = new String[1];
+            getThemeFileValues(new File(themeInfo.pathToFile), null, strArr);
+            int i = 0;
+            if (TextUtils.isEmpty(strArr[0])) {
+                themedWallpaperLink = null;
+            } else {
+                str = strArr[0];
+                File filesDirFixed = ApplicationLoader.getFilesDirFixed();
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(Utilities.MD5(str));
+                stringBuilder.append(".wp");
+                themeInfo.pathToWallpaper = new File(filesDirFixed, stringBuilder.toString()).getAbsolutePath();
+                try {
+                    Uri parse = Uri.parse(str);
+                    themeInfo.slug = parse.getQueryParameter("slug");
+                    str = parse.getQueryParameter("mode");
+                    if (str != null) {
+                        strArr = str.toLowerCase().split(" ");
+                        if (strArr != null && strArr.length > 0) {
+                            while (i < strArr.length) {
+                                if ("blur".equals(strArr[i])) {
+                                    themeInfo.isBlured = true;
+                                } else if ("motion".equals(strArr[i])) {
+                                    themeInfo.isMotion = true;
+                                }
+                                i++;
+                            }
                         }
                     }
-                    applyTheme(obj, !z, true, false);
-                    return obj;
+                } catch (Throwable th) {
+                    FileLog.e(th);
                 }
             }
+            return themeInfo;
+        } catch (Exception th2) {
+            FileLog.e(th2);
+            return null;
+        }
+    }
+
+    public static ThemeInfo applyThemeFile(File file, String str, TL_theme tL_theme, boolean z) {
+        String str2 = ".attheme";
+        try {
+            if (!str.toLowerCase().endsWith(str2)) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(str);
+                stringBuilder.append(str2);
+                str = stringBuilder.toString();
+            }
+            if (z) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.goingToPreviewTheme, new Object[0]);
+                ThemeInfo themeInfo = new ThemeInfo();
+                themeInfo.name = str;
+                themeInfo.info = tL_theme;
+                themeInfo.pathToFile = file.getAbsolutePath();
+                themeInfo.account = UserConfig.selectedAccount;
+                applyThemeTemporary(themeInfo);
+                return themeInfo;
+            }
+            Object stringBuilder2;
+            File file2;
+            if (tL_theme != null) {
+                StringBuilder stringBuilder3 = new StringBuilder();
+                stringBuilder3.append("remote");
+                stringBuilder3.append(tL_theme.id);
+                stringBuilder2 = stringBuilder3.toString();
+                File filesDirFixed = ApplicationLoader.getFilesDirFixed();
+                StringBuilder stringBuilder4 = new StringBuilder();
+                stringBuilder4.append(stringBuilder2);
+                stringBuilder4.append(str2);
+                file2 = new File(filesDirFixed, stringBuilder4.toString());
+            } else {
+                file2 = new File(ApplicationLoader.getFilesDirFixed(), str);
+                stringBuilder2 = str;
+            }
+            if (AndroidUtilities.copyFile(file, file2)) {
+                previousTheme = null;
+                ThemeInfo themeInfo2 = (ThemeInfo) themesDict.get(stringBuilder2);
+                if (themeInfo2 == null) {
+                    themeInfo2 = new ThemeInfo();
+                    themeInfo2.name = str;
+                    themeInfo2.account = UserConfig.selectedAccount;
+                    themes.add(themeInfo2);
+                    otherThemes.add(themeInfo2);
+                    sortThemes();
+                } else {
+                    themesDict.remove(stringBuilder2);
+                }
+                themeInfo2.info = tL_theme;
+                themeInfo2.pathToFile = file2.getAbsolutePath();
+                themesDict.put(themeInfo2.getKey(), themeInfo2);
+                saveOtherThemes(true);
+                applyTheme(themeInfo2, true, true, false);
+                return themeInfo2;
+            }
+            applyPreviousTheme();
             return null;
         } catch (Exception e) {
             FileLog.e(e);
@@ -2515,114 +5457,375 @@ public class Theme {
         applyTheme(themeInfo, true, true, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0075 A:{Catch:{ Exception -> 0x0091 }} */
-    public static void applyTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r5, boolean r6, boolean r7, boolean r8) {
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0151 A:{Catch:{ all -> 0x01ac }} */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x01b7 A:{Catch:{ Exception -> 0x01bf }} */
+    private static void applyTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r17, boolean r18, boolean r19, boolean r20) {
         /*
-        if (r5 != 0) goto L_0x0003;
-    L_0x0002:
+        r1 = r17;
+        r2 = r20;
+        if (r1 != 0) goto L_0x0007;
+    L_0x0006:
         return;
-    L_0x0003:
+    L_0x0007:
         r0 = org.telegram.ui.Components.ThemeEditorView.getInstance();
-        if (r0 == 0) goto L_0x000c;
-    L_0x0009:
+        if (r0 == 0) goto L_0x0010;
+    L_0x000d:
         r0.destroy();
-    L_0x000c:
-        r0 = r5.pathToFile;	 Catch:{ Exception -> 0x0091 }
-        r1 = "overrideThemeWallpaper";
-        r2 = 0;
-        r3 = "theme";
-        r4 = 0;
-        if (r0 != 0) goto L_0x003e;
-    L_0x0016:
-        r0 = r5.assetName;	 Catch:{ Exception -> 0x0091 }
-        if (r0 == 0) goto L_0x001b;
+    L_0x0010:
+        r3 = 0;
+        r0 = r1.pathToFile;	 Catch:{ Exception -> 0x01bf }
+        r4 = "overrideThemeWallpaper";
+        r5 = "theme";
+        r6 = 0;
+        if (r0 != 0) goto L_0x0045;
     L_0x001a:
-        goto L_0x003e;
-    L_0x001b:
-        if (r8 != 0) goto L_0x0032;
-    L_0x001d:
-        if (r6 == 0) goto L_0x0032;
+        r0 = r1.assetName;	 Catch:{ Exception -> 0x01bf }
+        if (r0 == 0) goto L_0x001f;
+    L_0x001e:
+        goto L_0x0045;
     L_0x001f:
-        r6 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x0091 }
-        r6 = r6.edit();	 Catch:{ Exception -> 0x0091 }
-        r6.remove(r3);	 Catch:{ Exception -> 0x0091 }
-        if (r7 == 0) goto L_0x002f;
-    L_0x002c:
-        r6.remove(r1);	 Catch:{ Exception -> 0x0091 }
-    L_0x002f:
-        r6.commit();	 Catch:{ Exception -> 0x0091 }
-    L_0x0032:
-        r6 = currentColors;	 Catch:{ Exception -> 0x0091 }
-        r6.clear();	 Catch:{ Exception -> 0x0091 }
-        themedWallpaperFileOffset = r2;	 Catch:{ Exception -> 0x0091 }
-        wallpaper = r4;	 Catch:{ Exception -> 0x0091 }
-        themedWallpaper = r4;	 Catch:{ Exception -> 0x0091 }
-        goto L_0x0071;
-    L_0x003e:
-        if (r8 != 0) goto L_0x0057;
-    L_0x0040:
-        if (r6 == 0) goto L_0x0057;
-    L_0x0042:
-        r6 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x0091 }
-        r6 = r6.edit();	 Catch:{ Exception -> 0x0091 }
-        r0 = r5.name;	 Catch:{ Exception -> 0x0091 }
-        r6.putString(r3, r0);	 Catch:{ Exception -> 0x0091 }
-        if (r7 == 0) goto L_0x0054;
-    L_0x0051:
-        r6.remove(r1);	 Catch:{ Exception -> 0x0091 }
-    L_0x0054:
-        r6.commit();	 Catch:{ Exception -> 0x0091 }
-    L_0x0057:
-        r6 = r5.assetName;	 Catch:{ Exception -> 0x0091 }
-        if (r6 == 0) goto L_0x0064;
-    L_0x005b:
-        r6 = r5.assetName;	 Catch:{ Exception -> 0x0091 }
-        r6 = getThemeFileValues(r4, r6);	 Catch:{ Exception -> 0x0091 }
-        currentColors = r6;	 Catch:{ Exception -> 0x0091 }
-        goto L_0x0071;
-    L_0x0064:
-        r6 = new java.io.File;	 Catch:{ Exception -> 0x0091 }
-        r7 = r5.pathToFile;	 Catch:{ Exception -> 0x0091 }
-        r6.<init>(r7);	 Catch:{ Exception -> 0x0091 }
-        r6 = getThemeFileValues(r6, r4);	 Catch:{ Exception -> 0x0091 }
-        currentColors = r6;	 Catch:{ Exception -> 0x0091 }
-    L_0x0071:
-        currentTheme = r5;	 Catch:{ Exception -> 0x0091 }
-        if (r8 != 0) goto L_0x0079;
-    L_0x0075:
-        r5 = currentTheme;	 Catch:{ Exception -> 0x0091 }
-        currentDayTheme = r5;	 Catch:{ Exception -> 0x0091 }
-    L_0x0079:
-        reloadWallpaper();	 Catch:{ Exception -> 0x0091 }
-        applyCommonTheme();	 Catch:{ Exception -> 0x0091 }
-        applyDialogsTheme();	 Catch:{ Exception -> 0x0091 }
-        applyProfileTheme();	 Catch:{ Exception -> 0x0091 }
-        applyChatTheme(r2);	 Catch:{ Exception -> 0x0091 }
-        r5 = new org.telegram.ui.ActionBar.-$$Lambda$Theme$U5dmA2RnRuUehj9EUY9kmkkhUlE;	 Catch:{ Exception -> 0x0091 }
-        r5.<init>(r8);	 Catch:{ Exception -> 0x0091 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r5);	 Catch:{ Exception -> 0x0091 }
-        goto L_0x0095;
-    L_0x0091:
-        r5 = move-exception;
-        org.telegram.messenger.FileLog.e(r5);
-    L_0x0095:
+        if (r2 != 0) goto L_0x0036;
+    L_0x0021:
+        if (r18 == 0) goto L_0x0036;
+    L_0x0023:
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x01bf }
+        r0 = r0.edit();	 Catch:{ Exception -> 0x01bf }
+        r0.remove(r5);	 Catch:{ Exception -> 0x01bf }
+        if (r19 == 0) goto L_0x0033;
+    L_0x0030:
+        r0.remove(r4);	 Catch:{ Exception -> 0x01bf }
+    L_0x0033:
+        r0.commit();	 Catch:{ Exception -> 0x01bf }
+    L_0x0036:
+        r0 = currentColorsNoAccent;	 Catch:{ Exception -> 0x01bf }
+        r0.clear();	 Catch:{ Exception -> 0x01bf }
+        themedWallpaperFileOffset = r3;	 Catch:{ Exception -> 0x01bf }
+        themedWallpaperLink = r6;	 Catch:{ Exception -> 0x01bf }
+        wallpaper = r6;	 Catch:{ Exception -> 0x01bf }
+        themedWallpaper = r6;	 Catch:{ Exception -> 0x01bf }
+        goto L_0x01b3;
+    L_0x0045:
+        if (r2 != 0) goto L_0x0060;
+    L_0x0047:
+        if (r18 == 0) goto L_0x0060;
+    L_0x0049:
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x01bf }
+        r0 = r0.edit();	 Catch:{ Exception -> 0x01bf }
+        r7 = r17.getKey();	 Catch:{ Exception -> 0x01bf }
+        r0.putString(r5, r7);	 Catch:{ Exception -> 0x01bf }
+        if (r19 == 0) goto L_0x005d;
+    L_0x005a:
+        r0.remove(r4);	 Catch:{ Exception -> 0x01bf }
+    L_0x005d:
+        r0.commit();	 Catch:{ Exception -> 0x01bf }
+    L_0x0060:
+        r0 = 1;
+        r4 = new java.lang.String[r0];	 Catch:{ Exception -> 0x01bf }
+        r5 = r1.assetName;	 Catch:{ Exception -> 0x01bf }
+        if (r5 == 0) goto L_0x0070;
+    L_0x0067:
+        r5 = r1.assetName;	 Catch:{ Exception -> 0x01bf }
+        r5 = getThemeFileValues(r6, r5, r6);	 Catch:{ Exception -> 0x01bf }
+        currentColorsNoAccent = r5;	 Catch:{ Exception -> 0x01bf }
+        goto L_0x007d;
+    L_0x0070:
+        r5 = new java.io.File;	 Catch:{ Exception -> 0x01bf }
+        r7 = r1.pathToFile;	 Catch:{ Exception -> 0x01bf }
+        r5.<init>(r7);	 Catch:{ Exception -> 0x01bf }
+        r5 = getThemeFileValues(r5, r6, r4);	 Catch:{ Exception -> 0x01bf }
+        currentColorsNoAccent = r5;	 Catch:{ Exception -> 0x01bf }
+    L_0x007d:
+        r5 = currentColorsNoAccent;	 Catch:{ Exception -> 0x01bf }
+        r7 = "wallpaperFileOffset";
+        r5 = r5.get(r7);	 Catch:{ Exception -> 0x01bf }
+        r5 = (java.lang.Integer) r5;	 Catch:{ Exception -> 0x01bf }
+        if (r5 == 0) goto L_0x008e;
+    L_0x0089:
+        r5 = r5.intValue();	 Catch:{ Exception -> 0x01bf }
+        goto L_0x008f;
+    L_0x008e:
+        r5 = -1;
+    L_0x008f:
+        themedWallpaperFileOffset = r5;	 Catch:{ Exception -> 0x01bf }
+        r5 = r4[r3];	 Catch:{ Exception -> 0x01bf }
+        r5 = android.text.TextUtils.isEmpty(r5);	 Catch:{ Exception -> 0x01bf }
+        if (r5 != 0) goto L_0x01b1;
+    L_0x0099:
+        r4 = r4[r3];	 Catch:{ Exception -> 0x01bf }
+        themedWallpaperLink = r4;	 Catch:{ Exception -> 0x01bf }
+        r4 = new java.io.File;	 Catch:{ Exception -> 0x01bf }
+        r5 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Exception -> 0x01bf }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01bf }
+        r7.<init>();	 Catch:{ Exception -> 0x01bf }
+        r8 = themedWallpaperLink;	 Catch:{ Exception -> 0x01bf }
+        r8 = org.telegram.messenger.Utilities.MD5(r8);	 Catch:{ Exception -> 0x01bf }
+        r7.append(r8);	 Catch:{ Exception -> 0x01bf }
+        r8 = ".wp";
+        r7.append(r8);	 Catch:{ Exception -> 0x01bf }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x01bf }
+        r4.<init>(r5, r7);	 Catch:{ Exception -> 0x01bf }
+        r4 = r4.getAbsolutePath();	 Catch:{ Exception -> 0x01bf }
+        r1.pathToWallpaper = r4;	 Catch:{ Exception -> 0x01bf }
+        r4 = themedWallpaperLink;	 Catch:{ all -> 0x01ac }
+        r4 = android.net.Uri.parse(r4);	 Catch:{ all -> 0x01ac }
+        r5 = "slug";
+        r5 = r4.getQueryParameter(r5);	 Catch:{ all -> 0x01ac }
+        r1.slug = r5;	 Catch:{ all -> 0x01ac }
+        r5 = "id";
+        r5 = r4.getQueryParameter(r5);	 Catch:{ all -> 0x01ac }
+        r5 = org.telegram.messenger.Utilities.parseLong(r5);	 Catch:{ all -> 0x01ac }
+        r7 = r5.longValue();	 Catch:{ all -> 0x01ac }
+        r5 = "pattern";
+        r5 = r4.getQueryParameter(r5);	 Catch:{ all -> 0x01ac }
+        r5 = org.telegram.messenger.Utilities.parseLong(r5);	 Catch:{ all -> 0x01ac }
+        r9 = r5.longValue();	 Catch:{ all -> 0x01ac }
+        r5 = "mode";
+        r5 = r4.getQueryParameter(r5);	 Catch:{ all -> 0x01ac }
+        if (r5 == 0) goto L_0x0124;
+    L_0x00f5:
+        r5 = r5.toLowerCase();	 Catch:{ all -> 0x01ac }
+        r11 = " ";
+        r5 = r5.split(r11);	 Catch:{ all -> 0x01ac }
+        if (r5 == 0) goto L_0x0124;
+    L_0x0101:
+        r11 = r5.length;	 Catch:{ all -> 0x01ac }
+        if (r11 <= 0) goto L_0x0124;
+    L_0x0104:
+        r11 = 0;
+    L_0x0105:
+        r12 = r5.length;	 Catch:{ all -> 0x01ac }
+        if (r11 >= r12) goto L_0x0124;
+    L_0x0108:
+        r12 = "blur";
+        r13 = r5[r11];	 Catch:{ all -> 0x01ac }
+        r12 = r12.equals(r13);	 Catch:{ all -> 0x01ac }
+        if (r12 == 0) goto L_0x0115;
+    L_0x0112:
+        r1.isBlured = r0;	 Catch:{ all -> 0x01ac }
+        goto L_0x0121;
+    L_0x0115:
+        r12 = "motion";
+        r13 = r5[r11];	 Catch:{ all -> 0x01ac }
+        r12 = r12.equals(r13);	 Catch:{ all -> 0x01ac }
+        if (r12 == 0) goto L_0x0121;
+    L_0x011f:
+        r1.isMotion = r0;	 Catch:{ all -> 0x01ac }
+    L_0x0121:
+        r11 = r11 + 1;
+        goto L_0x0105;
+    L_0x0124:
+        r5 = "intensity";
+        r5 = r4.getQueryParameter(r5);	 Catch:{ all -> 0x01ac }
+        r5 = org.telegram.messenger.Utilities.parseInt(r5);	 Catch:{ all -> 0x01ac }
+        r5 = r5.intValue();	 Catch:{ all -> 0x01ac }
+        r11 = "bg_color";
+        r4 = r4.getQueryParameter(r11);	 Catch:{ Exception -> 0x0148 }
+        r11 = android.text.TextUtils.isEmpty(r4);	 Catch:{ Exception -> 0x0148 }
+        if (r11 != 0) goto L_0x0148;
+    L_0x013e:
+        r11 = 16;
+        r4 = java.lang.Integer.parseInt(r4, r11);	 Catch:{ Exception -> 0x0148 }
+        r11 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
+        r4 = r4 | r11;
+        goto L_0x0149;
+    L_0x0148:
+        r4 = 0;
+    L_0x0149:
+        r11 = r1.slug;	 Catch:{ all -> 0x01ac }
+        r11 = android.text.TextUtils.isEmpty(r11);	 Catch:{ all -> 0x01ac }
+        if (r11 != 0) goto L_0x01b3;
+    L_0x0151:
+        r11 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ all -> 0x01ac }
+        r11 = r11.edit();	 Catch:{ all -> 0x01ac }
+        if (r18 == 0) goto L_0x0197;
+    L_0x015b:
+        r12 = "selectedBackgroundSlug";
+        r13 = r1.slug;	 Catch:{ all -> 0x01ac }
+        r11.putString(r12, r13);	 Catch:{ all -> 0x01ac }
+        r12 = "selectedPattern";
+        r13 = "selectedBackground2";
+        r14 = 0;
+        r16 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1));
+        if (r16 == 0) goto L_0x0177;
+    L_0x016c:
+        r7 = -1;
+        r11.putLong(r13, r7);	 Catch:{ all -> 0x01ac }
+        r11.putLong(r12, r9);	 Catch:{ all -> 0x01ac }
+        isPatternWallpaper = r0;	 Catch:{ all -> 0x01ac }
+        goto L_0x017f;
+    L_0x0177:
+        r11.putLong(r13, r7);	 Catch:{ all -> 0x01ac }
+        r11.putLong(r12, r14);	 Catch:{ all -> 0x01ac }
+        isPatternWallpaper = r3;	 Catch:{ all -> 0x01ac }
+    L_0x017f:
+        r0 = "selectedBackgroundBlurred";
+        r7 = r1.isBlured;	 Catch:{ all -> 0x01ac }
+        r11.putBoolean(r0, r7);	 Catch:{ all -> 0x01ac }
+        r0 = "selectedColor";
+        r11.putInt(r0, r4);	 Catch:{ all -> 0x01ac }
+        r0 = "selectedIntensity";
+        r4 = (float) r5;	 Catch:{ all -> 0x01ac }
+        r5 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
+        r4 = r4 / r5;
+        r11.putFloat(r0, r4);	 Catch:{ all -> 0x01ac }
+        isWallpaperMotionPrev = r6;	 Catch:{ all -> 0x01ac }
+        goto L_0x019f;
+    L_0x0197:
+        r0 = isWallpaperMotion;	 Catch:{ all -> 0x01ac }
+        r0 = java.lang.Boolean.valueOf(r0);	 Catch:{ all -> 0x01ac }
+        isWallpaperMotionPrev = r0;	 Catch:{ all -> 0x01ac }
+    L_0x019f:
+        r0 = "selectedBackgroundMotion";
+        r4 = r1.isMotion;	 Catch:{ all -> 0x01ac }
+        isWallpaperMotion = r4;	 Catch:{ all -> 0x01ac }
+        r11.putBoolean(r0, r4);	 Catch:{ all -> 0x01ac }
+        r11.commit();	 Catch:{ all -> 0x01ac }
+        goto L_0x01b3;
+    L_0x01ac:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x01bf }
+        goto L_0x01b3;
+    L_0x01b1:
+        themedWallpaperLink = r6;	 Catch:{ Exception -> 0x01bf }
+    L_0x01b3:
+        currentTheme = r1;	 Catch:{ Exception -> 0x01bf }
+        if (r2 != 0) goto L_0x01bb;
+    L_0x01b7:
+        r0 = currentTheme;	 Catch:{ Exception -> 0x01bf }
+        currentDayTheme = r0;	 Catch:{ Exception -> 0x01bf }
+    L_0x01bb:
+        refreshThemeColors();	 Catch:{ Exception -> 0x01bf }
+        goto L_0x01c3;
+    L_0x01bf:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x01c3:
+        r0 = previousTheme;
+        if (r0 != 0) goto L_0x01d4;
+    L_0x01c7:
+        r0 = switchingNightTheme;
+        if (r0 != 0) goto L_0x01d4;
+    L_0x01cb:
+        r0 = r1.account;
+        r0 = org.telegram.messenger.MessagesController.getInstance(r0);
+        r0.saveTheme(r1, r2, r3);
+    L_0x01d4:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.applyTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean, boolean, boolean):void");
     }
 
-    private static void saveOtherThemes() {
+    private static void refreshThemeColors() {
+        currentColors.clear();
+        currentColors.putAll(currentColorsNoAccent);
+        ThemeInfo themeInfo = currentTheme;
+        int i = themeInfo.accentColor;
+        if (i != 0) {
+            int i2 = themeInfo.accentBaseColor;
+            if (!(i2 == 0 || i == i2)) {
+                HashSet hashSet = new HashSet(currentColorsNoAccent.keySet());
+                hashSet.addAll(defaultColors.keySet());
+                hashSet.removeAll(themeAccentExclusionKeys);
+                Iterator it = hashSet.iterator();
+                while (it.hasNext()) {
+                    String str = (String) it.next();
+                    Integer num = (Integer) currentColorsNoAccent.get(str);
+                    if (num == null) {
+                        String str2 = (String) fallbackKeys.get(str);
+                        if (!(str2 == null || currentColorsNoAccent.get(str2) == null)) {
+                        }
+                    }
+                    if (num == null) {
+                        num = (Integer) defaultColors.get(str);
+                    }
+                    int changeColorAccent = changeColorAccent(themeInfo.accentBaseColorHsv, themeInfo.accentColorHsv, num.intValue());
+                    if (changeColorAccent != num.intValue()) {
+                        currentColors.put(str, Integer.valueOf(changeColorAccent));
+                    }
+                }
+            }
+        }
+        reloadWallpaper();
+        applyCommonTheme();
+        applyDialogsTheme();
+        applyProfileTheme();
+        applyChatTheme(false);
+        AndroidUtilities.runOnUIThread(-$$Lambda$Theme$JmSLMyb-373NmPAc6NmsxsfWldE.INSTANCE);
+    }
+
+    public static int changeColorAccent(ThemeInfo themeInfo, int i, int i2) {
+        if (i != 0) {
+            int i3 = themeInfo.accentBaseColor;
+            if (!(i3 == 0 || i == i3)) {
+                Color.colorToHSV(i, hsv);
+                return changeColorAccent(themeInfo.accentBaseColorHsv, hsv, i2);
+            }
+        }
+        return i2;
+    }
+
+    public static int changeColorAccent(int i) {
+        ThemeInfo themeInfo = currentTheme;
+        return changeColorAccent(themeInfo, themeInfo.accentColor, i);
+    }
+
+    private static int changeColorAccent(float[] fArr, float[] fArr2, int i) {
+        float f = fArr[0];
+        float f2 = fArr[1];
+        float f3 = fArr[2];
+        float f4 = fArr2[0];
+        float f5 = fArr2[1];
+        float f6 = fArr2[2];
+        Color.colorToHSV(i, hsv);
+        float[] fArr3 = hsv;
+        float f7 = fArr3[0];
+        float f8 = fArr3[1];
+        float f9 = fArr3[2];
+        float var_ = f7 - f;
+        if (Math.min(Math.abs(var_), Math.abs(var_ - 360.0f)) > 30.0f) {
+            return i;
+        }
+        var_ = Math.min((1.5f * f8) / f2, 1.0f);
+        float[] fArr4 = hsv;
+        fArr4[0] = (f7 + f4) - f;
+        fArr4[1] = (f8 * f5) / f2;
+        fArr4[2] = f9 * ((1.0f - var_) + ((var_ * f6) / f3));
+        return Color.HSVToColor(Color.alpha(i), hsv);
+    }
+
+    public static void applyCurrentThemeAccent(int i) {
+        currentTheme.setAccentColor(i);
+        refreshThemeColors();
+    }
+
+    public static void saveThemeAccent(ThemeInfo themeInfo, int i) {
+        if (themeInfo.assetName != null) {
+            Editor edit = MessagesController.getGlobalMainSettings().edit();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("accent_for_");
+            stringBuilder.append(themeInfo.assetName);
+            edit.putInt(stringBuilder.toString(), i).commit();
+            themeInfo.setAccentColor(i);
+        }
+    }
+
+    private static void saveOtherThemes(boolean z) {
         int i = 0;
         Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0).edit();
-        JSONArray jSONArray = new JSONArray();
-        while (i < otherThemes.size()) {
-            JSONObject saveJson = ((ThemeInfo) otherThemes.get(i)).getSaveJson();
-            if (saveJson != null) {
-                jSONArray.put(saveJson);
+        if (z) {
+            JSONArray jSONArray = new JSONArray();
+            while (i < otherThemes.size()) {
+                JSONObject saveJson = ((ThemeInfo) otherThemes.get(i)).getSaveJson();
+                if (saveJson != null) {
+                    jSONArray.put(saveJson);
+                }
+                i++;
             }
-            i++;
+            edit.putString("themes2", jSONArray.toString());
         }
-        edit.putString("themes2", jSONArray.toString());
+        edit.putInt("remoteThemesHash", remoteThemesHash);
+        edit.putInt("lastLoadingThemesTime", lastLoadingThemesTime);
+        edit.putInt("lastLoadingCurrentThemeTime", lastLoadingCurrentThemeTime);
         edit.commit();
     }
 
@@ -2660,8 +5863,12 @@ public class Theme {
         return currentTheme == currentNightTheme;
     }
 
-    public static boolean isCurrentThemeDefault() {
+    private static boolean isCurrentThemeDefault() {
         return currentTheme == defaultTheme;
+    }
+
+    public static boolean isThemeDefault(ThemeInfo themeInfo) {
+        return themeInfo == defaultTheme;
     }
 
     private static long getAutoNightSwitchThemeDelay() {
@@ -2890,15 +6097,20 @@ public class Theme {
     }
 
     private static void applyDayNightThemeMaybe(boolean z) {
-        Boolean valueOf = Boolean.valueOf(true);
-        if (z) {
-            if (currentTheme != currentNightTheme) {
+        if (previousTheme == null) {
+            if (z) {
+                if (currentTheme != currentNightTheme) {
+                    lastThemeSwitchTime = SystemClock.elapsedRealtime();
+                    switchingNightTheme = true;
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentNightTheme, Boolean.valueOf(true));
+                    switchingNightTheme = false;
+                }
+            } else if (currentTheme != currentDayTheme) {
                 lastThemeSwitchTime = SystemClock.elapsedRealtime();
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentNightTheme, valueOf);
+                switchingNightTheme = true;
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentDayTheme, Boolean.valueOf(true));
+                switchingNightTheme = false;
             }
-        } else if (currentTheme != currentDayTheme) {
-            lastThemeSwitchTime = SystemClock.elapsedRealtime();
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentDayTheme, valueOf);
         }
     }
 
@@ -2911,348 +6123,1564 @@ public class Theme {
             applyTheme(defaultTheme, true, false, false);
             z = true;
         }
+        if (themeInfo == currentNightTheme) {
+            currentNightTheme = (ThemeInfo) themesDict.get("Dark Blue");
+        }
+        themeInfo.removeObservers();
         otherThemes.remove(themeInfo);
         themesDict.remove(themeInfo.name);
         themes.remove(themeInfo);
         new File(themeInfo.pathToFile).delete();
-        saveOtherThemes();
+        saveOtherThemes(true);
         return z;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x0107 A:{SYNTHETIC, Splitter:B:38:0x0107} */
-    /* JADX WARNING: Removed duplicated region for block: B:45:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00fc A:{SYNTHETIC, Splitter:B:33:0x00fc} */
-    public static void saveCurrentTheme(java.lang.String r12, boolean r13) {
+    public static ThemeInfo createNewTheme(String str) {
+        ThemeInfo themeInfo = new ThemeInfo();
+        File filesDirFixed = ApplicationLoader.getFilesDirFixed();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("theme");
+        stringBuilder.append(Utilities.random.nextLong());
+        stringBuilder.append(".attheme");
+        themeInfo.pathToFile = new File(filesDirFixed, stringBuilder.toString()).getAbsolutePath();
+        themeInfo.name = str;
+        themeInfo.account = UserConfig.selectedAccount;
+        saveCurrentTheme(themeInfo, true, true, false);
+        return themeInfo;
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:110:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x0290 A:{SYNTHETIC, Splitter:B:93:0x0290} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02a7 A:{SYNTHETIC, Splitter:B:100:0x02a7} */
+    public static void saveCurrentTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r19, boolean r20, boolean r21, boolean r22) {
         /*
+        r1 = r19;
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
+        r2 = 0;
+        r3 = "overrideThemeWallpaper";
+        r3 = r0.getBoolean(r3, r2);
+        r4 = 0;
+        r5 = "selectedBackgroundSlug";
+        r5 = r0.getString(r5, r4);
+        r6 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
+        r8 = "selectedBackground2";
+        r8 = r0.getLong(r8, r6);
+        r10 = 0;
+        r12 = "selectedPattern";
+        r12 = r0.getLong(r12, r10);
+        r14 = 3;
+        r15 = 2;
+        r16 = 1;
+        if (r22 == 0) goto L_0x0111;
+    L_0x002b:
+        r17 = android.text.TextUtils.isEmpty(r5);
+        if (r17 != 0) goto L_0x010f;
+    L_0x0031:
+        r17 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
+        if (r17 != 0) goto L_0x0039;
+    L_0x0035:
+        r6 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1));
+        if (r6 == 0) goto L_0x010f;
+    L_0x0039:
+        if (r3 != 0) goto L_0x0041;
+    L_0x003b:
+        r3 = hasWallpaperFromTheme();
+        if (r3 != 0) goto L_0x010f;
+    L_0x0041:
+        r3 = "selectedBackgroundBlurred";
+        r3 = r0.getBoolean(r3, r2);
+        r6 = "selectedBackgroundMotion";
+        r6 = r0.getBoolean(r6, r2);
+        r7 = "selectedColor";
+        r7 = r0.getInt(r7, r2);
+        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r11 = "selectedIntensity";
+        r0 = r0.getFloat(r11, r10);
+        r10 = new java.lang.StringBuilder;
+        r10.<init>();
+        if (r3 == 0) goto L_0x0067;
+    L_0x0062:
+        r3 = "blur";
+        r10.append(r3);
+    L_0x0067:
+        if (r6 == 0) goto L_0x0079;
+    L_0x0069:
+        r3 = r10.length();
+        if (r3 <= 0) goto L_0x0074;
+    L_0x006f:
+        r3 = "+";
+        r10.append(r3);
+    L_0x0074:
+        r3 = "motion";
+        r10.append(r3);
+    L_0x0079:
+        r17 = -1;
+        r3 = "https://attheme.org?slug=";
+        r6 = (r8 > r17 ? 1 : (r8 == r17 ? 0 : -1));
+        if (r6 == 0) goto L_0x0099;
+    L_0x0081:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r1 = currentColors;
-        r1 = r1.entrySet();
-        r1 = r1.iterator();
-    L_0x000f:
-        r2 = r1.hasNext();
-        if (r2 == 0) goto L_0x0036;
-    L_0x0015:
-        r2 = r1.next();
-        r2 = (java.util.Map.Entry) r2;
-        r3 = r2.getKey();
-        r3 = (java.lang.String) r3;
         r0.append(r3);
-        r3 = "=";
+        r0.append(r5);
+        r3 = "&id=";
         r0.append(r3);
-        r2 = r2.getValue();
-        r0.append(r2);
-        r2 = "\n";
-        r0.append(r2);
-        goto L_0x000f;
-    L_0x0036:
-        r1 = new java.io.File;
-        r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
-        r1.<init>(r2, r12);
-        r2 = 0;
-        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x00f6 }
-        r3.<init>(r1);	 Catch:{ Exception -> 0x00f6 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = org.telegram.messenger.AndroidUtilities.getStringBytes(r0);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r3.write(r0);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = themedWallpaper;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = r0 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        if (r0 == 0) goto L_0x009c;
-    L_0x0056:
-        r0 = themedWallpaper;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = (android.graphics.drawable.BitmapDrawable) r0;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r2 = 2;
-        if (r0 == 0) goto L_0x0091;
-    L_0x0061:
-        r4 = 4;
-        r5 = new byte[r4];	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r6 = 0;
-        r7 = 87;
-        r5[r6] = r7;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r8 = 80;
-        r9 = 1;
-        r5[r9] = r8;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r10 = 83;
-        r5[r2] = r10;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r10 = 3;
-        r11 = 10;
-        r5[r10] = r11;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r3.write(r5);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r5 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0.compress(r5, r7, r3);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = 5;
-        r0 = new byte[r0];	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0[r6] = r11;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0[r9] = r7;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0[r2] = r8;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r5 = 69;
-        r0[r10] = r5;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0[r4] = r11;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r3.write(r0);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-    L_0x0091:
-        if (r13 == 0) goto L_0x009c;
-    L_0x0093:
-        r13 = themedWallpaper;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        wallpaper = r13;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r13 = wallpaper;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        calcBackgroundColor(r13, r2);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-    L_0x009c:
-        r13 = themesDict;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r13 = r13.get(r12);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r13 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r13;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        if (r13 != 0) goto L_0x00ca;
-    L_0x00a6:
-        r13 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r13.<init>();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = r1.getAbsolutePath();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r13.pathToFile = r0;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r13.name = r12;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12 = themes;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12.add(r13);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12 = themesDict;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = r13.name;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12.put(r0, r13);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12 = otherThemes;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12.add(r13);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        saveOtherThemes();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        sortThemes();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-    L_0x00ca:
-        currentTheme = r13;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12 = currentTheme;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r13 = currentNightTheme;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        if (r12 == r13) goto L_0x00d6;
-    L_0x00d2:
-        r12 = currentTheme;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        currentDayTheme = r12;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-    L_0x00d6:
-        r12 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12 = r12.edit();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r13 = "theme";
-        r0 = currentDayTheme;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r0 = r0.name;	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12.putString(r13, r0);	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r12.commit();	 Catch:{ Exception -> 0x00f0, all -> 0x00ee }
-        r3.close();	 Catch:{ Exception -> 0x0100 }
-        goto L_0x0104;
-    L_0x00ee:
-        r12 = move-exception;
-        goto L_0x0105;
+        r0.append(r8);
+        r0 = r0.toString();
+        goto L_0x00f0;
+    L_0x0099:
+        r6 = new java.lang.Object[r14];
+        r8 = r7 >> 16;
+        r8 = (byte) r8;
+        r8 = r8 & 255;
+        r8 = java.lang.Integer.valueOf(r8);
+        r6[r2] = r8;
+        r8 = r7 >> 8;
+        r8 = (byte) r8;
+        r8 = r8 & 255;
+        r8 = java.lang.Integer.valueOf(r8);
+        r6[r16] = r8;
+        r7 = r7 & 255;
+        r7 = (byte) r7;
+        r7 = java.lang.Byte.valueOf(r7);
+        r6[r15] = r7;
+        r7 = "%02x%02x%02x";
+        r6 = java.lang.String.format(r7, r6);
+        r6 = r6.toLowerCase();
+        r7 = new java.lang.StringBuilder;
+        r7.<init>();
+        r7.append(r3);
+        r7.append(r5);
+        r3 = "&intensity=";
+        r7.append(r3);
+        r3 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
+        r0 = r0 * r3;
+        r0 = (int) r0;
+        r7.append(r0);
+        r0 = "&bg_color=";
+        r7.append(r0);
+        r7.append(r6);
+        r0 = "&pattern=";
+        r7.append(r0);
+        r7.append(r12);
+        r0 = r7.toString();
     L_0x00f0:
-        r12 = move-exception;
-        r2 = r3;
-        goto L_0x00f7;
-    L_0x00f3:
-        r12 = move-exception;
-        r3 = r2;
-        goto L_0x0105;
+        r3 = r10.length();
+        if (r3 <= 0) goto L_0x0113;
     L_0x00f6:
-        r12 = move-exception;
-    L_0x00f7:
-        org.telegram.messenger.FileLog.e(r12);	 Catch:{ all -> 0x00f3 }
-        if (r2 == 0) goto L_0x0104;
-    L_0x00fc:
-        r2.close();	 Catch:{ Exception -> 0x0100 }
-        goto L_0x0104;
-    L_0x0100:
-        r12 = move-exception;
-        org.telegram.messenger.FileLog.e(r12);
-    L_0x0104:
-        return;
-    L_0x0105:
-        if (r3 == 0) goto L_0x010f;
-    L_0x0107:
-        r3.close();	 Catch:{ Exception -> 0x010b }
-        goto L_0x010f;
-    L_0x010b:
-        r13 = move-exception;
-        org.telegram.messenger.FileLog.e(r13);
+        r3 = new java.lang.StringBuilder;
+        r3.<init>();
+        r3.append(r0);
+        r0 = "&mode=";
+        r3.append(r0);
+        r0 = r10.toString();
+        r3.append(r0);
+        r0 = r3.toString();
+        goto L_0x0113;
     L_0x010f:
-        goto L_0x0111;
-    L_0x0110:
-        throw r12;
+        r0 = r4;
+        goto L_0x0113;
     L_0x0111:
-        goto L_0x0110;
+        r0 = themedWallpaperLink;
+    L_0x0113:
+        if (r21 == 0) goto L_0x0118;
+    L_0x0115:
+        r3 = wallpaper;
+        goto L_0x011a;
+    L_0x0118:
+        r3 = themedWallpaper;
+    L_0x011a:
+        if (r21 == 0) goto L_0x0122;
+    L_0x011c:
+        if (r3 == 0) goto L_0x0122;
+    L_0x011e:
+        r5 = wallpaper;
+        themedWallpaper = r5;
+    L_0x0122:
+        r5 = new java.lang.StringBuilder;
+        r5.<init>();
+        r6 = currentColors;
+        r6 = r6.entrySet();
+        r6 = r6.iterator();
+    L_0x0131:
+        r7 = r6.hasNext();
+        r8 = "\n";
+        if (r7 == 0) goto L_0x016f;
+    L_0x0139:
+        r7 = r6.next();
+        r7 = (java.util.Map.Entry) r7;
+        r9 = r7.getKey();
+        r9 = (java.lang.String) r9;
+        r10 = r3 instanceof android.graphics.drawable.BitmapDrawable;
+        if (r10 != 0) goto L_0x014b;
+    L_0x0149:
+        if (r0 == 0) goto L_0x015c;
+    L_0x014b:
+        r10 = "chat_wallpaper";
+        r10 = r10.equals(r9);
+        if (r10 != 0) goto L_0x0131;
+    L_0x0153:
+        r10 = "chat_wallpaper_gradient_to";
+        r10 = r10.equals(r9);
+        if (r10 == 0) goto L_0x015c;
+    L_0x015b:
+        goto L_0x0131;
+    L_0x015c:
+        r5.append(r9);
+        r9 = "=";
+        r5.append(r9);
+        r7 = r7.getValue();
+        r5.append(r7);
+        r5.append(r8);
+        goto L_0x0131;
+    L_0x016f:
+        r6 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x028a }
+        r7 = r1.pathToFile;	 Catch:{ Exception -> 0x028a }
+        r6.<init>(r7);	 Catch:{ Exception -> 0x028a }
+        r4 = r5.length();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r4 != 0) goto L_0x018b;
+    L_0x017c:
+        r4 = r3 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r4 != 0) goto L_0x018b;
+    L_0x0180:
+        r4 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r4 == 0) goto L_0x018b;
+    L_0x0186:
+        r4 = 32;
+        r5.append(r4);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x018b:
+        r4 = r5.toString();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r4 = org.telegram.messenger.AndroidUtilities.getStringBytes(r4);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r6.write(r4);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r4 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r5 = 87;
+        if (r4 != 0) goto L_0x01f2;
+    L_0x019e:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2.<init>();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r4 = "WLS=";
+        r2.append(r4);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2.append(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2.append(r8);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = org.telegram.messenger.AndroidUtilities.getStringBytes(r2);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r6.write(r2);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r21 == 0) goto L_0x0233;
+    L_0x01bb:
+        r3 = (android.graphics.drawable.BitmapDrawable) r3;	 Catch:{ all -> 0x01ed }
+        r2 = r3.getBitmap();	 Catch:{ all -> 0x01ed }
+        r3 = new java.io.FileOutputStream;	 Catch:{ all -> 0x01ed }
+        r4 = new java.io.File;	 Catch:{ all -> 0x01ed }
+        r7 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x01ed }
+        r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x01ed }
+        r8.<init>();	 Catch:{ all -> 0x01ed }
+        r0 = org.telegram.messenger.Utilities.MD5(r0);	 Catch:{ all -> 0x01ed }
+        r8.append(r0);	 Catch:{ all -> 0x01ed }
+        r0 = ".wp";
+        r8.append(r0);	 Catch:{ all -> 0x01ed }
+        r0 = r8.toString();	 Catch:{ all -> 0x01ed }
+        r4.<init>(r7, r0);	 Catch:{ all -> 0x01ed }
+        r3.<init>(r4);	 Catch:{ all -> 0x01ed }
+        r0 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x01ed }
+        r2.compress(r0, r5, r3);	 Catch:{ all -> 0x01ed }
+        r3.close();	 Catch:{ all -> 0x01ed }
+        goto L_0x0233;
+    L_0x01ed:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        goto L_0x0233;
+    L_0x01f2:
+        r0 = r3 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r0 == 0) goto L_0x0233;
+    L_0x01f6:
+        r0 = r3;
+        r0 = (android.graphics.drawable.BitmapDrawable) r0;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r0 == 0) goto L_0x022a;
+    L_0x01ff:
+        r4 = 4;
+        r7 = new byte[r4];	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r7[r2] = r5;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r8 = 80;
+        r7[r16] = r8;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r9 = 83;
+        r7[r15] = r9;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r9 = 10;
+        r7[r14] = r9;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r6.write(r7);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r7 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.compress(r7, r5, r6);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = 5;
+        r0 = new byte[r0];	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0[r2] = r9;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0[r16] = r5;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0[r15] = r8;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = 69;
+        r0[r14] = r2;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0[r4] = r9;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r6.write(r0);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x022a:
+        if (r20 == 0) goto L_0x0233;
+    L_0x022c:
+        if (r22 != 0) goto L_0x0233;
+    L_0x022e:
+        wallpaper = r3;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        calcBackgroundColor(r3, r15);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x0233:
+        if (r22 != 0) goto L_0x027c;
+    L_0x0235:
+        r0 = themesDict;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = r19.getKey();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = r0.get(r2);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r0 != 0) goto L_0x025a;
+    L_0x0241:
+        r0 = themes;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.add(r1);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = themesDict;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = r19.getKey();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.put(r2, r1);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = otherThemes;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.add(r1);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        saveOtherThemes(r16);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        sortThemes();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x025a:
+        currentTheme = r1;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = currentTheme;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = currentNightTheme;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        if (r0 == r2) goto L_0x0266;
+    L_0x0262:
+        r0 = currentTheme;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        currentDayTheme = r0;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x0266:
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0 = r0.edit();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r2 = "theme";
+        r3 = currentDayTheme;	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r3 = r3.getKey();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.putString(r2, r3);	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+        r0.commit();	 Catch:{ Exception -> 0x0283, all -> 0x0280 }
+    L_0x027c:
+        r6.close();	 Catch:{ Exception -> 0x0294 }
+        goto L_0x0299;
+    L_0x0280:
+        r0 = move-exception;
+        r1 = r0;
+        goto L_0x02a5;
+    L_0x0283:
+        r0 = move-exception;
+        r4 = r6;
+        goto L_0x028b;
+    L_0x0286:
+        r0 = move-exception;
+        r1 = r0;
+        r6 = r4;
+        goto L_0x02a5;
+    L_0x028a:
+        r0 = move-exception;
+    L_0x028b:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0286 }
+        if (r4 == 0) goto L_0x0299;
+    L_0x0290:
+        r4.close();	 Catch:{ Exception -> 0x0294 }
+        goto L_0x0299;
+    L_0x0294:
+        r0 = move-exception;
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);
+    L_0x0299:
+        if (r20 == 0) goto L_0x02a4;
+    L_0x029b:
+        r0 = r1.account;
+        r0 = org.telegram.messenger.MessagesController.getInstance(r0);
+        r0.saveThemeToServer(r1);
+    L_0x02a4:
+        return;
+    L_0x02a5:
+        if (r6 == 0) goto L_0x02b0;
+    L_0x02a7:
+        r6.close();	 Catch:{ Exception -> 0x02ab }
+        goto L_0x02b0;
+    L_0x02ab:
+        r0 = move-exception;
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);
+    L_0x02b0:
+        goto L_0x02b2;
+    L_0x02b1:
+        throw r1;
+    L_0x02b2:
+        goto L_0x02b1;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.saveCurrentTheme(java.lang.String, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.saveCurrentTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean, boolean, boolean):void");
     }
 
-    public static File getAssetFile(String str) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), str);
-        long available;
-        try {
-            InputStream open = ApplicationLoader.applicationContext.getAssets().open(str);
-            available = (long) open.available();
-            open.close();
-        } catch (Exception e) {
-            FileLog.e(e);
-            available = 0;
+    public static void checkCurrentRemoteTheme(boolean z) {
+        if (loadingCurrentTheme != 0) {
+            return;
         }
-        if (!(file.exists() && (available == 0 || file.length() == available))) {
-            InputStream open2;
-            try {
-                open2 = ApplicationLoader.applicationContext.getAssets().open(str);
-                AndroidUtilities.copyFile(open2, file);
-                if (open2 != null) {
-                    open2.close();
+        if (z || Math.abs((System.currentTimeMillis() / 1000) - ((long) lastLoadingCurrentThemeTime)) >= 3600) {
+            int i = 0;
+            while (i < 2) {
+                ThemeInfo themeInfo = i == 0 ? currentDayTheme : currentNightTheme;
+                if (themeInfo != null) {
+                    TL_theme tL_theme = themeInfo.info;
+                    if (!(tL_theme == null || tL_theme.document == null || !UserConfig.getInstance(themeInfo.account).isClientActivated())) {
+                        loadingCurrentTheme++;
+                        TL_account_getTheme tL_account_getTheme = new TL_account_getTheme();
+                        tL_account_getTheme.document_id = themeInfo.info.document.id;
+                        tL_account_getTheme.format = "android";
+                        TL_inputTheme tL_inputTheme = new TL_inputTheme();
+                        TL_theme tL_theme2 = themeInfo.info;
+                        tL_inputTheme.access_hash = tL_theme2.access_hash;
+                        tL_inputTheme.id = tL_theme2.id;
+                        tL_account_getTheme.theme = tL_inputTheme;
+                        ConnectionsManager.getInstance(themeInfo.account).sendRequest(tL_account_getTheme, new -$$Lambda$Theme$pF9AI0vS7PvPoaowEPmtk2Zehvo(themeInfo));
+                    }
                 }
-            } catch (Exception e2) {
-                FileLog.e(e2);
-            } catch (Throwable unused) {
+                i++;
             }
         }
-        return file;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x00a8 A:{SYNTHETIC, Splitter:B:50:0x00a8} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:28:0x0069 */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00b3 A:{SYNTHETIC, Splitter:B:56:0x00b3} */
-    /* JADX WARNING: Can't wrap try/catch for region: R(4:26|27|28|29) */
-    /* JADX WARNING: Missing block: B:40:?, code skipped:
-            r15.close();
-     */
-    /* JADX WARNING: Missing block: B:52:0x00ac, code skipped:
-            r14 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:53:0x00ad, code skipped:
-            org.telegram.messenger.FileLog.e(r14);
-     */
-    private static java.util.HashMap<java.lang.String, java.lang.Integer> getThemeFileValues(java.io.File r14, java.lang.String r15) {
+    /* JADX WARNING: Removed duplicated region for block: B:10:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x001b  */
+    static /* synthetic */ void lambda$null$2(org.telegram.tgnet.TLObject r4, org.telegram.ui.ActionBar.Theme.ThemeInfo r5) {
         /*
-        r0 = new java.util.HashMap;
-        r0.<init>();
-        r1 = 1024; // 0x400 float:1.435E-42 double:5.06E-321;
-        r2 = 0;
-        r1 = new byte[r1];	 Catch:{ Throwable -> 0x00a2 }
-        if (r15 == 0) goto L_0x0010;
-    L_0x000c:
-        r14 = getAssetFile(r15);	 Catch:{ Throwable -> 0x00a2 }
+        r0 = loadingCurrentTheme;
+        r1 = 1;
+        r0 = r0 - r1;
+        loadingCurrentTheme = r0;
+        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_theme;
+        if (r0 == 0) goto L_0x0016;
+    L_0x000a:
+        r4 = (org.telegram.tgnet.TLRPC.TL_theme) r4;
+        r0 = r4.document;
+        if (r0 == 0) goto L_0x0016;
     L_0x0010:
-        r15 = new java.io.FileInputStream;	 Catch:{ Throwable -> 0x00a2 }
-        r15.<init>(r14);	 Catch:{ Throwable -> 0x00a2 }
-        r14 = -1;
-        themedWallpaperFileOffset = r14;	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r2 = 0;
+        r5.info = r4;
+        r5.loadThemeDocument();
+        goto L_0x0017;
+    L_0x0016:
+        r1 = 0;
+    L_0x0017:
+        r4 = loadingCurrentTheme;
+        if (r4 != 0) goto L_0x0028;
+    L_0x001b:
+        r4 = java.lang.System.currentTimeMillis();
+        r2 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r4 = r4 / r2;
+        r5 = (int) r4;
+        lastLoadingCurrentThemeTime = r5;
+        saveOtherThemes(r1);
+    L_0x0028:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$null$2(org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.Theme$ThemeInfo):void");
+    }
+
+    public static void loadRemoteThemes(int i, boolean z) {
+        if (!loadingRemoteThemes) {
+            if ((z || Math.abs((System.currentTimeMillis() / 1000) - ((long) lastLoadingThemesTime)) >= 3600) && UserConfig.getInstance(i).isClientActivated()) {
+                loadingRemoteThemes = true;
+                TL_account_getThemes tL_account_getThemes = new TL_account_getThemes();
+                tL_account_getThemes.format = "android";
+                tL_account_getThemes.hash = remoteThemesHash;
+                ConnectionsManager.getInstance(i).sendRequest(tL_account_getThemes, new -$$Lambda$Theme$W8PxHsNGN-1ClSKhdG5WIm1ySCw(i));
+            }
+        }
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x010f A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0105  */
+    static /* synthetic */ void lambda$null$4(org.telegram.tgnet.TLObject r11, int r12) {
+        /*
+        r0 = 0;
+        loadingRemoteThemes = r0;
+        r1 = r11 instanceof org.telegram.tgnet.TLRPC.TL_account_themes;
+        if (r1 == 0) goto L_0x0125;
+    L_0x0007:
+        r11 = (org.telegram.tgnet.TLRPC.TL_account_themes) r11;
+        r1 = r11.hash;
+        remoteThemesHash = r1;
+        r1 = java.lang.System.currentTimeMillis();
+        r3 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r1 = r1 / r3;
+        r2 = (int) r1;
+        lastLoadingThemesTime = r2;
+        r1 = new java.util.ArrayList;
+        r1.<init>();
+        r2 = otherThemes;
+        r2 = r2.size();
+        r3 = 0;
+    L_0x0023:
+        if (r3 >= r2) goto L_0x003b;
+    L_0x0025:
+        r4 = otherThemes;
+        r4 = r4.get(r3);
+        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;
+        r5 = r4.info;
+        if (r5 == 0) goto L_0x0038;
+    L_0x0031:
+        r5 = r4.account;
+        if (r5 != r12) goto L_0x0038;
+    L_0x0035:
+        r1.add(r4);
+    L_0x0038:
+        r3 = r3 + 1;
+        goto L_0x0023;
+    L_0x003b:
+        r2 = r11.themes;
+        r2 = r2.size();
         r3 = 0;
         r4 = 0;
-    L_0x001b:
-        r5 = r15.read(r1);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        if (r5 == r14) goto L_0x0096;
-    L_0x0021:
-        r8 = r3;
-        r6 = 0;
-        r7 = 0;
-    L_0x0024:
-        r9 = 1;
-        if (r6 >= r5) goto L_0x0086;
-    L_0x0027:
-        r10 = r1[r6];	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r11 = 10;
-        if (r10 != r11) goto L_0x0083;
-    L_0x002d:
-        r10 = r6 - r7;
-        r10 = r10 + r9;
-        r11 = new java.lang.String;	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r12 = r10 + -1;
-        r11.<init>(r1, r7, r12);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r12 = "WPS";
-        r12 = r11.startsWith(r12);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        if (r12 == 0) goto L_0x0044;
-    L_0x003f:
-        r10 = r10 + r8;
-        themedWallpaperFileOffset = r10;	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r4 = 1;
-        goto L_0x0086;
-    L_0x0044:
-        r9 = 61;
-        r9 = r11.indexOf(r9);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        if (r9 == r14) goto L_0x0081;
-    L_0x004c:
-        r12 = r11.substring(r2, r9);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r9 = r9 + 1;
-        r9 = r11.substring(r9);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r11 = r9.length();	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        if (r11 <= 0) goto L_0x0072;
-    L_0x005c:
-        r11 = r9.charAt(r2);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r13 = 35;
-        if (r11 != r13) goto L_0x0072;
-    L_0x0064:
-        r9 = android.graphics.Color.parseColor(r9);	 Catch:{ Exception -> 0x0069 }
-        goto L_0x007a;
-    L_0x0069:
-        r9 = org.telegram.messenger.Utilities.parseInt(r9);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r9 = r9.intValue();	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        goto L_0x007a;
+    L_0x0043:
+        r5 = 1;
+        if (r3 >= r2) goto L_0x00ba;
+    L_0x0046:
+        r6 = r11.themes;
+        r6 = r6.get(r3);
+        r6 = (org.telegram.tgnet.TLRPC.Theme) r6;
+        r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_theme;
+        if (r7 != 0) goto L_0x0053;
+    L_0x0052:
+        goto L_0x00b7;
+    L_0x0053:
+        r6 = (org.telegram.tgnet.TLRPC.TL_theme) r6;
+        r7 = new java.lang.StringBuilder;
+        r7.<init>();
+        r8 = "remote";
+        r7.append(r8);
+        r8 = r6.id;
+        r7.append(r8);
+        r7 = r7.toString();
+        r8 = themesDict;
+        r8 = r8.get(r7);
+        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;
+        if (r8 != 0) goto L_0x00a5;
     L_0x0072:
-        r9 = org.telegram.messenger.Utilities.parseInt(r9);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r9 = r9.intValue();	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-    L_0x007a:
-        r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r0.put(r12, r9);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-    L_0x0081:
-        r7 = r7 + r10;
-        r8 = r8 + r10;
-    L_0x0083:
-        r6 = r6 + 1;
-        goto L_0x0024;
-    L_0x0086:
-        if (r3 != r8) goto L_0x0089;
-    L_0x0088:
-        goto L_0x0096;
-    L_0x0089:
-        r3 = r15.getChannel();	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r5 = (long) r8;	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        r3.position(r5);	 Catch:{ Throwable -> 0x009c, all -> 0x009a }
-        if (r4 == 0) goto L_0x0094;
-    L_0x0093:
-        goto L_0x0096;
-    L_0x0094:
-        r3 = r8;
-        goto L_0x001b;
-    L_0x0096:
-        r15.close();	 Catch:{ Exception -> 0x00ac }
-        goto L_0x00b0;
-    L_0x009a:
-        r14 = move-exception;
-        goto L_0x00b1;
-    L_0x009c:
-        r14 = move-exception;
-        r2 = r15;
-        goto L_0x00a3;
-    L_0x009f:
-        r14 = move-exception;
-        r15 = r2;
-        goto L_0x00b1;
-    L_0x00a2:
-        r14 = move-exception;
-    L_0x00a3:
-        org.telegram.messenger.FileLog.e(r14);	 Catch:{ all -> 0x009f }
-        if (r2 == 0) goto L_0x00b0;
+        r8 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
+        r8.<init>();
+        r8.account = r12;
+        r4 = new java.io.File;
+        r9 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
+        r10 = new java.lang.StringBuilder;
+        r10.<init>();
+        r10.append(r7);
+        r7 = ".attheme";
+        r10.append(r7);
+        r7 = r10.toString();
+        r4.<init>(r9, r7);
+        r4 = r4.getAbsolutePath();
+        r8.pathToFile = r4;
+        r4 = themes;
+        r4.add(r8);
+        r4 = otherThemes;
+        r4.add(r8);
+        r4 = 1;
+        goto L_0x00a8;
+    L_0x00a5:
+        r1.remove(r8);
     L_0x00a8:
-        r2.close();	 Catch:{ Exception -> 0x00ac }
-        goto L_0x00b0;
-    L_0x00ac:
-        r14 = move-exception;
-        org.telegram.messenger.FileLog.e(r14);
-    L_0x00b0:
-        return r0;
-    L_0x00b1:
-        if (r15 == 0) goto L_0x00bb;
-    L_0x00b3:
-        r15.close();	 Catch:{ Exception -> 0x00b7 }
-        goto L_0x00bb;
+        r5 = r6.title;
+        r8.name = r5;
+        r8.info = r6;
+        r5 = themesDict;
+        r6 = r8.getKey();
+        r5.put(r6, r8);
     L_0x00b7:
-        r15 = move-exception;
-        org.telegram.messenger.FileLog.e(r15);
-    L_0x00bb:
-        goto L_0x00bd;
-    L_0x00bc:
-        throw r14;
-    L_0x00bd:
-        goto L_0x00bc;
+        r3 = r3 + 1;
+        goto L_0x0043;
+    L_0x00ba:
+        r11 = r1.size();
+        r12 = 0;
+    L_0x00bf:
+        if (r12 >= r11) goto L_0x0112;
+    L_0x00c1:
+        r2 = r1.get(r12);
+        r2 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r2;
+        r2.removeObservers();
+        r3 = otherThemes;
+        r3.remove(r2);
+        r3 = themesDict;
+        r6 = r2.name;
+        r3.remove(r6);
+        r3 = themes;
+        r3.remove(r2);
+        r3 = new java.io.File;
+        r6 = r2.pathToFile;
+        r3.<init>(r6);
+        r3.delete();
+        r3 = currentDayTheme;
+        if (r3 != r2) goto L_0x00ee;
+    L_0x00e9:
+        r3 = defaultTheme;
+        currentDayTheme = r3;
+        goto L_0x0100;
+    L_0x00ee:
+        r3 = currentNightTheme;
+        if (r3 != r2) goto L_0x0100;
+    L_0x00f2:
+        r3 = themesDict;
+        r6 = "Dark Blue";
+        r3 = r3.get(r6);
+        r3 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r3;
+        currentNightTheme = r3;
+        r3 = 1;
+        goto L_0x0101;
+    L_0x0100:
+        r3 = 0;
+    L_0x0101:
+        r6 = currentTheme;
+        if (r6 != r2) goto L_0x010f;
+    L_0x0105:
+        if (r3 == 0) goto L_0x010a;
+    L_0x0107:
+        r2 = currentNightTheme;
+        goto L_0x010c;
+    L_0x010a:
+        r2 = currentDayTheme;
+    L_0x010c:
+        applyTheme(r2, r5, r0, r3);
+    L_0x010f:
+        r12 = r12 + 1;
+        goto L_0x00bf;
+    L_0x0112:
+        saveOtherThemes(r5);
+        sortThemes();
+        if (r4 == 0) goto L_0x0125;
+    L_0x011a:
+        r11 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r12 = org.telegram.messenger.NotificationCenter.themeListUpdated;
+        r0 = new java.lang.Object[r0];
+        r11.postNotificationName(r12, r0);
+    L_0x0125:
+        return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.getThemeFileValues(java.io.File, java.lang.String):java.util.HashMap");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$null$4(org.telegram.tgnet.TLObject, int):void");
+    }
+
+    public static void setThemeFileReference(TL_theme tL_theme) {
+        int size = themes.size();
+        int i = 0;
+        while (i < size) {
+            TL_theme tL_theme2 = ((ThemeInfo) themes.get(i)).info;
+            if (tL_theme2 == null || tL_theme2.id != tL_theme.id) {
+                i++;
+            } else {
+                Document document = tL_theme2.document;
+                if (document != null) {
+                    Document document2 = tL_theme.document;
+                    if (document2 != null) {
+                        document.file_reference = document2.file_reference;
+                        saveOtherThemes(true);
+                        return;
+                    }
+                    return;
+                }
+                return;
+            }
+        }
+    }
+
+    public static boolean isThemeInstalled(ThemeInfo themeInfo) {
+        return (themeInfo == null || themesDict.get(themeInfo.getKey()) == null) ? false : true;
+    }
+
+    public static void setThemeUploadInfo(ThemeInfo themeInfo, TL_theme tL_theme, boolean z) {
+        if (tL_theme != null) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("remote");
+            stringBuilder.append(tL_theme.id);
+            String stringBuilder2 = stringBuilder.toString();
+            if (themeInfo != null) {
+                themesDict.remove(themeInfo.getKey());
+            } else {
+                themeInfo = (ThemeInfo) themesDict.get(stringBuilder2);
+            }
+            if (themeInfo != null) {
+                themeInfo.info = tL_theme;
+                themeInfo.name = tL_theme.title;
+                File file = new File(themeInfo.pathToFile);
+                File filesDirFixed = ApplicationLoader.getFilesDirFixed();
+                StringBuilder stringBuilder3 = new StringBuilder();
+                stringBuilder3.append(stringBuilder2);
+                stringBuilder3.append(".attheme");
+                File file2 = new File(filesDirFixed, stringBuilder3.toString());
+                if (!file.equals(file2)) {
+                    try {
+                        AndroidUtilities.copyFile(file, file2);
+                        themeInfo.pathToFile = file2.getAbsolutePath();
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+                if (z) {
+                    themeInfo.loadThemeDocument();
+                } else {
+                    themeInfo.previewParsed = false;
+                }
+                themesDict.put(themeInfo.getKey(), themeInfo);
+                saveOtherThemes(true);
+            }
+        }
+    }
+
+    /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x0050 */
+    /* JADX WARNING: Missing block: B:22:0x004b, code skipped:
+            if (r6 != null) goto L_0x004d;
+     */
+    /* JADX WARNING: Missing block: B:24:?, code skipped:
+            r6.close();
+     */
+    public static java.io.File getAssetFile(java.lang.String r6) {
+        /*
+        r0 = new java.io.File;
+        r1 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
+        r0.<init>(r1, r6);
+        r1 = 0;
+        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x001e }
+        r3 = r3.getAssets();	 Catch:{ Exception -> 0x001e }
+        r3 = r3.open(r6);	 Catch:{ Exception -> 0x001e }
+        r4 = r3.available();	 Catch:{ Exception -> 0x001e }
+        r4 = (long) r4;	 Catch:{ Exception -> 0x001e }
+        r3.close();	 Catch:{ Exception -> 0x001e }
+        goto L_0x0023;
+    L_0x001e:
+        r3 = move-exception;
+        org.telegram.messenger.FileLog.e(r3);
+        r4 = r1;
+    L_0x0023:
+        r3 = r0.exists();
+        if (r3 == 0) goto L_0x0035;
+    L_0x0029:
+        r3 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1));
+        if (r3 == 0) goto L_0x0055;
+    L_0x002d:
+        r1 = r0.length();
+        r3 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1));
+        if (r3 == 0) goto L_0x0055;
+    L_0x0035:
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0051 }
+        r1 = r1.getAssets();	 Catch:{ Exception -> 0x0051 }
+        r6 = r1.open(r6);	 Catch:{ Exception -> 0x0051 }
+        org.telegram.messenger.AndroidUtilities.copyFile(r6, r0);	 Catch:{ all -> 0x0048 }
+        if (r6 == 0) goto L_0x0055;
+    L_0x0044:
+        r6.close();	 Catch:{ Exception -> 0x0051 }
+        goto L_0x0055;
+    L_0x0048:
+        r1 = move-exception;
+        throw r1;	 Catch:{ all -> 0x004a }
+    L_0x004a:
+        r1 = move-exception;
+        if (r6 == 0) goto L_0x0050;
+    L_0x004d:
+        r6.close();	 Catch:{ all -> 0x0050 }
+    L_0x0050:
+        throw r1;	 Catch:{ Exception -> 0x0051 }
+    L_0x0051:
+        r6 = move-exception;
+        org.telegram.messenger.FileLog.e(r6);
+    L_0x0055:
+        return r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.getAssetFile(java.lang.String):java.io.File");
+    }
+
+    private static int getPreviewColor(HashMap<String, Integer> hashMap, String str) {
+        Integer num = (Integer) hashMap.get(str);
+        if (num == null) {
+            num = (Integer) defaultColors.get(str);
+        }
+        return num.intValue();
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x0269 A:{SYNTHETIC, Splitter:B:61:0x0269} */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x02db A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x02a1 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02f8 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0315 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x033d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x035f A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x036d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x03ae A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x03cf A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0286 A:{SYNTHETIC, Splitter:B:77:0x0286} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x02a1 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x02db A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02f8 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0315 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x033d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x035f A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x036d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x03ae A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x03cf A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0286 A:{SYNTHETIC, Splitter:B:77:0x0286} */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x02db A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x02a1 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02f8 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0315 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x033d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x035f A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x036d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x03ae A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x03cf A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0286 A:{SYNTHETIC, Splitter:B:77:0x0286} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x02a1 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x02db A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02f8 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0315 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x033d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x035f A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x036d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x03ae A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x03cf A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0286 A:{SYNTHETIC, Splitter:B:77:0x0286} */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x02db A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x02a1 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02f8 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0315 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x033d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x035f A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x036d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x03ae A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x03cf A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0286 A:{SYNTHETIC, Splitter:B:77:0x0286} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x02a1 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x02db A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02f8 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0315 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x033d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x035f A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x036d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x03ae A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x03cf A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x02db A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x02a1 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02f8 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0315 A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x033d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x035f A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x036d A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x03ae A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x03cf A:{Catch:{ all -> 0x028d, all -> 0x0437 }} */
+    public static java.lang.String createThemePreviewImage(org.telegram.ui.ActionBar.Theme.ThemeInfo r24) {
+        /*
+        r0 = r24;
+        r1 = 1;
+        r2 = 0;
+        r3 = new java.lang.String[r1];	 Catch:{ all -> 0x0437 }
+        r4 = new java.io.File;	 Catch:{ all -> 0x0437 }
+        r5 = r0.pathToFile;	 Catch:{ all -> 0x0437 }
+        r4.<init>(r5);	 Catch:{ all -> 0x0437 }
+        r4 = getThemeFileValues(r4, r2, r3);	 Catch:{ all -> 0x0437 }
+        r5 = "wallpaperFileOffset";
+        r5 = r4.get(r5);	 Catch:{ all -> 0x0437 }
+        r5 = (java.lang.Integer) r5;	 Catch:{ all -> 0x0437 }
+        r6 = 560; // 0x230 float:7.85E-43 double:2.767E-321;
+        r7 = 678; // 0x2a6 float:9.5E-43 double:3.35E-321;
+        r8 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0437 }
+        r6 = org.telegram.messenger.Bitmaps.createBitmap(r6, r7, r8);	 Catch:{ all -> 0x0437 }
+        r13 = new android.graphics.Canvas;	 Catch:{ all -> 0x0437 }
+        r13.<init>(r6);	 Catch:{ all -> 0x0437 }
+        r14 = new android.graphics.Paint;	 Catch:{ all -> 0x0437 }
+        r14.<init>();	 Catch:{ all -> 0x0437 }
+        r7 = "actionBarDefault";
+        r7 = getPreviewColor(r4, r7);	 Catch:{ all -> 0x0437 }
+        r8 = "actionBarDefaultIcon";
+        r8 = getPreviewColor(r4, r8);	 Catch:{ all -> 0x0437 }
+        r9 = "chat_messagePanelBackground";
+        r15 = getPreviewColor(r4, r9);	 Catch:{ all -> 0x0437 }
+        r9 = "chat_messagePanelIcons";
+        r9 = getPreviewColor(r4, r9);	 Catch:{ all -> 0x0437 }
+        r10 = "chat_inBubble";
+        r10 = getPreviewColor(r4, r10);	 Catch:{ all -> 0x0437 }
+        r11 = "chat_outBubble";
+        r11 = getPreviewColor(r4, r11);	 Catch:{ all -> 0x0437 }
+        r12 = "chat_wallpaper";
+        r12 = r4.get(r12);	 Catch:{ all -> 0x0437 }
+        r12 = (java.lang.Integer) r12;	 Catch:{ all -> 0x0437 }
+        r2 = "chat_serviceBackground";
+        r2 = r4.get(r2);	 Catch:{ all -> 0x0437 }
+        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0437 }
+        r1 = "chat_wallpaper_gradient_to";
+        r1 = r4.get(r1);	 Catch:{ all -> 0x0437 }
+        r1 = (java.lang.Integer) r1;	 Catch:{ all -> 0x0437 }
+        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
+        r4 = r4.getResources();	 Catch:{ all -> 0x0437 }
+        r17 = r15;
+        r15 = NUM; // 0x7var_ float:1.7945657E38 double:1.052935766E-314;
+        r4 = r4.getDrawable(r15);	 Catch:{ all -> 0x0437 }
+        r4 = r4.mutate();	 Catch:{ all -> 0x0437 }
+        setDrawableColor(r4, r8);	 Catch:{ all -> 0x0437 }
+        r15 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
+        r15 = r15.getResources();	 Catch:{ all -> 0x0437 }
+        r18 = r4;
+        r4 = NUM; // 0x7var_ float:1.7945661E38 double:1.052935767E-314;
+        r4 = r15.getDrawable(r4);	 Catch:{ all -> 0x0437 }
+        r4 = r4.mutate();	 Catch:{ all -> 0x0437 }
+        setDrawableColor(r4, r8);	 Catch:{ all -> 0x0437 }
+        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
+        r8 = r8.getResources();	 Catch:{ all -> 0x0437 }
+        r15 = NUM; // 0x7var_b float:1.7945671E38 double:1.0529357693E-314;
+        r8 = r8.getDrawable(r15);	 Catch:{ all -> 0x0437 }
+        r15 = r8.mutate();	 Catch:{ all -> 0x0437 }
+        setDrawableColor(r15, r9);	 Catch:{ all -> 0x0437 }
+        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
+        r8 = r8.getResources();	 Catch:{ all -> 0x0437 }
+        r19 = r15;
+        r15 = NUM; // 0x7var_ float:1.7945663E38 double:1.0529357674E-314;
+        r8 = r8.getDrawable(r15);	 Catch:{ all -> 0x0437 }
+        r15 = r8.mutate();	 Catch:{ all -> 0x0437 }
+        setDrawableColor(r15, r9);	 Catch:{ all -> 0x0437 }
+        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
+        r8 = r8.getResources();	 Catch:{ all -> 0x0437 }
+        r9 = NUM; // 0x7var_ float:1.7945665E38 double:1.052935768E-314;
+        r8 = r8.getDrawable(r9);	 Catch:{ all -> 0x0437 }
+        r9 = r8.mutate();	 Catch:{ all -> 0x0437 }
+        setDrawableColor(r9, r10);	 Catch:{ all -> 0x0437 }
+        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
+        r8 = r8.getResources();	 Catch:{ all -> 0x0437 }
+        r10 = NUM; // 0x7var_ float:1.7945667E38 double:1.0529357683E-314;
+        r8 = r8.getDrawable(r10);	 Catch:{ all -> 0x0437 }
+        r10 = r8.mutate();	 Catch:{ all -> 0x0437 }
+        setDrawableColor(r10, r11);	 Catch:{ all -> 0x0437 }
+        r11 = new android.graphics.RectF;	 Catch:{ all -> 0x0437 }
+        r11.<init>();	 Catch:{ all -> 0x0437 }
+        r8 = 2;
+        r20 = r9;
+        r9 = 0;
+        if (r12 == 0) goto L_0x0141;
+    L_0x00f2:
+        if (r1 != 0) goto L_0x00fe;
+    L_0x00f4:
+        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0437 }
+        r1 = r12.intValue();	 Catch:{ all -> 0x0437 }
+        r0.<init>(r1);	 Catch:{ all -> 0x0437 }
+        goto L_0x0115;
+    L_0x00fe:
+        r0 = new org.telegram.ui.Components.BackgroundGradientDrawable;	 Catch:{ all -> 0x0437 }
+        r3 = android.graphics.drawable.GradientDrawable.Orientation.BL_TR;	 Catch:{ all -> 0x0437 }
+        r5 = new int[r8];	 Catch:{ all -> 0x0437 }
+        r21 = r12.intValue();	 Catch:{ all -> 0x0437 }
+        r5[r9] = r21;	 Catch:{ all -> 0x0437 }
+        r1 = r1.intValue();	 Catch:{ all -> 0x0437 }
+        r16 = 1;
+        r5[r16] = r1;	 Catch:{ all -> 0x0437 }
+        r0.<init>(r3, r5);	 Catch:{ all -> 0x0437 }
+    L_0x0115:
+        r1 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r3 = r6.getHeight();	 Catch:{ all -> 0x0437 }
+        r5 = 120; // 0x78 float:1.68E-43 double:5.93E-322;
+        r3 = r3 - r5;
+        r0.setBounds(r9, r5, r1, r3);	 Catch:{ all -> 0x0437 }
+        r0.draw(r13);	 Catch:{ all -> 0x0437 }
+        if (r2 != 0) goto L_0x013b;
+    L_0x0128:
+        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0437 }
+        r1 = r12.intValue();	 Catch:{ all -> 0x0437 }
+        r0.<init>(r1);	 Catch:{ all -> 0x0437 }
+        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0);	 Catch:{ all -> 0x0437 }
+        r0 = r0[r9];	 Catch:{ all -> 0x0437 }
+        r2 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0437 }
+    L_0x013b:
+        r12 = r10;
+        r1 = 1;
+        r21 = 2;
+        goto L_0x029f;
+    L_0x0141:
+        if (r5 == 0) goto L_0x0149;
+    L_0x0143:
+        r1 = r5.intValue();	 Catch:{ all -> 0x0437 }
+        if (r1 >= 0) goto L_0x0151;
+    L_0x0149:
+        r1 = r3[r9];	 Catch:{ all -> 0x0437 }
+        r1 = android.text.TextUtils.isEmpty(r1);	 Catch:{ all -> 0x0437 }
+        if (r1 != 0) goto L_0x029b;
+    L_0x0151:
+        r1 = new android.graphics.BitmapFactory$Options;	 Catch:{ all -> 0x027b }
+        r1.<init>();	 Catch:{ all -> 0x027b }
+        r12 = 1;
+        r1.inJustDecodeBounds = r12;	 Catch:{ all -> 0x027b }
+        r12 = r3[r9];	 Catch:{ all -> 0x027b }
+        r12 = android.text.TextUtils.isEmpty(r12);	 Catch:{ all -> 0x027b }
+        if (r12 != 0) goto L_0x0193;
+    L_0x0161:
+        r0 = new java.io.File;	 Catch:{ all -> 0x018b }
+        r12 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x018b }
+        r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x018b }
+        r8.<init>();	 Catch:{ all -> 0x018b }
+        r3 = r3[r9];	 Catch:{ all -> 0x018b }
+        r3 = org.telegram.messenger.Utilities.MD5(r3);	 Catch:{ all -> 0x018b }
+        r8.append(r3);	 Catch:{ all -> 0x018b }
+        r3 = ".wp";
+        r8.append(r3);	 Catch:{ all -> 0x018b }
+        r3 = r8.toString();	 Catch:{ all -> 0x018b }
+        r0.<init>(r12, r3);	 Catch:{ all -> 0x018b }
+        r3 = r0.getAbsolutePath();	 Catch:{ all -> 0x018b }
+        android.graphics.BitmapFactory.decodeFile(r3, r1);	 Catch:{ all -> 0x018b }
+        r12 = r10;
+        r3 = 0;
+        goto L_0x01ac;
+    L_0x018b:
+        r0 = move-exception;
+        r12 = r10;
+        r1 = 0;
+        r3 = 0;
+        r21 = 2;
+        goto L_0x0281;
+    L_0x0193:
+        r3 = new java.io.FileInputStream;	 Catch:{ all -> 0x027b }
+        r0 = r0.pathToFile;	 Catch:{ all -> 0x027b }
+        r3.<init>(r0);	 Catch:{ all -> 0x027b }
+        r0 = r3.getChannel();	 Catch:{ all -> 0x0275 }
+        r8 = r5.intValue();	 Catch:{ all -> 0x0275 }
+        r12 = r10;
+        r9 = (long) r8;
+        r0.position(r9);	 Catch:{ all -> 0x0273 }
+        r8 = 0;
+        android.graphics.BitmapFactory.decodeStream(r3, r8, r1);	 Catch:{ all -> 0x0273 }
+        r0 = 0;
+    L_0x01ac:
+        r8 = r1.outWidth;	 Catch:{ all -> 0x0273 }
+        if (r8 <= 0) goto L_0x0264;
+    L_0x01b0:
+        r8 = r1.outHeight;	 Catch:{ all -> 0x0273 }
+        if (r8 <= 0) goto L_0x0264;
+    L_0x01b4:
+        r8 = r1.outWidth;	 Catch:{ all -> 0x0273 }
+        r8 = (float) r8;	 Catch:{ all -> 0x0273 }
+        r9 = NUM; // 0x440CLASSNAME float:560.0 double:5.64043681E-315;
+        r8 = r8 / r9;
+        r10 = r1.outHeight;	 Catch:{ all -> 0x0273 }
+        r10 = (float) r10;	 Catch:{ all -> 0x0273 }
+        r10 = r10 / r9;
+        r8 = java.lang.Math.min(r8, r10);	 Catch:{ all -> 0x0273 }
+        r10 = 1;
+        r1.inSampleSize = r10;	 Catch:{ all -> 0x0273 }
+        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r10 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
+        if (r10 <= 0) goto L_0x01db;
+    L_0x01cb:
+        r10 = r1.inSampleSize;	 Catch:{ all -> 0x0273 }
+        r21 = 2;
+        r10 = r10 * 2;
+        r1.inSampleSize = r10;	 Catch:{ all -> 0x0262 }
+        r10 = r1.inSampleSize;	 Catch:{ all -> 0x0262 }
+        r10 = (float) r10;	 Catch:{ all -> 0x0262 }
+        r10 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1));
+        if (r10 < 0) goto L_0x01cb;
+    L_0x01da:
+        goto L_0x01dd;
+    L_0x01db:
+        r21 = 2;
+    L_0x01dd:
+        r8 = 0;
+        r1.inJustDecodeBounds = r8;	 Catch:{ all -> 0x0262 }
+        if (r0 == 0) goto L_0x01eb;
+    L_0x01e2:
+        r0 = r0.getAbsolutePath();	 Catch:{ all -> 0x0262 }
+        r0 = android.graphics.BitmapFactory.decodeFile(r0, r1);	 Catch:{ all -> 0x0262 }
+        goto L_0x01fc;
+    L_0x01eb:
+        r0 = r3.getChannel();	 Catch:{ all -> 0x0262 }
+        r5 = r5.intValue();	 Catch:{ all -> 0x0262 }
+        r9 = (long) r5;	 Catch:{ all -> 0x0262 }
+        r0.position(r9);	 Catch:{ all -> 0x0262 }
+        r5 = 0;
+        r0 = android.graphics.BitmapFactory.decodeStream(r3, r5, r1);	 Catch:{ all -> 0x0262 }
+    L_0x01fc:
+        if (r0 == 0) goto L_0x0266;
+    L_0x01fe:
+        r1 = new android.graphics.Paint;	 Catch:{ all -> 0x0262 }
+        r1.<init>();	 Catch:{ all -> 0x0262 }
+        r5 = 1;
+        r1.setFilterBitmap(r5);	 Catch:{ all -> 0x0262 }
+        r8 = r0.getWidth();	 Catch:{ all -> 0x0262 }
+        r8 = (float) r8;	 Catch:{ all -> 0x0262 }
+        r9 = NUM; // 0x440CLASSNAME float:560.0 double:5.64043681E-315;
+        r8 = r8 / r9;
+        r10 = r0.getHeight();	 Catch:{ all -> 0x0262 }
+        r10 = (float) r10;	 Catch:{ all -> 0x0262 }
+        r10 = r10 / r9;
+        r8 = java.lang.Math.min(r8, r10);	 Catch:{ all -> 0x0262 }
+        r9 = r0.getWidth();	 Catch:{ all -> 0x0262 }
+        r9 = (float) r9;	 Catch:{ all -> 0x0262 }
+        r9 = r9 / r8;
+        r10 = r0.getHeight();	 Catch:{ all -> 0x0262 }
+        r10 = (float) r10;	 Catch:{ all -> 0x0262 }
+        r10 = r10 / r8;
+        r8 = 0;
+        r11.set(r8, r8, r9, r10);	 Catch:{ all -> 0x0262 }
+        r8 = r6.getWidth();	 Catch:{ all -> 0x0262 }
+        r8 = (float) r8;	 Catch:{ all -> 0x0262 }
+        r9 = r11.width();	 Catch:{ all -> 0x0262 }
+        r8 = r8 - r9;
+        r9 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r8 = r8 / r9;
+        r10 = r6.getHeight();	 Catch:{ all -> 0x0262 }
+        r10 = (float) r10;	 Catch:{ all -> 0x0262 }
+        r16 = r11.height();	 Catch:{ all -> 0x0262 }
+        r10 = r10 - r16;
+        r10 = r10 / r9;
+        r11.offset(r8, r10);	 Catch:{ all -> 0x0262 }
+        r8 = 0;
+        r13.drawBitmap(r0, r8, r11, r1);	 Catch:{ all -> 0x0262 }
+        if (r2 != 0) goto L_0x0260;
+    L_0x024b:
+        r1 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x025d }
+        r1.<init>(r0);	 Catch:{ all -> 0x025d }
+        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x025d }
+        r1 = 0;
+        r0 = r0[r1];	 Catch:{ all -> 0x025d }
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x025d }
+        r2 = r0;
+        goto L_0x0260;
+    L_0x025d:
+        r0 = move-exception;
+        r1 = 1;
+        goto L_0x0281;
+    L_0x0260:
+        r1 = 1;
+        goto L_0x0267;
+    L_0x0262:
+        r0 = move-exception;
+        goto L_0x0279;
+    L_0x0264:
+        r21 = 2;
+    L_0x0266:
+        r1 = 0;
+    L_0x0267:
+        if (r3 == 0) goto L_0x029f;
+    L_0x0269:
+        r3.close();	 Catch:{ Exception -> 0x026d }
+        goto L_0x029f;
+    L_0x026d:
+        r0 = move-exception;
+        r3 = r0;
+    L_0x026f:
+        org.telegram.messenger.FileLog.e(r3);	 Catch:{ all -> 0x0437 }
+        goto L_0x029f;
+    L_0x0273:
+        r0 = move-exception;
+        goto L_0x0277;
+    L_0x0275:
+        r0 = move-exception;
+        r12 = r10;
+    L_0x0277:
+        r21 = 2;
+    L_0x0279:
+        r1 = 0;
+        goto L_0x0281;
+    L_0x027b:
+        r0 = move-exception;
+        r12 = r10;
+        r21 = 2;
+        r1 = 0;
+        r3 = 0;
+    L_0x0281:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x028d }
+        if (r3 == 0) goto L_0x029f;
+    L_0x0286:
+        r3.close();	 Catch:{ Exception -> 0x028a }
+        goto L_0x029f;
+    L_0x028a:
+        r0 = move-exception;
+        r3 = r0;
+        goto L_0x026f;
+    L_0x028d:
+        r0 = move-exception;
+        r1 = r0;
+        if (r3 == 0) goto L_0x029a;
+    L_0x0291:
+        r3.close();	 Catch:{ Exception -> 0x0295 }
+        goto L_0x029a;
+    L_0x0295:
+        r0 = move-exception;
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0437 }
+    L_0x029a:
+        throw r1;	 Catch:{ all -> 0x0437 }
+    L_0x029b:
+        r12 = r10;
+        r21 = 2;
+        r1 = 0;
+    L_0x029f:
+        if (r1 != 0) goto L_0x02db;
+    L_0x02a1:
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0437 }
+        r0 = r0.getResources();	 Catch:{ all -> 0x0437 }
+        r1 = NUM; // 0x7var_ float:1.7944718E38 double:1.052935537E-314;
+        r0 = r0.getDrawable(r1);	 Catch:{ all -> 0x0437 }
+        r0 = r0.mutate();	 Catch:{ all -> 0x0437 }
+        r0 = (android.graphics.drawable.BitmapDrawable) r0;	 Catch:{ all -> 0x0437 }
+        if (r2 != 0) goto L_0x02c1;
+    L_0x02b6:
+        r1 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0);	 Catch:{ all -> 0x0437 }
+        r2 = 0;
+        r1 = r1[r2];	 Catch:{ all -> 0x0437 }
+        r2 = java.lang.Integer.valueOf(r1);	 Catch:{ all -> 0x0437 }
+    L_0x02c1:
+        r1 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0437 }
+        r3 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0437 }
+        r0.setTileModeXY(r1, r3);	 Catch:{ all -> 0x0437 }
+        r1 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r3 = r6.getHeight();	 Catch:{ all -> 0x0437 }
+        r5 = 120; // 0x78 float:1.68E-43 double:5.93E-322;
+        r3 = r3 - r5;
+        r8 = 0;
+        r0.setBounds(r8, r5, r1, r3);	 Catch:{ all -> 0x0437 }
+        r0.draw(r13);	 Catch:{ all -> 0x0437 }
+        goto L_0x02dd;
+    L_0x02db:
+        r5 = 120; // 0x78 float:1.68E-43 double:5.93E-322;
+    L_0x02dd:
+        r14.setColor(r7);	 Catch:{ all -> 0x0437 }
+        r8 = 0;
+        r9 = 0;
+        r0 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r10 = (float) r0;	 Catch:{ all -> 0x0437 }
+        r0 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
+        r7 = r13;
+        r1 = 2;
+        r3 = r20;
+        r22 = r11;
+        r11 = r0;
+        r23 = r12;
+        r12 = r14;
+        r7.drawRect(r8, r9, r10, r11, r12);	 Catch:{ all -> 0x0437 }
+        if (r18 == 0) goto L_0x0313;
+    L_0x02f8:
+        r0 = 13;
+        r7 = r18.getIntrinsicHeight();	 Catch:{ all -> 0x0437 }
+        r9 = 120 - r7;
+        r9 = r9 / r1;
+        r7 = r18.getIntrinsicWidth();	 Catch:{ all -> 0x0437 }
+        r7 = r7 + r0;
+        r8 = r18.getIntrinsicHeight();	 Catch:{ all -> 0x0437 }
+        r8 = r8 + r9;
+        r10 = r18;
+        r10.setBounds(r0, r9, r7, r8);	 Catch:{ all -> 0x0437 }
+        r10.draw(r13);	 Catch:{ all -> 0x0437 }
+    L_0x0313:
+        if (r4 == 0) goto L_0x0337;
+    L_0x0315:
+        r0 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r7 = r4.getIntrinsicWidth();	 Catch:{ all -> 0x0437 }
+        r0 = r0 - r7;
+        r0 = r0 + -10;
+        r7 = r4.getIntrinsicHeight();	 Catch:{ all -> 0x0437 }
+        r9 = 120 - r7;
+        r9 = r9 / r1;
+        r7 = r4.getIntrinsicWidth();	 Catch:{ all -> 0x0437 }
+        r7 = r7 + r0;
+        r8 = r4.getIntrinsicHeight();	 Catch:{ all -> 0x0437 }
+        r8 = r8 + r9;
+        r4.setBounds(r0, r9, r7, r8);	 Catch:{ all -> 0x0437 }
+        r4.draw(r13);	 Catch:{ all -> 0x0437 }
+    L_0x0337:
+        r0 = 20;
+        r4 = r23;
+        if (r4 == 0) goto L_0x035d;
+    L_0x033d:
+        r7 = 216; // 0xd8 float:3.03E-43 double:1.067E-321;
+        r8 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r8 = r8 - r0;
+        r9 = 308; // 0x134 float:4.32E-43 double:1.52E-321;
+        r10 = 161; // 0xa1 float:2.26E-43 double:7.95E-322;
+        r4.setBounds(r10, r7, r8, r9);	 Catch:{ all -> 0x0437 }
+        r4.draw(r13);	 Catch:{ all -> 0x0437 }
+        r7 = 430; // 0x1ae float:6.03E-43 double:2.124E-321;
+        r8 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r8 = r8 - r0;
+        r9 = 522; // 0x20a float:7.31E-43 double:2.58E-321;
+        r4.setBounds(r10, r7, r8, r9);	 Catch:{ all -> 0x0437 }
+        r4.draw(r13);	 Catch:{ all -> 0x0437 }
+    L_0x035d:
+        if (r3 == 0) goto L_0x036b;
+    L_0x035f:
+        r4 = 323; // 0x143 float:4.53E-43 double:1.596E-321;
+        r7 = 399; // 0x18f float:5.59E-43 double:1.97E-321;
+        r8 = 415; // 0x19f float:5.82E-43 double:2.05E-321;
+        r3.setBounds(r0, r4, r7, r8);	 Catch:{ all -> 0x0437 }
+        r3.draw(r13);	 Catch:{ all -> 0x0437 }
+    L_0x036b:
+        if (r2 == 0) goto L_0x038f;
+    L_0x036d:
+        r0 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r0 = r0 + -126;
+        r0 = r0 / r1;
+        r3 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
+        r4 = (float) r0;	 Catch:{ all -> 0x0437 }
+        r3 = (float) r3;	 Catch:{ all -> 0x0437 }
+        r0 = r0 + 126;
+        r0 = (float) r0;	 Catch:{ all -> 0x0437 }
+        r7 = 192; // 0xc0 float:2.69E-43 double:9.5E-322;
+        r7 = (float) r7;	 Catch:{ all -> 0x0437 }
+        r8 = r22;
+        r8.set(r4, r3, r0, r7);	 Catch:{ all -> 0x0437 }
+        r0 = r2.intValue();	 Catch:{ all -> 0x0437 }
+        r14.setColor(r0);	 Catch:{ all -> 0x0437 }
+        r0 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
+        r13.drawRoundRect(r8, r0, r0, r14);	 Catch:{ all -> 0x0437 }
+    L_0x038f:
+        r2 = r17;
+        r14.setColor(r2);	 Catch:{ all -> 0x0437 }
+        r8 = 0;
+        r0 = r6.getHeight();	 Catch:{ all -> 0x0437 }
+        r0 = r0 - r5;
+        r9 = (float) r0;	 Catch:{ all -> 0x0437 }
+        r0 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r10 = (float) r0;	 Catch:{ all -> 0x0437 }
+        r0 = r6.getHeight();	 Catch:{ all -> 0x0437 }
+        r11 = (float) r0;	 Catch:{ all -> 0x0437 }
+        r7 = r13;
+        r12 = r14;
+        r7.drawRect(r8, r9, r10, r11, r12);	 Catch:{ all -> 0x0437 }
+        r0 = 22;
+        if (r19 == 0) goto L_0x03cd;
+    L_0x03ae:
+        r2 = r6.getHeight();	 Catch:{ all -> 0x0437 }
+        r2 = r2 - r5;
+        r3 = r19.getIntrinsicHeight();	 Catch:{ all -> 0x0437 }
+        r9 = 120 - r3;
+        r9 = r9 / r1;
+        r2 = r2 + r9;
+        r3 = r19.getIntrinsicWidth();	 Catch:{ all -> 0x0437 }
+        r3 = r3 + r0;
+        r4 = r19.getIntrinsicHeight();	 Catch:{ all -> 0x0437 }
+        r4 = r4 + r2;
+        r7 = r19;
+        r7.setBounds(r0, r2, r3, r4);	 Catch:{ all -> 0x0437 }
+        r7.draw(r13);	 Catch:{ all -> 0x0437 }
+    L_0x03cd:
+        if (r15 == 0) goto L_0x03f6;
+    L_0x03cf:
+        r2 = r6.getWidth();	 Catch:{ all -> 0x0437 }
+        r3 = r15.getIntrinsicWidth();	 Catch:{ all -> 0x0437 }
+        r2 = r2 - r3;
+        r2 = r2 - r0;
+        r0 = r6.getHeight();	 Catch:{ all -> 0x0437 }
+        r0 = r0 - r5;
+        r3 = r15.getIntrinsicHeight();	 Catch:{ all -> 0x0437 }
+        r9 = 120 - r3;
+        r9 = r9 / r1;
+        r0 = r0 + r9;
+        r1 = r15.getIntrinsicWidth();	 Catch:{ all -> 0x0437 }
+        r1 = r1 + r2;
+        r3 = r15.getIntrinsicHeight();	 Catch:{ all -> 0x0437 }
+        r3 = r3 + r0;
+        r15.setBounds(r2, r0, r1, r3);	 Catch:{ all -> 0x0437 }
+        r15.draw(r13);	 Catch:{ all -> 0x0437 }
+    L_0x03f6:
+        r1 = 0;
+        r13.setBitmap(r1);	 Catch:{ all -> 0x0437 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0437 }
+        r0.<init>();	 Catch:{ all -> 0x0437 }
+        r1 = "-2147483648_";
+        r0.append(r1);	 Catch:{ all -> 0x0437 }
+        r1 = org.telegram.messenger.SharedConfig.getLastLocalId();	 Catch:{ all -> 0x0437 }
+        r0.append(r1);	 Catch:{ all -> 0x0437 }
+        r1 = ".jpg";
+        r0.append(r1);	 Catch:{ all -> 0x0437 }
+        r0 = r0.toString();	 Catch:{ all -> 0x0437 }
+        r1 = new java.io.File;	 Catch:{ all -> 0x0437 }
+        r2 = 4;
+        r2 = org.telegram.messenger.FileLoader.getDirectory(r2);	 Catch:{ all -> 0x0437 }
+        r1.<init>(r2, r0);	 Catch:{ all -> 0x0437 }
+        r0 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0432 }
+        r0.<init>(r1);	 Catch:{ all -> 0x0432 }
+        r2 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0432 }
+        r3 = 80;
+        r6.compress(r2, r3, r0);	 Catch:{ all -> 0x0432 }
+        org.telegram.messenger.SharedConfig.saveConfig();	 Catch:{ all -> 0x0432 }
+        r0 = r1.getAbsolutePath();	 Catch:{ all -> 0x0432 }
+        return r0;
+    L_0x0432:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0437 }
+        goto L_0x043b;
+    L_0x0437:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x043b:
+        r1 = 0;
+        return r1;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createThemePreviewImage(org.telegram.ui.ActionBar.Theme$ThemeInfo):java.lang.String");
+    }
+
+    /* JADX WARNING: Missing exception handler attribute for start block: B:34:0x0081 */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x00c9 A:{SYNTHETIC, Splitter:B:55:0x00c9} */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Can't wrap try/catch for region: R(4:32|33|34|35) */
+    /* JADX WARNING: Missing block: B:49:0x00c0, code skipped:
+            r0 = th;
+     */
+    /* JADX WARNING: Missing block: B:56:?, code skipped:
+            r5.close();
+     */
+    private static java.util.HashMap<java.lang.String, java.lang.Integer> getThemeFileValues(java.io.File r16, java.lang.String r17, java.lang.String[] r18) {
+        /*
+        r0 = r18;
+        r1 = new java.util.HashMap;
+        r1.<init>();
+        r2 = 1024; // 0x400 float:1.435E-42 double:5.06E-321;
+        r3 = 0;
+        r2 = new byte[r2];	 Catch:{ all -> 0x00c2 }
+        if (r17 == 0) goto L_0x0013;
+    L_0x000e:
+        r4 = getAssetFile(r17);	 Catch:{ all -> 0x00c2 }
+        goto L_0x0015;
+    L_0x0013:
+        r4 = r16;
+    L_0x0015:
+        r5 = new java.io.FileInputStream;	 Catch:{ all -> 0x00c2 }
+        r5.<init>(r4);	 Catch:{ all -> 0x00c2 }
+        r3 = -1;
+        r4 = 0;
+        r6 = 0;
+        r7 = -1;
+        r8 = 0;
+    L_0x001f:
+        r9 = r5.read(r2);	 Catch:{ all -> 0x00c0 }
+        if (r9 == r3) goto L_0x00b3;
+    L_0x0025:
+        r12 = r6;
+        r10 = 0;
+        r11 = 0;
+    L_0x0028:
+        r13 = 1;
+        if (r10 >= r9) goto L_0x00a0;
+    L_0x002b:
+        r14 = r2[r10];	 Catch:{ all -> 0x00c0 }
+        r15 = 10;
+        if (r14 != r15) goto L_0x009b;
+    L_0x0031:
+        r14 = r10 - r11;
+        r14 = r14 + r13;
+        r15 = new java.lang.String;	 Catch:{ all -> 0x00c0 }
+        r13 = r14 + -1;
+        r15.<init>(r2, r11, r13);	 Catch:{ all -> 0x00c0 }
+        r13 = "WLS=";
+        r13 = r15.startsWith(r13);	 Catch:{ all -> 0x00c0 }
+        if (r13 == 0) goto L_0x0050;
+    L_0x0043:
+        if (r0 == 0) goto L_0x0099;
+    L_0x0045:
+        r13 = r0.length;	 Catch:{ all -> 0x00c0 }
+        if (r13 <= 0) goto L_0x0099;
+    L_0x0048:
+        r13 = 4;
+        r13 = r15.substring(r13);	 Catch:{ all -> 0x00c0 }
+        r0[r4] = r13;	 Catch:{ all -> 0x00c0 }
+        goto L_0x0099;
+    L_0x0050:
+        r13 = "WPS";
+        r13 = r15.startsWith(r13);	 Catch:{ all -> 0x00c0 }
+        if (r13 == 0) goto L_0x005c;
+    L_0x0058:
+        r14 = r14 + r12;
+        r7 = r14;
+        r8 = 1;
+        goto L_0x00a0;
+    L_0x005c:
+        r13 = 61;
+        r13 = r15.indexOf(r13);	 Catch:{ all -> 0x00c0 }
+        if (r13 == r3) goto L_0x0099;
+    L_0x0064:
+        r3 = r15.substring(r4, r13);	 Catch:{ all -> 0x00c0 }
+        r13 = r13 + 1;
+        r13 = r15.substring(r13);	 Catch:{ all -> 0x00c0 }
+        r15 = r13.length();	 Catch:{ all -> 0x00c0 }
+        if (r15 <= 0) goto L_0x008a;
+    L_0x0074:
+        r15 = r13.charAt(r4);	 Catch:{ all -> 0x00c0 }
+        r4 = 35;
+        if (r15 != r4) goto L_0x008a;
+    L_0x007c:
+        r4 = android.graphics.Color.parseColor(r13);	 Catch:{ Exception -> 0x0081 }
+        goto L_0x0092;
+    L_0x0081:
+        r4 = org.telegram.messenger.Utilities.parseInt(r13);	 Catch:{ all -> 0x00c0 }
+        r4 = r4.intValue();	 Catch:{ all -> 0x00c0 }
+        goto L_0x0092;
+    L_0x008a:
+        r4 = org.telegram.messenger.Utilities.parseInt(r13);	 Catch:{ all -> 0x00c0 }
+        r4 = r4.intValue();	 Catch:{ all -> 0x00c0 }
+    L_0x0092:
+        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ all -> 0x00c0 }
+        r1.put(r3, r4);	 Catch:{ all -> 0x00c0 }
+    L_0x0099:
+        r11 = r11 + r14;
+        r12 = r12 + r14;
+    L_0x009b:
+        r10 = r10 + 1;
+        r3 = -1;
+        r4 = 0;
+        goto L_0x0028;
+    L_0x00a0:
+        if (r6 != r12) goto L_0x00a3;
+    L_0x00a2:
+        goto L_0x00b3;
+    L_0x00a3:
+        r3 = r5.getChannel();	 Catch:{ all -> 0x00c0 }
+        r9 = (long) r12;	 Catch:{ all -> 0x00c0 }
+        r3.position(r9);	 Catch:{ all -> 0x00c0 }
+        if (r8 == 0) goto L_0x00ae;
+    L_0x00ad:
+        goto L_0x00b3;
+    L_0x00ae:
+        r6 = r12;
+        r3 = -1;
+        r4 = 0;
+        goto L_0x001f;
+    L_0x00b3:
+        r0 = "wallpaperFileOffset";
+        r2 = java.lang.Integer.valueOf(r7);	 Catch:{ all -> 0x00c0 }
+        r1.put(r0, r2);	 Catch:{ all -> 0x00c0 }
+        r5.close();	 Catch:{ Exception -> 0x00cd }
+        goto L_0x00d2;
+    L_0x00c0:
+        r0 = move-exception;
+        goto L_0x00c4;
+    L_0x00c2:
+        r0 = move-exception;
+        r5 = r3;
+    L_0x00c4:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x00d3 }
+        if (r5 == 0) goto L_0x00d2;
+    L_0x00c9:
+        r5.close();	 Catch:{ Exception -> 0x00cd }
+        goto L_0x00d2;
+    L_0x00cd:
+        r0 = move-exception;
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);
+    L_0x00d2:
+        return r1;
+    L_0x00d3:
+        r0 = move-exception;
+        r1 = r0;
+        if (r5 == 0) goto L_0x00e0;
+    L_0x00d7:
+        r5.close();	 Catch:{ Exception -> 0x00db }
+        goto L_0x00e0;
+    L_0x00db:
+        r0 = move-exception;
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);
+    L_0x00e0:
+        goto L_0x00e2;
+    L_0x00e1:
+        throw r1;
+    L_0x00e2:
+        goto L_0x00e1;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.getThemeFileValues(java.io.File, java.lang.String, java.lang.String[]):java.util.HashMap");
     }
 
     public static void createCommonResources(Context context) {
@@ -3269,7 +7697,6 @@ public class Theme {
             checkboxSquare_backgroundPaint = new Paint(1);
             linkSelectionPaint = new Paint();
             Resources resources = context.getResources();
-            avatar_broadcastDrawable = resources.getDrawable(NUM);
             avatar_savedDrawable = resources.getDrawable(NUM);
             avatar_ghostDrawable = resources.getDrawable(NUM);
             RLottieDrawable rLottieDrawable = dialogs_archiveAvatarDrawable;
@@ -3308,7 +7735,6 @@ public class Theme {
             paint.setColor(getColor("divider"));
             linkSelectionPaint.setColor(getColor("windowBackgroundWhiteLinkSelection"));
             String str = "avatar_text";
-            setDrawableColorByKey(avatar_broadcastDrawable, str);
             setDrawableColorByKey(avatar_savedDrawable, str);
             String str2 = "avatar_backgroundArchived";
             String str3 = "Arrow1.**";
@@ -3370,7 +7796,8 @@ public class Theme {
             dialogs_countGrayPaint = new Paint(1);
             dialogs_errorPaint = new Paint(1);
             dialogs_lockDrawable = resources.getDrawable(NUM);
-            dialogs_checkDrawable = resources.getDrawable(NUM);
+            dialogs_checkDrawable = resources.getDrawable(NUM).mutate();
+            dialogs_checkReadDrawable = resources.getDrawable(NUM).mutate();
             dialogs_halfCheckDrawable = resources.getDrawable(NUM);
             dialogs_clockDrawable = resources.getDrawable(NUM).mutate();
             dialogs_errorDrawable = resources.getDrawable(NUM);
@@ -3426,8 +7853,9 @@ public class Theme {
             dialogs_onlinePaint.setColor(getColor("windowBackgroundWhiteBlueText3"));
             dialogs_offlinePaint.setColor(getColor("windowBackgroundWhiteGrayText3"));
             setDrawableColorByKey(dialogs_lockDrawable, "chats_secretIcon");
-            str = "chats_sentCheck";
-            setDrawableColorByKey(dialogs_checkDrawable, str);
+            setDrawableColorByKey(dialogs_checkDrawable, "chats_sentCheck");
+            str = "chats_sentReadCheck";
+            setDrawableColorByKey(dialogs_checkReadDrawable, str);
             setDrawableColorByKey(dialogs_halfCheckDrawable, str);
             setDrawableColorByKey(dialogs_clockDrawable, "chats_sentClock");
             setDrawableColorByKey(dialogs_errorDrawable, "chats_sentErrorIcon");
@@ -3480,45 +7908,45 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0a53 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0a6d */
     /* JADX WARNING: Can't wrap try/catch for region: R(9:12|13|(4:15|(1:17)(1:18)|19|20)|37|21|22|23|24|25) */
     public static void createChatResources(android.content.Context r14, boolean r15) {
         /*
         r0 = sync;
         monitor-enter(r0);
-        r1 = chat_msgTextPaint;	 Catch:{ all -> 0x0bf7 }
+        r1 = chat_msgTextPaint;	 Catch:{ all -> 0x0CLASSNAME }
         r2 = 1;
         if (r1 != 0) goto L_0x003d;
     L_0x0008:
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
-        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
-        chat_msgTextPaint = r1;	 Catch:{ all -> 0x0bf7 }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
-        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
-        chat_msgGameTextPaint = r1;	 Catch:{ all -> 0x0bf7 }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
-        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
-        chat_msgTextPaintOneEmoji = r1;	 Catch:{ all -> 0x0bf7 }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
-        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
-        chat_msgTextPaintTwoEmoji = r1;	 Catch:{ all -> 0x0bf7 }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
-        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
-        chat_msgTextPaintThreeEmoji = r1;	 Catch:{ all -> 0x0bf7 }
-        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0bf7 }
-        r1.<init>(r2);	 Catch:{ all -> 0x0bf7 }
-        chat_msgBotButtonPaint = r1;	 Catch:{ all -> 0x0bf7 }
-        r1 = chat_msgBotButtonPaint;	 Catch:{ all -> 0x0bf7 }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0CLASSNAME }
+        r1.<init>(r2);	 Catch:{ all -> 0x0CLASSNAME }
+        chat_msgTextPaint = r1;	 Catch:{ all -> 0x0CLASSNAME }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0CLASSNAME }
+        r1.<init>(r2);	 Catch:{ all -> 0x0CLASSNAME }
+        chat_msgGameTextPaint = r1;	 Catch:{ all -> 0x0CLASSNAME }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0CLASSNAME }
+        r1.<init>(r2);	 Catch:{ all -> 0x0CLASSNAME }
+        chat_msgTextPaintOneEmoji = r1;	 Catch:{ all -> 0x0CLASSNAME }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0CLASSNAME }
+        r1.<init>(r2);	 Catch:{ all -> 0x0CLASSNAME }
+        chat_msgTextPaintTwoEmoji = r1;	 Catch:{ all -> 0x0CLASSNAME }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0CLASSNAME }
+        r1.<init>(r2);	 Catch:{ all -> 0x0CLASSNAME }
+        chat_msgTextPaintThreeEmoji = r1;	 Catch:{ all -> 0x0CLASSNAME }
+        r1 = new android.text.TextPaint;	 Catch:{ all -> 0x0CLASSNAME }
+        r1.<init>(r2);	 Catch:{ all -> 0x0CLASSNAME }
+        chat_msgBotButtonPaint = r1;	 Catch:{ all -> 0x0CLASSNAME }
+        r1 = chat_msgBotButtonPaint;	 Catch:{ all -> 0x0CLASSNAME }
         r3 = "fonts/rmedium.ttf";
-        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);	 Catch:{ all -> 0x0bf7 }
-        r1.setTypeface(r3);	 Catch:{ all -> 0x0bf7 }
+        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);	 Catch:{ all -> 0x0CLASSNAME }
+        r1.setTypeface(r3);	 Catch:{ all -> 0x0CLASSNAME }
     L_0x003d:
-        monitor-exit(r0);	 Catch:{ all -> 0x0bf7 }
+        monitor-exit(r0);	 Catch:{ all -> 0x0CLASSNAME }
         r0 = 2;
-        if (r15 != 0) goto L_0x0a5d;
+        if (r15 != 0) goto L_0x0a77;
     L_0x0041:
         r1 = chat_msgInDrawable;
-        if (r1 != 0) goto L_0x0a5d;
+        if (r1 != 0) goto L_0x0a77;
     L_0x0045:
         r1 = new android.text.TextPaint;
         r1.<init>(r2);
@@ -3716,74 +8144,77 @@ public class Theme {
         r1.<init>();
         chat_composeBackgroundPaint = r1;
         r1 = r14.getResources();
-        r3 = NUM; // 0x7var_ float:1.7945359E38 double:1.052935693E-314;
+        r3 = NUM; // 0x7var_ float:1.7945365E38 double:1.0529356947E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945359E38 double:1.052935693E-314;
+        r3 = NUM; // 0x7var_ float:1.7945365E38 double:1.0529356947E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_b float:1.7945898E38 double:1.0529358247E-314;
+        r3 = NUM; // 0x7var_ float:1.794592E38 double:1.05293583E-314;
         r3 = r1.getDrawable(r3);
         chat_msgNoSoundDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.794539E38 double:1.0529357007E-314;
+        r3 = NUM; // 0x7var_ float:1.7945395E38 double:1.052935702E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.794539E38 double:1.0529357007E-314;
+        r3 = NUM; // 0x7var_ float:1.7945395E38 double:1.052935702E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.79454E38 double:1.052935703E-314;
+        r3 = NUM; // 0x7var_ float:1.7945405E38 double:1.0529357046E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInMediaDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.79454E38 double:1.052935703E-314;
+        r3 = NUM; // 0x7var_ float:1.7945405E38 double:1.0529357046E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInMediaSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.79454E38 double:1.052935703E-314;
+        r3 = NUM; // 0x7var_ float:1.7945405E38 double:1.0529357046E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMediaDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.79454E38 double:1.052935703E-314;
+        r3 = NUM; // 0x7var_ float:1.7945405E38 double:1.0529357046E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMediaSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945324E38 double:1.052935685E-314;
-        r3 = r1.getDrawable(r3);
-        r3 = r3.mutate();
-        chat_msgOutCheckDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945324E38 double:1.052935685E-314;
-        r3 = r1.getDrawable(r3);
-        r3 = r3.mutate();
-        chat_msgOutCheckSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945324E38 double:1.052935685E-314;
-        r3 = r1.getDrawable(r3);
-        r3 = r3.mutate();
-        chat_msgMediaCheckDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945324E38 double:1.052935685E-314;
+        r3 = NUM; // 0x7var_ float:1.794533E38 double:1.0529356863E-314;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgOutCheckDrawable = r4;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgOutCheckSelectedDrawable = r4;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgOutCheckReadDrawable = r4;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgOutCheckReadSelectedDrawable = r4;
+        r4 = r1.getDrawable(r3);
+        r4 = r4.mutate();
+        chat_msgMediaCheckDrawable = r4;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerCheckDrawable = r3;
-        r3 = NUM; // 0x7var_e float:1.7945353E38 double:1.052935692E-314;
+        r3 = NUM; // 0x7var_ float:1.7945359E38 double:1.052935693E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutHalfCheckDrawable = r3;
-        r3 = NUM; // 0x7var_e float:1.7945353E38 double:1.052935692E-314;
+        r3 = NUM; // 0x7var_ float:1.7945359E38 double:1.052935693E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutHalfCheckSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_e float:1.7945353E38 double:1.052935692E-314;
+        r3 = NUM; // 0x7var_ float:1.7945359E38 double:1.052935693E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgMediaHalfCheckDrawable = r3;
-        r3 = NUM; // 0x7var_e float:1.7945353E38 double:1.052935692E-314;
+        r3 = NUM; // 0x7var_ float:1.7945359E38 double:1.052935693E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerHalfCheckDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945328E38 double:1.052935686E-314;
+        r3 = NUM; // 0x7var_ float:1.7945334E38 double:1.0529356873E-314;
         r4 = r1.getDrawable(r3);
         r4 = r4.mutate();
         chat_msgOutClockDrawable = r4;
@@ -3802,56 +8233,61 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerClockDrawable = r3;
-        r3 = NUM; // 0x7var_b0 float:1.7945454E38 double:1.0529357165E-314;
-        r4 = r1.getDrawable(r3);
-        r4 = r4.mutate();
-        chat_msgInViewsDrawable = r4;
-        r4 = r1.getDrawable(r3);
-        r4 = r4.mutate();
-        chat_msgInViewsSelectedDrawable = r4;
-        r4 = r1.getDrawable(r3);
-        r4 = r4.mutate();
-        chat_msgOutViewsDrawable = r4;
-        r4 = r1.getDrawable(r3);
-        r4 = r4.mutate();
-        chat_msgOutViewsSelectedDrawable = r4;
-        r4 = r1.getDrawable(r3);
-        r4 = r4.mutate();
-        chat_msgMediaViewsDrawable = r4;
+        r3 = NUM; // 0x7var_b4 float:1.7945462E38 double:1.0529357184E-314;
+        r3 = r1.getDrawable(r3);
+        r3 = r3.mutate();
+        chat_msgInViewsDrawable = r3;
+        r3 = NUM; // 0x7var_b4 float:1.7945462E38 double:1.0529357184E-314;
+        r3 = r1.getDrawable(r3);
+        r3 = r3.mutate();
+        chat_msgInViewsSelectedDrawable = r3;
+        r3 = NUM; // 0x7var_b4 float:1.7945462E38 double:1.0529357184E-314;
+        r3 = r1.getDrawable(r3);
+        r3 = r3.mutate();
+        chat_msgOutViewsDrawable = r3;
+        r3 = NUM; // 0x7var_b4 float:1.7945462E38 double:1.0529357184E-314;
+        r3 = r1.getDrawable(r3);
+        r3 = r3.mutate();
+        chat_msgOutViewsSelectedDrawable = r3;
+        r3 = NUM; // 0x7var_b4 float:1.7945462E38 double:1.0529357184E-314;
+        r3 = r1.getDrawable(r3);
+        r3 = r3.mutate();
+        chat_msgMediaViewsDrawable = r3;
+        r3 = NUM; // 0x7var_b4 float:1.7945462E38 double:1.0529357184E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerViewsDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945308E38 double:1.052935681E-314;
+        r3 = NUM; // 0x7var_b float:1.7945314E38 double:1.0529356824E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInMenuDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945308E38 double:1.052935681E-314;
+        r3 = NUM; // 0x7var_b float:1.7945314E38 double:1.0529356824E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInMenuSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945308E38 double:1.052935681E-314;
+        r3 = NUM; // 0x7var_b float:1.7945314E38 double:1.0529356824E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMenuDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945308E38 double:1.052935681E-314;
+        r3 = NUM; // 0x7var_b float:1.7945314E38 double:1.0529356824E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMenuSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945884E38 double:1.052935821E-314;
+        r3 = NUM; // 0x7var_f float:1.7945906E38 double:1.0529358266E-314;
         r3 = r1.getDrawable(r3);
         chat_msgMediaMenuDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945363E38 double:1.052935694E-314;
+        r3 = NUM; // 0x7var_ float:1.7945369E38 double:1.0529356957E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInInstantDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945363E38 double:1.052935694E-314;
+        r3 = NUM; // 0x7var_ float:1.7945369E38 double:1.0529356957E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutInstantDrawable = r3;
-        r3 = NUM; // 0x7var_b1 float:1.7945456E38 double:1.052935717E-314;
+        r3 = NUM; // 0x7var_b5 float:1.7945464E38 double:1.052935719E-314;
         r3 = r1.getDrawable(r3);
         chat_msgErrorDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945146E38 double:1.0529356414E-314;
+        r3 = NUM; // 0x7var_b float:1.7945152E38 double:1.052935643E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_muteIconDrawable = r3;
@@ -3910,7 +8346,7 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         calllog_msgCallDownGreenDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945162E38 double:1.0529356453E-314;
+        r3 = NUM; // 0x7var_ float:1.7945168E38 double:1.052935647E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgAvatarLiveLocationDrawable = r3;
@@ -3923,20 +8359,20 @@ public class Theme {
         r3 = NUM; // 0x7var_ float:1.7944681E38 double:1.052935528E-314;
         r3 = r1.getDrawable(r3);
         chat_inlineResultLocation = r3;
-        r3 = NUM; // 0x7var_f float:1.7945193E38 double:1.0529356527E-314;
+        r3 = NUM; // 0x7var_ float:1.7945199E38 double:1.052935654E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_redLocationIcon = r3;
-        r3 = NUM; // 0x7var_ float:1.794536E38 double:1.0529356937E-314;
+        r3 = NUM; // 0x7var_ float:1.7945367E38 double:1.052935695E-314;
         r3 = r1.getDrawable(r3);
         chat_msgInShadowDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945391E38 double:1.052935701E-314;
+        r3 = NUM; // 0x7var_ float:1.7945397E38 double:1.0529357026E-314;
         r3 = r1.getDrawable(r3);
         chat_msgOutShadowDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945401E38 double:1.0529357036E-314;
+        r3 = NUM; // 0x7var_ float:1.7945407E38 double:1.052935705E-314;
         r3 = r1.getDrawable(r3);
         chat_msgInMediaShadowDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945401E38 double:1.0529357036E-314;
+        r3 = NUM; // 0x7var_ float:1.7945407E38 double:1.052935705E-314;
         r3 = r1.getDrawable(r3);
         chat_msgOutMediaShadowDrawable = r3;
         r3 = NUM; // 0x7var_ float:1.794468E38 double:1.0529355277E-314;
@@ -3945,7 +8381,7 @@ public class Theme {
         r3 = NUM; // 0x7var_ float:1.7944677E38 double:1.052935527E-314;
         r3 = r1.getDrawable(r3);
         chat_botInlineDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.794583E38 double:1.052935808E-314;
+        r3 = NUM; // 0x7var_ float:1.7945852E38 double:1.0529358133E-314;
         r3 = r1.getDrawable(r3);
         chat_systemDrawable = r3;
         r3 = NUM; // 0x7var_a2 float:1.7944907E38 double:1.052935583E-314;
@@ -3992,7 +8428,7 @@ public class Theme {
         r4 = createCircleDrawableWithIcon(r4, r8);
         r8 = 5;
         r3[r8] = r4;
-        r3 = NUM; // 0x7var_c0 float:1.7945487E38 double:1.0529357244E-314;
+        r3 = NUM; // 0x7var_c4 float:1.7945495E38 double:1.0529357263E-314;
         r3 = r1.getDrawable(r3);
         chat_attachEmptyDrawable = r3;
         r3 = chat_cornerOuter;
@@ -4027,16 +8463,16 @@ public class Theme {
         r4 = NUM; // 0x7var_ float:1.7944807E38 double:1.052935559E-314;
         r4 = r1.getDrawable(r4);
         r3[r6] = r4;
-        r3 = NUM; // 0x7var_ float:1.7945726E38 double:1.0529357827E-314;
+        r3 = NUM; // 0x7var_ float:1.7945748E38 double:1.052935788E-314;
         r3 = r1.getDrawable(r3);
         chat_shareDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945724E38 double:1.052935782E-314;
+        r3 = NUM; // 0x7var_ float:1.7945746E38 double:1.0529357876E-314;
         r3 = r1.getDrawable(r3);
         chat_shareIconDrawable = r3;
         r3 = NUM; // 0x7var_e float:1.7944834E38 double:1.0529355653E-314;
         r3 = r1.getDrawable(r3);
         chat_replyIconDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945294E38 double:1.0529356774E-314;
+        r3 = NUM; // 0x7var_ float:1.79453E38 double:1.052935679E-314;
         r3 = r1.getDrawable(r3);
         chat_goIconDrawable = r3;
         r3 = chat_fileMiniStatesDrawable;
@@ -4087,7 +8523,7 @@ public class Theme {
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r7];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_ float:1.7945892E38 double:1.052935823E-314;
+        r10 = NUM; // 0x7var_ float:1.7945915E38 double:1.0529358286E-314;
         r9 = createCircleDrawableWithIcon(r9, r10);
         r3[r5] = r9;
         r3 = chat_fileMiniStatesDrawable;
@@ -4098,16 +8534,16 @@ public class Theme {
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r8];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_ float:1.7945894E38 double:1.0529358237E-314;
+        r10 = NUM; // 0x7var_ float:1.7945917E38 double:1.052935829E-314;
         r9 = createCircleDrawableWithIcon(r9, r10);
         r3[r5] = r9;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r8];
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r9 = NUM; // 0x7var_ float:1.7945894E38 double:1.0529358237E-314;
+        r9 = NUM; // 0x7var_ float:1.7945917E38 double:1.052935829E-314;
         r4 = createCircleDrawableWithIcon(r4, r9);
         r3[r2] = r4;
-        r3 = NUM; // 0x7var_d float:1.7945416E38 double:1.052935707E-314;
+        r3 = NUM; // 0x7var_a0 float:1.7945422E38 double:1.0529357086E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_fileIcon = r3;
@@ -4115,7 +8551,7 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_flameIcon = r3;
-        r3 = NUM; // 0x7var_e float:1.7945418E38 double:1.0529357076E-314;
+        r3 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_gifIcon = r3;
@@ -4123,7 +8559,7 @@ public class Theme {
         r3 = r3[r5];
         r4 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
+        r10 = NUM; // 0x7var_a4 float:1.794543E38 double:1.0529357105E-314;
         r9 = createCircleDrawableWithIcon(r9, r10);
         r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
@@ -4134,7 +8570,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r2];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_a0 float:1.7945422E38 double:1.0529357086E-314;
+        r10 = NUM; // 0x7var_a3 float:1.7945428E38 double:1.05293571E-314;
         r9 = createCircleDrawableWithIcon(r9, r10);
         r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
@@ -4145,7 +8581,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r0];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_f float:1.794542E38 double:1.052935708E-314;
+        r10 = NUM; // 0x7var_a2 float:1.7945426E38 double:1.0529357095E-314;
         r9 = createCircleDrawableWithIcon(r9, r10);
         r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
@@ -4156,7 +8592,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r6];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r11 = NUM; // 0x7var_d float:1.7945416E38 double:1.052935707E-314;
+        r11 = NUM; // 0x7var_a0 float:1.7945422E38 double:1.0529357086E-314;
         r9 = createCircleDrawableWithIcon(r9, r11);
         r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
@@ -4167,7 +8603,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r7];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r11 = NUM; // 0x7var_c float:1.7945414E38 double:1.0529357066E-314;
+        r11 = NUM; // 0x7var_f float:1.794542E38 double:1.052935708E-314;
         r9 = createCircleDrawableWithIcon(r9, r11);
         r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
@@ -4178,7 +8614,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r8];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r12 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
+        r12 = NUM; // 0x7var_a4 float:1.794543E38 double:1.0529357105E-314;
         r9 = createCircleDrawableWithIcon(r9, r12);
         r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
@@ -4190,7 +8626,7 @@ public class Theme {
         r9 = 6;
         r3 = r3[r9];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r12 = NUM; // 0x7var_a0 float:1.7945422E38 double:1.0529357086E-314;
+        r12 = NUM; // 0x7var_a3 float:1.7945428E38 double:1.05293571E-314;
         r9 = createCircleDrawableWithIcon(r9, r12);
         r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
@@ -4215,7 +8651,7 @@ public class Theme {
         r9 = 8;
         r3 = r3[r9];
         r9 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r12 = NUM; // 0x7var_d float:1.7945416E38 double:1.052935707E-314;
+        r12 = NUM; // 0x7var_a0 float:1.7945422E38 double:1.0529357086E-314;
         r9 = createCircleDrawableWithIcon(r9, r12);
         r3[r5] = r9;
         r3 = chat_fileStatesDrawable;
@@ -4260,7 +8696,7 @@ public class Theme {
         r3 = chat_photoStatesDrawables;
         r3 = r3[r0];
         r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r13 = NUM; // 0x7var_e float:1.7945418E38 double:1.0529357076E-314;
+        r13 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
         r12 = createCircleDrawableWithIcon(r12, r13);
         r3[r5] = r12;
         r3 = chat_photoStatesDrawables;
@@ -4271,13 +8707,13 @@ public class Theme {
         r3 = chat_photoStatesDrawables;
         r3 = r3[r6];
         r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r13 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
+        r13 = NUM; // 0x7var_a4 float:1.794543E38 double:1.0529357105E-314;
         r12 = createCircleDrawableWithIcon(r12, r13);
         r3[r5] = r12;
         r3 = chat_photoStatesDrawables;
         r3 = r3[r6];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r12 = NUM; // 0x7var_a1 float:1.7945424E38 double:1.052935709E-314;
+        r12 = NUM; // 0x7var_a4 float:1.794543E38 double:1.0529357105E-314;
         r6 = createCircleDrawableWithIcon(r6, r12);
         r3[r2] = r6;
         r3 = chat_photoStatesDrawables;
@@ -4299,7 +8735,7 @@ public class Theme {
         r6 = r3[r6];
         r7 = 6;
         r3 = r3[r7];
-        r7 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
+        r7 = NUM; // 0x7var_fc float:1.7945608E38 double:1.052935754E-314;
         r7 = r1.getDrawable(r7);
         r3[r2] = r7;
         r6[r5] = r7;
@@ -4381,18 +8817,18 @@ public class Theme {
         r3[r2] = r1;
         r1 = chat_contactDrawable;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = NUM; // 0x7var_ float:1.794533E38 double:1.0529356863E-314;
+        r6 = NUM; // 0x7var_ float:1.7945337E38 double:1.052935688E-314;
         r3 = createCircleDrawableWithIcon(r3, r6);
         r1[r5] = r3;
         r1 = chat_contactDrawable;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = NUM; // 0x7var_ float:1.794533E38 double:1.0529356863E-314;
+        r4 = NUM; // 0x7var_ float:1.7945337E38 double:1.052935688E-314;
         r3 = createCircleDrawableWithIcon(r3, r4);
         r1[r2] = r3;
         r1 = chat_locationDrawable;
         r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r4 = NUM; // 0x7var_ float:1.794537E38 double:1.052935696E-314;
+        r4 = NUM; // 0x7var_a float:1.7945377E38 double:1.0529356977E-314;
         r3 = createRoundRectDrawableWithIcon(r3, r4);
         r1[r5] = r3;
         r1 = chat_locationDrawable;
@@ -4404,65 +8840,65 @@ public class Theme {
         r1 = NUM; // 0x7var_e float:1.7944801E38 double:1.0529355574E-314;
         r14 = r14.getDrawable(r1);
         chat_composeShadowDrawable = r14;
-        r14 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ Throwable -> 0x0a5a }
+        r14 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0a74 }
         r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);	 Catch:{ Throwable -> 0x0a5a }
+        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);	 Catch:{ all -> 0x0a74 }
         r14 = r14 + r1;
-        r1 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x0a5a }
-        r1 = android.graphics.Bitmap.createBitmap(r14, r14, r1);	 Catch:{ Throwable -> 0x0a5a }
-        r3 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x0a5a }
-        r3.<init>(r1);	 Catch:{ Throwable -> 0x0a5a }
-        r4 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x0a5a }
-        r4.<init>(r2);	 Catch:{ Throwable -> 0x0a5a }
-        r4.setColor(r5);	 Catch:{ Throwable -> 0x0a5a }
-        r6 = android.graphics.Paint.Style.FILL;	 Catch:{ Throwable -> 0x0a5a }
-        r4.setStyle(r6);	 Catch:{ Throwable -> 0x0a5a }
-        r6 = new android.graphics.PorterDuffXfermode;	 Catch:{ Throwable -> 0x0a5a }
-        r7 = android.graphics.PorterDuff.Mode.CLEAR;	 Catch:{ Throwable -> 0x0a5a }
-        r6.<init>(r7);	 Catch:{ Throwable -> 0x0a5a }
-        r4.setXfermode(r6);	 Catch:{ Throwable -> 0x0a5a }
-        r6 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x0a5a }
-        r6.<init>(r2);	 Catch:{ Throwable -> 0x0a5a }
+        r1 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0a74 }
+        r1 = android.graphics.Bitmap.createBitmap(r14, r14, r1);	 Catch:{ all -> 0x0a74 }
+        r3 = new android.graphics.Canvas;	 Catch:{ all -> 0x0a74 }
+        r3.<init>(r1);	 Catch:{ all -> 0x0a74 }
+        r4 = new android.graphics.Paint;	 Catch:{ all -> 0x0a74 }
+        r4.<init>(r2);	 Catch:{ all -> 0x0a74 }
+        r4.setColor(r5);	 Catch:{ all -> 0x0a74 }
+        r6 = android.graphics.Paint.Style.FILL;	 Catch:{ all -> 0x0a74 }
+        r4.setStyle(r6);	 Catch:{ all -> 0x0a74 }
+        r6 = new android.graphics.PorterDuffXfermode;	 Catch:{ all -> 0x0a74 }
+        r7 = android.graphics.PorterDuff.Mode.CLEAR;	 Catch:{ all -> 0x0a74 }
+        r6.<init>(r7);	 Catch:{ all -> 0x0a74 }
+        r4.setXfermode(r6);	 Catch:{ all -> 0x0a74 }
+        r6 = new android.graphics.Paint;	 Catch:{ all -> 0x0a74 }
+        r6.<init>(r2);	 Catch:{ all -> 0x0a74 }
         r2 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Throwable -> 0x0a5a }
-        r2 = (float) r2;	 Catch:{ Throwable -> 0x0a5a }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ all -> 0x0a74 }
+        r2 = (float) r2;	 Catch:{ all -> 0x0a74 }
         r7 = 0;
         r8 = 0;
         r9 = NUM; // 0x5var_ float:9.223372E18 double:7.874593756E-315;
-        r6.setShadowLayer(r2, r7, r8, r9);	 Catch:{ Throwable -> 0x0a5a }
-    L_0x0a31:
-        if (r5 >= r0) goto L_0x0a4f;
-    L_0x0a33:
+        r6.setShadowLayer(r2, r7, r8, r9);	 Catch:{ all -> 0x0a74 }
+    L_0x0a4b:
+        if (r5 >= r0) goto L_0x0a69;
+    L_0x0a4d:
         r2 = r14 / 2;
-        r2 = (float) r2;	 Catch:{ Throwable -> 0x0a5a }
+        r2 = (float) r2;	 Catch:{ all -> 0x0a74 }
         r7 = r14 / 2;
-        r7 = (float) r7;	 Catch:{ Throwable -> 0x0a5a }
-        r8 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ Throwable -> 0x0a5a }
+        r7 = (float) r7;	 Catch:{ all -> 0x0a74 }
+        r8 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0a74 }
         r8 = r8 / r0;
         r9 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);	 Catch:{ Throwable -> 0x0a5a }
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);	 Catch:{ all -> 0x0a74 }
         r8 = r8 - r9;
-        r8 = (float) r8;	 Catch:{ Throwable -> 0x0a5a }
-        if (r5 != 0) goto L_0x0a48;
-    L_0x0a46:
+        r8 = (float) r8;	 Catch:{ all -> 0x0a74 }
+        if (r5 != 0) goto L_0x0a62;
+    L_0x0a60:
         r9 = r6;
-        goto L_0x0a49;
-    L_0x0a48:
+        goto L_0x0a63;
+    L_0x0a62:
         r9 = r4;
-    L_0x0a49:
-        r3.drawCircle(r2, r7, r8, r9);	 Catch:{ Throwable -> 0x0a5a }
+    L_0x0a63:
+        r3.drawCircle(r2, r7, r8, r9);	 Catch:{ all -> 0x0a74 }
         r5 = r5 + 1;
-        goto L_0x0a31;
-    L_0x0a4f:
+        goto L_0x0a4b;
+    L_0x0a69:
         r14 = 0;
-        r3.setBitmap(r14);	 Catch:{ Exception -> 0x0a53 }
-    L_0x0a53:
-        r14 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ Throwable -> 0x0a5a }
-        r14.<init>(r1);	 Catch:{ Throwable -> 0x0a5a }
-        chat_roundVideoShadow = r14;	 Catch:{ Throwable -> 0x0a5a }
-    L_0x0a5a:
+        r3.setBitmap(r14);	 Catch:{ Exception -> 0x0a6d }
+    L_0x0a6d:
+        r14 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x0a74 }
+        r14.<init>(r1);	 Catch:{ all -> 0x0a74 }
+        chat_roundVideoShadow = r14;	 Catch:{ all -> 0x0a74 }
+    L_0x0a74:
         applyChatTheme(r15);
-    L_0x0a5d:
+    L_0x0a77:
         r14 = chat_msgTextPaintOneEmoji;
         r1 = NUM; // 0x41e00000 float:28.0 double:5.46040909E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
@@ -4494,11 +8930,11 @@ public class Theme {
         r2 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r2 = (float) r2;
         r14.setTextSize(r2);
-        if (r15 != 0) goto L_0x0bf6;
-    L_0x0aa8:
+        if (r15 != 0) goto L_0x0CLASSNAME;
+    L_0x0ac2:
         r14 = chat_botProgressPaint;
-        if (r14 == 0) goto L_0x0bf6;
-    L_0x0aac:
+        if (r14 == 0) goto L_0x0CLASSNAME;
+    L_0x0ac6:
         r15 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
         r15 = (float) r15;
@@ -4635,16 +9071,16 @@ public class Theme {
         r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
         r15 = (float) r15;
         r14.setStrokeWidth(r15);
-    L_0x0bf6:
+    L_0x0CLASSNAME:
         return;
-    L_0x0bf7:
+    L_0x0CLASSNAME:
         r14 = move-exception;
-        monitor-exit(r0);	 Catch:{ all -> 0x0bf7 }
-        goto L_0x0bfb;
-    L_0x0bfa:
+        monitor-exit(r0);	 Catch:{ all -> 0x0CLASSNAME }
+        goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
         throw r14;
-    L_0x0bfb:
-        goto L_0x0bfa;
+    L_0x0CLASSNAME:
+        goto L_0x0CLASSNAME;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createChatResources(android.content.Context, boolean):void");
     }
@@ -4690,8 +9126,10 @@ public class Theme {
             setDrawableColorByKey(chat_msgOutMediaShadowDrawable, str7);
             setDrawableColorByKey(chat_msgOutCheckDrawable, "chat_outSentCheck");
             setDrawableColorByKey(chat_msgOutCheckSelectedDrawable, "chat_outSentCheckSelected");
-            setDrawableColorByKey(chat_msgOutHalfCheckDrawable, "chat_outSentCheck");
-            setDrawableColorByKey(chat_msgOutHalfCheckSelectedDrawable, "chat_outSentCheckSelected");
+            setDrawableColorByKey(chat_msgOutCheckReadDrawable, "chat_outSentCheckRead");
+            setDrawableColorByKey(chat_msgOutCheckReadSelectedDrawable, "chat_outSentCheckReadSelected");
+            setDrawableColorByKey(chat_msgOutHalfCheckDrawable, "chat_outSentCheckRead");
+            setDrawableColorByKey(chat_msgOutHalfCheckSelectedDrawable, "chat_outSentCheckReadSelected");
             setDrawableColorByKey(chat_msgOutClockDrawable, "chat_outSentClock");
             setDrawableColorByKey(chat_msgOutSelectedClockDrawable, "chat_outSentClockSelected");
             setDrawableColorByKey(chat_msgInClockDrawable, "chat_inSentClock");
@@ -5006,7 +9444,8 @@ public class Theme {
 
     public static void setColor(String str, int i, boolean z) {
         String str2 = "chat_wallpaper";
-        if (str.equals(str2)) {
+        String str3 = "chat_wallpaper_gradient_to";
+        if (str.equals(str2) || str.equals(str3)) {
             i |= -16777216;
         }
         if (z) {
@@ -5016,17 +9455,19 @@ public class Theme {
         }
         if (str.equals("chat_serviceBackground") || str.equals("chat_serviceBackgroundSelected")) {
             applyChatServiceMessageColor();
-        } else if (str.equals(str2)) {
+        } else if (str.equals(str2) || str.equals(str3)) {
             reloadWallpaper();
         }
     }
 
-    public static void setThemeWallpaper(String str, Bitmap bitmap, File file) {
+    public static void setThemeWallpaper(ThemeInfo themeInfo, Bitmap bitmap, File file) {
         currentColors.remove("chat_wallpaper");
+        currentColors.remove("chat_wallpaper_gradient_to");
+        themedWallpaperLink = null;
         MessagesController.getGlobalMainSettings().edit().remove("overrideThemeWallpaper").commit();
         if (bitmap != null) {
             themedWallpaper = new BitmapDrawable(bitmap);
-            saveCurrentTheme(str, false);
+            saveCurrentTheme(themeInfo, false, false, false);
             calcBackgroundColor(themedWallpaper, 0);
             applyChatServiceMessageColor();
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
@@ -5034,7 +9475,7 @@ public class Theme {
         }
         themedWallpaper = null;
         wallpaper = null;
-        saveCurrentTheme(str, false);
+        saveCurrentTheme(themeInfo, false, false, false);
         reloadWallpaper();
     }
 
@@ -5125,8 +9566,12 @@ public class Theme {
         }
     }
 
+    public static boolean isThemeWallpaperPublic() {
+        return TextUtils.isEmpty(themedWallpaperLink) ^ 1;
+    }
+
     public static boolean hasWallpaperFromTheme() {
-        return currentColors.containsKey("chat_wallpaper") || themedWallpaperFileOffset > 0;
+        return currentColors.containsKey("chat_wallpaper") || themedWallpaperFileOffset > 0 || !TextUtils.isEmpty(themedWallpaperLink);
     }
 
     public static boolean isCustomTheme() {
@@ -5164,360 +9609,418 @@ public class Theme {
 
     public static void loadWallpaper() {
         if (wallpaper == null) {
-            Utilities.searchQueue.postRunnable(-$$Lambda$Theme$g9IkSg8DwYzdCeZKlfMvOXD2f9I.INSTANCE);
+            Utilities.searchQueue.postRunnable(-$$Lambda$Theme$mtcROGDmdvjCywBvR0cdvd_2Uoc.INSTANCE);
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00ba A:{SYNTHETIC, Splitter:B:55:0x00ba} */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x00a5 A:{SYNTHETIC, Splitter:B:43:0x00a5} */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00ba A:{SYNTHETIC, Splitter:B:55:0x00ba} */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0136 A:{Catch:{ Exception -> 0x00b1 }} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:77:0x0132 */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x00ad A:{SYNTHETIC, Splitter:B:47:0x00ad} */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00ba A:{SYNTHETIC, Splitter:B:55:0x00ba} */
-    /* JADX WARNING: Can't wrap try/catch for region: R(7:55|56|57|(2:59|60)(2:61|(1:(2:71|(1:73)(1:74))(1:70)))|77|78|(2:(1:81)|82)) */
-    static /* synthetic */ void lambda$loadWallpaper$3() {
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x011f A:{SYNTHETIC, Splitter:B:68:0x011f} */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0109 A:{SYNTHETIC, Splitter:B:55:0x0109} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x011f A:{SYNTHETIC, Splitter:B:68:0x011f} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x019b A:{Catch:{ all -> 0x010f }} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:90:0x0197 */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x011f A:{SYNTHETIC, Splitter:B:68:0x011f} */
+    /* JADX WARNING: Can't wrap try/catch for region: R(7:68|69|70|(2:72|73)(2:74|(1:(2:84|(1:86)(1:87))(1:83)))|90|91|(2:(1:94)|95)) */
+    static /* synthetic */ void lambda$loadWallpaper$7() {
         /*
         r0 = wallpaperSync;
         monitor-enter(r0);
-        r1 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ all -> 0x014e }
+        r1 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ all -> 0x01b3 }
+        r2 = previousTheme;	 Catch:{ all -> 0x01b3 }
+        r3 = 1;
+        r4 = 0;
+        if (r2 != 0) goto L_0x0017;
+    L_0x000d:
         r2 = "overrideThemeWallpaper";
-        r3 = 0;
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x014e }
-        r4 = "selectedBackgroundMotion";
-        r4 = r1.getBoolean(r4, r3);	 Catch:{ all -> 0x014e }
-        isWallpaperMotion = r4;	 Catch:{ all -> 0x014e }
-        r4 = "selectedPattern";
-        r5 = 0;
-        r7 = r1.getLong(r4, r5);	 Catch:{ all -> 0x014e }
-        r4 = 1;
-        r9 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));
-        if (r9 == 0) goto L_0x0025;
-    L_0x0023:
-        r7 = 1;
-        goto L_0x0026;
-    L_0x0025:
-        r7 = 0;
-    L_0x0026:
-        isPatternWallpaper = r7;	 Catch:{ all -> 0x014e }
-        if (r2 != 0) goto L_0x00b6;
-    L_0x002a:
-        r2 = currentColors;	 Catch:{ all -> 0x014e }
-        r7 = "chat_wallpaper";
-        r2 = r2.get(r7);	 Catch:{ all -> 0x014e }
-        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x014e }
-        if (r2 == 0) goto L_0x0045;
-    L_0x0036:
-        r7 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x014e }
-        r2 = r2.intValue();	 Catch:{ all -> 0x014e }
-        r7.<init>(r2);	 Catch:{ all -> 0x014e }
-        wallpaper = r7;	 Catch:{ all -> 0x014e }
-        isCustomTheme = r4;	 Catch:{ all -> 0x014e }
-        goto L_0x00b6;
-    L_0x0045:
-        r2 = themedWallpaperFileOffset;	 Catch:{ all -> 0x014e }
-        if (r2 <= 0) goto L_0x00b6;
-    L_0x0049:
-        r2 = currentTheme;	 Catch:{ all -> 0x014e }
-        r2 = r2.pathToFile;	 Catch:{ all -> 0x014e }
-        if (r2 != 0) goto L_0x0055;
-    L_0x004f:
-        r2 = currentTheme;	 Catch:{ all -> 0x014e }
-        r2 = r2.assetName;	 Catch:{ all -> 0x014e }
-        if (r2 == 0) goto L_0x00b6;
-    L_0x0055:
+        r2 = r1.getBoolean(r2, r4);	 Catch:{ all -> 0x01b3 }
+        if (r2 == 0) goto L_0x0017;
+    L_0x0015:
+        r2 = 1;
+        goto L_0x0018;
+    L_0x0017:
         r2 = 0;
-        r7 = currentTheme;	 Catch:{ Throwable -> 0x009f }
-        r7 = r7.assetName;	 Catch:{ Throwable -> 0x009f }
-        if (r7 == 0) goto L_0x0065;
-    L_0x005c:
-        r7 = currentTheme;	 Catch:{ Throwable -> 0x009f }
-        r7 = r7.assetName;	 Catch:{ Throwable -> 0x009f }
-        r7 = getAssetFile(r7);	 Catch:{ Throwable -> 0x009f }
-        goto L_0x006e;
-    L_0x0065:
-        r7 = new java.io.File;	 Catch:{ Throwable -> 0x009f }
-        r8 = currentTheme;	 Catch:{ Throwable -> 0x009f }
-        r8 = r8.pathToFile;	 Catch:{ Throwable -> 0x009f }
-        r7.<init>(r8);	 Catch:{ Throwable -> 0x009f }
-    L_0x006e:
-        r8 = new java.io.FileInputStream;	 Catch:{ Throwable -> 0x009f }
-        r8.<init>(r7);	 Catch:{ Throwable -> 0x009f }
-        r2 = r8.getChannel();	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        r7 = themedWallpaperFileOffset;	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        r9 = (long) r7;	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        r2.position(r9);	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        r2 = android.graphics.BitmapFactory.decodeStream(r8);	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        if (r2 == 0) goto L_0x008e;
-    L_0x0083:
-        r7 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        r7.<init>(r2);	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        wallpaper = r7;	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        themedWallpaper = r7;	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-        isCustomTheme = r4;	 Catch:{ Throwable -> 0x009a, all -> 0x0097 }
-    L_0x008e:
-        r8.close();	 Catch:{ Exception -> 0x0092 }
-        goto L_0x00b6;
-    L_0x0092:
+    L_0x0018:
+        r5 = "selectedBackgroundMotion";
+        r5 = r1.getBoolean(r5, r4);	 Catch:{ all -> 0x01b3 }
+        isWallpaperMotion = r5;	 Catch:{ all -> 0x01b3 }
+        r5 = "selectedPattern";
+        r6 = 0;
+        r8 = r1.getLong(r5, r6);	 Catch:{ all -> 0x01b3 }
+        r5 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
+        if (r5 == 0) goto L_0x002e;
+    L_0x002c:
+        r5 = 1;
+        goto L_0x002f;
+    L_0x002e:
+        r5 = 0;
+    L_0x002f:
+        isPatternWallpaper = r5;	 Catch:{ all -> 0x01b3 }
+        if (r2 != 0) goto L_0x011b;
+    L_0x0033:
+        r2 = currentColors;	 Catch:{ all -> 0x01b3 }
+        r5 = "chat_wallpaper";
+        r2 = r2.get(r5);	 Catch:{ all -> 0x01b3 }
+        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x01b3 }
+        if (r2 == 0) goto L_0x0073;
+    L_0x003f:
+        r5 = currentColors;	 Catch:{ all -> 0x01b3 }
+        r8 = "chat_wallpaper_gradient_to";
+        r5 = r5.get(r8);	 Catch:{ all -> 0x01b3 }
+        r5 = (java.lang.Integer) r5;	 Catch:{ all -> 0x01b3 }
+        if (r5 != 0) goto L_0x0057;
+    L_0x004b:
+        r5 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x01b3 }
+        r2 = r2.intValue();	 Catch:{ all -> 0x01b3 }
+        r5.<init>(r2);	 Catch:{ all -> 0x01b3 }
+        wallpaper = r5;	 Catch:{ all -> 0x01b3 }
+        goto L_0x006f;
+    L_0x0057:
+        r8 = new org.telegram.ui.Components.BackgroundGradientDrawable;	 Catch:{ all -> 0x01b3 }
+        r9 = android.graphics.drawable.GradientDrawable.Orientation.BL_TR;	 Catch:{ all -> 0x01b3 }
+        r10 = 2;
+        r10 = new int[r10];	 Catch:{ all -> 0x01b3 }
+        r2 = r2.intValue();	 Catch:{ all -> 0x01b3 }
+        r10[r4] = r2;	 Catch:{ all -> 0x01b3 }
+        r2 = r5.intValue();	 Catch:{ all -> 0x01b3 }
+        r10[r3] = r2;	 Catch:{ all -> 0x01b3 }
+        r8.<init>(r9, r10);	 Catch:{ all -> 0x01b3 }
+        wallpaper = r8;	 Catch:{ all -> 0x01b3 }
+    L_0x006f:
+        isCustomTheme = r3;	 Catch:{ all -> 0x01b3 }
+        goto L_0x011b;
+    L_0x0073:
+        r2 = themedWallpaperLink;	 Catch:{ all -> 0x01b3 }
+        if (r2 == 0) goto L_0x00ae;
+    L_0x0077:
+        r2 = new java.io.File;	 Catch:{ all -> 0x01b3 }
+        r5 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x01b3 }
+        r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x01b3 }
+        r8.<init>();	 Catch:{ all -> 0x01b3 }
+        r9 = themedWallpaperLink;	 Catch:{ all -> 0x01b3 }
+        r9 = org.telegram.messenger.Utilities.MD5(r9);	 Catch:{ all -> 0x01b3 }
+        r8.append(r9);	 Catch:{ all -> 0x01b3 }
+        r9 = ".wp";
+        r8.append(r9);	 Catch:{ all -> 0x01b3 }
+        r8 = r8.toString();	 Catch:{ all -> 0x01b3 }
+        r2.<init>(r5, r8);	 Catch:{ all -> 0x01b3 }
+        r2 = r2.getAbsolutePath();	 Catch:{ all -> 0x01b3 }
+        r2 = android.graphics.BitmapFactory.decodeFile(r2);	 Catch:{ all -> 0x01b3 }
+        if (r2 == 0) goto L_0x011b;
+    L_0x00a1:
+        r5 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x01b3 }
+        r5.<init>(r2);	 Catch:{ all -> 0x01b3 }
+        wallpaper = r5;	 Catch:{ all -> 0x01b3 }
+        themedWallpaper = r5;	 Catch:{ all -> 0x01b3 }
+        isCustomTheme = r3;	 Catch:{ all -> 0x01b3 }
+        goto L_0x011b;
+    L_0x00ae:
+        r2 = themedWallpaperFileOffset;	 Catch:{ all -> 0x01b3 }
+        if (r2 <= 0) goto L_0x011b;
+    L_0x00b2:
+        r2 = currentTheme;	 Catch:{ all -> 0x01b3 }
+        r2 = r2.pathToFile;	 Catch:{ all -> 0x01b3 }
+        if (r2 != 0) goto L_0x00be;
+    L_0x00b8:
+        r2 = currentTheme;	 Catch:{ all -> 0x01b3 }
+        r2 = r2.assetName;	 Catch:{ all -> 0x01b3 }
+        if (r2 == 0) goto L_0x011b;
+    L_0x00be:
+        r2 = 0;
+        r5 = currentTheme;	 Catch:{ all -> 0x0103 }
+        r5 = r5.assetName;	 Catch:{ all -> 0x0103 }
+        if (r5 == 0) goto L_0x00ce;
+    L_0x00c5:
+        r5 = currentTheme;	 Catch:{ all -> 0x0103 }
+        r5 = r5.assetName;	 Catch:{ all -> 0x0103 }
+        r5 = getAssetFile(r5);	 Catch:{ all -> 0x0103 }
+        goto L_0x00d7;
+    L_0x00ce:
+        r5 = new java.io.File;	 Catch:{ all -> 0x0103 }
+        r8 = currentTheme;	 Catch:{ all -> 0x0103 }
+        r8 = r8.pathToFile;	 Catch:{ all -> 0x0103 }
+        r5.<init>(r8);	 Catch:{ all -> 0x0103 }
+    L_0x00d7:
+        r8 = new java.io.FileInputStream;	 Catch:{ all -> 0x0103 }
+        r8.<init>(r5);	 Catch:{ all -> 0x0103 }
+        r2 = r8.getChannel();	 Catch:{ all -> 0x0100 }
+        r5 = themedWallpaperFileOffset;	 Catch:{ all -> 0x0100 }
+        r9 = (long) r5;	 Catch:{ all -> 0x0100 }
+        r2.position(r9);	 Catch:{ all -> 0x0100 }
+        r2 = android.graphics.BitmapFactory.decodeStream(r8);	 Catch:{ all -> 0x0100 }
+        if (r2 == 0) goto L_0x00f7;
+    L_0x00ec:
+        r5 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x0100 }
+        r5.<init>(r2);	 Catch:{ all -> 0x0100 }
+        wallpaper = r5;	 Catch:{ all -> 0x0100 }
+        themedWallpaper = r5;	 Catch:{ all -> 0x0100 }
+        isCustomTheme = r3;	 Catch:{ all -> 0x0100 }
+    L_0x00f7:
+        r8.close();	 Catch:{ Exception -> 0x00fb }
+        goto L_0x011b;
+    L_0x00fb:
         r2 = move-exception;
-    L_0x0093:
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x014e }
-        goto L_0x00b6;
-    L_0x0097:
-        r1 = move-exception;
+    L_0x00fc:
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x01b3 }
+        goto L_0x011b;
+    L_0x0100:
+        r5 = move-exception;
         r2 = r8;
-        goto L_0x00ab;
-    L_0x009a:
-        r7 = move-exception;
-        r2 = r8;
-        goto L_0x00a0;
-    L_0x009d:
+        goto L_0x0104;
+    L_0x0103:
+        r5 = move-exception;
+    L_0x0104:
+        org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x010f }
+        if (r2 == 0) goto L_0x011b;
+    L_0x0109:
+        r2.close();	 Catch:{ Exception -> 0x010d }
+        goto L_0x011b;
+    L_0x010d:
+        r2 = move-exception;
+        goto L_0x00fc;
+    L_0x010f:
         r1 = move-exception;
-        goto L_0x00ab;
-    L_0x009f:
-        r7 = move-exception;
-    L_0x00a0:
-        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x009d }
-        if (r2 == 0) goto L_0x00b6;
-    L_0x00a5:
-        r2.close();	 Catch:{ Exception -> 0x00a9 }
-        goto L_0x00b6;
-    L_0x00a9:
+        if (r2 == 0) goto L_0x011a;
+    L_0x0112:
+        r2.close();	 Catch:{ Exception -> 0x0116 }
+        goto L_0x011a;
+    L_0x0116:
         r2 = move-exception;
-        goto L_0x0093;
-    L_0x00ab:
-        if (r2 == 0) goto L_0x00b5;
-    L_0x00ad:
-        r2.close();	 Catch:{ Exception -> 0x00b1 }
-        goto L_0x00b5;
-    L_0x00b1:
-        r2 = move-exception;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x014e }
-    L_0x00b5:
-        throw r1;	 Catch:{ all -> 0x014e }
-    L_0x00b6:
-        r2 = wallpaper;	 Catch:{ all -> 0x014e }
-        if (r2 != 0) goto L_0x0142;
-    L_0x00ba:
-        r7 = getSelectedBackgroundId();	 Catch:{ Throwable -> 0x0131 }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x01b3 }
+    L_0x011a:
+        throw r1;	 Catch:{ all -> 0x01b3 }
+    L_0x011b:
+        r2 = wallpaper;	 Catch:{ all -> 0x01b3 }
+        if (r2 != 0) goto L_0x01a7;
+    L_0x011f:
+        r8 = getSelectedBackgroundId();	 Catch:{ all -> 0x0196 }
         r2 = "selectedPattern";
-        r9 = r1.getLong(r2, r5);	 Catch:{ Throwable -> 0x0131 }
+        r10 = r1.getLong(r2, r6);	 Catch:{ all -> 0x0196 }
         r2 = "selectedColor";
-        r1 = r1.getInt(r2, r3);	 Catch:{ Throwable -> 0x0131 }
-        r11 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
+        r1 = r1.getInt(r2, r4);	 Catch:{ all -> 0x0196 }
+        r12 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
         r2 = NUM; // 0x7var_ float:1.7944643E38 double:1.052935519E-314;
-        r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1));
-        if (r13 != 0) goto L_0x00e3;
-    L_0x00d4:
-        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0132 }
-        r5 = r5.getResources();	 Catch:{ Throwable -> 0x0132 }
-        r2 = r5.getDrawable(r2);	 Catch:{ Throwable -> 0x0132 }
-        wallpaper = r2;	 Catch:{ Throwable -> 0x0132 }
-        isCustomTheme = r3;	 Catch:{ Throwable -> 0x0132 }
-        goto L_0x0132;
-    L_0x00e3:
-        r11 = -1;
-        r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1));
-        if (r13 == 0) goto L_0x00f3;
-    L_0x00e9:
-        r11 = -100;
-        r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1));
-        if (r13 < 0) goto L_0x00f3;
-    L_0x00ef:
-        r11 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));
-        if (r11 <= 0) goto L_0x0132;
-    L_0x00f3:
-        if (r1 == 0) goto L_0x0101;
-    L_0x00f5:
-        r7 = (r9 > r5 ? 1 : (r9 == r5 ? 0 : -1));
-        if (r7 != 0) goto L_0x0101;
-    L_0x00f9:
-        r2 = new android.graphics.drawable.ColorDrawable;	 Catch:{ Throwable -> 0x0132 }
-        r2.<init>(r1);	 Catch:{ Throwable -> 0x0132 }
-        wallpaper = r2;	 Catch:{ Throwable -> 0x0132 }
-        goto L_0x0132;
-    L_0x0101:
-        r5 = new java.io.File;	 Catch:{ Throwable -> 0x0132 }
-        r6 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Throwable -> 0x0132 }
-        r7 = "wallpaper.jpg";
-        r5.<init>(r6, r7);	 Catch:{ Throwable -> 0x0132 }
-        r5.length();	 Catch:{ Throwable -> 0x0132 }
-        r6 = r5.exists();	 Catch:{ Throwable -> 0x0132 }
-        if (r6 == 0) goto L_0x0122;
-    L_0x0115:
-        r2 = r5.getAbsolutePath();	 Catch:{ Throwable -> 0x0132 }
-        r2 = android.graphics.drawable.Drawable.createFromPath(r2);	 Catch:{ Throwable -> 0x0132 }
-        wallpaper = r2;	 Catch:{ Throwable -> 0x0132 }
-        isCustomTheme = r4;	 Catch:{ Throwable -> 0x0132 }
-        goto L_0x0132;
-    L_0x0122:
-        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0132 }
-        r5 = r5.getResources();	 Catch:{ Throwable -> 0x0132 }
-        r2 = r5.getDrawable(r2);	 Catch:{ Throwable -> 0x0132 }
-        wallpaper = r2;	 Catch:{ Throwable -> 0x0132 }
-        isCustomTheme = r3;	 Catch:{ Throwable -> 0x0132 }
-        goto L_0x0132;
-    L_0x0131:
-        r1 = 0;
-    L_0x0132:
-        r2 = wallpaper;	 Catch:{ all -> 0x014e }
-        if (r2 != 0) goto L_0x0142;
-    L_0x0136:
-        if (r1 != 0) goto L_0x013b;
-    L_0x0138:
-        r1 = -2693905; // 0xffffffffffd6e4ef float:NaN double:NaN;
-    L_0x013b:
-        r2 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x014e }
-        r2.<init>(r1);	 Catch:{ all -> 0x014e }
-        wallpaper = r2;	 Catch:{ all -> 0x014e }
-    L_0x0142:
-        r1 = wallpaper;	 Catch:{ all -> 0x014e }
-        calcBackgroundColor(r1, r4);	 Catch:{ all -> 0x014e }
-        r1 = org.telegram.ui.ActionBar.-$$Lambda$Theme$TMhHMPfcji-vj3thFJwRUoKkxRA.INSTANCE;	 Catch:{ all -> 0x014e }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ all -> 0x014e }
-        monitor-exit(r0);	 Catch:{ all -> 0x014e }
-        return;
+        r5 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1));
+        if (r5 != 0) goto L_0x0148;
+    L_0x0139:
+        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0197 }
+        r5 = r5.getResources();	 Catch:{ all -> 0x0197 }
+        r2 = r5.getDrawable(r2);	 Catch:{ all -> 0x0197 }
+        wallpaper = r2;	 Catch:{ all -> 0x0197 }
+        isCustomTheme = r4;	 Catch:{ all -> 0x0197 }
+        goto L_0x0197;
+    L_0x0148:
+        r12 = -1;
+        r5 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1));
+        if (r5 == 0) goto L_0x0158;
     L_0x014e:
+        r12 = -100;
+        r5 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1));
+        if (r5 < 0) goto L_0x0158;
+    L_0x0154:
+        r5 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
+        if (r5 <= 0) goto L_0x0197;
+    L_0x0158:
+        if (r1 == 0) goto L_0x0166;
+    L_0x015a:
+        r5 = (r10 > r6 ? 1 : (r10 == r6 ? 0 : -1));
+        if (r5 != 0) goto L_0x0166;
+    L_0x015e:
+        r2 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0197 }
+        r2.<init>(r1);	 Catch:{ all -> 0x0197 }
+        wallpaper = r2;	 Catch:{ all -> 0x0197 }
+        goto L_0x0197;
+    L_0x0166:
+        r5 = new java.io.File;	 Catch:{ all -> 0x0197 }
+        r6 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x0197 }
+        r7 = "wallpaper.jpg";
+        r5.<init>(r6, r7);	 Catch:{ all -> 0x0197 }
+        r5.length();	 Catch:{ all -> 0x0197 }
+        r6 = r5.exists();	 Catch:{ all -> 0x0197 }
+        if (r6 == 0) goto L_0x0187;
+    L_0x017a:
+        r2 = r5.getAbsolutePath();	 Catch:{ all -> 0x0197 }
+        r2 = android.graphics.drawable.Drawable.createFromPath(r2);	 Catch:{ all -> 0x0197 }
+        wallpaper = r2;	 Catch:{ all -> 0x0197 }
+        isCustomTheme = r3;	 Catch:{ all -> 0x0197 }
+        goto L_0x0197;
+    L_0x0187:
+        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0197 }
+        r5 = r5.getResources();	 Catch:{ all -> 0x0197 }
+        r2 = r5.getDrawable(r2);	 Catch:{ all -> 0x0197 }
+        wallpaper = r2;	 Catch:{ all -> 0x0197 }
+        isCustomTheme = r4;	 Catch:{ all -> 0x0197 }
+        goto L_0x0197;
+    L_0x0196:
+        r1 = 0;
+    L_0x0197:
+        r2 = wallpaper;	 Catch:{ all -> 0x01b3 }
+        if (r2 != 0) goto L_0x01a7;
+    L_0x019b:
+        if (r1 != 0) goto L_0x01a0;
+    L_0x019d:
+        r1 = -2693905; // 0xffffffffffd6e4ef float:NaN double:NaN;
+    L_0x01a0:
+        r2 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x01b3 }
+        r2.<init>(r1);	 Catch:{ all -> 0x01b3 }
+        wallpaper = r2;	 Catch:{ all -> 0x01b3 }
+    L_0x01a7:
+        r1 = wallpaper;	 Catch:{ all -> 0x01b3 }
+        calcBackgroundColor(r1, r3);	 Catch:{ all -> 0x01b3 }
+        r1 = org.telegram.ui.ActionBar.-$$Lambda$Theme$DY2qfmfPrWuHZxqvtvAPoFIux_Y.INSTANCE;	 Catch:{ all -> 0x01b3 }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ all -> 0x01b3 }
+        monitor-exit(r0);	 Catch:{ all -> 0x01b3 }
+        return;
+    L_0x01b3:
         r1 = move-exception;
-        monitor-exit(r0);	 Catch:{ all -> 0x014e }
-        goto L_0x0152;
-    L_0x0151:
+        monitor-exit(r0);	 Catch:{ all -> 0x01b3 }
+        goto L_0x01b7;
+    L_0x01b6:
         throw r1;
-    L_0x0152:
-        goto L_0x0151;
+    L_0x01b7:
+        goto L_0x01b6;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$loadWallpaper$3():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$loadWallpaper$7():void");
     }
 
-    static /* synthetic */ void lambda$null$2() {
+    static /* synthetic */ void lambda$null$6() {
         applyChatServiceMessageColor();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x009b A:{SYNTHETIC, Splitter:B:43:0x009b} */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x00a7 A:{SYNTHETIC, Splitter:B:49:0x00a7} */
-    public static android.graphics.drawable.Drawable getThemedWallpaper(boolean r8) {
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x00bb A:{SYNTHETIC, Splitter:B:45:0x00bb} */
+    public static android.graphics.drawable.Drawable getThemedWallpaper(boolean r9) {
         /*
         r0 = currentColors;
         r1 = "chat_wallpaper";
         r0 = r0.get(r1);
         r0 = (java.lang.Integer) r0;
-        if (r0 == 0) goto L_0x0016;
-    L_0x000c:
-        r8 = new android.graphics.drawable.ColorDrawable;
-        r0 = r0.intValue();
-        r8.<init>(r0);
-        return r8;
-    L_0x0016:
-        r0 = themedWallpaperFileOffset;
         r1 = 0;
-        if (r0 <= 0) goto L_0x00b0;
-    L_0x001b:
+        r2 = 1;
+        if (r0 == 0) goto L_0x003b;
+    L_0x000e:
+        r9 = currentColors;
+        r3 = "chat_wallpaper_gradient_to";
+        r9 = r9.get(r3);
+        r9 = (java.lang.Integer) r9;
+        if (r9 != 0) goto L_0x0024;
+    L_0x001a:
+        r9 = new android.graphics.drawable.ColorDrawable;
+        r0 = r0.intValue();
+        r9.<init>(r0);
+        return r9;
+    L_0x0024:
+        r3 = new org.telegram.ui.Components.BackgroundGradientDrawable;
+        r4 = android.graphics.drawable.GradientDrawable.Orientation.BL_TR;
+        r5 = 2;
+        r5 = new int[r5];
+        r0 = r0.intValue();
+        r5[r1] = r0;
+        r9 = r9.intValue();
+        r5[r2] = r9;
+        r3.<init>(r4, r5);
+        return r3;
+    L_0x003b:
+        r0 = themedWallpaperFileOffset;
+        r3 = 0;
+        if (r0 <= 0) goto L_0x00d0;
+    L_0x0040:
         r0 = currentTheme;
-        r2 = r0.pathToFile;
-        if (r2 != 0) goto L_0x0025;
-    L_0x0021:
+        r4 = r0.pathToFile;
+        if (r4 != 0) goto L_0x004a;
+    L_0x0046:
         r0 = r0.assetName;
-        if (r0 == 0) goto L_0x00b0;
-    L_0x0025:
-        r0 = currentTheme;	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        r0 = r0.assetName;	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        if (r0 == 0) goto L_0x0034;
-    L_0x002b:
-        r0 = currentTheme;	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        r0 = r0.assetName;	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        r0 = getAssetFile(r0);	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        goto L_0x003d;
-    L_0x0034:
-        r0 = new java.io.File;	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        r2 = currentTheme;	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        r2 = r2.pathToFile;	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        r0.<init>(r2);	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-    L_0x003d:
-        r2 = new java.io.FileInputStream;	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        r2.<init>(r0);	 Catch:{ Throwable -> 0x0094, all -> 0x0091 }
-        r0 = r2.getChannel();	 Catch:{ Throwable -> 0x008f }
-        r3 = themedWallpaperFileOffset;	 Catch:{ Throwable -> 0x008f }
-        r3 = (long) r3;	 Catch:{ Throwable -> 0x008f }
-        r0.position(r3);	 Catch:{ Throwable -> 0x008f }
-        r0 = new android.graphics.BitmapFactory$Options;	 Catch:{ Throwable -> 0x008f }
-        r0.<init>();	 Catch:{ Throwable -> 0x008f }
-        r3 = 1;
-        if (r8 == 0) goto L_0x0072;
-    L_0x0054:
-        r0.inJustDecodeBounds = r3;	 Catch:{ Throwable -> 0x008f }
-        r8 = r0.outWidth;	 Catch:{ Throwable -> 0x008f }
-        r8 = (float) r8;	 Catch:{ Throwable -> 0x008f }
-        r4 = r0.outHeight;	 Catch:{ Throwable -> 0x008f }
-        r4 = (float) r4;	 Catch:{ Throwable -> 0x008f }
-        r5 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Throwable -> 0x008f }
-    L_0x0062:
-        r6 = (float) r5;	 Catch:{ Throwable -> 0x008f }
-        r7 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
-        if (r7 > 0) goto L_0x006b;
-    L_0x0067:
-        r6 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r6 <= 0) goto L_0x0072;
-    L_0x006b:
-        r3 = r3 * 2;
-        r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r8 = r8 / r6;
-        r4 = r4 / r6;
+        if (r0 == 0) goto L_0x00d0;
+    L_0x004a:
+        r0 = currentTheme;	 Catch:{ all -> 0x00b4 }
+        r0 = r0.assetName;	 Catch:{ all -> 0x00b4 }
+        if (r0 == 0) goto L_0x0059;
+    L_0x0050:
+        r0 = currentTheme;	 Catch:{ all -> 0x00b4 }
+        r0 = r0.assetName;	 Catch:{ all -> 0x00b4 }
+        r0 = getAssetFile(r0);	 Catch:{ all -> 0x00b4 }
         goto L_0x0062;
-    L_0x0072:
-        r8 = 0;
-        r0.inJustDecodeBounds = r8;	 Catch:{ Throwable -> 0x008f }
-        r0.inSampleSize = r3;	 Catch:{ Throwable -> 0x008f }
-        r8 = android.graphics.BitmapFactory.decodeStream(r2, r1, r0);	 Catch:{ Throwable -> 0x008f }
-        if (r8 == 0) goto L_0x008b;
-    L_0x007d:
-        r0 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ Throwable -> 0x008f }
-        r0.<init>(r8);	 Catch:{ Throwable -> 0x008f }
-        r2.close();	 Catch:{ Exception -> 0x0086 }
-        goto L_0x008a;
+    L_0x0059:
+        r0 = new java.io.File;	 Catch:{ all -> 0x00b4 }
+        r4 = currentTheme;	 Catch:{ all -> 0x00b4 }
+        r4 = r4.pathToFile;	 Catch:{ all -> 0x00b4 }
+        r0.<init>(r4);	 Catch:{ all -> 0x00b4 }
+    L_0x0062:
+        r4 = new java.io.FileInputStream;	 Catch:{ all -> 0x00b4 }
+        r4.<init>(r0);	 Catch:{ all -> 0x00b4 }
+        r0 = r4.getChannel();	 Catch:{ all -> 0x00b2 }
+        r5 = themedWallpaperFileOffset;	 Catch:{ all -> 0x00b2 }
+        r5 = (long) r5;	 Catch:{ all -> 0x00b2 }
+        r0.position(r5);	 Catch:{ all -> 0x00b2 }
+        r0 = new android.graphics.BitmapFactory$Options;	 Catch:{ all -> 0x00b2 }
+        r0.<init>();	 Catch:{ all -> 0x00b2 }
+        if (r9 == 0) goto L_0x0096;
+    L_0x0078:
+        r0.inJustDecodeBounds = r2;	 Catch:{ all -> 0x00b2 }
+        r9 = r0.outWidth;	 Catch:{ all -> 0x00b2 }
+        r9 = (float) r9;	 Catch:{ all -> 0x00b2 }
+        r5 = r0.outHeight;	 Catch:{ all -> 0x00b2 }
+        r5 = (float) r5;	 Catch:{ all -> 0x00b2 }
+        r6 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ all -> 0x00b2 }
     L_0x0086:
-        r8 = move-exception;
-        org.telegram.messenger.FileLog.e(r8);
-    L_0x008a:
-        return r0;
+        r7 = (float) r6;	 Catch:{ all -> 0x00b2 }
+        r8 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1));
+        if (r8 > 0) goto L_0x008f;
     L_0x008b:
-        r2.close();	 Catch:{ Exception -> 0x009f }
-        goto L_0x00b0;
+        r7 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1));
+        if (r7 <= 0) goto L_0x0096;
     L_0x008f:
-        r8 = move-exception;
-        goto L_0x0096;
-    L_0x0091:
-        r8 = move-exception;
-        r2 = r1;
-        goto L_0x00a5;
-    L_0x0094:
-        r8 = move-exception;
-        r2 = r1;
+        r2 = r2 * 2;
+        r7 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r9 = r9 / r7;
+        r5 = r5 / r7;
+        goto L_0x0086;
     L_0x0096:
-        org.telegram.messenger.FileLog.e(r8);	 Catch:{ all -> 0x00a4 }
-        if (r2 == 0) goto L_0x00b0;
-    L_0x009b:
-        r2.close();	 Catch:{ Exception -> 0x009f }
-        goto L_0x00b0;
-    L_0x009f:
-        r8 = move-exception;
-        org.telegram.messenger.FileLog.e(r8);
-        goto L_0x00b0;
-    L_0x00a4:
-        r8 = move-exception;
-    L_0x00a5:
-        if (r2 == 0) goto L_0x00af;
-    L_0x00a7:
-        r2.close();	 Catch:{ Exception -> 0x00ab }
-        goto L_0x00af;
-    L_0x00ab:
+        r0.inJustDecodeBounds = r1;	 Catch:{ all -> 0x00b2 }
+        r0.inSampleSize = r2;	 Catch:{ all -> 0x00b2 }
+        r9 = android.graphics.BitmapFactory.decodeStream(r4, r3, r0);	 Catch:{ all -> 0x00b2 }
+        if (r9 == 0) goto L_0x00ae;
+    L_0x00a0:
+        r0 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x00b2 }
+        r0.<init>(r9);	 Catch:{ all -> 0x00b2 }
+        r4.close();	 Catch:{ Exception -> 0x00a9 }
+        goto L_0x00ad;
+    L_0x00a9:
+        r9 = move-exception;
+        org.telegram.messenger.FileLog.e(r9);
+    L_0x00ad:
+        return r0;
+    L_0x00ae:
+        r4.close();	 Catch:{ Exception -> 0x00bf }
+        goto L_0x00d0;
+    L_0x00b2:
+        r9 = move-exception;
+        goto L_0x00b6;
+    L_0x00b4:
+        r9 = move-exception;
+        r4 = r3;
+    L_0x00b6:
+        org.telegram.messenger.FileLog.e(r9);	 Catch:{ all -> 0x00c4 }
+        if (r4 == 0) goto L_0x00d0;
+    L_0x00bb:
+        r4.close();	 Catch:{ Exception -> 0x00bf }
+        goto L_0x00d0;
+    L_0x00bf:
+        r9 = move-exception;
+        org.telegram.messenger.FileLog.e(r9);
+        goto L_0x00d0;
+    L_0x00c4:
+        r9 = move-exception;
+        if (r4 == 0) goto L_0x00cf;
+    L_0x00c7:
+        r4.close();	 Catch:{ Exception -> 0x00cb }
+        goto L_0x00cf;
+    L_0x00cb:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x00af:
-        throw r8;
-    L_0x00b0:
-        return r1;
+    L_0x00cf:
+        throw r9;
+    L_0x00d0:
+        return r3;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.getThemedWallpaper(boolean):android.graphics.drawable.Drawable");
     }
@@ -5531,13 +10034,16 @@ public class Theme {
             globalMainSettings.edit().putLong(str2, j).remove(str).commit();
         }
         long j2 = globalMainSettings.getLong(str2, 1000001);
-        if (hasWallpaperFromTheme() && !globalMainSettings.getBoolean("overrideThemeWallpaper", false)) {
+        if (!hasWallpaperFromTheme() || globalMainSettings.getBoolean("overrideThemeWallpaper", false)) {
+            if (j2 == -2) {
+                return 1000001;
+            }
+            return j2;
+        } else if (TextUtils.isEmpty(themedWallpaperLink)) {
             return -2;
+        } else {
+            return j2;
         }
-        if (j2 == -2) {
-            return 1000001;
-        }
-        return j2;
     }
 
     public static Drawable getCachedWallpaper() {

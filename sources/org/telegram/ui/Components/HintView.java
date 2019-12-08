@@ -174,10 +174,7 @@ public class HintView extends FrameLayout {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     HintView.this.animatorSet = null;
-                    HintView hintView = HintView.this;
-                    -$$Lambda$HintView$1$Oo-YArBkq6553J0682j2MQqGlbY -__lambda_hintview_1_oo-yarbkq6553j0682j2mqqglby = new -$$Lambda$HintView$1$Oo-YArBkq6553J0682j2MQqGlbY(this);
-                    hintView.hideRunnable = -__lambda_hintview_1_oo-yarbkq6553j0682j2mqqglby;
-                    AndroidUtilities.runOnUIThread(-__lambda_hintview_1_oo-yarbkq6553j0682j2mqqglby, HintView.this.currentType == 0 ? 10000 : 2000);
+                    AndroidUtilities.runOnUIThread(HintView.this.hideRunnable = new -$$Lambda$HintView$1$Oo-YArBkq6553J0682j2MQqGlbY(this), HintView.this.currentType == 0 ? 10000 : 2000);
                 }
 
                 public /* synthetic */ void lambda$onAnimationEnd$0$HintView$1() {
@@ -262,10 +259,7 @@ public class HintView extends FrameLayout {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     HintView.this.animatorSet = null;
-                    HintView hintView = HintView.this;
-                    -$$Lambda$HintView$2$jvm1hL0MTRZE1LibhgmMBpjU0UA -__lambda_hintview_2_jvm1hl0mtrze1libhgmmbpju0ua = new -$$Lambda$HintView$2$jvm1hL0MTRZE1LibhgmMBpjU0UA(this);
-                    hintView.hideRunnable = -__lambda_hintview_2_jvm1hl0mtrze1libhgmmbpju0ua;
-                    AndroidUtilities.runOnUIThread(-__lambda_hintview_2_jvm1hl0mtrze1libhgmmbpju0ua, 2000);
+                    AndroidUtilities.runOnUIThread(HintView.this.hideRunnable = new -$$Lambda$HintView$2$jvm1hL0MTRZE1LibhgmMBpjU0UA(this), 2000);
                 }
 
                 public /* synthetic */ void lambda$onAnimationEnd$0$HintView$2() {

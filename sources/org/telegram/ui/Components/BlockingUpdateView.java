@@ -165,7 +165,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         super.setVisibility(i);
         if (i == 8) {
             NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailToLoad);
             NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
         }
     }
@@ -180,7 +180,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 showProgress(false);
                 openApkInstall((Activity) getContext(), this.appUpdate.document);
             }
-        } else if (i == NotificationCenter.fileDidFailedLoad) {
+        } else if (i == NotificationCenter.fileDidFailToLoad) {
             str = (String) objArr[0];
             str2 = this.fileName;
             if (str2 != null && str2.equals(str)) {
@@ -327,7 +327,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             this.acceptTextView.setText(LocaleController.getString(str, NUM).toUpperCase());
         }
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailToLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
         if (z) {
             TL_help_getAppUpdate tL_help_getAppUpdate = new TL_help_getAppUpdate();

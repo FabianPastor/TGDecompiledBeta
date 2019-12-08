@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -25,8 +26,13 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController.PhotoEntry;
+import org.telegram.messenger.MediaController.SearchImage;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
@@ -50,8 +56,10 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     private boolean needCheckShow;
     private PhotoEntry photoEntry;
     private boolean pressed;
+    private SearchImage searchEntry;
     private FrameLayout videoInfoContainer;
     private TextView videoTextView;
+    private boolean zoomOnSelect = true;
 
     public interface PhotoAttachPhotoCellDelegate {
         void onCheckClick(PhotoAttachPhotoCell photoAttachPhotoCell);
@@ -219,6 +227,53 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         }
         frameLayout.setAlpha(f);
         requestLayout();
+    }
+
+    public void setPhotoEntry(SearchImage searchImage, boolean z, boolean z2) {
+        int i = 0;
+        this.pressed = false;
+        this.searchEntry = searchImage;
+        this.isLast = z2;
+        Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(NUM);
+        PhotoSize photoSize = searchImage.thumbPhotoSize;
+        if (photoSize != null) {
+            this.imageView.setImage(ImageLocation.getForPhoto(photoSize, searchImage.photo), null, drawable, (Object) searchImage);
+        } else {
+            photoSize = searchImage.photoSize;
+            if (photoSize != null) {
+                this.imageView.setImage(ImageLocation.getForPhoto(photoSize, searchImage.photo), "80_80", drawable, (Object) searchImage);
+            } else {
+                String str = searchImage.thumbPath;
+                if (str != null) {
+                    this.imageView.setImage(str, null, drawable);
+                } else {
+                    str = searchImage.thumbUrl;
+                    if (str != null && str.length() > 0) {
+                        this.imageView.setImage(searchImage.thumbUrl, null, drawable);
+                    } else if (MessageObject.isDocumentHasThumb(searchImage.document)) {
+                        this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 320), searchImage.document), null, drawable, (Object) searchImage);
+                    } else {
+                        this.imageView.setImageDrawable(drawable);
+                    }
+                }
+            }
+        }
+        if (z && PhotoViewer.isShowingImage(searchImage.getPathToAttach())) {
+            i = 1;
+        }
+        this.imageView.getImageReceiver().setVisible(i ^ 1, true);
+        float f = 0.0f;
+        this.checkBox.setAlpha(i != 0 ? 0.0f : 1.0f);
+        FrameLayout frameLayout = this.videoInfoContainer;
+        if (i == 0) {
+            f = 1.0f;
+        }
+        frameLayout.setAlpha(f);
+        requestLayout();
+    }
+
+    public boolean isChecked() {
+        return this.checkBox.isChecked();
     }
 
     public void setChecked(int i, final boolean z, boolean z2) {
@@ -428,23 +483,31 @@ public class PhotoAttachPhotoCell extends FrameLayout {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        if (this.checkBox.isChecked() || this.container.getScaleX() != 1.0f || !this.imageView.getImageReceiver().hasNotThumb() || this.imageView.getImageReceiver().getCurrentAlpha() != 1.0f || PhotoViewer.isShowingImage(this.photoEntry.path)) {
-            this.backgroundPaint.setColor(Theme.getColor("chat_attachPhotoBackground"));
-            canvas.drawRect(0.0f, 0.0f, (float) this.imageView.getMeasuredWidth(), (float) this.imageView.getMeasuredHeight(), this.backgroundPaint);
+        if (!this.checkBox.isChecked() && this.container.getScaleX() == 1.0f && this.imageView.getImageReceiver().hasNotThumb() && this.imageView.getImageReceiver().getCurrentAlpha() == 1.0f) {
+            PhotoEntry photoEntry = this.photoEntry;
+            if (photoEntry == null || !PhotoViewer.isShowingImage(photoEntry.path)) {
+                SearchImage searchImage = this.searchEntry;
+                if (searchImage == null || !PhotoViewer.isShowingImage(searchImage.getPathToAttach())) {
+                    return;
+                }
+            }
         }
+        this.backgroundPaint.setColor(Theme.getColor("chat_attachPhotoBackground"));
+        canvas.drawRect(0.0f, 0.0f, (float) this.imageView.getMeasuredWidth(), (float) this.imageView.getMeasuredHeight(), this.backgroundPaint);
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setEnabled(true);
-        if (this.photoEntry.isVideo) {
+        PhotoEntry photoEntry = this.photoEntry;
+        if (photoEntry == null || !photoEntry.isVideo) {
+            accessibilityNodeInfo.setText(LocaleController.getString("AttachPhoto", NUM));
+        } else {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(LocaleController.getString("AttachVideo", NUM));
             stringBuilder.append(", ");
             stringBuilder.append(LocaleController.formatCallDuration(this.photoEntry.duration));
             accessibilityNodeInfo.setText(stringBuilder.toString());
-        } else {
-            accessibilityNodeInfo.setText(LocaleController.getString("AttachPhoto", NUM));
         }
         if (this.checkBox.isChecked()) {
             accessibilityNodeInfo.setSelected(true);

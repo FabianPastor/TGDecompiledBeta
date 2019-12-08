@@ -5,6 +5,9 @@ import org.telegram.messenger.AndroidUtilities;
 
 public class URLSpanNoUnderlineBold extends URLSpanNoUnderline {
     public URLSpanNoUnderlineBold(String str) {
+        if (str != null) {
+            str = str.replace(8238, ' ');
+        }
         super(str);
     }
 

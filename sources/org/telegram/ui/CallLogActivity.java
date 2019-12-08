@@ -74,11 +74,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     private static final int TYPE_OUT = 0;
     private OnClickListener callBtnClickListener = new OnClickListener() {
         public void onClick(View view) {
-            CallLogRow callLogRow = (CallLogRow) view.getTag();
-            CallLogActivity callLogActivity = CallLogActivity.this;
-            User user = callLogRow.user;
-            callLogActivity.lastCallUser = user;
-            VoIPHelper.startCall(user, CallLogActivity.this.getParentActivity(), null);
+            VoIPHelper.startCall(CallLogActivity.this.lastCallUser = ((CallLogRow) view.getTag()).user, CallLogActivity.this.getParentActivity(), null);
         }
     };
     private ArrayList<CallLogRow> calls = new ArrayList();
@@ -230,35 +226,37 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         int i3 = 0;
         if (i == NotificationCenter.didReceiveNewMessages && this.firstLoaded) {
-            Iterator it = ((ArrayList) objArr[1]).iterator();
-            while (it.hasNext()) {
-                MessageObject messageObject = (MessageObject) it.next();
-                Message message = messageObject.messageOwner;
-                if (message.action instanceof TL_messageActionPhoneCall) {
-                    CallLogRow callLogRow;
-                    int i4 = message.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? messageObject.messageOwner.to_id.user_id : messageObject.messageOwner.from_id;
-                    int i5 = messageObject.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? 0 : 1;
-                    PhoneCallDiscardReason phoneCallDiscardReason = messageObject.messageOwner.action.reason;
-                    if (i5 == 1 && ((phoneCallDiscardReason instanceof TL_phoneCallDiscardReasonMissed) || (phoneCallDiscardReason instanceof TL_phoneCallDiscardReasonBusy))) {
-                        i5 = 2;
-                    }
-                    if (this.calls.size() > 0) {
-                        callLogRow = (CallLogRow) this.calls.get(0);
-                        if (callLogRow.user.id == i4 && callLogRow.type == i5) {
-                            callLogRow.calls.add(0, messageObject.messageOwner);
-                            this.listViewAdapter.notifyItemChanged(0);
+            if (!((Boolean) objArr[2]).booleanValue()) {
+                Iterator it = ((ArrayList) objArr[1]).iterator();
+                while (it.hasNext()) {
+                    MessageObject messageObject = (MessageObject) it.next();
+                    Message message = messageObject.messageOwner;
+                    if (message.action instanceof TL_messageActionPhoneCall) {
+                        CallLogRow callLogRow;
+                        int i4 = message.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? messageObject.messageOwner.to_id.user_id : messageObject.messageOwner.from_id;
+                        int i5 = messageObject.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? 0 : 1;
+                        PhoneCallDiscardReason phoneCallDiscardReason = messageObject.messageOwner.action.reason;
+                        if (i5 == 1 && ((phoneCallDiscardReason instanceof TL_phoneCallDiscardReasonMissed) || (phoneCallDiscardReason instanceof TL_phoneCallDiscardReasonBusy))) {
+                            i5 = 2;
                         }
+                        if (this.calls.size() > 0) {
+                            callLogRow = (CallLogRow) this.calls.get(0);
+                            if (callLogRow.user.id == i4 && callLogRow.type == i5) {
+                                callLogRow.calls.add(0, messageObject.messageOwner);
+                                this.listViewAdapter.notifyItemChanged(0);
+                            }
+                        }
+                        callLogRow = new CallLogRow(this, null);
+                        callLogRow.calls = new ArrayList();
+                        callLogRow.calls.add(messageObject.messageOwner);
+                        callLogRow.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i4));
+                        callLogRow.type = i5;
+                        this.calls.add(0, callLogRow);
+                        this.listViewAdapter.notifyItemInserted(0);
                     }
-                    callLogRow = new CallLogRow(this, null);
-                    callLogRow.calls = new ArrayList();
-                    callLogRow.calls.add(messageObject.messageOwner);
-                    callLogRow.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i4));
-                    callLogRow.type = i5;
-                    this.calls.add(0, callLogRow);
-                    this.listViewAdapter.notifyItemInserted(0);
                 }
             }
-        } else if (i == NotificationCenter.messagesDeleted && this.firstLoaded) {
+        } else if (i == NotificationCenter.messagesDeleted && this.firstLoaded && !((Boolean) objArr[2]).booleanValue()) {
             ArrayList arrayList = (ArrayList) objArr[0];
             Iterator it2 = this.calls.iterator();
             while (it2.hasNext()) {
@@ -668,7 +666,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         for (Message message : callLogRow.calls) {
             arrayList.add(Integer.valueOf(message.id));
         }
-        MessagesController.getInstance(this.currentAccount).deleteMessages(arrayList, null, null, 0, false);
+        MessagesController.getInstance(this.currentAccount).deleteMessages(arrayList, null, null, 0, 0, false, false);
     }
 
     public void onResume() {
@@ -719,7 +717,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         themeDescriptionArr[21] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, Theme.dialogs_onlinePaint, null, null, "windowBackgroundWhiteBlueText3");
         themeDescriptionArr[22] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Paint[]{Theme.dialogs_namePaint, Theme.dialogs_searchNamePaint}, null, null, "chats_name");
         themeDescriptionArr[23] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Paint[]{Theme.dialogs_nameEncryptedPaint, Theme.dialogs_searchNameEncryptedPaint}, null, null, "chats_secretName");
-        themeDescriptionArr[24] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[24] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$CallLogActivity$jzz7fdD3HMf_Ya8AHg1H2NHtPCs -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2 = -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs;
         themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundRed");
         themeDescriptionArr[26] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundOrange");

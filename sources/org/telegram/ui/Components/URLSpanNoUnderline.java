@@ -15,6 +15,9 @@ public class URLSpanNoUnderline extends URLSpan {
     }
 
     public URLSpanNoUnderline(String str, TextStyleRun textStyleRun) {
+        if (str != null) {
+            str = str.replace(8238, ' ');
+        }
         super(str);
         this.style = textStyleRun;
     }

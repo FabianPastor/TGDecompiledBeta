@@ -1167,7 +1167,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         r3 = r9.getFrameRotation();	 Catch:{ Exception -> 0x0088 }
         r1.setRotation(r3);	 Catch:{ Exception -> 0x0088 }
         r1 = r1.build();	 Catch:{ Exception -> 0x0088 }
-        r1 = r0.detect(r1);	 Catch:{ Throwable -> 0x007c }
+        r1 = r0.detect(r1);	 Catch:{ all -> 0x007c }
         r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0088 }
         r3.<init>();	 Catch:{ Exception -> 0x0088 }
         r4 = r9.getPaintingSize();	 Catch:{ Exception -> 0x0088 }

@@ -937,11 +937,11 @@ public class CameraController implements OnInfoListener {
         r1 = 4;
         r1 = org.telegram.messenger.FileLoader.getDirectory(r1);
         r5.<init>(r1, r0);
-        r0 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x007a }
-        r0.<init>(r5);	 Catch:{ Throwable -> 0x007a }
-        r1 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x007a }
+        r0 = new java.io.FileOutputStream;	 Catch:{ all -> 0x007a }
+        r0.<init>(r5);	 Catch:{ all -> 0x007a }
+        r1 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x007a }
         r2 = 80;
-        r6.compress(r1, r2, r0);	 Catch:{ Throwable -> 0x007a }
+        r6.compress(r1, r2, r0);	 Catch:{ all -> 0x007a }
         goto L_0x007e;
     L_0x007a:
         r0 = move-exception;

@@ -19,7 +19,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MrzRecognizer;
 import org.telegram.messenger.MrzRecognizer.Result;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.camera.CameraView.CameraViewDelegate;
 import org.telegram.messenger.camera.Size;
@@ -148,10 +147,6 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         this.cameraView.destroy(z, runnable);
         this.cameraView = null;
         this.backgroundHandlerThread.quitSafely();
-    }
-
-    public void cancel() {
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.recordStopped, Integer.valueOf(0));
     }
 
     public void hideCamera(boolean z) {

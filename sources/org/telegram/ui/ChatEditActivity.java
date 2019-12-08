@@ -483,7 +483,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         int i2 = 5;
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
         if (ChatObject.canChangeChatInfo(this.currentChat)) {
-            this.avatarDrawable.setInfo(5, null, null, false);
+            this.avatarDrawable.setInfo(5, null, null);
             final Paint paint = new Paint(1);
             paint.setColor(NUM);
             this.avatarOverlay = new View(context2) {
@@ -520,7 +520,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
             frameLayout.addView(this.avatarProgressView, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
             showAvatarProgress(false, false);
         } else {
-            this.avatarDrawable.setInfo(5, this.currentChat.title, null, false);
+            this.avatarDrawable.setInfo(5, this.currentChat.title, null);
         }
         this.nameTextView = new EditTextEmoji(context2, anonymousClass2, this, 0);
         if (this.isChannel) {
@@ -767,12 +767,12 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
                     locationActivity.setInitialLocation((TL_channelLocation) channelLocation);
                 }
             }
-            locationActivity.setDelegate(new -$$Lambda$ChatEditActivity$60nHXJ_fIqSZFG6uqL1de3q9lwM(this));
+            locationActivity.setDelegate(new -$$Lambda$ChatEditActivity$p1iHQUCNbkBH3bG3cN0lfw9rr7s(this));
             presentFragment(locationActivity);
         }
     }
 
-    public /* synthetic */ void lambda$null$4$ChatEditActivity(MessageMedia messageMedia, int i) {
+    public /* synthetic */ void lambda$null$4$ChatEditActivity(MessageMedia messageMedia, int i, boolean z, int i2) {
         TL_channelLocation tL_channelLocation = new TL_channelLocation();
         tL_channelLocation.address = messageMedia.address;
         tL_channelLocation.geo_point = messageMedia.geo;
@@ -1024,7 +1024,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r3.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d0a9a float:1.874762E38 double:1.0531311184E-314;
+        r1 = NUM; // 0x7f0d0af0 float:1.8747794E38 double:1.053131161E-314;
         r2 = "UserRestrictionsApplyChanges";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -1037,7 +1037,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0.setMessage(r1);
         goto L_0x0098;
     L_0x008c:
-        r1 = NUM; // 0x7f0d04ee float:1.8744674E38 double:1.053130401E-314;
+        r1 = NUM; // 0x7f0d04f3 float:1.8744685E38 double:1.0531304035E-314;
         r2 = "GroupSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
@@ -1048,7 +1048,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$NBEr6CX4NZ1r3XbdnOXbearPc6k;
         r2.<init>(r3);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0d075e float:1.874594E38 double:1.0531307094E-314;
+        r1 = NUM; // 0x7f0d0774 float:1.8745985E38 double:1.05313072E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$TOgShEf6MXFD3VhufzCjnieIAt0;
@@ -1758,7 +1758,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r10[50] = new ThemeDescription(this.stickersInfoCell3, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
         r10[51] = new ThemeDescription(this.stickersInfoCell3, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
         -$$Lambda$ChatEditActivity$HxxxUSJLb6eQcLNiQbebCuwv8Vw -__lambda_chateditactivity_hxxxusjlb6eqclniqbebcuwv8vw2 = -__lambda_chateditactivity_hxxxusjlb6eqclniqbebcuwv8vw;
-        r10[52] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_chateditactivity_hxxxusjlb6eqclniqbebcuwv8vw2, "avatar_text");
+        r10[52] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_savedDrawable}, -__lambda_chateditactivity_hxxxusjlb6eqclniqbebcuwv8vw2, "avatar_text");
         r10[53] = new ThemeDescription(null, 0, null, null, null, -__lambda_chateditactivity_hxxxusjlb6eqclniqbebcuwv8vw2, "avatar_backgroundRed");
         r10[54] = new ThemeDescription(null, 0, null, null, null, -__lambda_chateditactivity_hxxxusjlb6eqclniqbebcuwv8vw2, "avatar_backgroundOrange");
         r10[55] = new ThemeDescription(null, 0, null, null, null, -__lambda_chateditactivity_hxxxusjlb6eqclniqbebcuwv8vw2, "avatar_backgroundViolet");
@@ -1771,7 +1771,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
 
     public /* synthetic */ void lambda$getThemeDescriptions$23$ChatEditActivity() {
         if (this.avatarImage != null) {
-            this.avatarDrawable.setInfo(5, null, null, false);
+            this.avatarDrawable.setInfo(5, null, null);
             this.avatarImage.invalidate();
         }
     }

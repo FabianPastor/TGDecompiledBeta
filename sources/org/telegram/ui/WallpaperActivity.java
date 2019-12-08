@@ -8,9 +8,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ComposeShader;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
@@ -18,26 +15,16 @@ import android.graphics.Point;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RadialGradient;
 import android.graphics.RectF;
-import android.graphics.Shader.TileMode;
-import android.graphics.SweepGradient;
 import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputFilter.LengthFilter;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.style.CharacterStyle;
 import android.util.Property;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutParams;
@@ -66,6 +53,7 @@ import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_pollAnswer;
+import org.telegram.tgnet.TLRPC.TL_reactionCount;
 import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -79,9 +67,8 @@ import org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate.-CC;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Components.AnimationProperties.FloatProperty;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.ColorPicker;
 import org.telegram.ui.Components.CubicBezierInterpolator;
-import org.telegram.ui.Components.EditTextBoldCursor;
-import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
@@ -139,8 +126,6 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
     private RadialProgress2 radialProgress;
     private TL_wallPaper selectedPattern;
     private TextPaint textPaint;
-    private Drawable themedWallpaper;
-    private boolean viewCreated;
 
     private class CheckBoxView extends View {
         private static final float progressBounceDiff = 0.2f;
@@ -276,495 +261,6 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
     }
 
-    private class ColorPicker extends FrameLayout {
-        private int centerX;
-        private int centerY;
-        private Drawable circleDrawable;
-        private Paint circlePaint;
-        private boolean circlePressed;
-        private EditTextBoldCursor[] colorEditText = new EditTextBoldCursor[2];
-        private LinearGradient colorGradient;
-        private float[] colorHSV = new float[]{0.0f, 0.0f, 1.0f};
-        private boolean colorPressed;
-        private Bitmap colorWheelBitmap;
-        private Paint colorWheelPaint;
-        private int colorWheelRadius;
-        private float[] hsvTemp = new float[3];
-        boolean ignoreTextChange;
-        private LinearLayout linearLayout;
-        private int lx;
-        private int ly;
-        private final int paramValueSliderWidth = AndroidUtilities.dp(20.0f);
-        final /* synthetic */ WallpaperActivity this$0;
-        private Paint valueSliderPaint;
-
-        public ColorPicker(WallpaperActivity wallpaperActivity, Context context) {
-            final WallpaperActivity wallpaperActivity2 = wallpaperActivity;
-            Context context2 = context;
-            this.this$0 = wallpaperActivity2;
-            super(context2);
-            setWillNotDraw(false);
-            this.circlePaint = new Paint(1);
-            this.circleDrawable = context.getResources().getDrawable(NUM).mutate();
-            this.colorWheelPaint = new Paint();
-            this.colorWheelPaint.setAntiAlias(true);
-            this.colorWheelPaint.setDither(true);
-            this.valueSliderPaint = new Paint();
-            this.valueSliderPaint.setAntiAlias(true);
-            this.valueSliderPaint.setDither(true);
-            this.linearLayout = new LinearLayout(context2);
-            this.linearLayout.setOrientation(0);
-            addView(this.linearLayout, LayoutHelper.createFrame(-1, 64.0f, 51, 12.0f, 14.0f, 21.0f, 0.0f));
-            int i = 0;
-            while (i < 2) {
-                this.colorEditText[i] = new EditTextBoldCursor(context2);
-                this.colorEditText[i].setTextSize(1, 18.0f);
-                this.colorEditText[i].setHintColor(Theme.getColor("windowBackgroundWhiteHintText"));
-                String str = "windowBackgroundWhiteBlackText";
-                this.colorEditText[i].setTextColor(Theme.getColor(str));
-                this.colorEditText[i].setBackgroundDrawable(null);
-                this.colorEditText[i].setCursorColor(Theme.getColor(str));
-                this.colorEditText[i].setCursorSize(AndroidUtilities.dp(20.0f));
-                this.colorEditText[i].setCursorWidth(1.5f);
-                this.colorEditText[i].setSingleLine(true);
-                this.colorEditText[i].setGravity(19);
-                this.colorEditText[i].setHeaderHintColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
-                this.colorEditText[i].setTransformHintToHeader(true);
-                this.colorEditText[i].setLineColors(Theme.getColor("windowBackgroundWhiteInputField"), Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Theme.getColor("windowBackgroundWhiteRedText3"));
-                this.colorEditText[i].setPadding(0, 0, 0, 0);
-                if (i == 0) {
-                    this.colorEditText[i].setInputType(1);
-                    this.colorEditText[i].setHintText(LocaleController.getString("BackgroundHexColorCode", NUM));
-                } else {
-                    this.colorEditText[i].setInputType(2);
-                    this.colorEditText[i].setHintText(LocaleController.getString("BackgroundBrightness", NUM));
-                }
-                this.colorEditText[i].setImeOptions(NUM);
-                InputFilter[] inputFilterArr = new InputFilter[1];
-                inputFilterArr[0] = new LengthFilter(i == 0 ? 7 : 3);
-                this.colorEditText[i].setFilters(inputFilterArr);
-                this.linearLayout.addView(this.colorEditText[i], LayoutHelper.createLinear(0, -1, i == 0 ? 0.67f : 0.31f, 0, 0, i != 1 ? 23 : 0, 0));
-                this.colorEditText[i].addTextChangedListener(new TextWatcher() {
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                    }
-
-                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                    }
-
-                    public void afterTextChanged(Editable editable) {
-                        ColorPicker colorPicker = ColorPicker.this;
-                        if (!colorPicker.ignoreTextChange) {
-                            colorPicker.ignoreTextChange = true;
-                            String str = "";
-                            int i;
-                            ColorPicker colorPicker2;
-                            if (i == 0) {
-                                i = 0;
-                                while (i < editable.length()) {
-                                    char charAt = editable.charAt(i);
-                                    if ((charAt < '0' || charAt > '9') && ((charAt < 'a' || charAt > 'f') && ((charAt < 'A' || charAt > 'F') && !(charAt == '#' && i == 0)))) {
-                                        editable.replace(i, i + 1, str);
-                                        i--;
-                                    }
-                                    i++;
-                                }
-                                String str2 = "#";
-                                if (editable.length() == 0) {
-                                    editable.append(str2);
-                                } else if (editable.charAt(0) != '#') {
-                                    editable.insert(0, str2);
-                                }
-                                try {
-                                    ColorPicker.this.setColor(Integer.parseInt(editable.toString().substring(1), 16) | -16777216);
-                                } catch (Exception unused) {
-                                    ColorPicker.this.setColor(-1);
-                                }
-                                colorPicker2 = ColorPicker.this;
-                                colorPicker2.this$0.setBackgroundColor(colorPicker2.getColor());
-                                EditText editText = ColorPicker.this.colorEditText[1];
-                                StringBuilder stringBuilder = new StringBuilder();
-                                stringBuilder.append(str);
-                                stringBuilder.append((int) (ColorPicker.this.colorHSV[2] * 255.0f));
-                                editText.setText(stringBuilder.toString());
-                            } else {
-                                i = Utilities.parseInt(editable.toString()).intValue();
-                                if (i > 255 || i < 0) {
-                                    i = i > 255 ? 255 : 0;
-                                    int length = editable.length();
-                                    StringBuilder stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(str);
-                                    stringBuilder2.append(i);
-                                    editable.replace(0, length, stringBuilder2.toString());
-                                }
-                                ColorPicker.this.colorHSV[2] = ((float) i) / 255.0f;
-                                colorPicker2 = ColorPicker.this;
-                                colorPicker2.this$0.setBackgroundColor(colorPicker2.getColor());
-                                int red = Color.red(ColorPicker.this.this$0.backgroundColor);
-                                i = Color.green(ColorPicker.this.this$0.backgroundColor);
-                                int blue = Color.blue(ColorPicker.this.this$0.backgroundColor);
-                                ColorPicker.this.colorEditText[0].setText(String.format("#%02x%02x%02x", new Object[]{Byte.valueOf((byte) red), Byte.valueOf((byte) i), Byte.valueOf((byte) blue)}));
-                            }
-                            ColorPicker.this.invalidate();
-                            ColorPicker.this.ignoreTextChange = false;
-                        }
-                    }
-                });
-                this.colorEditText[i].setOnEditorActionListener(-$$Lambda$WallpaperActivity$ColorPicker$DX_Z3G7ZN8lj8LNj53R64xuAIvg.INSTANCE);
-                i++;
-            }
-        }
-
-        static /* synthetic */ boolean lambda$new$0(TextView textView, int i, KeyEvent keyEvent) {
-            if (i != 6) {
-                return false;
-            }
-            AndroidUtilities.hideKeyboard(textView);
-            return true;
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            i = MeasureSpec.getSize(i);
-            int min = Math.min(i, MeasureSpec.getSize(i2));
-            measureChild(this.linearLayout, MeasureSpec.makeMeasureSpec(i - AndroidUtilities.dp(42.0f), NUM), i2);
-            setMeasuredDimension(min, min);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            Canvas canvas2 = canvas;
-            this.centerX = ((getWidth() / 2) - (this.paramValueSliderWidth * 2)) + AndroidUtilities.dp(11.0f);
-            this.centerY = (getHeight() / 2) + AndroidUtilities.dp(34.0f);
-            Bitmap bitmap = this.colorWheelBitmap;
-            int i = this.centerX;
-            int i2 = this.colorWheelRadius;
-            canvas2.drawBitmap(bitmap, (float) (i - i2), (float) (this.centerY - i2), null);
-            double toRadians = (double) ((float) Math.toRadians((double) this.colorHSV[0]));
-            double d = -Math.cos(toRadians);
-            double d2 = (double) this.colorHSV[1];
-            Double.isNaN(d2);
-            d *= d2;
-            d2 = (double) this.colorWheelRadius;
-            Double.isNaN(d2);
-            int i3 = ((int) (d * d2)) + this.centerX;
-            toRadians = -Math.sin(toRadians);
-            float[] fArr = this.colorHSV;
-            d2 = (double) fArr[1];
-            Double.isNaN(d2);
-            toRadians *= d2;
-            d2 = (double) this.colorWheelRadius;
-            Double.isNaN(d2);
-            i2 = ((int) (toRadians * d2)) + this.centerY;
-            float[] fArr2 = this.hsvTemp;
-            fArr2[0] = fArr[0];
-            fArr2[1] = fArr[1];
-            fArr2[2] = 1.0f;
-            drawPointerArrow(canvas2, i3, i2, Color.HSVToColor(fArr2));
-            i3 = this.centerX;
-            i2 = this.colorWheelRadius;
-            this.lx = (i3 + i2) + (this.paramValueSliderWidth * 2);
-            this.ly = this.centerY - i2;
-            int dp = AndroidUtilities.dp(9.0f);
-            int i4 = this.colorWheelRadius * 2;
-            if (this.colorGradient == null) {
-                i2 = this.lx;
-                float f = (float) i2;
-                int i5 = this.ly;
-                float f2 = (float) (i2 + dp);
-                float f3 = (float) (i5 + i4);
-                this.colorGradient = new LinearGradient(f, (float) i5, f2, f3, new int[]{-16777216, Color.HSVToColor(this.hsvTemp)}, null, TileMode.CLAMP);
-            }
-            this.valueSliderPaint.setShader(this.colorGradient);
-            i3 = this.lx;
-            float f4 = (float) i3;
-            i2 = this.ly;
-            canvas.drawRect(f4, (float) i2, (float) (i3 + dp), (float) (i2 + i4), this.valueSliderPaint);
-            i3 = this.lx + (dp / 2);
-            f4 = (float) this.ly;
-            float[] fArr3 = this.colorHSV;
-            drawPointerArrow(canvas2, i3, (int) (f4 + (fArr3[2] * ((float) i4))), Color.HSVToColor(fArr3));
-        }
-
-        private void drawPointerArrow(Canvas canvas, int i, int i2, int i3) {
-            int dp = AndroidUtilities.dp(13.0f);
-            this.circleDrawable.setBounds(i - dp, i2 - dp, i + dp, dp + i2);
-            this.circleDrawable.draw(canvas);
-            this.circlePaint.setColor(-1);
-            float f = (float) i;
-            float f2 = (float) i2;
-            canvas.drawCircle(f, f2, (float) AndroidUtilities.dp(11.0f), this.circlePaint);
-            this.circlePaint.setColor(i3);
-            canvas.drawCircle(f, f2, (float) AndroidUtilities.dp(9.0f), this.circlePaint);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onSizeChanged(int i, int i2, int i3, int i4) {
-            if (this.colorWheelRadius != AndroidUtilities.dp(120.0f)) {
-                this.colorWheelRadius = AndroidUtilities.dp(120.0f);
-                i = this.colorWheelRadius;
-                this.colorWheelBitmap = createColorWheelBitmap(i * 2, i * 2);
-                this.colorGradient = null;
-            }
-        }
-
-        private Bitmap createColorWheelBitmap(int i, int i2) {
-            Bitmap createBitmap = Bitmap.createBitmap(i, i2, Config.ARGB_8888);
-            int[] iArr = new int[13];
-            float[] fArr = new float[]{0.0f, 1.0f, 1.0f};
-            for (int i3 = 0; i3 < iArr.length; i3++) {
-                fArr[0] = (float) (((i3 * 30) + 180) % 360);
-                iArr[i3] = Color.HSVToColor(fArr);
-            }
-            iArr[12] = iArr[0];
-            float f = (float) (i / 2);
-            float f2 = (float) (i2 / 2);
-            this.colorWheelPaint.setShader(new ComposeShader(new SweepGradient(f, f2, iArr, null), new RadialGradient(f, f2, (float) this.colorWheelRadius, -1, 16777215, TileMode.CLAMP), Mode.SRC_OVER));
-            new Canvas(createBitmap).drawCircle(f, f2, (float) this.colorWheelRadius, this.colorWheelPaint);
-            return createBitmap;
-        }
-
-        /* JADX WARNING: Removed duplicated region for block: B:48:0x00e0  */
-        /* JADX WARNING: Missing block: B:3:0x000b, code skipped:
-            if (r0 != 2) goto L_0x0012;
-     */
-        /* JADX WARNING: Missing block: B:31:0x00a0, code skipped:
-            if (r15 <= (r0 + (r14.colorWheelRadius * 2))) goto L_0x00a2;
-     */
-        public boolean onTouchEvent(android.view.MotionEvent r15) {
-            /*
-            r14 = this;
-            r0 = r15.getAction();
-            r1 = 2;
-            r2 = 0;
-            r3 = 1;
-            if (r0 == 0) goto L_0x0017;
-        L_0x0009:
-            if (r0 == r3) goto L_0x000e;
-        L_0x000b:
-            if (r0 == r1) goto L_0x0017;
-        L_0x000d:
-            goto L_0x0012;
-        L_0x000e:
-            r14.colorPressed = r2;
-            r14.circlePressed = r2;
-        L_0x0012:
-            r15 = super.onTouchEvent(r15);
-            return r15;
-        L_0x0017:
-            r0 = r15.getX();
-            r0 = (int) r0;
-            r15 = r15.getY();
-            r15 = (int) r15;
-            r4 = r14.centerX;
-            r4 = r0 - r4;
-            r5 = r14.centerY;
-            r5 = r15 - r5;
-            r6 = r4 * r4;
-            r7 = r5 * r5;
-            r6 = r6 + r7;
-            r6 = (double) r6;
-            r6 = java.lang.Math.sqrt(r6);
-            r8 = r14.circlePressed;
-            r9 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-            r10 = 0;
-            if (r8 != 0) goto L_0x0045;
-        L_0x003a:
-            r8 = r14.colorPressed;
-            if (r8 != 0) goto L_0x0086;
-        L_0x003e:
-            r8 = r14.colorWheelRadius;
-            r11 = (double) r8;
-            r8 = (r6 > r11 ? 1 : (r6 == r11 ? 0 : -1));
-            if (r8 > 0) goto L_0x0086;
-        L_0x0045:
-            r8 = r14.colorWheelRadius;
-            r11 = (double) r8;
-            r13 = (r6 > r11 ? 1 : (r6 == r11 ? 0 : -1));
-            if (r13 <= 0) goto L_0x004d;
-        L_0x004c:
-            r6 = (double) r8;
-        L_0x004d:
-            r8 = r14.circlePressed;
-            if (r8 != 0) goto L_0x0058;
-        L_0x0051:
-            r8 = r14.getParent();
-            r8.requestDisallowInterceptTouchEvent(r3);
-        L_0x0058:
-            r14.circlePressed = r3;
-            r8 = r14.colorHSV;
-            r11 = (double) r5;
-            r4 = (double) r4;
-            r4 = java.lang.Math.atan2(r11, r4);
-            r4 = java.lang.Math.toDegrees(r4);
-            r11 = NUM; // 0xNUM float:0.0 double:180.0;
-            r4 = r4 + r11;
-            r4 = (float) r4;
-            r8[r2] = r4;
-            r4 = r14.colorHSV;
-            r5 = r14.colorWheelRadius;
-            r11 = (double) r5;
-            java.lang.Double.isNaN(r11);
-            r6 = r6 / r11;
-            r5 = (float) r6;
-            r5 = java.lang.Math.min(r9, r5);
-            r5 = java.lang.Math.max(r10, r5);
-            r4[r3] = r5;
-            r4 = 0;
-            r14.colorGradient = r4;
-        L_0x0086:
-            r4 = r14.colorPressed;
-            if (r4 != 0) goto L_0x00a2;
-        L_0x008a:
-            r4 = r14.circlePressed;
-            if (r4 != 0) goto L_0x00cb;
-        L_0x008e:
-            r4 = r14.lx;
-            if (r0 < r4) goto L_0x00cb;
-        L_0x0092:
-            r5 = r14.paramValueSliderWidth;
-            r4 = r4 + r5;
-            if (r0 > r4) goto L_0x00cb;
-        L_0x0097:
-            r0 = r14.ly;
-            if (r15 < r0) goto L_0x00cb;
-        L_0x009b:
-            r4 = r14.colorWheelRadius;
-            r4 = r4 * 2;
-            r0 = r0 + r4;
-            if (r15 > r0) goto L_0x00cb;
-        L_0x00a2:
-            r0 = r14.ly;
-            r15 = r15 - r0;
-            r15 = (float) r15;
-            r0 = r14.colorWheelRadius;
-            r0 = (float) r0;
-            r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            r0 = r0 * r4;
-            r15 = r15 / r0;
-            r0 = (r15 > r10 ? 1 : (r15 == r10 ? 0 : -1));
-            if (r0 >= 0) goto L_0x00b4;
-        L_0x00b2:
-            r15 = 0;
-            goto L_0x00ba;
-        L_0x00b4:
-            r0 = (r15 > r9 ? 1 : (r15 == r9 ? 0 : -1));
-            if (r0 <= 0) goto L_0x00ba;
-        L_0x00b8:
-            r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        L_0x00ba:
-            r0 = r14.colorHSV;
-            r0[r1] = r15;
-            r15 = r14.colorPressed;
-            if (r15 != 0) goto L_0x00c9;
-        L_0x00c2:
-            r15 = r14.getParent();
-            r15.requestDisallowInterceptTouchEvent(r3);
-        L_0x00c9:
-            r14.colorPressed = r3;
-        L_0x00cb:
-            r15 = r14.colorPressed;
-            if (r15 != 0) goto L_0x00d3;
-        L_0x00cf:
-            r15 = r14.circlePressed;
-            if (r15 == 0) goto L_0x015e;
-        L_0x00d3:
-            r15 = r14.this$0;
-            r0 = r14.getColor();
-            r15.setBackgroundColor(r0);
-            r15 = r14.ignoreTextChange;
-            if (r15 != 0) goto L_0x015b;
-        L_0x00e0:
-            r15 = r14.this$0;
-            r15 = r15.backgroundColor;
-            r15 = android.graphics.Color.red(r15);
-            r0 = r14.this$0;
-            r0 = r0.backgroundColor;
-            r0 = android.graphics.Color.green(r0);
-            r4 = r14.this$0;
-            r4 = r4.backgroundColor;
-            r4 = android.graphics.Color.blue(r4);
-            r14.ignoreTextChange = r3;
-            r5 = r14.colorEditText;
-            r5 = r5[r2];
-            r6 = 3;
-            r6 = new java.lang.Object[r6];
-            r15 = (byte) r15;
-            r15 = java.lang.Byte.valueOf(r15);
-            r6[r2] = r15;
-            r15 = (byte) r0;
-            r15 = java.lang.Byte.valueOf(r15);
-            r6[r3] = r15;
-            r15 = (byte) r4;
-            r15 = java.lang.Byte.valueOf(r15);
-            r6[r1] = r15;
-            r15 = "#%02x%02x%02x";
-            r15 = java.lang.String.format(r15, r6);
-            r5.setText(r15);
-            r15 = r14.colorEditText;
-            r15 = r15[r3];
-            r0 = new java.lang.StringBuilder;
-            r0.<init>();
-            r4 = "";
-            r0.append(r4);
-            r4 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
-            r5 = r14.colorHSV;
-            r5 = r5[r1];
-            r5 = r5 * r4;
-            r4 = (int) r5;
-            r0.append(r4);
-            r0 = r0.toString();
-            r15.setText(r0);
-            r15 = 0;
-        L_0x0147:
-            if (r15 >= r1) goto L_0x0159;
-        L_0x0149:
-            r0 = r14.colorEditText;
-            r4 = r0[r15];
-            r0 = r0[r15];
-            r0 = r0.length();
-            r4.setSelection(r0);
-            r15 = r15 + 1;
-            goto L_0x0147;
-        L_0x0159:
-            r14.ignoreTextChange = r2;
-        L_0x015b:
-            r14.invalidate();
-        L_0x015e:
-            return r3;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.WallpaperActivity$ColorPicker.onTouchEvent(android.view.MotionEvent):boolean");
-        }
-
-        public void setColor(int i) {
-            if (this.ignoreTextChange) {
-                Color.colorToHSV(i, this.colorHSV);
-            } else {
-                this.ignoreTextChange = true;
-                int red = Color.red(i);
-                int green = Color.green(i);
-                int blue = Color.blue(i);
-                Color.colorToHSV(i, this.colorHSV);
-                this.colorEditText[0].setText(String.format("#%02x%02x%02x", new Object[]{Byte.valueOf((byte) red), Byte.valueOf((byte) green), Byte.valueOf((byte) blue)}));
-                EditText editText = this.colorEditText[1];
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("");
-                stringBuilder.append((int) (this.colorHSV[2] * 255.0f));
-                editText.setText(stringBuilder.toString());
-                for (i = 0; i < 2; i++) {
-                    EditTextBoldCursor[] editTextBoldCursorArr = this.colorEditText;
-                    editTextBoldCursorArr[i].setSelection(editTextBoldCursorArr[i].length());
-                }
-                this.ignoreTextChange = false;
-            }
-            this.colorGradient = null;
-            invalidate();
-        }
-
-        public int getColor() {
-            return (Color.HSVToColor(this.colorHSV) & 16777215) | -16777216;
-        }
-    }
-
     public interface WallpaperActivityDelegate {
         void didSetNewBackground();
     }
@@ -806,7 +302,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         /* JADX WARNING: Removed duplicated region for block: B:14:0x003b  */
         /* JADX WARNING: Removed duplicated region for block: B:13:0x002c  */
         /* JADX WARNING: Missing block: B:9:0x0025, code skipped:
-            if (r0.id == org.telegram.ui.WallpaperActivity.access$500(r8.this$0).id) goto L_0x0027;
+            if (r0.id == org.telegram.ui.WallpaperActivity.access$100(r8.this$0).id) goto L_0x0027;
      */
         public void updateSelected(boolean r9) {
             /*
@@ -1001,6 +497,10 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
 
                     public /* synthetic */ void didPressOther(ChatMessageCell chatMessageCell, float f, float f2) {
                         -CC.$default$didPressOther(this, chatMessageCell, f, f2);
+                    }
+
+                    public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TL_reactionCount tL_reactionCount) {
+                        -CC.$default$didPressReaction(this, chatMessageCell, tL_reactionCount);
                     }
 
                     public /* synthetic */ void didPressReplyMessage(ChatMessageCell chatMessageCell, int i) {
@@ -1287,8 +787,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
     /* JADX WARNING: Removed duplicated region for block: B:32:0x01df  */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0285  */
     /* JADX WARNING: Removed duplicated region for block: B:67:0x02a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0502  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x050f  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0507  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0514  */
     public android.view.View createView(android.content.Context r28) {
         /*
         r27 = this;
@@ -1448,7 +948,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r11 = org.telegram.ui.ActionBar.Theme.getColor(r14);
         r9.setTextColor(r11);
         r9 = r6.bottomOverlayChatText;
-        r11 = NUM; // 0x7f0d0981 float:1.874705E38 double:1.0531309796E-314;
+        r11 = NUM; // 0x7f0d09a3 float:1.8747118E38 double:1.0531309964E-314;
         r10 = "SetBackground";
         r10 = org.telegram.messenger.LocaleController.getString(r10, r11);
         r9.setText(r10);
@@ -1654,14 +1154,14 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r2.setCallback(r3);
         r2 = r6.currentWallpaper;
         r2 = r2 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r2 == 0) goto L_0x04e7;
+        if (r2 == 0) goto L_0x04ec;
     L_0x02a3:
         r2 = 0;
         r6.isBlurred = r2;
         r2 = 0;
     L_0x02a7:
         r3 = 2;
-        if (r2 >= r3) goto L_0x04e7;
+        if (r2 >= r3) goto L_0x04ec;
     L_0x02aa:
         r4 = r6.patternLayout;
         r5 = new org.telegram.ui.WallpaperActivity$4;
@@ -1782,7 +1282,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.setTextColor(r8);
         r3 = r6.patternsSaveButton;
         r3 = r3[r2];
-        r8 = NUM; // 0x7f0d0914 float:1.8746828E38 double:1.0531309258E-314;
+        r8 = NUM; // 0x7f0d0930 float:1.8746885E38 double:1.0531309396E-314;
         r10 = "Save";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r8 = r8.toUpperCase();
@@ -1889,11 +1389,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r25 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26);
         r3.addView(r5, r13);
-        goto L_0x04e3;
+        goto L_0x04e8;
     L_0x04c0:
         r10 = 0;
-        r3 = new org.telegram.ui.WallpaperActivity$ColorPicker;
-        r3.<init>(r6, r0);
+        r3 = new org.telegram.ui.Components.ColorPicker;
+        r5 = new org.telegram.ui.-$$Lambda$WallpaperActivity$zSvQbauZnhDK6wRRSmJlbMMUtgg;
+        r5.<init>(r6);
+        r3.<init>(r0, r5);
         r6.colorPicker = r3;
         r3 = r6.patternLayout;
         r3 = r3[r2];
@@ -1907,10 +1409,10 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r26 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26);
         r3.addView(r5, r13);
-    L_0x04e3:
+    L_0x04e8:
         r2 = r2 + 1;
         goto L_0x02a7;
-    L_0x04e7:
+    L_0x04ec:
         r6.setCurrentImage(r7);
         r1 = r6.radialProgress;
         r2 = 0;
@@ -1922,23 +1424,23 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r0 = r6.backgroundImage;
         r0 = r0.getImageReceiver();
         r0 = r0.hasBitmapImage();
-        if (r0 != 0) goto L_0x0509;
-    L_0x0502:
+        if (r0 != 0) goto L_0x050e;
+    L_0x0507:
         r0 = r6.fragmentView;
         r1 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r0.setBackgroundColor(r1);
-    L_0x0509:
+    L_0x050e:
         r0 = r6.currentWallpaper;
         r0 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r0 != 0) goto L_0x0521;
-    L_0x050f:
+        if (r0 != 0) goto L_0x0526;
+    L_0x0514:
         r0 = r6.backgroundImage;
         r0 = r0.getImageReceiver();
         r0.setCrossfadeWithOldImage(r7);
         r0 = r6.backgroundImage;
         r0 = r0.getImageReceiver();
         r0.setForceCrossfade(r7);
-    L_0x0521:
+    L_0x0526:
         r0 = r6.fragmentView;
         return r0;
         */
@@ -1970,24 +1472,24 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0117 A:{SYNTHETIC, Splitter:B:60:0x0117} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x014d  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x013c  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:102:0x01fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x0266  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0117 A:{SYNTHETIC, Splitter:B:60:0x0117} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x013c  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x014d  */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:102:0x01fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x0266  */
-    public /* synthetic */ void lambda$createView$1$WallpaperActivity(android.view.View r32) {
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0116 A:{SYNTHETIC, Splitter:B:60:0x0116} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0153  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x013b  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x020e  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x028a  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0116 A:{SYNTHETIC, Splitter:B:60:0x0116} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x013b  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0153  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x020e  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x028a  */
+    public /* synthetic */ void lambda$createView$1$WallpaperActivity(android.view.View r33) {
         /*
-        r31 = this;
-        r1 = r31;
+        r32 = this;
+        r1 = r32;
         r2 = new java.io.File;
         r0 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
         r3 = r1.isBlurred;
@@ -2005,332 +1507,358 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r5 = "jpg";
         r6 = -2;
         r8 = 87;
-        r9 = 0;
         r10 = 1;
-        if (r3 == 0) goto L_0x0059;
-    L_0x0023:
-        r0 = r1.backgroundImage;	 Catch:{ Exception -> 0x003c }
-        r0 = r0.getImageReceiver();	 Catch:{ Exception -> 0x003c }
-        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x003c }
-        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x003c }
-        r3.<init>(r2);	 Catch:{ Exception -> 0x003c }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x003c }
-        r0.compress(r11, r8, r3);	 Catch:{ Exception -> 0x003c }
-        r3.close();	 Catch:{ Exception -> 0x003c }
+        if (r3 == 0) goto L_0x0058;
+    L_0x0022:
+        r0 = r1.backgroundImage;	 Catch:{ Exception -> 0x003b }
+        r0 = r0.getImageReceiver();	 Catch:{ Exception -> 0x003b }
+        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x003b }
+        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x003b }
+        r3.<init>(r2);	 Catch:{ Exception -> 0x003b }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x003b }
+        r0.compress(r11, r8, r3);	 Catch:{ Exception -> 0x003b }
+        r3.close();	 Catch:{ Exception -> 0x003b }
         r0 = 1;
-        goto L_0x0041;
-    L_0x003c:
+        goto L_0x0040;
+    L_0x003b:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x0041:
-        if (r0 != 0) goto L_0x00b9;
-    L_0x0043:
+    L_0x0040:
+        if (r0 != 0) goto L_0x00b8;
+    L_0x0042:
         r0 = r1.currentWallpaper;
         r0 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r0;
         r0 = r0.document;
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r10);
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x0052 }
-        goto L_0x00b9;
-    L_0x0052:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x0051 }
+        goto L_0x00b8;
+    L_0x0051:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-        goto L_0x0111;
-    L_0x0059:
+        goto L_0x0110;
+    L_0x0058:
         r3 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r3 == 0) goto L_0x00bb;
-    L_0x005d:
+        if (r3 == 0) goto L_0x00ba;
+    L_0x005c:
         r3 = r1.selectedPattern;
-        if (r3 == 0) goto L_0x00b8;
-    L_0x0061:
-        r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0;	 Catch:{ Throwable -> 0x00b3 }
-        r0 = r1.backgroundImage;	 Catch:{ Throwable -> 0x00b3 }
-        r0 = r0.getImageReceiver();	 Catch:{ Throwable -> 0x00b3 }
-        r0 = r0.getBitmap();	 Catch:{ Throwable -> 0x00b3 }
-        r3 = r0.getWidth();	 Catch:{ Throwable -> 0x00b3 }
-        r11 = r0.getHeight();	 Catch:{ Throwable -> 0x00b3 }
-        r12 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x00b3 }
-        r3 = android.graphics.Bitmap.createBitmap(r3, r11, r12);	 Catch:{ Throwable -> 0x00b3 }
-        r11 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x00b3 }
-        r11.<init>(r3);	 Catch:{ Throwable -> 0x00b3 }
-        r12 = r1.backgroundColor;	 Catch:{ Throwable -> 0x00b3 }
-        r11.drawColor(r12);	 Catch:{ Throwable -> 0x00b3 }
-        r12 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x00b3 }
+        if (r3 == 0) goto L_0x00b7;
+    L_0x0060:
+        r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0;	 Catch:{ all -> 0x00b2 }
+        r0 = r1.backgroundImage;	 Catch:{ all -> 0x00b2 }
+        r0 = r0.getImageReceiver();	 Catch:{ all -> 0x00b2 }
+        r0 = r0.getBitmap();	 Catch:{ all -> 0x00b2 }
+        r3 = r0.getWidth();	 Catch:{ all -> 0x00b2 }
+        r11 = r0.getHeight();	 Catch:{ all -> 0x00b2 }
+        r12 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x00b2 }
+        r3 = android.graphics.Bitmap.createBitmap(r3, r11, r12);	 Catch:{ all -> 0x00b2 }
+        r11 = new android.graphics.Canvas;	 Catch:{ all -> 0x00b2 }
+        r11.<init>(r3);	 Catch:{ all -> 0x00b2 }
+        r12 = r1.backgroundColor;	 Catch:{ all -> 0x00b2 }
+        r11.drawColor(r12);	 Catch:{ all -> 0x00b2 }
+        r12 = new android.graphics.Paint;	 Catch:{ all -> 0x00b2 }
         r13 = 2;
-        r12.<init>(r13);	 Catch:{ Throwable -> 0x00b3 }
-        r13 = new android.graphics.PorterDuffColorFilter;	 Catch:{ Throwable -> 0x00b3 }
-        r14 = r1.patternColor;	 Catch:{ Throwable -> 0x00b3 }
-        r15 = r1.blendMode;	 Catch:{ Throwable -> 0x00b3 }
-        r13.<init>(r14, r15);	 Catch:{ Throwable -> 0x00b3 }
-        r12.setColorFilter(r13);	 Catch:{ Throwable -> 0x00b3 }
+        r12.<init>(r13);	 Catch:{ all -> 0x00b2 }
+        r13 = new android.graphics.PorterDuffColorFilter;	 Catch:{ all -> 0x00b2 }
+        r14 = r1.patternColor;	 Catch:{ all -> 0x00b2 }
+        r15 = r1.blendMode;	 Catch:{ all -> 0x00b2 }
+        r13.<init>(r14, r15);	 Catch:{ all -> 0x00b2 }
+        r12.setColorFilter(r13);	 Catch:{ all -> 0x00b2 }
         r13 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
-        r14 = r1.currentIntensity;	 Catch:{ Throwable -> 0x00b3 }
+        r14 = r1.currentIntensity;	 Catch:{ all -> 0x00b2 }
         r14 = r14 * r13;
-        r13 = (int) r14;	 Catch:{ Throwable -> 0x00b3 }
-        r12.setAlpha(r13);	 Catch:{ Throwable -> 0x00b3 }
+        r13 = (int) r14;	 Catch:{ all -> 0x00b2 }
+        r12.setAlpha(r13);	 Catch:{ all -> 0x00b2 }
         r13 = 0;
-        r11.drawBitmap(r0, r13, r13, r12);	 Catch:{ Throwable -> 0x00b3 }
-        r0 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x00b3 }
-        r0.<init>(r2);	 Catch:{ Throwable -> 0x00b3 }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x00b3 }
-        r3.compress(r11, r8, r0);	 Catch:{ Throwable -> 0x00b3 }
-        r0.close();	 Catch:{ Throwable -> 0x00b3 }
-        goto L_0x00b8;
-    L_0x00b3:
+        r11.drawBitmap(r0, r13, r13, r12);	 Catch:{ all -> 0x00b2 }
+        r0 = new java.io.FileOutputStream;	 Catch:{ all -> 0x00b2 }
+        r0.<init>(r2);	 Catch:{ all -> 0x00b2 }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x00b2 }
+        r3.compress(r11, r8, r0);	 Catch:{ all -> 0x00b2 }
+        r0.close();	 Catch:{ all -> 0x00b2 }
+        goto L_0x00b7;
+    L_0x00b2:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x0111;
-    L_0x00b8:
+        goto L_0x0110;
+    L_0x00b7:
         r0 = 1;
-    L_0x00b9:
+    L_0x00b8:
         r3 = 0;
-        goto L_0x0113;
-    L_0x00bb:
+        goto L_0x0112;
+    L_0x00ba:
         r3 = r0 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
-        if (r3 == 0) goto L_0x00ea;
-    L_0x00bf:
+        if (r3 == 0) goto L_0x00e9;
+    L_0x00be:
         r0 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r0;
         r3 = r0.resId;
-        if (r3 != 0) goto L_0x00b8;
-    L_0x00c5:
+        if (r3 != 0) goto L_0x00b7;
+    L_0x00c4:
         r11 = (long) r3;
         r3 = (r11 > r6 ? 1 : (r11 == r6 ? 0 : -1));
-        if (r3 != 0) goto L_0x00cb;
+        if (r3 != 0) goto L_0x00ca;
+    L_0x00c9:
+        goto L_0x00b7;
     L_0x00ca:
-        goto L_0x00b8;
-    L_0x00cb:
-        r3 = r0.originalPath;	 Catch:{ Exception -> 0x00e3 }
-        if (r3 == 0) goto L_0x00d2;
-    L_0x00cf:
-        r0 = r0.originalPath;	 Catch:{ Exception -> 0x00e3 }
-        goto L_0x00d4;
-    L_0x00d2:
-        r0 = r0.path;	 Catch:{ Exception -> 0x00e3 }
-    L_0x00d4:
-        r3 = r0.equals(r2);	 Catch:{ Exception -> 0x00e3 }
-        if (r3 == 0) goto L_0x00dc;
-    L_0x00da:
+        r3 = r0.originalPath;	 Catch:{ Exception -> 0x00e2 }
+        if (r3 == 0) goto L_0x00d1;
+    L_0x00ce:
+        r0 = r0.originalPath;	 Catch:{ Exception -> 0x00e2 }
+        goto L_0x00d3;
+    L_0x00d1:
+        r0 = r0.path;	 Catch:{ Exception -> 0x00e2 }
+    L_0x00d3:
+        r3 = r0.equals(r2);	 Catch:{ Exception -> 0x00e2 }
+        if (r3 == 0) goto L_0x00db;
+    L_0x00d9:
         r0 = 1;
-        goto L_0x0113;
-    L_0x00dc:
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x00e1 }
-        goto L_0x0113;
-    L_0x00e1:
+        goto L_0x0112;
+    L_0x00db:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x00e0 }
+        goto L_0x0112;
+    L_0x00e0:
         r0 = move-exception;
-        goto L_0x00e5;
-    L_0x00e3:
+        goto L_0x00e4;
+    L_0x00e2:
         r0 = move-exception;
         r3 = 0;
-    L_0x00e5:
+    L_0x00e4:
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-        goto L_0x0113;
-    L_0x00ea:
+        goto L_0x0112;
+    L_0x00e9:
         r3 = r0 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r3 == 0) goto L_0x0111;
-    L_0x00ee:
+        if (r3 == 0) goto L_0x0110;
+    L_0x00ed:
         r0 = (org.telegram.messenger.MediaController.SearchImage) r0;
         r3 = r0.photo;
-        if (r3 == 0) goto L_0x0101;
-    L_0x00f4:
+        if (r3 == 0) goto L_0x0100;
+    L_0x00f3:
         r0 = r3.sizes;
         r3 = r1.maxWallpaperSize;
         r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3, r10);
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r10);
-        goto L_0x0107;
-    L_0x0101:
+        goto L_0x0106;
+    L_0x0100:
         r0 = r0.imageUrl;
         r0 = org.telegram.messenger.ImageLoader.getHttpFilePath(r0, r5);
-    L_0x0107:
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x010c }
-        goto L_0x00b9;
-    L_0x010c:
+    L_0x0106:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x010b }
+        goto L_0x00b8;
+    L_0x010b:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-    L_0x0111:
+    L_0x0110:
         r0 = 0;
-        goto L_0x00b9;
-    L_0x0113:
+        goto L_0x00b8;
+    L_0x0112:
         r11 = r1.isBlurred;
-        if (r11 == 0) goto L_0x0136;
-    L_0x0117:
-        r0 = new java.io.File;	 Catch:{ Throwable -> 0x0131 }
-        r11 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Throwable -> 0x0131 }
-        r0.<init>(r11, r4);	 Catch:{ Throwable -> 0x0131 }
-        r4 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x0131 }
-        r4.<init>(r0);	 Catch:{ Throwable -> 0x0131 }
-        r0 = r1.blurredBitmap;	 Catch:{ Throwable -> 0x0131 }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x0131 }
-        r0.compress(r11, r8, r4);	 Catch:{ Throwable -> 0x0131 }
-        r4.close();	 Catch:{ Throwable -> 0x0131 }
+        if (r11 == 0) goto L_0x0135;
+    L_0x0116:
+        r0 = new java.io.File;	 Catch:{ all -> 0x0130 }
+        r11 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x0130 }
+        r0.<init>(r11, r4);	 Catch:{ all -> 0x0130 }
+        r4 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0130 }
+        r4.<init>(r0);	 Catch:{ all -> 0x0130 }
+        r0 = r1.blurredBitmap;	 Catch:{ all -> 0x0130 }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0130 }
+        r0.compress(r11, r8, r4);	 Catch:{ all -> 0x0130 }
+        r4.close();	 Catch:{ all -> 0x0130 }
         r0 = 1;
-        goto L_0x0136;
-    L_0x0131:
+        goto L_0x0135;
+    L_0x0130:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x0136:
-        r8 = r1.currentWallpaper;
-        r11 = r8 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
-        if (r11 == 0) goto L_0x014d;
-    L_0x013c:
-        r8 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r8;
-        r12 = r8.id;
-        r4 = r8.access_hash;
-        r22 = r4;
+    L_0x0135:
+        r4 = r1.currentWallpaper;
+        r8 = r4 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
+        if (r8 == 0) goto L_0x0153;
+    L_0x013b:
+        r4 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r4;
+        r12 = r4.id;
+        r16 = r12;
+        r11 = r4.access_hash;
+        r4 = r4.slug;
+        r23 = r11;
+        r12 = r16;
         r20 = r12;
-        r8 = 0;
+        r5 = 0;
+        r6 = 1;
         r14 = 0;
         r19 = 0;
-        goto L_0x01d4;
-    L_0x014d:
-        r4 = r8 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r4 == 0) goto L_0x0195;
-    L_0x0151:
-        r8 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r8;
-        r4 = r1.selectedPattern;
-        if (r4 == 0) goto L_0x0183;
+        goto L_0x01e6;
+    L_0x0153:
+        r8 = r4 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
+        if (r8 == 0) goto L_0x019f;
     L_0x0157:
-        r12 = r4.id;
-        r4 = r4.access_hash;
-        r6 = r8.id;
-        r14 = r8.patternId;
-        r11 = (r6 > r14 ? 1 : (r6 == r14 ? 0 : -1));
-        if (r11 != 0) goto L_0x0178;
-    L_0x0163:
-        r6 = r1.backgroundColor;
-        r7 = r8.color;
-        if (r6 != r7) goto L_0x0178;
+        r4 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r4;
+        r5 = r1.selectedPattern;
+        if (r5 == 0) goto L_0x018b;
+    L_0x015d:
+        r12 = r5.id;
+        r6 = r5.access_hash;
+        r14 = r4.id;
+        r9 = r4.patternId;
+        r5 = (r14 > r9 ? 1 : (r14 == r9 ? 0 : -1));
+        if (r5 != 0) goto L_0x017e;
     L_0x0169:
-        r6 = r8.intensity;
-        r7 = r1.currentIntensity;
-        r6 = r6 - r7;
-        r7 = NUM; // 0x3a83126f float:0.001 double:4.85008663E-315;
-        r6 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1));
-        if (r6 > 0) goto L_0x0178;
-    L_0x0175:
+        r5 = r1.backgroundColor;
+        r9 = r4.color;
+        if (r5 != r9) goto L_0x017e;
+    L_0x016f:
+        r4 = r4.intensity;
+        r5 = r1.currentIntensity;
+        r4 = r4 - r5;
+        r5 = NUM; // 0x3a83126f float:0.001 double:4.85008663E-315;
+        r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
+        if (r4 > 0) goto L_0x017e;
+    L_0x017b:
         r16 = r12;
-        goto L_0x017a;
-    L_0x0178:
+        goto L_0x0180;
+    L_0x017e:
         r16 = -1;
-    L_0x017a:
-        r6 = r1.selectedPattern;
-        r14 = r6.id;
-        r6 = r14;
+    L_0x0180:
+        r4 = r1.selectedPattern;
+        r14 = r4.id;
+        r4 = r4.slug;
+        r9 = r14;
         r14 = r12;
         r12 = r16;
-        goto L_0x018b;
-    L_0x0183:
+        goto L_0x0194;
+    L_0x018b:
         r4 = 0;
         r6 = 0;
+        r9 = 0;
         r12 = -1;
         r14 = 0;
-    L_0x018b:
-        r8 = r1.backgroundColor;
-        r22 = r4;
+    L_0x0194:
+        r5 = r1.backgroundColor;
+        r23 = r6;
         r20 = r14;
+        r6 = 1;
         r19 = 0;
-        r14 = r6;
-        goto L_0x01d4;
-    L_0x0195:
-        r4 = r8 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
-        if (r4 == 0) goto L_0x01a9;
-    L_0x0199:
-        r8 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r8;
-        r12 = r8.id;
-        r4 = r8.path;
+        r14 = r9;
+        goto L_0x01e6;
+    L_0x019f:
+        r6 = r4 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
+        if (r6 == 0) goto L_0x01b5;
+    L_0x01a3:
+        r4 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r4;
+        r12 = r4.id;
+        r4 = r4.path;
         r19 = r4;
-        r8 = 0;
-    L_0x01a2:
+        r4 = 0;
+        r5 = 0;
+        r6 = 1;
+    L_0x01ae:
         r14 = 0;
-    L_0x01a4:
+    L_0x01b0:
         r20 = 0;
-        r22 = 0;
-        goto L_0x01d4;
-    L_0x01a9:
-        r4 = r8 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r4 == 0) goto L_0x01cc;
-    L_0x01ad:
-        r8 = (org.telegram.messenger.MediaController.SearchImage) r8;
-        r4 = r8.photo;
-        if (r4 == 0) goto L_0x01c0;
-    L_0x01b3:
-        r4 = r4.sizes;
+        r23 = 0;
+        goto L_0x01e6;
+    L_0x01b5:
+        r6 = r4 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r6 == 0) goto L_0x01dc;
+    L_0x01b9:
+        r4 = (org.telegram.messenger.MediaController.SearchImage) r4;
+        r6 = r4.photo;
+        if (r6 == 0) goto L_0x01cd;
+    L_0x01bf:
+        r4 = r6.sizes;
         r5 = r1.maxWallpaperSize;
-        r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5, r10);
-        r4 = org.telegram.messenger.FileLoader.getPathToAttach(r4, r10);
-        goto L_0x01c6;
-    L_0x01c0:
-        r4 = r8.imageUrl;
+        r6 = 1;
+        r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5, r6);
+        r4 = org.telegram.messenger.FileLoader.getPathToAttach(r4, r6);
+        goto L_0x01d4;
+    L_0x01cd:
+        r6 = 1;
+        r4 = r4.imageUrl;
         r4 = org.telegram.messenger.ImageLoader.getHttpFilePath(r4, r5);
-    L_0x01c6:
-        r19 = r4;
-        r8 = 0;
+    L_0x01d4:
+        r11 = r4;
+        r19 = r11;
+        r4 = 0;
+        r5 = 0;
         r12 = -1;
-        goto L_0x01a2;
-    L_0x01cc:
-        r8 = 0;
+        goto L_0x01ae;
+    L_0x01dc:
+        r6 = 1;
+        r4 = 0;
+        r5 = 0;
         r12 = 0;
         r14 = 0;
         r19 = 0;
-        goto L_0x01a4;
-    L_0x01d4:
-        r4 = r1.currentAccount;
-        r18 = org.telegram.messenger.MessagesController.getInstance(r4);
-        r4 = r1.isBlurred;
-        r5 = r1.isMotion;
-        r6 = r1.currentIntensity;
-        r16 = 0;
-        r7 = (r22 > r16 ? 1 : (r22 == r16 ? 0 : -1));
-        if (r7 == 0) goto L_0x01e9;
+        goto L_0x01b0;
     L_0x01e6:
-        r28 = 1;
-        goto L_0x01eb;
-    L_0x01e9:
-        r28 = 0;
-    L_0x01eb:
+        r7 = r1.currentAccount;
+        r18 = org.telegram.messenger.MessagesController.getInstance(r7);
+        r7 = r1.isBlurred;
+        r9 = r1.isMotion;
+        r10 = r1.currentIntensity;
+        r16 = 0;
+        r11 = (r23 > r16 ? 1 : (r23 == r16 ? 0 : -1));
+        if (r11 == 0) goto L_0x01fb;
+    L_0x01f8:
+        r29 = 1;
+        goto L_0x01fd;
+    L_0x01fb:
         r29 = 0;
-        r24 = r4;
-        r25 = r5;
-        r26 = r8;
-        r27 = r6;
-        r18.saveWallpaperToServer(r19, r20, r22, r24, r25, r26, r27, r28, r29);
-        if (r0 == 0) goto L_0x0262;
-    L_0x01fa:
+    L_0x01fd:
+        r30 = 0;
+        r22 = r4;
+        r25 = r7;
+        r26 = r9;
+        r27 = r5;
+        r28 = r10;
+        r18.saveWallpaperToServer(r19, r20, r22, r23, r25, r26, r27, r28, r29, r30);
+        if (r0 == 0) goto L_0x0286;
+    L_0x020e:
         r0 = "chat_serviceBackground";
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
         org.telegram.ui.ActionBar.Theme.serviceMessageColorBackup = r0;
         r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
         r0 = r0.edit();
-        r4 = "selectedBackground2";
-        r0.putLong(r4, r12);
+        r7 = "selectedBackground2";
+        r0.putLong(r7, r12);
+        r7 = android.text.TextUtils.isEmpty(r4);
+        r9 = "selectedBackgroundSlug";
+        if (r7 != 0) goto L_0x022f;
+    L_0x022b:
+        r0.putString(r9, r4);
+        goto L_0x0232;
+    L_0x022f:
+        r0.remove(r9);
+    L_0x0232:
         r4 = r1.isBlurred;
-        r5 = "selectedBackgroundBlurred";
-        r0.putBoolean(r5, r4);
+        r7 = "selectedBackgroundBlurred";
+        r0.putBoolean(r7, r4);
         r4 = r1.isMotion;
-        r5 = "selectedBackgroundMotion";
-        r0.putBoolean(r5, r4);
+        r7 = "selectedBackgroundMotion";
+        r0.putBoolean(r7, r4);
         r4 = "selectedColor";
-        r0.putInt(r4, r8);
+        r0.putInt(r4, r5);
         r4 = r1.currentIntensity;
         r5 = "selectedIntensity";
         r0.putFloat(r5, r4);
         r4 = "selectedPattern";
         r0.putLong(r4, r14);
         r4 = -2;
-        r6 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x0235;
-    L_0x0234:
-        r9 = 1;
-    L_0x0235:
+        r7 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1));
+        if (r7 == 0) goto L_0x0258;
+    L_0x0257:
+        goto L_0x0259;
+    L_0x0258:
+        r6 = 0;
+    L_0x0259:
         r4 = "overrideThemeWallpaper";
-        r0.putBoolean(r4, r9);
+        r0.putBoolean(r4, r6);
         r0.commit();
         org.telegram.ui.ActionBar.Theme.reloadWallpaper();
-        if (r3 != 0) goto L_0x0262;
-    L_0x0242:
+        if (r3 != 0) goto L_0x0286;
+    L_0x0266:
         r0 = org.telegram.messenger.ImageLoader.getInstance();
         r3 = new java.lang.StringBuilder;
         r3.<init>();
@@ -2341,13 +1869,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.append(r2);
         r2 = r3.toString();
         r0.removeImage(r2);
-    L_0x0262:
+    L_0x0286:
         r0 = r1.delegate;
-        if (r0 == 0) goto L_0x0269;
-    L_0x0266:
+        if (r0 == 0) goto L_0x028d;
+    L_0x028a:
         r0.didSetNewBackground();
-    L_0x0269:
-        r31.finishFragment();
+    L_0x028d:
+        r32.finishFragment();
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.WallpaperActivity.lambda$createView$1$WallpaperActivity(android.view.View):void");
@@ -2481,6 +2009,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         if (this.isMotion) {
             this.parallaxEffect.setEnabled(true);
         }
+        AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
+        AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
     }
 
     public void onPause() {
@@ -2955,22 +2485,16 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
         i = 0;
         while (true) {
-            textViewArr = this.patternsSaveButton;
+            textViewArr = this.patternsCancelButton;
             if (i >= textViewArr.length) {
                 break;
             }
             arrayList.add(new ThemeDescription(textViewArr[i], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_fieldOverlayText"));
             i++;
         }
-        if (this.colorPicker != null) {
-            for (i = 0; i < this.colorPicker.colorEditText.length; i++) {
-                arrayList.add(new ThemeDescription(this.colorPicker.colorEditText[i], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-                arrayList.add(new ThemeDescription(this.colorPicker.colorEditText[i], ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText"));
-                arrayList.add(new ThemeDescription(this.colorPicker.colorEditText[i], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "windowBackgroundWhiteBlueHeader"));
-                arrayList.add(new ThemeDescription(this.colorPicker.colorEditText[i], ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField"));
-                arrayList.add(new ThemeDescription(this.colorPicker.colorEditText[i], ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"));
-                arrayList.add(new ThemeDescription(this.colorPicker.colorEditText[i], ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "windowBackgroundWhiteRedText3"));
-            }
+        ColorPicker colorPicker = this.colorPicker;
+        if (colorPicker != null) {
+            colorPicker.provideThemeDescriptions(arrayList);
         }
         arrayList.add(new ThemeDescription(this.intensitySeekBar, 0, new Class[]{SeekBarView.class}, new String[]{"innerPaint1"}, null, null, null, "player_progressBackground"));
         arrayList.add(new ThemeDescription(this.intensitySeekBar, 0, new Class[]{SeekBarView.class}, new String[]{"outerPaint1"}, null, null, null, "player_progress"));
@@ -2983,8 +2507,10 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutShadowDrawable, Theme.chat_msgOutMediaShadowDrawable}, null, "chat_outBubbleShadow"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_messageTextIn"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_messageTextOut"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckDrawable, Theme.chat_msgOutHalfCheckDrawable}, null, "chat_outSentCheck"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckSelectedDrawable, Theme.chat_msgOutHalfCheckSelectedDrawable}, null, "chat_outSentCheckSelected"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckDrawable}, null, "chat_outSentCheck"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckSelectedDrawable}, null, "chat_outSentCheckSelected"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckReadDrawable, Theme.chat_msgOutHalfCheckDrawable}, null, "chat_outSentCheckRead"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCheckReadSelectedDrawable, Theme.chat_msgOutHalfCheckSelectedDrawable}, null, "chat_outSentCheckReadSelected"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgMediaCheckDrawable, Theme.chat_msgMediaHalfCheckDrawable}, null, "chat_mediaSentCheck"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyLine"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyLine"));

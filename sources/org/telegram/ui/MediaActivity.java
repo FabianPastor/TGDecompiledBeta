@@ -1272,6 +1272,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 int i2 = 1;
+                Chat chat;
                 Bundle bundle;
                 if (i == -1) {
                     if (MediaActivity.this.actionBar.isActionModeShowed()) {
@@ -1288,7 +1289,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 } else if (i == 4) {
                     EncryptedChat encryptedChat;
                     User user;
-                    Chat chat;
                     i = (int) MediaActivity.this.dialog_id;
                     if (i == 0) {
                         encryptedChat = MessagesController.getInstance(MediaActivity.this.currentAccount).getEncryptedChat(Integer.valueOf((int) (MediaActivity.this.dialog_id >> 32)));
@@ -1304,7 +1304,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         encryptedChat = user;
                     }
                     MediaActivity mediaActivity = MediaActivity.this;
-                    AlertsCreator.createDeleteMessagesAlert(mediaActivity, user, chat, encryptedChat, null, mediaActivity.mergeDialogId, null, MediaActivity.this.selectedFiles, null, 1, new -$$Lambda$MediaActivity$4$aYBqp6dz0HCr-EWMktVHdulVPRM(this));
+                    AlertsCreator.createDeleteMessagesAlert(mediaActivity, user, chat, encryptedChat, null, mediaActivity.mergeDialogId, null, MediaActivity.this.selectedFiles, null, false, 1, new -$$Lambda$MediaActivity$4$aYBqp6dz0HCr-EWMktVHdulVPRM(this));
                 } else if (i == 3) {
                     bundle = new Bundle();
                     bundle.putBoolean("onlySelect", true);
@@ -1316,22 +1316,17 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     bundle = new Bundle();
                     int access$2100 = (int) MediaActivity.this.dialog_id;
                     int access$21002 = (int) (MediaActivity.this.dialog_id >> 32);
-                    if (access$2100 != 0) {
-                        String str = "chat_id";
-                        if (access$21002 == 1) {
-                            bundle.putInt(str, access$2100);
-                        } else if (access$2100 > 0) {
-                            bundle.putInt("user_id", access$2100);
-                        } else if (access$2100 < 0) {
-                            Chat chat2 = MessagesController.getInstance(MediaActivity.this.currentAccount).getChat(Integer.valueOf(-access$2100));
-                            if (!(chat2 == null || chat2.migrated_to == null)) {
-                                bundle.putInt("migrated_to", access$2100);
-                                access$2100 = -chat2.migrated_to.channel_id;
-                            }
-                            bundle.putInt(str, -access$2100);
-                        }
-                    } else {
+                    if (access$2100 == 0) {
                         bundle.putInt("enc_id", access$21002);
+                    } else if (access$2100 > 0) {
+                        bundle.putInt("user_id", access$2100);
+                    } else if (access$2100 < 0) {
+                        chat = MessagesController.getInstance(MediaActivity.this.currentAccount).getChat(Integer.valueOf(-access$2100));
+                        if (!(chat == null || chat.migrated_to == null)) {
+                            bundle.putInt("migrated_to", access$2100);
+                            access$2100 = -chat.migrated_to.channel_id;
+                        }
+                        bundle.putInt("chat_id", -access$2100);
                     }
                     bundle.putInt("message_id", MediaActivity.this.selectedFiles[0].keyAt(0));
                     NotificationCenter.getInstance(MediaActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
@@ -1346,63 +1341,57 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
 
             public /* synthetic */ void lambda$onItemClick$1$MediaActivity$4(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-                int i;
                 ArrayList arrayList2 = arrayList;
                 ArrayList arrayList3 = new ArrayList();
-                int i2 = 1;
+                int i = 1;
                 while (true) {
-                    i = 0;
-                    if (i2 < 0) {
+                    int i2 = 0;
+                    if (i < 0) {
                         break;
                     }
                     ArrayList arrayList4 = new ArrayList();
-                    while (i < MediaActivity.this.selectedFiles[i2].size()) {
-                        arrayList4.add(Integer.valueOf(MediaActivity.this.selectedFiles[i2].keyAt(i)));
-                        i++;
+                    while (i2 < MediaActivity.this.selectedFiles[i].size()) {
+                        arrayList4.add(Integer.valueOf(MediaActivity.this.selectedFiles[i].keyAt(i2)));
+                        i2++;
                     }
                     Collections.sort(arrayList4);
                     Iterator it = arrayList4.iterator();
                     while (it.hasNext()) {
                         Integer num = (Integer) it.next();
                         if (num.intValue() > 0) {
-                            arrayList3.add(MediaActivity.this.selectedFiles[i2].get(num.intValue()));
+                            arrayList3.add(MediaActivity.this.selectedFiles[i].get(num.intValue()));
                         }
                     }
-                    MediaActivity.this.selectedFiles[i2].clear();
-                    i2--;
+                    MediaActivity.this.selectedFiles[i].clear();
+                    i--;
                 }
                 MediaActivity.this.cantDeleteMessagesCount = 0;
                 MediaActivity.this.actionBar.hideActionMode();
                 if (arrayList.size() > 1 || ((Long) arrayList2.get(0)).longValue() == ((long) UserConfig.getInstance(MediaActivity.this.currentAccount).getClientUserId()) || charSequence != null) {
                     DialogsActivity dialogsActivity2 = dialogsActivity;
                     MediaActivity.this.updateRowsSelection();
-                    while (i < arrayList.size()) {
-                        long j;
-                        long longValue = ((Long) arrayList2.get(i)).longValue();
+                    for (int i3 = 0; i3 < arrayList.size(); i3++) {
+                        long longValue = ((Long) arrayList2.get(i3)).longValue();
                         if (charSequence != null) {
-                            j = longValue;
-                            SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, true, null, null, null);
-                        } else {
-                            j = longValue;
+                            SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, true, null, null, null, true, 0);
                         }
-                        SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(arrayList3, j);
-                        i++;
+                        SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(arrayList3, longValue, true, 0);
                     }
                     dialogsActivity.finishFragment();
                 } else {
                     long longValue2 = ((Long) arrayList2.get(0)).longValue();
-                    int i3 = (int) longValue2;
-                    i2 = (int) (longValue2 >> 32);
+                    int i4 = (int) longValue2;
+                    i = (int) (longValue2 >> 32);
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("scrollToTopOnResume", true);
-                    if (i3 == 0) {
-                        bundle.putInt("enc_id", i2);
-                    } else if (i3 > 0) {
-                        bundle.putInt("user_id", i3);
-                    } else if (i3 < 0) {
-                        bundle.putInt("chat_id", -i3);
+                    if (i4 == 0) {
+                        bundle.putInt("enc_id", i);
+                    } else if (i4 > 0) {
+                        bundle.putInt("user_id", i4);
+                    } else if (i4 < 0) {
+                        bundle.putInt("chat_id", -i4);
                     }
-                    if (i3 == 0 || MessagesController.getInstance(MediaActivity.this.currentAccount).checkCanOpenChat(bundle, dialogsActivity)) {
+                    if (i4 == 0 || MessagesController.getInstance(MediaActivity.this.currentAccount).checkCanOpenChat(bundle, dialogsActivity)) {
                         NotificationCenter.getInstance(MediaActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                         ChatActivity chatActivity = new ChatActivity(bundle);
                         MediaActivity.this.presentFragment(chatActivity, true);
@@ -2000,13 +1989,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             anonymousClass7.addView(anonymousClass8, LayoutHelper.createFrame(-1, -1.0f));
             MediaPage[] mediaPageArr2 = this.mediaPages;
             mediaPageArr2[i3] = anonymousClass8;
-            MediaPage mediaPage = mediaPageArr2[i3];
-            final AnonymousClass9 anonymousClass9 = new LinearLayoutManager(context2, 1, false) {
+            final LinearLayoutManager access$7702 = mediaPageArr2[i3].layoutManager = new LinearLayoutManager(context2, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
             };
-            mediaPage.layoutManager = anonymousClass9;
             this.mediaPages[i3].listView = new RecyclerListView(context2) {
                 /* Access modifiers changed, original: protected */
                 public void onLayout(boolean z, int i, int i2, int i3, int i4) {
@@ -2017,9 +2004,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             this.mediaPages[i3].listView.setItemAnimator(itemAnimator);
             this.mediaPages[i3].listView.setClipToPadding(false);
             this.mediaPages[i3].listView.setSectionsType(i2);
-            this.mediaPages[i3].listView.setLayoutManager(anonymousClass9);
-            mediaPageArr2 = this.mediaPages;
-            mediaPageArr2[i3].addView(mediaPageArr2[i3].listView, LayoutHelper.createFrame(-1, -1.0f));
+            this.mediaPages[i3].listView.setLayoutManager(access$7702);
+            MediaPage[] mediaPageArr3 = this.mediaPages;
+            mediaPageArr3[i3].addView(mediaPageArr3[i3].listView, LayoutHelper.createFrame(-1, -1.0f));
             this.mediaPages[i3].listView.setOnItemClickListener(new -$$Lambda$MediaActivity$gt9PcHemY5TDJnj_A3DgU8jzVM0(this, anonymousClass8));
             this.mediaPages[i3].listView.setOnScrollListener(new OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int i) {
@@ -2043,11 +2030,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                     if (!MediaActivity.this.searching || !MediaActivity.this.searchWas) {
                         int i3;
-                        i = anonymousClass9.findFirstVisibleItemPosition();
+                        i = access$7702.findFirstVisibleItemPosition();
                         if (i == -1) {
                             i3 = 0;
                         } else {
-                            i3 = Math.abs(anonymousClass9.findLastVisibleItemPosition() - i) + 1;
+                            i3 = Math.abs(access$7702.findLastVisibleItemPosition() - i) + 1;
                         }
                         int itemCount = recyclerView.getAdapter().getItemCount();
                         if (!(i3 == 0 || i + i3 <= itemCount - 2 || MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].loading)) {
@@ -2078,7 +2065,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             });
             this.mediaPages[i3].listView.setOnItemLongClickListener(new -$$Lambda$MediaActivity$RwU3_9vRjx_ylKGSBWguLaWu-aA(this, anonymousClass8));
             if (i3 == 0 && i4 != -1) {
-                anonymousClass9.scrollToPositionWithOffset(i4, i5);
+                access$7702.scrollToPositionWithOffset(i4, i5);
             }
             this.mediaPages[i3].emptyView = new LinearLayout(context2) {
                 /* Access modifiers changed, original: protected */
@@ -2091,8 +2078,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             this.mediaPages[i3].emptyView.setOrientation(1);
             this.mediaPages[i3].emptyView.setGravity(17);
             this.mediaPages[i3].emptyView.setVisibility(8);
-            MediaPage[] mediaPageArr3 = this.mediaPages;
-            mediaPageArr3[i3].addView(mediaPageArr3[i3].emptyView, LayoutHelper.createFrame(-1, -1.0f));
+            MediaPage[] mediaPageArr4 = this.mediaPages;
+            mediaPageArr4[i3].addView(mediaPageArr4[i3].emptyView, LayoutHelper.createFrame(-1, -1.0f));
             this.mediaPages[i3].emptyView.setOnTouchListener(-$$Lambda$MediaActivity$KVxLpoziroW7rOfn3d0nOSI4Va4.INSTANCE);
             this.mediaPages[i3].emptyImageView = new ImageView(context2);
             this.mediaPages[i3].emptyView.addView(this.mediaPages[i3].emptyImageView, LayoutHelper.createLinear(-2, -2));
@@ -2113,8 +2100,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             this.mediaPages[i3].progressView.setGravity(17);
             this.mediaPages[i3].progressView.setOrientation(1);
             this.mediaPages[i3].progressView.setVisibility(8);
-            mediaPageArr3 = this.mediaPages;
-            mediaPageArr3[i3].addView(mediaPageArr3[i3].progressView, LayoutHelper.createFrame(-1, -1.0f));
+            mediaPageArr4 = this.mediaPages;
+            mediaPageArr4[i3].addView(mediaPageArr4[i3].progressView, LayoutHelper.createFrame(-1, -1.0f));
             this.mediaPages[i3].progressBar = new RadialProgressView(context2);
             this.mediaPages[i3].progressView.addView(this.mediaPages[i3].progressBar, LayoutHelper.createLinear(-2, -2));
             if (i3 != 0) {
@@ -2197,16 +2184,16 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x0201  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0224  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x02fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x020c  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x022f  */
+    /* JADX WARNING: Removed duplicated region for block: B:176:0x0310  */
     public void didReceivedNotification(int r22, int r23, java.lang.Object... r24) {
         /*
         r21 = this;
         r0 = r21;
         r1 = r22;
         r2 = org.telegram.messenger.NotificationCenter.mediaDidLoad;
-        r6 = 4;
+        r7 = 4;
         r8 = 3;
         r9 = 2;
         r10 = 0;
@@ -2220,9 +2207,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r12 = (java.lang.Integer) r12;
         r12 = r12.intValue();
         r13 = r0.classGuid;
-        if (r12 != r13) goto L_0x03f0;
+        if (r12 != r13) goto L_0x0412;
     L_0x0021:
-        r12 = r24[r6];
+        r12 = r24[r7];
         r12 = (java.lang.Integer) r12;
         r12 = r12.intValue();
         r13 = r0.sharedMediaData;
@@ -2256,38 +2243,38 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     L_0x0054:
         if (r12 != 0) goto L_0x0059;
     L_0x0056:
-        r7 = r0.photoVideoAdapter;
+        r6 = r0.photoVideoAdapter;
         goto L_0x006e;
     L_0x0059:
         if (r12 != r11) goto L_0x005e;
     L_0x005b:
-        r7 = r0.documentsAdapter;
+        r6 = r0.documentsAdapter;
         goto L_0x006e;
     L_0x005e:
         if (r12 != r9) goto L_0x0063;
     L_0x0060:
-        r7 = r0.voiceAdapter;
+        r6 = r0.voiceAdapter;
         goto L_0x006e;
     L_0x0063:
         if (r12 != r8) goto L_0x0068;
     L_0x0065:
-        r7 = r0.linksAdapter;
+        r6 = r0.linksAdapter;
         goto L_0x006e;
     L_0x0068:
-        if (r12 != r6) goto L_0x006d;
+        if (r12 != r7) goto L_0x006d;
     L_0x006a:
-        r7 = r0.audioAdapter;
+        r6 = r0.audioAdapter;
         goto L_0x006e;
     L_0x006d:
-        r7 = 0;
+        r6 = 0;
     L_0x006e:
-        if (r7 == 0) goto L_0x007c;
+        if (r6 == 0) goto L_0x007c;
     L_0x0070:
-        r2 = r7.getItemCount();
-        r3 = r7 instanceof org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
+        r2 = r6.getItemCount();
+        r3 = r6 instanceof org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
         if (r3 == 0) goto L_0x007d;
     L_0x0078:
-        r7.notifySectionsChanged();
+        r6.notifySectionsChanged();
         goto L_0x007d;
     L_0x007c:
         r2 = 0;
@@ -2322,8 +2309,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r1 == 0) goto L_0x00e3;
     L_0x00b5:
         r3 = r0.mergeDialogId;
-        r5 = 0;
-        r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
+        r7 = 0;
+        r1 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
         if (r1 == 0) goto L_0x00e3;
     L_0x00bd:
         r1 = r0.sharedMediaData;
@@ -2343,7 +2330,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r20 = r1;
         r13.loadMedia(r14, r16, r17, r18, r19, r20);
     L_0x00e3:
-        if (r7 == 0) goto L_0x011d;
+        if (r6 == 0) goto L_0x011d;
     L_0x00e5:
         r1 = 0;
     L_0x00e6:
@@ -2354,7 +2341,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r3 = r3[r1];
         r3 = r3.listView;
         r3 = r3.getAdapter();
-        if (r3 != r7) goto L_0x0102;
+        if (r3 != r6) goto L_0x0102;
     L_0x00f7:
         r3 = r0.mediaPages;
         r3 = r3[r1];
@@ -2364,28 +2351,28 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r1 = r1 + 1;
         goto L_0x00e6;
     L_0x0105:
-        r1 = r7.getItemCount();
+        r1 = r6.getItemCount();
         if (r2 <= r11) goto L_0x0110;
     L_0x010b:
         r3 = r2 + -2;
-        r7.notifyItemChanged(r3);
+        r6.notifyItemChanged(r3);
     L_0x0110:
         if (r1 <= r2) goto L_0x0116;
     L_0x0112:
-        r7.notifyItemRangeInserted(r2, r1);
+        r6.notifyItemRangeInserted(r2, r1);
         goto L_0x011d;
     L_0x0116:
         if (r1 >= r2) goto L_0x011d;
     L_0x0118:
         r3 = r2 - r1;
-        r7.notifyItemRangeRemoved(r1, r3);
+        r6.notifyItemRangeRemoved(r1, r3);
     L_0x011d:
         r0.scrolling = r11;
         r1 = 0;
     L_0x0120:
         r3 = r0.mediaPages;
         r4 = r3.length;
-        if (r1 >= r4) goto L_0x03f0;
+        if (r1 >= r4) goto L_0x0412;
     L_0x0125:
         r3 = r3[r1];
         r3 = r3.selectedType;
@@ -2443,7 +2430,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r3 = r3[r1];
         r3 = r3.listView;
         r3 = r3.getAdapter();
-        if (r3 != r7) goto L_0x01b0;
+        if (r3 != r6) goto L_0x01b0;
     L_0x019e:
         r3 = r0.mediaPages;
         r3 = r3[r1];
@@ -2457,235 +2444,249 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         goto L_0x0120;
     L_0x01b4:
         r2 = org.telegram.messenger.NotificationCenter.messagesDeleted;
-        if (r1 != r2) goto L_0x024b;
+        if (r1 != r2) goto L_0x0256;
     L_0x01b8:
+        r1 = r24[r9];
+        r1 = (java.lang.Boolean) r1;
+        r1 = r1.booleanValue();
+        if (r1 == 0) goto L_0x01c3;
+    L_0x01c2:
+        return;
+    L_0x01c3:
         r1 = r0.dialog_id;
         r2 = (int) r1;
-        if (r2 >= 0) goto L_0x01d0;
-    L_0x01bd:
+        if (r2 >= 0) goto L_0x01db;
+    L_0x01c8:
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.MessagesController.getInstance(r1);
         r2 = r0.dialog_id;
         r3 = (int) r2;
         r2 = -r3;
         r2 = java.lang.Integer.valueOf(r2);
-        r7 = r1.getChat(r2);
-        goto L_0x01d1;
-    L_0x01d0:
-        r7 = 0;
-    L_0x01d1:
+        r6 = r1.getChat(r2);
+        goto L_0x01dc;
+    L_0x01db:
+        r6 = 0;
+    L_0x01dc:
         r1 = r24[r11];
         r1 = (java.lang.Integer) r1;
         r1 = r1.intValue();
-        r2 = org.telegram.messenger.ChatObject.isChannel(r7);
-        if (r2 == 0) goto L_0x01f1;
-    L_0x01df:
-        if (r1 != 0) goto L_0x01eb;
-    L_0x01e1:
+        r2 = org.telegram.messenger.ChatObject.isChannel(r6);
+        if (r2 == 0) goto L_0x01fc;
+    L_0x01ea:
+        if (r1 != 0) goto L_0x01f6;
+    L_0x01ec:
         r2 = r0.mergeDialogId;
         r4 = 0;
-        r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x01eb;
-    L_0x01e9:
-        r1 = 1;
-        goto L_0x01f5;
-    L_0x01eb:
-        r2 = r7.id;
-        if (r1 != r2) goto L_0x01f0;
-    L_0x01ef:
-        goto L_0x01f4;
-    L_0x01f0:
-        return;
-    L_0x01f1:
-        if (r1 == 0) goto L_0x01f4;
-    L_0x01f3:
-        return;
+        r7 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
+        if (r7 == 0) goto L_0x01f6;
     L_0x01f4:
+        r1 = 1;
+        goto L_0x0200;
+    L_0x01f6:
+        r2 = r6.id;
+        if (r1 != r2) goto L_0x01fb;
+    L_0x01fa:
+        goto L_0x01ff;
+    L_0x01fb:
+        return;
+    L_0x01fc:
+        if (r1 == 0) goto L_0x01ff;
+    L_0x01fe:
+        return;
+    L_0x01ff:
         r1 = 0;
-    L_0x01f5:
+    L_0x0200:
         r2 = r24[r10];
         r2 = (java.util.ArrayList) r2;
         r3 = r2.size();
         r4 = 0;
         r5 = 0;
-    L_0x01ff:
-        if (r4 >= r3) goto L_0x0222;
-    L_0x0201:
+    L_0x020a:
+        if (r4 >= r3) goto L_0x022d;
+    L_0x020c:
         r6 = r5;
         r5 = 0;
-    L_0x0203:
+    L_0x020e:
         r7 = r0.sharedMediaData;
         r8 = r7.length;
-        if (r5 >= r8) goto L_0x021e;
-    L_0x0208:
+        if (r5 >= r8) goto L_0x0229;
+    L_0x0213:
         r7 = r7[r5];
         r8 = r2.get(r4);
         r8 = (java.lang.Integer) r8;
         r8 = r8.intValue();
         r7 = r7.deleteMessage(r8, r1);
-        if (r7 == 0) goto L_0x021b;
-    L_0x021a:
+        if (r7 == 0) goto L_0x0226;
+    L_0x0225:
         r6 = 1;
-    L_0x021b:
+    L_0x0226:
         r5 = r5 + 1;
-        goto L_0x0203;
-    L_0x021e:
+        goto L_0x020e;
+    L_0x0229:
         r4 = r4 + 1;
         r5 = r6;
-        goto L_0x01ff;
-    L_0x0222:
-        if (r5 == 0) goto L_0x03f0;
-    L_0x0224:
+        goto L_0x020a;
+    L_0x022d:
+        if (r5 == 0) goto L_0x0412;
+    L_0x022f:
         r0.scrolling = r11;
         r1 = r0.photoVideoAdapter;
-        if (r1 == 0) goto L_0x022d;
-    L_0x022a:
+        if (r1 == 0) goto L_0x0238;
+    L_0x0235:
         r1.notifyDataSetChanged();
-    L_0x022d:
-        r1 = r0.documentsAdapter;
-        if (r1 == 0) goto L_0x0234;
-    L_0x0231:
-        r1.notifyDataSetChanged();
-    L_0x0234:
-        r1 = r0.voiceAdapter;
-        if (r1 == 0) goto L_0x023b;
     L_0x0238:
+        r1 = r0.documentsAdapter;
+        if (r1 == 0) goto L_0x023f;
+    L_0x023c:
         r1.notifyDataSetChanged();
-    L_0x023b:
-        r1 = r0.linksAdapter;
-        if (r1 == 0) goto L_0x0242;
     L_0x023f:
+        r1 = r0.voiceAdapter;
+        if (r1 == 0) goto L_0x0246;
+    L_0x0243:
         r1.notifyDataSetChanged();
-    L_0x0242:
-        r1 = r0.audioAdapter;
-        if (r1 == 0) goto L_0x03f0;
     L_0x0246:
+        r1 = r0.linksAdapter;
+        if (r1 == 0) goto L_0x024d;
+    L_0x024a:
         r1.notifyDataSetChanged();
-        goto L_0x03f0;
-    L_0x024b:
+    L_0x024d:
+        r1 = r0.audioAdapter;
+        if (r1 == 0) goto L_0x0412;
+    L_0x0251:
+        r1.notifyDataSetChanged();
+        goto L_0x0412;
+    L_0x0256:
         r2 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages;
-        if (r1 != r2) goto L_0x0341;
-    L_0x024f:
+        if (r1 != r2) goto L_0x0357;
+    L_0x025a:
+        r1 = r24[r9];
+        r1 = (java.lang.Boolean) r1;
+        r1 = r1.booleanValue();
+        if (r1 == 0) goto L_0x0265;
+    L_0x0264:
+        return;
+    L_0x0265:
         r1 = r24[r10];
         r1 = (java.lang.Long) r1;
         r1 = r1.longValue();
         r3 = r0.dialog_id;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 != 0) goto L_0x03f0;
-    L_0x025d:
+        if (r5 != 0) goto L_0x0412;
+    L_0x0273:
         r1 = r24[r11];
         r1 = (java.util.ArrayList) r1;
         r2 = (int) r3;
-        if (r2 != 0) goto L_0x0266;
-    L_0x0264:
+        if (r2 != 0) goto L_0x027c;
+    L_0x027a:
         r2 = 1;
-        goto L_0x0267;
-    L_0x0266:
+        goto L_0x027d;
+    L_0x027c:
         r2 = 0;
-    L_0x0267:
+    L_0x027d:
         r3 = 0;
         r4 = 0;
-    L_0x0269:
+    L_0x027f:
         r5 = r1.size();
-        if (r3 >= r5) goto L_0x02ac;
-    L_0x026f:
+        if (r3 >= r5) goto L_0x02c2;
+    L_0x0285:
         r5 = r1.get(r3);
         r5 = (org.telegram.messenger.MessageObject) r5;
         r12 = r5.messageOwner;
         r12 = r12.media;
-        if (r12 == 0) goto L_0x02a8;
-    L_0x027b:
+        if (r12 == 0) goto L_0x02be;
+    L_0x0291:
         r12 = r5.needDrawBluredPreview();
-        if (r12 == 0) goto L_0x0282;
-    L_0x0281:
-        goto L_0x02a8;
-    L_0x0282:
+        if (r12 == 0) goto L_0x0298;
+    L_0x0297:
+        goto L_0x02be;
+    L_0x0298:
         r12 = r5.messageOwner;
         r12 = org.telegram.messenger.MediaDataController.getMediaType(r12);
         r13 = -1;
-        if (r12 != r13) goto L_0x028c;
-    L_0x028b:
+        if (r12 != r13) goto L_0x02a2;
+    L_0x02a1:
         return;
-    L_0x028c:
+    L_0x02a2:
         r13 = r0.sharedMediaData;
         r13 = r13[r12];
         r14 = r5.getDialogId();
         r6 = r0.dialog_id;
         r16 = (r14 > r6 ? 1 : (r14 == r6 ? 0 : -1));
-        if (r16 != 0) goto L_0x029c;
-    L_0x029a:
+        if (r16 != 0) goto L_0x02b2;
+    L_0x02b0:
         r6 = 0;
-        goto L_0x029d;
-    L_0x029c:
+        goto L_0x02b3;
+    L_0x02b2:
         r6 = 1;
-    L_0x029d:
+    L_0x02b3:
         r5 = r13.addMessage(r5, r6, r11, r2);
-        if (r5 == 0) goto L_0x02a8;
-    L_0x02a3:
+        if (r5 == 0) goto L_0x02be;
+    L_0x02b9:
         r4 = r0.hasMedia;
         r4[r12] = r11;
         r4 = 1;
-    L_0x02a8:
+    L_0x02be:
         r3 = r3 + 1;
-        r6 = 4;
-        goto L_0x0269;
-    L_0x02ac:
-        if (r4 == 0) goto L_0x03f0;
-    L_0x02ae:
+        r7 = 4;
+        goto L_0x027f;
+    L_0x02c2:
+        if (r4 == 0) goto L_0x0412;
+    L_0x02c4:
         r0.scrolling = r11;
         r1 = 0;
-    L_0x02b1:
+    L_0x02c7:
         r2 = r0.mediaPages;
         r3 = r2.length;
-        if (r1 >= r3) goto L_0x033c;
-    L_0x02b6:
-        r2 = r2[r1];
-        r2 = r2.selectedType;
-        if (r2 != 0) goto L_0x02c2;
-    L_0x02be:
-        r7 = r0.photoVideoAdapter;
-    L_0x02c0:
-        r3 = 4;
-        goto L_0x02f8;
-    L_0x02c2:
-        r2 = r0.mediaPages;
-        r2 = r2[r1];
-        r2 = r2.selectedType;
-        if (r2 != r11) goto L_0x02cf;
+        if (r1 >= r3) goto L_0x0352;
     L_0x02cc:
-        r7 = r0.documentsAdapter;
-        goto L_0x02c0;
-    L_0x02cf:
+        r2 = r2[r1];
+        r2 = r2.selectedType;
+        if (r2 != 0) goto L_0x02d8;
+    L_0x02d4:
+        r6 = r0.photoVideoAdapter;
+    L_0x02d6:
+        r3 = 4;
+        goto L_0x030e;
+    L_0x02d8:
         r2 = r0.mediaPages;
         r2 = r2[r1];
         r2 = r2.selectedType;
-        if (r2 != r9) goto L_0x02dc;
-    L_0x02d9:
-        r7 = r0.voiceAdapter;
-        goto L_0x02c0;
-    L_0x02dc:
+        if (r2 != r11) goto L_0x02e5;
+    L_0x02e2:
+        r6 = r0.documentsAdapter;
+        goto L_0x02d6;
+    L_0x02e5:
         r2 = r0.mediaPages;
         r2 = r2[r1];
         r2 = r2.selectedType;
-        if (r2 != r8) goto L_0x02e9;
-    L_0x02e6:
-        r7 = r0.linksAdapter;
-        goto L_0x02c0;
-    L_0x02e9:
+        if (r2 != r9) goto L_0x02f2;
+    L_0x02ef:
+        r6 = r0.voiceAdapter;
+        goto L_0x02d6;
+    L_0x02f2:
+        r2 = r0.mediaPages;
+        r2 = r2[r1];
+        r2 = r2.selectedType;
+        if (r2 != r8) goto L_0x02ff;
+    L_0x02fc:
+        r6 = r0.linksAdapter;
+        goto L_0x02d6;
+    L_0x02ff:
         r2 = r0.mediaPages;
         r2 = r2[r1];
         r2 = r2.selectedType;
         r3 = 4;
-        if (r2 != r3) goto L_0x02f7;
-    L_0x02f4:
-        r7 = r0.audioAdapter;
-        goto L_0x02f8;
-    L_0x02f7:
-        r7 = 0;
-    L_0x02f8:
-        if (r7 == 0) goto L_0x0337;
-    L_0x02fa:
-        r2 = r7.getItemCount();
+        if (r2 != r3) goto L_0x030d;
+    L_0x030a:
+        r6 = r0.audioAdapter;
+        goto L_0x030e;
+    L_0x030d:
+        r6 = 0;
+    L_0x030e:
+        if (r6 == 0) goto L_0x034d;
+    L_0x0310:
+        r2 = r6.getItemCount();
         r4 = r0.photoVideoAdapter;
         r4.notifyDataSetChanged();
         r4 = r0.documentsAdapter;
@@ -2696,14 +2697,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r4.notifyDataSetChanged();
         r4 = r0.audioAdapter;
         r4.notifyDataSetChanged();
-        if (r2 != 0) goto L_0x0337;
-    L_0x0319:
+        if (r2 != 0) goto L_0x034d;
+    L_0x032f:
         r2 = r0.actionBar;
         r2 = r2.getTranslationY();
         r4 = 0;
         r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r2 == 0) goto L_0x0338;
-    L_0x0324:
+        if (r2 == 0) goto L_0x034e;
+    L_0x033a:
         r2 = r0.mediaPages;
         r2 = r2[r1];
         r2 = r2.layoutManager;
@@ -2711,128 +2712,136 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r5 = r5.getTranslationY();
         r5 = (int) r5;
         r2.scrollToPositionWithOffset(r10, r5);
-        goto L_0x0338;
-    L_0x0337:
+        goto L_0x034e;
+    L_0x034d:
         r4 = 0;
-    L_0x0338:
+    L_0x034e:
         r1 = r1 + 1;
-        goto L_0x02b1;
-    L_0x033c:
+        goto L_0x02c7;
+    L_0x0352:
         r21.updateTabs();
-        goto L_0x03f0;
-    L_0x0341:
+        goto L_0x0412;
+    L_0x0357:
         r2 = org.telegram.messenger.NotificationCenter.messageReceivedByServer;
-        if (r1 != r2) goto L_0x0362;
-    L_0x0345:
+        if (r1 != r2) goto L_0x0384;
+    L_0x035b:
+        r1 = 6;
+        r1 = r24[r1];
+        r1 = (java.lang.Boolean) r1;
+        r1 = r1.booleanValue();
+        if (r1 == 0) goto L_0x0367;
+    L_0x0366:
+        return;
+    L_0x0367:
         r1 = r24[r10];
         r1 = (java.lang.Integer) r1;
         r2 = r24[r11];
         r2 = (java.lang.Integer) r2;
         r3 = r0.sharedMediaData;
         r4 = r3.length;
-    L_0x0350:
-        if (r10 >= r4) goto L_0x03f0;
-    L_0x0352:
+    L_0x0372:
+        if (r10 >= r4) goto L_0x0412;
+    L_0x0374:
         r5 = r3[r10];
         r6 = r1.intValue();
         r7 = r2.intValue();
         r5.replaceMid(r6, r7);
         r10 = r10 + 1;
-        goto L_0x0350;
-    L_0x0362:
+        goto L_0x0372;
+    L_0x0384:
         r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart;
-        if (r1 == r2) goto L_0x036e;
-    L_0x0366:
+        if (r1 == r2) goto L_0x0390;
+    L_0x0388:
         r2 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged;
-        if (r1 == r2) goto L_0x036e;
-    L_0x036a:
+        if (r1 == r2) goto L_0x0390;
+    L_0x038c:
         r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset;
-        if (r1 != r2) goto L_0x03f0;
-    L_0x036e:
+        if (r1 != r2) goto L_0x0412;
+    L_0x0390:
         r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset;
-        if (r1 == r2) goto L_0x03bc;
-    L_0x0372:
+        if (r1 == r2) goto L_0x03de;
+    L_0x0394:
         r2 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged;
-        if (r1 != r2) goto L_0x0377;
-    L_0x0376:
-        goto L_0x03bc;
-    L_0x0377:
+        if (r1 != r2) goto L_0x0399;
+    L_0x0398:
+        goto L_0x03de;
+    L_0x0399:
         r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart;
-        if (r1 != r2) goto L_0x03f0;
-    L_0x037b:
+        if (r1 != r2) goto L_0x0412;
+    L_0x039d:
         r1 = r24[r10];
         r1 = (org.telegram.messenger.MessageObject) r1;
         r1 = r1.eventId;
         r3 = 0;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 == 0) goto L_0x0388;
-    L_0x0387:
+        if (r5 == 0) goto L_0x03aa;
+    L_0x03a9:
         return;
-    L_0x0388:
+    L_0x03aa:
         r1 = 0;
-    L_0x0389:
-        r2 = r0.mediaPages;
-        r3 = r2.length;
-        if (r1 >= r3) goto L_0x03f0;
-    L_0x038e:
-        r2 = r2[r1];
-        r2 = r2.listView;
-        r2 = r2.getChildCount();
-        r3 = 0;
-    L_0x0399:
-        if (r3 >= r2) goto L_0x03b9;
-    L_0x039b:
-        r4 = r0.mediaPages;
-        r4 = r4[r1];
-        r4 = r4.listView;
-        r4 = r4.getChildAt(r3);
-        r5 = r4 instanceof org.telegram.ui.Cells.SharedAudioCell;
-        if (r5 == 0) goto L_0x03b6;
     L_0x03ab:
-        r4 = (org.telegram.ui.Cells.SharedAudioCell) r4;
-        r5 = r4.getMessage();
-        if (r5 == 0) goto L_0x03b6;
-    L_0x03b3:
-        r4.updateButtonState(r10, r11);
-    L_0x03b6:
-        r3 = r3 + 1;
-        goto L_0x0399;
-    L_0x03b9:
-        r1 = r1 + 1;
-        goto L_0x0389;
-    L_0x03bc:
-        r1 = 0;
-    L_0x03bd:
         r2 = r0.mediaPages;
         r3 = r2.length;
-        if (r1 >= r3) goto L_0x03f0;
-    L_0x03c2:
+        if (r1 >= r3) goto L_0x0412;
+    L_0x03b0:
         r2 = r2[r1];
         r2 = r2.listView;
         r2 = r2.getChildCount();
         r3 = 0;
-    L_0x03cd:
-        if (r3 >= r2) goto L_0x03ed;
-    L_0x03cf:
+    L_0x03bb:
+        if (r3 >= r2) goto L_0x03db;
+    L_0x03bd:
         r4 = r0.mediaPages;
         r4 = r4[r1];
         r4 = r4.listView;
         r4 = r4.getChildAt(r3);
         r5 = r4 instanceof org.telegram.ui.Cells.SharedAudioCell;
-        if (r5 == 0) goto L_0x03ea;
-    L_0x03df:
+        if (r5 == 0) goto L_0x03d8;
+    L_0x03cd:
         r4 = (org.telegram.ui.Cells.SharedAudioCell) r4;
         r5 = r4.getMessage();
-        if (r5 == 0) goto L_0x03ea;
-    L_0x03e7:
+        if (r5 == 0) goto L_0x03d8;
+    L_0x03d5:
         r4.updateButtonState(r10, r11);
-    L_0x03ea:
+    L_0x03d8:
         r3 = r3 + 1;
-        goto L_0x03cd;
-    L_0x03ed:
+        goto L_0x03bb;
+    L_0x03db:
         r1 = r1 + 1;
-        goto L_0x03bd;
-    L_0x03f0:
+        goto L_0x03ab;
+    L_0x03de:
+        r1 = 0;
+    L_0x03df:
+        r2 = r0.mediaPages;
+        r3 = r2.length;
+        if (r1 >= r3) goto L_0x0412;
+    L_0x03e4:
+        r2 = r2[r1];
+        r2 = r2.listView;
+        r2 = r2.getChildCount();
+        r3 = 0;
+    L_0x03ef:
+        if (r3 >= r2) goto L_0x040f;
+    L_0x03f1:
+        r4 = r0.mediaPages;
+        r4 = r4[r1];
+        r4 = r4.listView;
+        r4 = r4.getChildAt(r3);
+        r5 = r4 instanceof org.telegram.ui.Cells.SharedAudioCell;
+        if (r5 == 0) goto L_0x040c;
+    L_0x0401:
+        r4 = (org.telegram.ui.Cells.SharedAudioCell) r4;
+        r5 = r4.getMessage();
+        if (r5 == 0) goto L_0x040c;
+    L_0x0409:
+        r4.updateButtonState(r10, r11);
+    L_0x040c:
+        r3 = r3 + 1;
+        goto L_0x03ef;
+    L_0x040f:
+        r1 = r1 + 1;
+        goto L_0x03df;
+    L_0x0412:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MediaActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -3144,7 +3153,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00cf;
     L_0x00c1:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d09a6 float:1.8747124E38 double:1.053130998E-314;
+        r2 = NUM; // 0x7f0d09d1 float:1.8747212E38 double:1.053131019E-314;
         r9 = "SharedMediaTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r1, r2);
@@ -3158,14 +3167,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00eb;
     L_0x00dd:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d09a2 float:1.8747116E38 double:1.053130996E-314;
+        r2 = NUM; // 0x7f0d09cd float:1.8747204E38 double:1.053131017E-314;
         r9 = "SharedFilesTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r6, r2);
     L_0x00eb:
         r9 = r12.dialog_id;
         r0 = (int) r9;
-        r2 = NUM; // 0x7f0d09a7 float:1.8747127E38 double:1.0531309984E-314;
+        r2 = NUM; // 0x7f0d09d2 float:1.8747214E38 double:1.0531310196E-314;
         r9 = "SharedMusicTab";
         if (r0 == 0) goto L_0x0129;
     L_0x00f5:
@@ -3178,7 +3187,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0111;
     L_0x0103:
         r0 = r12.scrollSlidingTextTabStrip;
-        r7 = NUM; // 0x7f0d09a4 float:1.874712E38 double:1.053130997E-314;
+        r7 = NUM; // 0x7f0d09cf float:1.8747208E38 double:1.053131018E-314;
         r8 = "SharedLinksTab";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r0.addTextTab(r3, r7);
@@ -3230,7 +3239,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0178;
     L_0x016a:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d09aa float:1.8747133E38 double:1.053131E-314;
+        r2 = NUM; // 0x7f0d09d5 float:1.874722E38 double:1.053131021E-314;
         r3 = "SharedVoiceTab";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.addTextTab(r4, r2);
@@ -3464,7 +3473,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
         AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
         this.selectedFiles[messageObject.getDialogId() == this.dialog_id ? 0 : 1].put(messageObject.getId(), messageObject);
-        if (!messageObject.canDeleteMessage(null)) {
+        if (!messageObject.canDeleteMessage(false, null)) {
             this.cantDeleteMessagesCount++;
         }
         this.actionBar.createActionMode().getItem(4).setVisibility(this.cantDeleteMessagesCount == 0 ? 0 : 8);
@@ -3512,12 +3521,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 i4 = messageObject.getDialogId() == this.dialog_id ? 0 : 1;
                 if (this.selectedFiles[i4].indexOfKey(messageObject.getId()) >= 0) {
                     this.selectedFiles[i4].remove(messageObject.getId());
-                    if (!messageObject2.canDeleteMessage(null)) {
+                    if (!messageObject2.canDeleteMessage(false, null)) {
                         this.cantDeleteMessagesCount--;
                     }
                 } else if (this.selectedFiles[0].size() + this.selectedFiles[1].size() < 100) {
                     this.selectedFiles[i4].put(messageObject.getId(), messageObject2);
-                    if (!messageObject2.canDeleteMessage(null)) {
+                    if (!messageObject2.canDeleteMessage(false, null)) {
                         this.cantDeleteMessagesCount++;
                     }
                 } else {

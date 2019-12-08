@@ -115,7 +115,7 @@ public class GroupCreateSpan extends View {
         r1 = r0.avatarDrawable;
         r3 = r2.first_name;
         r6 = r2.last_name;
-        r1.setInfo(r5, r3, r6, r5);
+        r1.setInfo(r5, r3, r6);
         r1 = r2.contact_id;
         r0.uid = r1;
         r1 = r2.key;

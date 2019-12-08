@@ -85,7 +85,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.timeItem.setOnClickListener(new -$$Lambda$ChatAvatarContainer$AUPtAkLLMEGZaufiE0P7VnJ7Wsk(this));
             this.timeItem.setContentDescription(LocaleController.getString("SetTimer", NUM));
         }
-        if (this.parentFragment != null) {
+        ChatActivity chatActivity2 = this.parentFragment;
+        if (chatActivity2 != null && !chatActivity2.isInScheduleMode()) {
             setOnClickListener(new -$$Lambda$ChatAvatarContainer$F8krEgvfCBOEDgLZx9CeIOwCevs(this));
             Chat currentChat = this.parentFragment.getCurrentChat();
             this.statusDrawables[0] = new TypingDotsDrawable();
@@ -285,7 +286,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity != null) {
             User currentUser = chatActivity.getCurrentUser();
-            if (UserObject.isUserSelf(currentUser)) {
+            if (UserObject.isUserSelf(currentUser) || this.parentFragment.isInScheduleMode()) {
                 if (this.subtitleTextView.getVisibility() != 8) {
                     this.subtitleTextView.setVisibility(8);
                 }

@@ -371,15 +371,15 @@ public class RadialProgress {
         if (r3 != 0) goto L_0x0054;
     L_0x0037:
         r3 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Throwable -> 0x0053 }
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Throwable -> 0x0053 }
-        r0 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x0053 }
-        r3 = android.graphics.Bitmap.createBitmap(r4, r3, r0);	 Catch:{ Throwable -> 0x0053 }
-        r2.miniDrawBitmap = r3;	 Catch:{ Throwable -> 0x0053 }
-        r3 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x0053 }
-        r4 = r2.miniDrawBitmap;	 Catch:{ Throwable -> 0x0053 }
-        r3.<init>(r4);	 Catch:{ Throwable -> 0x0053 }
-        r2.miniDrawCanvas = r3;	 Catch:{ Throwable -> 0x0053 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ all -> 0x0053 }
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ all -> 0x0053 }
+        r0 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0053 }
+        r3 = android.graphics.Bitmap.createBitmap(r4, r3, r0);	 Catch:{ all -> 0x0053 }
+        r2.miniDrawBitmap = r3;	 Catch:{ all -> 0x0053 }
+        r3 = new android.graphics.Canvas;	 Catch:{ all -> 0x0053 }
+        r4 = r2.miniDrawBitmap;	 Catch:{ all -> 0x0053 }
+        r3.<init>(r4);	 Catch:{ all -> 0x0053 }
+        r2.miniDrawCanvas = r3;	 Catch:{ all -> 0x0053 }
         goto L_0x0054;
     L_0x0054:
         if (r5 != 0) goto L_0x005c;

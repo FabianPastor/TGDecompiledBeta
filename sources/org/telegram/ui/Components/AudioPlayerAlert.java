@@ -1072,73 +1072,73 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     /* JADX WARNING: Missing exception handler attribute for start block: B:31:0x00a4 */
     /* JADX WARNING: Can't wrap try/catch for region: R(4:29|30|31|32) */
     /* JADX WARNING: Missing block: B:16:0x0066, code skipped:
-            if (r7.exists() == false) goto L_0x0068;
+            if (r6.exists() == false) goto L_0x0068;
      */
-    private void onSubItemClick(int r7) {
+    private void onSubItemClick(int r6) {
         /*
-        r6 = this;
+        r5 = this;
         r0 = org.telegram.messenger.MediaController.getInstance();
         r0 = r0.getPlayingMessageObject();
-        if (r0 == 0) goto L_0x017a;
+        if (r0 == 0) goto L_0x0174;
     L_0x000a:
-        r1 = r6.parentActivity;
+        r1 = r5.parentActivity;
         if (r1 != 0) goto L_0x0010;
     L_0x000e:
-        goto L_0x017a;
+        goto L_0x0174;
     L_0x0010:
         r2 = 1;
-        if (r7 != r2) goto L_0x004b;
+        if (r6 != r2) goto L_0x004b;
     L_0x0013:
-        r7 = org.telegram.messenger.UserConfig.selectedAccount;
-        r3 = r6.currentAccount;
-        if (r7 == r3) goto L_0x001c;
+        r6 = org.telegram.messenger.UserConfig.selectedAccount;
+        r3 = r5.currentAccount;
+        if (r6 == r3) goto L_0x001c;
     L_0x0019:
         r1.switchToAccount(r3, r2);
     L_0x001c:
-        r7 = new android.os.Bundle;
-        r7.<init>();
+        r6 = new android.os.Bundle;
+        r6.<init>();
         r1 = "onlySelect";
-        r7.putBoolean(r1, r2);
+        r6.putBoolean(r1, r2);
         r1 = 3;
         r2 = "dialogsType";
-        r7.putInt(r2, r1);
+        r6.putInt(r2, r1);
         r1 = new org.telegram.ui.DialogsActivity;
-        r1.<init>(r7);
-        r7 = new java.util.ArrayList;
-        r7.<init>();
-        r7.add(r0);
+        r1.<init>(r6);
+        r6 = new java.util.ArrayList;
+        r6.<init>();
+        r6.add(r0);
         r0 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$bZwv44or3-083Y0MYIMNRo1ORcQ;
-        r0.<init>(r6, r7);
+        r0.<init>(r5, r6);
         r1.setDelegate(r0);
-        r7 = r6.parentActivity;
-        r7.lambda$runLinkRequest$27$LaunchActivity(r1);
-        r6.dismiss();
-        goto L_0x017a;
+        r6 = r5.parentActivity;
+        r6.lambda$runLinkRequest$27$LaunchActivity(r1);
+        r5.dismiss();
+        goto L_0x0174;
     L_0x004b:
         r3 = 2;
-        if (r7 != r3) goto L_0x00ff;
+        if (r6 != r3) goto L_0x00ff;
     L_0x004e:
-        r7 = r0.messageOwner;	 Catch:{ Exception -> 0x00f9 }
-        r7 = r7.attachPath;	 Catch:{ Exception -> 0x00f9 }
-        r7 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Exception -> 0x00f9 }
+        r6 = r0.messageOwner;	 Catch:{ Exception -> 0x00f9 }
+        r6 = r6.attachPath;	 Catch:{ Exception -> 0x00f9 }
+        r6 = android.text.TextUtils.isEmpty(r6);	 Catch:{ Exception -> 0x00f9 }
         r1 = 0;
-        if (r7 != 0) goto L_0x0068;
+        if (r6 != 0) goto L_0x0068;
     L_0x0059:
-        r7 = new java.io.File;	 Catch:{ Exception -> 0x00f9 }
+        r6 = new java.io.File;	 Catch:{ Exception -> 0x00f9 }
         r3 = r0.messageOwner;	 Catch:{ Exception -> 0x00f9 }
         r3 = r3.attachPath;	 Catch:{ Exception -> 0x00f9 }
-        r7.<init>(r3);	 Catch:{ Exception -> 0x00f9 }
-        r3 = r7.exists();	 Catch:{ Exception -> 0x00f9 }
+        r6.<init>(r3);	 Catch:{ Exception -> 0x00f9 }
+        r3 = r6.exists();	 Catch:{ Exception -> 0x00f9 }
         if (r3 != 0) goto L_0x0069;
     L_0x0068:
-        r7 = r1;
+        r6 = r1;
     L_0x0069:
-        if (r7 != 0) goto L_0x0071;
+        if (r6 != 0) goto L_0x0071;
     L_0x006b:
-        r7 = r0.messageOwner;	 Catch:{ Exception -> 0x00f9 }
-        r7 = org.telegram.messenger.FileLoader.getPathToMessage(r7);	 Catch:{ Exception -> 0x00f9 }
+        r6 = r0.messageOwner;	 Catch:{ Exception -> 0x00f9 }
+        r6 = org.telegram.messenger.FileLoader.getPathToMessage(r6);	 Catch:{ Exception -> 0x00f9 }
     L_0x0071:
-        r3 = r7.exists();	 Catch:{ Exception -> 0x00f9 }
+        r3 = r6.exists();	 Catch:{ Exception -> 0x00f9 }
         if (r3 == 0) goto L_0x00c9;
     L_0x0077:
         r1 = new android.content.Intent;	 Catch:{ Exception -> 0x00f9 }
@@ -1160,146 +1160,136 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     L_0x0095:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x00a4 }
         r3 = "org.telegram.messenger.provider";
-        r0 = androidx.core.content.FileProvider.getUriForFile(r0, r3, r7);	 Catch:{ Exception -> 0x00a4 }
+        r0 = androidx.core.content.FileProvider.getUriForFile(r0, r3, r6);	 Catch:{ Exception -> 0x00a4 }
         r1.putExtra(r4, r0);	 Catch:{ Exception -> 0x00a4 }
         r1.setFlags(r2);	 Catch:{ Exception -> 0x00a4 }
         goto L_0x00b3;
     L_0x00a4:
-        r7 = android.net.Uri.fromFile(r7);	 Catch:{ Exception -> 0x00f9 }
-        r1.putExtra(r4, r7);	 Catch:{ Exception -> 0x00f9 }
+        r6 = android.net.Uri.fromFile(r6);	 Catch:{ Exception -> 0x00f9 }
+        r1.putExtra(r4, r6);	 Catch:{ Exception -> 0x00f9 }
         goto L_0x00b3;
     L_0x00ac:
-        r7 = android.net.Uri.fromFile(r7);	 Catch:{ Exception -> 0x00f9 }
-        r1.putExtra(r4, r7);	 Catch:{ Exception -> 0x00f9 }
+        r6 = android.net.Uri.fromFile(r6);	 Catch:{ Exception -> 0x00f9 }
+        r1.putExtra(r4, r6);	 Catch:{ Exception -> 0x00f9 }
     L_0x00b3:
-        r7 = r6.parentActivity;	 Catch:{ Exception -> 0x00f9 }
+        r6 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r0 = "ShareFile";
-        r2 = NUM; // 0x7f0d0991 float:1.8747082E38 double:1.0531309875E-314;
+        r2 = NUM; // 0x7f0d09bc float:1.874717E38 double:1.053131009E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r0 = android.content.Intent.createChooser(r1, r0);	 Catch:{ Exception -> 0x00f9 }
         r1 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
-        r7.startActivityForResult(r0, r1);	 Catch:{ Exception -> 0x00f9 }
-        goto L_0x017a;
+        r6.startActivityForResult(r0, r1);	 Catch:{ Exception -> 0x00f9 }
+        goto L_0x0174;
     L_0x00c9:
-        r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder;	 Catch:{ Exception -> 0x00f9 }
-        r0 = r6.parentActivity;	 Catch:{ Exception -> 0x00f9 }
-        r7.<init>(r0);	 Catch:{ Exception -> 0x00f9 }
+        r6 = new org.telegram.ui.ActionBar.AlertDialog$Builder;	 Catch:{ Exception -> 0x00f9 }
+        r0 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
+        r6.<init>(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "AppName";
         r2 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
-        r7.setTitle(r0);	 Catch:{ Exception -> 0x00f9 }
+        r6.setTitle(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "OK";
-        r2 = NUM; // 0x7f0d06eb float:1.8745707E38 double:1.0531306525E-314;
+        r2 = NUM; // 0x7f0d0700 float:1.874575E38 double:1.053130663E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
-        r7.setPositiveButton(r0, r1);	 Catch:{ Exception -> 0x00f9 }
+        r6.setPositiveButton(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r0 = "PleaseDownload";
-        r1 = NUM; // 0x7f0d0860 float:1.8746463E38 double:1.053130837E-314;
+        r1 = NUM; // 0x7f0d0876 float:1.8746508E38 double:1.0531308477E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);	 Catch:{ Exception -> 0x00f9 }
-        r7.setMessage(r0);	 Catch:{ Exception -> 0x00f9 }
-        r7.show();	 Catch:{ Exception -> 0x00f9 }
-        goto L_0x017a;
+        r6.setMessage(r0);	 Catch:{ Exception -> 0x00f9 }
+        r6.show();	 Catch:{ Exception -> 0x00f9 }
+        goto L_0x0174;
     L_0x00f9:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);
-        goto L_0x017a;
+        r6 = move-exception;
+        org.telegram.messenger.FileLog.e(r6);
+        goto L_0x0174;
     L_0x00ff:
         r3 = 4;
-        if (r7 != r3) goto L_0x017a;
+        if (r6 != r3) goto L_0x0174;
     L_0x0102:
-        r7 = org.telegram.messenger.UserConfig.selectedAccount;
-        r3 = r6.currentAccount;
-        if (r7 == r3) goto L_0x010b;
+        r6 = org.telegram.messenger.UserConfig.selectedAccount;
+        r3 = r5.currentAccount;
+        if (r6 == r3) goto L_0x010b;
     L_0x0108:
         r1.switchToAccount(r3, r2);
     L_0x010b:
-        r7 = new android.os.Bundle;
-        r7.<init>();
-        r3 = r0.getDialogId();
-        r1 = (int) r3;
-        r5 = 32;
-        r3 = r3 >> r5;
-        r4 = (int) r3;
-        if (r1 == 0) goto L_0x0151;
+        r6 = new android.os.Bundle;
+        r6.<init>();
+        r1 = r0.getDialogId();
+        r3 = (int) r1;
+        r4 = 32;
+        r1 = r1 >> r4;
+        r2 = (int) r1;
+        if (r3 == 0) goto L_0x014b;
     L_0x011b:
-        r3 = "chat_id";
-        if (r4 != r2) goto L_0x0123;
-    L_0x011f:
-        r7.putInt(r3, r1);
-        goto L_0x0156;
+        if (r3 <= 0) goto L_0x0123;
+    L_0x011d:
+        r1 = "user_id";
+        r6.putInt(r1, r3);
+        goto L_0x0150;
     L_0x0123:
-        if (r1 <= 0) goto L_0x012b;
+        if (r3 >= 0) goto L_0x0150;
     L_0x0125:
-        r2 = "user_id";
-        r7.putInt(r2, r1);
-        goto L_0x0156;
-    L_0x012b:
-        if (r1 >= 0) goto L_0x0156;
-    L_0x012d:
-        r2 = r6.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r4 = -r1;
-        r4 = java.lang.Integer.valueOf(r4);
-        r2 = r2.getChat(r4);
-        if (r2 == 0) goto L_0x014c;
-    L_0x013e:
-        r4 = r2.migrated_to;
-        if (r4 == 0) goto L_0x014c;
-    L_0x0142:
-        r4 = "migrated_to";
-        r7.putInt(r4, r1);
-        r1 = r2.migrated_to;
+        r1 = r5.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r2 = -r3;
+        r2 = java.lang.Integer.valueOf(r2);
+        r1 = r1.getChat(r2);
+        if (r1 == 0) goto L_0x0144;
+    L_0x0136:
+        r2 = r1.migrated_to;
+        if (r2 == 0) goto L_0x0144;
+    L_0x013a:
+        r2 = "migrated_to";
+        r6.putInt(r2, r3);
+        r1 = r1.migrated_to;
         r1 = r1.channel_id;
-        r1 = -r1;
-    L_0x014c:
-        r1 = -r1;
-        r7.putInt(r3, r1);
-        goto L_0x0156;
-    L_0x0151:
+        r3 = -r1;
+    L_0x0144:
+        r1 = -r3;
+        r2 = "chat_id";
+        r6.putInt(r2, r1);
+        goto L_0x0150;
+    L_0x014b:
         r1 = "enc_id";
-        r7.putInt(r1, r4);
-    L_0x0156:
+        r6.putInt(r1, r2);
+    L_0x0150:
         r0 = r0.getId();
         r1 = "message_id";
-        r7.putInt(r1, r0);
-        r0 = r6.currentAccount;
+        r6.putInt(r1, r0);
+        r0 = r5.currentAccount;
         r0 = org.telegram.messenger.NotificationCenter.getInstance(r0);
         r1 = org.telegram.messenger.NotificationCenter.closeChats;
         r2 = 0;
         r3 = new java.lang.Object[r2];
         r0.postNotificationName(r1, r3);
-        r0 = r6.parentActivity;
+        r0 = r5.parentActivity;
         r1 = new org.telegram.ui.ChatActivity;
-        r1.<init>(r7);
+        r1.<init>(r6);
         r0.presentFragment(r1, r2, r2);
-        r6.dismiss();
-    L_0x017a:
+        r5.dismiss();
+    L_0x0174:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert.onSubItemClick(int):void");
     }
 
     public /* synthetic */ void lambda$onSubItemClick$10$AudioPlayerAlert(ArrayList arrayList, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
-        ArrayList arrayList3 = arrayList;
-        ArrayList arrayList4 = arrayList2;
+        ArrayList arrayList3 = arrayList2;
         int i = 0;
-        if (arrayList2.size() > 1 || ((Long) arrayList4.get(0)).longValue() == ((long) UserConfig.getInstance(this.currentAccount).getClientUserId()) || charSequence != null) {
+        if (arrayList2.size() > 1 || ((Long) arrayList3.get(0)).longValue() == ((long) UserConfig.getInstance(this.currentAccount).getClientUserId()) || charSequence != null) {
+            ArrayList arrayList4 = arrayList;
             while (i < arrayList2.size()) {
-                long j;
-                long longValue = ((Long) arrayList4.get(i)).longValue();
+                long longValue = ((Long) arrayList3.get(i)).longValue();
                 if (charSequence != null) {
-                    j = longValue;
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, true, null, null, null);
-                } else {
-                    j = longValue;
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, true, null, null, null, true, 0);
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(arrayList, j);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(arrayList, longValue, true, 0);
                 i++;
-                arrayList4 = arrayList2;
             }
             dialogsActivity.finishFragment();
             return;
         }
-        long longValue2 = ((Long) arrayList4.get(0)).longValue();
+        long longValue2 = ((Long) arrayList3.get(0)).longValue();
         int i2 = (int) longValue2;
         int i3 = (int) (longValue2 >> 32);
         Bundle bundle = new Bundle();
@@ -1314,7 +1304,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
         ChatActivity chatActivity = new ChatActivity(bundle);
         if (this.parentActivity.presentFragment(chatActivity, true, false)) {
-            chatActivity.showFieldPanelForForward(true, arrayList3);
+            chatActivity.showFieldPanelForForward(true, arrayList);
         } else {
             dialogsActivity.finishFragment();
         }

@@ -776,12 +776,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         L_0x0237:
             if (r3 == 0) goto L_0x0243;
         L_0x0239:
-            r2 = NUM; // 0x7f0d06c1 float:1.8745622E38 double:1.053130632E-314;
+            r2 = NUM; // 0x7f0d06d6 float:1.8745664E38 double:1.053130642E-314;
             r3 = "NotificationsCustom";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             goto L_0x024c;
         L_0x0243:
-            r2 = NUM; // 0x7f0d06d9 float:1.874567E38 double:1.0531306436E-314;
+            r2 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
             r3 = "NotificationsOn";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         L_0x024c:
@@ -789,7 +789,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             goto L_0x02e5;
         L_0x024f:
             r3 = 3600; // 0xe10 float:5.045E-42 double:1.7786E-320;
-            r4 = NUM; // 0x7f0d0b20 float:1.8747891E38 double:1.0531311846E-314;
+            r4 = NUM; // 0x7f0d0b76 float:1.8748066E38 double:1.053131227E-314;
             r5 = "WillUnmuteIn";
             if (r2 >= r3) goto L_0x026b;
         L_0x0258:
@@ -862,18 +862,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         L_0x02c6:
             if (r3 == 0) goto L_0x02d2;
         L_0x02c8:
-            r2 = NUM; // 0x7f0d06c1 float:1.8745622E38 double:1.053130632E-314;
+            r2 = NUM; // 0x7f0d06d6 float:1.8745664E38 double:1.053130642E-314;
             r3 = "NotificationsCustom";
             r7 = org.telegram.messenger.LocaleController.getString(r3, r2);
             goto L_0x02e5;
         L_0x02d2:
             if (r10 == 0) goto L_0x02da;
         L_0x02d4:
-            r2 = NUM; // 0x7f0d06d9 float:1.874567E38 double:1.0531306436E-314;
+            r2 = NUM; // 0x7f0d06ee float:1.8745713E38 double:1.053130654E-314;
             r3 = "NotificationsOn";
             goto L_0x02df;
         L_0x02da:
-            r2 = NUM; // 0x7f0d06d7 float:1.8745666E38 double:1.0531306427E-314;
+            r2 = NUM; // 0x7f0d06ec float:1.8745709E38 double:1.053130653E-314;
             r3 = "NotificationsOff";
         L_0x02df:
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
@@ -881,11 +881,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         L_0x02e5:
             if (r7 != 0) goto L_0x02f0;
         L_0x02e7:
-            r2 = NUM; // 0x7f0d06d7 float:1.8745666E38 double:1.0531306427E-314;
+            r2 = NUM; // 0x7f0d06ec float:1.8745709E38 double:1.053130653E-314;
             r3 = "NotificationsOff";
             r7 = org.telegram.messenger.LocaleController.getString(r3, r2);
         L_0x02f0:
-            r2 = NUM; // 0x7f0d06bd float:1.8745613E38 double:1.05313063E-314;
+            r2 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
             r3 = "Notifications";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setTextAndValueAndCheck(r2, r7, r10, r9);
@@ -902,7 +902,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r8 = "%d";
             if (r2 != r3) goto L_0x0345;
         L_0x0316:
-            r3 = NUM; // 0x7f0d09a8 float:1.8747129E38 double:1.053130999E-314;
+            r3 = NUM; // 0x7f0d09d3 float:1.8747216E38 double:1.05313102E-314;
             r4 = "SharedPhotosAndVideos";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r4 = new java.lang.Object[r10];
@@ -912,7 +912,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r5 = java.lang.Integer.valueOf(r5);
             r4[r9] = r5;
             r4 = java.lang.String.format(r8, r4);
-            r5 = NUM; // 0x7var_b float:1.7945671E38 double:1.0529357693E-314;
+            r5 = NUM; // 0x7var_ float:1.7945693E38 double:1.052935775E-314;
             r6 = org.telegram.ui.ProfileActivity.this;
             r6 = r6.sharedSectionRow;
             r6 = r6 - r10;
@@ -927,7 +927,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.filesRow;
             if (r2 != r3) goto L_0x037c;
         L_0x034d:
-            r3 = NUM; // 0x7f0d0468 float:1.8744403E38 double:1.053130335E-314;
+            r3 = NUM; // 0x7f0d046d float:1.8744413E38 double:1.0531303373E-314;
             r4 = "FilesDataUsage";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r4 = new java.lang.Object[r10];
@@ -937,7 +937,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r5 = java.lang.Integer.valueOf(r5);
             r4[r9] = r5;
             r4 = java.lang.String.format(r8, r4);
-            r5 = NUM; // 0x7var_ float:1.7945657E38 double:1.052935766E-314;
+            r5 = NUM; // 0x7var_f float:1.794568E38 double:1.0529357713E-314;
             r6 = org.telegram.ui.ProfileActivity.this;
             r6 = r6.sharedSectionRow;
             r6 = r6 - r10;
@@ -952,7 +952,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.linksRow;
             if (r2 != r3) goto L_0x03b3;
         L_0x0384:
-            r3 = NUM; // 0x7f0d09a3 float:1.8747118E38 double:1.0531309964E-314;
+            r3 = NUM; // 0x7f0d09ce float:1.8747206E38 double:1.0531310176E-314;
             r5 = "SharedLinks";
             r3 = org.telegram.messenger.LocaleController.getString(r5, r3);
             r5 = new java.lang.Object[r10];
@@ -962,7 +962,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r4 = java.lang.Integer.valueOf(r4);
             r5[r9] = r4;
             r4 = java.lang.String.format(r8, r5);
-            r5 = NUM; // 0x7var_ float:1.7945661E38 double:1.052935767E-314;
+            r5 = NUM; // 0x7var_ float:1.7945683E38 double:1.0529357723E-314;
             r6 = org.telegram.ui.ProfileActivity.this;
             r6 = r6.sharedSectionRow;
             r6 = r6 - r10;
@@ -977,7 +977,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.audioRow;
             if (r2 != r3) goto L_0x03eb;
         L_0x03bb:
-            r3 = NUM; // 0x7f0d099f float:1.874711E38 double:1.0531309944E-314;
+            r3 = NUM; // 0x7f0d09ca float:1.8747198E38 double:1.0531310157E-314;
             r4 = "SharedAudioFiles";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r4 = new java.lang.Object[r10];
@@ -988,7 +988,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r5 = java.lang.Integer.valueOf(r5);
             r4[r9] = r5;
             r4 = java.lang.String.format(r8, r4);
-            r5 = NUM; // 0x7var_ float:1.7945653E38 double:1.052935765E-314;
+            r5 = NUM; // 0x7var_d float:1.7945675E38 double:1.0529357703E-314;
             r6 = org.telegram.ui.ProfileActivity.this;
             r6 = r6.sharedSectionRow;
             r6 = r6 - r10;
@@ -1014,7 +1014,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r5 = java.lang.Integer.valueOf(r5);
             r4[r9] = r5;
             r4 = java.lang.String.format(r8, r4);
-            r5 = NUM; // 0x7var_c float:1.7945673E38 double:1.05293577E-314;
+            r5 = NUM; // 0x7var_ float:1.7945696E38 double:1.0529357753E-314;
             r6 = org.telegram.ui.ProfileActivity.this;
             r6 = r6.sharedSectionRow;
             r6 = r6 - r10;
@@ -1030,7 +1030,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r4 = NUM; // 0x7var_a float:1.7944598E38 double:1.052935508E-314;
             if (r2 != r3) goto L_0x045a;
         L_0x042e:
-            r3 = NUM; // 0x7f0d04fc float:1.8744703E38 double:1.053130408E-314;
+            r3 = NUM; // 0x7f0d0501 float:1.8744713E38 double:1.0531304104E-314;
             r5 = "GroupsInCommonTitle";
             r3 = org.telegram.messenger.LocaleController.getString(r5, r3);
             r5 = new java.lang.Object[r10];
@@ -1067,14 +1067,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = r2.ttl;
             if (r2 != 0) goto L_0x048c;
         L_0x0482:
-            r2 = NUM; // 0x7f0d09af float:1.8747143E38 double:1.0531310023E-314;
+            r2 = NUM; // 0x7f0d09da float:1.874723E38 double:1.0531310236E-314;
             r3 = "ShortMessageLifetimeForever";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             goto L_0x0490;
         L_0x048c:
             r2 = org.telegram.messenger.LocaleController.formatTTLString(r2);
         L_0x0490:
-            r3 = NUM; // 0x7f0d05e2 float:1.874517E38 double:1.0531305216E-314;
+            r3 = NUM; // 0x7f0d05e7 float:1.874518E38 double:1.053130524E-314;
             r4 = "MessageLifetime";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r1.setTextAndValue(r3, r2, r9);
@@ -1084,7 +1084,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.unblockRow;
             if (r2 != r3) goto L_0x04b9;
         L_0x04a6:
-            r2 = NUM; // 0x7f0d0a5a float:1.874749E38 double:1.053131087E-314;
+            r2 = NUM; // 0x7f0d0aae float:1.874766E38 double:1.0531311283E-314;
             r3 = "Unblock";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
@@ -1096,7 +1096,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.startSecretChatRow;
             if (r2 != r3) goto L_0x04d4;
         L_0x04c1:
-            r2 = NUM; // 0x7f0d09d5 float:1.874722E38 double:1.053131021E-314;
+            r2 = NUM; // 0x7f0d0a00 float:1.8747307E38 double:1.0531310424E-314;
             r3 = "StartEncryptedChat";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
@@ -1121,7 +1121,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r4 = java.lang.Integer.valueOf(r5);
             r3 = r3.getEncryptedChat(r4);
             r2.setEncryptedChat(r3);
-            r3 = NUM; // 0x7f0d03e6 float:1.8744139E38 double:1.0531302706E-314;
+            r3 = NUM; // 0x7f0d03ea float:1.8744147E38 double:1.0531302726E-314;
             r4 = "EncryptionKey";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r1.setTextAndValueDrawable(r3, r2, r9);
@@ -1133,7 +1133,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         L_0x0516:
             r2 = "windowBackgroundWhiteRedText5";
             r1.setColors(r7, r2);
-            r2 = NUM; // 0x7f0d0573 float:1.8744944E38 double:1.053130467E-314;
+            r2 = NUM; // 0x7f0d0578 float:1.8744954E38 double:1.053130469E-314;
             r3 = "LeaveChannel";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
@@ -1153,13 +1153,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = r2.megagroup;
             if (r2 == 0) goto L_0x0557;
         L_0x0549:
-            r2 = NUM; // 0x7f0d089c float:1.8746585E38 double:1.0531308665E-314;
+            r2 = NUM; // 0x7f0d08b4 float:1.8746634E38 double:1.0531308783E-314;
             r3 = "ProfileJoinGroup";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
             goto L_0x0906;
         L_0x0557:
-            r2 = NUM; // 0x7f0d089b float:1.8746583E38 double:1.053130866E-314;
+            r2 = NUM; // 0x7f0d08b3 float:1.8746632E38 double:1.053130878E-314;
             r3 = "ProfileJoinChannel";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
@@ -1379,7 +1379,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = org.telegram.ui.ProfileActivity.this;
             r2 = r2.userInfo;
             r2 = r2.about;
-            r3 = NUM; // 0x7f0d0a92 float:1.8747603E38 double:1.0531311145E-314;
+            r3 = NUM; // 0x7f0d0ae8 float:1.8747778E38 double:1.053131157E-314;
             r4 = "UserBio";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r4 = org.telegram.ui.ProfileActivity.this;
@@ -1434,11 +1434,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = r3.format(r2);
             goto L_0x07b5;
         L_0x07ac:
-            r2 = NUM; // 0x7f0d083a float:1.8746386E38 double:1.053130818E-314;
+            r2 = NUM; // 0x7f0d0850 float:1.874643E38 double:1.053130829E-314;
             r3 = "PhoneHidden";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         L_0x07b5:
-            r3 = NUM; // 0x7f0d083d float:1.8746392E38 double:1.0531308195E-314;
+            r3 = NUM; // 0x7f0d0853 float:1.8746437E38 double:1.0531308304E-314;
             r4 = "PhoneMobile";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r1.setTextAndValue(r2, r3, r9);
@@ -1476,7 +1476,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         L_0x0809:
             r2 = "-";
         L_0x080b:
-            r3 = NUM; // 0x7f0d0ab5 float:1.8747674E38 double:1.053131132E-314;
+            r3 = NUM; // 0x7f0d0b0b float:1.8747849E38 double:1.0531311743E-314;
             r4 = "Username";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r1.setTextAndValue(r2, r3, r9);
@@ -1505,7 +1505,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = r2.username;
             r3.append(r2);
             r2 = r3.toString();
-            r3 = NUM; // 0x7f0d0531 float:1.874481E38 double:1.053130434E-314;
+            r3 = NUM; // 0x7f0d0536 float:1.874482E38 double:1.0531304366E-314;
             r4 = "InviteLink";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r1.setTextAndValue(r2, r3, r9);
@@ -1556,13 +1556,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = r2.channelInfoRow;
             if (r2 == r8) goto L_0x08d5;
         L_0x08c8:
-            r2 = NUM; // 0x7f0d08d6 float:1.8746703E38 double:1.053130895E-314;
+            r2 = NUM; // 0x7f0d08f2 float:1.874676E38 double:1.053130909E-314;
             r3 = "ReportChatDescription";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2);
             goto L_0x0906;
         L_0x08d5:
-            r2 = NUM; // 0x7f0d0523 float:1.8744782E38 double:1.053130427E-314;
+            r2 = NUM; // 0x7f0d0528 float:1.8744792E38 double:1.0531304297E-314;
             r3 = "Info";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2);
@@ -1572,7 +1572,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.sharedHeaderRow;
             if (r2 != r3) goto L_0x08f7;
         L_0x08ea:
-            r2 = NUM; // 0x7f0d09a0 float:1.8747112E38 double:1.053130995E-314;
+            r2 = NUM; // 0x7f0d09cb float:1.87472E38 double:1.053131016E-314;
             r3 = "SharedContent";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2);
@@ -1811,7 +1811,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                     }
                                 } else if (ProfileActivity.this.userBlocked) {
                                     MessagesController.getInstance(ProfileActivity.this.currentAccount).unblockUser(ProfileActivity.this.user_id);
-                                    SendMessagesHelper.getInstance(ProfileActivity.this.currentAccount).sendMessage("/start", (long) ProfileActivity.this.user_id, null, null, false, null, null, null);
+                                    SendMessagesHelper.getInstance(ProfileActivity.this.currentAccount).sendMessage("/start", (long) ProfileActivity.this.user_id, null, null, false, null, null, null, true, 0);
                                     ProfileActivity.this.finishFragment();
                                 } else {
                                     MessagesController.getInstance(ProfileActivity.this.currentAccount).blockUser(ProfileActivity.this.user_id);
@@ -2944,7 +2944,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         /*
         r9 = this;
         r0 = r9.usernameRow;
-        r1 = NUM; // 0x7f0d030e float:1.87437E38 double:1.053130164E-314;
+        r1 = NUM; // 0x7f0d0310 float:1.8743705E38 double:1.053130165E-314;
         r2 = "Copy";
         r3 = 1;
         r4 = 0;
@@ -3431,14 +3431,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        int i3 = 0;
-        if (i == NotificationCenter.updateInterfaces) {
-            i = ((Integer) objArr[0]).intValue();
+        int i3 = i;
+        Object[] objArr2 = objArr;
+        int i4 = 0;
+        int i5;
+        if (i3 == NotificationCenter.updateInterfaces) {
+            i3 = ((Integer) objArr2[0]).intValue();
             if (this.user_id != 0) {
-                if (!((i & 2) == 0 && (i & 1) == 0 && (i & 4) == 0)) {
+                if (!((i3 & 2) == 0 && (i3 & 1) == 0 && (i3 & 4) == 0)) {
                     updateProfileData();
                 }
-                if ((i & 1024) != 0) {
+                if ((i3 & 1024) != 0) {
                     RecyclerListView recyclerListView = this.listView;
                     if (recyclerListView != null) {
                         Holder holder = (Holder) recyclerListView.findViewHolderForPosition(this.phoneRow);
@@ -3448,190 +3451,189 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     }
                 }
             } else if (this.chat_id != 0) {
-                i2 = i & 8192;
-                if (!(i2 == 0 && (i & 8) == 0 && (i & 16) == 0 && (i & 32) == 0 && (i & 4) == 0)) {
+                i5 = i3 & 8192;
+                if (!(i5 == 0 && (i3 & 8) == 0 && (i3 & 16) == 0 && (i3 & 32) == 0 && (i3 & 4) == 0)) {
                     updateOnlineCount();
                     updateProfileData();
                 }
-                if (i2 != 0) {
+                if (i5 != 0) {
                     updateRowsIds();
                     ListAdapter listAdapter = this.listAdapter;
                     if (listAdapter != null) {
                         listAdapter.notifyDataSetChanged();
                     }
                 }
-                if (!((i & 2) == 0 && (i & 1) == 0 && (i & 4) == 0)) {
+                if (!((i3 & 2) == 0 && (i3 & 1) == 0 && (i3 & 4) == 0)) {
                     RecyclerListView recyclerListView2 = this.listView;
                     if (recyclerListView2 != null) {
-                        i2 = recyclerListView2.getChildCount();
-                        while (i3 < i2) {
-                            View childAt = this.listView.getChildAt(i3);
+                        i5 = recyclerListView2.getChildCount();
+                        while (i4 < i5) {
+                            View childAt = this.listView.getChildAt(i4);
                             if (childAt instanceof UserCell) {
-                                ((UserCell) childAt).update(i);
+                                ((UserCell) childAt).update(i3);
                             }
-                            i3++;
+                            i4++;
                         }
                     }
                 }
             }
         } else {
-            int i4 = 1;
+            int i6 = 1;
             long longValue;
             long j;
-            int i5;
             int[] iArr;
-            int i6;
-            int i7;
+            int[] iArr2;
+            int[] iArr3;
             ListAdapter listAdapter2;
             boolean z;
-            if (i == NotificationCenter.chatOnlineCountDidLoad) {
-                Integer num = (Integer) objArr[0];
+            int i7;
+            if (i3 == NotificationCenter.chatOnlineCountDidLoad) {
+                Integer num = (Integer) objArr2[0];
                 if (this.chatInfo != null) {
                     Chat chat = this.currentChat;
                     if (chat != null && chat.id == num.intValue()) {
-                        this.chatInfo.online_count = ((Integer) objArr[1]).intValue();
+                        this.chatInfo.online_count = ((Integer) objArr2[1]).intValue();
                         updateOnlineCount();
                         updateProfileData();
                     }
                 }
-            } else if (i == NotificationCenter.contactsDidLoad) {
+            } else if (i3 == NotificationCenter.contactsDidLoad) {
                 createActionBarMenu();
-            } else if (i == NotificationCenter.mediaDidLoad) {
-                longValue = ((Long) objArr[0]).longValue();
-                if (((Integer) objArr[3]).intValue() == this.classGuid) {
-                    j = this.dialog_id;
-                    if (j == 0) {
-                        i5 = this.user_id;
-                        if (i5 == 0) {
-                            i5 = this.chat_id;
-                            if (i5 != 0) {
-                                i5 = -i5;
+            } else if (i3 == NotificationCenter.mediaDidLoad) {
+                long longValue2 = ((Long) objArr2[0]).longValue();
+                if (((Integer) objArr2[3]).intValue() == this.classGuid) {
+                    long j2 = this.dialog_id;
+                    if (j2 == 0) {
+                        i3 = this.user_id;
+                        if (i3 == 0) {
+                            i3 = this.chat_id;
+                            if (i3 != 0) {
+                                i3 = -i3;
                             }
                         }
-                        j = (long) i5;
+                        j2 = (long) i3;
                     }
-                    i5 = ((Integer) objArr[4]).intValue();
-                    this.sharedMediaData[i5].setTotalCount(((Integer) objArr[1]).intValue());
-                    ArrayList arrayList = (ArrayList) objArr[2];
-                    boolean z2 = ((int) j) == 0;
-                    if (longValue == j) {
-                        i4 = 0;
+                    i3 = ((Integer) objArr2[4]).intValue();
+                    this.sharedMediaData[i3].setTotalCount(((Integer) objArr2[1]).intValue());
+                    ArrayList arrayList = (ArrayList) objArr2[2];
+                    boolean z2 = ((int) j2) == 0;
+                    if (longValue2 == j2) {
+                        i6 = 0;
                     }
                     if (!arrayList.isEmpty()) {
-                        this.sharedMediaData[i5].setEndReached(i4, ((Boolean) objArr[5]).booleanValue());
+                        this.sharedMediaData[i3].setEndReached(i6, ((Boolean) objArr2[5]).booleanValue());
                     }
-                    for (i = 0; i < arrayList.size(); i++) {
-                        this.sharedMediaData[i5].addMessage((MessageObject) arrayList.get(i), i4, false, z2);
+                    for (i5 = 0; i5 < arrayList.size(); i5++) {
+                        this.sharedMediaData[i3].addMessage((MessageObject) arrayList.get(i5), i6, false, z2);
                     }
                 }
-            } else if (i == NotificationCenter.mediaCountsDidLoad) {
-                longValue = ((Long) objArr[0]).longValue();
-                long j2 = this.dialog_id;
-                if (j2 == 0) {
-                    int i8 = this.user_id;
-                    if (i8 != 0) {
-                        j2 = (long) i8;
-                    } else {
-                        i8 = this.chat_id;
-                        if (i8 != 0) {
-                            j2 = (long) (-i8);
+            } else if (i3 == NotificationCenter.mediaCountsDidLoad) {
+                longValue = ((Long) objArr2[0]).longValue();
+                j = this.dialog_id;
+                if (j == 0) {
+                    i3 = this.user_id;
+                    if (i3 == 0) {
+                        i3 = this.chat_id;
+                        if (i3 != 0) {
+                            i3 = -i3;
                         }
                     }
+                    j = (long) i3;
                 }
-                if (longValue == j2 || longValue == this.mergeDialogId) {
-                    iArr = (int[]) objArr[1];
-                    if (longValue == j2) {
-                        this.mediaCount = iArr;
+                if (longValue == j || longValue == this.mergeDialogId) {
+                    int[] iArr4 = (int[]) objArr2[1];
+                    if (longValue == j) {
+                        this.mediaCount = iArr4;
                     } else {
-                        this.mediaMergeCount = iArr;
+                        this.mediaMergeCount = iArr4;
                     }
-                    iArr = this.lastMediaCount;
-                    int[] iArr2 = this.prevMediaCount;
-                    System.arraycopy(iArr, 0, iArr2, 0, iArr2.length);
-                    i6 = 0;
+                    iArr4 = this.lastMediaCount;
+                    iArr = this.prevMediaCount;
+                    System.arraycopy(iArr4, 0, iArr, 0, iArr.length);
+                    i3 = 0;
                     while (true) {
-                        iArr2 = this.lastMediaCount;
-                        if (i6 >= iArr2.length) {
+                        iArr = this.lastMediaCount;
+                        if (i3 >= iArr.length) {
                             break;
                         }
-                        int[] iArr3 = this.mediaCount;
-                        if (iArr3[i6] >= 0) {
-                            int[] iArr4 = this.mediaMergeCount;
-                            if (iArr4[i6] >= 0) {
-                                iArr2[i6] = iArr3[i6] + iArr4[i6];
-                                if (longValue == j2 && this.lastMediaCount[i6] != 0) {
-                                    MediaDataController.getInstance(this.currentAccount).loadMedia(j2, 50, 0, i6, 2, this.classGuid);
-                                }
-                                i6++;
-                            }
-                        }
                         iArr2 = this.mediaCount;
-                        if (iArr2[i6] >= 0) {
-                            this.lastMediaCount[i6] = iArr2[i6];
-                        } else {
-                            iArr2 = this.mediaMergeCount;
-                            if (iArr2[i6] >= 0) {
-                                this.lastMediaCount[i6] = iArr2[i6];
-                            } else {
-                                this.lastMediaCount[i6] = 0;
+                        if (iArr2[i3] >= 0) {
+                            iArr3 = this.mediaMergeCount;
+                            if (iArr3[i3] >= 0) {
+                                iArr[i3] = iArr2[i3] + iArr3[i3];
+                                if (longValue == j && this.lastMediaCount[i3] != 0) {
+                                    MediaDataController.getInstance(this.currentAccount).loadMedia(j, 50, 0, i3, 2, this.classGuid);
+                                }
+                                i3++;
                             }
                         }
-                        MediaDataController.getInstance(this.currentAccount).loadMedia(j2, 50, 0, i6, 2, this.classGuid);
-                        i6++;
+                        iArr = this.mediaCount;
+                        if (iArr[i3] >= 0) {
+                            this.lastMediaCount[i3] = iArr[i3];
+                        } else {
+                            iArr = this.mediaMergeCount;
+                            if (iArr[i3] >= 0) {
+                                this.lastMediaCount[i3] = iArr[i3];
+                            } else {
+                                this.lastMediaCount[i3] = 0;
+                            }
+                        }
+                        MediaDataController.getInstance(this.currentAccount).loadMedia(j, 50, 0, i3, 2, this.classGuid);
+                        i3++;
                     }
                     updateSharedMediaRows();
                 }
-            } else if (i == NotificationCenter.mediaCountDidLoad) {
-                longValue = ((Long) objArr[0]).longValue();
+            } else if (i3 == NotificationCenter.mediaCountDidLoad) {
+                longValue = ((Long) objArr2[0]).longValue();
                 j = this.dialog_id;
                 if (j == 0) {
-                    i7 = this.user_id;
-                    if (i7 == 0) {
-                        i7 = this.chat_id;
-                        if (i7 != 0) {
-                            i7 = -i7;
+                    i3 = this.user_id;
+                    if (i3 == 0) {
+                        i3 = this.chat_id;
+                        if (i3 != 0) {
+                            i3 = -i3;
                         }
                     }
-                    j = (long) i7;
+                    j = (long) i3;
                 }
                 if (longValue == j || longValue == this.mergeDialogId) {
-                    i5 = ((Integer) objArr[3]).intValue();
-                    i6 = ((Integer) objArr[1]).intValue();
+                    i3 = ((Integer) objArr2[3]).intValue();
+                    i5 = ((Integer) objArr2[1]).intValue();
                     if (longValue == j) {
-                        this.mediaCount[i5] = i6;
+                        this.mediaCount[i3] = i5;
                     } else {
-                        this.mediaMergeCount[i5] = i6;
+                        this.mediaMergeCount[i3] = i5;
                     }
-                    int[] iArr5 = this.prevMediaCount;
-                    int[] iArr6 = this.lastMediaCount;
-                    iArr5[i5] = iArr6[i5];
-                    iArr5 = this.mediaCount;
-                    if (iArr5[i5] >= 0) {
-                        iArr = this.mediaMergeCount;
-                        if (iArr[i5] >= 0) {
-                            iArr6[i5] = iArr5[i5] + iArr[i5];
+                    iArr = this.prevMediaCount;
+                    iArr2 = this.lastMediaCount;
+                    iArr[i3] = iArr2[i3];
+                    iArr = this.mediaCount;
+                    if (iArr[i3] >= 0) {
+                        iArr3 = this.mediaMergeCount;
+                        if (iArr3[i3] >= 0) {
+                            iArr2[i3] = iArr[i3] + iArr3[i3];
                             updateSharedMediaRows();
                         }
                     }
-                    iArr5 = this.mediaCount;
-                    if (iArr5[i5] >= 0) {
-                        this.lastMediaCount[i5] = iArr5[i5];
+                    iArr = this.mediaCount;
+                    if (iArr[i3] >= 0) {
+                        this.lastMediaCount[i3] = iArr[i3];
                     } else {
-                        iArr5 = this.mediaMergeCount;
-                        if (iArr5[i5] >= 0) {
-                            this.lastMediaCount[i5] = iArr5[i5];
+                        iArr = this.mediaMergeCount;
+                        if (iArr[i3] >= 0) {
+                            this.lastMediaCount[i3] = iArr[i3];
                         } else {
-                            this.lastMediaCount[i5] = 0;
+                            this.lastMediaCount[i3] = 0;
                         }
                     }
                     updateSharedMediaRows();
                 }
-            } else if (i == NotificationCenter.encryptedChatCreated) {
+            } else if (i3 == NotificationCenter.encryptedChatCreated) {
                 if (this.creatingChat) {
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$ProfileActivity$0-D0ofJ9OrdEukkEwUiB-hIwlCk(this, objArr));
+                    AndroidUtilities.runOnUIThread(new -$$Lambda$ProfileActivity$0-D0ofJ9OrdEukkEwUiB-hIwlCk(this, objArr2));
                 }
-            } else if (i == NotificationCenter.encryptedChatUpdated) {
-                EncryptedChat encryptedChat = (EncryptedChat) objArr[0];
+            } else if (i3 == NotificationCenter.encryptedChatUpdated) {
+                EncryptedChat encryptedChat = (EncryptedChat) objArr2[0];
                 EncryptedChat encryptedChat2 = this.currentEncryptedChat;
                 if (encryptedChat2 != null && encryptedChat.id == encryptedChat2.id) {
                     this.currentEncryptedChat = encryptedChat;
@@ -3641,7 +3643,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         listAdapter2.notifyDataSetChanged();
                     }
                 }
-            } else if (i == NotificationCenter.blockedUsersDidLoad) {
+            } else if (i3 == NotificationCenter.blockedUsersDidLoad) {
                 boolean z3;
                 z = this.userBlocked;
                 if (MessagesController.getInstance(this.currentAccount).blockedUsers.indexOfKey(this.user_id) >= 0) {
@@ -3653,22 +3655,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     updateRowsIds();
                     this.listAdapter.notifyDataSetChanged();
                 }
-            } else if (i == NotificationCenter.chatInfoDidLoad) {
-                ChatFull chatFull = (ChatFull) objArr[0];
+            } else if (i3 == NotificationCenter.chatInfoDidLoad) {
+                ChatFull chatFull = (ChatFull) objArr2[0];
                 if (chatFull.id == this.chat_id) {
-                    boolean booleanValue = ((Boolean) objArr[2]).booleanValue();
+                    boolean booleanValue = ((Boolean) objArr2[2]).booleanValue();
                     ChatFull chatFull2 = this.chatInfo;
                     if ((chatFull2 instanceof TL_channelFull) && chatFull.participants == null && chatFull2 != null) {
                         chatFull.participants = chatFull2.participants;
                     }
                     if (this.chatInfo == null && (chatFull instanceof TL_channelFull)) {
-                        i3 = 1;
+                        i4 = 1;
                     }
                     this.chatInfo = chatFull;
                     if (this.mergeDialogId == 0) {
-                        i = this.chatInfo.migrated_from_chat_id;
-                        if (i != 0) {
-                            this.mergeDialogId = (long) (-i);
+                        i3 = this.chatInfo.migrated_from_chat_id;
+                        if (i3 != 0) {
+                            this.mergeDialogId = (long) (-i3);
                             MediaDataController.getInstance(this.currentAccount).getMediaCount(this.mergeDialogId, 0, this.classGuid, true);
                         }
                     }
@@ -3684,14 +3686,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         this.currentChat = chat2;
                         createActionBarMenu();
                     }
-                    if (this.currentChat.megagroup && !(i3 == 0 && booleanValue)) {
+                    if (this.currentChat.megagroup && !(i4 == 0 && booleanValue)) {
                         getChannelParticipants(true);
                     }
                 }
-            } else if (i == NotificationCenter.closeChats) {
+            } else if (i3 == NotificationCenter.closeChats) {
                 removeSelfFromStack();
-            } else if (i == NotificationCenter.botInfoDidLoad) {
-                BotInfo botInfo = (BotInfo) objArr[0];
+            } else if (i3 == NotificationCenter.botInfoDidLoad) {
+                BotInfo botInfo = (BotInfo) objArr2[0];
                 if (botInfo.user_id == this.user_id) {
                     this.botInfo = botInfo;
                     updateRowsIds();
@@ -3700,9 +3702,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         listAdapter2.notifyDataSetChanged();
                     }
                 }
-            } else if (i == NotificationCenter.userInfoDidLoad) {
-                if (((Integer) objArr[0]).intValue() == this.user_id) {
-                    this.userInfo = (UserFull) objArr[1];
+            } else if (i3 == NotificationCenter.userInfoDidLoad) {
+                if (((Integer) objArr2[0]).intValue() == this.user_id) {
+                    this.userInfo = (UserFull) objArr2[1];
                     if (this.openAnimationInProgress || this.callItem != null) {
                         this.recreateMenuAfterAnimation = true;
                     } else {
@@ -3714,71 +3716,73 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         listAdapter2.notifyDataSetChanged();
                     }
                 }
-            } else if (i == NotificationCenter.didReceiveNewMessages) {
-                longValue = this.dialog_id;
-                if (longValue == 0) {
-                    i = this.user_id;
-                    if (i == 0) {
-                        i = -this.chat_id;
+            } else if (i3 == NotificationCenter.didReceiveNewMessages) {
+                if (!((Boolean) objArr2[2]).booleanValue()) {
+                    longValue = this.dialog_id;
+                    if (longValue == 0) {
+                        i3 = this.user_id;
+                        if (i3 == 0) {
+                            i3 = -this.chat_id;
+                        }
+                        longValue = (long) i3;
                     }
-                    longValue = (long) i;
-                }
-                if (longValue == ((Long) objArr[0]).longValue()) {
-                    z = ((int) longValue) == 0;
-                    ArrayList arrayList2 = (ArrayList) objArr[1];
-                    i6 = 0;
-                    while (i6 < arrayList2.size()) {
-                        MessageObject messageObject = (MessageObject) arrayList2.get(i6);
-                        if (this.currentEncryptedChat != null) {
-                            MessageAction messageAction = messageObject.messageOwner.action;
-                            if (messageAction instanceof TL_messageEncryptedAction) {
-                                DecryptedMessageAction decryptedMessageAction = messageAction.encryptedAction;
-                                if (decryptedMessageAction instanceof TL_decryptedMessageActionSetMessageTTL) {
-                                    TL_decryptedMessageActionSetMessageTTL tL_decryptedMessageActionSetMessageTTL = (TL_decryptedMessageActionSetMessageTTL) decryptedMessageAction;
-                                    ListAdapter listAdapter3 = this.listAdapter;
-                                    if (listAdapter3 != null) {
-                                        listAdapter3.notifyDataSetChanged();
+                    if (longValue == ((Long) objArr2[0]).longValue()) {
+                        z = ((int) longValue) == 0;
+                        ArrayList arrayList2 = (ArrayList) objArr2[1];
+                        i7 = 0;
+                        while (i7 < arrayList2.size()) {
+                            MessageObject messageObject = (MessageObject) arrayList2.get(i7);
+                            if (this.currentEncryptedChat != null) {
+                                MessageAction messageAction = messageObject.messageOwner.action;
+                                if (messageAction instanceof TL_messageEncryptedAction) {
+                                    DecryptedMessageAction decryptedMessageAction = messageAction.encryptedAction;
+                                    if (decryptedMessageAction instanceof TL_decryptedMessageActionSetMessageTTL) {
+                                        TL_decryptedMessageActionSetMessageTTL tL_decryptedMessageActionSetMessageTTL = (TL_decryptedMessageActionSetMessageTTL) decryptedMessageAction;
+                                        ListAdapter listAdapter3 = this.listAdapter;
+                                        if (listAdapter3 != null) {
+                                            listAdapter3.notifyDataSetChanged();
+                                        }
                                     }
                                 }
                             }
+                            int mediaType = MediaDataController.getMediaType(messageObject.messageOwner);
+                            if (mediaType != -1) {
+                                this.sharedMediaData[mediaType].addMessage(messageObject, 0, true, z);
+                                i7++;
+                            } else {
+                                return;
+                            }
                         }
-                        i7 = MediaDataController.getMediaType(messageObject.messageOwner);
-                        if (i7 != -1) {
-                            this.sharedMediaData[i7].addMessage(messageObject, 0, true, z);
-                            i6++;
-                        } else {
-                            return;
-                        }
+                        loadMediaCounts();
                     }
-                    loadMediaCounts();
                 }
-            } else if (i == NotificationCenter.messagesDeleted) {
-                i = ((Integer) objArr[1]).intValue();
+            } else if (i3 == NotificationCenter.messagesDeleted && !((Boolean) objArr2[2]).booleanValue()) {
+                i3 = ((Integer) objArr2[1]).intValue();
                 if (ChatObject.isChannel(this.currentChat)) {
-                    if ((i != 0 || this.mergeDialogId == 0) && i != this.currentChat.id) {
+                    if ((i3 != 0 || this.mergeDialogId == 0) && i3 != this.currentChat.id) {
                         return;
                     }
-                } else if (i != 0) {
+                } else if (i3 != 0) {
                     return;
                 }
-                ArrayList arrayList3 = (ArrayList) objArr[0];
-                i2 = arrayList3.size();
-                i6 = 0;
+                ArrayList arrayList3 = (ArrayList) objArr2[0];
+                i5 = arrayList3.size();
+                i7 = 0;
                 Object obj = null;
-                while (i6 < i2) {
+                while (i7 < i5) {
                     Object obj2 = obj;
-                    i5 = 0;
+                    int i8 = 0;
                     while (true) {
                         SharedMediaData[] sharedMediaDataArr = this.sharedMediaData;
-                        if (i5 >= sharedMediaDataArr.length) {
+                        if (i8 >= sharedMediaDataArr.length) {
                             break;
                         }
-                        if (sharedMediaDataArr[i5].deleteMessage(((Integer) arrayList3.get(i6)).intValue(), 0)) {
+                        if (sharedMediaDataArr[i8].deleteMessage(((Integer) arrayList3.get(i7)).intValue(), 0)) {
                             obj2 = 1;
                         }
-                        i5++;
+                        i8++;
                     }
-                    i6++;
+                    i7++;
                     obj = obj2;
                 }
                 if (obj != null) {
@@ -3838,21 +3842,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0135  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x011e  */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0135  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0107  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x011e  */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0135  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0107  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x011e  */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0135  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00d9  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0107  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x011e  */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0135  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0133  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0133  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0105  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0133  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0105  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0133  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0105  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0133  */
     private void updateSharedMediaRows() {
         /*
         r13 = this;
@@ -3868,233 +3872,232 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r4 = r13.audioRow;
         r5 = r13.voiceRow;
         r6 = r13.groupsInCommonRow;
-        r7 = r13.sharedSectionRow;
         r13.updateRowsIds();
         r7 = 3;
         r8 = 2;
         r9 = -1;
-        if (r0 != r9) goto L_0x004e;
-    L_0x001d:
+        if (r0 != r9) goto L_0x004c;
+    L_0x001b:
         r10 = r13.sharedHeaderRow;
-        if (r10 == r9) goto L_0x004e;
-    L_0x0021:
+        if (r10 == r9) goto L_0x004c;
+    L_0x001f:
         r0 = r13.photosRow;
-        if (r0 == r9) goto L_0x0026;
-    L_0x0025:
-        goto L_0x0027;
-    L_0x0026:
+        if (r0 == r9) goto L_0x0024;
+    L_0x0023:
+        goto L_0x0025;
+    L_0x0024:
         r7 = 2;
-    L_0x0027:
+    L_0x0025:
         r0 = r13.filesRow;
-        if (r0 == r9) goto L_0x002d;
+        if (r0 == r9) goto L_0x002b;
+    L_0x0029:
+        r7 = r7 + 1;
     L_0x002b:
-        r7 = r7 + 1;
-    L_0x002d:
         r0 = r13.linksRow;
-        if (r0 == r9) goto L_0x0033;
+        if (r0 == r9) goto L_0x0031;
+    L_0x002f:
+        r7 = r7 + 1;
     L_0x0031:
-        r7 = r7 + 1;
-    L_0x0033:
         r0 = r13.audioRow;
-        if (r0 == r9) goto L_0x0039;
+        if (r0 == r9) goto L_0x0037;
+    L_0x0035:
+        r7 = r7 + 1;
     L_0x0037:
-        r7 = r7 + 1;
-    L_0x0039:
         r0 = r13.voiceRow;
-        if (r0 == r9) goto L_0x003f;
+        if (r0 == r9) goto L_0x003d;
+    L_0x003b:
+        r7 = r7 + 1;
     L_0x003d:
-        r7 = r7 + 1;
-    L_0x003f:
         r0 = r13.groupsInCommonRow;
-        if (r0 == r9) goto L_0x0045;
-    L_0x0043:
+        if (r0 == r9) goto L_0x0043;
+    L_0x0041:
         r7 = r7 + 1;
-    L_0x0045:
+    L_0x0043:
         r0 = r13.listAdapter;
         r1 = r13.sharedHeaderRow;
         r0.notifyItemRangeInserted(r1, r7);
-        goto L_0x014a;
+        goto L_0x0148;
+    L_0x004c:
+        if (r0 == r9) goto L_0x0148;
     L_0x004e:
-        if (r0 == r9) goto L_0x014a;
-    L_0x0050:
         r0 = r13.sharedHeaderRow;
-        if (r0 == r9) goto L_0x014a;
+        if (r0 == r9) goto L_0x0148;
+    L_0x0052:
+        if (r1 == r9) goto L_0x0068;
     L_0x0054:
-        if (r1 == r9) goto L_0x006a;
-    L_0x0056:
         r0 = r13.photosRow;
-        if (r0 == r9) goto L_0x006a;
-    L_0x005a:
+        if (r0 == r9) goto L_0x0068;
+    L_0x0058:
         r10 = r13.prevMediaCount;
         r11 = 0;
         r10 = r10[r11];
         r12 = r13.lastMediaCount;
         r11 = r12[r11];
-        if (r10 == r11) goto L_0x006a;
-    L_0x0065:
+        if (r10 == r11) goto L_0x0068;
+    L_0x0063:
         r10 = r13.listAdapter;
         r10.notifyItemChanged(r0);
+    L_0x0068:
+        if (r2 == r9) goto L_0x007e;
     L_0x006a:
-        if (r2 == r9) goto L_0x0080;
-    L_0x006c:
         r0 = r13.filesRow;
-        if (r0 == r9) goto L_0x0080;
-    L_0x0070:
+        if (r0 == r9) goto L_0x007e;
+    L_0x006e:
         r10 = r13.prevMediaCount;
         r11 = 1;
         r10 = r10[r11];
         r12 = r13.lastMediaCount;
         r11 = r12[r11];
-        if (r10 == r11) goto L_0x0080;
-    L_0x007b:
+        if (r10 == r11) goto L_0x007e;
+    L_0x0079:
         r10 = r13.listAdapter;
         r10.notifyItemChanged(r0);
+    L_0x007e:
+        if (r3 == r9) goto L_0x0093;
     L_0x0080:
-        if (r3 == r9) goto L_0x0095;
-    L_0x0082:
         r0 = r13.linksRow;
-        if (r0 == r9) goto L_0x0095;
-    L_0x0086:
+        if (r0 == r9) goto L_0x0093;
+    L_0x0084:
         r10 = r13.prevMediaCount;
         r10 = r10[r7];
         r11 = r13.lastMediaCount;
         r7 = r11[r7];
-        if (r10 == r7) goto L_0x0095;
-    L_0x0090:
+        if (r10 == r7) goto L_0x0093;
+    L_0x008e:
         r7 = r13.listAdapter;
         r7.notifyItemChanged(r0);
+    L_0x0093:
+        if (r4 == r9) goto L_0x00a9;
     L_0x0095:
-        if (r4 == r9) goto L_0x00ab;
-    L_0x0097:
         r0 = r13.audioRow;
-        if (r0 == r9) goto L_0x00ab;
-    L_0x009b:
+        if (r0 == r9) goto L_0x00a9;
+    L_0x0099:
         r7 = r13.prevMediaCount;
         r10 = 4;
         r7 = r7[r10];
         r11 = r13.lastMediaCount;
         r10 = r11[r10];
-        if (r7 == r10) goto L_0x00ab;
-    L_0x00a6:
+        if (r7 == r10) goto L_0x00a9;
+    L_0x00a4:
         r7 = r13.listAdapter;
         r7.notifyItemChanged(r0);
+    L_0x00a9:
+        if (r5 == r9) goto L_0x00be;
     L_0x00ab:
-        if (r5 == r9) goto L_0x00c0;
-    L_0x00ad:
         r0 = r13.voiceRow;
-        if (r0 == r9) goto L_0x00c0;
-    L_0x00b1:
+        if (r0 == r9) goto L_0x00be;
+    L_0x00af:
         r7 = r13.prevMediaCount;
         r7 = r7[r8];
         r10 = r13.lastMediaCount;
         r8 = r10[r8];
-        if (r7 == r8) goto L_0x00c0;
-    L_0x00bb:
+        if (r7 == r8) goto L_0x00be;
+    L_0x00b9:
         r7 = r13.listAdapter;
         r7.notifyItemChanged(r0);
+    L_0x00be:
+        if (r1 != r9) goto L_0x00ca;
     L_0x00c0:
-        if (r1 != r9) goto L_0x00cc;
-    L_0x00c2:
         r0 = r13.photosRow;
-        if (r0 == r9) goto L_0x00cc;
-    L_0x00c6:
+        if (r0 == r9) goto L_0x00ca;
+    L_0x00c4:
         r1 = r13.listAdapter;
         r1.notifyItemInserted(r0);
-        goto L_0x00d7;
+        goto L_0x00d5;
+    L_0x00ca:
+        if (r1 == r9) goto L_0x00d5;
     L_0x00cc:
-        if (r1 == r9) goto L_0x00d7;
-    L_0x00ce:
         r0 = r13.photosRow;
-        if (r0 != r9) goto L_0x00d7;
-    L_0x00d2:
+        if (r0 != r9) goto L_0x00d5;
+    L_0x00d0:
         r0 = r13.listAdapter;
         r0.notifyItemRemoved(r1);
+    L_0x00d5:
+        if (r2 != r9) goto L_0x00e1;
     L_0x00d7:
-        if (r2 != r9) goto L_0x00e3;
-    L_0x00d9:
         r0 = r13.filesRow;
-        if (r0 == r9) goto L_0x00e3;
-    L_0x00dd:
+        if (r0 == r9) goto L_0x00e1;
+    L_0x00db:
         r1 = r13.listAdapter;
         r1.notifyItemInserted(r0);
-        goto L_0x00ee;
+        goto L_0x00ec;
+    L_0x00e1:
+        if (r2 == r9) goto L_0x00ec;
     L_0x00e3:
-        if (r2 == r9) goto L_0x00ee;
-    L_0x00e5:
         r0 = r13.filesRow;
-        if (r0 != r9) goto L_0x00ee;
-    L_0x00e9:
+        if (r0 != r9) goto L_0x00ec;
+    L_0x00e7:
         r0 = r13.listAdapter;
         r0.notifyItemRemoved(r2);
+    L_0x00ec:
+        if (r3 != r9) goto L_0x00f8;
     L_0x00ee:
-        if (r3 != r9) goto L_0x00fa;
-    L_0x00f0:
         r0 = r13.linksRow;
-        if (r0 == r9) goto L_0x00fa;
-    L_0x00f4:
+        if (r0 == r9) goto L_0x00f8;
+    L_0x00f2:
         r1 = r13.listAdapter;
         r1.notifyItemInserted(r0);
-        goto L_0x0105;
+        goto L_0x0103;
+    L_0x00f8:
+        if (r3 == r9) goto L_0x0103;
     L_0x00fa:
-        if (r3 == r9) goto L_0x0105;
-    L_0x00fc:
         r0 = r13.linksRow;
-        if (r0 != r9) goto L_0x0105;
-    L_0x0100:
+        if (r0 != r9) goto L_0x0103;
+    L_0x00fe:
         r0 = r13.listAdapter;
         r0.notifyItemRemoved(r3);
+    L_0x0103:
+        if (r4 != r9) goto L_0x010f;
     L_0x0105:
-        if (r4 != r9) goto L_0x0111;
-    L_0x0107:
         r0 = r13.audioRow;
-        if (r0 == r9) goto L_0x0111;
-    L_0x010b:
+        if (r0 == r9) goto L_0x010f;
+    L_0x0109:
         r1 = r13.listAdapter;
         r1.notifyItemInserted(r0);
-        goto L_0x011c;
+        goto L_0x011a;
+    L_0x010f:
+        if (r4 == r9) goto L_0x011a;
     L_0x0111:
-        if (r4 == r9) goto L_0x011c;
-    L_0x0113:
         r0 = r13.audioRow;
-        if (r0 != r9) goto L_0x011c;
-    L_0x0117:
+        if (r0 != r9) goto L_0x011a;
+    L_0x0115:
         r0 = r13.listAdapter;
         r0.notifyItemRemoved(r4);
+    L_0x011a:
+        if (r5 != r9) goto L_0x0126;
     L_0x011c:
-        if (r5 != r9) goto L_0x0128;
-    L_0x011e:
         r0 = r13.voiceRow;
-        if (r0 == r9) goto L_0x0128;
-    L_0x0122:
+        if (r0 == r9) goto L_0x0126;
+    L_0x0120:
         r1 = r13.listAdapter;
         r1.notifyItemInserted(r0);
-        goto L_0x0133;
+        goto L_0x0131;
+    L_0x0126:
+        if (r5 == r9) goto L_0x0131;
     L_0x0128:
-        if (r5 == r9) goto L_0x0133;
-    L_0x012a:
         r0 = r13.voiceRow;
-        if (r0 != r9) goto L_0x0133;
-    L_0x012e:
+        if (r0 != r9) goto L_0x0131;
+    L_0x012c:
         r0 = r13.listAdapter;
         r0.notifyItemRemoved(r5);
+    L_0x0131:
+        if (r6 != r9) goto L_0x013d;
     L_0x0133:
-        if (r6 != r9) goto L_0x013f;
-    L_0x0135:
         r0 = r13.groupsInCommonRow;
-        if (r0 == r9) goto L_0x013f;
-    L_0x0139:
+        if (r0 == r9) goto L_0x013d;
+    L_0x0137:
         r1 = r13.listAdapter;
         r1.notifyItemInserted(r0);
-        goto L_0x014a;
+        goto L_0x0148;
+    L_0x013d:
+        if (r6 == r9) goto L_0x0148;
     L_0x013f:
-        if (r6 == r9) goto L_0x014a;
-    L_0x0141:
         r0 = r13.groupsInCommonRow;
-        if (r0 != r9) goto L_0x014a;
-    L_0x0145:
+        if (r0 != r9) goto L_0x0148;
+    L_0x0143:
         r0 = r13.listAdapter;
         r0.notifyItemRemoved(r6);
-    L_0x014a:
+    L_0x0148:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateSharedMediaRows():void");
@@ -5308,14 +5311,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r4 = 1;
         if (r1 != r2) goto L_0x0024;
     L_0x001a:
-        r1 = NUM; // 0x7f0d0b0c float:1.874785E38 double:1.053131175E-314;
+        r1 = NUM; // 0x7f0d0b62 float:1.8748025E38 double:1.0531312173E-314;
         r5 = "WaitingForNetwork";
         r1 = org.telegram.messenger.LocaleController.getString(r5, r1);
         goto L_0x004b;
     L_0x0024:
         if (r1 != r4) goto L_0x0030;
     L_0x0026:
-        r1 = NUM; // 0x7f0d02f4 float:1.8743648E38 double:1.053130151E-314;
+        r1 = NUM; // 0x7f0d02f6 float:1.8743652E38 double:1.053130152E-314;
         r5 = "Connecting";
         r1 = org.telegram.messenger.LocaleController.getString(r5, r1);
         goto L_0x004b;
@@ -5323,7 +5326,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r5 = 5;
         if (r1 != r5) goto L_0x003d;
     L_0x0033:
-        r1 = NUM; // 0x7f0d0a79 float:1.8747552E38 double:1.053131102E-314;
+        r1 = NUM; // 0x7f0d0acd float:1.8747723E38 double:1.0531311436E-314;
         r5 = "Updating";
         r1 = org.telegram.messenger.LocaleController.getString(r5, r1);
         goto L_0x004b;
@@ -5331,7 +5334,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r5 = 4;
         if (r1 != r5) goto L_0x004a;
     L_0x0040:
-        r1 = NUM; // 0x7f0d02f6 float:1.8743652E38 double:1.053130152E-314;
+        r1 = NUM; // 0x7f0d02f8 float:1.8743656E38 double:1.053130153E-314;
         r5 = "ConnectingToProxy";
         r1 = org.telegram.messenger.LocaleController.getString(r5, r1);
         goto L_0x004b;
@@ -5377,10 +5380,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r10 = r10.getClientUserId();
         if (r9 != r10) goto L_0x00b5;
     L_0x009d:
-        r6 = NUM; // 0x7f0d0297 float:1.874346E38 double:1.053130105E-314;
+        r6 = NUM; // 0x7f0d0298 float:1.8743461E38 double:1.0531301056E-314;
         r9 = "ChatYourSelf";
         r6 = org.telegram.messenger.LocaleController.getString(r9, r6);
-        r9 = NUM; // 0x7f0d029c float:1.874347E38 double:1.0531301076E-314;
+        r9 = NUM; // 0x7f0d029d float:1.8743472E38 double:1.053130108E-314;
         r10 = "ChatYourSelfName";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r19 = r9;
@@ -5403,7 +5406,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r9 = org.telegram.messenger.MessagesController.isSupportUser(r5);
         if (r9 == 0) goto L_0x00d7;
     L_0x00cd:
-        r9 = NUM; // 0x7f0d0a03 float:1.8747313E38 double:1.053131044E-314;
+        r9 = NUM; // 0x7f0d0a2e float:1.87474E38 double:1.053131065E-314;
         r10 = "SupportStatus";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         goto L_0x011c;
@@ -5442,7 +5445,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r11.setTextColor(r10);
         goto L_0x011c;
     L_0x0113:
-        r9 = NUM; // 0x7f0d0979 float:1.8747033E38 double:1.0531309757E-314;
+        r9 = NUM; // 0x7f0d099b float:1.8747102E38 double:1.0531309925E-314;
         r10 = "ServiceNotifications";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
     L_0x011c:
@@ -5691,7 +5694,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r3 = r10.has_geo;
         if (r3 == 0) goto L_0x02de;
     L_0x02d1:
-        r3 = NUM; // 0x7f0d05d2 float:1.8745137E38 double:1.0531305137E-314;
+        r3 = NUM; // 0x7f0d05d7 float:1.8745147E38 double:1.053130516E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r3 = r5.toLowerCase();
         goto L_0x038b;
@@ -5700,12 +5703,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r3 = android.text.TextUtils.isEmpty(r3);
         if (r3 != 0) goto L_0x02f3;
     L_0x02e6:
-        r3 = NUM; // 0x7f0d05d6 float:1.8745145E38 double:1.0531305157E-314;
+        r3 = NUM; // 0x7f0d05db float:1.8745155E38 double:1.053130518E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r8, r3);
         r3 = r3.toLowerCase();
         goto L_0x038b;
     L_0x02f3:
-        r3 = NUM; // 0x7f0d05d3 float:1.8745139E38 double:1.053130514E-314;
+        r3 = NUM; // 0x7f0d05d8 float:1.874515E38 double:1.0531305167E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r11, r3);
         r3 = r5.toLowerCase();
         goto L_0x038b;
@@ -5735,7 +5738,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r3 = r3.megagroup;
         if (r3 == 0) goto L_0x033b;
     L_0x032d:
-        r3 = NUM; // 0x7f0d058b float:1.8744993E38 double:1.0531304786E-314;
+        r3 = NUM; // 0x7f0d0590 float:1.8745003E38 double:1.053130481E-314;
         r5 = "Loading";
         r3 = org.telegram.messenger.LocaleController.getString(r5, r3);
         r3 = r3.toLowerCase();
@@ -5946,28 +5949,28 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = r10.has_geo;
         if (r2 == 0) goto L_0x04a0;
     L_0x0493:
-        r6 = NUM; // 0x7f0d05d2 float:1.8745137E38 double:1.0531305137E-314;
+        r6 = NUM; // 0x7f0d05d7 float:1.8745147E38 double:1.053130516E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r13, r6);
         r7 = r2.toLowerCase();
         goto L_0x0528;
     L_0x04a0:
-        r6 = NUM; // 0x7f0d05d2 float:1.8745137E38 double:1.0531305137E-314;
+        r6 = NUM; // 0x7f0d05d7 float:1.8745147E38 double:1.053130516E-314;
         r2 = r10.username;
         r2 = android.text.TextUtils.isEmpty(r2);
         if (r2 != 0) goto L_0x04b7;
     L_0x04ab:
-        r2 = NUM; // 0x7f0d05d6 float:1.8745145E38 double:1.0531305157E-314;
+        r2 = NUM; // 0x7f0d05db float:1.8745155E38 double:1.053130518E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r8, r2);
         r7 = r2.toLowerCase();
         goto L_0x0528;
     L_0x04b7:
-        r12 = NUM; // 0x7f0d05d3 float:1.8745139E38 double:1.053130514E-314;
+        r12 = NUM; // 0x7f0d05d8 float:1.874515E38 double:1.0531305167E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r11, r12);
         r7 = r2.toLowerCase();
         goto L_0x0528;
     L_0x04c3:
-        r6 = NUM; // 0x7f0d05d2 float:1.8745137E38 double:1.0531305137E-314;
-        r12 = NUM; // 0x7f0d05d3 float:1.8745139E38 double:1.053130514E-314;
+        r6 = NUM; // 0x7f0d05d7 float:1.8745147E38 double:1.053130516E-314;
+        r12 = NUM; // 0x7f0d05d8 float:1.874515E38 double:1.0531305167E-314;
         r5 = r0.onlineTextView;
         r5 = r5[r3];
         r17 = 0;
@@ -6081,10 +6084,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = org.telegram.messenger.UserConfig.getInstance(r2);
         r2 = r2.getClientUserId();
         r3 = r0.user_id;
-        r6 = NUM; // 0x7f0d0990 float:1.874708E38 double:1.053130987E-314;
+        r6 = NUM; // 0x7f0d09bb float:1.8747167E38 double:1.0531310083E-314;
         r7 = "ShareContact";
         r8 = 3;
-        r9 = NUM; // 0x7var_a4 float:1.794543E38 double:1.0529357105E-314;
+        r9 = NUM; // 0x7var_a8 float:1.7945438E38 double:1.0529357125E-314;
         if (r2 == r3) goto L_0x015f;
     L_0x002e:
         r2 = r0.currentAccount;
@@ -6108,9 +6111,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r0.callItem = r3;
     L_0x0054:
         r3 = r0.isBot;
-        r10 = NUM; // 0x7f0d0a5a float:1.874749E38 double:1.053131087E-314;
+        r10 = NUM; // 0x7f0d0aae float:1.874766E38 double:1.0531311283E-314;
         r11 = "Unblock";
-        r12 = NUM; // 0x7var_c float:1.7945316E38 double:1.052935683E-314;
+        r12 = NUM; // 0x7var_f float:1.7945322E38 double:1.0529356843E-314;
         r13 = 2;
         if (r3 != 0) goto L_0x00c2;
     L_0x0061:
@@ -6145,14 +6148,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     L_0x009d:
         r3.addSubItem(r13, r12, r2);
         r2 = 4;
-        r6 = NUM; // 0x7var_ float:1.7945339E38 double:1.0529356883E-314;
-        r7 = NUM; // 0x7f0d03c1 float:1.8744064E38 double:1.0531302523E-314;
+        r6 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
+        r7 = NUM; // 0x7f0d03c4 float:1.874407E38 double:1.053130254E-314;
         r8 = "EditContact";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.addSubItem(r2, r6, r7);
         r2 = 5;
-        r6 = NUM; // 0x7var_ float:1.7945334E38 double:1.0529356873E-314;
-        r7 = NUM; // 0x7f0d035c float:1.874386E38 double:1.0531302024E-314;
+        r6 = NUM; // 0x7var_ float:1.794534E38 double:1.052935689E-314;
+        r7 = NUM; // 0x7f0d035f float:1.8743865E38 double:1.053130204E-314;
         r8 = "DeleteContact";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.addSubItem(r2, r6, r7);
@@ -6176,7 +6179,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if (r14 != 0) goto L_0x00f2;
     L_0x00e1:
         r14 = 9;
-        r15 = NUM; // 0x7var_ float:1.794531E38 double:1.0529356814E-314;
+        r15 = NUM; // 0x7var_c float:1.7945316E38 double:1.052935683E-314;
         r4 = NUM; // 0x7f0d01cf float:1.8743054E38 double:1.0531300063E-314;
         r12 = "BotInvite";
         r4 = org.telegram.messenger.LocaleController.getString(r12, r4);
@@ -6189,7 +6192,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         goto L_0x010f;
     L_0x00ff:
         r4 = 1;
-        r12 = NUM; // 0x7var_a float:1.7945312E38 double:1.052935682E-314;
+        r12 = NUM; // 0x7var_d float:1.7945318E38 double:1.0529356834E-314;
         r14 = NUM; // 0x7f0d00a7 float:1.8742453E38 double:1.05312986E-314;
         r15 = "AddContact";
         r14 = org.telegram.messenger.LocaleController.getString(r15, r14);
@@ -6208,10 +6211,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = r0.userBlocked;
         if (r2 != 0) goto L_0x012a;
     L_0x0126:
-        r12 = NUM; // 0x7var_c float:1.7945316E38 double:1.052935683E-314;
+        r12 = NUM; // 0x7var_f float:1.7945322E38 double:1.0529356843E-314;
         goto L_0x012d;
     L_0x012a:
-        r12 = NUM; // 0x7var_b float:1.7945412E38 double:1.052935706E-314;
+        r12 = NUM; // 0x7var_e float:1.7945418E38 double:1.0529357076E-314;
     L_0x012d:
         r2 = r0.userBlocked;
         if (r2 != 0) goto L_0x0137;
@@ -6238,7 +6241,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     L_0x0154:
         r2 = org.telegram.messenger.LocaleController.getString(r11, r10);
     L_0x0158:
-        r4 = NUM; // 0x7var_c float:1.7945316E38 double:1.052935683E-314;
+        r4 = NUM; // 0x7var_f float:1.7945322E38 double:1.0529356843E-314;
         r3.addSubItem(r13, r4, r2);
         goto L_0x016d;
     L_0x015f:
@@ -6261,9 +6264,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r4 = java.lang.Integer.valueOf(r4);
         r3 = r3.getChat(r4);
         r4 = org.telegram.messenger.ChatObject.isChannel(r3);
-        r6 = NUM; // 0x7f0d0930 float:1.8746885E38 double:1.0531309396E-314;
+        r6 = NUM; // 0x7f0d094f float:1.8746948E38 double:1.053130955E-314;
         r7 = "SearchMembers";
-        r8 = NUM; // 0x7var_a3 float:1.7945428E38 double:1.05293571E-314;
+        r8 = NUM; // 0x7var_a7 float:1.7945436E38 double:1.052935712E-314;
         r9 = 17;
         if (r4 == 0) goto L_0x0207;
     L_0x0196:
@@ -6293,8 +6296,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = NUM; // 0x7var_ac float:1.7944927E38 double:1.052935588E-314;
         r4 = r1.addItem(r5, r2);
         r2 = 19;
-        r10 = NUM; // 0x7var_a6 float:1.7945434E38 double:1.0529357115E-314;
-        r11 = NUM; // 0x7f0d09d8 float:1.8747226E38 double:1.0531310226E-314;
+        r10 = NUM; // 0x7var_aa float:1.7945442E38 double:1.0529357135E-314;
+        r11 = NUM; // 0x7f0d0a03 float:1.8747313E38 double:1.053131044E-314;
         r12 = "Statistics";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r4.addSubItem(r2, r10, r11);
@@ -6320,8 +6323,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if (r3 != 0) goto L_0x0238;
     L_0x01f6:
         r3 = 7;
-        r4 = NUM; // 0x7var_ float:1.7945367E38 double:1.052935695E-314;
-        r6 = NUM; // 0x7f0d0575 float:1.8744948E38 double:1.053130468E-314;
+        r4 = NUM; // 0x7var_ float:1.7945373E38 double:1.0529356967E-314;
+        r6 = NUM; // 0x7f0d057a float:1.8744958E38 double:1.05313047E-314;
         r7 = "LeaveMegaMenu";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r2.addSubItem(r3, r4, r6);
@@ -6340,8 +6343,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r3.addSubItem(r9, r8, r2);
         r2 = 7;
-        r4 = NUM; // 0x7var_ float:1.7945367E38 double:1.052935695E-314;
-        r6 = NUM; // 0x7f0d0355 float:1.8743845E38 double:1.053130199E-314;
+        r4 = NUM; // 0x7var_ float:1.7945373E38 double:1.0529356967E-314;
+        r6 = NUM; // 0x7f0d0358 float:1.874385E38 double:1.0531302005E-314;
         r7 = "DeleteAndExit";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r3.addSubItem(r2, r4, r6);
@@ -6353,7 +6356,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = r1.addItem(r5, r3);
     L_0x0241:
         r1 = 14;
-        r3 = NUM; // 0x7var_f float:1.7945355E38 double:1.0529356923E-314;
+        r3 = NUM; // 0x7var_ float:1.794536E38 double:1.0529356937E-314;
         r4 = NUM; // 0x7f0d00ba float:1.8742492E38 double:1.0531298694E-314;
         r5 = "AddShortcut";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
@@ -6365,7 +6368,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r1 = r0.editItem;
         if (r1 == 0) goto L_0x026e;
     L_0x0262:
-        r2 = NUM; // 0x7f0d039d float:1.874399E38 double:1.0531302346E-314;
+        r2 = NUM; // 0x7f0d03a0 float:1.8743997E38 double:1.053130236E-314;
         r3 = "Edit";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setContentDescription(r2);
@@ -6408,7 +6411,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
             presentFragment(new ChatActivity(bundle), true);
             removeSelfFromStack();
-            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id)), longValue, null, null, null);
+            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id)), longValue, null, null, null, true, 0);
         }
     }
 
@@ -6427,101 +6430,93 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
     public ThemeDescription[] getThemeDescriptions() {
         -$$Lambda$ProfileActivity$UnQ2igF3-HzP0AhTDZ-WibwhM_I -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i = new -$$Lambda$ProfileActivity$UnQ2igF3-HzP0AhTDZ-WibwhM_I(this);
-        r11 = new ThemeDescription[65];
-        r11[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon");
-        r11[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "avatar_backgroundActionBarBlue");
-        r11[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "avatar_backgroundActionBarBlue");
-        r11[7] = new ThemeDescription(this.topView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "avatar_backgroundActionBarBlue");
-        r11[8] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "avatar_actionBarSelectorBlue");
-        r11[9] = new ThemeDescription(this.nameTextView[1], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "profile_title");
-        r11[10] = new ThemeDescription(this.nameTextView[1], ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "avatar_backgroundActionBarBlue");
-        r11[11] = new ThemeDescription(this.onlineTextView[1], ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "profile_status");
-        r11[12] = new ThemeDescription(this.onlineTextView[1], ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "avatar_subtitleInProfileBlue");
-        r11[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        r11[14] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        r11[15] = new ThemeDescription(this.avatarImage, 0, null, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
-        r11[16] = new ThemeDescription(this.avatarImage, 0, null, null, new Drawable[]{this.avatarDrawable}, null, "avatar_backgroundInProfileBlue");
-        r11[17] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "profile_actionIcon");
-        r11[18] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "profile_actionBackground");
-        r11[19] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "profile_actionPressedBackground");
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[65];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, 0, null, null, null, null, "windowBackgroundWhite");
+        themeDescriptionArr[1] = new ThemeDescription(this.listView, 0, null, null, null, null, "windowBackgroundGray");
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground");
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem");
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon");
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "avatar_backgroundActionBarBlue");
+        themeDescriptionArr[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "avatar_backgroundActionBarBlue");
+        themeDescriptionArr[7] = new ThemeDescription(this.topView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "avatar_backgroundActionBarBlue");
+        themeDescriptionArr[8] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "avatar_actionBarSelectorBlue");
+        themeDescriptionArr[9] = new ThemeDescription(this.nameTextView[1], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "profile_title");
+        themeDescriptionArr[10] = new ThemeDescription(this.nameTextView[1], ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "avatar_backgroundActionBarBlue");
+        themeDescriptionArr[11] = new ThemeDescription(this.onlineTextView[1], ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "profile_status");
+        themeDescriptionArr[12] = new ThemeDescription(this.onlineTextView[1], ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "avatar_subtitleInProfileBlue");
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        themeDescriptionArr[15] = new ThemeDescription(this.avatarImage, 0, null, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[16] = new ThemeDescription(this.avatarImage, 0, null, null, new Drawable[]{this.avatarDrawable}, null, "avatar_backgroundInProfileBlue");
+        themeDescriptionArr[17] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "profile_actionIcon");
+        themeDescriptionArr[18] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "profile_actionBackground");
+        themeDescriptionArr[19] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "profile_actionPressedBackground");
         View view = this.listView;
         int i = ThemeDescription.FLAG_CHECKTAG;
         Class[] clsArr = new Class[]{TextCell.class};
         String[] strArr = new String[1];
         strArr[0] = "textView";
-        r11[20] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlackText");
-        view = this.listView;
-        View view2 = view;
-        r11[21] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGreenText2");
-        view = this.listView;
-        view2 = view;
-        r11[22] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteRedText5");
-        view = this.listView;
-        view2 = view;
-        r11[23] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueText2");
-        view = this.listView;
-        view2 = view;
-        r11[24] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueButton");
+        themeDescriptionArr[20] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGreenText2");
+        themeDescriptionArr[22] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteRedText5");
+        themeDescriptionArr[23] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueText2");
+        themeDescriptionArr[24] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueButton");
         view = this.listView;
         clsArr = new Class[]{TextCell.class};
         strArr = new String[1];
         strArr[0] = "valueTextView";
-        r11[25] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteValueText");
+        themeDescriptionArr[25] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteValueText");
         view = this.listView;
         i = ThemeDescription.FLAG_CHECKTAG;
         clsArr = new Class[]{TextCell.class};
         strArr = new String[1];
         strArr[0] = "imageView";
-        r11[26] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayIcon");
-        view = this.listView;
-        view2 = view;
-        r11[27] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteBlueIcon");
-        r11[28] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r11[29] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
-        r11[30] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
-        r11[31] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r11[32] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
+        themeDescriptionArr[26] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayIcon");
+        themeDescriptionArr[27] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteBlueIcon");
+        themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[29] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
+        themeDescriptionArr[30] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
+        themeDescriptionArr[31] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[32] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
         view = this.listView;
         clsArr = new Class[]{NotificationsCheckCell.class};
         strArr = new String[1];
         strArr[0] = "checkBox";
-        r11[33] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "switchTrack");
-        r11[34] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
-        view = this.listView;
-        view2 = view;
-        r11[35] = new ThemeDescription(view2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{UserCell.class}, new String[]{"adminTextView"}, null, null, null, "profile_creatorIcon");
-        r11[36] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteGrayIcon");
-        r11[37] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[33] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "switchTrack");
+        themeDescriptionArr[34] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
+        themeDescriptionArr[35] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{UserCell.class}, new String[]{"adminTextView"}, null, null, null, "profile_creatorIcon");
+        themeDescriptionArr[36] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteGrayIcon");
+        themeDescriptionArr[37] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
         ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i;
-        r11[38] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
-        r11[39] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
-        r11[40] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[38] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
+        themeDescriptionArr[39] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
+        themeDescriptionArr[40] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$ProfileActivity$UnQ2igF3-HzP0AhTDZ-WibwhM_I -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2 = -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i;
-        r11[41] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundRed");
-        r11[42] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundOrange");
-        r11[43] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundViolet");
-        r11[44] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundGreen");
-        r11[45] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundCyan");
-        r11[46] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundBlue");
-        r11[47] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundPink");
-        r11[48] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "undo_background");
-        r11[49] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, null, null, null, "undo_cancelColor");
-        r11[50] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, null, null, null, "undo_cancelColor");
-        r11[51] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"infoTextView"}, null, null, null, "undo_infoColor");
-        r11[52] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"textPaint"}, null, null, null, "undo_infoColor");
-        r11[53] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"progressPaint"}, null, null, null, "undo_infoColor");
-        r11[54] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{UndoView.class}, new String[]{"leftImageView"}, null, null, null, "undo_infoColor");
-        r11[55] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AboutLinkCell.class}, Theme.profile_aboutTextPaint, null, null, "windowBackgroundWhiteBlackText");
-        r11[56] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{AboutLinkCell.class}, Theme.profile_aboutTextPaint, null, null, "windowBackgroundWhiteLinkText");
-        r11[57] = new ThemeDescription(this.listView, 0, new Class[]{AboutLinkCell.class}, Theme.linkSelectionPaint, null, null, "windowBackgroundWhiteLinkSelection");
-        r11[58] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        r11[59] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGray");
-        r11[60] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        r11[61] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGray");
-        r11[62] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        r11[63] = new ThemeDescription(this.nameTextView[1], 0, null, null, new Drawable[]{Theme.profile_verifiedCheckDrawable}, null, "profile_verifiedCheck");
-        r11[64] = new ThemeDescription(this.nameTextView[1], 0, null, null, new Drawable[]{Theme.profile_verifiedDrawable}, null, "profile_verifiedBackground");
-        return r11;
+        themeDescriptionArr[41] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundRed");
+        themeDescriptionArr[42] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundOrange");
+        themeDescriptionArr[43] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundViolet");
+        themeDescriptionArr[44] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundGreen");
+        themeDescriptionArr[45] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundCyan");
+        themeDescriptionArr[46] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundBlue");
+        themeDescriptionArr[47] = new ThemeDescription(null, 0, null, null, null, -__lambda_profileactivity_unq2igf3-hzp0ahtdz-wibwhm_i2, "avatar_backgroundPink");
+        themeDescriptionArr[48] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "undo_background");
+        themeDescriptionArr[49] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, null, null, null, "undo_cancelColor");
+        themeDescriptionArr[50] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, null, null, null, "undo_cancelColor");
+        themeDescriptionArr[51] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"infoTextView"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[52] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"textPaint"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[53] = new ThemeDescription(this.undoView, 0, new Class[]{UndoView.class}, new String[]{"progressPaint"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[54] = new ThemeDescription(this.undoView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{UndoView.class}, new String[]{"leftImageView"}, null, null, null, "undo_infoColor");
+        themeDescriptionArr[55] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AboutLinkCell.class}, Theme.profile_aboutTextPaint, null, null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[56] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{AboutLinkCell.class}, Theme.profile_aboutTextPaint, null, null, "windowBackgroundWhiteLinkText");
+        themeDescriptionArr[57] = new ThemeDescription(this.listView, 0, new Class[]{AboutLinkCell.class}, Theme.linkSelectionPaint, null, null, "windowBackgroundWhiteLinkSelection");
+        themeDescriptionArr[58] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        themeDescriptionArr[59] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGray");
+        themeDescriptionArr[60] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        themeDescriptionArr[61] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGray");
+        themeDescriptionArr[62] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        themeDescriptionArr[63] = new ThemeDescription(this.nameTextView[1], 0, null, null, new Drawable[]{Theme.profile_verifiedCheckDrawable}, null, "profile_verifiedCheck");
+        themeDescriptionArr[64] = new ThemeDescription(this.nameTextView[1], 0, null, null, new Drawable[]{Theme.profile_verifiedDrawable}, null, "profile_verifiedBackground");
+        return themeDescriptionArr;
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$21$ProfileActivity() {

@@ -436,7 +436,7 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.messagesDeleted) {
-            if (this.currentMessageObject != null && ((Integer) objArr[1]).intValue() == 0 && ((ArrayList) objArr[0]).contains(Integer.valueOf(this.currentMessageObject.getId()))) {
+            if (!((Boolean) objArr[2]).booleanValue() && this.currentMessageObject != null && ((Integer) objArr[1]).intValue() == 0 && ((ArrayList) objArr[0]).contains(Integer.valueOf(this.currentMessageObject.getId()))) {
                 if (!this.isVideo || this.videoWatchedOneTime) {
                     closePhoto(true, true);
                 } else {

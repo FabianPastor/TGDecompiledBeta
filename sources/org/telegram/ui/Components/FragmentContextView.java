@@ -182,7 +182,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     public /* synthetic */ void lambda$new$4$FragmentContextView(View view) {
         int i = this.currentStyle;
         long j = 0;
-        BaseFragment baseFragment;
+        int i2;
         if (i == 0) {
             MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
             if (this.fragment != null && playingMessageObject != null) {
@@ -190,7 +190,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.fragment.showDialog(new AudioPlayerAlert(getContext()));
                     return;
                 }
-                baseFragment = this.fragment;
+                BaseFragment baseFragment = this.fragment;
                 if (baseFragment instanceof ChatActivity) {
                     j = ((ChatActivity) baseFragment).getDialogId();
                 }
@@ -200,19 +200,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
                 j = playingMessageObject.getDialogId();
                 Bundle bundle = new Bundle();
-                int i2 = (int) j;
+                i2 = (int) j;
                 int i3 = (int) (j >> 32);
-                if (i2 != 0) {
-                    String str = "chat_id";
-                    if (i3 == 1) {
-                        bundle.putInt(str, i2);
-                    } else if (i2 > 0) {
-                        bundle.putInt("user_id", i2);
-                    } else if (i2 < 0) {
-                        bundle.putInt(str, -i2);
-                    }
-                } else {
+                if (i2 == 0) {
                     bundle.putInt("enc_id", i3);
+                } else if (i2 > 0) {
+                    bundle.putInt("user_id", i2);
+                } else if (i2 < 0) {
+                    bundle.putInt("chat_id", -i2);
                 }
                 bundle.putInt("message_id", playingMessageObject.getId());
                 this.fragment.presentFragment(new ChatActivity(bundle), this.fragment instanceof ChatActivity);
@@ -224,15 +219,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         } else if (i == 2) {
             long dialogId;
             i = UserConfig.selectedAccount;
-            baseFragment = this.fragment;
-            if (baseFragment instanceof ChatActivity) {
-                dialogId = ((ChatActivity) baseFragment).getDialogId();
+            BaseFragment baseFragment2 = this.fragment;
+            if (baseFragment2 instanceof ChatActivity) {
+                dialogId = ((ChatActivity) baseFragment2).getDialogId();
                 i = this.fragment.getCurrentAccount();
             } else {
                 if (LocationController.getLocationsCount() == 1) {
-                    for (int i4 = 0; i4 < 3; i4++) {
-                        if (!LocationController.getInstance(i4).sharingLocationsUI.isEmpty()) {
-                            SharingLocationInfo sharingLocationInfo = (SharingLocationInfo) LocationController.getInstance(i4).sharingLocationsUI.get(0);
+                    for (i2 = 0; i2 < 3; i2++) {
+                        if (!LocationController.getInstance(i2).sharingLocationsUI.isEmpty()) {
+                            SharingLocationInfo sharingLocationInfo = (SharingLocationInfo) LocationController.getInstance(i2).sharingLocationsUI.get(0);
                             dialogId = sharingLocationInfo.did;
                             i = sharingLocationInfo.messageObject.currentAccount;
                             break;
@@ -267,7 +262,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             launchActivity.switchToAccount(sharingLocationInfo.messageObject.currentAccount, true);
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
-            locationActivity.setDelegate(new -$$Lambda$FragmentContextView$qSdNXrOdRWHj2Hn2uLFHHQL36iI(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
+            locationActivity.setDelegate(new -$$Lambda$FragmentContextView$z_fnb_TazpUpwkTqfofStIvH9G8(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
             launchActivity.lambda$runLinkRequest$27$LaunchActivity(locationActivity);
         }
     }
@@ -626,7 +621,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             if (this.lastLocationSharingCount != i) {
                 String str;
-                String str2;
                 this.lastLocationSharingCount = i;
                 String string = LocaleController.getString("AttachLiveLocation", NUM);
                 if (i == 0) {
@@ -634,7 +628,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 } else {
                     i--;
                     boolean isSharingLocation = LocationController.getInstance(currentAccount).isSharingLocation(dialogId);
-                    str2 = "AndOther";
+                    String str2 = "AndOther";
                     String str3 = "%1$s - %2$s %3$s";
                     String str4 = "%1$s - %2$s";
                     if (isSharingLocation) {
@@ -655,8 +649,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         str = String.format(str4, new Object[]{string, UserObject.getFirstName(user)});
                     }
                 }
-                str2 = this.lastString;
-                if (str2 == null || !str.equals(str2)) {
+                if (!str.equals(this.lastString)) {
                     this.lastString = str;
                     int indexOf = str.indexOf(string);
                     SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);

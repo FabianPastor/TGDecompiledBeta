@@ -14,10 +14,12 @@ public class NotificationsService extends Service {
     }
 
     public void onCreate() {
+        super.onCreate();
         ApplicationLoader.postInitApplication();
     }
 
     public void onDestroy() {
+        super.onDestroy();
         if (MessagesController.getGlobalNotificationsSettings().getBoolean("pushService", true)) {
             sendBroadcast(new Intent("org.telegram.start"));
         }

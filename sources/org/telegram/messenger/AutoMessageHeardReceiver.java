@@ -24,17 +24,19 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
                 Utilities.globalQueue.postRunnable(new -$$Lambda$AutoMessageHeardReceiver$R9C-O9TfhsmJTCeCbR268b8rTs8(instance, i, intExtra2, longExtra, intExtra));
                 return;
             }
-            MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, true);
+            MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, true, 0);
         }
     }
 
     static /* synthetic */ void lambda$null$0(AccountInstance accountInstance, User user, int i, long j, int i2) {
+        User user2 = user;
         accountInstance.getMessagesController().putUser(user, true);
-        MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, true);
+        MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, true, 0);
     }
 
     static /* synthetic */ void lambda$null$2(AccountInstance accountInstance, Chat chat, int i, long j, int i2) {
+        Chat chat2 = chat;
         accountInstance.getMessagesController().putChat(chat, true);
-        MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, true);
+        MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, true, 0);
     }
 }

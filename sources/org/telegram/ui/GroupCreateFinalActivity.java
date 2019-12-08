@@ -525,7 +525,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
         };
         this.avatarImage.setRoundRadius(AndroidUtilities.dp(32.0f));
-        this.avatarDrawable.setInfo(5, null, null, this.chatType == 1);
+        this.avatarDrawable.setInfo(5, null, null);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
         this.avatarImage.setContentDescription(LocaleController.getString("ChoosePhoto", NUM));
         int i = 3;
@@ -680,12 +680,12 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if ((view instanceof TextSettingsCell) && AndroidUtilities.isGoogleMapsInstalled(this)) {
             LocationActivity locationActivity = new LocationActivity(4);
             locationActivity.setDialogId(0);
-            locationActivity.setDelegate(new -$$Lambda$GroupCreateFinalActivity$aeNh984lesCfPcrxtuATCZCNzJc(this));
+            locationActivity.setDelegate(new -$$Lambda$GroupCreateFinalActivity$vTqL6hCSuWIBlqg728_wrtqzHeA(this));
             presentFragment(locationActivity);
         }
     }
 
-    public /* synthetic */ void lambda$null$4$GroupCreateFinalActivity(MessageMedia messageMedia, int i) {
+    public /* synthetic */ void lambda$null$4$GroupCreateFinalActivity(MessageMedia messageMedia, int i, boolean z, int i2) {
         this.currentGroupCreateLocation.setLatitude(messageMedia.geo.lat);
         this.currentGroupCreateLocation.setLongitude(messageMedia.geo._long);
         this.currentGroupCreateAddress = messageMedia.address;
@@ -976,7 +976,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         r10[20] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueText");
         r10[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, "windowBackgroundWhiteGrayText");
         -$$Lambda$GroupCreateFinalActivity$VPEySrwsnDav95hCH-qJfgjLqoE -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2 = -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe;
-        r10[22] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_text");
+        r10[22] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_text");
         r10[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundRed");
         r10[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundOrange");
         r10[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundViolet");

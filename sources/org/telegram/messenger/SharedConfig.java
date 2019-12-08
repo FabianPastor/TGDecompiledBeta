@@ -68,18 +68,18 @@ public class SharedConfig {
     public static String pushString = "";
     public static String pushStringStatus = "";
     public static boolean raiseToSpeak = true;
-    public static int repeatMode;
+    public static int repeatMode = 0;
     public static boolean roundCamera16to9 = true;
-    public static boolean saveIncomingPhotos;
+    public static boolean saveIncomingPhotos = false;
     public static boolean saveStreamMedia = true;
-    public static boolean saveToGallery;
+    public static boolean saveToGallery = false;
     public static boolean showNotificationsForAllAccounts = true;
-    public static boolean shuffleMusic;
-    public static boolean sortContactsByName;
+    public static boolean shuffleMusic = false;
+    public static boolean sortContactsByName = false;
     public static boolean streamAllVideo = false;
     public static boolean streamMedia = true;
     public static boolean streamMkv = false;
-    public static int suggestStickers;
+    public static int suggestStickers = 0;
     private static final Object sync = new Object();
     public static boolean useFingerprint = true;
     public static boolean useSystemEmoji;
@@ -681,8 +681,8 @@ public class SharedConfig {
             if (file3.isDirectory()) {
                 new File(file3, str).createNewFile();
             }
-        } catch (Exception e) {
-            FileLog.e(e);
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 

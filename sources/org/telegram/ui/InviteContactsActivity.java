@@ -1015,7 +1015,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         strArr[0] = "statusTextView";
         themeDescriptionArr[23] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueText");
         themeDescriptionArr[24] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, null, null, null, "windowBackgroundWhiteGrayText");
-        themeDescriptionArr[25] = new ThemeDescription(this.listView, 0, new Class[]{InviteUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[25] = new ThemeDescription(this.listView, 0, new Class[]{InviteUserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$InviteContactsActivity$lRM1FX-g-ooIebl8RwlJ1GDWMOI -__lambda_invitecontactsactivity_lrm1fx-g-ooiebl8rwlj1gdwmoi2 = -__lambda_invitecontactsactivity_lrm1fx-g-ooiebl8rwlj1gdwmoi;
         themeDescriptionArr[26] = new ThemeDescription(null, 0, null, null, null, -__lambda_invitecontactsactivity_lrm1fx-g-ooiebl8rwlj1gdwmoi2, "avatar_backgroundRed");
         themeDescriptionArr[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_invitecontactsactivity_lrm1fx-g-ooiebl8rwlj1gdwmoi2, "avatar_backgroundOrange");

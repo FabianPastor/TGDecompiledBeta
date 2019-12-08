@@ -228,7 +228,7 @@ public class SecretChatHelper extends BaseController {
         getUserConfig().saveConfig(false);
         ArrayList arrayList = new ArrayList();
         arrayList.add(tL_messageService);
-        getMessagesStorage().putMessages(arrayList, false, true, true, 0);
+        getMessagesStorage().putMessages(arrayList, false, true, true, 0, false);
         return tL_messageService;
     }
 
@@ -469,7 +469,7 @@ public class SecretChatHelper extends BaseController {
                 messageObject.messageOwner.send_state = 1;
                 ArrayList arrayList = new ArrayList();
                 arrayList.add(messageObject);
-                getMessagesController().updateInterfaceWithMessages(message.dialog_id, arrayList);
+                getMessagesController().updateInterfaceWithMessages(message.dialog_id, arrayList, false);
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
             }
             Message message2 = message;
@@ -492,7 +492,7 @@ public class SecretChatHelper extends BaseController {
                 messageObject.messageOwner.send_state = 1;
                 ArrayList arrayList2 = new ArrayList();
                 arrayList2.add(messageObject);
-                getMessagesController().updateInterfaceWithMessages(message.dialog_id, arrayList2);
+                getMessagesController().updateInterfaceWithMessages(message.dialog_id, arrayList2, false);
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
             }
             Message message2 = message;
@@ -540,7 +540,7 @@ public class SecretChatHelper extends BaseController {
                     ImageLoader.getInstance().replaceImageInCache(stringBuilder3, stringBuilder, ImageLocation.getForPhoto(photoSize, message.media.photo), true);
                     ArrayList arrayList2 = new ArrayList();
                     arrayList2.add(message);
-                    getMessagesStorage().putMessages(arrayList2, false, true, false, 0);
+                    getMessagesStorage().putMessages(arrayList2, false, true, false, 0, false);
                     return;
                 }
             }
@@ -574,7 +574,7 @@ public class SecretChatHelper extends BaseController {
                     }
                     ArrayList arrayList3 = new ArrayList();
                     arrayList3.add(message);
-                    getMessagesStorage().putMessages(arrayList3, false, true, false, 0);
+                    getMessagesStorage().putMessages(arrayList3, false, true, false, 0, false);
                 }
             }
         }
@@ -614,7 +614,7 @@ public class SecretChatHelper extends BaseController {
         EncryptedChat encryptedChat2 = encryptedChat;
         if (decryptedMessage != null && encryptedChat2.auth_key != null && !(encryptedChat2 instanceof TL_encryptedChatRequested) && !(encryptedChat2 instanceof TL_encryptedChatWaiting)) {
             Message message2 = message;
-            getSendMessagesHelper().putToSendingMessages(message);
+            getSendMessagesHelper().putToSendingMessages(message, false);
             Utilities.stageQueue.postRunnable(new -$$Lambda$SecretChatHelper$go4ClJO8kMeuzFvRQpPn8-EmO40(this, encryptedChat, decryptedMessage, message2, inputEncryptedFile, messageObject, str));
         }
     }
@@ -793,7 +793,7 @@ public class SecretChatHelper extends BaseController {
             getMessagesStorage().getStorageQueue().postRunnable(new -$$Lambda$SecretChatHelper$kXyPCeVLRJzYiyabGiQYTza0QCE(this, message, messages_sentencryptedmessage, mediaExistanceFlags, str2));
             return;
         }
-        getMessagesStorage().markMessageAsSendError(message);
+        getMessagesStorage().markMessageAsSendError(message, false);
         AndroidUtilities.runOnUIThread(new -$$Lambda$SecretChatHelper$KXmAZjrV-o2jJvsCy8wRyFby6VI(this, message));
     }
 
@@ -801,18 +801,18 @@ public class SecretChatHelper extends BaseController {
         if (isSecretInvisibleMessage(message)) {
             messages_sentencryptedmessage.date = 0;
         }
-        getMessagesStorage().updateMessageStateAndId(message.random_id, Integer.valueOf(message.id), message.id, messages_sentencryptedmessage.date, false, 0);
+        getMessagesStorage().updateMessageStateAndId(message.random_id, Integer.valueOf(message.id), message.id, messages_sentencryptedmessage.date, false, 0, 0);
         AndroidUtilities.runOnUIThread(new -$$Lambda$SecretChatHelper$6RH9f8axwCUH9UKWqF8EeUaUF1g(this, message, i, str));
     }
 
     public /* synthetic */ void lambda$null$3$SecretChatHelper(Message message, int i, String str) {
         message.send_state = 0;
-        getNotificationCenter().postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(message.id), Integer.valueOf(message.id), message, Long.valueOf(message.dialog_id), Long.valueOf(0), Integer.valueOf(i));
+        getNotificationCenter().postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(message.id), Integer.valueOf(message.id), message, Long.valueOf(message.dialog_id), Long.valueOf(0), Integer.valueOf(i), Boolean.valueOf(false));
         getSendMessagesHelper().processSentMessage(message.id);
         if (MessageObject.isVideoMessage(message) || MessageObject.isNewGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
             getSendMessagesHelper().stopVideoService(str);
         }
-        getSendMessagesHelper().removeFromSendingMessages(message.id);
+        getSendMessagesHelper().removeFromSendingMessages(message.id, false);
     }
 
     public /* synthetic */ void lambda$null$5$SecretChatHelper(Message message) {
@@ -822,7 +822,7 @@ public class SecretChatHelper extends BaseController {
         if (MessageObject.isVideoMessage(message) || MessageObject.isNewGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
             getSendMessagesHelper().stopVideoService(message.attachPath);
         }
-        getSendMessagesHelper().removeFromSendingMessages(message.id);
+        getSendMessagesHelper().removeFromSendingMessages(message.id, false);
     }
 
     private void applyPeerLayer(EncryptedChat encryptedChat, int i) {
@@ -886,6 +886,7 @@ public class SecretChatHelper extends BaseController {
             byte[] bArr2;
             if (tLObject2 instanceof TL_decryptedMessage) {
                 Message tL_message_secret;
+                String str;
                 int i4;
                 MessageMedia messageMedia;
                 TL_decryptedMessage tL_decryptedMessage = (TL_decryptedMessage) tLObject2;
@@ -909,8 +910,8 @@ public class SecretChatHelper extends BaseController {
                 tL_message_secret.to_id.user_id = getUserConfig().getClientUserId();
                 tL_message_secret.unread = true;
                 tL_message_secret.flags = 768;
-                String str = tL_decryptedMessage.via_bot_name;
-                if (str != null && str.length() > 0) {
+                String str2 = tL_decryptedMessage.via_bot_name;
+                if (str2 != null && str2.length() > 0) {
                     tL_message_secret.via_bot_name = tL_decryptedMessage.via_bot_name;
                     tL_message_secret.flags |= 2048;
                 }
@@ -933,7 +934,7 @@ public class SecretChatHelper extends BaseController {
                     tL_message_secret.media.webpage = new TL_webPageUrlPending();
                     tL_message_secret.media.webpage.url = tL_decryptedMessage.media.url;
                 } else {
-                    String str2 = "";
+                    String str3 = "";
                     MessageMedia messageMedia2;
                     DecryptedMessageMedia decryptedMessageMedia2;
                     if (decryptedMessageMedia instanceof TL_decryptedMessageMediaContact) {
@@ -944,7 +945,7 @@ public class SecretChatHelper extends BaseController {
                         messageMedia2.first_name = decryptedMessageMedia2.first_name;
                         messageMedia2.phone_number = decryptedMessageMedia2.phone_number;
                         messageMedia2.user_id = decryptedMessageMedia2.user_id;
-                        messageMedia2.vcard = str2;
+                        messageMedia2.vcard = str3;
                     } else if (decryptedMessageMedia instanceof TL_decryptedMessageMediaGeoPoint) {
                         tL_message_secret.media = new TL_messageMediaGeo();
                         tL_message_secret.media.geo = new TL_geoPoint();
@@ -953,9 +954,8 @@ public class SecretChatHelper extends BaseController {
                         geoPoint.lat = decryptedMessageMedia2.lat;
                         geoPoint._long = decryptedMessageMedia2._long;
                     } else {
-                        String str3 = "s";
+                        String str4 = "s";
                         byte[] bArr3;
-                        String str4;
                         DecryptedMessageMedia decryptedMessageMedia3;
                         DecryptedMessageMedia decryptedMessageMedia4;
                         Document document;
@@ -968,11 +968,11 @@ public class SecretChatHelper extends BaseController {
                                     tL_message_secret.media = new TL_messageMediaPhoto();
                                     messageMedia2 = tL_message_secret.media;
                                     messageMedia2.flags |= 3;
-                                    str4 = tL_decryptedMessage.media.caption;
-                                    if (str4 == null) {
-                                        str4 = str2;
+                                    str = tL_decryptedMessage.media.caption;
+                                    if (str == null) {
+                                        str = str3;
                                     }
-                                    tL_message_secret.message = str4;
+                                    tL_message_secret.message = str;
                                     tL_message_secret.media.photo = new TL_photo();
                                     Photo photo = tL_message_secret.media.photo;
                                     photo.file_reference = new byte[0];
@@ -985,7 +985,7 @@ public class SecretChatHelper extends BaseController {
                                         tL_photoCachedSize.w = decryptedMessageMedia3.thumb_w;
                                         tL_photoCachedSize.h = decryptedMessageMedia3.thumb_h;
                                         tL_photoCachedSize.bytes = bArr;
-                                        tL_photoCachedSize.type = str3;
+                                        tL_photoCachedSize.type = str4;
                                         tL_photoCachedSize.location = new TL_fileLocationUnavailable();
                                         tL_message_secret.media.photo.sizes.add(tL_photoCachedSize);
                                     }
@@ -1028,11 +1028,11 @@ public class SecretChatHelper extends BaseController {
                                     document.key = decryptedMessageMedia3.key;
                                     document.iv = decryptedMessageMedia3.iv;
                                     document.dc_id = encryptedFile2.dc_id;
-                                    str4 = decryptedMessageMedia3.caption;
-                                    if (str4 == null) {
-                                        str4 = str2;
+                                    str = decryptedMessageMedia3.caption;
+                                    if (str == null) {
+                                        str = str3;
                                     }
-                                    tL_message_secret.message = str4;
+                                    tL_message_secret.message = str;
                                     document = tL_message_secret.media.document;
                                     document.date = i2;
                                     document.size = encryptedFile2.size;
@@ -1046,14 +1046,14 @@ public class SecretChatHelper extends BaseController {
                                     byte[] bArr4 = ((TL_decryptedMessageMediaVideo) decryptedMessageMedia).thumb;
                                     if (bArr4 == null || bArr4.length == 0 || bArr4.length > 6000 || decryptedMessageMedia.thumb_w > 100 || decryptedMessageMedia.thumb_h > 100) {
                                         tL_photoSizeEmpty = new TL_photoSizeEmpty();
-                                        tL_photoSizeEmpty.type = str3;
+                                        tL_photoSizeEmpty.type = str4;
                                     } else {
                                         tL_photoSizeEmpty = new TL_photoCachedSize();
                                         tL_photoSizeEmpty.bytes = bArr4;
                                         decryptedMessageMedia2 = tL_decryptedMessage.media;
                                         tL_photoSizeEmpty.w = decryptedMessageMedia2.thumb_w;
                                         tL_photoSizeEmpty.h = decryptedMessageMedia2.thumb_h;
-                                        tL_photoSizeEmpty.type = str3;
+                                        tL_photoSizeEmpty.type = str4;
                                         tL_photoSizeEmpty.location = new TL_fileLocationUnavailable();
                                     }
                                     tL_message_secret.media.document.thumbs.add(tL_photoSizeEmpty);
@@ -1087,11 +1087,11 @@ public class SecretChatHelper extends BaseController {
                                     tL_message_secret.media = new TL_messageMediaDocument();
                                     messageMedia2 = tL_message_secret.media;
                                     messageMedia2.flags |= 3;
-                                    str4 = tL_decryptedMessage.media.caption;
-                                    if (str4 == null) {
-                                        str4 = str2;
+                                    str = tL_decryptedMessage.media.caption;
+                                    if (str == null) {
+                                        str = str3;
                                     }
-                                    tL_message_secret.message = str4;
+                                    tL_message_secret.message = str;
                                     tL_message_secret.media.document = new TL_documentEncrypted();
                                     document = tL_message_secret.media.document;
                                     document.id = encryptedFile2.id;
@@ -1115,20 +1115,20 @@ public class SecretChatHelper extends BaseController {
                                     document.key = decryptedMessageMedia4.key;
                                     document.iv = decryptedMessageMedia4.iv;
                                     if (document.mime_type == null) {
-                                        document.mime_type = str2;
+                                        document.mime_type = str3;
                                     }
                                     decryptedMessageMedia = tL_decryptedMessage.media;
                                     bArr = ((TL_decryptedMessageMediaDocument) decryptedMessageMedia).thumb;
                                     if (bArr == null || bArr.length == 0 || bArr.length > 6000 || decryptedMessageMedia.thumb_w > 100 || decryptedMessageMedia.thumb_h > 100) {
                                         tL_photoSizeEmpty = new TL_photoSizeEmpty();
-                                        tL_photoSizeEmpty.type = str3;
+                                        tL_photoSizeEmpty.type = str4;
                                     } else {
                                         tL_photoSizeEmpty = new TL_photoCachedSize();
                                         tL_photoSizeEmpty.bytes = bArr;
                                         decryptedMessageMedia4 = tL_decryptedMessage.media;
                                         tL_photoSizeEmpty.w = decryptedMessageMedia4.thumb_w;
                                         tL_photoSizeEmpty.h = decryptedMessageMedia4.thumb_h;
-                                        tL_photoSizeEmpty.type = str3;
+                                        tL_photoSizeEmpty.type = str4;
                                         tL_photoSizeEmpty.location = new TL_fileLocationUnavailable();
                                     }
                                     tL_message_secret.media.document.thumbs.add(tL_photoSizeEmpty);
@@ -1145,7 +1145,7 @@ public class SecretChatHelper extends BaseController {
                             tL_message_secret.media = new TL_messageMediaDocument();
                             messageMedia2 = tL_message_secret.media;
                             messageMedia2.flags |= 3;
-                            tL_message_secret.message = str2;
+                            tL_message_secret.message = str3;
                             messageMedia2.document = new TL_document();
                             document = tL_message_secret.media.document;
                             decryptedMessageMedia2 = tL_decryptedMessage.media;
@@ -1161,7 +1161,7 @@ public class SecretChatHelper extends BaseController {
                             document = tL_message_secret.media.document;
                             document.flags |= 1;
                             if (document.mime_type == null) {
-                                document.mime_type = str2;
+                                document.mime_type = str3;
                             }
                         } else if (decryptedMessageMedia instanceof TL_decryptedMessageMediaAudio) {
                             bArr2 = decryptedMessageMedia.key;
@@ -1182,11 +1182,11 @@ public class SecretChatHelper extends BaseController {
                                     document.size = encryptedFile2.size;
                                     document.dc_id = encryptedFile2.dc_id;
                                     document.mime_type = decryptedMessageMedia3.mime_type;
-                                    str4 = decryptedMessageMedia3.caption;
-                                    if (str4 == null) {
-                                        str4 = str2;
+                                    str = decryptedMessageMedia3.caption;
+                                    if (str == null) {
+                                        str = str3;
                                     }
-                                    tL_message_secret.message = str4;
+                                    tL_message_secret.message = str;
                                     document = tL_message_secret.media.document;
                                     if (document.mime_type == null) {
                                         document.mime_type = "audio/ogg";
@@ -1201,7 +1201,7 @@ public class SecretChatHelper extends BaseController {
                                     }
                                     if (tL_message_secret.media.document.thumbs.isEmpty()) {
                                         TL_photoSizeEmpty tL_photoSizeEmpty2 = new TL_photoSizeEmpty();
-                                        tL_photoSizeEmpty2.type = str3;
+                                        tL_photoSizeEmpty2.type = str4;
                                         tL_message_secret.media.document.thumbs.add(tL_photoSizeEmpty2);
                                     }
                                 }
@@ -1221,7 +1221,7 @@ public class SecretChatHelper extends BaseController {
                             messageMedia2.address = decryptedMessageMedia4.address;
                             messageMedia2.provider = decryptedMessageMedia4.provider;
                             messageMedia2.venue_id = decryptedMessageMedia4.venue_id;
-                            messageMedia2.venue_type = str2;
+                            messageMedia2.venue_type = str3;
                         }
                     }
                 }
@@ -1232,6 +1232,10 @@ public class SecretChatHelper extends BaseController {
                         messageMedia.ttl_seconds = i4;
                         messageMedia.flags |= 4;
                     }
+                }
+                str = tL_message_secret.message;
+                if (str != null) {
+                    tL_message_secret.message = str.replace(8238, ' ');
                 }
                 return tL_message_secret;
             } else if (tLObject2 instanceof TL_decryptedMessageService) {
@@ -1578,7 +1582,7 @@ public class SecretChatHelper extends BaseController {
                 arrayList3.add(encryptedChat2);
                 try {
                     AndroidUtilities.runOnUIThread(new -$$Lambda$SecretChatHelper$VQkryblefkb-35jNwuFnQ2KSKkw(this, arrayList));
-                    getSendMessagesHelper().processUnsentMessages(arrayList, new ArrayList(), new ArrayList(), arrayList3);
+                    getSendMessagesHelper().processUnsentMessages(arrayList, null, new ArrayList(), new ArrayList(), arrayList3);
                     getMessagesStorage().getDatabase().executeFast(String.format(Locale.US, "REPLACE INTO requested_holes VALUES(%d, %d, %d)", new Object[]{Integer.valueOf(encryptedChat2.id), Integer.valueOf(i3), Integer.valueOf(i2)})).stepThis().dispose();
                 } catch (Exception e2) {
                     e = e2;
@@ -1643,25 +1647,18 @@ public class SecretChatHelper extends BaseController {
     }
 
     private boolean decryptWithMtProtoVersion(NativeByteBuffer nativeByteBuffer, byte[] bArr, byte[] bArr2, int i, boolean z, boolean z2) {
-        byte[] bArr3;
-        boolean z3;
         NativeByteBuffer nativeByteBuffer2 = nativeByteBuffer;
-        byte[] bArr4 = bArr2;
+        byte[] bArr3 = bArr2;
         int i2 = i;
-        if (i2 == 1) {
-            bArr3 = bArr;
-            z3 = false;
-        } else {
-            bArr3 = bArr;
-            z3 = z;
-        }
-        MessageKeyData generateMessageKeyData = MessageKeyData.generateMessageKeyData(bArr3, bArr4, z3, i2);
+        byte[] bArr4 = bArr;
+        boolean z3 = i2 == 1 ? false : z;
+        MessageKeyData generateMessageKeyData = MessageKeyData.generateMessageKeyData(bArr4, bArr3, z3, i2);
         Utilities.aesIgeEncryption(nativeByteBuffer2.buffer, generateMessageKeyData.aesKey, generateMessageKeyData.aesIv, false, false, 24, nativeByteBuffer.limit() - 24);
         int readInt32 = nativeByteBuffer2.readInt32(false);
         if (i2 == 2) {
             int i3 = (z3 ? 8 : 0) + 88;
             ByteBuffer byteBuffer = nativeByteBuffer2.buffer;
-            if (!Utilities.arraysEquals(bArr4, 0, Utilities.computeSHA256(bArr, i3, 32, byteBuffer, 24, byteBuffer.limit()), 8)) {
+            if (!Utilities.arraysEquals(bArr3, 0, Utilities.computeSHA256(bArr, i3, 32, byteBuffer, 24, byteBuffer.limit()), 8)) {
                 if (z2) {
                     Utilities.aesIgeEncryption(nativeByteBuffer2.buffer, generateMessageKeyData.aesKey, generateMessageKeyData.aesIv, true, false, 24, nativeByteBuffer.limit() - 24);
                     nativeByteBuffer2.position(24);
@@ -1673,8 +1670,8 @@ public class SecretChatHelper extends BaseController {
         if (i4 < nativeByteBuffer2.buffer.limit() - 15 || i4 > nativeByteBuffer2.buffer.limit()) {
             i4 = nativeByteBuffer2.buffer.limit();
         }
-        bArr3 = Utilities.computeSHA1(nativeByteBuffer2.buffer, 24, i4);
-        if (!Utilities.arraysEquals(bArr4, 0, bArr3, bArr3.length - 16)) {
+        bArr4 = Utilities.computeSHA1(nativeByteBuffer2.buffer, 24, i4);
+        if (!Utilities.arraysEquals(bArr3, 0, bArr4, bArr4.length - 16)) {
             if (z2) {
                 Utilities.aesIgeEncryption(nativeByteBuffer2.buffer, generateMessageKeyData.aesKey, generateMessageKeyData.aesIv, true, false, 24, nativeByteBuffer.limit() - 24);
                 nativeByteBuffer2.position(24);
@@ -1692,10 +1689,10 @@ public class SecretChatHelper extends BaseController {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x005b A:{Catch:{ Exception -> 0x025b }} */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0059 A:{Catch:{ Exception -> 0x025b }} */
-    /* JADX WARNING: Removed duplicated region for block: B:106:0x0241 A:{Catch:{ Exception -> 0x025b }} */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x005e A:{Catch:{ Exception -> 0x025b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x005b A:{Catch:{ Exception -> 0x0258 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0059 A:{Catch:{ Exception -> 0x0258 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:104:0x023e A:{Catch:{ Exception -> 0x0258 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x005e A:{Catch:{ Exception -> 0x0258 }} */
     public java.util.ArrayList<org.telegram.tgnet.TLRPC.Message> decryptMessage(org.telegram.tgnet.TLRPC.EncryptedMessage r22) {
         /*
         r21 = this;
@@ -1707,40 +1704,40 @@ public class SecretChatHelper extends BaseController {
         r10 = 1;
         r11 = r1.getEncryptedChatDB(r2, r10);
         r12 = 0;
-        if (r11 == 0) goto L_0x025f;
+        if (r11 == 0) goto L_0x025c;
     L_0x0014:
         r1 = r11 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChatDiscarded;
         if (r1 == 0) goto L_0x001a;
     L_0x0018:
-        goto L_0x025f;
+        goto L_0x025c;
     L_0x001a:
-        r13 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x025b }
-        r1 = r0.bytes;	 Catch:{ Exception -> 0x025b }
-        r1 = r1.length;	 Catch:{ Exception -> 0x025b }
-        r13.<init>(r1);	 Catch:{ Exception -> 0x025b }
-        r1 = r0.bytes;	 Catch:{ Exception -> 0x025b }
-        r13.writeBytes(r1);	 Catch:{ Exception -> 0x025b }
+        r13 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0258 }
+        r1 = r0.bytes;	 Catch:{ Exception -> 0x0258 }
+        r1 = r1.length;	 Catch:{ Exception -> 0x0258 }
+        r13.<init>(r1);	 Catch:{ Exception -> 0x0258 }
+        r1 = r0.bytes;	 Catch:{ Exception -> 0x0258 }
+        r13.writeBytes(r1);	 Catch:{ Exception -> 0x0258 }
         r14 = 0;
-        r13.position(r14);	 Catch:{ Exception -> 0x025b }
-        r1 = r13.readInt64(r14);	 Catch:{ Exception -> 0x025b }
-        r3 = r11.key_fingerprint;	 Catch:{ Exception -> 0x025b }
+        r13.position(r14);	 Catch:{ Exception -> 0x0258 }
+        r1 = r13.readInt64(r14);	 Catch:{ Exception -> 0x0258 }
+        r3 = r11.key_fingerprint;	 Catch:{ Exception -> 0x0258 }
         r5 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1));
         if (r5 != 0) goto L_0x0039;
     L_0x0035:
-        r3 = r11.auth_key;	 Catch:{ Exception -> 0x025b }
+        r3 = r11.auth_key;	 Catch:{ Exception -> 0x0258 }
         r15 = r3;
         goto L_0x004d;
     L_0x0039:
-        r3 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x025b }
+        r3 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x0258 }
         r5 = 0;
         r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
         if (r7 == 0) goto L_0x004c;
     L_0x0041:
-        r3 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x025b }
+        r3 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x0258 }
         r5 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1));
         if (r5 != 0) goto L_0x004c;
     L_0x0047:
-        r3 = r11.future_auth_key;	 Catch:{ Exception -> 0x025b }
+        r3 = r11.future_auth_key;	 Catch:{ Exception -> 0x0258 }
         r15 = r3;
         r7 = 1;
         goto L_0x004e;
@@ -1749,8 +1746,8 @@ public class SecretChatHelper extends BaseController {
     L_0x004d:
         r7 = 0;
     L_0x004e:
-        r3 = r11.layer;	 Catch:{ Exception -> 0x025b }
-        r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3);	 Catch:{ Exception -> 0x025b }
+        r3 = r11.layer;	 Catch:{ Exception -> 0x0258 }
+        r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3);	 Catch:{ Exception -> 0x0258 }
         r4 = 73;
         r6 = 2;
         if (r3 < r4) goto L_0x005b;
@@ -1760,13 +1757,13 @@ public class SecretChatHelper extends BaseController {
     L_0x005b:
         r5 = 1;
     L_0x005c:
-        if (r15 == 0) goto L_0x0241;
+        if (r15 == 0) goto L_0x023e;
     L_0x005e:
         r1 = 16;
-        r16 = r13.readData(r1, r14);	 Catch:{ Exception -> 0x025b }
-        r1 = r11.admin_id;	 Catch:{ Exception -> 0x025b }
-        r2 = r21.getUserConfig();	 Catch:{ Exception -> 0x025b }
-        r2 = r2.getClientUserId();	 Catch:{ Exception -> 0x025b }
+        r16 = r13.readData(r1, r14);	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.admin_id;	 Catch:{ Exception -> 0x0258 }
+        r2 = r21.getUserConfig();	 Catch:{ Exception -> 0x0258 }
+        r2 = r2.getClientUserId();	 Catch:{ Exception -> 0x0258 }
         if (r1 != r2) goto L_0x0073;
     L_0x0070:
         r17 = 1;
@@ -1776,7 +1773,7 @@ public class SecretChatHelper extends BaseController {
     L_0x0075:
         if (r5 != r6) goto L_0x007e;
     L_0x0077:
-        r1 = r11.mtproto_seq;	 Catch:{ Exception -> 0x025b }
+        r1 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0258 }
         if (r1 == 0) goto L_0x007e;
     L_0x007b:
         r18 = 0;
@@ -1793,10 +1790,10 @@ public class SecretChatHelper extends BaseController {
         r6 = r17;
         r20 = r7;
         r7 = r18;
-        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x025b }
-        if (r1 != 0) goto L_0x00c3;
-    L_0x0095:
+        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0258 }
         r6 = r19;
+        if (r1 != 0) goto L_0x00c2;
+    L_0x0097:
         if (r6 != r10) goto L_0x00af;
     L_0x0099:
         if (r18 == 0) goto L_0x00ae;
@@ -1808,13 +1805,13 @@ public class SecretChatHelper extends BaseController {
         r3 = r15;
         r4 = r16;
         r6 = r17;
-        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x025b }
+        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0258 }
         if (r1 != 0) goto L_0x00ac;
     L_0x00ab:
         goto L_0x00ae;
     L_0x00ac:
         r6 = 1;
-        goto L_0x00c5;
+        goto L_0x00c2;
     L_0x00ae:
         return r12;
     L_0x00af:
@@ -1825,246 +1822,243 @@ public class SecretChatHelper extends BaseController {
         r4 = r16;
         r6 = r17;
         r7 = r18;
-        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x025b }
+        r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0258 }
         if (r1 != 0) goto L_0x00c1;
     L_0x00c0:
         return r12;
     L_0x00c1:
         r6 = 2;
-        goto L_0x00c5;
-    L_0x00c3:
-        r6 = r19;
-    L_0x00c5:
-        r1 = org.telegram.tgnet.TLClassStore.Instance();	 Catch:{ Exception -> 0x025b }
-        r2 = r13.readInt32(r14);	 Catch:{ Exception -> 0x025b }
-        r1 = r1.TLdeserialize(r13, r2, r14);	 Catch:{ Exception -> 0x025b }
-        r13.reuse();	 Catch:{ Exception -> 0x025b }
+    L_0x00c2:
+        r1 = org.telegram.tgnet.TLClassStore.Instance();	 Catch:{ Exception -> 0x0258 }
+        r2 = r13.readInt32(r14);	 Catch:{ Exception -> 0x0258 }
+        r1 = r1.TLdeserialize(r13, r2, r14);	 Catch:{ Exception -> 0x0258 }
+        r13.reuse();	 Catch:{ Exception -> 0x0258 }
         r14 = r20;
-        if (r14 != 0) goto L_0x00e9;
-    L_0x00d8:
-        r2 = r11.layer;	 Catch:{ Exception -> 0x025b }
-        r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);	 Catch:{ Exception -> 0x025b }
+        if (r14 != 0) goto L_0x00e6;
+    L_0x00d5:
+        r2 = r11.layer;	 Catch:{ Exception -> 0x0258 }
+        r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);	 Catch:{ Exception -> 0x0258 }
         r3 = 20;
-        if (r2 < r3) goto L_0x00e9;
-    L_0x00e2:
-        r2 = r11.key_use_count_in;	 Catch:{ Exception -> 0x025b }
+        if (r2 < r3) goto L_0x00e6;
+    L_0x00df:
+        r2 = r11.key_use_count_in;	 Catch:{ Exception -> 0x0258 }
         r3 = 1;
         r2 = r2 + r3;
-        r2 = (short) r2;	 Catch:{ Exception -> 0x025b }
-        r11.key_use_count_in = r2;	 Catch:{ Exception -> 0x025b }
-    L_0x00e9:
-        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageLayer;	 Catch:{ Exception -> 0x025b }
-        if (r2 == 0) goto L_0x0217;
-    L_0x00ed:
-        r1 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageLayer) r1;	 Catch:{ Exception -> 0x025b }
-        r2 = r11.seq_in;	 Catch:{ Exception -> 0x025b }
-        if (r2 != 0) goto L_0x010d;
-    L_0x00f3:
-        r2 = r11.seq_out;	 Catch:{ Exception -> 0x025b }
-        if (r2 != 0) goto L_0x010d;
-    L_0x00f7:
-        r2 = r11.admin_id;	 Catch:{ Exception -> 0x025b }
-        r3 = r21.getUserConfig();	 Catch:{ Exception -> 0x025b }
-        r3 = r3.getClientUserId();	 Catch:{ Exception -> 0x025b }
-        if (r2 != r3) goto L_0x010a;
-    L_0x0103:
+        r2 = (short) r2;	 Catch:{ Exception -> 0x0258 }
+        r11.key_use_count_in = r2;	 Catch:{ Exception -> 0x0258 }
+    L_0x00e6:
+        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageLayer;	 Catch:{ Exception -> 0x0258 }
+        if (r2 == 0) goto L_0x0214;
+    L_0x00ea:
+        r1 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageLayer) r1;	 Catch:{ Exception -> 0x0258 }
+        r2 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
+        if (r2 != 0) goto L_0x010a;
+    L_0x00f0:
+        r2 = r11.seq_out;	 Catch:{ Exception -> 0x0258 }
+        if (r2 != 0) goto L_0x010a;
+    L_0x00f4:
+        r2 = r11.admin_id;	 Catch:{ Exception -> 0x0258 }
+        r3 = r21.getUserConfig();	 Catch:{ Exception -> 0x0258 }
+        r3 = r3.getClientUserId();	 Catch:{ Exception -> 0x0258 }
+        if (r2 != r3) goto L_0x0107;
+    L_0x0100:
         r2 = 1;
-        r11.seq_out = r2;	 Catch:{ Exception -> 0x025b }
+        r11.seq_out = r2;	 Catch:{ Exception -> 0x0258 }
         r2 = -2;
-        r11.seq_in = r2;	 Catch:{ Exception -> 0x025b }
-        goto L_0x010d;
-    L_0x010a:
+        r11.seq_in = r2;	 Catch:{ Exception -> 0x0258 }
+        goto L_0x010a;
+    L_0x0107:
         r2 = -1;
-        r11.seq_in = r2;	 Catch:{ Exception -> 0x025b }
-    L_0x010d:
-        r2 = r1.random_bytes;	 Catch:{ Exception -> 0x025b }
-        r2 = r2.length;	 Catch:{ Exception -> 0x025b }
+        r11.seq_in = r2;	 Catch:{ Exception -> 0x0258 }
+    L_0x010a:
+        r2 = r1.random_bytes;	 Catch:{ Exception -> 0x0258 }
+        r2 = r2.length;	 Catch:{ Exception -> 0x0258 }
         r3 = 15;
-        if (r2 >= r3) goto L_0x011e;
-    L_0x0114:
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x025b }
-        if (r0 == 0) goto L_0x011d;
-    L_0x0118:
+        if (r2 >= r3) goto L_0x011b;
+    L_0x0111:
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0258 }
+        if (r0 == 0) goto L_0x011a;
+    L_0x0115:
         r0 = "got random bytes less than needed";
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x025b }
-    L_0x011d:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0258 }
+    L_0x011a:
         return r12;
-    L_0x011e:
-        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x025b }
-        if (r2 == 0) goto L_0x015e;
-    L_0x0122:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x025b }
-        r2.<init>();	 Catch:{ Exception -> 0x025b }
+    L_0x011b:
+        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0258 }
+        if (r2 == 0) goto L_0x015b;
+    L_0x011f:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0258 }
+        r2.<init>();	 Catch:{ Exception -> 0x0258 }
         r3 = "current chat in_seq = ";
-        r2.append(r3);	 Catch:{ Exception -> 0x025b }
-        r3 = r11.seq_in;	 Catch:{ Exception -> 0x025b }
-        r2.append(r3);	 Catch:{ Exception -> 0x025b }
-        r2.append(r9);	 Catch:{ Exception -> 0x025b }
-        r3 = r11.seq_out;	 Catch:{ Exception -> 0x025b }
-        r2.append(r3);	 Catch:{ Exception -> 0x025b }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x025b }
-        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x025b }
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x025b }
-        r2.<init>();	 Catch:{ Exception -> 0x025b }
+        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
+        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
+        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
+        r2.append(r9);	 Catch:{ Exception -> 0x0258 }
+        r3 = r11.seq_out;	 Catch:{ Exception -> 0x0258 }
+        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0258 }
+        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0258 }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0258 }
+        r2.<init>();	 Catch:{ Exception -> 0x0258 }
         r3 = "got message with in_seq = ";
-        r2.append(r3);	 Catch:{ Exception -> 0x025b }
-        r3 = r1.in_seq_no;	 Catch:{ Exception -> 0x025b }
-        r2.append(r3);	 Catch:{ Exception -> 0x025b }
-        r2.append(r9);	 Catch:{ Exception -> 0x025b }
-        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x025b }
-        r2.append(r3);	 Catch:{ Exception -> 0x025b }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x025b }
-        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x025b }
-    L_0x015e:
-        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x025b }
-        r3 = r11.seq_in;	 Catch:{ Exception -> 0x025b }
-        if (r2 > r3) goto L_0x0165;
-    L_0x0164:
+        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
+        r3 = r1.in_seq_no;	 Catch:{ Exception -> 0x0258 }
+        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
+        r2.append(r9);	 Catch:{ Exception -> 0x0258 }
+        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
+        r2.append(r3);	 Catch:{ Exception -> 0x0258 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0258 }
+        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0258 }
+    L_0x015b:
+        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
+        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
+        if (r2 > r3) goto L_0x0162;
+    L_0x0161:
         return r12;
-    L_0x0165:
+    L_0x0162:
         r2 = 1;
-        if (r6 != r2) goto L_0x0173;
-    L_0x0168:
-        r2 = r11.mtproto_seq;	 Catch:{ Exception -> 0x025b }
-        if (r2 == 0) goto L_0x0173;
-    L_0x016c:
-        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x025b }
-        r3 = r11.mtproto_seq;	 Catch:{ Exception -> 0x025b }
-        if (r2 < r3) goto L_0x0173;
-    L_0x0172:
+        if (r6 != r2) goto L_0x0170;
+    L_0x0165:
+        r2 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0258 }
+        if (r2 == 0) goto L_0x0170;
+    L_0x0169:
+        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
+        r3 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0258 }
+        if (r2 < r3) goto L_0x0170;
+    L_0x016f:
         return r12;
-    L_0x0173:
-        r2 = r11.seq_in;	 Catch:{ Exception -> 0x025b }
-        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x025b }
+    L_0x0170:
+        r2 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
+        r3 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
         r3 = r3 - r10;
-        if (r2 == r3) goto L_0x01f3;
-    L_0x017a:
-        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x025b }
-        if (r2 == 0) goto L_0x0183;
-    L_0x017e:
+        if (r2 == r3) goto L_0x01f0;
+    L_0x0177:
+        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0258 }
+        if (r2 == 0) goto L_0x0180;
+    L_0x017b:
         r2 = "got hole";
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x025b }
-    L_0x0183:
-        r2 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x025b }
-        r3 = r11.id;	 Catch:{ Exception -> 0x025b }
-        r2 = r2.get(r3);	 Catch:{ Exception -> 0x025b }
-        r2 = (java.util.ArrayList) r2;	 Catch:{ Exception -> 0x025b }
-        if (r2 != 0) goto L_0x019b;
-    L_0x018f:
-        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x025b }
-        r2.<init>();	 Catch:{ Exception -> 0x025b }
-        r3 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x025b }
-        r4 = r11.id;	 Catch:{ Exception -> 0x025b }
-        r3.put(r4, r2);	 Catch:{ Exception -> 0x025b }
-    L_0x019b:
-        r3 = r2.size();	 Catch:{ Exception -> 0x025b }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x0258 }
+    L_0x0180:
+        r2 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0258 }
+        r3 = r11.id;	 Catch:{ Exception -> 0x0258 }
+        r2 = r2.get(r3);	 Catch:{ Exception -> 0x0258 }
+        r2 = (java.util.ArrayList) r2;	 Catch:{ Exception -> 0x0258 }
+        if (r2 != 0) goto L_0x0198;
+    L_0x018c:
+        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0258 }
+        r2.<init>();	 Catch:{ Exception -> 0x0258 }
+        r3 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0258 }
+        r4 = r11.id;	 Catch:{ Exception -> 0x0258 }
+        r3.put(r4, r2);	 Catch:{ Exception -> 0x0258 }
+    L_0x0198:
+        r3 = r2.size();	 Catch:{ Exception -> 0x0258 }
         r4 = 4;
-        if (r3 < r4) goto L_0x01dc;
-    L_0x01a2:
-        r0 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x025b }
-        r1 = r11.id;	 Catch:{ Exception -> 0x025b }
-        r0.remove(r1);	 Catch:{ Exception -> 0x025b }
-        r0 = new org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded;	 Catch:{ Exception -> 0x025b }
-        r0.<init>();	 Catch:{ Exception -> 0x025b }
-        r1 = r11.id;	 Catch:{ Exception -> 0x025b }
-        r0.id = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = r11.user_id;	 Catch:{ Exception -> 0x025b }
-        r0.user_id = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = r11.auth_key;	 Catch:{ Exception -> 0x025b }
-        r0.auth_key = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = r11.key_create_date;	 Catch:{ Exception -> 0x025b }
-        r0.key_create_date = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = r11.key_use_count_in;	 Catch:{ Exception -> 0x025b }
-        r0.key_use_count_in = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = r11.key_use_count_out;	 Catch:{ Exception -> 0x025b }
-        r0.key_use_count_out = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = r11.seq_in;	 Catch:{ Exception -> 0x025b }
-        r0.seq_in = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = r11.seq_out;	 Catch:{ Exception -> 0x025b }
-        r0.seq_out = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$y_-QKcAzTtKUDu-WddTe8KbVDxY;	 Catch:{ Exception -> 0x025b }
-        r1.<init>(r8, r0);	 Catch:{ Exception -> 0x025b }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ Exception -> 0x025b }
-        r0 = r11.id;	 Catch:{ Exception -> 0x025b }
-        r8.declineSecretChat(r0);	 Catch:{ Exception -> 0x025b }
+        if (r3 < r4) goto L_0x01d9;
+    L_0x019f:
+        r0 = r8.secretHolesQueue;	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.id;	 Catch:{ Exception -> 0x0258 }
+        r0.remove(r1);	 Catch:{ Exception -> 0x0258 }
+        r0 = new org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded;	 Catch:{ Exception -> 0x0258 }
+        r0.<init>();	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.id;	 Catch:{ Exception -> 0x0258 }
+        r0.id = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.user_id;	 Catch:{ Exception -> 0x0258 }
+        r0.user_id = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.auth_key;	 Catch:{ Exception -> 0x0258 }
+        r0.auth_key = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.key_create_date;	 Catch:{ Exception -> 0x0258 }
+        r0.key_create_date = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.key_use_count_in;	 Catch:{ Exception -> 0x0258 }
+        r0.key_use_count_in = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.key_use_count_out;	 Catch:{ Exception -> 0x0258 }
+        r0.key_use_count_out = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
+        r0.seq_in = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = r11.seq_out;	 Catch:{ Exception -> 0x0258 }
+        r0.seq_out = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$y_-QKcAzTtKUDu-WddTe8KbVDxY;	 Catch:{ Exception -> 0x0258 }
+        r1.<init>(r8, r0);	 Catch:{ Exception -> 0x0258 }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ Exception -> 0x0258 }
+        r0 = r11.id;	 Catch:{ Exception -> 0x0258 }
+        r8.declineSecretChat(r0);	 Catch:{ Exception -> 0x0258 }
         return r12;
-    L_0x01dc:
-        r3 = new org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder;	 Catch:{ Exception -> 0x025b }
-        r3.<init>();	 Catch:{ Exception -> 0x025b }
-        r3.layer = r1;	 Catch:{ Exception -> 0x025b }
-        r1 = r0.file;	 Catch:{ Exception -> 0x025b }
-        r3.file = r1;	 Catch:{ Exception -> 0x025b }
-        r0 = r0.date;	 Catch:{ Exception -> 0x025b }
-        r3.date = r0;	 Catch:{ Exception -> 0x025b }
-        r3.new_key_used = r14;	 Catch:{ Exception -> 0x025b }
-        r3.decryptedWithVersion = r6;	 Catch:{ Exception -> 0x025b }
-        r2.add(r3);	 Catch:{ Exception -> 0x025b }
+    L_0x01d9:
+        r3 = new org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder;	 Catch:{ Exception -> 0x0258 }
+        r3.<init>();	 Catch:{ Exception -> 0x0258 }
+        r3.layer = r1;	 Catch:{ Exception -> 0x0258 }
+        r1 = r0.file;	 Catch:{ Exception -> 0x0258 }
+        r3.file = r1;	 Catch:{ Exception -> 0x0258 }
+        r0 = r0.date;	 Catch:{ Exception -> 0x0258 }
+        r3.date = r0;	 Catch:{ Exception -> 0x0258 }
+        r3.new_key_used = r14;	 Catch:{ Exception -> 0x0258 }
+        r3.decryptedWithVersion = r6;	 Catch:{ Exception -> 0x0258 }
+        r2.add(r3);	 Catch:{ Exception -> 0x0258 }
         return r12;
-    L_0x01f3:
-        if (r6 != r10) goto L_0x01ff;
-    L_0x01f5:
-        r2 = r11.mtproto_seq;	 Catch:{ Exception -> 0x025b }
-        r3 = r11.seq_in;	 Catch:{ Exception -> 0x025b }
-        r2 = java.lang.Math.min(r2, r3);	 Catch:{ Exception -> 0x025b }
-        r11.mtproto_seq = r2;	 Catch:{ Exception -> 0x025b }
-    L_0x01ff:
-        r2 = r1.layer;	 Catch:{ Exception -> 0x025b }
-        r8.applyPeerLayer(r11, r2);	 Catch:{ Exception -> 0x025b }
-        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x025b }
-        r11.seq_in = r2;	 Catch:{ Exception -> 0x025b }
-        r2 = r1.in_seq_no;	 Catch:{ Exception -> 0x025b }
-        r11.in_seq_no = r2;	 Catch:{ Exception -> 0x025b }
-        r2 = r21.getMessagesStorage();	 Catch:{ Exception -> 0x025b }
+    L_0x01f0:
+        if (r6 != r10) goto L_0x01fc;
+    L_0x01f2:
+        r2 = r11.mtproto_seq;	 Catch:{ Exception -> 0x0258 }
+        r3 = r11.seq_in;	 Catch:{ Exception -> 0x0258 }
+        r2 = java.lang.Math.min(r2, r3);	 Catch:{ Exception -> 0x0258 }
+        r11.mtproto_seq = r2;	 Catch:{ Exception -> 0x0258 }
+    L_0x01fc:
+        r2 = r1.layer;	 Catch:{ Exception -> 0x0258 }
+        r8.applyPeerLayer(r11, r2);	 Catch:{ Exception -> 0x0258 }
+        r2 = r1.out_seq_no;	 Catch:{ Exception -> 0x0258 }
+        r11.seq_in = r2;	 Catch:{ Exception -> 0x0258 }
+        r2 = r1.in_seq_no;	 Catch:{ Exception -> 0x0258 }
+        r11.in_seq_no = r2;	 Catch:{ Exception -> 0x0258 }
+        r2 = r21.getMessagesStorage();	 Catch:{ Exception -> 0x0258 }
         r3 = 1;
-        r2.updateEncryptedChatSeq(r11, r3);	 Catch:{ Exception -> 0x025b }
-        r1 = r1.message;	 Catch:{ Exception -> 0x025b }
-        goto L_0x0225;
-    L_0x0217:
-        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageService;	 Catch:{ Exception -> 0x025b }
-        if (r2 == 0) goto L_0x0240;
-    L_0x021b:
+        r2.updateEncryptedChatSeq(r11, r3);	 Catch:{ Exception -> 0x0258 }
+        r1 = r1.message;	 Catch:{ Exception -> 0x0258 }
+        goto L_0x0222;
+    L_0x0214:
+        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageService;	 Catch:{ Exception -> 0x0258 }
+        if (r2 == 0) goto L_0x023d;
+    L_0x0218:
         r2 = r1;
-        r2 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageService) r2;	 Catch:{ Exception -> 0x025b }
-        r2 = r2.action;	 Catch:{ Exception -> 0x025b }
-        r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageActionNotifyLayer;	 Catch:{ Exception -> 0x025b }
-        if (r2 != 0) goto L_0x0225;
-    L_0x0224:
-        goto L_0x0240;
-    L_0x0225:
+        r2 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageService) r2;	 Catch:{ Exception -> 0x0258 }
+        r2 = r2.action;	 Catch:{ Exception -> 0x0258 }
+        r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageActionNotifyLayer;	 Catch:{ Exception -> 0x0258 }
+        if (r2 != 0) goto L_0x0222;
+    L_0x0221:
+        goto L_0x023d;
+    L_0x0222:
         r5 = r1;
-        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x025b }
-        r7.<init>();	 Catch:{ Exception -> 0x025b }
-        r3 = r0.file;	 Catch:{ Exception -> 0x025b }
-        r4 = r0.date;	 Catch:{ Exception -> 0x025b }
+        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0258 }
+        r7.<init>();	 Catch:{ Exception -> 0x0258 }
+        r3 = r0.file;	 Catch:{ Exception -> 0x0258 }
+        r4 = r0.date;	 Catch:{ Exception -> 0x0258 }
         r1 = r21;
         r2 = r11;
         r6 = r14;
-        r0 = r1.processDecryptedObject(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x025b }
-        if (r0 == 0) goto L_0x023c;
+        r0 = r1.processDecryptedObject(r2, r3, r4, r5, r6);	 Catch:{ Exception -> 0x0258 }
+        if (r0 == 0) goto L_0x0239;
+    L_0x0236:
+        r7.add(r0);	 Catch:{ Exception -> 0x0258 }
     L_0x0239:
-        r7.add(r0);	 Catch:{ Exception -> 0x025b }
-    L_0x023c:
-        r8.checkSecretHoles(r11, r7);	 Catch:{ Exception -> 0x025b }
+        r8.checkSecretHoles(r11, r7);	 Catch:{ Exception -> 0x0258 }
         return r7;
-    L_0x0240:
+    L_0x023d:
         return r12;
-    L_0x0241:
-        r13.reuse();	 Catch:{ Exception -> 0x025b }
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x025b }
-        if (r0 == 0) goto L_0x025f;
-    L_0x0248:
+    L_0x023e:
+        r13.reuse();	 Catch:{ Exception -> 0x0258 }
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0258 }
+        if (r0 == 0) goto L_0x025c;
+    L_0x0245:
         r0 = "fingerprint mismatch %x";
         r3 = 1;
-        r3 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x025b }
-        r1 = java.lang.Long.valueOf(r1);	 Catch:{ Exception -> 0x025b }
-        r3[r14] = r1;	 Catch:{ Exception -> 0x025b }
-        r0 = java.lang.String.format(r0, r3);	 Catch:{ Exception -> 0x025b }
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x025b }
-        goto L_0x025f;
-    L_0x025b:
+        r3 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x0258 }
+        r1 = java.lang.Long.valueOf(r1);	 Catch:{ Exception -> 0x0258 }
+        r3[r14] = r1;	 Catch:{ Exception -> 0x0258 }
+        r0 = java.lang.String.format(r0, r3);	 Catch:{ Exception -> 0x0258 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0258 }
+        goto L_0x025c;
+    L_0x0258:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x025f:
+    L_0x025c:
         return r12;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SecretChatHelper.decryptMessage(org.telegram.tgnet.TLRPC$EncryptedMessage):java.util.ArrayList");

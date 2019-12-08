@@ -154,18 +154,21 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
             photoPickerActivity.setDelegate(new PhotoPickerActivityDelegate() {
                 private boolean sendPressed;
 
-                private void sendSelectedPhotos(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList) {
+                private void sendSelectedPhotos(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList, boolean z, int i) {
+                }
+
+                public void onCaptionChanged(CharSequence charSequence) {
                 }
 
                 public void selectedPhotosChanged() {
                 }
 
-                public void actionButtonPressed(boolean z) {
+                public void actionButtonPressed(boolean z, boolean z2, int i) {
                     if (!hashMap.isEmpty() && ImageUpdater.this.delegate != null && !this.sendPressed && !z) {
                         this.sendPressed = true;
                         ArrayList arrayList = new ArrayList();
-                        for (int i = 0; i < arrayList.size(); i++) {
-                            Object obj = hashMap.get(arrayList.get(i));
+                        for (int i2 = 0; i2 < arrayList.size(); i2++) {
+                            Object obj = hashMap.get(arrayList.get(i2));
                             SendingMediaInfo sendingMediaInfo = new SendingMediaInfo();
                             arrayList.add(sendingMediaInfo);
                             if (obj instanceof SearchImage) {
@@ -226,7 +229,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                                 loadBitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), null, 800.0f, 800.0f, true);
                             } else {
                                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
-                                NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
+                                NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailToLoad);
                                 this.uploadingImage = FileLoader.getAttachFileName(closestPhotoSizeWithSize.location);
                                 this.imageReceiver.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, sendingMediaInfo.searchImage.photo), null, null, "jpg", null, 1);
                             }
@@ -294,7 +297,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
             }
             PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(1, false, false, null);
             photoAlbumPickerActivity.setDelegate(new PhotoAlbumPickerActivityDelegate() {
-                public void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList) {
+                public void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList, boolean z, int i) {
                     ImageUpdater.this.didSelectPhotos(arrayList);
                 }
 
@@ -365,7 +368,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                     return false;
                 }
 
-                public void sendButtonPressed(int i, VideoEditedInfo videoEditedInfo) {
+                public void sendButtonPressed(int i, VideoEditedInfo videoEditedInfo, boolean z, int i2) {
                     PhotoEntry photoEntry = (PhotoEntry) arrayList.get(0);
                     String str = photoEntry.imagePath;
                     if (str == null) {
@@ -457,9 +460,9 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                     this.delegate = null;
                 }
             }
-        } else if ((i == NotificationCenter.fileDidLoad || i == NotificationCenter.fileDidFailedLoad || i == NotificationCenter.httpFileDidLoad || i == NotificationCenter.httpFileDidFailedLoad) && ((String) objArr[0]).equals(this.uploadingImage)) {
+        } else if ((i == NotificationCenter.fileDidLoad || i == NotificationCenter.fileDidFailToLoad || i == NotificationCenter.httpFileDidLoad || i == NotificationCenter.httpFileDidFailedLoad) && ((String) objArr[0]).equals(this.uploadingImage)) {
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailToLoad);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidLoad);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);
             this.uploadingImage = null;

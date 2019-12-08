@@ -93,13 +93,18 @@ public class ChatActionCell extends BaseCell {
         this.delegate = chatActionCellDelegate;
     }
 
-    public void setCustomDate(int i) {
+    public void setCustomDate(int i, boolean z) {
         if (this.customDate != i) {
-            String formatDateChat = LocaleController.formatDateChat((long) i);
+            CharSequence formatString;
+            if (z) {
+                formatString = LocaleController.formatString("MessageScheduledOn", NUM, LocaleController.formatDateChat((long) i));
+            } else {
+                formatString = LocaleController.formatDateChat((long) i);
+            }
             CharSequence charSequence = this.customText;
-            if (charSequence == null || !TextUtils.equals(formatDateChat, charSequence)) {
+            if (charSequence == null || !TextUtils.equals(formatString, charSequence)) {
                 this.customDate = i;
-                this.customText = formatDateChat;
+                this.customText = formatString;
                 if (getMeasuredWidth() != 0) {
                     createLayout(this.customText, getMeasuredWidth());
                     invalidate();
@@ -133,7 +138,7 @@ public class ChatActionCell extends BaseCell {
                 } else {
                     i = 0;
                 }
-                this.avatarDrawable.setInfo(i, null, null, false);
+                this.avatarDrawable.setInfo(i, null, null);
                 MessageObject messageObject2 = this.currentMessageObject;
                 if (messageObject2.messageOwner.action instanceof TL_messageActionUserUpdatedPhoto) {
                     this.imageReceiver.setImage(null, null, this.avatarDrawable, null, messageObject2, 0);

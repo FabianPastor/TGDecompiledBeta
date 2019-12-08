@@ -107,6 +107,9 @@ public class VoIPService extends VoIPBaseService {
         return null;
     }
 
+    public void onGroupCallKeySent() {
+    }
+
     @SuppressLint({"MissingPermission"})
     public int onStartCommand(Intent intent, int i, int i2) {
         if (VoIPBaseService.sharedInstance != null) {
@@ -1288,23 +1291,17 @@ public class VoIPService extends VoIPBaseService {
 
     /* Access modifiers changed, original: 0000 */
     public void onMediaButtonEvent(KeyEvent keyEvent) {
-        if (keyEvent.getKeyCode() == 79 || keyEvent.getKeyCode() == 127 || keyEvent.getKeyCode() == 85) {
-            boolean z = true;
-            if (keyEvent.getAction() != 1) {
-                return;
-            }
-            if (this.currentState == 15) {
-                acceptIncomingCall();
-                return;
-            }
-            if (isMicMute()) {
-                z = false;
-            }
-            setMicMute(z);
-            Iterator it = this.stateListeners.iterator();
-            while (it.hasNext()) {
-                ((StateListener) it.next()).onAudioSettingsChanged();
-            }
+        if ((keyEvent.getKeyCode() != 79 && keyEvent.getKeyCode() != 127 && keyEvent.getKeyCode() != 85) || keyEvent.getAction() != 1) {
+            return;
+        }
+        if (this.currentState == 15) {
+            acceptIncomingCall();
+            return;
+        }
+        setMicMute(isMicMute() ^ 1);
+        Iterator it = this.stateListeners.iterator();
+        while (it.hasNext()) {
+            ((StateListener) it.next()).onAudioSettingsChanged();
         }
     }
 
@@ -1377,10 +1374,6 @@ public class VoIPService extends VoIPBaseService {
         byte[] bArr2 = new byte[8];
         System.arraycopy(bArr, bArr.length - 8, bArr2, 0, 8);
         this.groupCallKeyFingerprint = Utilities.bytesToLong(bArr2);
-    }
-
-    public void onGroupCallKeySent() {
-        boolean z = this.isOutgoing;
     }
 
     public void onCallUpgradeRequestReceived() {

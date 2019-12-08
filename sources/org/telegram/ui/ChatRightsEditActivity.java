@@ -1090,7 +1090,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 }
                 tL_channels_editCreator.password = inputCheckPasswordSRP2;
                 tL_channels_editCreator.user_id = getMessagesController().getInputUser(this.currentUser);
-                getConnectionsManager().sendRequest(tL_channels_editCreator, new -$$Lambda$ChatRightsEditActivity$QUED_t1XS7niduj0Ch3rf4BK838(this, inputCheckPasswordSRP, twoStepVerificationActivity));
+                getConnectionsManager().sendRequest(tL_channels_editCreator, new -$$Lambda$ChatRightsEditActivity$D25IvZ5aoFom9wTENXuXrYvar_Nw(this, inputCheckPasswordSRP, twoStepVerificationActivity, tL_channels_editCreator));
                 return;
             }
             MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), this.chatId, this, new -$$Lambda$ChatRightsEditActivity$f-QWBMrtF1b2jpUj_yHfvf_4djU(this, inputCheckPasswordSRP, twoStepVerificationActivity));
@@ -1103,11 +1103,11 @@ public class ChatRightsEditActivity extends BaseFragment {
         initTransfer(inputCheckPasswordSRP, twoStepVerificationActivity);
     }
 
-    public /* synthetic */ void lambda$initTransfer$14$ChatRightsEditActivity(InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ChatRightsEditActivity$NyqDaJJATXIkVGLTXceHmS5HrAM(this, tL_error, inputCheckPasswordSRP, twoStepVerificationActivity));
+    public /* synthetic */ void lambda$initTransfer$14$ChatRightsEditActivity(InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TL_channels_editCreator tL_channels_editCreator, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$ChatRightsEditActivity$8ueSdr7oGEPpYP8jH_36Dnc4DC0(this, tL_error, inputCheckPasswordSRP, twoStepVerificationActivity, tL_channels_editCreator));
     }
 
-    public /* synthetic */ void lambda$null$13$ChatRightsEditActivity(TL_error tL_error, InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity) {
+    public /* synthetic */ void lambda$null$13$ChatRightsEditActivity(TL_error tL_error, InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TL_channels_editCreator tL_channels_editCreator) {
         TL_error tL_error2 = tL_error;
         TwoStepVerificationActivity twoStepVerificationActivity2 = twoStepVerificationActivity;
         if (tL_error2 != null) {
@@ -1201,7 +1201,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                                 twoStepVerificationActivity.needHideProgress();
                                 twoStepVerificationActivity.finishFragment();
                             }
-                            AlertsCreator.showAddUserAlert(tL_error2.text, this, this.isChannel);
+                            AlertsCreator.showAddUserAlert(tL_error2.text, this, this.isChannel, tL_channels_editCreator);
                         }
                     }
                 } else if (inputCheckPasswordSRP == null) {
@@ -1742,7 +1742,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_chatrightseditactivity_39lr7fbs516ru6ntpvs_by3oycs;
         themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
         themeDescriptionArr[29] = new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
-        themeDescriptionArr[30] = new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[30] = new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$ChatRightsEditActivity$39LR7FBS516Ru6nTpVS_BY3Oycs -__lambda_chatrightseditactivity_39lr7fbs516ru6ntpvs_by3oycs2 = -__lambda_chatrightseditactivity_39lr7fbs516ru6ntpvs_by3oycs;
         themeDescriptionArr[31] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatrightseditactivity_39lr7fbs516ru6ntpvs_by3oycs2, "avatar_backgroundRed");
         themeDescriptionArr[32] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatrightseditactivity_39lr7fbs516ru6ntpvs_by3oycs2, "avatar_backgroundOrange");
@@ -1753,11 +1753,11 @@ public class ChatRightsEditActivity extends BaseFragment {
         themeDescriptionArr[37] = new ThemeDescription(null, 0, null, null, null, -__lambda_chatrightseditactivity_39lr7fbs516ru6ntpvs_by3oycs2, "avatar_backgroundPink");
         themeDescriptionArr[38] = new ThemeDescription(null, 0, new Class[]{DialogRadioCell.class}, new String[]{"textView"}, null, null, null, "dialogTextBlack");
         themeDescriptionArr[39] = new ThemeDescription(null, 0, new Class[]{DialogRadioCell.class}, new String[]{"textView"}, null, null, null, "dialogTextGray2");
-        int i2 = ThemeDescription.FLAG_CHECKBOX;
+        i = ThemeDescription.FLAG_CHECKBOX;
         Class[] clsArr2 = new Class[]{DialogRadioCell.class};
         String[] strArr2 = new String[1];
         strArr2[0] = "radioButton";
-        themeDescriptionArr[40] = new ThemeDescription(null, i2, clsArr2, strArr2, null, null, null, "dialogRadioBackground");
+        themeDescriptionArr[40] = new ThemeDescription(null, i, clsArr2, strArr2, null, null, null, "dialogRadioBackground");
         themeDescriptionArr[41] = new ThemeDescription(null, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{DialogRadioCell.class}, new String[]{"radioButton"}, null, null, null, "dialogRadioBackgroundChecked");
         return themeDescriptionArr;
     }

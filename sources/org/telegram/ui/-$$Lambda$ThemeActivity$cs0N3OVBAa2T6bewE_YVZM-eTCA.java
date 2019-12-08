@@ -11,6 +11,6 @@ public final /* synthetic */ class -$$Lambda$ThemeActivity$cs0N3OVBAa2T6bewE_YVZ
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ThemeActivity.lambda$updateRows$0((ThemeInfo) obj, (ThemeInfo) obj2);
+        return Integer.compare(((ThemeInfo) obj).sortIndex, ((ThemeInfo) obj2).sortIndex);
     }
 }

@@ -678,8 +678,7 @@ public class RecyclerListView extends RecyclerView {
                                 RecyclerListView.this.onItemClickListenerExtended.onItemClick(access$300, access$600, x - access$300.getX(), y - access$300.getY());
                             }
                         }
-                        recyclerListView = RecyclerListView.this;
-                        AnonymousClass1 anonymousClass1 = new Runnable() {
+                        AndroidUtilities.runOnUIThread(RecyclerListView.this.clickRunnable = new Runnable() {
                             public void run() {
                                 if (this == RecyclerListView.this.clickRunnable) {
                                     RecyclerListView.this.clickRunnable = null;
@@ -703,9 +702,7 @@ public class RecyclerListView extends RecyclerView {
                                     }
                                 }
                             }
-                        };
-                        recyclerListView.clickRunnable = anonymousClass1;
-                        AndroidUtilities.runOnUIThread(anonymousClass1, (long) ViewConfiguration.getPressedStateDuration());
+                        }, (long) ViewConfiguration.getPressedStateDuration());
                         if (RecyclerListView.this.selectChildRunnable != null) {
                             View access$3002 = RecyclerListView.this.currentChildView;
                             AndroidUtilities.cancelRunOnUIThread(RecyclerListView.this.selectChildRunnable);

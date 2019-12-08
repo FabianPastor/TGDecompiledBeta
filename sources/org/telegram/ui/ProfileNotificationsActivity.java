@@ -1372,7 +1372,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_profilenotificationsactivity_7a70wck-sskw_wsss5moegsrl6m;
         themeDescriptionArr[24] = new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
         themeDescriptionArr[25] = new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
-        themeDescriptionArr[26] = new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[26] = new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$ProfileNotificationsActivity$7A70wCk-sskw_wSSS5mOEgsRl6M -__lambda_profilenotificationsactivity_7a70wck-sskw_wsss5moegsrl6m2 = -__lambda_profilenotificationsactivity_7a70wck-sskw_wsss5moegsrl6m;
         themeDescriptionArr[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_profilenotificationsactivity_7a70wck-sskw_wsss5moegsrl6m2, "avatar_backgroundRed");
         themeDescriptionArr[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_profilenotificationsactivity_7a70wck-sskw_wsss5moegsrl6m2, "avatar_backgroundOrange");

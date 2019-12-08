@@ -66,6 +66,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextColorThemeCell;
 import org.telegram.ui.Components.RecyclerListView.Holder;
@@ -78,7 +79,6 @@ public class ThemeEditorView {
     private static volatile ThemeEditorView Instance;
     private ArrayList<ThemeDescription> currentThemeDesription;
     private int currentThemeDesriptionPosition;
-    private String currentThemeName;
     private DecelerateInterpolator decelerateInterpolator;
     private EditorAlert editorAlert;
     private final int editorHeight = AndroidUtilities.dp(54.0f);
@@ -86,6 +86,7 @@ public class ThemeEditorView {
     private boolean hidden;
     private Activity parentActivity;
     private SharedPreferences preferences;
+    private ThemeInfo themeInfo;
     private WallpaperUpdater wallpaperUpdater;
     private LayoutParams windowLayoutParams;
     private WindowManager windowManager;
@@ -95,10 +96,8 @@ public class ThemeEditorView {
         private boolean animationInProgress;
         private FrameLayout bottomLayout;
         private FrameLayout bottomSaveLayout;
-        private TextView cancelButton;
         private AnimatorSet colorChangeAnimation;
         private ColorPicker colorPicker;
-        private TextView defaultButtom;
         private FrameLayout frameLayout;
         private boolean ignoreTextChange;
         private LinearLayoutManager layoutManager;
@@ -822,28 +821,24 @@ public class ThemeEditorView {
         private class SearchField extends FrameLayout {
             private View backgroundView;
             private ImageView clearSearchImageView;
-            private CloseProgressDrawable2 progressDrawable;
-            private View searchBackground;
             private EditTextBoldCursor searchEditText;
-            private ImageView searchIconImageView;
 
             public SearchField(Context context) {
                 super(context);
-                this.searchBackground = new View(context);
-                this.searchBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), -854795));
-                addView(this.searchBackground, LayoutHelper.createFrame(-1, 36.0f, 51, 14.0f, 11.0f, 14.0f, 0.0f));
-                this.searchIconImageView = new ImageView(context);
-                this.searchIconImageView.setScaleType(ScaleType.CENTER);
-                this.searchIconImageView.setImageResource(NUM);
-                this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(-6182737, Mode.MULTIPLY));
-                addView(this.searchIconImageView, LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f));
+                View view = new View(context);
+                view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), -854795));
+                addView(view, LayoutHelper.createFrame(-1, 36.0f, 51, 14.0f, 11.0f, 14.0f, 0.0f));
+                ImageView imageView = new ImageView(context);
+                imageView.setScaleType(ScaleType.CENTER);
+                imageView.setImageResource(NUM);
+                imageView.setColorFilter(new PorterDuffColorFilter(-6182737, Mode.MULTIPLY));
+                addView(imageView, LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f));
                 this.clearSearchImageView = new ImageView(context);
                 this.clearSearchImageView.setScaleType(ScaleType.CENTER);
-                ImageView imageView = this.clearSearchImageView;
+                imageView = this.clearSearchImageView;
                 CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
-                this.progressDrawable = closeProgressDrawable2;
                 imageView.setImageDrawable(closeProgressDrawable2);
-                this.progressDrawable.setSide(AndroidUtilities.dp(7.0f));
+                closeProgressDrawable2.setSide(AndroidUtilities.dp(7.0f));
                 this.clearSearchImageView.setScaleX(0.1f);
                 this.clearSearchImageView.setScaleY(0.1f);
                 this.clearSearchImageView.setAlpha(0.0f);
@@ -952,7 +947,6 @@ public class ThemeEditorView {
             private Context context;
             private int currentCount;
             private ArrayList<ArrayList<ThemeDescription>> items = new ArrayList();
-            private HashMap<String, ArrayList<ThemeDescription>> itemsMap = new HashMap();
 
             public int getItemViewType(int i) {
                 return i == 0 ? 1 : 0;
@@ -964,12 +958,13 @@ public class ThemeEditorView {
 
             public ListAdapter(Context context, ThemeDescription[] themeDescriptionArr) {
                 this.context = context;
+                HashMap hashMap = new HashMap();
                 for (ThemeDescription themeDescription : themeDescriptionArr) {
                     String currentKey = themeDescription.getCurrentKey();
-                    ArrayList arrayList = (ArrayList) this.itemsMap.get(currentKey);
+                    ArrayList arrayList = (ArrayList) hashMap.get(currentKey);
                     if (arrayList == null) {
                         arrayList = new ArrayList();
-                        this.itemsMap.put(currentKey, arrayList);
+                        hashMap.put(currentKey, arrayList);
                         this.items.add(arrayList);
                     }
                     arrayList.add(themeDescription);
@@ -1554,30 +1549,30 @@ public class ThemeEditorView {
             this.bottomLayout.setVisibility(8);
             this.bottomLayout.setBackgroundColor(-1);
             this.containerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-            this.cancelButton = new TextView(context2);
-            this.cancelButton.setTextSize(1, 14.0f);
-            this.cancelButton.setTextColor(-15095832);
-            this.cancelButton.setGravity(17);
-            this.cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
-            this.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-            this.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-            this.cancelButton.setTypeface(AndroidUtilities.getTypeface(str));
-            this.bottomLayout.addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
-            this.cancelButton.setOnClickListener(new -$$Lambda$ThemeEditorView$EditorAlert$e8sB4SzqRAAe3BbXeRhAVLL0Fkg(this));
+            textView = new TextView(context2);
+            textView.setTextSize(1, 14.0f);
+            textView.setTextColor(-15095832);
+            textView.setGravity(17);
+            textView.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
+            textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
+            textView.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
+            textView.setTypeface(AndroidUtilities.getTypeface(str));
+            this.bottomLayout.addView(textView, LayoutHelper.createFrame(-2, -1, 51));
+            textView.setOnClickListener(new -$$Lambda$ThemeEditorView$EditorAlert$e8sB4SzqRAAe3BbXeRhAVLL0Fkg(this));
             LinearLayout linearLayout = new LinearLayout(context2);
             linearLayout.setOrientation(0);
             this.bottomLayout.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 53));
-            this.defaultButtom = new TextView(context2);
-            this.defaultButtom.setTextSize(1, 14.0f);
-            this.defaultButtom.setTextColor(-15095832);
-            this.defaultButtom.setGravity(17);
-            this.defaultButtom.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
-            this.defaultButtom.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-            this.defaultButtom.setText(LocaleController.getString("Default", NUM).toUpperCase());
-            this.defaultButtom.setTypeface(AndroidUtilities.getTypeface(str));
-            linearLayout.addView(this.defaultButtom, LayoutHelper.createFrame(-2, -1, 51));
-            this.defaultButtom.setOnClickListener(new -$$Lambda$ThemeEditorView$EditorAlert$KOpMpGNwWrKZ5XW39TuNtWWXkWM(this));
             TextView textView2 = new TextView(context2);
+            textView2.setTextSize(1, 14.0f);
+            textView2.setTextColor(-15095832);
+            textView2.setGravity(17);
+            textView2.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
+            textView2.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
+            textView2.setText(LocaleController.getString("Default", NUM).toUpperCase());
+            textView2.setTypeface(AndroidUtilities.getTypeface(str));
+            linearLayout.addView(textView2, LayoutHelper.createFrame(-2, -1, 51));
+            textView2.setOnClickListener(new -$$Lambda$ThemeEditorView$EditorAlert$KOpMpGNwWrKZ5XW39TuNtWWXkWM(this));
+            textView2 = new TextView(context2);
             textView2.setTextSize(1, 14.0f);
             textView2.setTextColor(-15095832);
             textView2.setGravity(17);
@@ -1619,7 +1614,7 @@ public class ThemeEditorView {
         }
 
         public /* synthetic */ void lambda$new$2$ThemeEditorView$EditorAlert(View view) {
-            Theme.saveCurrentTheme(this.this$0.currentThemeName, true);
+            Theme.saveCurrentTheme(this.this$0.themeInfo, true, false, false);
             setOnDismissListener(null);
             dismiss();
             this.this$0.close();
@@ -1727,7 +1722,7 @@ public class ThemeEditorView {
             if (this.this$0.parentActivity != null) {
                 ((LaunchActivity) this.this$0.parentActivity).rebuildAllFragments(false);
             }
-            Theme.saveCurrentTheme(this.this$0.currentThemeName, false);
+            Theme.saveCurrentTheme(this.this$0.themeInfo, false, false, false);
             if (this.listView.getAdapter() == this.listAdapter) {
                 AndroidUtilities.hideKeyboard(getCurrentFocus());
             }
@@ -1855,12 +1850,12 @@ public class ThemeEditorView {
         }
     }
 
-    public void show(Activity activity, final String str) {
+    public void show(Activity activity, ThemeInfo themeInfo) {
         if (Instance != null) {
             Instance.destroy();
         }
         this.hidden = false;
-        this.currentThemeName = str;
+        this.themeInfo = themeInfo;
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
             private float startX;
@@ -2194,7 +2189,7 @@ public class ThemeEditorView {
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             this.wallpaperUpdater = new WallpaperUpdater(activity, null, new WallpaperUpdaterDelegate() {
                 public void didSelectWallpaper(File file, Bitmap bitmap, boolean z) {
-                    Theme.setThemeWallpaper(str, bitmap, file);
+                    Theme.setThemeWallpaper(ThemeEditorView.this.themeInfo, bitmap, file);
                 }
 
                 public void needOpenColorPicker() {

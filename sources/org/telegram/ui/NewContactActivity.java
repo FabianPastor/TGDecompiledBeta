@@ -80,29 +80,28 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2 = r1.avatarDrawable;
         r4 = "";
         r5 = 5;
-        r6 = 0;
-        r2.setInfo(r5, r4, r4, r6);
+        r2.setInfo(r5, r4, r4);
         r2 = r1.actionBar;
         r2 = r2.createMenu();
         r4 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r7 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
-        r2 = r2.addItemWithWidth(r3, r7, r4);
+        r6 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
+        r2 = r2.addItemWithWidth(r3, r6, r4);
         r1.editDoneItem = r2;
         r2 = r1.editDoneItem;
         r4 = "Done";
-        r7 = NUM; // 0x7f0d039b float:1.8743987E38 double:1.0531302336E-314;
-        r4 = org.telegram.messenger.LocaleController.getString(r4, r7);
+        r6 = NUM; // 0x7f0d039e float:1.8743993E38 double:1.053130235E-314;
+        r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r2.setContentDescription(r4);
         r2 = new org.telegram.ui.Components.ContextProgressView;
         r2.<init>(r0, r3);
         r1.editDoneItemProgress = r2;
         r2 = r1.editDoneItem;
         r4 = r1.editDoneItemProgress;
-        r7 = -1;
-        r8 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
-        r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8);
-        r2.addView(r4, r8);
+        r6 = -1;
+        r7 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7);
+        r2.addView(r4, r7);
         r2 = r1.editDoneItemProgress;
         r4 = 4;
         r2.setVisibility(r4);
@@ -112,15 +111,16 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2 = new android.widget.LinearLayout;
         r2.<init>(r0);
         r4 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
-        r8 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r2.setPadding(r8, r6, r4, r6);
+        r8 = 0;
+        r2.setPadding(r7, r8, r4, r8);
         r2.setOrientation(r3);
         r4 = r1.fragmentView;
         r4 = (android.widget.ScrollView) r4;
-        r8 = -2;
+        r7 = -2;
         r9 = 51;
-        r9 = org.telegram.ui.Components.LayoutHelper.createScroll(r7, r8, r9);
+        r9 = org.telegram.ui.Components.LayoutHelper.createScroll(r6, r7, r9);
         r4.addView(r2, r9);
         r4 = org.telegram.ui.-$$Lambda$NewContactActivity$dyt1ArQHbLSL06GO-wtQQZkRhQE.INSTANCE;
         r2.setOnTouchListener(r4);
@@ -170,7 +170,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r9 = r1.firstNameField;
         r9.setSingleLine(r3);
         r9 = r1.firstNameField;
-        r13 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r6);
+        r13 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8);
         r9.setBackgroundDrawable(r13);
         r9 = r1.firstNameField;
         r13 = 3;
@@ -182,7 +182,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r9.setImeOptions(r5);
         r9 = r1.firstNameField;
         r14 = "FirstName";
-        r15 = NUM; // 0x7f0d0473 float:1.8744425E38 double:1.0531303403E-314;
+        r15 = NUM; // 0x7f0d0478 float:1.8744435E38 double:1.053130343E-314;
         r14 = org.telegram.messenger.LocaleController.getString(r14, r15);
         r9.setHint(r14);
         r9 = r1.firstNameField;
@@ -203,60 +203,60 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r20 = 0;
         r21 = 0;
         r22 = 0;
-        r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22);
-        r4.addView(r9, r7);
-        r7 = r1.firstNameField;
+        r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22);
+        r4.addView(r9, r6);
+        r6 = r1.firstNameField;
         r9 = new org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4;
         r9.<init>(r1);
-        r7.setOnEditorActionListener(r9);
-        r7 = r1.firstNameField;
+        r6.setOnEditorActionListener(r9);
+        r6 = r1.firstNameField;
         r9 = new org.telegram.ui.NewContactActivity$2;
         r9.<init>();
-        r7.addTextChangedListener(r9);
-        r7 = new org.telegram.ui.Components.EditTextBoldCursor;
-        r7.<init>(r0);
-        r1.lastNameField = r7;
-        r7 = r1.lastNameField;
-        r7.setTextSize(r3, r10);
-        r7 = r1.lastNameField;
+        r6.addTextChangedListener(r9);
+        r6 = new org.telegram.ui.Components.EditTextBoldCursor;
+        r6.<init>(r0);
+        r1.lastNameField = r6;
+        r6 = r1.lastNameField;
+        r6.setTextSize(r3, r10);
+        r6 = r1.lastNameField;
         r9 = org.telegram.ui.ActionBar.Theme.getColor(r11);
-        r7.setHintTextColor(r9);
-        r7 = r1.lastNameField;
+        r6.setHintTextColor(r9);
+        r6 = r1.lastNameField;
         r9 = org.telegram.ui.ActionBar.Theme.getColor(r12);
-        r7.setTextColor(r9);
-        r7 = r1.lastNameField;
-        r9 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r6);
-        r7.setBackgroundDrawable(r9);
-        r7 = r1.lastNameField;
-        r7.setMaxLines(r3);
-        r7 = r1.lastNameField;
-        r7.setLines(r3);
-        r7 = r1.lastNameField;
-        r7.setSingleLine(r3);
-        r7 = r1.lastNameField;
-        r7.setGravity(r13);
-        r7 = r1.lastNameField;
+        r6.setTextColor(r9);
+        r6 = r1.lastNameField;
+        r9 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8);
+        r6.setBackgroundDrawable(r9);
+        r6 = r1.lastNameField;
+        r6.setMaxLines(r3);
+        r6 = r1.lastNameField;
+        r6.setLines(r3);
+        r6 = r1.lastNameField;
+        r6.setSingleLine(r3);
+        r6 = r1.lastNameField;
+        r6.setGravity(r13);
+        r6 = r1.lastNameField;
         r9 = 49152; // 0xCLASSNAME float:6.8877E-41 double:2.42843E-319;
-        r7.setInputType(r9);
-        r7 = r1.lastNameField;
-        r7.setImeOptions(r5);
+        r6.setInputType(r9);
+        r6 = r1.lastNameField;
+        r6.setImeOptions(r5);
         r5 = r1.lastNameField;
-        r7 = "LastName";
-        r9 = NUM; // 0x7f0d0563 float:1.8744912E38 double:1.053130459E-314;
-        r7 = org.telegram.messenger.LocaleController.getString(r7, r9);
-        r5.setHint(r7);
+        r6 = "LastName";
+        r9 = NUM; // 0x7f0d0568 float:1.8744922E38 double:1.0531304613E-314;
+        r6 = org.telegram.messenger.LocaleController.getString(r6, r9);
+        r5.setHint(r6);
         r5 = r1.lastNameField;
-        r7 = org.telegram.ui.ActionBar.Theme.getColor(r12);
-        r5.setCursorColor(r7);
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r5.setCursorColor(r6);
         r5 = r1.lastNameField;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r14);
-        r5.setCursorSize(r7);
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r14);
+        r5.setCursorSize(r6);
         r5 = r1.lastNameField;
         r5.setCursorWidth(r15);
         r5 = r1.lastNameField;
         r20 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
-        r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22);
-        r4.addView(r5, r7);
+        r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22);
+        r4.addView(r5, r6);
         r4 = r1.lastNameField;
         r5 = new org.telegram.ui.-$$Lambda$NewContactActivity$caCQM7G1cFeQM5WDamEHC5G1jDk;
         r5.<init>(r1);
@@ -273,11 +273,11 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r4 = r1.countryButton;
         r5 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r7 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r9 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r4.setPadding(r5, r7, r9, r6);
+        r4.setPadding(r5, r6, r9, r8);
         r4 = r1.countryButton;
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r12);
         r4.setTextColor(r5);
@@ -291,7 +291,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r4 = r1.countryButton;
         r4.setGravity(r13);
         r4 = r1.countryButton;
-        r5 = NUM; // 0x7var_b float:1.79458E38 double:1.052935801E-314;
+        r5 = NUM; // 0x7var_ float:1.7945823E38 double:1.0529358064E-314;
         r4.setBackgroundResource(r5);
         r4 = r1.countryButton;
         r17 = 36;
@@ -311,9 +311,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r4 = r1.lineView;
         r5 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r4.setPadding(r5, r6, r7, r6);
+        r6 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r4.setPadding(r5, r8, r6, r8);
         r4 = r1.lineView;
         r5 = "windowBackgroundWhiteGrayLine";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
@@ -326,7 +326,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2.addView(r4, r5);
         r4 = new android.widget.LinearLayout;
         r4.<init>(r0);
-        r4.setOrientation(r6);
+        r4.setOrientation(r8);
         r17 = -2;
         r19 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
         r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r16, r17, r18, r19, r20, r21);
@@ -346,79 +346,79 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r5 = 2;
         r2.setImportantForAccessibility(r5);
         r2 = r1.textView;
-        r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r8, r8);
-        r4.addView(r2, r7);
+        r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r7);
+        r4.addView(r2, r6);
         r2 = new org.telegram.ui.Components.EditTextBoldCursor;
         r2.<init>(r0);
         r1.codeField = r2;
         r2 = r1.codeField;
         r2.setInputType(r13);
         r2 = r1.codeField;
-        r7 = org.telegram.ui.ActionBar.Theme.getColor(r12);
-        r2.setTextColor(r7);
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r2.setTextColor(r6);
         r2 = r1.codeField;
-        r7 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r6);
-        r2.setBackgroundDrawable(r7);
+        r6 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8);
+        r2.setBackgroundDrawable(r6);
         r2 = r1.codeField;
-        r7 = org.telegram.ui.ActionBar.Theme.getColor(r12);
-        r2.setCursorColor(r7);
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r2.setCursorColor(r6);
         r2 = r1.codeField;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r14);
-        r2.setCursorSize(r7);
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r14);
+        r2.setCursorSize(r6);
         r2 = r1.codeField;
         r2.setCursorWidth(r15);
         r2 = r1.codeField;
-        r7 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r2.setPadding(r7, r6, r6, r6);
+        r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r2.setPadding(r6, r8, r8, r8);
         r2 = r1.codeField;
         r2.setTextSize(r3, r10);
         r2 = r1.codeField;
         r2.setMaxLines(r3);
         r2 = r1.codeField;
-        r7 = 19;
-        r2.setGravity(r7);
+        r6 = 19;
+        r2.setGravity(r6);
         r2 = r1.codeField;
-        r7 = NUM; // 0x10000005 float:2.5243564E-29 double:1.326247394E-315;
-        r2.setImeOptions(r7);
+        r6 = NUM; // 0x10000005 float:2.5243564E-29 double:1.326247394E-315;
+        r2.setImeOptions(r6);
         r2 = r1.codeField;
         r16 = 55;
         r17 = 36;
         r18 = -NUM; // 0xffffffffCLASSNAME float:-9.0 double:NaN;
         r19 = 0;
         r20 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
-        r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r16, r17, r18, r19, r20, r21);
-        r4.addView(r2, r7);
+        r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r16, r17, r18, r19, r20, r21);
+        r4.addView(r2, r6);
         r2 = r1.codeField;
-        r7 = new org.telegram.ui.NewContactActivity$4;
-        r7.<init>();
-        r2.addTextChangedListener(r7);
+        r6 = new org.telegram.ui.NewContactActivity$4;
+        r6.<init>();
+        r2.addTextChangedListener(r6);
         r2 = r1.codeField;
-        r7 = new org.telegram.ui.-$$Lambda$NewContactActivity$sAQJMXy-aH9t_IBkPAm16jh4ito;
-        r7.<init>(r1);
-        r2.setOnEditorActionListener(r7);
+        r6 = new org.telegram.ui.-$$Lambda$NewContactActivity$sAQJMXy-aH9t_IBkPAm16jh4ito;
+        r6.<init>(r1);
+        r2.setOnEditorActionListener(r6);
         r2 = new org.telegram.ui.Components.HintEditText;
         r2.<init>(r0);
         r1.phoneField = r2;
         r2 = r1.phoneField;
         r2.setInputType(r13);
         r2 = r1.phoneField;
-        r7 = org.telegram.ui.ActionBar.Theme.getColor(r12);
-        r2.setTextColor(r7);
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r2.setTextColor(r6);
         r2 = r1.phoneField;
-        r7 = org.telegram.ui.ActionBar.Theme.getColor(r11);
-        r2.setHintTextColor(r7);
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r11);
+        r2.setHintTextColor(r6);
         r2 = r1.phoneField;
-        r7 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r6);
-        r2.setBackgroundDrawable(r7);
+        r6 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8);
+        r2.setBackgroundDrawable(r6);
         r2 = r1.phoneField;
-        r2.setPadding(r6, r6, r6, r6);
+        r2.setPadding(r8, r8, r8, r8);
         r2 = r1.phoneField;
-        r7 = org.telegram.ui.ActionBar.Theme.getColor(r12);
-        r2.setCursorColor(r7);
+        r6 = org.telegram.ui.ActionBar.Theme.getColor(r12);
+        r2.setCursorColor(r6);
         r2 = r1.phoneField;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r14);
-        r2.setCursorSize(r7);
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r14);
+        r2.setCursorSize(r6);
         r2 = r1.phoneField;
         r2.setCursorWidth(r15);
         r2 = r1.phoneField;
@@ -426,16 +426,16 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2 = r1.phoneField;
         r2.setMaxLines(r3);
         r2 = r1.phoneField;
-        r7 = 19;
-        r2.setGravity(r7);
+        r6 = 19;
+        r2.setGravity(r6);
         r2 = r1.phoneField;
-        r7 = NUM; // 0x10000006 float:2.5243567E-29 double:1.3262474E-315;
-        r2.setImeOptions(r7);
+        r6 = NUM; // 0x10000006 float:2.5243567E-29 double:1.3262474E-315;
+        r2.setImeOptions(r6);
         r2 = r1.phoneField;
-        r7 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
-        r8 = -1;
-        r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r7);
-        r4.addView(r2, r7);
+        r6 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
+        r7 = -1;
+        r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6);
+        r4.addView(r2, r6);
         r2 = r1.phoneField;
         r4 = new org.telegram.ui.NewContactActivity$5;
         r4.<init>();
@@ -451,41 +451,41 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2 = new java.util.HashMap;
         r2.<init>();
         r4 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x0442 }
-        r7 = new java.io.InputStreamReader;	 Catch:{ Exception -> 0x0442 }
+        r6 = new java.io.InputStreamReader;	 Catch:{ Exception -> 0x0442 }
         r0 = r24.getResources();	 Catch:{ Exception -> 0x0442 }
         r0 = r0.getAssets();	 Catch:{ Exception -> 0x0442 }
-        r8 = "countries.txt";
-        r0 = r0.open(r8);	 Catch:{ Exception -> 0x0442 }
-        r7.<init>(r0);	 Catch:{ Exception -> 0x0442 }
-        r4.<init>(r7);	 Catch:{ Exception -> 0x0442 }
+        r7 = "countries.txt";
+        r0 = r0.open(r7);	 Catch:{ Exception -> 0x0442 }
+        r6.<init>(r0);	 Catch:{ Exception -> 0x0442 }
+        r4.<init>(r6);	 Catch:{ Exception -> 0x0442 }
     L_0x0405:
         r0 = r4.readLine();	 Catch:{ Exception -> 0x0442 }
         if (r0 == 0) goto L_0x043e;
     L_0x040b:
-        r7 = ";";
-        r0 = r0.split(r7);	 Catch:{ Exception -> 0x0442 }
-        r7 = r1.countriesArray;	 Catch:{ Exception -> 0x0442 }
-        r8 = r0[r5];	 Catch:{ Exception -> 0x0442 }
-        r7.add(r6, r8);	 Catch:{ Exception -> 0x0442 }
-        r7 = r1.countriesMap;	 Catch:{ Exception -> 0x0442 }
-        r8 = r0[r5];	 Catch:{ Exception -> 0x0442 }
-        r9 = r0[r6];	 Catch:{ Exception -> 0x0442 }
-        r7.put(r8, r9);	 Catch:{ Exception -> 0x0442 }
-        r7 = r1.codesMap;	 Catch:{ Exception -> 0x0442 }
-        r8 = r0[r6];	 Catch:{ Exception -> 0x0442 }
+        r6 = ";";
+        r0 = r0.split(r6);	 Catch:{ Exception -> 0x0442 }
+        r6 = r1.countriesArray;	 Catch:{ Exception -> 0x0442 }
+        r7 = r0[r5];	 Catch:{ Exception -> 0x0442 }
+        r6.add(r8, r7);	 Catch:{ Exception -> 0x0442 }
+        r6 = r1.countriesMap;	 Catch:{ Exception -> 0x0442 }
+        r7 = r0[r5];	 Catch:{ Exception -> 0x0442 }
+        r9 = r0[r8];	 Catch:{ Exception -> 0x0442 }
+        r6.put(r7, r9);	 Catch:{ Exception -> 0x0442 }
+        r6 = r1.codesMap;	 Catch:{ Exception -> 0x0442 }
+        r7 = r0[r8];	 Catch:{ Exception -> 0x0442 }
         r9 = r0[r5];	 Catch:{ Exception -> 0x0442 }
-        r7.put(r8, r9);	 Catch:{ Exception -> 0x0442 }
-        r7 = r0.length;	 Catch:{ Exception -> 0x0442 }
-        if (r7 <= r13) goto L_0x0436;
+        r6.put(r7, r9);	 Catch:{ Exception -> 0x0442 }
+        r6 = r0.length;	 Catch:{ Exception -> 0x0442 }
+        if (r6 <= r13) goto L_0x0436;
     L_0x042d:
-        r7 = r1.phoneFormatMap;	 Catch:{ Exception -> 0x0442 }
-        r8 = r0[r6];	 Catch:{ Exception -> 0x0442 }
+        r6 = r1.phoneFormatMap;	 Catch:{ Exception -> 0x0442 }
+        r7 = r0[r8];	 Catch:{ Exception -> 0x0442 }
         r9 = r0[r13];	 Catch:{ Exception -> 0x0442 }
-        r7.put(r8, r9);	 Catch:{ Exception -> 0x0442 }
+        r6.put(r7, r9);	 Catch:{ Exception -> 0x0442 }
     L_0x0436:
-        r7 = r0[r3];	 Catch:{ Exception -> 0x0442 }
+        r6 = r0[r3];	 Catch:{ Exception -> 0x0442 }
         r0 = r0[r5];	 Catch:{ Exception -> 0x0442 }
-        r2.put(r7, r0);	 Catch:{ Exception -> 0x0442 }
+        r2.put(r6, r0);	 Catch:{ Exception -> 0x0442 }
         goto L_0x0405;
     L_0x043e:
         r4.close();	 Catch:{ Exception -> 0x0442 }
@@ -539,14 +539,14 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r0 = r5.get(r0);
         r0 = (java.lang.CharSequence) r0;
         r2.setText(r0);
-        r1.countryState = r6;
+        r1.countryState = r8;
     L_0x049c:
         r0 = r1.codeField;
         r0 = r0.length();
         if (r0 != 0) goto L_0x04b9;
     L_0x04a4:
         r0 = r1.countryButton;
-        r2 = NUM; // 0x7f0d02c1 float:1.8743545E38 double:1.053130126E-314;
+        r2 = NUM; // 0x7f0d02c2 float:1.8743547E38 double:1.0531301264E-314;
         r5 = "ChooseCountry";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r0.setText(r2);
@@ -750,7 +750,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     public ThemeDescription[] getThemeDescriptions() {
         r10 = new ThemeDescription[34];
         -$$Lambda$NewContactActivity$-TdFXabn_cMkV_y0uLVuNwOAoYk -__lambda_newcontactactivity_-tdfxabn_cmkv_y0ulvunwoaoyk = new -$$Lambda$NewContactActivity$-TdFXabn_cMkV_y0uLVuNwOAoYk(this);
-        r10[26] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_newcontactactivity_-tdfxabn_cmkv_y0ulvunwoaoyk, "avatar_text");
+        r10[26] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_savedDrawable}, -__lambda_newcontactactivity_-tdfxabn_cmkv_y0ulvunwoaoyk, "avatar_text");
         r10[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_newcontactactivity_-tdfxabn_cmkv_y0ulvunwoaoyk, "avatar_backgroundRed");
         r10[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_newcontactactivity_-tdfxabn_cmkv_y0ulvunwoaoyk, "avatar_backgroundOrange");
         r10[29] = new ThemeDescription(null, 0, null, null, null, -__lambda_newcontactactivity_-tdfxabn_cmkv_y0ulvunwoaoyk, "avatar_backgroundViolet");
@@ -763,7 +763,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
     public /* synthetic */ void lambda$getThemeDescriptions$9$NewContactActivity() {
         if (this.avatarImage != null) {
-            this.avatarDrawable.setInfo(5, this.firstNameField.getText().toString(), this.lastNameField.getText().toString(), false);
+            this.avatarDrawable.setInfo(5, this.firstNameField.getText().toString(), this.lastNameField.getText().toString());
             this.avatarImage.invalidate();
         }
     }

@@ -85,9 +85,9 @@ public class EditTextBoldCursor extends EditText {
         init();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:10:0x0040 A:{Catch:{ Throwable -> 0x004f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0054 A:{Catch:{ Throwable -> 0x00d1 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x00f3 A:{Catch:{ Throwable -> 0x00ff }} */
+    /* JADX WARNING: Removed duplicated region for block: B:10:0x0040 A:{Catch:{ all -> 0x004f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0054 A:{Catch:{ all -> 0x00d1 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x00f3 A:{Catch:{ all -> 0x00ff }} */
     /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x003c */
     /* JADX WARNING: Failed to process nested try/catch */
     @android.annotation.SuppressLint({"PrivateApi"})
@@ -115,107 +115,107 @@ public class EditTextBoldCursor extends EditText {
     L_0x0026:
         r8.setImportantForAutofill(r4);
     L_0x0029:
-        r2 = mScrollYField;	 Catch:{ Throwable -> 0x003c }
+        r2 = mScrollYField;	 Catch:{ all -> 0x003c }
         if (r2 != 0) goto L_0x003c;
     L_0x002d:
         r2 = android.view.View.class;
         r5 = "mScrollY";
-        r2 = r2.getDeclaredField(r5);	 Catch:{ Throwable -> 0x003c }
-        mScrollYField = r2;	 Catch:{ Throwable -> 0x003c }
-        r2 = mScrollYField;	 Catch:{ Throwable -> 0x003c }
-        r2.setAccessible(r3);	 Catch:{ Throwable -> 0x003c }
+        r2 = r2.getDeclaredField(r5);	 Catch:{ all -> 0x003c }
+        mScrollYField = r2;	 Catch:{ all -> 0x003c }
+        r2 = mScrollYField;	 Catch:{ all -> 0x003c }
+        r2.setAccessible(r3);	 Catch:{ all -> 0x003c }
     L_0x003c:
-        r2 = mCursorDrawableResField;	 Catch:{ Throwable -> 0x004f }
+        r2 = mCursorDrawableResField;	 Catch:{ all -> 0x004f }
         if (r2 != 0) goto L_0x004f;
     L_0x0040:
         r2 = android.widget.TextView.class;
         r5 = "mCursorDrawableRes";
-        r2 = r2.getDeclaredField(r5);	 Catch:{ Throwable -> 0x004f }
-        mCursorDrawableResField = r2;	 Catch:{ Throwable -> 0x004f }
-        r2 = mCursorDrawableResField;	 Catch:{ Throwable -> 0x004f }
-        r2.setAccessible(r3);	 Catch:{ Throwable -> 0x004f }
+        r2 = r2.getDeclaredField(r5);	 Catch:{ all -> 0x004f }
+        mCursorDrawableResField = r2;	 Catch:{ all -> 0x004f }
+        r2 = mCursorDrawableResField;	 Catch:{ all -> 0x004f }
+        r2.setAccessible(r3);	 Catch:{ all -> 0x004f }
     L_0x004f:
         r2 = 0;
-        r5 = editorClass;	 Catch:{ Throwable -> 0x00d1 }
+        r5 = editorClass;	 Catch:{ all -> 0x00d1 }
         if (r5 != 0) goto L_0x00d5;
     L_0x0054:
         r5 = android.widget.TextView.class;
         r6 = "mEditor";
-        r5 = r5.getDeclaredField(r6);	 Catch:{ Throwable -> 0x00d1 }
-        mEditor = r5;	 Catch:{ Throwable -> 0x00d1 }
-        r5 = mEditor;	 Catch:{ Throwable -> 0x00d1 }
-        r5.setAccessible(r3);	 Catch:{ Throwable -> 0x00d1 }
+        r5 = r5.getDeclaredField(r6);	 Catch:{ all -> 0x00d1 }
+        mEditor = r5;	 Catch:{ all -> 0x00d1 }
+        r5 = mEditor;	 Catch:{ all -> 0x00d1 }
+        r5.setAccessible(r3);	 Catch:{ all -> 0x00d1 }
         r5 = "android.widget.Editor";
-        r5 = java.lang.Class.forName(r5);	 Catch:{ Throwable -> 0x00d1 }
-        editorClass = r5;	 Catch:{ Throwable -> 0x00d1 }
-        r5 = editorClass;	 Catch:{ Throwable -> 0x00d1 }
-        r5 = r5.getDeclaredField(r1);	 Catch:{ Throwable -> 0x00d1 }
-        mShowCursorField = r5;	 Catch:{ Throwable -> 0x00d1 }
-        r5 = mShowCursorField;	 Catch:{ Throwable -> 0x00d1 }
-        r5.setAccessible(r3);	 Catch:{ Throwable -> 0x00d1 }
-        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x00d1 }
+        r5 = java.lang.Class.forName(r5);	 Catch:{ all -> 0x00d1 }
+        editorClass = r5;	 Catch:{ all -> 0x00d1 }
+        r5 = editorClass;	 Catch:{ all -> 0x00d1 }
+        r5 = r5.getDeclaredField(r1);	 Catch:{ all -> 0x00d1 }
+        mShowCursorField = r5;	 Catch:{ all -> 0x00d1 }
+        r5 = mShowCursorField;	 Catch:{ all -> 0x00d1 }
+        r5.setAccessible(r3);	 Catch:{ all -> 0x00d1 }
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ all -> 0x00d1 }
         r6 = 28;
         if (r5 < r6) goto L_0x008e;
     L_0x007e:
-        r5 = editorClass;	 Catch:{ Throwable -> 0x00d1 }
+        r5 = editorClass;	 Catch:{ all -> 0x00d1 }
         r6 = "mDrawableForCursor";
-        r5 = r5.getDeclaredField(r6);	 Catch:{ Throwable -> 0x00d1 }
-        mCursorDrawableField = r5;	 Catch:{ Throwable -> 0x00d1 }
-        r5 = mCursorDrawableField;	 Catch:{ Throwable -> 0x00d1 }
-        r5.setAccessible(r3);	 Catch:{ Throwable -> 0x00d1 }
+        r5 = r5.getDeclaredField(r6);	 Catch:{ all -> 0x00d1 }
+        mCursorDrawableField = r5;	 Catch:{ all -> 0x00d1 }
+        r5 = mCursorDrawableField;	 Catch:{ all -> 0x00d1 }
+        r5.setAccessible(r3);	 Catch:{ all -> 0x00d1 }
         goto L_0x009d;
     L_0x008e:
-        r5 = editorClass;	 Catch:{ Throwable -> 0x00d1 }
+        r5 = editorClass;	 Catch:{ all -> 0x00d1 }
         r6 = "mCursorDrawable";
-        r5 = r5.getDeclaredField(r6);	 Catch:{ Throwable -> 0x00d1 }
-        mCursorDrawableField = r5;	 Catch:{ Throwable -> 0x00d1 }
-        r5 = mCursorDrawableField;	 Catch:{ Throwable -> 0x00d1 }
-        r5.setAccessible(r3);	 Catch:{ Throwable -> 0x00d1 }
+        r5 = r5.getDeclaredField(r6);	 Catch:{ all -> 0x00d1 }
+        mCursorDrawableField = r5;	 Catch:{ all -> 0x00d1 }
+        r5 = mCursorDrawableField;	 Catch:{ all -> 0x00d1 }
+        r5.setAccessible(r3);	 Catch:{ all -> 0x00d1 }
     L_0x009d:
         r5 = android.widget.TextView.class;
-        r6 = new java.lang.Class[r3];	 Catch:{ Throwable -> 0x00d1 }
-        r7 = java.lang.Boolean.TYPE;	 Catch:{ Throwable -> 0x00d1 }
-        r6[r2] = r7;	 Catch:{ Throwable -> 0x00d1 }
-        r5 = r5.getDeclaredMethod(r0, r6);	 Catch:{ Throwable -> 0x00d1 }
-        getVerticalOffsetMethod = r5;	 Catch:{ Throwable -> 0x00d1 }
-        r5 = getVerticalOffsetMethod;	 Catch:{ Throwable -> 0x00d1 }
-        r5.setAccessible(r3);	 Catch:{ Throwable -> 0x00d1 }
-        r5 = editorClass;	 Catch:{ Throwable -> 0x00d1 }
-        r1 = r5.getDeclaredField(r1);	 Catch:{ Throwable -> 0x00d1 }
-        mShowCursorField = r1;	 Catch:{ Throwable -> 0x00d1 }
-        r1 = mShowCursorField;	 Catch:{ Throwable -> 0x00d1 }
-        r1.setAccessible(r3);	 Catch:{ Throwable -> 0x00d1 }
+        r6 = new java.lang.Class[r3];	 Catch:{ all -> 0x00d1 }
+        r7 = java.lang.Boolean.TYPE;	 Catch:{ all -> 0x00d1 }
+        r6[r2] = r7;	 Catch:{ all -> 0x00d1 }
+        r5 = r5.getDeclaredMethod(r0, r6);	 Catch:{ all -> 0x00d1 }
+        getVerticalOffsetMethod = r5;	 Catch:{ all -> 0x00d1 }
+        r5 = getVerticalOffsetMethod;	 Catch:{ all -> 0x00d1 }
+        r5.setAccessible(r3);	 Catch:{ all -> 0x00d1 }
+        r5 = editorClass;	 Catch:{ all -> 0x00d1 }
+        r1 = r5.getDeclaredField(r1);	 Catch:{ all -> 0x00d1 }
+        mShowCursorField = r1;	 Catch:{ all -> 0x00d1 }
+        r1 = mShowCursorField;	 Catch:{ all -> 0x00d1 }
+        r1.setAccessible(r3);	 Catch:{ all -> 0x00d1 }
         r1 = android.widget.TextView.class;
-        r5 = new java.lang.Class[r3];	 Catch:{ Throwable -> 0x00d1 }
-        r6 = java.lang.Boolean.TYPE;	 Catch:{ Throwable -> 0x00d1 }
-        r5[r2] = r6;	 Catch:{ Throwable -> 0x00d1 }
-        r0 = r1.getDeclaredMethod(r0, r5);	 Catch:{ Throwable -> 0x00d1 }
-        getVerticalOffsetMethod = r0;	 Catch:{ Throwable -> 0x00d1 }
-        r0 = getVerticalOffsetMethod;	 Catch:{ Throwable -> 0x00d1 }
-        r0.setAccessible(r3);	 Catch:{ Throwable -> 0x00d1 }
+        r5 = new java.lang.Class[r3];	 Catch:{ all -> 0x00d1 }
+        r6 = java.lang.Boolean.TYPE;	 Catch:{ all -> 0x00d1 }
+        r5[r2] = r6;	 Catch:{ all -> 0x00d1 }
+        r0 = r1.getDeclaredMethod(r0, r5);	 Catch:{ all -> 0x00d1 }
+        getVerticalOffsetMethod = r0;	 Catch:{ all -> 0x00d1 }
+        r0 = getVerticalOffsetMethod;	 Catch:{ all -> 0x00d1 }
+        r0.setAccessible(r3);	 Catch:{ all -> 0x00d1 }
         goto L_0x00d5;
     L_0x00d1:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
     L_0x00d5:
-        r0 = new android.graphics.drawable.GradientDrawable;	 Catch:{ Throwable -> 0x00ff }
-        r1 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM;	 Catch:{ Throwable -> 0x00ff }
-        r4 = new int[r4];	 Catch:{ Throwable -> 0x00ff }
+        r0 = new android.graphics.drawable.GradientDrawable;	 Catch:{ all -> 0x00ff }
+        r1 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM;	 Catch:{ all -> 0x00ff }
+        r4 = new int[r4];	 Catch:{ all -> 0x00ff }
         r5 = -11230757; // 0xfffffffffvar_a1db float:-2.8263674E38 double:NaN;
-        r4[r2] = r5;	 Catch:{ Throwable -> 0x00ff }
-        r4[r3] = r5;	 Catch:{ Throwable -> 0x00ff }
-        r0.<init>(r1, r4);	 Catch:{ Throwable -> 0x00ff }
-        r8.gradientDrawable = r0;	 Catch:{ Throwable -> 0x00ff }
-        r0 = mEditor;	 Catch:{ Throwable -> 0x00ff }
-        r0 = r0.get(r8);	 Catch:{ Throwable -> 0x00ff }
-        r8.editor = r0;	 Catch:{ Throwable -> 0x00ff }
-        r0 = mCursorDrawableField;	 Catch:{ Throwable -> 0x00ff }
+        r4[r2] = r5;	 Catch:{ all -> 0x00ff }
+        r4[r3] = r5;	 Catch:{ all -> 0x00ff }
+        r0.<init>(r1, r4);	 Catch:{ all -> 0x00ff }
+        r8.gradientDrawable = r0;	 Catch:{ all -> 0x00ff }
+        r0 = mEditor;	 Catch:{ all -> 0x00ff }
+        r0 = r0.get(r8);	 Catch:{ all -> 0x00ff }
+        r8.editor = r0;	 Catch:{ all -> 0x00ff }
+        r0 = mCursorDrawableField;	 Catch:{ all -> 0x00ff }
         if (r0 == 0) goto L_0x00ff;
     L_0x00f3:
-        r0 = mCursorDrawableResField;	 Catch:{ Throwable -> 0x00ff }
+        r0 = mCursorDrawableResField;	 Catch:{ all -> 0x00ff }
         r1 = NUM; // 0x7var_f float:1.7944836E38 double:1.052935566E-314;
-        r1 = java.lang.Integer.valueOf(r1);	 Catch:{ Throwable -> 0x00ff }
-        r0.set(r8, r1);	 Catch:{ Throwable -> 0x00ff }
+        r1 = java.lang.Integer.valueOf(r1);	 Catch:{ all -> 0x00ff }
+        r0.set(r8, r1);	 Catch:{ all -> 0x00ff }
     L_0x00ff:
         r0 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);

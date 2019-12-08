@@ -45,6 +45,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.StickerCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
@@ -84,6 +85,7 @@ public class ContentPreviewViewer {
     private Runnable showSheetRunnable = new Runnable() {
         public void run() {
             if (ContentPreviewViewer.this.parentActivity != null) {
+                String str = "Schedule";
                 ArrayList arrayList;
                 int[] iArr;
                 if (ContentPreviewViewer.this.currentContentType == 0) {
@@ -94,10 +96,15 @@ public class ContentPreviewViewer {
                     ArrayList arrayList2 = new ArrayList();
                     ArrayList arrayList3 = new ArrayList();
                     if (ContentPreviewViewer.this.delegate != null) {
-                        if (ContentPreviewViewer.this.delegate.needSend()) {
+                        if (ContentPreviewViewer.this.delegate.needSend() && !ContentPreviewViewer.this.delegate.isInScheduleMode()) {
                             arrayList.add(LocaleController.getString("SendStickerPreview", NUM));
                             arrayList3.add(Integer.valueOf(NUM));
                             arrayList2.add(Integer.valueOf(0));
+                        }
+                        if (ContentPreviewViewer.this.delegate.canSchedule()) {
+                            arrayList.add(LocaleController.getString(str, NUM));
+                            arrayList3.add(Integer.valueOf(NUM));
+                            arrayList2.add(Integer.valueOf(3));
                         }
                         if (ContentPreviewViewer.this.currentStickerSet != null && ContentPreviewViewer.this.delegate.needOpen()) {
                             arrayList.add(LocaleController.formatString("ViewPackPreview", NUM, new Object[0]));
@@ -106,15 +113,15 @@ public class ContentPreviewViewer {
                         }
                     }
                     if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (isStickerInFavorites || MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites())) {
-                        String str;
+                        String str2;
                         if (isStickerInFavorites) {
                             i = NUM;
-                            str = "DeleteFromFavorites";
+                            str2 = "DeleteFromFavorites";
                         } else {
                             i = NUM;
-                            str = "AddToFavorites";
+                            str2 = "AddToFavorites";
                         }
-                        arrayList.add(LocaleController.getString(str, i));
+                        arrayList.add(LocaleController.getString(str2, i));
                         arrayList3.add(Integer.valueOf(isStickerInFavorites ? NUM : NUM));
                         arrayList2.add(Integer.valueOf(2));
                     }
@@ -123,10 +130,10 @@ public class ContentPreviewViewer {
                         for (i = 0; i < arrayList3.size(); i++) {
                             iArr[i] = ((Integer) arrayList3.get(i)).intValue();
                         }
-                        builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new -$$Lambda$ContentPreviewViewer$1$-tphIjLgQDrHLUWAgGWRuEayPA8(this, arrayList2, isStickerInFavorites));
+                        builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new -$$Lambda$ContentPreviewViewer$1$imL7s2qfRP4bUjAtc6JLJW8Hhgw(this, arrayList2, isStickerInFavorites));
                         builder.setDimBehind(false);
                         ContentPreviewViewer.this.visibleDialog = builder.create();
-                        ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new -$$Lambda$ContentPreviewViewer$1$rUBBWoN2ti7pHLcw01tGVjaLoPY(this));
+                        ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new -$$Lambda$ContentPreviewViewer$1$NZBUQP7-vH9TTdKIqLQEN7It1ok(this));
                         ContentPreviewViewer.this.visibleDialog.show();
                         ContentPreviewViewer.this.containerView.performHapticFeedback(0);
                     }
@@ -157,10 +164,15 @@ public class ContentPreviewViewer {
                     ArrayList arrayList4 = new ArrayList();
                     ArrayList arrayList5 = new ArrayList();
                     arrayList = new ArrayList();
-                    if (ContentPreviewViewer.this.delegate.needSend()) {
+                    if (ContentPreviewViewer.this.delegate.needSend() && !ContentPreviewViewer.this.delegate.isInScheduleMode()) {
                         arrayList4.add(LocaleController.getString("SendGifPreview", NUM));
                         arrayList.add(Integer.valueOf(NUM));
                         arrayList5.add(Integer.valueOf(0));
+                    }
+                    if (ContentPreviewViewer.this.delegate.canSchedule()) {
+                        arrayList4.add(LocaleController.getString(str, NUM));
+                        arrayList.add(Integer.valueOf(NUM));
+                        arrayList5.add(Integer.valueOf(3));
                     }
                     if (ContentPreviewViewer.this.currentDocument != null) {
                         hasRecentGif = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).hasRecentGif(ContentPreviewViewer.this.currentDocument);
@@ -180,9 +192,9 @@ public class ContentPreviewViewer {
                     for (int i2 = 0; i2 < arrayList.size(); i2++) {
                         iArr[i2] = ((Integer) arrayList.get(i2)).intValue();
                     }
-                    ContentPreviewViewer.this.visibleDialog.setItems((CharSequence[]) arrayList4.toArray(new CharSequence[0]), iArr, new -$$Lambda$ContentPreviewViewer$1$S1kRdazvJNKM-pErU5YcNROqRxU(this, arrayList5));
+                    ContentPreviewViewer.this.visibleDialog.setItems((CharSequence[]) arrayList4.toArray(new CharSequence[0]), iArr, new -$$Lambda$ContentPreviewViewer$1$ctJp2_zc8S3VjDWUO8qfR09OkLI(this, arrayList5));
                     ContentPreviewViewer.this.visibleDialog.setDimBehind(false);
-                    ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new -$$Lambda$ContentPreviewViewer$1$jPj7FNt8-HCUYPFDcuvR11RuA7g(this));
+                    ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new -$$Lambda$ContentPreviewViewer$1$VGh98iTBEiBGO7rG6tFMvm6L3hY(this));
                     ContentPreviewViewer.this.visibleDialog.show();
                     ContentPreviewViewer.this.containerView.performHapticFeedback(0);
                     if (hasRecentGif) {
@@ -192,11 +204,11 @@ public class ContentPreviewViewer {
             }
         }
 
-        public /* synthetic */ void lambda$run$0$ContentPreviewViewer$1(ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$run$1$ContentPreviewViewer$1(ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
             if (ContentPreviewViewer.this.parentActivity != null) {
                 if (((Integer) arrayList.get(i)).intValue() == 0) {
                     if (ContentPreviewViewer.this.delegate != null) {
-                        ContentPreviewViewer.this.delegate.sendSticker(ContentPreviewViewer.this.currentDocument, ContentPreviewViewer.this.parentObject);
+                        ContentPreviewViewer.this.delegate.sendSticker(ContentPreviewViewer.this.currentDocument, ContentPreviewViewer.this.parentObject, true, 0);
                     }
                 } else if (((Integer) arrayList.get(i)).intValue() == 1) {
                     if (ContentPreviewViewer.this.delegate != null) {
@@ -204,21 +216,23 @@ public class ContentPreviewViewer {
                     }
                 } else if (((Integer) arrayList.get(i)).intValue() == 2) {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(2, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), z);
+                } else if (((Integer) arrayList.get(i)).intValue() == 3) {
+                    Document access$300 = ContentPreviewViewer.this.currentDocument;
+                    Object access$1500 = ContentPreviewViewer.this.parentObject;
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, false, new -$$Lambda$ContentPreviewViewer$1$VeEKHdYoA5-UzCB0iok2LPLcTCo(ContentPreviewViewer.this.delegate, access$300, access$1500));
                 }
             }
         }
 
-        public /* synthetic */ void lambda$run$1$ContentPreviewViewer$1(DialogInterface dialogInterface) {
+        public /* synthetic */ void lambda$run$2$ContentPreviewViewer$1(DialogInterface dialogInterface) {
             ContentPreviewViewer.this.visibleDialog = null;
             ContentPreviewViewer.this.close();
         }
 
-        public /* synthetic */ void lambda$run$2$ContentPreviewViewer$1(ArrayList arrayList, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$run$4$ContentPreviewViewer$1(ArrayList arrayList, DialogInterface dialogInterface, int i) {
             if (ContentPreviewViewer.this.parentActivity != null) {
                 if (((Integer) arrayList.get(i)).intValue() == 0) {
-                    if (ContentPreviewViewer.this.delegate != null) {
-                        ContentPreviewViewer.this.delegate.sendGif(ContentPreviewViewer.this.currentDocument != null ? ContentPreviewViewer.this.currentDocument : ContentPreviewViewer.this.inlineResult);
-                    }
+                    ContentPreviewViewer.this.delegate.sendGif(ContentPreviewViewer.this.currentDocument != null ? ContentPreviewViewer.this.currentDocument : ContentPreviewViewer.this.inlineResult, true, 0);
                 } else if (((Integer) arrayList.get(i)).intValue() == 1) {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).removeRecentGif(ContentPreviewViewer.this.currentDocument);
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
@@ -226,11 +240,24 @@ public class ContentPreviewViewer {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentGif(ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000));
                     MessagesController.getInstance(ContentPreviewViewer.this.currentAccount).saveGif("gif", ContentPreviewViewer.this.currentDocument);
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
+                } else if (((Integer) arrayList.get(i)).intValue() == 3) {
+                    Document access$300 = ContentPreviewViewer.this.currentDocument;
+                    BotInlineResult access$1400 = ContentPreviewViewer.this.inlineResult;
+                    ContentPreviewViewer.this.parentObject;
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, false, new -$$Lambda$ContentPreviewViewer$1$OPsVklic0vV-NhdYCfmrpeZgJyo(ContentPreviewViewer.this.delegate, access$300, access$1400));
                 }
             }
         }
 
-        public /* synthetic */ void lambda$run$3$ContentPreviewViewer$1(DialogInterface dialogInterface) {
+        static /* synthetic */ void lambda$null$3(ContentPreviewViewerDelegate contentPreviewViewerDelegate, Document document, BotInlineResult botInlineResult, boolean z, int i) {
+            Object document2;
+            if (document2 == null) {
+                document2 = botInlineResult;
+            }
+            contentPreviewViewerDelegate.sendGif(document2, z, i);
+        }
+
+        public /* synthetic */ void lambda$run$5$ContentPreviewViewer$1(DialogInterface dialogInterface) {
             ContentPreviewViewer.this.visibleDialog = null;
             ContentPreviewViewer.this.close();
         }
@@ -254,11 +281,15 @@ public class ContentPreviewViewer {
                 return true;
             }
 
-            public static void $default$sendGif(ContentPreviewViewerDelegate contentPreviewViewerDelegate, Object obj) {
+            public static void $default$sendGif(ContentPreviewViewerDelegate contentPreviewViewerDelegate, Object obj, boolean z, int i) {
             }
         }
 
+        boolean canSchedule();
+
         void gifAddedOrDeleted();
+
+        boolean isInScheduleMode();
 
         boolean needOpen();
 
@@ -266,9 +297,9 @@ public class ContentPreviewViewer {
 
         void openSet(InputStickerSet inputStickerSet, boolean z);
 
-        void sendGif(Object obj);
+        void sendGif(Object obj, boolean z, int i);
 
-        void sendSticker(Document document, Object obj);
+        void sendSticker(Document document, Object obj, boolean z, int i);
     }
 
     private class FrameLayoutDrawer extends FrameLayout {

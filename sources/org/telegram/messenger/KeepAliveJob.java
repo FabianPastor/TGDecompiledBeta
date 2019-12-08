@@ -97,8 +97,8 @@ public class KeepAliveJob extends JobIntentService {
         r0 = finishJobByTimeoutRunnable;
         r1 = 60000; // 0xea60 float:8.4078E-41 double:2.9644E-319;
         r4.postRunnable(r0, r1);
-        r4 = countDownLatch;	 Catch:{ Throwable -> 0x002a }
-        r4.await();	 Catch:{ Throwable -> 0x002a }
+        r4 = countDownLatch;	 Catch:{ all -> 0x002a }
+        r4.await();	 Catch:{ all -> 0x002a }
     L_0x002a:
         r4 = org.telegram.messenger.Utilities.globalQueue;
         r0 = finishJobByTimeoutRunnable;
