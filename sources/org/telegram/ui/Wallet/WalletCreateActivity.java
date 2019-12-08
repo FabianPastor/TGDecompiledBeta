@@ -23,6 +23,7 @@ import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.URLSpan;
@@ -60,9 +61,6 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -76,6 +74,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BiometricPromtHelper;
+import org.telegram.ui.Components.BiometricPromtHelper.ContinueCallback;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
@@ -84,7 +83,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
-public class WalletCreateActivity extends BaseFragment implements NotificationCenterDelegate {
+public class WalletCreateActivity extends BaseFragment {
     public static final int TYPE_24_WORDS = 4;
     public static final int TYPE_CREATE = 0;
     public static final int TYPE_IMPORT = 6;
@@ -128,7 +127,6 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
     private EditTextBoldCursor passcodeEditText;
     private View passcodeNumbersView;
     private int passcodeType;
-    private AlertDialog preloadingProgressDialog;
     private boolean resumeCreation;
     private LinearLayout rightColumn;
     private ScrollView scrollView;
@@ -186,7 +184,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 }
 
                 public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                    if (BuildVars.DEBUG_PRIVATE_VERSION && WalletCreateActivity.this.currentType == 6) {
+                    if (WalletCreateActivity.this.currentType == 6) {
                         boolean z = i3 > i2 && i3 > 40;
                         this.isPaste = z;
                     }
@@ -483,9 +481,6 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
             }
             Collections.sort(this.checkWordIndices);
         }
-        if (this.currentType == 2) {
-            getNotificationCenter().addObserver(this, NotificationCenter.finishedWalletPreloading);
-        }
         if (this.currentType == 4 && !this.exportingWords) {
             this.cancelOnDestroyRunnable = new -$$Lambda$WalletCreateActivity$VxyhPihiDtOkD-VJVW6TPE8xt7Q(this);
             AndroidUtilities.runOnUIThread(this.cancelOnDestroyRunnable, 60000);
@@ -510,27 +505,24 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
         if (this.currentType == 8) {
             getTonController().finishSettingUserPasscode();
         }
-        if (this.currentType == 2) {
-            getNotificationCenter().removeObserver(this, NotificationCenter.finishedWalletPreloading);
-        }
         Runnable runnable = this.cancelOnDestroyRunnable;
         if (runnable != null) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
             this.cancelOnDestroyRunnable = null;
         }
-        if (VERSION.SDK_INT < 23) {
-            return;
-        }
-        if ((SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture) && this.currentType != 9) {
-            AndroidUtilities.setFlagSecure(this, false);
+        if (VERSION.SDK_INT >= 23 && AndroidUtilities.allowScreenCapture()) {
+            i = this.currentType;
+            if (i != 9 && i != 0) {
+                AndroidUtilities.setFlagSecure(this, false);
+            }
         }
     }
 
     public View createView(Context context) {
         final Context context2 = context;
-        boolean canGoBack = canGoBack();
-        this.swipeBackEnabled = canGoBack;
-        if (canGoBack) {
+        boolean z = canGoBack() && !(this.currentType == 0 && BuildVars.TON_WALLET_STANDALONE);
+        this.swipeBackEnabled = z;
+        if (z) {
             this.actionBar.setBackButtonImage(NUM);
             if (this.currentType == 5) {
                 this.swipeBackEnabled = false;
@@ -610,7 +602,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
             this.hintPopupWindow.setFocusable(false);
         } else if (i == 1 && this.resumeCreation) {
             this.biometricPromtHelper = new BiometricPromtHelper(this);
-            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+            if (BuildVars.DEBUG_VERSION) {
                 this.actionBar.createMenu().addItemWithWidth(item_logout, NUM, AndroidUtilities.dp(56.0f));
             }
         }
@@ -642,7 +634,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
         this.buttonTextView.setTextSize(1, 14.0f);
         this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-        this.buttonTextView.setOnClickListener(new -$$Lambda$WalletCreateActivity$w95B2Pct8juLEi3ykDVmDmKU01U(this));
+        this.buttonTextView.setOnClickListener(new -$$Lambda$WalletCreateActivity$deo47Vs2HpyExVa6xs6h1TBmLl0(this));
         switch (this.currentType) {
             case 0:
             case 1:
@@ -726,7 +718,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                         WalletCreateActivity.this.descriptionText2.layout(0, i5, WalletCreateActivity.this.descriptionText2.getMeasuredWidth(), WalletCreateActivity.this.descriptionText2.getMeasuredHeight() + i5);
                     }
                 };
-                anonymousClass3.setOnTouchListener(-$$Lambda$WalletCreateActivity$BQvl00kD384V_bVq9rT0ZbevBcc.INSTANCE);
+                anonymousClass3.setOnTouchListener(-$$Lambda$WalletCreateActivity$91xVmYiVI79i4BfBbl2wPByWIq4.INSTANCE);
                 anonymousClass3.addView(this.actionBar);
                 anonymousClass3.addView(this.imageView);
                 anonymousClass3.addView(this.titleTextView);
@@ -1039,7 +1031,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 this.passcodeEditText.setTypeface(Typeface.DEFAULT);
                 setCurrentPasscodeLengthLimit();
                 frameLayout.addView(this.passcodeEditText, LayoutHelper.createFrame(220, 36.0f, 49, 0.0f, 190.0f, 0.0f, 0.0f));
-                this.passcodeEditText.setOnEditorActionListener(new -$$Lambda$WalletCreateActivity$3tWT5-LJBMj9JmDrx_q9vpQzW-c(this));
+                this.passcodeEditText.setOnEditorActionListener(new -$$Lambda$WalletCreateActivity$SFvPrkAon93SP2nQXrpB4PRWLKQ(this));
                 this.passcodeEditText.addTextChangedListener(new TextWatcher() {
                     private boolean ignoreTextChange;
 
@@ -1104,17 +1096,20 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 this.titleTextView.setText(LocaleController.getString("GramWallet", NUM));
                 this.descriptionText.setText(LocaleController.getString("GramWalletInfo", NUM));
                 this.buttonTextView.setText(LocaleController.getString("CreateMyWallet", NUM));
-                String string = LocaleController.getString("CreateMyWalletTerms", NUM);
-                spannableStringBuilder = new SpannableStringBuilder(string);
-                int indexOf = string.indexOf(42);
-                int lastIndexOf = string.lastIndexOf(42);
-                if (!(indexOf == -1 || lastIndexOf == -1)) {
-                    spannableStringBuilder.replace(lastIndexOf, lastIndexOf + 1, str4);
-                    spannableStringBuilder.replace(indexOf, indexOf + 1, str4);
-                    spannableStringBuilder.setSpan(new URLSpan(LocaleController.getString("WalletTosUrl", NUM)), indexOf, lastIndexOf - 1, 33);
+                if (!BuildVars.TON_WALLET_STANDALONE) {
+                    String string = LocaleController.getString("CreateMyWalletTerms", NUM);
+                    spannableStringBuilder = new SpannableStringBuilder(string);
+                    int indexOf = string.indexOf(42);
+                    int lastIndexOf = string.lastIndexOf(42);
+                    if (!(indexOf == -1 || lastIndexOf == -1)) {
+                        spannableStringBuilder.replace(lastIndexOf, lastIndexOf + 1, str4);
+                        spannableStringBuilder.replace(indexOf, indexOf + 1, str4);
+                        spannableStringBuilder.setSpan(new URLSpan(LocaleController.getString("WalletTosUrl", NUM)), indexOf, lastIndexOf - 1, 33);
+                    }
+                    this.descriptionText2.setText(spannableStringBuilder);
+                    this.descriptionText2.setVisibility(0);
+                    break;
                 }
-                this.descriptionText2.setText(spannableStringBuilder);
-                this.descriptionText2.setVisibility(0);
                 break;
             case 1:
                 this.imageView.setAnimation(NUM, 120, 120);
@@ -1221,7 +1216,6 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 this.descriptionText2.setText(spannableStringBuilder);
                 break;
             case 9:
-                this.imageView.setAutoRepeat(true);
                 this.imageView.setAnimation(NUM, 130, 130);
                 this.imageView.setPadding(AndroidUtilities.dp(27.0f), 0, 0, 0);
                 this.titleTextView.setText(LocaleController.getString("WalletSendDone", NUM));
@@ -1230,9 +1224,6 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 break;
         }
         this.imageView.playAnimation();
-        if (VERSION.SDK_INT >= 23 && ((SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture) && this.currentType != 9)) {
-            AndroidUtilities.setFlagSecure(this, true);
-        }
         return this.fragmentView;
     }
 
@@ -1256,7 +1247,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
         this.hintPopupWindow.dismiss();
     }
 
-    public /* synthetic */ void lambda$createView$12$WalletCreateActivity(View view) {
+    public /* synthetic */ void lambda$createView$5$WalletCreateActivity(View view) {
         if (getParentActivity() != null) {
             hideHint();
             WalletCreateActivity walletCreateActivity;
@@ -1264,7 +1255,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
             AlertDialog.Builder builder;
             switch (this.currentType) {
                 case 0:
-                    BiometricPromtHelper.askForBiometric(this, new -$$Lambda$WalletCreateActivity$kp7zyUxLgj06vzOvDVTgpJAKnL0(this), LocaleController.getString("WalletSecurityAlertCreateContinue", NUM));
+                    createWallet();
                     break;
                 case 1:
                     if (!this.resumeCreation) {
@@ -1286,14 +1277,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                     }
                     break;
                 case 2:
-                    if (!getTonController().isPreloadingWallet()) {
-                        presentFragment(new WalletActivity(), true);
-                        break;
-                    }
-                    this.preloadingProgressDialog = new AlertDialog(getParentActivity(), 3);
-                    this.preloadingProgressDialog.setOnCancelListener(new -$$Lambda$WalletCreateActivity$As-B8zplblIRWJV_-qHzCJp1Htg(this));
-                    this.preloadingProgressDialog.setCanCacnel(true);
-                    this.preloadingProgressDialog.show();
+                    presentFragment(new WalletActivity(), true);
                     break;
                 case 3:
                     finishFragment();
@@ -1328,7 +1312,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                                 builder = new AlertDialog.Builder(getParentActivity());
                                 builder.setTitle(LocaleController.getString("WalletTestTimeAlertTitle", NUM));
                                 builder.setMessage(LocaleController.getString("WalletTestTimeAlertText", NUM));
-                                builder.setNegativeButton(LocaleController.getString("WalletTestTimeAlertButtonSee", NUM), new -$$Lambda$WalletCreateActivity$XsWnyPMKZdToaAUK52VMAhmO7e0(this));
+                                builder.setNegativeButton(LocaleController.getString("WalletTestTimeAlertButtonSee", NUM), new -$$Lambda$WalletCreateActivity$5k-y9kNPe_E_P8CSD4sSHOmdUcc(this));
                                 builder.setPositiveButton(LocaleController.getString("WalletTestTimeAlertButtonTry", NUM), null);
                                 showDialog(builder.create());
                                 return;
@@ -1349,7 +1333,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                     return;
                 case 6:
                     if (checkEditTexts()) {
-                        BiometricPromtHelper.askForBiometric(this, new -$$Lambda$WalletCreateActivity$O2cS5iTzzL0mnjHsgFRk-Ue5HWk(this), LocaleController.getString("WalletSecurityAlertImportContinue", NUM));
+                        createWallet();
                         break;
                     }
                     return;
@@ -1368,88 +1352,106 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    public /* synthetic */ void lambda$null$6$WalletCreateActivity(boolean z) {
-        AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
-        alertDialog.setCanCacnel(false);
-        alertDialog.show();
-        getTonController().createWallet(null, z, new -$$Lambda$WalletCreateActivity$xV1Lq-PkGV1CKNpotEWIfJ7h1go(this, alertDialog), new -$$Lambda$WalletCreateActivity$KrlZd84ULXX72MKfVWNwblYFVHw(this, alertDialog));
-    }
-
-    public /* synthetic */ void lambda$null$4$WalletCreateActivity(AlertDialog alertDialog, String[] strArr) {
-        alertDialog.dismiss();
-        WalletCreateActivity walletCreateActivity = new WalletCreateActivity(1);
-        walletCreateActivity.secretWords = strArr;
-        presentFragment(walletCreateActivity, true);
-    }
-
-    public /* synthetic */ void lambda$null$5$WalletCreateActivity(AlertDialog alertDialog, String str, Error error) {
-        alertDialog.dismiss();
-        String string = LocaleController.getString("Wallet", NUM);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(LocaleController.getString("ErrorOccurred", NUM));
-        stringBuilder.append("\n");
-        if (error != null) {
-            str = error.message;
-        }
-        stringBuilder.append(str);
-        AlertsCreator.showSimpleAlert(this, string, stringBuilder.toString());
-    }
-
-    public /* synthetic */ void lambda$null$7$WalletCreateActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$4$WalletCreateActivity(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
-    public /* synthetic */ void lambda$null$8$WalletCreateActivity(DialogInterface dialogInterface) {
-        getNotificationCenter().removeObserver(this, NotificationCenter.finishedWalletPreloading);
-        presentFragment(new WalletActivity(), true);
-    }
-
-    public /* synthetic */ void lambda$null$11$WalletCreateActivity(boolean z) {
-        AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
-        int i = 0;
-        alertDialog.setCanCacnel(false);
-        alertDialog.show();
-        String[] strArr = new String[24];
-        while (i < 24) {
-            strArr[i] = this.editTexts[i].getText().toString();
-            i++;
-        }
-        getTonController().createWallet(strArr, z, new -$$Lambda$WalletCreateActivity$TCiEzBp0zHDyZXUD5sMBqcgX3U8(this, alertDialog), new -$$Lambda$WalletCreateActivity$aIiIEzD4KQofFz_rZ-r4D3SDiVs(this, alertDialog));
-    }
-
-    public /* synthetic */ void lambda$null$9$WalletCreateActivity(AlertDialog alertDialog, String[] strArr) {
-        alertDialog.dismiss();
-        WalletCreateActivity walletCreateActivity = this.fragmentToRemove;
-        if (walletCreateActivity != null) {
-            walletCreateActivity.removeSelfFromStack();
-        }
-        if (getTonController().isWaitingForUserPasscode()) {
-            presentFragment(new WalletCreateActivity(7), true);
-        } else {
-            presentFragment(new WalletCreateActivity(2), true);
-        }
-    }
-
-    public /* synthetic */ void lambda$null$10$WalletCreateActivity(AlertDialog alertDialog, String str, Error error) {
-        alertDialog.dismiss();
-        if (str.startsWith("TONLIB")) {
-            AlertsCreator.showSimpleAlert(this, LocaleController.getString("WalletImportAlertTitle", NUM), LocaleController.getString("WalletImportAlertText", NUM));
-            return;
-        }
-        String string = LocaleController.getString("Wallet", NUM);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(LocaleController.getString("ErrorOccurred", NUM));
-        stringBuilder.append("\n");
-        stringBuilder.append(str);
-        AlertsCreator.showSimpleAlert(this, string, stringBuilder.toString());
-    }
-
-    public /* synthetic */ boolean lambda$createView$14$WalletCreateActivity(TextView textView, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$createView$7$WalletCreateActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
         }
         onPasscodeEnter();
         return true;
+    }
+
+    private void createWallet() {
+        BiometricPromtHelper.askForBiometric(this, new ContinueCallback() {
+            private AlertDialog progressDialog;
+
+            private void doCreate(boolean z) {
+                String[] strArr;
+                if (WalletCreateActivity.this.currentType == 0) {
+                    strArr = null;
+                } else {
+                    String[] strArr2 = new String[24];
+                    for (int i = 0; i < 24; i++) {
+                        strArr2[i] = WalletCreateActivity.this.editTexts[i].getText().toString();
+                    }
+                    strArr = strArr2;
+                }
+                WalletCreateActivity.this.getTonController().createWallet(strArr, z, new -$$Lambda$WalletCreateActivity$14$gdSWiu_xFOjUTNCDn1lfUBoivGA(this), new -$$Lambda$WalletCreateActivity$14$J-zC5quhSiCjHDcKnMX9EBgJB0w(this));
+            }
+
+            public /* synthetic */ void lambda$doCreate$0$WalletCreateActivity$14(String[] strArr) {
+                this.progressDialog.dismiss();
+                if (WalletCreateActivity.this.currentType == 0) {
+                    WalletCreateActivity walletCreateActivity = new WalletCreateActivity(1);
+                    walletCreateActivity.secretWords = strArr;
+                    WalletCreateActivity.this.presentFragment(walletCreateActivity, true);
+                    return;
+                }
+                if (WalletCreateActivity.this.fragmentToRemove != null) {
+                    WalletCreateActivity.this.fragmentToRemove.removeSelfFromStack();
+                }
+                if (WalletCreateActivity.this.getTonController().isWaitingForUserPasscode()) {
+                    WalletCreateActivity.this.presentFragment(new WalletCreateActivity(7), true);
+                } else {
+                    WalletCreateActivity.this.presentFragment(new WalletCreateActivity(2), true);
+                }
+            }
+
+            public /* synthetic */ void lambda$doCreate$1$WalletCreateActivity$14(String str, Error error) {
+                this.progressDialog.dismiss();
+                String str2 = "\n";
+                String str3 = "ErrorOccurred";
+                String str4 = "Wallet";
+                if (WalletCreateActivity.this.currentType == 0) {
+                    WalletCreateActivity walletCreateActivity = WalletCreateActivity.this;
+                    String string = LocaleController.getString(str4, NUM);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(LocaleController.getString(str3, NUM));
+                    stringBuilder.append(str2);
+                    if (error != null) {
+                        str = error.message;
+                    }
+                    stringBuilder.append(str);
+                    AlertsCreator.showSimpleAlert(walletCreateActivity, string, stringBuilder.toString());
+                } else if (str.startsWith("TONLIB")) {
+                    AlertsCreator.showSimpleAlert(WalletCreateActivity.this, LocaleController.getString("WalletImportAlertTitle", NUM), LocaleController.getString("WalletImportAlertText", NUM));
+                } else {
+                    WalletCreateActivity walletCreateActivity2 = WalletCreateActivity.this;
+                    String string2 = LocaleController.getString(str4, NUM);
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append(LocaleController.getString(str3, NUM));
+                    stringBuilder2.append(str2);
+                    stringBuilder2.append(str);
+                    AlertsCreator.showSimpleAlert(walletCreateActivity2, string2, stringBuilder2.toString());
+                }
+            }
+
+            public void run(boolean z) {
+                this.progressDialog = new AlertDialog(WalletCreateActivity.this.getParentActivity(), 3);
+                this.progressDialog.setCanCacnel(false);
+                this.progressDialog.show();
+                UserConfig userConfig = WalletCreateActivity.this.getUserConfig();
+                if (userConfig.walletConfigType == 0 && TextUtils.isEmpty(userConfig.walletConfigFromUrl)) {
+                    WalletConfigLoader.loadConfig(userConfig.walletConfigUrl, new -$$Lambda$WalletCreateActivity$14$q7v4Cm-pGPnn8ufS-qBz9b6G-Y4(this, userConfig, z));
+                } else {
+                    doCreate(z);
+                }
+            }
+
+            public /* synthetic */ void lambda$run$2$WalletCreateActivity$14(UserConfig userConfig, boolean z, String str) {
+                if (TextUtils.isEmpty(str)) {
+                    this.progressDialog.dismiss();
+                    AlertsCreator.showSimpleAlert(WalletCreateActivity.this, LocaleController.getString("WalletError", NUM), LocaleController.getString("WalletCreateBlockchainConfigLoadError", NUM));
+                    return;
+                }
+                userConfig.walletConfigFromUrl = str;
+                userConfig.saveConfig(false);
+                doCreate(z);
+            }
+        }, LocaleController.getString("WalletSecurityAlertCreateContinue", NUM));
     }
 
     public void onResume() {
@@ -1463,6 +1465,9 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
     public void onPause() {
         super.onPause();
         hideHint();
+        if (getParentActivity() != null) {
+            AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
+        }
     }
 
     public void onBeginSlide() {
@@ -1479,13 +1484,21 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                     if (i == 8 && !z2) {
                         this.passcodeEditText.requestFocus();
                         AndroidUtilities.showKeyboard(this.passcodeEditText);
+                    }
+                    if (VERSION.SDK_INT >= 23 && AndroidUtilities.allowScreenCapture()) {
+                        i = this.currentType;
+                        if (i != 9 && i != 0) {
+                            AndroidUtilities.setFlagSecure(this, true);
+                            return;
+                        }
                         return;
                     }
-                    return;
                 }
             }
             this.editTexts[0].editText.requestFocus();
             AndroidUtilities.showKeyboard(this.editTexts[0].editText);
+            if (VERSION.SDK_INT >= 23) {
+            }
         }
     }
 
@@ -1496,20 +1509,6 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
 
     public boolean onBackPressed() {
         return canGoBack();
-    }
-
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.finishedWalletPreloading) {
-            AlertDialog alertDialog = this.preloadingProgressDialog;
-            if (alertDialog != null) {
-                try {
-                    alertDialog.dismiss();
-                    presentFragment(new WalletActivity(), true);
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-            }
-        }
     }
 
     public void onActivityResultFragment(int i, int i2, Intent intent) {
@@ -1523,18 +1522,18 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
             AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
             alertDialog.setCanCacnel(false);
             alertDialog.show();
-            getTonController().getSecretWords(null, cipher, new -$$Lambda$WalletCreateActivity$582jswwO1HDg3kq5k6PqfPmAngs(this, alertDialog), new -$$Lambda$WalletCreateActivity$4kb5fBbPHQtOLTgjF6Qhv5-eYwM(this, alertDialog));
+            getTonController().getSecretWords(null, cipher, new -$$Lambda$WalletCreateActivity$LY4ARfL7NoAk4YfAIWYHc-DVdLc(this, alertDialog), new -$$Lambda$WalletCreateActivity$QH2pmyadLy4pXjjtKXAO2468Ae4(this, alertDialog));
         }
     }
 
-    public /* synthetic */ void lambda$doExport$15$WalletCreateActivity(AlertDialog alertDialog, String[] strArr) {
+    public /* synthetic */ void lambda$doExport$8$WalletCreateActivity(AlertDialog alertDialog, String[] strArr) {
         alertDialog.dismiss();
         WalletCreateActivity walletCreateActivity = new WalletCreateActivity(4);
         walletCreateActivity.secretWords = strArr;
         presentFragment(walletCreateActivity, true);
     }
 
-    public /* synthetic */ void lambda$doExport$16$WalletCreateActivity(AlertDialog alertDialog, String str, Error error) {
+    public /* synthetic */ void lambda$doExport$9$WalletCreateActivity(AlertDialog alertDialog, String str, Error error) {
         alertDialog.dismiss();
         if (str.equals("KEYSTORE_FAIL")) {
             getTonController().cleanup();
@@ -1654,7 +1653,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
                 alertDialog.setCanCacnel(false);
                 alertDialog.show();
-                getTonController().setUserPasscode(obj, this.passcodeType, new -$$Lambda$WalletCreateActivity$MhbfSHRG0qyyDXO7kuZm0dCNIQk(this, alertDialog));
+                getTonController().setUserPasscode(obj, this.passcodeType, new -$$Lambda$WalletCreateActivity$3OkLQHoSI3SMpEsSjlTvNx9d9-M(this, alertDialog));
             } else {
                 Toast.makeText(getParentActivity(), LocaleController.getString("WalletSetPasscodeError", NUM), 0).show();
                 this.titleTextView.setText(LocaleController.getString("WalletSetPasscode", NUM));
@@ -1667,7 +1666,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    public /* synthetic */ void lambda$onPasscodeEnter$17$WalletCreateActivity(AlertDialog alertDialog) {
+    public /* synthetic */ void lambda$onPasscodeEnter$10$WalletCreateActivity(AlertDialog alertDialog) {
         alertDialog.dismiss();
         if (this.changingPasscode) {
             getTonController().saveWalletKeys(true);

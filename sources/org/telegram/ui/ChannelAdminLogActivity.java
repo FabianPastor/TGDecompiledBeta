@@ -2415,7 +2415,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fb:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
+        r3 = NUM; // 0x7f0e09f9 float:1.8880216E38 double:1.053163418E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);
@@ -2457,9 +2457,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r1 = r1.toLowerCase();
         r2 = "attheme";
         r1 = r1.endsWith(r2);
-        r2 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r2 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r3 = "OK";
-        r4 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r4 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r5 = "AppName";
         if (r1 == 0) goto L_0x02de;
     L_0x025d:
@@ -2514,7 +2514,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0535 float:1.8877741E38 double:1.053162815E-314;
+        r1 = NUM; // 0x7f0e0550 float:1.8877796E38 double:1.0531628286E-314;
         r4 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2545,7 +2545,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0534 float:1.887774E38 double:1.0531628147E-314;
+        r1 = NUM; // 0x7f0e054f float:1.8877794E38 double:1.053162828E-314;
         r4 = "IncorrectLocalization";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);

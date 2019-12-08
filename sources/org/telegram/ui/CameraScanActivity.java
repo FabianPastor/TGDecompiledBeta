@@ -25,20 +25,27 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
 import android.util.Property;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.gms.vision.barcode.BarcodeDetector.Builder;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
@@ -51,7 +58,9 @@ import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.camera.CameraView.CameraViewDelegate;
 import org.telegram.messenger.camera.Size;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AlertsCreator;
@@ -80,6 +89,7 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
     private boolean recognized;
     private TextView recognizedMrzView;
     private TextView titleTextView;
+    private BarcodeDetector visionQrReader;
 
     public interface CameraScanActivityDelegate {
 
@@ -96,11 +106,42 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
         void didFindQr(String str);
     }
 
+    public static ActionBarLayout[] showAsSheet(BaseFragment baseFragment, final CameraScanActivityDelegate cameraScanActivityDelegate) {
+        if (baseFragment == null || baseFragment.getParentActivity() == null) {
+            return null;
+        }
+        final ActionBarLayout[] actionBarLayoutArr = new ActionBarLayout[]{new ActionBarLayout(baseFragment.getParentActivity())};
+        new BottomSheet(baseFragment.getParentActivity(), false) {
+            /* Access modifiers changed, original: protected */
+            public boolean canDismissWithSwipe() {
+                return false;
+            }
+
+            public void onBackPressed() {
+                ActionBarLayout[] actionBarLayoutArr = actionBarLayoutArr;
+                if (actionBarLayoutArr[0] == null || actionBarLayoutArr[0].fragmentsStack.size() <= 1) {
+                    super.onBackPressed();
+                } else {
+                    actionBarLayoutArr[0].onBackPressed();
+                }
+            }
+
+            public void dismiss() {
+                super.dismiss();
+                actionBarLayoutArr[0] = null;
+            }
+        }.show();
+        return actionBarLayoutArr;
+    }
+
     public CameraScanActivity(int i) {
         CameraController.getInstance().initCamera(new -$$Lambda$CameraScanActivity$MpjUCnNpRqL7_BAyOkpBVyW42YI(this));
         this.currentType = i;
         if (this.currentType == 1) {
             this.qrReader = new QRCodeReader();
+            Builder builder = new Builder(ApplicationLoader.applicationContext);
+            builder.setBarcodeFormats(256);
+            this.visionQrReader = builder.build();
         }
     }
 
@@ -114,11 +155,20 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         destroy(false, null);
-        getParentActivity().setRequestedOrientation(-1);
+        if (getParentActivity() != null) {
+            getParentActivity().setRequestedOrientation(-1);
+        }
+        BarcodeDetector barcodeDetector = this.visionQrReader;
+        if (barcodeDetector != null) {
+            barcodeDetector.release();
+        }
+    }
+
+    public boolean onFragmentCreate() {
+        return super.onFragmentCreate();
     }
 
     public View createView(Context context) {
-        getParentActivity().setRequestedOrientation(1);
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteGrayText2"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarWhiteSelector"), false);
@@ -138,7 +188,7 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
         this.cornerPaint.setStyle(Style.STROKE);
         this.cornerPaint.setStrokeWidth((float) AndroidUtilities.dp(4.0f));
         this.cornerPaint.setStrokeJoin(Join.ROUND);
-        AnonymousClass2 anonymousClass2 = new ViewGroup(context) {
+        AnonymousClass3 anonymousClass3 = new ViewGroup(context) {
             /* Access modifiers changed, original: protected */
             public void onMeasure(int i, int i2) {
                 int size = MeasureSpec.getSize(i);
@@ -234,9 +284,11 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
                 return z;
             }
         };
-        anonymousClass2.setOnTouchListener(-$$Lambda$CameraScanActivity$coK9fFDxJKElfMa1PuRYWa0XVmg.INSTANCE);
-        this.fragmentView = anonymousClass2;
+        anonymousClass3.setOnTouchListener(-$$Lambda$CameraScanActivity$coK9fFDxJKElfMa1PuRYWa0XVmg.INSTANCE);
+        this.fragmentView = anonymousClass3;
         this.cameraView = new CameraView(context, false);
+        this.cameraView.setUseMaxPreview(true);
+        this.cameraView.setOptimizeForBarcode(true);
         this.cameraView.setDelegate(new CameraViewDelegate() {
             public void onCameraCreated(Camera camera) {
             }
@@ -245,7 +297,7 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
                 CameraScanActivity.this.startRecognizing();
             }
         });
-        anonymousClass2.addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
+        anonymousClass3.addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
         if (this.currentType == 0) {
             String str = "windowBackgroundWhite";
             this.actionBar.setBackgroundColor(Theme.getColor(str));
@@ -255,18 +307,18 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
             this.actionBar.setAddToContainer(false);
             this.actionBar.setItemsColor(-1, false);
             this.actionBar.setItemsBackgroundColor(NUM, false);
-            anonymousClass2.setBackgroundColor(Theme.getColor("wallet_blackBackground"));
-            anonymousClass2.addView(this.actionBar);
+            anonymousClass3.setBackgroundColor(Theme.getColor("wallet_blackBackground"));
+            anonymousClass3.addView(this.actionBar);
         }
         this.titleTextView = new TextView(context);
         this.titleTextView.setGravity(1);
         this.titleTextView.setTextSize(1, 24.0f);
-        anonymousClass2.addView(this.titleTextView);
+        anonymousClass3.addView(this.titleTextView);
         this.descriptionText = new TextView(context);
         this.descriptionText.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
         this.descriptionText.setGravity(1);
         this.descriptionText.setTextSize(1, 16.0f);
-        anonymousClass2.addView(this.descriptionText);
+        anonymousClass3.addView(this.descriptionText);
         this.recognizedMrzView = new TextView(context);
         this.recognizedMrzView.setTextColor(-1);
         this.recognizedMrzView.setGravity(81);
@@ -283,19 +335,22 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
             this.recognizedMrzView.setTextSize(1, 16.0f);
             this.recognizedMrzView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
             this.recognizedMrzView.setText(LocaleController.getString("WalletScanCodeNotFound", NUM));
-            anonymousClass2.addView(this.recognizedMrzView);
+            anonymousClass3.addView(this.recognizedMrzView);
             this.galleryButton = new ImageView(context);
             this.galleryButton.setScaleType(ScaleType.CENTER);
             this.galleryButton.setImageResource(NUM);
             this.galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM), Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM)));
-            anonymousClass2.addView(this.galleryButton);
+            anonymousClass3.addView(this.galleryButton);
             this.galleryButton.setOnClickListener(new -$$Lambda$CameraScanActivity$elYH43-16s4YXL1e30sBSwZ-5V8(this));
             this.flashButton = new ImageView(context);
             this.flashButton.setScaleType(ScaleType.CENTER);
             this.flashButton.setImageResource(NUM);
             this.flashButton.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM));
-            anonymousClass2.addView(this.flashButton);
+            anonymousClass3.addView(this.flashButton);
             this.flashButton.setOnClickListener(new -$$Lambda$CameraScanActivity$KKa95LeROqiNbgpnOnp7zBLDcDQ(this));
+        }
+        if (getParentActivity() != null) {
+            getParentActivity().setRequestedOrientation(1);
         }
         this.fragmentView.setKeepScreenOn(true);
         return this.fragmentView;
@@ -310,6 +365,7 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
                 }
             }
             PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(10, false, false, null);
+            photoAlbumPickerActivity.setMaxSelectedPhotos(1, false);
             photoAlbumPickerActivity.setAllowSearchImages(false);
             photoAlbumPickerActivity.setDelegate(new PhotoAlbumPickerActivityDelegate() {
                 public void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList, boolean z, int i) {
@@ -318,7 +374,7 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
                             SendingMediaInfo sendingMediaInfo = (SendingMediaInfo) arrayList.get(0);
                             if (sendingMediaInfo.path != null) {
                                 Point realScreenSize = AndroidUtilities.getRealScreenSize();
-                                String access$1700 = CameraScanActivity.this.tryReadQr(null, ImageLoader.loadBitmap(sendingMediaInfo.path, null, (float) realScreenSize.x, (float) realScreenSize.y, true));
+                                String access$1700 = CameraScanActivity.this.tryReadQr(null, null, 0, 0, 0, ImageLoader.loadBitmap(sendingMediaInfo.path, null, (float) realScreenSize.x, (float) realScreenSize.y, true));
                                 if (access$1700 != null) {
                                     if (CameraScanActivity.this.delegate != null) {
                                         CameraScanActivity.this.delegate.didFindQr(access$1700);
@@ -383,11 +439,11 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
         this.flashButton.invalidate();
     }
 
-    public void onActivityResult(int i, int i2, Intent intent) {
+    public void onActivityResultFragment(int i, int i2, Intent intent) {
         if (i2 == -1 && i == 11 && intent != null && intent.getData() != null) {
             try {
                 Point realScreenSize = AndroidUtilities.getRealScreenSize();
-                String tryReadQr = tryReadQr(null, ImageLoader.loadBitmap(null, intent.getData(), (float) realScreenSize.x, (float) realScreenSize.y, true));
+                String tryReadQr = tryReadQr(null, null, 0, 0, 0, ImageLoader.loadBitmap(null, intent.getData(), (float) realScreenSize.x, (float) realScreenSize.y, true));
                 if (tryReadQr != null) {
                     if (this.delegate != null) {
                         this.delegate.didFindQr(tryReadQr);
@@ -405,13 +461,12 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
     }
 
     public void destroy(boolean z, Runnable runnable) {
-        this.cameraView.destroy(z, runnable);
-        this.cameraView = null;
+        CameraView cameraView = this.cameraView;
+        if (cameraView != null) {
+            cameraView.destroy(z, runnable);
+            this.cameraView = null;
+        }
         this.backgroundHandlerThread.quitSafely();
-    }
-
-    public void hideCamera(boolean z) {
-        destroy(z, null);
     }
 
     private void startRecognizing() {
@@ -483,8 +538,7 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
             }
             camera.getParameters().getPreviewFormat();
             int min = (int) (((float) Math.min(previewSize.getWidth(), previewSize.getHeight())) / 1.5f);
-            byte[] bArr2 = bArr;
-            String tryReadQr = tryReadQr(new PlanarYUVLuminanceSource(bArr2, previewSize.getWidth(), previewSize.getHeight(), (previewSize.getWidth() - min) / 2, (previewSize.getHeight() - min) / 2, min, min, false), null);
+            String tryReadQr = tryReadQr(bArr, previewSize, (previewSize.getWidth() - min) / 2, (previewSize.getHeight() - min) / 2, min, null);
             if (tryReadQr != null) {
                 this.recognized = true;
                 camera.stopPreview();
@@ -513,38 +567,59 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
         finishFragment();
     }
 
-    private String tryReadQr(LuminanceSource luminanceSource, Bitmap bitmap) {
+    private String tryReadQr(byte[] bArr, Size size, int i, int i2, int i3, Bitmap bitmap) {
+        Bitmap bitmap2 = bitmap;
         boolean z = true;
-        if (bitmap != null) {
-            try {
-                int[] iArr = new int[(bitmap.getWidth() * bitmap.getHeight())];
-                bitmap.getPixels(iArr, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-                luminanceSource = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), iArr);
-            } catch (Throwable unused) {
-                if (bitmap == null) {
-                    z = false;
+        try {
+            CharSequence charSequence;
+            if (this.visionQrReader.isOperational()) {
+                Frame build;
+                Frame.Builder builder;
+                if (bitmap2 != null) {
+                    builder = new Frame.Builder();
+                    builder.setBitmap(bitmap2);
+                    build = builder.build();
+                } else {
+                    builder = new Frame.Builder();
+                    builder.setImageData(ByteBuffer.wrap(bArr), size.getWidth(), size.getHeight(), 17);
+                    build = builder.build();
                 }
-                onNoQrFound(z);
+                SparseArray detect = this.visionQrReader.detect(build);
+                charSequence = (detect == null || detect.size() <= 0) ? null : ((Barcode) detect.valueAt(0)).rawValue;
+            } else {
+                LuminanceSource rGBLuminanceSource;
+                if (bitmap2 != null) {
+                    int[] iArr = new int[(bitmap.getWidth() * bitmap.getHeight())];
+                    bitmap.getPixels(iArr, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+                    rGBLuminanceSource = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), iArr);
+                } else {
+                    LuminanceSource planarYUVLuminanceSource = new PlanarYUVLuminanceSource(bArr, size.getWidth(), size.getHeight(), i, i2, i3, i3, false);
+                }
+                com.google.zxing.Result decode = this.qrReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(rGBLuminanceSource)));
+                if (decode == null) {
+                    onNoQrFound(bitmap2 != null);
+                    return null;
+                }
+                charSequence = decode.getText();
+            }
+            if (TextUtils.isEmpty(charSequence)) {
+                onNoQrFound(bitmap2 != null);
+                return null;
+            } else if (charSequence.startsWith("ton://transfer/")) {
+                if (getTonController().isValidWalletAddress(Uri.parse(charSequence).getPath().replace("/", ""))) {
+                    return charSequence;
+                }
+                onNoWalletFound(bitmap2 != null);
+                return null;
+            } else {
+                onNoWalletFound(bitmap2 != null);
                 return null;
             }
-        }
-        com.google.zxing.Result decode = this.qrReader.decode(new BinaryBitmap(new HybridBinarizer(luminanceSource)));
-        if (decode == null) {
-            onNoQrFound(bitmap != null);
-            return null;
-        }
-        String text = decode.getText();
-        if (TextUtils.isEmpty(text)) {
-            onNoQrFound(bitmap != null);
-            return null;
-        } else if (text.startsWith("ton://transfer/")) {
-            if (getTonController().isValidWalletAddress(Uri.parse(text).getPath().replace("/", ""))) {
-                return text;
+        } catch (Throwable unused) {
+            if (bitmap2 == null) {
+                z = false;
             }
-            onNoWalletFound(bitmap != null);
-            return null;
-        } else {
-            onNoWalletFound(bitmap != null);
+            onNoQrFound(z);
             return null;
         }
     }

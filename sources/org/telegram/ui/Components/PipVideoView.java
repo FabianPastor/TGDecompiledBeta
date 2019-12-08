@@ -33,6 +33,7 @@ import org.telegram.ui.PhotoViewer;
 public class PipVideoView {
     private View controlsView;
     private DecelerateInterpolator decelerateInterpolator;
+    private boolean isInAppOnly;
     private Activity parentActivity;
     private EmbedBottomSheet parentSheet;
     private PhotoViewer photoViewer;
@@ -238,6 +239,10 @@ public class PipVideoView {
         }
     }
 
+    public PipVideoView(boolean z) {
+        this.isInAppOnly = z;
+    }
+
     public TextureView show(Activity activity, EmbedBottomSheet embedBottomSheet, View view, float f, int i, WebView webView) {
         return show(activity, null, embedBottomSheet, view, f, i, webView);
     }
@@ -349,7 +354,11 @@ public class PipVideoView {
             this.controlsView = view;
         }
         this.windowView.addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
-        this.windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
+        if (this.isInAppOnly) {
+            this.windowManager = activity.getWindowManager();
+        } else {
+            this.windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
+        }
         this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
         int i2 = this.preferences.getInt("sidex", 1);
         int i3 = this.preferences.getInt("sidey", 0);
@@ -363,7 +372,9 @@ public class PipVideoView {
             this.windowLayoutParams.y = getSideCoord(false, i3, f3, this.videoHeight);
             this.windowLayoutParams.format = -3;
             this.windowLayoutParams.gravity = 51;
-            if (VERSION.SDK_INT >= 26) {
+            if (this.isInAppOnly) {
+                this.windowLayoutParams.type = 99;
+            } else if (VERSION.SDK_INT >= 26) {
                 this.windowLayoutParams.type = 2038;
             } else {
                 this.windowLayoutParams.type = 2003;

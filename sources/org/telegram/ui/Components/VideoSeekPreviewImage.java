@@ -72,8 +72,7 @@ public class VideoSeekPreviewImage extends View {
             }
         }
         long j = (long) (((float) this.duration) * f);
-        int i2 = ((int) (j - ((long) ((((int) ((j / 60) / 1000)) * 60) * 1000)))) / 1000;
-        this.frameTime = String.format("%d:%02d", new Object[]{Integer.valueOf((int) ((j / 60) / 1000)), Integer.valueOf(i2)});
+        this.frameTime = AndroidUtilities.formatShortDuration((int) (j / 1000));
         this.timeWidth = (int) Math.ceil((double) this.textPaint.measureText(this.frameTime));
         invalidate();
         if (this.progressRunnable != null) {

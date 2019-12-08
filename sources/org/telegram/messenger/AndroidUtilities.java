@@ -76,6 +76,12 @@ import androidx.core.content.FileProvider;
 import androidx.viewpager.widget.ViewPager;
 import com.android.internal.telephony.ITelephony;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
+import drinkless.org.ton.Client;
+import drinkless.org.ton.TonApi.Error;
+import drinkless.org.ton.TonApi.Object;
+import drinkless.org.ton.TonApi.OnLiteServerQueryError;
+import drinkless.org.ton.TonApi.OnLiteServerQueryResult;
+import drinkless.org.ton.TonApi.UpdateSendLiteServerQuery;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -103,14 +109,20 @@ import net.hockeyapp.android.UpdateManager;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
+import org.telegram.messenger.TonController.BytesCallback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_document;
+import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_restrictionReason;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
 import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.TL_wallPaperSettings;
+import org.telegram.tgnet.TLRPC.TL_wallet_getKeySecretSalt;
+import org.telegram.tgnet.TLRPC.TL_wallet_liteResponse;
+import org.telegram.tgnet.TLRPC.TL_wallet_secretSalt;
+import org.telegram.tgnet.TLRPC.TL_wallet_sendLiteRequest;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -121,6 +133,7 @@ import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PickerBottomLayout;
+import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.WallpapersListActivity.ColorWallpaper;
 
@@ -1534,16 +1547,17 @@ public class AndroidUtilities {
         return d / 1000000.0d;
     }
 
-    public static String formapMapUrl(int i, double d, double d2, int i2, int i3, boolean z, int i4) {
+    public static String formapMapUrl(int i, double d, double d2, int i2, int i3, boolean z, int i4, int i5) {
         int min = Math.min(2, (int) Math.ceil((double) density));
-        int i5 = MessagesController.getInstance(i).mapProvider;
-        if (i5 == 1 || i5 == 3) {
+        int i6 = i5;
+        int i7 = i6 == -1 ? MessagesController.getInstance(i).mapProvider : i6;
+        if (i7 == 1 || i7 == 3) {
             String[] strArr = new String[]{"ru_RU", "tr_TR"};
             LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
             String str = null;
-            for (i5 = 0; i5 < strArr.length; i5++) {
-                if (strArr[i5].toLowerCase().contains(currentLocaleInfo.shortName)) {
-                    str = strArr[i5];
+            for (i7 = 0; i7 < strArr.length; i7++) {
+                if (strArr[i7].toLowerCase().contains(currentLocaleInfo.shortName)) {
+                    str = strArr[i7];
                 }
             }
             if (str == null) {
@@ -2382,6 +2396,77 @@ public class AndroidUtilities {
         }
     }
 
+    public static String formatShortDuration(int i) {
+        return formatDuration(i, false);
+    }
+
+    public static String formatLongDuration(int i) {
+        return formatDuration(i, true);
+    }
+
+    public static String formatDuration(int i, boolean z) {
+        int i2 = i / 3600;
+        int i3 = (i / 60) % 60;
+        i %= 60;
+        if (i2 != 0) {
+            return String.format(Locale.US, "%d:%02d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i)});
+        } else if (z) {
+            return String.format(Locale.US, "%02d:%02d", new Object[]{Integer.valueOf(i3), Integer.valueOf(i)});
+        } else {
+            return String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(i3), Integer.valueOf(i)});
+        }
+    }
+
+    public static String formatShortDuration(int i, int i2) {
+        return formatDuration(i, i2, false);
+    }
+
+    public static String formatLongDuration(int i, int i2) {
+        return formatDuration(i, i2, true);
+    }
+
+    public static String formatDuration(int i, int i2, boolean z) {
+        int i3 = i2 / 3600;
+        int i4 = (i2 / 60) % 60;
+        int i5 = i2 % 60;
+        int i6 = i / 3600;
+        int i7 = (i / 60) % 60;
+        i %= 60;
+        if (i2 == 0) {
+            if (i6 != 0) {
+                return String.format(Locale.US, "%d:%02d:%02d / -:--", new Object[]{Integer.valueOf(i6), Integer.valueOf(i7), Integer.valueOf(i)});
+            } else if (z) {
+                return String.format(Locale.US, "%02d:%02d / -:--", new Object[]{Integer.valueOf(i7), Integer.valueOf(i)});
+            } else {
+                return String.format(Locale.US, "%d:%02d / -:--", new Object[]{Integer.valueOf(i7), Integer.valueOf(i)});
+            }
+        } else if (i6 != 0 || i3 != 0) {
+            return String.format(Locale.US, "%d:%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(i6), Integer.valueOf(i7), Integer.valueOf(i), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(i5)});
+        } else if (z) {
+            return String.format(Locale.US, "%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(i7), Integer.valueOf(i), Integer.valueOf(i4), Integer.valueOf(i5)});
+        } else {
+            return String.format(Locale.US, "%d:%02d / %d:%02d", new Object[]{Integer.valueOf(i7), Integer.valueOf(i), Integer.valueOf(i4), Integer.valueOf(i5)});
+        }
+    }
+
+    public static String formatVideoDuration(int i, int i2) {
+        int i3 = i2 / 3600;
+        int i4 = (i2 / 60) % 60;
+        i2 %= 60;
+        int i5 = i / 3600;
+        int i6 = (i / 60) % 60;
+        i %= 60;
+        if (i5 == 0 && i3 == 0) {
+            return String.format(Locale.US, "%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(i6), Integer.valueOf(i), Integer.valueOf(i4), Integer.valueOf(i2)});
+        } else if (i3 == 0) {
+            return String.format(Locale.US, "%d:%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(i5), Integer.valueOf(i6), Integer.valueOf(i), Integer.valueOf(i4), Integer.valueOf(i2)});
+        } else if (i5 == 0) {
+            return String.format(Locale.US, "%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(i6), Integer.valueOf(i), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(i2)});
+        } else {
+            return String.format(Locale.US, "%d:%02d:%02d / %d:%02d:%02d", new Object[]{Integer.valueOf(i5), Integer.valueOf(i6), Integer.valueOf(i), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(i2)});
+        }
+    }
+
     public static byte[] decodeQuotedPrintable(byte[] bArr) {
         if (bArr == null) {
             return null;
@@ -2556,9 +2641,9 @@ public class AndroidUtilities {
         r7 = r5.exists();
         if (r7 == 0) goto L_0x015c;
     L_0x004d:
-        r7 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r7 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r8 = "OK";
-        r9 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r9 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r10 = "AppName";
         r11 = 1;
         if (r2 == 0) goto L_0x00a6;
@@ -2582,7 +2667,7 @@ public class AndroidUtilities {
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0535 float:1.8877741E38 double:1.053162815E-314;
+        r1 = NUM; // 0x7f0e0550 float:1.8877796E38 double:1.0531628286E-314;
         r3 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
@@ -2679,7 +2764,7 @@ public class AndroidUtilities {
         r3.setTitle(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.setPositiveButton(r1, r6);
-        r1 = NUM; // 0x7f0e065c float:1.887834E38 double:1.053162961E-314;
+        r1 = NUM; // 0x7f0e067f float:1.887841E38 double:1.0531629783E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r5 = 0;
@@ -2801,21 +2886,21 @@ public class AndroidUtilities {
     L_0x0092:
         r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r8.<init>(r9);
-        r0 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r0 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r1 = "AppName";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setTitle(r0);
-        r0 = NUM; // 0x7f0e00f0 float:1.8875524E38 double:1.053162275E-314;
+        r0 = NUM; // 0x7f0e00f3 float:1.887553E38 double:1.0531622767E-314;
         r1 = "ApkRestricted";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setMessage(r0);
-        r0 = NUM; // 0x7f0e0859 float:1.8879372E38 double:1.0531632124E-314;
+        r0 = NUM; // 0x7f0e087c float:1.8879443E38 double:1.0531632297E-314;
         r1 = "PermissionOpenSettings";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw;
         r1.<init>(r9);
         r8.setPositiveButton(r0, r1);
-        r9 = NUM; // 0x7f0e01fa float:1.8876064E38 double:1.0531624066E-314;
+        r9 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
         r0 = "Cancel";
         r9 = org.telegram.messenger.LocaleController.getString(r0, r9);
         r8.setNegativeButton(r9, r2);
@@ -3544,10 +3629,14 @@ public class AndroidUtilities {
             if (z) {
                 try {
                     baseFragment.getParentActivity().getWindow().setFlags(8192, 8192);
+                    flagSecureFragment = new WeakReference(baseFragment);
+                    return;
                 } catch (Exception unused) {
+                    return;
                 }
-                flagSecureFragment = new WeakReference(baseFragment);
-            } else if (flagSecureFragment.get() == baseFragment) {
+            }
+            WeakReference weakReference = flagSecureFragment;
+            if (weakReference != null && weakReference.get() == baseFragment) {
                 try {
                     baseFragment.getParentActivity().getWindow().clearFlags(8192);
                 } catch (Exception unused2) {
@@ -3555,5 +3644,49 @@ public class AndroidUtilities {
                 flagSecureFragment = null;
             }
         }
+    }
+
+    public static void openSharing(BaseFragment baseFragment, String str) {
+        if (baseFragment != null && baseFragment.getParentActivity() != null) {
+            baseFragment.showDialog(new ShareAlert(baseFragment.getParentActivity(), null, str, false, str, false));
+        }
+    }
+
+    public static boolean allowScreenCapture() {
+        return SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture;
+    }
+
+    public static void getTonWalletSalt(int i, BytesCallback bytesCallback) {
+        ConnectionsManager.getInstance(i).sendRequest(new TL_wallet_getKeySecretSalt(), new -$$Lambda$AndroidUtilities$jQk6Chp51iovYoXvar_WJJjUc2DA(bytesCallback));
+    }
+
+    static /* synthetic */ void lambda$getTonWalletSalt$7(BytesCallback bytesCallback, TLObject tLObject, TL_error tL_error) {
+        if (tLObject instanceof TL_wallet_secretSalt) {
+            bytesCallback.run(((TL_wallet_secretSalt) tLObject).salt);
+        } else {
+            bytesCallback.run(null);
+        }
+    }
+
+    public static void processTonUpdate(int i, Client client, Object object) {
+        if (object instanceof UpdateSendLiteServerQuery) {
+            UpdateSendLiteServerQuery updateSendLiteServerQuery = (UpdateSendLiteServerQuery) object;
+            long j = updateSendLiteServerQuery.id;
+            TL_wallet_sendLiteRequest tL_wallet_sendLiteRequest = new TL_wallet_sendLiteRequest();
+            tL_wallet_sendLiteRequest.body = updateSendLiteServerQuery.data;
+            ConnectionsManager.getInstance(i).sendRequest(tL_wallet_sendLiteRequest, new -$$Lambda$AndroidUtilities$WThGqTP3imQHn0t9VPFazPVrxWk(client, j), 8);
+        }
+    }
+
+    static /* synthetic */ void lambda$processTonUpdate$8(Client client, long j, TLObject tLObject, TL_error tL_error) {
+        if (tLObject instanceof TL_wallet_liteResponse) {
+            client.send(new OnLiteServerQueryResult(j, ((TL_wallet_liteResponse) tLObject).response), null);
+        } else if (tL_error != null) {
+            client.send(new OnLiteServerQueryError(j, new Error(tL_error.code, tL_error.text)), null);
+        }
+    }
+
+    public static File getSharingDirectory() {
+        return new File(FileLoader.getDirectory(4), "sharing/");
     }
 }

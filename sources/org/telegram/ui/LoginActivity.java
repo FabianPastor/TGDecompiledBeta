@@ -306,19 +306,22 @@ public class LoginActivity extends BaseFragment {
 
         public /* synthetic */ void lambda$null$2$LoginActivity$LoginActivityPasswordView(TL_error tL_error, TLObject tLObject) {
             this.this$0.needHideProgress(false);
-            String str = "AppName";
             if (tL_error == null) {
                 TL_auth_passwordRecovery tL_auth_passwordRecovery = (TL_auth_passwordRecovery) tLObject;
                 Builder builder = new Builder(this.this$0.getParentActivity());
                 builder.setMessage(LocaleController.formatString("RestoreEmailSent", NUM, tL_auth_passwordRecovery.email_pattern));
-                builder.setTitle(LocaleController.getString(str, NUM));
+                builder.setTitle(LocaleController.getString("RestoreEmailSentTitle", NUM));
                 builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$LoginActivity$LoginActivityPasswordView$xtZEvWAVK5tRPP93-2SWWR4hemw(this, tL_auth_passwordRecovery));
                 Dialog showDialog = this.this$0.showDialog(builder.create());
                 if (showDialog != null) {
                     showDialog.setCanceledOnTouchOutside(false);
                     showDialog.setCancelable(false);
+                    return;
                 }
-            } else if (tL_error.text.startsWith("FLOOD_WAIT")) {
+                return;
+            }
+            String str = "AppName";
+            if (tL_error.text.startsWith("FLOOD_WAIT")) {
                 String formatPluralString;
                 int intValue = Utilities.parseInt(tL_error.text).intValue();
                 if (intValue < 60) {
@@ -327,9 +330,9 @@ public class LoginActivity extends BaseFragment {
                     formatPluralString = LocaleController.formatPluralString("Minutes", intValue / 60);
                 }
                 this.this$0.needShowAlert(LocaleController.getString(str, NUM), LocaleController.formatString("FloodWaitTime", NUM, formatPluralString));
-            } else {
-                this.this$0.needShowAlert(LocaleController.getString(str, NUM), tL_error.text);
+                return;
             }
+            this.this$0.needShowAlert(LocaleController.getString(str, NUM), tL_error.text);
         }
 
         public /* synthetic */ void lambda$null$1$LoginActivity$LoginActivityPasswordView(TL_auth_passwordRecovery tL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
@@ -2344,13 +2347,13 @@ public class LoginActivity extends BaseFragment {
             r7 = r6.text;
             r8 = "PHONE_NUMBER_INVALID";
             r7 = r7.contains(r8);
-            r8 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+            r8 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
             r3 = "AppName";
             if (r7 == 0) goto L_0x00e9;
         L_0x00d5:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e053f float:1.8877761E38 double:1.05316282E-314;
+            r8 = NUM; // 0x7f0e055a float:1.8877816E38 double:1.0531628335E-314;
             r2 = "InvalidPhoneNumber";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2379,7 +2382,7 @@ public class LoginActivity extends BaseFragment {
             r6.setPage(r1, r2, r7, r2);
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e02e8 float:1.8876547E38 double:1.053162524E-314;
+            r8 = NUM; // 0x7f0e02f4 float:1.887657E38 double:1.05316253E-314;
             r2 = "CodeExpired";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2392,7 +2395,7 @@ public class LoginActivity extends BaseFragment {
         L_0x012e:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e0484 float:1.8877382E38 double:1.053162728E-314;
+            r8 = NUM; // 0x7f0e049c float:1.887743E38 double:1.0531627396E-314;
             r2 = "FloodWait";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2402,7 +2405,7 @@ public class LoginActivity extends BaseFragment {
             r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
             r2 = new java.lang.StringBuilder;
             r2.<init>();
-            r3 = NUM; // 0x7f0e0404 float:1.8877123E38 double:1.0531626645E-314;
+            r3 = NUM; // 0x7f0e041c float:1.8877171E38 double:1.0531626764E-314;
             r4 = "ErrorOccurred";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r2.append(r3);
@@ -2416,7 +2419,7 @@ public class LoginActivity extends BaseFragment {
         L_0x016a:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e053c float:1.8877755E38 double:1.0531628187E-314;
+            r8 = NUM; // 0x7f0e0557 float:1.887781E38 double:1.053162832E-314;
             r2 = "InvalidCode";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -3492,7 +3495,7 @@ public class LoginActivity extends BaseFragment {
         r1 = r26;
         r2 = r0.actionBar;
         r3 = "AppName";
-        r4 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r4 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r2.setTitle(r3);
         r2 = r0.actionBar;
@@ -3541,7 +3544,7 @@ public class LoginActivity extends BaseFragment {
         r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10);
         r3.addView(r9, r12);
         r3 = r0.doneItem;
-        r9 = NUM; // 0x7f0e03a9 float:1.8876938E38 double:1.0531626196E-314;
+        r9 = NUM; // 0x7f0e03c1 float:1.8876987E38 double:1.0531626314E-314;
         r12 = "Done";
         r13 = org.telegram.messenger.LocaleController.getString(r12, r9);
         r3.setContentDescription(r13);

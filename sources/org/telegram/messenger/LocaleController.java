@@ -833,162 +833,162 @@ public class LocaleController {
         return stringBuilder.toString();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
     public static java.lang.String getLocaleAlias(java.lang.String r16) {
         /*
         r0 = r16;
@@ -1011,157 +1011,157 @@ public class LocaleController {
         r14 = "in";
         r15 = "id";
         r2 = "he";
-        if (r3 == r4) goto L_0x00b2;
-    L_0x0026:
+        if (r3 == r4) goto L_0x00b3;
+    L_0x0027:
         r4 = 3355; // 0xd1b float:4.701E-42 double:1.6576E-320;
-        if (r3 == r4) goto L_0x00aa;
-    L_0x002a:
+        if (r3 == r4) goto L_0x00ab;
+    L_0x002b:
         r4 = 3365; // 0xd25 float:4.715E-42 double:1.6625E-320;
-        if (r3 == r4) goto L_0x00a2;
-    L_0x002e:
+        if (r3 == r4) goto L_0x00a3;
+    L_0x002f:
         r4 = 3374; // 0xd2e float:4.728E-42 double:1.667E-320;
-        if (r3 == r4) goto L_0x009a;
-    L_0x0032:
+        if (r3 == r4) goto L_0x009b;
+    L_0x0033:
         r4 = 3391; // 0xd3f float:4.752E-42 double:1.6754E-320;
-        if (r3 == r4) goto L_0x0092;
-    L_0x0036:
+        if (r3 == r4) goto L_0x0093;
+    L_0x0037:
         r4 = 3508; // 0xdb4 float:4.916E-42 double:1.733E-320;
-        if (r3 == r4) goto L_0x0089;
-    L_0x003a:
+        if (r3 == r4) goto L_0x008a;
+    L_0x003b:
         r4 = 3521; // 0xdc1 float:4.934E-42 double:1.7396E-320;
-        if (r3 == r4) goto L_0x0081;
-    L_0x003e:
+        if (r3 == r4) goto L_0x0082;
+    L_0x003f:
         r4 = 3704; // 0xe78 float:5.19E-42 double:1.83E-320;
-        if (r3 == r4) goto L_0x0079;
-    L_0x0042:
+        if (r3 == r4) goto L_0x007a;
+    L_0x0043:
         r4 = 3856; // 0xvar_ float:5.403E-42 double:1.905E-320;
-        if (r3 == r4) goto L_0x0070;
-    L_0x0046:
+        if (r3 == r4) goto L_0x0071;
+    L_0x0047:
         r4 = 101385; // 0x18CLASSNAME float:1.4207E-40 double:5.0091E-319;
-        if (r3 == r4) goto L_0x0067;
-    L_0x004b:
+        if (r3 == r4) goto L_0x0068;
+    L_0x004c:
         r4 = 3404; // 0xd4c float:4.77E-42 double:1.682E-320;
-        if (r3 == r4) goto L_0x005e;
-    L_0x004f:
+        if (r3 == r4) goto L_0x005f;
+    L_0x0050:
         r4 = 3405; // 0xd4d float:4.771E-42 double:1.6823E-320;
-        if (r3 == r4) goto L_0x0055;
-    L_0x0053:
-        goto L_0x00ba;
-    L_0x0055:
+        if (r3 == r4) goto L_0x0056;
+    L_0x0054:
+        goto L_0x00bb;
+    L_0x0056:
         r0 = r0.equals(r10);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x005b:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x005c:
         r0 = 2;
-        goto L_0x00bb;
-    L_0x005e:
+        goto L_0x00bc;
+    L_0x005f:
         r0 = r0.equals(r11);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x0064:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x0065:
         r0 = 8;
-        goto L_0x00bb;
-    L_0x0067:
+        goto L_0x00bc;
+    L_0x0068:
         r0 = r0.equals(r5);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x006d:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x006e:
         r0 = 10;
-        goto L_0x00bb;
-    L_0x0070:
+        goto L_0x00bc;
+    L_0x0071:
         r0 = r0.equals(r6);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x0076:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x0077:
         r0 = 11;
-        goto L_0x00bb;
-    L_0x0079:
+        goto L_0x00bc;
+    L_0x007a:
         r0 = r0.equals(r7);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x007f:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x0080:
         r0 = 4;
-        goto L_0x00bb;
-    L_0x0081:
+        goto L_0x00bc;
+    L_0x0082:
         r0 = r0.equals(r8);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x0087:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x0088:
         r0 = 3;
-        goto L_0x00bb;
-    L_0x0089:
+        goto L_0x00bc;
+    L_0x008a:
         r0 = r0.equals(r9);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x008f:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x0090:
         r0 = 9;
-        goto L_0x00bb;
-    L_0x0092:
+        goto L_0x00bc;
+    L_0x0093:
         r0 = r0.equals(r12);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x0098:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x0099:
         r0 = 5;
-        goto L_0x00bb;
-    L_0x009a:
+        goto L_0x00bc;
+    L_0x009b:
         r0 = r0.equals(r13);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x00a0:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x00a1:
         r0 = 1;
-        goto L_0x00bb;
-    L_0x00a2:
+        goto L_0x00bc;
+    L_0x00a3:
         r0 = r0.equals(r14);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x00a8:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x00a9:
         r0 = 0;
-        goto L_0x00bb;
-    L_0x00aa:
+        goto L_0x00bc;
+    L_0x00ab:
         r0 = r0.equals(r15);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x00b0:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x00b1:
         r0 = 6;
-        goto L_0x00bb;
-    L_0x00b2:
+        goto L_0x00bc;
+    L_0x00b3:
         r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x00ba;
-    L_0x00b8:
+        if (r0 == 0) goto L_0x00bb;
+    L_0x00b9:
         r0 = 7;
-        goto L_0x00bb;
-    L_0x00ba:
-        r0 = -1;
+        goto L_0x00bc;
     L_0x00bb:
+        r0 = -1;
+    L_0x00bc:
         switch(r0) {
-            case 0: goto L_0x00ca;
-            case 1: goto L_0x00c9;
-            case 2: goto L_0x00c8;
-            case 3: goto L_0x00c7;
-            case 4: goto L_0x00c6;
-            case 5: goto L_0x00c5;
-            case 6: goto L_0x00c4;
-            case 7: goto L_0x00c3;
-            case 8: goto L_0x00c2;
-            case 9: goto L_0x00c1;
-            case 10: goto L_0x00c0;
-            case 11: goto L_0x00bf;
-            default: goto L_0x00be;
+            case 0: goto L_0x00cb;
+            case 1: goto L_0x00ca;
+            case 2: goto L_0x00c9;
+            case 3: goto L_0x00c8;
+            case 4: goto L_0x00c7;
+            case 5: goto L_0x00c6;
+            case 6: goto L_0x00c5;
+            case 7: goto L_0x00c4;
+            case 8: goto L_0x00c3;
+            case 9: goto L_0x00c2;
+            case 10: goto L_0x00c1;
+            case 11: goto L_0x00c0;
+            default: goto L_0x00bf;
         };
-    L_0x00be:
-        return r1;
     L_0x00bf:
-        return r12;
+        return r1;
     L_0x00c0:
-        return r7;
+        return r12;
     L_0x00c1:
-        return r8;
+        return r7;
     L_0x00c2:
-        return r10;
+        return r8;
     L_0x00c3:
-        return r13;
+        return r10;
     L_0x00c4:
-        return r14;
+        return r13;
     L_0x00c5:
-        return r6;
+        return r14;
     L_0x00c6:
-        return r5;
+        return r6;
     L_0x00c7:
-        return r9;
+        return r5;
     L_0x00c8:
-        return r11;
+        return r9;
     L_0x00c9:
-        return r2;
+        return r11;
     L_0x00ca:
+        return r2;
+    L_0x00cb:
         return r15;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.getLocaleAlias(java.lang.String):java.lang.String");
@@ -1697,6 +1697,47 @@ public class LocaleController {
         stringBuilder2.append(stringForQuantity);
         str = stringBuilder2.toString();
         return formatString(str, ApplicationLoader.applicationContext.getResources().getIdentifier(str, "string", ApplicationLoader.applicationContext.getPackageName()), Integer.valueOf(i));
+    }
+
+    public static String formatPluralStringComma(String str, int i) {
+        StringBuilder stringBuilder;
+        if (str != null) {
+            try {
+                if (str.length() != 0) {
+                    if (getInstance().currentPluralRules != null) {
+                        String stringForQuantity = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
+                        StringBuilder stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append(str);
+                        stringBuilder2.append("_");
+                        stringBuilder2.append(stringForQuantity);
+                        stringForQuantity = stringBuilder2.toString();
+                        stringBuilder2 = new StringBuilder(String.format(Locale.US, "%d", new Object[]{Integer.valueOf(i)}));
+                        for (i = stringBuilder2.length() - 3; i > 0; i -= 3) {
+                            stringBuilder2.insert(i, ',');
+                        }
+                        String str2 = BuildVars.USE_CLOUD_STRINGS ? (String) getInstance().localeValues.get(str) : null;
+                        if (str2 == null) {
+                            str2 = ApplicationLoader.applicationContext.getString(ApplicationLoader.applicationContext.getResources().getIdentifier(stringForQuantity, "string", ApplicationLoader.applicationContext.getPackageName()));
+                        }
+                        str2 = str2.replace("%1$d", "%1$s");
+                        if (getInstance().currentLocale != null) {
+                            return String.format(getInstance().currentLocale, str2, new Object[]{stringBuilder2});
+                        }
+                        return String.format(str2, new Object[]{stringBuilder2});
+                    }
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("LOC_ERR: ");
+                stringBuilder.append(str);
+                return stringBuilder.toString();
+            }
+        }
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("LOC_ERR:");
+        stringBuilder.append(str);
+        return stringBuilder.toString();
     }
 
     public static String formatString(String str, int i, Object... objArr) {
@@ -2765,49 +2806,49 @@ public class LocaleController {
         r7 = 1;
     L_0x0076:
         nameDisplayOrder = r7;
-        r7 = NUM; // 0x7f0e0c4d float:1.8881424E38 double:1.0531637124E-314;
+        r7 = NUM; // 0x7f0e0c9f float:1.888159E38 double:1.053163753E-314;
         r8 = "formatterMonth";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "dd MMM";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterDayMonth = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881437E38 double:1.0531637154E-314;
+        r7 = NUM; // 0x7f0e0ca5 float:1.8881603E38 double:1.053163756E-314;
         r8 = "formatterYear";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "dd.MM.yy";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterYear = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881439E38 double:1.053163716E-314;
+        r7 = NUM; // 0x7f0e0ca6 float:1.8881605E38 double:1.0531637564E-314;
         r8 = "formatterYearMax";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "dd.MM.yyyy";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterYearMax = r7;
-        r7 = NUM; // 0x7f0e0c2d float:1.888136E38 double:1.0531636966E-314;
+        r7 = NUM; // 0x7f0e0c7f float:1.8881526E38 double:1.053163737E-314;
         r8 = "chatDate";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "d MMMM";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.chatDate = r7;
-        r7 = NUM; // 0x7f0e0c2e float:1.8881362E38 double:1.053163697E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881528E38 double:1.0531637376E-314;
         r8 = "chatFullDate";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "d MMMM yyyy";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.chatFullDate = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881435E38 double:1.053163715E-314;
+        r7 = NUM; // 0x7f0e0ca4 float:1.88816E38 double:1.0531637554E-314;
         r8 = "formatterWeek";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "EEE";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterWeek = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881408E38 double:1.0531637085E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881575E38 double:1.053163749E-314;
         r8 = "formatDateSchedule";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "MMM d";
         r7 = r9.createFormatter(r0, r7, r8);
         r9.formatterScheduleDay = r7;
-        r7 = NUM; // 0x7f0e0CLASSNAME float:1.888141E38 double:1.053163709E-314;
+        r7 = NUM; // 0x7f0e0CLASSNAME float:1.8881577E38 double:1.0531637495E-314;
         r8 = "formatDateScheduleYear";
         r7 = r9.getStringInternal(r8, r7);
         r8 = "MMM d yyyy";
@@ -2831,11 +2872,11 @@ public class LocaleController {
         r2 = is24HourFormat;
         if (r2 == 0) goto L_0x0123;
     L_0x011d:
-        r2 = NUM; // 0x7f0e0c4c float:1.8881422E38 double:1.053163712E-314;
+        r2 = NUM; // 0x7f0e0c9e float:1.8881589E38 double:1.0531637525E-314;
         r4 = "formatterDay24H";
         goto L_0x0128;
     L_0x0123:
-        r2 = NUM; // 0x7f0e0c4b float:1.888142E38 double:1.0531637115E-314;
+        r2 = NUM; // 0x7f0e0c9d float:1.8881587E38 double:1.053163752E-314;
         r4 = "formatterDay12H";
     L_0x0128:
         r2 = r9.getStringInternal(r4, r2);
@@ -2852,11 +2893,11 @@ public class LocaleController {
         r1 = is24HourFormat;
         if (r1 == 0) goto L_0x0145;
     L_0x013f:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881433E38 double:1.0531637144E-314;
+        r1 = NUM; // 0x7f0e0ca3 float:1.8881599E38 double:1.053163755E-314;
         r2 = "formatterStats24H";
         goto L_0x014a;
     L_0x0145:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.888143E38 double:1.053163714E-314;
+        r1 = NUM; // 0x7f0e0ca2 float:1.8881597E38 double:1.0531637544E-314;
         r2 = "formatterStats12H";
     L_0x014a:
         r1 = r9.getStringInternal(r2, r1);
@@ -2875,11 +2916,11 @@ public class LocaleController {
         r1 = is24HourFormat;
         if (r1 == 0) goto L_0x0169;
     L_0x0163:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881414E38 double:1.05316371E-314;
+        r1 = NUM; // 0x7f0e0c9a float:1.888158E38 double:1.0531637505E-314;
         r2 = "formatterBannedUntil24H";
         goto L_0x016e;
     L_0x0169:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881412E38 double:1.0531637095E-314;
+        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881579E38 double:1.05316375E-314;
         r2 = "formatterBannedUntil12H";
     L_0x016e:
         r1 = r9.getStringInternal(r2, r1);
@@ -2895,11 +2936,11 @@ public class LocaleController {
         r1 = is24HourFormat;
         if (r1 == 0) goto L_0x0188;
     L_0x0182:
-        r1 = NUM; // 0x7f0e0c4a float:1.8881418E38 double:1.053163711E-314;
+        r1 = NUM; // 0x7f0e0c9c float:1.8881585E38 double:1.0531637515E-314;
         r2 = "formatterBannedUntilThisYear24H";
         goto L_0x018d;
     L_0x0188:
-        r1 = NUM; // 0x7f0e0CLASSNAME float:1.8881416E38 double:1.0531637105E-314;
+        r1 = NUM; // 0x7f0e0c9b float:1.8881583E38 double:1.053163751E-314;
         r2 = "formatterBannedUntilThisYear12H";
     L_0x018d:
         r1 = r9.getStringInternal(r2, r1);
@@ -2914,21 +2955,21 @@ public class LocaleController {
         r1 = r9.createFormatter(r0, r1, r2);
         r9.formatterBannedUntilThisYear = r1;
         r1 = r9.formatterScheduleSend;
-        r2 = NUM; // 0x7f0e0996 float:1.8880015E38 double:1.053163369E-314;
+        r2 = NUM; // 0x7f0e09c5 float:1.888011E38 double:1.0531633923E-314;
         r4 = "SendTodayAt";
         r2 = r9.getStringInternal(r4, r2);
         r4 = "'Send today at' HH:mm";
         r2 = r9.createFormatter(r0, r2, r4);
         r1[r3] = r2;
         r1 = r9.formatterScheduleSend;
-        r2 = NUM; // 0x7f0e0982 float:1.8879974E38 double:1.053163359E-314;
+        r2 = NUM; // 0x7f0e09ac float:1.888006E38 double:1.05316338E-314;
         r3 = "SendDayAt";
         r2 = r9.getStringInternal(r3, r2);
         r3 = "'Send on' MMM d 'at' HH:mm";
         r2 = r9.createFormatter(r0, r2, r3);
         r1[r5] = r2;
         r1 = r9.formatterScheduleSend;
-        r2 = NUM; // 0x7f0e0983 float:1.8879976E38 double:1.0531633597E-314;
+        r2 = NUM; // 0x7f0e09ad float:1.8880061E38 double:1.0531633804E-314;
         r3 = "SendDayYearAt";
         r2 = r9.getStringInternal(r3, r2);
         r3 = "'Send on' MMM d yyyy 'at' HH:mm";
@@ -2936,7 +2977,7 @@ public class LocaleController {
         r1[r6] = r2;
         r1 = r9.formatterScheduleSend;
         r2 = 3;
-        r3 = NUM; // 0x7f0e08ed float:1.8879672E38 double:1.0531632856E-314;
+        r3 = NUM; // 0x7f0e0913 float:1.887975E38 double:1.0531633043E-314;
         r4 = "RemindTodayAt";
         r3 = r9.getStringInternal(r4, r3);
         r4 = "'Remind today at' HH:mm";
@@ -2944,7 +2985,7 @@ public class LocaleController {
         r1[r2] = r3;
         r1 = r9.formatterScheduleSend;
         r2 = 4;
-        r3 = NUM; // 0x7f0e08eb float:1.8879668E38 double:1.0531632846E-314;
+        r3 = NUM; // 0x7f0e0911 float:1.8879745E38 double:1.0531633034E-314;
         r4 = "RemindDayAt";
         r3 = r9.getStringInternal(r4, r3);
         r4 = "'Remind on' MMM d 'at' HH:mm";
@@ -2952,7 +2993,7 @@ public class LocaleController {
         r1[r2] = r3;
         r1 = r9.formatterScheduleSend;
         r2 = 5;
-        r3 = NUM; // 0x7f0e08ec float:1.887967E38 double:1.053163285E-314;
+        r3 = NUM; // 0x7f0e0912 float:1.8879747E38 double:1.053163304E-314;
         r4 = "RemindDayYearAt";
         r3 = r9.getStringInternal(r4, r3);
         r4 = "'Remind on' MMM d yyyy 'at' HH:mm";

@@ -22,7 +22,9 @@ public class SeekBarView extends FrameLayout {
     private int thumbX;
 
     public interface SeekBarViewDelegate {
-        void onSeekBarDrag(float f);
+        void onSeekBarDrag(boolean z, float f);
+
+        void onSeekBarPressed(boolean z);
     }
 
     public SeekBarView(Context context) {
@@ -81,14 +83,16 @@ public class SeekBarView extends FrameLayout {
                 }
                 this.thumbDX = (int) (motionEvent.getX() - ((float) this.thumbX));
                 this.pressed = true;
+                this.delegate.onSeekBarPressed(true);
                 invalidate();
                 return true;
             }
         } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
             if (this.pressed) {
                 if (motionEvent.getAction() == 1) {
-                    this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
+                    this.delegate.onSeekBarDrag(true, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
                 }
+                this.delegate.onSeekBarPressed(false);
                 this.pressed = false;
                 invalidate();
                 return true;
@@ -102,12 +106,16 @@ public class SeekBarView extends FrameLayout {
                 this.thumbX = getMeasuredWidth() - this.thumbWidth;
             }
             if (this.reportChanges) {
-                this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
+                this.delegate.onSeekBarDrag(false, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
             }
             invalidate();
             return true;
         }
         return false;
+    }
+
+    public float getProgress() {
+        return ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth));
     }
 
     public void setProgress(float f) {

@@ -53,6 +53,19 @@ public class TonApi {
         }
     }
 
+    public static class Data extends Object {
+        public static final int CONSTRUCTOR = -NUM;
+        public byte[] bytes;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public Data(byte[] bArr) {
+            this.bytes = bArr;
+        }
+    }
+
     public static class Error extends Object {
         public static final int CONSTRUCTOR = -NUM;
         public int code;
@@ -107,6 +120,25 @@ public class TonApi {
         }
     }
 
+    public static class Fees extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public long fwdFee;
+        public long gasFee;
+        public long inFwdFee;
+        public long storageFee;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public Fees(long j, long j2, long j3, long j4) {
+            this.inFwdFee = j;
+            this.storageFee = j2;
+            this.gasFee = j3;
+            this.fwdFee = j4;
+        }
+    }
+
     public static abstract class Function extends Object {
         public native String toString();
     }
@@ -114,19 +146,7 @@ public class TonApi {
     public static abstract class GenericAccountState extends Object {
     }
 
-    public static class InputKey extends Object {
-        public static final int CONSTRUCTOR = NUM;
-        public Key key;
-        public byte[] localPassword;
-
-        public int getConstructor() {
-            return NUM;
-        }
-
-        public InputKey(Key key, byte[] bArr) {
-            this.key = key;
-            this.localPassword = bArr;
-        }
+    public static abstract class InputKey extends Object {
     }
 
     public static class InternalTransactionId extends Object {
@@ -160,6 +180,23 @@ public class TonApi {
     }
 
     public static abstract class KeyStoreType extends Object {
+    }
+
+    public static class LiteServerInfo extends Object {
+        public static final int CONSTRUCTOR = -NUM;
+        public long capabilities;
+        public long now;
+        public int version;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public LiteServerInfo(long j, int i, long j2) {
+            this.now = j;
+            this.version = i;
+            this.capabilities = j2;
+        }
     }
 
     public static abstract class LogStream extends Object {
@@ -211,6 +248,51 @@ public class TonApi {
         public Options(Config config, KeyStoreType keyStoreType) {
             this.config = config;
             this.keystoreType = keyStoreType;
+        }
+    }
+
+    public static class OptionsConfigInfo extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public long defaultWalletId;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public OptionsConfigInfo(long j) {
+            this.defaultWalletId = j;
+        }
+    }
+
+    public static class QueryFees extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public Fees destinationFees;
+        public Fees sourceFees;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public QueryFees(Fees fees, Fees fees2) {
+            this.sourceFees = fees;
+            this.destinationFees = fees2;
+        }
+    }
+
+    public static class QueryInfo extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public byte[] bodyHash;
+        public long id;
+        public long validUntil;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public QueryInfo(long j, long j2, byte[] bArr) {
+            this.id = j;
+            this.validUntil = j2;
+            this.bodyHash = bArr;
         }
     }
 
@@ -336,6 +418,42 @@ public class TonApi {
         }
     }
 
+    public static class SmcInfo extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public long id;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public SmcInfo(long j) {
+            this.id = j;
+        }
+    }
+
+    public static abstract class SmcMethodId extends Object {
+    }
+
+    public static class SmcRunResult extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public int exitCode;
+        public long gasUsed;
+        public TvmStackEntry[] stack;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public SmcRunResult(long j, TvmStackEntry[] tvmStackEntryArr, int i) {
+            this.gasUsed = j;
+            this.stack = tvmStackEntryArr;
+            this.exitCode = i;
+        }
+    }
+
+    public static abstract class SyncState extends Object {
+    }
+
     public static class TestGiverAccountState extends Object {
         public static final int CONSTRUCTOR = NUM;
         public long balance;
@@ -387,6 +505,48 @@ public class TonApi {
         }
     }
 
+    public static class TvmCell extends Object {
+        public static final int CONSTRUCTOR = -NUM;
+        public String bytes;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public TvmCell(String str) {
+            this.bytes = str;
+        }
+    }
+
+    public static class TvmNumberDecimal extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public String number;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public TvmNumberDecimal(String str) {
+            this.number = str;
+        }
+    }
+
+    public static class TvmSlice extends Object {
+        public static final int CONSTRUCTOR = -NUM;
+        public String bytes;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public TvmSlice(String str) {
+            this.bytes = str;
+        }
+    }
+
+    public static abstract class TvmStackEntry extends Object {
+    }
+
     public static class UninitedAccountState extends Object {
         public static final int CONSTRUCTOR = -NUM;
         public long balance;
@@ -425,19 +585,7 @@ public class TonApi {
         }
     }
 
-    public static class UpdateSendLiteServerQuery extends Object {
-        public static final int CONSTRUCTOR = -NUM;
-        public byte[] data;
-        public long id;
-
-        public int getConstructor() {
-            return -NUM;
-        }
-
-        public UpdateSendLiteServerQuery(long j, byte[] bArr) {
-            this.id = j;
-            this.data = bArr;
-        }
+    public static abstract class Update extends Object {
     }
 
     public static class WalletAccountState extends Object {
@@ -469,6 +617,42 @@ public class TonApi {
 
         public WalletInitialAccountState(String str) {
             this.publicKey = str;
+        }
+    }
+
+    public static class WalletV3AccountState extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public long balance;
+        public InternalTransactionId lastTransactionId;
+        public int seqno;
+        public long syncUtime;
+        public long walletId;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public WalletV3AccountState(long j, long j2, int i, InternalTransactionId internalTransactionId, long j3) {
+            this.balance = j;
+            this.walletId = j2;
+            this.seqno = i;
+            this.lastTransactionId = internalTransactionId;
+            this.syncUtime = j3;
+        }
+    }
+
+    public static class WalletV3InitialAccountState extends Object {
+        public static final int CONSTRUCTOR = NUM;
+        public String publicKey;
+        public long walletId;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public WalletV3InitialAccountState(String str, long j) {
+            this.publicKey = str;
+            this.walletId = j;
         }
     }
 
@@ -527,6 +711,21 @@ public class TonApi {
         }
     }
 
+    public static class Decrypt extends Function {
+        public static final int CONSTRUCTOR = NUM;
+        public byte[] encryptedData;
+        public byte[] secret;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public Decrypt(byte[] bArr, byte[] bArr2) {
+            this.encryptedData = bArr;
+            this.secret = bArr2;
+        }
+    }
+
     public static class DeleteAllKeys extends Function {
         public static final int CONSTRUCTOR = NUM;
 
@@ -548,6 +747,21 @@ public class TonApi {
         }
     }
 
+    public static class Encrypt extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public byte[] decryptedData;
+        public byte[] secret;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public Encrypt(byte[] bArr, byte[] bArr2) {
+            this.decryptedData = bArr;
+            this.secret = bArr2;
+        }
+    }
+
     public static class ExportEncryptedKey extends Function {
         public static final int CONSTRUCTOR = NUM;
         public InputKey inputKey;
@@ -564,11 +778,11 @@ public class TonApi {
     }
 
     public static class ExportKey extends Function {
-        public static final int CONSTRUCTOR = NUM;
+        public static final int CONSTRUCTOR = -NUM;
         public InputKey inputKey;
 
         public int getConstructor() {
-            return NUM;
+            return -NUM;
         }
 
         public ExportKey(InputKey inputKey) {
@@ -653,6 +867,44 @@ public class TonApi {
 
         public GenericAccountStateWallet(WalletAccountState walletAccountState) {
             this.accountState = walletAccountState;
+        }
+    }
+
+    public static class GenericAccountStateWalletV3 extends GenericAccountState {
+        public static final int CONSTRUCTOR = -NUM;
+        public WalletV3AccountState accountState;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public GenericAccountStateWalletV3(WalletV3AccountState walletV3AccountState) {
+            this.accountState = walletV3AccountState;
+        }
+    }
+
+    public static class GenericCreateSendGramsQuery extends Function {
+        public static final int CONSTRUCTOR = NUM;
+        public boolean allowSendToUninited;
+        public long amount;
+        public AccountAddress destination;
+        public byte[] message;
+        public InputKey privateKey;
+        public AccountAddress source;
+        public int timeout;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public GenericCreateSendGramsQuery(InputKey inputKey, AccountAddress accountAddress, AccountAddress accountAddress2, long j, int i, boolean z, byte[] bArr) {
+            this.privateKey = inputKey;
+            this.source = accountAddress;
+            this.destination = accountAddress2;
+            this.amount = j;
+            this.timeout = i;
+            this.allowSendToUninited = z;
+            this.message = bArr;
         }
     }
 
@@ -808,6 +1060,46 @@ public class TonApi {
         }
     }
 
+    public static class InputKeyFake extends InputKey {
+        public static final int CONSTRUCTOR = -NUM;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+    }
+
+    public static class InputKeyRegular extends InputKey {
+        public static final int CONSTRUCTOR = -NUM;
+        public Key key;
+        public byte[] localPassword;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public InputKeyRegular(Key key, byte[] bArr) {
+            this.key = key;
+            this.localPassword = bArr;
+        }
+    }
+
+    public static class Kdf extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public int iterations;
+        public byte[] password;
+        public byte[] salt;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public Kdf(byte[] bArr, byte[] bArr2, int i) {
+            this.password = bArr;
+            this.salt = bArr2;
+            this.iterations = i;
+        }
+    }
+
     public static class KeyStoreTypeDirectory extends KeyStoreType {
         public static final int CONSTRUCTOR = -NUM;
         public String directory;
@@ -826,6 +1118,14 @@ public class TonApi {
 
         public int getConstructor() {
             return -NUM;
+        }
+    }
+
+    public static class LiteServerGetInfo extends Function {
+        public static final int CONSTRUCTOR = NUM;
+
+        public int getConstructor() {
+            return NUM;
         }
     }
 
@@ -903,6 +1203,19 @@ public class TonApi {
         }
     }
 
+    public static class OptionsValidateConfig extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public Config config;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public OptionsValidateConfig(Config config) {
+            this.config = config;
+        }
+    }
+
     public static class PackAccountAddress extends Function {
         public static final int CONSTRUCTOR = -NUM;
         public UnpackedAccountAddress accountAddress;
@@ -913,6 +1226,96 @@ public class TonApi {
 
         public PackAccountAddress(UnpackedAccountAddress unpackedAccountAddress) {
             this.accountAddress = unpackedAccountAddress;
+        }
+    }
+
+    public static class QueryEstimateFees extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public long id;
+        public boolean ignoreChksig;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public QueryEstimateFees(long j, boolean z) {
+            this.id = j;
+            this.ignoreChksig = z;
+        }
+    }
+
+    public static class QueryForget extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public long id;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public QueryForget(long j) {
+            this.id = j;
+        }
+    }
+
+    public static class QueryGetInfo extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public long id;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public QueryGetInfo(long j) {
+            this.id = j;
+        }
+    }
+
+    public static class QuerySend extends Function {
+        public static final int CONSTRUCTOR = NUM;
+        public long id;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public QuerySend(long j) {
+            this.id = j;
+        }
+    }
+
+    public static class RawCreateAndSendMessage extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public byte[] data;
+        public AccountAddress destination;
+        public byte[] initialAccountState;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public RawCreateAndSendMessage(AccountAddress accountAddress, byte[] bArr, byte[] bArr2) {
+            this.destination = accountAddress;
+            this.initialAccountState = bArr;
+            this.data = bArr2;
+        }
+    }
+
+    public static class RawCreateQuery extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public byte[] body;
+        public AccountAddress destination;
+        public byte[] initCode;
+        public byte[] initData;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public RawCreateQuery(AccountAddress accountAddress, byte[] bArr, byte[] bArr2, byte[] bArr3) {
+            this.destination = accountAddress;
+            this.initCode = bArr;
+            this.initData = bArr2;
+            this.body = bArr3;
         }
     }
 
@@ -958,19 +1361,15 @@ public class TonApi {
     }
 
     public static class RawSendMessage extends Function {
-        public static final int CONSTRUCTOR = NUM;
-        public byte[] data;
-        public AccountAddress destination;
-        public byte[] initialAccountState;
+        public static final int CONSTRUCTOR = -NUM;
+        public byte[] body;
 
         public int getConstructor() {
-            return NUM;
+            return -NUM;
         }
 
-        public RawSendMessage(AccountAddress accountAddress, byte[] bArr, byte[] bArr2) {
-            this.destination = accountAddress;
-            this.initialAccountState = bArr;
-            this.data = bArr2;
+        public RawSendMessage(byte[] bArr) {
+            this.body = bArr;
         }
     }
 
@@ -1025,6 +1424,134 @@ public class TonApi {
 
         public SetLogVerbosityLevel(int i) {
             this.newVerbosityLevel = i;
+        }
+    }
+
+    public static class SmcGetCode extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public long id;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public SmcGetCode(long j) {
+            this.id = j;
+        }
+    }
+
+    public static class SmcGetData extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public long id;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public SmcGetData(long j) {
+            this.id = j;
+        }
+    }
+
+    public static class SmcGetState extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public long id;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public SmcGetState(long j) {
+            this.id = j;
+        }
+    }
+
+    public static class SmcLoad extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public AccountAddress accountAddress;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public SmcLoad(AccountAddress accountAddress) {
+            this.accountAddress = accountAddress;
+        }
+    }
+
+    public static class SmcMethodIdName extends SmcMethodId {
+        public static final int CONSTRUCTOR = -NUM;
+        public String name;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public SmcMethodIdName(String str) {
+            this.name = str;
+        }
+    }
+
+    public static class SmcMethodIdNumber extends SmcMethodId {
+        public static final int CONSTRUCTOR = -NUM;
+        public int number;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public SmcMethodIdNumber(int i) {
+            this.number = i;
+        }
+    }
+
+    public static class SmcRunGetMethod extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+        public long id;
+        public SmcMethodId method;
+        public TvmStackEntry[] stack;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public SmcRunGetMethod(long j, SmcMethodId smcMethodId, TvmStackEntry[] tvmStackEntryArr) {
+            this.id = j;
+            this.method = smcMethodId;
+            this.stack = tvmStackEntryArr;
+        }
+    }
+
+    public static class Sync extends Function {
+        public static final int CONSTRUCTOR = -NUM;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+    }
+
+    public static class SyncStateDone extends SyncState {
+        public static final int CONSTRUCTOR = NUM;
+
+        public int getConstructor() {
+            return NUM;
+        }
+    }
+
+    public static class SyncStateInProgress extends SyncState {
+        public static final int CONSTRUCTOR = NUM;
+        public int currentSeqno;
+        public int fromSeqno;
+        public int toSeqno;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public SyncStateInProgress(int i, int i2, int i3) {
+            this.fromSeqno = i;
+            this.toSeqno = i2;
+            this.currentSeqno = i3;
         }
     }
 
@@ -1090,11 +1617,11 @@ public class TonApi {
     }
 
     public static class TestWalletInit extends Function {
-        public static final int CONSTRUCTOR = NUM;
+        public static final int CONSTRUCTOR = -NUM;
         public InputKey privateKey;
 
         public int getConstructor() {
-            return NUM;
+            return -NUM;
         }
 
         public TestWalletInit(InputKey inputKey) {
@@ -1123,6 +1650,53 @@ public class TonApi {
         }
     }
 
+    public static class TvmStackEntryCell extends TvmStackEntry {
+        public static final int CONSTRUCTOR = NUM;
+        public TvmCell cell;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public TvmStackEntryCell(TvmCell tvmCell) {
+            this.cell = tvmCell;
+        }
+    }
+
+    public static class TvmStackEntryNumber extends TvmStackEntry {
+        public static final int CONSTRUCTOR = NUM;
+        public TvmNumberDecimal number;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public TvmStackEntryNumber(TvmNumberDecimal tvmNumberDecimal) {
+            this.number = tvmNumberDecimal;
+        }
+    }
+
+    public static class TvmStackEntrySlice extends TvmStackEntry {
+        public static final int CONSTRUCTOR = NUM;
+        public TvmSlice slice;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public TvmStackEntrySlice(TvmSlice tvmSlice) {
+            this.slice = tvmSlice;
+        }
+    }
+
+    public static class TvmStackEntryUnsupported extends TvmStackEntry {
+        public static final int CONSTRUCTOR = NUM;
+
+        public int getConstructor() {
+            return NUM;
+        }
+    }
+
     public static class UnpackAccountAddress extends Function {
         public static final int CONSTRUCTOR = -NUM;
         public String accountAddress;
@@ -1133,6 +1707,34 @@ public class TonApi {
 
         public UnpackAccountAddress(String str) {
             this.accountAddress = str;
+        }
+    }
+
+    public static class UpdateSendLiteServerQuery extends Update {
+        public static final int CONSTRUCTOR = -NUM;
+        public byte[] data;
+        public long id;
+
+        public int getConstructor() {
+            return -NUM;
+        }
+
+        public UpdateSendLiteServerQuery(long j, byte[] bArr) {
+            this.id = j;
+            this.data = bArr;
+        }
+    }
+
+    public static class UpdateSyncState extends Update {
+        public static final int CONSTRUCTOR = NUM;
+        public SyncState syncState;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public UpdateSyncState(SyncState syncState) {
+            this.syncState = syncState;
         }
     }
 
@@ -1163,11 +1765,11 @@ public class TonApi {
     }
 
     public static class WalletInit extends Function {
-        public static final int CONSTRUCTOR = NUM;
+        public static final int CONSTRUCTOR = -NUM;
         public InputKey privateKey;
 
         public int getConstructor() {
-            return NUM;
+            return -NUM;
         }
 
         public WalletInit(InputKey inputKey) {
@@ -1176,7 +1778,7 @@ public class TonApi {
     }
 
     public static class WalletSendGrams extends Function {
-        public static final int CONSTRUCTOR = -NUM;
+        public static final int CONSTRUCTOR = NUM;
         public long amount;
         public AccountAddress destination;
         public byte[] message;
@@ -1185,7 +1787,7 @@ public class TonApi {
         public long validUntil;
 
         public int getConstructor() {
-            return -NUM;
+            return NUM;
         }
 
         public WalletSendGrams(InputKey inputKey, AccountAddress accountAddress, int i, long j, long j2, byte[] bArr) {
@@ -1195,6 +1797,19 @@ public class TonApi {
             this.validUntil = j;
             this.amount = j2;
             this.message = bArr;
+        }
+    }
+
+    public static class WalletV3GetAccountAddress extends Function {
+        public static final int CONSTRUCTOR = NUM;
+        public WalletV3InitialAccountState inititalAccountState;
+
+        public int getConstructor() {
+            return NUM;
+        }
+
+        public WalletV3GetAccountAddress(WalletV3InitialAccountState walletV3InitialAccountState) {
+            this.inititalAccountState = walletV3InitialAccountState;
         }
     }
 }

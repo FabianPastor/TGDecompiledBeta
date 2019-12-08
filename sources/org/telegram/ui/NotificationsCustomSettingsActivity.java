@@ -746,14 +746,16 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         public /* synthetic */ void lambda$updateSearchResults$4$NotificationsCustomSettingsActivity$SearchAdapter(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
-            this.searchRunnable = null;
-            this.searchResult = arrayList;
-            this.searchResultNames = arrayList2;
-            this.searchAdapterHelper.mergeResults(arrayList3);
-            if (NotificationsCustomSettingsActivity.this.searching && !this.searchAdapterHelper.isSearchInProgress()) {
-                NotificationsCustomSettingsActivity.this.emptyView.showTextView();
+            if (NotificationsCustomSettingsActivity.this.searching) {
+                this.searchRunnable = null;
+                this.searchResult = arrayList;
+                this.searchResultNames = arrayList2;
+                this.searchAdapterHelper.mergeResults(arrayList3);
+                if (NotificationsCustomSettingsActivity.this.searching && !this.searchAdapterHelper.isSearchInProgress()) {
+                    NotificationsCustomSettingsActivity.this.emptyView.showTextView();
+                }
+                notifyDataSetChanged();
             }
-            notifyDataSetChanged();
         }
 
         public Object getObject(int i) {

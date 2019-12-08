@@ -169,9 +169,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             PhotoSize closestPhotoSizeWithSize;
             if (messageObject.isVideo()) {
                 this.videoInfoContainer.setVisibility(0);
-                int duration = messageObject.getDuration();
-                duration -= (duration / 60) * 60;
-                this.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(r8), Integer.valueOf(duration)}));
+                this.videoTextView.setText(AndroidUtilities.formatShortDuration(messageObject.getDuration()));
                 Document document = messageObject.getDocument();
                 PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 50);
                 closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 320);

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
@@ -23,6 +24,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -212,7 +214,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             r3 = new java.lang.Object[r3];
             r4 = r0.name;
             r3[r2] = r4;
-            r4 = NUM; // 0x7f0e056b float:1.887785E38 double:1.053162842E-314;
+            r4 = NUM; // 0x7f0e0586 float:1.8877905E38 double:1.053162855E-314;
             r5 = "LanguageCustom";
             r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
             r3[r1] = r4;
@@ -341,11 +343,16 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             LocaleInfo currentLocale = ((LanguageCell) view).getCurrentLocale();
             if (!(currentLocale == null || currentLocale.pathToFile == null || (currentLocale.isRemote() && currentLocale.serverIndex != Integer.MAX_VALUE))) {
                 Builder builder = new Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString("DeleteLocalization", NUM));
-                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", NUM));
+                builder.setMessage(LocaleController.formatString("DeleteLocalizationText", NUM, currentLocale.name));
                 builder.setPositiveButton(LocaleController.getString("Delete", NUM), new -$$Lambda$LanguageSelectActivity$oSx7KAjKIG5eHsslTckzl6eK4-U(this, currentLocale));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                showDialog(builder.create());
+                AlertDialog create = builder.create();
+                showDialog(create);
+                TextView textView = (TextView) create.getButton(-1);
+                if (textView != null) {
+                    textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                }
                 return true;
             }
         }

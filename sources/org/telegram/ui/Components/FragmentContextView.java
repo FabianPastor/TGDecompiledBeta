@@ -39,6 +39,7 @@ import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -63,6 +64,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private BaseFragment fragment;
     private FrameLayout frameLayout;
     private boolean isLocation;
+    private boolean isMusic;
     private int lastLocationSharingCount = -1;
     private MessageObject lastMessageObject;
     private String lastString;
@@ -133,36 +135,41 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     public /* synthetic */ void lambda$new$1$FragmentContextView(View view) {
-        if (MediaController.getInstance().getPlaybackSpeed() > 1.0f) {
-            MediaController.getInstance().setPlaybackSpeed(1.0f);
+        if (MediaController.getInstance().getPlaybackSpeed(this.isMusic) > 1.0f) {
+            MediaController.getInstance().setPlaybackSpeed(this.isMusic, 1.0f);
         } else {
-            MediaController.getInstance().setPlaybackSpeed(1.8f);
+            MediaController.getInstance().setPlaybackSpeed(this.isMusic, 1.8f);
         }
-        updatePlaybackButton();
     }
 
     public /* synthetic */ void lambda$new$3$FragmentContextView(View view) {
         if (this.currentStyle == 2) {
             Builder builder = new Builder(this.fragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setTitle(LocaleController.getString("StopLiveLocationAlertToTitle", NUM));
             BaseFragment baseFragment = this.fragment;
             if (baseFragment instanceof DialogsActivity) {
-                builder.setMessage(LocaleController.getString("StopLiveLocationAlertAll", NUM));
+                builder.setMessage(LocaleController.getString("StopLiveLocationAlertAllText", NUM));
             } else {
                 ChatActivity chatActivity = (ChatActivity) baseFragment;
                 Chat currentChat = chatActivity.getCurrentChat();
                 User currentUser = chatActivity.getCurrentUser();
                 if (currentChat != null) {
-                    builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToGroup", NUM, currentChat.title));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToGroupText", NUM, currentChat.title)));
                 } else if (currentUser != null) {
-                    builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToUser", NUM, UserObject.getFirstName(currentUser)));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToUserText", NUM, UserObject.getFirstName(currentUser))));
                 } else {
                     builder.setMessage(LocaleController.getString("AreYouSure", NUM));
                 }
             }
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$FragmentContextView$n_uFawyX6mh1KEybpEHLF-yq7cs(this));
+            builder.setPositiveButton(LocaleController.getString("Stop", NUM), new -$$Lambda$FragmentContextView$n_uFawyX6mh1KEybpEHLF-yq7cs(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+            AlertDialog create = builder.create();
             builder.show();
+            TextView textView = (TextView) create.getButton(-1);
+            if (textView != null) {
+                textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                return;
+            }
             return;
         }
         MediaController.getInstance().cleanupPlayer(true, true);
@@ -245,10 +252,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     private void updatePlaybackButton() {
-        if (MediaController.getInstance().getPlaybackSpeed() > 1.0f) {
-            this.playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerPlayPause"), Mode.MULTIPLY));
-        } else {
-            this.playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerClose"), Mode.MULTIPLY));
+        if (this.playbackSpeedButton != null) {
+            if (MediaController.getInstance().getPlaybackSpeed(this.isMusic) > 1.0f) {
+                this.playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerPlayPause"), Mode.MULTIPLY));
+            } else {
+                this.playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerClose"), Mode.MULTIPLY));
+            }
         }
     }
 
@@ -421,6 +430,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingDidStart);
         }
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.messagePlayingSpeedChanged);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndedCall);
     }
@@ -444,6 +454,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingDidStart);
         }
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.messagePlayingSpeedChanged);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didEndedCall);
         fragmentContextView = this.additionalContextView;
@@ -476,6 +487,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             checkPlayer(false);
         } else if (i == NotificationCenter.didStartedCall) {
             checkCall(false);
+        } else if (i == NotificationCenter.messagePlayingSpeedChanged) {
+            updatePlaybackButton();
         } else {
             checkPlayer(false);
         }
@@ -760,9 +773,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (!(this.lastMessageObject == playingMessageObject && i == 0)) {
                 SpannableStringBuilder spannableStringBuilder;
                 this.lastMessageObject = playingMessageObject;
-                ImageView imageView;
                 if (this.lastMessageObject.isVoice() || this.lastMessageObject.isRoundVideo()) {
-                    imageView = this.playbackSpeedButton;
+                    this.isMusic = false;
+                    ImageView imageView = this.playbackSpeedButton;
                     if (imageView != null) {
                         imageView.setAlpha(1.0f);
                         this.playbackSpeedButton.setEnabled(true);
@@ -770,13 +783,21 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.titleTextView.setPadding(0, 0, AndroidUtilities.dp(44.0f), 0);
                     spannableStringBuilder = new SpannableStringBuilder(String.format("%s %s", new Object[]{playingMessageObject.getMusicAuthor(), playingMessageObject.getMusicTitle()}));
                     this.titleTextView.setEllipsize(TruncateAt.MIDDLE);
+                    updatePlaybackButton();
                 } else {
-                    imageView = this.playbackSpeedButton;
-                    if (imageView != null) {
-                        imageView.setAlpha(0.0f);
+                    this.isMusic = true;
+                    if (this.playbackSpeedButton == null) {
+                        this.titleTextView.setPadding(0, 0, 0, 0);
+                    } else if (playingMessageObject.getDuration() >= 1200) {
+                        this.playbackSpeedButton.setAlpha(1.0f);
+                        this.playbackSpeedButton.setEnabled(true);
+                        this.titleTextView.setPadding(0, 0, AndroidUtilities.dp(44.0f), 0);
+                        updatePlaybackButton();
+                    } else {
+                        this.playbackSpeedButton.setAlpha(0.0f);
                         this.playbackSpeedButton.setEnabled(false);
+                        this.titleTextView.setPadding(0, 0, 0, 0);
                     }
-                    this.titleTextView.setPadding(0, 0, 0, 0);
                     spannableStringBuilder = new SpannableStringBuilder(String.format("%s - %s", new Object[]{playingMessageObject.getMusicAuthor(), playingMessageObject.getMusicTitle()}));
                     this.titleTextView.setEllipsize(TruncateAt.END);
                 }

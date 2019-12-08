@@ -120,7 +120,6 @@ import org.telegram.ui.Components.TermsOfServiceView.TermsOfServiceViewDelegate;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
-import org.telegram.ui.Wallet.WalletActionActivity;
 import org.telegram.ui.Wallet.WalletActivity;
 import org.telegram.ui.Wallet.WalletCreateActivity;
 import org.telegram.ui.WallpapersListActivity.ColorWallpaper;
@@ -181,83 +180,83 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     /* JADX WARNING: Missing exception handler attribute for start block: B:43:0x0109 */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Can't wrap try/catch for region: R(5:40|41|42|43|44) */
-    /* JADX WARNING: Missing block: B:108:0x0439, code skipped:
+    /* JADX WARNING: Missing block: B:108:0x0442, code skipped:
             r0 = -1;
      */
-    /* JADX WARNING: Missing block: B:109:0x043a, code skipped:
-            if (r0 == 0) goto L_0x04a3;
+    /* JADX WARNING: Missing block: B:109:0x0443, code skipped:
+            if (r0 == 0) goto L_0x04ac;
      */
-    /* JADX WARNING: Missing block: B:110:0x043c, code skipped:
-            if (r0 == 1) goto L_0x0494;
+    /* JADX WARNING: Missing block: B:110:0x0445, code skipped:
+            if (r0 == 1) goto L_0x049d;
      */
-    /* JADX WARNING: Missing block: B:111:0x043e, code skipped:
-            if (r0 == 2) goto L_0x0480;
+    /* JADX WARNING: Missing block: B:111:0x0447, code skipped:
+            if (r0 == 2) goto L_0x0489;
      */
-    /* JADX WARNING: Missing block: B:112:0x0440, code skipped:
-            if (r0 == 3) goto L_0x046c;
+    /* JADX WARNING: Missing block: B:112:0x0449, code skipped:
+            if (r0 == 3) goto L_0x0475;
      */
-    /* JADX WARNING: Missing block: B:113:0x0442, code skipped:
-            if (r0 == 4) goto L_0x0458;
+    /* JADX WARNING: Missing block: B:113:0x044b, code skipped:
+            if (r0 == 4) goto L_0x0461;
      */
-    /* JADX WARNING: Missing block: B:115:0x0445, code skipped:
-            if (r0 == 5) goto L_0x0449;
+    /* JADX WARNING: Missing block: B:115:0x044e, code skipped:
+            if (r0 == 5) goto L_0x0452;
      */
-    /* JADX WARNING: Missing block: B:117:0x0449, code skipped:
+    /* JADX WARNING: Missing block: B:117:0x0452, code skipped:
             r0 = new org.telegram.ui.WallpapersListActivity(0);
             r11.actionBarLayout.addFragmentToStack(r0);
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:118:0x0458, code skipped:
-            if (r3 == null) goto L_0x0522;
+    /* JADX WARNING: Missing block: B:118:0x0461, code skipped:
+            if (r3 == null) goto L_0x052b;
      */
-    /* JADX WARNING: Missing block: B:119:0x045a, code skipped:
+    /* JADX WARNING: Missing block: B:119:0x0463, code skipped:
             r0 = new org.telegram.ui.ProfileActivity(r3);
      */
-    /* JADX WARNING: Missing block: B:120:0x0465, code skipped:
-            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0522;
+    /* JADX WARNING: Missing block: B:120:0x046e, code skipped:
+            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x052b;
      */
-    /* JADX WARNING: Missing block: B:121:0x0467, code skipped:
+    /* JADX WARNING: Missing block: B:121:0x0470, code skipped:
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:122:0x046c, code skipped:
-            if (r3 == null) goto L_0x0522;
+    /* JADX WARNING: Missing block: B:122:0x0475, code skipped:
+            if (r3 == null) goto L_0x052b;
      */
-    /* JADX WARNING: Missing block: B:123:0x046e, code skipped:
+    /* JADX WARNING: Missing block: B:123:0x0477, code skipped:
             r0 = new org.telegram.ui.ChannelCreateActivity(r3);
      */
-    /* JADX WARNING: Missing block: B:124:0x0479, code skipped:
-            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0522;
+    /* JADX WARNING: Missing block: B:124:0x0482, code skipped:
+            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x052b;
      */
-    /* JADX WARNING: Missing block: B:125:0x047b, code skipped:
+    /* JADX WARNING: Missing block: B:125:0x0484, code skipped:
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:126:0x0480, code skipped:
-            if (r3 == null) goto L_0x0522;
+    /* JADX WARNING: Missing block: B:126:0x0489, code skipped:
+            if (r3 == null) goto L_0x052b;
      */
-    /* JADX WARNING: Missing block: B:127:0x0482, code skipped:
+    /* JADX WARNING: Missing block: B:127:0x048b, code skipped:
             r0 = new org.telegram.ui.GroupCreateFinalActivity(r3);
      */
-    /* JADX WARNING: Missing block: B:128:0x048d, code skipped:
-            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0522;
+    /* JADX WARNING: Missing block: B:128:0x0496, code skipped:
+            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x052b;
      */
-    /* JADX WARNING: Missing block: B:129:0x048f, code skipped:
+    /* JADX WARNING: Missing block: B:129:0x0498, code skipped:
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:130:0x0494, code skipped:
+    /* JADX WARNING: Missing block: B:130:0x049d, code skipped:
             r0 = new org.telegram.ui.SettingsActivity();
             r11.actionBarLayout.addFragmentToStack(r0);
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:131:0x04a3, code skipped:
-            if (r3 == null) goto L_0x0522;
+    /* JADX WARNING: Missing block: B:131:0x04ac, code skipped:
+            if (r3 == null) goto L_0x052b;
      */
-    /* JADX WARNING: Missing block: B:132:0x04a5, code skipped:
+    /* JADX WARNING: Missing block: B:132:0x04ae, code skipped:
             r0 = new org.telegram.ui.ChatActivity(r3);
      */
-    /* JADX WARNING: Missing block: B:133:0x04b0, code skipped:
-            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0522;
+    /* JADX WARNING: Missing block: B:133:0x04b9, code skipped:
+            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x052b;
      */
-    /* JADX WARNING: Missing block: B:134:0x04b2, code skipped:
+    /* JADX WARNING: Missing block: B:134:0x04bb, code skipped:
             r0.restoreSelfArgs(r12);
      */
     public void onCreate(android.os.Bundle r12) {
@@ -392,7 +391,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x0112;
     L_0x0112:
         r0 = r11.getWindow();
-        r3 = NUM; // 0x7var_cd float:1.7946032E38 double:1.0529358573E-314;
+        r3 = NUM; // 0x7var_ce float:1.7946034E38 double:1.052935858E-314;
         r0.setBackgroundDrawableResource(r3);
         r0 = org.telegram.messenger.SharedConfig.passcodeHash;
         r0 = r0.length();
@@ -671,24 +670,27 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
         r3 = org.telegram.messenger.NotificationCenter.notificationsCountUpdated;
         r0.addObserver(r11, r3);
+        r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r3 = org.telegram.messenger.NotificationCenter.screenStateChanged;
+        r0.addObserver(r11, r3);
         r0 = r11.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x04bb;
-    L_0x03b2:
+        if (r0 == 0) goto L_0x04c4;
+    L_0x03bb:
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.UserConfig.getInstance(r0);
         r0 = r0.isClientActivated();
-        if (r0 != 0) goto L_0x03ce;
-    L_0x03be:
+        if (r0 != 0) goto L_0x03d7;
+    L_0x03c7:
         r0 = r11.actionBarLayout;
         r3 = new org.telegram.ui.LoginActivity;
         r3.<init>();
         r0.addFragmentToStack(r3);
         r0 = r11.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r2, r2);
-        goto L_0x03e2;
-    L_0x03ce:
+        goto L_0x03eb;
+    L_0x03d7:
         r0 = new org.telegram.ui.DialogsActivity;
         r0.<init>(r4);
         r3 = r11.sideMenu;
@@ -697,273 +699,273 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r3.addFragmentToStack(r0);
         r0 = r11.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r1, r2);
-    L_0x03e2:
-        if (r12 == 0) goto L_0x0522;
-    L_0x03e4:
+    L_0x03eb:
+        if (r12 == 0) goto L_0x052b;
+    L_0x03ed:
         r0 = "fragment";
-        r0 = r12.getString(r0);	 Catch:{ Exception -> 0x04b6 }
-        if (r0 == 0) goto L_0x0522;
-    L_0x03ec:
+        r0 = r12.getString(r0);	 Catch:{ Exception -> 0x04bf }
+        if (r0 == 0) goto L_0x052b;
+    L_0x03f5:
         r3 = "args";
-        r3 = r12.getBundle(r3);	 Catch:{ Exception -> 0x04b6 }
-        r4 = r0.hashCode();	 Catch:{ Exception -> 0x04b6 }
+        r3 = r12.getBundle(r3);	 Catch:{ Exception -> 0x04bf }
+        r4 = r0.hashCode();	 Catch:{ Exception -> 0x04bf }
         r6 = 4;
         r7 = 3;
         r8 = 2;
         switch(r4) {
-            case -1529105743: goto L_0x042f;
-            case -1349522494: goto L_0x0425;
-            case 3052376: goto L_0x041b;
-            case 98629247: goto L_0x0411;
-            case 738950403: goto L_0x0407;
-            case 1434631203: goto L_0x03fd;
-            default: goto L_0x03fc;
-        };	 Catch:{ Exception -> 0x04b6 }
-    L_0x03fc:
-        goto L_0x0439;
-    L_0x03fd:
-        r4 = "settings";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04b6 }
-        if (r0 == 0) goto L_0x0439;
+            case -1529105743: goto L_0x0438;
+            case -1349522494: goto L_0x042e;
+            case 3052376: goto L_0x0424;
+            case 98629247: goto L_0x041a;
+            case 738950403: goto L_0x0410;
+            case 1434631203: goto L_0x0406;
+            default: goto L_0x0405;
+        };	 Catch:{ Exception -> 0x04bf }
     L_0x0405:
+        goto L_0x0442;
+    L_0x0406:
+        r4 = "settings";
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04bf }
+        if (r0 == 0) goto L_0x0442;
+    L_0x040e:
         r0 = 1;
-        goto L_0x043a;
-    L_0x0407:
+        goto L_0x0443;
+    L_0x0410:
         r4 = "channel";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04b6 }
-        if (r0 == 0) goto L_0x0439;
-    L_0x040f:
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04bf }
+        if (r0 == 0) goto L_0x0442;
+    L_0x0418:
         r0 = 3;
-        goto L_0x043a;
-    L_0x0411:
+        goto L_0x0443;
+    L_0x041a:
         r4 = "group";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04b6 }
-        if (r0 == 0) goto L_0x0439;
-    L_0x0419:
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04bf }
+        if (r0 == 0) goto L_0x0442;
+    L_0x0422:
         r0 = 2;
-        goto L_0x043a;
-    L_0x041b:
+        goto L_0x0443;
+    L_0x0424:
         r4 = "chat";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04b6 }
-        if (r0 == 0) goto L_0x0439;
-    L_0x0423:
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04bf }
+        if (r0 == 0) goto L_0x0442;
+    L_0x042c:
         r0 = 0;
-        goto L_0x043a;
-    L_0x0425:
+        goto L_0x0443;
+    L_0x042e:
         r4 = "chat_profile";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04b6 }
-        if (r0 == 0) goto L_0x0439;
-    L_0x042d:
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04bf }
+        if (r0 == 0) goto L_0x0442;
+    L_0x0436:
         r0 = 4;
-        goto L_0x043a;
-    L_0x042f:
+        goto L_0x0443;
+    L_0x0438:
         r4 = "wallpapers";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04b6 }
-        if (r0 == 0) goto L_0x0439;
-    L_0x0437:
-        r0 = 5;
-        goto L_0x043a;
-    L_0x0439:
-        r0 = -1;
-    L_0x043a:
-        if (r0 == 0) goto L_0x04a3;
-    L_0x043c:
-        if (r0 == r1) goto L_0x0494;
-    L_0x043e:
-        if (r0 == r8) goto L_0x0480;
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04bf }
+        if (r0 == 0) goto L_0x0442;
     L_0x0440:
-        if (r0 == r7) goto L_0x046c;
+        r0 = 5;
+        goto L_0x0443;
     L_0x0442:
-        if (r0 == r6) goto L_0x0458;
-    L_0x0444:
-        r3 = 5;
-        if (r0 == r3) goto L_0x0449;
+        r0 = -1;
+    L_0x0443:
+        if (r0 == 0) goto L_0x04ac;
+    L_0x0445:
+        if (r0 == r1) goto L_0x049d;
     L_0x0447:
-        goto L_0x0522;
+        if (r0 == r8) goto L_0x0489;
     L_0x0449:
-        r0 = new org.telegram.ui.WallpapersListActivity;	 Catch:{ Exception -> 0x04b6 }
-        r0.<init>(r2);	 Catch:{ Exception -> 0x04b6 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04b6 }
-        r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04b6 }
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04b6 }
-        goto L_0x0522;
-    L_0x0458:
-        if (r3 == 0) goto L_0x0522;
-    L_0x045a:
-        r0 = new org.telegram.ui.ProfileActivity;	 Catch:{ Exception -> 0x04b6 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x04b6 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04b6 }
-        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04b6 }
-        if (r3 == 0) goto L_0x0522;
-    L_0x0467:
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04b6 }
-        goto L_0x0522;
-    L_0x046c:
-        if (r3 == 0) goto L_0x0522;
-    L_0x046e:
-        r0 = new org.telegram.ui.ChannelCreateActivity;	 Catch:{ Exception -> 0x04b6 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x04b6 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04b6 }
-        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04b6 }
-        if (r3 == 0) goto L_0x0522;
-    L_0x047b:
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04b6 }
-        goto L_0x0522;
-    L_0x0480:
-        if (r3 == 0) goto L_0x0522;
-    L_0x0482:
-        r0 = new org.telegram.ui.GroupCreateFinalActivity;	 Catch:{ Exception -> 0x04b6 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x04b6 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04b6 }
-        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04b6 }
-        if (r3 == 0) goto L_0x0522;
-    L_0x048f:
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04b6 }
-        goto L_0x0522;
-    L_0x0494:
-        r0 = new org.telegram.ui.SettingsActivity;	 Catch:{ Exception -> 0x04b6 }
-        r0.<init>();	 Catch:{ Exception -> 0x04b6 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04b6 }
-        r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04b6 }
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04b6 }
-        goto L_0x0522;
-    L_0x04a3:
-        if (r3 == 0) goto L_0x0522;
-    L_0x04a5:
-        r0 = new org.telegram.ui.ChatActivity;	 Catch:{ Exception -> 0x04b6 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x04b6 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04b6 }
-        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04b6 }
-        if (r3 == 0) goto L_0x0522;
-    L_0x04b2:
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04b6 }
-        goto L_0x0522;
-    L_0x04b6:
+        if (r0 == r7) goto L_0x0475;
+    L_0x044b:
+        if (r0 == r6) goto L_0x0461;
+    L_0x044d:
+        r3 = 5;
+        if (r0 == r3) goto L_0x0452;
+    L_0x0450:
+        goto L_0x052b;
+    L_0x0452:
+        r0 = new org.telegram.ui.WallpapersListActivity;	 Catch:{ Exception -> 0x04bf }
+        r0.<init>(r2);	 Catch:{ Exception -> 0x04bf }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04bf }
+        r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04bf }
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04bf }
+        goto L_0x052b;
+    L_0x0461:
+        if (r3 == 0) goto L_0x052b;
+    L_0x0463:
+        r0 = new org.telegram.ui.ProfileActivity;	 Catch:{ Exception -> 0x04bf }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x04bf }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04bf }
+        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04bf }
+        if (r3 == 0) goto L_0x052b;
+    L_0x0470:
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04bf }
+        goto L_0x052b;
+    L_0x0475:
+        if (r3 == 0) goto L_0x052b;
+    L_0x0477:
+        r0 = new org.telegram.ui.ChannelCreateActivity;	 Catch:{ Exception -> 0x04bf }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x04bf }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04bf }
+        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04bf }
+        if (r3 == 0) goto L_0x052b;
+    L_0x0484:
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04bf }
+        goto L_0x052b;
+    L_0x0489:
+        if (r3 == 0) goto L_0x052b;
+    L_0x048b:
+        r0 = new org.telegram.ui.GroupCreateFinalActivity;	 Catch:{ Exception -> 0x04bf }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x04bf }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04bf }
+        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04bf }
+        if (r3 == 0) goto L_0x052b;
+    L_0x0498:
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04bf }
+        goto L_0x052b;
+    L_0x049d:
+        r0 = new org.telegram.ui.SettingsActivity;	 Catch:{ Exception -> 0x04bf }
+        r0.<init>();	 Catch:{ Exception -> 0x04bf }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04bf }
+        r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04bf }
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04bf }
+        goto L_0x052b;
+    L_0x04ac:
+        if (r3 == 0) goto L_0x052b;
+    L_0x04ae:
+        r0 = new org.telegram.ui.ChatActivity;	 Catch:{ Exception -> 0x04bf }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x04bf }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04bf }
+        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04bf }
+        if (r3 == 0) goto L_0x052b;
+    L_0x04bb:
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04bf }
+        goto L_0x052b;
+    L_0x04bf:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x0522;
-    L_0x04bb:
+        goto L_0x052b;
+    L_0x04c4:
         r0 = r11.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.get(r2);
         r0 = (org.telegram.ui.ActionBar.BaseFragment) r0;
         r3 = r0 instanceof org.telegram.ui.DialogsActivity;
-        if (r3 == 0) goto L_0x04d0;
-    L_0x04c9:
+        if (r3 == 0) goto L_0x04d9;
+    L_0x04d2:
         r0 = (org.telegram.ui.DialogsActivity) r0;
         r3 = r11.sideMenu;
         r0.setSideMenu(r3);
-    L_0x04d0:
+    L_0x04d9:
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x0505;
-    L_0x04d6:
+        if (r0 == 0) goto L_0x050e;
+    L_0x04df:
         r0 = r11.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.size();
-        if (r0 > r1) goto L_0x04ec;
-    L_0x04e0:
+        if (r0 > r1) goto L_0x04f5;
+    L_0x04e9:
         r0 = r11.layersActionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x04ec;
-    L_0x04ea:
+        if (r0 == 0) goto L_0x04f5;
+    L_0x04f3:
         r0 = 1;
-        goto L_0x04ed;
-    L_0x04ec:
+        goto L_0x04f6;
+    L_0x04f5:
         r0 = 0;
-    L_0x04ed:
+    L_0x04f6:
         r3 = r11.layersActionBarLayout;
         r3 = r3.fragmentsStack;
         r3 = r3.size();
-        if (r3 != r1) goto L_0x0506;
-    L_0x04f7:
+        if (r3 != r1) goto L_0x050f;
+    L_0x0500:
         r3 = r11.layersActionBarLayout;
         r3 = r3.fragmentsStack;
         r3 = r3.get(r2);
         r3 = r3 instanceof org.telegram.ui.LoginActivity;
-        if (r3 == 0) goto L_0x0506;
-    L_0x0503:
+        if (r3 == 0) goto L_0x050f;
+    L_0x050c:
         r0 = 0;
-        goto L_0x0506;
-    L_0x0505:
+        goto L_0x050f;
+    L_0x050e:
         r0 = 1;
-    L_0x0506:
+    L_0x050f:
         r3 = r11.actionBarLayout;
         r3 = r3.fragmentsStack;
         r3 = r3.size();
-        if (r3 != r1) goto L_0x051d;
-    L_0x0510:
+        if (r3 != r1) goto L_0x0526;
+    L_0x0519:
         r3 = r11.actionBarLayout;
         r3 = r3.fragmentsStack;
         r3 = r3.get(r2);
         r3 = r3 instanceof org.telegram.ui.LoginActivity;
-        if (r3 == 0) goto L_0x051d;
-    L_0x051c:
+        if (r3 == 0) goto L_0x0526;
+    L_0x0525:
         r0 = 0;
-    L_0x051d:
+    L_0x0526:
         r3 = r11.drawerLayoutContainer;
         r3.setAllowOpenDrawer(r0, r2);
-    L_0x0522:
+    L_0x052b:
         r11.checkLayout();
         r0 = r11.getIntent();
-        if (r12 == 0) goto L_0x052d;
-    L_0x052b:
+        if (r12 == 0) goto L_0x0536;
+    L_0x0534:
         r12 = 1;
-        goto L_0x052e;
-    L_0x052d:
+        goto L_0x0537;
+    L_0x0536:
         r12 = 0;
-    L_0x052e:
+    L_0x0537:
         r11.handleIntent(r0, r2, r12, r2);
-        r12 = android.os.Build.DISPLAY;	 Catch:{ Exception -> 0x0592 }
-        r0 = android.os.Build.USER;	 Catch:{ Exception -> 0x0592 }
+        r12 = android.os.Build.DISPLAY;	 Catch:{ Exception -> 0x059b }
+        r0 = android.os.Build.USER;	 Catch:{ Exception -> 0x059b }
         r2 = "";
-        if (r12 == 0) goto L_0x053e;
-    L_0x0539:
-        r12 = r12.toLowerCase();	 Catch:{ Exception -> 0x0592 }
-        goto L_0x053f;
-    L_0x053e:
+        if (r12 == 0) goto L_0x0547;
+    L_0x0542:
+        r12 = r12.toLowerCase();	 Catch:{ Exception -> 0x059b }
+        goto L_0x0548;
+    L_0x0547:
         r12 = r2;
-    L_0x053f:
-        if (r0 == 0) goto L_0x0545;
-    L_0x0541:
-        r2 = r12.toLowerCase();	 Catch:{ Exception -> 0x0592 }
-    L_0x0545:
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0592 }
-        if (r0 == 0) goto L_0x0565;
-    L_0x0549:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0592 }
-        r0.<init>();	 Catch:{ Exception -> 0x0592 }
+    L_0x0548:
+        if (r0 == 0) goto L_0x054e;
+    L_0x054a:
+        r2 = r12.toLowerCase();	 Catch:{ Exception -> 0x059b }
+    L_0x054e:
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x059b }
+        if (r0 == 0) goto L_0x056e;
+    L_0x0552:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x059b }
+        r0.<init>();	 Catch:{ Exception -> 0x059b }
         r3 = "OS name ";
-        r0.append(r3);	 Catch:{ Exception -> 0x0592 }
-        r0.append(r12);	 Catch:{ Exception -> 0x0592 }
+        r0.append(r3);	 Catch:{ Exception -> 0x059b }
+        r0.append(r12);	 Catch:{ Exception -> 0x059b }
         r3 = " ";
-        r0.append(r3);	 Catch:{ Exception -> 0x0592 }
-        r0.append(r2);	 Catch:{ Exception -> 0x0592 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x0592 }
-        org.telegram.messenger.FileLog.d(r0);	 Catch:{ Exception -> 0x0592 }
-    L_0x0565:
+        r0.append(r3);	 Catch:{ Exception -> 0x059b }
+        r0.append(r2);	 Catch:{ Exception -> 0x059b }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x059b }
+        org.telegram.messenger.FileLog.d(r0);	 Catch:{ Exception -> 0x059b }
+    L_0x056e:
         r0 = "flyme";
-        r12 = r12.contains(r0);	 Catch:{ Exception -> 0x0592 }
-        if (r12 != 0) goto L_0x0575;
-    L_0x056d:
+        r12 = r12.contains(r0);	 Catch:{ Exception -> 0x059b }
+        if (r12 != 0) goto L_0x057e;
+    L_0x0576:
         r12 = "flyme";
-        r12 = r2.contains(r12);	 Catch:{ Exception -> 0x0592 }
-        if (r12 == 0) goto L_0x0596;
-    L_0x0575:
-        org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r1;	 Catch:{ Exception -> 0x0592 }
-        r12 = r11.getWindow();	 Catch:{ Exception -> 0x0592 }
-        r12 = r12.getDecorView();	 Catch:{ Exception -> 0x0592 }
-        r12 = r12.getRootView();	 Catch:{ Exception -> 0x0592 }
-        r0 = r12.getViewTreeObserver();	 Catch:{ Exception -> 0x0592 }
-        r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$KOGX7F1UQC0GXDka6tTbIrU0Wk0;	 Catch:{ Exception -> 0x0592 }
-        r2.<init>(r12);	 Catch:{ Exception -> 0x0592 }
-        r11.onGlobalLayoutListener = r2;	 Catch:{ Exception -> 0x0592 }
-        r0.addOnGlobalLayoutListener(r2);	 Catch:{ Exception -> 0x0592 }
-        goto L_0x0596;
-    L_0x0592:
+        r12 = r2.contains(r12);	 Catch:{ Exception -> 0x059b }
+        if (r12 == 0) goto L_0x059f;
+    L_0x057e:
+        org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r1;	 Catch:{ Exception -> 0x059b }
+        r12 = r11.getWindow();	 Catch:{ Exception -> 0x059b }
+        r12 = r12.getDecorView();	 Catch:{ Exception -> 0x059b }
+        r12 = r12.getRootView();	 Catch:{ Exception -> 0x059b }
+        r0 = r12.getViewTreeObserver();	 Catch:{ Exception -> 0x059b }
+        r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$KOGX7F1UQC0GXDka6tTbIrU0Wk0;	 Catch:{ Exception -> 0x059b }
+        r2.<init>(r12);	 Catch:{ Exception -> 0x059b }
+        r11.onGlobalLayoutListener = r2;	 Catch:{ Exception -> 0x059b }
+        r0.addOnGlobalLayoutListener(r2);	 Catch:{ Exception -> 0x059b }
+        goto L_0x059f;
+    L_0x059b:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
-    L_0x0596:
+    L_0x059f:
         r12 = org.telegram.messenger.MediaController.getInstance();
         r12.setBaseActivity(r11, r1);
         return;
@@ -1196,9 +1198,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } else if (TextUtils.isEmpty(str)) {
             return new WalletActivity();
         } else {
-            BaseFragment walletActionActivity = new WalletActionActivity(0, null);
-            walletActionActivity.setRecipientString(str, false);
-            return walletActionActivity;
+            return new WalletActivity(str);
         }
     }
 
@@ -1384,131 +1384,131 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     /* JADX WARNING: Removed duplicated region for block: B:112:0x021a  */
     /* JADX WARNING: Removed duplicated region for block: B:112:0x021a  */
     /* JADX WARNING: Removed duplicated region for block: B:174:0x0323  */
-    /* JADX WARNING: Removed duplicated region for block: B:583:0x0d5a A:{Catch:{ all -> 0x0d4e, all -> 0x0d55, Exception -> 0x0d5e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:583:0x0d5e A:{Catch:{ all -> 0x0d52, all -> 0x0d59, Exception -> 0x0d62 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:204:0x0390 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0976  */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x097a  */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:204:0x0390 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0976  */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x097a  */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:204:0x0390 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0976  */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc2 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:755:0x11e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:754:0x11d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:739:0x118b  */
-    /* JADX WARNING: Removed duplicated region for block: B:744:0x11a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:754:0x11d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:755:0x11e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x097a  */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0cb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0cc6 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:755:0x11e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:754:0x11db  */
+    /* JADX WARNING: Removed duplicated region for block: B:739:0x118f  */
+    /* JADX WARNING: Removed duplicated region for block: B:744:0x11a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:754:0x11db  */
+    /* JADX WARNING: Removed duplicated region for block: B:755:0x11e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x0225  */
     /* JADX WARNING: Removed duplicated region for block: B:39:0x00e2  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:579:0x0d55 */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x11fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:634:0x0edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x124f  */
-    /* JADX WARNING: Removed duplicated region for block: B:764:0x120a  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x1294  */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:579:0x0d59 */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x11ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:634:0x0ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x1253  */
+    /* JADX WARNING: Removed duplicated region for block: B:764:0x120e  */
+    /* JADX WARNING: Removed duplicated region for block: B:780:0x1298  */
     /* JADX WARNING: Missing block: B:12:0x0040, code skipped:
             if ("android.intent.action.MAIN".equals(r46.getAction()) == false) goto L_0x0042;
      */
     /* JADX WARNING: Missing block: B:109:0x0213, code skipped:
             if (r15.sendingText == null) goto L_0x010e;
      */
-    /* JADX WARNING: Missing block: B:491:0x0ba2, code skipped:
-            if (r1.intValue() == 0) goto L_0x0ba4;
+    /* JADX WARNING: Missing block: B:491:0x0ba6, code skipped:
+            if (r1.intValue() == 0) goto L_0x0ba8;
      */
     /* JADX WARNING: Missing block: B:641:0x0var_, code skipped:
             if (r4.checkCanOpenChat(r0, (org.telegram.ui.ActionBar.BaseFragment) r5.get(r5.size() - 1)) != false) goto L_0x0var_;
@@ -1516,20 +1516,20 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     /* JADX WARNING: Missing block: B:644:0x0var_, code skipped:
             if (r2.actionBarLayout.presentFragment(new org.telegram.ui.ChatActivity(r0), false, true, true, false) != false) goto L_0x0var_;
      */
-    /* JADX WARNING: Missing block: B:646:0x0var_, code skipped:
+    /* JADX WARNING: Missing block: B:646:0x0f2b, code skipped:
             r13 = false;
      */
-    /* JADX WARNING: Missing block: B:655:0x0f5c, code skipped:
-            if (r0.checkCanOpenChat(r5, (org.telegram.ui.ActionBar.BaseFragment) r4.get(r4.size() - 1)) != false) goto L_0x0f5e;
+    /* JADX WARNING: Missing block: B:655:0x0var_, code skipped:
+            if (r0.checkCanOpenChat(r5, (org.telegram.ui.ActionBar.BaseFragment) r4.get(r4.size() - 1)) != false) goto L_0x0var_;
      */
-    /* JADX WARNING: Missing block: B:657:0x0f6d, code skipped:
+    /* JADX WARNING: Missing block: B:657:0x0var_, code skipped:
             if (r2.actionBarLayout.presentFragment(new org.telegram.ui.ChatActivity(r5), false, true, true, false) != false) goto L_0x0var_;
      */
-    /* JADX WARNING: Missing block: B:730:0x115b, code skipped:
-            if ((r0.get(r0.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x1179;
+    /* JADX WARNING: Missing block: B:730:0x115f, code skipped:
+            if ((r0.get(r0.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x117d;
      */
-    /* JADX WARNING: Missing block: B:734:0x1177, code skipped:
-            if ((r0.get(r0.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x1179;
+    /* JADX WARNING: Missing block: B:734:0x117b, code skipped:
+            if ((r0.get(r0.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x117d;
      */
     private boolean handleIntent(android.content.Intent r46, boolean r47, boolean r48, boolean r49) {
         /*
@@ -1637,14 +1637,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
         r1 = r1 & r2;
         r6 = 3;
-        if (r1 != 0) goto L_0x0ec0;
+        if (r1 != 0) goto L_0x0ec4;
     L_0x00c8:
-        if (r14 == 0) goto L_0x0ec0;
+        if (r14 == 0) goto L_0x0ec4;
     L_0x00ca:
         r1 = r46.getAction();
-        if (r1 == 0) goto L_0x0ec0;
+        if (r1 == 0) goto L_0x0ec4;
     L_0x00d0:
-        if (r0 != 0) goto L_0x0ec0;
+        if (r0 != 0) goto L_0x0ec4;
     L_0x00d2:
         r0 = r46.getAction();
         r1 = "android.intent.action.SEND";
@@ -1827,12 +1827,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0217:
         r0 = 0;
     L_0x0218:
-        if (r0 == 0) goto L_0x0ec0;
+        if (r0 == 0) goto L_0x0ec4;
     L_0x021a:
         r0 = "Unsupported content";
         r0 = android.widget.Toast.makeText(r15, r0, r12);
         r0.show();
-        goto L_0x0ec0;
+        goto L_0x0ec4;
     L_0x0225:
         r0 = r46.getAction();
         r4 = "android.intent.action.SEND_MULTIPLE";
@@ -1991,15 +1991,15 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2 = r15;
         r3 = 0;
         r30 = 0;
-        goto L_0x0ec6;
+        goto L_0x0eca;
     L_0x0334:
         r0 = r46.getAction();
         r4 = "android.intent.action.VIEW";
         r0 = r4.equals(r0);
-        if (r0 == 0) goto L_0x0df3;
+        if (r0 == 0) goto L_0x0df7;
     L_0x0340:
         r0 = r46.getData();
-        if (r0 == 0) goto L_0x0dd8;
+        if (r0 == 0) goto L_0x0ddc;
     L_0x0346:
         r4 = r0.getScheme();
         if (r4 == 0) goto L_0x0CLASSNAME;
@@ -2050,12 +2050,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x038d:
         r4 = -1;
     L_0x038e:
-        if (r4 == 0) goto L_0x0950;
+        if (r4 == 0) goto L_0x0954;
     L_0x0390:
-        if (r4 == r13) goto L_0x0950;
+        if (r4 == r13) goto L_0x0954;
     L_0x0392:
         r5 = 2;
-        if (r4 == r5) goto L_0x08eb;
+        if (r4 == r5) goto L_0x08ef;
     L_0x0395:
         if (r4 == r6) goto L_0x0399;
     L_0x0397:
@@ -2071,101 +2071,101 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r7 = "payload";
         r13 = "scope";
         r12 = "tg://telegram.org";
-        if (r4 != 0) goto L_0x0808;
+        if (r4 != 0) goto L_0x080a;
     L_0x03b3:
         r4 = "tg://resolve";
         r4 = r0.startsWith(r4);
         if (r4 == 0) goto L_0x03bd;
     L_0x03bb:
-        goto L_0x0808;
+        goto L_0x080a;
     L_0x03bd:
         r4 = "tg:privatepost";
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x07ae;
+        if (r4 != 0) goto L_0x07b0;
     L_0x03c5:
         r4 = "tg://privatepost";
         r4 = r0.startsWith(r4);
         if (r4 == 0) goto L_0x03cf;
     L_0x03cd:
-        goto L_0x07ae;
+        goto L_0x07b0;
     L_0x03cf:
         r4 = "tg:bg";
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x06e3;
+        if (r4 != 0) goto L_0x06e5;
     L_0x03d7:
         r4 = "tg://bg";
         r4 = r0.startsWith(r4);
         if (r4 == 0) goto L_0x03e1;
     L_0x03df:
-        goto L_0x06e3;
+        goto L_0x06e5;
     L_0x03e1:
         r4 = "tg:join";
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x06c9;
+        if (r4 != 0) goto L_0x06cb;
     L_0x03e9:
         r4 = "tg://join";
         r4 = r0.startsWith(r4);
         if (r4 == 0) goto L_0x03f3;
     L_0x03f1:
-        goto L_0x06c9;
+        goto L_0x06cb;
     L_0x03f3:
         r4 = "tg:addstickers";
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x06ae;
+        if (r4 != 0) goto L_0x06b0;
     L_0x03fb:
         r4 = "tg://addstickers";
         r4 = r0.startsWith(r4);
         if (r4 == 0) goto L_0x0405;
     L_0x0403:
-        goto L_0x06ae;
+        goto L_0x06b0;
     L_0x0405:
         r4 = "tg:msg";
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0624;
+        if (r4 != 0) goto L_0x0626;
     L_0x040d:
         r4 = "tg://msg";
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0624;
+        if (r4 != 0) goto L_0x0626;
     L_0x0415:
         r4 = "tg://share";
         r4 = r0.startsWith(r4);
-        if (r4 != 0) goto L_0x0624;
+        if (r4 != 0) goto L_0x0626;
     L_0x041d:
         r4 = "tg:share";
         r4 = r0.startsWith(r4);
         if (r4 == 0) goto L_0x0427;
     L_0x0425:
-        goto L_0x0624;
+        goto L_0x0626;
     L_0x0427:
         r1 = "tg:confirmphone";
         r1 = r0.startsWith(r1);
-        if (r1 != 0) goto L_0x05ff;
+        if (r1 != 0) goto L_0x0601;
     L_0x042f:
         r1 = "tg://confirmphone";
         r1 = r0.startsWith(r1);
         if (r1 == 0) goto L_0x0439;
     L_0x0437:
-        goto L_0x05ff;
+        goto L_0x0601;
     L_0x0439:
         r1 = "tg:login";
         r1 = r0.startsWith(r1);
-        if (r1 != 0) goto L_0x05dc;
+        if (r1 != 0) goto L_0x05de;
     L_0x0441:
         r1 = "tg://login";
         r1 = r0.startsWith(r1);
         if (r1 == 0) goto L_0x044b;
     L_0x0449:
-        goto L_0x05dc;
+        goto L_0x05de;
     L_0x044b:
         r1 = "tg:openmessage";
         r1 = r0.startsWith(r1);
-        if (r1 != 0) goto L_0x0579;
+        if (r1 != 0) goto L_0x057b;
     L_0x0453:
         r1 = "tg://openmessage";
         r1 = r0.startsWith(r1);
         if (r1 == 0) goto L_0x045d;
     L_0x045b:
-        goto L_0x0579;
+        goto L_0x057b;
     L_0x045d:
         r1 = "tg:passport";
         r1 = r0.startsWith(r1);
@@ -2224,7 +2224,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r13 = 0;
         r18 = 0;
         r23 = 0;
-        goto L_0x087b;
+        goto L_0x087f;
     L_0x04c3:
         r1 = "tg:addtheme";
         r0 = r0.replace(r1, r12);
@@ -2249,7 +2249,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r25 = 0;
         r26 = 0;
         r27 = 0;
-        goto L_0x0883;
+        goto L_0x0887;
     L_0x04f2:
         r1 = "tg:setlanguage";
         r0 = r0.replace(r1, r12);
@@ -2271,7 +2271,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r18 = 0;
         r23 = 0;
         r24 = 0;
-        goto L_0x087d;
+        goto L_0x0881;
     L_0x051b:
         r1 = "tg:passport";
         r0 = r0.replace(r1, r12);
@@ -2284,23 +2284,23 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1.<init>();
         r2 = r0.getQueryParameter(r13);
         r4 = android.text.TextUtils.isEmpty(r2);
-        if (r4 != 0) goto L_0x0558;
+        if (r4 != 0) goto L_0x055a;
     L_0x0540:
         r4 = "{";
         r4 = r2.startsWith(r4);
-        if (r4 == 0) goto L_0x0558;
-    L_0x0548:
+        if (r4 == 0) goto L_0x055a;
+    L_0x0549:
         r4 = "}";
         r4 = r2.endsWith(r4);
-        if (r4 == 0) goto L_0x0558;
-    L_0x0550:
+        if (r4 == 0) goto L_0x055a;
+    L_0x0552:
         r4 = r0.getQueryParameter(r5);
         r1.put(r5, r4);
-        goto L_0x055f;
-    L_0x0558:
+        goto L_0x0561;
+    L_0x055a:
         r4 = r0.getQueryParameter(r7);
         r1.put(r7, r4);
-    L_0x055f:
+    L_0x0561:
         r4 = r0.getQueryParameter(r6);
         r1.put(r6, r4);
         r1.put(r13, r2);
@@ -2308,8 +2308,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1.put(r9, r2);
         r0 = r0.getQueryParameter(r8);
         r1.put(r8, r0);
-        goto L_0x086c;
-    L_0x0579:
+        goto L_0x0870;
+    L_0x057b:
         r1 = "tg:openmessage";
         r0 = r0.replace(r1, r12);
         r1 = "tg://openmessage";
@@ -2321,29 +2321,29 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2 = r0.getQueryParameter(r2);
         r4 = "message_id";
         r0 = r0.getQueryParameter(r4);
-        if (r1 == 0) goto L_0x05a3;
-    L_0x059d:
-        r12 = java.lang.Integer.parseInt(r1);	 Catch:{ NumberFormatException -> 0x05ab }
+        if (r1 == 0) goto L_0x05a5;
+    L_0x059f:
+        r12 = java.lang.Integer.parseInt(r1);	 Catch:{ NumberFormatException -> 0x05ad }
         r1 = 0;
-        goto L_0x05ad;
-    L_0x05a3:
-        if (r2 == 0) goto L_0x05ab;
+        goto L_0x05af;
     L_0x05a5:
-        r12 = java.lang.Integer.parseInt(r2);	 Catch:{ NumberFormatException -> 0x05ab }
+        if (r2 == 0) goto L_0x05ad;
+    L_0x05a7:
+        r12 = java.lang.Integer.parseInt(r2);	 Catch:{ NumberFormatException -> 0x05ad }
         r1 = r12;
-        goto L_0x05ac;
-    L_0x05ab:
-        r1 = 0;
-    L_0x05ac:
-        r12 = 0;
+        goto L_0x05ae;
     L_0x05ad:
-        if (r0 == 0) goto L_0x05b4;
+        r1 = 0;
+    L_0x05ae:
+        r12 = 0;
     L_0x05af:
-        r0 = java.lang.Integer.parseInt(r0);	 Catch:{ NumberFormatException -> 0x05b4 }
-        goto L_0x05b5;
-    L_0x05b4:
+        if (r0 == 0) goto L_0x05b6;
+    L_0x05b1:
+        r0 = java.lang.Integer.parseInt(r0);	 Catch:{ NumberFormatException -> 0x05b6 }
+        goto L_0x05b7;
+    L_0x05b6:
         r0 = 0;
-    L_0x05b5:
+    L_0x05b7:
         r35 = r0;
         r34 = r1;
         r33 = r12;
@@ -2367,8 +2367,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r30 = 0;
         r31 = 0;
         r32 = 0;
-        goto L_0x0caa;
-    L_0x05dc:
+        goto L_0x0cae;
+    L_0x05de:
         r1 = "tg:login";
         r0 = r0.replace(r1, r12);
         r1 = "tg://login";
@@ -2386,8 +2386,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r9 = 0;
         r12 = 0;
         r13 = 0;
-        goto L_0x0805;
-    L_0x05ff:
+        goto L_0x0807;
+    L_0x0601:
         r1 = "tg:confirmphone";
         r0 = r0.replace(r1, r12);
         r1 = "tg://confirmphone";
@@ -2405,8 +2405,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r8 = 0;
         r9 = 0;
         r12 = 0;
-        goto L_0x0803;
-    L_0x0624:
+        goto L_0x0805;
+    L_0x0626:
         r4 = "tg:msg";
         r0 = r0.replace(r4, r12);
         r4 = "tg://msg";
@@ -2418,29 +2418,29 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = android.net.Uri.parse(r0);
         r4 = "url";
         r4 = r0.getQueryParameter(r4);
-        if (r4 != 0) goto L_0x0649;
-    L_0x0648:
-        goto L_0x064a;
-    L_0x0649:
-        r2 = r4;
+        if (r4 != 0) goto L_0x064b;
     L_0x064a:
+        goto L_0x064c;
+    L_0x064b:
+        r2 = r4;
+    L_0x064c:
         r4 = "text";
         r4 = r0.getQueryParameter(r4);
-        if (r4 == 0) goto L_0x0680;
-    L_0x0652:
+        if (r4 == 0) goto L_0x0682;
+    L_0x0654:
         r4 = r2.length();
-        if (r4 <= 0) goto L_0x0669;
-    L_0x0658:
+        if (r4 <= 0) goto L_0x066b;
+    L_0x065a:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4.append(r2);
         r4.append(r1);
         r2 = r4.toString();
         r12 = 1;
-        goto L_0x066a;
-    L_0x0669:
+        goto L_0x066c;
+    L_0x066b:
         r12 = 0;
-    L_0x066a:
+    L_0x066c:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4.append(r2);
@@ -2448,32 +2448,32 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = r0.getQueryParameter(r2);
         r4.append(r0);
         r2 = r4.toString();
-        goto L_0x0681;
-    L_0x0680:
+        goto L_0x0683;
+    L_0x0682:
         r12 = 0;
-    L_0x0681:
+    L_0x0683:
         r0 = r2.length();
         r4 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
-        if (r0 <= r4) goto L_0x0692;
-    L_0x0689:
+        if (r0 <= r4) goto L_0x0694;
+    L_0x068b:
         r0 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
         r4 = 0;
         r0 = r2.substring(r4, r0);
         r7 = r0;
-        goto L_0x0694;
-    L_0x0692:
+        goto L_0x0696;
+    L_0x0694:
         r4 = 0;
         r7 = r2;
-    L_0x0694:
+    L_0x0696:
         r0 = r7.endsWith(r1);
-        if (r0 == 0) goto L_0x06a5;
-    L_0x069a:
+        if (r0 == 0) goto L_0x06a7;
+    L_0x069c:
         r0 = r7.length();
         r2 = 1;
         r0 = r0 - r2;
         r7 = r7.substring(r4, r0);
-        goto L_0x0694;
-    L_0x06a5:
+        goto L_0x0696;
+    L_0x06a7:
         r0 = r7;
         r9 = r12;
         r4 = 0;
@@ -2481,8 +2481,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r6 = 0;
         r7 = 0;
         r8 = 0;
-        goto L_0x0801;
-    L_0x06ae:
+        goto L_0x0803;
+    L_0x06b0:
         r1 = "tg:addstickers";
         r0 = r0.replace(r1, r12);
         r1 = "tg://addstickers";
@@ -2493,8 +2493,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5 = r0;
         r0 = 0;
         r4 = 0;
-        goto L_0x07fd;
-    L_0x06c9:
+        goto L_0x07ff;
+    L_0x06cb:
         r1 = "tg:join";
         r0 = r0.replace(r1, r12);
         r1 = "tg://join";
@@ -2504,8 +2504,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = r0.getQueryParameter(r1);
         r4 = r0;
         r0 = 0;
-        goto L_0x07fc;
-    L_0x06e3:
+        goto L_0x07fe;
+    L_0x06e5:
         r1 = "tg:bg";
         r0 = r0.replace(r1, r12);
         r1 = "tg://bg";
@@ -2520,70 +2520,70 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2 = r0.getQueryParameter(r2);
         r1.slug = r2;
         r2 = r1.slug;
-        if (r2 != 0) goto L_0x0713;
-    L_0x070b:
+        if (r2 != 0) goto L_0x0715;
+    L_0x070d:
         r2 = "color";
         r2 = r0.getQueryParameter(r2);
         r1.slug = r2;
-    L_0x0713:
+    L_0x0715:
         r2 = r1.slug;
-        if (r2 == 0) goto L_0x0731;
-    L_0x0717:
+        if (r2 == 0) goto L_0x0733;
+    L_0x0719:
         r2 = r2.length();
         r4 = 6;
-        if (r2 != r4) goto L_0x0731;
-    L_0x071e:
-        r0 = r1.settings;	 Catch:{ Exception -> 0x072d }
-        r2 = r1.slug;	 Catch:{ Exception -> 0x072d }
+        if (r2 != r4) goto L_0x0733;
+    L_0x0720:
+        r0 = r1.settings;	 Catch:{ Exception -> 0x072f }
+        r2 = r1.slug;	 Catch:{ Exception -> 0x072f }
         r4 = 16;
-        r2 = java.lang.Integer.parseInt(r2, r4);	 Catch:{ Exception -> 0x072d }
+        r2 = java.lang.Integer.parseInt(r2, r4);	 Catch:{ Exception -> 0x072f }
         r4 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r2 = r2 | r4;
-        r0.background_color = r2;	 Catch:{ Exception -> 0x072d }
-    L_0x072d:
+        r0.background_color = r2;	 Catch:{ Exception -> 0x072f }
+    L_0x072f:
         r2 = 0;
         r1.slug = r2;
-        goto L_0x0799;
-    L_0x0731:
+        goto L_0x079b;
+    L_0x0733:
         r2 = "mode";
         r2 = r0.getQueryParameter(r2);
-        if (r2 == 0) goto L_0x076e;
-    L_0x0739:
+        if (r2 == 0) goto L_0x0770;
+    L_0x073b:
         r2 = r2.toLowerCase();
         r4 = " ";
         r2 = r2.split(r4);
-        if (r2 == 0) goto L_0x076e;
-    L_0x0745:
+        if (r2 == 0) goto L_0x0770;
+    L_0x0747:
         r4 = r2.length;
-        if (r4 <= 0) goto L_0x076e;
-    L_0x0748:
+        if (r4 <= 0) goto L_0x0770;
+    L_0x074a:
         r4 = 0;
-    L_0x0749:
+    L_0x074b:
         r5 = r2.length;
-        if (r4 >= r5) goto L_0x076e;
-    L_0x074c:
+        if (r4 >= r5) goto L_0x0770;
+    L_0x074e:
         r5 = r2[r4];
         r6 = "blur";
         r5 = r6.equals(r5);
-        if (r5 == 0) goto L_0x075c;
-    L_0x0756:
+        if (r5 == 0) goto L_0x075e;
+    L_0x0758:
         r5 = r1.settings;
         r6 = 1;
         r5.blur = r6;
-        goto L_0x076b;
-    L_0x075c:
+        goto L_0x076d;
+    L_0x075e:
         r6 = 1;
         r5 = r2[r4];
         r7 = "motion";
         r5 = r7.equals(r5);
-        if (r5 == 0) goto L_0x076b;
-    L_0x0767:
+        if (r5 == 0) goto L_0x076d;
+    L_0x0769:
         r5 = r1.settings;
         r5.motion = r6;
-    L_0x076b:
+    L_0x076d:
         r4 = r4 + 1;
-        goto L_0x0749;
-    L_0x076e:
+        goto L_0x074b;
+    L_0x0770:
         r2 = r1.settings;
         r4 = "intensity";
         r4 = r0.getQueryParameter(r4);
@@ -2591,17 +2591,17 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r4 = r4.intValue();
         r2.intensity = r4;
         r2 = "bg_color";
-        r0 = r0.getQueryParameter(r2);	 Catch:{ Exception -> 0x0799 }
-        r2 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0799 }
-        if (r2 != 0) goto L_0x0799;
-    L_0x078c:
-        r2 = r1.settings;	 Catch:{ Exception -> 0x0799 }
+        r0 = r0.getQueryParameter(r2);	 Catch:{ Exception -> 0x079b }
+        r2 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x079b }
+        if (r2 != 0) goto L_0x079b;
+    L_0x078e:
+        r2 = r1.settings;	 Catch:{ Exception -> 0x079b }
         r4 = 16;
-        r0 = java.lang.Integer.parseInt(r0, r4);	 Catch:{ Exception -> 0x0799 }
+        r0 = java.lang.Integer.parseInt(r0, r4);	 Catch:{ Exception -> 0x079b }
         r4 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r0 = r0 | r4;
-        r2.background_color = r0;	 Catch:{ Exception -> 0x0799 }
-    L_0x0799:
+        r2.background_color = r0;	 Catch:{ Exception -> 0x079b }
+    L_0x079b:
         r26 = r1;
         r0 = 0;
         r4 = 0;
@@ -2616,8 +2616,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r23 = 0;
         r24 = 0;
         r25 = 0;
-        goto L_0x087f;
-    L_0x07ae:
+        goto L_0x0883;
+    L_0x07b0:
         r1 = "tg:privatepost";
         r0 = r0.replace(r1, r12);
         r1 = "tg://privatepost";
@@ -2630,13 +2630,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = r0.getQueryParameter(r2);
         r0 = org.telegram.messenger.Utilities.parseInt(r0);
         r2 = r1.intValue();
-        if (r2 == 0) goto L_0x07fa;
-    L_0x07d8:
+        if (r2 == 0) goto L_0x07fc;
+    L_0x07da:
         r2 = r0.intValue();
-        if (r2 != 0) goto L_0x07df;
-    L_0x07de:
-        goto L_0x07fa;
-    L_0x07df:
+        if (r2 != 0) goto L_0x07e1;
+    L_0x07e0:
+        goto L_0x07fc;
+    L_0x07e1:
         r27 = r0;
         r29 = r1;
         r0 = 0;
@@ -2654,26 +2654,26 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r25 = 0;
         r26 = 0;
         r28 = 0;
-        goto L_0x0885;
-    L_0x07fa:
+        goto L_0x0889;
+    L_0x07fc:
         r0 = 0;
         r4 = 0;
-    L_0x07fc:
+    L_0x07fe:
         r5 = 0;
-    L_0x07fd:
+    L_0x07ff:
         r6 = 0;
         r7 = 0;
         r8 = 0;
         r9 = 0;
-    L_0x0801:
+    L_0x0803:
         r12 = 0;
         r13 = 0;
-    L_0x0803:
-        r18 = 0;
     L_0x0805:
+        r18 = 0;
+    L_0x0807:
         r23 = 0;
-        goto L_0x0879;
-    L_0x0808:
+        goto L_0x087d;
+    L_0x080a:
         r1 = "tg:resolve";
         r0 = r0.replace(r1, r12);
         r1 = "tg://resolve";
@@ -2683,29 +2683,29 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1 = r0.getQueryParameter(r1);
         r2 = "telegrampassport";
         r2 = r2.equals(r1);
-        if (r2 == 0) goto L_0x088a;
-    L_0x0826:
+        if (r2 == 0) goto L_0x088e;
+    L_0x0828:
         r1 = new java.util.HashMap;
         r1.<init>();
         r2 = r0.getQueryParameter(r13);
         r4 = android.text.TextUtils.isEmpty(r2);
-        if (r4 != 0) goto L_0x084d;
-    L_0x0835:
+        if (r4 != 0) goto L_0x0851;
+    L_0x0837:
         r4 = "{";
         r4 = r2.startsWith(r4);
-        if (r4 == 0) goto L_0x084d;
-    L_0x083d:
+        if (r4 == 0) goto L_0x0851;
+    L_0x0840:
         r4 = "}";
         r4 = r2.endsWith(r4);
-        if (r4 == 0) goto L_0x084d;
-    L_0x0845:
+        if (r4 == 0) goto L_0x0851;
+    L_0x0849:
         r4 = r0.getQueryParameter(r5);
         r1.put(r5, r4);
-        goto L_0x0854;
-    L_0x084d:
+        goto L_0x0858;
+    L_0x0851:
         r4 = r0.getQueryParameter(r7);
         r1.put(r7, r4);
-    L_0x0854:
+    L_0x0858:
         r4 = r0.getQueryParameter(r6);
         r1.put(r6, r4);
         r1.put(r13, r2);
@@ -2713,7 +2713,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1.put(r9, r2);
         r0 = r0.getQueryParameter(r8);
         r1.put(r8, r0);
-    L_0x086c:
+    L_0x0870:
         r23 = r1;
         r0 = 0;
         r4 = 0;
@@ -2725,22 +2725,22 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r12 = 0;
         r13 = 0;
         r18 = 0;
-    L_0x0879:
-        r24 = 0;
-    L_0x087b:
-        r25 = 0;
     L_0x087d:
-        r26 = 0;
+        r24 = 0;
     L_0x087f:
+        r25 = 0;
+    L_0x0881:
+        r26 = 0;
+    L_0x0883:
         r27 = 0;
         r28 = 0;
-    L_0x0883:
+    L_0x0887:
         r29 = 0;
-    L_0x0885:
+    L_0x0889:
         r30 = 0;
         r31 = 0;
-        goto L_0x08e7;
-    L_0x088a:
+        goto L_0x08eb;
+    L_0x088e:
         r2 = "start";
         r2 = r0.getQueryParameter(r2);
         r4 = "startgroup";
@@ -2751,8 +2751,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = r0.getQueryParameter(r6);
         r0 = org.telegram.messenger.Utilities.parseInt(r0);
         r6 = r0.intValue();
-        if (r6 != 0) goto L_0x08ca;
-    L_0x08ac:
+        if (r6 != 0) goto L_0x08ce;
+    L_0x08b0:
         r7 = r1;
         r30 = r2;
         r31 = r4;
@@ -2772,8 +2772,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r27 = 0;
         r28 = 0;
         r29 = 0;
-        goto L_0x08e7;
-    L_0x08ca:
+        goto L_0x08eb;
+    L_0x08ce:
         r29 = r0;
         r7 = r1;
         r30 = r2;
@@ -2793,44 +2793,44 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r26 = 0;
         r27 = 0;
         r28 = 0;
-    L_0x08e7:
-        r32 = 0;
-        goto L_0x0ca4;
     L_0x08eb:
+        r32 = 0;
+        goto L_0x0ca8;
+    L_0x08ef:
         r1 = android.os.Build.VERSION.SDK_INT;
         r2 = 18;
-        if (r1 < r2) goto L_0x094d;
-    L_0x08f1:
+        if (r1 < r2) goto L_0x0951;
+    L_0x08f5:
         r1 = org.telegram.messenger.UserConfig.selectedAccount;
-        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r1 = org.telegram.messenger.UserConfig.getInstance(r1);
         r1 = r1.walletConfig;
         r1 = android.text.TextUtils.isEmpty(r1);
-        if (r1 != 0) goto L_0x094d;
-    L_0x08ff:
+        if (r1 != 0) goto L_0x0951;
+    L_0x0903:
         r1 = org.telegram.messenger.UserConfig.selectedAccount;
-        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r1 = org.telegram.messenger.UserConfig.getInstance(r1);
         r1 = r1.walletBlockchainName;
         r1 = android.text.TextUtils.isEmpty(r1);
-        if (r1 != 0) goto L_0x094d;
-    L_0x090d:
+        if (r1 != 0) goto L_0x0951;
+    L_0x0911:
         r0 = r0.toString();
         r1 = "ton:transfer";
         r1 = r0.startsWith(r1);
-        if (r1 != 0) goto L_0x0924;
-    L_0x0919:
+        if (r1 != 0) goto L_0x0928;
+    L_0x091d:
         r1 = "ton://transfer";
         r1 = r0.startsWith(r1);
-        if (r1 == 0) goto L_0x0922;
-    L_0x0921:
-        goto L_0x0924;
-    L_0x0922:
+        if (r1 == 0) goto L_0x0926;
+    L_0x0925:
+        goto L_0x0928;
+    L_0x0926:
         r7 = 0;
-        goto L_0x092c;
-    L_0x0924:
+        goto L_0x0930;
+    L_0x0928:
         r1 = "ton:transfer";
         r2 = "ton://transfer";
         r7 = r0.replace(r1, r2);
-    L_0x092c:
+    L_0x0930:
         r32 = r7;
         r0 = 0;
         r4 = 0;
@@ -2851,37 +2851,37 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r29 = 0;
         r30 = 0;
         r31 = 0;
-        goto L_0x0ca4;
-    L_0x094d:
+        goto L_0x0ca8;
+    L_0x0951:
         r8 = 0;
-        goto L_0x0CLASSNAME;
-    L_0x0950:
+        goto L_0x0c8a;
+    L_0x0954:
         r4 = r0.getHost();
         r4 = r4.toLowerCase();
         r5 = "telegram.me";
         r5 = r4.equals(r5);
-        if (r5 != 0) goto L_0x0970;
-    L_0x0960:
+        if (r5 != 0) goto L_0x0974;
+    L_0x0964:
         r5 = "t.me";
         r5 = r4.equals(r5);
-        if (r5 != 0) goto L_0x0970;
-    L_0x0968:
+        if (r5 != 0) goto L_0x0974;
+    L_0x096c:
         r5 = "telegram.dog";
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x094d;
-    L_0x0970:
+        if (r4 == 0) goto L_0x0951;
+    L_0x0974:
         r4 = r0.getPath();
-        if (r4 == 0) goto L_0x0CLASSNAME;
-    L_0x0976:
+        if (r4 == 0) goto L_0x0c4d;
+    L_0x097a:
         r5 = r4.length();
         r6 = 1;
-        if (r5 <= r6) goto L_0x0CLASSNAME;
-    L_0x097d:
+        if (r5 <= r6) goto L_0x0c4d;
+    L_0x0981:
         r4 = r4.substring(r6);
         r5 = "bg/";
         r5 = r4.startsWith(r5);
-        if (r5 == 0) goto L_0x0a4d;
-    L_0x0989:
+        if (r5 == 0) goto L_0x0a51;
+    L_0x098d:
         r7 = new org.telegram.tgnet.TLRPC$TL_wallPaper;
         r7.<init>();
         r1 = new org.telegram.tgnet.TLRPC$TL_wallPaperSettings;
@@ -2891,96 +2891,96 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1 = r4.replace(r1, r2);
         r7.slug = r1;
         r1 = r7.slug;
-        if (r1 == 0) goto L_0x09bc;
-    L_0x09a1:
+        if (r1 == 0) goto L_0x09c0;
+    L_0x09a5:
         r1 = r1.length();
         r2 = 6;
-        if (r1 != r2) goto L_0x09bc;
-    L_0x09a8:
-        r0 = r7.settings;	 Catch:{ Exception -> 0x09b7 }
-        r1 = r7.slug;	 Catch:{ Exception -> 0x09b7 }
+        if (r1 != r2) goto L_0x09c0;
+    L_0x09ac:
+        r0 = r7.settings;	 Catch:{ Exception -> 0x09bb }
+        r1 = r7.slug;	 Catch:{ Exception -> 0x09bb }
         r2 = 16;
-        r1 = java.lang.Integer.parseInt(r1, r2);	 Catch:{ Exception -> 0x09b7 }
+        r1 = java.lang.Integer.parseInt(r1, r2);	 Catch:{ Exception -> 0x09bb }
         r2 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r1 = r1 | r2;
-        r0.background_color = r1;	 Catch:{ Exception -> 0x09b7 }
-    L_0x09b7:
+        r0.background_color = r1;	 Catch:{ Exception -> 0x09bb }
+    L_0x09bb:
         r8 = 0;
         r7.slug = r8;
-        goto L_0x0a38;
-    L_0x09bc:
+        goto L_0x0a3c;
+    L_0x09c0:
         r8 = 0;
         r1 = "mode";
         r1 = r0.getQueryParameter(r1);
-        if (r1 == 0) goto L_0x09fa;
-    L_0x09c5:
+        if (r1 == 0) goto L_0x09fe;
+    L_0x09c9:
         r1 = r1.toLowerCase();
         r2 = " ";
         r1 = r1.split(r2);
-        if (r1 == 0) goto L_0x09fa;
-    L_0x09d1:
-        r2 = r1.length;
-        if (r2 <= 0) goto L_0x09fa;
-    L_0x09d4:
-        r2 = 0;
+        if (r1 == 0) goto L_0x09fe;
     L_0x09d5:
-        r4 = r1.length;
-        if (r2 >= r4) goto L_0x09fa;
+        r2 = r1.length;
+        if (r2 <= 0) goto L_0x09fe;
     L_0x09d8:
+        r2 = 0;
+    L_0x09d9:
+        r4 = r1.length;
+        if (r2 >= r4) goto L_0x09fe;
+    L_0x09dc:
         r4 = r1[r2];
         r5 = "blur";
         r4 = r5.equals(r4);
-        if (r4 == 0) goto L_0x09e8;
-    L_0x09e2:
+        if (r4 == 0) goto L_0x09ec;
+    L_0x09e6:
         r4 = r7.settings;
         r5 = 1;
         r4.blur = r5;
-        goto L_0x09f7;
-    L_0x09e8:
+        goto L_0x09fb;
+    L_0x09ec:
         r5 = 1;
         r4 = r1[r2];
         r6 = "motion";
         r4 = r6.equals(r4);
-        if (r4 == 0) goto L_0x09f7;
-    L_0x09f3:
+        if (r4 == 0) goto L_0x09fb;
+    L_0x09f7:
         r4 = r7.settings;
         r4.motion = r5;
-    L_0x09f7:
+    L_0x09fb:
         r2 = r2 + 1;
-        goto L_0x09d5;
-    L_0x09fa:
+        goto L_0x09d9;
+    L_0x09fe:
         r1 = "intensity";
         r1 = r0.getQueryParameter(r1);
         r2 = android.text.TextUtils.isEmpty(r1);
-        if (r2 != 0) goto L_0x0a13;
-    L_0x0a06:
+        if (r2 != 0) goto L_0x0a17;
+    L_0x0a0a:
         r2 = r7.settings;
         r1 = org.telegram.messenger.Utilities.parseInt(r1);
         r1 = r1.intValue();
         r2.intensity = r1;
-        goto L_0x0a19;
-    L_0x0a13:
+        goto L_0x0a1d;
+    L_0x0a17:
         r1 = r7.settings;
         r2 = 50;
         r1.intensity = r2;
-    L_0x0a19:
+    L_0x0a1d:
         r1 = "bg_color";
-        r0 = r0.getQueryParameter(r1);	 Catch:{ Exception -> 0x0a38 }
-        r1 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0a38 }
-        if (r1 != 0) goto L_0x0a33;
-    L_0x0a25:
-        r1 = r7.settings;	 Catch:{ Exception -> 0x0a38 }
+        r0 = r0.getQueryParameter(r1);	 Catch:{ Exception -> 0x0a3c }
+        r1 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0a3c }
+        if (r1 != 0) goto L_0x0a37;
+    L_0x0a29:
+        r1 = r7.settings;	 Catch:{ Exception -> 0x0a3c }
         r2 = 16;
-        r0 = java.lang.Integer.parseInt(r0, r2);	 Catch:{ Exception -> 0x0a38 }
+        r0 = java.lang.Integer.parseInt(r0, r2);	 Catch:{ Exception -> 0x0a3c }
         r2 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r0 = r0 | r2;
-        r1.background_color = r0;	 Catch:{ Exception -> 0x0a38 }
-        goto L_0x0a38;
-    L_0x0a33:
-        r0 = r7.settings;	 Catch:{ Exception -> 0x0a38 }
+        r1.background_color = r0;	 Catch:{ Exception -> 0x0a3c }
+        goto L_0x0a3c;
+    L_0x0a37:
+        r0 = r7.settings;	 Catch:{ Exception -> 0x0a3c }
         r1 = -1;
-        r0.background_color = r1;	 Catch:{ Exception -> 0x0a38 }
-    L_0x0a38:
+        r0.background_color = r1;	 Catch:{ Exception -> 0x0a3c }
+    L_0x0a3c:
         r24 = r7;
         r0 = r8;
         r1 = r0;
@@ -2995,13 +2995,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r19 = r18;
         r23 = r19;
         r25 = r23;
-        goto L_0x0c5d;
-    L_0x0a4d:
+        goto L_0x0CLASSNAME;
+    L_0x0a51:
         r8 = 0;
         r5 = "login/";
         r5 = r4.startsWith(r5);
-        if (r5 == 0) goto L_0x0a6f;
-    L_0x0a56:
+        if (r5 == 0) goto L_0x0a73;
+    L_0x0a5a:
         r0 = "login/";
         r7 = r4.replace(r0, r2);
         r23 = r7;
@@ -3017,43 +3017,43 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r18 = r13;
         r19 = r18;
         r24 = r19;
-        goto L_0x0c5b;
-    L_0x0a6f:
+        goto L_0x0c5f;
+    L_0x0a73:
         r5 = "joinchat/";
         r5 = r4.startsWith(r5);
-        if (r5 == 0) goto L_0x0a81;
-    L_0x0a77:
+        if (r5 == 0) goto L_0x0a85;
+    L_0x0a7b:
         r0 = "joinchat/";
         r7 = r4.replace(r0, r2);
         r0 = r7;
         r1 = r8;
-        goto L_0x0c4c;
-    L_0x0a81:
+        goto L_0x0CLASSNAME;
+    L_0x0a85:
         r5 = "addstickers/";
         r5 = r4.startsWith(r5);
-        if (r5 == 0) goto L_0x0a94;
-    L_0x0a89:
+        if (r5 == 0) goto L_0x0a98;
+    L_0x0a8d:
         r0 = "addstickers/";
         r7 = r4.replace(r0, r2);
         r1 = r7;
         r0 = r8;
         r2 = r0;
-        goto L_0x0c4d;
-    L_0x0a94:
+        goto L_0x0CLASSNAME;
+    L_0x0a98:
         r5 = "msg/";
         r5 = r4.startsWith(r5);
-        if (r5 != 0) goto L_0x0bce;
-    L_0x0a9c:
+        if (r5 != 0) goto L_0x0bd2;
+    L_0x0aa0:
         r5 = "share/";
         r5 = r4.startsWith(r5);
-        if (r5 == 0) goto L_0x0aa6;
-    L_0x0aa4:
-        goto L_0x0bce;
-    L_0x0aa6:
+        if (r5 == 0) goto L_0x0aaa;
+    L_0x0aa8:
+        goto L_0x0bd2;
+    L_0x0aaa:
         r1 = "confirmphone";
         r1 = r4.startsWith(r1);
-        if (r1 == 0) goto L_0x0ac5;
-    L_0x0aae:
+        if (r1 == 0) goto L_0x0ac9;
+    L_0x0ab2:
         r1 = "phone";
         r7 = r0.getQueryParameter(r1);
         r0 = r0.getQueryParameter(r3);
@@ -3068,11 +3068,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r9 = r7;
         r18 = r9;
         goto L_0x0CLASSNAME;
-    L_0x0ac5:
+    L_0x0ac9:
         r1 = "setlanguage/";
         r1 = r4.startsWith(r1);
-        if (r1 == 0) goto L_0x0ae2;
-    L_0x0acd:
+        if (r1 == 0) goto L_0x0ae6;
+    L_0x0ad1:
         r0 = 12;
         r7 = r4.substring(r0);
         r18 = r7;
@@ -3086,12 +3086,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r9 = r7;
         r13 = r9;
         r19 = r13;
-        goto L_0x0CLASSNAME;
-    L_0x0ae2:
+        goto L_0x0c5b;
+    L_0x0ae6:
         r1 = "addtheme/";
         r1 = r4.startsWith(r1);
-        if (r1 == 0) goto L_0x0b01;
-    L_0x0aea:
+        if (r1 == 0) goto L_0x0b05;
+    L_0x0aee:
         r0 = 9;
         r7 = r4.substring(r0);
         r19 = r7;
@@ -3106,17 +3106,17 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r13 = r9;
         r18 = r13;
         r23 = r18;
-        goto L_0x0CLASSNAME;
-    L_0x0b01:
+        goto L_0x0c5d;
+    L_0x0b05:
         r1 = "c/";
         r1 = r4.startsWith(r1);
-        if (r1 == 0) goto L_0x0b56;
-    L_0x0b09:
+        if (r1 == 0) goto L_0x0b5a;
+    L_0x0b0d:
         r0 = r0.getPathSegments();
         r1 = r0.size();
         r2 = 3;
-        if (r1 != r2) goto L_0x0b3d;
-    L_0x0b14:
+        if (r1 != r2) goto L_0x0b41;
+    L_0x0b18:
         r1 = 1;
         r2 = r0.get(r1);
         r2 = (java.lang.CharSequence) r2;
@@ -3126,21 +3126,21 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = (java.lang.CharSequence) r0;
         r0 = org.telegram.messenger.Utilities.parseInt(r0);
         r1 = r0.intValue();
-        if (r1 == 0) goto L_0x0b3d;
-    L_0x0b30:
+        if (r1 == 0) goto L_0x0b41;
+    L_0x0b34:
         r1 = r7.intValue();
-        if (r1 != 0) goto L_0x0b37;
-    L_0x0b36:
-        goto L_0x0b3d;
-    L_0x0b37:
+        if (r1 != 0) goto L_0x0b3b;
+    L_0x0b3a:
+        goto L_0x0b41;
+    L_0x0b3b:
         r44 = r7;
         r7 = r0;
         r0 = r44;
-        goto L_0x0b3f;
-    L_0x0b3d:
+        goto L_0x0b43;
+    L_0x0b41:
         r0 = r8;
         r7 = r0;
-    L_0x0b3f:
+    L_0x0b43:
         r26 = r0;
         r25 = r7;
         r0 = r8;
@@ -3156,52 +3156,52 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r19 = r18;
         r23 = r19;
         r24 = r23;
-        goto L_0x0c5f;
-    L_0x0b56:
+        goto L_0x0CLASSNAME;
+    L_0x0b5a:
         r1 = r4.length();
         r2 = 1;
-        if (r1 < r2) goto L_0x0c4a;
-    L_0x0b5d:
+        if (r1 < r2) goto L_0x0c4e;
+    L_0x0b61:
         r1 = new java.util.ArrayList;
         r2 = r0.getPathSegments();
         r1.<init>(r2);
         r2 = r1.size();
-        if (r2 <= 0) goto L_0x0b7f;
-    L_0x0b6c:
+        if (r2 <= 0) goto L_0x0b83;
+    L_0x0b70:
         r2 = 0;
         r4 = r1.get(r2);
         r4 = (java.lang.String) r4;
         r5 = "s";
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x0b80;
-    L_0x0b7b:
-        r1.remove(r2);
-        goto L_0x0b80;
+        if (r4 == 0) goto L_0x0b84;
     L_0x0b7f:
+        r1.remove(r2);
+        goto L_0x0b84;
+    L_0x0b83:
         r2 = 0;
-    L_0x0b80:
+    L_0x0b84:
         r4 = r1.size();
-        if (r4 <= 0) goto L_0x0ba6;
-    L_0x0b86:
+        if (r4 <= 0) goto L_0x0baa;
+    L_0x0b8a:
         r4 = r1.get(r2);
         r7 = r4;
         r7 = (java.lang.String) r7;
         r2 = r1.size();
         r4 = 1;
-        if (r2 <= r4) goto L_0x0ba4;
-    L_0x0b94:
+        if (r2 <= r4) goto L_0x0ba8;
+    L_0x0b98:
         r1 = r1.get(r4);
         r1 = (java.lang.CharSequence) r1;
         r1 = org.telegram.messenger.Utilities.parseInt(r1);
         r2 = r1.intValue();
-        if (r2 != 0) goto L_0x0ba8;
-    L_0x0ba4:
+        if (r2 != 0) goto L_0x0bac;
+    L_0x0ba8:
         r1 = r8;
-        goto L_0x0ba8;
-    L_0x0ba6:
+        goto L_0x0bac;
+    L_0x0baa:
         r1 = r8;
         r7 = r1;
-    L_0x0ba8:
+    L_0x0bac:
         r2 = "start";
         r2 = r0.getQueryParameter(r2);
         r4 = "startgroup";
@@ -3220,33 +3220,33 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r23 = r19;
         r24 = r23;
         r26 = r24;
-        goto L_0x0c5f;
-    L_0x0bce:
+        goto L_0x0CLASSNAME;
+    L_0x0bd2:
         r4 = "url";
         r4 = r0.getQueryParameter(r4);
-        if (r4 != 0) goto L_0x0bd7;
-    L_0x0bd6:
-        goto L_0x0bd8;
-    L_0x0bd7:
+        if (r4 != 0) goto L_0x0bdb;
+    L_0x0bda:
+        goto L_0x0bdc;
+    L_0x0bdb:
         r2 = r4;
-    L_0x0bd8:
+    L_0x0bdc:
         r4 = "text";
         r4 = r0.getQueryParameter(r4);
-        if (r4 == 0) goto L_0x0c0e;
-    L_0x0be0:
+        if (r4 == 0) goto L_0x0CLASSNAME;
+    L_0x0be4:
         r4 = r2.length();
-        if (r4 <= 0) goto L_0x0bf7;
-    L_0x0be6:
+        if (r4 <= 0) goto L_0x0bfb;
+    L_0x0bea:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4.append(r2);
         r4.append(r1);
         r2 = r4.toString();
         r12 = 1;
-        goto L_0x0bf8;
-    L_0x0bf7:
+        goto L_0x0bfc;
+    L_0x0bfb:
         r12 = 0;
-    L_0x0bf8:
+    L_0x0bfc:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4.append(r2);
@@ -3254,14 +3254,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = r0.getQueryParameter(r2);
         r4.append(r0);
         r2 = r4.toString();
-        goto L_0x0c0f;
-    L_0x0c0e:
+        goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
         r12 = 0;
-    L_0x0c0f:
+    L_0x0CLASSNAME:
         r0 = r2.length();
         r4 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
         if (r0 <= r4) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+    L_0x0c1b:
         r0 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
         r4 = 0;
         r0 = r2.substring(r4, r0);
@@ -3273,7 +3273,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0CLASSNAME:
         r0 = r7.endsWith(r1);
         if (r0 == 0) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+    L_0x0c2c:
         r0 = r7.length();
         r2 = 1;
         r0 = r0 - r2;
@@ -3296,14 +3296,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r25 = r24;
         r26 = r25;
         goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+    L_0x0c4d:
         r8 = 0;
-    L_0x0c4a:
+    L_0x0c4e:
         r0 = r8;
         r1 = r0;
-    L_0x0c4c:
+    L_0x0CLASSNAME:
         r2 = r1;
-    L_0x0c4d:
+    L_0x0CLASSNAME:
         r4 = r2;
         r5 = r4;
         r6 = r5;
@@ -3313,15 +3313,15 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r18 = r13;
     L_0x0CLASSNAME:
         r19 = r18;
-    L_0x0CLASSNAME:
-        r23 = r19;
-    L_0x0CLASSNAME:
-        r24 = r23;
     L_0x0c5b:
-        r25 = r24;
+        r23 = r19;
     L_0x0c5d:
-        r26 = r25;
+        r24 = r23;
     L_0x0c5f:
+        r25 = r24;
+    L_0x0CLASSNAME:
+        r26 = r25;
+    L_0x0CLASSNAME:
         r12 = 0;
     L_0x0CLASSNAME:
         r30 = r2;
@@ -3344,10 +3344,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r44 = r12;
         r12 = r9;
         r9 = r44;
-        goto L_0x0caa;
+        goto L_0x0cae;
     L_0x0CLASSNAME:
         r8 = r7;
-    L_0x0CLASSNAME:
+    L_0x0c8a:
         r0 = r8;
         r4 = r0;
         r5 = r4;
@@ -3367,168 +3367,168 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r31 = r30;
         r32 = r31;
         r9 = 0;
-    L_0x0ca4:
+    L_0x0ca8:
         r33 = 0;
         r34 = 0;
         r35 = 0;
-    L_0x0caa:
-        if (r18 != 0) goto L_0x0cc0;
-    L_0x0cac:
+    L_0x0cae:
+        if (r18 != 0) goto L_0x0cc4;
+    L_0x0cb0:
         r1 = r15.currentAccount;
         r1 = org.telegram.messenger.UserConfig.getInstance(r1);
         r1 = r1.isClientActivated();
-        if (r1 == 0) goto L_0x0cb9;
-    L_0x0cb8:
-        goto L_0x0cc0;
-    L_0x0cb9:
+        if (r1 == 0) goto L_0x0cbd;
+    L_0x0cbc:
+        goto L_0x0cc4;
+    L_0x0cbd:
         r42 = r11;
         r2 = r15;
         r30 = 0;
-        goto L_0x0dd3;
-    L_0x0cc0:
-        if (r6 != 0) goto L_0x0db8;
-    L_0x0cc2:
-        if (r13 == 0) goto L_0x0cc6;
+        goto L_0x0dd7;
     L_0x0cc4:
-        goto L_0x0db8;
+        if (r6 != 0) goto L_0x0dbc;
     L_0x0cc6:
-        if (r7 != 0) goto L_0x0d71;
+        if (r13 == 0) goto L_0x0cca;
     L_0x0cc8:
-        if (r4 != 0) goto L_0x0d71;
+        goto L_0x0dbc;
     L_0x0cca:
-        if (r5 != 0) goto L_0x0d71;
+        if (r7 != 0) goto L_0x0d75;
     L_0x0ccc:
-        if (r0 != 0) goto L_0x0d71;
+        if (r4 != 0) goto L_0x0d75;
     L_0x0cce:
-        if (r12 != 0) goto L_0x0d71;
+        if (r5 != 0) goto L_0x0d75;
     L_0x0cd0:
-        if (r23 != 0) goto L_0x0d71;
+        if (r0 != 0) goto L_0x0d75;
     L_0x0cd2:
-        if (r24 != 0) goto L_0x0d71;
+        if (r12 != 0) goto L_0x0d75;
     L_0x0cd4:
-        if (r25 != 0) goto L_0x0d71;
+        if (r23 != 0) goto L_0x0d75;
     L_0x0cd6:
-        if (r18 != 0) goto L_0x0d71;
+        if (r24 != 0) goto L_0x0d75;
     L_0x0cd8:
-        if (r26 != 0) goto L_0x0d71;
+        if (r25 != 0) goto L_0x0d75;
     L_0x0cda:
-        if (r27 != 0) goto L_0x0d71;
+        if (r18 != 0) goto L_0x0d75;
     L_0x0cdc:
-        if (r28 == 0) goto L_0x0ce0;
+        if (r26 != 0) goto L_0x0d75;
     L_0x0cde:
-        goto L_0x0d71;
+        if (r27 != 0) goto L_0x0d75;
     L_0x0ce0:
-        r36 = r45.getContentResolver();	 Catch:{ Exception -> 0x0d60 }
-        r37 = r46.getData();	 Catch:{ Exception -> 0x0d60 }
+        if (r28 == 0) goto L_0x0ce4;
+    L_0x0ce2:
+        goto L_0x0d75;
+    L_0x0ce4:
+        r36 = r45.getContentResolver();	 Catch:{ Exception -> 0x0d64 }
+        r37 = r46.getData();	 Catch:{ Exception -> 0x0d64 }
         r38 = 0;
         r39 = 0;
         r40 = 0;
         r41 = 0;
-        r1 = r36.query(r37, r38, r39, r40, r41);	 Catch:{ Exception -> 0x0d60 }
-        if (r1 == 0) goto L_0x0d56;
-    L_0x0cf6:
-        r0 = r1.moveToFirst();	 Catch:{ all -> 0x0d4a }
-        if (r0 == 0) goto L_0x0d56;
-    L_0x0cfc:
+        r1 = r36.query(r37, r38, r39, r40, r41);	 Catch:{ Exception -> 0x0d64 }
+        if (r1 == 0) goto L_0x0d5a;
+    L_0x0cfa:
+        r0 = r1.moveToFirst();	 Catch:{ all -> 0x0d4e }
+        if (r0 == 0) goto L_0x0d5a;
+    L_0x0d00:
         r0 = "account_name";
-        r0 = r1.getColumnIndex(r0);	 Catch:{ all -> 0x0d4a }
-        r0 = r1.getString(r0);	 Catch:{ all -> 0x0d4a }
-        r0 = org.telegram.messenger.Utilities.parseInt(r0);	 Catch:{ all -> 0x0d4a }
-        r0 = r0.intValue();	 Catch:{ all -> 0x0d4a }
+        r0 = r1.getColumnIndex(r0);	 Catch:{ all -> 0x0d4e }
+        r0 = r1.getString(r0);	 Catch:{ all -> 0x0d4e }
+        r0 = org.telegram.messenger.Utilities.parseInt(r0);	 Catch:{ all -> 0x0d4e }
+        r0 = r0.intValue();	 Catch:{ all -> 0x0d4e }
         r2 = 0;
         r6 = 3;
-    L_0x0d10:
-        if (r2 >= r6) goto L_0x0d2c;
-    L_0x0d12:
-        r3 = org.telegram.messenger.UserConfig.getInstance(r2);	 Catch:{ all -> 0x0d2a }
-        r3 = r3.getClientUserId();	 Catch:{ all -> 0x0d2a }
-        if (r3 != r0) goto L_0x0d26;
-    L_0x0d1c:
+    L_0x0d14:
+        if (r2 >= r6) goto L_0x0d30;
+    L_0x0d16:
+        r3 = org.telegram.messenger.UserConfig.getInstance(r2);	 Catch:{ all -> 0x0d2e }
+        r3 = r3.getClientUserId();	 Catch:{ all -> 0x0d2e }
+        if (r3 != r0) goto L_0x0d2a;
+    L_0x0d20:
         r3 = 0;
-        r11[r3] = r2;	 Catch:{ all -> 0x0d2a }
-        r0 = r11[r3];	 Catch:{ all -> 0x0d2a }
+        r11[r3] = r2;	 Catch:{ all -> 0x0d2e }
+        r0 = r11[r3];	 Catch:{ all -> 0x0d2e }
         r13 = 1;
-        r15.switchToAccount(r0, r13);	 Catch:{ all -> 0x0d48 }
-        goto L_0x0d2d;
-    L_0x0d26:
+        r15.switchToAccount(r0, r13);	 Catch:{ all -> 0x0d4c }
+        goto L_0x0d31;
+    L_0x0d2a:
         r13 = 1;
         r2 = r2 + 1;
-        goto L_0x0d10;
-    L_0x0d2a:
+        goto L_0x0d14;
+    L_0x0d2e:
         r0 = move-exception;
-        goto L_0x0d4c;
-    L_0x0d2c:
+        goto L_0x0d50;
+    L_0x0d30:
         r13 = 1;
-    L_0x0d2d:
+    L_0x0d31:
         r0 = "DATA4";
-        r0 = r1.getColumnIndex(r0);	 Catch:{ all -> 0x0d48 }
-        r0 = r1.getInt(r0);	 Catch:{ all -> 0x0d48 }
+        r0 = r1.getColumnIndex(r0);	 Catch:{ all -> 0x0d4c }
+        r0 = r1.getInt(r0);	 Catch:{ all -> 0x0d4c }
         r2 = 0;
-        r3 = r11[r2];	 Catch:{ all -> 0x0d48 }
-        r3 = org.telegram.messenger.NotificationCenter.getInstance(r3);	 Catch:{ all -> 0x0d48 }
-        r4 = org.telegram.messenger.NotificationCenter.closeChats;	 Catch:{ all -> 0x0d48 }
-        r5 = new java.lang.Object[r2];	 Catch:{ all -> 0x0d48 }
-        r3.postNotificationName(r4, r5);	 Catch:{ all -> 0x0d48 }
+        r3 = r11[r2];	 Catch:{ all -> 0x0d4c }
+        r3 = org.telegram.messenger.NotificationCenter.getInstance(r3);	 Catch:{ all -> 0x0d4c }
+        r4 = org.telegram.messenger.NotificationCenter.closeChats;	 Catch:{ all -> 0x0d4c }
+        r5 = new java.lang.Object[r2];	 Catch:{ all -> 0x0d4c }
+        r3.postNotificationName(r4, r5);	 Catch:{ all -> 0x0d4c }
         r33 = r0;
-        goto L_0x0d58;
-    L_0x0d48:
-        r0 = move-exception;
-        goto L_0x0d4d;
-    L_0x0d4a:
-        r0 = move-exception;
-        r6 = 3;
+        goto L_0x0d5c;
     L_0x0d4c:
-        r13 = 1;
-    L_0x0d4d:
-        throw r0;	 Catch:{ all -> 0x0d4e }
+        r0 = move-exception;
+        goto L_0x0d51;
     L_0x0d4e:
         r0 = move-exception;
-        r2 = r0;
-        if (r1 == 0) goto L_0x0d55;
+        r6 = 3;
+    L_0x0d50:
+        r13 = 1;
+    L_0x0d51:
+        throw r0;	 Catch:{ all -> 0x0d52 }
     L_0x0d52:
-        r1.close();	 Catch:{ all -> 0x0d55 }
-    L_0x0d55:
-        throw r2;	 Catch:{ Exception -> 0x0d5e }
+        r0 = move-exception;
+        r2 = r0;
+        if (r1 == 0) goto L_0x0d59;
     L_0x0d56:
-        r6 = 3;
-        r13 = 1;
-    L_0x0d58:
-        if (r1 == 0) goto L_0x0d66;
+        r1.close();	 Catch:{ all -> 0x0d59 }
+    L_0x0d59:
+        throw r2;	 Catch:{ Exception -> 0x0d62 }
     L_0x0d5a:
-        r1.close();	 Catch:{ Exception -> 0x0d5e }
-        goto L_0x0d66;
+        r6 = 3;
+        r13 = 1;
+    L_0x0d5c:
+        if (r1 == 0) goto L_0x0d6a;
     L_0x0d5e:
+        r1.close();	 Catch:{ Exception -> 0x0d62 }
+        goto L_0x0d6a;
+    L_0x0d62:
         r0 = move-exception;
-        goto L_0x0d63;
-    L_0x0d60:
+        goto L_0x0d67;
+    L_0x0d64:
         r0 = move-exception;
         r6 = 3;
         r13 = 1;
-    L_0x0d63:
+    L_0x0d67:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0d66:
+    L_0x0d6a:
         r42 = r11;
         r2 = r15;
         r7 = r32;
         r12 = r33;
         r30 = 0;
-        goto L_0x0de3;
-    L_0x0d71:
+        goto L_0x0de7;
+    L_0x0d75:
         r6 = 3;
         r13 = 1;
-        if (r0 == 0) goto L_0x0d8e;
-    L_0x0d75:
+        if (r0 == 0) goto L_0x0d92;
+    L_0x0d79:
         r1 = "@";
         r1 = r0.startsWith(r1);
-        if (r1 == 0) goto L_0x0d8e;
-    L_0x0d7d:
+        if (r1 == 0) goto L_0x0d92;
+    L_0x0d81:
         r1 = new java.lang.StringBuilder;
         r1.<init>();
         r2 = " ";
         r1.append(r2);
         r1.append(r0);
         r0 = r1.toString();
-    L_0x0d8e:
+    L_0x0d92:
         r22 = 0;
         r2 = r11[r22];
         r19 = 0;
@@ -3551,8 +3551,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r18 = r28;
         r1.runLinkRequest(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19);
         r2 = r45;
-        goto L_0x0dd3;
-    L_0x0db8:
+        goto L_0x0dd7;
+    L_0x0dbc:
         r42 = r11;
         r30 = 0;
         r0 = new android.os.Bundle;
@@ -3564,11 +3564,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2 = r45;
         r1.<init>(r2, r0);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);
-    L_0x0dd3:
+    L_0x0dd7:
         r7 = r32;
         r12 = r33;
-        goto L_0x0de3;
-    L_0x0dd8:
+        goto L_0x0de7;
+    L_0x0ddc:
         r42 = r11;
         r2 = r15;
         r30 = 0;
@@ -3576,7 +3576,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r12 = 0;
         r34 = 0;
         r35 = 0;
-    L_0x0de3:
+    L_0x0de7:
         r1 = r46;
         r0 = r34;
         r4 = r35;
@@ -3587,16 +3587,16 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r9 = 0;
         r10 = 0;
         r11 = 0;
-        goto L_0x0ecf;
-    L_0x0df3:
+        goto L_0x0ed3;
+    L_0x0df7:
         r42 = r11;
         r2 = r15;
         r30 = 0;
         r0 = r46.getAction();
         r1 = "org.telegram.messenger.OPEN_ACCOUNT";
         r0 = r0.equals(r1);
-        if (r0 == 0) goto L_0x0e12;
-    L_0x0e04:
+        if (r0 == 0) goto L_0x0e16;
+    L_0x0e08:
         r1 = r46;
         r6 = r42;
         r0 = 0;
@@ -3607,13 +3607,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r8 = 0;
         r9 = 0;
         r10 = 1;
-        goto L_0x0ecd;
-    L_0x0e12:
+        goto L_0x0ed1;
+    L_0x0e16:
         r0 = r46.getAction();
         r1 = "new_dialog";
         r0 = r0.equals(r1);
-        if (r0 == 0) goto L_0x0e2d;
-    L_0x0e1e:
+        if (r0 == 0) goto L_0x0e31;
+    L_0x0e22:
         r1 = r46;
         r6 = r42;
         r0 = 0;
@@ -3625,13 +3625,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r9 = 0;
         r10 = 0;
         r11 = 1;
-        goto L_0x0ece;
-    L_0x0e2d:
+        goto L_0x0ed2;
+    L_0x0e31:
         r0 = r46.getAction();
         r1 = "com.tmessages.openchat";
         r0 = r0.startsWith(r1);
-        if (r0 == 0) goto L_0x0e96;
-    L_0x0e39:
+        if (r0 == 0) goto L_0x0e9a;
+    L_0x0e3d:
         r0 = "chatId";
         r1 = r46;
         r3 = 0;
@@ -3640,8 +3640,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r4 = r1.getIntExtra(r4, r3);
         r5 = "encId";
         r5 = r1.getIntExtra(r5, r3);
-        if (r0 == 0) goto L_0x0e63;
-    L_0x0e50:
+        if (r0 == 0) goto L_0x0e67;
+    L_0x0e54:
         r6 = r42;
         r4 = r6[r3];
         r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
@@ -3649,25 +3649,25 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r7 = new java.lang.Object[r3];
         r4.postNotificationName(r5, r7);
         r4 = 0;
-    L_0x0e60:
+    L_0x0e64:
         r5 = 0;
-    L_0x0e61:
+    L_0x0e65:
         r12 = 0;
-        goto L_0x0e8c;
-    L_0x0e63:
-        r6 = r42;
-        if (r4 == 0) goto L_0x0e76;
+        goto L_0x0e90;
     L_0x0e67:
+        r6 = r42;
+        if (r4 == 0) goto L_0x0e7a;
+    L_0x0e6b:
         r0 = r6[r3];
         r0 = org.telegram.messenger.NotificationCenter.getInstance(r0);
         r5 = org.telegram.messenger.NotificationCenter.closeChats;
         r7 = new java.lang.Object[r3];
         r0.postNotificationName(r5, r7);
         r0 = 0;
-        goto L_0x0e60;
-    L_0x0e76:
-        if (r5 == 0) goto L_0x0e88;
-    L_0x0e78:
+        goto L_0x0e64;
+    L_0x0e7a:
+        if (r5 == 0) goto L_0x0e8c;
+    L_0x0e7c:
         r0 = r6[r3];
         r0 = org.telegram.messenger.NotificationCenter.getInstance(r0);
         r4 = org.telegram.messenger.NotificationCenter.closeChats;
@@ -3675,13 +3675,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0.postNotificationName(r4, r7);
         r0 = 0;
         r4 = 0;
-        goto L_0x0e61;
-    L_0x0e88:
+        goto L_0x0e65;
+    L_0x0e8c:
         r0 = 0;
         r4 = 0;
         r5 = 0;
         r12 = 1;
-    L_0x0e8c:
+    L_0x0e90:
         r43 = r12;
         r7 = 0;
         r8 = 0;
@@ -3690,78 +3690,78 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r11 = 0;
         r12 = r4;
         r4 = 0;
-        goto L_0x0ed1;
-    L_0x0e96:
+        goto L_0x0ed5;
+    L_0x0e9a:
         r1 = r46;
         r6 = r42;
         r3 = 0;
         r0 = r46.getAction();
         r4 = "com.tmessages.openplayer";
         r0 = r0.equals(r4);
-        if (r0 == 0) goto L_0x0ead;
-    L_0x0ea7:
+        if (r0 == 0) goto L_0x0eb1;
+    L_0x0eab:
         r0 = 0;
         r4 = 0;
         r5 = 0;
         r7 = 0;
         r8 = 1;
-        goto L_0x0ecb;
-    L_0x0ead:
+        goto L_0x0ecf;
+    L_0x0eb1:
         r0 = r46.getAction();
         r4 = "org.tmessages.openlocations";
         r0 = r0.equals(r4);
-        if (r0 == 0) goto L_0x0ec6;
-    L_0x0eb9:
+        if (r0 == 0) goto L_0x0eca;
+    L_0x0ebd:
         r0 = 0;
         r4 = 0;
         r5 = 0;
         r7 = 0;
         r8 = 0;
         r9 = 1;
-        goto L_0x0ecc;
-    L_0x0ec0:
+        goto L_0x0ed0;
+    L_0x0ec4:
         r30 = r8;
         r6 = r11;
         r1 = r14;
         r2 = r15;
         r3 = 0;
-    L_0x0ec6:
+    L_0x0eca:
         r0 = 0;
         r4 = 0;
         r5 = 0;
         r7 = 0;
         r8 = 0;
-    L_0x0ecb:
-        r9 = 0;
-    L_0x0ecc:
-        r10 = 0;
-    L_0x0ecd:
-        r11 = 0;
-    L_0x0ece:
-        r12 = 0;
     L_0x0ecf:
-        r43 = 0;
+        r9 = 0;
+    L_0x0ed0:
+        r10 = 0;
     L_0x0ed1:
+        r11 = 0;
+    L_0x0ed2:
+        r12 = 0;
+    L_0x0ed3:
+        r43 = 0;
+    L_0x0ed5:
         r13 = r2.currentAccount;
         r13 = org.telegram.messenger.UserConfig.getInstance(r13);
         r13 = r13.isClientActivated();
-        if (r13 == 0) goto L_0x11fb;
-    L_0x0edd:
-        if (r12 == 0) goto L_0x0var_;
-    L_0x0edf:
+        if (r13 == 0) goto L_0x11ff;
+    L_0x0ee1:
+        if (r12 == 0) goto L_0x0f2d;
+    L_0x0ee3:
         r0 = new android.os.Bundle;
         r0.<init>();
         r5 = "user_id";
         r0.putInt(r5, r12);
-        if (r4 == 0) goto L_0x0ef0;
-    L_0x0eeb:
+        if (r4 == 0) goto L_0x0ef4;
+    L_0x0eef:
         r5 = "message_id";
         r0.putInt(r5, r4);
-    L_0x0ef0:
+    L_0x0ef4:
         r4 = mainFragmentsStack;
         r4 = r4.isEmpty();
         if (r4 != 0) goto L_0x0var_;
-    L_0x0ef8:
+    L_0x0efc:
         r4 = r6[r3];
         r4 = org.telegram.messenger.MessagesController.getInstance(r4);
         r5 = mainFragmentsStack;
@@ -3771,7 +3771,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5 = r5.get(r6);
         r5 = (org.telegram.ui.ActionBar.BaseFragment) r5;
         r4 = r4.checkCanOpenChat(r0, r5);
-        if (r4 == 0) goto L_0x0var_;
+        if (r4 == 0) goto L_0x0f2b;
     L_0x0var_:
         goto L_0x0var_;
     L_0x0var_:
@@ -3785,29 +3785,29 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r9 = 1;
         r10 = 0;
         r0 = r5.presentFragment(r6, r7, r8, r9, r10);
-        if (r0 == 0) goto L_0x0var_;
+        if (r0 == 0) goto L_0x0f2b;
     L_0x0var_:
         r13 = 1;
-        goto L_0x0f8b;
-    L_0x0var_:
+        goto L_0x0f8f;
+    L_0x0f2b:
         r13 = 0;
-        goto L_0x0f8b;
-    L_0x0var_:
+        goto L_0x0f8f;
+    L_0x0f2d:
         r12 = 1;
         if (r0 == 0) goto L_0x0var_;
-    L_0x0f2c:
+    L_0x0var_:
         r5 = new android.os.Bundle;
         r5.<init>();
         r7 = "chat_id";
         r5.putInt(r7, r0);
-        if (r4 == 0) goto L_0x0f3d;
-    L_0x0var_:
+        if (r4 == 0) goto L_0x0var_;
+    L_0x0f3c:
         r0 = "message_id";
         r5.putInt(r0, r4);
-    L_0x0f3d:
+    L_0x0var_:
         r0 = mainFragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x0f5e;
+        if (r0 != 0) goto L_0x0var_;
     L_0x0var_:
         r0 = r6[r3];
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
@@ -3817,8 +3817,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r4 = r4.get(r6);
         r4 = (org.telegram.ui.ActionBar.BaseFragment) r4;
         r0 = r0.checkCanOpenChat(r5, r4);
-        if (r0 == 0) goto L_0x0var_;
-    L_0x0f5e:
+        if (r0 == 0) goto L_0x0f2b;
+    L_0x0var_:
         r7 = new org.telegram.ui.ChatActivity;
         r7.<init>(r5);
         r6 = r2.actionBarLayout;
@@ -3827,8 +3827,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r10 = 1;
         r11 = 0;
         r0 = r6.presentFragment(r7, r8, r9, r10, r11);
-        if (r0 == 0) goto L_0x0var_;
-    L_0x0f6f:
+        if (r0 == 0) goto L_0x0f2b;
+    L_0x0var_:
         goto L_0x0var_;
     L_0x0var_:
         if (r5 == 0) goto L_0x0var_;
@@ -3845,81 +3845,81 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r10 = 1;
         r11 = 0;
         r13 = r6.presentFragment(r7, r8, r9, r10, r11);
-    L_0x0f8b:
+    L_0x0f8f:
         r0 = r47;
         r4 = 0;
-        goto L_0x1200;
+        goto L_0x1204;
     L_0x0var_:
-        if (r43 == 0) goto L_0x0fca;
+        if (r43 == 0) goto L_0x0fce;
     L_0x0var_:
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 != 0) goto L_0x0f9e;
-    L_0x0var_:
+        if (r0 != 0) goto L_0x0fa2;
+    L_0x0f9c:
         r0 = r2.actionBarLayout;
         r0.removeAllFragments();
-        goto L_0x0fc6;
-    L_0x0f9e:
+        goto L_0x0fca;
+    L_0x0fa2:
         r0 = r2.layersActionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x0fc6;
-    L_0x0fa8:
+        if (r0 != 0) goto L_0x0fca;
+    L_0x0fac:
         r0 = r2.layersActionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.size();
         r0 = r0 - r12;
-        if (r0 <= 0) goto L_0x0fc1;
-    L_0x0fb3:
+        if (r0 <= 0) goto L_0x0fc5;
+    L_0x0fb7:
         r0 = r2.layersActionBarLayout;
         r4 = r0.fragmentsStack;
         r4 = r4.get(r3);
         r4 = (org.telegram.ui.ActionBar.BaseFragment) r4;
         r0.removeFragmentFromStack(r4);
-        goto L_0x0fa8;
-    L_0x0fc1:
+        goto L_0x0fac;
+    L_0x0fc5:
         r0 = r2.layersActionBarLayout;
         r0.closeLastFragment(r3);
-    L_0x0fc6:
-        r0 = 0;
-    L_0x0fc7:
-        r4 = 0;
-        goto L_0x11ff;
     L_0x0fca:
-        if (r7 == 0) goto L_0x0ffb;
-    L_0x0fcc:
+        r0 = 0;
+    L_0x0fcb:
+        r4 = 0;
+        goto L_0x1203;
+    L_0x0fce:
+        if (r7 == 0) goto L_0x0fff;
+    L_0x0fd0:
         r0 = r2.getCurrentWalletFragment(r7);
-        if (r0 == 0) goto L_0x0fda;
-    L_0x0fd2:
+        if (r0 == 0) goto L_0x0fde;
+    L_0x0fd6:
         r4 = new org.telegram.ui.-$$Lambda$LaunchActivity$5GybZC1APjVUWmzZAupg-DSdEx8;
         r4.<init>(r2, r0);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-    L_0x0fda:
+    L_0x0fde:
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x0ff0;
-    L_0x0fe0:
+        if (r0 == 0) goto L_0x0ff4;
+    L_0x0fe4:
         r0 = r2.actionBarLayout;
         r0.showLastFragment();
         r0 = r2.rightActionBarLayout;
         r0.showLastFragment();
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r3, r3);
-        goto L_0x0ff5;
-    L_0x0ff0:
+        goto L_0x0ff9;
+    L_0x0ff4:
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r12, r3);
-    L_0x0ff5:
+    L_0x0ff9:
         r0 = r47;
         r4 = 0;
         r13 = 1;
-        goto L_0x1200;
-    L_0x0ffb:
-        if (r8 == 0) goto L_0x101c;
-    L_0x0ffd:
+        goto L_0x1204;
+    L_0x0fff:
+        if (r8 == 0) goto L_0x1020;
+    L_0x1001:
         r0 = r2.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x1019;
-    L_0x1007:
+        if (r0 != 0) goto L_0x101d;
+    L_0x100b:
         r0 = r2.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.get(r3);
@@ -3927,17 +3927,17 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r4 = new org.telegram.ui.Components.AudioPlayerAlert;
         r4.<init>(r2);
         r0.showDialog(r4);
-    L_0x1019:
+    L_0x101d:
         r0 = r47;
-        goto L_0x0fc7;
-    L_0x101c:
-        if (r9 == 0) goto L_0x1040;
-    L_0x101e:
+        goto L_0x0fcb;
+    L_0x1020:
+        if (r9 == 0) goto L_0x1044;
+    L_0x1022:
         r0 = r2.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x1019;
-    L_0x1028:
+        if (r0 != 0) goto L_0x101d;
+    L_0x102c:
         r0 = r2.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.get(r3);
@@ -3947,30 +3947,30 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5.<init>(r2, r6);
         r4.<init>(r2, r5);
         r0.showDialog(r4);
-        goto L_0x1019;
-    L_0x1040:
-        r0 = r2.videoPath;
-        if (r0 != 0) goto L_0x10c5;
+        goto L_0x101d;
     L_0x1044:
-        r0 = r2.photoPathsArray;
-        if (r0 != 0) goto L_0x10c5;
+        r0 = r2.videoPath;
+        if (r0 != 0) goto L_0x10c9;
     L_0x1048:
-        r0 = r2.sendingText;
-        if (r0 != 0) goto L_0x10c5;
+        r0 = r2.photoPathsArray;
+        if (r0 != 0) goto L_0x10c9;
     L_0x104c:
-        r0 = r2.documentsPathsArray;
-        if (r0 != 0) goto L_0x10c5;
+        r0 = r2.sendingText;
+        if (r0 != 0) goto L_0x10c9;
     L_0x1050:
-        r0 = r2.contactsToSend;
-        if (r0 != 0) goto L_0x10c5;
+        r0 = r2.documentsPathsArray;
+        if (r0 != 0) goto L_0x10c9;
     L_0x1054:
-        r0 = r2.documentsUrisArray;
-        if (r0 == 0) goto L_0x1059;
+        r0 = r2.contactsToSend;
+        if (r0 != 0) goto L_0x10c9;
     L_0x1058:
-        goto L_0x10c5;
-    L_0x1059:
-        if (r10 == 0) goto L_0x108a;
-    L_0x105b:
+        r0 = r2.documentsUrisArray;
+        if (r0 == 0) goto L_0x105d;
+    L_0x105c:
+        goto L_0x10c9;
+    L_0x105d:
+        if (r10 == 0) goto L_0x108e;
+    L_0x105f:
         r13 = r2.actionBarLayout;
         r14 = new org.telegram.ui.SettingsActivity;
         r14.<init>();
@@ -3980,22 +3980,22 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r18 = 0;
         r13.presentFragment(r14, r15, r16, r17, r18);
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x1083;
-    L_0x1072:
+        if (r0 == 0) goto L_0x1087;
+    L_0x1076:
         r0 = r2.actionBarLayout;
         r0.showLastFragment();
         r0 = r2.rightActionBarLayout;
         r0.showLastFragment();
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r3, r3);
-        goto L_0x0ff5;
-    L_0x1083:
+        goto L_0x0ff9;
+    L_0x1087:
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r12, r3);
-        goto L_0x0ff5;
-    L_0x108a:
-        if (r11 == 0) goto L_0x10c2;
-    L_0x108c:
+        goto L_0x0ff9;
+    L_0x108e:
+        if (r11 == 0) goto L_0x10c6;
+    L_0x1090:
         r0 = new android.os.Bundle;
         r0.<init>();
         r4 = "destroyAfterSelect";
@@ -4009,35 +4009,35 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r10 = 0;
         r5.presentFragment(r6, r7, r8, r9, r10);
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x10bb;
-    L_0x10aa:
+        if (r0 == 0) goto L_0x10bf;
+    L_0x10ae:
         r0 = r2.actionBarLayout;
         r0.showLastFragment();
         r0 = r2.rightActionBarLayout;
         r0.showLastFragment();
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r3, r3);
-        goto L_0x0ff5;
-    L_0x10bb:
+        goto L_0x0ff9;
+    L_0x10bf:
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r12, r3);
-        goto L_0x0ff5;
-    L_0x10c2:
+        goto L_0x0ff9;
+    L_0x10c6:
         r4 = 0;
-        goto L_0x11fd;
-    L_0x10c5:
+        goto L_0x1201;
+    L_0x10c9:
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 != 0) goto L_0x10d8;
-    L_0x10cb:
+        if (r0 != 0) goto L_0x10dc;
+    L_0x10cf:
         r0 = r6[r3];
         r0 = org.telegram.messenger.NotificationCenter.getInstance(r0);
         r4 = org.telegram.messenger.NotificationCenter.closeChats;
         r5 = new java.lang.Object[r3];
         r0.postNotificationName(r4, r5);
-    L_0x10d8:
-        r0 = (r20 > r30 ? 1 : (r20 == r30 ? 0 : -1));
-        if (r0 != 0) goto L_0x11ea;
     L_0x10dc:
+        r0 = (r20 > r30 ? 1 : (r20 == r30 ? 0 : -1));
+        if (r0 != 0) goto L_0x11ee;
+    L_0x10e0:
         r0 = new android.os.Bundle;
         r0.<init>();
         r4 = "onlySelect";
@@ -4048,73 +4048,73 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r4 = "allowSwitchAccount";
         r0.putBoolean(r4, r12);
         r4 = r2.contactsToSend;
-        if (r4 == 0) goto L_0x1118;
-    L_0x10f5:
+        if (r4 == 0) goto L_0x111c;
+    L_0x10f9:
         r4 = r4.size();
-        if (r4 == r12) goto L_0x1134;
-    L_0x10fb:
-        r4 = NUM; // 0x7f0e0991 float:1.8880005E38 double:1.0531633666E-314;
-        r5 = "SendContactTo";
+        if (r4 == r12) goto L_0x1138;
+    L_0x10ff:
+        r4 = NUM; // 0x7f0e09c1 float:1.8880102E38 double:1.0531633903E-314;
+        r5 = "SendContactToText";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertString";
         r0.putString(r5, r4);
-        r4 = NUM; // 0x7f0e0981 float:1.8879972E38 double:1.0531633587E-314;
-        r5 = "SendContactToGroup";
+        r4 = NUM; // 0x7f0e09aa float:1.8880055E38 double:1.053163379E-314;
+        r5 = "SendContactToGroupText";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertStringGroup";
         r0.putString(r5, r4);
-        goto L_0x1134;
-    L_0x1118:
-        r4 = NUM; // 0x7f0e0991 float:1.8880005E38 double:1.0531633666E-314;
-        r5 = "SendMessagesTo";
+        goto L_0x1138;
+    L_0x111c:
+        r4 = NUM; // 0x7f0e09c1 float:1.8880102E38 double:1.0531633903E-314;
+        r5 = "SendMessagesToText";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertString";
         r0.putString(r5, r4);
-        r4 = NUM; // 0x7f0e0992 float:1.8880007E38 double:1.053163367E-314;
-        r5 = "SendMessagesToGroup";
+        r4 = NUM; // 0x7f0e09c0 float:1.88801E38 double:1.05316339E-314;
+        r5 = "SendMessagesToGroupText";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertStringGroup";
         r0.putString(r5, r4);
-    L_0x1134:
+    L_0x1138:
         r7 = new org.telegram.ui.DialogsActivity;
         r7.<init>(r0);
         r7.setDelegate(r2);
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x115e;
-    L_0x1142:
+        if (r0 == 0) goto L_0x1162;
+    L_0x1146:
         r0 = r2.layersActionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.size();
-        if (r0 <= 0) goto L_0x117b;
-    L_0x114c:
+        if (r0 <= 0) goto L_0x117f;
+    L_0x1150:
         r0 = r2.layersActionBarLayout;
         r0 = r0.fragmentsStack;
         r4 = r0.size();
         r4 = r4 - r12;
         r0 = r0.get(r4);
         r0 = r0 instanceof org.telegram.ui.DialogsActivity;
-        if (r0 == 0) goto L_0x117b;
-    L_0x115d:
-        goto L_0x1179;
-    L_0x115e:
+        if (r0 == 0) goto L_0x117f;
+    L_0x1161:
+        goto L_0x117d;
+    L_0x1162:
         r0 = r2.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.size();
-        if (r0 <= r12) goto L_0x117b;
-    L_0x1168:
+        if (r0 <= r12) goto L_0x117f;
+    L_0x116c:
         r0 = r2.actionBarLayout;
         r0 = r0.fragmentsStack;
         r4 = r0.size();
         r4 = r4 - r12;
         r0 = r0.get(r4);
         r0 = r0 instanceof org.telegram.ui.DialogsActivity;
-        if (r0 == 0) goto L_0x117b;
-    L_0x1179:
+        if (r0 == 0) goto L_0x117f;
+    L_0x117d:
         r0 = 1;
-        goto L_0x117c;
-    L_0x117b:
+        goto L_0x1180;
+    L_0x117f:
         r0 = 0;
-    L_0x117c:
+    L_0x1180:
         r8 = r0;
         r6 = r2.actionBarLayout;
         r9 = 1;
@@ -4122,97 +4122,97 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r11 = 0;
         r6.presentFragment(r7, r8, r9, r10, r11);
         r0 = org.telegram.ui.SecretMediaViewer.hasInstance();
-        if (r0 == 0) goto L_0x119d;
-    L_0x118b:
+        if (r0 == 0) goto L_0x11a1;
+    L_0x118f:
         r0 = org.telegram.ui.SecretMediaViewer.getInstance();
         r0 = r0.isVisible();
-        if (r0 == 0) goto L_0x119d;
-    L_0x1195:
+        if (r0 == 0) goto L_0x11a1;
+    L_0x1199:
         r0 = org.telegram.ui.SecretMediaViewer.getInstance();
         r0.closePhoto(r3, r3);
-        goto L_0x11cc;
-    L_0x119d:
+        goto L_0x11d0;
+    L_0x11a1:
         r0 = org.telegram.ui.PhotoViewer.hasInstance();
-        if (r0 == 0) goto L_0x11b5;
-    L_0x11a3:
+        if (r0 == 0) goto L_0x11b9;
+    L_0x11a7:
         r0 = org.telegram.ui.PhotoViewer.getInstance();
         r0 = r0.isVisible();
-        if (r0 == 0) goto L_0x11b5;
-    L_0x11ad:
+        if (r0 == 0) goto L_0x11b9;
+    L_0x11b1:
         r0 = org.telegram.ui.PhotoViewer.getInstance();
         r0.closePhoto(r3, r12);
-        goto L_0x11cc;
-    L_0x11b5:
+        goto L_0x11d0;
+    L_0x11b9:
         r0 = org.telegram.ui.ArticleViewer.hasInstance();
-        if (r0 == 0) goto L_0x11cc;
-    L_0x11bb:
+        if (r0 == 0) goto L_0x11d0;
+    L_0x11bf:
         r0 = org.telegram.ui.ArticleViewer.getInstance();
         r0 = r0.isVisible();
-        if (r0 == 0) goto L_0x11cc;
-    L_0x11c5:
+        if (r0 == 0) goto L_0x11d0;
+    L_0x11c9:
         r0 = org.telegram.ui.ArticleViewer.getInstance();
         r0.close(r3, r12);
-    L_0x11cc:
+    L_0x11d0:
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r3, r3);
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x11e3;
-    L_0x11d7:
+        if (r0 == 0) goto L_0x11e7;
+    L_0x11db:
         r0 = r2.actionBarLayout;
         r0.showLastFragment();
         r0 = r2.rightActionBarLayout;
         r0.showLastFragment();
-        goto L_0x0ff5;
-    L_0x11e3:
+        goto L_0x0ff9;
+    L_0x11e7:
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r12, r3);
-        goto L_0x0ff5;
-    L_0x11ea:
+        goto L_0x0ff9;
+    L_0x11ee:
         r0 = new java.util.ArrayList;
         r0.<init>();
         r4 = java.lang.Long.valueOf(r20);
         r0.add(r4);
         r4 = 0;
         r2.didSelectDialogs(r4, r0, r4, r3);
-        goto L_0x11fd;
-    L_0x11fb:
+        goto L_0x1201;
+    L_0x11ff:
         r4 = 0;
         r12 = 1;
-    L_0x11fd:
+    L_0x1201:
         r0 = r47;
-    L_0x11ff:
+    L_0x1203:
         r13 = 0;
-    L_0x1200:
-        if (r13 != 0) goto L_0x129e;
-    L_0x1202:
-        if (r0 != 0) goto L_0x129e;
     L_0x1204:
+        if (r13 != 0) goto L_0x12a2;
+    L_0x1206:
+        if (r0 != 0) goto L_0x12a2;
+    L_0x1208:
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x124f;
-    L_0x120a:
+        if (r0 == 0) goto L_0x1253;
+    L_0x120e:
         r0 = r2.currentAccount;
         r0 = org.telegram.messenger.UserConfig.getInstance(r0);
         r0 = r0.isClientActivated();
-        if (r0 != 0) goto L_0x1230;
-    L_0x1216:
+        if (r0 != 0) goto L_0x1234;
+    L_0x121a:
         r0 = r2.layersActionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x1289;
-    L_0x1220:
+        if (r0 == 0) goto L_0x128d;
+    L_0x1224:
         r0 = r2.layersActionBarLayout;
         r5 = new org.telegram.ui.LoginActivity;
         r5.<init>();
         r0.addFragmentToStack(r5);
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r3, r3);
-        goto L_0x1289;
-    L_0x1230:
+        goto L_0x128d;
+    L_0x1234:
         r0 = r2.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x1289;
-    L_0x123a:
+        if (r0 == 0) goto L_0x128d;
+    L_0x123e:
         r0 = new org.telegram.ui.DialogsActivity;
         r0.<init>(r4);
         r5 = r2.sideMenu;
@@ -4221,26 +4221,26 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5.addFragmentToStack(r0);
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r12, r3);
-        goto L_0x1289;
-    L_0x124f:
+        goto L_0x128d;
+    L_0x1253:
         r0 = r2.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x1289;
-    L_0x1259:
+        if (r0 == 0) goto L_0x128d;
+    L_0x125d:
         r0 = r2.currentAccount;
         r0 = org.telegram.messenger.UserConfig.getInstance(r0);
         r0 = r0.isClientActivated();
-        if (r0 != 0) goto L_0x1275;
-    L_0x1265:
+        if (r0 != 0) goto L_0x1279;
+    L_0x1269:
         r0 = r2.actionBarLayout;
         r5 = new org.telegram.ui.LoginActivity;
         r5.<init>();
         r0.addFragmentToStack(r5);
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r3, r3);
-        goto L_0x1289;
-    L_0x1275:
+        goto L_0x128d;
+    L_0x1279:
         r0 = new org.telegram.ui.DialogsActivity;
         r0.<init>(r4);
         r5 = r2.sideMenu;
@@ -4249,17 +4249,17 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5.addFragmentToStack(r0);
         r0 = r2.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r12, r3);
-    L_0x1289:
+    L_0x128d:
         r0 = r2.actionBarLayout;
         r0.showLastFragment();
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x129e;
-    L_0x1294:
+        if (r0 == 0) goto L_0x12a2;
+    L_0x1298:
         r0 = r2.layersActionBarLayout;
         r0.showLastFragment();
         r0 = r2.rightActionBarLayout;
         r0.showLastFragment();
-    L_0x129e:
+    L_0x12a2:
         r1.setAction(r4);
         return r13;
         */
@@ -4356,18 +4356,18 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x007b:
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r0.<init>(r11);
-        r1 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r1 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r2 = "AppName";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0730 float:1.887877E38 double:1.0531630657E-314;
+        r1 = NUM; // 0x7f0e0753 float:1.887884E38 double:1.053163083E-314;
         r2 = new java.lang.Object[r3];
         r2[r13] = r35;
         r3 = "OtherLoginCode";
         r1 = org.telegram.messenger.LocaleController.formatString(r3, r1, r2);
         r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r1 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r2 = "OK";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setPositiveButton(r1, r12);
@@ -4759,13 +4759,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5 = "cantSendToChannels";
         r4.putBoolean(r5, r10);
         r4.putInt(r7, r10);
-        r5 = NUM; // 0x7f0e0984 float:1.8879978E38 double:1.05316336E-314;
-        r7 = "SendGameTo";
+        r5 = NUM; // 0x7f0e09b1 float:1.888007E38 double:1.0531633824E-314;
+        r7 = "SendGameToText";
         r5 = org.telegram.messenger.LocaleController.getString(r7, r5);
         r7 = "selectAlertString";
         r4.putString(r7, r5);
-        r5 = NUM; // 0x7f0e0985 float:1.887998E38 double:1.0531633607E-314;
-        r7 = "SendGameToGroup";
+        r5 = NUM; // 0x7f0e09b0 float:1.8880068E38 double:1.053163382E-314;
+        r7 = "SendGameToGroupText";
         r5 = org.telegram.messenger.LocaleController.getString(r7, r5);
         r7 = "selectAlertStringGroup";
         r4.putString(r7, r5);
@@ -4902,7 +4902,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5[r6] = r8;
         r6 = "%1$s";
         r5[r10] = r6;
-        r6 = "AddToTheGroupTitle";
+        r6 = "AddToTheGroupAlertText";
         r5 = org.telegram.messenger.LocaleController.formatString(r6, r7, r5);
         r6 = "addToGroupAlertString";
         r0.putString(r6, r5);
@@ -4915,7 +4915,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x026c;
     L_0x0197:
         r0 = "BotCantJoinGroups";
-        r2 = NUM; // 0x7f0e01cf float:1.8875977E38 double:1.0531623854E-314;
+        r2 = NUM; // 0x7f0e01d8 float:1.8875995E38 double:1.05316239E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x01a8 }
         r0 = android.widget.Toast.makeText(r11, r0, r6);	 Catch:{ Exception -> 0x01a8 }
         r0.show();	 Catch:{ Exception -> 0x01a8 }
@@ -5016,7 +5016,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x026c;
     L_0x0257:
         r0 = "NoUsernameFound";
-        r2 = NUM; // 0x7f0e067a float:1.88784E38 double:1.053162976E-314;
+        r2 = NUM; // 0x7f0e069d float:1.8878471E38 double:1.053162993E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x0268 }
         r0 = android.widget.Toast.makeText(r11, r0, r6);	 Catch:{ Exception -> 0x0268 }
         r0.show();	 Catch:{ Exception -> 0x0268 }
@@ -5171,7 +5171,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x00a8:
         r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r11.<init>(r8);
-        r12 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r12 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r13 = "AppName";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r11.setTitle(r12);
@@ -5180,18 +5180,18 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r10 = r10.startsWith(r12);
         if (r10 == 0) goto L_0x00d0;
     L_0x00c3:
-        r10 = NUM; // 0x7f0e0484 float:1.8877382E38 double:1.053162728E-314;
+        r10 = NUM; // 0x7f0e049c float:1.887743E38 double:1.0531627396E-314;
         r12 = "FloodWait";
         r10 = org.telegram.messenger.LocaleController.getString(r12, r10);
         r11.setMessage(r10);
         goto L_0x00dc;
     L_0x00d0:
-        r10 = NUM; // 0x7f0e055e float:1.8877824E38 double:1.0531628355E-314;
+        r10 = NUM; // 0x7f0e0579 float:1.887788E38 double:1.053162849E-314;
         r12 = "JoinToGroupErrorNotExist";
         r10 = org.telegram.messenger.LocaleController.getString(r12, r10);
         r11.setMessage(r10);
     L_0x00dc:
-        r10 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r10 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r12 = "OK";
         r10 = org.telegram.messenger.LocaleController.getString(r12, r10);
         r11.setPositiveButton(r10, r9);
@@ -5461,12 +5461,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r4 = move-exception;
         org.telegram.messenger.FileLog.e(r4);
     L_0x0041:
-        r4 = NUM; // 0x7f0e0a66 float:1.8880437E38 double:1.053163472E-314;
+        r4 = NUM; // 0x7f0e0aa2 float:1.8880558E38 double:1.0531635015E-314;
         r5 = "Theme";
         if (r3 != r1) goto L_0x005d;
     L_0x0048:
         r3 = org.telegram.messenger.LocaleController.getString(r5, r4);
-        r4 = NUM; // 0x7f0e0a79 float:1.8880475E38 double:1.053163481E-314;
+        r4 = NUM; // 0x7f0e0ab5 float:1.8880597E38 double:1.053163511E-314;
         r5 = "ThemeNotSupported";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r2, r3, r4);
@@ -5474,7 +5474,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x0071;
     L_0x005d:
         r3 = org.telegram.messenger.LocaleController.getString(r5, r4);
-        r4 = NUM; // 0x7f0e0a78 float:1.8880473E38 double:1.0531634807E-314;
+        r4 = NUM; // 0x7f0e0ab4 float:1.8880595E38 double:1.0531635104E-314;
         r5 = "ThemeNotFound";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r2, r3, r4);
@@ -5625,120 +5625,155 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     public void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList<Long> arrayList, CharSequence charSequence, boolean z) {
         BaseFragment baseFragment = dialogsActivity;
-        long longValue = ((Long) arrayList.get(0)).longValue();
-        int i = (int) longValue;
-        int i2 = (int) (longValue >> 32);
-        ArrayList arrayList2 = this.contactsToSend;
-        int size = arrayList2 != null ? arrayList2.size() + 0 : 0;
+        ArrayList<Long> arrayList2 = arrayList;
+        ArrayList arrayList3 = this.contactsToSend;
+        int i = 0;
+        int size = arrayList3 != null ? arrayList3.size() + 0 : 0;
         if (this.videoPath != null) {
             size++;
         }
-        ArrayList arrayList3 = this.photoPathsArray;
-        if (arrayList3 != null) {
-            size += arrayList3.size();
+        ArrayList arrayList4 = this.photoPathsArray;
+        if (arrayList4 != null) {
+            size += arrayList4.size();
         }
-        arrayList3 = this.documentsPathsArray;
-        if (arrayList3 != null) {
-            size += arrayList3.size();
+        arrayList4 = this.documentsPathsArray;
+        if (arrayList4 != null) {
+            size += arrayList4.size();
         }
-        arrayList3 = this.documentsUrisArray;
-        if (arrayList3 != null) {
-            size += arrayList3.size();
+        arrayList4 = this.documentsUrisArray;
+        if (arrayList4 != null) {
+            size += arrayList4.size();
         }
         if (this.videoPath == null && this.photoPathsArray == null && this.documentsPathsArray == null && this.documentsUrisArray == null && this.sendingText != null) {
             size++;
         }
-        if (!AlertsCreator.checkSlowMode(this, this.currentAccount, longValue, size > 1)) {
-            Bundle bundle = new Bundle();
-            int currentAccount = baseFragment != null ? dialogsActivity.getCurrentAccount() : this.currentAccount;
-            bundle.putBoolean("scrollToTopOnResume", true);
-            if (!AndroidUtilities.isTablet()) {
-                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+        int i2 = 0;
+        while (true) {
+            boolean z2 = true;
+            long longValue;
+            if (i2 < arrayList.size()) {
+                longValue = ((Long) arrayList2.get(i2)).longValue();
+                int i3 = this.currentAccount;
+                if (size <= 1) {
+                    z2 = false;
+                }
+                if (!AlertsCreator.checkSlowMode(this, i3, longValue, z2)) {
+                    i2++;
+                } else {
+                    return;
+                }
             }
-            if (i == 0) {
-                bundle.putInt("enc_id", i2);
-            } else if (i > 0) {
-                bundle.putInt("user_id", i);
-            } else if (i < 0) {
-                bundle.putInt("chat_id", -i);
+            BaseFragment chatActivity;
+            size = baseFragment != null ? dialogsActivity.getCurrentAccount() : this.currentAccount;
+            if (arrayList.size() <= 1) {
+                longValue = ((Long) arrayList2.get(0)).longValue();
+                i2 = (int) longValue;
+                int i4 = (int) (longValue >> 32);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("scrollToTopOnResume", true);
+                if (!AndroidUtilities.isTablet()) {
+                    NotificationCenter.getInstance(size).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                }
+                if (i2 == 0) {
+                    bundle.putInt("enc_id", i4);
+                } else if (i2 > 0) {
+                    bundle.putInt("user_id", i2);
+                } else if (i2 < 0) {
+                    bundle.putInt("chat_id", -i2);
+                }
+                if (MessagesController.getInstance(size).checkCanOpenChat(bundle, baseFragment)) {
+                    chatActivity = new ChatActivity(bundle);
+                } else {
+                    return;
+                }
             }
-            if (MessagesController.getInstance(currentAccount).checkCanOpenChat(bundle, baseFragment)) {
-                ArrayList arrayList4;
-                BaseFragment chatActivity = new ChatActivity(bundle);
-                ArrayList arrayList5 = this.contactsToSend;
-                if (arrayList5 == null || arrayList5.size() != 1) {
-                    int i3;
+            chatActivity = null;
+            ArrayList arrayList5 = this.contactsToSend;
+            if (arrayList5 == null || arrayList5.size() != 1) {
+                int i5 = 0;
+                while (i5 < arrayList.size()) {
+                    String str;
+                    ArrayList arrayList6;
+                    long longValue2 = ((Long) arrayList2.get(i5)).longValue();
                     AccountInstance instance = AccountInstance.getInstance(UserConfig.selectedAccount);
-                    ActionBarLayout actionBarLayout = this.actionBarLayout;
-                    boolean z2 = baseFragment != null;
-                    boolean z3 = baseFragment == null;
-                    arrayList4 = null;
-                    actionBarLayout.presentFragment(chatActivity, z2, z3, true, false);
-                    String str = this.videoPath;
-                    if (str != null) {
-                        chatActivity.openVideoEditor(str, this.sendingText);
-                        this.sendingText = arrayList4;
+                    if (chatActivity != null) {
+                        this.actionBarLayout.presentFragment(chatActivity, baseFragment != null, baseFragment == null, true, false);
+                        str = this.videoPath;
+                        if (str != null) {
+                            chatActivity.openVideoEditor(str, this.sendingText);
+                            this.sendingText = null;
+                        }
                     }
                     if (this.photoPathsArray != null) {
                         str = this.sendingText;
                         if (str != null && str.length() <= 1024 && this.photoPathsArray.size() == 1) {
-                            ((SendingMediaInfo) this.photoPathsArray.get(0)).caption = this.sendingText;
-                            this.sendingText = arrayList4;
+                            ((SendingMediaInfo) this.photoPathsArray.get(i)).caption = this.sendingText;
+                            this.sendingText = null;
                         }
-                        i3 = 1;
-                        SendMessagesHelper.prepareSendingMedia(instance, this.photoPathsArray, longValue, null, null, false, false, null, true, 0);
+                        i = 1024;
+                        SendMessagesHelper.prepareSendingMedia(instance, this.photoPathsArray, longValue2, null, null, false, false, null, true, 0);
                     } else {
-                        i3 = 1;
+                        i = 1024;
                     }
                     if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
                         String str2;
                         str = this.sendingText;
-                        if (str != null && str.length() <= 1024) {
-                            arrayList2 = this.documentsPathsArray;
-                            size = arrayList2 != null ? arrayList2.size() : 0;
-                            ArrayList arrayList6 = this.documentsUrisArray;
-                            if (size + (arrayList6 != null ? arrayList6.size() : 0) == i3) {
-                                str = this.sendingText;
-                                this.sendingText = arrayList4;
-                                str2 = str;
-                                SendMessagesHelper.prepareSendingDocuments(instance, this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, str2, this.documentsMimeType, longValue, null, null, null, true, 0);
+                        if (str != null && str.length() <= r4) {
+                            arrayList6 = this.documentsPathsArray;
+                            i = arrayList6 != null ? arrayList6.size() : 0;
+                            ArrayList arrayList7 = this.documentsUrisArray;
+                            if (i + (arrayList7 != null ? arrayList7.size() : 0) == 1) {
+                                String str3 = this.sendingText;
+                                this.sendingText = null;
+                                str2 = str3;
+                                SendMessagesHelper.prepareSendingDocuments(instance, this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, str2, this.documentsMimeType, longValue2, null, null, null, true, 0);
                             }
                         }
-                        str2 = arrayList4;
-                        SendMessagesHelper.prepareSendingDocuments(instance, this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, str2, this.documentsMimeType, longValue, null, null, null, true, 0);
+                        str2 = null;
+                        SendMessagesHelper.prepareSendingDocuments(instance, this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, str2, this.documentsMimeType, longValue2, null, null, null, true, 0);
                     }
-                    String str3 = this.sendingText;
-                    if (str3 != null) {
-                        SendMessagesHelper.prepareSendingText(instance, str3, longValue, true, 0);
+                    String str4 = this.sendingText;
+                    if (str4 != null) {
+                        SendMessagesHelper.prepareSendingText(instance, str4, longValue2, true, 0);
                     }
-                    arrayList5 = this.contactsToSend;
-                    if (!(arrayList5 == null || arrayList5.isEmpty())) {
+                    arrayList6 = this.contactsToSend;
+                    if (!(arrayList6 == null || arrayList6.isEmpty())) {
                         for (i = 0; i < this.contactsToSend.size(); i++) {
-                            SendMessagesHelper.getInstance(currentAccount).sendMessage((User) this.contactsToSend.get(i), longValue, null, null, null, true, 0);
+                            SendMessagesHelper.getInstance(size).sendMessage((User) this.contactsToSend.get(i), longValue2, null, null, null, true, 0);
                         }
                     }
-                } else {
-                    if (this.contactsToSend.size() == 1) {
-                        BaseFragment phonebookShareActivity = new PhonebookShareActivity(null, this.contactsToSendUri, null, null);
-                        phonebookShareActivity.setDelegate(new -$$Lambda$LaunchActivity$uwzzO2_girAplfyFq43fOYYcOBs(this, chatActivity, currentAccount, longValue));
-                        this.actionBarLayout.presentFragment(phonebookShareActivity, baseFragment != null, baseFragment == null, true, false);
+                    if (!TextUtils.isEmpty(charSequence)) {
+                        SendMessagesHelper.prepareSendingText(instance, charSequence.toString(), longValue2, true, 0);
                     }
-                    arrayList4 = null;
+                    i5++;
+                    i = 0;
                 }
-                this.photoPathsArray = arrayList4;
-                this.videoPath = arrayList4;
-                this.sendingText = arrayList4;
-                this.documentsPathsArray = arrayList4;
-                this.documentsOriginalPathsArray = arrayList4;
-                this.contactsToSend = arrayList4;
-                this.contactsToSendUri = arrayList4;
+            } else {
+                PhonebookShareActivity phonebookShareActivity = new PhonebookShareActivity(null, this.contactsToSendUri, null, null);
+                phonebookShareActivity.setDelegate(new -$$Lambda$LaunchActivity$A1V1jKdUjCR72Pzt5rp6DOhh7GI(this, chatActivity, arrayList2, size));
+                this.actionBarLayout.presentFragment(phonebookShareActivity, baseFragment != null, baseFragment == null, true, false);
             }
+            if (baseFragment != null && chatActivity == null) {
+                dialogsActivity.finishFragment();
+            }
+            this.photoPathsArray = null;
+            this.videoPath = null;
+            this.sendingText = null;
+            this.documentsPathsArray = null;
+            this.documentsOriginalPathsArray = null;
+            this.contactsToSend = null;
+            this.contactsToSendUri = null;
+            return;
         }
     }
 
-    public /* synthetic */ void lambda$didSelectDialogs$40$LaunchActivity(ChatActivity chatActivity, int i, long j, User user, boolean z, int i2) {
-        this.actionBarLayout.presentFragment(chatActivity, true, false, true, false);
-        SendMessagesHelper.getInstance(i).sendMessage(user, j, null, null, null, z, i2);
+    public /* synthetic */ void lambda$didSelectDialogs$40$LaunchActivity(ChatActivity chatActivity, ArrayList arrayList, int i, User user, boolean z, int i2) {
+        if (chatActivity != null) {
+            this.actionBarLayout.presentFragment(chatActivity, true, false, true, false);
+        }
+        for (int i3 = 0; i3 < arrayList.size(); i3++) {
+            SendMessagesHelper.getInstance(i).sendMessage(user, ((Long) arrayList.get(i3)).longValue(), null, null, null, z, i2);
+        }
     }
 
     private void onFinish() {
@@ -5768,6 +5803,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.closeOtherAppActivities);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetPasscode);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.notificationsCountUpdated);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.screenStateChanged);
         }
     }
 
@@ -5925,7 +5961,6 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     public void onPause() {
         super.onPause();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(4096));
-        SharedConfig.lastAppPauseTime = System.currentTimeMillis();
         ApplicationLoader.mainInterfacePaused = true;
         Utilities.stageQueue.postRunnable(-$$Lambda$LaunchActivity$FosST-41dau99zs7twbH8VdqwTc.INSTANCE);
         onPasscodePause();
@@ -6327,6 +6362,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     if (str4.equals(this.loadingThemeFileName) || str4.equals(this.loadingThemeWallpaperName)) {
                         onThemeLoadFinish();
                     }
+                } else if (i == NotificationCenter.screenStateChanged && !ApplicationLoader.mainInterfacePaused) {
+                    if (ApplicationLoader.isScreenOn) {
+                        onPasscodeResume();
+                    } else {
+                        onPasscodePause();
+                    }
                 }
             }
         }
@@ -6512,7 +6553,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder;	 Catch:{ Exception -> 0x0115 }
         r7.<init>(r1);	 Catch:{ Exception -> 0x0115 }
         r8 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
-        r9 = NUM; // 0x7f0e02d2 float:1.8876502E38 double:1.0531625133E-314;
+        r9 = NUM; // 0x7f0e02de float:1.8876526E38 double:1.0531625193E-314;
         r8 = r1.getStringForLanguageAlert(r8, r2, r9);	 Catch:{ Exception -> 0x0115 }
         r7.setTitle(r8);	 Catch:{ Exception -> 0x0115 }
         r8 = r1.englishLocaleStrings;	 Catch:{ Exception -> 0x0115 }
@@ -6527,7 +6568,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8];	 Catch:{ Exception -> 0x0115 }
         r12 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
         r13 = "English";
-        r14 = NUM; // 0x7f0e03fa float:1.8877102E38 double:1.0531626596E-314;
+        r14 = NUM; // 0x7f0e0412 float:1.887715E38 double:1.0531626714E-314;
         r12 = r1.getStringForLanguageAlert(r12, r13, r14);	 Catch:{ Exception -> 0x0115 }
         if (r5 == 0) goto L_0x0056;
     L_0x0054:
@@ -6604,7 +6645,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r3 = new org.telegram.ui.Cells.LanguageCell;	 Catch:{ Exception -> 0x0115 }
         r3.<init>(r1, r6);	 Catch:{ Exception -> 0x0115 }
         r4 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
-        r5 = NUM; // 0x7f0e02d3 float:1.8876504E38 double:1.053162514E-314;
+        r5 = NUM; // 0x7f0e02df float:1.8876528E38 double:1.05316252E-314;
         r4 = r1.getStringForLanguageAlert(r4, r0, r5);	 Catch:{ Exception -> 0x0115 }
         r6 = r1.englishLocaleStrings;	 Catch:{ Exception -> 0x0115 }
         r0 = r1.getStringForLanguageAlert(r6, r0, r5);	 Catch:{ Exception -> 0x0115 }
@@ -6617,7 +6658,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2.addView(r3, r0);	 Catch:{ Exception -> 0x0115 }
         r7.setView(r2);	 Catch:{ Exception -> 0x0115 }
         r0 = "OK";
-        r2 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r2 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x0115 }
         r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$hPnomj29M7tV8r3dsaooSomOoSE;	 Catch:{ Exception -> 0x0115 }
         r2.<init>(r1, r10);	 Catch:{ Exception -> 0x0115 }

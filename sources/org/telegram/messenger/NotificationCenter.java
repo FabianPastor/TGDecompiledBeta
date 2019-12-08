@@ -64,7 +64,6 @@ public class NotificationCenter {
     public static final int fileNewChunkAvailable;
     public static final int filePreparingFailed;
     public static final int filePreparingStarted;
-    public static final int finishedWalletPreloading;
     public static final int folderBecomeEmpty;
     private static volatile NotificationCenter globalInstance = null;
     public static final int goingToPreviewTheme;
@@ -86,6 +85,7 @@ public class NotificationCenter {
     public static final int messagePlayingGoingToStop;
     public static final int messagePlayingPlayStateChanged;
     public static final int messagePlayingProgressDidChanged;
+    public static final int messagePlayingSpeedChanged;
     public static final int messageReceivedByAck;
     public static final int messageReceivedByServer;
     public static final int messageSendError;
@@ -131,6 +131,7 @@ public class NotificationCenter {
     public static final int replaceMessagesObjects;
     public static final int replyMessagesDidLoad;
     public static final int scheduledMessagesUpdated;
+    public static final int screenStateChanged;
     public static final int screenshotTook;
     public static final int sendingMessagesChanged;
     public static final int startAllHeavyOperations;
@@ -148,6 +149,7 @@ public class NotificationCenter {
     public static final int userInfoDidLoad;
     public static final int videoLoadingStateChanged;
     public static final int walletPendingTransactionsChanged;
+    public static final int walletSyncProgressChanged;
     public static final int wallpapersDidLoad;
     public static final int wallpapersNeedReload;
     public static final int wasUnableToFindCurrentLocation;
@@ -415,10 +417,10 @@ public class NotificationCenter {
         scheduledMessagesUpdated = i;
         i = totalEvents;
         totalEvents = i + 1;
-        finishedWalletPreloading = i;
+        walletPendingTransactionsChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
-        walletPendingTransactionsChanged = i;
+        walletSyncProgressChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoad = i;
@@ -608,6 +610,12 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         closeSearchByActiveAction = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        messagePlayingSpeedChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        screenStateChanged = i;
     }
 
     public static NotificationCenter getInstance(int i) {

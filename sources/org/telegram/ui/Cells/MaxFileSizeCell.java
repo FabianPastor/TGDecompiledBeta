@@ -15,6 +15,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SeekBarView;
+import org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate;
 
 public class MaxFileSizeCell extends FrameLayout {
     private long currentSize;
@@ -60,41 +61,44 @@ public class MaxFileSizeCell extends FrameLayout {
             }
         };
         this.seekBarView.setReportChanges(true);
-        this.seekBarView.setDelegate(new -$$Lambda$MaxFileSizeCell$cPUnEl5DY5tp-A3IQaD5cETcr3k(this));
-        addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 10.0f, 40.0f, 10.0f, 0.0f));
-    }
+        this.seekBarView.setDelegate(new SeekBarViewDelegate() {
+            public void onSeekBarPressed(boolean z) {
+            }
 
-    public /* synthetic */ void lambda$new$0$MaxFileSizeCell(float f) {
-        float f2;
-        float f3;
-        if (f <= 0.25f) {
-            f2 = (float) 512000;
-            f3 = 536576.0f;
-        } else {
-            f -= 0.25f;
-            if (f < 0.25f) {
-                f2 = (float) 1048576;
-                f3 = 9437184.0f;
-            } else {
-                f -= 0.25f;
+            public void onSeekBarDrag(boolean z, float f) {
+                float f2;
+                float f3;
                 if (f <= 0.25f) {
-                    f2 = (float) 10485760;
-                    f3 = 9.437184E7f;
+                    f2 = (float) 512000;
+                    f3 = 536576.0f;
                 } else {
                     f -= 0.25f;
-                    f2 = (float) NUM;
-                    f3 = 1.50575514E9f;
+                    if (f < 0.25f) {
+                        f2 = (float) 1048576;
+                        f3 = 9437184.0f;
+                    } else {
+                        f -= 0.25f;
+                        if (f <= 0.25f) {
+                            f2 = (float) 10485760;
+                            f3 = 9.437184E7f;
+                        } else {
+                            f -= 0.25f;
+                            f2 = (float) NUM;
+                            f3 = 1.50575514E9f;
+                        }
+                    }
                 }
+                int i = (int) (f2 + ((f / 0.25f) * f3));
+                TextView access$000 = MaxFileSizeCell.this.sizeTextView;
+                Object[] objArr = new Object[1];
+                long j = (long) i;
+                objArr[0] = AndroidUtilities.formatFileSize(j);
+                access$000.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, objArr));
+                MaxFileSizeCell.this.currentSize = j;
+                MaxFileSizeCell.this.didChangedSizeValue(i);
             }
-        }
-        int i = (int) (f2 + ((f / 0.25f) * f3));
-        TextView textView = this.sizeTextView;
-        Object[] objArr = new Object[1];
-        long j = (long) i;
-        objArr[0] = AndroidUtilities.formatFileSize(j);
-        textView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, objArr));
-        this.currentSize = j;
-        didChangedSizeValue(i);
+        });
+        addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 10.0f, 40.0f, 10.0f, 0.0f));
     }
 
     public void setText(String str) {

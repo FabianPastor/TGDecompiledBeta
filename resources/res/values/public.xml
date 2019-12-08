@@ -664,6 +664,7 @@
     <public type="drawable" name="msg_usersearch" id="NUM" />
     <public type="drawable" name="msg_views" id="NUM" />
     <public type="drawable" name="msg_warning" id="NUM" />
+    <public type="drawable" name="music_empty" id="NUM" />
     <public type="drawable" name="music_reverse" id="NUM" />
     <public type="drawable" name="myloc_on" id="NUM" />
     <public type="drawable" name="navigate" id="NUM" />
@@ -1005,6 +1006,7 @@
     <public type="id" name="icon" id="NUM" />
     <public type="id" name="icon_group" id="NUM" />
     <public type="id" name="icon_only" id="NUM" />
+    <public type="id" name="index_tag" id="NUM" />
     <public type="id" name="info" id="NUM" />
     <public type="id" name="input_email" id="NUM" />
     <public type="id" name="input_message" id="NUM" />
@@ -1160,8 +1162,10 @@
     <public type="raw" name="wallet_note" id="NUM" />
     <public type="raw" name="wallet_perfect" id="NUM" />
     <public type="raw" name="wallet_science" id="NUM" />
+    <public type="raw" name="wallet_sync" id="NUM" />
     <public type="raw" name="wallet_toobad" id="NUM" />
     <public type="string" name="ALongTimeAgo" id="NUM" />
+    <public type="string" name="Abort" id="NUM" />
     <public type="string" name="AbortEmail" id="NUM" />
     <public type="string" name="AbortPassword" id="NUM" />
     <public type="string" name="AccActionCancelDownload" id="NUM" />
@@ -1362,8 +1366,9 @@
     <public type="string" name="AddToMasks" id="NUM" />
     <public type="string" name="AddToStickers" id="NUM" />
     <public type="string" name="AddToTheGroup" id="NUM" />
+    <public type="string" name="AddToTheGroupAlertText" id="NUM" />
+    <public type="string" name="AddToTheGroupAlertTitle" id="NUM" />
     <public type="string" name="AddToTheGroupForwardCount" id="NUM" />
-    <public type="string" name="AddToTheGroupTitle" id="NUM" />
     <public type="string" name="AddedToFavorites" id="NUM" />
     <public type="string" name="AdminWillBeRemoved" id="NUM" />
     <public type="string" name="Agree" id="NUM" />
@@ -1436,6 +1441,7 @@
     <public type="string" name="AreYouSure" id="NUM" />
     <public type="string" name="AreYouSureBlockContact2" id="NUM" />
     <public type="string" name="AreYouSureClearDrafts" id="NUM" />
+    <public type="string" name="AreYouSureClearDraftsTitle" id="NUM" />
     <public type="string" name="AreYouSureClearHistory" id="NUM" />
     <public type="string" name="AreYouSureClearHistoryCacheFewChats" id="NUM" />
     <public type="string" name="AreYouSureClearHistoryChannel" id="NUM" />
@@ -1452,7 +1458,9 @@
     <public type="string" name="AreYouSureDeleteFewMessages" id="NUM" />
     <public type="string" name="AreYouSureDeleteFewMessagesMega" id="NUM" />
     <public type="string" name="AreYouSureDeleteGIF" id="NUM" />
+    <public type="string" name="AreYouSureDeleteGIFTitle" id="NUM" />
     <public type="string" name="AreYouSureDeletePhoto" id="NUM" />
+    <public type="string" name="AreYouSureDeletePhotoTitle" id="NUM" />
     <public type="string" name="AreYouSureDeleteSingleMessage" id="NUM" />
     <public type="string" name="AreYouSureDeleteSingleMessageMega" id="NUM" />
     <public type="string" name="AreYouSureDeleteThisChat" id="NUM" />
@@ -1461,11 +1469,14 @@
     <public type="string" name="AreYouSureDeleteThisChatWithSecretUser" id="NUM" />
     <public type="string" name="AreYouSureDeleteThisChatWithUser" id="NUM" />
     <public type="string" name="AreYouSureDeleteVideo" id="NUM" />
+    <public type="string" name="AreYouSureDeleteVideoTitle" id="NUM" />
     <public type="string" name="AreYouSureLogout" id="NUM" />
     <public type="string" name="AreYouSureRegistration" id="NUM" />
     <public type="string" name="AreYouSureSecretChat" id="NUM" />
     <public type="string" name="AreYouSureSecretChatTitle" id="NUM" />
+    <public type="string" name="AreYouSureSessionTitle" id="NUM" />
     <public type="string" name="AreYouSureSessions" id="NUM" />
+    <public type="string" name="AreYouSureSessionsTitle" id="NUM" />
     <public type="string" name="AreYouSureShareMyContactInfo" id="NUM" />
     <public type="string" name="AreYouSureShareMyContactInfoBot" id="NUM" />
     <public type="string" name="AreYouSureShareMyContactInfoUser" id="NUM" />
@@ -1671,6 +1682,7 @@
     <public type="string" name="CancelAccountReset" id="NUM" />
     <public type="string" name="CancelAccountResetInfo" id="NUM" />
     <public type="string" name="CancelEmailQuestion" id="NUM" />
+    <public type="string" name="CancelEmailQuestionTitle" id="NUM" />
     <public type="string" name="CancelLinkExpired" id="NUM" />
     <public type="string" name="CancelLinkSuccess" id="NUM" />
     <public type="string" name="CancelPasswordQuestion" id="NUM" />
@@ -1771,6 +1783,7 @@
     <public type="string" name="ChannelPrivateLinkHelp" id="NUM" />
     <public type="string" name="ChannelPublic" id="NUM" />
     <public type="string" name="ChannelPublicEmptyUsername" id="NUM" />
+    <public type="string" name="ChannelPublicEmptyUsernameTitle" id="NUM" />
     <public type="string" name="ChannelPublicInfo" id="NUM" />
     <public type="string" name="ChannelRemoveUser" id="NUM" />
     <public type="string" name="ChannelRemoveUserAdmin" id="NUM" />
@@ -1785,6 +1798,7 @@
     <public type="string" name="ChannelSubscribers" id="NUM" />
     <public type="string" name="ChannelTooMuch" id="NUM" />
     <public type="string" name="ChannelTooMuchJoin" id="NUM" />
+    <public type="string" name="ChannelTooMuchTitle" id="NUM" />
     <public type="string" name="ChannelType" id="NUM" />
     <public type="string" name="ChannelTypeHeader" id="NUM" />
     <public type="string" name="ChannelUnmute" id="NUM" />
@@ -1874,7 +1888,6 @@
     <public type="string" name="ChooseFromGallery" id="NUM" />
     <public type="string" name="ChooseFromSearch" id="NUM" />
     <public type="string" name="ChooseFromYourStickers" id="NUM" />
-    <public type="string" name="ChooseMapPreviewProvider" id="NUM" />
     <public type="string" name="ChoosePhoto" id="NUM" />
     <public type="string" name="ChooseStickerSet" id="NUM" />
     <public type="string" name="ChooseStickerSetMy" id="NUM" />
@@ -1931,6 +1944,7 @@
     <public type="string" name="ContactJobTitle" id="NUM" />
     <public type="string" name="ContactJoined" id="NUM" />
     <public type="string" name="ContactNotRegistered" id="NUM" />
+    <public type="string" name="ContactNotRegisteredTitle" id="NUM" />
     <public type="string" name="ContactShare" id="NUM" />
     <public type="string" name="ContactSupport" id="NUM" />
     <public type="string" name="ContactSupportInfo" id="NUM" />
@@ -2025,6 +2039,12 @@
     <public type="string" name="DeleteAndExit" id="NUM" />
     <public type="string" name="DeleteAndExitButton" id="NUM" />
     <public type="string" name="DeleteAndStop" id="NUM" />
+    <public type="string" name="DeleteBackground_few" id="NUM" />
+    <public type="string" name="DeleteBackground_many" id="NUM" />
+    <public type="string" name="DeleteBackground_one" id="NUM" />
+    <public type="string" name="DeleteBackground_other" id="NUM" />
+    <public type="string" name="DeleteBackground_two" id="NUM" />
+    <public type="string" name="DeleteBackground_zero" id="NUM" />
     <public type="string" name="DeleteBanUser" id="NUM" />
     <public type="string" name="DeleteChat" id="NUM" />
     <public type="string" name="DeleteChatBackgroundsAlert" id="NUM" />
@@ -2035,7 +2055,8 @@
     <public type="string" name="DeleteForUser" id="NUM" />
     <public type="string" name="DeleteFromFavorites" id="NUM" />
     <public type="string" name="DeleteGif" id="NUM" />
-    <public type="string" name="DeleteLocalization" id="NUM" />
+    <public type="string" name="DeleteLocalizationText" id="NUM" />
+    <public type="string" name="DeleteLocalizationTitle" id="NUM" />
     <public type="string" name="DeleteMega" id="NUM" />
     <public type="string" name="DeleteMegaMenu" id="NUM" />
     <public type="string" name="DeleteMessagesOption" id="NUM" />
@@ -2049,6 +2070,7 @@
     <public type="string" name="DeleteReportSpam" id="NUM" />
     <public type="string" name="DeleteSingleMessagesTitle" id="NUM" />
     <public type="string" name="DeleteThemeAlert" id="NUM" />
+    <public type="string" name="DeleteThemeTitle" id="NUM" />
     <public type="string" name="DeleteThisChat" id="NUM" />
     <public type="string" name="DeleteThisGroup" id="NUM" />
     <public type="string" name="DescriptionInfo" id="NUM" />
@@ -2064,6 +2086,7 @@
     <public type="string" name="Digits_zero" id="NUM" />
     <public type="string" name="DirectShare" id="NUM" />
     <public type="string" name="DirectShareInfo" id="NUM" />
+    <public type="string" name="Disable" id="NUM" />
     <public type="string" name="DisappearingGif" id="NUM" />
     <public type="string" name="DisappearingPhoto" id="NUM" />
     <public type="string" name="DisappearingVideo" id="NUM" />
@@ -2073,6 +2096,7 @@
     <public type="string" name="DiscardVoiceMessageAction" id="NUM" />
     <public type="string" name="DiscardVoiceMessageDescription" id="NUM" />
     <public type="string" name="DiscardVoiceMessageTitle" id="NUM" />
+    <public type="string" name="Disconnect" id="NUM" />
     <public type="string" name="DiscussChannel" id="NUM" />
     <public type="string" name="Discussion" id="NUM" />
     <public type="string" name="DiscussionChannelGroupSetHelp" id="NUM" />
@@ -2422,7 +2446,8 @@
     <public type="string" name="GlobalSearch" id="NUM" />
     <public type="string" name="GlobalSendMessageRestricted" id="NUM" />
     <public type="string" name="GotAQuestion" id="NUM" />
-    <public type="string" name="GpsDisabledAlert" id="NUM" />
+    <public type="string" name="GpsDisabledAlertText" id="NUM" />
+    <public type="string" name="GpsDisabledAlertTitle" id="NUM" />
     <public type="string" name="Grain" id="NUM" />
     <public type="string" name="GramWallet" id="NUM" />
     <public type="string" name="GramWalletInfo" id="NUM" />
@@ -2465,6 +2490,7 @@
     <public type="string" name="Hashtags" id="NUM" />
     <public type="string" name="HidAccount" id="NUM" />
     <public type="string" name="HiddenName" id="NUM" />
+    <public type="string" name="HideAboveTheList" id="NUM" />
     <public type="string" name="HideOnTop" id="NUM" />
     <public type="string" name="Highlights" id="NUM" />
     <public type="string" name="HistoryCleared" id="NUM" />
@@ -2604,7 +2630,8 @@
     <public type="string" name="LocalAudioCache" id="NUM" />
     <public type="string" name="LocalCache" id="NUM" />
     <public type="string" name="LocalDatabase" id="NUM" />
-    <public type="string" name="LocalDatabaseClear" id="NUM" />
+    <public type="string" name="LocalDatabaseClearText" id="NUM" />
+    <public type="string" name="LocalDatabaseClearTextTitle" id="NUM" />
     <public type="string" name="LocalDatabaseInfo" id="NUM" />
     <public type="string" name="LocalDocumentCache" id="NUM" />
     <public type="string" name="LocalGifCache" id="NUM" />
@@ -2638,8 +2665,10 @@
     <public type="string" name="MapPreviewProviderGoogle" id="NUM" />
     <public type="string" name="MapPreviewProviderNobody" id="NUM" />
     <public type="string" name="MapPreviewProviderTelegram" id="NUM" />
+    <public type="string" name="MapPreviewProviderTitle" id="NUM" />
     <public type="string" name="MapPreviewProviderYandex" id="NUM" />
     <public type="string" name="March" id="NUM" />
+    <public type="string" name="MarkAllAsRead" id="NUM" />
     <public type="string" name="MarkAsRead" id="NUM" />
     <public type="string" name="MarkAsUnread" id="NUM" />
     <public type="string" name="Masks" id="NUM" />
@@ -2775,7 +2804,10 @@
     <public type="string" name="NewThemePreviewReply" id="NUM" />
     <public type="string" name="NewThemeTitle" id="NUM" />
     <public type="string" name="Next" id="NUM" />
-    <public type="string" name="NoAudio" id="NUM" />
+    <public type="string" name="NoAudioFiles" id="NUM" />
+    <public type="string" name="NoAudioFilesInfo" id="NUM" />
+    <public type="string" name="NoAudioFound" id="NUM" />
+    <public type="string" name="NoAudioFoundInfo" id="NUM" />
     <public type="string" name="NoBlocked" id="NUM" />
     <public type="string" name="NoBlockedChannel2" id="NUM" />
     <public type="string" name="NoBlockedGroup2" id="NUM" />
@@ -3328,6 +3360,7 @@
     <public type="string" name="Photos_other" id="NUM" />
     <public type="string" name="Photos_two" id="NUM" />
     <public type="string" name="Photos_zero" id="NUM" />
+    <public type="string" name="PinInTheList" id="NUM" />
     <public type="string" name="PinMessage" id="NUM" />
     <public type="string" name="PinMessageAlert" id="NUM" />
     <public type="string" name="PinMessageAlertChannel" id="NUM" />
@@ -3386,6 +3419,8 @@
     <public type="string" name="PrivacyP2PHeader" id="NUM" />
     <public type="string" name="PrivacyPaymentsClear" id="NUM" />
     <public type="string" name="PrivacyPaymentsClearAlert" id="NUM" />
+    <public type="string" name="PrivacyPaymentsClearAlertText" id="NUM" />
+    <public type="string" name="PrivacyPaymentsClearAlertTitle" id="NUM" />
     <public type="string" name="PrivacyPhone" id="NUM" />
     <public type="string" name="PrivacyPhoneInfo" id="NUM" />
     <public type="string" name="PrivacyPhoneInfo2" id="NUM" />
@@ -3504,12 +3539,14 @@
     <public type="string" name="ResetMyAccountWarningReset" id="NUM" />
     <public type="string" name="ResetMyAccountWarningText" id="NUM" />
     <public type="string" name="ResetNotificationsAlert" id="NUM" />
+    <public type="string" name="ResetNotificationsAlertTitle" id="NUM" />
     <public type="string" name="ResetNotificationsText" id="NUM" />
     <public type="string" name="ResetStatistics" id="NUM" />
     <public type="string" name="ResetStatisticsAlert" id="NUM" />
     <public type="string" name="ResetStatisticsAlertTitle" id="NUM" />
     <public type="string" name="RestoreEmailSent" id="NUM" />
     <public type="string" name="RestoreEmailSentInfo" id="NUM" />
+    <public type="string" name="RestoreEmailSentTitle" id="NUM" />
     <public type="string" name="RestoreEmailTrouble" id="NUM" />
     <public type="string" name="RestoreEmailTroubleText" id="NUM" />
     <public type="string" name="RestorePasswordNoEmailText" id="NUM" />
@@ -3593,12 +3630,12 @@
     <public type="string" name="SendAsFile" id="NUM" />
     <public type="string" name="SendAsFiles" id="NUM" />
     <public type="string" name="SendByEnter" id="NUM" />
-    <public type="string" name="SendContactTo" id="NUM" />
-    <public type="string" name="SendContactToGroup" id="NUM" />
+    <public type="string" name="SendContactToGroupText" id="NUM" />
+    <public type="string" name="SendContactToText" id="NUM" />
     <public type="string" name="SendDayAt" id="NUM" />
     <public type="string" name="SendDayYearAt" id="NUM" />
-    <public type="string" name="SendGameTo" id="NUM" />
-    <public type="string" name="SendGameToGroup" id="NUM" />
+    <public type="string" name="SendGameToGroupText" id="NUM" />
+    <public type="string" name="SendGameToText" id="NUM" />
     <public type="string" name="SendGifPreview" id="NUM" />
     <public type="string" name="SendItems" id="NUM" />
     <public type="string" name="SendLiveLocation" id="NUM" />
@@ -3609,9 +3646,10 @@
     <public type="string" name="SendLocation" id="NUM" />
     <public type="string" name="SendMessageRestricted" id="NUM" />
     <public type="string" name="SendMessageRestrictedForever" id="NUM" />
+    <public type="string" name="SendMessageTitle" id="NUM" />
     <public type="string" name="SendMessageTo" id="NUM" />
-    <public type="string" name="SendMessagesTo" id="NUM" />
-    <public type="string" name="SendMessagesToGroup" id="NUM" />
+    <public type="string" name="SendMessagesToGroupText" id="NUM" />
+    <public type="string" name="SendMessagesToText" id="NUM" />
     <public type="string" name="SendSelectedLocation" id="NUM" />
     <public type="string" name="SendSticker" id="NUM" />
     <public type="string" name="SendStickerPreview" id="NUM" />
@@ -3756,9 +3794,10 @@
     <public type="string" name="StopAllLocationSharings" id="NUM" />
     <public type="string" name="StopDownload" id="NUM" />
     <public type="string" name="StopLiveLocation" id="NUM" />
-    <public type="string" name="StopLiveLocationAlertAll" id="NUM" />
-    <public type="string" name="StopLiveLocationAlertToGroup" id="NUM" />
-    <public type="string" name="StopLiveLocationAlertToUser" id="NUM" />
+    <public type="string" name="StopLiveLocationAlertAllText" id="NUM" />
+    <public type="string" name="StopLiveLocationAlertToGroupText" id="NUM" />
+    <public type="string" name="StopLiveLocationAlertToTitle" id="NUM" />
+    <public type="string" name="StopLiveLocationAlertToUserText" id="NUM" />
     <public type="string" name="StopLoading" id="NUM" />
     <public type="string" name="StopPoll" id="NUM" />
     <public type="string" name="StopPollAlertText" id="NUM" />
@@ -3776,6 +3815,7 @@
     <public type="string" name="SuggestContacts" id="NUM" />
     <public type="string" name="SuggestContactsAlert" id="NUM" />
     <public type="string" name="SuggestContactsInfo" id="NUM" />
+    <public type="string" name="SuggestContactsTitle" id="NUM" />
     <public type="string" name="SuggestStickers" id="NUM" />
     <public type="string" name="SuggestStickersAll" id="NUM" />
     <public type="string" name="SuggestStickersInstalled" id="NUM" />
@@ -3785,7 +3825,8 @@
     <public type="string" name="SyncContacts" id="NUM" />
     <public type="string" name="SyncContactsAdded" id="NUM" />
     <public type="string" name="SyncContactsDelete" id="NUM" />
-    <public type="string" name="SyncContactsDeleteInfo" id="NUM" />
+    <public type="string" name="SyncContactsDeleteText" id="NUM" />
+    <public type="string" name="SyncContactsDeleteTitle" id="NUM" />
     <public type="string" name="SyncContactsInfoOff" id="NUM" />
     <public type="string" name="SyncContactsInfoOn" id="NUM" />
     <public type="string" name="SyncContactsOff" id="NUM" />
@@ -3811,14 +3852,19 @@
     <public type="string" name="TelegramPassportCreatePasswordInfo" id="NUM" />
     <public type="string" name="TelegramPassportDelete" id="NUM" />
     <public type="string" name="TelegramPassportDeleteAlert" id="NUM" />
+    <public type="string" name="TelegramPassportDeleteTitle" id="NUM" />
     <public type="string" name="TelegramVersion" id="NUM" />
+    <public type="string" name="Terminate" id="NUM" />
     <public type="string" name="TerminateAllSessions" id="NUM" />
     <public type="string" name="TerminateAllWebSessions" id="NUM" />
     <public type="string" name="TerminateSessionInfo" id="NUM" />
     <public type="string" name="TerminateSessionQuestion" id="NUM" />
+    <public type="string" name="TerminateSessionText" id="NUM" />
     <public type="string" name="TerminateWebSessionInfo" id="NUM" />
-    <public type="string" name="TerminateWebSessionQuestion" id="NUM" />
     <public type="string" name="TerminateWebSessionStop" id="NUM" />
+    <public type="string" name="TerminateWebSessionText" id="NUM" />
+    <public type="string" name="TerminateWebSessionTitle" id="NUM" />
+    <public type="string" name="TerminateWebSessionsTitle" id="NUM" />
     <public type="string" name="TermsOfService" id="NUM" />
     <public type="string" name="TermsOfServiceLogin" id="NUM" />
     <public type="string" name="TextCopied" id="NUM" />
@@ -3893,6 +3939,7 @@
     <public type="string" name="TurnPasswordOff" id="NUM" />
     <public type="string" name="TurnPasswordOffPassport" id="NUM" />
     <public type="string" name="TurnPasswordOffQuestion" id="NUM" />
+    <public type="string" name="TurnPasswordOffQuestionTitle" id="NUM" />
     <public type="string" name="TwoStepVerification" id="NUM" />
     <public type="string" name="TwoStepVerificationTitle" id="NUM" />
     <public type="string" name="TypeLocationGroup" id="NUM" />
@@ -4094,10 +4141,24 @@
     <public type="string" name="WalletAddressCopy" id="NUM" />
     <public type="string" name="WalletAmount" id="NUM" />
     <public type="string" name="WalletBiometricTooManyAttempts" id="NUM" />
+    <public type="string" name="WalletBlockchainConfigInvalid" id="NUM" />
+    <public type="string" name="WalletBlockchainConfigLoadError" id="NUM" />
     <public type="string" name="WalletBlockchainFees" id="NUM" />
+    <public type="string" name="WalletBlockchainName" id="NUM" />
+    <public type="string" name="WalletBlockchainNameHint" id="NUM" />
+    <public type="string" name="WalletBlockchainNameInfo" id="NUM" />
+    <public type="string" name="WalletBlockchainNameWarning" id="NUM" />
     <public type="string" name="WalletChangePasscode" id="NUM" />
     <public type="string" name="WalletClose" id="NUM" />
     <public type="string" name="WalletComment" id="NUM" />
+    <public type="string" name="WalletConfigType" id="NUM" />
+    <public type="string" name="WalletConfigTypeInfo" id="NUM" />
+    <public type="string" name="WalletConfigTypeJson" id="NUM" />
+    <public type="string" name="WalletConfigTypeJsonHeader" id="NUM" />
+    <public type="string" name="WalletConfigTypeJsonHint" id="NUM" />
+    <public type="string" name="WalletConfigTypeUrl" id="NUM" />
+    <public type="string" name="WalletConfigTypeUrlHeader" id="NUM" />
+    <public type="string" name="WalletConfigTypeUrlHint" id="NUM" />
     <public type="string" name="WalletConfirm" id="NUM" />
     <public type="string" name="WalletConfirmation" id="NUM" />
     <public type="string" name="WalletConfirmationText" id="NUM" />
@@ -4105,21 +4166,23 @@
     <public type="string" name="WalletCongratulationsinfo" id="NUM" />
     <public type="string" name="WalletContinue" id="NUM" />
     <public type="string" name="WalletCopyAddress" id="NUM" />
+    <public type="string" name="WalletCreateBlockchainConfigLoadError" id="NUM" />
     <public type="string" name="WalletCreateInvoice" id="NUM" />
     <public type="string" name="WalletCreateInvoiceTitle" id="NUM" />
     <public type="string" name="WalletCreated" id="NUM" />
+    <public type="string" name="WalletDate" id="NUM" />
     <public type="string" name="WalletDelete" id="NUM" />
     <public type="string" name="WalletDeleteInfo" id="NUM" />
     <public type="string" name="WalletDeleteTitle" id="NUM" />
     <public type="string" name="WalletDone" id="NUM" />
     <public type="string" name="WalletEnterPasscode" id="NUM" />
     <public type="string" name="WalletEnterWalletAddress" id="NUM" />
+    <public type="string" name="WalletError" id="NUM" />
     <public type="string" name="WalletExport" id="NUM" />
     <public type="string" name="WalletExportConfirmContinue" id="NUM" />
     <public type="string" name="WalletExportConfirmCredentials" id="NUM" />
+    <public type="string" name="WalletFee" id="NUM" />
     <public type="string" name="WalletFrom" id="NUM" />
-    <public type="string" name="WalletGramsToReceive" id="NUM" />
-    <public type="string" name="WalletGramsToSend" id="NUM" />
     <public type="string" name="WalletImportAlertText" id="NUM" />
     <public type="string" name="WalletImportAlertTitle" id="NUM" />
     <public type="string" name="WalletImportDontHave" id="NUM" />
@@ -4130,6 +4193,7 @@
     <public type="string" name="WalletKeystoreInvalidated" id="NUM" />
     <public type="string" name="WalletPasscodeLength" id="NUM" />
     <public type="string" name="WalletPendingTransactions" id="NUM" />
+    <public type="string" name="WalletPendingWait" id="NUM" />
     <public type="string" name="WalletPerfect" id="NUM" />
     <public type="string" name="WalletPerfectInfo" id="NUM" />
     <public type="string" name="WalletPerfectSetPasscode" id="NUM" />
@@ -4165,11 +4229,13 @@
     <public type="string" name="WalletSendRecipient" id="NUM" />
     <public type="string" name="WalletSendSameWalletProceed" id="NUM" />
     <public type="string" name="WalletSendSameWalletText" id="NUM" />
+    <public type="string" name="WalletSendSyncInProgress" id="NUM" />
     <public type="string" name="WalletSendWarningSendAnyway" id="NUM" />
     <public type="string" name="WalletSendWarningText" id="NUM" />
     <public type="string" name="WalletSendWarningTitle" id="NUM" />
     <public type="string" name="WalletSendingGrams" id="NUM" />
     <public type="string" name="WalletSendingGramsInfo" id="NUM" />
+    <public type="string" name="WalletServerSettings" id="NUM" />
     <public type="string" name="WalletSetPasscode" id="NUM" />
     <public type="string" name="WalletSetPasscode4Digit" id="NUM" />
     <public type="string" name="WalletSetPasscode6Digit" id="NUM" />
@@ -4187,9 +4253,10 @@
     <public type="string" name="WalletShareInvoiceUrlInfo" id="NUM" />
     <public type="string" name="WalletShareQr" id="NUM" />
     <public type="string" name="WalletStorageFee" id="NUM" />
-    <public type="string" name="WalletStorageFeeHeader" id="NUM" />
     <public type="string" name="WalletSwipeToRefresh" id="NUM" />
     <public type="string" name="WalletTelegramLogout" id="NUM" />
+    <public type="string" name="WalletTestShareInfo" id="NUM" />
+    <public type="string" name="WalletTestShareInvoiceUrlInfo" id="NUM" />
     <public type="string" name="WalletTestTime" id="NUM" />
     <public type="string" name="WalletTestTimeAlertButtonSee" id="NUM" />
     <public type="string" name="WalletTestTimeAlertButtonTry" id="NUM" />
@@ -4211,16 +4278,17 @@
     <public type="string" name="WalletTransactionAddressCopied" id="NUM" />
     <public type="string" name="WalletTransactionComment" id="NUM" />
     <public type="string" name="WalletTransactionFee" id="NUM" />
-    <public type="string" name="WalletTransactionFeeHeader" id="NUM" />
     <public type="string" name="WalletTransactionRecipient" id="NUM" />
     <public type="string" name="WalletTransactionSendGrams" id="NUM" />
     <public type="string" name="WalletTransactionSender" id="NUM" />
     <public type="string" name="WalletUpdatedFewSecondsAgo" id="NUM" />
     <public type="string" name="WalletUpdatedTimeAgo" id="NUM" />
     <public type="string" name="WalletUpdating" id="NUM" />
+    <public type="string" name="WalletUpdatingProgress" id="NUM" />
     <public type="string" name="WalletView" id="NUM" />
     <public type="string" name="WalletYourAddress" id="NUM" />
     <public type="string" name="WalletYourBalance" id="NUM" />
+    <public type="string" name="WalletYourInvoice" id="NUM" />
     <public type="string" name="Warmth" id="NUM" />
     <public type="string" name="WebSessionsTitle" id="NUM" />
     <public type="string" name="Weeks_few" id="NUM" />

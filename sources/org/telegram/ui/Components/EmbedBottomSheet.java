@@ -49,6 +49,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BringAppForegroundService;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -434,7 +435,7 @@ public class EmbedBottomSheet extends BottomSheet {
             public TextureView onSwitchInlineMode(View view, boolean z, float f, int i, boolean z2) {
                 if (z) {
                     view.setTranslationY(0.0f);
-                    EmbedBottomSheet.this.pipVideoView = new PipVideoView();
+                    EmbedBottomSheet.this.pipVideoView = new PipVideoView(false);
                     return EmbedBottomSheet.this.pipVideoView.show(EmbedBottomSheet.this.parentActivity, EmbedBottomSheet.this, view, f, i, null);
                 }
                 if (z2) {
@@ -715,6 +716,9 @@ public class EmbedBottomSheet extends BottomSheet {
             if (this.videoView.getTextureImageView() != null) {
                 this.videoView.getTextureImageView().setVisibility(4);
             }
+            if ("disabled".equals(MessagesController.getInstance(this.currentAccount).youtubePipType)) {
+                this.pipButton.setVisibility(8);
+            }
         }
         if (this.orientationEventListener.canDetectOrientation()) {
             this.orientationEventListener.enable();
@@ -729,56 +733,75 @@ public class EmbedBottomSheet extends BottomSheet {
         dismiss();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x0038  */
-    public /* synthetic */ void lambda$new$4$EmbedBottomSheet(android.view.View r8) {
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x0051  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0039  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x0051  */
+    public /* synthetic */ void lambda$new$4$EmbedBottomSheet(android.view.View r9) {
         /*
-        r7 = this;
-        r8 = r7.checkInlinePermissions();
-        if (r8 != 0) goto L_0x0007;
-    L_0x0006:
+        r8 = this;
+        r9 = r8.isYouTube;
+        if (r9 == 0) goto L_0x0016;
+    L_0x0004:
+        r9 = r8.currentAccount;
+        r9 = org.telegram.messenger.MessagesController.getInstance(r9);
+        r9 = r9.youtubePipType;
+        r0 = "inapp";
+        r9 = r0.equals(r9);
+        if (r9 == 0) goto L_0x0016;
+    L_0x0014:
+        r9 = 1;
+        goto L_0x0017;
+    L_0x0016:
+        r9 = 0;
+    L_0x0017:
+        if (r9 != 0) goto L_0x0020;
+    L_0x0019:
+        r0 = r8.checkInlinePermissions();
+        if (r0 != 0) goto L_0x0020;
+    L_0x001f:
         return;
-    L_0x0007:
-        r8 = r7.progressBar;
-        r8 = r8.getVisibility();
-        if (r8 != 0) goto L_0x0010;
-    L_0x000f:
-        return;
-    L_0x0010:
-        r8 = new org.telegram.ui.Components.PipVideoView;
-        r8.<init>();
-        r7.pipVideoView = r8;
-        r0 = r7.pipVideoView;
-        r1 = r7.parentActivity;
-        r3 = 0;
-        r8 = r7.width;
-        if (r8 == 0) goto L_0x0029;
     L_0x0020:
-        r2 = r7.height;
-        if (r2 == 0) goto L_0x0029;
-    L_0x0024:
-        r8 = (float) r8;
-        r2 = (float) r2;
-        r8 = r8 / r2;
-        r4 = r8;
-        goto L_0x002d;
+        r0 = r8.progressBar;
+        r0 = r0.getVisibility();
+        if (r0 != 0) goto L_0x0029;
+    L_0x0028:
+        return;
     L_0x0029:
-        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x002d:
-        r5 = 0;
-        r6 = r7.webView;
-        r2 = r7;
-        r0.show(r1, r2, r3, r4, r5, r6);
-        r8 = r7.isYouTube;
-        if (r8 == 0) goto L_0x003d;
-    L_0x0038:
-        r8 = "hideControls();";
-        r7.runJsCode(r8);
+        r0 = new org.telegram.ui.Components.PipVideoView;
+        r0.<init>(r9);
+        r8.pipVideoView = r0;
+        r1 = r8.pipVideoView;
+        r2 = r8.parentActivity;
+        r4 = 0;
+        r9 = r8.width;
+        if (r9 == 0) goto L_0x0042;
+    L_0x0039:
+        r0 = r8.height;
+        if (r0 == 0) goto L_0x0042;
     L_0x003d:
-        r8 = r7.containerView;
+        r9 = (float) r9;
+        r0 = (float) r0;
+        r9 = r9 / r0;
+        r5 = r9;
+        goto L_0x0046;
+    L_0x0042:
+        r9 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+    L_0x0046:
+        r6 = 0;
+        r7 = r8.webView;
+        r3 = r8;
+        r1.show(r2, r3, r4, r5, r6, r7);
+        r9 = r8.isYouTube;
+        if (r9 == 0) goto L_0x0056;
+    L_0x0051:
+        r9 = "hideControls();";
+        r8.runJsCode(r9);
+    L_0x0056:
+        r9 = r8.containerView;
         r0 = 0;
-        r8.setTranslationY(r0);
-        r7.dismissInternal();
+        r9.setTranslationY(r0);
+        r8.dismissInternal();
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmbedBottomSheet.lambda$new$4$EmbedBottomSheet(android.view.View):void");

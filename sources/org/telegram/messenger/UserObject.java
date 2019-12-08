@@ -26,15 +26,12 @@ public class UserObject {
             return LocaleController.getString("HiddenName", NUM);
         }
         String formatName = ContactsController.formatName(user.first_name, user.last_name);
-        if (formatName.length() == 0) {
-            String str = user.phone;
-            if (!(str == null || str.length() == 0)) {
-                PhoneFormat instance = PhoneFormat.getInstance();
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("+");
-                stringBuilder.append(user.phone);
-                formatName = instance.format(stringBuilder.toString());
-            }
+        if (formatName.length() == 0 && !TextUtils.isEmpty(user.phone)) {
+            PhoneFormat instance = PhoneFormat.getInstance();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("+");
+            stringBuilder.append(user.phone);
+            formatName = instance.format(stringBuilder.toString());
         }
         return formatName;
     }

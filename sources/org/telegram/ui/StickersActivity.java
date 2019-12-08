@@ -11,6 +11,7 @@ import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.ItemTouchHelper.Callback;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Locale;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -39,6 +41,7 @@ import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.StickerSetCell;
 import org.telegram.ui.Cells.TextCheckCell;
@@ -441,10 +444,26 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         } else if (i == this.masksRow) {
             presentFragment(new StickersActivity(1));
         } else if (i == this.suggestRow) {
-            Builder builder = new Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("SuggestStickers", NUM));
-            builder.setItems(new CharSequence[]{LocaleController.getString("SuggestStickersAll", NUM), LocaleController.getString("SuggestStickersInstalled", NUM), LocaleController.getString("SuggestStickersNone", NUM)}, new -$$Lambda$StickersActivity$43apBJTj1nQwZFS8l5r8_cQqass(this));
-            showDialog(builder.create());
+            if (getParentActivity() != null) {
+                Builder builder = new Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("SuggestStickers", NUM));
+                String[] strArr = new String[]{LocaleController.getString("SuggestStickersAll", NUM), LocaleController.getString("SuggestStickersInstalled", NUM), LocaleController.getString("SuggestStickersNone", NUM)};
+                LinearLayout linearLayout = new LinearLayout(getParentActivity());
+                linearLayout.setOrientation(1);
+                builder.setView(linearLayout);
+                int i2 = 0;
+                while (i2 < strArr.length) {
+                    RadioColorCell radioColorCell = new RadioColorCell(getParentActivity());
+                    radioColorCell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+                    radioColorCell.setTag(Integer.valueOf(i2));
+                    radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
+                    radioColorCell.setTextAndValue(strArr[i2], SharedConfig.suggestStickers == i2);
+                    linearLayout.addView(radioColorCell);
+                    radioColorCell.setOnClickListener(new -$$Lambda$StickersActivity$aQeyQYzu6_oCtDWXN7Su5xmUucw(this, builder));
+                    i2++;
+                }
+                showDialog(builder.create());
+            }
         } else if (i == this.loopRow) {
             SharedConfig.toggleLoopStickers();
             if (view instanceof TextCheckCell) {
@@ -453,9 +472,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$null$0$StickersActivity(DialogInterface dialogInterface, int i) {
-        SharedConfig.setSuggestStickers(i);
+    public /* synthetic */ void lambda$null$0$StickersActivity(Builder builder, View view) {
+        SharedConfig.setSuggestStickers(((Integer) view.getTag()).intValue());
         this.listAdapter.notifyItemChanged(this.suggestRow);
+        builder.getDismissRunnable().run();
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {

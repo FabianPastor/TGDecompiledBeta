@@ -357,6 +357,10 @@ public class BaseFragment {
         return (BaseFragment) arrayList.get((arrayList.size() - 2) - i);
     }
 
+    public ActionBarLayout getParentLayout() {
+        return this.parentLayout;
+    }
+
     public boolean presentFragmentAsPreview(BaseFragment baseFragment) {
         ActionBarLayout actionBarLayout = this.parentLayout;
         return actionBarLayout != null && actionBarLayout.presentFragmentAsPreview(baseFragment);

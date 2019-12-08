@@ -2105,15 +2105,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             private boolean zoomingWas;
 
             public boolean shutterLongPressed() {
-                boolean z = ChatAttachAlert.this.baseFragment instanceof ChatActivity;
-                Integer valueOf = Integer.valueOf(0);
-                if (!z || ChatAttachAlert.this.mediaCaptured || ChatAttachAlert.this.takingPhoto || ChatAttachAlert.this.baseFragment == null || ChatAttachAlert.this.baseFragment.getParentActivity() == null || ChatAttachAlert.this.cameraView == null) {
+                if (!(ChatAttachAlert.this.baseFragment instanceof ChatActivity) || ChatAttachAlert.this.mediaCaptured || ChatAttachAlert.this.takingPhoto || ChatAttachAlert.this.baseFragment == null || ChatAttachAlert.this.baseFragment.getParentActivity() == null || ChatAttachAlert.this.cameraView == null) {
                     return false;
                 }
                 if (VERSION.SDK_INT >= 23) {
                     if (ChatAttachAlert.this.baseFragment.getParentActivity().checkSelfPermission("android.permission.RECORD_AUDIO") != 0) {
                         ChatAttachAlert.this.requestingPermissions = true;
-                        ChatAttachAlert.this.baseFragment.getParentActivity().requestPermissions(new String[]{r3}, 21);
+                        ChatAttachAlert.this.baseFragment.getParentActivity().requestPermissions(new String[]{r2}, 21);
                         return false;
                     }
                 }
@@ -2122,10 +2120,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
                 ChatAttachAlert.this.switchCameraButton.setAlpha(0.0f);
                 ChatAttachAlert.this.tooltipTextView.setAlpha(0.0f);
-                z = (ChatAttachAlert.this.baseFragment instanceof ChatActivity) && ((ChatActivity) ChatAttachAlert.this.baseFragment).isSecretChat();
+                boolean z = (ChatAttachAlert.this.baseFragment instanceof ChatActivity) && ((ChatActivity) ChatAttachAlert.this.baseFragment).isSecretChat();
                 this.outputFile = AndroidUtilities.generateVideoPath(z);
                 ChatAttachAlert.this.recordTime.setAlpha(1.0f);
-                ChatAttachAlert.this.recordTime.setText(String.format("%02d:%02d", new Object[]{valueOf, valueOf}));
+                ChatAttachAlert.this.recordTime.setText(AndroidUtilities.formatLongDuration(0));
                 ChatAttachAlert.this.videoRecordTime = 0;
                 ChatAttachAlert.this.videoRecordRunnable = new -$$Lambda$ChatAttachAlert$17$OU-Cx3hPJao50n49qJFByW_0WWk(this);
                 AndroidUtilities.lockOrientation(baseFragment2.getParentActivity());
@@ -2137,7 +2135,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             public /* synthetic */ void lambda$shutterLongPressed$0$ChatAttachAlert$17() {
                 if (ChatAttachAlert.this.videoRecordRunnable != null) {
                     ChatAttachAlert.this.videoRecordTime = ChatAttachAlert.this.videoRecordTime + 1;
-                    ChatAttachAlert.this.recordTime.setText(String.format("%02d:%02d", new Object[]{Integer.valueOf(ChatAttachAlert.this.videoRecordTime / 60), Integer.valueOf(ChatAttachAlert.this.videoRecordTime % 60)}));
+                    ChatAttachAlert.this.recordTime.setText(AndroidUtilities.formatLongDuration(ChatAttachAlert.this.videoRecordTime));
                     AndroidUtilities.runOnUIThread(ChatAttachAlert.this.videoRecordRunnable, 1000);
                 }
             }
@@ -3323,7 +3321,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x003b:
         r6 = NUM; // 0x7var_be float:1.7944963E38 double:1.052935597E-314;
         r5.setImageResource(r6);
-        r6 = NUM; // 0x7f0e0011 float:1.8875072E38 double:1.053162165E-314;
+        r6 = NUM; // 0x7f0e0012 float:1.8875074E38 double:1.0531621655E-314;
         r0 = "AccDescrCameraFlashAuto";
         r6 = org.telegram.messenger.LocaleController.getString(r0, r6);
         r5.setContentDescription(r6);
@@ -3331,7 +3329,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x004e:
         r6 = NUM; // 0x7var_c0 float:1.7944967E38 double:1.052935598E-314;
         r5.setImageResource(r6);
-        r6 = NUM; // 0x7f0e0013 float:1.8875076E38 double:1.053162166E-314;
+        r6 = NUM; // 0x7f0e0014 float:1.8875078E38 double:1.0531621665E-314;
         r0 = "AccDescrCameraFlashOn";
         r6 = org.telegram.messenger.LocaleController.getString(r0, r6);
         r5.setContentDescription(r6);
@@ -3339,7 +3337,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x0061:
         r6 = NUM; // 0x7var_bf float:1.7944965E38 double:1.0529355974E-314;
         r5.setImageResource(r6);
-        r6 = NUM; // 0x7f0e0012 float:1.8875074E38 double:1.0531621655E-314;
+        r6 = NUM; // 0x7f0e0013 float:1.8875076E38 double:1.053162166E-314;
         r0 = "AccDescrCameraFlashOff";
         r6 = org.telegram.messenger.LocaleController.getString(r0, r6);
         r5.setContentDescription(r6);

@@ -58,7 +58,7 @@ public class BottomSheet extends Dialog {
     private boolean bigTitle;
     private boolean canDismissWithSwipe = true;
     protected ContainerView container;
-    protected ViewGroup containerView;
+    protected ViewGroup containerView = r0[0];
     protected int currentAccount = UserConfig.selectedAccount;
     protected AnimatorSet currentSheetAnimation;
     protected int currentSheetAnimationType;

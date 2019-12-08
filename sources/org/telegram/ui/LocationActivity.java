@@ -1192,8 +1192,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     try {
                         if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
                             Builder builder = new Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", NUM));
-                            builder.setMessage(LocaleController.getString("GpsDisabledAlert", NUM));
+                            builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", NUM));
+                            builder.setMessage(LocaleController.getString("GpsDisabledAlertText", NUM));
                             builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new -$$Lambda$LocationActivity$THwaiRnXnH4pqYDHVBK3BEyn4Yw(this));
                             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                             showDialog(builder.create());

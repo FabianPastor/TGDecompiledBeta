@@ -257,12 +257,12 @@ public class DataUsageActivity extends BaseFragment {
             int itemViewType = viewHolder.getItemViewType();
             String str = "windowBackgroundGrayShadow";
             if (itemViewType != 0) {
+                int i2 = 3;
                 boolean z = false;
                 if (itemViewType == 1) {
                     TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                    String str2;
                     if (i == this.resetRow) {
-                        str2 = "windowBackgroundWhiteRedText2";
+                        String str2 = "windowBackgroundWhiteRedText2";
                         textSettingsCell.setTag(str2);
                         textSettingsCell.setText(LocaleController.getString("ResetStatistics", NUM), false);
                         textSettingsCell.setTextColor(Theme.getColor(str2));
@@ -271,36 +271,35 @@ public class DataUsageActivity extends BaseFragment {
                     String str3 = "windowBackgroundWhiteBlackText";
                     textSettingsCell.setTag(str3);
                     textSettingsCell.setTextColor(Theme.getColor(str3));
-                    itemViewType = (i == this.callsSentRow || i == this.callsReceivedRow || i == this.callsBytesSentRow || i == this.callsBytesReceivedRow) ? 0 : (i == this.messagesSentRow || i == this.messagesReceivedRow || i == this.messagesBytesSentRow || i == this.messagesBytesReceivedRow) ? 1 : (i == this.photosSentRow || i == this.photosReceivedRow || i == this.photosBytesSentRow || i == this.photosBytesReceivedRow) ? 4 : (i == this.audiosSentRow || i == this.audiosReceivedRow || i == this.audiosBytesSentRow || i == this.audiosBytesReceivedRow) ? 3 : (i == this.videosSentRow || i == this.videosReceivedRow || i == this.videosBytesSentRow || i == this.videosBytesReceivedRow) ? 2 : (i == this.filesSentRow || i == this.filesReceivedRow || i == this.filesBytesSentRow || i == this.filesBytesReceivedRow) ? 5 : 6;
-                    str = "%d";
+                    if (i == this.callsSentRow || i == this.callsReceivedRow || i == this.callsBytesSentRow || i == this.callsBytesReceivedRow) {
+                        i2 = 0;
+                    } else if (i == this.messagesSentRow || i == this.messagesReceivedRow || i == this.messagesBytesSentRow || i == this.messagesBytesReceivedRow) {
+                        i2 = 1;
+                    } else if (i == this.photosSentRow || i == this.photosReceivedRow || i == this.photosBytesSentRow || i == this.photosBytesReceivedRow) {
+                        i2 = 4;
+                    } else if (!(i == this.audiosSentRow || i == this.audiosReceivedRow || i == this.audiosBytesSentRow || i == this.audiosBytesReceivedRow)) {
+                        i2 = (i == this.videosSentRow || i == this.videosReceivedRow || i == this.videosBytesSentRow || i == this.videosBytesReceivedRow) ? 2 : (i == this.filesSentRow || i == this.filesReceivedRow || i == this.filesBytesSentRow || i == this.filesBytesReceivedRow) ? 5 : 6;
+                    }
+                    String str4 = "%d";
                     if (i == this.callsSentRow) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString("OutgoingCalls", NUM), String.format(str, new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(this.currentType, itemViewType))}), true);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("OutgoingCalls", NUM), String.format(str4, new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(this.currentType, i2))}), true);
                     } else if (i == this.callsReceivedRow) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString("IncomingCalls", NUM), String.format(str, new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(this.currentType, itemViewType))}), true);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("IncomingCalls", NUM), String.format(str4, new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(this.currentType, i2))}), true);
                     } else if (i == this.callsTotalTimeRow) {
-                        i = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(this.currentType);
-                        itemViewType = i / 3600;
-                        i -= itemViewType * 3600;
-                        i -= (i / 60) * 60;
-                        if (itemViewType != 0) {
-                            str2 = String.format("%d:%02d:%02d", new Object[]{Integer.valueOf(itemViewType), Integer.valueOf(r1), Integer.valueOf(i)});
-                        } else {
-                            str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(r1), Integer.valueOf(i)});
-                        }
-                        textSettingsCell.setTextAndValue(LocaleController.getString("CallsTotalTime", NUM), str2, false);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("CallsTotalTime", NUM), AndroidUtilities.formatShortDuration(StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(this.currentType)), false);
                     } else if (i == this.messagesSentRow || i == this.photosSentRow || i == this.videosSentRow || i == this.audiosSentRow || i == this.filesSentRow) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString("CountSent", NUM), String.format(str, new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(this.currentType, itemViewType))}), true);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("CountSent", NUM), String.format(str4, new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(this.currentType, i2))}), true);
                     } else if (i == this.messagesReceivedRow || i == this.photosReceivedRow || i == this.videosReceivedRow || i == this.audiosReceivedRow || i == this.filesReceivedRow) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString("CountReceived", NUM), String.format(str, new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(this.currentType, itemViewType))}), true);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("CountReceived", NUM), String.format(str4, new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(this.currentType, i2))}), true);
                     } else if (i == this.messagesBytesSentRow || i == this.photosBytesSentRow || i == this.videosBytesSentRow || i == this.audiosBytesSentRow || i == this.filesBytesSentRow || i == this.callsBytesSentRow || i == this.totalBytesSentRow) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString("BytesSent", NUM), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(this.currentType, itemViewType)), true);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("BytesSent", NUM), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(this.currentType, i2)), true);
                     } else if (i == this.messagesBytesReceivedRow || i == this.photosBytesReceivedRow || i == this.videosBytesReceivedRow || i == this.audiosBytesReceivedRow || i == this.filesBytesReceivedRow || i == this.callsBytesReceivedRow || i == this.totalBytesReceivedRow) {
-                        String string = LocaleController.getString("BytesReceived", NUM);
-                        str3 = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(this.currentType, itemViewType));
+                        str3 = LocaleController.getString("BytesReceived", NUM);
+                        str4 = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(this.currentType, i2));
                         if (i != this.totalBytesReceivedRow) {
                             z = true;
                         }
-                        textSettingsCell.setTextAndValue(string, str3, z);
+                        textSettingsCell.setTextAndValue(str3, str4, z);
                     }
                 } else if (itemViewType == 2) {
                     HeaderCell headerCell = (HeaderCell) viewHolder.itemView;

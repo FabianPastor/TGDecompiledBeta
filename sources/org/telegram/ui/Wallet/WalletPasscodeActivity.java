@@ -34,7 +34,6 @@ import javax.crypto.Cipher;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.TonController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -924,45 +923,41 @@ public class WalletPasscodeActivity extends BaseFragment {
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        if (VERSION.SDK_INT < 23) {
-            return;
-        }
-        if (SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture) {
+        if (VERSION.SDK_INT >= 23 && AndroidUtilities.allowScreenCapture()) {
             AndroidUtilities.setFlagSecure(this, false);
         }
     }
 
     public View createView(Context context) {
-        Context context2 = context;
-        FrameLayout frameLayout = new FrameLayout(context2);
+        FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.fragmentView = frameLayout;
-        this.continueButton = new TextView(context2);
+        this.continueButton = new TextView(context);
         this.continueButton.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText2"));
         this.continueButton.setTextSize(1, 14.0f);
         this.continueButton.setText(LocaleController.getString("WalletClose", NUM));
         this.continueButton.setGravity(16);
         this.continueButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.continueButton.setAlpha(1.0f);
+        this.continueButton.setAlpha(0.0f);
         this.continueButton.setVisibility(0);
         this.actionBar.addView(this.continueButton, LayoutHelper.createFrame(-2, -1.0f, 53, 0.0f, 0.0f, 22.0f, 0.0f));
         this.continueButton.setOnClickListener(new -$$Lambda$WalletPasscodeActivity$WKd3wEz2eE54L9DsjyQg15DQmeE(this));
-        FrameLayout frameLayout2 = new FrameLayout(context2);
+        FrameLayout frameLayout2 = new FrameLayout(context);
         frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-2, -2, 17));
-        RLottieImageView rLottieImageView = new RLottieImageView(context2);
+        RLottieImageView rLottieImageView = new RLottieImageView(context);
         rLottieImageView.setScaleType(ScaleType.CENTER);
         rLottieImageView.setAutoRepeat(true);
         rLottieImageView.setAnimation(NUM, 130, 130);
         rLottieImageView.playAnimation();
         frameLayout2.addView(rLottieImageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.titleTextView = new TextView(context2);
+        this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.titleTextView.setGravity(1);
         this.titleTextView.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
         this.titleTextView.setTextSize(1, 24.0f);
         this.titleTextView.setText(LocaleController.getString("WalletSendingGrams", NUM));
         frameLayout2.addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 130.0f, 0.0f, 0.0f));
-        this.descriptionText = new TextView(context2);
+        this.descriptionText = new TextView(context);
         this.descriptionText.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
         this.descriptionText.setGravity(1);
         this.descriptionText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
@@ -973,12 +968,12 @@ public class WalletPasscodeActivity extends BaseFragment {
         if (this.currentType != 3) {
             int i = this.userConfig.tonPasscodeType;
             i = i == 0 ? 4 : i == 1 ? 6 : 32;
-            this.passcodeView = new PasscodeView(this, context2, i);
+            this.passcodeView = new PasscodeView(this, context, i);
             frameLayout.addView(this.passcodeView, LayoutHelper.createFrame(-1, -1.0f));
             this.passcodeView.onShow();
         }
         frameLayout.addView(this.actionBar);
-        if (VERSION.SDK_INT >= 23 && (SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture)) {
+        if (VERSION.SDK_INT >= 23 && AndroidUtilities.allowScreenCapture()) {
             AndroidUtilities.setFlagSecure(this, true);
         }
         return this.fragmentView;
@@ -1110,9 +1105,7 @@ public class WalletPasscodeActivity extends BaseFragment {
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
-        if (!this.hasWalletInBack) {
-            getTonController().scheduleShortPoll();
-        }
+        getTonController().scheduleShortPoll();
     }
 
     public /* synthetic */ void lambda$trySendGrams$7$WalletPasscodeActivity() {

@@ -3136,37 +3136,37 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
 
         /* Access modifiers changed, original: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:33:0x013c  */
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x0121  */
-        /* JADX WARNING: Removed duplicated region for block: B:37:0x0153  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x01cc  */
+        /* JADX WARNING: Removed duplicated region for block: B:33:0x013e  */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x0123  */
+        /* JADX WARNING: Removed duplicated region for block: B:37:0x0155  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x01ce  */
         /* JADX WARNING: Removed duplicated region for block: B:22:0x00b9  */
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x0121  */
-        /* JADX WARNING: Removed duplicated region for block: B:33:0x013c  */
-        /* JADX WARNING: Removed duplicated region for block: B:37:0x0153  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x01cc  */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x0123  */
+        /* JADX WARNING: Removed duplicated region for block: B:33:0x013e  */
+        /* JADX WARNING: Removed duplicated region for block: B:37:0x0155  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x01ce  */
         /* JADX WARNING: Removed duplicated region for block: B:16:0x0063  */
         /* JADX WARNING: Removed duplicated region for block: B:22:0x00b9  */
-        /* JADX WARNING: Removed duplicated region for block: B:33:0x013c  */
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x0121  */
-        /* JADX WARNING: Removed duplicated region for block: B:37:0x0153  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x01cc  */
+        /* JADX WARNING: Removed duplicated region for block: B:33:0x013e  */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x0123  */
+        /* JADX WARNING: Removed duplicated region for block: B:37:0x0155  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x01ce  */
         @android.annotation.SuppressLint({"NewApi"})
-        public void onMeasure(int r29, int r30) {
+        public void onMeasure(int r30, int r31) {
             /*
-            r28 = this;
-            r8 = r28;
-            r0 = android.view.View.MeasureSpec.getSize(r29);
+            r29 = this;
+            r8 = r29;
+            r0 = android.view.View.MeasureSpec.getSize(r30);
             r1 = r8.currentType;
             r2 = 1;
             r9 = 2;
             r3 = 0;
             if (r1 != r2) goto L_0x0024;
         L_0x000d:
-            r0 = r28.getParent();
+            r0 = r29.getParent();
             r0 = (android.view.View) r0;
             r0 = r0.getMeasuredWidth();
-            r1 = r28.getParent();
+            r1 = r29.getParent();
             r1 = (android.view.View) r1;
             r1 = r1.getMeasuredHeight();
             r10 = r0;
@@ -3181,7 +3181,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = 0;
         L_0x0029:
             r1 = r8.currentBlock;
-            if (r1 == 0) goto L_0x01d2;
+            if (r1 == 0) goto L_0x01d4;
         L_0x002d:
             r4 = r8.currentType;
             r5 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
@@ -3296,10 +3296,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r4 = (int) r4;
             r20 = 1;
             r21 = 15;
+            r22 = -1;
             r16 = r0;
             r18 = r5;
             r19 = r4;
-            r23 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r13, r14, r16, r18, r19, r20, r21);
+            r24 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r13, r14, r16, r18, r19, r20, r21, r22);
             r0 = r8.currentBlock;
             r0 = r0.geo;
             r1 = org.telegram.messenger.AndroidUtilities.density;
@@ -3319,10 +3320,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = r1.mapProvider;
             r8.currentMapProvider = r1;
             r1 = r8.currentMapProvider;
-            if (r1 != r9) goto L_0x013c;
-        L_0x0121:
-            if (r0 == 0) goto L_0x014f;
+            if (r1 != r9) goto L_0x013e;
         L_0x0123:
+            if (r0 == 0) goto L_0x0151;
+        L_0x0125:
             r13 = r8.imageView;
             r14 = org.telegram.messenger.ImageLocation.getForWebFile(r0);
             r15 = 0;
@@ -3333,36 +3334,36 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r18 = r0.currentPage;
             r19 = 0;
             r13.setImage(r14, r15, r16, r17, r18, r19);
-            goto L_0x014f;
-        L_0x013c:
-            if (r23 == 0) goto L_0x014f;
+            goto L_0x0151;
         L_0x013e:
+            if (r24 == 0) goto L_0x0151;
+        L_0x0140:
             r0 = r8.imageView;
-            r24 = 0;
+            r25 = 0;
             r1 = org.telegram.ui.ActionBar.Theme.chat_locationDrawable;
-            r25 = r1[r3];
-            r26 = 0;
+            r26 = r1[r3];
             r27 = 0;
-            r22 = r0;
-            r22.setImage(r23, r24, r25, r26, r27);
-        L_0x014f:
+            r28 = 0;
+            r23 = r0;
+            r23.setImage(r24, r25, r26, r27, r28);
+        L_0x0151:
             r0 = r8.currentType;
-            if (r0 != 0) goto L_0x01b5;
-        L_0x0153:
+            if (r0 != 0) goto L_0x01b7;
+        L_0x0155:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
             r5 = r8.currentBlock;
             r1 = r5.caption;
             r3 = r1.text;
             r6 = r8.parentAdapter;
-            r1 = r28;
+            r1 = r29;
             r4 = r7;
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6);
             r8.captionLayout = r0;
             r0 = r8.captionLayout;
             r13 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-            if (r0 == 0) goto L_0x0182;
-        L_0x016d:
+            if (r0 == 0) goto L_0x0184;
+        L_0x016f:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
             r1 = r8.captionLayout;
             r1 = r1.getHeight();
@@ -3372,57 +3373,57 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = org.telegram.messenger.AndroidUtilities.dp(r13);
             r0 = r0 + r1;
             r11 = r11 + r0;
-        L_0x0182:
+        L_0x0184:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
             r5 = r8.currentBlock;
             r1 = r5.caption;
             r3 = r1.credit;
             r1 = r0.isRtl;
-            if (r1 == 0) goto L_0x0196;
-        L_0x0191:
+            if (r1 == 0) goto L_0x0198;
+        L_0x0193:
             r1 = org.telegram.ui.Components.StaticLayoutEx.ALIGN_RIGHT();
-            goto L_0x0198;
-        L_0x0196:
-            r1 = android.text.Layout.Alignment.ALIGN_NORMAL;
+            goto L_0x019a;
         L_0x0198:
+            r1 = android.text.Layout.Alignment.ALIGN_NORMAL;
+        L_0x019a:
             r6 = r1;
             r14 = r8.parentAdapter;
-            r1 = r28;
+            r1 = r29;
             r4 = r7;
             r7 = r14;
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7);
             r8.creditLayout = r0;
             r0 = r8.creditLayout;
-            if (r0 == 0) goto L_0x01b5;
-        L_0x01a9:
+            if (r0 == 0) goto L_0x01b7;
+        L_0x01ab:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
             r1 = r8.creditLayout;
             r1 = r1.getHeight();
             r0 = r0 + r1;
             r11 = r11 + r0;
-        L_0x01b5:
+        L_0x01b7:
             r0 = r8.isFirst;
-            if (r0 != 0) goto L_0x01c8;
-        L_0x01b9:
+            if (r0 != 0) goto L_0x01ca;
+        L_0x01bb:
             r0 = r8.currentType;
-            if (r0 != 0) goto L_0x01c8;
-        L_0x01bd:
+            if (r0 != 0) goto L_0x01ca;
+        L_0x01bf:
             r0 = r8.currentBlock;
             r0 = r0.level;
-            if (r0 > 0) goto L_0x01c8;
-        L_0x01c3:
+            if (r0 > 0) goto L_0x01ca;
+        L_0x01c5:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r12);
             r11 = r11 + r0;
-        L_0x01c8:
+        L_0x01ca:
             r0 = r8.currentType;
-            if (r0 == r9) goto L_0x01d1;
-        L_0x01cc:
+            if (r0 == r9) goto L_0x01d3;
+        L_0x01ce:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r12);
             r11 = r11 + r0;
-        L_0x01d1:
+        L_0x01d3:
             r2 = r11;
-        L_0x01d2:
+        L_0x01d4:
             r8.setMeasuredDimension(r10, r2);
             return;
             */
@@ -4498,7 +4499,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = android.text.TextUtils.isEmpty(r1);
             if (r1 != 0) goto L_0x0191;
         L_0x016f:
-            r1 = NUM; // 0x7f0e0137 float:1.8875668E38 double:1.0531623103E-314;
+            r1 = NUM; // 0x7f0e0140 float:1.8875687E38 double:1.0531623147E-314;
             r4 = 2;
             r4 = new java.lang.Object[r4];
             r5 = org.telegram.messenger.LocaleController.getInstance();
@@ -4518,7 +4519,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = android.text.TextUtils.isEmpty(r1);
             if (r1 != 0) goto L_0x01aa;
         L_0x0199:
-            r1 = NUM; // 0x7f0e0136 float:1.8875666E38 double:1.05316231E-314;
+            r1 = NUM; // 0x7f0e013f float:1.8875685E38 double:1.053162314E-314;
             r2 = new java.lang.Object[r12];
             r3 = r14.author;
             r2[r13] = r3;
@@ -6382,28 +6383,27 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
         public void updatePlayingMessageProgress() {
             if (this.currentDocument != null && this.currentMessageObject != null) {
-                int i;
                 if (!this.seekBar.isDragging()) {
                     this.seekBar.setProgress(this.currentMessageObject.audioProgress);
                 }
+                int i = 0;
                 if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
                     i = this.currentMessageObject.audioProgressSec;
                 } else {
-                    for (i = 0; i < this.currentDocument.attributes.size(); i++) {
-                        DocumentAttribute documentAttribute = (DocumentAttribute) this.currentDocument.attributes.get(i);
+                    for (int i2 = 0; i2 < this.currentDocument.attributes.size(); i2++) {
+                        DocumentAttribute documentAttribute = (DocumentAttribute) this.currentDocument.attributes.get(i2);
                         if (documentAttribute instanceof TL_documentAttributeAudio) {
                             i = documentAttribute.duration;
                             break;
                         }
                     }
-                    i = 0;
                 }
-                String format = String.format("%d:%02d", new Object[]{Integer.valueOf(i / 60), Integer.valueOf(i % 60)});
+                String formatShortDuration = AndroidUtilities.formatShortDuration(i);
                 String str = this.lastTimeString;
-                if (str == null || !(str == null || str.equals(format))) {
-                    this.lastTimeString = format;
+                if (str == null || !(str == null || str.equals(formatShortDuration))) {
+                    this.lastTimeString = formatShortDuration;
                     ArticleViewer.audioTimePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-                    this.durationLayout = new StaticLayout(format, ArticleViewer.audioTimePaint, (int) Math.ceil((double) ArticleViewer.audioTimePaint.measureText(format)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.durationLayout = new StaticLayout(formatShortDuration, ArticleViewer.audioTimePaint, (int) Math.ceil((double) ArticleViewer.audioTimePaint.measureText(formatShortDuration)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 }
                 ArticleViewer.audioTimePaint.setColor(ArticleViewer.this.getTextColor());
                 invalidate();
@@ -13593,16 +13593,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         j = duration;
                     }
                 }
-                j /= 1000;
-                TextPaint paint = ArticleViewer.this.videoPlayerTime.getPaint();
-                r10 = new Object[4];
-                long j2 = j / 60;
-                r10[0] = Long.valueOf(j2);
-                j %= 60;
-                r10[1] = Long.valueOf(j);
-                r10[2] = Long.valueOf(j2);
-                r10[3] = Long.valueOf(j);
-                ArticleViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.dp(64.0f)) - ((int) Math.ceil((double) paint.measureText(String.format("%02d:%02d / %02d:%02d", r10)))), getMeasuredHeight());
+                i2 = (int) (j / 1000);
+                ArticleViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.dp(64.0f)) - ((int) Math.ceil((double) ArticleViewer.this.videoPlayerTime.getPaint().measureText(AndroidUtilities.formatLongDuration(i2, i2)))), getMeasuredHeight());
             }
 
             /* Access modifiers changed, original: protected */
@@ -14889,7 +14881,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004f:
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
+        r3 = NUM; // 0x7f0e09f9 float:1.8880216E38 double:1.053163418E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x0098 }
         r1 = android.content.Intent.createChooser(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -14900,16 +14892,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r0.<init>(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "AppName";
-        r2 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r2 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setTitle(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "OK";
-        r2 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r2 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 0;
         r0.setPositiveButton(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r1 = "PleaseDownload";
-        r2 = NUM; // 0x7f0e0884 float:1.887946E38 double:1.0531632337E-314;
+        r2 = NUM; // 0x7f0e08a8 float:1.8879532E38 double:1.0531632515E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setMessage(r1);	 Catch:{ Exception -> 0x0098 }
         r0 = r0.create();	 Catch:{ Exception -> 0x0098 }
@@ -14935,22 +14927,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     private void updateVideoPlayerTime() {
-        CharSequence format;
+        CharSequence formatLongDuration;
         VideoPlayer videoPlayer = this.videoPlayer;
-        String str = "%02d:%02d / %02d:%02d";
-        Integer valueOf = Integer.valueOf(0);
         if (videoPlayer == null) {
-            format = String.format(str, new Object[]{valueOf, valueOf, valueOf, valueOf});
+            formatLongDuration = AndroidUtilities.formatLongDuration(0, 0);
         } else {
             long currentPosition = videoPlayer.getCurrentPosition() / 1000;
-            if (this.videoPlayer.getDuration() / 1000 == -9223372036854775807L || currentPosition == -9223372036854775807L) {
-                format = String.format(str, new Object[]{valueOf, valueOf, valueOf, valueOf});
+            long duration = this.videoPlayer.getDuration() / 1000;
+            if (duration == -9223372036854775807L || currentPosition == -9223372036854775807L) {
+                formatLongDuration = AndroidUtilities.formatLongDuration(0, 0);
             } else {
-                format = String.format(str, new Object[]{Long.valueOf(currentPosition / 60), Long.valueOf(currentPosition % 60), Long.valueOf(r13 / 60), Long.valueOf(r13 % 60)});
+                formatLongDuration = AndroidUtilities.formatLongDuration((int) currentPosition, (int) duration);
             }
         }
-        if (!TextUtils.equals(this.videoPlayerTime.getText(), format)) {
-            this.videoPlayerTime.setText(format);
+        if (!TextUtils.equals(this.videoPlayerTime.getText(), formatLongDuration)) {
+            this.videoPlayerTime.setText(formatLongDuration);
         }
     }
 
@@ -15044,24 +15035,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         }
                     }
                 });
-                VideoPlayer videoPlayer = this.videoPlayer;
-                long j = 0;
-                if (videoPlayer != null) {
-                    long duration = videoPlayer.getDuration();
-                    if (duration != -9223372036854775807L) {
-                        j = duration;
-                    }
-                }
-                j /= 1000;
-                TextPaint paint = this.videoPlayerTime.getPaint();
-                r1 = new Object[4];
-                long j2 = j / 60;
-                r1[0] = Long.valueOf(j2);
-                j %= 60;
-                r1[1] = Long.valueOf(j);
-                r1[2] = Long.valueOf(j2);
-                r1[3] = Long.valueOf(j);
-                Math.ceil((double) paint.measureText(String.format("%02d:%02d / %02d:%02d", r1)));
             }
             this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
             this.bottomLayout.setVisibility(0);
@@ -15428,7 +15401,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r6.menuItem;
         r0.hideSubItem(r9);
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e0142 float:1.887569E38 double:1.0531623157E-314;
+        r1 = NUM; // 0x7f0e014b float:1.8875709E38 double:1.05316232E-314;
         r2 = "AttachGif";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -15443,21 +15416,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r14 == 0) goto L_0x00ef;
     L_0x00e0:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e0153 float:1.8875725E38 double:1.053162324E-314;
+        r1 = NUM; // 0x7f0e015c float:1.8875743E38 double:1.0531623286E-314;
         r2 = "AttachVideo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x0123;
     L_0x00ef:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e014d float:1.8875713E38 double:1.053162321E-314;
+        r1 = NUM; // 0x7f0e0156 float:1.8875731E38 double:1.0531623256E-314;
         r2 = "AttachPhoto";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x0123;
     L_0x00fe:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e0710 float:1.8878705E38 double:1.05316305E-314;
+        r1 = NUM; // 0x7f0e0733 float:1.8878776E38 double:1.053163067E-314;
         r2 = new java.lang.Object[r10];
         r3 = r6.currentIndex;
         r3 = r3 + r9;

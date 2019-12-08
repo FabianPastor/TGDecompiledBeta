@@ -318,19 +318,19 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             if (this.currentType == 0) {
                 drawable = getContext().getResources().getDrawable(NUM);
                 Theme.setDrawableColorByKey(drawable, str);
-                this.scrollSlidingTabStrip.addIconTab(drawable);
+                this.scrollSlidingTabStrip.addIconTab(0, drawable);
                 this.stickersEmptyView.setText(LocaleController.getString("NoStickers", NUM));
             } else {
                 drawable = getContext().getResources().getDrawable(NUM);
                 Theme.setDrawableColorByKey(drawable, str);
-                this.scrollSlidingTabStrip.addIconTab(drawable);
+                this.scrollSlidingTabStrip.addIconTab(1, drawable);
                 this.stickersEmptyView.setText(LocaleController.getString("NoMasks", NUM));
             }
             if (!this.recentStickers[this.currentType].isEmpty()) {
                 i = this.stickersTabOffset;
                 this.recentTabBum = i;
                 this.stickersTabOffset = i + 1;
-                this.scrollSlidingTabStrip.addIconTab(Theme.createEmojiIconSelectorDrawable(getContext(), NUM, Theme.getColor("chat_emojiPanelMasksIcon"), Theme.getColor("chat_emojiPanelMasksIconSelected")));
+                this.scrollSlidingTabStrip.addIconTab(2, Theme.createEmojiIconSelectorDrawable(getContext(), NUM, Theme.getColor("chat_emojiPanelMasksIcon"), Theme.getColor("chat_emojiPanelMasksIconSelected")));
             }
             this.stickerSets[this.currentType].clear();
             ArrayList stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType);

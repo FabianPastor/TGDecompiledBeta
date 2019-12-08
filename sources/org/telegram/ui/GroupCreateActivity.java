@@ -506,16 +506,16 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r11 = r11.itemView;
             r11 = (org.telegram.ui.Cells.TextCell) r11;
             r0 = r10.inviteViaLink;
-            r2 = NUM; // 0x7var_ float:1.7945825E38 double:1.052935807E-314;
+            r2 = NUM; // 0x7var_ float:1.7945827E38 double:1.0529358074E-314;
             if (r0 != r12) goto L_0x0028;
         L_0x001a:
-            r12 = NUM; // 0x7f0e023a float:1.8876194E38 double:1.0531624382E-314;
+            r12 = NUM; // 0x7f0e0244 float:1.8876214E38 double:1.053162443E-314;
             r0 = "ChannelInviteViaLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
             goto L_0x018e;
         L_0x0028:
-            r12 = NUM; // 0x7f0e054d float:1.887779E38 double:1.053162827E-314;
+            r12 = NUM; // 0x7f0e0568 float:1.8877845E38 double:1.0531628404E-314;
             r0 = "InviteToGroupByLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
@@ -718,7 +718,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r12 = r10.searching;
             if (r12 == 0) goto L_0x018e;
         L_0x0182:
-            r12 = NUM; // 0x7f0e04ea float:1.887759E38 double:1.053162778E-314;
+            r12 = NUM; // 0x7f0e0502 float:1.8877638E38 double:1.05316279E-314;
             r0 = "GlobalSearch";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -1004,14 +1004,16 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public /* synthetic */ void lambda$updateSearchResults$4$GroupCreateActivity$GroupCreateAdapter(ArrayList arrayList, ArrayList arrayList2) {
-            this.searchRunnable = null;
-            this.searchResult = arrayList;
-            this.searchResultNames = arrayList2;
-            this.searchAdapterHelper.mergeResults(this.searchResult);
-            if (this.searching && !this.searchAdapterHelper.isSearchInProgress()) {
-                GroupCreateActivity.this.emptyView.showTextView();
+            if (this.searching) {
+                this.searchRunnable = null;
+                this.searchResult = arrayList;
+                this.searchResultNames = arrayList2;
+                this.searchAdapterHelper.mergeResults(this.searchResult);
+                if (this.searching && !this.searchAdapterHelper.isSearchInProgress()) {
+                    GroupCreateActivity.this.emptyView.showTextView();
+                }
+                notifyDataSetChanged();
             }
-            notifyDataSetChanged();
         }
     }
 

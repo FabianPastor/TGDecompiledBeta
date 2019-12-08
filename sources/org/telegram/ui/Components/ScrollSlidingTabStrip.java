@@ -1,12 +1,16 @@
 package org.telegram.ui.Components;
 
+import android.animation.LayoutTransition;
+import android.animation.LayoutTransition.TransitionListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -14,6 +18,8 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
@@ -22,6 +28,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ScrollSlidingTabStrip extends HorizontalScrollView {
@@ -31,17 +38,21 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private LayoutParams defaultTabLayoutParams;
     private ScrollSlidingTabStripDelegate delegate;
     private int dividerPadding = AndroidUtilities.dp(12.0f);
+    private SparseArray<View> futureTabsPositions = new SparseArray();
     private int indicatorColor = -10066330;
     private int indicatorHeight;
     private long lastAnimationTime;
     private int lastScrollX = 0;
+    private LayoutTransition layoutTransition;
     private float positionAnimationProgress;
+    private HashMap<String, View> prevTypes = new HashMap();
     private Paint rectPaint;
     private int scrollOffset = AndroidUtilities.dp(52.0f);
     private boolean shouldExpand;
     private float startAnimationPosition;
     private int tabCount;
     private int tabPadding = AndroidUtilities.dp(24.0f);
+    private HashMap<String, View> tabTypes = new HashMap();
     private LinearLayout tabsContainer;
     private int underlineColor = NUM;
     private int underlineHeight = AndroidUtilities.dp(2.0f);
@@ -64,6 +75,17 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.rectPaint.setStyle(Style.FILL);
         this.defaultTabLayoutParams = new LayoutParams(AndroidUtilities.dp(52.0f), -1);
         this.defaultExpandLayoutParams = new LayoutParams(0, -1, 1.0f);
+        this.layoutTransition = new LayoutTransition();
+        this.layoutTransition.setAnimateParentHierarchy(false);
+        this.layoutTransition.setDuration(250);
+        this.layoutTransition.addTransitionListener(new TransitionListener() {
+            public void startTransition(LayoutTransition layoutTransition, ViewGroup viewGroup, View view, int i) {
+            }
+
+            public void endTransition(LayoutTransition layoutTransition, ViewGroup viewGroup, View view, int i) {
+                ScrollSlidingTabStrip.this.tabsContainer.setLayoutTransition(null);
+            }
+        });
     }
 
     public void setDelegate(ScrollSlidingTabStripDelegate scrollSlidingTabStripDelegate) {
@@ -72,9 +94,42 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
     public void removeTabs() {
         this.tabsContainer.removeAllViews();
+        this.tabTypes.clear();
+        this.prevTypes.clear();
+        this.futureTabsPositions.clear();
         this.tabCount = 0;
         this.currentPosition = 0;
         this.animateFromPosition = false;
+    }
+
+    public void beginUpdate(boolean z) {
+        this.prevTypes = this.tabTypes;
+        this.tabTypes = new HashMap();
+        this.futureTabsPositions.clear();
+        this.tabCount = 0;
+        if (z) {
+            this.tabsContainer.setLayoutTransition(this.layoutTransition);
+        }
+    }
+
+    public void commitUpdate() {
+        HashMap hashMap = this.prevTypes;
+        if (hashMap != null) {
+            for (Entry value : hashMap.entrySet()) {
+                this.tabsContainer.removeView((View) value.getValue());
+            }
+            this.prevTypes.clear();
+        }
+        int size = this.futureTabsPositions.size();
+        for (int i = 0; i < size; i++) {
+            int keyAt = this.futureTabsPositions.keyAt(i);
+            View view = (View) this.futureTabsPositions.valueAt(i);
+            if (this.tabsContainer.indexOfChild(view) != keyAt) {
+                this.tabsContainer.removeView(view);
+                this.tabsContainer.addView(view, keyAt);
+            }
+        }
+        this.futureTabsPositions.clear();
     }
 
     public void selectTab(int i) {
@@ -83,98 +138,164 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
-    public TextView addIconTabWithCounter(Drawable drawable) {
-        int i = this.tabCount;
-        this.tabCount = i + 1;
-        FrameLayout frameLayout = new FrameLayout(getContext());
-        frameLayout.setFocusable(true);
-        this.tabsContainer.addView(frameLayout);
-        ImageView imageView = new ImageView(getContext());
-        imageView.setImageDrawable(drawable);
-        imageView.setScaleType(ScaleType.CENTER);
-        frameLayout.setOnClickListener(new -$$Lambda$ScrollSlidingTabStrip$mNTU5l0eITNwV9vJo7-FdGx3xIs(this, i));
-        frameLayout.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
-        frameLayout.setSelected(i == this.currentPosition);
-        TextView textView = new TextView(getContext());
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView.setTextSize(1, 12.0f);
-        textView.setTextColor(Theme.getColor("chat_emojiPanelBadgeText"));
-        textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(9.0f), Theme.getColor("chat_emojiPanelBadgeBackground")));
-        textView.setMinWidth(AndroidUtilities.dp(18.0f));
-        textView.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), AndroidUtilities.dp(1.0f));
-        frameLayout.addView(textView, LayoutHelper.createFrame(-2, 18.0f, 51, 26.0f, 6.0f, 0.0f, 0.0f));
+    private void checkViewIndex(String str, View view, int i) {
+        HashMap hashMap = this.prevTypes;
+        if (hashMap != null) {
+            hashMap.remove(str);
+        }
+        this.futureTabsPositions.put(i, view);
+    }
+
+    public TextView addIconTabWithCounter(int i, Drawable drawable) {
+        TextView textView;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("textTab");
+        stringBuilder.append(i);
+        String stringBuilder2 = stringBuilder.toString();
+        int i2 = this.tabCount;
+        this.tabCount = i2 + 1;
+        FrameLayout frameLayout = (FrameLayout) this.prevTypes.get(stringBuilder2);
+        boolean z = false;
+        if (frameLayout != null) {
+            textView = (TextView) frameLayout.getChildAt(1);
+            checkViewIndex(stringBuilder2, frameLayout, i2);
+        } else {
+            frameLayout = new FrameLayout(getContext());
+            frameLayout.setFocusable(true);
+            this.tabsContainer.addView(frameLayout, i2);
+            ImageView imageView = new ImageView(getContext());
+            imageView.setImageDrawable(drawable);
+            imageView.setScaleType(ScaleType.CENTER);
+            frameLayout.setOnClickListener(new -$$Lambda$ScrollSlidingTabStrip$Mg6YBvRHsbzFMvGEZ5gJ6RjTMS4(this));
+            frameLayout.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
+            textView = new TextView(getContext());
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView.setTextSize(1, 12.0f);
+            textView.setTextColor(Theme.getColor("chat_emojiPanelBadgeText"));
+            textView.setGravity(17);
+            textView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(9.0f), Theme.getColor("chat_emojiPanelBadgeBackground")));
+            textView.setMinWidth(AndroidUtilities.dp(18.0f));
+            textView.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), AndroidUtilities.dp(1.0f));
+            frameLayout.addView(textView, LayoutHelper.createFrame(-2, 18.0f, 51, 26.0f, 6.0f, 0.0f, 0.0f));
+        }
+        frameLayout.setTag(NUM, Integer.valueOf(i2));
+        if (i2 == this.currentPosition) {
+            z = true;
+        }
+        frameLayout.setSelected(z);
+        this.tabTypes.put(stringBuilder2, frameLayout);
         return textView;
     }
 
-    public /* synthetic */ void lambda$addIconTabWithCounter$0$ScrollSlidingTabStrip(int i, View view) {
-        this.delegate.onPageSelected(i);
+    public /* synthetic */ void lambda$addIconTabWithCounter$0$ScrollSlidingTabStrip(View view) {
+        this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }
 
-    public ImageView addIconTab(Drawable drawable) {
-        int i = this.tabCount;
-        this.tabCount = i + 1;
-        ImageView imageView = new ImageView(getContext());
+    public ImageView addIconTab(int i, Drawable drawable) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("tab");
+        stringBuilder.append(i);
+        String stringBuilder2 = stringBuilder.toString();
+        int i2 = this.tabCount;
+        this.tabCount = i2 + 1;
+        ImageView imageView = (ImageView) this.prevTypes.get(stringBuilder2);
         boolean z = true;
-        imageView.setFocusable(true);
-        imageView.setImageDrawable(drawable);
-        imageView.setScaleType(ScaleType.CENTER);
-        imageView.setOnClickListener(new -$$Lambda$ScrollSlidingTabStrip$_7-oyaI-rm6dAg9Sbg63YJVLh4k(this, i));
-        this.tabsContainer.addView(imageView);
-        if (i != this.currentPosition) {
+        if (imageView != null) {
+            checkViewIndex(stringBuilder2, imageView, i2);
+        } else {
+            imageView = new ImageView(getContext());
+            imageView.setFocusable(true);
+            imageView.setImageDrawable(drawable);
+            imageView.setScaleType(ScaleType.CENTER);
+            imageView.setOnClickListener(new -$$Lambda$ScrollSlidingTabStrip$-knZopOmL0i4nlzfxWP13yCLASSNAMEyU(this));
+            this.tabsContainer.addView(imageView, i2);
+        }
+        imageView.setTag(NUM, Integer.valueOf(i2));
+        if (i2 != this.currentPosition) {
             z = false;
         }
         imageView.setSelected(z);
+        this.tabTypes.put(stringBuilder2, imageView);
         return imageView;
     }
 
-    public /* synthetic */ void lambda$addIconTab$1$ScrollSlidingTabStrip(int i, View view) {
-        this.delegate.onPageSelected(i);
+    public /* synthetic */ void lambda$addIconTab$1$ScrollSlidingTabStrip(View view) {
+        this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }
 
     public void addStickerTab(Chat chat) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("chat");
+        stringBuilder.append(chat.id);
+        String stringBuilder2 = stringBuilder.toString();
         int i = this.tabCount;
         this.tabCount = i + 1;
-        FrameLayout frameLayout = new FrameLayout(getContext());
-        frameLayout.setFocusable(true);
-        frameLayout.setOnClickListener(new -$$Lambda$ScrollSlidingTabStrip$CxqiesXBMvO9L7nEGHWQr5LTQDY(this, i));
-        this.tabsContainer.addView(frameLayout);
-        frameLayout.setSelected(i == this.currentPosition);
-        BackupImageView backupImageView = new BackupImageView(getContext());
-        backupImageView.setLayerNum(1);
-        backupImageView.setRoundRadius(AndroidUtilities.dp(15.0f));
-        Drawable avatarDrawable = new AvatarDrawable();
-        avatarDrawable.setTextSize(AndroidUtilities.dp(14.0f));
-        avatarDrawable.setInfo(chat);
-        backupImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", avatarDrawable, (Object) chat);
-        backupImageView.setAspectFit(true);
-        frameLayout.addView(backupImageView, LayoutHelper.createFrame(30, 30, 17));
+        FrameLayout frameLayout = (FrameLayout) this.prevTypes.get(stringBuilder2);
+        boolean z = false;
+        if (frameLayout != null) {
+            checkViewIndex(stringBuilder2, frameLayout, i);
+        } else {
+            frameLayout = new FrameLayout(getContext());
+            frameLayout.setFocusable(true);
+            frameLayout.setOnClickListener(new -$$Lambda$ScrollSlidingTabStrip$yCy1gNSpMXs7Mbzifyk58_0TeXA(this));
+            this.tabsContainer.addView(frameLayout, i);
+            Drawable avatarDrawable = new AvatarDrawable();
+            avatarDrawable.setTextSize(AndroidUtilities.dp(14.0f));
+            avatarDrawable.setInfo(chat);
+            BackupImageView backupImageView = new BackupImageView(getContext());
+            backupImageView.setLayerNum(1);
+            backupImageView.setRoundRadius(AndroidUtilities.dp(15.0f));
+            backupImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", avatarDrawable, (Object) chat);
+            backupImageView.setAspectFit(true);
+            frameLayout.addView(backupImageView, LayoutHelper.createFrame(30, 30, 17));
+        }
+        frameLayout.setTag(NUM, Integer.valueOf(i));
+        if (i == this.currentPosition) {
+            z = true;
+        }
+        frameLayout.setSelected(z);
+        this.tabTypes.put(stringBuilder2, frameLayout);
     }
 
-    public /* synthetic */ void lambda$addStickerTab$2$ScrollSlidingTabStrip(int i, View view) {
-        this.delegate.onPageSelected(i);
+    public /* synthetic */ void lambda$addStickerTab$2$ScrollSlidingTabStrip(View view) {
+        this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }
 
-    public View addStickerTab(TLObject tLObject, Document document, Object obj) {
+    public View addStickerTab(TLObject tLObject, Document document, TL_messages_stickerSet tL_messages_stickerSet) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("set");
+        stringBuilder.append(tL_messages_stickerSet.set.id);
+        String stringBuilder2 = stringBuilder.toString();
         int i = this.tabCount;
         this.tabCount = i + 1;
-        FrameLayout frameLayout = new FrameLayout(getContext());
+        FrameLayout frameLayout = (FrameLayout) this.prevTypes.get(stringBuilder2);
+        boolean z = true;
+        if (frameLayout != null) {
+            checkViewIndex(stringBuilder2, frameLayout, i);
+        } else {
+            frameLayout = new FrameLayout(getContext());
+            frameLayout.setFocusable(true);
+            frameLayout.setOnClickListener(new -$$Lambda$ScrollSlidingTabStrip$cxe7rrzK6mwQBm262XzWyjJ8n2o(this));
+            this.tabsContainer.addView(frameLayout, i);
+            BackupImageView backupImageView = new BackupImageView(getContext());
+            backupImageView.setLayerNum(1);
+            backupImageView.setAspectFit(true);
+            frameLayout.addView(backupImageView, LayoutHelper.createFrame(30, 30, 17));
+        }
         frameLayout.setTag(tLObject);
-        frameLayout.setTag(NUM, obj);
+        frameLayout.setTag(NUM, Integer.valueOf(i));
+        frameLayout.setTag(NUM, tL_messages_stickerSet);
         frameLayout.setTag(NUM, document);
-        frameLayout.setFocusable(true);
-        frameLayout.setOnClickListener(new -$$Lambda$ScrollSlidingTabStrip$VOvZofAy7NE0HRe6ap1qMeWlOr0(this, i));
-        this.tabsContainer.addView(frameLayout);
-        frameLayout.setSelected(i == this.currentPosition);
-        BackupImageView backupImageView = new BackupImageView(getContext());
-        backupImageView.setLayerNum(1);
-        backupImageView.setAspectFit(true);
-        frameLayout.addView(backupImageView, LayoutHelper.createFrame(30, 30, 17));
+        if (i != this.currentPosition) {
+            z = false;
+        }
+        frameLayout.setSelected(z);
+        this.tabTypes.put(stringBuilder2, frameLayout);
         return frameLayout;
     }
 
-    public /* synthetic */ void lambda$addStickerTab$3$ScrollSlidingTabStrip(int i, View view) {
-        this.delegate.onPageSelected(i);
+    public /* synthetic */ void lambda$addStickerTab$3$ScrollSlidingTabStrip(View view) {
+        this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }
 
     public void updateTabStyles() {

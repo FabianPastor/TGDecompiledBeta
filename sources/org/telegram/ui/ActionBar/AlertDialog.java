@@ -52,6 +52,7 @@ public class AlertDialog extends Dialog implements Callback {
     private ScrollView contentScrollView;
     private int currentProgress;
     private View customView;
+    private int customViewHeight = -2;
     private int customViewOffset = 20;
     private boolean dismissDialogByButtons = true;
     private Runnable dismissRunnable = new -$$Lambda$H9iyBEO4Zihg11d8XSg-qvJnAGk(this);
@@ -183,7 +184,12 @@ public class AlertDialog extends Dialog implements Callback {
         }
 
         public Builder setView(View view) {
+            return setView(view, -2);
+        }
+
+        public Builder setView(View view, int i) {
             this.alertDialog.customView = view;
+            this.alertDialog.customViewHeight = i;
             return this;
         }
 
@@ -935,7 +941,7 @@ public class AlertDialog extends Dialog implements Callback {
             if (view.getParent() != null) {
                 ((ViewGroup) this.customView.getParent()).removeView(this.customView);
             }
-            this.scrollContainer.addView(this.customView, LayoutHelper.createLinear(-1, -2));
+            this.scrollContainer.addView(this.customView, LayoutHelper.createLinear(-1, this.customViewHeight));
         }
         if (obj != null) {
             this.buttonsLayout = new FrameLayout(getContext()) {

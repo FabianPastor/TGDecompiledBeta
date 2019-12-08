@@ -83,6 +83,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.SeekBarView;
+import org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate;
 import org.telegram.ui.Components.ThemeEditorView;
 
 public class ThemeActivity extends BaseFragment implements NotificationCenterDelegate {
@@ -314,27 +315,29 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
             this.sizeBar = new SeekBarView(context);
             this.sizeBar.setReportChanges(true);
-            this.sizeBar.setDelegate(new -$$Lambda$ThemeActivity$TextSizeCell$Ci0_0LdqTC4U6xi9evAA0pUhylM(this));
+            this.sizeBar.setDelegate(new SeekBarViewDelegate(ThemeActivity.this) {
+                public void onSeekBarPressed(boolean z) {
+                }
+
+                public void onSeekBarDrag(boolean z, float f) {
+                    int round = Math.round(((float) TextSizeCell.this.startFontSize) + (((float) (TextSizeCell.this.endFontSize - TextSizeCell.this.startFontSize)) * f));
+                    if (round != SharedConfig.fontSize) {
+                        SharedConfig.fontSize = round;
+                        Editor edit = MessagesController.getGlobalMainSettings().edit();
+                        edit.putInt("fons_size", SharedConfig.fontSize);
+                        edit.commit();
+                        Theme.chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) SharedConfig.fontSize));
+                        ChatMessageCell[] cells = TextSizeCell.this.messagesCell.getCells();
+                        for (int i = 0; i < cells.length; i++) {
+                            cells[i].getMessageObject().resetLayout();
+                            cells[i].requestLayout();
+                        }
+                    }
+                }
+            });
             addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 9.0f, 5.0f, 43.0f, 0.0f));
             this.messagesCell = new ThemePreviewMessagesCell(context, ThemeActivity.this.parentLayout, 0);
             addView(this.messagesCell, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 53.0f, 0.0f, 0.0f));
-        }
-
-        public /* synthetic */ void lambda$new$0$ThemeActivity$TextSizeCell(float f) {
-            int i = this.startFontSize;
-            int round = Math.round(((float) i) + (((float) (this.endFontSize - i)) * f));
-            if (round != SharedConfig.fontSize) {
-                SharedConfig.fontSize = round;
-                Editor edit = MessagesController.getGlobalMainSettings().edit();
-                edit.putInt("fons_size", SharedConfig.fontSize);
-                edit.commit();
-                Theme.chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) SharedConfig.fontSize));
-                ChatMessageCell[] cells = this.messagesCell.getCells();
-                for (i = 0; i < cells.length; i++) {
-                    cells[i].getMessageObject().resetLayout();
-                    cells[i].requestLayout();
-                }
-            }
         }
 
         /* Access modifiers changed, original: protected */
@@ -475,7 +478,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r3 = r5;
             r0.<init>(r1, r2, r3, r4, r5, r6);
             r8.showDialog(r9);
-            goto L_0x01d0;
+            goto L_0x01e2;
         L_0x0049:
             r9 = 0;
             r0 = 1;
@@ -602,23 +605,23 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x012d:
             r8 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x0143 }
             r10 = "ShareFile";
-            r0 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
+            r0 = NUM; // 0x7f0e09f9 float:1.8880216E38 double:1.053163418E-314;
             r10 = org.telegram.messenger.LocaleController.getString(r10, r0);	 Catch:{ Exception -> 0x0143 }
             r9 = android.content.Intent.createChooser(r9, r10);	 Catch:{ Exception -> 0x0143 }
             r10 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
             r8.startActivityForResult(r9, r10);	 Catch:{ Exception -> 0x0143 }
-            goto L_0x01d0;
+            goto L_0x01e2;
         L_0x0143:
             r8 = move-exception;
             org.telegram.messenger.FileLog.e(r8);
-            goto L_0x01d0;
+            goto L_0x01e2;
         L_0x0149:
             r1 = 2;
             if (r10 != r1) goto L_0x016f;
         L_0x014c:
             r9 = org.telegram.ui.ThemeActivity.this;
             r9 = r9.parentLayout;
-            if (r9 == 0) goto L_0x01d0;
+            if (r9 == 0) goto L_0x01e2;
         L_0x0154:
             org.telegram.ui.ActionBar.Theme.applyTheme(r8);
             r9 = org.telegram.ui.ThemeActivity.this;
@@ -629,7 +632,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r10 = org.telegram.ui.ThemeActivity.this;
             r10 = r10.getParentActivity();
             r9.show(r10, r8);
-            goto L_0x01d0;
+            goto L_0x01e2;
         L_0x016f:
             r0 = 3;
             if (r10 != r0) goto L_0x017e;
@@ -639,7 +642,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r0 = 0;
             r10.<init>(r8, r0);
             r9.presentFragment(r10);
-            goto L_0x01d0;
+            goto L_0x01e2;
         L_0x017e:
             r10 = org.telegram.ui.ThemeActivity.this;
             r10 = r10.getParentActivity();
@@ -651,28 +654,36 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r0 = org.telegram.ui.ThemeActivity.this;
             r0 = r0.getParentActivity();
             r10.<init>(r0);
-            r0 = NUM; // 0x7f0e0377 float:1.8876837E38 double:1.053162595E-314;
+            r0 = NUM; // 0x7f0e038d float:1.8876881E38 double:1.0531626057E-314;
+            r1 = "DeleteThemeTitle";
+            r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
+            r10.setTitle(r0);
+            r0 = NUM; // 0x7f0e038c float:1.887688E38 double:1.053162605E-314;
             r1 = "DeleteThemeAlert";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r10.setMessage(r0);
-            r0 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
-            r1 = "AppName";
-            r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
-            r10.setTitle(r0);
-            r0 = NUM; // 0x7f0e0356 float:1.887677E38 double:1.0531625786E-314;
+            r0 = NUM; // 0x7f0e0363 float:1.8876796E38 double:1.053162585E-314;
             r1 = "Delete";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r1 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw;
             r1.<init>(r7, r8);
             r10.setPositiveButton(r0, r1);
-            r8 = NUM; // 0x7f0e01fa float:1.8876064E38 double:1.0531624066E-314;
+            r8 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
             r0 = "Cancel";
             r8 = org.telegram.messenger.LocaleController.getString(r0, r8);
             r10.setNegativeButton(r8, r9);
-            r8 = org.telegram.ui.ThemeActivity.this;
-            r9 = r10.create();
-            r8.showDialog(r9);
-        L_0x01d0:
+            r8 = r10.create();
+            r9 = org.telegram.ui.ThemeActivity.this;
+            r9.showDialog(r8);
+            r9 = -1;
+            r8 = r8.getButton(r9);
+            r8 = (android.widget.TextView) r8;
+            if (r8 == 0) goto L_0x01e2;
+        L_0x01d9:
+            r9 = "dialogTextRed2";
+            r9 = org.telegram.ui.ActionBar.Theme.getColor(r9);
+            r8.setTextColor(r9);
+        L_0x01e2:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeActivity$ListAdapter.lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme$ThemeInfo, android.content.DialogInterface, int):void");
@@ -1941,8 +1952,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 try {
                     if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService(str)).isProviderEnabled(str2)) {
                         Builder builder = new Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", NUM));
-                        builder.setMessage(LocaleController.getString("GpsDisabledAlert", NUM));
+                        builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", NUM));
+                        builder.setMessage(LocaleController.getString("GpsDisabledAlertText", NUM));
                         builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new -$$Lambda$ThemeActivity$oEXZvbxqKHkZY6ZgCJTwtSLiYYk(this));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                         showDialog(builder.create());

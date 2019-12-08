@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player.EventListener;
+import com.google.android.exoplayer2.Player.EventListener.-CC;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.SimpleExoPlayer.VideoListener;
 import com.google.android.exoplayer2.Timeline;
@@ -82,10 +83,18 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         void onVideoSizeChanged(int i, int i2, int i3, float f);
     }
 
+    public /* synthetic */ void onIsPlayingChanged(boolean z) {
+        -CC.$default$onIsPlayingChanged(this, z);
+    }
+
     public void onLoadingChanged(boolean z) {
     }
 
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+    }
+
+    public /* synthetic */ void onPlaybackSuppressionReasonChanged(int i) {
+        -CC.$default$onPlaybackSuppressionReasonChanged(this, i);
     }
 
     public void onPositionDiscontinuity(int i) {
@@ -134,10 +143,18 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         if (this.mixedAudio && this.audioPlayer == null) {
             this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, defaultLoadControl, null, 2);
             this.audioPlayer.addListener(new EventListener() {
+                public /* synthetic */ void onIsPlayingChanged(boolean z) {
+                    -CC.$default$onIsPlayingChanged(this, z);
+                }
+
                 public void onLoadingChanged(boolean z) {
                 }
 
                 public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+                }
+
+                public /* synthetic */ void onPlaybackSuppressionReasonChanged(int i) {
+                    -CC.$default$onPlaybackSuppressionReasonChanged(this, i);
                 }
 
                 public void onPlayerError(ExoPlaybackException exoPlaybackException) {
@@ -182,7 +199,7 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         for (int i = 0; i < 2; i++) {
             Uri uri3;
             String str3;
-            MediaSource hlsMediaSource;
+            MediaSource createMediaSource;
             if (i == 0) {
                 uri3 = uri;
                 str3 = str;
@@ -209,14 +226,14 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
                 factory = this.mediaDataSourceFactory;
                 dashMediaSource = new DashMediaSource(uri3, factory, new DefaultDashChunkSource.Factory(factory), this.mainHandler, null);
             } else if (obj == 1) {
-                hlsMediaSource = new HlsMediaSource(uri3, this.mediaDataSourceFactory, this.mainHandler, null);
+                createMediaSource = new HlsMediaSource.Factory(this.mediaDataSourceFactory).createMediaSource(uri3);
             } else if (obj != 2) {
                 dashMediaSource = new ExtractorMediaSource(uri3, this.mediaDataSourceFactory, new DefaultExtractorsFactory(), this.mainHandler, null);
             } else {
                 factory = this.mediaDataSourceFactory;
                 dashMediaSource = new SsMediaSource(uri3, factory, new DefaultSsChunkSource.Factory(factory), this.mainHandler, null);
             }
-            LoopingMediaSource loopingMediaSource = new LoopingMediaSource(hlsMediaSource);
+            LoopingMediaSource loopingMediaSource = new LoopingMediaSource(createMediaSource);
             if (i == 0) {
                 mediaSource = loopingMediaSource;
             } else {
@@ -227,10 +244,10 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         this.audioPlayer.prepare(mediaSource2, true, true);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0086  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0087  */
     /* JADX WARNING: Removed duplicated region for block: B:22:0x0053  */
     /* JADX WARNING: Removed duplicated region for block: B:22:0x0053  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0086  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0087  */
     /* JADX WARNING: Missing block: B:13:0x0039, code skipped:
             if (r10.equals("dash") == false) goto L_0x0050;
      */
@@ -292,7 +309,7 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
     L_0x0050:
         r2 = -1;
     L_0x0051:
-        if (r2 == 0) goto L_0x0086;
+        if (r2 == 0) goto L_0x0087;
     L_0x0053:
         if (r2 == r6) goto L_0x007b;
     L_0x0055:
@@ -307,7 +324,7 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         r0 = r7;
         r1 = r9;
         r0.<init>(r1, r2, r3, r4, r5);
-        goto L_0x0097;
+        goto L_0x0098;
     L_0x0069:
         r7 = new com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
         r2 = r8.mediaDataSourceFactory;
@@ -318,15 +335,14 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         r0 = r7;
         r1 = r9;
         r0.<init>(r1, r2, r3, r4, r5);
-        goto L_0x0097;
+        goto L_0x0098;
     L_0x007b:
-        r7 = new com.google.android.exoplayer2.source.hls.HlsMediaSource;
-        r0 = r8.mediaDataSourceFactory;
-        r2 = r8.mainHandler;
-        r3 = 0;
-        r7.<init>(r9, r0, r2, r3);
-        goto L_0x0097;
-    L_0x0086:
+        r0 = new com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory;
+        r2 = r8.mediaDataSourceFactory;
+        r0.<init>(r2);
+        r7 = r0.createMediaSource(r9);
+        goto L_0x0098;
+    L_0x0087:
         r7 = new com.google.android.exoplayer2.source.dash.DashMediaSource;
         r2 = r8.mediaDataSourceFactory;
         r3 = new com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory;
@@ -336,7 +352,7 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         r0 = r7;
         r1 = r9;
         r0.<init>(r1, r2, r3, r4, r5);
-    L_0x0097:
+    L_0x0098:
         r0 = r8.player;
         r0.prepare(r7, r6, r6);
         return;

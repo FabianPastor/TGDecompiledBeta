@@ -2432,7 +2432,7 @@ public class TLRPC {
             if (r9 == r5) goto L_0x0061;
         L_0x005d:
             r9 = r7.legacy;
-            if (r9 == 0) goto L_0x011c;
+            if (r9 == 0) goto L_0x011d;
         L_0x0061:
             r9 = 2;
             if (r0 == 0) goto L_0x0099;
@@ -2468,12 +2468,12 @@ public class TLRPC {
             r7.message = r0;
         L_0x0099:
             r0 = r8.remaining();
-            if (r0 <= 0) goto L_0x011c;
+            if (r0 <= 0) goto L_0x011d;
         L_0x009f:
             r0 = r8.readString(r1);
             r7.attachPath = r0;
             r0 = r7.attachPath;
-            if (r0 == 0) goto L_0x011c;
+            if (r0 == 0) goto L_0x011d;
         L_0x00a9:
             r0 = r7.id;
             if (r0 < 0) goto L_0x00b5;
@@ -2482,54 +2482,54 @@ public class TLRPC {
             if (r0 == r5) goto L_0x00b5;
         L_0x00b1:
             r0 = r7.legacy;
-            if (r0 == 0) goto L_0x0114;
+            if (r0 == 0) goto L_0x0115;
         L_0x00b5:
             r0 = r7.attachPath;
             r3 = "||";
             r0 = r0.startsWith(r3);
-            if (r0 == 0) goto L_0x0114;
-        L_0x00bf:
+            if (r0 == 0) goto L_0x0115;
+        L_0x00c0:
             r0 = r7.attachPath;
             r3 = "\\|\\|";
             r0 = r0.split(r3);
             r3 = r0.length;
-            if (r3 <= 0) goto L_0x011c;
-        L_0x00ca:
+            if (r3 <= 0) goto L_0x011d;
+        L_0x00cb:
             r3 = r7.params;
-            if (r3 != 0) goto L_0x00d5;
-        L_0x00ce:
+            if (r3 != 0) goto L_0x00d6;
+        L_0x00cf:
             r3 = new java.util.HashMap;
             r3.<init>();
             r7.params = r3;
-        L_0x00d5:
-            r3 = 1;
         L_0x00d6:
+            r3 = 1;
+        L_0x00d7:
             r4 = r0.length;
             r4 = r4 - r2;
-            if (r3 >= r4) goto L_0x00f1;
-        L_0x00da:
+            if (r3 >= r4) goto L_0x00f2;
+        L_0x00db:
             r4 = r0[r3];
             r5 = "\\|=\\|";
             r4 = r4.split(r5);
             r5 = r4.length;
-            if (r5 != r9) goto L_0x00ee;
-        L_0x00e5:
+            if (r5 != r9) goto L_0x00ef;
+        L_0x00e6:
             r5 = r7.params;
             r6 = r4[r1];
             r4 = r4[r2];
             r5.put(r6, r4);
-        L_0x00ee:
+        L_0x00ef:
             r3 = r3 + 1;
-            goto L_0x00d6;
-        L_0x00f1:
+            goto L_0x00d7;
+        L_0x00f2:
             r9 = r0.length;
             r9 = r9 - r2;
             r9 = r0[r9];
             r9 = r9.trim();
             r7.attachPath = r9;
             r9 = r7.legacy;
-            if (r9 == 0) goto L_0x011c;
-        L_0x00ff:
+            if (r9 == 0) goto L_0x011d;
+        L_0x0100:
             r9 = r7.params;
             r0 = "legacy_layer";
             r9 = r9.get(r0);
@@ -2537,22 +2537,22 @@ public class TLRPC {
             r9 = org.telegram.messenger.Utilities.parseInt(r9);
             r9 = r9.intValue();
             r7.layer = r9;
-            goto L_0x011c;
-        L_0x0114:
+            goto L_0x011d;
+        L_0x0115:
             r9 = r7.attachPath;
             r9 = r9.trim();
             r7.attachPath = r9;
-        L_0x011c:
+        L_0x011d:
             r9 = r7.flags;
             r9 = r9 & 4;
-            if (r9 == 0) goto L_0x012c;
-        L_0x0122:
+            if (r9 == 0) goto L_0x012d;
+        L_0x0123:
             r9 = r7.id;
-            if (r9 >= 0) goto L_0x012c;
-        L_0x0126:
+            if (r9 >= 0) goto L_0x012d;
+        L_0x0127:
             r8 = r8.readInt32(r1);
             r7.fwd_msg_id = r8;
-        L_0x012c:
+        L_0x012d:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, int):void");

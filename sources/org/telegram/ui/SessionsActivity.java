@@ -319,33 +319,49 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$createView$11$SessionsActivity(View view, int i) {
         int i2 = i;
-        String str = "Cancel";
-        String str2 = "OK";
-        String str3 = "AppName";
+        String str = "dialogTextRed2";
+        String str2 = "Cancel";
+        String str3 = "Terminate";
+        String str4 = "Disconnect";
+        AlertDialog create;
+        TextView textView;
         if (i2 == this.terminateAllSessionsRow) {
             if (getParentActivity() != null) {
+                CharSequence string;
                 Builder builder = new Builder(getParentActivity());
                 if (this.currentType == 0) {
                     builder.setMessage(LocaleController.getString("AreYouSureSessions", NUM));
+                    builder.setTitle(LocaleController.getString("AreYouSureSessionsTitle", NUM));
+                    string = LocaleController.getString(str3, NUM);
                 } else {
                     builder.setMessage(LocaleController.getString("AreYouSureWebSessions", NUM));
+                    builder.setTitle(LocaleController.getString("TerminateWebSessionsTitle", NUM));
+                    string = LocaleController.getString(str4, NUM);
                 }
-                builder.setTitle(LocaleController.getString(str3, NUM));
-                builder.setPositiveButton(LocaleController.getString(str2, NUM), new -$$Lambda$SessionsActivity$oaaWYlgt897yPsbKGRVtpZZB0Zw(this));
-                builder.setNegativeButton(LocaleController.getString(str, NUM), null);
-                showDialog(builder.create());
+                builder.setPositiveButton(string, new -$$Lambda$SessionsActivity$oaaWYlgt897yPsbKGRVtpZZB0Zw(this));
+                builder.setNegativeButton(LocaleController.getString(str2, NUM), null);
+                create = builder.create();
+                showDialog(create);
+                textView = (TextView) create.getButton(-1);
+                if (textView != null) {
+                    textView.setTextColor(Theme.getColor(str));
+                }
             }
         } else if (((i2 >= this.otherSessionsStartRow && i2 < this.otherSessionsEndRow) || (i2 >= this.passwordSessionsStartRow && i2 < this.passwordSessionsEndRow)) && getParentActivity() != null) {
+            CharSequence string2;
             Builder builder2 = new Builder(getParentActivity());
-            builder2.setTitle(LocaleController.getString(str3, NUM));
             boolean[] zArr = new boolean[1];
             if (this.currentType == 0) {
-                builder2.setMessage(LocaleController.getString("TerminateSessionQuestion", NUM));
+                builder2.setMessage(LocaleController.getString("TerminateSessionText", NUM));
+                builder2.setTitle(LocaleController.getString("AreYouSureSessionTitle", NUM));
+                string2 = LocaleController.getString(str3, NUM);
             } else {
-                builder2.setMessage(LocaleController.formatString("TerminateWebSessionQuestion", NUM, ((TL_webAuthorization) this.sessions.get(i2 - this.otherSessionsStartRow)).domain));
+                builder2.setMessage(LocaleController.formatString("TerminateWebSessionText", NUM, ((TL_webAuthorization) this.sessions.get(i2 - this.otherSessionsStartRow)).domain));
+                builder2.setTitle(LocaleController.getString("TerminateWebSessionTitle", NUM));
+                str3 = LocaleController.getString(str4, NUM);
                 FrameLayout frameLayout = new FrameLayout(getParentActivity());
-                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(r10.bot_id));
-                String str4 = "";
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(r8.bot_id));
+                str4 = "";
                 String firstName = user != null ? UserObject.getFirstName(user) : str4;
                 CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), 1);
                 checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
@@ -355,10 +371,16 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 checkBoxCell.setOnClickListener(new -$$Lambda$SessionsActivity$fTHr4kOeCS_36_P5G_qrJ-UGaNE(zArr));
                 builder2.setCustomViewOffset(16);
                 builder2.setView(frameLayout);
+                string2 = str3;
             }
-            builder2.setPositiveButton(LocaleController.getString(str2, NUM), new -$$Lambda$SessionsActivity$Rp5LHvaMpCLASSNAMEOI5FKrDiSKjtcrQ(this, i2, zArr));
-            builder2.setNegativeButton(LocaleController.getString(str, NUM), null);
-            showDialog(builder2.create());
+            builder2.setPositiveButton(string2, new -$$Lambda$SessionsActivity$Rp5LHvaMpCLASSNAMEOI5FKrDiSKjtcrQ(this, i2, zArr));
+            builder2.setNegativeButton(LocaleController.getString(str2, NUM), null);
+            create = builder2.create();
+            showDialog(create);
+            textView = (TextView) create.getButton(-1);
+            if (textView != null) {
+                textView.setTextColor(Theme.getColor(str));
+            }
         }
     }
 

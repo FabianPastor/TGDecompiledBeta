@@ -91,8 +91,11 @@ public class WalletTransactionCell extends LinearLayout {
         byte[] bArr;
         StringBuilder stringBuilder;
         CharSequence format;
-        CharSequence spannableStringBuilder;
-        RawMessage rawMessage = rawTransaction.inMsg;
+        Object obj;
+        int i;
+        RawTransaction rawTransaction2 = rawTransaction;
+        boolean z2 = z;
+        RawMessage rawMessage = rawTransaction2.inMsg;
         if (rawMessage != null) {
             j = rawMessage.value + 0;
             bArr = rawMessage.message;
@@ -100,38 +103,40 @@ public class WalletTransactionCell extends LinearLayout {
             bArr = null;
             j = 0;
         }
-        RawMessage[] rawMessageArr = rawTransaction.outMsgs;
+        RawMessage[] rawMessageArr = rawTransaction2.outMsgs;
         if (rawMessageArr != null && rawMessageArr.length > 0) {
             byte[] bArr2 = bArr;
-            int i = 0;
+            int i2 = 0;
             while (true) {
-                RawMessage[] rawMessageArr2 = rawTransaction.outMsgs;
-                if (i >= rawMessageArr2.length) {
+                RawMessage[] rawMessageArr2 = rawTransaction2.outMsgs;
+                if (i2 >= rawMessageArr2.length) {
                     break;
                 }
-                j -= rawMessageArr2[i].value;
+                j -= rawMessageArr2[i2].value;
                 if (bArr2 == null || bArr2.length == 0) {
-                    bArr2 = rawTransaction.outMsgs[i].message;
+                    bArr2 = rawTransaction2.outMsgs[i2].message;
                 }
-                i++;
+                i2++;
             }
             bArr = bArr2;
         }
         this.clockImage.setVisibility(8);
         this.isEmpty = false;
         if (j > 0) {
-            stringBuilder = new StringBuilder(rawTransaction.inMsg.source);
+            stringBuilder = new StringBuilder(rawTransaction2.inMsg.source);
             this.valueTextView.setTextColor(Theme.getColor("wallet_greenText"));
             this.fromTextView.setText(LocaleController.getString("WalletFrom", NUM));
             format = String.format("+%s", new Object[]{TonController.formatCurrency(j)});
+            obj = null;
         } else {
             String str = "WalletTo";
-            if (rawTransaction.transactionId.lt == 0) {
-                stringBuilder = new StringBuilder(rawTransaction.inMsg.destination);
+            if (rawTransaction2.transactionId.lt == 0) {
+                stringBuilder = new StringBuilder(rawTransaction2.inMsg.destination);
                 this.fromTextView.setText(LocaleController.getString(str, NUM));
                 this.clockImage.setVisibility(0);
+                obj = 1;
             } else {
-                RawMessage[] rawMessageArr3 = rawTransaction.outMsgs;
+                RawMessage[] rawMessageArr3 = rawTransaction2.outMsgs;
                 if (rawMessageArr3 == null || rawMessageArr3.length <= 0) {
                     String str2 = "";
                     stringBuilder = new StringBuilder(str2);
@@ -142,38 +147,48 @@ public class WalletTransactionCell extends LinearLayout {
                     this.fromTextView.setText(LocaleController.getString(str, NUM));
                     stringBuilder = stringBuilder2;
                 }
+                obj = null;
             }
             this.valueTextView.setTextColor(Theme.getColor("wallet_redText"));
             format = String.format("%s", new Object[]{TonController.formatCurrency(j)});
         }
         this.currentAmount = j;
-        this.currentDate = rawTransaction.utime;
+        this.currentDate = rawTransaction2.utime;
         int indexOf = TextUtils.indexOf(format, '.');
         if (indexOf >= 0) {
-            spannableStringBuilder = new SpannableStringBuilder(format);
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(format);
             spannableStringBuilder.setSpan(new TypefaceSpan(this.defaultTypeFace, AndroidUtilities.dp(14.0f)), indexOf + 1, format.length(), 33);
-        } else {
-            spannableStringBuilder = format;
+            format = spannableStringBuilder;
         }
-        this.valueTextView.setText(spannableStringBuilder);
-        this.dateTextView.setText(LocaleController.getInstance().formatterDay.format(rawTransaction.utime * 1000));
+        this.valueTextView.setText(format);
+        this.dateTextView.setText(LocaleController.getInstance().formatterDay.format(rawTransaction2.utime * 1000));
         if (!this.isEmpty) {
             stringBuilder.insert(stringBuilder.length() / 2, 10);
         }
         this.addressValueTextView.setText(stringBuilder);
-        this.currentStorageFee = rawTransaction.storageFee;
-        this.currentTransactionFee = rawTransaction.otherFee;
+        if (obj != null) {
+            this.currentStorageFee = 0;
+            this.currentTransactionFee = 0;
+        } else {
+            this.currentStorageFee = rawTransaction2.storageFee;
+            this.currentTransactionFee = rawTransaction2.otherFee;
+        }
         if (this.currentStorageFee == 0 && this.currentTransactionFee == 0) {
             this.feeTextView.setVisibility(8);
+            i = 0;
         } else {
-            this.feeTextView.setText(LocaleController.formatString("WalletBlockchainFees", NUM, TonController.formatCurrency((-this.currentStorageFee) - this.currentTransactionFee)));
+            TextView textView = this.feeTextView;
+            Object[] objArr = new Object[1];
+            i = 0;
+            objArr[0] = TonController.formatCurrency((-this.currentStorageFee) - this.currentTransactionFee);
+            textView.setText(LocaleController.formatString("WalletBlockchainFees", NUM, objArr));
             this.feeTextView.setVisibility(0);
         }
         if (bArr == null || bArr.length <= 0) {
             this.commentTextView.setVisibility(8);
         } else {
             this.commentTextView.setText(new String(bArr));
-            this.commentTextView.setVisibility(0);
+            this.commentTextView.setVisibility(i);
         }
         LayoutParams layoutParams = (LayoutParams) this.addressValueTextView.getLayoutParams();
         if (this.commentTextView.getVisibility() == 0 || this.feeTextView.getVisibility() == 0) {
@@ -189,8 +204,8 @@ public class WalletTransactionCell extends LinearLayout {
                 layoutParams.bottomMargin = AndroidUtilities.dp(9.0f);
             }
         }
-        this.drawDivider = z;
-        setWillNotDraw(z ^ 1);
+        this.drawDivider = z2;
+        setWillNotDraw(z2 ^ 1);
     }
 
     public String getAddress() {

@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -150,7 +151,15 @@ public class ApplicationLoader extends Application {
     }
 
     public static void startPushService() {
-        if (MessagesController.getGlobalNotificationsSettings().getBoolean("pushService", true)) {
+        boolean z;
+        SharedPreferences globalNotificationsSettings = MessagesController.getGlobalNotificationsSettings();
+        String str = "pushService";
+        if (globalNotificationsSettings.contains(str)) {
+            z = globalNotificationsSettings.getBoolean(str, true);
+        } else {
+            z = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", false);
+        }
+        if (z) {
             try {
                 applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
                 return;
@@ -158,10 +167,6 @@ public class ApplicationLoader extends Application {
                 return;
             }
         }
-        stopPushService();
-    }
-
-    public static void stopPushService() {
         applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
         ((AlarmManager) applicationContext.getSystemService("alarm")).cancel(PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0));
     }

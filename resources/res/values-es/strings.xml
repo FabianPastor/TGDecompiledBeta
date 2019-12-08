@@ -200,7 +200,6 @@
     <string name="AddToStickers">Añadir a Stickers</string>
     <string name="AddToTheGroup">¿Añadir a %1$s al grupo?</string>
     <string name="AddToTheGroupForwardCount">Cantidad de últimos mensajes para reenviar:</string>
-    <string name="AddToTheGroupTitle">¿Añadir a %1$s al chat %2$s?</string>
     <string name="AddedToFavorites">Sticker añadido a Favoritos</string>
     <string name="AdminWillBeRemoved">%1$s se eliminará de los administradores si le aplicas restricciones.</string>
     <string name="Agree">Aceptar</string>
@@ -710,7 +709,6 @@
     <string name="ChooseFromGallery">Subir desde la galería</string>
     <string name="ChooseFromSearch">Buscar en la web</string>
     <string name="ChooseFromYourStickers">Elige desde tus stickers</string>
-    <string name="ChooseMapPreviewProvider">Elige el proveedor de vista previa del mapa</string>
     <string name="ChoosePhoto">Elegir foto</string>
     <string name="ChooseStickerSet">ELIGE UN PACK DE STICKERS</string>
     <string name="ChooseStickerSetMy">Puedes crear tus packs de stickers personalizados usando el bot @stickers.</string>
@@ -869,7 +867,6 @@
     <string name="DeleteForUser">Eliminar para %1$s</string>
     <string name="DeleteFromFavorites">Eliminar de Favoritos</string>
     <string name="DeleteGif">¿Eliminar GIF?</string>
-    <string name="DeleteLocalization">¿Eliminar traducción?</string>
     <string name="DeleteMega">Eliminar grupo</string>
     <string name="DeleteMegaMenu">Eliminar grupo</string>
     <string name="DeleteMessagesOption">Retirar mis mensajes</string>
@@ -1250,7 +1247,6 @@
     <string name="GlobalSearch">Búsqueda global</string>
     <string name="GlobalSendMessageRestricted">No se puede enviar mensajes en este grupo.</string>
     <string name="GotAQuestion">¿Tienes preguntas\10sobre Telegram?</string>
-    <string name="GpsDisabledAlert">Tu GPS parece estar desactivado. Por favor, actívalo para acceder a las características de ubicación.</string>
     <string name="Grain">Grano</string>
     <string name="Gray">Gris</string>
     <string name="Green">Verde</string>
@@ -1429,7 +1425,6 @@
     <string name="LocalAudioCache">Mensajes de voz/video</string>
     <string name="LocalCache">Otros archivos</string>
     <string name="LocalDatabase">Base de datos local</string>
-    <string name="LocalDatabaseClear">¿Eliminar de la caché los mensajes de texto?</string>
     <string name="LocalDatabaseInfo">Al eliminar la base de datos se eliminarán los mensajes en la caché y se comprimirá la base de datos para liberar espacio de almacenamiento. Telegram requiere algunos datos para funcionar, así que la base de datos nunca podrá llegar a cero.\10\10Esto puede tomar unos minutos.</string>
     <string name="LocalDocumentCache">Archivos</string>
     <string name="LocalGifCache">GIF</string>
@@ -1600,7 +1595,6 @@
     <string name="NewThemePreviewReply">¡Buenos días! ��</string>
     <string name="NewThemeTitle">Nuevo tema</string>
     <string name="Next">Siguiente</string>
-    <string name="NoAudio">Por favor, añade archivos a la carpeta de música en tu dispositivo para verlos aquí.</string>
     <string name="NoBlocked">No hay usuarios bloqueados</string>
     <string name="NoBlockedChannel2">Los usuarios que fueron eliminados del canal por los administradores no pueden volver a unirse con enlaces de invitación.</string>
     <string name="NoBlockedGroup2">Los usuarios que fueron eliminados del grupo por los administradores no pueden volver a unirse con enlaces de invitación.</string>
@@ -2418,12 +2412,8 @@
     <string name="SendAsFile">Como archivo</string>
     <string name="SendAsFiles">Como archivos</string>
     <string name="SendByEnter">Enviar con la tecla Intro</string>
-    <string name="SendContactTo">¿Enviar contacto a %1$s?</string>
-    <string name="SendContactToGroup">¿Enviar contacto a %1$s?</string>
     <string name="SendDayAt">\'Enviar el\' d \'de\' MMM \'a las\' HH:mm</string>
     <string name="SendDayYearAt">\'Enviar el\' d \'de\' MMM \'de\' yyyy \'a las\' HH:mm</string>
-    <string name="SendGameTo">¿Compartir el juego con %1$s?</string>
-    <string name="SendGameToGroup">¿Compartir el juego en %1$s?</string>
     <string name="SendGifPreview">Enviar GIF</string>
     <string name="SendItems">Enviar %1$s</string>
     <string name="SendLiveLocation">Ubicación en tiempo real</string>
@@ -2435,8 +2425,6 @@
     <string name="SendMessageRestricted">Los administradores del grupo han restringido que escribas hasta el %1$s</string>
     <string name="SendMessageRestrictedForever">Los administradores del grupo han restringido que escribas.</string>
     <string name="SendMessageTo">Añadir personas...</string>
-    <string name="SendMessagesTo">¿Enviar mensajes a %1$s?</string>
-    <string name="SendMessagesToGroup">¿Enviar mensajes a %1$s?</string>
     <string name="SendSelectedLocation">Enviar la ubicación seleccionada</string>
     <string name="SendSticker">ENVIAR STICKER</string>
     <string name="SendStickerPreview">Enviar sticker</string>
@@ -2581,9 +2569,6 @@
     <string name="StopAllLocationSharings">DETENER TODO</string>
     <string name="StopDownload">Detener descarga</string>
     <string name="StopLiveLocation">Dejar de compartir</string>
-    <string name="StopLiveLocationAlertAll">¿Quieres dejar de enviar tu ubicación en tiempo real?</string>
-    <string name="StopLiveLocationAlertToGroup">¿Quieres dejar de enviar la ubicación en tiempo real a %1$s?</string>
-    <string name="StopLiveLocationAlertToUser">¿Quieres dejar de enviar la ubicación en tiempo real a %1$s?</string>
     <string name="StopLoading">¿Detener la carga?</string>
     <string name="StopPoll">Detener encuesta</string>
     <string name="StopPollAlertText">Si detienes esta encuesta ahora, nadie más podrá votar. Esta acción no se puede deshacer.</string>
@@ -2610,7 +2595,6 @@
     <string name="SyncContacts">Sincronizar contactos</string>
     <string name="SyncContactsAdded">Los contactos de este dispositivo fueron añadidos a tu cuenta.</string>
     <string name="SyncContactsDelete">Eliminar contactos sincronizados</string>
-    <string name="SyncContactsDeleteInfo">Esto eliminará tus contactos de los servidores de Telegram. Si “Sincronizar contactos” está activado, los contactos se volverán a sincronizar.</string>
     <string name="SyncContactsInfoOff">Activa esta opción para sincronizar continuamente los contactos de este dispositivo con tu cuenta.</string>
     <string name="SyncContactsInfoOn">Los contactos de este dispositivo serán añadidos a tu cuenta.</string>
     <string name="SyncContactsOff">Los contactos de este dispositivo no serán añadidos a esta cuenta.</string>
@@ -2642,7 +2626,6 @@
     <string name="TerminateSessionInfo">Toca una sesión para cerrarla.</string>
     <string name="TerminateSessionQuestion">¿Cerrar esta sesión?</string>
     <string name="TerminateWebSessionInfo">Toca para desconectar de tu cuenta de Telegram.</string>
-    <string name="TerminateWebSessionQuestion">¿Desconectar %1$s?</string>
     <string name="TerminateWebSessionStop">Bloquear %1$s</string>
     <string name="TermsOfService">Términos de servicio</string>
     <string name="TermsOfServiceLogin">Al inscribirte,\10aceptas los *términos de servicio*.</string>

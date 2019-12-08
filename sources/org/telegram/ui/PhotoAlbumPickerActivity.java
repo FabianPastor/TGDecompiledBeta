@@ -705,6 +705,15 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
     }
 
+    public boolean onBackPressed() {
+        EditTextEmoji editTextEmoji = this.commentTextView;
+        if (editTextEmoji == null || !editTextEmoji.isPopupShowing()) {
+            return super.onBackPressed();
+        }
+        this.commentTextView.hidePopup(true);
+        return false;
+    }
+
     public void setMaxSelectedPhotos(int i, boolean z) {
         this.maxSelectedPhotos = i;
         this.allowOrder = z;
