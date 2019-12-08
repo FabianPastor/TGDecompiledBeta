@@ -475,8 +475,10 @@ public class BaseFragment {
         if (onDismissListener != null) {
             onDismissListener.onDismiss(dialogInterface);
         }
-        onDialogDismiss(this.visibleDialog);
-        this.visibleDialog = null;
+        onDialogDismiss((Dialog) dialogInterface);
+        if (dialogInterface == this.visibleDialog) {
+            this.visibleDialog = null;
+        }
     }
 
     public Dialog getVisibleDialog() {

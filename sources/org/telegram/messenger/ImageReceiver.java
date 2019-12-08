@@ -899,8 +899,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         if (drawable2 instanceof RecyclableDrawable) {
             ((RecyclableDrawable) drawable2).recycle();
         }
-        boolean z2 = drawable instanceof AnimatedFileDrawable;
-        if (z2) {
+        if (drawable instanceof AnimatedFileDrawable) {
             AnimatedFileDrawable animatedFileDrawable = (AnimatedFileDrawable) drawable;
             animatedFileDrawable.setParentView(this.parentView);
             animatedFileDrawable.setUseSharedQueue(this.useSharedAnimationQueue);
@@ -917,18 +916,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             rLottieDrawable.setAllowDecodeSingleFrame(true);
         }
         this.staticThumbDrawable = drawable;
-        int i2 = this.roundRadius;
-        if (i2 == 0 || !(drawable instanceof BitmapDrawable)) {
-            this.thumbShader = null;
-        } else if (!(drawable instanceof RLottieDrawable)) {
-            if (z2) {
-                ((AnimatedFileDrawable) drawable).setRoundRadius(i2);
-            } else {
-                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                TileMode tileMode = TileMode.CLAMP;
-                this.thumbShader = new BitmapShader(bitmap, tileMode, tileMode);
-            }
-        }
+        updateDrawableRadius(drawable);
         this.currentMediaLocation = null;
         this.currentMediaFilter = null;
         this.currentMediaDrawable = null;
@@ -956,7 +944,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
         ImageReceiverDelegate imageReceiverDelegate = this.delegate;
         if (imageReceiverDelegate != null) {
-            z2 = (this.currentThumbDrawable == null && this.staticThumbDrawable == null) ? false : true;
+            boolean z2 = (this.currentThumbDrawable == null && this.staticThumbDrawable == null) ? false : true;
             imageReceiverDelegate.didSetImage(this, z2, true);
         }
         View view = this.parentView;
@@ -965,7 +953,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 view.invalidate();
             } else {
                 i = this.imageX;
-                i2 = this.imageY;
+                int i2 = this.imageY;
                 view.invalidate(i, i2, this.imageW + i, this.imageH + i2);
             }
         }
@@ -976,6 +964,31 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 z = false;
             }
             this.crossfadeWithThumb = z;
+        }
+    }
+
+    private void setDrawableShader(Drawable drawable, BitmapShader bitmapShader) {
+        if (drawable == this.currentThumbDrawable || drawable == this.staticThumbDrawable) {
+            this.thumbShader = bitmapShader;
+        } else if (drawable == this.currentMediaDrawable) {
+            this.mediaShader = bitmapShader;
+        } else if (drawable == this.currentImageDrawable) {
+            this.imageShader = bitmapShader;
+        }
+    }
+
+    private void updateDrawableRadius(Drawable drawable) {
+        int i = this.roundRadius;
+        if (i == 0 || !(drawable instanceof BitmapDrawable)) {
+            setDrawableShader(drawable, null);
+        } else if (!(drawable instanceof RLottieDrawable)) {
+            if (drawable instanceof AnimatedFileDrawable) {
+                ((AnimatedFileDrawable) drawable).setRoundRadius(i);
+                return;
+            }
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            TileMode tileMode = TileMode.CLAMP;
+            setDrawableShader(drawable, new BitmapShader(bitmap, tileMode, tileMode));
         }
     }
 
@@ -2305,450 +2318,364 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Missing block: B:119:0x0160, code skipped:
-            if ((r8 instanceof org.telegram.ui.Components.AnimatedFileDrawable) == false) goto L_0x0162;
+    /* JADX WARNING: Missing block: B:100:0x0113, code skipped:
+            if ((r7 instanceof org.telegram.ui.Components.AnimatedFileDrawable) == false) goto L_0x0115;
      */
-    public boolean setImageBitmapByKey(android.graphics.drawable.Drawable r6, java.lang.String r7, int r8, boolean r9, int r10) {
+    public boolean setImageBitmapByKey(android.graphics.drawable.Drawable r5, java.lang.String r6, int r7, boolean r8, int r9) {
         /*
-        r5 = this;
+        r4 = this;
         r0 = 0;
-        if (r6 == 0) goto L_0x0266;
+        if (r5 == 0) goto L_0x01f1;
     L_0x0003:
-        if (r7 == 0) goto L_0x0266;
+        if (r6 == 0) goto L_0x01f1;
     L_0x0005:
-        r1 = r5.currentGuid;
-        if (r1 == r10) goto L_0x000b;
+        r1 = r4.currentGuid;
+        if (r1 == r9) goto L_0x000b;
     L_0x0009:
-        goto L_0x0266;
+        goto L_0x01f1;
     L_0x000b:
-        r10 = 0;
-        r1 = 0;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3 = 1;
-        if (r8 != 0) goto L_0x00b6;
-    L_0x0012:
-        r8 = r5.currentImageKey;
-        r7 = r7.equals(r8);
-        if (r7 != 0) goto L_0x001b;
+        r9 = 0;
+        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r2 = 1;
+        if (r7 != 0) goto L_0x008f;
+    L_0x0011:
+        r7 = r4.currentImageKey;
+        r6 = r6.equals(r7);
+        if (r6 != 0) goto L_0x001a;
+    L_0x0019:
+        return r0;
     L_0x001a:
-        return r0;
-    L_0x001b:
-        r7 = r6 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
-        if (r7 != 0) goto L_0x0028;
-    L_0x001f:
-        r8 = org.telegram.messenger.ImageLoader.getInstance();
-        r4 = r5.currentImageKey;
-        r8.incrementUseCount(r4);
-    L_0x0028:
-        r5.currentImageDrawable = r6;
-        r8 = r6 instanceof org.telegram.messenger.ExtendedBitmapDrawable;
-        if (r8 == 0) goto L_0x0037;
-    L_0x002e:
-        r8 = r6;
-        r8 = (org.telegram.messenger.ExtendedBitmapDrawable) r8;
-        r8 = r8.getOrientation();
-        r5.imageOrientation = r8;
-    L_0x0037:
-        r8 = r5.roundRadius;
-        if (r8 == 0) goto L_0x005e;
+        r6 = r5 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
+        if (r6 != 0) goto L_0x0027;
+    L_0x001e:
+        r6 = org.telegram.messenger.ImageLoader.getInstance();
+        r7 = r4.currentImageKey;
+        r6.incrementUseCount(r7);
+    L_0x0027:
+        r4.currentImageDrawable = r5;
+        r6 = r5 instanceof org.telegram.messenger.ExtendedBitmapDrawable;
+        if (r6 == 0) goto L_0x0036;
+    L_0x002d:
+        r6 = r5;
+        r6 = (org.telegram.messenger.ExtendedBitmapDrawable) r6;
+        r6 = r6.getOrientation();
+        r4.imageOrientation = r6;
+    L_0x0036:
+        r4.updateDrawableRadius(r5);
+        if (r8 != 0) goto L_0x003f;
     L_0x003b:
-        r4 = r6 instanceof android.graphics.drawable.BitmapDrawable;
-        if (r4 == 0) goto L_0x005e;
+        r6 = r4.forcePreview;
+        if (r6 == 0) goto L_0x0043;
     L_0x003f:
-        r1 = r6 instanceof org.telegram.ui.Components.RLottieDrawable;
-        if (r1 == 0) goto L_0x0044;
+        r6 = r4.forceCrossfade;
+        if (r6 == 0) goto L_0x008b;
     L_0x0043:
-        goto L_0x0060;
-    L_0x0044:
-        if (r7 == 0) goto L_0x004d;
-    L_0x0046:
-        r7 = r6;
-        r7 = (org.telegram.ui.Components.AnimatedFileDrawable) r7;
-        r7.setRoundRadius(r8);
-        goto L_0x0060;
-    L_0x004d:
-        r7 = r6;
-        r7 = (android.graphics.drawable.BitmapDrawable) r7;
-        r8 = new android.graphics.BitmapShader;
-        r7 = r7.getBitmap();
-        r1 = android.graphics.Shader.TileMode.CLAMP;
-        r8.<init>(r7, r1, r1);
-        r5.imageShader = r8;
-        goto L_0x0060;
-    L_0x005e:
-        r5.imageShader = r1;
-    L_0x0060:
-        if (r9 != 0) goto L_0x0066;
-    L_0x0062:
-        r7 = r5.forcePreview;
-        if (r7 == 0) goto L_0x006a;
-    L_0x0066:
-        r7 = r5.forceCrossfade;
-        if (r7 == 0) goto L_0x00b2;
-    L_0x006a:
-        r7 = r5.currentMediaDrawable;
-        r8 = r7 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
-        if (r8 == 0) goto L_0x0079;
-    L_0x0070:
-        r7 = (org.telegram.ui.Components.AnimatedFileDrawable) r7;
-        r7 = r7.hasBitmap();
-        if (r7 == 0) goto L_0x0079;
-    L_0x0078:
-        goto L_0x007f;
-    L_0x0079:
-        r7 = r5.currentImageDrawable;
-        r7 = r7 instanceof org.telegram.ui.Components.RLottieDrawable;
-        if (r7 == 0) goto L_0x0081;
-    L_0x007f:
-        r7 = 0;
-        goto L_0x0082;
-    L_0x0081:
-        r7 = 1;
-    L_0x0082:
-        if (r7 == 0) goto L_0x01ed;
-    L_0x0084:
-        r7 = r5.currentThumbDrawable;
-        if (r7 != 0) goto L_0x008c;
-    L_0x0088:
-        r7 = r5.staticThumbDrawable;
-        if (r7 == 0) goto L_0x0096;
-    L_0x008c:
-        r7 = r5.currentAlpha;
-        r7 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1));
-        if (r7 == 0) goto L_0x0096;
-    L_0x0092:
-        r7 = r5.forceCrossfade;
-        if (r7 == 0) goto L_0x01ed;
-    L_0x0096:
-        r5.currentAlpha = r10;
-        r7 = java.lang.System.currentTimeMillis();
-        r5.lastUpdateAlphaTime = r7;
-        r7 = r5.crossfadeImage;
-        if (r7 != 0) goto L_0x00ad;
-    L_0x00a2:
-        r7 = r5.currentThumbDrawable;
-        if (r7 != 0) goto L_0x00ad;
-    L_0x00a6:
-        r7 = r5.staticThumbDrawable;
-        if (r7 == 0) goto L_0x00ab;
-    L_0x00aa:
-        goto L_0x00ad;
-    L_0x00ab:
-        r7 = 0;
-        goto L_0x00ae;
-    L_0x00ad:
-        r7 = 1;
-    L_0x00ae:
-        r5.crossfadeWithThumb = r7;
-        goto L_0x01ed;
-    L_0x00b2:
-        r5.currentAlpha = r2;
-        goto L_0x01ed;
-    L_0x00b6:
-        r4 = 3;
-        if (r8 != r4) goto L_0x013a;
-    L_0x00b9:
-        r8 = r5.currentMediaKey;
-        r7 = r7.equals(r8);
-        if (r7 != 0) goto L_0x00c2;
-    L_0x00c1:
-        return r0;
-    L_0x00c2:
+        r6 = r4.currentMediaDrawable;
         r7 = r6 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
-        if (r7 != 0) goto L_0x00cf;
-    L_0x00c6:
-        r8 = org.telegram.messenger.ImageLoader.getInstance();
-        r4 = r5.currentMediaKey;
-        r8.incrementUseCount(r4);
-    L_0x00cf:
-        r5.currentMediaDrawable = r6;
-        r8 = r5.roundRadius;
-        if (r8 == 0) goto L_0x00f8;
-    L_0x00d5:
-        r4 = r6 instanceof android.graphics.drawable.BitmapDrawable;
-        if (r4 == 0) goto L_0x00f8;
-    L_0x00d9:
-        r1 = r6 instanceof org.telegram.ui.Components.RLottieDrawable;
-        if (r1 == 0) goto L_0x00de;
-    L_0x00dd:
-        goto L_0x00fa;
-    L_0x00de:
-        if (r7 == 0) goto L_0x00e7;
-    L_0x00e0:
-        r7 = r6;
-        r7 = (org.telegram.ui.Components.AnimatedFileDrawable) r7;
-        r7.setRoundRadius(r8);
-        goto L_0x00fa;
-    L_0x00e7:
-        r7 = r6;
-        r7 = (android.graphics.drawable.BitmapDrawable) r7;
-        r8 = new android.graphics.BitmapShader;
-        r7 = r7.getBitmap();
-        r1 = android.graphics.Shader.TileMode.CLAMP;
-        r8.<init>(r7, r1, r1);
-        r5.mediaShader = r8;
-        goto L_0x00fa;
-    L_0x00f8:
-        r5.mediaShader = r1;
-    L_0x00fa:
-        r7 = r5.currentImageDrawable;
-        if (r7 != 0) goto L_0x01ed;
-    L_0x00fe:
-        if (r9 != 0) goto L_0x0104;
-    L_0x0100:
-        r7 = r5.forcePreview;
-        if (r7 == 0) goto L_0x0108;
-    L_0x0104:
-        r7 = r5.forceCrossfade;
-        if (r7 == 0) goto L_0x0136;
-    L_0x0108:
-        r7 = r5.currentThumbDrawable;
-        if (r7 != 0) goto L_0x0110;
-    L_0x010c:
-        r7 = r5.staticThumbDrawable;
-        if (r7 == 0) goto L_0x011a;
-    L_0x0110:
-        r7 = r5.currentAlpha;
-        r7 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1));
-        if (r7 == 0) goto L_0x011a;
-    L_0x0116:
-        r7 = r5.forceCrossfade;
-        if (r7 == 0) goto L_0x01ed;
-    L_0x011a:
-        r5.currentAlpha = r10;
-        r7 = java.lang.System.currentTimeMillis();
-        r5.lastUpdateAlphaTime = r7;
-        r7 = r5.crossfadeImage;
-        if (r7 != 0) goto L_0x0131;
-    L_0x0126:
-        r7 = r5.currentThumbDrawable;
-        if (r7 != 0) goto L_0x0131;
-    L_0x012a:
-        r7 = r5.staticThumbDrawable;
-        if (r7 == 0) goto L_0x012f;
-    L_0x012e:
-        goto L_0x0131;
-    L_0x012f:
-        r7 = 0;
-        goto L_0x0132;
-    L_0x0131:
-        r7 = 1;
-    L_0x0132:
-        r5.crossfadeWithThumb = r7;
-        goto L_0x01ed;
-    L_0x0136:
-        r5.currentAlpha = r2;
-        goto L_0x01ed;
-    L_0x013a:
-        if (r8 != r3) goto L_0x01ed;
-    L_0x013c:
-        r8 = r5.currentThumbDrawable;
-        if (r8 == 0) goto L_0x0141;
-    L_0x0140:
-        return r0;
-    L_0x0141:
-        r8 = r5.forcePreview;
-        if (r8 != 0) goto L_0x0163;
-    L_0x0145:
-        r8 = r5.getAnimation();
-        if (r8 == 0) goto L_0x0152;
-    L_0x014b:
-        r8 = r8.hasBitmap();
-        if (r8 == 0) goto L_0x0152;
-    L_0x0151:
-        return r0;
-    L_0x0152:
-        r8 = r5.currentImageDrawable;
-        if (r8 == 0) goto L_0x015a;
-    L_0x0156:
-        r8 = r8 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
-        if (r8 == 0) goto L_0x0162;
-    L_0x015a:
-        r8 = r5.currentMediaDrawable;
-        if (r8 == 0) goto L_0x0163;
-    L_0x015e:
-        r8 = r8 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
-        if (r8 != 0) goto L_0x0163;
-    L_0x0162:
-        return r0;
-    L_0x0163:
-        r8 = r5.currentThumbKey;
-        r7 = r7.equals(r8);
-        if (r7 != 0) goto L_0x016c;
-    L_0x016b:
-        return r0;
-    L_0x016c:
-        r7 = org.telegram.messenger.ImageLoader.getInstance();
-        r8 = r5.currentThumbKey;
-        r7.incrementUseCount(r8);
-        r5.currentThumbDrawable = r6;
-        r7 = r6 instanceof org.telegram.messenger.ExtendedBitmapDrawable;
-        if (r7 == 0) goto L_0x0184;
-    L_0x017b:
-        r7 = r6;
-        r7 = (org.telegram.messenger.ExtendedBitmapDrawable) r7;
-        r7 = r7.getOrientation();
-        r5.thumbOrientation = r7;
-    L_0x0184:
-        r7 = r5.roundRadius;
-        if (r7 == 0) goto L_0x01ad;
-    L_0x0188:
-        r8 = r6 instanceof android.graphics.drawable.BitmapDrawable;
-        if (r8 == 0) goto L_0x01ad;
-    L_0x018c:
-        r8 = r6 instanceof org.telegram.ui.Components.RLottieDrawable;
-        if (r8 == 0) goto L_0x0191;
-    L_0x0190:
-        goto L_0x01af;
-    L_0x0191:
-        r8 = r6 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
-        if (r8 == 0) goto L_0x019c;
-    L_0x0195:
-        r8 = r6;
-        r8 = (org.telegram.ui.Components.AnimatedFileDrawable) r8;
-        r8.setRoundRadius(r7);
-        goto L_0x01af;
-    L_0x019c:
-        r7 = r6;
-        r7 = (android.graphics.drawable.BitmapDrawable) r7;
-        r8 = new android.graphics.BitmapShader;
-        r7 = r7.getBitmap();
-        r1 = android.graphics.Shader.TileMode.CLAMP;
-        r8.<init>(r7, r1, r1);
-        r5.thumbShader = r8;
-        goto L_0x01af;
-    L_0x01ad:
-        r5.thumbShader = r1;
-    L_0x01af:
-        if (r9 != 0) goto L_0x01eb;
-    L_0x01b1:
-        r7 = r5.crossfadeAlpha;
-        r8 = 2;
-        if (r7 == r8) goto L_0x01eb;
-    L_0x01b6:
-        r7 = r5.currentParentObject;
-        r8 = r7 instanceof org.telegram.messenger.MessageObject;
-        if (r8 == 0) goto L_0x01d1;
-    L_0x01bc:
-        r7 = (org.telegram.messenger.MessageObject) r7;
-        r7 = r7.isRoundVideo();
-        if (r7 == 0) goto L_0x01d1;
-    L_0x01c4:
-        r7 = r5.currentParentObject;
-        r7 = (org.telegram.messenger.MessageObject) r7;
-        r7 = r7.isSending();
-        if (r7 == 0) goto L_0x01d1;
-    L_0x01ce:
-        r5.currentAlpha = r2;
-        goto L_0x01ed;
-    L_0x01d1:
-        r5.currentAlpha = r10;
-        r7 = java.lang.System.currentTimeMillis();
-        r5.lastUpdateAlphaTime = r7;
-        r7 = r5.staticThumbDrawable;
-        if (r7 == 0) goto L_0x01e7;
-    L_0x01dd:
-        r7 = r5.currentImageKey;
-        if (r7 != 0) goto L_0x01e7;
-    L_0x01e1:
-        r7 = r5.currentMediaKey;
-        if (r7 != 0) goto L_0x01e7;
-    L_0x01e5:
-        r7 = 1;
-        goto L_0x01e8;
-    L_0x01e7:
-        r7 = 0;
-    L_0x01e8:
-        r5.crossfadeWithThumb = r7;
-        goto L_0x01ed;
-    L_0x01eb:
-        r5.currentAlpha = r2;
-    L_0x01ed:
-        r7 = r6 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
-        if (r7 == 0) goto L_0x020c;
-    L_0x01f1:
+        if (r7 == 0) goto L_0x0052;
+    L_0x0049:
         r6 = (org.telegram.ui.Components.AnimatedFileDrawable) r6;
-        r7 = r5.parentView;
-        r6.setParentView(r7);
-        r7 = r5.useSharedAnimationQueue;
-        r6.setUseSharedQueue(r7);
-        r7 = r5.allowStartAnimation;
-        if (r7 == 0) goto L_0x0204;
-    L_0x0201:
-        r6.start();
-    L_0x0204:
-        r7 = r5.allowDecodeSingleFrame;
-        r6.setAllowDecodeSingleFrame(r7);
-        r5.animationReadySent = r0;
-        goto L_0x0228;
-    L_0x020c:
-        r7 = r6 instanceof org.telegram.ui.Components.RLottieDrawable;
-        if (r7 == 0) goto L_0x0228;
-    L_0x0210:
-        r6 = (org.telegram.ui.Components.RLottieDrawable) r6;
-        r7 = r5.parentView;
-        r6.addParentView(r7);
-        r7 = r5.currentOpenedLayerFlags;
-        if (r7 != 0) goto L_0x021e;
-    L_0x021b:
-        r6.start();
-    L_0x021e:
-        r6.setAllowDecodeSingleFrame(r3);
-        r7 = r5.autoRepeat;
-        r6.setAutoRepeat(r7);
-        r5.animationReadySent = r0;
-    L_0x0228:
-        r6 = r5.parentView;
-        if (r6 == 0) goto L_0x0241;
-    L_0x022c:
-        r7 = r5.invalidateAll;
-        if (r7 == 0) goto L_0x0234;
-    L_0x0230:
-        r6.invalidate();
-        goto L_0x0241;
-    L_0x0234:
-        r7 = r5.imageX;
-        r8 = r5.imageY;
-        r9 = r5.imageW;
+        r6 = r6.hasBitmap();
+        if (r6 == 0) goto L_0x0052;
+    L_0x0051:
+        goto L_0x0058;
+    L_0x0052:
+        r6 = r4.currentImageDrawable;
+        r6 = r6 instanceof org.telegram.ui.Components.RLottieDrawable;
+        if (r6 == 0) goto L_0x005a;
+    L_0x0058:
+        r6 = 0;
+        goto L_0x005b;
+    L_0x005a:
+        r6 = 1;
+    L_0x005b:
+        if (r6 == 0) goto L_0x0178;
+    L_0x005d:
+        r6 = r4.currentThumbDrawable;
+        if (r6 != 0) goto L_0x0065;
+    L_0x0061:
+        r6 = r4.staticThumbDrawable;
+        if (r6 == 0) goto L_0x006f;
+    L_0x0065:
+        r6 = r4.currentAlpha;
+        r6 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1));
+        if (r6 == 0) goto L_0x006f;
+    L_0x006b:
+        r6 = r4.forceCrossfade;
+        if (r6 == 0) goto L_0x0178;
+    L_0x006f:
+        r4.currentAlpha = r9;
+        r6 = java.lang.System.currentTimeMillis();
+        r4.lastUpdateAlphaTime = r6;
+        r6 = r4.crossfadeImage;
+        if (r6 != 0) goto L_0x0086;
+    L_0x007b:
+        r6 = r4.currentThumbDrawable;
+        if (r6 != 0) goto L_0x0086;
+    L_0x007f:
+        r6 = r4.staticThumbDrawable;
+        if (r6 == 0) goto L_0x0084;
+    L_0x0083:
+        goto L_0x0086;
+    L_0x0084:
+        r6 = 0;
+        goto L_0x0087;
+    L_0x0086:
+        r6 = 1;
+    L_0x0087:
+        r4.crossfadeWithThumb = r6;
+        goto L_0x0178;
+    L_0x008b:
+        r4.currentAlpha = r1;
+        goto L_0x0178;
+    L_0x008f:
+        r3 = 3;
+        if (r7 != r3) goto L_0x00ed;
+    L_0x0092:
+        r7 = r4.currentMediaKey;
+        r6 = r6.equals(r7);
+        if (r6 != 0) goto L_0x009b;
+    L_0x009a:
+        return r0;
+    L_0x009b:
+        r6 = r5 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
+        if (r6 != 0) goto L_0x00a8;
+    L_0x009f:
+        r6 = org.telegram.messenger.ImageLoader.getInstance();
+        r7 = r4.currentMediaKey;
+        r6.incrementUseCount(r7);
+    L_0x00a8:
+        r4.currentMediaDrawable = r5;
+        r4.updateDrawableRadius(r5);
+        r6 = r4.currentImageDrawable;
+        if (r6 != 0) goto L_0x0178;
+    L_0x00b1:
+        if (r8 != 0) goto L_0x00b7;
+    L_0x00b3:
+        r6 = r4.forcePreview;
+        if (r6 == 0) goto L_0x00bb;
+    L_0x00b7:
+        r6 = r4.forceCrossfade;
+        if (r6 == 0) goto L_0x00e9;
+    L_0x00bb:
+        r6 = r4.currentThumbDrawable;
+        if (r6 != 0) goto L_0x00c3;
+    L_0x00bf:
+        r6 = r4.staticThumbDrawable;
+        if (r6 == 0) goto L_0x00cd;
+    L_0x00c3:
+        r6 = r4.currentAlpha;
+        r6 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1));
+        if (r6 == 0) goto L_0x00cd;
+    L_0x00c9:
+        r6 = r4.forceCrossfade;
+        if (r6 == 0) goto L_0x0178;
+    L_0x00cd:
+        r4.currentAlpha = r9;
+        r6 = java.lang.System.currentTimeMillis();
+        r4.lastUpdateAlphaTime = r6;
+        r6 = r4.crossfadeImage;
+        if (r6 != 0) goto L_0x00e4;
+    L_0x00d9:
+        r6 = r4.currentThumbDrawable;
+        if (r6 != 0) goto L_0x00e4;
+    L_0x00dd:
+        r6 = r4.staticThumbDrawable;
+        if (r6 == 0) goto L_0x00e2;
+    L_0x00e1:
+        goto L_0x00e4;
+    L_0x00e2:
+        r6 = 0;
+        goto L_0x00e5;
+    L_0x00e4:
+        r6 = 1;
+    L_0x00e5:
+        r4.crossfadeWithThumb = r6;
+        goto L_0x0178;
+    L_0x00e9:
+        r4.currentAlpha = r1;
+        goto L_0x0178;
+    L_0x00ed:
+        if (r7 != r2) goto L_0x0178;
+    L_0x00ef:
+        r7 = r4.currentThumbDrawable;
+        if (r7 == 0) goto L_0x00f4;
+    L_0x00f3:
+        return r0;
+    L_0x00f4:
+        r7 = r4.forcePreview;
+        if (r7 != 0) goto L_0x0116;
+    L_0x00f8:
+        r7 = r4.getAnimation();
+        if (r7 == 0) goto L_0x0105;
+    L_0x00fe:
+        r7 = r7.hasBitmap();
+        if (r7 == 0) goto L_0x0105;
+    L_0x0104:
+        return r0;
+    L_0x0105:
+        r7 = r4.currentImageDrawable;
+        if (r7 == 0) goto L_0x010d;
+    L_0x0109:
+        r7 = r7 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
+        if (r7 == 0) goto L_0x0115;
+    L_0x010d:
+        r7 = r4.currentMediaDrawable;
+        if (r7 == 0) goto L_0x0116;
+    L_0x0111:
+        r7 = r7 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
+        if (r7 != 0) goto L_0x0116;
+    L_0x0115:
+        return r0;
+    L_0x0116:
+        r7 = r4.currentThumbKey;
+        r6 = r6.equals(r7);
+        if (r6 != 0) goto L_0x011f;
+    L_0x011e:
+        return r0;
+    L_0x011f:
+        r6 = org.telegram.messenger.ImageLoader.getInstance();
+        r7 = r4.currentThumbKey;
+        r6.incrementUseCount(r7);
+        r4.currentThumbDrawable = r5;
+        r6 = r5 instanceof org.telegram.messenger.ExtendedBitmapDrawable;
+        if (r6 == 0) goto L_0x0137;
+    L_0x012e:
+        r6 = r5;
+        r6 = (org.telegram.messenger.ExtendedBitmapDrawable) r6;
+        r6 = r6.getOrientation();
+        r4.thumbOrientation = r6;
+    L_0x0137:
+        r4.updateDrawableRadius(r5);
+        if (r8 != 0) goto L_0x0176;
+    L_0x013c:
+        r6 = r4.crossfadeAlpha;
+        r7 = 2;
+        if (r6 == r7) goto L_0x0176;
+    L_0x0141:
+        r6 = r4.currentParentObject;
+        r7 = r6 instanceof org.telegram.messenger.MessageObject;
+        if (r7 == 0) goto L_0x015c;
+    L_0x0147:
+        r6 = (org.telegram.messenger.MessageObject) r6;
+        r6 = r6.isRoundVideo();
+        if (r6 == 0) goto L_0x015c;
+    L_0x014f:
+        r6 = r4.currentParentObject;
+        r6 = (org.telegram.messenger.MessageObject) r6;
+        r6 = r6.isSending();
+        if (r6 == 0) goto L_0x015c;
+    L_0x0159:
+        r4.currentAlpha = r1;
+        goto L_0x0178;
+    L_0x015c:
+        r4.currentAlpha = r9;
+        r6 = java.lang.System.currentTimeMillis();
+        r4.lastUpdateAlphaTime = r6;
+        r6 = r4.staticThumbDrawable;
+        if (r6 == 0) goto L_0x0172;
+    L_0x0168:
+        r6 = r4.currentImageKey;
+        if (r6 != 0) goto L_0x0172;
+    L_0x016c:
+        r6 = r4.currentMediaKey;
+        if (r6 != 0) goto L_0x0172;
+    L_0x0170:
+        r6 = 1;
+        goto L_0x0173;
+    L_0x0172:
+        r6 = 0;
+    L_0x0173:
+        r4.crossfadeWithThumb = r6;
+        goto L_0x0178;
+    L_0x0176:
+        r4.currentAlpha = r1;
+    L_0x0178:
+        r6 = r5 instanceof org.telegram.ui.Components.AnimatedFileDrawable;
+        if (r6 == 0) goto L_0x0197;
+    L_0x017c:
+        r5 = (org.telegram.ui.Components.AnimatedFileDrawable) r5;
+        r6 = r4.parentView;
+        r5.setParentView(r6);
+        r6 = r4.useSharedAnimationQueue;
+        r5.setUseSharedQueue(r6);
+        r6 = r4.allowStartAnimation;
+        if (r6 == 0) goto L_0x018f;
+    L_0x018c:
+        r5.start();
+    L_0x018f:
+        r6 = r4.allowDecodeSingleFrame;
+        r5.setAllowDecodeSingleFrame(r6);
+        r4.animationReadySent = r0;
+        goto L_0x01b3;
+    L_0x0197:
+        r6 = r5 instanceof org.telegram.ui.Components.RLottieDrawable;
+        if (r6 == 0) goto L_0x01b3;
+    L_0x019b:
+        r5 = (org.telegram.ui.Components.RLottieDrawable) r5;
+        r6 = r4.parentView;
+        r5.addParentView(r6);
+        r6 = r4.currentOpenedLayerFlags;
+        if (r6 != 0) goto L_0x01a9;
+    L_0x01a6:
+        r5.start();
+    L_0x01a9:
+        r5.setAllowDecodeSingleFrame(r2);
+        r6 = r4.autoRepeat;
+        r5.setAutoRepeat(r6);
+        r4.animationReadySent = r0;
+    L_0x01b3:
+        r5 = r4.parentView;
+        if (r5 == 0) goto L_0x01cc;
+    L_0x01b7:
+        r6 = r4.invalidateAll;
+        if (r6 == 0) goto L_0x01bf;
+    L_0x01bb:
+        r5.invalidate();
+        goto L_0x01cc;
+    L_0x01bf:
+        r6 = r4.imageX;
+        r7 = r4.imageY;
+        r8 = r4.imageW;
+        r8 = r8 + r6;
+        r9 = r4.imageH;
         r9 = r9 + r7;
-        r10 = r5.imageH;
-        r10 = r10 + r8;
-        r6.invalidate(r7, r8, r9, r10);
-    L_0x0241:
-        r6 = r5.delegate;
-        if (r6 == 0) goto L_0x0265;
-    L_0x0245:
-        r7 = r5.currentImageDrawable;
-        if (r7 != 0) goto L_0x0258;
-    L_0x0249:
-        r7 = r5.currentThumbDrawable;
-        if (r7 != 0) goto L_0x0258;
-    L_0x024d:
-        r7 = r5.staticThumbDrawable;
-        if (r7 != 0) goto L_0x0258;
-    L_0x0251:
-        r7 = r5.currentMediaDrawable;
-        if (r7 == 0) goto L_0x0256;
-    L_0x0255:
-        goto L_0x0258;
-    L_0x0256:
-        r7 = 0;
-        goto L_0x0259;
-    L_0x0258:
-        r7 = 1;
-    L_0x0259:
-        r8 = r5.currentImageDrawable;
-        if (r8 != 0) goto L_0x0262;
-    L_0x025d:
-        r8 = r5.currentMediaDrawable;
-        if (r8 != 0) goto L_0x0262;
-    L_0x0261:
+        r5.invalidate(r6, r7, r8, r9);
+    L_0x01cc:
+        r5 = r4.delegate;
+        if (r5 == 0) goto L_0x01f0;
+    L_0x01d0:
+        r6 = r4.currentImageDrawable;
+        if (r6 != 0) goto L_0x01e3;
+    L_0x01d4:
+        r6 = r4.currentThumbDrawable;
+        if (r6 != 0) goto L_0x01e3;
+    L_0x01d8:
+        r6 = r4.staticThumbDrawable;
+        if (r6 != 0) goto L_0x01e3;
+    L_0x01dc:
+        r6 = r4.currentMediaDrawable;
+        if (r6 == 0) goto L_0x01e1;
+    L_0x01e0:
+        goto L_0x01e3;
+    L_0x01e1:
+        r6 = 0;
+        goto L_0x01e4;
+    L_0x01e3:
+        r6 = 1;
+    L_0x01e4:
+        r7 = r4.currentImageDrawable;
+        if (r7 != 0) goto L_0x01ed;
+    L_0x01e8:
+        r7 = r4.currentMediaDrawable;
+        if (r7 != 0) goto L_0x01ed;
+    L_0x01ec:
         r0 = 1;
-    L_0x0262:
-        r6.didSetImage(r5, r7, r0);
-    L_0x0265:
-        return r3;
-    L_0x0266:
+    L_0x01ed:
+        r5.didSetImage(r4, r6, r0);
+    L_0x01f0:
+        return r2;
+    L_0x01f1:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setImageBitmapByKey(android.graphics.drawable.Drawable, java.lang.String, int, boolean, int):boolean");

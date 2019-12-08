@@ -16,7 +16,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -50,7 +49,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
@@ -113,11 +111,10 @@ import org.telegram.tgnet.TLRPC.TL_help_getNearestDc;
 import org.telegram.tgnet.TLRPC.TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC.TL_nearestDc;
 import org.telegram.tgnet.TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow;
+import org.telegram.tgnet.TLRPC.TL_passwordKdfAlgoUnknown;
 import org.telegram.tgnet.TLRPC.auth_CodeType;
 import org.telegram.tgnet.TLRPC.auth_SentCodeType;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
-import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -139,14 +136,21 @@ import org.telegram.ui.Components.SlideView;
 
 @SuppressLint({"HardwareIds"})
 public class LoginActivity extends BaseFragment {
+    private static final int DONE_TYPE_ACTION = 1;
+    private static final int DONE_TYPE_FLOATING = 0;
     private static final int done_button = 1;
     private boolean checkPermissions;
     private boolean checkShowPermissions;
+    private int currentDoneType;
     private TL_help_termsOfService currentTermsOfService;
     private int currentViewNum;
+    private boolean[] doneButtonVisible;
     private ActionBarMenuItem doneItem;
     private AnimatorSet doneItemAnimation;
     private ContextProgressView doneProgressView;
+    private FrameLayout floatingButtonContainer;
+    private ImageView floatingButtonIcon;
+    private RadialProgressView floatingProgressView;
     private boolean newAccount;
     private Dialog permissionsDialog;
     private ArrayList<String> permissionsItems;
@@ -154,6 +158,7 @@ public class LoginActivity extends BaseFragment {
     private ArrayList<String> permissionsShowItems;
     private int progressRequestId;
     private int scrollHeight;
+    private AnimatorSet[] showDoneAnimation;
     private boolean syncContacts;
     private SlideView[] views;
 
@@ -192,9 +197,7 @@ public class LoginActivity extends BaseFragment {
         private byte[] current_salt2;
         private byte[] current_srp_B;
         private long current_srp_id;
-        private String email_unconfirmed_pattern;
         private boolean has_recovery;
-        private String hint;
         private boolean nextPressed;
         private int passwordType;
         private String phoneCode;
@@ -417,34 +420,28 @@ public class LoginActivity extends BaseFragment {
                 this.current_srp_B = Utilities.hexToBytes(this.currentParams.getString("current_srp_B"));
                 this.current_srp_id = this.currentParams.getLong("current_srp_id");
                 this.passwordType = this.currentParams.getInt("passwordType");
-                this.hint = this.currentParams.getString("hint");
+                String string = this.currentParams.getString("hint");
                 if (this.currentParams.getInt("has_recovery") == 1) {
                     z2 = true;
                 }
                 this.has_recovery = z2;
-                this.email_unconfirmed_pattern = this.currentParams.getString("email_unconfirmed_pattern");
                 this.requestPhone = bundle.getString("phoneFormated");
                 this.phoneHash = bundle.getString("phoneHash");
                 this.phoneCode = bundle.getString("code");
-                String str = this.hint;
-                if (str == null || str.length() <= 0) {
+                if (string == null || string.length() <= 0) {
                     this.codeField.setHint(LocaleController.getString("LoginPassword", NUM));
                 } else {
-                    this.codeField.setHint(this.hint);
+                    this.codeField.setHint(string);
                 }
             }
         }
 
         private void onPasscodeError(boolean z) {
             if (this.this$0.getParentActivity() != null) {
-                Vibrator vibrator = (Vibrator) this.this$0.getParentActivity().getSystemService("vibrator");
-                if (vibrator != null) {
-                    vibrator.vibrate(200);
-                }
                 if (z) {
                     this.codeField.setText("");
                 }
-                AndroidUtilities.shakeView(this.confirmTextView, 2.0f, 0);
+                this.this$0.onFieldError(this.confirmTextView);
             }
         }
 
@@ -470,13 +467,14 @@ public class LoginActivity extends BaseFragment {
                 tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow.g = this.current_g;
                 tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow.p = this.current_p;
             } else {
-                tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow = null;
+                tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow = new TL_passwordKdfAlgoUnknown();
             }
             boolean z = tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow instanceof TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow;
             byte[] x = z ? SRPHelper.getX(AndroidUtilities.getStringBytes(str), tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) : null;
             TL_auth_checkPassword tL_auth_checkPassword = new TL_auth_checkPassword();
             -$$Lambda$LoginActivity$LoginActivityPasswordView$WrnSljxMnTCOO4pqUidVvar_UWto -__lambda_loginactivity_loginactivitypasswordview_wrnsljxmntcoo4pquidvvar_uwto = new -$$Lambda$LoginActivity$LoginActivityPasswordView$WrnSljxMnTCOO4pqUidVvar_UWto(this);
             if (z) {
+                tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow = tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow;
                 tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow.salt1 = this.current_salt1;
                 tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow.salt2 = this.current_salt2;
                 tL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow.g = this.current_g;
@@ -590,7 +588,6 @@ public class LoginActivity extends BaseFragment {
         private EditTextBoldCursor codeField;
         private TextView confirmTextView;
         private Bundle currentParams;
-        private String email_unconfirmed_pattern;
         private boolean nextPressed;
         final /* synthetic */ LoginActivity this$0;
 
@@ -680,8 +677,8 @@ public class LoginActivity extends BaseFragment {
             if (bundle != null) {
                 this.codeField.setText("");
                 this.currentParams = bundle;
-                this.email_unconfirmed_pattern = this.currentParams.getString("email_unconfirmed_pattern");
-                this.cancelButton.setText(LocaleController.formatString("RestoreEmailTrouble", NUM, this.email_unconfirmed_pattern));
+                String string = this.currentParams.getString("email_unconfirmed_pattern");
+                this.cancelButton.setText(LocaleController.formatString("RestoreEmailTrouble", NUM, string));
                 AndroidUtilities.showKeyboard(this.codeField);
                 this.codeField.requestFocus();
             }
@@ -817,7 +814,6 @@ public class LoginActivity extends BaseFragment {
         private ImageUpdater imageUpdater;
         private EditTextBoldCursor lastNameField;
         private boolean nextPressed = false;
-        private String phoneCode;
         private String phoneHash;
         private TextView privacyView;
         private String requestPhone;
@@ -1012,9 +1008,9 @@ public class LoginActivity extends BaseFragment {
             this.privacyView.setMovementMethod(new LinkMovementMethodMy());
             this.privacyView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
             this.privacyView.setTextSize(1, 14.0f);
-            this.privacyView.setGravity(81);
+            this.privacyView.setGravity(83);
             this.privacyView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            addView(this.privacyView, LayoutHelper.createLinear(-2, -1, 81, 0, 28, 0, 16));
+            addView(this.privacyView, LayoutHelper.createLinear(-2, -1, 83, 0, 28, 100, 16));
             String string = LocaleController.getString("TermsOfServiceLogin", NUM);
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string);
             int indexOf = string.indexOf(42);
@@ -1161,6 +1157,12 @@ public class LoginActivity extends BaseFragment {
 
         public void onShow() {
             super.onShow();
+            EditTextBoldCursor editTextBoldCursor = this.firstNameField;
+            if (editTextBoldCursor != null) {
+                editTextBoldCursor.requestFocus();
+                editTextBoldCursor = this.firstNameField;
+                editTextBoldCursor.setSelection(editTextBoldCursor.length());
+            }
             AndroidUtilities.runOnUIThread(new -$$Lambda$LoginActivity$LoginActivityRegisterView$mhiqEuaO3fJj3ukKBPnIzQ_CLASSNAMEQ(this), 100);
         }
 
@@ -1180,14 +1182,17 @@ public class LoginActivity extends BaseFragment {
                 this.lastNameField.setText(str);
                 this.requestPhone = bundle.getString("phoneFormated");
                 this.phoneHash = bundle.getString("phoneHash");
-                this.phoneCode = bundle.getString("code");
                 this.currentParams = bundle;
             }
         }
 
         public void onNextPressed() {
             if (!this.nextPressed) {
-                if (this.this$0.currentTermsOfService == null || !this.this$0.currentTermsOfService.popup) {
+                if (this.this$0.currentTermsOfService != null && this.this$0.currentTermsOfService.popup) {
+                    showTermsOfService(true);
+                } else if (this.firstNameField.length() == 0) {
+                    this.this$0.onFieldError(this.firstNameField);
+                } else {
                     this.nextPressed = true;
                     TL_auth_signUp tL_auth_signUp = new TL_auth_signUp();
                     tL_auth_signUp.phone_code_hash = this.phoneHash;
@@ -1196,9 +1201,7 @@ public class LoginActivity extends BaseFragment {
                     tL_auth_signUp.last_name = this.lastNameField.getText().toString();
                     this.this$0.needShowProgress(0);
                     ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_signUp, new -$$Lambda$LoginActivity$LoginActivityRegisterView$f0ZfM2Vj75AOg7vhpvjVYpg5d40(this), 10);
-                    return;
                 }
-                showTermsOfService(true);
             }
         }
 
@@ -1496,7 +1499,6 @@ public class LoginActivity extends BaseFragment {
         private int currentType;
         private String emailPhone;
         private boolean ignoreOnTextChange;
-        private boolean isRestored;
         private double lastCodeTime;
         private double lastCurrentTime;
         private String lastError = "";
@@ -1790,7 +1792,6 @@ public class LoginActivity extends BaseFragment {
             Bundle bundle2 = bundle;
             if (bundle2 != null) {
                 int i;
-                this.isRestored = z;
                 this.waitingForEvent = true;
                 int i2 = this.currentType;
                 if (i2 == 2) {
@@ -1940,7 +1941,7 @@ public class LoginActivity extends BaseFragment {
                                 } else if (i == 2) {
                                     this.timeText.setText(LocaleController.formatString(str2, NUM, Integer.valueOf(1), Integer.valueOf(0)));
                                 }
-                                if (this.isRestored) {
+                                if (z) {
                                     charSequence2 = AndroidUtilities.obtainLoginPhoneCall(this.pattern);
                                 }
                                 if (charSequence2 != null) {
@@ -2043,14 +2044,14 @@ public class LoginActivity extends BaseFragment {
 
                     public /* synthetic */ void lambda$run$0$LoginActivity$LoginActivitySmsView$4() {
                         double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$4100 = LoginActivitySmsView.this.lastCodeTime;
+                        double access$4700 = LoginActivitySmsView.this.lastCodeTime;
                         Double.isNaN(currentTimeMillis);
-                        access$4100 = currentTimeMillis - access$4100;
+                        access$4700 = currentTimeMillis - access$4700;
                         LoginActivitySmsView.this.lastCodeTime = currentTimeMillis;
                         LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                        double access$4200 = (double) loginActivitySmsView.codeTime;
-                        Double.isNaN(access$4200);
-                        loginActivitySmsView.codeTime = (int) (access$4200 - access$4100);
+                        double access$4800 = (double) loginActivitySmsView.codeTime;
+                        Double.isNaN(access$4800);
+                        loginActivitySmsView.codeTime = (int) (access$4800 - access$4700);
                         if (LoginActivitySmsView.this.codeTime <= 1000) {
                             LoginActivitySmsView.this.problemText.setVisibility(0);
                             LoginActivitySmsView.this.timeText.setVisibility(8);
@@ -2086,20 +2087,20 @@ public class LoginActivity extends BaseFragment {
 
                     public /* synthetic */ void lambda$run$2$LoginActivity$LoginActivitySmsView$5() {
                         double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$4700 = LoginActivitySmsView.this.lastCurrentTime;
+                        double access$5300 = LoginActivitySmsView.this.lastCurrentTime;
                         Double.isNaN(currentTimeMillis);
-                        access$4700 = currentTimeMillis - access$4700;
+                        access$5300 = currentTimeMillis - access$5300;
                         LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
                         LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                        double access$4800 = (double) loginActivitySmsView.time;
-                        Double.isNaN(access$4800);
-                        loginActivitySmsView.time = (int) (access$4800 - access$4700);
+                        double access$5400 = (double) loginActivitySmsView.time;
+                        Double.isNaN(access$5400);
+                        loginActivitySmsView.time = (int) (access$5400 - access$5300);
                         if (LoginActivitySmsView.this.time >= 1000) {
-                            int access$48002 = (LoginActivitySmsView.this.time / 1000) - (((LoginActivitySmsView.this.time / 1000) / 60) * 60);
+                            int access$54002 = (LoginActivitySmsView.this.time / 1000) - (((LoginActivitySmsView.this.time / 1000) / 60) * 60);
                             if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(r0), Integer.valueOf(access$48002)));
+                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(r0), Integer.valueOf(access$54002)));
                             } else if (LoginActivitySmsView.this.nextType == 2) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(r0), Integer.valueOf(access$48002)));
+                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(r0), Integer.valueOf(access$54002)));
                             }
                             if (LoginActivitySmsView.this.progressView != null) {
                                 LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
@@ -2186,7 +2187,7 @@ public class LoginActivity extends BaseFragment {
             if (!this.nextPressed && this.this$0.currentViewNum >= 1 && this.this$0.currentViewNum <= 4) {
                 String code = getCode();
                 if (TextUtils.isEmpty(code)) {
-                    AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
+                    this.this$0.onFieldError(this.codeFieldContainer);
                     return;
                 }
                 this.nextPressed = true;
@@ -2204,7 +2205,8 @@ public class LoginActivity extends BaseFragment {
                 tL_auth_signIn.phone_code = code;
                 tL_auth_signIn.phone_code_hash = this.phoneHash;
                 destroyTimer();
-                this.this$0.needShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_signIn, new -$$Lambda$LoginActivity$LoginActivitySmsView$QuZqrlgFwDiyZUcg7gbDXVsiiUk(this, tL_auth_signIn), 10));
+                this.this$0.needShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_signIn, new -$$Lambda$LoginActivity$LoginActivitySmsView$QuZqrlgFwDiyZUcg7gbDXVsiiUk(this, tL_auth_signIn), 10), false);
+                this.this$0.showDoneButton(true, true);
             }
         }
 
@@ -2237,7 +2239,7 @@ public class LoginActivity extends BaseFragment {
         L_0x0005:
             r5.nextPressed = r1;
             r6 = r5.this$0;
-            r6.needHideProgress(r1);
+            r6.showDoneButton(r1, r2);
             r5.destroyTimer();
             r5.destroyCodeTimer();
             r6 = r7 instanceof org.telegram.tgnet.TLRPC.TL_auth_authorizationSignUpRequired;
@@ -2292,7 +2294,7 @@ public class LoginActivity extends BaseFragment {
         L_0x0079:
             r5.nextPressed = r1;
             r7 = r5.this$0;
-            r7.needHideProgress(r1);
+            r7.showDoneButton(r1, r2);
             r7 = r5.currentType;
             r8 = 4;
             r3 = 2;
@@ -2453,7 +2455,7 @@ public class LoginActivity extends BaseFragment {
 
         public /* synthetic */ void lambda$null$5$LoginActivity$LoginActivitySmsView(TL_error tL_error, TLObject tLObject, TL_auth_signIn tL_auth_signIn) {
             this.nextPressed = false;
-            this.this$0.needHideProgress(false);
+            this.this$0.showDoneButton(false, true);
             if (tL_error == null) {
                 TL_account_password tL_account_password = (TL_account_password) tLObject;
                 if (TwoStepVerificationActivity.canHandleCurrentPassword(tL_account_password, true)) {
@@ -2527,6 +2529,9 @@ public class LoginActivity extends BaseFragment {
         public /* synthetic */ void lambda$onBackPressed$9$LoginActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
             onBackPressed(true);
             this.this$0.setPage(0, true, null, true);
+            this.this$0.showDoneButton(false, true);
+            this.this$0.currentDoneType = 0;
+            this.this$0.showDoneButton(true, true);
         }
 
         public void onDestroyActivity() {
@@ -2773,9 +2778,9 @@ public class LoginActivity extends BaseFragment {
                                     stringBuilder2.append(substring.substring(1));
                                     stringBuilder2.append(PhoneView.this.phoneField.getText().toString());
                                     charSequence = stringBuilder2.toString();
-                                    EditTextBoldCursor access$1300 = PhoneView.this.codeField;
+                                    EditTextBoldCursor access$1700 = PhoneView.this.codeField;
                                     substring = substring.substring(0, 1);
-                                    access$1300.setText(substring);
+                                    access$1700.setText(substring);
                                 }
                             } else {
                                 substring = stripExceptNumbers;
@@ -2790,11 +2795,11 @@ public class LoginActivity extends BaseFragment {
                                     PhoneView.this.ignoreSelection = true;
                                     PhoneView.this.countryButton.setText((CharSequence) PhoneView.this.countriesArray.get(indexOf));
                                     String str4 = (String) PhoneView.this.phoneFormatMap.get(substring);
-                                    HintEditText access$1500 = PhoneView.this.phoneField;
+                                    HintEditText access$1900 = PhoneView.this.phoneField;
                                     if (str4 != null) {
                                         str = str4.replace('X', 8211);
                                     }
-                                    access$1500.setHintText(str);
+                                    access$1900.setHintText(str);
                                     PhoneView.this.countryState = 0;
                                 } else {
                                     PhoneView.this.countryButton.setText(LocaleController.getString(str3, NUM));
@@ -2918,11 +2923,11 @@ public class LoginActivity extends BaseFragment {
                         }
                         editable.replace(0, editable.length(), stringBuilder);
                         if (selectionStart >= 0) {
-                            HintEditText access$1500 = PhoneView.this.phoneField;
+                            HintEditText access$1900 = PhoneView.this.phoneField;
                             if (selectionStart > PhoneView.this.phoneField.length()) {
                                 selectionStart = PhoneView.this.phoneField.length();
                             }
-                            access$1500.setSelection(selectionStart);
+                            access$1900.setSelection(selectionStart);
                         }
                         PhoneView.this.phoneField.onTextChange();
                         PhoneView.this.ignoreOnPhoneChange = false;
@@ -3185,6 +3190,8 @@ public class LoginActivity extends BaseFragment {
                     this.this$0.needShowAlert(LocaleController.getString(str5, NUM), LocaleController.getString("WrongCountry", NUM));
                 } else if (this.codeField.length() == 0) {
                     this.this$0.needShowAlert(LocaleController.getString(str5, NUM), LocaleController.getString("InvalidPhoneNumber", NUM));
+                } else if (this.phoneField.length() == 0) {
+                    this.this$0.onFieldError(this.phoneField);
                 } else {
                     StringBuilder stringBuilder2 = new StringBuilder();
                     stringBuilder2.append("");
@@ -3442,6 +3449,8 @@ public class LoginActivity extends BaseFragment {
         this.checkPermissions = true;
         this.checkShowPermissions = true;
         this.syncContacts = true;
+        this.showDoneAnimation = new AnimatorSet[2];
+        this.doneButtonVisible = new boolean[]{true, false};
     }
 
     public LoginActivity(int i) {
@@ -3451,6 +3460,8 @@ public class LoginActivity extends BaseFragment {
         this.checkPermissions = true;
         this.checkShowPermissions = true;
         this.syncContacts = true;
+        this.showDoneAnimation = new AnimatorSet[2];
+        this.doneButtonVisible = new boolean[]{true, false};
         this.currentAccount = i;
         this.newAccount = true;
     }
@@ -3471,135 +3482,541 @@ public class LoginActivity extends BaseFragment {
         }
     }
 
-    public View createView(Context context) {
-        SlideView[] slideViewArr;
-        Context context2 = context;
-        this.actionBar.setTitle(LocaleController.getString("AppName", NUM));
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int i) {
-                if (i == 1) {
-                    if (LoginActivity.this.doneProgressView.getTag() == null) {
-                        LoginActivity.this.views[LoginActivity.this.currentViewNum].onNextPressed();
-                    } else if (LoginActivity.this.getParentActivity() != null) {
-                        Builder builder = new Builder(LoginActivity.this.getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", NUM));
-                        builder.setMessage(LocaleController.getString("StopLoading", NUM));
-                        builder.setPositiveButton(LocaleController.getString("WaitMore", NUM), null);
-                        builder.setNegativeButton(LocaleController.getString("Stop", NUM), new -$$Lambda$LoginActivity$1$lZ8la8kpyrJX7A2ctFfMuS75IVo(this));
-                        LoginActivity.this.showDialog(builder.create());
-                    }
-                } else if (i == -1 && LoginActivity.this.onBackPressed()) {
-                    LoginActivity.this.finishFragment();
-                }
-            }
+    /* JADX WARNING: Missing block: B:101:0x03be, code skipped:
+            if (r1 != 4) goto L_0x03c5;
+     */
+    public android.view.View createView(android.content.Context r26) {
+        /*
+        r25 = this;
+        r0 = r25;
+        r1 = r26;
+        r2 = r0.actionBar;
+        r3 = "AppName";
+        r4 = NUM; // 0x7f0e00f1 float:1.8875526E38 double:1.0531622757E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
+        r2.setTitle(r3);
+        r2 = r0.actionBar;
+        r3 = new org.telegram.ui.LoginActivity$1;
+        r3.<init>();
+        r2.setActionBarMenuOnItemClick(r3);
+        r2 = 0;
+        r0.currentDoneType = r2;
+        r3 = r0.doneButtonVisible;
+        r4 = 1;
+        r3[r2] = r4;
+        r3[r4] = r2;
+        r3 = r0.actionBar;
+        r3 = r3.createMenu();
+        r5 = r0.actionBar;
+        r5.setAllowOverlayTitle(r4);
+        r5 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        r7 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
+        r3 = r3.addItemWithWidth(r4, r7, r6);
+        r0.doneItem = r3;
+        r3 = new org.telegram.ui.Components.ContextProgressView;
+        r3.<init>(r1, r4);
+        r0.doneProgressView = r3;
+        r3 = r0.doneProgressView;
+        r6 = 0;
+        r3.setAlpha(r6);
+        r3 = r0.doneProgressView;
+        r7 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r3.setScaleX(r7);
+        r3 = r0.doneProgressView;
+        r3.setScaleY(r7);
+        r3 = r0.doneProgressView;
+        r8 = 4;
+        r3.setVisibility(r8);
+        r3 = r0.doneItem;
+        r3.setAlpha(r6);
+        r3 = r0.doneItem;
+        r3.setScaleX(r7);
+        r3 = r0.doneItem;
+        r3.setScaleY(r7);
+        r3 = r0.doneItem;
+        r9 = r0.doneProgressView;
+        r10 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r11 = -1;
+        r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10);
+        r3.addView(r9, r12);
+        r3 = r0.doneItem;
+        r9 = NUM; // 0x7f0e03a9 float:1.8876938E38 double:1.0531626196E-314;
+        r12 = "Done";
+        r13 = org.telegram.messenger.LocaleController.getString(r12, r9);
+        r3.setContentDescription(r13);
+        r3 = r0.doneItem;
+        r13 = r0.doneButtonVisible;
+        r13 = r13[r4];
+        r14 = 8;
+        if (r13 == 0) goto L_0x0097;
+    L_0x0095:
+        r13 = 0;
+        goto L_0x0099;
+    L_0x0097:
+        r13 = 8;
+    L_0x0099:
+        r3.setVisibility(r13);
+        r3 = new android.widget.FrameLayout;
+        r3.<init>(r1);
+        r0.fragmentView = r3;
+        r13 = new org.telegram.ui.LoginActivity$2;
+        r13.<init>(r1);
+        r13.setFillViewport(r4);
+        r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10);
+        r3.addView(r13, r15);
+        r15 = new android.widget.FrameLayout;
+        r15.<init>(r1);
+        r10 = -2;
+        r7 = 51;
+        r7 = org.telegram.ui.Components.LayoutHelper.createScroll(r11, r10, r7);
+        r13.addView(r15, r7);
+        r7 = r0.views;
+        r10 = new org.telegram.ui.LoginActivity$PhoneView;
+        r10.<init>(r0, r1);
+        r7[r2] = r10;
+        r7 = r0.views;
+        r10 = new org.telegram.ui.LoginActivity$LoginActivitySmsView;
+        r10.<init>(r0, r1, r4);
+        r7[r4] = r10;
+        r7 = r0.views;
+        r10 = new org.telegram.ui.LoginActivity$LoginActivitySmsView;
+        r13 = 2;
+        r10.<init>(r0, r1, r13);
+        r7[r13] = r10;
+        r7 = r0.views;
+        r10 = new org.telegram.ui.LoginActivity$LoginActivitySmsView;
+        r11 = 3;
+        r10.<init>(r0, r1, r11);
+        r7[r11] = r10;
+        r7 = r0.views;
+        r10 = new org.telegram.ui.LoginActivity$LoginActivitySmsView;
+        r10.<init>(r0, r1, r8);
+        r7[r8] = r10;
+        r7 = r0.views;
+        r10 = 5;
+        r11 = new org.telegram.ui.LoginActivity$LoginActivityRegisterView;
+        r11.<init>(r0, r1);
+        r7[r10] = r11;
+        r7 = r0.views;
+        r10 = new org.telegram.ui.LoginActivity$LoginActivityPasswordView;
+        r10.<init>(r0, r1);
+        r11 = 6;
+        r7[r11] = r10;
+        r7 = r0.views;
+        r10 = 7;
+        r6 = new org.telegram.ui.LoginActivity$LoginActivityRecoverView;
+        r6.<init>(r0, r1);
+        r7[r10] = r6;
+        r6 = r0.views;
+        r7 = new org.telegram.ui.LoginActivity$LoginActivityResetWaitView;
+        r7.<init>(r0, r1);
+        r6[r14] = r7;
+        r6 = 0;
+    L_0x0118:
+        r7 = r0.views;
+        r10 = r7.length;
+        if (r6 >= r10) goto L_0x015e;
+    L_0x011d:
+        r7 = r7[r6];
+        if (r6 != 0) goto L_0x0123;
+    L_0x0121:
+        r10 = 0;
+        goto L_0x0125;
+    L_0x0123:
+        r10 = 8;
+    L_0x0125:
+        r7.setVisibility(r10);
+        r7 = r0.views;
+        r7 = r7[r6];
+        r16 = -1;
+        r17 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r18 = 51;
+        r10 = org.telegram.messenger.AndroidUtilities.isTablet();
+        if (r10 == 0) goto L_0x013d;
+    L_0x0138:
+        r10 = NUM; // 0x41d00000 float:26.0 double:5.455228437E-315;
+        r19 = NUM; // 0x41d00000 float:26.0 double:5.455228437E-315;
+        goto L_0x0141;
+    L_0x013d:
+        r10 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+        r19 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+    L_0x0141:
+        r20 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
+        r10 = org.telegram.messenger.AndroidUtilities.isTablet();
+        if (r10 == 0) goto L_0x014e;
+    L_0x0149:
+        r10 = NUM; // 0x41d00000 float:26.0 double:5.455228437E-315;
+        r21 = NUM; // 0x41d00000 float:26.0 double:5.455228437E-315;
+        goto L_0x0152;
+    L_0x014e:
+        r10 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+        r21 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+    L_0x0152:
+        r22 = 0;
+        r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22);
+        r15.addView(r7, r10);
+        r6 = r6 + 1;
+        goto L_0x0118;
+    L_0x015e:
+        r6 = r25.loadCurrentState();
+        if (r6 == 0) goto L_0x01c5;
+    L_0x0164:
+        r7 = "currentViewNum";
+        r7 = r6.getInt(r7, r2);
+        r0.currentViewNum = r7;
+        r7 = "syncContacts";
+        r7 = r6.getInt(r7, r4);
+        if (r7 != r4) goto L_0x0176;
+    L_0x0174:
+        r7 = 1;
+        goto L_0x0177;
+    L_0x0176:
+        r7 = 0;
+    L_0x0177:
+        r0.syncContacts = r7;
+        r7 = r0.currentViewNum;
+        if (r7 < r4) goto L_0x01a3;
+    L_0x017d:
+        if (r7 > r8) goto L_0x01a3;
+    L_0x017f:
+        r7 = "open";
+        r7 = r6.getInt(r7);
+        if (r7 == 0) goto L_0x01c5;
+    L_0x0187:
+        r10 = java.lang.System.currentTimeMillis();
+        r16 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r10 = r10 / r16;
+        r14 = (long) r7;
+        r10 = r10 - r14;
+        r10 = java.lang.Math.abs(r10);
+        r14 = 86400; // 0x15180 float:1.21072E-40 double:4.26873E-319;
+        r7 = (r10 > r14 ? 1 : (r10 == r14 ? 0 : -1));
+        if (r7 < 0) goto L_0x01c5;
+    L_0x019c:
+        r0.currentViewNum = r2;
+        r6 = 0;
+        r25.clearCurrentState();
+        goto L_0x01c5;
+    L_0x01a3:
+        r7 = r0.currentViewNum;
+        if (r7 != r11) goto L_0x01c5;
+    L_0x01a7:
+        r7 = r0.views;
+        r7 = r7[r11];
+        r7 = (org.telegram.ui.LoginActivity.LoginActivityPasswordView) r7;
+        r10 = r7.passwordType;
+        if (r10 == 0) goto L_0x01bf;
+    L_0x01b3:
+        r10 = r7.current_salt1;
+        if (r10 == 0) goto L_0x01bf;
+    L_0x01b9:
+        r7 = r7.current_salt2;
+        if (r7 != 0) goto L_0x01c5;
+    L_0x01bf:
+        r0.currentViewNum = r2;
+        r6 = 0;
+        r25.clearCurrentState();
+    L_0x01c5:
+        r7 = new android.widget.FrameLayout;
+        r7.<init>(r1);
+        r0.floatingButtonContainer = r7;
+        r7 = r0.floatingButtonContainer;
+        r10 = r0.doneButtonVisible;
+        r10 = r10[r2];
+        if (r10 == 0) goto L_0x01d6;
+    L_0x01d4:
+        r10 = 0;
+        goto L_0x01d8;
+    L_0x01d6:
+        r10 = 8;
+    L_0x01d8:
+        r7.setVisibility(r10);
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        r10 = "chats_actionBackground";
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r10);
+        r11 = "chats_actionPressedBackground";
+        r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);
+        r7 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r7, r10, r11);
+        r10 = android.os.Build.VERSION.SDK_INT;
+        r11 = 21;
+        if (r10 >= r11) goto L_0x0221;
+    L_0x01f5:
+        r10 = r26.getResources();
+        r14 = NUM; // 0x7var_c5 float:1.7944978E38 double:1.0529356004E-314;
+        r10 = r10.getDrawable(r14);
+        r10 = r10.mutate();
+        r14 = new android.graphics.PorterDuffColorFilter;
+        r15 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
+        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r14.<init>(r15, r8);
+        r10.setColorFilter(r14);
+        r8 = new org.telegram.ui.Components.CombinedDrawable;
+        r8.<init>(r10, r7, r2, r2);
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        r10 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        r8.setIconSize(r7, r10);
+        r7 = r8;
+    L_0x0221:
+        r8 = r0.floatingButtonContainer;
+        r8.setBackgroundDrawable(r7);
+        r7 = android.os.Build.VERSION.SDK_INT;
+        if (r7 < r11) goto L_0x0291;
+    L_0x022a:
+        r7 = new android.animation.StateListAnimator;
+        r7.<init>();
+        r8 = new int[r4];
+        r10 = 16842919; // 0x10100a7 float:2.3694026E-38 double:8.3215077E-317;
+        r8[r2] = r10;
+        r10 = r0.floatingButtonIcon;
+        r14 = new float[r13];
+        r15 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r15 = (float) r15;
+        r14[r2] = r15;
+        r15 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r15 = (float) r15;
+        r14[r4] = r15;
+        r15 = "translationZ";
+        r10 = android.animation.ObjectAnimator.ofFloat(r10, r15, r14);
+        r14 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
+        r10 = r10.setDuration(r14);
+        r7.addState(r8, r10);
+        r8 = new int[r2];
+        r10 = r0.floatingButtonIcon;
+        r14 = new float[r13];
+        r15 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r15 = (float) r15;
+        r14[r2] = r15;
+        r15 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r15 = (float) r15;
+        r14[r4] = r15;
+        r15 = "translationZ";
+        r10 = android.animation.ObjectAnimator.ofFloat(r10, r15, r14);
+        r14 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
+        r10 = r10.setDuration(r14);
+        r7.addState(r8, r10);
+        r8 = r0.floatingButtonContainer;
+        r8.setStateListAnimator(r7);
+        r7 = r0.floatingButtonContainer;
+        r8 = new org.telegram.ui.LoginActivity$3;
+        r8.<init>();
+        r7.setOutlineProvider(r8);
+    L_0x0291:
+        r7 = r0.floatingButtonContainer;
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r11) goto L_0x029c;
+    L_0x0297:
+        r8 = 56;
+        r18 = 56;
+        goto L_0x02a0;
+    L_0x029c:
+        r8 = 60;
+        r18 = 60;
+    L_0x02a0:
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r11) goto L_0x02a7;
+    L_0x02a4:
+        r19 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
+        goto L_0x02ab;
+    L_0x02a7:
+        r8 = NUM; // 0x42700000 float:60.0 double:5.507034975E-315;
+        r19 = NUM; // 0x42700000 float:60.0 double:5.507034975E-315;
+    L_0x02ab:
+        r20 = 85;
+        r21 = 0;
+        r22 = 0;
+        r23 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
+        r24 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
+        r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24);
+        r3.addView(r7, r8);
+        r3 = r0.floatingButtonContainer;
+        r7 = new org.telegram.ui.-$$Lambda$LoginActivity$W1F_A-dhM1LzLqQMtvwEBbAYl2w;
+        r7.<init>(r0);
+        r3.setOnClickListener(r7);
+        r3 = new android.widget.ImageView;
+        r3.<init>(r1);
+        r0.floatingButtonIcon = r3;
+        r3 = r0.floatingButtonIcon;
+        r7 = android.widget.ImageView.ScaleType.CENTER;
+        r3.setScaleType(r7);
+        r3 = r0.floatingButtonIcon;
+        r7 = new android.graphics.PorterDuffColorFilter;
+        r8 = "chats_actionIcon";
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);
+        r10 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r8, r10);
+        r3.setColorFilter(r7);
+        r3 = r0.floatingButtonIcon;
+        r7 = NUM; // 0x7var_e float:1.7944704E38 double:1.0529355337E-314;
+        r3.setImageResource(r7);
+        r3 = r0.floatingButtonContainer;
+        r7 = org.telegram.messenger.LocaleController.getString(r12, r9);
+        r3.setContentDescription(r7);
+        r3 = r0.floatingButtonContainer;
+        r7 = r0.floatingButtonIcon;
+        r8 = android.os.Build.VERSION.SDK_INT;
+        if (r8 < r11) goto L_0x0302;
+    L_0x02ff:
+        r8 = 56;
+        goto L_0x0304;
+    L_0x0302:
+        r8 = 60;
+    L_0x0304:
+        r9 = android.os.Build.VERSION.SDK_INT;
+        if (r9 < r11) goto L_0x0309;
+    L_0x0308:
+        goto L_0x030b;
+    L_0x0309:
+        r5 = NUM; // 0x42700000 float:60.0 double:5.507034975E-315;
+    L_0x030b:
+        r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r5);
+        r3.addView(r7, r5);
+        r3 = new org.telegram.ui.Components.RadialProgressView;
+        r3.<init>(r1);
+        r0.floatingProgressView = r3;
+        r1 = r0.floatingProgressView;
+        r3 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r1.setSize(r3);
+        r1 = r0.floatingProgressView;
+        r3 = "chats_actionIcon";
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
+        r1.setProgressColor(r3);
+        r1 = r0.floatingProgressView;
+        r3 = 0;
+        r1.setAlpha(r3);
+        r1 = r0.floatingProgressView;
+        r3 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r1.setScaleX(r3);
+        r1 = r0.floatingProgressView;
+        r1.setScaleY(r3);
+        r1 = r0.floatingProgressView;
+        r3 = 4;
+        r1.setVisibility(r3);
+        r1 = r0.floatingButtonContainer;
+        r5 = r0.floatingProgressView;
+        r7 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r8 = -1;
+        r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r7);
+        r1.addView(r5, r7);
+        r1 = 0;
+    L_0x0357:
+        r5 = r0.views;
+        r7 = r5.length;
+        if (r1 >= r7) goto L_0x03d7;
+    L_0x035c:
+        if (r6 == 0) goto L_0x0373;
+    L_0x035e:
+        if (r1 < r4) goto L_0x036c;
+    L_0x0360:
+        if (r1 > r3) goto L_0x036c;
+    L_0x0362:
+        r3 = r0.currentViewNum;
+        if (r1 != r3) goto L_0x0373;
+    L_0x0366:
+        r3 = r5[r1];
+        r3.restoreStateParams(r6);
+        goto L_0x0373;
+    L_0x036c:
+        r3 = r0.views;
+        r3 = r3[r1];
+        r3.restoreStateParams(r6);
+    L_0x0373:
+        r3 = r0.currentViewNum;
+        if (r3 != r1) goto L_0x03c8;
+    L_0x0377:
+        r3 = r0.actionBar;
+        r5 = r0.views;
+        r5 = r5[r1];
+        r5 = r5.needBackButton();
+        if (r5 != 0) goto L_0x038a;
+    L_0x0383:
+        r5 = r0.newAccount;
+        if (r5 == 0) goto L_0x0388;
+    L_0x0387:
+        goto L_0x038a;
+    L_0x0388:
+        r5 = 0;
+        goto L_0x038d;
+    L_0x038a:
+        r5 = NUM; // 0x7var_e9 float:1.794505E38 double:1.052935618E-314;
+    L_0x038d:
+        r3.setBackButtonImage(r5);
+        r3 = r0.views;
+        r3 = r3[r1];
+        r3.setVisibility(r2);
+        r3 = r0.views;
+        r3 = r3[r1];
+        r3.onShow();
+        r0.currentDoneType = r2;
+        if (r1 == r4) goto L_0x03b3;
+    L_0x03a2:
+        if (r1 == r13) goto L_0x03b3;
+    L_0x03a4:
+        r3 = 3;
+        if (r1 == r3) goto L_0x03b3;
+    L_0x03a7:
+        r3 = 4;
+        if (r1 == r3) goto L_0x03b3;
+    L_0x03aa:
+        r3 = 8;
+        if (r1 != r3) goto L_0x03af;
+    L_0x03ae:
+        goto L_0x03b3;
+    L_0x03af:
+        r0.showDoneButton(r4, r2);
+        goto L_0x03b6;
+    L_0x03b3:
+        r0.showDoneButton(r2, r2);
+    L_0x03b6:
+        if (r1 == r4) goto L_0x03c1;
+    L_0x03b8:
+        if (r1 == r13) goto L_0x03c1;
+    L_0x03ba:
+        r3 = 3;
+        r7 = 4;
+        if (r1 == r3) goto L_0x03c3;
+    L_0x03be:
+        if (r1 != r7) goto L_0x03c5;
+    L_0x03c0:
+        goto L_0x03c3;
+    L_0x03c1:
+        r3 = 3;
+        r7 = 4;
+    L_0x03c3:
+        r0.currentDoneType = r4;
+    L_0x03c5:
+        r8 = 8;
+        goto L_0x03d3;
+    L_0x03c8:
+        r3 = 3;
+        r7 = 4;
+        r5 = r0.views;
+        r5 = r5[r1];
+        r8 = 8;
+        r5.setVisibility(r8);
+    L_0x03d3:
+        r1 = r1 + 1;
+        r3 = 4;
+        goto L_0x0357;
+    L_0x03d7:
+        r1 = r0.actionBar;
+        r2 = r0.currentViewNum;
+        r2 = r5[r2];
+        r2 = r2.getHeaderName();
+        r1.setTitle(r2);
+        r1 = r0.fragmentView;
+        return r1;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity.createView(android.content.Context):android.view.View");
+    }
 
-            public /* synthetic */ void lambda$onItemClick$0$LoginActivity$1(DialogInterface dialogInterface, int i) {
-                LoginActivity.this.views[LoginActivity.this.currentViewNum].onCancelPressed();
-                LoginActivity.this.needHideProgress(true);
-            }
-        });
-        ActionBarMenu createMenu = this.actionBar.createMenu();
-        this.actionBar.setAllowOverlayTitle(true);
-        this.doneItem = createMenu.addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
-        this.doneProgressView = new ContextProgressView(context2, 1);
-        this.doneProgressView.setAlpha(0.0f);
-        this.doneProgressView.setScaleX(0.1f);
-        this.doneProgressView.setScaleY(0.1f);
-        this.doneProgressView.setVisibility(4);
-        this.doneItem.addView(this.doneProgressView, LayoutHelper.createFrame(-1, -1.0f));
-        this.doneItem.setContentDescription(LocaleController.getString("Done", NUM));
-        AnonymousClass2 anonymousClass2 = new ScrollView(context2) {
-            public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
-                if (LoginActivity.this.currentViewNum == 1 || LoginActivity.this.currentViewNum == 2 || LoginActivity.this.currentViewNum == 4) {
-                    rect.bottom += AndroidUtilities.dp(40.0f);
-                }
-                return super.requestChildRectangleOnScreen(view, rect, z);
-            }
-
-            /* Access modifiers changed, original: protected */
-            public void onMeasure(int i, int i2) {
-                LoginActivity.this.scrollHeight = MeasureSpec.getSize(i2) - AndroidUtilities.dp(30.0f);
-                super.onMeasure(i, i2);
-            }
-        };
-        anonymousClass2.setFillViewport(true);
-        this.fragmentView = anonymousClass2;
-        FrameLayout frameLayout = new FrameLayout(context2);
-        anonymousClass2.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
-        this.views[0] = new PhoneView(this, context2);
-        this.views[1] = new LoginActivitySmsView(this, context2, 1);
-        this.views[2] = new LoginActivitySmsView(this, context2, 2);
-        this.views[3] = new LoginActivitySmsView(this, context2, 3);
-        this.views[4] = new LoginActivitySmsView(this, context2, 4);
-        this.views[5] = new LoginActivityRegisterView(this, context2);
-        this.views[6] = new LoginActivityPasswordView(this, context2);
-        this.views[7] = new LoginActivityRecoverView(this, context2);
-        this.views[8] = new LoginActivityResetWaitView(this, context2);
-        int i = 0;
-        while (true) {
-            slideViewArr = this.views;
-            if (i >= slideViewArr.length) {
-                break;
-            }
-            slideViewArr[i].setVisibility(i == 0 ? 0 : 8);
-            View view = this.views[i];
-            float f = 18.0f;
-            float f2 = AndroidUtilities.isTablet() ? 26.0f : 18.0f;
-            if (AndroidUtilities.isTablet()) {
-                f = 26.0f;
-            }
-            frameLayout.addView(view, LayoutHelper.createFrame(-1, -1.0f, 51, f2, 30.0f, f, 0.0f));
-            i++;
-        }
-        Bundle loadCurrentState = loadCurrentState();
-        if (loadCurrentState != null) {
-            this.currentViewNum = loadCurrentState.getInt("currentViewNum", 0);
-            this.syncContacts = loadCurrentState.getInt("syncContacts", 1) == 1;
-            int i2 = this.currentViewNum;
-            if (i2 >= 1 && i2 <= 4) {
-                i2 = loadCurrentState.getInt("open");
-                if (i2 != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) i2)) >= 86400) {
-                    this.currentViewNum = 0;
-                    clearCurrentState();
-                }
-            } else if (this.currentViewNum == 6) {
-                LoginActivityPasswordView loginActivityPasswordView = (LoginActivityPasswordView) this.views[6];
-                if (loginActivityPasswordView.passwordType == 0 || loginActivityPasswordView.current_salt1 == null || loginActivityPasswordView.current_salt2 == null) {
-                    this.currentViewNum = 0;
-                    clearCurrentState();
-                }
-            }
-            loadCurrentState = null;
-        }
-        int i3 = 0;
-        while (true) {
-            slideViewArr = this.views;
-            if (i3 < slideViewArr.length) {
-                if (loadCurrentState != null) {
-                    if (i3 < 1 || i3 > 4) {
-                        this.views[i3].restoreStateParams(loadCurrentState);
-                    } else if (i3 == this.currentViewNum) {
-                        slideViewArr[i3].restoreStateParams(loadCurrentState);
-                    }
-                }
-                if (this.currentViewNum == i3) {
-                    ActionBar actionBar = this.actionBar;
-                    int i4 = (this.views[i3].needBackButton() || this.newAccount) ? NUM : 0;
-                    actionBar.setBackButtonImage(i4);
-                    this.views[i3].setVisibility(0);
-                    this.views[i3].onShow();
-                    if (i3 == 3 || i3 == 8) {
-                        this.doneItem.setVisibility(8);
-                    }
-                } else {
-                    this.views[i3].setVisibility(8);
-                }
-                i3++;
-            } else {
-                this.actionBar.setTitle(slideViewArr[this.currentViewNum].getHeaderName());
-                return this.fragmentView;
-            }
-        }
+    public /* synthetic */ void lambda$createView$0$LoginActivity(View view) {
+        onDoneButtonPressed();
     }
 
     public void onPause() {
@@ -3618,8 +4035,8 @@ public class LoginActivity extends BaseFragment {
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
         try {
             if (this.currentViewNum >= 1 && this.currentViewNum <= 4 && (this.views[this.currentViewNum] instanceof LoginActivitySmsView)) {
-                int access$700 = ((LoginActivitySmsView) this.views[this.currentViewNum]).openTime;
-                if (access$700 != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) access$700)) >= 86400) {
+                int access$600 = ((LoginActivitySmsView) this.views[this.currentViewNum]).openTime;
+                if (access$600 != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) access$600)) >= 86400) {
                     this.views[this.currentViewNum].onBackPressed(true);
                     setPage(0, false, null, true);
                 }
@@ -3784,6 +4201,17 @@ public class LoginActivity extends BaseFragment {
         }
     }
 
+    private void onFieldError(View view) {
+        try {
+            Vibrator vibrator = (Vibrator) getParentActivity().getSystemService("vibrator");
+            if (vibrator != null) {
+                vibrator.vibrate(200);
+            }
+        } catch (Throwable unused) {
+        }
+        AndroidUtilities.shakeView(view, 2.0f, 0);
+    }
+
     private void needShowInvalidAlert(String str, boolean z) {
         if (getParentActivity() != null) {
             Builder builder = new Builder(getParentActivity());
@@ -3793,13 +4221,13 @@ public class LoginActivity extends BaseFragment {
             } else {
                 builder.setMessage(LocaleController.getString("InvalidPhoneNumber", NUM));
             }
-            builder.setNeutralButton(LocaleController.getString("BotHelp", NUM), new -$$Lambda$LoginActivity$ue6fWEokYAlkmz3p94N9QOm1_o4(this, z, str));
+            builder.setNeutralButton(LocaleController.getString("BotHelp", NUM), new -$$Lambda$LoginActivity$46vRdz1bQM_EHE2DXn2q36kGyZo(this, z, str));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
             showDialog(builder.create());
         }
     }
 
-    public /* synthetic */ void lambda$needShowInvalidAlert$0$LoginActivity(boolean z, String str, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$needShowInvalidAlert$1$LoginActivity(boolean z, String str, DialogInterface dialogInterface, int i) {
         try {
             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             String format = String.format(Locale.US, "%s (%d)", new Object[]{packageInfo.versionName, Integer.valueOf(packageInfo.versionCode)});
@@ -3856,84 +4284,294 @@ public class LoginActivity extends BaseFragment {
         }
     }
 
-    private void showEditDoneProgress(final boolean z) {
+    private void showDoneButton(final boolean z, boolean z2) {
+        final boolean z3 = this.currentDoneType == 0;
+        boolean[] zArr = this.doneButtonVisible;
+        int i = this.currentDoneType;
+        if (zArr[i] != z) {
+            AnimatorSet[] animatorSetArr = this.showDoneAnimation;
+            if (animatorSetArr[i] != null) {
+                animatorSetArr[i].cancel();
+            }
+            zArr = this.doneButtonVisible;
+            i = this.currentDoneType;
+            zArr[i] = z;
+            if (z2) {
+                this.showDoneAnimation[i] = new AnimatorSet();
+                Animator[] animatorArr;
+                AnimatorSet animatorSet;
+                if (z) {
+                    AnimatorSet animatorSet2;
+                    if (z3) {
+                        this.floatingButtonContainer.setVisibility(0);
+                        animatorSet2 = this.showDoneAnimation[this.currentDoneType];
+                        animatorArr = new Animator[3];
+                        animatorArr[0] = ObjectAnimator.ofFloat(this.floatingButtonContainer, View.SCALE_X, new float[]{1.0f});
+                        animatorArr[1] = ObjectAnimator.ofFloat(this.floatingButtonContainer, View.SCALE_Y, new float[]{1.0f});
+                        animatorArr[2] = ObjectAnimator.ofFloat(this.floatingButtonContainer, View.ALPHA, new float[]{1.0f});
+                        animatorSet2.playTogether(animatorArr);
+                    } else {
+                        this.doneItem.setVisibility(0);
+                        animatorSet2 = this.showDoneAnimation[this.currentDoneType];
+                        animatorArr = new Animator[3];
+                        animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem, View.SCALE_X, new float[]{1.0f});
+                        animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem, View.SCALE_Y, new float[]{1.0f});
+                        animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem, View.ALPHA, new float[]{1.0f});
+                        animatorSet2.playTogether(animatorArr);
+                    }
+                } else if (z3) {
+                    animatorSet = this.showDoneAnimation[this.currentDoneType];
+                    animatorArr = new Animator[3];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.floatingButtonContainer, View.SCALE_X, new float[]{0.1f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.floatingButtonContainer, View.SCALE_Y, new float[]{0.1f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(this.floatingButtonContainer, View.ALPHA, new float[]{0.0f});
+                    animatorSet.playTogether(animatorArr);
+                } else {
+                    animatorSet = this.showDoneAnimation[this.currentDoneType];
+                    animatorArr = new Animator[3];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem, View.SCALE_X, new float[]{0.1f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem, View.SCALE_Y, new float[]{0.1f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem, View.ALPHA, new float[]{0.0f});
+                    animatorSet.playTogether(animatorArr);
+                }
+                this.showDoneAnimation[this.currentDoneType].addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        if (LoginActivity.this.showDoneAnimation[z3 ^ 1] != null && LoginActivity.this.showDoneAnimation[z3 ^ 1].equals(animator) && !z) {
+                            if (z3) {
+                                LoginActivity.this.floatingButtonContainer.setVisibility(8);
+                            } else {
+                                LoginActivity.this.doneItem.setVisibility(8);
+                            }
+                        }
+                    }
+
+                    public void onAnimationCancel(Animator animator) {
+                        if (LoginActivity.this.showDoneAnimation[z3 ^ 1] != null && LoginActivity.this.showDoneAnimation[z3 ^ 1].equals(animator)) {
+                            LoginActivity.this.showDoneAnimation[z3 ^ 1] = null;
+                        }
+                    }
+                });
+                this.showDoneAnimation[this.currentDoneType].setDuration(150);
+                this.showDoneAnimation[this.currentDoneType].start();
+            } else if (z) {
+                if (z3) {
+                    this.floatingButtonContainer.setVisibility(0);
+                    this.floatingButtonContainer.setScaleX(1.0f);
+                    this.floatingButtonContainer.setScaleY(1.0f);
+                    this.floatingButtonContainer.setAlpha(1.0f);
+                } else {
+                    this.doneItem.setVisibility(0);
+                    this.doneItem.setScaleX(1.0f);
+                    this.doneItem.setScaleY(1.0f);
+                    this.doneItem.setAlpha(1.0f);
+                }
+            } else if (z3) {
+                this.floatingButtonContainer.setVisibility(8);
+                this.floatingButtonContainer.setScaleX(0.1f);
+                this.floatingButtonContainer.setScaleY(0.1f);
+                this.floatingButtonContainer.setAlpha(0.0f);
+            } else {
+                this.doneItem.setVisibility(8);
+                this.doneItem.setScaleX(0.1f);
+                this.doneItem.setScaleY(0.1f);
+                this.doneItem.setAlpha(0.0f);
+            }
+        }
+    }
+
+    private void onDoneButtonPressed() {
+        if (this.doneButtonVisible[this.currentDoneType]) {
+            if (this.doneProgressView.getTag() == null) {
+                this.views[this.currentViewNum].onNextPressed();
+            } else if (getParentActivity() != null) {
+                Builder builder = new Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setMessage(LocaleController.getString("StopLoading", NUM));
+                builder.setPositiveButton(LocaleController.getString("WaitMore", NUM), null);
+                builder.setNegativeButton(LocaleController.getString("Stop", NUM), new -$$Lambda$LoginActivity$QDPdXQumalMXrHB2DnwB0raXD7E(this));
+                showDialog(builder.create());
+            }
+        }
+    }
+
+    public /* synthetic */ void lambda$onDoneButtonPressed$2$LoginActivity(DialogInterface dialogInterface, int i) {
+        this.views[this.currentViewNum].onCancelPressed();
+        needHideProgress(true);
+    }
+
+    private void showEditDoneProgress(boolean z, boolean z2) {
+        final boolean z3 = z;
         AnimatorSet animatorSet = this.doneItemAnimation;
         if (animatorSet != null) {
             animatorSet.cancel();
         }
-        this.doneItemAnimation = new AnimatorSet();
-        AnimatorSet animatorSet2;
-        Animator[] animatorArr;
-        if (z) {
-            this.doneProgressView.setTag(Integer.valueOf(1));
-            this.doneProgressView.setVisibility(0);
-            animatorSet2 = this.doneItemAnimation;
-            animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_X, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_Y, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.ALPHA, new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_X, new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_Y, new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.doneProgressView, View.ALPHA, new float[]{1.0f});
-            animatorSet2.playTogether(animatorArr);
-        } else {
-            this.doneProgressView.setTag(null);
-            this.doneItem.getContentView().setVisibility(0);
-            animatorSet2 = this.doneItemAnimation;
-            animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_X, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_Y, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.doneProgressView, View.ALPHA, new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_X, new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_Y, new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.ALPHA, new float[]{1.0f});
-            animatorSet2.playTogether(animatorArr);
-        }
-        this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                if (LoginActivity.this.doneItemAnimation != null && LoginActivity.this.doneItemAnimation.equals(animator)) {
-                    if (z) {
-                        LoginActivity.this.doneItem.getContentView().setVisibility(4);
-                    } else {
-                        LoginActivity.this.doneProgressView.setVisibility(4);
+        final boolean z4 = this.currentDoneType == 0;
+        if (z2) {
+            this.doneItemAnimation = new AnimatorSet();
+            AnimatorSet animatorSet2;
+            Animator[] animatorArr;
+            if (z3) {
+                this.doneProgressView.setTag(Integer.valueOf(1));
+                if (z4) {
+                    this.floatingProgressView.setVisibility(0);
+                    this.floatingButtonContainer.setEnabled(false);
+                    animatorSet2 = this.doneItemAnimation;
+                    Animator[] animatorArr2 = new Animator[6];
+                    animatorArr2[0] = ObjectAnimator.ofFloat(this.floatingButtonIcon, View.SCALE_X, new float[]{0.1f});
+                    animatorArr2[1] = ObjectAnimator.ofFloat(this.floatingButtonIcon, View.SCALE_Y, new float[]{0.1f});
+                    animatorArr2[2] = ObjectAnimator.ofFloat(this.floatingButtonIcon, View.ALPHA, new float[]{0.0f});
+                    animatorArr2[3] = ObjectAnimator.ofFloat(this.floatingProgressView, View.SCALE_X, new float[]{1.0f});
+                    animatorArr2[4] = ObjectAnimator.ofFloat(this.floatingProgressView, View.SCALE_Y, new float[]{1.0f});
+                    animatorArr2[5] = ObjectAnimator.ofFloat(this.floatingProgressView, View.ALPHA, new float[]{1.0f});
+                    animatorSet2.playTogether(animatorArr2);
+                } else {
+                    this.doneProgressView.setVisibility(0);
+                    animatorSet2 = this.doneItemAnimation;
+                    animatorArr = new Animator[6];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_X, new float[]{0.1f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_Y, new float[]{0.1f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.ALPHA, new float[]{0.0f});
+                    animatorArr[3] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_X, new float[]{1.0f});
+                    animatorArr[4] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_Y, new float[]{1.0f});
+                    animatorArr[5] = ObjectAnimator.ofFloat(this.doneProgressView, View.ALPHA, new float[]{1.0f});
+                    animatorSet2.playTogether(animatorArr);
+                }
+            } else {
+                this.doneProgressView.setTag(null);
+                if (z4) {
+                    this.floatingButtonIcon.setVisibility(0);
+                    this.floatingButtonContainer.setEnabled(true);
+                    animatorSet2 = this.doneItemAnimation;
+                    animatorArr = new Animator[6];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.floatingProgressView, View.SCALE_X, new float[]{0.1f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.floatingProgressView, View.SCALE_Y, new float[]{0.1f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(this.floatingProgressView, View.ALPHA, new float[]{0.0f});
+                    animatorArr[3] = ObjectAnimator.ofFloat(this.floatingButtonIcon, View.SCALE_X, new float[]{1.0f});
+                    animatorArr[4] = ObjectAnimator.ofFloat(this.floatingButtonIcon, View.SCALE_Y, new float[]{1.0f});
+                    animatorArr[5] = ObjectAnimator.ofFloat(this.floatingButtonIcon, View.ALPHA, new float[]{1.0f});
+                    animatorSet2.playTogether(animatorArr);
+                } else {
+                    this.doneItem.getContentView().setVisibility(0);
+                    animatorSet2 = this.doneItemAnimation;
+                    animatorArr = new Animator[6];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_X, new float[]{0.1f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.doneProgressView, View.SCALE_Y, new float[]{0.1f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(this.doneProgressView, View.ALPHA, new float[]{0.0f});
+                    animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_X, new float[]{1.0f});
+                    animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_Y, new float[]{1.0f});
+                    animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.ALPHA, new float[]{1.0f});
+                    animatorSet2.playTogether(animatorArr);
+                }
+            }
+            this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    if (LoginActivity.this.doneItemAnimation != null && LoginActivity.this.doneItemAnimation.equals(animator)) {
+                        if (z4) {
+                            if (z3) {
+                                LoginActivity.this.floatingButtonIcon.setVisibility(4);
+                            } else {
+                                LoginActivity.this.floatingProgressView.setVisibility(4);
+                            }
+                        } else if (z3) {
+                            LoginActivity.this.doneItem.getContentView().setVisibility(4);
+                        } else {
+                            LoginActivity.this.doneProgressView.setVisibility(4);
+                        }
                     }
                 }
-            }
 
-            public void onAnimationCancel(Animator animator) {
-                if (LoginActivity.this.doneItemAnimation != null && LoginActivity.this.doneItemAnimation.equals(animator)) {
-                    LoginActivity.this.doneItemAnimation = null;
+                public void onAnimationCancel(Animator animator) {
+                    if (LoginActivity.this.doneItemAnimation != null && LoginActivity.this.doneItemAnimation.equals(animator)) {
+                        LoginActivity.this.doneItemAnimation = null;
+                    }
                 }
+            });
+            this.doneItemAnimation.setDuration(150);
+            this.doneItemAnimation.start();
+        } else if (!z3) {
+            this.doneProgressView.setTag(null);
+            if (z4) {
+                this.floatingProgressView.setVisibility(4);
+                this.floatingButtonIcon.setVisibility(0);
+                this.floatingButtonContainer.setEnabled(true);
+                this.floatingProgressView.setScaleX(0.1f);
+                this.floatingProgressView.setScaleY(0.1f);
+                this.floatingProgressView.setAlpha(0.0f);
+                this.floatingButtonIcon.setScaleX(1.0f);
+                this.floatingButtonIcon.setScaleY(1.0f);
+                this.floatingButtonIcon.setAlpha(1.0f);
+                return;
             }
-        });
-        this.doneItemAnimation.setDuration(150);
-        this.doneItemAnimation.start();
+            this.doneItem.getContentView().setVisibility(0);
+            this.doneProgressView.setVisibility(4);
+            this.doneProgressView.setScaleX(0.1f);
+            this.doneProgressView.setScaleY(0.1f);
+            this.doneProgressView.setAlpha(0.0f);
+            this.doneItem.getContentView().setScaleX(1.0f);
+            this.doneItem.getContentView().setScaleY(1.0f);
+            this.doneItem.getContentView().setAlpha(1.0f);
+        } else if (z4) {
+            this.floatingProgressView.setVisibility(0);
+            this.floatingButtonIcon.setVisibility(4);
+            this.floatingButtonContainer.setEnabled(false);
+            this.floatingButtonIcon.setScaleX(0.1f);
+            this.floatingButtonIcon.setScaleY(0.1f);
+            this.floatingButtonIcon.setAlpha(0.0f);
+            this.floatingProgressView.setScaleX(1.0f);
+            this.floatingProgressView.setScaleY(1.0f);
+            this.floatingProgressView.setAlpha(1.0f);
+        } else {
+            this.doneProgressView.setVisibility(0);
+            this.doneItem.getContentView().setVisibility(4);
+            this.doneItem.getContentView().setScaleX(0.1f);
+            this.doneItem.getContentView().setScaleY(0.1f);
+            this.doneItem.getContentView().setAlpha(0.0f);
+            this.doneProgressView.setScaleX(1.0f);
+            this.doneProgressView.setScaleY(1.0f);
+            this.doneProgressView.setAlpha(1.0f);
+        }
     }
 
     private void needShowProgress(int i) {
-        this.progressRequestId = i;
-        showEditDoneProgress(true);
+        needShowProgress(i, true);
     }
 
-    public void needHideProgress(boolean z) {
+    private void needShowProgress(int i, boolean z) {
+        this.progressRequestId = i;
+        showEditDoneProgress(true, z);
+    }
+
+    private void needHideProgress(boolean z) {
+        needHideProgress(z, true);
+    }
+
+    private void needHideProgress(boolean z, boolean z2) {
         if (this.progressRequestId != 0) {
             if (z) {
                 ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.progressRequestId, true);
             }
             this.progressRequestId = 0;
         }
-        showEditDoneProgress(false);
+        showEditDoneProgress(false, z2);
     }
 
     public void setPage(int i, boolean z, Bundle bundle, boolean z2) {
-        if (i == 3 || i == 8) {
-            this.doneItem.setVisibility(8);
+        if (i == 1 || i == 2 || i == 3 || i == 4 || i == 8) {
+            this.currentDoneType = 0;
+            showDoneButton(false, z);
         } else {
             if (i == 0) {
                 this.checkPermissions = true;
                 this.checkShowPermissions = true;
             }
-            this.doneItem.setVisibility(0);
+            this.currentDoneType = 1;
+            showDoneButton(false, z);
+            this.currentDoneType = 0;
+            showEditDoneProgress(false, false);
+            showDoneButton(true, z);
+        }
+        if (i == 1 || i == 2 || i == 3 || i == 4) {
+            this.currentDoneType = 1;
         }
         int i2 = NUM;
         if (z) {
@@ -4101,6 +4739,10 @@ public class LoginActivity extends BaseFragment {
                 ThemeDescription themeDescription = r12;
                 ThemeDescription themeDescription2 = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
                 arrayList.add(themeDescription);
+                arrayList.add(new ThemeDescription(this.floatingButtonIcon, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionIcon"));
+                arrayList.add(new ThemeDescription(this.floatingButtonIcon, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chats_actionBackground"));
+                arrayList.add(new ThemeDescription(this.floatingButtonIcon, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "chats_actionPressedBackground"));
+                arrayList.add(new ThemeDescription(this.floatingProgressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "chats_actionIcon"));
                 arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"));
                 arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));
                 arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"));
@@ -4158,11 +4800,11 @@ public class LoginActivity extends BaseFragment {
                 }
                 arrayList.add(new ThemeDescription(loginActivitySmsView.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
                 arrayList.add(new ThemeDescription(loginActivitySmsView.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlueText4"));
-                View access$5000 = loginActivitySmsView.progressView;
+                View access$5600 = loginActivitySmsView.progressView;
                 Class[] clsArr = new Class[]{ProgressView.class};
                 String[] strArr = new String[1];
                 strArr[0] = "paint";
-                arrayList.add(new ThemeDescription(access$5000, 0, clsArr, strArr, null, null, null, "login_progressInner"));
+                arrayList.add(new ThemeDescription(access$5600, 0, clsArr, strArr, null, null, null, "login_progressInner"));
                 arrayList.add(new ThemeDescription(loginActivitySmsView.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, "login_progressOuter"));
                 arrayList.add(new ThemeDescription(loginActivitySmsView.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
                 arrayList.add(new ThemeDescription(loginActivitySmsView.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionBackground"));

@@ -219,6 +219,10 @@ public class RadialProgress2 {
         this.overrideAlpha = f;
     }
 
+    public float getOverrideAlpha() {
+        return this.overrideAlpha;
+    }
+
     /* JADX WARNING: Removed duplicated region for block: B:35:0x0093  */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x0068  */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x00ed  */

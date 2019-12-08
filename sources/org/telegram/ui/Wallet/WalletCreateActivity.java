@@ -60,7 +60,6 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SharedConfig;
@@ -523,7 +522,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
             return;
         }
         if ((SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture) && this.currentType != 9) {
-            MediaController.getInstance().setFlagSecure(this, false);
+            AndroidUtilities.setFlagSecure(this, false);
         }
     }
 
@@ -1158,7 +1157,6 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 this.actionBar.getTitleTextView().setAlpha(0.0f);
                 break;
             case 5:
-                this.imageView.setAutoRepeat(true);
                 this.imageView.setAnimation(NUM, 104, 104);
                 this.actionBar.setTitle(LocaleController.getString("WalletTestTimeTitle", NUM));
                 this.titleTextView.setText(LocaleController.getString("WalletTestTime", NUM));
@@ -1232,8 +1230,8 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 break;
         }
         this.imageView.playAnimation();
-        if (VERSION.SDK_INT >= 23 && (SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture)) {
-            MediaController.getInstance().setFlagSecure(this, true);
+        if (VERSION.SDK_INT >= 23 && ((SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture) && this.currentType != 9)) {
+            AndroidUtilities.setFlagSecure(this, true);
         }
         return this.fragmentView;
     }
@@ -1276,7 +1274,7 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                         break;
                     }
                     keyProtectionType = getTonController().getKeyProtectionType();
-                    String str = "WalletExportConfirmCredentials";
+                    String str = "WalletExportConfirmContinue";
                     if (keyProtectionType == 1) {
                         if (VERSION.SDK_INT >= 23) {
                             getParentActivity().startActivityForResult(((KeyguardManager) ApplicationLoader.applicationContext.getSystemService("keyguard")).createConfirmDeviceCredentialIntent(LocaleController.getString("Wallet", NUM), LocaleController.getString(str, NUM)), 34);
@@ -1567,9 +1565,9 @@ public class WalletCreateActivity extends BaseFragment implements NotificationCe
                 return true;
             }
             if (numericEditTextArr[i].length() == 0) {
-                AndroidUtilities.shakeView(this.editTexts[i], 2.0f, 0);
                 this.editTexts[i].editText.clearFocus();
                 this.editTexts[i].editText.requestFocus();
+                AndroidUtilities.shakeView(this.editTexts[i], 2.0f, 0);
                 try {
                     Vibrator vibrator = (Vibrator) getParentActivity().getSystemService("vibrator");
                     if (vibrator != null) {

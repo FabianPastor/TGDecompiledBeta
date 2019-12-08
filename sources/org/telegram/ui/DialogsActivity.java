@@ -444,12 +444,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
         public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
             int actionMasked = motionEvent.getActionMasked();
-            if (actionMasked == 0 || actionMasked == 1 || actionMasked == 3) {
-                if (actionMasked == 0) {
-                    DialogsActivity.this.layoutManager.findFirstVisibleItemPosition();
-                } else if (DialogsActivity.this.actionBar.isActionModeShowed()) {
-                    DialogsActivity.this.allowMoving = true;
-                }
+            if ((actionMasked == 1 || actionMasked == 3) && DialogsActivity.this.actionBar.isActionModeShowed()) {
+                DialogsActivity.this.allowMoving = true;
             }
             return super.onInterceptTouchEvent(motionEvent);
         }

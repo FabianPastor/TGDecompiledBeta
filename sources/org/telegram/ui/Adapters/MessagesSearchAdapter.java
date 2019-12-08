@@ -17,22 +17,14 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 public class MessagesSearchAdapter extends SelectionAdapter {
     private int currentAccount = UserConfig.selectedAccount;
     private Context mContext;
-    private boolean messagesSearchEndReached;
     private ArrayList<MessageObject> searchResultMessages = new ArrayList();
 
     public long getItemId(int i) {
         return (long) i;
     }
 
-    public void loadMoreSearchMessages() {
-    }
-
     public MessagesSearchAdapter(Context context) {
         this.mContext = context;
-    }
-
-    public boolean isMessagesSearchEndReached() {
-        return this.messagesSearchEndReached;
     }
 
     public void notifyDataSetChanged() {
@@ -41,8 +33,7 @@ public class MessagesSearchAdapter extends SelectionAdapter {
     }
 
     public int getItemCount() {
-        int size = this.searchResultMessages.size();
-        return size != 0 ? size + (this.messagesSearchEndReached ^ 1) : size;
+        return this.searchResultMessages.size();
     }
 
     public Object getItem(int i) {
@@ -64,7 +55,7 @@ public class MessagesSearchAdapter extends SelectionAdapter {
             DialogCell dialogCell = (DialogCell) viewHolder.itemView;
             dialogCell.useSeparator = true;
             MessageObject messageObject = (MessageObject) getItem(i);
-            dialogCell.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date);
+            dialogCell.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date, true);
         }
     }
 

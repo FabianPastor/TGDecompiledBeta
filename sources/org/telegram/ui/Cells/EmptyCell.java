@@ -5,7 +5,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 
 public class EmptyCell extends FrameLayout {
-    int cellHeight;
+    private int cellHeight;
 
     public EmptyCell(Context context) {
         this(context, 8);
@@ -17,8 +17,10 @@ public class EmptyCell extends FrameLayout {
     }
 
     public void setHeight(int i) {
-        this.cellHeight = i;
-        requestLayout();
+        if (this.cellHeight != i) {
+            this.cellHeight = i;
+            requestLayout();
+        }
     }
 
     /* Access modifiers changed, original: protected */

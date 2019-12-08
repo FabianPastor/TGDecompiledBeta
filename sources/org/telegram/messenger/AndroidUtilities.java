@@ -83,6 +83,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -143,6 +144,7 @@ public class AndroidUtilities {
     private static int[] documentIcons = new int[]{NUM, NUM, NUM, NUM};
     private static int[] documentMediaIcons = new int[]{NUM, NUM, NUM, NUM};
     public static boolean firstConfigurationWas;
+    private static WeakReference<BaseFragment> flagSecureFragment;
     private static boolean hasCallPermissions;
     public static boolean incorrectDisplaySizeFix;
     public static boolean isInMultiwindow;
@@ -473,6 +475,10 @@ public class AndroidUtilities {
 
     public static int getPeerLayerVersion(int i) {
         return (i >> 16) & 65535;
+    }
+
+    public static float lerp(float f, float f2, float f3) {
+        return f + (f3 * (f2 - f));
     }
 
     public static int setMyLayerVersion(int i, int i2) {
@@ -3523,5 +3529,31 @@ public class AndroidUtilities {
             i++;
         }
         return -1;
+    }
+
+    public static float lerp(float[] fArr, float f) {
+        return lerp(fArr[0], fArr[1], f);
+    }
+
+    public static boolean hasFlagSecureFragment() {
+        return flagSecureFragment != null;
+    }
+
+    public static void setFlagSecure(BaseFragment baseFragment, boolean z) {
+        if (baseFragment != null && baseFragment.getParentActivity() != null) {
+            if (z) {
+                try {
+                    baseFragment.getParentActivity().getWindow().setFlags(8192, 8192);
+                } catch (Exception unused) {
+                }
+                flagSecureFragment = new WeakReference(baseFragment);
+            } else if (flagSecureFragment.get() == baseFragment) {
+                try {
+                    baseFragment.getParentActivity().getWindow().clearFlags(8192);
+                } catch (Exception unused2) {
+                }
+                flagSecureFragment = null;
+            }
+        }
     }
 }

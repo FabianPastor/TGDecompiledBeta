@@ -392,7 +392,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x0112;
     L_0x0112:
         r0 = r11.getWindow();
-        r3 = NUM; // 0x7var_cc float:1.794603E38 double:1.052935857E-314;
+        r3 = NUM; // 0x7var_cd float:1.7946032E38 double:1.0529358573E-314;
         r0.setBackgroundDrawableResource(r3);
         r0 = org.telegram.messenger.SharedConfig.passcodeHash;
         r0 = r0.length();
@@ -463,7 +463,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r6.<init>(r11);
         r11.backgroundTablet = r6;
         r6 = r11.getResources();
-        r7 = NUM; // 0x7var_f float:1.7944836E38 double:1.052935566E-314;
+        r7 = NUM; // 0x7var_ float:1.7944838E38 double:1.0529355663E-314;
         r6 = r6.getDrawable(r7);
         r6 = (android.graphics.drawable.BitmapDrawable) r6;
         r7 = android.graphics.Shader.TileMode.REPEAT;
@@ -531,7 +531,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r6 = r11.layersActionBarLayout;
         r6.setUseAlphaAnimations(r1);
         r6 = r11.layersActionBarLayout;
-        r7 = NUM; // 0x7var_ float:1.7944805E38 double:1.0529355584E-314;
+        r7 = NUM; // 0x7var_ float:1.7944807E38 double:1.052935559E-314;
         r6.setBackgroundResource(r7);
         r6 = r11.layersActionBarLayout;
         r7 = layerFragmentsStack;
@@ -1012,8 +1012,29 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             this.drawerLayoutContainer.closeDrawer(false);
         } else {
             i2 = this.drawerLayoutAdapter.getId(i);
+            Bundle bundle;
             if (i2 == 2) {
                 lambda$runLinkRequest$29$LaunchActivity(new GroupCreateActivity(new Bundle()));
+                this.drawerLayoutContainer.closeDrawer(false);
+            } else if (i2 == 3) {
+                bundle = new Bundle();
+                bundle.putBoolean("onlyUsers", true);
+                bundle.putBoolean("destroyAfterSelect", true);
+                bundle.putBoolean("createSecretChat", true);
+                bundle.putBoolean("allowBots", false);
+                lambda$runLinkRequest$29$LaunchActivity(new ContactsActivity(bundle));
+                this.drawerLayoutContainer.closeDrawer(false);
+            } else if (i2 == 4) {
+                SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                String str = "channel_intro";
+                if (BuildVars.DEBUG_VERSION || !globalMainSettings.getBoolean(str, false)) {
+                    lambda$runLinkRequest$29$LaunchActivity(new ActionIntroActivity(0));
+                    globalMainSettings.edit().putBoolean(str, true).commit();
+                } else {
+                    bundle = new Bundle();
+                    bundle.putInt("step", 0);
+                    lambda$runLinkRequest$29$LaunchActivity(new ChannelCreateActivity(bundle));
+                }
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (i2 == 6) {
                 lambda$runLinkRequest$29$LaunchActivity(new ContactsActivity(null));
@@ -1031,7 +1052,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 lambda$runLinkRequest$29$LaunchActivity(new CallLogActivity());
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (i2 == 11) {
-                Bundle bundle = new Bundle();
+                bundle = new Bundle();
                 bundle.putInt("user_id", UserConfig.getInstance(this.currentAccount).getClientUserId());
                 lambda$runLinkRequest$29$LaunchActivity(new ChatActivity(bundle));
                 this.drawerLayoutContainer.closeDrawer(false);
@@ -6337,7 +6358,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
-                    } else if (!MediaController.getInstance().hasFlagSecureFragment()) {
+                    } else if (!AndroidUtilities.hasFlagSecureFragment()) {
                         try {
                             getWindow().clearFlags(8192);
                         } catch (Exception e2) {

@@ -34,7 +34,6 @@ import javax.crypto.Cipher;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.TonController;
 import org.telegram.messenger.UserConfig;
@@ -57,6 +56,7 @@ public class WalletPasscodeActivity extends BaseFragment {
     public static final int TYPE_PASSCODE_SEND = 0;
     private static final int[] ids = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
     private boolean allowEditing;
+    private TextView continueButton;
     private int currentType;
     private TextView descriptionText;
     private boolean failedToOpenFinished;
@@ -892,6 +892,14 @@ public class WalletPasscodeActivity extends BaseFragment {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 return false;
             }
+
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int i, int i2) {
+                if (WalletPasscodeActivity.this.continueButton != null && VERSION.SDK_INT >= 21) {
+                    ((LayoutParams) WalletPasscodeActivity.this.continueButton.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
+                }
+                super.onMeasure(i, i2);
+            }
         };
         anonymousClass1.setBackButtonImage(NUM);
         anonymousClass1.setBackgroundDrawable(null);
@@ -920,7 +928,7 @@ public class WalletPasscodeActivity extends BaseFragment {
             return;
         }
         if (SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture) {
-            MediaController.getInstance().setFlagSecure(this, false);
+            AndroidUtilities.setFlagSecure(this, false);
         }
     }
 
@@ -929,6 +937,16 @@ public class WalletPasscodeActivity extends BaseFragment {
         FrameLayout frameLayout = new FrameLayout(context2);
         frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.fragmentView = frameLayout;
+        this.continueButton = new TextView(context2);
+        this.continueButton.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText2"));
+        this.continueButton.setTextSize(1, 14.0f);
+        this.continueButton.setText(LocaleController.getString("WalletClose", NUM));
+        this.continueButton.setGravity(16);
+        this.continueButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.continueButton.setAlpha(1.0f);
+        this.continueButton.setVisibility(0);
+        this.actionBar.addView(this.continueButton, LayoutHelper.createFrame(-2, -1.0f, 53, 0.0f, 0.0f, 22.0f, 0.0f));
+        this.continueButton.setOnClickListener(new -$$Lambda$WalletPasscodeActivity$WKd3wEz2eE54L9DsjyQg15DQmeE(this));
         FrameLayout frameLayout2 = new FrameLayout(context2);
         frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-2, -2, 17));
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
@@ -961,9 +979,18 @@ public class WalletPasscodeActivity extends BaseFragment {
         }
         frameLayout.addView(this.actionBar);
         if (VERSION.SDK_INT >= 23 && (SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture)) {
-            MediaController.getInstance().setFlagSecure(this, true);
+            AndroidUtilities.setFlagSecure(this, true);
         }
         return this.fragmentView;
+    }
+
+    public /* synthetic */ void lambda$createView$0$WalletPasscodeActivity(View view) {
+        getTonController().cancelShortPoll();
+        if (this.hasWalletInBack) {
+            finishFragment();
+        } else {
+            presentFragment(new WalletActivity(), true);
+        }
     }
 
     public void onResume() {
@@ -991,21 +1018,21 @@ public class WalletPasscodeActivity extends BaseFragment {
                 alertDialog = new AlertDialog(getParentActivity(), 3);
                 alertDialog.setCanCacnel(false);
                 alertDialog.show();
-                getTonController().prepareForPasscodeChange(str, new -$$Lambda$WalletPasscodeActivity$PzMYWLRhU5-fabUNXIZ73muqV-k(this, alertDialog), new -$$Lambda$WalletPasscodeActivity$MD7uoNkdYSEbOF7lXC1vd9IGby8(this, alertDialog));
+                getTonController().prepareForPasscodeChange(str, new -$$Lambda$WalletPasscodeActivity$BI-fMXpnL5z8rR5QNvwUCcV_-FU(this, alertDialog), new -$$Lambda$WalletPasscodeActivity$ua4Q0UpSSX6xvhcB9pfaCss5klk(this, alertDialog));
             }
         } else if (i == 2) {
             if (getParentActivity() != null) {
                 alertDialog = new AlertDialog(getParentActivity(), 3);
                 alertDialog.setCanCacnel(false);
                 alertDialog.show();
-                getTonController().getSecretWords(str, null, new -$$Lambda$WalletPasscodeActivity$pKATXxup42IdB0jN5doA0kc7A_A(this, alertDialog), new -$$Lambda$WalletPasscodeActivity$xcFGTbm7S4DGs7JyrCHaLzGC4TA(this, alertDialog));
+                getTonController().getSecretWords(str, null, new -$$Lambda$WalletPasscodeActivity$6t39g59yWrccW6Nn-Y0ftETkiCA(this, alertDialog), new -$$Lambda$WalletPasscodeActivity$Uqb52jkhFxpMrtSlXrJGl13eFHU(this, alertDialog));
             }
         } else if (i == 0 || i == 3) {
             trySendGrams(str, null);
         }
     }
 
-    public /* synthetic */ void lambda$checkPasscode$0$WalletPasscodeActivity(AlertDialog alertDialog) {
+    public /* synthetic */ void lambda$checkPasscode$1$WalletPasscodeActivity(AlertDialog alertDialog) {
         alertDialog.dismiss();
         this.passcodeView.onGoodPasscode(false);
         WalletCreateActivity walletCreateActivity = new WalletCreateActivity(8);
@@ -1013,7 +1040,7 @@ public class WalletPasscodeActivity extends BaseFragment {
         presentFragment(walletCreateActivity, true);
     }
 
-    public /* synthetic */ void lambda$checkPasscode$1$WalletPasscodeActivity(AlertDialog alertDialog, String str, Error error) {
+    public /* synthetic */ void lambda$checkPasscode$2$WalletPasscodeActivity(AlertDialog alertDialog, String str, Error error) {
         this.allowEditing = true;
         alertDialog.dismiss();
         if ("PASSCODE_INVALID".equals(str)) {
@@ -1031,7 +1058,7 @@ public class WalletPasscodeActivity extends BaseFragment {
         AlertsCreator.showSimpleAlert(this, string, stringBuilder.toString());
     }
 
-    public /* synthetic */ void lambda$checkPasscode$2$WalletPasscodeActivity(AlertDialog alertDialog, String[] strArr) {
+    public /* synthetic */ void lambda$checkPasscode$3$WalletPasscodeActivity(AlertDialog alertDialog, String[] strArr) {
         this.passcodeView.onGoodPasscode(false);
         alertDialog.dismiss();
         WalletCreateActivity walletCreateActivity = new WalletCreateActivity(4);
@@ -1039,7 +1066,7 @@ public class WalletPasscodeActivity extends BaseFragment {
         presentFragment(walletCreateActivity, true);
     }
 
-    public /* synthetic */ void lambda$checkPasscode$3$WalletPasscodeActivity(AlertDialog alertDialog, String str, Error error) {
+    public /* synthetic */ void lambda$checkPasscode$4$WalletPasscodeActivity(AlertDialog alertDialog, String str, Error error) {
         this.allowEditing = true;
         alertDialog.dismiss();
         if ("PASSCODE_INVALID".equals(str)) {
@@ -1067,44 +1094,52 @@ public class WalletPasscodeActivity extends BaseFragment {
             alertDialog = null;
         }
         String str2 = str;
-        getTonController().sendGrams(str2, this.sendingCipher, inputKey, this.fromWallet, this.toWallet, this.sendingAmount, this.sendingMessage, new -$$Lambda$WalletPasscodeActivity$pMWVSHAPFbq3T_71TFedCmDuKGo(this, alertDialog), new -$$Lambda$WalletPasscodeActivity$9Epr4FB8wdpR5Km7TodjPK7RPXg(this, alertDialog), new -$$Lambda$WalletPasscodeActivity$lQU1uiMpUEFoaMNnooNyoC4tB3E(this, str2), new -$$Lambda$WalletPasscodeActivity$5HBHbcbDcSEutsBdkaH9R8Y28AE(this, alertDialog));
+        getTonController().sendGrams(str2, this.sendingCipher, inputKey, this.fromWallet, this.toWallet, this.sendingAmount, this.sendingMessage, new -$$Lambda$WalletPasscodeActivity$9Epr4FB8wdpR5Km7TodjPK7RPXg(this, alertDialog), new -$$Lambda$WalletPasscodeActivity$9CbYONqZ1BeOIv-jwZAt1uAar9Y(this, alertDialog), new -$$Lambda$WalletPasscodeActivity$h2SaxgP530F9oGwRFQJtdbBSWaI(this), new -$$Lambda$WalletPasscodeActivity$hMQh41Vr1AYxXbRlz_G1Z21KynY(this, str2), new -$$Lambda$WalletPasscodeActivity$iCX9fEqianebHBHWQAhIHdcuKpo(this, alertDialog));
     }
 
-    public /* synthetic */ void lambda$trySendGrams$4$WalletPasscodeActivity(AlertDialog alertDialog) {
+    public /* synthetic */ void lambda$trySendGrams$5$WalletPasscodeActivity(AlertDialog alertDialog) {
         this.passcodeView.onGoodPasscode(true);
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
     }
 
-    public /* synthetic */ void lambda$trySendGrams$5$WalletPasscodeActivity(AlertDialog alertDialog) {
+    public /* synthetic */ void lambda$trySendGrams$6$WalletPasscodeActivity(AlertDialog alertDialog) {
+        this.continueButton.setVisibility(0);
+        this.continueButton.animate().alpha(1.0f).setDuration(180).start();
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
+        if (!this.hasWalletInBack) {
+            getTonController().scheduleShortPoll();
+        }
+    }
+
+    public /* synthetic */ void lambda$trySendGrams$7$WalletPasscodeActivity() {
         this.sendingFinished = true;
         openFinishedFragment();
     }
 
-    public /* synthetic */ void lambda$trySendGrams$8$WalletPasscodeActivity(String str, InputKey inputKey) {
+    public /* synthetic */ void lambda$trySendGrams$10$WalletPasscodeActivity(String str, InputKey inputKey) {
         if (getParentActivity() != null) {
             Builder builder = new Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("WalletSendWarningTitle", NUM));
             builder.setMessage(LocaleController.getString("WalletSendWarningText", NUM));
-            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new -$$Lambda$WalletPasscodeActivity$4Bm9hhsJNbY-HezeCxXfHdIFLNA(this));
-            builder.setPositiveButton(LocaleController.getString("WalletSendWarningSendAnyway", NUM), new -$$Lambda$WalletPasscodeActivity$5Xyny3f0zpRLr2AV2mQGILQpRRU(this, str, inputKey));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new -$$Lambda$WalletPasscodeActivity$ySQo1RWSZx1qEdUCCdpWI-QVB5c(this));
+            builder.setPositiveButton(LocaleController.getString("WalletSendWarningSendAnyway", NUM), new -$$Lambda$WalletPasscodeActivity$7shTJWRC9JKBj6AMCLzD5KySVGE(this, str, inputKey));
             showDialog(builder.create());
         }
     }
 
-    public /* synthetic */ void lambda$null$6$WalletPasscodeActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$8$WalletPasscodeActivity(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
-    public /* synthetic */ void lambda$null$7$WalletPasscodeActivity(String str, InputKey inputKey, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$9$WalletPasscodeActivity(String str, InputKey inputKey, DialogInterface dialogInterface, int i) {
         trySendGrams(str, inputKey);
     }
 
-    public /* synthetic */ void lambda$trySendGrams$11$WalletPasscodeActivity(AlertDialog alertDialog, String str, Error error) {
+    public /* synthetic */ void lambda$trySendGrams$13$WalletPasscodeActivity(AlertDialog alertDialog, String str, Error error) {
         this.allowEditing = true;
         if (alertDialog != null) {
             alertDialog.dismiss();
@@ -1121,17 +1156,17 @@ public class WalletPasscodeActivity extends BaseFragment {
                 str = error.message;
             }
             stringBuilder.append(str);
-            showDialog(AlertsCreator.createSimpleAlert(parentActivity, string, stringBuilder.toString()).create(), new -$$Lambda$WalletPasscodeActivity$MSEZkvLSLT8e6MeDuFTd4vEVCH0(this));
+            showDialog(AlertsCreator.createSimpleAlert(parentActivity, string, stringBuilder.toString()).create(), new -$$Lambda$WalletPasscodeActivity$MAKRb-BIqElPPJJSt-lQOPJHDr0(this));
         } else {
-            showDialog(AlertsCreator.createSimpleAlert(getParentActivity(), LocaleController.getString("WalletInsufficientGramsTitle", NUM), LocaleController.getString("WalletInsufficientGramsText", NUM)).create(), new -$$Lambda$WalletPasscodeActivity$vyzEZryVOTiaJUyQwN_ewxortqI(this));
+            showDialog(AlertsCreator.createSimpleAlert(getParentActivity(), LocaleController.getString("WalletInsufficientGramsTitle", NUM), LocaleController.getString("WalletInsufficientGramsText", NUM)).create(), new -$$Lambda$WalletPasscodeActivity$_N6qGMP92W0rMZhlhbtkmPe_KoQ(this));
         }
     }
 
-    public /* synthetic */ void lambda$null$9$WalletPasscodeActivity(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$null$11$WalletPasscodeActivity(DialogInterface dialogInterface) {
         finishFragment();
     }
 
-    public /* synthetic */ void lambda$null$10$WalletPasscodeActivity(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$null$12$WalletPasscodeActivity(DialogInterface dialogInterface) {
         finishFragment();
     }
 

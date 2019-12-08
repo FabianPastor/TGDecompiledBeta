@@ -795,7 +795,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r6 = r27;
         r0 = r28;
         r1 = r6.actionBar;
-        r2 = NUM; // 0x7var_e8 float:1.7945048E38 double:1.0529356177E-314;
+        r2 = NUM; // 0x7var_e9 float:1.794505E38 double:1.052935618E-314;
         r1.setBackButtonImage(r2);
         r1 = r6.actionBar;
         r7 = 1;
@@ -818,7 +818,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
     L_0x0034:
         r1 = r6.actionBar;
         r1 = r1.createMenu();
-        r2 = NUM; // 0x7var_ float:1.7945164E38 double:1.052935646E-314;
+        r2 = NUM; // 0x7var_ float:1.7945166E38 double:1.0529356463E-314;
         r1.addItem(r7, r2);
     L_0x0040:
         r1 = new android.widget.FrameLayout;

@@ -66,7 +66,7 @@ import org.telegram.ui.Components.ShareAlert;
 
 public class WalletActionActivity extends BaseFragment {
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 34;
-    private static final int MAX_COMMENT_LENGTH = 128;
+    private static final int MAX_COMMENT_LENGTH = 500;
     public static final int SEND_ACTIVITY_RESULT_CODE = 33;
     public static final int TYPE_INVOICE = 1;
     public static final int TYPE_SEND = 0;
@@ -439,7 +439,7 @@ public class WalletActionActivity extends BaseFragment {
                     pollEditTextCell = new PollEditTextCell(this.mContext, null);
                     pollEditTextCell.createErrorTextView();
                     pollEditTextCell.setBackgroundColor(Theme.getColor(str));
-                    pollEditTextCell.getTextView().setFilters(new InputFilter[]{new LengthFilter(128)});
+                    pollEditTextCell.getTextView().setFilters(new InputFilter[]{new LengthFilter(500)});
                     pollEditTextCell.addTextWatcher(new TextWatcher() {
                         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                         }
@@ -1017,8 +1017,8 @@ public class WalletActionActivity extends BaseFragment {
         Object obj = "windowBackgroundWhiteRedText5";
         if (view instanceof PollEditTextCell) {
             PollEditTextCell pollEditTextCell = (PollEditTextCell) view;
-            int length = 128 - this.commentString.length();
-            if (((float) length) <= 38.4f) {
+            int length = 500 - this.commentString.length();
+            if (((float) length) <= 150.0f) {
                 String str;
                 pollEditTextCell.setText2(String.format("%d", new Object[]{Integer.valueOf(length)}));
                 SimpleTextView textView2 = pollEditTextCell.getTextView2();

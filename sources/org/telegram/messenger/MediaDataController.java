@@ -736,7 +736,7 @@ public class MediaDataController extends BaseController {
     L_0x0078:
         if (r1 >= r6) goto L_0x0095;
     L_0x007a:
-        r8 = r12.documents;
+        r8 = r0.documents;
         r8 = r8.get(r1);
         r8 = (org.telegram.tgnet.TLRPC.Document) r8;
         r8 = r8.id;
@@ -3629,7 +3629,7 @@ public class MediaDataController extends BaseController {
         r0 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ all -> 0x02b7 }
         r0 = r10.setLongLabel(r0);	 Catch:{ all -> 0x02b7 }
         r10 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b7 }
-        r11 = NUM; // 0x7var_a float:1.7945896E38 double:1.052935824E-314;
+        r11 = NUM; // 0x7var_b float:1.7945898E38 double:1.0529358247E-314;
         r10 = android.graphics.drawable.Icon.createWithResource(r10, r11);	 Catch:{ all -> 0x02b7 }
         r0 = r0.setIcon(r10);	 Catch:{ all -> 0x02b7 }
         r0 = r0.setIntent(r3);	 Catch:{ all -> 0x02b7 }
@@ -3861,7 +3861,7 @@ public class MediaDataController extends BaseController {
         goto L_0x029a;
     L_0x028e:
         r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b7 }
-        r6 = NUM; // 0x7var_b float:1.7945898E38 double:1.0529358247E-314;
+        r6 = NUM; // 0x7var_c float:1.79459E38 double:1.052935825E-314;
         r3 = android.graphics.drawable.Icon.createWithResource(r3, r6);	 Catch:{ all -> 0x02b7 }
         r1.setIcon(r3);	 Catch:{ all -> 0x02b7 }
     L_0x029a:
@@ -4482,7 +4482,7 @@ public class MediaDataController extends BaseController {
     L_0x0120:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x014f }
         r0 = r0.getResources();	 Catch:{ all -> 0x014f }
-        r8 = NUM; // 0x7var_ float:1.7944789E38 double:1.0529355544E-314;
+        r8 = NUM; // 0x7var_ float:1.794479E38 double:1.052935555E-314;
         r0 = r0.getDrawable(r8);	 Catch:{ all -> 0x014f }
         r8 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ all -> 0x014f }
@@ -4507,10 +4507,10 @@ public class MediaDataController extends BaseController {
     L_0x0153:
         r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x023d }
         r8 = 26;
-        r11 = NUM; // 0x7var_ float:1.7944785E38 double:1.0529355534E-314;
-        r12 = NUM; // 0x7var_ float:1.7944787E38 double:1.052935554E-314;
-        r13 = NUM; // 0x7var_ float:1.7944783E38 double:1.052935553E-314;
-        r14 = NUM; // 0x7var_ float:1.794479E38 double:1.052935555E-314;
+        r11 = NUM; // 0x7var_ float:1.7944787E38 double:1.052935554E-314;
+        r12 = NUM; // 0x7var_ float:1.7944789E38 double:1.0529355544E-314;
+        r13 = NUM; // 0x7var_ float:1.7944785E38 double:1.0529355534E-314;
+        r14 = NUM; // 0x7var_a float:1.7944793E38 double:1.0529355554E-314;
         if (r0 < r8) goto L_0x01da;
     L_0x0165:
         r0 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ Exception -> 0x023d }
