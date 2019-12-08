@@ -521,6 +521,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                         return -CC.$default$needPlayMessage(this, messageObject);
                     }
 
+                    public /* synthetic */ boolean shouldRepeatSticker(MessageObject messageObject) {
+                        return -CC.$default$shouldRepeatSticker(this, messageObject);
+                    }
+
                     public /* synthetic */ void videoTimerReached() {
                         -CC.$default$videoTimerReached(this);
                     }

@@ -1016,13 +1016,6 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     lottieAnimation.start();
                 }
             }
-            if (this.autoRepeat == 2) {
-                lottieAnimation = getLottieAnimation();
-                if (lottieAnimation != null && lottieAnimation.getParentViewsCounts() <= 1) {
-                    lottieAnimation.setCurrentFrame(0);
-                    lottieAnimation.start();
-                }
-            }
             return false;
         }
         setImageBackup = this.setImageBackup;
@@ -2847,10 +2840,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     if (this.currentOpenedLayerFlags == 0) {
                         lottieAnimation = getLottieAnimation();
                         if (lottieAnimation != null) {
-                            i2 = this.autoRepeat;
-                            if (i2 != 2 || (i2 == 2 && lottieAnimation.getAutoRepeatPlayCount() == 0)) {
-                                lottieAnimation.start();
-                            }
+                            lottieAnimation.start();
                         }
                     }
                 }

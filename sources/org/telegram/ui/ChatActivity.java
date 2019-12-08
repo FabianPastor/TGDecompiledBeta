@@ -296,6 +296,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean allowContextBotPanel;
     private boolean allowContextBotPanelSecond = true;
     private boolean allowStickersPanel;
+    private HashMap<MessageObject, Boolean> alredyPlayedStickers = new HashMap();
     private ArrayList<MessageObject> animatingMessageObjects = new ArrayList();
     private Paint aspectPaint;
     private Path aspectPath;
@@ -1826,6 +1827,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                         }
                         return null;
+                    }
+
+                    public boolean shouldRepeatSticker(MessageObject messageObject) {
+                        if (ChatActivity.this.alredyPlayedStickers.containsKey(messageObject)) {
+                            return false;
+                        }
+                        ChatActivity.this.alredyPlayedStickers.put(messageObject, Boolean.valueOf(true));
+                        return true;
                     }
                 });
                 if (ChatActivity.this.currentEncryptedChat == null) {

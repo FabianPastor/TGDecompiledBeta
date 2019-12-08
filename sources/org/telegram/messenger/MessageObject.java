@@ -4947,7 +4947,13 @@ public class MessageObject {
         this.isRoundVideoCached = 0;
         Message message = this.messageOwner;
         if ((message instanceof TL_message) || (message instanceof TL_messageForwarded_old2)) {
-            if (this.emojiAnimatedSticker == null && isMediaEmpty()) {
+            if (this.emojiAnimatedSticker != null) {
+                if (isSticker()) {
+                    this.type = 13;
+                } else {
+                    this.type = 15;
+                }
+            } else if (isMediaEmpty()) {
                 this.type = 0;
                 if (TextUtils.isEmpty(this.messageText) && this.eventId == 0) {
                     this.messageText = "Empty message";
@@ -4976,7 +4982,7 @@ public class MessageObject {
                             this.type = 17;
                         } else if (messageMedia instanceof TL_messageMediaUnsupported) {
                             this.type = 0;
-                        } else if (this.emojiAnimatedSticker != null || (messageMedia instanceof TL_messageMediaDocument)) {
+                        } else if (messageMedia instanceof TL_messageMediaDocument) {
                             Document document = getDocument();
                             if (document == null || document.mime_type == null) {
                                 this.type = 9;

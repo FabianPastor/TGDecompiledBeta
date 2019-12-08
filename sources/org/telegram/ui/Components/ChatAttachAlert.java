@@ -929,7 +929,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             if (!(this.needCamera && ChatAttachAlert.this.selectedAlbumEntry == ChatAttachAlert.this.galleryAlbumEntry && (ChatAttachAlert.this.deviceHasGoodCamera || ChatAttachAlert.this.noCameraPermissions))) {
                 i = 0;
             }
-            if (ChatAttachAlert.this.noGalleryPermissions) {
+            if (ChatAttachAlert.this.noGalleryPermissions && this == ChatAttachAlert.this.adapter) {
                 i++;
             }
             i += ChatAttachAlert.cameraPhotos.size();
@@ -986,7 +986,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     public void onOpenAnimationStart() {
     }
 
-    static /* synthetic */ int access$8210() {
+    static /* synthetic */ int access$8310() {
         int i = lastImageId;
         lastImageId = i - 1;
         return i;
@@ -1696,6 +1696,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                             ChatAttachAlert.this.dropDown.setText(ChatAttachAlert.this.selectedAlbumEntry.bucketName);
                         }
                         ChatAttachAlert.this.adapter.notifyDataSetChanged();
+                        ChatAttachAlert.this.cameraAttachAdapter.notifyDataSetChanged();
                         ChatAttachAlert.this.layoutManager.scrollToPositionWithOffset(0, (-ChatAttachAlert.this.gridView.getPaddingTop()) + AndroidUtilities.dp(7.0f));
                     }
                 }
@@ -2039,7 +2040,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             public /* synthetic */ void lambda$shutterLongPressed$1$ChatAttachAlert$16(String str, long j) {
                 if (this.outputFile != null && ChatAttachAlert.this.baseFragment != null) {
                     ChatAttachAlert.mediaFromExternalCamera = false;
-                    PhotoEntry photoEntry = new PhotoEntry(0, ChatAttachAlert.access$8210(), 0, this.outputFile.getAbsolutePath(), 0, true);
+                    PhotoEntry photoEntry = new PhotoEntry(0, ChatAttachAlert.access$8310(), 0, this.outputFile.getAbsolutePath(), 0, true);
                     photoEntry.duration = (int) j;
                     photoEntry.thumbPath = str;
                     ChatAttachAlert.this.openPhotoViewer(photoEntry, false, false);
@@ -2095,7 +2096,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         i = 0;
                     }
                     ChatAttachAlert.mediaFromExternalCamera = false;
-                    PhotoEntry photoEntry = new PhotoEntry(0, ChatAttachAlert.access$8210(), 0, file.getAbsolutePath(), i, false);
+                    PhotoEntry photoEntry = new PhotoEntry(0, ChatAttachAlert.access$8310(), 0, file.getAbsolutePath(), i, false);
                     photoEntry.canDeleteAfter = true;
                     ChatAttachAlert.this.openPhotoViewer(photoEntry, z, false);
                 }
@@ -2335,9 +2336,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 ObjectAnimator duration = ObjectAnimator.ofFloat(this.switchCameraButton, "scaleX", new float[]{0.0f}).setDuration(100);
                 duration.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
-                        ImageView access$7100 = ChatAttachAlert.this.switchCameraButton;
+                        ImageView access$7200 = ChatAttachAlert.this.switchCameraButton;
                         int i = (ChatAttachAlert.this.cameraView == null || !ChatAttachAlert.this.cameraView.isFrontface()) ? NUM : NUM;
-                        access$7100.setImageResource(i);
+                        access$7200.setImageResource(i);
                         ObjectAnimator.ofFloat(ChatAttachAlert.this.switchCameraButton, "scaleX", new float[]{1.0f}).setDuration(100).start();
                     }
                 });
@@ -3820,34 +3821,36 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                             }
                         }
                         ChatAttachAlert.this.switchCameraButton.setImageResource(ChatAttachAlert.this.cameraView.isFrontface() ? NUM : NUM);
-                        ImageView access$7100 = ChatAttachAlert.this.switchCameraButton;
+                        ImageView access$7200 = ChatAttachAlert.this.switchCameraButton;
                         if (ChatAttachAlert.this.cameraView.hasFrontFaceCamera()) {
                             i = 0;
                         }
-                        access$7100.setVisibility(i);
-                        ChatAttachAlert.this.cameraInitAnimation = new AnimatorSet();
-                        ChatAttachAlert.this.cameraInitAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(ChatAttachAlert.this.cameraView, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(ChatAttachAlert.this.cameraIcon, View.ALPHA, new float[]{0.0f, 1.0f})});
-                        ChatAttachAlert.this.cameraInitAnimation.setDuration(180);
-                        ChatAttachAlert.this.cameraInitAnimation.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animator) {
-                                if (animator.equals(ChatAttachAlert.this.cameraInitAnimation)) {
-                                    ChatAttachAlert.this.cameraInitAnimation = null;
-                                    int childCount = ChatAttachAlert.this.gridView.getChildCount();
-                                    for (int i = 0; i < childCount; i++) {
-                                        View childAt = ChatAttachAlert.this.gridView.getChildAt(i);
-                                        if (childAt instanceof PhotoAttachCameraCell) {
-                                            childAt.setVisibility(4);
-                                            return;
+                        access$7200.setVisibility(i);
+                        if (!ChatAttachAlert.this.cameraOpened) {
+                            ChatAttachAlert.this.cameraInitAnimation = new AnimatorSet();
+                            ChatAttachAlert.this.cameraInitAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(ChatAttachAlert.this.cameraView, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(ChatAttachAlert.this.cameraIcon, View.ALPHA, new float[]{0.0f, 1.0f})});
+                            ChatAttachAlert.this.cameraInitAnimation.setDuration(180);
+                            ChatAttachAlert.this.cameraInitAnimation.addListener(new AnimatorListenerAdapter() {
+                                public void onAnimationEnd(Animator animator) {
+                                    if (animator.equals(ChatAttachAlert.this.cameraInitAnimation)) {
+                                        ChatAttachAlert.this.cameraInitAnimation = null;
+                                        int childCount = ChatAttachAlert.this.gridView.getChildCount();
+                                        for (int i = 0; i < childCount; i++) {
+                                            View childAt = ChatAttachAlert.this.gridView.getChildAt(i);
+                                            if (childAt instanceof PhotoAttachCameraCell) {
+                                                childAt.setVisibility(4);
+                                                return;
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            public void onAnimationCancel(Animator animator) {
-                                ChatAttachAlert.this.cameraInitAnimation = null;
-                            }
-                        });
-                        ChatAttachAlert.this.cameraInitAnimation.start();
+                                public void onAnimationCancel(Animator animator) {
+                                    ChatAttachAlert.this.cameraInitAnimation = null;
+                                }
+                            });
+                            ChatAttachAlert.this.cameraInitAnimation.start();
+                        }
                     }
                 });
                 if (this.cameraIcon == null) {
@@ -4415,7 +4418,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         this.cameraPhotoLayoutManager.scrollToPositionWithOffset(0, 1000000);
         this.buttonsLayoutManager.scrollToPositionWithOffset(0, 1000000);
         this.layoutManager.scrollToPositionWithOffset(0, 1000000);
-        updatePhotosButton(0);
         updateAlbumsDropDown();
     }
 
@@ -4459,6 +4461,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 loadGalleryPhotos();
             }
             this.adapter.notifyDataSetChanged();
+            this.cameraAttachAdapter.notifyDataSetChanged();
         }
     }
 
@@ -4557,16 +4560,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     private void clearSelectedPhotos() {
-        Object obj;
-        if (selectedPhotos.isEmpty()) {
-            obj = null;
-        } else {
+        if (!selectedPhotos.isEmpty()) {
             for (Entry value : selectedPhotos.entrySet()) {
                 ((PhotoEntry) value.getValue()).reset();
             }
             selectedPhotos.clear();
             selectedPhotosOrder.clear();
-            obj = 1;
         }
         if (!cameraPhotos.isEmpty()) {
             int size = cameraPhotos.size();
@@ -4583,13 +4582,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
             }
             cameraPhotos.clear();
-            obj = 1;
         }
         updatePhotosButton(0);
-        if (obj != null) {
-            this.cameraAttachAdapter.notifyDataSetChanged();
-        }
         this.adapter.notifyDataSetChanged();
+        this.cameraAttachAdapter.notifyDataSetChanged();
     }
 
     public void dismissInternal() {

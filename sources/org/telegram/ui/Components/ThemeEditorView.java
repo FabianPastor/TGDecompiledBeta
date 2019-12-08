@@ -1683,6 +1683,13 @@ public class ThemeEditorView {
             }
         }
 
+        public void dismissInternal() {
+            super.dismissInternal();
+            if (this.searchField.searchEditText.isFocused()) {
+                AndroidUtilities.hideKeyboard(this.searchField.searchEditText);
+            }
+        }
+
         private void setColorPickerVisible(boolean z) {
             String str = "scrollOffsetY";
             float f = 0.0f;

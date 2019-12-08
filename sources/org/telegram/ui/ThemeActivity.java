@@ -509,6 +509,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                             return -CC.$default$needPlayMessage(this, messageObject);
                         }
 
+                        public /* synthetic */ boolean shouldRepeatSticker(MessageObject messageObject) {
+                            return -CC.$default$shouldRepeatSticker(this, messageObject);
+                        }
+
                         public /* synthetic */ void videoTimerReached() {
                             -CC.$default$videoTimerReached(this);
                         }

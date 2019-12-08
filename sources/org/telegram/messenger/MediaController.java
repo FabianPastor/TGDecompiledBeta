@@ -90,7 +90,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public static AlbumEntry allVideosAlbumEntry;
     private static Runnable broadcastPhotosRunnable;
     private static final String[] projectionPhotos;
-    private static final String[] projectionVideo = new String[]{"_id", "bucket_id", "bucket_display_name", "_data", "date_added", "duration"};
+    private static final String[] projectionVideo = new String[]{"_id", "bucket_id", "bucket_display_name", "_data", "datetaken", "duration"};
     private static Runnable refreshGalleryRunnable;
     private Sensor accelerometerSensor;
     private boolean accelerometerVertical;
@@ -778,7 +778,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r1[1] = "bucket_id";
         r1[2] = "bucket_display_name";
         r1[3] = "_data";
-        r1[4] = "date_added";
+        r1[4] = "datetaken";
         r1[5] = "orientation";
         projectionPhotos = r1;
     }
@@ -974,7 +974,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         Utilities.globalQueue.postRunnable(new -$$Lambda$MediaController$FaCBRlQgZxu6gGs04ETW1GD6ZDk(this));
         this.fileBuffer = ByteBuffer.allocateDirect(1920);
         AndroidUtilities.runOnUIThread(new -$$Lambda$MediaController$Jq_ZASoLiwPvRrenXbD34k0cp8A(this));
-        this.mediaProjections = new String[]{"_data", "_display_name", "bucket_display_name", "date_added", "title", "width", "height"};
+        this.mediaProjections = new String[]{"_data", "_display_name", "bucket_display_name", "datetaken", "title", "width", "height"};
         ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
         try {
             contentResolver.registerContentObserver(Media.EXTERNAL_CONTENT_URI, true, new GalleryObserverExternal());
@@ -4719,7 +4719,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     static /* synthetic */ void lambda$loadGalleryPhotosAlbums$28(int r39) {
         /*
         r1 = "AllMedia";
-        r2 = "date_added";
+        r2 = "datetaken";
         r3 = "_data";
         r4 = "bucket_display_name";
         r5 = "bucket_id";
@@ -4778,7 +4778,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r19 = projectionPhotos;	 Catch:{ Throwable -> 0x020f, all -> 0x0209 }
         r20 = 0;
         r21 = 0;
-        r22 = "date_added DESC";
+        r22 = "datetaken DESC";
         r15 = android.provider.MediaStore.Images.Media.query(r17, r18, r19, r20, r21, r22);	 Catch:{ Throwable -> 0x020f, all -> 0x0209 }
         if (r15 == 0) goto L_0x01e9;
     L_0x007f:
@@ -5064,7 +5064,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r34 = projectionVideo;	 Catch:{ Throwable -> 0x0374 }
         r35 = 0;
         r36 = 0;
-        r37 = "date_added DESC";
+        r37 = "datetaken DESC";
         r12 = android.provider.MediaStore.Images.Media.query(r32, r33, r34, r35, r36, r37);	 Catch:{ Throwable -> 0x0374 }
         if (r12 == 0) goto L_0x023f;
     L_0x025a:

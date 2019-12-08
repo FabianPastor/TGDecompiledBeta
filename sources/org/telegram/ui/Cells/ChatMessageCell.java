@@ -507,6 +507,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 return false;
             }
 
+            public static boolean $default$shouldRepeatSticker(ChatMessageCellDelegate chatMessageCellDelegate, MessageObject messageObject) {
+                return true;
+            }
+
             public static void $default$videoTimerReached(ChatMessageCellDelegate chatMessageCellDelegate) {
             }
         }
@@ -548,6 +552,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2);
 
         boolean needPlayMessage(MessageObject messageObject);
+
+        boolean shouldRepeatSticker(MessageObject messageObject);
 
         void videoTimerReached();
     }
@@ -4682,259 +4688,259 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:1576:0x272c  */
     /* JADX WARNING: Removed duplicated region for block: B:1588:0x2763  */
     /* JADX WARNING: Removed duplicated region for block: B:1587:0x274d  */
-    /* JADX WARNING: Removed duplicated region for block: B:1985:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:1834:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:2041:0x30de  */
-    /* JADX WARNING: Removed duplicated region for block: B:2002:0x2fd7 A:{SYNTHETIC, Splitter:B:2002:0x2fd7} */
-    /* JADX WARNING: Removed duplicated region for block: B:2056:0x3144  */
-    /* JADX WARNING: Removed duplicated region for block: B:2063:0x317c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3151  */
-    /* JADX WARNING: Removed duplicated region for block: B:2108:0x31ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:2087:0x31c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:2112:0x3250  */
-    /* JADX WARNING: Removed duplicated region for block: B:2111:0x3205  */
-    /* JADX WARNING: Removed duplicated region for block: B:1810:0x2be1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1803:0x2b9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1813:0x2bef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1817:0x2c1f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1816:0x2c1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1820:0x2c2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1823:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1834:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1985:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:2002:0x2fd7 A:{SYNTHETIC, Splitter:B:2002:0x2fd7} */
-    /* JADX WARNING: Removed duplicated region for block: B:2041:0x30de  */
-    /* JADX WARNING: Removed duplicated region for block: B:2043:0x30e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:2056:0x3144  */
-    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3151  */
-    /* JADX WARNING: Removed duplicated region for block: B:2063:0x317c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2066:0x3196  */
-    /* JADX WARNING: Removed duplicated region for block: B:2074:0x31a5 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:2087:0x31c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:2108:0x31ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:2111:0x3205  */
-    /* JADX WARNING: Removed duplicated region for block: B:2112:0x3250  */
-    /* JADX WARNING: Removed duplicated region for block: B:1752:0x2ad9  */
-    /* JADX WARNING: Removed duplicated region for block: B:1751:0x2ad6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1762:0x2aef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1777:0x2b24  */
-    /* JADX WARNING: Removed duplicated region for block: B:1803:0x2b9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1810:0x2be1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1813:0x2bef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1816:0x2c1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1817:0x2c1f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1820:0x2c2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:1823:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1985:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:1834:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:2041:0x30de  */
-    /* JADX WARNING: Removed duplicated region for block: B:2002:0x2fd7 A:{SYNTHETIC, Splitter:B:2002:0x2fd7} */
-    /* JADX WARNING: Removed duplicated region for block: B:2043:0x30e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:2056:0x3144  */
-    /* JADX WARNING: Removed duplicated region for block: B:2063:0x317c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3151  */
-    /* JADX WARNING: Removed duplicated region for block: B:2066:0x3196  */
-    /* JADX WARNING: Removed duplicated region for block: B:2074:0x31a5 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:2108:0x31ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:2087:0x31c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:2112:0x3250  */
-    /* JADX WARNING: Removed duplicated region for block: B:2111:0x3205  */
-    /* JADX WARNING: Removed duplicated region for block: B:1711:0x2a43  */
-    /* JADX WARNING: Removed duplicated region for block: B:1710:0x2a3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:1741:0x2aba  */
-    /* JADX WARNING: Removed duplicated region for block: B:1751:0x2ad6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1752:0x2ad9  */
-    /* JADX WARNING: Removed duplicated region for block: B:1762:0x2aef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1777:0x2b24  */
-    /* JADX WARNING: Removed duplicated region for block: B:1810:0x2be1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1803:0x2b9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1813:0x2bef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1817:0x2c1f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1816:0x2c1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1820:0x2c2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1823:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1834:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1985:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:2002:0x2fd7 A:{SYNTHETIC, Splitter:B:2002:0x2fd7} */
-    /* JADX WARNING: Removed duplicated region for block: B:2041:0x30de  */
-    /* JADX WARNING: Removed duplicated region for block: B:2043:0x30e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:2056:0x3144  */
-    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3151  */
-    /* JADX WARNING: Removed duplicated region for block: B:2063:0x317c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2066:0x3196  */
-    /* JADX WARNING: Removed duplicated region for block: B:2074:0x31a5 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:2087:0x31c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:2108:0x31ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:2111:0x3205  */
-    /* JADX WARNING: Removed duplicated region for block: B:2112:0x3250  */
-    /* JADX WARNING: Removed duplicated region for block: B:1688:0x29df  */
-    /* JADX WARNING: Removed duplicated region for block: B:1676:0x29ae  */
-    /* JADX WARNING: Removed duplicated region for block: B:1699:0x2a11  */
-    /* JADX WARNING: Removed duplicated region for block: B:1698:0x2a03  */
-    /* JADX WARNING: Removed duplicated region for block: B:1710:0x2a3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:1711:0x2a43  */
-    /* JADX WARNING: Removed duplicated region for block: B:1741:0x2aba  */
-    /* JADX WARNING: Removed duplicated region for block: B:1752:0x2ad9  */
-    /* JADX WARNING: Removed duplicated region for block: B:1751:0x2ad6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1762:0x2aef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1777:0x2b24  */
-    /* JADX WARNING: Removed duplicated region for block: B:1803:0x2b9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1810:0x2be1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1813:0x2bef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1816:0x2c1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1817:0x2c1f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1820:0x2c2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:1823:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1985:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:1834:0x2CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:2041:0x30de  */
-    /* JADX WARNING: Removed duplicated region for block: B:2002:0x2fd7 A:{SYNTHETIC, Splitter:B:2002:0x2fd7} */
-    /* JADX WARNING: Removed duplicated region for block: B:2043:0x30e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:2056:0x3144  */
-    /* JADX WARNING: Removed duplicated region for block: B:2063:0x317c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3151  */
-    /* JADX WARNING: Removed duplicated region for block: B:2066:0x3196  */
-    /* JADX WARNING: Removed duplicated region for block: B:2074:0x31a5 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:2108:0x31ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:2087:0x31c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:2112:0x3250  */
-    /* JADX WARNING: Removed duplicated region for block: B:2111:0x3205  */
-    /* JADX WARNING: Removed duplicated region for block: B:2359:0x3859  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2224:0x34e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:2217:0x34b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2227:0x34e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2234:0x351c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2204:0x346e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2217:0x34b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2224:0x34e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:2227:0x34e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2234:0x351c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
+    /* JADX WARNING: Removed duplicated region for block: B:1991:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:1840:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:2047:0x30ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:2008:0x2fe5 A:{SYNTHETIC, Splitter:B:2008:0x2fe5} */
+    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3152  */
+    /* JADX WARNING: Removed duplicated region for block: B:2069:0x318a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2068:0x315f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2114:0x320d  */
+    /* JADX WARNING: Removed duplicated region for block: B:2093:0x31ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:2118:0x325e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2117:0x3213  */
+    /* JADX WARNING: Removed duplicated region for block: B:1816:0x2bef  */
+    /* JADX WARNING: Removed duplicated region for block: B:1809:0x2bad  */
+    /* JADX WARNING: Removed duplicated region for block: B:1819:0x2bfd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1823:0x2c2d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1822:0x2c2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1826:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x2c4f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1829:0x2c3f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1840:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1991:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:2008:0x2fe5 A:{SYNTHETIC, Splitter:B:2008:0x2fe5} */
+    /* JADX WARNING: Removed duplicated region for block: B:2047:0x30ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:2049:0x30f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3152  */
+    /* JADX WARNING: Removed duplicated region for block: B:2068:0x315f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2069:0x318a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2072:0x31a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2080:0x31b3 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:2093:0x31ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:2114:0x320d  */
+    /* JADX WARNING: Removed duplicated region for block: B:2117:0x3213  */
+    /* JADX WARNING: Removed duplicated region for block: B:2118:0x325e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1758:0x2ae7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1757:0x2ae4  */
+    /* JADX WARNING: Removed duplicated region for block: B:1768:0x2afd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1783:0x2b32  */
+    /* JADX WARNING: Removed duplicated region for block: B:1809:0x2bad  */
+    /* JADX WARNING: Removed duplicated region for block: B:1816:0x2bef  */
+    /* JADX WARNING: Removed duplicated region for block: B:1819:0x2bfd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1822:0x2c2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1823:0x2c2d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1826:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1829:0x2c3f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x2c4f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1991:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:1840:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:2047:0x30ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:2008:0x2fe5 A:{SYNTHETIC, Splitter:B:2008:0x2fe5} */
+    /* JADX WARNING: Removed duplicated region for block: B:2049:0x30f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3152  */
+    /* JADX WARNING: Removed duplicated region for block: B:2069:0x318a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2068:0x315f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2072:0x31a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2080:0x31b3 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:2114:0x320d  */
+    /* JADX WARNING: Removed duplicated region for block: B:2093:0x31ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:2118:0x325e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2117:0x3213  */
+    /* JADX WARNING: Removed duplicated region for block: B:1717:0x2a51  */
+    /* JADX WARNING: Removed duplicated region for block: B:1716:0x2a4c  */
+    /* JADX WARNING: Removed duplicated region for block: B:1747:0x2ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:1757:0x2ae4  */
+    /* JADX WARNING: Removed duplicated region for block: B:1758:0x2ae7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1768:0x2afd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1783:0x2b32  */
+    /* JADX WARNING: Removed duplicated region for block: B:1816:0x2bef  */
+    /* JADX WARNING: Removed duplicated region for block: B:1809:0x2bad  */
+    /* JADX WARNING: Removed duplicated region for block: B:1819:0x2bfd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1823:0x2c2d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1822:0x2c2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1826:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x2c4f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1829:0x2c3f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1840:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1991:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:2008:0x2fe5 A:{SYNTHETIC, Splitter:B:2008:0x2fe5} */
+    /* JADX WARNING: Removed duplicated region for block: B:2047:0x30ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:2049:0x30f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3152  */
+    /* JADX WARNING: Removed duplicated region for block: B:2068:0x315f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2069:0x318a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2072:0x31a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2080:0x31b3 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:2093:0x31ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:2114:0x320d  */
+    /* JADX WARNING: Removed duplicated region for block: B:2117:0x3213  */
+    /* JADX WARNING: Removed duplicated region for block: B:2118:0x325e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1694:0x29ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:1682:0x29bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:1705:0x2a1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1704:0x2a11  */
+    /* JADX WARNING: Removed duplicated region for block: B:1716:0x2a4c  */
+    /* JADX WARNING: Removed duplicated region for block: B:1717:0x2a51  */
+    /* JADX WARNING: Removed duplicated region for block: B:1747:0x2ac8  */
+    /* JADX WARNING: Removed duplicated region for block: B:1758:0x2ae7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1757:0x2ae4  */
+    /* JADX WARNING: Removed duplicated region for block: B:1768:0x2afd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1783:0x2b32  */
+    /* JADX WARNING: Removed duplicated region for block: B:1809:0x2bad  */
+    /* JADX WARNING: Removed duplicated region for block: B:1816:0x2bef  */
+    /* JADX WARNING: Removed duplicated region for block: B:1819:0x2bfd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1822:0x2c2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1823:0x2c2d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1826:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1829:0x2c3f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x2c4f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1991:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:1840:0x2CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:2047:0x30ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:2008:0x2fe5 A:{SYNTHETIC, Splitter:B:2008:0x2fe5} */
+    /* JADX WARNING: Removed duplicated region for block: B:2049:0x30f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3152  */
+    /* JADX WARNING: Removed duplicated region for block: B:2069:0x318a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2068:0x315f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2072:0x31a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2080:0x31b3 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:2114:0x320d  */
+    /* JADX WARNING: Removed duplicated region for block: B:2093:0x31ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:2118:0x325e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2117:0x3213  */
+    /* JADX WARNING: Removed duplicated region for block: B:2365:0x3867  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2223:0x34c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2233:0x34f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:2240:0x352a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2236:0x3504  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2210:0x347c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2223:0x34c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2233:0x34f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:2236:0x3504  */
+    /* JADX WARNING: Removed duplicated region for block: B:2240:0x352a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
     /* JADX WARNING: Removed duplicated region for block: B:1367:0x2058  */
     /* JADX WARNING: Removed duplicated region for block: B:1366:0x2052  */
     /* JADX WARNING: Removed duplicated region for block: B:1473:0x22a0  */
     /* JADX WARNING: Removed duplicated region for block: B:1383:0x2096  */
-    /* JADX WARNING: Removed duplicated region for block: B:2204:0x346e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2224:0x34e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:2217:0x34b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2227:0x34e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2234:0x351c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
+    /* JADX WARNING: Removed duplicated region for block: B:2210:0x347c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2223:0x34c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2233:0x34f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:2240:0x352a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2236:0x3504  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
     /* JADX WARNING: Removed duplicated region for block: B:133:0x01dc  */
     /* JADX WARNING: Removed duplicated region for block: B:140:0x0204  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x02b6  */
     /* JADX WARNING: Removed duplicated region for block: B:1037:0x176f  */
     /* JADX WARNING: Removed duplicated region for block: B:157:0x02c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
     /* JADX WARNING: Removed duplicated region for block: B:133:0x01dc  */
     /* JADX WARNING: Removed duplicated region for block: B:140:0x0204  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x02b6  */
     /* JADX WARNING: Removed duplicated region for block: B:157:0x02c7  */
     /* JADX WARNING: Removed duplicated region for block: B:1037:0x176f  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x015a  */
     /* JADX WARNING: Removed duplicated region for block: B:133:0x01dc  */
     /* JADX WARNING: Removed duplicated region for block: B:140:0x0204  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x02b6  */
     /* JADX WARNING: Removed duplicated region for block: B:1037:0x176f  */
     /* JADX WARNING: Removed duplicated region for block: B:157:0x02c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:549:0x0add  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
@@ -4942,18 +4948,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:549:0x0add  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
@@ -4961,19 +4967,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:549:0x0add  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
@@ -4981,96 +4987,38 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
-    /* JADX WARNING: Removed duplicated region for block: B:2043:0x30e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:2056:0x3144  */
-    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3151  */
-    /* JADX WARNING: Removed duplicated region for block: B:2063:0x317c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2066:0x3196  */
-    /* JADX WARNING: Removed duplicated region for block: B:2074:0x31a5 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:2087:0x31c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:2108:0x31ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:2111:0x3205  */
-    /* JADX WARNING: Removed duplicated region for block: B:2112:0x3250  */
-    /* JADX WARNING: Removed duplicated region for block: B:2204:0x346e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2217:0x34b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2224:0x34e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:2227:0x34e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2234:0x351c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
-    /* JADX WARNING: Removed duplicated region for block: B:2043:0x30e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:2056:0x3144  */
-    /* JADX WARNING: Removed duplicated region for block: B:2063:0x317c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3151  */
-    /* JADX WARNING: Removed duplicated region for block: B:2066:0x3196  */
-    /* JADX WARNING: Removed duplicated region for block: B:2074:0x31a5 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:2108:0x31ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:2087:0x31c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:2112:0x3250  */
-    /* JADX WARNING: Removed duplicated region for block: B:2111:0x3205  */
-    /* JADX WARNING: Removed duplicated region for block: B:2204:0x346e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2224:0x34e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:2217:0x34b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2227:0x34e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2234:0x351c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:549:0x0add  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:628:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:1430:0x21ad  */
     /* JADX WARNING: Removed duplicated region for block: B:1423:0x217a  */
     /* JADX WARNING: Removed duplicated region for block: B:1433:0x21b2  */
@@ -5079,25 +5027,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:1453:0x222a  */
     /* JADX WARNING: Removed duplicated region for block: B:1452:0x221d  */
     /* JADX WARNING: Removed duplicated region for block: B:1464:0x2263  */
-    /* JADX WARNING: Removed duplicated region for block: B:2204:0x346e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2217:0x34b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2224:0x34e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:2227:0x34e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2234:0x351c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2210:0x347c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2223:0x34c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2233:0x34f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:2236:0x3504  */
+    /* JADX WARNING: Removed duplicated region for block: B:2240:0x352a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:1423:0x217a  */
     /* JADX WARNING: Removed duplicated region for block: B:1430:0x21ad  */
     /* JADX WARNING: Removed duplicated region for block: B:1433:0x21b2  */
@@ -5106,37 +5054,37 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:1452:0x221d  */
     /* JADX WARNING: Removed duplicated region for block: B:1453:0x222a  */
     /* JADX WARNING: Removed duplicated region for block: B:1464:0x2263  */
-    /* JADX WARNING: Removed duplicated region for block: B:2204:0x346e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2224:0x34e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:2217:0x34b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2227:0x34e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2234:0x351c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
-    /* JADX WARNING: Removed duplicated region for block: B:2302:0x36f7 A:{Catch:{ Exception -> 0x3764 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:2306:0x3742 A:{Catch:{ Exception -> 0x3764 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:2317:0x3775  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2210:0x347c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2223:0x34c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2233:0x34f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:2240:0x352a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2236:0x3504  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
+    /* JADX WARNING: Removed duplicated region for block: B:2308:0x3705 A:{Catch:{ Exception -> 0x3772 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2312:0x3750 A:{Catch:{ Exception -> 0x3772 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3783  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:549:0x0add  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
@@ -5144,19 +5092,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:447:0x08bb  */
     /* JADX WARNING: Removed duplicated region for block: B:521:0x0a23  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
@@ -5166,37 +5114,37 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:628:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:549:0x0add  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
@@ -5204,37 +5152,66 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:628:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
+    /* JADX WARNING: Removed duplicated region for block: B:2049:0x30f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3152  */
+    /* JADX WARNING: Removed duplicated region for block: B:2068:0x315f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2069:0x318a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2072:0x31a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2080:0x31b3 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:2093:0x31ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:2114:0x320d  */
+    /* JADX WARNING: Removed duplicated region for block: B:2117:0x3213  */
+    /* JADX WARNING: Removed duplicated region for block: B:2118:0x325e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2210:0x347c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2223:0x34c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2233:0x34f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:2236:0x3504  */
+    /* JADX WARNING: Removed duplicated region for block: B:2240:0x352a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:521:0x0a23  */
     /* JADX WARNING: Removed duplicated region for block: B:447:0x08bb  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
@@ -5244,19 +5221,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:447:0x08bb  */
     /* JADX WARNING: Removed duplicated region for block: B:521:0x0a23  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
@@ -5266,19 +5243,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:549:0x0add  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
@@ -5286,19 +5263,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:521:0x0a23  */
     /* JADX WARNING: Removed duplicated region for block: B:447:0x08bb  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
@@ -5308,19 +5285,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Removed duplicated region for block: B:523:0x0a34 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:549:0x0add  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0CLASSNAME  */
@@ -5328,27 +5305,56 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:799:0x10cc  */
     /* JADX WARNING: Removed duplicated region for block: B:630:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:825:0x1137  */
-    /* JADX WARNING: Removed duplicated region for block: B:2247:0x3560  */
-    /* JADX WARNING: Removed duplicated region for block: B:2258:0x35c0 A:{SYNTHETIC, Splitter:B:2258:0x35c0} */
-    /* JADX WARNING: Removed duplicated region for block: B:2275:0x364c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2282:0x366d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2323:0x3797  */
-    /* JADX WARNING: Removed duplicated region for block: B:2326:0x37a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2387:0x39aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:2392:0x39bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2409:0x39fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2412:0x3a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:2419:0x3a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x3a43  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
+    /* JADX WARNING: Removed duplicated region for block: B:2049:0x30f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2062:0x3152  */
+    /* JADX WARNING: Removed duplicated region for block: B:2069:0x318a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2068:0x315f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2072:0x31a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2080:0x31b3 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:2114:0x320d  */
+    /* JADX WARNING: Removed duplicated region for block: B:2093:0x31ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:2118:0x325e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2117:0x3213  */
+    /* JADX WARNING: Removed duplicated region for block: B:2210:0x347c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2230:0x34f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2223:0x34c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2233:0x34f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:2240:0x352a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2236:0x3504  */
+    /* JADX WARNING: Removed duplicated region for block: B:2253:0x356e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2264:0x35ce A:{SYNTHETIC, Splitter:B:2264:0x35ce} */
+    /* JADX WARNING: Removed duplicated region for block: B:2281:0x365a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2288:0x367b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2329:0x37a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2332:0x37b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:2393:0x39b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2398:0x39ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2399:0x39d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:2415:0x3a09  */
+    /* JADX WARNING: Removed duplicated region for block: B:2418:0x3a14  */
+    /* JADX WARNING: Removed duplicated region for block: B:2425:0x3a46  */
+    /* JADX WARNING: Removed duplicated region for block: B:2428:0x3a51  */
     /* JADX WARNING: Missing block: B:847:0x1192, code skipped:
             if (r5 != 8) goto L_0x1196;
      */
-    /* JADX WARNING: Missing block: B:1763:0x2af7, code skipped:
-            if ("m".equals(r4.type) == false) goto L_0x2af9;
+    /* JADX WARNING: Missing block: B:1769:0x2b05, code skipped:
+            if ("m".equals(r4.type) == false) goto L_0x2b07;
      */
-    /* JADX WARNING: Missing block: B:2059:0x3149, code skipped:
-            if (r2 != 5) goto L_0x3191;
+    /* JADX WARNING: Missing block: B:2065:0x3157, code skipped:
+            if (r2 != 5) goto L_0x319f;
      */
     private void setMessageContent(org.telegram.messenger.MessageObject r60, org.telegram.messenger.MessageObject.GroupedMessages r61, boolean r62, boolean r63) {
         /*
@@ -5557,7 +5563,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         goto L_0x010c;
     L_0x0109:
         r15 = 0;
-        goto L_0x3a3e;
+        goto L_0x3a4c;
     L_0x010c:
         r1.pinnedBottom = r2;
         r1.pinnedTop = r3;
@@ -10138,7 +10144,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = 0;
         r15 = 0;
         r29 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x354e;
+        goto L_0x355c;
     L_0x2009:
         r0 = r14.messageOwner;
         r0 = r0.fwd_from;
@@ -10532,7 +10538,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r15 = 0;
         r29 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r57 = 0;
-        goto L_0x3454;
+        goto L_0x3462;
     L_0x22a0:
         r2 = 4;
         if (r0 != r2) goto L_0x27b9;
@@ -11220,12 +11226,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r15 = 0;
         r29 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r12 = r9;
-        goto L_0x3454;
+        goto L_0x3462;
     L_0x27b9:
         r10 = -1;
         r15 = 8;
         r0 = r60.isAnyKindOfSticker();
-        if (r0 == 0) goto L_0x293c;
+        if (r0 == 0) goto L_0x294a;
     L_0x27c2:
         r2 = 0;
         r1.drawBackground = r2;
@@ -11289,45 +11295,33 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x281f:
         r3 = r3 * r4;
         r4 = r60.isAnimatedEmoji();
-        if (r4 == 0) goto L_0x2853;
+        if (r4 == 0) goto L_0x2842;
     L_0x2827:
-        if (r12 < r2) goto L_0x283e;
-    L_0x2829:
         r4 = r1.currentAccount;
         r4 = org.telegram.messenger.MessagesController.getInstance(r4);
         r4 = r4.animatedEmojisZoom;
-        r3 = r3 * r4;
-        r4 = (float) r12;
+        r5 = (float) r12;
+        r6 = NUM; // 0x44000000 float:512.0 double:5.63655132E-315;
+        r5 = r5 / r6;
+        r5 = r5 * r3;
+        r5 = r5 * r4;
+        r5 = (int) r5;
         r2 = (float) r2;
-        r2 = r3 / r2;
-        r4 = r4 * r2;
-        r2 = (int) r4;
-        r3 = (int) r3;
-        r11 = r2;
-        r12 = r3;
-        goto L_0x2875;
-    L_0x283e:
-        r4 = r1.currentAccount;
-        r4 = org.telegram.messenger.MessagesController.getInstance(r4);
-        r4 = r4.animatedEmojisZoom;
-        r3 = r3 * r4;
-        r2 = (float) r2;
-        r4 = (float) r12;
-        r4 = r3 / r4;
+        r2 = r2 / r6;
+        r2 = r2 * r3;
         r2 = r2 * r4;
         r2 = (int) r2;
-        r3 = (int) r3;
         r12 = r2;
-        r11 = r3;
-        goto L_0x2875;
-    L_0x2853:
-        if (r12 != 0) goto L_0x285e;
-    L_0x2855:
+        r11 = r5;
+        goto L_0x2864;
+    L_0x2842:
+        if (r12 != 0) goto L_0x284d;
+    L_0x2844:
         r2 = (int) r3;
         r4 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r12 = r2 + r4;
-    L_0x285e:
+    L_0x284d:
         r2 = (float) r2;
         r4 = (float) r12;
         r4 = r3 / r4;
@@ -11336,20 +11330,72 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = (int) r3;
         r5 = (float) r2;
         r6 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1));
-        if (r6 <= 0) goto L_0x2873;
-    L_0x286b:
+        if (r6 <= 0) goto L_0x2862;
+    L_0x285a:
         r2 = (float) r4;
         r3 = r3 / r5;
         r2 = r2 * r3;
         r2 = (int) r2;
         r11 = r2;
         r12 = r4;
-        goto L_0x2875;
-    L_0x2873:
+        goto L_0x2864;
+    L_0x2862:
         r12 = r2;
         r11 = r4;
-    L_0x2875:
+    L_0x2864:
+        r2 = r60.isAnimatedEmoji();
+        if (r2 != 0) goto L_0x2891;
+    L_0x286a:
+        r2 = org.telegram.messenger.SharedConfig.loopStickers;
+        if (r2 != 0) goto L_0x2870;
+    L_0x286e:
+        if (r0 == 0) goto L_0x2891;
+    L_0x2870:
+        r2 = java.util.Locale.US;
+        r3 = 2;
+        r4 = new java.lang.Object[r3];
+        r3 = java.lang.Integer.valueOf(r11);
+        r5 = 0;
+        r4[r5] = r3;
+        r3 = java.lang.Integer.valueOf(r12);
+        r5 = 1;
+        r4[r5] = r3;
+        r3 = "%d_%d";
+        r2 = java.lang.String.format(r2, r3, r4);
+        r3 = r1.photoImage;
+        r3.setAutoRepeat(r5);
+    L_0x288e:
+        r4 = r2;
         r2 = 6;
+        goto L_0x28c2;
+    L_0x2891:
+        r5 = 1;
+        r2 = java.util.Locale.US;
+        r3 = 3;
+        r4 = new java.lang.Object[r3];
+        r3 = java.lang.Integer.valueOf(r11);
+        r6 = 0;
+        r4[r6] = r3;
+        r3 = java.lang.Integer.valueOf(r12);
+        r4[r5] = r3;
+        r3 = r60.toString();
+        r5 = 2;
+        r4[r5] = r3;
+        r3 = "%d_%d_nr_%s";
+        r2 = java.lang.String.format(r2, r3, r4);
+        r3 = r1.photoImage;
+        r4 = r1.delegate;
+        r4 = r4.shouldRepeatSticker(r14);
+        if (r4 == 0) goto L_0x28bd;
+    L_0x28bb:
+        r4 = 2;
+        goto L_0x28be;
+    L_0x28bd:
+        r4 = 3;
+    L_0x28be:
+        r3.setAutoRepeat(r4);
+        goto L_0x288e;
+    L_0x28c2:
         r1.documentAttachType = r2;
         r2 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
@@ -11366,96 +11412,64 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r14.photoThumbsObject;
         r1.photoParentObject = r2;
         r2 = r14.attachPathExists;
-        if (r2 == 0) goto L_0x28e0;
-    L_0x289d:
+        if (r2 == 0) goto L_0x2913;
+    L_0x28e9:
         r2 = r1.photoImage;
         r3 = r14.messageOwner;
         r3 = r3.attachPath;
         r3 = org.telegram.messenger.ImageLocation.getForPath(r3);
-        r4 = java.util.Locale.US;
-        r5 = 2;
-        r6 = new java.lang.Object[r5];
-        r5 = java.lang.Integer.valueOf(r11);
-        r7 = 0;
-        r6[r7] = r5;
-        r5 = java.lang.Integer.valueOf(r12);
-        r7 = 1;
-        r6[r7] = r5;
-        r5 = "%d_%d";
-        r4 = java.lang.String.format(r4, r5, r6);
         r5 = r1.currentPhotoObjectThumb;
         r6 = r1.photoParentObject;
         r5 = org.telegram.messenger.ImageLocation.getForObject(r5, r6);
         r6 = r60.getDocument();
         r7 = r6.size;
-        if (r0 == 0) goto L_0x28d4;
-    L_0x28d0:
+        if (r0 == 0) goto L_0x2907;
+    L_0x2903:
         r0 = "webp";
         r8 = r0;
-        goto L_0x28d5;
-    L_0x28d4:
+        goto L_0x2908;
+    L_0x2907:
         r8 = 0;
-    L_0x28d5:
+    L_0x2908:
         r0 = 1;
         r6 = "b1";
         r9 = r60;
         r13 = -1;
         r10 = r0;
         r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10);
-        goto L_0x292d;
-    L_0x28e0:
+        goto L_0x2947;
+    L_0x2913:
         r13 = -1;
         r2 = r60.getDocument();
         r2 = r2.id;
-        r4 = 0;
-        r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x292d;
-    L_0x28ed:
+        r5 = 0;
+        r7 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1));
+        if (r7 == 0) goto L_0x2947;
+    L_0x2920:
         r2 = r1.photoImage;
         r3 = r60.getDocument();
         r3 = org.telegram.messenger.ImageLocation.getForDocument(r3);
-        r4 = java.util.Locale.US;
-        r5 = 2;
-        r6 = new java.lang.Object[r5];
-        r5 = java.lang.Integer.valueOf(r11);
-        r7 = 0;
-        r6[r7] = r5;
-        r5 = java.lang.Integer.valueOf(r12);
-        r7 = 1;
-        r6[r7] = r5;
-        r5 = "%d_%d";
-        r4 = java.lang.String.format(r4, r5, r6);
         r5 = r1.currentPhotoObjectThumb;
         r6 = r1.photoParentObject;
         r5 = org.telegram.messenger.ImageLocation.getForObject(r5, r6);
         r6 = r60.getDocument();
         r7 = r6.size;
-        if (r0 == 0) goto L_0x2924;
-    L_0x2920:
+        if (r0 == 0) goto L_0x293e;
+    L_0x293a:
         r0 = "webp";
         r8 = r0;
-        goto L_0x2925;
-    L_0x2924:
+        goto L_0x293f;
+    L_0x293e:
         r8 = 0;
-    L_0x2925:
+    L_0x293f:
         r10 = 1;
         r6 = "b1";
         r9 = r60;
         r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10);
-    L_0x292d:
-        r0 = r1.photoImage;
-        r2 = org.telegram.messenger.SharedConfig.loopStickers;
-        if (r2 == 0) goto L_0x2935;
-    L_0x2933:
-        r2 = 1;
-        goto L_0x2936;
-    L_0x2935:
-        r2 = 2;
-    L_0x2936:
-        r0.setAutoRepeat(r2);
+    L_0x2947:
         r0 = r11;
         goto L_0x2298;
-    L_0x293c:
+    L_0x294a:
         r13 = -1;
         r0 = r14.photoThumbs;
         r2 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
@@ -11465,45 +11479,45 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.photoParentObject = r0;
         r0 = r14.type;
         r2 = 5;
-        if (r0 != r2) goto L_0x295f;
-    L_0x2952:
+        if (r0 != r2) goto L_0x296d;
+    L_0x2960:
         r0 = org.telegram.messenger.AndroidUtilities.roundMessageSize;
         r2 = r60.getDocument();
         r1.documentAttach = r2;
         r2 = 7;
         r1.documentAttachType = r2;
-    L_0x295d:
+    L_0x296b:
         r2 = 0;
-        goto L_0x29a5;
-    L_0x295f:
+        goto L_0x29b3;
+    L_0x296d:
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x2971;
-    L_0x2965:
+        if (r0 == 0) goto L_0x297f;
+    L_0x2973:
         r0 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();
-    L_0x2969:
+    L_0x2977:
         r0 = (float) r0;
         r2 = NUM; // 0x3var_ float:0.7 double:5.23867711E-315;
         r0 = r0 * r2;
         r0 = (int) r0;
-        goto L_0x295d;
-    L_0x2971:
+        goto L_0x296b;
+    L_0x297f:
         r0 = r1.currentPhotoObject;
-        if (r0 == 0) goto L_0x299a;
-    L_0x2975:
+        if (r0 == 0) goto L_0x29a8;
+    L_0x2983:
         r0 = r14.type;
         r2 = 1;
-        if (r0 == r2) goto L_0x297f;
-    L_0x297a:
+        if (r0 == r2) goto L_0x298d;
+    L_0x2988:
         r2 = 3;
-        if (r0 == r2) goto L_0x297f;
-    L_0x297d:
-        if (r0 != r15) goto L_0x299a;
-    L_0x297f:
+        if (r0 == r2) goto L_0x298d;
+    L_0x298b:
+        if (r0 != r15) goto L_0x29a8;
+    L_0x298d:
         r0 = r1.currentPhotoObject;
         r2 = r0.w;
         r0 = r0.h;
-        if (r2 < r0) goto L_0x299a;
-    L_0x2987:
+        if (r2 < r0) goto L_0x29a8;
+    L_0x2995:
         r0 = org.telegram.messenger.AndroidUtilities.displaySize;
         r2 = r0.x;
         r0 = r0.y;
@@ -11512,96 +11526,96 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0 = r0 - r2;
         r2 = 1;
-        goto L_0x29a5;
-    L_0x299a:
+        goto L_0x29b3;
+    L_0x29a8:
         r0 = org.telegram.messenger.AndroidUtilities.displaySize;
         r2 = r0.x;
         r0 = r0.y;
         r0 = java.lang.Math.min(r2, r0);
-        goto L_0x2969;
-    L_0x29a5:
+        goto L_0x2977;
+    L_0x29b3:
         r3 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r3 = r3 + r0;
-        if (r2 != 0) goto L_0x29df;
-    L_0x29ae:
+        if (r2 != 0) goto L_0x29ed;
+    L_0x29bc:
         r2 = r14.type;
         r4 = 5;
-        if (r2 == r4) goto L_0x29c9;
-    L_0x29b3:
+        if (r2 == r4) goto L_0x29d7;
+    L_0x29c1:
         r2 = r59.checkNeedDrawShareButton(r60);
-        if (r2 == 0) goto L_0x29c9;
-    L_0x29b9:
+        if (r2 == 0) goto L_0x29d7;
+    L_0x29c7:
         r2 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r2 = r0 - r2;
         r4 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r0 - r4;
-        goto L_0x29ca;
-    L_0x29c9:
+        goto L_0x29d8;
+    L_0x29d7:
         r2 = r0;
-    L_0x29ca:
+    L_0x29d8:
         r4 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
-        if (r0 <= r4) goto L_0x29d4;
-    L_0x29d0:
+        if (r0 <= r4) goto L_0x29e2;
+    L_0x29de:
         r0 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
-    L_0x29d4:
+    L_0x29e2:
         r4 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
-        if (r3 <= r4) goto L_0x29fe;
-    L_0x29da:
+        if (r3 <= r4) goto L_0x2a0c;
+    L_0x29e8:
         r3 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
-        goto L_0x29fe;
-    L_0x29df:
+        goto L_0x2a0c;
+    L_0x29ed:
         r2 = r1.isChat;
-        if (r2 == 0) goto L_0x29fd;
-    L_0x29e3:
+        if (r2 == 0) goto L_0x2a0b;
+    L_0x29f1:
         r2 = r60.needDrawAvatar();
-        if (r2 == 0) goto L_0x29fd;
-    L_0x29e9:
+        if (r2 == 0) goto L_0x2a0b;
+    L_0x29f7:
         r2 = r60.isOutOwner();
-        if (r2 != 0) goto L_0x29fd;
-    L_0x29ef:
+        if (r2 != 0) goto L_0x2a0b;
+    L_0x29fd:
         r2 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r2 = r0 - r2;
         r58 = r2;
         r2 = r0;
         r0 = r58;
-        goto L_0x29fe;
-    L_0x29fd:
+        goto L_0x2a0c;
+    L_0x2a0b:
         r2 = r0;
-    L_0x29fe:
+    L_0x2a0c:
         r4 = r14.type;
         r5 = 1;
-        if (r4 != r5) goto L_0x2a11;
-    L_0x2a03:
+        if (r4 != r5) goto L_0x2a1f;
+    L_0x2a11:
         r59.updateSecretTimeText(r60);
         r4 = r14.photoThumbs;
         r5 = 40;
         r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5);
         r1.currentPhotoObjectThumb = r4;
-        goto L_0x2a25;
-    L_0x2a11:
+        goto L_0x2a33;
+    L_0x2a1f:
         r5 = 3;
-        if (r4 == r5) goto L_0x2a27;
-    L_0x2a14:
-        if (r4 != r15) goto L_0x2a17;
-    L_0x2a16:
-        goto L_0x2a27;
-    L_0x2a17:
+        if (r4 == r5) goto L_0x2a35;
+    L_0x2a22:
+        if (r4 != r15) goto L_0x2a25;
+    L_0x2a24:
+        goto L_0x2a35;
+    L_0x2a25:
         r5 = 5;
-        if (r4 != r5) goto L_0x2a25;
-    L_0x2a1a:
+        if (r4 != r5) goto L_0x2a33;
+    L_0x2a28:
         r4 = r14.photoThumbs;
         r5 = 40;
         r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5);
         r1.currentPhotoObjectThumb = r4;
-        goto L_0x2a38;
-    L_0x2a25:
+        goto L_0x2a46;
+    L_0x2a33:
         r4 = 0;
-        goto L_0x2a39;
-    L_0x2a27:
+        goto L_0x2a47;
+    L_0x2a35:
         r4 = 0;
         r1.createDocumentLayout(r4, r14);
         r4 = r14.photoThumbs;
@@ -11609,60 +11623,60 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5);
         r1.currentPhotoObjectThumb = r4;
         r59.updateSecretTimeText(r60);
-    L_0x2a38:
+    L_0x2a46:
         r4 = 1;
-    L_0x2a39:
+    L_0x2a47:
         r5 = r14.type;
         r6 = 5;
-        if (r5 != r6) goto L_0x2a43;
-    L_0x2a3e:
+        if (r5 != r6) goto L_0x2a51;
+    L_0x2a4c:
         r5 = org.telegram.messenger.AndroidUtilities.roundMessageSize;
         r8 = r5;
-        goto L_0x2ab6;
-    L_0x2a43:
+        goto L_0x2ac4;
+    L_0x2a51:
         r5 = r1.currentPhotoObject;
-        if (r5 == 0) goto L_0x2a48;
-    L_0x2a47:
-        goto L_0x2a4a;
-    L_0x2a48:
+        if (r5 == 0) goto L_0x2a56;
+    L_0x2a55:
+        goto L_0x2a58;
+    L_0x2a56:
         r5 = r1.currentPhotoObjectThumb;
-    L_0x2a4a:
-        if (r5 == 0) goto L_0x2a51;
-    L_0x2a4c:
+    L_0x2a58:
+        if (r5 == 0) goto L_0x2a5f;
+    L_0x2a5a:
         r12 = r5.w;
         r5 = r5.h;
-        goto L_0x2a79;
-    L_0x2a51:
+        goto L_0x2a87;
+    L_0x2a5f:
         r5 = r1.documentAttach;
-        if (r5 == 0) goto L_0x2a77;
-    L_0x2a55:
+        if (r5 == 0) goto L_0x2a85;
+    L_0x2a63:
         r5 = r5.attributes;
         r5 = r5.size();
         r6 = 0;
         r7 = 0;
         r12 = 0;
-    L_0x2a5e:
-        if (r6 >= r5) goto L_0x2a75;
-    L_0x2a60:
+    L_0x2a6c:
+        if (r6 >= r5) goto L_0x2a83;
+    L_0x2a6e:
         r8 = r1.documentAttach;
         r8 = r8.attributes;
         r8 = r8.get(r6);
         r8 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r8;
         r9 = r8 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
-        if (r9 == 0) goto L_0x2a72;
-    L_0x2a6e:
+        if (r9 == 0) goto L_0x2a80;
+    L_0x2a7c:
         r12 = r8.w;
         r7 = r8.h;
-    L_0x2a72:
+    L_0x2a80:
         r6 = r6 + 1;
-        goto L_0x2a5e;
-    L_0x2a75:
+        goto L_0x2a6c;
+    L_0x2a83:
         r5 = r7;
-        goto L_0x2a79;
-    L_0x2a77:
+        goto L_0x2a87;
+    L_0x2a85:
         r5 = 0;
         r12 = 0;
-    L_0x2a79:
+    L_0x2a87:
         r6 = (float) r12;
         r7 = (float) r0;
         r8 = r6 / r7;
@@ -11671,18 +11685,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r5 = (float) r5;
         r8 = r5 / r8;
         r8 = (int) r8;
-        if (r9 != 0) goto L_0x2a8c;
-    L_0x2a86:
+        if (r9 != 0) goto L_0x2a9a;
+    L_0x2a94:
         r9 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-    L_0x2a8c:
-        if (r8 != 0) goto L_0x2a94;
-    L_0x2a8e:
+    L_0x2a9a:
+        if (r8 != 0) goto L_0x2aa2;
+    L_0x2a9c:
         r8 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
-    L_0x2a94:
-        if (r8 <= r3) goto L_0x2a9e;
-    L_0x2a96:
+    L_0x2aa2:
+        if (r8 <= r3) goto L_0x2aac;
+    L_0x2aa4:
         r5 = (float) r8;
         r6 = (float) r3;
         r5 = r5 / r6;
@@ -11690,117 +11704,117 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r6 / r5;
         r5 = (int) r6;
         r8 = r3;
-        goto L_0x2ab6;
-    L_0x2a9e:
+        goto L_0x2ac4;
+    L_0x2aac:
         r10 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        if (r8 >= r10) goto L_0x2ab5;
-    L_0x2aa6:
+        if (r8 >= r10) goto L_0x2ac3;
+    L_0x2ab4:
         r8 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
         r10 = (float) r8;
         r5 = r5 / r10;
         r6 = r6 / r5;
         r5 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1));
-        if (r5 >= 0) goto L_0x2ab5;
-    L_0x2ab3:
+        if (r5 >= 0) goto L_0x2ac3;
+    L_0x2ac1:
         r5 = (int) r6;
-        goto L_0x2ab6;
-    L_0x2ab5:
+        goto L_0x2ac4;
+    L_0x2ac3:
         r5 = r9;
-    L_0x2ab6:
+    L_0x2ac4:
         r6 = r1.currentPhotoObject;
-        if (r6 == 0) goto L_0x2ac8;
-    L_0x2aba:
+        if (r6 == 0) goto L_0x2ad6;
+    L_0x2ac8:
         r6 = r6.type;
         r7 = "s";
         r6 = r7.equals(r6);
-        if (r6 == 0) goto L_0x2ac8;
-    L_0x2ac4:
+        if (r6 == 0) goto L_0x2ad6;
+    L_0x2ad2:
         r6 = 0;
         r1.currentPhotoObject = r6;
-        goto L_0x2ac9;
-    L_0x2ac8:
+        goto L_0x2ad7;
+    L_0x2ad6:
         r6 = 0;
-    L_0x2ac9:
+    L_0x2ad7:
         r7 = r1.currentPhotoObject;
-        if (r7 == 0) goto L_0x2adb;
-    L_0x2acd:
+        if (r7 == 0) goto L_0x2ae9;
+    L_0x2adb:
         r9 = r1.currentPhotoObjectThumb;
-        if (r7 != r9) goto L_0x2adb;
-    L_0x2ad1:
+        if (r7 != r9) goto L_0x2ae9;
+    L_0x2adf:
         r7 = r14.type;
         r9 = 1;
-        if (r7 != r9) goto L_0x2ad9;
-    L_0x2ad6:
+        if (r7 != r9) goto L_0x2ae7;
+    L_0x2ae4:
         r1.currentPhotoObjectThumb = r6;
-        goto L_0x2adb;
-    L_0x2ad9:
-        r1.currentPhotoObject = r6;
-    L_0x2adb:
-        if (r4 == 0) goto L_0x2b04;
-    L_0x2add:
-        r4 = r60.needDrawBluredPreview();
-        if (r4 != 0) goto L_0x2b04;
-    L_0x2ae3:
-        r4 = r1.currentPhotoObject;
-        if (r4 == 0) goto L_0x2aeb;
+        goto L_0x2ae9;
     L_0x2ae7:
-        r6 = r1.currentPhotoObjectThumb;
-        if (r4 != r6) goto L_0x2b04;
+        r1.currentPhotoObject = r6;
+    L_0x2ae9:
+        if (r4 == 0) goto L_0x2b12;
     L_0x2aeb:
-        r4 = r1.currentPhotoObjectThumb;
+        r4 = r60.needDrawBluredPreview();
+        if (r4 != 0) goto L_0x2b12;
+    L_0x2af1:
+        r4 = r1.currentPhotoObject;
         if (r4 == 0) goto L_0x2af9;
-    L_0x2aef:
+    L_0x2af5:
+        r6 = r1.currentPhotoObjectThumb;
+        if (r4 != r6) goto L_0x2b12;
+    L_0x2af9:
+        r4 = r1.currentPhotoObjectThumb;
+        if (r4 == 0) goto L_0x2b07;
+    L_0x2afd:
         r4 = r4.type;
         r6 = "m";
         r4 = r6.equals(r4);
-        if (r4 != 0) goto L_0x2b04;
-    L_0x2af9:
+        if (r4 != 0) goto L_0x2b12;
+    L_0x2b07:
         r4 = r1.photoImage;
         r6 = 1;
         r4.setNeedsQualityThumb(r6);
         r4 = r1.photoImage;
         r4.setShouldGenerateQualityThumb(r6);
-    L_0x2b04:
+    L_0x2b12:
         r4 = r1.currentMessagesGroup;
-        if (r4 != 0) goto L_0x2b0f;
-    L_0x2b08:
+        if (r4 != 0) goto L_0x2b1d;
+    L_0x2b16:
         r4 = r14.caption;
-        if (r4 == 0) goto L_0x2b0f;
-    L_0x2b0c:
+        if (r4 == 0) goto L_0x2b1d;
+    L_0x2b1a:
         r4 = 0;
         r1.mediaBackground = r4;
-    L_0x2b0f:
-        if (r5 == 0) goto L_0x2b13;
-    L_0x2b11:
-        if (r8 != 0) goto L_0x2b75;
-    L_0x2b13:
+    L_0x2b1d:
+        if (r5 == 0) goto L_0x2b21;
+    L_0x2b1f:
+        if (r8 != 0) goto L_0x2b83;
+    L_0x2b21:
         r4 = r14.type;
-        if (r4 != r15) goto L_0x2b75;
-    L_0x2b17:
+        if (r4 != r15) goto L_0x2b83;
+    L_0x2b25:
         r4 = 0;
-    L_0x2b18:
+    L_0x2b26:
         r6 = r60.getDocument();
         r6 = r6.attributes;
         r6 = r6.size();
-        if (r4 >= r6) goto L_0x2b75;
-    L_0x2b24:
+        if (r4 >= r6) goto L_0x2b83;
+    L_0x2b32:
         r6 = r60.getDocument();
         r6 = r6.attributes;
         r6 = r6.get(r4);
         r6 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r6;
         r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
-        if (r7 != 0) goto L_0x2b3c;
-    L_0x2b34:
+        if (r7 != 0) goto L_0x2b4a;
+    L_0x2b42:
         r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
-        if (r7 == 0) goto L_0x2b39;
-    L_0x2b38:
-        goto L_0x2b3c;
-    L_0x2b39:
+        if (r7 == 0) goto L_0x2b47;
+    L_0x2b46:
+        goto L_0x2b4a;
+    L_0x2b47:
         r4 = r4 + 1;
-        goto L_0x2b18;
-    L_0x2b3c:
+        goto L_0x2b26;
+    L_0x2b4a:
         r4 = r6.w;
         r5 = (float) r4;
         r0 = (float) r0;
@@ -11812,20 +11826,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7 = (float) r7;
         r7 = r7 / r5;
         r5 = (int) r7;
-        if (r5 <= r3) goto L_0x2b52;
-    L_0x2b4b:
+        if (r5 <= r3) goto L_0x2b60;
+    L_0x2b59:
         r0 = (float) r5;
         r5 = (float) r3;
         r0 = r0 / r5;
         r4 = (float) r4;
         r4 = r4 / r0;
         r5 = (int) r4;
-        goto L_0x2b76;
-    L_0x2b52:
+        goto L_0x2b84;
+    L_0x2b60:
         r3 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        if (r5 >= r3) goto L_0x2b72;
-    L_0x2b5a:
+        if (r5 >= r3) goto L_0x2b80;
+    L_0x2b68:
         r3 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r5 = r6.h;
@@ -11836,63 +11850,63 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7 = (float) r6;
         r7 = r7 / r5;
         r0 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1));
-        if (r0 >= 0) goto L_0x2b73;
-    L_0x2b6d:
+        if (r0 >= 0) goto L_0x2b81;
+    L_0x2b7b:
         r0 = (float) r6;
         r0 = r0 / r5;
         r0 = (int) r0;
         r5 = r0;
-        goto L_0x2b76;
-    L_0x2b72:
+        goto L_0x2b84;
+    L_0x2b80:
         r3 = r5;
-    L_0x2b73:
+    L_0x2b81:
         r5 = r4;
-        goto L_0x2b76;
-    L_0x2b75:
+        goto L_0x2b84;
+    L_0x2b83:
         r3 = r8;
-    L_0x2b76:
-        if (r5 == 0) goto L_0x2b7a;
-    L_0x2b78:
-        if (r3 != 0) goto L_0x2b81;
-    L_0x2b7a:
+    L_0x2b84:
+        if (r5 == 0) goto L_0x2b88;
+    L_0x2b86:
+        if (r3 != 0) goto L_0x2b8f;
+    L_0x2b88:
         r0 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r3 = r5;
-    L_0x2b81:
+    L_0x2b8f:
         r0 = r14.type;
         r4 = 3;
-        if (r0 != r4) goto L_0x2b9b;
-    L_0x2b86:
+        if (r0 != r4) goto L_0x2ba9;
+    L_0x2b94:
         r0 = r1.infoWidth;
         r4 = NUM; // 0x42200000 float:40.0 double:5.481131706E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r0 + r4;
-        if (r5 >= r0) goto L_0x2b9b;
-    L_0x2b91:
+        if (r5 >= r0) goto L_0x2ba9;
+    L_0x2b9f:
         r0 = r1.infoWidth;
         r4 = NUM; // 0x42200000 float:40.0 double:5.481131706E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r5 = r0 + r4;
-    L_0x2b9b:
+    L_0x2ba9:
         r0 = r1.currentMessagesGroup;
-        if (r0 == 0) goto L_0x2be1;
-    L_0x2b9f:
+        if (r0 == 0) goto L_0x2bef;
+    L_0x2bad:
         r0 = r59.getGroupPhotosWidth();
         r2 = 0;
         r4 = 0;
-    L_0x2ba5:
+    L_0x2bb3:
         r6 = r1.currentMessagesGroup;
         r6 = r6.posArray;
         r6 = r6.size();
-        if (r2 >= r6) goto L_0x2bd7;
-    L_0x2baf:
+        if (r2 >= r6) goto L_0x2be5;
+    L_0x2bbd:
         r6 = r1.currentMessagesGroup;
         r6 = r6.posArray;
         r6 = r6.get(r2);
         r6 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r6;
         r7 = r6.minY;
-        if (r7 != 0) goto L_0x2bd7;
-    L_0x2bbd:
+        if (r7 != 0) goto L_0x2be5;
+    L_0x2bcb:
         r7 = (double) r4;
         r4 = r6.pw;
         r6 = r6.leftSpanOffset;
@@ -11908,23 +11922,23 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7 = r7 + r9;
         r4 = (int) r7;
         r2 = r2 + 1;
-        goto L_0x2ba5;
-    L_0x2bd7:
+        goto L_0x2bb3;
+    L_0x2be5:
         r0 = NUM; // 0x420CLASSNAME float:35.0 double:5.47465589E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r4 = r4 - r0;
         r1.availableTimeWidth = r4;
-        goto L_0x2bea;
-    L_0x2be1:
+        goto L_0x2bf8;
+    L_0x2bef:
         r0 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r2 = r2 - r0;
         r1.availableTimeWidth = r2;
-    L_0x2bea:
+    L_0x2bf8:
         r0 = r14.type;
         r2 = 5;
-        if (r0 != r2) goto L_0x2CLASSNAME;
-    L_0x2bef:
+        if (r0 != r2) goto L_0x2c1f;
+    L_0x2bfd:
         r0 = r1.availableTimeWidth;
         r6 = (double) r0;
         r0 = org.telegram.ui.ActionBar.Theme.chat_audioTimePaint;
@@ -11941,57 +11955,57 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r6 - r8;
         r0 = (int) r6;
         r1.availableTimeWidth = r0;
-    L_0x2CLASSNAME:
+    L_0x2c1f:
         r59.measureTime(r60);
         r0 = r1.timeWidth;
         r2 = r60.isOutOwner();
-        if (r2 == 0) goto L_0x2c1f;
-    L_0x2c1c:
+        if (r2 == 0) goto L_0x2c2d;
+    L_0x2c2a:
         r12 = 20;
-        goto L_0x2CLASSNAME;
-    L_0x2c1f:
+        goto L_0x2c2e;
+    L_0x2c2d:
         r12 = 0;
-    L_0x2CLASSNAME:
+    L_0x2c2e:
         r12 = r12 + 14;
         r2 = (float) r12;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0 = r0 + r2;
-        if (r5 >= r0) goto L_0x2c2b;
-    L_0x2c2a:
-        r5 = r0;
-    L_0x2c2b:
-        r2 = r60.isRoundVideo();
-        if (r2 == 0) goto L_0x2CLASSNAME;
+        if (r5 >= r0) goto L_0x2CLASSNAME;
     L_0x2CLASSNAME:
+        r5 = r0;
+    L_0x2CLASSNAME:
+        r2 = r60.isRoundVideo();
+        if (r2 == 0) goto L_0x2c4f;
+    L_0x2c3f:
         r3 = java.lang.Math.min(r5, r3);
         r2 = 0;
         r1.drawBackground = r2;
         r2 = r1.photoImage;
         r4 = r3 / 2;
         r2.setRoundRadius(r4);
-    L_0x2c3f:
+    L_0x2c4d:
         r5 = r3;
         goto L_0x2CLASSNAME;
-    L_0x2CLASSNAME:
+    L_0x2c4f:
         r2 = r60.needDrawBluredPreview();
         if (r2 == 0) goto L_0x2CLASSNAME;
     L_0x2CLASSNAME:
         r2 = org.telegram.messenger.AndroidUtilities.isTablet();
         if (r2 == 0) goto L_0x2CLASSNAME;
-    L_0x2c4d:
+    L_0x2c5b:
         r2 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();
-        goto L_0x2c5c;
+        goto L_0x2c6a;
     L_0x2CLASSNAME:
         r2 = org.telegram.messenger.AndroidUtilities.displaySize;
         r3 = r2.x;
         r2 = r2.y;
         r2 = java.lang.Math.min(r3, r2);
-    L_0x2c5c:
+    L_0x2c6a:
         r2 = (float) r2;
         r3 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
         r2 = r2 * r3;
         r3 = (int) r2;
-        goto L_0x2c3f;
+        goto L_0x2c4d;
     L_0x2CLASSNAME:
         r2 = r1.currentMessagesGroup;
         if (r2 == 0) goto L_0x2var_;
@@ -12016,42 +12030,42 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = (int) r4;
         r5 = r1.currentPosition;
         r5 = r5.minY;
-        if (r5 == 0) goto L_0x2d27;
-    L_0x2CLASSNAME:
+        if (r5 == 0) goto L_0x2d35;
+    L_0x2c9f:
         r5 = r60.isOutOwner();
-        if (r5 == 0) goto L_0x2c9f;
-    L_0x2CLASSNAME:
+        if (r5 == 0) goto L_0x2cad;
+    L_0x2ca5:
         r5 = r1.currentPosition;
         r5 = r5.flags;
         r6 = 1;
         r5 = r5 & r6;
-        if (r5 != 0) goto L_0x2cad;
-    L_0x2c9f:
+        if (r5 != 0) goto L_0x2cbb;
+    L_0x2cad:
         r5 = r60.isOutOwner();
-        if (r5 != 0) goto L_0x2d27;
-    L_0x2ca5:
+        if (r5 != 0) goto L_0x2d35;
+    L_0x2cb3:
         r5 = r1.currentPosition;
         r5 = r5.flags;
         r6 = 2;
         r5 = r5 & r6;
-        if (r5 == 0) goto L_0x2d27;
-    L_0x2cad:
+        if (r5 == 0) goto L_0x2d35;
+    L_0x2cbb:
         r5 = 0;
         r6 = 0;
         r7 = 0;
-    L_0x2cb0:
+    L_0x2cbe:
         r8 = r1.currentMessagesGroup;
         r8 = r8.posArray;
         r8 = r8.size();
-        if (r5 >= r8) goto L_0x2d25;
-    L_0x2cba:
+        if (r5 >= r8) goto L_0x2d33;
+    L_0x2cc8:
         r8 = r1.currentMessagesGroup;
         r8 = r8.posArray;
         r8 = r8.get(r5);
         r8 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r8;
         r9 = r8.minY;
-        if (r9 != 0) goto L_0x2cef;
-    L_0x2cc8:
+        if (r9 != 0) goto L_0x2cfd;
+    L_0x2cd6:
         r9 = (double) r6;
         r6 = r8.pw;
         r6 = (float) r6;
@@ -12061,28 +12075,28 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = (double) r6;
         r11 = java.lang.Math.ceil(r11);
         r6 = r8.leftSpanOffset;
-        if (r6 == 0) goto L_0x2ce6;
-    L_0x2cda:
+        if (r6 == 0) goto L_0x2cf4;
+    L_0x2ce8:
         r6 = (float) r6;
         r8 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
         r6 = r6 / r8;
         r6 = r6 * r3;
         r13 = (double) r6;
         r13 = java.lang.Math.ceil(r13);
-        goto L_0x2ce8;
-    L_0x2ce6:
+        goto L_0x2cf6;
+    L_0x2cf4:
         r13 = 0;
-    L_0x2ce8:
+    L_0x2cf6:
         r11 = r11 + r13;
         java.lang.Double.isNaN(r9);
         r9 = r9 + r11;
         r6 = (int) r9;
-        goto L_0x2d1f;
-    L_0x2cef:
+        goto L_0x2d2d;
+    L_0x2cfd:
         r10 = r1.currentPosition;
         r10 = r10.minY;
-        if (r9 != r10) goto L_0x2d1c;
-    L_0x2cf5:
+        if (r9 != r10) goto L_0x2d2a;
+    L_0x2d03:
         r9 = (double) r7;
         r7 = r8.pw;
         r7 = (float) r7;
@@ -12092,58 +12106,58 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = (double) r7;
         r11 = java.lang.Math.ceil(r11);
         r7 = r8.leftSpanOffset;
-        if (r7 == 0) goto L_0x2d13;
-    L_0x2d07:
+        if (r7 == 0) goto L_0x2d21;
+    L_0x2d15:
         r7 = (float) r7;
         r8 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
         r7 = r7 / r8;
         r7 = r7 * r3;
         r7 = (double) r7;
         r7 = java.lang.Math.ceil(r7);
-        goto L_0x2d15;
-    L_0x2d13:
+        goto L_0x2d23;
+    L_0x2d21:
         r7 = 0;
-    L_0x2d15:
+    L_0x2d23:
         r11 = r11 + r7;
         java.lang.Double.isNaN(r9);
         r9 = r9 + r11;
         r7 = (int) r9;
-        goto L_0x2d1f;
-    L_0x2d1c:
-        if (r9 <= r10) goto L_0x2d1f;
-    L_0x2d1e:
-        goto L_0x2d25;
-    L_0x2d1f:
+        goto L_0x2d2d;
+    L_0x2d2a:
+        if (r9 <= r10) goto L_0x2d2d;
+    L_0x2d2c:
+        goto L_0x2d33;
+    L_0x2d2d:
         r5 = r5 + 1;
         r14 = r60;
         r13 = -1;
-        goto L_0x2cb0;
-    L_0x2d25:
+        goto L_0x2cbe;
+    L_0x2d33:
         r6 = r6 - r7;
         r4 = r4 + r6;
-    L_0x2d27:
+    L_0x2d35:
         r5 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r4 = r4 - r5;
         r5 = r1.isAvatarVisible;
-        if (r5 == 0) goto L_0x2d39;
-    L_0x2d32:
+        if (r5 == 0) goto L_0x2d47;
+    L_0x2d40:
         r5 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r4 = r4 - r5;
-    L_0x2d39:
+    L_0x2d47:
         r5 = r1.currentPosition;
         r6 = r5.siblingHeights;
-        if (r6 == 0) goto L_0x2d69;
-    L_0x2d3f:
+        if (r6 == 0) goto L_0x2d77;
+    L_0x2d4d:
         r5 = 0;
         r6 = 0;
-    L_0x2d41:
+    L_0x2d4f:
         r7 = r1.currentPosition;
         r8 = r7.siblingHeights;
         r9 = r8.length;
-        if (r5 >= r9) goto L_0x2d56;
-    L_0x2d48:
+        if (r5 >= r9) goto L_0x2d64;
+    L_0x2d56:
         r7 = r8[r5];
         r7 = r7 * r2;
         r7 = (double) r7;
@@ -12151,8 +12165,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7 = (int) r7;
         r6 = r6 + r7;
         r5 = r5 + 1;
-        goto L_0x2d41;
-    L_0x2d56:
+        goto L_0x2d4f;
+    L_0x2d64:
         r2 = r7.maxY;
         r5 = r7.minY;
         r2 = r2 - r5;
@@ -12162,66 +12176,66 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r5 = java.lang.Math.round(r7);
         r2 = r2 * r5;
         r6 = r6 + r2;
-        goto L_0x2d73;
-    L_0x2d69:
+        goto L_0x2d81;
+    L_0x2d77:
         r5 = r5.ph;
         r2 = r2 * r5;
         r5 = (double) r2;
         r5 = java.lang.Math.ceil(r5);
         r6 = (int) r5;
-    L_0x2d73:
+    L_0x2d81:
         r1.backgroundWidth = r4;
         r2 = r1.currentPosition;
         r2 = r2.flags;
         r5 = r2 & 2;
-        if (r5 == 0) goto L_0x2d87;
-    L_0x2d7d:
+        if (r5 == 0) goto L_0x2d95;
+    L_0x2d8b:
         r5 = 1;
         r2 = r2 & r5;
-        if (r2 == 0) goto L_0x2d87;
-    L_0x2d81:
+        if (r2 == 0) goto L_0x2d95;
+    L_0x2d8f:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r18);
-    L_0x2d85:
+    L_0x2d93:
         r4 = r4 - r2;
-        goto L_0x2dae;
-    L_0x2d87:
+        goto L_0x2dbc;
+    L_0x2d95:
         r2 = r1.currentPosition;
         r2 = r2.flags;
         r5 = r2 & 2;
-        if (r5 != 0) goto L_0x2d9a;
-    L_0x2d8f:
+        if (r5 != 0) goto L_0x2da8;
+    L_0x2d9d:
         r5 = 1;
         r2 = r2 & r5;
-        if (r2 != 0) goto L_0x2d9a;
-    L_0x2d93:
+        if (r2 != 0) goto L_0x2da8;
+    L_0x2da1:
         r2 = NUM; // 0x41300000 float:11.0 double:5.4034219E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        goto L_0x2d85;
-    L_0x2d9a:
+        goto L_0x2d93;
+    L_0x2da8:
         r2 = r1.currentPosition;
         r2 = r2.flags;
         r5 = 2;
         r2 = r2 & r5;
-        if (r2 == 0) goto L_0x2da7;
-    L_0x2da2:
+        if (r2 == 0) goto L_0x2db5;
+    L_0x2db0:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r19);
-        goto L_0x2d85;
-    L_0x2da7:
+        goto L_0x2d93;
+    L_0x2db5:
         r2 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        goto L_0x2d85;
-    L_0x2dae:
+        goto L_0x2d93;
+    L_0x2dbc:
         r2 = r1.currentPosition;
         r2 = r2.edge;
-        if (r2 != 0) goto L_0x2dbb;
-    L_0x2db4:
+        if (r2 != 0) goto L_0x2dc9;
+    L_0x2dc2:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r19);
         r2 = r2 + r4;
         r5 = r2;
-        goto L_0x2dbc;
-    L_0x2dbb:
+        goto L_0x2dca;
+    L_0x2dc9:
         r5 = r4;
-    L_0x2dbc:
+    L_0x2dca:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r19);
         r2 = r5 - r2;
         r7 = 0;
@@ -12229,22 +12243,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r1.currentPosition;
         r2 = r2.flags;
         r7 = r2 & 8;
-        if (r7 != 0) goto L_0x2ddf;
-    L_0x2dcd:
+        if (r7 != 0) goto L_0x2ded;
+    L_0x2ddb:
         r7 = r1.currentMessagesGroup;
         r7 = r7.hasSibling;
-        if (r7 == 0) goto L_0x2dd8;
-    L_0x2dd3:
+        if (r7 == 0) goto L_0x2de6;
+    L_0x2de1:
         r2 = r2 & 4;
-        if (r2 != 0) goto L_0x2dd8;
-    L_0x2dd7:
-        goto L_0x2ddf;
-    L_0x2dd8:
+        if (r2 != 0) goto L_0x2de6;
+    L_0x2de5:
+        goto L_0x2ded;
+    L_0x2de6:
         r21 = r5;
         r63 = r6;
         r5 = r4;
-        goto L_0x2f7a;
-    L_0x2ddf:
+        goto L_0x2var_;
+    L_0x2ded:
         r2 = r1.currentPosition;
         r2 = r1.getAdditionalWidthForPosition(r2);
         r12 = r12 + r2;
@@ -12253,9 +12267,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r2.size();
         r7 = r4;
         r4 = 0;
-    L_0x2df0:
+    L_0x2dfe:
         if (r4 >= r2) goto L_0x2var_;
-    L_0x2df2:
+    L_0x2e00:
         r8 = r1.currentMessagesGroup;
         r8 = r8.messages;
         r8 = r8.get(r4);
@@ -12266,11 +12280,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r9;
         r10 = r1.currentPosition;
         if (r9 == r10) goto L_0x2var_;
-    L_0x2e0a:
+    L_0x2e18:
         r10 = r9.flags;
         r10 = r10 & r15;
         if (r10 == 0) goto L_0x2var_;
-    L_0x2e0f:
+    L_0x2e1d:
         r7 = r9.pw;
         r7 = (float) r7;
         r10 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
@@ -12280,40 +12294,40 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = java.lang.Math.ceil(r10);
         r7 = (int) r10;
         r10 = r9.minY;
-        if (r10 == 0) goto L_0x2ecc;
-    L_0x2e21:
+        if (r10 == 0) goto L_0x2eda;
+    L_0x2e2f:
         r10 = r60.isOutOwner();
-        if (r10 == 0) goto L_0x2e2d;
-    L_0x2e27:
+        if (r10 == 0) goto L_0x2e3b;
+    L_0x2e35:
         r10 = r9.flags;
         r11 = 1;
         r10 = r10 & r11;
-        if (r10 != 0) goto L_0x2e39;
-    L_0x2e2d:
+        if (r10 != 0) goto L_0x2e47;
+    L_0x2e3b:
         r10 = r60.isOutOwner();
-        if (r10 != 0) goto L_0x2ecc;
-    L_0x2e33:
+        if (r10 != 0) goto L_0x2eda;
+    L_0x2e41:
         r10 = r9.flags;
         r11 = 2;
         r10 = r10 & r11;
-        if (r10 == 0) goto L_0x2ecc;
-    L_0x2e39:
+        if (r10 == 0) goto L_0x2eda;
+    L_0x2e47:
         r10 = 0;
         r11 = 0;
         r13 = 0;
-    L_0x2e3c:
+    L_0x2e4a:
         r14 = r1.currentMessagesGroup;
         r14 = r14.posArray;
         r14 = r14.size();
-        if (r10 >= r14) goto L_0x2ec3;
-    L_0x2e46:
+        if (r10 >= r14) goto L_0x2ed1;
+    L_0x2e54:
         r14 = r1.currentMessagesGroup;
         r14 = r14.posArray;
         r14 = r14.get(r10);
         r14 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r14;
         r15 = r14.minY;
-        if (r15 != 0) goto L_0x2e82;
-    L_0x2e54:
+        if (r15 != 0) goto L_0x2e90;
+    L_0x2e62:
         r21 = r5;
         r63 = r6;
         r5 = (double) r11;
@@ -12326,31 +12340,31 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = (double) r11;
         r11 = java.lang.Math.ceil(r11);
         r14 = r14.leftSpanOffset;
-        if (r14 == 0) goto L_0x2e78;
-    L_0x2e6c:
+        if (r14 == 0) goto L_0x2e86;
+    L_0x2e7a:
         r14 = (float) r14;
         r15 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
         r14 = r14 / r15;
         r14 = r14 * r3;
         r14 = (double) r14;
         r14 = java.lang.Math.ceil(r14);
-        goto L_0x2e7a;
-    L_0x2e78:
+        goto L_0x2e88;
+    L_0x2e86:
         r14 = 0;
-    L_0x2e7a:
+    L_0x2e88:
         r11 = r11 + r14;
         java.lang.Double.isNaN(r5);
         r5 = r5 + r11;
         r5 = (int) r5;
         r11 = r5;
-        goto L_0x2eb7;
-    L_0x2e82:
+        goto L_0x2ec5;
+    L_0x2e90:
         r21 = r5;
         r63 = r6;
         r22 = r12;
         r5 = r9.minY;
-        if (r15 != r5) goto L_0x2eb4;
-    L_0x2e8c:
+        if (r15 != r5) goto L_0x2ec2;
+    L_0x2e9a:
         r5 = (double) r13;
         r12 = r14.pw;
         r12 = (float) r12;
@@ -12360,97 +12374,97 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12 = (double) r12;
         r12 = java.lang.Math.ceil(r12);
         r14 = r14.leftSpanOffset;
-        if (r14 == 0) goto L_0x2eaa;
-    L_0x2e9e:
+        if (r14 == 0) goto L_0x2eb8;
+    L_0x2eac:
         r14 = (float) r14;
         r15 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
         r14 = r14 / r15;
         r14 = r14 * r3;
         r14 = (double) r14;
         r14 = java.lang.Math.ceil(r14);
-        goto L_0x2eac;
-    L_0x2eaa:
+        goto L_0x2eba;
+    L_0x2eb8:
         r14 = 0;
-    L_0x2eac:
+    L_0x2eba:
         r12 = r12 + r14;
         java.lang.Double.isNaN(r5);
         r5 = r5 + r12;
         r5 = (int) r5;
         r13 = r5;
-        goto L_0x2eb7;
-    L_0x2eb4:
-        if (r15 <= r5) goto L_0x2eb7;
-    L_0x2eb6:
-        goto L_0x2ec9;
-    L_0x2eb7:
+        goto L_0x2ec5;
+    L_0x2ec2:
+        if (r15 <= r5) goto L_0x2ec5;
+    L_0x2ec4:
+        goto L_0x2ed7;
+    L_0x2ec5:
         r10 = r10 + 1;
         r6 = r63;
         r5 = r21;
         r12 = r22;
         r15 = 8;
-        goto L_0x2e3c;
-    L_0x2ec3:
+        goto L_0x2e4a;
+    L_0x2ed1:
         r21 = r5;
         r63 = r6;
         r22 = r12;
-    L_0x2ec9:
+    L_0x2ed7:
         r11 = r11 - r13;
         r7 = r7 + r11;
-        goto L_0x2ed2;
-    L_0x2ecc:
+        goto L_0x2ee0;
+    L_0x2eda:
         r21 = r5;
         r63 = r6;
         r22 = r12;
-    L_0x2ed2:
+    L_0x2ee0:
         r5 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r7 = r7 - r5;
         r5 = r9.flags;
         r6 = r5 & 2;
-        if (r6 == 0) goto L_0x2ee9;
-    L_0x2edf:
+        if (r6 == 0) goto L_0x2ef7;
+    L_0x2eed:
         r5 = r5 & 1;
-        if (r5 == 0) goto L_0x2ee9;
-    L_0x2ee3:
+        if (r5 == 0) goto L_0x2ef7;
+    L_0x2ef1:
         r5 = org.telegram.messenger.AndroidUtilities.dp(r18);
-    L_0x2ee7:
+    L_0x2ef5:
         r7 = r7 - r5;
-        goto L_0x2f0c;
-    L_0x2ee9:
+        goto L_0x2f1a;
+    L_0x2ef7:
         r5 = r9.flags;
         r6 = r5 & 2;
-        if (r6 != 0) goto L_0x2efa;
-    L_0x2eef:
+        if (r6 != 0) goto L_0x2var_;
+    L_0x2efd:
         r5 = r5 & 1;
-        if (r5 != 0) goto L_0x2efa;
-    L_0x2ef3:
+        if (r5 != 0) goto L_0x2var_;
+    L_0x2var_:
         r5 = NUM; // 0x41300000 float:11.0 double:5.4034219E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        goto L_0x2ee7;
-    L_0x2efa:
+        goto L_0x2ef5;
+    L_0x2var_:
         r5 = r9.flags;
         r6 = 2;
         r5 = r5 & r6;
         if (r5 == 0) goto L_0x2var_;
-    L_0x2var_:
+    L_0x2f0e:
         r5 = org.telegram.messenger.AndroidUtilities.dp(r19);
-        goto L_0x2ee7;
+        goto L_0x2ef5;
     L_0x2var_:
         r5 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        goto L_0x2ee7;
-    L_0x2f0c:
+        goto L_0x2ef5;
+    L_0x2f1a:
         r5 = r1.isChat;
         if (r5 == 0) goto L_0x2var_;
-    L_0x2var_:
+    L_0x2f1e:
         r5 = r8.isOutOwner();
         if (r5 != 0) goto L_0x2var_;
     L_0x2var_:
         r5 = r8.needDrawAvatar();
         if (r5 == 0) goto L_0x2var_;
-    L_0x2f1c:
+    L_0x2f2a:
         if (r9 == 0) goto L_0x2var_;
-    L_0x2f1e:
+    L_0x2f2c:
         r5 = r9.edge;
         if (r5 == 0) goto L_0x2var_;
     L_0x2var_:
@@ -12470,29 +12484,29 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r5 = r9.minX;
         r6 = r1.currentPosition;
         r6 = r6.minX;
-        if (r5 < r6) goto L_0x2f4d;
-    L_0x2var_:
+        if (r5 < r6) goto L_0x2f5b;
+    L_0x2f4f:
         r5 = r1.currentMessagesGroup;
         r5 = r5.hasSibling;
-        if (r5 == 0) goto L_0x2f5b;
+        if (r5 == 0) goto L_0x2var_;
     L_0x2var_:
         r5 = r9.minY;
         r6 = r9.maxY;
-        if (r5 == r6) goto L_0x2f5b;
-    L_0x2f4d:
+        if (r5 == r6) goto L_0x2var_;
+    L_0x2f5b:
         r5 = r1.captionOffsetX;
         r5 = r5 - r7;
         r1.captionOffsetX = r5;
-        goto L_0x2f5b;
+        goto L_0x2var_;
     L_0x2var_:
         r21 = r5;
         r63 = r6;
         r22 = r12;
         r12 = r22;
-    L_0x2f5b:
+    L_0x2var_:
         r5 = r8.caption;
         if (r5 == 0) goto L_0x2var_;
-    L_0x2f5f:
+    L_0x2f6d:
         r6 = r1.currentCaption;
         if (r6 == 0) goto L_0x2var_;
     L_0x2var_:
@@ -12506,240 +12520,240 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r63;
         r5 = r21;
         r15 = 8;
-        goto L_0x2df0;
+        goto L_0x2dfe;
     L_0x2var_:
         r21 = r5;
         r63 = r6;
         r22 = r12;
     L_0x2var_:
         r5 = r7;
-    L_0x2f7a:
+    L_0x2var_:
         r14 = r60;
         r15 = r63;
         r2 = r5;
         r5 = r21;
         r3 = 0;
-        goto L_0x2fd3;
+        goto L_0x2fe1;
     L_0x2var_:
         r2 = r14.caption;
         r1.currentCaption = r2;
         r2 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r2 == 0) goto L_0x2var_;
-    L_0x2f8d:
+        if (r2 == 0) goto L_0x2fa0;
+    L_0x2f9b:
         r2 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();
-        goto L_0x2f9c;
-    L_0x2var_:
+        goto L_0x2faa;
+    L_0x2fa0:
         r2 = org.telegram.messenger.AndroidUtilities.displaySize;
         r4 = r2.x;
         r2 = r2.y;
         r2 = java.lang.Math.min(r4, r2);
-    L_0x2f9c:
+    L_0x2faa:
         r2 = (float) r2;
         r4 = NUM; // 0x3var_ float:0.65 double:5.234532584E-315;
         r2 = r2 * r4;
         r2 = (int) r2;
         r4 = r60.needDrawBluredPreview();
-        if (r4 != 0) goto L_0x2fb2;
-    L_0x2fa9:
+        if (r4 != 0) goto L_0x2fc0;
+    L_0x2fb7:
         r4 = r1.currentCaption;
-        if (r4 == 0) goto L_0x2fb2;
-    L_0x2fad:
-        if (r5 >= r2) goto L_0x2fb2;
-    L_0x2faf:
+        if (r4 == 0) goto L_0x2fc0;
+    L_0x2fbb:
+        if (r5 >= r2) goto L_0x2fc0;
+    L_0x2fbd:
         r12 = r2;
         r2 = 1;
-        goto L_0x2fba;
-    L_0x2fb2:
+        goto L_0x2fc8;
+    L_0x2fc0:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r19);
         r2 = r5 - r2;
         r12 = r2;
         r2 = 0;
-    L_0x2fba:
+    L_0x2fc8:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r18);
         r4 = r4 + r5;
         r1.backgroundWidth = r4;
         r4 = r1.mediaBackground;
-        if (r4 != 0) goto L_0x2fd0;
-    L_0x2fc5:
+        if (r4 != 0) goto L_0x2fde;
+    L_0x2fd3:
         r4 = r1.backgroundWidth;
         r6 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = r4 + r6;
         r1.backgroundWidth = r4;
-    L_0x2fd0:
+    L_0x2fde:
         r15 = r3;
         r3 = r2;
         r2 = r5;
-    L_0x2fd3:
+    L_0x2fe1:
         r4 = r1.currentCaption;
-        if (r4 == 0) goto L_0x30de;
-    L_0x2fd7:
-        r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x30d5 }
+        if (r4 == 0) goto L_0x30ec;
+    L_0x2fe5:
+        r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x30e3 }
         r7 = 24;
-        if (r6 < r7) goto L_0x2ffe;
-    L_0x2fdd:
-        r6 = r4.length();	 Catch:{ Exception -> 0x30d5 }
-        r7 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x30d5 }
+        if (r6 < r7) goto L_0x300c;
+    L_0x2feb:
+        r6 = r4.length();	 Catch:{ Exception -> 0x30e3 }
+        r7 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x30e3 }
         r8 = 0;
-        r4 = android.text.StaticLayout.Builder.obtain(r4, r8, r6, r7, r12);	 Catch:{ Exception -> 0x30d5 }
+        r4 = android.text.StaticLayout.Builder.obtain(r4, r8, r6, r7, r12);	 Catch:{ Exception -> 0x30e3 }
         r6 = 1;
-        r4 = r4.setBreakStrategy(r6);	 Catch:{ Exception -> 0x30d5 }
-        r4 = r4.setHyphenationFrequency(r8);	 Catch:{ Exception -> 0x30d5 }
-        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x30d5 }
-        r4 = r4.setAlignment(r6);	 Catch:{ Exception -> 0x30d5 }
-        r4 = r4.build();	 Catch:{ Exception -> 0x30d5 }
-        r1.captionLayout = r4;	 Catch:{ Exception -> 0x30d5 }
-        goto L_0x3015;
-    L_0x2ffe:
-        r6 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x30d5 }
-        r29 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x30d5 }
-        r31 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x30d5 }
+        r4 = r4.setBreakStrategy(r6);	 Catch:{ Exception -> 0x30e3 }
+        r4 = r4.setHyphenationFrequency(r8);	 Catch:{ Exception -> 0x30e3 }
+        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x30e3 }
+        r4 = r4.setAlignment(r6);	 Catch:{ Exception -> 0x30e3 }
+        r4 = r4.build();	 Catch:{ Exception -> 0x30e3 }
+        r1.captionLayout = r4;	 Catch:{ Exception -> 0x30e3 }
+        goto L_0x3023;
+    L_0x300c:
+        r6 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x30e3 }
+        r29 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x30e3 }
+        r31 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x30e3 }
         r32 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r33 = 0;
         r34 = 0;
         r27 = r6;
         r28 = r4;
         r30 = r12;
-        r27.<init>(r28, r29, r30, r31, r32, r33, r34);	 Catch:{ Exception -> 0x30d5 }
-        r1.captionLayout = r6;	 Catch:{ Exception -> 0x30d5 }
-    L_0x3015:
-        r4 = r1.captionLayout;	 Catch:{ Exception -> 0x30d5 }
-        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x30d5 }
-        if (r4 <= 0) goto L_0x30cf;
-    L_0x301d:
-        if (r3 == 0) goto L_0x3052;
-    L_0x301f:
-        r6 = 0;
-        r1.captionWidth = r6;	 Catch:{ Exception -> 0x30d5 }
-        r6 = 0;
+        r27.<init>(r28, r29, r30, r31, r32, r33, r34);	 Catch:{ Exception -> 0x30e3 }
+        r1.captionLayout = r6;	 Catch:{ Exception -> 0x30e3 }
     L_0x3023:
-        if (r6 >= r4) goto L_0x304b;
-    L_0x3025:
-        r7 = r1.captionWidth;	 Catch:{ Exception -> 0x30d5 }
-        r7 = (double) r7;	 Catch:{ Exception -> 0x30d5 }
-        r9 = r1.captionLayout;	 Catch:{ Exception -> 0x30d5 }
-        r9 = r9.getLineWidth(r6);	 Catch:{ Exception -> 0x30d5 }
-        r9 = (double) r9;	 Catch:{ Exception -> 0x30d5 }
-        r9 = java.lang.Math.ceil(r9);	 Catch:{ Exception -> 0x30d5 }
-        r7 = java.lang.Math.max(r7, r9);	 Catch:{ Exception -> 0x30d5 }
-        r7 = (int) r7;	 Catch:{ Exception -> 0x30d5 }
-        r1.captionWidth = r7;	 Catch:{ Exception -> 0x30d5 }
-        r7 = r1.captionLayout;	 Catch:{ Exception -> 0x30d5 }
-        r7 = r7.getLineLeft(r6);	 Catch:{ Exception -> 0x30d5 }
+        r4 = r1.captionLayout;	 Catch:{ Exception -> 0x30e3 }
+        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x30e3 }
+        if (r4 <= 0) goto L_0x30dd;
+    L_0x302b:
+        if (r3 == 0) goto L_0x3060;
+    L_0x302d:
+        r6 = 0;
+        r1.captionWidth = r6;	 Catch:{ Exception -> 0x30e3 }
+        r6 = 0;
+    L_0x3031:
+        if (r6 >= r4) goto L_0x3059;
+    L_0x3033:
+        r7 = r1.captionWidth;	 Catch:{ Exception -> 0x30e3 }
+        r7 = (double) r7;	 Catch:{ Exception -> 0x30e3 }
+        r9 = r1.captionLayout;	 Catch:{ Exception -> 0x30e3 }
+        r9 = r9.getLineWidth(r6);	 Catch:{ Exception -> 0x30e3 }
+        r9 = (double) r9;	 Catch:{ Exception -> 0x30e3 }
+        r9 = java.lang.Math.ceil(r9);	 Catch:{ Exception -> 0x30e3 }
+        r7 = java.lang.Math.max(r7, r9);	 Catch:{ Exception -> 0x30e3 }
+        r7 = (int) r7;	 Catch:{ Exception -> 0x30e3 }
+        r1.captionWidth = r7;	 Catch:{ Exception -> 0x30e3 }
+        r7 = r1.captionLayout;	 Catch:{ Exception -> 0x30e3 }
+        r7 = r7.getLineLeft(r6);	 Catch:{ Exception -> 0x30e3 }
         r8 = 0;
         r7 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1));
-        if (r7 == 0) goto L_0x3048;
-    L_0x3045:
-        r1.captionWidth = r12;	 Catch:{ Exception -> 0x30d5 }
-        goto L_0x304b;
-    L_0x3048:
+        if (r7 == 0) goto L_0x3056;
+    L_0x3053:
+        r1.captionWidth = r12;	 Catch:{ Exception -> 0x30e3 }
+        goto L_0x3059;
+    L_0x3056:
         r6 = r6 + 1;
-        goto L_0x3023;
-    L_0x304b:
-        r4 = r1.captionWidth;	 Catch:{ Exception -> 0x30d5 }
-        if (r4 <= r12) goto L_0x3054;
-    L_0x304f:
-        r1.captionWidth = r12;	 Catch:{ Exception -> 0x30d5 }
-        goto L_0x3054;
-    L_0x3052:
-        r1.captionWidth = r12;	 Catch:{ Exception -> 0x30d5 }
-    L_0x3054:
-        r4 = r1.captionLayout;	 Catch:{ Exception -> 0x30d5 }
-        r4 = r4.getHeight();	 Catch:{ Exception -> 0x30d5 }
-        r1.captionHeight = r4;	 Catch:{ Exception -> 0x30d5 }
-        r4 = r1.captionHeight;	 Catch:{ Exception -> 0x30d5 }
+        goto L_0x3031;
+    L_0x3059:
+        r4 = r1.captionWidth;	 Catch:{ Exception -> 0x30e3 }
+        if (r4 <= r12) goto L_0x3062;
+    L_0x305d:
+        r1.captionWidth = r12;	 Catch:{ Exception -> 0x30e3 }
+        goto L_0x3062;
+    L_0x3060:
+        r1.captionWidth = r12;	 Catch:{ Exception -> 0x30e3 }
+    L_0x3062:
+        r4 = r1.captionLayout;	 Catch:{ Exception -> 0x30e3 }
+        r4 = r4.getHeight();	 Catch:{ Exception -> 0x30e3 }
+        r1.captionHeight = r4;	 Catch:{ Exception -> 0x30e3 }
+        r4 = r1.captionHeight;	 Catch:{ Exception -> 0x30e3 }
         r6 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x30d5 }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x30e3 }
         r4 = r4 + r6;
-        r1.addedCaptionHeight = r4;	 Catch:{ Exception -> 0x30d5 }
-        r4 = r1.currentPosition;	 Catch:{ Exception -> 0x30d5 }
-        if (r4 == 0) goto L_0x3079;
-    L_0x306b:
-        r4 = r1.currentPosition;	 Catch:{ Exception -> 0x30d5 }
-        r4 = r4.flags;	 Catch:{ Exception -> 0x30d5 }
+        r1.addedCaptionHeight = r4;	 Catch:{ Exception -> 0x30e3 }
+        r4 = r1.currentPosition;	 Catch:{ Exception -> 0x30e3 }
+        if (r4 == 0) goto L_0x3087;
+    L_0x3079:
+        r4 = r1.currentPosition;	 Catch:{ Exception -> 0x30e3 }
+        r4 = r4.flags;	 Catch:{ Exception -> 0x30e3 }
         r6 = 8;
         r4 = r4 & r6;
-        if (r4 == 0) goto L_0x3075;
-    L_0x3074:
-        goto L_0x3079;
-    L_0x3075:
+        if (r4 == 0) goto L_0x3083;
+    L_0x3082:
+        goto L_0x3087;
+    L_0x3083:
         r4 = 0;
-        r1.captionLayout = r4;	 Catch:{ Exception -> 0x30d5 }
-        goto L_0x30cf;
-    L_0x3079:
-        r4 = r1.addedCaptionHeight;	 Catch:{ Exception -> 0x30d5 }
+        r1.captionLayout = r4;	 Catch:{ Exception -> 0x30e3 }
+        goto L_0x30dd;
+    L_0x3087:
+        r4 = r1.addedCaptionHeight;	 Catch:{ Exception -> 0x30e3 }
         r6 = 0;
         r12 = r6 + r4;
-        r4 = r1.captionWidth;	 Catch:{ Exception -> 0x30cd }
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r19);	 Catch:{ Exception -> 0x30cd }
+        r4 = r1.captionWidth;	 Catch:{ Exception -> 0x30db }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r19);	 Catch:{ Exception -> 0x30db }
         r6 = r5 - r6;
-        r4 = java.lang.Math.max(r4, r6);	 Catch:{ Exception -> 0x30cd }
-        r6 = r1.captionLayout;	 Catch:{ Exception -> 0x30cd }
-        r7 = r1.captionLayout;	 Catch:{ Exception -> 0x30cd }
-        r7 = r7.getLineCount();	 Catch:{ Exception -> 0x30cd }
+        r4 = java.lang.Math.max(r4, r6);	 Catch:{ Exception -> 0x30db }
+        r6 = r1.captionLayout;	 Catch:{ Exception -> 0x30db }
+        r7 = r1.captionLayout;	 Catch:{ Exception -> 0x30db }
+        r7 = r7.getLineCount();	 Catch:{ Exception -> 0x30db }
         r8 = 1;
         r7 = r7 - r8;
-        r6 = r6.getLineWidth(r7);	 Catch:{ Exception -> 0x30cd }
-        r7 = r1.captionLayout;	 Catch:{ Exception -> 0x30cd }
-        r9 = r1.captionLayout;	 Catch:{ Exception -> 0x30cd }
-        r9 = r9.getLineCount();	 Catch:{ Exception -> 0x30cd }
+        r6 = r6.getLineWidth(r7);	 Catch:{ Exception -> 0x30db }
+        r7 = r1.captionLayout;	 Catch:{ Exception -> 0x30db }
+        r9 = r1.captionLayout;	 Catch:{ Exception -> 0x30db }
+        r9 = r9.getLineCount();	 Catch:{ Exception -> 0x30db }
         r9 = r9 - r8;
-        r7 = r7.getLineLeft(r9);	 Catch:{ Exception -> 0x30cd }
+        r7 = r7.getLineLeft(r9);	 Catch:{ Exception -> 0x30db }
         r6 = r6 + r7;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r20);	 Catch:{ Exception -> 0x30cd }
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r20);	 Catch:{ Exception -> 0x30db }
         r4 = r4 + r7;
-        r4 = (float) r4;	 Catch:{ Exception -> 0x30cd }
+        r4 = (float) r4;	 Catch:{ Exception -> 0x30db }
         r4 = r4 - r6;
-        r0 = (float) r0;	 Catch:{ Exception -> 0x30cd }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x30db }
         r0 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1));
-        if (r0 >= 0) goto L_0x30c6;
-    L_0x30b2:
+        if (r0 >= 0) goto L_0x30d4;
+    L_0x30c0:
         r0 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);	 Catch:{ Exception -> 0x30cd }
+        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);	 Catch:{ Exception -> 0x30db }
         r12 = r12 + r0;
-        r0 = r1.addedCaptionHeight;	 Catch:{ Exception -> 0x30cd }
+        r0 = r1.addedCaptionHeight;	 Catch:{ Exception -> 0x30db }
         r4 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x30cd }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x30db }
         r0 = r0 + r4;
-        r1.addedCaptionHeight = r0;	 Catch:{ Exception -> 0x30cd }
+        r1.addedCaptionHeight = r0;	 Catch:{ Exception -> 0x30db }
         r0 = 1;
-        goto L_0x30c7;
-    L_0x30c6:
+        goto L_0x30d5;
+    L_0x30d4:
         r0 = 0;
-    L_0x30c7:
+    L_0x30d5:
         r58 = r12;
         r12 = r0;
         r0 = r58;
-        goto L_0x30d1;
-    L_0x30cd:
+        goto L_0x30df;
+    L_0x30db:
         r0 = move-exception;
-        goto L_0x30d7;
-    L_0x30cf:
+        goto L_0x30e5;
+    L_0x30dd:
         r0 = 0;
         r12 = 0;
-    L_0x30d1:
+    L_0x30df:
         r21 = r0;
         r0 = r12;
-        goto L_0x30e1;
-    L_0x30d5:
+        goto L_0x30ef;
+    L_0x30e3:
         r0 = move-exception;
         r12 = 0;
-    L_0x30d7:
+    L_0x30e5:
         org.telegram.messenger.FileLog.e(r0);
         r21 = r12;
         r0 = 0;
-        goto L_0x30e1;
-    L_0x30de:
+        goto L_0x30ef;
+    L_0x30ec:
         r0 = 0;
         r21 = 0;
-    L_0x30e1:
-        if (r3 == 0) goto L_0x310c;
-    L_0x30e3:
+    L_0x30ef:
+        if (r3 == 0) goto L_0x311a;
+    L_0x30f1:
         r3 = r1.captionWidth;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r19);
         r3 = r3 + r4;
-        if (r5 >= r3) goto L_0x310c;
-    L_0x30ec:
+        if (r5 >= r3) goto L_0x311a;
+    L_0x30fa:
         r3 = r1.captionWidth;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r19);
         r3 = r3 + r4;
@@ -12747,19 +12761,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4 + r3;
         r1.backgroundWidth = r4;
         r4 = r1.mediaBackground;
-        if (r4 != 0) goto L_0x3109;
-    L_0x30fe:
+        if (r4 != 0) goto L_0x3117;
+    L_0x310c:
         r4 = r1.backgroundWidth;
         r5 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r4 = r4 + r5;
         r1.backgroundWidth = r4;
-    L_0x3109:
+    L_0x3117:
         r22 = r3;
-        goto L_0x310e;
-    L_0x310c:
+        goto L_0x311c;
+    L_0x311a:
         r22 = r5;
-    L_0x310e:
+    L_0x311c:
         r3 = java.util.Locale.US;
         r4 = 2;
         r5 = new java.lang.Object[r4];
@@ -12782,24 +12796,24 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.currentPhotoFilterThumb = r2;
         r1.currentPhotoFilter = r2;
         r2 = r14.photoThumbs;
-        if (r2 == 0) goto L_0x313f;
-    L_0x3139:
+        if (r2 == 0) goto L_0x314d;
+    L_0x3147:
         r2 = r2.size();
-        if (r2 > r4) goto L_0x314b;
-    L_0x313f:
+        if (r2 > r4) goto L_0x3159;
+    L_0x314d:
         r2 = r14.type;
         r3 = 3;
-        if (r2 == r3) goto L_0x314b;
-    L_0x3144:
+        if (r2 == r3) goto L_0x3159;
+    L_0x3152:
         r3 = 8;
-        if (r2 == r3) goto L_0x314b;
-    L_0x3148:
+        if (r2 == r3) goto L_0x3159;
+    L_0x3156:
         r3 = 5;
-        if (r2 != r3) goto L_0x3191;
-    L_0x314b:
+        if (r2 != r3) goto L_0x319f;
+    L_0x3159:
         r2 = r60.needDrawBluredPreview();
-        if (r2 == 0) goto L_0x317c;
-    L_0x3151:
+        if (r2 == 0) goto L_0x318a;
+    L_0x315f:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r3 = r1.currentPhotoFilter;
@@ -12816,8 +12830,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2.append(r3);
         r2 = r2.toString();
         r1.currentPhotoFilterThumb = r2;
-        goto L_0x3191;
-    L_0x317c:
+        goto L_0x319f;
+    L_0x318a:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r3 = r1.currentPhotoFilterThumb;
@@ -12826,103 +12840,103 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2.append(r3);
         r2 = r2.toString();
         r1.currentPhotoFilterThumb = r2;
-    L_0x3191:
+    L_0x319f:
         r2 = r14.type;
         r3 = 3;
-        if (r2 == r3) goto L_0x31a0;
-    L_0x3196:
+        if (r2 == r3) goto L_0x31ae;
+    L_0x31a4:
         r3 = 8;
-        if (r2 == r3) goto L_0x31a0;
-    L_0x319a:
+        if (r2 == r3) goto L_0x31ae;
+    L_0x31a8:
         r3 = 5;
-        if (r2 != r3) goto L_0x319e;
-    L_0x319d:
-        goto L_0x31a0;
-    L_0x319e:
-        r2 = 0;
-        goto L_0x31a1;
-    L_0x31a0:
-        r2 = 1;
-    L_0x31a1:
-        r3 = r1.currentPhotoObject;
-        if (r3 == 0) goto L_0x31af;
-    L_0x31a5:
-        if (r2 != 0) goto L_0x31af;
-    L_0x31a7:
-        r4 = r3.size;
-        if (r4 != 0) goto L_0x31af;
+        if (r2 != r3) goto L_0x31ac;
     L_0x31ab:
-        r12 = -1;
-        r3.size = r12;
-        goto L_0x31b0;
+        goto L_0x31ae;
+    L_0x31ac:
+        r2 = 0;
+        goto L_0x31af;
+    L_0x31ae:
+        r2 = 1;
     L_0x31af:
-        r12 = -1;
-    L_0x31b0:
-        r3 = r1.currentPhotoObjectThumb;
-        if (r3 == 0) goto L_0x31bc;
-    L_0x31b4:
-        if (r2 != 0) goto L_0x31bc;
-    L_0x31b6:
+        r3 = r1.currentPhotoObject;
+        if (r3 == 0) goto L_0x31bd;
+    L_0x31b3:
+        if (r2 != 0) goto L_0x31bd;
+    L_0x31b5:
         r4 = r3.size;
-        if (r4 != 0) goto L_0x31bc;
-    L_0x31ba:
+        if (r4 != 0) goto L_0x31bd;
+    L_0x31b9:
+        r12 = -1;
         r3.size = r12;
-    L_0x31bc:
+        goto L_0x31be;
+    L_0x31bd:
+        r12 = -1;
+    L_0x31be:
+        r3 = r1.currentPhotoObjectThumb;
+        if (r3 == 0) goto L_0x31ca;
+    L_0x31c2:
+        if (r2 != 0) goto L_0x31ca;
+    L_0x31c4:
+        r4 = r3.size;
+        if (r4 != 0) goto L_0x31ca;
+    L_0x31c8:
+        r3.size = r12;
+    L_0x31ca:
         r3 = org.telegram.messenger.SharedConfig.autoplayVideo;
-        if (r3 == 0) goto L_0x31ff;
-    L_0x31c0:
+        if (r3 == 0) goto L_0x320d;
+    L_0x31ce:
         r3 = r14.type;
         r11 = 3;
-        if (r3 != r11) goto L_0x31fd;
-    L_0x31c5:
+        if (r3 != r11) goto L_0x320b;
+    L_0x31d3:
         r3 = r60.needDrawBluredPreview();
-        if (r3 != 0) goto L_0x31fd;
-    L_0x31cb:
+        if (r3 != 0) goto L_0x320b;
+    L_0x31d9:
         r3 = r1.currentMessageObject;
         r3 = r3.mediaExists;
-        if (r3 != 0) goto L_0x31e5;
-    L_0x31d1:
+        if (r3 != 0) goto L_0x31f3;
+    L_0x31df:
         r3 = r60.canStreamVideo();
-        if (r3 == 0) goto L_0x31fd;
-    L_0x31d7:
+        if (r3 == 0) goto L_0x320b;
+    L_0x31e5:
         r3 = r1.currentAccount;
         r3 = org.telegram.messenger.DownloadController.getInstance(r3);
         r4 = r1.currentMessageObject;
         r3 = r3.canDownloadMedia(r4);
-        if (r3 == 0) goto L_0x31fd;
-    L_0x31e5:
+        if (r3 == 0) goto L_0x320b;
+    L_0x31f3:
         r3 = r1.currentPosition;
-        if (r3 == 0) goto L_0x31f9;
-    L_0x31e9:
+        if (r3 == 0) goto L_0x3207;
+    L_0x31f7:
         r3 = r3.flags;
         r4 = r3 & 1;
-        if (r4 == 0) goto L_0x31f5;
-    L_0x31ef:
+        if (r4 == 0) goto L_0x3203;
+    L_0x31fd:
         r4 = 2;
         r3 = r3 & r4;
-        if (r3 == 0) goto L_0x31f5;
-    L_0x31f3:
+        if (r3 == 0) goto L_0x3203;
+    L_0x3201:
         r3 = 1;
-        goto L_0x31f6;
-    L_0x31f5:
+        goto L_0x3204;
+    L_0x3203:
         r3 = 0;
-    L_0x31f6:
+    L_0x3204:
         r1.autoPlayingMedia = r3;
-        goto L_0x31fd;
-    L_0x31f9:
+        goto L_0x320b;
+    L_0x3207:
         r3 = 1;
         r1.autoPlayingMedia = r3;
-        goto L_0x3201;
-    L_0x31fd:
+        goto L_0x320f;
+    L_0x320b:
         r3 = 1;
-        goto L_0x3201;
-    L_0x31ff:
+        goto L_0x320f;
+    L_0x320d:
         r3 = 1;
         r11 = 3;
-    L_0x3201:
+    L_0x320f:
         r4 = r1.autoPlayingMedia;
-        if (r4 == 0) goto L_0x3250;
-    L_0x3205:
+        if (r4 == 0) goto L_0x325e;
+    L_0x3213:
         r2 = r1.photoImage;
         r2.setAllowStartAnimation(r3);
         r2 = r1.photoImage;
@@ -12955,60 +12969,60 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r15 = 0;
         r13 = r27;
         r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13);
-        goto L_0x344d;
-    L_0x3250:
+        goto L_0x345b;
+    L_0x325e:
         r28 = r15;
         r15 = 0;
         r29 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r3 = r14.type;
         r4 = 1;
-        if (r3 != r4) goto L_0x330a;
-    L_0x325a:
+        if (r3 != r4) goto L_0x3318;
+    L_0x3268:
         r3 = r14.useCustomPhoto;
-        if (r3 == 0) goto L_0x3270;
-    L_0x325e:
+        if (r3 == 0) goto L_0x327e;
+    L_0x326c:
         r2 = r1.photoImage;
         r3 = r59.getResources();
         r4 = NUM; // 0x7var_c float:1.7945835E38 double:1.0529358093E-314;
         r3 = r3.getDrawable(r4);
         r2.setImageBitmap(r3);
-        goto L_0x344d;
-    L_0x3270:
+        goto L_0x345b;
+    L_0x327e:
         r3 = r1.currentPhotoObject;
-        if (r3 == 0) goto L_0x3302;
-    L_0x3274:
+        if (r3 == 0) goto L_0x3310;
+    L_0x3282:
         r3 = org.telegram.messenger.FileLoader.getAttachFileName(r3);
         r4 = r14.mediaExists;
-        if (r4 == 0) goto L_0x3287;
-    L_0x327c:
+        if (r4 == 0) goto L_0x3295;
+    L_0x328a:
         r4 = r1.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r4.removeLoadingFileObserver(r1);
         r4 = 1;
-        goto L_0x3288;
-    L_0x3287:
+        goto L_0x3296;
+    L_0x3295:
         r4 = 0;
-    L_0x3288:
-        if (r4 != 0) goto L_0x32d2;
-    L_0x328a:
+    L_0x3296:
+        if (r4 != 0) goto L_0x32e0;
+    L_0x3298:
         r4 = r1.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r5 = r1.currentMessageObject;
         r4 = r4.canDownloadMedia(r5);
-        if (r4 != 0) goto L_0x32d2;
-    L_0x3298:
+        if (r4 != 0) goto L_0x32e0;
+    L_0x32a6:
         r4 = r1.currentAccount;
         r4 = org.telegram.messenger.FileLoader.getInstance(r4);
         r3 = r4.isLoadingFile(r3);
-        if (r3 == 0) goto L_0x32a5;
-    L_0x32a4:
-        goto L_0x32d2;
-    L_0x32a5:
+        if (r3 == 0) goto L_0x32b3;
+    L_0x32b2:
+        goto L_0x32e0;
+    L_0x32b3:
         r3 = 1;
         r1.photoNotSet = r3;
         r2 = r1.currentPhotoObjectThumb;
-        if (r2 == 0) goto L_0x32ca;
-    L_0x32ac:
+        if (r2 == 0) goto L_0x32d8;
+    L_0x32ba:
         r3 = r1.photoImage;
         r4 = 0;
         r5 = 0;
@@ -13019,21 +13033,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = 0;
         r10 = r1.currentMessageObject;
         r2 = r10.shouldEncryptPhotoOrVideo();
-        if (r2 == 0) goto L_0x32c4;
-    L_0x32c2:
+        if (r2 == 0) goto L_0x32d2;
+    L_0x32d0:
         r11 = 2;
-        goto L_0x32c5;
-    L_0x32c4:
+        goto L_0x32d3;
+    L_0x32d2:
         r11 = 0;
-    L_0x32c5:
+    L_0x32d3:
         r3.setImage(r4, r5, r6, r7, r8, r9, r10, r11);
-        goto L_0x344d;
-    L_0x32ca:
+        goto L_0x345b;
+    L_0x32d8:
         r2 = r1.photoImage;
         r3 = 0;
         r2.setImageBitmap(r3);
-        goto L_0x344d;
-    L_0x32d2:
+        goto L_0x345b;
+    L_0x32e0:
         r4 = r1.photoImage;
         r3 = r1.currentPhotoObject;
         r5 = r1.photoParentObject;
@@ -13043,41 +13057,41 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7 = r1.photoParentObject;
         r7 = org.telegram.messenger.ImageLocation.getForObject(r3, r7);
         r8 = r1.currentPhotoFilterThumb;
-        if (r2 == 0) goto L_0x32ec;
-    L_0x32ea:
+        if (r2 == 0) goto L_0x32fa;
+    L_0x32f8:
         r9 = 0;
-        goto L_0x32f1;
-    L_0x32ec:
+        goto L_0x32ff;
+    L_0x32fa:
         r2 = r1.currentPhotoObject;
         r12 = r2.size;
         r9 = r12;
-    L_0x32f1:
+    L_0x32ff:
         r10 = 0;
         r11 = r1.currentMessageObject;
         r2 = r11.shouldEncryptPhotoOrVideo();
-        if (r2 == 0) goto L_0x32fc;
-    L_0x32fa:
+        if (r2 == 0) goto L_0x330a;
+    L_0x3308:
         r12 = 2;
-        goto L_0x32fd;
-    L_0x32fc:
+        goto L_0x330b;
+    L_0x330a:
         r12 = 0;
-    L_0x32fd:
+    L_0x330b:
         r4.setImage(r5, r6, r7, r8, r9, r10, r11, r12);
-        goto L_0x344d;
-    L_0x3302:
+        goto L_0x345b;
+    L_0x3310:
         r2 = r1.photoImage;
         r3 = 0;
         r2.setImageBitmap(r3);
-        goto L_0x344d;
-    L_0x330a:
+        goto L_0x345b;
+    L_0x3318:
         r2 = 8;
-        if (r3 == r2) goto L_0x333c;
-    L_0x330e:
+        if (r3 == r2) goto L_0x334a;
+    L_0x331c:
         r2 = 5;
-        if (r3 != r2) goto L_0x3312;
-    L_0x3311:
-        goto L_0x333c;
-    L_0x3312:
+        if (r3 != r2) goto L_0x3320;
+    L_0x331f:
+        goto L_0x334a;
+    L_0x3320:
         r2 = r1.photoImage;
         r3 = r1.currentPhotoObject;
         r4 = r1.photoParentObject;
@@ -13091,82 +13105,82 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r8 = 0;
         r9 = r1.currentMessageObject;
         r9 = r9.shouldEncryptPhotoOrVideo();
-        if (r9 == 0) goto L_0x3334;
-    L_0x3332:
+        if (r9 == 0) goto L_0x3342;
+    L_0x3340:
         r10 = 2;
-        goto L_0x3335;
-    L_0x3334:
+        goto L_0x3343;
+    L_0x3342:
         r10 = 0;
-    L_0x3335:
+    L_0x3343:
         r9 = r60;
         r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10);
-        goto L_0x344d;
-    L_0x333c:
+        goto L_0x345b;
+    L_0x334a:
         r2 = r60.getDocument();
         r2 = org.telegram.messenger.FileLoader.getAttachFileName(r2);
         r3 = r14.attachPathExists;
-        if (r3 == 0) goto L_0x3353;
-    L_0x3348:
+        if (r3 == 0) goto L_0x3361;
+    L_0x3356:
         r3 = r1.currentAccount;
         r3 = org.telegram.messenger.DownloadController.getInstance(r3);
         r3.removeLoadingFileObserver(r1);
         r3 = 1;
-        goto L_0x335a;
-    L_0x3353:
+        goto L_0x3368;
+    L_0x3361:
         r3 = r14.mediaExists;
-        if (r3 == 0) goto L_0x3359;
-    L_0x3357:
+        if (r3 == 0) goto L_0x3367;
+    L_0x3365:
         r3 = 2;
-        goto L_0x335a;
-    L_0x3359:
+        goto L_0x3368;
+    L_0x3367:
         r3 = 0;
-    L_0x335a:
+    L_0x3368:
         r4 = r60.getDocument();
         r4 = org.telegram.messenger.MessageObject.isGifDocument(r4);
-        if (r4 != 0) goto L_0x336c;
-    L_0x3364:
+        if (r4 != 0) goto L_0x337a;
+    L_0x3372:
         r4 = r14.type;
         r5 = 5;
-        if (r4 != r5) goto L_0x336a;
-    L_0x3369:
-        goto L_0x336c;
-    L_0x336a:
+        if (r4 != r5) goto L_0x3378;
+    L_0x3377:
+        goto L_0x337a;
+    L_0x3378:
         r12 = 0;
-        goto L_0x3378;
-    L_0x336c:
+        goto L_0x3386;
+    L_0x337a:
         r4 = r1.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r5 = r1.currentMessageObject;
         r12 = r4.canDownloadMedia(r5);
-    L_0x3378:
-        r4 = r60.isSending();
-        if (r4 != 0) goto L_0x342f;
-    L_0x337e:
-        r4 = r60.isEditing();
-        if (r4 != 0) goto L_0x342f;
-    L_0x3384:
-        if (r3 != 0) goto L_0x3394;
     L_0x3386:
+        r4 = r60.isSending();
+        if (r4 != 0) goto L_0x343d;
+    L_0x338c:
+        r4 = r60.isEditing();
+        if (r4 != 0) goto L_0x343d;
+    L_0x3392:
+        if (r3 != 0) goto L_0x33a2;
+    L_0x3394:
         r4 = r1.currentAccount;
         r4 = org.telegram.messenger.FileLoader.getInstance(r4);
         r2 = r4.isLoadingFile(r2);
-        if (r2 != 0) goto L_0x3394;
-    L_0x3392:
-        if (r12 == 0) goto L_0x342f;
-    L_0x3394:
+        if (r2 != 0) goto L_0x33a2;
+    L_0x33a0:
+        if (r12 == 0) goto L_0x343d;
+    L_0x33a2:
         r2 = 1;
-        if (r3 == r2) goto L_0x33d9;
-    L_0x3397:
-        r4 = r60.needDrawBluredPreview();
-        if (r4 != 0) goto L_0x33d9;
-    L_0x339d:
-        if (r3 != 0) goto L_0x33a7;
-    L_0x339f:
-        r4 = r60.canStreamVideo();
-        if (r4 == 0) goto L_0x33d9;
+        if (r3 == r2) goto L_0x33e7;
     L_0x33a5:
-        if (r12 == 0) goto L_0x33d9;
-    L_0x33a7:
+        r4 = r60.needDrawBluredPreview();
+        if (r4 != 0) goto L_0x33e7;
+    L_0x33ab:
+        if (r3 != 0) goto L_0x33b5;
+    L_0x33ad:
+        r4 = r60.canStreamVideo();
+        if (r4 == 0) goto L_0x33e7;
+    L_0x33b3:
+        if (r12 == 0) goto L_0x33e7;
+    L_0x33b5:
         r1.autoPlayingMedia = r2;
         r2 = r1.photoImage;
         r3 = r60.getDocument();
@@ -13187,20 +13201,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = "g";
         r12 = r60;
         r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13);
-        goto L_0x344d;
-    L_0x33d9:
-        if (r3 != r2) goto L_0x3401;
-    L_0x33db:
+        goto L_0x345b;
+    L_0x33e7:
+        if (r3 != r2) goto L_0x340f;
+    L_0x33e9:
         r2 = r1.photoImage;
         r3 = r60.isSendError();
-        if (r3 == 0) goto L_0x33e5;
-    L_0x33e3:
+        if (r3 == 0) goto L_0x33f3;
+    L_0x33f1:
         r3 = 0;
-        goto L_0x33e9;
-    L_0x33e5:
+        goto L_0x33f7;
+    L_0x33f3:
         r3 = r14.messageOwner;
         r3 = r3.attachPath;
-    L_0x33e9:
+    L_0x33f7:
         r3 = org.telegram.messenger.ImageLocation.getForPath(r3);
         r4 = 0;
         r5 = r1.currentPhotoObjectThumb;
@@ -13212,8 +13226,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = 0;
         r9 = r60;
         r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10);
-        goto L_0x344d;
-    L_0x3401:
+        goto L_0x345b;
+    L_0x340f:
         r2 = r1.photoImage;
         r3 = r60.getDocument();
         r3 = org.telegram.messenger.ImageLocation.getForDocument(r3);
@@ -13233,8 +13247,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = 0;
         r12 = r60;
         r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13);
-        goto L_0x344d;
-    L_0x342f:
+        goto L_0x345b;
+    L_0x343d:
         r2 = r1.photoImage;
         r3 = r1.currentPhotoObject;
         r4 = r1.photoParentObject;
@@ -13249,49 +13263,49 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = 0;
         r9 = r60;
         r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10);
-    L_0x344d:
+    L_0x345b:
         r2 = r0;
         r57 = r21;
         r0 = r22;
         r12 = r28;
-    L_0x3454:
+    L_0x3462:
         r59.setMessageObjectInternal(r60);
         r3 = r1.drawForwardedName;
-        if (r3 == 0) goto L_0x347a;
-    L_0x345b:
-        r3 = r60.needDrawForwarded();
-        if (r3 == 0) goto L_0x347a;
-    L_0x3461:
-        r3 = r1.currentPosition;
-        if (r3 == 0) goto L_0x3469;
-    L_0x3465:
-        r3 = r3.minY;
-        if (r3 != 0) goto L_0x347a;
+        if (r3 == 0) goto L_0x3488;
     L_0x3469:
+        r3 = r60.needDrawForwarded();
+        if (r3 == 0) goto L_0x3488;
+    L_0x346f:
+        r3 = r1.currentPosition;
+        if (r3 == 0) goto L_0x3477;
+    L_0x3473:
+        r3 = r3.minY;
+        if (r3 != 0) goto L_0x3488;
+    L_0x3477:
         r3 = r14.type;
         r4 = 5;
-        if (r3 == r4) goto L_0x348f;
-    L_0x346e:
+        if (r3 == r4) goto L_0x349d;
+    L_0x347c:
         r3 = r1.namesOffset;
         r4 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r3 = r3 + r4;
         r1.namesOffset = r3;
-        goto L_0x348f;
-    L_0x347a:
+        goto L_0x349d;
+    L_0x3488:
         r3 = r1.drawNameLayout;
-        if (r3 == 0) goto L_0x348f;
-    L_0x347e:
+        if (r3 == 0) goto L_0x349d;
+    L_0x348c:
         r3 = r14.messageOwner;
         r3 = r3.reply_to_msg_id;
-        if (r3 != 0) goto L_0x348f;
-    L_0x3484:
+        if (r3 != 0) goto L_0x349d;
+    L_0x3492:
         r3 = r1.namesOffset;
         r4 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r3 = r3 + r4;
         r1.namesOffset = r3;
-    L_0x348f:
+    L_0x349d:
         r3 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r3 = r3 + r12;
@@ -13300,73 +13314,73 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3 + r57;
         r1.totalHeight = r3;
         r3 = r1.currentPosition;
-        if (r3 == 0) goto L_0x34b3;
-    L_0x34a1:
+        if (r3 == 0) goto L_0x34c1;
+    L_0x34af:
         r3 = r3.flags;
         r4 = 8;
         r3 = r3 & r4;
-        if (r3 != 0) goto L_0x34b3;
-    L_0x34a8:
+        if (r3 != 0) goto L_0x34c1;
+    L_0x34b6:
         r3 = r1.totalHeight;
         r4 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r3 = r3 - r4;
         r1.totalHeight = r3;
-    L_0x34b3:
+    L_0x34c1:
         r3 = r1.currentPosition;
-        if (r3 == 0) goto L_0x34e4;
-    L_0x34b7:
+        if (r3 == 0) goto L_0x34f2;
+    L_0x34c5:
         r3 = r1.getAdditionalWidthForPosition(r3);
         r0 = r0 + r3;
         r3 = r1.currentPosition;
         r3 = r3.flags;
         r3 = r3 & 4;
-        if (r3 != 0) goto L_0x34d4;
-    L_0x34c4:
+        if (r3 != 0) goto L_0x34e2;
+    L_0x34d2:
         r3 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r12 = r12 + r3;
         r3 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r3 = 0 - r3;
-        goto L_0x34d5;
-    L_0x34d4:
+        goto L_0x34e3;
+    L_0x34e2:
         r3 = 0;
-    L_0x34d5:
+    L_0x34e3:
         r4 = r1.currentPosition;
         r4 = r4.flags;
         r5 = 8;
         r4 = r4 & r5;
-        if (r4 != 0) goto L_0x34e5;
-    L_0x34de:
+        if (r4 != 0) goto L_0x34f3;
+    L_0x34ec:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r29);
         r12 = r12 + r4;
-        goto L_0x34e5;
-    L_0x34e4:
+        goto L_0x34f3;
+    L_0x34f2:
         r3 = 0;
-    L_0x34e5:
+    L_0x34f3:
         r4 = r1.drawPinnedTop;
-        if (r4 == 0) goto L_0x34f2;
-    L_0x34e9:
+        if (r4 == 0) goto L_0x3500;
+    L_0x34f7:
         r4 = r1.namesOffset;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r29);
         r4 = r4 - r5;
         r1.namesOffset = r4;
-    L_0x34f2:
+    L_0x3500:
         r4 = r1.currentPosition;
-        if (r4 == 0) goto L_0x351c;
-    L_0x34f6:
+        if (r4 == 0) goto L_0x352a;
+    L_0x3504:
         r4 = r1.namesOffset;
-        if (r4 <= 0) goto L_0x350a;
-    L_0x34fa:
+        if (r4 <= 0) goto L_0x3518;
+    L_0x3508:
         r4 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r5 = r1.totalHeight;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r20);
         r5 = r5 - r6;
         r1.totalHeight = r5;
-        goto L_0x3541;
-    L_0x350a:
+        goto L_0x354f;
+    L_0x3518:
         r4 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r5 = r1.totalHeight;
@@ -13374,19 +13388,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r5 = r5 - r6;
         r1.totalHeight = r5;
-        goto L_0x3541;
-    L_0x351c:
+        goto L_0x354f;
+    L_0x352a:
         r4 = r1.namesOffset;
-        if (r4 <= 0) goto L_0x3530;
-    L_0x3520:
+        if (r4 <= 0) goto L_0x353e;
+    L_0x352e:
         r4 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r5 = r1.totalHeight;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r20);
         r5 = r5 - r6;
         r1.totalHeight = r5;
-        goto L_0x3541;
-    L_0x3530:
+        goto L_0x354f;
+    L_0x353e:
         r4 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r5 = r1.totalHeight;
@@ -13394,7 +13408,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r5 = r5 - r6;
         r1.totalHeight = r5;
-    L_0x3541:
+    L_0x354f:
         r5 = r1.photoImage;
         r6 = r1.namesOffset;
         r4 = r4 + r6;
@@ -13402,171 +13416,171 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r5.setImageCoords(r15, r4, r0, r12);
         r59.invalidate();
         r9 = r2;
-    L_0x354e:
-        r0 = r1.currentPosition;
-        if (r0 != 0) goto L_0x3648;
-    L_0x3552:
-        r0 = r60.isAnyKindOfSticker();
-        if (r0 != 0) goto L_0x3648;
-    L_0x3558:
-        r0 = r1.addedCaptionHeight;
-        if (r0 != 0) goto L_0x3648;
     L_0x355c:
-        r0 = r1.captionLayout;
-        if (r0 != 0) goto L_0x35bc;
+        r0 = r1.currentPosition;
+        if (r0 != 0) goto L_0x3656;
     L_0x3560:
+        r0 = r60.isAnyKindOfSticker();
+        if (r0 != 0) goto L_0x3656;
+    L_0x3566:
+        r0 = r1.addedCaptionHeight;
+        if (r0 != 0) goto L_0x3656;
+    L_0x356a:
+        r0 = r1.captionLayout;
+        if (r0 != 0) goto L_0x35ca;
+    L_0x356e:
         r0 = r14.caption;
-        if (r0 == 0) goto L_0x35bc;
-    L_0x3564:
-        r1.currentCaption = r0;	 Catch:{ Exception -> 0x35b8 }
-        r0 = r1.backgroundWidth;	 Catch:{ Exception -> 0x35b8 }
+        if (r0 == 0) goto L_0x35ca;
+    L_0x3572:
+        r1.currentCaption = r0;	 Catch:{ Exception -> 0x35c6 }
+        r0 = r1.backgroundWidth;	 Catch:{ Exception -> 0x35c6 }
         r2 = NUM; // 0x41var_ float:31.0 double:5.46818007E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x35b8 }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x35c6 }
         r0 = r0 - r2;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r19);	 Catch:{ Exception -> 0x35b8 }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r19);	 Catch:{ Exception -> 0x35c6 }
         r0 = r0 - r2;
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x35b8 }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x35c6 }
         r3 = 24;
-        if (r2 < r3) goto L_0x359e;
-    L_0x357a:
-        r2 = r14.caption;	 Catch:{ Exception -> 0x35b8 }
-        r3 = r14.caption;	 Catch:{ Exception -> 0x35b8 }
-        r3 = r3.length();	 Catch:{ Exception -> 0x35b8 }
-        r4 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x35b8 }
-        r0 = android.text.StaticLayout.Builder.obtain(r2, r15, r3, r4, r0);	 Catch:{ Exception -> 0x35b8 }
+        if (r2 < r3) goto L_0x35ac;
+    L_0x3588:
+        r2 = r14.caption;	 Catch:{ Exception -> 0x35c6 }
+        r3 = r14.caption;	 Catch:{ Exception -> 0x35c6 }
+        r3 = r3.length();	 Catch:{ Exception -> 0x35c6 }
+        r4 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x35c6 }
+        r0 = android.text.StaticLayout.Builder.obtain(r2, r15, r3, r4, r0);	 Catch:{ Exception -> 0x35c6 }
         r2 = 1;
-        r0 = r0.setBreakStrategy(r2);	 Catch:{ Exception -> 0x35b8 }
-        r0 = r0.setHyphenationFrequency(r15);	 Catch:{ Exception -> 0x35b8 }
-        r2 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x35b8 }
-        r0 = r0.setAlignment(r2);	 Catch:{ Exception -> 0x35b8 }
-        r0 = r0.build();	 Catch:{ Exception -> 0x35b8 }
-        r1.captionLayout = r0;	 Catch:{ Exception -> 0x35b8 }
-        goto L_0x35bc;
-    L_0x359e:
-        r2 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x35b8 }
-        r3 = r14.caption;	 Catch:{ Exception -> 0x35b8 }
-        r32 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x35b8 }
-        r34 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x35b8 }
+        r0 = r0.setBreakStrategy(r2);	 Catch:{ Exception -> 0x35c6 }
+        r0 = r0.setHyphenationFrequency(r15);	 Catch:{ Exception -> 0x35c6 }
+        r2 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x35c6 }
+        r0 = r0.setAlignment(r2);	 Catch:{ Exception -> 0x35c6 }
+        r0 = r0.build();	 Catch:{ Exception -> 0x35c6 }
+        r1.captionLayout = r0;	 Catch:{ Exception -> 0x35c6 }
+        goto L_0x35ca;
+    L_0x35ac:
+        r2 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x35c6 }
+        r3 = r14.caption;	 Catch:{ Exception -> 0x35c6 }
+        r32 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x35c6 }
+        r34 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x35c6 }
         r35 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r36 = 0;
         r37 = 0;
         r30 = r2;
         r31 = r3;
         r33 = r0;
-        r30.<init>(r31, r32, r33, r34, r35, r36, r37);	 Catch:{ Exception -> 0x35b8 }
-        r1.captionLayout = r2;	 Catch:{ Exception -> 0x35b8 }
-        goto L_0x35bc;
-    L_0x35b8:
+        r30.<init>(r31, r32, r33, r34, r35, r36, r37);	 Catch:{ Exception -> 0x35c6 }
+        r1.captionLayout = r2;	 Catch:{ Exception -> 0x35c6 }
+        goto L_0x35ca;
+    L_0x35c6:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x35bc:
+    L_0x35ca:
         r0 = r1.captionLayout;
-        if (r0 == 0) goto L_0x3648;
-    L_0x35c0:
-        r0 = r1.backgroundWidth;	 Catch:{ Exception -> 0x3644 }
+        if (r0 == 0) goto L_0x3656;
+    L_0x35ce:
+        r0 = r1.backgroundWidth;	 Catch:{ Exception -> 0x3652 }
         r2 = NUM; // 0x41var_ float:31.0 double:5.46818007E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x3644 }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x3652 }
         r0 = r0 - r2;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r19);	 Catch:{ Exception -> 0x3644 }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r19);	 Catch:{ Exception -> 0x3652 }
         r2 = r0 - r2;
-        r3 = r1.captionLayout;	 Catch:{ Exception -> 0x3644 }
-        if (r3 == 0) goto L_0x3648;
-    L_0x35d3:
-        r3 = r1.captionLayout;	 Catch:{ Exception -> 0x3644 }
-        r3 = r3.getLineCount();	 Catch:{ Exception -> 0x3644 }
-        if (r3 <= 0) goto L_0x3648;
-    L_0x35db:
-        r1.captionWidth = r2;	 Catch:{ Exception -> 0x3644 }
-        r2 = r1.timeWidth;	 Catch:{ Exception -> 0x3644 }
-        r3 = r60.isOutOwner();	 Catch:{ Exception -> 0x3644 }
-        if (r3 == 0) goto L_0x35ec;
-    L_0x35e5:
+        r3 = r1.captionLayout;	 Catch:{ Exception -> 0x3652 }
+        if (r3 == 0) goto L_0x3656;
+    L_0x35e1:
+        r3 = r1.captionLayout;	 Catch:{ Exception -> 0x3652 }
+        r3 = r3.getLineCount();	 Catch:{ Exception -> 0x3652 }
+        if (r3 <= 0) goto L_0x3656;
+    L_0x35e9:
+        r1.captionWidth = r2;	 Catch:{ Exception -> 0x3652 }
+        r2 = r1.timeWidth;	 Catch:{ Exception -> 0x3652 }
+        r3 = r60.isOutOwner();	 Catch:{ Exception -> 0x3652 }
+        if (r3 == 0) goto L_0x35fa;
+    L_0x35f3:
         r3 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Exception -> 0x3644 }
-        goto L_0x35ed;
-    L_0x35ec:
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Exception -> 0x3652 }
+        goto L_0x35fb;
+    L_0x35fa:
         r12 = 0;
-    L_0x35ed:
+    L_0x35fb:
         r2 = r2 + r12;
-        r3 = r1.captionLayout;	 Catch:{ Exception -> 0x3644 }
-        r3 = r3.getHeight();	 Catch:{ Exception -> 0x3644 }
-        r1.captionHeight = r3;	 Catch:{ Exception -> 0x3644 }
-        r3 = r1.totalHeight;	 Catch:{ Exception -> 0x3644 }
-        r4 = r1.captionHeight;	 Catch:{ Exception -> 0x3644 }
+        r3 = r1.captionLayout;	 Catch:{ Exception -> 0x3652 }
+        r3 = r3.getHeight();	 Catch:{ Exception -> 0x3652 }
+        r1.captionHeight = r3;	 Catch:{ Exception -> 0x3652 }
+        r3 = r1.totalHeight;	 Catch:{ Exception -> 0x3652 }
+        r4 = r1.captionHeight;	 Catch:{ Exception -> 0x3652 }
         r5 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x3644 }
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x3652 }
         r4 = r4 + r5;
         r3 = r3 + r4;
-        r1.totalHeight = r3;	 Catch:{ Exception -> 0x3644 }
-        r3 = r1.captionLayout;	 Catch:{ Exception -> 0x3644 }
-        r4 = r1.captionLayout;	 Catch:{ Exception -> 0x3644 }
-        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x3644 }
+        r1.totalHeight = r3;	 Catch:{ Exception -> 0x3652 }
+        r3 = r1.captionLayout;	 Catch:{ Exception -> 0x3652 }
+        r4 = r1.captionLayout;	 Catch:{ Exception -> 0x3652 }
+        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x3652 }
         r5 = 1;
         r4 = r4 - r5;
-        r3 = r3.getLineWidth(r4);	 Catch:{ Exception -> 0x3644 }
-        r4 = r1.captionLayout;	 Catch:{ Exception -> 0x3644 }
-        r6 = r1.captionLayout;	 Catch:{ Exception -> 0x3644 }
-        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x3644 }
+        r3 = r3.getLineWidth(r4);	 Catch:{ Exception -> 0x3652 }
+        r4 = r1.captionLayout;	 Catch:{ Exception -> 0x3652 }
+        r6 = r1.captionLayout;	 Catch:{ Exception -> 0x3652 }
+        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x3652 }
         r6 = r6 - r5;
-        r4 = r4.getLineLeft(r6);	 Catch:{ Exception -> 0x3644 }
+        r4 = r4.getLineLeft(r6);	 Catch:{ Exception -> 0x3652 }
         r3 = r3 + r4;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r18);	 Catch:{ Exception -> 0x3644 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r18);	 Catch:{ Exception -> 0x3652 }
         r0 = r0 - r4;
-        r0 = (float) r0;	 Catch:{ Exception -> 0x3644 }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x3652 }
         r0 = r0 - r3;
-        r2 = (float) r2;	 Catch:{ Exception -> 0x3644 }
+        r2 = (float) r2;	 Catch:{ Exception -> 0x3652 }
         r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r0 >= 0) goto L_0x3648;
-    L_0x362c:
-        r0 = r1.totalHeight;	 Catch:{ Exception -> 0x3644 }
+        if (r0 >= 0) goto L_0x3656;
+    L_0x363a:
+        r0 = r1.totalHeight;	 Catch:{ Exception -> 0x3652 }
         r2 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x3644 }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x3652 }
         r0 = r0 + r2;
-        r1.totalHeight = r0;	 Catch:{ Exception -> 0x3644 }
-        r0 = r1.captionHeight;	 Catch:{ Exception -> 0x3644 }
+        r1.totalHeight = r0;	 Catch:{ Exception -> 0x3652 }
+        r0 = r1.captionHeight;	 Catch:{ Exception -> 0x3652 }
         r2 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x3644 }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x3652 }
         r0 = r0 + r2;
-        r1.captionHeight = r0;	 Catch:{ Exception -> 0x3644 }
+        r1.captionHeight = r0;	 Catch:{ Exception -> 0x3652 }
         r9 = 2;
-        goto L_0x3648;
-    L_0x3644:
+        goto L_0x3656;
+    L_0x3652:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x3648:
+    L_0x3656:
         r0 = r1.captionLayout;
-        if (r0 != 0) goto L_0x3663;
-    L_0x364c:
+        if (r0 != 0) goto L_0x3671;
+    L_0x365a:
         r0 = r1.widthBeforeNewTimeLine;
         r2 = -1;
-        if (r0 == r2) goto L_0x3663;
-    L_0x3651:
+        if (r0 == r2) goto L_0x3671;
+    L_0x365f:
         r2 = r1.availableTimeWidth;
         r2 = r2 - r0;
         r0 = r1.timeWidth;
-        if (r2 >= r0) goto L_0x3663;
-    L_0x3658:
+        if (r2 >= r0) goto L_0x3671;
+    L_0x3666:
         r0 = r1.totalHeight;
         r2 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0 = r0 + r2;
         r1.totalHeight = r0;
-    L_0x3663:
+    L_0x3671:
         r0 = r1.currentMessageObject;
         r2 = r0.eventId;
         r4 = 0;
         r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x378f;
-    L_0x366d:
+        if (r6 == 0) goto L_0x379d;
+    L_0x367b:
         r0 = r0.isMediaEmpty();
-        if (r0 != 0) goto L_0x378f;
-    L_0x3673:
+        if (r0 != 0) goto L_0x379d;
+    L_0x3681:
         r0 = r1.currentMessageObject;
         r0 = r0.messageOwner;
         r0 = r0.media;
         r0 = r0.webpage;
-        if (r0 == 0) goto L_0x378f;
-    L_0x367d:
+        if (r0 == 0) goto L_0x379d;
+    L_0x368b:
         r0 = r1.backgroundWidth;
         r2 = NUM; // 0x42240000 float:41.0 double:5.48242687E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
@@ -13578,170 +13592,170 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r0.messageOwner;
         r0 = r0.media;
         r3 = r0.webpage;
-        r0 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x36ec }
-        r4 = r3.site_name;	 Catch:{ Exception -> 0x36ec }
-        r0 = r0.measureText(r4);	 Catch:{ Exception -> 0x36ec }
+        r0 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x36fa }
+        r4 = r3.site_name;	 Catch:{ Exception -> 0x36fa }
+        r0 = r0.measureText(r4);	 Catch:{ Exception -> 0x36fa }
         r0 = r0 + r29;
-        r4 = (double) r0;	 Catch:{ Exception -> 0x36ec }
-        r4 = java.lang.Math.ceil(r4);	 Catch:{ Exception -> 0x36ec }
-        r0 = (int) r4;	 Catch:{ Exception -> 0x36ec }
-        r1.siteNameWidth = r0;	 Catch:{ Exception -> 0x36ec }
-        r4 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x36ec }
-        r5 = r3.site_name;	 Catch:{ Exception -> 0x36ec }
-        r32 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x36ec }
-        r33 = java.lang.Math.min(r0, r2);	 Catch:{ Exception -> 0x36ec }
-        r34 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x36ec }
+        r4 = (double) r0;	 Catch:{ Exception -> 0x36fa }
+        r4 = java.lang.Math.ceil(r4);	 Catch:{ Exception -> 0x36fa }
+        r0 = (int) r4;	 Catch:{ Exception -> 0x36fa }
+        r1.siteNameWidth = r0;	 Catch:{ Exception -> 0x36fa }
+        r4 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x36fa }
+        r5 = r3.site_name;	 Catch:{ Exception -> 0x36fa }
+        r32 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x36fa }
+        r33 = java.lang.Math.min(r0, r2);	 Catch:{ Exception -> 0x36fa }
+        r34 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x36fa }
         r35 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r36 = 0;
         r37 = 0;
         r30 = r4;
         r31 = r5;
-        r30.<init>(r31, r32, r33, r34, r35, r36, r37);	 Catch:{ Exception -> 0x36ec }
-        r1.siteNameLayout = r4;	 Catch:{ Exception -> 0x36ec }
-        r0 = r1.siteNameLayout;	 Catch:{ Exception -> 0x36ec }
-        r0 = r0.getLineLeft(r15);	 Catch:{ Exception -> 0x36ec }
+        r30.<init>(r31, r32, r33, r34, r35, r36, r37);	 Catch:{ Exception -> 0x36fa }
+        r1.siteNameLayout = r4;	 Catch:{ Exception -> 0x36fa }
+        r0 = r1.siteNameLayout;	 Catch:{ Exception -> 0x36fa }
+        r0 = r0.getLineLeft(r15);	 Catch:{ Exception -> 0x36fa }
         r5 = 0;
         r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-        if (r0 == 0) goto L_0x36ce;
-    L_0x36cc:
+        if (r0 == 0) goto L_0x36dc;
+    L_0x36da:
         r0 = 1;
-        goto L_0x36cf;
-    L_0x36ce:
+        goto L_0x36dd;
+    L_0x36dc:
         r0 = 0;
-    L_0x36cf:
-        r1.siteNameRtl = r0;	 Catch:{ Exception -> 0x36ea }
-        r0 = r1.siteNameLayout;	 Catch:{ Exception -> 0x36ea }
-        r4 = r1.siteNameLayout;	 Catch:{ Exception -> 0x36ea }
-        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x36ea }
+    L_0x36dd:
+        r1.siteNameRtl = r0;	 Catch:{ Exception -> 0x36f8 }
+        r0 = r1.siteNameLayout;	 Catch:{ Exception -> 0x36f8 }
+        r4 = r1.siteNameLayout;	 Catch:{ Exception -> 0x36f8 }
+        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x36f8 }
         r6 = 1;
         r4 = r4 - r6;
-        r0 = r0.getLineBottom(r4);	 Catch:{ Exception -> 0x36ea }
-        r4 = r1.linkPreviewHeight;	 Catch:{ Exception -> 0x36ea }
+        r0 = r0.getLineBottom(r4);	 Catch:{ Exception -> 0x36f8 }
+        r4 = r1.linkPreviewHeight;	 Catch:{ Exception -> 0x36f8 }
         r4 = r4 + r0;
-        r1.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x36ea }
-        r4 = r1.totalHeight;	 Catch:{ Exception -> 0x36ea }
+        r1.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x36f8 }
+        r4 = r1.totalHeight;	 Catch:{ Exception -> 0x36f8 }
         r4 = r4 + r0;
-        r1.totalHeight = r4;	 Catch:{ Exception -> 0x36ea }
-        goto L_0x36f1;
-    L_0x36ea:
+        r1.totalHeight = r4;	 Catch:{ Exception -> 0x36f8 }
+        goto L_0x36ff;
+    L_0x36f8:
         r0 = move-exception;
-        goto L_0x36ee;
-    L_0x36ec:
+        goto L_0x36fc;
+    L_0x36fa:
         r0 = move-exception;
         r5 = 0;
-    L_0x36ee:
+    L_0x36fc:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x36f1:
-        r1.descriptionX = r15;	 Catch:{ Exception -> 0x3764 }
-        r0 = r1.linkPreviewHeight;	 Catch:{ Exception -> 0x3764 }
-        if (r0 == 0) goto L_0x3700;
-    L_0x36f7:
-        r0 = r1.totalHeight;	 Catch:{ Exception -> 0x3764 }
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r20);	 Catch:{ Exception -> 0x3764 }
+    L_0x36ff:
+        r1.descriptionX = r15;	 Catch:{ Exception -> 0x3772 }
+        r0 = r1.linkPreviewHeight;	 Catch:{ Exception -> 0x3772 }
+        if (r0 == 0) goto L_0x370e;
+    L_0x3705:
+        r0 = r1.totalHeight;	 Catch:{ Exception -> 0x3772 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r20);	 Catch:{ Exception -> 0x3772 }
         r0 = r0 + r4;
-        r1.totalHeight = r0;	 Catch:{ Exception -> 0x3764 }
-    L_0x3700:
-        r0 = r3.description;	 Catch:{ Exception -> 0x3764 }
-        r31 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;	 Catch:{ Exception -> 0x3764 }
-        r33 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x3764 }
+        r1.totalHeight = r0;	 Catch:{ Exception -> 0x3772 }
+    L_0x370e:
+        r0 = r3.description;	 Catch:{ Exception -> 0x3772 }
+        r31 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;	 Catch:{ Exception -> 0x3772 }
+        r33 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x3772 }
         r34 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r29);	 Catch:{ Exception -> 0x3764 }
-        r3 = (float) r3;	 Catch:{ Exception -> 0x3764 }
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r29);	 Catch:{ Exception -> 0x3772 }
+        r3 = (float) r3;	 Catch:{ Exception -> 0x3772 }
         r36 = 0;
-        r37 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x3764 }
+        r37 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x3772 }
         r39 = 6;
         r30 = r0;
         r32 = r2;
         r35 = r3;
         r38 = r2;
-        r0 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r30, r31, r32, r33, r34, r35, r36, r37, r38, r39);	 Catch:{ Exception -> 0x3764 }
-        r1.descriptionLayout = r0;	 Catch:{ Exception -> 0x3764 }
-        r0 = r1.descriptionLayout;	 Catch:{ Exception -> 0x3764 }
-        r2 = r1.descriptionLayout;	 Catch:{ Exception -> 0x3764 }
-        r2 = r2.getLineCount();	 Catch:{ Exception -> 0x3764 }
+        r0 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r30, r31, r32, r33, r34, r35, r36, r37, r38, r39);	 Catch:{ Exception -> 0x3772 }
+        r1.descriptionLayout = r0;	 Catch:{ Exception -> 0x3772 }
+        r0 = r1.descriptionLayout;	 Catch:{ Exception -> 0x3772 }
+        r2 = r1.descriptionLayout;	 Catch:{ Exception -> 0x3772 }
+        r2 = r2.getLineCount();	 Catch:{ Exception -> 0x3772 }
         r3 = 1;
         r2 = r2 - r3;
-        r0 = r0.getLineBottom(r2);	 Catch:{ Exception -> 0x3764 }
-        r2 = r1.linkPreviewHeight;	 Catch:{ Exception -> 0x3764 }
+        r0 = r0.getLineBottom(r2);	 Catch:{ Exception -> 0x3772 }
+        r2 = r1.linkPreviewHeight;	 Catch:{ Exception -> 0x3772 }
         r2 = r2 + r0;
-        r1.linkPreviewHeight = r2;	 Catch:{ Exception -> 0x3764 }
-        r2 = r1.totalHeight;	 Catch:{ Exception -> 0x3764 }
+        r1.linkPreviewHeight = r2;	 Catch:{ Exception -> 0x3772 }
+        r2 = r1.totalHeight;	 Catch:{ Exception -> 0x3772 }
         r2 = r2 + r0;
-        r1.totalHeight = r2;	 Catch:{ Exception -> 0x3764 }
+        r1.totalHeight = r2;	 Catch:{ Exception -> 0x3772 }
         r0 = 0;
-    L_0x373a:
-        r2 = r1.descriptionLayout;	 Catch:{ Exception -> 0x3764 }
-        r2 = r2.getLineCount();	 Catch:{ Exception -> 0x3764 }
-        if (r0 >= r2) goto L_0x3768;
-    L_0x3742:
-        r2 = r1.descriptionLayout;	 Catch:{ Exception -> 0x3764 }
-        r2 = r2.getLineLeft(r0);	 Catch:{ Exception -> 0x3764 }
-        r2 = (double) r2;	 Catch:{ Exception -> 0x3764 }
-        r2 = java.lang.Math.ceil(r2);	 Catch:{ Exception -> 0x3764 }
-        r2 = (int) r2;	 Catch:{ Exception -> 0x3764 }
-        if (r2 == 0) goto L_0x3761;
+    L_0x3748:
+        r2 = r1.descriptionLayout;	 Catch:{ Exception -> 0x3772 }
+        r2 = r2.getLineCount();	 Catch:{ Exception -> 0x3772 }
+        if (r0 >= r2) goto L_0x3776;
     L_0x3750:
-        r3 = r1.descriptionX;	 Catch:{ Exception -> 0x3764 }
-        if (r3 != 0) goto L_0x3758;
-    L_0x3754:
+        r2 = r1.descriptionLayout;	 Catch:{ Exception -> 0x3772 }
+        r2 = r2.getLineLeft(r0);	 Catch:{ Exception -> 0x3772 }
+        r2 = (double) r2;	 Catch:{ Exception -> 0x3772 }
+        r2 = java.lang.Math.ceil(r2);	 Catch:{ Exception -> 0x3772 }
+        r2 = (int) r2;	 Catch:{ Exception -> 0x3772 }
+        if (r2 == 0) goto L_0x376f;
+    L_0x375e:
+        r3 = r1.descriptionX;	 Catch:{ Exception -> 0x3772 }
+        if (r3 != 0) goto L_0x3766;
+    L_0x3762:
         r2 = -r2;
-        r1.descriptionX = r2;	 Catch:{ Exception -> 0x3764 }
-        goto L_0x3761;
-    L_0x3758:
-        r3 = r1.descriptionX;	 Catch:{ Exception -> 0x3764 }
+        r1.descriptionX = r2;	 Catch:{ Exception -> 0x3772 }
+        goto L_0x376f;
+    L_0x3766:
+        r3 = r1.descriptionX;	 Catch:{ Exception -> 0x3772 }
         r2 = -r2;
-        r2 = java.lang.Math.max(r3, r2);	 Catch:{ Exception -> 0x3764 }
-        r1.descriptionX = r2;	 Catch:{ Exception -> 0x3764 }
-    L_0x3761:
+        r2 = java.lang.Math.max(r3, r2);	 Catch:{ Exception -> 0x3772 }
+        r1.descriptionX = r2;	 Catch:{ Exception -> 0x3772 }
+    L_0x376f:
         r0 = r0 + 1;
-        goto L_0x373a;
-    L_0x3764:
+        goto L_0x3748;
+    L_0x3772:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x3768:
+    L_0x3776:
         r0 = r1.totalHeight;
         r2 = NUM; // 0x41880000 float:17.0 double:5.431915495E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0 = r0 + r2;
         r1.totalHeight = r0;
-        if (r9 == 0) goto L_0x3790;
-    L_0x3775:
+        if (r9 == 0) goto L_0x379e;
+    L_0x3783:
         r0 = r1.totalHeight;
         r2 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0 = r0 - r2;
         r1.totalHeight = r0;
         r2 = 2;
-        if (r9 != r2) goto L_0x3790;
-    L_0x3783:
+        if (r9 != r2) goto L_0x379e;
+    L_0x3791:
         r0 = r1.captionHeight;
         r2 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0 = r0 - r2;
         r1.captionHeight = r0;
-        goto L_0x3790;
-    L_0x378f:
+        goto L_0x379e;
+    L_0x379d:
         r5 = 0;
-    L_0x3790:
+    L_0x379e:
         r0 = r1.botButtons;
         r0.clear();
-        if (r16 == 0) goto L_0x37a4;
-    L_0x3797:
+        if (r16 == 0) goto L_0x37b2;
+    L_0x37a5:
         r0 = r1.botButtonsByData;
         r0.clear();
         r0 = r1.botButtonsByPosition;
         r0.clear();
         r2 = 0;
         r1.botButtonsLayout = r2;
-    L_0x37a4:
+    L_0x37b2:
         r0 = r1.currentPosition;
-        if (r0 != 0) goto L_0x39a2;
-    L_0x37a8:
+        if (r0 != 0) goto L_0x39b0;
+    L_0x37b6:
         r0 = r14.messageOwner;
         r0 = r0.reply_markup;
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
-        if (r2 == 0) goto L_0x39a2;
-    L_0x37b0:
+        if (r2 == 0) goto L_0x39b0;
+    L_0x37be:
         r0 = r0.rows;
         r0 = r0.size();
         r2 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
@@ -13753,42 +13767,42 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.substractBackgroundHeight = r2;
         r2 = r1.backgroundWidth;
         r3 = r1.mediaBackground;
-        if (r3 == 0) goto L_0x37ce;
-    L_0x37cd:
-        goto L_0x37d2;
-    L_0x37ce:
+        if (r3 == 0) goto L_0x37dc;
+    L_0x37db:
+        goto L_0x37e0;
+    L_0x37dc:
         r10 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r5 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-    L_0x37d2:
+    L_0x37e0:
         r3 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r2 = r2 - r3;
         r1.widthForButtons = r2;
         r2 = r14.wantedBotKeyboardWidth;
         r3 = r1.widthForButtons;
-        if (r2 <= r3) goto L_0x3824;
-    L_0x37df:
+        if (r2 <= r3) goto L_0x3832;
+    L_0x37ed:
         r2 = r1.isChat;
-        if (r2 == 0) goto L_0x37f2;
-    L_0x37e3:
+        if (r2 == 0) goto L_0x3800;
+    L_0x37f1:
         r2 = r60.needDrawAvatar();
-        if (r2 == 0) goto L_0x37f2;
-    L_0x37e9:
+        if (r2 == 0) goto L_0x3800;
+    L_0x37f7:
         r2 = r60.isOutOwner();
-        if (r2 != 0) goto L_0x37f2;
-    L_0x37ef:
+        if (r2 != 0) goto L_0x3800;
+    L_0x37fd:
         r2 = NUM; // 0x42780000 float:62.0 double:5.5096253E-315;
-        goto L_0x37f4;
-    L_0x37f2:
+        goto L_0x3802;
+    L_0x3800:
         r2 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-    L_0x37f4:
+    L_0x3802:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r2 = -r2;
         r3 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r3 == 0) goto L_0x3804;
-    L_0x37ff:
+        if (r3 == 0) goto L_0x3812;
+    L_0x380d:
         r3 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();
-        goto L_0x3815;
-    L_0x3804:
+        goto L_0x3823;
+    L_0x3812:
         r3 = org.telegram.messenger.AndroidUtilities.displaySize;
         r4 = r3.x;
         r3 = r3.y;
@@ -13796,47 +13810,47 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r3 = r3 - r4;
-    L_0x3815:
+    L_0x3823:
         r2 = r2 + r3;
         r3 = r1.backgroundWidth;
         r4 = r14.wantedBotKeyboardWidth;
         r2 = java.lang.Math.min(r4, r2);
         r2 = java.lang.Math.max(r3, r2);
         r1.widthForButtons = r2;
-    L_0x3824:
+    L_0x3832:
         r2 = new java.util.HashMap;
         r3 = r1.botButtonsByData;
         r2.<init>(r3);
         r3 = r14.botButtonsLayout;
-        if (r3 == 0) goto L_0x3845;
-    L_0x382f:
+        if (r3 == 0) goto L_0x3853;
+    L_0x383d:
         r4 = r1.botButtonsLayout;
-        if (r4 == 0) goto L_0x3845;
-    L_0x3833:
+        if (r4 == 0) goto L_0x3853;
+    L_0x3841:
         r3 = r3.toString();
         r3 = r4.equals(r3);
-        if (r3 == 0) goto L_0x3845;
-    L_0x383d:
+        if (r3 == 0) goto L_0x3853;
+    L_0x384b:
         r3 = new java.util.HashMap;
         r4 = r1.botButtonsByPosition;
         r3.<init>(r4);
-        goto L_0x3850;
-    L_0x3845:
+        goto L_0x385e;
+    L_0x3853:
         r3 = r14.botButtonsLayout;
-        if (r3 == 0) goto L_0x384f;
-    L_0x3849:
+        if (r3 == 0) goto L_0x385d;
+    L_0x3857:
         r3 = r3.toString();
         r1.botButtonsLayout = r3;
-    L_0x384f:
+    L_0x385d:
         r3 = 0;
-    L_0x3850:
+    L_0x385e:
         r4 = r1.botButtonsByData;
         r4.clear();
         r4 = 0;
         r5 = 0;
-    L_0x3857:
-        if (r4 >= r0) goto L_0x399f;
-    L_0x3859:
+    L_0x3865:
+        if (r4 >= r0) goto L_0x39ad;
+    L_0x3867:
         r6 = r14.messageOwner;
         r6 = r6.reply_markup;
         r6 = r6.rows;
@@ -13844,10 +13858,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = (org.telegram.tgnet.TLRPC.TL_keyboardButtonRow) r6;
         r7 = r6.buttons;
         r7 = r7.size();
-        if (r7 != 0) goto L_0x386f;
-    L_0x386d:
-        goto L_0x399b;
-    L_0x386f:
+        if (r7 != 0) goto L_0x387d;
+    L_0x387b:
+        goto L_0x39a9;
+    L_0x387d:
         r8 = r1.widthForButtons;
         r9 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
         r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
@@ -13859,11 +13873,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r8 = r8 / r7;
         r7 = r5;
         r5 = 0;
-    L_0x3884:
+    L_0x3892:
         r9 = r6.buttons;
         r9 = r9.size();
-        if (r5 >= r9) goto L_0x399a;
-    L_0x388c:
+        if (r5 >= r9) goto L_0x39a8;
+    L_0x389a:
         r9 = new org.telegram.ui.Cells.ChatMessageCell$BotButton;
         r10 = 0;
         r9.<init>(r1, r10);
@@ -13881,28 +13895,28 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11.append(r12);
         r11.append(r5);
         r11 = r11.toString();
-        if (r3 == 0) goto L_0x38c4;
-    L_0x38bd:
+        if (r3 == 0) goto L_0x38d2;
+    L_0x38cb:
         r12 = r3.get(r11);
         r12 = (org.telegram.ui.Cells.ChatMessageCell.BotButton) r12;
-        goto L_0x38ca;
-    L_0x38c4:
+        goto L_0x38d8;
+    L_0x38d2:
         r12 = r2.get(r10);
         r12 = (org.telegram.ui.Cells.ChatMessageCell.BotButton) r12;
-    L_0x38ca:
-        if (r12 == 0) goto L_0x38e2;
-    L_0x38cc:
+    L_0x38d8:
+        if (r12 == 0) goto L_0x38f0;
+    L_0x38da:
         r13 = r12.progressAlpha;
         r9.progressAlpha = r13;
         r13 = r12.angle;
         r9.angle = r13;
         r12 = r12.lastUpdateTime;
         r9.lastUpdateTime = r12;
-        goto L_0x38e9;
-    L_0x38e2:
+        goto L_0x38f7;
+    L_0x38f0:
         r12 = java.lang.System.currentTimeMillis();
         r9.lastUpdateTime = r12;
-    L_0x38e9:
+    L_0x38f7:
         r12 = r1.botButtonsByData;
         r12.put(r10, r9);
         r10 = r1.botButtonsByPosition;
@@ -13925,19 +13939,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9.height = r10;
         r10 = r9.button;
         r10 = r10 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
-        if (r10 == 0) goto L_0x3939;
-    L_0x3925:
+        if (r10 == 0) goto L_0x3947;
+    L_0x3933:
         r10 = r14.messageOwner;
         r10 = r10.media;
         r10 = r10.flags;
         r10 = r10 & 4;
-        if (r10 == 0) goto L_0x3939;
-    L_0x392f:
+        if (r10 == 0) goto L_0x3947;
+    L_0x393d:
         r10 = NUM; // 0x7f0d0811 float:1.8746303E38 double:1.053130798E-314;
         r11 = "PaymentReceipt";
         r10 = org.telegram.messenger.LocaleController.getString(r11, r10);
-        goto L_0x395e;
-    L_0x3939:
+        goto L_0x396c;
+    L_0x3947:
         r10 = r9.button;
         r10 = r10.text;
         r11 = org.telegram.ui.ActionBar.Theme.chat_botButtonPaint;
@@ -13951,7 +13965,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12 = (float) r12;
         r13 = android.text.TextUtils.TruncateAt.END;
         r10 = android.text.TextUtils.ellipsize(r10, r11, r12, r13);
-    L_0x395e:
+    L_0x396c:
         r31 = r10;
         r10 = new android.text.StaticLayout;
         r32 = org.telegram.ui.ActionBar.Theme.chat_botButtonPaint;
@@ -13970,92 +13984,92 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = r10.size();
         r11 = 1;
         r10 = r10 - r11;
-        if (r5 != r10) goto L_0x3996;
-    L_0x3989:
+        if (r5 != r10) goto L_0x39a4;
+    L_0x3997:
         r10 = r9.x;
         r9 = r9.width;
         r10 = r10 + r9;
         r7 = java.lang.Math.max(r7, r10);
-    L_0x3996:
+    L_0x39a4:
         r5 = r5 + 1;
-        goto L_0x3884;
-    L_0x399a:
+        goto L_0x3892;
+    L_0x39a8:
         r5 = r7;
-    L_0x399b:
+    L_0x39a9:
         r4 = r4 + 1;
-        goto L_0x3857;
-    L_0x399f:
+        goto L_0x3865;
+    L_0x39ad:
         r1.widthForButtons = r5;
-        goto L_0x39a6;
-    L_0x39a2:
+        goto L_0x39b4;
+    L_0x39b0:
         r1.substractBackgroundHeight = r15;
         r1.keyboardHeight = r15;
-    L_0x39a6:
+    L_0x39b4:
         r0 = r1.drawPinnedBottom;
-        if (r0 == 0) goto L_0x39b8;
-    L_0x39aa:
+        if (r0 == 0) goto L_0x39c6;
+    L_0x39b8:
         r0 = r1.drawPinnedTop;
-        if (r0 == 0) goto L_0x39b8;
-    L_0x39ae:
+        if (r0 == 0) goto L_0x39c6;
+    L_0x39bc:
         r0 = r1.totalHeight;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r20);
         r0 = r0 - r2;
         r1.totalHeight = r0;
-        goto L_0x39df;
-    L_0x39b8:
-        r0 = r1.drawPinnedBottom;
-        if (r0 == 0) goto L_0x39c6;
-    L_0x39bc:
-        r0 = r1.totalHeight;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r29);
-        r0 = r0 - r2;
-        r1.totalHeight = r0;
-        goto L_0x39df;
+        goto L_0x39ed;
     L_0x39c6:
-        r0 = r1.drawPinnedTop;
-        if (r0 == 0) goto L_0x39df;
+        r0 = r1.drawPinnedBottom;
+        if (r0 == 0) goto L_0x39d4;
     L_0x39ca:
-        r0 = r1.pinnedBottom;
-        if (r0 == 0) goto L_0x39df;
-    L_0x39ce:
-        r0 = r1.currentPosition;
-        if (r0 == 0) goto L_0x39df;
-    L_0x39d2:
-        r0 = r0.siblingHeights;
-        if (r0 != 0) goto L_0x39df;
-    L_0x39d6:
         r0 = r1.totalHeight;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r29);
         r0 = r0 - r2;
         r1.totalHeight = r0;
-    L_0x39df:
+        goto L_0x39ed;
+    L_0x39d4:
+        r0 = r1.drawPinnedTop;
+        if (r0 == 0) goto L_0x39ed;
+    L_0x39d8:
+        r0 = r1.pinnedBottom;
+        if (r0 == 0) goto L_0x39ed;
+    L_0x39dc:
+        r0 = r1.currentPosition;
+        if (r0 == 0) goto L_0x39ed;
+    L_0x39e0:
+        r0 = r0.siblingHeights;
+        if (r0 != 0) goto L_0x39ed;
+    L_0x39e4:
+        r0 = r1.totalHeight;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r29);
+        r0 = r0 - r2;
+        r1.totalHeight = r0;
+    L_0x39ed:
         r0 = r60.isAnyKindOfSticker();
-        if (r0 == 0) goto L_0x39f7;
-    L_0x39e5:
+        if (r0 == 0) goto L_0x3a05;
+    L_0x39f3:
         r0 = r1.totalHeight;
         r2 = NUM; // 0x428CLASSNAME float:70.0 double:5.51610112E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        if (r0 >= r2) goto L_0x39f7;
-    L_0x39ef:
+        if (r0 >= r2) goto L_0x3a05;
+    L_0x39fd:
         r0 = NUM; // 0x428CLASSNAME float:70.0 double:5.51610112E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r1.totalHeight = r0;
-    L_0x39f7:
+    L_0x3a05:
         r0 = r1.drawPhotoImage;
-        if (r0 != 0) goto L_0x3a01;
-    L_0x39fb:
+        if (r0 != 0) goto L_0x3a0f;
+    L_0x3a09:
         r0 = r1.photoImage;
         r2 = 0;
         r0.setImageBitmap(r2);
-    L_0x3a01:
+    L_0x3a0f:
         r0 = r1.documentAttachType;
         r2 = 5;
-        if (r0 != r2) goto L_0x3a38;
-    L_0x3a06:
+        if (r0 != r2) goto L_0x3a46;
+    L_0x3a14:
         r0 = r1.documentAttach;
         r0 = org.telegram.messenger.MessageObject.isDocumentHasThumb(r0);
-        if (r0 == 0) goto L_0x3a20;
-    L_0x3a0e:
+        if (r0 == 0) goto L_0x3a2e;
+    L_0x3a1c:
         r0 = r1.documentAttach;
         r0 = r0.thumbs;
         r2 = 90;
@@ -14063,52 +14077,52 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r1.radialProgress;
         r3 = r1.documentAttach;
         r2.setImageOverlay(r0, r3, r14);
-        goto L_0x3a3e;
-    L_0x3a20:
+        goto L_0x3a4c;
+    L_0x3a2e:
         r2 = 1;
         r0 = r14.getArtworkUrl(r2);
         r2 = android.text.TextUtils.isEmpty(r0);
-        if (r2 != 0) goto L_0x3a31;
-    L_0x3a2b:
+        if (r2 != 0) goto L_0x3a3f;
+    L_0x3a39:
         r2 = r1.radialProgress;
         r2.setImageOverlay(r0);
-        goto L_0x3a3e;
-    L_0x3a31:
+        goto L_0x3a4c;
+    L_0x3a3f:
         r0 = r1.radialProgress;
         r2 = 0;
         r0.setImageOverlay(r2, r2, r2);
-        goto L_0x3a3e;
-    L_0x3a38:
+        goto L_0x3a4c;
+    L_0x3a46:
         r2 = 0;
         r0 = r1.radialProgress;
         r0.setImageOverlay(r2, r2, r2);
-    L_0x3a3e:
+    L_0x3a4c:
         r59.updateWaveform();
-        if (r17 == 0) goto L_0x3a49;
-    L_0x3a43:
+        if (r17 == 0) goto L_0x3a57;
+    L_0x3a51:
         r0 = r14.cancelEditing;
-        if (r0 != 0) goto L_0x3a49;
-    L_0x3a47:
+        if (r0 != 0) goto L_0x3a57;
+    L_0x3a55:
         r0 = 1;
-        goto L_0x3a4a;
-    L_0x3a49:
+        goto L_0x3a58;
+    L_0x3a57:
         r0 = 0;
-    L_0x3a4a:
+    L_0x3a58:
         r2 = 1;
         r1.updateButtonState(r15, r0, r2);
         r0 = r1.buttonState;
         r2 = 2;
-        if (r0 != r2) goto L_0x3a7e;
-    L_0x3a53:
+        if (r0 != r2) goto L_0x3a8c;
+    L_0x3a61:
         r0 = r1.documentAttachType;
         r2 = 3;
-        if (r0 != r2) goto L_0x3a7e;
-    L_0x3a58:
+        if (r0 != r2) goto L_0x3a8c;
+    L_0x3a66:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.DownloadController.getInstance(r0);
         r0 = r0.canDownloadMedia(r14);
-        if (r0 == 0) goto L_0x3a7e;
-    L_0x3a64:
+        if (r0 == 0) goto L_0x3a8c;
+    L_0x3a72:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.FileLoader.getInstance(r0);
         r2 = r1.documentAttach;
@@ -14120,7 +14134,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r1.radialProgress;
         r2 = r59.getIconForCurrentState();
         r0.setIcon(r2, r15, r15);
-    L_0x3a7e:
+    L_0x3a8c:
         r0 = r1.accessibilityVirtualViewBounds;
         r0.clear();
         return;

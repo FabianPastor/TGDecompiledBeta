@@ -3290,7 +3290,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private boolean validateSlowModeDialog(long j) {
         if (this.messagesCount <= 1) {
             ChatActivityEnterView chatActivityEnterView = this.commentView;
-            if (chatActivityEnterView == null || chatActivityEnterView.getVisibility() != 0 || this.commentView.getFieldText().length() == 0) {
+            if (chatActivityEnterView == null || chatActivityEnterView.getVisibility() != 0 || TextUtils.isEmpty(this.commentView.getFieldText())) {
                 return true;
             }
         }

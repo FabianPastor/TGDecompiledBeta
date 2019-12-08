@@ -216,7 +216,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                         rLottieDrawable.nextRenderingBitmap = rLottieDrawable.backgroundBitmap;
                         int i = RLottieDrawable.this.shouldLimitFps ? 2 : 1;
                         if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.metaData[0]) {
-                            if (RLottieDrawable.this.autoRepeatPlayCount <= 0 || RLottieDrawable.this.autoRepeat != 2 || RLottieDrawable.this.currentFrame <= 0) {
+                            if (RLottieDrawable.this.autoRepeat == 3) {
+                                RLottieDrawable.this.nextFrameIsLast = true;
+                                RLottieDrawable.this.autoRepeatPlayCount = RLottieDrawable.this.autoRepeatPlayCount + 1;
+                            } else if (RLottieDrawable.this.autoRepeatPlayCount <= 0 || RLottieDrawable.this.autoRepeat != 2 || RLottieDrawable.this.currentFrame <= 0) {
                                 RLottieDrawable rLottieDrawable2 = RLottieDrawable.this;
                                 rLottieDrawable2.currentFrame = rLottieDrawable2.currentFrame + i;
                                 RLottieDrawable.this.nextFrameIsLast = false;
@@ -305,10 +308,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         } catch (Throwable th) {
             FileLog.e(th);
         }
-    }
-
-    public int getParentViewsCounts() {
-        return this.parentViews.size();
     }
 
     public void addParentView(View view) {
@@ -402,7 +401,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setAutoRepeat(int i) {
-        this.autoRepeat = i;
+        if (this.autoRepeat != 2 || i != 3 || this.currentFrame == 0) {
+            this.autoRepeat = i;
+        }
     }
 
     /* Access modifiers changed, original: protected */
@@ -416,10 +417,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public void start() {
         if (!this.isRunning) {
-            this.autoRepeatPlayCount = 0;
-            this.isRunning = true;
-            scheduleNextGetFrame();
-            invalidateInternal();
+            if (this.autoRepeat < 2 || this.autoRepeatPlayCount == 0) {
+                this.isRunning = true;
+                scheduleNextGetFrame();
+                invalidateInternal();
+            }
         }
     }
 
@@ -520,10 +522,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public void stop() {
         this.isRunning = false;
-    }
-
-    public int getAutoRepeatPlayCount() {
-        return this.autoRepeatPlayCount;
     }
 
     public void setProgress(float f) {
