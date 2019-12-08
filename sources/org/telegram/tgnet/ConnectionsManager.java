@@ -110,9 +110,9 @@ public class ConnectionsManager extends BaseController {
         }
 
         /* Access modifiers changed, original: protected|varargs */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x014a A:{SYNTHETIC, Splitter:B:56:0x014a} */
-        /* JADX WARNING: Removed duplicated region for block: B:79:0x0157 A:{SYNTHETIC} */
-        /* JADX WARNING: Removed duplicated region for block: B:61:0x0154 A:{SYNTHETIC, Splitter:B:61:0x0154} */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x014c A:{SYNTHETIC, Splitter:B:56:0x014c} */
+        /* JADX WARNING: Removed duplicated region for block: B:79:0x0159 A:{SYNTHETIC} */
+        /* JADX WARNING: Removed duplicated region for block: B:61:0x0156 A:{SYNTHETIC, Splitter:B:61:0x0156} */
         public org.telegram.tgnet.NativeByteBuffer doInBackground(java.lang.Void... r14) {
             /*
             r13 = this;
@@ -123,205 +123,205 @@ public class ConnectionsManager extends BaseController {
             r1 = 0;
         L_0x0005:
             r4 = 3;
-            if (r1 >= r4) goto L_0x016c;
+            if (r1 >= r4) goto L_0x016e;
         L_0x0008:
-            if (r1 != 0) goto L_0x0010;
+            if (r1 != 0) goto L_0x0011;
         L_0x000a:
             r4 = "www.google.com";
-            goto L_0x0018;
-        L_0x000d:
+            goto L_0x001a;
+        L_0x000e:
             r4 = move-exception;
-            goto L_0x0145;
-        L_0x0010:
+            goto L_0x0147;
+        L_0x0011:
             r4 = 1;
-            if (r1 != r4) goto L_0x0016;
-        L_0x0013:
+            if (r1 != r4) goto L_0x0018;
+        L_0x0014:
             r4 = "www.google.ru";
-            goto L_0x0018;
-        L_0x0016:
-            r4 = "google.com";
+            goto L_0x001a;
         L_0x0018:
-            r5 = r13.currentAccount;	 Catch:{ all -> 0x000d }
-            r5 = org.telegram.tgnet.ConnectionsManager.native_isTestBackend(r5);	 Catch:{ all -> 0x000d }
-            if (r5 == 0) goto L_0x0023;
-        L_0x0020:
+            r4 = "google.com";
+        L_0x001a:
+            r5 = r13.currentAccount;	 Catch:{ all -> 0x000e }
+            r5 = org.telegram.tgnet.ConnectionsManager.native_isTestBackend(r5);	 Catch:{ all -> 0x000e }
+            if (r5 == 0) goto L_0x0025;
+        L_0x0022:
             r5 = "tapv3.stel.com";
-            goto L_0x002f;
-        L_0x0023:
-            r5 = r13.currentAccount;	 Catch:{ all -> 0x000d }
-            r5 = org.telegram.messenger.AccountInstance.getInstance(r5);	 Catch:{ all -> 0x000d }
-            r5 = r5.getMessagesController();	 Catch:{ all -> 0x000d }
-            r5 = r5.dcDomainName;	 Catch:{ all -> 0x000d }
-        L_0x002f:
-            r6 = org.telegram.messenger.Utilities.random;	 Catch:{ all -> 0x000d }
+            goto L_0x0031;
+        L_0x0025:
+            r5 = r13.currentAccount;	 Catch:{ all -> 0x000e }
+            r5 = org.telegram.messenger.AccountInstance.getInstance(r5);	 Catch:{ all -> 0x000e }
+            r5 = r5.getMessagesController();	 Catch:{ all -> 0x000e }
+            r5 = r5.dcDomainName;	 Catch:{ all -> 0x000e }
+        L_0x0031:
+            r6 = org.telegram.messenger.Utilities.random;	 Catch:{ all -> 0x000e }
             r7 = 116; // 0x74 float:1.63E-43 double:5.73E-322;
-            r6 = r6.nextInt(r7);	 Catch:{ all -> 0x000d }
+            r6 = r6.nextInt(r7);	 Catch:{ all -> 0x000e }
             r6 = r6 + 13;
-            r7 = new java.lang.StringBuilder;	 Catch:{ all -> 0x000d }
-            r7.<init>(r6);	 Catch:{ all -> 0x000d }
+            r7 = new java.lang.StringBuilder;	 Catch:{ all -> 0x000e }
+            r7.<init>(r6);	 Catch:{ all -> 0x000e }
             r8 = 0;
-        L_0x003f:
-            if (r8 >= r6) goto L_0x0055;
         L_0x0041:
+            if (r8 >= r6) goto L_0x0057;
+        L_0x0043:
             r9 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzNUM";
-            r10 = org.telegram.messenger.Utilities.random;	 Catch:{ all -> 0x000d }
+            r10 = org.telegram.messenger.Utilities.random;	 Catch:{ all -> 0x000e }
             r11 = 62;
-            r10 = r10.nextInt(r11);	 Catch:{ all -> 0x000d }
-            r9 = r9.charAt(r10);	 Catch:{ all -> 0x000d }
-            r7.append(r9);	 Catch:{ all -> 0x000d }
+            r10 = r10.nextInt(r11);	 Catch:{ all -> 0x000e }
+            r9 = r9.charAt(r10);	 Catch:{ all -> 0x000e }
+            r7.append(r9);	 Catch:{ all -> 0x000e }
             r8 = r8 + 1;
-            goto L_0x003f;
-        L_0x0055:
-            r6 = new java.net.URL;	 Catch:{ all -> 0x000d }
-            r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x000d }
-            r8.<init>();	 Catch:{ all -> 0x000d }
+            goto L_0x0041;
+        L_0x0057:
+            r6 = new java.net.URL;	 Catch:{ all -> 0x000e }
+            r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x000e }
+            r8.<init>();	 Catch:{ all -> 0x000e }
             r9 = "https://";
-            r8.append(r9);	 Catch:{ all -> 0x000d }
-            r8.append(r4);	 Catch:{ all -> 0x000d }
+            r8.append(r9);	 Catch:{ all -> 0x000e }
+            r8.append(r4);	 Catch:{ all -> 0x000e }
             r4 = "/resolve?name=";
-            r8.append(r4);	 Catch:{ all -> 0x000d }
-            r8.append(r5);	 Catch:{ all -> 0x000d }
+            r8.append(r4);	 Catch:{ all -> 0x000e }
+            r8.append(r5);	 Catch:{ all -> 0x000e }
             r4 = "&type=ANY&random_padding=";
-            r8.append(r4);	 Catch:{ all -> 0x000d }
-            r8.append(r7);	 Catch:{ all -> 0x000d }
-            r4 = r8.toString();	 Catch:{ all -> 0x000d }
-            r6.<init>(r4);	 Catch:{ all -> 0x000d }
-            r4 = r6.openConnection();	 Catch:{ all -> 0x000d }
+            r8.append(r4);	 Catch:{ all -> 0x000e }
+            r8.append(r7);	 Catch:{ all -> 0x000e }
+            r4 = r8.toString();	 Catch:{ all -> 0x000e }
+            r6.<init>(r4);	 Catch:{ all -> 0x000e }
+            r4 = r6.openConnection();	 Catch:{ all -> 0x000e }
             r5 = "User-Agent";
             r6 = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1";
-            r4.addRequestProperty(r5, r6);	 Catch:{ all -> 0x000d }
+            r4.addRequestProperty(r5, r6);	 Catch:{ all -> 0x000e }
             r5 = "Host";
             r6 = "dns.google.com";
-            r4.addRequestProperty(r5, r6);	 Catch:{ all -> 0x000d }
+            r4.addRequestProperty(r5, r6);	 Catch:{ all -> 0x000e }
             r5 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
-            r4.setConnectTimeout(r5);	 Catch:{ all -> 0x000d }
-            r4.setReadTimeout(r5);	 Catch:{ all -> 0x000d }
-            r4.connect();	 Catch:{ all -> 0x000d }
-            r3 = r4.getInputStream();	 Catch:{ all -> 0x000d }
-            r4 = r4.getDate();	 Catch:{ all -> 0x000d }
+            r4.setConnectTimeout(r5);	 Catch:{ all -> 0x000e }
+            r4.setReadTimeout(r5);	 Catch:{ all -> 0x000e }
+            r4.connect();	 Catch:{ all -> 0x000e }
+            r3 = r4.getInputStream();	 Catch:{ all -> 0x000e }
+            r4 = r4.getDate();	 Catch:{ all -> 0x000e }
             r6 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
             r4 = r4 / r6;
-            r5 = (int) r4;	 Catch:{ all -> 0x000d }
-            r13.responseDate = r5;	 Catch:{ all -> 0x000d }
-            r4 = new java.io.ByteArrayOutputStream;	 Catch:{ all -> 0x000d }
-            r4.<init>();	 Catch:{ all -> 0x000d }
+            r5 = (int) r4;	 Catch:{ all -> 0x000e }
+            r13.responseDate = r5;	 Catch:{ all -> 0x000e }
+            r4 = new java.io.ByteArrayOutputStream;	 Catch:{ all -> 0x000e }
+            r4.<init>();	 Catch:{ all -> 0x000e }
             r2 = 32768; // 0x8000 float:4.5918E-41 double:1.61895E-319;
-            r2 = new byte[r2];	 Catch:{ all -> 0x0141 }
-        L_0x00b0:
-            r5 = r13.isCancelled();	 Catch:{ all -> 0x0141 }
-            if (r5 == 0) goto L_0x00b7;
-        L_0x00b6:
-            goto L_0x00c2;
-        L_0x00b7:
-            r5 = r3.read(r2);	 Catch:{ all -> 0x0141 }
-            if (r5 <= 0) goto L_0x00c1;
-        L_0x00bd:
-            r4.write(r2, r0, r5);	 Catch:{ all -> 0x0141 }
-            goto L_0x00b0;
-        L_0x00c1:
+            r2 = new byte[r2];	 Catch:{ all -> 0x0143 }
+        L_0x00b2:
+            r5 = r13.isCancelled();	 Catch:{ all -> 0x0143 }
+            if (r5 == 0) goto L_0x00b9;
+        L_0x00b8:
+            goto L_0x00c4;
+        L_0x00b9:
+            r5 = r3.read(r2);	 Catch:{ all -> 0x0143 }
+            if (r5 <= 0) goto L_0x00c3;
+        L_0x00bf:
+            r4.write(r2, r0, r5);	 Catch:{ all -> 0x0143 }
+            goto L_0x00b2;
+        L_0x00c3:
             r2 = -1;
-        L_0x00c2:
-            r2 = new org.json.JSONObject;	 Catch:{ all -> 0x0141 }
-            r5 = new java.lang.String;	 Catch:{ all -> 0x0141 }
-            r6 = r4.toByteArray();	 Catch:{ all -> 0x0141 }
-            r5.<init>(r6);	 Catch:{ all -> 0x0141 }
-            r2.<init>(r5);	 Catch:{ all -> 0x0141 }
+        L_0x00c4:
+            r2 = new org.json.JSONObject;	 Catch:{ all -> 0x0143 }
+            r5 = new java.lang.String;	 Catch:{ all -> 0x0143 }
+            r6 = r4.toByteArray();	 Catch:{ all -> 0x0143 }
+            r5.<init>(r6);	 Catch:{ all -> 0x0143 }
+            r2.<init>(r5);	 Catch:{ all -> 0x0143 }
             r5 = "Answer";
-            r2 = r2.getJSONArray(r5);	 Catch:{ all -> 0x0141 }
-            r5 = r2.length();	 Catch:{ all -> 0x0141 }
-            r6 = new java.util.ArrayList;	 Catch:{ all -> 0x0141 }
-            r6.<init>(r5);	 Catch:{ all -> 0x0141 }
+            r2 = r2.getJSONArray(r5);	 Catch:{ all -> 0x0143 }
+            r5 = r2.length();	 Catch:{ all -> 0x0143 }
+            r6 = new java.util.ArrayList;	 Catch:{ all -> 0x0143 }
+            r6.<init>(r5);	 Catch:{ all -> 0x0143 }
             r7 = 0;
-        L_0x00e0:
-            if (r7 >= r5) goto L_0x00fd;
         L_0x00e2:
-            r8 = r2.getJSONObject(r7);	 Catch:{ all -> 0x0141 }
+            if (r7 >= r5) goto L_0x00ff;
+        L_0x00e4:
+            r8 = r2.getJSONObject(r7);	 Catch:{ all -> 0x0143 }
             r9 = "type";
-            r9 = r8.getInt(r9);	 Catch:{ all -> 0x0141 }
+            r9 = r8.getInt(r9);	 Catch:{ all -> 0x0143 }
             r10 = 16;
-            if (r9 == r10) goto L_0x00f1;
-        L_0x00f0:
-            goto L_0x00fa;
-        L_0x00f1:
+            if (r9 == r10) goto L_0x00f3;
+        L_0x00f2:
+            goto L_0x00fc;
+        L_0x00f3:
             r9 = "data";
-            r8 = r8.getString(r9);	 Catch:{ all -> 0x0141 }
-            r6.add(r8);	 Catch:{ all -> 0x0141 }
-        L_0x00fa:
+            r8 = r8.getString(r9);	 Catch:{ all -> 0x0143 }
+            r6.add(r8);	 Catch:{ all -> 0x0143 }
+        L_0x00fc:
             r7 = r7 + 1;
-            goto L_0x00e0;
-        L_0x00fd:
-            r2 = org.telegram.tgnet.-$$Lambda$ConnectionsManager$DnsTxtLoadTask$BEcjqZFmP4raPbtfXzTVfRUBAsw.INSTANCE;	 Catch:{ all -> 0x0141 }
-            java.util.Collections.sort(r6, r2);	 Catch:{ all -> 0x0141 }
-            r2 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0141 }
-            r2.<init>();	 Catch:{ all -> 0x0141 }
+            goto L_0x00e2;
+        L_0x00ff:
+            r2 = org.telegram.tgnet.-$$Lambda$ConnectionsManager$DnsTxtLoadTask$BEcjqZFmP4raPbtfXzTVfRUBAsw.INSTANCE;	 Catch:{ all -> 0x0143 }
+            java.util.Collections.sort(r6, r2);	 Catch:{ all -> 0x0143 }
+            r2 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0143 }
+            r2.<init>();	 Catch:{ all -> 0x0143 }
             r5 = 0;
-        L_0x0108:
-            r7 = r6.size();	 Catch:{ all -> 0x0141 }
-            if (r5 >= r7) goto L_0x0122;
-        L_0x010e:
-            r7 = r6.get(r5);	 Catch:{ all -> 0x0141 }
-            r7 = (java.lang.String) r7;	 Catch:{ all -> 0x0141 }
+        L_0x010a:
+            r7 = r6.size();	 Catch:{ all -> 0x0143 }
+            if (r5 >= r7) goto L_0x0124;
+        L_0x0110:
+            r7 = r6.get(r5);	 Catch:{ all -> 0x0143 }
+            r7 = (java.lang.String) r7;	 Catch:{ all -> 0x0143 }
             r8 = "\"";
             r9 = "";
-            r7 = r7.replace(r8, r9);	 Catch:{ all -> 0x0141 }
-            r2.append(r7);	 Catch:{ all -> 0x0141 }
+            r7 = r7.replace(r8, r9);	 Catch:{ all -> 0x0143 }
+            r2.append(r7);	 Catch:{ all -> 0x0143 }
             r5 = r5 + 1;
-            goto L_0x0108;
-        L_0x0122:
-            r2 = r2.toString();	 Catch:{ all -> 0x0141 }
-            r2 = android.util.Base64.decode(r2, r0);	 Catch:{ all -> 0x0141 }
-            r5 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ all -> 0x0141 }
-            r6 = r2.length;	 Catch:{ all -> 0x0141 }
-            r5.<init>(r6);	 Catch:{ all -> 0x0141 }
-            r5.writeBytes(r2);	 Catch:{ all -> 0x0141 }
-            if (r3 == 0) goto L_0x013d;
-        L_0x0135:
-            r3.close();	 Catch:{ all -> 0x0139 }
-            goto L_0x013d;
-        L_0x0139:
+            goto L_0x010a;
+        L_0x0124:
+            r2 = r2.toString();	 Catch:{ all -> 0x0143 }
+            r2 = android.util.Base64.decode(r2, r0);	 Catch:{ all -> 0x0143 }
+            r5 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ all -> 0x0143 }
+            r6 = r2.length;	 Catch:{ all -> 0x0143 }
+            r5.<init>(r6);	 Catch:{ all -> 0x0143 }
+            r5.writeBytes(r2);	 Catch:{ all -> 0x0143 }
+            if (r3 == 0) goto L_0x013f;
+        L_0x0137:
+            r3.close();	 Catch:{ all -> 0x013b }
+            goto L_0x013f;
+        L_0x013b:
             r14 = move-exception;
             org.telegram.messenger.FileLog.e(r14);
-        L_0x013d:
-            r4.close();	 Catch:{ Exception -> 0x0140 }
-        L_0x0140:
+        L_0x013f:
+            r4.close();	 Catch:{ Exception -> 0x0142 }
+        L_0x0142:
             return r5;
-        L_0x0141:
+        L_0x0143:
             r2 = move-exception;
             r12 = r4;
             r4 = r2;
             r2 = r12;
-        L_0x0145:
-            org.telegram.messenger.FileLog.e(r4);	 Catch:{ all -> 0x015b }
-            if (r3 == 0) goto L_0x0152;
-        L_0x014a:
-            r3.close();	 Catch:{ all -> 0x014e }
-            goto L_0x0152;
-        L_0x014e:
+        L_0x0147:
+            org.telegram.messenger.FileLog.e(r4);	 Catch:{ all -> 0x015d }
+            if (r3 == 0) goto L_0x0154;
+        L_0x014c:
+            r3.close();	 Catch:{ all -> 0x0150 }
+            goto L_0x0154;
+        L_0x0150:
             r4 = move-exception;
             org.telegram.messenger.FileLog.e(r4);
-        L_0x0152:
-            if (r2 == 0) goto L_0x0157;
         L_0x0154:
-            r2.close();	 Catch:{ Exception -> 0x0157 }
-        L_0x0157:
+            if (r2 == 0) goto L_0x0159;
+        L_0x0156:
+            r2.close();	 Catch:{ Exception -> 0x0159 }
+        L_0x0159:
             r1 = r1 + 1;
             goto L_0x0005;
-        L_0x015b:
+        L_0x015d:
             r14 = move-exception;
-            if (r3 == 0) goto L_0x0166;
-        L_0x015e:
-            r3.close();	 Catch:{ all -> 0x0162 }
-            goto L_0x0166;
-        L_0x0162:
+            if (r3 == 0) goto L_0x0168;
+        L_0x0160:
+            r3.close();	 Catch:{ all -> 0x0164 }
+            goto L_0x0168;
+        L_0x0164:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-        L_0x0166:
-            if (r2 == 0) goto L_0x016b;
         L_0x0168:
-            r2.close();	 Catch:{ Exception -> 0x016b }
-        L_0x016b:
+            if (r2 == 0) goto L_0x016d;
+        L_0x016a:
+            r2.close();	 Catch:{ Exception -> 0x016d }
+        L_0x016d:
             throw r14;
-        L_0x016c:
+        L_0x016e:
             return r14;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.ConnectionsManager$DnsTxtLoadTask.doInBackground(java.lang.Void[]):org.telegram.tgnet.NativeByteBuffer");

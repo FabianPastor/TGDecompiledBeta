@@ -7771,22 +7771,22 @@ public class ImageLoader {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00af  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ec  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00af  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ec  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00af  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ec  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00af  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ed  */
     private static org.telegram.tgnet.TLRPC.PhotoSize scaleAndSaveImageInternal(org.telegram.tgnet.TLRPC.PhotoSize r3, android.graphics.Bitmap r4, int r5, int r6, float r7, float r8, float r9, int r10, boolean r11, boolean r12) throws java.lang.Exception {
         /*
         r7 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -7814,7 +7814,7 @@ public class ImageLoader {
         goto L_0x0020;
     L_0x001d:
         r9 = (org.telegram.tgnet.TLRPC.TL_fileLocationToBeDeprecated) r9;
-        goto L_0x0089;
+        goto L_0x008a;
     L_0x0020:
         r9 = new org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
         r9.<init>();
@@ -7841,7 +7841,7 @@ public class ImageLoader {
     L_0x0052:
         r12 = "s";
         r3.type = r12;
-        goto L_0x0089;
+        goto L_0x008a;
     L_0x0057:
         r12 = r3.w;
         r0 = 320; // 0x140 float:4.48E-43 double:1.58E-321;
@@ -7852,33 +7852,33 @@ public class ImageLoader {
     L_0x0061:
         r12 = "m";
         r3.type = r12;
-        goto L_0x0089;
+        goto L_0x008a;
     L_0x0066:
         r12 = r3.w;
         r0 = 800; // 0x320 float:1.121E-42 double:3.953E-321;
-        if (r12 > r0) goto L_0x0075;
+        if (r12 > r0) goto L_0x0076;
     L_0x006c:
         r12 = r3.h;
-        if (r12 > r0) goto L_0x0075;
+        if (r12 > r0) goto L_0x0076;
     L_0x0070:
         r12 = "x";
         r3.type = r12;
-        goto L_0x0089;
-    L_0x0075:
+        goto L_0x008a;
+    L_0x0076:
         r12 = r3.w;
         r0 = 1280; // 0x500 float:1.794E-42 double:6.324E-321;
-        if (r12 > r0) goto L_0x0085;
-    L_0x007b:
+        if (r12 > r0) goto L_0x0086;
+    L_0x007c:
         r12 = r3.h;
-        if (r12 > r0) goto L_0x0085;
-    L_0x007f:
+        if (r12 > r0) goto L_0x0086;
+    L_0x0080:
         r12 = "y";
         r3.type = r12;
-        goto L_0x0089;
-    L_0x0085:
+        goto L_0x008a;
+    L_0x0086:
         r12 = "w";
         r3.type = r12;
-    L_0x0089:
+    L_0x008a:
         r12 = new java.lang.StringBuilder;
         r12.<init>();
         r0 = r9.volume_id;
@@ -7893,20 +7893,20 @@ public class ImageLoader {
         r0 = new java.io.File;
         r1 = r9.volume_id;
         r9 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1));
-        if (r9 == 0) goto L_0x00af;
-    L_0x00ae:
-        goto L_0x00b0;
+        if (r9 == 0) goto L_0x00b0;
     L_0x00af:
-        r6 = 4;
+        goto L_0x00b1;
     L_0x00b0:
+        r6 = 4;
+    L_0x00b1:
         r6 = org.telegram.messenger.FileLoader.getDirectory(r6);
         r0.<init>(r6, r12);
         r6 = new java.io.FileOutputStream;
         r6.<init>(r0);
         r7 = android.graphics.Bitmap.CompressFormat.JPEG;
         r5.compress(r7, r10, r6);
-        if (r11 == 0) goto L_0x00dc;
-    L_0x00c3:
+        if (r11 == 0) goto L_0x00dd;
+    L_0x00c4:
         r7 = new java.io.ByteArrayOutputStream;
         r7.<init>();
         r8 = android.graphics.Bitmap.CompressFormat.JPEG;
@@ -7917,18 +7917,18 @@ public class ImageLoader {
         r8 = r8.length;
         r3.size = r8;
         r7.close();
-        goto L_0x00e7;
-    L_0x00dc:
+        goto L_0x00e8;
+    L_0x00dd:
         r7 = r6.getChannel();
         r7 = r7.size();
         r8 = (int) r7;
         r3.size = r8;
-    L_0x00e7:
+    L_0x00e8:
         r6.close();
-        if (r5 == r4) goto L_0x00ef;
-    L_0x00ec:
+        if (r5 == r4) goto L_0x00f0;
+    L_0x00ed:
         r5.recycle();
-    L_0x00ef:
+    L_0x00f0:
         return r3;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.scaleAndSaveImageInternal(org.telegram.tgnet.TLRPC$PhotoSize, android.graphics.Bitmap, int, int, float, float, float, int, boolean, boolean):org.telegram.tgnet.TLRPC$PhotoSize");

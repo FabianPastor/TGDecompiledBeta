@@ -1346,7 +1346,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     for (i3 = 
 /*
 Method generation error in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
-jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r14_15 'i3' int) = (r14_2 'i3' int), (r14_0 'i3' int), (r14_14 'i3' int) binds: {(r14_2 'i3' int)=B:71:0x04f2, (r14_0 'i3' int)=B:72:0x04f7, (r14_14 'i3' int)=B:218:0x073e} in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r14_15 'i3' int) = (r14_2 'i3' int), (r14_0 'i3' int), (r14_14 'i3' int) binds: {(r14_2 'i3' int)=B:71:0x04f3, (r14_0 'i3' int)=B:72:0x04f8, (r14_14 'i3' int)=B:218:0x073f} in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
 	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
 	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
@@ -15817,6 +15817,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         ViewGroup.LayoutParams layoutParams = this.animatingImageView.getLayoutParams();
         layoutParams.width = (int) drawRegion.width();
         layoutParams.height = (int) drawRegion.height();
+        if (layoutParams.width == 0) {
+            layoutParams.width = 1;
+        }
+        if (layoutParams.height == 0) {
+            layoutParams.height = 1;
+        }
         this.animatingImageView.setLayoutParams(layoutParams);
         Point point = AndroidUtilities.displaySize;
         float f = ((float) point.x) / ((float) layoutParams.width);
@@ -15951,25 +15957,27 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:18:0x0089  */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x00b9  */
     /* JADX WARNING: Removed duplicated region for block: B:21:0x0091  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x00f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0117  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x02c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x0154  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0362  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x00de  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x00e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0103  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x0123  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x02cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x0160  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x036e  */
     public void closePhoto(boolean r18) {
         /*
         r17 = this;
         r0 = r17;
         r1 = r0.parentActivity;
-        if (r1 == 0) goto L_0x0398;
+        if (r1 == 0) goto L_0x03a4;
     L_0x0006:
         r1 = r0.isPhotoVisible;
-        if (r1 == 0) goto L_0x0398;
+        if (r1 == 0) goto L_0x03a4;
     L_0x000a:
         r1 = r17.checkPhotoAnimation();
         if (r1 == 0) goto L_0x0012;
     L_0x0010:
-        goto L_0x0398;
+        goto L_0x03a4;
     L_0x0012:
         r17.releasePlayer();
         r1 = r0.currentAccount;
@@ -16001,7 +16009,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0055:
         r2 = r0.currentMedia;
         r2 = r0.getPlaceForPhoto(r2);
-        if (r18 == 0) goto L_0x036c;
+        if (r18 == 0) goto L_0x0378;
     L_0x005d:
         r5 = 1;
         r0.photoAnimationInProgress = r5;
@@ -16070,6 +16078,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r8.setImageBitmap(r9);
         r8 = r3;
     L_0x00da:
+        r9 = r7.width;
+        if (r9 != 0) goto L_0x00e0;
+    L_0x00de:
+        r7.width = r5;
+    L_0x00e0:
+        r9 = r7.height;
+        if (r9 != 0) goto L_0x00e6;
+    L_0x00e4:
+        r7.height = r5;
+    L_0x00e6:
         r9 = r0.animatingImageView;
         r9.setLayoutParams(r7);
         r9 = org.telegram.messenger.AndroidUtilities.displaySize;
@@ -16086,12 +16104,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = (float) r11;
         r9 = r9 / r11;
         r11 = (r10 > r9 ? 1 : (r10 == r9 ? 0 : -1));
-        if (r11 <= 0) goto L_0x00f7;
-    L_0x00f6:
-        goto L_0x00f8;
-    L_0x00f7:
+        if (r11 <= 0) goto L_0x0103;
+    L_0x0102:
+        goto L_0x0104;
+    L_0x0103:
         r9 = r10;
-    L_0x00f8:
+    L_0x0104:
         r10 = r7.width;
         r10 = (float) r10;
         r11 = r0.scale;
@@ -16109,16 +16127,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r11 / r10;
         r12 = android.os.Build.VERSION.SDK_INT;
         r13 = 21;
-        if (r12 < r13) goto L_0x0123;
-    L_0x0117:
+        if (r12 < r13) goto L_0x012f;
+    L_0x0123:
         r12 = r0.lastInsets;
-        if (r12 == 0) goto L_0x0123;
-    L_0x011b:
+        if (r12 == 0) goto L_0x012f;
+    L_0x0127:
         r12 = (android.view.WindowInsets) r12;
         r12 = r12.getSystemWindowInsetLeft();
         r12 = (float) r12;
         r11 = r11 + r12;
-    L_0x0123:
+    L_0x012f:
         r12 = org.telegram.messenger.AndroidUtilities.displaySize;
         r12 = r12.y;
         r13 = org.telegram.messenger.AndroidUtilities.statusBarHeight;
@@ -16145,17 +16163,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = 3;
         r12 = 2;
         r13 = 0;
-        if (r2 == 0) goto L_0x02c3;
-    L_0x0154:
+        if (r2 == 0) goto L_0x02cf;
+    L_0x0160:
         r14 = r2.imageReceiver;
         r14.setVisible(r1, r5);
         r14 = r2.imageReceiver;
         r14 = r14.isAspectFit();
-        if (r14 == 0) goto L_0x0163;
-    L_0x0161:
+        if (r14 == 0) goto L_0x016f;
+    L_0x016d:
         r14 = 0;
-        goto L_0x0172;
-    L_0x0163:
+        goto L_0x017e;
+    L_0x016f:
         r14 = r8.left;
         r15 = r2.imageReceiver;
         r15 = r15.getImageX();
@@ -16163,7 +16181,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = r14 - r15;
         r14 = java.lang.Math.abs(r14);
         r14 = (int) r14;
-    L_0x0172:
+    L_0x017e:
         r15 = r8.top;
         r3 = r2.imageReceiver;
         r3 = r3.getImageY();
@@ -16185,10 +16203,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = (float) r9;
         r7 = r7 + r9;
         r7 = (int) r7;
-        if (r7 >= 0) goto L_0x019a;
-    L_0x0199:
+        if (r7 >= 0) goto L_0x01a6;
+    L_0x01a5:
         r7 = 0;
-    L_0x019a:
+    L_0x01a6:
         r9 = r2.viewY;
         r9 = (float) r9;
         r10 = r8.top;
@@ -16206,10 +16224,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = (float) r4;
         r9 = r9 + r4;
         r4 = (int) r9;
-        if (r4 >= 0) goto L_0x01b7;
-    L_0x01b6:
+        if (r4 >= 0) goto L_0x01c3;
+    L_0x01c2:
         r4 = 0;
-    L_0x01b7:
+    L_0x01c3:
         r7 = java.lang.Math.max(r7, r3);
         r4 = java.lang.Math.max(r4, r3);
         r9 = r0.animationValues;
@@ -16341,8 +16359,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = 5;
         r1[r4] = r3;
         r6.playTogether(r1);
-        goto L_0x0342;
-    L_0x02c3:
+        goto L_0x034e;
+    L_0x02cf:
         r1 = org.telegram.messenger.AndroidUtilities.displaySize;
         r1 = r1.y;
         r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight;
@@ -16368,12 +16386,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r8 = new float[r5];
         r9 = r0.translationY;
         r9 = (r9 > r10 ? 1 : (r9 == r10 ? 0 : -1));
-        if (r9 < 0) goto L_0x02f8;
-    L_0x02f7:
-        goto L_0x02f9;
-    L_0x02f8:
+        if (r9 < 0) goto L_0x0304;
+    L_0x0303:
+        goto L_0x0305;
+    L_0x0304:
         r1 = -r1;
-    L_0x02f9:
+    L_0x0305:
         r1 = (float) r1;
         r9 = 0;
         r8[r9] = r1;
@@ -16408,7 +16426,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = 6;
         r3[r4] = r1;
         r6.playTogether(r3);
-    L_0x0342:
+    L_0x034e:
         r1 = new org.telegram.ui.-$$Lambda$ArticleViewer$bddzRYkreqx-hk8WrDDgX9mS_Fw;
         r1.<init>(r0, r2);
         r0.photoAnimationEndRunnable = r1;
@@ -16421,15 +16439,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.photoTransitionAnimationStartTime = r1;
         r1 = android.os.Build.VERSION.SDK_INT;
         r2 = 18;
-        if (r1 < r2) goto L_0x0368;
-    L_0x0362:
+        if (r1 < r2) goto L_0x0374;
+    L_0x036e:
         r1 = r0.photoContainerView;
         r2 = 0;
         r1.setLayerType(r12, r2);
-    L_0x0368:
+    L_0x0374:
         r6.start();
-        goto L_0x0389;
-    L_0x036c:
+        goto L_0x0395;
+    L_0x0378:
         r1 = r0.photoContainerView;
         r3 = 4;
         r1.setVisibility(r3);
@@ -16443,16 +16461,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.setScaleX(r2);
         r1 = r0.photoContainerView;
         r1.setScaleY(r2);
-    L_0x0389:
+    L_0x0395:
         r1 = r0.currentAnimation;
-        if (r1 == 0) goto L_0x0398;
-    L_0x038d:
+        if (r1 == 0) goto L_0x03a4;
+    L_0x0399:
         r2 = 0;
         r1.setSecondParentView(r2);
         r0.currentAnimation = r2;
         r1 = r0.centerImage;
         r1.setImageBitmap(r2);
-    L_0x0398:
+    L_0x03a4:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.closePhoto(boolean):void");

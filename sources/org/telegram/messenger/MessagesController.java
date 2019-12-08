@@ -8901,7 +8901,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         int i = (int) dialog.id;
         if (i != 0 && this.checkingLastMessagesDialogs.indexOfKey(i) < 0) {
             TL_messages_getHistory tL_messages_getHistory = new TL_messages_getHistory();
-            tL_messages_getHistory.peer = inputPeer == null ? getInputPeer(i) : inputPeer;
+            if (inputPeer == null) {
+                inputPeer = getInputPeer(i);
+            }
+            tL_messages_getHistory.peer = inputPeer;
             if (tL_messages_getHistory.peer != null) {
                 tL_messages_getHistory.limit = 1;
                 this.checkingLastMessagesDialogs.put(i, true);
@@ -8924,13 +8927,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                             nativeByteBuffer.writeInt32(dialog.unread_mentions_count);
                             nativeByteBuffer.writeBool(dialog.unread_mark);
                             nativeByteBuffer.writeInt32(dialog.folder_id);
-                            inputPeer.serializeToStream(nativeByteBuffer);
+                            tL_messages_getHistory.peer.serializeToStream(nativeByteBuffer);
                         } catch (Exception e2) {
                             e = e2;
                         }
                     } catch (Exception e3) {
-                        e = e3;
+                        Throwable th = e3;
                         nativeByteBuffer = null;
+                        e = th;
                         FileLog.e(e);
                         j = getMessagesStorage().createPendingTask(nativeByteBuffer);
                         getConnectionsManager().sendRequest(tL_messages_getHistory, new -$$Lambda$MessagesController$9goMHps4vcUnXcLVLUkEn9GeTGE(this, i, dialog, j));

@@ -1770,11 +1770,11 @@ public class AlertsCreator {
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             if (obj != null || obj2 != null) {
                 boolean z5;
-                Builder builder;
+                BackupImageView backupImageView;
                 String string;
                 int currentAccount = baseFragment.getCurrentAccount();
                 Context parentActivity = baseFragment.getParentActivity();
-                Builder builder2 = new Builder(parentActivity);
+                Builder builder = new Builder(parentActivity);
                 int clientUserId = UserConfig.getInstance(currentAccount).getClientUserId();
                 final CheckBoxCell[] checkBoxCellArr = new CheckBoxCell[1];
                 TextView textView = new TextView(parentActivity);
@@ -1791,12 +1791,12 @@ public class AlertsCreator {
                         }
                     }
                 };
-                builder2.setView(anonymousClass3);
+                builder.setView(anonymousClass3);
                 Drawable avatarDrawable = new AvatarDrawable();
                 avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
-                BackupImageView backupImageView = new BackupImageView(parentActivity);
-                backupImageView.setRoundRadius(AndroidUtilities.dp(20.0f));
-                anonymousClass3.addView(backupImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, 22.0f, 5.0f, 22.0f, 0.0f));
+                BackupImageView backupImageView2 = new BackupImageView(parentActivity);
+                backupImageView2.setRoundRadius(AndroidUtilities.dp(20.0f));
+                anonymousClass3.addView(backupImageView2, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, 22.0f, 5.0f, 22.0f, 0.0f));
                 TextView textView2 = new TextView(parentActivity);
                 textView2.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
                 textView2.setTextSize(1, 20.0f);
@@ -1806,36 +1806,39 @@ public class AlertsCreator {
                 textView2.setSingleLine(true);
                 textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
                 textView2.setEllipsize(TruncateAt.END);
-                String str = "ClearHistoryCache";
-                String str2 = "ClearHistory";
-                String str3 = "LeaveMegaMenu";
+                String str = "DeleteChatUser";
+                String str2 = "ClearHistoryCache";
+                String str3 = "ClearHistory";
+                Builder builder2 = builder;
+                String str4 = "LeaveMegaMenu";
                 if (!z) {
                     z5 = z6;
-                    builder = builder2;
+                    backupImageView = backupImageView2;
                     if (z2) {
-                        String str4 = "DeleteMegaMenu";
                         if (!ChatObject.isChannel(chat)) {
-                            textView2.setText(LocaleController.getString(str4, NUM));
+                            textView2.setText(LocaleController.getString("DeleteMegaMenu", NUM));
                         } else if (obj.megagroup) {
-                            textView2.setText(LocaleController.getString(str4, NUM));
+                            textView2.setText(LocaleController.getString("DeleteMegaMenu", NUM));
                         } else {
                             textView2.setText(LocaleController.getString("ChannelDeleteMenu", NUM));
                         }
+                    } else if (obj == null) {
+                        textView2.setText(LocaleController.getString(str, NUM));
                     } else if (!ChatObject.isChannel(chat)) {
-                        textView2.setText(LocaleController.getString(str3, NUM));
+                        textView2.setText(LocaleController.getString(str4, NUM));
                     } else if (obj.megagroup) {
-                        textView2.setText(LocaleController.getString(str3, NUM));
+                        textView2.setText(LocaleController.getString(str4, NUM));
                     } else {
                         textView2.setText(LocaleController.getString("LeaveChannelMenu", NUM));
                     }
                 } else if (z6) {
                     z5 = z6;
-                    builder = builder2;
-                    textView2.setText(LocaleController.getString(str, NUM));
+                    backupImageView = backupImageView2;
+                    textView2.setText(LocaleController.getString(str2, NUM));
                 } else {
                     z5 = z6;
-                    builder = builder2;
-                    textView2.setText(LocaleController.getString(str2, NUM));
+                    backupImageView = backupImageView2;
+                    textView2.setText(LocaleController.getString(str3, NUM));
                 }
                 anonymousClass3.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 21 : 76), 11.0f, (float) (LocaleController.isRTL ? 76 : 21), 0.0f));
                 anonymousClass3.addView(textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 24.0f, 57.0f, 24.0f, 9.0f));
@@ -1885,17 +1888,20 @@ public class AlertsCreator {
                     anonymousClass3.addView(checkBoxCellArr[0], LayoutHelper.createFrame(-1, 48.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
                     checkBoxCellArr[0].setOnClickListener(new -$$Lambda$AlertsCreator$b9LvzOmxlr-UJrl-uDMYPiB7I6I(zArr));
                 }
-                if (obj2 != null) {
-                    if (obj2.id == clientUserId) {
-                        avatarDrawable.setAvatarType(2);
-                        backupImageView.setImage(null, null, avatarDrawable, obj2);
-                    } else {
-                        avatarDrawable.setInfo((User) obj2);
-                        backupImageView.setImage(ImageLocation.getForUser(obj2, false), "50_50", avatarDrawable, obj2);
+                BackupImageView backupImageView3;
+                if (obj2 == null) {
+                    backupImageView3 = backupImageView;
+                    if (obj != null) {
+                        avatarDrawable.setInfo((Chat) obj);
+                        backupImageView3.setImage(ImageLocation.getForChat(obj, false), "50_50", avatarDrawable, obj);
                     }
-                } else if (obj != null) {
-                    avatarDrawable.setInfo((Chat) obj);
-                    backupImageView.setImage(ImageLocation.getForChat(obj, false), "50_50", avatarDrawable, obj);
+                } else if (obj2.id == clientUserId) {
+                    avatarDrawable.setAvatarType(2);
+                    backupImageView.setImage(null, null, avatarDrawable, obj2);
+                } else {
+                    backupImageView3 = backupImageView;
+                    avatarDrawable.setInfo((User) obj2);
+                    backupImageView3.setImage(ImageLocation.getForUser(obj2, false), "50_50", avatarDrawable, obj2);
                 }
                 if (z3) {
                     textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllMessagesAlert", NUM)));
@@ -1944,9 +1950,9 @@ public class AlertsCreator {
                     string = LocaleController.getString("DeleteAll", NUM);
                 } else if (z) {
                     if (z5) {
-                        string = LocaleController.getString(str, NUM);
-                    } else {
                         string = LocaleController.getString(str2, NUM);
+                    } else {
+                        string = LocaleController.getString(str3, NUM);
                     }
                 } else if (z2) {
                     if (!ChatObject.isChannel(chat)) {
@@ -1957,16 +1963,16 @@ public class AlertsCreator {
                         string = LocaleController.getString("ChannelDelete", NUM);
                     }
                 } else if (!ChatObject.isChannel(chat)) {
-                    string = LocaleController.getString("DeleteChatUser", NUM);
+                    string = LocaleController.getString(str, NUM);
                 } else if (obj.megagroup) {
-                    string = LocaleController.getString(str3, NUM);
+                    string = LocaleController.getString(str4, NUM);
                 } else {
                     string = LocaleController.getString("LeaveChannelMenu", NUM);
                 }
-                str = string;
+                str3 = string;
                 -$$Lambda$AlertsCreator$MnHLfrgmi5mlg6nnWL9u3dTctXY -__lambda_alertscreator_mnhlfrgmi5mlg6nnwl9u3dtctxy = new -$$Lambda$AlertsCreator$MnHLfrgmi5mlg6nnWL9u3dTctXY(user, z5, z3, zArr, baseFragment, z, z2, chat, z4, booleanCallback);
-                Builder builder3 = builder;
-                builder3.setPositiveButton(str, -__lambda_alertscreator_mnhlfrgmi5mlg6nnwl9u3dtctxy);
+                Builder builder3 = builder2;
+                builder3.setPositiveButton(str3, -__lambda_alertscreator_mnhlfrgmi5mlg6nnwl9u3dtctxy);
                 builder3.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                 AlertDialog create = builder3.create();
                 baseFragment.showDialog(create);

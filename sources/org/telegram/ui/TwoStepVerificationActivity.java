@@ -1133,11 +1133,13 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     private void showAlertWithText(String str, String str2) {
-        Builder builder = new Builder(getParentActivity());
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
-        builder.setTitle(str);
-        builder.setMessage(str2);
-        showDialog(builder.create());
+        if (getParentActivity() != null) {
+            Builder builder = new Builder(getParentActivity());
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
+            builder.setTitle(str);
+            builder.setMessage(str2);
+            showDialog(builder.create());
+        }
     }
 
     private void setNewPassword(boolean z) {
