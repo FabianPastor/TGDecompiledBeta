@@ -213,7 +213,7 @@ public class EditTextBoldCursor extends EditText {
         if (r0 == 0) goto L_0x00ff;
     L_0x00f3:
         r0 = mCursorDrawableResField;	 Catch:{ Throwable -> 0x00ff }
-        r1 = NUM; // 0x7var_d2 float:1.7945004E38 double:1.052935607E-314;
+        r1 = NUM; // 0x7var_f float:1.7944836E38 double:1.052935566E-314;
         r1 = java.lang.Integer.valueOf(r1);	 Catch:{ Throwable -> 0x00ff }
         r0.set(r8, r1);	 Catch:{ Throwable -> 0x00ff }
     L_0x00ff:
@@ -566,13 +566,11 @@ public class EditTextBoldCursor extends EditText {
                         this.gradientDrawable.draw(canvas2);
                         canvas.restore();
                     }
-                } else {
-                    return;
                 }
             }
         } catch (Throwable unused4) {
         }
-        if (!(this.lineColor == 0 || this.hintLayout == null)) {
+        if (this.lineColor != 0 && this.hintLayout != null) {
             if (!TextUtils.isEmpty(this.errorText)) {
                 this.linePaint.setColor(this.errorLineColor);
                 extendedPaddingTop = AndroidUtilities.dp(2.0f);

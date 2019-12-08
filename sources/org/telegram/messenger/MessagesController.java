@@ -388,6 +388,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private String installReferer;
     private boolean isLeftProxyChannel;
     private ArrayList<Integer> joiningToChannels = new ArrayList();
+    private int lastCheckProxyId;
     private int lastPrintingStringCount;
     private long lastPushRegisterSendTime;
     private long lastStatusUpdateTime;
@@ -1323,6 +1324,10 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public ConcurrentHashMap<Integer, User> getUsers() {
         return this.users;
+    }
+
+    public ConcurrentHashMap<Integer, Chat> getChats() {
+        return this.chats;
     }
 
     public Chat getChat(Integer num) {
@@ -2308,7 +2313,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     stringBuilder2.append(tL_peerSettings.report_spam);
                     stringBuilder2.append(" share = ");
                     stringBuilder2.append(tL_peerSettings.share_contact);
-                    stringBuilder2.append("geo = ");
+                    stringBuilder2.append(" geo = ");
                     stringBuilder2.append(tL_peerSettings.report_geo);
                     stringBuilder2.append(" hide = ");
                     stringBuilder2.append(z2);
@@ -4268,59 +4273,59 @@ public class MessagesController extends BaseController implements NotificationCe
         checkProxyInfoInternal(z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0091  */
-    private void checkProxyInfoInternal(boolean r11) {
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0098  */
+    private void checkProxyInfoInternal(boolean r12) {
         /*
-        r10 = this;
+        r11 = this;
         r0 = 0;
-        if (r11 == 0) goto L_0x0009;
+        if (r12 == 0) goto L_0x0009;
     L_0x0003:
-        r1 = r10.checkingProxyInfo;
+        r1 = r11.checkingProxyInfo;
         if (r1 == 0) goto L_0x0009;
     L_0x0007:
-        r10.checkingProxyInfo = r0;
+        r11.checkingProxyInfo = r0;
     L_0x0009:
-        if (r11 != 0) goto L_0x0017;
+        if (r12 != 0) goto L_0x0017;
     L_0x000b:
-        r11 = r10.nextProxyInfoCheckTime;
-        r1 = r10.getConnectionsManager();
+        r12 = r11.nextProxyInfoCheckTime;
+        r1 = r11.getConnectionsManager();
         r1 = r1.getCurrentTime();
-        if (r11 > r1) goto L_0x001b;
+        if (r12 > r1) goto L_0x001b;
     L_0x0017:
-        r11 = r10.checkingProxyInfo;
-        if (r11 == 0) goto L_0x001c;
+        r12 = r11.checkingProxyInfo;
+        if (r12 == 0) goto L_0x001c;
     L_0x001b:
         return;
     L_0x001c:
-        r11 = r10.checkingProxyInfoRequestId;
+        r12 = r11.checkingProxyInfoRequestId;
         r1 = 1;
-        if (r11 == 0) goto L_0x002c;
+        if (r12 == 0) goto L_0x002c;
     L_0x0021:
-        r11 = r10.getConnectionsManager();
-        r2 = r10.checkingProxyInfoRequestId;
-        r11.cancelRequest(r2, r1);
-        r10.checkingProxyInfoRequestId = r0;
+        r12 = r11.getConnectionsManager();
+        r2 = r11.checkingProxyInfoRequestId;
+        r12.cancelRequest(r2, r1);
+        r11.checkingProxyInfoRequestId = r0;
     L_0x002c:
-        r11 = getGlobalMainSettings();
+        r12 = getGlobalMainSettings();
         r2 = "proxy_enabled";
-        r2 = r11.getBoolean(r2, r0);
+        r2 = r12.getBoolean(r2, r0);
         r3 = "";
         r4 = "proxy_ip";
-        r4 = r11.getString(r4, r3);
+        r4 = r12.getString(r4, r3);
         r5 = "proxy_secret";
-        r11 = r11.getString(r5, r3);
-        r5 = r10.proxyDialogId;
+        r12 = r12.getString(r5, r3);
+        r5 = r11.proxyDialogId;
         r7 = 0;
         r3 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1));
         if (r3 == 0) goto L_0x0067;
     L_0x004c:
-        r3 = r10.proxyDialogAddress;
+        r3 = r11.proxyDialogAddress;
         if (r3 == 0) goto L_0x0067;
     L_0x0050:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r5.append(r4);
-        r5.append(r11);
+        r5.append(r12);
         r5 = r5.toString();
         r3 = r3.equals(r5);
         if (r3 != 0) goto L_0x0067;
@@ -4330,216 +4335,228 @@ public class MessagesController extends BaseController implements NotificationCe
     L_0x0067:
         r3 = 0;
     L_0x0068:
+        r5 = r11.lastCheckProxyId;
+        r5 = r5 + r1;
+        r11.lastCheckProxyId = r5;
         r5 = 2;
-        if (r2 == 0) goto L_0x008e;
-    L_0x006b:
+        if (r2 == 0) goto L_0x0095;
+    L_0x0070:
         r2 = android.text.TextUtils.isEmpty(r4);
-        if (r2 != 0) goto L_0x008e;
-    L_0x0071:
-        r2 = android.text.TextUtils.isEmpty(r11);
-        if (r2 != 0) goto L_0x008e;
-    L_0x0077:
-        r10.checkingProxyInfo = r1;
-        r2 = new org.telegram.tgnet.TLRPC$TL_help_getProxyData;
-        r2.<init>();
-        r6 = r10.getConnectionsManager();
-        r9 = new org.telegram.messenger.-$$Lambda$MessagesController$SaWsznydC5Y7TDBVTp_FLPmMJQE;
-        r9.<init>(r10, r4, r11);
-        r11 = r6.sendRequest(r2, r9);
-        r10.checkingProxyInfoRequestId = r11;
-        goto L_0x008f;
-    L_0x008e:
+        if (r2 != 0) goto L_0x0095;
+    L_0x0076:
+        r2 = android.text.TextUtils.isEmpty(r12);
+        if (r2 != 0) goto L_0x0095;
+    L_0x007c:
+        r11.checkingProxyInfo = r1;
+        r2 = r11.lastCheckProxyId;
+        r6 = new org.telegram.tgnet.TLRPC$TL_help_getProxyData;
+        r6.<init>();
+        r9 = r11.getConnectionsManager();
+        r10 = new org.telegram.messenger.-$$Lambda$MessagesController$z2rvLz6VXyoFjyl4l1AzXkktcJ0;
+        r10.<init>(r11, r2, r4, r12);
+        r12 = r9.sendRequest(r6, r10);
+        r11.checkingProxyInfoRequestId = r12;
+        goto L_0x0096;
+    L_0x0095:
         r3 = 2;
-    L_0x008f:
-        if (r3 == 0) goto L_0x00d6;
-    L_0x0091:
-        r10.proxyDialogId = r7;
-        r11 = 0;
-        r10.proxyDialogAddress = r11;
-        r11 = getGlobalMainSettings();
-        r11 = r11.edit();
-        r6 = r10.proxyDialogId;
+    L_0x0096:
+        if (r3 == 0) goto L_0x00dd;
+    L_0x0098:
+        r11.proxyDialogId = r7;
+        r12 = 0;
+        r11.proxyDialogAddress = r12;
+        r12 = getGlobalMainSettings();
+        r12 = r12.edit();
+        r6 = r11.proxyDialogId;
         r2 = "proxy_dialog";
-        r11 = r11.putLong(r2, r6);
+        r12 = r12.putLong(r2, r6);
         r2 = "proxyDialogAddress";
-        r11 = r11.remove(r2);
-        r11.commit();
-        r11 = r10.getConnectionsManager();
-        r11 = r11.getCurrentTime();
-        r11 = r11 + 3600;
-        r10.nextProxyInfoCheckTime = r11;
-        if (r3 != r5) goto L_0x00ce;
-    L_0x00bd:
-        r10.checkingProxyInfo = r0;
-        r11 = r10.checkingProxyInfoRequestId;
-        if (r11 == 0) goto L_0x00ce;
-    L_0x00c3:
-        r11 = r10.getConnectionsManager();
-        r2 = r10.checkingProxyInfoRequestId;
-        r11.cancelRequest(r2, r1);
-        r10.checkingProxyInfoRequestId = r0;
-    L_0x00ce:
-        r11 = new org.telegram.messenger.-$$Lambda$MessagesController$FvadbQtD8d2glGqiRUodW_Fj5b8;
-        r11.<init>(r10);
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r11);
-    L_0x00d6:
+        r12 = r12.remove(r2);
+        r12.commit();
+        r12 = r11.getConnectionsManager();
+        r12 = r12.getCurrentTime();
+        r12 = r12 + 3600;
+        r11.nextProxyInfoCheckTime = r12;
+        if (r3 != r5) goto L_0x00d5;
+    L_0x00c4:
+        r11.checkingProxyInfo = r0;
+        r12 = r11.checkingProxyInfoRequestId;
+        if (r12 == 0) goto L_0x00d5;
+    L_0x00ca:
+        r12 = r11.getConnectionsManager();
+        r2 = r11.checkingProxyInfoRequestId;
+        r12.cancelRequest(r2, r1);
+        r11.checkingProxyInfoRequestId = r0;
+    L_0x00d5:
+        r12 = new org.telegram.messenger.-$$Lambda$MessagesController$FvadbQtD8d2glGqiRUodW_Fj5b8;
+        r12.<init>(r11);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r12);
+    L_0x00dd:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.checkProxyInfoInternal(boolean):void");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00ab  */
-    /* JADX WARNING: Missing block: B:22:0x004c, code skipped:
-            if (r6.restricted == false) goto L_0x0025;
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00af  */
+    /* JADX WARNING: Missing block: B:22:0x004d, code skipped:
+            if (r5.restricted == false) goto L_0x0053;
      */
-    /* JADX WARNING: Missing block: B:32:0x0075, code skipped:
-            if (r6.restricted == false) goto L_0x0025;
+    /* JADX WARNING: Missing block: B:34:0x0079, code skipped:
+            if (r5.restricted == false) goto L_0x0025;
      */
-    public /* synthetic */ void lambda$checkProxyInfoInternal$95$MessagesController(java.lang.String r10, java.lang.String r11, org.telegram.tgnet.TLObject r12, org.telegram.tgnet.TLRPC.TL_error r13) {
+    public /* synthetic */ void lambda$checkProxyInfoInternal$95$MessagesController(int r11, java.lang.String r12, java.lang.String r13, org.telegram.tgnet.TLObject r14, org.telegram.tgnet.TLRPC.TL_error r15) {
         /*
-        r9 = this;
-        r13 = r9.checkingProxyInfoRequestId;
-        if (r13 != 0) goto L_0x0005;
+        r10 = this;
+        r15 = r10.lastCheckProxyId;
+        if (r11 == r15) goto L_0x0005;
     L_0x0004:
         return;
     L_0x0005:
-        r13 = r12 instanceof org.telegram.tgnet.TLRPC.TL_help_proxyDataEmpty;
+        r15 = r14 instanceof org.telegram.tgnet.TLRPC.TL_help_proxyDataEmpty;
         r0 = "proxyDialogAddress";
         r1 = "proxy_dialog";
         r2 = 0;
         r3 = 1;
-        if (r13 == 0) goto L_0x0017;
+        if (r15 == 0) goto L_0x0017;
     L_0x000f:
-        r12 = (org.telegram.tgnet.TLRPC.TL_help_proxyDataEmpty) r12;
-        r10 = r12.expires;
-        r9.nextProxyInfoCheckTime = r10;
-        goto L_0x00c0;
+        r14 = (org.telegram.tgnet.TLRPC.TL_help_proxyDataEmpty) r14;
+        r11 = r14.expires;
+        r10.nextProxyInfoCheckTime = r11;
+        goto L_0x00c7;
     L_0x0017:
-        r13 = r12 instanceof org.telegram.tgnet.TLRPC.TL_help_proxyDataPromo;
-        if (r13 == 0) goto L_0x00b4;
+        r15 = r14 instanceof org.telegram.tgnet.TLRPC.TL_help_proxyDataPromo;
+        if (r15 == 0) goto L_0x00bb;
     L_0x001b:
-        r12 = (org.telegram.tgnet.TLRPC.TL_help_proxyDataPromo) r12;
-        r13 = r12.peer;
-        r4 = r13.user_id;
-        if (r4 == 0) goto L_0x0027;
-    L_0x0023:
-        r3 = (long) r4;
-        r4 = r3;
+        r8 = r14;
+        r8 = (org.telegram.tgnet.TLRPC.TL_help_proxyDataPromo) r8;
+        r14 = r8.peer;
+        r15 = r14.user_id;
+        if (r15 == 0) goto L_0x0028;
+    L_0x0024:
+        r14 = (long) r15;
     L_0x0025:
+        r6 = r14;
         r3 = 0;
-        goto L_0x007b;
-    L_0x0027:
-        r4 = r13.chat_id;
-        if (r4 == 0) goto L_0x0052;
-    L_0x002b:
-        r13 = -r4;
-        r4 = (long) r13;
-        r13 = 0;
-    L_0x002e:
-        r6 = r12.chats;
-        r6 = r6.size();
-        if (r13 >= r6) goto L_0x0025;
-    L_0x0036:
-        r6 = r12.chats;
-        r6 = r6.get(r13);
-        r6 = (org.telegram.tgnet.TLRPC.Chat) r6;
-        r7 = r6.id;
-        r8 = r12.peer;
-        r8 = r8.chat_id;
-        if (r7 != r8) goto L_0x004f;
-    L_0x0046:
-        r13 = r6.kicked;
-        if (r13 != 0) goto L_0x007b;
-    L_0x004a:
-        r13 = r6.restricted;
-        if (r13 == 0) goto L_0x0025;
-    L_0x004e:
-        goto L_0x007b;
+        goto L_0x007f;
+    L_0x0028:
+        r15 = r14.chat_id;
+        if (r15 == 0) goto L_0x0056;
+    L_0x002c:
+        r14 = -r15;
+        r14 = (long) r14;
+        r4 = 0;
+    L_0x002f:
+        r5 = r8.chats;
+        r5 = r5.size();
+        if (r4 >= r5) goto L_0x0053;
+    L_0x0037:
+        r5 = r8.chats;
+        r5 = r5.get(r4);
+        r5 = (org.telegram.tgnet.TLRPC.Chat) r5;
+        r6 = r5.id;
+        r7 = r8.peer;
+        r7 = r7.chat_id;
+        if (r6 != r7) goto L_0x0050;
+    L_0x0047:
+        r4 = r5.kicked;
+        if (r4 != 0) goto L_0x0054;
+    L_0x004b:
+        r4 = r5.restricted;
+        if (r4 == 0) goto L_0x0053;
     L_0x004f:
-        r13 = r13 + 1;
-        goto L_0x002e;
-    L_0x0052:
-        r13 = r13.channel_id;
-        r13 = -r13;
-        r4 = (long) r13;
-        r13 = 0;
-    L_0x0057:
-        r6 = r12.chats;
-        r6 = r6.size();
-        if (r13 >= r6) goto L_0x0025;
-    L_0x005f:
-        r6 = r12.chats;
-        r6 = r6.get(r13);
-        r6 = (org.telegram.tgnet.TLRPC.Chat) r6;
-        r7 = r6.id;
-        r8 = r12.peer;
-        r8 = r8.channel_id;
-        if (r7 != r8) goto L_0x0078;
-    L_0x006f:
-        r13 = r6.kicked;
-        if (r13 != 0) goto L_0x007b;
+        goto L_0x0054;
+    L_0x0050:
+        r4 = r4 + 1;
+        goto L_0x002f;
+    L_0x0053:
+        r3 = 0;
+    L_0x0054:
+        r6 = r14;
+        goto L_0x007f;
+    L_0x0056:
+        r14 = r14.channel_id;
+        r14 = -r14;
+        r14 = (long) r14;
+        r4 = 0;
+    L_0x005b:
+        r5 = r8.chats;
+        r5 = r5.size();
+        if (r4 >= r5) goto L_0x0025;
+    L_0x0063:
+        r5 = r8.chats;
+        r5 = r5.get(r4);
+        r5 = (org.telegram.tgnet.TLRPC.Chat) r5;
+        r6 = r5.id;
+        r7 = r8.peer;
+        r7 = r7.channel_id;
+        if (r6 != r7) goto L_0x007c;
     L_0x0073:
-        r13 = r6.restricted;
-        if (r13 == 0) goto L_0x0025;
+        r4 = r5.kicked;
+        if (r4 != 0) goto L_0x0054;
     L_0x0077:
-        goto L_0x007b;
-    L_0x0078:
-        r13 = r13 + 1;
-        goto L_0x0057;
+        r4 = r5.restricted;
+        if (r4 == 0) goto L_0x0025;
     L_0x007b:
-        r9.proxyDialogId = r4;
-        r13 = new java.lang.StringBuilder;
-        r13.<init>();
-        r13.append(r10);
-        r13.append(r11);
-        r10 = r13.toString();
-        r9.proxyDialogAddress = r10;
-        r10 = getGlobalMainSettings();
-        r10 = r10.edit();
-        r6 = r9.proxyDialogId;
-        r10 = r10.putLong(r1, r6);
-        r11 = r9.proxyDialogAddress;
-        r10 = r10.putString(r0, r11);
-        r10.commit();
-        r10 = r12.expires;
-        r9.nextProxyInfoCheckTime = r10;
-        if (r3 != 0) goto L_0x00c0;
-    L_0x00ab:
-        r10 = new org.telegram.messenger.-$$Lambda$MessagesController$0mxeOwB8KketmB2b8T1pp9iml0o;
-        r10.<init>(r9, r4, r12);
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);
-        goto L_0x00c0;
-    L_0x00b4:
-        r10 = r9.getConnectionsManager();
-        r10 = r10.getCurrentTime();
-        r10 = r10 + 3600;
-        r9.nextProxyInfoCheckTime = r10;
-    L_0x00c0:
-        if (r3 == 0) goto L_0x00e7;
-    L_0x00c2:
-        r10 = 0;
-        r9.proxyDialogId = r10;
-        r10 = getGlobalMainSettings();
-        r10 = r10.edit();
-        r11 = r9.proxyDialogId;
-        r10 = r10.putLong(r1, r11);
-        r10 = r10.remove(r0);
-        r10.commit();
-        r9.checkingProxyInfoRequestId = r2;
-        r9.checkingProxyInfo = r2;
-        r10 = new org.telegram.messenger.-$$Lambda$MessagesController$Kx39oNX6WpYn1825Y_0aDSwCf7M;
-        r10.<init>(r9);
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);
-    L_0x00e7:
+        goto L_0x0054;
+    L_0x007c:
+        r4 = r4 + 1;
+        goto L_0x005b;
+    L_0x007f:
+        r10.proxyDialogId = r6;
+        r14 = new java.lang.StringBuilder;
+        r14.<init>();
+        r14.append(r12);
+        r14.append(r13);
+        r12 = r14.toString();
+        r10.proxyDialogAddress = r12;
+        r12 = getGlobalMainSettings();
+        r12 = r12.edit();
+        r13 = r10.proxyDialogId;
+        r12 = r12.putLong(r1, r13);
+        r13 = r10.proxyDialogAddress;
+        r12 = r12.putString(r0, r13);
+        r12.commit();
+        r12 = r8.expires;
+        r10.nextProxyInfoCheckTime = r12;
+        if (r3 != 0) goto L_0x00c7;
+    L_0x00af:
+        r12 = new org.telegram.messenger.-$$Lambda$MessagesController$n7K3nVWWjMtOeGCLASSNAMEWcnXUQyV8g;
+        r4 = r12;
+        r5 = r10;
+        r9 = r11;
+        r4.<init>(r5, r6, r8, r9);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r12);
+        goto L_0x00c7;
+    L_0x00bb:
+        r11 = r10.getConnectionsManager();
+        r11 = r11.getCurrentTime();
+        r11 = r11 + 3600;
+        r10.nextProxyInfoCheckTime = r11;
+    L_0x00c7:
+        if (r3 == 0) goto L_0x00ee;
+    L_0x00c9:
+        r11 = 0;
+        r10.proxyDialogId = r11;
+        r11 = getGlobalMainSettings();
+        r11 = r11.edit();
+        r12 = r10.proxyDialogId;
+        r11 = r11.putLong(r1, r12);
+        r11 = r11.remove(r0);
+        r11.commit();
+        r10.checkingProxyInfoRequestId = r2;
+        r10.checkingProxyInfo = r2;
+        r11 = new org.telegram.messenger.-$$Lambda$MessagesController$Kx39oNX6WpYn1825Y_0aDSwCf7M;
+        r11.<init>(r10);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r11);
+    L_0x00ee:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$checkProxyInfoInternal$95$MessagesController(java.lang.String, java.lang.String, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$checkProxyInfoInternal$95$MessagesController(int, java.lang.String, java.lang.String, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
     }
 
-    public /* synthetic */ void lambda$null$93$MessagesController(long j, TL_help_proxyDataPromo tL_help_proxyDataPromo) {
+    public /* synthetic */ void lambda$null$93$MessagesController(long j, TL_help_proxyDataPromo tL_help_proxyDataPromo, int i) {
         this.proxyDialog = (Dialog) this.dialogs_dict.get(j);
-        int i = 0;
+        int i2 = 0;
         if (this.proxyDialog != null) {
             this.checkingProxyInfo = false;
             sortDialogs(null);
@@ -4548,55 +4565,55 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         SparseArray sparseArray = new SparseArray();
         SparseArray sparseArray2 = new SparseArray();
-        for (int i2 = 0; i2 < tL_help_proxyDataPromo.users.size(); i2++) {
-            User user = (User) tL_help_proxyDataPromo.users.get(i2);
+        for (int i3 = 0; i3 < tL_help_proxyDataPromo.users.size(); i3++) {
+            User user = (User) tL_help_proxyDataPromo.users.get(i3);
             sparseArray.put(user.id, user);
         }
-        while (i < tL_help_proxyDataPromo.chats.size()) {
-            Chat chat = (Chat) tL_help_proxyDataPromo.chats.get(i);
+        while (i2 < tL_help_proxyDataPromo.chats.size()) {
+            Chat chat = (Chat) tL_help_proxyDataPromo.chats.get(i2);
             sparseArray2.put(chat.id, chat);
-            i++;
+            i2++;
         }
         TL_messages_getPeerDialogs tL_messages_getPeerDialogs = new TL_messages_getPeerDialogs();
         TL_inputDialogPeer tL_inputDialogPeer = new TL_inputDialogPeer();
         Peer peer = tL_help_proxyDataPromo.peer;
-        int i3;
+        int i4;
         InputPeer inputPeer;
         Chat chat2;
         if (peer.user_id != 0) {
             tL_inputDialogPeer.peer = new TL_inputPeerUser();
             InputPeer inputPeer2 = tL_inputDialogPeer.peer;
-            i3 = tL_help_proxyDataPromo.peer.user_id;
-            inputPeer2.user_id = i3;
-            User user2 = (User) sparseArray.get(i3);
+            i4 = tL_help_proxyDataPromo.peer.user_id;
+            inputPeer2.user_id = i4;
+            User user2 = (User) sparseArray.get(i4);
             if (user2 != null) {
                 tL_inputDialogPeer.peer.access_hash = user2.access_hash;
             }
         } else if (peer.chat_id != 0) {
             tL_inputDialogPeer.peer = new TL_inputPeerChat();
             inputPeer = tL_inputDialogPeer.peer;
-            i3 = tL_help_proxyDataPromo.peer.chat_id;
-            inputPeer.chat_id = i3;
-            chat2 = (Chat) sparseArray2.get(i3);
+            i4 = tL_help_proxyDataPromo.peer.chat_id;
+            inputPeer.chat_id = i4;
+            chat2 = (Chat) sparseArray2.get(i4);
             if (chat2 != null) {
                 tL_inputDialogPeer.peer.access_hash = chat2.access_hash;
             }
         } else {
             tL_inputDialogPeer.peer = new TL_inputPeerChannel();
             inputPeer = tL_inputDialogPeer.peer;
-            i3 = tL_help_proxyDataPromo.peer.channel_id;
-            inputPeer.channel_id = i3;
-            chat2 = (Chat) sparseArray2.get(i3);
+            i4 = tL_help_proxyDataPromo.peer.channel_id;
+            inputPeer.channel_id = i4;
+            chat2 = (Chat) sparseArray2.get(i4);
             if (chat2 != null) {
                 tL_inputDialogPeer.peer.access_hash = chat2.access_hash;
             }
         }
         tL_messages_getPeerDialogs.peers.add(tL_inputDialogPeer);
-        getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$jGzHg4Vpn20r2Dvt16XQexkQnM8(this, tL_help_proxyDataPromo, j));
+        this.checkingProxyInfoRequestId = getConnectionsManager().sendRequest(tL_messages_getPeerDialogs, new -$$Lambda$MessagesController$2fC0dvzWpXkmUAs9awG6yAsc_EE(this, i, tL_help_proxyDataPromo, j));
     }
 
-    public /* synthetic */ void lambda$null$92$MessagesController(TL_help_proxyDataPromo tL_help_proxyDataPromo, long j, TLObject tLObject, TL_error tL_error) {
-        if (this.checkingProxyInfoRequestId != 0) {
+    public /* synthetic */ void lambda$null$92$MessagesController(int i, TL_help_proxyDataPromo tL_help_proxyDataPromo, long j, TLObject tLObject, TL_error tL_error) {
+        if (i == this.lastCheckProxyId) {
             this.checkingProxyInfoRequestId = 0;
             TL_messages_peerDialogs tL_messages_peerDialogs = (TL_messages_peerDialogs) tLObject;
             if (tL_messages_peerDialogs == null || tL_messages_peerDialogs.dialogs.isEmpty()) {
@@ -4622,8 +4639,20 @@ public class MessagesController extends BaseController implements NotificationCe
         putChats(tL_help_proxyDataPromo.chats, false);
         putUsers(tL_messages_peerDialogs.users, false);
         putChats(tL_messages_peerDialogs.chats, false);
-        this.proxyDialog = (Dialog) tL_messages_peerDialogs.dialogs.get(0);
         Dialog dialog = this.proxyDialog;
+        if (dialog != null) {
+            int i = (int) dialog.id;
+            if (i < 0) {
+                Chat chat = getChat(Integer.valueOf(-i));
+                if (ChatObject.isNotInChat(chat) || chat.restricted) {
+                    removeDialog(this.proxyDialog);
+                }
+            } else {
+                removeDialog(dialog);
+            }
+        }
+        this.proxyDialog = (Dialog) tL_messages_peerDialogs.dialogs.get(0);
+        dialog = this.proxyDialog;
         dialog.id = j;
         dialog.folder_id = 0;
         if (DialogObject.isChannel(dialog)) {
@@ -4643,16 +4672,16 @@ public class MessagesController extends BaseController implements NotificationCe
         this.dialogs_read_outbox_max.put(Long.valueOf(this.proxyDialog.id), Integer.valueOf(Math.max(num.intValue(), this.proxyDialog.read_outbox_max_id)));
         this.dialogs_dict.put(j, this.proxyDialog);
         if (!tL_messages_peerDialogs.messages.isEmpty()) {
-            int i;
+            int i2;
             SparseArray sparseArray = new SparseArray();
             SparseArray sparseArray2 = new SparseArray();
-            for (i = 0; i < tL_messages_peerDialogs.users.size(); i++) {
-                User user = (User) tL_messages_peerDialogs.users.get(i);
+            for (i2 = 0; i2 < tL_messages_peerDialogs.users.size(); i2++) {
+                User user = (User) tL_messages_peerDialogs.users.get(i2);
                 sparseArray.put(user.id, user);
             }
-            for (i = 0; i < tL_messages_peerDialogs.chats.size(); i++) {
-                Chat chat = (Chat) tL_messages_peerDialogs.chats.get(i);
-                sparseArray2.put(chat.id, chat);
+            for (i2 = 0; i2 < tL_messages_peerDialogs.chats.size(); i2++) {
+                Chat chat2 = (Chat) tL_messages_peerDialogs.chats.get(i2);
+                sparseArray2.put(chat2.id, chat2);
             }
             MessageObject messageObject = new MessageObject(this.currentAccount, (Message) tL_messages_peerDialogs.messages.get(0), sparseArray, sparseArray2, false);
             this.dialogMessage.put(j, messageObject);
@@ -5218,7 +5247,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:102:0x021b  */
     /* JADX WARNING: Removed duplicated region for block: B:126:0x025c A:{SYNTHETIC} */
     /* JADX WARNING: Missing block: B:96:0x0206, code skipped:
-            if (r3[0] < (byte) 102) goto L_0x020a;
+            if (r3[0] < (byte) 103) goto L_0x020a;
      */
     public /* synthetic */ void lambda$processLoadedMessages$108$MessagesController(org.telegram.tgnet.TLRPC.messages_Messages r25, long r26, boolean r28, int r29, int r30, boolean r31, int r32, int r33, int r34, int r35, int r36, boolean r37, int r38, int r39, int r40, int r41, boolean r42) {
         /*
@@ -5502,7 +5531,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (r28 == 0) goto L_0x025b;
     L_0x01dd:
         r3 = r1.legacy;
-        r4 = 102; // 0x66 float:1.43E-43 double:5.04E-322;
+        r4 = 103; // 0x67 float:1.44E-43 double:5.1E-322;
         if (r3 == 0) goto L_0x01f1;
     L_0x01e3:
         r3 = r1.layer;
@@ -5528,7 +5557,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (r4 != r7) goto L_0x0215;
     L_0x0202:
         r3 = r3[r11];
-        r4 = 102; // 0x66 float:1.43E-43 double:5.04E-322;
+        r4 = 103; // 0x67 float:1.44E-43 double:5.1E-322;
         if (r3 >= r4) goto L_0x0215;
     L_0x0208:
         goto L_0x020a;
@@ -10011,8 +10040,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             TL_account_registerDevice tL_account_registerDevice = new TL_account_registerDevice();
             tL_account_registerDevice.token_type = 2;
             tL_account_registerDevice.token = str;
+            int i = 0;
+            tL_account_registerDevice.no_muted = false;
             tL_account_registerDevice.secret = SharedConfig.pushAuthKey;
-            for (int i = 0; i < 3; i++) {
+            while (i < 3) {
                 UserConfig instance = UserConfig.getInstance(i);
                 if (i != this.currentAccount && instance.isClientActivated()) {
                     int clientUserId = instance.getClientUserId();
@@ -10026,6 +10057,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         FileLog.d(stringBuilder.toString());
                     }
                 }
+                i++;
             }
             getConnectionsManager().sendRequest(tL_account_registerDevice, new -$$Lambda$MessagesController$RQIUdGcrH5D0HSeyADRBCxVETRg(this, str));
         }
@@ -16727,15 +16759,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$wC7rqtVcAfymedoa-ZshP2BMxtc(this, arrayList));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:372:0x089e  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x093d  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x094a  */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x094e  */
-    /* JADX WARNING: Removed duplicated region for block: B:407:0x0956  */
-    /* JADX WARNING: Removed duplicated region for block: B:412:0x097e  */
-    /* JADX WARNING: Removed duplicated region for block: B:411:0x096f  */
+    /* JADX WARNING: Removed duplicated region for block: B:372:0x089d  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x093c  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0949  */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x094d  */
+    /* JADX WARNING: Removed duplicated region for block: B:407:0x0955  */
+    /* JADX WARNING: Removed duplicated region for block: B:412:0x097d  */
+    /* JADX WARNING: Removed duplicated region for block: B:411:0x096e  */
     /* JADX WARNING: Removed duplicated region for block: B:448:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:414:0x0981  */
+    /* JADX WARNING: Removed duplicated region for block: B:414:0x0980  */
     public /* synthetic */ void lambda$processUpdateArray$252$MessagesController(int r31, java.util.ArrayList r32, android.util.LongSparseArray r33, android.util.LongSparseArray r34, android.util.LongSparseArray r35, boolean r36, java.util.ArrayList r37, java.util.ArrayList r38, android.util.SparseArray r39) {
         /*
         r30 = this;
@@ -16748,7 +16780,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = 2;
         r5 = 1;
         r4 = 0;
-        if (r9 == 0) goto L_0x07b0;
+        if (r9 == 0) goto L_0x07af;
     L_0x0011:
         r2 = new java.util.ArrayList;
         r2.<init>();
@@ -16760,7 +16792,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r16 = 0;
         r17 = 0;
     L_0x0026:
-        if (r15 >= r1) goto L_0x0783;
+        if (r15 >= r1) goto L_0x0782;
     L_0x0028:
         r0 = r9.get(r15);
         r0 = (org.telegram.tgnet.TLRPC.Update) r0;
@@ -16807,7 +16839,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r18;
         r3 = 0;
         r12 = 0;
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x007a:
         r6 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateUserStatus;
         if (r6 == 0) goto L_0x00d8;
@@ -17021,7 +17053,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r8.loadPinnedDialogs(r0, r12, r1);
     L_0x01e3:
         r1 = r18;
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x01e7:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateFolderPeers;
         if (r1 == 0) goto L_0x021e;
@@ -17054,7 +17086,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         goto L_0x01f4;
     L_0x021a:
         r17 = 1;
-        goto L_0x076f;
+        goto L_0x076e;
     L_0x021e:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateUserPhoto;
         if (r1 == 0) goto L_0x0245;
@@ -17115,7 +17147,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = (org.telegram.tgnet.TLRPC.TL_updateNotifySettings) r0;
         r1 = r0.notify_settings;
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
-        if (r1 == 0) goto L_0x076f;
+        if (r1 == 0) goto L_0x076e;
     L_0x0294:
         if (r16 != 0) goto L_0x029c;
     L_0x0296:
@@ -17338,7 +17370,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.putInt(r2, r0);
     L_0x0420:
         r16 = r1;
-        goto L_0x076f;
+        goto L_0x076e;
     L_0x0424:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateChannel;
         if (r1 == 0) goto L_0x047a;
@@ -17390,7 +17422,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r0.channel_id;
         r2 = 1;
         r8.loadFullChat(r0, r3, r2);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x047a:
         r1 = r18;
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateChatDefaultBannedRights;
@@ -17407,14 +17439,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x048b:
         r2 = java.lang.Integer.valueOf(r4);
         r2 = r8.getChat(r2);
-        if (r2 == 0) goto L_0x076d;
+        if (r2 == 0) goto L_0x076c;
     L_0x0495:
         r0 = r0.default_banned_rights;
         r2.default_banned_rights = r0;
         r0 = new org.telegram.messenger.-$$Lambda$MessagesController$pL3OiIJT873-B_YcUiQaGgfHDJ4;
         r0.<init>(r8, r2);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x04a3:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateStickerSets;
         if (r2 == 0) goto L_0x04b3;
@@ -17423,7 +17455,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r30.getMediaDataController();
         r2 = 1;
         r0.loadStickers(r3, r3, r2);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x04b3:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateStickerSetsOrder;
         if (r2 == 0) goto L_0x04c6;
@@ -17433,7 +17465,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r0.masks;
         r0 = r0.order;
         r2.reorderStickers(r4, r0);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x04c6:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateFavedStickers;
         if (r2 == 0) goto L_0x04d5;
@@ -17442,14 +17474,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = 2;
         r4 = 1;
         r0.loadRecents(r2, r3, r3, r4);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x04d5:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateContactsReset;
         if (r2 == 0) goto L_0x04e2;
     L_0x04d9:
         r0 = r30.getContactsController();
         r0.forceImportContacts();
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x04e2:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateNewStickerSet;
         if (r2 == 0) goto L_0x04f3;
@@ -17458,7 +17490,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r30.getMediaDataController();
         r0 = r0.stickerset;
         r2.addNewStickerSet(r0);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x04f3:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateSavedGifs;
         if (r2 == 0) goto L_0x0508;
@@ -17468,7 +17500,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = "lastGifLoadTime";
         r0 = r0.putLong(r2, r12);
         r0.commit();
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x0508:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateRecentStickers;
         if (r2 == 0) goto L_0x051d;
@@ -17478,7 +17510,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = "lastStickersLoadTime";
         r0 = r0.putLong(r2, r12);
         r0.commit();
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x051d:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateDraftMessage;
         if (r2 == 0) goto L_0x054b;
@@ -17519,10 +17551,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x054f:
         r0 = r30.getMediaDataController();
         r0.markFaturedStickersAsRead(r3);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x0558:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePhoneCall;
-        if (r2 == 0) goto L_0x06b6;
+        if (r2 == 0) goto L_0x06b5;
     L_0x055c:
         r0 = (org.telegram.tgnet.TLRPC.TL_updatePhoneCall) r0;
         r0 = r0.phone_call;
@@ -17547,7 +17579,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         org.telegram.messenger.FileLog.d(r4);
     L_0x0592:
         r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_phoneCallRequested;
-        if (r4 == 0) goto L_0x0692;
+        if (r4 == 0) goto L_0x0691;
     L_0x0596:
         r4 = r0.date;
         r5 = r8.callRingTimeout;
@@ -17558,11 +17590,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r4 >= r5) goto L_0x05b2;
     L_0x05a7:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x076d;
+        if (r0 == 0) goto L_0x076c;
     L_0x05ab:
         r0 = "ignoring too old call";
         org.telegram.messenger.FileLog.d(r0);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x05b2:
         r4 = android.os.Build.VERSION.SDK_INT;
         r5 = 21;
@@ -17574,25 +17606,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r4 != 0) goto L_0x05cf;
     L_0x05c4:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x076d;
+        if (r0 == 0) goto L_0x076c;
     L_0x05c8:
         r0 = "Ignoring incoming call because notifications are disabled in system";
         org.telegram.messenger.FileLog.d(r0);
-        goto L_0x076d;
+        goto L_0x076c;
     L_0x05cf:
         r4 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r5 = "phone";
         r4 = r4.getSystemService(r5);
         r4 = (android.telephony.TelephonyManager) r4;
-        if (r2 != 0) goto L_0x0648;
+        if (r2 != 0) goto L_0x0647;
     L_0x05db:
         r2 = org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent;
-        if (r2 != 0) goto L_0x0648;
+        if (r2 != 0) goto L_0x0647;
     L_0x05df:
         r2 = r4.getCallState();
         if (r2 == 0) goto L_0x05e6;
     L_0x05e5:
-        goto L_0x0648;
+        goto L_0x0647;
     L_0x05e6:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
         if (r2 == 0) goto L_0x0600;
@@ -17628,25 +17660,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r8.currentAccount;
         r4 = "account";
         r2.putExtra(r4, r0);
-        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x0642 }
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x0641 }
         r4 = 26;
-        if (r0 < r4) goto L_0x063b;
-    L_0x0634:
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0642 }
-        r0.startForegroundService(r2);	 Catch:{ Throwable -> 0x0642 }
-        goto L_0x076d;
-    L_0x063b:
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0642 }
-        r0.startService(r2);	 Catch:{ Throwable -> 0x0642 }
-        goto L_0x076d;
-    L_0x0642:
+        if (r0 < r4) goto L_0x063a;
+    L_0x0633:
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0641 }
+        r0.startForegroundService(r2);	 Catch:{ Throwable -> 0x0641 }
+        goto L_0x076c;
+    L_0x063a:
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0641 }
+        r0.startService(r2);	 Catch:{ Throwable -> 0x0641 }
+        goto L_0x076c;
+    L_0x0641:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x076d;
-    L_0x0648:
+        goto L_0x076c;
+    L_0x0647:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x0667;
-    L_0x064c:
+        if (r2 == 0) goto L_0x0666;
+    L_0x064b:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r4 = "Auto-declining call ";
@@ -17657,7 +17689,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2.append(r4);
         r2 = r2.toString();
         org.telegram.messenger.FileLog.d(r2);
-    L_0x0667:
+    L_0x0666:
         r2 = new org.telegram.tgnet.TLRPC$TL_phone_discardCall;
         r2.<init>();
         r4 = new org.telegram.tgnet.TLRPC$TL_inputPhoneCall;
@@ -17675,105 +17707,105 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = new org.telegram.messenger.-$$Lambda$MessagesController$aLx0tcgsBMQeJvAsZEy4RW-eryE;
         r4.<init>(r8);
         r0.sendRequest(r2, r4);
-        goto L_0x076d;
-    L_0x0692:
-        if (r2 == 0) goto L_0x069b;
-    L_0x0694:
-        if (r0 == 0) goto L_0x069b;
-    L_0x0696:
+        goto L_0x076c;
+    L_0x0691:
+        if (r2 == 0) goto L_0x069a;
+    L_0x0693:
+        if (r0 == 0) goto L_0x069a;
+    L_0x0695:
         r2.onCallUpdated(r0);
-        goto L_0x076d;
-    L_0x069b:
+        goto L_0x076c;
+    L_0x069a:
         r2 = org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent;
-        if (r2 == 0) goto L_0x076d;
-    L_0x069f:
+        if (r2 == 0) goto L_0x076c;
+    L_0x069e:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x06a8;
-    L_0x06a3:
+        if (r2 == 0) goto L_0x06a7;
+    L_0x06a2:
         r2 = "Updated the call while the service is starting";
         org.telegram.messenger.FileLog.d(r2);
-    L_0x06a8:
+    L_0x06a7:
         r4 = r0.id;
         r2 = org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent;
         r6 = r2.id;
         r2 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r2 != 0) goto L_0x076d;
-    L_0x06b2:
+        if (r2 != 0) goto L_0x076c;
+    L_0x06b1:
         org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent = r0;
-        goto L_0x076d;
-    L_0x06b6:
+        goto L_0x076c;
+    L_0x06b5:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateDialogUnreadMark;
-        if (r2 == 0) goto L_0x0714;
-    L_0x06ba:
+        if (r2 == 0) goto L_0x0713;
+    L_0x06b9:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateDialogUnreadMark) r0;
         r2 = r0.peer;
         r4 = r2 instanceof org.telegram.tgnet.TLRPC.TL_dialogPeer;
-        if (r4 == 0) goto L_0x06d8;
-    L_0x06c2:
+        if (r4 == 0) goto L_0x06d7;
+    L_0x06c1:
         r2 = (org.telegram.tgnet.TLRPC.TL_dialogPeer) r2;
         r2 = r2.peer;
         r4 = r2.user_id;
-        if (r4 == 0) goto L_0x06cd;
-    L_0x06ca:
+        if (r4 == 0) goto L_0x06cc;
+    L_0x06c9:
         r4 = (long) r4;
-    L_0x06cb:
+    L_0x06ca:
         r6 = r4;
-        goto L_0x06d9;
-    L_0x06cd:
+        goto L_0x06d8;
+    L_0x06cc:
         r4 = r2.chat_id;
-        if (r4 == 0) goto L_0x06d3;
-    L_0x06d1:
+        if (r4 == 0) goto L_0x06d2;
+    L_0x06d0:
         r2 = -r4;
-        goto L_0x06d6;
-    L_0x06d3:
+        goto L_0x06d5;
+    L_0x06d2:
         r2 = r2.channel_id;
         r2 = -r2;
-    L_0x06d6:
+    L_0x06d5:
         r4 = (long) r2;
-        goto L_0x06cb;
-    L_0x06d8:
+        goto L_0x06ca;
+    L_0x06d7:
         r6 = r12;
-    L_0x06d9:
+    L_0x06d8:
         r2 = r30.getMessagesStorage();
         r4 = r0.unread;
         r2.setDialogUnread(r6, r4);
         r2 = r8.dialogs_dict;
         r2 = r2.get(r6);
         r2 = (org.telegram.tgnet.TLRPC.Dialog) r2;
-        if (r2 == 0) goto L_0x076d;
-    L_0x06ec:
+        if (r2 == 0) goto L_0x076c;
+    L_0x06eb:
         r4 = r2.unread_mark;
         r0 = r0.unread;
-        if (r4 == r0) goto L_0x076d;
-    L_0x06f2:
+        if (r4 == r0) goto L_0x076c;
+    L_0x06f1:
         r2.unread_mark = r0;
         r0 = r2.unread_count;
-        if (r0 != 0) goto L_0x070f;
-    L_0x06f8:
+        if (r0 != 0) goto L_0x070e;
+    L_0x06f7:
         r0 = r8.isDialogMuted(r6);
-        if (r0 != 0) goto L_0x070f;
-    L_0x06fe:
+        if (r0 != 0) goto L_0x070e;
+    L_0x06fd:
         r0 = r2.unread_mark;
-        if (r0 == 0) goto L_0x0709;
-    L_0x0702:
+        if (r0 == 0) goto L_0x0708;
+    L_0x0701:
         r0 = r8.unreadUnmutedDialogs;
         r2 = 1;
         r0 = r0 + r2;
         r8.unreadUnmutedDialogs = r0;
-        goto L_0x070f;
-    L_0x0709:
+        goto L_0x070e;
+    L_0x0708:
         r2 = 1;
         r0 = r8.unreadUnmutedDialogs;
         r0 = r0 - r2;
         r8.unreadUnmutedDialogs = r0;
-    L_0x070f:
+    L_0x070e:
         r0 = r1 | 256;
         r18 = r0;
-        goto L_0x076f;
-    L_0x0714:
+        goto L_0x076e;
+    L_0x0713:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateMessagePoll;
-        if (r2 == 0) goto L_0x0739;
-    L_0x0718:
+        if (r2 == 0) goto L_0x0738;
+    L_0x0717:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateMessagePoll) r0;
         r2 = r30.getNotificationCenter();
         r4 = org.telegram.messenger.NotificationCenter.didUpdatePollResults;
@@ -17789,49 +17821,49 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = 2;
         r5[r6] = r0;
         r2.postNotificationName(r4, r5);
-        goto L_0x076d;
-    L_0x0739:
+        goto L_0x076c;
+    L_0x0738:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePeerSettings;
-        if (r2 == 0) goto L_0x075b;
-    L_0x073d:
+        if (r2 == 0) goto L_0x075a;
+    L_0x073c:
         r0 = (org.telegram.tgnet.TLRPC.TL_updatePeerSettings) r0;
         r2 = r0.peer;
         r4 = r2 instanceof org.telegram.tgnet.TLRPC.TL_peerUser;
-        if (r4 == 0) goto L_0x0749;
-    L_0x0745:
+        if (r4 == 0) goto L_0x0748;
+    L_0x0744:
         r2 = r2.user_id;
-    L_0x0747:
+    L_0x0746:
         r4 = (long) r2;
-        goto L_0x0754;
-    L_0x0749:
+        goto L_0x0753;
+    L_0x0748:
         r4 = r2 instanceof org.telegram.tgnet.TLRPC.TL_peerChat;
-        if (r4 == 0) goto L_0x0750;
-    L_0x074d:
+        if (r4 == 0) goto L_0x074f;
+    L_0x074c:
         r2 = r2.chat_id;
-        goto L_0x0752;
-    L_0x0750:
+        goto L_0x0751;
+    L_0x074f:
         r2 = r2.channel_id;
-    L_0x0752:
+    L_0x0751:
         r2 = -r2;
-        goto L_0x0747;
-    L_0x0754:
+        goto L_0x0746;
+    L_0x0753:
         r0 = r0.settings;
         r2 = 1;
         r8.savePeerSettings(r4, r0, r2);
-        goto L_0x076d;
-    L_0x075b:
+        goto L_0x076c;
+    L_0x075a:
         r2 = 1;
         r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePeerLocated;
-        if (r4 == 0) goto L_0x076d;
-    L_0x0760:
+        if (r4 == 0) goto L_0x076c;
+    L_0x075f:
         r4 = r30.getNotificationCenter();
         r5 = org.telegram.messenger.NotificationCenter.newPeopleNearbyAvailable;
         r6 = new java.lang.Object[r2];
         r6[r3] = r0;
         r4.postNotificationName(r5, r6);
-    L_0x076d:
+    L_0x076c:
         r18 = r1;
-    L_0x076f:
+    L_0x076e:
         r15 = r15 + 1;
         r9 = r32;
         r10 = r33;
@@ -17844,20 +17876,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r5 = 1;
         r14 = 2;
         goto L_0x0026;
-    L_0x0783:
+    L_0x0782:
         r14 = r2;
         r23 = r3;
         r1 = r18;
         r3 = 0;
         r12 = 0;
-        if (r16 == 0) goto L_0x079b;
-    L_0x078d:
+        if (r16 == 0) goto L_0x079a;
+    L_0x078c:
         r16.commit();
         r0 = r30.getNotificationCenter();
         r2 = org.telegram.messenger.NotificationCenter.notificationsSettingsUpdated;
         r4 = new java.lang.Object[r3];
         r0.postNotificationName(r2, r4);
-    L_0x079b:
+    L_0x079a:
         r0 = r30.getMessagesStorage();
         r2 = r23;
         r4 = 1;
@@ -17866,17 +17898,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.updateUsers(r14, r3, r4, r4);
         r0 = r1;
         r1 = r33;
-        goto L_0x07ba;
-    L_0x07b0:
+        goto L_0x07b9;
+    L_0x07af:
         r3 = 0;
         r4 = 1;
         r12 = 0;
         r0 = r31;
         r1 = r33;
         r17 = 0;
-    L_0x07ba:
-        if (r1 == 0) goto L_0x0876;
-    L_0x07bc:
+    L_0x07b9:
+        if (r1 == 0) goto L_0x0875;
+    L_0x07bb:
         r2 = r30.getNotificationCenter();
         r5 = org.telegram.messenger.NotificationCenter.didReceivedWebpagesInUpdates;
         r6 = new java.lang.Object[r4];
@@ -17884,48 +17916,48 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2.postNotificationName(r5, r6);
         r2 = r33.size();
         r4 = 0;
-    L_0x07ce:
-        if (r4 >= r2) goto L_0x0876;
-    L_0x07d0:
+    L_0x07cd:
+        if (r4 >= r2) goto L_0x0875;
+    L_0x07cf:
         r5 = r1.keyAt(r4);
         r7 = r8.reloadingWebpagesPending;
         r7 = r7.get(r5);
         r7 = (java.util.ArrayList) r7;
         r9 = r8.reloadingWebpagesPending;
         r9.remove(r5);
-        if (r7 == 0) goto L_0x0870;
-    L_0x07e3:
+        if (r7 == 0) goto L_0x086f;
+    L_0x07e2:
         r5 = r1.valueAt(r4);
         r5 = (org.telegram.tgnet.TLRPC.WebPage) r5;
         r6 = new java.util.ArrayList;
         r6.<init>();
         r9 = r5 instanceof org.telegram.tgnet.TLRPC.TL_webPage;
-        if (r9 != 0) goto L_0x07ff;
-    L_0x07f2:
+        if (r9 != 0) goto L_0x07fe;
+    L_0x07f1:
         r9 = r5 instanceof org.telegram.tgnet.TLRPC.TL_webPageEmpty;
-        if (r9 == 0) goto L_0x07f7;
+        if (r9 == 0) goto L_0x07f6;
+    L_0x07f5:
+        goto L_0x07fe;
     L_0x07f6:
-        goto L_0x07ff;
-    L_0x07f7:
         r9 = r8.reloadingWebpagesPending;
         r14 = r5.id;
         r9.put(r14, r7);
-        goto L_0x083e;
-    L_0x07ff:
+        goto L_0x083d;
+    L_0x07fe:
         r9 = r7.size();
         r14 = r12;
         r10 = 0;
-    L_0x0805:
-        if (r10 >= r9) goto L_0x083d;
-    L_0x0807:
+    L_0x0804:
+        if (r10 >= r9) goto L_0x083c;
+    L_0x0806:
         r16 = r7.get(r10);
         r12 = r16;
         r12 = (org.telegram.messenger.MessageObject) r12;
         r12 = r12.messageOwner;
         r12 = r12.media;
         r12.webpage = r5;
-        if (r10 != 0) goto L_0x082d;
-    L_0x0817:
+        if (r10 != 0) goto L_0x082c;
+    L_0x0816:
         r12 = r7.get(r10);
         r12 = (org.telegram.messenger.MessageObject) r12;
         r12 = r12.getDialogId();
@@ -17934,20 +17966,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = r14.messageOwner;
         org.telegram.messenger.ImageLoader.saveMessageThumbs(r14);
         r14 = r12;
-    L_0x082d:
+    L_0x082c:
         r12 = r7.get(r10);
         r12 = (org.telegram.messenger.MessageObject) r12;
         r12 = r12.messageOwner;
         r6.add(r12);
         r10 = r10 + 1;
         r12 = 0;
-        goto L_0x0805;
-    L_0x083d:
+        goto L_0x0804;
+    L_0x083c:
         r12 = r14;
-    L_0x083e:
+    L_0x083d:
         r5 = r6.isEmpty();
-        if (r5 != 0) goto L_0x0870;
-    L_0x0844:
+        if (r5 != 0) goto L_0x086f;
+    L_0x0843:
         r23 = r30.getMessagesStorage();
         r25 = 1;
         r26 = 1;
@@ -17965,109 +17997,109 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = 1;
         r10[r9] = r7;
         r5.postNotificationName(r6, r10);
-    L_0x0870:
+    L_0x086f:
         r4 = r4 + 1;
         r12 = 0;
-        goto L_0x07ce;
-    L_0x0876:
-        if (r11 == 0) goto L_0x088f;
-    L_0x0878:
+        goto L_0x07cd;
+    L_0x0875:
+        if (r11 == 0) goto L_0x088e;
+    L_0x0877:
         r1 = r34.size();
         r2 = 0;
-    L_0x087d:
-        if (r2 >= r1) goto L_0x0895;
-    L_0x087f:
+    L_0x087c:
+        if (r2 >= r1) goto L_0x0894;
+    L_0x087e:
         r4 = r11.keyAt(r2);
         r6 = r11.valueAt(r2);
         r6 = (java.util.ArrayList) r6;
         r8.updateInterfaceWithMessages(r4, r6);
         r2 = r2 + 1;
-        goto L_0x087d;
-    L_0x088f:
-        if (r17 == 0) goto L_0x0899;
-    L_0x0891:
+        goto L_0x087c;
+    L_0x088e:
+        if (r17 == 0) goto L_0x0898;
+    L_0x0890:
         r1 = 0;
         r8.sortDialogs(r1);
-    L_0x0895:
+    L_0x0894:
         r1 = r35;
         r2 = 1;
-        goto L_0x089c;
-    L_0x0899:
+        goto L_0x089b;
+    L_0x0898:
         r1 = r35;
         r2 = 0;
-    L_0x089c:
-        if (r1 == 0) goto L_0x093b;
-    L_0x089e:
+    L_0x089b:
+        if (r1 == 0) goto L_0x093a;
+    L_0x089d:
         r4 = r35.size();
         r5 = r2;
         r2 = 0;
-    L_0x08a4:
-        if (r2 >= r4) goto L_0x093a;
-    L_0x08a6:
+    L_0x08a3:
+        if (r2 >= r4) goto L_0x0939;
+    L_0x08a5:
         r6 = r1.keyAt(r2);
         r9 = r1.valueAt(r2);
         r9 = (java.util.ArrayList) r9;
         r10 = r8.dialogMessage;
         r10 = r10.get(r6);
         r10 = (org.telegram.messenger.MessageObject) r10;
-        if (r10 == 0) goto L_0x08ea;
-    L_0x08ba:
+        if (r10 == 0) goto L_0x08e9;
+    L_0x08b9:
         r11 = r9.size();
         r12 = 0;
-    L_0x08bf:
-        if (r12 >= r11) goto L_0x08ea;
-    L_0x08c1:
+    L_0x08be:
+        if (r12 >= r11) goto L_0x08e9;
+    L_0x08c0:
         r13 = r9.get(r12);
         r13 = (org.telegram.messenger.MessageObject) r13;
         r14 = r10.getId();
         r15 = r13.getId();
-        if (r14 != r15) goto L_0x08ec;
-    L_0x08d1:
+        if (r14 != r15) goto L_0x08eb;
+    L_0x08d0:
         r5 = r8.dialogMessage;
         r5.put(r6, r13);
         r5 = r13.messageOwner;
         r5 = r5.to_id;
-        if (r5 == 0) goto L_0x08e9;
-    L_0x08dc:
+        if (r5 == 0) goto L_0x08e8;
+    L_0x08db:
         r5 = r5.channel_id;
-        if (r5 != 0) goto L_0x08e9;
-    L_0x08e0:
+        if (r5 != 0) goto L_0x08e8;
+    L_0x08df:
         r5 = r8.dialogMessagesByIds;
         r10 = r13.getId();
         r5.put(r10, r13);
-    L_0x08e9:
+    L_0x08e8:
         r5 = 1;
-    L_0x08ea:
+    L_0x08e9:
         r13 = 0;
-        goto L_0x091a;
-    L_0x08ec:
+        goto L_0x0919;
+    L_0x08eb:
         r14 = r10.getDialogId();
         r16 = r13.getDialogId();
         r18 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1));
-        if (r18 != 0) goto L_0x0916;
-    L_0x08f8:
+        if (r18 != 0) goto L_0x0915;
+    L_0x08f7:
         r14 = r10.messageOwner;
         r14 = r14.action;
         r14 = r14 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
-        if (r14 == 0) goto L_0x0916;
-    L_0x0900:
+        if (r14 == 0) goto L_0x0915;
+    L_0x08ff:
         r14 = r10.replyMessageObject;
-        if (r14 == 0) goto L_0x0916;
-    L_0x0904:
+        if (r14 == 0) goto L_0x0915;
+    L_0x0903:
         r14 = r14.getId();
         r15 = r13.getId();
-        if (r14 != r15) goto L_0x0916;
-    L_0x090e:
+        if (r14 != r15) goto L_0x0915;
+    L_0x090d:
         r10.replyMessageObject = r13;
         r13 = 0;
         r10.generatePinMessageText(r13, r13);
         r5 = 1;
-        goto L_0x091a;
-    L_0x0916:
+        goto L_0x0919;
+    L_0x0915:
         r13 = 0;
         r12 = r12 + 1;
-        goto L_0x08bf;
-    L_0x091a:
+        goto L_0x08be;
+    L_0x0919:
         r10 = r30.getMediaDataController();
         r10.loadReplyMessagesForMessages(r9, r6);
         r10 = r30.getNotificationCenter();
@@ -18080,62 +18112,62 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14[r6] = r9;
         r10.postNotificationName(r11, r14);
         r2 = r2 + 1;
-        goto L_0x08a4;
-    L_0x093a:
+        goto L_0x08a3;
+    L_0x0939:
         r2 = r5;
-    L_0x093b:
-        if (r2 == 0) goto L_0x0948;
-    L_0x093d:
+    L_0x093a:
+        if (r2 == 0) goto L_0x0947;
+    L_0x093c:
         r1 = r30.getNotificationCenter();
         r2 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
         r4 = new java.lang.Object[r3];
         r1.postNotificationName(r2, r4);
-    L_0x0948:
-        if (r36 == 0) goto L_0x094c;
-    L_0x094a:
+    L_0x0947:
+        if (r36 == 0) goto L_0x094b;
+    L_0x0949:
         r0 = r0 | 64;
-    L_0x094c:
-        if (r37 == 0) goto L_0x0952;
-    L_0x094e:
+    L_0x094b:
+        if (r37 == 0) goto L_0x0951;
+    L_0x094d:
         r0 = r0 | 1;
         r0 = r0 | 128;
-    L_0x0952:
+    L_0x0951:
         r1 = r38;
-        if (r1 == 0) goto L_0x096d;
-    L_0x0956:
+        if (r1 == 0) goto L_0x096c;
+    L_0x0955:
         r2 = r38.size();
         r4 = 0;
-    L_0x095b:
-        if (r4 >= r2) goto L_0x096d;
-    L_0x095d:
+    L_0x095a:
+        if (r4 >= r2) goto L_0x096c;
+    L_0x095c:
         r5 = r1.get(r4);
         r5 = (org.telegram.tgnet.TLRPC.ChatParticipants) r5;
         r6 = r30.getMessagesStorage();
         r6.updateChatParticipants(r5);
         r4 = r4 + 1;
-        goto L_0x095b;
-    L_0x096d:
-        if (r39 == 0) goto L_0x097e;
-    L_0x096f:
+        goto L_0x095a;
+    L_0x096c:
+        if (r39 == 0) goto L_0x097d;
+    L_0x096e:
         r1 = r30.getNotificationCenter();
         r2 = org.telegram.messenger.NotificationCenter.didUpdatedMessagesViews;
         r4 = 1;
         r5 = new java.lang.Object[r4];
         r5[r3] = r39;
         r1.postNotificationName(r2, r5);
-        goto L_0x097f;
-    L_0x097e:
+        goto L_0x097e;
+    L_0x097d:
         r4 = 1;
-    L_0x097f:
-        if (r0 == 0) goto L_0x0992;
-    L_0x0981:
+    L_0x097e:
+        if (r0 == 0) goto L_0x0991;
+    L_0x0980:
         r1 = r30.getNotificationCenter();
         r2 = org.telegram.messenger.NotificationCenter.updateInterfaces;
         r4 = new java.lang.Object[r4];
         r0 = java.lang.Integer.valueOf(r0);
         r4[r3] = r0;
         r1.postNotificationName(r2, r4);
-    L_0x0992:
+    L_0x0991:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$252$MessagesController(int, java.util.ArrayList, android.util.LongSparseArray, android.util.LongSparseArray, android.util.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, android.util.SparseArray):void");
@@ -18410,7 +18442,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         mediaDataController = getMediaDataController();
                         Message message = messageObject2.messageOwner;
                         mediaDataController.addRecentGif(message.media.document, message.date);
-                    } else if (messageObject2.isSticker()) {
+                    } else if (messageObject2.isSticker() || messageObject2.isAnimatedSticker()) {
                         mediaDataController = getMediaDataController();
                         Message message2 = messageObject2.messageOwner;
                         mediaDataController.addRecentSticker(0, messageObject2, message2.media.document, message2.date, false);
@@ -18500,7 +18532,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     }
                 } else if (!z) {
                     Chat chat = getChat(Integer.valueOf(i2));
-                    if ((i2 == 0 || chat != null) && (chat == null || !chat.left)) {
+                    if ((i2 == 0 || chat != null) && (chat == null || !ChatObject.isNotInChat(chat))) {
                         if (BuildVars.LOGS_ENABLED) {
                             StringBuilder stringBuilder = new StringBuilder();
                             stringBuilder.append("not found dialog with id ");

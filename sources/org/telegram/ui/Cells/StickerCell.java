@@ -14,8 +14,10 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
+import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -26,6 +28,7 @@ public class StickerCell extends FrameLayout {
     private boolean clearsInputField;
     private BackupImageView imageView;
     private long lastUpdateTime;
+    private Object parentObject;
     private float scale;
     private boolean scaled;
     private Document sticker;
@@ -35,6 +38,7 @@ public class StickerCell extends FrameLayout {
         super(context);
         this.imageView = new BackupImageView(context);
         this.imageView.setAspectFit(true);
+        this.imageView.setLayerNum(1);
         addView(this.imageView, LayoutHelper.createFrame(66, 66.0f, 1, 0.0f, 5.0f, 0.0f, 0.0f));
         setFocusable(true);
     }
@@ -61,20 +65,30 @@ public class StickerCell extends FrameLayout {
     }
 
     public void setSticker(Document document, Object obj, int i) {
-        if (document != null) {
-            this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90), document), null, "webp", null, obj);
+        Document document2 = document;
+        int i2 = i;
+        this.parentObject = obj;
+        if (document2 != null) {
+            PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
+            if (!MessageObject.canAutoplayAnimatedSticker(document)) {
+                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), null, "webp", null, this.parentObject);
+            } else if (closestPhotoSizeWithSize != null) {
+                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), null, 0, this.parentObject);
+            } else {
+                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", null, null, this.parentObject);
+            }
         }
-        this.sticker = document;
-        if (i == -1) {
+        this.sticker = document2;
+        if (i2 == -1) {
             setBackgroundResource(NUM);
             setPadding(AndroidUtilities.dp(7.0f), 0, 0, 0);
-        } else if (i == 0) {
+        } else if (i2 == 0) {
             setBackgroundResource(NUM);
             setPadding(0, 0, 0, 0);
-        } else if (i == 1) {
+        } else if (i2 == 1) {
             setBackgroundResource(NUM);
             setPadding(0, 0, AndroidUtilities.dp(7.0f), 0);
-        } else if (i == 2) {
+        } else if (i2 == 2) {
             setBackgroundResource(NUM);
             setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         }
@@ -87,6 +101,10 @@ public class StickerCell extends FrameLayout {
 
     public Document getSticker() {
         return this.sticker;
+    }
+
+    public Object getParentObject() {
+        return this.parentObject;
     }
 
     public void setScaled(boolean z) {

@@ -52,15 +52,15 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x047f  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x04a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x047c  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x04a4  */
     public android.view.View createView(android.content.Context r24) {
         /*
         r23 = this;
         r1 = r23;
         r0 = r24;
         r2 = r1.actionBar;
-        r3 = NUM; // 0x7var_f8 float:1.794508E38 double:1.0529356256E-314;
+        r3 = NUM; // 0x7var_a5 float:1.7944913E38 double:1.0529355845E-314;
         r2.setBackButtonImage(r3);
         r2 = r1.actionBar;
         r3 = 1;
@@ -86,12 +86,12 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2 = r2.createMenu();
         r4 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r7 = NUM; // 0x7var_ float:1.7945142E38 double:1.0529356404E-314;
+        r7 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
         r2 = r2.addItemWithWidth(r3, r7, r4);
         r1.editDoneItem = r2;
         r2 = r1.editDoneItem;
         r4 = "Done";
-        r7 = NUM; // 0x7f0d0395 float:1.8743975E38 double:1.0531302306E-314;
+        r7 = NUM; // 0x7f0d039a float:1.8743985E38 double:1.053130233E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r7);
         r2.setContentDescription(r4);
         r2 = new org.telegram.ui.Components.ContextProgressView;
@@ -182,7 +182,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r9.setImeOptions(r5);
         r9 = r1.firstNameField;
         r14 = "FirstName";
-        r15 = NUM; // 0x7f0d0468 float:1.8744403E38 double:1.053130335E-314;
+        r15 = NUM; // 0x7f0d046d float:1.8744413E38 double:1.0531303373E-314;
         r14 = org.telegram.messenger.LocaleController.getString(r14, r15);
         r9.setHint(r14);
         r9 = r1.firstNameField;
@@ -242,7 +242,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r7.setImeOptions(r5);
         r5 = r1.lastNameField;
         r7 = "LastName";
-        r9 = NUM; // 0x7f0d0553 float:1.874488E38 double:1.053130451E-314;
+        r9 = NUM; // 0x7f0d0559 float:1.8744891E38 double:1.053130454E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r9);
         r5.setHint(r7);
         r5 = r1.lastNameField;
@@ -291,7 +291,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r4 = r1.countryButton;
         r4.setGravity(r13);
         r4 = r1.countryButton;
-        r5 = NUM; // 0x7var_aa float:1.7945961E38 double:1.05293584E-314;
+        r5 = NUM; // 0x7var_ float:1.7945793E38 double:1.052935799E-314;
         r4.setBackgroundResource(r5);
         r4 = r1.countryButton;
         r17 = 36;
@@ -450,101 +450,101 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r2.setOnKeyListener(r4);
         r2 = new java.util.HashMap;
         r2.<init>();
-        r4 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x0445 }
-        r7 = new java.io.InputStreamReader;	 Catch:{ Exception -> 0x0445 }
-        r0 = r24.getResources();	 Catch:{ Exception -> 0x0445 }
-        r0 = r0.getAssets();	 Catch:{ Exception -> 0x0445 }
+        r4 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x0442 }
+        r7 = new java.io.InputStreamReader;	 Catch:{ Exception -> 0x0442 }
+        r0 = r24.getResources();	 Catch:{ Exception -> 0x0442 }
+        r0 = r0.getAssets();	 Catch:{ Exception -> 0x0442 }
         r8 = "countries.txt";
-        r0 = r0.open(r8);	 Catch:{ Exception -> 0x0445 }
-        r7.<init>(r0);	 Catch:{ Exception -> 0x0445 }
-        r4.<init>(r7);	 Catch:{ Exception -> 0x0445 }
-    L_0x0408:
-        r0 = r4.readLine();	 Catch:{ Exception -> 0x0445 }
-        if (r0 == 0) goto L_0x0441;
-    L_0x040e:
+        r0 = r0.open(r8);	 Catch:{ Exception -> 0x0442 }
+        r7.<init>(r0);	 Catch:{ Exception -> 0x0442 }
+        r4.<init>(r7);	 Catch:{ Exception -> 0x0442 }
+    L_0x0405:
+        r0 = r4.readLine();	 Catch:{ Exception -> 0x0442 }
+        if (r0 == 0) goto L_0x043e;
+    L_0x040b:
         r7 = ";";
-        r0 = r0.split(r7);	 Catch:{ Exception -> 0x0445 }
-        r7 = r1.countriesArray;	 Catch:{ Exception -> 0x0445 }
-        r8 = r0[r5];	 Catch:{ Exception -> 0x0445 }
-        r7.add(r6, r8);	 Catch:{ Exception -> 0x0445 }
-        r7 = r1.countriesMap;	 Catch:{ Exception -> 0x0445 }
-        r8 = r0[r5];	 Catch:{ Exception -> 0x0445 }
-        r9 = r0[r6];	 Catch:{ Exception -> 0x0445 }
-        r7.put(r8, r9);	 Catch:{ Exception -> 0x0445 }
-        r7 = r1.codesMap;	 Catch:{ Exception -> 0x0445 }
-        r8 = r0[r6];	 Catch:{ Exception -> 0x0445 }
-        r9 = r0[r5];	 Catch:{ Exception -> 0x0445 }
-        r7.put(r8, r9);	 Catch:{ Exception -> 0x0445 }
-        r7 = r0.length;	 Catch:{ Exception -> 0x0445 }
-        if (r7 <= r13) goto L_0x0439;
-    L_0x0430:
-        r7 = r1.phoneFormatMap;	 Catch:{ Exception -> 0x0445 }
-        r8 = r0[r6];	 Catch:{ Exception -> 0x0445 }
-        r9 = r0[r13];	 Catch:{ Exception -> 0x0445 }
-        r7.put(r8, r9);	 Catch:{ Exception -> 0x0445 }
-    L_0x0439:
-        r7 = r0[r3];	 Catch:{ Exception -> 0x0445 }
-        r0 = r0[r5];	 Catch:{ Exception -> 0x0445 }
-        r2.put(r7, r0);	 Catch:{ Exception -> 0x0445 }
-        goto L_0x0408;
-    L_0x0441:
-        r4.close();	 Catch:{ Exception -> 0x0445 }
-        goto L_0x0449;
-    L_0x0445:
+        r0 = r0.split(r7);	 Catch:{ Exception -> 0x0442 }
+        r7 = r1.countriesArray;	 Catch:{ Exception -> 0x0442 }
+        r8 = r0[r5];	 Catch:{ Exception -> 0x0442 }
+        r7.add(r6, r8);	 Catch:{ Exception -> 0x0442 }
+        r7 = r1.countriesMap;	 Catch:{ Exception -> 0x0442 }
+        r8 = r0[r5];	 Catch:{ Exception -> 0x0442 }
+        r9 = r0[r6];	 Catch:{ Exception -> 0x0442 }
+        r7.put(r8, r9);	 Catch:{ Exception -> 0x0442 }
+        r7 = r1.codesMap;	 Catch:{ Exception -> 0x0442 }
+        r8 = r0[r6];	 Catch:{ Exception -> 0x0442 }
+        r9 = r0[r5];	 Catch:{ Exception -> 0x0442 }
+        r7.put(r8, r9);	 Catch:{ Exception -> 0x0442 }
+        r7 = r0.length;	 Catch:{ Exception -> 0x0442 }
+        if (r7 <= r13) goto L_0x0436;
+    L_0x042d:
+        r7 = r1.phoneFormatMap;	 Catch:{ Exception -> 0x0442 }
+        r8 = r0[r6];	 Catch:{ Exception -> 0x0442 }
+        r9 = r0[r13];	 Catch:{ Exception -> 0x0442 }
+        r7.put(r8, r9);	 Catch:{ Exception -> 0x0442 }
+    L_0x0436:
+        r7 = r0[r3];	 Catch:{ Exception -> 0x0442 }
+        r0 = r0[r5];	 Catch:{ Exception -> 0x0442 }
+        r2.put(r7, r0);	 Catch:{ Exception -> 0x0442 }
+        goto L_0x0405;
+    L_0x043e:
+        r4.close();	 Catch:{ Exception -> 0x0442 }
+        goto L_0x0446;
+    L_0x0442:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0449:
+    L_0x0446:
         r0 = r1.countriesArray;
         r4 = org.telegram.ui.-$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE;
         java.util.Collections.sort(r0, r4);
         r0 = r1.initialPhoneNumber;
         r0 = android.text.TextUtils.isEmpty(r0);
         r4 = 0;
-        if (r0 != 0) goto L_0x0463;
-    L_0x0459:
+        if (r0 != 0) goto L_0x0460;
+    L_0x0456:
         r0 = r1.codeField;
         r2 = r1.initialPhoneNumber;
         r0.setText(r2);
         r1.initialPhoneNumber = r4;
-        goto L_0x04bc;
-    L_0x0463:
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0478 }
+        goto L_0x04b9;
+    L_0x0460:
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0475 }
         r5 = "phone";
-        r0 = r0.getSystemService(r5);	 Catch:{ Exception -> 0x0478 }
-        r0 = (android.telephony.TelephonyManager) r0;	 Catch:{ Exception -> 0x0478 }
-        if (r0 == 0) goto L_0x047c;
-    L_0x046f:
-        r0 = r0.getSimCountryIso();	 Catch:{ Exception -> 0x0478 }
-        r0 = r0.toUpperCase();	 Catch:{ Exception -> 0x0478 }
-        goto L_0x047d;
-    L_0x0478:
+        r0 = r0.getSystemService(r5);	 Catch:{ Exception -> 0x0475 }
+        r0 = (android.telephony.TelephonyManager) r0;	 Catch:{ Exception -> 0x0475 }
+        if (r0 == 0) goto L_0x0479;
+    L_0x046c:
+        r0 = r0.getSimCountryIso();	 Catch:{ Exception -> 0x0475 }
+        r0 = r0.toUpperCase();	 Catch:{ Exception -> 0x0475 }
+        goto L_0x047a;
+    L_0x0475:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x047c:
+    L_0x0479:
         r0 = r4;
-    L_0x047d:
-        if (r0 == 0) goto L_0x049f;
-    L_0x047f:
+    L_0x047a:
+        if (r0 == 0) goto L_0x049c;
+    L_0x047c:
         r0 = r2.get(r0);
         r0 = (java.lang.String) r0;
-        if (r0 == 0) goto L_0x049f;
-    L_0x0487:
+        if (r0 == 0) goto L_0x049c;
+    L_0x0484:
         r2 = r1.countriesArray;
         r2 = r2.indexOf(r0);
         r5 = -1;
-        if (r2 == r5) goto L_0x049f;
-    L_0x0490:
+        if (r2 == r5) goto L_0x049c;
+    L_0x048d:
         r2 = r1.codeField;
         r5 = r1.countriesMap;
         r0 = r5.get(r0);
         r0 = (java.lang.CharSequence) r0;
         r2.setText(r0);
         r1.countryState = r6;
-    L_0x049f:
+    L_0x049c:
         r0 = r1.codeField;
         r0 = r0.length();
-        if (r0 != 0) goto L_0x04bc;
-    L_0x04a7:
+        if (r0 != 0) goto L_0x04b9;
+    L_0x04a4:
         r0 = r1.countryButton;
         r2 = NUM; // 0x7f0d02c0 float:1.8743543E38 double:1.0531301254E-314;
         r5 = "ChooseCountry";
@@ -553,7 +553,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         r0 = r1.phoneField;
         r0.setHintText(r4);
         r1.countryState = r3;
-    L_0x04bc:
+    L_0x04b9:
         r0 = r1.fragmentView;
         return r0;
         */

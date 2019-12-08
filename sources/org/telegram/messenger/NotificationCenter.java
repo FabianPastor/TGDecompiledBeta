@@ -128,7 +128,9 @@ public class NotificationCenter {
     public static final int replaceMessagesObjects;
     public static final int replyMessagesDidLoad;
     public static final int screenshotTook;
+    public static final int startAllHeavyOperations;
     public static final int stickersDidLoad;
+    public static final int stopAllHeavyOperations;
     public static final int stopEncodingService;
     public static final int suggestedLangpack;
     public static final int themeListUpdated;
@@ -146,6 +148,7 @@ public class NotificationCenter {
     private boolean animationInProgress;
     private int broadcasting = 0;
     private int currentAccount;
+    private int currentHeavyOperationFlags;
     private ArrayList<DelayedPost> delayedPosts = new ArrayList(10);
     private SparseArray<ArrayList<Object>> observers = new SparseArray();
     private SparseArray<ArrayList<Object>> removeAfterBroadcast = new SparseArray();
@@ -389,6 +392,12 @@ public class NotificationCenter {
         newPeopleNearbyAvailable = i;
         i = totalEvents;
         totalEvents = i + 1;
+        stopAllHeavyOperations = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        startAllHeavyOperations = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         httpFileDidLoad = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -608,11 +617,19 @@ public class NotificationCenter {
     }
 
     public void setAnimationInProgress(boolean z) {
+        Integer valueOf = Integer.valueOf(512);
+        int i = 0;
+        if (z) {
+            getGlobalInstance().postNotificationName(stopAllHeavyOperations, valueOf);
+        } else {
+            getGlobalInstance().postNotificationName(startAllHeavyOperations, valueOf);
+        }
         this.animationInProgress = z;
         if (!this.animationInProgress && !this.delayedPosts.isEmpty()) {
-            for (int i = 0; i < this.delayedPosts.size(); i++) {
+            while (i < this.delayedPosts.size()) {
                 DelayedPost delayedPost = (DelayedPost) this.delayedPosts.get(i);
                 postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
+                i++;
             }
             this.delayedPosts.clear();
         }
@@ -622,9 +639,13 @@ public class NotificationCenter {
         return this.animationInProgress;
     }
 
+    public int getCurrentHeavyOperationFlags() {
+        return this.currentHeavyOperationFlags;
+    }
+
     public void postNotificationName(int i, Object... objArr) {
-        boolean z = false;
-        if (this.allowedNotifications != null) {
+        boolean z = i == startAllHeavyOperations || i == stopAllHeavyOperations;
+        if (!z && this.allowedNotifications != null) {
             int i2 = 0;
             while (true) {
                 int[] iArr = this.allowedNotifications;
@@ -637,6 +658,11 @@ public class NotificationCenter {
                     i2++;
                 }
             }
+        }
+        if (i == startAllHeavyOperations) {
+            this.currentHeavyOperationFlags = (((Integer) objArr[0]).intValue() ^ -1) & this.currentHeavyOperationFlags;
+        } else if (i == stopAllHeavyOperations) {
+            this.currentHeavyOperationFlags = ((Integer) objArr[0]).intValue() | this.currentHeavyOperationFlags;
         }
         postNotificationNameInternal(i, z, objArr);
     }

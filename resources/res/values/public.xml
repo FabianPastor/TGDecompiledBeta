@@ -1,93 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <public type="anim" name="abc_fade_in" id="NUM" />
-    <public type="anim" name="abc_fade_out" id="NUM" />
-    <public type="anim" name="abc_grow_fade_in_from_bottom" id="NUM" />
-    <public type="anim" name="abc_popup_enter" id="NUM" />
-    <public type="anim" name="abc_popup_exit" id="NUM" />
-    <public type="anim" name="abc_shrink_fade_out_from_bottom" id="NUM" />
-    <public type="anim" name="abc_slide_in_bottom" id="NUM" />
-    <public type="anim" name="abc_slide_in_top" id="NUM" />
-    <public type="anim" name="abc_slide_out_bottom" id="NUM" />
-    <public type="anim" name="abc_slide_out_top" id="NUM" />
-    <public type="anim" name="abc_tooltip_enter" id="NUM" />
-    <public type="anim" name="abc_tooltip_exit" id="NUM" />
     <public type="anim" name="no_animation" id="NUM" />
     <public type="anim" name="popup_context_in" id="NUM" />
     <public type="anim" name="popup_in" id="NUM" />
     <public type="anim" name="popup_out" id="NUM" />
     <public type="array" name="android_wear_capabilities" id="NUM" />
-    <public type="attr" name="actionBarDivider" id="NUM" />
-    <public type="attr" name="actionBarItemBackground" id="NUM" />
-    <public type="attr" name="actionBarPopupTheme" id="NUM" />
-    <public type="attr" name="actionBarSize" id="NUM" />
-    <public type="attr" name="actionBarSplitStyle" id="NUM" />
-    <public type="attr" name="actionBarStyle" id="NUM" />
-    <public type="attr" name="actionBarTabBarStyle" id="NUM" />
-    <public type="attr" name="actionBarTabStyle" id="NUM" />
-    <public type="attr" name="actionBarTabTextStyle" id="NUM" />
-    <public type="attr" name="actionBarTheme" id="NUM" />
-    <public type="attr" name="actionBarWidgetTheme" id="NUM" />
-    <public type="attr" name="actionButtonStyle" id="NUM" />
-    <public type="attr" name="actionDropDownStyle" id="NUM" />
-    <public type="attr" name="actionLayout" id="NUM" />
-    <public type="attr" name="actionMenuTextAppearance" id="NUM" />
-    <public type="attr" name="actionMenuTextColor" id="NUM" />
-    <public type="attr" name="actionModeBackground" id="NUM" />
-    <public type="attr" name="actionModeCloseButtonStyle" id="NUM" />
-    <public type="attr" name="actionModeCloseDrawable" id="NUM" />
-    <public type="attr" name="actionModeCopyDrawable" id="NUM" />
-    <public type="attr" name="actionModeCutDrawable" id="NUM" />
-    <public type="attr" name="actionModeFindDrawable" id="NUM" />
-    <public type="attr" name="actionModePasteDrawable" id="NUM" />
-    <public type="attr" name="actionModePopupWindowStyle" id="NUM" />
-    <public type="attr" name="actionModeSelectAllDrawable" id="NUM" />
-    <public type="attr" name="actionModeShareDrawable" id="NUM" />
-    <public type="attr" name="actionModeSplitBackground" id="NUM" />
-    <public type="attr" name="actionModeStyle" id="NUM" />
-    <public type="attr" name="actionModeWebSearchDrawable" id="NUM" />
-    <public type="attr" name="actionOverflowButtonStyle" id="NUM" />
-    <public type="attr" name="actionOverflowMenuStyle" id="NUM" />
-    <public type="attr" name="actionProviderClass" id="NUM" />
-    <public type="attr" name="actionViewClass" id="NUM" />
-    <public type="attr" name="activityChooserViewStyle" id="NUM" />
-    <public type="attr" name="alertDialogButtonGroupStyle" id="NUM" />
-    <public type="attr" name="alertDialogCenterButtons" id="NUM" />
-    <public type="attr" name="alertDialogStyle" id="NUM" />
-    <public type="attr" name="alertDialogTheme" id="NUM" />
-    <public type="attr" name="allowStacking" id="NUM" />
     <public type="attr" name="alpha" id="NUM" />
-    <public type="attr" name="alphabeticModifiers" id="NUM" />
     <public type="attr" name="ambientEnabled" id="NUM" />
     <public type="attr" name="appTheme" id="NUM" />
-    <public type="attr" name="arrowHeadLength" id="NUM" />
-    <public type="attr" name="arrowShaftLength" id="NUM" />
-    <public type="attr" name="autoCompleteTextViewStyle" id="NUM" />
-    <public type="attr" name="autoSizeMaxTextSize" id="NUM" />
-    <public type="attr" name="autoSizeMinTextSize" id="NUM" />
-    <public type="attr" name="autoSizePresetSizes" id="NUM" />
-    <public type="attr" name="autoSizeStepGranularity" id="NUM" />
-    <public type="attr" name="autoSizeTextType" id="NUM" />
-    <public type="attr" name="background" id="NUM" />
-    <public type="attr" name="backgroundSplit" id="NUM" />
-    <public type="attr" name="backgroundStacked" id="NUM" />
-    <public type="attr" name="backgroundTint" id="NUM" />
-    <public type="attr" name="backgroundTintMode" id="NUM" />
-    <public type="attr" name="barLength" id="NUM" />
-    <public type="attr" name="borderlessButtonStyle" id="NUM" />
-    <public type="attr" name="buttonBarButtonStyle" id="NUM" />
-    <public type="attr" name="buttonBarNegativeButtonStyle" id="NUM" />
-    <public type="attr" name="buttonBarNeutralButtonStyle" id="NUM" />
-    <public type="attr" name="buttonBarPositiveButtonStyle" id="NUM" />
-    <public type="attr" name="buttonBarStyle" id="NUM" />
-    <public type="attr" name="buttonGravity" id="NUM" />
-    <public type="attr" name="buttonIconDimen" id="NUM" />
-    <public type="attr" name="buttonPanelSideLayout" id="NUM" />
     <public type="attr" name="buttonSize" id="NUM" />
-    <public type="attr" name="buttonStyle" id="NUM" />
-    <public type="attr" name="buttonStyleSmall" id="NUM" />
-    <public type="attr" name="buttonTint" id="NUM" />
-    <public type="attr" name="buttonTintMode" id="NUM" />
     <public type="attr" name="buyButtonAppearance" id="NUM" />
     <public type="attr" name="buyButtonHeight" id="NUM" />
     <public type="attr" name="buyButtonText" id="NUM" />
@@ -99,59 +20,12 @@
     <public type="attr" name="cameraTargetLng" id="NUM" />
     <public type="attr" name="cameraTilt" id="NUM" />
     <public type="attr" name="cameraZoom" id="NUM" />
-    <public type="attr" name="checkboxStyle" id="NUM" />
-    <public type="attr" name="checkedTextViewStyle" id="NUM" />
     <public type="attr" name="circleCrop" id="NUM" />
-    <public type="attr" name="closeIcon" id="NUM" />
-    <public type="attr" name="closeItemLayout" id="NUM" />
-    <public type="attr" name="collapseContentDescription" id="NUM" />
-    <public type="attr" name="collapseIcon" id="NUM" />
-    <public type="attr" name="color" id="NUM" />
-    <public type="attr" name="colorAccent" id="NUM" />
-    <public type="attr" name="colorBackgroundFloating" id="NUM" />
-    <public type="attr" name="colorButtonNormal" id="NUM" />
-    <public type="attr" name="colorControlActivated" id="NUM" />
-    <public type="attr" name="colorControlHighlight" id="NUM" />
-    <public type="attr" name="colorControlNormal" id="NUM" />
-    <public type="attr" name="colorError" id="NUM" />
-    <public type="attr" name="colorPrimary" id="NUM" />
-    <public type="attr" name="colorPrimaryDark" id="NUM" />
     <public type="attr" name="colorScheme" id="NUM" />
-    <public type="attr" name="colorSwitchThumbNormal" id="NUM" />
-    <public type="attr" name="commitIcon" id="NUM" />
-    <public type="attr" name="contentDescription" id="NUM" />
-    <public type="attr" name="contentInsetEnd" id="NUM" />
-    <public type="attr" name="contentInsetEndWithActions" id="NUM" />
-    <public type="attr" name="contentInsetLeft" id="NUM" />
-    <public type="attr" name="contentInsetRight" id="NUM" />
-    <public type="attr" name="contentInsetStart" id="NUM" />
-    <public type="attr" name="contentInsetStartWithNavigation" id="NUM" />
-    <public type="attr" name="controlBackground" id="NUM" />
     <public type="attr" name="coordinatorLayoutStyle" id="NUM" />
-    <public type="attr" name="customNavigationLayout" id="NUM" />
     <public type="attr" name="customThemeStyle" id="NUM" />
-    <public type="attr" name="defaultQueryHint" id="NUM" />
-    <public type="attr" name="dialogCornerRadius" id="NUM" />
-    <public type="attr" name="dialogPreferredPadding" id="NUM" />
-    <public type="attr" name="dialogTheme" id="NUM" />
-    <public type="attr" name="displayOptions" id="NUM" />
-    <public type="attr" name="divider" id="NUM" />
-    <public type="attr" name="dividerHorizontal" id="NUM" />
-    <public type="attr" name="dividerPadding" id="NUM" />
-    <public type="attr" name="dividerVertical" id="NUM" />
-    <public type="attr" name="drawableSize" id="NUM" />
-    <public type="attr" name="drawerArrowStyle" id="NUM" />
-    <public type="attr" name="dropDownListViewStyle" id="NUM" />
-    <public type="attr" name="dropdownListPreferredItemHeight" id="NUM" />
-    <public type="attr" name="editTextBackground" id="NUM" />
-    <public type="attr" name="editTextColor" id="NUM" />
-    <public type="attr" name="editTextStyle" id="NUM" />
-    <public type="attr" name="elevation" id="NUM" />
     <public type="attr" name="environment" id="NUM" />
-    <public type="attr" name="expandActivityOverflowButtonDrawable" id="NUM" />
-    <public type="attr" name="firstBaselineToTopHeight" id="NUM" />
     <public type="attr" name="font" id="NUM" />
-    <public type="attr" name="fontFamily" id="NUM" />
     <public type="attr" name="fontProviderAuthority" id="NUM" />
     <public type="attr" name="fontProviderCerts" id="NUM" />
     <public type="attr" name="fontProviderFetchStrategy" id="NUM" />
@@ -163,65 +37,20 @@
     <public type="attr" name="fontWeight" id="NUM" />
     <public type="attr" name="fragmentMode" id="NUM" />
     <public type="attr" name="fragmentStyle" id="NUM" />
-    <public type="attr" name="gapBetweenBars" id="NUM" />
-    <public type="attr" name="goIcon" id="NUM" />
-    <public type="attr" name="height" id="NUM" />
-    <public type="attr" name="hideOnContentScroll" id="NUM" />
-    <public type="attr" name="homeAsUpIndicator" id="NUM" />
-    <public type="attr" name="homeLayout" id="NUM" />
-    <public type="attr" name="icon" id="NUM" />
-    <public type="attr" name="iconTint" id="NUM" />
-    <public type="attr" name="iconTintMode" id="NUM" />
-    <public type="attr" name="iconifiedByDefault" id="NUM" />
     <public type="attr" name="imageAspectRatio" id="NUM" />
     <public type="attr" name="imageAspectRatioAdjust" id="NUM" />
-    <public type="attr" name="imageButtonStyle" id="NUM" />
-    <public type="attr" name="indeterminateProgressStyle" id="NUM" />
-    <public type="attr" name="initialActivityCount" id="NUM" />
-    <public type="attr" name="isLightTheme" id="NUM" />
-    <public type="attr" name="itemPadding" id="NUM" />
     <public type="attr" name="keylines" id="NUM" />
-    <public type="attr" name="lastBaselineToBottomHeight" id="NUM" />
     <public type="attr" name="latLngBoundsNorthEastLatitude" id="NUM" />
     <public type="attr" name="latLngBoundsNorthEastLongitude" id="NUM" />
     <public type="attr" name="latLngBoundsSouthWestLatitude" id="NUM" />
     <public type="attr" name="latLngBoundsSouthWestLongitude" id="NUM" />
-    <public type="attr" name="layout" id="NUM" />
     <public type="attr" name="layout_anchor" id="NUM" />
     <public type="attr" name="layout_anchorGravity" id="NUM" />
     <public type="attr" name="layout_behavior" id="NUM" />
     <public type="attr" name="layout_dodgeInsetEdges" id="NUM" />
     <public type="attr" name="layout_insetEdge" id="NUM" />
     <public type="attr" name="layout_keyline" id="NUM" />
-    <public type="attr" name="lineHeight" id="NUM" />
-    <public type="attr" name="listChoiceBackgroundIndicator" id="NUM" />
-    <public type="attr" name="listDividerAlertDialog" id="NUM" />
-    <public type="attr" name="listItemLayout" id="NUM" />
-    <public type="attr" name="listLayout" id="NUM" />
-    <public type="attr" name="listMenuViewStyle" id="NUM" />
-    <public type="attr" name="listPopupWindowStyle" id="NUM" />
-    <public type="attr" name="listPreferredItemHeight" id="NUM" />
-    <public type="attr" name="listPreferredItemHeightLarge" id="NUM" />
-    <public type="attr" name="listPreferredItemHeightSmall" id="NUM" />
-    <public type="attr" name="listPreferredItemPaddingLeft" id="NUM" />
-    <public type="attr" name="listPreferredItemPaddingRight" id="NUM" />
     <public type="attr" name="liteMode" id="NUM" />
-    <public type="attr" name="logo" id="NUM" />
-    <public type="attr" name="logoDescription" id="NUM" />
-    <public type="attr" name="lottie_autoPlay" id="NUM" />
-    <public type="attr" name="lottie_colorFilter" id="NUM" />
-    <public type="attr" name="lottie_enableMergePathsForKitKatAndAbove" id="NUM" />
-    <public type="attr" name="lottie_fileName" id="NUM" />
-    <public type="attr" name="lottie_imageAssetsFolder" id="NUM" />
-    <public type="attr" name="lottie_loop" id="NUM" />
-    <public type="attr" name="lottie_progress" id="NUM" />
-    <public type="attr" name="lottie_rawRes" id="NUM" />
-    <public type="attr" name="lottie_renderMode" id="NUM" />
-    <public type="attr" name="lottie_repeatCount" id="NUM" />
-    <public type="attr" name="lottie_repeatMode" id="NUM" />
-    <public type="attr" name="lottie_scale" id="NUM" />
-    <public type="attr" name="lottie_speed" id="NUM" />
-    <public type="attr" name="lottie_url" id="NUM" />
     <public type="attr" name="mapType" id="NUM" />
     <public type="attr" name="maskedWalletDetailsBackground" id="NUM" />
     <public type="attr" name="maskedWalletDetailsButtonBackground" id="NUM" />
@@ -230,103 +59,9 @@
     <public type="attr" name="maskedWalletDetailsLogoImageType" id="NUM" />
     <public type="attr" name="maskedWalletDetailsLogoTextColor" id="NUM" />
     <public type="attr" name="maskedWalletDetailsTextAppearance" id="NUM" />
-    <public type="attr" name="maxButtonHeight" id="NUM" />
-    <public type="attr" name="measureWithLargestChild" id="NUM" />
-    <public type="attr" name="multiChoiceItemLayout" id="NUM" />
-    <public type="attr" name="navigationContentDescription" id="NUM" />
-    <public type="attr" name="navigationIcon" id="NUM" />
-    <public type="attr" name="navigationMode" id="NUM" />
-    <public type="attr" name="numericModifiers" id="NUM" />
-    <public type="attr" name="overlapAnchor" id="NUM" />
-    <public type="attr" name="paddingBottomNoButtons" id="NUM" />
-    <public type="attr" name="paddingEnd" id="NUM" />
-    <public type="attr" name="paddingStart" id="NUM" />
-    <public type="attr" name="paddingTopNoTitle" id="NUM" />
-    <public type="attr" name="panelBackground" id="NUM" />
-    <public type="attr" name="panelMenuListTheme" id="NUM" />
-    <public type="attr" name="panelMenuListWidth" id="NUM" />
-    <public type="attr" name="popupMenuStyle" id="NUM" />
-    <public type="attr" name="popupTheme" id="NUM" />
-    <public type="attr" name="popupWindowStyle" id="NUM" />
-    <public type="attr" name="preserveIconSpacing" id="NUM" />
-    <public type="attr" name="progressBarPadding" id="NUM" />
-    <public type="attr" name="progressBarStyle" id="NUM" />
-    <public type="attr" name="queryBackground" id="NUM" />
-    <public type="attr" name="queryHint" id="NUM" />
-    <public type="attr" name="radioButtonStyle" id="NUM" />
-    <public type="attr" name="ratingBarStyle" id="NUM" />
-    <public type="attr" name="ratingBarStyleIndicator" id="NUM" />
-    <public type="attr" name="ratingBarStyleSmall" id="NUM" />
     <public type="attr" name="scopeUris" id="NUM" />
-    <public type="attr" name="searchHintIcon" id="NUM" />
-    <public type="attr" name="searchIcon" id="NUM" />
-    <public type="attr" name="searchViewStyle" id="NUM" />
-    <public type="attr" name="seekBarStyle" id="NUM" />
-    <public type="attr" name="selectableItemBackground" id="NUM" />
-    <public type="attr" name="selectableItemBackgroundBorderless" id="NUM" />
-    <public type="attr" name="showAsAction" id="NUM" />
-    <public type="attr" name="showDividers" id="NUM" />
-    <public type="attr" name="showText" id="NUM" />
-    <public type="attr" name="showTitle" id="NUM" />
-    <public type="attr" name="singleChoiceItemLayout" id="NUM" />
-    <public type="attr" name="spinBars" id="NUM" />
-    <public type="attr" name="spinnerDropDownItemStyle" id="NUM" />
-    <public type="attr" name="spinnerStyle" id="NUM" />
-    <public type="attr" name="splitTrack" id="NUM" />
-    <public type="attr" name="srcCompat" id="NUM" />
-    <public type="attr" name="state_above_anchor" id="NUM" />
     <public type="attr" name="statusBarBackground" id="NUM" />
-    <public type="attr" name="subMenuArrow" id="NUM" />
-    <public type="attr" name="submitBackground" id="NUM" />
-    <public type="attr" name="subtitle" id="NUM" />
-    <public type="attr" name="subtitleTextAppearance" id="NUM" />
-    <public type="attr" name="subtitleTextColor" id="NUM" />
-    <public type="attr" name="subtitleTextStyle" id="NUM" />
-    <public type="attr" name="suggestionRowLayout" id="NUM" />
-    <public type="attr" name="switchMinWidth" id="NUM" />
-    <public type="attr" name="switchPadding" id="NUM" />
-    <public type="attr" name="switchStyle" id="NUM" />
-    <public type="attr" name="switchTextAppearance" id="NUM" />
-    <public type="attr" name="textAllCaps" id="NUM" />
-    <public type="attr" name="textAppearanceLargePopupMenu" id="NUM" />
-    <public type="attr" name="textAppearanceListItem" id="NUM" />
-    <public type="attr" name="textAppearanceListItemSecondary" id="NUM" />
-    <public type="attr" name="textAppearanceListItemSmall" id="NUM" />
-    <public type="attr" name="textAppearancePopupMenuHeader" id="NUM" />
-    <public type="attr" name="textAppearanceSearchResultSubtitle" id="NUM" />
-    <public type="attr" name="textAppearanceSearchResultTitle" id="NUM" />
-    <public type="attr" name="textAppearanceSmallPopupMenu" id="NUM" />
-    <public type="attr" name="textColorAlertDialogListItem" id="NUM" />
-    <public type="attr" name="textColorSearchUrl" id="NUM" />
-    <public type="attr" name="theme" id="NUM" />
-    <public type="attr" name="thickness" id="NUM" />
-    <public type="attr" name="thumbTextPadding" id="NUM" />
-    <public type="attr" name="thumbTint" id="NUM" />
-    <public type="attr" name="thumbTintMode" id="NUM" />
-    <public type="attr" name="tickMark" id="NUM" />
-    <public type="attr" name="tickMarkTint" id="NUM" />
-    <public type="attr" name="tickMarkTintMode" id="NUM" />
-    <public type="attr" name="tint" id="NUM" />
-    <public type="attr" name="tintMode" id="NUM" />
-    <public type="attr" name="title" id="NUM" />
-    <public type="attr" name="titleMargin" id="NUM" />
-    <public type="attr" name="titleMarginBottom" id="NUM" />
-    <public type="attr" name="titleMarginEnd" id="NUM" />
-    <public type="attr" name="titleMarginStart" id="NUM" />
-    <public type="attr" name="titleMarginTop" id="NUM" />
-    <public type="attr" name="titleMargins" id="NUM" />
-    <public type="attr" name="titleTextAppearance" id="NUM" />
-    <public type="attr" name="titleTextColor" id="NUM" />
-    <public type="attr" name="titleTextStyle" id="NUM" />
-    <public type="attr" name="toolbarNavigationButtonStyle" id="NUM" />
-    <public type="attr" name="toolbarStyle" id="NUM" />
     <public type="attr" name="toolbarTextColorStyle" id="NUM" />
-    <public type="attr" name="tooltipForegroundColor" id="NUM" />
-    <public type="attr" name="tooltipFrameBackground" id="NUM" />
-    <public type="attr" name="tooltipText" id="NUM" />
-    <public type="attr" name="track" id="NUM" />
-    <public type="attr" name="trackTint" id="NUM" />
-    <public type="attr" name="trackTintMode" id="NUM" />
     <public type="attr" name="ttcIndex" id="NUM" />
     <public type="attr" name="uiCompass" id="NUM" />
     <public type="attr" name="uiMapToolbar" id="NUM" />
@@ -337,63 +72,10 @@
     <public type="attr" name="uiZoomControls" id="NUM" />
     <public type="attr" name="uiZoomGestures" id="NUM" />
     <public type="attr" name="useViewLifecycle" id="NUM" />
-    <public type="attr" name="viewInflaterClass" id="NUM" />
-    <public type="attr" name="voiceIcon" id="NUM" />
-    <public type="attr" name="windowActionBar" id="NUM" />
-    <public type="attr" name="windowActionBarOverlay" id="NUM" />
-    <public type="attr" name="windowActionModeOverlay" id="NUM" />
-    <public type="attr" name="windowFixedHeightMajor" id="NUM" />
-    <public type="attr" name="windowFixedHeightMinor" id="NUM" />
-    <public type="attr" name="windowFixedWidthMajor" id="NUM" />
-    <public type="attr" name="windowFixedWidthMinor" id="NUM" />
-    <public type="attr" name="windowMinWidthMajor" id="NUM" />
-    <public type="attr" name="windowMinWidthMinor" id="NUM" />
-    <public type="attr" name="windowNoTitle" id="NUM" />
     <public type="attr" name="windowTransitionStyle" id="NUM" />
     <public type="attr" name="zOrderOnTop" id="NUM" />
-    <public type="bool" name="abc_action_bar_embed_tabs" id="NUM" />
-    <public type="bool" name="abc_allow_stacked_button_bar" id="NUM" />
-    <public type="bool" name="abc_config_actionMenuItemAllCaps" id="NUM" />
     <public type="bool" name="isTablet" id="NUM" />
     <public type="bool" name="useHardwareAcceleration" id="NUM" />
-    <public type="color" name="abc_background_cache_hint_selector_material_dark" id="NUM" />
-    <public type="color" name="abc_background_cache_hint_selector_material_light" id="NUM" />
-    <public type="color" name="abc_btn_colored_borderless_text_material" id="NUM" />
-    <public type="color" name="abc_btn_colored_text_material" id="NUM" />
-    <public type="color" name="abc_color_highlight_material" id="NUM" />
-    <public type="color" name="abc_hint_foreground_material_dark" id="NUM" />
-    <public type="color" name="abc_hint_foreground_material_light" id="NUM" />
-    <public type="color" name="abc_input_method_navigation_guard" id="NUM" />
-    <public type="color" name="abc_primary_text_disable_only_material_dark" id="NUM" />
-    <public type="color" name="abc_primary_text_disable_only_material_light" id="NUM" />
-    <public type="color" name="abc_primary_text_material_dark" id="NUM" />
-    <public type="color" name="abc_primary_text_material_light" id="NUM" />
-    <public type="color" name="abc_search_url_text" id="NUM" />
-    <public type="color" name="abc_search_url_text_normal" id="NUM" />
-    <public type="color" name="abc_search_url_text_pressed" id="NUM" />
-    <public type="color" name="abc_search_url_text_selected" id="NUM" />
-    <public type="color" name="abc_secondary_text_material_dark" id="NUM" />
-    <public type="color" name="abc_secondary_text_material_light" id="NUM" />
-    <public type="color" name="abc_tint_btn_checkable" id="NUM" />
-    <public type="color" name="abc_tint_default" id="NUM" />
-    <public type="color" name="abc_tint_edittext" id="NUM" />
-    <public type="color" name="abc_tint_seek_thumb" id="NUM" />
-    <public type="color" name="abc_tint_spinner" id="NUM" />
-    <public type="color" name="abc_tint_switch_track" id="NUM" />
-    <public type="color" name="accent_material_dark" id="NUM" />
-    <public type="color" name="accent_material_light" id="NUM" />
-    <public type="color" name="background_floating_material_dark" id="NUM" />
-    <public type="color" name="background_floating_material_light" id="NUM" />
-    <public type="color" name="background_material_dark" id="NUM" />
-    <public type="color" name="background_material_light" id="NUM" />
-    <public type="color" name="bright_foreground_disabled_material_dark" id="NUM" />
-    <public type="color" name="bright_foreground_disabled_material_light" id="NUM" />
-    <public type="color" name="bright_foreground_inverse_material_dark" id="NUM" />
-    <public type="color" name="bright_foreground_inverse_material_light" id="NUM" />
-    <public type="color" name="bright_foreground_material_dark" id="NUM" />
-    <public type="color" name="bright_foreground_material_light" id="NUM" />
-    <public type="color" name="button_material_dark" id="NUM" />
-    <public type="color" name="button_material_light" id="NUM" />
     <public type="color" name="common_google_signin_btn_text_dark" id="NUM" />
     <public type="color" name="common_google_signin_btn_text_dark_default" id="NUM" />
     <public type="color" name="common_google_signin_btn_text_dark_disabled" id="NUM" />
@@ -405,17 +87,7 @@
     <public type="color" name="common_google_signin_btn_text_light_focused" id="NUM" />
     <public type="color" name="common_google_signin_btn_text_light_pressed" id="NUM" />
     <public type="color" name="common_google_signin_btn_tint" id="NUM" />
-    <public type="color" name="dim_foreground_disabled_material_dark" id="NUM" />
-    <public type="color" name="dim_foreground_disabled_material_light" id="NUM" />
-    <public type="color" name="dim_foreground_material_dark" id="NUM" />
-    <public type="color" name="dim_foreground_material_light" id="NUM" />
     <public type="color" name="divider" id="NUM" />
-    <public type="color" name="error_color_material_dark" id="NUM" />
-    <public type="color" name="error_color_material_light" id="NUM" />
-    <public type="color" name="foreground_material_dark" id="NUM" />
-    <public type="color" name="foreground_material_light" id="NUM" />
-    <public type="color" name="highlighted_text_material_dark" id="NUM" />
-    <public type="color" name="highlighted_text_material_light" id="NUM" />
     <public type="color" name="hockeyapp_background_header" id="NUM" />
     <public type="color" name="hockeyapp_background_light" id="NUM" />
     <public type="color" name="hockeyapp_background_white" id="NUM" />
@@ -426,42 +98,10 @@
     <public type="color" name="hockeyapp_text_light" id="NUM" />
     <public type="color" name="hockeyapp_text_normal" id="NUM" />
     <public type="color" name="hockeyapp_text_white" id="NUM" />
-    <public type="color" name="material_blue_grey_800" id="NUM" />
-    <public type="color" name="material_blue_grey_900" id="NUM" />
-    <public type="color" name="material_blue_grey_950" id="NUM" />
-    <public type="color" name="material_deep_teal_200" id="NUM" />
-    <public type="color" name="material_deep_teal_500" id="NUM" />
-    <public type="color" name="material_grey_100" id="NUM" />
-    <public type="color" name="material_grey_300" id="NUM" />
-    <public type="color" name="material_grey_50" id="NUM" />
-    <public type="color" name="material_grey_600" id="NUM" />
-    <public type="color" name="material_grey_800" id="NUM" />
-    <public type="color" name="material_grey_850" id="NUM" />
-    <public type="color" name="material_grey_900" id="NUM" />
     <public type="color" name="notification_action_color_filter" id="NUM" />
     <public type="color" name="notification_icon_bg_color" id="NUM" />
-    <public type="color" name="primary_dark_material_dark" id="NUM" />
-    <public type="color" name="primary_dark_material_light" id="NUM" />
-    <public type="color" name="primary_material_dark" id="NUM" />
-    <public type="color" name="primary_material_light" id="NUM" />
-    <public type="color" name="primary_text_default_material_dark" id="NUM" />
-    <public type="color" name="primary_text_default_material_light" id="NUM" />
-    <public type="color" name="primary_text_disabled_material_dark" id="NUM" />
-    <public type="color" name="primary_text_disabled_material_light" id="NUM" />
-    <public type="color" name="ripple_material_dark" id="NUM" />
     <public type="color" name="ripple_material_light" id="NUM" />
-    <public type="color" name="secondary_text_default_material_dark" id="NUM" />
     <public type="color" name="secondary_text_default_material_light" id="NUM" />
-    <public type="color" name="secondary_text_disabled_material_dark" id="NUM" />
-    <public type="color" name="secondary_text_disabled_material_light" id="NUM" />
-    <public type="color" name="switch_thumb_disabled_material_dark" id="NUM" />
-    <public type="color" name="switch_thumb_disabled_material_light" id="NUM" />
-    <public type="color" name="switch_thumb_material_dark" id="NUM" />
-    <public type="color" name="switch_thumb_material_light" id="NUM" />
-    <public type="color" name="switch_thumb_normal_material_dark" id="NUM" />
-    <public type="color" name="switch_thumb_normal_material_light" id="NUM" />
-    <public type="color" name="tooltip_background_dark" id="NUM" />
-    <public type="color" name="tooltip_background_light" id="NUM" />
     <public type="color" name="wallet_bright_foreground_disabled_holo_light" id="NUM" />
     <public type="color" name="wallet_bright_foreground_holo_dark" id="NUM" />
     <public type="color" name="wallet_bright_foreground_holo_light" id="NUM" />
@@ -475,81 +115,6 @@
     <public type="color" name="wallet_link_text_light" id="NUM" />
     <public type="color" name="wallet_primary_text_holo_light" id="NUM" />
     <public type="color" name="wallet_secondary_text_holo_dark" id="NUM" />
-    <public type="dimen" name="abc_action_bar_content_inset_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_content_inset_with_nav" id="NUM" />
-    <public type="dimen" name="abc_action_bar_default_height_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_default_padding_end_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_default_padding_start_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_elevation_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_icon_vertical_padding_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_overflow_padding_end_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_overflow_padding_start_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_stacked_max_height" id="NUM" />
-    <public type="dimen" name="abc_action_bar_stacked_tab_max_width" id="NUM" />
-    <public type="dimen" name="abc_action_bar_subtitle_bottom_margin_material" id="NUM" />
-    <public type="dimen" name="abc_action_bar_subtitle_top_margin_material" id="NUM" />
-    <public type="dimen" name="abc_action_button_min_height_material" id="NUM" />
-    <public type="dimen" name="abc_action_button_min_width_material" id="NUM" />
-    <public type="dimen" name="abc_action_button_min_width_overflow_material" id="NUM" />
-    <public type="dimen" name="abc_alert_dialog_button_bar_height" id="NUM" />
-    <public type="dimen" name="abc_alert_dialog_button_dimen" id="NUM" />
-    <public type="dimen" name="abc_button_inset_horizontal_material" id="NUM" />
-    <public type="dimen" name="abc_button_inset_vertical_material" id="NUM" />
-    <public type="dimen" name="abc_button_padding_horizontal_material" id="NUM" />
-    <public type="dimen" name="abc_button_padding_vertical_material" id="NUM" />
-    <public type="dimen" name="abc_cascading_menus_min_smallest_width" id="NUM" />
-    <public type="dimen" name="abc_config_prefDialogWidth" id="NUM" />
-    <public type="dimen" name="abc_control_corner_material" id="NUM" />
-    <public type="dimen" name="abc_control_inset_material" id="NUM" />
-    <public type="dimen" name="abc_control_padding_material" id="NUM" />
-    <public type="dimen" name="abc_dialog_corner_radius_material" id="NUM" />
-    <public type="dimen" name="abc_dialog_fixed_height_major" id="NUM" />
-    <public type="dimen" name="abc_dialog_fixed_height_minor" id="NUM" />
-    <public type="dimen" name="abc_dialog_fixed_width_major" id="NUM" />
-    <public type="dimen" name="abc_dialog_fixed_width_minor" id="NUM" />
-    <public type="dimen" name="abc_dialog_list_padding_bottom_no_buttons" id="NUM" />
-    <public type="dimen" name="abc_dialog_list_padding_top_no_title" id="NUM" />
-    <public type="dimen" name="abc_dialog_min_width_major" id="NUM" />
-    <public type="dimen" name="abc_dialog_min_width_minor" id="NUM" />
-    <public type="dimen" name="abc_dialog_padding_material" id="NUM" />
-    <public type="dimen" name="abc_dialog_padding_top_material" id="NUM" />
-    <public type="dimen" name="abc_dialog_title_divider_material" id="NUM" />
-    <public type="dimen" name="abc_disabled_alpha_material_dark" id="NUM" />
-    <public type="dimen" name="abc_disabled_alpha_material_light" id="NUM" />
-    <public type="dimen" name="abc_dropdownitem_icon_width" id="NUM" />
-    <public type="dimen" name="abc_dropdownitem_text_padding_left" id="NUM" />
-    <public type="dimen" name="abc_dropdownitem_text_padding_right" id="NUM" />
-    <public type="dimen" name="abc_edit_text_inset_bottom_material" id="NUM" />
-    <public type="dimen" name="abc_edit_text_inset_horizontal_material" id="NUM" />
-    <public type="dimen" name="abc_edit_text_inset_top_material" id="NUM" />
-    <public type="dimen" name="abc_floating_window_z" id="NUM" />
-    <public type="dimen" name="abc_list_item_padding_horizontal_material" id="NUM" />
-    <public type="dimen" name="abc_panel_menu_list_width" id="NUM" />
-    <public type="dimen" name="abc_progress_bar_height_material" id="NUM" />
-    <public type="dimen" name="abc_search_view_preferred_height" id="NUM" />
-    <public type="dimen" name="abc_search_view_preferred_width" id="NUM" />
-    <public type="dimen" name="abc_seekbar_track_background_height_material" id="NUM" />
-    <public type="dimen" name="abc_seekbar_track_progress_height_material" id="NUM" />
-    <public type="dimen" name="abc_select_dialog_padding_start_material" id="NUM" />
-    <public type="dimen" name="abc_switch_padding" id="NUM" />
-    <public type="dimen" name="abc_text_size_body_1_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_body_2_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_button_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_caption_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_display_1_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_display_2_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_display_3_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_display_4_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_headline_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_large_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_medium_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_menu_header_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_menu_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_small_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_subhead_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_subtitle_material_toolbar" id="NUM" />
-    <public type="dimen" name="abc_text_size_title_material" id="NUM" />
-    <public type="dimen" name="abc_text_size_title_material_toolbar" id="NUM" />
     <public type="dimen" name="compat_button_inset_horizontal_material" id="NUM" />
     <public type="dimen" name="compat_button_inset_vertical_material" id="NUM" />
     <public type="dimen" name="compat_button_padding_horizontal_material" id="NUM" />
@@ -558,15 +123,6 @@
     <public type="dimen" name="compat_notification_large_icon_max_height" id="NUM" />
     <public type="dimen" name="compat_notification_large_icon_max_width" id="NUM" />
     <public type="dimen" name="custom_notification_corner_radius" id="NUM" />
-    <public type="dimen" name="disabled_alpha_material_dark" id="NUM" />
-    <public type="dimen" name="disabled_alpha_material_light" id="NUM" />
-    <public type="dimen" name="highlight_alpha_material_colored" id="NUM" />
-    <public type="dimen" name="highlight_alpha_material_dark" id="NUM" />
-    <public type="dimen" name="highlight_alpha_material_light" id="NUM" />
-    <public type="dimen" name="hint_alpha_material_dark" id="NUM" />
-    <public type="dimen" name="hint_alpha_material_light" id="NUM" />
-    <public type="dimen" name="hint_pressed_alpha_material_dark" id="NUM" />
-    <public type="dimen" name="hint_pressed_alpha_material_light" id="NUM" />
     <public type="dimen" name="notification_action_icon_size" id="NUM" />
     <public type="dimen" name="notification_action_text_size" id="NUM" />
     <public type="dimen" name="notification_big_circle_margin" id="NUM" />
@@ -582,99 +138,8 @@
     <public type="dimen" name="notification_subtext_size" id="NUM" />
     <public type="dimen" name="notification_top_pad" id="NUM" />
     <public type="dimen" name="notification_top_pad_large_text" id="NUM" />
-    <public type="dimen" name="tooltip_corner_radius" id="NUM" />
-    <public type="dimen" name="tooltip_horizontal_padding" id="NUM" />
-    <public type="dimen" name="tooltip_margin" id="NUM" />
-    <public type="dimen" name="tooltip_precise_anchor_extra_offset" id="NUM" />
-    <public type="dimen" name="tooltip_precise_anchor_threshold" id="NUM" />
-    <public type="dimen" name="tooltip_vertical_padding" id="NUM" />
-    <public type="dimen" name="tooltip_y_offset_non_touch" id="NUM" />
-    <public type="dimen" name="tooltip_y_offset_touch" id="NUM" />
     <public type="drawable" name="ab_progress" id="NUM" />
-    <public type="drawable" name="abc_ab_share_pack_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_action_bar_item_background_material" id="NUM" />
-    <public type="drawable" name="abc_btn_borderless_material" id="NUM" />
-    <public type="drawable" name="abc_btn_check_material" id="NUM" />
-    <public type="drawable" name="abc_btn_check_to_on_mtrl_000" id="NUM" />
-    <public type="drawable" name="abc_btn_check_to_on_mtrl_015" id="NUM" />
-    <public type="drawable" name="abc_btn_colored_material" id="NUM" />
-    <public type="drawable" name="abc_btn_default_mtrl_shape" id="NUM" />
-    <public type="drawable" name="abc_btn_radio_material" id="NUM" />
-    <public type="drawable" name="abc_btn_radio_to_on_mtrl_000" id="NUM" />
-    <public type="drawable" name="abc_btn_radio_to_on_mtrl_015" id="NUM" />
-    <public type="drawable" name="abc_btn_switch_to_on_mtrl_00001" id="NUM" />
-    <public type="drawable" name="abc_btn_switch_to_on_mtrl_00012" id="NUM" />
-    <public type="drawable" name="abc_cab_background_internal_bg" id="NUM" />
-    <public type="drawable" name="abc_cab_background_top_material" id="NUM" />
-    <public type="drawable" name="abc_cab_background_top_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_control_background_material" id="NUM" />
-    <public type="drawable" name="abc_dialog_material_background" id="NUM" />
-    <public type="drawable" name="abc_edit_text_material" id="NUM" />
-    <public type="drawable" name="abc_ic_ab_back_material" id="NUM" />
-    <public type="drawable" name="abc_ic_arrow_drop_right_black_24dp" id="NUM" />
-    <public type="drawable" name="abc_ic_clear_material" id="NUM" />
-    <public type="drawable" name="abc_ic_commit_search_api_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_ic_go_search_api_material" id="NUM" />
-    <public type="drawable" name="abc_ic_menu_copy_mtrl_am_alpha" id="NUM" />
-    <public type="drawable" name="abc_ic_menu_cut_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_ic_menu_overflow_material" id="NUM" />
-    <public type="drawable" name="abc_ic_menu_paste_mtrl_am_alpha" id="NUM" />
-    <public type="drawable" name="abc_ic_menu_selectall_mtrl_alpha" id="NUM" />
     <public type="drawable" name="abc_ic_menu_share_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_ic_search_api_material" id="NUM" />
-    <public type="drawable" name="abc_ic_star_black_16dp" id="NUM" />
-    <public type="drawable" name="abc_ic_star_black_36dp" id="NUM" />
-    <public type="drawable" name="abc_ic_star_black_48dp" id="NUM" />
-    <public type="drawable" name="abc_ic_star_half_black_16dp" id="NUM" />
-    <public type="drawable" name="abc_ic_star_half_black_36dp" id="NUM" />
-    <public type="drawable" name="abc_ic_star_half_black_48dp" id="NUM" />
-    <public type="drawable" name="abc_ic_voice_search_api_material" id="NUM" />
-    <public type="drawable" name="abc_item_background_holo_dark" id="NUM" />
-    <public type="drawable" name="abc_item_background_holo_light" id="NUM" />
-    <public type="drawable" name="abc_list_divider_material" id="NUM" />
-    <public type="drawable" name="abc_list_divider_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_list_focused_holo" id="NUM" />
-    <public type="drawable" name="abc_list_longpressed_holo" id="NUM" />
-    <public type="drawable" name="abc_list_pressed_holo_dark" id="NUM" />
-    <public type="drawable" name="abc_list_pressed_holo_light" id="NUM" />
-    <public type="drawable" name="abc_list_selector_background_transition_holo_dark" id="NUM" />
-    <public type="drawable" name="abc_list_selector_background_transition_holo_light" id="NUM" />
-    <public type="drawable" name="abc_list_selector_disabled_holo_dark" id="NUM" />
-    <public type="drawable" name="abc_list_selector_disabled_holo_light" id="NUM" />
-    <public type="drawable" name="abc_list_selector_holo_dark" id="NUM" />
-    <public type="drawable" name="abc_list_selector_holo_light" id="NUM" />
-    <public type="drawable" name="abc_menu_hardkey_panel_mtrl_mult" id="NUM" />
-    <public type="drawable" name="abc_popup_background_mtrl_mult" id="NUM" />
-    <public type="drawable" name="abc_ratingbar_indicator_material" id="NUM" />
-    <public type="drawable" name="abc_ratingbar_material" id="NUM" />
-    <public type="drawable" name="abc_ratingbar_small_material" id="NUM" />
-    <public type="drawable" name="abc_scrubber_control_off_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_scrubber_control_to_pressed_mtrl_000" id="NUM" />
-    <public type="drawable" name="abc_scrubber_control_to_pressed_mtrl_005" id="NUM" />
-    <public type="drawable" name="abc_scrubber_primary_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_scrubber_track_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_seekbar_thumb_material" id="NUM" />
-    <public type="drawable" name="abc_seekbar_tick_mark_material" id="NUM" />
-    <public type="drawable" name="abc_seekbar_track_material" id="NUM" />
-    <public type="drawable" name="abc_spinner_mtrl_am_alpha" id="NUM" />
-    <public type="drawable" name="abc_spinner_textfield_background_material" id="NUM" />
-    <public type="drawable" name="abc_switch_thumb_material" id="NUM" />
-    <public type="drawable" name="abc_switch_track_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_tab_indicator_material" id="NUM" />
-    <public type="drawable" name="abc_tab_indicator_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_text_cursor_material" id="NUM" />
-    <public type="drawable" name="abc_text_select_handle_left_mtrl_dark" id="NUM" />
-    <public type="drawable" name="abc_text_select_handle_left_mtrl_light" id="NUM" />
-    <public type="drawable" name="abc_text_select_handle_middle_mtrl_dark" id="NUM" />
-    <public type="drawable" name="abc_text_select_handle_middle_mtrl_light" id="NUM" />
-    <public type="drawable" name="abc_text_select_handle_right_mtrl_dark" id="NUM" />
-    <public type="drawable" name="abc_text_select_handle_right_mtrl_light" id="NUM" />
-    <public type="drawable" name="abc_textfield_activated_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_textfield_default_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_textfield_search_activated_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_textfield_search_default_mtrl_alpha" id="NUM" />
-    <public type="drawable" name="abc_textfield_search_material" id="NUM" />
-    <public type="drawable" name="abc_vector_test" id="NUM" />
     <public type="drawable" name="account_add" id="NUM" />
     <public type="drawable" name="account_check" id="NUM" />
     <public type="drawable" name="actions_addadmin" id="NUM" />
@@ -1303,8 +768,6 @@
     <public type="drawable" name="tool_rotate" id="NUM" />
     <public type="drawable" name="tooltip_arrow" id="NUM" />
     <public type="drawable" name="tooltip_arrow_up" id="NUM" />
-    <public type="drawable" name="tooltip_frame_dark" id="NUM" />
-    <public type="drawable" name="tooltip_frame_light" id="NUM" />
     <public type="drawable" name="tooltip_sound" id="NUM" />
     <public type="drawable" name="transparent" id="NUM" />
     <public type="drawable" name="update" id="NUM" />
@@ -1330,12 +793,6 @@
     <public type="drawable" name="volume_on" id="NUM" />
     <public type="drawable" name="wall_selection" id="NUM" />
     <public type="drawable" name="ytlogo" id="NUM" />
-    <public type="id" name="ALT" id="NUM" />
-    <public type="id" name="CTRL" id="NUM" />
-    <public type="id" name="FUNCTION" id="NUM" />
-    <public type="id" name="META" id="NUM" />
-    <public type="id" name="SHIFT" id="NUM" />
-    <public type="id" name="SYM" id="NUM" />
     <public type="id" name="acc_action_msg_options" id="NUM" />
     <public type="id" name="acc_action_open_photo" id="NUM" />
     <public type="id" name="acc_action_small_button" id="NUM" />
@@ -1372,31 +829,14 @@
     <public type="id" name="accessibility_custom_action_7" id="NUM" />
     <public type="id" name="accessibility_custom_action_8" id="NUM" />
     <public type="id" name="accessibility_custom_action_9" id="NUM" />
-    <public type="id" name="action_bar" id="NUM" />
-    <public type="id" name="action_bar_activity_content" id="NUM" />
-    <public type="id" name="action_bar_container" id="NUM" />
-    <public type="id" name="action_bar_root" id="NUM" />
-    <public type="id" name="action_bar_spinner" id="NUM" />
-    <public type="id" name="action_bar_subtitle" id="NUM" />
-    <public type="id" name="action_bar_title" id="NUM" />
     <public type="id" name="action_container" id="NUM" />
-    <public type="id" name="action_context_bar" id="NUM" />
     <public type="id" name="action_divider" id="NUM" />
     <public type="id" name="action_image" id="NUM" />
-    <public type="id" name="action_menu_divider" id="NUM" />
-    <public type="id" name="action_menu_presenter" id="NUM" />
-    <public type="id" name="action_mode_bar" id="NUM" />
-    <public type="id" name="action_mode_bar_stub" id="NUM" />
-    <public type="id" name="action_mode_close_button" id="NUM" />
     <public type="id" name="action_text" id="NUM" />
     <public type="id" name="actions" id="NUM" />
-    <public type="id" name="activity_chooser_view_content" id="NUM" />
-    <public type="id" name="add" id="NUM" />
     <public type="id" name="adjust_height" id="NUM" />
     <public type="id" name="adjust_width" id="NUM" />
-    <public type="id" name="alertTitle" id="NUM" />
     <public type="id" name="all" id="NUM" />
-    <public type="id" name="always" id="NUM" />
     <public type="id" name="android_pay" id="NUM" />
     <public type="id" name="android_pay_dark" id="NUM" />
     <public type="id" name="android_pay_light" id="NUM" />
@@ -1405,12 +845,9 @@
     <public type="id" name="answer_text" id="NUM" />
     <public type="id" name="async" id="NUM" />
     <public type="id" name="auto" id="NUM" />
-    <public type="id" name="automatic" id="NUM" />
-    <public type="id" name="beginning" id="NUM" />
     <public type="id" name="blocking" id="NUM" />
     <public type="id" name="book_now" id="NUM" />
     <public type="id" name="bottom" id="NUM" />
-    <public type="id" name="buttonPanel" id="NUM" />
     <public type="id" name="button_add_response" id="NUM" />
     <public type="id" name="button_attachment" id="NUM" />
     <public type="id" name="button_login" id="NUM" />
@@ -1425,30 +862,18 @@
     <public type="id" name="center" id="NUM" />
     <public type="id" name="center_horizontal" id="NUM" />
     <public type="id" name="center_vertical" id="NUM" />
-    <public type="id" name="checkbox" id="NUM" />
     <public type="id" name="chronometer" id="NUM" />
     <public type="id" name="classic" id="NUM" />
     <public type="id" name="clip_horizontal" id="NUM" />
     <public type="id" name="clip_vertical" id="NUM" />
-    <public type="id" name="collapseActionView" id="NUM" />
-    <public type="id" name="content" id="NUM" />
-    <public type="id" name="contentPanel" id="NUM" />
     <public type="id" name="current_animation" id="NUM" />
-    <public type="id" name="custom" id="NUM" />
-    <public type="id" name="customPanel" id="NUM" />
     <public type="id" name="dark" id="NUM" />
     <public type="id" name="decline_btn" id="NUM" />
     <public type="id" name="decline_text" id="NUM" />
-    <public type="id" name="decor_content_parent" id="NUM" />
-    <public type="id" name="default_activity_button" id="NUM" />
     <public type="id" name="dialog_button" id="NUM" />
-    <public type="id" name="disableHome" id="NUM" />
     <public type="id" name="donate_with" id="NUM" />
     <public type="id" name="donate_with_google" id="NUM" />
-    <public type="id" name="edit_query" id="NUM" />
     <public type="id" name="end" id="NUM" />
-    <public type="id" name="expand_activities_button" id="NUM" />
-    <public type="id" name="expanded_menu" id="NUM" />
     <public type="id" name="fill" id="NUM" />
     <public type="id" name="fill_horizontal" id="NUM" />
     <public type="id" name="fill_vertical" id="NUM" />
@@ -1458,18 +883,12 @@
     <public type="id" name="google_wallet_grayscale" id="NUM" />
     <public type="id" name="google_wallet_monochrome" id="NUM" />
     <public type="id" name="grayscale" id="NUM" />
-    <public type="id" name="group_divider" id="NUM" />
-    <public type="id" name="hardware" id="NUM" />
     <public type="id" name="holo_dark" id="NUM" />
     <public type="id" name="holo_light" id="NUM" />
-    <public type="id" name="home" id="NUM" />
-    <public type="id" name="homeAsUp" id="NUM" />
     <public type="id" name="hybrid" id="NUM" />
     <public type="id" name="icon" id="NUM" />
     <public type="id" name="icon_group" id="NUM" />
     <public type="id" name="icon_only" id="NUM" />
-    <public type="id" name="ifRoom" id="NUM" />
-    <public type="id" name="image" id="NUM" />
     <public type="id" name="info" id="NUM" />
     <public type="id" name="input_email" id="NUM" />
     <public type="id" name="input_message" id="NUM" />
@@ -1488,12 +907,9 @@
     <public type="id" name="light" id="NUM" />
     <public type="id" name="line1" id="NUM" />
     <public type="id" name="line3" id="NUM" />
-    <public type="id" name="listMode" id="NUM" />
     <public type="id" name="list_attachments" id="NUM" />
     <public type="id" name="list_feedback_messages" id="NUM" />
-    <public type="id" name="list_item" id="NUM" />
     <public type="id" name="logo_only" id="NUM" />
-    <public type="id" name="lottie_layer_name" id="NUM" />
     <public type="id" name="match_parent" id="NUM" />
     <public type="id" name="material" id="NUM" />
     <public type="id" name="menu_bold" id="NUM" />
@@ -1504,19 +920,14 @@
     <public type="id" name="menu_regular" id="NUM" />
     <public type="id" name="menu_strike" id="NUM" />
     <public type="id" name="menu_underline" id="NUM" />
-    <public type="id" name="message" id="NUM" />
-    <public type="id" name="middle" id="NUM" />
     <public type="id" name="monochrome" id="NUM" />
-    <public type="id" name="multiply" id="NUM" />
     <public type="id" name="name" id="NUM" />
-    <public type="id" name="never" id="NUM" />
     <public type="id" name="none" id="NUM" />
     <public type="id" name="normal" id="NUM" />
     <public type="id" name="notification_background" id="NUM" />
     <public type="id" name="notification_main_column" id="NUM" />
     <public type="id" name="notification_main_column_container" id="NUM" />
     <public type="id" name="object_tag" id="NUM" />
-    <public type="id" name="parentPanel" id="NUM" />
     <public type="id" name="parent_tag" id="NUM" />
     <public type="id" name="passcode_btn_0" id="NUM" />
     <public type="id" name="passcode_btn_1" id="NUM" />
@@ -1541,50 +952,17 @@
     <public type="id" name="player_progress_bar" id="NUM" />
     <public type="id" name="player_song_name" id="NUM" />
     <public type="id" name="production" id="NUM" />
-    <public type="id" name="progress_circular" id="NUM" />
-    <public type="id" name="progress_horizontal" id="NUM" />
-    <public type="id" name="radio" id="NUM" />
-    <public type="id" name="restart" id="NUM" />
-    <public type="id" name="reverse" id="NUM" />
     <public type="id" name="right" id="NUM" />
     <public type="id" name="right_icon" id="NUM" />
     <public type="id" name="right_side" id="NUM" />
     <public type="id" name="sandbox" id="NUM" />
     <public type="id" name="satellite" id="NUM" />
-    <public type="id" name="screen" id="NUM" />
-    <public type="id" name="scrollIndicatorDown" id="NUM" />
-    <public type="id" name="scrollIndicatorUp" id="NUM" />
-    <public type="id" name="scrollView" id="NUM" />
-    <public type="id" name="search_badge" id="NUM" />
-    <public type="id" name="search_bar" id="NUM" />
-    <public type="id" name="search_button" id="NUM" />
-    <public type="id" name="search_close_btn" id="NUM" />
-    <public type="id" name="search_edit_frame" id="NUM" />
-    <public type="id" name="search_go_btn" id="NUM" />
-    <public type="id" name="search_mag_icon" id="NUM" />
-    <public type="id" name="search_plate" id="NUM" />
-    <public type="id" name="search_src_text" id="NUM" />
-    <public type="id" name="search_voice_btn" id="NUM" />
-    <public type="id" name="select_dialog_listview" id="NUM" />
     <public type="id" name="selectionDetails" id="NUM" />
-    <public type="id" name="shortcut" id="NUM" />
-    <public type="id" name="showCustom" id="NUM" />
-    <public type="id" name="showHome" id="NUM" />
-    <public type="id" name="showTitle" id="NUM" />
     <public type="id" name="slide" id="NUM" />
-    <public type="id" name="software" id="NUM" />
-    <public type="id" name="spacer" id="NUM" />
-    <public type="id" name="split_action_bar" id="NUM" />
-    <public type="id" name="src_atop" id="NUM" />
-    <public type="id" name="src_in" id="NUM" />
-    <public type="id" name="src_over" id="NUM" />
     <public type="id" name="standard" id="NUM" />
     <public type="id" name="start" id="NUM" />
     <public type="id" name="strict_sandbox" id="NUM" />
-    <public type="id" name="submenuarrow" id="NUM" />
-    <public type="id" name="submit_area" id="NUM" />
     <public type="id" name="subtitle" id="NUM" />
-    <public type="id" name="tabMode" id="NUM" />
     <public type="id" name="tag_accessibility_actions" id="NUM" />
     <public type="id" name="tag_accessibility_clickable_spans" id="NUM" />
     <public type="id" name="tag_accessibility_heading" id="NUM" />
@@ -1597,63 +975,22 @@
     <public type="id" name="test" id="NUM" />
     <public type="id" name="text" id="NUM" />
     <public type="id" name="text2" id="NUM" />
-    <public type="id" name="textSpacerNoButtons" id="NUM" />
-    <public type="id" name="textSpacerNoTitle" id="NUM" />
     <public type="id" name="text_headline" id="NUM" />
     <public type="id" name="text_wrap" id="NUM" />
     <public type="id" name="time" id="NUM" />
     <public type="id" name="title" id="NUM" />
-    <public type="id" name="titleDividerNoCustom" id="NUM" />
-    <public type="id" name="title_template" id="NUM" />
     <public type="id" name="top" id="NUM" />
-    <public type="id" name="topPanel" id="NUM" />
-    <public type="id" name="uniform" id="NUM" />
-    <public type="id" name="up" id="NUM" />
-    <public type="id" name="useLogo" id="NUM" />
     <public type="id" name="view_header" id="NUM" />
     <public type="id" name="web_update_details" id="NUM" />
     <public type="id" name="wide" id="NUM" />
-    <public type="id" name="withText" id="NUM" />
     <public type="id" name="wrap_content" id="NUM" />
     <public type="id" name="wrapper_attachments" id="NUM" />
     <public type="id" name="wrapper_feedback" id="NUM" />
     <public type="id" name="wrapper_feedback_scroll" id="NUM" />
     <public type="id" name="wrapper_messages" id="NUM" />
     <public type="id" name="wrapper_messages_buttons" id="NUM" />
-    <public type="integer" name="abc_config_activityDefaultDur" id="NUM" />
-    <public type="integer" name="abc_config_activityShortDur" id="NUM" />
-    <public type="integer" name="cancel_button_image_alpha" id="NUM" />
-    <public type="integer" name="config_tooltipAnimTime" id="NUM" />
     <public type="integer" name="google_play_services_version" id="NUM" />
     <public type="integer" name="status_bar_notification_info_maxnum" id="NUM" />
-    <public type="layout" name="abc_action_bar_title_item" id="NUM" />
-    <public type="layout" name="abc_action_bar_up_container" id="NUM" />
-    <public type="layout" name="abc_action_menu_item_layout" id="NUM" />
-    <public type="layout" name="abc_action_menu_layout" id="NUM" />
-    <public type="layout" name="abc_action_mode_bar" id="NUM" />
-    <public type="layout" name="abc_action_mode_close_item_material" id="NUM" />
-    <public type="layout" name="abc_activity_chooser_view" id="NUM" />
-    <public type="layout" name="abc_activity_chooser_view_list_item" id="NUM" />
-    <public type="layout" name="abc_alert_dialog_button_bar_material" id="NUM" />
-    <public type="layout" name="abc_alert_dialog_material" id="NUM" />
-    <public type="layout" name="abc_alert_dialog_title_material" id="NUM" />
-    <public type="layout" name="abc_cascading_menu_item_layout" id="NUM" />
-    <public type="layout" name="abc_dialog_title_material" id="NUM" />
-    <public type="layout" name="abc_expanded_menu_layout" id="NUM" />
-    <public type="layout" name="abc_list_menu_item_checkbox" id="NUM" />
-    <public type="layout" name="abc_list_menu_item_icon" id="NUM" />
-    <public type="layout" name="abc_list_menu_item_layout" id="NUM" />
-    <public type="layout" name="abc_list_menu_item_radio" id="NUM" />
-    <public type="layout" name="abc_popup_menu_header_item_layout" id="NUM" />
-    <public type="layout" name="abc_popup_menu_item_layout" id="NUM" />
-    <public type="layout" name="abc_screen_content_include" id="NUM" />
-    <public type="layout" name="abc_screen_simple" id="NUM" />
-    <public type="layout" name="abc_screen_simple_overlay_action_mode" id="NUM" />
-    <public type="layout" name="abc_screen_toolbar" id="NUM" />
-    <public type="layout" name="abc_search_dropdown_item_icons_2line" id="NUM" />
-    <public type="layout" name="abc_search_view" id="NUM" />
-    <public type="layout" name="abc_select_dialog_material" id="NUM" />
-    <public type="layout" name="abc_tooltip" id="NUM" />
     <public type="layout" name="call_notification" id="NUM" />
     <public type="layout" name="call_notification_rtl" id="NUM" />
     <public type="layout" name="custom_dialog" id="NUM" />
@@ -1670,10 +1007,6 @@
     <public type="layout" name="notification_template_part_time" id="NUM" />
     <public type="layout" name="player_big_notification" id="NUM" />
     <public type="layout" name="player_small_notification" id="NUM" />
-    <public type="layout" name="select_dialog_item_material" id="NUM" />
-    <public type="layout" name="select_dialog_multichoice_material" id="NUM" />
-    <public type="layout" name="select_dialog_singlechoice_material" id="NUM" />
-    <public type="layout" name="support_simple_spinner_dropdown_item" id="NUM" />
     <public type="layout" name="wallet_test_layout" id="NUM" />
     <public type="mipmap" name="ic_launcher" id="NUM" />
     <public type="mipmap" name="ic_launcher_round" id="NUM" />
@@ -2613,6 +1946,11 @@
     <public type="string" name="DiscussionUnlinkChannelAlert" id="NUM" />
     <public type="string" name="DiscussionUnlinkGroup" id="NUM" />
     <public type="string" name="DiscussionUnlinkGroupAlert" id="NUM" />
+    <public type="string" name="DistanceUnits" id="NUM" />
+    <public type="string" name="DistanceUnitsAutomatic" id="NUM" />
+    <public type="string" name="DistanceUnitsKilometers" id="NUM" />
+    <public type="string" name="DistanceUnitsMiles" id="NUM" />
+    <public type="string" name="DistanceUnitsTitle" id="NUM" />
     <public type="string" name="DocumentsTitle" id="NUM" />
     <public type="string" name="Done" id="NUM" />
     <public type="string" name="Draft" id="NUM" />
@@ -2834,6 +2172,7 @@
     <public type="string" name="FontSizePreviewLine2" id="NUM" />
     <public type="string" name="FontSizePreviewName" id="NUM" />
     <public type="string" name="FontSizePreviewReply" id="NUM" />
+    <public type="string" name="FootsAway" id="NUM" />
     <public type="string" name="ForgotPassword" id="NUM" />
     <public type="string" name="Forward" id="NUM" />
     <public type="string" name="ForwardTo" id="NUM" />
@@ -3041,7 +2380,7 @@
     <public type="string" name="July" id="NUM" />
     <public type="string" name="JumpToDate" id="NUM" />
     <public type="string" name="June" id="NUM" />
-    <public type="string" name="KMetersAway" id="NUM" />
+    <public type="string" name="KMetersAway2" id="NUM" />
     <public type="string" name="KeepMedia" id="NUM" />
     <public type="string" name="KeepMediaForever" id="NUM" />
     <public type="string" name="KeepMediaInfo" id="NUM" />
@@ -3187,17 +2526,19 @@
     <public type="string" name="MessageLifetimeRemoved" id="NUM" />
     <public type="string" name="MessageLifetimeVideo" id="NUM" />
     <public type="string" name="MessageLifetimeYouRemoved" id="NUM" />
+    <public type="string" name="MessageNotFound" id="NUM" />
     <public type="string" name="MessageNotifications" id="NUM" />
     <public type="string" name="MessagePreview" id="NUM" />
     <public type="string" name="MessagesDataUsage" id="NUM" />
     <public type="string" name="MessagesSettings" id="NUM" />
-    <public type="string" name="MetersAway" id="NUM" />
+    <public type="string" name="MetersAway2" id="NUM" />
     <public type="string" name="Meters_few" id="NUM" />
     <public type="string" name="Meters_many" id="NUM" />
     <public type="string" name="Meters_one" id="NUM" />
     <public type="string" name="Meters_other" id="NUM" />
     <public type="string" name="Meters_two" id="NUM" />
     <public type="string" name="Meters_zero" id="NUM" />
+    <public type="string" name="MilesAway" id="NUM" />
     <public type="string" name="MinutesBold_few" id="NUM" />
     <public type="string" name="MinutesBold_many" id="NUM" />
     <public type="string" name="MinutesBold_one" id="NUM" />
@@ -4370,6 +3711,7 @@
     <public type="string" name="UserRestrictionsBlock" id="NUM" />
     <public type="string" name="UserRestrictionsCanDo" id="NUM" />
     <public type="string" name="UserRestrictionsChangeInfo" id="NUM" />
+    <public type="string" name="UserRestrictionsCustom" id="NUM" />
     <public type="string" name="UserRestrictionsDisabled" id="NUM" />
     <public type="string" name="UserRestrictionsDuration" id="NUM" />
     <public type="string" name="UserRestrictionsEmbedLinks" id="NUM" />
@@ -4530,45 +3872,6 @@
     <public type="string" name="YourPasswordSuccess" id="NUM" />
     <public type="string" name="YourPasswordSuccessText" id="NUM" />
     <public type="string" name="YourPhone" id="NUM" />
-    <public type="string" name="abc_action_bar_home_description" id="NUM" />
-    <public type="string" name="abc_action_bar_up_description" id="NUM" />
-    <public type="string" name="abc_action_menu_overflow_description" id="NUM" />
-    <public type="string" name="abc_action_mode_done" id="NUM" />
-    <public type="string" name="abc_activity_chooser_view_see_all" id="NUM" />
-    <public type="string" name="abc_activitychooserview_choose_application" id="NUM" />
-    <public type="string" name="abc_capital_off" id="NUM" />
-    <public type="string" name="abc_capital_on" id="NUM" />
-    <public type="string" name="abc_font_family_body_1_material" id="NUM" />
-    <public type="string" name="abc_font_family_body_2_material" id="NUM" />
-    <public type="string" name="abc_font_family_button_material" id="NUM" />
-    <public type="string" name="abc_font_family_caption_material" id="NUM" />
-    <public type="string" name="abc_font_family_display_1_material" id="NUM" />
-    <public type="string" name="abc_font_family_display_2_material" id="NUM" />
-    <public type="string" name="abc_font_family_display_3_material" id="NUM" />
-    <public type="string" name="abc_font_family_display_4_material" id="NUM" />
-    <public type="string" name="abc_font_family_headline_material" id="NUM" />
-    <public type="string" name="abc_font_family_menu_material" id="NUM" />
-    <public type="string" name="abc_font_family_subhead_material" id="NUM" />
-    <public type="string" name="abc_font_family_title_material" id="NUM" />
-    <public type="string" name="abc_menu_alt_shortcut_label" id="NUM" />
-    <public type="string" name="abc_menu_ctrl_shortcut_label" id="NUM" />
-    <public type="string" name="abc_menu_delete_shortcut_label" id="NUM" />
-    <public type="string" name="abc_menu_enter_shortcut_label" id="NUM" />
-    <public type="string" name="abc_menu_function_shortcut_label" id="NUM" />
-    <public type="string" name="abc_menu_meta_shortcut_label" id="NUM" />
-    <public type="string" name="abc_menu_shift_shortcut_label" id="NUM" />
-    <public type="string" name="abc_menu_space_shortcut_label" id="NUM" />
-    <public type="string" name="abc_menu_sym_shortcut_label" id="NUM" />
-    <public type="string" name="abc_prepend_shortcut_label" id="NUM" />
-    <public type="string" name="abc_search_hint" id="NUM" />
-    <public type="string" name="abc_searchview_description_clear" id="NUM" />
-    <public type="string" name="abc_searchview_description_query" id="NUM" />
-    <public type="string" name="abc_searchview_description_search" id="NUM" />
-    <public type="string" name="abc_searchview_description_submit" id="NUM" />
-    <public type="string" name="abc_searchview_description_voice" id="NUM" />
-    <public type="string" name="abc_shareactionprovider_share_with" id="NUM" />
-    <public type="string" name="abc_shareactionprovider_share_with_application" id="NUM" />
-    <public type="string" name="abc_toolbar_collapse_description" id="NUM" />
     <public type="string" name="chatDate" id="NUM" />
     <public type="string" name="chatFullDate" id="NUM" />
     <public type="string" name="common_google_play_services_enable_button" id="NUM" />
@@ -4712,282 +4015,22 @@
     <public type="string" name="messages_two" id="NUM" />
     <public type="string" name="messages_zero" id="NUM" />
     <public type="string" name="project_id" id="NUM" />
-    <public type="string" name="search_menu_title" id="NUM" />
     <public type="string" name="status_bar_notification_info_overflow" id="NUM" />
     <public type="string" name="wallet_buy_button_place_holder" id="NUM" />
     <public type="style" name="ActionBar.Transparent.TMessages.Item" id="NUM" />
     <public type="style" name="ActionBar.Transparent.TMessages.Start" id="NUM" />
-    <public type="style" name="AlertDialog.AppCompat" id="NUM" />
-    <public type="style" name="AlertDialog.AppCompat.Light" id="NUM" />
-    <public type="style" name="Animation.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Animation.AppCompat.DropDownUp" id="NUM" />
-    <public type="style" name="Animation.AppCompat.Tooltip" id="NUM" />
-    <public type="style" name="Base.AlertDialog.AppCompat" id="NUM" />
-    <public type="style" name="Base.AlertDialog.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.Animation.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Base.Animation.AppCompat.DropDownUp" id="NUM" />
-    <public type="style" name="Base.Animation.AppCompat.Tooltip" id="NUM" />
-    <public type="style" name="Base.DialogWindowTitle.AppCompat" id="NUM" />
-    <public type="style" name="Base.DialogWindowTitleBackground.AppCompat" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Body1" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Body2" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Button" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Caption" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Display1" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Display2" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Display3" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Display4" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Headline" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Large" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Large.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Large" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Medium" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Medium.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Menu" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.SearchResult" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.SearchResult.Subtitle" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.SearchResult.Title" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Small" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Small.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Subhead" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Subhead.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Title" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Title.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Tooltip" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.ActionBar.Menu" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.ActionBar.Title" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.ActionMode.Title" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.Button" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.Button.Colored" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.Button.Inverse" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.DropDownItem" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Header" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Large" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Small" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.Switch" id="NUM" />
-    <public type="style" name="Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem" id="NUM" />
-    <public type="style" name="Base.TextAppearance.Widget.AppCompat.ExpandedMenu.Item" id="NUM" />
-    <public type="style" name="Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle" id="NUM" />
-    <public type="style" name="Base.TextAppearance.Widget.AppCompat.Toolbar.Title" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.CompactMenu" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Dialog.Alert" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Dialog.FixedSize" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Dialog.MinWidth" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.DialogWhenLarge" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Light.DarkActionBar" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Light.Dialog" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Light.Dialog.Alert" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Light.Dialog.FixedSize" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Light.Dialog.MinWidth" id="NUM" />
-    <public type="style" name="Base.Theme.AppCompat.Light.DialogWhenLarge" id="NUM" />
-    <public type="style" name="Base.ThemeOverlay.AppCompat" id="NUM" />
-    <public type="style" name="Base.ThemeOverlay.AppCompat.ActionBar" id="NUM" />
-    <public type="style" name="Base.ThemeOverlay.AppCompat.Dark" id="NUM" />
-    <public type="style" name="Base.ThemeOverlay.AppCompat.Dark.ActionBar" id="NUM" />
-    <public type="style" name="Base.ThemeOverlay.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Base.ThemeOverlay.AppCompat.Dialog.Alert" id="NUM" />
-    <public type="style" name="Base.ThemeOverlay.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.V21.Theme.AppCompat" id="NUM" />
-    <public type="style" name="Base.V21.Theme.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Base.V21.Theme.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.V21.Theme.AppCompat.Light.Dialog" id="NUM" />
-    <public type="style" name="Base.V21.ThemeOverlay.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Base.V22.Theme.AppCompat" id="NUM" />
-    <public type="style" name="Base.V22.Theme.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.V23.Theme.AppCompat" id="NUM" />
-    <public type="style" name="Base.V23.Theme.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.V26.Theme.AppCompat" id="NUM" />
-    <public type="style" name="Base.V26.Theme.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.V26.Widget.AppCompat.Toolbar" id="NUM" />
-    <public type="style" name="Base.V28.Theme.AppCompat" id="NUM" />
-    <public type="style" name="Base.V28.Theme.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.V7.Theme.AppCompat" id="NUM" />
-    <public type="style" name="Base.V7.Theme.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Base.V7.Theme.AppCompat.Light" id="NUM" />
-    <public type="style" name="Base.V7.Theme.AppCompat.Light.Dialog" id="NUM" />
-    <public type="style" name="Base.V7.ThemeOverlay.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Base.V7.Widget.AppCompat.AutoCompleteTextView" id="NUM" />
-    <public type="style" name="Base.V7.Widget.AppCompat.EditText" id="NUM" />
-    <public type="style" name="Base.V7.Widget.AppCompat.Toolbar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionBar.Solid" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionBar.TabBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionBar.TabText" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionBar.TabView" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionButton" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionButton.CloseMode" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionButton.Overflow" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActionMode" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ActivityChooserView" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.AutoCompleteTextView" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Button" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Button.Borderless" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Button.Borderless.Colored" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Button.ButtonBar.AlertDialog" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Button.Colored" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Button.Small" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ButtonBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ButtonBar.AlertDialog" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.CompoundButton.CheckBox" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.CompoundButton.RadioButton" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.CompoundButton.Switch" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.DrawerArrowToggle" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.DrawerArrowToggle.Common" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.DropDownItem.Spinner" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.EditText" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ImageButton" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Light.ActionBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Light.ActionBar.Solid" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Light.ActionBar.TabBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Light.ActionBar.TabText" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Light.ActionBar.TabText.Inverse" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Light.ActionBar.TabView" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Light.PopupMenu" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Light.PopupMenu.Overflow" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ListMenuView" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ListPopupWindow" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ListView" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ListView.DropDown" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ListView.Menu" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.PopupMenu" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.PopupMenu.Overflow" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.PopupWindow" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ProgressBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.ProgressBar.Horizontal" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.RatingBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.RatingBar.Indicator" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.RatingBar.Small" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.SearchView" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.SearchView.ActionBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.SeekBar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.SeekBar.Discrete" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Spinner" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Spinner.Underlined" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.TextView.SpinnerItem" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Toolbar" id="NUM" />
-    <public type="style" name="Base.Widget.AppCompat.Toolbar.Button.Navigation" id="NUM" />
     <public type="style" name="DialogNoAnimation" id="NUM" />
     <public type="style" name="HockeyApp.ButtonStyle" id="NUM" />
     <public type="style" name="HockeyApp.EditTextStyle" id="NUM" />
     <public type="style" name="HockeyApp.SingleLineInputStyle" id="NUM" />
     <public type="style" name="MyTextViewStyle" id="NUM" />
-    <public type="style" name="Platform.AppCompat" id="NUM" />
-    <public type="style" name="Platform.AppCompat.Light" id="NUM" />
-    <public type="style" name="Platform.ThemeOverlay.AppCompat" id="NUM" />
-    <public type="style" name="Platform.ThemeOverlay.AppCompat.Dark" id="NUM" />
-    <public type="style" name="Platform.ThemeOverlay.AppCompat.Light" id="NUM" />
-    <public type="style" name="Platform.V21.AppCompat" id="NUM" />
-    <public type="style" name="Platform.V21.AppCompat.Light" id="NUM" />
-    <public type="style" name="Platform.V25.AppCompat" id="NUM" />
-    <public type="style" name="Platform.V25.AppCompat.Light" id="NUM" />
-    <public type="style" name="Platform.Widget.AppCompat.Spinner" id="NUM" />
     <public type="style" name="PopupAnimation" id="NUM" />
     <public type="style" name="PopupContextAnimation" id="NUM" />
-    <public type="style" name="RtlOverlay.DialogWindowTitle.AppCompat" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.ActionBar.TitleItem" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.DialogTitle.Icon" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.PopupMenuItem" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.PopupMenuItem.InternalGroup" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.PopupMenuItem.Shortcut" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.PopupMenuItem.SubmenuArrow" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.PopupMenuItem.Text" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.PopupMenuItem.Title" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.Search.DropDown" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.Search.DropDown.Icon1" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.Search.DropDown.Icon2" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.Search.DropDown.Query" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.Search.DropDown.Text" id="NUM" />
-    <public type="style" name="RtlOverlay.Widget.AppCompat.SearchView.MagIcon" id="NUM" />
-    <public type="style" name="RtlUnderlay.Widget.AppCompat.ActionButton" id="NUM" />
-    <public type="style" name="RtlUnderlay.Widget.AppCompat.ActionButton.Overflow" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Body1" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Body2" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Button" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Caption" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Display1" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Display2" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Display3" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Display4" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Headline" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Large" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Large.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Light.SearchResult.Subtitle" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Light.SearchResult.Title" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Medium" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Medium.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Menu" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.SearchResult.Subtitle" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.SearchResult.Title" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Small" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Small.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Subhead" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Subhead.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Title" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Title.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Tooltip" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionBar.Menu" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionBar.Subtitle" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionBar.Title" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionMode.Subtitle" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionMode.Subtitle.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionMode.Title" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.ActionMode.Title.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.Button" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.Button.Borderless.Colored" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.Button.Colored" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.Button.Inverse" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.DropDownItem" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.PopupMenu.Header" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.PopupMenu.Large" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.PopupMenu.Small" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.Switch" id="NUM" />
-    <public type="style" name="TextAppearance.AppCompat.Widget.TextView.SpinnerItem" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification.Info" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification.Line2" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification.Time" id="NUM" />
     <public type="style" name="TextAppearance.Compat.Notification.Title" id="NUM" />
-    <public type="style" name="TextAppearance.Widget.AppCompat.ExpandedMenu.Item" id="NUM" />
-    <public type="style" name="TextAppearance.Widget.AppCompat.Toolbar.Subtitle" id="NUM" />
-    <public type="style" name="TextAppearance.Widget.AppCompat.Toolbar.Title" id="NUM" />
-    <public type="style" name="Theme.AppCompat" id="NUM" />
-    <public type="style" name="Theme.AppCompat.CompactMenu" id="NUM" />
-    <public type="style" name="Theme.AppCompat.DayNight" id="NUM" />
-    <public type="style" name="Theme.AppCompat.DayNight.DarkActionBar" id="NUM" />
-    <public type="style" name="Theme.AppCompat.DayNight.Dialog" id="NUM" />
-    <public type="style" name="Theme.AppCompat.DayNight.Dialog.Alert" id="NUM" />
-    <public type="style" name="Theme.AppCompat.DayNight.Dialog.MinWidth" id="NUM" />
-    <public type="style" name="Theme.AppCompat.DayNight.DialogWhenLarge" id="NUM" />
-    <public type="style" name="Theme.AppCompat.DayNight.NoActionBar" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Dialog.Alert" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Dialog.MinWidth" id="NUM" />
-    <public type="style" name="Theme.AppCompat.DialogWhenLarge" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Light" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Light.DarkActionBar" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Light.Dialog" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Light.Dialog.Alert" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Light.Dialog.MinWidth" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Light.DialogWhenLarge" id="NUM" />
-    <public type="style" name="Theme.AppCompat.Light.NoActionBar" id="NUM" />
-    <public type="style" name="Theme.AppCompat.NoActionBar" id="NUM" />
     <public type="style" name="Theme.TMessages" id="NUM" />
     <public type="style" name="Theme.TMessages.BorderLessButton" id="NUM" />
     <public type="style" name="Theme.TMessages.CalendarView" id="NUM" />
@@ -5000,90 +4043,11 @@
     <public type="style" name="Theme.TMessages.TimePicker" id="NUM" />
     <public type="style" name="Theme.TMessages.Transparent" id="NUM" />
     <public type="style" name="Theme.TMessages.TransparentWithAlerts" id="NUM" />
-    <public type="style" name="ThemeOverlay.AppCompat" id="NUM" />
-    <public type="style" name="ThemeOverlay.AppCompat.ActionBar" id="NUM" />
-    <public type="style" name="ThemeOverlay.AppCompat.Dark" id="NUM" />
-    <public type="style" name="ThemeOverlay.AppCompat.Dark.ActionBar" id="NUM" />
-    <public type="style" name="ThemeOverlay.AppCompat.Dialog" id="NUM" />
-    <public type="style" name="ThemeOverlay.AppCompat.Dialog.Alert" id="NUM" />
-    <public type="style" name="ThemeOverlay.AppCompat.Light" id="NUM" />
     <public type="style" name="TransparentDialog" id="NUM" />
     <public type="style" name="WalletFragmentDefaultButtonTextAppearance" id="NUM" />
     <public type="style" name="WalletFragmentDefaultDetailsHeaderTextAppearance" id="NUM" />
     <public type="style" name="WalletFragmentDefaultDetailsTextAppearance" id="NUM" />
     <public type="style" name="WalletFragmentDefaultStyle" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionBar.Solid" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionBar.TabBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionBar.TabText" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionBar.TabView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionButton" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionButton.CloseMode" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionButton.Overflow" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActionMode" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ActivityChooserView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.AutoCompleteTextView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Button" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Button.Borderless" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Button.Borderless.Colored" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Button.ButtonBar.AlertDialog" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Button.Colored" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Button.Small" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ButtonBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ButtonBar.AlertDialog" id="NUM" />
-    <public type="style" name="Widget.AppCompat.CompoundButton.CheckBox" id="NUM" />
-    <public type="style" name="Widget.AppCompat.CompoundButton.RadioButton" id="NUM" />
-    <public type="style" name="Widget.AppCompat.CompoundButton.Switch" id="NUM" />
-    <public type="style" name="Widget.AppCompat.DrawerArrowToggle" id="NUM" />
-    <public type="style" name="Widget.AppCompat.DropDownItem.Spinner" id="NUM" />
-    <public type="style" name="Widget.AppCompat.EditText" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ImageButton" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar.Solid" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar.Solid.Inverse" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar.TabBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar.TabBar.Inverse" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar.TabText" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar.TabText.Inverse" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar.TabView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionBar.TabView.Inverse" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionButton" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionButton.CloseMode" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionButton.Overflow" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActionMode.Inverse" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ActivityChooserView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.AutoCompleteTextView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.DropDownItem.Spinner" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ListPopupWindow" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.ListView.DropDown" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.PopupMenu" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.PopupMenu.Overflow" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.SearchView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Light.Spinner.DropDown.ActionBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ListMenuView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ListPopupWindow" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ListView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ListView.DropDown" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ListView.Menu" id="NUM" />
-    <public type="style" name="Widget.AppCompat.PopupMenu" id="NUM" />
-    <public type="style" name="Widget.AppCompat.PopupMenu.Overflow" id="NUM" />
-    <public type="style" name="Widget.AppCompat.PopupWindow" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ProgressBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.ProgressBar.Horizontal" id="NUM" />
-    <public type="style" name="Widget.AppCompat.RatingBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.RatingBar.Indicator" id="NUM" />
-    <public type="style" name="Widget.AppCompat.RatingBar.Small" id="NUM" />
-    <public type="style" name="Widget.AppCompat.SearchView" id="NUM" />
-    <public type="style" name="Widget.AppCompat.SearchView.ActionBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.SeekBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.SeekBar.Discrete" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Spinner" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Spinner.DropDown" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Spinner.DropDown.ActionBar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Spinner.Underlined" id="NUM" />
-    <public type="style" name="Widget.AppCompat.TextView.SpinnerItem" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Toolbar" id="NUM" />
-    <public type="style" name="Widget.AppCompat.Toolbar.Button.Navigation" id="NUM" />
     <public type="style" name="Widget.Compat.NotificationActionContainer" id="NUM" />
     <public type="style" name="Widget.Compat.NotificationActionText" id="NUM" />
     <public type="style" name="Widget.Support.CoordinatorLayout" id="NUM" />

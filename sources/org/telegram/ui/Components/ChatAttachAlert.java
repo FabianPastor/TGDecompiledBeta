@@ -2081,7 +2081,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x003a:
         goto L_0x0073;
     L_0x003b:
-        r6 = NUM; // 0x7var_d4 float:1.7945008E38 double:1.052935608E-314;
+        r6 = NUM; // 0x7var_ float:1.794484E38 double:1.052935567E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0d0011 float:1.874215E38 double:1.053129786E-314;
         r0 = "AccDescrCameraFlashAuto";
@@ -2089,7 +2089,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x004e:
-        r6 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r6 = NUM; // 0x7var_ float:1.7944844E38 double:1.0529355677E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0d0013 float:1.8742153E38 double:1.053129787E-314;
         r0 = "AccDescrCameraFlashOn";
@@ -2097,7 +2097,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x0061:
-        r6 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
+        r6 = NUM; // 0x7var_ float:1.7944842E38 double:1.0529355673E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0d0012 float:1.8742151E38 double:1.0531297864E-314;
         r0 = "AccDescrCameraFlashOff";
@@ -2338,10 +2338,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x014f A:{SYNTHETIC, Splitter:B:82:0x014f} */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x01b2 A:{SYNTHETIC, Splitter:B:91:0x01b2} */
-    /* JADX WARNING: Missing block: B:46:0x00ed, code skipped:
-            if (new java.io.File(r0).exists() != false) goto L_0x00f0;
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x014e A:{SYNTHETIC, Splitter:B:82:0x014e} */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x01b1 A:{SYNTHETIC, Splitter:B:91:0x01b1} */
+    /* JADX WARNING: Missing block: B:46:0x00ec, code skipped:
+            if (new java.io.File(r0).exists() != false) goto L_0x00ef;
      */
     public void onActivityResultFragment(int r21, android.content.Intent r22, java.lang.String r23) {
         /*
@@ -2350,12 +2350,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r0 = r21;
         r7 = r23;
         r2 = r1.baseFragment;
-        if (r2 == 0) goto L_0x01bc;
+        if (r2 == 0) goto L_0x01bb;
     L_0x000a:
         r2 = r2.getParentActivity();
         if (r2 != 0) goto L_0x0012;
     L_0x0010:
-        goto L_0x01bc;
+        goto L_0x01bb;
     L_0x0012:
         r10 = 1;
         mediaFromExternalCamera = r10;
@@ -2414,10 +2414,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r2.<init>(r3, r4, r5, r7, r8, r9);
         r0.canDeleteAfter = r10;
         r1.openPhotoViewer(r0, r11, r10);
-        goto L_0x01bc;
+        goto L_0x01bb;
     L_0x0072:
         r2 = 2;
-        if (r0 != r2) goto L_0x01bc;
+        if (r0 != r2) goto L_0x01bb;
     L_0x0075:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
         if (r0 == 0) goto L_0x008d;
@@ -2445,13 +2445,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x009f:
         r0 = r22;
     L_0x00a1:
-        if (r0 == 0) goto L_0x0103;
+        if (r0 == 0) goto L_0x0102;
     L_0x00a3:
         r0 = r0.getData();
-        if (r0 == 0) goto L_0x00ef;
+        if (r0 == 0) goto L_0x00ee;
     L_0x00a9:
         r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r3 == 0) goto L_0x00c6;
+        if (r3 == 0) goto L_0x00c5;
     L_0x00ad:
         r3 = new java.lang.StringBuilder;
         r3.<init>();
@@ -2461,11 +2461,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r3.append(r4);
         r3 = r3.toString();
         org.telegram.messenger.FileLog.d(r3);
-    L_0x00c6:
+    L_0x00c5:
         r0 = org.telegram.messenger.AndroidUtilities.getPath(r0);
         r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r3 == 0) goto L_0x00e2;
-    L_0x00ce:
+        if (r3 == 0) goto L_0x00e1;
+    L_0x00cd:
         r3 = new java.lang.StringBuilder;
         r3.<init>();
         r4 = "resolved path = ";
@@ -2473,89 +2473,89 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r3.append(r0);
         r3 = r3.toString();
         org.telegram.messenger.FileLog.d(r3);
-    L_0x00e2:
-        if (r0 == 0) goto L_0x00ef;
-    L_0x00e4:
+    L_0x00e1:
+        if (r0 == 0) goto L_0x00ee;
+    L_0x00e3:
         r3 = new java.io.File;
         r3.<init>(r0);
         r3 = r3.exists();
-        if (r3 != 0) goto L_0x00f0;
-    L_0x00ef:
+        if (r3 != 0) goto L_0x00ef;
+    L_0x00ee:
         r0 = r7;
-    L_0x00f0:
+    L_0x00ef:
         r3 = r1.baseFragment;
         r4 = r3 instanceof org.telegram.ui.ChatActivity;
-        if (r4 == 0) goto L_0x00fe;
-    L_0x00f6:
+        if (r4 == 0) goto L_0x00fd;
+    L_0x00f5:
         r3 = (org.telegram.ui.ChatActivity) r3;
         r3 = r3.isSecretChat();
-        if (r3 != 0) goto L_0x0101;
-    L_0x00fe:
+        if (r3 != 0) goto L_0x0100;
+    L_0x00fd:
         org.telegram.messenger.AndroidUtilities.addMediaToGallery(r23);
-    L_0x0101:
+    L_0x0100:
         r7 = r2;
-        goto L_0x0104;
-    L_0x0103:
+        goto L_0x0103;
+    L_0x0102:
         r0 = r2;
-    L_0x0104:
-        if (r0 != 0) goto L_0x0114;
-    L_0x0106:
-        if (r7 == 0) goto L_0x0114;
-    L_0x0108:
+    L_0x0103:
+        if (r0 != 0) goto L_0x0113;
+    L_0x0105:
+        if (r7 == 0) goto L_0x0113;
+    L_0x0107:
         r3 = new java.io.File;
         r3.<init>(r7);
         r3 = r3.exists();
-        if (r3 == 0) goto L_0x0114;
+        if (r3 == 0) goto L_0x0113;
+    L_0x0112:
+        goto L_0x0114;
     L_0x0113:
-        goto L_0x0115;
-    L_0x0114:
         r7 = r0;
-    L_0x0115:
+    L_0x0114:
         r3 = 0;
-        r5 = new android.media.MediaMetadataRetriever;	 Catch:{ Exception -> 0x0149 }
-        r5.<init>();	 Catch:{ Exception -> 0x0149 }
-        r5.setDataSource(r7);	 Catch:{ Exception -> 0x0142, all -> 0x0140 }
+        r5 = new android.media.MediaMetadataRetriever;	 Catch:{ Exception -> 0x0148 }
+        r5.<init>();	 Catch:{ Exception -> 0x0148 }
+        r5.setDataSource(r7);	 Catch:{ Exception -> 0x0141, all -> 0x013f }
         r0 = 9;
-        r0 = r5.extractMetadata(r0);	 Catch:{ Exception -> 0x0142, all -> 0x0140 }
-        if (r0 == 0) goto L_0x0136;
-    L_0x0127:
-        r8 = java.lang.Long.parseLong(r0);	 Catch:{ Exception -> 0x0142, all -> 0x0140 }
-        r0 = (float) r8;	 Catch:{ Exception -> 0x0142, all -> 0x0140 }
+        r0 = r5.extractMetadata(r0);	 Catch:{ Exception -> 0x0141, all -> 0x013f }
+        if (r0 == 0) goto L_0x0135;
+    L_0x0126:
+        r8 = java.lang.Long.parseLong(r0);	 Catch:{ Exception -> 0x0141, all -> 0x013f }
+        r0 = (float) r8;	 Catch:{ Exception -> 0x0141, all -> 0x013f }
         r2 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
         r0 = r0 / r2;
-        r8 = (double) r0;	 Catch:{ Exception -> 0x0142, all -> 0x0140 }
-        r2 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x0142, all -> 0x0140 }
+        r8 = (double) r0;	 Catch:{ Exception -> 0x0141, all -> 0x013f }
+        r2 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x0141, all -> 0x013f }
         r0 = (int) r2;
         r3 = (long) r0;
-    L_0x0136:
-        r5.release();	 Catch:{ Exception -> 0x013a }
-        goto L_0x0152;
-    L_0x013a:
+    L_0x0135:
+        r5.release();	 Catch:{ Exception -> 0x0139 }
+        goto L_0x0151;
+    L_0x0139:
         r0 = move-exception;
         r2 = r0;
         org.telegram.messenger.FileLog.e(r2);
-        goto L_0x0152;
-    L_0x0140:
+        goto L_0x0151;
+    L_0x013f:
         r0 = move-exception;
-        goto L_0x0147;
-    L_0x0142:
+        goto L_0x0146;
+    L_0x0141:
         r0 = move-exception;
         r2 = r5;
-        goto L_0x014a;
-    L_0x0145:
+        goto L_0x0149;
+    L_0x0144:
         r0 = move-exception;
         r5 = r2;
-    L_0x0147:
+    L_0x0146:
         r2 = r0;
-        goto L_0x01b0;
-    L_0x0149:
+        goto L_0x01af;
+    L_0x0148:
         r0 = move-exception;
-    L_0x014a:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0145 }
-        if (r2 == 0) goto L_0x0152;
-    L_0x014f:
-        r2.release();	 Catch:{ Exception -> 0x013a }
-    L_0x0152:
+    L_0x0149:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0144 }
+        if (r2 == 0) goto L_0x0151;
+    L_0x014e:
+        r2.release();	 Catch:{ Exception -> 0x0139 }
+    L_0x0151:
         r0 = android.media.ThumbnailUtils.createVideoThumbnail(r7, r10);
         r2 = new java.lang.StringBuilder;
         r2.<init>();
@@ -2570,16 +2570,16 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r6 = 4;
         r6 = org.telegram.messenger.FileLoader.getDirectory(r6);
         r5.<init>(r6, r2);
-        r2 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x0187 }
-        r2.<init>(r5);	 Catch:{ Throwable -> 0x0187 }
-        r6 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x0187 }
+        r2 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x0186 }
+        r2.<init>(r5);	 Catch:{ Throwable -> 0x0186 }
+        r6 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x0186 }
         r8 = 55;
-        r0.compress(r6, r8, r2);	 Catch:{ Throwable -> 0x0187 }
-        goto L_0x018b;
-    L_0x0187:
+        r0.compress(r6, r8, r2);	 Catch:{ Throwable -> 0x0186 }
+        goto L_0x018a;
+    L_0x0186:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x018b:
+    L_0x018a:
         org.telegram.messenger.SharedConfig.saveConfig();
         r0 = new org.telegram.messenger.MediaController$PhotoEntry;
         r13 = 0;
@@ -2597,19 +2597,19 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r2 = r5.getAbsolutePath();
         r0.thumbPath = r2;
         r1.openPhotoViewer(r0, r11, r10);
-        goto L_0x01bc;
-    L_0x01b0:
-        if (r5 == 0) goto L_0x01bb;
-    L_0x01b2:
-        r5.release();	 Catch:{ Exception -> 0x01b6 }
         goto L_0x01bb;
-    L_0x01b6:
+    L_0x01af:
+        if (r5 == 0) goto L_0x01ba;
+    L_0x01b1:
+        r5.release();	 Catch:{ Exception -> 0x01b5 }
+        goto L_0x01ba;
+    L_0x01b5:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-    L_0x01bb:
+    L_0x01ba:
         throw r2;
-    L_0x01bc:
+    L_0x01bb:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlert.onActivityResultFragment(int, android.content.Intent, java.lang.String):void");
@@ -3425,6 +3425,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         }
                     }
                 }
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(512));
             }
 
             public void onAnimationCancel(Animator animator) {
@@ -3511,6 +3512,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
         AnimatorSet animatorSet4 = animatorSet;
         this.currentSheetAnimation = animatorSet4;
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
         animatorSet4.start();
     }
 

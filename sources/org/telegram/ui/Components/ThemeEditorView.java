@@ -2306,15 +2306,15 @@ public class ThemeEditorView {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0114  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0113  */
     /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x017f  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0114  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x017d  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0113  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x017d  */
     /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0114  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0113  */
     /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x017d  */
     private void animateToBoundsMaybe() {
         /*
         r16 = this;
@@ -2341,70 +2341,70 @@ public class ThemeEditorView {
         r12 = "sidex";
         r13 = "x";
         r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        if (r10 <= r9) goto L_0x00e5;
-    L_0x003c:
+        if (r10 <= r9) goto L_0x00e4;
+    L_0x003b:
         r10 = r0.windowLayoutParams;
         r10 = r10.x;
-        if (r10 >= 0) goto L_0x004b;
-    L_0x0042:
+        if (r10 >= 0) goto L_0x004a;
+    L_0x0041:
         r15 = r0.editorWidth;
         r15 = -r15;
         r15 = r15 / 4;
-        if (r10 <= r15) goto L_0x004b;
-    L_0x0049:
-        goto L_0x00e5;
-    L_0x004b:
+        if (r10 <= r15) goto L_0x004a;
+    L_0x0048:
+        goto L_0x00e4;
+    L_0x004a:
         r10 = r0.windowLayoutParams;
         r10 = r10.x;
         r10 = r5 - r10;
         r10 = java.lang.Math.abs(r10);
-        if (r10 <= r9) goto L_0x00b7;
-    L_0x0057:
+        if (r10 <= r9) goto L_0x00b6;
+    L_0x0056:
         r10 = r0.windowLayoutParams;
         r10 = r10.x;
         r15 = org.telegram.messenger.AndroidUtilities.displaySize;
         r15 = r15.x;
         r2 = r0.editorWidth;
         r11 = r15 - r2;
-        if (r10 <= r11) goto L_0x006d;
-    L_0x0065:
+        if (r10 <= r11) goto L_0x006c;
+    L_0x0064:
         r2 = r2 / 4;
         r2 = r2 * 3;
         r15 = r15 - r2;
-        if (r10 >= r15) goto L_0x006d;
+        if (r10 >= r15) goto L_0x006c;
+    L_0x006b:
+        goto L_0x00b6;
     L_0x006c:
-        goto L_0x00b7;
-    L_0x006d:
         r2 = r0.windowView;
         r2 = r2.getAlpha();
         r2 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1));
-        if (r2 == 0) goto L_0x00a3;
-    L_0x0077:
+        if (r2 == 0) goto L_0x00a2;
+    L_0x0076:
         r1 = new java.util.ArrayList;
         r1.<init>();
         r2 = r0.windowLayoutParams;
         r2 = r2.x;
-        if (r2 >= 0) goto L_0x0091;
-    L_0x0082:
+        if (r2 >= 0) goto L_0x0090;
+    L_0x0081:
         r2 = new int[r4];
         r5 = r0.editorWidth;
         r5 = -r5;
         r2[r3] = r5;
         r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2);
         r1.add(r2);
-        goto L_0x00a0;
-    L_0x0091:
+        goto L_0x009f;
+    L_0x0090:
         r2 = new int[r4];
         r5 = org.telegram.messenger.AndroidUtilities.displaySize;
         r5 = r5.x;
         r2[r3] = r5;
         r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2);
         r1.add(r2);
-    L_0x00a0:
+    L_0x009f:
         r2 = r1;
         r1 = 1;
-        goto L_0x0112;
-    L_0x00a3:
+        goto L_0x0111;
+    L_0x00a2:
         r2 = r0.windowLayoutParams;
         r2 = r2.x;
         r2 = r2 - r1;
@@ -2417,88 +2417,88 @@ public class ThemeEditorView {
         r1 = 2;
         r8.putInt(r12, r1);
         r1 = 0;
-        goto L_0x00e3;
-    L_0x00b7:
+        goto L_0x00e2;
+    L_0x00b6:
         r1 = new java.util.ArrayList;
         r1.<init>();
         r8.putInt(r12, r4);
         r2 = r0.windowView;
         r2 = r2.getAlpha();
         r2 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1));
-        if (r2 == 0) goto L_0x00d8;
-    L_0x00c9:
+        if (r2 == 0) goto L_0x00d7;
+    L_0x00c8:
         r2 = r0.windowView;
         r10 = android.view.View.ALPHA;
         r11 = new float[r4];
         r11[r3] = r14;
         r2 = android.animation.ObjectAnimator.ofFloat(r2, r10, r11);
         r1.add(r2);
-    L_0x00d8:
+    L_0x00d7:
         r2 = new int[r4];
         r2[r3] = r5;
         r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2);
         r1.add(r2);
-    L_0x00e3:
+    L_0x00e2:
         r2 = r1;
-        goto L_0x0111;
-    L_0x00e5:
+        goto L_0x0110;
+    L_0x00e4:
         r2 = new java.util.ArrayList;
         r2.<init>();
         r8.putInt(r12, r3);
         r5 = r0.windowView;
         r5 = r5.getAlpha();
         r5 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1));
-        if (r5 == 0) goto L_0x0106;
-    L_0x00f7:
+        if (r5 == 0) goto L_0x0105;
+    L_0x00f6:
         r5 = r0.windowView;
         r10 = android.view.View.ALPHA;
         r11 = new float[r4];
         r11[r3] = r14;
         r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11);
         r2.add(r5);
-    L_0x0106:
+    L_0x0105:
         r5 = new int[r4];
         r5[r3] = r1;
         r1 = android.animation.ObjectAnimator.ofInt(r0, r13, r5);
         r2.add(r1);
-    L_0x0111:
+    L_0x0110:
         r1 = 0;
-    L_0x0112:
-        if (r1 != 0) goto L_0x017d;
-    L_0x0114:
+    L_0x0111:
+        if (r1 != 0) goto L_0x017b;
+    L_0x0113:
         r5 = r0.windowLayoutParams;
         r5 = r5.y;
         r5 = r6 - r5;
         r5 = java.lang.Math.abs(r5);
         r10 = "y";
         r11 = "sidey";
-        if (r5 <= r9) goto L_0x0165;
-    L_0x0125:
+        if (r5 <= r9) goto L_0x0163;
+    L_0x0123:
         r5 = r0.windowLayoutParams;
         r5 = r5.y;
         r12 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight();
-        if (r5 > r12) goto L_0x0130;
-    L_0x012f:
-        goto L_0x0165;
-    L_0x0130:
+        if (r5 > r12) goto L_0x012e;
+    L_0x012d:
+        goto L_0x0163;
+    L_0x012e:
         r5 = r0.windowLayoutParams;
         r5 = r5.y;
         r5 = r7 - r5;
         r5 = java.lang.Math.abs(r5);
-        if (r5 > r9) goto L_0x0152;
+        if (r5 > r9) goto L_0x0150;
+    L_0x013a:
+        if (r2 != 0) goto L_0x0141;
     L_0x013c:
-        if (r2 != 0) goto L_0x0143;
-    L_0x013e:
         r2 = new java.util.ArrayList;
         r2.<init>();
-    L_0x0143:
+    L_0x0141:
         r8.putInt(r11, r4);
         r5 = new int[r4];
         r5[r3] = r7;
         r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5);
         r2.add(r5);
-        goto L_0x017a;
-    L_0x0152:
+        goto L_0x0178;
+    L_0x0150:
         r5 = r0.windowLayoutParams;
         r5 = r5.y;
         r5 = r5 - r6;
@@ -2510,38 +2510,38 @@ public class ThemeEditorView {
         r8.putFloat(r6, r5);
         r5 = 2;
         r8.putInt(r11, r5);
-        goto L_0x017a;
+        goto L_0x0178;
+    L_0x0163:
+        if (r2 != 0) goto L_0x016a;
     L_0x0165:
-        if (r2 != 0) goto L_0x016c;
-    L_0x0167:
         r2 = new java.util.ArrayList;
         r2.<init>();
-    L_0x016c:
+    L_0x016a:
         r8.putInt(r11, r3);
         r5 = new int[r4];
         r5[r3] = r6;
         r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5);
         r2.add(r5);
-    L_0x017a:
+    L_0x0178:
         r8.commit();
+    L_0x017b:
+        if (r2 == 0) goto L_0x01b7;
     L_0x017d:
-        if (r2 == 0) goto L_0x01b9;
-    L_0x017f:
         r5 = r0.decelerateInterpolator;
-        if (r5 != 0) goto L_0x018a;
-    L_0x0183:
+        if (r5 != 0) goto L_0x0188;
+    L_0x0181:
         r5 = new android.view.animation.DecelerateInterpolator;
         r5.<init>();
         r0.decelerateInterpolator = r5;
-    L_0x018a:
+    L_0x0188:
         r5 = new android.animation.AnimatorSet;
         r5.<init>();
         r6 = r0.decelerateInterpolator;
         r5.setInterpolator(r6);
         r6 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
         r5.setDuration(r6);
-        if (r1 == 0) goto L_0x01b3;
-    L_0x019b:
+        if (r1 == 0) goto L_0x01b1;
+    L_0x0199:
         r1 = r0.windowView;
         r6 = android.view.View.ALPHA;
         r4 = new float[r4];
@@ -2552,10 +2552,10 @@ public class ThemeEditorView {
         r1 = new org.telegram.ui.Components.ThemeEditorView$4;
         r1.<init>();
         r5.addListener(r1);
-    L_0x01b3:
+    L_0x01b1:
         r5.playTogether(r2);
         r5.start();
-    L_0x01b9:
+    L_0x01b7:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.animateToBoundsMaybe():void");

@@ -41,11 +41,20 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     private String lastSticker;
     private Context mContext;
     private Runnable searchRunnable;
-    private ArrayList<Document> stickers;
+    private ArrayList<StickerResult> stickers;
     private HashMap<String, Document> stickersMap;
-    private ArrayList<Object> stickersParents;
     private ArrayList<String> stickersToLoad = new ArrayList();
     private boolean visible;
+
+    private class StickerResult {
+        public Object parent;
+        public Document sticker;
+
+        public StickerResult(Document document, Object obj) {
+            this.sticker = document;
+            this.parent = obj;
+        }
+    }
 
     public interface StickersAdapterDelegate {
         void needChangePanelVisibility(boolean z);
@@ -105,13 +114,13 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         this.stickersToLoad.clear();
         int min = Math.min(6, this.stickers.size());
         while (i < min) {
-            Document document = (Document) this.stickers.get(i);
-            PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
+            StickerResult stickerResult = (StickerResult) this.stickers.get(i);
+            PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(stickerResult.sticker.thumbs, 90);
             if (closestPhotoSizeWithSize instanceof TL_photoSize) {
                 String str = "webp";
                 if (!FileLoader.getPathToAttach(closestPhotoSizeWithSize, str, true).exists()) {
                     this.stickersToLoad.add(FileLoader.getAttachFileName(closestPhotoSizeWithSize, str));
-                    FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(closestPhotoSizeWithSize, document), this.stickersParents.get(i), "webp", 1, 1);
+                    FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(closestPhotoSizeWithSize, stickerResult.sticker), stickerResult.parent, "webp", 1, 1);
                 }
             }
             i++;
@@ -145,11 +154,9 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             if (hashMap == null || !hashMap.containsKey(stringBuilder2)) {
                 if (this.stickers == null) {
                     this.stickers = new ArrayList();
-                    this.stickersParents = new ArrayList();
                     this.stickersMap = new HashMap();
                 }
-                this.stickers.add(document);
-                this.stickersParents.add(obj);
+                this.stickers.add(new StickerResult(document, obj));
                 this.stickersMap.put(stringBuilder2, document);
             }
         }
@@ -158,6 +165,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     private void addStickersToResult(ArrayList<Document> arrayList, Object obj) {
         if (arrayList != null && !arrayList.isEmpty()) {
             int size = arrayList.size();
+            Object obj2 = obj;
             for (int i = 0; i < size; i++) {
                 Document document = (Document) arrayList.get(i);
                 StringBuilder stringBuilder = new StringBuilder();
@@ -167,26 +175,19 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                 String stringBuilder2 = stringBuilder.toString();
                 HashMap hashMap = this.stickersMap;
                 if (hashMap == null || !hashMap.containsKey(stringBuilder2)) {
-                    Object obj2;
                     if (this.stickers == null) {
                         this.stickers = new ArrayList();
-                        this.stickersParents = new ArrayList();
                         this.stickersMap = new HashMap();
                     }
-                    this.stickers.add(document);
                     int size2 = document.attributes.size();
                     for (int i2 = 0; i2 < size2; i2++) {
                         DocumentAttribute documentAttribute = (DocumentAttribute) document.attributes.get(i2);
                         if (documentAttribute instanceof TL_documentAttributeSticker) {
-                            this.stickersParents.add(documentAttribute.stickerset);
-                            obj2 = 1;
+                            obj2 = documentAttribute.stickerset;
                             break;
                         }
                     }
-                    obj2 = null;
-                    if (obj2 == null) {
-                        this.stickersParents.add(obj);
-                    }
+                    this.stickers.add(new StickerResult(document, obj2));
                     this.stickersMap.put(stringBuilder2, document);
                 }
             }
@@ -358,29 +359,28 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     L_0x00bc:
         r11 = 0;
     L_0x00bd:
-        if (r12 != 0) goto L_0x01ba;
+        if (r12 != 0) goto L_0x01b1;
     L_0x00bf:
         r12 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r12 == r6) goto L_0x01ba;
+        if (r12 == r6) goto L_0x01b1;
     L_0x00c3:
         if (r11 != 0) goto L_0x00c7;
     L_0x00c5:
-        goto L_0x01ba;
+        goto L_0x01b1;
     L_0x00c7:
         r10.cancelEmojiSearch();
         r11 = 0;
         r10.stickers = r11;
-        r10.stickersParents = r11;
         r10.stickersMap = r11;
         r12 = r10.lastReqId;
-        if (r12 == 0) goto L_0x00e2;
-    L_0x00d5:
+        if (r12 == 0) goto L_0x00e0;
+    L_0x00d3:
         r12 = r10.currentAccount;
         r12 = org.telegram.tgnet.ConnectionsManager.getInstance(r12);
         r2 = r10.lastReqId;
         r12.cancelRequest(r2, r0);
         r10.lastReqId = r1;
-    L_0x00e2:
+    L_0x00e0:
         r10.delayLocalResults = r1;
         r12 = r10.currentAccount;
         r12 = org.telegram.messenger.MediaDataController.getInstance(r12);
@@ -391,137 +391,135 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         r4 = r12.size();
         r5 = 0;
         r6 = 0;
-    L_0x00fe:
+    L_0x00fc:
         r7 = 5;
-        if (r5 >= r4) goto L_0x011c;
-    L_0x0101:
+        if (r5 >= r4) goto L_0x011a;
+    L_0x00ff:
         r8 = r12.get(r5);
         r8 = (org.telegram.tgnet.TLRPC.Document) r8;
         r9 = r10.lastSticker;
         r9 = r10.isValidSticker(r8, r9);
-        if (r9 == 0) goto L_0x0119;
-    L_0x010f:
+        if (r9 == 0) goto L_0x0117;
+    L_0x010d:
         r9 = "recent";
         r10.addStickerToResult(r8, r9);
         r6 = r6 + 1;
-        if (r6 < r7) goto L_0x0119;
-    L_0x0118:
-        goto L_0x011c;
-    L_0x0119:
+        if (r6 < r7) goto L_0x0117;
+    L_0x0116:
+        goto L_0x011a;
+    L_0x0117:
         r5 = r5 + 1;
-        goto L_0x00fe;
-    L_0x011c:
+        goto L_0x00fc;
+    L_0x011a:
         r4 = r2.size();
         r5 = 0;
+    L_0x011f:
+        if (r5 >= r4) goto L_0x0137;
     L_0x0121:
-        if (r5 >= r4) goto L_0x0139;
-    L_0x0123:
         r6 = r2.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r8 = r10.lastSticker;
         r8 = r10.isValidSticker(r6, r8);
-        if (r8 == 0) goto L_0x0136;
-    L_0x0131:
+        if (r8 == 0) goto L_0x0134;
+    L_0x012f:
         r8 = "fav";
         r10.addStickerToResult(r6, r8);
-    L_0x0136:
+    L_0x0134:
         r5 = r5 + 1;
-        goto L_0x0121;
-    L_0x0139:
+        goto L_0x011f;
+    L_0x0137:
         r4 = r10.currentAccount;
         r4 = org.telegram.messenger.MediaDataController.getInstance(r4);
         r4 = r4.getAllStickers();
-        if (r4 == 0) goto L_0x014e;
-    L_0x0145:
+        if (r4 == 0) goto L_0x014c;
+    L_0x0143:
         r5 = r10.lastSticker;
         r4 = r4.get(r5);
         r4 = (java.util.ArrayList) r4;
-        goto L_0x014f;
-    L_0x014e:
+        goto L_0x014d;
+    L_0x014c:
         r4 = r11;
+    L_0x014d:
+        if (r4 == 0) goto L_0x0158;
     L_0x014f:
-        if (r4 == 0) goto L_0x016d;
-    L_0x0151:
         r5 = r4.isEmpty();
-        if (r5 != 0) goto L_0x016d;
-    L_0x0157:
-        r5 = new java.util.ArrayList;
-        r5.<init>(r4);
-        r4 = r12.isEmpty();
-        if (r4 != 0) goto L_0x016a;
-    L_0x0162:
-        r4 = new org.telegram.ui.Adapters.StickersAdapter$1;
-        r4.<init>(r2, r12);
-        java.util.Collections.sort(r5, r4);
-    L_0x016a:
-        r10.addStickersToResult(r5, r11);
-    L_0x016d:
+        if (r5 != 0) goto L_0x0158;
+    L_0x0155:
+        r10.addStickersToResult(r4, r11);
+    L_0x0158:
+        r4 = r10.stickers;
+        if (r4 == 0) goto L_0x0164;
+    L_0x015c:
+        r5 = new org.telegram.ui.Adapters.StickersAdapter$1;
+        r5.<init>(r2, r12);
+        java.util.Collections.sort(r4, r5);
+    L_0x0164:
         r12 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r12 != 0) goto L_0x0176;
-    L_0x0171:
+        if (r12 != 0) goto L_0x016d;
+    L_0x0168:
         r12 = r10.lastSticker;
         r10.searchServerStickers(r12, r3);
-    L_0x0176:
+    L_0x016d:
         r12 = r10.stickers;
-        if (r12 == 0) goto L_0x01ae;
-    L_0x017a:
+        if (r12 == 0) goto L_0x01a5;
+    L_0x0171:
         r12 = r12.isEmpty();
-        if (r12 != 0) goto L_0x01ae;
-    L_0x0180:
+        if (r12 != 0) goto L_0x01a5;
+    L_0x0177:
         r12 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r12 != 0) goto L_0x0196;
-    L_0x0184:
+        if (r12 != 0) goto L_0x018d;
+    L_0x017b:
         r12 = r10.stickers;
         r12 = r12.size();
-        if (r12 >= r7) goto L_0x0196;
-    L_0x018c:
+        if (r12 >= r7) goto L_0x018d;
+    L_0x0183:
         r10.delayLocalResults = r0;
         r11 = r10.delegate;
         r11.needChangePanelVisibility(r1);
         r10.visible = r1;
-        goto L_0x01aa;
-    L_0x0196:
+        goto L_0x01a1;
+    L_0x018d:
         r10.checkStickerFilesExistAndDownload();
         r12 = r10.stickersToLoad;
         r12 = r12.isEmpty();
-        if (r12 == 0) goto L_0x01a3;
-    L_0x01a1:
+        if (r12 == 0) goto L_0x019a;
+    L_0x0198:
         r10.keywordResults = r11;
-    L_0x01a3:
+    L_0x019a:
         r11 = r10.delegate;
         r11.needChangePanelVisibility(r12);
         r10.visible = r0;
-    L_0x01aa:
+    L_0x01a1:
         r10.notifyDataSetChanged();
-        goto L_0x01b9;
-    L_0x01ae:
+        goto L_0x01b0;
+    L_0x01a5:
         r11 = r10.visible;
-        if (r11 == 0) goto L_0x01b9;
-    L_0x01b2:
+        if (r11 == 0) goto L_0x01b0;
+    L_0x01a9:
         r11 = r10.delegate;
         r11.needChangePanelVisibility(r1);
         r10.visible = r1;
-    L_0x01b9:
+    L_0x01b0:
         return;
-    L_0x01ba:
+    L_0x01b1:
         r12 = r10.visible;
-        if (r12 == 0) goto L_0x01d2;
-    L_0x01be:
+        if (r12 == 0) goto L_0x01c9;
+    L_0x01b5:
         r12 = r10.keywordResults;
-        if (r12 == 0) goto L_0x01c8;
-    L_0x01c2:
+        if (r12 == 0) goto L_0x01bf;
+    L_0x01b9:
         r12 = r12.isEmpty();
-        if (r12 == 0) goto L_0x01d2;
-    L_0x01c8:
+        if (r12 == 0) goto L_0x01c9;
+    L_0x01bf:
         r10.visible = r1;
         r12 = r10.delegate;
         r12.needChangePanelVisibility(r1);
         r10.notifyDataSetChanged();
-    L_0x01d2:
-        if (r11 != 0) goto L_0x01d7;
-    L_0x01d4:
+    L_0x01c9:
+        if (r11 != 0) goto L_0x01ce;
+    L_0x01cb:
         r10.searchEmojiByKeyword();
-    L_0x01d7:
+    L_0x01ce:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.StickersAdapter.loadStikersForEmoji(java.lang.CharSequence, boolean):void");
@@ -578,7 +576,6 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             if (this.stickersToLoad.isEmpty()) {
                 this.lastSticker = null;
                 this.stickers = null;
-                this.stickersParents = null;
                 this.stickersMap = null;
             }
             this.keywordResults = null;
@@ -618,7 +615,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             return ((KeywordResult) this.keywordResults.get(i)).emoji;
         }
         arrayList = this.stickers;
-        Object obj = (arrayList == null || i < 0 || i >= arrayList.size()) ? null : this.stickers.get(i);
+        Object obj = (arrayList == null || i < 0 || i >= arrayList.size()) ? null : ((StickerResult) this.stickers.get(i)).sticker;
         return obj;
     }
 
@@ -628,9 +625,9 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         if (arrayList != null && !arrayList.isEmpty()) {
             return null;
         }
-        arrayList = this.stickersParents;
+        arrayList = this.stickers;
         if (arrayList != null && i >= 0 && i < arrayList.size()) {
-            obj = this.stickersParents.get(i);
+            obj = ((StickerResult) this.stickers.get(i)).parent;
         }
         return obj;
     }
@@ -660,7 +657,8 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                 i2 = -1;
             }
             StickerCell stickerCell = (StickerCell) viewHolder.itemView;
-            stickerCell.setSticker((Document) this.stickers.get(i), this.stickersParents.get(i), i2);
+            StickerResult stickerResult = (StickerResult) this.stickers.get(i);
+            stickerCell.setSticker(stickerResult.sticker, stickerResult.parent, i2);
             stickerCell.setClearsInputField(true);
         } else if (itemViewType == 1) {
             if (i != 0) {

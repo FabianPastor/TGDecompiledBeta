@@ -1088,7 +1088,7 @@ public class PhotoCropActivity extends BaseFragment {
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        if (!(this.bitmapKey == null || !ImageLoader.getInstance().decrementUseCount(this.bitmapKey) || ImageLoader.getInstance().isInCache(this.bitmapKey))) {
+        if (!(this.bitmapKey == null || !ImageLoader.getInstance().decrementUseCount(this.bitmapKey) || ImageLoader.getInstance().isInMemCache(this.bitmapKey, false))) {
             this.bitmapKey = null;
         }
         if (this.bitmapKey == null) {

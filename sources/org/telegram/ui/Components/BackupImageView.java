@@ -118,6 +118,10 @@ public class BackupImageView extends View {
         this.imageReceiver.setImageBitmap(drawable);
     }
 
+    public void setLayerNum(int i) {
+        this.imageReceiver.setLayerNum(i);
+    }
+
     public void setRoundRadius(int i) {
         this.imageReceiver.setRoundRadius(i);
         invalidate();

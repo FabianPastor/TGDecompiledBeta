@@ -1345,7 +1345,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r5 = 1;
         if (r3 != r5) goto L_0x0072;
     L_0x005d:
-        r3 = NUM; // 0x7f0d06b2 float:1.8745591E38 double:1.0531306244E-314;
+        r3 = NUM; // 0x7f0d06ba float:1.8745607E38 double:1.0531306283E-314;
         r5 = new java.lang.Object[r5];
         r5[r4] = r0;
         r0 = "NotificationsExceptionsSingleAlert";
@@ -1354,7 +1354,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r2.setMessage(r0);
         goto L_0x0086;
     L_0x0072:
-        r3 = NUM; // 0x7f0d06b1 float:1.874559E38 double:1.053130624E-314;
+        r3 = NUM; // 0x7f0d06b9 float:1.8745605E38 double:1.053130628E-314;
         r5 = new java.lang.Object[r5];
         r5[r4] = r0;
         r0 = "NotificationsExceptionsAlert";
@@ -1362,17 +1362,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0);
         r2.setMessage(r0);
     L_0x0086:
-        r0 = NUM; // 0x7f0d06b0 float:1.8745587E38 double:1.0531306234E-314;
+        r0 = NUM; // 0x7f0d06b8 float:1.8745603E38 double:1.0531306273E-314;
         r3 = "NotificationsExceptions";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r2.setTitle(r0);
-        r0 = NUM; // 0x7f0d0aa6 float:1.8747644E38 double:1.0531311244E-314;
+        r0 = NUM; // 0x7f0d0aaf float:1.8747662E38 double:1.053131129E-314;
         r3 = "ViewExceptions";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r3 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$9FhV71oy8_vyXyR3LWFGjX-RReE;
         r3.<init>(r6, r7);
         r2.setNeutralButton(r0, r3);
-        r7 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+        r7 = NUM; // 0x7f0d06da float:1.8745672E38 double:1.053130644E-314;
         r0 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r2.setNegativeButton(r7, r1);

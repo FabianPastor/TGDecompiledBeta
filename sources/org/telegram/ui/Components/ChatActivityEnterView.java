@@ -2580,10 +2580,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r4 = r2.silent;
         if (r4 == 0) goto L_0x0150;
     L_0x014c:
-        r4 = NUM; // 0x7var_ float:1.7945235E38 double:1.052935663E-314;
+        r4 = NUM; // 0x7var_f1 float:1.7945067E38 double:1.052935622E-314;
         goto L_0x0153;
     L_0x0150:
-        r4 = NUM; // 0x7var_ float:1.7945237E38 double:1.0529356636E-314;
+        r4 = NUM; // 0x7var_f2 float:1.7945069E38 double:1.0529356226E-314;
     L_0x0153:
         r3.setImageResource(r4);
         r3 = r2.attachLayout;
@@ -2856,7 +2856,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             this.cancelBotButton.setScaleY(1.0f);
                             this.cancelBotButton.setAlpha(1.0f);
                             this.cancelBotButton.setVisibility(0);
-                            i = 8;
                             this.sendButton.setVisibility(8);
                         } else {
                             this.cancelBotButton.setScaleX(0.1f);
@@ -2866,8 +2865,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             this.sendButton.setScaleY(1.0f);
                             this.sendButton.setAlpha(1.0f);
                             this.sendButton.setVisibility(0);
-                            i = 8;
                             this.cancelBotButton.setVisibility(8);
+                        }
+                        if (this.expandStickersButton.getVisibility() == 0) {
+                            this.expandStickersButton.setScaleX(0.1f);
+                            this.expandStickersButton.setScaleY(0.1f);
+                            this.expandStickersButton.setAlpha(0.0f);
+                            i = 8;
+                            this.expandStickersButton.setVisibility(8);
+                        } else {
+                            i = 8;
                         }
                         this.audioVideoButtonContainer.setVisibility(i);
                         linearLayout = this.attachLayout;
@@ -4176,14 +4183,24 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.stickersDragging = true;
                         this.wasExpanded = ChatActivityEnterView.this.stickersExpanded;
                         ChatActivityEnterView.this.stickersExpanded = true;
+                        NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
+                        int i = NotificationCenter.stopAllHeavyOperations;
+                        Object[] objArr = new Object[1];
+                        int i2 = 0;
+                        objArr[0] = Integer.valueOf(1);
+                        globalInstance.postNotificationName(i, objArr);
                         ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
-                        chatActivityEnterView.stickersExpandedHeight = (((chatActivityEnterView.sizeNotifierLayout.getHeight() - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - ActionBar.getCurrentActionBarHeight()) - ChatActivityEnterView.this.getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
+                        int height = chatActivityEnterView.sizeNotifierLayout.getHeight();
+                        if (VERSION.SDK_INT >= 21) {
+                            i2 = AndroidUtilities.statusBarHeight;
+                        }
+                        chatActivityEnterView.stickersExpandedHeight = (((height - i2) - ActionBar.getCurrentActionBarHeight()) - ChatActivityEnterView.this.getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                         if (ChatActivityEnterView.this.searchingType == 2) {
                             chatActivityEnterView = ChatActivityEnterView.this;
-                            int access$8500 = chatActivityEnterView.stickersExpandedHeight;
+                            i = chatActivityEnterView.stickersExpandedHeight;
                             int dp = AndroidUtilities.dp(120.0f);
                             Point point = AndroidUtilities.displaySize;
-                            chatActivityEnterView.stickersExpandedHeight = Math.min(access$8500, dp + (point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight));
+                            chatActivityEnterView.stickersExpandedHeight = Math.min(i, dp + (point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight));
                         }
                         ChatActivityEnterView.this.emojiView.getLayoutParams().height = ChatActivityEnterView.this.stickersExpandedHeight;
                         ChatActivityEnterView.this.emojiView.setLayerType(2, null);
@@ -4263,6 +4280,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (!this.emojiViewVisible) {
             EmojiView emojiView = this.emojiView;
             if (emojiView != null && emojiView.getVisibility() != 8) {
+                this.sizeNotifierLayout.removeView(this.emojiView);
                 this.emojiView.setVisibility(8);
             }
         }
@@ -4280,6 +4298,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             View view = null;
             if (i2 == 0) {
+                if (this.emojiView.getParent() == null) {
+                    this.sizeNotifierLayout.addView(this.emojiView);
+                }
                 this.emojiView.setVisibility(0);
                 this.emojiViewVisible = true;
                 BotKeyboardView botKeyboardView2 = this.botKeyboardView;
@@ -4290,6 +4311,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             } else if (i2 == 1) {
                 EmojiView emojiView = this.emojiView;
                 if (!(emojiView == null || emojiView.getVisibility() == 8)) {
+                    this.sizeNotifierLayout.removeView(this.emojiView);
                     this.emojiView.setVisibility(8);
                     this.emojiViewVisible = false;
                 }
@@ -4333,7 +4355,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.currentPopupContentType = -1;
             if (this.emojiView != null) {
                 this.emojiViewVisible = false;
-                if (AndroidUtilities.usingHardwareInput || AndroidUtilities.isInMultiwindow) {
+                if (i != 2 || AndroidUtilities.usingHardwareInput || AndroidUtilities.isInMultiwindow) {
+                    this.sizeNotifierLayout.removeView(this.emojiView);
                     this.emojiView.setVisibility(8);
                 }
             }
@@ -4907,8 +4930,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.stickersExpansionAnim = null;
             }
             String str = "animationProgress";
-            Animator[] animatorArr;
             if (this.stickersExpanded) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(1));
                 this.originalViewHeight = this.sizeNotifierLayout.getHeight();
                 this.stickersExpandedHeight = (((this.originalViewHeight - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - ActionBar.getCurrentActionBarHeight()) - getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 if (this.searchingType == 2) {
@@ -4924,11 +4947,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.messageEditText.setSelection(selectionStart, selectionEnd);
                 if (z2) {
                     AnimatorSet animatorSet = new AnimatorSet();
-                    animatorArr = new Animator[3];
-                    animatorArr[0] = ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)});
-                    animatorArr[1] = ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)});
-                    animatorArr[2] = ObjectAnimator.ofFloat(this.stickersArrow, str, new float[]{1.0f});
-                    animatorSet.playTogether(animatorArr);
+                    r9 = new Animator[3];
+                    r9[0] = ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)});
+                    r9[1] = ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)});
+                    r9[2] = ObjectAnimator.ofFloat(this.stickersArrow, str, new float[]{1.0f});
+                    animatorSet.playTogether(r9);
                     animatorSet.setDuration(400);
                     animatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                     ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new -$$Lambda$ChatActivityEnterView$4bFyOKzZkoegxIkwH3otL-R7SUo(this, i));
@@ -4936,10 +4959,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         public void onAnimationEnd(Animator animator) {
                             ChatActivityEnterView.this.stickersExpansionAnim = null;
                             ChatActivityEnterView.this.emojiView.setLayerType(0, null);
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(512));
                         }
                     });
                     this.stickersExpansionAnim = animatorSet;
                     this.emojiView.setLayerType(2, null);
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
                     animatorSet.start();
                 } else {
                     this.stickersExpansionProgress = 1.0f;
@@ -4947,44 +4972,49 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.emojiView.setTranslationY((float) (-(this.stickersExpandedHeight - i)));
                     this.stickersArrow.setAnimationProgress(1.0f);
                 }
-            } else if (z2) {
-                this.closeAnimationInProgress = true;
-                AnimatorSet animatorSet2 = new AnimatorSet();
-                animatorArr = new Animator[3];
-                animatorArr[0] = ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{0});
-                animatorArr[1] = ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{0});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.stickersArrow, str, new float[]{0.0f});
-                animatorSet2.playTogether(animatorArr);
-                animatorSet2.setDuration(400);
-                animatorSet2.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
-                ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new -$$Lambda$ChatActivityEnterView$A5TmJlGp3wUlMNBvVwJxDClmnmg(this, i));
-                animatorSet2.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        ChatActivityEnterView.this.closeAnimationInProgress = false;
-                        ChatActivityEnterView.this.stickersExpansionAnim = null;
-                        if (ChatActivityEnterView.this.emojiView != null) {
-                            ChatActivityEnterView.this.emojiView.getLayoutParams().height = i;
-                            ChatActivityEnterView.this.emojiView.setLayerType(0, null);
-                        }
-                        if (ChatActivityEnterView.this.sizeNotifierLayout != null) {
-                            ChatActivityEnterView.this.sizeNotifierLayout.requestLayout();
-                            ChatActivityEnterView.this.sizeNotifierLayout.setForeground(null);
-                            ChatActivityEnterView.this.sizeNotifierLayout.setWillNotDraw(false);
-                        }
-                    }
-                });
-                this.stickersExpansionAnim = animatorSet2;
-                this.emojiView.setLayerType(2, null);
-                animatorSet2.start();
             } else {
-                this.stickersExpansionProgress = 0.0f;
-                setTranslationY(0.0f);
-                this.emojiView.setTranslationY(0.0f);
-                this.emojiView.getLayoutParams().height = i;
-                this.sizeNotifierLayout.requestLayout();
-                this.sizeNotifierLayout.setForeground(null);
-                this.sizeNotifierLayout.setWillNotDraw(false);
-                this.stickersArrow.setAnimationProgress(0.0f);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(1));
+                if (z2) {
+                    this.closeAnimationInProgress = true;
+                    AnimatorSet animatorSet2 = new AnimatorSet();
+                    r5 = new Animator[3];
+                    r5[0] = ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{0});
+                    r5[1] = ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{0});
+                    r5[2] = ObjectAnimator.ofFloat(this.stickersArrow, str, new float[]{0.0f});
+                    animatorSet2.playTogether(r5);
+                    animatorSet2.setDuration(400);
+                    animatorSet2.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+                    ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new -$$Lambda$ChatActivityEnterView$A5TmJlGp3wUlMNBvVwJxDClmnmg(this, i));
+                    animatorSet2.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            ChatActivityEnterView.this.closeAnimationInProgress = false;
+                            ChatActivityEnterView.this.stickersExpansionAnim = null;
+                            if (ChatActivityEnterView.this.emojiView != null) {
+                                ChatActivityEnterView.this.emojiView.getLayoutParams().height = i;
+                                ChatActivityEnterView.this.emojiView.setLayerType(0, null);
+                            }
+                            if (ChatActivityEnterView.this.sizeNotifierLayout != null) {
+                                ChatActivityEnterView.this.sizeNotifierLayout.requestLayout();
+                                ChatActivityEnterView.this.sizeNotifierLayout.setForeground(null);
+                                ChatActivityEnterView.this.sizeNotifierLayout.setWillNotDraw(false);
+                            }
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, Integer.valueOf(512));
+                        }
+                    });
+                    this.stickersExpansionAnim = animatorSet2;
+                    this.emojiView.setLayerType(2, null);
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, Integer.valueOf(512));
+                    animatorSet2.start();
+                } else {
+                    this.stickersExpansionProgress = 0.0f;
+                    setTranslationY(0.0f);
+                    this.emojiView.setTranslationY(0.0f);
+                    this.emojiView.getLayoutParams().height = i;
+                    this.sizeNotifierLayout.requestLayout();
+                    this.sizeNotifierLayout.setForeground(null);
+                    this.sizeNotifierLayout.setWillNotDraw(false);
+                    this.stickersArrow.setAnimationProgress(0.0f);
+                }
             }
             if (z4) {
                 this.expandStickersButton.setContentDescription(LocaleController.getString("AccDescrCollapsePanel", NUM));

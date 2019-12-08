@@ -134,7 +134,6 @@ public class SharingLiveLocationCell extends FrameLayout {
     }
 
     public void setDialog(MessageObject messageObject, Location location) {
-        String str;
         CharSequence charSequence;
         int i = messageObject.messageOwner.from_id;
         if (messageObject.isForwarded()) {
@@ -149,7 +148,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.currentAccount = messageObject.currentAccount;
         CharSequence charSequence2 = !TextUtils.isEmpty(messageObject.messageOwner.media.address) ? messageObject.messageOwner.media.address : null;
         if (TextUtils.isEmpty(messageObject.messageOwner.media.title)) {
-            str = "";
+            String str = "";
             this.avatarDrawable = null;
             String str2 = "50_50";
             Object user;
@@ -184,18 +183,10 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.location.setLongitude(messageObject.messageOwner.media.geo._long);
         if (location != null) {
             float distanceTo = this.location.distanceTo(location);
-            String str3 = "MetersAway";
-            str = "KMetersAway";
             if (charSequence2 != null) {
-                if (distanceTo < 1000.0f) {
-                    this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{charSequence2, Integer.valueOf((int) distanceTo), LocaleController.getString(str3, NUM)}));
-                } else {
-                    this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{charSequence2, Float.valueOf(distanceTo / 1000.0f), LocaleController.getString(str, NUM)}));
-                }
-            } else if (distanceTo < 1000.0f) {
-                this.distanceTextView.setText(String.format("%d %s", new Object[]{Integer.valueOf((int) distanceTo), LocaleController.getString(str3, NUM)}));
+                this.distanceTextView.setText(String.format("%s - %s", new Object[]{charSequence2, LocaleController.formatDistance(distanceTo)}));
             } else {
-                this.distanceTextView.setText(String.format("%.2f %s", new Object[]{Float.valueOf(distanceTo / 1000.0f), LocaleController.getString(str, NUM)}));
+                this.distanceTextView.setText(LocaleController.formatDistance(distanceTo));
             }
         } else if (charSequence2 != null) {
             this.distanceTextView.setText(charSequence2);
@@ -231,15 +222,10 @@ public class SharingLiveLocationCell extends FrameLayout {
         i = message.edit_date;
         String formatLocationUpdateDate = LocaleController.formatLocationUpdateDate(i != 0 ? (long) i : (long) message.date);
         if (location != null) {
-            if (this.location.distanceTo(location) < 1000.0f) {
-                this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{formatLocationUpdateDate, Integer.valueOf((int) this.location.distanceTo(location)), LocaleController.getString("MetersAway", NUM)}));
-                return;
-            } else {
-                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{formatLocationUpdateDate, Float.valueOf(this.location.distanceTo(location) / 1000.0f), LocaleController.getString("KMetersAway", NUM)}));
-                return;
-            }
+            this.distanceTextView.setText(String.format("%s - %s", new Object[]{formatLocationUpdateDate, LocaleController.formatDistance(this.location.distanceTo(location))}));
+        } else {
+            this.distanceTextView.setText(formatLocationUpdateDate);
         }
-        this.distanceTextView.setText(formatLocationUpdateDate);
     }
 
     public void setDialog(SharingLocationInfo sharingLocationInfo) {

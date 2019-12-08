@@ -119,6 +119,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private ArrayList<ThemeInfo> darkThemes = new ArrayList();
     private ArrayList<ThemeInfo> defaultThemes = new ArrayList();
     private int directShareRow;
+    private int distanceRow;
     private int emojiRow;
     private int enableAnimationsRow;
     private GpsLocationListener gpsLocationListener = new GpsLocationListener(this, null);
@@ -788,7 +789,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x00e0:
             r4 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f6 }
             r6 = "ShareFile";
-            r0 = NUM; // 0x7f0d096f float:1.8747013E38 double:1.0531309707E-314;
+            r0 = NUM; // 0x7f0d0977 float:1.874703E38 double:1.0531309747E-314;
             r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x00f6 }
             r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x00f6 }
             r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -986,13 +987,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
 
         public /* synthetic */ void lambda$onCreateViewHolder$3$ThemeActivity$ListAdapter(RecyclerListView recyclerListView, View view, int i) {
-            ThemeInfo access$6500 = ((InnerThemeView) view).themeInfo;
-            if (access$6500 != Theme.getCurrentTheme()) {
+            ThemeInfo access$6600 = ((InnerThemeView) view).themeInfo;
+            if (access$6600 != Theme.getCurrentTheme()) {
                 NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
                 int i2 = NotificationCenter.needSetDayNightTheme;
                 r2 = new Object[2];
                 int i3 = 0;
-                r2[0] = access$6500;
+                r2[0] = access$6600;
                 r2[1] = Boolean.valueOf(false);
                 globalInstance.postNotificationName(i2, r2);
                 i = view.getLeft();
@@ -1093,6 +1094,17 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                 return;
                             } else if (i == ThemeActivity.this.showThemesRows) {
                                 textSettingsCell.setText(LocaleController.getString("ShowAllThemes", NUM), false);
+                                return;
+                            } else if (i == ThemeActivity.this.distanceRow) {
+                                i = SharedConfig.distanceSystemType;
+                                if (i == 0) {
+                                    string = LocaleController.getString("DistanceUnitsAutomatic", NUM);
+                                } else if (i == 1) {
+                                    string = LocaleController.getString("DistanceUnitsKilometers", NUM);
+                                } else {
+                                    string = LocaleController.getString("DistanceUnitsMiles", NUM);
+                                }
+                                textSettingsCell.setTextAndValue(LocaleController.getString("DistanceUnits", NUM), string, false);
                                 return;
                             } else {
                                 return;
@@ -1199,7 +1211,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                             textCheckCell.setTextAndCheck(LocaleController.getString("SendByEnter", NUM), MessagesController.getGlobalMainSettings().getBoolean("send_by_enter", false), true);
                             return;
                         } else if (i == ThemeActivity.this.saveToGalleryRow) {
-                            textCheckCell.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", NUM), SharedConfig.saveToGallery, false);
+                            textCheckCell.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", NUM), SharedConfig.saveToGallery, true);
                             return;
                         } else if (i == ThemeActivity.this.raiseToSpeakRow) {
                             textCheckCell.setTextAndCheck(LocaleController.getString("RaiseToSpeak", NUM), SharedConfig.raiseToSpeak, true);
@@ -1248,7 +1260,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
 
         public int getItemViewType(int i) {
-            if (i == ThemeActivity.this.scheduleFromRow || i == ThemeActivity.this.emojiRow || i == ThemeActivity.this.showThemesRows || i == ThemeActivity.this.scheduleToRow || i == ThemeActivity.this.scheduleUpdateLocationRow || i == ThemeActivity.this.backgroundRow || i == ThemeActivity.this.contactsReimportRow || i == ThemeActivity.this.contactsSortRow || i == ThemeActivity.this.stickersRow) {
+            if (i == ThemeActivity.this.scheduleFromRow || i == ThemeActivity.this.emojiRow || i == ThemeActivity.this.showThemesRows || i == ThemeActivity.this.scheduleToRow || i == ThemeActivity.this.scheduleUpdateLocationRow || i == ThemeActivity.this.backgroundRow || i == ThemeActivity.this.contactsReimportRow || i == ThemeActivity.this.contactsSortRow || i == ThemeActivity.this.stickersRow || i == ThemeActivity.this.distanceRow) {
                 return 1;
             }
             if (i == ThemeActivity.this.automaticBrightnessInfoRow || i == ThemeActivity.this.scheduleLocationInfoRow) {
@@ -1282,7 +1294,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    static /* synthetic */ void lambda$openThemeCreate$6(DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$openThemeCreate$7(DialogInterface dialogInterface, int i) {
     }
 
     public ThemeActivity(int i) {
@@ -1337,6 +1349,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         this.raiseToSpeakRow = -1;
         this.sendByEnterRow = -1;
         this.saveToGalleryRow = -1;
+        this.distanceRow = -1;
         this.settings2Row = -1;
         this.stickersRow = -1;
         this.stickersSection2Row = -1;
@@ -1415,6 +1428,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             i3 = this.rowCount;
             this.rowCount = i3 + 1;
             this.saveToGalleryRow = i3;
+            i3 = this.rowCount;
+            this.rowCount = i3 + 1;
+            this.distanceRow = i3;
             i3 = this.rowCount;
             this.rowCount = i3 + 1;
             this.settings2Row = i3;
@@ -1685,11 +1701,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         this.listView.setAdapter(this.listAdapter);
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new -$$Lambda$ThemeActivity$6AbNGVXM3fzlqnkK4ORVG2-WTt4(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$ThemeActivity$v1y6WvGig7weyKrIxBSLQ1B8fCk(this));
         return this.fragmentView;
     }
 
-    public /* synthetic */ void lambda$createView$5$ThemeActivity(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$createView$6$ThemeActivity(View view, int i, float f, float f2) {
         SharedPreferences globalMainSettings;
         String str;
         boolean z;
@@ -1728,186 +1744,206 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.saveToGallery);
                 }
-            } else if (i == this.customTabsRow) {
-                SharedConfig.toggleCustomTabs();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.customTabs);
-                }
-            } else if (i == this.directShareRow) {
-                SharedConfig.toggleDirectShare();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.directShare);
-                }
-            } else if (i != this.contactsReimportRow) {
-                int i2;
-                if (i == this.contactsSortRow) {
+            } else {
+                String str2 = "Cancel";
+                AlertDialog.Builder builder;
+                if (i == this.distanceRow) {
                     if (getParentActivity() != null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("SortBy", NUM));
-                        builder.setItems(new CharSequence[]{LocaleController.getString("Default", NUM), LocaleController.getString("SortFirstName", NUM), LocaleController.getString("SortLastName", NUM)}, new -$$Lambda$ThemeActivity$Ur1wYdChFFO5JBnOUCuxyfGs_Qw(this, i));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+                        builder = new AlertDialog.Builder(getParentActivity());
+                        builder.setTitle(LocaleController.getString("DistanceUnitsTitle", NUM));
+                        builder.setItems(new CharSequence[]{LocaleController.getString("DistanceUnitsAutomatic", NUM), LocaleController.getString("DistanceUnitsKilometers", NUM), LocaleController.getString("DistanceUnitsMiles", NUM)}, new -$$Lambda$ThemeActivity$VVfPYsGSwRhI82htSahIdZWO_zQ(this));
+                        builder.setNegativeButton(LocaleController.getString(str2, NUM), null);
                         showDialog(builder.create());
                     }
-                } else if (i == this.stickersRow) {
-                    presentFragment(new StickersActivity(0));
-                } else if (i == this.showThemesRows) {
-                    presentFragment(new ThemeActivity(2));
-                } else if (i == this.emojiRow) {
-                    if (getParentActivity() != null) {
-                        boolean[] zArr = new boolean[2];
-                        Builder builder2 = new Builder(getParentActivity());
-                        builder2.setApplyTopPadding(false);
-                        builder2.setApplyBottomPadding(false);
-                        LinearLayout linearLayout = new LinearLayout(getParentActivity());
-                        linearLayout.setOrientation(1);
-                        int i3 = 0;
-                        while (true) {
-                            if (i3 >= (VERSION.SDK_INT >= 19 ? 2 : 1)) {
-                                break;
-                            }
-                            CharSequence string;
-                            if (i3 == 0) {
-                                zArr[i3] = SharedConfig.allowBigEmoji;
-                                string = LocaleController.getString("EmojiBigSize", NUM);
-                            } else if (i3 == 1) {
-                                zArr[i3] = SharedConfig.useSystemEmoji;
-                                string = LocaleController.getString("EmojiUseDefault", NUM);
-                            } else {
-                                string = null;
-                            }
-                            CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), 1, 21);
-                            checkBoxCell.setTag(Integer.valueOf(i3));
-                            checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                            linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 50));
-                            checkBoxCell.setText(string, "", zArr[i3], true);
-                            checkBoxCell.setTextColor(Theme.getColor("dialogTextBlack"));
-                            checkBoxCell.setOnClickListener(new -$$Lambda$ThemeActivity$EM3ewToEngglZwU9SAL1G0JUpz0(zArr));
-                            i3++;
-                        }
-                        BottomSheetCell bottomSheetCell = new BottomSheetCell(getParentActivity(), 1);
-                        bottomSheetCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        bottomSheetCell.setTextAndIcon(LocaleController.getString("Save", NUM).toUpperCase(), 0);
-                        bottomSheetCell.setTextColor(Theme.getColor("dialogTextBlue2"));
-                        bottomSheetCell.setOnClickListener(new -$$Lambda$ThemeActivity$Qmfg6ZM5i1uh-yBWU4bHsWNdCLASSNAME(this, zArr, i));
-                        linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50));
-                        builder2.setCustomView(linearLayout);
-                        showDialog(builder2.create());
+                } else if (i == this.customTabsRow) {
+                    SharedConfig.toggleCustomTabs();
+                    if (view instanceof TextCheckCell) {
+                        ((TextCheckCell) view).setChecked(SharedConfig.customTabs);
                     }
-                } else if ((i >= this.themeStartRow && i < this.themeEndRow) || (i >= this.themeStart2Row && i < this.themeEnd2Row)) {
-                    ArrayList arrayList;
-                    int i4 = this.themeStart2Row;
-                    if (i4 < 0 || i < i4) {
-                        i -= this.themeStartRow;
-                        i4 = this.currentType;
-                        if (i4 == 1) {
+                } else if (i == this.directShareRow) {
+                    SharedConfig.toggleDirectShare();
+                    if (view instanceof TextCheckCell) {
+                        ((TextCheckCell) view).setChecked(SharedConfig.directShare);
+                    }
+                } else if (i != this.contactsReimportRow) {
+                    int i2;
+                    if (i == this.contactsSortRow) {
+                        if (getParentActivity() != null) {
+                            builder = new AlertDialog.Builder(getParentActivity());
+                            builder.setTitle(LocaleController.getString("SortBy", NUM));
+                            builder.setItems(new CharSequence[]{LocaleController.getString("Default", NUM), LocaleController.getString("SortFirstName", NUM), LocaleController.getString("SortLastName", NUM)}, new -$$Lambda$ThemeActivity$6SZnAHP7Ptnel1TqPa7stHg_Y4w(this, i));
+                            builder.setNegativeButton(LocaleController.getString(str2, NUM), null);
+                            showDialog(builder.create());
+                        }
+                    } else if (i == this.stickersRow) {
+                        presentFragment(new StickersActivity(0));
+                    } else if (i == this.showThemesRows) {
+                        presentFragment(new ThemeActivity(2));
+                    } else if (i == this.emojiRow) {
+                        if (getParentActivity() != null) {
+                            boolean[] zArr = new boolean[2];
+                            Builder builder2 = new Builder(getParentActivity());
+                            builder2.setApplyTopPadding(false);
+                            builder2.setApplyBottomPadding(false);
+                            LinearLayout linearLayout = new LinearLayout(getParentActivity());
+                            linearLayout.setOrientation(1);
+                            int i3 = 0;
+                            while (true) {
+                                if (i3 >= (VERSION.SDK_INT >= 19 ? 2 : 1)) {
+                                    break;
+                                }
+                                CharSequence string;
+                                if (i3 == 0) {
+                                    zArr[i3] = SharedConfig.allowBigEmoji;
+                                    string = LocaleController.getString("EmojiBigSize", NUM);
+                                } else if (i3 == 1) {
+                                    zArr[i3] = SharedConfig.useSystemEmoji;
+                                    string = LocaleController.getString("EmojiUseDefault", NUM);
+                                } else {
+                                    string = null;
+                                }
+                                CheckBoxCell checkBoxCell = new CheckBoxCell(getParentActivity(), 1, 21);
+                                checkBoxCell.setTag(Integer.valueOf(i3));
+                                checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                                linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 50));
+                                checkBoxCell.setText(string, "", zArr[i3], true);
+                                checkBoxCell.setTextColor(Theme.getColor("dialogTextBlack"));
+                                checkBoxCell.setOnClickListener(new -$$Lambda$ThemeActivity$oJH33DcVMQXviQl25Lh-LzwbtQU(zArr));
+                                i3++;
+                            }
+                            BottomSheetCell bottomSheetCell = new BottomSheetCell(getParentActivity(), 1);
+                            bottomSheetCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                            bottomSheetCell.setTextAndIcon(LocaleController.getString("Save", NUM).toUpperCase(), 0);
+                            bottomSheetCell.setTextColor(Theme.getColor("dialogTextBlue2"));
+                            bottomSheetCell.setOnClickListener(new -$$Lambda$ThemeActivity$_UbERQfvYIKeuvaeg80W1WAsIhc(this, zArr, i));
+                            linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50));
+                            builder2.setCustomView(linearLayout);
+                            showDialog(builder2.create());
+                        }
+                    } else if ((i >= this.themeStartRow && i < this.themeEndRow) || (i >= this.themeStart2Row && i < this.themeEnd2Row)) {
+                        ArrayList arrayList;
+                        int i4 = this.themeStart2Row;
+                        if (i4 < 0 || i < i4) {
+                            i -= this.themeStartRow;
+                            i4 = this.currentType;
+                            if (i4 == 1) {
+                                arrayList = this.darkThemes;
+                            } else if (i4 == 2) {
+                                arrayList = this.defaultThemes;
+                            } else {
+                                arrayList = Theme.themes;
+                            }
+                        } else {
+                            i -= i4;
                             arrayList = this.darkThemes;
-                        } else if (i4 == 2) {
-                            arrayList = this.defaultThemes;
-                        } else {
-                            arrayList = Theme.themes;
                         }
-                    } else {
-                        i -= i4;
-                        arrayList = this.darkThemes;
-                    }
-                    if (i >= 0 && i < arrayList.size()) {
-                        ThemeInfo themeInfo = (ThemeInfo) arrayList.get(i);
-                        if (this.currentType == 1) {
-                            Theme.setCurrentNightTheme(themeInfo);
-                        } else if (themeInfo != Theme.getCurrentTheme()) {
-                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, Boolean.valueOf(false));
-                        } else {
-                            return;
-                        }
-                        i4 = this.listView.getChildCount();
-                        int i5;
-                        while (i5 < i4) {
-                            View childAt = this.listView.getChildAt(i5);
-                            if (childAt instanceof ThemeCell) {
-                                ((ThemeCell) childAt).updateCurrentThemeCheck();
-                            }
-                            i5++;
-                        }
-                    }
-                } else if (i == this.nightThemeRow) {
-                    if ((!LocaleController.isRTL || f > ((float) AndroidUtilities.dp(76.0f))) && (LocaleController.isRTL || f < ((float) (view.getMeasuredWidth() - AndroidUtilities.dp(76.0f))))) {
-                        presentFragment(new ThemeActivity(1));
-                    } else {
-                        NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) view;
-                        if (Theme.selectedAutoNightType == 0) {
-                            Theme.selectedAutoNightType = 2;
-                            notificationsCheckCell.setChecked(true);
-                        } else {
-                            Theme.selectedAutoNightType = 0;
-                            notificationsCheckCell.setChecked(false);
-                        }
-                        Theme.saveAutoNightThemeConfig();
-                        Theme.checkAutoNightThemeConditions();
-                        if (Theme.selectedAutoNightType != 0) {
-                            z2 = true;
-                        }
-                        CharSequence currentNightThemeName = z2 ? Theme.getCurrentNightThemeName() : LocaleController.getString("AutoNightThemeOff", NUM);
-                        if (z2) {
-                            String str2;
-                            if (Theme.selectedAutoNightType == 1) {
-                                i2 = NUM;
-                                str2 = "AutoNightScheduled";
+                        if (i >= 0 && i < arrayList.size()) {
+                            ThemeInfo themeInfo = (ThemeInfo) arrayList.get(i);
+                            if (this.currentType == 1) {
+                                Theme.setCurrentNightTheme(themeInfo);
+                            } else if (themeInfo != Theme.getCurrentTheme()) {
+                                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, Boolean.valueOf(false));
                             } else {
-                                i2 = NUM;
-                                str2 = "AutoNightAdaptive";
+                                return;
                             }
-                            str = LocaleController.getString(str2, i2);
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append(str);
-                            stringBuilder.append(" ");
-                            stringBuilder.append(currentNightThemeName);
-                            currentNightThemeName = stringBuilder.toString();
+                            i4 = this.listView.getChildCount();
+                            int i5;
+                            while (i5 < i4) {
+                                View childAt = this.listView.getChildAt(i5);
+                                if (childAt instanceof ThemeCell) {
+                                    ((ThemeCell) childAt).updateCurrentThemeCheck();
+                                }
+                                i5++;
+                            }
                         }
-                        notificationsCheckCell.setTextAndValueAndCheck(LocaleController.getString("AutoNightTheme", NUM), currentNightThemeName, z2, true);
-                    }
-                } else if (i == this.nightDisabledRow) {
-                    Theme.selectedAutoNightType = 0;
-                    updateRows();
-                    Theme.checkAutoNightThemeConditions();
-                } else if (i == this.nightScheduledRow) {
-                    Theme.selectedAutoNightType = 1;
-                    if (Theme.autoNightScheduleByLocation) {
-                        updateSunTime(null, true);
-                    }
-                    updateRows();
-                    Theme.checkAutoNightThemeConditions();
-                } else if (i == this.nightAutomaticRow) {
-                    Theme.selectedAutoNightType = 2;
-                    updateRows();
-                    Theme.checkAutoNightThemeConditions();
-                } else if (i == this.scheduleLocationRow) {
-                    Theme.autoNightScheduleByLocation ^= 1;
-                    ((TextCheckCell) view).setChecked(Theme.autoNightScheduleByLocation);
-                    updateRows();
-                    if (Theme.autoNightScheduleByLocation) {
-                        updateSunTime(null, true);
-                    }
-                    Theme.checkAutoNightThemeConditions();
-                } else if (i == this.scheduleFromRow || i == this.scheduleToRow) {
-                    if (getParentActivity() != null) {
-                        int i6;
-                        if (i == this.scheduleFromRow) {
-                            i2 = Theme.autoNightDayStartTime;
-                            i6 = i2 / 60;
+                    } else if (i == this.nightThemeRow) {
+                        if ((!LocaleController.isRTL || f > ((float) AndroidUtilities.dp(76.0f))) && (LocaleController.isRTL || f < ((float) (view.getMeasuredWidth() - AndroidUtilities.dp(76.0f))))) {
+                            presentFragment(new ThemeActivity(1));
                         } else {
-                            i2 = Theme.autoNightDayEndTime;
-                            i6 = i2 / 60;
+                            NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) view;
+                            if (Theme.selectedAutoNightType == 0) {
+                                Theme.selectedAutoNightType = 2;
+                                notificationsCheckCell.setChecked(true);
+                            } else {
+                                Theme.selectedAutoNightType = 0;
+                                notificationsCheckCell.setChecked(false);
+                            }
+                            Theme.saveAutoNightThemeConfig();
+                            Theme.checkAutoNightThemeConditions();
+                            if (Theme.selectedAutoNightType != 0) {
+                                z2 = true;
+                            }
+                            CharSequence currentNightThemeName = z2 ? Theme.getCurrentNightThemeName() : LocaleController.getString("AutoNightThemeOff", NUM);
+                            if (z2) {
+                                String str3;
+                                if (Theme.selectedAutoNightType == 1) {
+                                    i2 = NUM;
+                                    str3 = "AutoNightScheduled";
+                                } else {
+                                    i2 = NUM;
+                                    str3 = "AutoNightAdaptive";
+                                }
+                                str = LocaleController.getString(str3, i2);
+                                StringBuilder stringBuilder = new StringBuilder();
+                                stringBuilder.append(str);
+                                stringBuilder.append(" ");
+                                stringBuilder.append(currentNightThemeName);
+                                currentNightThemeName = stringBuilder.toString();
+                            }
+                            notificationsCheckCell.setTextAndValueAndCheck(LocaleController.getString("AutoNightTheme", NUM), currentNightThemeName, z2, true);
                         }
-                        showDialog(new TimePickerDialog(getParentActivity(), new -$$Lambda$ThemeActivity$NM7fAI0FGrIygn_Tl1Tnvhrr91Y(this, i, (TextSettingsCell) view), i6, i2 - (i6 * 60), true));
+                    } else if (i == this.nightDisabledRow) {
+                        Theme.selectedAutoNightType = 0;
+                        updateRows();
+                        Theme.checkAutoNightThemeConditions();
+                    } else if (i == this.nightScheduledRow) {
+                        Theme.selectedAutoNightType = 1;
+                        if (Theme.autoNightScheduleByLocation) {
+                            updateSunTime(null, true);
+                        }
+                        updateRows();
+                        Theme.checkAutoNightThemeConditions();
+                    } else if (i == this.nightAutomaticRow) {
+                        Theme.selectedAutoNightType = 2;
+                        updateRows();
+                        Theme.checkAutoNightThemeConditions();
+                    } else if (i == this.scheduleLocationRow) {
+                        Theme.autoNightScheduleByLocation ^= 1;
+                        ((TextCheckCell) view).setChecked(Theme.autoNightScheduleByLocation);
+                        updateRows();
+                        if (Theme.autoNightScheduleByLocation) {
+                            updateSunTime(null, true);
+                        }
+                        Theme.checkAutoNightThemeConditions();
+                    } else if (i == this.scheduleFromRow || i == this.scheduleToRow) {
+                        if (getParentActivity() != null) {
+                            int i6;
+                            if (i == this.scheduleFromRow) {
+                                i2 = Theme.autoNightDayStartTime;
+                                i6 = i2 / 60;
+                            } else {
+                                i2 = Theme.autoNightDayEndTime;
+                                i6 = i2 / 60;
+                            }
+                            showDialog(new TimePickerDialog(getParentActivity(), new -$$Lambda$ThemeActivity$NLpLs4DhCd_iMAEVJCE3ibkqEYM(this, i, (TextSettingsCell) view), i6, i2 - (i6 * 60), true));
+                        }
+                    } else if (i == this.scheduleUpdateLocationRow) {
+                        updateSunTime(null, true);
                     }
-                } else if (i == this.scheduleUpdateLocationRow) {
-                    updateSunTime(null, true);
                 }
             }
         }
     }
 
-    public /* synthetic */ void lambda$null$1$ThemeActivity(int i, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$null$1$ThemeActivity(DialogInterface dialogInterface, int i) {
+        SharedConfig.setDistanceSystemType(i);
+        ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.distanceRow);
+        if (findViewHolderForAdapterPosition != null) {
+            this.listAdapter.onBindViewHolder(findViewHolderForAdapterPosition, this.distanceRow);
+        }
+    }
+
+    public /* synthetic */ void lambda$null$2$ThemeActivity(int i, DialogInterface dialogInterface, int i2) {
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("sortContactsBy", i2);
         edit.commit();
@@ -1917,14 +1953,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    static /* synthetic */ void lambda$null$2(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$null$3(boolean[] zArr, View view) {
         CheckBoxCell checkBoxCell = (CheckBoxCell) view;
         int intValue = ((Integer) checkBoxCell.getTag()).intValue();
         zArr[intValue] = zArr[intValue] ^ 1;
         checkBoxCell.setChecked(zArr[intValue], true);
     }
 
-    public /* synthetic */ void lambda$null$3$ThemeActivity(boolean[] zArr, int i, View view) {
+    public /* synthetic */ void lambda$null$4$ThemeActivity(boolean[] zArr, int i, View view) {
         try {
             if (this.visibleDialog != null) {
                 this.visibleDialog.dismiss();
@@ -1946,7 +1982,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    public /* synthetic */ void lambda$null$4$ThemeActivity(int i, TextSettingsCell textSettingsCell, TimePicker timePicker, int i2, int i3) {
+    public /* synthetic */ void lambda$null$5$ThemeActivity(int i, TextSettingsCell textSettingsCell, TimePicker timePicker, int i2, int i3) {
         int i4 = (i2 * 60) + i3;
         String str = "%02d:%02d";
         if (i == this.scheduleFromRow) {
@@ -1972,7 +2008,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(LocaleController.getString("NewTheme", NUM));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), -$$Lambda$ThemeActivity$Fq-Zy67h0RlXwDUh_E75MeVk8fE.INSTANCE);
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), -$$Lambda$ThemeActivity$qFtHe50_ifU97oyJPTOMCLASSNAMElb-4.INSTANCE);
         LinearLayout linearLayout = new LinearLayout(getParentActivity());
         linearLayout.setOrientation(1);
         builder.setView(linearLayout);
@@ -1996,19 +2032,19 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         editTextBoldCursor.setCursorWidth(1.5f);
         editTextBoldCursor.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
         linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, 36, 51, 24, 6, 24, 0));
-        editTextBoldCursor.setOnEditorActionListener(-$$Lambda$ThemeActivity$oWMEMCEfOWz5AenMBirLxMHUSLA.INSTANCE);
+        editTextBoldCursor.setOnEditorActionListener(-$$Lambda$ThemeActivity$UtOgQevuPsMcT5YWzA_L_XdJ6GE.INSTANCE);
         AlertDialog create = builder.create();
-        create.setOnShowListener(new -$$Lambda$ThemeActivity$pMIDVqVy4Cqc6NEOajbkSuFQwZA(editTextBoldCursor));
+        create.setOnShowListener(new -$$Lambda$ThemeActivity$Py-jct2pO3d853NUYha3H1otW1E(editTextBoldCursor));
         showDialog(create);
-        create.getButton(-1).setOnClickListener(new -$$Lambda$ThemeActivity$9RPKhWFFO8KxhnQ8K0AhpMvKhFA(this, editTextBoldCursor, create));
+        create.getButton(-1).setOnClickListener(new -$$Lambda$ThemeActivity$m-0ACTFYxyp1was-YBB2FgoAlpI(this, editTextBoldCursor, create));
     }
 
-    static /* synthetic */ void lambda$null$8(EditTextBoldCursor editTextBoldCursor) {
+    static /* synthetic */ void lambda$null$9(EditTextBoldCursor editTextBoldCursor) {
         editTextBoldCursor.requestFocus();
         AndroidUtilities.showKeyboard(editTextBoldCursor);
     }
 
-    public /* synthetic */ void lambda$openThemeCreate$10$ThemeActivity(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, View view) {
+    public /* synthetic */ void lambda$openThemeCreate$11$ThemeActivity(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, View view) {
         if (editTextBoldCursor.length() == 0) {
             Vibrator vibrator = (Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator");
             if (vibrator != null) {
@@ -2058,7 +2094,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("GpsDisabledAlert", NUM));
-                        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new -$$Lambda$ThemeActivity$fvRbp4i9JBIdpZn90Y9NJP-7GVc(this));
+                        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new -$$Lambda$ThemeActivity$mVAtg0YWSeLeJ8g-Sfv2FYT0sNs(this));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                         showDialog(builder.create());
                         return;
@@ -2096,7 +2132,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         Calendar instance = Calendar.getInstance();
         instance.setTimeInMillis(System.currentTimeMillis());
         Theme.autoNightLastSunCheckDay = instance.get(5);
-        Utilities.globalQueue.postRunnable(new -$$Lambda$ThemeActivity$bw9bigoIiGmqIM9XZH7TFdPN3XE(this));
+        Utilities.globalQueue.postRunnable(new -$$Lambda$ThemeActivity$GZQKUE0cKd9OFksp7NGMN416-vY(this));
         Holder holder = (Holder) this.listView.findViewHolderForAdapterPosition(this.scheduleLocationInfoRow);
         if (holder != null) {
             View view = holder.itemView;
@@ -2109,7 +2145,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    public /* synthetic */ void lambda$updateSunTime$11$ThemeActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$updateSunTime$12$ThemeActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
                 getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
@@ -2118,7 +2154,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    public /* synthetic */ void lambda$updateSunTime$13$ThemeActivity() {
+    public /* synthetic */ void lambda$updateSunTime$14$ThemeActivity() {
         String str = null;
         try {
             List fromLocation = new Geocoder(ApplicationLoader.applicationContext, Locale.getDefault()).getFromLocation(Theme.autoNightLocationLatitude, Theme.autoNightLocationLongitude, 1);
@@ -2127,10 +2163,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             }
         } catch (Exception unused) {
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ThemeActivity$5EVizJzluGYCke-mYmlNF_TBd-Q(this, str));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$ThemeActivity$RghdrIHDj2WdLl4YvT8var_T-etA(this, str));
     }
 
-    public /* synthetic */ void lambda$null$12$ThemeActivity(String str) {
+    public /* synthetic */ void lambda$null$13$ThemeActivity(String str) {
         Theme.autoNightCityName = str;
         if (Theme.autoNightCityName == null) {
             Theme.autoNightCityName = String.format("(%.06f, %.06f)", new Object[]{Double.valueOf(Theme.autoNightLocationLatitude), Double.valueOf(Theme.autoNightLocationLongitude)});
@@ -2181,13 +2217,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             } else {
                 builder.setMessage(LocaleController.getString("PermissionNoLocation", NUM));
             }
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$ThemeActivity$xPe7XQuRsh6WWeEQTpdUdkf0Mig(this));
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$ThemeActivity$3OhSDQ1s3rked8X9g-Hmi3BPAXg(this));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
             showDialog(builder.create());
         }
     }
 
-    public /* synthetic */ void lambda$showPermissionAlert$14$ThemeActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showPermissionAlert$15$ThemeActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
                 Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");

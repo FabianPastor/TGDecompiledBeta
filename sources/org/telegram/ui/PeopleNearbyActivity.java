@@ -120,13 +120,13 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(74.0f), Theme.getColor("chats_archiveBackground")));
             this.imageView.setImageDrawable(new ShareLocationDrawable(context, 2));
             this.imageView.setScaleType(ScaleType.CENTER);
-            addView(this.imageView, LayoutHelper.createFrame(74, 74.0f, 49, 0.0f, 20.0f, 0.0f, 0.0f));
+            addView(this.imageView, LayoutHelper.createFrame(74, 74.0f, 49, 0.0f, 27.0f, 0.0f, 0.0f));
             this.messageTextView = new TextView(context);
             this.messageTextView.setTextColor(Theme.getColor("chats_message"));
             this.messageTextView.setTextSize(1, 14.0f);
             this.messageTextView.setGravity(17);
             this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PeopleNearbyInfo", NUM, new Object[0])));
-            addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 124.0f, 52.0f, 27.0f));
+            addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 125.0f, 52.0f, 27.0f));
         }
     }
 
@@ -202,16 +202,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         }
 
         private String formatDistance(TL_peerLocated tL_peerLocated) {
-            int i = tL_peerLocated.distance;
-            String str = "%d %s";
-            if (i < 1000) {
-                return String.format(str, new Object[]{Integer.valueOf(Math.max(1, i)), LocaleController.getString("MetersAway", NUM)});
-            }
-            String str2 = "KMetersAway";
-            if (i % 1000 == 0) {
-                return String.format(str, new Object[]{Integer.valueOf(i / 1000), LocaleController.getString(str2, NUM)});
-            }
-            return String.format("%.2f %s", new Object[]{Float.valueOf(((float) i) / 1000.0f), LocaleController.getString(str2, NUM)});
+            return LocaleController.formatDistance((float) tL_peerLocated.distance);
         }
 
         public void onBindViewHolder(ViewHolder viewHolder, int i) {

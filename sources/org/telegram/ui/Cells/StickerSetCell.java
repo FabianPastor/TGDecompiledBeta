@@ -20,7 +20,9 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -61,6 +63,7 @@ public class StickerSetCell extends FrameLayout {
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
         this.imageView = new BackupImageView(context2);
         this.imageView.setAspectFit(true);
+        this.imageView.setLayerNum(1);
         addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         if (i2 == 2) {
             this.progressView = new RadialProgressView(getContext());
@@ -162,7 +165,12 @@ public class StickerSetCell extends FrameLayout {
         }
         this.valueTextView.setText(LocaleController.formatPluralString(str, arrayList.size()));
         Document document = (Document) arrayList.get(0);
-        this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90), document), null, "webp", null, (Object) tL_messages_stickerSet);
+        PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
+        if (MessageObject.canAutoplayAnimatedSticker(document)) {
+            this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, document), null, 0, tL_messages_stickerSet);
+            return;
+        }
+        this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document), null, "webp", null, (Object) tL_messages_stickerSet);
     }
 
     public void setChecked(boolean z) {

@@ -240,396 +240,396 @@ public class M4AInfo extends AudioInfo {
         r5 = 1;
         r6 = 2;
         switch(r3) {
-            case 2954818: goto L_0x0110;
-            case 3059752: goto L_0x0106;
-            case 3060304: goto L_0x00fc;
-            case 3060591: goto L_0x00f1;
-            case 3083677: goto L_0x00e6;
-            case 3177818: goto L_0x00db;
-            case 3511163: goto L_0x00d0;
-            case 3564088: goto L_0x00c5;
-            case 3568737: goto L_0x00ba;
-            case 5099770: goto L_0x00af;
-            case 5131342: goto L_0x00a3;
-            case 5133313: goto L_0x0097;
-            case 5133368: goto L_0x008b;
-            case 5133411: goto L_0x007e;
-            case 5133907: goto L_0x0071;
-            case 5136903: goto L_0x0064;
-            case 5137308: goto L_0x0057;
-            case 5142332: goto L_0x004a;
-            case 5143505: goto L_0x003d;
+            case 2954818: goto L_0x0105;
+            case 3059752: goto L_0x00fb;
+            case 3060304: goto L_0x00f1;
+            case 3060591: goto L_0x00e6;
+            case 3083677: goto L_0x00db;
+            case 3177818: goto L_0x00d0;
+            case 3511163: goto L_0x00c5;
+            case 3564088: goto L_0x00ba;
+            case 3568737: goto L_0x00af;
+            case 5099770: goto L_0x00a5;
+            case 5131342: goto L_0x009a;
+            case 5133313: goto L_0x008f;
+            case 5133368: goto L_0x0084;
+            case 5133411: goto L_0x0078;
+            case 5133907: goto L_0x006c;
+            case 5136903: goto L_0x0060;
+            case 5137308: goto L_0x0054;
+            case 5142332: goto L_0x0048;
+            case 5143505: goto L_0x003c;
             case 5152688: goto L_0x0031;
             default: goto L_0x002f;
         };
     L_0x002f:
-        goto L_0x011a;
+        goto L_0x010f;
     L_0x0031:
         r3 = "©wrt";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x003a:
+        if (r1 == 0) goto L_0x010f;
+    L_0x0039:
         r1 = 5;
-        goto L_0x011b;
-    L_0x003d:
+        goto L_0x0110;
+    L_0x003c:
         r3 = "©nam";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x0046:
+        if (r1 == 0) goto L_0x010f;
+    L_0x0044:
         r1 = 16;
-        goto L_0x011b;
-    L_0x004a:
+        goto L_0x0110;
+    L_0x0048:
         r3 = "©lyr";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x0053:
+        if (r1 == 0) goto L_0x010f;
+    L_0x0050:
         r1 = 15;
-        goto L_0x011b;
-    L_0x0057:
+        goto L_0x0110;
+    L_0x0054:
         r3 = "©grp";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x0060:
+        if (r1 == 0) goto L_0x010f;
+    L_0x005c:
         r1 = 14;
-        goto L_0x011b;
-    L_0x0064:
+        goto L_0x0110;
+    L_0x0060:
         r3 = "©gen";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x006d:
+        if (r1 == 0) goto L_0x010f;
+    L_0x0068:
         r1 = 13;
-        goto L_0x011b;
-    L_0x0071:
+        goto L_0x0110;
+    L_0x006c:
         r3 = "©day";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x007a:
+        if (r1 == 0) goto L_0x010f;
+    L_0x0074:
         r1 = 10;
-        goto L_0x011b;
-    L_0x007e:
+        goto L_0x0110;
+    L_0x0078:
         r3 = "©cpy";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x0087:
+        if (r1 == 0) goto L_0x010f;
+    L_0x0080:
         r1 = 9;
-        goto L_0x011b;
-    L_0x008b:
+        goto L_0x0110;
+    L_0x0084:
         r3 = "©com";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x0094:
+        if (r1 == 0) goto L_0x010f;
+    L_0x008c:
         r1 = 4;
-        goto L_0x011b;
-    L_0x0097:
+        goto L_0x0110;
+    L_0x008f:
         r3 = "©cmt";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00a0:
+        if (r1 == 0) goto L_0x010f;
+    L_0x0097:
         r1 = 3;
-        goto L_0x011b;
-    L_0x00a3:
+        goto L_0x0110;
+    L_0x009a:
         r3 = "©alb";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00ac:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00a2:
         r1 = 0;
-        goto L_0x011b;
-    L_0x00af:
+        goto L_0x0110;
+    L_0x00a5:
         r3 = "©ART";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00b8:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00ad:
         r1 = 2;
-        goto L_0x011b;
-    L_0x00ba:
+        goto L_0x0110;
+    L_0x00af:
         r3 = "trkn";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00c2:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00b7:
         r1 = 19;
-        goto L_0x011b;
-    L_0x00c5:
+        goto L_0x0110;
+    L_0x00ba:
         r3 = "tmpo";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00cd:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00c2:
         r1 = 18;
-        goto L_0x011b;
-    L_0x00d0:
+        goto L_0x0110;
+    L_0x00c5:
         r3 = "rtng";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00d8:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00cd:
         r1 = 17;
-        goto L_0x011b;
-    L_0x00db:
+        goto L_0x0110;
+    L_0x00d0:
         r3 = "gnre";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00e3:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00d8:
         r1 = 12;
-        goto L_0x011b;
-    L_0x00e6:
+        goto L_0x0110;
+    L_0x00db:
         r3 = "disk";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00ee:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00e3:
         r1 = 11;
-        goto L_0x011b;
-    L_0x00f1:
+        goto L_0x0110;
+    L_0x00e6:
         r3 = "cprt";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x00f9:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00ee:
         r1 = 8;
-        goto L_0x011b;
-    L_0x00fc:
+        goto L_0x0110;
+    L_0x00f1:
         r3 = "cpil";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x0104:
+        if (r1 == 0) goto L_0x010f;
+    L_0x00f9:
         r1 = 7;
-        goto L_0x011b;
-    L_0x0106:
+        goto L_0x0110;
+    L_0x00fb:
         r3 = "covr";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x010e:
+        if (r1 == 0) goto L_0x010f;
+    L_0x0103:
         r1 = 6;
-        goto L_0x011b;
-    L_0x0110:
+        goto L_0x0110;
+    L_0x0105:
         r3 = "aART";
         r1 = r1.equals(r3);
-        if (r1 == 0) goto L_0x011a;
-    L_0x0118:
+        if (r1 == 0) goto L_0x010f;
+    L_0x010d:
         r1 = 1;
-        goto L_0x011b;
-    L_0x011a:
+        goto L_0x0110;
+    L_0x010f:
         r1 = -1;
-    L_0x011b:
+    L_0x0110:
         r2 = "UTF-8";
         switch(r1) {
-            case 0: goto L_0x029c;
-            case 1: goto L_0x0295;
-            case 2: goto L_0x028e;
-            case 3: goto L_0x0287;
-            case 4: goto L_0x0272;
-            case 5: goto L_0x0272;
-            case 6: goto L_0x01f1;
-            case 7: goto L_0x01e9;
-            case 8: goto L_0x01d3;
-            case 9: goto L_0x01d3;
-            case 10: goto L_0x01b5;
-            case 11: goto L_0x01a4;
-            case 12: goto L_0x0171;
-            case 13: goto L_0x015b;
-            case 14: goto L_0x0153;
-            case 15: goto L_0x014b;
-            case 16: goto L_0x0143;
-            case 17: goto L_0x013b;
-            case 18: goto L_0x0133;
-            case 19: goto L_0x0122;
-            default: goto L_0x0120;
+            case 0: goto L_0x0291;
+            case 1: goto L_0x028a;
+            case 2: goto L_0x0283;
+            case 3: goto L_0x027c;
+            case 4: goto L_0x0267;
+            case 5: goto L_0x0267;
+            case 6: goto L_0x01e6;
+            case 7: goto L_0x01de;
+            case 8: goto L_0x01c8;
+            case 9: goto L_0x01c8;
+            case 10: goto L_0x01aa;
+            case 11: goto L_0x0199;
+            case 12: goto L_0x0166;
+            case 13: goto L_0x0150;
+            case 14: goto L_0x0148;
+            case 15: goto L_0x0140;
+            case 16: goto L_0x0138;
+            case 17: goto L_0x0130;
+            case 18: goto L_0x0128;
+            case 19: goto L_0x0117;
+            default: goto L_0x0115;
         };
-    L_0x0120:
-        goto L_0x02a2;
-    L_0x0122:
+    L_0x0115:
+        goto L_0x0297;
+    L_0x0117:
         r8.skip(r6);
         r0 = r8.readShort();
         r7.track = r0;
         r8 = r8.readShort();
         r7.tracks = r8;
-        goto L_0x02a2;
-    L_0x0133:
+        goto L_0x0297;
+    L_0x0128:
         r8 = r8.readShort();
         r7.tempo = r8;
-        goto L_0x02a2;
-    L_0x013b:
+        goto L_0x0297;
+    L_0x0130:
         r8 = r8.readByte();
         r7.rating = r8;
-        goto L_0x02a2;
-    L_0x0143:
+        goto L_0x0297;
+    L_0x0138:
         r8 = r8.readString(r2);
         r7.title = r8;
-        goto L_0x02a2;
-    L_0x014b:
+        goto L_0x0297;
+    L_0x0140:
         r8 = r8.readString(r2);
         r7.lyrics = r8;
-        goto L_0x02a2;
-    L_0x0153:
+        goto L_0x0297;
+    L_0x0148:
         r8 = r8.readString(r2);
         r7.grouping = r8;
-        goto L_0x02a2;
-    L_0x015b:
+        goto L_0x0297;
+    L_0x0150:
         r0 = r7.genre;
-        if (r0 == 0) goto L_0x0169;
-    L_0x015f:
+        if (r0 == 0) goto L_0x015e;
+    L_0x0154:
         r0 = r0.trim();
         r0 = r0.length();
-        if (r0 != 0) goto L_0x02a2;
-    L_0x0169:
+        if (r0 != 0) goto L_0x0297;
+    L_0x015e:
         r8 = r8.readString(r2);
         r7.genre = r8;
-        goto L_0x02a2;
-    L_0x0171:
+        goto L_0x0297;
+    L_0x0166:
         r0 = r7.genre;
-        if (r0 == 0) goto L_0x017f;
-    L_0x0175:
+        if (r0 == 0) goto L_0x0174;
+    L_0x016a:
         r0 = r0.trim();
         r0 = r0.length();
-        if (r0 != 0) goto L_0x02a2;
-    L_0x017f:
+        if (r0 != 0) goto L_0x0297;
+    L_0x0174:
         r0 = r8.getRemaining();
         r3 = 2;
         r6 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
-        if (r6 != 0) goto L_0x019c;
-    L_0x0189:
+        if (r6 != 0) goto L_0x0191;
+    L_0x017e:
         r8 = r8.readShort();
         r8 = r8 - r5;
         r8 = org.telegram.messenger.audioinfo.mp3.ID3v1Genre.getGenre(r8);
-        if (r8 == 0) goto L_0x02a2;
-    L_0x0194:
+        if (r8 == 0) goto L_0x0297;
+    L_0x0189:
         r8 = r8.getDescription();
         r7.genre = r8;
-        goto L_0x02a2;
-    L_0x019c:
+        goto L_0x0297;
+    L_0x0191:
         r8 = r8.readString(r2);
         r7.genre = r8;
-        goto L_0x02a2;
-    L_0x01a4:
+        goto L_0x0297;
+    L_0x0199:
         r8.skip(r6);
         r0 = r8.readShort();
         r7.disc = r0;
         r8 = r8.readShort();
         r7.discs = r8;
-        goto L_0x02a2;
-    L_0x01b5:
+        goto L_0x0297;
+    L_0x01aa:
         r8 = r8.readString(r2);
         r8 = r8.trim();
         r1 = r8.length();
-        if (r1 < r0) goto L_0x02a2;
-    L_0x01c3:
-        r8 = r8.substring(r4, r0);	 Catch:{ NumberFormatException -> 0x02a2 }
-        r8 = java.lang.Short.valueOf(r8);	 Catch:{ NumberFormatException -> 0x02a2 }
-        r8 = r8.shortValue();	 Catch:{ NumberFormatException -> 0x02a2 }
-        r7.year = r8;	 Catch:{ NumberFormatException -> 0x02a2 }
-        goto L_0x02a2;
-    L_0x01d3:
+        if (r1 < r0) goto L_0x0297;
+    L_0x01b8:
+        r8 = r8.substring(r4, r0);	 Catch:{ NumberFormatException -> 0x0297 }
+        r8 = java.lang.Short.valueOf(r8);	 Catch:{ NumberFormatException -> 0x0297 }
+        r8 = r8.shortValue();	 Catch:{ NumberFormatException -> 0x0297 }
+        r7.year = r8;	 Catch:{ NumberFormatException -> 0x0297 }
+        goto L_0x0297;
+    L_0x01c8:
         r0 = r7.copyright;
-        if (r0 == 0) goto L_0x01e1;
-    L_0x01d7:
+        if (r0 == 0) goto L_0x01d6;
+    L_0x01cc:
         r0 = r0.trim();
         r0 = r0.length();
-        if (r0 != 0) goto L_0x02a2;
-    L_0x01e1:
+        if (r0 != 0) goto L_0x0297;
+    L_0x01d6:
         r8 = r8.readString(r2);
         r7.copyright = r8;
-        goto L_0x02a2;
-    L_0x01e9:
+        goto L_0x0297;
+    L_0x01de:
         r8 = r8.readBoolean();
         r7.compilation = r8;
-        goto L_0x02a2;
-    L_0x01f1:
-        r8 = r8.readBytes();	 Catch:{ Exception -> 0x026d }
-        r0 = new android.graphics.BitmapFactory$Options;	 Catch:{ Exception -> 0x026d }
-        r0.<init>();	 Catch:{ Exception -> 0x026d }
-        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x026d }
-        r0.inSampleSize = r5;	 Catch:{ Exception -> 0x026d }
-        r1 = r8.length;	 Catch:{ Exception -> 0x026d }
-        android.graphics.BitmapFactory.decodeByteArray(r8, r4, r1, r0);	 Catch:{ Exception -> 0x026d }
-        r1 = r0.outWidth;	 Catch:{ Exception -> 0x026d }
+        goto L_0x0297;
+    L_0x01e6:
+        r8 = r8.readBytes();	 Catch:{ Exception -> 0x0262 }
+        r0 = new android.graphics.BitmapFactory$Options;	 Catch:{ Exception -> 0x0262 }
+        r0.<init>();	 Catch:{ Exception -> 0x0262 }
+        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0262 }
+        r0.inSampleSize = r5;	 Catch:{ Exception -> 0x0262 }
+        r1 = r8.length;	 Catch:{ Exception -> 0x0262 }
+        android.graphics.BitmapFactory.decodeByteArray(r8, r4, r1, r0);	 Catch:{ Exception -> 0x0262 }
+        r1 = r0.outWidth;	 Catch:{ Exception -> 0x0262 }
         r2 = 800; // 0x320 float:1.121E-42 double:3.953E-321;
-        if (r1 > r2) goto L_0x020c;
-    L_0x0208:
-        r1 = r0.outHeight;	 Catch:{ Exception -> 0x026d }
-        if (r1 <= r2) goto L_0x021f;
-    L_0x020c:
-        r1 = r0.outWidth;	 Catch:{ Exception -> 0x026d }
-        r3 = r0.outHeight;	 Catch:{ Exception -> 0x026d }
-        r1 = java.lang.Math.max(r1, r3);	 Catch:{ Exception -> 0x026d }
-    L_0x0214:
-        if (r1 <= r2) goto L_0x021f;
-    L_0x0216:
-        r3 = r0.inSampleSize;	 Catch:{ Exception -> 0x026d }
+        if (r1 > r2) goto L_0x0201;
+    L_0x01fd:
+        r1 = r0.outHeight;	 Catch:{ Exception -> 0x0262 }
+        if (r1 <= r2) goto L_0x0214;
+    L_0x0201:
+        r1 = r0.outWidth;	 Catch:{ Exception -> 0x0262 }
+        r3 = r0.outHeight;	 Catch:{ Exception -> 0x0262 }
+        r1 = java.lang.Math.max(r1, r3);	 Catch:{ Exception -> 0x0262 }
+    L_0x0209:
+        if (r1 <= r2) goto L_0x0214;
+    L_0x020b:
+        r3 = r0.inSampleSize;	 Catch:{ Exception -> 0x0262 }
         r3 = r3 * 2;
-        r0.inSampleSize = r3;	 Catch:{ Exception -> 0x026d }
+        r0.inSampleSize = r3;	 Catch:{ Exception -> 0x0262 }
         r1 = r1 / 2;
-        goto L_0x0214;
-    L_0x021f:
-        r0.inJustDecodeBounds = r4;	 Catch:{ Exception -> 0x026d }
-        r1 = r8.length;	 Catch:{ Exception -> 0x026d }
-        r8 = android.graphics.BitmapFactory.decodeByteArray(r8, r4, r1, r0);	 Catch:{ Exception -> 0x026d }
-        r7.cover = r8;	 Catch:{ Exception -> 0x026d }
-        r8 = r7.cover;	 Catch:{ Exception -> 0x026d }
-        if (r8 == 0) goto L_0x02a2;
-    L_0x022c:
-        r8 = r7.cover;	 Catch:{ Exception -> 0x026d }
-        r8 = r8.getWidth();	 Catch:{ Exception -> 0x026d }
-        r0 = r7.cover;	 Catch:{ Exception -> 0x026d }
-        r0 = r0.getHeight();	 Catch:{ Exception -> 0x026d }
-        r8 = java.lang.Math.max(r8, r0);	 Catch:{ Exception -> 0x026d }
-        r8 = (float) r8;	 Catch:{ Exception -> 0x026d }
+        goto L_0x0209;
+    L_0x0214:
+        r0.inJustDecodeBounds = r4;	 Catch:{ Exception -> 0x0262 }
+        r1 = r8.length;	 Catch:{ Exception -> 0x0262 }
+        r8 = android.graphics.BitmapFactory.decodeByteArray(r8, r4, r1, r0);	 Catch:{ Exception -> 0x0262 }
+        r7.cover = r8;	 Catch:{ Exception -> 0x0262 }
+        r8 = r7.cover;	 Catch:{ Exception -> 0x0262 }
+        if (r8 == 0) goto L_0x0297;
+    L_0x0221:
+        r8 = r7.cover;	 Catch:{ Exception -> 0x0262 }
+        r8 = r8.getWidth();	 Catch:{ Exception -> 0x0262 }
+        r0 = r7.cover;	 Catch:{ Exception -> 0x0262 }
+        r0 = r0.getHeight();	 Catch:{ Exception -> 0x0262 }
+        r8 = java.lang.Math.max(r8, r0);	 Catch:{ Exception -> 0x0262 }
+        r8 = (float) r8;	 Catch:{ Exception -> 0x0262 }
         r0 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r8 = r8 / r0;
         r0 = 0;
         r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0260;
-    L_0x0245:
-        r0 = r7.cover;	 Catch:{ Exception -> 0x026d }
-        r1 = r7.cover;	 Catch:{ Exception -> 0x026d }
-        r1 = r1.getWidth();	 Catch:{ Exception -> 0x026d }
-        r1 = (float) r1;	 Catch:{ Exception -> 0x026d }
+        if (r0 <= 0) goto L_0x0255;
+    L_0x023a:
+        r0 = r7.cover;	 Catch:{ Exception -> 0x0262 }
+        r1 = r7.cover;	 Catch:{ Exception -> 0x0262 }
+        r1 = r1.getWidth();	 Catch:{ Exception -> 0x0262 }
+        r1 = (float) r1;	 Catch:{ Exception -> 0x0262 }
         r1 = r1 / r8;
-        r1 = (int) r1;	 Catch:{ Exception -> 0x026d }
-        r2 = r7.cover;	 Catch:{ Exception -> 0x026d }
-        r2 = r2.getHeight();	 Catch:{ Exception -> 0x026d }
-        r2 = (float) r2;	 Catch:{ Exception -> 0x026d }
+        r1 = (int) r1;	 Catch:{ Exception -> 0x0262 }
+        r2 = r7.cover;	 Catch:{ Exception -> 0x0262 }
+        r2 = r2.getHeight();	 Catch:{ Exception -> 0x0262 }
+        r2 = (float) r2;	 Catch:{ Exception -> 0x0262 }
         r2 = r2 / r8;
-        r8 = (int) r2;	 Catch:{ Exception -> 0x026d }
-        r8 = android.graphics.Bitmap.createScaledBitmap(r0, r1, r8, r5);	 Catch:{ Exception -> 0x026d }
-        r7.smallCover = r8;	 Catch:{ Exception -> 0x026d }
-        goto L_0x0264;
-    L_0x0260:
-        r8 = r7.cover;	 Catch:{ Exception -> 0x026d }
-        r7.smallCover = r8;	 Catch:{ Exception -> 0x026d }
-    L_0x0264:
-        r8 = r7.smallCover;	 Catch:{ Exception -> 0x026d }
-        if (r8 != 0) goto L_0x02a2;
-    L_0x0268:
-        r8 = r7.cover;	 Catch:{ Exception -> 0x026d }
-        r7.smallCover = r8;	 Catch:{ Exception -> 0x026d }
-        goto L_0x02a2;
-    L_0x026d:
+        r8 = (int) r2;	 Catch:{ Exception -> 0x0262 }
+        r8 = android.graphics.Bitmap.createScaledBitmap(r0, r1, r8, r5);	 Catch:{ Exception -> 0x0262 }
+        r7.smallCover = r8;	 Catch:{ Exception -> 0x0262 }
+        goto L_0x0259;
+    L_0x0255:
+        r8 = r7.cover;	 Catch:{ Exception -> 0x0262 }
+        r7.smallCover = r8;	 Catch:{ Exception -> 0x0262 }
+    L_0x0259:
+        r8 = r7.smallCover;	 Catch:{ Exception -> 0x0262 }
+        if (r8 != 0) goto L_0x0297;
+    L_0x025d:
+        r8 = r7.cover;	 Catch:{ Exception -> 0x0262 }
+        r7.smallCover = r8;	 Catch:{ Exception -> 0x0262 }
+        goto L_0x0297;
+    L_0x0262:
         r8 = move-exception;
         r8.printStackTrace();
-        goto L_0x02a2;
-    L_0x0272:
+        goto L_0x0297;
+    L_0x0267:
         r0 = r7.composer;
-        if (r0 == 0) goto L_0x0280;
-    L_0x0276:
+        if (r0 == 0) goto L_0x0275;
+    L_0x026b:
         r0 = r0.trim();
         r0 = r0.length();
-        if (r0 != 0) goto L_0x02a2;
-    L_0x0280:
+        if (r0 != 0) goto L_0x0297;
+    L_0x0275:
         r8 = r8.readString(r2);
         r7.composer = r8;
-        goto L_0x02a2;
-    L_0x0287:
+        goto L_0x0297;
+    L_0x027c:
         r8 = r8.readString(r2);
         r7.comment = r8;
-        goto L_0x02a2;
-    L_0x028e:
+        goto L_0x0297;
+    L_0x0283:
         r8 = r8.readString(r2);
         r7.artist = r8;
-        goto L_0x02a2;
-    L_0x0295:
+        goto L_0x0297;
+    L_0x028a:
         r8 = r8.readString(r2);
         r7.albumArtist = r8;
-        goto L_0x02a2;
-    L_0x029c:
+        goto L_0x0297;
+    L_0x0291:
         r8 = r8.readString(r2);
         r7.album = r8;
-    L_0x02a2:
+    L_0x0297:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.audioinfo.m4a.M4AInfo.data(org.telegram.messenger.audioinfo.m4a.MP4Atom):void");

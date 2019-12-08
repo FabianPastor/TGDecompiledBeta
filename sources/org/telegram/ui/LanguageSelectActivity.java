@@ -88,28 +88,28 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             return new Holder(shadowSectionCell);
         }
 
-        /* JADX WARNING: Missing block: B:12:0x0066, code skipped:
-            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$800(r6.this$0).size() - 1)) goto L_0x0068;
+        /* JADX WARNING: Missing block: B:12:0x0065, code skipped:
+            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$800(r6.this$0).size() - 1)) goto L_0x0067;
      */
-        /* JADX WARNING: Missing block: B:14:0x006a, code skipped:
+        /* JADX WARNING: Missing block: B:14:0x0069, code skipped:
             r8 = 0;
      */
-        /* JADX WARNING: Missing block: B:21:0x009d, code skipped:
-            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$1000(r6.this$0).size() - 1)) goto L_0x0068;
+        /* JADX WARNING: Missing block: B:21:0x009c, code skipped:
+            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$1000(r6.this$0).size() - 1)) goto L_0x0067;
      */
-        /* JADX WARNING: Missing block: B:26:0x00cf, code skipped:
-            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$900(r6.this$0).size() - 1)) goto L_0x0068;
+        /* JADX WARNING: Missing block: B:26:0x00ce, code skipped:
+            if (r8 == (org.telegram.ui.LanguageSelectActivity.access$900(r6.this$0).size() - 1)) goto L_0x0067;
      */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r7, int r8) {
             /*
             r6 = this;
             r0 = r7.getItemViewType();
             r1 = 1;
-            if (r0 == 0) goto L_0x0046;
+            if (r0 == 0) goto L_0x0045;
         L_0x0007:
             if (r0 == r1) goto L_0x000b;
         L_0x0009:
-            goto L_0x0109;
+            goto L_0x0108;
         L_0x000b:
             r7 = r7.itemView;
             r7 = (org.telegram.ui.Cells.ShadowSectionCell) r7;
@@ -117,31 +117,31 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             r0 = r0.unofficialLanguages;
             r0 = r0.isEmpty();
             r1 = "windowBackgroundGrayShadow";
-            if (r0 != 0) goto L_0x0038;
-        L_0x001e:
+            if (r0 != 0) goto L_0x0037;
+        L_0x001d:
             r0 = org.telegram.ui.LanguageSelectActivity.this;
             r0 = r0.unofficialLanguages;
             r0 = r0.size();
-            if (r8 != r0) goto L_0x0038;
-        L_0x002a:
+            if (r8 != r0) goto L_0x0037;
+        L_0x0029:
             r8 = r6.mContext;
-            r0 = NUM; // 0x7var_e5 float:1.7945042E38 double:1.052935616E-314;
+            r0 = NUM; // 0x7var_ float:1.7944874E38 double:1.052935575E-314;
             r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r8, r0, r1);
             r7.setBackgroundDrawable(r8);
-            goto L_0x0109;
-        L_0x0038:
+            goto L_0x0108;
+        L_0x0037:
             r8 = r6.mContext;
-            r0 = NUM; // 0x7var_e6 float:1.7945044E38 double:1.0529356167E-314;
+            r0 = NUM; // 0x7var_ float:1.7944876E38 double:1.0529355757E-314;
             r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r8, r0, r1);
             r7.setBackgroundDrawable(r8);
-            goto L_0x0109;
-        L_0x0046:
+            goto L_0x0108;
+        L_0x0045:
             r7 = r7.itemView;
             r7 = (org.telegram.ui.Cells.LanguageCell) r7;
             r0 = r6.search;
             r2 = 0;
-            if (r0 == 0) goto L_0x006c;
-        L_0x004f:
+            if (r0 == 0) goto L_0x006b;
+        L_0x004e:
             r0 = org.telegram.ui.LanguageSelectActivity.this;
             r0 = r0.searchResult;
             r0 = r0.get(r8);
@@ -150,26 +150,26 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             r3 = r3.searchResult;
             r3 = r3.size();
             r3 = r3 - r1;
-            if (r8 != r3) goto L_0x006a;
-        L_0x0068:
+            if (r8 != r3) goto L_0x0069;
+        L_0x0067:
             r8 = 1;
-            goto L_0x00d2;
-        L_0x006a:
+            goto L_0x00d1;
+        L_0x0069:
             r8 = 0;
-            goto L_0x00d2;
-        L_0x006c:
+            goto L_0x00d1;
+        L_0x006b:
             r0 = org.telegram.ui.LanguageSelectActivity.this;
             r0 = r0.unofficialLanguages;
             r0 = r0.isEmpty();
-            if (r0 != 0) goto L_0x00a0;
-        L_0x0078:
-            if (r8 < 0) goto L_0x00a0;
-        L_0x007a:
+            if (r0 != 0) goto L_0x009f;
+        L_0x0077:
+            if (r8 < 0) goto L_0x009f;
+        L_0x0079:
             r0 = org.telegram.ui.LanguageSelectActivity.this;
             r0 = r0.unofficialLanguages;
             r0 = r0.size();
-            if (r8 >= r0) goto L_0x00a0;
-        L_0x0086:
+            if (r8 >= r0) goto L_0x009f;
+        L_0x0085:
             r0 = org.telegram.ui.LanguageSelectActivity.this;
             r0 = r0.unofficialLanguages;
             r0 = r0.get(r8);
@@ -178,21 +178,21 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             r3 = r3.unofficialLanguages;
             r3 = r3.size();
             r3 = r3 - r1;
-            if (r8 != r3) goto L_0x006a;
+            if (r8 != r3) goto L_0x0069;
+        L_0x009e:
+            goto L_0x0067;
         L_0x009f:
-            goto L_0x0068;
-        L_0x00a0:
             r0 = org.telegram.ui.LanguageSelectActivity.this;
             r0 = r0.unofficialLanguages;
             r0 = r0.isEmpty();
-            if (r0 != 0) goto L_0x00b8;
-        L_0x00ac:
+            if (r0 != 0) goto L_0x00b7;
+        L_0x00ab:
             r0 = org.telegram.ui.LanguageSelectActivity.this;
             r0 = r0.unofficialLanguages;
             r0 = r0.size();
             r0 = r0 + r1;
             r8 = r8 - r0;
-        L_0x00b8:
+        L_0x00b7:
             r0 = org.telegram.ui.LanguageSelectActivity.this;
             r0 = r0.sortedLanguages;
             r0 = r0.get(r8);
@@ -201,18 +201,18 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             r3 = r3.sortedLanguages;
             r3 = r3.size();
             r3 = r3 - r1;
-            if (r8 != r3) goto L_0x006a;
+            if (r8 != r3) goto L_0x0069;
+        L_0x00d0:
+            goto L_0x0067;
         L_0x00d1:
-            goto L_0x0068;
-        L_0x00d2:
             r3 = r0.isLocal();
-            if (r3 == 0) goto L_0x00f5;
-        L_0x00d8:
+            if (r3 == 0) goto L_0x00f4;
+        L_0x00d7:
             r3 = 2;
             r3 = new java.lang.Object[r3];
             r4 = r0.name;
             r3[r2] = r4;
-            r4 = NUM; // 0x7f0d0549 float:1.8744859E38 double:1.053130446E-314;
+            r4 = NUM; // 0x7f0d054f float:1.8744871E38 double:1.053130449E-314;
             r5 = "LanguageCustom";
             r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
             r3[r1] = r4;
@@ -220,22 +220,22 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             r3 = java.lang.String.format(r4, r3);
             r8 = r8 ^ r1;
             r7.setLanguage(r0, r3, r8);
-            goto L_0x00fa;
-        L_0x00f5:
+            goto L_0x00f9;
+        L_0x00f4:
             r3 = 0;
             r8 = r8 ^ r1;
             r7.setLanguage(r0, r3, r8);
-        L_0x00fa:
+        L_0x00f9:
             r8 = org.telegram.messenger.LocaleController.getInstance();
             r8 = r8.getCurrentLocaleInfo();
-            if (r0 != r8) goto L_0x0105;
+            if (r0 != r8) goto L_0x0104;
+        L_0x0103:
+            goto L_0x0105;
         L_0x0104:
-            goto L_0x0106;
-        L_0x0105:
             r1 = 0;
-        L_0x0106:
+        L_0x0105:
             r7.setLanguageSelected(r1);
-        L_0x0109:
+        L_0x0108:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LanguageSelectActivity$ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

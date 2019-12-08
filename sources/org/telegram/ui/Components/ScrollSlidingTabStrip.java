@@ -17,6 +17,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
@@ -140,6 +141,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.tabsContainer.addView(frameLayout);
         frameLayout.setSelected(i == this.currentPosition);
         BackupImageView backupImageView = new BackupImageView(getContext());
+        backupImageView.setLayerNum(1);
         backupImageView.setRoundRadius(AndroidUtilities.dp(15.0f));
         Drawable avatarDrawable = new AvatarDrawable();
         avatarDrawable.setTextSize(AndroidUtilities.dp(14.0f));
@@ -165,6 +167,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.tabsContainer.addView(frameLayout);
         frameLayout.setSelected(i == this.currentPosition);
         BackupImageView backupImageView = new BackupImageView(getContext());
+        backupImageView.setLayerNum(1);
         backupImageView.setAspectFit(true);
         frameLayout.addView(backupImageView, LayoutHelper.createFrame(30, 30, 17));
         return frameLayout;
@@ -221,14 +224,24 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             Object tag = childAt.getTag();
             Object tag2 = childAt.getTag(NUM);
             Document document = (Document) childAt.getTag(NUM);
-            if (tag instanceof Document) {
+            boolean z = tag instanceof Document;
+            if (z) {
                 forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90), document);
             } else if (tag instanceof PhotoSize) {
                 forDocument = ImageLocation.getForSticker((PhotoSize) tag, document);
             } else {
                 scrollX++;
             }
-            ((BackupImageView) ((FrameLayout) childAt).getChildAt(0)).setImage(forDocument, null, "webp", null, tag2);
+            if (forDocument != null) {
+                BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
+                if (z && MessageObject.isAnimatedStickerDocument(document)) {
+                    backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
+                } else if (forDocument.lottieAnimation) {
+                    backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
+                } else {
+                    backupImageView.setImage(forDocument, null, "webp", null, tag2);
+                }
+            }
             scrollX++;
         }
     }
@@ -249,17 +262,23 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 Object tag = childAt.getTag();
                 Object tag2 = childAt.getTag(NUM);
                 Document document = (Document) childAt.getTag(NUM);
-                if (tag instanceof Document) {
+                boolean z = tag instanceof Document;
+                if (z) {
                     forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90), document);
                 } else if (tag instanceof PhotoSize) {
                     forDocument = ImageLocation.getForSticker((PhotoSize) tag, document);
                 }
-                ImageLocation imageLocation = forDocument;
-                BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
-                if (i4 < i || i4 >= i + i2) {
-                    backupImageView.setImageDrawable(null);
-                } else {
-                    backupImageView.setImage(imageLocation, null, "webp", null, tag2);
+                if (forDocument != null) {
+                    BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
+                    if (i4 < i || i4 >= i + i2) {
+                        backupImageView.setImageDrawable(null);
+                    } else if (z && MessageObject.isAnimatedStickerDocument(document)) {
+                        backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
+                    } else if (forDocument.lottieAnimation) {
+                        backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
+                    } else {
+                        backupImageView.setImage(forDocument, null, "webp", null, tag2);
+                    }
                 }
             }
             i4++;

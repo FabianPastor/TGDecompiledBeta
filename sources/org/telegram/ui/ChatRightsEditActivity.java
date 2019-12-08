@@ -678,7 +678,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     for (int i3 = 0; i3 < bottomSheetCellArr.length; i3++) {
                         CharSequence string;
                         bottomSheetCellArr[i3] = new BottomSheetCell(context, 0);
-                        bottomSheetCellArr[i3].setPadding(AndroidUtilities.dp(23.0f), 0, AndroidUtilities.dp(23.0f), 0);
+                        bottomSheetCellArr[i3].setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
                         bottomSheetCellArr[i3].setTag(Integer.valueOf(i3));
                         bottomSheetCellArr[i3].setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         if (i3 == 0) {
@@ -688,7 +688,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         } else if (i3 == 2) {
                             string = LocaleController.formatPluralString("Weeks", 1);
                         } else if (i3 != 3) {
-                            string = LocaleController.getString("NotificationsCustom", NUM);
+                            string = LocaleController.getString("UserRestrictionsCustom", NUM);
                         } else {
                             string = LocaleController.formatPluralString("Months", 1);
                         }
