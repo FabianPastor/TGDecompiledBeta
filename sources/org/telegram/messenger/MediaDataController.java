@@ -2372,10 +2372,6 @@ public class MediaDataController extends BaseController {
         return this.searchResultMessages;
     }
 
-    public void clearFoundMessageObjects() {
-        this.searchResultMessages.clear();
-    }
-
     public boolean isMessageFound(int i, boolean z) {
         return this.searchResultMessagesMap[z].indexOfKey(i) >= 0;
     }

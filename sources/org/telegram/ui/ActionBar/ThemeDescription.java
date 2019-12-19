@@ -217,64 +217,63 @@ public class ThemeDescription {
 
     public void setColor(int i, boolean z, boolean z2) {
         Drawable background;
-        int i2;
         RecyclerListView recyclerListView;
-        int i3;
+        int i2;
         if (z2) {
             Theme.setColor(this.currentKey, i, z);
         }
         this.currentColor = i;
-        int i4 = this.alphaOverride;
-        if (i4 > 0) {
-            i = Color.argb(i4, Color.red(i), Color.green(i), Color.blue(i));
+        int i3 = this.alphaOverride;
+        if (i3 > 0) {
+            i = Color.argb(i3, Color.red(i), Color.green(i), Color.blue(i));
         }
-        int i5 = 0;
+        int i4 = 0;
         if (this.paintToUpdate != null) {
-            i4 = 0;
+            i3 = 0;
             while (true) {
                 Paint[] paintArr = this.paintToUpdate;
-                if (i4 >= paintArr.length) {
+                if (i3 >= paintArr.length) {
                     break;
                 }
-                if ((this.changeFlags & FLAG_LINKCOLOR) == 0 || !(paintArr[i4] instanceof TextPaint)) {
-                    this.paintToUpdate[i4].setColor(i);
+                if ((this.changeFlags & FLAG_LINKCOLOR) == 0 || !(paintArr[i3] instanceof TextPaint)) {
+                    this.paintToUpdate[i3].setColor(i);
                 } else {
-                    ((TextPaint) paintArr[i4]).linkColor = i;
+                    ((TextPaint) paintArr[i3]).linkColor = i;
                 }
-                i4++;
+                i3++;
             }
         }
         if (this.drawablesToUpdate != null) {
-            i4 = 0;
+            i3 = 0;
             while (true) {
                 Drawable[] drawableArr = this.drawablesToUpdate;
-                if (i4 >= drawableArr.length) {
+                if (i3 >= drawableArr.length) {
                     break;
                 }
-                if (drawableArr[i4] != null) {
-                    if (drawableArr[i4] instanceof ScamDrawable) {
-                        ((ScamDrawable) drawableArr[i4]).setColor(i);
-                    } else if (drawableArr[i4] instanceof RLottieDrawable) {
+                if (drawableArr[i3] != null) {
+                    if (drawableArr[i3] instanceof ScamDrawable) {
+                        ((ScamDrawable) drawableArr[i3]).setColor(i);
+                    } else if (drawableArr[i3] instanceof RLottieDrawable) {
                         if (this.lottieLayerName != null) {
-                            RLottieDrawable rLottieDrawable = (RLottieDrawable) drawableArr[i4];
+                            RLottieDrawable rLottieDrawable = (RLottieDrawable) drawableArr[i3];
                             StringBuilder stringBuilder = new StringBuilder();
                             stringBuilder.append(this.lottieLayerName);
                             stringBuilder.append(".**");
                             rLottieDrawable.setLayerColor(stringBuilder.toString(), i);
                         }
-                    } else if (drawableArr[i4] instanceof CombinedDrawable) {
+                    } else if (drawableArr[i3] instanceof CombinedDrawable) {
                         if ((this.changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
-                            ((CombinedDrawable) drawableArr[i4]).getBackground().setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                            ((CombinedDrawable) drawableArr[i3]).getBackground().setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
                         } else {
-                            ((CombinedDrawable) drawableArr[i4]).getIcon().setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                            ((CombinedDrawable) drawableArr[i3]).getIcon().setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
                         }
-                    } else if (drawableArr[i4] instanceof AvatarDrawable) {
-                        ((AvatarDrawable) drawableArr[i4]).setColor(i);
+                    } else if (drawableArr[i3] instanceof AvatarDrawable) {
+                        ((AvatarDrawable) drawableArr[i3]).setColor(i);
                     } else {
-                        drawableArr[i4].setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                        drawableArr[i3].setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
                     }
                 }
-                i4++;
+                i3++;
             }
         }
         View view = this.viewToInvalidate;
@@ -287,9 +286,9 @@ public class ThemeDescription {
                     this.viewToInvalidate.setBackgroundColor(i);
                 }
             }
-            i4 = this.changeFlags;
-            if ((FLAG_BACKGROUNDFILTER & i4) != 0) {
-                if ((i4 & FLAG_PROGRESSBAR) != 0) {
+            i3 = this.changeFlags;
+            if ((FLAG_BACKGROUNDFILTER & i3) != 0) {
+                if ((i3 & FLAG_PROGRESSBAR) != 0) {
                     view = this.viewToInvalidate;
                     if (view instanceof EditTextBoldCursor) {
                         ((EditTextBoldCursor) view).setErrorLineColor(i);
@@ -347,9 +346,9 @@ public class ThemeDescription {
             if ((this.changeFlags & FLAG_AB_SEARCH) != 0) {
                 ((ActionBar) this.viewToInvalidate).setSearchTextColor(i, false);
             }
-            i4 = this.changeFlags;
-            if ((FLAG_AB_SUBMENUITEM & i4) != 0) {
-                ((ActionBar) this.viewToInvalidate).setPopupItemsColor(i, (i4 & FLAG_IMAGECOLOR) != 0, false);
+            i3 = this.changeFlags;
+            if ((FLAG_AB_SUBMENUITEM & i3) != 0) {
+                ((ActionBar) this.viewToInvalidate).setPopupItemsColor(i, (i3 & FLAG_IMAGECOLOR) != 0, false);
             }
             if ((this.changeFlags & FLAG_AB_SUBMENUBACKGROUND) != 0) {
                 ((ActionBar) this.viewToInvalidate).setPopupBackgroundColor(i, false);
@@ -361,10 +360,10 @@ public class ThemeDescription {
         }
         view = this.viewToInvalidate;
         if (view instanceof EmptyTextProgressView) {
-            int i6 = this.changeFlags;
-            if ((FLAG_TEXTCOLOR & i6) != 0) {
+            int i5 = this.changeFlags;
+            if ((FLAG_TEXTCOLOR & i5) != 0) {
                 ((EmptyTextProgressView) view).setTextColor(i);
-            } else if ((i6 & FLAG_PROGRESSBAR) != 0) {
+            } else if ((i5 & FLAG_PROGRESSBAR) != 0) {
                 ((EmptyTextProgressView) view).setProgressBarColor(i);
             }
         }
@@ -380,8 +379,8 @@ public class ThemeDescription {
         } else if (view instanceof ContextProgressView) {
             ((ContextProgressView) view).updateColors();
         }
-        i4 = this.changeFlags;
-        if ((FLAG_TEXTCOLOR & i4) != 0 && ((i4 & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, this.viewToInvalidate))) {
+        i3 = this.changeFlags;
+        if ((FLAG_TEXTCOLOR & i3) != 0 && ((i3 & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, this.viewToInvalidate))) {
             view = this.viewToInvalidate;
             if (view instanceof TextView) {
                 ((TextView) view).setTextColor(i);
@@ -399,11 +398,11 @@ public class ThemeDescription {
                 ((EditTextBoldCursor) view).setCursorColor(i);
             }
         }
-        i4 = this.changeFlags;
-        if ((FLAG_HINTTEXTCOLOR & i4) != 0) {
+        i3 = this.changeFlags;
+        if ((FLAG_HINTTEXTCOLOR & i3) != 0) {
             View view2 = this.viewToInvalidate;
             if (view2 instanceof EditTextBoldCursor) {
-                if ((i4 & FLAG_PROGRESSBAR) != 0) {
+                if ((i3 & FLAG_PROGRESSBAR) != 0) {
                     ((EditTextBoldCursor) view2).setHeaderHintColor(i);
                 } else {
                     ((EditTextBoldCursor) view2).setHintColor(i);
@@ -419,8 +418,8 @@ public class ThemeDescription {
                 background.setColorFilter(Theme.colorFilter);
             }
         }
-        i4 = this.changeFlags;
-        if ((FLAG_IMAGECOLOR & i4) != 0 && ((i4 & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, this.viewToInvalidate))) {
+        i3 = this.changeFlags;
+        if ((FLAG_IMAGECOLOR & i3) != 0 && ((i3 & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, this.viewToInvalidate))) {
             view = this.viewToInvalidate;
             if (view instanceof ImageView) {
                 if ((this.changeFlags & FLAG_USEBACKGROUNDDRAWABLE) != 0) {
@@ -431,19 +430,8 @@ public class ThemeDescription {
                 } else {
                     ((ImageView) view).setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
                 }
-            } else if (!(view instanceof BackupImageView)) {
-                if (view instanceof SimpleTextView) {
-                    ((SimpleTextView) view).setSideDrawablesColor(i);
-                } else if (view instanceof TextView) {
-                    Drawable[] compoundDrawables = ((TextView) view).getCompoundDrawables();
-                    if (compoundDrawables != null) {
-                        for (i2 = 0; i2 < compoundDrawables.length; i2++) {
-                            if (compoundDrawables[i2] != null) {
-                                compoundDrawables[i2].setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
-                            }
-                        }
-                    }
-                }
+            } else if (!(view instanceof BackupImageView) && (view instanceof SimpleTextView)) {
+                ((SimpleTextView) view).setSideDrawablesColor(i);
             }
         }
         view = this.viewToInvalidate;
@@ -469,14 +457,14 @@ public class ThemeDescription {
             if ((this.changeFlags & FLAG_SECTIONS) != 0) {
                 ArrayList headers = recyclerListView.getHeaders();
                 if (headers != null) {
-                    for (i3 = 0; i3 < headers.size(); i3++) {
-                        processViewColor((View) headers.get(i3), i);
+                    for (i2 = 0; i2 < headers.size(); i2++) {
+                        processViewColor((View) headers.get(i2), i);
                     }
                 }
                 headers = recyclerListView.getHeadersCache();
                 if (headers != null) {
-                    for (i3 = 0; i3 < headers.size(); i3++) {
-                        processViewColor((View) headers.get(i3), i);
+                    for (i2 = 0; i2 < headers.size(); i2++) {
+                        processViewColor((View) headers.get(i2), i);
                     }
                 }
                 view = recyclerListView.getPinnedHeader();
@@ -487,39 +475,40 @@ public class ThemeDescription {
         } else if (view != null) {
             Class[] clsArr = this.listClasses;
             if (clsArr == null || clsArr.length == 0) {
-                i4 = this.changeFlags;
-                if ((FLAG_SELECTOR & i4) != 0) {
+                i3 = this.changeFlags;
+                if ((FLAG_SELECTOR & i3) != 0) {
                     this.viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                } else if ((i4 & FLAG_SELECTORWHITE) != 0) {
+                } else if ((i3 & FLAG_SELECTORWHITE) != 0) {
                     this.viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                 }
             }
         }
         if (this.listClasses != null) {
+            int hiddenChildCount;
             view = this.viewToInvalidate;
             if (view instanceof RecyclerListView) {
                 recyclerListView = (RecyclerListView) view;
                 recyclerListView.getRecycledViewPool().clear();
-                i2 = recyclerListView.getHiddenChildCount();
-                for (i3 = 0; i3 < i2; i3++) {
-                    processViewColor(recyclerListView.getHiddenChildAt(i3), i);
+                hiddenChildCount = recyclerListView.getHiddenChildCount();
+                for (i2 = 0; i2 < hiddenChildCount; i2++) {
+                    processViewColor(recyclerListView.getHiddenChildAt(i2), i);
                 }
-                i2 = recyclerListView.getCachedChildCount();
-                for (i3 = 0; i3 < i2; i3++) {
-                    processViewColor(recyclerListView.getCachedChildAt(i3), i);
+                hiddenChildCount = recyclerListView.getCachedChildCount();
+                for (i2 = 0; i2 < hiddenChildCount; i2++) {
+                    processViewColor(recyclerListView.getCachedChildAt(i2), i);
                 }
-                i2 = recyclerListView.getAttachedScrapChildCount();
-                for (i3 = 0; i3 < i2; i3++) {
-                    processViewColor(recyclerListView.getAttachedScrapChildAt(i3), i);
+                hiddenChildCount = recyclerListView.getAttachedScrapChildCount();
+                for (i2 = 0; i2 < hiddenChildCount; i2++) {
+                    processViewColor(recyclerListView.getAttachedScrapChildAt(i2), i);
                 }
             }
             view = this.viewToInvalidate;
             if (view instanceof ViewGroup) {
                 ViewGroup viewGroup = (ViewGroup) view;
-                i2 = viewGroup.getChildCount();
-                while (i5 < i2) {
-                    processViewColor(viewGroup.getChildAt(i5), i);
-                    i5++;
+                hiddenChildCount = viewGroup.getChildCount();
+                while (i4 < hiddenChildCount) {
+                    processViewColor(viewGroup.getChildAt(i4), i);
+                    i4++;
                 }
             }
             processViewColor(this.viewToInvalidate, i);
