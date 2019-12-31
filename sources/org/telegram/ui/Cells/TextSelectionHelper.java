@@ -1943,7 +1943,6 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             }
         }
 
-        /* Access modifiers changed, original: protected */
         public void invalidate() {
             super.invalidate();
             for (int i = 0; i < this.parentView.getChildCount(); i++) {
@@ -2416,7 +2415,6 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             }
         }
 
-        /* Access modifiers changed, original: protected */
         public void invalidate() {
             super.invalidate();
             SelectableView selectableView = this.selectedView;
@@ -3167,7 +3165,6 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         return (i == this.selectionStart || i == this.selectionEnd) ? false : true;
     }
 
-    /* Access modifiers changed, original: protected */
     public void invalidate() {
         SelectableView selectableView = this.selectedView;
         if (selectableView != null) {
