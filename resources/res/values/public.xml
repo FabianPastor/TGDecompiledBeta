@@ -1945,6 +1945,7 @@
     <public type="string" name="ClearOtherSessionsHelp" id="NUM" />
     <public type="string" name="ClearOtherWebSessionsHelp" id="NUM" />
     <public type="string" name="ClearRecentEmoji" id="NUM" />
+    <public type="string" name="ClearRecentHistory" id="NUM" />
     <public type="string" name="ClearSearch" id="NUM" />
     <public type="string" name="ClearSearchAlert" id="NUM" />
     <public type="string" name="ClearSearchAlertTitle" id="NUM" />

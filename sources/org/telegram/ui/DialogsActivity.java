@@ -3261,7 +3261,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = r12 + r16;
         if (r12 <= r4) goto L_0x0232;
     L_0x0124:
-        r0 = NUM; // 0x7f0e08e0 float:1.8879646E38 double:1.053163279E-314;
+        r0 = NUM; // 0x7f0e08e1 float:1.8879648E38 double:1.0531632796E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -3299,7 +3299,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x01a1;
     L_0x016d:
-        r3 = NUM; // 0x7f0e0397 float:1.8876901E38 double:1.0531626107E-314;
+        r3 = NUM; // 0x7f0e0398 float:1.8876904E38 double:1.053162611E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3311,7 +3311,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
+        r1 = NUM; // 0x7f0e0383 float:1.887686E38 double:1.053162601E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$4jeFfbPa00Dvar_qyJvj0h0oI_X4;

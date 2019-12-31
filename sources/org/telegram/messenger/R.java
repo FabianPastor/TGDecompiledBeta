@@ -2045,6 +2045,7 @@ public final class R {
         public static final int ClearOtherSessionsHelp = NUM;
         public static final int ClearOtherWebSessionsHelp = NUM;
         public static final int ClearRecentEmoji = NUM;
+        public static final int ClearRecentHistory = NUM;
         public static final int ClearSearch = NUM;
         public static final int ClearSearchAlert = NUM;
         public static final int ClearSearchAlertTitle = NUM;

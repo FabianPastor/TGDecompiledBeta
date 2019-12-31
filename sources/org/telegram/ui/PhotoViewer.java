@@ -2301,7 +2301,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r1 != 0) goto L_0x067e;
     L_0x033c:
         r1 = r0.opennedFromMedia;
-        r2 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
+        r2 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
         r3 = "Of";
         if (r1 == 0) goto L_0x0368;
     L_0x0345:
@@ -2909,7 +2909,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x00a8:
         r1 = r6.parentActivity;	 Catch:{ Exception -> 0x00c1 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0e0a3f float:1.8880358E38 double:1.0531634526E-314;
+        r3 = NUM; // 0x7f0e0a40 float:1.888036E38 double:1.053163453E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x00c1 }
         r0 = android.content.Intent.createChooser(r0, r2);	 Catch:{ Exception -> 0x00c1 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -4442,13 +4442,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r7 = NUM; // 0x7var_fe float:1.7945612E38 double:1.052935755E-314;
         if (r6 == 0) goto L_0x00d1;
     L_0x00c4:
-        r6 = NUM; // 0x7f0e0a2a float:1.8880315E38 double:1.053163442E-314;
+        r6 = NUM; // 0x7f0e0a2b float:1.8880317E38 double:1.0531634427E-314;
         r8 = "SetReminder";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r5.setTextAndIcon(r6, r7);
         goto L_0x00ef;
     L_0x00d1:
-        r6 = NUM; // 0x7f0e09b3 float:1.8880074E38 double:1.0531633834E-314;
+        r6 = NUM; // 0x7f0e09b4 float:1.8880076E38 double:1.053163384E-314;
         r8 = "ScheduleMessage";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r5.setTextAndIcon(r6, r7);
@@ -4456,7 +4456,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x00de:
         if (r2 != r6) goto L_0x00ef;
     L_0x00e0:
-        r6 = NUM; // 0x7f0e0a0d float:1.8880256E38 double:1.053163428E-314;
+        r6 = NUM; // 0x7f0e0a0e float:1.8880258E38 double:1.0531634284E-314;
         r7 = "SendWithoutSound";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r7 = NUM; // 0x7var_b float:1.7945217E38 double:1.0529356587E-314;
@@ -6522,7 +6522,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.onAppear();
         r2 = r0.editorDoneLayout;
         r2 = r2.doneButton;
-        r4 = NUM; // 0x7f0e034e float:1.8876753E38 double:1.0531625746E-314;
+        r4 = NUM; // 0x7f0e034f float:1.8876755E38 double:1.053162575E-314;
         r5 = "Crop";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.setText(r4);
@@ -7642,7 +7642,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r0.isEvent = r10;
         r0.sharedMediaType = r8;
         r10 = r0.allMediaItem;
-        r14 = NUM; // 0x7f0e0a60 float:1.8880425E38 double:1.053163469E-314;
+        r14 = NUM; // 0x7f0e0a61 float:1.8880427E38 double:1.0531634694E-314;
         r15 = "ShowAllMedia";
         r14 = org.telegram.messenger.LocaleController.getString(r15, r14);
         r10.setText(r14);
@@ -7799,7 +7799,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r15 = 0;
         goto L_0x01f4;
     L_0x0209:
-        r10 = NUM; // 0x7f0e0a5f float:1.8880423E38 double:1.0531634684E-314;
+        r10 = NUM; // 0x7f0e0a60 float:1.8880425E38 double:1.053163469E-314;
         r13 = "ShowAllFiles";
         if (r1 == 0) goto L_0x0309;
     L_0x0210:
@@ -8790,7 +8790,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = (long) r5;
         r11 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 * r11;
-        r7 = NUM; // 0x7f0e0cee float:1.8881751E38 double:1.053163792E-314;
+        r7 = NUM; // 0x7f0e0cef float:1.8881753E38 double:1.0531637925E-314;
         r11 = new java.lang.Object[r13];
         r12 = org.telegram.messenger.LocaleController.getInstance();
         r12 = r12.formatterYear;
@@ -8979,7 +8979,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6 = r6 + r7;
         r6 = java.lang.Integer.valueOf(r6);
         r5[r3] = r6;
-        r3 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
+        r3 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
         r3 = org.telegram.messenger.LocaleController.formatString(r9, r3, r5);
         r4.setTitle(r3);
         goto L_0x0412;
@@ -9081,7 +9081,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r5 + r7;
         r5 = java.lang.Integer.valueOf(r5);
         r4[r6] = r5;
-        r5 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
+        r5 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
         r4 = org.telegram.messenger.LocaleController.formatString(r9, r5, r4);
         r3.setTitle(r4);
         goto L_0x0412;
@@ -9231,7 +9231,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4 = r4.size();
         r4 = java.lang.Integer.valueOf(r4);
         r3[r2] = r4;
-        r2 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
+        r2 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
         r2 = org.telegram.messenger.LocaleController.formatString(r9, r2, r3);
         r1.setTitle(r2);
         goto L_0x07ca;
@@ -9290,7 +9290,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = r3.size();
         r3 = java.lang.Integer.valueOf(r3);
         r2[r4] = r3;
-        r3 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
+        r3 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
         r2 = org.telegram.messenger.LocaleController.formatString(r9, r3, r2);
         r1.setTitle(r2);
     L_0x052c:
@@ -9613,7 +9613,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r5.size();
         r5 = java.lang.Integer.valueOf(r5);
         r4[r12] = r5;
-        r5 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
+        r5 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
         r4 = org.telegram.messenger.LocaleController.formatString(r9, r5, r4);
         r3.setTitle(r4);
     L_0x0737:
@@ -9636,7 +9636,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r4 == 0) goto L_0x0764;
     L_0x0755:
         r3 = r0.actionBar;
-        r4 = NUM; // 0x7f0e09af float:1.8880066E38 double:1.0531633814E-314;
+        r4 = NUM; // 0x7f0e09b0 float:1.8880068E38 double:1.053163382E-314;
         r5 = "SavedMessages";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);
@@ -11198,7 +11198,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r10.doneButtonPressed = r11;
         r10.parentChatActivity = r2;
         r2 = r10.actionBar;
-        r6 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
+        r6 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
         r14 = 2;
         r14 = new java.lang.Object[r14];
         r15 = java.lang.Integer.valueOf(r12);
