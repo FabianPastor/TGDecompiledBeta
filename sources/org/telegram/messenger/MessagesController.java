@@ -813,7 +813,6 @@ public class MessagesController extends BaseController implements NotificationCe
             int size = tL_jsonObject.value.size();
             Object obj = null;
             Object obj2 = null;
-            Object obj3 = null;
             for (int i = 0; i < size; i++) {
                 TL_jsonObjectValue tL_jsonObjectValue = (TL_jsonObjectValue) tL_jsonObject.value.get(i);
                 JSONValue jSONValue;
@@ -828,73 +827,52 @@ public class MessagesController extends BaseController implements NotificationCe
                         }
                     }
                 } else {
-                    UserConfig userConfig;
-                    TL_jsonString tL_jsonString;
-                    if ("wallet_config".equals(tL_jsonObjectValue.key)) {
-                        if (tL_jsonObjectValue.value instanceof TL_jsonString) {
-                            userConfig = getUserConfig();
-                            tL_jsonString = (TL_jsonString) tL_jsonObjectValue.value;
-                            if (!tL_jsonString.value.equals(userConfig.walletConfig)) {
-                                userConfig.walletConfig = tL_jsonString.value;
+                    if ("youtube_pip".equals(tL_jsonObjectValue.key)) {
+                        jSONValue = tL_jsonObjectValue.value;
+                        if (jSONValue instanceof TL_jsonString) {
+                            TL_jsonString tL_jsonString = (TL_jsonString) jSONValue;
+                            if (!tL_jsonString.value.equals(this.youtubePipType)) {
+                                this.youtubePipType = tL_jsonString.value;
+                                edit.putString("youtubePipType", this.youtubePipType);
                             }
                         }
                     } else {
-                        if (!"wallet_blockchain_name".equals(tL_jsonObjectValue.key)) {
-                            if ("youtube_pip".equals(tL_jsonObjectValue.key)) {
+                        boolean z;
+                        if ("background_connection".equals(tL_jsonObjectValue.key)) {
+                            jSONValue = tL_jsonObjectValue.value;
+                            if (jSONValue instanceof TL_jsonBool) {
+                                z = ((TL_jsonBool) jSONValue).value;
+                                if (z != this.backgroundConnection) {
+                                    this.backgroundConnection = z;
+                                    edit.putBoolean("backgroundConnection", this.backgroundConnection);
+                                }
+                            }
+                        } else {
+                            if ("keep_alive_service".equals(tL_jsonObjectValue.key)) {
                                 jSONValue = tL_jsonObjectValue.value;
-                                if (jSONValue instanceof TL_jsonString) {
-                                    tL_jsonString = (TL_jsonString) jSONValue;
-                                    if (!tL_jsonString.value.equals(this.youtubePipType)) {
-                                        this.youtubePipType = tL_jsonString.value;
-                                        edit.putString("youtubePipType", this.youtubePipType);
+                                if (jSONValue instanceof TL_jsonBool) {
+                                    z = ((TL_jsonBool) jSONValue).value;
+                                    if (z != this.keepAliveService) {
+                                        this.keepAliveService = z;
+                                        edit.putBoolean("keepAliveService", this.keepAliveService);
                                     }
                                 }
                             } else {
-                                boolean z;
-                                if ("background_connection".equals(tL_jsonObjectValue.key)) {
+                                if ("qr_login_camera".equals(tL_jsonObjectValue.key)) {
                                     jSONValue = tL_jsonObjectValue.value;
                                     if (jSONValue instanceof TL_jsonBool) {
                                         z = ((TL_jsonBool) jSONValue).value;
-                                        if (z != this.backgroundConnection) {
-                                            this.backgroundConnection = z;
-                                            edit.putBoolean("backgroundConnection", this.backgroundConnection);
-                                        }
-                                    }
-                                } else {
-                                    if ("keep_alive_service".equals(tL_jsonObjectValue.key)) {
-                                        jSONValue = tL_jsonObjectValue.value;
-                                        if (jSONValue instanceof TL_jsonBool) {
-                                            z = ((TL_jsonBool) jSONValue).value;
-                                            if (z != this.keepAliveService) {
-                                                this.keepAliveService = z;
-                                                edit.putBoolean("keepAliveService", this.keepAliveService);
-                                            }
-                                        }
-                                    } else {
-                                        if ("qr_login_camera".equals(tL_jsonObjectValue.key)) {
-                                            jSONValue = tL_jsonObjectValue.value;
-                                            if (jSONValue instanceof TL_jsonBool) {
-                                                z = ((TL_jsonBool) jSONValue).value;
-                                                if (z != this.qrLoginCamera) {
-                                                    this.qrLoginCamera = z;
-                                                    edit.putBoolean("qrLoginCamera", this.qrLoginCamera);
-                                                }
-                                            }
+                                        if (z != this.qrLoginCamera) {
+                                            this.qrLoginCamera = z;
+                                            edit.putBoolean("qrLoginCamera", this.qrLoginCamera);
                                         }
                                     }
                                 }
-                                obj = 1;
-                                obj3 = 1;
-                            }
-                        } else if (tL_jsonObjectValue.value instanceof TL_jsonString) {
-                            userConfig = getUserConfig();
-                            tL_jsonString = (TL_jsonString) tL_jsonObjectValue.value;
-                            if (!tL_jsonString.value.equals(userConfig.walletBlockchainName)) {
-                                userConfig.walletBlockchainName = tL_jsonString.value;
                             }
                         }
+                        obj = 1;
+                        obj2 = 1;
                     }
-                    obj2 = 1;
                 }
                 obj = 1;
             }
@@ -902,11 +880,6 @@ public class MessagesController extends BaseController implements NotificationCe
                 edit.commit();
             }
             if (obj2 != null) {
-                getTonController().onTonConfigUpdated();
-                getUserConfig().saveConfig(false);
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
-            }
-            if (obj3 != null) {
                 ApplicationLoader.startPushService();
                 ConnectionsManager connectionsManager = getConnectionsManager();
                 connectionsManager.setPushConnectionEnabled(connectionsManager.isPushConnectionEnabled());
@@ -1535,7 +1508,7 @@ public class MessagesController extends BaseController implements NotificationCe
         DialogsActivity.dialogsLoaded[this.currentAccount] = false;
         this.notificationsPreferences.edit().clear().commit();
         this.emojiPreferences.edit().putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).commit();
-        this.mainPreferences.edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("dcDomainName2").remove("webFileDatacenterId").commit();
+        this.mainPreferences.edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("dcDomainName2").remove("webFileDatacenterId").remove("themehint").commit();
         this.lastScheduledServerQueryTime.clear();
         this.reloadingWebpages.clear();
         this.reloadingWebpagesPending.clear();

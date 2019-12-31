@@ -4648,7 +4648,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                         stringBuilder = new StringBuilder();
                                         stringBuilder.append(str);
                                         stringBuilder.append(((TL_inputMessageEntityMentionName) messageEntity).user_id.user_id);
-                                        spannableStringBuilder.setSpan(new URLSpanUserMention(stringBuilder.toString(), 1), messageEntity.offset, messageEntity.offset + messageEntity.length, 33);
+                                        spannableStringBuilder.setSpan(new URLSpanUserMention(stringBuilder.toString(), 3), messageEntity.offset, messageEntity.offset + messageEntity.length, 33);
                                     } else if (messageEntity instanceof TL_messageEntityMentionName) {
                                         if (messageEntity.offset + messageEntity.length < spannableStringBuilder.length() && spannableStringBuilder.charAt(messageEntity.offset + messageEntity.length) == ' ') {
                                             messageEntity.length++;
@@ -4656,7 +4656,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                         stringBuilder = new StringBuilder();
                                         stringBuilder.append(str);
                                         stringBuilder.append(((TL_messageEntityMentionName) messageEntity).user_id);
-                                        spannableStringBuilder.setSpan(new URLSpanUserMention(stringBuilder.toString(), 1), messageEntity.offset, messageEntity.offset + messageEntity.length, 33);
+                                        spannableStringBuilder.setSpan(new URLSpanUserMention(stringBuilder.toString(), 3), messageEntity.offset, messageEntity.offset + messageEntity.length, 33);
                                     } else {
                                         TextStyleRun textStyleRun;
                                         if (!(messageEntity instanceof TL_messageEntityCode)) {

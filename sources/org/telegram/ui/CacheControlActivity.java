@@ -199,7 +199,7 @@ public class CacheControlActivity extends BaseFragment {
             return 0;
         }
         if (file.isDirectory()) {
-            return Utilities.getDirSize(file.getAbsolutePath(), i);
+            return Utilities.getDirSize(file.getAbsolutePath(), i, false);
         }
         if (file.isFile()) {
             return 0 + file.length();
@@ -300,7 +300,7 @@ public class CacheControlActivity extends BaseFragment {
     L_0x0051:
         r11 = r11.getAbsolutePath();
         r12 = NUM; // 0x7fffffffffffffff float:NaN double:NaN;
-        org.telegram.messenger.Utilities.clearDir(r11, r10, r12);
+        org.telegram.messenger.Utilities.clearDir(r11, r10, r12, r0);
     L_0x005d:
         if (r9 != r7) goto L_0x006b;
     L_0x005f:

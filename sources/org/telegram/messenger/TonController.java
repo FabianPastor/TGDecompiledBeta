@@ -46,7 +46,6 @@ import drinkless.org.ton.TonApi.InputKeyFake;
 import drinkless.org.ton.TonApi.InputKeyRegular;
 import drinkless.org.ton.TonApi.InternalTransactionId;
 import drinkless.org.ton.TonApi.KeyStoreTypeDirectory;
-import drinkless.org.ton.TonApi.LogStreamFile;
 import drinkless.org.ton.TonApi.Object;
 import drinkless.org.ton.TonApi.Ok;
 import drinkless.org.ton.TonApi.Options;
@@ -62,16 +61,11 @@ import drinkless.org.ton.TonApi.RawGetTransactions;
 import drinkless.org.ton.TonApi.RawMessage;
 import drinkless.org.ton.TonApi.RawTransaction;
 import drinkless.org.ton.TonApi.RawTransactions;
-import drinkless.org.ton.TonApi.SetLogStream;
-import drinkless.org.ton.TonApi.SyncState;
-import drinkless.org.ton.TonApi.SyncStateDone;
-import drinkless.org.ton.TonApi.SyncStateInProgress;
 import drinkless.org.ton.TonApi.TestGiverAccountState;
 import drinkless.org.ton.TonApi.TestWalletAccountState;
 import drinkless.org.ton.TonApi.UninitedAccountState;
 import drinkless.org.ton.TonApi.UnpackAccountAddress;
 import drinkless.org.ton.TonApi.UnpackedAccountAddress;
-import drinkless.org.ton.TonApi.UpdateSyncState;
 import drinkless.org.ton.TonApi.WalletAccountState;
 import drinkless.org.ton.TonApi.WalletV3AccountState;
 import drinkless.org.ton.TonApi.WalletV3GetAccountAddress;
@@ -220,36 +214,7 @@ public class TonController extends BaseController {
         stringBuilder.append(i);
         this.tonCache = context.getSharedPreferences(stringBuilder.toString(), 0);
         loadCache();
-        this.client = Client.create(new -$$Lambda$TonController$bsWlPmC-mcv5bw47ilenQ4kKjmI(this), null, null);
-        if (BuildVars.LOGS_ENABLED) {
-            this.client.send(new SetLogStream(new LogStreamFile(FileLog.getTonlibLogPath(), 5242880)), null);
-        }
         loadTonConfigFromUrl();
-    }
-
-    public /* synthetic */ void lambda$new$1$TonController(Object object) {
-        if (object instanceof UpdateSyncState) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$EL_P00Sg4K1AN4gF7roMYLMLFxo(this, object));
-        } else {
-            AndroidUtilities.processTonUpdate(this.currentAccount, this.client, object);
-        }
-    }
-
-    public /* synthetic */ void lambda$null$0$TonController(Object object) {
-        SyncState syncState = ((UpdateSyncState) object).syncState;
-        if (syncState instanceof SyncStateDone) {
-            this.syncProgress = 100;
-        } else if (syncState instanceof SyncStateInProgress) {
-            SyncStateInProgress syncStateInProgress = (SyncStateInProgress) syncState;
-            int i = syncStateInProgress.currentSeqno;
-            int i2 = syncStateInProgress.fromSeqno;
-            double d = (double) (i - i2);
-            double d2 = (double) (syncStateInProgress.toSeqno - i2);
-            Double.isNaN(d);
-            Double.isNaN(d2);
-            this.syncProgress = (int) ((d / d2) * 100.0d);
-        }
-        getNotificationCenter().postNotificationName(NotificationCenter.walletSyncProgressChanged, Integer.valueOf(this.syncProgress));
     }
 
     private void loadCache() {
@@ -982,20 +947,10 @@ public class TonController extends BaseController {
     }
 
     private Object sendRequest(Function function, TonLibCallback tonLibCallback, boolean z) {
-        Object[] objArr = new Object[1];
-        CountDownLatch countDownLatch = z ? new CountDownLatch(1) : null;
-        this.client.send(function, new -$$Lambda$TonController$v5N5zKbXFLbODGFjRDOM7843r2s(tonLibCallback, function, objArr, countDownLatch), null);
-        if (countDownLatch != null) {
-            try {
-                countDownLatch.await();
-            } catch (Throwable th) {
-                FileLog.e(th);
-            }
-        }
-        return objArr[0];
+        return new Object();
     }
 
-    static /* synthetic */ void lambda$sendRequest$2(TonLibCallback tonLibCallback, Function function, Object[] objArr, CountDownLatch countDownLatch, Object object) {
+    private static /* synthetic */ void lambda$sendRequest$0(TonLibCallback tonLibCallback, Function function, Object[] objArr, CountDownLatch countDownLatch, Object object) {
         if (tonLibCallback != null) {
             tonLibCallback.run(object);
             return;
@@ -1069,10 +1024,10 @@ public class TonController extends BaseController {
     }
 
     private void onFinishWalletCreate(String[] strArr, WordsCallback wordsCallback, byte[] bArr, TonApi.Key key) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$iUk-ob6wahaWXuL2VuZK_EKknDQ(this, key, bArr, strArr, wordsCallback));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$uMjPBMNMREKI79Tm2gV7lkxaL0k(this, key, bArr, strArr, wordsCallback));
     }
 
-    public /* synthetic */ void lambda$onFinishWalletCreate$3$TonController(TonApi.Key key, byte[] bArr, String[] strArr, WordsCallback wordsCallback) {
+    public /* synthetic */ void lambda$onFinishWalletCreate$1$TonController(TonApi.Key key, byte[] bArr, String[] strArr, WordsCallback wordsCallback) {
         preloadWallet(key.publicKey);
         int length = (bArr.length + 3) + key.secret.length;
         int i = length % 16;
@@ -1164,28 +1119,28 @@ public class TonController extends BaseController {
     }
 
     public void isKeyStoreInvalidated(BooleanCallback booleanCallback) {
-        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$sQAfp6v27aGkxmVjdx96RQm5IYE(this, booleanCallback));
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$4dT3xvzVSa-pPW-MT9gNBpw3wns(this, booleanCallback));
     }
 
-    public /* synthetic */ void lambda$isKeyStoreInvalidated$5$TonController(BooleanCallback booleanCallback) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$kQUHKz4hyFcAYU8txACWltCsDRc(booleanCallback, initCipher(2) == 2));
+    public /* synthetic */ void lambda$isKeyStoreInvalidated$3$TonController(BooleanCallback booleanCallback) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$_OEE2ksoduiuTHFpGjk8mvDcehg(booleanCallback, initCipher(2) == 2));
     }
 
     public void createWallet(String[] strArr, boolean z, WordsCallback wordsCallback, ErrorCallback errorCallback) {
-        AndroidUtilities.getTonWalletSalt(this.currentAccount, new -$$Lambda$TonController$y4rzsuU0HEOkbZyV__GESg9CTVs(this, errorCallback, z, strArr, wordsCallback));
+        AndroidUtilities.getTonWalletSalt(this.currentAccount, new -$$Lambda$TonController$tgWf0krnuU6EvdvBZHK6lr1x_oY(this, errorCallback, z, strArr, wordsCallback));
     }
 
-    public /* synthetic */ void lambda$createWallet$13$TonController(ErrorCallback errorCallback, boolean z, String[] strArr, WordsCallback wordsCallback, byte[] bArr) {
-        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$0--ntOaxpsvx5ZLt9wRtQ0zpvRY(this, bArr, errorCallback, z, strArr, wordsCallback));
+    public /* synthetic */ void lambda$createWallet$11$TonController(ErrorCallback errorCallback, boolean z, String[] strArr, WordsCallback wordsCallback, byte[] bArr) {
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$hxM5pU9LVqYIxBytdUBYfYV0Abc(this, bArr, errorCallback, z, strArr, wordsCallback));
     }
 
-    public /* synthetic */ void lambda$null$12$TonController(byte[] bArr, ErrorCallback errorCallback, boolean z, String[] strArr, WordsCallback wordsCallback) {
+    public /* synthetic */ void lambda$null$10$TonController(byte[] bArr, ErrorCallback errorCallback, boolean z, String[] strArr, WordsCallback wordsCallback) {
         if (bArr == null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$-yNeuXCa6X7NtFGX5BoWfxv3aLM(errorCallback));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$lln4mzoHvpPox4RxMdcn111AjXs(errorCallback));
         } else if (initTonLib()) {
             sendRequest(new DeleteAllKeys(), true);
             if (keyStore == null) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$0Qs3PCw-0U216Kbo9EpY5a0gfUU(errorCallback));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$P7kBEUm9Jb2MlUdB8cJNocpP8-E(errorCallback));
                 return;
             }
             cleanup();
@@ -1216,35 +1171,35 @@ public class TonController extends BaseController {
                         if (sendRequest2 instanceof ExportedKey) {
                             onFinishWalletCreate(((ExportedKey) sendRequest2).wordList, wordsCallback, bArr2, key);
                         } else {
-                            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$o6TLWvPOQs_Ed6E-tlxgN0EmvOk(this, errorCallback, sendRequest2));
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$-Sq-PWfPKNVqcUgyq-JbOy4U1qk(this, errorCallback, sendRequest2));
                         }
                     } else {
                         onFinishWalletCreate(null, wordsCallback, bArr2, key);
                     }
                 } else {
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$nol4SDV7Xq2g28zLuViVPJF_Hd8(this, errorCallback, sendRequest));
+                    AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$BMAFS-SG30u4Ck0HTZEt6Zm-kpA(this, errorCallback, sendRequest));
                 }
             } else {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$A_GCvar_k9IFPgwfloPcNNJckftE(errorCallback));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$NgvzVS9b7-YyWM6nBhNg0XjjecU(errorCallback));
             }
         } else {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$5ff7B1hIQjt-6fKSdaIpimgRCNM(errorCallback));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$ANDCmubqTiuFsobBDpZALRnuNC4(errorCallback));
         }
     }
 
-    public /* synthetic */ void lambda$null$8$TonController(ErrorCallback errorCallback, Object obj) {
+    public /* synthetic */ void lambda$null$6$TonController(ErrorCallback errorCallback, Object obj) {
         errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
     }
 
-    public /* synthetic */ void lambda$null$9$TonController(ErrorCallback errorCallback, Object obj) {
+    public /* synthetic */ void lambda$null$7$TonController(ErrorCallback errorCallback, Object obj) {
         errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
     }
 
     public void setUserPasscode(String str, int i, Runnable runnable) {
-        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$VP44BxohUzVQ09a8SeVN_gkBKFk(this, i, str, runnable));
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$z22FAcE5iCnNUyw8kDQErp5pHfQ(this, i, str, runnable));
     }
 
-    public /* synthetic */ void lambda$setUserPasscode$14$TonController(int i, String str, Runnable runnable) {
+    public /* synthetic */ void lambda$setUserPasscode$12$TonController(int i, String str, Runnable runnable) {
         this.creatingPasscodeType = i;
         this.creatingPasscodeSalt = new byte[32];
         Utilities.random.nextBytes(this.creatingPasscodeSalt);
@@ -1427,18 +1382,18 @@ public class TonController extends BaseController {
     }
 
     private void getTransactions(boolean z, InternalTransactionId internalTransactionId, Runnable runnable) {
-        sendRequest(new RawGetTransactions(this.accountAddress, internalTransactionId), new -$$Lambda$TonController$eW4FMIDfYCJnmFSRipIHNW5Mu0g(this, z, runnable));
+        sendRequest(new RawGetTransactions(this.accountAddress, internalTransactionId), new -$$Lambda$TonController$BJplM7TBHaoagaFxa2S8jmt1XHQ(this, z, runnable));
     }
 
-    public /* synthetic */ void lambda$getTransactions$17$TonController(boolean z, Runnable runnable, Object obj) {
+    public /* synthetic */ void lambda$getTransactions$15$TonController(boolean z, Runnable runnable, Object obj) {
         if (obj instanceof RawTransactions) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$vfluoB1yoC4E8fiJI5ZoE2BbJYw(this, new ArrayList(Arrays.asList(((RawTransactions) obj).transactions)), z, runnable));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$J-LtiyVAK6-s6HMNlP7AFP51bNM(this, new ArrayList(Arrays.asList(((RawTransactions) obj).transactions)), z, runnable));
         } else if (runnable != null || this.uiTransactionCallback != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$47O8iWCtlur9nCF-Q9JGSCnjiHo(this, runnable, z));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$5uPQeMcdeNbcwu75v419pdUsHIA(this, runnable, z));
         }
     }
 
-    public /* synthetic */ void lambda$null$15$TonController(ArrayList arrayList, boolean z, Runnable runnable) {
+    public /* synthetic */ void lambda$null$13$TonController(ArrayList arrayList, boolean z, Runnable runnable) {
         this.walletLoaded = true;
         Object obj = null;
         if (!this.pendingTransactions.isEmpty()) {
@@ -1482,7 +1437,7 @@ public class TonController extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$null$16$TonController(Runnable runnable, boolean z) {
+    public /* synthetic */ void lambda$null$14$TonController(Runnable runnable, boolean z) {
         if (runnable != null) {
             runnable.run();
         }
@@ -1496,19 +1451,19 @@ public class TonController extends BaseController {
         if (!this.isPrealodingWallet) {
             this.isPrealodingWallet = true;
             getWalletAddress(str);
-            getAccountState(new -$$Lambda$TonController$4sUFBUpjSKVJQ64xFw7yS9hJtZg(this));
+            getAccountState(new -$$Lambda$TonController$gJbFAzuiSMm6DxM-5Qbx9QIhA_Q(this));
         }
     }
 
-    public /* synthetic */ void lambda$preloadWallet$19$TonController(GenericAccountState genericAccountState) {
+    public /* synthetic */ void lambda$preloadWallet$17$TonController(GenericAccountState genericAccountState) {
         if (genericAccountState == null) {
             this.isPrealodingWallet = false;
         } else {
-            getTransactions(true, getLastTransactionId(genericAccountState), new -$$Lambda$TonController$9XjiN4RwqYFaKtdlWzOcTwPp2tM(this));
+            getTransactions(true, getLastTransactionId(genericAccountState), new -$$Lambda$TonController$QJgWom4shvmiclz7ycmuuua1G_g(this));
         }
     }
 
-    public /* synthetic */ void lambda$null$18$TonController() {
+    public /* synthetic */ void lambda$null$16$TonController() {
         this.isPrealodingWallet = false;
     }
 
@@ -1521,18 +1476,18 @@ public class TonController extends BaseController {
     }
 
     public void getAccountState(AccountStateCallback accountStateCallback) {
-        sendRequest(new GenericGetAccountState(this.accountAddress), new -$$Lambda$TonController$JFjP4qdxkHS_WpJpPFkh7yR5SjQ(this, accountStateCallback));
+        sendRequest(new GenericGetAccountState(this.accountAddress), new -$$Lambda$TonController$lFlasxIPj0pe3vPrwkuvuEnSFGk(this, accountStateCallback));
     }
 
-    public /* synthetic */ void lambda$getAccountState$22$TonController(AccountStateCallback accountStateCallback, Object obj) {
+    public /* synthetic */ void lambda$getAccountState$20$TonController(AccountStateCallback accountStateCallback, Object obj) {
         if (obj instanceof GenericAccountState) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$wnGpkvpHsIHyzkpFHXBflXm6OU8(this, accountStateCallback, obj));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$ZC-1xr9i8Xz4R9b0Ipt-ntBBs6Y(this, accountStateCallback, obj));
         } else {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$lnmcLT7QojSLk-gv4lDyeXZpSI0(accountStateCallback));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$37rcZVVB24mwu_62dzh_KprPJRM(accountStateCallback));
         }
     }
 
-    public /* synthetic */ void lambda$null$20$TonController(AccountStateCallback accountStateCallback, Object obj) {
+    public /* synthetic */ void lambda$null$18$TonController(AccountStateCallback accountStateCallback, Object obj) {
         GenericAccountState genericAccountState = (GenericAccountState) obj;
         this.cachedAccountState = genericAccountState;
         accountStateCallback.run(genericAccountState);
@@ -1543,7 +1498,7 @@ public class TonController extends BaseController {
         UserConfig userConfig = getUserConfig();
         byte[] decrypt = decrypt(userConfig.tonEncryptedData, cipher);
         if (decrypt == null || decrypt.length <= 3) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$HBNfR0kbdSvbRiQ3yhmIB2tL69g(errorCallback2));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$KVuT1XGAhJAd-9p7lcZAZLdA18A(errorCallback2));
             return null;
         }
         if (userConfig.tonPasscodeType != -1) {
@@ -1569,113 +1524,113 @@ public class TonController extends BaseController {
             return new InputKeyRegular(new TonApi.Key(userConfig.tonPublicKey, bArr4), bArr3);
         }
         if (TextUtils.isEmpty(str)) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$3-4CkmOmoT2bO3dO2BASk7HXPCU(errorCallback2));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$HBNfR0kbdSvbRiQ3yhmIB2tL69g(errorCallback2));
         } else {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$2OcyRR2ZKiFvj7wZccoJvASoxN8(errorCallback2));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$-YETmygdyjyHumNBoQ3cxTfex40(errorCallback2));
         }
         return null;
     }
 
     public void prepareForPasscodeChange(String str, Runnable runnable, ErrorCallback errorCallback) {
-        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$nYm5gjV4EcJ_uWgaKe-pQJbVMEs(this, str, errorCallback, runnable));
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$0QYEaLYvGIfwyA5t_rPmcAajkf0(this, str, errorCallback, runnable));
     }
 
-    public /* synthetic */ void lambda$prepareForPasscodeChange$26$TonController(String str, ErrorCallback errorCallback, Runnable runnable) {
+    public /* synthetic */ void lambda$prepareForPasscodeChange$24$TonController(String str, ErrorCallback errorCallback, Runnable runnable) {
         if (decryptTonData(str, null, null, errorCallback, true) != null) {
             AndroidUtilities.runOnUIThread(runnable);
         }
     }
 
     public void getSecretWords(String str, Cipher cipher, WordsCallback wordsCallback, ErrorCallback errorCallback) {
-        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$u-aTIq1Y_1XApO7-ytnq99MZSnU(this, str, cipher, errorCallback, wordsCallback));
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$Genh6d-D8nPvdFbitLergEttZ8o(this, str, cipher, errorCallback, wordsCallback));
     }
 
-    public /* synthetic */ void lambda$getSecretWords$30$TonController(String str, Cipher cipher, ErrorCallback errorCallback, WordsCallback wordsCallback) {
+    public /* synthetic */ void lambda$getSecretWords$28$TonController(String str, Cipher cipher, ErrorCallback errorCallback, WordsCallback wordsCallback) {
         initTonLib();
         InputKey decryptTonData = decryptTonData(str, cipher, null, errorCallback, false);
         if (decryptTonData != null) {
-            sendRequest(new ExportKey(decryptTonData), new -$$Lambda$TonController$xCAZdHQd-0Alzthtt7sYgL1zb9o(this, wordsCallback, errorCallback));
+            sendRequest(new ExportKey(decryptTonData), new -$$Lambda$TonController$3vvHOu5RFS7QEN90b6dOIO6uIHM(this, wordsCallback, errorCallback));
         }
     }
 
-    public /* synthetic */ void lambda$null$29$TonController(WordsCallback wordsCallback, ErrorCallback errorCallback, Object obj) {
+    public /* synthetic */ void lambda$null$27$TonController(WordsCallback wordsCallback, ErrorCallback errorCallback, Object obj) {
         if (obj instanceof ExportedKey) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$uBcsIaLrUJcBgPWHX4NCtqMC4Fw(wordsCallback, (ExportedKey) obj));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$oAriRjh11c2Pb8qwcXa_NXDnoD8(wordsCallback, (ExportedKey) obj));
         } else {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$znWQMOv27QrJ-VjmODDBlJTP4jU(this, errorCallback, obj));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$x01Zt0IdL5udS9k5Xt_mQzML-7s(this, errorCallback, obj));
         }
     }
 
-    public /* synthetic */ void lambda$null$28$TonController(ErrorCallback errorCallback, Object obj) {
+    public /* synthetic */ void lambda$null$26$TonController(ErrorCallback errorCallback, Object obj) {
         errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
     }
 
     public void getSendFee(String str, String str2, long j, String str3, FeeCallback feeCallback) {
-        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$rmj6RWruILMIDwXKtOj3iIZRsvg(this, str, str2, j, str3, feeCallback));
+        Utilities.globalQueue.postRunnable(new -$$Lambda$TonController$Fi-LPQ1eWOgf-5nsADaZt1litCc(this, str, str2, j, str3, feeCallback));
     }
 
-    public /* synthetic */ void lambda$getSendFee$36$TonController(String str, String str2, long j, String str3, FeeCallback feeCallback) {
+    public /* synthetic */ void lambda$getSendFee$34$TonController(String str, String str2, long j, String str3, FeeCallback feeCallback) {
         String str4 = str;
         str4 = str2;
-        sendRequest(new GenericCreateSendGramsQuery(new InputKeyFake(), new AccountAddress(str), new AccountAddress(str2), j, 0, true, str3 != null ? str3.getBytes() : new byte[0]), new -$$Lambda$TonController$ILzap0prykOf_bDUayUNWbm8ApI(this, feeCallback));
+        sendRequest(new GenericCreateSendGramsQuery(new InputKeyFake(), new AccountAddress(str), new AccountAddress(str2), j, 0, true, str3 != null ? str3.getBytes() : new byte[0]), new -$$Lambda$TonController$qR3Tgb351JrkevNaqYs6rgZrxoI(this, feeCallback));
     }
 
-    public /* synthetic */ void lambda$null$35$TonController(FeeCallback feeCallback, Object obj) {
+    public /* synthetic */ void lambda$null$33$TonController(FeeCallback feeCallback, Object obj) {
         if (obj instanceof QueryInfo) {
-            sendRequest(new QueryEstimateFees(((QueryInfo) obj).id, true), new -$$Lambda$TonController$daXwKtNSaWy7G7M57zYWYvar_vzg(feeCallback));
+            sendRequest(new QueryEstimateFees(((QueryInfo) obj).id, true), new -$$Lambda$TonController$df_RsxATpf0GQpenv3l4j2PC1Tw(feeCallback));
         } else {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$fc0s7xgfYzLacWIYqaNny0X45p4(feeCallback));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$jW6wtjLesOuYuNx0zBEds91eiMM(feeCallback));
         }
     }
 
-    static /* synthetic */ void lambda$null$33(FeeCallback feeCallback, Object obj) {
+    static /* synthetic */ void lambda$null$31(FeeCallback feeCallback, Object obj) {
         if (obj instanceof QueryFees) {
             Fees fees = ((QueryFees) obj).sourceFees;
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$gx970w2d8N8gkzu44QDyYZdfNUY(feeCallback, ((fees.fwdFee + fees.gasFee) + fees.inFwdFee) + fees.storageFee));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$-kt7s_A0jMhl4hCL2zTDpVn7PtY(feeCallback, ((fees.fwdFee + fees.gasFee) + fees.inFwdFee) + fees.storageFee));
             return;
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$jW6wtjLesOuYuNx0zBEds91eiMM(feeCallback));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$1_Iq1FPXTAyXlSAJwQTDt3Yuu3A(feeCallback));
     }
 
     public void sendGrams(String str, Cipher cipher, InputKey inputKey, String str2, String str3, long j, String str4, Runnable runnable, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback, ErrorCallback errorCallback) {
         DispatchQueue dispatchQueue = Utilities.globalQueue;
-        -$$Lambda$TonController$lGl0uwBvLFIb85clhMRSWxdFQHo -__lambda_toncontroller_lgl0uwbvlfib85clhmrswxdfqho = r1;
-        -$$Lambda$TonController$lGl0uwBvLFIb85clhMRSWxdFQHo -__lambda_toncontroller_lgl0uwbvlfib85clhmrswxdfqho2 = new -$$Lambda$TonController$lGl0uwBvLFIb85clhMRSWxdFQHo(this, inputKey, str, cipher, runnable, errorCallback, str2, str3, j, str4, runnable3, runnable2, dangerousCallback);
-        dispatchQueue.postRunnable(-__lambda_toncontroller_lgl0uwbvlfib85clhmrswxdfqho);
+        -$$Lambda$TonController$pCFvgPRO7LoJVVjLo13UdJcy_fw -__lambda_toncontroller_pcfvgpro7lojvvjlo13udjcy_fw = r1;
+        -$$Lambda$TonController$pCFvgPRO7LoJVVjLo13UdJcy_fw -__lambda_toncontroller_pcfvgpro7lojvvjlo13udjcy_fw2 = new -$$Lambda$TonController$pCFvgPRO7LoJVVjLo13UdJcy_fw(this, inputKey, str, cipher, runnable, errorCallback, str2, str3, j, str4, runnable3, runnable2, dangerousCallback);
+        dispatchQueue.postRunnable(-__lambda_toncontroller_pcfvgpro7lojvvjlo13udjcy_fw);
     }
 
-    public /* synthetic */ void lambda$sendGrams$42$TonController(InputKey inputKey, String str, Cipher cipher, Runnable runnable, ErrorCallback errorCallback, String str2, String str3, long j, String str4, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback) {
+    public /* synthetic */ void lambda$sendGrams$40$TonController(InputKey inputKey, String str, Cipher cipher, Runnable runnable, ErrorCallback errorCallback, String str2, String str3, long j, String str4, Runnable runnable2, Runnable runnable3, DangerousCallback dangerousCallback) {
         InputKey decryptTonData = inputKey == null ? decryptTonData(str, cipher, runnable, errorCallback, false) : inputKey;
         if (decryptTonData != null) {
             long j2 = j;
             Function genericCreateSendGramsQuery = new GenericCreateSendGramsQuery(decryptTonData, new AccountAddress(str2), new AccountAddress(str3), j2, 0, true, str4 != null ? str4.getBytes() : new byte[0]);
-            TonLibCallback -__lambda_toncontroller_yuecot-fm_kv3rlii_kh71p7bie = new -$$Lambda$TonController$yUECOT-FM_Kv3rLiI_KH71P7BiE(this, str2, str3, j2, str4, runnable2, runnable3, errorCallback, dangerousCallback, decryptTonData);
-            sendRequest(genericCreateSendGramsQuery, -__lambda_toncontroller_yuecot-fm_kv3rlii_kh71p7bie);
+            TonLibCallback -__lambda_toncontroller_s5yblrm_eah0urwn_n6fuvaxvz0 = new -$$Lambda$TonController$S5YblRM_eaH0urwn_n6FUVAxVZ0(this, str2, str3, j2, str4, runnable2, runnable3, errorCallback, dangerousCallback, decryptTonData);
+            sendRequest(genericCreateSendGramsQuery, -__lambda_toncontroller_s5yblrm_eah0urwn_n6fuvaxvz0);
         }
     }
 
-    public /* synthetic */ void lambda$null$41$TonController(String str, String str2, long j, String str3, Runnable runnable, Runnable runnable2, ErrorCallback errorCallback, DangerousCallback dangerousCallback, InputKey inputKey, Object obj) {
+    public /* synthetic */ void lambda$null$39$TonController(String str, String str2, long j, String str3, Runnable runnable, Runnable runnable2, ErrorCallback errorCallback, DangerousCallback dangerousCallback, InputKey inputKey, Object obj) {
         Object obj2 = obj;
         if (obj2 instanceof QueryInfo) {
             QueryInfo queryInfo = (QueryInfo) obj2;
             Function querySend = new QuerySend(queryInfo.id);
-            TonLibCallback -__lambda_toncontroller_dmqqck7xxfuyq7rk-qrcrsjghau = new -$$Lambda$TonController$dmqQcK7xXFUyq7rK-qrcrSJghAU(this, str, str2, j, str3, queryInfo, runnable, runnable2, errorCallback);
-            sendRequest(querySend, -__lambda_toncontroller_dmqqck7xxfuyq7rk-qrcrsjghau);
+            TonLibCallback -__lambda_toncontroller_z-13g23zsh_gfnxypbtmompovk4 = new -$$Lambda$TonController$z-13G23zsH_GfNxYPBtMOmpOvK4(this, str, str2, j, str3, queryInfo, runnable, runnable2, errorCallback);
+            sendRequest(querySend, -__lambda_toncontroller_z-13g23zsh_gfnxypbtmompovk4);
             return;
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$QlgABM4m-WzQMPhpS-Kj0ErK0Nw(this, obj, dangerousCallback, inputKey, errorCallback));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$bMO-MD6JPh5oaQurli6G2MeAsRY(this, obj, dangerousCallback, inputKey, errorCallback));
     }
 
-    public /* synthetic */ void lambda$null$39$TonController(String str, String str2, long j, String str3, QueryInfo queryInfo, Runnable runnable, Runnable runnable2, ErrorCallback errorCallback, Object obj) {
+    public /* synthetic */ void lambda$null$37$TonController(String str, String str2, long j, String str3, QueryInfo queryInfo, Runnable runnable, Runnable runnable2, ErrorCallback errorCallback, Object obj) {
         Object obj2 = obj;
         if (obj2 instanceof Ok) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$Peu8-5DSueZpb_27JpN0qoMvBqc(this, str, str2, j, str3, queryInfo, runnable, runnable2));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$CuyudYXTq33MGPIBUZ0M6s-OBAc(this, str, str2, j, str3, queryInfo, runnable, runnable2));
             return;
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$2eEZy_v8fKhoVNoONuTQuOtJvmc(this, errorCallback, obj2));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$TonController$gw9gFHyWSEcegrBijUnpaJmp1dI(this, errorCallback, obj2));
     }
 
-    public /* synthetic */ void lambda$null$37$TonController(String str, String str2, long j, String str3, QueryInfo queryInfo, Runnable runnable, Runnable runnable2) {
+    public /* synthetic */ void lambda$null$35$TonController(String str, String str2, long j, String str3, QueryInfo queryInfo, Runnable runnable, Runnable runnable2) {
         QueryInfo queryInfo2 = queryInfo;
         RawMessage rawMessage = new RawMessage();
         rawMessage.source = str;
@@ -1690,11 +1645,11 @@ public class TonController extends BaseController {
         runnable2.run();
     }
 
-    public /* synthetic */ void lambda$null$38$TonController(ErrorCallback errorCallback, Object obj) {
+    public /* synthetic */ void lambda$null$36$TonController(ErrorCallback errorCallback, Object obj) {
         errorCallback.run("TONLIB_FAIL", getTonApiErrorSafe(obj));
     }
 
-    public /* synthetic */ void lambda$null$40$TonController(Object obj, DangerousCallback dangerousCallback, InputKey inputKey, ErrorCallback errorCallback) {
+    public /* synthetic */ void lambda$null$38$TonController(Object obj, DangerousCallback dangerousCallback, InputKey inputKey, ErrorCallback errorCallback) {
         Error tonApiErrorSafe = getTonApiErrorSafe(obj);
         if (tonApiErrorSafe == null || !tonApiErrorSafe.message.startsWith("DANGEROUS_TRANSACTION")) {
             errorCallback.run("TONLIB_FAIL", tonApiErrorSafe);
@@ -1706,7 +1661,7 @@ public class TonController extends BaseController {
     private void runShortPolling() {
         if (!this.shortPollingInProgress && !this.pendingTransactions.isEmpty()) {
             this.shortPollingInProgress = true;
-            getAccountState(new -$$Lambda$TonController$Km29l-ktaYYDRq7V_ySesd3emDs(this, this.cachedAccountState));
+            getAccountState(new -$$Lambda$TonController$ZwQvnl7h5w2BAiAFZkDfeaJCd5c(this, this.cachedAccountState));
         }
     }
 
@@ -1715,7 +1670,7 @@ public class TonController extends BaseController {
     /* JADX WARNING: Missing block: B:7:0x0018, code skipped:
             if (r8.lt == r2.lt) goto L_0x001c;
      */
-    public /* synthetic */ void lambda$runShortPolling$44$TonController(drinkless.org.ton.TonApi.GenericAccountState r8, drinkless.org.ton.TonApi.GenericAccountState r9) {
+    public /* synthetic */ void lambda$runShortPolling$42$TonController(drinkless.org.ton.TonApi.GenericAccountState r8, drinkless.org.ton.TonApi.GenericAccountState r9) {
         /*
         r7 = this;
         r0 = 1;
@@ -1743,7 +1698,7 @@ public class TonController extends BaseController {
         if (r8 == 0) goto L_0x002c;
     L_0x001f:
         r8 = getLastTransactionId(r9);
-        r1 = new org.telegram.messenger.-$$Lambda$TonController$t00t6QI4nlspHGaD-6kGZWJKt7s;
+        r1 = new org.telegram.messenger.-$$Lambda$TonController$1e_N16tO-4nWvlG6WbYTOXkO55E;
         r1.<init>(r7, r9);
         r7.getTransactions(r0, r8, r1);
         goto L_0x003f;
@@ -1760,10 +1715,10 @@ public class TonController extends BaseController {
     L_0x003f:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.TonController.lambda$runShortPolling$44$TonController(drinkless.org.ton.TonApi$GenericAccountState, drinkless.org.ton.TonApi$GenericAccountState):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.TonController.lambda$runShortPolling$42$TonController(drinkless.org.ton.TonApi$GenericAccountState, drinkless.org.ton.TonApi$GenericAccountState):void");
     }
 
-    public /* synthetic */ void lambda$null$43$TonController(GenericAccountState genericAccountState) {
+    public /* synthetic */ void lambda$null$41$TonController(GenericAccountState genericAccountState) {
         this.shortPollRunnable = null;
         this.shortPollingInProgress = false;
         checkPendingTransactionsForFailure(genericAccountState);
@@ -1809,11 +1764,11 @@ public class TonController extends BaseController {
     private void loadTonConfigFromUrl() {
         UserConfig userConfig = getUserConfig();
         if (userConfig.walletConfigType == 0) {
-            WalletConfigLoader.loadConfig(userConfig.walletConfigUrl, new -$$Lambda$TonController$VOuIbtTEE2aV8W0SGQKLGpsihu0(this, userConfig));
+            WalletConfigLoader.loadConfig(userConfig.walletConfigUrl, new -$$Lambda$TonController$t6QAy4FxSz0TIxSldHqjrzP73cU(this, userConfig));
         }
     }
 
-    public /* synthetic */ void lambda$loadTonConfigFromUrl$45$TonController(UserConfig userConfig, String str) {
+    public /* synthetic */ void lambda$loadTonConfigFromUrl$43$TonController(UserConfig userConfig, String str) {
         if (!(TextUtils.isEmpty(str) || TextUtils.equals(userConfig.walletConfigFromUrl, str))) {
             userConfig.walletConfigFromUrl = str;
             userConfig.saveConfig(false);

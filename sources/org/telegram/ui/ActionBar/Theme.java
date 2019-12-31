@@ -1255,10 +1255,19 @@ public class Theme {
         public int rotation;
         public String slug;
 
+        public OverrideWallpaperInfo() {
+            String str = "";
+            this.fileName = str;
+            this.originalFileName = str;
+            this.slug = str;
+        }
+
         public OverrideWallpaperInfo(OverrideWallpaperInfo overrideWallpaperInfo, ThemeInfo themeInfo, ThemeAccent themeAccent) {
             File file;
-            File filesDirFixed;
-            String generateWallpaperName;
+            String str = "";
+            this.fileName = str;
+            this.originalFileName = str;
+            this.slug = str;
             this.slug = overrideWallpaperInfo.slug;
             this.color = overrideWallpaperInfo.color;
             this.gradientColor = overrideWallpaperInfo.gradientColor;
@@ -1268,34 +1277,33 @@ public class Theme {
             this.intensity = overrideWallpaperInfo.intensity;
             this.parentTheme = themeInfo;
             this.parentAccent = themeAccent;
-            String str = "";
             if (TextUtils.isEmpty(overrideWallpaperInfo.fileName)) {
-                overrideWallpaperInfo.fileName = str;
+                this.fileName = str;
             } else {
                 try {
                     file = new File(ApplicationLoader.getFilesDirFixed(), overrideWallpaperInfo.fileName);
-                    filesDirFixed = ApplicationLoader.getFilesDirFixed();
-                    generateWallpaperName = this.parentTheme.generateWallpaperName(this.parentAccent, false);
+                    File filesDirFixed = ApplicationLoader.getFilesDirFixed();
+                    String generateWallpaperName = this.parentTheme.generateWallpaperName(this.parentAccent, false);
                     this.fileName = generateWallpaperName;
                     AndroidUtilities.copyFile(file, new File(filesDirFixed, generateWallpaperName));
                 } catch (Exception e) {
-                    overrideWallpaperInfo.fileName = str;
+                    this.fileName = str;
                     FileLog.e(e);
                 }
             }
             if (TextUtils.isEmpty(overrideWallpaperInfo.originalFileName)) {
-                overrideWallpaperInfo.originalFileName = str;
+                this.originalFileName = str;
             } else if (overrideWallpaperInfo.originalFileName.equals(overrideWallpaperInfo.fileName)) {
                 this.originalFileName = this.fileName;
             } else {
                 try {
                     file = new File(ApplicationLoader.getFilesDirFixed(), overrideWallpaperInfo.originalFileName);
-                    filesDirFixed = ApplicationLoader.getFilesDirFixed();
-                    generateWallpaperName = this.parentTheme.generateWallpaperName(this.parentAccent, true);
-                    this.originalFileName = generateWallpaperName;
-                    AndroidUtilities.copyFile(file, new File(filesDirFixed, generateWallpaperName));
+                    File filesDirFixed2 = ApplicationLoader.getFilesDirFixed();
+                    String generateWallpaperName2 = this.parentTheme.generateWallpaperName(this.parentAccent, true);
+                    this.originalFileName = generateWallpaperName2;
+                    AndroidUtilities.copyFile(file, new File(filesDirFixed2, generateWallpaperName2));
                 } catch (Exception e2) {
-                    overrideWallpaperInfo.originalFileName = str;
+                    this.originalFileName = str;
                     FileLog.e(e2);
                 }
             }
@@ -1506,7 +1514,7 @@ public class Theme {
         L_0x00d9:
             r8 = 0;
         L_0x00da:
-            if (r4 == 0) goto L_0x013e;
+            if (r4 == 0) goto L_0x0141;
         L_0x00dc:
             r7 = r11.parentTheme;
             r7 = r7.accentBaseColor;
@@ -1515,16 +1523,16 @@ public class Theme {
             if (r4 != r7) goto L_0x00ea;
         L_0x00e4:
             r7 = r11.accentColor;
-            if (r7 == 0) goto L_0x013e;
+            if (r7 == 0) goto L_0x0141;
         L_0x00e8:
-            if (r7 == r4) goto L_0x013e;
+            if (r7 == r4) goto L_0x0141;
         L_0x00ea:
             android.graphics.Color.colorToHSV(r4, r2);
             r4 = org.telegram.ui.ActionBar.Theme.myMessagesColorKeys;
             r4 = r4.iterator();
         L_0x00f5:
             r7 = r4.hasNext();
-            if (r7 == 0) goto L_0x013e;
+            if (r7 == 0) goto L_0x0141;
         L_0x00fb:
             r7 = r4.next();
             r7 = (java.lang.String) r7;
@@ -1548,35 +1556,39 @@ public class Theme {
             r9 = r9.get(r7);
             r9 = (java.lang.Integer) r9;
         L_0x0128:
+            if (r9 != 0) goto L_0x012b;
+        L_0x012a:
+            goto L_0x00f5;
+        L_0x012b:
             r10 = r9.intValue();
             r10 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r1, r2, r10, r3);
             r9 = r9.intValue();
             if (r10 == r9) goto L_0x00f5;
-        L_0x0136:
+        L_0x0139:
             r9 = java.lang.Integer.valueOf(r10);
             r13.put(r7, r9);
             goto L_0x00f5;
-        L_0x013e:
+        L_0x0141:
             r12 = -1;
             r1 = "chat_outLoader";
-            if (r8 != 0) goto L_0x034a;
-        L_0x0143:
+            if (r8 != 0) goto L_0x034d;
+        L_0x0146:
             r2 = r11.myMessagesGradientAccentColor;
-            if (r2 == 0) goto L_0x034a;
-        L_0x0147:
+            if (r2 == 0) goto L_0x034d;
+        L_0x014a:
             r3 = r11.myMessagesAccentColor;
             r2 = org.telegram.ui.ActionBar.Theme.useBlackText(r3, r2);
-            if (r2 == 0) goto L_0x0157;
-        L_0x014f:
+            if (r2 == 0) goto L_0x015a;
+        L_0x0152:
             r2 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
             r3 = -11184811; // 0xfffffffffvar_ float:-2.8356863E38 double:NaN;
             r4 = NUM; // 0x4d000000 float:1.34217728E8 double:6.382565465E-315;
-            goto L_0x015e;
-        L_0x0157:
+            goto L_0x0161;
+        L_0x015a:
             r3 = -1118482; // 0xffffffffffeeeeee float:NaN double:NaN;
             r4 = NUM; // 0x4dffffff float:5.3687088E8 double:6.46545592E-315;
             r2 = -1;
-        L_0x015e:
+        L_0x0161:
             r7 = java.lang.Integer.valueOf(r4);
             r9 = "chat_outAudioProgress";
             r13.put(r9, r7);
@@ -1742,70 +1754,70 @@ public class Theme {
             r2 = java.lang.Integer.valueOf(r2);
             r3 = "chat_outMediaIconSelected";
             r13.put(r3, r2);
-        L_0x034a:
-            if (r8 == 0) goto L_0x035f;
-        L_0x034c:
+        L_0x034d:
+            if (r8 == 0) goto L_0x0362;
+        L_0x034f:
             r1 = r13.get(r1);
             r1 = (java.lang.Integer) r1;
             r1 = r1.intValue();
             r12 = org.telegram.messenger.AndroidUtilities.getColorDistance(r12, r1);
             r1 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
-            if (r12 >= r1) goto L_0x035f;
-        L_0x035e:
-            goto L_0x0360;
-        L_0x035f:
+            if (r12 >= r1) goto L_0x0362;
+        L_0x0361:
+            goto L_0x0363;
+        L_0x0362:
             r6 = r8;
-        L_0x0360:
+        L_0x0363:
             r12 = r11.myMessagesAccentColor;
-            if (r12 == 0) goto L_0x037a;
-        L_0x0364:
+            if (r12 == 0) goto L_0x037d;
+        L_0x0367:
             r1 = r11.myMessagesGradientAccentColor;
-            if (r1 == 0) goto L_0x037a;
-        L_0x0368:
+            if (r1 == 0) goto L_0x037d;
+        L_0x036b:
             r12 = java.lang.Integer.valueOf(r12);
             r13.put(r5, r12);
             r12 = r11.myMessagesGradientAccentColor;
             r12 = java.lang.Integer.valueOf(r12);
             r1 = "chat_outBubbleGradient";
             r13.put(r1, r12);
-        L_0x037a:
+        L_0x037d:
             r1 = r11.backgroundOverrideColor;
             r12 = (int) r1;
             r3 = "chat_wallpaper";
             r4 = 0;
-            if (r12 == 0) goto L_0x038b;
-        L_0x0383:
+            if (r12 == 0) goto L_0x038e;
+        L_0x0386:
             r12 = java.lang.Integer.valueOf(r12);
             r13.put(r3, r12);
-            goto L_0x0392;
-        L_0x038b:
+            goto L_0x0395;
+        L_0x038e:
             r12 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1));
-            if (r12 == 0) goto L_0x0392;
-        L_0x038f:
-            r13.remove(r3);
+            if (r12 == 0) goto L_0x0395;
         L_0x0392:
+            r13.remove(r3);
+        L_0x0395:
             r1 = r11.backgroundGradientOverrideColor;
             r12 = (int) r1;
             r3 = "chat_wallpaper_gradient_to";
-            if (r12 == 0) goto L_0x03a1;
-        L_0x0399:
+            if (r12 == 0) goto L_0x03a4;
+        L_0x039c:
             r12 = java.lang.Integer.valueOf(r12);
             r13.put(r3, r12);
-            goto L_0x03a8;
-        L_0x03a1:
+            goto L_0x03ab;
+        L_0x03a4:
             r12 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1));
-            if (r12 == 0) goto L_0x03a8;
-        L_0x03a5:
-            r13.remove(r3);
+            if (r12 == 0) goto L_0x03ab;
         L_0x03a8:
+            r13.remove(r3);
+        L_0x03ab:
             r12 = r11.backgroundRotation;
             r1 = 45;
-            if (r12 == r1) goto L_0x03b7;
-        L_0x03ae:
+            if (r12 == r1) goto L_0x03ba;
+        L_0x03b1:
             r12 = java.lang.Integer.valueOf(r12);
             r1 = "chat_wallpaper_gradient_rotation";
             r13.put(r1, r12);
-        L_0x03b7:
+        L_0x03ba:
             r12 = r6 ^ 1;
             return r12;
             */
@@ -3059,97 +3071,97 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x2c2c A:{Catch:{ all -> 0x2CLASSNAME }} */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x2CLASSNAME A:{Catch:{ all -> 0x2CLASSNAME }} */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d6a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d8a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d87 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x2daa A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d97 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x2ad9 A:{SYNTHETIC, Splitter:B:67:0x2ad9} */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x2ac8 A:{Catch:{ Exception -> 0x2e55 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x2afa A:{SYNTHETIC, Splitter:B:78:0x2afa} */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x2b28 A:{Catch:{ Exception -> 0x2e51 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x2db8 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x2e1e A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x2e17 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x2e3a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x2e33 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x2c1f A:{Catch:{ all -> 0x2c3a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x2CLASSNAME A:{Catch:{ all -> 0x2c3c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d7a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x2d9d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d8a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x2acc A:{SYNTHETIC, Splitter:B:67:0x2acc} */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x2abb A:{Catch:{ Exception -> 0x2e48 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x2aed A:{SYNTHETIC, Splitter:B:78:0x2aed} */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x2b1b A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x2dab A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:208:0x2e11 A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x2e0a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x2e2d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x2e26 A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d7a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d8a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x2d9d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d6a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d87 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d8a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d97 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x2daa A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d6a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d8a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d87 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x2daa A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d97 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d6a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d87 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d8a A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d97 A:{Catch:{ Exception -> 0x2e4d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x2daa A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d7a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x2d9d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d8a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d7a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7d A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d8a A:{Catch:{ Exception -> 0x2e40 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x2d9d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ef1  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
     static {
@@ -3591,2489 +3603,2473 @@ public class Theme {
         r13 = "windowBackgroundWhiteBlueText6";
         r9.put(r13, r12);
         r9 = defaultColors;
-        r12 = -13141330; // 0xfffffffffvar_aae float:-2.4388571E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteBlueText7";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -14776109; // 0xffffffffff1e88d3 float:-2.1072846E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteBlueButton";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -13132315; // 0xfffffffffvar_de5 float:-2.4406856E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteBlueIcon";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -14248148; // 0xfffffffffvar_c float:-2.2143678E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGreenText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -13129704; // 0xfffffffffvar_a818 float:-2.4412152E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGreenText2";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -3319206; // 0xffffffffffcd5a5a float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteRedText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -2404015; // 0xffffffffffdb5151 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteRedText2";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -2995895; // 0xffffffffffd24949 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteRedText3";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -3198928; // 0xffffffffffcvar_ float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteRedText4";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -1230535; // 0xffffffffffed3939 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteRedText5";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -39322; // 0xfffffffffffvar_ float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteRedText6";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -8156010; // 0xfffffffffvar_CLASSNAME float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayText2";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayText3";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -8355712; // 0xfffffffffvar_ float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayText4";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -6052957; // 0xffffffffffa3a3a3 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayText5";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -9079435; // 0xfffffffffvar_ float:-3.2627073E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayText6";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -3750202; // 0xffffffffffc6c6c6 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayText7";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -9605774; // 0xffffffffff6d6d72 float:-3.155953E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayText8";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -2368549; // 0xffffffffffdbdbdb float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteGrayLine";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = "windowBackgroundWhiteBlackText";
-        r9.put(r12, r11);
-        r9 = defaultColors;
-        r12 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteHintText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteValueText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteLinkText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = NUM; // 0x3362a9e3 float:5.2774237E-8 double:4.25935987E-315;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteLinkSelection";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteBlueHeader";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -2368549; // 0xffffffffffdbdbdb float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteInputField";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -13129232; // 0xfffffffffvar_a9f0 float:-2.4413109E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundWhiteInputFieldActivated";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -5196358; // 0xffffffffffb0b5ba float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "switchTrack";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -11358743; // 0xfffffffffvar_ade9 float:-2.8004087E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "switchTrackChecked";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -8221031; // 0xfffffffffvar_e99 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "switchTrackBlue";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -12810041; // 0xffffffffff3CLASSNAMEc7 float:-2.5060505E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "switchTrackBlueChecked";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = "switchTrackBlueThumb";
-        r9.put(r12, r0);
-        r9 = defaultColors;
-        r12 = "switchTrackBlueThumbChecked";
-        r9.put(r12, r0);
-        r9 = defaultColors;
-        r12 = NUM; // 0x17404a53 float:6.2132356E-25 double:1.927297214E-315;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "switchTrackBlueSelector";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = NUM; // 0x21024781 float:4.414035E-19 double:2.73612322E-315;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "switchTrackBlueSelectorChecked";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -688514; // 0xffffffffffvar_e7e float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "switch2Track";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -11358743; // 0xfffffffffvar_ade9 float:-2.8004087E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "switch2TrackChecked";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -12345121; // 0xfffffffffvar_a0df float:-2.6003475E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "checkboxSquareBackground";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = "checkboxSquareCheck";
-        r9.put(r12, r0);
-        r9 = defaultColors;
-        r12 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "checkboxSquareUnchecked";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -5197648; // 0xffffffffffb0b0b0 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "checkboxSquareDisabled";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "listSelectorSDK21";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -5000269; // 0xffffffffffb3b3b3 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "radioBackground";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -13129232; // 0xfffffffffvar_a9f0 float:-2.4413109E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "radioBackgroundChecked";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -986896; // 0xfffffffffff0f0f0 float:NaN double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundGray";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r12 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
-        r12 = java.lang.Integer.valueOf(r12);
-        r13 = "windowBackgroundGrayShadow";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = -6974059; // 0xfffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "emptyListPlaceholder";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2500135; // 0xffffffffffd9d9d9 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "divider";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1117195; // 0xffffffffffeef3f5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "graySection";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8418927; // 0xffffffffff7var_ float:-3.3966742E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "key_graySectionText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -4202506; // 0xffffffffffbfdff6 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "contextProgressInner1";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13920542; // 0xffffffffff2b96e2 float:-2.2808142E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "contextProgressOuter1";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -4202506; // 0xffffffffffbfdff6 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "contextProgressInner2";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "contextProgressOuter2";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -5000269; // 0xffffffffffb3b3b3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "contextProgressInner3";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "contextProgressOuter3";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -3486256; // 0xffffffffffcacdd0 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "contextProgressInner4";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "contextProgressOuter4";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11361317; // 0xfffffffffvar_a3db float:-2.7998867E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "fastScrollActive";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3551791; // 0xffffffffffc9cdd1 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "fastScrollInactive";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "fastScrollText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "avatar_text";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -10043398; // 0xfffffffffvar_bffa float:-3.0671924E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundSaved";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -5654847; // 0xffffffffffa9b6c1 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundArchived";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10043398; // 0xfffffffffvar_bffa float:-3.0671924E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundArchivedHidden";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1743531; // 0xffffffffffe56555 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundRed";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -881592; // 0xffffffffffvar_CLASSNAME float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundOrange";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7436818; // 0xffffffffff8e85ee float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundViolet";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8992691; // 0xfffffffffvar_CLASSNAMEd float:-3.280301E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundGreen";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10502443; // 0xffffffffff5fbed5 float:-2.974087E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundCyan";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11232035; // 0xfffffffffvar_cdd float:-2.8261082E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundBlue";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -887654; // 0xffffffffffvar_a float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundPink";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1642505; // 0xffffffffffe6eff7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundGroupCreateSpanBlue";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11500111; // 0xfffffffffvar_b1 float:-2.7717359E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundInProfileBlue";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_backgroundActionBarBlue";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2626822; // 0xffffffffffd7eafa float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_subtitleInProfileBlue";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11959891; // 0xfffffffffvar_ad float:-2.6784814E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_actionBarSelectorBlue";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "avatar_actionBarIconBlue";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -3516848; // 0xffffffffffca5650 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_nameInMessageRed";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2589911; // 0xffffffffffd87b29 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_nameInMessageOrange";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_nameInMessageViolet";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11488718; // 0xfffffffffvar_b232 float:-2.7740467E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_nameInMessageGreen";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13132104; // 0xfffffffffvar_eb8 float:-2.4407284E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_nameInMessageCyan";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_nameInMessageBlue";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "avatar_nameInMessagePink";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11371101; // 0xfffffffffvar_da3 float:-2.7979022E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarDefault";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarDefaultIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "actionBarActionModeDefault";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = NUM; // 0x10000000 float:2.5243549E-29 double:1.32624737E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarActionModeDefaultTop";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarActionModeDefaultIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarDefaultTitle";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarDefaultSubtitle";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12554860; // 0xfffffffffvar_d94 float:-2.5578074E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarDefaultSelector";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x2var_ float:1.1641532E-10 double:3.895851647E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarWhiteSelector";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarDefaultSearch";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -NUM; // 0xfffffffvar_ffffff float:-1.5407439E-33 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarDefaultSearchPlaceholder";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarDefaultSubmenuItem";
-        r9.put(r13, r11);
-        r9 = defaultColors;
-        r13 = -9999504; // 0xfffffffffvar_b70 float:-3.0760951E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarDefaultSubmenuItemIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarDefaultSubmenuBackground";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -1907998; // 0xffffffffffe2e2e2 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarActionModeDefaultSelector";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarTabActiveText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarTabUnactiveText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarTabLine";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -12554860; // 0xfffffffffvar_d94 float:-2.5578074E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarTabSelector";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarBrowser";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -9471353; // 0xffffffffff6f7a87 float:-3.1832169E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarDefaultArchived";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10590350; // 0xffffffffff5e6772 float:-2.9562573E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarDefaultArchivedSelector";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "actionBarDefaultArchivedIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "actionBarDefaultArchivedTitle";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "actionBarDefaultArchivedSearch";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -NUM; // 0xfffffffvar_ffffff float:-1.5407439E-33 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "actionBarDefaultSearchArchivedPlaceholder";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11810020; // 0xffffffffff4bcb1c float:-2.7088789E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_onlineCircle";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11613090; // 0xffffffffff4ecc5e float:-2.748821E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_unreadCounter";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3749428; // 0xffffffffffc6c9cc float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_unreadCounterMuted";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_unreadCounterText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -10049056; // 0xfffffffffvar_a9e0 float:-3.0660448E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_archiveBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6313293; // 0xffffffffff9faab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_archivePinBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_archiveIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chats_archiveText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chats_name";
-        r9.put(r13, r11);
-        r9 = defaultColors;
-        r13 = -11382190; // 0xfffffffffvar_ float:-2.7956531E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_nameArchived";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -16734706; // 0xfffffffffvar_a60e float:-1.7100339E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_secretName";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -15093466; // 0xfffffffffvar_b126 float:-2.042917E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_secretIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -14408668; // 0xfffffffffvar_ float:-2.1818104E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_nameIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_pinnedIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7631473; // 0xffffffffff8b8d8f float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_message";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7237231; // 0xfffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_messageArchived";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7434095; // 0xffffffffff8e9091 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_message_threeLines";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2274503; // 0xffffffffffdd4b39 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_draft";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_nameMessage";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7631473; // 0xffffffffff8b8d8f float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_nameMessageArchived";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12434359; // 0xfffffffffvar_ float:-2.5822479E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_nameMessage_threeLines";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10592674; // 0xffffffffff5e5e5e float:-2.955786E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_nameMessageArchived_threeLines";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_attachMessage";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_actionMessage";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6973028; // 0xfffffffffvar_c float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_date";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_pinnedOverlay";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_tabletSelectedOverlay";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_sentCheck";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_sentReadCheck";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_sentClock";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2796974; // 0xffffffffffd55252 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_sentError";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_sentErrorIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -13391642; // 0xfffffffffvar_a8e6 float:-2.3880878E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_verifiedBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_verifiedCheck";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -4341308; // 0xffffffffffbdc1c4 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_muteIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_mentionIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chats_menuBackground";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -12303292; // 0xfffffffffvar_ float:-2.6088314E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_menuItemText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_menuItemCheck";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7827048; // 0xfffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_menuItemIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_menuName";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chats_menuPhone";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -4004353; // 0xffffffffffc2e5ff float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_menuPhoneCats";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_menuCloud";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -12420183; // 0xfffffffffvar_ba9 float:-2.5851231E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_menuCloudBackgroundCats";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_actionIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -10114592; // 0xfffffffffvar_a9e0 float:-3.0527525E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_actionBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11100714; // 0xfffffffffvar_dd6 float:-2.8527432E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_actionPressedBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_actionUnreadIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chats_actionUnreadBackground";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_actionUnreadPressedBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_menuTopBackgroundCats";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3749428; // 0xffffffffffc6c9cc float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_archivePullDownBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10049056; // 0xfffffffffvar_a9e0 float:-3.0660448E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chats_archivePullDownBackgroundActive";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12171706; // 0xfffffffffvar_ float:-2.6355202E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachMediaBanBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_attachMediaBanText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_attachCheckBoxCheck";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -12995849; // 0xfffffffffvar_b2f7 float:-2.4683642E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachCheckBoxBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachPhotoBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13391883; // 0xfffffffffvar_a7f5 float:-2.388039E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachActiveTab";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7169634; // 0xfffffffffvar_e float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachUnactiveTab";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13421773; // 0xfffffffffvar_ float:-2.3819765E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachPermissionImage";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1945520; // 0xffffffffffe25050 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachPermissionMark";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9472134; // 0xffffffffff6var_a float:-3.1830585E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachPermissionText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3355444; // 0xffffffffffcccccc float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachEmptyImage";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12214795; // 0xfffffffffvar_df5 float:-2.6267807E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachGalleryBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_attachGalleryIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -1351584; // 0xffffffffffeb6060 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachAudioBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_attachAudioIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -13321743; // 0xfffffffffvar_b9f1 float:-2.402265E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachFileBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_attachFileIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -868277; // 0xfffffffffff2CLASSNAMEb float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachContactBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_attachContactIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -13187226; // 0xfffffffffvar_CLASSNAME float:-2.4295483E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachLocationBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_attachLocationIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -868277; // 0xfffffffffff2CLASSNAMEb float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_attachPollBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_attachPollIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_status";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inDownCall";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -47032; // 0xfffffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inUpCall";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outUpCall";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x66728fa6 float:2.8636563E23 double:8.491920826E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_shareBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -NUM; // 0xfffffffvar_fa6 float:-1.2540116E-23 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_shareBackgroundSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_lockIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -5124893; // 0xffffffffffb1cce3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_muteIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_inBubble";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -1247235; // 0xffffffffffecf7fd float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inBubbleSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -14862509; // 0xffffffffff1d3753 float:-2.0897606E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inBubbleShadow";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outBubble";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x14000000 float:6.4623485E-27 double:1.65780921E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outBubbleGradientSelectedOverlay";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2492475; // 0xffffffffffd9f7c5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outBubbleSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -14781172; // 0xffffffffff1e750c float:-2.1062577E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outBubbleShadow";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_inMediaIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -1050370; // 0xffffffffffeff8fe float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inMediaIconSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outMediaIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1967921; // 0xffffffffffe1f8cf float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outMediaIconSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_messageTextIn";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = "chat_messageTextOut";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messageLinkIn";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messageLinkOut";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_serviceText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_serviceLink";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_serviceIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = NUM; // 0x66000000 float:1.5111573E23 double:8.45482698E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_mediaTimeBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outSentCheck";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outSentCheckSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outSentCheckRead";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outSentCheckReadSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outSentClock";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outSentClockSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inSentClock";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7094838; // 0xfffffffffvar_bdca float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inSentClockSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_mediaSentCheck";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_mediaSentClock";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inViews";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7094838; // 0xfffffffffvar_bdca float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inViewsSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9522601; // 0xffffffffff6eb257 float:-3.1728226E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outViews";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9522601; // 0xffffffffff6eb257 float:-3.1728226E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outViewsSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_mediaViews";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -4801083; // 0xffffffffffb6bdc5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inMenu";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6766130; // 0xfffffffffvar_c1ce float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inMenuSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7221634; // 0xfffffffffvar_ce7e float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outMenu";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7221634; // 0xfffffffffvar_ce7e float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outMenuSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_mediaMenu";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outInstant";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12019389; // 0xfffffffffvar_ float:-2.6664138E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outInstantSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inInstant";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13600331; // 0xfffffffffvar_b5 float:-2.3457607E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inInstantSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2411211; // 0xffffffffffdb3535 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_sentError";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_sentErrorIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = NUM; // 0x280a90f0 float:7.691967E-15 double:3.31903965E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_selectedBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_previewDurationText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_previewGameText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inPreviewInstantText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outPreviewInstantText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13600331; // 0xfffffffffvar_b5 float:-2.3457607E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inPreviewInstantSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12019389; // 0xfffffffffvar_ float:-2.6664138E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outPreviewInstantSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1776928; // 0xffffffffffe4e2e0 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_secretTimeText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_stickerNameText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_botButtonText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_botProgress";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -13072697; // 0xfffffffffvar_c7 float:-2.4527776E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inForwardedNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outForwardedNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inViaBotNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outViaBotNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_stickerViaBotNameText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -10903592; // 0xfffffffffvar_fd8 float:-2.8927243E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inReplyLine";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9520791; // 0xffffffffff6eb969 float:-3.1731897E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outReplyLine";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_stickerReplyLine";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inReplyNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outReplyNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_stickerReplyNameText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_inReplyMessageText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = "chat_outReplyMessageText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inReplyMediaMessageText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outReplyMediaMessageText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inReplyMediaMessageSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outReplyMediaMessageSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_stickerReplyMessageText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -9390872; // 0xfffffffffvar_b4e8 float:-3.1995404E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inPreviewLine";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7812741; // 0xfffffffffvar_CLASSNAMEb float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outPreviewLine";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inSiteNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outSiteNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inContactNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outContactNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inContactPhoneText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inContactPhoneSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outContactPhoneText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outContactPhoneSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_mediaProgress";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_inAudioProgress";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioProgress";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1050370; // 0xffffffffffeff8fe float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioSelectedProgress";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1967921; // 0xffffffffffe1f8cf float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioSelectedProgress";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_mediaTimeText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inTimeText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9391780; // 0xfffffffffvar_b15c float:-3.1993562E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outTimeText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -4143413; // 0xffffffffffc0c6cb float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_adminText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_adminSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inTimeSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9391780; // 0xfffffffffvar_b15c float:-3.1993562E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outTimeSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioPerfomerText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioPerfomerSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioPerfomerText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioPerfomerSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioTitleText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioTitleText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioDurationText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioDurationText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioDurationSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioDurationSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1774864; // 0xffffffffffe4eaf0 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioSeekbar";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x3fe4eaf0 float:1.7884197 double:5.296220484E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioCacheSeekbar";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -4463700; // 0xffffffffffbbe3ac float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioSeekbar";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x3fbbe3ac float:1.4678855 double:5.28293587E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioCacheSeekbar";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -4399384; // 0xffffffffffbcdee8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioSeekbarSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -5644906; // 0xffffffffffa9dd96 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioSeekbarSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inAudioSeekbarFill";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outAudioSeekbarFill";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2169365; // 0xffffffffffdee5eb float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inVoiceSeekbar";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -4463700; // 0xffffffffffbbe3ac float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outVoiceSeekbar";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -4399384; // 0xffffffffffbcdee8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inVoiceSeekbarSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -5644906; // 0xffffffffffa9dd96 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outVoiceSeekbarSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inVoiceSeekbarFill";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outVoiceSeekbarFill";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileProgress";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileProgress";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3413258; // 0xffffffffffcbeaf6 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileProgressSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3806041; // 0xffffffffffc5eca7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileProgressSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileNameText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileInfoText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileInfoText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileInfoSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileInfoSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3413258; // 0xffffffffffcbeaf6 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileBackgroundSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3806041; // 0xffffffffffc5eca7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileBackgroundSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inVenueInfoText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outVenueInfoText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inVenueInfoSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outVenueInfoSelectedText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_mediaInfoText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = NUM; // 0x3362a9e3 float:5.2774237E-8 double:4.25935987E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_linkSelectBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x6662a9e3 float:2.6759717E23 double:8.48677336E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_textSelectBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -986379; // 0xfffffffffff0f2f5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelBadgeBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_emojiPanelBadgeText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -1709586; // 0xffffffffffe5e9ee float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiSearchBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7036497; // 0xfffffffffvar_a1af float:NaN double:NaN;
+        r13 = -13141330; // 0xfffffffffvar_aae float:-2.4388571E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiSearchIcon";
+        r14 = "windowBackgroundWhiteBlueText7";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = NUM; // 0x12000000 float:4.0389678E-28 double:1.49202829E-315;
+        r13 = -14776109; // 0xffffffffff1e88d3 float:-2.1072846E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelShadowLine";
+        r14 = "windowBackgroundWhiteBlueButton";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -7038047; // 0xfffffffffvar_ba1 float:NaN double:NaN;
+        r13 = -13132315; // 0xfffffffffvar_de5 float:-2.4406856E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelEmptyText";
+        r14 = "windowBackgroundWhiteBlueIcon";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -6445909; // 0xffffffffff9da4ab float:NaN double:NaN;
+        r13 = -14248148; // 0xfffffffffvar_c float:-2.2143678E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelIcon";
+        r14 = "windowBackgroundWhiteGreenText";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -7564905; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r13 = -13129704; // 0xfffffffffvar_a818 float:-2.4412152E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiBottomPanelIcon";
+        r14 = "windowBackgroundWhiteGreenText2";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -13920286; // 0xffffffffff2b97e2 float:-2.280866E38 double:NaN;
+        r13 = -3319206; // 0xffffffffffcd5a5a float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelIconSelected";
+        r14 = "windowBackgroundWhiteRedText";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -1907225; // 0xffffffffffe2e5e7 float:NaN double:NaN;
+        r13 = -2404015; // 0xffffffffffdb5151 float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelStickerPackSelector";
+        r14 = "windowBackgroundWhiteRedText2";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -11097104; // 0xfffffffffvar_abf0 float:-2.8534754E38 double:NaN;
+        r13 = -2995895; // 0xffffffffffd24949 float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelStickerPackSelectorLine";
+        r14 = "windowBackgroundWhiteRedText3";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -7564905; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r13 = -3198928; // 0xffffffffffcvar_ float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelBackspace";
+        r14 = "windowBackgroundWhiteRedText4";
         r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_emojiPanelMasksIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -10305560; // 0xfffffffffvar_bfe8 float:-3.0140196E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelMasksIconSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_emojiPanelTrendingTitle";
-        r9.put(r13, r11);
         r9 = defaultColors;
-        r13 = -8221804; // 0xfffffffffvar_b94 float:NaN double:NaN;
+        r13 = -1230535; // 0xffffffffffed3939 float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelStickerSetName";
+        r14 = "windowBackgroundWhiteRedText5";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -14184997; // 0xfffffffffvar_ddb float:-2.2271763E38 double:NaN;
+        r13 = -39322; // 0xfffffffffffvar_ float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelStickerSetNameHighlight";
+        r14 = "windowBackgroundWhiteRedText6";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -5130564; // 0xffffffffffb1b6bc float:NaN double:NaN;
+        r13 = -8156010; // 0xfffffffffvar_CLASSNAME float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelStickerSetNameIcon";
+        r14 = "windowBackgroundWhiteGrayText";
         r9.put(r14, r13);
         r9 = defaultColors;
         r13 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelTrendingDescription";
+        r14 = "windowBackgroundWhiteGrayText2";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -13220017; // 0xfffffffffvar_f float:-2.4228975E38 double:NaN;
+        r13 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_botKeyboardButtonText";
+        r14 = "windowBackgroundWhiteGrayText3";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -1775639; // 0xffffffffffe4e7e9 float:NaN double:NaN;
+        r13 = -8355712; // 0xfffffffffvar_ float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_botKeyboardButtonBackground";
+        r14 = "windowBackgroundWhiteGrayText4";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -3354156; // 0xffffffffffccd1d4 float:NaN double:NaN;
+        r13 = -6052957; // 0xffffffffffa3a3a3 float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_botKeyboardButtonBackgroundPressed";
+        r14 = "windowBackgroundWhiteGrayText5";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r13 = -9079435; // 0xfffffffffvar_ float:-3.2627073E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_unreadMessagesStartArrowIcon";
+        r14 = "windowBackgroundWhiteGrayText6";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -11102772; // 0xfffffffffvar_cc float:-2.8523258E38 double:NaN;
+        r13 = -3750202; // 0xffffffffffc6c6c6 float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_unreadMessagesStartText";
+        r14 = "windowBackgroundWhiteGrayText7";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = "chat_unreadMessagesStartBackground";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r13 = -9605774; // 0xffffffffff6d6d72 float:-3.155953E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileIcon";
+        r14 = "windowBackgroundWhiteGrayText8";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -7883067; // 0xfffffffffvar_b6c5 float:NaN double:NaN;
+        r13 = -2368549; // 0xffffffffffdbdbdb float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inFileSelectedIcon";
+        r14 = "windowBackgroundWhiteGrayLine";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outFileSelectedIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inLocationBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inLocationIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outLocationBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7880840; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outLocationIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inContactBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_inContactIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outContactBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outContactIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outBroadcast";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_mediaBroadcast";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_searchPanelIcons";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_searchPanelText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8421505; // 0xffffffffff7f7f7f float:-3.3961514E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_secretChatStatusText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_fieldOverlayText";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_stickersHintPanel";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -11032346; // 0xfffffffffvar_a8e6 float:-2.86661E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_replyPanelIcons";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_replyPanelClose";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_replyPanelName";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_replyPanelMessage";
+        r13 = "windowBackgroundWhiteBlackText";
         r9.put(r13, r11);
         r9 = defaultColors;
-        r13 = -1513240; // 0xffffffffffe8e8e8 float:NaN double:NaN;
+        r13 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_replyPanelLine";
+        r14 = "windowBackgroundWhiteHintText";
         r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_messagePanelBackground";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_messagePanelText";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = -5985101; // 0xffffffffffa4acb3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelHint";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11230757; // 0xfffffffffvar_a1db float:-2.8263674E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelCursor";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_messagePanelShadow";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelIcons";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11817481; // 0xffffffffff4badf7 float:-2.7073656E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelVideoFrame";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_recordedVoicePlayPause";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -2495749; // 0xffffffffffd9eafb float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_recordedVoicePlayPausePressed";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2468275; // 0xffffffffffda564d float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_recordedVoiceDot";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9981205; // 0xfffffffffvar_b2eb float:-3.0798066E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_recordedVoiceBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6107400; // 0xffffffffffa2cef8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_recordedVoiceProgress";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_recordedVoiceProgressInner";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_recordVoiceCancel";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10309397; // 0xfffffffffvar_b0eb float:-3.0132414E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelSend";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -5987164; // 0xffffffffffa4a4a4 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "key_chat_messagePanelVoiceLock";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "key_chat_messagePanelVoiceLockBackground";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "key_chat_messagePanelVoiceLockShadow";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = -11711413; // 0xffffffffff4d4c4b float:-2.7288787E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_recordTime";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_emojiPanelNewTrending";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_gifSaveHintText";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -NUM; // 0xffffffffcCLASSNAME float:-3.8028356E7 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_gifSaveHintBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_goDownButton";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = "chat_goDownButtonShadow";
-        r9.put(r13, r12);
-        r9 = defaultColors;
-        r13 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_goDownButtonIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_goDownButtonCounter";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -11689240; // 0xffffffffff4da2e8 float:-2.733376E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_goDownButtonCounterBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -5395027; // 0xffffffffffadadad float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelCancelInlineBot";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_messagePanelVoicePressed";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -11037236; // 0xfffffffffvar_cc float:-2.865618E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelVoiceBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0xd000000 float:3.9443045E-31 double:1.07757599E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelVoiceShadow";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_messagePanelVoiceDelete";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_messagePanelVoiceDuration";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -11037236; // 0xfffffffffvar_cc float:-2.865618E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inlineResultIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_topPanelBackground";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -7563878; // 0xffffffffff8CLASSNAMEa float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_topPanelClose";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9658414; // 0xffffffffff6c9fd2 float:-3.1452764E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_topPanelLine";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -12940081; // 0xffffffffff3a8ccf float:-2.4796753E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_topPanelTitle";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_topPanelMessage";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -3188393; // 0xffffffffffcvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_reportSpam";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11894091; // 0xffffffffff4a82b5 float:-2.6918272E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_addContact";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inLoader";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -10114080; // 0xfffffffffvar_abe0 float:-3.0528564E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inLoaderSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outLoader";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -9783964; // 0xffffffffff6ab564 float:-3.1198118E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outLoaderSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6113080; // 0xffffffffffa2b8c8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inLoaderPhoto";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inLoaderPhotoSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -197380; // 0xfffffffffffcfcfc float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inLoaderPhotoIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_inLoaderPhotoIconSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outLoaderPhoto";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -8538000; // 0xffffffffff7db870 float:-3.3725234E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outLoaderPhotoSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outLoaderPhotoIcon";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -4134748; // 0xffffffffffc0e8a4 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_outLoaderPhotoIconSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x66000000 float:1.5111573E23 double:8.45482698E-315;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_mediaLoaderPhoto";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = NUM; // 0x7var_ float:1.7014118E38 double:1.0527088494E-314;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_mediaLoaderPhotoSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_mediaLoaderPhotoIcon";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -2500135; // 0xffffffffffd9d9d9 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_mediaLoaderPhotoIconSelected";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -NUM; // 0xffffffffcc3e648e float:-4.9910328E7 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "chat_secretTimerBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "chat_secretTimerText";
-        r9.put(r13, r0);
         r9 = defaultColors;
         r13 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "profile_creatorIcon";
+        r14 = "windowBackgroundWhiteValueText";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -8288630; // 0xfffffffffvar_a float:NaN double:NaN;
+        r13 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "profile_actionIcon";
+        r14 = "windowBackgroundWhiteLinkText";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = "profile_actionBackground";
+        r13 = NUM; // 0x3362a9e3 float:5.2774237E-8 double:4.25935987E-315;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "windowBackgroundWhiteLinkSelection";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "windowBackgroundWhiteBlueHeader";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -2368549; // 0xffffffffffdbdbdb float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "windowBackgroundWhiteInputField";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -13129232; // 0xfffffffffvar_a9f0 float:-2.4413109E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "windowBackgroundWhiteInputFieldActivated";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -5196358; // 0xffffffffffb0b5ba float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "switchTrack";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -11358743; // 0xfffffffffvar_ade9 float:-2.8004087E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "switchTrackChecked";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -8221031; // 0xfffffffffvar_e99 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "switchTrackBlue";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -12810041; // 0xffffffffff3CLASSNAMEc7 float:-2.5060505E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "switchTrackBlueChecked";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = "switchTrackBlueThumb";
         r9.put(r13, r0);
         r9 = defaultColors;
-        r13 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "profile_actionPressedBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -5056776; // 0xffffffffffb2d6f8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "profile_verifiedBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11959368; // 0xfffffffffvar_b8 float:-2.6785875E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "profile_verifiedCheck";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "profile_title";
+        r13 = "switchTrackBlueThumbChecked";
         r9.put(r13, r0);
         r9 = defaultColors;
-        r13 = -2626822; // 0xffffffffffd7eafa float:NaN double:NaN;
+        r13 = NUM; // 0x17404a53 float:6.2132356E-25 double:1.927297214E-315;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "profile_status";
+        r14 = "switchTrackBlueSelector";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = "player_actionBar";
+        r13 = NUM; // 0x21024781 float:4.414035E-19 double:2.73612322E-315;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "switchTrackBlueSelectorChecked";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -688514; // 0xffffffffffvar_e7e float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "switch2Track";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -11358743; // 0xfffffffffvar_ade9 float:-2.8004087E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "switch2TrackChecked";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -12345121; // 0xfffffffffvar_a0df float:-2.6003475E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "checkboxSquareBackground";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = "checkboxSquareCheck";
         r9.put(r13, r0);
+        r9 = defaultColors;
+        r13 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "checkboxSquareUnchecked";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -5197648; // 0xffffffffffb0b0b0 float:NaN double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "checkboxSquareDisabled";
+        r9.put(r14, r13);
         r9 = defaultColors;
         r13 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_actionBarSelector";
+        r14 = "listSelectorSDK21";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r13 = -5000269; // 0xffffffffffb3b3b3 float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_actionBarTitle";
+        r14 = "radioBackground";
         r9.put(r14, r13);
         r9 = defaultColors;
-        r13 = -NUM; // 0xfffffffvar_ float:-6.617445E-24 double:NaN;
+        r13 = -13129232; // 0xfffffffffvar_a9f0 float:-2.4413109E38 double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_actionBarTop";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_actionBarSubtitle";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_actionBarItems";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = "player_background";
-        r9.put(r13, r0);
-        r9 = defaultColors;
-        r13 = -7564650; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_time";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1445899; // 0xffffffffffe9eff5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_progressBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -1445899; // 0xffffffffffe9eff5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "key_player_progressCachedBackground";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -11821085; // 0xffffffffff4b9fe3 float:-2.7066346E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_progress";
-        r9.put(r14, r13);
-        r9 = defaultColors;
-        r13 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
-        r14 = "player_placeholder";
+        r14 = "radioBackgroundChecked";
         r9.put(r14, r13);
         r9 = defaultColors;
         r13 = -986896; // 0xfffffffffff0f0f0 float:NaN double:NaN;
         r13 = java.lang.Integer.valueOf(r13);
+        r14 = "windowBackgroundGray";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r13 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
+        r13 = java.lang.Integer.valueOf(r13);
+        r14 = "windowBackgroundGrayShadow";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = -6974059; // 0xfffffffffvar_ float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "emptyListPlaceholder";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2500135; // 0xffffffffffd9d9d9 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "divider";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1117195; // 0xffffffffffeef3f5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "graySection";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -8418927; // 0xffffffffff7var_ float:-3.3966742E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "key_graySectionText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -4202506; // 0xffffffffffbfdff6 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "contextProgressInner1";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13920542; // 0xffffffffff2b96e2 float:-2.2808142E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "contextProgressOuter1";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -4202506; // 0xffffffffffbfdff6 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "contextProgressInner2";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "contextProgressOuter2";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -5000269; // 0xffffffffffb3b3b3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "contextProgressInner3";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "contextProgressOuter3";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -3486256; // 0xffffffffffcacdd0 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "contextProgressInner4";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "contextProgressOuter4";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11361317; // 0xfffffffffvar_a3db float:-2.7998867E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "fastScrollActive";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3551791; // 0xffffffffffc9cdd1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "fastScrollInactive";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "fastScrollText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "avatar_text";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -10043398; // 0xfffffffffvar_bffa float:-3.0671924E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundSaved";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -5654847; // 0xffffffffffa9b6c1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundArchived";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10043398; // 0xfffffffffvar_bffa float:-3.0671924E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundArchivedHidden";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1743531; // 0xffffffffffe56555 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundRed";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -881592; // 0xffffffffffvar_CLASSNAME float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundOrange";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7436818; // 0xffffffffff8e85ee float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundViolet";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -8992691; // 0xfffffffffvar_CLASSNAMEd float:-3.280301E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundGreen";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10502443; // 0xffffffffff5fbed5 float:-2.974087E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundCyan";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11232035; // 0xfffffffffvar_cdd float:-2.8261082E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundBlue";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -887654; // 0xffffffffffvar_a float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundPink";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1642505; // 0xffffffffffe6eff7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundGroupCreateSpanBlue";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11500111; // 0xfffffffffvar_b1 float:-2.7717359E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundInProfileBlue";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_backgroundActionBarBlue";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2626822; // 0xffffffffffd7eafa float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_subtitleInProfileBlue";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11959891; // 0xfffffffffvar_ad float:-2.6784814E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_actionBarSelectorBlue";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "avatar_actionBarIconBlue";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -3516848; // 0xffffffffffca5650 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_nameInMessageRed";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2589911; // 0xffffffffffd87b29 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_nameInMessageOrange";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_nameInMessageViolet";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11488718; // 0xfffffffffvar_b232 float:-2.7740467E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_nameInMessageGreen";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13132104; // 0xfffffffffvar_eb8 float:-2.4407284E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_nameInMessageCyan";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_nameInMessageBlue";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11627828; // 0xffffffffff4e92cc float:-2.7458318E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "avatar_nameInMessagePink";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11371101; // 0xfffffffffvar_da3 float:-2.7979022E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarDefault";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarDefaultIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "actionBarActionModeDefault";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = NUM; // 0x10000000 float:2.5243549E-29 double:1.32624737E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarActionModeDefaultTop";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarActionModeDefaultIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarDefaultTitle";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarDefaultSubtitle";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12554860; // 0xfffffffffvar_d94 float:-2.5578074E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarDefaultSelector";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x2var_ float:1.1641532E-10 double:3.895851647E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarWhiteSelector";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarDefaultSearch";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -NUM; // 0xfffffffvar_ffffff float:-1.5407439E-33 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarDefaultSearchPlaceholder";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarDefaultSubmenuItem";
+        r9.put(r14, r11);
+        r9 = defaultColors;
+        r14 = -9999504; // 0xfffffffffvar_b70 float:-3.0760951E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarDefaultSubmenuItemIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarDefaultSubmenuBackground";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -1907998; // 0xffffffffffe2e2e2 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarActionModeDefaultSelector";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarTabActiveText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarTabUnactiveText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarTabLine";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -12554860; // 0xfffffffffvar_d94 float:-2.5578074E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarTabSelector";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarBrowser";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -9471353; // 0xffffffffff6f7a87 float:-3.1832169E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarDefaultArchived";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10590350; // 0xffffffffff5e6772 float:-2.9562573E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarDefaultArchivedSelector";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "actionBarDefaultArchivedIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "actionBarDefaultArchivedTitle";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "actionBarDefaultArchivedSearch";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -NUM; // 0xfffffffvar_ffffff float:-1.5407439E-33 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "actionBarDefaultSearchArchivedPlaceholder";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11810020; // 0xffffffffff4bcb1c float:-2.7088789E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_onlineCircle";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11613090; // 0xffffffffff4ecc5e float:-2.748821E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_unreadCounter";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3749428; // 0xffffffffffc6c9cc float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_unreadCounterMuted";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_unreadCounterText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -10049056; // 0xfffffffffvar_a9e0 float:-3.0660448E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_archiveBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6313293; // 0xffffffffff9faab3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_archivePinBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_archiveIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chats_archiveText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chats_name";
+        r9.put(r14, r11);
+        r9 = defaultColors;
+        r14 = -11382190; // 0xfffffffffvar_ float:-2.7956531E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_nameArchived";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -16734706; // 0xfffffffffvar_a60e float:-1.7100339E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_secretName";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -15093466; // 0xfffffffffvar_b126 float:-2.042917E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_secretIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -14408668; // 0xfffffffffvar_ float:-2.1818104E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_nameIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_pinnedIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7631473; // 0xffffffffff8b8d8f float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_message";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7237231; // 0xfffffffffvar_ float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_messageArchived";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7434095; // 0xffffffffff8e9091 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_message_threeLines";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2274503; // 0xffffffffffdd4b39 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_draft";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_nameMessage";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7631473; // 0xffffffffff8b8d8f float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_nameMessageArchived";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12434359; // 0xfffffffffvar_ float:-2.5822479E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_nameMessage_threeLines";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10592674; // 0xffffffffff5e5e5e float:-2.955786E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_nameMessageArchived_threeLines";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_attachMessage";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12812624; // 0xffffffffff3c7eb0 float:-2.5055266E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_actionMessage";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6973028; // 0xfffffffffvar_c float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_date";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_pinnedOverlay";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_tabletSelectedOverlay";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_sentCheck";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_sentReadCheck";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_sentClock";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2796974; // 0xffffffffffd55252 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_sentError";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_sentErrorIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -13391642; // 0xfffffffffvar_a8e6 float:-2.3880878E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_verifiedBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_verifiedCheck";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -4341308; // 0xffffffffffbdc1c4 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_muteIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_mentionIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chats_menuBackground";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -12303292; // 0xfffffffffvar_ float:-2.6088314E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_menuItemText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_menuItemCheck";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7827048; // 0xfffffffffvar_ float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_menuItemIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_menuName";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chats_menuPhone";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -4004353; // 0xffffffffffc2e5ff float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_menuPhoneCats";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_menuCloud";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -12420183; // 0xfffffffffvar_ba9 float:-2.5851231E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_menuCloudBackgroundCats";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_actionIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -10114592; // 0xfffffffffvar_a9e0 float:-3.0527525E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_actionBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11100714; // 0xfffffffffvar_dd6 float:-2.8527432E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_actionPressedBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_actionUnreadIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chats_actionUnreadBackground";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_actionUnreadPressedBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10907718; // 0xfffffffffvar_fba float:-2.8918875E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_menuTopBackgroundCats";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3749428; // 0xffffffffffc6c9cc float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_archivePullDownBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10049056; // 0xfffffffffvar_a9e0 float:-3.0660448E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chats_archivePullDownBackgroundActive";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12171706; // 0xfffffffffvar_ float:-2.6355202E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachMediaBanBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_attachMediaBanText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_attachCheckBoxCheck";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -12995849; // 0xfffffffffvar_b2f7 float:-2.4683642E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachCheckBoxBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachPhotoBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13391883; // 0xfffffffffvar_a7f5 float:-2.388039E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachActiveTab";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7169634; // 0xfffffffffvar_e float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachUnactiveTab";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13421773; // 0xfffffffffvar_ float:-2.3819765E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachPermissionImage";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1945520; // 0xffffffffffe25050 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachPermissionMark";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9472134; // 0xffffffffff6var_a float:-3.1830585E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachPermissionText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3355444; // 0xffffffffffcccccc float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachEmptyImage";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12214795; // 0xfffffffffvar_df5 float:-2.6267807E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachGalleryBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_attachGalleryIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -1351584; // 0xffffffffffeb6060 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachAudioBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_attachAudioIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -13321743; // 0xfffffffffvar_b9f1 float:-2.402265E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachFileBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_attachFileIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -868277; // 0xfffffffffff2CLASSNAMEb float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachContactBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_attachContactIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -13187226; // 0xfffffffffvar_CLASSNAME float:-2.4295483E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachLocationBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_attachLocationIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -868277; // 0xfffffffffff2CLASSNAMEb float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_attachPollBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_attachPollIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -2758409; // 0xffffffffffd5e8f7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_status";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inDownCall";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -47032; // 0xfffffffffffvar_ float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inUpCall";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outUpCall";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x66728fa6 float:2.8636563E23 double:8.491920826E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_shareBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -NUM; // 0xfffffffvar_fa6 float:-1.2540116E-23 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_shareBackgroundSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_lockIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -5124893; // 0xffffffffffb1cce3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_muteIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_inBubble";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -1247235; // 0xffffffffffecf7fd float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inBubbleSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -14862509; // 0xffffffffff1d3753 float:-2.0897606E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inBubbleShadow";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outBubble";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x14000000 float:6.4623485E-27 double:1.65780921E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outBubbleGradientSelectedOverlay";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2492475; // 0xffffffffffd9f7c5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outBubbleSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -14781172; // 0xffffffffff1e750c float:-2.1062577E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outBubbleShadow";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_inMediaIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -1050370; // 0xffffffffffeff8fe float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inMediaIconSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outMediaIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1967921; // 0xffffffffffe1f8cf float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outMediaIconSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_messageTextIn";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = "chat_messageTextOut";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messageLinkIn";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -14255946; // 0xfffffffffvar_b6 float:-2.2127861E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messageLinkOut";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_serviceText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_serviceLink";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_serviceIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = NUM; // 0x66000000 float:1.5111573E23 double:8.45482698E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_mediaTimeBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outSentCheck";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outSentCheckSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outSentCheckRead";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10637232; // 0xffffffffff5db050 float:-2.9467485E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outSentCheckReadSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outSentClock";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9061026; // 0xfffffffffvar_bd5e float:-3.266441E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outSentClockSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inSentClock";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7094838; // 0xfffffffffvar_bdca float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inSentClockSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_mediaSentCheck";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_mediaSentClock";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inViews";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7094838; // 0xfffffffffvar_bdca float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inViewsSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9522601; // 0xffffffffff6eb257 float:-3.1728226E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outViews";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9522601; // 0xffffffffff6eb257 float:-3.1728226E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outViewsSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_mediaViews";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -4801083; // 0xffffffffffb6bdc5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inMenu";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6766130; // 0xfffffffffvar_c1ce float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inMenuSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7221634; // 0xfffffffffvar_ce7e float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outMenu";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7221634; // 0xfffffffffvar_ce7e float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outMenuSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_mediaMenu";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outInstant";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12019389; // 0xfffffffffvar_ float:-2.6664138E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outInstantSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_inInstant";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r14 = -13600331; // 0xfffffffffvar_b5 float:-2.3457607E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inInstantSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2411211; // 0xffffffffffdb3535 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_sentError";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_sentErrorIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = NUM; // 0x280a90f0 float:7.691967E-15 double:3.31903965E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_selectedBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_previewDurationText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_previewGameText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_inPreviewInstantText";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outPreviewInstantText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13600331; // 0xfffffffffvar_b5 float:-2.3457607E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inPreviewInstantSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12019389; // 0xfffffffffvar_ float:-2.6664138E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outPreviewInstantSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1776928; // 0xffffffffffe4e2e0 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_secretTimeText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_stickerNameText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_botButtonText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_botProgress";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -13072697; // 0xfffffffffvar_c7 float:-2.4527776E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inForwardedNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outForwardedNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_inViaBotNameText";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outViaBotNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_stickerViaBotNameText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -10903592; // 0xfffffffffvar_fd8 float:-2.8927243E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inReplyLine";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9520791; // 0xffffffffff6eb969 float:-3.1731897E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outReplyLine";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_stickerReplyLine";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_inReplyNameText";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outReplyNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_stickerReplyNameText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_inReplyMessageText";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = "chat_outReplyMessageText";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inReplyMediaMessageText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outReplyMediaMessageText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inReplyMediaMessageSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outReplyMediaMessageSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_stickerReplyMessageText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -9390872; // 0xfffffffffvar_b4e8 float:-3.1995404E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inPreviewLine";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7812741; // 0xfffffffffvar_CLASSNAMEb float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outPreviewLine";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_inSiteNameText";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outSiteNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inContactNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outContactNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inContactPhoneText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inContactPhoneSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outContactPhoneText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outContactPhoneSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_mediaProgress";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_inAudioProgress";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioProgress";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1050370; // 0xffffffffffeff8fe float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioSelectedProgress";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1967921; // 0xffffffffffe1f8cf float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioSelectedProgress";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_mediaTimeText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inTimeText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9391780; // 0xfffffffffvar_b15c float:-3.1993562E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outTimeText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -4143413; // 0xffffffffffc0c6cb float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_adminText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_adminSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inTimeSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9391780; // 0xfffffffffvar_b15c float:-3.1993562E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outTimeSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioPerfomerText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioPerfomerSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioPerfomerText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13286860; // 0xfffffffffvar_ float:-2.4093401E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioPerfomerSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioTitleText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioTitleText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioDurationText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioDurationText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioDurationSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioDurationSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1774864; // 0xffffffffffe4eaf0 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioSeekbar";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x3fe4eaf0 float:1.7884197 double:5.296220484E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioCacheSeekbar";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -4463700; // 0xffffffffffbbe3ac float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioSeekbar";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x3fbbe3ac float:1.4678855 double:5.28293587E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioCacheSeekbar";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -4399384; // 0xffffffffffbcdee8 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioSeekbarSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -5644906; // 0xffffffffffa9dd96 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioSeekbarSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inAudioSeekbarFill";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outAudioSeekbarFill";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2169365; // 0xffffffffffdee5eb float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inVoiceSeekbar";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -4463700; // 0xffffffffffbbe3ac float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outVoiceSeekbar";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -4399384; // 0xffffffffffbcdee8 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inVoiceSeekbarSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -5644906; // 0xffffffffffa9dd96 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outVoiceSeekbarSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inVoiceSeekbarFill";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outVoiceSeekbarFill";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileProgress";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileProgress";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3413258; // 0xffffffffffcbeaf6 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileProgressSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3806041; // 0xffffffffffc5eca7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileProgressSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11625772; // 0xffffffffff4e9ad4 float:-2.7462488E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11162801; // 0xfffffffffvar_ab4f float:-2.8401505E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileNameText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileInfoText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileInfoText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileInfoSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileInfoSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3413258; // 0xffffffffffcbeaf6 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileBackgroundSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3806041; // 0xffffffffffc5eca7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileBackgroundSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inVenueInfoText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outVenueInfoText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7752511; // 0xfffffffffvar_b4c1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inVenueInfoSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10112933; // 0xfffffffffvar_b05b float:-3.053089E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outVenueInfoSelectedText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_mediaInfoText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = NUM; // 0x3362a9e3 float:5.2774237E-8 double:4.25935987E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_linkSelectBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x6662a9e3 float:2.6759717E23 double:8.48677336E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_textSelectBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -986379; // 0xfffffffffff0f2f5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelBadgeBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_emojiPanelBadgeText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -1709586; // 0xffffffffffe5e9ee float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiSearchBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7036497; // 0xfffffffffvar_a1af float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiSearchIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0x12000000 float:4.0389678E-28 double:1.49202829E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelShadowLine";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7038047; // 0xfffffffffvar_ba1 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelEmptyText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6445909; // 0xffffffffff9da4ab float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7564905; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiBottomPanelIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13920286; // 0xffffffffff2b97e2 float:-2.280866E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelIconSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1907225; // 0xffffffffffe2e5e7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelStickerPackSelector";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11097104; // 0xfffffffffvar_abf0 float:-2.8534754E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelStickerPackSelectorLine";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7564905; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelBackspace";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_emojiPanelMasksIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -10305560; // 0xfffffffffvar_bfe8 float:-3.0140196E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelMasksIconSelected";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_emojiPanelTrendingTitle";
+        r9.put(r14, r11);
+        r9 = defaultColors;
+        r14 = -8221804; // 0xfffffffffvar_b94 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelStickerSetName";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -14184997; // 0xfffffffffvar_ddb float:-2.2271763E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelStickerSetNameHighlight";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -5130564; // 0xffffffffffb1b6bc float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelStickerSetNameIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelTrendingDescription";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -13220017; // 0xfffffffffvar_f float:-2.4228975E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_botKeyboardButtonText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1775639; // 0xffffffffffe4e7e9 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_botKeyboardButtonBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -3354156; // 0xffffffffffccd1d4 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_botKeyboardButtonBackgroundPressed";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_unreadMessagesStartArrowIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11102772; // 0xfffffffffvar_cc float:-2.8523258E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_unreadMessagesStartText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_unreadMessagesStartBackground";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7883067; // 0xfffffffffvar_b6c5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inFileSelectedIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outFileSelectedIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inLocationBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inLocationIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outLocationBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7880840; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outLocationIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inContactBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_inContactIcon";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outContactBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -1048610; // 0xffffffffffefffde float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outContactIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -12146122; // 0xfffffffffvar_aa36 float:-2.6407093E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_outBroadcast";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_mediaBroadcast";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_searchPanelIcons";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9999761; // 0xfffffffffvar_a6f float:-3.076043E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_searchPanelText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -8421505; // 0xffffffffff7f7f7f float:-3.3961514E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_secretChatStatusText";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_fieldOverlayText";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r14 = "chat_stickersHintPanel";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -11032346; // 0xfffffffffvar_a8e6 float:-2.86661E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_replyPanelIcons";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_replyPanelClose";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_replyPanelName";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r14 = "chat_replyPanelMessage";
+        r9.put(r14, r11);
+        r9 = defaultColors;
+        r14 = -1513240; // 0xffffffffffe8e8e8 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_replyPanelLine";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_messagePanelBackground";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_messagePanelText";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = -5985101; // 0xffffffffffa4acb3 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelHint";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11230757; // 0xfffffffffvar_a1db float:-2.8263674E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelCursor";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_messagePanelShadow";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelIcons";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11817481; // 0xffffffffff4badf7 float:-2.7073656E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelVideoFrame";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_recordedVoicePlayPause";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -2495749; // 0xffffffffffd9eafb float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_recordedVoicePlayPausePressed";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -2468275; // 0xffffffffffda564d float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_recordedVoiceDot";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9981205; // 0xfffffffffvar_b2eb float:-3.0798066E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_recordedVoiceBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -6107400; // 0xffffffffffa2cef8 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_recordedVoiceProgress";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_recordedVoiceProgressInner";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_recordVoiceCancel";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -10309397; // 0xfffffffffvar_b0eb float:-3.0132414E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelSend";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -5987164; // 0xffffffffffa4a4a4 float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "key_chat_messagePanelVoiceLock";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "key_chat_messagePanelVoiceLockBackground";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "key_chat_messagePanelVoiceLockShadow";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = -11711413; // 0xffffffffff4d4c4b float:-2.7288787E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_recordTime";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_emojiPanelNewTrending";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_gifSaveHintText";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -NUM; // 0xffffffffcCLASSNAME float:-3.8028356E7 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_gifSaveHintBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_goDownButton";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = "chat_goDownButtonShadow";
+        r9.put(r14, r13);
+        r9 = defaultColors;
+        r14 = -7432805; // 0xffffffffff8e959b float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_goDownButtonIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_goDownButtonCounter";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -11689240; // 0xffffffffff4da2e8 float:-2.733376E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_goDownButtonCounterBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -5395027; // 0xffffffffffadadad float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelCancelInlineBot";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_messagePanelVoicePressed";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -11037236; // 0xfffffffffvar_cc float:-2.865618E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelVoiceBackground";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = NUM; // 0xd000000 float:3.9443045E-31 double:1.07757599E-315;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelVoiceShadow";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9211021; // 0xfffffffffvar_ float:-3.2360185E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_messagePanelVoiceDelete";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_messagePanelVoiceDuration";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -11037236; // 0xfffffffffvar_cc float:-2.865618E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_inlineResultIcon";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_topPanelBackground";
+        r9.put(r14, r0);
+        r9 = defaultColors;
+        r14 = -7563878; // 0xffffffffff8CLASSNAMEa float:NaN double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_topPanelClose";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = -9658414; // 0xffffffffff6c9fd2 float:-3.1452764E38 double:NaN;
+        r14 = java.lang.Integer.valueOf(r14);
+        r15 = "chat_topPanelLine";
+        r9.put(r15, r14);
+        r9 = defaultColors;
+        r14 = "chat_topPanelTitle";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_topPanelMessage";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -3188393; // 0xffffffffffcvar_ float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_reportSpam";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -11894091; // 0xffffffffff4a82b5 float:-2.6918272E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_addContact";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -9259544; // 0xfffffffffvar_b5e8 float:-3.2261769E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_inLoader";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -10114080; // 0xfffffffffvar_abe0 float:-3.0528564E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_inLoaderSelected";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -8863118; // 0xfffffffffvar_CLASSNAME float:-3.3065816E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_outLoader";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -9783964; // 0xffffffffff6ab564 float:-3.1198118E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_outLoaderSelected";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -6113080; // 0xffffffffffa2b8c8 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_inLoaderPhoto";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -6113849; // 0xffffffffffa2b5c7 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_inLoaderPhotoSelected";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -197380; // 0xfffffffffffcfcfc float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_inLoaderPhotoIcon";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -1314571; // 0xffffffffffebf0f5 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_inLoaderPhotoIconSelected";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -8011912; // 0xfffffffffvar_bvar_ float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_outLoaderPhoto";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -8538000; // 0xffffffffff7db870 float:-3.3725234E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_outLoaderPhotoSelected";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -2427453; // 0xffffffffffdaf5c3 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_outLoaderPhotoIcon";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -4134748; // 0xffffffffffc0e8a4 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_outLoaderPhotoIconSelected";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = NUM; // 0x66000000 float:1.5111573E23 double:8.45482698E-315;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_mediaLoaderPhoto";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = NUM; // 0x7var_ float:1.7014118E38 double:1.0527088494E-314;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_mediaLoaderPhotoSelected";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = "chat_mediaLoaderPhotoIcon";
+        r9.put(r12, r0);
+        r9 = defaultColors;
+        r12 = -2500135; // 0xffffffffffd9d9d9 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_mediaLoaderPhotoIconSelected";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -NUM; // 0xffffffffcc3e648e float:-4.9910328E7 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "chat_secretTimerBackground";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = "chat_secretTimerText";
+        r9.put(r12, r0);
+        r9 = defaultColors;
+        r12 = -12937771; // 0xffffffffff3a95d5 float:-2.4801438E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "profile_creatorIcon";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -8288630; // 0xfffffffffvar_a float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "profile_actionIcon";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = "profile_actionBackground";
+        r9.put(r12, r0);
+        r9 = defaultColors;
+        r12 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "profile_actionPressedBackground";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -5056776; // 0xffffffffffb2d6f8 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "profile_verifiedBackground";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -11959368; // 0xfffffffffvar_b8 float:-2.6785875E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "profile_verifiedCheck";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = "profile_title";
+        r9.put(r12, r0);
+        r9 = defaultColors;
+        r12 = -2626822; // 0xffffffffffd7eafa float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "profile_status";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = "player_actionBar";
+        r9.put(r12, r0);
+        r9 = defaultColors;
+        r12 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_actionBarSelector";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_actionBarTitle";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -NUM; // 0xfffffffvar_ float:-6.617445E-24 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_actionBarTop";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_actionBarSubtitle";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -7697782; // 0xffffffffff8a8a8a float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_actionBarItems";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = "player_background";
+        r9.put(r12, r0);
+        r9 = defaultColors;
+        r12 = -7564650; // 0xffffffffff8CLASSNAME float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_time";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -1445899; // 0xffffffffffe9eff5 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_progressBackground";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -1445899; // 0xffffffffffe9eff5 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "key_player_progressCachedBackground";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -11821085; // 0xffffffffff4b9fe3 float:-2.7066346E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_progress";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
+        r14 = "player_placeholder";
+        r9.put(r14, r12);
+        r9 = defaultColors;
+        r12 = -986896; // 0xfffffffffff0f0f0 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "player_placeholderBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -13421773; // 0xfffffffffvar_ float:-2.3819765E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -13421773; // 0xfffffffffvar_ float:-2.3819765E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "player_button";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -11753238; // 0xffffffffff4ca8ea float:-2.7203956E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11753238; // 0xffffffffff4ca8ea float:-2.7203956E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "player_buttonActive";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -1973016; // 0xffffffffffe1e4e8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -1973016; // 0xffffffffffe1e4e8 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "key_sheet_scrollUp";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -3551789; // 0xffffffffffc9cdd3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -3551789; // 0xffffffffffc9cdd3 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "key_sheet_other";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "files_folderIcon";
-        r9.put(r13, r0);
+        r12 = "files_folderIcon";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -10637333; // 0xffffffffff5dafeb float:-2.946728E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -10637333; // 0xffffffffff5dafeb float:-2.946728E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "files_folderIconBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "files_iconText";
-        r9.put(r13, r0);
+        r12 = "files_iconText";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -6908266; // 0xfffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -6908266; // 0xfffffffffvar_ float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "sessions_devicesImage";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -12211217; // 0xfffffffffvar_abef float:-2.6275065E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12211217; // 0xfffffffffvar_abef float:-2.6275065E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "passport_authorizeBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -12542501; // 0xfffffffffvar_ddb float:-2.560314E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12542501; // 0xfffffffffvar_ddb float:-2.560314E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "passport_authorizeBackgroundSelected";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "passport_authorizeText";
-        r9.put(r13, r0);
+        r12 = "passport_authorizeText";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -12149258; // 0xfffffffffvar_df6 float:-2.6400732E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12149258; // 0xfffffffffvar_df6 float:-2.6400732E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_sendLocationBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "location_sendLocationIcon";
-        r9.put(r13, r0);
+        r12 = "location_sendLocationIcon";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -14906664; // 0xffffffffff1c8ad8 float:-2.0808049E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -14906664; // 0xffffffffff1c8ad8 float:-2.0808049E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_sendLocationText";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -11550140; // 0xffffffffff4fCLASSNAME float:-2.7615888E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11550140; // 0xffffffffff4fCLASSNAME float:-2.7615888E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_sendLiveLocationBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "location_sendLiveLocationIcon";
-        r9.put(r13, r0);
+        r12 = "location_sendLiveLocationIcon";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -13194460; // 0xfffffffffvar_ab24 float:-2.428081E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -13194460; // 0xfffffffffvar_ab24 float:-2.428081E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_sendLiveLocationText";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -13262875; // 0xfffffffffvar_fe5 float:-2.4142049E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -13262875; // 0xfffffffffvar_fe5 float:-2.4142049E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_liveLocationProgress";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -11753238; // 0xffffffffff4ca8ea float:-2.7203956E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11753238; // 0xffffffffff4ca8ea float:-2.7203956E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_placeLocationBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -12959675; // 0xffffffffff3a4045 float:-2.4757011E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12959675; // 0xffffffffff3a4045 float:-2.4757011E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_actionIcon";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -12414746; // 0xfffffffffvar_e6 float:-2.5862259E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12414746; // 0xfffffffffvar_e6 float:-2.5862259E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_actionActiveIcon";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "location_actionBackground";
-        r9.put(r13, r0);
+        r12 = "location_actionBackground";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "location_actionPressedBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -13262875; // 0xfffffffffvar_fe5 float:-2.4142049E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -13262875; // 0xfffffffffvar_fe5 float:-2.4142049E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "dialog_liveLocationProgress";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -16725933; // 0xfffffffffvar_CLASSNAME float:-1.7118133E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "calls_callReceivedGreenIcon";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -47032; // 0xfffffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -47032; // 0xfffffffffffvar_ float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "calls_callReceivedRedIcon";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -11491093; // 0xfffffffffvar_a8eb float:-2.773565E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11491093; // 0xfffffffffvar_a8eb float:-2.773565E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "featuredStickers_addedIcon";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "featuredStickers_buttonProgress";
-        r9.put(r13, r0);
+        r12 = "featuredStickers_buttonProgress";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -11491093; // 0xfffffffffvar_a8eb float:-2.773565E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11491093; // 0xfffffffffvar_a8eb float:-2.773565E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "featuredStickers_addButton";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -12346402; // 0xfffffffffvar_bde float:-2.6000877E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12346402; // 0xfffffffffvar_bde float:-2.6000877E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "featuredStickers_addButtonPressed";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -11496493; // 0xfffffffffvar_d3 float:-2.7724697E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11496493; // 0xfffffffffvar_d3 float:-2.7724697E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "featuredStickers_removeButtonText";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "featuredStickers_buttonText";
-        r9.put(r13, r0);
+        r12 = "featuredStickers_buttonText";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11688214; // 0xffffffffff4da6ea float:-2.733584E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "featuredStickers_unread";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "inappPlayerPerformer";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -13683656; // 0xffffffffff2var_ float:-2.3288603E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "inappPlayerTitle";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "inappPlayerBackground";
-        r9.put(r13, r0);
+        r12 = "inappPlayerBackground";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -10309397; // 0xfffffffffvar_b0eb float:-3.0132414E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -10309397; // 0xfffffffffvar_b0eb float:-3.0132414E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "inappPlayerPlayPause";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -5723992; // 0xffffffffffa8a8a8 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "inappPlayerClose";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -12279325; // 0xfffffffffvar_a1e3 float:-2.6136925E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12279325; // 0xfffffffffvar_a1e3 float:-2.6136925E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "returnToCallBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "returnToCallText";
-        r9.put(r13, r0);
+        r12 = "returnToCallText";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -13196562; // 0xfffffffffvar_a2ee float:-2.4276547E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -13196562; // 0xfffffffffvar_a2ee float:-2.4276547E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "sharedMedia_startStopLoadIcon";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -986123; // 0xfffffffffff0f3f5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -986123; // 0xfffffffffff0f3f5 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "sharedMedia_linkPlaceholder";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -4735293; // 0xffffffffffb7bec3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -4735293; // 0xffffffffffb7bec3 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "sharedMedia_linkPlaceholderText";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -1182729; // 0xffffffffffedf3f7 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -1182729; // 0xffffffffffedf3f7 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "sharedMedia_photoPlaceholder";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -12154957; // 0xfffffffffvar_b3 float:-2.6389173E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12154957; // 0xfffffffffvar_b3 float:-2.6389173E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "sharedMedia_actionMode";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -10567099; // 0xffffffffff5eCLASSNAME float:-2.9609732E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -10567099; // 0xffffffffff5eCLASSNAME float:-2.9609732E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "checkbox";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "checkboxCheck";
-        r9.put(r13, r0);
+        r12 = "checkboxCheck";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -5195326; // 0xffffffffffb0b9c2 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -5195326; // 0xffffffffffb0b9c2 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "checkboxDisabled";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -4801083; // 0xffffffffffb6bdc5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -4801083; // 0xffffffffffb6bdc5 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "stickers_menu";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = NUM; // 0xvar_ float:6.3108872E-30 double:1.24335691E-315;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "stickers_menuSelector";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -4669499; // 0xffffffffffb8bfc5 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -4669499; // 0xffffffffffb8bfc5 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "changephoneinfo_image";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -11491350; // 0xfffffffffvar_a7ea float:-2.7735128E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11491350; // 0xfffffffffvar_a7ea float:-2.7735128E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "changephoneinfo_image2";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -6182221; // 0xffffffffffa1aab3 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "groupcreate_hintText";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -11361317; // 0xfffffffffvar_a3db float:-2.7998867E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11361317; // 0xfffffffffvar_a3db float:-2.7998867E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "groupcreate_cursor";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "groupcreate_sectionShadow";
-        r9.put(r13, r12);
+        r12 = "groupcreate_sectionShadow";
+        r9.put(r12, r13);
         r9 = defaultColors;
-        r13 = -8617336; // 0xffffffffff7CLASSNAME float:-3.3564321E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -8617336; // 0xffffffffff7CLASSNAME float:-3.3564321E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "groupcreate_sectionText";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "groupcreate_spanText";
-        r9.put(r13, r11);
+        r12 = "groupcreate_spanText";
+        r9.put(r12, r11);
         r9 = defaultColors;
-        r13 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -855310; // 0xfffffffffff2f2f2 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "groupcreate_spanBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "groupcreate_spanDelete";
-        r9.put(r13, r0);
+        r12 = "groupcreate_spanDelete";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -11157919; // 0xfffffffffvar_be61 float:-2.8411407E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -11157919; // 0xfffffffffvar_be61 float:-2.8411407E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "contacts_inviteBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "contacts_inviteText";
-        r9.put(r13, r0);
+        r12 = "contacts_inviteText";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -1971470; // 0xffffffffffe1eaf2 float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -1971470; // 0xffffffffffe1eaf2 float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "login_progressInner";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -10313520; // 0xfffffffffvar_a0d0 float:-3.0124051E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -10313520; // 0xfffffffffvar_a0d0 float:-3.0124051E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "login_progressOuter";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -14043401; // 0xfffffffffvar_b6f7 float:-2.2558954E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -14043401; // 0xfffffffffvar_b6f7 float:-2.2558954E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "musicPicker_checkbox";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "musicPicker_checkboxCheck";
-        r9.put(r13, r0);
+        r12 = "musicPicker_checkboxCheck";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -10702870; // 0xffffffffff5cafea float:-2.9334356E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -10702870; // 0xffffffffff5cafea float:-2.9334356E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "musicPicker_buttonBackground";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "musicPicker_buttonIcon";
-        r9.put(r13, r0);
+        r12 = "musicPicker_buttonIcon";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -15095832; // 0xfffffffffvar_a7e8 float:-2.042437E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -15095832; // 0xfffffffffvar_a7e8 float:-2.042437E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "picker_enabledButton";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -6710887; // 0xfffffffffvar_ float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "picker_disabledButton";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -14043401; // 0xfffffffffvar_b6f7 float:-2.2558954E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -14043401; // 0xfffffffffvar_b6f7 float:-2.2558954E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "picker_badge";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "picker_badgeText";
-        r9.put(r13, r0);
+        r12 = "picker_badgeText";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = -12348980; // 0xfffffffffvar_cc float:-2.5995648E38 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -12348980; // 0xfffffffffvar_cc float:-2.5995648E38 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "chat_botSwitchToInlineText";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -NUM; // 0xffffffffea272var_ float:-5.05284E25 double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -NUM; // 0xffffffffea272var_ float:-5.05284E25 double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "undo_background";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = -8008961; // 0xfffffffffvar_caff float:NaN double:NaN;
-        r13 = java.lang.Integer.valueOf(r13);
+        r12 = -8008961; // 0xfffffffffvar_caff float:NaN double:NaN;
+        r12 = java.lang.Integer.valueOf(r12);
         r14 = "undo_cancelColor";
-        r9.put(r14, r13);
+        r9.put(r14, r12);
         r9 = defaultColors;
-        r13 = "undo_infoColor";
-        r9.put(r13, r0);
+        r12 = "undo_infoColor";
+        r9.put(r12, r0);
         r9 = defaultColors;
-        r13 = "wallet_blackBackground";
-        r9.put(r13, r12);
+        r12 = "wallet_blackBackground";
+        r9.put(r12, r13);
         r9 = defaultColors;
         r12 = -986896; // 0xfffffffffff0f0f0 float:NaN double:NaN;
         r12 = java.lang.Integer.valueOf(r12);
@@ -6633,6 +6629,9 @@ public class Theme {
         r9 = "chat_outBubbleShadow";
         r0.add(r9);
         r0 = myMessagesColorKeys;
+        r9 = "chat_outBubbleGradient";
+        r0.add(r9);
+        r0 = myMessagesColorKeys;
         r9 = "chat_outSentCheck";
         r0.add(r9);
         r0 = myMessagesColorKeys;
@@ -6888,9 +6887,9 @@ public class Theme {
         r10[r5] = r16;
         r16 = "JqSUrO0-mFIBAAAAWwTvLzoWGQI";
         r10[r7] = r16;
-        r16 = "F5oWoCs7QFACAAAAgf2bD_mg8Bw";
+        r16 = "O-wmAfBPSFADAAAA4zINVfD_bro";
         r10[r4] = r16;
-        r16 = "fqv01SQemVIBAAAApND8LDRUhRU";
+        r16 = "RepJ5uE_SVABAAAAr4d0YhgB850";
         r10[r8] = r16;
         r16 = "-Xc-np9y2VMCAAAARKr0yNNPYW0";
         r17 = 5;
@@ -6902,8 +6901,8 @@ public class Theme {
         r10[r16] = r3;
         r16 = 8;
         r10[r16] = r3;
-        r8 = 9;
-        r10[r8] = r3;
+        r16 = 9;
+        r10[r16] = r3;
         r16 = 10;
         r10[r16] = r3;
         r16 = 11;
@@ -6919,7 +6918,7 @@ public class Theme {
         r8 = new int[r15];
         r8 = {0, 180, 45, 0, 45, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r7 = new int[r15];
-        r7 = {0, 52, 46, 57, 47, 64, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r7 = {0, 52, 46, 57, 45, 64, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r16 = r11;
         r11 = r0;
         r21 = 16;
@@ -6951,41 +6950,42 @@ public class Theme {
         r2 = -8214301; // 0xfffffffffvar_a8e3 float:NaN double:NaN;
         r0.previewOutColor = r2;
         r0.sortIndex = r4;
-        r2 = 17;
+        r2 = 18;
         r11 = new int[r2];
-        r11 = {-7177260, -9860357, -14440464, -8687151, -9848491, -14053142, -9403671, -13203974, -12138259, -11880383, -1344335, -1142742, -6127120, -2931932, -1131212, -8417365, -13270557};
+        r11 = {-7177260, -9860357, -14440464, -8687151, -9848491, -14053142, -9403671, -10044691, -13203974, -12138259, -11880383, -1344335, -1142742, -6127120, -2931932, -1131212, -8417365, -13270557};
         r12 = new int[r2];
-        r12 = {-6464359, -10267323, -13532789, -5413850, -11898828, -13410942, -13215889, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r12 = {-6464359, -10267323, -13532789, -5413850, -11898828, -13410942, -13215889, -10255762, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r13 = new int[r2];
-        r13 = {-10465880, -9937588, -14983040, -6736562, -14197445, -13534568, -13144441, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r13 = {-10465880, -9937588, -14983040, -6736562, -14197445, -13534568, -13144441, -10526366, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r14 = new int[r2];
-        r14 = {-14147282, -15263198, -16310753, -15724781, -15459054, -16313828, -14802903, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r14 = {-14147282, -15263198, -16310753, -15724781, -15459054, -16313828, -14802903, -16645117, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r15 = new int[r2];
-        r15 = {-15593453, -14277074, -15459034, -14541276, -15064812, -14932432, -15461096, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r15 = {-15593453, -14277074, -15459034, -14541276, -15064812, -14932432, -15461096, -15393761, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r2 = new int[r2];
-        r2 = {11, 12, 13, 14, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        r6 = 17;
+        r2 = {11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        r6 = 18;
         r6 = new java.lang.String[r6];
-        r7 = "dhf9pceaQVACAAAAbzdVo4SCiZA";
+        r7 = "O-wmAfBPSFADAAAA4zINVfD_bro";
         r6[r1] = r7;
-        r7 = "p-pXcflrmFIBAAAAvXYQk-mCwZU";
+        r7 = "RepJ5uE_SVABAAAAr4d0YhgB850";
         r6[r5] = r7;
         r7 = "dk_wwlghOFACAAAAfz9xrxi6euw";
         r8 = 2;
         r6[r8] = r7;
-        r7 = "p-pXcflrmFIBAAAAvXYQk-mCwZU";
+        r7 = "9LW_RcoOSVACAAAAFTk3DTyXN-M";
         r6[r4] = r7;
-        r7 = "F5oWoCs7QFACAAAAgf2bD_mg8Bw";
+        r7 = "PllZ-bf_SFAEAAAA8crRfwZiDNg";
         r8 = 4;
         r6[r8] = r7;
         r7 = "-Xc-np9y2VMCAAAARKr0yNNPYW0";
         r8 = 5;
         r6[r8] = r7;
-        r7 = "JqSUrO0-mFIBAAAAWwTvLzoWGQI";
+        r7 = "kO4jyq55SFABAAAA0WEpcLfahXk";
         r8 = 6;
         r6[r8] = r7;
         r7 = 7;
-        r6[r7] = r3;
+        r8 = "brFJPpalSVABAAAAIIPqSI_g_VI";
+        r6[r7] = r8;
         r7 = 8;
         r6[r7] = r3;
         r7 = 9;
@@ -7004,11 +7004,13 @@ public class Theme {
         r6[r7] = r3;
         r6[r21] = r3;
         r7 = 17;
+        r6[r7] = r3;
+        r7 = 18;
         r7 = new int[r7];
-        r7 = {225, 45, 225, 135, 45, 225, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r8 = 17;
+        r7 = {225, 45, 225, 135, 45, 225, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r8 = 18;
         r8 = new int[r8];
-        r8 = {35, 37, 31, 40, 30, 34, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r8 = {40, 40, 31, 50, 25, 34, 35, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r10 = r0;
         r16 = r2;
         r17 = r6;
@@ -7049,7 +7051,7 @@ public class Theme {
         r6 = new int[r2];
         r6 = {9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8};
         r7 = new java.lang.String[r2];
-        r2 = "bEuIiu4zQFAEAAAAD2nUXDlWBYw";
+        r2 = "MIo6r0qGSFAFAAAAtL8TsDzNX60";
         r7[r1] = r2;
         r2 = "dhf9pceaQVACAAAAbzdVo4SCiZA";
         r7[r5] = r2;
@@ -7086,7 +7088,7 @@ public class Theme {
         r8 = new int[r2];
         r8 = {315, 315, 225, 315, 0, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r2 = new int[r2];
-        r2 = {37, 50, 58, 47, 46, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r2 = {50, 50, 58, 47, 46, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r10 = r0;
         r16 = r6;
         r17 = r7;
@@ -7154,8 +7156,9 @@ public class Theme {
         r2 = 14;
         r8 = new int[r2];
         r8 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r2 = new int[r2];
-        r2 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r10 = new int[r2];
+        r10 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r2 = r10;
         r10 = r0;
         r16 = r6;
         r17 = r7;
@@ -7181,27 +7184,32 @@ public class Theme {
         r0.previewOutColor = r2;
         r2 = 4;
         r0.sortIndex = r2;
-        r2 = 9;
+        r2 = 14;
         r11 = new int[r2];
-        r11 = {-12678921, -11881005, -11880383, -2534026, -1934037, -7115558, -3128522, -1528292, -8812381};
+        r11 = {-9781697, -7505693, -2204034, -10913816, -2375398, -12678921, -11881005, -11880383, -2534026, -1934037, -7115558, -3128522, -1528292, -8812381};
         r12 = new int[r2];
-        r12 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r12 = {-7712108, -4953061, -5288081, -14258547, -9154889, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r13 = new int[r2];
-        r13 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r13 = {-9939525, -5948598, -10335844, -13659747, -14054507, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r14 = new int[r2];
-        r14 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r14 = {-16644350, -15658220, -16514300, -16053236, -16382457, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r15 = new int[r2];
-        r15 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r15 = {-15790576, -16250871, -16448251, -15856112, -15921904, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r6 = new int[r2];
-        r6 = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        r6 = {9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8};
         r7 = new java.lang.String[r2];
-        r7[r1] = r3;
-        r7[r5] = r3;
-        r2 = 2;
-        r7[r2] = r3;
-        r7[r4] = r3;
-        r2 = 4;
-        r7[r2] = r3;
+        r2 = "YIxYGEALQVADAAAAA3QbEH0AowY";
+        r7[r1] = r2;
+        r2 = "9LW_RcoOSVACAAAAFTk3DTyXN-M";
+        r7[r5] = r2;
+        r2 = "O-wmAfBPSFADAAAA4zINVfD_bro";
+        r8 = 2;
+        r7[r8] = r2;
+        r2 = "F5oWoCs7QFACAAAAgf2bD_mg8Bw";
+        r7[r4] = r2;
+        r2 = "-Xc-np9y2VMCAAAARKr0yNNPYW0";
+        r8 = 4;
+        r7[r8] = r2;
         r2 = 5;
         r7[r2] = r3;
         r2 = 6;
@@ -7211,11 +7219,20 @@ public class Theme {
         r2 = 8;
         r7[r2] = r3;
         r2 = 9;
+        r7[r2] = r3;
+        r2 = 10;
+        r7[r2] = r3;
+        r2 = 11;
+        r7[r2] = r3;
+        r2 = 12;
+        r7[r2] = r3;
+        r2 = 13;
+        r7[r2] = r3;
+        r2 = 14;
         r8 = new int[r2];
-        r8 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r10 = new int[r2];
-        r10 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r2 = r10;
+        r8 = {45, 135, 0, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r2 = new int[r2];
+        r2 = {34, 47, 52, 48, 54, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r10 = r0;
         r16 = r6;
         r17 = r7;
@@ -7232,21 +7249,21 @@ public class Theme {
         r2 = 0;
         r0 = r9.getString(r0, r2);
         r2 = 0;
-    L_0x297d:
-        if (r2 >= r4) goto L_0x29c4;
-    L_0x297f:
+    L_0x2970:
+        if (r2 >= r4) goto L_0x29b7;
+    L_0x2972:
         r6 = remoteThemesHash;
         r7 = new java.lang.StringBuilder;
         r7.<init>();
         r8 = "remoteThemesHash";
         r7.append(r8);
-        if (r2 == 0) goto L_0x2992;
-    L_0x298d:
+        if (r2 == 0) goto L_0x2985;
+    L_0x2980:
         r8 = java.lang.Integer.valueOf(r2);
-        goto L_0x2993;
-    L_0x2992:
+        goto L_0x2986;
+    L_0x2985:
         r8 = r3;
-    L_0x2993:
+    L_0x2986:
         r7.append(r8);
         r7 = r7.toString();
         r7 = r9.getInt(r7, r1);
@@ -7256,67 +7273,67 @@ public class Theme {
         r7.<init>();
         r8 = "lastLoadingThemesTime";
         r7.append(r8);
-        if (r2 == 0) goto L_0x29b3;
-    L_0x29ae:
+        if (r2 == 0) goto L_0x29a6;
+    L_0x29a1:
         r8 = java.lang.Integer.valueOf(r2);
-        goto L_0x29b4;
-    L_0x29b3:
+        goto L_0x29a7;
+    L_0x29a6:
         r8 = r3;
-    L_0x29b4:
+    L_0x29a7:
         r7.append(r8);
         r7 = r7.toString();
         r7 = r9.getInt(r7, r1);
         r6[r2] = r7;
         r2 = r2 + 1;
-        goto L_0x297d;
-    L_0x29c4:
+        goto L_0x2970;
+    L_0x29b7:
         r2 = android.text.TextUtils.isEmpty(r0);
-        if (r2 != 0) goto L_0x29fe;
-    L_0x29ca:
-        r2 = new org.json.JSONArray;	 Catch:{ Exception -> 0x29f9 }
-        r2.<init>(r0);	 Catch:{ Exception -> 0x29f9 }
+        if (r2 != 0) goto L_0x29f1;
+    L_0x29bd:
+        r2 = new org.json.JSONArray;	 Catch:{ Exception -> 0x29ec }
+        r2.<init>(r0);	 Catch:{ Exception -> 0x29ec }
         r0 = 0;
-    L_0x29d0:
-        r6 = r2.length();	 Catch:{ Exception -> 0x29f9 }
-        if (r0 >= r6) goto L_0x2a45;
-    L_0x29d6:
-        r6 = r2.getJSONObject(r0);	 Catch:{ Exception -> 0x29f9 }
-        r6 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r6);	 Catch:{ Exception -> 0x29f9 }
-        if (r6 == 0) goto L_0x29f6;
-    L_0x29e0:
-        r7 = otherThemes;	 Catch:{ Exception -> 0x29f9 }
-        r7.add(r6);	 Catch:{ Exception -> 0x29f9 }
-        r7 = themes;	 Catch:{ Exception -> 0x29f9 }
-        r7.add(r6);	 Catch:{ Exception -> 0x29f9 }
-        r7 = themesDict;	 Catch:{ Exception -> 0x29f9 }
-        r8 = r6.getKey();	 Catch:{ Exception -> 0x29f9 }
-        r7.put(r8, r6);	 Catch:{ Exception -> 0x29f9 }
-        r6.loadWallpapers(r9);	 Catch:{ Exception -> 0x29f9 }
-    L_0x29f6:
+    L_0x29c3:
+        r6 = r2.length();	 Catch:{ Exception -> 0x29ec }
+        if (r0 >= r6) goto L_0x2a38;
+    L_0x29c9:
+        r6 = r2.getJSONObject(r0);	 Catch:{ Exception -> 0x29ec }
+        r6 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r6);	 Catch:{ Exception -> 0x29ec }
+        if (r6 == 0) goto L_0x29e9;
+    L_0x29d3:
+        r7 = otherThemes;	 Catch:{ Exception -> 0x29ec }
+        r7.add(r6);	 Catch:{ Exception -> 0x29ec }
+        r7 = themes;	 Catch:{ Exception -> 0x29ec }
+        r7.add(r6);	 Catch:{ Exception -> 0x29ec }
+        r7 = themesDict;	 Catch:{ Exception -> 0x29ec }
+        r8 = r6.getKey();	 Catch:{ Exception -> 0x29ec }
+        r7.put(r8, r6);	 Catch:{ Exception -> 0x29ec }
+        r6.loadWallpapers(r9);	 Catch:{ Exception -> 0x29ec }
+    L_0x29e9:
         r0 = r0 + 1;
-        goto L_0x29d0;
-    L_0x29f9:
+        goto L_0x29c3;
+    L_0x29ec:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x2a45;
-    L_0x29fe:
+        goto L_0x2a38;
+    L_0x29f1:
         r0 = 0;
         r2 = "themes";
         r0 = r9.getString(r2, r0);
         r2 = android.text.TextUtils.isEmpty(r0);
-        if (r2 != 0) goto L_0x2a45;
-    L_0x2a0c:
+        if (r2 != 0) goto L_0x2a38;
+    L_0x29ff:
         r2 = "&";
         r0 = r0.split(r2);
         r2 = 0;
-    L_0x2a13:
+    L_0x2a06:
         r6 = r0.length;
-        if (r2 >= r6) goto L_0x2a34;
-    L_0x2a16:
+        if (r2 >= r6) goto L_0x2a27;
+    L_0x2a09:
         r6 = r0[r2];
         r6 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r6);
-        if (r6 == 0) goto L_0x2a31;
-    L_0x2a1e:
+        if (r6 == 0) goto L_0x2a24;
+    L_0x2a11:
         r7 = otherThemes;
         r7.add(r6);
         r7 = themes;
@@ -7324,191 +7341,191 @@ public class Theme {
         r7 = themesDict;
         r8 = r6.getKey();
         r7.put(r8, r6);
-    L_0x2a31:
+    L_0x2a24:
         r2 = r2 + 1;
-        goto L_0x2a13;
-    L_0x2a34:
+        goto L_0x2a06;
+    L_0x2a27:
         saveOtherThemes(r5, r5);
         r0 = r9.edit();
         r2 = "themes";
         r0 = r0.remove(r2);
         r0.commit();
-    L_0x2a45:
+    L_0x2a38:
         sortThemes();
         r2 = 0;
         r6 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e55 }
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e48 }
         r7 = "Dark Blue";
-        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e55 }
+        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e48 }
         r7 = r0;
-        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e55 }
+        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e48 }
         r0 = "theme";
         r8 = 0;
-        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e55 }
+        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e48 }
         r8 = "Default";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e55 }
-        if (r8 == 0) goto L_0x2a7f;
-    L_0x2a68:
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e55 }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e48 }
+        if (r8 == 0) goto L_0x2a72;
+    L_0x2a5b:
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e48 }
         r8 = "Blue";
-        r0 = r0.get(r8);	 Catch:{ Exception -> 0x2e55 }
+        r0 = r0.get(r8);	 Catch:{ Exception -> 0x2e48 }
         r8 = r0;
-        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e55 }
-        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a79 }
-        r8.currentAccentId = r0;	 Catch:{ Exception -> 0x2a79 }
-    L_0x2a77:
+        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e48 }
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a6c }
+        r8.currentAccentId = r0;	 Catch:{ Exception -> 0x2a6c }
+    L_0x2a6a:
         r2 = r8;
-        goto L_0x2ab9;
-    L_0x2a79:
+        goto L_0x2aac;
+    L_0x2a6c:
         r0 = move-exception;
         r4 = r3;
         r1 = r6;
         r2 = r8;
-        goto L_0x2e58;
-    L_0x2a7f:
+        goto L_0x2e4b;
+    L_0x2a72:
         r8 = "Dark";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e55 }
-        if (r8 == 0) goto L_0x2a93;
-    L_0x2a87:
-        r8 = 9;
-        r7.currentAccentId = r8;	 Catch:{ Exception -> 0x2a8d }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e48 }
+        if (r8 == 0) goto L_0x2a86;
+    L_0x2a7a:
+        r0 = 9;
+        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2a80 }
         r2 = r7;
-        goto L_0x2ab9;
-    L_0x2a8d:
+        goto L_0x2aac;
+    L_0x2a80:
         r0 = move-exception;
         r4 = r3;
         r1 = r6;
         r2 = r7;
-        goto L_0x2e58;
-    L_0x2a93:
-        if (r0 == 0) goto L_0x2ab9;
-    L_0x2a95:
-        r8 = themesDict;	 Catch:{ Exception -> 0x2e55 }
-        r0 = r8.get(r0);	 Catch:{ Exception -> 0x2e55 }
+        goto L_0x2e4b;
+    L_0x2a86:
+        if (r0 == 0) goto L_0x2aac;
+    L_0x2a88:
+        r8 = themesDict;	 Catch:{ Exception -> 0x2e48 }
+        r0 = r8.get(r0);	 Catch:{ Exception -> 0x2e48 }
         r8 = r0;
-        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e55 }
-        if (r8 == 0) goto L_0x2a77;
-    L_0x2aa0:
+        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e48 }
+        if (r8 == 0) goto L_0x2a6a;
+    L_0x2a93:
         r0 = "lastDayTheme";
-        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2a79 }
-        if (r0 != 0) goto L_0x2a77;
-    L_0x2aa8:
-        r0 = r9.edit();	 Catch:{ Exception -> 0x2a79 }
+        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2a6c }
+        if (r0 != 0) goto L_0x2a6a;
+    L_0x2a9b:
+        r0 = r9.edit();	 Catch:{ Exception -> 0x2a6c }
         r2 = "lastDayTheme";
-        r10 = r8.getKey();	 Catch:{ Exception -> 0x2a79 }
-        r0.putString(r2, r10);	 Catch:{ Exception -> 0x2a79 }
-        r0.commit();	 Catch:{ Exception -> 0x2a79 }
-        goto L_0x2a77;
-    L_0x2ab9:
+        r10 = r8.getKey();	 Catch:{ Exception -> 0x2a6c }
+        r0.putString(r2, r10);	 Catch:{ Exception -> 0x2a6c }
+        r0.commit();	 Catch:{ Exception -> 0x2a6c }
+        goto L_0x2a6a;
+    L_0x2aac:
         r0 = "nighttheme";
         r8 = 0;
-        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e55 }
+        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e48 }
         r8 = "Default";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e55 }
-        if (r8 == 0) goto L_0x2ad9;
-    L_0x2ac8:
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e55 }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e48 }
+        if (r8 == 0) goto L_0x2acc;
+    L_0x2abb:
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e48 }
         r7 = "Blue";
-        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e55 }
+        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e48 }
         r7 = r0;
-        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e55 }
-        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a8d }
-        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2a8d }
+        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e48 }
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a80 }
+        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2a80 }
         r2 = r7;
-        goto L_0x2af6;
-    L_0x2ad9:
+        goto L_0x2ae9;
+    L_0x2acc:
         r8 = "Dark";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e55 }
-        if (r8 == 0) goto L_0x2ae8;
-    L_0x2ae1:
-        currentNightTheme = r7;	 Catch:{ Exception -> 0x2e55 }
-        r8 = 9;
-        r7.currentAccentId = r8;	 Catch:{ Exception -> 0x2e55 }
-        goto L_0x2af6;
-    L_0x2ae8:
-        if (r0 == 0) goto L_0x2af6;
-    L_0x2aea:
-        r7 = themesDict;	 Catch:{ Exception -> 0x2e55 }
-        r0 = r7.get(r0);	 Catch:{ Exception -> 0x2e55 }
-        r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0;	 Catch:{ Exception -> 0x2e55 }
-        if (r0 == 0) goto L_0x2af6;
-    L_0x2af4:
-        currentNightTheme = r0;	 Catch:{ Exception -> 0x2e55 }
-    L_0x2af6:
-        r0 = currentNightTheme;	 Catch:{ Exception -> 0x2e51 }
-        if (r0 == 0) goto L_0x2b14;
-    L_0x2afa:
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e48 }
+        if (r8 == 0) goto L_0x2adb;
+    L_0x2ad4:
+        currentNightTheme = r7;	 Catch:{ Exception -> 0x2e48 }
+        r0 = 9;
+        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2e48 }
+        goto L_0x2ae9;
+    L_0x2adb:
+        if (r0 == 0) goto L_0x2ae9;
+    L_0x2add:
+        r7 = themesDict;	 Catch:{ Exception -> 0x2e48 }
+        r0 = r7.get(r0);	 Catch:{ Exception -> 0x2e48 }
+        r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0;	 Catch:{ Exception -> 0x2e48 }
+        if (r0 == 0) goto L_0x2ae9;
+    L_0x2ae7:
+        currentNightTheme = r0;	 Catch:{ Exception -> 0x2e48 }
+    L_0x2ae9:
+        r0 = currentNightTheme;	 Catch:{ Exception -> 0x2e44 }
+        if (r0 == 0) goto L_0x2b07;
+    L_0x2aed:
         r0 = "lastDarkTheme";
-        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2e55 }
-        if (r0 != 0) goto L_0x2b14;
-    L_0x2b02:
-        r0 = r9.edit();	 Catch:{ Exception -> 0x2e55 }
+        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2e48 }
+        if (r0 != 0) goto L_0x2b07;
+    L_0x2af5:
+        r0 = r9.edit();	 Catch:{ Exception -> 0x2e48 }
         r7 = "lastDarkTheme";
-        r8 = currentNightTheme;	 Catch:{ Exception -> 0x2e55 }
-        r8 = r8.getKey();	 Catch:{ Exception -> 0x2e55 }
-        r0.putString(r7, r8);	 Catch:{ Exception -> 0x2e55 }
-        r0.commit();	 Catch:{ Exception -> 0x2e55 }
-    L_0x2b14:
+        r8 = currentNightTheme;	 Catch:{ Exception -> 0x2e48 }
+        r8 = r8.getKey();	 Catch:{ Exception -> 0x2e48 }
+        r0.putString(r7, r8);	 Catch:{ Exception -> 0x2e48 }
+        r0.commit();	 Catch:{ Exception -> 0x2e48 }
+    L_0x2b07:
         r0 = 0;
         r7 = 0;
-        r8 = themesDict;	 Catch:{ Exception -> 0x2e51 }
-        r8 = r8.values();	 Catch:{ Exception -> 0x2e51 }
-        r8 = r8.iterator();	 Catch:{ Exception -> 0x2e51 }
+        r8 = themesDict;	 Catch:{ Exception -> 0x2e44 }
+        r8 = r8.values();	 Catch:{ Exception -> 0x2e44 }
+        r8 = r8.iterator();	 Catch:{ Exception -> 0x2e44 }
         r10 = r7;
         r7 = r0;
-    L_0x2b22:
-        r0 = r8.hasNext();	 Catch:{ Exception -> 0x2e51 }
-        if (r0 == 0) goto L_0x2db2;
-    L_0x2b28:
-        r0 = r8.next();	 Catch:{ Exception -> 0x2e51 }
+    L_0x2b15:
+        r0 = r8.hasNext();	 Catch:{ Exception -> 0x2e44 }
+        if (r0 == 0) goto L_0x2da5;
+    L_0x2b1b:
+        r0 = r8.next();	 Catch:{ Exception -> 0x2e44 }
         r11 = r0;
-        r11 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r11;	 Catch:{ Exception -> 0x2e51 }
-        r0 = r11.assetName;	 Catch:{ Exception -> 0x2e51 }
-        if (r0 == 0) goto L_0x2da4;
-    L_0x2b33:
-        r0 = r11.accentBaseColor;	 Catch:{ Exception -> 0x2e51 }
-        if (r0 == 0) goto L_0x2da4;
-    L_0x2b37:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e51 }
-        r0.<init>();	 Catch:{ Exception -> 0x2e51 }
+        r11 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r11;	 Catch:{ Exception -> 0x2e44 }
+        r0 = r11.assetName;	 Catch:{ Exception -> 0x2e44 }
+        if (r0 == 0) goto L_0x2d97;
+    L_0x2b26:
+        r0 = r11.accentBaseColor;	 Catch:{ Exception -> 0x2e44 }
+        if (r0 == 0) goto L_0x2d97;
+    L_0x2b2a:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e44 }
+        r0.<init>();	 Catch:{ Exception -> 0x2e44 }
         r12 = "accents_";
-        r0.append(r12);	 Catch:{ Exception -> 0x2e51 }
-        r12 = r11.assetName;	 Catch:{ Exception -> 0x2e51 }
-        r0.append(r12);	 Catch:{ Exception -> 0x2e51 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e51 }
+        r0.append(r12);	 Catch:{ Exception -> 0x2e44 }
+        r12 = r11.assetName;	 Catch:{ Exception -> 0x2e44 }
+        r0.append(r12);	 Catch:{ Exception -> 0x2e44 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e44 }
         r12 = 0;
-        r0 = r9.getString(r0, r12);	 Catch:{ Exception -> 0x2e51 }
-        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e51 }
-        r12.<init>();	 Catch:{ Exception -> 0x2e51 }
+        r0 = r9.getString(r0, r12);	 Catch:{ Exception -> 0x2e44 }
+        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e44 }
+        r12.<init>();	 Catch:{ Exception -> 0x2e44 }
         r13 = "accent_current_";
-        r12.append(r13);	 Catch:{ Exception -> 0x2e51 }
-        r13 = r11.assetName;	 Catch:{ Exception -> 0x2e51 }
-        r12.append(r13);	 Catch:{ Exception -> 0x2e51 }
-        r12 = r12.toString();	 Catch:{ Exception -> 0x2e51 }
-        r13 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e51 }
-        if (r13 == 0) goto L_0x2b69;
-    L_0x2b66:
-        r13 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e55 }
-        goto L_0x2b6a;
-    L_0x2b69:
+        r12.append(r13);	 Catch:{ Exception -> 0x2e44 }
+        r13 = r11.assetName;	 Catch:{ Exception -> 0x2e44 }
+        r12.append(r13);	 Catch:{ Exception -> 0x2e44 }
+        r12 = r12.toString();	 Catch:{ Exception -> 0x2e44 }
+        r13 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e44 }
+        if (r13 == 0) goto L_0x2b5c;
+    L_0x2b59:
+        r13 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e48 }
+        goto L_0x2b5d;
+    L_0x2b5c:
         r13 = 0;
-    L_0x2b6a:
-        r12 = r9.getInt(r12, r13);	 Catch:{ Exception -> 0x2e51 }
-        r11.currentAccentId = r12;	 Catch:{ Exception -> 0x2e51 }
-        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x2e51 }
-        r12.<init>();	 Catch:{ Exception -> 0x2e51 }
-        r13 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x2e51 }
-        if (r13 != 0) goto L_0x2CLASSNAME;
-    L_0x2b7b:
+    L_0x2b5d:
+        r12 = r9.getInt(r12, r13);	 Catch:{ Exception -> 0x2e44 }
+        r11.currentAccentId = r12;	 Catch:{ Exception -> 0x2e44 }
+        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x2e44 }
+        r12.<init>();	 Catch:{ Exception -> 0x2e44 }
+        r13 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x2e44 }
+        if (r13 != 0) goto L_0x2c5c;
+    L_0x2b6e:
         r13 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x2CLASSNAME }
         r0 = android.util.Base64.decode(r0, r4);	 Catch:{ all -> 0x2CLASSNAME }
         r13.<init>(r0);	 Catch:{ all -> 0x2CLASSNAME }
         r0 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
         r14 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
         r15 = 0;
-    L_0x2b8d:
-        if (r15 >= r14) goto L_0x2c4b;
-    L_0x2b8f:
+    L_0x2b80:
+        if (r15 >= r14) goto L_0x2c3e;
+    L_0x2b82:
         r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ all -> 0x2CLASSNAME }
         r1.<init>();	 Catch:{ all -> 0x2CLASSNAME }
         r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
@@ -7521,85 +7538,85 @@ public class Theme {
         r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
         r1.myMessagesGradientAccentColor = r4;	 Catch:{ all -> 0x2CLASSNAME }
         r4 = 3;
-        if (r0 < r4) goto L_0x2bbb;
-    L_0x2bb1:
+        if (r0 < r4) goto L_0x2bae;
+    L_0x2ba4:
         r18 = r2;
         r4 = r3;
-        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
-        goto L_0x2bc5;
-    L_0x2bbb:
+        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2c3c }
+        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2c3c }
+        goto L_0x2bb8;
+    L_0x2bae:
         r18 = r2;
         r4 = r3;
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = (long) r2;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
-    L_0x2bc5:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3c }
+        r2 = (long) r2;	 Catch:{ all -> 0x2c3c }
+        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2c3c }
+    L_0x2bb8:
         r2 = 2;
-        if (r0 < r2) goto L_0x2bcf;
-    L_0x2bc8:
-        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
-        goto L_0x2bd6;
-    L_0x2bcf:
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = (long) r2;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
-    L_0x2bd6:
-        if (r0 < r5) goto L_0x2bde;
-    L_0x2bd8:
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundRotation = r2;	 Catch:{ all -> 0x2CLASSNAME }
-    L_0x2bde:
+        if (r0 < r2) goto L_0x2bc2;
+    L_0x2bbb:
+        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2c3c }
+        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2c3c }
+        goto L_0x2bc9;
+    L_0x2bc2:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3c }
+        r2 = (long) r2;	 Catch:{ all -> 0x2c3c }
+        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2c3c }
+    L_0x2bc9:
+        if (r0 < r5) goto L_0x2bd1;
+    L_0x2bcb:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3c }
+        r1.backgroundRotation = r2;	 Catch:{ all -> 0x2c3c }
+    L_0x2bd1:
         r2 = 4;
-        if (r0 < r2) goto L_0x2bfa;
-    L_0x2be1:
-        r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = r13.readDouble(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = (float) r2;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.patternIntensity = r2;	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.patternMotion = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        if (r0 < r2) goto L_0x2bed;
+    L_0x2bd4:
+        r13.readInt64(r5);	 Catch:{ all -> 0x2c3c }
+        r2 = r13.readDouble(r5);	 Catch:{ all -> 0x2c3c }
+        r2 = (float) r2;	 Catch:{ all -> 0x2c3c }
+        r1.patternIntensity = r2;	 Catch:{ all -> 0x2c3c }
+        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2c3c }
+        r1.patternMotion = r2;	 Catch:{ all -> 0x2c3c }
         r2 = 5;
-        if (r0 < r2) goto L_0x2bfb;
-    L_0x2bf4:
-        r2 = r13.readString(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.patternSlug = r2;	 Catch:{ all -> 0x2CLASSNAME }
-    L_0x2bfa:
+        if (r0 < r2) goto L_0x2bee;
+    L_0x2be7:
+        r2 = r13.readString(r5);	 Catch:{ all -> 0x2c3c }
+        r1.patternSlug = r2;	 Catch:{ all -> 0x2c3c }
+    L_0x2bed:
         r2 = 5;
-    L_0x2bfb:
+    L_0x2bee:
         if (r0 < r2) goto L_0x2CLASSNAME;
-    L_0x2bfd:
-        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2bf0:
+        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2c3c }
         if (r2 == 0) goto L_0x2CLASSNAME;
+    L_0x2bf6:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3c }
+        r1.account = r2;	 Catch:{ all -> 0x2c3c }
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3c }
+        r2 = org.telegram.tgnet.TLRPC.Theme.TLdeserialize(r13, r2, r5);	 Catch:{ all -> 0x2c3c }
+        r2 = (org.telegram.tgnet.TLRPC.TL_theme) r2;	 Catch:{ all -> 0x2c3c }
+        r1.info = r2;	 Catch:{ all -> 0x2c3c }
     L_0x2CLASSNAME:
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.account = r2;	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = org.telegram.tgnet.TLRPC.Theme.TLdeserialize(r13, r2, r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = (org.telegram.tgnet.TLRPC.TL_theme) r2;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.info = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r11.themeAccentsMap;	 Catch:{ all -> 0x2c3c }
+        r3 = r1.id;	 Catch:{ all -> 0x2c3c }
+        r2.put(r3, r1);	 Catch:{ all -> 0x2c3c }
+        r2 = r1.info;	 Catch:{ all -> 0x2c3c }
+        if (r2 == 0) goto L_0x2c1f;
     L_0x2CLASSNAME:
-        r2 = r11.themeAccentsMap;	 Catch:{ all -> 0x2CLASSNAME }
-        r3 = r1.id;	 Catch:{ all -> 0x2CLASSNAME }
-        r2.put(r3, r1);	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = r1.info;	 Catch:{ all -> 0x2CLASSNAME }
-        if (r2 == 0) goto L_0x2c2c;
-    L_0x2CLASSNAME:
-        r2 = r11.accentsByThemeId;	 Catch:{ all -> 0x2CLASSNAME }
-        r3 = r1.info;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r11.accentsByThemeId;	 Catch:{ all -> 0x2c3c }
+        r3 = r1.info;	 Catch:{ all -> 0x2c3c }
         r20 = r6;
-        r5 = r3.id;	 Catch:{ all -> 0x2CLASSNAME }
-        r2.put(r5, r1);	 Catch:{ all -> 0x2CLASSNAME }
-        goto L_0x2c2e;
-    L_0x2c2c:
+        r5 = r3.id;	 Catch:{ all -> 0x2c3a }
+        r2.put(r5, r1);	 Catch:{ all -> 0x2c3a }
+        goto L_0x2CLASSNAME;
+    L_0x2c1f:
         r20 = r6;
-    L_0x2c2e:
-        r12.add(r1);	 Catch:{ all -> 0x2CLASSNAME }
-        r2 = r11.lastAccentId;	 Catch:{ all -> 0x2CLASSNAME }
-        r1 = r1.id;	 Catch:{ all -> 0x2CLASSNAME }
-        r1 = java.lang.Math.max(r2, r1);	 Catch:{ all -> 0x2CLASSNAME }
-        r11.lastAccentId = r1;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2CLASSNAME:
+        r12.add(r1);	 Catch:{ all -> 0x2c3a }
+        r2 = r11.lastAccentId;	 Catch:{ all -> 0x2c3a }
+        r1 = r1.id;	 Catch:{ all -> 0x2c3a }
+        r1 = java.lang.Math.max(r2, r1);	 Catch:{ all -> 0x2c3a }
+        r11.lastAccentId = r1;	 Catch:{ all -> 0x2c3a }
         r15 = r15 + 1;
         r3 = r4;
         r2 = r18;
@@ -7607,329 +7624,329 @@ public class Theme {
         r1 = 0;
         r4 = 3;
         r5 = 1;
-        goto L_0x2b8d;
-    L_0x2CLASSNAME:
+        goto L_0x2b80;
+    L_0x2c3a:
+        r0 = move-exception;
+        goto L_0x2c4a;
+    L_0x2c3c:
         r0 = move-exception;
         goto L_0x2CLASSNAME;
-    L_0x2CLASSNAME:
-        r0 = move-exception;
-        goto L_0x2CLASSNAME;
-    L_0x2c4b:
+    L_0x2c3e:
         r18 = r2;
         r4 = r3;
         r1 = r6;
         r3 = 5;
-        goto L_0x2c5e;
+        goto L_0x2CLASSNAME;
     L_0x2CLASSNAME:
         r0 = move-exception;
         r18 = r2;
         r4 = r3;
     L_0x2CLASSNAME:
         r20 = r6;
-    L_0x2CLASSNAME:
+    L_0x2c4a:
         org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x2CLASSNAME }
         r1 = r20;
-    L_0x2c5c:
+    L_0x2c4f:
         r3 = 5;
         r5 = 1;
-    L_0x2c5e:
+    L_0x2CLASSNAME:
         r6 = 3;
-        goto L_0x2d64;
+        goto L_0x2d57;
     L_0x2CLASSNAME:
         r0 = move-exception;
         r2 = r18;
         r1 = r20;
     L_0x2CLASSNAME:
         r5 = 1;
-        goto L_0x2e58;
-    L_0x2CLASSNAME:
+        goto L_0x2e4b;
+    L_0x2c5c:
         r18 = r2;
         r4 = r3;
         r20 = r6;
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2d9e }
-        r0.<init>();	 Catch:{ Exception -> 0x2d9e }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2d91 }
+        r0.<init>();	 Catch:{ Exception -> 0x2d91 }
         r1 = "accent_for_";
-        r0.append(r1);	 Catch:{ Exception -> 0x2d9e }
-        r1 = r11.assetName;	 Catch:{ Exception -> 0x2d9e }
-        r0.append(r1);	 Catch:{ Exception -> 0x2d9e }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2d9e }
+        r0.append(r1);	 Catch:{ Exception -> 0x2d91 }
+        r1 = r11.assetName;	 Catch:{ Exception -> 0x2d91 }
+        r0.append(r1);	 Catch:{ Exception -> 0x2d91 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2d91 }
         r1 = r20;
         r2 = 0;
-        r3 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2d9c }
-        if (r3 == 0) goto L_0x2c5c;
-    L_0x2c8a:
-        if (r7 != 0) goto L_0x2c9a;
-    L_0x2c8c:
+        r3 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2d8f }
+        if (r3 == 0) goto L_0x2c4f;
+    L_0x2c7d:
+        if (r7 != 0) goto L_0x2c8d;
+    L_0x2c7f:
         r7 = r1.edit();	 Catch:{ Exception -> 0x2CLASSNAME }
         r2 = r9.edit();	 Catch:{ Exception -> 0x2CLASSNAME }
         r10 = r2;
-        goto L_0x2c9a;
+        goto L_0x2c8d;
     L_0x2CLASSNAME:
         r0 = move-exception;
         r2 = r18;
         goto L_0x2CLASSNAME;
-    L_0x2c9a:
-        r7.remove(r0);	 Catch:{ Exception -> 0x2d9c }
-        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2d9c }
-        r0 = r0.size();	 Catch:{ Exception -> 0x2d9c }
+    L_0x2c8d:
+        r7.remove(r0);	 Catch:{ Exception -> 0x2d8f }
+        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2d8f }
+        r0 = r0.size();	 Catch:{ Exception -> 0x2d8f }
         r2 = 0;
-    L_0x2ca4:
-        if (r2 >= r0) goto L_0x2cbb;
-    L_0x2ca6:
+    L_0x2CLASSNAME:
+        if (r2 >= r0) goto L_0x2cae;
+    L_0x2CLASSNAME:
         r5 = r11.themeAccents;	 Catch:{ Exception -> 0x2CLASSNAME }
         r5 = r5.get(r2);	 Catch:{ Exception -> 0x2CLASSNAME }
         r5 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r5;	 Catch:{ Exception -> 0x2CLASSNAME }
         r6 = r5.accentColor;	 Catch:{ Exception -> 0x2CLASSNAME }
-        if (r6 != r3) goto L_0x2cb8;
-    L_0x2cb2:
+        if (r6 != r3) goto L_0x2cab;
+    L_0x2ca5:
         r0 = r5.id;	 Catch:{ Exception -> 0x2CLASSNAME }
         r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2CLASSNAME }
         r0 = 1;
-        goto L_0x2cbc;
-    L_0x2cb8:
+        goto L_0x2caf;
+    L_0x2cab:
         r2 = r2 + 1;
-        goto L_0x2ca4;
-    L_0x2cbb:
+        goto L_0x2CLASSNAME;
+    L_0x2cae:
         r0 = 0;
-    L_0x2cbc:
-        if (r0 != 0) goto L_0x2d49;
-    L_0x2cbe:
-        r0 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ Exception -> 0x2d9c }
-        r0.<init>();	 Catch:{ Exception -> 0x2d9c }
+    L_0x2caf:
+        if (r0 != 0) goto L_0x2d3c;
+    L_0x2cb1:
+        r0 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ Exception -> 0x2d8f }
+        r0.<init>();	 Catch:{ Exception -> 0x2d8f }
         r2 = 100;
-        r0.id = r2;	 Catch:{ Exception -> 0x2d9c }
-        r0.accentColor = r3;	 Catch:{ Exception -> 0x2d9c }
-        r0.parentTheme = r11;	 Catch:{ Exception -> 0x2d9c }
-        r2 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2d9c }
-        r3 = r0.id;	 Catch:{ Exception -> 0x2d9c }
-        r2.put(r3, r0);	 Catch:{ Exception -> 0x2d9c }
+        r0.id = r2;	 Catch:{ Exception -> 0x2d8f }
+        r0.accentColor = r3;	 Catch:{ Exception -> 0x2d8f }
+        r0.parentTheme = r11;	 Catch:{ Exception -> 0x2d8f }
+        r2 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2d8f }
+        r3 = r0.id;	 Catch:{ Exception -> 0x2d8f }
+        r2.put(r3, r0);	 Catch:{ Exception -> 0x2d8f }
         r2 = 0;
-        r12.add(r2, r0);	 Catch:{ Exception -> 0x2d9c }
+        r12.add(r2, r0);	 Catch:{ Exception -> 0x2d8f }
         r2 = 100;
-        r11.currentAccentId = r2;	 Catch:{ Exception -> 0x2d9c }
+        r11.currentAccentId = r2;	 Catch:{ Exception -> 0x2d8f }
         r2 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
-        r11.lastAccentId = r2;	 Catch:{ Exception -> 0x2d9c }
-        r2 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x2d9c }
+        r11.lastAccentId = r2;	 Catch:{ Exception -> 0x2d8f }
+        r2 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x2d8f }
         r3 = 68;
-        r2.<init>(r3);	 Catch:{ Exception -> 0x2d9c }
+        r2.<init>(r3);	 Catch:{ Exception -> 0x2d8f }
         r3 = 5;
-        r2.writeInt32(r3);	 Catch:{ Exception -> 0x2d9c }
+        r2.writeInt32(r3);	 Catch:{ Exception -> 0x2d8f }
         r5 = 1;
-        r2.writeInt32(r5);	 Catch:{ Exception -> 0x2e4d }
-        r6 = r0.id;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
-        r6 = r0.accentColor;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
-        r6 = r0.myMessagesAccentColor;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
-        r6 = r0.myMessagesGradientAccentColor;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
-        r13 = r0.backgroundOverrideColor;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e4d }
-        r13 = r0.backgroundGradientOverrideColor;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e4d }
-        r6 = r0.backgroundRotation;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt32(r5);	 Catch:{ Exception -> 0x2e40 }
+        r6 = r0.id;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e40 }
+        r6 = r0.accentColor;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e40 }
+        r6 = r0.myMessagesAccentColor;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e40 }
+        r6 = r0.myMessagesGradientAccentColor;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e40 }
+        r13 = r0.backgroundOverrideColor;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e40 }
+        r13 = r0.backgroundGradientOverrideColor;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e40 }
+        r6 = r0.backgroundRotation;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e40 }
         r13 = 0;
-        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e4d }
-        r6 = r0.patternIntensity;	 Catch:{ Exception -> 0x2e4d }
-        r13 = (double) r6;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeDouble(r13);	 Catch:{ Exception -> 0x2e4d }
-        r6 = r0.patternMotion;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e4d }
-        r0 = r0.patternSlug;	 Catch:{ Exception -> 0x2e4d }
-        r2.writeString(r0);	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e40 }
+        r6 = r0.patternIntensity;	 Catch:{ Exception -> 0x2e40 }
+        r13 = (double) r6;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeDouble(r13);	 Catch:{ Exception -> 0x2e40 }
+        r6 = r0.patternMotion;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e40 }
+        r0 = r0.patternSlug;	 Catch:{ Exception -> 0x2e40 }
+        r2.writeString(r0);	 Catch:{ Exception -> 0x2e40 }
         r6 = 0;
-        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e4d }
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e4d }
-        r0.<init>();	 Catch:{ Exception -> 0x2e4d }
+        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e40 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e40 }
+        r0.<init>();	 Catch:{ Exception -> 0x2e40 }
         r6 = "accents_";
-        r0.append(r6);	 Catch:{ Exception -> 0x2e4d }
-        r6 = r11.assetName;	 Catch:{ Exception -> 0x2e4d }
-        r0.append(r6);	 Catch:{ Exception -> 0x2e4d }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e4d }
-        r2 = r2.toByteArray();	 Catch:{ Exception -> 0x2e4d }
+        r0.append(r6);	 Catch:{ Exception -> 0x2e40 }
+        r6 = r11.assetName;	 Catch:{ Exception -> 0x2e40 }
+        r0.append(r6);	 Catch:{ Exception -> 0x2e40 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e40 }
+        r2 = r2.toByteArray();	 Catch:{ Exception -> 0x2e40 }
         r6 = 3;
-        r2 = android.util.Base64.encodeToString(r2, r6);	 Catch:{ Exception -> 0x2e4d }
-        r10.putString(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        goto L_0x2d4c;
-    L_0x2d49:
+        r2 = android.util.Base64.encodeToString(r2, r6);	 Catch:{ Exception -> 0x2e40 }
+        r10.putString(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        goto L_0x2d3f;
+    L_0x2d3c:
         r3 = 5;
         r5 = 1;
         r6 = 3;
-    L_0x2d4c:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e4d }
-        r0.<init>();	 Catch:{ Exception -> 0x2e4d }
+    L_0x2d3f:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e40 }
+        r0.<init>();	 Catch:{ Exception -> 0x2e40 }
         r2 = "accent_current_";
-        r0.append(r2);	 Catch:{ Exception -> 0x2e4d }
-        r2 = r11.assetName;	 Catch:{ Exception -> 0x2e4d }
-        r0.append(r2);	 Catch:{ Exception -> 0x2e4d }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e4d }
-        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e4d }
-        r10.putInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-    L_0x2d64:
-        r0 = r12.isEmpty();	 Catch:{ Exception -> 0x2e4d }
-        if (r0 != 0) goto L_0x2d75;
-    L_0x2d6a:
-        r0 = org.telegram.ui.ActionBar.-$$Lambda$Theme$-1eio9W5h8f4eCuCQ0q4O3hfyjg.INSTANCE;	 Catch:{ Exception -> 0x2e4d }
-        java.util.Collections.sort(r12, r0);	 Catch:{ Exception -> 0x2e4d }
-        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2e4d }
+        r0.append(r2);	 Catch:{ Exception -> 0x2e40 }
+        r2 = r11.assetName;	 Catch:{ Exception -> 0x2e40 }
+        r0.append(r2);	 Catch:{ Exception -> 0x2e40 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e40 }
+        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e40 }
+        r10.putInt(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+    L_0x2d57:
+        r0 = r12.isEmpty();	 Catch:{ Exception -> 0x2e40 }
+        if (r0 != 0) goto L_0x2d68;
+    L_0x2d5d:
+        r0 = org.telegram.ui.ActionBar.-$$Lambda$Theme$-1eio9W5h8f4eCuCQ0q4O3hfyjg.INSTANCE;	 Catch:{ Exception -> 0x2e40 }
+        java.util.Collections.sort(r12, r0);	 Catch:{ Exception -> 0x2e40 }
+        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2e40 }
         r2 = 0;
-        r0.addAll(r2, r12);	 Catch:{ Exception -> 0x2e4d }
-    L_0x2d75:
-        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e4d }
-        if (r0 == 0) goto L_0x2d8d;
-    L_0x2d79:
-        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e4d }
-        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e4d }
-        r0 = r0.get(r2);	 Catch:{ Exception -> 0x2e4d }
-        if (r0 != 0) goto L_0x2d8d;
-    L_0x2d83:
-        r0 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e4d }
-        if (r0 == 0) goto L_0x2d8a;
-    L_0x2d87:
-        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e4d }
-        goto L_0x2d8b;
-    L_0x2d8a:
+        r0.addAll(r2, r12);	 Catch:{ Exception -> 0x2e40 }
+    L_0x2d68:
+        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e40 }
+        if (r0 == 0) goto L_0x2d80;
+    L_0x2d6c:
+        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e40 }
+        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e40 }
+        r0 = r0.get(r2);	 Catch:{ Exception -> 0x2e40 }
+        if (r0 != 0) goto L_0x2d80;
+    L_0x2d76:
+        r0 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e40 }
+        if (r0 == 0) goto L_0x2d7d;
+    L_0x2d7a:
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e40 }
+        goto L_0x2d7e;
+    L_0x2d7d:
         r0 = 0;
-    L_0x2d8b:
-        r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2e4d }
-    L_0x2d8d:
-        r11.loadWallpapers(r9);	 Catch:{ Exception -> 0x2e4d }
+    L_0x2d7e:
+        r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2e40 }
+    L_0x2d80:
+        r11.loadWallpapers(r9);	 Catch:{ Exception -> 0x2e40 }
         r2 = 0;
-        r0 = r11.getAccent(r2);	 Catch:{ Exception -> 0x2e4d }
-        if (r0 == 0) goto L_0x2daa;
-    L_0x2d97:
-        r0 = r0.overrideWallpaper;	 Catch:{ Exception -> 0x2e4d }
-        r11.overrideWallpaper = r0;	 Catch:{ Exception -> 0x2e4d }
-        goto L_0x2daa;
-    L_0x2d9c:
+        r0 = r11.getAccent(r2);	 Catch:{ Exception -> 0x2e40 }
+        if (r0 == 0) goto L_0x2d9d;
+    L_0x2d8a:
+        r0 = r0.overrideWallpaper;	 Catch:{ Exception -> 0x2e40 }
+        r11.overrideWallpaper = r0;	 Catch:{ Exception -> 0x2e40 }
+        goto L_0x2d9d;
+    L_0x2d8f:
         r0 = move-exception;
-        goto L_0x2da1;
-    L_0x2d9e:
+        goto L_0x2d94;
+    L_0x2d91:
         r0 = move-exception;
         r1 = r20;
-    L_0x2da1:
+    L_0x2d94:
         r5 = 1;
-        goto L_0x2e4e;
-    L_0x2da4:
+        goto L_0x2e41;
+    L_0x2d97:
         r18 = r2;
         r4 = r3;
         r1 = r6;
         r3 = 5;
         r6 = 3;
-    L_0x2daa:
+    L_0x2d9d:
         r6 = r1;
         r3 = r4;
         r2 = r18;
         r1 = 0;
         r4 = 3;
-        goto L_0x2b22;
-    L_0x2db2:
+        goto L_0x2b15;
+    L_0x2da5:
         r18 = r2;
         r4 = r3;
         r1 = r6;
-        if (r7 == 0) goto L_0x2dbe;
-    L_0x2db8:
-        r7.commit();	 Catch:{ Exception -> 0x2e4d }
-        r10.commit();	 Catch:{ Exception -> 0x2e4d }
-    L_0x2dbe:
+        if (r7 == 0) goto L_0x2db1;
+    L_0x2dab:
+        r7.commit();	 Catch:{ Exception -> 0x2e40 }
+        r10.commit();	 Catch:{ Exception -> 0x2e40 }
+    L_0x2db1:
         r0 = "selectedAutoNightType";
         r2 = 0;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        selectedAutoNightType = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        selectedAutoNightType = r0;	 Catch:{ Exception -> 0x2e40 }
         r0 = "autoNightScheduleByLocation";
-        r0 = r1.getBoolean(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightScheduleByLocation = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getBoolean(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightScheduleByLocation = r0;	 Catch:{ Exception -> 0x2e40 }
         r0 = "autoNightBrighnessThreshold";
         r2 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
-        r0 = r1.getFloat(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightBrighnessThreshold = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getFloat(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightBrighnessThreshold = r0;	 Catch:{ Exception -> 0x2e40 }
         r0 = "autoNightDayStartTime";
         r2 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightDayStartTime = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightDayStartTime = r0;	 Catch:{ Exception -> 0x2e40 }
         r0 = "autoNightDayEndTime";
         r2 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightDayEndTime = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightDayEndTime = r0;	 Catch:{ Exception -> 0x2e40 }
         r0 = "autoNightSunsetTime";
         r2 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightSunsetTime = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightSunsetTime = r0;	 Catch:{ Exception -> 0x2e40 }
         r0 = "autoNightSunriseTime";
         r2 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightSunriseTime = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightSunriseTime = r0;	 Catch:{ Exception -> 0x2e40 }
         r0 = "autoNightCityName";
-        r0 = r1.getString(r0, r4);	 Catch:{ Exception -> 0x2e4d }
-        autoNightCityName = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getString(r0, r4);	 Catch:{ Exception -> 0x2e40 }
+        autoNightCityName = r0;	 Catch:{ Exception -> 0x2e40 }
         r0 = "autoNightLocationLatitude3";
         r2 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e40 }
         r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
         r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1));
-        if (r0 == 0) goto L_0x2e1e;
-    L_0x2e17:
-        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e4d }
-        goto L_0x2e25;
-    L_0x2e1e:
+        if (r0 == 0) goto L_0x2e11;
+    L_0x2e0a:
+        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e40 }
+        goto L_0x2e18;
+    L_0x2e11:
         r2 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e4d }
-    L_0x2e25:
+        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e40 }
+    L_0x2e18:
         r0 = "autoNightLocationLongitude3";
         r2 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e40 }
         r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
         r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1));
-        if (r0 == 0) goto L_0x2e3a;
-    L_0x2e33:
-        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e4d }
-        goto L_0x2e41;
-    L_0x2e3a:
+        if (r0 == 0) goto L_0x2e2d;
+    L_0x2e26:
+        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e40 }
+        goto L_0x2e34;
+    L_0x2e2d:
         r2 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e4d }
-    L_0x2e41:
+        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e40 }
+    L_0x2e34:
         r0 = "autoNightLastSunCheckDay";
         r2 = -1;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
-        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e40 }
+        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x2e40 }
         r2 = r18;
-        goto L_0x2e5b;
-    L_0x2e4d:
+        goto L_0x2e4e;
+    L_0x2e40:
         r0 = move-exception;
-    L_0x2e4e:
+    L_0x2e41:
         r2 = r18;
-        goto L_0x2e58;
-    L_0x2e51:
+        goto L_0x2e4b;
+    L_0x2e44:
         r0 = move-exception;
         r18 = r2;
-        goto L_0x2e56;
-    L_0x2e55:
+        goto L_0x2e49;
+    L_0x2e48:
         r0 = move-exception;
-    L_0x2e56:
+    L_0x2e49:
         r4 = r3;
         r1 = r6;
-    L_0x2e58:
+    L_0x2e4b:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x2e5b:
-        if (r2 != 0) goto L_0x2e60;
-    L_0x2e5d:
+    L_0x2e4e:
+        if (r2 != 0) goto L_0x2e53;
+    L_0x2e50:
         r2 = defaultTheme;
-        goto L_0x2e62;
-    L_0x2e60:
+        goto L_0x2e55;
+    L_0x2e53:
         currentDayTheme = r2;
-    L_0x2e62:
+    L_0x2e55:
         r0 = "overrideThemeWallpaper";
         r0 = r1.contains(r0);
-        if (r0 != 0) goto L_0x2e72;
-    L_0x2e6a:
+        if (r0 != 0) goto L_0x2e65;
+    L_0x2e5d:
         r0 = "selectedBackground2";
         r0 = r1.contains(r0);
         if (r0 == 0) goto L_0x2var_;
-    L_0x2e72:
+    L_0x2e65:
         r0 = "overrideThemeWallpaper";
         r3 = 0;
         r0 = r1.getBoolean(r0, r3);
@@ -7938,14 +7955,14 @@ public class Theme {
         r6 = r1.getLong(r3, r6);
         r8 = -2;
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 == 0) goto L_0x2var_;
-    L_0x2e88:
-        if (r0 != 0) goto L_0x2e91;
-    L_0x2e8a:
+        if (r3 == 0) goto L_0x2ef6;
+    L_0x2e7b:
+        if (r0 != 0) goto L_0x2e84;
+    L_0x2e7d:
         r8 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
         r0 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r0 == 0) goto L_0x2var_;
-    L_0x2e91:
+        if (r0 == 0) goto L_0x2ef6;
+    L_0x2e84:
         r0 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo;
         r0.<init>();
         r3 = "selectedColor";
@@ -7957,23 +7974,23 @@ public class Theme {
         r0.slug = r3;
         r8 = -1;
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 != 0) goto L_0x2ebe;
-    L_0x2ead:
+        if (r3 != 0) goto L_0x2eb1;
+    L_0x2ea0:
         r3 = r0.slug;
         r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 == 0) goto L_0x2ebe;
-    L_0x2eb5:
+        if (r3 == 0) goto L_0x2eb1;
+    L_0x2ea8:
         r3 = "c";
         r0.slug = r3;
         r0.fileName = r4;
         r0.originalFileName = r4;
-        goto L_0x2ec8;
-    L_0x2ebe:
+        goto L_0x2ebb;
+    L_0x2eb1:
         r3 = "wallpaper.jpg";
         r0.fileName = r3;
         r3 = "wallpaper_original.jpg";
         r0.originalFileName = r3;
-    L_0x2ec8:
+    L_0x2ebb:
         r3 = "selectedGradientColor";
         r4 = 0;
         r3 = r1.getInt(r3, r4);
@@ -7995,11 +8012,11 @@ public class Theme {
         r3 = currentDayTheme;
         r3.setOverrideWallpaper(r0);
         r3 = selectedAutoNightType;
-        if (r3 == 0) goto L_0x2var_;
-    L_0x2efe:
+        if (r3 == 0) goto L_0x2ef6;
+    L_0x2ef1:
         r3 = currentNightTheme;
         r3.setOverrideWallpaper(r0);
-    L_0x2var_:
+    L_0x2ef6:
         r0 = r1.edit();
         r1 = "overrideThemeWallpaper";
         r0 = r0.remove(r1);
@@ -8009,10 +8026,10 @@ public class Theme {
     L_0x2var_:
         r0 = needSwitchToTheme();
         r1 = 2;
-        if (r0 != r1) goto L_0x2f1f;
-    L_0x2f1d:
+        if (r0 != r1) goto L_0x2var_;
+    L_0x2var_:
         r2 = currentNightTheme;
-    L_0x2f1f:
+    L_0x2var_:
         if (r0 != r1) goto L_0x2var_;
     L_0x2var_:
         r1 = 0;
@@ -8608,6 +8625,14 @@ public class Theme {
             isApplyingAccent = false;
             previousTheme = null;
             checkAutoNightThemeConditions();
+        }
+    }
+
+    public static void clearPreviousTheme() {
+        if (previousTheme != null) {
+            hasPreviousTheme = false;
+            isApplyingAccent = false;
+            previousTheme = null;
         }
     }
 

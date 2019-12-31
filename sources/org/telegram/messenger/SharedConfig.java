@@ -410,7 +410,7 @@ public class SharedConfig {
             for (int i3 = 0; i3 < createMediaPaths.size(); i3++) {
                 if (createMediaPaths.keyAt(i3) != 4) {
                     try {
-                        Utilities.clearDir(((File) createMediaPaths.valueAt(i3)).getAbsolutePath(), 0, j);
+                        Utilities.clearDir(((File) createMediaPaths.valueAt(i3)).getAbsolutePath(), 0, j, false);
                     } catch (Throwable th) {
                         FileLog.e(th);
                     }
@@ -420,7 +420,7 @@ public class SharedConfig {
         File file2 = new File(file, "acache");
         if (file2.exists()) {
             try {
-                Utilities.clearDir(file2.getAbsolutePath(), 0, (long) (i - 86400));
+                Utilities.clearDir(file2.getAbsolutePath(), 0, (long) (i - 86400), false);
             } catch (Throwable th2) {
                 FileLog.e(th2);
             }

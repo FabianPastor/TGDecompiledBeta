@@ -1619,6 +1619,15 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
                     super.onChildPressed(view, f, f2, z);
                 }
             }
+
+            /* Access modifiers changed, original: protected */
+            public boolean allowSelectChildAtPosition(View view) {
+                ViewHolder findContainingViewHolder = ThemePreviewActivity.this.listView2.findContainingViewHolder(view);
+                if (findContainingViewHolder == null || findContainingViewHolder.getItemViewType() != 2) {
+                    return super.allowSelectChildAtPosition(view);
+                }
+                return false;
+            }
         };
         ((DefaultItemAnimator) this.listView2.getItemAnimator()).setDelayAnimations(false);
         this.listView2.setVerticalScrollBarEnabled(true);
@@ -2117,7 +2126,10 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         if (!(this.currentWallpaper instanceof ColorWallpaper)) {
             Drawable drawable = imageReceiver.getDrawable();
             if (z && drawable != null) {
-                Theme.applyChatServiceMessageColor(AndroidUtilities.calcDrawableColor(drawable));
+                String str = "chat_serviceBackground";
+                if (!Theme.hasThemeKey(str)) {
+                    Theme.applyChatServiceMessageColor(AndroidUtilities.calcDrawableColor(drawable));
+                }
                 this.listView2.invalidateViews();
                 FrameLayout frameLayout = this.buttonsContainer;
                 if (frameLayout != null) {
@@ -2128,9 +2140,8 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
                 }
                 RadialProgress2 radialProgress2 = this.radialProgress;
                 if (radialProgress2 != null) {
-                    String str = "chat_serviceText";
-                    String str2 = "chat_serviceBackground";
-                    radialProgress2.setColors(str2, str2, str, str);
+                    String str2 = "chat_serviceText";
+                    radialProgress2.setColors(str, str, str2, str2);
                 }
                 if (!z2 && this.isBlurred && this.blurredBitmap == null) {
                     this.backgroundImage.getImageReceiver().setCrossfadeWithOldImage(false);
@@ -2682,75 +2693,75 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         cancelThemeApply(false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:9:0x0033  */
-    /* JADX WARNING: Removed duplicated region for block: B:8:0x001b  */
+    /* JADX WARNING: Removed duplicated region for block: B:9:0x0035  */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x001d  */
     /* JADX WARNING: Removed duplicated region for block: B:14:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x005e  */
-    public /* synthetic */ void lambda$createView$12$ThemePreviewActivity(android.view.View r8) {
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x0061  */
+    public /* synthetic */ void lambda$createView$12$ThemePreviewActivity(android.view.View r7) {
         /*
-        r7 = this;
-        r8 = org.telegram.ui.ActionBar.Theme.getPreviousTheme();
+        r6 = this;
+        r7 = org.telegram.ui.ActionBar.Theme.getPreviousTheme();
         r0 = 0;
-        if (r8 == 0) goto L_0x0014;
+        if (r7 == 0) goto L_0x0014;
     L_0x0007:
-        r1 = r8.prevAccentId;
+        r1 = r7.prevAccentId;
         if (r1 < 0) goto L_0x0014;
     L_0x000b:
-        r2 = r8.themeAccentsMap;
+        r2 = r7.themeAccentsMap;
         r1 = r2.get(r1);
         r1 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r1;
-        goto L_0x0015;
+        goto L_0x0018;
     L_0x0014:
-        r1 = r0;
-    L_0x0015:
-        r2 = r7.accent;
+        r1 = r7.getAccent(r0);
+    L_0x0018:
+        r2 = r6.accent;
         r3 = 1;
-        r4 = 0;
-        if (r2 == 0) goto L_0x0033;
-    L_0x001b:
-        r7.saveAccentWallpaper();
-        r0 = r7.applyingTheme;
-        org.telegram.ui.ActionBar.Theme.saveThemeAccents(r0, r3, r4, r4, r4);
-        org.telegram.ui.ActionBar.Theme.applyPreviousTheme();
-        r0 = r7.applyingTheme;
-        r2 = r7.nightTheme;
-        org.telegram.ui.ActionBar.Theme.applyTheme(r0, r2);
-        r0 = r7.parentLayout;
-        r0.rebuildAllFragmentViews(r4, r4);
-        goto L_0x0057;
-    L_0x0033:
-        r2 = r7.parentLayout;
-        r2.rebuildAllFragmentViews(r4, r4);
+        if (r2 == 0) goto L_0x0035;
+    L_0x001d:
+        r6.saveAccentWallpaper();
+        r2 = r6.applyingTheme;
+        org.telegram.ui.ActionBar.Theme.saveThemeAccents(r2, r3, r0, r0, r0);
+        org.telegram.ui.ActionBar.Theme.clearPreviousTheme();
+        r2 = r6.applyingTheme;
+        r4 = r6.nightTheme;
+        org.telegram.ui.ActionBar.Theme.applyTheme(r2, r4);
+        r2 = r6.parentLayout;
+        r2.rebuildAllFragmentViews(r0, r0);
+        goto L_0x005a;
+    L_0x0035:
+        r2 = r6.parentLayout;
+        r2.rebuildAllFragmentViews(r0, r0);
         r2 = new java.io.File;
-        r5 = r7.applyingTheme;
-        r5 = r5.pathToFile;
-        r2.<init>(r5);
-        r5 = r7.applyingTheme;
-        r6 = r5.name;
-        r5 = r5.info;
-        org.telegram.ui.ActionBar.Theme.applyThemeFile(r2, r6, r5, r4);
-        r2 = r7.applyingTheme;
+        r4 = r6.applyingTheme;
+        r4 = r4.pathToFile;
+        r2.<init>(r4);
+        r4 = r6.applyingTheme;
+        r5 = r4.name;
+        r4 = r4.info;
+        org.telegram.ui.ActionBar.Theme.applyThemeFile(r2, r5, r4, r0);
+        r2 = r6.applyingTheme;
         r2 = r2.account;
         r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r5 = r7.applyingTheme;
-        r2.saveTheme(r5, r0, r4, r4);
-    L_0x0057:
-        r7.finishFragment();
-        r0 = r7.screenType;
-        if (r0 != 0) goto L_0x0077;
-    L_0x005e:
-        r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
-        r2 = org.telegram.messenger.NotificationCenter.didApplyNewTheme;
+        r4 = r6.applyingTheme;
+        r5 = 0;
+        r2.saveTheme(r4, r5, r0, r0);
+    L_0x005a:
+        r6.finishFragment();
+        r2 = r6.screenType;
+        if (r2 != 0) goto L_0x007a;
+    L_0x0061:
+        r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r4 = org.telegram.messenger.NotificationCenter.didApplyNewTheme;
         r5 = 3;
         r5 = new java.lang.Object[r5];
-        r5[r4] = r8;
+        r5[r0] = r7;
         r5[r3] = r1;
-        r8 = 2;
-        r1 = r7.deleteOnCancel;
-        r1 = java.lang.Boolean.valueOf(r1);
-        r5[r8] = r1;
-        r0.postNotificationName(r2, r5);
-    L_0x0077:
+        r7 = 2;
+        r0 = r6.deleteOnCancel;
+        r0 = java.lang.Boolean.valueOf(r0);
+        r5[r7] = r0;
+        r2.postNotificationName(r4, r5);
+    L_0x007a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemePreviewActivity.lambda$createView$12$ThemePreviewActivity(android.view.View):void");
@@ -3918,13 +3929,16 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
             this.backgroundImage.setBackgroundColor(this.backgroundColor);
             this.patternColor = AndroidUtilities.getPatternColor(this.backgroundColor);
         }
-        r5 = new int[4];
-        int i5 = this.patternColor;
-        r5[0] = i5;
-        r5[1] = i5;
-        r5[2] = i5;
-        r5[3] = i5;
-        Theme.applyChatServiceMessageColor(r5);
+        String str = "chat_serviceBackground";
+        if (!Theme.hasThemeKey(str)) {
+            r1 = new int[4];
+            int i5 = this.patternColor;
+            r1[0] = i5;
+            r1[1] = i5;
+            r1[2] = i5;
+            r1[3] = i5;
+            Theme.applyChatServiceMessageColor(r1);
+        }
         BackupImageView backupImageView = this.backgroundImage;
         if (backupImageView != null) {
             backupImageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(this.patternColor, this.blendMode));
@@ -3937,17 +3951,16 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         }
         FrameLayout frameLayout = this.buttonsContainer;
         if (frameLayout != null) {
-            i = frameLayout.getChildCount();
-            while (i3 < i) {
+            i2 = frameLayout.getChildCount();
+            while (i3 < i2) {
                 this.buttonsContainer.getChildAt(i3).invalidate();
                 i3++;
             }
         }
         RadialProgress2 radialProgress2 = this.radialProgress;
         if (radialProgress2 != null) {
-            String str = "chat_serviceText";
-            String str2 = "chat_serviceBackground";
-            radialProgress2.setColors(str2, str2, str, str);
+            String str2 = "chat_serviceText";
+            radialProgress2.setColors(str, str, str2, str2);
         }
     }
 
