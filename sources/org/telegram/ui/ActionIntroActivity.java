@@ -32,21 +32,14 @@ import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.LocationFetchCallback;
 import org.telegram.messenger.MrzRecognizer.Result;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_auth_acceptLoginToken;
-import org.telegram.tgnet.TLRPC.TL_auth_loginTokenInfo;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.Updates;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.CameraScanActivity.CameraScanActivityDelegate;
 import org.telegram.ui.CameraScanActivity.CameraScanActivityDelegate.-CC;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
@@ -75,8 +68,13 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
     private Drawable drawable1;
     private Drawable drawable2;
     private RLottieImageView imageView;
+    private ActionIntroQRLoginDelegate qrLoginDelegate;
     private TextView subtitleTextView;
     private TextView titleTextView;
+
+    public interface ActionIntroQRLoginDelegate {
+        void didFindQRCode(String str);
+    }
 
     public ActionIntroActivity(int i) {
         this.currentType = i;
@@ -763,6 +761,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
         }
     }
 
+    public void setQrLoginDelegate(ActionIntroQRLoginDelegate actionIntroQRLoginDelegate) {
+        this.qrLoginDelegate = actionIntroQRLoginDelegate;
+    }
+
     private void processOpenQrReader() {
         CameraScanActivity.showAsSheet(this, false, new CameraScanActivityDelegate() {
             public /* synthetic */ void didFindMrzInfo(Result result) {
@@ -770,125 +772,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
             }
 
             public void didFindQr(String str) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$ActionIntroActivity$3$q8PccGKuuILf9YaMoqzswYoXDyc(this));
-            }
-
-            public /* synthetic */ void lambda$didFindQr$1$ActionIntroActivity$3() {
-                if (ActionIntroActivity.this.getParentActivity() != null) {
-                    Builder builder = new Builder(ActionIntroActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("AuthAnotherClient", NUM));
-                    builder.setMessage(LocaleController.getString("AuthAnotherClientOk", NUM));
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
-                    ActionIntroActivity.this.showDialog(builder.create(), new -$$Lambda$ActionIntroActivity$3$-Seo25h9gvDNmTFZZz81Rp7HLvk(this));
-                }
-            }
-
-            public /* synthetic */ void lambda$null$0$ActionIntroActivity$3(DialogInterface dialogInterface) {
-                ActionIntroActivity.this.finishFragment();
-            }
-
-            private /* synthetic */ void lambda$didFindQr$8(byte[] bArr, AlertDialog alertDialog, TLObject tLObject, TL_error tL_error) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$ActionIntroActivity$3$zgx6u9qoxxv5e8X4RMUk8zQwrJ0(this, tLObject, bArr, tL_error, alertDialog));
-            }
-
-            public /* synthetic */ void lambda$null$7$ActionIntroActivity$3(TLObject tLObject, byte[] bArr, TL_error tL_error, AlertDialog alertDialog) {
-                String str = "AuthAnotherClient";
-                if (tLObject instanceof TL_auth_loginTokenInfo) {
-                    TL_auth_loginTokenInfo tL_auth_loginTokenInfo = (TL_auth_loginTokenInfo) tLObject;
-                    Builder builder = new Builder(ActionIntroActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString(str, NUM));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    if (tL_auth_loginTokenInfo.ip.length() != 0) {
-                        stringBuilder.append(tL_auth_loginTokenInfo.ip);
-                    }
-                    String str2 = " ";
-                    if (tL_auth_loginTokenInfo.region.length() != 0) {
-                        if (stringBuilder.length() != 0) {
-                            stringBuilder.append(str2);
-                        }
-                        stringBuilder.append("— ");
-                        stringBuilder.append(tL_auth_loginTokenInfo.region);
-                    }
-                    String str3 = ", ";
-                    if (tL_auth_loginTokenInfo.device_model.length() != 0) {
-                        if (stringBuilder.length() != 0) {
-                            stringBuilder.append(str3);
-                        }
-                        stringBuilder.append(tL_auth_loginTokenInfo.device_model);
-                    }
-                    if (!(tL_auth_loginTokenInfo.system_version.length() == 0 && tL_auth_loginTokenInfo.platform.length() == 0)) {
-                        if (stringBuilder.length() != 0) {
-                            stringBuilder.append(str3);
-                        }
-                        if (tL_auth_loginTokenInfo.platform.length() != 0) {
-                            stringBuilder.append(tL_auth_loginTokenInfo.platform);
-                        }
-                        if (tL_auth_loginTokenInfo.system_version.length() != 0) {
-                            if (tL_auth_loginTokenInfo.platform.length() != 0) {
-                                stringBuilder.append(str2);
-                            }
-                            stringBuilder.append(tL_auth_loginTokenInfo.system_version);
-                        }
-                    }
-                    if (tL_auth_loginTokenInfo.app_name.length() != 0) {
-                        if (stringBuilder.length() != 0) {
-                            stringBuilder.append(str3);
-                        }
-                        stringBuilder.append(tL_auth_loginTokenInfo.app_name);
-                        stringBuilder.append(" (ID: ");
-                        stringBuilder.append(tL_auth_loginTokenInfo.api_id);
-                        stringBuilder.append(")");
-                    }
-                    builder.setMessage(stringBuilder.toString());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                    builder.setPositiveButton(LocaleController.getString("Accept", NUM), new -$$Lambda$ActionIntroActivity$3$Ym37NXHDQvungRiPfnAYJEXVcmI(this, bArr, tL_error));
-                    ActionIntroActivity.this.showDialog(builder.create());
-                } else {
-                    AlertsCreator.showSimpleAlert(ActionIntroActivity.this, LocaleController.getString(str, NUM), LocaleController.getString("AuthAnotherClientTokenError", NUM));
-                }
-                try {
-                    alertDialog.dismiss();
-                } catch (Exception unused) {
-                }
-            }
-
-            public /* synthetic */ void lambda$null$6$ActionIntroActivity$3(byte[] bArr, TL_error tL_error, DialogInterface dialogInterface, int i) {
-                TL_auth_acceptLoginToken tL_auth_acceptLoginToken = new TL_auth_acceptLoginToken();
-                tL_auth_acceptLoginToken.token = bArr;
-                ActionIntroActivity.this.getConnectionsManager().sendRequest(tL_auth_acceptLoginToken, new -$$Lambda$ActionIntroActivity$3$Yc9_1XtDXnKAsyAS-hFo4wdNPTc(this, tL_error));
-            }
-
-            public /* synthetic */ void lambda$null$5$ActionIntroActivity$3(TL_error tL_error, TLObject tLObject, TL_error tL_error2) {
-                if (tLObject instanceof Updates) {
-                    ActionIntroActivity.this.getMessagesController().processUpdates((Updates) tLObject, false);
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$ActionIntroActivity$3$micn9dH8jMUONuC4IBC7lDafjP0(this));
-                    return;
-                }
-                AndroidUtilities.runOnUIThread(new -$$Lambda$ActionIntroActivity$3$Bb_uPxFm6vI7TPwYkkhF3xcR-h4(this, tL_error));
-            }
-
-            public /* synthetic */ void lambda$null$3$ActionIntroActivity$3() {
-                if (ActionIntroActivity.this.getParentActivity() != null) {
-                    Builder builder = new Builder(ActionIntroActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("AuthAnotherClient", NUM));
-                    builder.setMessage(LocaleController.getString("AuthAnotherClientOk", NUM));
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
-                    ActionIntroActivity.this.showDialog(builder.create(), new -$$Lambda$ActionIntroActivity$3$mZp-PDvjL5vMyAAkEyvcK5Yzd7Q(this));
-                }
-            }
-
-            public /* synthetic */ void lambda$null$2$ActionIntroActivity$3(DialogInterface dialogInterface) {
-                ActionIntroActivity.this.finishFragment();
-            }
-
-            public /* synthetic */ void lambda$null$4$ActionIntroActivity$3(TL_error tL_error) {
-                ActionIntroActivity actionIntroActivity = ActionIntroActivity.this;
-                String string = LocaleController.getString("AuthAnotherClient", NUM);
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(LocaleController.getString("ErrorOccurred", NUM));
-                stringBuilder.append("\n");
-                stringBuilder.append(tL_error.text);
-                AlertsCreator.showSimpleAlert(actionIntroActivity, string, stringBuilder.toString());
+                ActionIntroActivity.this.finishFragment(false);
+                ActionIntroActivity.this.qrLoginDelegate.didFindQRCode(str);
             }
         });
     }

@@ -17,6 +17,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.TL_message;
+import org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_pollAnswer;
@@ -26,12 +27,18 @@ import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate;
 import org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate.-CC;
+import org.telegram.ui.Cells.TextSelectionHelper.ChatListTextSelectionHelper;
+import org.telegram.ui.Components.BackgroundGradientDrawable;
+import org.telegram.ui.Components.BackgroundGradientDrawable.Disposable;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ThemePreviewMessagesCell extends LinearLayout {
     private Drawable backgroundDrawable;
+    private Disposable backgroundGradientDisposable;
     private ChatMessageCell[] cells = new ChatMessageCell[2];
+    private final Runnable invalidateRunnable = new -$$Lambda$0cwbLyLRHfcV1AL1hb0st_cAaKo(this);
     private Drawable oldBackgroundDrawable;
+    private Disposable oldBackgroundGradientDisposable;
     private ActionBarLayout parentLayout;
     private Drawable shadowDrawable;
 
@@ -52,12 +59,13 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     }
 
     public ThemePreviewMessagesCell(Context context, ActionBarLayout actionBarLayout, int i) {
+        Context context2 = context;
         super(context);
         this.parentLayout = actionBarLayout;
         setWillNotDraw(false);
         setOrientation(1);
         setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f));
-        this.shadowDrawable = Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow");
+        this.shadowDrawable = Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow");
         int currentTimeMillis = ((int) (System.currentTimeMillis() / 1000)) - 3600;
         TL_message tL_message = new TL_message();
         if (i == 0) {
@@ -80,7 +88,21 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         if (i == 0) {
             tL_message.message = LocaleController.getString("FontSizePreviewLine2", NUM);
         } else {
-            tL_message.message = LocaleController.getString("NewThemePreviewLine2", NUM);
+            String string = LocaleController.getString("NewThemePreviewLine3", NUM);
+            StringBuilder stringBuilder = new StringBuilder(string);
+            int indexOf = string.indexOf(42);
+            int lastIndexOf = string.lastIndexOf(42);
+            if (!(indexOf == -1 || lastIndexOf == -1)) {
+                String str = "";
+                stringBuilder.replace(lastIndexOf, lastIndexOf + 1, str);
+                stringBuilder.replace(indexOf, indexOf + 1, str);
+                TL_messageEntityTextUrl tL_messageEntityTextUrl = new TL_messageEntityTextUrl();
+                tL_messageEntityTextUrl.offset = indexOf;
+                tL_messageEntityTextUrl.length = (lastIndexOf - indexOf) - 1;
+                tL_messageEntityTextUrl.url = "https://telegram.org";
+                tL_message.entities.add(tL_messageEntityTextUrl);
+            }
+            tL_message.message = stringBuilder.toString();
         }
         tL_message.date = currentTimeMillis + 960;
         tL_message.dialog_id = 1;
@@ -119,12 +141,12 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         messageObject3.eventId = 1;
         messageObject3.resetLayout();
         messageObject3.replyMessageObject = messageObject;
-        i = 0;
+        int i3 = 0;
         while (true) {
             ChatMessageCell[] chatMessageCellArr = this.cells;
-            if (i < chatMessageCellArr.length) {
-                chatMessageCellArr[i] = new ChatMessageCell(context);
-                this.cells[i].setDelegate(new ChatMessageCellDelegate() {
+            if (i3 < chatMessageCellArr.length) {
+                chatMessageCellArr[i3] = new ChatMessageCell(context2);
+                this.cells[i3].setDelegate(new ChatMessageCellDelegate() {
                     public /* synthetic */ boolean canPerformActions() {
                         return -CC.$default$canPerformActions(this);
                     }
@@ -197,6 +219,14 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         return -CC.$default$getAdminRank(this, i);
                     }
 
+                    public /* synthetic */ ChatListTextSelectionHelper getTextSelectionHelper() {
+                        return -CC.$default$getTextSelectionHelper(this);
+                    }
+
+                    public /* synthetic */ boolean hasSelectedMessages() {
+                        return -CC.$default$hasSelectedMessages(this);
+                    }
+
                     public /* synthetic */ void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2) {
                         -CC.$default$needOpenWebView(this, str, str2, str3, str4, i, i2);
                     }
@@ -218,11 +248,11 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                     }
                 });
                 chatMessageCellArr = this.cells;
-                chatMessageCellArr[i].isChat = false;
-                chatMessageCellArr[i].setFullyDraw(true);
-                this.cells[i].setMessageObject(i == 0 ? messageObject3 : messageObject2, null, false, false);
-                addView(this.cells[i], LayoutHelper.createLinear(-1, -2));
-                i++;
+                chatMessageCellArr[i3].isChat = false;
+                chatMessageCellArr[i3].setFullyDraw(true);
+                this.cells[i3].setMessageObject(i3 == 0 ? messageObject3 : messageObject2, null, false, false);
+                addView(this.cells[i3], LayoutHelper.createLinear(-1, -2));
+                i3++;
             } else {
                 return;
             }
@@ -253,6 +283,13 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         if (!(cachedWallpaperNonBlocking == this.backgroundDrawable || cachedWallpaperNonBlocking == null)) {
             if (Theme.isAnimatingColor()) {
                 this.oldBackgroundDrawable = this.backgroundDrawable;
+                this.oldBackgroundGradientDisposable = this.backgroundGradientDisposable;
+            } else {
+                Disposable disposable = this.backgroundGradientDisposable;
+                if (disposable != null) {
+                    disposable.dispose();
+                    this.backgroundGradientDisposable = null;
+                }
             }
             this.backgroundDrawable = cachedWallpaperNonBlocking;
         }
@@ -268,7 +305,11 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                 }
                 if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
                     drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                    drawable.draw(canvas);
+                    if (drawable instanceof BackgroundGradientDrawable) {
+                        this.backgroundGradientDisposable = ((BackgroundGradientDrawable) drawable).drawExactBoundsSize(canvas, this);
+                    } else {
+                        drawable.draw(canvas);
+                    }
                 } else if (drawable instanceof BitmapDrawable) {
                     if (((BitmapDrawable) drawable).getTileModeX() == TileMode.REPEAT) {
                         canvas.save();
@@ -296,12 +337,33 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                     }
                 }
                 if (i == 0 && this.oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
+                    Disposable disposable2 = this.oldBackgroundGradientDisposable;
+                    if (disposable2 != null) {
+                        disposable2.dispose();
+                        this.oldBackgroundGradientDisposable = null;
+                    }
                     this.oldBackgroundDrawable = null;
+                    invalidate();
                 }
             }
             i++;
         }
         this.shadowDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
         this.shadowDrawable.draw(canvas);
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Disposable disposable = this.backgroundGradientDisposable;
+        if (disposable != null) {
+            disposable.dispose();
+            this.backgroundGradientDisposable = null;
+        }
+        disposable = this.oldBackgroundGradientDisposable;
+        if (disposable != null) {
+            disposable.dispose();
+            this.oldBackgroundGradientDisposable = null;
+        }
     }
 }

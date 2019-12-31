@@ -417,7 +417,8 @@ public class ActionBar extends FrameLayout {
         this.actionMode = new ActionBarMenu(getContext(), this);
         actionBarMenu = this.actionMode;
         actionBarMenu.isActionMode = true;
-        actionBarMenu.setBackgroundColor(Theme.getColor("actionBarActionModeDefault"));
+        actionBarMenu.setClickable(true);
+        this.actionMode.setBackgroundColor(Theme.getColor("actionBarActionModeDefault"));
         addView(this.actionMode, indexOfChild(this.backButtonImageView));
         this.actionMode.setPadding(0, this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0, 0, 0);
         LayoutParams layoutParams = (LayoutParams) this.actionMode.getLayoutParams();

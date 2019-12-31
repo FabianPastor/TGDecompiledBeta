@@ -654,6 +654,19 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
                         secretMediaViewer.updateMinMax(secretMediaViewer.scale);
                     }
                 }
+
+                /* Access modifiers changed, original: protected */
+                public void onDraw(Canvas canvas) {
+                    if (VERSION.SDK_INT >= 21 && SecretMediaViewer.this.isVisible && SecretMediaViewer.this.lastInsets != null) {
+                        WindowInsets windowInsets = (WindowInsets) SecretMediaViewer.this.lastInsets;
+                        if (SecretMediaViewer.this.photoAnimationInProgress != 0) {
+                            SecretMediaViewer.this.blackPaint.setAlpha(SecretMediaViewer.this.photoBackgroundDrawable.getAlpha());
+                        } else {
+                            SecretMediaViewer.this.blackPaint.setAlpha(255);
+                        }
+                        canvas.drawRect(0.0f, (float) getMeasuredHeight(), (float) getMeasuredWidth(), (float) (getMeasuredHeight() + windowInsets.getSystemWindowInsetBottom()), SecretMediaViewer.this.blackPaint);
+                    }
+                }
             };
             this.windowView.setBackgroundDrawable(this.photoBackgroundDrawable);
             this.windowView.setFocusable(true);

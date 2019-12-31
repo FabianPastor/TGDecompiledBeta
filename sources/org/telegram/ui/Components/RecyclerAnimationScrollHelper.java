@@ -14,8 +14,8 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class RecyclerAnimationScrollHelper {
     public static final int SCROLL_DIRECTION_DOWN = 0;
-    public static final int SCROLL_DIRECTION_TOP = 1;
     public static final int SCROLL_DIRECTION_UNSET = -1;
+    public static final int SCROLL_DIRECTION_UP = 1;
     AnimationCallback animationCallback;
     ValueAnimator animator;
     private LinearLayoutManager layoutManager;
@@ -112,9 +112,7 @@ public class RecyclerAnimationScrollHelper {
         RecyclerListView recyclerListView = this.recyclerView;
         if (!recyclerListView.animationRunning) {
             if (!z2 || this.scrollDirection == -1) {
-                if (!this.recyclerView.animationRunning) {
-                    this.layoutManager.scrollToPositionWithOffset(i, i2, z);
-                }
+                this.layoutManager.scrollToPositionWithOffset(i, i2, z);
                 return;
             }
             int childCount = recyclerListView.getChildCount();
@@ -198,14 +196,14 @@ public class RecyclerAnimationScrollHelper {
                     if (animatableAdapter != null) {
                         animatableAdapter.onAnimationStart();
                     }
-                    i4 = bottom + (z3 ? -i2 : i3 - RecyclerAnimationScrollHelper.this.recyclerView.getHeight());
+                    i7 = bottom + (z3 ? -i2 : i3 - RecyclerAnimationScrollHelper.this.recyclerView.getHeight());
                     ValueAnimator valueAnimator = RecyclerAnimationScrollHelper.this.animator;
                     if (valueAnimator != null) {
                         valueAnimator.removeAllListeners();
                         RecyclerAnimationScrollHelper.this.animator.cancel();
                     }
                     RecyclerAnimationScrollHelper.this.animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                    RecyclerAnimationScrollHelper.this.animator.addUpdateListener(new -$$Lambda$RecyclerAnimationScrollHelper$1$M7MBIJuKHjMNW6Hbfy-3yn-W-EE(this, arrayList, z3, i4, arrayList));
+                    RecyclerAnimationScrollHelper.this.animator.addUpdateListener(new -$$Lambda$RecyclerAnimationScrollHelper$1$M7MBIJuKHjMNW6Hbfy-3yn-W-EE(this, arrayList, z3, i7, arrayList));
                     RecyclerAnimationScrollHelper.this.animator.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             RecyclerAnimationScrollHelper.this.recyclerView.animationRunning = false;
@@ -239,11 +237,7 @@ public class RecyclerAnimationScrollHelper {
                         }
                     });
                     RecyclerAnimationScrollHelper.this.recyclerView.removeOnLayoutChangeListener(this);
-                    long j = (long) (((float) bottom) / 6.4f);
-                    if (j < 280) {
-                        j = 280;
-                    }
-                    RecyclerAnimationScrollHelper.this.animator.setDuration(j);
+                    RecyclerAnimationScrollHelper.this.animator.setDuration(Math.min((long) (((i7 / RecyclerAnimationScrollHelper.this.recyclerView.getMeasuredHeight()) + 1) * 200), 1300));
                     RecyclerAnimationScrollHelper.this.animator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                     RecyclerAnimationScrollHelper.this.animator.start();
                 }

@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Drawable.Callback;
 import android.graphics.drawable.Drawable.ConstantState;
@@ -97,23 +98,33 @@ public class CombinedDrawable extends Drawable implements Callback {
     public void draw(Canvas canvas) {
         this.background.setBounds(getBounds());
         this.background.draw(canvas);
-        Drawable drawable = this.icon;
-        if (drawable != null) {
+        if (this.icon != null) {
+            int i;
+            Drawable drawable;
             int centerX;
-            int centerY;
             if (this.fullSize) {
-                drawable.setBounds(getBounds());
+                Rect bounds = getBounds();
+                i = this.left;
+                if (i != 0) {
+                    drawable = this.icon;
+                    int i2 = bounds.left + i;
+                    int i3 = bounds.top;
+                    int i4 = this.top;
+                    drawable.setBounds(i2, i3 + i4, bounds.right - i, bounds.bottom - i4);
+                } else {
+                    this.icon.setBounds(bounds);
+                }
             } else if (this.iconWidth != 0) {
                 centerX = ((getBounds().centerX() - (this.iconWidth / 2)) + this.left) + this.offsetX;
-                centerY = getBounds().centerY();
-                int i = this.iconHeight;
-                centerY = ((centerY - (i / 2)) + this.top) + this.offsetY;
-                this.icon.setBounds(centerX, centerY, this.iconWidth + centerX, i + centerY);
+                i = getBounds().centerY();
+                int i5 = this.iconHeight;
+                i = ((i - (i5 / 2)) + this.top) + this.offsetY;
+                this.icon.setBounds(centerX, i, this.iconWidth + centerX, i5 + i);
             } else {
                 centerX = (getBounds().centerX() - (this.icon.getIntrinsicWidth() / 2)) + this.left;
-                centerY = (getBounds().centerY() - (this.icon.getIntrinsicHeight() / 2)) + this.top;
-                Drawable drawable2 = this.icon;
-                drawable2.setBounds(centerX, centerY, drawable2.getIntrinsicWidth() + centerX, this.icon.getIntrinsicHeight() + centerY);
+                i = (getBounds().centerY() - (this.icon.getIntrinsicHeight() / 2)) + this.top;
+                drawable = this.icon;
+                drawable.setBounds(centerX, i, drawable.getIntrinsicWidth() + centerX, this.icon.getIntrinsicHeight() + i);
             }
             this.icon.draw(canvas);
         }

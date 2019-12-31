@@ -176,8 +176,8 @@ public class ProfileSearchCell extends BaseCell {
         this.sublabelOffsetY = i2;
     }
 
-    /* JADX WARNING: Missing block: B:153:0x041f, code skipped:
-            if (r4.expires > org.telegram.tgnet.ConnectionsManager.getInstance(r0.currentAccount).getCurrentTime()) goto L_0x0421;
+    /* JADX WARNING: Missing block: B:159:0x0435, code skipped:
+            if (r4.expires > org.telegram.tgnet.ConnectionsManager.getInstance(r0.currentAccount).getCurrentTime()) goto L_0x0437;
      */
     public void buildLayout() {
         /*
@@ -445,7 +445,7 @@ public class ProfileSearchCell extends BaseCell {
         r2 = r2.format(r3);
         goto L_0x01de;
     L_0x01d5:
-        r2 = NUM; // 0x7f0e054f float:1.8877794E38 double:1.053162828E-314;
+        r2 = NUM; // 0x7f0e0557 float:1.887781E38 double:1.053162832E-314;
         r3 = "HiddenName";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
     L_0x01de:
@@ -643,148 +643,162 @@ public class ProfileSearchCell extends BaseCell {
         r0.statusLeft = r4;
     L_0x0345:
         r4 = r0.chat;
-        if (r4 == 0) goto L_0x03be;
+        if (r4 == 0) goto L_0x03d4;
     L_0x0349:
         r6 = r0.subLabel;
         if (r6 == 0) goto L_0x034f;
     L_0x034d:
-        goto L_0x03be;
+        goto L_0x03d4;
     L_0x034f:
-        if (r4 == 0) goto L_0x03b5;
+        if (r4 == 0) goto L_0x03cb;
     L_0x0351:
         r4 = org.telegram.messenger.ChatObject.isChannel(r4);
-        if (r4 == 0) goto L_0x0381;
+        if (r4 == 0) goto L_0x038c;
     L_0x0357:
         r4 = r0.chat;
         r6 = r4.megagroup;
-        if (r6 != 0) goto L_0x0381;
+        if (r6 != 0) goto L_0x038c;
     L_0x035d:
+        r6 = r4.participants_count;
+        if (r6 == 0) goto L_0x0368;
+    L_0x0361:
+        r4 = "Subscribers";
+        r13 = org.telegram.messenger.LocaleController.formatPluralString(r4, r6);
+        goto L_0x03cc;
+    L_0x0368:
         r4 = r4.username;
         r4 = android.text.TextUtils.isEmpty(r4);
-        if (r4 == 0) goto L_0x0373;
-    L_0x0365:
-        r4 = NUM; // 0x7f0e0276 float:1.8876315E38 double:1.053162468E-314;
+        if (r4 == 0) goto L_0x037e;
+    L_0x0370:
+        r4 = NUM; // 0x7f0e0279 float:1.8876321E38 double:1.0531624694E-314;
         r6 = "ChannelPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r6, r4);
         r13 = r4.toLowerCase();
-        goto L_0x03b6;
-    L_0x0373:
-        r4 = NUM; // 0x7f0e0279 float:1.8876321E38 double:1.0531624694E-314;
+        goto L_0x03cc;
+    L_0x037e:
+        r4 = NUM; // 0x7f0e027c float:1.8876328E38 double:1.053162471E-314;
         r6 = "ChannelPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r6, r4);
         r13 = r4.toLowerCase();
-        goto L_0x03b6;
-    L_0x0381:
+        goto L_0x03cc;
+    L_0x038c:
         r4 = r0.chat;
+        r6 = r4.participants_count;
+        if (r6 == 0) goto L_0x0399;
+    L_0x0392:
+        r4 = "Members";
+        r13 = org.telegram.messenger.LocaleController.formatPluralString(r4, r6);
+        goto L_0x03cc;
+    L_0x0399:
         r6 = r4.has_geo;
-        if (r6 == 0) goto L_0x0391;
-    L_0x0387:
-        r4 = NUM; // 0x7f0e0623 float:1.8878224E38 double:1.053162933E-314;
+        if (r6 == 0) goto L_0x03a7;
+    L_0x039d:
+        r4 = NUM; // 0x7f0e0631 float:1.8878252E38 double:1.0531629397E-314;
         r6 = "MegaLocation";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r4);
-        goto L_0x03b6;
-    L_0x0391:
+        goto L_0x03cc;
+    L_0x03a7:
         r4 = r4.username;
         r4 = android.text.TextUtils.isEmpty(r4);
-        if (r4 == 0) goto L_0x03a7;
-    L_0x0399:
-        r4 = NUM; // 0x7f0e0624 float:1.8878226E38 double:1.0531629333E-314;
+        if (r4 == 0) goto L_0x03bd;
+    L_0x03af:
+        r4 = NUM; // 0x7f0e0632 float:1.8878254E38 double:1.05316294E-314;
         r6 = "MegaPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r6, r4);
         r13 = r4.toLowerCase();
-        goto L_0x03b6;
-    L_0x03a7:
-        r4 = NUM; // 0x7f0e0627 float:1.8878232E38 double:1.053162935E-314;
+        goto L_0x03cc;
+    L_0x03bd:
+        r4 = NUM; // 0x7f0e0635 float:1.887826E38 double:1.0531629417E-314;
         r6 = "MegaPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r6, r4);
         r13 = r4.toLowerCase();
-        goto L_0x03b6;
-    L_0x03b5:
+        goto L_0x03cc;
+    L_0x03cb:
         r13 = r1;
-    L_0x03b6:
+    L_0x03cc:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r15);
         r0.nameTop = r4;
-        goto L_0x0443;
-    L_0x03be:
+        goto L_0x0459;
+    L_0x03d4:
         r13 = r0.subLabel;
-        if (r13 == 0) goto L_0x03c4;
-    L_0x03c2:
-        goto L_0x0438;
-    L_0x03c4:
+        if (r13 == 0) goto L_0x03da;
+    L_0x03d8:
+        goto L_0x044e;
+    L_0x03da:
         r4 = r0.user;
-        if (r4 == 0) goto L_0x0437;
-    L_0x03c8:
+        if (r4 == 0) goto L_0x044d;
+    L_0x03de:
         r4 = org.telegram.messenger.MessagesController.isSupportUser(r4);
-        if (r4 == 0) goto L_0x03d8;
-    L_0x03ce:
-        r4 = NUM; // 0x7f0e0aa4 float:1.8880562E38 double:1.0531635025E-314;
+        if (r4 == 0) goto L_0x03ee;
+    L_0x03e4:
+        r4 = NUM; // 0x7f0e0ab9 float:1.8880605E38 double:1.053163513E-314;
         r6 = "SupportStatus";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r4);
-        goto L_0x0438;
-    L_0x03d8:
+        goto L_0x044e;
+    L_0x03ee:
         r4 = r0.user;
         r6 = r4.bot;
-        if (r6 == 0) goto L_0x03e8;
-    L_0x03de:
-        r4 = NUM; // 0x7f0e01e5 float:1.8876021E38 double:1.0531623963E-314;
+        if (r6 == 0) goto L_0x03fe;
+    L_0x03f4:
+        r4 = NUM; // 0x7f0e01e8 float:1.8876027E38 double:1.0531623977E-314;
         r6 = "Bot";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r4);
-        goto L_0x0438;
-    L_0x03e8:
+        goto L_0x044e;
+    L_0x03fe:
         r6 = r4.id;
         r7 = 333000; // 0x514c8 float:4.66632E-40 double:1.64524E-318;
-        if (r6 == r7) goto L_0x042d;
-    L_0x03ef:
+        if (r6 == r7) goto L_0x0443;
+    L_0x0405:
         r7 = 777000; // 0xbdb28 float:1.088809E-39 double:3.83889E-318;
-        if (r6 != r7) goto L_0x03f5;
-    L_0x03f4:
-        goto L_0x042d;
-    L_0x03f5:
+        if (r6 != r7) goto L_0x040b;
+    L_0x040a:
+        goto L_0x0443;
+    L_0x040b:
         r6 = r0.currentAccount;
         r13 = org.telegram.messenger.LocaleController.formatUserStatus(r6, r4);
         r4 = r0.user;
-        if (r4 == 0) goto L_0x0438;
-    L_0x03ff:
+        if (r4 == 0) goto L_0x044e;
+    L_0x0415:
         r4 = r4.id;
         r6 = r0.currentAccount;
         r6 = org.telegram.messenger.UserConfig.getInstance(r6);
         r6 = r6.getClientUserId();
-        if (r4 == r6) goto L_0x0421;
-    L_0x040d:
+        if (r4 == r6) goto L_0x0437;
+    L_0x0423:
         r4 = r0.user;
         r4 = r4.status;
-        if (r4 == 0) goto L_0x0438;
-    L_0x0413:
+        if (r4 == 0) goto L_0x044e;
+    L_0x0429:
         r4 = r4.expires;
         r6 = r0.currentAccount;
         r6 = org.telegram.tgnet.ConnectionsManager.getInstance(r6);
         r6 = r6.getCurrentTime();
-        if (r4 <= r6) goto L_0x0438;
-    L_0x0421:
+        if (r4 <= r6) goto L_0x044e;
+    L_0x0437:
         r2 = org.telegram.ui.ActionBar.Theme.dialogs_onlinePaint;
-        r4 = NUM; // 0x7f0e0760 float:1.8878867E38 double:1.0531630894E-314;
+        r4 = NUM; // 0x7f0e0770 float:1.88789E38 double:1.0531630973E-314;
         r6 = "Online";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r4);
-        goto L_0x0438;
-    L_0x042d:
-        r4 = NUM; // 0x7f0e0a09 float:1.8880248E38 double:1.053163426E-314;
+        goto L_0x044e;
+    L_0x0443:
+        r4 = NUM; // 0x7f0e0a1d float:1.8880289E38 double:1.053163436E-314;
         r6 = "ServiceNotifications";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r4);
-        goto L_0x0438;
-    L_0x0437:
+        goto L_0x044e;
+    L_0x044d:
         r13 = r1;
-    L_0x0438:
+    L_0x044e:
         r4 = r0.savedMessages;
-        if (r4 == 0) goto L_0x0443;
-    L_0x043c:
+        if (r4 == 0) goto L_0x0459;
+    L_0x0452:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r15);
         r0.nameTop = r4;
         r13 = r1;
-    L_0x0443:
+    L_0x0459:
         r11 = r2;
         r2 = android.text.TextUtils.isEmpty(r13);
-        if (r2 != 0) goto L_0x047b;
-    L_0x044a:
+        if (r2 != 0) goto L_0x0491;
+    L_0x0460:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r14);
         r1 = r3 - r1;
         r1 = (float) r1;
@@ -807,25 +821,25 @@ public class ProfileSearchCell extends BaseCell {
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r1 = r1 - r2;
         r0.nameLockTop = r1;
-        goto L_0x047d;
-    L_0x047b:
+        goto L_0x0493;
+    L_0x0491:
         r0.statusLayout = r1;
-    L_0x047d:
+    L_0x0493:
         r1 = org.telegram.messenger.LocaleController.isRTL;
-        if (r1 == 0) goto L_0x0492;
-    L_0x0481:
+        if (r1 == 0) goto L_0x04a8;
+    L_0x0497:
         r1 = r24.getMeasuredWidth();
         r2 = NUM; // 0x42640000 float:57.0 double:5.503149485E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r1 = r1 - r2;
         r2 = r24.getPaddingRight();
         r1 = r1 - r2;
-        goto L_0x049b;
-    L_0x0492:
+        goto L_0x04b1;
+    L_0x04a8:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r2 = r24.getPaddingLeft();
         r1 = r1 + r2;
-    L_0x049b:
+    L_0x04b1:
         r2 = r0.avatarImage;
         r4 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
@@ -834,19 +848,19 @@ public class ProfileSearchCell extends BaseCell {
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r2.setImageCoords(r1, r4, r6, r5);
         r1 = org.telegram.messenger.LocaleController.isRTL;
-        if (r1 == 0) goto L_0x051d;
-    L_0x04b4:
+        if (r1 == 0) goto L_0x0533;
+    L_0x04ca:
         r1 = r0.nameLayout;
         r1 = r1.getLineCount();
         r2 = 0;
-        if (r1 <= 0) goto L_0x04e9;
-    L_0x04bd:
+        if (r1 <= 0) goto L_0x04ff;
+    L_0x04d3:
         r1 = r0.nameLayout;
         r4 = 0;
         r1 = r1.getLineLeft(r4);
         r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 != 0) goto L_0x04e9;
-    L_0x04c8:
+        if (r1 != 0) goto L_0x04ff;
+    L_0x04de:
         r1 = r0.nameLayout;
         r1 = r1.getLineWidth(r4);
         r4 = (double) r1;
@@ -854,8 +868,8 @@ public class ProfileSearchCell extends BaseCell {
         r1 = r0.nameWidth;
         r6 = (double) r1;
         r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r8 >= 0) goto L_0x04e9;
-    L_0x04da:
+        if (r8 >= 0) goto L_0x04ff;
+    L_0x04f0:
         r6 = r0.nameLeft;
         r6 = (double) r6;
         r8 = (double) r1;
@@ -865,27 +879,27 @@ public class ProfileSearchCell extends BaseCell {
         r6 = r6 + r8;
         r1 = (int) r6;
         r0.nameLeft = r1;
-    L_0x04e9:
+    L_0x04ff:
         r1 = r0.statusLayout;
-        if (r1 == 0) goto L_0x0588;
-    L_0x04ed:
+        if (r1 == 0) goto L_0x059e;
+    L_0x0503:
         r1 = r1.getLineCount();
-        if (r1 <= 0) goto L_0x0588;
-    L_0x04f3:
+        if (r1 <= 0) goto L_0x059e;
+    L_0x0509:
         r1 = r0.statusLayout;
         r4 = 0;
         r1 = r1.getLineLeft(r4);
         r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 != 0) goto L_0x0588;
-    L_0x04fe:
+        if (r1 != 0) goto L_0x059e;
+    L_0x0514:
         r1 = r0.statusLayout;
         r1 = r1.getLineWidth(r4);
         r1 = (double) r1;
         r1 = java.lang.Math.ceil(r1);
         r3 = (double) r3;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0588;
-    L_0x050e:
+        if (r5 >= 0) goto L_0x059e;
+    L_0x0524:
         r5 = r0.statusLeft;
         r5 = (double) r5;
         java.lang.Double.isNaN(r3);
@@ -894,20 +908,20 @@ public class ProfileSearchCell extends BaseCell {
         r5 = r5 + r3;
         r1 = (int) r5;
         r0.statusLeft = r1;
-        goto L_0x0588;
-    L_0x051d:
+        goto L_0x059e;
+    L_0x0533:
         r1 = r0.nameLayout;
         r1 = r1.getLineCount();
-        if (r1 <= 0) goto L_0x0554;
-    L_0x0525:
+        if (r1 <= 0) goto L_0x056a;
+    L_0x053b:
         r1 = r0.nameLayout;
         r2 = 0;
         r1 = r1.getLineRight(r2);
         r4 = r0.nameWidth;
         r4 = (float) r4;
         r1 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1));
-        if (r1 != 0) goto L_0x0554;
-    L_0x0533:
+        if (r1 != 0) goto L_0x056a;
+    L_0x0549:
         r1 = r0.nameLayout;
         r1 = r1.getLineWidth(r2);
         r1 = (double) r1;
@@ -915,8 +929,8 @@ public class ProfileSearchCell extends BaseCell {
         r4 = r0.nameWidth;
         r5 = (double) r4;
         r7 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
-        if (r7 >= 0) goto L_0x0554;
-    L_0x0545:
+        if (r7 >= 0) goto L_0x056a;
+    L_0x055b:
         r5 = r0.nameLeft;
         r5 = (double) r5;
         r7 = (double) r4;
@@ -926,28 +940,28 @@ public class ProfileSearchCell extends BaseCell {
         r5 = r5 - r7;
         r1 = (int) r5;
         r0.nameLeft = r1;
-    L_0x0554:
+    L_0x056a:
         r1 = r0.statusLayout;
-        if (r1 == 0) goto L_0x0588;
-    L_0x0558:
+        if (r1 == 0) goto L_0x059e;
+    L_0x056e:
         r1 = r1.getLineCount();
-        if (r1 <= 0) goto L_0x0588;
-    L_0x055e:
+        if (r1 <= 0) goto L_0x059e;
+    L_0x0574:
         r1 = r0.statusLayout;
         r2 = 0;
         r1 = r1.getLineRight(r2);
         r4 = (float) r3;
         r1 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1));
-        if (r1 != 0) goto L_0x0588;
-    L_0x056a:
+        if (r1 != 0) goto L_0x059e;
+    L_0x0580:
         r1 = r0.statusLayout;
         r1 = r1.getLineWidth(r2);
         r1 = (double) r1;
         r1 = java.lang.Math.ceil(r1);
         r3 = (double) r3;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0588;
-    L_0x057a:
+        if (r5 >= 0) goto L_0x059e;
+    L_0x0590:
         r5 = r0.statusLeft;
         r5 = (double) r5;
         java.lang.Double.isNaN(r3);
@@ -956,7 +970,7 @@ public class ProfileSearchCell extends BaseCell {
         r5 = r5 - r3;
         r1 = (int) r5;
         r0.statusLeft = r1;
-    L_0x0588:
+    L_0x059e:
         r1 = r0.nameLeft;
         r2 = r24.getPaddingLeft();
         r1 = r1 + r2;

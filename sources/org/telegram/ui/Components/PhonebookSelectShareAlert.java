@@ -460,7 +460,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             if (r11 == 0) goto L_0x00ee;
         L_0x00df:
             r11 = r10.statusTextView;
-            r1 = NUM; // 0x7f0e075b float:1.8878857E38 double:1.053163087E-314;
+            r1 = NUM; // 0x7f0e076b float:1.887889E38 double:1.053163095E-314;
             r3 = "NumberUnknown";
             r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
             r11.setText(r1);

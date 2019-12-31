@@ -574,7 +574,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     }
 
     public /* synthetic */ void lambda$null$1$PrivacySettingsActivity() {
-        getMediaDataController().clearAllDrafts();
+        getMediaDataController().clearAllDrafts(true);
     }
 
     public /* synthetic */ void lambda$null$2$PrivacySettingsActivity(TLObject tLObject, TL_error tL_error) {

@@ -272,7 +272,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
             locationActivity.setDelegate(new -$$Lambda$FragmentContextView$z_fnb_TazpUpwkTqfofStIvH9G8(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
-            launchActivity.lambda$runLinkRequest$31$LaunchActivity(locationActivity);
+            launchActivity.lambda$runLinkRequest$32$LaunchActivity(locationActivity);
         }
     }
 
@@ -537,7 +537,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             if (this.fragment instanceof DialogsActivity) {
                 String firstName;
-                String string = LocaleController.getString("AttachLiveLocation", NUM);
+                String string = LocaleController.getString("LiveLocationContext", NUM);
                 ArrayList arrayList = new ArrayList();
                 for (int i = 0; i < 3; i++) {
                     arrayList.addAll(LocationController.getInstance(i).sharingLocationsUI);
@@ -635,7 +635,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (this.lastLocationSharingCount != i) {
                 String str;
                 this.lastLocationSharingCount = i;
-                String string = LocaleController.getString("AttachLiveLocation", NUM);
+                String string = LocaleController.getString("LiveLocationContext", NUM);
                 if (i == 0) {
                     str = string;
                 } else {
