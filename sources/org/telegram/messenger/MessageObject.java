@@ -8,7 +8,6 @@ import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.text.style.URLSpan;
 import android.util.Base64;
 import android.util.SparseArray;
 import java.io.BufferedReader;
@@ -21,7 +20,6 @@ import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.Emoji.EmojiSpan;
@@ -141,8 +139,6 @@ import org.telegram.tgnet.TLRPC.WebDocument;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TypefaceSpan;
-import org.telegram.ui.Components.URLSpanBotCommand;
-import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanNoUnderlineBold;
 
 public class MessageObject {
@@ -5963,7 +5959,7 @@ public class MessageObject {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:45:0x00a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x00da  */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x00cb  */
     /* JADX WARNING: Missing block: B:39:0x0095, code skipped:
             if (r7.messageOwner.send_state == 0) goto L_0x0097;
@@ -5975,24 +5971,24 @@ public class MessageObject {
         /*
         r7 = this;
         r0 = r7.caption;
-        if (r0 != 0) goto L_0x00d9;
+        if (r0 != 0) goto L_0x00ee;
     L_0x0004:
         r0 = r7.isRoundVideo();
         if (r0 == 0) goto L_0x000c;
     L_0x000a:
-        goto L_0x00d9;
+        goto L_0x00ee;
     L_0x000c:
         r0 = r7.isMediaEmpty();
-        if (r0 != 0) goto L_0x00d9;
+        if (r0 != 0) goto L_0x00ee;
     L_0x0012:
         r0 = r7.messageOwner;
         r1 = r0.media;
         r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaGame;
-        if (r1 != 0) goto L_0x00d9;
+        if (r1 != 0) goto L_0x00ee;
     L_0x001a:
         r0 = r0.message;
         r0 = android.text.TextUtils.isEmpty(r0);
-        if (r0 != 0) goto L_0x00d9;
+        if (r0 != 0) goto L_0x00ee;
     L_0x0022:
         r0 = r7.messageOwner;
         r0 = r0.message;
@@ -6099,124 +6095,294 @@ public class MessageObject {
         r1 = r7.caption;
         r7.addEntitiesToText(r1, r0);
         r0 = r7.isVideo();
-        if (r0 == 0) goto L_0x00d9;
+        if (r0 == 0) goto L_0x00da;
     L_0x00cb:
         r0 = r7.isOutOwner();
         r1 = r7.caption;
         r3 = 3;
         r4 = r7.getDuration();
         addUrlsByPattern(r0, r1, r2, r3, r4);
-    L_0x00d9:
+        goto L_0x00ee;
+    L_0x00da:
+        r0 = r7.isMusic();
+        if (r0 == 0) goto L_0x00ee;
+    L_0x00e0:
+        r0 = r7.isOutOwner();
+        r1 = r7.caption;
+        r3 = 4;
+        r4 = r7.getDuration();
+        addUrlsByPattern(r0, r1, r2, r3, r4);
+    L_0x00ee:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generateCaption():void");
     }
 
-    private static void addUrlsByPattern(boolean z, CharSequence charSequence, boolean z2, int i, int i2) {
-        Matcher matcher;
-        CharSequence charSequence2 = charSequence;
-        int i3 = i;
-        int i4 = 3;
-        if (i3 == 3) {
-            try {
-                if (videoTimeUrlPattern == null) {
-                    videoTimeUrlPattern = Pattern.compile("\\b(?:(\\d{1,2}):)?(\\d{1,3}):([0-5][0-9])\\b");
-                }
-                matcher = videoTimeUrlPattern.matcher(charSequence2);
-            } catch (Exception e) {
-                FileLog.e(e);
-                return;
-            }
-        } else if (i3 == 1) {
-            if (instagramUrlPattern == null) {
-                instagramUrlPattern = Pattern.compile("(^|\\s|\\()@[a-zA-Z\\d_.]{1,32}|(^|\\s|\\()#[\\w.]+");
-            }
-            matcher = instagramUrlPattern.matcher(charSequence2);
-        } else {
-            if (urlPattern == null) {
-                urlPattern = Pattern.compile("(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s|\\()@[a-zA-Z\\d_]{1,32}|(^|\\s|\\()#[\\w.]+|(^|\\s)\\$[A-Z]{3,8}([ ,.]|$)");
-            }
-            matcher = urlPattern.matcher(charSequence2);
-        }
-        Spannable spannable = (Spannable) charSequence2;
-        while (matcher.find()) {
-            int start = matcher.start();
-            int end = matcher.end();
-            Object obj = null;
-            int end2;
-            if (i3 == i4) {
-                URLSpan[] uRLSpanArr = (URLSpan[]) spannable.getSpans(start, end, URLSpan.class);
-                if (uRLSpanArr == null || uRLSpanArr.length <= 0) {
-                    matcher.groupCount();
-                    int start2 = matcher.start(1);
-                    end2 = matcher.end(1);
-                    int start3 = matcher.start(2);
-                    int end3 = matcher.end(2);
-                    int start4 = matcher.start(i4);
-                    int end4 = matcher.end(i4);
-                    end3 = Utilities.parseInt(charSequence2.subSequence(start3, end3)).intValue();
-                    start3 = Utilities.parseInt(charSequence2.subSequence(start4, end4)).intValue();
-                    start2 = (start2 < 0 || end2 < 0) ? -1 : Utilities.parseInt(charSequence2.subSequence(start2, end2)).intValue();
-                    start3 += end3 * 60;
-                    if (start2 > 0) {
-                        start3 += (start2 * 60) * 60;
-                    }
-                    if (start3 <= i2) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("video?");
-                        stringBuilder.append(start3);
-                        obj = new URLSpanNoUnderline(stringBuilder.toString());
-                    }
-                }
-            } else {
-                end2 = i2;
-                char charAt = charSequence2.charAt(start);
-                if (i3 != 0) {
-                    if (!(charAt == '@' || charAt == '#')) {
-                        start++;
-                    }
-                    charAt = charSequence2.charAt(start);
-                    if (!(charAt == '@' || charAt == '#')) {
-                    }
-                } else if (!(charAt == '@' || charAt == '#' || charAt == '/' || charAt == '$')) {
-                    start++;
-                }
-                StringBuilder stringBuilder2;
-                if (i3 == 1) {
-                    if (charAt == '@') {
-                        stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append("https://instagram.com/");
-                        stringBuilder2.append(charSequence2.subSequence(start + 1, end).toString());
-                        obj = new URLSpanNoUnderline(stringBuilder2.toString());
-                    } else if (charAt == '#') {
-                        stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append("https://www.instagram.com/explore/tags/");
-                        stringBuilder2.append(charSequence2.subSequence(start + 1, end).toString());
-                        obj = new URLSpanNoUnderline(stringBuilder2.toString());
-                    }
-                } else if (i3 == 2) {
-                    if (charAt == '@') {
-                        stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append("https://twitter.com/");
-                        stringBuilder2.append(charSequence2.subSequence(start + 1, end).toString());
-                        obj = new URLSpanNoUnderline(stringBuilder2.toString());
-                    } else if (charAt == '#') {
-                        stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append("https://twitter.com/hashtag/");
-                        stringBuilder2.append(charSequence2.subSequence(start + 1, end).toString());
-                        obj = new URLSpanNoUnderline(stringBuilder2.toString());
-                    }
-                } else if (charSequence2.charAt(start) != '/') {
-                    obj = new URLSpanNoUnderline(charSequence2.subSequence(start, end).toString());
-                } else if (z2) {
-                    obj = new URLSpanBotCommand(charSequence2.subSequence(start, end).toString(), z ? 1 : 0);
-                }
-            }
-            if (obj != null) {
-                spannable.setSpan(obj, start, end, 0);
-            }
-            i4 = 3;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x01da A:{Catch:{ Exception -> 0x01df }} */
+    private static void addUrlsByPattern(boolean r16, java.lang.CharSequence r17, boolean r18, int r19, int r20) {
+        /*
+        r0 = r17;
+        r1 = r19;
+        r2 = 4;
+        r3 = 3;
+        r4 = 1;
+        if (r1 == r3) goto L_0x0034;
+    L_0x0009:
+        if (r1 != r2) goto L_0x000c;
+    L_0x000b:
+        goto L_0x0034;
+    L_0x000c:
+        if (r1 != r4) goto L_0x0021;
+    L_0x000e:
+        r5 = instagramUrlPattern;	 Catch:{ Exception -> 0x01df }
+        if (r5 != 0) goto L_0x001a;
+    L_0x0012:
+        r5 = "(^|\\s|\\()@[a-zA-Z\\d_.]{1,32}|(^|\\s|\\()#[\\w.]+";
+        r5 = java.util.regex.Pattern.compile(r5);	 Catch:{ Exception -> 0x01df }
+        instagramUrlPattern = r5;	 Catch:{ Exception -> 0x01df }
+    L_0x001a:
+        r5 = instagramUrlPattern;	 Catch:{ Exception -> 0x01df }
+        r5 = r5.matcher(r0);	 Catch:{ Exception -> 0x01df }
+        goto L_0x0046;
+    L_0x0021:
+        r5 = urlPattern;	 Catch:{ Exception -> 0x01df }
+        if (r5 != 0) goto L_0x002d;
+    L_0x0025:
+        r5 = "(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s|\\()@[a-zA-Z\\d_]{1,32}|(^|\\s|\\()#[\\w.]+|(^|\\s)\\$[A-Z]{3,8}([ ,.]|$)";
+        r5 = java.util.regex.Pattern.compile(r5);	 Catch:{ Exception -> 0x01df }
+        urlPattern = r5;	 Catch:{ Exception -> 0x01df }
+    L_0x002d:
+        r5 = urlPattern;	 Catch:{ Exception -> 0x01df }
+        r5 = r5.matcher(r0);	 Catch:{ Exception -> 0x01df }
+        goto L_0x0046;
+    L_0x0034:
+        r5 = videoTimeUrlPattern;	 Catch:{ Exception -> 0x01df }
+        if (r5 != 0) goto L_0x0040;
+    L_0x0038:
+        r5 = "\\b(?:(\\d{1,2}):)?(\\d{1,3}):([0-5][0-9])\\b";
+        r5 = java.util.regex.Pattern.compile(r5);	 Catch:{ Exception -> 0x01df }
+        videoTimeUrlPattern = r5;	 Catch:{ Exception -> 0x01df }
+    L_0x0040:
+        r5 = videoTimeUrlPattern;	 Catch:{ Exception -> 0x01df }
+        r5 = r5.matcher(r0);	 Catch:{ Exception -> 0x01df }
+    L_0x0046:
+        r6 = r0;
+        r6 = (android.text.Spannable) r6;	 Catch:{ Exception -> 0x01df }
+    L_0x0049:
+        r7 = r5.find();	 Catch:{ Exception -> 0x01df }
+        if (r7 == 0) goto L_0x01e3;
+    L_0x004f:
+        r7 = r5.start();	 Catch:{ Exception -> 0x01df }
+        r8 = r5.end();	 Catch:{ Exception -> 0x01df }
+        r9 = 0;
+        r10 = 0;
+        r11 = 2;
+        if (r1 == r3) goto L_0x0144;
+    L_0x005c:
+        if (r1 != r2) goto L_0x0060;
+    L_0x005e:
+        goto L_0x0144;
+    L_0x0060:
+        r12 = r0.charAt(r7);	 Catch:{ Exception -> 0x01df }
+        r13 = 47;
+        r14 = 35;
+        r15 = 64;
+        if (r1 == 0) goto L_0x007b;
+    L_0x006c:
+        if (r12 == r15) goto L_0x0072;
+    L_0x006e:
+        if (r12 == r14) goto L_0x0072;
+    L_0x0070:
+        r7 = r7 + 1;
+    L_0x0072:
+        r12 = r0.charAt(r7);	 Catch:{ Exception -> 0x01df }
+        if (r12 == r15) goto L_0x0087;
+    L_0x0078:
+        if (r12 == r14) goto L_0x0087;
+    L_0x007a:
+        goto L_0x0049;
+    L_0x007b:
+        if (r12 == r15) goto L_0x0087;
+    L_0x007d:
+        if (r12 == r14) goto L_0x0087;
+    L_0x007f:
+        if (r12 == r13) goto L_0x0087;
+    L_0x0081:
+        r2 = 36;
+        if (r12 == r2) goto L_0x0087;
+    L_0x0085:
+        r7 = r7 + 1;
+    L_0x0087:
+        if (r1 != r4) goto L_0x00d0;
+    L_0x0089:
+        if (r12 != r15) goto L_0x00ad;
+    L_0x008b:
+        r9 = new org.telegram.ui.Components.URLSpanNoUnderline;	 Catch:{ Exception -> 0x01df }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01df }
+        r2.<init>();	 Catch:{ Exception -> 0x01df }
+        r11 = "https://instagram.com/";
+        r2.append(r11);	 Catch:{ Exception -> 0x01df }
+        r11 = r7 + 1;
+        r11 = r0.subSequence(r11, r8);	 Catch:{ Exception -> 0x01df }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x01df }
+        r2.append(r11);	 Catch:{ Exception -> 0x01df }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x01df }
+        r9.<init>(r2);	 Catch:{ Exception -> 0x01df }
+        goto L_0x0132;
+    L_0x00ad:
+        if (r12 != r14) goto L_0x0132;
+    L_0x00af:
+        r9 = new org.telegram.ui.Components.URLSpanNoUnderline;	 Catch:{ Exception -> 0x01df }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01df }
+        r2.<init>();	 Catch:{ Exception -> 0x01df }
+        r11 = "https://www.instagram.com/explore/tags/";
+        r2.append(r11);	 Catch:{ Exception -> 0x01df }
+        r11 = r7 + 1;
+        r11 = r0.subSequence(r11, r8);	 Catch:{ Exception -> 0x01df }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x01df }
+        r2.append(r11);	 Catch:{ Exception -> 0x01df }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x01df }
+        r9.<init>(r2);	 Catch:{ Exception -> 0x01df }
+        goto L_0x0132;
+    L_0x00d0:
+        if (r1 != r11) goto L_0x0118;
+    L_0x00d2:
+        if (r12 != r15) goto L_0x00f5;
+    L_0x00d4:
+        r9 = new org.telegram.ui.Components.URLSpanNoUnderline;	 Catch:{ Exception -> 0x01df }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01df }
+        r2.<init>();	 Catch:{ Exception -> 0x01df }
+        r11 = "https://twitter.com/";
+        r2.append(r11);	 Catch:{ Exception -> 0x01df }
+        r11 = r7 + 1;
+        r11 = r0.subSequence(r11, r8);	 Catch:{ Exception -> 0x01df }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x01df }
+        r2.append(r11);	 Catch:{ Exception -> 0x01df }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x01df }
+        r9.<init>(r2);	 Catch:{ Exception -> 0x01df }
+        goto L_0x0132;
+    L_0x00f5:
+        if (r12 != r14) goto L_0x0132;
+    L_0x00f7:
+        r9 = new org.telegram.ui.Components.URLSpanNoUnderline;	 Catch:{ Exception -> 0x01df }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01df }
+        r2.<init>();	 Catch:{ Exception -> 0x01df }
+        r11 = "https://twitter.com/hashtag/";
+        r2.append(r11);	 Catch:{ Exception -> 0x01df }
+        r11 = r7 + 1;
+        r11 = r0.subSequence(r11, r8);	 Catch:{ Exception -> 0x01df }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x01df }
+        r2.append(r11);	 Catch:{ Exception -> 0x01df }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x01df }
+        r9.<init>(r2);	 Catch:{ Exception -> 0x01df }
+        goto L_0x0132;
+    L_0x0118:
+        r2 = r0.charAt(r7);	 Catch:{ Exception -> 0x01df }
+        if (r2 != r13) goto L_0x0136;
+    L_0x011e:
+        if (r18 == 0) goto L_0x0132;
+    L_0x0120:
+        r9 = new org.telegram.ui.Components.URLSpanBotCommand;	 Catch:{ Exception -> 0x01df }
+        r2 = r0.subSequence(r7, r8);	 Catch:{ Exception -> 0x01df }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x01df }
+        if (r16 == 0) goto L_0x012e;
+    L_0x012c:
+        r11 = 1;
+        goto L_0x012f;
+    L_0x012e:
+        r11 = 0;
+    L_0x012f:
+        r9.<init>(r2, r11);	 Catch:{ Exception -> 0x01df }
+    L_0x0132:
+        r2 = r20;
+        goto L_0x01d8;
+    L_0x0136:
+        r9 = new org.telegram.ui.Components.URLSpanNoUnderline;	 Catch:{ Exception -> 0x01df }
+        r2 = r0.subSequence(r7, r8);	 Catch:{ Exception -> 0x01df }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x01df }
+        r9.<init>(r2);	 Catch:{ Exception -> 0x01df }
+        goto L_0x0132;
+    L_0x0144:
+        r2 = android.text.style.URLSpan.class;
+        r2 = r6.getSpans(r7, r8, r2);	 Catch:{ Exception -> 0x01df }
+        r2 = (android.text.style.URLSpan[]) r2;	 Catch:{ Exception -> 0x01df }
+        if (r2 == 0) goto L_0x0154;
+    L_0x014e:
+        r2 = r2.length;	 Catch:{ Exception -> 0x01df }
+        if (r2 <= 0) goto L_0x0154;
+    L_0x0151:
+        r2 = 4;
+        goto L_0x0049;
+    L_0x0154:
+        r5.groupCount();	 Catch:{ Exception -> 0x01df }
+        r2 = r5.start(r4);	 Catch:{ Exception -> 0x01df }
+        r9 = r5.end(r4);	 Catch:{ Exception -> 0x01df }
+        r12 = r5.start(r11);	 Catch:{ Exception -> 0x01df }
+        r11 = r5.end(r11);	 Catch:{ Exception -> 0x01df }
+        r13 = r5.start(r3);	 Catch:{ Exception -> 0x01df }
+        r14 = r5.end(r3);	 Catch:{ Exception -> 0x01df }
+        r11 = r0.subSequence(r12, r11);	 Catch:{ Exception -> 0x01df }
+        r11 = org.telegram.messenger.Utilities.parseInt(r11);	 Catch:{ Exception -> 0x01df }
+        r11 = r11.intValue();	 Catch:{ Exception -> 0x01df }
+        r12 = r0.subSequence(r13, r14);	 Catch:{ Exception -> 0x01df }
+        r12 = org.telegram.messenger.Utilities.parseInt(r12);	 Catch:{ Exception -> 0x01df }
+        r12 = r12.intValue();	 Catch:{ Exception -> 0x01df }
+        if (r2 < 0) goto L_0x0198;
+    L_0x0189:
+        if (r9 < 0) goto L_0x0198;
+    L_0x018b:
+        r2 = r0.subSequence(r2, r9);	 Catch:{ Exception -> 0x01df }
+        r2 = org.telegram.messenger.Utilities.parseInt(r2);	 Catch:{ Exception -> 0x01df }
+        r2 = r2.intValue();	 Catch:{ Exception -> 0x01df }
+        goto L_0x0199;
+    L_0x0198:
+        r2 = -1;
+    L_0x0199:
+        r11 = r11 * 60;
+        r12 = r12 + r11;
+        if (r2 <= 0) goto L_0x01a3;
+    L_0x019e:
+        r2 = r2 * 60;
+        r2 = r2 * 60;
+        r12 = r12 + r2;
+    L_0x01a3:
+        r2 = r20;
+        if (r12 <= r2) goto L_0x01a8;
+    L_0x01a7:
+        goto L_0x0151;
+    L_0x01a8:
+        if (r1 != r3) goto L_0x01c2;
+    L_0x01aa:
+        r9 = new org.telegram.ui.Components.URLSpanNoUnderline;	 Catch:{ Exception -> 0x01df }
+        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01df }
+        r11.<init>();	 Catch:{ Exception -> 0x01df }
+        r13 = "video?";
+        r11.append(r13);	 Catch:{ Exception -> 0x01df }
+        r11.append(r12);	 Catch:{ Exception -> 0x01df }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x01df }
+        r9.<init>(r11);	 Catch:{ Exception -> 0x01df }
+        goto L_0x01d8;
+    L_0x01c2:
+        r9 = new org.telegram.ui.Components.URLSpanNoUnderline;	 Catch:{ Exception -> 0x01df }
+        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01df }
+        r11.<init>();	 Catch:{ Exception -> 0x01df }
+        r13 = "audio?";
+        r11.append(r13);	 Catch:{ Exception -> 0x01df }
+        r11.append(r12);	 Catch:{ Exception -> 0x01df }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x01df }
+        r9.<init>(r11);	 Catch:{ Exception -> 0x01df }
+    L_0x01d8:
+        if (r9 == 0) goto L_0x0151;
+    L_0x01da:
+        r6.setSpan(r9, r7, r8, r10);	 Catch:{ Exception -> 0x01df }
+        goto L_0x0151;
+    L_0x01df:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x01e3:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.addUrlsByPattern(boolean, java.lang.CharSequence, boolean, int, int):void");
     }
 
     public static int[] getWebDocumentWidthAndHeight(WebDocument webDocument) {
@@ -7119,33 +7285,33 @@ public class MessageObject {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.getMaxMessageTextWidth():int");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0273 A:{SYNTHETIC, Splitter:B:113:0x0273} */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x0298  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x02f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x02fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:188:0x03c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x0306  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x00ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x011b A:{Catch:{ Exception -> 0x0435 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00f9 A:{Catch:{ Exception -> 0x0435 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x0143  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0157  */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0088  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x007e  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x00aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x00ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00f9 A:{Catch:{ Exception -> 0x0435 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x011b A:{Catch:{ Exception -> 0x0435 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x0143  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0157  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x02f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x02fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x0306  */
-    /* JADX WARNING: Removed duplicated region for block: B:188:0x03c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x0284 A:{SYNTHETIC, Splitter:B:115:0x0284} */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x02a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x0306  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x030b  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x03d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x0317  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0105  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0133 A:{Catch:{ Exception -> 0x0445 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0111 A:{Catch:{ Exception -> 0x0445 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x015b  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0159  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x016f  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x0089  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x007f  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0105  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0111 A:{Catch:{ Exception -> 0x0445 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0133 A:{Catch:{ Exception -> 0x0445 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0159  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x015b  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x016f  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x0306  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x030b  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x0317  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x03d4  */
     /* JADX WARNING: Missing block: B:36:0x0077, code skipped:
             if ((r0.media instanceof org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported) == false) goto L_0x007b;
      */
@@ -7154,17 +7320,17 @@ public class MessageObject {
         r29 = this;
         r1 = r29;
         r0 = r1.type;
-        if (r0 != 0) goto L_0x0439;
+        if (r0 != 0) goto L_0x0449;
     L_0x0006:
         r0 = r1.messageOwner;
         r0 = r0.to_id;
-        if (r0 == 0) goto L_0x0439;
+        if (r0 == 0) goto L_0x0449;
     L_0x000c:
         r0 = r1.messageText;
         r0 = android.text.TextUtils.isEmpty(r0);
         if (r0 == 0) goto L_0x0016;
     L_0x0014:
-        goto L_0x0439;
+        goto L_0x0449;
     L_0x0016:
         r29.generateLinkDescription();
         r0 = new java.util.ArrayList;
@@ -7237,24 +7403,24 @@ public class MessageObject {
     L_0x007b:
         r3 = 0;
     L_0x007c:
-        if (r3 == 0) goto L_0x0088;
-    L_0x007e:
+        r5 = 4;
+        if (r3 == 0) goto L_0x0089;
+    L_0x007f:
         r0 = r29.isOutOwner();
-        r5 = r1.messageText;
-        addLinks(r0, r5);
+        r6 = r1.messageText;
+        addLinks(r0, r6);
         goto L_0x00a3;
-    L_0x0088:
+    L_0x0089:
         r0 = r1.messageText;
-        r5 = r0 instanceof android.text.Spannable;
-        if (r5 == 0) goto L_0x00a3;
-    L_0x008e:
+        r6 = r0 instanceof android.text.Spannable;
+        if (r6 == 0) goto L_0x00a3;
+    L_0x008f:
         r0 = r0.length();
-        r5 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        if (r0 >= r5) goto L_0x00a3;
-    L_0x0096:
+        r6 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        if (r0 >= r6) goto L_0x00a3;
+    L_0x0097:
         r0 = r1.messageText;	 Catch:{ all -> 0x009f }
         r0 = (android.text.Spannable) r0;	 Catch:{ all -> 0x009f }
-        r5 = 4;
         org.telegram.messenger.AndroidUtilities.addLinks(r0, r5);	 Catch:{ all -> 0x009f }
         goto L_0x00a3;
     L_0x009f:
@@ -7262,8 +7428,8 @@ public class MessageObject {
         org.telegram.messenger.FileLog.e(r0);
     L_0x00a3:
         r0 = r29.isYouTubeVideo();
-        r5 = 3;
-        if (r0 != 0) goto L_0x00cf;
+        r6 = 3;
+        if (r0 != 0) goto L_0x00e7;
     L_0x00aa:
         r0 = r1.replyMessageObject;
         if (r0 == 0) goto L_0x00b5;
@@ -7271,577 +7437,579 @@ public class MessageObject {
         r0 = r0.isYouTubeVideo();
         if (r0 == 0) goto L_0x00b5;
     L_0x00b4:
-        goto L_0x00cf;
+        goto L_0x00e7;
     L_0x00b5:
         r0 = r1.replyMessageObject;
-        if (r0 == 0) goto L_0x00db;
+        if (r0 == 0) goto L_0x00f3;
     L_0x00b9:
         r0 = r0.isVideo();
-        if (r0 == 0) goto L_0x00db;
+        if (r0 == 0) goto L_0x00cf;
     L_0x00bf:
         r0 = r29.isOutOwner();
-        r6 = r1.messageText;
+        r5 = r1.messageText;
         r7 = r1.replyMessageObject;
         r7 = r7.getDuration();
-        addUrlsByPattern(r0, r6, r2, r5, r7);
-        goto L_0x00db;
+        addUrlsByPattern(r0, r5, r2, r6, r7);
+        goto L_0x00f3;
     L_0x00cf:
+        r0 = r1.replyMessageObject;
+        r0 = r0.isMusic();
+        if (r0 == 0) goto L_0x00f3;
+    L_0x00d7:
         r0 = r29.isOutOwner();
-        r6 = r1.messageText;
+        r7 = r1.messageText;
+        r8 = r1.replyMessageObject;
+        r8 = r8.getDuration();
+        addUrlsByPattern(r0, r7, r2, r5, r8);
+        goto L_0x00f3;
+    L_0x00e7:
+        r0 = r29.isOutOwner();
+        r5 = r1.messageText;
         r7 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        addUrlsByPattern(r0, r6, r2, r5, r7);
-    L_0x00db:
+        addUrlsByPattern(r0, r5, r2, r6, r7);
+    L_0x00f3:
         r0 = r1.messageText;
         r3 = r1.addEntitiesToText(r0, r3);
-        r15 = r29.getMaxMessageTextWidth();
+        r5 = r29.getMaxMessageTextWidth();
         r0 = r1.messageOwner;
         r0 = r0.media;
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaGame;
-        if (r0 == 0) goto L_0x00f0;
-    L_0x00ed:
+        if (r0 == 0) goto L_0x0108;
+    L_0x0105:
         r0 = org.telegram.ui.ActionBar.Theme.chat_msgGameTextPaint;
-        goto L_0x00f2;
-    L_0x00f0:
+        goto L_0x010a;
+    L_0x0108:
         r0 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;
-    L_0x00f2:
+    L_0x010a:
+        r15 = r0;
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0445 }
+        r14 = 24;
+        if (r0 < r14) goto L_0x0133;
+    L_0x0111:
+        r0 = r1.messageText;	 Catch:{ Exception -> 0x0445 }
+        r7 = r1.messageText;	 Catch:{ Exception -> 0x0445 }
+        r7 = r7.length();	 Catch:{ Exception -> 0x0445 }
+        r0 = android.text.StaticLayout.Builder.obtain(r0, r2, r7, r15, r5);	 Catch:{ Exception -> 0x0445 }
+        r0 = r0.setBreakStrategy(r4);	 Catch:{ Exception -> 0x0445 }
+        r0 = r0.setHyphenationFrequency(r2);	 Catch:{ Exception -> 0x0445 }
+        r7 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0445 }
+        r0 = r0.setAlignment(r7);	 Catch:{ Exception -> 0x0445 }
+        r0 = r0.build();	 Catch:{ Exception -> 0x0445 }
         r14 = r0;
-        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0435 }
-        r13 = 24;
-        if (r0 < r13) goto L_0x011b;
-    L_0x00f9:
-        r0 = r1.messageText;	 Catch:{ Exception -> 0x0435 }
-        r6 = r1.messageText;	 Catch:{ Exception -> 0x0435 }
-        r6 = r6.length();	 Catch:{ Exception -> 0x0435 }
-        r0 = android.text.StaticLayout.Builder.obtain(r0, r2, r6, r14, r15);	 Catch:{ Exception -> 0x0435 }
-        r0 = r0.setBreakStrategy(r4);	 Catch:{ Exception -> 0x0435 }
-        r0 = r0.setHyphenationFrequency(r2);	 Catch:{ Exception -> 0x0435 }
-        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0435 }
-        r0 = r0.setAlignment(r6);	 Catch:{ Exception -> 0x0435 }
-        r0 = r0.build();	 Catch:{ Exception -> 0x0435 }
-        r13 = r0;
-        r5 = 24;
-        goto L_0x0131;
-    L_0x011b:
-        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0435 }
-        r7 = r1.messageText;	 Catch:{ Exception -> 0x0435 }
-        r10 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0435 }
-        r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r12 = 0;
+        r6 = 24;
+        goto L_0x0149;
+    L_0x0133:
+        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0445 }
+        r8 = r1.messageText;	 Catch:{ Exception -> 0x0445 }
+        r11 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0445 }
+        r12 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r13 = 0;
         r16 = 0;
-        r6 = r0;
-        r8 = r14;
+        r7 = r0;
         r9 = r15;
-        r5 = 24;
-        r13 = r16;
-        r6.<init>(r7, r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x0435 }
-        r13 = r0;
-    L_0x0131:
-        r0 = r13.getHeight();
+        r10 = r5;
+        r6 = 24;
+        r14 = r16;
+        r7.<init>(r8, r9, r10, r11, r12, r13, r14);	 Catch:{ Exception -> 0x0445 }
+        r14 = r0;
+    L_0x0149:
+        r0 = r14.getHeight();
         r1.textHeight = r0;
-        r0 = r13.getLineCount();
+        r0 = r14.getLineCount();
         r1.linesCount = r0;
         r0 = android.os.Build.VERSION.SDK_INT;
-        if (r0 < r5) goto L_0x0143;
-    L_0x0141:
-        r12 = 1;
-        goto L_0x0150;
-    L_0x0143:
-        r0 = r1.linesCount;
-        r0 = (float) r0;
-        r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r0 = r0 / r6;
-        r6 = (double) r0;
-        r6 = java.lang.Math.ceil(r6);
-        r0 = (int) r6;
-        r12 = r0;
-    L_0x0150:
-        r11 = 0;
-        r9 = 0;
-        r10 = 0;
-        r16 = 0;
-    L_0x0155:
-        if (r10 >= r12) goto L_0x0434;
-    L_0x0157:
-        r0 = android.os.Build.VERSION.SDK_INT;
-        if (r0 < r5) goto L_0x015e;
+        if (r0 < r6) goto L_0x015b;
+    L_0x0159:
+        r13 = 1;
+        goto L_0x0168;
     L_0x015b:
         r0 = r1.linesCount;
-        goto L_0x0167;
-    L_0x015e:
-        r0 = 10;
-        r6 = r1.linesCount;
-        r6 = r6 - r9;
-        r0 = java.lang.Math.min(r0, r6);
-    L_0x0167:
-        r8 = new org.telegram.messenger.MessageObject$TextLayoutBlock;
-        r8.<init>();
-        r7 = 2;
-        if (r12 != r4) goto L_0x01dc;
+        r0 = (float) r0;
+        r7 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r0 = r0 / r7;
+        r7 = (double) r0;
+        r7 = java.lang.Math.ceil(r7);
+        r0 = (int) r7;
+        r13 = r0;
+    L_0x0168:
+        r12 = 0;
+        r10 = 0;
+        r11 = 0;
+        r17 = 0;
+    L_0x016d:
+        if (r11 >= r13) goto L_0x0444;
     L_0x016f:
-        r8.textLayout = r13;
-        r8.textYOffset = r11;
-        r8.charactersOffset = r2;
-        r6 = r1.emojiOnlyCount;
-        if (r6 == 0) goto L_0x01c7;
-    L_0x0179:
-        if (r6 == r4) goto L_0x01b0;
-    L_0x017b:
-        if (r6 == r7) goto L_0x0199;
-    L_0x017d:
+        r0 = android.os.Build.VERSION.SDK_INT;
+        if (r0 < r6) goto L_0x0176;
+    L_0x0173:
+        r0 = r1.linesCount;
+        goto L_0x017f;
+    L_0x0176:
+        r0 = 10;
+        r7 = r1.linesCount;
+        r7 = r7 - r10;
+        r0 = java.lang.Math.min(r0, r7);
+    L_0x017f:
+        r9 = new org.telegram.messenger.MessageObject$TextLayoutBlock;
+        r9.<init>();
+        r8 = 2;
+        if (r13 != r4) goto L_0x01f3;
+    L_0x0187:
+        r9.textLayout = r14;
+        r9.textYOffset = r12;
+        r9.charactersOffset = r2;
+        r7 = r1.emojiOnlyCount;
+        if (r7 == 0) goto L_0x01df;
+    L_0x0191:
+        if (r7 == r4) goto L_0x01c8;
+    L_0x0193:
+        if (r7 == r8) goto L_0x01b1;
+    L_0x0195:
         r2 = 3;
-        if (r6 == r2) goto L_0x0181;
-    L_0x0180:
-        goto L_0x01c7;
-    L_0x0181:
-        r6 = r1.textHeight;
-        r17 = NUM; // 0x40866666 float:4.2 double:5.348506967E-315;
-        r18 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        r6 = r6 - r18;
-        r1.textHeight = r6;
-        r6 = r8.textYOffset;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        r2 = (float) r2;
-        r6 = r6 - r2;
-        r8.textYOffset = r6;
-        goto L_0x01c7;
+        if (r7 == r2) goto L_0x0199;
+    L_0x0198:
+        goto L_0x01df;
     L_0x0199:
+        r7 = r1.textHeight;
+        r16 = NUM; // 0x40866666 float:4.2 double:5.348506967E-315;
+        r18 = org.telegram.messenger.AndroidUtilities.dp(r16);
+        r7 = r7 - r18;
+        r1.textHeight = r7;
+        r7 = r9.textYOffset;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r16);
+        r2 = (float) r2;
+        r7 = r7 - r2;
+        r9.textYOffset = r7;
+        goto L_0x01df;
+    L_0x01b1:
         r2 = r1.textHeight;
-        r6 = NUM; // 0x40900000 float:4.5 double:5.35161536E-315;
-        r17 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r2 = r2 - r17;
+        r7 = NUM; // 0x40900000 float:4.5 double:5.35161536E-315;
+        r16 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r2 = r2 - r16;
         r1.textHeight = r2;
-        r2 = r8.textYOffset;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r2 = r2 - r6;
-        r8.textYOffset = r2;
-        goto L_0x01c7;
-    L_0x01b0:
+        r2 = r9.textYOffset;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r7 = (float) r7;
+        r2 = r2 - r7;
+        r9.textYOffset = r2;
+        goto L_0x01df;
+    L_0x01c8:
         r2 = r1.textHeight;
-        r6 = NUM; // 0x40a9999a float:5.3 double:5.35990441E-315;
-        r17 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r2 = r2 - r17;
+        r7 = NUM; // 0x40a9999a float:5.3 double:5.35990441E-315;
+        r16 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r2 = r2 - r16;
         r1.textHeight = r2;
-        r2 = r8.textYOffset;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r2 = r2 - r6;
-        r8.textYOffset = r2;
-    L_0x01c7:
+        r2 = r9.textYOffset;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r7 = (float) r7;
+        r2 = r2 - r7;
+        r9.textYOffset = r2;
+    L_0x01df:
         r2 = r1.textHeight;
-        r8.height = r2;
-        r19 = r3;
-        r5 = r8;
-        r2 = r9;
-        r6 = r10;
-        r8 = r12;
-        r4 = r13;
-        r18 = r14;
-        r3 = r15;
-        r7 = r16;
-        r17 = 2;
-    L_0x01d9:
+        r9.height = r2;
+        r18 = r3;
+        r6 = r9;
+        r2 = r10;
+        r4 = r11;
+        r8 = r13;
+        r3 = r14;
+        r19 = r15;
+        r7 = r17;
+        r23 = 2;
+    L_0x01f0:
         r9 = r0;
-        goto L_0x02ba;
-    L_0x01dc:
-        r2 = r13.getLineStart(r9);
-        r6 = r9 + r0;
-        r6 = r6 - r4;
-        r6 = r13.getLineEnd(r6);
-        if (r6 >= r2) goto L_0x01f7;
-    L_0x01e9:
-        r19 = r3;
-        r2 = r9;
-        r6 = r10;
-        r8 = r12;
-        r25 = r13;
-        r18 = r14;
-        r3 = r15;
-        r4 = 0;
+        goto L_0x02cb;
+    L_0x01f3:
+        r2 = r14.getLineStart(r10);
+        r7 = r10 + r0;
+        r7 = r7 - r4;
+        r7 = r14.getLineEnd(r7);
+        if (r7 >= r2) goto L_0x020d;
+    L_0x0200:
+        r18 = r3;
+        r7 = r10;
+        r4 = r11;
+        r8 = r13;
+        r16 = r14;
+        r19 = r15;
+        r2 = 0;
         r10 = 1;
-        goto L_0x0421;
-    L_0x01f7:
-        r8.charactersOffset = r2;
-        r8.charactersEnd = r6;
-        if (r3 == 0) goto L_0x0233;
-    L_0x01fd:
-        r7 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0411 }
-        if (r7 < r5) goto L_0x0233;
-    L_0x0201:
-        r7 = r1.messageText;	 Catch:{ Exception -> 0x0411 }
+        goto L_0x0432;
+    L_0x020d:
+        r9.charactersOffset = r2;
+        r9.charactersEnd = r7;
+        if (r3 == 0) goto L_0x0248;
+    L_0x0213:
+        r8 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0423 }
+        if (r8 < r6) goto L_0x0248;
+    L_0x0217:
+        r8 = r1.messageText;	 Catch:{ Exception -> 0x0423 }
         r18 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r18 = org.telegram.messenger.AndroidUtilities.dp(r18);	 Catch:{ Exception -> 0x0411 }
-        r5 = r15 + r18;
-        r2 = android.text.StaticLayout.Builder.obtain(r7, r2, r6, r14, r5);	 Catch:{ Exception -> 0x0411 }
-        r2 = r2.setBreakStrategy(r4);	 Catch:{ Exception -> 0x0411 }
-        r5 = 0;
-        r2 = r2.setHyphenationFrequency(r5);	 Catch:{ Exception -> 0x0411 }
-        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0411 }
-        r2 = r2.setAlignment(r6);	 Catch:{ Exception -> 0x0411 }
-        r2 = r2.build();	 Catch:{ Exception -> 0x0411 }
-        r8.textLayout = r2;	 Catch:{ Exception -> 0x0411 }
-        r19 = r3;
-        r5 = r8;
-        r2 = r9;
-        r23 = r10;
-        r24 = r12;
-        r4 = r13;
-        r18 = r14;
-        r3 = r15;
-        r17 = 2;
-        goto L_0x0268;
-    L_0x0233:
-        r5 = 0;
-        r7 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0411 }
-        r5 = r1.messageText;	 Catch:{ Exception -> 0x0411 }
-        r18 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0411 }
+        r18 = org.telegram.messenger.AndroidUtilities.dp(r18);	 Catch:{ Exception -> 0x0423 }
+        r6 = r5 + r18;
+        r2 = android.text.StaticLayout.Builder.obtain(r8, r2, r7, r15, r6);	 Catch:{ Exception -> 0x0423 }
+        r2 = r2.setBreakStrategy(r4);	 Catch:{ Exception -> 0x0423 }
+        r6 = 0;
+        r2 = r2.setHyphenationFrequency(r6);	 Catch:{ Exception -> 0x0423 }
+        r7 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0423 }
+        r2 = r2.setAlignment(r7);	 Catch:{ Exception -> 0x0423 }
+        r2 = r2.build();	 Catch:{ Exception -> 0x0423 }
+        r9.textLayout = r2;	 Catch:{ Exception -> 0x0423 }
+        r18 = r3;
+        r6 = r9;
+        r2 = r10;
+        r24 = r11;
+        r25 = r13;
+        r3 = r14;
+        r19 = r15;
+        r23 = 2;
+        goto L_0x0279;
+    L_0x0248:
+        r6 = 0;
+        r8 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0423 }
+        r6 = r1.messageText;	 Catch:{ Exception -> 0x0423 }
+        r18 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0423 }
         r19 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r20 = 0;
         r21 = 0;
-        r22 = r6;
-        r6 = r7;
-        r4 = r7;
-        r17 = 2;
-        r7 = r5;
-        r5 = r8;
-        r8 = r2;
-        r2 = r9;
-        r9 = r22;
-        r23 = r10;
-        r10 = r14;
+        r22 = r7;
+        r7 = r8;
+        r4 = r8;
+        r23 = 2;
+        r8 = r6;
+        r6 = r9;
+        r9 = r2;
+        r2 = r10;
+        r10 = r22;
+        r24 = r11;
         r11 = r15;
-        r24 = r12;
-        r12 = r18;
+        r12 = r5;
         r25 = r13;
-        r13 = r19;
-        r18 = r14;
-        r14 = r20;
-        r19 = r3;
-        r3 = r15;
-        r15 = r21;
-        r6.<init>(r7, r8, r9, r10, r11, r12, r13, r14, r15);	 Catch:{ Exception -> 0x040b }
-        r5.textLayout = r4;	 Catch:{ Exception -> 0x040b }
-        r4 = r25;
-    L_0x0268:
-        r6 = r4.getLineTop(r2);	 Catch:{ Exception -> 0x0407 }
-        r6 = (float) r6;	 Catch:{ Exception -> 0x0407 }
-        r5.textYOffset = r6;	 Catch:{ Exception -> 0x0407 }
-        r6 = r23;
-        if (r6 == 0) goto L_0x027a;
-    L_0x0273:
-        r7 = r5.textYOffset;	 Catch:{ Exception -> 0x0403 }
-        r7 = r7 - r16;
-        r7 = (int) r7;	 Catch:{ Exception -> 0x0403 }
-        r5.height = r7;	 Catch:{ Exception -> 0x0403 }
-    L_0x027a:
-        r7 = r5.height;	 Catch:{ Exception -> 0x0403 }
-        r8 = r5.textLayout;	 Catch:{ Exception -> 0x0403 }
-        r9 = r5.textLayout;	 Catch:{ Exception -> 0x0403 }
-        r9 = r9.getLineCount();	 Catch:{ Exception -> 0x0403 }
+        r13 = r18;
+        r18 = r3;
+        r3 = r14;
+        r14 = r19;
+        r19 = r15;
+        r15 = r20;
+        r16 = r21;
+        r7.<init>(r8, r9, r10, r11, r12, r13, r14, r15, r16);	 Catch:{ Exception -> 0x041a }
+        r6.textLayout = r4;	 Catch:{ Exception -> 0x041a }
+    L_0x0279:
+        r4 = r3.getLineTop(r2);	 Catch:{ Exception -> 0x041a }
+        r4 = (float) r4;	 Catch:{ Exception -> 0x041a }
+        r6.textYOffset = r4;	 Catch:{ Exception -> 0x041a }
+        r4 = r24;
+        if (r4 == 0) goto L_0x028b;
+    L_0x0284:
+        r7 = r6.textYOffset;	 Catch:{ Exception -> 0x0415 }
+        r7 = r7 - r17;
+        r7 = (int) r7;	 Catch:{ Exception -> 0x0415 }
+        r6.height = r7;	 Catch:{ Exception -> 0x0415 }
+    L_0x028b:
+        r7 = r6.height;	 Catch:{ Exception -> 0x0415 }
+        r8 = r6.textLayout;	 Catch:{ Exception -> 0x0415 }
+        r9 = r6.textLayout;	 Catch:{ Exception -> 0x0415 }
+        r9 = r9.getLineCount();	 Catch:{ Exception -> 0x0415 }
         r10 = 1;
         r9 = r9 - r10;
-        r8 = r8.getLineBottom(r9);	 Catch:{ Exception -> 0x0403 }
-        r7 = java.lang.Math.max(r7, r8);	 Catch:{ Exception -> 0x0403 }
-        r5.height = r7;	 Catch:{ Exception -> 0x0403 }
-        r7 = r5.textYOffset;	 Catch:{ Exception -> 0x0403 }
-        r8 = r24;
-        r12 = r8 + -1;
-        if (r6 != r12) goto L_0x01d9;
-    L_0x0298:
-        r9 = r5.textLayout;
+        r8 = r8.getLineBottom(r9);	 Catch:{ Exception -> 0x0415 }
+        r7 = java.lang.Math.max(r7, r8);	 Catch:{ Exception -> 0x0415 }
+        r6.height = r7;	 Catch:{ Exception -> 0x0415 }
+        r7 = r6.textYOffset;	 Catch:{ Exception -> 0x0415 }
+        r8 = r25;
+        r13 = r8 + -1;
+        if (r4 != r13) goto L_0x01f0;
+    L_0x02a9:
+        r9 = r6.textLayout;
         r9 = r9.getLineCount();
         r9 = java.lang.Math.max(r0, r9);
-        r0 = r1.textHeight;	 Catch:{ Exception -> 0x02b6 }
-        r10 = r5.textYOffset;	 Catch:{ Exception -> 0x02b6 }
-        r11 = r5.textLayout;	 Catch:{ Exception -> 0x02b6 }
-        r11 = r11.getHeight();	 Catch:{ Exception -> 0x02b6 }
-        r11 = (float) r11;	 Catch:{ Exception -> 0x02b6 }
+        r0 = r1.textHeight;	 Catch:{ Exception -> 0x02c7 }
+        r10 = r6.textYOffset;	 Catch:{ Exception -> 0x02c7 }
+        r11 = r6.textLayout;	 Catch:{ Exception -> 0x02c7 }
+        r11 = r11.getHeight();	 Catch:{ Exception -> 0x02c7 }
+        r11 = (float) r11;	 Catch:{ Exception -> 0x02c7 }
         r10 = r10 + r11;
-        r10 = (int) r10;	 Catch:{ Exception -> 0x02b6 }
-        r0 = java.lang.Math.max(r0, r10);	 Catch:{ Exception -> 0x02b6 }
-        r1.textHeight = r0;	 Catch:{ Exception -> 0x02b6 }
-        goto L_0x02ba;
-    L_0x02b6:
+        r10 = (int) r10;	 Catch:{ Exception -> 0x02c7 }
+        r0 = java.lang.Math.max(r0, r10);	 Catch:{ Exception -> 0x02c7 }
+        r1.textHeight = r0;	 Catch:{ Exception -> 0x02c7 }
+        goto L_0x02cb;
+    L_0x02c7:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x02ba:
+    L_0x02cb:
         r0 = r1.textLayoutBlocks;
-        r0.add(r5);
-        r0 = r5.textLayout;	 Catch:{ Exception -> 0x02d3 }
+        r0.add(r6);
+        r0 = r6.textLayout;	 Catch:{ Exception -> 0x02e4 }
         r10 = r9 + -1;
-        r11 = r0.getLineLeft(r10);	 Catch:{ Exception -> 0x02d3 }
+        r12 = r0.getLineLeft(r10);	 Catch:{ Exception -> 0x02e4 }
         r10 = 0;
-        if (r6 != 0) goto L_0x02dd;
-    L_0x02ca:
-        r0 = (r11 > r10 ? 1 : (r11 == r10 ? 0 : -1));
-        if (r0 < 0) goto L_0x02dd;
-    L_0x02ce:
-        r1.textXOffset = r11;	 Catch:{ Exception -> 0x02d1 }
-        goto L_0x02dd;
-    L_0x02d1:
+        if (r4 != 0) goto L_0x02ee;
+    L_0x02db:
+        r0 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1));
+        if (r0 < 0) goto L_0x02ee;
+    L_0x02df:
+        r1.textXOffset = r12;	 Catch:{ Exception -> 0x02e2 }
+        goto L_0x02ee;
+    L_0x02e2:
         r0 = move-exception;
-        goto L_0x02d5;
-    L_0x02d3:
+        goto L_0x02e6;
+    L_0x02e4:
         r0 = move-exception;
         r10 = 0;
-    L_0x02d5:
-        if (r6 != 0) goto L_0x02d9;
-    L_0x02d7:
-        r1.textXOffset = r10;
-    L_0x02d9:
-        org.telegram.messenger.FileLog.e(r0);
-        r11 = 0;
-    L_0x02dd:
-        r0 = r5.textLayout;	 Catch:{ Exception -> 0x02e6 }
-        r12 = r9 + -1;
-        r0 = r0.getLineWidth(r12);	 Catch:{ Exception -> 0x02e6 }
-        goto L_0x02eb;
     L_0x02e6:
+        if (r4 != 0) goto L_0x02ea;
+    L_0x02e8:
+        r1.textXOffset = r10;
+    L_0x02ea:
+        org.telegram.messenger.FileLog.e(r0);
+        r12 = 0;
+    L_0x02ee:
+        r0 = r6.textLayout;	 Catch:{ Exception -> 0x02f7 }
+        r11 = r9 + -1;
+        r0 = r0.getLineWidth(r11);	 Catch:{ Exception -> 0x02f7 }
+        goto L_0x02fc;
+    L_0x02f7:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x02eb:
-        r12 = (double) r0;
-        r12 = java.lang.Math.ceil(r12);
-        r15 = (int) r12;
-        r12 = r3 + 80;
-        if (r15 <= r12) goto L_0x02f6;
-    L_0x02f5:
-        r15 = r3;
-    L_0x02f6:
-        r12 = r8 + -1;
-        if (r6 != r12) goto L_0x02fc;
-    L_0x02fa:
-        r1.lastLineWidth = r15;
     L_0x02fc:
-        r0 = r0 + r11;
         r13 = (double) r0;
         r13 = java.lang.Math.ceil(r13);
-        r13 = (int) r13;
-        r14 = 1;
-        if (r9 <= r14) goto L_0x03c4;
+        r11 = (int) r13;
+        r13 = r5 + 80;
+        if (r11 <= r13) goto L_0x0307;
     L_0x0306:
-        r28 = r13;
-        r26 = r15;
-        r11 = 0;
-        r14 = 0;
-        r15 = 0;
-        r27 = 0;
-    L_0x030f:
-        if (r11 >= r9) goto L_0x039f;
-    L_0x0311:
-        r0 = r5.textLayout;	 Catch:{ Exception -> 0x0318 }
-        r0 = r0.getLineWidth(r11);	 Catch:{ Exception -> 0x0318 }
-        goto L_0x031d;
-    L_0x0318:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        r0 = 0;
-    L_0x031d:
-        r10 = r3 + 20;
-        r10 = (float) r10;
-        r10 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1));
-        if (r10 <= 0) goto L_0x0325;
-    L_0x0324:
-        r0 = (float) r3;
-    L_0x0325:
-        r10 = r0;
-        r0 = r5.textLayout;	 Catch:{ Exception -> 0x032d }
-        r0 = r0.getLineLeft(r11);	 Catch:{ Exception -> 0x032d }
-        goto L_0x0332;
-    L_0x032d:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        r0 = 0;
-    L_0x0332:
-        r16 = 0;
-        r20 = (r0 > r16 ? 1 : (r0 == r16 ? 0 : -1));
-        if (r20 <= 0) goto L_0x034e;
-    L_0x0338:
-        r25 = r4;
-        r4 = r1.textXOffset;
-        r4 = java.lang.Math.min(r4, r0);
-        r1.textXOffset = r4;
-        r4 = r5.directionFlags;
-        r16 = r7;
-        r7 = 1;
-        r4 = r4 | r7;
-        r4 = (byte) r4;
-        r5.directionFlags = r4;
-        r1.hasRtl = r7;
-        goto L_0x0359;
-    L_0x034e:
-        r25 = r4;
-        r16 = r7;
-        r4 = r5.directionFlags;
-        r4 = r4 | 2;
-        r4 = (byte) r4;
-        r5.directionFlags = r4;
-    L_0x0359:
-        if (r14 != 0) goto L_0x036f;
-    L_0x035b:
-        r4 = 0;
-        r7 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1));
-        if (r7 != 0) goto L_0x036f;
-    L_0x0360:
-        r4 = r5.textLayout;	 Catch:{ Exception -> 0x036b }
-        r4 = r4.getParagraphDirection(r11);	 Catch:{ Exception -> 0x036b }
-        r7 = 1;
-        if (r4 != r7) goto L_0x036f;
-    L_0x0369:
-        r14 = 1;
-        goto L_0x036f;
-    L_0x036b:
-        r4 = r27;
-        r14 = 1;
-        goto L_0x0371;
-    L_0x036f:
-        r4 = r27;
-    L_0x0371:
-        r27 = java.lang.Math.max(r4, r10);
-        r0 = r0 + r10;
-        r15 = java.lang.Math.max(r15, r0);
-        r7 = r14;
-        r4 = r15;
-        r14 = (double) r10;
-        r14 = java.lang.Math.ceil(r14);
-        r10 = (int) r14;
-        r14 = r26;
-        r26 = java.lang.Math.max(r14, r10);
+        r11 = r5;
+    L_0x0307:
+        r13 = r8 + -1;
+        if (r4 != r13) goto L_0x030d;
+    L_0x030b:
+        r1.lastLineWidth = r11;
+    L_0x030d:
+        r0 = r0 + r12;
         r14 = (double) r0;
         r14 = java.lang.Math.ceil(r14);
-        r0 = (int) r14;
-        r10 = r28;
-        r28 = java.lang.Math.max(r10, r0);
+        r14 = (int) r14;
+        r15 = 1;
+        if (r9 <= r15) goto L_0x03d4;
+    L_0x0317:
+        r26 = r11;
+        r28 = r14;
+        r11 = 0;
+        r12 = 0;
+        r15 = 0;
+        r27 = 0;
+    L_0x0320:
+        if (r11 >= r9) goto L_0x03ae;
+    L_0x0322:
+        r0 = r6.textLayout;	 Catch:{ Exception -> 0x0329 }
+        r0 = r0.getLineWidth(r11);	 Catch:{ Exception -> 0x0329 }
+        goto L_0x032e;
+    L_0x0329:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+        r0 = 0;
+    L_0x032e:
+        r10 = r5 + 20;
+        r10 = (float) r10;
+        r10 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1));
+        if (r10 <= 0) goto L_0x0336;
+    L_0x0335:
+        r0 = (float) r5;
+    L_0x0336:
+        r10 = r0;
+        r0 = r6.textLayout;	 Catch:{ Exception -> 0x033e }
+        r0 = r0.getLineLeft(r11);	 Catch:{ Exception -> 0x033e }
+        goto L_0x0343;
+    L_0x033e:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+        r0 = 0;
+    L_0x0343:
+        r16 = 0;
+        r17 = (r0 > r16 ? 1 : (r0 == r16 ? 0 : -1));
+        if (r17 <= 0) goto L_0x035f;
+    L_0x0349:
+        r16 = r3;
+        r3 = r1.textXOffset;
+        r3 = java.lang.Math.min(r3, r0);
+        r1.textXOffset = r3;
+        r3 = r6.directionFlags;
+        r17 = r7;
+        r7 = 1;
+        r3 = r3 | r7;
+        r3 = (byte) r3;
+        r6.directionFlags = r3;
+        r1.hasRtl = r7;
+        goto L_0x036a;
+    L_0x035f:
+        r16 = r3;
+        r17 = r7;
+        r3 = r6.directionFlags;
+        r3 = r3 | 2;
+        r3 = (byte) r3;
+        r6.directionFlags = r3;
+    L_0x036a:
+        if (r12 != 0) goto L_0x0380;
+    L_0x036c:
+        r3 = 0;
+        r7 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
+        if (r7 != 0) goto L_0x0380;
+    L_0x0371:
+        r3 = r6.textLayout;	 Catch:{ Exception -> 0x037c }
+        r3 = r3.getParagraphDirection(r11);	 Catch:{ Exception -> 0x037c }
+        r7 = 1;
+        if (r3 != r7) goto L_0x0380;
+    L_0x037a:
+        r12 = 1;
+        goto L_0x0380;
+    L_0x037c:
+        r3 = r27;
+        r12 = 1;
+        goto L_0x0382;
+    L_0x0380:
+        r3 = r27;
+    L_0x0382:
+        r27 = java.lang.Math.max(r3, r10);
+        r0 = r0 + r10;
+        r15 = java.lang.Math.max(r15, r0);
+        r7 = r2;
+        r2 = (double) r10;
+        r2 = java.lang.Math.ceil(r2);
+        r2 = (int) r2;
+        r10 = r26;
+        r26 = java.lang.Math.max(r10, r2);
+        r2 = (double) r0;
+        r2 = java.lang.Math.ceil(r2);
+        r0 = (int) r2;
+        r2 = r28;
+        r28 = java.lang.Math.max(r2, r0);
         r11 = r11 + 1;
-        r15 = r4;
-        r14 = r7;
-        r7 = r16;
-        r4 = r25;
+        r2 = r7;
+        r3 = r16;
+        r7 = r17;
         r10 = 0;
-        goto L_0x030f;
-    L_0x039f:
-        r25 = r4;
-        r16 = r7;
-        r7 = r26;
-        r4 = r27;
-        if (r14 == 0) goto L_0x03ae;
-    L_0x03a9:
-        if (r6 != r12) goto L_0x03b3;
-    L_0x03ab:
-        r1.lastLineWidth = r13;
-        goto L_0x03b3;
+        goto L_0x0320;
     L_0x03ae:
-        if (r6 != r12) goto L_0x03b2;
-    L_0x03b0:
-        r1.lastLineWidth = r7;
-    L_0x03b2:
-        r15 = r4;
-    L_0x03b3:
+        r16 = r3;
+        r17 = r7;
+        r10 = r26;
+        r3 = r27;
+        r7 = r2;
+        if (r12 == 0) goto L_0x03be;
+    L_0x03b9:
+        if (r4 != r13) goto L_0x03c3;
+    L_0x03bb:
+        r1.lastLineWidth = r14;
+        goto L_0x03c3;
+    L_0x03be:
+        if (r4 != r13) goto L_0x03c2;
+    L_0x03c0:
+        r1.lastLineWidth = r10;
+    L_0x03c2:
+        r15 = r3;
+    L_0x03c3:
         r0 = r1.textWidth;
-        r4 = (double) r15;
-        r4 = java.lang.Math.ceil(r4);
-        r4 = (int) r4;
-        r0 = java.lang.Math.max(r0, r4);
+        r2 = (double) r15;
+        r2 = java.lang.Math.ceil(r2);
+        r2 = (int) r2;
+        r0 = java.lang.Math.max(r0, r2);
         r1.textWidth = r0;
-        r4 = 0;
+        r2 = 0;
         r10 = 1;
-        goto L_0x0401;
-    L_0x03c4:
-        r25 = r4;
-        r16 = r7;
-        r4 = 0;
-        r0 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1));
-        if (r0 <= 0) goto L_0x03ed;
-    L_0x03cd:
+        goto L_0x0412;
+    L_0x03d4:
+        r16 = r3;
+        r17 = r7;
+        r7 = r2;
+        r2 = 0;
+        r0 = (r12 > r2 ? 1 : (r12 == r2 ? 0 : -1));
+        if (r0 <= 0) goto L_0x03fe;
+    L_0x03de:
         r0 = r1.textXOffset;
-        r0 = java.lang.Math.min(r0, r11);
+        r0 = java.lang.Math.min(r0, r12);
         r1.textXOffset = r0;
         r0 = r1.textXOffset;
-        r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1));
-        if (r0 != 0) goto L_0x03de;
-    L_0x03db:
-        r0 = (float) r15;
-        r0 = r0 + r11;
-        r15 = (int) r0;
-    L_0x03de:
+        r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
+        if (r0 != 0) goto L_0x03ef;
+    L_0x03ec:
+        r0 = (float) r11;
+        r0 = r0 + r12;
+        r11 = (int) r0;
+    L_0x03ef:
         r10 = 1;
-        if (r8 == r10) goto L_0x03e3;
-    L_0x03e1:
+        if (r8 == r10) goto L_0x03f4;
+    L_0x03f2:
         r0 = 1;
-        goto L_0x03e4;
-    L_0x03e3:
+        goto L_0x03f5;
+    L_0x03f4:
         r0 = 0;
-    L_0x03e4:
+    L_0x03f5:
         r1.hasRtl = r0;
-        r0 = r5.directionFlags;
+        r0 = r6.directionFlags;
         r0 = r0 | r10;
         r0 = (byte) r0;
-        r5.directionFlags = r0;
-        goto L_0x03f5;
-    L_0x03ed:
+        r6.directionFlags = r0;
+        goto L_0x0406;
+    L_0x03fe:
         r10 = 1;
-        r0 = r5.directionFlags;
+        r0 = r6.directionFlags;
         r0 = r0 | 2;
         r0 = (byte) r0;
-        r5.directionFlags = r0;
-    L_0x03f5:
+        r6.directionFlags = r0;
+    L_0x0406:
         r0 = r1.textWidth;
-        r5 = java.lang.Math.min(r3, r15);
-        r0 = java.lang.Math.max(r0, r5);
+        r3 = java.lang.Math.min(r5, r11);
+        r0 = java.lang.Math.max(r0, r3);
         r1.textWidth = r0;
-    L_0x0401:
-        r9 = r9 + r2;
-        goto L_0x0422;
-    L_0x0403:
+    L_0x0412:
+        r0 = r7 + r9;
+        goto L_0x0433;
+    L_0x0415:
         r0 = move-exception;
-        r25 = r4;
-        goto L_0x040e;
-    L_0x0407:
+        r7 = r2;
+        r16 = r3;
+        goto L_0x0420;
+    L_0x041a:
         r0 = move-exception;
-        r25 = r4;
-        goto L_0x040c;
-    L_0x040b:
+        r7 = r2;
+        r16 = r3;
+        r4 = r24;
+    L_0x0420:
+        r8 = r25;
+        goto L_0x042d;
+    L_0x0423:
         r0 = move-exception;
-    L_0x040c:
-        r6 = r23;
-    L_0x040e:
-        r8 = r24;
-        goto L_0x041c;
-    L_0x0411:
-        r0 = move-exception;
-        r19 = r3;
-        r2 = r9;
-        r6 = r10;
-        r8 = r12;
-        r25 = r13;
-        r18 = r14;
-        r3 = r15;
-    L_0x041c:
-        r4 = 0;
+        r18 = r3;
+        r7 = r10;
+        r4 = r11;
+        r8 = r13;
+        r16 = r14;
+        r19 = r15;
+    L_0x042d:
+        r2 = 0;
         r10 = 1;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0421:
-        r9 = r2;
-    L_0x0422:
-        r0 = r6 + 1;
+    L_0x0432:
+        r0 = r7;
+    L_0x0433:
+        r11 = r4 + 1;
         r10 = r0;
-        r15 = r3;
-        r12 = r8;
-        r14 = r18;
-        r3 = r19;
-        r13 = r25;
+        r13 = r8;
+        r14 = r16;
+        r3 = r18;
+        r15 = r19;
         r2 = 0;
         r4 = 1;
-        r5 = 24;
-        r11 = 0;
-        goto L_0x0155;
-    L_0x0434:
+        r6 = 24;
+        r12 = 0;
+        goto L_0x016d;
+    L_0x0444:
         return;
-    L_0x0435:
+    L_0x0445:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0439:
+    L_0x0449:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generateLayout(org.telegram.tgnet.TLRPC$User):void");

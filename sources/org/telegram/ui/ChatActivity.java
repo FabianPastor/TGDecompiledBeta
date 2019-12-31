@@ -1319,6 +1319,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     String url;
                                     if (characterStyle2 instanceof URLSpanNoUnderline) {
                                         url = ((URLSpanNoUnderline) characterStyle2).getURL();
+                                        int intValue;
+                                        SparseArray[] access$3200;
+                                        int i;
                                         if (ChatActivity.isClickableLink(url)) {
                                             if (z2) {
                                                 Builder builder = new Builder(ChatActivity.this.getParentActivity());
@@ -1343,7 +1346,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                             }
                                         } else if (url.startsWith("video")) {
                                             WebPage webPage;
-                                            int intValue = Utilities.parseInt(url).intValue();
+                                            intValue = Utilities.parseInt(url).intValue();
                                             if (messageObject.isYouTubeVideo()) {
                                                 webPage = messageObject.messageOwner.media.webpage;
                                             } else {
@@ -1356,8 +1359,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                                 if (messageObject.isVideo() || messageObject.replyMessageObject == null) {
                                                     chatMessageCell2 = chatMessageCell;
                                                 } else {
-                                                    int i;
-                                                    SparseArray[] access$3200 = ChatActivity.this.messagesDict;
+                                                    access$3200 = ChatActivity.this.messagesDict;
                                                     if (messageObject.replyMessageObject.getDialogId() == ChatActivity.this.dialog_id) {
                                                         i = 0;
                                                     }
@@ -1366,6 +1368,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                                 messageObject.forceSeekTo = ((float) intValue) / ((float) messageObject.getDuration());
                                                 openPhotoViewerForMessage(chatMessageCell2, messageObject);
                                             }
+                                        } else if (url.startsWith("audio")) {
+                                            intValue = Utilities.parseInt(url).intValue();
+                                            if (!(messageObject.isMusic() || messageObject.replyMessageObject == null)) {
+                                                access$3200 = ChatActivity.this.messagesDict;
+                                                if (messageObject.replyMessageObject.getDialogId() == ChatActivity.this.dialog_id) {
+                                                    i = 0;
+                                                }
+                                                messageObject = (MessageObject) access$3200[i].get(messageObject.replyMessageObject.getId());
+                                            }
+                                            messageObject.forceSeekTo = ((float) intValue) / ((float) messageObject.getDuration());
+                                            ChatActivity.this.getMediaController().playMessage(messageObject);
                                         }
                                     } else {
                                         String url2 = ((URLSpan) characterStyle2).getURL();

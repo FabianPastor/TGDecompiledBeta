@@ -3040,6 +3040,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         Document document;
         StringBuilder stringBuilder;
         StringBuilder stringBuilder2;
+        float f;
         if (messageObject.isRoundVideo() || z2) {
             FileLoader.getInstance(messageObject2.currentAccount).setLoadingVideoForPlayer(messageObject.getDocument(), true);
             this.playerWasReady = false;
@@ -3206,7 +3207,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             }
             if (messageObject.isRoundVideo()) {
                 this.videoPlayer.setStreamType(this.useFrontSpeaker ? 0 : 3);
-                float f = this.currentPlaybackSpeed;
+                f = this.currentPlaybackSpeed;
                 if (f > 1.0f) {
                     this.videoPlayer.setPlaybackSpeed(f);
                 }
@@ -3318,6 +3319,12 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                         if (this.currentMusicPlaybackSpeed > 1.0f) {
                             this.audioPlayer.setPlaybackSpeed(this.currentMusicPlaybackSpeed);
                         }
+                    }
+                    if (messageObject2.forceSeekTo >= 0.0f) {
+                        f = messageObject2.forceSeekTo;
+                        this.seekToProgressPending = f;
+                        messageObject2.audioProgress = f;
+                        messageObject2.forceSeekTo = -1.0f;
                     }
                 }
                 this.audioPlayer.setStreamType(this.useFrontSpeaker ? 0 : 3);
