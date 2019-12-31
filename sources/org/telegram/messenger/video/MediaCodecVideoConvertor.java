@@ -173,17 +173,17 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:715:0x0d29  */
     /* JADX WARNING: Removed duplicated region for block: B:718:0x0d30 A:{SYNTHETIC, Splitter:B:718:0x0d30} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -194,7 +194,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -205,7 +205,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -216,8 +216,8 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -228,10 +228,10 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -242,8 +242,8 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -254,7 +254,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -265,7 +265,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -276,7 +276,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -287,7 +287,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -298,8 +298,8 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -310,7 +310,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -321,8 +321,8 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -333,8 +333,8 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -345,8 +345,8 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -357,7 +357,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -368,12 +368,12 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:699:0x0cef  */
     /* JADX WARNING: Removed duplicated region for block: B:702:0x0cf6 A:{SYNTHETIC, Splitter:B:702:0x0cf6} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -384,7 +384,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -395,17 +395,17 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:699:0x0cef  */
     /* JADX WARNING: Removed duplicated region for block: B:702:0x0cf6 A:{SYNTHETIC, Splitter:B:702:0x0cf6} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:699:0x0cef  */
     /* JADX WARNING: Removed duplicated region for block: B:702:0x0cf6 A:{SYNTHETIC, Splitter:B:702:0x0cf6} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -416,8 +416,8 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -428,7 +428,7 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
@@ -439,24 +439,24 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Removed duplicated region for block: B:681:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:681:0x0CLASSNAME} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:699:0x0cef  */
     /* JADX WARNING: Removed duplicated region for block: B:702:0x0cf6 A:{SYNTHETIC, Splitter:B:702:0x0cf6} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:699:0x0cef  */
     /* JADX WARNING: Removed duplicated region for block: B:702:0x0cf6 A:{SYNTHETIC, Splitter:B:702:0x0cf6} */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:699:0x0cef  */
     /* JADX WARNING: Removed duplicated region for block: B:702:0x0cf6 A:{SYNTHETIC, Splitter:B:702:0x0cf6} */
     /* JADX WARNING: Removed duplicated region for block: B:708:0x0d03  */
     /* JADX WARNING: Removed duplicated region for block: B:710:0x0d20 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
-    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{ExcHandler: all (r0_57 'th' java.lang.Throwable), Splitter:B:58:0x0139} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0ca9 A:{Splitter:B:58:0x0139, ExcHandler: all (r0_57 'th' java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:640:0x0bec A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:647:0x0c2a A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
     /* JADX WARNING: Removed duplicated region for block: B:649:0x0c2f A:{Catch:{ Exception -> 0x0c4b, all -> 0x0ca9 }} */
