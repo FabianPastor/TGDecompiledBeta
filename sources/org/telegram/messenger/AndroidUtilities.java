@@ -3125,26 +3125,26 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0102  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0100  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0107  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0105  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x010c  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x010a  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0100  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0102  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0105  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0107  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x010a  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x010c  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0102  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0100  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0107  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0105  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x010c  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x010a  */
-    /* JADX WARNING: Missing block: B:29:0x0066, code skipped:
-            if (r15.startsWith(r5) == false) goto L_0x00ec;
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x0103  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0101  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0106  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x010d  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x010b  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0101  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x0103  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0106  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x010b  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x010d  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x0103  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0101  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0106  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x010d  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x010b  */
+    /* JADX WARNING: Missing block: B:29:0x0067, code skipped:
+            if (r15.startsWith(r5) == false) goto L_0x00ed;
      */
     public static boolean handleProxyIntent(android.app.Activity r14, android.content.Intent r15) {
         /*
@@ -3155,154 +3155,154 @@ public class AndroidUtilities {
     L_0x0009:
         return r2;
     L_0x000a:
-        r3 = r15.getFlags();	 Catch:{ Exception -> 0x0113 }
+        r3 = r15.getFlags();	 Catch:{ Exception -> 0x0114 }
         r4 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
         r3 = r3 & r4;
         if (r3 == 0) goto L_0x0014;
     L_0x0013:
         return r2;
     L_0x0014:
-        r15 = r15.getData();	 Catch:{ Exception -> 0x0113 }
-        if (r15 == 0) goto L_0x0113;
+        r15 = r15.getData();	 Catch:{ Exception -> 0x0114 }
+        if (r15 == 0) goto L_0x0114;
     L_0x001a:
-        r3 = r15.getScheme();	 Catch:{ Exception -> 0x0113 }
+        r3 = r15.getScheme();	 Catch:{ Exception -> 0x0114 }
         r4 = 0;
-        if (r3 == 0) goto L_0x00ec;
+        if (r3 == 0) goto L_0x00ed;
     L_0x0021:
         r5 = "http";
-        r5 = r3.equals(r5);	 Catch:{ Exception -> 0x0113 }
+        r5 = r3.equals(r5);	 Catch:{ Exception -> 0x0114 }
         r6 = "secret";
         r7 = "pass";
         r8 = "user";
         r9 = "port";
         r10 = "server";
-        if (r5 != 0) goto L_0x0095;
+        if (r5 != 0) goto L_0x0096;
     L_0x0034:
         r5 = "https";
-        r5 = r3.equals(r5);	 Catch:{ Exception -> 0x0113 }
+        r5 = r3.equals(r5);	 Catch:{ Exception -> 0x0114 }
         if (r5 == 0) goto L_0x003d;
     L_0x003c:
-        goto L_0x0095;
+        goto L_0x0096;
     L_0x003d:
         r5 = "tg";
-        r3 = r3.equals(r5);	 Catch:{ Exception -> 0x0113 }
-        if (r3 == 0) goto L_0x00ec;
+        r3 = r3.equals(r5);	 Catch:{ Exception -> 0x0114 }
+        if (r3 == 0) goto L_0x00ed;
     L_0x0045:
-        r15 = r15.toString();	 Catch:{ Exception -> 0x0113 }
-        r3 = r15.startsWith(r0);	 Catch:{ Exception -> 0x0113 }
+        r15 = r15.toString();	 Catch:{ Exception -> 0x0114 }
+        r3 = r15.startsWith(r0);	 Catch:{ Exception -> 0x0114 }
         r5 = "tg://socks";
         r11 = "tg:socks";
         r12 = "tg://proxy";
-        if (r3 != 0) goto L_0x0068;
-    L_0x0056:
-        r3 = r15.startsWith(r12);	 Catch:{ Exception -> 0x0113 }
-        if (r3 != 0) goto L_0x0068;
-    L_0x005c:
-        r3 = r15.startsWith(r11);	 Catch:{ Exception -> 0x0113 }
-        if (r3 != 0) goto L_0x0068;
-    L_0x0062:
-        r3 = r15.startsWith(r5);	 Catch:{ Exception -> 0x0113 }
-        if (r3 == 0) goto L_0x00ec;
-    L_0x0068:
-        r15 = r15.replace(r0, r1);	 Catch:{ Exception -> 0x0113 }
-        r15 = r15.replace(r12, r1);	 Catch:{ Exception -> 0x0113 }
-        r15 = r15.replace(r5, r1);	 Catch:{ Exception -> 0x0113 }
-        r15 = r15.replace(r11, r1);	 Catch:{ Exception -> 0x0113 }
-        r15 = android.net.Uri.parse(r15);	 Catch:{ Exception -> 0x0113 }
-        r4 = r15.getQueryParameter(r10);	 Catch:{ Exception -> 0x0113 }
-        r0 = r15.getQueryParameter(r9);	 Catch:{ Exception -> 0x0113 }
-        r1 = r15.getQueryParameter(r8);	 Catch:{ Exception -> 0x0113 }
-        r3 = r15.getQueryParameter(r7);	 Catch:{ Exception -> 0x0113 }
-        r15 = r15.getQueryParameter(r6);	 Catch:{ Exception -> 0x0113 }
+        if (r3 != 0) goto L_0x0069;
+    L_0x0057:
+        r3 = r15.startsWith(r12);	 Catch:{ Exception -> 0x0114 }
+        if (r3 != 0) goto L_0x0069;
+    L_0x005d:
+        r3 = r15.startsWith(r11);	 Catch:{ Exception -> 0x0114 }
+        if (r3 != 0) goto L_0x0069;
+    L_0x0063:
+        r3 = r15.startsWith(r5);	 Catch:{ Exception -> 0x0114 }
+        if (r3 == 0) goto L_0x00ed;
+    L_0x0069:
+        r15 = r15.replace(r0, r1);	 Catch:{ Exception -> 0x0114 }
+        r15 = r15.replace(r12, r1);	 Catch:{ Exception -> 0x0114 }
+        r15 = r15.replace(r5, r1);	 Catch:{ Exception -> 0x0114 }
+        r15 = r15.replace(r11, r1);	 Catch:{ Exception -> 0x0114 }
+        r15 = android.net.Uri.parse(r15);	 Catch:{ Exception -> 0x0114 }
+        r4 = r15.getQueryParameter(r10);	 Catch:{ Exception -> 0x0114 }
+        r0 = r15.getQueryParameter(r9);	 Catch:{ Exception -> 0x0114 }
+        r1 = r15.getQueryParameter(r8);	 Catch:{ Exception -> 0x0114 }
+        r3 = r15.getQueryParameter(r7);	 Catch:{ Exception -> 0x0114 }
+        r15 = r15.getQueryParameter(r6);	 Catch:{ Exception -> 0x0114 }
         r7 = r0;
         r6 = r4;
         r4 = r1;
-        goto L_0x00f0;
-    L_0x0095:
-        r0 = r15.getHost();	 Catch:{ Exception -> 0x0113 }
-        r0 = r0.toLowerCase();	 Catch:{ Exception -> 0x0113 }
+        goto L_0x00f1;
+    L_0x0096:
+        r0 = r15.getHost();	 Catch:{ Exception -> 0x0114 }
+        r0 = r0.toLowerCase();	 Catch:{ Exception -> 0x0114 }
         r1 = "telegram.me";
-        r1 = r0.equals(r1);	 Catch:{ Exception -> 0x0113 }
-        if (r1 != 0) goto L_0x00b5;
-    L_0x00a5:
+        r1 = r0.equals(r1);	 Catch:{ Exception -> 0x0114 }
+        if (r1 != 0) goto L_0x00b6;
+    L_0x00a6:
         r1 = "t.me";
-        r1 = r0.equals(r1);	 Catch:{ Exception -> 0x0113 }
-        if (r1 != 0) goto L_0x00b5;
-    L_0x00ad:
+        r1 = r0.equals(r1);	 Catch:{ Exception -> 0x0114 }
+        if (r1 != 0) goto L_0x00b6;
+    L_0x00ae:
         r1 = "telegram.dog";
-        r0 = r0.equals(r1);	 Catch:{ Exception -> 0x0113 }
-        if (r0 == 0) goto L_0x00e4;
-    L_0x00b5:
-        r0 = r15.getPath();	 Catch:{ Exception -> 0x0113 }
-        if (r0 == 0) goto L_0x00e4;
-    L_0x00bb:
+        r0 = r0.equals(r1);	 Catch:{ Exception -> 0x0114 }
+        if (r0 == 0) goto L_0x00e5;
+    L_0x00b6:
+        r0 = r15.getPath();	 Catch:{ Exception -> 0x0114 }
+        if (r0 == 0) goto L_0x00e5;
+    L_0x00bc:
         r1 = "/socks";
-        r1 = r0.startsWith(r1);	 Catch:{ Exception -> 0x0113 }
-        if (r1 != 0) goto L_0x00cb;
-    L_0x00c3:
+        r1 = r0.startsWith(r1);	 Catch:{ Exception -> 0x0114 }
+        if (r1 != 0) goto L_0x00cc;
+    L_0x00c4:
         r1 = "/proxy";
-        r0 = r0.startsWith(r1);	 Catch:{ Exception -> 0x0113 }
-        if (r0 == 0) goto L_0x00e4;
-    L_0x00cb:
-        r4 = r15.getQueryParameter(r10);	 Catch:{ Exception -> 0x0113 }
-        r0 = r15.getQueryParameter(r9);	 Catch:{ Exception -> 0x0113 }
-        r1 = r15.getQueryParameter(r8);	 Catch:{ Exception -> 0x0113 }
-        r3 = r15.getQueryParameter(r7);	 Catch:{ Exception -> 0x0113 }
-        r15 = r15.getQueryParameter(r6);	 Catch:{ Exception -> 0x0113 }
+        r0 = r0.startsWith(r1);	 Catch:{ Exception -> 0x0114 }
+        if (r0 == 0) goto L_0x00e5;
+    L_0x00cc:
+        r4 = r15.getQueryParameter(r10);	 Catch:{ Exception -> 0x0114 }
+        r0 = r15.getQueryParameter(r9);	 Catch:{ Exception -> 0x0114 }
+        r1 = r15.getQueryParameter(r8);	 Catch:{ Exception -> 0x0114 }
+        r3 = r15.getQueryParameter(r7);	 Catch:{ Exception -> 0x0114 }
+        r15 = r15.getQueryParameter(r6);	 Catch:{ Exception -> 0x0114 }
         r13 = r1;
         r1 = r15;
         r15 = r4;
         r4 = r13;
-        goto L_0x00e8;
-    L_0x00e4:
+        goto L_0x00e9;
+    L_0x00e5:
         r15 = r4;
         r0 = r15;
         r1 = r0;
         r3 = r1;
-    L_0x00e8:
+    L_0x00e9:
         r6 = r15;
         r7 = r0;
         r15 = r1;
-        goto L_0x00f0;
-    L_0x00ec:
+        goto L_0x00f1;
+    L_0x00ed:
         r15 = r4;
         r3 = r15;
         r6 = r3;
         r7 = r6;
-    L_0x00f0:
-        r0 = android.text.TextUtils.isEmpty(r6);	 Catch:{ Exception -> 0x0113 }
-        if (r0 != 0) goto L_0x0113;
-    L_0x00f6:
-        r0 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Exception -> 0x0113 }
-        if (r0 != 0) goto L_0x0113;
-    L_0x00fc:
+    L_0x00f1:
+        r0 = android.text.TextUtils.isEmpty(r6);	 Catch:{ Exception -> 0x0114 }
+        if (r0 != 0) goto L_0x0114;
+    L_0x00f7:
+        r0 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Exception -> 0x0114 }
+        if (r0 != 0) goto L_0x0114;
+    L_0x00fd:
         r0 = "";
-        if (r4 != 0) goto L_0x0102;
-    L_0x0100:
+        if (r4 != 0) goto L_0x0103;
+    L_0x0101:
         r8 = r0;
-        goto L_0x0103;
-    L_0x0102:
-        r8 = r4;
+        goto L_0x0104;
     L_0x0103:
-        if (r3 != 0) goto L_0x0107;
-    L_0x0105:
+        r8 = r4;
+    L_0x0104:
+        if (r3 != 0) goto L_0x0108;
+    L_0x0106:
         r9 = r0;
-        goto L_0x0108;
-    L_0x0107:
-        r9 = r3;
+        goto L_0x0109;
     L_0x0108:
-        if (r15 != 0) goto L_0x010c;
-    L_0x010a:
+        r9 = r3;
+    L_0x0109:
+        if (r15 != 0) goto L_0x010d;
+    L_0x010b:
         r10 = r0;
-        goto L_0x010d;
-    L_0x010c:
-        r10 = r15;
+        goto L_0x010e;
     L_0x010d:
+        r10 = r15;
+    L_0x010e:
         r5 = r14;
-        showProxyAlert(r5, r6, r7, r8, r9, r10);	 Catch:{ Exception -> 0x0113 }
+        showProxyAlert(r5, r6, r7, r8, r9, r10);	 Catch:{ Exception -> 0x0114 }
         r14 = 1;
         return r14;
-    L_0x0113:
+    L_0x0114:
         return r2;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.handleProxyIntent(android.app.Activity, android.content.Intent):boolean");

@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.5.3
 
 Name: AndroidManifest.xml
-SHA1-Digest: PkbWKGsVZceTt9lybfA3SQ5sfX0=
+SHA1-Digest: L73A32hom0iNWdpwgeul3KGiptg=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -99,7 +99,7 @@ Name: assets/darkblue.attheme
 SHA1-Digest: AYhcBRlsF9nx0XGzMnA4VJfJpDY=
 
 Name: assets/day.attheme
-SHA1-Digest: SWyo0luo9f2qrr+2JjglXn7A6MU=
+SHA1-Digest: o6p9SEix8txBLVurv/FhiQYVPx0=
 
 Name: assets/emoji/v15_emoji2.0x_0_0.png
 SHA1-Digest: IGvgGSS4IiLPx3uNrLISie7dkJ8=
@@ -213,7 +213,7 @@ Name: assets/fonts/rmono.ttf
 SHA1-Digest: aaZcK3l9L6EktMcJCX52G3hXoDU=
 
 Name: assets/night.attheme
-SHA1-Digest: Y46cBLWpwb8NgNBabvHh7tx6cSM=
+SHA1-Digest: uHdrbWYhSm4CbHj1mCuS3XDFVxc=
 
 Name: assets/secureid_ocr_nn.dat
 SHA1-Digest: baCkFlis9uqkjrzfYyVFGLmb0x8=
@@ -222,7 +222,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: q3TZgHtn0rSDRRaojnWqmj/szVo=
+SHA1-Digest: m1YvMzB676QqdDaV7GlqKTUlxO0=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -8818,7 +8818,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: /NG/sGtLtg6pQStl3jNTenp8qvI=
+SHA1-Digest: Q/mXHhB+M3FsYscR0Ca+yCiFHWk=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=
