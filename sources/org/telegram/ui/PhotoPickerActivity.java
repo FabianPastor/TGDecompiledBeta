@@ -642,7 +642,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 if (i < PhotoPickerActivity.this.recentSearches.size()) {
                     textCell.setTextAndIcon((String) PhotoPickerActivity.this.recentSearches.get(i), NUM, false);
                 } else {
-                    textCell.setTextAndIcon(LocaleController.getString("ClearHistory", NUM), NUM, false);
+                    textCell.setTextAndIcon(LocaleController.getString("ClearRecentHistory", NUM), NUM, false);
                 }
             }
         }
@@ -743,7 +743,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r3.setBackButtonImage(r6);
         r3 = r0.selectedAlbum;
         r6 = "SearchGifsTitle";
-        r7 = NUM; // 0x7f0e09c6 float:1.8880112E38 double:1.053163393E-314;
+        r7 = NUM; // 0x7f0e09c7 float:1.8880114E38 double:1.0531633933E-314;
         r8 = "SearchImagesTitle";
         r9 = 1;
         if (r3 == 0) goto L_0x004d;
@@ -764,7 +764,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (r3 != r9) goto L_0x0069;
     L_0x005d:
         r3 = r0.actionBar;
-        r10 = NUM; // 0x7f0e09c3 float:1.8880106E38 double:1.0531633913E-314;
+        r10 = NUM; // 0x7f0e09c4 float:1.8880108E38 double:1.053163392E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r6, r10);
         r3.setTitle(r10);
     L_0x0069:
@@ -783,14 +783,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r10.<init>(r0);
         r3.setSubMenuDelegate(r10);
         r10 = NUM; // 0x7var_e0 float:1.7945551E38 double:1.05293574E-314;
-        r11 = NUM; // 0x7f0e0a63 float:1.888043E38 double:1.0531634704E-314;
+        r11 = NUM; // 0x7f0e0a64 float:1.8880433E38 double:1.053163471E-314;
         r12 = "ShowAsList";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r10 = r3.addSubItem(r9, r10, r11);
         r0.showAsListItem = r10;
         r10 = 2;
         r11 = NUM; // 0x7var_e9 float:1.794557E38 double:1.0529357446E-314;
-        r12 = NUM; // 0x7f0e0781 float:1.8878934E38 double:1.0531631057E-314;
+        r12 = NUM; // 0x7f0e0782 float:1.8878936E38 double:1.053163106E-314;
         r13 = "OpenInExternalApp";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r3.addSubItem(r10, r11, r12);
@@ -831,7 +831,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (r3 != r9) goto L_0x010b;
     L_0x00ff:
         r3 = r0.searchItem;
-        r5 = NUM; // 0x7f0e09c3 float:1.8880106E38 double:1.0531633913E-314;
+        r5 = NUM; // 0x7f0e09c4 float:1.8880108E38 double:1.053163392E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setSearchFieldHint(r5);
     L_0x010b:
@@ -922,7 +922,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r3 = r0.emptyView;
         r3.setShowAtCenter(r2);
         r3 = r0.emptyView;
-        r6 = NUM; // 0x7f0e06be float:1.8878538E38 double:1.0531630094E-314;
+        r6 = NUM; // 0x7f0e06bf float:1.887854E38 double:1.05316301E-314;
         r8 = "NoPhotos";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r3.setText(r6);
@@ -935,7 +935,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r3.setPadding(r2, r6, r2, r2);
         r3 = r0.emptyView;
-        r6 = NUM; // 0x7f0e06c6 float:1.8878555E38 double:1.0531630133E-314;
+        r6 = NUM; // 0x7f0e06c7 float:1.8878557E38 double:1.053163014E-314;
         r8 = "NoRecentSearches";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r3.setText(r6);
@@ -1079,7 +1079,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         r3 = r0.writeButtonContainer;
         r3.setAlpha(r2);
         r3 = r0.writeButtonContainer;
-        r5 = NUM; // 0x7f0e09e8 float:1.8880181E38 double:1.0531634096E-314;
+        r5 = NUM; // 0x7f0e09e9 float:1.8880183E38 double:1.05316341E-314;
         r6 = "Send";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.setContentDescription(r5);

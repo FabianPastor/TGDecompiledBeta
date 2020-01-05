@@ -766,6 +766,7 @@
     <string name="ClearOtherSessionsHelp">Logs out all devices except for this one.</string>
     <string name="ClearOtherWebSessionsHelp">You can log in on websites that support signing in with Telegram.</string>
     <string name="ClearRecentEmoji">Clear recent emoji?</string>
+    <string name="ClearRecentHistory">Clear history</string>
     <string name="ClearSearch">Clear search history?</string>
     <string name="ClearSearchAlert">Are you sure you want to clear your search history?</string>
     <string name="ClearSearchAlertTitle">Clear search history</string>

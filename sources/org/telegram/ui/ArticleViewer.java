@@ -15887,7 +15887,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004f:
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0e0a3f float:1.8880358E38 double:1.0531634526E-314;
+        r3 = NUM; // 0x7f0e0a40 float:1.888036E38 double:1.053163453E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x0098 }
         r1 = android.content.Intent.createChooser(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -15902,12 +15902,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setTitle(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "OK";
-        r2 = NUM; // 0x7f0e076c float:1.8878891E38 double:1.0531630954E-314;
+        r2 = NUM; // 0x7f0e076d float:1.8878893E38 double:1.053163096E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 0;
         r0.setPositiveButton(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r1 = "PleaseDownload";
-        r2 = NUM; // 0x7f0e08e7 float:1.887966E38 double:1.0531632826E-314;
+        r2 = NUM; // 0x7f0e08e8 float:1.8879662E38 double:1.053163283E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setMessage(r1);	 Catch:{ Exception -> 0x0098 }
         r0 = r0.create();	 Catch:{ Exception -> 0x0098 }
@@ -16445,7 +16445,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         goto L_0x012e;
     L_0x0109:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
+        r1 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
         r2 = new java.lang.Object[r10];
         r3 = r6.currentIndex;
         r3 = r3 + r9;

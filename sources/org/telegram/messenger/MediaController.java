@@ -3320,12 +3320,12 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             this.audioPlayer.setPlaybackSpeed(this.currentMusicPlaybackSpeed);
                         }
                     }
-                    if (messageObject2.forceSeekTo >= 0.0f) {
-                        f = messageObject2.forceSeekTo;
-                        this.seekToProgressPending = f;
-                        messageObject2.audioProgress = f;
-                        messageObject2.forceSeekTo = -1.0f;
-                    }
+                }
+                if (messageObject2.forceSeekTo >= 0.0f) {
+                    f = messageObject2.forceSeekTo;
+                    this.seekToProgressPending = f;
+                    messageObject2.audioProgress = f;
+                    messageObject2.forceSeekTo = -1.0f;
                 }
                 this.audioPlayer.setStreamType(this.useFrontSpeaker ? 0 : 3);
                 this.audioPlayer.play();
@@ -3827,7 +3827,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r3 = 2;
         r2.<init>(r10, r3);	 Catch:{ Exception -> 0x005e }
         r10 = "Loading";
-        r1 = NUM; // 0x7f0e05e6 float:1.88781E38 double:1.0531629027E-314;
+        r1 = NUM; // 0x7f0e05e7 float:1.8878102E38 double:1.053162903E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r10, r1);	 Catch:{ Exception -> 0x005b }
         r2.setMessage(r10);	 Catch:{ Exception -> 0x005b }
         r2.setCanceledOnTouchOutside(r0);	 Catch:{ Exception -> 0x005b }

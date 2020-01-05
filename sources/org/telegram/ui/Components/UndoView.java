@@ -287,7 +287,7 @@ public class UndoView extends FrameLayout {
     L_0x004d:
         r1 = r4;
         r1 = (org.telegram.tgnet.TLRPC.User) r1;
-        r2 = NUM; // 0x7f0e076a float:1.8878887E38 double:1.0531630944E-314;
+        r2 = NUM; // 0x7f0e076b float:1.887889E38 double:1.053163095E-314;
         r3 = new java.lang.Object[r5];
         r1 = org.telegram.messenger.UserObject.getFirstName(r1);
         r3[r15] = r1;
@@ -342,7 +342,7 @@ public class UndoView extends FrameLayout {
         r2 = (org.telegram.tgnet.TLRPC.User) r2;
         if (r3 != r1) goto L_0x00d2;
     L_0x00bc:
-        r1 = NUM; // 0x7f0e0400 float:1.8877114E38 double:1.0531626626E-314;
+        r1 = NUM; // 0x7f0e0401 float:1.8877116E38 double:1.053162663E-314;
         r3 = new java.lang.Object[r5];
         r2 = org.telegram.messenger.UserObject.getFirstName(r2);
         r3[r15] = r2;
@@ -351,7 +351,7 @@ public class UndoView extends FrameLayout {
         r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
         goto L_0x00e7;
     L_0x00d2:
-        r1 = NUM; // 0x7f0e0401 float:1.8877116E38 double:1.053162663E-314;
+        r1 = NUM; // 0x7f0e0402 float:1.8877119E38 double:1.0531626635E-314;
         r3 = new java.lang.Object[r5];
         r2 = org.telegram.messenger.UserObject.getFirstName(r2);
         r3[r15] = r2;
@@ -467,7 +467,7 @@ public class UndoView extends FrameLayout {
         r1 = r4;
         r1 = (org.telegram.tgnet.TLRPC.TL_authorization) r1;
         r1 = r0.infoTextView;
-        r2 = NUM; // 0x7f0e0315 float:1.8876638E38 double:1.0531625464E-314;
+        r2 = NUM; // 0x7f0e0316 float:1.887664E38 double:1.053162547E-314;
         r3 = "ColorThemeChanged";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -490,7 +490,7 @@ public class UndoView extends FrameLayout {
         r2 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r1.rightMargin = r2;
-        r1 = NUM; // 0x7f0e0316 float:1.887664E38 double:1.053162547E-314;
+        r1 = NUM; // 0x7f0e0317 float:1.8876642E38 double:1.0531625474E-314;
         r2 = "ColorThemeChangedInfo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new android.text.SpannableStringBuilder;
@@ -565,7 +565,7 @@ public class UndoView extends FrameLayout {
         if (r3 != 0) goto L_0x02cc;
     L_0x02bd:
         r3 = r0.infoTextView;
-        r4 = NUM; // 0x7f0e055c float:1.887782E38 double:1.0531628345E-314;
+        r4 = NUM; // 0x7f0e055d float:1.8877822E38 double:1.053162835E-314;
         r6 = "HistoryClearedUndo";
         r4 = org.telegram.messenger.LocaleController.getString(r6, r4);
         r3.setText(r4);
@@ -593,7 +593,7 @@ public class UndoView extends FrameLayout {
         goto L_0x0314;
     L_0x02f7:
         r3 = r0.infoTextView;
-        r4 = NUM; // 0x7f0e0535 float:1.8877741E38 double:1.053162815E-314;
+        r4 = NUM; // 0x7f0e0536 float:1.8877743E38 double:1.0531628157E-314;
         r6 = "GroupDeletedUndo";
         r4 = org.telegram.messenger.LocaleController.getString(r6, r4);
         r3.setText(r4);
