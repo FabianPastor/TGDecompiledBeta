@@ -675,19 +675,21 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
 
     private void updateColors() {
         int[] iArr = this.colors;
-        iArr[0] = 3355443;
-        iArr[1] = Theme.getColor("windowBackgroundWhiteBlackText");
-        iArr = this.colors;
-        iArr[2] = 16777215;
-        String str = "windowBackgroundWhite";
-        iArr[3] = Theme.getColor(str);
-        iArr = this.colors;
-        iArr[4] = 5285866;
-        iArr[5] = Theme.getColor("featuredStickers_addButton");
-        iArr = this.colors;
-        iArr[6] = 2170912;
-        iArr[7] = Theme.getColor(str);
-        this.imageView.replaceColors(this.colors);
+        if (iArr != null && this.imageView != null) {
+            iArr[0] = 3355443;
+            iArr[1] = Theme.getColor("windowBackgroundWhiteBlackText");
+            iArr = this.colors;
+            iArr[2] = 16777215;
+            String str = "windowBackgroundWhite";
+            iArr[3] = Theme.getColor(str);
+            iArr = this.colors;
+            iArr[4] = 5285866;
+            iArr[5] = Theme.getColor("featuredStickers_addButton");
+            iArr = this.colors;
+            iArr[6] = 2170912;
+            iArr[7] = Theme.getColor(str);
+            this.imageView.replaceColors(this.colors);
+        }
     }
 
     public void setGroupCreateAddress(String str, String str2, Location location) {

@@ -887,23 +887,25 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
 
         public /* synthetic */ boolean lambda$onCreateViewHolder$5$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, View view, int i) {
-            ThemeAccent themeAccent = (ThemeAccent) themeAccentsListAdapter.themeAccents.get(i);
-            if (themeAccent.id < 100) {
-                return false;
+            if (i >= 0 && i < themeAccentsListAdapter.themeAccents.size()) {
+                ThemeAccent themeAccent = (ThemeAccent) themeAccentsListAdapter.themeAccents.get(i);
+                if (themeAccent.id >= 100) {
+                    Builder builder = new Builder(ThemeActivity.this.getParentActivity());
+                    CharSequence[] charSequenceArr = new CharSequence[4];
+                    charSequenceArr[0] = LocaleController.getString("OpenInEditor", NUM);
+                    charSequenceArr[1] = LocaleController.getString("ShareTheme", NUM);
+                    TL_theme tL_theme = themeAccent.info;
+                    String string = (tL_theme == null || !tL_theme.creator) ? null : LocaleController.getString("ThemeSetUrl", NUM);
+                    charSequenceArr[2] = string;
+                    charSequenceArr[3] = LocaleController.getString("DeleteTheme", NUM);
+                    builder.setItems(charSequenceArr, new int[]{NUM, NUM, NUM, NUM}, new -$$Lambda$ThemeActivity$ListAdapter$bBxbJopnBfliVbn7S3U5sGJ24Z4(this, themeAccent, themeAccentsListAdapter));
+                    AlertDialog create = builder.create();
+                    ThemeActivity.this.showDialog(create);
+                    create.setItemColor(create.getItemsCount() - 1, Theme.getColor("dialogTextRed2"), Theme.getColor("dialogRedIcon"));
+                    return true;
+                }
             }
-            Builder builder = new Builder(ThemeActivity.this.getParentActivity());
-            CharSequence[] charSequenceArr = new CharSequence[4];
-            charSequenceArr[0] = LocaleController.getString("OpenInEditor", NUM);
-            charSequenceArr[1] = LocaleController.getString("ShareTheme", NUM);
-            TL_theme tL_theme = themeAccent.info;
-            String string = (tL_theme == null || !tL_theme.creator) ? null : LocaleController.getString("ThemeSetUrl", NUM);
-            charSequenceArr[2] = string;
-            charSequenceArr[3] = LocaleController.getString("DeleteTheme", NUM);
-            builder.setItems(charSequenceArr, new int[]{NUM, NUM, NUM, NUM}, new -$$Lambda$ThemeActivity$ListAdapter$bBxbJopnBfliVbn7S3U5sGJ24Z4(this, themeAccent, themeAccentsListAdapter));
-            AlertDialog create = builder.create();
-            ThemeActivity.this.showDialog(create);
-            create.setItemColor(create.getItemsCount() - 1, Theme.getColor("dialogTextRed2"), Theme.getColor("dialogRedIcon"));
-            return true;
+            return false;
         }
 
         public /* synthetic */ void lambda$null$4$ThemeActivity$ListAdapter(ThemeAccent themeAccent, ThemeAccentsListAdapter themeAccentsListAdapter, DialogInterface dialogInterface, int i) {
@@ -2104,8 +2106,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private void updateMenuItem() {
         if (this.menuItem != null) {
             ThemeInfo currentTheme = Theme.getCurrentTheme();
+            ThemeAccent accent = currentTheme.getAccent(false);
             ArrayList arrayList = currentTheme.themeAccents;
-            if (arrayList == null || arrayList.isEmpty() || currentTheme.getAccent(false).id < 100) {
+            if (arrayList == null || arrayList.isEmpty() || accent == null || accent.id < 100) {
                 this.menuItem.hideSubItem(2);
                 this.menuItem.hideSubItem(3);
             } else {

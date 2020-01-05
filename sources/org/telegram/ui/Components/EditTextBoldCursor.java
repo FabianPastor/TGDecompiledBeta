@@ -785,7 +785,10 @@ public class EditTextBoldCursor extends EditText {
     }
 
     public /* synthetic */ boolean lambda$startActionMode$0$EditTextBoldCursor() {
-        this.floatingActionMode.updateViewLocationInWindow();
+        FloatingActionMode floatingActionMode = this.floatingActionMode;
+        if (floatingActionMode != null) {
+            floatingActionMode.updateViewLocationInWindow();
+        }
         return true;
     }
 

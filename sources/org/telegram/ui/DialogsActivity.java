@@ -571,61 +571,63 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
 
         public /* synthetic */ void lambda$onSwiped$1$DialogsActivity$SwipeController(int i, int i2, int i3) {
-            Dialog dialog = (Dialog) DialogsActivity.frozenDialogsList.remove(i);
-            int i4 = dialog.pinnedNum;
-            DialogsActivity.this.slidingView = null;
-            DialogsActivity.this.listView.invalidate();
-            int i5 = 0;
-            int addDialogToFolder = DialogsActivity.this.getMessagesController().addDialogToFolder(dialog.id, DialogsActivity.this.folderId == 0 ? 1 : 0, -1, 0);
-            int findLastVisibleItemPosition = DialogsActivity.this.layoutManager.findLastVisibleItemPosition();
-            if (findLastVisibleItemPosition == i2 - 1) {
-                DialogsActivity.this.layoutManager.findViewByPosition(findLastVisibleItemPosition).requestLayout();
-            }
-            if (!(addDialogToFolder == 2 && i3 == 0)) {
-                DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount - 1;
-                DialogsActivity.this.dialogsAdapter.notifyItemRemoved(i3);
-                DialogsActivity.this.dialogRemoveFinished = 2;
-            }
-            if (DialogsActivity.this.folderId == 0) {
-                if (addDialogToFolder == 2) {
+            if (DialogsActivity.frozenDialogsList != null) {
+                Dialog dialog = (Dialog) DialogsActivity.frozenDialogsList.remove(i);
+                int i4 = dialog.pinnedNum;
+                DialogsActivity.this.slidingView = null;
+                DialogsActivity.this.listView.invalidate();
+                int i5 = 0;
+                int addDialogToFolder = DialogsActivity.this.getMessagesController().addDialogToFolder(dialog.id, DialogsActivity.this.folderId == 0 ? 1 : 0, -1, 0);
+                int findLastVisibleItemPosition = DialogsActivity.this.layoutManager.findLastVisibleItemPosition();
+                if (findLastVisibleItemPosition == i2 - 1) {
+                    DialogsActivity.this.layoutManager.findViewByPosition(findLastVisibleItemPosition).requestLayout();
+                }
+                if (!(addDialogToFolder == 2 && i3 == 0)) {
                     DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                    if (i3 == 0) {
-                        DialogsActivity.this.dialogChangeFinished = 2;
-                        DialogsActivity.this.setDialogsListFrozen(true);
-                        DialogsActivity.this.dialogsAdapter.notifyItemChanged(0);
-                    } else {
-                        DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount + 1;
-                        DialogsActivity.this.dialogsAdapter.notifyItemInserted(0);
-                        if (!SharedConfig.archiveHidden && DialogsActivity.this.layoutManager.findFirstVisibleItemPosition() == 0) {
-                            DialogsActivity.this.listView.smoothScrollBy(0, -AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f));
+                    DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount - 1;
+                    DialogsActivity.this.dialogsAdapter.notifyItemRemoved(i3);
+                    DialogsActivity.this.dialogRemoveFinished = 2;
+                }
+                if (DialogsActivity.this.folderId == 0) {
+                    if (addDialogToFolder == 2) {
+                        DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
+                        if (i3 == 0) {
+                            DialogsActivity.this.dialogChangeFinished = 2;
+                            DialogsActivity.this.setDialogsListFrozen(true);
+                            DialogsActivity.this.dialogsAdapter.notifyItemChanged(0);
+                        } else {
+                            DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount + 1;
+                            DialogsActivity.this.dialogsAdapter.notifyItemInserted(0);
+                            if (!SharedConfig.archiveHidden && DialogsActivity.this.layoutManager.findFirstVisibleItemPosition() == 0) {
+                                DialogsActivity.this.listView.smoothScrollBy(0, -AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f));
+                            }
+                        }
+                        DialogsActivity.frozenDialogsList.add(0, DialogsActivity.getDialogsArray(DialogsActivity.this.currentAccount, DialogsActivity.this.dialogsType, DialogsActivity.this.folderId, false).get(0));
+                    } else if (addDialogToFolder == 1) {
+                        ViewHolder findViewHolderForAdapterPosition = DialogsActivity.this.listView.findViewHolderForAdapterPosition(0);
+                        if (findViewHolderForAdapterPosition != null) {
+                            View view = findViewHolderForAdapterPosition.itemView;
+                            if (view instanceof DialogCell) {
+                                DialogCell dialogCell = (DialogCell) view;
+                                dialogCell.checkCurrentDialogIndex(true);
+                                dialogCell.animateArchiveAvatar();
+                            }
                         }
                     }
-                    DialogsActivity.frozenDialogsList.add(0, DialogsActivity.getDialogsArray(DialogsActivity.this.currentAccount, DialogsActivity.this.dialogsType, DialogsActivity.this.folderId, false).get(0));
-                } else if (addDialogToFolder == 1) {
-                    ViewHolder findViewHolderForAdapterPosition = DialogsActivity.this.listView.findViewHolderForAdapterPosition(0);
-                    if (findViewHolderForAdapterPosition != null) {
-                        View view = findViewHolderForAdapterPosition.itemView;
-                        if (view instanceof DialogCell) {
-                            DialogCell dialogCell = (DialogCell) view;
-                            dialogCell.checkCurrentDialogIndex(true);
-                            dialogCell.animateArchiveAvatar();
-                        }
+                    SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                    String str = "archivehint_l";
+                    if (globalMainSettings.getBoolean(str, false) || SharedConfig.archiveHidden) {
+                        i5 = 1;
                     }
+                    if (i5 == 0) {
+                        globalMainSettings.edit().putBoolean(str, true).commit();
+                    }
+                    DialogsActivity.this.getUndoView().showWithAction(dialog.id, i5 != 0 ? 2 : 3, null, new -$$Lambda$DialogsActivity$SwipeController$YQ1mguBHuXIRhAK21aamsJthsAQ(this, dialog, i4));
                 }
-                SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-                String str = "archivehint_l";
-                if (globalMainSettings.getBoolean(str, false) || SharedConfig.archiveHidden) {
-                    i5 = 1;
+                if (DialogsActivity.this.folderId != 0 && DialogsActivity.frozenDialogsList.isEmpty()) {
+                    DialogsActivity.this.listView.setEmptyView(null);
+                    DialogsActivity.this.progressView.setVisibility(4);
                 }
-                if (i5 == 0) {
-                    globalMainSettings.edit().putBoolean(str, true).commit();
-                }
-                DialogsActivity.this.getUndoView().showWithAction(dialog.id, i5 != 0 ? 2 : 3, null, new -$$Lambda$DialogsActivity$SwipeController$YQ1mguBHuXIRhAK21aamsJthsAQ(this, dialog, i4));
-            }
-            if (DialogsActivity.this.folderId != 0 && DialogsActivity.frozenDialogsList.isEmpty()) {
-                DialogsActivity.this.listView.setEmptyView(null);
-                DialogsActivity.this.progressView.setVisibility(4);
             }
         }
 
@@ -1118,7 +1120,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             } else {
                 this.actionBar.setTitle(LocaleController.getString("AppName", NUM));
             }
-            this.actionBar.setSupportsHolidayImage(true);
+            if (this.folderId == 0) {
+                this.actionBar.setSupportsHolidayImage(true);
+            }
         }
         this.actionBar.setTitleActionRunnable(new -$$Lambda$DialogsActivity$g_ZetuAZEmHs4itgVWSuCgX-8K4(this));
         if (this.allowSwitchAccount && UserConfig.getActivatedAccountsCount() > 1) {

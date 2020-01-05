@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
@@ -168,7 +167,7 @@ public class ActionBar extends FrameLayout {
                     this.snowflakesEffect = new SnowflakesEffect();
                     this.titleTextView.invalidate();
                     invalidate();
-                } else if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                } else {
                     this.snowflakesEffect = null;
                     this.fireworksEffect = new FireworksEffect();
                     this.titleTextView.invalidate();

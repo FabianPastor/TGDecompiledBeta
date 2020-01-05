@@ -4979,19 +4979,21 @@ public class AlertsCreator {
     }
 
     private static void processCreate(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, BaseFragment baseFragment) {
-        AndroidUtilities.hideKeyboard(editTextBoldCursor);
-        ThemeInfo createNewTheme = Theme.createNewTheme(editTextBoldCursor.getText().toString());
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeListUpdated, new Object[0]);
-        new ThemeEditorView().show(baseFragment.getParentActivity(), createNewTheme);
-        alertDialog.dismiss();
-        SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-        String str = "themehint";
-        if (!globalMainSettings.getBoolean(str, false)) {
-            globalMainSettings.edit().putBoolean(str, true).commit();
-            try {
-                Toast.makeText(baseFragment.getParentActivity(), LocaleController.getString("CreateNewThemeHelp", NUM), 1).show();
-            } catch (Exception e) {
-                FileLog.e(e);
+        if (!(baseFragment == null || baseFragment.getParentActivity() == null)) {
+            AndroidUtilities.hideKeyboard(editTextBoldCursor);
+            ThemeInfo createNewTheme = Theme.createNewTheme(editTextBoldCursor.getText().toString());
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeListUpdated, new Object[0]);
+            new ThemeEditorView().show(baseFragment.getParentActivity(), createNewTheme);
+            alertDialog.dismiss();
+            SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+            String str = "themehint";
+            if (!globalMainSettings.getBoolean(str, false)) {
+                globalMainSettings.edit().putBoolean(str, true).commit();
+                try {
+                    Toast.makeText(baseFragment.getParentActivity(), LocaleController.getString("CreateNewThemeHelp", NUM), 1).show();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
             }
         }
     }

@@ -6122,7 +6122,7 @@ public class MessageObject {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:79:0x01da A:{Catch:{ Exception -> 0x01df }} */
-    private static void addUrlsByPattern(boolean r16, java.lang.CharSequence r17, boolean r18, int r19, int r20) {
+    public static void addUrlsByPattern(boolean r16, java.lang.CharSequence r17, boolean r18, int r19, int r20) {
         /*
         r0 = r17;
         r1 = r19;

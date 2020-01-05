@@ -1824,7 +1824,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             } else {
                 z = this.proximityTouched;
                 if (z) {
-                    if (!(this.playingMessageObject == null || ApplicationLoader.mainInterfacePaused || ((!this.playingMessageObject.isVoice() && !this.playingMessageObject.isRoundVideo()) || this.useFrontSpeaker || !NotificationsController.audioManager.isWiredHeadsetOn()))) {
+                    if (!(this.playingMessageObject == null || ApplicationLoader.mainInterfacePaused || ((!this.playingMessageObject.isVoice() && !this.playingMessageObject.isRoundVideo()) || this.useFrontSpeaker || NotificationsController.audioManager.isWiredHeadsetOn()))) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.d("start listen by proximity only");
                         }
@@ -5332,7 +5332,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
         MessageObject messageObject = (MessageObject) this.videoConvertQueue.get(0);
         synchronized (this.videoConvertSync) {
-            messageObject.videoEditedInfo.canceled = false;
+            if (messageObject != null) {
+                if (messageObject.videoEditedInfo != null) {
+                    messageObject.videoEditedInfo.canceled = false;
+                }
+            }
         }
         Intent intent = new Intent(ApplicationLoader.applicationContext, VideoEncodingService.class);
         intent.putExtra("path", messageObject.messageOwner.attachPath);
@@ -5453,236 +5457,236 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         instance.postNotificationName(i, objArr);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x00ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00fe  */
-    private boolean convertVideo(org.telegram.messenger.MessageObject r31) {
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x00ff  */
+    private boolean convertVideo(org.telegram.messenger.MessageObject r32) {
         /*
-        r30 = this;
-        r9 = r30;
-        r0 = r31;
-        if (r0 == 0) goto L_0x014d;
-    L_0x0006:
-        r2 = r0.videoEditedInfo;
-        if (r2 != 0) goto L_0x000c;
+        r31 = this;
+        r9 = r31;
+        r0 = r32;
+        r1 = r0.videoEditedInfo;
+        if (r0 == 0) goto L_0x0150;
+    L_0x0008:
+        if (r1 != 0) goto L_0x000c;
     L_0x000a:
-        goto L_0x014d;
+        goto L_0x0150;
     L_0x000c:
-        r3 = r2.originalPath;
-        r4 = r2.startTime;
-        r6 = r2.endTime;
-        r8 = r2.resultWidth;
-        r10 = r2.resultHeight;
-        r11 = r2.rotationValue;
-        r12 = r2.originalWidth;
-        r13 = r2.originalHeight;
-        r14 = r2.framerate;
-        r2 = r2.bitrate;
-        r18 = r2;
-        r1 = r31.getDialogId();
-        r2 = (int) r1;
-        if (r2 != 0) goto L_0x002b;
+        r3 = r1.originalPath;
+        r4 = r1.startTime;
+        r6 = r1.endTime;
+        r8 = r1.resultWidth;
+        r10 = r1.resultHeight;
+        r11 = r1.rotationValue;
+        r12 = r1.originalWidth;
+        r13 = r1.originalHeight;
+        r14 = r1.framerate;
+        r15 = r1.bitrate;
+        r16 = r3;
+        r2 = r32.getDialogId();
+        r3 = (int) r2;
+        if (r3 != 0) goto L_0x002b;
     L_0x0029:
-        r2 = 1;
+        r3 = 1;
         goto L_0x002c;
     L_0x002b:
-        r2 = 0;
+        r3 = 0;
     L_0x002c:
-        r15 = new java.io.File;
-        r1 = r0.messageOwner;
-        r1 = r1.attachPath;
-        r15.<init>(r1);
-        r1 = r15.exists();
-        if (r1 == 0) goto L_0x003e;
-    L_0x003b:
-        r15.delete();
-    L_0x003e:
-        if (r3 != 0) goto L_0x0042;
+        r2 = new java.io.File;
+        r17 = r8;
+        r8 = r0.messageOwner;
+        r8 = r8.attachPath;
+        r2.<init>(r8);
+        r8 = r2.exists();
+        if (r8 == 0) goto L_0x0040;
+    L_0x003d:
+        r2.delete();
     L_0x0040:
-        r3 = "";
+        if (r16 != 0) goto L_0x0046;
     L_0x0042:
-        r16 = 0;
-        r1 = (r4 > r16 ? 1 : (r4 == r16 ? 0 : -1));
-        if (r1 <= 0) goto L_0x0053;
-    L_0x0048:
-        r1 = (r6 > r16 ? 1 : (r6 == r16 ? 0 : -1));
-        if (r1 <= 0) goto L_0x0053;
+        r8 = "";
+        r16 = r8;
+    L_0x0046:
+        r18 = 0;
+        r8 = (r4 > r18 ? 1 : (r4 == r18 ? 0 : -1));
+        if (r8 <= 0) goto L_0x0057;
     L_0x004c:
-        r16 = r6 - r4;
+        r8 = (r6 > r18 ? 1 : (r6 == r18 ? 0 : -1));
+        if (r8 <= 0) goto L_0x0057;
+    L_0x0050:
+        r18 = r6 - r4;
         r21 = r6;
-        r24 = r16;
+        r24 = r18;
         goto L_0x0070;
-    L_0x0053:
-        r1 = (r6 > r16 ? 1 : (r6 == r16 ? 0 : -1));
-        if (r1 <= 0) goto L_0x005c;
     L_0x0057:
+        r8 = (r6 > r18 ? 1 : (r6 == r18 ? 0 : -1));
+        if (r8 <= 0) goto L_0x0060;
+    L_0x005b:
         r21 = r6;
         r24 = r21;
         goto L_0x0070;
-    L_0x005c:
-        r1 = (r4 > r16 ? 1 : (r4 == r16 ? 0 : -1));
-        if (r1 <= 0) goto L_0x0068;
     L_0x0060:
-        r1 = r0.videoEditedInfo;
+        r8 = (r4 > r18 ? 1 : (r4 == r18 ? 0 : -1));
+        if (r8 <= 0) goto L_0x006a;
+    L_0x0064:
         r21 = r6;
         r6 = r1.originalDuration;
         r6 = r6 - r4;
         goto L_0x006e;
-    L_0x0068:
+    L_0x006a:
         r21 = r6;
-        r1 = r0.videoEditedInfo;
         r6 = r1.originalDuration;
     L_0x006e:
         r24 = r6;
     L_0x0070:
-        r1 = 59;
-        if (r14 != 0) goto L_0x0079;
+        r6 = 59;
+        if (r14 != 0) goto L_0x0077;
     L_0x0074:
-        r1 = 25;
-        r17 = 25;
-        goto L_0x0080;
+        r6 = 25;
+        goto L_0x007b;
+    L_0x0077:
+        if (r14 <= r6) goto L_0x007a;
     L_0x0079:
-        if (r14 <= r1) goto L_0x007e;
+        goto L_0x007b;
+    L_0x007a:
+        r6 = r14;
     L_0x007b:
-        r17 = 59;
-        goto L_0x0080;
-    L_0x007e:
-        r17 = r14;
-    L_0x0080:
-        r1 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
-        r6 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
-        r7 = 90;
-        if (r11 != r7) goto L_0x008e;
+        r7 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        r8 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+        r14 = 90;
+        if (r11 != r14) goto L_0x008b;
+    L_0x0083:
+        r7 = r10;
+        r8 = r17;
+        r14 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
     L_0x0088:
-        r1 = r8;
+        r17 = 0;
+        goto L_0x009f;
+    L_0x008b:
+        if (r11 != r8) goto L_0x0093;
+    L_0x008d:
         r8 = r10;
-        r6 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
-    L_0x008c:
-        r7 = 0;
-        goto L_0x009c;
-    L_0x008e:
-        if (r11 != r6) goto L_0x0092;
-    L_0x0090:
-        r1 = r10;
-        goto L_0x008c;
-    L_0x0092:
-        if (r11 != r1) goto L_0x0099;
-    L_0x0094:
-        r1 = r8;
-        r8 = r10;
-        r6 = 90;
-        goto L_0x008c;
+        r7 = r17;
+        r14 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+        goto L_0x0088;
+    L_0x0093:
+        if (r11 != r7) goto L_0x0099;
+    L_0x0095:
+        r7 = r10;
+        r8 = r17;
+        goto L_0x0088;
     L_0x0099:
-        r1 = r10;
-        r7 = r11;
-        r6 = 0;
-    L_0x009c:
-        if (r8 != r12) goto L_0x00b8;
-    L_0x009e:
-        if (r1 != r13) goto L_0x00b8;
-    L_0x00a0:
-        if (r6 != 0) goto L_0x00b8;
-    L_0x00a2:
-        r6 = r0.videoEditedInfo;
-        r6 = r6.roundVideo;
-        if (r6 != 0) goto L_0x00b8;
-    L_0x00a8:
-        r6 = android.os.Build.VERSION.SDK_INT;
-        r10 = 18;
-        if (r6 < r10) goto L_0x00b5;
-    L_0x00ae:
+        r8 = r10;
+        r7 = r17;
+        r14 = 0;
+        r17 = r11;
+    L_0x009f:
+        if (r7 != r12) goto L_0x00b9;
+    L_0x00a1:
+        if (r8 != r13) goto L_0x00b9;
+    L_0x00a3:
+        if (r14 != 0) goto L_0x00b9;
+    L_0x00a5:
+        r10 = r1.roundVideo;
+        if (r10 != 0) goto L_0x00b9;
+    L_0x00a9:
+        r10 = android.os.Build.VERSION.SDK_INT;
+        r11 = 18;
+        if (r10 < r11) goto L_0x00b6;
+    L_0x00af:
         r10 = -1;
-        r6 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
-        if (r6 == 0) goto L_0x00b5;
-    L_0x00b4:
-        goto L_0x00b8;
+        r12 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
+        if (r12 == 0) goto L_0x00b6;
     L_0x00b5:
+        goto L_0x00b9;
+    L_0x00b6:
         r23 = 0;
-        goto L_0x00ba;
-    L_0x00b8:
+        goto L_0x00bb;
+    L_0x00b9:
         r23 = 1;
-    L_0x00ba:
-        r6 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r10 = "videoconvert";
-        r11 = 0;
-        r6 = r6.getSharedPreferences(r10, r11);
-        r28 = java.lang.System.currentTimeMillis();
+    L_0x00bb:
+        r10 = org.telegram.messenger.ApplicationLoader.applicationContext;
+        r11 = "videoconvert";
+        r12 = 0;
+        r28 = r10.getSharedPreferences(r11, r12);
+        r29 = java.lang.System.currentTimeMillis();
         r10 = new org.telegram.messenger.MediaController$8;
         r26 = r10;
-        r10.<init>(r0, r15);
-        r10 = r0.videoEditedInfo;
-        r11 = 1;
-        r10.videoConvertFirstWrite = r11;
+        r10.<init>(r1, r2, r0);
+        r10 = 1;
+        r1.videoConvertFirstWrite = r10;
         r11 = new org.telegram.messenger.video.MediaCodecVideoConvertor;
         r10 = r11;
         r11.<init>();
-        r11 = r3;
-        r12 = r15;
-        r13 = r7;
-        r14 = r2;
+        r11 = r16;
+        r12 = r2;
+        r13 = r17;
+        r14 = r3;
         r3 = r15;
-        r15 = r8;
-        r16 = r1;
+        r15 = r7;
+        r16 = r8;
+        r17 = r6;
+        r18 = r3;
         r19 = r4;
-        r1 = r10.convertVideo(r11, r12, r13, r14, r15, r16, r17, r18, r19, r21, r23, r24, r26);
-        r2 = r0.videoEditedInfo;
-        r2 = r2.canceled;
-        if (r2 != 0) goto L_0x00fa;
-    L_0x00ee:
-        r4 = r9.videoConvertSync;
-        monitor-enter(r4);
-        r2 = r0.videoEditedInfo;	 Catch:{ all -> 0x00f7 }
-        r2 = r2.canceled;	 Catch:{ all -> 0x00f7 }
-        monitor-exit(r4);	 Catch:{ all -> 0x00f7 }
-        goto L_0x00fa;
-    L_0x00f7:
+        r3 = r10.convertVideo(r11, r12, r13, r14, r15, r16, r17, r18, r19, r21, r23, r24, r26);
+        r4 = r1.canceled;
+        if (r4 != 0) goto L_0x00fb;
+    L_0x00f1:
+        r5 = r9.videoConvertSync;
+        monitor-enter(r5);
+        r4 = r1.canceled;	 Catch:{ all -> 0x00f8 }
+        monitor-exit(r5);	 Catch:{ all -> 0x00f8 }
+        goto L_0x00fb;
+    L_0x00f8:
         r0 = move-exception;
-        monitor-exit(r4);	 Catch:{ all -> 0x00f7 }
+        monitor-exit(r5);	 Catch:{ all -> 0x00f8 }
         throw r0;
-    L_0x00fa:
-        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r4 == 0) goto L_0x0121;
-    L_0x00fe:
-        r4 = new java.lang.StringBuilder;
-        r4.<init>();
+    L_0x00fb:
+        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r1 == 0) goto L_0x0122;
+    L_0x00ff:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
         r5 = "time=";
-        r4.append(r5);
-        r7 = java.lang.System.currentTimeMillis();
-        r7 = r7 - r28;
-        r4.append(r7);
+        r1.append(r5);
+        r5 = java.lang.System.currentTimeMillis();
+        r5 = r5 - r29;
+        r1.append(r5);
         r5 = " canceled=";
-        r4.append(r5);
-        r4.append(r2);
-        r4 = r4.toString();
-        org.telegram.messenger.FileLog.d(r4);
-    L_0x0121:
-        r4 = r6.edit();
+        r1.append(r5);
+        r1.append(r4);
+        r1 = r1.toString();
+        org.telegram.messenger.FileLog.d(r1);
+    L_0x0122:
+        r1 = r28.edit();
         r5 = "isPreviousOk";
         r6 = 1;
-        r4 = r4.putBoolean(r5, r6);
-        r4.apply();
-        r4 = 1;
-        r7 = r3.length();
-        if (r1 != 0) goto L_0x013c;
-    L_0x0136:
-        if (r2 == 0) goto L_0x0139;
-    L_0x0138:
-        goto L_0x013c;
+        r1 = r1.putBoolean(r5, r6);
+        r1.apply();
+        r5 = 1;
+        r7 = r2.length();
+        if (r3 != 0) goto L_0x013d;
+    L_0x0137:
+        if (r4 == 0) goto L_0x013a;
     L_0x0139:
+        goto L_0x013d;
+    L_0x013a:
         r27 = 0;
-        goto L_0x013e;
-    L_0x013c:
+        goto L_0x013f;
+    L_0x013d:
         r27 = 1;
-    L_0x013e:
+    L_0x013f:
         r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r1 = r31;
+        r3 = r2;
         r11 = 1;
-        r1 = r30;
-        r2 = r31;
+        r2 = r32;
+        r4 = r5;
         r5 = r7;
         r7 = r27;
         r8 = r10;
         r1.didWriteData(r2, r3, r4, r5, r7, r8);
         return r11;
-    L_0x014d:
+    L_0x0150:
         r0 = 0;
         return r0;
         */
