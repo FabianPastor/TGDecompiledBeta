@@ -1064,7 +1064,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         DialogsActivity.this.floatingButtonTranslation = (float) AndroidUtilities.dp(100.0f);
                         DialogsActivity.this.floatingButtonHideProgress = 1.0f;
                         DialogsActivity.this.updateFloatingButtonOffset();
-                        DialogsActivity.this.hideFloatingButton(false);
                     }
                     DialogsActivity.this.showSearch(false, true);
                 }
@@ -1163,11 +1162,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         DialogsActivity.this.perfromSelectedDialogsAction(i, true);
                     }
                 } else if (DialogsActivity.this.getParentActivity() != null) {
-                    DialogsActivityDelegate access$7800 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$7700 = DialogsActivity.this.delegate;
                     LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                     launchActivity.switchToAccount(i - 10, true);
                     DialogsActivity dialogsActivity = new DialogsActivity(DialogsActivity.this.arguments);
-                    dialogsActivity.setDelegate(access$7800);
+                    dialogsActivity.setDelegate(access$7700);
                     launchActivity.presentFragment(dialogsActivity, false, true);
                 }
             }
@@ -2440,6 +2439,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             DialogsActivity.this.searchListView.hide();
                             DialogsActivity.this.listView.show();
                             DialogsActivity.this.dialogsSearchAdapter.searchDialogs(null);
+                            if (!DialogsActivity.this.onlySelect) {
+                                DialogsActivity.this.hideFloatingButton(false);
+                            }
                         }
                         DialogsActivity.this.listView.setVerticalScrollBarEnabled(true);
                         DialogsActivity.this.searchListView.setVerticalScrollBarEnabled(true);

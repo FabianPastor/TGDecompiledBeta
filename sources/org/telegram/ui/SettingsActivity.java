@@ -1768,7 +1768,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (i == 6) {
                     MessagesStorage.getInstance(SettingsActivity.this.currentAccount).clearSentMedia();
                     SharedConfig.setNoSoundHintShowed(false);
-                    MessagesController.getGlobalMainSettings().edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").commit();
+                    MessagesController.getGlobalMainSettings().edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("themehint").commit();
                     SharedConfig.textSelectionHintShows = 0;
                 } else if (i == 7) {
                     VoIPHelper.showCallDebugSettings(SettingsActivity.this.getParentActivity());

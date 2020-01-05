@@ -4025,13 +4025,44 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         if ((!this.drawSelectionBackground && this.currentMessagesGroup == null) || (this.currentMessagesGroup != null && !this.delegate.hasSelectedMessages())) {
             return false;
         }
-        if (this.currentMessageObject.hasValidGroupId()) {
-            ViewGroup viewGroup = (ViewGroup) getParent();
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                View childAt = viewGroup.getChildAt(i);
-                if (childAt instanceof ChatMessageCell) {
-                    ChatMessageCell chatMessageCell = (ChatMessageCell) childAt;
-                    if (!(chatMessageCell.getCurrentMessagesGroup() == null || chatMessageCell.getCurrentMessagesGroup().groupId != this.currentMessagesGroup.groupId || (chatMessageCell.getCurrentPosition().flags & 8) == 0 || (chatMessageCell.getCurrentPosition().flags & 1) == 0)) {
+        int dp;
+        if (!this.currentMessageObject.hasValidGroupId() || this.currentMessagesGroup == null) {
+            if (hasCaptionLayout()) {
+                textSelectionHelper.setIsDescription(false);
+                textSelectionHelper.setMaybeTextCord(this.captionX, this.captionY);
+            } else if (this.descriptionLayout == null || motionEvent.getY() <= ((float) this.descriptionY)) {
+                textSelectionHelper.setIsDescription(false);
+                textSelectionHelper.setMaybeTextCord(this.textX, this.textY);
+            } else {
+                int dp2;
+                textSelectionHelper.setIsDescription(true);
+                if (this.hasGamePreview) {
+                    dp2 = this.unmovedTextX - AndroidUtilities.dp(10.0f);
+                } else {
+                    if (this.hasInvoicePreview) {
+                        dp2 = this.unmovedTextX;
+                        dp = AndroidUtilities.dp(1.0f);
+                    } else {
+                        dp2 = this.unmovedTextX;
+                        dp = AndroidUtilities.dp(1.0f);
+                    }
+                    dp2 += dp;
+                }
+                textSelectionHelper.setMaybeTextCord((dp2 + AndroidUtilities.dp(10.0f)) + this.descriptionX, this.descriptionY);
+            }
+            textSelectionHelper.setMessageObject(this);
+            return textSelectionHelper.onTouchEvent(motionEvent);
+        }
+        ViewGroup viewGroup = (ViewGroup) getParent();
+        for (dp = 0; dp < viewGroup.getChildCount(); dp++) {
+            View childAt = viewGroup.getChildAt(dp);
+            if (childAt instanceof ChatMessageCell) {
+                ChatMessageCell chatMessageCell = (ChatMessageCell) childAt;
+                GroupedMessages currentMessagesGroup = chatMessageCell.getCurrentMessagesGroup();
+                GroupedMessagePosition currentPosition = chatMessageCell.getCurrentPosition();
+                if (currentMessagesGroup != null && currentMessagesGroup.groupId == this.currentMessagesGroup.groupId) {
+                    int i = currentPosition.flags;
+                    if (!((i & 8) == 0 || (i & 1) == 0)) {
                         textSelectionHelper.setMaybeTextCord(chatMessageCell.captionX, chatMessageCell.captionY);
                         textSelectionHelper.setMessageObject(chatMessageCell);
                         if (chatMessageCell == this) {
@@ -4042,34 +4073,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                 }
             }
-            return false;
         }
-        if (hasCaptionLayout()) {
-            textSelectionHelper.setIsDescription(false);
-            textSelectionHelper.setMaybeTextCord(this.captionX, this.captionY);
-        } else if (this.descriptionLayout == null || motionEvent.getY() <= ((float) this.descriptionY)) {
-            textSelectionHelper.setIsDescription(false);
-            textSelectionHelper.setMaybeTextCord(this.textX, this.textY);
-        } else {
-            int dp;
-            textSelectionHelper.setIsDescription(true);
-            if (this.hasGamePreview) {
-                dp = this.unmovedTextX - AndroidUtilities.dp(10.0f);
-            } else {
-                int dp2;
-                if (this.hasInvoicePreview) {
-                    dp = this.unmovedTextX;
-                    dp2 = AndroidUtilities.dp(1.0f);
-                } else {
-                    dp = this.unmovedTextX;
-                    dp2 = AndroidUtilities.dp(1.0f);
-                }
-                dp += dp2;
-            }
-            textSelectionHelper.setMaybeTextCord((dp + AndroidUtilities.dp(10.0f)) + this.descriptionX, this.descriptionY);
-        }
-        textSelectionHelper.setMessageObject(this);
-        return textSelectionHelper.onTouchEvent(motionEvent);
+        return false;
     }
 
     private void updateSelectionTextPosition() {

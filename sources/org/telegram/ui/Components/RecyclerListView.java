@@ -754,8 +754,10 @@ public class RecyclerListView extends RecyclerView {
                 RecyclerListView.this.longPressCalled = false;
                 ItemAnimator itemAnimator = RecyclerListView.this.getItemAnimator();
                 if ((RecyclerListView.this.allowItemsInteractionDuringAnimation || itemAnimator == null || !itemAnimator.isRunning()) && RecyclerListView.this.allowSelectChildAtPosition(x, y)) {
-                    RecyclerListView recyclerListView2 = RecyclerListView.this;
-                    recyclerListView2.currentChildView = recyclerListView2.findChildViewUnder(x, y);
+                    View findChildViewUnder = RecyclerListView.this.findChildViewUnder(x, y);
+                    if (findChildViewUnder != null && RecyclerListView.this.allowSelectChildAtPosition(findChildViewUnder)) {
+                        RecyclerListView.this.currentChildView = findChildViewUnder;
+                    }
                 }
                 if (RecyclerListView.this.currentChildView instanceof ViewGroup) {
                     x = motionEvent.getX() - ((float) RecyclerListView.this.currentChildView.getLeft());
@@ -821,8 +823,8 @@ public class RecyclerListView extends RecyclerView {
                     RecyclerListView.this.selectChildRunnable = null;
                 }
                 View access$300 = RecyclerListView.this.currentChildView;
-                RecyclerListView recyclerListView3 = RecyclerListView.this;
-                recyclerListView3.onChildPressed(recyclerListView3.currentChildView, 0.0f, 0.0f, false);
+                RecyclerListView recyclerListView2 = RecyclerListView.this;
+                recyclerListView2.onChildPressed(recyclerListView2.currentChildView, 0.0f, 0.0f, false);
                 RecyclerListView.this.currentChildView = null;
                 RecyclerListView.this.interceptedByChild = false;
                 RecyclerListView.this.removeSelection(access$300, motionEvent2);
@@ -1007,6 +1009,11 @@ public class RecyclerListView extends RecyclerView {
 
     /* Access modifiers changed, original: protected */
     public boolean allowSelectChildAtPosition(float f, float f2) {
+        return true;
+    }
+
+    /* Access modifiers changed, original: protected */
+    public boolean allowSelectChildAtPosition(View view) {
         return true;
     }
 

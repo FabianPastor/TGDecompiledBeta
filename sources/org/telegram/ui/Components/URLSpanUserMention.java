@@ -26,7 +26,9 @@ public class URLSpanUserMention extends URLSpanNoUnderline {
     public void updateDrawState(TextPaint textPaint) {
         super.updateDrawState(textPaint);
         int i = this.currentType;
-        if (i == 2) {
+        if (i == 3) {
+            textPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkText"));
+        } else if (i == 2) {
             textPaint.setColor(-1);
         } else if (i == 1) {
             textPaint.setColor(Theme.getColor("chat_messageLinkOut"));
