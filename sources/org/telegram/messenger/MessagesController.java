@@ -6391,10 +6391,11 @@ public class MessagesController extends BaseController implements NotificationCe
         int i2 = 0;
         for (i = 0; i < this.allDialogs.size(); i++) {
             Dialog dialog2 = (Dialog) this.allDialogs.get(i);
-            if (!dialog2.pinned) {
+            if (dialog2.pinned) {
+                i2 = Math.max(dialog2.pinnedNum, i2);
+            } else if (dialog2.id != this.proxyDialogId) {
                 break;
             }
-            i2 = Math.max(dialog2.pinnedNum, i2);
         }
         tL_dialogFolder.pinnedNum = i2 + 1;
         TL_messages_dialogs tL_messages_dialogs = new TL_messages_dialogs();
@@ -12137,16 +12138,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 for (int i3 = 0; i3 < size; i3++) {
                     Dialog dialog = (Dialog) dialogs.get(i3);
                     if (!(dialog instanceof TL_dialogFolder)) {
-                        if (!dialog.pinned) {
+                        if (dialog.pinned) {
+                            getMessagesStorage().setDialogPinned(dialog.id, dialog.pinnedNum);
+                            if (((int) dialog.id) != 0) {
+                                InputPeer inputPeer = getInputPeer((int) ((Dialog) dialogs.get(i3)).id);
+                                TL_inputDialogPeer tL_inputDialogPeer = new TL_inputDialogPeer();
+                                tL_inputDialogPeer.peer = inputPeer;
+                                tL_messages_reorderPinnedDialogs.order.add(tL_inputDialogPeer);
+                                i2 += tL_inputDialogPeer.getObjectSize();
+                            }
+                        } else if (dialog.id != this.proxyDialogId) {
                             break;
-                        }
-                        getMessagesStorage().setDialogPinned(dialog.id, dialog.pinnedNum);
-                        if (((int) dialog.id) != 0) {
-                            InputPeer inputPeer = getInputPeer((int) ((Dialog) dialogs.get(i3)).id);
-                            TL_inputDialogPeer tL_inputDialogPeer = new TL_inputDialogPeer();
-                            tL_inputDialogPeer.peer = inputPeer;
-                            tL_messages_reorderPinnedDialogs.order.add(tL_inputDialogPeer);
-                            i2 += tL_inputDialogPeer.getObjectSize();
                         }
                     }
                 }
@@ -12210,10 +12212,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             for (int i4 = 0; i4 < dialogs.size(); i4++) {
                 Dialog dialog2 = (Dialog) dialogs.get(i4);
                 if (!(dialog2 instanceof TL_dialogFolder)) {
-                    if (!dialog2.pinned) {
+                    if (dialog2.pinned) {
+                        i3 = Math.max(dialog2.pinnedNum, i3);
+                    } else if (dialog2.id != this.proxyDialogId) {
                         break;
                     }
-                    i3 = Math.max(dialog2.pinnedNum, i3);
                 }
             }
             dialog.pinnedNum = i3 + 1;
@@ -12371,6 +12374,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public /* synthetic */ void lambda$null$236$MessagesController(int i, ArrayList arrayList, boolean z, TL_messages_peerDialogs tL_messages_peerDialogs, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
         int i2;
         Dialog dialog;
+        long j;
         Object obj;
         int size;
         int i3 = i;
@@ -12385,21 +12389,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         for (i2 = 0; i2 < dialogs.size(); i2++) {
             dialog = (Dialog) dialogs.get(i2);
             if (!(dialog instanceof TL_dialogFolder)) {
-                if (((int) dialog.id) == 0) {
+                j = dialog.id;
+                if (((int) j) == 0) {
                     if (i4 < arrayList.size()) {
                         arrayList2.add(i4, dialog);
                     } else {
                         arrayList2.add(dialog);
                     }
                     i4++;
-                } else if (!dialog.pinned) {
-                    break;
-                } else {
+                } else if (dialog.pinned) {
                     i5 = Math.max(dialog.pinnedNum, i5);
                     dialog.pinned = false;
                     dialog.pinnedNum = 0;
                     i4++;
                     obj2 = 1;
+                } else if (j != this.proxyDialogId) {
+                    break;
                 }
             }
         }
@@ -12428,7 +12433,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     this.dialogMessage.put(dialog2.id, messageObject);
                     if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
                         this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
-                        long j = messageObject.messageOwner.random_id;
+                        j = messageObject.messageOwner.random_id;
                         if (j != 0) {
                             this.dialogMessagesByRandomIds.put(j, messageObject);
                         }
