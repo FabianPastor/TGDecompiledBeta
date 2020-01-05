@@ -88,7 +88,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     protected boolean multiselect = true;
     private boolean parentIsScrolling;
     public RecyclerListView parentView;
-    protected Path path = new Path();
+    protected PathWithSavedBottom path = new PathWithSavedBottom();
     private ActionBarPopupWindowLayout popupLayout;
     private Rect popupRect;
     private ActionBarPopupWindow popupWindow;
@@ -274,7 +274,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         void onTextCopied();
     }
 
-    public static class IngnoreCopySpanable {
+    public static class IgnoreCopySpannable {
     }
 
     private static class LayoutBlock {
@@ -287,6 +287,30 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
 
         /* synthetic */ LayoutBlock(AnonymousClass1 anonymousClass1) {
             this();
+        }
+    }
+
+    private static class PathWithSavedBottom extends Path {
+        float lastBottom;
+
+        private PathWithSavedBottom() {
+            this.lastBottom = 0.0f;
+        }
+
+        /* synthetic */ PathWithSavedBottom(AnonymousClass1 anonymousClass1) {
+            this();
+        }
+
+        public void reset() {
+            super.reset();
+            this.lastBottom = 0.0f;
+        }
+
+        public void addRect(float f, float f2, float f3, float f4, Direction direction) {
+            super.addRect(f, f2, f3, f4, direction);
+            if (f4 > this.lastBottom) {
+                this.lastBottom = f4;
+            }
         }
     }
 
@@ -1286,7 +1310,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 LayoutBlock layoutBlock;
                 int i2;
                 int dp = AndroidUtilities.dp(22.0f);
-                int access$2000 = TextSelectionHelper.this.topOffset;
+                int access$2100 = TextSelectionHelper.this.topOffset;
                 TextSelectionHelper.this.pickEndView();
                 if (TextSelectionHelper.this.selectedView != null) {
                     canvas.save();
@@ -1320,7 +1344,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                             y += lineBottom;
                             float f;
                             float interpolation;
-                            if (y <= ((float) access$2000) || y >= ((float) textSelectionHelper3.parentView.getMeasuredHeight())) {
+                            if (y <= ((float) access$2100) || y >= ((float) textSelectionHelper3.parentView.getMeasuredHeight())) {
                                 TextSelectionHelper.this.endArea.setEmpty();
                             } else if (staticLayout.isRtlCharAt(TextSelectionHelper.this.selectionEnd)) {
                                 canvas.save();
@@ -1390,7 +1414,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                             x += lineBottom2;
                             float interpolation2;
                             float f4;
-                            if (x <= ((float) access$2000) || x >= ((float) textSelectionHelper3.parentView.getMeasuredHeight())) {
+                            if (x <= ((float) access$2100) || x >= ((float) textSelectionHelper3.parentView.getMeasuredHeight())) {
                                 if (x > 0.0f && x - ((float) TextSelectionHelper.this.getLineHeight()) < ((float) TextSelectionHelper.this.parentView.getMeasuredHeight())) {
                                     i2++;
                                 }
@@ -2035,63 +2059,96 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 }
                 i2 = this.startViewPosition;
                 int i4;
-                int i5;
                 CharSequence charSequence;
+                int i5;
                 CharSequence charSequence2;
                 if (i3 == i2) {
                     i = i2 == i ? this.endViewChildPosition : this.childCountByPosition.get(i3) - 1;
-                    i4 = this.startViewChildPosition;
-                    while (i4 <= i) {
-                        i5 = (i4 << 16) + i3;
-                        charSequence = (CharSequence) this.textByPosition.get(i5);
-                        if (this.startViewPosition == this.endViewPosition && i4 == this.endViewChildPosition && i4 == this.startViewChildPosition) {
-                            spannableStringBuilder.append(charSequence.subSequence(this.startViewOffset, this.endViewOffset));
+                    i2 = this.startViewChildPosition;
+                    while (i2 <= i) {
+                        i4 = (i2 << 16) + i3;
+                        charSequence = (CharSequence) this.textByPosition.get(i4);
+                        CharSequence charSequence3;
+                        if (this.startViewPosition == this.endViewPosition && i2 == this.endViewChildPosition && i2 == this.startViewChildPosition) {
+                            i4 = this.endViewOffset;
+                            int i6 = this.startViewOffset;
+                            if (i6 < charSequence.length()) {
+                                if (i4 > charSequence.length()) {
+                                    i4 = charSequence.length();
+                                }
+                                spannableStringBuilder.append(charSequence.subSequence(i6, i4));
+                                spannableStringBuilder.append(10);
+                            }
+                        } else if (this.startViewPosition == this.endViewPosition && i2 == this.endViewChildPosition) {
+                            charSequence3 = (CharSequence) this.prefixTextByPosition.get(i4);
+                            if (charSequence3 != null) {
+                                spannableStringBuilder.append(charSequence3).append(' ');
+                            }
+                            i4 = this.endViewOffset;
+                            if (i4 > charSequence.length()) {
+                                i4 = charSequence.length();
+                            }
+                            spannableStringBuilder.append(charSequence.subSequence(0, i4));
                             spannableStringBuilder.append(10);
-                        } else if (i4 == this.startViewChildPosition) {
-                            spannableStringBuilder.append(charSequence.subSequence(this.startViewOffset, charSequence.length()));
-                            spannableStringBuilder.append(10);
+                        } else if (i2 == this.startViewChildPosition) {
+                            i4 = this.startViewOffset;
+                            if (i4 < charSequence.length()) {
+                                spannableStringBuilder.append(charSequence.subSequence(i4, charSequence.length()));
+                                spannableStringBuilder.append(10);
+                            }
                         } else {
-                            charSequence2 = (CharSequence) this.prefixTextByPosition.get(i5);
-                            if (charSequence2 != null) {
-                                spannableStringBuilder.append(charSequence2).append(' ');
+                            charSequence3 = (CharSequence) this.prefixTextByPosition.get(i4);
+                            if (charSequence3 != null) {
+                                spannableStringBuilder.append(charSequence3).append(' ');
                             }
                             spannableStringBuilder.append(charSequence);
                             spannableStringBuilder.append(10);
                         }
-                        i4++;
+                        i2++;
                     }
                 } else if (i3 == i) {
                     i = 0;
                     while (i <= this.endViewChildPosition) {
                         i5 = (i << 16) + i3;
-                        charSequence = (CharSequence) this.textByPosition.get(i5);
+                        charSequence2 = (CharSequence) this.textByPosition.get(i5);
                         if (this.startViewPosition == this.endViewPosition && i == this.endViewChildPosition && i == this.startViewChildPosition) {
-                            spannableStringBuilder.append(charSequence.subSequence(this.startViewOffset, this.endViewOffset));
-                            spannableStringBuilder.append(10);
-                        } else if (i == this.endViewChildPosition) {
-                            charSequence2 = (CharSequence) this.prefixTextByPosition.get(i5);
-                            if (charSequence2 != null) {
-                                spannableStringBuilder.append(charSequence2).append(' ');
+                            i5 = this.endViewOffset;
+                            i4 = this.startViewOffset;
+                            if (i4 < charSequence2.length()) {
+                                if (i5 > charSequence2.length()) {
+                                    i5 = charSequence2.length();
+                                }
+                                spannableStringBuilder.append(charSequence2.subSequence(i4, i5));
+                                spannableStringBuilder.append(10);
                             }
-                            spannableStringBuilder.append(charSequence.subSequence(0, this.endViewOffset));
+                        } else if (i == this.endViewChildPosition) {
+                            charSequence = (CharSequence) this.prefixTextByPosition.get(i5);
+                            if (charSequence != null) {
+                                spannableStringBuilder.append(charSequence).append(' ');
+                            }
+                            i5 = this.endViewOffset;
+                            if (i5 > charSequence2.length()) {
+                                i5 = charSequence2.length();
+                            }
+                            spannableStringBuilder.append(charSequence2.subSequence(0, i5));
                             spannableStringBuilder.append(10);
                         } else {
-                            charSequence2 = (CharSequence) this.prefixTextByPosition.get(i5);
-                            if (charSequence2 != null) {
-                                spannableStringBuilder.append(charSequence2).append(' ');
+                            charSequence = (CharSequence) this.prefixTextByPosition.get(i5);
+                            if (charSequence != null) {
+                                spannableStringBuilder.append(charSequence).append(' ');
                             }
-                            spannableStringBuilder.append(charSequence);
+                            spannableStringBuilder.append(charSequence2);
                             spannableStringBuilder.append(10);
                         }
                         i++;
                     }
                 } else {
                     i = this.childCountByPosition.get(i3);
-                    for (i4 = this.startViewChildPosition; i4 < i; i4++) {
-                        i5 = (i4 << 16) + i3;
-                        charSequence = (CharSequence) this.prefixTextByPosition.get(i5);
-                        if (charSequence != null) {
-                            spannableStringBuilder.append(charSequence).append(' ');
+                    for (int i7 = this.startViewChildPosition; i7 < i; i7++) {
+                        i5 = (i7 << 16) + i3;
+                        charSequence2 = (CharSequence) this.prefixTextByPosition.get(i5);
+                        if (charSequence2 != null) {
+                            spannableStringBuilder.append(charSequence2).append(' ');
                         }
                         spannableStringBuilder.append((CharSequence) this.textByPosition.get(i5));
                         spannableStringBuilder.append(10);
@@ -2102,7 +2159,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             if (spannableStringBuilder.length() <= 0) {
                 return null;
             }
-            for (Object obj : (IngnoreCopySpanable[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length() - 1, IngnoreCopySpanable.class)) {
+            for (Object obj : (IgnoreCopySpannable[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length() - 1, IgnoreCopySpannable.class)) {
                 spannableStringBuilder.delete(spannableStringBuilder.getSpanStart(obj), spannableStringBuilder.getSpanEnd(obj));
             }
             return spannableStringBuilder.subSequence(0, spannableStringBuilder.length() - 1);
@@ -3453,20 +3510,19 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
 
     private void drawLine(Canvas canvas, StaticLayout staticLayout, int i, int i2, int i3) {
         staticLayout.getSelectionPath(i2, i3, this.path);
-        if ((staticLayout.getParagraphDirection(i) == -1 ? 1 : null) != null || staticLayout.getSpacingAdd() <= 0.0f || i >= staticLayout.getLineCount() - 1) {
+        if (this.path.lastBottom < ((float) staticLayout.getLineBottom(i))) {
+            i2 = staticLayout.getLineBottom(i);
+            int lineTop = staticLayout.getLineTop(i);
+            float f = (float) (i2 - lineTop);
+            float f2 = (float) lineTop;
+            float f3 = this.path.lastBottom - f2;
+            canvas.save();
+            canvas.scale(1.0f, f / f3, 0.0f, f2);
             canvas.drawPath(this.path, this.selectionPaint);
+            canvas.restore();
             return;
         }
-        i2 = staticLayout.getLineBottom(i);
-        i = staticLayout.getLineTop(i);
-        float f = (float) (i2 - i);
-        float spacingAdd = ((float) i2) - staticLayout.getSpacingAdd();
-        float f2 = (float) i;
-        spacingAdd -= f2;
-        canvas.save();
-        canvas.scale(1.0f, f / spacingAdd, 0.0f, f2);
         canvas.drawPath(this.path, this.selectionPaint);
-        canvas.restore();
     }
 
     /* Access modifiers changed, original: protected */

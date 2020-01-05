@@ -2785,6 +2785,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.mapTypeButton.setPopupItemsColor(Theme.getColor("actionBarDefaultSubmenuItem"), false);
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), Mode.MULTIPLY));
         this.shadow.invalidate();
+        if (this.googleMap == null) {
+            return;
+        }
         if (Theme.getCurrentTheme().isDark() || Theme.isCurrentThemeNight()) {
             if (!this.currentMapStyleDark) {
                 this.currentMapStyleDark = true;

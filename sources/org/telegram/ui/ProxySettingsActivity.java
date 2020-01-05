@@ -562,6 +562,8 @@ public class ProxySettingsActivity extends BaseFragment {
         }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:11:0x002d  */
+    /* JADX WARNING: Removed duplicated region for block: B:10:0x002c A:{RETURN} */
     private void updatePasteCell() {
         /*
         r11 = this;
@@ -574,11 +576,11 @@ public class ProxySettingsActivity extends BaseFragment {
         r3 = r0.getItemCount();
         if (r3 <= 0) goto L_0x0023;
     L_0x0010:
-        r0 = r0.getItemAt(r2);
-        r3 = r11.fragmentView;
-        r3 = r3.getContext();
-        r0 = r0.coerceToText(r3);
-        r0 = r0.toString();
+        r0 = r0.getItemAt(r2);	 Catch:{ Exception -> 0x0023 }
+        r3 = r11.fragmentView;	 Catch:{ Exception -> 0x0023 }
+        r3 = r3.getContext();	 Catch:{ Exception -> 0x0023 }
+        r0 = r0.coerceToText(r3);	 Catch:{ Exception -> 0x0023 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x0023 }
         goto L_0x0024;
     L_0x0023:
         r0 = r1;

@@ -1256,12 +1256,12 @@ public class MessagesController extends BaseController implements NotificationCe
                     TL_account_uploadWallPaper tL_account_uploadWallPaper = new TL_account_uploadWallPaper();
                     tL_account_uploadWallPaper.file = inputFile;
                     tL_account_uploadWallPaper.mime_type = "image/jpeg";
-                    TL_wallPaperSettings tL_wallPaperSettings = new TL_wallPaperSettings();
                     OverrideWallpaperInfo overrideWallpaperInfo = this.uploadingWallpaperInfo;
+                    TL_wallPaperSettings tL_wallPaperSettings = new TL_wallPaperSettings();
                     tL_wallPaperSettings.blur = overrideWallpaperInfo.isBlurred;
                     tL_wallPaperSettings.motion = overrideWallpaperInfo.isMotion;
                     tL_account_uploadWallPaper.settings = tL_wallPaperSettings;
-                    getConnectionsManager().sendRequest(tL_account_uploadWallPaper, new -$$Lambda$MessagesController$0X6aUkz7iyW23B1znikJVXca3kM(this, tL_wallPaperSettings));
+                    getConnectionsManager().sendRequest(tL_account_uploadWallPaper, new -$$Lambda$MessagesController$Ff_w1WJnzH_NpUM3KwOnMO3hJe8(this, overrideWallpaperInfo, tL_wallPaperSettings));
                 }
             } else {
                 TL_photos_uploadProfilePhoto tL_photos_uploadProfilePhoto = new TL_photos_uploadProfilePhoto();
@@ -1377,23 +1377,22 @@ public class MessagesController extends BaseController implements NotificationCe
         getUserConfig().saveConfig(true);
     }
 
-    public /* synthetic */ void lambda$didReceivedNotification$10$MessagesController(TL_wallPaperSettings tL_wallPaperSettings, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$didReceivedNotification$10$MessagesController(OverrideWallpaperInfo overrideWallpaperInfo, TL_wallPaperSettings tL_wallPaperSettings, TLObject tLObject, TL_error tL_error) {
         TL_wallPaper tL_wallPaper = (TL_wallPaper) tLObject;
-        File file = new File(ApplicationLoader.getFilesDirFixed(), this.uploadingWallpaperInfo.originalFileName);
+        File file = new File(ApplicationLoader.getFilesDirFixed(), overrideWallpaperInfo.originalFileName);
         if (tL_wallPaper != null) {
             try {
                 AndroidUtilities.copyFile(file, FileLoader.getPathToAttach(tL_wallPaper.document, true));
             } catch (Exception unused) {
             }
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$UrQ0sTGI3Otzc2sSL6K_eOsR19E(this, tL_wallPaper, tL_wallPaperSettings, file));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$B138rTIAjQdD73W1aZgHjM8LXKw(this, tL_wallPaper, tL_wallPaperSettings, overrideWallpaperInfo, file));
     }
 
-    public /* synthetic */ void lambda$null$9$MessagesController(TL_wallPaper tL_wallPaper, TL_wallPaperSettings tL_wallPaperSettings, File file) {
+    public /* synthetic */ void lambda$null$9$MessagesController(TL_wallPaper tL_wallPaper, TL_wallPaperSettings tL_wallPaperSettings, OverrideWallpaperInfo overrideWallpaperInfo, File file) {
         if (this.uploadingWallpaper != null && tL_wallPaper != null) {
             tL_wallPaper.settings = tL_wallPaperSettings;
             tL_wallPaper.flags |= 4;
-            OverrideWallpaperInfo overrideWallpaperInfo = this.uploadingWallpaperInfo;
             overrideWallpaperInfo.slug = tL_wallPaper.slug;
             overrideWallpaperInfo.saveOverrideWallpaper();
             ArrayList arrayList = new ArrayList();

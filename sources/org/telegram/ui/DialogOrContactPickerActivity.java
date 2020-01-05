@@ -579,12 +579,17 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                                     if (i2 < i / 2) {
                                         i2 = -i2;
                                         DialogOrContactPickerActivity.this.viewPages[0].listView.smoothScrollBy(0, i2);
-                                        DialogOrContactPickerActivity.this.viewPages[0].listView2.smoothScrollBy(0, i2);
+                                        if (DialogOrContactPickerActivity.this.viewPages[0].listView2 != null) {
+                                            DialogOrContactPickerActivity.this.viewPages[0].listView2.smoothScrollBy(0, i2);
+                                            return;
+                                        }
                                         return;
                                     }
                                     i -= i2;
                                     DialogOrContactPickerActivity.this.viewPages[0].listView.smoothScrollBy(0, i);
-                                    DialogOrContactPickerActivity.this.viewPages[0].listView2.smoothScrollBy(0, i);
+                                    if (DialogOrContactPickerActivity.this.viewPages[0].listView2 != null) {
+                                        DialogOrContactPickerActivity.this.viewPages[0].listView2.smoothScrollBy(0, i);
+                                    }
                                 }
                             }
                         }

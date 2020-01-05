@@ -79,11 +79,17 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.layoutTransition.setAnimateParentHierarchy(false);
         this.layoutTransition.setDuration(250);
         this.layoutTransition.addTransitionListener(new TransitionListener() {
+            private boolean inTransition;
+
             public void startTransition(LayoutTransition layoutTransition, ViewGroup viewGroup, View view, int i) {
             }
 
             public void endTransition(LayoutTransition layoutTransition, ViewGroup viewGroup, View view, int i) {
-                ScrollSlidingTabStrip.this.tabsContainer.setLayoutTransition(null);
+                if (!this.inTransition) {
+                    this.inTransition = true;
+                    ScrollSlidingTabStrip.this.tabsContainer.setLayoutTransition(null);
+                    this.inTransition = false;
+                }
             }
         });
     }

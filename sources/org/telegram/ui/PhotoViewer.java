@@ -10274,6 +10274,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             } else {
                 SpannableString valueOf = SpannableString.valueOf(charSequence.toString());
                 messageObject2.addEntitiesToText(valueOf, true, false);
+                if (messageObject.isVideo()) {
+                    MessageObject.addUrlsByPattern(messageObject.isOutOwner(), valueOf, false, 3, messageObject.getDuration());
+                }
                 replaceEmoji = Emoji.replaceEmoji(valueOf, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             }
             this.captionTextView.setTag(replaceEmoji);
