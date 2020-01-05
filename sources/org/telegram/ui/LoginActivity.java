@@ -2429,13 +2429,13 @@ public class LoginActivity extends BaseFragment {
             r7 = r6.text;
             r8 = "PHONE_NUMBER_INVALID";
             r7 = r7.contains(r8);
-            r8 = NUM; // 0x7f0e00f9 float:1.8875543E38 double:1.0531622797E-314;
+            r8 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
             r3 = "AppName";
             if (r7 == 0) goto L_0x00e9;
         L_0x00d5:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e0585 float:1.8877903E38 double:1.0531628547E-314;
+            r8 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
             r2 = "InvalidPhoneNumber";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2464,7 +2464,7 @@ public class LoginActivity extends BaseFragment {
             r6.setPage(r1, r2, r7, r2);
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e0307 float:1.887661E38 double:1.0531625395E-314;
+            r8 = NUM; // 0x7f0e0305 float:1.8876605E38 double:1.0531625385E-314;
             r2 = "CodeExpired";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2477,7 +2477,7 @@ public class LoginActivity extends BaseFragment {
         L_0x012e:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e04c2 float:1.8877508E38 double:1.0531627584E-314;
+            r8 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
             r2 = "FloodWait";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2487,7 +2487,7 @@ public class LoginActivity extends BaseFragment {
             r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
             r2 = new java.lang.StringBuilder;
             r2.<init>();
-            r3 = NUM; // 0x7f0e0441 float:1.8877246E38 double:1.0531626947E-314;
+            r3 = NUM; // 0x7f0e043e float:1.887724E38 double:1.053162693E-314;
             r4 = "ErrorOccurred";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r2.append(r3);
@@ -2501,7 +2501,7 @@ public class LoginActivity extends BaseFragment {
         L_0x016a:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e0582 float:1.8877897E38 double:1.0531628533E-314;
+            r8 = NUM; // 0x7f0e057e float:1.887789E38 double:1.0531628513E-314;
             r2 = "InvalidCode";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -3574,7 +3574,7 @@ public class LoginActivity extends BaseFragment {
         r1 = r26;
         r2 = r0.actionBar;
         r3 = "AppName";
-        r4 = NUM; // 0x7f0e00f9 float:1.8875543E38 double:1.0531622797E-314;
+        r4 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r2.setTitle(r3);
         r2 = r0.actionBar;
@@ -3623,7 +3623,7 @@ public class LoginActivity extends BaseFragment {
         r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10);
         r3.addView(r9, r12);
         r3 = r0.doneItem;
-        r9 = NUM; // 0x7f0e03e4 float:1.8877058E38 double:1.0531626487E-314;
+        r9 = NUM; // 0x7f0e03e1 float:1.8877052E38 double:1.053162647E-314;
         r12 = "Done";
         r13 = org.telegram.messenger.LocaleController.getString(r12, r9);
         r3.setContentDescription(r13);

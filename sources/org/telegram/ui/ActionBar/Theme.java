@@ -2677,7 +2677,9 @@ public class Theme {
             if (i == i2) {
                 return true;
             }
-            if (((ThemeAccent) this.themeAccentsMap.get(i2)).accentColor == ((ThemeAccent) this.themeAccentsMap.get(this.currentAccentId)).accentColor) {
+            ThemeAccent themeAccent = (ThemeAccent) this.themeAccentsMap.get(i2);
+            ThemeAccent themeAccent2 = (ThemeAccent) this.themeAccentsMap.get(this.currentAccentId);
+            if (themeAccent2 != null && themeAccent.accentColor == themeAccent2.accentColor) {
                 z = true;
             }
             return z;
@@ -6954,9 +6956,9 @@ public class Theme {
         r11 = new int[r2];
         r11 = {-7177260, -9860357, -14440464, -8687151, -9848491, -14053142, -9403671, -10044691, -13203974, -12138259, -11880383, -1344335, -1142742, -6127120, -2931932, -1131212, -8417365, -13270557};
         r12 = new int[r2];
-        r12 = {-6464359, -10267323, -13532789, -5413850, -11898828, -13410942, -13215889, -10255762, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r12 = {-6464359, -10267323, -13532789, -5413850, -11898828, -13410942, -13215889, -10914461, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r13 = new int[r2];
-        r13 = {-10465880, -9937588, -14983040, -6736562, -14197445, -13534568, -13144441, -10526366, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r13 = {-10465880, -9937588, -14983040, -6736562, -14197445, -13534568, -13144441, -10587280, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r14 = new int[r2];
         r14 = {-14147282, -15263198, -16310753, -15724781, -15459054, -16313828, -14802903, -16645117, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r15 = new int[r2];
@@ -6984,7 +6986,7 @@ public class Theme {
         r8 = 6;
         r6[r8] = r7;
         r7 = 7;
-        r8 = "brFJPpalSVABAAAAIIPqSI_g_VI";
+        r8 = "CJNyxPMgSVAEAAAAvW9sMwCLASSNAMEcw";
         r6[r7] = r8;
         r7 = 8;
         r6[r7] = r3;
@@ -7010,7 +7012,7 @@ public class Theme {
         r7 = {225, 45, 225, 135, 45, 225, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r8 = 18;
         r8 = new int[r8];
-        r8 = {40, 40, 31, 50, 25, 34, 35, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r8 = {40, 40, 31, 50, 25, 34, 35, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r10 = r0;
         r16 = r2;
         r17 = r6;

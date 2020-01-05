@@ -455,7 +455,7 @@ public class CacheControlActivity extends BaseFragment {
         r4 = "Months";
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7);
         r2[r3] = r4;
-        r3 = NUM; // 0x7f0e05aa float:1.8877978E38 double:1.053162873E-314;
+        r3 = NUM; // 0x7f0e05a6 float:1.887797E38 double:1.053162871E-314;
         r4 = "KeepMediaForever";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2[r5] = r3;
@@ -474,19 +474,19 @@ public class CacheControlActivity extends BaseFragment {
         r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r2 = r16.getParentActivity();
         r1.<init>(r2);
-        r2 = NUM; // 0x7f0e05ee float:1.8878116E38 double:1.0531629066E-314;
+        r2 = NUM; // 0x7f0e05e9 float:1.8878106E38 double:1.053162904E-314;
         r3 = "LocalDatabaseClearTextTitle";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setTitle(r2);
-        r2 = NUM; // 0x7f0e05ed float:1.8878114E38 double:1.053162906E-314;
+        r2 = NUM; // 0x7f0e05e8 float:1.8878104E38 double:1.0531629037E-314;
         r3 = "LocalDatabaseClearText";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setMessage(r2);
-        r2 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
+        r2 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
         r3 = "Cancel";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setNegativeButton(r2, r8);
-        r2 = NUM; // 0x7f0e01fa float:1.8876064E38 double:1.0531624066E-314;
+        r2 = NUM; // 0x7f0e01f9 float:1.8876062E38 double:1.053162406E-314;
         r3 = "CacheClear";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r3 = new org.telegram.ui.-$$Lambda$CacheControlActivity$OxPoOxpLG_g1G1jasfpkphw5fag;
@@ -533,7 +533,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != 0) goto L_0x00f2;
     L_0x00e5:
         r8 = r0.photoSize;
-        r15 = NUM; // 0x7f0e05f3 float:1.8878127E38 double:1.053162909E-314;
+        r15 = NUM; // 0x7f0e05ee float:1.8878116E38 double:1.0531629066E-314;
         r13 = "LocalPhotoCache";
         r13 = org.telegram.messenger.LocaleController.getString(r13, r15);
     L_0x00f0:
@@ -543,7 +543,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r7) goto L_0x0100;
     L_0x00f4:
         r8 = r0.videoSize;
-        r13 = NUM; // 0x7f0e05f4 float:1.8878129E38 double:1.0531629096E-314;
+        r13 = NUM; // 0x7f0e05ef float:1.8878118E38 double:1.053162907E-314;
         r15 = "LocalVideoCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -551,7 +551,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r3) goto L_0x010e;
     L_0x0102:
         r8 = r0.documentsSize;
-        r13 = NUM; // 0x7f0e05f0 float:1.887812E38 double:1.0531629076E-314;
+        r13 = NUM; // 0x7f0e05eb float:1.887811E38 double:1.053162905E-314;
         r15 = "LocalDocumentCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -559,7 +559,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r5) goto L_0x011c;
     L_0x0110:
         r8 = r0.musicSize;
-        r13 = NUM; // 0x7f0e05f2 float:1.8878125E38 double:1.0531629086E-314;
+        r13 = NUM; // 0x7f0e05ed float:1.8878114E38 double:1.053162906E-314;
         r15 = "LocalMusicCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -567,7 +567,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r4) goto L_0x012a;
     L_0x011e:
         r8 = r0.audioSize;
-        r13 = NUM; // 0x7f0e05e9 float:1.8878106E38 double:1.053162904E-314;
+        r13 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r15 = "LocalAudioCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -576,7 +576,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r8) goto L_0x0139;
     L_0x012d:
         r8 = r0.stickersSize;
-        r13 = NUM; // 0x7f0e00f5 float:1.8875534E38 double:1.0531622777E-314;
+        r13 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
         r15 = "AnimatedStickers";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -585,7 +585,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r8) goto L_0x0148;
     L_0x013c:
         r8 = r0.cacheSize;
-        r13 = NUM; // 0x7f0e05ea float:1.8878108E38 double:1.0531629046E-314;
+        r13 = NUM; // 0x7f0e05e6 float:1.88781E38 double:1.0531629027E-314;
         r15 = "LocalCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -635,7 +635,7 @@ public class CacheControlActivity extends BaseFragment {
         r3.<init>(r4, r7);
         r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r6);
         r3.setBackgroundDrawable(r4);
-        r4 = NUM; // 0x7f0e02fc float:1.8876587E38 double:1.053162534E-314;
+        r4 = NUM; // 0x7f0e02fa float:1.8876583E38 double:1.053162533E-314;
         r5 = "ClearMediaCache";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r4 = r4.toUpperCase();
@@ -688,8 +688,8 @@ public class CacheControlActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01ea A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Missing block: B:53:0x0237, code skipped:
             r0 = th;
      */

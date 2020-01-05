@@ -3391,7 +3391,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     public int[] offsetToCord(int i) {
         fillLayoutForOffset(i, this.layoutBlock);
         StaticLayout staticLayout = this.layoutBlock.layout;
-        if (staticLayout == null || i >= staticLayout.getText().length()) {
+        if (staticLayout == null || i > staticLayout.getText().length()) {
             return this.tmpCoord;
         }
         int lineForOffset = staticLayout.getLineForOffset(i);

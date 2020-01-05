@@ -464,8 +464,10 @@ public class CropAreaView extends View {
         canvas.drawRect((float) ((int) rectF2.right), (float) ((int) rectF2.top), (float) getWidth(), (float) ((int) this.actualRect.bottom), this.dimPaint);
         canvas.drawRect(0.0f, (float) ((int) this.actualRect.bottom), (float) getWidth(), (float) getHeight(), this.dimPaint);
         bitmap = this.circleBitmap;
-        RectF rectF3 = this.actualRect;
-        canvas.drawBitmap(bitmap, (float) ((int) rectF3.left), (float) ((int) rectF3.top), null);
+        if (bitmap != null) {
+            RectF rectF3 = this.actualRect;
+            canvas.drawBitmap(bitmap, (float) ((int) rectF3.left), (float) ((int) rectF3.top), null);
+        }
     }
 
     private void updateTouchAreas() {

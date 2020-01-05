@@ -17,7 +17,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -71,7 +70,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     private ActionBarMenuItem doneItem;
     private AnimatorSet doneItemAnimation;
     private boolean donePressed;
-    private EditText editText;
+    private EditTextBoldCursor editText;
     private ImageView eraseImageView;
     private int headerRow;
     private boolean ignoreTextChanges;
@@ -286,12 +285,12 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.nameContainer.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.nameContainer.setOrientation(0);
         this.nameContainer.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(14.0f), 0);
-        this.editText = new EditText(context2);
-        EditText editText = this.editText;
+        this.editText = new EditTextBoldCursor(context2);
+        EditTextBoldCursor editTextBoldCursor = this.editText;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
         stringBuilder.append("/addstickers/");
-        editText.setText(stringBuilder.toString());
+        editTextBoldCursor.setText(stringBuilder.toString());
         this.editText.setTextSize(1, 17.0f);
         String str = "windowBackgroundWhiteHintText";
         this.editText.setHintTextColor(Theme.getColor(str));
@@ -372,7 +371,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             if (stickerSet != null) {
                 this.ignoreTextChanges = true;
                 this.usernameTextView.setText(stickerSet.short_name);
-                EditTextBoldCursor editTextBoldCursor = this.usernameTextView;
+                editTextBoldCursor = this.usernameTextView;
                 editTextBoldCursor.setSelection(editTextBoldCursor.length());
                 this.ignoreTextChanges = false;
             }
