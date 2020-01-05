@@ -341,6 +341,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     return -CC.$default$canSchedule(this);
                 }
 
+                public /* synthetic */ long getDialogId() {
+                    return -CC.$default$getDialogId(this);
+                }
+
                 public /* synthetic */ boolean isExpanded() {
                     return -CC.$default$isExpanded(this);
                 }

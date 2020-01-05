@@ -149,57 +149,57 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             return super.onTouchEvent(motionEvent);
         }
 
-        /* JADX WARNING: Unknown top exception splitter block from list: {B:107:0x0203=Splitter:B:107:0x0203, B:116:0x020e=Splitter:B:116:0x020e} */
-        /* JADX WARNING: Removed duplicated region for block: B:103:0x01f4 A:{Catch:{ all -> 0x0209 }} */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:116:0x020e */
-        /* JADX WARNING: Removed duplicated region for block: B:37:0x00fa A:{Catch:{ Exception -> 0x0106 }} */
-        /* JADX WARNING: Removed duplicated region for block: B:41:0x0112 A:{Catch:{ all -> 0x0209 }} */
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x0124 A:{Catch:{ all -> 0x0209 }} */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:34:0x00ee */
-        /* JADX WARNING: Removed duplicated region for block: B:41:0x0112 A:{Catch:{ all -> 0x0209 }} */
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x0124 A:{Catch:{ all -> 0x0209 }} */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:38:0x0106 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:67:0x0184 */
-        /* JADX WARNING: Can't wrap try/catch for region: R(11:28|29|(2:31|(1:33))|34|35|(1:37)|38|39|(1:41)|42|(1:44)) */
-        /* JADX WARNING: Can't wrap try/catch for region: R(11:28|29|(2:31|(1:33))|34|35|(1:37)|38|39|(1:41)|42|(1:44)) */
-        /* JADX WARNING: Can't wrap try/catch for region: R(4:65|66|67|68) */
-        /* JADX WARNING: Missing block: B:59:0x0168, code skipped:
-            if (r14.equals(r15) == false) goto L_0x01e3;
-     */
-        /* JADX WARNING: Missing block: B:85:0x01be, code skipped:
-            r4 = -1;
-     */
-        /* JADX WARNING: Missing block: B:86:0x01bf, code skipped:
-            if (r4 == 0) goto L_0x01db;
-     */
-        /* JADX WARNING: Missing block: B:88:0x01c2, code skipped:
-            if (r4 == 1) goto L_0x01d5;
+        /* JADX WARNING: Unknown top exception splitter block from list: {B:120:0x0214=Splitter:B:120:0x0214, B:111:0x0209=Splitter:B:111:0x0209} */
+        /* JADX WARNING: Removed duplicated region for block: B:107:0x01fa A:{Catch:{ all -> 0x020f }} */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:120:0x0214 */
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x0118 A:{Catch:{ all -> 0x020f }} */
+        /* JADX WARNING: Removed duplicated region for block: B:48:0x012a A:{Catch:{ all -> 0x020f }} */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:42:0x010c */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:71:0x018a */
+        /* JADX WARNING: Removed duplicated region for block: B:41:0x0100 A:{Catch:{ Exception -> 0x010c }} */
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x0118 A:{Catch:{ all -> 0x020f }} */
+        /* JADX WARNING: Removed duplicated region for block: B:48:0x012a A:{Catch:{ all -> 0x020f }} */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:38:0x00f4 */
+        /* JADX WARNING: Can't wrap try/catch for region: R(11:32|33|(2:35|(1:37))|38|39|(1:41)|42|43|(1:45)|46|(1:48)) */
+        /* JADX WARNING: Can't wrap try/catch for region: R(11:32|33|(2:35|(1:37))|38|39|(1:41)|42|43|(1:45)|46|(1:48)) */
+        /* JADX WARNING: Can't wrap try/catch for region: R(4:69|70|71|72) */
+        /* JADX WARNING: Missing block: B:63:0x016e, code skipped:
+            if (r14.equals(r15) == false) goto L_0x01e9;
      */
         /* JADX WARNING: Missing block: B:89:0x01c4, code skipped:
-            if (r4 == 2) goto L_0x01cf;
+            r3 = -1;
      */
-        /* JADX WARNING: Missing block: B:91:0x01c7, code skipped:
-            if (r4 == 3) goto L_0x01ca;
+        /* JADX WARNING: Missing block: B:90:0x01c5, code skipped:
+            if (r3 == 0) goto L_0x01e1;
+     */
+        /* JADX WARNING: Missing block: B:92:0x01c8, code skipped:
+            if (r3 == 1) goto L_0x01db;
      */
         /* JADX WARNING: Missing block: B:93:0x01ca, code skipped:
-            r1.themeInfo.previewBackgroundGradientColor = r3;
+            if (r3 == 2) goto L_0x01d5;
      */
-        /* JADX WARNING: Missing block: B:94:0x01cf, code skipped:
-            r1.themeInfo.setPreviewBackgroundColor(r3);
+        /* JADX WARNING: Missing block: B:95:0x01cd, code skipped:
+            if (r3 == 3) goto L_0x01d0;
      */
-        /* JADX WARNING: Missing block: B:95:0x01d5, code skipped:
-            r1.themeInfo.setPreviewOutColor(r3);
+        /* JADX WARNING: Missing block: B:97:0x01d0, code skipped:
+            r1.themeInfo.previewBackgroundGradientColor = r2;
      */
-        /* JADX WARNING: Missing block: B:96:0x01db, code skipped:
-            r1.themeInfo.setPreviewInColor(r3);
+        /* JADX WARNING: Missing block: B:98:0x01d5, code skipped:
+            r1.themeInfo.setPreviewBackgroundColor(r2);
      */
-        /* JADX WARNING: Missing block: B:112:0x0209, code skipped:
+        /* JADX WARNING: Missing block: B:99:0x01db, code skipped:
+            r1.themeInfo.setPreviewOutColor(r2);
+     */
+        /* JADX WARNING: Missing block: B:100:0x01e1, code skipped:
+            r1.themeInfo.setPreviewInColor(r2);
+     */
+        /* JADX WARNING: Missing block: B:116:0x020f, code skipped:
             r0 = move-exception;
      */
-        /* JADX WARNING: Missing block: B:113:0x020a, code skipped:
+        /* JADX WARNING: Missing block: B:117:0x0210, code skipped:
             r2 = r0;
      */
-        /* JADX WARNING: Missing block: B:115:?, code skipped:
+        /* JADX WARNING: Missing block: B:119:?, code skipped:
             r5.close();
      */
         private boolean parseTheme() {
@@ -207,331 +207,337 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             r17 = this;
             r1 = r17;
             r0 = "chat_inBubble";
-            r2 = new java.io.File;
-            r3 = r1.themeInfo;
-            r3 = r3.pathToFile;
-            r2.<init>(r3);
-            r4 = 1;
-            r5 = new java.io.FileInputStream;	 Catch:{ all -> 0x020f }
-            r5.<init>(r2);	 Catch:{ all -> 0x020f }
-            r2 = 0;
+            r2 = r1.themeInfo;
+            if (r2 == 0) goto L_0x0271;
+        L_0x0008:
+            r2 = r2.pathToFile;
+            if (r2 != 0) goto L_0x000e;
+        L_0x000c:
+            goto L_0x0271;
+        L_0x000e:
+            r4 = new java.io.File;
+            r4.<init>(r2);
+            r2 = 1;
+            r5 = new java.io.FileInputStream;	 Catch:{ all -> 0x0215 }
+            r5.<init>(r4);	 Catch:{ all -> 0x0215 }
+            r4 = 0;
             r6 = 0;
-        L_0x0015:
-            r7 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes;	 Catch:{ all -> 0x0207 }
-            r7 = r5.read(r7);	 Catch:{ all -> 0x0207 }
+        L_0x001b:
+            r7 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes;	 Catch:{ all -> 0x020d }
+            r7 = r5.read(r7);	 Catch:{ all -> 0x020d }
             r8 = -1;
-            if (r7 == r8) goto L_0x0203;
-        L_0x0020:
-            r11 = r2;
+            if (r7 == r8) goto L_0x0209;
+        L_0x0026:
+            r11 = r4;
             r9 = 0;
             r10 = 0;
-        L_0x0023:
-            if (r9 >= r7) goto L_0x01f0;
-        L_0x0025:
-            r12 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes;	 Catch:{ all -> 0x0207 }
-            r12 = r12[r9];	 Catch:{ all -> 0x0207 }
+        L_0x0029:
+            if (r9 >= r7) goto L_0x01f6;
+        L_0x002b:
+            r12 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes;	 Catch:{ all -> 0x020d }
+            r12 = r12[r9];	 Catch:{ all -> 0x020d }
             r13 = 10;
-            if (r12 != r13) goto L_0x01e6;
-        L_0x002f:
+            if (r12 != r13) goto L_0x01ec;
+        L_0x0035:
             r12 = r9 - r10;
-            r12 = r12 + r4;
-            r13 = new java.lang.String;	 Catch:{ all -> 0x0207 }
-            r14 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes;	 Catch:{ all -> 0x0207 }
+            r12 = r12 + r2;
+            r13 = new java.lang.String;	 Catch:{ all -> 0x020d }
+            r14 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes;	 Catch:{ all -> 0x020d }
             r15 = r12 + -1;
             r8 = "UTF-8";
-            r13.<init>(r14, r10, r15, r8);	 Catch:{ all -> 0x0207 }
+            r13.<init>(r14, r10, r15, r8);	 Catch:{ all -> 0x020d }
             r8 = "WLS=";
-            r8 = r13.startsWith(r8);	 Catch:{ all -> 0x0207 }
-            if (r8 == 0) goto L_0x012c;
-        L_0x0047:
+            r8 = r13.startsWith(r8);	 Catch:{ all -> 0x020d }
+            if (r8 == 0) goto L_0x0132;
+        L_0x004d:
             r8 = 4;
-            r8 = r13.substring(r8);	 Catch:{ all -> 0x0207 }
-            r13 = android.net.Uri.parse(r8);	 Catch:{ all -> 0x0207 }
-            r14 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
+            r8 = r13.substring(r8);	 Catch:{ all -> 0x020d }
+            r13 = android.net.Uri.parse(r8);	 Catch:{ all -> 0x020d }
+            r14 = r1.themeInfo;	 Catch:{ all -> 0x020d }
             r15 = "slug";
-            r15 = r13.getQueryParameter(r15);	 Catch:{ all -> 0x0207 }
-            r14.slug = r15;	 Catch:{ all -> 0x0207 }
-            r14 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
-            r15 = new java.io.File;	 Catch:{ all -> 0x0207 }
-            r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x0207 }
-            r4 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0207 }
-            r4.<init>();	 Catch:{ all -> 0x0207 }
-            r8 = org.telegram.messenger.Utilities.MD5(r8);	 Catch:{ all -> 0x0207 }
-            r4.append(r8);	 Catch:{ all -> 0x0207 }
+            r15 = r13.getQueryParameter(r15);	 Catch:{ all -> 0x020d }
+            r14.slug = r15;	 Catch:{ all -> 0x020d }
+            r14 = r1.themeInfo;	 Catch:{ all -> 0x020d }
+            r15 = new java.io.File;	 Catch:{ all -> 0x020d }
+            r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x020d }
+            r2 = new java.lang.StringBuilder;	 Catch:{ all -> 0x020d }
+            r2.<init>();	 Catch:{ all -> 0x020d }
+            r8 = org.telegram.messenger.Utilities.MD5(r8);	 Catch:{ all -> 0x020d }
+            r2.append(r8);	 Catch:{ all -> 0x020d }
             r8 = ".wp";
-            r4.append(r8);	 Catch:{ all -> 0x0207 }
-            r4 = r4.toString();	 Catch:{ all -> 0x0207 }
-            r15.<init>(r3, r4);	 Catch:{ all -> 0x0207 }
-            r3 = r15.getAbsolutePath();	 Catch:{ all -> 0x0207 }
-            r14.pathToWallpaper = r3;	 Catch:{ all -> 0x0207 }
-            r3 = "mode";
-            r3 = r13.getQueryParameter(r3);	 Catch:{ all -> 0x0207 }
-            if (r3 == 0) goto L_0x00ad;
-        L_0x0088:
-            r3 = r3.toLowerCase();	 Catch:{ all -> 0x0207 }
-            r4 = " ";
-            r3 = r3.split(r4);	 Catch:{ all -> 0x0207 }
-            if (r3 == 0) goto L_0x00ad;
-        L_0x0094:
-            r4 = r3.length;	 Catch:{ all -> 0x0207 }
-            if (r4 <= 0) goto L_0x00ad;
-        L_0x0097:
-            r4 = 0;
-        L_0x0098:
-            r8 = r3.length;	 Catch:{ all -> 0x0207 }
-            if (r4 >= r8) goto L_0x00ad;
-        L_0x009b:
+            r2.append(r8);	 Catch:{ all -> 0x020d }
+            r2 = r2.toString();	 Catch:{ all -> 0x020d }
+            r15.<init>(r3, r2);	 Catch:{ all -> 0x020d }
+            r2 = r15.getAbsolutePath();	 Catch:{ all -> 0x020d }
+            r14.pathToWallpaper = r2;	 Catch:{ all -> 0x020d }
+            r2 = "mode";
+            r2 = r13.getQueryParameter(r2);	 Catch:{ all -> 0x020d }
+            if (r2 == 0) goto L_0x00b3;
+        L_0x008e:
+            r2 = r2.toLowerCase();	 Catch:{ all -> 0x020d }
+            r3 = " ";
+            r2 = r2.split(r3);	 Catch:{ all -> 0x020d }
+            if (r2 == 0) goto L_0x00b3;
+        L_0x009a:
+            r3 = r2.length;	 Catch:{ all -> 0x020d }
+            if (r3 <= 0) goto L_0x00b3;
+        L_0x009d:
+            r3 = 0;
+        L_0x009e:
+            r8 = r2.length;	 Catch:{ all -> 0x020d }
+            if (r3 >= r8) goto L_0x00b3;
+        L_0x00a1:
             r8 = "blur";
-            r14 = r3[r4];	 Catch:{ all -> 0x0207 }
-            r8 = r8.equals(r14);	 Catch:{ all -> 0x0207 }
-            if (r8 == 0) goto L_0x00aa;
-        L_0x00a5:
-            r8 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
+            r14 = r2[r3];	 Catch:{ all -> 0x020d }
+            r8 = r8.equals(r14);	 Catch:{ all -> 0x020d }
+            if (r8 == 0) goto L_0x00b0;
+        L_0x00ab:
+            r8 = r1.themeInfo;	 Catch:{ all -> 0x020d }
             r14 = 1;
-            r8.isBlured = r14;	 Catch:{ all -> 0x0207 }
-        L_0x00aa:
-            r4 = r4 + 1;
-            goto L_0x0098;
-        L_0x00ad:
-            r3 = "pattern";
-            r3 = r13.getQueryParameter(r3);	 Catch:{ all -> 0x0207 }
-            r3 = android.text.TextUtils.isEmpty(r3);	 Catch:{ all -> 0x0207 }
-            if (r3 != 0) goto L_0x01e1;
-        L_0x00b9:
-            r3 = "bg_color";
-            r3 = r13.getQueryParameter(r3);	 Catch:{ Exception -> 0x00ee }
-            r4 = android.text.TextUtils.isEmpty(r3);	 Catch:{ Exception -> 0x00ee }
-            if (r4 != 0) goto L_0x00ee;
-        L_0x00c5:
-            r4 = r1.themeInfo;	 Catch:{ Exception -> 0x00ee }
+            r8.isBlured = r14;	 Catch:{ all -> 0x020d }
+        L_0x00b0:
+            r3 = r3 + 1;
+            goto L_0x009e;
+        L_0x00b3:
+            r2 = "pattern";
+            r2 = r13.getQueryParameter(r2);	 Catch:{ all -> 0x020d }
+            r2 = android.text.TextUtils.isEmpty(r2);	 Catch:{ all -> 0x020d }
+            if (r2 != 0) goto L_0x01e7;
+        L_0x00bf:
+            r2 = "bg_color";
+            r2 = r13.getQueryParameter(r2);	 Catch:{ Exception -> 0x00f4 }
+            r3 = android.text.TextUtils.isEmpty(r2);	 Catch:{ Exception -> 0x00f4 }
+            if (r3 != 0) goto L_0x00f4;
+        L_0x00cb:
+            r3 = r1.themeInfo;	 Catch:{ Exception -> 0x00f4 }
             r8 = 6;
             r14 = 0;
-            r15 = r3.substring(r14, r8);	 Catch:{ Exception -> 0x00ee }
+            r15 = r2.substring(r14, r8);	 Catch:{ Exception -> 0x00f4 }
             r14 = 16;
-            r15 = java.lang.Integer.parseInt(r15, r14);	 Catch:{ Exception -> 0x00ee }
+            r15 = java.lang.Integer.parseInt(r15, r14);	 Catch:{ Exception -> 0x00f4 }
             r16 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
             r15 = r15 | r16;
-            r4.patternBgColor = r15;	 Catch:{ Exception -> 0x00ee }
-            r4 = r3.length();	 Catch:{ Exception -> 0x00ee }
-            if (r4 <= r8) goto L_0x00ee;
-        L_0x00df:
-            r4 = r1.themeInfo;	 Catch:{ Exception -> 0x00ee }
+            r3.patternBgColor = r15;	 Catch:{ Exception -> 0x00f4 }
+            r3 = r2.length();	 Catch:{ Exception -> 0x00f4 }
+            if (r3 <= r8) goto L_0x00f4;
+        L_0x00e5:
+            r3 = r1.themeInfo;	 Catch:{ Exception -> 0x00f4 }
             r8 = 7;
-            r3 = r3.substring(r8);	 Catch:{ Exception -> 0x00ee }
-            r3 = java.lang.Integer.parseInt(r3, r14);	 Catch:{ Exception -> 0x00ee }
-            r3 = r3 | r16;
-            r4.patternBgGradientColor = r3;	 Catch:{ Exception -> 0x00ee }
-        L_0x00ee:
-            r3 = "rotation";
-            r3 = r13.getQueryParameter(r3);	 Catch:{ Exception -> 0x0106 }
-            r4 = android.text.TextUtils.isEmpty(r3);	 Catch:{ Exception -> 0x0106 }
-            if (r4 != 0) goto L_0x0106;
-        L_0x00fa:
-            r4 = r1.themeInfo;	 Catch:{ Exception -> 0x0106 }
-            r3 = org.telegram.messenger.Utilities.parseInt(r3);	 Catch:{ Exception -> 0x0106 }
-            r3 = r3.intValue();	 Catch:{ Exception -> 0x0106 }
-            r4.patternBgGradientRotation = r3;	 Catch:{ Exception -> 0x0106 }
-        L_0x0106:
-            r3 = "intensity";
-            r3 = r13.getQueryParameter(r3);	 Catch:{ all -> 0x0207 }
-            r4 = android.text.TextUtils.isEmpty(r3);	 Catch:{ all -> 0x0207 }
-            if (r4 != 0) goto L_0x011e;
-        L_0x0112:
-            r4 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
-            r3 = org.telegram.messenger.Utilities.parseInt(r3);	 Catch:{ all -> 0x0207 }
-            r3 = r3.intValue();	 Catch:{ all -> 0x0207 }
-            r4.patternIntensity = r3;	 Catch:{ all -> 0x0207 }
-        L_0x011e:
-            r3 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
-            r3 = r3.patternIntensity;	 Catch:{ all -> 0x0207 }
-            if (r3 != 0) goto L_0x01e1;
+            r2 = r2.substring(r8);	 Catch:{ Exception -> 0x00f4 }
+            r2 = java.lang.Integer.parseInt(r2, r14);	 Catch:{ Exception -> 0x00f4 }
+            r2 = r2 | r16;
+            r3.patternBgGradientColor = r2;	 Catch:{ Exception -> 0x00f4 }
+        L_0x00f4:
+            r2 = "rotation";
+            r2 = r13.getQueryParameter(r2);	 Catch:{ Exception -> 0x010c }
+            r3 = android.text.TextUtils.isEmpty(r2);	 Catch:{ Exception -> 0x010c }
+            if (r3 != 0) goto L_0x010c;
+        L_0x0100:
+            r3 = r1.themeInfo;	 Catch:{ Exception -> 0x010c }
+            r2 = org.telegram.messenger.Utilities.parseInt(r2);	 Catch:{ Exception -> 0x010c }
+            r2 = r2.intValue();	 Catch:{ Exception -> 0x010c }
+            r3.patternBgGradientRotation = r2;	 Catch:{ Exception -> 0x010c }
+        L_0x010c:
+            r2 = "intensity";
+            r2 = r13.getQueryParameter(r2);	 Catch:{ all -> 0x020d }
+            r3 = android.text.TextUtils.isEmpty(r2);	 Catch:{ all -> 0x020d }
+            if (r3 != 0) goto L_0x0124;
+        L_0x0118:
+            r3 = r1.themeInfo;	 Catch:{ all -> 0x020d }
+            r2 = org.telegram.messenger.Utilities.parseInt(r2);	 Catch:{ all -> 0x020d }
+            r2 = r2.intValue();	 Catch:{ all -> 0x020d }
+            r3.patternIntensity = r2;	 Catch:{ all -> 0x020d }
         L_0x0124:
-            r3 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
-            r4 = 50;
-            r3.patternIntensity = r4;	 Catch:{ all -> 0x0207 }
-            goto L_0x01e1;
-        L_0x012c:
-            r3 = "WPS";
-            r3 = r13.startsWith(r3);	 Catch:{ all -> 0x0207 }
-            if (r3 == 0) goto L_0x013c;
-        L_0x0134:
-            r3 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
+            r2 = r1.themeInfo;	 Catch:{ all -> 0x020d }
+            r2 = r2.patternIntensity;	 Catch:{ all -> 0x020d }
+            if (r2 != 0) goto L_0x01e7;
+        L_0x012a:
+            r2 = r1.themeInfo;	 Catch:{ all -> 0x020d }
+            r3 = 50;
+            r2.patternIntensity = r3;	 Catch:{ all -> 0x020d }
+            goto L_0x01e7;
+        L_0x0132:
+            r2 = "WPS";
+            r2 = r13.startsWith(r2);	 Catch:{ all -> 0x020d }
+            if (r2 == 0) goto L_0x0142;
+        L_0x013a:
+            r2 = r1.themeInfo;	 Catch:{ all -> 0x020d }
             r12 = r12 + r11;
-            r3.previewWallpaperOffset = r12;	 Catch:{ all -> 0x0207 }
+            r2.previewWallpaperOffset = r12;	 Catch:{ all -> 0x020d }
             r6 = 1;
-            goto L_0x01f2;
-        L_0x013c:
-            r3 = 61;
-            r3 = r13.indexOf(r3);	 Catch:{ all -> 0x0207 }
-            r4 = -1;
-            if (r3 == r4) goto L_0x01e1;
-        L_0x0145:
+            goto L_0x01f8;
+        L_0x0142:
+            r2 = 61;
+            r2 = r13.indexOf(r2);	 Catch:{ all -> 0x020d }
+            r3 = -1;
+            if (r2 == r3) goto L_0x01e7;
+        L_0x014b:
             r8 = 0;
-            r14 = r13.substring(r8, r3);	 Catch:{ all -> 0x0207 }
-            r8 = r14.equals(r0);	 Catch:{ all -> 0x0207 }
+            r14 = r13.substring(r8, r2);	 Catch:{ all -> 0x020d }
+            r8 = r14.equals(r0);	 Catch:{ all -> 0x020d }
             r15 = "chat_wallpaper_gradient_to";
-            r4 = "chat_wallpaper";
+            r3 = "chat_wallpaper";
             r16 = r6;
             r6 = "chat_outBubble";
-            if (r8 != 0) goto L_0x016a;
-        L_0x0158:
-            r8 = r14.equals(r6);	 Catch:{ all -> 0x0207 }
-            if (r8 != 0) goto L_0x016a;
+            if (r8 != 0) goto L_0x0170;
         L_0x015e:
-            r8 = r14.equals(r4);	 Catch:{ all -> 0x0207 }
-            if (r8 != 0) goto L_0x016a;
+            r8 = r14.equals(r6);	 Catch:{ all -> 0x020d }
+            if (r8 != 0) goto L_0x0170;
         L_0x0164:
-            r8 = r14.equals(r15);	 Catch:{ all -> 0x0207 }
-            if (r8 == 0) goto L_0x01e3;
+            r8 = r14.equals(r3);	 Catch:{ all -> 0x020d }
+            if (r8 != 0) goto L_0x0170;
         L_0x016a:
-            r3 = r3 + 1;
-            r3 = r13.substring(r3);	 Catch:{ all -> 0x0207 }
-            r8 = r3.length();	 Catch:{ all -> 0x0207 }
-            if (r8 <= 0) goto L_0x018d;
-        L_0x0176:
+            r8 = r14.equals(r15);	 Catch:{ all -> 0x020d }
+            if (r8 == 0) goto L_0x01e9;
+        L_0x0170:
+            r2 = r2 + 1;
+            r2 = r13.substring(r2);	 Catch:{ all -> 0x020d }
+            r8 = r2.length();	 Catch:{ all -> 0x020d }
+            if (r8 <= 0) goto L_0x0193;
+        L_0x017c:
             r8 = 0;
-            r13 = r3.charAt(r8);	 Catch:{ all -> 0x0207 }
+            r13 = r2.charAt(r8);	 Catch:{ all -> 0x020d }
             r8 = 35;
-            if (r13 != r8) goto L_0x018d;
-        L_0x017f:
-            r3 = android.graphics.Color.parseColor(r3);	 Catch:{ Exception -> 0x0184 }
-            goto L_0x0195;
-        L_0x0184:
-            r3 = org.telegram.messenger.Utilities.parseInt(r3);	 Catch:{ all -> 0x0207 }
-            r3 = r3.intValue();	 Catch:{ all -> 0x0207 }
-            goto L_0x0195;
-        L_0x018d:
-            r3 = org.telegram.messenger.Utilities.parseInt(r3);	 Catch:{ all -> 0x0207 }
-            r3 = r3.intValue();	 Catch:{ all -> 0x0207 }
-        L_0x0195:
-            r8 = r14.hashCode();	 Catch:{ all -> 0x0207 }
+            if (r13 != r8) goto L_0x0193;
+        L_0x0185:
+            r2 = android.graphics.Color.parseColor(r2);	 Catch:{ Exception -> 0x018a }
+            goto L_0x019b;
+        L_0x018a:
+            r2 = org.telegram.messenger.Utilities.parseInt(r2);	 Catch:{ all -> 0x020d }
+            r2 = r2.intValue();	 Catch:{ all -> 0x020d }
+            goto L_0x019b;
+        L_0x0193:
+            r2 = org.telegram.messenger.Utilities.parseInt(r2);	 Catch:{ all -> 0x020d }
+            r2 = r2.intValue();	 Catch:{ all -> 0x020d }
+        L_0x019b:
+            r8 = r14.hashCode();	 Catch:{ all -> 0x020d }
             r13 = 2;
             switch(r8) {
-                case -1625862693: goto L_0x01b6;
-                case -633951866: goto L_0x01ae;
-                case 1269980952: goto L_0x01a6;
-                case 2052611411: goto L_0x019e;
-                default: goto L_0x019d;
-            };	 Catch:{ all -> 0x0207 }
-        L_0x019d:
-            goto L_0x01be;
-        L_0x019e:
-            r4 = r14.equals(r6);	 Catch:{ all -> 0x0207 }
-            if (r4 == 0) goto L_0x01be;
+                case -1625862693: goto L_0x01bc;
+                case -633951866: goto L_0x01b4;
+                case 1269980952: goto L_0x01ac;
+                case 2052611411: goto L_0x01a4;
+                default: goto L_0x01a3;
+            };	 Catch:{ all -> 0x020d }
+        L_0x01a3:
+            goto L_0x01c4;
         L_0x01a4:
-            r4 = 1;
-            goto L_0x01bf;
-        L_0x01a6:
-            r4 = r14.equals(r0);	 Catch:{ all -> 0x0207 }
-            if (r4 == 0) goto L_0x01be;
+            r3 = r14.equals(r6);	 Catch:{ all -> 0x020d }
+            if (r3 == 0) goto L_0x01c4;
+        L_0x01aa:
+            r3 = 1;
+            goto L_0x01c5;
         L_0x01ac:
-            r4 = 0;
-            goto L_0x01bf;
-        L_0x01ae:
-            r4 = r14.equals(r15);	 Catch:{ all -> 0x0207 }
-            if (r4 == 0) goto L_0x01be;
+            r3 = r14.equals(r0);	 Catch:{ all -> 0x020d }
+            if (r3 == 0) goto L_0x01c4;
+        L_0x01b2:
+            r3 = 0;
+            goto L_0x01c5;
         L_0x01b4:
-            r4 = 3;
-            goto L_0x01bf;
-        L_0x01b6:
-            r4 = r14.equals(r4);	 Catch:{ all -> 0x0207 }
-            if (r4 == 0) goto L_0x01be;
+            r3 = r14.equals(r15);	 Catch:{ all -> 0x020d }
+            if (r3 == 0) goto L_0x01c4;
+        L_0x01ba:
+            r3 = 3;
+            goto L_0x01c5;
         L_0x01bc:
-            r4 = 2;
-            goto L_0x01bf;
-        L_0x01be:
-            r4 = -1;
-        L_0x01bf:
-            if (r4 == 0) goto L_0x01db;
-        L_0x01c1:
-            r6 = 1;
-            if (r4 == r6) goto L_0x01d5;
+            r3 = r14.equals(r3);	 Catch:{ all -> 0x020d }
+            if (r3 == 0) goto L_0x01c4;
+        L_0x01c2:
+            r3 = 2;
+            goto L_0x01c5;
         L_0x01c4:
-            if (r4 == r13) goto L_0x01cf;
-        L_0x01c6:
-            r6 = 3;
-            if (r4 == r6) goto L_0x01ca;
-        L_0x01c9:
-            goto L_0x01e3;
+            r3 = -1;
+        L_0x01c5:
+            if (r3 == 0) goto L_0x01e1;
+        L_0x01c7:
+            r6 = 1;
+            if (r3 == r6) goto L_0x01db;
         L_0x01ca:
-            r4 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
-            r4.previewBackgroundGradientColor = r3;	 Catch:{ all -> 0x0207 }
-            goto L_0x01e3;
+            if (r3 == r13) goto L_0x01d5;
+        L_0x01cc:
+            r6 = 3;
+            if (r3 == r6) goto L_0x01d0;
         L_0x01cf:
-            r4 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
-            r4.setPreviewBackgroundColor(r3);	 Catch:{ all -> 0x0207 }
-            goto L_0x01e3;
+            goto L_0x01e9;
+        L_0x01d0:
+            r3 = r1.themeInfo;	 Catch:{ all -> 0x020d }
+            r3.previewBackgroundGradientColor = r2;	 Catch:{ all -> 0x020d }
+            goto L_0x01e9;
         L_0x01d5:
-            r4 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
-            r4.setPreviewOutColor(r3);	 Catch:{ all -> 0x0207 }
-            goto L_0x01e3;
+            r3 = r1.themeInfo;	 Catch:{ all -> 0x020d }
+            r3.setPreviewBackgroundColor(r2);	 Catch:{ all -> 0x020d }
+            goto L_0x01e9;
         L_0x01db:
-            r4 = r1.themeInfo;	 Catch:{ all -> 0x0207 }
-            r4.setPreviewInColor(r3);	 Catch:{ all -> 0x0207 }
-            goto L_0x01e3;
+            r3 = r1.themeInfo;	 Catch:{ all -> 0x020d }
+            r3.setPreviewOutColor(r2);	 Catch:{ all -> 0x020d }
+            goto L_0x01e9;
         L_0x01e1:
+            r3 = r1.themeInfo;	 Catch:{ all -> 0x020d }
+            r3.setPreviewInColor(r2);	 Catch:{ all -> 0x020d }
+            goto L_0x01e9;
+        L_0x01e7:
             r16 = r6;
-        L_0x01e3:
+        L_0x01e9:
             r10 = r10 + r12;
             r11 = r11 + r12;
-            goto L_0x01e8;
-        L_0x01e6:
+            goto L_0x01ee;
+        L_0x01ec:
             r16 = r6;
-        L_0x01e8:
+        L_0x01ee:
             r9 = r9 + 1;
             r6 = r16;
-            r4 = 1;
+            r2 = 1;
             r8 = -1;
-            goto L_0x0023;
-        L_0x01f0:
-            r16 = r6;
-        L_0x01f2:
-            if (r6 != 0) goto L_0x0203;
-        L_0x01f4:
-            if (r2 != r11) goto L_0x01f7;
+            goto L_0x0029;
         L_0x01f6:
-            goto L_0x0203;
-        L_0x01f7:
-            r2 = r5.getChannel();	 Catch:{ all -> 0x0207 }
-            r3 = (long) r11;	 Catch:{ all -> 0x0207 }
-            r2.position(r3);	 Catch:{ all -> 0x0207 }
-            r2 = r11;
-            r4 = 1;
-            goto L_0x0015;
-        L_0x0203:
-            r5.close();	 Catch:{ all -> 0x020f }
-            goto L_0x0213;
-        L_0x0207:
-            r0 = move-exception;
-            throw r0;	 Catch:{ all -> 0x0209 }
+            r16 = r6;
+        L_0x01f8:
+            if (r6 != 0) goto L_0x0209;
+        L_0x01fa:
+            if (r4 != r11) goto L_0x01fd;
+        L_0x01fc:
+            goto L_0x0209;
+        L_0x01fd:
+            r2 = r5.getChannel();	 Catch:{ all -> 0x020d }
+            r3 = (long) r11;	 Catch:{ all -> 0x020d }
+            r2.position(r3);	 Catch:{ all -> 0x020d }
+            r4 = r11;
+            r2 = 1;
+            goto L_0x001b;
         L_0x0209:
+            r5.close();	 Catch:{ all -> 0x0215 }
+            goto L_0x0219;
+        L_0x020d:
             r0 = move-exception;
-            r2 = r0;
-            r5.close();	 Catch:{ all -> 0x020e }
-        L_0x020e:
-            throw r2;	 Catch:{ all -> 0x020f }
+            throw r0;	 Catch:{ all -> 0x020f }
         L_0x020f:
             r0 = move-exception;
+            r2 = r0;
+            r5.close();	 Catch:{ all -> 0x0214 }
+        L_0x0214:
+            throw r2;	 Catch:{ all -> 0x0215 }
+        L_0x0215:
+            r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-        L_0x0213:
+        L_0x0219:
             r0 = r1.themeInfo;
             r2 = r0.pathToWallpaper;
-            if (r2 == 0) goto L_0x0265;
-        L_0x0219:
+            if (r2 == 0) goto L_0x026b;
+        L_0x021f:
             r0 = r0.badWallpaper;
-            if (r0 != 0) goto L_0x0265;
-        L_0x021d:
+            if (r0 != 0) goto L_0x026b;
+        L_0x0223:
             r0 = new java.io.File;
             r0.<init>(r2);
             r0 = r0.exists();
-            if (r0 != 0) goto L_0x0265;
-        L_0x0228:
+            if (r0 != 0) goto L_0x026b;
+        L_0x022e:
             r0 = org.telegram.ui.Cells.ThemesHorizontalListCell.this;
             r0 = r0.loadingWallpapers;
             r2 = r1.themeInfo;
             r0 = r0.containsKey(r2);
-            if (r0 != 0) goto L_0x0263;
-        L_0x0236:
+            if (r0 != 0) goto L_0x0269;
+        L_0x023c:
             r0 = org.telegram.ui.Cells.ThemesHorizontalListCell.this;
             r0 = r0.loadingWallpapers;
             r2 = r1.themeInfo;
@@ -550,13 +556,16 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             r3 = new org.telegram.ui.Cells.-$$Lambda$ThemesHorizontalListCell$InnerThemeView$aojGvqqAAssFRVGdS8VxlzJW2g8;
             r3.<init>(r1);
             r2.sendRequest(r0, r3);
-        L_0x0263:
+        L_0x0269:
             r2 = 0;
             return r2;
-        L_0x0265:
+        L_0x026b:
             r0 = r1.themeInfo;
             r2 = 1;
             r0.previewParsed = r2;
+            return r2;
+        L_0x0271:
+            r2 = 0;
             return r2;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ThemesHorizontalListCell$InnerThemeView.parseTheme():boolean");

@@ -3554,12 +3554,21 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         this.recordReplyingMessageObject = messageObject;
     }
 
+    public void requestAudioFocus(boolean z) {
+        if (z) {
+            if (!this.hasRecordAudioFocus && NotificationsController.audioManager.requestAudioFocus(this.audioRecordFocusChangedListener, 3, 2) == 1) {
+                this.hasRecordAudioFocus = true;
+            }
+        } else if (this.hasRecordAudioFocus) {
+            NotificationsController.audioManager.abandonAudioFocus(this.audioRecordFocusChangedListener);
+            this.hasRecordAudioFocus = false;
+        }
+    }
+
     public void startRecording(int i, long j, MessageObject messageObject, int i2) {
         MessageObject messageObject2 = this.playingMessageObject;
         Object obj = (messageObject2 == null || !isPlayingMessage(messageObject2) || isMessagePaused()) ? null : 1;
-        if (!this.hasRecordAudioFocus && NotificationsController.audioManager.requestAudioFocus(this.audioRecordFocusChangedListener, 3, 2) == 1) {
-            this.hasRecordAudioFocus = true;
-        }
+        requestAudioFocus(true);
         try {
             this.feedbackView.performHapticFeedback(3, 2);
         } catch (Exception unused) {
@@ -3684,10 +3693,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             if (file != null) {
                 file.delete();
             }
-            if (this.hasRecordAudioFocus) {
-                NotificationsController.audioManager.abandonAudioFocus(this.audioRecordFocusChangedListener);
-                this.hasRecordAudioFocus = false;
-            }
+            requestAudioFocus(false);
         }
         try {
             if (this.audioRecorder != null) {
@@ -3748,10 +3754,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             NotificationCenter.getInstance(this.recordingCurrentAccount).postNotificationName(NotificationCenter.audioRecordTooShort, Integer.valueOf(this.recordingGuid), Boolean.valueOf(false));
             file.delete();
         }
-        if (this.hasRecordAudioFocus) {
-            NotificationsController.audioManager.abandonAudioFocus(this.audioRecordFocusChangedListener);
-            this.hasRecordAudioFocus = z2;
-        }
+        requestAudioFocus(z2);
     }
 
     public void stopRecording(int i, boolean z, int i2) {

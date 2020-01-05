@@ -1340,7 +1340,7 @@ public class PhotoFilterView extends FrameLayout {
         frameLayout.addView(this.cancelTextView, LayoutHelper.createFrame(-2, -1, 51));
         this.doneTextView = new TextView(context2);
         this.doneTextView.setTextSize(1, 14.0f);
-        this.doneTextView.setTextColor(-11420173);
+        this.doneTextView.setTextColor(Theme.getColor("dialogFloatingButton"));
         this.doneTextView.setGravity(17);
         this.doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
         this.doneTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
@@ -1352,7 +1352,7 @@ public class PhotoFilterView extends FrameLayout {
         this.tuneItem = new ImageView(context2);
         this.tuneItem.setScaleType(ScaleType.CENTER);
         this.tuneItem.setImageResource(NUM);
-        this.tuneItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
+        this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
         this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
         this.tuneItem.setOnClickListener(new -$$Lambda$PhotoFilterView$4hvar_H88dpzJN2DxB_cny05r_QI(this));
@@ -1483,7 +1483,7 @@ public class PhotoFilterView extends FrameLayout {
 
     public /* synthetic */ void lambda$new$2$PhotoFilterView(View view) {
         this.selectedTool = 0;
-        this.tuneItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
+        this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
         this.blurItem.setColorFilter(null);
         this.curveItem.setColorFilter(null);
         switchMode();
@@ -1492,7 +1492,7 @@ public class PhotoFilterView extends FrameLayout {
     public /* synthetic */ void lambda$new$3$PhotoFilterView(View view) {
         this.selectedTool = 1;
         this.tuneItem.setColorFilter(null);
-        this.blurItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
+        this.blurItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
         this.curveItem.setColorFilter(null);
         switchMode();
     }
@@ -1501,7 +1501,7 @@ public class PhotoFilterView extends FrameLayout {
         this.selectedTool = 2;
         this.tuneItem.setColorFilter(null);
         this.blurItem.setColorFilter(null);
-        this.curveItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
+        this.curveItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
         switchMode();
     }
 
@@ -1548,14 +1548,36 @@ public class PhotoFilterView extends FrameLayout {
         }
     }
 
+    public void updateColors() {
+        TextView textView = this.doneTextView;
+        String str = "dialogFloatingButton";
+        if (textView != null) {
+            textView.setTextColor(Theme.getColor(str));
+        }
+        ImageView imageView = this.tuneItem;
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        }
+        imageView = this.blurItem;
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.blurItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        }
+        imageView = this.curveItem;
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.curveItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        }
+        updateSelectedBlurType();
+    }
+
     private void updateSelectedBlurType() {
         int i = this.blurType;
+        String str = "dialogFloatingButton";
         Drawable mutate;
         if (i == 0) {
             mutate = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
-            mutate.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
+            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
             this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(null, mutate, null, null);
-            this.blurOffButton.setTextColor(-11420173);
+            this.blurOffButton.setTextColor(Theme.getColor(str));
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
             this.blurRadialButton.setTextColor(-1);
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
@@ -1564,9 +1586,9 @@ public class PhotoFilterView extends FrameLayout {
             this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
             this.blurOffButton.setTextColor(-1);
             mutate = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
-            mutate.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
+            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(null, mutate, null, null);
-            this.blurRadialButton.setTextColor(-11420173);
+            this.blurRadialButton.setTextColor(Theme.getColor(str));
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
             this.blurLinearButton.setTextColor(-1);
         } else if (i == 2) {
@@ -1575,9 +1597,9 @@ public class PhotoFilterView extends FrameLayout {
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
             this.blurRadialButton.setTextColor(-1);
             mutate = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
-            mutate.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
+            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(null, mutate, null, null);
-            this.blurLinearButton.setTextColor(-11420173);
+            this.blurLinearButton.setTextColor(Theme.getColor(str));
         }
     }
 

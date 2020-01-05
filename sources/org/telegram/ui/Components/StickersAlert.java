@@ -70,6 +70,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.FeaturedStickerSetInfoCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
@@ -314,6 +315,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
 
             public boolean needSend() {
                 return StickersAlert.this.previewSendButton.getVisibility() == 0;
+            }
+
+            public long getDialogId() {
+                return StickersAlert.this.parentFragment instanceof ChatActivity ? ((ChatActivity) StickersAlert.this.parentFragment).getDialogId() : 0;
             }
         };
         this.parentActivity = (Activity) context;

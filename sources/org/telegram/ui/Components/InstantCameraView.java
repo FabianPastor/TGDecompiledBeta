@@ -40,6 +40,7 @@ import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Property;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
@@ -64,7 +65,6 @@ import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -1303,12 +1303,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 InstantCameraView.this.videoPlayer.setMute(true);
                 InstantCameraView.this.startProgressTimer();
                 AnimatorSet animatorSet = new AnimatorSet();
-                r4 = new Animator[3];
-                String str = "alpha";
-                r4[0] = ObjectAnimator.ofFloat(InstantCameraView.this.switchCameraButton, str, new float[]{0.0f});
-                r4[1] = ObjectAnimator.ofInt(InstantCameraView.this.paint, str, new int[]{0});
-                r4[2] = ObjectAnimator.ofFloat(InstantCameraView.this.muteImageView, str, new float[]{1.0f});
-                animatorSet.playTogether(r4);
+                Animator[] animatorArr = new Animator[3];
+                animatorArr[0] = ObjectAnimator.ofFloat(InstantCameraView.this.switchCameraButton, View.ALPHA, new float[]{0.0f});
+                animatorArr[1] = ObjectAnimator.ofInt(InstantCameraView.this.paint, "alpha", new int[]{0});
+                animatorArr[2] = ObjectAnimator.ofFloat(InstantCameraView.this.muteImageView, View.ALPHA, new float[]{1.0f});
+                animatorSet.playTogether(animatorArr);
                 animatorSet.setDuration(180);
                 animatorSet.setInterpolator(new DecelerateInterpolator());
                 animatorSet.start();
@@ -1323,6 +1322,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 access$3900.sendMedia(photoEntry, InstantCameraView.this.videoEditedInfo, true, 0);
             }
             didWriteData(this.videoFile, 0, true);
+            MediaController.getInstance().requestAudioFocus(false);
         }
 
         public /* synthetic */ void lambda$null$2$InstantCameraView$VideoRecorder(boolean z, int i) {
@@ -1710,26 +1710,23 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public class CameraGLThread extends DispatchQueue {
+        private static final int EGL_CONTEXT_CLIENT_VERSION = 12440;
+        private static final int EGL_OPENGL_ES2_BIT = 4;
         private final int DO_REINIT_MESSAGE = 2;
         private final int DO_RENDER_MESSAGE = 0;
         private final int DO_SETSESSION_MESSAGE = 3;
         private final int DO_SHUTDOWN_MESSAGE = 1;
-        private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
-        private final int EGL_OPENGL_ES2_BIT = 4;
         private Integer cameraId = Integer.valueOf(0);
         private SurfaceTexture cameraSurface;
         private CameraSession currentSession;
         private int drawProgram;
         private EGL10 egl10;
-        private javax.microedition.khronos.egl.EGLConfig eglConfig;
         private javax.microedition.khronos.egl.EGLContext eglContext;
         private javax.microedition.khronos.egl.EGLDisplay eglDisplay;
         private javax.microedition.khronos.egl.EGLSurface eglSurface;
-        private GL gl;
         private boolean initied;
         private int positionHandle;
         private boolean recording;
-        private int rotationAngle;
         private SurfaceTexture surfaceTexture;
         private int textureHandle;
         private int textureMatrixHandle;
@@ -1785,8 +1782,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     finish();
                     return false;
                 } else if (iArr[0] > 0) {
-                    this.eglConfig = eGLConfigArr[0];
-                    this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                    javax.microedition.khronos.egl.EGLConfig eGLConfig = eGLConfigArr[0];
+                    this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                     if (this.eglContext == null) {
                         if (BuildVars.LOGS_ENABLED) {
                             stringBuilder = new StringBuilder();
@@ -1799,7 +1796,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                     SurfaceTexture surfaceTexture = this.surfaceTexture;
                     if (surfaceTexture instanceof SurfaceTexture) {
-                        this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture, null);
+                        this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, eGLConfig, surfaceTexture, null);
                         javax.microedition.khronos.egl.EGLSurface eGLSurface = this.eglSurface;
                         if (eGLSurface == null || eGLSurface == EGL10.EGL_NO_SURFACE) {
                             if (BuildVars.LOGS_ENABLED) {
@@ -1811,7 +1808,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             finish();
                             return false;
                         } else if (this.egl10.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
-                            this.gl = this.eglContext.getGL();
+                            this.eglContext.getGL();
                             float access$1300 = (1.0f / InstantCameraView.this.scaleX) / 2.0f;
                             float access$1400 = (1.0f / InstantCameraView.this.scaleY) / 2.0f;
                             float[] fArr = new float[]{-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f};
@@ -2051,10 +2048,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 CameraSession cameraSession = (CameraSession) message.obj;
                 CameraSession cameraSession2 = this.currentSession;
                 if (cameraSession2 == cameraSession) {
-                    this.rotationAngle = cameraSession2.getWorldAngle();
+                    int worldAngle = cameraSession2.getWorldAngle();
                     Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
-                    if (this.rotationAngle != 0) {
-                        Matrix.rotateM(InstantCameraView.this.mMVPMatrix, 0, (float) this.rotationAngle, 0.0f, 0.0f, 1.0f);
+                    if (worldAngle != 0) {
+                        Matrix.rotateM(InstantCameraView.this.mMVPMatrix, 0, (float) worldAngle, 0.0f, 0.0f, 1.0f);
                     }
                 } else {
                     this.currentSession = cameraSession;
@@ -2195,21 +2192,24 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     animatorSet = this.muteAnimation;
                     Animator[] animatorArr = new Animator[3];
                     ImageView imageView = this.muteImageView;
+                    Property property = View.ALPHA;
                     float[] fArr = new float[1];
                     float f = 1.0f;
                     fArr[0] = isMuted != 0 ? 1.0f : 0.0f;
-                    animatorArr[0] = ObjectAnimator.ofFloat(imageView, "alpha", fArr);
+                    animatorArr[0] = ObjectAnimator.ofFloat(imageView, property, fArr);
                     imageView = this.muteImageView;
+                    property = View.SCALE_X;
                     fArr = new float[1];
                     fArr[0] = isMuted != 0 ? 1.0f : 0.5f;
-                    animatorArr[1] = ObjectAnimator.ofFloat(imageView, "scaleX", fArr);
+                    animatorArr[1] = ObjectAnimator.ofFloat(imageView, property, fArr);
                     ImageView imageView2 = this.muteImageView;
+                    Property property2 = View.SCALE_Y;
                     float[] fArr2 = new float[1];
                     if (isMuted == 0) {
                         f = 0.5f;
                     }
                     fArr2[0] = f;
-                    animatorArr[2] = ObjectAnimator.ofFloat(imageView2, "scaleY", fArr2);
+                    animatorArr[2] = ObjectAnimator.ofFloat(imageView2, property2, fArr2);
                     animatorSet.playTogether(animatorArr);
                     this.muteAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
@@ -2234,11 +2234,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             CameraSession cameraSession = this.cameraSession;
             if (cameraSession != null && cameraSession.isInitied() && this.cameraThread != null) {
                 switchCamera();
-                ObjectAnimator duration = ObjectAnimator.ofFloat(this.switchCameraButton, "scaleX", new float[]{0.0f}).setDuration(100);
+                ObjectAnimator duration = ObjectAnimator.ofFloat(this.switchCameraButton, View.SCALE_X, new float[]{0.0f}).setDuration(100);
                 duration.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         InstantCameraView.this.switchCameraButton.setImageResource(InstantCameraView.this.isFrontface ? NUM : NUM);
-                        ObjectAnimator.ofFloat(InstantCameraView.this.switchCameraButton, "scaleX", new float[]{1.0f}).setDuration(100).start();
+                        ObjectAnimator.ofFloat(InstantCameraView.this.switchCameraButton, View.SCALE_X, new float[]{1.0f}).setDuration(100).start();
                     }
                 });
                 duration.start();
@@ -2433,6 +2433,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.cameraContainer.addView(this.textureView, LayoutHelper.createFrame(-1, -1.0f));
                 setVisibility(0);
                 startAnimation(true);
+                MediaController.getInstance().requestAudioFocus(true);
             }
         }
     }
@@ -2453,64 +2454,70 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.animatorSet = new AnimatorSet();
         animatorSet = this.animatorSet;
         Animator[] animatorArr = new Animator[12];
+        Property property = View.ALPHA;
         float[] fArr = new float[1];
         float f = 1.0f;
         float f2 = 0.0f;
         fArr[0] = z ? 1.0f : 0.0f;
-        String str = "alpha";
-        animatorArr[0] = ObjectAnimator.ofFloat(this, str, fArr);
+        animatorArr[0] = ObjectAnimator.ofFloat(this, property, fArr);
         ImageView imageView = this.switchCameraButton;
+        Property property2 = View.ALPHA;
         float[] fArr2 = new float[1];
         fArr2[0] = z ? 1.0f : 0.0f;
-        animatorArr[1] = ObjectAnimator.ofFloat(imageView, str, fArr2);
-        animatorArr[2] = ObjectAnimator.ofFloat(this.muteImageView, str, new float[]{0.0f});
+        animatorArr[1] = ObjectAnimator.ofFloat(imageView, property2, fArr2);
+        animatorArr[2] = ObjectAnimator.ofFloat(this.muteImageView, View.ALPHA, new float[]{0.0f});
         Paint paint = this.paint;
         int[] iArr = new int[1];
         iArr[0] = z ? 255 : 0;
-        animatorArr[3] = ObjectAnimator.ofInt(paint, str, iArr);
+        animatorArr[3] = ObjectAnimator.ofInt(paint, "alpha", iArr);
         FrameLayout frameLayout = this.cameraContainer;
+        Property property3 = View.ALPHA;
         float[] fArr3 = new float[1];
         fArr3[0] = z ? 1.0f : 0.0f;
-        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout, str, fArr3);
+        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout, property3, fArr3);
         frameLayout = this.cameraContainer;
+        property3 = View.SCALE_X;
         fArr3 = new float[1];
         fArr3[0] = z ? 1.0f : 0.1f;
-        String str2 = "scaleX";
-        animatorArr[5] = ObjectAnimator.ofFloat(frameLayout, str2, fArr3);
+        animatorArr[5] = ObjectAnimator.ofFloat(frameLayout, property3, fArr3);
         frameLayout = this.cameraContainer;
+        property3 = View.SCALE_Y;
         fArr3 = new float[1];
         fArr3[0] = z ? 1.0f : 0.1f;
-        String str3 = "scaleY";
-        animatorArr[6] = ObjectAnimator.ofFloat(frameLayout, str3, fArr3);
+        animatorArr[6] = ObjectAnimator.ofFloat(frameLayout, property3, fArr3);
         frameLayout = this.cameraContainer;
+        property3 = View.TRANSLATION_Y;
         fArr3 = new float[2];
         fArr3[0] = z ? (float) (getMeasuredHeight() / 2) : 0.0f;
         fArr3[1] = z ? 0.0f : (float) (getMeasuredHeight() / 2);
-        String str4 = "translationY";
-        animatorArr[7] = ObjectAnimator.ofFloat(frameLayout, str4, fArr3);
+        animatorArr[7] = ObjectAnimator.ofFloat(frameLayout, property3, fArr3);
         BackupImageView backupImageView = this.textureOverlayView;
+        property3 = View.ALPHA;
         fArr3 = new float[1];
         fArr3[0] = z ? 1.0f : 0.0f;
-        animatorArr[8] = ObjectAnimator.ofFloat(backupImageView, str, fArr3);
-        BackupImageView backupImageView2 = this.textureOverlayView;
-        float[] fArr4 = new float[1];
-        fArr4[0] = z ? 1.0f : 0.1f;
-        animatorArr[9] = ObjectAnimator.ofFloat(backupImageView2, str2, fArr4);
-        backupImageView2 = this.textureOverlayView;
-        fArr4 = new float[1];
+        animatorArr[8] = ObjectAnimator.ofFloat(backupImageView, property3, fArr3);
+        backupImageView = this.textureOverlayView;
+        property3 = View.SCALE_X;
+        fArr3 = new float[1];
+        fArr3[0] = z ? 1.0f : 0.1f;
+        animatorArr[9] = ObjectAnimator.ofFloat(backupImageView, property3, fArr3);
+        backupImageView = this.textureOverlayView;
+        property3 = View.SCALE_Y;
+        fArr3 = new float[1];
         if (!z) {
             f = 0.1f;
         }
-        fArr4[0] = f;
-        animatorArr[10] = ObjectAnimator.ofFloat(backupImageView2, str3, fArr4);
-        BackupImageView backupImageView3 = this.textureOverlayView;
-        float[] fArr5 = new float[2];
-        fArr5[0] = z ? (float) (getMeasuredHeight() / 2) : 0.0f;
+        fArr3[0] = f;
+        animatorArr[10] = ObjectAnimator.ofFloat(backupImageView, property3, fArr3);
+        BackupImageView backupImageView2 = this.textureOverlayView;
+        Property property4 = View.TRANSLATION_Y;
+        float[] fArr4 = new float[2];
+        fArr4[0] = z ? (float) (getMeasuredHeight() / 2) : 0.0f;
         if (!z) {
             f2 = (float) (getMeasuredHeight() / 2);
         }
-        fArr5[1] = f2;
-        animatorArr[11] = ObjectAnimator.ofFloat(backupImageView3, str4, fArr5);
+        fArr4[1] = f2;
+        animatorArr[11] = ObjectAnimator.ofFloat(backupImageView2, property4, fArr4);
         animatorSet.playTogether(animatorArr);
         if (!z) {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -2609,6 +2616,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 if (i4 != 0) {
                     startAnimation(false);
                 }
+                MediaController.getInstance().requestAudioFocus(false);
             } else {
                 this.cancelled = this.recordedTime < 800;
                 this.recording = false;
@@ -2629,6 +2637,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 if (this.cancelled) {
                     NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.audioRecordTooShort, Integer.valueOf(this.recordingGuid), Boolean.valueOf(true));
                     startAnimation(false);
+                    MediaController.getInstance().requestAudioFocus(false);
                 }
             }
         }
@@ -2670,6 +2679,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 file.delete();
                 this.cameraFile = null;
             }
+            MediaController.getInstance().requestAudioFocus(false);
             startAnimation(false);
         }
     }

@@ -64,7 +64,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.checkBox.setSize(z ? 30 : 26);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setDrawBackground(true);
-        this.checkBox.setColor(-10043398, -1);
+        this.checkBox.setColor(Theme.getColor("dialogFloatingButton"), -1);
         addView(this.checkBox, LayoutHelper.createFrame(z ? 30 : 26, z ? 30.0f : 26.0f, 53, 0.0f, 4.0f, 4.0f, 0.0f));
         setFocusable(true);
     }
@@ -72,6 +72,16 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(this.itemWidth, NUM), MeasureSpec.makeMeasureSpec(this.itemWidth, NUM));
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        updateColors();
+    }
+
+    public void updateColors() {
+        this.checkBox.setColor(Theme.getColor("dialogFloatingButton"), -1);
     }
 
     public void showCheck(boolean z) {

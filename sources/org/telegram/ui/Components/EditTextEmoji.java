@@ -407,6 +407,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
                     return -CC.$default$canSchedule(this);
                 }
 
+                public /* synthetic */ long getDialogId() {
+                    return -CC.$default$getDialogId(this);
+                }
+
                 public /* synthetic */ boolean isExpanded() {
                     return -CC.$default$isExpanded(this);
                 }

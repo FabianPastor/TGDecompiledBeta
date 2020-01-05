@@ -1515,10 +1515,10 @@ public class AndroidUtilities {
         String str = " ";
         try {
             int ceil;
-            int i = (int) density;
+            float f = density;
             density = context.getResources().getDisplayMetrics().density;
-            int i2 = (int) density;
-            if (firstConfigurationWas && i != i2) {
+            float f2 = density;
+            if (firstConfigurationWas && ((double) Math.abs(f - f2)) > 0.001d) {
                 Theme.reloadAllResources(context);
             }
             boolean z = true;
@@ -2454,6 +2454,15 @@ public class AndroidUtilities {
         } else {
             return String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(i3), Integer.valueOf(i)});
         }
+    }
+
+    public static String formatDurationNoHours(int i, boolean z) {
+        int i2 = i / 60;
+        i %= 60;
+        if (z) {
+            return String.format(Locale.US, "%02d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i)});
+        }
+        return String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i)});
     }
 
     public static String formatShortDuration(int i, int i2) {

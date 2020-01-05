@@ -233,7 +233,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.toolsView.addView(this.cancelTextView, LayoutHelper.createFrame(-2, -1, 51));
         this.doneTextView = new TextView(context);
         this.doneTextView.setTextSize(1, 14.0f);
-        this.doneTextView.setTextColor(-11420173);
+        this.doneTextView.setTextColor(Theme.getColor("dialogFloatingButton"));
         this.doneTextView.setGravity(17);
         this.doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
         this.doneTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
@@ -329,10 +329,22 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             this.paintButton.setImageResource(NUM);
             this.paintButton.setColorFilter(null);
         } else {
-            this.paintButton.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
+            this.paintButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
             this.paintButton.setImageResource(NUM);
         }
         this.colorPicker.setSettingsButtonImage(i);
+    }
+
+    public void updateColors() {
+        ImageView imageView = this.paintButton;
+        String str = "dialogFloatingButton";
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.paintButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        }
+        TextView textView = this.doneTextView;
+        if (textView != null) {
+            textView.setTextColor(Theme.getColor(str));
+        }
     }
 
     public void init() {
@@ -950,7 +962,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             imageView = new ImageView(getContext());
             imageView.setImageResource(NUM);
             imageView.setScaleType(ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(-13660983, Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
             frameLayout.addView(imageView, LayoutHelper.createFrame(50, -1.0f));
         }
         return frameLayout;
@@ -1021,7 +1033,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             ImageView imageView = new ImageView(getContext());
             imageView.setImageResource(NUM);
             imageView.setScaleType(ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(-13660983, Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
             anonymousClass9.addView(imageView, LayoutHelper.createFrame(50, -1.0f));
         }
         return anonymousClass9;

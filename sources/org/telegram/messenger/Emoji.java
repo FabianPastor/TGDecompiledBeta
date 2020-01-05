@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,29 +26,27 @@ import java.util.Map.Entry;
 public class Emoji {
     private static final int MAX_RECENT_EMOJI_COUNT = 48;
     private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 34.0f);
-    private static final int[][] cols;
     private static int drawImgSize = AndroidUtilities.dp(20.0f);
-    private static Bitmap[][] emojiBmp = ((Bitmap[][]) Array.newInstance(Bitmap.class, new int[]{8, 4}));
+    private static Bitmap[][] emojiBmp = new Bitmap[8][];
     public static HashMap<String, String> emojiColor = new HashMap();
+    private static int[] emojiCounts = new int[]{1620, 184, 115, 328, 125, 206, 288, 258};
     public static HashMap<String, Integer> emojiUseHistory = new HashMap();
     private static boolean inited = false;
-    private static boolean[][] loadingEmoji = ((boolean[][]) Array.newInstance(boolean.class, new int[]{8, 4}));
+    private static Runnable invalidateUiRunnable = -$$Lambda$Emoji$evx_fdAb4NaXQ9KHlOHuPrE3OTE.INSTANCE;
+    private static boolean[][] loadingEmoji = new boolean[8][];
     private static Paint placeholderPaint = new Paint();
     public static ArrayList<String> recentEmoji = new ArrayList();
-    private static boolean recentEmojiLoaded = false;
+    private static boolean recentEmojiLoaded;
     private static HashMap<CharSequence, DrawableInfo> rects = new HashMap();
-    private static final int splitCount = 4;
 
     private static class DrawableInfo {
         public int emojiIndex;
         public byte page;
-        public byte page2;
-        public Rect rect;
+        public short page2;
 
-        public DrawableInfo(Rect rect, byte b, byte b2, int i) {
-            this.rect = rect;
+        public DrawableInfo(byte b, short s, int i) {
             this.page = b;
-            this.page2 = b2;
+            this.page2 = s;
             this.emojiIndex = i;
         }
     }
@@ -113,7 +110,7 @@ public class Emoji {
             }
             Bitmap[][] access$3002 = Emoji.emojiBmp;
             DrawableInfo drawableInfo2 = this.info;
-            canvas.drawBitmap(access$3002[drawableInfo2.page][drawableInfo2.page2], drawableInfo2.rect, drawRect, paint);
+            canvas.drawBitmap(access$3002[drawableInfo2.page][drawableInfo2.page2], null, drawRect, paint);
         }
 
         public /* synthetic */ void lambda$draw$0$Emoji$EmojiDrawable() {
@@ -180,60 +177,44 @@ public class Emoji {
     }
 
     static {
-        int i;
-        r1 = new int[8][];
-        int i2 = 2;
-        r1[2] = new int[]{5, 5, 5, 5};
-        r1[3] = new int[]{9, 9, 9, 9};
-        r1[4] = new int[]{5, 5, 5, 5};
-        r1[5] = new int[]{7, 7, 7, 7};
-        r1[6] = new int[]{8, 8, 8, 8};
-        r1[7] = new int[]{8, 8, 8, 8};
-        cols = r1;
-        float f = AndroidUtilities.density;
-        int i3 = 66;
-        if (f <= 1.0f) {
-            i3 = 33;
-            i2 = 1;
-        } else if (f > 1.5f) {
-            i = (f > 2.0f ? 1 : (f == 2.0f ? 0 : -1));
-        }
-        i = 0;
+        int i = 0;
         while (true) {
-            String[][] strArr = EmojiData.data;
-            if (i < strArr.length) {
-                int ceil = (int) Math.ceil((double) (((float) strArr[i].length) / 4.0f));
-                for (int i4 = 0; i4 < EmojiData.data[i].length; i4++) {
-                    int i5 = i4 / ceil;
-                    int i6 = i4 - (i5 * ceil);
-                    int[][] iArr = cols;
-                    int i7 = i6 % iArr[i][i5];
-                    i6 /= iArr[i][i5];
-                    int i8 = i7 * i2;
-                    int i9 = i6 * i2;
-                    rects.put(EmojiData.data[i][i4], new DrawableInfo(new Rect((i7 * i3) + i8, (i6 * i3) + i9, ((i7 + 1) * i3) + i8, ((i6 + 1) * i3) + i9), (byte) i, (byte) i5, i4));
+            Bitmap[][] bitmapArr = emojiBmp;
+            if (i >= bitmapArr.length) {
+                break;
+            }
+            int[] iArr = emojiCounts;
+            bitmapArr[i] = new Bitmap[iArr[i]];
+            loadingEmoji[i] = new boolean[iArr[i]];
+            i++;
+        }
+        for (i = 0; i < EmojiData.data.length; i++) {
+            int i2 = 0;
+            while (true) {
+                String[][] strArr = EmojiData.data;
+                if (i2 >= strArr[i].length) {
+                    break;
                 }
-                i++;
-            } else {
-                placeholderPaint.setColor(0);
-                return;
+                rects.put(strArr[i][i2], new DrawableInfo((byte) i, (short) i2, i2));
+                i2++;
             }
         }
+        placeholderPaint.setColor(0);
     }
 
-    private static void loadEmoji(int i, int i2) {
-        int i3;
+    private static void loadEmoji(byte b, short s) {
+        int i;
         try {
             if (AndroidUtilities.density <= 1.0f) {
-                i3 = 2;
+                i = 2;
             } else {
                 if (AndroidUtilities.density > 1.5f) {
-                    i3 = (AndroidUtilities.density > 2.0f ? 1 : (AndroidUtilities.density == 2.0f ? 0 : -1));
+                    i = (AndroidUtilities.density > 2.0f ? 1 : (AndroidUtilities.density == 2.0f ? 0 : -1));
                 }
-                i3 = 1;
+                i = 1;
             }
-            for (int i4 = 13; i4 < 15; i4++) {
-                File fileStreamPath = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(i4), Float.valueOf(2.0f), Integer.valueOf(i)}));
+            for (int i2 = 13; i2 < 16; i2++) {
+                File fileStreamPath = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(i2), Float.valueOf(2.0f), Byte.valueOf(b)}));
                 if (fileStreamPath.exists()) {
                     fileStreamPath.delete();
                 }
@@ -247,27 +228,24 @@ public class Emoji {
             }
             return;
         }
-        Bitmap bitmap = null;
+        Rect rect = null;
         try {
             AssetManager assets = ApplicationLoader.applicationContext.getAssets();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("emoji/");
-            stringBuilder.append(String.format(Locale.US, "v15_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(2.0f), Integer.valueOf(i), Integer.valueOf(i2)}));
+            stringBuilder.append(String.format(Locale.US, "%d_%d.png", new Object[]{Byte.valueOf(b), Short.valueOf(s)}));
             InputStream open = assets.open(stringBuilder.toString());
             Options options = new Options();
             options.inJustDecodeBounds = false;
-            options.inSampleSize = i3;
-            bitmap = BitmapFactory.decodeStream(open, null, options);
+            options.inSampleSize = i;
+            rect = BitmapFactory.decodeStream(open, null, options);
             open.close();
         } catch (Throwable th2) {
             FileLog.e(th2);
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$Emoji$8PuKHwVD-cYGVxmUFCHOFHCQ5bM(i, i2, bitmap));
-    }
-
-    static /* synthetic */ void lambda$loadEmoji$0(int i, int i2, Bitmap bitmap) {
-        emojiBmp[i][i2] = bitmap;
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoad, new Object[0]);
+        emojiBmp[b][s] = rect;
+        AndroidUtilities.cancelRunOnUIThread(invalidateUiRunnable);
+        AndroidUtilities.runOnUIThread(invalidateUiRunnable);
     }
 
     public static void invalidateAll(View view) {
