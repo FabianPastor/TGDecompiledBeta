@@ -48,46 +48,53 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
             int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType == 0) {
-                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                textInfoPrivacyCell.setText(LocaleController.getString("VoipQuickRepliesExplain", NUM));
-            } else if (itemViewType != 1) {
-                String str = "mainconfig";
-                if (itemViewType != 4) {
-                    switch (itemViewType) {
-                        case 9:
-                        case 10:
-                        case 11:
-                        case 12:
-                            String str2;
-                            EditTextSettingsCell editTextSettingsCell = (EditTextSettingsCell) viewHolder.itemView;
-                            String str3 = null;
-                            if (i == QuickRepliesSettingsActivity.this.reply1Row) {
-                                str3 = LocaleController.getString("QuickReplyDefault1", NUM);
-                                str2 = "quick_reply_msg1";
-                            } else if (i == QuickRepliesSettingsActivity.this.reply2Row) {
-                                str3 = LocaleController.getString("QuickReplyDefault2", NUM);
-                                str2 = "quick_reply_msg2";
-                            } else if (i == QuickRepliesSettingsActivity.this.reply3Row) {
-                                str3 = LocaleController.getString("QuickReplyDefault3", NUM);
-                                str2 = "quick_reply_msg3";
-                            } else if (i == QuickRepliesSettingsActivity.this.reply4Row) {
-                                str3 = LocaleController.getString("QuickReplyDefault4", NUM);
-                                str2 = "quick_reply_msg4";
-                            } else {
-                                str2 = null;
-                            }
-                            editTextSettingsCell.setTextAndHint(QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences(str, 0).getString(str2, ""), str3, true);
-                            return;
-                        default:
-                            return;
+            if (itemViewType != 0) {
+                boolean z = true;
+                if (itemViewType != 1) {
+                    String str = "mainconfig";
+                    if (itemViewType != 4) {
+                        switch (itemViewType) {
+                            case 9:
+                            case 10:
+                            case 11:
+                            case 12:
+                                String str2;
+                                EditTextSettingsCell editTextSettingsCell = (EditTextSettingsCell) viewHolder.itemView;
+                                String str3 = null;
+                                if (i == QuickRepliesSettingsActivity.this.reply1Row) {
+                                    str3 = LocaleController.getString("QuickReplyDefault1", NUM);
+                                    str2 = "quick_reply_msg1";
+                                } else if (i == QuickRepliesSettingsActivity.this.reply2Row) {
+                                    str3 = LocaleController.getString("QuickReplyDefault2", NUM);
+                                    str2 = "quick_reply_msg2";
+                                } else if (i == QuickRepliesSettingsActivity.this.reply3Row) {
+                                    str3 = LocaleController.getString("QuickReplyDefault3", NUM);
+                                    str2 = "quick_reply_msg3";
+                                } else if (i == QuickRepliesSettingsActivity.this.reply4Row) {
+                                    str3 = LocaleController.getString("QuickReplyDefault4", NUM);
+                                    str2 = "quick_reply_msg4";
+                                } else {
+                                    str2 = null;
+                                }
+                                str2 = QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences(str, 0).getString(str2, "");
+                                if (i == QuickRepliesSettingsActivity.this.reply4Row) {
+                                    z = false;
+                                }
+                                editTextSettingsCell.setTextAndHint(str2, str3, z);
+                                return;
+                            default:
+                                return;
+                        }
                     }
+                    ((TextCheckCell) viewHolder.itemView).setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", NUM), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences(str, 0).getBoolean("quick_reply_allow_custom", true), false);
+                    return;
                 }
-                ((TextCheckCell) viewHolder.itemView).setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", NUM), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences(str, 0).getBoolean("quick_reply_allow_custom", true), false);
-            } else {
                 TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
+                return;
             }
+            TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
+            textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+            textInfoPrivacyCell.setText(LocaleController.getString("VoipQuickRepliesExplain", NUM));
         }
 
         public boolean isEnabled(ViewHolder viewHolder) {

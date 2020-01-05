@@ -759,7 +759,7 @@ public class SharedConfig {
             int i = VERSION.SDK_INT;
             int i2 = ConnectionsManager.CPU_COUNT;
             int memoryClass = ((ActivityManager) ApplicationLoader.applicationContext.getSystemService("activity")).getMemoryClass();
-            if (i < 21 || i2 <= 2 || memoryClass <= 100 || ((i2 <= 4 && intValue != -1 && intValue <= 1250) || (i2 <= 4 && intValue <= 1600 && memoryClass <= 128 && i <= 21))) {
+            if (i < 21 || i2 <= 2 || memoryClass <= 100 || ((i2 <= 4 && intValue != -1 && intValue <= 1250) || ((i2 <= 4 && intValue <= 1600 && memoryClass <= 128 && i <= 21) || (i2 <= 4 && intValue <= 1300 && memoryClass <= 128 && i <= 24)))) {
                 devicePerformanceClass = 0;
             } else if (i2 < 8 || memoryClass <= 160 || ((intValue != -1 && intValue <= 1650) || (intValue == -1 && i2 == 8 && i <= 23))) {
                 devicePerformanceClass = 1;

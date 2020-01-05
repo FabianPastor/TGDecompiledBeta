@@ -8044,53 +8044,59 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x0029  */
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x0027  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0030  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x002e  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x005a  */
     private void showTextSelectionHint(org.telegram.messenger.MessageObject r9) {
         /*
         r8 = this;
+        r0 = r8.getParentActivity();
+        if (r0 != 0) goto L_0x0007;
+    L_0x0006:
+        return;
+    L_0x0007:
         r0 = r9.textLayoutBlocks;
         r1 = 0;
         r2 = 1;
-        if (r0 == 0) goto L_0x0018;
-    L_0x0006:
+        if (r0 == 0) goto L_0x001f;
+    L_0x000d:
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x0018;
-    L_0x000c:
+        if (r0 != 0) goto L_0x001f;
+    L_0x0013:
         r0 = r9.messageText;
         r9 = r9.textLayoutBlocks;
         r9 = r9.size();
-        if (r9 <= r2) goto L_0x001a;
-    L_0x0016:
-        r9 = 1;
-        goto L_0x001b;
-    L_0x0018:
-        r0 = r9.caption;
-    L_0x001a:
-        r9 = 0;
-    L_0x001b:
-        if (r9 != 0) goto L_0x002a;
+        if (r9 <= r2) goto L_0x0021;
     L_0x001d:
-        if (r0 == 0) goto L_0x002a;
+        r9 = 1;
+        goto L_0x0022;
     L_0x001f:
+        r0 = r9.caption;
+    L_0x0021:
+        r9 = 0;
+    L_0x0022:
+        if (r9 != 0) goto L_0x0031;
+    L_0x0024:
+        if (r0 == 0) goto L_0x0031;
+    L_0x0026:
         r9 = r0.length();
         r0 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
-        if (r9 <= r0) goto L_0x0029;
-    L_0x0027:
+        if (r9 <= r0) goto L_0x0030;
+    L_0x002e:
         r9 = 1;
-        goto L_0x002a;
-    L_0x0029:
+        goto L_0x0031;
+    L_0x0030:
         r9 = 0;
-    L_0x002a:
-        if (r9 == 0) goto L_0x007a;
-    L_0x002c:
+    L_0x0031:
+        if (r9 == 0) goto L_0x0081;
+    L_0x0033:
         r9 = org.telegram.messenger.SharedConfig.textSelectionHintShows;
         r0 = 2;
-        if (r9 > r0) goto L_0x007a;
-    L_0x0031:
+        if (r9 > r0) goto L_0x0081;
+    L_0x0038:
         r9 = r8.textSelectionHintWasShowed;
-        if (r9 != 0) goto L_0x007a;
-    L_0x0035:
+        if (r9 != 0) goto L_0x0081;
+    L_0x003c:
         r9 = r8.lastTouchY;
         r0 = r8.chatActivityEnterView;
         r0 = r0.getTop();
@@ -8099,15 +8105,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r0 = r0 - r1;
         r0 = (float) r0;
         r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1));
-        if (r9 <= 0) goto L_0x004a;
-    L_0x0049:
-        goto L_0x007a;
-    L_0x004a:
+        if (r9 <= 0) goto L_0x0051;
+    L_0x0050:
+        goto L_0x0081;
+    L_0x0051:
         r8.textSelectionHintWasShowed = r2;
         org.telegram.messenger.SharedConfig.increaseTextSelectionHintShowed();
         r9 = r8.textSelectionHint;
-        if (r9 != 0) goto L_0x0075;
-    L_0x0053:
+        if (r9 != 0) goto L_0x007c;
+    L_0x005a:
         r9 = new org.telegram.ui.ChatActivity$47;
         r0 = r8.getParentActivity();
         r9.<init>(r0);
@@ -8123,10 +8129,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r2, r3, r4, r5, r6, r7);
         r9.addView(r0, r1);
-    L_0x0075:
+    L_0x007c:
         r9 = r8.textSelectionHint;
         r9.show();
-    L_0x007a:
+    L_0x0081:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.showTextSelectionHint(org.telegram.messenger.MessageObject):void");
@@ -12400,27 +12406,27 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     /* JADX WARNING: Removed duplicated region for block: B:1155:0x149a  */
     /* JADX WARNING: Removed duplicated region for block: B:1169:0x14d7  */
     /* JADX WARNING: Removed duplicated region for block: B:1188:0x152f  */
-    /* JADX WARNING: Removed duplicated region for block: B:2601:0x1516 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:2602:0x1516 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:1152:0x1495  */
     /* JADX WARNING: Removed duplicated region for block: B:1148:0x147c  */
     /* JADX WARNING: Removed duplicated region for block: B:1155:0x149a  */
     /* JADX WARNING: Removed duplicated region for block: B:1156:0x149c  */
     /* JADX WARNING: Removed duplicated region for block: B:1169:0x14d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2601:0x1516 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:2602:0x1516 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:1188:0x152f  */
     /* JADX WARNING: Removed duplicated region for block: B:1169:0x14d7  */
     /* JADX WARNING: Removed duplicated region for block: B:1188:0x152f  */
-    /* JADX WARNING: Removed duplicated region for block: B:2601:0x1516 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:2602:0x1516 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:1169:0x14d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2601:0x1516 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:2602:0x1516 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:1188:0x152f  */
     /* JADX WARNING: Removed duplicated region for block: B:1169:0x14d7  */
     /* JADX WARNING: Removed duplicated region for block: B:1188:0x152f  */
-    /* JADX WARNING: Removed duplicated region for block: B:2601:0x1516 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:2602:0x1516 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:1165:0x14d0  */
     /* JADX WARNING: Removed duplicated region for block: B:1124:0x1424  */
     /* JADX WARNING: Removed duplicated region for block: B:1169:0x14d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:2601:0x1516 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:2602:0x1516 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:1188:0x152f  */
     /* JADX WARNING: Removed duplicated region for block: B:1059:0x132c  */
     /* JADX WARNING: Removed duplicated region for block: B:1062:0x1333  */
@@ -12432,7 +12438,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     /* JADX WARNING: Removed duplicated region for block: B:1165:0x14d0  */
     /* JADX WARNING: Removed duplicated region for block: B:1169:0x14d7  */
     /* JADX WARNING: Removed duplicated region for block: B:1188:0x152f  */
-    /* JADX WARNING: Removed duplicated region for block: B:2601:0x1516 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:2602:0x1516 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:1396:0x1945  */
     /* JADX WARNING: Removed duplicated region for block: B:1413:0x198a  */
     /* JADX WARNING: Removed duplicated region for block: B:1431:0x19d7  */
@@ -12509,7 +12515,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     /* JADX WARNING: Missing block: B:2308:0x2a9b, code skipped:
             if (r0.megagroup != false) goto L_0x2a9d;
      */
-    /* JADX WARNING: Missing block: B:2382:0x2bfb, code skipped:
+    /* JADX WARNING: Missing block: B:2383:0x2bfb, code skipped:
             if (((long) r2.id) == r0) goto L_0x2bfd;
      */
     public void didReceivedNotification(int r48, int r49, java.lang.Object... r50) {
@@ -19320,10 +19326,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (r0 != r1) goto L_0x2ed7;
     L_0x2b8a:
         r0 = r7.searchItem;
-        if (r0 == 0) goto L_0x2ed7;
+        if (r0 == 0) goto L_0x2b92;
     L_0x2b8e:
         r1 = 1;
         r0.setShowSearchProgress(r1);
+    L_0x2b92:
         r0 = r7.messagesSearchAdapter;
         if (r0 == 0) goto L_0x2ed7;
     L_0x2b96:
@@ -21057,10 +21064,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ChatActivity.this.alertViewAnimator = null;
                         }
                         ChatActivity.this.alertViewAnimator = new AnimatorSet();
-                        AnimatorSet access$25200 = ChatActivity.this.alertViewAnimator;
+                        AnimatorSet access$25300 = ChatActivity.this.alertViewAnimator;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(50.0f))});
-                        access$25200.playTogether(animatorArr);
+                        access$25300.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
                         ChatActivity.this.alertViewAnimator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {

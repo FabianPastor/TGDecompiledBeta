@@ -68,7 +68,7 @@ class TextSelectionHint extends View {
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, i2);
-        if (getMeasuredWidth() != this.lastW) {
+        if (getMeasuredWidth() != this.lastW || this.textLayout == null) {
             Animator animator = this.a;
             if (animator != null) {
                 animator.removeAllListeners();
@@ -129,60 +129,62 @@ class TextSelectionHint extends View {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        int i;
-        float f;
         Canvas canvas2 = canvas;
-        super.onDraw(canvas);
-        canvas.save();
-        canvas2.translate((float) this.padding, (float) ((getMeasuredHeight() - this.textLayout.getHeight()) >> 1));
-        if (this.enterValue != 0.0f) {
-            drawSelection(canvas2, this.textLayout, this.currentStart, this.currentEnd);
+        if (this.textLayout != null) {
+            int i;
+            float f;
+            super.onDraw(canvas);
+            canvas.save();
+            canvas2.translate((float) this.padding, (float) ((getMeasuredHeight() - this.textLayout.getHeight()) >> 1));
+            if (this.enterValue != 0.0f) {
+                drawSelection(canvas2, this.textLayout, this.currentStart, this.currentEnd);
+            }
+            this.textLayout.draw(canvas2);
+            int dp = AndroidUtilities.dp(14.0f);
+            int lineForOffset = this.textLayout.getLineForOffset(this.currentEnd);
+            this.textLayout.getPrimaryHorizontal(this.currentEnd);
+            int lineBottom = this.textLayout.getLineBottom(lineForOffset);
+            int i2 = this.currentEnd;
+            int i3 = this.animateToEnd;
+            if (i2 == i3) {
+                roundedRect(this.path, this.textLayout.getPrimaryHorizontal(i3), (float) this.textLayout.getLineTop(lineForOffset), this.textLayout.getPrimaryHorizontal(this.animateToEnd) + AndroidUtilities.dpf2(4.0f), (float) this.textLayout.getLineBottom(lineForOffset), AndroidUtilities.dpf2(4.0f), AndroidUtilities.dpf2(4.0f), false, true);
+                canvas2.drawPath(this.path, this.selectionPaint);
+            }
+            float interpolation = this.interpolator.getInterpolation(this.enterValue);
+            lineForOffset = (int) ((this.textLayout.getPrimaryHorizontal(this.animateToEnd) + (AndroidUtilities.dpf2(4.0f) * (1.0f - this.endOffsetValue))) + ((this.textLayout.getPrimaryHorizontal(this.end) - this.textLayout.getPrimaryHorizontal(this.animateToEnd)) * this.endOffsetValue));
+            canvas.save();
+            canvas2.translate((float) lineForOffset, (float) lineBottom);
+            float f2 = (float) dp;
+            float f3 = f2 / 2.0f;
+            canvas2.scale(interpolation, interpolation, f3, f3);
+            this.path.reset();
+            this.path.addCircle(f3, f3, f3, Direction.CCW);
+            this.path.addRect(0.0f, 0.0f, f3, f3, Direction.CCW);
+            canvas2.drawPath(this.path, this.textPaint);
+            canvas.restore();
+            lineForOffset = this.textLayout.getLineForOffset(this.currentStart);
+            this.textLayout.getPrimaryHorizontal(this.currentStart);
+            int lineBottom2 = this.textLayout.getLineBottom(lineForOffset);
+            if (this.currentStart == this.animateToStart) {
+                i = lineBottom2;
+                f = f3;
+                roundedRect(this.path, (float) (-AndroidUtilities.dp(4.0f)), (float) this.textLayout.getLineTop(lineForOffset), 0.0f, (float) this.textLayout.getLineBottom(lineForOffset), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), true, false);
+                canvas2.drawPath(this.path, this.selectionPaint);
+            } else {
+                i = lineBottom2;
+                f = f3;
+            }
+            canvas.save();
+            canvas2.translate((float) (((int) ((this.textLayout.getPrimaryHorizontal(this.animateToStart) - (((float) AndroidUtilities.dp(4.0f)) * (1.0f - this.startOffsetValue))) + ((this.textLayout.getPrimaryHorizontal(this.start) - this.textLayout.getPrimaryHorizontal(this.animateToStart)) * this.startOffsetValue))) - dp), (float) i);
+            float f4 = f;
+            canvas2.scale(interpolation, interpolation, f4, f4);
+            this.path.reset();
+            this.path.addCircle(f4, f4, f4, Direction.CCW);
+            this.path.addRect(f4, 0.0f, f2, f4, Direction.CCW);
+            canvas2.drawPath(this.path, this.textPaint);
+            canvas.restore();
+            canvas.restore();
         }
-        this.textLayout.draw(canvas2);
-        int dp = AndroidUtilities.dp(14.0f);
-        int lineForOffset = this.textLayout.getLineForOffset(this.currentEnd);
-        this.textLayout.getPrimaryHorizontal(this.currentEnd);
-        int lineBottom = this.textLayout.getLineBottom(lineForOffset);
-        int i2 = this.currentEnd;
-        int i3 = this.animateToEnd;
-        if (i2 == i3) {
-            roundedRect(this.path, this.textLayout.getPrimaryHorizontal(i3), (float) this.textLayout.getLineTop(lineForOffset), this.textLayout.getPrimaryHorizontal(this.animateToEnd) + AndroidUtilities.dpf2(4.0f), (float) this.textLayout.getLineBottom(lineForOffset), AndroidUtilities.dpf2(4.0f), AndroidUtilities.dpf2(4.0f), false, true);
-            canvas2.drawPath(this.path, this.selectionPaint);
-        }
-        float interpolation = this.interpolator.getInterpolation(this.enterValue);
-        lineForOffset = (int) ((this.textLayout.getPrimaryHorizontal(this.animateToEnd) + (AndroidUtilities.dpf2(4.0f) * (1.0f - this.endOffsetValue))) + ((this.textLayout.getPrimaryHorizontal(this.end) - this.textLayout.getPrimaryHorizontal(this.animateToEnd)) * this.endOffsetValue));
-        canvas.save();
-        canvas2.translate((float) lineForOffset, (float) lineBottom);
-        float f2 = (float) dp;
-        float f3 = f2 / 2.0f;
-        canvas2.scale(interpolation, interpolation, f3, f3);
-        this.path.reset();
-        this.path.addCircle(f3, f3, f3, Direction.CCW);
-        this.path.addRect(0.0f, 0.0f, f3, f3, Direction.CCW);
-        canvas2.drawPath(this.path, this.textPaint);
-        canvas.restore();
-        lineForOffset = this.textLayout.getLineForOffset(this.currentStart);
-        this.textLayout.getPrimaryHorizontal(this.currentStart);
-        int lineBottom2 = this.textLayout.getLineBottom(lineForOffset);
-        if (this.currentStart == this.animateToStart) {
-            i = lineBottom2;
-            f = f3;
-            roundedRect(this.path, (float) (-AndroidUtilities.dp(4.0f)), (float) this.textLayout.getLineTop(lineForOffset), 0.0f, (float) this.textLayout.getLineBottom(lineForOffset), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), true, false);
-            canvas2.drawPath(this.path, this.selectionPaint);
-        } else {
-            i = lineBottom2;
-            f = f3;
-        }
-        canvas.save();
-        canvas2.translate((float) (((int) ((this.textLayout.getPrimaryHorizontal(this.animateToStart) - (((float) AndroidUtilities.dp(4.0f)) * (1.0f - this.startOffsetValue))) + ((this.textLayout.getPrimaryHorizontal(this.start) - this.textLayout.getPrimaryHorizontal(this.animateToStart)) * this.startOffsetValue))) - dp), (float) i);
-        float f4 = f;
-        canvas2.scale(interpolation, interpolation, f4, f4);
-        this.path.reset();
-        this.path.addCircle(f4, f4, f4, Direction.CCW);
-        this.path.addRect(f4, 0.0f, f2, f4, Direction.CCW);
-        canvas2.drawPath(this.path, this.textPaint);
-        canvas.restore();
-        canvas.restore();
     }
 
     private void roundedRect(Path path, float f, float f2, float f3, float f4, float f5, float f6, boolean z, boolean z2) {

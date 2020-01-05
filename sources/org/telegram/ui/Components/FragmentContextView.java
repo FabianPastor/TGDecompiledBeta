@@ -130,7 +130,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (MediaController.getInstance().isMessagePaused()) {
             MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
         } else {
-            MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
+            MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
         }
     }
 

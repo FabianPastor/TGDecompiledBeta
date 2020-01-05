@@ -12964,7 +12964,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public static String getKeyForPhotoSize(PhotoSize photoSize, Bitmap[] bitmapArr, boolean z, boolean z2) {
-        if (photoSize == null) {
+        if (photoSize == null || photoSize.location == null) {
             return null;
         }
         Point messageSize = ChatMessageCell.getMessageSize(photoSize.w, photoSize.h);

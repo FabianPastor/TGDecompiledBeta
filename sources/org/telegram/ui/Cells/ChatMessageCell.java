@@ -2326,7 +2326,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     L_0x02cf:
         r0 = org.telegram.messenger.MediaController.getInstance();
         r2 = r1.currentMessageObject;
-        r0.lambda$startAudioAgain$5$MediaController(r2);
+        r0.lambda$startAudioAgain$6$MediaController(r2);
         goto L_0x036d;
     L_0x02da:
         r0 = r1.delegate;
@@ -4323,7 +4323,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             } else if (!MediaController.getInstance().isPlayingMessage(this.currentMessageObject) || MediaController.getInstance().isMessagePaused()) {
                 this.delegate.needPlayMessage(this.currentMessageObject);
             } else {
-                MediaController.getInstance().lambda$startAudioAgain$5$MediaController(this.currentMessageObject);
+                MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject);
             }
         } else if (i2 == 8) {
             i = this.buttonState;
@@ -22087,7 +22087,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.photoImage.setForceLoading(false);
             i2 = this.documentAttachType;
             if (i2 == 3 || i2 == 5) {
-                if (MediaController.getInstance().lambda$startAudioAgain$5$MediaController(this.currentMessageObject)) {
+                if (MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject)) {
                     this.buttonState = 0;
                     this.radialProgress.setIcon(getIconForCurrentState(), false, z3);
                     invalidate();

@@ -1239,6 +1239,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                         }
                     }, 200);
                 } else if (i == 17) {
+                    VoIPActivity.this.endBtn.setContentDescription(LocaleController.getString("CallAgain", NUM));
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipBusy", NUM), false);
                     VoIPActivity.this.showRetry();
                 } else if (i == 3 || i == 5) {

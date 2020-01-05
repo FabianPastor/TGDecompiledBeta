@@ -1163,7 +1163,6 @@ public class Theme {
             if (currentColor.intValue() != 0 && (this.gradientShader == null || i2 != this.currentBackgroundHeight || this.currentColor != color || this.currentGradientColor != currentColor.intValue())) {
                 this.gradientShader = new LinearGradient(0.0f, 0.0f, 0.0f, (float) i2, new int[]{currentColor.intValue(), color}, null, TileMode.CLAMP);
                 this.paint.setShader(this.gradientShader);
-                this.currentBackgroundHeight = i2;
                 this.currentColor = color;
                 this.currentGradientColor = currentColor.intValue();
                 this.paint.setColor(-1);
@@ -1174,6 +1173,7 @@ public class Theme {
                 }
                 this.paint.setColor(color);
             }
+            this.currentBackgroundHeight = i2;
             this.topY = i;
         }
 
@@ -1205,29 +1205,48 @@ public class Theme {
                 }
                 return;
             }
+            RectF rectF;
+            int i;
+            int i2;
             this.path.reset();
-            this.path.moveTo((float) (bounds.right - dp(2.6f)), (float) (bounds.bottom - dp));
-            this.path.lineTo((float) ((bounds.left + dp) + dp2), (float) (bounds.bottom - dp));
-            RectF rectF = this.rect;
-            int i = bounds.left;
-            float f2 = (float) (i + dp);
-            int i2 = bounds.bottom;
-            int i3 = dp2 * 2;
-            rectF.set(f2, (float) ((i2 - dp) - i3), (float) ((i + dp) + i3), (float) (i2 - dp));
-            this.path.arcTo(this.rect, 90.0f, 90.0f, false);
-            this.path.lineTo((float) (bounds.left + dp), (float) ((bounds.top + dp) + dp2));
-            rectF = this.rect;
-            i = bounds.left;
-            float f3 = (float) (i + dp);
-            int i4 = bounds.top;
-            rectF.set(f3, (float) (i4 + dp), (float) ((i + dp) + i3), (float) ((i4 + dp) + i3));
-            this.path.arcTo(this.rect, 180.0f, 90.0f, false);
-            this.path.lineTo((float) ((bounds.right - dp(8.0f)) - dp2), (float) (bounds.top + dp));
-            this.rect.set((float) ((bounds.right - dp(8.0f)) - i3), (float) (bounds.top + dp), (float) (bounds.right - dp(8.0f)), (float) ((bounds.top + dp) + i3));
-            this.path.arcTo(this.rect, 270.0f, 90.0f, false);
-            this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp) - dp2) - dp(1.0f)));
-            this.rect.set((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp) - i3) - dp(9.0f)), (float) ((bounds.right - dp(7.0f)) + i3), (float) ((bounds.bottom - dp) - dp(1.0f)));
-            this.path.arcTo(this.rect, 180.0f, -83.0f, false);
+            if ((this.topY + bounds.bottom) - dp2 < this.currentBackgroundHeight) {
+                this.path.moveTo((float) (bounds.right - dp(2.6f)), (float) (bounds.bottom - dp));
+                this.path.lineTo((float) ((bounds.left + dp) + dp2), (float) (bounds.bottom - dp));
+                rectF = this.rect;
+                i = bounds.left;
+                float f2 = (float) (i + dp);
+                int i3 = bounds.bottom;
+                i2 = dp2 * 2;
+                rectF.set(f2, (float) ((i3 - dp) - i2), (float) ((i + dp) + i2), (float) (i3 - dp));
+                this.path.arcTo(this.rect, 90.0f, 90.0f, false);
+            } else {
+                this.path.moveTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+                this.path.lineTo((float) (bounds.left + dp), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+            }
+            int i4 = this.topY;
+            i = dp2 * 2;
+            if (i4 + i >= 0) {
+                this.path.lineTo((float) (bounds.left + dp), (float) ((bounds.top + dp) + dp2));
+                rectF = this.rect;
+                int i5 = bounds.left;
+                float f3 = (float) (i5 + dp);
+                i2 = bounds.top;
+                rectF.set(f3, (float) (i2 + dp), (float) ((i5 + dp) + i), (float) ((i2 + dp) + i));
+                this.path.arcTo(this.rect, 180.0f, 90.0f, false);
+                this.path.lineTo((float) ((bounds.right - dp(8.0f)) - dp2), (float) (bounds.top + dp));
+                this.rect.set((float) ((bounds.right - dp(8.0f)) - i), (float) (bounds.top + dp), (float) (bounds.right - dp(8.0f)), (float) ((bounds.top + dp) + i));
+                this.path.arcTo(this.rect, 270.0f, 90.0f, false);
+            } else {
+                this.path.lineTo((float) (bounds.left + dp), (float) (bounds.top - i4));
+                this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (bounds.top - this.topY));
+            }
+            if ((this.topY + bounds.bottom) - i < this.currentBackgroundHeight) {
+                this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp) - dp2) - dp(1.0f)));
+                this.rect.set((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp) - i) - dp(9.0f)), (float) ((bounds.right - dp(7.0f)) + i), (float) ((bounds.bottom - dp) - dp(1.0f)));
+                this.path.arcTo(this.rect, 180.0f, -83.0f, false);
+            } else {
+                this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+            }
             this.path.close();
             canvas.drawPath(this.path, this.paint);
             if (this.gradientShader != null && this.isSelected) {
@@ -3078,7 +3097,7 @@ public class Theme {
     /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5d A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7d A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:189:0x2d7a A:{Catch:{ Exception -> 0x2e40 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x2d9d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x2d9d A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:194:0x2d8a A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:67:0x2acc A:{SYNTHETIC, Splitter:B:67:0x2acc} */
     /* JADX WARNING: Removed duplicated region for block: B:63:0x2abb A:{Catch:{ Exception -> 0x2e48 }} */
@@ -3091,81 +3110,81 @@ public class Theme {
     /* JADX WARNING: Removed duplicated region for block: B:211:0x2e26 A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x2ea6  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x2ea6  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5d A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:189:0x2d7a A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7d A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:194:0x2d8a A:{Catch:{ Exception -> 0x2e40 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x2d9d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x2d9d A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x2ea6  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x2ea6  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x2ea6  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x2ea6  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x2ea6  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
     /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5d A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7d A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:189:0x2d7a A:{Catch:{ Exception -> 0x2e40 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x2d9d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x2d9d A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:194:0x2d8a A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5d A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:189:0x2d7a A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7d A:{Catch:{ Exception -> 0x2e40 }} */
     /* JADX WARNING: Removed duplicated region for block: B:194:0x2d8a A:{Catch:{ Exception -> 0x2e40 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x2d9d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x2d9d A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:224:0x2e53  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x2e50  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ea0  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x2ef7  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x2f1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2f1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x2ea6  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2ef9  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x2f1e  */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x2f1c  */
     static {
         /*
         r0 = new java.lang.Object;
@@ -7947,7 +7966,7 @@ public class Theme {
     L_0x2e5d:
         r0 = "selectedBackground2";
         r0 = r1.contains(r0);
-        if (r0 == 0) goto L_0x2f0f;
+        if (r0 == 0) goto L_0x2var_;
     L_0x2e65:
         r0 = "overrideThemeWallpaper";
         r3 = 0;
@@ -7955,16 +7974,20 @@ public class Theme {
         r6 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
         r3 = "selectedBackground2";
         r6 = r1.getLong(r3, r6);
-        r8 = -2;
+        r8 = -1;
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 == 0) goto L_0x2efc;
+        if (r3 == 0) goto L_0x2e8a;
     L_0x2e7b:
-        if (r0 != 0) goto L_0x2e84;
+        if (r0 == 0) goto L_0x2efe;
     L_0x2e7d:
+        r8 = -2;
+        r0 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
+        if (r0 == 0) goto L_0x2efe;
+    L_0x2e83:
         r8 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
         r0 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r0 == 0) goto L_0x2efc;
-    L_0x2e84:
+        if (r0 == 0) goto L_0x2efe;
+    L_0x2e8a:
         r0 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo;
         r0.<init>();
         r3 = "selectedColor";
@@ -7976,27 +7999,26 @@ public class Theme {
         r0.slug = r3;
         r8 = -100;
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 < 0) goto L_0x2eb7;
-    L_0x2ea0:
+        if (r3 < 0) goto L_0x2eb9;
+    L_0x2ea6:
         r8 = -1;
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 > 0) goto L_0x2eb7;
-    L_0x2ea6:
-        r3 = r0.slug;
-        r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 == 0) goto L_0x2eb7;
-    L_0x2eae:
+        if (r3 > 0) goto L_0x2eb9;
+    L_0x2eac:
+        r3 = r0.color;
+        if (r3 == 0) goto L_0x2eb9;
+    L_0x2eb0:
         r3 = "c";
         r0.slug = r3;
         r0.fileName = r4;
         r0.originalFileName = r4;
-        goto L_0x2ec1;
-    L_0x2eb7:
+        goto L_0x2ec3;
+    L_0x2eb9:
         r3 = "wallpaper.jpg";
         r0.fileName = r3;
         r3 = "wallpaper_original.jpg";
         r0.originalFileName = r3;
-    L_0x2ec1:
+    L_0x2ec3:
         r3 = "selectedGradientColor";
         r4 = 0;
         r3 = r1.getInt(r3, r4);
@@ -8018,32 +8040,32 @@ public class Theme {
         r3 = currentDayTheme;
         r3.setOverrideWallpaper(r0);
         r3 = selectedAutoNightType;
-        if (r3 == 0) goto L_0x2efc;
-    L_0x2ef7:
+        if (r3 == 0) goto L_0x2efe;
+    L_0x2ef9:
         r3 = currentNightTheme;
         r3.setOverrideWallpaper(r0);
-    L_0x2efc:
+    L_0x2efe:
         r0 = r1.edit();
         r1 = "overrideThemeWallpaper";
         r0 = r0.remove(r1);
         r1 = "selectedBackground2";
         r0 = r0.remove(r1);
         r0.commit();
-    L_0x2f0f:
+    L_0x2var_:
         r0 = needSwitchToTheme();
         r1 = 2;
-        if (r0 != r1) goto L_0x2var_;
+        if (r0 != r1) goto L_0x2f1a;
     L_0x2var_:
         r2 = currentNightTheme;
-    L_0x2var_:
-        if (r0 != r1) goto L_0x2f1c;
     L_0x2f1a:
-        r1 = 0;
-        goto L_0x2f1e;
+        if (r0 != r1) goto L_0x2f1e;
     L_0x2f1c:
         r1 = 0;
-        r5 = 0;
+        goto L_0x2var_;
     L_0x2f1e:
+        r1 = 0;
+        r5 = 0;
+    L_0x2var_:
         applyTheme(r2, r1, r1, r5);
         r0 = org.telegram.ui.ActionBar.-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I.INSTANCE;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);

@@ -937,7 +937,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public void onActivityResultFragment(int i, int i2, Intent intent) {
-        this.imageUpdater.onActivityResult(i, i2, intent);
+        ImageUpdater imageUpdater = this.imageUpdater;
+        if (imageUpdater != null) {
+            imageUpdater.onActivityResult(i, i2, intent);
+        }
     }
 
     public void saveSelfArgs(Bundle bundle) {

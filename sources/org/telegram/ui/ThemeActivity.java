@@ -1074,10 +1074,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                         return;
                     } else if (i == ThemeActivity.this.nightAutomaticRow) {
                         string = LocaleController.getString(str, NUM);
-                        if (Theme.selectedAutoNightType == 2) {
+                        boolean z3 = Theme.selectedAutoNightType == 2;
+                        if (ThemeActivity.this.nightSystemDefaultRow != -1) {
                             z = true;
                         }
-                        themeTypeCell.setValue(string, z, true);
+                        themeTypeCell.setValue(string, z3, z);
                         return;
                     } else if (i == ThemeActivity.this.nightSystemDefaultRow) {
                         string = LocaleController.getString("AutoNightSystemDefault", NUM);

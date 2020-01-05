@@ -273,7 +273,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
                 invalidate();
             }
         } else if (i == 1) {
-            if (MediaController.getInstance().lambda$startAudioAgain$5$MediaController(this.currentMessageObject)) {
+            if (MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject)) {
                 this.buttonState = 0;
                 invalidate();
             }

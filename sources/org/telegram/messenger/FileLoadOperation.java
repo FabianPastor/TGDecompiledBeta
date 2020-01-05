@@ -3182,7 +3182,7 @@ public class FileLoadOperation {
 
     /* Access modifiers changed, original: protected */
     public void startDownloadRequest() {
-        if (!this.paused && this.state == 1 && (this.streamPriorityStartOffset != 0 || ((this.nextPartWasPreloaded || this.requestInfos.size() + this.delayedRequestInfos.size() < this.currentMaxDownloadRequests) && (!this.isPreloadVideoOperation || (this.requestedBytesCount <= 2097152 && (this.moovFound == 0 || this.requestInfos.size() <= 0)))))) {
+        if (!this.paused && !this.reuploadingCdn && this.state == 1 && (this.streamPriorityStartOffset != 0 || ((this.nextPartWasPreloaded || this.requestInfos.size() + this.delayedRequestInfos.size() < this.currentMaxDownloadRequests) && (!this.isPreloadVideoOperation || (this.requestedBytesCount <= 2097152 && (this.moovFound == 0 || this.requestInfos.size() <= 0)))))) {
             int max = (this.streamPriorityStartOffset != 0 || this.nextPartWasPreloaded || ((this.isPreloadVideoOperation && this.moovFound == 0) || this.totalBytesCount <= 0)) ? 1 : Math.max(0, this.currentMaxDownloadRequests - this.requestInfos.size());
             int i = 0;
             while (i < max) {

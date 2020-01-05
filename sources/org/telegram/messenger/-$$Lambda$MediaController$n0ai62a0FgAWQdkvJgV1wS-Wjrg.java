@@ -4,10 +4,10 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 
 /* compiled from: lambda */
-public final /* synthetic */ class -$$Lambda$MediaController$hrz-cghaZ1kTzzeIoiWSaviEy-E implements OnCancelListener {
+public final /* synthetic */ class -$$Lambda$MediaController$n0ai62a0FgAWQdkvJgV1wS-Wjrg implements OnCancelListener {
     private final /* synthetic */ boolean[] f$0;
 
-    public /* synthetic */ -$$Lambda$MediaController$hrz-cghaZ1kTzzeIoiWSaviEy-E(boolean[] zArr) {
+    public /* synthetic */ -$$Lambda$MediaController$n0ai62a0FgAWQdkvJgV1wS-Wjrg(boolean[] zArr) {
         this.f$0 = zArr;
     }
 

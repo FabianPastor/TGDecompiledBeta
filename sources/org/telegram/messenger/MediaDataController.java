@@ -2619,19 +2619,21 @@ public class MediaDataController extends BaseController {
                     this.searchResultMessagesMap[0].clear();
                     this.searchResultMessagesMap[1].clear();
                     this.messagesSearchCount[0] = 0;
+                    getNotificationCenter().postNotificationName(NotificationCenter.chatSearchResultsLoading, Integer.valueOf(i2));
                 }
-                i3 = 0;
+                i3 = Math.min(messages_messages.messages.size(), 20);
+                int i4 = 0;
                 Object obj = null;
-                while (i3 < Math.min(messages_messages.messages.size(), 20)) {
-                    MessageObject messageObject = new MessageObject(this.currentAccount, (Message) messages_messages.messages.get(i3), false);
+                while (i4 < i3) {
+                    MessageObject messageObject = new MessageObject(this.currentAccount, (Message) messages_messages.messages.get(i4), false);
                     this.searchResultMessages.add(messageObject);
                     this.searchResultMessagesMap[j == j2 ? 0 : 1].put(messageObject.getId(), messageObject);
-                    i3++;
+                    i4++;
                     obj = 1;
                 }
                 this.messagesSearchEndReached[j == j2 ? 0 : 1] = messages_messages.messages.size() != 21;
                 int[] iArr = this.messagesSearchCount;
-                int i4 = j == j2 ? 0 : 1;
+                i4 = j == j2 ? 0 : 1;
                 int size = ((messages_messages instanceof TL_messages_messagesSlice) || (messages_messages instanceof TL_messages_channelMessages)) ? messages_messages.count : messages_messages.messages.size();
                 iArr[i4] = size;
                 if (this.searchResultMessages.isEmpty()) {

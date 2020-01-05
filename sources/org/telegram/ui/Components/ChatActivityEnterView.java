@@ -2298,7 +2298,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 MediaController.getInstance().playMessage(this.audioToSendMessageObject);
                 this.recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPause", NUM));
             } else {
-                MediaController.getInstance().lambda$startAudioAgain$5$MediaController(this.audioToSendMessageObject);
+                MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.audioToSendMessageObject);
                 this.recordedAudioPlayButton.setImageDrawable(this.playDrawable);
                 this.recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
             }
@@ -2467,7 +2467,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public /* synthetic */ void lambda$new$15$ChatActivityEnterView(View view) {
-        sendMessage();
+        ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
+        if (actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
+            sendMessage();
+        }
     }
 
     public /* synthetic */ void lambda$new$16$ChatActivityEnterView(View view) {
