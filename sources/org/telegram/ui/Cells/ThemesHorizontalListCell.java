@@ -1423,7 +1423,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
 
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         if (!(getParent() == null || getParent().getParent() == null)) {
-            getParent().getParent().requestDisallowInterceptTouchEvent(true);
+            getParent().getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1));
         }
         return super.onInterceptTouchEvent(motionEvent);
     }

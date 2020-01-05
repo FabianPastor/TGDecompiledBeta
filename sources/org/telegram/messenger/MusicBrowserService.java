@@ -654,7 +654,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     private void handlePauseRequest() {
-        MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
+        MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
         this.delayedStopHandler.removeCallbacksAndMessages(null);
         this.delayedStopHandler.sendEmptyMessageDelayed(0, 30000);
     }

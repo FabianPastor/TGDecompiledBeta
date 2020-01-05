@@ -296,7 +296,7 @@ public class DataUsageActivity extends BaseFragment {
                     } else if (i == this.messagesBytesReceivedRow || i == this.photosBytesReceivedRow || i == this.videosBytesReceivedRow || i == this.audiosBytesReceivedRow || i == this.filesBytesReceivedRow || i == this.callsBytesReceivedRow || i == this.totalBytesReceivedRow) {
                         str3 = LocaleController.getString("BytesReceived", NUM);
                         str4 = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(this.currentType, i2));
-                        if (i != this.totalBytesReceivedRow) {
+                        if (i == this.callsBytesReceivedRow) {
                             z = true;
                         }
                         textSettingsCell.setTextAndValue(str3, str4, z);

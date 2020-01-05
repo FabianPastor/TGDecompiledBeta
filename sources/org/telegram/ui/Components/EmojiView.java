@@ -3923,7 +3923,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         this.pager = new ViewPager(context2) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 if (getParent() != null) {
-                    getParent().requestDisallowInterceptTouchEvent(true);
+                    getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1));
                 }
                 return super.onInterceptTouchEvent(motionEvent);
             }

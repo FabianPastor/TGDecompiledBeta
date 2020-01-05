@@ -1660,7 +1660,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$null$10$LocationActivity(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        if (Theme.getCurrentTheme().isDark() || Theme.isCurrentThemeNight()) {
+        if (isActiveThemeDark()) {
             this.currentMapStyleDark = true;
             this.googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, NUM));
         }
@@ -1689,6 +1689,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     public /* synthetic */ void lambda$null$14$LocationActivity(TL_messageMediaVenue tL_messageMediaVenue, boolean z, int i) {
         this.delegate.didSelectLocation(tL_messageMediaVenue, this.locationType, z, i);
         finishFragment();
+    }
+
+    private boolean isActiveThemeDark() {
+        boolean z = true;
+        if (Theme.getActiveTheme().isDark()) {
+            return true;
+        }
+        if (AndroidUtilities.computePerceivedBrightness(Theme.getColor("windowBackgroundWhite")) >= 0.721f) {
+            z = false;
+        }
+        return z;
     }
 
     private void updateEmptyView() {
@@ -2788,7 +2799,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (this.googleMap == null) {
             return;
         }
-        if (Theme.getCurrentTheme().isDark() || Theme.isCurrentThemeNight()) {
+        if (isActiveThemeDark()) {
             if (!this.currentMapStyleDark) {
                 this.currentMapStyleDark = true;
                 this.googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, NUM));

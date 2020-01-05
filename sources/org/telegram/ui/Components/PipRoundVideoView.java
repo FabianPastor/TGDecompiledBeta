@@ -138,7 +138,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                                 if (MediaController.getInstance().isMessagePaused()) {
                                     MediaController.getInstance().playMessage(playingMessageObject);
                                 } else {
-                                    MediaController.getInstance().lambda$startAudioAgain$5$MediaController(playingMessageObject);
+                                    MediaController.getInstance().lambda$startAudioAgain$6$MediaController(playingMessageObject);
                                 }
                             }
                         }

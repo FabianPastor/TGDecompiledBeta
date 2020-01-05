@@ -1913,7 +1913,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 View anonymousClass2 = new RecyclerListView(this.mContext) {
                     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                         if (!(getParent() == null || getParent().getParent() == null)) {
-                            getParent().getParent().requestDisallowInterceptTouchEvent(true);
+                            getParent().getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1));
                         }
                         return super.onInterceptTouchEvent(motionEvent);
                     }

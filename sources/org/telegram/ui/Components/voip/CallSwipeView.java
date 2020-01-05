@@ -10,10 +10,11 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
+import androidx.annotation.Keep;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -41,10 +42,12 @@ public class CallSwipeView extends View {
             this.index = i;
         }
 
+        @Keep
         public int getArrowAlpha() {
             return CallSwipeView.this.arrowAlphas[this.index];
         }
 
+        @Keep
         public void setArrowAlpha(int i) {
             CallSwipeView.this.arrowAlphas[this.index] = i;
         }
@@ -64,6 +67,7 @@ public class CallSwipeView extends View {
     }
 
     private void init() {
+        setClickable(true);
         this.arrowsPaint = new Paint(1);
         this.arrowsPaint.setColor(-1);
         this.arrowsPaint.setStyle(Style.STROKE);
@@ -141,8 +145,9 @@ public class CallSwipeView extends View {
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (!isEnabled()) {
-            return false;
+        AccessibilityManager accessibilityManager = (AccessibilityManager) getContext().getSystemService("accessibility");
+        if (!isEnabled() || accessibilityManager.isTouchExplorationEnabled()) {
+            return super.onTouchEvent(motionEvent);
         }
         if (motionEvent.getAction() != 0) {
             float f = 0.0f;
@@ -252,15 +257,10 @@ public class CallSwipeView extends View {
         this.arrow.lineTo(0.0f, f2);
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        accessibilityNodeInfo.addAction(16);
-    }
-
-    public boolean performAccessibilityAction(int i, Bundle bundle) {
-        if (i == 16 && isEnabled()) {
+    public void onPopulateAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+        if (isEnabled() && accessibilityEvent.getEventType() == 1) {
             this.listener.onDragComplete();
         }
-        return super.performAccessibilityAction(i, bundle);
+        super.onPopulateAccessibilityEvent(accessibilityEvent);
     }
 }

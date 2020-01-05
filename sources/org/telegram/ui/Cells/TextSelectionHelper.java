@@ -2243,16 +2243,22 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             if (selectableView == null || ((ChatMessageCell) selectableView).getMessageObject() == null) {
                 return 0;
             }
-            StaticLayout descriptionlayout;
             MessageObject messageObject = ((ChatMessageCell) this.selectedView).getMessageObject();
+            StaticLayout staticLayout = null;
             if (this.isDescription) {
-                descriptionlayout = ((ChatMessageCell) this.selectedView).getDescriptionlayout();
+                staticLayout = ((ChatMessageCell) this.selectedView).getDescriptionlayout();
             } else if (((ChatMessageCell) this.selectedView).hasCaptionLayout()) {
-                descriptionlayout = ((ChatMessageCell) this.selectedView).getCaptionLayout();
+                staticLayout = ((ChatMessageCell) this.selectedView).getCaptionLayout();
             } else {
-                descriptionlayout = ((org.telegram.messenger.MessageObject.TextLayoutBlock) messageObject.textLayoutBlocks.get(0)).textLayout;
+                ArrayList arrayList = messageObject.textLayoutBlocks;
+                if (arrayList != null) {
+                    staticLayout = ((org.telegram.messenger.MessageObject.TextLayoutBlock) arrayList.get(0)).textLayout;
+                }
             }
-            return descriptionlayout.getLineBottom(0) - descriptionlayout.getLineTop(0);
+            if (staticLayout == null) {
+                return 0;
+            }
+            return staticLayout.getLineBottom(0) - staticLayout.getLineTop(0);
         }
 
         public void setMessageObject(ChatMessageCell chatMessageCell) {
@@ -2260,7 +2266,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             MessageObject messageObject = chatMessageCell.getMessageObject();
             Rect rect;
             int i;
-            if (this.maybeIsDescription) {
+            if (this.maybeIsDescription && chatMessageCell.getDescriptionlayout() != null) {
                 rect = this.textArea;
                 i = this.maybeTextX;
                 rect.set(i, this.maybeTextY, chatMessageCell.getDescriptionlayout().getWidth() + i, this.maybeTextY + chatMessageCell.getDescriptionlayout().getHeight());
@@ -2459,8 +2465,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 layoutBlock.yOffset = 0.0f;
                 layoutBlock.xOffset = 0.0f;
             } else {
+                ArrayList arrayList = messageObject.textLayoutBlocks;
+                if (arrayList == null) {
+                    layoutBlock.layout = null;
+                    return;
+                }
                 int i2 = 0;
-                if (messageObject.textLayoutBlocks.size() == 1) {
+                if (arrayList.size() == 1) {
                     layoutBlock.layout = ((org.telegram.messenger.MessageObject.TextLayoutBlock) messageObject.textLayoutBlocks.get(0)).textLayout;
                     layoutBlock.yOffset = 0.0f;
                     if (((org.telegram.messenger.MessageObject.TextLayoutBlock) messageObject.textLayoutBlocks.get(0)).isRtl()) {
@@ -2595,6 +2606,12 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 this.textX = i;
                 this.textY = i2;
                 invalidate();
+            }
+        }
+
+        public void checkDataChanged(MessageObject messageObject) {
+            if (this.selectedCellId == messageObject.getId()) {
+                clear(true);
             }
         }
     }

@@ -4758,12 +4758,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r0 = r13.listAdapter;
         r1 = r13.sharedHeaderRow;
         r0.notifyItemRangeInserted(r1, r7);
-        goto L_0x0148;
+        goto L_0x016c;
     L_0x004c:
-        if (r0 == r9) goto L_0x0148;
+        if (r0 == r9) goto L_0x0149;
     L_0x004e:
-        r0 = r13.sharedHeaderRow;
-        if (r0 == r9) goto L_0x0148;
+        r10 = r13.sharedHeaderRow;
+        if (r10 == r9) goto L_0x0149;
     L_0x0052:
         if (r1 == r9) goto L_0x0068;
     L_0x0054:
@@ -4930,16 +4930,51 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     L_0x0137:
         r1 = r13.listAdapter;
         r1.notifyItemInserted(r0);
-        goto L_0x0148;
+        goto L_0x016c;
     L_0x013d:
-        if (r6 == r9) goto L_0x0148;
+        if (r6 == r9) goto L_0x016c;
     L_0x013f:
         r0 = r13.groupsInCommonRow;
-        if (r0 != r9) goto L_0x0148;
+        if (r0 != r9) goto L_0x016c;
     L_0x0143:
         r0 = r13.listAdapter;
         r0.notifyItemRemoved(r6);
-    L_0x0148:
+        goto L_0x016c;
+    L_0x0149:
+        if (r0 == r9) goto L_0x016c;
+    L_0x014b:
+        r10 = r13.sharedHeaderRow;
+        if (r10 != r9) goto L_0x016c;
+    L_0x014f:
+        if (r1 == r9) goto L_0x0152;
+    L_0x0151:
+        goto L_0x0153;
+    L_0x0152:
+        r7 = 2;
+    L_0x0153:
+        if (r2 == r9) goto L_0x0157;
+    L_0x0155:
+        r7 = r7 + 1;
+    L_0x0157:
+        if (r3 == r9) goto L_0x015b;
+    L_0x0159:
+        r7 = r7 + 1;
+    L_0x015b:
+        if (r4 == r9) goto L_0x015f;
+    L_0x015d:
+        r7 = r7 + 1;
+    L_0x015f:
+        if (r5 == r9) goto L_0x0163;
+    L_0x0161:
+        r7 = r7 + 1;
+    L_0x0163:
+        if (r6 == r9) goto L_0x0167;
+    L_0x0165:
+        r7 = r7 + 1;
+    L_0x0167:
+        r1 = r13.listAdapter;
+        r1.notifyItemRangeChanged(r0, r7);
+    L_0x016c:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateSharedMediaRows():void");

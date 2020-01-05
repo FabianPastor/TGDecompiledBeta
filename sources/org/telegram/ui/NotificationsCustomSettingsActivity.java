@@ -272,16 +272,16 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                         }
                         str = "NotificationsImportance";
                         if (i == 0) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("NotificationsPriorityHigh", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("NotificationsPriorityHigh", NUM), false);
                             return;
                         } else if (i == 1 || i == 2) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("NotificationsPriorityUrgent", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("NotificationsPriorityUrgent", NUM), false);
                             return;
                         } else if (i == 4) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("NotificationsPriorityLow", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("NotificationsPriorityLow", NUM), false);
                             return;
                         } else if (i == 5) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("NotificationsPriorityMedium", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("NotificationsPriorityMedium", NUM), false);
                             return;
                         } else {
                             return;

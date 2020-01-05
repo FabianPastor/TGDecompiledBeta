@@ -3072,19 +3072,21 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 if (this.zooming && motionEvent.getPointerCount() == 2 && !this.dragging) {
                     hypot = (float) Math.hypot((double) (motionEvent.getX(1) - motionEvent.getX(0)), (double) (motionEvent.getY(1) - motionEvent.getY(0)));
                     if (this.zoomWas) {
-                        dp = (hypot - this.pinchStartDistance) / ((float) AndroidUtilities.dp(100.0f));
-                        this.pinchStartDistance = hypot;
-                        this.cameraZoom += dp;
-                        hypot = this.cameraZoom;
-                        if (hypot < 0.0f) {
-                            this.cameraZoom = 0.0f;
-                        } else if (hypot > 1.0f) {
-                            this.cameraZoom = 1.0f;
+                        if (this.cameraView != null) {
+                            dp = (hypot - this.pinchStartDistance) / ((float) AndroidUtilities.dp(100.0f));
+                            this.pinchStartDistance = hypot;
+                            this.cameraZoom += dp;
+                            hypot = this.cameraZoom;
+                            if (hypot < 0.0f) {
+                                this.cameraZoom = 0.0f;
+                            } else if (hypot > 1.0f) {
+                                this.cameraZoom = 1.0f;
+                            }
+                            this.zoomControlView.setZoom(this.cameraZoom, false);
+                            this.containerView.invalidate();
+                            this.cameraView.setZoom(this.cameraZoom);
+                            showZoomControls(true, true);
                         }
-                        this.zoomControlView.setZoom(this.cameraZoom, false);
-                        this.containerView.invalidate();
-                        this.cameraView.setZoom(this.cameraZoom);
-                        showZoomControls(true, true);
                     } else if (Math.abs(hypot - this.pinchStartDistance) >= AndroidUtilities.getPixelsInCM(0.4f, false)) {
                         this.pinchStartDistance = hypot;
                         this.zoomWas = true;

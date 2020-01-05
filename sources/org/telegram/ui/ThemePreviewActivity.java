@@ -74,6 +74,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -2180,28 +2181,29 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x01ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x023b  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x01ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x023b  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0149 A:{SYNTHETIC, Splitter:B:64:0x0149} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x017c  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x0172  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x01ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x023b  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0149 A:{SYNTHETIC, Splitter:B:64:0x0149} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x0172  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x017c  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x01ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x023b  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0077  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x0220  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x022a  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x026b  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x0220  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x022a  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x026b  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x0179 A:{SYNTHETIC, Splitter:B:76:0x0179} */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x01ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x0220  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x022a  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x026b  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x0179 A:{SYNTHETIC, Splitter:B:76:0x0179} */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x01ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x0220  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x022a  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x026b  */
     public /* synthetic */ void lambda$createView$5$ThemePreviewActivity(android.view.View r20) {
         /*
         r19 = this;
@@ -2229,260 +2231,289 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         r9 = "t";
         r10 = 87;
         r11 = 1;
-        if (r7 == 0) goto L_0x005e;
+        if (r7 == 0) goto L_0x008e;
     L_0x002f:
-        r0 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x0040 }
-        r0.<init>(r6);	 Catch:{ Exception -> 0x0040 }
-        r7 = r1.originalBitmap;	 Catch:{ Exception -> 0x0040 }
-        r12 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x0040 }
-        r7.compress(r12, r10, r0);	 Catch:{ Exception -> 0x0040 }
-        r0.close();	 Catch:{ Exception -> 0x0040 }
+        r0 = r1.originalBitmap;
+        if (r0 == 0) goto L_0x0049;
+    L_0x0033:
+        r0 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x0044 }
+        r0.<init>(r6);	 Catch:{ Exception -> 0x0044 }
+        r7 = r1.originalBitmap;	 Catch:{ Exception -> 0x0044 }
+        r12 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x0044 }
+        r7.compress(r12, r10, r0);	 Catch:{ Exception -> 0x0044 }
+        r0.close();	 Catch:{ Exception -> 0x0044 }
+    L_0x0042:
         r0 = 1;
-        goto L_0x0045;
-    L_0x0040:
+        goto L_0x0075;
+    L_0x0044:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
+        goto L_0x005c;
+    L_0x0049:
+        r0 = r1.backgroundImage;
+        r0 = r0.getImageReceiver();
+        r7 = r0.hasNotThumb();
+        if (r7 != 0) goto L_0x005e;
+    L_0x0055:
+        r7 = r0.hasStaticThumb();
+        if (r7 == 0) goto L_0x005c;
+    L_0x005b:
+        goto L_0x005e;
+    L_0x005c:
         r0 = 0;
-    L_0x0045:
-        if (r0 != 0) goto L_0x00e8;
-    L_0x0047:
+        goto L_0x0075;
+    L_0x005e:
+        r0 = r0.getBitmap();
+        r7 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x0070 }
+        r7.<init>(r6);	 Catch:{ Exception -> 0x0070 }
+        r12 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x0070 }
+        r0.compress(r12, r10, r7);	 Catch:{ Exception -> 0x0070 }
+        r7.close();	 Catch:{ Exception -> 0x0070 }
+        goto L_0x0042;
+    L_0x0070:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+        goto L_0x005c;
+    L_0x0075:
+        if (r0 != 0) goto L_0x0118;
+    L_0x0077:
         r0 = r1.currentWallpaper;
         r0 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r0;
         r0 = r0.document;
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r11);
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r6);	 Catch:{ Exception -> 0x0057 }
-        goto L_0x00e8;
-    L_0x0057:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r6);	 Catch:{ Exception -> 0x0087 }
+        goto L_0x0118;
+    L_0x0087:
         r0 = move-exception;
         r7 = r0;
         org.telegram.messenger.FileLog.e(r7);
-        goto L_0x0143;
-    L_0x005e:
+        goto L_0x0173;
+    L_0x008e:
         r7 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r7 == 0) goto L_0x00ea;
-    L_0x0062:
+        if (r7 == 0) goto L_0x011a;
+    L_0x0092:
         r7 = r1.selectedPattern;
-        if (r7 == 0) goto L_0x00e7;
-    L_0x0066:
-        r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0;	 Catch:{ all -> 0x00e2 }
-        r0 = r1.backgroundImage;	 Catch:{ all -> 0x00e2 }
-        r0 = r0.getImageReceiver();	 Catch:{ all -> 0x00e2 }
-        r0 = r0.getBitmap();	 Catch:{ all -> 0x00e2 }
-        r7 = r0.getWidth();	 Catch:{ all -> 0x00e2 }
-        r12 = r0.getHeight();	 Catch:{ all -> 0x00e2 }
-        r13 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x00e2 }
-        r7 = android.graphics.Bitmap.createBitmap(r7, r12, r13);	 Catch:{ all -> 0x00e2 }
-        r12 = new android.graphics.Canvas;	 Catch:{ all -> 0x00e2 }
-        r12.<init>(r7);	 Catch:{ all -> 0x00e2 }
-        r13 = r1.backgroundGradientColor;	 Catch:{ all -> 0x00e2 }
+        if (r7 == 0) goto L_0x0117;
+    L_0x0096:
+        r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0;	 Catch:{ all -> 0x0112 }
+        r0 = r1.backgroundImage;	 Catch:{ all -> 0x0112 }
+        r0 = r0.getImageReceiver();	 Catch:{ all -> 0x0112 }
+        r0 = r0.getBitmap();	 Catch:{ all -> 0x0112 }
+        r7 = r0.getWidth();	 Catch:{ all -> 0x0112 }
+        r12 = r0.getHeight();	 Catch:{ all -> 0x0112 }
+        r13 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0112 }
+        r7 = android.graphics.Bitmap.createBitmap(r7, r12, r13);	 Catch:{ all -> 0x0112 }
+        r12 = new android.graphics.Canvas;	 Catch:{ all -> 0x0112 }
+        r12.<init>(r7);	 Catch:{ all -> 0x0112 }
+        r13 = r1.backgroundGradientColor;	 Catch:{ all -> 0x0112 }
         r14 = 2;
-        if (r13 == 0) goto L_0x00ae;
-    L_0x008a:
-        r13 = new android.graphics.drawable.GradientDrawable;	 Catch:{ all -> 0x00e2 }
-        r15 = r1.backgroundRotation;	 Catch:{ all -> 0x00e2 }
-        r15 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r15);	 Catch:{ all -> 0x00e2 }
-        r3 = new int[r14];	 Catch:{ all -> 0x00e2 }
-        r10 = r1.backgroundColor;	 Catch:{ all -> 0x00e2 }
-        r3[r5] = r10;	 Catch:{ all -> 0x00e2 }
-        r10 = r1.backgroundGradientColor;	 Catch:{ all -> 0x00e2 }
-        r3[r11] = r10;	 Catch:{ all -> 0x00e2 }
-        r13.<init>(r15, r3);	 Catch:{ all -> 0x00e2 }
-        r3 = r7.getWidth();	 Catch:{ all -> 0x00e2 }
-        r10 = r7.getHeight();	 Catch:{ all -> 0x00e2 }
-        r13.setBounds(r5, r5, r3, r10);	 Catch:{ all -> 0x00e2 }
-        r13.draw(r12);	 Catch:{ all -> 0x00e2 }
-        goto L_0x00b3;
-    L_0x00ae:
-        r3 = r1.backgroundColor;	 Catch:{ all -> 0x00e2 }
-        r12.drawColor(r3);	 Catch:{ all -> 0x00e2 }
-    L_0x00b3:
-        r3 = new android.graphics.Paint;	 Catch:{ all -> 0x00e2 }
-        r3.<init>(r14);	 Catch:{ all -> 0x00e2 }
-        r10 = new android.graphics.PorterDuffColorFilter;	 Catch:{ all -> 0x00e2 }
-        r13 = r1.patternColor;	 Catch:{ all -> 0x00e2 }
-        r14 = r1.blendMode;	 Catch:{ all -> 0x00e2 }
-        r10.<init>(r13, r14);	 Catch:{ all -> 0x00e2 }
-        r3.setColorFilter(r10);	 Catch:{ all -> 0x00e2 }
+        if (r13 == 0) goto L_0x00de;
+    L_0x00ba:
+        r13 = new android.graphics.drawable.GradientDrawable;	 Catch:{ all -> 0x0112 }
+        r15 = r1.backgroundRotation;	 Catch:{ all -> 0x0112 }
+        r15 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r15);	 Catch:{ all -> 0x0112 }
+        r3 = new int[r14];	 Catch:{ all -> 0x0112 }
+        r10 = r1.backgroundColor;	 Catch:{ all -> 0x0112 }
+        r3[r5] = r10;	 Catch:{ all -> 0x0112 }
+        r10 = r1.backgroundGradientColor;	 Catch:{ all -> 0x0112 }
+        r3[r11] = r10;	 Catch:{ all -> 0x0112 }
+        r13.<init>(r15, r3);	 Catch:{ all -> 0x0112 }
+        r3 = r7.getWidth();	 Catch:{ all -> 0x0112 }
+        r10 = r7.getHeight();	 Catch:{ all -> 0x0112 }
+        r13.setBounds(r5, r5, r3, r10);	 Catch:{ all -> 0x0112 }
+        r13.draw(r12);	 Catch:{ all -> 0x0112 }
+        goto L_0x00e3;
+    L_0x00de:
+        r3 = r1.backgroundColor;	 Catch:{ all -> 0x0112 }
+        r12.drawColor(r3);	 Catch:{ all -> 0x0112 }
+    L_0x00e3:
+        r3 = new android.graphics.Paint;	 Catch:{ all -> 0x0112 }
+        r3.<init>(r14);	 Catch:{ all -> 0x0112 }
+        r10 = new android.graphics.PorterDuffColorFilter;	 Catch:{ all -> 0x0112 }
+        r13 = r1.patternColor;	 Catch:{ all -> 0x0112 }
+        r14 = r1.blendMode;	 Catch:{ all -> 0x0112 }
+        r10.<init>(r13, r14);	 Catch:{ all -> 0x0112 }
+        r3.setColorFilter(r10);	 Catch:{ all -> 0x0112 }
         r10 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
-        r13 = r1.currentIntensity;	 Catch:{ all -> 0x00e2 }
+        r13 = r1.currentIntensity;	 Catch:{ all -> 0x0112 }
         r13 = r13 * r10;
-        r10 = (int) r13;	 Catch:{ all -> 0x00e2 }
-        r3.setAlpha(r10);	 Catch:{ all -> 0x00e2 }
+        r10 = (int) r13;	 Catch:{ all -> 0x0112 }
+        r3.setAlpha(r10);	 Catch:{ all -> 0x0112 }
         r10 = 0;
-        r12.drawBitmap(r0, r10, r10, r3);	 Catch:{ all -> 0x00e2 }
-        r0 = new java.io.FileOutputStream;	 Catch:{ all -> 0x00e2 }
-        r0.<init>(r6);	 Catch:{ all -> 0x00e2 }
-        r3 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x00e2 }
+        r12.drawBitmap(r0, r10, r10, r3);	 Catch:{ all -> 0x0112 }
+        r0 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0112 }
+        r0.<init>(r6);	 Catch:{ all -> 0x0112 }
+        r3 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0112 }
         r10 = 87;
-        r7.compress(r3, r10, r0);	 Catch:{ all -> 0x00e2 }
-        r0.close();	 Catch:{ all -> 0x00e2 }
-        goto L_0x00e7;
-    L_0x00e2:
+        r7.compress(r3, r10, r0);	 Catch:{ all -> 0x0112 }
+        r0.close();	 Catch:{ all -> 0x0112 }
+        goto L_0x0117;
+    L_0x0112:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x0143;
-    L_0x00e7:
+        goto L_0x0173;
+    L_0x0117:
         r0 = 1;
-    L_0x00e8:
+    L_0x0118:
         r3 = 0;
-        goto L_0x0145;
-    L_0x00ea:
+        goto L_0x0175;
+    L_0x011a:
         r3 = r0 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
-        if (r3 == 0) goto L_0x011c;
-    L_0x00ee:
+        if (r3 == 0) goto L_0x014c;
+    L_0x011e:
         r0 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r0;
         r3 = r0.resId;
-        if (r3 != 0) goto L_0x00e7;
-    L_0x00f4:
+        if (r3 != 0) goto L_0x0117;
+    L_0x0124:
         r3 = r0.slug;
         r3 = r9.equals(r3);
-        if (r3 == 0) goto L_0x00fd;
-    L_0x00fc:
-        goto L_0x00e7;
-    L_0x00fd:
-        r3 = r0.originalPath;	 Catch:{ Exception -> 0x0115 }
-        if (r3 == 0) goto L_0x0104;
-    L_0x0101:
-        r0 = r0.originalPath;	 Catch:{ Exception -> 0x0115 }
-        goto L_0x0106;
-    L_0x0104:
-        r0 = r0.path;	 Catch:{ Exception -> 0x0115 }
-    L_0x0106:
-        r3 = r0.equals(r6);	 Catch:{ Exception -> 0x0115 }
-        if (r3 == 0) goto L_0x010e;
-    L_0x010c:
-        r0 = 1;
-        goto L_0x0145;
-    L_0x010e:
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r6);	 Catch:{ Exception -> 0x0113 }
-        goto L_0x0145;
-    L_0x0113:
-        r0 = move-exception;
+        if (r3 == 0) goto L_0x012d;
+    L_0x012c:
         goto L_0x0117;
-    L_0x0115:
+    L_0x012d:
+        r3 = r0.originalPath;	 Catch:{ Exception -> 0x0145 }
+        if (r3 == 0) goto L_0x0134;
+    L_0x0131:
+        r0 = r0.originalPath;	 Catch:{ Exception -> 0x0145 }
+        goto L_0x0136;
+    L_0x0134:
+        r0 = r0.path;	 Catch:{ Exception -> 0x0145 }
+    L_0x0136:
+        r3 = r0.equals(r6);	 Catch:{ Exception -> 0x0145 }
+        if (r3 == 0) goto L_0x013e;
+    L_0x013c:
+        r0 = 1;
+        goto L_0x0175;
+    L_0x013e:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r6);	 Catch:{ Exception -> 0x0143 }
+        goto L_0x0175;
+    L_0x0143:
+        r0 = move-exception;
+        goto L_0x0147;
+    L_0x0145:
         r0 = move-exception;
         r3 = 0;
-    L_0x0117:
+    L_0x0147:
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-        goto L_0x0145;
-    L_0x011c:
+        goto L_0x0175;
+    L_0x014c:
         r3 = r0 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r3 == 0) goto L_0x0143;
-    L_0x0120:
+        if (r3 == 0) goto L_0x0173;
+    L_0x0150:
         r0 = (org.telegram.messenger.MediaController.SearchImage) r0;
         r3 = r0.photo;
-        if (r3 == 0) goto L_0x0133;
-    L_0x0126:
+        if (r3 == 0) goto L_0x0163;
+    L_0x0156:
         r0 = r3.sizes;
         r3 = r1.maxWallpaperSize;
         r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3, r11);
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r11);
-        goto L_0x0139;
-    L_0x0133:
+        goto L_0x0169;
+    L_0x0163:
         r0 = r0.imageUrl;
         r0 = org.telegram.messenger.ImageLoader.getHttpFilePath(r0, r8);
-    L_0x0139:
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r6);	 Catch:{ Exception -> 0x013e }
-        goto L_0x00e8;
-    L_0x013e:
+    L_0x0169:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r6);	 Catch:{ Exception -> 0x016e }
+        goto L_0x0118;
+    L_0x016e:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-    L_0x0143:
+    L_0x0173:
         r0 = 0;
-        goto L_0x00e8;
-    L_0x0145:
+        goto L_0x0118;
+    L_0x0175:
         r7 = r1.isBlurred;
-        if (r7 == 0) goto L_0x016a;
-    L_0x0149:
-        r0 = new java.io.File;	 Catch:{ all -> 0x0165 }
-        r7 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x0165 }
-        r0.<init>(r7, r4);	 Catch:{ all -> 0x0165 }
-        r7 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0165 }
-        r7.<init>(r0);	 Catch:{ all -> 0x0165 }
-        r0 = r1.blurredBitmap;	 Catch:{ all -> 0x0165 }
-        r10 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0165 }
+        if (r7 == 0) goto L_0x019a;
+    L_0x0179:
+        r0 = new java.io.File;	 Catch:{ all -> 0x0195 }
+        r7 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x0195 }
+        r0.<init>(r7, r4);	 Catch:{ all -> 0x0195 }
+        r7 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0195 }
+        r7.<init>(r0);	 Catch:{ all -> 0x0195 }
+        r0 = r1.blurredBitmap;	 Catch:{ all -> 0x0195 }
+        r10 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0195 }
         r12 = 87;
-        r0.compress(r10, r12, r7);	 Catch:{ all -> 0x0165 }
-        r7.close();	 Catch:{ all -> 0x0165 }
+        r0.compress(r10, r12, r7);	 Catch:{ all -> 0x0195 }
+        r7.close();	 Catch:{ all -> 0x0195 }
         r0 = 1;
-        goto L_0x016a;
-    L_0x0165:
+        goto L_0x019a;
+    L_0x0195:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x016a:
+    L_0x019a:
         r7 = 45;
         r10 = r1.currentWallpaper;
         r12 = r10 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
-        if (r12 == 0) goto L_0x017c;
-    L_0x0172:
+        if (r12 == 0) goto L_0x01ac;
+    L_0x01a2:
         r10 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r10;
         r8 = r10.slug;
-    L_0x0176:
+    L_0x01a6:
         r7 = 0;
         r10 = 0;
         r12 = 45;
-    L_0x017a:
+    L_0x01aa:
         r14 = 0;
-        goto L_0x01c8;
-    L_0x017c:
+        goto L_0x01f8;
+    L_0x01ac:
         r12 = r10 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r12 == 0) goto L_0x0193;
-    L_0x0180:
+        if (r12 == 0) goto L_0x01c3;
+    L_0x01b0:
         r10 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r10;
         r7 = r1.selectedPattern;
-        if (r7 == 0) goto L_0x0189;
-    L_0x0186:
+        if (r7 == 0) goto L_0x01b9;
+    L_0x01b6:
         r7 = r7.slug;
-        goto L_0x018b;
-    L_0x0189:
+        goto L_0x01bb;
+    L_0x01b9:
         r7 = "c";
-    L_0x018b:
+    L_0x01bb:
         r8 = r7;
         r7 = r1.backgroundColor;
         r10 = r1.backgroundGradientColor;
         r12 = r1.backgroundRotation;
-        goto L_0x017a;
-    L_0x0193:
+        goto L_0x01aa;
+    L_0x01c3:
         r12 = r10 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
-        if (r12 == 0) goto L_0x01a3;
-    L_0x0197:
+        if (r12 == 0) goto L_0x01d3;
+    L_0x01c7:
         r10 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r10;
         r8 = r10.slug;
         r10 = r10.path;
         r14 = r10;
-    L_0x019e:
+    L_0x01ce:
         r7 = 0;
         r10 = 0;
         r12 = 45;
-        goto L_0x01c8;
-    L_0x01a3:
+        goto L_0x01f8;
+    L_0x01d3:
         r12 = r10 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r12 == 0) goto L_0x01c5;
-    L_0x01a7:
+        if (r12 == 0) goto L_0x01f5;
+    L_0x01d7:
         r10 = (org.telegram.messenger.MediaController.SearchImage) r10;
         r12 = r10.photo;
-        if (r12 == 0) goto L_0x01ba;
-    L_0x01ad:
+        if (r12 == 0) goto L_0x01ea;
+    L_0x01dd:
         r8 = r12.sizes;
         r10 = r1.maxWallpaperSize;
         r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r10, r11);
         r8 = org.telegram.messenger.FileLoader.getPathToAttach(r8, r11);
-        goto L_0x01c0;
-    L_0x01ba:
+        goto L_0x01f0;
+    L_0x01ea:
         r10 = r10.imageUrl;
         r8 = org.telegram.messenger.ImageLoader.getHttpFilePath(r10, r8);
-    L_0x01c0:
+    L_0x01f0:
         r10 = "";
         r14 = r8;
         r8 = r10;
-        goto L_0x019e;
-    L_0x01c5:
+        goto L_0x01ce;
+    L_0x01f5:
         r8 = "d";
-        goto L_0x0176;
-    L_0x01c8:
+        goto L_0x01a6;
+    L_0x01f8:
         r15 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo;
         r15.<init>();
         r15.fileName = r4;
@@ -2499,32 +2530,32 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         r15.intensity = r2;
         r2 = r1.currentAccount;
         r13 = org.telegram.messenger.MessagesController.getInstance(r2);
-        if (r8 == 0) goto L_0x01f0;
-    L_0x01ed:
+        if (r8 == 0) goto L_0x0220;
+    L_0x021d:
         r16 = 1;
-        goto L_0x01f2;
-    L_0x01f0:
+        goto L_0x0222;
+    L_0x0220:
         r16 = 0;
-    L_0x01f2:
+    L_0x0222:
         r17 = 0;
         r2 = r15;
         r13.saveWallpaperToServer(r14, r15, r16, r17);
-        if (r0 == 0) goto L_0x0237;
-    L_0x01fa:
+        if (r0 == 0) goto L_0x0267;
+    L_0x022a:
         r0 = "chat_serviceBackground";
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
         org.telegram.ui.ActionBar.Theme.serviceMessageColorBackup = r0;
         r0 = r2.slug;
         r0 = r9.equals(r0);
-        if (r0 == 0) goto L_0x020b;
-    L_0x020a:
+        if (r0 == 0) goto L_0x023b;
+    L_0x023a:
         r2 = 0;
-    L_0x020b:
+    L_0x023b:
         r0 = org.telegram.ui.ActionBar.Theme.getActiveTheme();
         r0.setOverrideWallpaper(r2);
         org.telegram.ui.ActionBar.Theme.reloadWallpaper();
-        if (r3 != 0) goto L_0x0237;
-    L_0x0217:
+        if (r3 != 0) goto L_0x0267;
+    L_0x0247:
         r0 = org.telegram.messenger.ImageLoader.getInstance();
         r2 = new java.lang.StringBuilder;
         r2.<init>();
@@ -2535,12 +2566,12 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         r2.append(r3);
         r2 = r2.toString();
         r0.removeImage(r2);
-    L_0x0237:
+    L_0x0267:
         r0 = r1.delegate;
-        if (r0 == 0) goto L_0x023e;
-    L_0x023b:
+        if (r0 == 0) goto L_0x026e;
+    L_0x026b:
         r0.didSetNewBackground();
-    L_0x023e:
+    L_0x026e:
         r19.finishFragment();
         return;
         */
@@ -3107,14 +3138,29 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         if (this.screenType == 0 && this.accent == null) {
             this.isMotion = Theme.isWallpaperMotion();
         } else {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append((int) (1080.0f / AndroidUtilities.density));
-            stringBuilder.append("_");
-            stringBuilder.append((int) (1920.0f / AndroidUtilities.density));
-            stringBuilder.append("_f");
-            this.imageFilter = stringBuilder.toString();
-            Point point = AndroidUtilities.displaySize;
-            this.maxWallpaperSize = Math.min(1920, Math.max(point.x, point.y));
+            String str = "_f";
+            String str2 = "_";
+            if (SharedConfig.getDevicePerfomanceClass() == 0) {
+                Point point = AndroidUtilities.displaySize;
+                int min = Math.min(point.x, point.y);
+                Point point2 = AndroidUtilities.displaySize;
+                int max = Math.max(point2.x, point2.y);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append((int) (((float) min) / AndroidUtilities.density));
+                stringBuilder.append(str2);
+                stringBuilder.append((int) (((float) max) / AndroidUtilities.density));
+                stringBuilder.append(str);
+                this.imageFilter = stringBuilder.toString();
+            } else {
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append((int) (1080.0f / AndroidUtilities.density));
+                stringBuilder2.append(str2);
+                stringBuilder2.append((int) (1920.0f / AndroidUtilities.density));
+                stringBuilder2.append(str);
+                this.imageFilter = stringBuilder2.toString();
+            }
+            Point point3 = AndroidUtilities.displaySize;
+            this.maxWallpaperSize = Math.min(1920, Math.max(point3.x, point3.y));
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersNeedReload);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersDidLoad);
             this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
