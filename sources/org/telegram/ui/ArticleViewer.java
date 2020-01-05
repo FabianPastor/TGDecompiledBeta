@@ -10849,14 +10849,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         int color = Theme.getColor("windowBackgroundWhite");
         webpageSearchPaint.setColor((((((float) Color.red(color)) * 0.2126f) + (((float) Color.green(color)) * 0.7152f)) + (((float) Color.blue(color)) * 0.0722f)) / 255.0f <= 0.705f ? -3041234 : -6551);
         String str = "windowBackgroundWhiteLinkSelection";
-        webpageUrlPaint.setColor(Theme.getColor(str));
-        urlPaint.setColor(Theme.getColor(str));
+        webpageUrlPaint.setColor(Theme.getColor(str) & NUM);
+        urlPaint.setColor(Theme.getColor(str) & NUM);
         String str2 = "windowBackgroundWhiteInputField";
         tableHalfLinePaint.setColor(Theme.getColor(str2));
         tableLinePaint.setColor(Theme.getColor(str2));
         photoBackgroundPaint.setColor(NUM);
         dividerPaint.setColor(Theme.getColor("divider"));
-        webpageMarkPaint.setColor(Theme.getColor(str));
+        webpageMarkPaint.setColor(Theme.getColor(str) & NUM);
         color = Theme.getColor("switchTrack");
         int red = Color.red(color);
         int green = Color.green(color);
