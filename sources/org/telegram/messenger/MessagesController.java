@@ -9117,7 +9117,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 tL_messages_dialogs.messages.addAll(messages_messages.messages);
                 tL_messages_dialogs.count = 1;
                 processDialogsUpdate(tL_messages_dialogs, null);
-                getMessagesStorage().putMessages(messages_messages.messages, true, true, false, getDownloadController().getAutodownloadMask(), true);
+                getMessagesStorage().putMessages(messages_messages.messages, true, true, false, getDownloadController().getAutodownloadMask(), true, false);
             }
         }
         if (j != 0) {
