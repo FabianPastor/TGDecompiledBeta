@@ -1589,6 +1589,7 @@
     <string name="NewSecretChat">Nuevo chat secreto</string>
     <string name="NewTheme">Nuevo tema</string>
     <string name="NewThemePreviewLine1">¿Sabes qué hora es?</string>
+    <string name="NewThemePreviewLine2">Es de mañana en Tokio ��</string>
     <string name="NewThemePreviewName">Bob Harris</string>
     <string name="NewThemePreviewReply">¡Buenos días! ��</string>
     <string name="NewThemeTitle">Nuevo tema</string>
@@ -2629,10 +2630,12 @@
     <string name="TextSizeHeader">Tamaño del texto</string>
     <string name="Theme">Tema</string>
     <string name="ThemeArcticBlue">Ártico</string>
+    <string name="ThemeBlue">Mono</string>
     <string name="ThemeCreateHelp">Cualquiera puede instalar tu tema usando este enlace. Cuando modifiques el tema, será actualizado para todos los usuarios que lo hayan instalado.\10\10El tema se basará en tus colores y fondo de chat seleccionados actualmente.</string>
     <string name="ThemeCreateHelp2">Puedes cambiar el enlace de tu tema.\10\10Los enlaces de temas deben tener más de 5 caracteres y pueden usar a-z, 0-9 y guiones bajos.</string>
     <string name="ThemeDark">Oscuro</string>
     <string name="ThemeDarkBlue">Azul oscuro</string>
+    <string name="ThemeGraphite">Grafito</string>
     <string name="ThemeHelpLink">Tu tema será actualizado para todos los usuarios cada vez que lo modifiques. Cualquiera puede instalarlo usando este enlace:\10%1$s</string>
     <string name="ThemeInfo">Elige esquemas de colores personalizados</string>
     <string name="ThemeInstallCount_few">%1$d personas están usando este tema</string>

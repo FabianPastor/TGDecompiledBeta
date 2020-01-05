@@ -84,7 +84,7 @@ public class PasscodeView extends FrameLayout {
     private boolean selfCancelled;
 
     private class AnimatingTextView extends FrameLayout {
-        private static final String DOT = "•";
+        private final String DOT;
         private ArrayList<TextView> characterTextViews = new ArrayList(4);
         private AnimatorSet currentAnimation;
         private Runnable dotRunnable;
@@ -93,6 +93,8 @@ public class PasscodeView extends FrameLayout {
 
         public AnimatingTextView(Context context) {
             super(context);
+            String str = "•";
+            this.DOT = str;
             for (int i = 0; i < 4; i++) {
                 TextView textView = new TextView(context);
                 textView.setTextColor(-1);
@@ -113,7 +115,7 @@ public class PasscodeView extends FrameLayout {
                 textView.setTextSize(1, 36.0f);
                 textView.setGravity(17);
                 textView.setAlpha(0.0f);
-                textView.setText("•");
+                textView.setText(str);
                 textView.setPivotX((float) AndroidUtilities.dp(25.0f));
                 textView.setPivotY((float) AndroidUtilities.dp(25.0f));
                 addView(textView);
@@ -1006,16 +1008,14 @@ public class PasscodeView extends FrameLayout {
             if (Theme.isCustomTheme()) {
                 this.backgroundDrawable = Theme.getCachedWallpaper();
                 this.backgroundFrameLayout.setBackgroundColor(-NUM);
+            } else if (Theme.getSelectedBackgroundId() == 1000001) {
+                this.backgroundFrameLayout.setBackgroundColor(-11436898);
             } else {
-                if ("d".equals(Theme.getSelectedBackgroundSlug())) {
-                    this.backgroundFrameLayout.setBackgroundColor(-11436898);
+                this.backgroundDrawable = Theme.getCachedWallpaper();
+                if (this.backgroundDrawable != null) {
+                    this.backgroundFrameLayout.setBackgroundColor(-NUM);
                 } else {
-                    this.backgroundDrawable = Theme.getCachedWallpaper();
-                    if (this.backgroundDrawable != null) {
-                        this.backgroundFrameLayout.setBackgroundColor(-NUM);
-                    } else {
-                        this.backgroundFrameLayout.setBackgroundColor(-11436898);
-                    }
+                    this.backgroundFrameLayout.setBackgroundColor(-11436898);
                 }
             }
             this.passcodeTextView.setText(LocaleController.getString("EnterYourPasscode", NUM));

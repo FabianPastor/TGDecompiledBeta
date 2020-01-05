@@ -853,9 +853,6 @@ public class BottomSheet extends Dialog {
         Window window = getWindow();
         window.setWindowAnimations(NUM);
         setContentView(this.container, new LayoutParams(-1, -1));
-        if (VERSION.SDK_INT >= 23 && Theme.getColor("actionBarDefault", null, true) == -1) {
-            this.container.setSystemUiVisibility(this.container.getSystemUiVisibility() | 8192);
-        }
         if (this.containerView == null) {
             this.containerView = new FrameLayout(getContext()) {
                 public boolean hasOverlappingRendering() {

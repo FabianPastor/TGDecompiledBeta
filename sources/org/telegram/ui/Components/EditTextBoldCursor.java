@@ -34,7 +34,6 @@ import androidx.annotation.Keep;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
@@ -261,7 +260,7 @@ public class EditTextBoldCursor extends EditText {
         if (r0 == 0) goto L_0x00d2;
     L_0x00c6:
         r0 = mCursorDrawableResField;	 Catch:{ all -> 0x00d2 }
-        r1 = NUM; // 0x7var_bc float:1.794496E38 double:1.052935596E-314;
+        r1 = NUM; // 0x7var_bb float:1.7944957E38 double:1.0529355954E-314;
         r1 = java.lang.Integer.valueOf(r1);	 Catch:{ all -> 0x00d2 }
         r0.set(r8, r1);	 Catch:{ all -> 0x00d2 }
     L_0x00d2:
@@ -794,22 +793,6 @@ public class EditTextBoldCursor extends EditText {
             return super.startActionMode(callback, i);
         }
         return startActionMode(callback);
-    }
-
-    public void setSelection(int i, int i2) {
-        try {
-            super.setSelection(i, i2);
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-    }
-
-    public void setSelection(int i) {
-        try {
-            super.setSelection(i);
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

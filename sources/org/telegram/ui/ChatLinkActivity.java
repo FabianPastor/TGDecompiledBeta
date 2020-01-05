@@ -903,10 +903,8 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     }
 
     public /* synthetic */ void lambda$linkChat$9$ChatLinkActivity(BaseFragment baseFragment, int i) {
-        if (i != 0) {
-            MessagesController.getInstance(this.currentAccount).toogleChannelInvitesHistory(i, false);
-            linkChat(getMessagesController().getChat(Integer.valueOf(i)), baseFragment);
-        }
+        MessagesController.getInstance(this.currentAccount).toogleChannelInvitesHistory(i, false);
+        linkChat(getMessagesController().getChat(Integer.valueOf(i)), baseFragment);
     }
 
     public /* synthetic */ void lambda$linkChat$11$ChatLinkActivity(AlertDialog[] alertDialogArr, Chat chat, BaseFragment baseFragment, TLObject tLObject, TL_error tL_error) {

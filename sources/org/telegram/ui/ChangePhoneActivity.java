@@ -664,74 +664,74 @@ public class ChangePhoneActivity extends BaseFragment {
                 this.timeTimer.schedule(new TimerTask() {
                     public void run() {
                         if (LoginActivitySmsView.this.timeTimer != null) {
-                            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM(this));
-                        }
-                    }
-
-                    public /* synthetic */ void lambda$run$2$ChangePhoneActivity$LoginActivitySmsView$5() {
-                        double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$3000 = LoginActivitySmsView.this.lastCurrentTime;
-                        Double.isNaN(currentTimeMillis);
-                        access$3000 = currentTimeMillis - access$3000;
-                        LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                        double access$3100 = (double) loginActivitySmsView.time;
-                        Double.isNaN(access$3100);
-                        loginActivitySmsView.time = (int) (access$3100 - access$3000);
-                        LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
-                        if (LoginActivitySmsView.this.time >= 1000) {
-                            int access$31002 = (LoginActivitySmsView.this.time / 1000) - (((LoginActivitySmsView.this.time / 1000) / 60) * 60);
-                            if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(r0), Integer.valueOf(access$31002)));
-                            } else if (LoginActivitySmsView.this.nextType == 2) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(r0), Integer.valueOf(access$31002)));
-                            }
-                            if (LoginActivitySmsView.this.progressView != null) {
-                                LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
-                                return;
-                            }
-                            return;
-                        }
-                        if (LoginActivitySmsView.this.progressView != null) {
-                            LoginActivitySmsView.this.progressView.setProgress(1.0f);
-                        }
-                        LoginActivitySmsView.this.destroyTimer();
-                        if (LoginActivitySmsView.this.currentType == 3) {
-                            AndroidUtilities.setWaitingForCall(false);
-                            NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
-                            LoginActivitySmsView.this.waitingForEvent = false;
-                            LoginActivitySmsView.this.destroyCodeTimer();
-                            LoginActivitySmsView.this.resendCode();
-                        } else if (LoginActivitySmsView.this.currentType != 2 && LoginActivitySmsView.this.currentType != 4) {
-                        } else {
-                            if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2) {
-                                if (LoginActivitySmsView.this.nextType == 4) {
-                                    LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", NUM));
-                                } else {
-                                    LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    double currentTimeMillis = (double) System.currentTimeMillis();
+                                    double access$3000 = LoginActivitySmsView.this.lastCurrentTime;
+                                    Double.isNaN(currentTimeMillis);
+                                    access$3000 = currentTimeMillis - access$3000;
+                                    LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
+                                    double access$3100 = (double) loginActivitySmsView.time;
+                                    Double.isNaN(access$3100);
+                                    loginActivitySmsView.time = (int) (access$3100 - access$3000);
+                                    LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
+                                    if (LoginActivitySmsView.this.time >= 1000) {
+                                        int access$31002 = (LoginActivitySmsView.this.time / 1000) - (((LoginActivitySmsView.this.time / 1000) / 60) * 60);
+                                        if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
+                                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(r0), Integer.valueOf(access$31002)));
+                                        } else if (LoginActivitySmsView.this.nextType == 2) {
+                                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(r0), Integer.valueOf(access$31002)));
+                                        }
+                                        if (LoginActivitySmsView.this.progressView != null) {
+                                            LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
+                                            return;
+                                        }
+                                        return;
+                                    }
+                                    if (LoginActivitySmsView.this.progressView != null) {
+                                        LoginActivitySmsView.this.progressView.setProgress(1.0f);
+                                    }
+                                    LoginActivitySmsView.this.destroyTimer();
+                                    if (LoginActivitySmsView.this.currentType == 3) {
+                                        AndroidUtilities.setWaitingForCall(false);
+                                        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                                        LoginActivitySmsView.this.waitingForEvent = false;
+                                        LoginActivitySmsView.this.destroyCodeTimer();
+                                        LoginActivitySmsView.this.resendCode();
+                                    } else if (LoginActivitySmsView.this.currentType != 2 && LoginActivitySmsView.this.currentType != 4) {
+                                    } else {
+                                        if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2) {
+                                            if (LoginActivitySmsView.this.nextType == 4) {
+                                                LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", NUM));
+                                            } else {
+                                                LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
+                                            }
+                                            LoginActivitySmsView.this.createCodeTimer();
+                                            TL_auth_resendCode tL_auth_resendCode = new TL_auth_resendCode();
+                                            tL_auth_resendCode.phone_number = LoginActivitySmsView.this.requestPhone;
+                                            tL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
+                                            ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tL_auth_resendCode, new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$1$eJjB5myTNL1kqHYNqARreg4ju8A(this), 2);
+                                        } else if (LoginActivitySmsView.this.nextType == 3) {
+                                            AndroidUtilities.setWaitingForSms(false);
+                                            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                                            LoginActivitySmsView.this.waitingForEvent = false;
+                                            LoginActivitySmsView.this.destroyCodeTimer();
+                                            LoginActivitySmsView.this.resendCode();
+                                        }
+                                    }
                                 }
-                                LoginActivitySmsView.this.createCodeTimer();
-                                TL_auth_resendCode tL_auth_resendCode = new TL_auth_resendCode();
-                                tL_auth_resendCode.phone_number = LoginActivitySmsView.this.requestPhone;
-                                tL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                                ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tL_auth_resendCode, new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE(this), 2);
-                            } else if (LoginActivitySmsView.this.nextType == 3) {
-                                AndroidUtilities.setWaitingForSms(false);
-                                NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveSmsCode);
-                                LoginActivitySmsView.this.waitingForEvent = false;
-                                LoginActivitySmsView.this.destroyCodeTimer();
-                                LoginActivitySmsView.this.resendCode();
-                            }
-                        }
-                    }
 
-                    public /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(TLObject tLObject, TL_error tL_error) {
-                        if (tL_error != null && tL_error.text != null) {
-                            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs(this, tL_error));
-                        }
-                    }
+                                public /* synthetic */ void lambda$run$1$ChangePhoneActivity$LoginActivitySmsView$5$1(TLObject tLObject, TL_error tL_error) {
+                                    if (tL_error != null && tL_error.text != null) {
+                                        AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$1$FMLmEU_ubtOj51-10AYQOG59ia0(this, tL_error));
+                                    }
+                                }
 
-                    public /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5(TL_error tL_error) {
-                        LoginActivitySmsView.this.lastError = tL_error.text;
+                                public /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5$1(TL_error tL_error) {
+                                    LoginActivitySmsView.this.lastError = tL_error.text;
+                                }
+                            });
+                        }
                     }
                 }, 0, 1000);
             }

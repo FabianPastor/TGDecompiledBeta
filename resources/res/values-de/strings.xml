@@ -1589,6 +1589,7 @@
     <string name="NewSecretChat">Neuer Geheimer Chat</string>
     <string name="NewTheme">Neues Farbthema</string>
     <string name="NewThemePreviewLine1">Wie spät ist es gerade?</string>
+    <string name="NewThemePreviewLine2">Es ist Morgen in Tokio ��</string>
     <string name="NewThemePreviewName">Bob Harris</string>
     <string name="NewThemePreviewReply">Guten Morgen! ��</string>
     <string name="NewThemeTitle">Neues Thema</string>
@@ -2629,10 +2630,12 @@
     <string name="TextSizeHeader">Textgröße für Nachrichten</string>
     <string name="Theme">Thema</string>
     <string name="ThemeArcticBlue">Arktis</string>
+    <string name="ThemeBlue">Mono</string>
     <string name="ThemeCreateHelp">Jeder kann dein Thema über diesen Link installieren. Wenn du das Thema änderst, wird es für alle Nutzer aktualisiert, die es installiert haben.\10\10Das Farbthema wird auf dem aktuell ausgewählten Thema und dem Hintergrundbild basieren.</string>
     <string name="ThemeCreateHelp2">Du kannst den Link deines Themas ändern.\10\10Links müssen länger als 5 Zeichen sein und dürfen a-z, 0-9 und Unterstriche enthalten.</string>
     <string name="ThemeDark">Dunkel</string>
     <string name="ThemeDarkBlue">Dunkel (Blau)</string>
+    <string name="ThemeGraphite">Graphit</string>
     <string name="ThemeHelpLink">Sobald du dein Thema anpasst, aktualisiert es sich bei allen Nutzern, die es ebenfalls benutzen.\10\10Jeder kann es über diesen Link installieren:\10%1$s</string>
     <string name="ThemeInfo">Wähle eigene Farbthemen</string>
     <string name="ThemeInstallCount_few">%1$d Leute benutzen dieses Thema</string>

@@ -127,13 +127,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             if (r8 != r0) goto L_0x0038;
         L_0x002a:
             r8 = r6.mContext;
-            r0 = NUM; // 0x7var_de float:1.7945028E38 double:1.0529356127E-314;
+            r0 = NUM; // 0x7var_dd float:1.7945026E38 double:1.052935612E-314;
             r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r8, r0, r1);
             r7.setBackgroundDrawable(r8);
             goto L_0x0109;
         L_0x0038:
             r8 = r6.mContext;
-            r0 = NUM; // 0x7var_df float:1.794503E38 double:1.052935613E-314;
+            r0 = NUM; // 0x7var_de float:1.7945028E38 double:1.0529356127E-314;
             r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r8, r0, r1);
             r7.setBackgroundDrawable(r8);
             goto L_0x0109;
@@ -214,7 +214,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             r3 = new java.lang.Object[r3];
             r4 = r0.name;
             r3[r2] = r4;
-            r4 = NUM; // 0x7f0e05b1 float:1.8877993E38 double:1.0531628765E-314;
+            r4 = NUM; // 0x7f0e05a5 float:1.8877968E38 double:1.0531628706E-314;
             r5 = "LanguageCustom";
             r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
             r3[r1] = r4;

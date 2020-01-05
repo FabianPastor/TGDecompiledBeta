@@ -78,10 +78,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private static final int AUDIO_NO_FOCUS_NO_DUCK = 0;
     public static final String AUIDO_MIME_TYPE = "audio/mp4a-latm";
     private static volatile MediaController Instance = null;
-    public static final int VIDEO_BITRATE_1080 = 6800000;
-    public static final int VIDEO_BITRATE_360 = 750000;
-    public static final int VIDEO_BITRATE_480 = 1000000;
-    public static final int VIDEO_BITRATE_720 = 2621440;
     public static final String VIDEO_MIME_TYPE = "video/avc";
     private static final float VOLUME_DUCK = 0.2f;
     private static final float VOLUME_NORMAL = 1.0f;
@@ -3040,7 +3036,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         Document document;
         StringBuilder stringBuilder;
         StringBuilder stringBuilder2;
-        float f;
         if (messageObject.isRoundVideo() || z2) {
             FileLoader.getInstance(messageObject2.currentAccount).setLoadingVideoForPlayer(messageObject.getDocument(), true);
             this.playerWasReady = false;
@@ -3207,7 +3202,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             }
             if (messageObject.isRoundVideo()) {
                 this.videoPlayer.setStreamType(this.useFrontSpeaker ? 0 : 3);
-                f = this.currentPlaybackSpeed;
+                float f = this.currentPlaybackSpeed;
                 if (f > 1.0f) {
                     this.videoPlayer.setPlaybackSpeed(f);
                 }
@@ -3320,12 +3315,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             this.audioPlayer.setPlaybackSpeed(this.currentMusicPlaybackSpeed);
                         }
                     }
-                }
-                if (messageObject2.forceSeekTo >= 0.0f) {
-                    f = messageObject2.forceSeekTo;
-                    this.seekToProgressPending = f;
-                    messageObject2.audioProgress = f;
-                    messageObject2.forceSeekTo = -1.0f;
                 }
                 this.audioPlayer.setStreamType(this.useFrontSpeaker ? 0 : 3);
                 this.audioPlayer.play();
@@ -3827,7 +3816,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r3 = 2;
         r2.<init>(r10, r3);	 Catch:{ Exception -> 0x005e }
         r10 = "Loading";
-        r1 = NUM; // 0x7f0e05e7 float:1.8878102E38 double:1.053162903E-314;
+        r1 = NUM; // 0x7f0e05d8 float:1.8878072E38 double:1.0531628958E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r10, r1);	 Catch:{ Exception -> 0x005b }
         r2.setMessage(r10);	 Catch:{ Exception -> 0x005b }
         r2.setCanceledOnTouchOutside(r0);	 Catch:{ Exception -> 0x005b }
@@ -4297,157 +4286,161 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.getFileName(android.net.Uri):java.lang.String");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0095 A:{SYNTHETIC, Splitter:B:43:0x0095} */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x009f A:{SYNTHETIC, Splitter:B:48:0x009f} */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00ad A:{SYNTHETIC, Splitter:B:56:0x00ad} */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x00b7 A:{SYNTHETIC, Splitter:B:61:0x00b7} */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0095 A:{SYNTHETIC, Splitter:B:43:0x0095} */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x009f A:{SYNTHETIC, Splitter:B:48:0x009f} */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00ad A:{SYNTHETIC, Splitter:B:56:0x00ad} */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x00b7 A:{SYNTHETIC, Splitter:B:61:0x00b7} */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00ad A:{SYNTHETIC, Splitter:B:56:0x00ad} */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x00b7 A:{SYNTHETIC, Splitter:B:61:0x00b7} */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00b5 A:{SYNTHETIC, Splitter:B:56:0x00b5} */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x00bf A:{SYNTHETIC, Splitter:B:61:0x00bf} */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x009d A:{SYNTHETIC, Splitter:B:43:0x009d} */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a7 A:{SYNTHETIC, Splitter:B:48:0x00a7} */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00b5 A:{SYNTHETIC, Splitter:B:56:0x00b5} */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x00bf A:{SYNTHETIC, Splitter:B:61:0x00bf} */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x009d A:{SYNTHETIC, Splitter:B:43:0x009d} */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a7 A:{SYNTHETIC, Splitter:B:48:0x00a7} */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00b5 A:{SYNTHETIC, Splitter:B:56:0x00b5} */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x00bf A:{SYNTHETIC, Splitter:B:61:0x00bf} */
     public static java.lang.String copyFileToCache(android.net.Uri r7, java.lang.String r8) {
         /*
         r0 = 0;
-        r1 = getFileName(r7);	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r1 = org.telegram.messenger.FileLoader.fixFileName(r1);	 Catch:{ Exception -> 0x008d, all -> 0x008a }
+        r1 = getFileName(r7);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r1 = org.telegram.messenger.FileLoader.fixFileName(r1);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
         r2 = 0;
         if (r1 != 0) goto L_0x0027;
     L_0x000c:
-        r1 = org.telegram.messenger.SharedConfig.getLastLocalId();	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        org.telegram.messenger.SharedConfig.saveConfig();	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x008d, all -> 0x008a }
+        r1 = org.telegram.messenger.SharedConfig.getLastLocalId();	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        org.telegram.messenger.SharedConfig.saveConfig();	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
         r4 = "%d.%s";
         r5 = 2;
-        r5 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r1 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r5[r2] = r1;	 Catch:{ Exception -> 0x008d, all -> 0x008a }
+        r5 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r1 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r5[r2] = r1;	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
         r1 = 1;
-        r5[r1] = r8;	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r1 = java.lang.String.format(r3, r4, r5);	 Catch:{ Exception -> 0x008d, all -> 0x008a }
+        r5[r1] = r8;	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r1 = java.lang.String.format(r3, r4, r5);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
     L_0x0027:
-        r8 = org.telegram.messenger.AndroidUtilities.getSharingDirectory();	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r8.mkdirs();	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r3 = new java.io.File;	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r3.<init>(r8, r1);	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r8 = android.net.Uri.fromFile(r3);	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r8 = org.telegram.messenger.AndroidUtilities.isInternalUri(r8);	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        if (r8 == 0) goto L_0x003e;
-    L_0x003d:
+        r8 = new java.io.File;	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r3 = 4;
+        r3 = org.telegram.messenger.FileLoader.getDirectory(r3);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r4 = "sharing/";
+        r8.<init>(r3, r4);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r8.mkdirs();	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r3 = new java.io.File;	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r3.<init>(r8, r1);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r8 = android.net.Uri.fromFile(r3);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r8 = org.telegram.messenger.AndroidUtilities.isInternalUri(r8);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        if (r8 == 0) goto L_0x0046;
+    L_0x0045:
         return r0;
-    L_0x003e:
-        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r8 = r8.getContentResolver();	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r7 = r8.openInputStream(r7);	 Catch:{ Exception -> 0x008d, all -> 0x008a }
-        r8 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x0084, all -> 0x007e }
-        r8.<init>(r3);	 Catch:{ Exception -> 0x0084, all -> 0x007e }
+    L_0x0046:
+        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r8 = r8.getContentResolver();	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r7 = r8.openInputStream(r7);	 Catch:{ Exception -> 0x0095, all -> 0x0092 }
+        r8 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x008c, all -> 0x0086 }
+        r8.<init>(r3);	 Catch:{ Exception -> 0x008c, all -> 0x0086 }
         r1 = 20480; // 0x5000 float:2.8699E-41 double:1.01185E-319;
-        r1 = new byte[r1];	 Catch:{ Exception -> 0x0078, all -> 0x0073 }
-    L_0x0051:
-        r4 = r7.read(r1);	 Catch:{ Exception -> 0x0078, all -> 0x0073 }
+        r1 = new byte[r1];	 Catch:{ Exception -> 0x0080, all -> 0x007b }
+    L_0x0059:
+        r4 = r7.read(r1);	 Catch:{ Exception -> 0x0080, all -> 0x007b }
         r5 = -1;
-        if (r4 == r5) goto L_0x005c;
-    L_0x0058:
-        r8.write(r1, r2, r4);	 Catch:{ Exception -> 0x0078, all -> 0x0073 }
-        goto L_0x0051;
-    L_0x005c:
-        r0 = r3.getAbsolutePath();	 Catch:{ Exception -> 0x0078, all -> 0x0073 }
-        if (r7 == 0) goto L_0x006a;
-    L_0x0062:
-        r7.close();	 Catch:{ Exception -> 0x0066 }
-        goto L_0x006a;
-    L_0x0066:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);
+        if (r4 == r5) goto L_0x0064;
+    L_0x0060:
+        r8.write(r1, r2, r4);	 Catch:{ Exception -> 0x0080, all -> 0x007b }
+        goto L_0x0059;
+    L_0x0064:
+        r0 = r3.getAbsolutePath();	 Catch:{ Exception -> 0x0080, all -> 0x007b }
+        if (r7 == 0) goto L_0x0072;
     L_0x006a:
-        r8.close();	 Catch:{ Exception -> 0x006e }
+        r7.close();	 Catch:{ Exception -> 0x006e }
         goto L_0x0072;
     L_0x006e:
         r7 = move-exception;
         org.telegram.messenger.FileLog.e(r7);
     L_0x0072:
+        r8.close();	 Catch:{ Exception -> 0x0076 }
+        goto L_0x007a;
+    L_0x0076:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);
+    L_0x007a:
         return r0;
-    L_0x0073:
+    L_0x007b:
         r0 = move-exception;
         r6 = r0;
         r0 = r7;
         r7 = r6;
-        goto L_0x00ab;
-    L_0x0078:
+        goto L_0x00b3;
+    L_0x0080:
         r1 = move-exception;
         r6 = r8;
         r8 = r7;
         r7 = r1;
         r1 = r6;
-        goto L_0x0090;
-    L_0x007e:
+        goto L_0x0098;
+    L_0x0086:
         r8 = move-exception;
         r6 = r0;
         r0 = r7;
         r7 = r8;
         r8 = r6;
-        goto L_0x00ab;
-    L_0x0084:
+        goto L_0x00b3;
+    L_0x008c:
         r8 = move-exception;
         r1 = r0;
         r6 = r8;
         r8 = r7;
         r7 = r6;
-        goto L_0x0090;
-    L_0x008a:
+        goto L_0x0098;
+    L_0x0092:
         r7 = move-exception;
         r8 = r0;
-        goto L_0x00ab;
-    L_0x008d:
+        goto L_0x00b3;
+    L_0x0095:
         r7 = move-exception;
         r8 = r0;
         r1 = r8;
-    L_0x0090:
-        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x00a8 }
-        if (r8 == 0) goto L_0x009d;
-    L_0x0095:
-        r8.close();	 Catch:{ Exception -> 0x0099 }
-        goto L_0x009d;
-    L_0x0099:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);
+    L_0x0098:
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x00b0 }
+        if (r8 == 0) goto L_0x00a5;
     L_0x009d:
-        if (r1 == 0) goto L_0x00a7;
-    L_0x009f:
-        r1.close();	 Catch:{ Exception -> 0x00a3 }
-        goto L_0x00a7;
-    L_0x00a3:
+        r8.close();	 Catch:{ Exception -> 0x00a1 }
+        goto L_0x00a5;
+    L_0x00a1:
         r7 = move-exception;
         org.telegram.messenger.FileLog.e(r7);
+    L_0x00a5:
+        if (r1 == 0) goto L_0x00af;
     L_0x00a7:
+        r1.close();	 Catch:{ Exception -> 0x00ab }
+        goto L_0x00af;
+    L_0x00ab:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);
+    L_0x00af:
         return r0;
-    L_0x00a8:
+    L_0x00b0:
         r7 = move-exception;
         r0 = r8;
         r8 = r1;
-    L_0x00ab:
-        if (r0 == 0) goto L_0x00b5;
-    L_0x00ad:
-        r0.close();	 Catch:{ Exception -> 0x00b1 }
-        goto L_0x00b5;
-    L_0x00b1:
+    L_0x00b3:
+        if (r0 == 0) goto L_0x00bd;
+    L_0x00b5:
+        r0.close();	 Catch:{ Exception -> 0x00b9 }
+        goto L_0x00bd;
+    L_0x00b9:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x00b5:
-        if (r8 == 0) goto L_0x00bf;
-    L_0x00b7:
-        r8.close();	 Catch:{ Exception -> 0x00bb }
-        goto L_0x00bf;
-    L_0x00bb:
+    L_0x00bd:
+        if (r8 == 0) goto L_0x00c7;
+    L_0x00bf:
+        r8.close();	 Catch:{ Exception -> 0x00c3 }
+        goto L_0x00c7;
+    L_0x00c3:
         r8 = move-exception;
         org.telegram.messenger.FileLog.e(r8);
-    L_0x00bf:
-        goto L_0x00c1;
-    L_0x00c0:
+    L_0x00c7:
+        goto L_0x00c9;
+    L_0x00c8:
         throw r7;
-    L_0x00c1:
-        goto L_0x00c0;
+    L_0x00c9:
+        goto L_0x00c8;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.copyFileToCache(android.net.Uri, java.lang.String):java.lang.String");
     }
@@ -5460,12 +5453,12 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r30 = this;
         r9 = r30;
         r0 = r31;
-        if (r0 == 0) goto L_0x014d;
+        if (r0 == 0) goto L_0x014c;
     L_0x0006:
         r2 = r0.videoEditedInfo;
         if (r2 != 0) goto L_0x000c;
     L_0x000a:
-        goto L_0x014d;
+        goto L_0x014c;
     L_0x000c:
         r3 = r2.originalPath;
         r4 = r2.startTime;
@@ -5640,7 +5633,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         throw r0;
     L_0x00fa:
         r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r4 == 0) goto L_0x0121;
+        if (r4 == 0) goto L_0x0120;
     L_0x00fe:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
@@ -5654,7 +5647,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r4.append(r2);
         r4 = r4.toString();
         org.telegram.messenger.FileLog.d(r4);
-    L_0x0121:
+    L_0x0120:
         r4 = r6.edit();
         r5 = "isPreviousOk";
         r6 = 1;
@@ -5662,17 +5655,17 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r4.apply();
         r4 = 1;
         r7 = r3.length();
-        if (r1 != 0) goto L_0x013c;
-    L_0x0136:
-        if (r2 == 0) goto L_0x0139;
+        if (r1 != 0) goto L_0x013b;
+    L_0x0135:
+        if (r2 == 0) goto L_0x0138;
+    L_0x0137:
+        goto L_0x013b;
     L_0x0138:
-        goto L_0x013c;
-    L_0x0139:
         r27 = 0;
-        goto L_0x013e;
-    L_0x013c:
+        goto L_0x013d;
+    L_0x013b:
         r27 = 1;
-    L_0x013e:
+    L_0x013d:
         r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r11 = 1;
         r1 = r30;
@@ -5682,7 +5675,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r8 = r10;
         r1.didWriteData(r2, r3, r4, r5, r7, r8);
         return r11;
-    L_0x014d:
+    L_0x014c:
         r0 = 0;
         return r0;
         */
@@ -5703,75 +5696,21 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         return parseInt;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x0057  */
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x0056 A:{RETURN} */
-    public static int makeVideoBitrate(int r5, int r6, int r7, int r8, int r9) {
-        /*
-        r0 = java.lang.Math.min(r8, r9);
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r2 = 1080; // 0x438 float:1.513E-42 double:5.336E-321;
-        if (r0 < r2) goto L_0x0010;
-    L_0x000a:
-        r0 = 6800000; // 0x67CLASSNAME float:9.52883E-39 double:3.3596464E-317;
-    L_0x000d:
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0036;
-    L_0x0010:
-        r0 = java.lang.Math.min(r8, r9);
-        r2 = 720; // 0x2d0 float:1.009E-42 double:3.557E-321;
-        if (r0 < r2) goto L_0x001b;
-    L_0x0018:
-        r0 = 2621440; // 0x280000 float:3.67342E-39 double:1.2951634E-317;
-        goto L_0x000d;
-    L_0x001b:
-        r0 = java.lang.Math.min(r8, r9);
-        r1 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        if (r0 < r1) goto L_0x002d;
-    L_0x0023:
-        r0 = 1000000; // 0xvar_ float:1.401298E-39 double:4.940656E-318;
-        r1 = NUM; // 0x3f4ccccd float:0.8 double:5.246966156E-315;
-        r2 = NUM; // 0x3var_ float:0.9 double:5.2552552E-315;
-        goto L_0x0036;
-    L_0x002d:
-        r0 = 750000; // 0xb71b0 float:1.050974E-39 double:3.70549E-318;
-        r1 = NUM; // 0x3var_a float:0.6 double:5.230388065E-315;
-        r2 = NUM; // 0x3var_ float:0.7 double:5.23867711E-315;
-    L_0x0036:
-        r3 = (float) r7;
-        r5 = (float) r5;
-        r4 = (float) r8;
-        r5 = r5 / r4;
-        r6 = (float) r6;
-        r4 = (float) r9;
-        r6 = r6 / r4;
-        r5 = java.lang.Math.min(r5, r6);
-        r3 = r3 / r5;
-        r5 = (int) r3;
-        r5 = (float) r5;
-        r5 = r5 * r1;
-        r5 = (int) r5;
-        r6 = getVideoBitrateWithFactor(r2);
-        r6 = (float) r6;
-        r1 = NUM; // 0x49610000 float:921600.0 double:6.082411336E-315;
-        r9 = r9 * r8;
-        r8 = (float) r9;
-        r1 = r1 / r8;
-        r6 = r6 / r1;
-        r6 = (int) r6;
-        if (r7 >= r6) goto L_0x0057;
-    L_0x0056:
-        return r5;
-    L_0x0057:
-        if (r5 <= r0) goto L_0x005a;
-    L_0x0059:
-        return r0;
-    L_0x005a:
-        if (r5 >= r6) goto L_0x005d;
-    L_0x005c:
-        return r6;
-    L_0x005d:
-        return r5;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.makeVideoBitrate(int, int, int, int, int):int");
+    public static int makeVideoBitrate(int i, int i2, int i3, int i4, int i5) {
+        float f;
+        float f2 = 1.0f;
+        if (Math.min(i4, i5) > 1080) {
+            f = 1.0f;
+        } else if (Math.min(i4, i5) > 720) {
+            f2 = 0.6f;
+            f = 0.9f;
+        } else {
+            f2 = 0.4f;
+            f = 0.7f;
+        }
+        float f3 = (float) (i5 * i4);
+        i = (int) ((((float) i3) / (((float) (i * i2)) / f3)) * f2);
+        i2 = (int) (((float) getVideoBitrateWithFactor(f)) / (921600.0f / f3));
+        return (i3 >= i2 && i < i2) ? i2 : i;
     }
 }

@@ -18,8 +18,6 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.TLRPC.TL_pageTableCell;
 import org.telegram.ui.ArticleViewer.DrawingText;
-import org.telegram.ui.Cells.TextSelectionHelper.ArticleSelectableView;
-import org.telegram.ui.Cells.TextSelectionHelper.ArticleTextSelectionHelper;
 
 public class TableLayout extends View {
     public static final int ALIGN_BOUNDS = 0;
@@ -155,7 +153,6 @@ public class TableLayout extends View {
     private float[] radii = new float[8];
     private RectF rect = new RectF();
     private ArrayList<Point> rowSpans = new ArrayList();
-    private ArticleTextSelectionHelper textSelectionHelper;
 
     public static abstract class Alignment {
         public abstract int getAlignmentValue(Child child, int i);
@@ -854,8 +851,6 @@ public class TableLayout extends View {
         private LayoutParams layoutParams;
         private int measuredHeight;
         private int measuredWidth;
-        public int rowspan;
-        private int selectionIndex = -1;
         public int textHeight;
         public DrawingText textLayout;
         public int textLeft;
@@ -1140,9 +1135,6 @@ public class TableLayout extends View {
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) getTextX(), (float) getTextY());
-                    if (this.selectionIndex >= 0) {
-                        TableLayout.this.textSelectionHelper.draw(canvas, (ArticleSelectableView) TableLayout.this.getParent().getParent(), this.selectionIndex);
-                    }
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -1329,14 +1321,6 @@ public class TableLayout extends View {
                     canvas.drawArc(TableLayout.this.rect, 0.0f, 90.0f, false, linePaint);
                 }
             }
-        }
-
-        public void setSelectionIndex(int i) {
-            this.selectionIndex = i;
-        }
-
-        public int getRow() {
-            return this.rowspan + 10;
         }
     }
 
@@ -1609,7 +1593,6 @@ public class TableLayout extends View {
         layoutParams.rowSpec = new Spec(false, new Interval(i6, i6 + i4), FILL, 0.0f, null);
         layoutParams.columnSpec = new Spec(false, new Interval(i5, i5 + i3), FILL, 0.0f, null);
         child.layoutParams = layoutParams;
-        child.rowspan = i6;
         this.childrens.add(child);
         invalidateStructure();
     }
@@ -1629,7 +1612,6 @@ public class TableLayout extends View {
         layoutParams.rowSpec = new Spec(false, new Interval(i5, i7 + i5), FILL, 0.0f, null);
         layoutParams.columnSpec = new Spec(false, new Interval(i4, i6 + i4), FILL, 1.0f, null);
         child.layoutParams = layoutParams;
-        child.rowspan = i5;
         this.childrens.add(child);
         int i8 = tL_pageTableCell2.rowspan;
         if (i8 > 1) {
@@ -1664,9 +1646,8 @@ public class TableLayout extends View {
         return (i < 0 || i >= this.childrens.size()) ? null : (Child) this.childrens.get(i);
     }
 
-    public TableLayout(Context context, TableLayoutDelegate tableLayoutDelegate, ArticleTextSelectionHelper articleTextSelectionHelper) {
+    public TableLayout(Context context, TableLayoutDelegate tableLayoutDelegate) {
         super(context);
-        this.textSelectionHelper = articleTextSelectionHelper;
         setRowCount(Integer.MIN_VALUE);
         setColumnCount(Integer.MIN_VALUE);
         setOrientation(0);
@@ -2090,30 +2071,30 @@ public class TableLayout extends View {
             int i13 = locations2[interval2.max] - i11;
             measurement = getMeasurement(childAt, z2);
             measurement2 = getMeasurement(childAt, z);
-            Alignment access$1300 = spec.getAbsoluteAlignment(z2);
-            Alignment access$13002 = spec2.getAbsoluteAlignment(z);
+            Alignment access$1200 = spec.getAbsoluteAlignment(z2);
+            Alignment access$12002 = spec2.getAbsoluteAlignment(z);
             Bounds bounds = (Bounds) this.mHorizontalAxis.getGroupBounds().getValue(i9);
             Bounds bounds2 = (Bounds) this.mVerticalAxis.getGroupBounds().getValue(i9);
-            gravityOffset = access$1300.getGravityOffset(childAt, i12 - bounds.size(z2));
+            gravityOffset = access$1200.getGravityOffset(childAt, i12 - bounds.size(z2));
             Bounds bounds3 = bounds2;
-            int gravityOffset2 = access$13002.getGravityOffset(childAt, i13 - bounds2.size(z2));
+            int gravityOffset2 = access$12002.getGravityOffset(childAt, i13 - bounds2.size(z2));
             int margin = getMargin(childAt, z2, z2);
             int margin2 = getMargin(childAt, false, z2);
             int margin3 = getMargin(childAt, z2, false);
             int i14 = margin + margin3;
             int margin4 = margin2 + getMargin(childAt, false, false);
             Bounds bounds4 = bounds3;
-            Alignment alignment = access$13002;
+            Alignment alignment = access$12002;
             Child child2 = childAt;
-            Alignment alignment2 = access$1300;
+            Alignment alignment2 = access$1200;
             int i15 = measurement2;
             i4 = max;
             max = measurement;
-            int offset = bounds.getOffset(this, child2, access$1300, measurement + i14, true);
-            access$1300 = alignment;
-            i5 = bounds4.getOffset(this, child2, access$1300, i15 + margin4, false);
+            int offset = bounds.getOffset(this, child2, access$1200, measurement + i14, true);
+            access$1200 = alignment;
+            i5 = bounds4.getOffset(this, child2, access$1200, i15 + margin4, false);
             i6 = alignment2.getSizeInCell(childAt, max, i12 - i14);
-            childCount = access$1300.getSizeInCell(childAt, i15, i13 - margin4);
+            childCount = access$1200.getSizeInCell(childAt, i15, i13 - margin4);
             i10 = (i10 + gravityOffset) + offset;
             i3 = !this.isRtl ? margin + i10 : ((i8 - i6) - margin3) - i10;
             i5 = ((i11 + gravityOffset2) + i5) + margin2;

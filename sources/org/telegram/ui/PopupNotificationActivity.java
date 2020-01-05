@@ -630,7 +630,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     L_0x0010:
         r14 = r14.getX();
         r13.moveStartX = r14;
-        goto L_0x01c5;
+        goto L_0x01c4;
     L_0x0018:
         r0 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
         r2 = 2;
@@ -670,7 +670,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         r5 = 0;
     L_0x0057:
         r0 = r13.startedMoving;
-        if (r0 == 0) goto L_0x01c5;
+        if (r0 == 0) goto L_0x01c4;
     L_0x005b:
         r0 = r13.leftView;
         if (r0 != 0) goto L_0x0062;
@@ -694,7 +694,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         r0.addMovement(r14);
     L_0x0071:
         r13.applyViewsLayoutParams(r1);
-        goto L_0x01c5;
+        goto L_0x01c4;
     L_0x0076:
         r4 = 3;
         if (r14 == 0) goto L_0x0085;
@@ -703,13 +703,13 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         if (r5 == r3) goto L_0x0085;
     L_0x007f:
         r5 = r14.getAction();
-        if (r5 != r4) goto L_0x01c5;
+        if (r5 != r4) goto L_0x01c4;
     L_0x0085:
         r5 = 0;
-        if (r14 == 0) goto L_0x01b5;
+        if (r14 == 0) goto L_0x01b4;
     L_0x0088:
         r6 = r13.startedMoving;
-        if (r6 == 0) goto L_0x01b5;
+        if (r6 == 0) goto L_0x01b4;
     L_0x008c:
         r14 = r14.getX();
         r6 = r13.moveStartX;
@@ -822,7 +822,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         r14 = 0;
     L_0x0133:
         r7 = (r14 > r8 ? 1 : (r14 == r8 ? 0 : -1));
-        if (r7 == 0) goto L_0x01b8;
+        if (r7 == 0) goto L_0x01b7;
     L_0x0137:
         r6 = (float) r6;
         r6 = r14 / r6;
@@ -841,33 +841,33 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         r8 = android.animation.ObjectAnimator.ofFloat(r8, r10, r9);
         r7.add(r8);
         r8 = r13.centerButtonsView;
-        if (r8 == 0) goto L_0x0171;
-    L_0x0161:
+        if (r8 == 0) goto L_0x0170;
+    L_0x0160:
         r9 = new float[r3];
         r11 = r8.getTranslationX();
         r11 = r11 + r14;
         r9[r1] = r11;
         r8 = android.animation.ObjectAnimator.ofFloat(r8, r10, r9);
         r7.add(r8);
-    L_0x0171:
-        if (r2 == 0) goto L_0x0183;
-    L_0x0173:
+    L_0x0170:
+        if (r2 == 0) goto L_0x0182;
+    L_0x0172:
         r8 = new float[r3];
         r9 = r2.getTranslationX();
         r9 = r9 + r14;
         r8[r1] = r9;
         r2 = android.animation.ObjectAnimator.ofFloat(r2, r10, r8);
         r7.add(r2);
-    L_0x0183:
-        if (r4 == 0) goto L_0x0195;
-    L_0x0185:
+    L_0x0182:
+        if (r4 == 0) goto L_0x0194;
+    L_0x0184:
         r2 = new float[r3];
         r8 = r4.getTranslationX();
         r8 = r8 + r14;
         r2[r1] = r8;
         r14 = android.animation.ObjectAnimator.ofFloat(r4, r10, r2);
         r7.add(r14);
-    L_0x0195:
+    L_0x0194:
         r14 = new android.animation.AnimatorSet;
         r14.<init>();
         r14.playTogether(r7);
@@ -880,19 +880,19 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         r13.animationInProgress = r3;
         r2 = java.lang.System.currentTimeMillis();
         r13.animationStartTime = r2;
-        goto L_0x01b8;
-    L_0x01b5:
+        goto L_0x01b7;
+    L_0x01b4:
         r13.applyViewsLayoutParams(r1);
-    L_0x01b8:
+    L_0x01b7:
         r14 = r13.velocityTracker;
-        if (r14 == 0) goto L_0x01c1;
-    L_0x01bc:
+        if (r14 == 0) goto L_0x01c0;
+    L_0x01bb:
         r14.recycle();
         r13.velocityTracker = r5;
-    L_0x01c1:
+    L_0x01c0:
         r13.startedMoving = r1;
         r13.moveStartX = r0;
-    L_0x01c5:
+    L_0x01c4:
         r14 = r13.startedMoving;
         return r14;
         */

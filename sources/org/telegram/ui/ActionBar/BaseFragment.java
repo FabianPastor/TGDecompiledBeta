@@ -197,7 +197,7 @@ public class BaseFragment {
             if (viewGroup != null) {
                 try {
                     onRemoveFromParent();
-                    viewGroup.removeViewInLayout(this.fragmentView);
+                    viewGroup.removeView(this.fragmentView);
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -209,7 +209,7 @@ public class BaseFragment {
             viewGroup = (ViewGroup) actionBar.getParent();
             if (viewGroup != null) {
                 try {
-                    viewGroup.removeViewInLayout(this.actionBar);
+                    viewGroup.removeView(this.actionBar);
                 } catch (Exception e2) {
                     FileLog.e(e2);
                 }
@@ -234,7 +234,7 @@ public class BaseFragment {
                 if (viewGroup != null) {
                     try {
                         onRemoveFromParent();
-                        viewGroup.removeViewInLayout(this.fragmentView);
+                        viewGroup.removeView(this.fragmentView);
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
@@ -251,7 +251,7 @@ public class BaseFragment {
                     ViewGroup viewGroup2 = (ViewGroup) this.actionBar.getParent();
                     if (viewGroup2 != null) {
                         try {
-                            viewGroup2.removeViewInLayout(this.actionBar);
+                            viewGroup2.removeView(this.actionBar);
                         } catch (Exception e2) {
                             FileLog.e(e2);
                         }

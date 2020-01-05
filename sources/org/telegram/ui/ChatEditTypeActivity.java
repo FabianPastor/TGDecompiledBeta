@@ -614,11 +614,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     public /* synthetic */ void lambda$trySetUsername$9$ChatEditTypeActivity(int i) {
-        if (i != 0) {
-            this.chatId = i;
-            this.currentChat = getMessagesController().getChat(Integer.valueOf(i));
-            processDone();
-        }
+        this.chatId = i;
+        this.currentChat = getMessagesController().getChat(Integer.valueOf(i));
+        processDone();
     }
 
     private void loadAdminedChannels() {

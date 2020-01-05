@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
 import org.telegram.tgnet.TLRPC.Dialog;
-import org.telegram.tgnet.TLRPC.DraftMessage;
 import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.Peer;
 import org.telegram.tgnet.TLRPC.TL_dialog;
@@ -90,15 +89,5 @@ public class DialogObject {
             i2 = -inputPeer.channel_id;
         }
         return (long) i2;
-    }
-
-    public static long getLastMessageOrDraftDate(Dialog dialog, DraftMessage draftMessage) {
-        if (draftMessage != null) {
-            int i = draftMessage.date;
-            if (i >= dialog.last_message_date) {
-                return (long) i;
-            }
-        }
-        return (long) dialog.last_message_date;
     }
 }

@@ -78,12 +78,11 @@ public class DownloadController extends BaseController implements NotificationCe
         public boolean enabled;
         public boolean lessCallData;
         public int[] mask;
-        public int maxVideoBitrate;
         public boolean preloadMusic;
         public boolean preloadVideo;
         public int[] sizes;
 
-        public Preset(int[] iArr, int i, int i2, int i3, boolean z, boolean z2, boolean z3, boolean z4, int i4) {
+        public Preset(int[] iArr, int i, int i2, int i3, boolean z, boolean z2, boolean z3, boolean z4) {
             this.mask = new int[4];
             this.sizes = new int[4];
             int[] iArr2 = this.mask;
@@ -96,17 +95,14 @@ public class DownloadController extends BaseController implements NotificationCe
             this.preloadVideo = z;
             this.preloadMusic = z2;
             this.lessCallData = z4;
-            this.maxVideoBitrate = i4;
             this.enabled = z3;
         }
 
-        public Preset(String str, String str2) {
+        public Preset(String str) {
             this.mask = new int[4];
             this.sizes = new int[4];
-            String str3 = "_";
-            String[] split = str.split(str3);
+            String[] split = str.split("_");
             if (split.length >= 11) {
-                String[] strArr;
                 boolean z = false;
                 this.mask[0] = Utilities.parseInt(split[0]).intValue();
                 this.mask[1] = Utilities.parseInt(split[1]).intValue();
@@ -124,22 +120,7 @@ public class DownloadController extends BaseController implements NotificationCe
                         z = true;
                     }
                     this.lessCallData = z;
-                    strArr = null;
-                } else {
-                    strArr = str2.split(str3);
-                    if (Utilities.parseInt(strArr[11]).intValue() == 1) {
-                        z = true;
-                    }
-                    this.lessCallData = z;
                 }
-                if (split.length >= 13) {
-                    this.maxVideoBitrate = Utilities.parseInt(split[12]).intValue();
-                    return;
-                }
-                if (strArr == null) {
-                    strArr = str2.split(str3);
-                }
-                this.maxVideoBitrate = Utilities.parseInt(strArr[12]).intValue();
             }
         }
 
@@ -153,14 +134,12 @@ public class DownloadController extends BaseController implements NotificationCe
             this.preloadVideo = preset.preloadVideo;
             this.preloadMusic = preset.preloadMusic;
             this.lessCallData = preset.lessCallData;
-            this.maxVideoBitrate = preset.maxVideoBitrate;
         }
 
         public void set(TL_autoDownloadSettings tL_autoDownloadSettings) {
             this.preloadMusic = tL_autoDownloadSettings.audio_preload_next;
             this.preloadVideo = tL_autoDownloadSettings.video_preload_large;
             this.lessCallData = tL_autoDownloadSettings.phonecalls_less_data;
-            this.maxVideoBitrate = tL_autoDownloadSettings.video_upload_maxbitrate;
             int i = 0;
             this.sizes[0] = Math.max(512000, tL_autoDownloadSettings.photo_size_max);
             this.sizes[1] = Math.max(512000, tL_autoDownloadSettings.video_size_max);
@@ -221,8 +200,6 @@ public class DownloadController extends BaseController implements NotificationCe
             stringBuilder.append(this.enabled);
             stringBuilder.append(str);
             stringBuilder.append(this.lessCallData);
-            stringBuilder.append(str);
-            stringBuilder.append(this.maxVideoBitrate);
             return stringBuilder.toString();
         }
 
@@ -236,7 +213,7 @@ public class DownloadController extends BaseController implements NotificationCe
             iArr = this.sizes;
             int i2 = iArr[0];
             int[] iArr3 = preset.sizes;
-            return i2 == iArr3[0] && iArr[1] == iArr3[1] && iArr[2] == iArr3[2] && iArr[3] == iArr3[3] && this.preloadVideo == preset.preloadVideo && this.preloadMusic == preset.preloadMusic && this.maxVideoBitrate == preset.maxVideoBitrate;
+            return i2 == iArr3[0] && iArr[1] == iArr3[1] && iArr[2] == iArr3[2] && iArr[3] == iArr3[3] && this.preloadVideo == preset.preloadVideo && this.preloadMusic == preset.preloadMusic;
         }
 
         public boolean isEnabled() {
@@ -280,35 +257,32 @@ public class DownloadController extends BaseController implements NotificationCe
     public DownloadController(int i) {
         super(i);
         SharedPreferences mainSettings = MessagesController.getMainSettings(this.currentAccount);
-        String str = "1_1_1_1_1048576_512000_512000_524288_0_0_1_1_50";
-        this.lowPreset = new Preset(mainSettings.getString("preset0", str), str);
-        String str2 = "13_13_13_13_1048576_10485760_1048576_524288_1_1_1_0_100";
-        this.mediumPreset = new Preset(mainSettings.getString("preset1", str2), str2);
-        String str3 = "13_13_13_13_1048576_15728640_3145728_524288_1_1_1_0_100";
-        this.highPreset = new Preset(mainSettings.getString("preset2", str3), str3);
-        String str4 = "newConfig";
-        boolean contains = mainSettings.contains(str4);
-        String str5 = "currentRoamingPreset";
-        String str6 = "currentWifiPreset";
-        String str7 = "currentMobilePreset";
-        String str8 = "roamingPreset";
-        String str9 = "wifiPreset";
-        String str10 = "mobilePreset";
+        this.lowPreset = new Preset(mainSettings.getString("preset0", "1_1_1_1_1048576_512000_512000_524288_0_0_1_1"));
+        this.mediumPreset = new Preset(mainSettings.getString("preset1", "13_13_13_13_1048576_10485760_1048576_524288_1_1_1_0"));
+        this.highPreset = new Preset(mainSettings.getString("preset2", "13_13_13_13_1048576_15728640_3145728_524288_1_1_1_0"));
+        String str = "newConfig";
+        boolean contains = mainSettings.contains(str);
+        String str2 = "currentRoamingPreset";
+        String str3 = "currentWifiPreset";
+        String str4 = "currentMobilePreset";
+        String str5 = "roamingPreset";
+        String str6 = "wifiPreset";
+        String str7 = "mobilePreset";
         if (contains || !getUserConfig().isClientActivated()) {
-            String str11 = str6;
-            str6 = str5;
-            str5 = str11;
-            this.mobilePreset = new Preset(mainSettings.getString(str10, str2), str2);
-            this.wifiPreset = new Preset(mainSettings.getString(str9, str3), str3);
-            this.roamingPreset = new Preset(mainSettings.getString(str8, str), str);
-            this.currentMobilePreset = mainSettings.getInt(str7, 3);
-            this.currentWifiPreset = mainSettings.getInt(str5, 3);
-            this.currentRoamingPreset = mainSettings.getInt(str6, 3);
+            String str8 = str3;
+            str3 = str2;
+            str2 = str8;
+            this.mobilePreset = new Preset(mainSettings.getString(str7, this.mediumPreset.toString()));
+            this.wifiPreset = new Preset(mainSettings.getString(str6, this.highPreset.toString()));
+            this.roamingPreset = new Preset(mainSettings.getString(str5, this.lowPreset.toString()));
+            this.currentMobilePreset = mainSettings.getInt(str4, 3);
+            this.currentWifiPreset = mainSettings.getInt(str2, 3);
+            this.currentRoamingPreset = mainSettings.getInt(str3, 3);
             if (!contains) {
-                mainSettings.edit().putBoolean(str4, true).commit();
+                mainSettings.edit().putBoolean(str, true).commit();
             }
         } else {
-            String str12;
+            String str9;
             int i2 = 4;
             int[] iArr = new int[4];
             int[] iArr2 = new int[4];
@@ -316,12 +290,12 @@ public class DownloadController extends BaseController implements NotificationCe
             int[] iArr4 = new int[7];
             int[] iArr5 = new int[7];
             int[] iArr6 = new int[7];
-            String str13 = str5;
+            String str10 = str2;
             int i3 = 0;
             while (i3 < i2) {
                 Object obj;
                 StringBuilder stringBuilder = new StringBuilder();
-                str12 = str6;
+                str9 = str3;
                 stringBuilder.append("mobileDataDownloadMask");
                 Object obj2 = "";
                 if (i3 == 0) {
@@ -331,9 +305,9 @@ public class DownloadController extends BaseController implements NotificationCe
                     obj2 = Integer.valueOf(i3);
                 }
                 stringBuilder.append(obj2);
-                str = stringBuilder.toString();
-                if (i3 == 0 || mainSettings.contains(str)) {
-                    iArr[i3] = mainSettings.getInt(str, 13);
+                String stringBuilder2 = stringBuilder.toString();
+                if (i3 == 0 || mainSettings.contains(stringBuilder2)) {
+                    iArr[i3] = mainSettings.getInt(stringBuilder2, 13);
                     stringBuilder = new StringBuilder();
                     stringBuilder.append("wifiDownloadMask");
                     stringBuilder.append(i3 == 0 ? obj : Integer.valueOf(i3));
@@ -348,31 +322,33 @@ public class DownloadController extends BaseController implements NotificationCe
                     iArr3[i3] = iArr3[0];
                 }
                 i3++;
-                str6 = str12;
+                str3 = str9;
                 i2 = 4;
             }
-            str12 = str6;
+            str9 = str3;
             iArr4[2] = mainSettings.getInt("mobileMaxDownloadSize2", this.mediumPreset.sizes[1]);
             iArr4[3] = mainSettings.getInt("mobileMaxDownloadSize3", this.mediumPreset.sizes[2]);
             iArr5[2] = mainSettings.getInt("wifiMaxDownloadSize2", this.highPreset.sizes[1]);
             iArr5[3] = mainSettings.getInt("wifiMaxDownloadSize3", this.highPreset.sizes[2]);
             iArr6[2] = mainSettings.getInt("roamingMaxDownloadSize2", this.lowPreset.sizes[1]);
             iArr6[3] = mainSettings.getInt("roamingMaxDownloadSize3", this.lowPreset.sizes[2]);
-            boolean z = mainSettings.getBoolean("globalAutodownloadEnabled", true);
-            this.mobilePreset = new Preset(iArr, this.mediumPreset.sizes[0], iArr4[2], iArr4[3], true, true, z, false, 100);
-            this.wifiPreset = new Preset(iArr2, this.highPreset.sizes[0], iArr5[2], iArr5[3], true, true, z, false, 100);
-            this.roamingPreset = new Preset(iArr3, this.lowPreset.sizes[0], iArr6[2], iArr6[3], false, false, z, true, 50);
+            contains = mainSettings.getBoolean("globalAutodownloadEnabled", true);
+            int[] iArr7 = iArr3;
+            int[] iArr8 = iArr2;
+            this.mobilePreset = new Preset(iArr, this.mediumPreset.sizes[0], iArr4[2], iArr4[3], true, true, contains, false);
+            this.wifiPreset = new Preset(iArr8, this.highPreset.sizes[0], iArr5[2], iArr5[3], true, true, contains, false);
+            this.roamingPreset = new Preset(iArr7, this.lowPreset.sizes[0], iArr6[2], iArr6[3], false, false, contains, true);
             Editor edit = mainSettings.edit();
-            edit.putBoolean(str4, true);
-            edit.putString(str10, this.mobilePreset.toString());
-            edit.putString(str9, this.wifiPreset.toString());
-            edit.putString(str8, this.roamingPreset.toString());
+            edit.putBoolean(str, true);
+            edit.putString(str7, this.mobilePreset.toString());
+            edit.putString(str6, this.wifiPreset.toString());
+            edit.putString(str5, this.roamingPreset.toString());
             this.currentMobilePreset = 3;
-            edit.putInt(str7, 3);
+            edit.putInt(str4, 3);
             this.currentWifiPreset = 3;
-            edit.putInt(str12, 3);
+            edit.putInt(str9, 3);
             this.currentRoamingPreset = 3;
-            edit.putInt(str13, 3);
+            edit.putInt(str10, 3);
             edit.commit();
         }
         AndroidUtilities.runOnUIThread(new -$$Lambda$DownloadController$TvQOK4BckOSg64NROgC4NLSY7xY(this));
@@ -501,17 +477,6 @@ public class DownloadController extends BaseController implements NotificationCe
         this.videoDownloadQueue.clear();
         this.downloadQueueKeys.clear();
         this.typingTimes.clear();
-    }
-
-    public int getMaxVideoBitrate() {
-        int autodownloadNetworkType = ApplicationLoader.getAutodownloadNetworkType();
-        if (autodownloadNetworkType == 1) {
-            return getCurrentWiFiPreset().maxVideoBitrate;
-        }
-        if (autodownloadNetworkType == 2) {
-            return getCurrentRoamingPreset().maxVideoBitrate;
-        }
-        return getCurrentMobilePreset().maxVideoBitrate;
     }
 
     public int getAutodownloadMask() {
@@ -941,7 +906,6 @@ public class DownloadController extends BaseController implements NotificationCe
         tL_autoDownloadSettings.audio_preload_next = currentMobilePreset.preloadMusic;
         tL_autoDownloadSettings.video_preload_large = currentMobilePreset.preloadVideo;
         tL_autoDownloadSettings.phonecalls_less_data = currentMobilePreset.lessCallData;
-        tL_autoDownloadSettings.video_upload_maxbitrate = currentMobilePreset.maxVideoBitrate;
         tL_autoDownloadSettings.disabled = i2 ^ 1;
         i2 = 0;
         int i3 = 0;

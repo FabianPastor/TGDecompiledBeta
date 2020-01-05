@@ -1,14 +1,10 @@
 package org.telegram.ui.Adapters;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.os.Build.VERSION;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -50,7 +46,6 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     private Location previousFetchedLocation;
     private SendLocationCell sendLocationCell;
     private int shareLiveLocationPotistion = -1;
-    private Runnable updateRunnable;
 
     /* Access modifiers changed, original: protected */
     public void onDirectionClick() {
@@ -66,10 +61,6 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         this.overScrollHeight = i;
     }
 
-    public void setUpdateRunnable(Runnable runnable) {
-        this.updateRunnable = runnable;
-    }
-
     public void setGpsLocation(Location location) {
         Object obj = this.gpsLocation == null ? 1 : null;
         this.gpsLocation = location;
@@ -83,7 +74,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
             }
         }
         if (this.currentMessageObject != null) {
-            notifyItemChanged(1, new Object());
+            notifyItemChanged(1);
             updateLiveLocations();
         } else if (this.locationType != 2) {
             updateCell();
@@ -94,7 +85,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
 
     public void updateLiveLocations() {
         if (!this.currentLiveLocations.isEmpty()) {
-            notifyItemRangeChanged(2, this.currentLiveLocations.size(), new Object());
+            notifyItemRangeChanged(2, this.currentLiveLocations.size());
         }
     }
 
@@ -131,20 +122,20 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
             String str = "Loading";
             String str2;
             if (this.locationType == 4 || this.customLocation != null) {
-                String str3;
-                if (!TextUtils.isEmpty(this.addressName)) {
-                    str3 = this.addressName;
-                } else if ((this.customLocation == null && this.gpsLocation == null) || this.fetchingLocation) {
-                    str3 = LocaleController.getString(str, NUM);
-                } else {
-                    str2 = "(%f,%f)";
-                    if (this.customLocation != null) {
-                        str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.customLocation.getLongitude())});
+                String str3 = this.addressName;
+                if (str3 == null) {
+                    if ((this.customLocation == null && this.gpsLocation == null) || this.fetchingLocation) {
+                        str3 = LocaleController.getString(str, NUM);
                     } else {
-                        if (this.gpsLocation != null) {
-                            str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.gpsLocation.getLongitude())});
+                        str2 = "(%f,%f)";
+                        if (this.customLocation != null) {
+                            str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.customLocation.getLongitude())});
                         } else {
-                            str3 = LocaleController.getString(str, NUM);
+                            if (this.gpsLocation != null) {
+                                str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.gpsLocation.getLongitude())});
+                            } else {
+                                str3 = LocaleController.getString(str, NUM);
+                            }
                         }
                     }
                 }
@@ -245,64 +236,50 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View anonymousClass1;
+        View emptyCell;
         View sendLocationCell;
         switch (i) {
             case 0:
-                anonymousClass1 = new EmptyCell(this.mContext) {
-                    public ViewPropertyAnimator animate() {
-                        ViewPropertyAnimator animate = super.animate();
-                        if (VERSION.SDK_INT >= 19) {
-                            animate.setUpdateListener(new -$$Lambda$LocationActivityAdapter$1$6y19GSH-Lhc1zUdDmThcePJaAMQ(this));
-                        }
-                        return animate;
-                    }
-
-                    public /* synthetic */ void lambda$animate$0$LocationActivityAdapter$1(ValueAnimator valueAnimator) {
-                        if (LocationActivityAdapter.this.updateRunnable != null) {
-                            LocationActivityAdapter.this.updateRunnable.run();
-                        }
-                    }
-                };
+                emptyCell = new EmptyCell(this.mContext);
                 break;
             case 1:
                 sendLocationCell = new SendLocationCell(this.mContext, false);
                 break;
             case 2:
-                anonymousClass1 = new HeaderCell(this.mContext);
+                emptyCell = new HeaderCell(this.mContext);
                 break;
             case 3:
                 sendLocationCell = new LocationCell(this.mContext, false);
                 break;
             case 4:
-                anonymousClass1 = new LocationLoadingCell(this.mContext);
+                emptyCell = new LocationLoadingCell(this.mContext);
                 break;
             case 5:
-                anonymousClass1 = new LocationPoweredCell(this.mContext);
+                emptyCell = new LocationPoweredCell(this.mContext);
                 break;
             case 6:
-                anonymousClass1 = new SendLocationCell(this.mContext, true);
-                anonymousClass1.setDialogId(this.dialogId);
+                emptyCell = new SendLocationCell(this.mContext, true);
+                emptyCell.setDialogId(this.dialogId);
                 break;
             case 7:
                 Context context = this.mContext;
                 int i2 = this.locationType;
                 i2 = (i2 == 4 || i2 == 5) ? 16 : 54;
-                anonymousClass1 = new SharingLiveLocationCell(context, true, i2);
+                emptyCell = new SharingLiveLocationCell(context, true, i2);
                 break;
             case 8:
-                anonymousClass1 = new LocationDirectionCell(this.mContext);
-                anonymousClass1.setOnButtonClick(new -$$Lambda$LocationActivityAdapter$ZI5zffERDWGSr7GTCgcNce6b1mE(this));
+                emptyCell = new LocationDirectionCell(this.mContext);
+                emptyCell.setOnButtonClick(new -$$Lambda$LocationActivityAdapter$ZI5zffERDWGSr7GTCgcNce6b1mE(this));
                 break;
             default:
-                anonymousClass1 = new ShadowSectionCell(this.mContext);
+                emptyCell = new ShadowSectionCell(this.mContext);
                 CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 combinedDrawable.setFullsize(true);
-                anonymousClass1.setBackgroundDrawable(combinedDrawable);
+                emptyCell.setBackgroundDrawable(combinedDrawable);
                 break;
         }
-        anonymousClass1 = sendLocationCell;
-        return new Holder(anonymousClass1);
+        emptyCell = sendLocationCell;
+        return new Holder(emptyCell);
     }
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {

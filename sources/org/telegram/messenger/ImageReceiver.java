@@ -276,58 +276,58 @@ public class ImageReceiver implements NotificationCenterDelegate {
         setImage(null, null, imageLocation, str, imageLocation2, str2, drawable, i, str3, obj, i2);
     }
 
-    /* JADX WARNING: Missing block: B:83:0x014e, code skipped:
-            if (r13.equals(r14) != false) goto L_0x015a;
+    /* JADX WARNING: Missing block: B:83:0x014d, code skipped:
+            if (r15.equals(r14) != false) goto L_0x0159;
      */
-    /* JADX WARNING: Missing block: B:87:0x0158, code skipped:
-            if (r13.equals(r15) != false) goto L_0x015a;
+    /* JADX WARNING: Missing block: B:87:0x0157, code skipped:
+            if (r15.equals(r13) != false) goto L_0x0159;
      */
-    /* JADX WARNING: Missing block: B:88:0x015a, code skipped:
-            r13 = r0.delegate;
+    /* JADX WARNING: Missing block: B:88:0x0159, code skipped:
+            r15 = r0.delegate;
      */
-    /* JADX WARNING: Missing block: B:89:0x015c, code skipped:
-            if (r13 == null) goto L_0x0180;
+    /* JADX WARNING: Missing block: B:89:0x015b, code skipped:
+            if (r15 == null) goto L_0x017f;
      */
-    /* JADX WARNING: Missing block: B:91:0x0160, code skipped:
-            if (r0.currentImageDrawable != null) goto L_0x0171;
+    /* JADX WARNING: Missing block: B:91:0x015f, code skipped:
+            if (r0.currentImageDrawable != null) goto L_0x0170;
      */
-    /* JADX WARNING: Missing block: B:93:0x0164, code skipped:
-            if (r0.currentThumbDrawable != null) goto L_0x0171;
+    /* JADX WARNING: Missing block: B:93:0x0163, code skipped:
+            if (r0.currentThumbDrawable != null) goto L_0x0170;
      */
-    /* JADX WARNING: Missing block: B:95:0x0168, code skipped:
-            if (r0.staticThumbDrawable != null) goto L_0x0171;
+    /* JADX WARNING: Missing block: B:95:0x0167, code skipped:
+            if (r0.staticThumbDrawable != null) goto L_0x0170;
      */
-    /* JADX WARNING: Missing block: B:97:0x016c, code skipped:
-            if (r0.currentMediaDrawable == null) goto L_0x016f;
+    /* JADX WARNING: Missing block: B:97:0x016b, code skipped:
+            if (r0.currentMediaDrawable == null) goto L_0x016e;
      */
-    /* JADX WARNING: Missing block: B:98:0x016f, code skipped:
+    /* JADX WARNING: Missing block: B:98:0x016e, code skipped:
             r10 = false;
      */
-    /* JADX WARNING: Missing block: B:99:0x0171, code skipped:
+    /* JADX WARNING: Missing block: B:99:0x0170, code skipped:
             r10 = true;
      */
-    /* JADX WARNING: Missing block: B:101:0x0174, code skipped:
-            if (r0.currentImageDrawable != null) goto L_0x017c;
+    /* JADX WARNING: Missing block: B:101:0x0173, code skipped:
+            if (r0.currentImageDrawable != null) goto L_0x017b;
      */
-    /* JADX WARNING: Missing block: B:103:0x0178, code skipped:
-            if (r0.currentMediaDrawable != null) goto L_0x017c;
+    /* JADX WARNING: Missing block: B:103:0x0177, code skipped:
+            if (r0.currentMediaDrawable != null) goto L_0x017b;
      */
-    /* JADX WARNING: Missing block: B:104:0x017a, code skipped:
+    /* JADX WARNING: Missing block: B:104:0x0179, code skipped:
             r11 = true;
      */
-    /* JADX WARNING: Missing block: B:105:0x017c, code skipped:
+    /* JADX WARNING: Missing block: B:105:0x017b, code skipped:
             r11 = false;
      */
-    /* JADX WARNING: Missing block: B:106:0x017d, code skipped:
-            r13.didSetImage(r0, r10, r11);
+    /* JADX WARNING: Missing block: B:106:0x017c, code skipped:
+            r15.didSetImage(r0, r10, r11);
      */
-    /* JADX WARNING: Missing block: B:108:0x0182, code skipped:
-            if (r0.canceledLoading != false) goto L_0x0189;
+    /* JADX WARNING: Missing block: B:108:0x0181, code skipped:
+            if (r0.canceledLoading != false) goto L_0x0188;
      */
-    /* JADX WARNING: Missing block: B:110:0x0186, code skipped:
-            if (r0.forcePreview != false) goto L_0x0189;
+    /* JADX WARNING: Missing block: B:110:0x0185, code skipped:
+            if (r0.forcePreview != false) goto L_0x0188;
      */
-    /* JADX WARNING: Missing block: B:111:0x0188, code skipped:
+    /* JADX WARNING: Missing block: B:111:0x0187, code skipped:
             return;
      */
     public void setImage(org.telegram.messenger.ImageLocation r20, java.lang.String r21, org.telegram.messenger.ImageLocation r22, java.lang.String r23, org.telegram.messenger.ImageLocation r24, java.lang.String r25, android.graphics.drawable.Drawable r26, int r27, java.lang.String r28, java.lang.Object r29, int r30) {
@@ -456,7 +456,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     L_0x00b1:
         if (r3 == 0) goto L_0x00b8;
     L_0x00b3:
-        r14 = r3.getKey(r9, r13, r12);
+        r14 = r3.getKey(r9, r13);
         goto L_0x00b9;
     L_0x00b8:
         r14 = r13;
@@ -523,216 +523,215 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r13.append(r4);
         r14 = r13.toString();
     L_0x011f:
-        if (r1 == 0) goto L_0x0128;
+        if (r1 == 0) goto L_0x0127;
     L_0x0121:
         r10 = 0;
+        r13 = r1.getKey(r9, r10);
+        goto L_0x0128;
+    L_0x0127:
         r13 = 0;
-        r15 = r1.getKey(r9, r13, r10);
-        goto L_0x0129;
     L_0x0128:
-        r15 = 0;
-    L_0x0129:
-        if (r15 != 0) goto L_0x012e;
-    L_0x012b:
-        if (r1 == 0) goto L_0x012e;
-    L_0x012d:
+        if (r13 != 0) goto L_0x012d;
+    L_0x012a:
+        if (r1 == 0) goto L_0x012d;
+    L_0x012c:
         r1 = 0;
-    L_0x012e:
-        if (r15 == 0) goto L_0x0144;
-    L_0x0130:
-        if (r2 == 0) goto L_0x0144;
-    L_0x0132:
-        r13 = new java.lang.StringBuilder;
-        r13.<init>();
-        r13.append(r15);
-        r13.append(r12);
-        r13.append(r2);
-        r15 = r13.toString();
-    L_0x0144:
-        if (r15 != 0) goto L_0x0150;
-    L_0x0146:
-        r13 = r0.currentImageKey;
-        if (r13 == 0) goto L_0x0150;
-    L_0x014a:
-        r13 = r13.equals(r14);
-        if (r13 != 0) goto L_0x015a;
-    L_0x0150:
-        r13 = r0.currentMediaKey;
-        if (r13 == 0) goto L_0x0189;
-    L_0x0154:
-        r13 = r13.equals(r15);
-        if (r13 == 0) goto L_0x0189;
-    L_0x015a:
-        r13 = r0.delegate;
-        if (r13 == 0) goto L_0x0180;
-    L_0x015e:
+    L_0x012d:
+        if (r13 == 0) goto L_0x0143;
+    L_0x012f:
+        if (r2 == 0) goto L_0x0143;
+    L_0x0131:
+        r15 = new java.lang.StringBuilder;
+        r15.<init>();
+        r15.append(r13);
+        r15.append(r12);
+        r15.append(r2);
+        r13 = r15.toString();
+    L_0x0143:
+        if (r13 != 0) goto L_0x014f;
+    L_0x0145:
+        r15 = r0.currentImageKey;
+        if (r15 == 0) goto L_0x014f;
+    L_0x0149:
+        r15 = r15.equals(r14);
+        if (r15 != 0) goto L_0x0159;
+    L_0x014f:
+        r15 = r0.currentMediaKey;
+        if (r15 == 0) goto L_0x0188;
+    L_0x0153:
+        r15 = r15.equals(r13);
+        if (r15 == 0) goto L_0x0188;
+    L_0x0159:
+        r15 = r0.delegate;
+        if (r15 == 0) goto L_0x017f;
+    L_0x015d:
         r10 = r0.currentImageDrawable;
-        if (r10 != 0) goto L_0x0171;
-    L_0x0162:
+        if (r10 != 0) goto L_0x0170;
+    L_0x0161:
         r10 = r0.currentThumbDrawable;
-        if (r10 != 0) goto L_0x0171;
-    L_0x0166:
+        if (r10 != 0) goto L_0x0170;
+    L_0x0165:
         r10 = r0.staticThumbDrawable;
-        if (r10 != 0) goto L_0x0171;
-    L_0x016a:
+        if (r10 != 0) goto L_0x0170;
+    L_0x0169:
         r10 = r0.currentMediaDrawable;
-        if (r10 == 0) goto L_0x016f;
+        if (r10 == 0) goto L_0x016e;
+    L_0x016d:
+        goto L_0x0170;
     L_0x016e:
+        r10 = 0;
         goto L_0x0171;
-    L_0x016f:
-        r10 = 0;
-        goto L_0x0172;
+    L_0x0170:
+        r10 = 1;
     L_0x0171:
-        r10 = 1;
-    L_0x0172:
         r11 = r0.currentImageDrawable;
-        if (r11 != 0) goto L_0x017c;
-    L_0x0176:
+        if (r11 != 0) goto L_0x017b;
+    L_0x0175:
         r11 = r0.currentMediaDrawable;
-        if (r11 != 0) goto L_0x017c;
-    L_0x017a:
+        if (r11 != 0) goto L_0x017b;
+    L_0x0179:
         r11 = 1;
-        goto L_0x017d;
+        goto L_0x017c;
+    L_0x017b:
+        r11 = 0;
     L_0x017c:
-        r11 = 0;
-    L_0x017d:
-        r13.didSetImage(r0, r10, r11);
-    L_0x0180:
+        r15.didSetImage(r0, r10, r11);
+    L_0x017f:
         r10 = r0.canceledLoading;
-        if (r10 != 0) goto L_0x0189;
-    L_0x0184:
+        if (r10 != 0) goto L_0x0188;
+    L_0x0183:
         r10 = r0.forcePreview;
-        if (r10 != 0) goto L_0x0189;
-    L_0x0188:
+        if (r10 != 0) goto L_0x0188;
+    L_0x0187:
         return;
-    L_0x0189:
+    L_0x0188:
         r10 = r0.strippedLocation;
-        if (r10 == 0) goto L_0x018e;
+        if (r10 == 0) goto L_0x018d;
+    L_0x018c:
+        goto L_0x0192;
     L_0x018d:
-        goto L_0x0193;
-    L_0x018e:
-        if (r1 == 0) goto L_0x0192;
-    L_0x0190:
+        if (r1 == 0) goto L_0x0191;
+    L_0x018f:
         r10 = r1;
-        goto L_0x0193;
-    L_0x0192:
+        goto L_0x0192;
+    L_0x0191:
         r10 = r3;
-    L_0x0193:
-        if (r5 == 0) goto L_0x019b;
-    L_0x0195:
-        r11 = 0;
-        r13 = r5.getKey(r9, r10, r11);
-        goto L_0x019c;
-    L_0x019b:
-        r13 = 0;
-    L_0x019c:
-        if (r13 == 0) goto L_0x01b2;
-    L_0x019e:
-        if (r6 == 0) goto L_0x01b2;
-    L_0x01a0:
-        r10 = new java.lang.StringBuilder;
-        r10.<init>();
-        r10.append(r13);
-        r10.append(r12);
-        r10.append(r6);
-        r13 = r10.toString();
-    L_0x01b2:
-        r10 = r0.crossfadeWithOldImage;
-        r11 = 3;
-        r12 = 2;
-        if (r10 == 0) goto L_0x0235;
-    L_0x01b8:
-        r10 = r0.currentImageDrawable;
-        if (r10 == 0) goto L_0x01dc;
-    L_0x01bc:
-        r10 = 1;
-        r0.recycleBitmap(r13, r10);
+    L_0x0192:
+        if (r5 == 0) goto L_0x0199;
+    L_0x0194:
+        r10 = r5.getKey(r9, r10);
+        goto L_0x019a;
+    L_0x0199:
         r10 = 0;
-        r0.recycleBitmap(r10, r12);
-        r0.recycleBitmap(r15, r11);
-        r11 = r0.imageShader;
-        r0.crossfadeShader = r11;
-        r11 = r0.currentImageDrawable;
-        r0.crossfadeImage = r11;
-        r11 = r0.currentImageKey;
-        r0.crossfadeKey = r11;
-        r11 = 0;
-        r0.crossfadingWithThumb = r11;
+    L_0x019a:
+        if (r10 == 0) goto L_0x01b0;
+    L_0x019c:
+        if (r6 == 0) goto L_0x01b0;
+    L_0x019e:
+        r11 = new java.lang.StringBuilder;
+        r11.<init>();
+        r11.append(r10);
+        r11.append(r12);
+        r11.append(r6);
+        r10 = r11.toString();
+    L_0x01b0:
+        r11 = r10;
+        r10 = r0.crossfadeWithOldImage;
+        r12 = 3;
+        r15 = 2;
+        if (r10 == 0) goto L_0x0234;
+    L_0x01b7:
+        r10 = r0.currentImageDrawable;
+        if (r10 == 0) goto L_0x01db;
+    L_0x01bb:
+        r10 = 1;
+        r0.recycleBitmap(r11, r10);
+        r10 = 0;
+        r0.recycleBitmap(r10, r15);
+        r0.recycleBitmap(r13, r12);
+        r12 = r0.imageShader;
+        r0.crossfadeShader = r12;
+        r12 = r0.currentImageDrawable;
+        r0.crossfadeImage = r12;
+        r12 = r0.currentImageKey;
+        r0.crossfadeKey = r12;
+        r12 = 0;
+        r0.crossfadingWithThumb = r12;
         r0.currentImageDrawable = r10;
         r0.currentImageKey = r10;
-    L_0x01da:
-        r11 = 1;
-        goto L_0x0247;
-    L_0x01dc:
-        r11 = 0;
+    L_0x01d9:
+        r12 = 1;
+        goto L_0x0246;
+    L_0x01db:
+        r12 = 0;
         r10 = r0.currentThumbDrawable;
-        if (r10 == 0) goto L_0x01ff;
-    L_0x01e1:
-        r0.recycleBitmap(r14, r11);
+        if (r10 == 0) goto L_0x01fe;
+    L_0x01e0:
+        r0.recycleBitmap(r14, r12);
         r10 = 0;
-        r0.recycleBitmap(r10, r12);
-        r12 = 3;
-        r0.recycleBitmap(r15, r12);
-        r12 = r0.thumbShader;
-        r0.crossfadeShader = r12;
-        r12 = r0.currentThumbDrawable;
-        r0.crossfadeImage = r12;
-        r12 = r0.currentThumbKey;
-        r0.crossfadeKey = r12;
-        r0.crossfadingWithThumb = r11;
+        r0.recycleBitmap(r10, r15);
+        r15 = 3;
+        r0.recycleBitmap(r13, r15);
+        r15 = r0.thumbShader;
+        r0.crossfadeShader = r15;
+        r15 = r0.currentThumbDrawable;
+        r0.crossfadeImage = r15;
+        r15 = r0.currentThumbKey;
+        r0.crossfadeKey = r15;
+        r0.crossfadingWithThumb = r12;
         r0.currentThumbDrawable = r10;
         r0.currentThumbKey = r10;
-        goto L_0x01da;
-    L_0x01ff:
+        goto L_0x01d9;
+    L_0x01fe:
         r10 = r0.staticThumbDrawable;
-        if (r10 == 0) goto L_0x0223;
-    L_0x0203:
-        r0.recycleBitmap(r14, r11);
+        if (r10 == 0) goto L_0x0222;
+    L_0x0202:
+        r0.recycleBitmap(r14, r12);
         r10 = 1;
-        r0.recycleBitmap(r13, r10);
+        r0.recycleBitmap(r11, r10);
         r10 = 0;
-        r0.recycleBitmap(r10, r12);
-        r12 = 3;
-        r0.recycleBitmap(r15, r12);
-        r12 = r0.thumbShader;
-        r0.crossfadeShader = r12;
-        r12 = r0.staticThumbDrawable;
-        r0.crossfadeImage = r12;
-        r0.crossfadingWithThumb = r11;
+        r0.recycleBitmap(r10, r15);
+        r15 = 3;
+        r0.recycleBitmap(r13, r15);
+        r15 = r0.thumbShader;
+        r0.crossfadeShader = r15;
+        r15 = r0.staticThumbDrawable;
+        r0.crossfadeImage = r15;
+        r0.crossfadingWithThumb = r12;
         r0.crossfadeKey = r10;
         r0.currentThumbDrawable = r10;
         r0.currentThumbKey = r10;
-        goto L_0x01da;
-    L_0x0223:
+        goto L_0x01d9;
+    L_0x0222:
         r10 = 0;
-        r0.recycleBitmap(r14, r11);
-        r11 = 1;
-        r0.recycleBitmap(r13, r11);
-        r0.recycleBitmap(r10, r12);
-        r12 = 3;
-        r0.recycleBitmap(r15, r12);
+        r0.recycleBitmap(r14, r12);
+        r12 = 1;
+        r0.recycleBitmap(r11, r12);
+        r0.recycleBitmap(r10, r15);
+        r15 = 3;
+        r0.recycleBitmap(r13, r15);
         r0.crossfadeShader = r10;
-        goto L_0x0247;
-    L_0x0235:
+        goto L_0x0246;
+    L_0x0234:
         r10 = 0;
-        r11 = 1;
+        r12 = 1;
         r0.recycleBitmap(r14, r10);
-        r0.recycleBitmap(r13, r11);
+        r0.recycleBitmap(r11, r12);
         r10 = 0;
-        r0.recycleBitmap(r10, r12);
-        r12 = 3;
-        r0.recycleBitmap(r15, r12);
+        r0.recycleBitmap(r10, r15);
+        r15 = 3;
+        r0.recycleBitmap(r13, r15);
         r0.crossfadeShader = r10;
-    L_0x0247:
+    L_0x0246:
         r0.currentImageLocation = r3;
         r0.currentImageFilter = r4;
         r0.currentImageKey = r14;
         r0.currentMediaLocation = r1;
         r0.currentMediaFilter = r2;
-        r0.currentMediaKey = r15;
+        r0.currentMediaKey = r13;
         r0.currentThumbLocation = r5;
         r0.currentThumbFilter = r6;
-        r0.currentThumbKey = r13;
+        r0.currentThumbKey = r11;
         r0.currentParentObject = r9;
         r0.currentExt = r8;
         r1 = r27;
@@ -747,51 +746,51 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r0.currentAlpha = r1;
         r1 = r0.delegate;
-        if (r1 == 0) goto L_0x0298;
-    L_0x0276:
+        if (r1 == 0) goto L_0x0297;
+    L_0x0275:
         r2 = r0.currentImageDrawable;
-        if (r2 != 0) goto L_0x0289;
-    L_0x027a:
+        if (r2 != 0) goto L_0x0288;
+    L_0x0279:
         r2 = r0.currentThumbDrawable;
-        if (r2 != 0) goto L_0x0289;
-    L_0x027e:
+        if (r2 != 0) goto L_0x0288;
+    L_0x027d:
         r2 = r0.staticThumbDrawable;
-        if (r2 != 0) goto L_0x0289;
-    L_0x0282:
+        if (r2 != 0) goto L_0x0288;
+    L_0x0281:
         r2 = r0.currentMediaDrawable;
-        if (r2 == 0) goto L_0x0287;
+        if (r2 == 0) goto L_0x0286;
+    L_0x0285:
+        goto L_0x0288;
     L_0x0286:
-        goto L_0x0289;
-    L_0x0287:
         r2 = 0;
-        goto L_0x028a;
-    L_0x0289:
+        goto L_0x0289;
+    L_0x0288:
         r2 = 1;
-    L_0x028a:
+    L_0x0289:
         r3 = r0.currentImageDrawable;
-        if (r3 != 0) goto L_0x0294;
-    L_0x028e:
+        if (r3 != 0) goto L_0x0293;
+    L_0x028d:
         r3 = r0.currentMediaDrawable;
-        if (r3 != 0) goto L_0x0294;
-    L_0x0292:
+        if (r3 != 0) goto L_0x0293;
+    L_0x0291:
         r3 = 1;
-        goto L_0x0295;
-    L_0x0294:
+        goto L_0x0294;
+    L_0x0293:
         r3 = 0;
-    L_0x0295:
+    L_0x0294:
         r1.didSetImage(r0, r2, r3);
-    L_0x0298:
+    L_0x0297:
         r1 = org.telegram.messenger.ImageLoader.getInstance();
         r1.loadImageForImageReceiver(r0);
         r1 = r0.parentView;
-        if (r1 == 0) goto L_0x02b8;
-    L_0x02a3:
+        if (r1 == 0) goto L_0x02b7;
+    L_0x02a2:
         r2 = r0.invalidateAll;
-        if (r2 == 0) goto L_0x02ab;
-    L_0x02a7:
+        if (r2 == 0) goto L_0x02aa;
+    L_0x02a6:
         r1.invalidate();
-        goto L_0x02b8;
-    L_0x02ab:
+        goto L_0x02b7;
+    L_0x02aa:
         r2 = r0.imageX;
         r3 = r0.imageY;
         r4 = r0.imageW;
@@ -799,20 +798,20 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r5 = r0.imageH;
         r5 = r5 + r3;
         r1.invalidate(r2, r3, r4, r5);
-    L_0x02b8:
+    L_0x02b7:
         r1 = r9 instanceof org.telegram.messenger.MessageObject;
-        if (r1 == 0) goto L_0x02c6;
-    L_0x02bc:
+        if (r1 == 0) goto L_0x02c5;
+    L_0x02bb:
         r1 = r9;
         r1 = (org.telegram.messenger.MessageObject) r1;
         r1 = r1.isRoundVideo();
-        if (r1 == 0) goto L_0x02c6;
+        if (r1 == 0) goto L_0x02c5;
+    L_0x02c4:
+        goto L_0x02c6;
     L_0x02c5:
-        goto L_0x02c7;
+        r12 = 0;
     L_0x02c6:
-        r11 = 0;
-    L_0x02c7:
-        r0.isRoundVideo = r11;
+        r0.isRoundVideo = r12;
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setImage(org.telegram.messenger.ImageLocation, java.lang.String, org.telegram.messenger.ImageLocation, java.lang.String, org.telegram.messenger.ImageLocation, java.lang.String, android.graphics.drawable.Drawable, int, java.lang.String, java.lang.Object, int):void");

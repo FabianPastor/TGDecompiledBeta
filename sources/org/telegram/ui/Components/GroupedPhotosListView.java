@@ -299,145 +299,143 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
     L_0x0151:
         r9 = 1;
     L_0x0152:
-        if (r9 == 0) goto L_0x0290;
+        if (r9 == 0) goto L_0x027f;
     L_0x0154:
-        r7 = r0.currentPhotos;
-        r7 = r7.size();
         r0.animateAllLine = r2;
-        r9 = r0.currentPhotos;
-        r9.clear();
-        r9 = r0.currentObjects;
-        r9.clear();
-        if (r3 == 0) goto L_0x017e;
+        r7 = r0.currentPhotos;
+        r7.clear();
+        r7 = r0.currentObjects;
+        r7.clear();
+        if (r3 == 0) goto L_0x0178;
+    L_0x0162:
+        r7 = r3.isEmpty();
+        if (r7 != 0) goto L_0x0178;
     L_0x0168:
-        r9 = r3.isEmpty();
-        if (r9 != 0) goto L_0x017e;
-    L_0x016e:
         r4 = r0.currentObjects;
         r4.addAll(r3);
         r4 = r0.currentPhotos;
         r4.addAll(r3);
         r0.currentImage = r1;
         r0.animateToItem = r10;
-        goto L_0x0270;
-    L_0x017e:
+        goto L_0x026a;
+    L_0x0178:
         r11 = 0;
-        if (r4 == 0) goto L_0x0207;
-    L_0x0182:
+        if (r4 == 0) goto L_0x0201;
+    L_0x017c:
         r3 = r4.isEmpty();
-        if (r3 != 0) goto L_0x0207;
-    L_0x0188:
+        if (r3 != 0) goto L_0x0201;
+    L_0x0182:
         r13 = r0.currentGroupId;
         r3 = (r13 > r11 ? 1 : (r13 == r11 ? 0 : -1));
-        if (r3 != 0) goto L_0x0190;
-    L_0x018e:
-        if (r6 == 0) goto L_0x0270;
-    L_0x0190:
+        if (r3 != 0) goto L_0x018a;
+    L_0x0188:
+        if (r6 == 0) goto L_0x026a;
+    L_0x018a:
         r3 = r1 + 10;
         r5 = r4.size();
         r3 = java.lang.Math.min(r3, r5);
         r5 = r1;
-    L_0x019b:
-        r9 = 56;
-        if (r5 >= r3) goto L_0x01ca;
-    L_0x019f:
-        r11 = r4.get(r5);
-        r11 = (org.telegram.messenger.MessageObject) r11;
-        if (r6 != 0) goto L_0x01b1;
-    L_0x01a7:
-        r12 = r11.getGroupIdForUse();
-        r14 = r0.currentGroupId;
-        r16 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1));
-        if (r16 != 0) goto L_0x01ca;
-    L_0x01b1:
-        r12 = r0.currentObjects;
-        r12.add(r11);
-        r12 = r0.currentPhotos;
-        r13 = r11.photoThumbs;
-        r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r13, r9, r8);
-        r11 = r11.photoThumbsObject;
-        r9 = org.telegram.messenger.ImageLocation.getForObject(r9, r11);
-        r12.add(r9);
+    L_0x0195:
+        r7 = 56;
+        if (r5 >= r3) goto L_0x01c4;
+    L_0x0199:
+        r9 = r4.get(r5);
+        r9 = (org.telegram.messenger.MessageObject) r9;
+        if (r6 != 0) goto L_0x01ab;
+    L_0x01a1:
+        r11 = r9.getGroupIdForUse();
+        r13 = r0.currentGroupId;
+        r15 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1));
+        if (r15 != 0) goto L_0x01c4;
+    L_0x01ab:
+        r11 = r0.currentObjects;
+        r11.add(r9);
+        r11 = r0.currentPhotos;
+        r12 = r9.photoThumbs;
+        r7 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r12, r7, r8);
+        r9 = r9.photoThumbsObject;
+        r7 = org.telegram.messenger.ImageLocation.getForObject(r7, r9);
+        r11.add(r7);
         r5 = r5 + 1;
-        goto L_0x019b;
-    L_0x01ca:
+        goto L_0x0195;
+    L_0x01c4:
         r0.currentImage = r2;
         r0.animateToItem = r10;
         r3 = r1 + -10;
         r3 = java.lang.Math.max(r3, r2);
         r1 = r1 - r8;
-    L_0x01d5:
-        if (r1 < r3) goto L_0x0270;
-    L_0x01d7:
+    L_0x01cf:
+        if (r1 < r3) goto L_0x026a;
+    L_0x01d1:
         r5 = r4.get(r1);
         r5 = (org.telegram.messenger.MessageObject) r5;
-        if (r6 != 0) goto L_0x01e9;
-    L_0x01df:
-        r10 = r5.getGroupIdForUse();
-        r12 = r0.currentGroupId;
-        r14 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1));
-        if (r14 != 0) goto L_0x0270;
-    L_0x01e9:
-        r10 = r0.currentObjects;
-        r10.add(r2, r5);
-        r10 = r0.currentPhotos;
-        r11 = r5.photoThumbs;
-        r11 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r11, r9, r8);
+        if (r6 != 0) goto L_0x01e3;
+    L_0x01d9:
+        r9 = r5.getGroupIdForUse();
+        r11 = r0.currentGroupId;
+        r13 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
+        if (r13 != 0) goto L_0x026a;
+    L_0x01e3:
+        r9 = r0.currentObjects;
+        r9.add(r2, r5);
+        r9 = r0.currentPhotos;
+        r10 = r5.photoThumbs;
+        r10 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r10, r7, r8);
         r5 = r5.photoThumbsObject;
-        r5 = org.telegram.messenger.ImageLocation.getForObject(r11, r5);
-        r10.add(r2, r5);
+        r5 = org.telegram.messenger.ImageLocation.getForObject(r10, r5);
+        r9.add(r2, r5);
         r5 = r0.currentImage;
         r5 = r5 + r8;
         r0.currentImage = r5;
         r1 = r1 + -1;
-        goto L_0x01d5;
-    L_0x0207:
-        if (r5 == 0) goto L_0x0270;
-    L_0x0209:
+        goto L_0x01cf;
+    L_0x0201:
+        if (r5 == 0) goto L_0x026a;
+    L_0x0203:
         r3 = r5.isEmpty();
-        if (r3 != 0) goto L_0x0270;
-    L_0x020f:
+        if (r3 != 0) goto L_0x026a;
+    L_0x0209:
         r3 = r0.currentGroupId;
         r6 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1));
-        if (r6 == 0) goto L_0x0270;
-    L_0x0215:
+        if (r6 == 0) goto L_0x026a;
+    L_0x020f:
         r3 = r5.size();
         r4 = r1;
-    L_0x021a:
-        if (r4 >= r3) goto L_0x0240;
-    L_0x021c:
+    L_0x0214:
+        if (r4 >= r3) goto L_0x023a;
+    L_0x0216:
         r6 = r5.get(r4);
         r6 = (org.telegram.tgnet.TLRPC.PageBlock) r6;
-        r9 = r6.groupId;
-        r11 = (long) r9;
+        r7 = r6.groupId;
+        r11 = (long) r7;
         r13 = r0.currentGroupId;
-        r9 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1));
-        if (r9 != 0) goto L_0x0240;
-    L_0x022b:
-        r9 = r0.currentObjects;
-        r9.add(r6);
-        r9 = r0.currentPhotos;
-        r11 = r6.thumb;
+        r7 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1));
+        if (r7 != 0) goto L_0x023a;
+    L_0x0225:
+        r7 = r0.currentObjects;
+        r7.add(r6);
+        r7 = r0.currentPhotos;
+        r9 = r6.thumb;
         r6 = r6.thumbObject;
-        r6 = org.telegram.messenger.ImageLocation.getForObject(r11, r6);
-        r9.add(r6);
+        r6 = org.telegram.messenger.ImageLocation.getForObject(r9, r6);
+        r7.add(r6);
         r4 = r4 + 1;
-        goto L_0x021a;
-    L_0x0240:
+        goto L_0x0214;
+    L_0x023a:
         r0.currentImage = r2;
         r0.animateToItem = r10;
         r1 = r1 - r8;
-    L_0x0245:
-        if (r1 < 0) goto L_0x0270;
-    L_0x0247:
+    L_0x023f:
+        if (r1 < 0) goto L_0x026a;
+    L_0x0241:
         r3 = r5.get(r1);
         r3 = (org.telegram.tgnet.TLRPC.PageBlock) r3;
         r4 = r3.groupId;
-        r9 = (long) r4;
-        r11 = r0.currentGroupId;
-        r4 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
-        if (r4 != 0) goto L_0x0270;
-    L_0x0256:
+        r6 = (long) r4;
+        r9 = r0.currentGroupId;
+        r4 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1));
+        if (r4 != 0) goto L_0x026a;
+    L_0x0250:
         r4 = r0.currentObjects;
         r4.add(r2, r3);
         r4 = r0.currentPhotos;
@@ -449,25 +447,19 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
         r3 = r3 + r8;
         r0.currentImage = r3;
         r1 = r1 + -1;
-        goto L_0x0245;
-    L_0x0270:
+        goto L_0x023f;
+    L_0x026a:
         r1 = r0.currentPhotos;
         r1 = r1.size();
-        if (r1 != r8) goto L_0x0282;
-    L_0x0278:
+        if (r1 != r8) goto L_0x027c;
+    L_0x0272:
         r1 = r0.currentPhotos;
         r1.clear();
         r1 = r0.currentObjects;
         r1.clear();
-    L_0x0282:
-        r1 = r0.currentPhotos;
-        r1 = r1.size();
-        if (r1 == r7) goto L_0x028d;
-    L_0x028a:
-        r17.requestLayout();
-    L_0x028d:
+    L_0x027c:
         r0.fillImages(r2, r2);
-    L_0x0290:
+    L_0x027f:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupedPhotosListView.fillList():void");

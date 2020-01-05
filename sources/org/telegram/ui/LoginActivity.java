@@ -1603,6 +1603,7 @@ public class LoginActivity extends BaseFragment {
         private int time = 60000;
         private TextView timeText;
         private Timer timeTimer;
+        private int timeout;
         private final Object timerSync = new Object();
         private TextView titleTextView;
         private boolean waitingForEvent;
@@ -1892,7 +1893,9 @@ public class LoginActivity extends BaseFragment {
                 this.emailPhone = bundle2.getString("ephone");
                 this.requestPhone = bundle2.getString("phoneFormated");
                 this.phoneHash = bundle2.getString("phoneHash");
-                this.time = bundle2.getInt("timeout");
+                i2 = bundle2.getInt("timeout");
+                this.time = i2;
+                this.timeout = i2;
                 this.openTime = (int) (System.currentTimeMillis() / 1000);
                 this.nextType = bundle2.getInt("nextType");
                 this.pattern = bundle2.getString("pattern");
@@ -2199,7 +2202,7 @@ public class LoginActivity extends BaseFragment {
                         LoginActivitySmsView.this.destroyTimer();
                         if (LoginActivitySmsView.this.currentType == 3) {
                             AndroidUtilities.setWaitingForCall(false);
-                            NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
+                            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                             LoginActivitySmsView.this.waitingForEvent = false;
                             LoginActivitySmsView.this.destroyCodeTimer();
                             LoginActivitySmsView.this.resendCode();
@@ -2218,7 +2221,7 @@ public class LoginActivity extends BaseFragment {
                                 ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tL_auth_resendCode, new -$$Lambda$LoginActivity$LoginActivitySmsView$5$Lug0N7IyxdRqJvwOmLwPEiL6cA0(this), 10);
                             } else if (LoginActivitySmsView.this.nextType == 3) {
                                 AndroidUtilities.setWaitingForSms(false);
-                                NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveSmsCode);
+                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
                                 LoginActivitySmsView.this.waitingForEvent = false;
                                 LoginActivitySmsView.this.destroyCodeTimer();
                                 LoginActivitySmsView.this.resendCode();
@@ -2429,13 +2432,13 @@ public class LoginActivity extends BaseFragment {
             r7 = r6.text;
             r8 = "PHONE_NUMBER_INVALID";
             r7 = r7.contains(r8);
-            r8 = NUM; // 0x7f0e00f9 float:1.8875543E38 double:1.0531622797E-314;
+            r8 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
             r3 = "AppName";
             if (r7 == 0) goto L_0x00e9;
         L_0x00d5:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e0585 float:1.8877903E38 double:1.0531628547E-314;
+            r8 = NUM; // 0x7f0e0579 float:1.887788E38 double:1.053162849E-314;
             r2 = "InvalidPhoneNumber";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2464,7 +2467,7 @@ public class LoginActivity extends BaseFragment {
             r6.setPage(r1, r2, r7, r2);
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e0307 float:1.887661E38 double:1.0531625395E-314;
+            r8 = NUM; // 0x7f0e0303 float:1.8876601E38 double:1.0531625376E-314;
             r2 = "CodeExpired";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2477,7 +2480,7 @@ public class LoginActivity extends BaseFragment {
         L_0x012e:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e04c2 float:1.8877508E38 double:1.0531627584E-314;
+            r8 = NUM; // 0x7f0e04b9 float:1.887749E38 double:1.053162754E-314;
             r2 = "FloodWait";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2487,7 +2490,7 @@ public class LoginActivity extends BaseFragment {
             r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
             r2 = new java.lang.StringBuilder;
             r2.<init>();
-            r3 = NUM; // 0x7f0e0441 float:1.8877246E38 double:1.0531626947E-314;
+            r3 = NUM; // 0x7f0e0438 float:1.8877228E38 double:1.05316269E-314;
             r4 = "ErrorOccurred";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r2.append(r3);
@@ -2501,7 +2504,7 @@ public class LoginActivity extends BaseFragment {
         L_0x016a:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0e0582 float:1.8877897E38 double:1.0531628533E-314;
+            r8 = NUM; // 0x7f0e0576 float:1.8877873E38 double:1.0531628473E-314;
             r2 = "InvalidCode";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -3564,8 +3567,8 @@ public class LoginActivity extends BaseFragment {
         }
     }
 
-    /* JADX WARNING: Missing block: B:105:0x03c5, code skipped:
-            if (r1 != 4) goto L_0x03cc;
+    /* JADX WARNING: Missing block: B:105:0x03c3, code skipped:
+            if (r1 != 4) goto L_0x03ca;
      */
     public android.view.View createView(android.content.Context r26) {
         /*
@@ -3574,7 +3577,7 @@ public class LoginActivity extends BaseFragment {
         r1 = r26;
         r2 = r0.actionBar;
         r3 = "AppName";
-        r4 = NUM; // 0x7f0e00f9 float:1.8875543E38 double:1.0531622797E-314;
+        r4 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r2.setTitle(r3);
         r2 = r0.actionBar;
@@ -3593,7 +3596,7 @@ public class LoginActivity extends BaseFragment {
         r5.setAllowOverlayTitle(r4);
         r5 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r7 = NUM; // 0x7var_f float:1.7945128E38 double:1.052935637E-314;
+        r7 = NUM; // 0x7var_d float:1.7945124E38 double:1.052935636E-314;
         r3 = r3.addItemWithWidth(r4, r7, r6);
         r0.doneItem = r3;
         r3 = new org.telegram.ui.Components.ContextProgressView;
@@ -3623,7 +3626,7 @@ public class LoginActivity extends BaseFragment {
         r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10);
         r3.addView(r9, r12);
         r3 = r0.doneItem;
-        r9 = NUM; // 0x7f0e03e4 float:1.8877058E38 double:1.0531626487E-314;
+        r9 = NUM; // 0x7f0e03dd float:1.8877043E38 double:1.0531626453E-314;
         r12 = "Done";
         r13 = org.telegram.messenger.LocaleController.getString(r12, r9);
         r3.setContentDescription(r13);
@@ -3825,7 +3828,7 @@ public class LoginActivity extends BaseFragment {
         if (r10 >= r11) goto L_0x0221;
     L_0x01f5:
         r10 = r26.getResources();
-        r14 = NUM; // 0x7var_cd float:1.7944994E38 double:1.0529356043E-314;
+        r14 = NUM; // 0x7var_cc float:1.7944992E38 double:1.052935604E-314;
         r10 = r10.getDrawable(r14);
         r10 = r10.mutate();
         r14 = new android.graphics.PorterDuffColorFilter;
@@ -3843,7 +3846,7 @@ public class LoginActivity extends BaseFragment {
         r8 = r0.floatingButtonContainer;
         r8.setBackgroundDrawable(r7);
         r7 = android.os.Build.VERSION.SDK_INT;
-        if (r7 < r11) goto L_0x0293;
+        if (r7 < r11) goto L_0x0291;
     L_0x022a:
         r7 = new android.animation.StateListAnimator;
         r7.<init>();
@@ -3887,27 +3890,27 @@ public class LoginActivity extends BaseFragment {
         r8 = new org.telegram.ui.LoginActivity$4;
         r8.<init>();
         r7.setOutlineProvider(r8);
-    L_0x0293:
+    L_0x0291:
         r7 = r0.floatingButtonContainer;
         r8 = android.os.Build.VERSION.SDK_INT;
-        if (r8 < r11) goto L_0x029e;
-    L_0x0299:
+        if (r8 < r11) goto L_0x029c;
+    L_0x0297:
         r8 = 56;
         r18 = 56;
-        goto L_0x02a2;
-    L_0x029e:
+        goto L_0x02a0;
+    L_0x029c:
         r8 = 60;
         r18 = 60;
-    L_0x02a2:
+    L_0x02a0:
         r8 = android.os.Build.VERSION.SDK_INT;
-        if (r8 < r11) goto L_0x02a9;
-    L_0x02a6:
+        if (r8 < r11) goto L_0x02a7;
+    L_0x02a4:
         r19 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
-        goto L_0x02ad;
-    L_0x02a9:
+        goto L_0x02ab;
+    L_0x02a7:
         r8 = NUM; // 0x42700000 float:60.0 double:5.507034975E-315;
         r19 = NUM; // 0x42700000 float:60.0 double:5.507034975E-315;
-    L_0x02ad:
+    L_0x02ab:
         r20 = 85;
         r21 = 0;
         r22 = 0;
@@ -3941,20 +3944,20 @@ public class LoginActivity extends BaseFragment {
         r3 = r0.floatingButtonContainer;
         r7 = r0.floatingButtonIcon;
         r8 = android.os.Build.VERSION.SDK_INT;
-        if (r8 < r11) goto L_0x0304;
-    L_0x0301:
+        if (r8 < r11) goto L_0x0302;
+    L_0x02ff:
         r8 = 56;
-        goto L_0x0306;
-    L_0x0304:
+        goto L_0x0304;
+    L_0x0302:
         r8 = 60;
-    L_0x0306:
+    L_0x0304:
         r9 = android.os.Build.VERSION.SDK_INT;
-        if (r9 < r11) goto L_0x030b;
-    L_0x030a:
-        goto L_0x030d;
-    L_0x030b:
+        if (r9 < r11) goto L_0x0309;
+    L_0x0308:
+        goto L_0x030b;
+    L_0x0309:
         r5 = NUM; // 0x42700000 float:60.0 double:5.507034975E-315;
-    L_0x030d:
+    L_0x030b:
         r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r5);
         r3.addView(r7, r5);
         r3 = new org.telegram.ui.Components.RadialProgressView;
@@ -3985,53 +3988,53 @@ public class LoginActivity extends BaseFragment {
         r7 = -1;
         r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r5);
         r1.addView(r3, r5);
-        if (r6 == 0) goto L_0x035c;
-    L_0x035a:
+        if (r6 == 0) goto L_0x035a;
+    L_0x0358:
         r0.restoringState = r4;
-    L_0x035c:
+    L_0x035a:
         r1 = 0;
-    L_0x035d:
+    L_0x035b:
         r3 = r0.views;
         r5 = r3.length;
-        if (r1 >= r5) goto L_0x03dd;
+        if (r1 >= r5) goto L_0x03db;
+    L_0x0360:
+        if (r6 == 0) goto L_0x0378;
     L_0x0362:
-        if (r6 == 0) goto L_0x037a;
+        if (r1 < r4) goto L_0x0371;
     L_0x0364:
-        if (r1 < r4) goto L_0x0373;
-    L_0x0366:
         r5 = 4;
-        if (r1 > r5) goto L_0x0373;
-    L_0x0369:
+        if (r1 > r5) goto L_0x0371;
+    L_0x0367:
         r5 = r0.currentViewNum;
-        if (r1 != r5) goto L_0x037a;
-    L_0x036d:
+        if (r1 != r5) goto L_0x0378;
+    L_0x036b:
         r3 = r3[r1];
         r3.restoreStateParams(r6);
-        goto L_0x037a;
-    L_0x0373:
+        goto L_0x0378;
+    L_0x0371:
         r3 = r0.views;
         r3 = r3[r1];
         r3.restoreStateParams(r6);
-    L_0x037a:
+    L_0x0378:
         r3 = r0.currentViewNum;
-        if (r3 != r1) goto L_0x03cf;
-    L_0x037e:
+        if (r3 != r1) goto L_0x03cd;
+    L_0x037c:
         r3 = r0.actionBar;
         r5 = r0.views;
         r5 = r5[r1];
         r5 = r5.needBackButton();
-        if (r5 != 0) goto L_0x0391;
-    L_0x038a:
+        if (r5 != 0) goto L_0x038f;
+    L_0x0388:
         r5 = r0.newAccount;
-        if (r5 == 0) goto L_0x038f;
-    L_0x038e:
-        goto L_0x0391;
-    L_0x038f:
+        if (r5 == 0) goto L_0x038d;
+    L_0x038c:
+        goto L_0x038f;
+    L_0x038d:
         r5 = 0;
-        goto L_0x0394;
-    L_0x0391:
-        r5 = NUM; // 0x7var_f2 float:1.7945069E38 double:1.0529356226E-314;
-    L_0x0394:
+        goto L_0x0392;
+    L_0x038f:
+        r5 = NUM; // 0x7var_f0 float:1.7945065E38 double:1.0529356216E-314;
+    L_0x0392:
         r3.setBackButtonImage(r5);
         r3 = r0.views;
         r3 = r3[r1];
@@ -4040,56 +4043,56 @@ public class LoginActivity extends BaseFragment {
         r3 = r3[r1];
         r3.onShow();
         r0.currentDoneType = r2;
-        if (r1 == r4) goto L_0x03ba;
+        if (r1 == r4) goto L_0x03b8;
+    L_0x03a7:
+        if (r1 == r13) goto L_0x03b8;
     L_0x03a9:
-        if (r1 == r13) goto L_0x03ba;
-    L_0x03ab:
         r3 = 3;
-        if (r1 == r3) goto L_0x03ba;
-    L_0x03ae:
+        if (r1 == r3) goto L_0x03b8;
+    L_0x03ac:
         r3 = 4;
-        if (r1 == r3) goto L_0x03ba;
-    L_0x03b1:
+        if (r1 == r3) goto L_0x03b8;
+    L_0x03af:
         r3 = 8;
-        if (r1 != r3) goto L_0x03b6;
-    L_0x03b5:
-        goto L_0x03ba;
-    L_0x03b6:
+        if (r1 != r3) goto L_0x03b4;
+    L_0x03b3:
+        goto L_0x03b8;
+    L_0x03b4:
         r0.showDoneButton(r4, r2);
-        goto L_0x03bd;
-    L_0x03ba:
+        goto L_0x03bb;
+    L_0x03b8:
         r0.showDoneButton(r2, r2);
+    L_0x03bb:
+        if (r1 == r4) goto L_0x03c6;
     L_0x03bd:
-        if (r1 == r4) goto L_0x03c8;
+        if (r1 == r13) goto L_0x03c6;
     L_0x03bf:
-        if (r1 == r13) goto L_0x03c8;
-    L_0x03c1:
         r5 = 3;
         r7 = 4;
-        if (r1 == r5) goto L_0x03ca;
+        if (r1 == r5) goto L_0x03c8;
+    L_0x03c3:
+        if (r1 != r7) goto L_0x03ca;
     L_0x03c5:
-        if (r1 != r7) goto L_0x03cc;
-    L_0x03c7:
-        goto L_0x03ca;
-    L_0x03c8:
+        goto L_0x03c8;
+    L_0x03c6:
         r5 = 3;
         r7 = 4;
-    L_0x03ca:
+    L_0x03c8:
         r0.currentDoneType = r4;
-    L_0x03cc:
+    L_0x03ca:
         r8 = 8;
-        goto L_0x03da;
-    L_0x03cf:
+        goto L_0x03d8;
+    L_0x03cd:
         r5 = 3;
         r7 = 4;
         r3 = r0.views;
         r3 = r3[r1];
         r8 = 8;
         r3.setVisibility(r8);
-    L_0x03da:
+    L_0x03d8:
         r1 = r1 + 1;
-        goto L_0x035d;
-    L_0x03dd:
+        goto L_0x035b;
+    L_0x03db:
         r0.restoringState = r2;
         r1 = r0.actionBar;
         r2 = r0.currentViewNum;

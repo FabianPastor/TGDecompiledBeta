@@ -1589,6 +1589,7 @@
     <string name="NewSecretChat">محادثة سرية جديدة</string>
     <string name="NewTheme">نمط جديد</string>
     <string name="NewThemePreviewLine1">Do you know what time it is?</string>
+    <string name="NewThemePreviewLine2">It\'s morning in Tokyo ��</string>
     <string name="NewThemePreviewName">Bob Harris</string>
     <string name="NewThemePreviewReply">Good morning! ��</string>
     <string name="NewThemeTitle">New Theme</string>
@@ -2629,10 +2630,12 @@
     <string name="TextSizeHeader">حجم خط الرسائل</string>
     <string name="Theme">النمط</string>
     <string name="ThemeArcticBlue">ثلجي</string>
+    <string name="ThemeBlue">أحادي</string>
     <string name="ThemeCreateHelp">Anyone can install your theme using this link. When you change the theme, it will be updated for all users who installed it.\10\10The theme will be based on your currently selected theme and wallpaper.</string>
     <string name="ThemeCreateHelp2">You can change the link of your theme.\10\10Theme links must be longer than 5 characters and can use a-z, 0-9 and underscores.</string>
     <string name="ThemeDark">مظلم</string>
     <string name="ThemeDarkBlue">أزرق غامق</string>
+    <string name="ThemeGraphite">غرافيت</string>
     <string name="ThemeHelpLink">Your theme will be updated for all users each time you change it. Anyone can install it using this link:\10%1$s</string>
     <string name="ThemeInfo">اختيار لون مخصص للتطبيق</string>
     <string name="ThemeInstallCount_few">%1$d أشخاص يستخدمون هذا النمط</string>

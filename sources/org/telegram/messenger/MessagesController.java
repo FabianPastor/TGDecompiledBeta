@@ -41,7 +41,6 @@ import org.telegram.tgnet.TLRPC.ChatParticipant;
 import org.telegram.tgnet.TLRPC.Dialog;
 import org.telegram.tgnet.TLRPC.DialogPeer;
 import org.telegram.tgnet.TLRPC.Document;
-import org.telegram.tgnet.TLRPC.DraftMessage;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.EncryptedMessage;
 import org.telegram.tgnet.TLRPC.ExportedChatInvite;
@@ -158,11 +157,10 @@ import org.telegram.tgnet.TLRPC.TL_inputPhotoEmpty;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonGeoIrrelevant;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonSpam;
 import org.telegram.tgnet.TLRPC.TL_inputTheme;
-import org.telegram.tgnet.TLRPC.TL_inputThemeSettings;
 import org.telegram.tgnet.TLRPC.TL_inputUser;
 import org.telegram.tgnet.TLRPC.TL_inputUserEmpty;
 import org.telegram.tgnet.TLRPC.TL_inputUserSelf;
-import org.telegram.tgnet.TLRPC.TL_inputWallPaperNoFile;
+import org.telegram.tgnet.TLRPC.TL_inputWallPaper;
 import org.telegram.tgnet.TLRPC.TL_inputWallPaperSlug;
 import org.telegram.tgnet.TLRPC.TL_jsonBool;
 import org.telegram.tgnet.TLRPC.TL_jsonNumber;
@@ -298,7 +296,6 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.UserFull;
 import org.telegram.tgnet.TLRPC.UserProfilePhoto;
 import org.telegram.tgnet.TLRPC.Vector;
-import org.telegram.tgnet.TLRPC.WallPaperSettings;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.tgnet.TLRPC.contacts_Blocked;
 import org.telegram.tgnet.TLRPC.messages_Dialogs;
@@ -310,8 +307,6 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ActionBar.Theme.OverrideWallpaperInfo;
-import org.telegram.ui.ActionBar.Theme.ThemeAccent;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
@@ -372,6 +367,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private ArrayList<Integer> currentDeletingTaskMids;
     private int currentDeletingTaskTime;
     public String dcDomainName;
+    public boolean defaultP2pContacts;
     public LongSparseArray<Integer> deletedHistory = new LongSparseArray();
     private LongSparseArray<Dialog> deletingDialogs = new LongSparseArray();
     private final Comparator<Dialog> dialogComparator = new -$$Lambda$MessagesController$inGnIVSUUmZvhawO2qFC6eW_Ld4(this);
@@ -507,9 +503,10 @@ public class MessagesController extends BaseController implements NotificationCe
     private long updatesStartWaitTimeSeq;
     public boolean updatingState;
     private String uploadingAvatar;
-    private HashMap<String, Object> uploadingThemes = new HashMap();
+    private HashMap<String, ThemeInfo> uploadingThemes = new HashMap();
     private String uploadingWallpaper;
-    private OverrideWallpaperInfo uploadingWallpaperInfo;
+    private boolean uploadingWallpaperBlurred;
+    private boolean uploadingWallpaperMotion;
     private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap(100, 1.0f, 2);
     public String venueSearchBot;
     private ArrayList<Long> visibleDialogMainThreadIds = new ArrayList();
@@ -604,41 +601,104 @@ public class MessagesController extends BaseController implements NotificationCe
         getUserConfig().checkSavedPassword();
     }
 
-    public /* synthetic */ int lambda$new$1$MessagesController(Dialog dialog, Dialog dialog2) {
-        boolean z = dialog instanceof TL_dialogFolder;
-        if (z && !(dialog2 instanceof TL_dialogFolder)) {
-            return -1;
-        }
-        if (!z && (dialog2 instanceof TL_dialogFolder)) {
-            return 1;
-        }
-        if (!dialog.pinned && dialog2.pinned) {
-            return 1;
-        }
-        if (dialog.pinned && !dialog2.pinned) {
-            return -1;
-        }
-        if (dialog.pinned && dialog2.pinned) {
-            int i = dialog.pinnedNum;
-            int i2 = dialog2.pinnedNum;
-            if (i < i2) {
-                return 1;
-            }
-            if (i > i2) {
-                return -1;
-            }
-            return 0;
-        }
-        MediaDataController mediaDataController = getMediaDataController();
-        long lastMessageOrDraftDate = DialogObject.getLastMessageOrDraftDate(dialog, mediaDataController.getDraft(dialog.id));
-        long lastMessageOrDraftDate2 = DialogObject.getLastMessageOrDraftDate(dialog2, mediaDataController.getDraft(dialog2.id));
-        if (lastMessageOrDraftDate < lastMessageOrDraftDate2) {
-            return 1;
-        }
-        if (lastMessageOrDraftDate > lastMessageOrDraftDate2) {
-            return -1;
-        }
-        return 0;
+    /* JADX WARNING: Missing block: B:33:0x0048, code skipped:
+            if (r0 >= r7.last_message_date) goto L_0x004d;
+     */
+    /* JADX WARNING: Missing block: B:38:0x005d, code skipped:
+            if (r7 >= r8.last_message_date) goto L_0x0062;
+     */
+    public /* synthetic */ int lambda$new$1$MessagesController(org.telegram.tgnet.TLRPC.Dialog r7, org.telegram.tgnet.TLRPC.Dialog r8) {
+        /*
+        r6 = this;
+        r0 = r7 instanceof org.telegram.tgnet.TLRPC.TL_dialogFolder;
+        r1 = -1;
+        if (r0 == 0) goto L_0x000a;
+    L_0x0005:
+        r2 = r8 instanceof org.telegram.tgnet.TLRPC.TL_dialogFolder;
+        if (r2 != 0) goto L_0x000a;
+    L_0x0009:
+        return r1;
+    L_0x000a:
+        r2 = 1;
+        if (r0 != 0) goto L_0x0012;
+    L_0x000d:
+        r0 = r8 instanceof org.telegram.tgnet.TLRPC.TL_dialogFolder;
+        if (r0 == 0) goto L_0x0012;
+    L_0x0011:
+        return r2;
+    L_0x0012:
+        r0 = r7.pinned;
+        if (r0 != 0) goto L_0x001b;
+    L_0x0016:
+        r0 = r8.pinned;
+        if (r0 == 0) goto L_0x001b;
+    L_0x001a:
+        return r2;
+    L_0x001b:
+        r0 = r7.pinned;
+        if (r0 == 0) goto L_0x0024;
+    L_0x001f:
+        r0 = r8.pinned;
+        if (r0 != 0) goto L_0x0024;
+    L_0x0023:
+        return r1;
+    L_0x0024:
+        r0 = r7.pinned;
+        r3 = 0;
+        if (r0 == 0) goto L_0x0038;
+    L_0x0029:
+        r0 = r8.pinned;
+        if (r0 == 0) goto L_0x0038;
+    L_0x002d:
+        r7 = r7.pinnedNum;
+        r8 = r8.pinnedNum;
+        if (r7 >= r8) goto L_0x0034;
+    L_0x0033:
+        return r2;
+    L_0x0034:
+        if (r7 <= r8) goto L_0x0037;
+    L_0x0036:
+        return r1;
+    L_0x0037:
+        return r3;
+    L_0x0038:
+        r0 = r6.getMediaDataController();
+        r4 = r7.id;
+        r0 = r0.getDraft(r4);
+        if (r0 == 0) goto L_0x004b;
+    L_0x0044:
+        r0 = r0.date;
+        r4 = r7.last_message_date;
+        if (r0 < r4) goto L_0x004b;
+    L_0x004a:
+        goto L_0x004d;
+    L_0x004b:
+        r0 = r7.last_message_date;
+    L_0x004d:
+        r7 = r6.getMediaDataController();
+        r4 = r8.id;
+        r7 = r7.getDraft(r4);
+        if (r7 == 0) goto L_0x0060;
+    L_0x0059:
+        r7 = r7.date;
+        r4 = r8.last_message_date;
+        if (r7 < r4) goto L_0x0060;
+    L_0x005f:
+        goto L_0x0062;
+    L_0x0060:
+        r7 = r8.last_message_date;
+    L_0x0062:
+        if (r0 >= r7) goto L_0x0065;
+    L_0x0064:
+        return r2;
+    L_0x0065:
+        if (r0 <= r7) goto L_0x0068;
+    L_0x0067:
+        return r1;
+    L_0x0068:
+        return r3;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$new$1$MessagesController(org.telegram.tgnet.TLRPC$Dialog, org.telegram.tgnet.TLRPC$Dialog):int");
     }
 
     public /* synthetic */ int lambda$new$2$MessagesController(Update update, Update update2) {
@@ -759,6 +819,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.availableMapProviders = this.mainPreferences.getInt("availableMapProviders", 3);
         this.mapKey = this.mainPreferences.getString("pk", null);
         this.installReferer = this.mainPreferences.getString("installReferer", null);
+        this.defaultP2pContacts = this.mainPreferences.getBoolean("defaultP2pContacts", false);
         this.revokeTimeLimit = this.mainPreferences.getInt("revokeTimeLimit", this.revokeTimeLimit);
         this.revokeTimePmLimit = this.mainPreferences.getInt("revokeTimePmLimit", this.revokeTimePmLimit);
         this.canRevokePmInbox = this.mainPreferences.getBoolean("canRevokePmInbox", this.canRevokePmInbox);
@@ -813,6 +874,7 @@ public class MessagesController extends BaseController implements NotificationCe
             int size = tL_jsonObject.value.size();
             Object obj = null;
             Object obj2 = null;
+            Object obj3 = null;
             for (int i = 0; i < size; i++) {
                 TL_jsonObjectValue tL_jsonObjectValue = (TL_jsonObjectValue) tL_jsonObject.value.get(i);
                 JSONValue jSONValue;
@@ -827,52 +889,73 @@ public class MessagesController extends BaseController implements NotificationCe
                         }
                     }
                 } else {
-                    if ("youtube_pip".equals(tL_jsonObjectValue.key)) {
-                        jSONValue = tL_jsonObjectValue.value;
-                        if (jSONValue instanceof TL_jsonString) {
-                            TL_jsonString tL_jsonString = (TL_jsonString) jSONValue;
-                            if (!tL_jsonString.value.equals(this.youtubePipType)) {
-                                this.youtubePipType = tL_jsonString.value;
-                                edit.putString("youtubePipType", this.youtubePipType);
+                    UserConfig userConfig;
+                    TL_jsonString tL_jsonString;
+                    if ("wallet_config".equals(tL_jsonObjectValue.key)) {
+                        if (tL_jsonObjectValue.value instanceof TL_jsonString) {
+                            userConfig = getUserConfig();
+                            tL_jsonString = (TL_jsonString) tL_jsonObjectValue.value;
+                            if (!tL_jsonString.value.equals(userConfig.walletConfig)) {
+                                userConfig.walletConfig = tL_jsonString.value;
                             }
                         }
                     } else {
-                        boolean z;
-                        if ("background_connection".equals(tL_jsonObjectValue.key)) {
-                            jSONValue = tL_jsonObjectValue.value;
-                            if (jSONValue instanceof TL_jsonBool) {
-                                z = ((TL_jsonBool) jSONValue).value;
-                                if (z != this.backgroundConnection) {
-                                    this.backgroundConnection = z;
-                                    edit.putBoolean("backgroundConnection", this.backgroundConnection);
-                                }
-                            }
-                        } else {
-                            if ("keep_alive_service".equals(tL_jsonObjectValue.key)) {
+                        if (!"wallet_blockchain_name".equals(tL_jsonObjectValue.key)) {
+                            if ("youtube_pip".equals(tL_jsonObjectValue.key)) {
                                 jSONValue = tL_jsonObjectValue.value;
-                                if (jSONValue instanceof TL_jsonBool) {
-                                    z = ((TL_jsonBool) jSONValue).value;
-                                    if (z != this.keepAliveService) {
-                                        this.keepAliveService = z;
-                                        edit.putBoolean("keepAliveService", this.keepAliveService);
+                                if (jSONValue instanceof TL_jsonString) {
+                                    tL_jsonString = (TL_jsonString) jSONValue;
+                                    if (!tL_jsonString.value.equals(this.youtubePipType)) {
+                                        this.youtubePipType = tL_jsonString.value;
+                                        edit.putString("youtubePipType", this.youtubePipType);
                                     }
                                 }
                             } else {
-                                if ("qr_login_camera".equals(tL_jsonObjectValue.key)) {
+                                boolean z;
+                                if ("background_connection".equals(tL_jsonObjectValue.key)) {
                                     jSONValue = tL_jsonObjectValue.value;
                                     if (jSONValue instanceof TL_jsonBool) {
                                         z = ((TL_jsonBool) jSONValue).value;
-                                        if (z != this.qrLoginCamera) {
-                                            this.qrLoginCamera = z;
-                                            edit.putBoolean("qrLoginCamera", this.qrLoginCamera);
+                                        if (z != this.backgroundConnection) {
+                                            this.backgroundConnection = z;
+                                            edit.putBoolean("backgroundConnection", this.backgroundConnection);
+                                        }
+                                    }
+                                } else {
+                                    if ("keep_alive_service".equals(tL_jsonObjectValue.key)) {
+                                        jSONValue = tL_jsonObjectValue.value;
+                                        if (jSONValue instanceof TL_jsonBool) {
+                                            z = ((TL_jsonBool) jSONValue).value;
+                                            if (z != this.keepAliveService) {
+                                                this.keepAliveService = z;
+                                                edit.putBoolean("keepAliveService", this.keepAliveService);
+                                            }
+                                        }
+                                    } else {
+                                        if ("qr_login_camera".equals(tL_jsonObjectValue.key)) {
+                                            jSONValue = tL_jsonObjectValue.value;
+                                            if (jSONValue instanceof TL_jsonBool) {
+                                                z = ((TL_jsonBool) jSONValue).value;
+                                                if (z != this.qrLoginCamera) {
+                                                    this.qrLoginCamera = z;
+                                                    edit.putBoolean("qrLoginCamera", this.qrLoginCamera);
+                                                }
+                                            }
                                         }
                                     }
                                 }
+                                obj = 1;
+                                obj3 = 1;
+                            }
+                        } else if (tL_jsonObjectValue.value instanceof TL_jsonString) {
+                            userConfig = getUserConfig();
+                            tL_jsonString = (TL_jsonString) tL_jsonObjectValue.value;
+                            if (!tL_jsonString.value.equals(userConfig.walletBlockchainName)) {
+                                userConfig.walletBlockchainName = tL_jsonString.value;
                             }
                         }
-                        obj = 1;
-                        obj2 = 1;
                     }
+                    obj2 = 1;
                 }
                 obj = 1;
             }
@@ -880,6 +963,11 @@ public class MessagesController extends BaseController implements NotificationCe
                 edit.commit();
             }
             if (obj2 != null) {
+                getTonController().onTonConfigUpdated();
+                getUserConfig().saveConfig(false);
+                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
+            }
+            if (obj3 != null) {
                 ApplicationLoader.startPushService();
                 ConnectionsManager connectionsManager = getConnectionsManager();
                 connectionsManager.setPushConnectionEnabled(connectionsManager.isPushConnectionEnabled());
@@ -925,6 +1013,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.maxFolderPinnedDialogsCount = tL_config.pinned_infolder_count_max;
         this.maxMessageLength = tL_config.message_length_max;
         this.maxCaptionLength = tL_config.caption_length_max;
+        this.defaultP2pContacts = tL_config.default_p2p_contacts;
         this.preloadFeaturedStickers = tL_config.preload_featured_stickers;
         str = tL_config.venue_search_username;
         if (str != null) {
@@ -1012,6 +1101,7 @@ public class MessagesController extends BaseController implements NotificationCe
         edit.putInt("maxFolderPinnedDialogsCount", this.maxFolderPinnedDialogsCount);
         edit.putInt("maxMessageLength", this.maxMessageLength);
         edit.putInt("maxCaptionLength", this.maxCaptionLength);
+        edit.putBoolean("defaultP2pContacts", this.defaultP2pContacts);
         edit.putBoolean("preloadFeaturedStickers", this.preloadFeaturedStickers);
         edit.putInt("revokeTimeLimit", this.revokeTimeLimit);
         edit.putInt("revokeTimePmLimit", this.revokeTimePmLimit);
@@ -1137,7 +1227,6 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        TL_inputThemeSettings tL_inputThemeSettings = null;
         String str;
         if (i == NotificationCenter.FileDidUpload) {
             str = (String) objArr[0];
@@ -1146,120 +1235,39 @@ public class MessagesController extends BaseController implements NotificationCe
             if (str2 == null || !str2.equals(str)) {
                 str2 = this.uploadingWallpaper;
                 if (str2 == null || !str2.equals(str)) {
-                    InputFile inputFile2;
-                    ThemeInfo themeInfo;
-                    ThemeAccent themeAccent;
-                    Object obj = this.uploadingThemes.get(str);
-                    if (obj instanceof ThemeInfo) {
-                        ThemeInfo themeInfo2 = (ThemeInfo) obj;
-                        if (str.equals(themeInfo2.uploadingThumb)) {
-                            themeInfo2.uploadedThumb = inputFile;
-                            themeInfo2.uploadingThumb = null;
-                        } else if (str.equals(themeInfo2.uploadingFile)) {
-                            themeInfo2.uploadedFile = inputFile;
-                            themeInfo2.uploadingFile = null;
+                    ThemeInfo themeInfo = (ThemeInfo) this.uploadingThemes.get(str);
+                    if (themeInfo != null) {
+                        if (str.equals(themeInfo.uploadingThumb)) {
+                            themeInfo.uploadedThumb = inputFile;
+                            themeInfo.uploadingThumb = null;
+                        } else if (str.equals(themeInfo.uploadingFile)) {
+                            themeInfo.uploadedFile = inputFile;
+                            themeInfo.uploadingFile = null;
                         }
-                        inputFile = themeInfo2.uploadedThumb;
-                        inputFile2 = themeInfo2.uploadedFile;
-                        themeInfo = themeInfo2;
-                        themeAccent = null;
-                    } else if (obj instanceof ThemeAccent) {
-                        ThemeAccent themeAccent2 = (ThemeAccent) obj;
-                        if (str.equals(themeAccent2.uploadingThumb)) {
-                            themeAccent2.uploadedThumb = inputFile;
-                            themeAccent2.uploadingThumb = null;
-                        } else if (str.equals(themeAccent2.uploadingFile)) {
-                            themeAccent2.uploadedFile = inputFile;
-                            themeAccent2.uploadingFile = null;
-                        }
-                        ThemeInfo themeInfo3 = themeAccent2.parentTheme;
-                        themeInfo = themeInfo3;
-                        themeAccent = themeAccent2;
-                        inputFile = themeAccent2.uploadedThumb;
-                        inputFile2 = themeAccent2.uploadedFile;
-                    } else {
-                        inputFile = null;
-                        inputFile2 = inputFile;
-                        themeInfo = inputFile2;
-                        themeAccent = themeInfo;
-                    }
-                    this.uploadingThemes.remove(str);
-                    if (!(inputFile2 == null || inputFile == null)) {
-                        TL_theme tL_theme;
-                        File file = new File(str);
-                        TL_account_uploadTheme tL_account_uploadTheme = new TL_account_uploadTheme();
-                        tL_account_uploadTheme.mime_type = "application/x-tgtheme-android";
-                        str2 = "theme.attheme";
-                        tL_account_uploadTheme.file_name = str2;
-                        tL_account_uploadTheme.file = inputFile2;
-                        tL_account_uploadTheme.file.name = str2;
-                        tL_account_uploadTheme.thumb = inputFile;
-                        tL_account_uploadTheme.thumb.name = "theme-preview.jpg";
-                        tL_account_uploadTheme.flags |= 1;
-                        if (themeAccent != null) {
-                            WallPaperSettings wallPaperSettings;
-                            themeAccent.uploadedFile = null;
-                            themeAccent.uploadedThumb = null;
-                            tL_theme = themeAccent.info;
-                            tL_inputThemeSettings = new TL_inputThemeSettings();
-                            tL_inputThemeSettings.base_theme = Theme.getBaseThemeByKey(themeInfo.name);
-                            tL_inputThemeSettings.accent_color = themeAccent.accentColor;
-                            int i3 = themeAccent.myMessagesAccentColor;
-                            if (i3 != 0) {
-                                tL_inputThemeSettings.message_bottom_color = i3;
-                                tL_inputThemeSettings.flags |= 1;
-                            }
-                            i3 = themeAccent.myMessagesGradientAccentColor;
-                            if (i3 != 0) {
-                                tL_inputThemeSettings.message_top_color = i3;
-                                tL_inputThemeSettings.flags |= 1;
-                            } else {
-                                i3 = tL_inputThemeSettings.message_bottom_color;
-                                if (i3 != 0) {
-                                    tL_inputThemeSettings.message_top_color = i3;
-                                }
-                            }
-                            tL_inputThemeSettings.flags |= 2;
-                            tL_inputThemeSettings.wallpaper_settings = new TL_wallPaperSettings();
-                            if (TextUtils.isEmpty(themeAccent.patternSlug)) {
-                                tL_inputThemeSettings.wallpaper = new TL_inputWallPaperNoFile();
-                            } else {
-                                TL_inputWallPaperSlug tL_inputWallPaperSlug = new TL_inputWallPaperSlug();
-                                tL_inputWallPaperSlug.slug = themeAccent.patternSlug;
-                                tL_inputThemeSettings.wallpaper = tL_inputWallPaperSlug;
-                                wallPaperSettings = tL_inputThemeSettings.wallpaper_settings;
-                                wallPaperSettings.intensity = (int) (themeAccent.patternIntensity * 100.0f);
-                                wallPaperSettings.flags |= 8;
-                            }
-                            wallPaperSettings = tL_inputThemeSettings.wallpaper_settings;
-                            wallPaperSettings.motion = themeAccent.patternMotion;
-                            long j = themeAccent.backgroundOverrideColor;
-                            if (j != 0) {
-                                wallPaperSettings.background_color = (int) j;
-                                wallPaperSettings.flags |= 1;
-                            }
-                            j = themeAccent.backgroundGradientOverrideColor;
-                            if (j != 0) {
-                                wallPaperSettings = tL_inputThemeSettings.wallpaper_settings;
-                                wallPaperSettings.second_background_color = (int) j;
-                                wallPaperSettings.flags |= 16;
-                                wallPaperSettings.rotation = AndroidUtilities.getWallpaperRotation(themeAccent.backgroundRotation, true);
-                            }
-                        } else {
+                        if (!(themeInfo.uploadedFile == null || themeInfo.uploadedThumb == null)) {
+                            File file = new File(str);
+                            TL_account_uploadTheme tL_account_uploadTheme = new TL_account_uploadTheme();
+                            tL_account_uploadTheme.mime_type = "application/x-tgtheme-android";
+                            String str3 = "theme.attheme";
+                            tL_account_uploadTheme.file_name = str3;
+                            tL_account_uploadTheme.file = themeInfo.uploadedFile;
+                            tL_account_uploadTheme.file.name = str3;
+                            tL_account_uploadTheme.thumb = themeInfo.uploadedThumb;
+                            tL_account_uploadTheme.thumb.name = "theme-preview.jpg";
+                            tL_account_uploadTheme.flags = 1 | tL_account_uploadTheme.flags;
                             themeInfo.uploadedFile = null;
                             themeInfo.uploadedThumb = null;
-                            tL_theme = themeInfo.info;
+                            getConnectionsManager().sendRequest(tL_account_uploadTheme, new -$$Lambda$MessagesController$EvCHw7kw93yB8Oxz0Ey3T0TDVYc(this, themeInfo));
                         }
-                        getConnectionsManager().sendRequest(tL_account_uploadTheme, new -$$Lambda$MessagesController$yUpA2fs0hD5PF0RFsNkGeJ9FyjY(this, tL_theme, themeInfo, tL_inputThemeSettings, themeAccent));
+                        this.uploadingThemes.remove(str);
                     }
                 } else {
                     TL_account_uploadWallPaper tL_account_uploadWallPaper = new TL_account_uploadWallPaper();
                     tL_account_uploadWallPaper.file = inputFile;
                     tL_account_uploadWallPaper.mime_type = "image/jpeg";
                     TL_wallPaperSettings tL_wallPaperSettings = new TL_wallPaperSettings();
-                    OverrideWallpaperInfo overrideWallpaperInfo = this.uploadingWallpaperInfo;
-                    tL_wallPaperSettings.blur = overrideWallpaperInfo.isBlurred;
-                    tL_wallPaperSettings.motion = overrideWallpaperInfo.isMotion;
+                    tL_wallPaperSettings.blur = this.uploadingWallpaperBlurred;
+                    tL_wallPaperSettings.motion = this.uploadingWallpaperMotion;
                     tL_account_uploadWallPaper.settings = tL_wallPaperSettings;
                     getConnectionsManager().sendRequest(tL_account_uploadWallPaper, new -$$Lambda$MessagesController$0X6aUkz7iyW23B1znikJVXca3kM(this, tL_wallPaperSettings));
                 }
@@ -1270,23 +1278,17 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         } else if (i == NotificationCenter.FileDidFailUpload) {
             str = (String) objArr[0];
-            String str3 = this.uploadingAvatar;
-            if (str3 == null || !str3.equals(str)) {
-                str3 = this.uploadingWallpaper;
-                if (str3 == null || !str3.equals(str)) {
-                    Object remove = this.uploadingThemes.remove(str);
-                    if (remove instanceof ThemeInfo) {
-                        ThemeInfo themeInfo4 = (ThemeInfo) remove;
-                        themeInfo4.uploadedFile = null;
-                        themeInfo4.uploadedThumb = null;
-                        getNotificationCenter().postNotificationName(NotificationCenter.themeUploadError, themeInfo4, null);
-                    } else if (remove instanceof ThemeAccent) {
-                        ((ThemeAccent) remove).uploadingThumb = null;
-                        getNotificationCenter().postNotificationName(NotificationCenter.themeUploadError, r13.parentTheme, r13);
+            String str4 = this.uploadingAvatar;
+            if (str4 == null || !str4.equals(str)) {
+                str4 = this.uploadingWallpaper;
+                if (str4 == null || !str4.equals(str)) {
+                    ThemeInfo themeInfo2 = (ThemeInfo) this.uploadingThemes.remove(str);
+                    if (themeInfo2 != null) {
+                        themeInfo2.uploadedFile = null;
+                        themeInfo2.uploadedThumb = null;
                     }
                 } else {
                     this.uploadingWallpaper = null;
-                    this.uploadingWallpaperInfo = null;
                 }
             } else {
                 this.uploadingAvatar = null;
@@ -1379,7 +1381,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$didReceivedNotification$10$MessagesController(TL_wallPaperSettings tL_wallPaperSettings, TLObject tLObject, TL_error tL_error) {
         TL_wallPaper tL_wallPaper = (TL_wallPaper) tLObject;
-        File file = new File(ApplicationLoader.getFilesDirFixed(), this.uploadingWallpaperInfo.originalFileName);
+        File file = new File(ApplicationLoader.getFilesDirFixed(), this.uploadingWallpaperBlurred ? "wallpaper_original.jpg" : "wallpaper.jpg");
         if (tL_wallPaper != null) {
             try {
                 AndroidUtilities.copyFile(file, FileLoader.getPathToAttach(tL_wallPaper.document, true));
@@ -1393,9 +1395,10 @@ public class MessagesController extends BaseController implements NotificationCe
         if (this.uploadingWallpaper != null && tL_wallPaper != null) {
             tL_wallPaper.settings = tL_wallPaperSettings;
             tL_wallPaper.flags |= 4;
-            OverrideWallpaperInfo overrideWallpaperInfo = this.uploadingWallpaperInfo;
-            overrideWallpaperInfo.slug = tL_wallPaper.slug;
-            overrideWallpaperInfo.saveOverrideWallpaper();
+            Editor edit = getGlobalMainSettings().edit();
+            edit.putLong("selectedBackground2", tL_wallPaper.id);
+            edit.putString("selectedBackgroundSlug", tL_wallPaper.slug);
+            edit.commit();
             ArrayList arrayList = new ArrayList();
             arrayList.add(tL_wallPaper);
             getMessagesStorage().putWallpapers(arrayList, 2);
@@ -1413,87 +1416,78 @@ public class MessagesController extends BaseController implements NotificationCe
                 stringBuilder3.append(str);
                 ImageLoader.getInstance().replaceImageInCache(stringBuilder3.toString(), stringBuilder2, ImageLocation.getForDocument(closestPhotoSizeWithSize, tL_wallPaper.document), false);
             }
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.wallpapersNeedReload, tL_wallPaper.slug);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.wallpapersNeedReload, Long.valueOf(tL_wallPaper.id));
         }
     }
 
-    public /* synthetic */ void lambda$didReceivedNotification$16$MessagesController(TL_theme tL_theme, ThemeInfo themeInfo, TL_inputThemeSettings tL_inputThemeSettings, ThemeAccent themeAccent, TLObject tLObject, TL_error tL_error) {
-        String name = tL_theme != null ? tL_theme.title : themeInfo.getName();
-        int lastIndexOf = name.lastIndexOf(".attheme");
-        if (lastIndexOf > 0) {
-            name = name.substring(0, lastIndexOf);
-        }
+    public /* synthetic */ void lambda$didReceivedNotification$16$MessagesController(ThemeInfo themeInfo, TLObject tLObject, TL_error tL_error) {
+        int lastIndexOf = themeInfo.name.lastIndexOf(".attheme");
+        String substring = lastIndexOf > 0 ? themeInfo.name.substring(0, lastIndexOf) : themeInfo.name;
         if (tLObject != null) {
             Document document = (Document) tLObject;
             TL_inputDocument tL_inputDocument = new TL_inputDocument();
             tL_inputDocument.access_hash = document.access_hash;
             tL_inputDocument.id = document.id;
             tL_inputDocument.file_reference = document.file_reference;
+            TL_theme tL_theme = themeInfo.info;
             if (tL_theme == null || !tL_theme.creator) {
                 TL_account_createTheme tL_account_createTheme = new TL_account_createTheme();
                 tL_account_createTheme.document = tL_inputDocument;
-                tL_account_createTheme.flags |= 4;
-                String str = (tL_theme == null || TextUtils.isEmpty(tL_theme.slug)) ? "" : tL_theme.slug;
+                TL_theme tL_theme2 = themeInfo.info;
+                String str = (tL_theme2 == null || TextUtils.isEmpty(tL_theme2.slug)) ? "" : themeInfo.info.slug;
                 tL_account_createTheme.slug = str;
-                tL_account_createTheme.title = name;
-                if (tL_inputThemeSettings != null) {
-                    tL_account_createTheme.settings = tL_inputThemeSettings;
-                    tL_account_createTheme.flags |= 8;
-                }
-                getConnectionsManager().sendRequest(tL_account_createTheme, new -$$Lambda$MessagesController$8pFc6NDdyHIN9OiUggaLtP4v1c4(this, themeInfo, themeAccent));
+                tL_account_createTheme.title = substring;
+                getConnectionsManager().sendRequest(tL_account_createTheme, new -$$Lambda$MessagesController$weX16jBVe2JHWolmqaFr7zUbUlQ(this, themeInfo));
                 return;
             }
             TL_account_updateTheme tL_account_updateTheme = new TL_account_updateTheme();
             TL_inputTheme tL_inputTheme = new TL_inputTheme();
-            tL_inputTheme.id = tL_theme.id;
-            tL_inputTheme.access_hash = tL_theme.access_hash;
+            TL_theme tL_theme3 = themeInfo.info;
+            tL_inputTheme.id = tL_theme3.id;
+            tL_inputTheme.access_hash = tL_theme3.access_hash;
             tL_account_updateTheme.theme = tL_inputTheme;
-            tL_account_updateTheme.slug = tL_theme.slug;
+            tL_account_updateTheme.slug = tL_theme3.slug;
             tL_account_updateTheme.flags |= 1;
-            tL_account_updateTheme.title = name;
+            tL_account_updateTheme.title = substring;
             tL_account_updateTheme.flags |= 2;
             tL_account_updateTheme.document = tL_inputDocument;
             tL_account_updateTheme.flags |= 4;
-            if (tL_inputThemeSettings != null) {
-                tL_account_updateTheme.settings = tL_inputThemeSettings;
-                tL_account_updateTheme.flags |= 8;
-            }
             tL_account_updateTheme.format = "android";
-            getConnectionsManager().sendRequest(tL_account_updateTheme, new -$$Lambda$MessagesController$4i4T579xSt8cXV1phYKjHpEOfP0(this, themeInfo, themeAccent));
+            getConnectionsManager().sendRequest(tL_account_updateTheme, new -$$Lambda$MessagesController$JG26Xe_Ys8MFBiTMlGd1SQAsYU0(this, themeInfo));
             return;
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$ynufN6abcXmOgpZMWypIEQxGwBU(this, themeInfo, themeAccent));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$VGHEenac3IjoyMGVCqqxLQjYzJM(this, themeInfo));
     }
 
-    public /* synthetic */ void lambda$null$12$MessagesController(ThemeInfo themeInfo, ThemeAccent themeAccent, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$xzOiK08eeRnFb_SEqfm5LtW1m_Q(this, tLObject, themeInfo, themeAccent));
+    public /* synthetic */ void lambda$null$12$MessagesController(ThemeInfo themeInfo, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$BemIAzh2QIzfjeCLASSNAMEl-IAu140Eg(this, tLObject, themeInfo));
     }
 
-    public /* synthetic */ void lambda$null$11$MessagesController(TLObject tLObject, ThemeInfo themeInfo, ThemeAccent themeAccent) {
+    public /* synthetic */ void lambda$null$11$MessagesController(TLObject tLObject, ThemeInfo themeInfo) {
         if (tLObject instanceof TL_theme) {
-            Theme.setThemeUploadInfo(themeInfo, themeAccent, (TL_theme) tLObject, this.currentAccount, false);
-            installTheme(themeInfo, themeAccent, themeInfo == Theme.getCurrentNightTheme());
-            getNotificationCenter().postNotificationName(NotificationCenter.themeUploadedToServer, themeInfo, themeAccent);
+            Theme.setThemeUploadInfo(themeInfo, (TL_theme) tLObject, false);
+            installTheme(themeInfo, themeInfo == Theme.getCurrentNightTheme());
+            getNotificationCenter().postNotificationName(NotificationCenter.themeUploadedToServer, themeInfo);
             return;
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.themeUploadError, themeInfo, themeAccent);
+        getNotificationCenter().postNotificationName(NotificationCenter.themeUploadError, themeInfo);
     }
 
-    public /* synthetic */ void lambda$null$14$MessagesController(ThemeInfo themeInfo, ThemeAccent themeAccent, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$amTW3hZkyMf6s2SlhP0wIqQF-bc(this, tLObject, themeInfo, themeAccent));
+    public /* synthetic */ void lambda$null$14$MessagesController(ThemeInfo themeInfo, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$N-XFe6HsCwOLzJorr9jPhg3_7Zk(this, tLObject, themeInfo));
     }
 
-    public /* synthetic */ void lambda$null$13$MessagesController(TLObject tLObject, ThemeInfo themeInfo, ThemeAccent themeAccent) {
+    public /* synthetic */ void lambda$null$13$MessagesController(TLObject tLObject, ThemeInfo themeInfo) {
         if (tLObject instanceof TL_theme) {
-            Theme.setThemeUploadInfo(themeInfo, themeAccent, (TL_theme) tLObject, this.currentAccount, false);
-            getNotificationCenter().postNotificationName(NotificationCenter.themeUploadedToServer, themeInfo, themeAccent);
+            Theme.setThemeUploadInfo(themeInfo, (TL_theme) tLObject, false);
+            getNotificationCenter().postNotificationName(NotificationCenter.themeUploadedToServer, themeInfo);
             return;
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.themeUploadError, themeInfo, themeAccent);
+        getNotificationCenter().postNotificationName(NotificationCenter.themeUploadError, themeInfo);
     }
 
-    public /* synthetic */ void lambda$null$15$MessagesController(ThemeInfo themeInfo, ThemeAccent themeAccent) {
-        getNotificationCenter().postNotificationName(NotificationCenter.themeUploadError, themeInfo, themeAccent);
+    public /* synthetic */ void lambda$null$15$MessagesController(ThemeInfo themeInfo) {
+        getNotificationCenter().postNotificationName(NotificationCenter.themeUploadError, themeInfo);
     }
 
     public void cleanup() {
@@ -1508,7 +1502,7 @@ public class MessagesController extends BaseController implements NotificationCe
         DialogsActivity.dialogsLoaded[this.currentAccount] = false;
         this.notificationsPreferences.edit().clear().commit();
         this.emojiPreferences.edit().putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).commit();
-        this.mainPreferences.edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("dcDomainName2").remove("webFileDatacenterId").remove("themehint").commit();
+        this.mainPreferences.edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("dcDomainName2").remove("webFileDatacenterId").commit();
         this.lastScheduledServerQueryTime.clear();
         this.reloadingWebpages.clear();
         this.reloadingWebpagesPending.clear();
@@ -1592,7 +1586,6 @@ public class MessagesController extends BaseController implements NotificationCe
         this.getDifferenceFirstSync = true;
         this.uploadingAvatar = null;
         this.uploadingWallpaper = null;
-        this.uploadingWallpaperInfo = null;
         this.uploadingThemes.clear();
         this.statusRequest = 0;
         this.statusSettingState = 0;
@@ -3315,173 +3308,177 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    public void saveTheme(ThemeInfo themeInfo, ThemeAccent themeAccent, boolean z, boolean z2) {
-        TL_theme tL_theme = themeAccent != null ? themeAccent.info : themeInfo.info;
-        if (tL_theme != null) {
+    public void saveTheme(ThemeInfo themeInfo, boolean z, boolean z2) {
+        if (themeInfo.info != null) {
             TL_account_saveTheme tL_account_saveTheme = new TL_account_saveTheme();
             TL_inputTheme tL_inputTheme = new TL_inputTheme();
+            TL_theme tL_theme = themeInfo.info;
             tL_inputTheme.id = tL_theme.id;
             tL_inputTheme.access_hash = tL_theme.access_hash;
             tL_account_saveTheme.theme = tL_inputTheme;
             tL_account_saveTheme.unsave = z2;
             getConnectionsManager().sendRequest(tL_account_saveTheme, -$$Lambda$MessagesController$WKM5a9edf5QSZ_85kx_7-hVixAo.INSTANCE);
-            getConnectionsManager().resumeNetworkMaybe();
         }
         if (!z2) {
-            installTheme(themeInfo, themeAccent, z);
+            installTheme(themeInfo, z);
         }
     }
 
-    public void installTheme(ThemeInfo themeInfo, ThemeAccent themeAccent, boolean z) {
-        TL_theme tL_theme = themeAccent != null ? themeAccent.info : themeInfo.info;
-        CharSequence charSequence = themeAccent != null ? themeAccent.patternSlug : themeInfo.slug;
-        boolean z2 = themeAccent == null && themeInfo.isBlured;
-        boolean z3 = themeAccent != null ? themeAccent.patternMotion : themeInfo.isMotion;
+    public void installTheme(ThemeInfo themeInfo, boolean z) {
         TL_account_installTheme tL_account_installTheme = new TL_account_installTheme();
         tL_account_installTheme.dark = z;
-        if (tL_theme != null) {
+        if (themeInfo.info != null) {
             tL_account_installTheme.format = "android";
             TL_inputTheme tL_inputTheme = new TL_inputTheme();
+            TL_theme tL_theme = themeInfo.info;
             tL_inputTheme.id = tL_theme.id;
             tL_inputTheme.access_hash = tL_theme.access_hash;
             tL_account_installTheme.theme = tL_inputTheme;
             tL_account_installTheme.flags |= 2;
         }
         getConnectionsManager().sendRequest(tL_account_installTheme, -$$Lambda$MessagesController$JU6Vn2XI6a6J78k6RJwedOdT0ek.INSTANCE);
-        if (!TextUtils.isEmpty(charSequence)) {
+        if (!TextUtils.isEmpty(themeInfo.slug)) {
             TL_account_installWallPaper tL_account_installWallPaper = new TL_account_installWallPaper();
             TL_inputWallPaperSlug tL_inputWallPaperSlug = new TL_inputWallPaperSlug();
-            tL_inputWallPaperSlug.slug = charSequence;
+            tL_inputWallPaperSlug.slug = themeInfo.slug;
             tL_account_installWallPaper.wallpaper = tL_inputWallPaperSlug;
             tL_account_installWallPaper.settings = new TL_wallPaperSettings();
             TL_wallPaperSettings tL_wallPaperSettings = tL_account_installWallPaper.settings;
-            tL_wallPaperSettings.blur = z2;
-            tL_wallPaperSettings.motion = z3;
+            tL_wallPaperSettings.blur = themeInfo.isBlured;
+            tL_wallPaperSettings.motion = themeInfo.isMotion;
             getConnectionsManager().sendRequest(tL_account_installWallPaper, -$$Lambda$MessagesController$cHxeHBiTL_l8pWJ-ucJD2ba8DkY.INSTANCE);
         }
     }
 
-    public void saveThemeToServer(ThemeInfo themeInfo, ThemeAccent themeAccent) {
-        if (themeInfo != null) {
-            String absolutePath;
-            File pathToWallpaper;
-            if (themeAccent != null) {
-                absolutePath = themeAccent.saveToFile().getAbsolutePath();
-                pathToWallpaper = themeAccent.getPathToWallpaper();
-            } else {
-                absolutePath = themeInfo.pathToFile;
-                pathToWallpaper = null;
-            }
-            String str = absolutePath;
-            File file = pathToWallpaper;
-            if (str != null && !this.uploadingThemes.containsKey(str)) {
-                this.uploadingThemes.put(str, themeAccent != null ? themeAccent : themeInfo);
-                Utilities.globalQueue.postRunnable(new -$$Lambda$MessagesController$0nGFkqAGg_edYOn-uWXSeNvNlMI(this, str, file, themeAccent, themeInfo));
-            }
+    public void saveThemeToServer(ThemeInfo themeInfo) {
+        if (themeInfo != null && !this.uploadingThemes.containsKey(themeInfo.pathToFile)) {
+            this.uploadingThemes.put(themeInfo.pathToFile, themeInfo);
+            Utilities.globalQueue.postRunnable(new -$$Lambda$MessagesController$vZokDOaNon1X8-fcJes4QOGlVVg(this, themeInfo));
         }
     }
 
-    public /* synthetic */ void lambda$saveThemeToServer$74$MessagesController(String str, File file, ThemeAccent themeAccent, ThemeInfo themeInfo) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$yecm_B_GjFIPDLJORsqyNDL2PH4(this, Theme.createThemePreviewImage(str, file != null ? file.getAbsolutePath() : null), str, themeAccent, themeInfo));
+    public /* synthetic */ void lambda$saveThemeToServer$74$MessagesController(ThemeInfo themeInfo) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$ey1mX6CLASSNAMEY4YMTXa56od_QOeziQ(this, Theme.createThemePreviewImage(themeInfo), themeInfo));
     }
 
-    public /* synthetic */ void lambda$null$73$MessagesController(String str, String str2, ThemeAccent themeAccent, ThemeInfo themeInfo) {
+    public /* synthetic */ void lambda$null$73$MessagesController(String str, ThemeInfo themeInfo) {
         if (str == null) {
-            this.uploadingThemes.remove(str2);
+            this.uploadingThemes.remove(themeInfo.pathToFile);
             return;
         }
-        this.uploadingThemes.put(str, themeAccent != null ? themeAccent : themeInfo);
-        if (themeAccent == null) {
-            themeInfo.uploadingFile = str2;
-            themeInfo.uploadingThumb = str;
-        } else {
-            themeAccent.uploadingFile = str2;
-            themeAccent.uploadingThumb = str;
-        }
-        getFileLoader().uploadFile(str2, false, true, 67108864);
+        themeInfo.uploadingFile = themeInfo.pathToFile;
+        themeInfo.uploadingThumb = str;
+        this.uploadingThemes.put(str, themeInfo);
+        new File(themeInfo.pathToFile).length();
+        new File(str).length();
+        getFileLoader().uploadFile(themeInfo.pathToFile, false, true, 67108864);
         getFileLoader().uploadFile(str, false, true, 16777216);
     }
 
-    public void saveWallpaperToServer(File file, OverrideWallpaperInfo overrideWallpaperInfo, boolean z, long j) {
+    public void saveWallpaperToServer(File file, long j, String str, long j2, boolean z, boolean z2, int i, float f, boolean z3, long j3) {
+        long j4;
         Throwable e;
+        File file2 = file;
+        long j5 = j;
+        String str2 = str;
+        long j6 = j2;
+        boolean z4 = z;
+        boolean z5 = z2;
+        int i2 = i;
+        float f2 = f;
+        boolean z6 = z3;
         if (this.uploadingWallpaper != null) {
-            File file2 = new File(ApplicationLoader.getFilesDirFixed(), overrideWallpaperInfo.originalFileName);
-            if (file == null || !(file.getAbsolutePath().equals(this.uploadingWallpaper) || file.equals(file2))) {
+            File file3 = new File(ApplicationLoader.getFilesDirFixed(), this.uploadingWallpaperBlurred ? "wallpaper_original.jpg" : "wallpaper.jpg");
+            if (file2 == null || !(file.getAbsolutePath().equals(this.uploadingWallpaper) || file2.equals(file3))) {
                 getFileLoader().cancelUploadFile(this.uploadingWallpaper, false);
                 this.uploadingWallpaper = null;
-                this.uploadingWallpaperInfo = null;
             } else {
-                this.uploadingWallpaperInfo = overrideWallpaperInfo;
+                this.uploadingWallpaperMotion = z5;
+                this.uploadingWallpaperBlurred = z4;
                 return;
             }
         }
-        if (file != null) {
+        if (file2 != null) {
             this.uploadingWallpaper = file.getAbsolutePath();
-            this.uploadingWallpaperInfo = overrideWallpaperInfo;
+            this.uploadingWallpaperMotion = z5;
+            this.uploadingWallpaperBlurred = z4;
             getFileLoader().uploadFile(this.uploadingWallpaper, false, true, 16777216);
-        } else if (!(overrideWallpaperInfo.isDefault() || overrideWallpaperInfo.isColor() || overrideWallpaperInfo.isTheme())) {
+        } else if (j6 != 0) {
             TLObject tL_account_installWallPaper;
-            TL_inputWallPaperSlug tL_inputWallPaperSlug = new TL_inputWallPaperSlug();
-            tL_inputWallPaperSlug.slug = overrideWallpaperInfo.slug;
+            TL_inputWallPaper tL_inputWallPaper = new TL_inputWallPaper();
+            tL_inputWallPaper.id = j5;
+            tL_inputWallPaper.access_hash = j6;
             TL_wallPaperSettings tL_wallPaperSettings = new TL_wallPaperSettings();
-            tL_wallPaperSettings.blur = overrideWallpaperInfo.isBlurred;
-            tL_wallPaperSettings.motion = overrideWallpaperInfo.isMotion;
-            int i = overrideWallpaperInfo.color;
-            if (i != 0) {
-                tL_wallPaperSettings.background_color = i;
-                tL_wallPaperSettings.flags |= 1;
-                tL_wallPaperSettings.intensity = (int) (overrideWallpaperInfo.intensity * 100.0f);
+            tL_wallPaperSettings.blur = z4;
+            tL_wallPaperSettings.motion = z5;
+            if (i2 != 0) {
+                tL_wallPaperSettings.background_color = i2;
+                tL_wallPaperSettings.flags = 1 | tL_wallPaperSettings.flags;
+                tL_wallPaperSettings.intensity = (int) (100.0f * f2);
                 tL_wallPaperSettings.flags |= 8;
             }
-            i = overrideWallpaperInfo.gradientColor;
-            if (i != 0) {
-                tL_wallPaperSettings.second_background_color = i;
-                tL_wallPaperSettings.rotation = AndroidUtilities.getWallpaperRotation(overrideWallpaperInfo.rotation, true);
-                tL_wallPaperSettings.flags |= 16;
-            }
-            if (z) {
+            if (z6) {
                 tL_account_installWallPaper = new TL_account_installWallPaper();
-                tL_account_installWallPaper.wallpaper = tL_inputWallPaperSlug;
+                tL_account_installWallPaper.wallpaper = tL_inputWallPaper;
                 tL_account_installWallPaper.settings = tL_wallPaperSettings;
             } else {
                 tL_account_installWallPaper = new TL_account_saveWallPaper();
-                tL_account_installWallPaper.wallpaper = tL_inputWallPaperSlug;
+                tL_account_installWallPaper.wallpaper = tL_inputWallPaper;
                 tL_account_installWallPaper.settings = tL_wallPaperSettings;
             }
-            if (j == 0) {
+            if (j3 != 0) {
+                j4 = j3;
+            } else {
                 NativeByteBuffer nativeByteBuffer;
                 try {
                     nativeByteBuffer = new NativeByteBuffer(1024);
                     try {
-                        nativeByteBuffer.writeInt32(21);
-                        nativeByteBuffer.writeBool(overrideWallpaperInfo.isBlurred);
-                        nativeByteBuffer.writeBool(overrideWallpaperInfo.isMotion);
-                        nativeByteBuffer.writeInt32(overrideWallpaperInfo.color);
-                        nativeByteBuffer.writeInt32(overrideWallpaperInfo.gradientColor);
-                        nativeByteBuffer.writeInt32(overrideWallpaperInfo.rotation);
-                        nativeByteBuffer.writeDouble((double) overrideWallpaperInfo.intensity);
-                        nativeByteBuffer.writeBool(z);
-                        nativeByteBuffer.writeString(overrideWallpaperInfo.slug);
-                        nativeByteBuffer.writeString(overrideWallpaperInfo.originalFileName);
+                        nativeByteBuffer.writeInt32(19);
+                        nativeByteBuffer.writeInt64(j5);
+                        nativeByteBuffer.writeInt64(j6);
+                        nativeByteBuffer.writeBool(z4);
+                        nativeByteBuffer.writeBool(z5);
+                        nativeByteBuffer.writeInt32(i2);
+                        nativeByteBuffer.writeDouble((double) f2);
+                        nativeByteBuffer.writeBool(z6);
+                        if (str2 != null) {
+                            nativeByteBuffer.writeString(str2);
+                        } else {
+                            nativeByteBuffer.writeString("");
+                        }
                         nativeByteBuffer.limit(nativeByteBuffer.position());
                     } catch (Exception e2) {
                         e = e2;
+                        FileLog.e(e);
+                        j4 = getMessagesStorage().createPendingTask(nativeByteBuffer);
+                        getConnectionsManager().sendRequest(tL_account_installWallPaper, new -$$Lambda$MessagesController$_bgQ6O-mprxZVrzuXYSImnEiIuc(this, j4, z3, j, str));
                     }
                 } catch (Exception e3) {
                     e = e3;
                     nativeByteBuffer = null;
                     FileLog.e(e);
-                    j = getMessagesStorage().createPendingTask(nativeByteBuffer);
-                    getConnectionsManager().sendRequest(tL_account_installWallPaper, new -$$Lambda$MessagesController$Sq9QMUU7HOVWr8Dc5OGCzMKjLbk(this, j));
+                    j4 = getMessagesStorage().createPendingTask(nativeByteBuffer);
+                    getConnectionsManager().sendRequest(tL_account_installWallPaper, new -$$Lambda$MessagesController$_bgQ6O-mprxZVrzuXYSImnEiIuc(this, j4, z3, j, str));
                 }
-                j = getMessagesStorage().createPendingTask(nativeByteBuffer);
+                j4 = getMessagesStorage().createPendingTask(nativeByteBuffer);
             }
-            getConnectionsManager().sendRequest(tL_account_installWallPaper, new -$$Lambda$MessagesController$Sq9QMUU7HOVWr8Dc5OGCzMKjLbk(this, j));
+            getConnectionsManager().sendRequest(tL_account_installWallPaper, new -$$Lambda$MessagesController$_bgQ6O-mprxZVrzuXYSImnEiIuc(this, j4, z3, j, str));
         }
     }
 
-    public /* synthetic */ void lambda$saveWallpaperToServer$75$MessagesController(long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$saveWallpaperToServer$75$MessagesController(long j, boolean z, long j2, String str, TLObject tLObject, TL_error tL_error) {
         getMessagesStorage().removePendingTask(j);
+        if (!z && this.uploadingWallpaper != null) {
+            Editor edit = getGlobalMainSettings().edit();
+            edit.putLong("selectedBackground2", j2);
+            String str2 = "selectedBackgroundSlug";
+            if (TextUtils.isEmpty(str)) {
+                edit.remove(str2);
+            } else {
+                edit.putString(str2, str);
+            }
+            edit.commit();
+        }
     }
 
     public void markChannelDialogMessageAsDeleted(ArrayList<Integer> arrayList, int i) {
@@ -3729,47 +3726,6 @@ public class MessagesController extends BaseController implements NotificationCe
     public ArrayList<Dialog> getDialogs(int i) {
         ArrayList<Dialog> arrayList = (ArrayList) this.dialogsByFolder.get(i);
         return arrayList == null ? new ArrayList() : arrayList;
-    }
-
-    public void putAllNeededDraftDialogs() {
-        LongSparseArray drafts = getMediaDataController().getDrafts();
-        int size = drafts.size();
-        for (int i = 0; i < size; i++) {
-            putDraftDialogIfNeed(drafts.keyAt(i), (DraftMessage) drafts.valueAt(i));
-        }
-    }
-
-    public void putDraftDialogIfNeed(long j, DraftMessage draftMessage) {
-        if (this.dialogs_dict.indexOfKey(j) < 0) {
-            MediaDataController mediaDataController = getMediaDataController();
-            int size = this.allDialogs.size();
-            int i = 1;
-            if (size > 0) {
-                Dialog dialog = (Dialog) this.allDialogs.get(size - 1);
-                if (((long) draftMessage.date) < DialogObject.getLastMessageOrDraftDate(dialog, mediaDataController.getDraft(dialog.id))) {
-                    return;
-                }
-            }
-            TL_dialog tL_dialog = new TL_dialog();
-            tL_dialog.id = j;
-            tL_dialog.draft = draftMessage;
-            tL_dialog.folder_id = mediaDataController.getDraftFolderId(j);
-            if (j >= 0 || !ChatObject.isChannel(getChat(Integer.valueOf((int) (-j))))) {
-                i = 0;
-            }
-            tL_dialog.flags = i;
-            this.dialogs_dict.put(j, tL_dialog);
-            this.allDialogs.add(tL_dialog);
-            sortDialogs(null);
-        }
-    }
-
-    public void removeDraftDialogIfNeed(long j) {
-        Dialog dialog = (Dialog) this.dialogs_dict.get(j);
-        if (dialog != null && dialog.top_message == 0) {
-            this.dialogs_dict.remove(dialog.id);
-            this.allDialogs.remove(dialog);
-        }
     }
 
     private void removeDialog(Dialog dialog) {
@@ -5755,12 +5711,12 @@ public class MessagesController extends BaseController implements NotificationCe
         Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$u7NBKcciX4Bdp0eVOizI37kmoL4(this, messages_messages, j, z4, z, i, i9, z5, i5, i2, i3, i4, i6, z2, i10, i7, i8, i11, z3));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x030b A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:161:0x030b A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02c9  */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02c9  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x030b A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:161:0x030b A:{SYNTHETIC} */
     /* JADX WARNING: Missing block: B:117:0x02b0, code skipped:
-            if (r3[0] < (byte) 108) goto L_0x02b7;
+            if (r3[0] < (byte) 107) goto L_0x02b7;
      */
     public /* synthetic */ void lambda$processLoadedMessages$124$MessagesController(org.telegram.tgnet.TLRPC.messages_Messages r26, long r27, boolean r29, boolean r30, int r31, int r32, boolean r33, int r34, int r35, int r36, int r37, int r38, boolean r39, int r40, int r41, int r42, int r43, boolean r44) {
         /*
@@ -6148,7 +6104,7 @@ public class MessagesController extends BaseController implements NotificationCe
     L_0x0286:
         r2 = r24;
         r3 = r2.legacy;
-        r4 = 108; // 0x6c float:1.51E-43 double:5.34E-322;
+        r4 = 107; // 0x6b float:1.5E-43 double:5.3E-322;
         if (r3 == 0) goto L_0x029c;
     L_0x028e:
         r3 = r2.layer;
@@ -6241,6 +6197,37 @@ public class MessagesController extends BaseController implements NotificationCe
         goto L_0x025a;
     L_0x0313:
         r15 = r6;
+        r1 = 5;
+        r6 = r32;
+        if (r6 != r1) goto L_0x0341;
+    L_0x0319:
+        if (r30 == 0) goto L_0x0341;
+    L_0x031b:
+        r1 = r7.size();
+        r9 = r31;
+        if (r1 >= r9) goto L_0x0343;
+    L_0x0323:
+        if (r44 != 0) goto L_0x0343;
+    L_0x0325:
+        r6 = 0;
+        r7 = 0;
+        r10 = 0;
+        r0 = r25;
+        r1 = r27;
+        r3 = r31;
+        r4 = r35;
+        r5 = r36;
+        r8 = r37;
+        r9 = r10;
+        r10 = r38;
+        r11 = r39;
+        r12 = r29;
+        r13 = r40;
+        r0.loadMessages(r1, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13);
+        return;
+    L_0x0341:
+        r9 = r31;
+    L_0x0343:
         r22 = new org.telegram.messenger.-$$Lambda$MessagesController$wg-aA8iCrSooaLRWqrgjxDJgHQs;
         r20 = r0;
         r0 = r22;
@@ -6668,19 +6655,19 @@ public class MessagesController extends BaseController implements NotificationCe
         loadDialogs(i, i2, i3, z, null);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x015d  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x015d  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0158  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0158  */
     public void loadDialogs(int r11, int r12, int r13, boolean r14, java.lang.Runnable r15) {
         /*
         r10 = this;
         r0 = r10.loadingDialogs;
         r0 = r0.get(r11);
-        if (r0 != 0) goto L_0x0170;
+        if (r0 != 0) goto L_0x016b;
     L_0x0008:
         r0 = r10.resetingDialogs;
         if (r0 == 0) goto L_0x000e;
     L_0x000c:
-        goto L_0x0170;
+        goto L_0x016b;
     L_0x000e:
         r0 = r10.loadingDialogs;
         r1 = 1;
@@ -6710,49 +6697,42 @@ public class MessagesController extends BaseController implements NotificationCe
         r0 = r0.toString();
         org.telegram.messenger.FileLog.d(r0);
     L_0x0050:
-        if (r14 == 0) goto L_0x0069;
+        if (r14 == 0) goto L_0x0064;
     L_0x0052:
         r14 = r10.getMessagesStorage();
-        if (r12 != 0) goto L_0x005a;
+        if (r12 != 0) goto L_0x0059;
     L_0x0058:
-        r15 = 0;
-        goto L_0x0060;
-    L_0x005a:
-        r15 = r10.nextDialogsCacheOffset;
-        r15 = r15.get(r11, r3);
-    L_0x0060:
-        if (r12 != 0) goto L_0x0063;
-    L_0x0062:
-        goto L_0x0064;
-    L_0x0063:
-        r1 = 0;
+        goto L_0x005f;
+    L_0x0059:
+        r12 = r10.nextDialogsCacheOffset;
+        r3 = r12.get(r11, r3);
+    L_0x005f:
+        r14.getDialogs(r11, r3, r13);
+        goto L_0x016b;
     L_0x0064:
-        r14.getDialogs(r11, r15, r13, r1);
-        goto L_0x0170;
-    L_0x0069:
         r12 = new org.telegram.tgnet.TLRPC$TL_messages_getDialogs;
         r12.<init>();
         r12.limit = r13;
         r12.exclude_pinned = r1;
         r14 = 2;
-        if (r11 == 0) goto L_0x007c;
-    L_0x0075:
+        if (r11 == 0) goto L_0x0077;
+    L_0x0070:
         r0 = r12.flags;
         r0 = r0 | r14;
         r12.flags = r0;
         r12.folder_id = r11;
-    L_0x007c:
+    L_0x0077:
         r0 = r10.getUserConfig();
         r0 = r0.getDialogLoadOffsets(r11);
         r2 = r0[r3];
         r4 = 32;
         r5 = -1;
-        if (r2 == r5) goto L_0x0103;
-    L_0x008b:
+        if (r2 == r5) goto L_0x00fe;
+    L_0x0086:
         r2 = r0[r3];
         r5 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        if (r2 != r5) goto L_0x00ad;
-    L_0x0092:
+        if (r2 != r5) goto L_0x00a8;
+    L_0x008d:
         r12 = r10.dialogsEndReached;
         r12.put(r11, r1);
         r12 = r10.serverDialogsEndReached;
@@ -6764,42 +6744,42 @@ public class MessagesController extends BaseController implements NotificationCe
         r13 = new java.lang.Object[r3];
         r11.postNotificationName(r12, r13);
         return;
-    L_0x00ad:
+    L_0x00a8:
         r2 = r0[r3];
         r12.offset_id = r2;
         r1 = r0[r1];
         r12.offset_date = r1;
         r1 = r12.offset_id;
-        if (r1 != 0) goto L_0x00c2;
-    L_0x00b9:
+        if (r1 != 0) goto L_0x00bd;
+    L_0x00b4:
         r14 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty;
         r14.<init>();
         r12.offset_peer = r14;
-        goto L_0x0164;
-    L_0x00c2:
+        goto L_0x015f;
+    L_0x00bd:
         r1 = 4;
         r2 = r0[r1];
-        if (r2 == 0) goto L_0x00d5;
-    L_0x00c7:
+        if (r2 == 0) goto L_0x00d0;
+    L_0x00c2:
         r14 = new org.telegram.tgnet.TLRPC$TL_inputPeerChannel;
         r14.<init>();
         r12.offset_peer = r14;
         r14 = r12.offset_peer;
         r1 = r0[r1];
         r14.channel_id = r1;
-        goto L_0x00f5;
-    L_0x00d5:
+        goto L_0x00f0;
+    L_0x00d0:
         r1 = r0[r14];
-        if (r1 == 0) goto L_0x00e7;
-    L_0x00d9:
+        if (r1 == 0) goto L_0x00e2;
+    L_0x00d4:
         r1 = new org.telegram.tgnet.TLRPC$TL_inputPeerUser;
         r1.<init>();
         r12.offset_peer = r1;
         r1 = r12.offset_peer;
         r14 = r0[r14];
         r1.user_id = r14;
-        goto L_0x00f5;
-    L_0x00e7:
+        goto L_0x00f0;
+    L_0x00e2:
         r14 = new org.telegram.tgnet.TLRPC$TL_inputPeerChat;
         r14.<init>();
         r12.offset_peer = r14;
@@ -6807,7 +6787,7 @@ public class MessagesController extends BaseController implements NotificationCe
         r1 = 3;
         r1 = r0[r1];
         r14.chat_id = r1;
-    L_0x00f5:
+    L_0x00f0:
         r14 = r12.offset_peer;
         r1 = 5;
         r2 = r0[r1];
@@ -6817,40 +6797,40 @@ public class MessagesController extends BaseController implements NotificationCe
         r0 = r0 << r4;
         r0 = r0 | r2;
         r14.access_hash = r0;
-        goto L_0x0164;
-    L_0x0103:
+        goto L_0x015f;
+    L_0x00fe:
         r14 = r10.getDialogs(r11);
         r0 = r14.size();
         r0 = r0 - r1;
-    L_0x010c:
-        if (r0 < 0) goto L_0x015a;
-    L_0x010e:
+    L_0x0107:
+        if (r0 < 0) goto L_0x0155;
+    L_0x0109:
         r2 = r14.get(r0);
         r2 = (org.telegram.tgnet.TLRPC.Dialog) r2;
         r5 = r2.pinned;
-        if (r5 == 0) goto L_0x0119;
-    L_0x0118:
-        goto L_0x0157;
-    L_0x0119:
+        if (r5 == 0) goto L_0x0114;
+    L_0x0113:
+        goto L_0x0152;
+    L_0x0114:
         r5 = r2.id;
         r7 = (int) r5;
         r8 = r5 >> r4;
         r9 = (int) r8;
-        if (r7 == 0) goto L_0x0157;
-    L_0x0121:
-        if (r9 == r1) goto L_0x0157;
-    L_0x0123:
+        if (r7 == 0) goto L_0x0152;
+    L_0x011c:
+        if (r9 == r1) goto L_0x0152;
+    L_0x011e:
         r2 = r2.top_message;
-        if (r2 <= 0) goto L_0x0157;
-    L_0x0127:
+        if (r2 <= 0) goto L_0x0152;
+    L_0x0122:
         r2 = r10.dialogMessage;
         r2 = r2.get(r5);
         r2 = (org.telegram.messenger.MessageObject) r2;
-        if (r2 == 0) goto L_0x0157;
-    L_0x0131:
+        if (r2 == 0) goto L_0x0152;
+    L_0x012c:
         r5 = r2.getId();
-        if (r5 <= 0) goto L_0x0157;
-    L_0x0137:
+        if (r5 <= 0) goto L_0x0152;
+    L_0x0132:
         r14 = r2.messageOwner;
         r0 = r14.date;
         r12.offset_date = r0;
@@ -6858,38 +6838,38 @@ public class MessagesController extends BaseController implements NotificationCe
         r12.offset_id = r0;
         r14 = r14.to_id;
         r0 = r14.channel_id;
-        if (r0 == 0) goto L_0x0149;
-    L_0x0147:
+        if (r0 == 0) goto L_0x0144;
+    L_0x0142:
         r14 = -r0;
-        goto L_0x0150;
-    L_0x0149:
+        goto L_0x014b;
+    L_0x0144:
         r0 = r14.chat_id;
-        if (r0 == 0) goto L_0x014e;
-    L_0x014d:
-        goto L_0x0147;
-    L_0x014e:
+        if (r0 == 0) goto L_0x0149;
+    L_0x0148:
+        goto L_0x0142;
+    L_0x0149:
         r14 = r14.user_id;
-    L_0x0150:
+    L_0x014b:
         r14 = r10.getInputPeer(r14);
         r12.offset_peer = r14;
-        goto L_0x015b;
-    L_0x0157:
+        goto L_0x0156;
+    L_0x0152:
         r0 = r0 + -1;
-        goto L_0x010c;
-    L_0x015a:
+        goto L_0x0107;
+    L_0x0155:
         r1 = 0;
-    L_0x015b:
-        if (r1 != 0) goto L_0x0164;
-    L_0x015d:
+    L_0x0156:
+        if (r1 != 0) goto L_0x015f;
+    L_0x0158:
         r14 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty;
         r14.<init>();
         r12.offset_peer = r14;
-    L_0x0164:
+    L_0x015f:
         r14 = r10.getConnectionsManager();
         r0 = new org.telegram.messenger.-$$Lambda$MessagesController$INiSSH41hlqDqoaByzQ3Bgb39Ik;
         r0.<init>(r10, r11, r13, r15);
         r14.sendRequest(r12, r0);
-    L_0x0170:
+    L_0x016b:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.loadDialogs(int, int, int, boolean, java.lang.Runnable):void");
@@ -7582,24 +7562,26 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$null$137$MessagesController(messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         int i;
+        Dialog dialog;
+        long j;
         messages_Dialogs messages_dialogs2 = messages_dialogs;
         LongSparseArray longSparseArray3 = longSparseArray;
         this.resetingDialogs = false;
         applyDialogsNotificationsSettings(messages_dialogs2.dialogs);
-        MediaDataController mediaDataController = getMediaDataController();
-        mediaDataController.clearAllDrafts(false);
-        mediaDataController.loadDraftsIfNeed();
+        if (!getUserConfig().draftsLoaded) {
+            getMediaDataController().loadDrafts();
+        }
         putUsers(messages_dialogs2.users, false);
         putChats(messages_dialogs2.chats, false);
         for (i = 0; i < this.allDialogs.size(); i++) {
-            Dialog dialog = (Dialog) this.allDialogs.get(i);
+            dialog = (Dialog) this.allDialogs.get(i);
             if (!DialogObject.isSecretDialogId(dialog.id)) {
                 this.dialogs_dict.remove(dialog.id);
                 MessageObject messageObject = (MessageObject) this.dialogMessage.get(dialog.id);
                 this.dialogMessage.remove(dialog.id);
                 if (messageObject != null) {
                     this.dialogMessagesByIds.remove(messageObject.getId());
-                    long j = messageObject.messageOwner.random_id;
+                    j = messageObject.messageOwner.random_id;
                     if (j != 0) {
                         this.dialogMessagesByRandomIds.remove(j);
                     }
@@ -7607,20 +7589,19 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         for (i = 0; i < longSparseArray.size(); i++) {
-            long keyAt = longSparseArray3.keyAt(i);
-            Dialog dialog2 = (Dialog) longSparseArray3.valueAt(i);
-            DraftMessage draftMessage = dialog2.draft;
-            if (draftMessage instanceof TL_draftMessage) {
-                mediaDataController.saveDraft(dialog2.id, draftMessage, null, false);
+            j = longSparseArray3.keyAt(i);
+            dialog = (Dialog) longSparseArray3.valueAt(i);
+            if (dialog.draft instanceof TL_draftMessage) {
+                getMediaDataController().saveDraft(dialog.id, dialog.draft, null, false);
             }
-            this.dialogs_dict.put(keyAt, dialog2);
-            MessageObject messageObject2 = (MessageObject) longSparseArray2.get(dialog2.id);
-            this.dialogMessage.put(keyAt, messageObject2);
+            this.dialogs_dict.put(j, dialog);
+            MessageObject messageObject2 = (MessageObject) longSparseArray2.get(dialog.id);
+            this.dialogMessage.put(j, messageObject2);
             if (messageObject2 != null && messageObject2.messageOwner.to_id.channel_id == 0) {
                 this.dialogMessagesByIds.put(messageObject2.getId(), messageObject2);
-                long j2 = messageObject2.messageOwner.random_id;
-                if (j2 != 0) {
-                    this.dialogMessagesByRandomIds.put(j2, messageObject2);
+                j = messageObject2.messageOwner.random_id;
+                if (j != 0) {
+                    this.dialogMessagesByRandomIds.put(j, messageObject2);
                 }
             }
         }
@@ -7637,7 +7618,7 @@ public class MessagesController extends BaseController implements NotificationCe
         i = getUserConfig().getTotalDialogsCount(0);
         int[] dialogLoadOffsets = getUserConfig().getDialogLoadOffsets(0);
         if (!(i >= 400 || dialogLoadOffsets[0] == -1 || dialogLoadOffsets[0] == Integer.MAX_VALUE)) {
-            loadDialogs(0, 0, 100, false);
+            loadDialogs(0, 100, 0, false);
         }
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
@@ -8575,7 +8556,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         int i9 = i3;
         if (i7 != this.DIALOGS_LOAD_TYPE_CACHE) {
             applyDialogsNotificationsSettings(messages_dialogs2.dialogs);
-            getMediaDataController().loadDraftsIfNeed();
+            if (!getUserConfig().draftsLoaded) {
+                getMediaDataController().loadDrafts();
+            }
         }
         putUsers(messages_dialogs2.users, i7 == this.DIALOGS_LOAD_TYPE_CACHE);
         putChats(messages_dialogs2.chats, i7 == this.DIALOGS_LOAD_TYPE_CACHE);
@@ -8705,7 +8688,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.allDialogs.add(this.dialogs_dict.valueAt(i6));
         }
         sortDialogs(z ? sparseArray : null);
-        putAllNeededDraftDialogs();
         if (!(i7 == this.DIALOGS_LOAD_TYPE_CHANNEL || i7 == this.DIALOGS_LOAD_TYPE_UNKNOWN || z)) {
             SparseBooleanArray sparseBooleanArray = this.dialogsEndReached;
             messages_Dialogs messages_dialogs3 = messages_dialogs;
@@ -8735,7 +8717,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         } else {
             size = 0;
             if (!(dialogLoadOffsets[0] == -1 || dialogLoadOffsets[0] == Integer.MAX_VALUE)) {
-                loadDialogs(i8, 0, 100, false);
+                loadDialogs(0, 100, i8, false);
             }
         }
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[size]);
@@ -9128,7 +9110,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public /* synthetic */ void lambda$null$150$MessagesController(Dialog dialog) {
         Dialog dialog2 = (Dialog) this.dialogs_dict.get(dialog.id);
-        if (dialog2 != null && dialog2.top_message == 0 && getMediaDataController().getDraft(dialog.id) == null) {
+        if (dialog2 != null && dialog2.top_message == 0) {
             deleteDialog(dialog.id, 3);
         }
     }
@@ -10042,7 +10024,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$gyfvQkMWv4yBSfc0n_us4Q2AvCo(intCallback, updates));
             return;
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$TbqqFW17Bay6UwXMq2HUYJTgBaE(this, intCallback, context, alertDialog, tL_error, baseFragment, tL_messages_migrateChat));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$wjlb2UsKFc6f-xmKweM_XHqheM4(this, context, alertDialog, tL_error, baseFragment, tL_messages_migrateChat));
     }
 
     static /* synthetic */ void lambda$null$177(Context context, AlertDialog alertDialog) {
@@ -10067,10 +10049,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$179$MessagesController(IntCallback intCallback, Context context, AlertDialog alertDialog, TL_error tL_error, BaseFragment baseFragment, TL_messages_migrateChat tL_messages_migrateChat) {
-        if (intCallback != null) {
-            intCallback.run(0);
-        }
+    public /* synthetic */ void lambda$null$179$MessagesController(Context context, AlertDialog alertDialog, TL_error tL_error, BaseFragment baseFragment, TL_messages_migrateChat tL_messages_migrateChat) {
         if (!((Activity) context).isFinishing()) {
             try {
                 alertDialog.dismiss();
@@ -17470,66 +17449,66 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$uO7I-mlxQHl5Ek93CeE8oQ77KXo(this, arrayList));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0988  */
-    /* JADX WARNING: Removed duplicated region for block: B:448:0x0a51  */
-    /* JADX WARNING: Removed duplicated region for block: B:421:0x09a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:450:0x0a54  */
-    /* JADX WARNING: Removed duplicated region for block: B:452:0x0a61  */
-    /* JADX WARNING: Removed duplicated region for block: B:454:0x0a65  */
-    /* JADX WARNING: Removed duplicated region for block: B:456:0x0a6b  */
-    /* JADX WARNING: Removed duplicated region for block: B:461:0x0a94  */
-    /* JADX WARNING: Removed duplicated region for block: B:460:0x0a84  */
-    /* JADX WARNING: Removed duplicated region for block: B:463:0x0a98  */
-    /* JADX WARNING: Removed duplicated region for block: B:503:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:466:0x0aad  */
-    public /* synthetic */ void lambda$processUpdateArray$268$MessagesController(int r33, java.util.ArrayList r34, android.util.LongSparseArray r35, android.util.LongSparseArray r36, android.util.LongSparseArray r37, android.util.LongSparseArray r38, boolean r39, java.util.ArrayList r40, java.util.ArrayList r41, android.util.SparseArray r42, java.util.ArrayList r43) {
+    /* JADX WARNING: Removed duplicated region for block: B:420:0x0981  */
+    /* JADX WARNING: Removed duplicated region for block: B:451:0x0a4a  */
+    /* JADX WARNING: Removed duplicated region for block: B:424:0x099b  */
+    /* JADX WARNING: Removed duplicated region for block: B:453:0x0a4d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0a5a  */
+    /* JADX WARNING: Removed duplicated region for block: B:457:0x0a5e  */
+    /* JADX WARNING: Removed duplicated region for block: B:460:0x0a67  */
+    /* JADX WARNING: Removed duplicated region for block: B:465:0x0a90  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0a80  */
+    /* JADX WARNING: Removed duplicated region for block: B:467:0x0a94  */
+    /* JADX WARNING: Removed duplicated region for block: B:507:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:470:0x0aa9  */
+    public /* synthetic */ void lambda$processUpdateArray$268$MessagesController(int r40, java.util.ArrayList r41, android.util.LongSparseArray r42, android.util.LongSparseArray r43, android.util.LongSparseArray r44, android.util.LongSparseArray r45, boolean r46, java.util.ArrayList r47, java.util.ArrayList r48, android.util.SparseArray r49, java.util.ArrayList r50) {
         /*
-        r32 = this;
-        r8 = r32;
-        r9 = r34;
-        r10 = r35;
-        r11 = r36;
-        r12 = r37;
-        r13 = r38;
-        r14 = r41;
-        r15 = r43;
+        r39 = this;
+        r8 = r39;
+        r9 = r41;
+        r10 = r42;
+        r11 = r43;
+        r12 = r44;
+        r13 = r45;
+        r14 = r48;
+        r15 = r50;
         r3 = 0;
-        if (r9 == 0) goto L_0x0880;
+        if (r9 == 0) goto L_0x087e;
     L_0x0013:
+        r7 = new java.util.ArrayList;
+        r7.<init>();
         r5 = new java.util.ArrayList;
         r5.<init>();
-        r4 = new java.util.ArrayList;
-        r4.<init>();
-        r6 = r34.size();
-        r22 = r33;
-        r7 = 0;
+        r4 = r41.size();
+        r22 = r40;
+        r6 = 0;
         r20 = 0;
         r21 = 0;
     L_0x0028:
-        if (r7 >= r6) goto L_0x0856;
+        if (r6 >= r4) goto L_0x0857;
     L_0x002a:
-        r0 = r9.get(r7);
+        r0 = r9.get(r6);
         r0 = (org.telegram.tgnet.TLRPC.Update) r0;
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePrivacy;
-        if (r2 == 0) goto L_0x00c4;
+        if (r2 == 0) goto L_0x00c3;
     L_0x0034:
         r0 = (org.telegram.tgnet.TLRPC.TL_updatePrivacy) r0;
         r2 = r0.key;
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyStatusTimestamp;
         if (r1 == 0) goto L_0x004b;
     L_0x003c:
-        r1 = r32.getContactsController();
+        r1 = r39.getContactsController();
         r0 = r0.rules;
         r1.setPrivacyRules(r0, r3);
     L_0x0045:
-        r18 = 3;
-        r19 = 2;
+        r19 = 3;
+        r23 = 2;
         goto L_0x00b9;
     L_0x004b:
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyChatInvite;
         if (r1 == 0) goto L_0x005a;
     L_0x004f:
-        r1 = r32.getContactsController();
+        r1 = r39.getContactsController();
         r0 = r0.rules;
         r2 = 1;
         r1.setPrivacyRules(r0, r2);
@@ -17538,28 +17517,28 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyPhoneCall;
         if (r1 == 0) goto L_0x0069;
     L_0x005e:
-        r1 = r32.getContactsController();
+        r1 = r39.getContactsController();
         r0 = r0.rules;
         r2 = 2;
         r1.setPrivacyRules(r0, r2);
         goto L_0x0045;
     L_0x0069:
-        r19 = 2;
+        r23 = 2;
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyPhoneP2P;
         if (r1 == 0) goto L_0x007c;
     L_0x006f:
-        r1 = r32.getContactsController();
+        r1 = r39.getContactsController();
         r0 = r0.rules;
         r2 = 3;
         r1.setPrivacyRules(r0, r2);
-        r18 = 3;
+        r19 = 3;
         goto L_0x00b9;
     L_0x007c:
-        r18 = 3;
+        r19 = 3;
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyProfilePhoto;
         if (r1 == 0) goto L_0x008d;
     L_0x0082:
-        r1 = r32.getContactsController();
+        r1 = r39.getContactsController();
         r0 = r0.rules;
         r2 = 4;
         r1.setPrivacyRules(r0, r2);
@@ -17568,7 +17547,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyForwards;
         if (r1 == 0) goto L_0x009c;
     L_0x0091:
-        r1 = r32.getContactsController();
+        r1 = r39.getContactsController();
         r0 = r0.rules;
         r2 = 5;
         r1.setPrivacyRules(r0, r2);
@@ -17577,7 +17556,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyPhoneNumber;
         if (r1 == 0) goto L_0x00ab;
     L_0x00a0:
-        r1 = r32.getContactsController();
+        r1 = r39.getContactsController();
         r0 = r0.rules;
         r2 = 6;
         r1.setPrivacyRules(r0, r2);
@@ -17586,110 +17565,110 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_privacyKeyAddedByPhone;
         if (r1 == 0) goto L_0x00b9;
     L_0x00af:
-        r1 = r32.getContactsController();
+        r1 = r39.getContactsController();
         r0 = r0.rules;
         r2 = 7;
         r1.setPrivacyRules(r0, r2);
     L_0x00b9:
-        r31 = r4;
+        r17 = r4;
         r9 = r5;
         r16 = r6;
-        r17 = r7;
-    L_0x00c0:
+        r5 = r7;
+    L_0x00bf:
         r1 = r22;
         goto L_0x0846;
-    L_0x00c4:
-        r18 = 3;
-        r19 = 2;
+    L_0x00c3:
+        r19 = 3;
+        r23 = 2;
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateUserStatus;
-        if (r1 == 0) goto L_0x0126;
-    L_0x00cc:
+        if (r1 == 0) goto L_0x0125;
+    L_0x00cb:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateUserStatus) r0;
         r1 = r0.user_id;
         r1 = java.lang.Integer.valueOf(r1);
         r1 = r8.getUser(r1);
         r2 = r0.status;
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_userStatusRecently;
-        if (r3 == 0) goto L_0x00e3;
-    L_0x00de:
+        if (r3 == 0) goto L_0x00e2;
+    L_0x00dd:
         r3 = -100;
         r2.expires = r3;
-        goto L_0x00f4;
-    L_0x00e3:
+        goto L_0x00f3;
+    L_0x00e2:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_userStatusLastWeek;
-        if (r3 == 0) goto L_0x00ec;
-    L_0x00e7:
+        if (r3 == 0) goto L_0x00eb;
+    L_0x00e6:
         r3 = -101; // 0xffffffffffffff9b float:NaN double:NaN;
         r2.expires = r3;
-        goto L_0x00f4;
-    L_0x00ec:
+        goto L_0x00f3;
+    L_0x00eb:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_userStatusLastMonth;
-        if (r3 == 0) goto L_0x00f4;
-    L_0x00f0:
+        if (r3 == 0) goto L_0x00f3;
+    L_0x00ef:
         r3 = -102; // 0xffffffffffffff9a float:NaN double:NaN;
         r2.expires = r3;
-    L_0x00f4:
-        if (r1 == 0) goto L_0x00fe;
-    L_0x00f6:
+    L_0x00f3:
+        if (r1 == 0) goto L_0x00fd;
+    L_0x00f5:
         r2 = r0.user_id;
         r1.id = r2;
         r2 = r0.status;
         r1.status = r2;
-    L_0x00fe:
+    L_0x00fd:
         r1 = new org.telegram.tgnet.TLRPC$TL_user;
         r1.<init>();
         r2 = r0.user_id;
         r1.id = r2;
         r2 = r0.status;
         r1.status = r2;
-        r4.add(r1);
+        r5.add(r1);
         r1 = r0.user_id;
-        r2 = r32.getUserConfig();
+        r2 = r39.getUserConfig();
         r2 = r2.getClientUserId();
         if (r1 != r2) goto L_0x00b9;
-    L_0x011a:
-        r1 = r32.getNotificationsController();
+    L_0x0119:
+        r1 = r39.getNotificationsController();
         r0 = r0.status;
         r0 = r0.expires;
         r1.setLastOnlineFromOtherDevice(r0);
         goto L_0x00b9;
-    L_0x0126:
+    L_0x0125:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateUserName;
-        if (r1 == 0) goto L_0x0182;
-    L_0x012a:
+        if (r1 == 0) goto L_0x0181;
+    L_0x0129:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateUserName) r0;
         r1 = r0.user_id;
         r1 = java.lang.Integer.valueOf(r1);
         r1 = r8.getUser(r1);
-        if (r1 == 0) goto L_0x0168;
-    L_0x0138:
+        if (r1 == 0) goto L_0x0167;
+    L_0x0137:
         r2 = org.telegram.messenger.UserObject.isContact(r1);
-        if (r2 != 0) goto L_0x0146;
-    L_0x013e:
+        if (r2 != 0) goto L_0x0145;
+    L_0x013d:
         r2 = r0.first_name;
         r1.first_name = r2;
         r2 = r0.last_name;
         r1.last_name = r2;
-    L_0x0146:
+    L_0x0145:
         r2 = r1.username;
         r2 = android.text.TextUtils.isEmpty(r2);
-        if (r2 != 0) goto L_0x0155;
-    L_0x014e:
+        if (r2 != 0) goto L_0x0154;
+    L_0x014d:
         r2 = r8.objectsByUsernames;
         r3 = r1.username;
         r2.remove(r3);
-    L_0x0155:
+    L_0x0154:
         r2 = r0.username;
         r2 = android.text.TextUtils.isEmpty(r2);
-        if (r2 == 0) goto L_0x0164;
-    L_0x015d:
+        if (r2 == 0) goto L_0x0163;
+    L_0x015c:
         r2 = r8.objectsByUsernames;
         r3 = r0.username;
         r2.put(r3, r1);
-    L_0x0164:
+    L_0x0163:
         r2 = r0.username;
         r1.username = r2;
-    L_0x0168:
+    L_0x0167:
         r1 = new org.telegram.tgnet.TLRPC$TL_user;
         r1.<init>();
         r2 = r0.user_id;
@@ -17700,469 +17679,475 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.last_name = r2;
         r0 = r0.username;
         r1.username = r0;
-        r5.add(r1);
+        r7.add(r1);
         goto L_0x00b9;
-    L_0x0182:
+    L_0x0181:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateDialogPinned;
-        if (r1 == 0) goto L_0x01d9;
-    L_0x0186:
+        if (r1 == 0) goto L_0x01d5;
+    L_0x0185:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateDialogPinned) r0;
         r1 = r0.peer;
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_dialogPeer;
-        if (r2 == 0) goto L_0x0198;
-    L_0x018e:
+        if (r2 == 0) goto L_0x0197;
+    L_0x018d:
         r1 = (org.telegram.tgnet.TLRPC.TL_dialogPeer) r1;
         r1 = r1.peer;
         r1 = org.telegram.messenger.DialogObject.getPeerDialogId(r1);
         r2 = r1;
-        goto L_0x019a;
-    L_0x0198:
+        goto L_0x0199;
+    L_0x0197:
         r2 = 0;
-    L_0x019a:
+    L_0x0199:
         r1 = r0.pinned;
-        r26 = 0;
-        r27 = -1;
+        r25 = 0;
+        r26 = -1;
         r24 = r1;
-        r1 = r32;
-        r29 = r2;
-        r31 = r4;
+        r1 = r39;
+        r28 = r2;
+        r17 = r4;
         r4 = r24;
         r9 = r5;
-        r5 = r26;
+        r5 = r25;
         r16 = r6;
-        r17 = r7;
-        r15 = 2;
-        r6 = r27;
+        r15 = r7;
+        r14 = 0;
+        r6 = r26;
         r1 = r1.pinDialog(r2, r4, r5, r6);
-        if (r1 != 0) goto L_0x01d5;
-    L_0x01ba:
-        r1 = r32.getUserConfig();
+        if (r1 != 0) goto L_0x01d1;
+    L_0x01b8:
+        r1 = r39.getUserConfig();
         r2 = r0.folder_id;
         r3 = 0;
         r1.setPinnedDialogsLoaded(r2, r3);
-        r1 = r32.getUserConfig();
+        r1 = r39.getUserConfig();
         r1.saveConfig(r3);
         r0 = r0.folder_id;
-        r1 = r29;
-        r4 = 0;
-        r8.loadPinnedDialogs(r0, r1, r4);
-        goto L_0x00c0;
-    L_0x01d5:
+        r1 = r28;
+        r8.loadPinnedDialogs(r0, r1, r14);
+        goto L_0x01d2;
+    L_0x01d1:
         r3 = 0;
-        r4 = 0;
-        goto L_0x00c0;
-    L_0x01d9:
-        r31 = r4;
+    L_0x01d2:
+        r5 = r15;
+        goto L_0x00bf;
+    L_0x01d5:
+        r17 = r4;
         r9 = r5;
         r16 = r6;
-        r17 = r7;
+        r15 = r7;
         r3 = 0;
-        r4 = 0;
-        r15 = 2;
+        r14 = 0;
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePinnedDialogs;
-        if (r1 == 0) goto L_0x024f;
-    L_0x01e7:
+        if (r1 == 0) goto L_0x024d;
+    L_0x01e1:
         r0 = (org.telegram.tgnet.TLRPC.TL_updatePinnedDialogs) r0;
-        r1 = r32.getUserConfig();
+        r1 = r39.getUserConfig();
         r2 = r0.folder_id;
         r1.setPinnedDialogsLoaded(r2, r3);
-        r1 = r32.getUserConfig();
+        r1 = r39.getUserConfig();
         r1.saveConfig(r3);
         r1 = r0.flags;
         r2 = 1;
         r1 = r1 & r2;
-        if (r1 == 0) goto L_0x0245;
-    L_0x01ff:
-        r1 = new java.util.ArrayList;
-        r1.<init>();
-        r5 = r0.order;
-        r6 = r5.size();
-        r7 = 0;
-    L_0x020b:
-        if (r7 >= r6) goto L_0x0246;
-    L_0x020d:
-        r19 = r5.get(r7);
-        r2 = r19;
-        r2 = (org.telegram.tgnet.TLRPC.DialogPeer) r2;
-        r15 = r2 instanceof org.telegram.tgnet.TLRPC.TL_dialogPeer;
-        if (r15 == 0) goto L_0x0232;
+        if (r1 == 0) goto L_0x023f;
+    L_0x01f9:
+        r7 = new java.util.ArrayList;
+        r7.<init>();
+        r1 = r0.order;
+        r4 = r1.size();
+        r5 = 0;
+    L_0x0205:
+        if (r5 >= r4) goto L_0x023c;
+    L_0x0207:
+        r6 = r1.get(r5);
+        r6 = (org.telegram.tgnet.TLRPC.DialogPeer) r6;
+        r2 = r6 instanceof org.telegram.tgnet.TLRPC.TL_dialogPeer;
+        if (r2 == 0) goto L_0x022a;
+    L_0x0211:
+        r6 = (org.telegram.tgnet.TLRPC.TL_dialogPeer) r6;
+        r2 = r6.peer;
+        r6 = r2.user_id;
+        if (r6 == 0) goto L_0x021d;
     L_0x0219:
-        r2 = (org.telegram.tgnet.TLRPC.TL_dialogPeer) r2;
-        r2 = r2.peer;
-        r15 = r2.user_id;
-        if (r15 == 0) goto L_0x0225;
-    L_0x0221:
-        r23 = r5;
-        r4 = (long) r15;
-        goto L_0x0236;
+        r18 = r15;
+        r14 = (long) r6;
+        goto L_0x022e;
+    L_0x021d:
+        r18 = r15;
+        r6 = r2.chat_id;
+        if (r6 == 0) goto L_0x0225;
+    L_0x0223:
+        r2 = -r6;
+        goto L_0x0228;
     L_0x0225:
-        r23 = r5;
-        r4 = r2.chat_id;
-        if (r4 == 0) goto L_0x022d;
-    L_0x022b:
-        r2 = -r4;
-        goto L_0x0230;
-    L_0x022d:
         r2 = r2.channel_id;
         r2 = -r2;
-    L_0x0230:
-        r4 = (long) r2;
-        goto L_0x0236;
-    L_0x0232:
-        r23 = r5;
-        r4 = 0;
-    L_0x0236:
-        r2 = java.lang.Long.valueOf(r4);
-        r1.add(r2);
-        r7 = r7 + 1;
-        r5 = r23;
+    L_0x0228:
+        r14 = (long) r2;
+        goto L_0x022e;
+    L_0x022a:
+        r18 = r15;
+        r14 = 0;
+    L_0x022e:
+        r2 = java.lang.Long.valueOf(r14);
+        r7.add(r2);
+        r5 = r5 + 1;
+        r15 = r18;
         r2 = 1;
-        r4 = 0;
-        r15 = 2;
-        goto L_0x020b;
-    L_0x0245:
-        r1 = 0;
-    L_0x0246:
+        r14 = 0;
+        goto L_0x0205;
+    L_0x023c:
+        r18 = r15;
+        goto L_0x0242;
+    L_0x023f:
+        r18 = r15;
+        r7 = 0;
+    L_0x0242:
         r0 = r0.folder_id;
-        r4 = 0;
-        r8.loadPinnedDialogs(r0, r4, r1);
-        goto L_0x00c0;
-    L_0x024f:
-        r4 = 0;
-        r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateFolderPeers;
-        if (r1 == 0) goto L_0x0292;
+        r1 = 0;
+        r8.loadPinnedDialogs(r0, r1, r7);
+        r5 = r18;
+        goto L_0x00bf;
+    L_0x024d:
+        r18 = r15;
+        r1 = 0;
+        r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateFolderPeers;
+        if (r4 == 0) goto L_0x0292;
     L_0x0255:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateFolderPeers) r0;
-        r1 = r0.folder_peers;
-        r1 = r1.size();
-        r2 = 0;
+        r4 = r0.folder_peers;
+        r4 = r4.size();
+        r5 = 0;
     L_0x025e:
-        if (r2 >= r1) goto L_0x028e;
+        if (r5 >= r4) goto L_0x028c;
     L_0x0260:
         r6 = r0.folder_peers;
-        r6 = r6.get(r2);
+        r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.TL_folderPeer) r6;
         r7 = r6.peer;
-        r4 = org.telegram.messenger.DialogObject.getPeerDialogId(r7);
+        r14 = org.telegram.messenger.DialogObject.getPeerDialogId(r7);
         r7 = r8.dialogs_dict;
-        r4 = r7.get(r4);
-        r4 = (org.telegram.tgnet.TLRPC.Dialog) r4;
-        if (r4 != 0) goto L_0x0279;
+        r7 = r7.get(r14);
+        r7 = (org.telegram.tgnet.TLRPC.Dialog) r7;
+        if (r7 != 0) goto L_0x0279;
     L_0x0278:
         goto L_0x0289;
     L_0x0279:
-        r5 = r4.folder_id;
+        r14 = r7.folder_id;
         r6 = r6.folder_id;
-        if (r5 == r6) goto L_0x0289;
+        if (r14 == r6) goto L_0x0289;
     L_0x027f:
-        r4.pinned = r3;
-        r4.pinnedNum = r3;
-        r4.folder_id = r6;
-        r4 = 0;
-        r8.ensureFolderDialogExists(r6, r4);
+        r7.pinned = r3;
+        r7.pinnedNum = r3;
+        r7.folder_id = r6;
+        r7 = 0;
+        r8.ensureFolderDialogExists(r6, r7);
     L_0x0289:
-        r2 = r2 + 1;
-        r4 = 0;
+        r5 = r5 + 1;
         goto L_0x025e;
+    L_0x028c:
+        r5 = r18;
     L_0x028e:
         r21 = 1;
         goto L_0x0848;
     L_0x0292:
-        r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateUserPhoto;
-        if (r1 == 0) goto L_0x02ba;
+        r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateUserPhoto;
+        if (r4 == 0) goto L_0x02bc;
     L_0x0296:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateUserPhoto) r0;
-        r1 = r0.user_id;
-        r1 = java.lang.Integer.valueOf(r1);
-        r1 = r8.getUser(r1);
-        if (r1 == 0) goto L_0x02a8;
+        r4 = r0.user_id;
+        r4 = java.lang.Integer.valueOf(r4);
+        r4 = r8.getUser(r4);
+        if (r4 == 0) goto L_0x02a8;
     L_0x02a4:
-        r2 = r0.photo;
-        r1.photo = r2;
+        r5 = r0.photo;
+        r4.photo = r5;
     L_0x02a8:
-        r1 = new org.telegram.tgnet.TLRPC$TL_user;
-        r1.<init>();
-        r2 = r0.user_id;
-        r1.id = r2;
+        r4 = new org.telegram.tgnet.TLRPC$TL_user;
+        r4.<init>();
+        r5 = r0.user_id;
+        r4.id = r5;
         r0 = r0.photo;
-        r1.photo = r0;
-        r9.add(r1);
-        goto L_0x00c0;
-    L_0x02ba:
-        r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateUserPhone;
-        if (r1 == 0) goto L_0x02fd;
-    L_0x02be:
+        r4.photo = r0;
+        r5 = r18;
+        r5.add(r4);
+        goto L_0x00bf;
+    L_0x02bc:
+        r5 = r18;
+        r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateUserPhone;
+        if (r4 == 0) goto L_0x0301;
+    L_0x02c2:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateUserPhone) r0;
-        r1 = r0.user_id;
-        r1 = java.lang.Integer.valueOf(r1);
-        r1 = r8.getUser(r1);
-        if (r1 == 0) goto L_0x02eb;
-    L_0x02cc:
-        r2 = r0.phone;
-        r1.phone = r2;
-        r2 = org.telegram.messenger.Utilities.phoneBookQueue;
-        r4 = new org.telegram.messenger.-$$Lambda$MessagesController$k7hEf2Sqkmp6V-chvj_ni0sdttw;
-        r4.<init>(r8, r1);
-        r2.postRunnable(r4);
-        r1 = org.telegram.messenger.UserObject.isUserSelf(r1);
-        if (r1 == 0) goto L_0x02eb;
-    L_0x02e0:
-        r1 = r32.getNotificationCenter();
-        r2 = org.telegram.messenger.NotificationCenter.mainUserInfoChanged;
-        r4 = new java.lang.Object[r3];
-        r1.postNotificationName(r2, r4);
-    L_0x02eb:
-        r1 = new org.telegram.tgnet.TLRPC$TL_user;
-        r1.<init>();
-        r2 = r0.user_id;
-        r1.id = r2;
+        r4 = r0.user_id;
+        r4 = java.lang.Integer.valueOf(r4);
+        r4 = r8.getUser(r4);
+        if (r4 == 0) goto L_0x02ef;
+    L_0x02d0:
+        r6 = r0.phone;
+        r4.phone = r6;
+        r6 = org.telegram.messenger.Utilities.phoneBookQueue;
+        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$k7hEf2Sqkmp6V-chvj_ni0sdttw;
+        r7.<init>(r8, r4);
+        r6.postRunnable(r7);
+        r4 = org.telegram.messenger.UserObject.isUserSelf(r4);
+        if (r4 == 0) goto L_0x02ef;
+    L_0x02e4:
+        r4 = r39.getNotificationCenter();
+        r6 = org.telegram.messenger.NotificationCenter.mainUserInfoChanged;
+        r7 = new java.lang.Object[r3];
+        r4.postNotificationName(r6, r7);
+    L_0x02ef:
+        r4 = new org.telegram.tgnet.TLRPC$TL_user;
+        r4.<init>();
+        r6 = r0.user_id;
+        r4.id = r6;
         r0 = r0.phone;
-        r1.phone = r0;
-        r9.add(r1);
-        goto L_0x00c0;
-    L_0x02fd:
-        r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateNotifySettings;
-        if (r1 == 0) goto L_0x04a1;
+        r4.phone = r0;
+        r5.add(r4);
+        goto L_0x00bf;
     L_0x0301:
+        r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateNotifySettings;
+        if (r4 == 0) goto L_0x04a5;
+    L_0x0305:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateNotifySettings) r0;
-        r1 = r0.notify_settings;
-        r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
-        if (r1 == 0) goto L_0x0848;
-    L_0x0309:
-        if (r20 != 0) goto L_0x0311;
-    L_0x030b:
-        r1 = r8.notificationsPreferences;
-        r20 = r1.edit();
-    L_0x0311:
-        r1 = r20;
-        r2 = r32.getConnectionsManager();
-        r2 = r2.getCurrentTime();
-        r4 = r0.peer;
-        r5 = r4 instanceof org.telegram.tgnet.TLRPC.TL_notifyPeer;
-        if (r5 == 0) goto L_0x0435;
-    L_0x0321:
-        r4 = (org.telegram.tgnet.TLRPC.TL_notifyPeer) r4;
-        r4 = r4.peer;
-        r5 = r4.user_id;
-        if (r5 == 0) goto L_0x032b;
-    L_0x0329:
-        r4 = (long) r5;
-        goto L_0x0335;
-    L_0x032b:
-        r5 = r4.chat_id;
-        if (r5 == 0) goto L_0x0331;
+        r4 = r0.notify_settings;
+        r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
+        if (r4 == 0) goto L_0x0848;
+    L_0x030d:
+        if (r20 != 0) goto L_0x0315;
+    L_0x030f:
+        r4 = r8.notificationsPreferences;
+        r20 = r4.edit();
+    L_0x0315:
+        r4 = r20;
+        r6 = r39.getConnectionsManager();
+        r6 = r6.getCurrentTime();
+        r7 = r0.peer;
+        r14 = r7 instanceof org.telegram.tgnet.TLRPC.TL_notifyPeer;
+        if (r14 == 0) goto L_0x0439;
+    L_0x0325:
+        r7 = (org.telegram.tgnet.TLRPC.TL_notifyPeer) r7;
+        r7 = r7.peer;
+        r14 = r7.user_id;
+        if (r14 == 0) goto L_0x032f;
+    L_0x032d:
+        r14 = (long) r14;
+        goto L_0x0339;
     L_0x032f:
-        r4 = -r5;
-        goto L_0x0334;
-    L_0x0331:
-        r4 = r4.channel_id;
-        r4 = -r4;
-    L_0x0334:
-        r4 = (long) r4;
+        r14 = r7.chat_id;
+        if (r14 == 0) goto L_0x0335;
+    L_0x0333:
+        r7 = -r14;
+        goto L_0x0338;
     L_0x0335:
-        r6 = r8.dialogs_dict;
-        r6 = r6.get(r4);
-        r6 = (org.telegram.tgnet.TLRPC.Dialog) r6;
-        if (r6 == 0) goto L_0x0343;
-    L_0x033f:
-        r7 = r0.notify_settings;
-        r6.notify_settings = r7;
+        r7 = r7.channel_id;
+        r7 = -r7;
+    L_0x0338:
+        r14 = (long) r7;
+    L_0x0339:
+        r7 = r8.dialogs_dict;
+        r7 = r7.get(r14);
+        r7 = (org.telegram.tgnet.TLRPC.Dialog) r7;
+        if (r7 == 0) goto L_0x0347;
     L_0x0343:
-        r7 = r0.notify_settings;
-        r7 = r7.flags;
-        r15 = 2;
-        r7 = r7 & r15;
-        r15 = "silent_";
-        if (r7 == 0) goto L_0x0364;
-    L_0x034d:
-        r7 = new java.lang.StringBuilder;
-        r7.<init>();
-        r7.append(r15);
-        r7.append(r4);
-        r7 = r7.toString();
-        r15 = r0.notify_settings;
-        r15 = r15.silent;
-        r1.putBoolean(r7, r15);
-        goto L_0x0376;
-    L_0x0364:
-        r7 = new java.lang.StringBuilder;
-        r7.<init>();
-        r7.append(r15);
-        r7.append(r4);
-        r7 = r7.toString();
-        r1.remove(r7);
-    L_0x0376:
-        r7 = r0.notify_settings;
-        r15 = r7.flags;
-        r20 = 4;
-        r15 = r15 & 4;
-        r3 = "notify2_";
-        if (r15 == 0) goto L_0x0414;
-    L_0x0382:
-        r15 = r7.mute_until;
-        if (r15 <= r2) goto L_0x03f2;
-    L_0x0386:
-        r7 = 31536000; // 0x1e13380 float:8.2725845E-38 double:1.5580854E-316;
-        r2 = r2 + r7;
-        if (r15 <= r2) goto L_0x03aa;
-    L_0x038c:
-        r2 = new java.lang.StringBuilder;
-        r2.<init>();
-        r2.append(r3);
-        r2.append(r4);
-        r2 = r2.toString();
-        r3 = 2;
-        r1.putInt(r2, r3);
-        if (r6 == 0) goto L_0x03a8;
-    L_0x03a1:
-        r0 = r0.notify_settings;
-        r2 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        r0.mute_until = r2;
-    L_0x03a8:
-        r15 = 0;
-        goto L_0x03db;
-    L_0x03aa:
-        r2 = new java.lang.StringBuilder;
-        r2.<init>();
-        r2.append(r3);
-        r2.append(r4);
-        r2 = r2.toString();
-        r3 = 3;
-        r1.putInt(r2, r3);
-        r2 = new java.lang.StringBuilder;
-        r2.<init>();
-        r3 = "notifyuntil_";
-        r2.append(r3);
-        r2.append(r4);
-        r2 = r2.toString();
+        r1 = r0.notify_settings;
+        r7.notify_settings = r1;
+    L_0x0347:
+        r1 = r0.notify_settings;
+        r1 = r1.flags;
+        r2 = 2;
+        r1 = r1 & r2;
+        r3 = "silent_";
+        if (r1 == 0) goto L_0x0368;
+    L_0x0351:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r1.append(r3);
+        r1.append(r14);
+        r1 = r1.toString();
         r3 = r0.notify_settings;
-        r3 = r3.mute_until;
-        r1.putInt(r2, r3);
-        if (r6 == 0) goto L_0x03db;
-    L_0x03d7:
+        r3 = r3.silent;
+        r4.putBoolean(r1, r3);
+        goto L_0x037a;
+    L_0x0368:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r1.append(r3);
+        r1.append(r14);
+        r1 = r1.toString();
+        r4.remove(r1);
+    L_0x037a:
+        r1 = r0.notify_settings;
+        r3 = r1.flags;
+        r18 = 4;
+        r3 = r3 & 4;
+        r2 = "notify2_";
+        if (r3 == 0) goto L_0x0418;
+    L_0x0386:
+        r3 = r1.mute_until;
+        if (r3 <= r6) goto L_0x03f6;
+    L_0x038a:
+        r1 = 31536000; // 0x1e13380 float:8.2725845E-38 double:1.5580854E-316;
+        r6 = r6 + r1;
+        if (r3 <= r6) goto L_0x03ae;
+    L_0x0390:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r1.append(r2);
+        r1.append(r14);
+        r1 = r1.toString();
+        r2 = 2;
+        r4.putInt(r1, r2);
+        if (r7 == 0) goto L_0x03ac;
+    L_0x03a5:
         r0 = r0.notify_settings;
-        r0.mute_until = r15;
+        r1 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+        r0.mute_until = r1;
+    L_0x03ac:
+        r3 = 0;
+        goto L_0x03df;
+    L_0x03ae:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r1.append(r2);
+        r1.append(r14);
+        r1 = r1.toString();
+        r2 = 3;
+        r4.putInt(r1, r2);
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r2 = "notifyuntil_";
+        r1.append(r2);
+        r1.append(r14);
+        r1 = r1.toString();
+        r2 = r0.notify_settings;
+        r2 = r2.mute_until;
+        r4.putInt(r1, r2);
+        if (r7 == 0) goto L_0x03df;
     L_0x03db:
-        r0 = r32.getMessagesStorage();
-        r2 = (long) r15;
-        r6 = 32;
-        r2 = r2 << r6;
+        r0 = r0.notify_settings;
+        r0.mute_until = r3;
+    L_0x03df:
+        r0 = r39.getMessagesStorage();
+        r1 = (long) r3;
+        r3 = 32;
+        r1 = r1 << r3;
         r6 = 1;
-        r2 = r2 | r6;
-        r0.setDialogFlags(r4, r2);
-        r0 = r32.getNotificationsController();
-        r0.removeNotificationsForDialog(r4);
-        goto L_0x049d;
-    L_0x03f2:
-        r2 = 0;
-        if (r6 == 0) goto L_0x03f7;
-    L_0x03f5:
-        r7.mute_until = r2;
-    L_0x03f7:
+        r1 = r1 | r6;
+        r0.setDialogFlags(r14, r1);
+        r0 = r39.getNotificationsController();
+        r0.removeNotificationsForDialog(r14);
+        goto L_0x04a1;
+    L_0x03f6:
+        r3 = 0;
+        if (r7 == 0) goto L_0x03fb;
+    L_0x03f9:
+        r1.mute_until = r3;
+    L_0x03fb:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r0.append(r3);
-        r0.append(r4);
+        r0.append(r2);
+        r0.append(r14);
         r0 = r0.toString();
-        r1.putInt(r0, r2);
-        r0 = r32.getMessagesStorage();
-        r6 = 0;
-        r0.setDialogFlags(r4, r6);
-        goto L_0x049d;
-    L_0x0414:
-        r2 = 0;
-        if (r6 == 0) goto L_0x0419;
-    L_0x0417:
-        r7.mute_until = r2;
-    L_0x0419:
+        r4.putInt(r0, r3);
+        r0 = r39.getMessagesStorage();
+        r1 = 0;
+        r0.setDialogFlags(r14, r1);
+        goto L_0x04a1;
+    L_0x0418:
+        r3 = 0;
+        if (r7 == 0) goto L_0x041d;
+    L_0x041b:
+        r1.mute_until = r3;
+    L_0x041d:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r0.append(r3);
-        r0.append(r4);
+        r0.append(r2);
+        r0.append(r14);
         r0 = r0.toString();
-        r1.remove(r0);
-        r0 = r32.getMessagesStorage();
-        r2 = 0;
-        r0.setDialogFlags(r4, r2);
-        goto L_0x049d;
-    L_0x0435:
-        r2 = r4 instanceof org.telegram.tgnet.TLRPC.TL_notifyChats;
-        if (r2 == 0) goto L_0x0458;
+        r4.remove(r0);
+        r0 = r39.getMessagesStorage();
+        r1 = 0;
+        r0.setDialogFlags(r14, r1);
+        goto L_0x04a1;
     L_0x0439:
-        r2 = r0.notify_settings;
-        r3 = r2.flags;
-        r4 = 1;
-        r3 = r3 & r4;
-        if (r3 == 0) goto L_0x0448;
-    L_0x0441:
-        r2 = r2.show_previews;
-        r3 = "EnablePreviewGroup";
-        r1.putBoolean(r3, r2);
-    L_0x0448:
-        r0 = r0.notify_settings;
-        r2 = r0.flags;
-        r3 = 4;
+        r1 = r7 instanceof org.telegram.tgnet.TLRPC.TL_notifyChats;
+        if (r1 == 0) goto L_0x045c;
+    L_0x043d:
+        r1 = r0.notify_settings;
+        r2 = r1.flags;
+        r3 = 1;
         r2 = r2 & r3;
-        if (r2 == 0) goto L_0x049d;
-    L_0x0450:
+        if (r2 == 0) goto L_0x044c;
+    L_0x0445:
+        r1 = r1.show_previews;
+        r2 = "EnablePreviewGroup";
+        r4.putBoolean(r2, r1);
+    L_0x044c:
+        r0 = r0.notify_settings;
+        r1 = r0.flags;
+        r2 = 4;
+        r1 = r1 & r2;
+        if (r1 == 0) goto L_0x04a1;
+    L_0x0454:
         r0 = r0.mute_until;
-        r2 = "EnableGroup2";
-        r1.putInt(r2, r0);
-        goto L_0x049d;
-    L_0x0458:
-        r2 = r4 instanceof org.telegram.tgnet.TLRPC.TL_notifyUsers;
-        if (r2 == 0) goto L_0x047b;
+        r1 = "EnableGroup2";
+        r4.putInt(r1, r0);
+        goto L_0x04a1;
     L_0x045c:
-        r2 = r0.notify_settings;
-        r3 = r2.flags;
-        r4 = 1;
-        r3 = r3 & r4;
-        if (r3 == 0) goto L_0x046b;
-    L_0x0464:
-        r2 = r2.show_previews;
-        r3 = "EnablePreviewAll";
-        r1.putBoolean(r3, r2);
-    L_0x046b:
-        r0 = r0.notify_settings;
-        r2 = r0.flags;
-        r3 = 4;
+        r1 = r7 instanceof org.telegram.tgnet.TLRPC.TL_notifyUsers;
+        if (r1 == 0) goto L_0x047f;
+    L_0x0460:
+        r1 = r0.notify_settings;
+        r2 = r1.flags;
+        r3 = 1;
         r2 = r2 & r3;
-        if (r2 == 0) goto L_0x049d;
-    L_0x0473:
+        if (r2 == 0) goto L_0x046f;
+    L_0x0468:
+        r1 = r1.show_previews;
+        r2 = "EnablePreviewAll";
+        r4.putBoolean(r2, r1);
+    L_0x046f:
+        r0 = r0.notify_settings;
+        r1 = r0.flags;
+        r2 = 4;
+        r1 = r1 & r2;
+        if (r1 == 0) goto L_0x04a1;
+    L_0x0477:
         r0 = r0.mute_until;
-        r2 = "EnableAll2";
-        r1.putInt(r2, r0);
-        goto L_0x049d;
-    L_0x047b:
-        r2 = r4 instanceof org.telegram.tgnet.TLRPC.TL_notifyBroadcasts;
-        if (r2 == 0) goto L_0x049d;
+        r1 = "EnableAll2";
+        r4.putInt(r1, r0);
+        goto L_0x04a1;
     L_0x047f:
-        r2 = r0.notify_settings;
-        r3 = r2.flags;
-        r4 = 1;
-        r3 = r3 & r4;
-        if (r3 == 0) goto L_0x048e;
-    L_0x0487:
-        r2 = r2.show_previews;
-        r3 = "EnablePreviewChannel";
-        r1.putBoolean(r3, r2);
-    L_0x048e:
-        r0 = r0.notify_settings;
-        r2 = r0.flags;
-        r3 = 4;
+        r1 = r7 instanceof org.telegram.tgnet.TLRPC.TL_notifyBroadcasts;
+        if (r1 == 0) goto L_0x04a1;
+    L_0x0483:
+        r1 = r0.notify_settings;
+        r2 = r1.flags;
+        r3 = 1;
         r2 = r2 & r3;
-        if (r2 == 0) goto L_0x049d;
-    L_0x0496:
+        if (r2 == 0) goto L_0x0492;
+    L_0x048b:
+        r1 = r1.show_previews;
+        r2 = "EnablePreviewChannel";
+        r4.putBoolean(r2, r1);
+    L_0x0492:
+        r0 = r0.notify_settings;
+        r1 = r0.flags;
+        r2 = 4;
+        r1 = r1 & r2;
+        if (r1 == 0) goto L_0x04a1;
+    L_0x049a:
         r0 = r0.mute_until;
-        r2 = "EnableChannel2";
-        r1.putInt(r2, r0);
-    L_0x049d:
-        r20 = r1;
-        goto L_0x0848;
+        r1 = "EnableChannel2";
+        r4.putInt(r1, r0);
     L_0x04a1:
-        r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateChannel;
-        if (r1 == 0) goto L_0x04fa;
+        r20 = r4;
+        goto L_0x0848;
     L_0x04a5:
+        r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateChannel;
+        if (r1 == 0) goto L_0x04fe;
+    L_0x04a9:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateChannel) r0;
         r1 = r8.dialogs_dict;
         r2 = r0.channel_id;
@@ -18173,567 +18158,565 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r0.channel_id;
         r2 = java.lang.Integer.valueOf(r2);
         r2 = r8.getChat(r2);
-        if (r2 == 0) goto L_0x04ed;
-    L_0x04bf:
-        if (r1 != 0) goto L_0x04d4;
-    L_0x04c1:
-        r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channel;
-        if (r3 == 0) goto L_0x04d4;
+        if (r2 == 0) goto L_0x04f1;
+    L_0x04c3:
+        if (r1 != 0) goto L_0x04d8;
     L_0x04c5:
-        r3 = r2.left;
-        if (r3 != 0) goto L_0x04d4;
+        r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channel;
+        if (r3 == 0) goto L_0x04d8;
     L_0x04c9:
+        r3 = r2.left;
+        if (r3 != 0) goto L_0x04d8;
+    L_0x04cd:
         r1 = org.telegram.messenger.Utilities.stageQueue;
         r2 = new org.telegram.messenger.-$$Lambda$MessagesController$wJ5JalVVW9yaNMkgKt1IKwZClNY;
         r2.<init>(r8, r0);
         r1.postRunnable(r2);
-        goto L_0x04ed;
-    L_0x04d4:
-        r2 = r2.left;
-        if (r2 == 0) goto L_0x04ed;
+        goto L_0x04f1;
     L_0x04d8:
-        if (r1 == 0) goto L_0x04ed;
-    L_0x04da:
-        r2 = r8.proxyDialog;
-        if (r2 == 0) goto L_0x04e6;
+        r2 = r2.left;
+        if (r2 == 0) goto L_0x04f1;
+    L_0x04dc:
+        if (r1 == 0) goto L_0x04f1;
     L_0x04de:
+        r2 = r8.proxyDialog;
+        if (r2 == 0) goto L_0x04ea;
+    L_0x04e2:
         r2 = r2.id;
-        r4 = r1.id;
-        r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x04ed;
-    L_0x04e6:
+        r6 = r1.id;
+        r4 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1));
+        if (r4 == 0) goto L_0x04f1;
+    L_0x04ea:
         r1 = r1.id;
         r3 = 0;
         r8.deleteDialog(r1, r3);
-        goto L_0x04ee;
-    L_0x04ed:
+        goto L_0x04f2;
+    L_0x04f1:
         r3 = 0;
-    L_0x04ee:
+    L_0x04f2:
         r1 = r22;
         r1 = r1 | 8192;
         r0 = r0.channel_id;
         r2 = 1;
         r8.loadFullChat(r0, r3, r2);
         goto L_0x0846;
-    L_0x04fa:
+    L_0x04fe:
         r1 = r22;
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateChatDefaultBannedRights;
-        if (r2 == 0) goto L_0x0523;
-    L_0x0500:
+        if (r2 == 0) goto L_0x0527;
+    L_0x0504:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateChatDefaultBannedRights) r0;
         r2 = r0.peer;
         r3 = r2.channel_id;
-        if (r3 == 0) goto L_0x0509;
-    L_0x0508:
-        goto L_0x050b;
-    L_0x0509:
+        if (r3 == 0) goto L_0x050d;
+    L_0x050c:
+        goto L_0x050f;
+    L_0x050d:
         r3 = r2.chat_id;
-    L_0x050b:
+    L_0x050f:
         r2 = java.lang.Integer.valueOf(r3);
         r2 = r8.getChat(r2);
         if (r2 == 0) goto L_0x0846;
-    L_0x0515:
+    L_0x0519:
         r0 = r0.default_banned_rights;
         r2.default_banned_rights = r0;
         r0 = new org.telegram.messenger.-$$Lambda$MessagesController$-_A-zPdho0WiN66Q5g4H70UkDlI;
         r0.<init>(r8, r2);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
         goto L_0x0846;
-    L_0x0523:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateStickerSets;
-        if (r2 == 0) goto L_0x0534;
     L_0x0527:
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateStickerSets;
+        if (r2 == 0) goto L_0x0538;
+    L_0x052b:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateStickerSets) r0;
-        r0 = r32.getMediaDataController();
+        r0 = r39.getMediaDataController();
         r2 = 0;
         r3 = 1;
         r0.loadStickers(r2, r2, r3);
         goto L_0x0846;
-    L_0x0534:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateStickerSetsOrder;
-        if (r2 == 0) goto L_0x0547;
     L_0x0538:
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateStickerSetsOrder;
+        if (r2 == 0) goto L_0x054b;
+    L_0x053c:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateStickerSetsOrder) r0;
-        r2 = r32.getMediaDataController();
+        r2 = r39.getMediaDataController();
         r3 = r0.masks;
         r0 = r0.order;
         r2.reorderStickers(r3, r0);
         goto L_0x0846;
-    L_0x0547:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateFavedStickers;
-        if (r2 == 0) goto L_0x0557;
     L_0x054b:
-        r0 = r32.getMediaDataController();
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateFavedStickers;
+        if (r2 == 0) goto L_0x055b;
+    L_0x054f:
+        r0 = r39.getMediaDataController();
         r2 = 2;
         r3 = 0;
         r4 = 1;
         r0.loadRecents(r2, r3, r3, r4);
         goto L_0x0846;
-    L_0x0557:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateContactsReset;
-        if (r2 == 0) goto L_0x0564;
     L_0x055b:
-        r0 = r32.getContactsController();
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateContactsReset;
+        if (r2 == 0) goto L_0x0568;
+    L_0x055f:
+        r0 = r39.getContactsController();
         r0.forceImportContacts();
         goto L_0x0846;
-    L_0x0564:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateNewStickerSet;
-        if (r2 == 0) goto L_0x0575;
     L_0x0568:
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateNewStickerSet;
+        if (r2 == 0) goto L_0x0579;
+    L_0x056c:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateNewStickerSet) r0;
-        r2 = r32.getMediaDataController();
+        r2 = r39.getMediaDataController();
         r0 = r0.stickerset;
         r2.addNewStickerSet(r0);
         goto L_0x0846;
-    L_0x0575:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateSavedGifs;
-        if (r2 == 0) goto L_0x058c;
     L_0x0579:
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateSavedGifs;
+        if (r2 == 0) goto L_0x0590;
+    L_0x057d:
         r0 = r8.emojiPreferences;
         r0 = r0.edit();
         r2 = "lastGifLoadTime";
-        r6 = 0;
-        r0 = r0.putLong(r2, r6);
+        r3 = 0;
+        r0 = r0.putLong(r2, r3);
         r0.commit();
         goto L_0x0846;
-    L_0x058c:
-        r6 = 0;
+    L_0x0590:
+        r3 = 0;
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateRecentStickers;
-        if (r2 == 0) goto L_0x05a3;
-    L_0x0592:
+        if (r2 == 0) goto L_0x05a7;
+    L_0x0596:
         r0 = r8.emojiPreferences;
         r0 = r0.edit();
         r2 = "lastStickersLoadTime";
-        r0 = r0.putLong(r2, r6);
+        r0 = r0.putLong(r2, r3);
         r0.commit();
         goto L_0x0846;
-    L_0x05a3:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateDraftMessage;
-        if (r2 == 0) goto L_0x05d1;
     L_0x05a7:
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateDraftMessage;
+        if (r2 == 0) goto L_0x05d5;
+    L_0x05ab:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateDraftMessage) r0;
         r2 = r0.peer;
-        r3 = r2.user_id;
-        if (r3 == 0) goto L_0x05b3;
-    L_0x05af:
-        r2 = (long) r3;
-    L_0x05b0:
-        r22 = r2;
-        goto L_0x05be;
+        r6 = r2.user_id;
+        if (r6 == 0) goto L_0x05b7;
     L_0x05b3:
-        r3 = r2.channel_id;
-        if (r3 == 0) goto L_0x05b9;
+        r6 = (long) r6;
+    L_0x05b4:
+        r31 = r6;
+        goto L_0x05c2;
     L_0x05b7:
-        r2 = -r3;
-        goto L_0x05bc;
-    L_0x05b9:
+        r6 = r2.channel_id;
+        if (r6 == 0) goto L_0x05bd;
+    L_0x05bb:
+        r2 = -r6;
+        goto L_0x05c0;
+    L_0x05bd:
         r2 = r2.chat_id;
         r2 = -r2;
-    L_0x05bc:
-        r2 = (long) r2;
-        goto L_0x05b0;
-    L_0x05be:
-        r21 = r32.getMediaDataController();
+    L_0x05c0:
+        r6 = (long) r2;
+        goto L_0x05b4;
+    L_0x05c2:
+        r30 = r39.getMediaDataController();
         r0 = r0.draft;
-        r25 = 0;
-        r26 = 1;
-        r24 = r0;
-        r21.saveDraft(r22, r24, r25, r26);
+        r34 = 0;
+        r35 = 1;
+        r33 = r0;
+        r30.saveDraft(r31, r33, r34, r35);
         r22 = r1;
         goto L_0x028e;
-    L_0x05d1:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateReadFeaturedStickers;
-        if (r2 == 0) goto L_0x05df;
     L_0x05d5:
-        r0 = r32.getMediaDataController();
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateReadFeaturedStickers;
+        if (r2 == 0) goto L_0x05e3;
+    L_0x05d9:
+        r0 = r39.getMediaDataController();
         r2 = 0;
         r0.markFaturedStickersAsRead(r2);
         goto L_0x0846;
-    L_0x05df:
-        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePhoneCall;
-        if (r2 == 0) goto L_0x073e;
     L_0x05e3:
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePhoneCall;
+        if (r2 == 0) goto L_0x0741;
+    L_0x05e7:
         r0 = (org.telegram.tgnet.TLRPC.TL_updatePhoneCall) r0;
         r0 = r0.phone_call;
         r2 = org.telegram.messenger.voip.VoIPService.getSharedInstance();
-        r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r3 == 0) goto L_0x0619;
-    L_0x05ef:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r4 = "Received call in update: ";
-        r3.append(r4);
-        r3.append(r0);
-        r3 = r3.toString();
-        org.telegram.messenger.FileLog.d(r3);
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r4 = "call id ";
-        r3.append(r4);
-        r4 = r0.id;
-        r3.append(r4);
-        r3 = r3.toString();
-        org.telegram.messenger.FileLog.d(r3);
-    L_0x0619:
-        r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_phoneCallRequested;
-        if (r3 == 0) goto L_0x071a;
+        r6 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r6 == 0) goto L_0x061d;
+    L_0x05f3:
+        r6 = new java.lang.StringBuilder;
+        r6.<init>();
+        r7 = "Received call in update: ";
+        r6.append(r7);
+        r6.append(r0);
+        r6 = r6.toString();
+        org.telegram.messenger.FileLog.d(r6);
+        r6 = new java.lang.StringBuilder;
+        r6.<init>();
+        r7 = "call id ";
+        r6.append(r7);
+        r14 = r0.id;
+        r6.append(r14);
+        r6 = r6.toString();
+        org.telegram.messenger.FileLog.d(r6);
     L_0x061d:
-        r3 = r0.date;
-        r4 = r8.callRingTimeout;
-        r4 = r4 / 1000;
-        r3 = r3 + r4;
-        r4 = r32.getConnectionsManager();
-        r4 = r4.getCurrentTime();
-        if (r3 >= r4) goto L_0x0639;
-    L_0x062e:
+        r6 = r0 instanceof org.telegram.tgnet.TLRPC.TL_phoneCallRequested;
+        if (r6 == 0) goto L_0x071d;
+    L_0x0621:
+        r6 = r0.date;
+        r7 = r8.callRingTimeout;
+        r7 = r7 / 1000;
+        r6 = r6 + r7;
+        r7 = r39.getConnectionsManager();
+        r7 = r7.getCurrentTime();
+        if (r6 >= r7) goto L_0x063d;
+    L_0x0632:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
         if (r0 == 0) goto L_0x0846;
-    L_0x0632:
+    L_0x0636:
         r0 = "ignoring too old call";
         org.telegram.messenger.FileLog.d(r0);
         goto L_0x0846;
-    L_0x0639:
-        r3 = android.os.Build.VERSION.SDK_INT;
-        r4 = 21;
-        if (r3 < r4) goto L_0x0656;
-    L_0x063f:
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = androidx.core.app.NotificationManagerCompat.from(r3);
-        r3 = r3.areNotificationsEnabled();
-        if (r3 != 0) goto L_0x0656;
-    L_0x064b:
+    L_0x063d:
+        r6 = android.os.Build.VERSION.SDK_INT;
+        r7 = 21;
+        if (r6 < r7) goto L_0x065a;
+    L_0x0643:
+        r6 = org.telegram.messenger.ApplicationLoader.applicationContext;
+        r6 = androidx.core.app.NotificationManagerCompat.from(r6);
+        r6 = r6.areNotificationsEnabled();
+        if (r6 != 0) goto L_0x065a;
+    L_0x064f:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
         if (r0 == 0) goto L_0x0846;
-    L_0x064f:
+    L_0x0653:
         r0 = "Ignoring incoming call because notifications are disabled in system";
         org.telegram.messenger.FileLog.d(r0);
         goto L_0x0846;
-    L_0x0656:
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r4 = "phone";
-        r3 = r3.getSystemService(r4);
-        r3 = (android.telephony.TelephonyManager) r3;
-        if (r2 != 0) goto L_0x06d0;
-    L_0x0662:
-        r2 = org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent;
-        if (r2 != 0) goto L_0x06d0;
+    L_0x065a:
+        r6 = org.telegram.messenger.ApplicationLoader.applicationContext;
+        r7 = "phone";
+        r6 = r6.getSystemService(r7);
+        r6 = (android.telephony.TelephonyManager) r6;
+        if (r2 != 0) goto L_0x06d3;
     L_0x0666:
-        r2 = r3.getCallState();
-        if (r2 == 0) goto L_0x066d;
-    L_0x066c:
-        goto L_0x06d0;
-    L_0x066d:
-        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x0687;
+        r2 = org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent;
+        if (r2 != 0) goto L_0x06d3;
+    L_0x066a:
+        r2 = r6.getCallState();
+        if (r2 == 0) goto L_0x0671;
+    L_0x0670:
+        goto L_0x06d3;
     L_0x0671:
+        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r2 == 0) goto L_0x068b;
+    L_0x0675:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = "Starting service for call ";
-        r2.append(r3);
-        r3 = r0.id;
-        r2.append(r3);
+        r6 = "Starting service for call ";
+        r2.append(r6);
+        r6 = r0.id;
+        r2.append(r6);
         r2 = r2.toString();
         org.telegram.messenger.FileLog.d(r2);
-    L_0x0687:
+    L_0x068b:
         org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent = r0;
         r2 = new android.content.Intent;
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r4 = org.telegram.messenger.voip.VoIPService.class;
-        r2.<init>(r3, r4);
-        r3 = "is_outgoing";
-        r4 = 0;
-        r2.putExtra(r3, r4);
-        r3 = r0.participant_id;
-        r4 = r32.getUserConfig();
-        r4 = r4.getClientUserId();
-        if (r3 != r4) goto L_0x06a7;
-    L_0x06a4:
+        r6 = org.telegram.messenger.ApplicationLoader.applicationContext;
+        r7 = org.telegram.messenger.voip.VoIPService.class;
+        r2.<init>(r6, r7);
+        r6 = "is_outgoing";
+        r7 = 0;
+        r2.putExtra(r6, r7);
+        r6 = r0.participant_id;
+        r7 = r39.getUserConfig();
+        r7 = r7.getClientUserId();
+        if (r6 != r7) goto L_0x06ab;
+    L_0x06a8:
         r0 = r0.admin_id;
-        goto L_0x06a9;
-    L_0x06a7:
+        goto L_0x06ad;
+    L_0x06ab:
         r0 = r0.participant_id;
-    L_0x06a9:
-        r3 = "user_id";
-        r2.putExtra(r3, r0);
+    L_0x06ad:
+        r6 = "user_id";
+        r2.putExtra(r6, r0);
         r0 = r8.currentAccount;
-        r3 = "account";
-        r2.putExtra(r3, r0);
-        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ all -> 0x06ca }
-        r3 = 26;
-        if (r0 < r3) goto L_0x06c3;
-    L_0x06bc:
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x06ca }
-        r0.startForegroundService(r2);	 Catch:{ all -> 0x06ca }
+        r6 = "account";
+        r2.putExtra(r6, r0);
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ all -> 0x06cd }
+        r6 = 26;
+        if (r0 < r6) goto L_0x06c6;
+    L_0x06bf:
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x06cd }
+        r0.startForegroundService(r2);	 Catch:{ all -> 0x06cd }
         goto L_0x0846;
-    L_0x06c3:
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x06ca }
-        r0.startService(r2);	 Catch:{ all -> 0x06ca }
+    L_0x06c6:
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x06cd }
+        r0.startService(r2);	 Catch:{ all -> 0x06cd }
         goto L_0x0846;
-    L_0x06ca:
+    L_0x06cd:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         goto L_0x0846;
-    L_0x06d0:
+    L_0x06d3:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x06ef;
-    L_0x06d4:
+        if (r2 == 0) goto L_0x06f2;
+    L_0x06d7:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = "Auto-declining call ";
-        r2.append(r3);
-        r3 = r0.id;
-        r2.append(r3);
-        r3 = " because there's already active one";
-        r2.append(r3);
+        r6 = "Auto-declining call ";
+        r2.append(r6);
+        r6 = r0.id;
+        r2.append(r6);
+        r6 = " because there's already active one";
+        r2.append(r6);
         r2 = r2.toString();
         org.telegram.messenger.FileLog.d(r2);
-    L_0x06ef:
+    L_0x06f2:
         r2 = new org.telegram.tgnet.TLRPC$TL_phone_discardCall;
         r2.<init>();
-        r3 = new org.telegram.tgnet.TLRPC$TL_inputPhoneCall;
-        r3.<init>();
-        r2.peer = r3;
-        r3 = r2.peer;
-        r4 = r0.access_hash;
-        r3.access_hash = r4;
-        r4 = r0.id;
-        r3.id = r4;
+        r6 = new org.telegram.tgnet.TLRPC$TL_inputPhoneCall;
+        r6.<init>();
+        r2.peer = r6;
+        r6 = r2.peer;
+        r14 = r0.access_hash;
+        r6.access_hash = r14;
+        r14 = r0.id;
+        r6.id = r14;
         r0 = new org.telegram.tgnet.TLRPC$TL_phoneCallDiscardReasonBusy;
         r0.<init>();
         r2.reason = r0;
-        r0 = r32.getConnectionsManager();
-        r3 = new org.telegram.messenger.-$$Lambda$MessagesController$KwSrP312VOB27NH519srqu8bVm0;
-        r3.<init>(r8);
-        r0.sendRequest(r2, r3);
+        r0 = r39.getConnectionsManager();
+        r6 = new org.telegram.messenger.-$$Lambda$MessagesController$KwSrP312VOB27NH519srqu8bVm0;
+        r6.<init>(r8);
+        r0.sendRequest(r2, r6);
         goto L_0x0846;
-    L_0x071a:
-        if (r2 == 0) goto L_0x0723;
-    L_0x071c:
-        if (r0 == 0) goto L_0x0723;
-    L_0x071e:
+    L_0x071d:
+        if (r2 == 0) goto L_0x0726;
+    L_0x071f:
+        if (r0 == 0) goto L_0x0726;
+    L_0x0721:
         r2.onCallUpdated(r0);
         goto L_0x0846;
-    L_0x0723:
+    L_0x0726:
         r2 = org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent;
         if (r2 == 0) goto L_0x0846;
-    L_0x0727:
+    L_0x072a:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x0730;
-    L_0x072b:
+        if (r2 == 0) goto L_0x0733;
+    L_0x072e:
         r2 = "Updated the call while the service is starting";
         org.telegram.messenger.FileLog.d(r2);
-    L_0x0730:
-        r2 = r0.id;
-        r4 = org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent;
-        r4 = r4.id;
-        r15 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r15 != 0) goto L_0x0846;
-    L_0x073a:
+    L_0x0733:
+        r6 = r0.id;
+        r2 = org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent;
+        r14 = r2.id;
+        r2 = (r6 > r14 ? 1 : (r6 == r14 ? 0 : -1));
+        if (r2 != 0) goto L_0x0846;
+    L_0x073d:
         org.telegram.messenger.voip.VoIPService.callIShouldHavePutIntoIntent = r0;
         goto L_0x0846;
-    L_0x073e:
+    L_0x0741:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateDialogUnreadMark;
-        if (r2 == 0) goto L_0x079f;
-    L_0x0742:
+        if (r2 == 0) goto L_0x07a1;
+    L_0x0745:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateDialogUnreadMark) r0;
         r2 = r0.peer;
-        r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_dialogPeer;
-        if (r3 == 0) goto L_0x0760;
-    L_0x074a:
+        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_dialogPeer;
+        if (r6 == 0) goto L_0x0762;
+    L_0x074d:
         r2 = (org.telegram.tgnet.TLRPC.TL_dialogPeer) r2;
         r2 = r2.peer;
-        r3 = r2.user_id;
-        if (r3 == 0) goto L_0x0755;
-    L_0x0752:
-        r2 = (long) r3;
-    L_0x0753:
-        r4 = r2;
-        goto L_0x0761;
+        r6 = r2.user_id;
+        if (r6 == 0) goto L_0x0757;
     L_0x0755:
-        r3 = r2.chat_id;
-        if (r3 == 0) goto L_0x075b;
-    L_0x0759:
-        r2 = -r3;
-        goto L_0x075e;
+        r6 = (long) r6;
+        goto L_0x0763;
+    L_0x0757:
+        r6 = r2.chat_id;
+        if (r6 == 0) goto L_0x075d;
     L_0x075b:
+        r2 = -r6;
+        goto L_0x0760;
+    L_0x075d:
         r2 = r2.channel_id;
         r2 = -r2;
-    L_0x075e:
-        r2 = (long) r2;
-        goto L_0x0753;
     L_0x0760:
-        r4 = r6;
-    L_0x0761:
-        r2 = r32.getMessagesStorage();
-        r3 = r0.unread;
-        r2.setDialogUnread(r4, r3);
+        r6 = (long) r2;
+        goto L_0x0763;
+    L_0x0762:
+        r6 = r3;
+    L_0x0763:
+        r2 = r39.getMessagesStorage();
+        r14 = r0.unread;
+        r2.setDialogUnread(r6, r14);
         r2 = r8.dialogs_dict;
-        r2 = r2.get(r4);
+        r2 = r2.get(r6);
         r2 = (org.telegram.tgnet.TLRPC.Dialog) r2;
-        if (r2 == 0) goto L_0x079a;
-    L_0x0774:
-        r3 = r2.unread_mark;
+        if (r2 == 0) goto L_0x079c;
+    L_0x0776:
+        r14 = r2.unread_mark;
         r0 = r0.unread;
-        if (r3 == r0) goto L_0x079a;
-    L_0x077a:
+        if (r14 == r0) goto L_0x079c;
+    L_0x077c:
         r2.unread_mark = r0;
         r0 = r2.unread_count;
-        if (r0 != 0) goto L_0x0797;
-    L_0x0780:
-        r0 = r8.isDialogMuted(r4);
-        if (r0 != 0) goto L_0x0797;
-    L_0x0786:
+        if (r0 != 0) goto L_0x0799;
+    L_0x0782:
+        r0 = r8.isDialogMuted(r6);
+        if (r0 != 0) goto L_0x0799;
+    L_0x0788:
         r0 = r2.unread_mark;
-        if (r0 == 0) goto L_0x0791;
-    L_0x078a:
+        if (r0 == 0) goto L_0x0793;
+    L_0x078c:
         r0 = r8.unreadUnmutedDialogs;
         r2 = 1;
         r0 = r0 + r2;
         r8.unreadUnmutedDialogs = r0;
-        goto L_0x0797;
-    L_0x0791:
+        goto L_0x0799;
+    L_0x0793:
         r2 = 1;
         r0 = r8.unreadUnmutedDialogs;
         r0 = r0 - r2;
         r8.unreadUnmutedDialogs = r0;
-    L_0x0797:
+    L_0x0799:
         r0 = r1 | 256;
-        goto L_0x079b;
-    L_0x079a:
+        goto L_0x079d;
+    L_0x079c:
         r0 = r1;
-    L_0x079b:
+    L_0x079d:
         r22 = r0;
         goto L_0x0848;
-    L_0x079f:
+    L_0x07a1:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateMessagePoll;
-        if (r2 == 0) goto L_0x07c6;
-    L_0x07a3:
+        if (r2 == 0) goto L_0x07c8;
+    L_0x07a5:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateMessagePoll) r0;
-        r2 = r32.getNotificationCenter();
-        r3 = org.telegram.messenger.NotificationCenter.didUpdatePollResults;
-        r4 = 3;
-        r5 = new java.lang.Object[r4];
-        r6 = r0.poll_id;
-        r4 = java.lang.Long.valueOf(r6);
-        r6 = 0;
-        r5[r6] = r4;
-        r4 = r0.poll;
-        r6 = 1;
-        r5[r6] = r4;
+        r2 = r39.getNotificationCenter();
+        r6 = org.telegram.messenger.NotificationCenter.didUpdatePollResults;
+        r7 = 3;
+        r14 = new java.lang.Object[r7];
+        r3 = r0.poll_id;
+        r3 = java.lang.Long.valueOf(r3);
+        r4 = 0;
+        r14[r4] = r3;
+        r3 = r0.poll;
+        r4 = 1;
+        r14[r4] = r3;
         r0 = r0.results;
-        r4 = 2;
-        r5[r4] = r0;
-        r2.postNotificationName(r3, r5);
+        r3 = 2;
+        r14[r3] = r0;
+        r2.postNotificationName(r6, r14);
         goto L_0x0846;
-    L_0x07c6:
+    L_0x07c8:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePeerSettings;
-        if (r2 == 0) goto L_0x07e8;
-    L_0x07ca:
+        if (r2 == 0) goto L_0x07ea;
+    L_0x07cc:
         r0 = (org.telegram.tgnet.TLRPC.TL_updatePeerSettings) r0;
         r2 = r0.peer;
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_peerUser;
-        if (r3 == 0) goto L_0x07d6;
-    L_0x07d2:
-        r2 = r2.user_id;
+        if (r3 == 0) goto L_0x07d8;
     L_0x07d4:
-        r2 = (long) r2;
-        goto L_0x07e1;
+        r2 = r2.user_id;
     L_0x07d6:
+        r2 = (long) r2;
+        goto L_0x07e3;
+    L_0x07d8:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_peerChat;
-        if (r3 == 0) goto L_0x07dd;
-    L_0x07da:
+        if (r3 == 0) goto L_0x07df;
+    L_0x07dc:
         r2 = r2.chat_id;
-        goto L_0x07df;
-    L_0x07dd:
-        r2 = r2.channel_id;
+        goto L_0x07e1;
     L_0x07df:
-        r2 = -r2;
-        goto L_0x07d4;
+        r2 = r2.channel_id;
     L_0x07e1:
+        r2 = -r2;
+        goto L_0x07d6;
+    L_0x07e3:
         r0 = r0.settings;
         r4 = 1;
         r8.savePeerSettings(r2, r0, r4);
         goto L_0x0846;
-    L_0x07e8:
+    L_0x07ea:
         r4 = 1;
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updatePeerLocated;
-        if (r2 == 0) goto L_0x07fc;
-    L_0x07ed:
-        r2 = r32.getNotificationCenter();
+        if (r2 == 0) goto L_0x07fe;
+    L_0x07ef:
+        r2 = r39.getNotificationCenter();
         r3 = org.telegram.messenger.NotificationCenter.newPeopleNearbyAvailable;
-        r5 = new java.lang.Object[r4];
+        r6 = new java.lang.Object[r4];
         r4 = 0;
-        r5[r4] = r0;
-        r2.postNotificationName(r3, r5);
+        r6[r4] = r0;
+        r2.postNotificationName(r3, r6);
         goto L_0x0846;
-    L_0x07fc:
+    L_0x07fe:
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateMessageReactions;
-        if (r2 == 0) goto L_0x0835;
-    L_0x0800:
+        if (r2 == 0) goto L_0x0837;
+    L_0x0802:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateMessageReactions) r0;
         r2 = r0.peer;
         r3 = r2.chat_id;
-        if (r3 == 0) goto L_0x080b;
-    L_0x0808:
+        if (r3 == 0) goto L_0x080d;
+    L_0x080a:
         r2 = -r3;
-    L_0x0809:
-        r2 = (long) r2;
-        goto L_0x0813;
     L_0x080b:
+        r2 = (long) r2;
+        goto L_0x0815;
+    L_0x080d:
         r3 = r2.channel_id;
-        if (r3 == 0) goto L_0x0810;
-    L_0x080f:
-        goto L_0x0808;
-    L_0x0810:
+        if (r3 == 0) goto L_0x0812;
+    L_0x0811:
+        goto L_0x080a;
+    L_0x0812:
         r2 = r2.user_id;
-        goto L_0x0809;
-    L_0x0813:
-        r4 = r32.getNotificationCenter();
-        r5 = org.telegram.messenger.NotificationCenter.didUpdateReactions;
-        r6 = 3;
-        r7 = new java.lang.Object[r6];
+        goto L_0x080b;
+    L_0x0815:
+        r4 = r39.getNotificationCenter();
+        r6 = org.telegram.messenger.NotificationCenter.didUpdateReactions;
+        r7 = 3;
+        r14 = new java.lang.Object[r7];
         r2 = java.lang.Long.valueOf(r2);
         r3 = 0;
-        r7[r3] = r2;
+        r14[r3] = r2;
         r2 = r0.msg_id;
         r2 = java.lang.Integer.valueOf(r2);
         r3 = 1;
-        r7[r3] = r2;
+        r14[r3] = r2;
         r0 = r0.reactions;
         r2 = 2;
-        r7[r2] = r0;
-        r4.postNotificationName(r5, r7);
+        r14[r2] = r0;
+        r4.postNotificationName(r6, r14);
         goto L_0x0846;
-    L_0x0835:
+    L_0x0837:
         r3 = 1;
         r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_updateTheme;
         if (r2 == 0) goto L_0x0846;
-    L_0x083a:
+    L_0x083c:
         r0 = (org.telegram.tgnet.TLRPC.TL_updateTheme) r0;
         r0 = r0.theme;
         r0 = (org.telegram.tgnet.TLRPC.TL_theme) r0;
-        r2 = r8.currentAccount;
-        r4 = 0;
-        org.telegram.ui.ActionBar.Theme.setThemeUploadInfo(r4, r4, r0, r2, r3);
+        r2 = 0;
+        org.telegram.ui.ActionBar.Theme.setThemeUploadInfo(r2, r0, r3);
     L_0x0846:
         r22 = r1;
     L_0x0848:
-        r7 = r17 + 1;
-        r15 = r43;
+        r6 = r16 + 1;
+        r14 = r48;
+        r15 = r50;
+        r7 = r5;
         r5 = r9;
-        r6 = r16;
-        r4 = r31;
+        r4 = r17;
         r3 = 0;
-        r9 = r34;
+        r9 = r41;
         goto L_0x0028;
-    L_0x0856:
-        r31 = r4;
+    L_0x0857:
         r9 = r5;
+        r5 = r7;
         r1 = r22;
         if (r20 == 0) goto L_0x086d;
     L_0x085d:
         r20.commit();
-        r0 = r32.getNotificationCenter();
+        r0 = r39.getNotificationCenter();
         r2 = org.telegram.messenger.NotificationCenter.notificationsSettingsUpdated;
         r3 = 0;
         r4 = new java.lang.Object[r3];
@@ -18742,262 +18725,258 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x086d:
         r3 = 0;
     L_0x086e:
-        r0 = r32.getMessagesStorage();
-        r2 = r31;
-        r4 = 1;
-        r0.updateUsers(r2, r4, r4, r4);
-        r0 = r32.getMessagesStorage();
-        r0.updateUsers(r9, r3, r4, r4);
-        goto L_0x0885;
-    L_0x0880:
-        r4 = 1;
-        r1 = r33;
+        r0 = r39.getMessagesStorage();
+        r2 = 1;
+        r0.updateUsers(r9, r2, r2, r2);
+        r0 = r39.getMessagesStorage();
+        r0.updateUsers(r5, r3, r2, r2);
+        goto L_0x0883;
+    L_0x087e:
+        r2 = 1;
+        r1 = r40;
         r21 = 0;
+    L_0x0883:
+        if (r10 == 0) goto L_0x095c;
     L_0x0885:
-        if (r10 == 0) goto L_0x0963;
-    L_0x0887:
-        r0 = r32.getNotificationCenter();
-        r2 = org.telegram.messenger.NotificationCenter.didReceivedWebpagesInUpdates;
-        r5 = new java.lang.Object[r4];
+        r0 = r39.getNotificationCenter();
+        r4 = org.telegram.messenger.NotificationCenter.didReceivedWebpagesInUpdates;
+        r5 = new java.lang.Object[r2];
         r5[r3] = r10;
-        r0.postNotificationName(r2, r5);
+        r0.postNotificationName(r4, r5);
         r0 = 0;
-        r2 = 2;
+    L_0x0893:
+        r3 = 2;
+        if (r0 >= r3) goto L_0x095c;
     L_0x0896:
-        if (r0 >= r2) goto L_0x0963;
+        if (r0 != r2) goto L_0x089b;
     L_0x0898:
-        if (r0 != r4) goto L_0x089d;
-    L_0x089a:
         r2 = r8.reloadingScheduledWebpagesPending;
-        goto L_0x089f;
-    L_0x089d:
+        goto L_0x089d;
+    L_0x089b:
         r2 = r8.reloadingWebpagesPending;
-    L_0x089f:
-        r3 = r35.size();
+    L_0x089d:
+        r3 = r42.size();
         r4 = 0;
+    L_0x08a2:
+        if (r4 >= r3) goto L_0x0957;
     L_0x08a4:
-        if (r4 >= r3) goto L_0x095b;
-    L_0x08a6:
         r5 = r10.keyAt(r4);
         r7 = r2.get(r5);
         r7 = (java.util.ArrayList) r7;
         r2.remove(r5);
-        if (r7 == 0) goto L_0x0951;
-    L_0x08b5:
+        if (r7 == 0) goto L_0x094f;
+    L_0x08b3:
         r5 = r10.valueAt(r4);
         r5 = (org.telegram.tgnet.TLRPC.WebPage) r5;
         r6 = new java.util.ArrayList;
         r6.<init>();
         r9 = r5 instanceof org.telegram.tgnet.TLRPC.TL_webPage;
-        if (r9 != 0) goto L_0x08d3;
-    L_0x08c4:
+        if (r9 != 0) goto L_0x08d1;
+    L_0x08c2:
         r9 = r5 instanceof org.telegram.tgnet.TLRPC.TL_webPageEmpty;
-        if (r9 == 0) goto L_0x08c9;
-    L_0x08c8:
-        goto L_0x08d3;
-    L_0x08c9:
-        r9 = r5.id;
-        r2.put(r9, r7);
-        r20 = r2;
+        if (r9 == 0) goto L_0x08c7;
+    L_0x08c6:
+        goto L_0x08d1;
+    L_0x08c7:
+        r14 = r5.id;
+        r2.put(r14, r7);
+        r18 = r2;
         r15 = 0;
-        goto L_0x0915;
-    L_0x08d3:
+        goto L_0x0913;
+    L_0x08d1:
         r9 = r7.size();
-        r10 = 0;
+        r14 = 0;
         r15 = 0;
+    L_0x08d8:
+        if (r14 >= r9) goto L_0x0911;
     L_0x08da:
-        if (r10 >= r9) goto L_0x0913;
-    L_0x08dc:
-        r17 = r7.get(r10);
-        r20 = r2;
+        r17 = r7.get(r14);
+        r18 = r2;
         r2 = r17;
         r2 = (org.telegram.messenger.MessageObject) r2;
         r2 = r2.messageOwner;
         r2 = r2.media;
         r2.webpage = r5;
-        if (r10 != 0) goto L_0x0903;
-    L_0x08ee:
-        r2 = r7.get(r10);
+        if (r14 != 0) goto L_0x0901;
+    L_0x08ec:
+        r2 = r7.get(r14);
         r2 = (org.telegram.messenger.MessageObject) r2;
         r15 = r2.getDialogId();
-        r2 = r7.get(r10);
+        r2 = r7.get(r14);
         r2 = (org.telegram.messenger.MessageObject) r2;
         r2 = r2.messageOwner;
         org.telegram.messenger.ImageLoader.saveMessageThumbs(r2);
-    L_0x0903:
-        r2 = r7.get(r10);
+    L_0x0901:
+        r2 = r7.get(r14);
         r2 = (org.telegram.messenger.MessageObject) r2;
         r2 = r2.messageOwner;
         r6.add(r2);
-        r10 = r10 + 1;
-        r2 = r20;
-        goto L_0x08da;
+        r14 = r14 + 1;
+        r2 = r18;
+        goto L_0x08d8;
+    L_0x0911:
+        r18 = r2;
     L_0x0913:
-        r20 = r2;
-    L_0x0915:
         r2 = r6.isEmpty();
-        if (r2 != 0) goto L_0x0953;
-    L_0x091b:
-        r22 = r32.getMessagesStorage();
-        r24 = 1;
-        r25 = 1;
-        r26 = 0;
-        r2 = r32.getDownloadController();
-        r27 = r2.getAutodownloadMask();
+        if (r2 != 0) goto L_0x0951;
+    L_0x0919:
+        r32 = r39.getMessagesStorage();
+        r34 = 1;
+        r35 = 1;
+        r36 = 0;
+        r2 = r39.getDownloadController();
+        r37 = r2.getAutodownloadMask();
         r2 = 1;
-        if (r0 != r2) goto L_0x0933;
-    L_0x0930:
-        r28 = 1;
-        goto L_0x0935;
+        if (r0 != r2) goto L_0x0931;
+    L_0x092e:
+        r38 = 1;
+        goto L_0x0933;
+    L_0x0931:
+        r38 = 0;
     L_0x0933:
-        r28 = 0;
-    L_0x0935:
-        r23 = r6;
-        r22.putMessages(r23, r24, r25, r26, r27, r28);
-        r2 = r32.getNotificationCenter();
+        r33 = r6;
+        r32.putMessages(r33, r34, r35, r36, r37, r38);
+        r2 = r39.getNotificationCenter();
         r5 = org.telegram.messenger.NotificationCenter.replaceMessagesObjects;
         r6 = 2;
         r9 = new java.lang.Object[r6];
         r6 = java.lang.Long.valueOf(r15);
-        r10 = 0;
-        r9[r10] = r6;
+        r14 = 0;
+        r9[r14] = r6;
         r6 = 1;
         r9[r6] = r7;
         r2.postNotificationName(r5, r9);
-        goto L_0x0953;
+        goto L_0x0951;
+    L_0x094f:
+        r18 = r2;
     L_0x0951:
-        r20 = r2;
-    L_0x0953:
         r4 = r4 + 1;
-        r10 = r35;
-        r2 = r20;
-        goto L_0x08a4;
-    L_0x095b:
+        r2 = r18;
+        goto L_0x08a2;
+    L_0x0957:
         r0 = r0 + 1;
-        r10 = r35;
-        r2 = 2;
-        r4 = 1;
-        goto L_0x0896;
-    L_0x0963:
-        if (r11 == 0) goto L_0x097d;
-    L_0x0965:
-        r0 = r36.size();
+        r2 = 1;
+        goto L_0x0893;
+    L_0x095c:
+        if (r11 == 0) goto L_0x0976;
+    L_0x095e:
+        r0 = r43.size();
         r2 = 0;
-    L_0x096a:
-        if (r2 >= r0) goto L_0x0983;
-    L_0x096c:
+    L_0x0963:
+        if (r2 >= r0) goto L_0x097c;
+    L_0x0965:
         r3 = r11.keyAt(r2);
         r5 = r11.valueAt(r2);
         r5 = (java.util.ArrayList) r5;
         r6 = 0;
         r8.updateInterfaceWithMessages(r3, r5, r6);
         r2 = r2 + 1;
-        goto L_0x096a;
-    L_0x097d:
-        if (r21 == 0) goto L_0x0985;
-    L_0x097f:
+        goto L_0x0963;
+    L_0x0976:
+        if (r21 == 0) goto L_0x097e;
+    L_0x0978:
         r2 = 0;
         r8.sortDialogs(r2);
-    L_0x0983:
+    L_0x097c:
         r0 = 1;
-        goto L_0x0986;
-    L_0x0985:
+        goto L_0x097f;
+    L_0x097e:
         r0 = 0;
-    L_0x0986:
-        if (r12 == 0) goto L_0x09a0;
-    L_0x0988:
-        r2 = r37.size();
+    L_0x097f:
+        if (r12 == 0) goto L_0x0999;
+    L_0x0981:
+        r2 = r44.size();
         r3 = 0;
-    L_0x098d:
-        if (r3 >= r2) goto L_0x09a0;
-    L_0x098f:
+    L_0x0986:
+        if (r3 >= r2) goto L_0x0999;
+    L_0x0988:
         r4 = r12.keyAt(r3);
         r6 = r12.valueAt(r3);
         r6 = (java.util.ArrayList) r6;
         r7 = 1;
         r8.updateInterfaceWithMessages(r4, r6, r7);
         r3 = r3 + 1;
-        goto L_0x098d;
-    L_0x09a0:
-        if (r13 == 0) goto L_0x0a51;
-    L_0x09a2:
-        r2 = r38.size();
+        goto L_0x0986;
+    L_0x0999:
+        if (r13 == 0) goto L_0x0a4a;
+    L_0x099b:
+        r2 = r45.size();
         r3 = r0;
         r0 = 0;
-    L_0x09a8:
-        if (r0 >= r2) goto L_0x0a4e;
-    L_0x09aa:
+    L_0x09a1:
+        if (r0 >= r2) goto L_0x0a47;
+    L_0x09a3:
         r4 = r13.keyAt(r0);
         r6 = r13.valueAt(r0);
         r6 = (java.util.ArrayList) r6;
         r7 = r8.dialogMessage;
         r7 = r7.get(r4);
         r7 = (org.telegram.messenger.MessageObject) r7;
-        if (r7 == 0) goto L_0x09ee;
-    L_0x09be:
+        if (r7 == 0) goto L_0x09e7;
+    L_0x09b7:
         r9 = r6.size();
         r10 = 0;
-    L_0x09c3:
-        if (r10 >= r9) goto L_0x09ee;
-    L_0x09c5:
+    L_0x09bc:
+        if (r10 >= r9) goto L_0x09e7;
+    L_0x09be:
         r11 = r6.get(r10);
         r11 = (org.telegram.messenger.MessageObject) r11;
         r12 = r7.getId();
-        r15 = r11.getId();
-        if (r12 != r15) goto L_0x09f0;
-    L_0x09d5:
+        r14 = r11.getId();
+        if (r12 != r14) goto L_0x09e9;
+    L_0x09ce:
         r3 = r8.dialogMessage;
         r3.put(r4, r11);
         r3 = r11.messageOwner;
         r3 = r3.to_id;
-        if (r3 == 0) goto L_0x09ed;
-    L_0x09e0:
+        if (r3 == 0) goto L_0x09e6;
+    L_0x09d9:
         r3 = r3.channel_id;
-        if (r3 != 0) goto L_0x09ed;
-    L_0x09e4:
+        if (r3 != 0) goto L_0x09e6;
+    L_0x09dd:
         r3 = r8.dialogMessagesByIds;
         r7 = r11.getId();
         r3.put(r7, r11);
-    L_0x09ed:
+    L_0x09e6:
         r3 = 1;
-    L_0x09ee:
+    L_0x09e7:
         r11 = 0;
-        goto L_0x0a1e;
-    L_0x09f0:
-        r15 = r7.getDialogId();
-        r20 = r11.getDialogId();
-        r12 = (r15 > r20 ? 1 : (r15 == r20 ? 0 : -1));
-        if (r12 != 0) goto L_0x0a1a;
-    L_0x09fc:
+        goto L_0x0a17;
+    L_0x09e9:
+        r14 = r7.getDialogId();
+        r16 = r11.getDialogId();
+        r12 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1));
+        if (r12 != 0) goto L_0x0a13;
+    L_0x09f5:
         r12 = r7.messageOwner;
         r12 = r12.action;
         r12 = r12 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
-        if (r12 == 0) goto L_0x0a1a;
-    L_0x0a04:
+        if (r12 == 0) goto L_0x0a13;
+    L_0x09fd:
         r12 = r7.replyMessageObject;
-        if (r12 == 0) goto L_0x0a1a;
-    L_0x0a08:
+        if (r12 == 0) goto L_0x0a13;
+    L_0x0a01:
         r12 = r12.getId();
-        r15 = r11.getId();
-        if (r12 != r15) goto L_0x0a1a;
-    L_0x0a12:
+        r14 = r11.getId();
+        if (r12 != r14) goto L_0x0a13;
+    L_0x0a0b:
         r7.replyMessageObject = r11;
         r11 = 0;
         r7.generatePinMessageText(r11, r11);
         r3 = 1;
-        goto L_0x0a1e;
-    L_0x0a1a:
+        goto L_0x0a17;
+    L_0x0a13:
         r11 = 0;
         r10 = r10 + 1;
-        goto L_0x09c3;
-    L_0x0a1e:
-        r20 = r32.getMediaDataController();
-        r24 = 0;
-        r25 = 0;
-        r21 = r6;
-        r22 = r4;
-        r20.loadReplyMessagesForMessages(r21, r22, r24, r25);
-        r7 = r32.getNotificationCenter();
+        goto L_0x09bc;
+    L_0x0a17:
+        r30 = r39.getMediaDataController();
+        r34 = 0;
+        r35 = 0;
+        r31 = r6;
+        r32 = r4;
+        r30.loadReplyMessagesForMessages(r31, r32, r34, r35);
+        r7 = r39.getNotificationCenter();
         r9 = org.telegram.messenger.NotificationCenter.replaceMessagesObjects;
         r10 = 3;
         r12 = new java.lang.Object[r10];
@@ -19011,73 +18990,75 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12[r6] = r4;
         r7.postNotificationName(r9, r12);
         r0 = r0 + 1;
-        goto L_0x09a8;
-    L_0x0a4e:
+        goto L_0x09a1;
+    L_0x0a47:
         r5 = 0;
         r0 = r3;
-        goto L_0x0a52;
-    L_0x0a51:
+        goto L_0x0a4b;
+    L_0x0a4a:
         r5 = 0;
-    L_0x0a52:
-        if (r0 == 0) goto L_0x0a5f;
-    L_0x0a54:
-        r0 = r32.getNotificationCenter();
+    L_0x0a4b:
+        if (r0 == 0) goto L_0x0a58;
+    L_0x0a4d:
+        r0 = r39.getNotificationCenter();
         r2 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
         r3 = new java.lang.Object[r5];
         r0.postNotificationName(r2, r3);
-    L_0x0a5f:
-        if (r39 == 0) goto L_0x0a63;
-    L_0x0a61:
+    L_0x0a58:
+        if (r46 == 0) goto L_0x0a5c;
+    L_0x0a5a:
         r1 = r1 | 64;
-    L_0x0a63:
-        if (r40 == 0) goto L_0x0a69;
-    L_0x0a65:
+    L_0x0a5c:
+        if (r47 == 0) goto L_0x0a62;
+    L_0x0a5e:
         r0 = r1 | 1;
         r1 = r0 | 128;
-    L_0x0a69:
-        if (r14 == 0) goto L_0x0a82;
-    L_0x0a6b:
-        r0 = r41.size();
-        r2 = 0;
-    L_0x0a70:
-        if (r2 >= r0) goto L_0x0a82;
-    L_0x0a72:
-        r3 = r14.get(r2);
-        r3 = (org.telegram.tgnet.TLRPC.ChatParticipants) r3;
-        r4 = r32.getMessagesStorage();
-        r4.updateChatParticipants(r3);
-        r2 = r2 + 1;
-        goto L_0x0a70;
-    L_0x0a82:
-        if (r42 == 0) goto L_0x0a94;
-    L_0x0a84:
-        r0 = r32.getNotificationCenter();
+    L_0x0a62:
+        r0 = r1;
+        r1 = r48;
+        if (r1 == 0) goto L_0x0a7e;
+    L_0x0a67:
+        r2 = r48.size();
+        r3 = 0;
+    L_0x0a6c:
+        if (r3 >= r2) goto L_0x0a7e;
+    L_0x0a6e:
+        r4 = r1.get(r3);
+        r4 = (org.telegram.tgnet.TLRPC.ChatParticipants) r4;
+        r5 = r39.getMessagesStorage();
+        r5.updateChatParticipants(r4);
+        r3 = r3 + 1;
+        goto L_0x0a6c;
+    L_0x0a7e:
+        if (r49 == 0) goto L_0x0a90;
+    L_0x0a80:
+        r1 = r39.getNotificationCenter();
         r2 = org.telegram.messenger.NotificationCenter.didUpdatedMessagesViews;
         r3 = 1;
         r4 = new java.lang.Object[r3];
         r5 = 0;
-        r4[r5] = r42;
-        r0.postNotificationName(r2, r4);
-        goto L_0x0a96;
-    L_0x0a94:
+        r4[r5] = r49;
+        r1.postNotificationName(r2, r4);
+        goto L_0x0a92;
+    L_0x0a90:
         r3 = 1;
         r5 = 0;
-    L_0x0a96:
-        if (r1 == 0) goto L_0x0aa9;
-    L_0x0a98:
-        r0 = r32.getNotificationCenter();
+    L_0x0a92:
+        if (r0 == 0) goto L_0x0aa5;
+    L_0x0a94:
+        r1 = r39.getNotificationCenter();
         r2 = org.telegram.messenger.NotificationCenter.updateInterfaces;
         r3 = new java.lang.Object[r3];
-        r1 = java.lang.Integer.valueOf(r1);
-        r3[r5] = r1;
-        r0.postNotificationName(r2, r3);
+        r0 = java.lang.Integer.valueOf(r0);
+        r3[r5] = r0;
+        r1.postNotificationName(r2, r3);
+    L_0x0aa5:
+        r1 = r50;
+        if (r1 == 0) goto L_0x0ab0;
     L_0x0aa9:
-        r1 = r43;
-        if (r1 == 0) goto L_0x0ab4;
-    L_0x0aad:
         r0 = org.telegram.messenger.ImageLoader.getInstance();
         r0.putThumbsToCache(r1);
-    L_0x0ab4:
+    L_0x0ab0:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$268$MessagesController(int, java.util.ArrayList, android.util.LongSparseArray, android.util.LongSparseArray, android.util.LongSparseArray, android.util.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, android.util.SparseArray, java.util.ArrayList):void");

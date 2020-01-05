@@ -3202,7 +3202,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 r5 = r12;
             L_0x004f:
                 r4 = org.telegram.messenger.EmojiData.emojiColoredMap;
-                r4 = r4.contains(r8);
+                r4 = r4.containsKey(r8);
                 r7 = 1;
                 if (r4 == 0) goto L_0x01f5;
             L_0x0058:

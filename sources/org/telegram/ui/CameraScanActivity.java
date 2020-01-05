@@ -637,7 +637,7 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
                 }
                 onNoWalletFound(bitmap2 != null);
                 return null;
-            } else if (!charSequence.startsWith("tg://login?token=")) {
+            } else if (!charSequence.startsWith("tg_login/")) {
                 onNoWalletFound(false);
                 return null;
             }

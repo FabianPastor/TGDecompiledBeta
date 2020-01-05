@@ -667,7 +667,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     LoginActivitySmsView.this.destroyTimer();
                                     if (LoginActivitySmsView.this.currentType == 3) {
                                         AndroidUtilities.setWaitingForCall(false);
-                                        NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
+                                        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                                         LoginActivitySmsView.this.waitingForEvent = false;
                                         LoginActivitySmsView.this.destroyCodeTimer();
                                         LoginActivitySmsView.this.resendCode();
@@ -686,7 +686,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tL_auth_resendCode, new -$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g(this), 2);
                                         } else if (LoginActivitySmsView.this.nextType == 3) {
                                             AndroidUtilities.setWaitingForSms(false);
-                                            NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveSmsCode);
+                                            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
                                             LoginActivitySmsView.this.waitingForEvent = false;
                                             LoginActivitySmsView.this.destroyCodeTimer();
                                             LoginActivitySmsView.this.resendCode();
@@ -800,7 +800,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (r7 != 0) goto L_0x003e;
         L_0x000b:
             r7 = r6.this$0;
-            r8 = NUM; // 0x7f0e021a float:1.8876129E38 double:1.0531624224E-314;
+            r8 = NUM; // 0x7f0e0217 float:1.8876123E38 double:1.053162421E-314;
             r1 = new java.lang.Object[r1];
             r2 = org.telegram.PhoneFormat.PhoneFormat.getInstance();
             r3 = new java.lang.StringBuilder;

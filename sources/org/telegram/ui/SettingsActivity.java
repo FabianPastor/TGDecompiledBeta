@@ -161,7 +161,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private RadialProgressView avatarProgressView;
     private int bioRow;
     private int chatRow;
-    private String currentBio;
     private int dataRow;
     private int devicesRow;
     private int emptyRow;
@@ -305,12 +304,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 if (itemViewType == 6) {
                     TextDetailCell textDetailCell = (TextDetailCell) viewHolder.itemView;
                     User currentUser;
-                    String str;
                     String format;
                     if (i == SettingsActivity.this.numberRow) {
                         currentUser = UserConfig.getInstance(SettingsActivity.this.currentAccount).getCurrentUser();
                         if (currentUser != null) {
-                            str = currentUser.phone;
+                            String str = currentUser.phone;
                             if (!(str == null || str.length() == 0)) {
                                 PhoneFormat instance = PhoneFormat.getInstance();
                                 StringBuilder stringBuilder = new StringBuilder();
@@ -334,19 +332,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         }
                         textDetailCell.setTextAndValue(format, LocaleController.getString("Username", NUM), true);
                     } else if (i == SettingsActivity.this.bioRow) {
-                        str = null;
                         String str2 = "UserBio";
                         if (SettingsActivity.this.userInfo == null || !TextUtils.isEmpty(SettingsActivity.this.userInfo.about)) {
                             textDetailCell.setTextWithEmojiAndValue(SettingsActivity.this.userInfo == null ? LocaleController.getString("Loading", NUM) : SettingsActivity.this.userInfo.about, LocaleController.getString(str2, NUM), false);
-                            SettingsActivity settingsActivity = SettingsActivity.this;
-                            if (settingsActivity.userInfo != null) {
-                                str = SettingsActivity.this.userInfo.about;
-                            }
-                            settingsActivity.currentBio = str;
-                            return;
+                        } else {
+                            textDetailCell.setTextAndValue(LocaleController.getString(str2, NUM), LocaleController.getString("UserBioDetail", NUM), false);
                         }
-                        textDetailCell.setTextAndValue(LocaleController.getString(str2, NUM), LocaleController.getString("UserBioDetail", NUM), false);
-                        SettingsActivity.this.currentBio = null;
                     }
                 }
             } else if (i == SettingsActivity.this.settingsSectionRow2) {
@@ -1768,8 +1759,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (i == 6) {
                     MessagesStorage.getInstance(SettingsActivity.this.currentAccount).clearSentMedia();
                     SharedConfig.setNoSoundHintShowed(false);
-                    MessagesController.getGlobalMainSettings().edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("themehint").commit();
-                    SharedConfig.textSelectionHintShows = 0;
+                    MessagesController.getGlobalMainSettings().edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").commit();
                 } else if (i == 7) {
                     VoIPHelper.showCallDebugSettings(SettingsActivity.this.getParentActivity());
                 } else if (i == 8) {
@@ -2330,10 +2320,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 updateUserData();
             }
         } else if (i == NotificationCenter.userInfoDidLoad) {
-            if (((Integer) objArr[0]).intValue() == UserConfig.getInstance(this.currentAccount).getClientUserId() && this.listAdapter != null) {
-                this.userInfo = (UserFull) objArr[1];
-                if (!TextUtils.equals(this.userInfo.about, this.currentBio)) {
-                    this.listAdapter.notifyItemChanged(this.bioRow);
+            if (((Integer) objArr[0]).intValue() == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                ListAdapter listAdapter = this.listAdapter;
+                if (listAdapter != null) {
+                    this.userInfo = (UserFull) objArr[1];
+                    listAdapter.notifyItemChanged(this.bioRow);
                 }
             }
         } else if (i == NotificationCenter.emojiDidLoad) {
@@ -2366,7 +2357,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             this.openAnimationInProgress = true;
         }
         if (z) {
-            NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaCountsDidLoad, NotificationCenter.userInfoDidLoad});
+            NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaCountsDidLoad});
             NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
         }
     }

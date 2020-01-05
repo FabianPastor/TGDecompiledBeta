@@ -179,7 +179,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         r7 = org.telegram.messenger.UserObject.isUserSelf(r12);
         if (r7 == 0) goto L_0x0134;
     L_0x0121:
-        r7 = NUM; // 0x7f0e09b0 float:1.8880068E38 double:1.053163382E-314;
+        r7 = NUM; // 0x7f0e099b float:1.8880025E38 double:1.0531633715E-314;
         r8 = "SavedMessages";
         r10 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r7 = r17.createSavedMessagesIcon();
@@ -257,7 +257,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         if (r10 != 0) goto L_0x01a5;
     L_0x019b:
         r7 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r8 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
+        r8 = NUM; // 0x7var_ float:1.7945343E38 double:1.0529356893E-314;
         r7 = android.graphics.drawable.Icon.createWithResource(r7, r8);
         r10 = r7;
     L_0x01a5:

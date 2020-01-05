@@ -37,7 +37,7 @@ public class CacheControlActivity extends BaseFragment {
     private long cacheSize = -1;
     private boolean calculating = true;
     private volatile boolean canceled = false;
-    private boolean[] clear = new boolean[7];
+    private boolean[] clear = new boolean[6];
     private int databaseInfoRow;
     private int databaseRow;
     private long databaseSize = -1;
@@ -50,7 +50,6 @@ public class CacheControlActivity extends BaseFragment {
     private long musicSize = -1;
     private long photoSize = -1;
     private int rowCount;
-    private long stickersSize = -1;
     private long totalSize = -1;
     private long videoSize = -1;
 
@@ -168,12 +167,9 @@ public class CacheControlActivity extends BaseFragment {
                     if (!this.canceled) {
                         this.musicSize = getDirectorySize(FileLoader.checkDirectory(3), 2);
                         if (!this.canceled) {
-                            this.stickersSize = getDirectorySize(new File(FileLoader.checkDirectory(4), "acache"), 0);
-                            if (!this.canceled) {
-                                this.audioSize = getDirectorySize(FileLoader.checkDirectory(1), 0);
-                                this.totalSize = (((((this.cacheSize + this.videoSize) + this.audioSize) + this.photoSize) + this.documentsSize) + this.musicSize) + this.stickersSize;
-                                AndroidUtilities.runOnUIThread(new -$$Lambda$CacheControlActivity$rl9mnpe2QS7cCoiKVnOTFMsRWgA(this));
-                            }
+                            this.audioSize = getDirectorySize(FileLoader.checkDirectory(1), 0);
+                            this.totalSize = ((((this.cacheSize + this.videoSize) + this.audioSize) + this.photoSize) + this.documentsSize) + this.musicSize;
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$CacheControlActivity$rl9mnpe2QS7cCoiKVnOTFMsRWgA(this));
                         }
                     }
                 }
@@ -199,7 +195,7 @@ public class CacheControlActivity extends BaseFragment {
             return 0;
         }
         if (file.isDirectory()) {
-            return Utilities.getDirSize(file.getAbsolutePath(), i, false);
+            return Utilities.getDirSize(file.getAbsolutePath(), i);
         }
         if (file.isFile()) {
             return 0 + file.length();
@@ -214,166 +210,138 @@ public class CacheControlActivity extends BaseFragment {
         Utilities.globalQueue.postRunnable(new -$$Lambda$CacheControlActivity$jBkbYZANDW5o41l52WQZczRyijs(this, alertDialog));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x003d  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x00be A:{SYNTHETIC} */
-    public /* synthetic */ void lambda$cleanupFolders$3$CacheControlActivity(org.telegram.ui.ActionBar.AlertDialog r15) {
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x0034  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x0094 A:{SYNTHETIC} */
+    public /* synthetic */ void lambda$cleanupFolders$3$CacheControlActivity(org.telegram.ui.ActionBar.AlertDialog r13) {
         /*
-        r14 = this;
+        r12 = this;
         r0 = 0;
         r1 = 0;
         r2 = 0;
     L_0x0003:
-        r3 = 7;
-        if (r1 >= r3) goto L_0x00c2;
+        r3 = 6;
+        if (r1 >= r3) goto L_0x0098;
     L_0x0006:
-        r3 = r14.clear;
+        r3 = r12.clear;
         r3 = r3[r1];
         r4 = 1;
         if (r3 != 0) goto L_0x000f;
     L_0x000d:
-        goto L_0x00be;
+        goto L_0x0094;
     L_0x000f:
         r3 = -1;
-        r5 = 100;
+        r5 = 4;
         r6 = 2;
-        r7 = 4;
-        r8 = 3;
-        if (r1 != 0) goto L_0x001a;
-    L_0x0017:
+        r7 = 3;
+        if (r1 != 0) goto L_0x0018;
+    L_0x0015:
+        r8 = 0;
+    L_0x0016:
         r9 = 0;
+        goto L_0x0031;
     L_0x0018:
-        r10 = 0;
-        goto L_0x0039;
+        if (r1 != r4) goto L_0x001c;
     L_0x001a:
-        if (r1 != r4) goto L_0x001e;
+        r8 = 2;
+        goto L_0x0016;
     L_0x001c:
-        r9 = 2;
-        goto L_0x0018;
+        if (r1 != r6) goto L_0x0021;
     L_0x001e:
-        if (r1 != r6) goto L_0x0023;
-    L_0x0020:
-        r9 = 3;
-        r10 = 1;
-        goto L_0x0039;
-    L_0x0023:
-        if (r1 != r8) goto L_0x0028;
-    L_0x0025:
-        r9 = 3;
-        r10 = 2;
-        goto L_0x0039;
-    L_0x0028:
-        if (r1 != r7) goto L_0x002c;
-    L_0x002a:
+        r8 = 3;
         r9 = 1;
-        goto L_0x0018;
-    L_0x002c:
-        r9 = 5;
-        if (r1 != r9) goto L_0x0032;
+        goto L_0x0031;
+    L_0x0021:
+        if (r1 != r7) goto L_0x0026;
+    L_0x0023:
+        r8 = 3;
+        r9 = 2;
+        goto L_0x0031;
+    L_0x0026:
+        if (r1 != r5) goto L_0x002a;
+    L_0x0028:
+        r8 = 1;
+        goto L_0x0016;
+    L_0x002a:
+        r8 = 5;
+        if (r1 != r8) goto L_0x002f;
+    L_0x002d:
+        r8 = 4;
+        goto L_0x0016;
     L_0x002f:
-        r9 = 100;
-        goto L_0x0018;
-    L_0x0032:
-        r9 = 6;
-        if (r1 != r9) goto L_0x0037;
-    L_0x0035:
-        r9 = 4;
-        goto L_0x0018;
-    L_0x0037:
-        r9 = -1;
-        goto L_0x0018;
-    L_0x0039:
-        if (r9 != r3) goto L_0x003d;
-    L_0x003b:
-        goto L_0x00be;
-    L_0x003d:
-        r3 = "acache";
-        if (r9 != r5) goto L_0x004b;
-    L_0x0041:
-        r11 = new java.io.File;
-        r12 = org.telegram.messenger.FileLoader.checkDirectory(r7);
-        r11.<init>(r12, r3);
-        goto L_0x004f;
-    L_0x004b:
-        r11 = org.telegram.messenger.FileLoader.checkDirectory(r9);
-    L_0x004f:
-        if (r11 == 0) goto L_0x005d;
-    L_0x0051:
-        r11 = r11.getAbsolutePath();
-        r12 = NUM; // 0x7fffffffffffffff float:NaN double:NaN;
-        org.telegram.messenger.Utilities.clearDir(r11, r10, r12, r0);
-    L_0x005d:
-        if (r9 != r7) goto L_0x006b;
-    L_0x005f:
-        r2 = org.telegram.messenger.FileLoader.checkDirectory(r7);
-        r2 = r14.getDirectorySize(r2, r10);
-        r14.cacheSize = r2;
-    L_0x0069:
+        r8 = -1;
+        goto L_0x0016;
+    L_0x0031:
+        if (r8 != r3) goto L_0x0034;
+    L_0x0033:
+        goto L_0x0094;
+    L_0x0034:
+        r3 = org.telegram.messenger.FileLoader.checkDirectory(r8);
+        if (r3 == 0) goto L_0x0046;
+    L_0x003a:
+        r3 = r3.getAbsolutePath();
+        r10 = NUM; // 0x7fffffffffffffff float:NaN double:NaN;
+        org.telegram.messenger.Utilities.clearDir(r3, r9, r10);
+    L_0x0046:
+        if (r8 != r5) goto L_0x0054;
+    L_0x0048:
+        r2 = org.telegram.messenger.FileLoader.checkDirectory(r5);
+        r2 = r12.getDirectorySize(r2, r9);
+        r12.cacheSize = r2;
+    L_0x0052:
         r2 = 1;
-        goto L_0x00be;
-    L_0x006b:
-        if (r9 != r4) goto L_0x0078;
-    L_0x006d:
+        goto L_0x0094;
+    L_0x0054:
+        if (r8 != r4) goto L_0x0061;
+    L_0x0056:
         r3 = org.telegram.messenger.FileLoader.checkDirectory(r4);
-        r3 = r14.getDirectorySize(r3, r10);
-        r14.audioSize = r3;
-        goto L_0x00be;
-    L_0x0078:
-        if (r9 != r8) goto L_0x0092;
-    L_0x007a:
-        if (r10 != r4) goto L_0x0087;
-    L_0x007c:
-        r3 = org.telegram.messenger.FileLoader.checkDirectory(r8);
-        r3 = r14.getDirectorySize(r3, r10);
-        r14.documentsSize = r3;
-        goto L_0x00be;
-    L_0x0087:
-        r3 = org.telegram.messenger.FileLoader.checkDirectory(r8);
-        r3 = r14.getDirectorySize(r3, r10);
-        r14.musicSize = r3;
-        goto L_0x00be;
-    L_0x0092:
-        if (r9 != 0) goto L_0x009f;
-    L_0x0094:
+        r3 = r12.getDirectorySize(r3, r9);
+        r12.audioSize = r3;
+        goto L_0x0094;
+    L_0x0061:
+        if (r8 != r7) goto L_0x007b;
+    L_0x0063:
+        if (r9 != r4) goto L_0x0070;
+    L_0x0065:
+        r3 = org.telegram.messenger.FileLoader.checkDirectory(r7);
+        r3 = r12.getDirectorySize(r3, r9);
+        r12.documentsSize = r3;
+        goto L_0x0094;
+    L_0x0070:
+        r3 = org.telegram.messenger.FileLoader.checkDirectory(r7);
+        r3 = r12.getDirectorySize(r3, r9);
+        r12.musicSize = r3;
+        goto L_0x0094;
+    L_0x007b:
+        if (r8 != 0) goto L_0x0088;
+    L_0x007d:
         r2 = org.telegram.messenger.FileLoader.checkDirectory(r0);
-        r2 = r14.getDirectorySize(r2, r10);
-        r14.photoSize = r2;
-        goto L_0x0069;
-    L_0x009f:
-        if (r9 != r6) goto L_0x00ac;
-    L_0x00a1:
+        r2 = r12.getDirectorySize(r2, r9);
+        r12.photoSize = r2;
+        goto L_0x0052;
+    L_0x0088:
+        if (r8 != r6) goto L_0x0094;
+    L_0x008a:
         r3 = org.telegram.messenger.FileLoader.checkDirectory(r6);
-        r3 = r14.getDirectorySize(r3, r10);
-        r14.videoSize = r3;
-        goto L_0x00be;
-    L_0x00ac:
-        if (r9 != r5) goto L_0x00be;
-    L_0x00ae:
-        r2 = new java.io.File;
-        r5 = org.telegram.messenger.FileLoader.checkDirectory(r7);
-        r2.<init>(r5, r3);
-        r2 = r14.getDirectorySize(r2, r10);
-        r14.stickersSize = r2;
-        goto L_0x0069;
-    L_0x00be:
+        r3 = r12.getDirectorySize(r3, r9);
+        r12.videoSize = r3;
+    L_0x0094:
         r1 = r1 + 1;
         goto L_0x0003;
-    L_0x00c2:
-        r0 = r14.cacheSize;
-        r3 = r14.videoSize;
+    L_0x0098:
+        r0 = r12.cacheSize;
+        r3 = r12.videoSize;
         r0 = r0 + r3;
-        r3 = r14.audioSize;
+        r3 = r12.audioSize;
         r0 = r0 + r3;
-        r3 = r14.photoSize;
+        r3 = r12.photoSize;
         r0 = r0 + r3;
-        r3 = r14.documentsSize;
+        r3 = r12.documentsSize;
         r0 = r0 + r3;
-        r3 = r14.musicSize;
+        r3 = r12.musicSize;
         r0 = r0 + r3;
-        r3 = r14.stickersSize;
-        r0 = r0 + r3;
-        r14.totalSize = r0;
+        r12.totalSize = r0;
         r0 = new org.telegram.ui.-$$Lambda$CacheControlActivity$Lvpblwm67qF5Tz21D4W9HaTE1WA;
-        r0.<init>(r14, r2, r15);
+        r0.<init>(r12, r2, r13);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
         return;
         */
@@ -422,8 +390,8 @@ public class CacheControlActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x018d  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x014e  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x017e  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x013f  */
     public /* synthetic */ void lambda$createView$10$CacheControlActivity(android.view.View r17, int r18) {
         /*
         r16 = this;
@@ -455,7 +423,7 @@ public class CacheControlActivity extends BaseFragment {
         r4 = "Months";
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7);
         r2[r3] = r4;
-        r3 = NUM; // 0x7f0e05aa float:1.8877978E38 double:1.053162873E-314;
+        r3 = NUM; // 0x7f0e059e float:1.8877954E38 double:1.053162867E-314;
         r4 = "KeepMediaForever";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2[r5] = r3;
@@ -464,7 +432,7 @@ public class CacheControlActivity extends BaseFragment {
         r1.setItems(r2, r3);
         r1 = r1.create();
         r0.showDialog(r1);
-        goto L_0x01de;
+        goto L_0x01cf;
     L_0x0053:
         r2 = r0.databaseRow;
         r8 = 0;
@@ -474,19 +442,19 @@ public class CacheControlActivity extends BaseFragment {
         r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r2 = r16.getParentActivity();
         r1.<init>(r2);
-        r2 = NUM; // 0x7f0e05ee float:1.8878116E38 double:1.0531629066E-314;
+        r2 = NUM; // 0x7f0e05df float:1.8878086E38 double:1.053162899E-314;
         r3 = "LocalDatabaseClearTextTitle";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setTitle(r2);
-        r2 = NUM; // 0x7f0e05ed float:1.8878114E38 double:1.053162906E-314;
+        r2 = NUM; // 0x7f0e05de float:1.8878084E38 double:1.0531628987E-314;
         r3 = "LocalDatabaseClearText";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setMessage(r2);
-        r2 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
+        r2 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
         r3 = "Cancel";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setNegativeButton(r2, r8);
-        r2 = NUM; // 0x7f0e01fa float:1.8876064E38 double:1.0531624066E-314;
+        r2 = NUM; // 0x7f0e01f7 float:1.8876058E38 double:1.053162405E-314;
         r3 = "CacheClear";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r3 = new org.telegram.ui.-$$Lambda$CacheControlActivity$OxPoOxpLG_g1G1jasfpkphw5fag;
@@ -496,25 +464,25 @@ public class CacheControlActivity extends BaseFragment {
         r0.showDialog(r1);
         r1 = r1.getButton(r9);
         r1 = (android.widget.TextView) r1;
-        if (r1 == 0) goto L_0x01de;
+        if (r1 == 0) goto L_0x01cf;
     L_0x00a6:
         r2 = "dialogTextRed2";
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setTextColor(r2);
-        goto L_0x01de;
+        goto L_0x01cf;
     L_0x00b1:
         r2 = r0.cacheRow;
-        if (r1 != r2) goto L_0x01de;
+        if (r1 != r2) goto L_0x01cf;
     L_0x00b5:
         r1 = r0.totalSize;
         r10 = 0;
         r12 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1));
-        if (r12 <= 0) goto L_0x01de;
+        if (r12 <= 0) goto L_0x01cf;
     L_0x00bd:
         r1 = r16.getParentActivity();
         if (r1 != 0) goto L_0x00c5;
     L_0x00c3:
-        goto L_0x01de;
+        goto L_0x01cf;
     L_0x00c5:
         r1 = new org.telegram.ui.ActionBar.BottomSheet$Builder;
         r2 = r16.getParentActivity();
@@ -526,24 +494,24 @@ public class CacheControlActivity extends BaseFragment {
         r2.setOrientation(r7);
         r12 = 0;
     L_0x00de:
-        r13 = 7;
+        r13 = 6;
         r14 = 50;
-        if (r12 >= r13) goto L_0x0199;
+        if (r12 >= r13) goto L_0x018a;
     L_0x00e3:
         if (r12 != 0) goto L_0x00f2;
     L_0x00e5:
         r8 = r0.photoSize;
-        r15 = NUM; // 0x7f0e05f3 float:1.8878127E38 double:1.053162909E-314;
+        r15 = NUM; // 0x7f0e05e4 float:1.8878096E38 double:1.0531629017E-314;
         r13 = "LocalPhotoCache";
         r13 = org.telegram.messenger.LocaleController.getString(r13, r15);
     L_0x00f0:
         r15 = r13;
-        goto L_0x014a;
+        goto L_0x013b;
     L_0x00f2:
         if (r12 != r7) goto L_0x0100;
     L_0x00f4:
         r8 = r0.videoSize;
-        r13 = NUM; // 0x7f0e05f4 float:1.8878129E38 double:1.0531629096E-314;
+        r13 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r15 = "LocalVideoCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -551,7 +519,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r3) goto L_0x010e;
     L_0x0102:
         r8 = r0.documentsSize;
-        r13 = NUM; // 0x7f0e05f0 float:1.887812E38 double:1.0531629076E-314;
+        r13 = NUM; // 0x7f0e05e1 float:1.887809E38 double:1.0531629E-314;
         r15 = "LocalDocumentCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -559,7 +527,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r5) goto L_0x011c;
     L_0x0110:
         r8 = r0.musicSize;
-        r13 = NUM; // 0x7f0e05f2 float:1.8878125E38 double:1.0531629086E-314;
+        r13 = NUM; // 0x7f0e05e3 float:1.8878094E38 double:1.053162901E-314;
         r15 = "LocalMusicCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -567,7 +535,7 @@ public class CacheControlActivity extends BaseFragment {
         if (r12 != r4) goto L_0x012a;
     L_0x011e:
         r8 = r0.audioSize;
-        r13 = NUM; // 0x7f0e05e9 float:1.8878106E38 double:1.053162904E-314;
+        r13 = NUM; // 0x7f0e05da float:1.8878076E38 double:1.0531628967E-314;
         r15 = "LocalAudioCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
@@ -575,27 +543,18 @@ public class CacheControlActivity extends BaseFragment {
         r8 = 5;
         if (r12 != r8) goto L_0x0139;
     L_0x012d:
-        r8 = r0.stickersSize;
-        r13 = NUM; // 0x7f0e00f5 float:1.8875534E38 double:1.0531622777E-314;
-        r15 = "AnimatedStickers";
-        r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
-        goto L_0x00f0;
-    L_0x0139:
-        r8 = 6;
-        if (r12 != r8) goto L_0x0148;
-    L_0x013c:
         r8 = r0.cacheSize;
-        r13 = NUM; // 0x7f0e05ea float:1.8878108E38 double:1.0531629046E-314;
+        r13 = NUM; // 0x7f0e05db float:1.8878078E38 double:1.053162897E-314;
         r15 = "LocalCache";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         goto L_0x00f0;
-    L_0x0148:
+    L_0x0139:
         r8 = r10;
         r15 = 0;
-    L_0x014a:
+    L_0x013b:
         r13 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r13 <= 0) goto L_0x018d;
-    L_0x014e:
+        if (r13 <= 0) goto L_0x017e;
+    L_0x013f:
         r13 = r0.clear;
         r13[r12] = r7;
         r13 = new org.telegram.ui.Cells.CheckBoxCell;
@@ -618,24 +577,24 @@ public class CacheControlActivity extends BaseFragment {
         r4 = new org.telegram.ui.-$$Lambda$CacheControlActivity$nToR5mmUsDX6DDZcwMPXsRZbyZs;
         r4.<init>(r0);
         r3.setOnClickListener(r4);
-        goto L_0x0191;
-    L_0x018d:
+        goto L_0x0182;
+    L_0x017e:
         r3 = r0.clear;
         r3[r12] = r6;
-    L_0x0191:
+    L_0x0182:
         r12 = r12 + 1;
         r3 = 2;
         r4 = 4;
         r8 = 0;
         r9 = -1;
         goto L_0x00de;
-    L_0x0199:
+    L_0x018a:
         r3 = new org.telegram.ui.ActionBar.BottomSheet$BottomSheetCell;
         r4 = r16.getParentActivity();
         r3.<init>(r4, r7);
         r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r6);
         r3.setBackgroundDrawable(r4);
-        r4 = NUM; // 0x7f0e02fc float:1.8876587E38 double:1.053162534E-314;
+        r4 = NUM; // 0x7f0e02f9 float:1.8876581E38 double:1.0531625326E-314;
         r5 = "ClearMediaCache";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r4 = r4.toUpperCase();
@@ -652,7 +611,7 @@ public class CacheControlActivity extends BaseFragment {
         r1.setCustomView(r2);
         r1 = r1.create();
         r0.showDialog(r1);
-    L_0x01de:
+    L_0x01cf:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CacheControlActivity.lambda$createView$10$CacheControlActivity(android.view.View, int):void");
@@ -688,8 +647,8 @@ public class CacheControlActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e0 A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01ea A:{Catch:{ Exception -> 0x023b, all -> 0x0237 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{Splitter:B:42:0x0115, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0237 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:42:0x0115} */
     /* JADX WARNING: Missing block: B:53:0x0237, code skipped:
             r0 = th;
      */

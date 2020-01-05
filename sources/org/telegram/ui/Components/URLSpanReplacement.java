@@ -31,12 +31,10 @@ public class URLSpanReplacement extends URLSpan {
     }
 
     public void updateDrawState(TextPaint textPaint) {
-        int color = textPaint.getColor();
         super.updateDrawState(textPaint);
         TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
-            textPaint.setUnderlineText(textPaint.linkColor == color);
         }
     }
 }

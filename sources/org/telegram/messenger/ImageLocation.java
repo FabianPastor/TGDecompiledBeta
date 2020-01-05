@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.DocumentObject.ThemeDocument;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatPhoto;
@@ -18,7 +17,6 @@ import org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC.TL_secureFile;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.UserProfilePhoto;
-import org.telegram.ui.ActionBar.Theme;
 
 public class ImageLocation {
     public long access_hash;
@@ -27,10 +25,10 @@ public class ImageLocation {
     public Document document;
     public long documentId;
     public byte[] file_reference;
-    public int imageType;
     public byte[] iv;
     public byte[] key;
     public TL_fileLocationToBeDeprecated location;
+    public boolean lottieAnimation;
     public String path;
     public Photo photo;
     public long photoId;
@@ -170,7 +168,7 @@ public class ImageLocation {
             }
             ImageLocation forPhoto = getForPhoto(photoSize.location, photoSize.size, null, null, null, false, document.dc_id, inputStickerSet, photoSize.type);
             if (MessageObject.isAnimatedStickerDocument(document, true)) {
-                forPhoto.imageType = 1;
+                forPhoto.lottieAnimation = true;
             }
             return forPhoto;
         }
@@ -375,7 +373,7 @@ public class ImageLocation {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLocation.getStippedKey(java.lang.Object, java.lang.Object, java.lang.Object):java.lang.String");
     }
 
-    public String getKey(Object obj, Object obj2, boolean z) {
+    public String getKey(Object obj, Object obj2) {
         String str = "_";
         StringBuilder stringBuilder;
         if (this.secureDocument != null) {
@@ -407,30 +405,12 @@ public class ImageLocation {
                 if (str2 != null) {
                     return Utilities.MD5(str2);
                 }
-            } else if (z || !(document instanceof ThemeDocument)) {
-                document = this.document;
-                if (!(document.id == 0 || document.dc_id == 0)) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(this.document.dc_id);
-                    stringBuilder.append(str);
-                    stringBuilder.append(this.document.id);
-                    return stringBuilder.toString();
-                }
-            } else {
-                ThemeDocument themeDocument = (ThemeDocument) document;
-                StringBuilder stringBuilder2 = new StringBuilder();
-                stringBuilder2.append(this.document.dc_id);
-                stringBuilder2.append(str);
-                stringBuilder2.append(this.document.id);
-                stringBuilder2.append(str);
-                stringBuilder2.append(Theme.getBaseThemeKey(themeDocument.themeSettings));
-                stringBuilder2.append(str);
-                stringBuilder2.append(themeDocument.themeSettings.accent_color);
-                stringBuilder2.append(str);
-                stringBuilder2.append(themeDocument.themeSettings.message_top_color);
-                stringBuilder2.append(str);
-                stringBuilder2.append(themeDocument.themeSettings.message_bottom_color);
-                return stringBuilder2.toString();
+            } else if (!(document.id == 0 || document.dc_id == 0)) {
+                stringBuilder = new StringBuilder();
+                stringBuilder.append(this.document.dc_id);
+                stringBuilder.append(str);
+                stringBuilder.append(this.document.id);
+                return stringBuilder.toString();
             }
         }
         return null;

@@ -51,6 +51,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private Runnable loadFrameTask;
     private final int[] metaData;
     private volatile long nativePtr;
+    private boolean needGenerateCache;
     private HashMap<String, Integer> newColorUpdates;
     private int[] newReplaceColors;
     private volatile boolean nextFrameIsLast;
@@ -72,9 +73,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private HashMap<Integer, Integer> vibrationPattern;
     private int width;
 
-    private static native long create(String str, int i, int i2, int[] iArr, boolean z, int[] iArr2, boolean z2);
+    private static native long create(String str, int[] iArr, boolean z, int[] iArr2);
 
-    private static native void createCache(long j, int i, int i2);
+    private static native void createCache(long j, Bitmap bitmap, int i, int i2, int i3);
 
     private static native long createWithJson(String str, String str2, int[] iArr, int[] iArr2);
 
@@ -175,12 +176,13 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 if (!(RLottieDrawable.this.isRecycled || RLottieDrawable.this.destroyWhenDone || RLottieDrawable.this.nativePtr == 0)) {
                     RLottieDrawable.lottieCacheGenerateQueue.execute(RLottieDrawable.this.cacheGenerateTask = new -$$Lambda$RLottieDrawable$5$Yb_jU2tqNZSr5pLiqbJfFDeXef4(this));
                 }
+                RLottieDrawable.this.loadFrameTask = null;
                 RLottieDrawable.this.decodeFrameFinishedInternal();
             }
 
             public /* synthetic */ void lambda$run$0$RLottieDrawable$5() {
                 if (RLottieDrawable.this.cacheGenerateTask != null) {
-                    RLottieDrawable.createCache(RLottieDrawable.this.nativePtr, RLottieDrawable.this.width, RLottieDrawable.this.height);
+                    RLottieDrawable.createCache(RLottieDrawable.this.nativePtr, RLottieDrawable.this.backgroundBitmap, RLottieDrawable.this.width, RLottieDrawable.this.height, RLottieDrawable.this.backgroundBitmap.getRowBytes());
                     RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
                 }
             }
@@ -200,6 +202,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                         }
                     }
                     if (RLottieDrawable.this.backgroundBitmap != null) {
+                        if (RLottieDrawable.this.needGenerateCache) {
+                            RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableGenerateCache);
+                            RLottieDrawable.this.needGenerateCache = false;
+                            return;
+                        }
                         try {
                             if (!RLottieDrawable.this.pendingColorUpdates.isEmpty()) {
                                 for (Entry entry : RLottieDrawable.this.pendingColorUpdates.entrySet()) {
@@ -214,12 +221,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             RLottieDrawable.this.pendingReplaceColors = null;
                         }
                         try {
-                            if (RLottieDrawable.getFrame(RLottieDrawable.this.nativePtr, RLottieDrawable.this.currentFrame, RLottieDrawable.this.backgroundBitmap, RLottieDrawable.this.width, RLottieDrawable.this.height, RLottieDrawable.this.backgroundBitmap.getRowBytes()) == -1) {
-                                RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableNoFrame);
-                                return;
-                            }
+                            RLottieDrawable.getFrame(RLottieDrawable.this.nativePtr, RLottieDrawable.this.currentFrame, RLottieDrawable.this.backgroundBitmap, RLottieDrawable.this.width, RLottieDrawable.this.height, RLottieDrawable.this.backgroundBitmap.getRowBytes());
                             if (RLottieDrawable.this.metaData[2] != 0) {
-                                RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableGenerateCache);
+                                RLottieDrawable.this.needGenerateCache = true;
                                 RLottieDrawable.this.metaData[2] = 0;
                             }
                             RLottieDrawable.this.nextRenderingBitmap = RLottieDrawable.this.backgroundBitmap;
@@ -254,7 +258,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.height = i2;
         this.shouldLimitFps = z2;
         getPaint().setFlags(2);
-        this.nativePtr = create(file.getAbsolutePath(), i, i2, this.metaData, z, iArr, this.shouldLimitFps);
+        this.nativePtr = create(file.getAbsolutePath(), this.metaData, z, iArr);
         if (z && lottieCacheGenerateQueue == null) {
             lottieCacheGenerateQueue = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue());
         }
@@ -493,63 +497,66 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         invalidateInternal();
     }
 
-    /* JADX WARNING: Missing block: B:14:0x0020, code skipped:
-            if (r5.singleFrameDecoded == false) goto L_0x0023;
+    /* JADX WARNING: Missing block: B:16:0x0024, code skipped:
+            if (r5.singleFrameDecoded == false) goto L_0x0027;
      */
     private boolean scheduleNextGetFrame() {
         /*
         r5 = this;
-        r0 = r5.loadFrameTask;
-        if (r0 != 0) goto L_0x004b;
+        r0 = r5.cacheGenerateTask;
+        if (r0 != 0) goto L_0x004f;
     L_0x0004:
-        r0 = r5.nextRenderingBitmap;
-        if (r0 != 0) goto L_0x004b;
+        r0 = r5.loadFrameTask;
+        if (r0 != 0) goto L_0x004f;
     L_0x0008:
+        r0 = r5.nextRenderingBitmap;
+        if (r0 != 0) goto L_0x004f;
+    L_0x000c:
         r0 = r5.nativePtr;
         r2 = 0;
         r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 == 0) goto L_0x004b;
-    L_0x0010:
-        r0 = r5.destroyWhenDone;
-        if (r0 != 0) goto L_0x004b;
+        if (r4 == 0) goto L_0x004f;
     L_0x0014:
-        r0 = r5.isRunning;
-        if (r0 != 0) goto L_0x0023;
+        r0 = r5.destroyWhenDone;
+        if (r0 != 0) goto L_0x004f;
     L_0x0018:
-        r0 = r5.decodeSingleFrame;
-        if (r0 == 0) goto L_0x004b;
+        r0 = r5.isRunning;
+        if (r0 != 0) goto L_0x0027;
     L_0x001c:
-        if (r0 == 0) goto L_0x0023;
-    L_0x001e:
-        r0 = r5.singleFrameDecoded;
-        if (r0 == 0) goto L_0x0023;
+        r0 = r5.decodeSingleFrame;
+        if (r0 == 0) goto L_0x004f;
+    L_0x0020:
+        if (r0 == 0) goto L_0x0027;
     L_0x0022:
-        goto L_0x004b;
-    L_0x0023:
+        r0 = r5.singleFrameDecoded;
+        if (r0 == 0) goto L_0x0027;
+    L_0x0026:
+        goto L_0x004f;
+    L_0x0027:
         r0 = r5.newColorUpdates;
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x0037;
-    L_0x002b:
+        if (r0 != 0) goto L_0x003b;
+    L_0x002f:
         r0 = r5.pendingColorUpdates;
         r1 = r5.newColorUpdates;
         r0.putAll(r1);
         r0 = r5.newColorUpdates;
         r0.clear();
-    L_0x0037:
-        r0 = r5.newReplaceColors;
-        if (r0 == 0) goto L_0x0040;
     L_0x003b:
+        r0 = r5.newReplaceColors;
+        if (r0 == 0) goto L_0x0044;
+    L_0x003f:
         r5.pendingReplaceColors = r0;
         r0 = 0;
         r5.newReplaceColors = r0;
-    L_0x0040:
+    L_0x0044:
         r0 = loadFrameRunnableQueue;
         r1 = r5.loadFrameRunnable;
         r5.loadFrameTask = r1;
         r0.execute(r1);
         r0 = 1;
         return r0;
-    L_0x004b:
+    L_0x004f:
         r0 = 0;
         return r0;
         */

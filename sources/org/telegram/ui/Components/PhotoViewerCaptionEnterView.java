@@ -574,7 +574,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public void closeKeyboard() {
         AndroidUtilities.hideKeyboard(this.messageEditText);
-        this.messageEditText.clearFocus();
     }
 
     public boolean isKeyboardVisible() {

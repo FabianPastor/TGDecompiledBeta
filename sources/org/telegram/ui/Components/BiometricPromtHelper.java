@@ -280,7 +280,7 @@ public class BiometricPromtHelper {
         goto L_0x003a;
     L_0x0012:
         r0 = 2;
-        r2 = NUM; // 0x7var_c4 float:1.7944975E38 double:1.0529356E-314;
+        r2 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
         if (r7 != r0) goto L_0x0019;
     L_0x0018:
         goto L_0x002f;
@@ -290,7 +290,7 @@ public class BiometricPromtHelper {
     L_0x001c:
         if (r7 != r3) goto L_0x0022;
     L_0x001e:
-        r2 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
+        r2 = NUM; // 0x7var_c2 float:1.7944971E38 double:1.052935599E-314;
         goto L_0x002f;
     L_0x0022:
         r4 = 4;

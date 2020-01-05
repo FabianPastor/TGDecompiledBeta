@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
 
@@ -49,11 +48,11 @@ public class MenuDrawable extends Drawable {
         if (z) {
             float f3 = this.currentRotation;
             if (f3 < f) {
-                this.currentAnimationTime = (int) (f3 * 200.0f);
+                this.currentAnimationTime = (int) (f3 * 300.0f);
             } else {
-                this.currentAnimationTime = (int) ((1.0f - f3) * 200.0f);
+                this.currentAnimationTime = (int) ((1.0f - f3) * 300.0f);
             }
-            this.lastFrameTime = SystemClock.uptimeMillis();
+            this.lastFrameTime = System.currentTimeMillis();
             this.finalRotation = f;
         } else {
             this.currentRotation = f;
@@ -63,6 +62,7 @@ public class MenuDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
+        int i;
         float dp;
         float dp2;
         float dp3;
@@ -70,28 +70,26 @@ public class MenuDrawable extends Drawable {
         float dp4;
         float abs;
         if (this.currentRotation != this.finalRotation) {
-            long uptimeMillis = SystemClock.uptimeMillis();
-            long j = this.lastFrameTime;
-            if (j != 0) {
-                this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (uptimeMillis - j));
-                int i = this.currentAnimationTime;
-                if (i >= 200) {
+            if (this.lastFrameTime != 0) {
+                this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (System.currentTimeMillis() - this.lastFrameTime));
+                i = this.currentAnimationTime;
+                if (i >= 300) {
                     this.currentRotation = this.finalRotation;
                 } else if (this.currentRotation < this.finalRotation) {
-                    this.currentRotation = this.interpolator.getInterpolation(((float) i) / 200.0f) * this.finalRotation;
+                    this.currentRotation = this.interpolator.getInterpolation(((float) i) / 300.0f) * this.finalRotation;
                 } else {
-                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) i) / 200.0f);
+                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) i) / 300.0f);
                 }
             }
-            this.lastFrameTime = uptimeMillis;
+            this.lastFrameTime = System.currentTimeMillis();
             invalidateSelf();
         }
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
-        int color = Theme.getColor("actionBarDefaultIcon");
+        i = Theme.getColor("actionBarDefaultIcon");
         if (this.rotateToBack) {
             canvas.rotate(this.currentRotation * ((float) (this.reverseAngle ? -180 : 180)));
-            this.paint.setColor(color);
+            this.paint.setColor(i);
             canvas.drawLine((float) (-AndroidUtilities.dp(9.0f)), 0.0f, ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(3.0f)) * this.currentRotation), 0.0f, this.paint);
             dp = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
             dp2 = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(2.5f)) * Math.abs(this.currentRotation));
@@ -101,7 +99,7 @@ public class MenuDrawable extends Drawable {
             abs = Math.abs(this.currentRotation);
         } else {
             canvas.rotate(this.currentRotation * ((float) (this.reverseAngle ? -225 : 135)));
-            this.paint.setColor(AndroidUtilities.getOffsetColor(color, Theme.getColor("actionBarActionModeDefaultIcon"), this.currentRotation, 1.0f));
+            this.paint.setColor(AndroidUtilities.getOffsetColor(i, Theme.getColor("actionBarActionModeDefaultIcon"), this.currentRotation, 1.0f));
             canvas.drawLine(((float) (-AndroidUtilities.dp(9.0f))) + (((float) AndroidUtilities.dp(1.0f)) * this.currentRotation), 0.0f, ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(1.0f)) * this.currentRotation), 0.0f, this.paint);
             dp = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
             dp2 = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(9.0f)) * Math.abs(this.currentRotation));

@@ -46,7 +46,6 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ActionBar.Theme.ThemeAccent;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
@@ -72,7 +71,6 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     private HeaderCell headerCell;
     private TextInfoPrivacyCell helpInfoCell;
     private boolean ignoreCheck;
-    private TL_theme info;
     private CharSequence infoText;
     private String lastCheckName;
     private boolean lastNameAvailable;
@@ -81,7 +79,6 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     private ThemePreviewMessagesCell messagesCell;
     private EditTextBoldCursor nameField;
     private AlertDialog progressDialog;
-    private ThemeAccent themeAccent;
     private ThemeInfo themeInfo;
 
     private static class LinkMovementMethodMy extends LinkMovementMethod {
@@ -131,11 +128,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     static /* synthetic */ void lambda$saveTheme$9(DialogInterface dialogInterface) {
     }
 
-    public ThemeSetUrlActivity(ThemeInfo themeInfo, ThemeAccent themeAccent, boolean z) {
+    public ThemeSetUrlActivity(ThemeInfo themeInfo, boolean z) {
         this.themeInfo = themeInfo;
-        this.themeAccent = themeAccent;
-        this.info = themeAccent != null ? themeAccent.info : themeInfo.info;
-        this.currentAccount = themeAccent != null ? themeAccent.account : themeInfo.account;
         this.creatingNewTheme = z;
     }
 
@@ -264,7 +258,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                     if (ThemeSetUrlActivity.this.linkField.length() > 0) {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append("https://");
-                        stringBuilder.append(ThemeSetUrlActivity.this.getMessagesController().linkPrefix);
+                        stringBuilder.append(MessagesController.getInstance(ThemeSetUrlActivity.this.themeInfo.account).linkPrefix);
                         stringBuilder.append("/addtheme/");
                         stringBuilder.append(ThemeSetUrlActivity.this.linkField.getText());
                         String stringBuilder2 = stringBuilder.toString();
@@ -318,13 +312,13 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         } else {
             this.helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, str3));
         }
-        TL_theme tL_theme = this.info;
-        if (tL_theme != null) {
+        ThemeInfo themeInfo = this.themeInfo;
+        if (themeInfo != null) {
             this.ignoreCheck = true;
-            this.nameField.setText(tL_theme.title);
+            this.nameField.setText(themeInfo.name);
             EditTextBoldCursor editTextBoldCursor = this.nameField;
             editTextBoldCursor.setSelection(editTextBoldCursor.length());
-            this.linkField.setText(this.info.slug);
+            this.linkField.setText(this.themeInfo.info.slug);
             editTextBoldCursor = this.linkField;
             editTextBoldCursor.setSelection(editTextBoldCursor.length());
             this.ignoreCheck = false;
@@ -407,11 +401,9 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        ThemeAccent themeAccent;
         AlertDialog alertDialog;
         if (i == NotificationCenter.themeUploadedToServer) {
-            themeAccent = (ThemeAccent) objArr[1];
-            if (((ThemeInfo) objArr[0]) == this.themeInfo && themeAccent == this.themeAccent) {
+            if (((ThemeInfo) objArr[0]) == this.themeInfo) {
                 alertDialog = this.progressDialog;
                 if (alertDialog != null) {
                     try {
@@ -424,172 +416,171 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                     finishFragment();
                 }
             }
-        } else if (i == NotificationCenter.themeUploadError) {
-            themeAccent = (ThemeAccent) objArr[1];
-            if (((ThemeInfo) objArr[0]) == this.themeInfo && themeAccent == this.themeAccent) {
-                alertDialog = this.progressDialog;
-                if (alertDialog != null) {
-                    try {
-                        alertDialog.dismiss();
-                        this.progressDialog = null;
-                    } catch (Exception e2) {
-                        FileLog.e(e2);
-                    }
+        } else if (i == NotificationCenter.themeUploadError && ((ThemeInfo) objArr[0]) == this.themeInfo) {
+            alertDialog = this.progressDialog;
+            if (alertDialog != null) {
+                try {
+                    alertDialog.dismiss();
+                    this.progressDialog = null;
+                } catch (Exception e2) {
+                    FileLog.e(e2);
                 }
             }
         }
     }
 
-    /* JADX WARNING: Missing block: B:55:0x00e0, code skipped:
-            if (r13 != null) goto L_0x00e5;
+    /* JADX WARNING: Missing block: B:55:0x00e4, code skipped:
+            if (r13 != null) goto L_0x00e9;
      */
     private boolean checkUrl(java.lang.String r12, boolean r13) {
         /*
         r11 = this;
         r0 = r11.checkRunnable;
         r1 = 1;
-        if (r0 == 0) goto L_0x001c;
+        if (r0 == 0) goto L_0x001e;
     L_0x0005:
         org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0);
         r0 = 0;
         r11.checkRunnable = r0;
         r11.lastCheckName = r0;
         r0 = r11.checkReqId;
-        if (r0 == 0) goto L_0x001c;
+        if (r0 == 0) goto L_0x001e;
     L_0x0011:
-        r0 = r11.currentAccount;
+        r0 = r11.themeInfo;
+        r0 = r0.account;
         r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
         r2 = r11.checkReqId;
         r0.cancelRequest(r2, r1);
-    L_0x001c:
+    L_0x001e:
         r0 = 0;
         r11.lastNameAvailable = r0;
-        r2 = NUM; // 0x7f0e0aef float:1.8880715E38 double:1.0531635395E-314;
+        r2 = NUM; // 0x7f0e0ad8 float:1.8880668E38 double:1.053163528E-314;
         r3 = "Theme";
         r4 = "windowBackgroundWhiteRedText4";
-        if (r12 == 0) goto L_0x00ab;
-    L_0x0029:
+        if (r12 == 0) goto L_0x00ad;
+    L_0x002b:
         r5 = "_";
         r6 = r12.startsWith(r5);
-        r7 = NUM; // 0x7f0e0a30 float:1.8880327E38 double:1.053163445E-314;
+        r7 = NUM; // 0x7f0e0a1b float:1.8880285E38 double:1.053163435E-314;
         r8 = "SetUrlInvalid";
-        if (r6 != 0) goto L_0x00a3;
-    L_0x0036:
+        if (r6 != 0) goto L_0x00a5;
+    L_0x0038:
         r5 = r12.endsWith(r5);
-        if (r5 == 0) goto L_0x003d;
-    L_0x003c:
-        goto L_0x00a3;
-    L_0x003d:
-        r5 = 0;
+        if (r5 == 0) goto L_0x003f;
     L_0x003e:
+        goto L_0x00a5;
+    L_0x003f:
+        r5 = 0;
+    L_0x0040:
         r6 = r12.length();
-        if (r5 >= r6) goto L_0x00ab;
-    L_0x0044:
+        if (r5 >= r6) goto L_0x00ad;
+    L_0x0046:
         r6 = r12.charAt(r5);
         r9 = 57;
         r10 = 48;
-        if (r5 != 0) goto L_0x0072;
-    L_0x004e:
-        if (r6 < r10) goto L_0x0072;
+        if (r5 != 0) goto L_0x0074;
     L_0x0050:
-        if (r6 > r9) goto L_0x0072;
+        if (r6 < r10) goto L_0x0074;
     L_0x0052:
-        if (r13 == 0) goto L_0x0065;
+        if (r6 > r9) goto L_0x0074;
     L_0x0054:
+        if (r13 == 0) goto L_0x0067;
+    L_0x0056:
         r12 = org.telegram.messenger.LocaleController.getString(r3, r2);
-        r13 = NUM; // 0x7f0e0a33 float:1.8880333E38 double:1.0531634466E-314;
+        r13 = NUM; // 0x7f0e0a1e float:1.888029E38 double:1.0531634363E-314;
         r1 = "SetUrlInvalidStartNumber";
         r13 = org.telegram.messenger.LocaleController.getString(r1, r13);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r12, r13);
-        goto L_0x0071;
-    L_0x0065:
-        r12 = NUM; // 0x7f0e0a33 float:1.8880333E38 double:1.0531634466E-314;
+        goto L_0x0073;
+    L_0x0067:
+        r12 = NUM; // 0x7f0e0a1e float:1.888029E38 double:1.0531634363E-314;
         r13 = "SetUrlInvalidStartNumber";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r11.setCheckText(r12, r4);
-    L_0x0071:
+    L_0x0073:
         return r0;
-    L_0x0072:
-        if (r6 < r10) goto L_0x0076;
     L_0x0074:
-        if (r6 <= r9) goto L_0x00a0;
+        if (r6 < r10) goto L_0x0078;
     L_0x0076:
+        if (r6 <= r9) goto L_0x00a2;
+    L_0x0078:
         r9 = 97;
-        if (r6 < r9) goto L_0x007e;
-    L_0x007a:
+        if (r6 < r9) goto L_0x0080;
+    L_0x007c:
         r9 = 122; // 0x7a float:1.71E-43 double:6.03E-322;
-        if (r6 <= r9) goto L_0x00a0;
-    L_0x007e:
+        if (r6 <= r9) goto L_0x00a2;
+    L_0x0080:
         r9 = 65;
-        if (r6 < r9) goto L_0x0086;
-    L_0x0082:
+        if (r6 < r9) goto L_0x0088;
+    L_0x0084:
         r9 = 90;
-        if (r6 <= r9) goto L_0x00a0;
-    L_0x0086:
+        if (r6 <= r9) goto L_0x00a2;
+    L_0x0088:
         r9 = 95;
-        if (r6 == r9) goto L_0x00a0;
-    L_0x008a:
-        if (r13 == 0) goto L_0x0098;
+        if (r6 == r9) goto L_0x00a2;
     L_0x008c:
+        if (r13 == 0) goto L_0x009a;
+    L_0x008e:
         r12 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r13 = org.telegram.messenger.LocaleController.getString(r8, r7);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r12, r13);
-        goto L_0x009f;
-    L_0x0098:
+        goto L_0x00a1;
+    L_0x009a:
         r12 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r11.setCheckText(r12, r4);
-    L_0x009f:
+    L_0x00a1:
         return r0;
-    L_0x00a0:
+    L_0x00a2:
         r5 = r5 + 1;
-        goto L_0x003e;
-    L_0x00a3:
+        goto L_0x0040;
+    L_0x00a5:
         r12 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r11.setCheckText(r12, r4);
         return r0;
-    L_0x00ab:
-        if (r12 == 0) goto L_0x011f;
     L_0x00ad:
+        if (r12 == 0) goto L_0x0123;
+    L_0x00af:
         r5 = r12.length();
         r6 = 5;
-        if (r5 >= r6) goto L_0x00b5;
-    L_0x00b4:
-        goto L_0x011f;
-    L_0x00b5:
+        if (r5 >= r6) goto L_0x00b7;
+    L_0x00b6:
+        goto L_0x0123;
+    L_0x00b7:
         r5 = r12.length();
         r6 = 64;
-        if (r5 <= r6) goto L_0x00d8;
-    L_0x00bd:
-        r12 = NUM; // 0x7f0e0a31 float:1.888033E38 double:1.0531634456E-314;
+        if (r5 <= r6) goto L_0x00da;
+    L_0x00bf:
+        r12 = NUM; // 0x7f0e0a1c float:1.8880287E38 double:1.0531634353E-314;
         r1 = "SetUrlInvalidLong";
-        if (r13 == 0) goto L_0x00d0;
-    L_0x00c4:
+        if (r13 == 0) goto L_0x00d2;
+    L_0x00c6:
         r13 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r13, r12);
-        goto L_0x00d7;
-    L_0x00d0:
+        goto L_0x00d9;
+    L_0x00d2:
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         r11.setCheckText(r12, r4);
-    L_0x00d7:
+    L_0x00d9:
         return r0;
-    L_0x00d8:
-        if (r13 != 0) goto L_0x011e;
     L_0x00da:
-        r13 = r11.info;
-        if (r13 == 0) goto L_0x00e3;
-    L_0x00de:
+        if (r13 != 0) goto L_0x0122;
+    L_0x00dc:
+        r13 = r11.themeInfo;
+        if (r13 == 0) goto L_0x00e7;
+    L_0x00e0:
+        r13 = r13.info;
         r13 = r13.slug;
-        if (r13 == 0) goto L_0x00e3;
-    L_0x00e2:
-        goto L_0x00e5;
-    L_0x00e3:
+        if (r13 == 0) goto L_0x00e7;
+    L_0x00e6:
+        goto L_0x00e9;
+    L_0x00e7:
         r13 = "";
-    L_0x00e5:
+    L_0x00e9:
         r13 = r12.equals(r13);
-        if (r13 == 0) goto L_0x00ff;
-    L_0x00eb:
-        r13 = NUM; // 0x7f0e0a2d float:1.8880321E38 double:1.0531634437E-314;
+        if (r13 == 0) goto L_0x0103;
+    L_0x00ef:
+        r13 = NUM; // 0x7f0e0a18 float:1.8880279E38 double:1.0531634333E-314;
         r2 = new java.lang.Object[r1];
         r2[r0] = r12;
         r12 = "SetUrlAvailable";
@@ -597,8 +588,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r13 = "windowBackgroundWhiteGreenText";
         r11.setCheckText(r12, r13);
         return r1;
-    L_0x00ff:
-        r13 = NUM; // 0x7f0e0a2e float:1.8880323E38 double:1.053163444E-314;
+    L_0x0103:
+        r13 = NUM; // 0x7f0e0a19 float:1.888028E38 double:1.053163434E-314;
         r0 = "SetUrlChecking";
         r13 = org.telegram.messenger.LocaleController.getString(r0, r13);
         r0 = "windowBackgroundWhiteGrayText8";
@@ -610,21 +601,21 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r12 = r11.checkRunnable;
         r2 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r12, r2);
-    L_0x011e:
+    L_0x0122:
         return r1;
-    L_0x011f:
-        r12 = NUM; // 0x7f0e0a32 float:1.8880331E38 double:1.053163446E-314;
+    L_0x0123:
+        r12 = NUM; // 0x7f0e0a1d float:1.8880289E38 double:1.053163436E-314;
         r1 = "SetUrlInvalidShort";
-        if (r13 == 0) goto L_0x0132;
-    L_0x0126:
+        if (r13 == 0) goto L_0x0136;
+    L_0x012a:
         r13 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r13, r12);
-        goto L_0x0139;
-    L_0x0132:
+        goto L_0x013d;
+    L_0x0136:
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         r11.setCheckText(r12, r4);
-    L_0x0139:
+    L_0x013d:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeSetUrlActivity.checkUrl(java.lang.String, boolean):boolean");
@@ -635,7 +626,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         tL_account_createTheme.slug = str;
         tL_account_createTheme.title = "";
         tL_account_createTheme.document = new TL_inputDocumentEmpty();
-        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_createTheme, new -$$Lambda$ThemeSetUrlActivity$aQbtyL09ngk96Vga3xgJIqv0TIQ(this, str), 2);
+        this.checkReqId = ConnectionsManager.getInstance(this.themeInfo.account).sendRequest(tL_account_createTheme, new -$$Lambda$ThemeSetUrlActivity$aQbtyL09ngk96Vga3xgJIqv0TIQ(this, str), 2);
     }
 
     public /* synthetic */ void lambda$null$7$ThemeSetUrlActivity(String str, TLObject tLObject, TL_error tL_error) {
@@ -670,7 +661,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     L_0x0023:
         goto L_0x0036;
     L_0x0024:
-        r4 = NUM; // 0x7f0e0a2f float:1.8880325E38 double:1.0531634447E-314;
+        r4 = NUM; // 0x7f0e0a1a float:1.8880283E38 double:1.0531634343E-314;
         r5 = "SetUrlInUse";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "windowBackgroundWhiteRedText4";
@@ -678,7 +669,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r3.lastNameAvailable = r0;
         goto L_0x004c;
     L_0x0036:
-        r5 = NUM; // 0x7f0e0a2d float:1.8880321E38 double:1.0531634437E-314;
+        r5 = NUM; // 0x7f0e0a18 float:1.8880279E38 double:1.0531634333E-314;
         r1 = 1;
         r2 = new java.lang.Object[r1];
         r2[r0] = r4;
@@ -725,26 +716,26 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (this.nameField.length() == 0) {
             AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", NUM), LocaleController.getString("ThemeNameInvalid", NUM));
         } else if (this.creatingNewTheme) {
-            TL_theme tL_theme = this.info;
-            str = tL_theme.title;
-            str2 = tL_theme.slug;
+            ThemeInfo themeInfo = this.themeInfo;
+            str = themeInfo.name;
+            str2 = themeInfo.info.slug;
             this.progressDialog = new AlertDialog(getParentActivity(), 3);
             this.progressDialog.setOnCancelListener(-$$Lambda$ThemeSetUrlActivity$DJii0csNwFlvBjy-KJ7HA1_lGQY.INSTANCE);
             this.progressDialog.show();
-            ThemeInfo themeInfo = this.themeInfo;
-            TL_theme tL_theme2 = this.info;
+            themeInfo = this.themeInfo;
+            TL_theme tL_theme = themeInfo.info;
             str = this.nameField.getText().toString();
-            tL_theme2.title = str;
+            tL_theme.title = str;
             themeInfo.name = str;
             this.themeInfo.info.slug = this.linkField.getText().toString();
             Theme.saveCurrentTheme(this.themeInfo, true, true, true);
         } else {
-            str2 = this.info.slug;
+            str2 = this.themeInfo.info.slug;
             str = "";
             if (str2 == null) {
                 str2 = str;
             }
-            String str3 = this.info.title;
+            String str3 = this.themeInfo.name;
             if (str3 != null) {
                 str = str3;
             }
@@ -757,17 +748,18 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             this.progressDialog = new AlertDialog(getParentActivity(), 3);
             TL_account_updateTheme tL_account_updateTheme = new TL_account_updateTheme();
             TL_inputTheme tL_inputTheme = new TL_inputTheme();
-            TL_theme tL_theme3 = this.info;
-            tL_inputTheme.id = tL_theme3.id;
-            tL_inputTheme.access_hash = tL_theme3.access_hash;
+            ThemeInfo themeInfo2 = this.themeInfo;
+            TL_theme tL_theme2 = themeInfo2.info;
+            tL_inputTheme.id = tL_theme2.id;
+            tL_inputTheme.access_hash = tL_theme2.access_hash;
             tL_account_updateTheme.theme = tL_inputTheme;
             tL_account_updateTheme.format = "android";
             tL_account_updateTheme.slug = str3;
             tL_account_updateTheme.flags = 1 | tL_account_updateTheme.flags;
             tL_account_updateTheme.title = obj;
             tL_account_updateTheme.flags |= 2;
-            int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateTheme, new -$$Lambda$ThemeSetUrlActivity$RZNy0C-blX8HMmj88uQdPDrohSI(this, tL_account_updateTheme), 2);
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
+            int sendRequest = ConnectionsManager.getInstance(themeInfo2.account).sendRequest(tL_account_updateTheme, new -$$Lambda$ThemeSetUrlActivity$RZNy0C-blX8HMmj88uQdPDrohSI(this, tL_account_updateTheme), 2);
+            ConnectionsManager.getInstance(this.themeInfo.account).bindRequestToGuid(sendRequest, this.classGuid);
             this.progressDialog.setOnCancelListener(new -$$Lambda$ThemeSetUrlActivity$-rj0xYcSJRokmADGaQlIk9tW0x0(this, sendRequest));
             this.progressDialog.show();
         }
@@ -788,7 +780,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         } catch (Exception e) {
             FileLog.e(e);
         }
-        Theme.setThemeUploadInfo(this.themeInfo, this.themeAccent, tL_theme, this.currentAccount, false);
+        Theme.setThemeUploadInfo(this.themeInfo, tL_theme, false);
         finishFragment();
     }
 
@@ -799,11 +791,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         } catch (Exception e) {
             FileLog.e(e);
         }
-        AlertsCreator.processError(this.currentAccount, tL_error, this, tL_account_updateTheme, new Object[0]);
+        AlertsCreator.processError(this.themeInfo.account, tL_error, this, tL_account_updateTheme, new Object[0]);
     }
 
     public /* synthetic */ void lambda$saveTheme$13$ThemeSetUrlActivity(int i, DialogInterface dialogInterface) {
-        ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
+        ConnectionsManager.getInstance(this.themeInfo.account).cancelRequest(i, true);
     }
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {

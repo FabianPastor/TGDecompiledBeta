@@ -39,17 +39,6 @@ public class DispatchQueue extends Thread {
         }
     }
 
-    public void cancelRunnables(Runnable[] runnableArr) {
-        try {
-            this.syncLatch.await();
-            for (Runnable removeCallbacks : runnableArr) {
-                this.handler.removeCallbacks(removeCallbacks);
-            }
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-    }
-
     public void postRunnable(Runnable runnable) {
         postRunnable(runnable, 0);
     }

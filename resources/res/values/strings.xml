@@ -244,7 +244,6 @@
     <string name="AndOther_other">and %1$d others</string>
     <string name="AndOther_two">and %1$d others</string>
     <string name="AndOther_zero">and %1$d others</string>
-    <string name="AnimatedStickers">Animated Stickers</string>
     <string name="AnonymousPoll">Anonymous Poll</string>
     <string name="ApkRestricted">APK installation is restricted for this app. You can enable this in system settings.</string>
     <string name="AppFolderInfo">Browse the app\'s folder</string>
@@ -361,14 +360,13 @@
     <string name="August">August</string>
     <string name="AuthAnotherClient">Login by QR Code</string>
     <string name="AuthAnotherClientDownloadClientUrl">https://desktop.telegram.org/</string>
-    <string name="AuthAnotherClientInfo1">Download Telegram on your computer from *desktop.telegram.org*.</string>
+    <string name="AuthAnotherClientInfo1">*Download Telegram* on your computer.</string>
     <string name="AuthAnotherClientInfo2">Run Telegram Desktop to get the QR code.</string>
     <string name="AuthAnotherClientInfo3">Scan the QR code to connect your account.</string>
     <string name="AuthAnotherClientNotFound">No auth token found</string>
-    <string name="AuthAnotherClientOk">Login Successfull</string>
+    <string name="AuthAnotherClientOk">Auth successfull</string>
     <string name="AuthAnotherClientScan">Scan QR Code</string>
     <string name="AuthAnotherClientTokenError">Token invalid or already expired.</string>
-    <string name="AuthAnotherClientUrl">This code can be used to allow someone to log in to your Telegram account.\10\10To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and scan the code.</string>
     <string name="AutoDownloadAudioInfo">Voice messages are tiny, so they\'re always downloaded automatically.</string>
     <string name="AutoDownloadChannels">Channels</string>
     <string name="AutoDownloadContacts">Contacts</string>
@@ -444,7 +442,6 @@
     <string name="Back">Back</string>
     <string name="BackgroundBlurred">Blurred</string>
     <string name="BackgroundBrightness">Brightness</string>
-    <string name="BackgroundChoosePattern">Choose pattern</string>
     <string name="BackgroundColor">Color</string>
     <string name="BackgroundColorPreviewLine1">Swipe left or right to see more colors.</string>
     <string name="BackgroundColorPreviewLine2">Salmon is a fish, not a color.</string>
@@ -766,7 +763,6 @@
     <string name="ClearOtherSessionsHelp">Logs out all devices except for this one.</string>
     <string name="ClearOtherWebSessionsHelp">You can log in on websites that support signing in with Telegram.</string>
     <string name="ClearRecentEmoji">Clear recent emoji?</string>
-    <string name="ClearRecentHistory">Clear history</string>
     <string name="ClearSearch">Clear search history?</string>
     <string name="ClearSearchAlert">Are you sure you want to clear your search history?</string>
     <string name="ClearSearchAlertTitle">Clear search history</string>
@@ -788,8 +784,6 @@
     <string name="ColorRed">Red</string>
     <string name="ColorSepia">Sepia</string>
     <string name="ColorTheme">Color theme</string>
-    <string name="ColorThemeChanged">Color theme changed.</string>
-    <string name="ColorThemeChangedInfo">You can change it back in *Chat Settings*.</string>
     <string name="ColorThemes">Color Themes</string>
     <string name="ColorViolet">Violet</string>
     <string name="ColorWhite">White</string>
@@ -937,7 +931,6 @@
     <string name="DeleteProxy">Delete Proxy?</string>
     <string name="DeleteReportSpam">Report spam</string>
     <string name="DeleteSingleMessagesTitle">Delete message</string>
-    <string name="DeleteTheme">Delete theme</string>
     <string name="DeleteThemeAlert">Are you sure you want to delete this theme?</string>
     <string name="DeleteThemeTitle">Delete theme</string>
     <string name="DeleteThisChat">Delete this chat</string>
@@ -1036,7 +1029,6 @@
     <string name="EditMessageError">Sorry, you can\'t edit this message.</string>
     <string name="EditMessageMedia">Tap to edit media</string>
     <string name="EditName">Edit name</string>
-    <string name="EditThemeColors">Edit colors</string>
     <string name="EditThemeTitle">Edit Theme</string>
     <string name="EditedMessage">edited</string>
     <string name="EmailCopied">Email copied to clipboard</string>
@@ -1084,7 +1076,6 @@
     <string name="EnterNewFirstPasscode">Enter a passcode</string>
     <string name="EnterNewPasscode">Enter your new passcode</string>
     <string name="EnterThemeName">Enter theme name</string>
-    <string name="EnterThemeNameEdit">Tap **Create** if you want to share your theme with others or customize each color manually\10\10Please enter theme name:</string>
     <string name="EnterYourPasscode">Enter your passcode</string>
     <string name="ErrorOccurred">An error occurred.</string>
     <string name="ErrorSendRestrictedMedia">Sorry, the admins of this group have restricted you from sending media.</string>
@@ -1393,9 +1384,6 @@
     <string name="InAppSounds">In-App Sounds</string>
     <string name="InAppVibrate">In-App Vibrate</string>
     <string name="InChatSound">In-Chat Sounds</string>
-    <string name="InactiveChannelSignature">channel, inactive for %1$s</string>
-    <string name="InactiveChatSignature">%1$s, inactive for %2$s</string>
-    <string name="InactiveChats">Inactive chats</string>
     <string name="IncomingCalls">Incoming calls</string>
     <string name="IncorrectLocalization">Incorrect localization file</string>
     <string name="IncorrectTheme">Incorrect theme file</string>
@@ -1482,11 +1470,9 @@
     <string name="Later">LATER</string>
     <string name="LeaveChannel">Leave Channel</string>
     <string name="LeaveChannelMenu">Leave channel</string>
-    <string name="LeaveChats">Leave %1$s</string>
     <string name="LeaveMegaMenu">Leave group</string>
     <string name="LedColor">LED Color</string>
     <string name="LedDisabled">Disabled</string>
-    <string name="LimitReached">Limit Reached</string>
     <string name="LinkAvailable">%1$s is available.</string>
     <string name="LinkChecking">Checking name…</string>
     <string name="LinkCopied">Link copied to clipboard</string>
@@ -1505,7 +1491,6 @@
     <string name="LinksTitle">Shared Links</string>
     <string name="LiveLocationAlertGroup">Choose for how long people in this chat will see your live location.</string>
     <string name="LiveLocationAlertPrivate">Choose for how long %1$s will see your accurate location.</string>
-    <string name="LiveLocationContext">Live Location</string>
     <string name="LiveLocations">Live locations</string>
     <string name="Loading">Loading...</string>
     <string name="LoadingFullImage">loading full image...</string>
@@ -1682,10 +1667,9 @@
     <string name="NewSecretChat">New Secret Chat</string>
     <string name="NewTheme">New color theme</string>
     <string name="NewThemePreviewLine1">Do you know what time it is?</string>
-    <string name="NewThemePreviewLine3">It\'s morning in *Tokyo* ��</string>
+    <string name="NewThemePreviewLine2">It\'s morning in Tokyo ��</string>
     <string name="NewThemePreviewName">Bob Harris</string>
     <string name="NewThemePreviewReply">Good morning! ��</string>
-    <string name="NewThemePreviewReply2">Good morning</string>
     <string name="NewThemeTitle">New Theme</string>
     <string name="Next">Next</string>
     <string name="NoAudioFiles">No audio files</string>
@@ -1912,7 +1896,6 @@
     <string name="OpenFile">OPEN FILE</string>
     <string name="OpenGroup">VIEW GROUP</string>
     <string name="OpenInBrowser">OPEN IN...</string>
-    <string name="OpenInEditor">Open in editor</string>
     <string name="OpenInExternalApp">Open in...</string>
     <string name="OpenMessage">VIEW MESSAGE</string>
     <string name="OpenTheme">VIEW THEME</string>
@@ -2270,7 +2253,6 @@
     <string name="PinnedMessage">Pinned Message</string>
     <string name="PinnedMessages">Pinned Messages</string>
     <string name="PinnedPoll">Pinned poll</string>
-    <string name="PlacesInThisArea">Places in this area</string>
     <string name="PleaseDownload">Please download media first</string>
     <string name="PleaseEnterCurrentPassword">Enter your password</string>
     <string name="PleaseEnterCurrentPasswordTransfer">Please enter your password to complete the transfer.</string>
@@ -2463,8 +2445,6 @@
     <string name="Satellite">Satellite</string>
     <string name="Saturation">Saturation</string>
     <string name="Save">Save</string>
-    <string name="SaveChangesAlertText">Do you want to apply the new colors you chose?</string>
-    <string name="SaveChangesAlertTitle">Save changes?</string>
     <string name="SaveTheme">SAVE THEME</string>
     <string name="SaveToDownloads">Save to downloads</string>
     <string name="SaveToGIFs">Save to GIFs</string>
@@ -2617,7 +2597,6 @@
     <string name="SharePhoneNumberWith">Share my phone number with %1$s</string>
     <string name="ShareSendTo">Send to...</string>
     <string name="ShareTelegram">Share Telegram...</string>
-    <string name="ShareTheme">Share theme</string>
     <string name="ShareYouLocationInfo">This will send your current location to the bot.</string>
     <string name="ShareYouLocationInline">This bot would like to know your location each time you send it a request. This can be used to provide location-specific results.</string>
     <string name="ShareYouLocationTitle">Share your location?</string>
@@ -2776,16 +2755,15 @@
     <string name="TermsOfService">Terms of Service</string>
     <string name="TermsOfServiceLogin">By signing up,\10you agree to the *Terms of Service*.</string>
     <string name="TextCopied">Text copied to clipboard</string>
-    <string name="TextSelectionHit">Hold the **word**, then move the cursor to select more text to copy.</string>
     <string name="TextSizeHeader">Messages text size</string>
     <string name="Theme">Theme</string>
     <string name="ThemeArcticBlue">Arctic Blue</string>
-    <string name="ThemeClassic">Classic</string>
+    <string name="ThemeBlue">Blue</string>
     <string name="ThemeCreateHelp">Anyone can install your theme using this link. When you change the theme, it will be updated for all users who installed it.\10\10The theme will be based on your currently selected theme and wallpaper.</string>
     <string name="ThemeCreateHelp2">You can change the link of your theme.\10\10Theme links must be longer than 5 characters and can use a-z, 0-9 and underscores.</string>
     <string name="ThemeDark">Dark</string>
     <string name="ThemeDarkBlue">Dark Blue</string>
-    <string name="ThemeDay">Day</string>
+    <string name="ThemeGraphite">Graphite</string>
     <string name="ThemeHelpLink">Your theme will be updated for all users each time you change it. Anyone can install it using this link:\10%1$s</string>
     <string name="ThemeInfo">Choose custom color schemes</string>
     <string name="ThemeInstallCount_few">%1$d people are using this theme</string>
@@ -2796,7 +2774,6 @@
     <string name="ThemeInstallCount_zero">%1$d people are using this theme</string>
     <string name="ThemeNameInvalid">Sorry, theme name is invalid.</string>
     <string name="ThemeNamePlaceholder">Name</string>
-    <string name="ThemeNight">Night</string>
     <string name="ThemeNotFound">Theme not found</string>
     <string name="ThemeNotSupported">Sorry, this colour theme doesn’t support your device yet.</string>
     <string name="ThemePreview">Theme Preview</string>
@@ -2824,9 +2801,6 @@
     <string name="ThemePreviewSongPerformer">David Hasselhoff</string>
     <string name="ThemePreviewSongTitle">True Survivor</string>
     <string name="ThemePreviewTitle">Reinhardt</string>
-    <string name="ThemeResetToDefaults">Reset to default</string>
-    <string name="ThemeResetToDefaultsText">Are you sure you want to reset text size and color settings?</string>
-    <string name="ThemeResetToDefaultsTitle">Reset settings</string>
     <string name="ThemeSetUrl">Set link</string>
     <string name="ThemeSetUrlHelp">Theme links must be longer than 5 characters and can use a-z, 0-9 and underscores.</string>
     <string name="ThemeUrl">Theme Link</string>
@@ -2842,10 +2816,6 @@
     <string name="TintShadows">SHADOWS</string>
     <string name="TodayAt">at</string>
     <string name="TodayAtFormatted">at %1$s</string>
-    <string name="TooManyCommunities">Too Many Communities</string>
-    <string name="TooManyCommunitiesHintCreate">Sorry, you are a member of too many groups or channels. Please leave some before creating a new one.</string>
-    <string name="TooManyCommunitiesHintEdit">Sorry, you are a member of too many groups and channels. For technical reasons, you need to leave some first before changing this setting in your groups.</string>
-    <string name="TooManyCommunitiesHintJoin">Sorry, you are a member of too many groups or channels. Please leave some before joining a new one.</string>
     <string name="TooManyTries">Too many tries.\10Please try again in %1$s.</string>
     <string name="TosAgeText">Tap Agree to confirm that you are %1$s or over.</string>
     <string name="TosAgeTitle">Age Verification</string>
@@ -2936,7 +2906,6 @@
     <string name="UserBioEmpty">None</string>
     <string name="UserBioInfo">You can add a few lines about yourself. Anyone who opens your profile will see this text.</string>
     <string name="UserBlocked">User blocked</string>
-    <string name="UserChannelTooMuchJoin">Sorry, the target user is a member of too many groups and channels. Please ask them to leave some first.</string>
     <string name="UserRemovedBy">Removed by %1$s</string>
     <string name="UserRestricted">Sorry, you are not allowed to do this.</string>
     <string name="UserRestrictions">User Permissions</string>

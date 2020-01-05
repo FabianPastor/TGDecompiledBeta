@@ -341,7 +341,6 @@
     <public type="drawable" name="devices" id="NUM" />
     <public type="drawable" name="doc_big" id="NUM" />
     <public type="drawable" name="edit_cancel" id="NUM" />
-    <public type="drawable" name="editor_rotate" id="NUM" />
     <public type="drawable" name="fab_highlight_dark" id="NUM" />
     <public type="drawable" name="fast_reply" id="NUM" />
     <public type="drawable" name="field_carret_empty" id="NUM" />
@@ -391,7 +390,6 @@
     <public type="drawable" name="group_edit_profile" id="NUM" />
     <public type="drawable" name="group_log" id="NUM" />
     <public type="drawable" name="groups_create" id="NUM" />
-    <public type="drawable" name="groups_limit1" id="NUM" />
     <public type="drawable" name="groups_overview_check" id="NUM" />
     <public type="drawable" name="groupsintro" id="NUM" />
     <public type="drawable" name="groupsintro2" id="NUM" />
@@ -518,6 +516,7 @@
     <public type="drawable" name="list_selector_ex" id="NUM" />
     <public type="drawable" name="list_warning_sign" id="NUM" />
     <public type="drawable" name="live_loc" id="NUM" />
+    <public type="drawable" name="livelocationpin" id="NUM" />
     <public type="drawable" name="livepin" id="NUM" />
     <public type="drawable" name="load_big" id="NUM" />
     <public type="drawable" name="loading_animation" id="NUM" />
@@ -657,7 +656,6 @@
     <public type="drawable" name="msg_pollstop" id="NUM" />
     <public type="drawable" name="msg_reply" id="NUM" />
     <public type="drawable" name="msg_report" id="NUM" />
-    <public type="drawable" name="msg_reset" id="NUM" />
     <public type="drawable" name="msg_retry" id="NUM" />
     <public type="drawable" name="msg_round_cancel_m" id="NUM" />
     <public type="drawable" name="msg_round_file_s" id="NUM" />
@@ -767,7 +765,6 @@
     <public type="drawable" name="pl_repeat1" id="NUM" />
     <public type="drawable" name="pl_shuffle" id="NUM" />
     <public type="drawable" name="place_x" id="NUM" />
-    <public type="drawable" name="places_btn" id="NUM" />
     <public type="drawable" name="play_big" id="NUM" />
     <public type="drawable" name="play_mini_video" id="NUM" />
     <public type="drawable" name="player" id="NUM" />
@@ -880,7 +877,6 @@
     <public type="drawable" name="tip5" id="NUM" />
     <public type="drawable" name="tip6" id="NUM" />
     <public type="drawable" name="tip6_dark" id="NUM" />
-    <public type="drawable" name="toast_pallete" id="NUM" />
     <public type="drawable" name="tool_blur" id="NUM" />
     <public type="drawable" name="tool_cropfix" id="NUM" />
     <public type="drawable" name="tool_curve" id="NUM" />
@@ -1423,7 +1419,6 @@
     <public type="string" name="AndOther_other" id="NUM" />
     <public type="string" name="AndOther_two" id="NUM" />
     <public type="string" name="AndOther_zero" id="NUM" />
-    <public type="string" name="AnimatedStickers" id="NUM" />
     <public type="string" name="AnonymousPoll" id="NUM" />
     <public type="string" name="ApkRestricted" id="NUM" />
     <public type="string" name="AppFolderInfo" id="NUM" />
@@ -1547,7 +1542,6 @@
     <public type="string" name="AuthAnotherClientOk" id="NUM" />
     <public type="string" name="AuthAnotherClientScan" id="NUM" />
     <public type="string" name="AuthAnotherClientTokenError" id="NUM" />
-    <public type="string" name="AuthAnotherClientUrl" id="NUM" />
     <public type="string" name="AutoDownloadAudioInfo" id="NUM" />
     <public type="string" name="AutoDownloadChannels" id="NUM" />
     <public type="string" name="AutoDownloadContacts" id="NUM" />
@@ -1623,7 +1617,6 @@
     <public type="string" name="Back" id="NUM" />
     <public type="string" name="BackgroundBlurred" id="NUM" />
     <public type="string" name="BackgroundBrightness" id="NUM" />
-    <public type="string" name="BackgroundChoosePattern" id="NUM" />
     <public type="string" name="BackgroundColor" id="NUM" />
     <public type="string" name="BackgroundColorPreviewLine1" id="NUM" />
     <public type="string" name="BackgroundColorPreviewLine2" id="NUM" />
@@ -1945,7 +1938,6 @@
     <public type="string" name="ClearOtherSessionsHelp" id="NUM" />
     <public type="string" name="ClearOtherWebSessionsHelp" id="NUM" />
     <public type="string" name="ClearRecentEmoji" id="NUM" />
-    <public type="string" name="ClearRecentHistory" id="NUM" />
     <public type="string" name="ClearSearch" id="NUM" />
     <public type="string" name="ClearSearchAlert" id="NUM" />
     <public type="string" name="ClearSearchAlertTitle" id="NUM" />
@@ -1967,8 +1959,6 @@
     <public type="string" name="ColorRed" id="NUM" />
     <public type="string" name="ColorSepia" id="NUM" />
     <public type="string" name="ColorTheme" id="NUM" />
-    <public type="string" name="ColorThemeChanged" id="NUM" />
-    <public type="string" name="ColorThemeChangedInfo" id="NUM" />
     <public type="string" name="ColorThemes" id="NUM" />
     <public type="string" name="ColorViolet" id="NUM" />
     <public type="string" name="ColorWhite" id="NUM" />
@@ -2116,7 +2106,6 @@
     <public type="string" name="DeleteProxy" id="NUM" />
     <public type="string" name="DeleteReportSpam" id="NUM" />
     <public type="string" name="DeleteSingleMessagesTitle" id="NUM" />
-    <public type="string" name="DeleteTheme" id="NUM" />
     <public type="string" name="DeleteThemeAlert" id="NUM" />
     <public type="string" name="DeleteThemeTitle" id="NUM" />
     <public type="string" name="DeleteThisChat" id="NUM" />
@@ -2215,7 +2204,6 @@
     <public type="string" name="EditMessageError" id="NUM" />
     <public type="string" name="EditMessageMedia" id="NUM" />
     <public type="string" name="EditName" id="NUM" />
-    <public type="string" name="EditThemeColors" id="NUM" />
     <public type="string" name="EditThemeTitle" id="NUM" />
     <public type="string" name="EditedMessage" id="NUM" />
     <public type="string" name="EmailCopied" id="NUM" />
@@ -2263,7 +2251,6 @@
     <public type="string" name="EnterNewFirstPasscode" id="NUM" />
     <public type="string" name="EnterNewPasscode" id="NUM" />
     <public type="string" name="EnterThemeName" id="NUM" />
-    <public type="string" name="EnterThemeNameEdit" id="NUM" />
     <public type="string" name="EnterYourPasscode" id="NUM" />
     <public type="string" name="ErrorOccurred" id="NUM" />
     <public type="string" name="ErrorSendRestrictedMedia" id="NUM" />
@@ -2572,9 +2559,6 @@
     <public type="string" name="InAppSounds" id="NUM" />
     <public type="string" name="InAppVibrate" id="NUM" />
     <public type="string" name="InChatSound" id="NUM" />
-    <public type="string" name="InactiveChannelSignature" id="NUM" />
-    <public type="string" name="InactiveChatSignature" id="NUM" />
-    <public type="string" name="InactiveChats" id="NUM" />
     <public type="string" name="IncomingCalls" id="NUM" />
     <public type="string" name="IncorrectLocalization" id="NUM" />
     <public type="string" name="IncorrectTheme" id="NUM" />
@@ -2661,11 +2645,9 @@
     <public type="string" name="Later" id="NUM" />
     <public type="string" name="LeaveChannel" id="NUM" />
     <public type="string" name="LeaveChannelMenu" id="NUM" />
-    <public type="string" name="LeaveChats" id="NUM" />
     <public type="string" name="LeaveMegaMenu" id="NUM" />
     <public type="string" name="LedColor" id="NUM" />
     <public type="string" name="LedDisabled" id="NUM" />
-    <public type="string" name="LimitReached" id="NUM" />
     <public type="string" name="LinkAvailable" id="NUM" />
     <public type="string" name="LinkChecking" id="NUM" />
     <public type="string" name="LinkCopied" id="NUM" />
@@ -2684,7 +2666,6 @@
     <public type="string" name="LinksTitle" id="NUM" />
     <public type="string" name="LiveLocationAlertGroup" id="NUM" />
     <public type="string" name="LiveLocationAlertPrivate" id="NUM" />
-    <public type="string" name="LiveLocationContext" id="NUM" />
     <public type="string" name="LiveLocations" id="NUM" />
     <public type="string" name="Loading" id="NUM" />
     <public type="string" name="LoadingFullImage" id="NUM" />
@@ -2861,10 +2842,9 @@
     <public type="string" name="NewSecretChat" id="NUM" />
     <public type="string" name="NewTheme" id="NUM" />
     <public type="string" name="NewThemePreviewLine1" id="NUM" />
-    <public type="string" name="NewThemePreviewLine3" id="NUM" />
+    <public type="string" name="NewThemePreviewLine2" id="NUM" />
     <public type="string" name="NewThemePreviewName" id="NUM" />
     <public type="string" name="NewThemePreviewReply" id="NUM" />
-    <public type="string" name="NewThemePreviewReply2" id="NUM" />
     <public type="string" name="NewThemeTitle" id="NUM" />
     <public type="string" name="Next" id="NUM" />
     <public type="string" name="NoAudioFiles" id="NUM" />
@@ -3091,7 +3071,6 @@
     <public type="string" name="OpenFile" id="NUM" />
     <public type="string" name="OpenGroup" id="NUM" />
     <public type="string" name="OpenInBrowser" id="NUM" />
-    <public type="string" name="OpenInEditor" id="NUM" />
     <public type="string" name="OpenInExternalApp" id="NUM" />
     <public type="string" name="OpenMessage" id="NUM" />
     <public type="string" name="OpenTheme" id="NUM" />
@@ -3449,7 +3428,6 @@
     <public type="string" name="PinnedMessage" id="NUM" />
     <public type="string" name="PinnedMessages" id="NUM" />
     <public type="string" name="PinnedPoll" id="NUM" />
-    <public type="string" name="PlacesInThisArea" id="NUM" />
     <public type="string" name="PleaseDownload" id="NUM" />
     <public type="string" name="PleaseEnterCurrentPassword" id="NUM" />
     <public type="string" name="PleaseEnterCurrentPasswordTransfer" id="NUM" />
@@ -3642,8 +3620,6 @@
     <public type="string" name="Satellite" id="NUM" />
     <public type="string" name="Saturation" id="NUM" />
     <public type="string" name="Save" id="NUM" />
-    <public type="string" name="SaveChangesAlertText" id="NUM" />
-    <public type="string" name="SaveChangesAlertTitle" id="NUM" />
     <public type="string" name="SaveTheme" id="NUM" />
     <public type="string" name="SaveToDownloads" id="NUM" />
     <public type="string" name="SaveToGIFs" id="NUM" />
@@ -3796,7 +3772,6 @@
     <public type="string" name="SharePhoneNumberWith" id="NUM" />
     <public type="string" name="ShareSendTo" id="NUM" />
     <public type="string" name="ShareTelegram" id="NUM" />
-    <public type="string" name="ShareTheme" id="NUM" />
     <public type="string" name="ShareYouLocationInfo" id="NUM" />
     <public type="string" name="ShareYouLocationInline" id="NUM" />
     <public type="string" name="ShareYouLocationTitle" id="NUM" />
@@ -3955,16 +3930,15 @@
     <public type="string" name="TermsOfService" id="NUM" />
     <public type="string" name="TermsOfServiceLogin" id="NUM" />
     <public type="string" name="TextCopied" id="NUM" />
-    <public type="string" name="TextSelectionHit" id="NUM" />
     <public type="string" name="TextSizeHeader" id="NUM" />
     <public type="string" name="Theme" id="NUM" />
     <public type="string" name="ThemeArcticBlue" id="NUM" />
-    <public type="string" name="ThemeClassic" id="NUM" />
+    <public type="string" name="ThemeBlue" id="NUM" />
     <public type="string" name="ThemeCreateHelp" id="NUM" />
     <public type="string" name="ThemeCreateHelp2" id="NUM" />
     <public type="string" name="ThemeDark" id="NUM" />
     <public type="string" name="ThemeDarkBlue" id="NUM" />
-    <public type="string" name="ThemeDay" id="NUM" />
+    <public type="string" name="ThemeGraphite" id="NUM" />
     <public type="string" name="ThemeHelpLink" id="NUM" />
     <public type="string" name="ThemeInfo" id="NUM" />
     <public type="string" name="ThemeInstallCount_few" id="NUM" />
@@ -3975,7 +3949,6 @@
     <public type="string" name="ThemeInstallCount_zero" id="NUM" />
     <public type="string" name="ThemeNameInvalid" id="NUM" />
     <public type="string" name="ThemeNamePlaceholder" id="NUM" />
-    <public type="string" name="ThemeNight" id="NUM" />
     <public type="string" name="ThemeNotFound" id="NUM" />
     <public type="string" name="ThemeNotSupported" id="NUM" />
     <public type="string" name="ThemePreview" id="NUM" />
@@ -4003,9 +3976,6 @@
     <public type="string" name="ThemePreviewSongPerformer" id="NUM" />
     <public type="string" name="ThemePreviewSongTitle" id="NUM" />
     <public type="string" name="ThemePreviewTitle" id="NUM" />
-    <public type="string" name="ThemeResetToDefaults" id="NUM" />
-    <public type="string" name="ThemeResetToDefaultsText" id="NUM" />
-    <public type="string" name="ThemeResetToDefaultsTitle" id="NUM" />
     <public type="string" name="ThemeSetUrl" id="NUM" />
     <public type="string" name="ThemeSetUrlHelp" id="NUM" />
     <public type="string" name="ThemeUrl" id="NUM" />
@@ -4021,10 +3991,6 @@
     <public type="string" name="TintShadows" id="NUM" />
     <public type="string" name="TodayAt" id="NUM" />
     <public type="string" name="TodayAtFormatted" id="NUM" />
-    <public type="string" name="TooManyCommunities" id="NUM" />
-    <public type="string" name="TooManyCommunitiesHintCreate" id="NUM" />
-    <public type="string" name="TooManyCommunitiesHintEdit" id="NUM" />
-    <public type="string" name="TooManyCommunitiesHintJoin" id="NUM" />
     <public type="string" name="TooManyTries" id="NUM" />
     <public type="string" name="TosAgeText" id="NUM" />
     <public type="string" name="TosAgeTitle" id="NUM" />
@@ -4115,7 +4081,6 @@
     <public type="string" name="UserBioEmpty" id="NUM" />
     <public type="string" name="UserBioInfo" id="NUM" />
     <public type="string" name="UserBlocked" id="NUM" />
-    <public type="string" name="UserChannelTooMuchJoin" id="NUM" />
     <public type="string" name="UserRemovedBy" id="NUM" />
     <public type="string" name="UserRestricted" id="NUM" />
     <public type="string" name="UserRestrictions" id="NUM" />

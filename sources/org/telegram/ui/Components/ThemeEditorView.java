@@ -969,11 +969,6 @@ public class ThemeEditorView {
                     }
                     arrayList.add(themeDescription);
                 }
-                if (VERSION.SDK_INT >= 26 && !hashMap.containsKey("windowBackgroundGray")) {
-                    ArrayList arrayList2 = new ArrayList();
-                    arrayList2.add(new ThemeDescription(null, 0, null, null, null, null, "windowBackgroundGray"));
-                    this.items.add(arrayList2);
-                }
             }
 
             public int getItemCount() {
@@ -2174,6 +2169,7 @@ public class ThemeEditorView {
                 ThemeEditorView.this.show();
             }
         };
+        this.windowView.setBackgroundResource(NUM);
         this.windowManager = (WindowManager) activity.getSystemService("window");
         this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
         int i = this.preferences.getInt("sidex", 1);
@@ -2216,9 +2212,11 @@ public class ThemeEditorView {
     }
 
     private void showWithAnimation() {
-        this.windowView.setBackgroundResource(NUM);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_X, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.windowView, View.SCALE_Y, new float[]{0.0f, 1.0f})});
+        r1 = new Animator[3];
+        r1[1] = ObjectAnimator.ofFloat(this.windowView, "scaleX", new float[]{0.0f, 1.0f});
+        r1[2] = ObjectAnimator.ofFloat(this.windowView, "scaleY", new float[]{0.0f, 1.0f});
+        animatorSet.playTogether(r1);
         animatorSet.setInterpolator(this.decelerateInterpolator);
         animatorSet.setDuration(150);
         animatorSet.start();
@@ -2249,15 +2247,14 @@ public class ThemeEditorView {
                 AnimatorSet animatorSet = new AnimatorSet();
                 Animator[] animatorArr = new Animator[3];
                 animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{1.0f, 0.0f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.windowView, View.SCALE_X, new float[]{1.0f, 0.0f});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, View.SCALE_Y, new float[]{1.0f, 0.0f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.windowView, "scaleX", new float[]{1.0f, 0.0f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "scaleY", new float[]{1.0f, 0.0f});
                 animatorSet.playTogether(animatorArr);
                 animatorSet.setInterpolator(this.decelerateInterpolator);
                 animatorSet.setDuration(150);
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         if (ThemeEditorView.this.windowView != null) {
-                            ThemeEditorView.this.windowView.setBackground(null);
                             ThemeEditorView.this.windowManager.removeView(ThemeEditorView.this.windowView);
                         }
                     }

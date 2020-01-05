@@ -506,16 +506,16 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r11 = r11.itemView;
             r11 = (org.telegram.ui.Cells.TextCell) r11;
             r0 = r10.inviteViaLink;
-            r2 = NUM; // 0x7var_ float:1.7945862E38 double:1.052935816E-314;
+            r2 = NUM; // 0x7var_ float:1.7945856E38 double:1.0529358143E-314;
             if (r0 != r12) goto L_0x0028;
         L_0x001a:
-            r12 = NUM; // 0x7f0e0256 float:1.887625E38 double:1.053162452E-314;
+            r12 = NUM; // 0x7f0e0253 float:1.8876244E38 double:1.0531624506E-314;
             r0 = "ChannelInviteViaLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
             goto L_0x018f;
         L_0x0028:
-            r12 = NUM; // 0x7f0e0593 float:1.8877932E38 double:1.0531628617E-314;
+            r12 = NUM; // 0x7f0e0587 float:1.8877908E38 double:1.0531628557E-314;
             r0 = "InviteToGroupByLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
@@ -718,7 +718,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r12 = r10.searching;
             if (r12 == 0) goto L_0x018f;
         L_0x0183:
-            r12 = NUM; // 0x7f0e0529 float:1.8877717E38 double:1.0531628093E-314;
+            r12 = NUM; // 0x7f0e0520 float:1.8877699E38 double:1.053162805E-314;
             r0 = "GlobalSearch";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);

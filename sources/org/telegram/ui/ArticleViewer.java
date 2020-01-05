@@ -222,12 +222,6 @@ import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.TextSelectionHelper;
-import org.telegram.ui.Cells.TextSelectionHelper.ArticleSelectableView;
-import org.telegram.ui.Cells.TextSelectionHelper.ArticleTextSelectionHelper;
-import org.telegram.ui.Cells.TextSelectionHelper.IngnoreCopySpanable;
-import org.telegram.ui.Cells.TextSelectionHelper.TextLayoutBlock;
-import org.telegram.ui.Cells.TextSelectionHelper.TextSelectionOverlay;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnchorSpan;
 import org.telegram.ui.Components.AnimatedArrowDrawable;
@@ -501,7 +495,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private Drawable slideDotDrawable;
     private Paint statusBarPaint = new Paint();
     private int switchImageAfterAnimation;
-    ArticleTextSelectionHelper textSelectionHelper;
     private boolean textureUploaded;
     private SimpleTextView titleTextView;
     private long transitionAnimationStartTime;
@@ -537,1510 +530,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private boolean zoomAnimation;
     private boolean zooming;
 
-    private class BlockDetailsBottomCell extends View {
-        private RectF rect = new RectF();
-
-        public BlockDetailsBottomCell(Context context) {
-            super(context);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(4.0f) + 1);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            canvas.drawLine(0.0f, 0.0f, (float) getMeasuredWidth(), 0.0f, ArticleViewer.dividerPaint);
-        }
-    }
-
-    private class BlockDividerCell extends View {
-        private RectF rect = new RectF();
-
-        public BlockDividerCell(Context context) {
-            super(context);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(18.0f));
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            int measuredWidth = getMeasuredWidth() / 3;
-            this.rect.set((float) measuredWidth, (float) AndroidUtilities.dp(8.0f), (float) (measuredWidth * 2), (float) AndroidUtilities.dp(10.0f));
-            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), ArticleViewer.dividerPaint);
-        }
-    }
-
-    private class BlockRelatedArticlesShadowCell extends View {
-        private CombinedDrawable shadowDrawable;
-
-        public BlockRelatedArticlesShadowCell(Context context) {
-            super(context);
-            this.shadowDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, NUM, -16777216));
-            this.shadowDrawable.setFullsize(true);
-            setBackgroundDrawable(this.shadowDrawable);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(12.0f));
-            Theme.setCombinedDrawableColor(this.shadowDrawable, Theme.getColor("windowBackgroundGray"), false);
-        }
-    }
-
-    class CheckForLongPress implements Runnable {
-        public int currentPressCount;
-
-        CheckForLongPress() {
-        }
-
-        public void run() {
-            if (ArticleViewer.this.checkingForLongPress && ArticleViewer.this.windowView != null) {
-                ArticleViewer.this.checkingForLongPress = false;
-                ArticleViewer articleViewer;
-                if (ArticleViewer.this.pressedLink != null) {
-                    ArticleViewer.this.windowView.performHapticFeedback(0);
-                    articleViewer = ArticleViewer.this;
-                    articleViewer.showCopyPopup(articleViewer.pressedLink.getUrl());
-                    ArticleViewer.this.pressedLink = null;
-                    ArticleViewer.this.pressedLinkOwnerLayout = null;
-                    if (ArticleViewer.this.pressedLinkOwnerView != null) {
-                        ArticleViewer.this.pressedLinkOwnerView.invalidate();
-                        return;
-                    }
-                    return;
-                }
-                if (ArticleViewer.this.pressedLinkOwnerView != null) {
-                    articleViewer = ArticleViewer.this;
-                    if (articleViewer.textSelectionHelper.isSelectable(articleViewer.pressedLinkOwnerView)) {
-                        ArticleViewer.this.windowView.performHapticFeedback(0);
-                        articleViewer = ArticleViewer.this;
-                        articleViewer.textSelectionHelper.trySelect(articleViewer.pressedLinkOwnerView);
-                        return;
-                    }
-                }
-                if (ArticleViewer.this.pressedLinkOwnerLayout != null && ArticleViewer.this.pressedLinkOwnerView != null) {
-                    ArticleViewer.this.windowView.performHapticFeedback(0);
-                    int[] iArr = new int[2];
-                    ArticleViewer.this.pressedLinkOwnerView.getLocationInWindow(iArr);
-                    int access$5900 = (iArr[1] + ArticleViewer.this.pressedLayoutY) - AndroidUtilities.dp(54.0f);
-                    if (access$5900 < 0) {
-                        access$5900 = 0;
-                    }
-                    ArticleViewer.this.pressedLinkOwnerView.invalidate();
-                    ArticleViewer.this.drawBlockSelection = true;
-                    ArticleViewer articleViewer2 = ArticleViewer.this;
-                    articleViewer2.showPopup(articleViewer2.pressedLinkOwnerView, 48, 0, access$5900);
-                    ArticleViewer.this.listView[0].setLayoutFrozen(true);
-                    ArticleViewer.this.listView[0].setLayoutFrozen(false);
-                }
-            }
-        }
-    }
-
-    private final class CheckForTap implements Runnable {
-        private CheckForTap() {
-        }
-
-        /* synthetic */ CheckForTap(ArticleViewer articleViewer, AnonymousClass1 anonymousClass1) {
-            this();
-        }
-
-        public void run() {
-            if (ArticleViewer.this.pendingCheckForLongPress == null) {
-                ArticleViewer articleViewer = ArticleViewer.this;
-                articleViewer.pendingCheckForLongPress = new CheckForLongPress();
-            }
-            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$1904(ArticleViewer.this);
-            if (ArticleViewer.this.windowView != null) {
-                ArticleViewer.this.windowView.postDelayed(ArticleViewer.this.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
-            }
-        }
-    }
-
-    public class FontCell extends FrameLayout {
-        private RadioButton radioButton;
-        private TextView textView;
-
-        public FontCell(Context context) {
-            super(context);
-            setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 2));
-            this.radioButton = new RadioButton(context);
-            this.radioButton.setSize(AndroidUtilities.dp(20.0f));
-            this.radioButton.setColor(Theme.getColor("dialogRadioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
-            RadioButton radioButton = this.radioButton;
-            int i = 5;
-            int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-            int i3 = 0;
-            float f = (float) (LocaleController.isRTL ? 0 : 22);
-            if (LocaleController.isRTL) {
-                i3 = 22;
-            }
-            addView(radioButton, LayoutHelper.createFrame(22, 22.0f, i2, f, 13.0f, (float) i3, 0.0f));
-            this.textView = new TextView(context);
-            this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.textView.setTextSize(1, 16.0f);
-            this.textView.setLines(1);
-            this.textView.setMaxLines(1);
-            this.textView.setSingleLine(true);
-            this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            TextView textView = this.textView;
-            if (!LocaleController.isRTL) {
-                i = 3;
-            }
-            i2 = i | 48;
-            int i4 = 17;
-            f = (float) (LocaleController.isRTL ? 17 : 62);
-            if (LocaleController.isRTL) {
-                i4 = 62;
-            }
-            addView(textView, LayoutHelper.createFrame(-1, -1.0f, i2, f, 0.0f, (float) i4, 0.0f));
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-        }
-
-        public void select(boolean z, boolean z2) {
-            this.radioButton.setChecked(z, z2);
-        }
-
-        public void setTextAndTypeface(String str, Typeface typeface) {
-            this.textView.setText(str);
-            this.textView.setTypeface(typeface);
-            invalidate();
-        }
-    }
-
-    private class FrameLayoutDrawer extends FrameLayout {
-        public FrameLayoutDrawer(Context context) {
-            super(context);
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            ArticleViewer.this.processTouchEvent(motionEvent);
-            return true;
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            ArticleViewer.this.drawContent(canvas);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public boolean drawChild(Canvas canvas, View view, long j) {
-            return view != ArticleViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, view, j);
-        }
-    }
-
-    private class LinkMovementMethodMy extends LinkMovementMethod {
-        private LinkMovementMethodMy() {
-        }
-
-        /* synthetic */ LinkMovementMethodMy(ArticleViewer articleViewer, AnonymousClass1 anonymousClass1) {
-            this();
-        }
-
-        public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
-            try {
-                boolean onTouchEvent = super.onTouchEvent(textView, spannable, motionEvent);
-                if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
-                    Selection.removeSelection(spannable);
-                }
-                return onTouchEvent;
-            } catch (Exception e) {
-                FileLog.e(e);
-                return false;
-            }
-        }
-    }
-
-    private class PhotoBackgroundDrawable extends ColorDrawable {
-        private Runnable drawRunnable;
-
-        public PhotoBackgroundDrawable(int i) {
-            super(i);
-        }
-
-        @Keep
-        public void setAlpha(int i) {
-            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
-                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
-                boolean z = (ArticleViewer.this.isPhotoVisible && i == 255) ? false : true;
-                drawerLayoutContainer.setAllowDrawContent(z);
-            }
-            super.setAlpha(i);
-        }
-
-        public void draw(Canvas canvas) {
-            super.draw(canvas);
-            if (getAlpha() != 0) {
-                Runnable runnable = this.drawRunnable;
-                if (runnable != null) {
-                    runnable.run();
-                    this.drawRunnable = null;
-                }
-            }
-        }
-    }
-
-    public static class PlaceProviderObject {
-        public int clipBottomAddition;
-        public int clipTopAddition;
-        public ImageReceiver imageReceiver;
-        public int index;
-        public View parentView;
-        public int radius;
-        public float scale = 1.0f;
-        public int size;
-        public BitmapHolder thumb;
-        public int viewX;
-        public int viewY;
-    }
-
-    private class RadialProgressView {
-        private float alpha = 1.0f;
-        private float animatedAlphaValue = 1.0f;
-        private float animatedProgressValue = 0.0f;
-        private float animationProgressStart = 0.0f;
-        private int backgroundState = -1;
-        private float currentProgress = 0.0f;
-        private long currentProgressTime = 0;
-        private long lastUpdateTime = 0;
-        private View parent;
-        private int previousBackgroundState = -2;
-        private RectF progressRect = new RectF();
-        private float radOffset = 0.0f;
-        private float scale = 1.0f;
-        private int size = AndroidUtilities.dp(64.0f);
-
-        public RadialProgressView(Context context, View view) {
-            if (ArticleViewer.decelerateInterpolator == null) {
-                ArticleViewer.decelerateInterpolator = new DecelerateInterpolator(1.5f);
-                ArticleViewer.progressPaint = new Paint(1);
-                ArticleViewer.progressPaint.setStyle(Style.STROKE);
-                ArticleViewer.progressPaint.setStrokeCap(Cap.ROUND);
-                ArticleViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
-                ArticleViewer.progressPaint.setColor(-1);
-            }
-            this.parent = view;
-        }
-
-        private void updateAnimation() {
-            long currentTimeMillis = System.currentTimeMillis();
-            long j = currentTimeMillis - this.lastUpdateTime;
-            this.lastUpdateTime = currentTimeMillis;
-            if (this.animatedProgressValue != 1.0f) {
-                this.radOffset += ((float) (360 * j)) / 3000.0f;
-                float f = this.currentProgress;
-                float f2 = this.animationProgressStart;
-                float f3 = f - f2;
-                if (f3 > 0.0f) {
-                    this.currentProgressTime += j;
-                    if (this.currentProgressTime >= 300) {
-                        this.animatedProgressValue = f;
-                        this.animationProgressStart = f;
-                        this.currentProgressTime = 0;
-                    } else {
-                        this.animatedProgressValue = f2 + (f3 * ArticleViewer.decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f));
-                    }
-                }
-                this.parent.invalidate();
-            }
-            if (this.animatedProgressValue >= 1.0f && this.previousBackgroundState != -2) {
-                this.animatedAlphaValue -= ((float) j) / 200.0f;
-                if (this.animatedAlphaValue <= 0.0f) {
-                    this.animatedAlphaValue = 0.0f;
-                    this.previousBackgroundState = -2;
-                }
-                this.parent.invalidate();
-            }
-        }
-
-        public void setProgress(float f, boolean z) {
-            if (z) {
-                this.animationProgressStart = this.animatedProgressValue;
-            } else {
-                this.animatedProgressValue = f;
-                this.animationProgressStart = f;
-            }
-            this.currentProgress = f;
-            this.currentProgressTime = 0;
-        }
-
-        public void setBackgroundState(int i, boolean z) {
-            this.lastUpdateTime = System.currentTimeMillis();
-            if (z) {
-                int i2 = this.backgroundState;
-                if (i2 != i) {
-                    this.previousBackgroundState = i2;
-                    this.animatedAlphaValue = 1.0f;
-                    this.backgroundState = i;
-                    this.parent.invalidate();
-                }
-            }
-            this.previousBackgroundState = -2;
-            this.backgroundState = i;
-            this.parent.invalidate();
-        }
-
-        public void setAlpha(float f) {
-            this.alpha = f;
-        }
-
-        public void setScale(float f) {
-            this.scale = f;
-        }
-
-        public void onDraw(Canvas canvas) {
-            Drawable drawable;
-            int i = (int) (((float) this.size) * this.scale);
-            int access$23200 = (ArticleViewer.this.getContainerViewWidth() - i) / 2;
-            int access$23300 = (ArticleViewer.this.getContainerViewHeight() - i) / 2;
-            int i2 = this.previousBackgroundState;
-            if (i2 >= 0 && i2 < 4) {
-                drawable = ArticleViewer.progressDrawables[this.previousBackgroundState];
-                if (drawable != null) {
-                    drawable.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
-                    drawable.setBounds(access$23200, access$23300, access$23200 + i, access$23300 + i);
-                    drawable.draw(canvas);
-                }
-            }
-            i2 = this.backgroundState;
-            if (i2 >= 0 && i2 < 4) {
-                drawable = ArticleViewer.progressDrawables[this.backgroundState];
-                if (drawable != null) {
-                    if (this.previousBackgroundState != -2) {
-                        drawable.setAlpha((int) (((1.0f - this.animatedAlphaValue) * 255.0f) * this.alpha));
-                    } else {
-                        drawable.setAlpha((int) (this.alpha * 255.0f));
-                    }
-                    drawable.setBounds(access$23200, access$23300, access$23200 + i, access$23300 + i);
-                    drawable.draw(canvas);
-                }
-            }
-            i2 = this.backgroundState;
-            if (!(i2 == 0 || i2 == 1)) {
-                i2 = this.previousBackgroundState;
-                if (!(i2 == 0 || i2 == 1)) {
-                    return;
-                }
-            }
-            int dp = AndroidUtilities.dp(4.0f);
-            if (this.previousBackgroundState != -2) {
-                ArticleViewer.progressPaint.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
-            } else {
-                ArticleViewer.progressPaint.setAlpha((int) (this.alpha * 255.0f));
-            }
-            this.progressRect.set((float) (access$23200 + dp), (float) (access$23300 + dp), (float) ((access$23200 + i) - dp), (float) ((access$23300 + i) - dp));
-            canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, this.animatedProgressValue * 360.0f), false, ArticleViewer.progressPaint);
-            updateAnimation();
-        }
-    }
-
-    public class ScrollEvaluator extends IntEvaluator {
-        public Integer evaluate(float f, Integer num, Integer num2) {
-            return super.evaluate(f, num, num2);
-        }
-    }
-
-    private class SearchResult {
-        private PageBlock block;
-        private int index;
-        private Object text;
-
-        private SearchResult() {
-        }
-
-        /* synthetic */ SearchResult(ArticleViewer articleViewer, AnonymousClass1 anonymousClass1) {
-            this();
-        }
-    }
-
-    private class TextSizeCell extends FrameLayout {
-        private int endFontSize = 30;
-        private int lastWidth;
-        private SeekBarView sizeBar;
-        private int startFontSize = 12;
-        private TextPaint textPaint;
-
-        public TextSizeCell(Context context) {
-            super(context);
-            setWillNotDraw(false);
-            this.textPaint = new TextPaint(1);
-            this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-            this.sizeBar = new SeekBarView(context);
-            this.sizeBar.setReportChanges(true);
-            this.sizeBar.setDelegate(new SeekBarViewDelegate(ArticleViewer.this) {
-                public void onSeekBarPressed(boolean z) {
-                }
-
-                public void onSeekBarDrag(boolean z, float f) {
-                    int round = Math.round(((float) TextSizeCell.this.startFontSize) + (((float) (TextSizeCell.this.endFontSize - TextSizeCell.this.startFontSize)) * f));
-                    if (round != SharedConfig.ivFontSize) {
-                        SharedConfig.ivFontSize = round;
-                        Editor edit = MessagesController.getGlobalMainSettings().edit();
-                        edit.putInt("iv_font_size", SharedConfig.ivFontSize);
-                        edit.commit();
-                        ArticleViewer.this.adapter[0].searchTextOffset.clear();
-                        ArticleViewer.this.updatePaintSize();
-                        TextSizeCell.this.invalidate();
-                    }
-                }
-            });
-            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 9.0f, 5.0f, 43.0f, 0.0f));
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteValueText"));
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("");
-            stringBuilder.append(SharedConfig.ivFontSize);
-            canvas.drawText(stringBuilder.toString(), (float) (getMeasuredWidth() - AndroidUtilities.dp(39.0f)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            super.onMeasure(i, i2);
-            i = MeasureSpec.getSize(i);
-            if (this.lastWidth != i) {
-                SeekBarView seekBarView = this.sizeBar;
-                int i3 = SharedConfig.ivFontSize;
-                int i4 = this.startFontSize;
-                seekBarView.setProgress(((float) (i3 - i4)) / ((float) (this.endFontSize - i4)));
-                this.lastWidth = i;
-            }
-        }
-
-        public void invalidate() {
-            super.invalidate();
-            this.sizeBar.invalidate();
-        }
-    }
-
-    private class WindowView extends FrameLayout {
-        private float alpha;
-        private Runnable attachRunnable;
-        private int bHeight;
-        private int bWidth;
-        private int bX;
-        private int bY;
-        private boolean closeAnimationInProgress;
-        private float innerTranslationX;
-        private boolean maybeStartTracking;
-        private boolean movingPage;
-        private boolean selfLayout;
-        private int startMovingHeaderHeight;
-        private boolean startedTracking;
-        private int startedTrackingPointerId;
-        private int startedTrackingX;
-        private int startedTrackingY;
-        private VelocityTracker tracker;
-
-        public WindowView(Context context) {
-            super(context);
-        }
-
-        @TargetApi(21)
-        public WindowInsets dispatchApplyWindowInsets(WindowInsets windowInsets) {
-            WindowInsets windowInsets2 = (WindowInsets) ArticleViewer.this.lastInsets;
-            ArticleViewer.this.lastInsets = windowInsets;
-            if (windowInsets2 == null || !windowInsets2.toString().equals(windowInsets.toString())) {
-                ArticleViewer.this.windowView.requestLayout();
-            }
-            if (VERSION.SDK_INT >= 28) {
-                DisplayCutout displayCutout = ArticleViewer.this.parentActivity.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout();
-                if (displayCutout != null) {
-                    List boundingRects = displayCutout.getBoundingRects();
-                    if (!(boundingRects == null || boundingRects.isEmpty())) {
-                        ArticleViewer articleViewer = ArticleViewer.this;
-                        boolean z = false;
-                        if (((Rect) boundingRects.get(0)).height() != 0) {
-                            z = true;
-                        }
-                        articleViewer.hasCutout = z;
-                    }
-                }
-            }
-            return super.dispatchApplyWindowInsets(windowInsets);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            i = MeasureSpec.getSize(i);
-            i2 = MeasureSpec.getSize(i2);
-            if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
-                setMeasuredDimension(i, i2);
-            } else {
-                setMeasuredDimension(i, i2);
-                WindowInsets windowInsets = (WindowInsets) ArticleViewer.this.lastInsets;
-                if (AndroidUtilities.incorrectDisplaySizeFix) {
-                    int i3 = AndroidUtilities.displaySize.y;
-                    if (i2 > i3) {
-                        i2 = i3;
-                    }
-                    i2 += AndroidUtilities.statusBarHeight;
-                }
-                i2 -= windowInsets.getSystemWindowInsetBottom();
-                i -= windowInsets.getSystemWindowInsetRight() + windowInsets.getSystemWindowInsetLeft();
-                if (windowInsets.getSystemWindowInsetRight() != 0) {
-                    this.bWidth = windowInsets.getSystemWindowInsetRight();
-                    this.bHeight = i2;
-                } else if (windowInsets.getSystemWindowInsetLeft() != 0) {
-                    this.bWidth = windowInsets.getSystemWindowInsetLeft();
-                    this.bHeight = i2;
-                } else {
-                    this.bWidth = i;
-                    this.bHeight = windowInsets.getStableInsetBottom();
-                }
-                i2 -= windowInsets.getSystemWindowInsetTop();
-            }
-            ArticleViewer.this.keyboardVisible = i2 < AndroidUtilities.displaySize.y - AndroidUtilities.dp(100.0f);
-            ArticleViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
-            ArticleViewer.this.photoContainerView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
-            ArticleViewer.this.photoContainerBackground.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
-            ArticleViewer.this.fullscreenVideoContainer.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
-            ViewGroup.LayoutParams layoutParams = ArticleViewer.this.animatingImageView.getLayoutParams();
-            ArticleViewer.this.animatingImageView.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(layoutParams.height, Integer.MIN_VALUE));
-        }
-
-        public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-            TextSelectionOverlay overlayView = ArticleViewer.this.textSelectionHelper.getOverlayView(getContext());
-            MotionEvent obtain = MotionEvent.obtain(motionEvent);
-            obtain.offsetLocation(-ArticleViewer.this.containerView.getX(), -ArticleViewer.this.containerView.getY());
-            if (ArticleViewer.this.textSelectionHelper.isSelectionMode() && ArticleViewer.this.textSelectionHelper.getOverlayView(getContext()).onTouchEvent(obtain)) {
-                return true;
-            }
-            if (overlayView.checkOnTap(motionEvent)) {
-                motionEvent.setAction(3);
-            }
-            if (motionEvent.getAction() != 0 || !ArticleViewer.this.textSelectionHelper.isSelectionMode() || (motionEvent.getY() >= ((float) ArticleViewer.this.containerView.getTop()) && motionEvent.getY() <= ((float) ArticleViewer.this.containerView.getBottom()))) {
-                return super.dispatchTouchEvent(motionEvent);
-            }
-            if (ArticleViewer.this.textSelectionHelper.getOverlayView(getContext()).onTouchEvent(obtain)) {
-                return super.dispatchTouchEvent(motionEvent);
-            }
-            return true;
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-            if (!this.selfLayout) {
-                int i5;
-                int i6;
-                i3 -= i;
-                if (ArticleViewer.this.anchorsOffsetMeasuredWidth != i3) {
-                    for (i5 = 0; i5 < ArticleViewer.this.listView.length; i5++) {
-                        for (Entry value : ArticleViewer.this.adapter[i5].anchorsOffset.entrySet()) {
-                            value.setValue(Integer.valueOf(-1));
-                        }
-                    }
-                    ArticleViewer.this.anchorsOffsetMeasuredWidth = i3;
-                }
-                if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
-                    i5 = 0;
-                    i6 = 0;
-                } else {
-                    WindowInsets windowInsets = (WindowInsets) ArticleViewer.this.lastInsets;
-                    i6 = windowInsets.getSystemWindowInsetLeft();
-                    if (windowInsets.getSystemWindowInsetRight() != 0) {
-                        this.bX = i3 - this.bWidth;
-                        this.bY = 0;
-                    } else if (windowInsets.getSystemWindowInsetLeft() != 0) {
-                        this.bX = 0;
-                        this.bY = 0;
-                    } else {
-                        this.bX = 0;
-                        this.bY = (i4 - i2) - this.bHeight;
-                    }
-                    i5 = windowInsets.getSystemWindowInsetTop() + 0;
-                }
-                ArticleViewer.this.containerView.layout(i6, i5, ArticleViewer.this.containerView.getMeasuredWidth() + i6, ArticleViewer.this.containerView.getMeasuredHeight() + i5);
-                ArticleViewer.this.photoContainerView.layout(i6, i5, ArticleViewer.this.photoContainerView.getMeasuredWidth() + i6, ArticleViewer.this.photoContainerView.getMeasuredHeight() + i5);
-                ArticleViewer.this.photoContainerBackground.layout(i6, i5, ArticleViewer.this.photoContainerBackground.getMeasuredWidth() + i6, ArticleViewer.this.photoContainerBackground.getMeasuredHeight() + i5);
-                ArticleViewer.this.fullscreenVideoContainer.layout(i6, i5, ArticleViewer.this.fullscreenVideoContainer.getMeasuredWidth() + i6, ArticleViewer.this.fullscreenVideoContainer.getMeasuredHeight() + i5);
-                ArticleViewer.this.animatingImageView.layout(0, 0, ArticleViewer.this.animatingImageView.getMeasuredWidth(), ArticleViewer.this.animatingImageView.getMeasuredHeight());
-                if (ArticleViewer.this.runAfterKeyboardClose != null) {
-                    ArticleViewer.this.runAfterKeyboardClose.start();
-                    ArticleViewer.this.runAfterKeyboardClose = null;
-                }
-            }
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onAttachedToWindow() {
-            super.onAttachedToWindow();
-            ArticleViewer.this.attachedToWindow = true;
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDetachedFromWindow() {
-            super.onDetachedFromWindow();
-            ArticleViewer.this.attachedToWindow = false;
-        }
-
-        public void requestDisallowInterceptTouchEvent(boolean z) {
-            handleTouchEvent(null);
-            super.requestDisallowInterceptTouchEvent(z);
-        }
-
-        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-            return !ArticleViewer.this.collapsed && (handleTouchEvent(motionEvent) || super.onInterceptTouchEvent(motionEvent));
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            return !ArticleViewer.this.collapsed && (handleTouchEvent(motionEvent) || super.onTouchEvent(motionEvent));
-        }
-
-        @Keep
-        public void setInnerTranslationX(float f) {
-            this.innerTranslationX = f;
-            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
-                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
-                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
-                drawerLayoutContainer.setAllowDrawContent(z);
-            }
-            invalidate();
-        }
-
-        /* Access modifiers changed, original: protected */
-        public boolean drawChild(Canvas canvas, View view, long j) {
-            int measuredWidth = getMeasuredWidth();
-            int i = (int) this.innerTranslationX;
-            int save = canvas.save();
-            canvas.clipRect(i, 0, measuredWidth, getHeight());
-            boolean drawChild = super.drawChild(canvas, view, j);
-            canvas.restoreToCount(save);
-            if (i != 0 && view == ArticleViewer.this.containerView) {
-                float f = (float) (measuredWidth - i);
-                float min = Math.min(0.8f, f / ((float) measuredWidth));
-                if (min < 0.0f) {
-                    min = 0.0f;
-                }
-                ArticleViewer.this.scrimPaint.setColor(((int) (min * 153.0f)) << 24);
-                canvas.drawRect(0.0f, 0.0f, (float) i, (float) getHeight(), ArticleViewer.this.scrimPaint);
-                min = Math.max(0.0f, Math.min(f / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
-                ArticleViewer.this.layerShadowDrawable.setBounds(i - ArticleViewer.this.layerShadowDrawable.getIntrinsicWidth(), view.getTop(), i, view.getBottom());
-                ArticleViewer.this.layerShadowDrawable.setAlpha((int) (min * 255.0f));
-                ArticleViewer.this.layerShadowDrawable.draw(canvas);
-            }
-            return drawChild;
-        }
-
-        @Keep
-        public float getInnerTranslationX() {
-            return this.innerTranslationX;
-        }
-
-        private void prepareForMoving(MotionEvent motionEvent) {
-            this.maybeStartTracking = false;
-            this.startedTracking = true;
-            this.startedTrackingX = (int) motionEvent.getX();
-            if (ArticleViewer.this.pagesStack.size() > 1) {
-                this.movingPage = true;
-                this.startMovingHeaderHeight = ArticleViewer.this.currentHeaderHeight;
-                ArticleViewer.this.listView[1].setVisibility(0);
-                ArticleViewer.this.listView[1].setAlpha(1.0f);
-                ArticleViewer.this.listView[1].setTranslationX(0.0f);
-                ArticleViewer.this.listView[0].setBackgroundColor(ArticleViewer.this.backgroundPaint.getColor());
-            } else {
-                this.movingPage = false;
-            }
-            ArticleViewer.this.cancelCheckLongPress();
-        }
-
-        public boolean handleTouchEvent(MotionEvent motionEvent) {
-            if (ArticleViewer.this.isPhotoVisible || this.closeAnimationInProgress || ArticleViewer.this.fullscreenVideoContainer.getVisibility() == 0 || ArticleViewer.this.textSelectionHelper.isSelectionMode()) {
-                return false;
-            }
-            VelocityTracker velocityTracker;
-            if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
-                this.startedTrackingPointerId = motionEvent.getPointerId(0);
-                this.maybeStartTracking = true;
-                this.startedTrackingX = (int) motionEvent.getX();
-                this.startedTrackingY = (int) motionEvent.getY();
-                velocityTracker = this.tracker;
-                if (velocityTracker != null) {
-                    velocityTracker.clear();
-                }
-            } else if (motionEvent != null && motionEvent.getAction() == 2 && motionEvent.getPointerId(0) == this.startedTrackingPointerId) {
-                if (this.tracker == null) {
-                    this.tracker = VelocityTracker.obtain();
-                }
-                int max = Math.max(0, (int) (motionEvent.getX() - ((float) this.startedTrackingX)));
-                int abs = Math.abs(((int) motionEvent.getY()) - this.startedTrackingY);
-                this.tracker.addMovement(motionEvent);
-                if (this.maybeStartTracking && !this.startedTracking && ((float) max) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(max) / 3 > abs) {
-                    prepareForMoving(motionEvent);
-                } else if (this.startedTracking) {
-                    ArticleViewer.this.pressedLinkOwnerLayout = null;
-                    ArticleViewer.this.pressedLinkOwnerView = null;
-                    if (this.movingPage) {
-                        ArticleViewer.this.listView[0].setTranslationX((float) max);
-                    } else {
-                        float f = (float) max;
-                        ArticleViewer.this.containerView.setTranslationX(f);
-                        setInnerTranslationX(f);
-                    }
-                }
-            } else if (motionEvent != null && motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6)) {
-                if (this.tracker == null) {
-                    this.tracker = VelocityTracker.obtain();
-                }
-                this.tracker.computeCurrentVelocity(1000);
-                float xVelocity = this.tracker.getXVelocity();
-                float yVelocity = this.tracker.getYVelocity();
-                if (!this.startedTracking && xVelocity >= 3500.0f && xVelocity > Math.abs(yVelocity)) {
-                    prepareForMoving(motionEvent);
-                }
-                if (this.startedTracking) {
-                    View access$2500 = this.movingPage ? ArticleViewer.this.listView[0] : ArticleViewer.this.containerView;
-                    float x = access$2500.getX();
-                    final boolean z = x < ((float) access$2500.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < yVelocity);
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    Animator[] animatorArr;
-                    if (!z) {
-                        x = ((float) access$2500.getMeasuredWidth()) - x;
-                        if (this.movingPage) {
-                            animatorArr = new Animator[1];
-                            animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()});
-                            animatorSet.playTogether(animatorArr);
-                        } else {
-                            animatorArr = new Animator[2];
-                            animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()});
-                            animatorArr[1] = ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()});
-                            animatorSet.playTogether(animatorArr);
-                        }
-                    } else if (this.movingPage) {
-                        animatorArr = new Animator[1];
-                        animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{0.0f});
-                        animatorSet.playTogether(animatorArr);
-                    } else {
-                        animatorArr = new Animator[2];
-                        animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{0.0f});
-                        animatorArr[1] = ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{0.0f});
-                        animatorSet.playTogether(animatorArr);
-                    }
-                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) access$2500.getMeasuredWidth())) * x), 50));
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            if (WindowView.this.movingPage) {
-                                ArticleViewer.this.listView[0].setBackgroundDrawable(null);
-                                if (!z) {
-                                    WebpageAdapter webpageAdapter = ArticleViewer.this.adapter[1];
-                                    ArticleViewer.this.adapter[1] = ArticleViewer.this.adapter[0];
-                                    ArticleViewer.this.adapter[0] = webpageAdapter;
-                                    RecyclerListView recyclerListView = ArticleViewer.this.listView[1];
-                                    ArticleViewer.this.listView[1] = ArticleViewer.this.listView[0];
-                                    ArticleViewer.this.listView[0] = recyclerListView;
-                                    LinearLayoutManager linearLayoutManager = ArticleViewer.this.layoutManager[1];
-                                    ArticleViewer.this.layoutManager[1] = ArticleViewer.this.layoutManager[0];
-                                    ArticleViewer.this.layoutManager[0] = linearLayoutManager;
-                                    ArticleViewer.this.pagesStack.remove(ArticleViewer.this.pagesStack.size() - 1);
-                                    ArticleViewer articleViewer = ArticleViewer.this;
-                                    articleViewer.currentPage = (WebPage) articleViewer.pagesStack.get(ArticleViewer.this.pagesStack.size() - 1);
-                                }
-                                ArticleViewer.this.listView[1].setVisibility(8);
-                                ArticleViewer.this.headerView.invalidate();
-                            } else if (!z) {
-                                ArticleViewer.this.saveCurrentPagePosition();
-                                ArticleViewer.this.onClosed();
-                            }
-                            WindowView.this.movingPage = false;
-                            WindowView.this.startedTracking = false;
-                            WindowView.this.closeAnimationInProgress = false;
-                        }
-                    });
-                    animatorSet.start();
-                    this.closeAnimationInProgress = true;
-                } else {
-                    this.maybeStartTracking = false;
-                    this.startedTracking = false;
-                    this.movingPage = false;
-                }
-                velocityTracker = this.tracker;
-                if (velocityTracker != null) {
-                    velocityTracker.recycle();
-                    this.tracker = null;
-                }
-            } else if (motionEvent == null) {
-                this.maybeStartTracking = false;
-                this.startedTracking = false;
-                this.movingPage = false;
-                velocityTracker = this.tracker;
-                if (velocityTracker != null) {
-                    velocityTracker.recycle();
-                    this.tracker = null;
-                }
-                ArticleTextSelectionHelper articleTextSelectionHelper = ArticleViewer.this.textSelectionHelper;
-                if (!(articleTextSelectionHelper == null || articleTextSelectionHelper.isSelectionMode())) {
-                    ArticleViewer.this.textSelectionHelper.clear();
-                }
-            }
-            return this.startedTracking;
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void dispatchDraw(Canvas canvas) {
-            super.dispatchDraw(canvas);
-            if (this.bWidth != 0 && this.bHeight != 0) {
-                ArticleViewer.this.blackPaint.setAlpha((int) (ArticleViewer.this.windowView.getAlpha() * 255.0f));
-                int i = this.bX;
-                if (i == 0) {
-                    int i2 = this.bY;
-                    if (i2 == 0) {
-                        canvas.drawRect((float) i, (float) i2, (float) (i + this.bWidth), (float) (i2 + this.bHeight), ArticleViewer.this.blackPaint);
-                        return;
-                    }
-                }
-                canvas.drawRect(((float) this.bX) - getTranslationX(), (float) this.bY, ((float) (this.bX + this.bWidth)) - getTranslationX(), (float) (this.bY + this.bHeight), ArticleViewer.this.blackPaint);
-            }
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            int measuredWidth = getMeasuredWidth();
-            int measuredHeight = getMeasuredHeight();
-            float f = (float) measuredWidth;
-            float f2 = (float) measuredHeight;
-            canvas.drawRect(this.innerTranslationX, 0.0f, f, f2, ArticleViewer.this.backgroundPaint);
-            if (VERSION.SDK_INT >= 21 && ArticleViewer.this.lastInsets != null) {
-                WindowInsets windowInsets = (WindowInsets) ArticleViewer.this.lastInsets;
-                canvas.drawRect(this.innerTranslationX, 0.0f, f, (float) windowInsets.getSystemWindowInsetTop(), ArticleViewer.this.statusBarPaint);
-                if (ArticleViewer.this.hasCutout) {
-                    measuredWidth = windowInsets.getSystemWindowInsetLeft();
-                    if (measuredWidth != 0) {
-                        canvas.drawRect(0.0f, 0.0f, (float) measuredWidth, f2, ArticleViewer.this.statusBarPaint);
-                    }
-                    measuredWidth = windowInsets.getSystemWindowInsetRight();
-                    if (measuredWidth != 0) {
-                        canvas.drawRect((float) (getMeasuredWidth() - measuredWidth), 0.0f, (float) getMeasuredWidth(), f2, ArticleViewer.this.statusBarPaint);
-                    }
-                }
-            }
-        }
-
-        @Keep
-        public void setAlpha(float f) {
-            int i = (int) (255.0f * f);
-            ArticleViewer.this.backgroundPaint.setAlpha(i);
-            ArticleViewer.this.statusBarPaint.setAlpha(i);
-            this.alpha = f;
-            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
-                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
-                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
-                drawerLayoutContainer.setAllowDrawContent(z);
-            }
-            invalidate();
-        }
-
-        @Keep
-        public float getAlpha() {
-            return this.alpha;
-        }
-
-        public boolean dispatchKeyEventPreIme(KeyEvent keyEvent) {
-            if (keyEvent == null || keyEvent.getKeyCode() != 4 || keyEvent.getAction() != 1) {
-                return super.dispatchKeyEventPreIme(keyEvent);
-            }
-            if (ArticleViewer.this.searchField.isFocused()) {
-                ArticleViewer.this.searchField.clearFocus();
-                AndroidUtilities.hideKeyboard(ArticleViewer.this.searchField);
-            } else {
-                ArticleViewer.this.close(true, false);
-            }
-            return true;
-        }
-    }
-
-    public class DrawingText implements TextLayoutBlock {
-        public LinkPath markPath;
-        public PageBlock parentBlock;
-        public Object parentText;
-        public CharSequence prefix;
-        public int row;
-        public int searchIndex = -1;
-        public LinkPath searchPath;
-        public StaticLayout textLayout;
-        public LinkPath textPath;
-        public int x;
-        public int y;
-
-        public void draw(Canvas canvas) {
-            if (ArticleViewer.this.searchResults.isEmpty()) {
-                this.searchIndex = -1;
-                this.searchPath = null;
-            } else {
-                SearchResult searchResult = (SearchResult) ArticleViewer.this.searchResults.get(ArticleViewer.this.currentSearchIndex);
-                if (searchResult.block != this.parentBlock || (searchResult.text != this.parentText && (!(searchResult.text instanceof String) || this.parentText != null))) {
-                    this.searchIndex = -1;
-                    this.searchPath = null;
-                } else if (this.searchIndex != searchResult.index) {
-                    this.searchPath = new LinkPath(true);
-                    this.searchPath.setAllowReset(false);
-                    this.searchPath.setCurrentLayout(this.textLayout, searchResult.index, 0.0f);
-                    this.searchPath.setBaselineShift(0);
-                    this.textLayout.getSelectionPath(searchResult.index, searchResult.index + ArticleViewer.this.searchText.length(), this.searchPath);
-                    this.searchPath.setAllowReset(true);
-                }
-            }
-            LinkPath linkPath = this.searchPath;
-            if (linkPath != null) {
-                canvas.drawPath(linkPath, ArticleViewer.webpageSearchPaint);
-            }
-            linkPath = this.textPath;
-            if (linkPath != null) {
-                canvas.drawPath(linkPath, ArticleViewer.webpageUrlPaint);
-            }
-            linkPath = this.markPath;
-            if (linkPath != null) {
-                canvas.drawPath(linkPath, ArticleViewer.webpageMarkPaint);
-            }
-            ArticleViewer.this.drawLayoutLink(canvas, this);
-            this.textLayout.draw(canvas);
-        }
-
-        public CharSequence getText() {
-            return this.textLayout.getText();
-        }
-
-        public int getLineCount() {
-            return this.textLayout.getLineCount();
-        }
-
-        public int getLineAscent(int i) {
-            return this.textLayout.getLineAscent(i);
-        }
-
-        public float getLineLeft(int i) {
-            return this.textLayout.getLineLeft(i);
-        }
-
-        public float getLineWidth(int i) {
-            return this.textLayout.getLineWidth(i);
-        }
-
-        public int getHeight() {
-            return this.textLayout.getHeight();
-        }
-
-        public int getWidth() {
-            return this.textLayout.getWidth();
-        }
-
-        public StaticLayout getLayout() {
-            return this.textLayout;
-        }
-
-        public int getX() {
-            return this.x;
-        }
-
-        public int getY() {
-            return this.y;
-        }
-
-        public int getRow() {
-            return this.row;
-        }
-
-        public CharSequence getPrefix() {
-            return this.prefix;
-        }
-    }
-
-    private class BlockAudioCell extends View implements FileDownloadProgressListener, ArticleSelectableView {
-        private int TAG;
-        private int buttonPressed;
-        private int buttonState;
-        private int buttonX;
-        private int buttonY;
-        private DrawingText captionLayout;
-        private DrawingText creditLayout;
-        private int creditOffset;
-        private TL_pageBlockAudio currentBlock;
-        private Document currentDocument;
-        private MessageObject currentMessageObject;
-        private StaticLayout durationLayout;
-        private boolean isFirst;
-        private String lastTimeString;
-        private WebpageAdapter parentAdapter;
-        private RadialProgress2 radialProgress;
-        private SeekBar seekBar;
-        private int seekBarX;
-        private int seekBarY;
-        private int textX;
-        private int textY = AndroidUtilities.dp(58.0f);
-        private DrawingText titleLayout;
-
-        public void onProgressUpload(String str, float f, boolean z) {
-        }
-
-        public BlockAudioCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-            this.radialProgress = new RadialProgress2(this);
-            this.radialProgress.setCircleRadius(AndroidUtilities.dp(24.0f));
-            this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
-            this.seekBar = new SeekBar(context);
-            this.seekBar.setDelegate(new -$$Lambda$ArticleViewer$BlockAudioCell$WgP383-edJ263u4ZKo-pJ9bitM4(this));
-        }
-
-        public /* synthetic */ void lambda$new$0$ArticleViewer$BlockAudioCell(float f) {
-            MessageObject messageObject = this.currentMessageObject;
-            if (messageObject != null) {
-                messageObject.audioProgress = f;
-                MediaController.getInstance().seekToProgress(this.currentMessageObject, f);
-            }
-        }
-
-        public void setBlock(TL_pageBlockAudio tL_pageBlockAudio, boolean z, boolean z2) {
-            this.currentBlock = tL_pageBlockAudio;
-            this.currentMessageObject = (MessageObject) this.parentAdapter.audioBlocks.get(this.currentBlock);
-            this.currentDocument = this.currentMessageObject.getDocument();
-            this.isFirst = z;
-            String str = "chat_inAudioSeekbarFill";
-            this.seekBar.setColors(Theme.getColor("chat_inAudioSeekbar"), Theme.getColor("chat_inAudioCacheSeekbar"), Theme.getColor(str), Theme.getColor(str), Theme.getColor("chat_inAudioSeekbarSelected"));
-            updateButtonState(false);
-            requestLayout();
-        }
-
-        public MessageObject getMessageObject() {
-            return this.currentMessageObject;
-        }
-
-        /* JADX WARNING: Missing block: B:18:0x0064, code skipped:
-            if (r1 <= ((float) (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f)))) goto L_0x006a;
-     */
-        /* JADX WARNING: Missing block: B:20:0x0068, code skipped:
-            if (r11.buttonState == 0) goto L_0x006a;
-     */
-        /* JADX WARNING: Missing block: B:21:0x006a, code skipped:
-            r11.buttonPressed = 1;
-            invalidate();
-     */
-        public boolean onTouchEvent(android.view.MotionEvent r12) {
-            /*
-            r11 = this;
-            r0 = r12.getX();
-            r1 = r12.getY();
-            r2 = r11.seekBar;
-            r3 = r12.getAction();
-            r4 = r12.getX();
-            r5 = r11.seekBarX;
-            r5 = (float) r5;
-            r4 = r4 - r5;
-            r5 = r12.getY();
-            r6 = r11.seekBarY;
-            r6 = (float) r6;
-            r5 = r5 - r6;
-            r2 = r2.onTouch(r3, r4, r5);
-            r3 = 1;
-            if (r2 == 0) goto L_0x0036;
-        L_0x0025:
-            r12 = r12.getAction();
-            if (r12 != 0) goto L_0x0032;
-        L_0x002b:
-            r12 = r11.getParent();
-            r12.requestDisallowInterceptTouchEvent(r3);
-        L_0x0032:
-            r11.invalidate();
-            return r3;
-        L_0x0036:
-            r2 = r12.getAction();
-            r4 = 0;
-            if (r2 != 0) goto L_0x0070;
-        L_0x003d:
-            r2 = r11.buttonState;
-            r5 = -1;
-            if (r2 == r5) goto L_0x0066;
-        L_0x0042:
-            r2 = r11.buttonX;
-            r5 = (float) r2;
-            r5 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-            if (r5 < 0) goto L_0x0066;
-        L_0x0049:
-            r5 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-            r6 = org.telegram.messenger.AndroidUtilities.dp(r5);
-            r2 = r2 + r6;
-            r2 = (float) r2;
-            r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-            if (r0 > 0) goto L_0x0066;
-        L_0x0055:
-            r0 = r11.buttonY;
-            r2 = (float) r0;
-            r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-            if (r2 < 0) goto L_0x0066;
-        L_0x005c:
-            r2 = org.telegram.messenger.AndroidUtilities.dp(r5);
-            r0 = r0 + r2;
-            r0 = (float) r0;
-            r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1));
-            if (r0 <= 0) goto L_0x006a;
-        L_0x0066:
-            r0 = r11.buttonState;
-            if (r0 != 0) goto L_0x008f;
-        L_0x006a:
-            r11.buttonPressed = r3;
-            r11.invalidate();
-            goto L_0x008f;
-        L_0x0070:
-            r0 = r12.getAction();
-            if (r0 != r3) goto L_0x0086;
-        L_0x0076:
-            r0 = r11.buttonPressed;
-            if (r0 != r3) goto L_0x008f;
-        L_0x007a:
-            r11.buttonPressed = r4;
-            r11.playSoundEffect(r4);
-            r11.didPressedButton(r3);
-            r11.invalidate();
-            goto L_0x008f;
-        L_0x0086:
-            r0 = r12.getAction();
-            r1 = 3;
-            if (r0 != r1) goto L_0x008f;
-        L_0x008d:
-            r11.buttonPressed = r4;
-        L_0x008f:
-            r0 = r11.buttonPressed;
-            if (r0 != 0) goto L_0x00bf;
-        L_0x0093:
-            r5 = org.telegram.ui.ArticleViewer.this;
-            r8 = r11.captionLayout;
-            r9 = r11.textX;
-            r10 = r11.textY;
-            r6 = r12;
-            r7 = r11;
-            r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
-            if (r0 != 0) goto L_0x00bf;
-        L_0x00a3:
-            r5 = org.telegram.ui.ArticleViewer.this;
-            r8 = r11.creditLayout;
-            r9 = r11.textX;
-            r0 = r11.textY;
-            r1 = r11.creditOffset;
-            r10 = r0 + r1;
-            r6 = r12;
-            r7 = r11;
-            r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
-            if (r0 != 0) goto L_0x00bf;
-        L_0x00b7:
-            r12 = super.onTouchEvent(r12);
-            if (r12 == 0) goto L_0x00be;
-        L_0x00bd:
-            goto L_0x00bf;
-        L_0x00be:
-            r3 = 0;
-        L_0x00bf:
-            return r3;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$BlockAudioCell.onTouchEvent(android.view.MotionEvent):boolean");
-        }
-
-        /* Access modifiers changed, original: protected */
-        @SuppressLint({"DrawAllocation", "NewApi"})
-        public void onMeasure(int i, int i2) {
-            int size = MeasureSpec.getSize(i);
-            int dp = AndroidUtilities.dp(54.0f);
-            TL_pageBlockAudio tL_pageBlockAudio = this.currentBlock;
-            int i3 = 1;
-            if (tL_pageBlockAudio != null) {
-                int i4 = tL_pageBlockAudio.level;
-                if (i4 > 0) {
-                    this.textX = AndroidUtilities.dp((float) (i4 * 14)) + AndroidUtilities.dp(18.0f);
-                } else {
-                    this.textX = AndroidUtilities.dp(18.0f);
-                }
-                int dp2 = (size - this.textX) - AndroidUtilities.dp(18.0f);
-                int dp3 = AndroidUtilities.dp(44.0f);
-                this.buttonX = AndroidUtilities.dp(16.0f);
-                this.buttonY = AndroidUtilities.dp(5.0f);
-                RadialProgress2 radialProgress2 = this.radialProgress;
-                int i5 = this.buttonX;
-                int i6 = this.buttonY;
-                radialProgress2.setProgressRect(i5, i6, i5 + dp3, i6 + dp3);
-                ArticleViewer articleViewer = ArticleViewer.this;
-                TL_pageBlockAudio tL_pageBlockAudio2 = this.currentBlock;
-                this.captionLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockAudio2.caption.text, dp2, this.textY, tL_pageBlockAudio2, this.parentAdapter);
-                if (this.captionLayout != null) {
-                    this.creditOffset = AndroidUtilities.dp(8.0f) + this.captionLayout.getHeight();
-                    dp += this.creditOffset + AndroidUtilities.dp(8.0f);
-                }
-                int i7 = dp;
-                articleViewer = ArticleViewer.this;
-                tL_pageBlockAudio2 = this.currentBlock;
-                this.creditLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockAudio2.caption.credit, dp2, this.textY + this.creditOffset, tL_pageBlockAudio2, articleViewer.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
-                if (this.creditLayout != null) {
-                    i7 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
-                }
-                if (!this.isFirst && this.currentBlock.level <= 0) {
-                    i7 += AndroidUtilities.dp(8.0f);
-                }
-                String musicAuthor = this.currentMessageObject.getMusicAuthor(false);
-                String musicTitle = this.currentMessageObject.getMusicTitle(false);
-                this.seekBarX = (this.buttonX + AndroidUtilities.dp(50.0f)) + dp3;
-                int dp4 = (size - this.seekBarX) - AndroidUtilities.dp(18.0f);
-                if (TextUtils.isEmpty(musicTitle) && TextUtils.isEmpty(musicAuthor)) {
-                    this.titleLayout = null;
-                    this.seekBarY = this.buttonY + ((dp3 - AndroidUtilities.dp(30.0f)) / 2);
-                } else {
-                    SpannableStringBuilder spannableStringBuilder;
-                    if (!TextUtils.isEmpty(musicTitle) && !TextUtils.isEmpty(musicAuthor)) {
-                        spannableStringBuilder = new SpannableStringBuilder(String.format("%s - %s", new Object[]{musicAuthor, musicTitle}));
-                    } else if (TextUtils.isEmpty(musicTitle)) {
-                        spannableStringBuilder = new SpannableStringBuilder(musicAuthor);
-                    } else {
-                        spannableStringBuilder = new SpannableStringBuilder(musicTitle);
-                    }
-                    if (!TextUtils.isEmpty(musicAuthor)) {
-                        spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, musicAuthor.length(), 18);
-                    }
-                    CharSequence ellipsize = TextUtils.ellipsize(spannableStringBuilder, Theme.chat_audioTitlePaint, (float) dp4, TruncateAt.END);
-                    this.titleLayout = new DrawingText();
-                    this.titleLayout.textLayout = new StaticLayout(ellipsize, ArticleViewer.audioTimePaint, dp4, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    this.titleLayout.parentBlock = this.currentBlock;
-                    this.seekBarY = (this.buttonY + ((dp3 - AndroidUtilities.dp(30.0f)) / 2)) + AndroidUtilities.dp(11.0f);
-                }
-                this.seekBar.setSize(dp4, AndroidUtilities.dp(30.0f));
-                i3 = i7;
-            }
-            setMeasuredDimension(size, i3);
-            updatePlayingMessageProgress();
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (this.currentBlock != null) {
-                int i;
-                DrawingText drawingText;
-                int i2;
-                int i3;
-                this.radialProgress.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
-                this.radialProgress.setProgressColor(Theme.getColor("chat_inFileProgress"));
-                this.radialProgress.draw(canvas);
-                canvas.save();
-                canvas.translate((float) this.seekBarX, (float) this.seekBarY);
-                this.seekBar.draw(canvas);
-                canvas.restore();
-                if (this.durationLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) (this.buttonX + AndroidUtilities.dp(54.0f)), (float) (this.seekBarY + AndroidUtilities.dp(6.0f)));
-                    this.durationLayout.draw(canvas);
-                    canvas.restore();
-                }
-                int i4 = 0;
-                if (this.titleLayout != null) {
-                    canvas.save();
-                    this.titleLayout.x = this.buttonX + AndroidUtilities.dp(54.0f);
-                    this.titleLayout.y = this.seekBarY - AndroidUtilities.dp(16.0f);
-                    DrawingText drawingText2 = this.titleLayout;
-                    canvas.translate((float) drawingText2.x, (float) drawingText2.y);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
-                    this.titleLayout.draw(canvas);
-                    canvas.restore();
-                    i = 1;
-                } else {
-                    i = 0;
-                }
-                if (this.captionLayout != null) {
-                    canvas.save();
-                    drawingText = this.captionLayout;
-                    i2 = this.textX;
-                    drawingText.x = i2;
-                    i3 = this.textY;
-                    drawingText.y = i3;
-                    canvas.translate((float) i2, (float) i3);
-                    i2 = i + 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
-                    this.captionLayout.draw(canvas);
-                    canvas.restore();
-                    i = i2;
-                }
-                if (this.creditLayout != null) {
-                    canvas.save();
-                    drawingText = this.creditLayout;
-                    i2 = this.textX;
-                    drawingText.x = i2;
-                    i3 = this.textY;
-                    int i5 = this.creditOffset;
-                    drawingText.y = i3 + i5;
-                    canvas.translate((float) i2, (float) (i3 + i5));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
-                    this.creditLayout.draw(canvas);
-                    canvas.restore();
-                }
-                if (this.currentBlock.level > 0) {
-                    float dp = (float) AndroidUtilities.dp(18.0f);
-                    float dp2 = (float) AndroidUtilities.dp(20.0f);
-                    i = getMeasuredHeight();
-                    if (this.currentBlock.bottom) {
-                        i4 = AndroidUtilities.dp(6.0f);
-                    }
-                    canvas.drawRect(dp, 0.0f, dp2, (float) (i - i4), ArticleViewer.quoteLinePaint);
-                }
-            }
-        }
-
-        private int getIconForCurrentState() {
-            int i = this.buttonState;
-            if (i == 1) {
-                return 1;
-            }
-            if (i == 2) {
-                return 2;
-            }
-            return i == 3 ? 3 : 0;
-        }
-
-        public void updatePlayingMessageProgress() {
-            if (this.currentDocument != null && this.currentMessageObject != null) {
-                if (!this.seekBar.isDragging()) {
-                    this.seekBar.setProgress(this.currentMessageObject.audioProgress);
-                }
-                int i = 0;
-                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
-                    i = this.currentMessageObject.audioProgressSec;
-                } else {
-                    for (int i2 = 0; i2 < this.currentDocument.attributes.size(); i2++) {
-                        DocumentAttribute documentAttribute = (DocumentAttribute) this.currentDocument.attributes.get(i2);
-                        if (documentAttribute instanceof TL_documentAttributeAudio) {
-                            i = documentAttribute.duration;
-                            break;
-                        }
-                    }
-                }
-                String formatShortDuration = AndroidUtilities.formatShortDuration(i);
-                String str = this.lastTimeString;
-                if (str == null || !(str == null || str.equals(formatShortDuration))) {
-                    this.lastTimeString = formatShortDuration;
-                    ArticleViewer.audioTimePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-                    this.durationLayout = new StaticLayout(formatShortDuration, ArticleViewer.audioTimePaint, (int) Math.ceil((double) ArticleViewer.audioTimePaint.measureText(formatShortDuration)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                }
-                ArticleViewer.audioTimePaint.setColor(ArticleViewer.this.getTextColor());
-                invalidate();
-            }
-        }
-
-        public void updateButtonState(boolean z) {
-            String attachFileName = FileLoader.getAttachFileName(this.currentDocument);
-            boolean exists = FileLoader.getPathToAttach(this.currentDocument, true).exists();
-            if (TextUtils.isEmpty(attachFileName)) {
-                this.radialProgress.setIcon(4, false, false);
-                return;
-            }
-            if (exists) {
-                DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
-                boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
-                    this.buttonState = 0;
-                } else {
-                    this.buttonState = 1;
-                }
-                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
-            } else {
-                DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(attachFileName, null, this);
-                if (FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(attachFileName)) {
-                    this.buttonState = 3;
-                    Float fileProgress = ImageLoader.getInstance().getFileProgress(attachFileName);
-                    if (fileProgress != null) {
-                        this.radialProgress.setProgress(fileProgress.floatValue(), z);
-                    } else {
-                        this.radialProgress.setProgress(0.0f, z);
-                    }
-                    this.radialProgress.setIcon(getIconForCurrentState(), true, z);
-                } else {
-                    this.buttonState = 2;
-                    this.radialProgress.setProgress(0.0f, z);
-                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
-                }
-            }
-            updatePlayingMessageProgress();
-        }
-
-        private void didPressedButton(boolean z) {
-            int i = this.buttonState;
-            if (i == 0) {
-                if (MediaController.getInstance().setPlaylist(this.parentAdapter.audioMessages, this.currentMessageObject, false)) {
-                    this.buttonState = 1;
-                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
-                    invalidate();
-                }
-            } else if (i == 1) {
-                if (MediaController.getInstance().lambda$startAudioAgain$5$MediaController(this.currentMessageObject)) {
-                    this.buttonState = 0;
-                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
-                    invalidate();
-                }
-            } else if (i == 2) {
-                this.radialProgress.setProgress(0.0f, false);
-                FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, ArticleViewer.this.currentPage, 1, 1);
-                this.buttonState = 3;
-                this.radialProgress.setIcon(getIconForCurrentState(), true, z);
-                invalidate();
-            } else if (i == 3) {
-                FileLoader.getInstance(ArticleViewer.this.currentAccount).cancelLoadFile(this.currentDocument);
-                this.buttonState = 2;
-                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
-                invalidate();
-            }
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDetachedFromWindow() {
-            super.onDetachedFromWindow();
-            DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onAttachedToWindow() {
-            super.onAttachedToWindow();
-            updateButtonState(false);
-        }
-
-        public void onFailedDownload(String str, boolean z) {
-            updateButtonState(true);
-        }
-
-        public void onSuccessDownload(String str) {
-            this.radialProgress.setProgress(1.0f, true);
-            updateButtonState(true);
-        }
-
-        public void onProgressDownload(String str, float f) {
-            this.radialProgress.setProgress(f, true);
-            if (this.buttonState != 3) {
-                updateButtonState(true);
-            }
-        }
-
-        public int getObserverTag() {
-            return this.TAG;
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.titleLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.captionLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.creditLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    private class BlockAuthorDateCell extends View implements ArticleSelectableView {
+    private class BlockAuthorDateCell extends View {
         private TL_pageBlockAuthorDate currentBlock;
         private WebpageAdapter parentAdapter;
         private DrawingText textLayout;
@@ -2072,25 +562,25 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 int indexOf;
                 ArticleViewer articleViewer = ArticleViewer.this;
                 RichText richText = tL_pageBlockAuthorDate.author;
-                CharSequence access$22000 = articleViewer.getText(this, richText, richText, tL_pageBlockAuthorDate, i);
+                CharSequence access$21900 = articleViewer.getText(this, richText, richText, tL_pageBlockAuthorDate, i);
                 Spannable spannable = null;
-                if (access$22000 instanceof Spannable) {
-                    spannable = (Spannable) access$22000;
-                    metricAffectingSpanArr = (MetricAffectingSpan[]) spannable.getSpans(0, access$22000.length(), MetricAffectingSpan.class);
+                if (access$21900 instanceof Spannable) {
+                    spannable = (Spannable) access$21900;
+                    metricAffectingSpanArr = (MetricAffectingSpan[]) spannable.getSpans(0, access$21900.length(), MetricAffectingSpan.class);
                 } else {
                     metricAffectingSpanArr = null;
                 }
-                if (this.currentBlock.published_date != 0 && !TextUtils.isEmpty(access$22000)) {
-                    formatString = LocaleController.formatString("ArticleDateByAuthor", NUM, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000), access$22000);
-                } else if (TextUtils.isEmpty(access$22000)) {
+                if (this.currentBlock.published_date != 0 && !TextUtils.isEmpty(access$21900)) {
+                    formatString = LocaleController.formatString("ArticleDateByAuthor", NUM, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000), access$21900);
+                } else if (TextUtils.isEmpty(access$21900)) {
                     formatString = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000);
                 } else {
-                    formatString = LocaleController.formatString("ArticleByAuthor", NUM, access$22000);
+                    formatString = LocaleController.formatString("ArticleByAuthor", NUM, access$21900);
                 }
                 if (metricAffectingSpanArr != null) {
                     try {
                         if (metricAffectingSpanArr.length > 0) {
-                            indexOf = TextUtils.indexOf(formatString, access$22000);
+                            indexOf = TextUtils.indexOf(formatString, access$21900);
                             if (indexOf != -1) {
                                 formatString = Factory.getInstance().newSpannable(formatString);
                                 for (int i3 = 0; i3 < metricAffectingSpanArr.length; i3++) {
@@ -2110,9 +600,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     } else {
                         this.textX = AndroidUtilities.dp(18.0f);
                     }
-                    DrawingText drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
                     i2 = indexOf;
                 } else {
                     i2 = 0;
@@ -2126,7 +613,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -2140,16 +626,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 accessibilityNodeInfo.setText(drawingText.getText());
             }
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockBlockquoteCell extends View implements ArticleSelectableView {
+    private class BlockBlockquoteCell extends View {
         private TL_pageBlockBlockquote currentBlock;
         private WebpageAdapter parentAdapter;
         private DrawingText textLayout;
@@ -2212,16 +691,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 if (dp != 0) {
                     dp += AndroidUtilities.dp(8.0f);
                 }
-                DrawingText drawingText = this.textLayout;
-                if (drawingText != null) {
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
-                }
-                drawingText = this.textLayout2;
-                if (drawingText != null) {
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY2;
-                }
             } else {
                 dp = 1;
             }
@@ -2231,57 +700,32 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                int i;
-                int measuredWidth;
-                int i2 = 0;
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
                     this.textLayout.draw(canvas);
                     canvas.restore();
-                } else {
-                    i = 0;
                 }
                 if (this.textLayout2 != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY2);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
                     this.textLayout2.draw(canvas);
                     canvas.restore();
                 }
                 if (ArticleViewer.this.isRtl) {
-                    measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(20.0f);
+                    int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(20.0f);
                     canvas.drawRect((float) measuredWidth, (float) AndroidUtilities.dp(6.0f), (float) (measuredWidth + AndroidUtilities.dp(2.0f)), (float) (getMeasuredHeight() - AndroidUtilities.dp(6.0f)), ArticleViewer.quoteLinePaint);
                 } else {
                     canvas.drawRect((float) AndroidUtilities.dp((float) ((this.currentBlock.level * 14) + 18)), (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp((float) ((this.currentBlock.level * 14) + 20)), (float) (getMeasuredHeight() - AndroidUtilities.dp(6.0f)), ArticleViewer.quoteLinePaint);
                 }
                 if (this.currentBlock.level > 0) {
-                    float dp = (float) AndroidUtilities.dp(18.0f);
-                    float dp2 = (float) AndroidUtilities.dp(20.0f);
-                    measuredWidth = getMeasuredHeight();
-                    if (this.currentBlock.bottom) {
-                        i2 = AndroidUtilities.dp(6.0f);
-                    }
-                    canvas.drawRect(dp, 0.0f, dp2, (float) (measuredWidth - i2), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.textLayout2;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
             }
         }
     }
 
-    private class BlockChannelCell extends FrameLayout implements ArticleSelectableView {
+    private class BlockChannelCell extends FrameLayout {
         private Paint backgroundPaint;
         private int buttonWidth;
         private AnimatorSet currentAnimation;
@@ -2468,11 +912,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 } else {
                     this.textX2 = (getMeasuredWidth() - this.textX) - this.buttonWidth;
                 }
-                DrawingText drawingText = this.textLayout;
-                if (drawingText != null) {
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
-                }
             }
         }
 
@@ -2497,24 +936,14 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     } else {
                         canvas.translate((float) this.textX, (float) this.textY);
                     }
-                    if (this.currentType == 0) {
-                        ArticleViewer.this.textSelectionHelper.draw(canvas, this);
-                    }
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
             }
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockCollageCell extends FrameLayout implements ArticleSelectableView {
+    private class BlockCollageCell extends FrameLayout {
         private DrawingText captionLayout;
         private DrawingText creditLayout;
         private int creditOffset;
@@ -2584,17 +1013,17 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         PhotoSize closestPhotoSizeWithSize;
                         TLObject tLObject = (TLObject) BlockCollageCell.this.currentBlock.items.get(i4);
                         if (tLObject instanceof TL_pageBlockPhoto) {
-                            Photo access$14900 = ArticleViewer.this.getPhotoWithId(((TL_pageBlockPhoto) tLObject).photo_id);
-                            if (access$14900 == null) {
+                            Photo access$14800 = ArticleViewer.this.getPhotoWithId(((TL_pageBlockPhoto) tLObject).photo_id);
+                            if (access$14800 == null) {
                                 i4++;
                             } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$14900.sizes, AndroidUtilities.getPhotoSize());
+                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$14800.sizes, AndroidUtilities.getPhotoSize());
                             }
                         } else {
                             if (tLObject instanceof TL_pageBlockVideo) {
-                                Document access$12800 = ArticleViewer.this.getDocumentWithId(((TL_pageBlockVideo) tLObject).video_id);
-                                if (access$12800 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$12800.thumbs, 90);
+                                Document access$12700 = ArticleViewer.this.getDocumentWithId(((TL_pageBlockVideo) tLObject).video_id);
+                                if (access$12700 != null) {
+                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$12700.thumbs, 90);
                                 }
                             }
                             i4++;
@@ -3162,9 +1591,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.captionLayout != null) {
                     this.creditOffset = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                     i2 += this.creditOffset + AndroidUtilities.dp(4.0f);
-                    DrawingText drawingText = this.captionLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
                 } else {
                     this.creditOffset = 0;
                 }
@@ -3173,9 +1599,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 this.creditLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockCollage2.caption.credit, i3, this.textY + this.creditOffset, tL_pageBlockCollage2, articleViewer.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
                 if (this.creditLayout != null) {
                     i2 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
-                    DrawingText drawingText2 = this.creditLayout;
-                    drawingText2.x = this.textX;
-                    drawingText2.y = this.textY + this.creditOffset;
                 }
                 i2 += AndroidUtilities.dp(16.0f);
                 tL_pageBlockCollage = this.currentBlock;
@@ -3195,50 +1618,44 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                int i;
-                int i2 = 0;
                 if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
-                } else {
-                    i = 0;
                 }
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    float dp = (float) AndroidUtilities.dp(18.0f);
-                    float dp2 = (float) AndroidUtilities.dp(20.0f);
-                    int measuredHeight = getMeasuredHeight();
-                    if (this.currentBlock.bottom) {
-                        i2 = AndroidUtilities.dp(6.0f);
-                    }
-                    canvas.drawRect(dp, 0.0f, dp2, (float) (measuredHeight - i2), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.captionLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.creditLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
             }
         }
     }
 
-    private class BlockDetailsCell extends View implements Callback, ArticleSelectableView {
+    private class BlockDetailsBottomCell extends View {
+        private RectF rect = new RectF();
+
+        public BlockDetailsBottomCell(Context context) {
+            super(context);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(4.0f) + 1);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            canvas.drawLine(0.0f, 0.0f, (float) getMeasuredWidth(), 0.0f, ArticleViewer.dividerPaint);
+        }
+    }
+
+    private class BlockDetailsCell extends View implements Callback {
         private AnimatedArrowDrawable arrow;
         private TL_pageBlockDetails currentBlock;
         private WebpageAdapter parentAdapter;
@@ -3284,9 +1701,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     i2 = Math.max(i2, AndroidUtilities.dp(21.0f) + this.textLayout.getHeight());
                     this.textY = ((this.textLayout.getHeight() + AndroidUtilities.dp(21.0f)) - this.textLayout.getHeight()) / 2;
-                    DrawingText drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
                 }
             }
             setMeasuredDimension(i, i2 + 1);
@@ -3302,7 +1716,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -3310,16 +1723,29 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 canvas.drawLine(0.0f, measuredHeight, (float) getMeasuredWidth(), measuredHeight, ArticleViewer.dividerPaint);
             }
         }
+    }
 
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
+    private class BlockDividerCell extends View {
+        private RectF rect = new RectF();
+
+        public BlockDividerCell(Context context) {
+            super(context);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(18.0f));
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            int measuredWidth = getMeasuredWidth() / 3;
+            this.rect.set((float) measuredWidth, (float) AndroidUtilities.dp(8.0f), (float) (measuredWidth * 2), (float) AndroidUtilities.dp(10.0f));
+            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), ArticleViewer.dividerPaint);
         }
     }
 
-    private class BlockEmbedCell extends FrameLayout implements ArticleSelectableView {
+    private class BlockEmbedCell extends FrameLayout {
         private DrawingText captionLayout;
         private DrawingText creditLayout;
         private int creditOffset;
@@ -3616,217 +2042,83 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
 
         /* Access modifiers changed, original: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:51:0x0154  */
-        @android.annotation.SuppressLint({"NewApi"})
-        public void onMeasure(int r13, int r14) {
-            /*
-            r12 = this;
-            r13 = android.view.View.MeasureSpec.getSize(r13);
-            r14 = r12.currentBlock;
-            if (r14 == 0) goto L_0x015d;
-        L_0x0008:
-            r14 = r14.level;
-            r0 = 0;
-            r1 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
-            if (r14 <= 0) goto L_0x002a;
-        L_0x000f:
-            r14 = r14 * 14;
-            r14 = (float) r14;
-            r14 = org.telegram.messenger.AndroidUtilities.dp(r14);
-            r2 = org.telegram.messenger.AndroidUtilities.dp(r1);
-            r14 = r14 + r2;
-            r12.listX = r14;
-            r12.textX = r14;
-            r14 = r12.listX;
-            r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-            r14 = r14 + r1;
-            r14 = r13 - r14;
-            r9 = r14;
-            goto L_0x0052;
-        L_0x002a:
-            r12.listX = r0;
-            r14 = org.telegram.messenger.AndroidUtilities.dp(r1);
-            r12.textX = r14;
-            r14 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
-            r2 = org.telegram.messenger.AndroidUtilities.dp(r14);
-            r2 = r13 - r2;
-            r3 = r12.currentBlock;
-            r3 = r3.full_width;
-            if (r3 != 0) goto L_0x0050;
-        L_0x0040:
-            r14 = org.telegram.messenger.AndroidUtilities.dp(r14);
-            r14 = r13 - r14;
-            r3 = r12.listX;
-            r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-            r3 = r3 + r1;
-            r12.listX = r3;
-            goto L_0x0051;
-        L_0x0050:
-            r14 = r13;
-        L_0x0051:
-            r9 = r2;
-        L_0x0052:
-            r1 = r12.currentBlock;
-            r1 = r1.w;
-            if (r1 != 0) goto L_0x005b;
-        L_0x0058:
-            r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-            goto L_0x005f;
-        L_0x005b:
-            r2 = (float) r13;
-            r1 = (float) r1;
-            r1 = r2 / r1;
-        L_0x005f:
-            r2 = r12.exactWebViewHeight;
-            if (r2 == 0) goto L_0x0069;
-        L_0x0063:
-            r1 = (float) r2;
-            r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-            goto L_0x007a;
-        L_0x0069:
-            r2 = r12.currentBlock;
-            r3 = r2.w;
-            r2 = r2.h;
-            r2 = (float) r2;
-            if (r3 != 0) goto L_0x0077;
-        L_0x0072:
-            r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-            r2 = (float) r2;
-        L_0x0077:
-            r2 = r2 * r1;
-            r1 = (int) r2;
-        L_0x007a:
-            r2 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-            if (r1 != 0) goto L_0x0082;
-        L_0x007e:
-            r1 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        L_0x0082:
-            r10 = r1;
-            r1 = r12.webView;
-            r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            r4 = android.view.View.MeasureSpec.makeMeasureSpec(r14, r3);
-            r5 = android.view.View.MeasureSpec.makeMeasureSpec(r10, r3);
-            r1.measure(r4, r5);
-            r1 = r12.videoView;
-            r1 = r1.getParent();
-            if (r1 != r12) goto L_0x00ac;
-        L_0x009a:
-            r1 = r12.videoView;
-            r14 = android.view.View.MeasureSpec.makeMeasureSpec(r14, r3);
-            r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-            r2 = r2 + r10;
-            r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r3);
-            r1.measure(r14, r2);
-        L_0x00ac:
-            r14 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r1 = org.telegram.messenger.AndroidUtilities.dp(r14);
-            r1 = r1 + r10;
-            r12.textY = r1;
-            r1 = org.telegram.ui.ArticleViewer.this;
-            r3 = 0;
-            r7 = r12.currentBlock;
-            r2 = r7.caption;
-            r4 = r2.text;
-            r6 = r12.textY;
-            r8 = r12.parentAdapter;
-            r2 = r12;
-            r5 = r9;
-            r1 = r1.createLayoutForText(r2, r3, r4, r5, r6, r7, r8);
-            r12.captionLayout = r1;
-            r1 = r12.captionLayout;
-            r11 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-            if (r1 == 0) goto L_0x00e6;
-        L_0x00d0:
-            r0 = org.telegram.messenger.AndroidUtilities.dp(r11);
-            r1 = r12.captionLayout;
-            r1 = r1.getHeight();
-            r0 = r0 + r1;
-            r12.creditOffset = r0;
-            r0 = r12.creditOffset;
-            r1 = org.telegram.messenger.AndroidUtilities.dp(r11);
-            r0 = r0 + r1;
-            r10 = r10 + r0;
-            goto L_0x00e8;
-        L_0x00e6:
-            r12.creditOffset = r0;
-        L_0x00e8:
-            r1 = org.telegram.ui.ArticleViewer.this;
-            r3 = 0;
-            r7 = r12.currentBlock;
-            r0 = r7.caption;
-            r4 = r0.credit;
-            r0 = r12.textY;
-            r2 = r12.creditOffset;
-            r6 = r0 + r2;
-            r0 = r1.isRtl;
-            if (r0 == 0) goto L_0x0102;
-        L_0x00fd:
-            r0 = org.telegram.ui.Components.StaticLayoutEx.ALIGN_RIGHT();
-            goto L_0x0104;
-        L_0x0102:
-            r0 = android.text.Layout.Alignment.ALIGN_NORMAL;
-        L_0x0104:
-            r8 = r0;
-            r0 = r12.parentAdapter;
-            r2 = r12;
-            r5 = r9;
-            r9 = r0;
-            r0 = r1.createLayoutForText(r2, r3, r4, r5, r6, r7, r8, r9);
-            r12.creditLayout = r0;
-            r0 = r12.creditLayout;
-            if (r0 == 0) goto L_0x012a;
-        L_0x0114:
-            r0 = org.telegram.messenger.AndroidUtilities.dp(r11);
-            r1 = r12.creditLayout;
-            r1 = r1.getHeight();
-            r0 = r0 + r1;
-            r10 = r10 + r0;
-            r0 = r12.creditLayout;
-            r1 = r12.textX;
-            r0.x = r1;
-            r1 = r12.creditOffset;
-            r0.y = r1;
-        L_0x012a:
-            r0 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
-            r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
-            r10 = r10 + r0;
-            r0 = r12.currentBlock;
-            r1 = r0.level;
-            if (r1 <= 0) goto L_0x0141;
-        L_0x0137:
-            r0 = r0.bottom;
-            if (r0 != 0) goto L_0x0141;
-        L_0x013b:
-            r14 = org.telegram.messenger.AndroidUtilities.dp(r14);
-        L_0x013f:
-            r10 = r10 + r14;
-            goto L_0x0150;
-        L_0x0141:
-            r0 = r12.currentBlock;
-            r0 = r0.level;
-            if (r0 != 0) goto L_0x0150;
-        L_0x0147:
-            r0 = r12.captionLayout;
-            if (r0 == 0) goto L_0x0150;
-        L_0x014b:
-            r14 = org.telegram.messenger.AndroidUtilities.dp(r14);
-            goto L_0x013f;
-        L_0x0150:
-            r14 = r12.captionLayout;
-            if (r14 == 0) goto L_0x015e;
-        L_0x0154:
-            r0 = r12.textX;
-            r14.x = r0;
-            r0 = r12.textY;
-            r14.y = r0;
-            goto L_0x015e;
-        L_0x015d:
-            r10 = 1;
-        L_0x015e:
-            r12.setMeasuredDimension(r13, r10);
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$BlockEmbedCell.onMeasure(int, int):void");
+        @SuppressLint({"NewApi"})
+        public void onMeasure(int i, int i2) {
+            int i3;
+            i = MeasureSpec.getSize(i);
+            TL_pageBlockEmbed tL_pageBlockEmbed = this.currentBlock;
+            if (tL_pageBlockEmbed != null) {
+                int i4;
+                int dp;
+                i2 = tL_pageBlockEmbed.level;
+                if (i2 > 0) {
+                    i2 = AndroidUtilities.dp((float) (i2 * 14)) + AndroidUtilities.dp(18.0f);
+                    this.listX = i2;
+                    this.textX = i2;
+                    i2 = i - (this.listX + AndroidUtilities.dp(18.0f));
+                    i4 = i2;
+                } else {
+                    this.listX = 0;
+                    this.textX = AndroidUtilities.dp(18.0f);
+                    dp = i - AndroidUtilities.dp(36.0f);
+                    if (this.currentBlock.full_width) {
+                        i2 = i;
+                    } else {
+                        i2 = i - AndroidUtilities.dp(36.0f);
+                        this.listX += AndroidUtilities.dp(18.0f);
+                    }
+                    i4 = dp;
+                }
+                int i5 = this.currentBlock.w;
+                float f = i5 == 0 ? 1.0f : ((float) i) / ((float) i5);
+                dp = this.exactWebViewHeight;
+                if (dp != 0) {
+                    i5 = AndroidUtilities.dp((float) dp);
+                } else {
+                    TL_pageBlockEmbed tL_pageBlockEmbed2 = this.currentBlock;
+                    int i6 = tL_pageBlockEmbed2.w;
+                    float f2 = (float) tL_pageBlockEmbed2.h;
+                    if (i6 == 0) {
+                        f2 = (float) AndroidUtilities.dp(f2);
+                    }
+                    i5 = (int) (f2 * f);
+                }
+                if (i5 == 0) {
+                    i5 = AndroidUtilities.dp(10.0f);
+                }
+                i3 = i5;
+                this.webView.measure(MeasureSpec.makeMeasureSpec(i2, NUM), MeasureSpec.makeMeasureSpec(i3, NUM));
+                if (this.videoView.getParent() == this) {
+                    this.videoView.measure(MeasureSpec.makeMeasureSpec(i2, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(10.0f) + i3, NUM));
+                }
+                this.textY = AndroidUtilities.dp(8.0f) + i3;
+                ArticleViewer articleViewer = ArticleViewer.this;
+                TL_pageBlockEmbed tL_pageBlockEmbed3 = this.currentBlock;
+                this.captionLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockEmbed3.caption.text, i4, this.textY, tL_pageBlockEmbed3, this.parentAdapter);
+                if (this.captionLayout != null) {
+                    this.creditOffset = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
+                    i3 += this.creditOffset + AndroidUtilities.dp(4.0f);
+                } else {
+                    this.creditOffset = 0;
+                }
+                articleViewer = ArticleViewer.this;
+                tL_pageBlockEmbed3 = this.currentBlock;
+                this.creditLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockEmbed3.caption.credit, i4, this.textY + this.creditOffset, tL_pageBlockEmbed3, articleViewer.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
+                if (this.creditLayout != null) {
+                    i3 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
+                }
+                i3 += AndroidUtilities.dp(5.0f);
+                TL_pageBlockEmbed tL_pageBlockEmbed4 = this.currentBlock;
+                if (tL_pageBlockEmbed4.level > 0 && !tL_pageBlockEmbed4.bottom) {
+                    i2 = AndroidUtilities.dp(8.0f);
+                } else if (this.currentBlock.level == 0 && this.captionLayout != null) {
+                    i2 = AndroidUtilities.dp(8.0f);
+                }
+                i3 += i2;
+            } else {
+                i3 = 1;
+            }
+            setMeasuredDimension(i, i3);
         }
 
         /* Access modifiers changed, original: protected */
@@ -3844,50 +2136,26 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                int i;
-                int i2 = 0;
                 if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
-                } else {
-                    i = 0;
                 }
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    float dp = (float) AndroidUtilities.dp(18.0f);
-                    float dp2 = (float) AndroidUtilities.dp(20.0f);
-                    int measuredHeight = getMeasuredHeight();
-                    if (this.currentBlock.bottom) {
-                        i2 = AndroidUtilities.dp(6.0f);
-                    }
-                    canvas.drawRect(dp, 0.0f, dp2, (float) (measuredHeight - i2), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.captionLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.creditLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
             }
         }
     }
 
-    private class BlockEmbedPostCell extends View implements ArticleSelectableView {
+    private class BlockEmbedPostCell extends View {
         private AvatarDrawable avatarDrawable;
         private ImageReceiver avatarImageView = new ImageReceiver(this);
         private boolean avatarVisible;
@@ -3959,22 +2227,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     boolean z = tL_pageBlockEmbedPost.author_photo_id != 0;
                     this.avatarVisible = z;
                     if (z) {
-                        Photo access$14900 = ArticleViewer.this.getPhotoWithId(this.currentBlock.author_photo_id);
-                        boolean z2 = access$14900 instanceof TL_photo;
+                        Photo access$14800 = ArticleViewer.this.getPhotoWithId(this.currentBlock.author_photo_id);
+                        boolean z2 = access$14800 instanceof TL_photo;
                         this.avatarVisible = z2;
                         if (z2) {
                             this.avatarDrawable.setInfo(0, this.currentBlock.author, null);
-                            this.avatarImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(access$14900.sizes, AndroidUtilities.dp(40.0f), true), access$14900), "40_40", this.avatarDrawable, 0, null, ArticleViewer.this.currentPage, 1);
+                            this.avatarImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(access$14800.sizes, AndroidUtilities.dp(40.0f), true), access$14800), "40_40", this.avatarDrawable, 0, null, ArticleViewer.this.currentPage, 1);
                         }
                     }
                     this.nameLayout = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, null, size - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), 0, this.currentBlock, Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
-                    DrawingText drawingText = this.nameLayout;
-                    if (drawingText != null) {
-                        drawingText.x = AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 32));
-                        this.nameLayout.y = AndroidUtilities.dp(this.dateLayout != null ? 10.0f : 19.0f);
-                    }
                     if (this.currentBlock.date != 0) {
-                        this.dateLayout = ArticleViewer.this.createLayoutForText(this, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.date) * 1000), null, size - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), AndroidUtilities.dp(29.0f), this.currentBlock, this.parentAdapter);
+                        articleViewer = ArticleViewer.this;
+                        String format = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.date) * 1000);
+                        if (this.avatarVisible) {
+                            i4 = 54;
+                        }
+                        this.dateLayout = articleViewer.createLayoutForText(this, format, null, size - AndroidUtilities.dp((float) (i4 + 50)), AndroidUtilities.dp(29.0f), this.currentBlock, this.parentAdapter);
                     } else {
                         this.dateLayout = null;
                     }
@@ -3997,30 +2265,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         if (this.creditLayout != null) {
                             i5 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                         }
-                        dp = i5;
+                        i3 = i5;
                     } else {
                         this.captionLayout = null;
                         this.creditLayout = null;
+                        i3 = dp;
                     }
-                    drawingText = this.dateLayout;
-                    if (drawingText != null) {
-                        if (this.avatarVisible) {
-                            i4 = 54;
-                        }
-                        drawingText.x = AndroidUtilities.dp((float) (i4 + 32));
-                        this.dateLayout.y = AndroidUtilities.dp(29.0f);
-                    }
-                    drawingText = this.captionLayout;
-                    if (drawingText != null) {
-                        drawingText.x = this.textX;
-                        drawingText.y = this.textY;
-                    }
-                    drawingText = this.creditLayout;
-                    if (drawingText != null) {
-                        drawingText.x = this.textX;
-                        drawingText.y = this.textY;
-                    }
-                    i3 = dp;
                 }
                 this.lineHeight = i3;
             }
@@ -4031,88 +2281,53 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         public void onDraw(Canvas canvas) {
             TL_pageBlockEmbedPost tL_pageBlockEmbedPost = this.currentBlock;
             if (tL_pageBlockEmbedPost != null) {
-                int i;
-                int i2;
-                int i3 = 0;
-                if (tL_pageBlockEmbedPost instanceof TL_pageBlockEmbedPostCaption) {
-                    i = 0;
-                } else {
-                    int i4;
+                if (!(tL_pageBlockEmbedPost instanceof TL_pageBlockEmbedPostCaption)) {
                     if (this.avatarVisible) {
                         this.avatarImageView.draw(canvas);
                     }
-                    i2 = 54;
+                    int i = 54;
+                    int i2 = 0;
                     if (this.nameLayout != null) {
                         canvas.save();
                         canvas.translate((float) AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 32)), (float) AndroidUtilities.dp(this.dateLayout != null ? 10.0f : 19.0f));
-                        ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
                         this.nameLayout.draw(canvas);
                         canvas.restore();
-                        i = 1;
-                    } else {
-                        i = 0;
                     }
                     if (this.dateLayout != null) {
                         canvas.save();
                         if (!this.avatarVisible) {
-                            i2 = 0;
+                            i = 0;
                         }
-                        canvas.translate((float) AndroidUtilities.dp((float) (i2 + 32)), (float) AndroidUtilities.dp(29.0f));
-                        i4 = i + 1;
-                        ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                        canvas.translate((float) AndroidUtilities.dp((float) (i + 32)), (float) AndroidUtilities.dp(29.0f));
                         this.dateLayout.draw(canvas);
                         canvas.restore();
-                        i = i4;
                     }
                     float dp = (float) AndroidUtilities.dp(18.0f);
                     float dp2 = (float) AndroidUtilities.dp(6.0f);
                     float dp3 = (float) AndroidUtilities.dp(20.0f);
-                    i4 = this.lineHeight;
+                    i = this.lineHeight;
                     if (this.currentBlock.level == 0) {
-                        i3 = AndroidUtilities.dp(6.0f);
+                        i2 = AndroidUtilities.dp(6.0f);
                     }
-                    canvas.drawRect(dp, dp2, dp3, (float) (i4 - i3), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect(dp, dp2, dp3, (float) (i - i2), ArticleViewer.quoteLinePaint);
                 }
                 if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    i2 = i + 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
-                    i = i2;
                 }
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
             }
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.nameLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.dateLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.captionLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.creditLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockFooterCell extends View implements ArticleSelectableView {
+    private class BlockFooterCell extends View {
         private TL_pageBlockFooter currentBlock;
         private WebpageAdapter parentAdapter;
         private DrawingText textLayout;
@@ -4157,10 +2372,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     } else {
                         i3 = AndroidUtilities.dp(16.0f);
                     }
-                    i3 = i2 + i3;
-                    drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
+                    i3 += i2;
                 }
             } else {
                 i3 = 1;
@@ -4174,7 +2386,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -4183,16 +2394,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
             }
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockHeaderCell extends View implements ArticleSelectableView {
+    private class BlockHeaderCell extends View {
         private TL_pageBlockHeader currentBlock;
         private WebpageAdapter parentAdapter;
         private DrawingText textLayout;
@@ -4223,9 +2427,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockHeader.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, ArticleViewer.this.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
                 if (this.textLayout != null) {
                     i3 = 0 + (AndroidUtilities.dp(16.0f) + this.textLayout.getHeight());
-                    DrawingText drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
                 }
             } else {
                 i3 = 1;
@@ -4238,7 +2439,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -4255,16 +2455,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 accessibilityNodeInfo.setText(stringBuilder.toString());
             }
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockKickerCell extends View implements ArticleSelectableView {
+    private class BlockKickerCell extends View {
         private TL_pageBlockKicker currentBlock;
         private WebpageAdapter parentAdapter;
         private DrawingText textLayout;
@@ -4302,9 +2495,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, ArticleViewer.this.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
                 if (this.textLayout != null) {
                     i3 += AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
-                    DrawingText drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
                 }
             } else {
                 i3 = 1;
@@ -4317,21 +2507,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockListItemCell extends ViewGroup implements ArticleSelectableView {
+    private class BlockListItemCell extends ViewGroup {
         private ViewHolder blockLayout;
         private int blockX;
         private int blockY;
@@ -4379,12 +2561,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
 
         /* Access modifiers changed, original: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:114:0x039f  */
-        /* JADX WARNING: Removed duplicated region for block: B:122:0x03c2  */
-        /* JADX WARNING: Removed duplicated region for block: B:130:0x03fc  */
-        /* JADX WARNING: Removed duplicated region for block: B:114:0x039f  */
-        /* JADX WARNING: Removed duplicated region for block: B:122:0x03c2  */
-        /* JADX WARNING: Removed duplicated region for block: B:130:0x03fc  */
+        /* JADX WARNING: Removed duplicated region for block: B:114:0x03a7  */
+        /* JADX WARNING: Removed duplicated region for block: B:114:0x03a7  */
         @android.annotation.SuppressLint({"NewApi"})
         public void onMeasure(int r17, int r18) {
             /*
@@ -4393,7 +2571,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r10 = android.view.View.MeasureSpec.getSize(r17);
             r0 = r9.currentBlock;
             r11 = 1;
-            if (r0 == 0) goto L_0x0417;
+            if (r0 == 0) goto L_0x03c6;
         L_0x000b:
             r1 = 0;
             r9.textLayout = r1;
@@ -4576,10 +2754,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7, r8);
             r9.textLayout = r0;
             r0 = r9.textLayout;
-            if (r0 == 0) goto L_0x037e;
+            if (r0 == 0) goto L_0x0386;
         L_0x01ac:
             r0 = r0.getLineCount();
-            if (r0 <= 0) goto L_0x037e;
+            if (r0 <= 0) goto L_0x0386;
         L_0x01b2:
             r0 = r9.currentBlock;
             r0 = r0.numLayout;
@@ -4604,18 +2782,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0.getHeight();
             r1 = org.telegram.messenger.AndroidUtilities.dp(r15);
             r0 = r0 + r1;
-            goto L_0x037d;
+            goto L_0x0385;
         L_0x01eb:
             r0 = r9.currentBlock;
             r0 = r0.blockItem;
-            if (r0 == 0) goto L_0x037e;
+            if (r0 == 0) goto L_0x0386;
         L_0x01f3:
             r0 = r9.textX;
             r9.blockX = r0;
             r0 = r9.textY;
             r9.blockY = r0;
             r0 = r9.blockLayout;
-            if (r0 == 0) goto L_0x0379;
+            if (r0 == 0) goto L_0x0381;
         L_0x01ff:
             r0 = r0.itemView;
             r1 = r0 instanceof org.telegram.ui.ArticleViewer.BlockParagraphCell;
@@ -4724,26 +2902,27 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r0 = r0 instanceof org.telegram.ui.ArticleViewer.BlockParagraphCell;
-            if (r0 == 0) goto L_0x02fb;
+            if (r0 == 0) goto L_0x0303;
         L_0x02bf:
             r0 = r9.currentBlock;
             r0 = r0.numLayout;
-            if (r0 == 0) goto L_0x02fb;
+            if (r0 == 0) goto L_0x0303;
         L_0x02c7:
             r0 = r9.currentBlock;
             r0 = r0.numLayout;
             r0 = r0.getLineCount();
-            if (r0 <= 0) goto L_0x02fb;
+            if (r0 <= 0) goto L_0x0303;
         L_0x02d3:
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r0 = (org.telegram.ui.ArticleViewer.BlockParagraphCell) r0;
             r2 = r0.textLayout;
-            if (r2 == 0) goto L_0x02fb;
-        L_0x02dd:
+            if (r2 == 0) goto L_0x0303;
+        L_0x02df:
+            r2 = r0.textLayout;
             r2 = r2.getLineCount();
-            if (r2 <= 0) goto L_0x02fb;
-        L_0x02e3:
+            if (r2 <= 0) goto L_0x0303;
+        L_0x02e9:
             r0 = r0.textLayout;
             r0 = r0.getLineAscent(r13);
             r2 = r9.currentBlock;
@@ -4753,54 +2932,54 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r2 = r2 + r3;
             r2 = r2 - r0;
             r9.numOffsetY = r2;
-        L_0x02fb:
+        L_0x0303:
             r0 = r9.currentBlock;
             r0 = r0.blockItem;
             r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockDetails;
-            if (r0 == 0) goto L_0x0328;
-        L_0x0305:
+            if (r0 == 0) goto L_0x0330;
+        L_0x030d:
             r9.verticalAlign = r11;
             r9.blockY = r13;
             r0 = r9.currentBlock;
             r0 = r0.index;
-            if (r0 != 0) goto L_0x0322;
-        L_0x0311:
+            if (r0 != 0) goto L_0x032a;
+        L_0x0319:
             r0 = r9.currentBlock;
             r0 = r0.parent;
             r0 = r0.level;
-            if (r0 != 0) goto L_0x0322;
-        L_0x031d:
+            if (r0 != 0) goto L_0x032a;
+        L_0x0325:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r12);
             r1 = r1 - r0;
-        L_0x0322:
+        L_0x032a:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r15);
             r1 = r1 - r0;
-            goto L_0x0343;
-        L_0x0328:
+            goto L_0x034b;
+        L_0x0330:
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r2 = r0 instanceof org.telegram.ui.ArticleViewer.BlockOrderedListItemCell;
-            if (r2 == 0) goto L_0x0339;
-        L_0x0330:
+            if (r2 == 0) goto L_0x0341;
+        L_0x0338:
             r0 = (org.telegram.ui.ArticleViewer.BlockOrderedListItemCell) r0;
             r0 = r0.verticalAlign;
             r9.verticalAlign = r0;
-            goto L_0x0343;
-        L_0x0339:
+            goto L_0x034b;
+        L_0x0341:
             r2 = r0 instanceof org.telegram.ui.ArticleViewer.BlockListItemCell;
-            if (r2 == 0) goto L_0x0343;
-        L_0x033d:
+            if (r2 == 0) goto L_0x034b;
+        L_0x0345:
             r0 = (org.telegram.ui.ArticleViewer.BlockListItemCell) r0;
             r0 = r0.verticalAlign;
             r9.verticalAlign = r0;
-        L_0x0343:
+        L_0x034b:
             r0 = r9.verticalAlign;
-            if (r0 == 0) goto L_0x036f;
-        L_0x0347:
+            if (r0 == 0) goto L_0x0377;
+        L_0x034f:
             r0 = r9.currentBlock;
             r0 = r0.numLayout;
-            if (r0 == 0) goto L_0x036f;
-        L_0x034f:
+            if (r0 == 0) goto L_0x0377;
+        L_0x0357:
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r0 = r0.getMeasuredHeight();
@@ -4814,16 +2993,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0 - r2;
             r9.textY = r0;
             r9.drawDot = r13;
-        L_0x036f:
+        L_0x0377:
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r0 = r0.getMeasuredHeight();
             r13 = r1 + r0;
-        L_0x0379:
+        L_0x0381:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r15);
-        L_0x037d:
+        L_0x0385:
             r13 = r13 + r0;
-        L_0x037e:
+        L_0x0386:
             r0 = r9.currentBlock;
             r0 = r0.parent;
             r0 = r0.items;
@@ -4834,74 +3013,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = r1 - r11;
             r0 = r0.get(r1);
             r1 = r9.currentBlock;
-            if (r0 != r1) goto L_0x03a4;
-        L_0x039f:
+            if (r0 != r1) goto L_0x03ac;
+        L_0x03a7:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r15);
             r13 = r13 + r0;
-        L_0x03a4:
+        L_0x03ac:
             r0 = r9.currentBlock;
             r0 = r0.index;
-            if (r0 != 0) goto L_0x03bd;
-        L_0x03ac:
+            if (r0 != 0) goto L_0x03c5;
+        L_0x03b4:
             r0 = r9.currentBlock;
             r0 = r0.parent;
             r0 = r0.level;
-            if (r0 != 0) goto L_0x03bd;
-        L_0x03b8:
+            if (r0 != 0) goto L_0x03c5;
+        L_0x03c0:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r12);
             r13 = r13 + r0;
-        L_0x03bd:
+        L_0x03c5:
             r11 = r13;
-            r0 = r9.textLayout;
-            if (r0 == 0) goto L_0x03ca;
-        L_0x03c2:
-            r1 = r9.textX;
-            r0.x = r1;
-            r1 = r9.textY;
-            r0.y = r1;
-        L_0x03ca:
-            r0 = r9.blockLayout;
-            if (r0 == 0) goto L_0x0417;
-        L_0x03ce:
-            r0 = r0.itemView;
-            r0 = r0 instanceof org.telegram.ui.Cells.TextSelectionHelper.ArticleSelectableView;
-            if (r0 == 0) goto L_0x0417;
-        L_0x03d4:
-            r0 = org.telegram.ui.ArticleViewer.this;
-            r0 = r0.textSelectionHelper;
-            r0 = r0.arrayList;
-            r0.clear();
-            r0 = r9.blockLayout;
-            r0 = r0.itemView;
-            r0 = (org.telegram.ui.Cells.TextSelectionHelper.ArticleSelectableView) r0;
-            r1 = org.telegram.ui.ArticleViewer.this;
-            r1 = r1.textSelectionHelper;
-            r1 = r1.arrayList;
-            r0.fillTextLayoutBlocks(r1);
-            r0 = org.telegram.ui.ArticleViewer.this;
-            r0 = r0.textSelectionHelper;
-            r0 = r0.arrayList;
-            r0 = r0.iterator();
-        L_0x03f6:
-            r1 = r0.hasNext();
-            if (r1 == 0) goto L_0x0417;
-        L_0x03fc:
-            r1 = r0.next();
-            r1 = (org.telegram.ui.Cells.TextSelectionHelper.TextLayoutBlock) r1;
-            r2 = r1 instanceof org.telegram.ui.ArticleViewer.DrawingText;
-            if (r2 == 0) goto L_0x03f6;
-        L_0x0406:
-            r1 = (org.telegram.ui.ArticleViewer.DrawingText) r1;
-            r2 = r1.x;
-            r3 = r9.blockX;
-            r2 = r2 + r3;
-            r1.x = r2;
-            r2 = r1.y;
-            r3 = r9.blockY;
-            r2 = r2 + r3;
-            r1.y = r2;
-            goto L_0x03f6;
-        L_0x0417:
+        L_0x03c6:
             r9.setMeasuredDimension(r10, r11);
             return;
             */
@@ -4948,18 +3078,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
-            }
-        }
-
-        public void invalidate() {
-            super.invalidate();
-            ViewHolder viewHolder = this.blockLayout;
-            if (viewHolder != null) {
-                viewHolder.itemView.invalidate();
             }
         }
 
@@ -4971,23 +3092,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 accessibilityNodeInfo.setText(drawingText.getText());
             }
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            ViewHolder viewHolder = this.blockLayout;
-            if (viewHolder != null) {
-                View view = viewHolder.itemView;
-                if (view instanceof ArticleSelectableView) {
-                    ((ArticleSelectableView) view).fillTextLayoutBlocks(arrayList);
-                }
-            }
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockMapCell extends FrameLayout implements ArticleSelectableView {
+    private class BlockMapCell extends FrameLayout {
         private DrawingText captionLayout;
         private DrawingText creditLayout;
         private int creditOffset;
@@ -5056,18 +3163,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* JADX WARNING: Removed duplicated region for block: B:33:0x0133  */
         /* JADX WARNING: Removed duplicated region for block: B:31:0x0115  */
         /* JADX WARNING: Removed duplicated region for block: B:37:0x015c  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x01f4  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x01dd  */
         /* JADX WARNING: Removed duplicated region for block: B:22:0x00a7  */
         /* JADX WARNING: Removed duplicated region for block: B:31:0x0115  */
         /* JADX WARNING: Removed duplicated region for block: B:33:0x0133  */
         /* JADX WARNING: Removed duplicated region for block: B:37:0x015c  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x01f4  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x01dd  */
         /* JADX WARNING: Removed duplicated region for block: B:16:0x0063  */
         /* JADX WARNING: Removed duplicated region for block: B:22:0x00a7  */
         /* JADX WARNING: Removed duplicated region for block: B:33:0x0133  */
         /* JADX WARNING: Removed duplicated region for block: B:31:0x0115  */
         /* JADX WARNING: Removed duplicated region for block: B:37:0x015c  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x01f4  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x01dd  */
         @android.annotation.SuppressLint({"NewApi"})
         public void onMeasure(int r26, int r27) {
             /*
@@ -5098,7 +3205,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = 0;
         L_0x0029:
             r1 = r9.currentBlock;
-            if (r1 == 0) goto L_0x01fa;
+            if (r1 == 0) goto L_0x01e3;
         L_0x002d:
             r4 = r9.currentType;
             r5 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
@@ -5270,7 +3377,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0 + r1;
             r9.textY = r0;
             r0 = r9.currentType;
-            if (r0 != 0) goto L_0x01dd;
+            if (r0 != 0) goto L_0x01c6;
         L_0x015c:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
@@ -5285,7 +3392,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r9.captionLayout = r0;
             r0 = r9.captionLayout;
             r14 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-            if (r0 == 0) goto L_0x0197;
+            if (r0 == 0) goto L_0x018d;
         L_0x0178:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r1 = r9.captionLayout;
@@ -5296,12 +3403,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r0 = r0 + r1;
             r12 = r12 + r0;
-            r0 = r9.captionLayout;
-            r1 = r9.textX;
-            r0.x = r1;
-            r1 = r9.textY;
-            r0.y = r1;
-        L_0x0197:
+        L_0x018d:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
             r6 = r9.currentBlock;
@@ -5311,13 +3413,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r4 = r9.creditOffset;
             r5 = r1 + r4;
             r1 = r0.isRtl;
-            if (r1 == 0) goto L_0x01b1;
-        L_0x01ac:
+            if (r1 == 0) goto L_0x01a7;
+        L_0x01a2:
             r1 = org.telegram.ui.Components.StaticLayoutEx.ALIGN_RIGHT();
-            goto L_0x01b3;
-        L_0x01b1:
+            goto L_0x01a9;
+        L_0x01a7:
             r1 = android.text.Layout.Alignment.ALIGN_NORMAL;
-        L_0x01b3:
+        L_0x01a9:
             r7 = r1;
             r15 = r9.parentAdapter;
             r1 = r25;
@@ -5326,42 +3428,35 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7, r8);
             r9.creditLayout = r0;
             r0 = r9.creditLayout;
-            if (r0 == 0) goto L_0x01dd;
-        L_0x01c4:
+            if (r0 == 0) goto L_0x01c6;
+        L_0x01ba:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r1 = r9.creditLayout;
             r1 = r1.getHeight();
             r0 = r0 + r1;
             r12 = r12 + r0;
-            r0 = r9.creditLayout;
-            r1 = r9.textX;
-            r0.x = r1;
-            r1 = r9.textY;
-            r2 = r9.creditOffset;
-            r1 = r1 + r2;
-            r0.y = r1;
-        L_0x01dd:
+        L_0x01c6:
             r0 = r9.isFirst;
-            if (r0 != 0) goto L_0x01f0;
-        L_0x01e1:
+            if (r0 != 0) goto L_0x01d9;
+        L_0x01ca:
             r0 = r9.currentType;
-            if (r0 != 0) goto L_0x01f0;
-        L_0x01e5:
+            if (r0 != 0) goto L_0x01d9;
+        L_0x01ce:
             r0 = r9.currentBlock;
             r0 = r0.level;
-            if (r0 > 0) goto L_0x01f0;
-        L_0x01eb:
+            if (r0 > 0) goto L_0x01d9;
+        L_0x01d4:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
             r12 = r12 + r0;
-        L_0x01f0:
+        L_0x01d9:
             r0 = r9.currentType;
-            if (r0 == r10) goto L_0x01f9;
-        L_0x01f4:
+            if (r0 == r10) goto L_0x01e2;
+        L_0x01dd:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
             r12 = r12 + r0;
-        L_0x01f9:
+        L_0x01e2:
             r2 = r12;
-        L_0x01fa:
+        L_0x01e3:
             r9.setMeasuredDimension(r11, r2);
             return;
             */
@@ -5371,44 +3466,30 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                int intrinsicWidth;
-                int intrinsicHeight;
                 this.imageView.draw(canvas);
                 if (this.currentMapProvider == 2 && this.imageView.hasNotThumb()) {
-                    intrinsicWidth = (int) (((float) Theme.chat_redLocationIcon.getIntrinsicWidth()) * 0.8f);
-                    intrinsicHeight = (int) (((float) Theme.chat_redLocationIcon.getIntrinsicHeight()) * 0.8f);
+                    int intrinsicWidth = (int) (((float) Theme.chat_redLocationIcon.getIntrinsicWidth()) * 0.8f);
+                    int intrinsicHeight = (int) (((float) Theme.chat_redLocationIcon.getIntrinsicHeight()) * 0.8f);
                     int imageX = this.imageView.getImageX() + ((this.imageView.getImageWidth() - intrinsicWidth) / 2);
                     int imageY = this.imageView.getImageY() + ((this.imageView.getImageHeight() / 2) - intrinsicHeight);
                     Theme.chat_redLocationIcon.setAlpha((int) (this.imageView.getCurrentAlpha() * 255.0f));
                     Theme.chat_redLocationIcon.setBounds(imageX, imageY, intrinsicWidth + imageX, intrinsicHeight + imageY);
                     Theme.chat_redLocationIcon.draw(canvas);
                 }
-                int i = 0;
                 if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    intrinsicHeight = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
-                } else {
-                    intrinsicHeight = 0;
                 }
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, intrinsicHeight);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    float dp = (float) AndroidUtilities.dp(18.0f);
-                    float dp2 = (float) AndroidUtilities.dp(20.0f);
-                    intrinsicWidth = getMeasuredHeight();
-                    if (this.currentBlock.bottom) {
-                        i = AndroidUtilities.dp(6.0f);
-                    }
-                    canvas.drawRect(dp, 0.0f, dp2, (float) (intrinsicWidth - i), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -5423,20 +3504,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
             accessibilityNodeInfo.setText(stringBuilder.toString());
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.captionLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.creditLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockOrderedListItemCell extends ViewGroup implements ArticleSelectableView {
+    private class BlockOrderedListItemCell extends ViewGroup {
         private ViewHolder blockLayout;
         private int blockX;
         private int blockY;
@@ -5483,12 +3553,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
 
         /* Access modifiers changed, original: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:103:0x0348  */
-        /* JADX WARNING: Removed duplicated region for block: B:111:0x036b  */
-        /* JADX WARNING: Removed duplicated region for block: B:121:0x03bd  */
-        /* JADX WARNING: Removed duplicated region for block: B:103:0x0348  */
-        /* JADX WARNING: Removed duplicated region for block: B:111:0x036b  */
-        /* JADX WARNING: Removed duplicated region for block: B:121:0x03bd  */
+        /* JADX WARNING: Removed duplicated region for block: B:103:0x0350  */
+        /* JADX WARNING: Removed duplicated region for block: B:103:0x0350  */
         @android.annotation.SuppressLint({"NewApi"})
         public void onMeasure(int r17, int r18) {
             /*
@@ -5497,7 +3563,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r10 = android.view.View.MeasureSpec.getSize(r17);
             r0 = r9.currentBlock;
             r11 = 1;
-            if (r0 == 0) goto L_0x03d8;
+            if (r0 == 0) goto L_0x036f;
         L_0x000b:
             r1 = 0;
             r9.textLayout = r1;
@@ -5674,10 +3740,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7, r8);
             r9.textLayout = r0;
             r0 = r9.textLayout;
-            if (r0 == 0) goto L_0x0327;
+            if (r0 == 0) goto L_0x032f;
         L_0x019d:
             r0 = r0.getLineCount();
-            if (r0 <= 0) goto L_0x0327;
+            if (r0 <= 0) goto L_0x032f;
         L_0x01a3:
             r0 = r9.currentBlock;
             r0 = r0.numLayout;
@@ -5700,18 +3766,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0.getHeight();
             r1 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r0 = r0 + r1;
-            goto L_0x0326;
+            goto L_0x032e;
         L_0x01d7:
             r0 = r9.currentBlock;
             r0 = r0.blockItem;
-            if (r0 == 0) goto L_0x0327;
+            if (r0 == 0) goto L_0x032f;
         L_0x01df:
             r0 = r9.textX;
             r9.blockX = r0;
             r0 = r9.textY;
             r9.blockY = r0;
             r0 = r9.blockLayout;
-            if (r0 == 0) goto L_0x0322;
+            if (r0 == 0) goto L_0x032a;
         L_0x01eb:
             r0 = r0.itemView;
             r1 = r0 instanceof org.telegram.ui.ArticleViewer.BlockParagraphCell;
@@ -5805,26 +3871,27 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r0 = r0 instanceof org.telegram.ui.ArticleViewer.BlockParagraphCell;
-            if (r0 == 0) goto L_0x02c6;
+            if (r0 == 0) goto L_0x02ce;
         L_0x028f:
             r0 = r9.currentBlock;
             r0 = r0.numLayout;
-            if (r0 == 0) goto L_0x02c6;
+            if (r0 == 0) goto L_0x02ce;
         L_0x0297:
             r0 = r9.currentBlock;
             r0 = r0.numLayout;
             r0 = r0.getLineCount();
-            if (r0 <= 0) goto L_0x02c6;
+            if (r0 <= 0) goto L_0x02ce;
         L_0x02a3:
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r0 = (org.telegram.ui.ArticleViewer.BlockParagraphCell) r0;
             r2 = r0.textLayout;
-            if (r2 == 0) goto L_0x02c6;
-        L_0x02ad:
+            if (r2 == 0) goto L_0x02ce;
+        L_0x02af:
+            r2 = r0.textLayout;
             r2 = r2.getLineCount();
-            if (r2 <= 0) goto L_0x02c6;
-        L_0x02b3:
+            if (r2 <= 0) goto L_0x02ce;
+        L_0x02b9:
             r0 = r0.textLayout;
             r0 = r0.getLineAscent(r13);
             r2 = r9.currentBlock;
@@ -5832,42 +3899,42 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r2 = r2.getLineAscent(r13);
             r2 = r2 - r0;
             r9.numOffsetY = r2;
-        L_0x02c6:
+        L_0x02ce:
             r0 = r9.currentBlock;
             r0 = r0.blockItem;
             r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockDetails;
-            if (r0 == 0) goto L_0x02da;
-        L_0x02d0:
+            if (r0 == 0) goto L_0x02e2;
+        L_0x02d8:
             r9.verticalAlign = r11;
             r9.blockY = r13;
             r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r1 = r1 - r0;
-            goto L_0x02f5;
-        L_0x02da:
+            goto L_0x02fd;
+        L_0x02e2:
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r2 = r0 instanceof org.telegram.ui.ArticleViewer.BlockOrderedListItemCell;
-            if (r2 == 0) goto L_0x02e9;
-        L_0x02e2:
+            if (r2 == 0) goto L_0x02f1;
+        L_0x02ea:
             r0 = (org.telegram.ui.ArticleViewer.BlockOrderedListItemCell) r0;
             r0 = r0.verticalAlign;
             r9.verticalAlign = r0;
-            goto L_0x02f5;
-        L_0x02e9:
+            goto L_0x02fd;
+        L_0x02f1:
             r2 = r0 instanceof org.telegram.ui.ArticleViewer.BlockListItemCell;
-            if (r2 == 0) goto L_0x02f5;
-        L_0x02ed:
+            if (r2 == 0) goto L_0x02fd;
+        L_0x02f5:
             r0 = (org.telegram.ui.ArticleViewer.BlockListItemCell) r0;
             r0 = r0.verticalAlign;
             r9.verticalAlign = r0;
-        L_0x02f5:
+        L_0x02fd:
             r0 = r9.verticalAlign;
-            if (r0 == 0) goto L_0x0318;
-        L_0x02f9:
+            if (r0 == 0) goto L_0x0320;
+        L_0x0301:
             r0 = r9.currentBlock;
             r0 = r0.numLayout;
-            if (r0 == 0) goto L_0x0318;
-        L_0x0301:
+            if (r0 == 0) goto L_0x0320;
+        L_0x0309:
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r0 = r0.getMeasuredHeight();
@@ -5877,16 +3944,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0 - r2;
             r0 = r0 / 2;
             r9.textY = r0;
-        L_0x0318:
+        L_0x0320:
             r0 = r9.blockLayout;
             r0 = r0.itemView;
             r0 = r0.getMeasuredHeight();
             r13 = r1 + r0;
-        L_0x0322:
+        L_0x032a:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
-        L_0x0326:
+        L_0x032e:
             r13 = r13 + r0;
-        L_0x0327:
+        L_0x032f:
             r0 = r9.currentBlock;
             r0 = r0.parent;
             r0 = r0.items;
@@ -5897,84 +3964,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = r1 - r11;
             r0 = r0.get(r1);
             r1 = r9.currentBlock;
-            if (r0 != r1) goto L_0x034d;
-        L_0x0348:
+            if (r0 != r1) goto L_0x0355;
+        L_0x0350:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r13 = r13 + r0;
-        L_0x034d:
+        L_0x0355:
             r0 = r9.currentBlock;
             r0 = r0.index;
-            if (r0 != 0) goto L_0x0366;
-        L_0x0355:
+            if (r0 != 0) goto L_0x036e;
+        L_0x035d:
             r0 = r9.currentBlock;
             r0 = r0.parent;
             r0 = r0.level;
-            if (r0 != 0) goto L_0x0366;
-        L_0x0361:
+            if (r0 != 0) goto L_0x036e;
+        L_0x0369:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r12);
             r13 = r13 + r0;
-        L_0x0366:
+        L_0x036e:
             r11 = r13;
-            r0 = r9.textLayout;
-            if (r0 == 0) goto L_0x038b;
-        L_0x036b:
-            r1 = r9.textX;
-            r0.x = r1;
-            r1 = r9.textY;
-            r0.y = r1;
-            r0 = r9.currentBlock;
-            r0 = r0.numLayout;
-            if (r0 == 0) goto L_0x038b;
-        L_0x037b:
-            r0 = r9.textLayout;
-            r1 = r9.currentBlock;
-            r1 = r1.numLayout;
-            r1 = r1.textLayout;
-            r1 = r1.getText();
-            r0.prefix = r1;
-        L_0x038b:
-            r0 = r9.blockLayout;
-            if (r0 == 0) goto L_0x03d8;
-        L_0x038f:
-            r0 = r0.itemView;
-            r0 = r0 instanceof org.telegram.ui.Cells.TextSelectionHelper.ArticleSelectableView;
-            if (r0 == 0) goto L_0x03d8;
-        L_0x0395:
-            r0 = org.telegram.ui.ArticleViewer.this;
-            r0 = r0.textSelectionHelper;
-            r0 = r0.arrayList;
-            r0.clear();
-            r0 = r9.blockLayout;
-            r0 = r0.itemView;
-            r0 = (org.telegram.ui.Cells.TextSelectionHelper.ArticleSelectableView) r0;
-            r1 = org.telegram.ui.ArticleViewer.this;
-            r1 = r1.textSelectionHelper;
-            r1 = r1.arrayList;
-            r0.fillTextLayoutBlocks(r1);
-            r0 = org.telegram.ui.ArticleViewer.this;
-            r0 = r0.textSelectionHelper;
-            r0 = r0.arrayList;
-            r0 = r0.iterator();
-        L_0x03b7:
-            r1 = r0.hasNext();
-            if (r1 == 0) goto L_0x03d8;
-        L_0x03bd:
-            r1 = r0.next();
-            r1 = (org.telegram.ui.Cells.TextSelectionHelper.TextLayoutBlock) r1;
-            r2 = r1 instanceof org.telegram.ui.ArticleViewer.DrawingText;
-            if (r2 == 0) goto L_0x03b7;
-        L_0x03c7:
-            r1 = (org.telegram.ui.ArticleViewer.DrawingText) r1;
-            r2 = r1.x;
-            r3 = r9.blockX;
-            r2 = r2 + r3;
-            r1.x = r2;
-            r2 = r1.y;
-            r3 = r9.blockY;
-            r2 = r2 + r3;
-            r1.y = r2;
-            goto L_0x03b7;
-        L_0x03d8:
+        L_0x036f:
             r9.setMeasuredDimension(r10, r11);
             return;
             */
@@ -6008,18 +4016,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
-            }
-        }
-
-        public void invalidate() {
-            super.invalidate();
-            ViewHolder viewHolder = this.blockLayout;
-            if (viewHolder != null) {
-                viewHolder.itemView.invalidate();
             }
         }
 
@@ -6031,28 +4030,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 accessibilityNodeInfo.setText(drawingText.getText());
             }
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            ViewHolder viewHolder = this.blockLayout;
-            if (viewHolder != null) {
-                View view = viewHolder.itemView;
-                if (view instanceof ArticleSelectableView) {
-                    ((ArticleSelectableView) view).fillTextLayoutBlocks(arrayList);
-                }
-            }
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    public class BlockParagraphCell extends View implements ArticleSelectableView {
+    private class BlockParagraphCell extends View {
         private TL_pageBlockParagraph currentBlock;
         private WebpageAdapter parentAdapter;
-        public DrawingText textLayout;
-        public int textX;
-        public int textY;
+        private DrawingText textLayout;
+        private int textX;
+        private int textY;
 
         public BlockParagraphCell(Context context, WebpageAdapter webpageAdapter) {
             super(context);
@@ -6092,10 +4077,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     } else {
                         i3 = AndroidUtilities.dp(16.0f);
                     }
-                    i3 = i2 + i3;
-                    drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
+                    i3 += i2;
                 }
             } else {
                 i3 = 1;
@@ -6109,7 +4091,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -6127,16 +4108,2143 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 accessibilityNodeInfo.setText(drawingText.getText());
             }
         }
+    }
 
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
+    private class BlockPreformattedCell extends FrameLayout {
+        private TL_pageBlockPreformatted currentBlock;
+        private WebpageAdapter parentAdapter;
+        private HorizontalScrollView scrollView;
+        private View textContainer;
+        private DrawingText textLayout;
+
+        public BlockPreformattedCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+            this.scrollView = new HorizontalScrollView(context, ArticleViewer.this) {
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    if (BlockPreformattedCell.this.textContainer.getMeasuredWidth() > getMeasuredWidth()) {
+                        ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
+                    }
+                    return super.onInterceptTouchEvent(motionEvent);
+                }
+
+                /* Access modifiers changed, original: protected */
+                public void onScrollChanged(int i, int i2, int i3, int i4) {
+                    super.onScrollChanged(i, i2, i3, i4);
+                    if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
+                        ArticleViewer.this.pressedLinkOwnerLayout = null;
+                        ArticleViewer.this.pressedLinkOwnerView = null;
+                    }
+                }
+            };
+            this.scrollView.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
+            addView(this.scrollView, LayoutHelper.createFrame(-1, -2.0f));
+            this.textContainer = new View(context, ArticleViewer.this) {
+                /* Access modifiers changed, original: protected */
+                public void onMeasure(int i, int i2) {
+                    i2 = 0;
+                    int i3 = 1;
+                    if (BlockPreformattedCell.this.currentBlock != null) {
+                        BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
+                        blockPreformattedCell.textLayout = ArticleViewer.this.createLayoutForText(this, null, blockPreformattedCell.currentBlock.text, AndroidUtilities.dp(5000.0f), 0, BlockPreformattedCell.this.currentBlock, BlockPreformattedCell.this.parentAdapter);
+                        if (BlockPreformattedCell.this.textLayout != null) {
+                            i = BlockPreformattedCell.this.textLayout.getHeight() + 0;
+                            int lineCount = BlockPreformattedCell.this.textLayout.getLineCount();
+                            while (i2 < lineCount) {
+                                i3 = Math.max((int) Math.ceil((double) BlockPreformattedCell.this.textLayout.getLineWidth(i2)), i3);
+                                i2++;
+                            }
+                        } else {
+                            i = 0;
+                        }
+                    } else {
+                        i = 1;
+                    }
+                    setMeasuredDimension(i3 + AndroidUtilities.dp(32.0f), i);
+                }
+
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
+                    return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, blockPreformattedCell.textLayout, 0, 0) || super.onTouchEvent(motionEvent);
+                }
+
+                /* Access modifiers changed, original: protected */
+                public void onDraw(Canvas canvas) {
+                    if (BlockPreformattedCell.this.textLayout != null) {
+                        canvas.save();
+                        BlockPreformattedCell.this.textLayout.draw(canvas);
+                        canvas.restore();
+                    }
+                }
+            };
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-2, -1);
+            int dp = AndroidUtilities.dp(16.0f);
+            layoutParams.rightMargin = dp;
+            layoutParams.leftMargin = dp;
+            dp = AndroidUtilities.dp(12.0f);
+            layoutParams.bottomMargin = dp;
+            layoutParams.topMargin = dp;
+            this.scrollView.addView(this.textContainer, layoutParams);
+            setWillNotDraw(false);
+        }
+
+        public void setBlock(TL_pageBlockPreformatted tL_pageBlockPreformatted) {
+            this.currentBlock = tL_pageBlockPreformatted;
+            this.scrollView.setScrollX(0);
+            this.textContainer.requestLayout();
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            i = MeasureSpec.getSize(i);
+            this.scrollView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(0, 0));
+            setMeasuredDimension(i, this.scrollView.getMeasuredHeight());
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                canvas.drawRect(0.0f, (float) AndroidUtilities.dp(8.0f), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(8.0f)), ArticleViewer.preformattedBackgroundPaint);
             }
         }
     }
 
-    private class BlockPhotoCell extends FrameLayout implements FileDownloadProgressListener, ArticleSelectableView {
+    private class BlockPullquoteCell extends View {
+        private TL_pageBlockPullquote currentBlock;
+        private WebpageAdapter parentAdapter;
+        private DrawingText textLayout;
+        private DrawingText textLayout2;
+        private int textX = AndroidUtilities.dp(18.0f);
+        private int textY = AndroidUtilities.dp(8.0f);
+        private int textY2;
+
+        public BlockPullquoteCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+        }
+
+        public void setBlock(TL_pageBlockPullquote tL_pageBlockPullquote) {
+            this.currentBlock = tL_pageBlockPullquote;
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            if (!ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY)) {
+                if (!(ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout2, this.textX, this.textY2) || super.onTouchEvent(motionEvent))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            int i3;
+            i = MeasureSpec.getSize(i);
+            TL_pageBlockPullquote tL_pageBlockPullquote = this.currentBlock;
+            if (tL_pageBlockPullquote != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockPullquote.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter);
+                i3 = 0;
+                if (this.textLayout != null) {
+                    i3 = 0 + (AndroidUtilities.dp(8.0f) + this.textLayout.getHeight());
+                }
+                this.textY2 = AndroidUtilities.dp(2.0f) + i3;
+                this.textLayout2 = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption, i - AndroidUtilities.dp(36.0f), this.textY2, this.currentBlock, this.parentAdapter);
+                if (this.textLayout2 != null) {
+                    i3 += AndroidUtilities.dp(8.0f) + this.textLayout2.getHeight();
+                }
+                if (i3 != 0) {
+                    i3 += AndroidUtilities.dp(8.0f);
+                }
+            } else {
+                i3 = 1;
+            }
+            setMeasuredDimension(i, i3);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                if (this.textLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    this.textLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.textLayout2 != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY2);
+                    this.textLayout2.draw(canvas);
+                    canvas.restore();
+                }
+            }
+        }
+    }
+
+    private class BlockRelatedArticlesCell extends View {
+        private TL_pageBlockRelatedArticlesChild currentBlock;
+        private boolean divider;
+        private boolean drawImage;
+        private ImageReceiver imageView;
+        private WebpageAdapter parentAdapter;
+        private DrawingText textLayout;
+        private DrawingText textLayout2;
+        private int textOffset;
+        private int textX = AndroidUtilities.dp(18.0f);
+        private int textY = AndroidUtilities.dp(10.0f);
+
+        public BlockRelatedArticlesCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+            this.imageView = new ImageReceiver(this);
+            this.imageView.setRoundRadius(AndroidUtilities.dp(6.0f));
+        }
+
+        public void setBlock(TL_pageBlockRelatedArticlesChild tL_pageBlockRelatedArticlesChild) {
+            this.currentBlock = tL_pageBlockRelatedArticlesChild;
+            requestLayout();
+        }
+
+        /* Access modifiers changed, original: protected */
+        @SuppressLint({"DrawAllocation", "NewApi"})
+        public void onMeasure(int i, int i2) {
+            int dp;
+            int i3;
+            Object obj;
+            int i4;
+            String formatString;
+            int size = MeasureSpec.getSize(i);
+            this.divider = this.currentBlock.num != this.currentBlock.parent.articles.size() - 1;
+            TL_pageRelatedArticle tL_pageRelatedArticle = (TL_pageRelatedArticle) this.currentBlock.parent.articles.get(this.currentBlock.num);
+            int dp2 = AndroidUtilities.dp((float) (SharedConfig.ivFontSize - 16));
+            long j = tL_pageRelatedArticle.photo_id;
+            Photo access$14800 = j != 0 ? ArticleViewer.this.getPhotoWithId(j) : null;
+            if (access$14800 != null) {
+                this.drawImage = true;
+                PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$14800.sizes, AndroidUtilities.getPhotoSize());
+                PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(access$14800.sizes, 80, true);
+                if (closestPhotoSizeWithSize == closestPhotoSizeWithSize2) {
+                    closestPhotoSizeWithSize2 = null;
+                }
+                this.imageView.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, access$14800), "64_64", ImageLocation.getForPhoto(closestPhotoSizeWithSize2, access$14800), "64_64_b", closestPhotoSizeWithSize.size, null, ArticleViewer.this.currentPage, 1);
+            } else {
+                this.drawImage = false;
+            }
+            int dp3 = AndroidUtilities.dp(60.0f);
+            int dp4 = size - AndroidUtilities.dp(36.0f);
+            if (this.drawImage) {
+                dp = AndroidUtilities.dp(44.0f);
+                this.imageView.setImageCoords((size - dp) - AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), dp, dp);
+                dp4 -= this.imageView.getImageWidth() + AndroidUtilities.dp(6.0f);
+            }
+            int i5 = dp4;
+            int dp5 = AndroidUtilities.dp(18.0f);
+            String str = tL_pageRelatedArticle.title;
+            if (str != null) {
+                i3 = dp3;
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, str, null, i5, this.textY, this.currentBlock, Alignment.ALIGN_NORMAL, 3, this.parentAdapter);
+            } else {
+                i3 = dp3;
+            }
+            DrawingText drawingText = this.textLayout;
+            if (drawingText != null) {
+                dp = drawingText.getLineCount();
+                dp4 = 4 - dp;
+                this.textOffset = (this.textLayout.getHeight() + AndroidUtilities.dp(6.0f)) + dp2;
+                dp5 += this.textLayout.getHeight();
+                for (int i6 = 0; i6 < dp; i6++) {
+                    if (this.textLayout.getLineLeft(i6) != 0.0f) {
+                        obj = 1;
+                        break;
+                    }
+                }
+                obj = null;
+                i4 = dp4;
+            } else {
+                this.textOffset = 0;
+                obj = null;
+                i4 = 4;
+            }
+            if (tL_pageRelatedArticle.published_date != 0 && !TextUtils.isEmpty(tL_pageRelatedArticle.author)) {
+                formatString = LocaleController.formatString("ArticleDateByAuthor", NUM, LocaleController.getInstance().chatFullDate.format(((long) tL_pageRelatedArticle.published_date) * 1000), tL_pageRelatedArticle.author);
+            } else if (!TextUtils.isEmpty(tL_pageRelatedArticle.author)) {
+                formatString = LocaleController.formatString("ArticleByAuthor", NUM, tL_pageRelatedArticle.author);
+            } else if (tL_pageRelatedArticle.published_date != 0) {
+                formatString = LocaleController.getInstance().chatFullDate.format(((long) tL_pageRelatedArticle.published_date) * 1000);
+            } else if (TextUtils.isEmpty(tL_pageRelatedArticle.description)) {
+                formatString = tL_pageRelatedArticle.url;
+            } else {
+                formatString = tL_pageRelatedArticle.description;
+            }
+            str = formatString;
+            ArticleViewer articleViewer = ArticleViewer.this;
+            int i7 = this.textOffset + this.textY;
+            TL_pageBlockRelatedArticlesChild tL_pageBlockRelatedArticlesChild = this.currentBlock;
+            Alignment ALIGN_RIGHT = (articleViewer.isRtl || obj != null) ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL;
+            this.textLayout2 = articleViewer.createLayoutForText(this, str, null, i5, i7, tL_pageBlockRelatedArticlesChild, ALIGN_RIGHT, i4, this.parentAdapter);
+            DrawingText drawingText2 = this.textLayout2;
+            if (drawingText2 != null) {
+                dp5 += drawingText2.getHeight();
+                if (this.textLayout != null) {
+                    dp5 += AndroidUtilities.dp(6.0f) + dp2;
+                }
+            }
+            setMeasuredDimension(size, Math.max(i3, dp5) + this.divider);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                if (this.drawImage) {
+                    this.imageView.draw(canvas);
+                }
+                canvas.save();
+                canvas.translate((float) this.textX, (float) AndroidUtilities.dp(10.0f));
+                DrawingText drawingText = this.textLayout;
+                if (drawingText != null) {
+                    drawingText.draw(canvas);
+                }
+                if (this.textLayout2 != null) {
+                    canvas.translate(0.0f, (float) this.textOffset);
+                    this.textLayout2.draw(canvas);
+                }
+                canvas.restore();
+                if (this.divider) {
+                    canvas.drawLine(ArticleViewer.this.isRtl ? 0.0f : (float) AndroidUtilities.dp(17.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (ArticleViewer.this.isRtl ? AndroidUtilities.dp(17.0f) : 0)), (float) (getMeasuredHeight() - 1), ArticleViewer.dividerPaint);
+                }
+            }
+        }
+    }
+
+    private class BlockRelatedArticlesHeaderCell extends View {
+        private TL_pageBlockRelatedArticles currentBlock;
+        private WebpageAdapter parentAdapter;
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.dp(18.0f);
+        private int textY;
+
+        public BlockRelatedArticlesHeaderCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+        }
+
+        public void setBlock(TL_pageBlockRelatedArticles tL_pageBlockRelatedArticles) {
+            this.currentBlock = tL_pageBlockRelatedArticles;
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(motionEvent);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            i = MeasureSpec.getSize(i);
+            TL_pageBlockRelatedArticles tL_pageBlockRelatedArticles = this.currentBlock;
+            if (tL_pageBlockRelatedArticles != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockRelatedArticles.title, i - AndroidUtilities.dp(52.0f), 0, this.currentBlock, Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
+                if (this.textLayout != null) {
+                    this.textY = AndroidUtilities.dp(6.0f) + ((AndroidUtilities.dp(32.0f) - this.textLayout.getHeight()) / 2);
+                }
+            }
+            if (this.textLayout != null) {
+                setMeasuredDimension(i, AndroidUtilities.dp(38.0f));
+            } else {
+                setMeasuredDimension(i, 1);
+            }
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (!(this.currentBlock == null || this.textLayout == null)) {
+                canvas.save();
+                canvas.translate((float) this.textX, (float) this.textY);
+                this.textLayout.draw(canvas);
+                canvas.restore();
+            }
+        }
+    }
+
+    private class BlockRelatedArticlesShadowCell extends View {
+        private CombinedDrawable shadowDrawable;
+
+        public BlockRelatedArticlesShadowCell(Context context) {
+            super(context);
+            this.shadowDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, NUM, -16777216));
+            this.shadowDrawable.setFullsize(true);
+            setBackgroundDrawable(this.shadowDrawable);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(12.0f));
+            Theme.setCombinedDrawableColor(this.shadowDrawable, Theme.getColor("windowBackgroundGray"), false);
+        }
+    }
+
+    private class BlockSlideshowCell extends FrameLayout {
+        private DrawingText captionLayout;
+        private DrawingText creditLayout;
+        private int creditOffset;
+        private TL_pageBlockSlideshow currentBlock;
+        private int currentPage;
+        private View dotsContainer;
+        private PagerAdapter innerAdapter;
+        private ViewPager innerListView;
+        private float pageOffset;
+        private WebpageAdapter parentAdapter;
+        private int textX = AndroidUtilities.dp(18.0f);
+        private int textY;
+
+        public BlockSlideshowCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+            if (ArticleViewer.dotsPaint == null) {
+                ArticleViewer.dotsPaint = new Paint(1);
+                ArticleViewer.dotsPaint.setColor(-1);
+            }
+            this.innerListView = new ViewPager(context, ArticleViewer.this) {
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    return super.onTouchEvent(motionEvent);
+                }
+
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
+                    return super.onInterceptTouchEvent(motionEvent);
+                }
+            };
+            this.innerListView.addOnPageChangeListener(new OnPageChangeListener(ArticleViewer.this) {
+                public void onPageScrollStateChanged(int i) {
+                }
+
+                public void onPageScrolled(int i, float f, int i2) {
+                    f = (float) BlockSlideshowCell.this.innerListView.getMeasuredWidth();
+                    if (f != 0.0f) {
+                        BlockSlideshowCell blockSlideshowCell = BlockSlideshowCell.this;
+                        blockSlideshowCell.pageOffset = (((((float) i) * f) + ((float) i2)) - (((float) blockSlideshowCell.currentPage) * f)) / f;
+                        BlockSlideshowCell.this.dotsContainer.invalidate();
+                    }
+                }
+
+                public void onPageSelected(int i) {
+                    BlockSlideshowCell.this.currentPage = i;
+                    BlockSlideshowCell.this.dotsContainer.invalidate();
+                }
+            });
+            ViewPager viewPager = this.innerListView;
+            AnonymousClass3 anonymousClass3 = new PagerAdapter(ArticleViewer.this) {
+
+                class ObjectContainer {
+                    private PageBlock block;
+                    private View view;
+
+                    ObjectContainer() {
+                    }
+                }
+
+                public int getCount() {
+                    if (BlockSlideshowCell.this.currentBlock == null) {
+                        return 0;
+                    }
+                    return BlockSlideshowCell.this.currentBlock.items.size();
+                }
+
+                public boolean isViewFromObject(View view, Object obj) {
+                    return ((ObjectContainer) obj).view == view;
+                }
+
+                public int getItemPosition(Object obj) {
+                    return BlockSlideshowCell.this.currentBlock.items.contains(((ObjectContainer) obj).block) ? -1 : -2;
+                }
+
+                public Object instantiateItem(ViewGroup viewGroup, int i) {
+                    View blockPhotoCell;
+                    PageBlock pageBlock = (PageBlock) BlockSlideshowCell.this.currentBlock.items.get(i);
+                    BlockSlideshowCell blockSlideshowCell;
+                    if (pageBlock instanceof TL_pageBlockPhoto) {
+                        blockSlideshowCell = BlockSlideshowCell.this;
+                        blockPhotoCell = new BlockPhotoCell(blockSlideshowCell.getContext(), BlockSlideshowCell.this.parentAdapter, 1);
+                        blockPhotoCell.setBlock((TL_pageBlockPhoto) pageBlock, true, true);
+                    } else {
+                        blockSlideshowCell = BlockSlideshowCell.this;
+                        blockPhotoCell = new BlockVideoCell(blockSlideshowCell.getContext(), BlockSlideshowCell.this.parentAdapter, 1);
+                        blockPhotoCell.setBlock((TL_pageBlockVideo) pageBlock, true, true);
+                    }
+                    viewGroup.addView(blockPhotoCell);
+                    ObjectContainer objectContainer = new ObjectContainer();
+                    objectContainer.view = blockPhotoCell;
+                    objectContainer.block = pageBlock;
+                    return objectContainer;
+                }
+
+                public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
+                    viewGroup.removeView(((ObjectContainer) obj).view);
+                }
+
+                public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
+                    if (dataSetObserver != null) {
+                        super.unregisterDataSetObserver(dataSetObserver);
+                    }
+                }
+            };
+            this.innerAdapter = anonymousClass3;
+            viewPager.setAdapter(anonymousClass3);
+            AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, Theme.getColor("windowBackgroundWhite"));
+            addView(this.innerListView);
+            this.dotsContainer = new View(context, ArticleViewer.this) {
+                /* Access modifiers changed, original: protected */
+                public void onDraw(Canvas canvas) {
+                    if (BlockSlideshowCell.this.currentBlock != null) {
+                        int dp;
+                        int measuredWidth;
+                        int count = BlockSlideshowCell.this.innerAdapter.getCount();
+                        int dp2 = ((AndroidUtilities.dp(7.0f) * count) + ((count - 1) * AndroidUtilities.dp(6.0f))) + AndroidUtilities.dp(4.0f);
+                        if (dp2 < getMeasuredWidth()) {
+                            count = (getMeasuredWidth() - dp2) / 2;
+                        } else {
+                            dp2 = AndroidUtilities.dp(4.0f);
+                            dp = AndroidUtilities.dp(13.0f);
+                            measuredWidth = ((getMeasuredWidth() - AndroidUtilities.dp(8.0f)) / 2) / dp;
+                            int i = (count - measuredWidth) - 1;
+                            if (BlockSlideshowCell.this.currentPage != i || BlockSlideshowCell.this.pageOffset >= 0.0f) {
+                                if (BlockSlideshowCell.this.currentPage >= i) {
+                                    count = ((count - (measuredWidth * 2)) - 1) * dp;
+                                } else if (BlockSlideshowCell.this.currentPage > measuredWidth) {
+                                    count = ((int) (BlockSlideshowCell.this.pageOffset * ((float) dp))) + ((BlockSlideshowCell.this.currentPage - measuredWidth) * dp);
+                                } else {
+                                    count = (BlockSlideshowCell.this.currentPage != measuredWidth || BlockSlideshowCell.this.pageOffset <= 0.0f) ? dp2 : (int) (BlockSlideshowCell.this.pageOffset * ((float) dp));
+                                }
+                                count = dp2 - count;
+                            } else {
+                                count = dp2 - (((int) (BlockSlideshowCell.this.pageOffset * ((float) dp))) + (((count - (measuredWidth * 2)) - 1) * dp));
+                            }
+                        }
+                        dp = 0;
+                        while (dp < BlockSlideshowCell.this.currentBlock.items.size()) {
+                            measuredWidth = (AndroidUtilities.dp(4.0f) + count) + (AndroidUtilities.dp(13.0f) * dp);
+                            Drawable access$20000 = BlockSlideshowCell.this.currentPage == dp ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
+                            access$20000.setBounds(measuredWidth - AndroidUtilities.dp(5.0f), 0, measuredWidth + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(10.0f));
+                            access$20000.draw(canvas);
+                            dp++;
+                        }
+                    }
+                }
+            };
+            addView(this.dotsContainer);
+            setWillNotDraw(false);
+        }
+
+        public void setBlock(TL_pageBlockSlideshow tL_pageBlockSlideshow) {
+            this.currentBlock = tL_pageBlockSlideshow;
+            this.innerAdapter.notifyDataSetChanged();
+            this.innerListView.setCurrentItem(0, false);
+            this.innerListView.forceLayout();
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            if (!ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.captionLayout, this.textX, this.textY)) {
+                if (!(ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(motionEvent))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /* Access modifiers changed, original: protected */
+        @SuppressLint({"NewApi"})
+        public void onMeasure(int i, int i2) {
+            i = MeasureSpec.getSize(i);
+            if (this.currentBlock != null) {
+                i2 = AndroidUtilities.dp(310.0f);
+                this.innerListView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
+                this.currentBlock.items.size();
+                this.dotsContainer.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(10.0f), NUM));
+                int dp = i - AndroidUtilities.dp(36.0f);
+                this.textY = AndroidUtilities.dp(16.0f) + i2;
+                ArticleViewer articleViewer = ArticleViewer.this;
+                TL_pageBlockSlideshow tL_pageBlockSlideshow = this.currentBlock;
+                this.captionLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockSlideshow.caption.text, dp, this.textY, tL_pageBlockSlideshow, this.parentAdapter);
+                if (this.captionLayout != null) {
+                    this.creditOffset = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
+                    i2 += this.creditOffset + AndroidUtilities.dp(4.0f);
+                } else {
+                    this.creditOffset = 0;
+                }
+                articleViewer = ArticleViewer.this;
+                tL_pageBlockSlideshow = this.currentBlock;
+                this.creditLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockSlideshow.caption.credit, dp, this.textY + this.creditOffset, tL_pageBlockSlideshow, articleViewer.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
+                if (this.creditLayout != null) {
+                    i2 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
+                }
+                i2 += AndroidUtilities.dp(16.0f);
+            } else {
+                i2 = 1;
+            }
+            setMeasuredDimension(i, i2);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            this.innerListView.layout(0, AndroidUtilities.dp(8.0f), this.innerListView.getMeasuredWidth(), AndroidUtilities.dp(8.0f) + this.innerListView.getMeasuredHeight());
+            int bottom = this.innerListView.getBottom() - AndroidUtilities.dp(23.0f);
+            View view = this.dotsContainer;
+            view.layout(0, bottom, view.getMeasuredWidth(), this.dotsContainer.getMeasuredHeight() + bottom);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                if (this.captionLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
+                    canvas.restore();
+                }
+            }
+        }
+    }
+
+    private class BlockSubheaderCell extends View {
+        private TL_pageBlockSubheader currentBlock;
+        private WebpageAdapter parentAdapter;
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.dp(18.0f);
+        private int textY = AndroidUtilities.dp(8.0f);
+
+        public BlockSubheaderCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+        }
+
+        public void setBlock(TL_pageBlockSubheader tL_pageBlockSubheader) {
+            this.currentBlock = tL_pageBlockSubheader;
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(motionEvent);
+        }
+
+        /* Access modifiers changed, original: protected */
+        @SuppressLint({"NewApi"})
+        public void onMeasure(int i, int i2) {
+            i = MeasureSpec.getSize(i);
+            TL_pageBlockSubheader tL_pageBlockSubheader = this.currentBlock;
+            int i3 = 0;
+            if (tL_pageBlockSubheader != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockSubheader.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, ArticleViewer.this.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
+                if (this.textLayout != null) {
+                    i3 = 0 + (AndroidUtilities.dp(16.0f) + this.textLayout.getHeight());
+                }
+            } else {
+                i3 = 1;
+            }
+            setMeasuredDimension(i, i3);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (!(this.currentBlock == null || this.textLayout == null)) {
+                canvas.save();
+                canvas.translate((float) this.textX, (float) this.textY);
+                this.textLayout.draw(canvas);
+                canvas.restore();
+            }
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.setEnabled(true);
+            if (this.textLayout != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(this.textLayout.getText());
+                stringBuilder.append(", ");
+                stringBuilder.append(LocaleController.getString("AccDescrIVHeading", NUM));
+                accessibilityNodeInfo.setText(stringBuilder.toString());
+            }
+        }
+    }
+
+    private class BlockSubtitleCell extends View {
+        private TL_pageBlockSubtitle currentBlock;
+        private WebpageAdapter parentAdapter;
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.dp(18.0f);
+        private int textY = AndroidUtilities.dp(8.0f);
+
+        public BlockSubtitleCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+        }
+
+        public void setBlock(TL_pageBlockSubtitle tL_pageBlockSubtitle) {
+            this.currentBlock = tL_pageBlockSubtitle;
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(motionEvent);
+        }
+
+        /* Access modifiers changed, original: protected */
+        @SuppressLint({"NewApi"})
+        public void onMeasure(int i, int i2) {
+            i = MeasureSpec.getSize(i);
+            TL_pageBlockSubtitle tL_pageBlockSubtitle = this.currentBlock;
+            int i3 = 0;
+            if (tL_pageBlockSubtitle != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockSubtitle.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, ArticleViewer.this.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
+                if (this.textLayout != null) {
+                    i3 = 0 + (AndroidUtilities.dp(16.0f) + this.textLayout.getHeight());
+                }
+            } else {
+                i3 = 1;
+            }
+            setMeasuredDimension(i, i3);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (!(this.currentBlock == null || this.textLayout == null)) {
+                canvas.save();
+                canvas.translate((float) this.textX, (float) this.textY);
+                this.textLayout.draw(canvas);
+                canvas.restore();
+            }
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.setEnabled(true);
+            if (this.textLayout != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(this.textLayout.getText());
+                stringBuilder.append(", ");
+                stringBuilder.append(LocaleController.getString("AccDescrIVHeading", NUM));
+                accessibilityNodeInfo.setText(stringBuilder.toString());
+            }
+        }
+    }
+
+    private class BlockTitleCell extends View {
+        private TL_pageBlockTitle currentBlock;
+        private WebpageAdapter parentAdapter;
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.dp(18.0f);
+        private int textY;
+
+        public BlockTitleCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+        }
+
+        public void setBlock(TL_pageBlockTitle tL_pageBlockTitle) {
+            this.currentBlock = tL_pageBlockTitle;
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(motionEvent);
+        }
+
+        /* Access modifiers changed, original: protected */
+        @SuppressLint({"NewApi"})
+        public void onMeasure(int i, int i2) {
+            int i3;
+            i = MeasureSpec.getSize(i);
+            TL_pageBlockTitle tL_pageBlockTitle = this.currentBlock;
+            if (tL_pageBlockTitle != null) {
+                i3 = 0;
+                if (tL_pageBlockTitle.first) {
+                    i3 = 0 + AndroidUtilities.dp(8.0f);
+                    this.textY = AndroidUtilities.dp(16.0f);
+                } else {
+                    this.textY = AndroidUtilities.dp(8.0f);
+                }
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, ArticleViewer.this.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
+                if (this.textLayout != null) {
+                    i3 += AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
+                }
+            } else {
+                i3 = 1;
+            }
+            setMeasuredDimension(i, i3);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (!(this.currentBlock == null || this.textLayout == null)) {
+                canvas.save();
+                canvas.translate((float) this.textX, (float) this.textY);
+                this.textLayout.draw(canvas);
+                canvas.restore();
+            }
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.setEnabled(true);
+            if (this.textLayout != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(this.textLayout.getText());
+                stringBuilder.append(", ");
+                stringBuilder.append(LocaleController.getString("AccDescrIVTitle", NUM));
+                accessibilityNodeInfo.setText(stringBuilder.toString());
+            }
+        }
+    }
+
+    class CheckForLongPress implements Runnable {
+        public int currentPressCount;
+
+        CheckForLongPress() {
+        }
+
+        public void run() {
+            if (ArticleViewer.this.checkingForLongPress && ArticleViewer.this.windowView != null) {
+                ArticleViewer.this.checkingForLongPress = false;
+                if (ArticleViewer.this.pressedLink != null) {
+                    ArticleViewer.this.windowView.performHapticFeedback(0);
+                    ArticleViewer articleViewer = ArticleViewer.this;
+                    articleViewer.showCopyPopup(articleViewer.pressedLink.getUrl());
+                    ArticleViewer.this.pressedLink = null;
+                    ArticleViewer.this.pressedLinkOwnerLayout = null;
+                    if (ArticleViewer.this.pressedLinkOwnerView != null) {
+                        ArticleViewer.this.pressedLinkOwnerView.invalidate();
+                    }
+                } else if (ArticleViewer.this.pressedLinkOwnerLayout != null && ArticleViewer.this.pressedLinkOwnerView != null) {
+                    ArticleViewer.this.windowView.performHapticFeedback(0);
+                    int[] iArr = new int[2];
+                    ArticleViewer.this.pressedLinkOwnerView.getLocationInWindow(iArr);
+                    int access$5900 = (iArr[1] + ArticleViewer.this.pressedLayoutY) - AndroidUtilities.dp(54.0f);
+                    if (access$5900 < 0) {
+                        access$5900 = 0;
+                    }
+                    ArticleViewer.this.pressedLinkOwnerView.invalidate();
+                    ArticleViewer.this.drawBlockSelection = true;
+                    ArticleViewer articleViewer2 = ArticleViewer.this;
+                    articleViewer2.showPopup(articleViewer2.pressedLinkOwnerView, 48, 0, access$5900);
+                    ArticleViewer.this.listView[0].setLayoutFrozen(true);
+                    ArticleViewer.this.listView[0].setLayoutFrozen(false);
+                }
+            }
+        }
+    }
+
+    private final class CheckForTap implements Runnable {
+        private CheckForTap() {
+        }
+
+        /* synthetic */ CheckForTap(ArticleViewer articleViewer, AnonymousClass1 anonymousClass1) {
+            this();
+        }
+
+        public void run() {
+            if (ArticleViewer.this.pendingCheckForLongPress == null) {
+                ArticleViewer articleViewer = ArticleViewer.this;
+                articleViewer.pendingCheckForLongPress = new CheckForLongPress();
+            }
+            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$1904(ArticleViewer.this);
+            if (ArticleViewer.this.windowView != null) {
+                ArticleViewer.this.windowView.postDelayed(ArticleViewer.this.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
+            }
+        }
+    }
+
+    public class DrawingText {
+        public LinkPath markPath;
+        public PageBlock parentBlock;
+        public Object parentText;
+        public int searchIndex = -1;
+        public LinkPath searchPath;
+        public StaticLayout textLayout;
+        public LinkPath textPath;
+
+        public void draw(Canvas canvas) {
+            if (ArticleViewer.this.searchResults.isEmpty()) {
+                this.searchIndex = -1;
+                this.searchPath = null;
+            } else {
+                SearchResult searchResult = (SearchResult) ArticleViewer.this.searchResults.get(ArticleViewer.this.currentSearchIndex);
+                if (searchResult.block != this.parentBlock || (searchResult.text != this.parentText && (!(searchResult.text instanceof String) || this.parentText != null))) {
+                    this.searchIndex = -1;
+                    this.searchPath = null;
+                } else if (this.searchIndex != searchResult.index) {
+                    this.searchPath = new LinkPath(true);
+                    this.searchPath.setAllowReset(false);
+                    this.searchPath.setCurrentLayout(this.textLayout, searchResult.index, 0.0f);
+                    this.searchPath.setBaselineShift(0);
+                    this.textLayout.getSelectionPath(searchResult.index, searchResult.index + ArticleViewer.this.searchText.length(), this.searchPath);
+                    this.searchPath.setAllowReset(true);
+                }
+            }
+            LinkPath linkPath = this.searchPath;
+            if (linkPath != null) {
+                canvas.drawPath(linkPath, ArticleViewer.webpageSearchPaint);
+            }
+            linkPath = this.textPath;
+            if (linkPath != null) {
+                canvas.drawPath(linkPath, ArticleViewer.webpageUrlPaint);
+            }
+            linkPath = this.markPath;
+            if (linkPath != null) {
+                canvas.drawPath(linkPath, ArticleViewer.webpageMarkPaint);
+            }
+            ArticleViewer.this.drawLayoutLink(canvas, this);
+            this.textLayout.draw(canvas);
+        }
+
+        public CharSequence getText() {
+            return this.textLayout.getText();
+        }
+
+        public int getLineCount() {
+            return this.textLayout.getLineCount();
+        }
+
+        public int getLineAscent(int i) {
+            return this.textLayout.getLineAscent(i);
+        }
+
+        public float getLineLeft(int i) {
+            return this.textLayout.getLineLeft(i);
+        }
+
+        public float getLineWidth(int i) {
+            return this.textLayout.getLineWidth(i);
+        }
+
+        public int getHeight() {
+            return this.textLayout.getHeight();
+        }
+
+        public int getWidth() {
+            return this.textLayout.getWidth();
+        }
+    }
+
+    public class FontCell extends FrameLayout {
+        private RadioButton radioButton;
+        private TextView textView;
+
+        public FontCell(Context context) {
+            super(context);
+            setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 2));
+            this.radioButton = new RadioButton(context);
+            this.radioButton.setSize(AndroidUtilities.dp(20.0f));
+            this.radioButton.setColor(Theme.getColor("dialogRadioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
+            RadioButton radioButton = this.radioButton;
+            int i = 5;
+            int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
+            int i3 = 0;
+            float f = (float) (LocaleController.isRTL ? 0 : 22);
+            if (LocaleController.isRTL) {
+                i3 = 22;
+            }
+            addView(radioButton, LayoutHelper.createFrame(22, 22.0f, i2, f, 13.0f, (float) i3, 0.0f));
+            this.textView = new TextView(context);
+            this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.textView.setTextSize(1, 16.0f);
+            this.textView.setLines(1);
+            this.textView.setMaxLines(1);
+            this.textView.setSingleLine(true);
+            this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+            TextView textView = this.textView;
+            if (!LocaleController.isRTL) {
+                i = 3;
+            }
+            i2 = i | 48;
+            int i4 = 17;
+            f = (float) (LocaleController.isRTL ? 17 : 62);
+            if (LocaleController.isRTL) {
+                i4 = 62;
+            }
+            addView(textView, LayoutHelper.createFrame(-1, -1.0f, i2, f, 0.0f, (float) i4, 0.0f));
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        }
+
+        public void select(boolean z, boolean z2) {
+            this.radioButton.setChecked(z, z2);
+        }
+
+        public void setTextAndTypeface(String str, Typeface typeface) {
+            this.textView.setText(str);
+            this.textView.setTypeface(typeface);
+            invalidate();
+        }
+    }
+
+    private class FrameLayoutDrawer extends FrameLayout {
+        public FrameLayoutDrawer(Context context) {
+            super(context);
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            ArticleViewer.this.processTouchEvent(motionEvent);
+            return true;
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            ArticleViewer.this.drawContent(canvas);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public boolean drawChild(Canvas canvas, View view, long j) {
+            return view != ArticleViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, view, j);
+        }
+    }
+
+    private class LinkMovementMethodMy extends LinkMovementMethod {
+        private LinkMovementMethodMy() {
+        }
+
+        /* synthetic */ LinkMovementMethodMy(ArticleViewer articleViewer, AnonymousClass1 anonymousClass1) {
+            this();
+        }
+
+        public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
+            try {
+                boolean onTouchEvent = super.onTouchEvent(textView, spannable, motionEvent);
+                if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+                    Selection.removeSelection(spannable);
+                }
+                return onTouchEvent;
+            } catch (Exception e) {
+                FileLog.e(e);
+                return false;
+            }
+        }
+    }
+
+    private class PhotoBackgroundDrawable extends ColorDrawable {
+        private Runnable drawRunnable;
+
+        public PhotoBackgroundDrawable(int i) {
+            super(i);
+        }
+
+        @Keep
+        public void setAlpha(int i) {
+            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
+                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
+                boolean z = (ArticleViewer.this.isPhotoVisible && i == 255) ? false : true;
+                drawerLayoutContainer.setAllowDrawContent(z);
+            }
+            super.setAlpha(i);
+        }
+
+        public void draw(Canvas canvas) {
+            super.draw(canvas);
+            if (getAlpha() != 0) {
+                Runnable runnable = this.drawRunnable;
+                if (runnable != null) {
+                    runnable.run();
+                    this.drawRunnable = null;
+                }
+            }
+        }
+    }
+
+    public static class PlaceProviderObject {
+        public int clipBottomAddition;
+        public int clipTopAddition;
+        public ImageReceiver imageReceiver;
+        public int index;
+        public View parentView;
+        public int radius;
+        public float scale = 1.0f;
+        public int size;
+        public BitmapHolder thumb;
+        public int viewX;
+        public int viewY;
+    }
+
+    private class RadialProgressView {
+        private float alpha = 1.0f;
+        private float animatedAlphaValue = 1.0f;
+        private float animatedProgressValue = 0.0f;
+        private float animationProgressStart = 0.0f;
+        private int backgroundState = -1;
+        private float currentProgress = 0.0f;
+        private long currentProgressTime = 0;
+        private long lastUpdateTime = 0;
+        private View parent;
+        private int previousBackgroundState = -2;
+        private RectF progressRect = new RectF();
+        private float radOffset = 0.0f;
+        private float scale = 1.0f;
+        private int size = AndroidUtilities.dp(64.0f);
+
+        public RadialProgressView(Context context, View view) {
+            if (ArticleViewer.decelerateInterpolator == null) {
+                ArticleViewer.decelerateInterpolator = new DecelerateInterpolator(1.5f);
+                ArticleViewer.progressPaint = new Paint(1);
+                ArticleViewer.progressPaint.setStyle(Style.STROKE);
+                ArticleViewer.progressPaint.setStrokeCap(Cap.ROUND);
+                ArticleViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
+                ArticleViewer.progressPaint.setColor(-1);
+            }
+            this.parent = view;
+        }
+
+        private void updateAnimation() {
+            long currentTimeMillis = System.currentTimeMillis();
+            long j = currentTimeMillis - this.lastUpdateTime;
+            this.lastUpdateTime = currentTimeMillis;
+            if (this.animatedProgressValue != 1.0f) {
+                this.radOffset += ((float) (360 * j)) / 3000.0f;
+                float f = this.currentProgress;
+                float f2 = this.animationProgressStart;
+                float f3 = f - f2;
+                if (f3 > 0.0f) {
+                    this.currentProgressTime += j;
+                    if (this.currentProgressTime >= 300) {
+                        this.animatedProgressValue = f;
+                        this.animationProgressStart = f;
+                        this.currentProgressTime = 0;
+                    } else {
+                        this.animatedProgressValue = f2 + (f3 * ArticleViewer.decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f));
+                    }
+                }
+                this.parent.invalidate();
+            }
+            if (this.animatedProgressValue >= 1.0f && this.previousBackgroundState != -2) {
+                this.animatedAlphaValue -= ((float) j) / 200.0f;
+                if (this.animatedAlphaValue <= 0.0f) {
+                    this.animatedAlphaValue = 0.0f;
+                    this.previousBackgroundState = -2;
+                }
+                this.parent.invalidate();
+            }
+        }
+
+        public void setProgress(float f, boolean z) {
+            if (z) {
+                this.animationProgressStart = this.animatedProgressValue;
+            } else {
+                this.animatedProgressValue = f;
+                this.animationProgressStart = f;
+            }
+            this.currentProgress = f;
+            this.currentProgressTime = 0;
+        }
+
+        public void setBackgroundState(int i, boolean z) {
+            this.lastUpdateTime = System.currentTimeMillis();
+            if (z) {
+                int i2 = this.backgroundState;
+                if (i2 != i) {
+                    this.previousBackgroundState = i2;
+                    this.animatedAlphaValue = 1.0f;
+                    this.backgroundState = i;
+                    this.parent.invalidate();
+                }
+            }
+            this.previousBackgroundState = -2;
+            this.backgroundState = i;
+            this.parent.invalidate();
+        }
+
+        public void setAlpha(float f) {
+            this.alpha = f;
+        }
+
+        public void setScale(float f) {
+            this.scale = f;
+        }
+
+        public void onDraw(Canvas canvas) {
+            Drawable drawable;
+            int i = (int) (((float) this.size) * this.scale);
+            int access$23100 = (ArticleViewer.this.getContainerViewWidth() - i) / 2;
+            int access$23200 = (ArticleViewer.this.getContainerViewHeight() - i) / 2;
+            int i2 = this.previousBackgroundState;
+            if (i2 >= 0 && i2 < 4) {
+                drawable = ArticleViewer.progressDrawables[this.previousBackgroundState];
+                if (drawable != null) {
+                    drawable.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
+                    drawable.setBounds(access$23100, access$23200, access$23100 + i, access$23200 + i);
+                    drawable.draw(canvas);
+                }
+            }
+            i2 = this.backgroundState;
+            if (i2 >= 0 && i2 < 4) {
+                drawable = ArticleViewer.progressDrawables[this.backgroundState];
+                if (drawable != null) {
+                    if (this.previousBackgroundState != -2) {
+                        drawable.setAlpha((int) (((1.0f - this.animatedAlphaValue) * 255.0f) * this.alpha));
+                    } else {
+                        drawable.setAlpha((int) (this.alpha * 255.0f));
+                    }
+                    drawable.setBounds(access$23100, access$23200, access$23100 + i, access$23200 + i);
+                    drawable.draw(canvas);
+                }
+            }
+            i2 = this.backgroundState;
+            if (!(i2 == 0 || i2 == 1)) {
+                i2 = this.previousBackgroundState;
+                if (!(i2 == 0 || i2 == 1)) {
+                    return;
+                }
+            }
+            int dp = AndroidUtilities.dp(4.0f);
+            if (this.previousBackgroundState != -2) {
+                ArticleViewer.progressPaint.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
+            } else {
+                ArticleViewer.progressPaint.setAlpha((int) (this.alpha * 255.0f));
+            }
+            this.progressRect.set((float) (access$23100 + dp), (float) (access$23200 + dp), (float) ((access$23100 + i) - dp), (float) ((access$23200 + i) - dp));
+            canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, this.animatedProgressValue * 360.0f), false, ArticleViewer.progressPaint);
+            updateAnimation();
+        }
+    }
+
+    public class ScrollEvaluator extends IntEvaluator {
+        public Integer evaluate(float f, Integer num, Integer num2) {
+            return super.evaluate(f, num, num2);
+        }
+    }
+
+    private class SearchResult {
+        private PageBlock block;
+        private int index;
+        private Object text;
+
+        private SearchResult() {
+        }
+
+        /* synthetic */ SearchResult(ArticleViewer articleViewer, AnonymousClass1 anonymousClass1) {
+            this();
+        }
+    }
+
+    private class TextSizeCell extends FrameLayout {
+        private int endFontSize = 30;
+        private int lastWidth;
+        private SeekBarView sizeBar;
+        private int startFontSize = 12;
+        private TextPaint textPaint;
+
+        public TextSizeCell(Context context) {
+            super(context);
+            setWillNotDraw(false);
+            this.textPaint = new TextPaint(1);
+            this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+            this.sizeBar = new SeekBarView(context);
+            this.sizeBar.setReportChanges(true);
+            this.sizeBar.setDelegate(new SeekBarViewDelegate(ArticleViewer.this) {
+                public void onSeekBarPressed(boolean z) {
+                }
+
+                public void onSeekBarDrag(boolean z, float f) {
+                    int round = Math.round(((float) TextSizeCell.this.startFontSize) + (((float) (TextSizeCell.this.endFontSize - TextSizeCell.this.startFontSize)) * f));
+                    if (round != SharedConfig.ivFontSize) {
+                        SharedConfig.ivFontSize = round;
+                        Editor edit = MessagesController.getGlobalMainSettings().edit();
+                        edit.putInt("iv_font_size", SharedConfig.ivFontSize);
+                        edit.commit();
+                        ArticleViewer.this.adapter[0].searchTextOffset.clear();
+                        ArticleViewer.this.updatePaintSize();
+                        TextSizeCell.this.invalidate();
+                    }
+                }
+            });
+            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 9.0f, 5.0f, 43.0f, 0.0f));
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteValueText"));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("");
+            stringBuilder.append(SharedConfig.ivFontSize);
+            canvas.drawText(stringBuilder.toString(), (float) (getMeasuredWidth() - AndroidUtilities.dp(39.0f)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(i, i2);
+            i = MeasureSpec.getSize(i);
+            if (this.lastWidth != i) {
+                SeekBarView seekBarView = this.sizeBar;
+                int i3 = SharedConfig.ivFontSize;
+                int i4 = this.startFontSize;
+                seekBarView.setProgress(((float) (i3 - i4)) / ((float) (this.endFontSize - i4)));
+                this.lastWidth = i;
+            }
+        }
+
+        public void invalidate() {
+            super.invalidate();
+            this.sizeBar.invalidate();
+        }
+    }
+
+    private class WindowView extends FrameLayout {
+        private float alpha;
+        private Runnable attachRunnable;
+        private int bHeight;
+        private int bWidth;
+        private int bX;
+        private int bY;
+        private boolean closeAnimationInProgress;
+        private float innerTranslationX;
+        private boolean maybeStartTracking;
+        private boolean movingPage;
+        private boolean selfLayout;
+        private int startMovingHeaderHeight;
+        private boolean startedTracking;
+        private int startedTrackingPointerId;
+        private int startedTrackingX;
+        private int startedTrackingY;
+        private VelocityTracker tracker;
+
+        public WindowView(Context context) {
+            super(context);
+        }
+
+        @TargetApi(21)
+        public WindowInsets dispatchApplyWindowInsets(WindowInsets windowInsets) {
+            WindowInsets windowInsets2 = (WindowInsets) ArticleViewer.this.lastInsets;
+            ArticleViewer.this.lastInsets = windowInsets;
+            if (windowInsets2 == null || !windowInsets2.toString().equals(windowInsets.toString())) {
+                ArticleViewer.this.windowView.requestLayout();
+            }
+            if (VERSION.SDK_INT >= 28) {
+                DisplayCutout displayCutout = ArticleViewer.this.parentActivity.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout();
+                if (displayCutout != null) {
+                    List boundingRects = displayCutout.getBoundingRects();
+                    if (!(boundingRects == null || boundingRects.isEmpty())) {
+                        ArticleViewer articleViewer = ArticleViewer.this;
+                        boolean z = false;
+                        if (((Rect) boundingRects.get(0)).height() != 0) {
+                            z = true;
+                        }
+                        articleViewer.hasCutout = z;
+                    }
+                }
+            }
+            return super.dispatchApplyWindowInsets(windowInsets);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            i = MeasureSpec.getSize(i);
+            i2 = MeasureSpec.getSize(i2);
+            if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
+                setMeasuredDimension(i, i2);
+            } else {
+                setMeasuredDimension(i, i2);
+                WindowInsets windowInsets = (WindowInsets) ArticleViewer.this.lastInsets;
+                if (AndroidUtilities.incorrectDisplaySizeFix) {
+                    int i3 = AndroidUtilities.displaySize.y;
+                    if (i2 > i3) {
+                        i2 = i3;
+                    }
+                    i2 += AndroidUtilities.statusBarHeight;
+                }
+                i2 -= windowInsets.getSystemWindowInsetBottom();
+                i -= windowInsets.getSystemWindowInsetRight() + windowInsets.getSystemWindowInsetLeft();
+                if (windowInsets.getSystemWindowInsetRight() != 0) {
+                    this.bWidth = windowInsets.getSystemWindowInsetRight();
+                    this.bHeight = i2;
+                } else if (windowInsets.getSystemWindowInsetLeft() != 0) {
+                    this.bWidth = windowInsets.getSystemWindowInsetLeft();
+                    this.bHeight = i2;
+                } else {
+                    this.bWidth = i;
+                    this.bHeight = windowInsets.getStableInsetBottom();
+                }
+                i2 -= windowInsets.getSystemWindowInsetTop();
+            }
+            ArticleViewer.this.keyboardVisible = i2 < AndroidUtilities.displaySize.y - AndroidUtilities.dp(100.0f);
+            ArticleViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
+            ArticleViewer.this.photoContainerView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
+            ArticleViewer.this.photoContainerBackground.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
+            ArticleViewer.this.fullscreenVideoContainer.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
+            ViewGroup.LayoutParams layoutParams = ArticleViewer.this.animatingImageView.getLayoutParams();
+            ArticleViewer.this.animatingImageView.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(layoutParams.height, Integer.MIN_VALUE));
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            if (!this.selfLayout) {
+                int i5;
+                int i6;
+                i3 -= i;
+                if (ArticleViewer.this.anchorsOffsetMeasuredWidth != i3) {
+                    for (i5 = 0; i5 < ArticleViewer.this.listView.length; i5++) {
+                        for (Entry value : ArticleViewer.this.adapter[i5].anchorsOffset.entrySet()) {
+                            value.setValue(Integer.valueOf(-1));
+                        }
+                    }
+                    ArticleViewer.this.anchorsOffsetMeasuredWidth = i3;
+                }
+                if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
+                    i5 = 0;
+                    i6 = 0;
+                } else {
+                    WindowInsets windowInsets = (WindowInsets) ArticleViewer.this.lastInsets;
+                    i6 = windowInsets.getSystemWindowInsetLeft();
+                    if (windowInsets.getSystemWindowInsetRight() != 0) {
+                        this.bX = i3 - this.bWidth;
+                        this.bY = 0;
+                    } else if (windowInsets.getSystemWindowInsetLeft() != 0) {
+                        this.bX = 0;
+                        this.bY = 0;
+                    } else {
+                        this.bX = 0;
+                        this.bY = (i4 - i2) - this.bHeight;
+                    }
+                    i5 = windowInsets.getSystemWindowInsetTop() + 0;
+                }
+                ArticleViewer.this.containerView.layout(i6, i5, ArticleViewer.this.containerView.getMeasuredWidth() + i6, ArticleViewer.this.containerView.getMeasuredHeight() + i5);
+                ArticleViewer.this.photoContainerView.layout(i6, i5, ArticleViewer.this.photoContainerView.getMeasuredWidth() + i6, ArticleViewer.this.photoContainerView.getMeasuredHeight() + i5);
+                ArticleViewer.this.photoContainerBackground.layout(i6, i5, ArticleViewer.this.photoContainerBackground.getMeasuredWidth() + i6, ArticleViewer.this.photoContainerBackground.getMeasuredHeight() + i5);
+                ArticleViewer.this.fullscreenVideoContainer.layout(i6, i5, ArticleViewer.this.fullscreenVideoContainer.getMeasuredWidth() + i6, ArticleViewer.this.fullscreenVideoContainer.getMeasuredHeight() + i5);
+                ArticleViewer.this.animatingImageView.layout(0, 0, ArticleViewer.this.animatingImageView.getMeasuredWidth(), ArticleViewer.this.animatingImageView.getMeasuredHeight());
+                if (ArticleViewer.this.runAfterKeyboardClose != null) {
+                    ArticleViewer.this.runAfterKeyboardClose.start();
+                    ArticleViewer.this.runAfterKeyboardClose = null;
+                }
+            }
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            ArticleViewer.this.attachedToWindow = true;
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            ArticleViewer.this.attachedToWindow = false;
+        }
+
+        public void requestDisallowInterceptTouchEvent(boolean z) {
+            handleTouchEvent(null);
+            super.requestDisallowInterceptTouchEvent(z);
+        }
+
+        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+            return !ArticleViewer.this.collapsed && (handleTouchEvent(motionEvent) || super.onInterceptTouchEvent(motionEvent));
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            return !ArticleViewer.this.collapsed && (handleTouchEvent(motionEvent) || super.onTouchEvent(motionEvent));
+        }
+
+        @Keep
+        public void setInnerTranslationX(float f) {
+            this.innerTranslationX = f;
+            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
+                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
+                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
+                drawerLayoutContainer.setAllowDrawContent(z);
+            }
+            invalidate();
+        }
+
+        /* Access modifiers changed, original: protected */
+        public boolean drawChild(Canvas canvas, View view, long j) {
+            int measuredWidth = getMeasuredWidth();
+            int i = (int) this.innerTranslationX;
+            int save = canvas.save();
+            canvas.clipRect(i, 0, measuredWidth, getHeight());
+            boolean drawChild = super.drawChild(canvas, view, j);
+            canvas.restoreToCount(save);
+            if (i != 0 && view == ArticleViewer.this.containerView) {
+                float f = (float) (measuredWidth - i);
+                float min = Math.min(0.8f, f / ((float) measuredWidth));
+                if (min < 0.0f) {
+                    min = 0.0f;
+                }
+                ArticleViewer.this.scrimPaint.setColor(((int) (min * 153.0f)) << 24);
+                canvas.drawRect(0.0f, 0.0f, (float) i, (float) getHeight(), ArticleViewer.this.scrimPaint);
+                min = Math.max(0.0f, Math.min(f / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
+                ArticleViewer.this.layerShadowDrawable.setBounds(i - ArticleViewer.this.layerShadowDrawable.getIntrinsicWidth(), view.getTop(), i, view.getBottom());
+                ArticleViewer.this.layerShadowDrawable.setAlpha((int) (min * 255.0f));
+                ArticleViewer.this.layerShadowDrawable.draw(canvas);
+            }
+            return drawChild;
+        }
+
+        @Keep
+        public float getInnerTranslationX() {
+            return this.innerTranslationX;
+        }
+
+        private void prepareForMoving(MotionEvent motionEvent) {
+            this.maybeStartTracking = false;
+            this.startedTracking = true;
+            this.startedTrackingX = (int) motionEvent.getX();
+            if (ArticleViewer.this.pagesStack.size() > 1) {
+                this.movingPage = true;
+                this.startMovingHeaderHeight = ArticleViewer.this.currentHeaderHeight;
+                ArticleViewer.this.listView[1].setVisibility(0);
+                ArticleViewer.this.listView[1].setAlpha(1.0f);
+                ArticleViewer.this.listView[1].setTranslationX(0.0f);
+                ArticleViewer.this.listView[0].setBackgroundColor(ArticleViewer.this.backgroundPaint.getColor());
+            } else {
+                this.movingPage = false;
+            }
+            ArticleViewer.this.cancelCheckLongPress();
+        }
+
+        public boolean handleTouchEvent(MotionEvent motionEvent) {
+            if (ArticleViewer.this.isPhotoVisible || this.closeAnimationInProgress || ArticleViewer.this.fullscreenVideoContainer.getVisibility() == 0) {
+                return false;
+            }
+            VelocityTracker velocityTracker;
+            if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
+                this.startedTrackingPointerId = motionEvent.getPointerId(0);
+                this.maybeStartTracking = true;
+                this.startedTrackingX = (int) motionEvent.getX();
+                this.startedTrackingY = (int) motionEvent.getY();
+                velocityTracker = this.tracker;
+                if (velocityTracker != null) {
+                    velocityTracker.clear();
+                }
+            } else if (motionEvent != null && motionEvent.getAction() == 2 && motionEvent.getPointerId(0) == this.startedTrackingPointerId) {
+                if (this.tracker == null) {
+                    this.tracker = VelocityTracker.obtain();
+                }
+                int max = Math.max(0, (int) (motionEvent.getX() - ((float) this.startedTrackingX)));
+                int abs = Math.abs(((int) motionEvent.getY()) - this.startedTrackingY);
+                this.tracker.addMovement(motionEvent);
+                if (this.maybeStartTracking && !this.startedTracking && ((float) max) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(max) / 3 > abs) {
+                    prepareForMoving(motionEvent);
+                } else if (this.startedTracking) {
+                    ArticleViewer.this.pressedLinkOwnerLayout = null;
+                    ArticleViewer.this.pressedLinkOwnerView = null;
+                    if (this.movingPage) {
+                        ArticleViewer.this.listView[0].setTranslationX((float) max);
+                    } else {
+                        float f = (float) max;
+                        ArticleViewer.this.containerView.setTranslationX(f);
+                        setInnerTranslationX(f);
+                    }
+                }
+            } else if (motionEvent != null && motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6)) {
+                if (this.tracker == null) {
+                    this.tracker = VelocityTracker.obtain();
+                }
+                this.tracker.computeCurrentVelocity(1000);
+                float xVelocity = this.tracker.getXVelocity();
+                float yVelocity = this.tracker.getYVelocity();
+                if (!this.startedTracking && xVelocity >= 3500.0f && xVelocity > Math.abs(yVelocity)) {
+                    prepareForMoving(motionEvent);
+                }
+                if (this.startedTracking) {
+                    View access$2500 = this.movingPage ? ArticleViewer.this.listView[0] : ArticleViewer.this.containerView;
+                    float x = access$2500.getX();
+                    final boolean z = x < ((float) access$2500.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < yVelocity);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    Animator[] animatorArr;
+                    if (!z) {
+                        x = ((float) access$2500.getMeasuredWidth()) - x;
+                        if (this.movingPage) {
+                            animatorArr = new Animator[1];
+                            animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()});
+                            animatorSet.playTogether(animatorArr);
+                        } else {
+                            animatorArr = new Animator[2];
+                            animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()});
+                            animatorArr[1] = ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()});
+                            animatorSet.playTogether(animatorArr);
+                        }
+                    } else if (this.movingPage) {
+                        animatorArr = new Animator[1];
+                        animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{0.0f});
+                        animatorSet.playTogether(animatorArr);
+                    } else {
+                        animatorArr = new Animator[2];
+                        animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{0.0f});
+                        animatorArr[1] = ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{0.0f});
+                        animatorSet.playTogether(animatorArr);
+                    }
+                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) access$2500.getMeasuredWidth())) * x), 50));
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (WindowView.this.movingPage) {
+                                ArticleViewer.this.listView[0].setBackgroundDrawable(null);
+                                if (!z) {
+                                    WebpageAdapter webpageAdapter = ArticleViewer.this.adapter[1];
+                                    ArticleViewer.this.adapter[1] = ArticleViewer.this.adapter[0];
+                                    ArticleViewer.this.adapter[0] = webpageAdapter;
+                                    RecyclerListView recyclerListView = ArticleViewer.this.listView[1];
+                                    ArticleViewer.this.listView[1] = ArticleViewer.this.listView[0];
+                                    ArticleViewer.this.listView[0] = recyclerListView;
+                                    LinearLayoutManager linearLayoutManager = ArticleViewer.this.layoutManager[1];
+                                    ArticleViewer.this.layoutManager[1] = ArticleViewer.this.layoutManager[0];
+                                    ArticleViewer.this.layoutManager[0] = linearLayoutManager;
+                                    ArticleViewer.this.pagesStack.remove(ArticleViewer.this.pagesStack.size() - 1);
+                                    ArticleViewer articleViewer = ArticleViewer.this;
+                                    articleViewer.currentPage = (WebPage) articleViewer.pagesStack.get(ArticleViewer.this.pagesStack.size() - 1);
+                                }
+                                ArticleViewer.this.listView[1].setVisibility(8);
+                                ArticleViewer.this.headerView.invalidate();
+                            } else if (!z) {
+                                ArticleViewer.this.saveCurrentPagePosition();
+                                ArticleViewer.this.onClosed();
+                            }
+                            WindowView.this.movingPage = false;
+                            WindowView.this.startedTracking = false;
+                            WindowView.this.closeAnimationInProgress = false;
+                        }
+                    });
+                    animatorSet.start();
+                    this.closeAnimationInProgress = true;
+                } else {
+                    this.maybeStartTracking = false;
+                    this.startedTracking = false;
+                    this.movingPage = false;
+                }
+                velocityTracker = this.tracker;
+                if (velocityTracker != null) {
+                    velocityTracker.recycle();
+                    this.tracker = null;
+                }
+            } else if (motionEvent == null) {
+                this.maybeStartTracking = false;
+                this.startedTracking = false;
+                this.movingPage = false;
+                velocityTracker = this.tracker;
+                if (velocityTracker != null) {
+                    velocityTracker.recycle();
+                    this.tracker = null;
+                }
+            }
+            return this.startedTracking;
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void dispatchDraw(Canvas canvas) {
+            super.dispatchDraw(canvas);
+            int i = this.bWidth;
+            if (i != 0) {
+                int i2 = this.bHeight;
+                if (i2 != 0) {
+                    int i3 = this.bX;
+                    if (i3 == 0) {
+                        int i4 = this.bY;
+                        if (i4 == 0) {
+                            canvas.drawRect((float) i3, (float) i4, (float) (i3 + i), (float) (i4 + i2), ArticleViewer.this.blackPaint);
+                            return;
+                        }
+                    }
+                    canvas.drawRect(((float) this.bX) - getTranslationX(), (float) this.bY, ((float) (this.bX + this.bWidth)) - getTranslationX(), (float) (this.bY + this.bHeight), ArticleViewer.this.blackPaint);
+                }
+            }
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            int measuredWidth = getMeasuredWidth();
+            int measuredHeight = getMeasuredHeight();
+            float f = (float) measuredWidth;
+            float f2 = (float) measuredHeight;
+            canvas.drawRect(this.innerTranslationX, 0.0f, f, f2, ArticleViewer.this.backgroundPaint);
+            if (VERSION.SDK_INT >= 21 && ArticleViewer.this.lastInsets != null) {
+                WindowInsets windowInsets = (WindowInsets) ArticleViewer.this.lastInsets;
+                canvas.drawRect(this.innerTranslationX, 0.0f, f, (float) windowInsets.getSystemWindowInsetTop(), ArticleViewer.this.statusBarPaint);
+                if (ArticleViewer.this.hasCutout) {
+                    measuredWidth = windowInsets.getSystemWindowInsetLeft();
+                    if (measuredWidth != 0) {
+                        canvas.drawRect(0.0f, 0.0f, (float) measuredWidth, f2, ArticleViewer.this.statusBarPaint);
+                    }
+                    measuredWidth = windowInsets.getSystemWindowInsetRight();
+                    if (measuredWidth != 0) {
+                        canvas.drawRect((float) (getMeasuredWidth() - measuredWidth), 0.0f, (float) getMeasuredWidth(), f2, ArticleViewer.this.statusBarPaint);
+                    }
+                }
+            }
+        }
+
+        @Keep
+        public void setAlpha(float f) {
+            int i = (int) (255.0f * f);
+            ArticleViewer.this.backgroundPaint.setAlpha(i);
+            ArticleViewer.this.statusBarPaint.setAlpha(i);
+            this.alpha = f;
+            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
+                DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
+                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
+                drawerLayoutContainer.setAllowDrawContent(z);
+            }
+            invalidate();
+        }
+
+        @Keep
+        public float getAlpha() {
+            return this.alpha;
+        }
+
+        public boolean dispatchKeyEventPreIme(KeyEvent keyEvent) {
+            if (keyEvent == null || keyEvent.getKeyCode() != 4 || keyEvent.getAction() != 1) {
+                return super.dispatchKeyEventPreIme(keyEvent);
+            }
+            if (ArticleViewer.this.searchField.isFocused()) {
+                ArticleViewer.this.searchField.clearFocus();
+                AndroidUtilities.hideKeyboard(ArticleViewer.this.searchField);
+            } else {
+                ArticleViewer.this.close(true, false);
+            }
+            return true;
+        }
+    }
+
+    private class BlockAudioCell extends View implements FileDownloadProgressListener {
+        private int TAG;
+        private int buttonPressed;
+        private int buttonState;
+        private int buttonX;
+        private int buttonY;
+        private DrawingText captionLayout;
+        private DrawingText creditLayout;
+        private int creditOffset;
+        private TL_pageBlockAudio currentBlock;
+        private Document currentDocument;
+        private MessageObject currentMessageObject;
+        private StaticLayout durationLayout;
+        private boolean isFirst;
+        private String lastTimeString;
+        private WebpageAdapter parentAdapter;
+        private RadialProgress2 radialProgress;
+        private SeekBar seekBar;
+        private int seekBarX;
+        private int seekBarY;
+        private int textX;
+        private int textY = AndroidUtilities.dp(58.0f);
+        private DrawingText titleLayout;
+
+        public void onProgressUpload(String str, float f, boolean z) {
+        }
+
+        public BlockAudioCell(Context context, WebpageAdapter webpageAdapter) {
+            super(context);
+            this.parentAdapter = webpageAdapter;
+            this.radialProgress = new RadialProgress2(this);
+            this.radialProgress.setCircleRadius(AndroidUtilities.dp(24.0f));
+            this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
+            this.seekBar = new SeekBar(context);
+            this.seekBar.setDelegate(new -$$Lambda$ArticleViewer$BlockAudioCell$WgP383-edJ263u4ZKo-pJ9bitM4(this));
+        }
+
+        public /* synthetic */ void lambda$new$0$ArticleViewer$BlockAudioCell(float f) {
+            MessageObject messageObject = this.currentMessageObject;
+            if (messageObject != null) {
+                messageObject.audioProgress = f;
+                MediaController.getInstance().seekToProgress(this.currentMessageObject, f);
+            }
+        }
+
+        public void setBlock(TL_pageBlockAudio tL_pageBlockAudio, boolean z, boolean z2) {
+            this.currentBlock = tL_pageBlockAudio;
+            this.currentMessageObject = (MessageObject) this.parentAdapter.audioBlocks.get(this.currentBlock);
+            this.currentDocument = this.currentMessageObject.getDocument();
+            this.isFirst = z;
+            String str = "chat_inAudioSeekbarFill";
+            this.seekBar.setColors(Theme.getColor("chat_inAudioSeekbar"), Theme.getColor("chat_inAudioCacheSeekbar"), Theme.getColor(str), Theme.getColor(str), Theme.getColor("chat_inAudioSeekbarSelected"));
+            updateButtonState(false);
+            requestLayout();
+        }
+
+        public MessageObject getMessageObject() {
+            return this.currentMessageObject;
+        }
+
+        /* JADX WARNING: Missing block: B:18:0x0064, code skipped:
+            if (r1 <= ((float) (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f)))) goto L_0x006a;
+     */
+        /* JADX WARNING: Missing block: B:20:0x0068, code skipped:
+            if (r11.buttonState == 0) goto L_0x006a;
+     */
+        /* JADX WARNING: Missing block: B:21:0x006a, code skipped:
+            r11.buttonPressed = 1;
+            invalidate();
+     */
+        public boolean onTouchEvent(android.view.MotionEvent r12) {
+            /*
+            r11 = this;
+            r0 = r12.getX();
+            r1 = r12.getY();
+            r2 = r11.seekBar;
+            r3 = r12.getAction();
+            r4 = r12.getX();
+            r5 = r11.seekBarX;
+            r5 = (float) r5;
+            r4 = r4 - r5;
+            r5 = r12.getY();
+            r6 = r11.seekBarY;
+            r6 = (float) r6;
+            r5 = r5 - r6;
+            r2 = r2.onTouch(r3, r4, r5);
+            r3 = 1;
+            if (r2 == 0) goto L_0x0036;
+        L_0x0025:
+            r12 = r12.getAction();
+            if (r12 != 0) goto L_0x0032;
+        L_0x002b:
+            r12 = r11.getParent();
+            r12.requestDisallowInterceptTouchEvent(r3);
+        L_0x0032:
+            r11.invalidate();
+            return r3;
+        L_0x0036:
+            r2 = r12.getAction();
+            r4 = 0;
+            if (r2 != 0) goto L_0x0070;
+        L_0x003d:
+            r2 = r11.buttonState;
+            r5 = -1;
+            if (r2 == r5) goto L_0x0066;
+        L_0x0042:
+            r2 = r11.buttonX;
+            r5 = (float) r2;
+            r5 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
+            if (r5 < 0) goto L_0x0066;
+        L_0x0049:
+            r5 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+            r6 = org.telegram.messenger.AndroidUtilities.dp(r5);
+            r2 = r2 + r6;
+            r2 = (float) r2;
+            r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
+            if (r0 > 0) goto L_0x0066;
+        L_0x0055:
+            r0 = r11.buttonY;
+            r2 = (float) r0;
+            r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
+            if (r2 < 0) goto L_0x0066;
+        L_0x005c:
+            r2 = org.telegram.messenger.AndroidUtilities.dp(r5);
+            r0 = r0 + r2;
+            r0 = (float) r0;
+            r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1));
+            if (r0 <= 0) goto L_0x006a;
+        L_0x0066:
+            r0 = r11.buttonState;
+            if (r0 != 0) goto L_0x008f;
+        L_0x006a:
+            r11.buttonPressed = r3;
+            r11.invalidate();
+            goto L_0x008f;
+        L_0x0070:
+            r0 = r12.getAction();
+            if (r0 != r3) goto L_0x0086;
+        L_0x0076:
+            r0 = r11.buttonPressed;
+            if (r0 != r3) goto L_0x008f;
+        L_0x007a:
+            r11.buttonPressed = r4;
+            r11.playSoundEffect(r4);
+            r11.didPressedButton(r3);
+            r11.invalidate();
+            goto L_0x008f;
+        L_0x0086:
+            r0 = r12.getAction();
+            r1 = 3;
+            if (r0 != r1) goto L_0x008f;
+        L_0x008d:
+            r11.buttonPressed = r4;
+        L_0x008f:
+            r0 = r11.buttonPressed;
+            if (r0 != 0) goto L_0x00bf;
+        L_0x0093:
+            r5 = org.telegram.ui.ArticleViewer.this;
+            r8 = r11.captionLayout;
+            r9 = r11.textX;
+            r10 = r11.textY;
+            r6 = r12;
+            r7 = r11;
+            r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
+            if (r0 != 0) goto L_0x00bf;
+        L_0x00a3:
+            r5 = org.telegram.ui.ArticleViewer.this;
+            r8 = r11.creditLayout;
+            r9 = r11.textX;
+            r0 = r11.textY;
+            r1 = r11.creditOffset;
+            r10 = r0 + r1;
+            r6 = r12;
+            r7 = r11;
+            r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
+            if (r0 != 0) goto L_0x00bf;
+        L_0x00b7:
+            r12 = super.onTouchEvent(r12);
+            if (r12 == 0) goto L_0x00be;
+        L_0x00bd:
+            goto L_0x00bf;
+        L_0x00be:
+            r3 = 0;
+        L_0x00bf:
+            return r3;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$BlockAudioCell.onTouchEvent(android.view.MotionEvent):boolean");
+        }
+
+        /* Access modifiers changed, original: protected */
+        @SuppressLint({"DrawAllocation", "NewApi"})
+        public void onMeasure(int i, int i2) {
+            int size = MeasureSpec.getSize(i);
+            int dp = AndroidUtilities.dp(54.0f);
+            TL_pageBlockAudio tL_pageBlockAudio = this.currentBlock;
+            int i3 = 1;
+            if (tL_pageBlockAudio != null) {
+                int i4 = tL_pageBlockAudio.level;
+                if (i4 > 0) {
+                    this.textX = AndroidUtilities.dp((float) (i4 * 14)) + AndroidUtilities.dp(18.0f);
+                } else {
+                    this.textX = AndroidUtilities.dp(18.0f);
+                }
+                int dp2 = (size - this.textX) - AndroidUtilities.dp(18.0f);
+                int dp3 = AndroidUtilities.dp(44.0f);
+                this.buttonX = AndroidUtilities.dp(16.0f);
+                this.buttonY = AndroidUtilities.dp(5.0f);
+                RadialProgress2 radialProgress2 = this.radialProgress;
+                int i5 = this.buttonX;
+                int i6 = this.buttonY;
+                radialProgress2.setProgressRect(i5, i6, i5 + dp3, i6 + dp3);
+                ArticleViewer articleViewer = ArticleViewer.this;
+                TL_pageBlockAudio tL_pageBlockAudio2 = this.currentBlock;
+                this.captionLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockAudio2.caption.text, dp2, this.textY, tL_pageBlockAudio2, this.parentAdapter);
+                if (this.captionLayout != null) {
+                    this.creditOffset = AndroidUtilities.dp(8.0f) + this.captionLayout.getHeight();
+                    dp += this.creditOffset + AndroidUtilities.dp(8.0f);
+                }
+                int i7 = dp;
+                articleViewer = ArticleViewer.this;
+                tL_pageBlockAudio2 = this.currentBlock;
+                this.creditLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockAudio2.caption.credit, dp2, this.textY + this.creditOffset, tL_pageBlockAudio2, articleViewer.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
+                if (this.creditLayout != null) {
+                    i7 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
+                }
+                if (!this.isFirst && this.currentBlock.level <= 0) {
+                    i7 += AndroidUtilities.dp(8.0f);
+                }
+                String musicAuthor = this.currentMessageObject.getMusicAuthor(false);
+                String musicTitle = this.currentMessageObject.getMusicTitle(false);
+                this.seekBarX = (this.buttonX + AndroidUtilities.dp(50.0f)) + dp3;
+                int dp4 = (size - this.seekBarX) - AndroidUtilities.dp(18.0f);
+                if (TextUtils.isEmpty(musicTitle) && TextUtils.isEmpty(musicAuthor)) {
+                    this.titleLayout = null;
+                    this.seekBarY = this.buttonY + ((dp3 - AndroidUtilities.dp(30.0f)) / 2);
+                } else {
+                    SpannableStringBuilder spannableStringBuilder;
+                    if (!TextUtils.isEmpty(musicTitle) && !TextUtils.isEmpty(musicAuthor)) {
+                        spannableStringBuilder = new SpannableStringBuilder(String.format("%s - %s", new Object[]{musicAuthor, musicTitle}));
+                    } else if (TextUtils.isEmpty(musicTitle)) {
+                        spannableStringBuilder = new SpannableStringBuilder(musicAuthor);
+                    } else {
+                        spannableStringBuilder = new SpannableStringBuilder(musicTitle);
+                    }
+                    if (!TextUtils.isEmpty(musicAuthor)) {
+                        spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, musicAuthor.length(), 18);
+                    }
+                    CharSequence ellipsize = TextUtils.ellipsize(spannableStringBuilder, Theme.chat_audioTitlePaint, (float) dp4, TruncateAt.END);
+                    this.titleLayout = new DrawingText();
+                    this.titleLayout.textLayout = new StaticLayout(ellipsize, ArticleViewer.audioTimePaint, dp4, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.titleLayout.parentBlock = this.currentBlock;
+                    this.seekBarY = (this.buttonY + ((dp3 - AndroidUtilities.dp(30.0f)) / 2)) + AndroidUtilities.dp(11.0f);
+                }
+                this.seekBar.setSize(dp4, AndroidUtilities.dp(30.0f));
+                i3 = i7;
+            }
+            setMeasuredDimension(size, i3);
+            updatePlayingMessageProgress();
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                this.radialProgress.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
+                this.radialProgress.setProgressColor(Theme.getColor("chat_inFileProgress"));
+                this.radialProgress.draw(canvas);
+                canvas.save();
+                canvas.translate((float) this.seekBarX, (float) this.seekBarY);
+                this.seekBar.draw(canvas);
+                canvas.restore();
+                if (this.durationLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) (this.buttonX + AndroidUtilities.dp(54.0f)), (float) (this.seekBarY + AndroidUtilities.dp(6.0f)));
+                    this.durationLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.titleLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) (this.buttonX + AndroidUtilities.dp(54.0f)), (float) (this.seekBarY - AndroidUtilities.dp(16.0f)));
+                    this.titleLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.captionLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.currentBlock.level > 0) {
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                }
+            }
+        }
+
+        private int getIconForCurrentState() {
+            int i = this.buttonState;
+            if (i == 1) {
+                return 1;
+            }
+            if (i == 2) {
+                return 2;
+            }
+            return i == 3 ? 3 : 0;
+        }
+
+        public void updatePlayingMessageProgress() {
+            if (this.currentDocument != null && this.currentMessageObject != null) {
+                if (!this.seekBar.isDragging()) {
+                    this.seekBar.setProgress(this.currentMessageObject.audioProgress);
+                }
+                int i = 0;
+                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
+                    i = this.currentMessageObject.audioProgressSec;
+                } else {
+                    for (int i2 = 0; i2 < this.currentDocument.attributes.size(); i2++) {
+                        DocumentAttribute documentAttribute = (DocumentAttribute) this.currentDocument.attributes.get(i2);
+                        if (documentAttribute instanceof TL_documentAttributeAudio) {
+                            i = documentAttribute.duration;
+                            break;
+                        }
+                    }
+                }
+                String formatShortDuration = AndroidUtilities.formatShortDuration(i);
+                String str = this.lastTimeString;
+                if (str == null || !(str == null || str.equals(formatShortDuration))) {
+                    this.lastTimeString = formatShortDuration;
+                    ArticleViewer.audioTimePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+                    this.durationLayout = new StaticLayout(formatShortDuration, ArticleViewer.audioTimePaint, (int) Math.ceil((double) ArticleViewer.audioTimePaint.measureText(formatShortDuration)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                }
+                ArticleViewer.audioTimePaint.setColor(ArticleViewer.this.getTextColor());
+                invalidate();
+            }
+        }
+
+        public void updateButtonState(boolean z) {
+            String attachFileName = FileLoader.getAttachFileName(this.currentDocument);
+            boolean exists = FileLoader.getPathToAttach(this.currentDocument, true).exists();
+            if (TextUtils.isEmpty(attachFileName)) {
+                this.radialProgress.setIcon(4, false, false);
+                return;
+            }
+            if (exists) {
+                DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
+                boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
+                    this.buttonState = 0;
+                } else {
+                    this.buttonState = 1;
+                }
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
+            } else {
+                DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(attachFileName, null, this);
+                if (FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(attachFileName)) {
+                    this.buttonState = 3;
+                    Float fileProgress = ImageLoader.getInstance().getFileProgress(attachFileName);
+                    if (fileProgress != null) {
+                        this.radialProgress.setProgress(fileProgress.floatValue(), z);
+                    } else {
+                        this.radialProgress.setProgress(0.0f, z);
+                    }
+                    this.radialProgress.setIcon(getIconForCurrentState(), true, z);
+                } else {
+                    this.buttonState = 2;
+                    this.radialProgress.setProgress(0.0f, z);
+                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
+                }
+            }
+            updatePlayingMessageProgress();
+        }
+
+        private void didPressedButton(boolean z) {
+            int i = this.buttonState;
+            if (i == 0) {
+                if (MediaController.getInstance().setPlaylist(this.parentAdapter.audioMessages, this.currentMessageObject, false)) {
+                    this.buttonState = 1;
+                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
+                    invalidate();
+                }
+            } else if (i == 1) {
+                if (MediaController.getInstance().lambda$startAudioAgain$5$MediaController(this.currentMessageObject)) {
+                    this.buttonState = 0;
+                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
+                    invalidate();
+                }
+            } else if (i == 2) {
+                this.radialProgress.setProgress(0.0f, false);
+                FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, ArticleViewer.this.currentPage, 1, 1);
+                this.buttonState = 3;
+                this.radialProgress.setIcon(getIconForCurrentState(), true, z);
+                invalidate();
+            } else if (i == 3) {
+                FileLoader.getInstance(ArticleViewer.this.currentAccount).cancelLoadFile(this.currentDocument);
+                this.buttonState = 2;
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
+                invalidate();
+            }
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            updateButtonState(false);
+        }
+
+        public void onFailedDownload(String str, boolean z) {
+            updateButtonState(true);
+        }
+
+        public void onSuccessDownload(String str) {
+            this.radialProgress.setProgress(1.0f, true);
+            updateButtonState(true);
+        }
+
+        public void onProgressDownload(String str, float f) {
+            this.radialProgress.setProgress(f, true);
+            if (this.buttonState != 3) {
+                updateButtonState(true);
+            }
+        }
+
+        public int getObserverTag() {
+            return this.TAG;
+        }
+    }
+
+    private class BlockPhotoCell extends FrameLayout implements FileDownloadProgressListener {
         private int TAG;
         boolean autoDownload;
         private int buttonPressed;
@@ -6191,9 +6299,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
             tL_pageBlockPhoto = this.currentBlock;
             if (tL_pageBlockPhoto != null) {
-                Photo access$14900 = ArticleViewer.this.getPhotoWithId(tL_pageBlockPhoto.photo_id);
-                if (access$14900 != null) {
-                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(access$14900.sizes, AndroidUtilities.getPhotoSize());
+                Photo access$14800 = ArticleViewer.this.getPhotoWithId(tL_pageBlockPhoto.photo_id);
+                if (access$14800 != null) {
+                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(access$14800.sizes, AndroidUtilities.getPhotoSize());
                 } else {
                     this.currentPhotoObject = null;
                 }
@@ -6390,8 +6498,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* JADX WARNING: Removed duplicated region for block: B:59:0x0180  */
         /* JADX WARNING: Removed duplicated region for block: B:62:0x018d  */
         /* JADX WARNING: Removed duplicated region for block: B:70:0x0251  */
-        /* JADX WARNING: Removed duplicated region for block: B:103:0x0313  */
-        /* JADX WARNING: Removed duplicated region for block: B:106:0x031f  */
         /* JADX WARNING: Removed duplicated region for block: B:9:0x0047  */
         @android.annotation.SuppressLint({"NewApi"})
         public void onMeasure(int r28, int r29) {
@@ -6436,7 +6542,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = 0;
         L_0x0043:
             r0 = r10.currentBlock;
-            if (r0 == 0) goto L_0x032a;
+            if (r0 == 0) goto L_0x030f;
         L_0x0047:
             r2 = org.telegram.ui.ArticleViewer.this;
             r3 = r0.photo_id;
@@ -6848,24 +6954,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r9 = r9 + r0;
         L_0x030e:
             r13 = r9;
-            r0 = r10.captionLayout;
-            if (r0 == 0) goto L_0x031b;
-        L_0x0313:
-            r1 = r10.textX;
-            r0.x = r1;
-            r1 = r10.textY;
-            r0.y = r1;
-        L_0x031b:
-            r0 = r10.creditLayout;
-            if (r0 == 0) goto L_0x032a;
-        L_0x031f:
-            r1 = r10.textX;
-            r0.x = r1;
-            r1 = r10.textY;
-            r2 = r10.creditOffset;
-            r1 = r1 + r2;
-            r0.y = r1;
-        L_0x032a:
+        L_0x030f:
             r0 = r10.channelCell;
             r1 = r28;
             r2 = r29;
@@ -6887,9 +6976,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                int measuredWidth;
-                int imageY;
-                int i;
                 if (!(this.imageView.hasBitmapImage() && this.imageView.getCurrentAlpha() == 1.0f)) {
                     canvas.drawRect((float) this.imageView.getImageX(), (float) this.imageView.getImageY(), (float) this.imageView.getImageX2(), (float) this.imageView.getImageY2(), ArticleViewer.photoBackgroundPaint);
                 }
@@ -6898,37 +6984,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     this.radialProgress.draw(canvas);
                 }
                 if (!TextUtils.isEmpty(this.currentBlock.url)) {
-                    measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(35.0f);
-                    imageY = this.imageView.getImageY() + AndroidUtilities.dp(11.0f);
+                    int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(35.0f);
+                    int imageY = this.imageView.getImageY() + AndroidUtilities.dp(11.0f);
                     this.linkDrawable.setBounds(measuredWidth, imageY, AndroidUtilities.dp(24.0f) + measuredWidth, AndroidUtilities.dp(24.0f) + imageY);
                     this.linkDrawable.draw(canvas);
                 }
-                imageY = 0;
                 if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
-                } else {
-                    i = 0;
                 }
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    float dp = (float) AndroidUtilities.dp(18.0f);
-                    float dp2 = (float) AndroidUtilities.dp(20.0f);
-                    measuredWidth = getMeasuredHeight();
-                    if (this.currentBlock.bottom) {
-                        imageY = AndroidUtilities.dp(6.0f);
-                    }
-                    canvas.drawRect(dp, 0.0f, dp2, (float) (measuredWidth - imageY), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -7031,841 +7105,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
             accessibilityNodeInfo.setText(stringBuilder.toString());
         }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.captionLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.creditLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
     }
 
-    private class BlockPreformattedCell extends FrameLayout implements ArticleSelectableView {
-        private TL_pageBlockPreformatted currentBlock;
-        private WebpageAdapter parentAdapter;
-        private HorizontalScrollView scrollView;
-        private View textContainer;
-        private DrawingText textLayout;
-
-        public BlockPreformattedCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-            this.scrollView = new HorizontalScrollView(context, ArticleViewer.this) {
-                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                    if (BlockPreformattedCell.this.textContainer.getMeasuredWidth() > getMeasuredWidth()) {
-                        ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
-                    }
-                    return super.onInterceptTouchEvent(motionEvent);
-                }
-
-                /* Access modifiers changed, original: protected */
-                public void onScrollChanged(int i, int i2, int i3, int i4) {
-                    super.onScrollChanged(i, i2, i3, i4);
-                    if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
-                        ArticleViewer.this.pressedLinkOwnerLayout = null;
-                        ArticleViewer.this.pressedLinkOwnerView = null;
-                    }
-                }
-            };
-            this.scrollView.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
-            addView(this.scrollView, LayoutHelper.createFrame(-1, -2.0f));
-            this.textContainer = new View(context, ArticleViewer.this) {
-                /* Access modifiers changed, original: protected */
-                public void onMeasure(int i, int i2) {
-                    i2 = 0;
-                    int i3 = 1;
-                    if (BlockPreformattedCell.this.currentBlock != null) {
-                        BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
-                        blockPreformattedCell.textLayout = ArticleViewer.this.createLayoutForText(this, null, blockPreformattedCell.currentBlock.text, AndroidUtilities.dp(5000.0f), 0, BlockPreformattedCell.this.currentBlock, BlockPreformattedCell.this.parentAdapter);
-                        if (BlockPreformattedCell.this.textLayout != null) {
-                            i = BlockPreformattedCell.this.textLayout.getHeight() + 0;
-                            int lineCount = BlockPreformattedCell.this.textLayout.getLineCount();
-                            while (i2 < lineCount) {
-                                i3 = Math.max((int) Math.ceil((double) BlockPreformattedCell.this.textLayout.getLineWidth(i2)), i3);
-                                i2++;
-                            }
-                            BlockPreformattedCell.this.textLayout.x = (int) getX();
-                            BlockPreformattedCell.this.textLayout.y = (int) getY();
-                        } else {
-                            i = 0;
-                        }
-                    } else {
-                        i = 1;
-                    }
-                    setMeasuredDimension(i3 + AndroidUtilities.dp(32.0f), i);
-                }
-
-                public boolean onTouchEvent(MotionEvent motionEvent) {
-                    BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
-                    return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, blockPreformattedCell.textLayout, 0, 0) || super.onTouchEvent(motionEvent);
-                }
-
-                /* Access modifiers changed, original: protected */
-                public void onDraw(Canvas canvas) {
-                    if (BlockPreformattedCell.this.textLayout != null) {
-                        canvas.save();
-                        BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
-                        ArticleViewer.this.textSelectionHelper.draw(canvas, blockPreformattedCell);
-                        BlockPreformattedCell.this.textLayout.draw(canvas);
-                        canvas.restore();
-                    }
-                }
-            };
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-2, -1);
-            int dp = AndroidUtilities.dp(16.0f);
-            layoutParams.rightMargin = dp;
-            layoutParams.leftMargin = dp;
-            dp = AndroidUtilities.dp(12.0f);
-            layoutParams.bottomMargin = dp;
-            layoutParams.topMargin = dp;
-            this.scrollView.addView(this.textContainer, layoutParams);
-            setWillNotDraw(false);
-        }
-
-        public void setBlock(TL_pageBlockPreformatted tL_pageBlockPreformatted) {
-            this.currentBlock = tL_pageBlockPreformatted;
-            this.scrollView.setScrollX(0);
-            this.textContainer.requestLayout();
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            i = MeasureSpec.getSize(i);
-            this.scrollView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(0, 0));
-            setMeasuredDimension(i, this.scrollView.getMeasuredHeight());
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (this.currentBlock != null) {
-                canvas.drawRect(0.0f, (float) AndroidUtilities.dp(8.0f), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(8.0f)), ArticleViewer.preformattedBackgroundPaint);
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    private class BlockPullquoteCell extends View implements ArticleSelectableView {
-        private TL_pageBlockPullquote currentBlock;
-        private WebpageAdapter parentAdapter;
-        private DrawingText textLayout;
-        private DrawingText textLayout2;
-        private int textX = AndroidUtilities.dp(18.0f);
-        private int textY = AndroidUtilities.dp(8.0f);
-        private int textY2;
-
-        public BlockPullquoteCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-        }
-
-        public void setBlock(TL_pageBlockPullquote tL_pageBlockPullquote) {
-            this.currentBlock = tL_pageBlockPullquote;
-            requestLayout();
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            if (!ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY)) {
-                if (!(ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout2, this.textX, this.textY2) || super.onTouchEvent(motionEvent))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            int i3;
-            i = MeasureSpec.getSize(i);
-            TL_pageBlockPullquote tL_pageBlockPullquote = this.currentBlock;
-            if (tL_pageBlockPullquote != null) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockPullquote.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter);
-                i3 = 0;
-                if (this.textLayout != null) {
-                    i3 = 0 + (AndroidUtilities.dp(8.0f) + this.textLayout.getHeight());
-                    DrawingText drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
-                }
-                this.textY2 = AndroidUtilities.dp(2.0f) + i3;
-                this.textLayout2 = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption, i - AndroidUtilities.dp(36.0f), this.textY2, this.currentBlock, this.parentAdapter);
-                if (this.textLayout2 != null) {
-                    i3 += AndroidUtilities.dp(8.0f) + this.textLayout2.getHeight();
-                    DrawingText drawingText2 = this.textLayout2;
-                    drawingText2.x = this.textX;
-                    drawingText2.y = this.textY2;
-                }
-                if (i3 != 0) {
-                    i3 += AndroidUtilities.dp(8.0f);
-                }
-            } else {
-                i3 = 1;
-            }
-            setMeasuredDimension(i, i3);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (this.currentBlock != null) {
-                int i = 0;
-                if (this.textLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
-                    this.textLayout.draw(canvas);
-                    canvas.restore();
-                    i = 1;
-                }
-                if (this.textLayout2 != null) {
-                    canvas.save();
-                    canvas.translate((float) this.textX, (float) this.textY2);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
-                    this.textLayout2.draw(canvas);
-                    canvas.restore();
-                }
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.textLayout2;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    private class BlockRelatedArticlesCell extends View implements ArticleSelectableView {
-        private TL_pageBlockRelatedArticlesChild currentBlock;
-        private boolean divider;
-        private boolean drawImage;
-        private ImageReceiver imageView;
-        private WebpageAdapter parentAdapter;
-        private DrawingText textLayout;
-        private DrawingText textLayout2;
-        private int textOffset;
-        private int textX = AndroidUtilities.dp(18.0f);
-        private int textY = AndroidUtilities.dp(10.0f);
-
-        public BlockRelatedArticlesCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-            this.imageView = new ImageReceiver(this);
-            this.imageView.setRoundRadius(AndroidUtilities.dp(6.0f));
-        }
-
-        public void setBlock(TL_pageBlockRelatedArticlesChild tL_pageBlockRelatedArticlesChild) {
-            this.currentBlock = tL_pageBlockRelatedArticlesChild;
-            requestLayout();
-        }
-
-        /* Access modifiers changed, original: protected */
-        @SuppressLint({"DrawAllocation", "NewApi"})
-        public void onMeasure(int i, int i2) {
-            int dp;
-            int i3;
-            Object obj;
-            int i4;
-            String formatString;
-            int size = MeasureSpec.getSize(i);
-            this.divider = this.currentBlock.num != this.currentBlock.parent.articles.size() - 1;
-            TL_pageRelatedArticle tL_pageRelatedArticle = (TL_pageRelatedArticle) this.currentBlock.parent.articles.get(this.currentBlock.num);
-            int dp2 = AndroidUtilities.dp((float) (SharedConfig.ivFontSize - 16));
-            long j = tL_pageRelatedArticle.photo_id;
-            Photo access$14900 = j != 0 ? ArticleViewer.this.getPhotoWithId(j) : null;
-            if (access$14900 != null) {
-                this.drawImage = true;
-                PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$14900.sizes, AndroidUtilities.getPhotoSize());
-                PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(access$14900.sizes, 80, true);
-                if (closestPhotoSizeWithSize == closestPhotoSizeWithSize2) {
-                    closestPhotoSizeWithSize2 = null;
-                }
-                this.imageView.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, access$14900), "64_64", ImageLocation.getForPhoto(closestPhotoSizeWithSize2, access$14900), "64_64_b", closestPhotoSizeWithSize.size, null, ArticleViewer.this.currentPage, 1);
-            } else {
-                this.drawImage = false;
-            }
-            int dp3 = AndroidUtilities.dp(60.0f);
-            int dp4 = size - AndroidUtilities.dp(36.0f);
-            if (this.drawImage) {
-                dp = AndroidUtilities.dp(44.0f);
-                this.imageView.setImageCoords((size - dp) - AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), dp, dp);
-                dp4 -= this.imageView.getImageWidth() + AndroidUtilities.dp(6.0f);
-            }
-            int i5 = dp4;
-            int dp5 = AndroidUtilities.dp(18.0f);
-            String str = tL_pageRelatedArticle.title;
-            if (str != null) {
-                i3 = dp3;
-                this.textLayout = ArticleViewer.this.createLayoutForText(this, str, null, i5, this.textY, this.currentBlock, Alignment.ALIGN_NORMAL, 3, this.parentAdapter);
-            } else {
-                i3 = dp3;
-            }
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                dp = drawingText.getLineCount();
-                dp4 = 4 - dp;
-                this.textOffset = (this.textLayout.getHeight() + AndroidUtilities.dp(6.0f)) + dp2;
-                dp5 += this.textLayout.getHeight();
-                for (int i6 = 0; i6 < dp; i6++) {
-                    if (this.textLayout.getLineLeft(i6) != 0.0f) {
-                        obj = 1;
-                        break;
-                    }
-                }
-                obj = null;
-                DrawingText drawingText2 = this.textLayout;
-                drawingText2.x = this.textX;
-                drawingText2.y = this.textY;
-                i4 = dp4;
-            } else {
-                this.textOffset = 0;
-                obj = null;
-                i4 = 4;
-            }
-            if (tL_pageRelatedArticle.published_date != 0 && !TextUtils.isEmpty(tL_pageRelatedArticle.author)) {
-                formatString = LocaleController.formatString("ArticleDateByAuthor", NUM, LocaleController.getInstance().chatFullDate.format(((long) tL_pageRelatedArticle.published_date) * 1000), tL_pageRelatedArticle.author);
-            } else if (!TextUtils.isEmpty(tL_pageRelatedArticle.author)) {
-                formatString = LocaleController.formatString("ArticleByAuthor", NUM, tL_pageRelatedArticle.author);
-            } else if (tL_pageRelatedArticle.published_date != 0) {
-                formatString = LocaleController.getInstance().chatFullDate.format(((long) tL_pageRelatedArticle.published_date) * 1000);
-            } else if (TextUtils.isEmpty(tL_pageRelatedArticle.description)) {
-                formatString = tL_pageRelatedArticle.url;
-            } else {
-                formatString = tL_pageRelatedArticle.description;
-            }
-            str = formatString;
-            ArticleViewer articleViewer = ArticleViewer.this;
-            int i7 = this.textOffset + this.textY;
-            TL_pageBlockRelatedArticlesChild tL_pageBlockRelatedArticlesChild = this.currentBlock;
-            Alignment ALIGN_RIGHT = (articleViewer.isRtl || obj != null) ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL;
-            this.textLayout2 = articleViewer.createLayoutForText(this, str, null, i5, i7, tL_pageBlockRelatedArticlesChild, ALIGN_RIGHT, i4, this.parentAdapter);
-            DrawingText drawingText3 = this.textLayout2;
-            if (drawingText3 != null) {
-                dp5 += drawingText3.getHeight();
-                if (this.textLayout != null) {
-                    dp5 += AndroidUtilities.dp(6.0f) + dp2;
-                }
-                drawingText3 = this.textLayout2;
-                drawingText3.x = this.textX;
-                drawingText3.y = this.textY + this.textOffset;
-            }
-            setMeasuredDimension(size, Math.max(i3, dp5) + this.divider);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (this.currentBlock != null) {
-                int i;
-                if (this.drawImage) {
-                    this.imageView.draw(canvas);
-                }
-                canvas.save();
-                canvas.translate((float) this.textX, (float) AndroidUtilities.dp(10.0f));
-                int i2 = 0;
-                if (this.textLayout != null) {
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
-                    this.textLayout.draw(canvas);
-                    i = 1;
-                } else {
-                    i = 0;
-                }
-                if (this.textLayout2 != null) {
-                    canvas.translate(0.0f, (float) this.textOffset);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
-                    this.textLayout2.draw(canvas);
-                }
-                canvas.restore();
-                if (this.divider) {
-                    float dp = ArticleViewer.this.isRtl ? 0.0f : (float) AndroidUtilities.dp(17.0f);
-                    float measuredHeight = (float) (getMeasuredHeight() - 1);
-                    i = getMeasuredWidth();
-                    if (ArticleViewer.this.isRtl) {
-                        i2 = AndroidUtilities.dp(17.0f);
-                    }
-                    canvas.drawLine(dp, measuredHeight, (float) (i - i2), (float) (getMeasuredHeight() - 1), ArticleViewer.dividerPaint);
-                }
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.textLayout2;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    private class BlockRelatedArticlesHeaderCell extends View implements ArticleSelectableView {
-        private TL_pageBlockRelatedArticles currentBlock;
-        private WebpageAdapter parentAdapter;
-        private DrawingText textLayout;
-        private int textX = AndroidUtilities.dp(18.0f);
-        private int textY;
-
-        public BlockRelatedArticlesHeaderCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-        }
-
-        public void setBlock(TL_pageBlockRelatedArticles tL_pageBlockRelatedArticles) {
-            this.currentBlock = tL_pageBlockRelatedArticles;
-            requestLayout();
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(motionEvent);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            i = MeasureSpec.getSize(i);
-            TL_pageBlockRelatedArticles tL_pageBlockRelatedArticles = this.currentBlock;
-            if (tL_pageBlockRelatedArticles != null) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockRelatedArticles.title, i - AndroidUtilities.dp(52.0f), 0, this.currentBlock, Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
-                if (this.textLayout != null) {
-                    this.textY = AndroidUtilities.dp(6.0f) + ((AndroidUtilities.dp(32.0f) - this.textLayout.getHeight()) / 2);
-                }
-            }
-            if (this.textLayout != null) {
-                setMeasuredDimension(i, AndroidUtilities.dp(38.0f));
-                DrawingText drawingText = this.textLayout;
-                drawingText.x = this.textX;
-                drawingText.y = this.textY;
-                return;
-            }
-            setMeasuredDimension(i, 1);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (!(this.currentBlock == null || this.textLayout == null)) {
-                canvas.save();
-                canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
-                this.textLayout.draw(canvas);
-                canvas.restore();
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    private class BlockSlideshowCell extends FrameLayout implements ArticleSelectableView {
-        private DrawingText captionLayout;
-        private DrawingText creditLayout;
-        private int creditOffset;
-        private TL_pageBlockSlideshow currentBlock;
-        private int currentPage;
-        private View dotsContainer;
-        private PagerAdapter innerAdapter;
-        private ViewPager innerListView;
-        private float pageOffset;
-        private WebpageAdapter parentAdapter;
-        private int textX = AndroidUtilities.dp(18.0f);
-        private int textY;
-
-        public BlockSlideshowCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-            if (ArticleViewer.dotsPaint == null) {
-                ArticleViewer.dotsPaint = new Paint(1);
-                ArticleViewer.dotsPaint.setColor(-1);
-            }
-            this.innerListView = new ViewPager(context, ArticleViewer.this) {
-                public boolean onTouchEvent(MotionEvent motionEvent) {
-                    return super.onTouchEvent(motionEvent);
-                }
-
-                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                    ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
-                    return super.onInterceptTouchEvent(motionEvent);
-                }
-            };
-            this.innerListView.addOnPageChangeListener(new OnPageChangeListener(ArticleViewer.this) {
-                public void onPageScrollStateChanged(int i) {
-                }
-
-                public void onPageScrolled(int i, float f, int i2) {
-                    f = (float) BlockSlideshowCell.this.innerListView.getMeasuredWidth();
-                    if (f != 0.0f) {
-                        BlockSlideshowCell blockSlideshowCell = BlockSlideshowCell.this;
-                        blockSlideshowCell.pageOffset = (((((float) i) * f) + ((float) i2)) - (((float) blockSlideshowCell.currentPage) * f)) / f;
-                        BlockSlideshowCell.this.dotsContainer.invalidate();
-                    }
-                }
-
-                public void onPageSelected(int i) {
-                    BlockSlideshowCell.this.currentPage = i;
-                    BlockSlideshowCell.this.dotsContainer.invalidate();
-                }
-            });
-            ViewPager viewPager = this.innerListView;
-            AnonymousClass3 anonymousClass3 = new PagerAdapter(ArticleViewer.this) {
-
-                class ObjectContainer {
-                    private PageBlock block;
-                    private View view;
-
-                    ObjectContainer() {
-                    }
-                }
-
-                public int getCount() {
-                    if (BlockSlideshowCell.this.currentBlock == null) {
-                        return 0;
-                    }
-                    return BlockSlideshowCell.this.currentBlock.items.size();
-                }
-
-                public boolean isViewFromObject(View view, Object obj) {
-                    return ((ObjectContainer) obj).view == view;
-                }
-
-                public int getItemPosition(Object obj) {
-                    return BlockSlideshowCell.this.currentBlock.items.contains(((ObjectContainer) obj).block) ? -1 : -2;
-                }
-
-                public Object instantiateItem(ViewGroup viewGroup, int i) {
-                    View blockPhotoCell;
-                    PageBlock pageBlock = (PageBlock) BlockSlideshowCell.this.currentBlock.items.get(i);
-                    BlockSlideshowCell blockSlideshowCell;
-                    if (pageBlock instanceof TL_pageBlockPhoto) {
-                        blockSlideshowCell = BlockSlideshowCell.this;
-                        blockPhotoCell = new BlockPhotoCell(blockSlideshowCell.getContext(), BlockSlideshowCell.this.parentAdapter, 1);
-                        blockPhotoCell.setBlock((TL_pageBlockPhoto) pageBlock, true, true);
-                    } else {
-                        blockSlideshowCell = BlockSlideshowCell.this;
-                        blockPhotoCell = new BlockVideoCell(blockSlideshowCell.getContext(), BlockSlideshowCell.this.parentAdapter, 1);
-                        blockPhotoCell.setBlock((TL_pageBlockVideo) pageBlock, true, true);
-                    }
-                    viewGroup.addView(blockPhotoCell);
-                    ObjectContainer objectContainer = new ObjectContainer();
-                    objectContainer.view = blockPhotoCell;
-                    objectContainer.block = pageBlock;
-                    return objectContainer;
-                }
-
-                public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-                    viewGroup.removeView(((ObjectContainer) obj).view);
-                }
-
-                public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
-                    if (dataSetObserver != null) {
-                        super.unregisterDataSetObserver(dataSetObserver);
-                    }
-                }
-            };
-            this.innerAdapter = anonymousClass3;
-            viewPager.setAdapter(anonymousClass3);
-            AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, Theme.getColor("windowBackgroundWhite"));
-            addView(this.innerListView);
-            this.dotsContainer = new View(context, ArticleViewer.this) {
-                /* Access modifiers changed, original: protected */
-                public void onDraw(Canvas canvas) {
-                    if (BlockSlideshowCell.this.currentBlock != null) {
-                        int dp;
-                        int measuredWidth;
-                        int count = BlockSlideshowCell.this.innerAdapter.getCount();
-                        int dp2 = ((AndroidUtilities.dp(7.0f) * count) + ((count - 1) * AndroidUtilities.dp(6.0f))) + AndroidUtilities.dp(4.0f);
-                        if (dp2 < getMeasuredWidth()) {
-                            count = (getMeasuredWidth() - dp2) / 2;
-                        } else {
-                            dp2 = AndroidUtilities.dp(4.0f);
-                            dp = AndroidUtilities.dp(13.0f);
-                            measuredWidth = ((getMeasuredWidth() - AndroidUtilities.dp(8.0f)) / 2) / dp;
-                            int i = (count - measuredWidth) - 1;
-                            if (BlockSlideshowCell.this.currentPage != i || BlockSlideshowCell.this.pageOffset >= 0.0f) {
-                                if (BlockSlideshowCell.this.currentPage >= i) {
-                                    count = ((count - (measuredWidth * 2)) - 1) * dp;
-                                } else if (BlockSlideshowCell.this.currentPage > measuredWidth) {
-                                    count = ((int) (BlockSlideshowCell.this.pageOffset * ((float) dp))) + ((BlockSlideshowCell.this.currentPage - measuredWidth) * dp);
-                                } else {
-                                    count = (BlockSlideshowCell.this.currentPage != measuredWidth || BlockSlideshowCell.this.pageOffset <= 0.0f) ? dp2 : (int) (BlockSlideshowCell.this.pageOffset * ((float) dp));
-                                }
-                                count = dp2 - count;
-                            } else {
-                                count = dp2 - (((int) (BlockSlideshowCell.this.pageOffset * ((float) dp))) + (((count - (measuredWidth * 2)) - 1) * dp));
-                            }
-                        }
-                        dp = 0;
-                        while (dp < BlockSlideshowCell.this.currentBlock.items.size()) {
-                            measuredWidth = (AndroidUtilities.dp(4.0f) + count) + (AndroidUtilities.dp(13.0f) * dp);
-                            Drawable access$20200 = BlockSlideshowCell.this.currentPage == dp ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
-                            access$20200.setBounds(measuredWidth - AndroidUtilities.dp(5.0f), 0, measuredWidth + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(10.0f));
-                            access$20200.draw(canvas);
-                            dp++;
-                        }
-                    }
-                }
-            };
-            addView(this.dotsContainer);
-            setWillNotDraw(false);
-        }
-
-        public void setBlock(TL_pageBlockSlideshow tL_pageBlockSlideshow) {
-            this.currentBlock = tL_pageBlockSlideshow;
-            this.innerAdapter.notifyDataSetChanged();
-            this.innerListView.setCurrentItem(0, false);
-            this.innerListView.forceLayout();
-            requestLayout();
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            if (!ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.captionLayout, this.textX, this.textY)) {
-                if (!(ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(motionEvent))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /* Access modifiers changed, original: protected */
-        @SuppressLint({"NewApi"})
-        public void onMeasure(int i, int i2) {
-            i = MeasureSpec.getSize(i);
-            if (this.currentBlock != null) {
-                i2 = AndroidUtilities.dp(310.0f);
-                this.innerListView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
-                this.currentBlock.items.size();
-                this.dotsContainer.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(10.0f), NUM));
-                int dp = i - AndroidUtilities.dp(36.0f);
-                this.textY = AndroidUtilities.dp(16.0f) + i2;
-                ArticleViewer articleViewer = ArticleViewer.this;
-                TL_pageBlockSlideshow tL_pageBlockSlideshow = this.currentBlock;
-                this.captionLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockSlideshow.caption.text, dp, this.textY, tL_pageBlockSlideshow, this.parentAdapter);
-                if (this.captionLayout != null) {
-                    this.creditOffset = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
-                    i2 += this.creditOffset + AndroidUtilities.dp(4.0f);
-                    DrawingText drawingText = this.captionLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
-                } else {
-                    this.creditOffset = 0;
-                }
-                articleViewer = ArticleViewer.this;
-                tL_pageBlockSlideshow = this.currentBlock;
-                this.creditLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockSlideshow.caption.credit, dp, this.textY + this.creditOffset, tL_pageBlockSlideshow, articleViewer.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
-                if (this.creditLayout != null) {
-                    i2 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
-                    DrawingText drawingText2 = this.creditLayout;
-                    drawingText2.x = this.textX;
-                    drawingText2.y = this.textY + this.creditOffset;
-                }
-                i2 += AndroidUtilities.dp(16.0f);
-            } else {
-                i2 = 1;
-            }
-            setMeasuredDimension(i, i2);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-            this.innerListView.layout(0, AndroidUtilities.dp(8.0f), this.innerListView.getMeasuredWidth(), AndroidUtilities.dp(8.0f) + this.innerListView.getMeasuredHeight());
-            int bottom = this.innerListView.getBottom() - AndroidUtilities.dp(23.0f);
-            View view = this.dotsContainer;
-            view.layout(0, bottom, view.getMeasuredWidth(), this.dotsContainer.getMeasuredHeight() + bottom);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (this.currentBlock != null) {
-                int i = 0;
-                if (this.captionLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
-                    this.captionLayout.draw(canvas);
-                    canvas.restore();
-                    i = 1;
-                }
-                if (this.creditLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
-                    this.creditLayout.draw(canvas);
-                    canvas.restore();
-                }
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.captionLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.creditLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    private class BlockSubheaderCell extends View implements ArticleSelectableView {
-        private TL_pageBlockSubheader currentBlock;
-        private WebpageAdapter parentAdapter;
-        private DrawingText textLayout;
-        private int textX = AndroidUtilities.dp(18.0f);
-        private int textY = AndroidUtilities.dp(8.0f);
-
-        public BlockSubheaderCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-        }
-
-        public void setBlock(TL_pageBlockSubheader tL_pageBlockSubheader) {
-            this.currentBlock = tL_pageBlockSubheader;
-            requestLayout();
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(motionEvent);
-        }
-
-        /* Access modifiers changed, original: protected */
-        @SuppressLint({"NewApi"})
-        public void onMeasure(int i, int i2) {
-            i = MeasureSpec.getSize(i);
-            TL_pageBlockSubheader tL_pageBlockSubheader = this.currentBlock;
-            int i3 = 0;
-            if (tL_pageBlockSubheader != null) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockSubheader.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, ArticleViewer.this.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
-                if (this.textLayout != null) {
-                    i3 = 0 + (AndroidUtilities.dp(16.0f) + this.textLayout.getHeight());
-                    DrawingText drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
-                }
-            } else {
-                i3 = 1;
-            }
-            setMeasuredDimension(i, i3);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (!(this.currentBlock == null || this.textLayout == null)) {
-                canvas.save();
-                canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
-                this.textLayout.draw(canvas);
-                canvas.restore();
-            }
-        }
-
-        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-            accessibilityNodeInfo.setEnabled(true);
-            if (this.textLayout != null) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(this.textLayout.getText());
-                stringBuilder.append(", ");
-                stringBuilder.append(LocaleController.getString("AccDescrIVHeading", NUM));
-                accessibilityNodeInfo.setText(stringBuilder.toString());
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    private class BlockSubtitleCell extends View implements ArticleSelectableView {
-        private TL_pageBlockSubtitle currentBlock;
-        private WebpageAdapter parentAdapter;
-        private DrawingText textLayout;
-        private int textX = AndroidUtilities.dp(18.0f);
-        private int textY = AndroidUtilities.dp(8.0f);
-
-        public BlockSubtitleCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-        }
-
-        public void setBlock(TL_pageBlockSubtitle tL_pageBlockSubtitle) {
-            this.currentBlock = tL_pageBlockSubtitle;
-            requestLayout();
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(motionEvent);
-        }
-
-        /* Access modifiers changed, original: protected */
-        @SuppressLint({"NewApi"})
-        public void onMeasure(int i, int i2) {
-            i = MeasureSpec.getSize(i);
-            TL_pageBlockSubtitle tL_pageBlockSubtitle = this.currentBlock;
-            int i3 = 0;
-            if (tL_pageBlockSubtitle != null) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, tL_pageBlockSubtitle.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, ArticleViewer.this.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
-                if (this.textLayout != null) {
-                    i3 = 0 + (AndroidUtilities.dp(16.0f) + this.textLayout.getHeight());
-                    DrawingText drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
-                }
-            } else {
-                i3 = 1;
-            }
-            setMeasuredDimension(i, i3);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (!(this.currentBlock == null || this.textLayout == null)) {
-                canvas.save();
-                canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
-                this.textLayout.draw(canvas);
-                canvas.restore();
-            }
-        }
-
-        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-            accessibilityNodeInfo.setEnabled(true);
-            if (this.textLayout != null) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(this.textLayout.getText());
-                stringBuilder.append(", ");
-                stringBuilder.append(LocaleController.getString("AccDescrIVHeading", NUM));
-                accessibilityNodeInfo.setText(stringBuilder.toString());
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    public class BlockTableCell extends FrameLayout implements TableLayoutDelegate, ArticleSelectableView {
+    private class BlockTableCell extends FrameLayout implements TableLayoutDelegate {
         private TL_pageBlockTable currentBlock;
         private boolean firstLayout;
         private int listX;
@@ -7882,11 +7124,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.parentAdapter = webpageAdapter;
             this.scrollView = new HorizontalScrollView(context, ArticleViewer.this) {
                 public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                    boolean onInterceptTouchEvent = super.onInterceptTouchEvent(motionEvent);
-                    if (BlockTableCell.this.tableLayout.getMeasuredWidth() > getMeasuredWidth() - AndroidUtilities.dp(36.0f) && onInterceptTouchEvent) {
+                    if (BlockTableCell.this.tableLayout.getMeasuredWidth() > getMeasuredWidth() - AndroidUtilities.dp(36.0f)) {
                         ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
                     }
-                    return onInterceptTouchEvent;
+                    return super.onInterceptTouchEvent(motionEvent);
                 }
 
                 /* Access modifiers changed, original: protected */
@@ -7895,11 +7136,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
                         ArticleViewer.this.pressedLinkOwnerLayout = null;
                         ArticleViewer.this.pressedLinkOwnerView = null;
-                    }
-                    BlockTableCell.this.updateChildTextPositions();
-                    ArticleTextSelectionHelper articleTextSelectionHelper = ArticleViewer.this.textSelectionHelper;
-                    if (articleTextSelectionHelper != null && articleTextSelectionHelper.isSelectionMode()) {
-                        ArticleViewer.this.textSelectionHelper.invalidate();
                     }
                 }
 
@@ -7918,7 +7154,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.scrollView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
             this.scrollView.setClipToPadding(false);
             addView(this.scrollView, LayoutHelper.createFrame(-1, -2.0f));
-            this.tableLayout = new TableLayout(context, this, ArticleViewer.this.textSelectionHelper);
+            this.tableLayout = new TableLayout(context, this);
             this.tableLayout.setOrientation(0);
             this.tableLayout.setRowOrderPreserved(true);
             this.scrollView.addView(this.tableLayout, new FrameLayout.LayoutParams(-2, -2));
@@ -8079,9 +7315,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     this.textY = 0;
                     i2 = (drawingText.getHeight() + AndroidUtilities.dp(8.0f)) + 0;
                     this.listY = i2;
-                    DrawingText drawingText2 = this.titleLayout;
-                    drawingText2.x = this.textX;
-                    drawingText2.y = this.textY;
                 } else {
                     this.listY = AndroidUtilities.dp(8.0f);
                     i2 = 0;
@@ -8096,24 +7329,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 i2 = 1;
             }
             setMeasuredDimension(i, i2);
-            updateChildTextPositions();
-        }
-
-        private void updateChildTextPositions() {
-            int i = this.titleLayout == null ? 0 : 1;
-            int childCount = this.tableLayout.getChildCount();
-            for (int i2 = 0; i2 < childCount; i2++) {
-                Child childAt = this.tableLayout.getChildAt(i2);
-                DrawingText drawingText = childAt.textLayout;
-                if (drawingText != null) {
-                    drawingText.x = ((childAt.getTextX() + this.listX) + AndroidUtilities.dp(18.0f)) - this.scrollView.getScrollX();
-                    childAt.textLayout.y = childAt.getTextY() + this.listY;
-                    childAt.textLayout.row = childAt.getRow();
-                    int i3 = i + 1;
-                    childAt.setSelectionIndex(i);
-                    i = i3;
-                }
-            }
         }
 
         /* Access modifiers changed, original: protected */
@@ -8134,121 +7349,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                int i = 0;
                 if (this.titleLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
                     this.titleLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    float dp = (float) AndroidUtilities.dp(18.0f);
-                    float dp2 = (float) AndroidUtilities.dp(20.0f);
-                    int measuredHeight = getMeasuredHeight();
-                    if (this.currentBlock.bottom) {
-                        i = AndroidUtilities.dp(6.0f);
-                    }
-                    canvas.drawRect(dp, 0.0f, dp2, (float) (measuredHeight - i), ArticleViewer.quoteLinePaint);
-                }
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.titleLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            int childCount = this.tableLayout.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                DrawingText drawingText2 = this.tableLayout.getChildAt(i).textLayout;
-                if (drawingText2 != null) {
-                    arrayList.add(drawingText2);
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
     }
 
-    private class BlockTitleCell extends View implements ArticleSelectableView {
-        private TL_pageBlockTitle currentBlock;
-        private WebpageAdapter parentAdapter;
-        private DrawingText textLayout;
-        private int textX = AndroidUtilities.dp(18.0f);
-        private int textY;
-
-        public BlockTitleCell(Context context, WebpageAdapter webpageAdapter) {
-            super(context);
-            this.parentAdapter = webpageAdapter;
-        }
-
-        public void setBlock(TL_pageBlockTitle tL_pageBlockTitle) {
-            this.currentBlock = tL_pageBlockTitle;
-            requestLayout();
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            return ArticleViewer.this.checkLayoutForLinks(motionEvent, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(motionEvent);
-        }
-
-        /* Access modifiers changed, original: protected */
-        @SuppressLint({"NewApi"})
-        public void onMeasure(int i, int i2) {
-            int i3;
-            i = MeasureSpec.getSize(i);
-            TL_pageBlockTitle tL_pageBlockTitle = this.currentBlock;
-            if (tL_pageBlockTitle != null) {
-                i3 = 0;
-                if (tL_pageBlockTitle.first) {
-                    i3 = 0 + AndroidUtilities.dp(8.0f);
-                    this.textY = AndroidUtilities.dp(16.0f);
-                } else {
-                    this.textY = AndroidUtilities.dp(8.0f);
-                }
-                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, i - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, ArticleViewer.this.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Alignment.ALIGN_NORMAL, this.parentAdapter);
-                if (this.textLayout != null) {
-                    i3 += AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
-                    DrawingText drawingText = this.textLayout;
-                    drawingText.x = this.textX;
-                    drawingText.y = this.textY;
-                }
-            } else {
-                i3 = 1;
-            }
-            setMeasuredDimension(i, i3);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (!(this.currentBlock == null || this.textLayout == null)) {
-                canvas.save();
-                canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
-                this.textLayout.draw(canvas);
-                canvas.restore();
-            }
-        }
-
-        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-            accessibilityNodeInfo.setEnabled(true);
-            if (this.textLayout != null) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(this.textLayout.getText());
-                stringBuilder.append(", ");
-                stringBuilder.append(LocaleController.getString("AccDescrIVTitle", NUM));
-                accessibilityNodeInfo.setText(stringBuilder.toString());
-            }
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.textLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-        }
-    }
-
-    private class BlockVideoCell extends FrameLayout implements FileDownloadProgressListener, ArticleSelectableView {
+    private class BlockVideoCell extends FrameLayout implements FileDownloadProgressListener {
         private int TAG;
         private boolean autoDownload;
         private int buttonPressed;
@@ -8528,7 +7642,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = 0;
         L_0x0042:
             r0 = r9.currentBlock;
-            if (r0 == 0) goto L_0x0332;
+            if (r0 == 0) goto L_0x031b;
         L_0x0046:
             r2 = r9.currentType;
             r3 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
@@ -8849,7 +7963,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0 + r2;
             r9.textY = r0;
             r0 = r9.currentType;
-            if (r0 != 0) goto L_0x02ea;
+            if (r0 != 0) goto L_0x02d3;
         L_0x0269:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
@@ -8864,7 +7978,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r9.captionLayout = r0;
             r0 = r9.captionLayout;
             r14 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-            if (r0 == 0) goto L_0x02a4;
+            if (r0 == 0) goto L_0x029a;
         L_0x0285:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r1 = r9.captionLayout;
@@ -8875,12 +7989,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r0 = r0 + r1;
             r11 = r11 + r0;
-            r0 = r9.captionLayout;
-            r1 = r9.textX;
-            r0.x = r1;
-            r1 = r9.textY;
-            r0.y = r1;
-        L_0x02a4:
+        L_0x029a:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
             r6 = r9.currentBlock;
@@ -8890,13 +7999,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r4 = r9.creditOffset;
             r5 = r1 + r4;
             r1 = r0.isRtl;
-            if (r1 == 0) goto L_0x02be;
-        L_0x02b9:
+            if (r1 == 0) goto L_0x02b4;
+        L_0x02af:
             r1 = org.telegram.ui.Components.StaticLayoutEx.ALIGN_RIGHT();
-            goto L_0x02c0;
-        L_0x02be:
+            goto L_0x02b6;
+        L_0x02b4:
             r1 = android.text.Layout.Alignment.ALIGN_NORMAL;
-        L_0x02c0:
+        L_0x02b6:
             r7 = r1;
             r15 = r9.parentAdapter;
             r1 = r30;
@@ -8905,66 +8014,59 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7, r8);
             r9.creditLayout = r0;
             r0 = r9.creditLayout;
-            if (r0 == 0) goto L_0x02ea;
-        L_0x02d1:
+            if (r0 == 0) goto L_0x02d3;
+        L_0x02c7:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
             r1 = r9.creditLayout;
             r1 = r1.getHeight();
             r0 = r0 + r1;
             r11 = r11 + r0;
-            r0 = r9.creditLayout;
-            r1 = r9.textX;
-            r0.x = r1;
-            r1 = r9.textY;
-            r2 = r9.creditOffset;
-            r1 = r1 + r2;
-            r0.y = r1;
-        L_0x02ea:
+        L_0x02d3:
             r0 = r9.isFirst;
-            if (r0 != 0) goto L_0x02ff;
-        L_0x02ee:
+            if (r0 != 0) goto L_0x02e8;
+        L_0x02d7:
             r0 = r9.currentType;
-            if (r0 != 0) goto L_0x02ff;
-        L_0x02f2:
+            if (r0 != 0) goto L_0x02e8;
+        L_0x02db:
             r0 = r9.currentBlock;
             r0 = r0.level;
-            if (r0 > 0) goto L_0x02ff;
-        L_0x02f8:
+            if (r0 > 0) goto L_0x02e8;
+        L_0x02e1:
             r0 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
             r1 = org.telegram.messenger.AndroidUtilities.dp(r0);
             r11 = r11 + r1;
-        L_0x02ff:
+        L_0x02e8:
             r0 = r9.parentBlock;
             r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockCover;
-            if (r0 == 0) goto L_0x0322;
-        L_0x0305:
+            if (r0 == 0) goto L_0x030b;
+        L_0x02ee:
             r0 = r9.parentAdapter;
             r0 = r0.blocks;
             r0 = r0.size();
-            if (r0 <= r12) goto L_0x0322;
-        L_0x0311:
+            if (r0 <= r12) goto L_0x030b;
+        L_0x02fa:
             r0 = r9.parentAdapter;
             r0 = r0.blocks;
             r0 = r0.get(r12);
             r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockChannel;
-            if (r0 == 0) goto L_0x0322;
-        L_0x031f:
+            if (r0 == 0) goto L_0x030b;
+        L_0x0308:
             r16 = 1;
-            goto L_0x0324;
-        L_0x0322:
+            goto L_0x030d;
+        L_0x030b:
             r16 = 0;
-        L_0x0324:
+        L_0x030d:
             r0 = r9.currentType;
-            if (r0 == r10) goto L_0x0331;
-        L_0x0328:
-            if (r16 != 0) goto L_0x0331;
-        L_0x032a:
+            if (r0 == r10) goto L_0x031a;
+        L_0x0311:
+            if (r16 != 0) goto L_0x031a;
+        L_0x0313:
             r0 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
             r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
             r11 = r11 + r0;
-        L_0x0331:
+        L_0x031a:
             r12 = r11;
-        L_0x0332:
+        L_0x031b:
             r0 = r9.channelCell;
             r1 = r31;
             r2 = r32;
@@ -8986,7 +8088,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                int i;
                 if (!(this.imageView.hasBitmapImage() && this.imageView.getCurrentAlpha() == 1.0f)) {
                     canvas.drawRect(this.imageView.getDrawRegion(), ArticleViewer.photoBackgroundPaint);
                 }
@@ -8994,32 +8095,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.imageView.getVisible()) {
                     this.radialProgress.draw(canvas);
                 }
-                int i2 = 0;
                 if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
-                } else {
-                    i = 0;
                 }
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    float dp = (float) AndroidUtilities.dp(18.0f);
-                    float dp2 = (float) AndroidUtilities.dp(20.0f);
-                    int measuredHeight = getMeasuredHeight();
-                    if (this.currentBlock.bottom) {
-                        i2 = AndroidUtilities.dp(6.0f);
-                    }
-                    canvas.drawRect(dp, 0.0f, dp2, (float) (measuredHeight - i2), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -9158,17 +8247,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 stringBuilder.append(this.captionLayout.getText());
             }
             accessibilityNodeInfo.setText(stringBuilder.toString());
-        }
-
-        public void fillTextLayoutBlocks(ArrayList<TextLayoutBlock> arrayList) {
-            DrawingText drawingText = this.captionLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
-            drawingText = this.creditLayout;
-            if (drawingText != null) {
-                arrayList.add(drawingText);
-            }
         }
     }
 
@@ -10240,18 +9318,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private void addAllMediaFromBlock(PageBlock pageBlock) {
             if (pageBlock instanceof TL_pageBlockPhoto) {
                 TL_pageBlockPhoto tL_pageBlockPhoto = (TL_pageBlockPhoto) pageBlock;
-                Photo access$14900 = ArticleViewer.this.getPhotoWithId(tL_pageBlockPhoto.photo_id);
-                if (access$14900 != null) {
-                    tL_pageBlockPhoto.thumb = FileLoader.getClosestPhotoSizeWithSize(access$14900.sizes, 56, true);
-                    tL_pageBlockPhoto.thumbObject = access$14900;
+                Photo access$14800 = ArticleViewer.this.getPhotoWithId(tL_pageBlockPhoto.photo_id);
+                if (access$14800 != null) {
+                    tL_pageBlockPhoto.thumb = FileLoader.getClosestPhotoSizeWithSize(access$14800.sizes, 56, true);
+                    tL_pageBlockPhoto.thumbObject = access$14800;
                     this.photoBlocks.add(pageBlock);
                 }
             } else if ((pageBlock instanceof TL_pageBlockVideo) && ArticleViewer.this.isVideoBlock(pageBlock)) {
                 TL_pageBlockVideo tL_pageBlockVideo = (TL_pageBlockVideo) pageBlock;
-                Document access$12800 = ArticleViewer.this.getDocumentWithId(tL_pageBlockVideo.video_id);
-                if (access$12800 != null) {
-                    tL_pageBlockVideo.thumb = FileLoader.getClosestPhotoSizeWithSize(access$12800.thumbs, 56, true);
-                    tL_pageBlockVideo.thumbObject = access$12800;
+                Document access$12700 = ArticleViewer.this.getDocumentWithId(tL_pageBlockVideo.video_id);
+                if (access$12700 != null) {
+                    tL_pageBlockVideo.thumb = FileLoader.getClosestPhotoSizeWithSize(access$12700.thumbs, 56, true);
+                    tL_pageBlockVideo.thumbObject = access$12700;
                     this.photoBlocks.add(pageBlock);
                 }
             } else {
@@ -10666,16 +9744,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
 
         private boolean isBlockOpened(TL_pageBlockDetailsChild tL_pageBlockDetailsChild) {
-            PageBlock access$12700 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.parent);
-            if (access$12700 instanceof TL_pageBlockDetails) {
-                return ((TL_pageBlockDetails) access$12700).open;
+            PageBlock access$12600 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.parent);
+            if (access$12600 instanceof TL_pageBlockDetails) {
+                return ((TL_pageBlockDetails) access$12600).open;
             }
-            if (!(access$12700 instanceof TL_pageBlockDetailsChild)) {
+            if (!(access$12600 instanceof TL_pageBlockDetailsChild)) {
                 return false;
             }
-            tL_pageBlockDetailsChild = (TL_pageBlockDetailsChild) access$12700;
-            PageBlock access$127002 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.block);
-            if (!(access$127002 instanceof TL_pageBlockDetails) || ((TL_pageBlockDetails) access$127002).open) {
+            tL_pageBlockDetailsChild = (TL_pageBlockDetailsChild) access$12600;
+            PageBlock access$126002 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.block);
+            if (!(access$126002 instanceof TL_pageBlockDetails) || ((TL_pageBlockDetails) access$126002).open) {
                 return isBlockOpened(tL_pageBlockDetailsChild);
             }
             return false;
@@ -10686,8 +9764,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             int size = this.blocks.size();
             for (int i = 0; i < size; i++) {
                 PageBlock pageBlock = (PageBlock) this.blocks.get(i);
-                PageBlock access$12700 = ArticleViewer.this.getLastNonListPageBlock(pageBlock);
-                if (!(access$12700 instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) access$12700)) {
+                PageBlock access$12600 = ArticleViewer.this.getLastNonListPageBlock(pageBlock);
+                if (!(access$12600 instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) access$12600)) {
                     this.localBlocks.add(pageBlock);
                 }
             }
@@ -11275,10 +10353,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     this.pageSwitchAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             ArticleViewer.this.listView[1].setVisibility(8);
-                            ArticleViewer articleViewer = ArticleViewer.this;
-                            articleViewer.textSelectionHelper.parentView = articleViewer.listView[0];
-                            articleViewer = ArticleViewer.this;
-                            articleViewer.textSelectionHelper.layoutManager = articleViewer.layoutManager[0];
                             ArticleViewer.this.listView[indexOfChild].setBackgroundDrawable(null);
                             if (VERSION.SDK_INT >= 18) {
                                 ArticleViewer.this.listView[indexOfChild].setLayerType(0, null);
@@ -11288,7 +10362,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     });
                     this.pageSwitchAnimation.start();
                 }
-                this.textSelectionHelper.clear(true);
                 this.headerView.invalidate();
                 this.adapter[0].cleanup();
                 int size = this.currentPage.cached_page.blocks.size();
@@ -11445,13 +10518,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     /* Access modifiers changed, original: protected */
-    public void startCheckLongPress(float f, float f2, View view) {
+    public void startCheckLongPress() {
         if (!this.checkingForLongPress) {
             this.checkingForLongPress = true;
             if (this.pendingCheckForTap == null) {
                 this.pendingCheckForTap = new CheckForTap(this, null);
             }
-            this.textSelectionHelper.setMaybeView((int) f, (int) f2, view);
             this.windowView.postDelayed(this.pendingCheckForTap, (long) ViewConfiguration.getTapTimeout());
         }
     }
@@ -11562,6 +10634,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (richText4 == null) {
             return null;
         }
+        MetricAffectingSpan[] metricAffectingSpanArr;
+        StringBuilder stringBuilder;
         if (richText4 instanceof TL_textFixed) {
             return getText(view, richText, ((TL_textFixed) richText4).text, pageBlock, i);
         } else if (richText4 instanceof TL_textItalic) {
@@ -11572,24 +10646,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             return getText(view, richText, ((TL_textUnderline) richText4).text, pageBlock, i);
         } else if (richText4 instanceof TL_textStrike) {
             return getText(view, richText, ((TL_textStrike) richText4).text, pageBlock, i);
-        } else {
-            int i2 = 0;
-            MetricAffectingSpan[] metricAffectingSpanArr;
-            StringBuilder stringBuilder;
-            if (richText4 instanceof TL_textEmail) {
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(view, richText, ((TL_textEmail) richText4).text, pageBlock, i));
-                metricAffectingSpanArr = (MetricAffectingSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
-                if (spannableStringBuilder.length() != 0) {
-                    if (metricAffectingSpanArr == null || metricAffectingSpanArr.length == 0) {
-                        textPaint = getTextPaint(richText3, richText4, pageBlock2);
-                    }
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("mailto:");
-                    stringBuilder.append(getUrl(richText2));
-                    spannableStringBuilder.setSpan(new TextPaintUrlSpan(textPaint, stringBuilder.toString()), 0, spannableStringBuilder.length(), 33);
+        } else if (richText4 instanceof TL_textEmail) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(view, richText, ((TL_textEmail) richText4).text, pageBlock, i));
+            metricAffectingSpanArr = (MetricAffectingSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
+            if (spannableStringBuilder.length() != 0) {
+                if (metricAffectingSpanArr == null || metricAffectingSpanArr.length == 0) {
+                    textPaint = getTextPaint(richText3, richText4, pageBlock2);
                 }
-                return spannableStringBuilder;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("mailto:");
+                stringBuilder.append(getUrl(richText2));
+                spannableStringBuilder.setSpan(new TextPaintUrlSpan(textPaint, stringBuilder.toString()), 0, spannableStringBuilder.length(), 33);
             }
+            return spannableStringBuilder;
+        } else {
             long j = 0;
             SpannableStringBuilder spannableStringBuilder2;
             TextPaint textPaint2;
@@ -11621,6 +10691,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (richText4 instanceof TL_textEmpty) {
                     return str;
                 }
+                int i2 = 1;
                 int textFlags;
                 int length;
                 if (richText4 instanceof TL_textConcat) {
@@ -11631,15 +10702,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         RichText richText5 = (RichText) richText4.texts.get(i3);
                         RichText lastRichText = getLastRichText(richText5);
                         Object obj = (i < 0 || !(richText5 instanceof TL_textUrl) || ((TL_textUrl) richText5).webpage_id == j) ? null : 1;
-                        String str2 = " ";
-                        if (!(obj == null || spannableStringBuilder3.length() == 0 || spannableStringBuilder3.charAt(spannableStringBuilder3.length() - 1) == 10)) {
-                            spannableStringBuilder3.append(str2);
-                            spannableStringBuilder3.setSpan(new IngnoreCopySpanable(), spannableStringBuilder3.length() - 1, spannableStringBuilder3.length(), i2);
+                        str = " ";
+                        if (!(obj == null || spannableStringBuilder3.length() == 0 || spannableStringBuilder3.charAt(spannableStringBuilder3.length() - i2) == 10)) {
+                            spannableStringBuilder3.append(str);
                         }
-                        String str3 = str2;
+                        String str2 = str;
                         RichText richText6 = lastRichText;
                         RichText richText7 = richText5;
-                        i2 = i3;
+                        int i4 = i3;
+                        int i5 = size;
                         CharSequence text = getText(view, richText, richText5, pageBlock, i);
                         textFlags = getTextFlags(richText6);
                         length = spannableStringBuilder3.length();
@@ -11657,18 +10728,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                                     textPaintWebpageUrlSpan2 = new TextPaintUrlSpan(getTextPaint(richText3, richText6, pageBlock2), url);
                                 }
                                 if (length != spannableStringBuilder3.length()) {
-                                    spannableStringBuilder3.setSpan(textPaintWebpageUrlSpan2, length, spannableStringBuilder3.length(), 18);
+                                    spannableStringBuilder3.setSpan(textPaintWebpageUrlSpan2, length, spannableStringBuilder3.length(), 33);
                                 }
                             } else if (length != spannableStringBuilder3.length()) {
-                                spannableStringBuilder3.setSpan(new TextPaintSpan(getTextPaint(richText3, richText6, pageBlock2)), length, spannableStringBuilder3.length(), 18);
+                                spannableStringBuilder3.setSpan(new TextPaintSpan(getTextPaint(richText3, richText6, pageBlock2)), length, spannableStringBuilder3.length(), 33);
                             }
                         }
-                        if (!(obj == null || i2 == size - 1)) {
-                            spannableStringBuilder3.append(str3);
-                            spannableStringBuilder3.setSpan(new IngnoreCopySpanable(), spannableStringBuilder3.length() - 1, spannableStringBuilder3.length(), 0);
+                        if (!(obj == null || i4 == i5 - 1)) {
+                            spannableStringBuilder3.append(str2);
                         }
-                        i3 = i2 + 1;
-                        i2 = 0;
+                        i3 = i4 + 1;
+                        size = i5;
+                        i2 = 1;
                         j = 0;
                     }
                     return spannableStringBuilder3;
@@ -11705,22 +10776,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     if (documentWithId == null) {
                         return str;
                     }
-                    int i4;
-                    int i5;
+                    int i6;
+                    int i7;
                     SpannableStringBuilder spannableStringBuilder4 = new SpannableStringBuilder("*");
                     textFlags = AndroidUtilities.dp((float) tL_textImage.w);
                     int dp = AndroidUtilities.dp((float) tL_textImage.h);
                     length = Math.abs(i);
                     if (textFlags > length) {
-                        i4 = (int) (((float) dp) * (((float) length) / ((float) textFlags)));
-                        i5 = length;
+                        i6 = (int) (((float) dp) * (((float) length) / ((float) textFlags)));
+                        i7 = length;
                     } else {
-                        i4 = dp;
-                        i5 = textFlags;
+                        i6 = dp;
+                        i7 = textFlags;
                     }
                     if (view != null) {
                         dp = Theme.getColor("windowBackgroundWhite");
-                        spannableStringBuilder4.setSpan(new TextPaintImageReceiverSpan(view, documentWithId, this.currentPage, i5, i4, false, (((((float) Color.red(dp)) * 0.2126f) + (((float) Color.green(dp)) * 0.7152f)) + (((float) Color.blue(dp)) * 0.0722f)) / 255.0f <= 0.705f), 0, spannableStringBuilder4.length(), 33);
+                        spannableStringBuilder4.setSpan(new TextPaintImageReceiverSpan(view, documentWithId, this.currentPage, i7, i6, false, (((((float) Color.red(dp)) * 0.2126f) + (((float) Color.green(dp)) * 0.7152f)) + (((float) Color.blue(dp)) * 0.0722f)) / 255.0f <= 0.705f), 0, spannableStringBuilder4.length(), 33);
                     }
                     return spannableStringBuilder4;
                 } else {
@@ -12655,10 +11726,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:88:0x018a  */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01aa  */
-    /* JADX WARNING: Missing block: B:94:0x01a3, code skipped:
-            if (r0.isShowing() != false) goto L_0x01a7;
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0180  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x01a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x01c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x01c0  */
+    /* JADX WARNING: Missing block: B:91:0x0199, code skipped:
+            if (r0.isShowing() != false) goto L_0x019d;
      */
     private boolean checkLayoutForLinks(android.view.MotionEvent r17, android.view.View r18, org.telegram.ui.ArticleViewer.DrawingText r19, int r20, int r21) {
         /*
@@ -12670,293 +11744,286 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r21;
         r5 = r1.pageSwitchAnimation;
         r6 = 0;
-        if (r5 != 0) goto L_0x01e0;
+        if (r5 != 0) goto L_0x01ce;
     L_0x000f:
-        if (r2 == 0) goto L_0x01e0;
+        if (r2 == 0) goto L_0x01ce;
     L_0x0011:
-        r5 = r1.textSelectionHelper;
-        r5 = r5.isSelectable(r2);
-        if (r5 != 0) goto L_0x001b;
-    L_0x0019:
-        goto L_0x01e0;
-    L_0x001b:
-        r1.pressedLinkOwnerView = r2;
-        r5 = 1;
-        if (r0 == 0) goto L_0x01ad;
-    L_0x0020:
-        r7 = r0.textLayout;
-        r8 = r17.getX();
+        if (r0 != 0) goto L_0x0015;
+    L_0x0013:
+        goto L_0x01ce;
+    L_0x0015:
+        r5 = r0.textLayout;
+        r7 = r17.getX();
+        r7 = (int) r7;
+        r8 = r17.getY();
         r8 = (int) r8;
-        r9 = r17.getY();
-        r9 = (int) r9;
-        r10 = r17.getAction();
-        if (r10 != 0) goto L_0x0116;
-    L_0x0032:
-        r10 = NUM; // 0x4var_ float:2.14748365E9 double:6.548346386E-315;
-        r11 = r7.getLineCount();
+        r9 = r17.getAction();
+        r10 = 1;
+        if (r9 != 0) goto L_0x010c;
+    L_0x0028:
+        r9 = NUM; // 0x4var_ float:2.14748365E9 double:6.548346386E-315;
+        r11 = r5.getLineCount();
         r12 = 0;
-        r10 = 0;
+        r9 = 0;
         r13 = NUM; // 0x4var_ float:2.14748365E9 double:6.548346386E-315;
         r14 = 0;
-    L_0x003d:
-        if (r10 >= r11) goto L_0x0052;
-    L_0x003f:
-        r15 = r7.getLineWidth(r10);
+    L_0x0033:
+        if (r9 >= r11) goto L_0x0048;
+    L_0x0035:
+        r15 = r5.getLineWidth(r9);
         r14 = java.lang.Math.max(r15, r14);
-        r15 = r7.getLineLeft(r10);
+        r15 = r5.getLineLeft(r9);
         r13 = java.lang.Math.min(r15, r13);
-        r10 = r10 + 1;
-        goto L_0x003d;
-    L_0x0052:
-        r10 = (float) r8;
+        r9 = r9 + 1;
+        goto L_0x0033;
+    L_0x0048:
+        r9 = (float) r7;
         r11 = (float) r3;
         r11 = r11 + r13;
-        r13 = (r10 > r11 ? 1 : (r10 == r11 ? 0 : -1));
-        if (r13 < 0) goto L_0x01a7;
-    L_0x0059:
+        r13 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
+        if (r13 < 0) goto L_0x019d;
+    L_0x004f:
         r11 = r11 + r14;
-        r10 = (r10 > r11 ? 1 : (r10 == r11 ? 0 : -1));
-        if (r10 > 0) goto L_0x01a7;
-    L_0x005e:
-        if (r9 < r4) goto L_0x01a7;
-    L_0x0060:
-        r10 = r7.getHeight();
-        r10 = r10 + r4;
-        if (r9 > r10) goto L_0x01a7;
-    L_0x0067:
+        r9 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
+        if (r9 > 0) goto L_0x019d;
+    L_0x0054:
+        if (r8 < r4) goto L_0x019d;
+    L_0x0056:
+        r9 = r5.getHeight();
+        r9 = r9 + r4;
+        if (r8 > r9) goto L_0x019d;
+    L_0x005d:
         r1.pressedLinkOwnerLayout = r0;
         r1.pressedLinkOwnerView = r2;
         r1.pressedLayoutY = r4;
-        r0 = r7.getText();
+        r0 = r5.getText();
         r0 = r0 instanceof android.text.Spannable;
-        if (r0 == 0) goto L_0x01a7;
-    L_0x0075:
-        r8 = r8 - r3;
-        r9 = r9 - r4;
-        r0 = r7.getLineForVertical(r9);	 Catch:{ Exception -> 0x0110 }
-        r3 = (float) r8;	 Catch:{ Exception -> 0x0110 }
-        r4 = r7.getOffsetForHorizontal(r0, r3);	 Catch:{ Exception -> 0x0110 }
-        r8 = r7.getLineLeft(r0);	 Catch:{ Exception -> 0x0110 }
-        r9 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1));
-        if (r9 > 0) goto L_0x01a7;
-    L_0x0088:
-        r0 = r7.getLineWidth(r0);	 Catch:{ Exception -> 0x0110 }
-        r8 = r8 + r0;
-        r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1));
-        if (r0 < 0) goto L_0x01a7;
-    L_0x0091:
-        r0 = r7.getText();	 Catch:{ Exception -> 0x0110 }
-        r0 = (android.text.Spannable) r0;	 Catch:{ Exception -> 0x0110 }
+        if (r0 == 0) goto L_0x019d;
+    L_0x006b:
+        r7 = r7 - r3;
+        r8 = r8 - r4;
+        r0 = r5.getLineForVertical(r8);	 Catch:{ Exception -> 0x0106 }
+        r3 = (float) r7;	 Catch:{ Exception -> 0x0106 }
+        r4 = r5.getOffsetForHorizontal(r0, r3);	 Catch:{ Exception -> 0x0106 }
+        r7 = r5.getLineLeft(r0);	 Catch:{ Exception -> 0x0106 }
+        r8 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1));
+        if (r8 > 0) goto L_0x019d;
+    L_0x007e:
+        r0 = r5.getLineWidth(r0);	 Catch:{ Exception -> 0x0106 }
+        r7 = r7 + r0;
+        r0 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1));
+        if (r0 < 0) goto L_0x019d;
+    L_0x0087:
+        r0 = r5.getText();	 Catch:{ Exception -> 0x0106 }
+        r0 = (android.text.Spannable) r0;	 Catch:{ Exception -> 0x0106 }
         r3 = org.telegram.ui.Components.TextPaintUrlSpan.class;
-        r3 = r0.getSpans(r4, r4, r3);	 Catch:{ Exception -> 0x0110 }
-        r3 = (org.telegram.ui.Components.TextPaintUrlSpan[]) r3;	 Catch:{ Exception -> 0x0110 }
-        if (r3 == 0) goto L_0x01a7;
-    L_0x00a1:
-        r4 = r3.length;	 Catch:{ Exception -> 0x0110 }
-        if (r4 <= 0) goto L_0x01a7;
-    L_0x00a4:
-        r4 = r3[r6];	 Catch:{ Exception -> 0x0110 }
-        r1.pressedLink = r4;	 Catch:{ Exception -> 0x0110 }
-        r4 = r1.pressedLink;	 Catch:{ Exception -> 0x0110 }
-        r4 = r0.getSpanStart(r4);	 Catch:{ Exception -> 0x0110 }
-        r8 = r1.pressedLink;	 Catch:{ Exception -> 0x0110 }
-        r8 = r0.getSpanEnd(r8);	 Catch:{ Exception -> 0x0110 }
-        r9 = r8;
-        r8 = r4;
+        r3 = r0.getSpans(r4, r4, r3);	 Catch:{ Exception -> 0x0106 }
+        r3 = (org.telegram.ui.Components.TextPaintUrlSpan[]) r3;	 Catch:{ Exception -> 0x0106 }
+        if (r3 == 0) goto L_0x019d;
+    L_0x0097:
+        r4 = r3.length;	 Catch:{ Exception -> 0x0106 }
+        if (r4 <= 0) goto L_0x019d;
+    L_0x009a:
+        r4 = r3[r6];	 Catch:{ Exception -> 0x0106 }
+        r1.pressedLink = r4;	 Catch:{ Exception -> 0x0106 }
+        r4 = r1.pressedLink;	 Catch:{ Exception -> 0x0106 }
+        r4 = r0.getSpanStart(r4);	 Catch:{ Exception -> 0x0106 }
+        r7 = r1.pressedLink;	 Catch:{ Exception -> 0x0106 }
+        r7 = r0.getSpanEnd(r7);	 Catch:{ Exception -> 0x0106 }
+        r8 = r7;
+        r7 = r4;
         r4 = 1;
-    L_0x00b7:
-        r10 = r3.length;	 Catch:{ Exception -> 0x0110 }
-        if (r4 >= r10) goto L_0x00cf;
-    L_0x00ba:
-        r10 = r3[r4];	 Catch:{ Exception -> 0x0110 }
-        r11 = r0.getSpanStart(r10);	 Catch:{ Exception -> 0x0110 }
-        r13 = r0.getSpanEnd(r10);	 Catch:{ Exception -> 0x0110 }
-        if (r8 > r11) goto L_0x00c8;
-    L_0x00c6:
-        if (r13 <= r9) goto L_0x00cc;
-    L_0x00c8:
-        r1.pressedLink = r10;	 Catch:{ Exception -> 0x0110 }
-        r8 = r11;
-        r9 = r13;
-    L_0x00cc:
+    L_0x00ad:
+        r9 = r3.length;	 Catch:{ Exception -> 0x0106 }
+        if (r4 >= r9) goto L_0x00c5;
+    L_0x00b0:
+        r9 = r3[r4];	 Catch:{ Exception -> 0x0106 }
+        r11 = r0.getSpanStart(r9);	 Catch:{ Exception -> 0x0106 }
+        r13 = r0.getSpanEnd(r9);	 Catch:{ Exception -> 0x0106 }
+        if (r7 > r11) goto L_0x00be;
+    L_0x00bc:
+        if (r13 <= r8) goto L_0x00c2;
+    L_0x00be:
+        r1.pressedLink = r9;	 Catch:{ Exception -> 0x0106 }
+        r7 = r11;
+        r8 = r13;
+    L_0x00c2:
         r4 = r4 + 1;
-        goto L_0x00b7;
-    L_0x00cf:
-        r0 = r1.urlPath;	 Catch:{ Exception -> 0x010a }
-        r0.setUseRoundRect(r5);	 Catch:{ Exception -> 0x010a }
-        r0 = r1.urlPath;	 Catch:{ Exception -> 0x010a }
-        r0.setCurrentLayout(r7, r8, r12);	 Catch:{ Exception -> 0x010a }
-        r0 = r1.pressedLink;	 Catch:{ Exception -> 0x010a }
-        r0 = r0.getTextPaint();	 Catch:{ Exception -> 0x010a }
-        if (r0 == 0) goto L_0x00ea;
+        goto L_0x00ad;
+    L_0x00c5:
+        r0 = r1.urlPath;	 Catch:{ Exception -> 0x0100 }
+        r0.setUseRoundRect(r10);	 Catch:{ Exception -> 0x0100 }
+        r0 = r1.urlPath;	 Catch:{ Exception -> 0x0100 }
+        r0.setCurrentLayout(r5, r7, r12);	 Catch:{ Exception -> 0x0100 }
+        r0 = r1.pressedLink;	 Catch:{ Exception -> 0x0100 }
+        r0 = r0.getTextPaint();	 Catch:{ Exception -> 0x0100 }
+        if (r0 == 0) goto L_0x00e0;
+    L_0x00d7:
+        r0 = r1.pressedLink;	 Catch:{ Exception -> 0x0100 }
+        r0 = r0.getTextPaint();	 Catch:{ Exception -> 0x0100 }
+        r0 = r0.baselineShift;	 Catch:{ Exception -> 0x0100 }
+        goto L_0x00e1;
+    L_0x00e0:
+        r0 = 0;
     L_0x00e1:
-        r0 = r1.pressedLink;	 Catch:{ Exception -> 0x010a }
-        r0 = r0.getTextPaint();	 Catch:{ Exception -> 0x010a }
-        r0 = r0.baselineShift;	 Catch:{ Exception -> 0x010a }
-        goto L_0x00eb;
-    L_0x00ea:
-        r0 = 0;
-    L_0x00eb:
-        r3 = r1.urlPath;	 Catch:{ Exception -> 0x010a }
-        if (r0 == 0) goto L_0x00fc;
-    L_0x00ef:
-        if (r0 <= 0) goto L_0x00f4;
-    L_0x00f1:
+        r3 = r1.urlPath;	 Catch:{ Exception -> 0x0100 }
+        if (r0 == 0) goto L_0x00f2;
+    L_0x00e5:
+        if (r0 <= 0) goto L_0x00ea;
+    L_0x00e7:
         r4 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
-        goto L_0x00f6;
-    L_0x00f4:
+        goto L_0x00ec;
+    L_0x00ea:
         r4 = -NUM; // 0xffffffffCLASSNAME float:-2.0 double:NaN;
-    L_0x00f6:
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x010a }
+    L_0x00ec:
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x0100 }
         r0 = r0 + r4;
-        goto L_0x00fd;
-    L_0x00fc:
+        goto L_0x00f3;
+    L_0x00f2:
         r0 = 0;
-    L_0x00fd:
-        r3.setBaselineShift(r0);	 Catch:{ Exception -> 0x010a }
-        r0 = r1.urlPath;	 Catch:{ Exception -> 0x010a }
-        r7.getSelectionPath(r8, r9, r0);	 Catch:{ Exception -> 0x010a }
-        r18.invalidate();	 Catch:{ Exception -> 0x010a }
-        goto L_0x01a7;
-    L_0x010a:
+    L_0x00f3:
+        r3.setBaselineShift(r0);	 Catch:{ Exception -> 0x0100 }
+        r0 = r1.urlPath;	 Catch:{ Exception -> 0x0100 }
+        r5.getSelectionPath(r7, r8, r0);	 Catch:{ Exception -> 0x0100 }
+        r18.invalidate();	 Catch:{ Exception -> 0x0100 }
+        goto L_0x019d;
+    L_0x0100:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0110 }
-        goto L_0x01a7;
-    L_0x0110:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0106 }
+        goto L_0x019d;
+    L_0x0106:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x01a7;
-    L_0x0116:
+        goto L_0x019d;
+    L_0x010c:
         r0 = r17.getAction();
-        if (r0 != r5) goto L_0x0194;
-    L_0x011c:
+        if (r0 != r10) goto L_0x018a;
+    L_0x0112:
         r0 = r1.pressedLink;
-        if (r0 == 0) goto L_0x01a7;
-    L_0x0120:
+        if (r0 == 0) goto L_0x019d;
+    L_0x0116:
         r0 = r0.getUrl();
-        if (r0 == 0) goto L_0x01a5;
-    L_0x0126:
+        if (r0 == 0) goto L_0x019b;
+    L_0x011c:
         r3 = r1.linkSheet;
         r4 = 0;
-        if (r3 == 0) goto L_0x0130;
-    L_0x012b:
+        if (r3 == 0) goto L_0x0126;
+    L_0x0121:
         r3.dismiss();
         r1.linkSheet = r4;
-    L_0x0130:
+    L_0x0126:
         r3 = 35;
         r3 = r0.lastIndexOf(r3);
-        r7 = -1;
-        if (r3 == r7) goto L_0x0186;
-    L_0x0139:
+        r5 = -1;
+        if (r3 == r5) goto L_0x017c;
+    L_0x012f:
         r4 = r1.currentPage;
         r4 = r4.cached_page;
         r4 = r4.url;
         r4 = android.text.TextUtils.isEmpty(r4);
-        if (r4 != 0) goto L_0x0150;
-    L_0x0145:
+        if (r4 != 0) goto L_0x0146;
+    L_0x013b:
         r4 = r1.currentPage;
         r4 = r4.cached_page;
         r4 = r4.url;
         r4 = r4.toLowerCase();
-        goto L_0x0158;
-    L_0x0150:
+        goto L_0x014e;
+    L_0x0146:
         r4 = r1.currentPage;
         r4 = r4.url;
         r4 = r4.toLowerCase();
-    L_0x0158:
-        r3 = r3 + r5;
-        r3 = r0.substring(r3);	 Catch:{ Exception -> 0x0164 }
-        r7 = "UTF-8";
-        r3 = java.net.URLDecoder.decode(r3, r7);	 Catch:{ Exception -> 0x0164 }
-        goto L_0x0166;
-    L_0x0164:
+    L_0x014e:
+        r3 = r3 + r10;
+        r3 = r0.substring(r3);	 Catch:{ Exception -> 0x015a }
+        r5 = "UTF-8";
+        r3 = java.net.URLDecoder.decode(r3, r5);	 Catch:{ Exception -> 0x015a }
+        goto L_0x015c;
+    L_0x015a:
         r3 = "";
-    L_0x0166:
+    L_0x015c:
         r0 = r0.toLowerCase();
         r0 = r0.contains(r4);
-        if (r0 == 0) goto L_0x0187;
-    L_0x0170:
+        if (r0 == 0) goto L_0x017d;
+    L_0x0166:
         r0 = android.text.TextUtils.isEmpty(r3);
-        if (r0 == 0) goto L_0x0181;
-    L_0x0176:
+        if (r0 == 0) goto L_0x0177;
+    L_0x016c:
         r0 = r1.layoutManager;
         r0 = r0[r6];
         r0.scrollToPositionWithOffset(r6, r6);
         r16.checkScrollAnimated();
-        goto L_0x0184;
-    L_0x0181:
+        goto L_0x017a;
+    L_0x0177:
         r1.scrollToAnchor(r3);
-    L_0x0184:
+    L_0x017a:
         r0 = 1;
-        goto L_0x0188;
-    L_0x0186:
+        goto L_0x017e;
+    L_0x017c:
         r3 = r4;
-    L_0x0187:
+    L_0x017d:
         r0 = 0;
-    L_0x0188:
-        if (r0 != 0) goto L_0x01a5;
-    L_0x018a:
+    L_0x017e:
+        if (r0 != 0) goto L_0x019b;
+    L_0x0180:
         r0 = r1.pressedLink;
         r0 = r0.getUrl();
         r1.openWebpageUrl(r0, r3);
-        goto L_0x01a5;
-    L_0x0194:
+        goto L_0x019b;
+    L_0x018a:
         r0 = r17.getAction();
         r3 = 3;
-        if (r0 != r3) goto L_0x01a7;
-    L_0x019b:
+        if (r0 != r3) goto L_0x019d;
+    L_0x0191:
         r0 = r1.popupWindow;
-        if (r0 == 0) goto L_0x01a5;
-    L_0x019f:
+        if (r0 == 0) goto L_0x019b;
+    L_0x0195:
         r0 = r0.isShowing();
-        if (r0 != 0) goto L_0x01a7;
-    L_0x01a5:
+        if (r0 != 0) goto L_0x019d;
+    L_0x019b:
         r0 = 1;
-        goto L_0x01a8;
-    L_0x01a7:
+        goto L_0x019e;
+    L_0x019d:
         r0 = 0;
-    L_0x01a8:
-        if (r0 == 0) goto L_0x01ad;
-    L_0x01aa:
+    L_0x019e:
+        if (r0 == 0) goto L_0x01a3;
+    L_0x01a0:
         r16.removePressedLink();
-    L_0x01ad:
+    L_0x01a3:
         r0 = r17.getAction();
-        if (r0 != 0) goto L_0x01be;
-    L_0x01b3:
-        r0 = r17.getX();
-        r3 = r17.getY();
-        r1.startCheckLongPress(r0, r3, r2);
-    L_0x01be:
+        if (r0 != 0) goto L_0x01ac;
+    L_0x01a9:
+        r16.startCheckLongPress();
+    L_0x01ac:
         r0 = r17.getAction();
-        if (r0 == 0) goto L_0x01ce;
-    L_0x01c4:
+        if (r0 == 0) goto L_0x01bc;
+    L_0x01b2:
         r0 = r17.getAction();
         r3 = 2;
-        if (r0 == r3) goto L_0x01ce;
-    L_0x01cb:
+        if (r0 == r3) goto L_0x01bc;
+    L_0x01b9:
         r16.cancelCheckLongPress();
-    L_0x01ce:
+    L_0x01bc:
         r0 = r2 instanceof org.telegram.ui.ArticleViewer.BlockDetailsCell;
-        if (r0 == 0) goto L_0x01d9;
-    L_0x01d2:
+        if (r0 == 0) goto L_0x01c7;
+    L_0x01c0:
         r0 = r1.pressedLink;
-        if (r0 == 0) goto L_0x01d7;
-    L_0x01d6:
-        goto L_0x01d8;
-    L_0x01d7:
-        r5 = 0;
-    L_0x01d8:
-        return r5;
-    L_0x01d9:
+        if (r0 == 0) goto L_0x01c5;
+    L_0x01c4:
+        goto L_0x01c6;
+    L_0x01c5:
+        r10 = 0;
+    L_0x01c6:
+        return r10;
+    L_0x01c7:
         r0 = r1.pressedLinkOwnerLayout;
-        if (r0 == 0) goto L_0x01de;
-    L_0x01dd:
-        goto L_0x01df;
-    L_0x01de:
-        r5 = 0;
-    L_0x01df:
-        return r5;
-    L_0x01e0:
+        if (r0 == 0) goto L_0x01cc;
+    L_0x01cb:
+        goto L_0x01cd;
+    L_0x01cc:
+        r10 = 0;
+    L_0x01cd:
+        return r10;
+    L_0x01ce:
         return r6;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.checkLayoutForLinks(android.view.MotionEvent, android.view.View, org.telegram.ui.ArticleViewer$DrawingText, int, int):boolean");
@@ -13605,15 +12672,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.listView[i].setOnItemLongClickListener(new -$$Lambda$ArticleViewer$gN3ysqedASIoOc6B-30_HuSHg6g(this));
             this.listView[i].setOnItemClickListener(new -$$Lambda$ArticleViewer$D7cgjgLrXEd0Ps-6XAby7DZGrbY(this, webpageAdapter));
             this.listView[i].setOnScrollListener(new OnScrollListener() {
-                public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                    if (i == 0) {
-                        ArticleViewer.this.textSelectionHelper.stopScrolling();
-                    }
-                }
-
                 public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                     if (recyclerView.getChildCount() != 0) {
-                        ArticleViewer.this.textSelectionHelper.onParentScrolled();
                         ArticleViewer.this.headerView.invalidate();
                         ArticleViewer.this.checkScroll(i2);
                     }
@@ -14116,21 +13176,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         this.rightImage.setParentView(this.photoContainerView);
         this.rightImage.setCrossfadeAlpha((byte) 2);
         this.rightImage.setInvalidateAll(true);
-        this.textSelectionHelper = new ArticleTextSelectionHelper();
-        ArticleTextSelectionHelper articleTextSelectionHelper = this.textSelectionHelper;
-        articleTextSelectionHelper.parentView = this.listView[0];
-        articleTextSelectionHelper.layoutManager = this.layoutManager[0];
-        articleTextSelectionHelper.setCallback(new TextSelectionHelper.Callback() {
-            public void onTextCopied() {
-            }
-
-            public void onStateChanged(boolean z) {
-                if (z) {
-                    ArticleViewer.this.showSearch(false);
-                }
-            }
-        });
-        this.containerView.addView(this.textSelectionHelper.getOverlayView(activity2));
         updatePaintColors();
     }
 
@@ -14144,14 +13189,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public /* synthetic */ void lambda$setParentActivity$11$ArticleViewer(WebpageAdapter webpageAdapter, View view, int i) {
-        ArticleTextSelectionHelper articleTextSelectionHelper = this.textSelectionHelper;
-        if (articleTextSelectionHelper != null) {
-            if (articleTextSelectionHelper.isSelectionMode()) {
-                this.textSelectionHelper.clear();
-                return;
-            }
-            this.textSelectionHelper.clear();
-        }
         if (i != webpageAdapter.localBlocks.size() || this.currentPage == null) {
             if (i >= 0 && i < webpageAdapter.localBlocks.size()) {
                 PageBlock pageBlock = (PageBlock) webpageAdapter.localBlocks.get(i);
@@ -14877,7 +13914,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.headerView.setTranslationY((float) (this.currentHeaderHeight - dp));
             this.searchShadow.setTranslationY((float) (this.currentHeaderHeight - dp));
             this.menuButton.setAdditionalYOffset((-(this.currentHeaderHeight - dp)) / 2);
-            this.textSelectionHelper.setTopOffset(this.currentHeaderHeight);
             i = 0;
             while (true) {
                 RecyclerListView[] recyclerListViewArr = this.listView;
@@ -15216,7 +14252,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12.setDuration(r13);
         r13 = r11.interpolator;
         r12.setInterpolator(r13);
-        r13 = new org.telegram.ui.ArticleViewer$21;
+        r13 = new org.telegram.ui.ArticleViewer$20;
         r13.<init>();
         r12.addListener(r13);
         r13 = java.lang.System.currentTimeMillis();
@@ -15582,10 +14618,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     return;
                 }
             }
-            if (this.textSelectionHelper.isSelectionMode()) {
-                this.textSelectionHelper.clear();
-                return;
-            }
             if (this.isPhotoVisible) {
                 closePhoto(z2 ^ 1);
                 if (!z2) {
@@ -15887,7 +14919,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004f:
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0e0a40 float:1.888036E38 double:1.053163453E-314;
+        r3 = NUM; // 0x7f0e0a2b float:1.8880317E38 double:1.0531634427E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x0098 }
         r1 = android.content.Intent.createChooser(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -15898,16 +14930,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r0.<init>(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "AppName";
-        r2 = NUM; // 0x7f0e00f9 float:1.8875543E38 double:1.0531622797E-314;
+        r2 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setTitle(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "OK";
-        r2 = NUM; // 0x7f0e076d float:1.8878893E38 double:1.053163096E-314;
+        r2 = NUM; // 0x7f0e075c float:1.8878859E38 double:1.0531630875E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 0;
         r0.setPositiveButton(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r1 = "PleaseDownload";
-        r2 = NUM; // 0x7f0e08e8 float:1.8879662E38 double:1.053163283E-314;
+        r2 = NUM; // 0x7f0e08d5 float:1.8879623E38 double:1.0531632737E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setMessage(r1);	 Catch:{ Exception -> 0x0098 }
         r0 = r0.create();	 Catch:{ Exception -> 0x0098 }
@@ -16375,7 +15407,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0080:
         r1 = new android.text.SpannableStringBuilder;
         r1.<init>(r0);
-        r2 = new org.telegram.ui.ArticleViewer$29;
+        r2 = new org.telegram.ui.ArticleViewer$28;
         r2.<init>(r0);
         r0 = r0.length();
         r3 = 34;
@@ -16416,7 +15448,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r6.menuItem;
         r0.showSubItem(r13);
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e0150 float:1.887572E38 double:1.0531623226E-314;
+        r1 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
         r2 = "AttachGif";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -16431,21 +15463,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r15 == 0) goto L_0x00fa;
     L_0x00eb:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e0161 float:1.8875754E38 double:1.053162331E-314;
+        r1 = NUM; // 0x7f0e0160 float:1.8875751E38 double:1.0531623305E-314;
         r2 = "AttachVideo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x012e;
     L_0x00fa:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e015b float:1.8875741E38 double:1.053162328E-314;
+        r1 = NUM; // 0x7f0e015a float:1.887574E38 double:1.0531623276E-314;
         r2 = "AttachPhoto";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x012e;
     L_0x0109:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e076f float:1.8878897E38 double:1.053163097E-314;
+        r1 = NUM; // 0x7f0e075e float:1.8878863E38 double:1.0531630884E-314;
         r2 = new java.lang.Object[r10];
         r3 = r6.currentIndex;
         r3 = r3 + r9;
@@ -16919,10 +15951,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         animatorSet.setDuration(200);
         animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$ArticleViewer$31$OxC9yTDmATIGGwh8Am5vKMtD61s(this));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$ArticleViewer$30$Sfa6dwZ-2FFlRYzPl3DKNvq__vY(this));
             }
 
-            public /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$31() {
+            public /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$30() {
                 NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(false);
                 if (ArticleViewer.this.photoAnimationEndRunnable != null) {
                     ArticleViewer.this.photoAnimationEndRunnable.run();
@@ -17461,7 +16493,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.photoAnimationEndRunnable = r1;
         r1 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r6.setDuration(r1);
-        r1 = new org.telegram.ui.ArticleViewer$32;
+        r1 = new org.telegram.ui.ArticleViewer$31;
         r1.<init>();
         r6.addListener(r1);
         r1 = java.lang.System.currentTimeMillis();
@@ -18973,8 +18005,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         Object obj = (aspectRatioFrameLayout == null || aspectRatioFrameLayout.getVisibility() != 0) ? null : 1;
         RadialProgressView[] radialProgressViewArr = this.radialProgressViews;
         if (!(radialProgressViewArr[0] == null || this.photoContainerView == null || obj != null)) {
-            int access$24000 = radialProgressViewArr[0].backgroundState;
-            if (access$24000 > 0 && access$24000 <= 3) {
+            int access$23900 = radialProgressViewArr[0].backgroundState;
+            if (access$23900 > 0 && access$23900 <= 3) {
                 float x = motionEvent.getX();
                 float y = motionEvent.getY();
                 if (x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {

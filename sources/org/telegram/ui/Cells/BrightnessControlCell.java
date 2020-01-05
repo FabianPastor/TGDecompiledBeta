@@ -53,7 +53,7 @@ public class BrightnessControlCell extends FrameLayout {
     /* Access modifiers changed, original: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        String str = "windowBackgroundWhiteGrayIcon";
+        String str = "profile_actionIcon";
         this.leftImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
         this.rightImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
     }

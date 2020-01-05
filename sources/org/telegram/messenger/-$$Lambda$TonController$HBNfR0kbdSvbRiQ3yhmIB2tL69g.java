@@ -11,6 +11,6 @@ public final /* synthetic */ class -$$Lambda$TonController$HBNfR0kbdSvbRiQ3yhmIB
     }
 
     public final void run() {
-        this.f$0.run("KEYSTORE_FAIL_DECRYPT", null);
+        this.f$0.run("KEYSTORE_FAIL", null);
     }
 }
