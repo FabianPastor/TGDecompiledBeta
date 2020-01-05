@@ -4253,6 +4253,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     linearLayout = this.attachLayout;
                     if (linearLayout != null) {
                         linearLayout.setVisibility(8);
+                        if (this.delegate != null && getVisibility() == 0) {
+                            this.delegate.onAttachButtonHidden();
+                        }
                         updateFieldRight(0);
                     }
                     this.scheduleButtonHidden = false;
@@ -4332,6 +4335,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         });
                         this.runningAnimation2.start();
                         updateFieldRight(0);
+                        if (this.delegate != null && getVisibility() == 0) {
+                            this.delegate.onAttachButtonHidden();
+                        }
                     }
                     this.runningAnimationType = 5;
                     this.runningAnimation = new AnimatorSet();

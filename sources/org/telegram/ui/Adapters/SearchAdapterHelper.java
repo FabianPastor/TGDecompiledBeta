@@ -442,7 +442,7 @@ public class SearchAdapterHelper {
 
     public void addHashtagsFromMessage(CharSequence charSequence) {
         if (charSequence != null) {
-            Matcher matcher = Pattern.compile("(^|\\s)#[\\w@.]+").matcher(charSequence);
+            Matcher matcher = Pattern.compile("(^|\\s)#[^0-9][\\w@.]+").matcher(charSequence);
             Object obj = null;
             while (matcher.find()) {
                 int start = matcher.start();

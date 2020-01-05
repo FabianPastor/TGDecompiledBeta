@@ -1419,6 +1419,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 StickersAlert.this.stickerPreviewLayout.setVisibility(8);
+                StickersAlert.this.stickerImageView.setImageDrawable(null);
             }
         });
         animatorSet.start();

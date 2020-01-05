@@ -3042,10 +3042,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     public /* synthetic */ void lambda$onDialogAnimationFinished$10$DialogsActivity() {
-        if (this.folderId != 0 && frozenDialogsList.isEmpty()) {
-            this.listView.setEmptyView(null);
-            this.progressView.setVisibility(4);
-            finishFragment();
+        if (this.folderId != 0) {
+            ArrayList arrayList = frozenDialogsList;
+            if (arrayList == null || arrayList.isEmpty()) {
+                this.listView.setEmptyView(null);
+                this.progressView.setVisibility(4);
+                finishFragment();
+            }
         }
         setDialogsListFrozen(false);
         updateDialogIndices();

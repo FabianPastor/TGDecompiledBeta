@@ -4345,41 +4345,43 @@ public class MessageObject {
     }
 
     public static void updatePollResults(TL_messageMediaPoll tL_messageMediaPoll, TL_pollResults tL_pollResults) {
-        if ((tL_pollResults.flags & 2) != 0) {
-            int size;
-            byte[] bArr = null;
-            if (tL_pollResults.min) {
-                ArrayList arrayList = tL_messageMediaPoll.results.results;
-                if (arrayList != null) {
-                    size = arrayList.size();
-                    for (int i = 0; i < size; i++) {
-                        TL_pollAnswerVoters tL_pollAnswerVoters = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i);
-                        if (tL_pollAnswerVoters.chosen) {
-                            bArr = tL_pollAnswerVoters.option;
+        if (tL_messageMediaPoll != null && tL_pollResults != null) {
+            if ((tL_pollResults.flags & 2) != 0) {
+                int size;
+                byte[] bArr = null;
+                if (tL_pollResults.min) {
+                    ArrayList arrayList = tL_messageMediaPoll.results.results;
+                    if (arrayList != null) {
+                        size = arrayList.size();
+                        for (int i = 0; i < size; i++) {
+                            TL_pollAnswerVoters tL_pollAnswerVoters = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i);
+                            if (tL_pollAnswerVoters.chosen) {
+                                bArr = tL_pollAnswerVoters.option;
+                                break;
+                            }
+                        }
+                    }
+                }
+                TL_pollResults tL_pollResults2 = tL_messageMediaPoll.results;
+                tL_pollResults2.results = tL_pollResults.results;
+                if (bArr != null) {
+                    size = tL_pollResults2.results.size();
+                    for (int i2 = 0; i2 < size; i2++) {
+                        TL_pollAnswerVoters tL_pollAnswerVoters2 = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i2);
+                        if (Arrays.equals(tL_pollAnswerVoters2.option, bArr)) {
+                            tL_pollAnswerVoters2.chosen = true;
                             break;
                         }
                     }
                 }
+                TL_pollResults tL_pollResults3 = tL_messageMediaPoll.results;
+                tL_pollResults3.flags |= 2;
             }
-            TL_pollResults tL_pollResults2 = tL_messageMediaPoll.results;
-            tL_pollResults2.results = tL_pollResults.results;
-            if (bArr != null) {
-                size = tL_pollResults2.results.size();
-                for (int i2 = 0; i2 < size; i2++) {
-                    TL_pollAnswerVoters tL_pollAnswerVoters2 = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i2);
-                    if (Arrays.equals(tL_pollAnswerVoters2.option, bArr)) {
-                        tL_pollAnswerVoters2.chosen = true;
-                        break;
-                    }
-                }
+            if ((tL_pollResults.flags & 4) != 0) {
+                TL_pollResults tL_pollResults4 = tL_messageMediaPoll.results;
+                tL_pollResults4.total_voters = tL_pollResults.total_voters;
+                tL_pollResults4.flags |= 4;
             }
-            TL_pollResults tL_pollResults3 = tL_messageMediaPoll.results;
-            tL_pollResults3.flags |= 2;
-        }
-        if ((tL_pollResults.flags & 4) != 0) {
-            TL_pollResults tL_pollResults4 = tL_messageMediaPoll.results;
-            tL_pollResults4.total_voters = tL_pollResults.total_voters;
-            tL_pollResults4.flags |= 4;
         }
     }
 
@@ -6151,7 +6153,7 @@ public class MessageObject {
         r5 = urlPattern;	 Catch:{ Exception -> 0x01df }
         if (r5 != 0) goto L_0x002d;
     L_0x0025:
-        r5 = "(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s|\\()@[a-zA-Z\\d_]{1,32}|(^|\\s|\\()#[\\w.]+|(^|\\s)\\$[A-Z]{3,8}([ ,.]|$)";
+        r5 = "(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s|\\()@[a-zA-Z\\d_]{1,32}|(^|\\s|\\()#[^0-9][\\w.]+|(^|\\s)\\$[A-Z]{3,8}([ ,.]|$)";
         r5 = java.util.regex.Pattern.compile(r5);	 Catch:{ Exception -> 0x01df }
         urlPattern = r5;	 Catch:{ Exception -> 0x01df }
     L_0x002d:

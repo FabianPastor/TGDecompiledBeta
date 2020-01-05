@@ -2659,7 +2659,7 @@ public class Theme {
             }
             ThemeAccent themeAccent = (ThemeAccent) this.themeAccentsMap.get(i2);
             ThemeAccent themeAccent2 = (ThemeAccent) this.themeAccentsMap.get(this.currentAccentId);
-            if (themeAccent.myMessagesAccentColor == themeAccent2.myMessagesAccentColor && themeAccent.myMessagesGradientAccentColor == themeAccent2.myMessagesGradientAccentColor) {
+            if (themeAccent != null && themeAccent2 != null && themeAccent.myMessagesAccentColor == themeAccent2.myMessagesAccentColor && themeAccent.myMessagesGradientAccentColor == themeAccent2.myMessagesGradientAccentColor) {
                 z = true;
             }
             return z;
@@ -11743,32 +11743,42 @@ public class Theme {
             linkSelectionPaint.setColor(getColor("windowBackgroundWhiteLinkSelection"));
             String str = "avatar_text";
             setDrawableColorByKey(avatar_savedDrawable, str);
+            dialogs_archiveAvatarDrawable.beginApplyLayerColors();
             String str2 = "avatar_backgroundArchived";
             String str3 = "Arrow1.**";
-            dialogs_archiveAvatarDrawable.setLayerColor(str3, getColor(str2));
+            dialogs_archiveAvatarDrawable.setLayerColor(str3, getNonAnimatedColor(str2));
             String str4 = "Arrow2.**";
-            dialogs_archiveAvatarDrawable.setLayerColor(str4, getColor(str2));
+            dialogs_archiveAvatarDrawable.setLayerColor(str4, getNonAnimatedColor(str2));
             String str5 = "Box2.**";
-            dialogs_archiveAvatarDrawable.setLayerColor(str5, getColor(str));
+            dialogs_archiveAvatarDrawable.setLayerColor(str5, getNonAnimatedColor(str));
             str2 = "Box1.**";
-            dialogs_archiveAvatarDrawable.setLayerColor(str2, getColor(str));
+            dialogs_archiveAvatarDrawable.setLayerColor(str2, getNonAnimatedColor(str));
+            dialogs_archiveAvatarDrawable.commitApplyLayerColors();
             dialogs_archiveAvatarDrawableRecolored = false;
             dialogs_archiveAvatarDrawable.setAllowDecodeSingleFrame(true);
+            dialogs_pinArchiveDrawable.beginApplyLayerColors();
             String str6 = "chats_archiveIcon";
             String str7 = "Arrow.**";
-            dialogs_pinArchiveDrawable.setLayerColor(str7, getColor(str6));
+            dialogs_pinArchiveDrawable.setLayerColor(str7, getNonAnimatedColor(str6));
             String str8 = "Line.**";
-            dialogs_pinArchiveDrawable.setLayerColor(str8, getColor(str6));
-            dialogs_unpinArchiveDrawable.setLayerColor(str7, getColor(str6));
-            dialogs_unpinArchiveDrawable.setLayerColor(str8, getColor(str6));
-            dialogs_archiveDrawable.setLayerColor(str7, getColor("chats_archiveBackground"));
-            dialogs_archiveDrawable.setLayerColor(str5, getColor(str6));
-            dialogs_archiveDrawable.setLayerColor(str2, getColor(str6));
+            dialogs_pinArchiveDrawable.setLayerColor(str8, getNonAnimatedColor(str6));
+            dialogs_pinArchiveDrawable.commitApplyLayerColors();
+            dialogs_unpinArchiveDrawable.beginApplyLayerColors();
+            dialogs_unpinArchiveDrawable.setLayerColor(str7, getNonAnimatedColor(str6));
+            dialogs_unpinArchiveDrawable.setLayerColor(str8, getNonAnimatedColor(str6));
+            dialogs_unpinArchiveDrawable.commitApplyLayerColors();
+            dialogs_archiveDrawable.beginApplyLayerColors();
+            dialogs_archiveDrawable.setLayerColor(str7, getNonAnimatedColor("chats_archiveBackground"));
+            dialogs_archiveDrawable.setLayerColor(str5, getNonAnimatedColor(str6));
+            dialogs_archiveDrawable.setLayerColor(str2, getNonAnimatedColor(str6));
+            dialogs_archiveDrawable.commitApplyLayerColors();
             dialogs_archiveDrawableRecolored = false;
-            dialogs_unarchiveDrawable.setLayerColor(str3, getColor(str6));
-            dialogs_unarchiveDrawable.setLayerColor(str4, getColor("chats_archivePinBackground"));
-            dialogs_unarchiveDrawable.setLayerColor(str5, getColor(str6));
-            dialogs_unarchiveDrawable.setLayerColor(str2, getColor(str6));
+            dialogs_unarchiveDrawable.beginApplyLayerColors();
+            dialogs_unarchiveDrawable.setLayerColor(str3, getNonAnimatedColor(str6));
+            dialogs_unarchiveDrawable.setLayerColor(str4, getNonAnimatedColor("chats_archivePinBackground"));
+            dialogs_unarchiveDrawable.setLayerColor(str5, getNonAnimatedColor(str6));
+            dialogs_unarchiveDrawable.setLayerColor(str2, getNonAnimatedColor(str6));
+            dialogs_unarchiveDrawable.commitApplyLayerColors();
         }
     }
 
@@ -13586,6 +13596,10 @@ public class Theme {
         Color.colorToHSV(currentTheme.accentBaseColor, tempHsv);
         Color.colorToHSV(accent.accentColor, tempHsv2);
         return changeColorAccent(tempHsv, tempHsv2, num.intValue(), currentTheme.isDark());
+    }
+
+    public static int getNonAnimatedColor(String str) {
+        return getColor(str, null, true);
     }
 
     public static int getColor(String str) {

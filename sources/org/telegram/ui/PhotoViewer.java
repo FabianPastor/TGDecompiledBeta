@@ -2929,12 +2929,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
 
     private void setScaleToFill() {
         float bitmapWidth = (float) this.centerImage.getBitmapWidth();
-        float containerViewWidth = (float) getContainerViewWidth();
         float bitmapHeight = (float) this.centerImage.getBitmapHeight();
-        float containerViewHeight = (float) getContainerViewHeight();
-        float min = Math.min(containerViewHeight / bitmapHeight, containerViewWidth / bitmapWidth);
-        this.scale = Math.max(containerViewWidth / ((float) ((int) (bitmapWidth * min))), containerViewHeight / ((float) ((int) (bitmapHeight * min))));
-        updateMinMax(this.scale);
+        if (bitmapWidth != 0.0f && bitmapHeight != 0.0f) {
+            float containerViewWidth = (float) getContainerViewWidth();
+            float containerViewHeight = (float) getContainerViewHeight();
+            float min = Math.min(containerViewHeight / bitmapHeight, containerViewWidth / bitmapWidth);
+            this.scale = Math.max(containerViewWidth / ((float) ((int) (bitmapWidth * min))), containerViewHeight / ((float) ((int) (bitmapHeight * min))));
+            updateMinMax(this.scale);
+        }
     }
 
     public void setParentAlert(ChatAttachAlert chatAttachAlert) {
@@ -3930,6 +3932,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.pickerViewSendButton.setBackgroundDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton")));
             this.pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(-1, Mode.MULTIPLY));
             this.pickerViewSendButton.setImageResource(NUM);
+            this.pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), Mode.MULTIPLY));
             this.containerView.addView(this.pickerViewSendButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 14.0f, 14.0f));
             this.pickerViewSendButton.setContentDescription(LocaleController.getString("Send", NUM));
             this.pickerViewSendButton.setOnClickListener(new -$$Lambda$PhotoViewer$Ygm2nkEIz52xt8vsvpsgSvg6BwY(this));
@@ -4295,7 +4298,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 clippingImageView.setTranslationX(clippingImageView.getTranslationX() - ((float) getLeftInset()));
                 this.animationValues[0][2] = this.animatingImageView.getTranslationX();
             }
-            this.windowView.requestLayout();
+            FrameLayout frameLayout = this.windowView;
+            if (frameLayout != null) {
+                frameLayout.requestLayout();
+            }
         }
         this.containerView.setPadding(windowInsets.getSystemWindowInsetLeft(), 0, windowInsets.getSystemWindowInsetRight(), 0);
         return windowInsets.consumeSystemWindowInsets();
@@ -5505,6 +5511,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             Drawable background = imageView.getBackground();
             Theme.setSelectorDrawableColor(background, color, false);
             Theme.setSelectorDrawableColor(background, Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : str), true);
+            this.pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), Mode.MULTIPLY));
         }
         CheckBox checkBox = this.checkImageView;
         if (checkBox != null) {

@@ -4459,7 +4459,7 @@ public class DialogCell extends BaseCell {
         if (r2 == 0) goto L_0x017f;
     L_0x016d:
         r2 = org.telegram.ui.ActionBar.Theme.dialogs_archiveDrawable;
-        r3 = org.telegram.ui.ActionBar.Theme.getColor(r16);
+        r3 = org.telegram.ui.ActionBar.Theme.getNonAnimatedColor(r16);
         r4 = "Arrow.**";
         r2.setLayerColor(r4, r3);
         org.telegram.ui.ActionBar.Theme.dialogs_archiveDrawableRecolored = r14;
@@ -4537,7 +4537,7 @@ public class DialogCell extends BaseCell {
         if (r4 != 0) goto L_0x0213;
     L_0x0205:
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_archiveDrawable;
-        r5 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r5 = org.telegram.ui.ActionBar.Theme.getNonAnimatedColor(r17);
         r6 = "Arrow.**";
         r4.setLayerColor(r6, r5);
         r4 = 1;

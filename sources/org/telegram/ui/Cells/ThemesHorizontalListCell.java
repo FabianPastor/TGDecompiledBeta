@@ -647,6 +647,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             this.themeInfo = themeInfo;
             this.isFirst = z2;
             this.isLast = z;
+            this.accentId = themeInfo.currentAccentId;
             LayoutParams layoutParams = (LayoutParams) this.button.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(this.isFirst ? 49.0f : 27.0f);
             this.button.setLayoutParams(layoutParams);

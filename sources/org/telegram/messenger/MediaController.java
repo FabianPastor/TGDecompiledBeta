@@ -3493,7 +3493,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         return false;
     }
 
-    public boolean resumeAudio(MessageObject messageObject) {
+    private boolean resumeAudio(MessageObject messageObject) {
         if (!((this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null || !isSamePlayingMessage(messageObject))) {
             try {
                 startProgressTimer(this.playingMessageObject);

@@ -102,6 +102,7 @@ import org.telegram.tgnet.TLRPC.TL_payments_validatedRequestedInfo;
 import org.telegram.tgnet.TLRPC.TL_postAddress;
 import org.telegram.tgnet.TLRPC.TL_shippingOption;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -5105,7 +5106,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private void setDonePressed(boolean z) {
         this.donePressed = z;
         this.swipeBackEnabled = z ^ 1;
-        this.actionBar.getBackButton().setEnabled(this.donePressed ^ 1);
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            actionBar.getBackButton().setEnabled(this.donePressed ^ 1);
+        }
         TextDetailSettingsCell[] textDetailSettingsCellArr = this.detailSettingsCell;
         if (textDetailSettingsCellArr[0] != null) {
             textDetailSettingsCellArr[0].setEnabled(this.donePressed ^ 1);

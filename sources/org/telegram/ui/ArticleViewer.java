@@ -1247,7 +1247,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 ArticleViewer.this.listView[1].setAlpha(1.0f);
                 ArticleViewer.this.listView[1].setTranslationX(0.0f);
                 ArticleViewer.this.listView[0].setBackgroundColor(ArticleViewer.this.backgroundPaint.getColor());
-                ArticleViewer.this.updateInterfaceForCurrentPage(true, 0);
+                ArticleViewer.this.updateInterfaceForCurrentPage(true, -1);
             } else {
                 this.movingPage = false;
             }

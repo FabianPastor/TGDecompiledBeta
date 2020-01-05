@@ -4987,7 +4987,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$BwVmPHsS9r3JtAebM5EKanHSsKE;
         r0.<init>(r3, r8, r10);
         r7.setOnCancelListener(r0);
-        r0 = 3;
+        r0 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
         r7.showDelayed(r0);	 Catch:{ Exception -> 0x0339 }
     L_0x0339:
         return;
@@ -6504,18 +6504,18 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         if (r13 != r0) goto L_0x0009;
     L_0x0004:
         r12.switchToAvailableAccountOrLogout();
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0009:
         r0 = org.telegram.messenger.NotificationCenter.closeOtherAppActivities;
         r1 = 0;
         if (r13 != r0) goto L_0x001a;
     L_0x000e:
         r13 = r15[r1];
-        if (r13 == r12) goto L_0x0565;
+        if (r13 == r12) goto L_0x0568;
     L_0x0012:
         r12.onFinish();
         r12.finish();
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x001a:
         r0 = org.telegram.messenger.NotificationCenter.didUpdateConnectionState;
         if (r13 != r0) goto L_0x0049;
@@ -6523,7 +6523,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r13 = org.telegram.tgnet.ConnectionsManager.getInstance(r14);
         r13 = r13.getConnectionState();
         r15 = r12.currentConnectionState;
-        if (r15 == r13) goto L_0x0565;
+        if (r15 == r13) goto L_0x0568;
     L_0x002a:
         r15 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
         if (r15 == 0) goto L_0x0042;
@@ -6538,14 +6538,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0042:
         r12.currentConnectionState = r13;
         r12.updateCurrentConnectionState(r14);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0049:
         r0 = org.telegram.messenger.NotificationCenter.mainUserInfoChanged;
         if (r13 != r0) goto L_0x0054;
     L_0x004d:
         r13 = r12.drawerLayoutAdapter;
         r13.notifyDataSetChanged();
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0054:
         r0 = org.telegram.messenger.NotificationCenter.needShowAlert;
         r2 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
@@ -6675,7 +6675,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0169:
         r13 = mainFragmentsStack;
         r13 = r13.isEmpty();
-        if (r13 != 0) goto L_0x0565;
+        if (r13 != 0) goto L_0x0568;
     L_0x0171:
         r13 = mainFragmentsStack;
         r14 = r13.size();
@@ -6684,7 +6684,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r13 = (org.telegram.ui.ActionBar.BaseFragment) r13;
         r14 = r0.create();
         r13.showDialog(r14);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0187:
         r0 = org.telegram.messenger.NotificationCenter.wasUnableToFindCurrentLocation;
         if (r13 != r0) goto L_0x01dd;
@@ -6709,7 +6709,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r15.setMessage(r13);
         r13 = mainFragmentsStack;
         r13 = r13.isEmpty();
-        if (r13 != 0) goto L_0x0565;
+        if (r13 != 0) goto L_0x0568;
     L_0x01c7:
         r13 = mainFragmentsStack;
         r14 = r13.size();
@@ -6718,19 +6718,19 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r13 = (org.telegram.ui.ActionBar.BaseFragment) r13;
         r14 = r15.create();
         r13.showDialog(r14);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x01dd:
         r0 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper;
         if (r13 != r0) goto L_0x01f0;
     L_0x01e1:
         r13 = r12.sideMenu;
-        if (r13 == 0) goto L_0x0565;
+        if (r13 == 0) goto L_0x0568;
     L_0x01e5:
         r13 = r13.getChildAt(r1);
-        if (r13 == 0) goto L_0x0565;
+        if (r13 == 0) goto L_0x0568;
     L_0x01eb:
         r13.invalidate();
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x01f0:
         r0 = org.telegram.messenger.NotificationCenter.didSetPasscode;
         if (r13 != r0) goto L_0x0226;
@@ -6745,22 +6745,22 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0202:
         r13 = r12.getWindow();	 Catch:{ Exception -> 0x020b }
         r13.setFlags(r14, r14);	 Catch:{ Exception -> 0x020b }
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x020b:
         r13 = move-exception;
         org.telegram.messenger.FileLog.e(r13);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0211:
         r13 = org.telegram.messenger.AndroidUtilities.hasFlagSecureFragment();
-        if (r13 != 0) goto L_0x0565;
+        if (r13 != 0) goto L_0x0568;
     L_0x0217:
         r13 = r12.getWindow();	 Catch:{ Exception -> 0x0220 }
         r13.clearFlags(r14);	 Catch:{ Exception -> 0x0220 }
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0220:
         r13 = move-exception;
         org.telegram.messenger.FileLog.e(r13);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0226:
         r0 = org.telegram.messenger.NotificationCenter.reloadInterface;
         if (r13 != r0) goto L_0x0247;
@@ -6779,13 +6779,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1 = 1;
     L_0x0242:
         r12.rebuildAllFragments(r1);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0247:
         r0 = org.telegram.messenger.NotificationCenter.suggestedLangpack;
         if (r13 != r0) goto L_0x0250;
     L_0x024b:
         r12.showLanguageAlert(r1);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0250:
         r0 = org.telegram.messenger.NotificationCenter.openArticle;
         if (r13 != r0) goto L_0x0282;
@@ -6809,7 +6809,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r15 = r15[r11];
         r15 = (java.lang.String) r15;
         r13.open(r14, r15);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0282:
         r0 = org.telegram.messenger.NotificationCenter.hasNewContactsToImport;
         if (r13 != r0) goto L_0x0307;
@@ -6864,7 +6864,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r13 = r5.create();
         r4.showDialog(r13);
         r13.setCanceledOnTouchOutside(r1);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0306:
         return;
     L_0x0307:
@@ -6910,7 +6910,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r14 = org.telegram.ui.ActionBar.Theme.getColor(r14);
         r13.setBehindKeyboardColor(r14);
         r12.checkSystemBarColors();
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0367:
         r14 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme;
         if (r13 != r14) goto L_0x0433;
@@ -7002,25 +7002,25 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1 = r12.actionBarLayout;
         r1.animateThemedValues(r14, r15, r0, r13);
         r1 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r1 == 0) goto L_0x0565;
+        if (r1 == 0) goto L_0x0568;
     L_0x0427:
         r1 = r12.layersActionBarLayout;
         r1.animateThemedValues(r14, r15, r0, r13);
         r1 = r12.rightActionBarLayout;
         r1.animateThemedValues(r14, r15, r0, r13);
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0433:
         r14 = org.telegram.messenger.NotificationCenter.notificationsCountUpdated;
         if (r13 != r14) goto L_0x0464;
     L_0x0437:
         r13 = r12.sideMenu;
-        if (r13 == 0) goto L_0x0565;
+        if (r13 == 0) goto L_0x0568;
     L_0x043b:
         r14 = r15[r1];
         r14 = (java.lang.Integer) r14;
         r13 = r13.getChildCount();
     L_0x0443:
-        if (r1 >= r13) goto L_0x0565;
+        if (r1 >= r13) goto L_0x0568;
     L_0x0445:
         r15 = r12.sideMenu;
         r15 = r15.getChildAt(r1);
@@ -7034,7 +7034,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         if (r0 != r2) goto L_0x0461;
     L_0x045c:
         r15.invalidate();
-        goto L_0x0565;
+        goto L_0x0568;
     L_0x0461:
         r1 = r1 + 1;
         goto L_0x0443;
@@ -7042,22 +7042,22 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r14 = org.telegram.messenger.NotificationCenter.needShowPlayServicesAlert;
         if (r13 != r14) goto L_0x0473;
     L_0x0468:
-        r13 = r15[r1];	 Catch:{ all -> 0x0565 }
-        r13 = (com.google.android.gms.common.api.Status) r13;	 Catch:{ all -> 0x0565 }
+        r13 = r15[r1];	 Catch:{ all -> 0x0568 }
+        r13 = (com.google.android.gms.common.api.Status) r13;	 Catch:{ all -> 0x0568 }
         r14 = 140; // 0x8c float:1.96E-43 double:6.9E-322;
-        r13.startResolutionForResult(r12, r14);	 Catch:{ all -> 0x0565 }
-        goto L_0x0565;
+        r13.startResolutionForResult(r12, r14);	 Catch:{ all -> 0x0568 }
+        goto L_0x0568;
     L_0x0473:
         r14 = org.telegram.messenger.NotificationCenter.fileDidLoad;
-        if (r13 != r14) goto L_0x052d;
+        if (r13 != r14) goto L_0x0530;
     L_0x0477:
         r13 = r12.loadingThemeFileName;
-        if (r13 == 0) goto L_0x04fd;
+        if (r13 == 0) goto L_0x04fe;
     L_0x047b:
         r14 = r15[r1];
         r14 = (java.lang.String) r14;
         r13 = r13.equals(r14);
-        if (r13 == 0) goto L_0x0565;
+        if (r13 == 0) goto L_0x0568;
     L_0x0485:
         r12.loadingThemeFileName = r10;
         r13 = new java.io.File;
@@ -7115,73 +7115,74 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r12.lambda$runLinkRequest$32$LaunchActivity(r13);
     L_0x04f9:
         r12.onThemeLoadFinish();
-        goto L_0x0565;
-    L_0x04fd:
+        goto L_0x0568;
+    L_0x04fe:
         r13 = r12.loadingThemeWallpaperName;
-        if (r13 == 0) goto L_0x0565;
-    L_0x0501:
+        if (r13 == 0) goto L_0x0568;
+    L_0x0502:
         r14 = r15[r1];
         r14 = (java.lang.String) r14;
         r13 = r13.equals(r14);
-        if (r13 == 0) goto L_0x0565;
-    L_0x050b:
+        if (r13 == 0) goto L_0x0568;
+    L_0x050c:
         r12.loadingThemeWallpaperName = r10;
         r13 = r15[r11];
         r13 = (java.io.File) r13;
         r14 = r12.loadingThemeAccent;
-        if (r14 == 0) goto L_0x0522;
-    L_0x0515:
+        if (r14 == 0) goto L_0x0523;
+    L_0x0516:
         r13 = r12.loadingTheme;
         r14 = r12.loadingThemeWallpaper;
         r15 = r12.loadingThemeInfo;
         r12.openThemeAccentPreview(r13, r14, r15);
         r12.onThemeLoadFinish();
-        goto L_0x0565;
-    L_0x0522:
-        r14 = org.telegram.messenger.Utilities.globalQueue;
-        r15 = new org.telegram.ui.-$$Lambda$LaunchActivity$XCOh9XiH_nEBmntlMKEFLyPJasM;
-        r15.<init>(r12, r13);
-        r14.postRunnable(r15);
-        goto L_0x0565;
-    L_0x052d:
+        goto L_0x0568;
+    L_0x0523:
+        r14 = r12.loadingThemeInfo;
+        r15 = org.telegram.messenger.Utilities.globalQueue;
+        r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$Xd6X8oHbTQg4L6KRZ74pkknk70g;
+        r0.<init>(r12, r14, r13);
+        r15.postRunnable(r0);
+        goto L_0x0568;
+    L_0x0530:
         r14 = org.telegram.messenger.NotificationCenter.fileDidFailToLoad;
-        if (r13 != r14) goto L_0x0549;
-    L_0x0531:
+        if (r13 != r14) goto L_0x054c;
+    L_0x0534:
         r13 = r15[r1];
         r13 = (java.lang.String) r13;
         r14 = r12.loadingThemeFileName;
         r14 = r13.equals(r14);
-        if (r14 != 0) goto L_0x0545;
-    L_0x053d:
+        if (r14 != 0) goto L_0x0548;
+    L_0x0540:
         r14 = r12.loadingThemeWallpaperName;
         r13 = r13.equals(r14);
-        if (r13 == 0) goto L_0x0565;
-    L_0x0545:
+        if (r13 == 0) goto L_0x0568;
+    L_0x0548:
         r12.onThemeLoadFinish();
-        goto L_0x0565;
-    L_0x0549:
+        goto L_0x0568;
+    L_0x054c:
         r14 = org.telegram.messenger.NotificationCenter.screenStateChanged;
-        if (r13 != r14) goto L_0x055e;
-    L_0x054d:
+        if (r13 != r14) goto L_0x0561;
+    L_0x0550:
         r13 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused;
-        if (r13 == 0) goto L_0x0552;
-    L_0x0551:
+        if (r13 == 0) goto L_0x0555;
+    L_0x0554:
         return;
-    L_0x0552:
+    L_0x0555:
         r13 = org.telegram.messenger.ApplicationLoader.isScreenOn;
-        if (r13 == 0) goto L_0x055a;
-    L_0x0556:
+        if (r13 == 0) goto L_0x055d;
+    L_0x0559:
         r12.onPasscodeResume();
-        goto L_0x0565;
-    L_0x055a:
+        goto L_0x0568;
+    L_0x055d:
         r12.onPasscodePause();
-        goto L_0x0565;
-    L_0x055e:
+        goto L_0x0568;
+    L_0x0561:
         r14 = org.telegram.messenger.NotificationCenter.needCheckSystemBarColors;
-        if (r13 != r14) goto L_0x0565;
-    L_0x0562:
-        r12.checkSystemBarColors();
+        if (r13 != r14) goto L_0x0568;
     L_0x0565:
+        r12.checkSystemBarColors();
+    L_0x0568:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -7233,25 +7234,26 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         onThemeLoadFinish();
     }
 
-    public /* synthetic */ void lambda$didReceivedNotification$59$LaunchActivity(File file) {
-        ThemeInfo themeInfo = this.loadingThemeInfo;
+    public /* synthetic */ void lambda$didReceivedNotification$59$LaunchActivity(ThemeInfo themeInfo, File file) {
         themeInfo.createBackground(file, themeInfo.pathToWallpaper);
         AndroidUtilities.runOnUIThread(new -$$Lambda$LaunchActivity$vpupveJhGHAPDPz0kMIWugUvsto(this));
     }
 
     public /* synthetic */ void lambda$null$58$LaunchActivity() {
-        File filesDirFixed = ApplicationLoader.getFilesDirFixed();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("remote");
-        stringBuilder.append(this.loadingTheme.id);
-        stringBuilder.append(".attheme");
-        File file = new File(filesDirFixed, stringBuilder.toString());
-        TL_theme tL_theme = this.loadingTheme;
-        ThemeInfo applyThemeFile = Theme.applyThemeFile(file, tL_theme.title, tL_theme, true);
-        if (applyThemeFile != null) {
-            lambda$runLinkRequest$32$LaunchActivity(new ThemePreviewActivity(applyThemeFile, true, 0, false, false));
+        if (this.loadingTheme != null) {
+            File filesDirFixed = ApplicationLoader.getFilesDirFixed();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("remote");
+            stringBuilder.append(this.loadingTheme.id);
+            stringBuilder.append(".attheme");
+            File file = new File(filesDirFixed, stringBuilder.toString());
+            TL_theme tL_theme = this.loadingTheme;
+            ThemeInfo applyThemeFile = Theme.applyThemeFile(file, tL_theme.title, tL_theme, true);
+            if (applyThemeFile != null) {
+                lambda$runLinkRequest$32$LaunchActivity(new ThemePreviewActivity(applyThemeFile, true, 0, false, false));
+            }
+            onThemeLoadFinish();
         }
-        onThemeLoadFinish();
     }
 
     private String getStringForLanguageAlert(HashMap<String, String> hashMap, String str, int i) {

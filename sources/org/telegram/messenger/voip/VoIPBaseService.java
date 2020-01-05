@@ -783,7 +783,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         sharedInstance = null;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didEndedCall, new Object[0]);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didEndCall, new Object[0]);
             }
         });
         VoIPController voIPController = this.controller;
