@@ -3322,12 +3322,15 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
             }
             MessagesStorage.getInstance(this.currentAccount).putWallpapers(tL_account_wallPapers.wallpapers, 1);
         }
-        if (this.selectedPattern == null && !TextUtils.isEmpty(this.accent.patternSlug)) {
-            TL_account_getWallPaper tL_account_getWallPaper = new TL_account_getWallPaper();
-            TL_inputWallPaperSlug tL_inputWallPaperSlug = new TL_inputWallPaperSlug();
-            tL_inputWallPaperSlug.slug = this.accent.patternSlug;
-            tL_account_getWallPaper.wallpaper = tL_inputWallPaperSlug;
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(getConnectionsManager().sendRequest(tL_account_getWallPaper, new -$$Lambda$ThemePreviewActivity$FLxgtJIEQMFfRtLB25WVCLASSNAMEMcPw(this)), this.classGuid);
+        if (this.selectedPattern == null) {
+            ThemeAccent themeAccent2 = this.accent;
+            if (themeAccent2 != null && !TextUtils.isEmpty(themeAccent2.patternSlug)) {
+                TL_account_getWallPaper tL_account_getWallPaper = new TL_account_getWallPaper();
+                TL_inputWallPaperSlug tL_inputWallPaperSlug = new TL_inputWallPaperSlug();
+                tL_inputWallPaperSlug.slug = this.accent.patternSlug;
+                tL_account_getWallPaper.wallpaper = tL_inputWallPaperSlug;
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(getConnectionsManager().sendRequest(tL_account_getWallPaper, new -$$Lambda$ThemePreviewActivity$FLxgtJIEQMFfRtLB25WVCLASSNAMEMcPw(this)), this.classGuid);
+            }
         }
     }
 

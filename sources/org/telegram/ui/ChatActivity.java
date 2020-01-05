@@ -514,6 +514,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean locationAlertShown;
     private int[] maxDate = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE};
     private int[] maxMessageId = new int[]{Integer.MAX_VALUE, Integer.MAX_VALUE};
+    private boolean maybeStartTrackingSlidingView;
     private TextView mediaBanTooltip;
     private FrameLayout mentionContainer;
     private ExtendedGridLayoutManager mentionGridLayoutManager;
@@ -866,6 +867,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private int startLoadFromMessageIdSaved;
     private int startLoadFromMessageOffset = Integer.MAX_VALUE;
     private String startVideoEdit;
+    private boolean startedTrackingSlidingView;
     private StickersAdapter stickersAdapter;
     private RecyclerListView stickersListView;
     private OnItemClickListener stickersOnItemClickListener;
@@ -21010,10 +21012,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ChatActivity.this.alertViewAnimator = null;
                         }
                         ChatActivity.this.alertViewAnimator = new AnimatorSet();
-                        AnimatorSet access$25000 = ChatActivity.this.alertViewAnimator;
+                        AnimatorSet access$25200 = ChatActivity.this.alertViewAnimator;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(50.0f))});
-                        access$25000.playTogether(animatorArr);
+                        access$25200.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
                         ChatActivity.this.alertViewAnimator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {

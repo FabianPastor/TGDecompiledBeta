@@ -3048,7 +3048,7 @@ public class Theme {
     /* JADX WARNING: Removed duplicated region for block: B:159:0x2d58 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:167:0x2d78 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:166:0x2d75 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2d91 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x2d91 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x2d85 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x2ad6 A:{SYNTHETIC, Splitter:B:68:0x2ad6} */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x2ac5 A:{Catch:{ Exception -> 0x2e34 }} */
@@ -3060,49 +3060,53 @@ public class Theme {
     /* JADX WARNING: Removed duplicated region for block: B:183:0x2e1a A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
     /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x2ebe  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x2edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2ee3  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x2ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
+    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
     /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
     /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x2ebe  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x2edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x2ee1  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2ee3  */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x2e8b  */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
+    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:159:0x2d58 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:166:0x2d75 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:167:0x2d78 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x2d85 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2d91 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x2d91 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:159:0x2d58 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:167:0x2d78 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:166:0x2d75 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2d91 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x2d91 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x2d85 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
     /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x2ebe  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x2edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2ee3  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x2ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x2e8b  */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
+    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
     /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
     /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x2ebe  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x2edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x2ee1  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2ee3  */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x2e8b  */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
+    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:159:0x2d58 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:166:0x2d75 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:167:0x2d78 A:{Catch:{ Exception -> 0x2e32 }} */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x2d85 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x2d91 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x2d91 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
     /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x2ebe  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x2edd  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2ee3  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x2ee1  */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x2e8b  */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
+    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
     static {
         /*
         r0 = new java.lang.Object;
@@ -7841,7 +7845,7 @@ public class Theme {
     L_0x2e48:
         r0 = "selectedBackground2";
         r0 = r4.contains(r0);
-        if (r0 == 0) goto L_0x2ed6;
+        if (r0 == 0) goto L_0x2ef4;
     L_0x2e50:
         r0 = "overrideThemeWallpaper";
         r1 = 0;
@@ -7849,26 +7853,46 @@ public class Theme {
         r5 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
         r1 = "selectedBackground2";
         r5 = r4.getLong(r1, r5);
-        if (r0 != 0) goto L_0x2e69;
-    L_0x2e62:
+        r8 = -2;
+        r1 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
+        if (r1 == 0) goto L_0x2ee1;
+    L_0x2e66:
+        if (r0 != 0) goto L_0x2e6f;
+    L_0x2e68:
         r0 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
         r8 = (r5 > r0 ? 1 : (r5 == r0 ? 0 : -1));
-        if (r8 == 0) goto L_0x2ec3;
-    L_0x2e69:
+        if (r8 == 0) goto L_0x2ee1;
+    L_0x2e6f:
         r0 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo;
         r0.<init>();
+        r1 = "selectedColor";
+        r8 = 0;
+        r1 = r4.getInt(r1, r8);
+        r0.color = r1;
+        r1 = "selectedBackgroundSlug";
+        r1 = r4.getString(r1, r3);
+        r0.slug = r1;
+        r8 = -1;
+        r1 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
+        if (r1 != 0) goto L_0x2e9c;
+    L_0x2e8b:
+        r1 = r0.slug;
+        r1 = android.text.TextUtils.isEmpty(r1);
+        if (r1 == 0) goto L_0x2e9c;
+    L_0x2e93:
+        r1 = "c";
+        r0.slug = r1;
+        r0.fileName = r3;
+        r0.originalFileName = r3;
+        goto L_0x2ea6;
+    L_0x2e9c:
         r1 = "wallpaper.jpg";
         r0.fileName = r1;
         r1 = "wallpaper_original.jpg";
         r0.originalFileName = r1;
-        r1 = "selectedBackgroundSlug";
-        r1 = r4.getString(r1, r3);
-        r0.slug = r1;
-        r1 = "selectedColor";
-        r3 = 0;
-        r1 = r4.getInt(r1, r3);
-        r0.color = r1;
+    L_0x2ea6:
         r1 = "selectedGradientColor";
+        r3 = 0;
         r1 = r4.getInt(r1, r3);
         r0.gradientColor = r1;
         r1 = 45;
@@ -7888,32 +7912,32 @@ public class Theme {
         r1 = currentDayTheme;
         r1.setOverrideWallpaper(r0);
         r1 = selectedAutoNightType;
-        if (r1 == 0) goto L_0x2ec3;
-    L_0x2ebe:
+        if (r1 == 0) goto L_0x2ee1;
+    L_0x2edc:
         r1 = currentNightTheme;
         r1.setOverrideWallpaper(r0);
-    L_0x2ec3:
+    L_0x2ee1:
         r0 = r4.edit();
         r1 = "overrideThemeWallpaper";
         r0 = r0.remove(r1);
         r1 = "selectedBackground2";
         r0 = r0.remove(r1);
         r0.commit();
-    L_0x2ed6:
+    L_0x2ef4:
         r0 = needSwitchToTheme();
         r1 = 2;
-        if (r0 != r1) goto L_0x2edf;
-    L_0x2edd:
+        if (r0 != r1) goto L_0x2efd;
+    L_0x2efb:
         r2 = currentNightTheme;
-    L_0x2edf:
-        if (r0 != r1) goto L_0x2ee3;
-    L_0x2ee1:
+    L_0x2efd:
+        if (r0 != r1) goto L_0x2var_;
+    L_0x2eff:
         r1 = 0;
-        goto L_0x2ee5;
-    L_0x2ee3:
+        goto L_0x2var_;
+    L_0x2var_:
         r1 = 0;
         r7 = 0;
-    L_0x2ee5:
+    L_0x2var_:
         applyTheme(r2, r1, r1, r7);
         r0 = org.telegram.ui.ActionBar.-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I.INSTANCE;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
