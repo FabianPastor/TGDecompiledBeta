@@ -1675,9 +1675,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 } else if (!DialogsActivity.this.validateSlowModeDialog(j)) {
                 } else {
                     if (DialogsActivity.this.dialogsAdapter.hasSelectedDialogs()) {
-                        DialogsActivity.this.dialogsAdapter.addOrRemoveSelectedDialog(j, null);
+                        DialogsActivity.this.findAndUpdateCheckBox(j, DialogsActivity.this.dialogsAdapter.addOrRemoveSelectedDialog(j, null));
                         DialogsActivity.this.updateSelectedCount();
-                        DialogsActivity.this.closeSearch();
+                        DialogsActivity.this.actionBar.closeSearchField();
                     } else {
                         DialogsActivity.this.didSelectResult(j, true, false);
                     }
@@ -2505,6 +2505,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         emptyTextProgressView3.setScaleY(f);
     }
 
+    private void findAndUpdateCheckBox(long j, boolean z) {
+        int childCount = this.listView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = this.listView.getChildAt(i);
+            if (childAt instanceof DialogCell) {
+                DialogCell dialogCell = (DialogCell) childAt;
+                if (dialogCell.getDialogId() == j) {
+                    dialogCell.setChecked(z, true);
+                    return;
+                }
+            }
+        }
+    }
+
     /* JADX WARNING: Removed duplicated region for block: B:94:0x0172  */
     /* JADX WARNING: Removed duplicated region for block: B:93:0x0171 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:93:0x0171 A:{RETURN} */
@@ -2750,7 +2764,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         return;
     L_0x0172:
         r3 = r10.onlySelect;
-        if (r3 == 0) goto L_0x0194;
+        if (r3 == 0) goto L_0x01a1;
     L_0x0176:
         r12 = r10.validateSlowModeDialog(r6);
         if (r12 != 0) goto L_0x017d;
@@ -2759,103 +2773,110 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     L_0x017d:
         r12 = r10.dialogsAdapter;
         r12 = r12.hasSelectedDialogs();
-        if (r12 == 0) goto L_0x018f;
+        if (r12 == 0) goto L_0x019c;
     L_0x0185:
         r12 = r10.dialogsAdapter;
-        r12.addOrRemoveSelectedDialog(r6, r11);
-        r10.updateSelectedCount();
-        goto L_0x0244;
+        r11 = r12.addOrRemoveSelectedDialog(r6, r11);
+        r12 = r10.dialogsSearchAdapter;
+        if (r13 != r12) goto L_0x0197;
     L_0x018f:
+        r12 = r10.actionBar;
+        r12.closeSearchField();
+        r10.findAndUpdateCheckBox(r6, r11);
+    L_0x0197:
+        r10.updateSelectedCount();
+        goto L_0x0251;
+    L_0x019c:
         r10.didSelectResult(r6, r1, r5);
-        goto L_0x0244;
-    L_0x0194:
+        goto L_0x0251;
+    L_0x01a1:
         r11 = new android.os.Bundle;
         r11.<init>();
         r1 = (int) r6;
         r2 = r6 >> r2;
         r3 = (int) r2;
-        if (r1 == 0) goto L_0x01d0;
-    L_0x019f:
-        if (r1 <= 0) goto L_0x01a8;
-    L_0x01a1:
+        if (r1 == 0) goto L_0x01dd;
+    L_0x01ac:
+        if (r1 <= 0) goto L_0x01b5;
+    L_0x01ae:
         r2 = "user_id";
         r11.putInt(r2, r1);
-        goto L_0x01d5;
-    L_0x01a8:
-        if (r1 >= 0) goto L_0x01d5;
-    L_0x01aa:
-        if (r0 == 0) goto L_0x01c9;
-    L_0x01ac:
+        goto L_0x01e2;
+    L_0x01b5:
+        if (r1 >= 0) goto L_0x01e2;
+    L_0x01b7:
+        if (r0 == 0) goto L_0x01d6;
+    L_0x01b9:
         r2 = r10.getMessagesController();
         r3 = -r1;
         r3 = java.lang.Integer.valueOf(r3);
         r2 = r2.getChat(r3);
-        if (r2 == 0) goto L_0x01c9;
-    L_0x01bb:
+        if (r2 == 0) goto L_0x01d6;
+    L_0x01c8:
         r3 = r2.migrated_to;
-        if (r3 == 0) goto L_0x01c9;
-    L_0x01bf:
+        if (r3 == 0) goto L_0x01d6;
+    L_0x01cc:
         r3 = "migrated_to";
         r11.putInt(r3, r1);
         r1 = r2.migrated_to;
         r1 = r1.channel_id;
         r1 = -r1;
-    L_0x01c9:
+    L_0x01d6:
         r1 = -r1;
         r2 = "chat_id";
         r11.putInt(r2, r1);
-        goto L_0x01d5;
-    L_0x01d0:
+        goto L_0x01e2;
+    L_0x01dd:
         r1 = "enc_id";
         r11.putInt(r1, r3);
-    L_0x01d5:
-        if (r0 == 0) goto L_0x01dd;
-    L_0x01d7:
+    L_0x01e2:
+        if (r0 == 0) goto L_0x01ea;
+    L_0x01e4:
         r12 = "message_id";
         r11.putInt(r12, r0);
-        goto L_0x01f1;
-    L_0x01dd:
-        if (r12 != 0) goto L_0x01e3;
-    L_0x01df:
+        goto L_0x01fe;
+    L_0x01ea:
+        if (r12 != 0) goto L_0x01f0;
+    L_0x01ec:
         r10.closeSearch();
-        goto L_0x01f1;
-    L_0x01e3:
+        goto L_0x01fe;
+    L_0x01f0:
         r12 = r10.searchObject;
-        if (r12 == 0) goto L_0x01f1;
-    L_0x01e7:
+        if (r12 == 0) goto L_0x01fe;
+    L_0x01f4:
         r0 = r10.dialogsSearchAdapter;
         r1 = r10.searchDialogId;
         r0.putRecentSearch(r1, r12);
         r12 = 0;
         r10.searchObject = r12;
-    L_0x01f1:
+    L_0x01fe:
         r12 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r12 == 0) goto L_0x0210;
-    L_0x01f7:
+        if (r12 == 0) goto L_0x021d;
+    L_0x0204:
         r0 = r10.openedDialogId;
         r12 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1));
-        if (r12 != 0) goto L_0x0202;
-    L_0x01fd:
+        if (r12 != 0) goto L_0x020f;
+    L_0x020a:
         r12 = r10.dialogsSearchAdapter;
-        if (r13 == r12) goto L_0x0202;
-    L_0x0201:
+        if (r13 == r12) goto L_0x020f;
+    L_0x020e:
         return;
-    L_0x0202:
+    L_0x020f:
         r12 = r10.dialogsAdapter;
-        if (r12 == 0) goto L_0x0210;
-    L_0x0206:
+        if (r12 == 0) goto L_0x021d;
+    L_0x0213:
         r10.openedDialogId = r6;
         r12.setOpenedDialogId(r6);
         r12 = 512; // 0x200 float:7.175E-43 double:2.53E-321;
         r10.updateVisibleRows(r12);
-    L_0x0210:
+    L_0x021d:
         r12 = r10.searchString;
-        if (r12 == 0) goto L_0x0232;
-    L_0x0214:
+        if (r12 == 0) goto L_0x023f;
+    L_0x0221:
         r12 = r10.getMessagesController();
         r12 = r12.checkCanOpenChat(r11, r10);
-        if (r12 == 0) goto L_0x0244;
-    L_0x021e:
+        if (r12 == 0) goto L_0x0251;
+    L_0x022b:
         r12 = r10.getNotificationCenter();
         r13 = org.telegram.messenger.NotificationCenter.closeChats;
         r0 = new java.lang.Object[r5];
@@ -2863,16 +2884,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = new org.telegram.ui.ChatActivity;
         r12.<init>(r11);
         r10.presentFragment(r12);
-        goto L_0x0244;
-    L_0x0232:
+        goto L_0x0251;
+    L_0x023f:
         r12 = r10.getMessagesController();
         r12 = r12.checkCanOpenChat(r11, r10);
-        if (r12 == 0) goto L_0x0244;
-    L_0x023c:
+        if (r12 == 0) goto L_0x0251;
+    L_0x0249:
         r12 = new org.telegram.ui.ChatActivity;
         r12.<init>(r11);
         r10.presentFragment(r12);
-    L_0x0244:
+    L_0x0251:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemClick(android.view.View, int, androidx.recyclerview.widget.RecyclerView$Adapter):void");

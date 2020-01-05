@@ -3826,6 +3826,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.qualityPicker.updateSelectedCount(0, false);
             this.qualityPicker.setTranslationY((float) AndroidUtilities.dp(120.0f));
             this.qualityPicker.doneButton.setText(LocaleController.getString("Done", NUM).toUpperCase());
+            this.qualityPicker.doneButton.setTextColor(Theme.getColor("dialogFloatingButton"));
             this.containerView.addView(this.qualityPicker, LayoutHelper.createFrame(-1, 48, 83));
             this.qualityPicker.cancelButton.setOnClickListener(new -$$Lambda$PhotoViewer$Ix7Bv26ggFYqzRhGVPWK6_2sNXM(this));
             this.qualityPicker.doneButton.setOnClickListener(new -$$Lambda$PhotoViewer$39sOKx3t1IYK0_BSSSDOFzpR-Xk(this));
@@ -3926,7 +3927,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
             };
             this.pickerViewSendButton.setScaleType(ScaleType.CENTER);
-            this.pickerViewSendButton.setBackgroundDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), -10043398, -10043398));
+            this.pickerViewSendButton.setBackgroundDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton")));
             this.pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(-1, Mode.MULTIPLY));
             this.pickerViewSendButton.setImageResource(NUM);
             this.containerView.addView(this.pickerViewSendButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 14.0f, 14.0f));
@@ -4055,7 +4056,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.checkImageView.setHasBorder(true);
             this.checkImageView.setSize(40);
             this.checkImageView.setCheckOffset(AndroidUtilities.dp(1.0f));
-            this.checkImageView.setColor(-10043398, -1);
+            this.checkImageView.setColor(Theme.getColor("dialogFloatingButton"), -1);
             this.checkImageView.setVisibility(8);
             FrameLayoutDrawer frameLayoutDrawer = this.containerView;
             CheckBox checkBox = this.checkImageView;
@@ -4719,7 +4720,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             textView2.setMinWidth(AndroidUtilities.dp(64.0f));
             textView2.setTag(Integer.valueOf(-1));
             textView2.setTextSize(1, 14.0f);
-            textView2.setTextColor(-11944718);
+            String str2 = "dialogFloatingButton";
+            textView2.setTextColor(Theme.getColor(str2));
             textView2.setGravity(17);
             textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView2.setText(LocaleController.getString("Done", NUM).toUpperCase());
@@ -4731,7 +4733,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             textView2.setMinWidth(AndroidUtilities.dp(64.0f));
             textView2.setTag(Integer.valueOf(-2));
             textView2.setTextSize(1, 14.0f);
-            textView2.setTextColor(-11944718);
+            textView2.setTextColor(Theme.getColor(str2));
             textView2.setGravity(17);
             textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView2.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
@@ -4769,7 +4771,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         } else if (obj instanceof SearchImage) {
             ((SearchImage) obj).ttl = value;
         }
-        this.timeItem.setColorFilter(value != 0 ? new PorterDuffColorFilter(-12734994, Mode.MULTIPLY) : null);
+        this.timeItem.setColorFilter(value != 0 ? new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY) : null);
         if (!this.checkImageView.isChecked()) {
             this.checkImageView.callOnClick();
         }
@@ -5494,6 +5496,70 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
+    public void updateColors() {
+        String str = "dialogFloatingButton";
+        int color = Theme.getColor(str);
+        ImageView imageView = this.pickerViewSendButton;
+        int i = 0;
+        if (imageView != null) {
+            Drawable background = imageView.getBackground();
+            Theme.setSelectorDrawableColor(background, color, false);
+            Theme.setSelectorDrawableColor(background, Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : str), true);
+        }
+        CheckBox checkBox = this.checkImageView;
+        if (checkBox != null) {
+            checkBox.setColor(Theme.getColor(str), -1);
+        }
+        PorterDuffColorFilter porterDuffColorFilter = new PorterDuffColorFilter(color, Mode.MULTIPLY);
+        imageView = this.timeItem;
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.timeItem.setColorFilter(porterDuffColorFilter);
+        }
+        imageView = this.paintItem;
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.paintItem.setColorFilter(porterDuffColorFilter);
+        }
+        imageView = this.cropItem;
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.cropItem.setColorFilter(porterDuffColorFilter);
+        }
+        imageView = this.tuneItem;
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.tuneItem.setColorFilter(porterDuffColorFilter);
+        }
+        imageView = this.muteItem;
+        if (!(imageView == null || imageView.getColorFilter() == null)) {
+            this.muteItem.setColorFilter(porterDuffColorFilter);
+        }
+        PickerBottomLayoutViewer pickerBottomLayoutViewer = this.editorDoneLayout;
+        if (pickerBottomLayoutViewer != null) {
+            pickerBottomLayoutViewer.doneButton.setTextColor(color);
+        }
+        pickerBottomLayoutViewer = this.qualityPicker;
+        if (pickerBottomLayoutViewer != null) {
+            pickerBottomLayoutViewer.doneButton.setTextColor(color);
+        }
+        PhotoPaintView photoPaintView = this.photoPaintView;
+        if (photoPaintView != null) {
+            photoPaintView.updateColors();
+        }
+        PhotoFilterView photoFilterView = this.photoFilterView;
+        if (photoFilterView != null) {
+            photoFilterView.updateColors();
+        }
+        RecyclerListView recyclerListView = this.selectedPhotosListView;
+        if (recyclerListView != null) {
+            int childCount = recyclerListView.getChildCount();
+            while (i < childCount) {
+                View childAt = this.selectedPhotosListView.getChildAt(i);
+                if (childAt instanceof PhotoPickerPhotoCell) {
+                    ((PhotoPickerPhotoCell) childAt).updateColors();
+                }
+                i++;
+            }
+        }
+    }
+
     public void injectVideoPlayer(VideoPlayer videoPlayer) {
         this.injectingVideoPlayer = videoPlayer;
     }
@@ -5941,7 +6007,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:72:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0045  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0047  */
     private void applyCurrentEditMode() {
         /*
         r19 = this;
@@ -5949,52 +6015,54 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1 = r0.currentEditMode;
         r2 = 3;
         r4 = 2;
+        r5 = 0;
         r6 = 1;
-        if (r1 == r6) goto L_0x0039;
-    L_0x0009:
-        if (r1 != 0) goto L_0x0010;
-    L_0x000b:
+        if (r1 == r6) goto L_0x003b;
+    L_0x000a:
+        if (r1 != 0) goto L_0x0011;
+    L_0x000c:
         r1 = r0.sendPhotoType;
-        if (r1 != r6) goto L_0x0010;
-    L_0x000f:
-        goto L_0x0039;
+        if (r1 != r6) goto L_0x0011;
     L_0x0010:
+        goto L_0x003b;
+    L_0x0011:
         r1 = r0.currentEditMode;
-        if (r1 != r4) goto L_0x0023;
-    L_0x0014:
+        if (r1 != r4) goto L_0x0024;
+    L_0x0015:
         r1 = r0.photoFilterView;
         r1 = r1.getBitmap();
         r7 = r0.photoFilterView;
         r7 = r7.getSavedFilterState();
+        r14 = r5;
         r15 = r7;
-        r14 = 0;
-        goto L_0x0036;
-    L_0x0023:
-        if (r1 != r2) goto L_0x0033;
-    L_0x0025:
+        goto L_0x0038;
+    L_0x0024:
+        if (r1 != r2) goto L_0x0035;
+    L_0x0026:
         r1 = r0.photoPaintView;
         r1 = r1.getBitmap();
         r7 = r0.photoPaintView;
         r7 = r7.getMasks();
+        r15 = r5;
         r14 = r7;
-        goto L_0x0040;
-    L_0x0033:
-        r1 = 0;
-        r14 = 0;
-        r15 = 0;
-    L_0x0036:
-        r16 = 0;
         goto L_0x0043;
-    L_0x0039:
+    L_0x0035:
+        r1 = r5;
+        r14 = r1;
+        r15 = r14;
+    L_0x0038:
+        r16 = 0;
+        goto L_0x0045;
+    L_0x003b:
         r1 = r0.photoCropView;
         r1 = r1.getBitmap();
-        r14 = 0;
-    L_0x0040:
-        r15 = 0;
-        r16 = 1;
+        r14 = r5;
+        r15 = r14;
     L_0x0043:
-        if (r1 == 0) goto L_0x0205;
+        r16 = 1;
     L_0x0045:
+        if (r1 == 0) goto L_0x0213;
+    L_0x0047:
         r7 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
         r8 = (float) r7;
         r7 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
@@ -6005,91 +6073,90 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r13 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
         r7 = r1;
         r7 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r7, r8, r9, r10, r11, r12, r13);
-        if (r7 == 0) goto L_0x0205;
-    L_0x005d:
+        if (r7 == 0) goto L_0x0213;
+    L_0x005f:
         r8 = r0.imagesArrLocals;
         r9 = r0.currentIndex;
         r8 = r8.get(r9);
         r9 = r8 instanceof org.telegram.messenger.MediaController.PhotoEntry;
         r10 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
-        r13 = -12734994; // 0xffffffffff3dadee float:-2.5212719E38 double:NaN;
-        if (r9 == 0) goto L_0x00ed;
-    L_0x006e:
-        r12 = r8;
-        r12 = (org.telegram.messenger.MediaController.PhotoEntry) r12;
+        r17 = "dialogFloatingButton";
+        if (r9 == 0) goto L_0x00f4;
+    L_0x006f:
+        r13 = r8;
+        r13 = (org.telegram.messenger.MediaController.PhotoEntry) r13;
         r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r6);
         r7 = r7.toString();
-        r12.imagePath = r7;
+        r13.imagePath = r7;
         r7 = org.telegram.messenger.AndroidUtilities.dp(r10);
         r8 = (float) r7;
         r7 = org.telegram.messenger.AndroidUtilities.dp(r10);
         r9 = (float) r7;
         r10 = 70;
         r11 = 0;
-        r17 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r12 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
         r18 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
         r7 = r1;
-        r3 = r12;
-        r12 = r17;
-        r5 = -12734994; // 0xffffffffff3dadee float:-2.5212719E38 double:NaN;
+        r3 = r13;
         r13 = r18;
         r7 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r7, r8, r9, r10, r11, r12, r13);
-        if (r7 == 0) goto L_0x00a5;
-    L_0x009b:
+        if (r7 == 0) goto L_0x00a1;
+    L_0x0097:
         r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r6);
         r7 = r7.toString();
         r3.thumbPath = r7;
-    L_0x00a5:
-        if (r14 == 0) goto L_0x00ac;
-    L_0x00a7:
+    L_0x00a1:
+        if (r14 == 0) goto L_0x00a8;
+    L_0x00a3:
         r7 = r3.stickers;
         r7.addAll(r14);
-    L_0x00ac:
+    L_0x00a8:
         r7 = r0.currentEditMode;
         if (r7 != r6) goto L_0x00bf;
-    L_0x00b0:
+    L_0x00ac:
         r2 = r0.cropItem;
         r7 = new android.graphics.PorterDuffColorFilter;
-        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r7.<init>(r5, r8);
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r8, r9);
         r2.setColorFilter(r7);
         r3.isCropped = r6;
-        goto L_0x00e0;
+        goto L_0x00e8;
     L_0x00bf:
-        if (r7 != r4) goto L_0x00d0;
+        if (r7 != r4) goto L_0x00d4;
     L_0x00c1:
         r2 = r0.tuneItem;
         r7 = new android.graphics.PorterDuffColorFilter;
-        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r7.<init>(r5, r8);
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r8, r9);
         r2.setColorFilter(r7);
         r3.isFiltered = r6;
-        goto L_0x00e0;
-    L_0x00d0:
-        if (r7 != r2) goto L_0x00e0;
-    L_0x00d2:
+        goto L_0x00e8;
+    L_0x00d4:
+        if (r7 != r2) goto L_0x00e8;
+    L_0x00d6:
         r2 = r0.paintItem;
         r7 = new android.graphics.PorterDuffColorFilter;
-        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r7.<init>(r5, r8);
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r8, r9);
         r2.setColorFilter(r7);
         r3.isPainted = r6;
-    L_0x00e0:
-        if (r15 == 0) goto L_0x00e6;
-    L_0x00e2:
-        r3.savedFilterState = r15;
-        goto L_0x0168;
-    L_0x00e6:
-        if (r16 == 0) goto L_0x0168;
     L_0x00e8:
-        r2 = 0;
-        r3.savedFilterState = r2;
-        goto L_0x0168;
-    L_0x00ed:
-        r5 = -12734994; // 0xffffffffff3dadee float:-2.5212719E38 double:NaN;
-        r3 = r8 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r3 == 0) goto L_0x0168;
+        if (r15 == 0) goto L_0x00ee;
+    L_0x00ea:
+        r3.savedFilterState = r15;
+        goto L_0x0177;
+    L_0x00ee:
+        if (r16 == 0) goto L_0x0177;
+    L_0x00f0:
+        r3.savedFilterState = r5;
+        goto L_0x0177;
     L_0x00f4:
+        r3 = r8 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r3 == 0) goto L_0x0177;
+    L_0x00f8:
         r3 = r8;
         r3 = (org.telegram.messenger.MediaController.SearchImage) r3;
         r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r6);
@@ -6105,78 +6172,80 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r13 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
         r7 = r1;
         r7 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r7, r8, r9, r10, r11, r12, r13);
-        if (r7 == 0) goto L_0x0123;
-    L_0x0119:
+        if (r7 == 0) goto L_0x0127;
+    L_0x011d:
         r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r6);
         r7 = r7.toString();
         r3.thumbPath = r7;
-    L_0x0123:
-        if (r14 == 0) goto L_0x012a;
-    L_0x0125:
+    L_0x0127:
+        if (r14 == 0) goto L_0x012e;
+    L_0x0129:
         r7 = r3.stickers;
         r7.addAll(r14);
-    L_0x012a:
-        r7 = r0.currentEditMode;
-        if (r7 != r6) goto L_0x013d;
     L_0x012e:
+        r7 = r0.currentEditMode;
+        if (r7 != r6) goto L_0x0145;
+    L_0x0132:
         r2 = r0.cropItem;
         r7 = new android.graphics.PorterDuffColorFilter;
-        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r7.<init>(r5, r8);
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r8, r9);
         r2.setColorFilter(r7);
         r3.isCropped = r6;
-        goto L_0x015e;
-    L_0x013d:
-        if (r7 != r4) goto L_0x014e;
-    L_0x013f:
+        goto L_0x016e;
+    L_0x0145:
+        if (r7 != r4) goto L_0x015a;
+    L_0x0147:
         r2 = r0.tuneItem;
         r7 = new android.graphics.PorterDuffColorFilter;
-        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r7.<init>(r5, r8);
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r8, r9);
         r2.setColorFilter(r7);
         r3.isFiltered = r6;
-        goto L_0x015e;
-    L_0x014e:
-        if (r7 != r2) goto L_0x015e;
-    L_0x0150:
+        goto L_0x016e;
+    L_0x015a:
+        if (r7 != r2) goto L_0x016e;
+    L_0x015c:
         r2 = r0.paintItem;
         r7 = new android.graphics.PorterDuffColorFilter;
-        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r7.<init>(r5, r8);
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r17);
+        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r8, r9);
         r2.setColorFilter(r7);
         r3.isPainted = r6;
-    L_0x015e:
-        if (r15 == 0) goto L_0x0163;
-    L_0x0160:
+    L_0x016e:
+        if (r15 == 0) goto L_0x0173;
+    L_0x0170:
         r3.savedFilterState = r15;
-        goto L_0x0168;
-    L_0x0163:
-        if (r16 == 0) goto L_0x0168;
-    L_0x0165:
-        r2 = 0;
-        r3.savedFilterState = r2;
-    L_0x0168:
-        r2 = r0.sendPhotoType;
-        if (r2 == 0) goto L_0x016f;
-    L_0x016c:
-        r3 = 4;
-        if (r2 != r3) goto L_0x0185;
-    L_0x016f:
-        r2 = r0.placeProvider;
-        if (r2 == 0) goto L_0x0185;
+        goto L_0x0177;
     L_0x0173:
+        if (r16 == 0) goto L_0x0177;
+    L_0x0175:
+        r3.savedFilterState = r5;
+    L_0x0177:
+        r2 = r0.sendPhotoType;
+        if (r2 == 0) goto L_0x017e;
+    L_0x017b:
+        r3 = 4;
+        if (r2 != r3) goto L_0x0194;
+    L_0x017e:
+        r2 = r0.placeProvider;
+        if (r2 == 0) goto L_0x0194;
+    L_0x0182:
         r3 = r0.currentIndex;
         r2.updatePhotoAtIndex(r3);
         r2 = r0.placeProvider;
         r3 = r0.currentIndex;
         r2 = r2.isPhotoChecked(r3);
-        if (r2 != 0) goto L_0x0185;
-    L_0x0182:
+        if (r2 != 0) goto L_0x0194;
+    L_0x0191:
         r19.setPhotoChecked();
-    L_0x0185:
+    L_0x0194:
         r2 = r0.currentEditMode;
-        if (r2 != r6) goto L_0x01e2;
-    L_0x0189:
+        if (r2 != r6) goto L_0x01f1;
+    L_0x0198:
         r2 = r0.photoCropView;
         r2 = r2.getRectSizeX();
         r3 = r19.getContainerViewWidth();
@@ -6184,23 +6253,23 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = r2 / r3;
         r3 = r0.photoCropView;
         r3 = r3.getRectSizeY();
-        r5 = r19.getContainerViewHeight();
-        r5 = (float) r5;
-        r3 = r3 / r5;
-        r5 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
-        if (r5 <= 0) goto L_0x01a6;
-    L_0x01a5:
-        goto L_0x01a7;
-    L_0x01a6:
+        r7 = r19.getContainerViewHeight();
+        r7 = (float) r7;
+        r3 = r3 / r7;
+        r7 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
+        if (r7 <= 0) goto L_0x01b5;
+    L_0x01b4:
+        goto L_0x01b6;
+    L_0x01b5:
         r2 = r3;
-    L_0x01a7:
+    L_0x01b6:
         r0.scale = r2;
         r2 = r0.photoCropView;
         r2 = r2.getRectX();
         r3 = r0.photoCropView;
         r3 = r3.getRectSizeX();
-        r5 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r3 = r3 / r5;
+        r7 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r3 = r3 / r7;
         r2 = r2 + r3;
         r3 = r19.getContainerViewWidth();
         r3 = r3 / r4;
@@ -6211,7 +6280,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = r2.getRectY();
         r3 = r0.photoCropView;
         r3 = r3.getRectSizeY();
-        r3 = r3 / r5;
+        r3 = r3 / r7;
         r2 = r2 + r3;
         r3 = r19.getContainerViewHeight();
         r3 = r3 / r4;
@@ -6222,10 +6291,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r0.applying = r6;
         r2 = r0.photoCropView;
         r2.onDisappear();
-    L_0x01e2:
+    L_0x01f1:
         r2 = r0.centerImage;
-        r3 = 0;
-        r2.setParentView(r3);
+        r2.setParentView(r5);
         r2 = r0.centerImage;
         r3 = 0;
         r2.setOrientation(r3, r6);
@@ -6237,10 +6305,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = r0.containerView;
         r1.setParentView(r2);
         r1 = r0.sendPhotoType;
-        if (r1 != r6) goto L_0x0205;
-    L_0x0202:
+        if (r1 != r6) goto L_0x0213;
+    L_0x0210:
         r19.setCropBitmap();
-    L_0x0205:
+    L_0x0213:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.applyCurrentEditMode():void");
@@ -6289,40 +6357,40 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         this.resetButton.setVisibility(z ? 8 : 0);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x02f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x02e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x02e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x02f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x02f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x02e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x02e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x02f6  */
     private void switchToEditMode(int r18) {
         /*
         r17 = this;
         r0 = r17;
         r1 = r18;
         r2 = r0.currentEditMode;
-        if (r2 == r1) goto L_0x0557;
+        if (r2 == r1) goto L_0x055a;
     L_0x0008:
         r2 = r0.centerImage;
         r2 = r2.getBitmap();
-        if (r2 == 0) goto L_0x0557;
+        if (r2 == 0) goto L_0x055a;
     L_0x0010:
         r2 = r0.changeModeAnimation;
-        if (r2 != 0) goto L_0x0557;
+        if (r2 != 0) goto L_0x055a;
     L_0x0014:
         r2 = r0.imageMoveAnimation;
-        if (r2 != 0) goto L_0x0557;
+        if (r2 != 0) goto L_0x055a;
     L_0x0018:
         r2 = r0.photoProgressViews;
         r3 = 0;
         r2 = r2[r3];
         r2 = r2.backgroundState;
         r4 = -1;
-        if (r2 != r4) goto L_0x0557;
+        if (r2 != r4) goto L_0x055a;
     L_0x0024:
         r2 = r0.captionEditText;
         r2 = r2.getTag();
         if (r2 == 0) goto L_0x002e;
     L_0x002c:
-        goto L_0x0557;
+        goto L_0x055a;
     L_0x002e:
         r2 = NUM; // 0x433a0000 float:186.0 double:5.57244073E-315;
         r5 = 3;
@@ -6512,10 +6580,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.addListener(r3);
         r1 = r0.imageMoveAnimation;
         r1.start();
-        goto L_0x0557;
+        goto L_0x055a;
     L_0x019f:
         r7 = NUM; // 0x42CLASSNAME float:96.0 double:5.532938244E-315;
-        if (r1 != r11) goto L_0x02a1;
+        if (r1 != r11) goto L_0x02a4;
     L_0x01a3:
         r17.createCropView();
         r2 = r0.photoCropView;
@@ -6528,7 +6596,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.setText(r4);
         r2 = r0.editorDoneLayout;
         r2 = r2.doneButton;
-        r4 = -11420173; // 0xfffffffffvar_bdf3 float:-2.7879492E38 double:NaN;
+        r4 = "dialogFloatingButton";
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
         r2.setTextColor(r4);
         r2 = new android.animation.AnimatorSet;
         r2.<init>();
@@ -6564,8 +6633,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
         r2.add(r4);
         r4 = r0.needCaptionLayout;
-        if (r4 == 0) goto L_0x022e;
-    L_0x0218:
+        if (r4 == 0) goto L_0x0231;
+    L_0x021b:
         r4 = r0.captionTextView;
         r5 = android.view.View.TRANSLATION_Y;
         r6 = new float[r12];
@@ -6575,12 +6644,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6[r11] = r3;
         r3 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
         r2.add(r3);
-    L_0x022e:
+    L_0x0231:
         r3 = r0.sendPhotoType;
-        if (r3 == 0) goto L_0x0234;
-    L_0x0232:
-        if (r3 != r9) goto L_0x0254;
-    L_0x0234:
+        if (r3 == 0) goto L_0x0237;
+    L_0x0235:
+        if (r3 != r9) goto L_0x0257;
+    L_0x0237:
         r3 = r0.checkImageView;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
@@ -6593,29 +6662,29 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x0254:
+    L_0x0257:
         r3 = r0.selectedPhotosListView;
         r3 = r3.getVisibility();
-        if (r3 != 0) goto L_0x026c;
-    L_0x025c:
+        if (r3 != 0) goto L_0x026f;
+    L_0x025f:
         r3 = r0.selectedPhotosListView;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x026c:
+    L_0x026f:
         r3 = r0.cameraItem;
         r3 = r3.getTag();
-        if (r3 == 0) goto L_0x0284;
-    L_0x0274:
+        if (r3 == 0) goto L_0x0287;
+    L_0x0277:
         r3 = r0.cameraItem;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x0284:
+    L_0x0287:
         r3 = r0.changeModeAnimation;
         r3.playTogether(r2);
         r2 = r0.changeModeAnimation;
@@ -6627,66 +6696,66 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.addListener(r3);
         r1 = r0.changeModeAnimation;
         r1.start();
-        goto L_0x0557;
-    L_0x02a1:
+        goto L_0x055a;
+    L_0x02a4:
         r8 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
-        if (r1 != r12) goto L_0x040b;
-    L_0x02a5:
+        if (r1 != r12) goto L_0x040e;
+    L_0x02a8:
         r5 = r0.photoFilterView;
-        if (r5 != 0) goto L_0x0335;
-    L_0x02a9:
+        if (r5 != 0) goto L_0x0338;
+    L_0x02ac:
         r5 = r0.imagesArrLocals;
         r5 = r5.isEmpty();
         r6 = 0;
-        if (r5 != 0) goto L_0x02e2;
-    L_0x02b2:
+        if (r5 != 0) goto L_0x02e5;
+    L_0x02b5:
         r5 = r0.imagesArrLocals;
         r13 = r0.currentIndex;
         r5 = r5.get(r13);
         r13 = r5 instanceof org.telegram.messenger.MediaController.PhotoEntry;
-        if (r13 == 0) goto L_0x02d7;
-    L_0x02be:
+        if (r13 == 0) goto L_0x02da;
+    L_0x02c1:
         r5 = (org.telegram.messenger.MediaController.PhotoEntry) r5;
         r13 = r5.imagePath;
-        if (r13 != 0) goto L_0x02ce;
-    L_0x02c4:
+        if (r13 != 0) goto L_0x02d1;
+    L_0x02c7:
         r6 = r5.path;
         r13 = r5.savedFilterState;
         r16 = r13;
         r13 = r6;
         r6 = r16;
-        goto L_0x02cf;
-    L_0x02ce:
+        goto L_0x02d2;
+    L_0x02d1:
         r13 = r6;
-    L_0x02cf:
+    L_0x02d2:
         r5 = r5.orientation;
         r16 = r13;
         r13 = r5;
         r5 = r16;
-        goto L_0x02e4;
-    L_0x02d7:
+        goto L_0x02e7;
+    L_0x02da:
         r13 = r5 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r13 == 0) goto L_0x02e2;
-    L_0x02db:
+        if (r13 == 0) goto L_0x02e5;
+    L_0x02de:
         r5 = (org.telegram.messenger.MediaController.SearchImage) r5;
         r6 = r5.savedFilterState;
         r5 = r5.imageUrl;
-        goto L_0x02e3;
-    L_0x02e2:
+        goto L_0x02e6;
+    L_0x02e5:
         r5 = r6;
-    L_0x02e3:
-        r13 = 0;
-    L_0x02e4:
-        if (r6 != 0) goto L_0x02f3;
     L_0x02e6:
+        r13 = 0;
+    L_0x02e7:
+        if (r6 != 0) goto L_0x02f6;
+    L_0x02e9:
         r5 = r0.centerImage;
         r5 = r5.getBitmap();
         r13 = r0.centerImage;
         r13 = r13.getOrientation();
-        goto L_0x02f7;
-    L_0x02f3:
+        goto L_0x02fa;
+    L_0x02f6:
         r5 = android.graphics.BitmapFactory.decodeFile(r5);
-    L_0x02f7:
+    L_0x02fa:
         r14 = new org.telegram.ui.Components.PhotoFilterView;
         r15 = r0.parentActivity;
         r14.<init>(r15, r5, r13, r6);
@@ -6710,7 +6779,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r2 = (float) r2;
         r4.setTranslationY(r2);
-    L_0x0335:
+    L_0x0338:
         r2 = new android.animation.AnimatorSet;
         r2.<init>();
         r0.changeModeAnimation = r2;
@@ -6745,22 +6814,22 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
         r2.add(r3);
         r3 = r0.sendPhotoType;
-        if (r3 == 0) goto L_0x039e;
-    L_0x0388:
-        if (r3 != r9) goto L_0x038b;
-    L_0x038a:
-        goto L_0x039e;
+        if (r3 == 0) goto L_0x03a1;
     L_0x038b:
-        if (r3 != r11) goto L_0x03be;
+        if (r3 != r9) goto L_0x038e;
     L_0x038d:
+        goto L_0x03a1;
+    L_0x038e:
+        if (r3 != r11) goto L_0x03c1;
+    L_0x0390:
         r3 = r0.photoCropView;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-        goto L_0x03be;
-    L_0x039e:
+        goto L_0x03c1;
+    L_0x03a1:
         r3 = r0.checkImageView;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
@@ -6773,29 +6842,29 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x03be:
+    L_0x03c1:
         r3 = r0.selectedPhotosListView;
         r3 = r3.getVisibility();
-        if (r3 != 0) goto L_0x03d6;
-    L_0x03c6:
+        if (r3 != 0) goto L_0x03d9;
+    L_0x03c9:
         r3 = r0.selectedPhotosListView;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x03d6:
+    L_0x03d9:
         r3 = r0.cameraItem;
         r3 = r3.getTag();
-        if (r3 == 0) goto L_0x03ee;
-    L_0x03de:
+        if (r3 == 0) goto L_0x03f1;
+    L_0x03e1:
         r3 = r0.cameraItem;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x03ee:
+    L_0x03f1:
         r3 = r0.changeModeAnimation;
         r3.playTogether(r2);
         r2 = r0.changeModeAnimation;
@@ -6807,13 +6876,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.addListener(r3);
         r1 = r0.changeModeAnimation;
         r1.start();
-        goto L_0x0557;
-    L_0x040b:
-        if (r1 != r5) goto L_0x0557;
-    L_0x040d:
+        goto L_0x055a;
+    L_0x040e:
+        if (r1 != r5) goto L_0x055a;
+    L_0x0410:
         r2 = r0.photoPaintView;
-        if (r2 != 0) goto L_0x0469;
-    L_0x0411:
+        if (r2 != 0) goto L_0x046c;
+    L_0x0414:
         r2 = new org.telegram.ui.Components.PhotoPaintView;
         r5 = r0.parentActivity;
         r13 = r0.centerImage;
@@ -6846,7 +6915,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = (float) r4;
         r2.setTranslationY(r4);
-    L_0x0469:
+    L_0x046c:
         r2 = new android.animation.AnimatorSet;
         r2.<init>();
         r0.changeModeAnimation = r2;
@@ -6881,8 +6950,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
         r2.add(r4);
         r4 = r0.needCaptionLayout;
-        if (r4 == 0) goto L_0x04d2;
-    L_0x04bc:
+        if (r4 == 0) goto L_0x04d5;
+    L_0x04bf:
         r4 = r0.captionTextView;
         r5 = android.view.View.TRANSLATION_Y;
         r6 = new float[r12];
@@ -6892,24 +6961,24 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6[r11] = r3;
         r3 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
         r2.add(r3);
-    L_0x04d2:
+    L_0x04d5:
         r3 = r0.sendPhotoType;
-        if (r3 == 0) goto L_0x04ec;
-    L_0x04d6:
-        if (r3 != r9) goto L_0x04d9;
-    L_0x04d8:
-        goto L_0x04ec;
+        if (r3 == 0) goto L_0x04ef;
     L_0x04d9:
-        if (r3 != r11) goto L_0x050c;
+        if (r3 != r9) goto L_0x04dc;
     L_0x04db:
+        goto L_0x04ef;
+    L_0x04dc:
+        if (r3 != r11) goto L_0x050f;
+    L_0x04de:
         r3 = r0.photoCropView;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-        goto L_0x050c;
-    L_0x04ec:
+        goto L_0x050f;
+    L_0x04ef:
         r3 = r0.checkImageView;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
@@ -6922,29 +6991,29 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x050c:
+    L_0x050f:
         r3 = r0.selectedPhotosListView;
         r3 = r3.getVisibility();
-        if (r3 != 0) goto L_0x0524;
-    L_0x0514:
+        if (r3 != 0) goto L_0x0527;
+    L_0x0517:
         r3 = r0.selectedPhotosListView;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x0524:
+    L_0x0527:
         r3 = r0.cameraItem;
         r3 = r3.getTag();
-        if (r3 == 0) goto L_0x053c;
-    L_0x052c:
+        if (r3 == 0) goto L_0x053f;
+    L_0x052f:
         r3 = r0.cameraItem;
         r4 = android.view.View.ALPHA;
         r5 = new float[r12];
         r5 = {NUM, 0};
         r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
         r2.add(r3);
-    L_0x053c:
+    L_0x053f:
         r3 = r0.changeModeAnimation;
         r3.playTogether(r2);
         r2 = r0.changeModeAnimation;
@@ -6956,7 +7025,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.addListener(r3);
         r1 = r0.changeModeAnimation;
         r1.start();
-    L_0x0557:
+    L_0x055a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.switchToEditMode(int):void");
@@ -8565,13 +8634,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     /* JADX WARNING: Removed duplicated region for block: B:292:0x0713  */
     /* JADX WARNING: Removed duplicated region for block: B:289:0x06f7  */
     /* JADX WARNING: Removed duplicated region for block: B:295:0x073b  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x07a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:316:0x07a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x07b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:320:0x07ae  */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x07ba  */
-    /* JADX WARNING: Removed duplicated region for block: B:324:0x07b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:328:0x07c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:317:0x07a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:316:0x07a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:321:0x07b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:320:0x07b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:325:0x07bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:324:0x07bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:328:0x07c6  */
     private void setIsAboutToSwitchToIndex(int r27, boolean r28) {
         /*
         r26 = this;
@@ -9204,7 +9273,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = r0.groupedPhotosListView;
         r3.fillList();
         r14 = r1;
-        goto L_0x07cb;
+        goto L_0x07ce;
     L_0x0476:
         return;
     L_0x0477:
@@ -9234,7 +9303,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = NUM; // 0x7f0e0766 float:1.887888E38 double:1.0531630924E-314;
         r2 = org.telegram.messenger.LocaleController.formatString(r9, r2, r3);
         r1.setTitle(r2);
-        goto L_0x07ca;
+        goto L_0x07cd;
     L_0x04b7:
         r2 = r0.imagesArrLocations;
         r2 = r2.isEmpty();
@@ -9322,21 +9391,21 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x055a:
         r1 = r0.groupedPhotosListView;
         r1.fillList();
-        goto L_0x07ca;
+        goto L_0x07cd;
     L_0x0561:
         return;
     L_0x0562:
         r2 = r0.imagesArrLocals;
         r2 = r2.isEmpty();
-        if (r2 != 0) goto L_0x07ca;
+        if (r2 != 0) goto L_0x07cd;
     L_0x056a:
-        if (r1 < 0) goto L_0x07c9;
+        if (r1 < 0) goto L_0x07cc;
     L_0x056c:
         r2 = r0.imagesArrLocals;
         r2 = r2.size();
         if (r1 < r2) goto L_0x0576;
     L_0x0574:
-        goto L_0x07c9;
+        goto L_0x07cc;
     L_0x0576:
         r2 = r0.imagesArrLocals;
         r1 = r2.get(r1);
@@ -9672,51 +9741,52 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x0793:
         r0.updateCaptionTextForCurrentPhoto(r1);
         r1 = new android.graphics.PorterDuffColorFilter;
-        r3 = -12734994; // 0xffffffffff3dadee float:-2.5212719E38 double:NaN;
+        r3 = "dialogFloatingButton";
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r4 = android.graphics.PorterDuff.Mode.MULTIPLY;
         r1.<init>(r3, r4);
         r3 = r0.timeItem;
-        if (r7 == 0) goto L_0x07a6;
-    L_0x07a4:
-        r4 = r1;
-        goto L_0x07a7;
-    L_0x07a6:
-        r4 = r14;
+        if (r7 == 0) goto L_0x07a9;
     L_0x07a7:
+        r4 = r1;
+        goto L_0x07aa;
+    L_0x07a9:
+        r4 = r14;
+    L_0x07aa:
         r3.setColorFilter(r4);
         r3 = r0.paintItem;
-        if (r11 == 0) goto L_0x07b0;
-    L_0x07ae:
-        r4 = r1;
-        goto L_0x07b1;
-    L_0x07b0:
-        r4 = r14;
+        if (r11 == 0) goto L_0x07b3;
     L_0x07b1:
+        r4 = r1;
+        goto L_0x07b4;
+    L_0x07b3:
+        r4 = r14;
+    L_0x07b4:
         r3.setColorFilter(r4);
         r3 = r0.cropItem;
-        if (r2 == 0) goto L_0x07ba;
-    L_0x07b8:
-        r2 = r1;
-        goto L_0x07bb;
-    L_0x07ba:
-        r2 = r14;
+        if (r2 == 0) goto L_0x07bd;
     L_0x07bb:
+        r2 = r1;
+        goto L_0x07be;
+    L_0x07bd:
+        r2 = r14;
+    L_0x07be:
         r3.setColorFilter(r2);
         r2 = r0.tuneItem;
-        if (r10 == 0) goto L_0x07c3;
-    L_0x07c2:
-        goto L_0x07c4;
-    L_0x07c3:
+        if (r10 == 0) goto L_0x07c6;
+    L_0x07c5:
+        goto L_0x07c7;
+    L_0x07c6:
         r1 = r14;
-    L_0x07c4:
+    L_0x07c7:
         r2.setColorFilter(r1);
         r2 = r6;
-        goto L_0x07cb;
-    L_0x07c9:
+        goto L_0x07ce;
+    L_0x07cc:
         return;
-    L_0x07ca:
+    L_0x07cd:
         r2 = r14;
-    L_0x07cb:
+    L_0x07ce:
         r1 = 1;
         r1 = r28 ^ 1;
         r0.setCurrentCaption(r14, r2, r1);
@@ -13878,7 +13948,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             if (this.muteVideo) {
                 this.actionBar.setSubtitle(null);
                 this.muteItem.setImageResource(NUM);
-                this.muteItem.setColorFilter(new PorterDuffColorFilter(-12734994, Mode.MULTIPLY));
+                this.muteItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
                 if (this.compressItem.getTag() != null) {
                     this.compressItem.setAlpha(0.5f);
                 }

@@ -1420,9 +1420,15 @@ public class ChatRightsEditActivity extends BaseFragment {
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.rankRow = i;
-                i = this.rowCount;
-                this.rowCount = i + 1;
-                this.rankInfoRow = i;
+                if (this.currentChat.creator && UserObject.isUserSelf(this.currentUser)) {
+                    i = this.rowCount;
+                    this.rowCount = i + 1;
+                    this.rankInfoRow = i;
+                } else {
+                    i = this.rowCount;
+                    this.rowCount = i + 1;
+                    this.cantEditInfoRow = i;
+                }
             }
         }
         if (z) {

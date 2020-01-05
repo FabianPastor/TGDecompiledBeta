@@ -219,7 +219,8 @@ public class ContentPreviewViewer {
                 } else if (((Integer) arrayList.get(i)).intValue() == 3) {
                     Document access$300 = ContentPreviewViewer.this.currentDocument;
                     Object access$1500 = ContentPreviewViewer.this.parentObject;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, 0, new -$$Lambda$ContentPreviewViewer$1$VeEKHdYoA5-UzCB0iok2LPLcTCo(ContentPreviewViewer.this.delegate, access$300, access$1500));
+                    ContentPreviewViewerDelegate access$500 = ContentPreviewViewer.this.delegate;
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new -$$Lambda$ContentPreviewViewer$1$VeEKHdYoA5-UzCB0iok2LPLcTCo(access$500, access$300, access$1500));
                 }
             }
         }
@@ -244,7 +245,8 @@ public class ContentPreviewViewer {
                     Document access$300 = ContentPreviewViewer.this.currentDocument;
                     BotInlineResult access$1400 = ContentPreviewViewer.this.inlineResult;
                     ContentPreviewViewer.this.parentObject;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, 0, new -$$Lambda$ContentPreviewViewer$1$OPsVklic0vV-NhdYCfmrpeZgJyo(ContentPreviewViewer.this.delegate, access$300, access$1400));
+                    ContentPreviewViewerDelegate access$500 = ContentPreviewViewer.this.delegate;
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new -$$Lambda$ContentPreviewViewer$1$OPsVklic0vV-NhdYCfmrpeZgJyo(access$500, access$300, access$1400));
                 }
             }
         }
@@ -286,6 +288,8 @@ public class ContentPreviewViewer {
         }
 
         boolean canSchedule();
+
+        long getDialogId();
 
         void gifAddedOrDeleted();
 
