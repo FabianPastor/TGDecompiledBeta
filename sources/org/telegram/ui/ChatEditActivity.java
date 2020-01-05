@@ -1024,31 +1024,31 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r3.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0e0b3b float:1.8880869E38 double:1.053163577E-314;
+        r1 = NUM; // 0x7f0e0b7c float:1.8881E38 double:1.053163609E-314;
         r2 = "UserRestrictionsApplyChanges";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         r1 = r3.isChannel;
         if (r1 == 0) goto L_0x008c;
     L_0x007f:
-        r1 = NUM; // 0x7f0e0273 float:1.887631E38 double:1.0531624664E-314;
+        r1 = NUM; // 0x7f0e0284 float:1.8876344E38 double:1.053162475E-314;
         r2 = "ChannelSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
         goto L_0x0098;
     L_0x008c:
-        r1 = NUM; // 0x7f0e051a float:1.8877686E38 double:1.053162802E-314;
+        r1 = NUM; // 0x7f0e053d float:1.8877757E38 double:1.053162819E-314;
         r2 = "GroupSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
     L_0x0098:
-        r1 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
+        r1 = NUM; // 0x7f0e00fc float:1.8875549E38 double:1.053162281E-314;
         r2 = "ApplyTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$NBEr6CX4NZ1r3XbdnOXbearPc6k;
         r2.<init>(r3);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0e07a5 float:1.8879007E38 double:1.0531631235E-314;
+        r1 = NUM; // 0x7f0e07da float:1.8879114E38 double:1.0531631497E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$TOgShEf6MXFD3VhufzCjnieIAt0;
@@ -1086,47 +1086,47 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         return i;
     }
 
-    /* JADX WARNING: Missing block: B:34:0x00c6, code skipped:
-            if (r1 != null) goto L_0x00cb;
+    /* JADX WARNING: Missing block: B:34:0x00c7, code skipped:
+            if (r1 != null) goto L_0x00cc;
      */
     private void processDone() {
         /*
         r5 = this;
         r0 = r5.donePressed;
-        if (r0 != 0) goto L_0x013c;
+        if (r0 != 0) goto L_0x013d;
     L_0x0004:
         r0 = r5.nameTextView;
         if (r0 != 0) goto L_0x000a;
     L_0x0008:
-        goto L_0x013c;
+        goto L_0x013d;
     L_0x000a:
         r0 = r0.length();
-        if (r0 != 0) goto L_0x002c;
+        if (r0 != 0) goto L_0x002d;
     L_0x0010:
         r0 = r5.getParentActivity();
         r1 = "vibrator";
         r0 = r0.getSystemService(r1);
         r0 = (android.os.Vibrator) r0;
-        if (r0 == 0) goto L_0x0023;
-    L_0x001e:
+        if (r0 == 0) goto L_0x0024;
+    L_0x001f:
         r1 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r0.vibrate(r1);
-    L_0x0023:
+    L_0x0024:
         r0 = r5.nameTextView;
         r1 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r2 = 0;
         org.telegram.messenger.AndroidUtilities.shakeView(r0, r1, r2);
         return;
-    L_0x002c:
+    L_0x002d:
         r0 = 1;
         r5.donePressed = r0;
         r1 = r5.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 != 0) goto L_0x0050;
-    L_0x0037:
+        if (r1 != 0) goto L_0x0051;
+    L_0x0038:
         r1 = r5.historyHidden;
-        if (r1 != 0) goto L_0x0050;
-    L_0x003b:
+        if (r1 != 0) goto L_0x0051;
+    L_0x003c:
         r0 = r5.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r1 = r5.getParentActivity();
@@ -1135,30 +1135,30 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r3.<init>(r5);
         r0.convertToMegaGroup(r1, r2, r5, r3);
         return;
-    L_0x0050:
+    L_0x0051:
         r1 = r5.info;
-        if (r1 == 0) goto L_0x0073;
-    L_0x0054:
+        if (r1 == 0) goto L_0x0074;
+    L_0x0055:
         r1 = r5.currentChat;
         r1 = org.telegram.messenger.ChatObject.isChannel(r1);
-        if (r1 == 0) goto L_0x0073;
-    L_0x005c:
+        if (r1 == 0) goto L_0x0074;
+    L_0x005d:
         r1 = r5.info;
         r2 = r1.hidden_prehistory;
         r3 = r5.historyHidden;
-        if (r2 == r3) goto L_0x0073;
-    L_0x0064:
+        if (r2 == r3) goto L_0x0074;
+    L_0x0065:
         r1.hidden_prehistory = r3;
         r1 = r5.currentAccount;
         r1 = org.telegram.messenger.MessagesController.getInstance(r1);
         r2 = r5.chatId;
         r3 = r5.historyHidden;
         r1.toogleChannelInvitesHistory(r2, r3);
-    L_0x0073:
+    L_0x0074:
         r1 = r5.imageUpdater;
         r1 = r1.uploadingImage;
-        if (r1 == 0) goto L_0x0097;
-    L_0x0079:
+        if (r1 == 0) goto L_0x0098;
+    L_0x007a:
         r5.createAfterUpload = r0;
         r0 = new org.telegram.ui.ActionBar.AlertDialog;
         r1 = r5.getParentActivity();
@@ -1172,15 +1172,15 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0 = r5.progressDialog;
         r0.show();
         return;
-    L_0x0097:
+    L_0x0098:
         r1 = r5.currentChat;
         r1 = r1.title;
         r2 = r5.nameTextView;
         r2 = r2.getText();
         r2 = r2.toString();
         r1 = r1.equals(r2);
-        if (r1 != 0) goto L_0x00c0;
-    L_0x00ab:
+        if (r1 != 0) goto L_0x00c1;
+    L_0x00ac:
         r1 = r5.currentAccount;
         r1 = org.telegram.messenger.MessagesController.getInstance(r1);
         r2 = r5.chatId;
@@ -1188,25 +1188,25 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r3 = r3.getText();
         r3 = r3.toString();
         r1.changeChatTitle(r2, r3);
-    L_0x00c0:
+    L_0x00c1:
         r1 = r5.info;
-        if (r1 == 0) goto L_0x00c9;
-    L_0x00c4:
+        if (r1 == 0) goto L_0x00ca;
+    L_0x00c5:
         r1 = r1.about;
-        if (r1 == 0) goto L_0x00c9;
-    L_0x00c8:
-        goto L_0x00cb;
+        if (r1 == 0) goto L_0x00ca;
     L_0x00c9:
+        goto L_0x00cc;
+    L_0x00ca:
         r1 = "";
-    L_0x00cb:
+    L_0x00cc:
         r2 = r5.descriptionTextView;
-        if (r2 == 0) goto L_0x00f4;
-    L_0x00cf:
+        if (r2 == 0) goto L_0x00f5;
+    L_0x00d0:
         r2 = r2.getText();
         r2 = r2.toString();
         r1 = r1.equals(r2);
-        if (r1 != 0) goto L_0x00f4;
-    L_0x00dd:
+        if (r1 != 0) goto L_0x00f5;
+    L_0x00de:
         r1 = r5.currentAccount;
         r1 = org.telegram.messenger.MessagesController.getInstance(r1);
         r2 = r5.chatId;
@@ -1215,22 +1215,22 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r3 = r3.toString();
         r4 = r5.info;
         r1.updateChatAbout(r2, r3, r4);
-    L_0x00f4:
+    L_0x00f5:
         r1 = r5.signMessages;
         r2 = r5.currentChat;
         r3 = r2.signatures;
-        if (r1 == r3) goto L_0x010b;
-    L_0x00fc:
+        if (r1 == r3) goto L_0x010c;
+    L_0x00fd:
         r2.signatures = r0;
         r0 = r5.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r1 = r5.chatId;
         r2 = r5.signMessages;
         r0.toogleChannelSignatures(r1, r2);
-    L_0x010b:
+    L_0x010c:
         r0 = r5.uploadedAvatar;
-        if (r0 == 0) goto L_0x0121;
-    L_0x010f:
+        if (r0 == 0) goto L_0x0122;
+    L_0x0110:
         r0 = r5.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r1 = r5.chatId;
@@ -1238,30 +1238,34 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r3 = r5.avatar;
         r4 = r5.avatarBig;
         r0.changeChatAvatar(r1, r2, r3, r4);
-        goto L_0x0139;
-    L_0x0121:
+        goto L_0x013a;
+    L_0x0122:
         r0 = r5.avatar;
-        if (r0 != 0) goto L_0x0139;
-    L_0x0125:
+        if (r0 != 0) goto L_0x013a;
+    L_0x0126:
         r0 = r5.currentChat;
         r0 = r0.photo;
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_chatPhoto;
-        if (r0 == 0) goto L_0x0139;
-    L_0x012d:
+        if (r0 == 0) goto L_0x013a;
+    L_0x012e:
         r0 = r5.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r1 = r5.chatId;
         r2 = 0;
         r0.changeChatAvatar(r1, r2, r2, r2);
-    L_0x0139:
+    L_0x013a:
         r5.finishFragment();
-    L_0x013c:
+    L_0x013d:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatEditActivity.processDone():void");
     }
 
     public /* synthetic */ void lambda$processDone$21$ChatEditActivity(int i) {
+        if (i == 0) {
+            this.donePressed = false;
+            return;
+        }
         this.chatId = i;
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
         this.donePressed = false;

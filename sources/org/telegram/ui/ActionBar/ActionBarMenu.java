@@ -132,6 +132,17 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     /* Access modifiers changed, original: protected */
+    public void setPopupItemsSelectorColor(int i) {
+        int childCount = getChildCount();
+        for (int i2 = 0; i2 < childCount; i2++) {
+            View childAt = getChildAt(i2);
+            if (childAt instanceof ActionBarMenuItem) {
+                ((ActionBarMenuItem) childAt).setPopupItemsSelectorColor(i);
+            }
+        }
+    }
+
+    /* Access modifiers changed, original: protected */
     public void redrawPopup(int i) {
         int childCount = getChildCount();
         for (int i2 = 0; i2 < childCount; i2++) {

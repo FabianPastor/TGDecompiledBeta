@@ -115,8 +115,8 @@ public class EmuDetector {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00c2 A:{RETURN} */
     private boolean checkBasic() {
         /*
         r6 = this;
@@ -126,114 +126,114 @@ public class EmuDetector {
         r2 = 0;
         r3 = "google_sdk";
         r4 = 1;
-        if (r0 != 0) goto L_0x00bd;
+        if (r0 != 0) goto L_0x00bf;
     L_0x000e:
         r0 = android.os.Build.MODEL;
         r0 = r0.contains(r3);
-        if (r0 != 0) goto L_0x00bd;
+        if (r0 != 0) goto L_0x00bf;
     L_0x0016:
         r0 = android.os.Build.MODEL;
         r0 = r0.toLowerCase();
         r5 = "droid4x";
         r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bd;
+        if (r0 != 0) goto L_0x00bf;
     L_0x0024:
         r0 = android.os.Build.MODEL;
         r5 = "Emulator";
         r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bd;
+        if (r0 != 0) goto L_0x00bf;
     L_0x002e:
         r0 = android.os.Build.MODEL;
         r5 = "Android SDK built for x86";
         r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bd;
+        if (r0 != 0) goto L_0x00bf;
     L_0x0038:
         r0 = android.os.Build.MANUFACTURER;
         r5 = "Genymotion";
         r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bd;
+        if (r0 != 0) goto L_0x00bf;
     L_0x0042:
         r0 = android.os.Build.HARDWARE;
         r5 = "goldfish";
         r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bd;
+        if (r0 != 0) goto L_0x00bf;
     L_0x004c:
         r0 = android.os.Build.HARDWARE;
         r5 = "vbox86";
         r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x0056:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x0057:
         r0 = android.os.Build.PRODUCT;
         r5 = "sdk";
         r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x0060:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x0061:
         r0 = android.os.Build.PRODUCT;
         r0 = r0.equals(r3);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x0068:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x0069:
         r0 = android.os.Build.PRODUCT;
         r5 = "sdk_x86";
         r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x0072:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x0073:
         r0 = android.os.Build.PRODUCT;
         r5 = "vbox86p";
         r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x007c:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x007e:
         r0 = android.os.Build.BOARD;
         r0 = r0.toLowerCase();
         r5 = "nox";
         r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x008a:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x008c:
         r0 = android.os.Build.BOOTLOADER;
         r0 = r0.toLowerCase();
         r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x0096:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x0098:
         r0 = android.os.Build.HARDWARE;
         r0 = r0.toLowerCase();
         r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x00a2:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x00a4:
         r0 = android.os.Build.PRODUCT;
         r0 = r0.toLowerCase();
         r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bd;
-    L_0x00ae:
+        if (r0 != 0) goto L_0x00bf;
+    L_0x00b0:
         r0 = android.os.Build.SERIAL;
         r0 = r0.toLowerCase();
         r0 = r0.contains(r5);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x00ba:
-        goto L_0x00bd;
-    L_0x00bb:
-        r0 = 0;
-        goto L_0x00be;
+        if (r0 == 0) goto L_0x00bd;
+    L_0x00bc:
+        goto L_0x00bf;
     L_0x00bd:
+        r0 = 0;
+        goto L_0x00c0;
+    L_0x00bf:
         r0 = 1;
-    L_0x00be:
-        if (r0 == 0) goto L_0x00c1;
     L_0x00c0:
+        if (r0 == 0) goto L_0x00c3;
+    L_0x00c2:
         return r4;
-    L_0x00c1:
+    L_0x00c3:
         r5 = android.os.Build.BRAND;
         r5 = r5.startsWith(r1);
-        if (r5 == 0) goto L_0x00d2;
-    L_0x00c9:
+        if (r5 == 0) goto L_0x00d4;
+    L_0x00cb:
         r5 = android.os.Build.DEVICE;
         r1 = r5.startsWith(r1);
-        if (r1 == 0) goto L_0x00d2;
-    L_0x00d1:
+        if (r1 == 0) goto L_0x00d4;
+    L_0x00d3:
         r2 = 1;
-    L_0x00d2:
+    L_0x00d4:
         r0 = r0 | r2;
-        if (r0 == 0) goto L_0x00d6;
-    L_0x00d5:
+        if (r0 == 0) goto L_0x00d8;
+    L_0x00d7:
         return r4;
-    L_0x00d6:
+    L_0x00d8:
         r1 = android.os.Build.PRODUCT;
         r1 = r3.equals(r1);
         r0 = r0 | r1;

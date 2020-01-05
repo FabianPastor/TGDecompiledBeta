@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -28,12 +29,14 @@ import org.telegram.tgnet.TLRPC.Document;
 public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public static final int PARAM_NUM_AUDIO_FRAME_SIZE = 5;
     public static final int PARAM_NUM_BITRATE = 3;
-    public static final int PARAM_NUM_COUNT = 9;
+    public static final int PARAM_NUM_COUNT = 11;
     public static final int PARAM_NUM_DURATION = 4;
     public static final int PARAM_NUM_FRAMERATE = 7;
+    public static final int PARAM_NUM_HAS_AUDIO = 10;
     public static final int PARAM_NUM_HEIGHT = 2;
-    public static final int PARAM_NUM_IS_AVC = 0;
     public static final int PARAM_NUM_ROTATION = 8;
+    public static final int PARAM_NUM_SUPPORTED_AUDIO_CODEC = 9;
+    public static final int PARAM_NUM_SUPPORTED_VIDEO_CODEC = 0;
     public static final int PARAM_NUM_VIDEO_FRAME_SIZE = 6;
     public static final int PARAM_NUM_WIDTH = 1;
     private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2, new DiscardPolicy());
@@ -226,7 +229,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     private static native int getVideoFrame(long j, Bitmap bitmap, int[] iArr, int i, boolean z);
 
-    public static native void getVideoInfo(String str, int[] iArr);
+    private static native void getVideoInfo(int i, String str, int[] iArr);
 
     private static native void prepareToSeek(long j);
 
@@ -694,5 +697,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         iArr[0] = iArr2[0];
         iArr[1] = iArr2[1];
         return animatedFileDrawable;
+    }
+
+    public static void getVideoInfo(String str, int[] iArr) {
+        getVideoInfo(VERSION.SDK_INT, str, iArr);
     }
 }

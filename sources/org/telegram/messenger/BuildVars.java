@@ -1,10 +1,10 @@
 package org.telegram.messenger;
 
 public class BuildVars {
-    public static String APP_HASH = "eb06d4abfb49dc3eeb1aeb98ae0var_e";
-    public static int APP_ID = 6;
-    public static int BUILD_VERSION = 1768;
-    public static String BUILD_VERSION_STRING = "5.12.1";
+    public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
+    public static int APP_ID = 4;
+    public static int BUILD_VERSION = 1818;
+    public static String BUILD_VERSION_STRING = "5.13.0";
     public static boolean CHECK_UPDATES = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = false;

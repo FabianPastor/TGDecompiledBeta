@@ -93,26 +93,30 @@ public class ChatActionCell extends BaseCell {
         this.delegate = chatActionCellDelegate;
     }
 
-    public void setCustomDate(int i, boolean z) {
+    public void setCustomDate(int i, boolean z, boolean z2) {
         if (this.customDate != i) {
-            CharSequence formatString;
-            if (z) {
-                formatString = LocaleController.formatString("MessageScheduledOn", NUM, LocaleController.formatDateChat((long) i));
+            CharSequence formatDateChat;
+            if (!z) {
+                formatDateChat = LocaleController.formatDateChat((long) i);
+            } else if (i == NUM) {
+                formatDateChat = LocaleController.getString("MessageScheduledUntilOnline", NUM);
             } else {
-                formatString = LocaleController.formatDateChat((long) i);
+                formatDateChat = LocaleController.formatString("MessageScheduledOn", NUM, LocaleController.formatDateChat((long) i));
             }
             CharSequence charSequence = this.customText;
-            if (charSequence == null || !TextUtils.equals(formatString, charSequence)) {
+            if (charSequence == null || !TextUtils.equals(formatDateChat, charSequence)) {
                 this.customDate = i;
-                this.customText = formatString;
+                this.customText = formatDateChat;
                 if (getMeasuredWidth() != 0) {
                     createLayout(this.customText, getMeasuredWidth());
                     invalidate();
                 }
                 if (this.wasLayout) {
                     buildLayout();
-                } else {
+                } else if (z2) {
                     AndroidUtilities.runOnUIThread(new -$$Lambda$W3vgGEA8PP4iykiyHwC5GJEFtAc(this));
+                } else {
+                    requestLayout();
                 }
             }
         }

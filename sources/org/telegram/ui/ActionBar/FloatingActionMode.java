@@ -186,6 +186,11 @@ public final class FloatingActionMode extends ActionMode {
 
     public void invalidateContentRect() {
         this.mCallback.onGetContentRect(this, this.mOriginatingView, this.mContentRect);
+        Rect rect = this.mContentRect;
+        if (rect.left == 0 && rect.right == 0) {
+            rect.left = 1;
+            rect.right = 1;
+        }
         repositionToolbar();
     }
 

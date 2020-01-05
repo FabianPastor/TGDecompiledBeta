@@ -129,7 +129,13 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     @Keep
     public void setAnimationIdicatorProgress(float f) {
         this.animationIdicatorProgress = f;
-        setAnimationProgressInernal((TextView) this.tabsContainer.getChildAt(this.currentPosition), (TextView) this.tabsContainer.getChildAt(this.previousPosition), f);
+        TextView textView = (TextView) this.tabsContainer.getChildAt(this.currentPosition);
+        TextView textView2 = (TextView) this.tabsContainer.getChildAt(this.previousPosition);
+        setAnimationProgressInernal(textView, textView2, f);
+        if (f >= 1.0f) {
+            textView2.setTag(this.unactiveTextColorKey);
+            textView.setTag(this.activeTextColorKey);
+        }
         ScrollSlidingTabStripDelegate scrollSlidingTabStripDelegate = this.delegate;
         if (scrollSlidingTabStripDelegate != null) {
             scrollSlidingTabStripDelegate.onPageScrolled(f);
@@ -370,6 +376,10 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
                 this.animateIndicatorToWidth = getChildWidth(textView2);
                 this.animateIndicatorToX = textView2.getLeft() + ((textView2.getMeasuredWidth() - this.animateIndicatorToWidth) / 2);
                 setAnimationProgressInernal(textView2, textView, f);
+                if (f >= 1.0f) {
+                    textView.setTag(this.unactiveTextColorKey);
+                    textView2.setTag(this.activeTextColorKey);
+                }
             }
             if (f >= 1.0f) {
                 this.currentPosition = i2;

@@ -23,7 +23,7 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new Holder(new LocationCell(this.mContext));
+        return new Holder(new LocationCell(this.mContext, false));
     }
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
@@ -34,7 +34,7 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
         if (i == this.places.size() - 1) {
             z = false;
         }
-        locationCell.setLocation(tL_messageMediaVenue, str, z);
+        locationCell.setLocation(tL_messageMediaVenue, str, i, z);
     }
 
     public TL_messageMediaVenue getItem(int i) {

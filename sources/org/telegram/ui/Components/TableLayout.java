@@ -18,6 +18,8 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.TLRPC.TL_pageTableCell;
 import org.telegram.ui.ArticleViewer.DrawingText;
+import org.telegram.ui.Cells.TextSelectionHelper.ArticleSelectableView;
+import org.telegram.ui.Cells.TextSelectionHelper.ArticleTextSelectionHelper;
 
 public class TableLayout extends View {
     public static final int ALIGN_BOUNDS = 0;
@@ -153,6 +155,7 @@ public class TableLayout extends View {
     private float[] radii = new float[8];
     private RectF rect = new RectF();
     private ArrayList<Point> rowSpans = new ArrayList();
+    private ArticleTextSelectionHelper textSelectionHelper;
 
     public static abstract class Alignment {
         public abstract int getAlignmentValue(Child child, int i);
@@ -851,6 +854,8 @@ public class TableLayout extends View {
         private LayoutParams layoutParams;
         private int measuredHeight;
         private int measuredWidth;
+        public int rowspan;
+        private int selectionIndex = -1;
         public int textHeight;
         public DrawingText textLayout;
         public int textLeft;
@@ -1135,6 +1140,9 @@ public class TableLayout extends View {
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) getTextX(), (float) getTextY());
+                    if (this.selectionIndex >= 0) {
+                        TableLayout.this.textSelectionHelper.draw(canvas, (ArticleSelectableView) TableLayout.this.getParent().getParent(), this.selectionIndex);
+                    }
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -1321,6 +1329,14 @@ public class TableLayout extends View {
                     canvas.drawArc(TableLayout.this.rect, 0.0f, 90.0f, false, linePaint);
                 }
             }
+        }
+
+        public void setSelectionIndex(int i) {
+            this.selectionIndex = i;
+        }
+
+        public int getRow() {
+            return this.rowspan + 10;
         }
     }
 
@@ -1577,6 +1593,8 @@ public class TableLayout extends View {
         Paint getLinePaint();
 
         Paint getStripPaint();
+
+        void onLayoutChild(DrawingText drawingText, int i, int i2);
     }
 
     static boolean canStretch(int i) {
@@ -1591,6 +1609,7 @@ public class TableLayout extends View {
         layoutParams.rowSpec = new Spec(false, new Interval(i6, i6 + i4), FILL, 0.0f, null);
         layoutParams.columnSpec = new Spec(false, new Interval(i5, i5 + i3), FILL, 0.0f, null);
         child.layoutParams = layoutParams;
+        child.rowspan = i6;
         this.childrens.add(child);
         invalidateStructure();
     }
@@ -1610,6 +1629,7 @@ public class TableLayout extends View {
         layoutParams.rowSpec = new Spec(false, new Interval(i5, i7 + i5), FILL, 0.0f, null);
         layoutParams.columnSpec = new Spec(false, new Interval(i4, i6 + i4), FILL, 1.0f, null);
         child.layoutParams = layoutParams;
+        child.rowspan = i5;
         this.childrens.add(child);
         int i8 = tL_pageTableCell2.rowspan;
         if (i8 > 1) {
@@ -1644,8 +1664,9 @@ public class TableLayout extends View {
         return (i < 0 || i >= this.childrens.size()) ? null : (Child) this.childrens.get(i);
     }
 
-    public TableLayout(Context context, TableLayoutDelegate tableLayoutDelegate) {
+    public TableLayout(Context context, TableLayoutDelegate tableLayoutDelegate, ArticleTextSelectionHelper articleTextSelectionHelper) {
         super(context);
+        this.textSelectionHelper = articleTextSelectionHelper;
         setRowCount(Integer.MIN_VALUE);
         setColumnCount(Integer.MIN_VALUE);
         setOrientation(0);
@@ -2021,6 +2042,7 @@ public class TableLayout extends View {
         int measurement2;
         int gravityOffset;
         int i4;
+        Child child;
         int i5 = i;
         int i6 = i2;
         consistencyCheck();
@@ -2068,30 +2090,30 @@ public class TableLayout extends View {
             int i13 = locations2[interval2.max] - i11;
             measurement = getMeasurement(childAt, z2);
             measurement2 = getMeasurement(childAt, z);
-            Alignment access$1200 = spec.getAbsoluteAlignment(z2);
-            Alignment access$12002 = spec2.getAbsoluteAlignment(z);
+            Alignment access$1300 = spec.getAbsoluteAlignment(z2);
+            Alignment access$13002 = spec2.getAbsoluteAlignment(z);
             Bounds bounds = (Bounds) this.mHorizontalAxis.getGroupBounds().getValue(i9);
             Bounds bounds2 = (Bounds) this.mVerticalAxis.getGroupBounds().getValue(i9);
-            gravityOffset = access$1200.getGravityOffset(childAt, i12 - bounds.size(z2));
+            gravityOffset = access$1300.getGravityOffset(childAt, i12 - bounds.size(z2));
             Bounds bounds3 = bounds2;
-            int gravityOffset2 = access$12002.getGravityOffset(childAt, i13 - bounds2.size(z2));
+            int gravityOffset2 = access$13002.getGravityOffset(childAt, i13 - bounds2.size(z2));
             int margin = getMargin(childAt, z2, z2);
             int margin2 = getMargin(childAt, false, z2);
             int margin3 = getMargin(childAt, z2, false);
             int i14 = margin + margin3;
             int margin4 = margin2 + getMargin(childAt, false, false);
             Bounds bounds4 = bounds3;
-            Alignment alignment = access$12002;
-            Child child = childAt;
-            Alignment alignment2 = access$1200;
+            Alignment alignment = access$13002;
+            Child child2 = childAt;
+            Alignment alignment2 = access$1300;
             int i15 = measurement2;
             i4 = max;
             max = measurement;
-            int offset = bounds.getOffset(this, child, access$1200, measurement + i14, true);
-            access$1200 = alignment;
-            i5 = bounds4.getOffset(this, child, access$1200, i15 + margin4, false);
+            int offset = bounds.getOffset(this, child2, access$1300, measurement + i14, true);
+            access$1300 = alignment;
+            i5 = bounds4.getOffset(this, child2, access$1300, i15 + margin4, false);
             i6 = alignment2.getSizeInCell(childAt, max, i12 - i14);
-            childCount = access$1200.getSizeInCell(childAt, i15, i13 - margin4);
+            childCount = access$1300.getSizeInCell(childAt, i15, i13 - margin4);
             i10 = (i10 + gravityOffset) + offset;
             i3 = !this.isRtl ? margin + i10 : ((i8 - i6) - margin3) - i10;
             i5 = ((i11 + gravityOffset2) + i5) + margin2;
@@ -2126,21 +2148,21 @@ public class TableLayout extends View {
         childCount = i4;
         i5 = 0;
         while (i5 < i6) {
-            Child child2;
+            Child child3;
             Object obj2;
-            Child child3 = (Child) this.cellsToFixHeight.get(i5);
-            measurement2 = child3.measuredHeight - child3.fixedHeight;
-            measurement = child3.index + 1;
+            child = (Child) this.cellsToFixHeight.get(i5);
+            measurement2 = child.measuredHeight - child.fixedHeight;
+            measurement = child.index + 1;
             gravityOffset = this.childrens.size();
             while (measurement < gravityOffset) {
-                child2 = (Child) this.childrens.get(measurement);
-                if (child3.layoutParams.rowSpec.span.min != child2.layoutParams.rowSpec.span.min) {
+                child3 = (Child) this.childrens.get(measurement);
+                if (child.layoutParams.rowSpec.span.min != child3.layoutParams.rowSpec.span.min) {
                     break;
-                } else if (child3.fixedHeight < child2.fixedHeight) {
+                } else if (child.fixedHeight < child3.fixedHeight) {
                     obj2 = 1;
                     break;
                 } else {
-                    max = child2.measuredHeight - child2.fixedHeight;
+                    max = child3.measuredHeight - child3.fixedHeight;
                     if (max > 0) {
                         measurement2 = Math.min(measurement2, max);
                     }
@@ -2149,12 +2171,12 @@ public class TableLayout extends View {
             }
             obj2 = null;
             if (obj2 == null) {
-                measurement = child3.index - 1;
+                measurement = child.index - 1;
                 while (measurement >= 0) {
                     Child child4 = (Child) this.childrens.get(measurement);
-                    if (child3.layoutParams.rowSpec.span.min != child4.layoutParams.rowSpec.span.min) {
+                    if (child.layoutParams.rowSpec.span.min != child4.layoutParams.rowSpec.span.min) {
                         break;
-                    } else if (child3.fixedHeight < child4.fixedHeight) {
+                    } else if (child.fixedHeight < child4.fixedHeight) {
                         obj2 = 1;
                         break;
                     } else {
@@ -2167,26 +2189,26 @@ public class TableLayout extends View {
                 }
             }
             if (obj2 == null) {
-                child3.setFixedHeight(child3.fixedHeight);
+                child.setFixedHeight(child.fixedHeight);
                 childCount -= measurement2;
                 measurement = this.childrens.size();
                 gravityOffset = i6;
                 i6 = i5;
                 for (i5 = 0; i5 < measurement; i5++) {
-                    child2 = (Child) this.childrens.get(i5);
-                    if (child3 != child2) {
-                        if (child3.layoutParams.rowSpec.span.min == child2.layoutParams.rowSpec.span.min) {
-                            if (child2.fixedHeight != child2.measuredHeight) {
-                                this.cellsToFixHeight.remove(child2);
-                                if (child2.index < child3.index) {
+                    child3 = (Child) this.childrens.get(i5);
+                    if (child != child3) {
+                        if (child.layoutParams.rowSpec.span.min == child3.layoutParams.rowSpec.span.min) {
+                            if (child3.fixedHeight != child3.measuredHeight) {
+                                this.cellsToFixHeight.remove(child3);
+                                if (child3.index < child.index) {
                                     i6--;
                                 }
                                 gravityOffset--;
                             }
-                            child2.measuredHeight = child2.measuredHeight - measurement2;
-                            child2.measure(child2.measuredWidth, child2.measuredHeight, true);
-                        } else if (child3.layoutParams.rowSpec.span.min < child2.layoutParams.rowSpec.span.min) {
-                            child2.y -= measurement2;
+                            child3.measuredHeight = child3.measuredHeight - measurement2;
+                            child3.measure(child3.measuredWidth, child3.measuredHeight, true);
+                        } else if (child.layoutParams.rowSpec.span.min < child3.layoutParams.rowSpec.span.min) {
+                            child3.y -= measurement2;
                         }
                     }
                 }
@@ -2194,6 +2216,11 @@ public class TableLayout extends View {
                 i6 = gravityOffset;
             }
             i5++;
+        }
+        i5 = getChildCount();
+        for (i6 = 0; i6 < i5; i6++) {
+            child = getChildAt(i6);
+            this.delegate.onLayoutChild(child.textLayout, child.getTextX(), child.getTextY());
         }
         setMeasuredDimension(i8, childCount);
     }

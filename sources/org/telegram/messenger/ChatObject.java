@@ -96,6 +96,10 @@ public class ChatObject {
         return getBannedRight(chat.default_banned_rights, i);
     }
 
+    public static boolean isActionBanned(Chat chat, int i) {
+        return chat != null && (getBannedRight(chat.banned_rights, i) || getBannedRight(chat.default_banned_rights, i));
+    }
+
     public static boolean canUserDoAdminAction(Chat chat, int i) {
         if (chat == null) {
             return false;

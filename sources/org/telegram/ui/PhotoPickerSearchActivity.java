@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -43,6 +42,7 @@ import org.telegram.ui.Components.ScrollSlidingTextTabStrip;
 import org.telegram.ui.Components.ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.PhotoPickerActivity.PhotoPickerActivityDelegate;
+import org.telegram.ui.PhotoPickerActivity.PhotoPickerActivitySearchDelegate;
 
 public class PhotoPickerSearchActivity extends BaseFragment {
     private static final Interpolator interpolator = -$$Lambda$PhotoPickerSearchActivity$jqQaX9Gg6oQw1X3auh_sMyxFvar_.INSTANCE;
@@ -75,9 +75,9 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         }
     }
 
-    public PhotoPickerSearchActivity(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList, ArrayList<SearchImage> arrayList2, int i, boolean z, ChatActivity chatActivity) {
-        this.imagesSearch = new PhotoPickerActivity(0, null, hashMap, arrayList, arrayList2, i, z, chatActivity);
-        this.gifsSearch = new PhotoPickerActivity(1, null, hashMap, arrayList, arrayList2, i, z, chatActivity);
+    public PhotoPickerSearchActivity(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList, int i, boolean z, ChatActivity chatActivity) {
+        this.imagesSearch = new PhotoPickerActivity(0, null, hashMap, arrayList, i, z, chatActivity);
+        this.gifsSearch = new PhotoPickerActivity(1, null, hashMap, arrayList, i, z, chatActivity);
     }
 
     public View createView(Context context) {
@@ -777,8 +777,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         anonymousClass4.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
         anonymousClass4.addView(this.imagesSearch.shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         anonymousClass4.addView(this.imagesSearch.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
-        anonymousClass4.addView(this.imagesSearch.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 6.0f, 10.0f));
-        anonymousClass4.addView(this.imagesSearch.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -8.0f, 9.0f));
+        anonymousClass4.addView(this.imagesSearch.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
+        anonymousClass4.addView(this.imagesSearch.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));
         updateTabs();
         switchToCurrentSelectedMode(false);
         if (this.scrollSlidingTextTabStrip.getCurrentTabId() == this.scrollSlidingTextTabStrip.getFirstTabId()) {
@@ -863,9 +863,35 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         }
     }
 
+    private void searchText(String str) {
+        this.searchItem.getSearchField().setText(str);
+        this.searchItem.getSearchField().setSelection(str.length());
+        this.actionBar.onSearchPressed();
+    }
+
     public void setDelegate(PhotoPickerActivityDelegate photoPickerActivityDelegate) {
         this.imagesSearch.setDelegate(photoPickerActivityDelegate);
         this.gifsSearch.setDelegate(photoPickerActivityDelegate);
+        this.imagesSearch.setSearchDelegate(new PhotoPickerActivitySearchDelegate() {
+            public void shouldSearchText(String str) {
+                PhotoPickerSearchActivity.this.searchText(str);
+            }
+
+            public void shouldClearRecentSearch() {
+                PhotoPickerSearchActivity.this.imagesSearch.clearRecentSearch();
+                PhotoPickerSearchActivity.this.gifsSearch.clearRecentSearch();
+            }
+        });
+        this.gifsSearch.setSearchDelegate(new PhotoPickerActivitySearchDelegate() {
+            public void shouldSearchText(String str) {
+                PhotoPickerSearchActivity.this.searchText(str);
+            }
+
+            public void shouldClearRecentSearch() {
+                PhotoPickerSearchActivity.this.imagesSearch.clearRecentSearch();
+                PhotoPickerSearchActivity.this.gifsSearch.clearRecentSearch();
+            }
+        });
     }
 
     public void setMaxSelectedPhotos(int i, boolean z) {

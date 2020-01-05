@@ -3,7 +3,6 @@ package org.telegram.messenger;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
@@ -12,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -186,7 +184,7 @@ public class Emoji {
         r1 = new int[8][];
         int i2 = 2;
         r1[2] = new int[]{5, 5, 5, 5};
-        r1[3] = new int[]{7, 7, 7, 7};
+        r1[3] = new int[]{9, 9, 9, 9};
         r1[4] = new int[]{5, 5, 5, 5};
         r1[5] = new int[]{7, 7, 7, 7};
         r1[6] = new int[]{8, 8, 8, 8};
@@ -234,7 +232,7 @@ public class Emoji {
                 }
                 i3 = 1;
             }
-            for (int i4 = 12; i4 < 14; i4++) {
+            for (int i4 = 13; i4 < 15; i4++) {
                 File fileStreamPath = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(i4), Float.valueOf(2.0f), Integer.valueOf(i)}));
                 if (fileStreamPath.exists()) {
                     fileStreamPath.delete();
@@ -254,14 +252,11 @@ public class Emoji {
             AssetManager assets = ApplicationLoader.applicationContext.getAssets();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("emoji/");
-            stringBuilder.append(String.format(Locale.US, "v14_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(2.0f), Integer.valueOf(i), Integer.valueOf(i2)}));
+            stringBuilder.append(String.format(Locale.US, "v15_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(2.0f), Integer.valueOf(i), Integer.valueOf(i2)}));
             InputStream open = assets.open(stringBuilder.toString());
             Options options = new Options();
             options.inJustDecodeBounds = false;
             options.inSampleSize = i3;
-            if (VERSION.SDK_INT >= 26) {
-                options.inPreferredConfig = Config.HARDWARE;
-            }
             bitmap = BitmapFactory.decodeStream(open, null, options);
             open.close();
         } catch (Throwable th2) {

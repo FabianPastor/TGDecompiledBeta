@@ -63,6 +63,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         private ActionBar actionBar;
         private FrameLayout fragmentView;
         private RecyclerListView listView;
+        private RecyclerListView listView2;
         private BaseFragment parentFragment;
         private int selectedType;
 
@@ -88,6 +89,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         bundle.putBoolean("disableSections", true);
         bundle.putBoolean("needFinishFragment", false);
         bundle.putBoolean(str, false);
+        bundle.putBoolean("allowSelf", false);
         this.contactsActivity = new ContactsActivity(bundle);
         this.contactsActivity.setDelegate(new -$$Lambda$DialogOrContactPickerActivity$YMiYnz58wvar_gzOnJojoou4oa4s(this));
         this.contactsActivity.onFragmentCreate();
@@ -221,12 +223,15 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                 int measuredHeight = DialogOrContactPickerActivity.this.actionBar.getMeasuredHeight();
                 this.globalIgnoreLayout = true;
                 int i3 = 0;
-                int i4 = 0;
-                while (i4 < DialogOrContactPickerActivity.this.viewPages.length) {
-                    if (!(DialogOrContactPickerActivity.this.viewPages[i4] == null || DialogOrContactPickerActivity.this.viewPages[i4].listView == null)) {
-                        DialogOrContactPickerActivity.this.viewPages[i4].listView.setPadding(0, measuredHeight, 0, 0);
+                for (int i4 = 0; i4 < DialogOrContactPickerActivity.this.viewPages.length; i4++) {
+                    if (DialogOrContactPickerActivity.this.viewPages[i4] != null) {
+                        if (DialogOrContactPickerActivity.this.viewPages[i4].listView != null) {
+                            DialogOrContactPickerActivity.this.viewPages[i4].listView.setPadding(0, measuredHeight, 0, 0);
+                        }
+                        if (DialogOrContactPickerActivity.this.viewPages[i4].listView2 != null) {
+                            DialogOrContactPickerActivity.this.viewPages[i4].listView2.setPadding(0, measuredHeight, 0, 0);
+                        }
                     }
-                    i4++;
                 }
                 this.globalIgnoreLayout = false;
                 measuredHeight = getChildCount();
@@ -438,37 +443,37 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                         DialogOrContactPickerActivity dialogOrContactPickerActivity = DialogOrContactPickerActivity.this;
                         boolean z2 = Math.abs(x2) < ((float) DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(xVelocity) < 3500.0f || Math.abs(xVelocity) < Math.abs(yVelocity));
                         dialogOrContactPickerActivity.backAnimation = z2;
-                        AnimatorSet access$2000;
+                        AnimatorSet access$2100;
                         Animator[] animatorArr;
                         if (DialogOrContactPickerActivity.this.backAnimation) {
                             x2 = Math.abs(x2);
                             if (DialogOrContactPickerActivity.this.animatingForward) {
-                                access$2000 = DialogOrContactPickerActivity.this.tabsAnimation;
+                                access$2100 = DialogOrContactPickerActivity.this.tabsAnimation;
                                 animatorArr = new Animator[2];
                                 animatorArr[0] = ObjectAnimator.ofFloat(DialogOrContactPickerActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f});
                                 animatorArr[1] = ObjectAnimator.ofFloat(DialogOrContactPickerActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) DialogOrContactPickerActivity.this.viewPages[1].getMeasuredWidth()});
-                                access$2000.playTogether(animatorArr);
+                                access$2100.playTogether(animatorArr);
                             } else {
-                                access$2000 = DialogOrContactPickerActivity.this.tabsAnimation;
+                                access$2100 = DialogOrContactPickerActivity.this.tabsAnimation;
                                 animatorArr = new Animator[2];
                                 animatorArr[0] = ObjectAnimator.ofFloat(DialogOrContactPickerActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f});
                                 animatorArr[1] = ObjectAnimator.ofFloat(DialogOrContactPickerActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) (-DialogOrContactPickerActivity.this.viewPages[1].getMeasuredWidth())});
-                                access$2000.playTogether(animatorArr);
+                                access$2100.playTogether(animatorArr);
                             }
                         } else {
                             x2 = ((float) DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth()) - Math.abs(x2);
                             if (DialogOrContactPickerActivity.this.animatingForward) {
-                                access$2000 = DialogOrContactPickerActivity.this.tabsAnimation;
+                                access$2100 = DialogOrContactPickerActivity.this.tabsAnimation;
                                 animatorArr = new Animator[2];
                                 animatorArr[0] = ObjectAnimator.ofFloat(DialogOrContactPickerActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) (-DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth())});
                                 animatorArr[1] = ObjectAnimator.ofFloat(DialogOrContactPickerActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f});
-                                access$2000.playTogether(animatorArr);
+                                access$2100.playTogether(animatorArr);
                             } else {
-                                access$2000 = DialogOrContactPickerActivity.this.tabsAnimation;
+                                access$2100 = DialogOrContactPickerActivity.this.tabsAnimation;
                                 animatorArr = new Animator[2];
                                 animatorArr[0] = ObjectAnimator.ofFloat(DialogOrContactPickerActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth()});
                                 animatorArr[1] = ObjectAnimator.ofFloat(DialogOrContactPickerActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f});
-                                access$2000.playTogether(animatorArr);
+                                access$2100.playTogether(animatorArr);
                             }
                         }
                         DialogOrContactPickerActivity.this.tabsAnimation.setInterpolator(DialogOrContactPickerActivity.interpolator);
@@ -542,6 +547,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             if (i == 0) {
                 this.viewPages[i].parentFragment = this.dialogsActivity;
                 this.viewPages[i].listView = this.dialogsActivity.getListView();
+                this.viewPages[i].listView2 = this.dialogsActivity.getSearchListView();
             } else if (i == 1) {
                 this.viewPages[i].parentFragment = this.contactsActivity;
                 this.viewPages[i].listView = this.contactsActivity.getListView();
@@ -549,7 +555,6 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             }
             ViewPage[] viewPageArr2 = this.viewPages;
             viewPageArr2[i].fragmentView = (FrameLayout) viewPageArr2[i].parentFragment.getFragmentView();
-            this.viewPages[i].listView.setClipToPadding(false);
             viewPageArr2 = this.viewPages;
             viewPageArr2[i].actionBar = viewPageArr2[i].parentFragment.getActionBar();
             viewPageArr2 = this.viewPages;
@@ -557,39 +562,52 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             ViewPage[] viewPageArr3 = this.viewPages;
             viewPageArr3[i].addView(viewPageArr3[i].actionBar, LayoutHelper.createFrame(-1, -2.0f));
             this.viewPages[i].actionBar.setVisibility(8);
-            final OnScrollListener onScrollListener = this.viewPages[i].listView.getOnScrollListener();
-            this.viewPages[i].listView.setOnScrollListener(new OnScrollListener() {
-                public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                    onScrollListener.onScrollStateChanged(recyclerView, i);
-                    if (i != 1) {
-                        int i2 = (int) (-DialogOrContactPickerActivity.this.actionBar.getTranslationY());
-                        i = ActionBar.getCurrentActionBarHeight();
-                        if (i2 != 0 && i2 != i) {
-                            if (i2 < i / 2) {
-                                DialogOrContactPickerActivity.this.viewPages[0].listView.smoothScrollBy(0, -i2);
-                            } else {
-                                DialogOrContactPickerActivity.this.viewPages[0].listView.smoothScrollBy(0, i - i2);
+            int i2 = 0;
+            while (i2 < 2) {
+                viewPageArr3 = this.viewPages;
+                RecyclerView access$1200 = i2 == 0 ? viewPageArr3[i].listView : viewPageArr3[i].listView2;
+                if (access$1200 != null) {
+                    access$1200.setClipToPadding(false);
+                    final OnScrollListener onScrollListener = access$1200.getOnScrollListener();
+                    access$1200.setOnScrollListener(new OnScrollListener() {
+                        public void onScrollStateChanged(RecyclerView recyclerView, int i) {
+                            onScrollListener.onScrollStateChanged(recyclerView, i);
+                            if (i != 1) {
+                                int i2 = (int) (-DialogOrContactPickerActivity.this.actionBar.getTranslationY());
+                                i = ActionBar.getCurrentActionBarHeight();
+                                if (i2 != 0 && i2 != i) {
+                                    if (i2 < i / 2) {
+                                        i2 = -i2;
+                                        DialogOrContactPickerActivity.this.viewPages[0].listView.smoothScrollBy(0, i2);
+                                        DialogOrContactPickerActivity.this.viewPages[0].listView2.smoothScrollBy(0, i2);
+                                        return;
+                                    }
+                                    i -= i2;
+                                    DialogOrContactPickerActivity.this.viewPages[0].listView.smoothScrollBy(0, i);
+                                    DialogOrContactPickerActivity.this.viewPages[0].listView2.smoothScrollBy(0, i);
+                                }
                             }
                         }
-                    }
-                }
 
-                public void onScrolled(RecyclerView recyclerView, int i, int i2) {
-                    onScrollListener.onScrolled(recyclerView, i, i2);
-                    if (recyclerView == DialogOrContactPickerActivity.this.viewPages[0].listView) {
-                        float translationY = DialogOrContactPickerActivity.this.actionBar.getTranslationY();
-                        float f = translationY - ((float) i2);
-                        if (f < ((float) (-ActionBar.getCurrentActionBarHeight()))) {
-                            f = (float) (-ActionBar.getCurrentActionBarHeight());
-                        } else if (f > 0.0f) {
-                            f = 0.0f;
+                        public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                            onScrollListener.onScrolled(recyclerView, i, i2);
+                            if (recyclerView == DialogOrContactPickerActivity.this.viewPages[0].listView || recyclerView == DialogOrContactPickerActivity.this.viewPages[0].listView2) {
+                                float translationY = DialogOrContactPickerActivity.this.actionBar.getTranslationY();
+                                float f = translationY - ((float) i2);
+                                if (f < ((float) (-ActionBar.getCurrentActionBarHeight()))) {
+                                    f = (float) (-ActionBar.getCurrentActionBarHeight());
+                                } else if (f > 0.0f) {
+                                    f = 0.0f;
+                                }
+                                if (f != translationY) {
+                                    DialogOrContactPickerActivity.this.setScrollY(f);
+                                }
+                            }
                         }
-                        if (f != translationY) {
-                            DialogOrContactPickerActivity.this.setScrollY(f);
-                        }
-                    }
+                    });
                 }
-            });
+                i2++;
+            }
             i++;
         }
         anonymousClass4.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
@@ -644,7 +662,11 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         while (true) {
             ViewPage[] viewPageArr = this.viewPages;
             if (i < viewPageArr.length) {
-                viewPageArr[i].listView.setPinnedSectionOffsetY((int) f);
+                int i2 = (int) f;
+                viewPageArr[i].listView.setPinnedSectionOffsetY(i2);
+                if (this.viewPages[i].listView2 != null) {
+                    this.viewPages[i].listView2.setPinnedSectionOffsetY(i2);
+                }
                 i++;
             } else {
                 this.fragmentView.invalidate();
@@ -703,12 +725,23 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                 break;
             }
             viewPageArr[i].listView.stopScroll();
+            if (this.viewPages[i].listView2 != null) {
+                this.viewPages[i].listView2.stopScroll();
+            }
             i++;
         }
-        viewPageArr[z].listView.getAdapter();
-        this.viewPages[z].listView.setPinnedHeaderShadowDrawable(null);
-        if (this.actionBar.getTranslationY() != 0.0f) {
-            ((LinearLayoutManager) this.viewPages[z].listView.getLayoutManager()).scrollToPositionWithOffset(0, (int) this.actionBar.getTranslationY());
+        i = 0;
+        while (i < 2) {
+            viewPageArr = this.viewPages;
+            RecyclerView access$1200 = i == 0 ? viewPageArr[z].listView : viewPageArr[z].listView2;
+            if (access$1200 != null) {
+                access$1200.getAdapter();
+                access$1200.setPinnedHeaderShadowDrawable(null);
+                if (this.actionBar.getTranslationY() != 0.0f) {
+                    ((LinearLayoutManager) access$1200.getLayoutManager()).scrollToPositionWithOffset(0, (int) this.actionBar.getTranslationY());
+                }
+            }
+            i++;
         }
     }
 

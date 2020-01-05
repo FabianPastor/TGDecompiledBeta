@@ -1134,12 +1134,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r5 = this;
         r0 = org.telegram.messenger.MediaController.getInstance();
         r0 = r0.getPlayingMessageObject();
-        if (r0 == 0) goto L_0x0174;
+        if (r0 == 0) goto L_0x0175;
     L_0x000a:
         r1 = r5.parentActivity;
         if (r1 != 0) goto L_0x0010;
     L_0x000e:
-        goto L_0x0174;
+        goto L_0x0175;
     L_0x0010:
         r2 = 1;
         if (r6 != r2) goto L_0x004b;
@@ -1166,9 +1166,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r0.<init>(r5, r6);
         r1.setDelegate(r0);
         r6 = r5.parentActivity;
-        r6.lambda$runLinkRequest$28$LaunchActivity(r1);
+        r6.lambda$runLinkRequest$32$LaunchActivity(r1);
         r5.dismiss();
-        goto L_0x0174;
+        goto L_0x0175;
     L_0x004b:
         r3 = 2;
         if (r6 != r3) goto L_0x00ff;
@@ -1229,37 +1229,37 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     L_0x00b3:
         r6 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r0 = "ShareFile";
-        r2 = NUM; // 0x7f0e09f9 float:1.8880216E38 double:1.053163418E-314;
+        r2 = NUM; // 0x7f0e0a31 float:1.888033E38 double:1.0531634456E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r0 = android.content.Intent.createChooser(r1, r0);	 Catch:{ Exception -> 0x00f9 }
         r1 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
         r6.startActivityForResult(r0, r1);	 Catch:{ Exception -> 0x00f9 }
-        goto L_0x0174;
+        goto L_0x0175;
     L_0x00c9:
         r6 = new org.telegram.ui.ActionBar.AlertDialog$Builder;	 Catch:{ Exception -> 0x00f9 }
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r6.<init>(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "AppName";
-        r2 = NUM; // 0x7f0e00f4 float:1.8875532E38 double:1.053162277E-314;
+        r2 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r6.setTitle(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "OK";
-        r2 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
+        r2 = NUM; // 0x7f0e0764 float:1.8878875E38 double:1.0531630914E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r6.setPositiveButton(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r0 = "PleaseDownload";
-        r1 = NUM; // 0x7f0e08a8 float:1.8879532E38 double:1.0531632515E-314;
+        r1 = NUM; // 0x7f0e08df float:1.8879644E38 double:1.0531632787E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r6.setMessage(r0);	 Catch:{ Exception -> 0x00f9 }
         r6.show();	 Catch:{ Exception -> 0x00f9 }
-        goto L_0x0174;
+        goto L_0x0175;
     L_0x00f9:
         r6 = move-exception;
         org.telegram.messenger.FileLog.e(r6);
-        goto L_0x0174;
+        goto L_0x0175;
     L_0x00ff:
         r3 = 4;
-        if (r6 != r3) goto L_0x0174;
+        if (r6 != r3) goto L_0x0175;
     L_0x0102:
         r6 = org.telegram.messenger.UserConfig.selectedAccount;
         r3 = r5.currentAccount;
@@ -1274,40 +1274,40 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r4 = 32;
         r1 = r1 >> r4;
         r2 = (int) r1;
-        if (r3 == 0) goto L_0x014b;
+        if (r3 == 0) goto L_0x014c;
     L_0x011b:
-        if (r3 <= 0) goto L_0x0123;
+        if (r3 <= 0) goto L_0x0124;
     L_0x011d:
         r1 = "user_id";
         r6.putInt(r1, r3);
-        goto L_0x0150;
-    L_0x0123:
-        if (r3 >= 0) goto L_0x0150;
-    L_0x0125:
+        goto L_0x0151;
+    L_0x0124:
+        if (r3 >= 0) goto L_0x0151;
+    L_0x0126:
         r1 = r5.currentAccount;
         r1 = org.telegram.messenger.MessagesController.getInstance(r1);
         r2 = -r3;
         r2 = java.lang.Integer.valueOf(r2);
         r1 = r1.getChat(r2);
-        if (r1 == 0) goto L_0x0144;
-    L_0x0136:
+        if (r1 == 0) goto L_0x0145;
+    L_0x0137:
         r2 = r1.migrated_to;
-        if (r2 == 0) goto L_0x0144;
-    L_0x013a:
+        if (r2 == 0) goto L_0x0145;
+    L_0x013b:
         r2 = "migrated_to";
         r6.putInt(r2, r3);
         r1 = r1.migrated_to;
         r1 = r1.channel_id;
         r3 = -r1;
-    L_0x0144:
+    L_0x0145:
         r1 = -r3;
         r2 = "chat_id";
         r6.putInt(r2, r1);
-        goto L_0x0150;
-    L_0x014b:
+        goto L_0x0151;
+    L_0x014c:
         r1 = "enc_id";
         r6.putInt(r1, r2);
-    L_0x0150:
+    L_0x0151:
         r0 = r0.getId();
         r1 = "message_id";
         r6.putInt(r1, r0);
@@ -1322,7 +1322,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r1.<init>(r6);
         r0.presentFragment(r1, r2, r2);
         r5.dismiss();
-    L_0x0174:
+    L_0x0175:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert.onSubItemClick(int):void");

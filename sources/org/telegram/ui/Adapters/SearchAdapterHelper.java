@@ -235,6 +235,7 @@ public class SearchAdapterHelper {
             this.reqId = 0;
             if (tL_error == null) {
                 int i2;
+                User user;
                 TL_contacts_found tL_contacts_found = (TL_contacts_found) tLObject;
                 this.globalSearch.clear();
                 this.globalSearchMap.clear();
@@ -249,7 +250,7 @@ public class SearchAdapterHelper {
                     sparseArray.put(chat.id, chat);
                 }
                 for (i2 = 0; i2 < tL_contacts_found.users.size(); i2++) {
-                    User user = (User) tL_contacts_found.users.get(i2);
+                    user = (User) tL_contacts_found.users.get(i2);
                     sparseArray2.put(user.id, user);
                 }
                 for (i2 = 0; i2 < 2; i2++) {
@@ -297,35 +298,34 @@ public class SearchAdapterHelper {
                 if (!this.allResultsAreGlobal) {
                     while (i < tL_contacts_found.my_results.size()) {
                         Object obj2;
-                        Object obj3;
                         Peer peer2 = (Peer) tL_contacts_found.my_results.get(i);
                         int i6 = peer2.user_id;
                         if (i6 != 0) {
-                            obj2 = (User) sparseArray2.get(i6);
-                            obj3 = null;
+                            user = (User) sparseArray2.get(i6);
+                            obj2 = null;
                         } else {
                             i6 = peer2.chat_id;
                             if (i6 != 0) {
-                                obj3 = (Chat) sparseArray.get(i6);
+                                obj2 = (Chat) sparseArray.get(i6);
                             } else {
-                                int i7 = peer2.channel_id;
-                                if (i7 != 0) {
-                                    Chat chat3 = (Chat) sparseArray.get(i7);
+                                i2 = peer2.channel_id;
+                                if (i2 != 0) {
+                                    Chat chat3 = (Chat) sparseArray.get(i2);
                                 } else {
-                                    obj3 = null;
-                                    obj2 = obj3;
+                                    obj2 = null;
+                                    user = obj2;
                                 }
                             }
-                            obj2 = null;
+                            user = null;
                         }
-                        if (obj3 != null) {
+                        if (obj2 != null) {
                             if (z) {
-                                this.localServerSearch.add(obj3);
-                                this.globalSearchMap.put(-obj3.id, obj3);
+                                this.localServerSearch.add(obj2);
+                                this.globalSearchMap.put(-obj2.id, obj2);
                             }
-                        } else if (obj2 != null) {
-                            this.localServerSearch.add(obj2);
-                            this.globalSearchMap.put(obj2.id, obj2);
+                        } else if (user != null && ((z2 || !user.bot) && (z3 || !user.self))) {
+                            this.localServerSearch.add(user);
+                            this.globalSearchMap.put(user.id, user);
                         }
                         i++;
                     }

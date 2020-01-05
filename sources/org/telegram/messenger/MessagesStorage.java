@@ -19,7 +19,6 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.ContactsController.Contact;
-import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
@@ -33,6 +32,8 @@ import org.telegram.tgnet.TLRPC.Dialog;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.InputChannel;
+import org.telegram.tgnet.TLRPC.InputDialogPeer;
+import org.telegram.tgnet.TLRPC.InputMedia;
 import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.MessageAction;
@@ -44,6 +45,7 @@ import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.ReplyMarkup;
 import org.telegram.tgnet.TLRPC.TL_channelFull;
+import org.telegram.tgnet.TLRPC.TL_channels_deleteMessages;
 import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_chatFull;
 import org.telegram.tgnet.TLRPC.TL_chatInviteEmpty;
@@ -55,6 +57,7 @@ import org.telegram.tgnet.TLRPC.TL_dialogFolder;
 import org.telegram.tgnet.TLRPC.TL_folder;
 import org.telegram.tgnet.TLRPC.TL_folderPeer;
 import org.telegram.tgnet.TLRPC.TL_inputFolderPeer;
+import org.telegram.tgnet.TLRPC.TL_inputMediaGame;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
 import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
@@ -69,6 +72,8 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messageReactions;
 import org.telegram.tgnet.TLRPC.TL_messages_botCallbackAnswer;
 import org.telegram.tgnet.TLRPC.TL_messages_botResults;
+import org.telegram.tgnet.TLRPC.TL_messages_deleteMessages;
+import org.telegram.tgnet.TLRPC.TL_messages_deleteScheduledMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_dialogs;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettingsEmpty_layer77;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
@@ -89,6 +94,7 @@ import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.tgnet.TLRPC.messages_Dialogs;
 import org.telegram.tgnet.TLRPC.messages_Messages;
 import org.telegram.tgnet.TLRPC.photos_Photos;
+import org.telegram.ui.ActionBar.Theme.OverrideWallpaperInfo;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
@@ -1032,429 +1038,150 @@ public class MessagesStorage extends BaseController {
         this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$z3HUCafabuAW6qPxQHj_RTk1MGw(this));
     }
 
-    /* JADX WARNING: Missing block: B:9:0x0025, code skipped:
-            r18 = r0;
-            r0 = r14;
-            r9 = r15;
-     */
-    /* JADX WARNING: Missing block: B:40:0x0177, code skipped:
-            r9 = r21;
-     */
-    /* JADX WARNING: Missing block: B:73:0x02dc, code skipped:
-            r0.reuse();
-     */
     public /* synthetic */ void lambda$loadPendingTasks$22$MessagesStorage() {
-        /*
-        r21 = this;
-        r15 = r21;
-        r0 = r15.database;	 Catch:{ Exception -> 0x02f3 }
-        r1 = "SELECT id, data FROM pending_tasks WHERE 1";
-        r13 = 0;
-        r2 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x02f3 }
-        r0 = r0.queryFinalized(r1, r2);	 Catch:{ Exception -> 0x02f3 }
-    L_0x000d:
-        r1 = r0.next();	 Catch:{ Exception -> 0x02f3 }
-        if (r1 == 0) goto L_0x02ea;
-    L_0x0013:
-        r11 = r0.longValue(r13);	 Catch:{ Exception -> 0x02f3 }
-        r1 = 1;
-        r14 = r0.byteBufferValue(r1);	 Catch:{ Exception -> 0x02f3 }
-        if (r14 == 0) goto L_0x02e0;
-    L_0x001e:
-        r1 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        switch(r1) {
-            case 0: goto L_0x02c2;
-            case 1: goto L_0x02a5;
-            case 2: goto L_0x0228;
-            case 3: goto L_0x0202;
-            case 4: goto L_0x01df;
-            case 5: goto L_0x0228;
-            case 6: goto L_0x01b8;
-            case 7: goto L_0x017b;
-            case 8: goto L_0x0228;
-            case 9: goto L_0x0158;
-            case 10: goto L_0x0228;
-            case 11: goto L_0x012b;
-            case 12: goto L_0x00e4;
-            case 13: goto L_0x00b9;
-            case 14: goto L_0x0228;
-            case 15: goto L_0x00a5;
-            case 16: goto L_0x007a;
-            case 17: goto L_0x004f;
-            case 18: goto L_0x002c;
-            case 19: goto L_0x00e4;
-            default: goto L_0x0025;
-        };	 Catch:{ Exception -> 0x02f3 }
-    L_0x0025:
-        r18 = r0;
-        r0 = r14;
-        r9 = r15;
-        r15 = 0;
-        goto L_0x02dc;
-    L_0x002c:
-        r3 = r14.readInt64(r13);	 Catch:{ Exception -> 0x02f3 }
-        r5 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r1 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r8 = org.telegram.tgnet.TLRPC.TL_messages_deleteScheduledMessages.TLdeserialize(r14, r1, r13);	 Catch:{ Exception -> 0x02f3 }
-        if (r8 != 0) goto L_0x0042;
-    L_0x003e:
-        r15.removePendingTask(r11);	 Catch:{ Exception -> 0x02f3 }
-        goto L_0x0025;
-    L_0x0042:
-        r9 = new org.telegram.messenger.-$$Lambda$MessagesStorage$l0j4dGsiYqNq856M-GFXUg5lJ8Y;	 Catch:{ Exception -> 0x02f3 }
-        r1 = r9;
-        r2 = r21;
-        r6 = r11;
-        r1.<init>(r2, r3, r5, r6, r8);	 Catch:{ Exception -> 0x02f3 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r9);	 Catch:{ Exception -> 0x02f3 }
-        goto L_0x0025;
-    L_0x004f:
-        r3 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r1 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x02f3 }
-        r4.<init>();	 Catch:{ Exception -> 0x02f3 }
-        r2 = 0;
-    L_0x005d:
-        if (r2 >= r1) goto L_0x006d;
-    L_0x005f:
-        r5 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r5 = org.telegram.tgnet.TLRPC.TL_inputFolderPeer.TLdeserialize(r14, r5, r13);	 Catch:{ Exception -> 0x02f3 }
-        r4.add(r5);	 Catch:{ Exception -> 0x02f3 }
-        r2 = r2 + 1;
-        goto L_0x005d;
-    L_0x006d:
-        r7 = new org.telegram.messenger.-$$Lambda$MessagesStorage$LtM1spYCOokckYn9GalfKw21eVw;	 Catch:{ Exception -> 0x02f3 }
-        r1 = r7;
-        r2 = r21;
-        r5 = r11;
-        r1.<init>(r2, r3, r4, r5);	 Catch:{ Exception -> 0x02f3 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r7);	 Catch:{ Exception -> 0x02f3 }
-        goto L_0x0025;
-    L_0x007a:
-        r3 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r1 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x02f3 }
-        r4.<init>();	 Catch:{ Exception -> 0x02f3 }
-        r2 = 0;
-    L_0x0088:
-        if (r2 >= r1) goto L_0x0098;
-    L_0x008a:
-        r5 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r5 = org.telegram.tgnet.TLRPC.InputDialogPeer.TLdeserialize(r14, r5, r13);	 Catch:{ Exception -> 0x02f3 }
-        r4.add(r5);	 Catch:{ Exception -> 0x02f3 }
-        r2 = r2 + 1;
-        goto L_0x0088;
-    L_0x0098:
-        r7 = new org.telegram.messenger.-$$Lambda$MessagesStorage$KOMsQ0FDjAutn-YKgmf9ukUIQZQ;	 Catch:{ Exception -> 0x02f3 }
-        r1 = r7;
-        r2 = r21;
-        r5 = r11;
-        r1.<init>(r2, r3, r4, r5);	 Catch:{ Exception -> 0x02f3 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r7);	 Catch:{ Exception -> 0x02f3 }
-        goto L_0x0025;
-    L_0x00a5:
-        r1 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r1 = org.telegram.tgnet.TLRPC.InputPeer.TLdeserialize(r14, r1, r13);	 Catch:{ Exception -> 0x02f3 }
-        r2 = org.telegram.messenger.Utilities.stageQueue;	 Catch:{ Exception -> 0x02f3 }
-        r3 = new org.telegram.messenger.-$$Lambda$MessagesStorage$tZ31OdkMW8PKLVCYnMiDI_DfRTs;	 Catch:{ Exception -> 0x02f3 }
-        r3.<init>(r15, r1, r11);	 Catch:{ Exception -> 0x02f3 }
-        r2.postRunnable(r3);	 Catch:{ Exception -> 0x02f3 }
-        goto L_0x0025;
-    L_0x00b9:
-        r3 = r14.readInt64(r13);	 Catch:{ Exception -> 0x02f3 }
-        r5 = r14.readBool(r13);	 Catch:{ Exception -> 0x02f3 }
-        r6 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r7 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r8 = r14.readBool(r13);	 Catch:{ Exception -> 0x02f3 }
-        r1 = r14.readInt32(r13);	 Catch:{ Exception -> 0x02f3 }
-        r9 = org.telegram.tgnet.TLRPC.InputPeer.TLdeserialize(r14, r1, r13);	 Catch:{ Exception -> 0x02f3 }
-        r16 = new org.telegram.messenger.-$$Lambda$MessagesStorage$gZU7uqq34_u60ckwe65AH41ydVA;	 Catch:{ Exception -> 0x02f3 }
-        r1 = r16;
-        r2 = r21;
-        r10 = r11;
-        r1.<init>(r2, r3, r5, r6, r7, r8, r9, r10);	 Catch:{ Exception -> 0x02f3 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r16);	 Catch:{ Exception -> 0x02f3 }
-        goto L_0x0025;
-    L_0x00e4:
-        r3 = r14.readInt64(r13);	 Catch:{ Exception -> 0x01b3 }
-        r6 = r14.readInt64(r13);	 Catch:{ Exception -> 0x01b3 }
-        r8 = r14.readBool(r13);	 Catch:{ Exception -> 0x01b3 }
-        r9 = r14.readBool(r13);	 Catch:{ Exception -> 0x01b3 }
-        r10 = r14.readInt32(r13);	 Catch:{ Exception -> 0x01b3 }
-        r16 = r3;
-        r2 = r14.readDouble(r13);	 Catch:{ Exception -> 0x01b3 }
-        r3 = (float) r2;	 Catch:{ Exception -> 0x01b3 }
-        r18 = r14.readBool(r13);	 Catch:{ Exception -> 0x01b3 }
-        r2 = 19;
-        if (r1 != r2) goto L_0x010d;
-    L_0x0107:
-        r1 = r14.readString(r13);	 Catch:{ Exception -> 0x02f3 }
-        r5 = r1;
-        goto L_0x010e;
-    L_0x010d:
-        r5 = 0;
-    L_0x010e:
-        r19 = new org.telegram.messenger.-$$Lambda$MessagesStorage$0DGsAplI_lg4cai0GKZKkit_JHg;	 Catch:{ Exception -> 0x01b3 }
-        r1 = r19;
-        r2 = r21;
-        r20 = r3;
-        r3 = r16;
-        r16 = r11;
-        r11 = r20;
-        r12 = r18;
-        r18 = r0;
-        r0 = r14;
-        r15 = 0;
-        r13 = r16;
-        r1.<init>(r2, r3, r5, r6, r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x01b3 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r19);	 Catch:{ Exception -> 0x01b3 }
-        goto L_0x0177;
-    L_0x012b:
-        r18 = r0;
-        r16 = r11;
-        r0 = r14;
-        r15 = 0;
-        r3 = r0.readInt32(r15);	 Catch:{ Exception -> 0x01b3 }
-        r4 = r0.readInt32(r15);	 Catch:{ Exception -> 0x01b3 }
-        r6 = r0.readInt32(r15);	 Catch:{ Exception -> 0x01b3 }
-        if (r4 == 0) goto L_0x0149;
-    L_0x013f:
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x01b3 }
-        r1 = org.telegram.tgnet.TLRPC.InputChannel.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x01b3 }
-        r5 = r1;
-        goto L_0x014a;
-    L_0x0149:
-        r5 = 0;
-    L_0x014a:
-        r9 = new org.telegram.messenger.-$$Lambda$MessagesStorage$TqvcAvYPfh-Cio-d66SYceSFjMQ;	 Catch:{ Exception -> 0x01b3 }
-        r1 = r9;
-        r2 = r21;
-        r7 = r16;
-        r1.<init>(r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x01b3 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r9);	 Catch:{ Exception -> 0x01b3 }
-        goto L_0x0177;
-    L_0x0158:
-        r18 = r0;
-        r16 = r11;
-        r0 = r14;
-        r15 = 0;
-        r3 = r0.readInt64(r15);	 Catch:{ Exception -> 0x01b3 }
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x01b3 }
-        r5 = org.telegram.tgnet.TLRPC.InputPeer.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x01b3 }
-        r8 = new org.telegram.messenger.-$$Lambda$MessagesStorage$OTCbnyNXoirwhvbsu8TFVflzodM;	 Catch:{ Exception -> 0x01b3 }
-        r1 = r8;
-        r2 = r21;
-        r6 = r16;
-        r1.<init>(r2, r3, r5, r6);	 Catch:{ Exception -> 0x01b3 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r8);	 Catch:{ Exception -> 0x01b3 }
-    L_0x0177:
-        r9 = r21;
-        goto L_0x02dc;
-    L_0x017b:
-        r18 = r0;
-        r16 = r11;
-        r0 = r14;
-        r15 = 0;
-        r3 = r0.readInt32(r15);	 Catch:{ Exception -> 0x01b3 }
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x01b3 }
-        r2 = org.telegram.tgnet.TLRPC.TL_messages_deleteMessages.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x01b3 }
-        if (r2 != 0) goto L_0x0195;
-    L_0x018f:
-        r1 = org.telegram.tgnet.TLRPC.TL_channels_deleteMessages.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x01b3 }
-        r6 = r1;
-        goto L_0x0196;
-    L_0x0195:
-        r6 = r2;
-    L_0x0196:
-        if (r6 != 0) goto L_0x01a1;
-    L_0x0198:
-        r9 = r21;
-        r7 = r16;
-        r9.removePendingTask(r7);	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02dc;
-    L_0x01a1:
-        r9 = r21;
-        r7 = r16;
-        r10 = new org.telegram.messenger.-$$Lambda$MessagesStorage$EuuPlYsIg_jeReoMzIbm6stO0ag;	 Catch:{ Exception -> 0x02f1 }
-        r1 = r10;
-        r2 = r21;
-        r4 = r7;
-        r1.<init>(r2, r3, r4, r6);	 Catch:{ Exception -> 0x02f1 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02dc;
-    L_0x01b3:
-        r0 = move-exception;
-        r9 = r21;
-        goto L_0x02f5;
-    L_0x01b8:
-        r18 = r0;
-        r7 = r11;
-        r0 = r14;
-        r9 = r15;
-        r15 = 0;
-        r3 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r4 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r10 = org.telegram.tgnet.TLRPC.InputChannel.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x02f1 }
-        r11 = org.telegram.messenger.Utilities.stageQueue;	 Catch:{ Exception -> 0x02f1 }
-        r12 = new org.telegram.messenger.-$$Lambda$MessagesStorage$veltQ-QzWYSSmgAGGDUTY-jvHoM;	 Catch:{ Exception -> 0x02f1 }
-        r1 = r12;
-        r2 = r21;
-        r5 = r7;
-        r7 = r10;
-        r1.<init>(r2, r3, r4, r5, r7);	 Catch:{ Exception -> 0x02f1 }
-        r11.postRunnable(r12);	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02dc;
-    L_0x01df:
-        r18 = r0;
-        r7 = r11;
-        r0 = r14;
-        r9 = r15;
-        r15 = 0;
-        r3 = r0.readInt64(r15);	 Catch:{ Exception -> 0x02f1 }
-        r5 = r0.readBool(r15);	 Catch:{ Exception -> 0x02f1 }
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r6 = org.telegram.tgnet.TLRPC.InputPeer.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x02f1 }
-        r10 = new org.telegram.messenger.-$$Lambda$MessagesStorage$AuH1gRs2iXmoSCC0c3xvFDAEwcM;	 Catch:{ Exception -> 0x02f1 }
-        r1 = r10;
-        r2 = r21;
-        r1.<init>(r2, r3, r5, r6, r7);	 Catch:{ Exception -> 0x02f1 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02dc;
-    L_0x0202:
-        r18 = r0;
-        r7 = r11;
-        r0 = r14;
-        r9 = r15;
-        r15 = 0;
-        r5 = r0.readInt64(r15);	 Catch:{ Exception -> 0x02f1 }
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3 = org.telegram.tgnet.TLRPC.InputPeer.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x02f1 }
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r1 = org.telegram.tgnet.TLRPC.InputMedia.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x02f1 }
-        r4 = r1;
-        r4 = (org.telegram.tgnet.TLRPC.TL_inputMediaGame) r4;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r21.getSendMessagesHelper();	 Catch:{ Exception -> 0x02f1 }
-        r2.sendGame(r3, r4, r5, r7);	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02dc;
-    L_0x0228:
-        r18 = r0;
-        r7 = r11;
-        r0 = r14;
-        r9 = r15;
-        r15 = 0;
-        r3 = new org.telegram.tgnet.TLRPC$TL_dialog;	 Catch:{ Exception -> 0x02f1 }
-        r3.<init>();	 Catch:{ Exception -> 0x02f1 }
-        r4 = r0.readInt64(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.id = r4;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.top_message = r2;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.read_inbox_max_id = r2;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.read_outbox_max_id = r2;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.unread_count = r2;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.last_message_date = r2;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.pts = r2;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.flags = r2;	 Catch:{ Exception -> 0x02f1 }
-        r2 = 5;
-        if (r1 < r2) goto L_0x0272;
-    L_0x0266:
-        r2 = r0.readBool(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.pinned = r2;	 Catch:{ Exception -> 0x02f1 }
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.pinnedNum = r2;	 Catch:{ Exception -> 0x02f1 }
-    L_0x0272:
-        r2 = 8;
-        if (r1 < r2) goto L_0x027c;
-    L_0x0276:
-        r2 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.unread_mentions_count = r2;	 Catch:{ Exception -> 0x02f1 }
-    L_0x027c:
-        r2 = 10;
-        if (r1 < r2) goto L_0x0286;
-    L_0x0280:
-        r2 = r0.readBool(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.unread_mark = r2;	 Catch:{ Exception -> 0x02f1 }
-    L_0x0286:
-        r2 = 14;
-        if (r1 < r2) goto L_0x0290;
-    L_0x028a:
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r3.folder_id = r1;	 Catch:{ Exception -> 0x02f1 }
-    L_0x0290:
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r4 = org.telegram.tgnet.TLRPC.InputPeer.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x02f1 }
-        r10 = new org.telegram.messenger.-$$Lambda$MessagesStorage$uwK8wtI_v95kHeLcf4gXEkrDfLc;	 Catch:{ Exception -> 0x02f1 }
-        r1 = r10;
-        r2 = r21;
-        r5 = r7;
-        r1.<init>(r2, r3, r4, r5);	 Catch:{ Exception -> 0x02f1 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02dc;
-    L_0x02a5:
-        r18 = r0;
-        r7 = r11;
-        r0 = r14;
-        r9 = r15;
-        r15 = 0;
-        r3 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r4 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r10 = org.telegram.messenger.Utilities.stageQueue;	 Catch:{ Exception -> 0x02f1 }
-        r11 = new org.telegram.messenger.-$$Lambda$MessagesStorage$0pEDcAvar_KSwzKWD9sU7FMqhzD0;	 Catch:{ Exception -> 0x02f1 }
-        r1 = r11;
-        r2 = r21;
-        r5 = r7;
-        r1.<init>(r2, r3, r4, r5);	 Catch:{ Exception -> 0x02f1 }
-        r10.postRunnable(r11);	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02dc;
-    L_0x02c2:
-        r18 = r0;
-        r7 = r11;
-        r0 = r14;
-        r9 = r15;
-        r15 = 0;
-        r1 = r0.readInt32(r15);	 Catch:{ Exception -> 0x02f1 }
-        r1 = org.telegram.tgnet.TLRPC.Chat.TLdeserialize(r0, r1, r15);	 Catch:{ Exception -> 0x02f1 }
-        if (r1 == 0) goto L_0x02dc;
-    L_0x02d2:
-        r2 = org.telegram.messenger.Utilities.stageQueue;	 Catch:{ Exception -> 0x02f1 }
-        r3 = new org.telegram.messenger.-$$Lambda$MessagesStorage$X8wmcVmkWlOOmT7hyCwq34C_3HA;	 Catch:{ Exception -> 0x02f1 }
-        r3.<init>(r9, r1, r7);	 Catch:{ Exception -> 0x02f1 }
-        r2.postRunnable(r3);	 Catch:{ Exception -> 0x02f1 }
-    L_0x02dc:
-        r0.reuse();	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02e4;
-    L_0x02e0:
-        r18 = r0;
-        r9 = r15;
-        r15 = 0;
-    L_0x02e4:
-        r15 = r9;
-        r0 = r18;
-        r13 = 0;
-        goto L_0x000d;
-    L_0x02ea:
-        r18 = r0;
-        r9 = r15;
-        r18.dispose();	 Catch:{ Exception -> 0x02f1 }
-        goto L_0x02f8;
-    L_0x02f1:
-        r0 = move-exception;
-        goto L_0x02f5;
-    L_0x02f3:
-        r0 = move-exception;
-        r9 = r15;
-    L_0x02f5:
-        org.telegram.messenger.FileLog.e(r0);
-    L_0x02f8:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadPendingTasks$22$MessagesStorage():void");
+        try {
+            SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT id, data FROM pending_tasks WHERE 1", new Object[0]);
+            while (queryFinalized.next()) {
+                long longValue = queryFinalized.longValue(0);
+                NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
+                if (byteBufferValue != null) {
+                    int readInt32 = byteBufferValue.readInt32(false);
+                    int readInt322;
+                    ArrayList arrayList;
+                    int i;
+                    switch (readInt32) {
+                        case 0:
+                            Chat TLdeserialize = Chat.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                            if (TLdeserialize != null) {
+                                Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesStorage$X8wmcVmkWlOOmT7hyCwq34C_3HA(this, TLdeserialize, longValue));
+                                break;
+                            }
+                            break;
+                        case 1:
+                            Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesStorage$0pEDcAvar_KSwzKWD9sU7FMqhzD0(this, byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), longValue));
+                            break;
+                        case 2:
+                        case 5:
+                        case 8:
+                        case 10:
+                        case 14:
+                            TL_dialog tL_dialog = new TL_dialog();
+                            tL_dialog.id = byteBufferValue.readInt64(false);
+                            tL_dialog.top_message = byteBufferValue.readInt32(false);
+                            tL_dialog.read_inbox_max_id = byteBufferValue.readInt32(false);
+                            tL_dialog.read_outbox_max_id = byteBufferValue.readInt32(false);
+                            tL_dialog.unread_count = byteBufferValue.readInt32(false);
+                            tL_dialog.last_message_date = byteBufferValue.readInt32(false);
+                            tL_dialog.pts = byteBufferValue.readInt32(false);
+                            tL_dialog.flags = byteBufferValue.readInt32(false);
+                            if (readInt32 >= 5) {
+                                tL_dialog.pinned = byteBufferValue.readBool(false);
+                                tL_dialog.pinnedNum = byteBufferValue.readInt32(false);
+                            }
+                            if (readInt32 >= 8) {
+                                tL_dialog.unread_mentions_count = byteBufferValue.readInt32(false);
+                            }
+                            if (readInt32 >= 10) {
+                                tL_dialog.unread_mark = byteBufferValue.readBool(false);
+                            }
+                            if (readInt32 >= 14) {
+                                tL_dialog.folder_id = byteBufferValue.readInt32(false);
+                            }
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$uwK8wtI_v95kHeLcf4gXEkrDfLc(this, tL_dialog, InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                            break;
+                        case 3:
+                            getSendMessagesHelper().sendGame(InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), (TL_inputMediaGame) InputMedia.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), byteBufferValue.readInt64(false), longValue);
+                            break;
+                        case 4:
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$AuH1gRs2iXmoSCC0c3xvFDAEwcM(this, byteBufferValue.readInt64(false), byteBufferValue.readBool(false), InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                            break;
+                        case 6:
+                            Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesStorage$veltQ-QzWYSSmgAGGDUTY-jvHoM(this, byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), longValue, InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false)));
+                            break;
+                        case 7:
+                            readInt322 = byteBufferValue.readInt32(false);
+                            readInt32 = byteBufferValue.readInt32(false);
+                            TLObject TLdeserialize2 = TL_messages_deleteMessages.TLdeserialize(byteBufferValue, readInt32, false);
+                            TLObject TLdeserialize3 = TLdeserialize2 == null ? TL_channels_deleteMessages.TLdeserialize(byteBufferValue, readInt32, false) : TLdeserialize2;
+                            if (TLdeserialize3 != null) {
+                                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$EuuPlYsIg_jeReoMzIbm6stO0ag(this, readInt322, longValue, TLdeserialize3));
+                                break;
+                            } else {
+                                removePendingTask(longValue);
+                                break;
+                            }
+                        case 9:
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$OTCbnyNXoirwhvbsu8TFVflzodM(this, byteBufferValue.readInt64(false), InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                            break;
+                        case 11:
+                            readInt322 = byteBufferValue.readInt32(false);
+                            int readInt323 = byteBufferValue.readInt32(false);
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$TqvcAvYPfh-Cio-d66SYceSFjMQ(this, readInt322, readInt323, readInt323 != 0 ? InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false) : null, byteBufferValue.readInt32(false), longValue));
+                            break;
+                        case 12:
+                        case 19:
+                        case 20:
+                            removePendingTask(longValue);
+                            break;
+                        case 13:
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$gZU7uqq34_u60ckwe65AH41ydVA(this, byteBufferValue.readInt64(false), byteBufferValue.readBool(false), byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), byteBufferValue.readBool(false), InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                            break;
+                        case 15:
+                            Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesStorage$tZ31OdkMW8PKLVCYnMiDI_DfRTs(this, InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue));
+                            break;
+                        case 16:
+                            readInt322 = byteBufferValue.readInt32(false);
+                            readInt32 = byteBufferValue.readInt32(false);
+                            arrayList = new ArrayList();
+                            for (i = 0; i < readInt32; i++) {
+                                arrayList.add(InputDialogPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false));
+                            }
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$KOMsQ0FDjAutn-YKgmf9ukUIQZQ(this, readInt322, arrayList, longValue));
+                            break;
+                        case 17:
+                            readInt322 = byteBufferValue.readInt32(false);
+                            readInt32 = byteBufferValue.readInt32(false);
+                            arrayList = new ArrayList();
+                            for (i = 0; i < readInt32; i++) {
+                                arrayList.add(TL_inputFolderPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false));
+                            }
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$LtM1spYCOokckYn9GalfKw21eVw(this, readInt322, arrayList, longValue));
+                            break;
+                        case 18:
+                            long readInt64 = byteBufferValue.readInt64(false);
+                            int readInt324 = byteBufferValue.readInt32(false);
+                            TL_messages_deleteScheduledMessages TLdeserialize4 = TL_messages_deleteScheduledMessages.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                            if (TLdeserialize4 != null) {
+                                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$l0j4dGsiYqNq856M-GFXUg5lJ8Y(this, readInt64, readInt324, longValue, TLdeserialize4));
+                                break;
+                            } else {
+                                removePendingTask(longValue);
+                                break;
+                            }
+                        case 21:
+                            OverrideWallpaperInfo overrideWallpaperInfo = new OverrideWallpaperInfo();
+                            byteBufferValue.readInt64(false);
+                            overrideWallpaperInfo.isBlurred = byteBufferValue.readBool(false);
+                            overrideWallpaperInfo.isMotion = byteBufferValue.readBool(false);
+                            overrideWallpaperInfo.color = byteBufferValue.readInt32(false);
+                            overrideWallpaperInfo.gradientColor = byteBufferValue.readInt32(false);
+                            overrideWallpaperInfo.rotation = byteBufferValue.readInt32(false);
+                            overrideWallpaperInfo.intensity = (float) byteBufferValue.readDouble(false);
+                            boolean readBool = byteBufferValue.readBool(false);
+                            overrideWallpaperInfo.slug = byteBufferValue.readString(false);
+                            overrideWallpaperInfo.originalFileName = byteBufferValue.readString(false);
+                            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$bGlnbD0Mf3yn2_2a_iqo-KIMiFo(this, overrideWallpaperInfo, readBool, longValue));
+                            break;
+                        default:
+                            break;
+                    }
+                    byteBufferValue.reuse();
+                }
+            }
+            queryFinalized.dispose();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 
     public /* synthetic */ void lambda$null$8$MessagesStorage(Chat chat, long j) {
@@ -1489,8 +1216,8 @@ public class MessagesStorage extends BaseController {
         getMessagesController().markMessageAsRead(i, i2, inputChannel, i3, j);
     }
 
-    public /* synthetic */ void lambda$null$16$MessagesStorage(long j, String str, long j2, boolean z, boolean z2, int i, float f, boolean z3, long j3) {
-        getMessagesController().saveWallpaperToServer(null, j, str, j2, z, z2, i, f, z3, j3);
+    public /* synthetic */ void lambda$null$16$MessagesStorage(OverrideWallpaperInfo overrideWallpaperInfo, boolean z, long j) {
+        getMessagesController().saveWallpaperToServer(null, overrideWallpaperInfo, z, j);
     }
 
     public /* synthetic */ void lambda$null$17$MessagesStorage(long j, boolean z, int i, int i2, boolean z2, InputPeer inputPeer, long j2) {
@@ -2109,31 +1836,15 @@ public class MessagesStorage extends BaseController {
         sQLiteCursor.dispose();
     }
 
-    public void loadWebRecent(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$FDG2AXH0gNlijE4kv3ZxR6LfwUc(this, i));
-    }
-
-    public /* synthetic */ void lambda$loadWebRecent$35$MessagesStorage(int i) {
-        try {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$LpCFOYZraZW4Vvc7KFZjUJu9q9Q(this, i, new ArrayList()));
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
-    }
-
-    public /* synthetic */ void lambda$null$34$MessagesStorage(int i, ArrayList arrayList) {
-        getNotificationCenter().postNotificationName(NotificationCenter.recentImagesDidLoad, Integer.valueOf(i), arrayList);
-    }
-
     public void addRecentLocalFile(String str, String str2, Document document) {
         if (str != null && str.length() != 0) {
             if ((str2 != null && str2.length() != 0) || document != null) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$yHXgFH0qy-Xwrz9ASxFUegzuz30(this, document, str, str2));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$PYdreL1lZbKyAVmwgtRlBdpecdo(this, document, str, str2));
             }
         }
     }
 
-    public /* synthetic */ void lambda$addRecentLocalFile$36$MessagesStorage(Document document, String str, String str2) {
+    public /* synthetic */ void lambda$addRecentLocalFile$34$MessagesStorage(Document document, String str, String str2) {
         if (document != null) {
             try {
                 SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE web_recent_v3 SET document = ? WHERE image_url = ?");
@@ -2159,97 +1870,11 @@ public class MessagesStorage extends BaseController {
         executeFast2.dispose();
     }
 
-    public void clearWebRecent(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Gte60fxIyz-UqgcoFPVOeWoUM7M(this, i));
-    }
-
-    public /* synthetic */ void lambda$clearWebRecent$37$MessagesStorage(int i) {
-        try {
-            SQLiteDatabase sQLiteDatabase = this.database;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("DELETE FROM web_recent_v3 WHERE type = ");
-            stringBuilder.append(i);
-            sQLiteDatabase.executeFast(stringBuilder.toString()).stepThis().dispose();
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-    }
-
-    public void putWebRecent(ArrayList<SearchImage> arrayList) {
-        if (!arrayList.isEmpty() && arrayList.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Y6cmeiOfWLueQdY1v-u9MGBJbAA(this, arrayList));
-        }
-    }
-
-    public /* synthetic */ void lambda$putWebRecent$38$MessagesStorage(ArrayList arrayList) {
-        try {
-            int i;
-            this.database.beginTransaction();
-            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            int i2 = 0;
-            while (true) {
-                i = 200;
-                if (i2 >= arrayList.size()) {
-                    break;
-                } else if (i2 == 200) {
-                    break;
-                } else {
-                    SearchImage searchImage = (SearchImage) arrayList.get(i2);
-                    executeFast.requery();
-                    executeFast.bindString(1, searchImage.id);
-                    executeFast.bindInteger(2, searchImage.type);
-                    String str = "";
-                    executeFast.bindString(3, searchImage.imageUrl != null ? searchImage.imageUrl : str);
-                    executeFast.bindString(4, searchImage.thumbUrl != null ? searchImage.thumbUrl : str);
-                    executeFast.bindString(5, str);
-                    executeFast.bindInteger(6, searchImage.width);
-                    executeFast.bindInteger(7, searchImage.height);
-                    executeFast.bindInteger(8, searchImage.size);
-                    executeFast.bindInteger(9, searchImage.date);
-                    NativeByteBuffer nativeByteBuffer = null;
-                    if (searchImage.photo != null) {
-                        nativeByteBuffer = new NativeByteBuffer(searchImage.photo.getObjectSize());
-                        searchImage.photo.serializeToStream(nativeByteBuffer);
-                        executeFast.bindByteBuffer(10, nativeByteBuffer);
-                    } else if (searchImage.document != null) {
-                        nativeByteBuffer = new NativeByteBuffer(searchImage.document.getObjectSize());
-                        searchImage.document.serializeToStream(nativeByteBuffer);
-                        executeFast.bindByteBuffer(10, nativeByteBuffer);
-                    } else {
-                        executeFast.bindNull(10);
-                    }
-                    executeFast.step();
-                    if (nativeByteBuffer != null) {
-                        nativeByteBuffer.reuse();
-                    }
-                    i2++;
-                }
-            }
-            executeFast.dispose();
-            this.database.commitTransaction();
-            if (arrayList.size() >= 200) {
-                this.database.beginTransaction();
-                while (i < arrayList.size()) {
-                    SQLiteDatabase sQLiteDatabase = this.database;
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("DELETE FROM web_recent_v3 WHERE id = '");
-                    stringBuilder.append(((SearchImage) arrayList.get(i)).id);
-                    stringBuilder.append("'");
-                    sQLiteDatabase.executeFast(stringBuilder.toString()).stepThis().dispose();
-                    i++;
-                }
-                this.database.commitTransaction();
-            }
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-    }
-
     public void deleteUserChannelHistory(int i, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$rSm_0FjKoFMC7lovq2hmPi4Ov50(this, i, i2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$N0a2D7Yb4WGy9pp3z3CdtYpSvKY(this, i, i2));
     }
 
-    public /* synthetic */ void lambda$deleteUserChannelHistory$41$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$deleteUserChannelHistory$37$MessagesStorage(int i, int i2) {
         long j = (long) (-i);
         try {
             ArrayList arrayList = new ArrayList();
@@ -2276,23 +1901,23 @@ public class MessagesStorage extends BaseController {
                 }
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$v2uVbmQ0FBcQTbwwzD5Ge9t6SKQ(this, arrayList, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$_fS5U8KeZdvYlLJfOHQbUAQTxNw(this, arrayList, i));
             markMessagesAsDeletedInternal(arrayList, i, false, false);
             updateDialogsWithDeletedMessagesInternal(arrayList, null, i);
             getFileLoader().deleteFiles(arrayList2, 0);
             if (!arrayList.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$8ZxgsqOEGgBoyGRrPirgyMu9kKY(this, arrayList, i));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$zT0UAgVq68Ldm9wBDUe4m52D_tA(this, arrayList, i));
             }
         } catch (Exception e2) {
             FileLog.e(e2);
         }
     }
 
-    public /* synthetic */ void lambda$null$39$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$null$35$MessagesStorage(ArrayList arrayList, int i) {
         getMessagesController().markChannelDialogMessageAsDeleted(arrayList, i);
     }
 
-    public /* synthetic */ void lambda$null$40$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$null$36$MessagesStorage(ArrayList arrayList, int i) {
         getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, Integer.valueOf(i), Boolean.valueOf(false));
     }
 
@@ -2341,12 +1966,12 @@ public class MessagesStorage extends BaseController {
     }
 
     public void deleteDialog(long j, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$JHZIn_b0-cS8U7AzFp5ZfxUFSio(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$GarsbEqAallfb3M0ugm5VCrBKBE(this, i, j));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:58:0x0212 A:{Catch:{ Exception -> 0x0037 }} */
     /* JADX WARNING: Removed duplicated region for block: B:58:0x0212 A:{Catch:{ Exception -> 0x0037 }} */
-    public /* synthetic */ void lambda$deleteDialog$43$MessagesStorage(int r20, long r21) {
+    public /* synthetic */ void lambda$deleteDialog$39$MessagesStorage(int r20, long r21) {
         /*
         r19 = this;
         r1 = r19;
@@ -2737,7 +2362,7 @@ public class MessagesStorage extends BaseController {
         r0 = r19.getMediaDataController();	 Catch:{ Exception -> 0x0037 }
         r2 = 0;
         r0.clearBotKeyboard(r3, r2);	 Catch:{ Exception -> 0x0037 }
-        r0 = new org.telegram.messenger.-$$Lambda$MessagesStorage$uufN6C3qM3gEul3YY7SEzeuJJSo;	 Catch:{ Exception -> 0x0037 }
+        r0 = new org.telegram.messenger.-$$Lambda$MessagesStorage$tBITSP4uIVXs3MrFSaqwnTCbLms;	 Catch:{ Exception -> 0x0037 }
         r0.<init>(r1);	 Catch:{ Exception -> 0x0037 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);	 Catch:{ Exception -> 0x0037 }
         goto L_0x03be;
@@ -2746,18 +2371,18 @@ public class MessagesStorage extends BaseController {
     L_0x03be:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteDialog$43$MessagesStorage(int, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteDialog$39$MessagesStorage(int, long):void");
     }
 
-    public /* synthetic */ void lambda$null$42$MessagesStorage() {
+    public /* synthetic */ void lambda$null$38$MessagesStorage() {
         getNotificationCenter().postNotificationName(NotificationCenter.needReloadRecentDialogsSearch, new Object[0]);
     }
 
     public void onDeleteQueryComplete(long j) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$A7k4sc1a2ORoZ72BrFZX2UvSDew(this, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7B7zYr_TXDhl6iWXwpWKnHe2Ihk(this, j));
     }
 
-    public /* synthetic */ void lambda$onDeleteQueryComplete$44$MessagesStorage(long j) {
+    public /* synthetic */ void lambda$onDeleteQueryComplete$40$MessagesStorage(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -2770,10 +2395,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getDialogPhotos(int i, int i2, long j, int i3) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$8_E0e9g6gd6Tt2YgTNR0X0Hg2c0(this, j, i, i2, i3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$RR0VoVcZWe3On5GCmEaULrWKi4o(this, j, i, i2, i3));
     }
 
-    public /* synthetic */ void lambda$getDialogPhotos$46$MessagesStorage(long j, int i, int i2, int i3) {
+    public /* synthetic */ void lambda$getDialogPhotos$42$MessagesStorage(long j, int i, int i2, int i3) {
         SQLiteCursor queryFinalized;
         if (j != 0) {
             try {
@@ -2794,18 +2419,18 @@ public class MessagesStorage extends BaseController {
             }
         }
         queryFinalized.dispose();
-        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesStorage$AUGvJb95Vbn4YIDhDnP0kPL96qE(this, tL_photos_photos, i, i2, j, i3));
+        Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesStorage$y-eXdDdnoHYRbr9uIJJn0XF7oIQ(this, tL_photos_photos, i, i2, j, i3));
     }
 
-    public /* synthetic */ void lambda$null$45$MessagesStorage(photos_Photos photos_photos, int i, int i2, long j, int i3) {
+    public /* synthetic */ void lambda$null$41$MessagesStorage(photos_Photos photos_photos, int i, int i2, long j, int i3) {
         getMessagesController().processLoadedUserPhotos(photos_photos, i, i2, j, true, i3);
     }
 
     public void clearUserPhotos(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Pbo7BY13-wIDhXQpqgrlfs6wO7g(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$xvrHjnuIRs85JaHJQkkpvc__sGg(this, i));
     }
 
-    public /* synthetic */ void lambda$clearUserPhotos$47$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$clearUserPhotos$43$MessagesStorage(int i) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -2818,10 +2443,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void clearUserPhoto(int i, long j) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0xVuEDwNuvaAk1dx0tCZ41B3cFo(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$gsmhH-OZS8JhtOYu-wVne1BaVnU(this, i, j));
     }
 
-    public /* synthetic */ void lambda$clearUserPhoto$48$MessagesStorage(int i, long j) {
+    public /* synthetic */ void lambda$clearUserPhoto$44$MessagesStorage(int i, long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -2836,10 +2461,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void resetDialogs(messages_Dialogs messages_dialogs, int i, int i2, int i3, int i4, int i5, LongSparseArray<Dialog> longSparseArray, LongSparseArray<MessageObject> longSparseArray2, Message message, int i6) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5OdwD90GU58z-A-YkFUYQG3gt8E(this, messages_dialogs, i6, i2, i3, i4, i5, message, i, longSparseArray, longSparseArray2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ybAdD4WJglgD5KNxMkNRIpaEu_c(this, messages_dialogs, i6, i2, i3, i4, i5, message, i, longSparseArray, longSparseArray2));
     }
 
-    public /* synthetic */ void lambda$resetDialogs$50$MessagesStorage(messages_Dialogs messages_dialogs, int i, int i2, int i3, int i4, int i5, Message message, int i6, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
+    public /* synthetic */ void lambda$resetDialogs$46$MessagesStorage(messages_Dialogs messages_dialogs, int i, int i2, int i3, int i4, int i5, Message message, int i6, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         messages_Dialogs messages_dialogs2 = messages_dialogs;
         Message message2 = message;
         try {
@@ -2873,7 +2498,7 @@ public class MessagesStorage extends BaseController {
                     }
                 }
             }
-            Collections.sort(arrayList2, new -$$Lambda$MessagesStorage$zIYBa_S5rmrWs9lV8u_RVY80bs8(longSparseArray3));
+            Collections.sort(arrayList2, new -$$Lambda$MessagesStorage$E1-iJ1217-dt315WyL33fblo70c(longSparseArray3));
             while (arrayList2.size() < size) {
                 arrayList2.add(0, Long.valueOf(0));
             }
@@ -3008,6 +2633,7 @@ public class MessagesStorage extends BaseController {
                 getUserConfig().setTotalDialogsCount(i14, i8);
                 i14++;
             }
+            getUserConfig().draftsLoaded = false;
             getUserConfig().saveConfig(false);
             getMessagesController().completeDialogsReset(messages_dialogs, i6, i2, i3, i4, i5, longSparseArray, longSparseArray2, message);
         } catch (Exception e) {
@@ -3015,7 +2641,7 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    static /* synthetic */ int lambda$null$49(LongSparseArray longSparseArray, Long l, Long l2) {
+    static /* synthetic */ int lambda$null$45(LongSparseArray longSparseArray, Long l, Long l2) {
         Integer num = (Integer) longSparseArray.get(l.longValue());
         Integer num2 = (Integer) longSparseArray.get(l2.longValue());
         if (num.intValue() < num2.intValue()) {
@@ -3026,11 +2652,11 @@ public class MessagesStorage extends BaseController {
 
     public void putDialogPhotos(int i, photos_Photos photos_photos) {
         if (photos_photos != null && !photos_photos.photos.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7hQNqEdO4L9DfD5FN4oqpslMtOE(this, i, photos_photos));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$totVTzJXq8gUob5gVQ81j018btU(this, i, photos_photos));
         }
     }
 
-    public /* synthetic */ void lambda$putDialogPhotos$51$MessagesStorage(int i, photos_Photos photos_photos) {
+    public /* synthetic */ void lambda$putDialogPhotos$47$MessagesStorage(int i, photos_Photos photos_photos) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -3059,14 +2685,14 @@ public class MessagesStorage extends BaseController {
     }
 
     public void emptyMessagesMedia(ArrayList<Integer> arrayList) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$cxqbo7mHWSo0fNJM_X4GL6eYcVI(this, arrayList));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$nXns8IPTByyel2e-T78aQHNV2m0(this, arrayList));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0108 A:{Catch:{ Exception -> 0x013d }} */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x0102 A:{Catch:{ Exception -> 0x013d }} */
     /* JADX WARNING: Removed duplicated region for block: B:37:0x011c A:{Catch:{ Exception -> 0x013d }} */
     /* JADX WARNING: Removed duplicated region for block: B:36:0x011a A:{Catch:{ Exception -> 0x013d }} */
-    public /* synthetic */ void lambda$emptyMessagesMedia$53$MessagesStorage(java.util.ArrayList r12) {
+    public /* synthetic */ void lambda$emptyMessagesMedia$49$MessagesStorage(java.util.ArrayList r12) {
         /*
         r11 = this;
         r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x013d }
@@ -3223,7 +2849,7 @@ public class MessagesStorage extends BaseController {
         goto L_0x00a4;
     L_0x012a:
         r12.dispose();	 Catch:{ Exception -> 0x013d }
-        r12 = new org.telegram.messenger.-$$Lambda$MessagesStorage$72wTv-LNhymdYFtfN_3iFK6abDA;	 Catch:{ Exception -> 0x013d }
+        r12 = new org.telegram.messenger.-$$Lambda$MessagesStorage$t7zI5TWNg08Mg1HnN5nF6Kp_mPY;	 Catch:{ Exception -> 0x013d }
         r12.<init>(r11, r1);	 Catch:{ Exception -> 0x013d }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r12);	 Catch:{ Exception -> 0x013d }
     L_0x0135:
@@ -3236,20 +2862,20 @@ public class MessagesStorage extends BaseController {
     L_0x0141:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$emptyMessagesMedia$53$MessagesStorage(java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$emptyMessagesMedia$49$MessagesStorage(java.util.ArrayList):void");
     }
 
-    public /* synthetic */ void lambda$null$52$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$48$MessagesStorage(ArrayList arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             getNotificationCenter().postNotificationName(NotificationCenter.updateMessageMedia, arrayList.get(i));
         }
     }
 
     public void updateMessagePollResults(long j, TL_poll tL_poll, TL_pollResults tL_pollResults) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$MeVYE7yH6nKl9CFisUBtLcCys5M(this, j, tL_poll, tL_pollResults));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$uTTvp4JTkvUeceAdO2CWGXhwxi4(this, j, tL_poll, tL_pollResults));
     }
 
-    public /* synthetic */ void lambda$updateMessagePollResults$54$MessagesStorage(long j, TL_poll tL_poll, TL_pollResults tL_pollResults) {
+    public /* synthetic */ void lambda$updateMessagePollResults$50$MessagesStorage(long j, TL_poll tL_poll, TL_pollResults tL_pollResults) {
         ArrayList arrayList = null;
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM polls WHERE id = %d", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -3304,10 +2930,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateMessageReactions(long j, int i, int i2, TL_messageReactions tL_messageReactions) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$RPLEb4vGYSqH-J18KfgPZ_uOqV4(this, i, i2, tL_messageReactions));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7NdoJnf6C2xsW-CLASSNAMEBc6nDcAwX4(this, i, i2, tL_messageReactions));
     }
 
-    public /* synthetic */ void lambda$updateMessageReactions$55$MessagesStorage(int i, int i2, TL_messageReactions tL_messageReactions) {
+    public /* synthetic */ void lambda$updateMessageReactions$51$MessagesStorage(int i, int i2, TL_messageReactions tL_messageReactions) {
         try {
             this.database.beginTransaction();
             long j = (long) i;
@@ -3343,10 +2969,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getNewTask(ArrayList<Integer> arrayList, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$bVp_lMLGEmQLtA2f-3ozx6XVwow(this, arrayList));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$IpjsIPwhy40OH5HZeDZzph1Hii8(this, arrayList));
     }
 
-    public /* synthetic */ void lambda$getNewTask$56$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$getNewTask$52$MessagesStorage(ArrayList arrayList) {
         if (arrayList != null) {
             try {
                 String join = TextUtils.join(",", arrayList);
@@ -3379,10 +3005,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void markMentionMessageAsRead(int i, int i2, long j) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$oUQbWzWHgzWvb97SS8YuocZ85IE(this, i, i2, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$c5ipfP7EHe-ksDzzWqn1xdh2Z5U(this, i, i2, j));
     }
 
-    public /* synthetic */ void lambda$markMentionMessageAsRead$57$MessagesStorage(int i, int i2, long j) {
+    public /* synthetic */ void lambda$markMentionMessageAsRead$53$MessagesStorage(int i, int i2, long j) {
         long j2 = (long) i;
         if (i2 != 0) {
             j2 |= ((long) i2) << 32;
@@ -3406,10 +3032,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void markMessageAsMention(long j) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$bqXSTC-AYBSJgUkEM35uIO8eNtQ(this, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Vqha-Pcq8qKqFi-2uTj2MzZCpm0(this, j));
     }
 
-    public /* synthetic */ void lambda$markMessageAsMention$58$MessagesStorage(long j) {
+    public /* synthetic */ void lambda$markMessageAsMention$54$MessagesStorage(long j) {
         try {
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET mention = 1, read_state = read_state & ~2 WHERE mid = %d", new Object[]{Long.valueOf(j)})).stepThis().dispose();
         } catch (Exception e) {
@@ -3418,10 +3044,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void resetMentionsCount(long j, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$6mkfECs0Y1k4jdJrEwp_MkqugSo(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$nr_6UagYOQ8kdWHEioIjW9iQZwc(this, i, j));
     }
 
-    public /* synthetic */ void lambda$resetMentionsCount$59$MessagesStorage(int i, long j) {
+    public /* synthetic */ void lambda$resetMentionsCount$55$MessagesStorage(int i, long j) {
         if (i == 0) {
             try {
                 this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(j)})).stepThis().dispose();
@@ -3437,10 +3063,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void createTaskForMid(int i, int i2, int i3, int i4, int i5, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Tq581q1MS8RBkcli9fcSLBUemkY(this, i3, i4, i5, i, i2, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$zt059g3skDW_QXIKY21511Dqqzo(this, i3, i4, i5, i, i2, z));
     }
 
-    public /* synthetic */ void lambda$createTaskForMid$61$MessagesStorage(int i, int i2, int i3, int i4, int i5, boolean z) {
+    public /* synthetic */ void lambda$createTaskForMid$57$MessagesStorage(int i, int i2, int i3, int i4, int i5, boolean z) {
         if (i <= i2) {
             i = i2;
         }
@@ -3454,7 +3080,7 @@ public class MessagesStorage extends BaseController {
             }
             arrayList.add(Long.valueOf(j));
             sparseArray.put(i, arrayList);
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$aJw6FikFwcePKYbaThgBNXQWIfY(this, z, arrayList));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$eu1e71QBBEV1jIwQjLSHzAFKcx8(this, z, arrayList));
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
             for (i5 = 0; i5 < sparseArray.size(); i5++) {
                 int keyAt = sparseArray.keyAt(i5);
@@ -3474,7 +3100,7 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$null$60$MessagesStorage(boolean z, ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$56$MessagesStorage(boolean z, ArrayList arrayList) {
         if (!z) {
             markMessagesContentAsRead(arrayList, 0);
         }
@@ -3482,10 +3108,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void createTaskForSecretChat(int i, int i2, int i3, int i4, ArrayList<Long> arrayList) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5T-KdtMoPXhT8P_57mgAcqP5S0o(this, arrayList, i, i4, i2, i3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$pKLdtsNRrW-aqkZwfyedv91tGr4(this, arrayList, i, i4, i2, i3));
     }
 
-    public /* synthetic */ void lambda$createTaskForSecretChat$63$MessagesStorage(ArrayList arrayList, int i, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$createTaskForSecretChat$59$MessagesStorage(ArrayList arrayList, int i, int i2, int i3, int i4) {
         ArrayList arrayList2 = arrayList;
         int i5 = Integer.MAX_VALUE;
         try {
@@ -3530,7 +3156,7 @@ public class MessagesStorage extends BaseController {
             }
             queryFinalized.dispose();
             if (arrayList2 != null) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$mrxD6nrmj1r19szVmqTrMpN_RUM(this, arrayList4));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$uS_-fU-YkDLrhjw80yT-Vy-D-6Y(this, arrayList4));
             }
             if (sparseArray.size() != 0) {
                 this.database.beginTransaction();
@@ -3555,7 +3181,7 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$null$62$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$58$MessagesStorage(ArrayList arrayList) {
         markMessagesContentAsRead(arrayList, 0);
         getNotificationCenter().postNotificationName(NotificationCenter.messagesReadContent, arrayList);
     }
@@ -3755,24 +3381,24 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void updateDialogsWithReadMessages(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, ArrayList<Long> arrayList, boolean z) {
         if (!isEmpty(sparseLongArray) || !isEmpty((List) arrayList)) {
             if (z) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$FazLRz0lY8TP61ErJo--9_vyvME(this, sparseLongArray, sparseLongArray2, arrayList));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5dLRM1qp_VR1x9Q3XyM-etp_2z0(this, sparseLongArray, sparseLongArray2, arrayList));
             } else {
                 updateDialogsWithReadMessagesInternal(null, sparseLongArray, sparseLongArray2, arrayList);
             }
         }
     }
 
-    public /* synthetic */ void lambda$updateDialogsWithReadMessages$64$MessagesStorage(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateDialogsWithReadMessages$60$MessagesStorage(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, ArrayList arrayList) {
         updateDialogsWithReadMessagesInternal(null, sparseLongArray, sparseLongArray2, arrayList);
     }
 
     public void updateChatParticipants(ChatParticipants chatParticipants) {
         if (chatParticipants != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$aCVrhjOTGqjTvFVxsq-MFIk-oGM(this, chatParticipants));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Yq9-fpKxa5n0haPp4o0Z8jTg-vk(this, chatParticipants));
         }
     }
 
-    public /* synthetic */ void lambda$updateChatParticipants$66$MessagesStorage(ChatParticipants chatParticipants) {
+    public /* synthetic */ void lambda$updateChatParticipants$62$MessagesStorage(ChatParticipants chatParticipants) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -3793,7 +3419,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             queryFinalized.dispose();
             if (chatFull instanceof TL_chatFull) {
                 chatFull.participants = chatParticipants;
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$AB2bBnEAj-fyyqEVm2jJWPzNsJM(this, chatFull));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$rVdPp8-2cV7pvYEafBpoyisc_us(this, chatFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(chatFull.getObjectSize());
                 chatFull.serializeToStream(nativeByteBuffer);
@@ -3810,15 +3436,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$65$MessagesStorage(ChatFull chatFull) {
+    public /* synthetic */ void lambda$null$61$MessagesStorage(ChatFull chatFull) {
         getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, chatFull, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public void loadChannelAdmins(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$cONFvdqA7wsnLNjaKs6wBV8UNzo(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$a59pu_hx9p55_fdXE4qUsxZy2B8(this, i));
     }
 
-    public /* synthetic */ void lambda$loadChannelAdmins$67$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$loadChannelAdmins$63$MessagesStorage(int i) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -3837,10 +3463,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void putChannelAdmins(int i, SparseArray<String> sparseArray) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$u222Vdo6Og72qcSr418OyvLJ9_g(this, i, sparseArray));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$eaNnWBFjekCL7KdiuyjiaLqiQiA(this, i, sparseArray));
     }
 
-    public /* synthetic */ void lambda$putChannelAdmins$68$MessagesStorage(int i, SparseArray sparseArray) {
+    public /* synthetic */ void lambda$putChannelAdmins$64$MessagesStorage(int i, SparseArray sparseArray) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -3865,10 +3491,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateChannelUsers(int i, ArrayList<ChannelParticipant> arrayList) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Gg6VJ8VCiiDz2YyQ0CSezi4IfYQ(this, i, arrayList));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$wwYDv37pXXhF1XY56cnq19o79Hc(this, i, arrayList));
     }
 
-    public /* synthetic */ void lambda$updateChannelUsers$69$MessagesStorage(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateChannelUsers$65$MessagesStorage(int i, ArrayList arrayList) {
         long j = (long) (-i);
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -3902,11 +3528,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void saveBotCache(String str, TLObject tLObject) {
         if (tLObject != null && !TextUtils.isEmpty(str)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$B6IgDwhzVqKjhu_PEkhKczROrNg(this, tLObject, str));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$hoAFhgcrjiE3Gv05PRpzj4gfkG8(this, tLObject, str));
         }
     }
 
-    public /* synthetic */ void lambda$saveBotCache$70$MessagesStorage(TLObject tLObject, String str) {
+    public /* synthetic */ void lambda$saveBotCache$66$MessagesStorage(TLObject tLObject, String str) {
         try {
             int i;
             SQLitePreparedStatement executeFast;
@@ -3945,7 +3571,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void getBotCache(String str, RequestDelegate requestDelegate) {
         if (str != null && requestDelegate != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7jxazQcOI7oIf1EeZlB3YOh2uLo(this, getConnectionsManager().getCurrentTime(), str, requestDelegate));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$4ir8D3T5kZJa2nLYE16z7mgxnu8(this, getConnectionsManager().getCurrentTime(), str, requestDelegate));
         }
     }
 
@@ -3963,7 +3589,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:24:0x0061, code skipped:
             r1 = null;
      */
-    public /* synthetic */ void lambda$getBotCache$71$MessagesStorage(int r5, java.lang.String r6, org.telegram.tgnet.RequestDelegate r7) {
+    public /* synthetic */ void lambda$getBotCache$67$MessagesStorage(int r5, java.lang.String r6, org.telegram.tgnet.RequestDelegate r7) {
         /*
         r4 = this;
         r0 = 0;
@@ -4036,16 +3662,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7.run(r1, r0);
         throw r5;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getBotCache$71$MessagesStorage(int, java.lang.String, org.telegram.tgnet.RequestDelegate):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getBotCache$67$MessagesStorage(int, java.lang.String, org.telegram.tgnet.RequestDelegate):void");
     }
 
     public void loadUserInfo(User user, boolean z, int i) {
         if (user != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$O4aZiPdD-N8-TP1mri3MHlLKMic(this, user, z, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$9QHORNBJg-ha24nvK8ijpO74v9o(this, user, z, i));
         }
     }
 
-    public /* synthetic */ void lambda$loadUserInfo$72$MessagesStorage(User user, boolean z, int i) {
+    public /* synthetic */ void lambda$loadUserInfo$68$MessagesStorage(User user, boolean z, int i) {
         UserFull userFull;
         Throwable e;
         User user2 = user;
@@ -4097,10 +3723,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateUserInfo(UserFull userFull, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$I0BVyIsbh4DguGVrCLASSNAMEjYCZW8tU(this, z, userFull));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Dnp_vJvk-4ql9AMId2Ud90xTY14(this, z, userFull));
     }
 
-    public /* synthetic */ void lambda$updateUserInfo$73$MessagesStorage(boolean z, UserFull userFull) {
+    public /* synthetic */ void lambda$updateUserInfo$69$MessagesStorage(boolean z, UserFull userFull) {
         if (z) {
             try {
                 SQLiteDatabase sQLiteDatabase = this.database;
@@ -4129,10 +3755,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateChatInfo(ChatFull chatFull, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$uqNhDPYbYlcKGSqAA0kADCE1H7c(this, chatFull, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$deiTLwS-_0g7ZFdhK02-HEjxAck(this, chatFull, z));
     }
 
-    public /* synthetic */ void lambda$updateChatInfo$74$MessagesStorage(ChatFull chatFull, boolean z) {
+    public /* synthetic */ void lambda$updateChatInfo$70$MessagesStorage(ChatFull chatFull, boolean z) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4180,10 +3806,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateUserPinnedMessage(int i, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$PApfk4ivN7ia9umDUCF0Y5DPLQc(this, i, i2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0FrciOzlcO50l1LlICryPocaC1g(this, i, i2));
     }
 
-    public /* synthetic */ void lambda$updateUserPinnedMessage$76$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$updateUserPinnedMessage$72$MessagesStorage(int i, int i2) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4203,7 +3829,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (userFull instanceof UserFull) {
                 userFull.pinned_msg_id = i2;
                 userFull.flags |= 64;
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$ytNznPTcg2UychcqMvfS2ui4LaE(this, i, userFull));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$7-c1xsqEG7aU4MgV3PEsKt5DG9I(this, i, userFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO user_settings VALUES(?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(userFull.getObjectSize());
                 userFull.serializeToStream(nativeByteBuffer);
@@ -4219,15 +3845,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$75$MessagesStorage(int i, UserFull userFull) {
+    public /* synthetic */ void lambda$null$71$MessagesStorage(int i, UserFull userFull) {
         getNotificationCenter().postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(i), userFull, null);
     }
 
     public void updateChatOnlineCount(int i, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$mccz06HddaI1pVcbGTAX04OD3QI(this, i2, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$rX8NPXUX71ELm9pvrdZ31sSfuT0(this, i2, i));
     }
 
-    public /* synthetic */ void lambda$updateChatOnlineCount$77$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$updateChatOnlineCount$73$MessagesStorage(int i, int i2) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE chat_settings_v2 SET online = ? WHERE uid = ?");
             executeFast.requery();
@@ -4241,10 +3867,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void updateChatPinnedMessage(int i, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ThVGzRt2wxYMGztsZHdKskSzuQU(this, i, i2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$WOXJb-2D3t0k8sPw11diqzgSl3E(this, i, i2));
     }
 
-    public /* synthetic */ void lambda$updateChatPinnedMessage$79$MessagesStorage(int i, int i2) {
+    public /* synthetic */ void lambda$updateChatPinnedMessage$75$MessagesStorage(int i, int i2) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4270,7 +3896,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     chatFull.pinned_msg_id = i2;
                     chatFull.flags |= 64;
                 }
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$vSUND9_zfjgvr5DwoG-QrQICRyA(this, chatFull));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$88NEHANjh8UPEvk6Jyh6UYlbUlw(this, chatFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(chatFull.getObjectSize());
                 chatFull.serializeToStream(nativeByteBuffer);
@@ -4287,15 +3913,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$78$MessagesStorage(ChatFull chatFull) {
+    public /* synthetic */ void lambda$null$74$MessagesStorage(ChatFull chatFull) {
         getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, chatFull, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public void updateChatInfo(int i, int i2, int i3, int i4, int i5) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$OQNVkV1FBVljG_qJfKogACDgUCQ(this, i, i3, i2, i4, i5));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$NFbnvWxdE5EucMmfRVp_zX8lc2Y(this, i, i3, i2, i4, i5));
     }
 
-    public /* synthetic */ void lambda$updateChatInfo$81$MessagesStorage(int i, int i2, int i3, int i4, int i5) {
+    public /* synthetic */ void lambda$updateChatInfo$77$MessagesStorage(int i, int i2, int i3, int i4, int i5) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4359,7 +3985,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     }
                 }
                 chatFull.participants.version = i5;
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$mTQw5N2KeyjhHN_dTTnU72ey6eA(this, chatFull));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$ZGUW3NfKCxYo6AlfLx9rvvpfRDk(this, chatFull));
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(chatFull.getObjectSize());
                 chatFull.serializeToStream(nativeByteBuffer);
@@ -4376,14 +4002,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$80$MessagesStorage(ChatFull chatFull) {
+    public /* synthetic */ void lambda$null$76$MessagesStorage(ChatFull chatFull) {
         getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, chatFull, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public boolean isMigratedChat(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$OIYBPNk6CHfqP9kKxaptJroriqI(this, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$rUfIFQ94z-TkLSzTLQNSjW0nmzo(this, i, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -4392,7 +4018,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return zArr[0];
     }
 
-    public /* synthetic */ void lambda$isMigratedChat$82$MessagesStorage(int i, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$isMigratedChat$78$MessagesStorage(int i, boolean[] zArr, CountDownLatch countDownLatch) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             StringBuilder stringBuilder = new StringBuilder();
@@ -4433,7 +4059,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public ChatFull loadChatInfo(int i, CountDownLatch countDownLatch, boolean z, boolean z2) {
         ChatFull[] chatFullArr = new ChatFull[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$eFk_VkNC4-VHuXhvWtuplw_qYbw(this, i, chatFullArr, z, z2, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$bFUukskWZw3OKUlOSgkXj-ylMEo(this, i, chatFullArr, z, z2, countDownLatch));
         if (countDownLatch != null) {
             try {
                 countDownLatch.await();
@@ -4450,7 +4076,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:97:? A:{SYNTHETIC, RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:82:0x01bc  */
     /* JADX WARNING: Removed duplicated region for block: B:98:? A:{SYNTHETIC, RETURN} */
-    public /* synthetic */ void lambda$loadChatInfo$83$MessagesStorage(int r18, org.telegram.tgnet.TLRPC.ChatFull[] r19, boolean r20, boolean r21, java.util.concurrent.CountDownLatch r22) {
+    public /* synthetic */ void lambda$loadChatInfo$79$MessagesStorage(int r18, org.telegram.tgnet.TLRPC.ChatFull[] r19, boolean r20, boolean r21, java.util.concurrent.CountDownLatch r22) {
         /*
         r17 = this;
         r1 = r17;
@@ -4705,14 +4331,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x01c1:
         goto L_0x01c0;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadChatInfo$83$MessagesStorage(int, org.telegram.tgnet.TLRPC$ChatFull[], boolean, boolean, java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadChatInfo$79$MessagesStorage(int, org.telegram.tgnet.TLRPC$ChatFull[], boolean, boolean, java.util.concurrent.CountDownLatch):void");
     }
 
     public void processPendingRead(long j, long j2, long j3, boolean z, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$GrLJp_0SJgc0Nw8b79ZqUgFaqrE(this, j, j2, z, i, this.lastSavedDate, j3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$S9FGmn9HsOM2QGUu6wolOcVtrko(this, j, j2, z, i, this.lastSavedDate, j3));
     }
 
-    public /* synthetic */ void lambda$processPendingRead$84$MessagesStorage(long j, long j2, boolean z, int i, int i2, long j3) {
+    public /* synthetic */ void lambda$processPendingRead$80$MessagesStorage(long j, long j2, boolean z, int i, int i2, long j3) {
         long j4 = j;
         try {
             int intValue;
@@ -4797,11 +4423,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putContacts(ArrayList<TL_contact> arrayList, boolean z) {
         if (!arrayList.isEmpty() || z) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$lHsDDA69tOQylG-TjAZrTKcy4aQ(this, z, new ArrayList(arrayList)));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$TIaGKRTPHd_tiIuS2RGjBU6Fxuk(this, z, new ArrayList(arrayList)));
         }
     }
 
-    public /* synthetic */ void lambda$putContacts$85$MessagesStorage(boolean z, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putContacts$81$MessagesStorage(boolean z, ArrayList arrayList) {
         if (z) {
             try {
                 this.database.executeFast("DELETE FROM contacts WHERE 1").stepThis().dispose();
@@ -4829,11 +4455,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void deleteContacts(ArrayList<Integer> arrayList) {
         if (arrayList != null && !arrayList.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$n2SlFJ6wjG9rx67gMU8BelUAu_A(this, arrayList));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$yWTuqu9gZCV4fHP1r0yQzVv8dug(this, arrayList));
         }
     }
 
-    public /* synthetic */ void lambda$deleteContacts$86$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$deleteContacts$82$MessagesStorage(ArrayList arrayList) {
         try {
             String join = TextUtils.join(",", arrayList);
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -4849,11 +4475,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void applyPhoneBookUpdates(String str, String str2) {
         if (!TextUtils.isEmpty(str)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$LszVWHeG3clr9zVCl6PxioeeZig(this, str, str2));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$VTt7HhG_hmdpnE_Uihu1A5_J8Jk(this, str, str2));
         }
     }
 
-    public /* synthetic */ void lambda$applyPhoneBookUpdates$87$MessagesStorage(String str, String str2) {
+    public /* synthetic */ void lambda$applyPhoneBookUpdates$83$MessagesStorage(String str, String str2) {
         try {
             if (str.length() != 0) {
                 this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 0 WHERE sphone IN(%s)", new Object[]{str})).stepThis().dispose();
@@ -4871,11 +4497,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             return;
         }
         if (!hashMap.isEmpty() || z || z2) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$weTYzGiBB__QFvxs0X15bBYkjVo(this, hashMap, z));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$YxED77Whr25iDDDFFAGpkOI6cbg(this, hashMap, z));
         }
     }
 
-    public /* synthetic */ void lambda$putCachedPhoneBook$88$MessagesStorage(HashMap hashMap, boolean z) {
+    public /* synthetic */ void lambda$putCachedPhoneBook$84$MessagesStorage(HashMap hashMap, boolean z) {
         try {
             if (BuildVars.LOGS_ENABLED) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -4931,7 +4557,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getCachedPhoneBook(boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$yDoN72yoFFNHYwNwviIST7pUkz0(this, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$yyil4fQcoHX5btPClt4-OEoOwqI(this, z));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:75:0x0130  */
@@ -5054,7 +4680,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:124:0x0221, code skipped:
             r3.dispose();
      */
-    public /* synthetic */ void lambda$getCachedPhoneBook$89$MessagesStorage(boolean r27) {
+    public /* synthetic */ void lambda$getCachedPhoneBook$85$MessagesStorage(boolean r27) {
         /*
         r26 = this;
         r1 = r26;
@@ -5388,14 +5014,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0236:
         goto L_0x0235;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$89$MessagesStorage(boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$85$MessagesStorage(boolean):void");
     }
 
     public void getContacts() {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$B5ChRtP62zvsHBcr0S-zt0XPQog(this));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5zHvct2d9Zg3BaO2FKDse8bk3gc(this));
     }
 
-    public /* synthetic */ void lambda$getContacts$90$MessagesStorage() {
+    public /* synthetic */ void lambda$getContacts$86$MessagesStorage() {
         ArrayList arrayList = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
         try {
@@ -5425,10 +5051,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getUnsentMessages(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$v57HK2b6e4K-LwST3oUiFHKq7-Q(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$C1cOzbvtNsbNZV4b19cMYFCSS2Q(this, i));
     }
 
-    public /* synthetic */ void lambda$getUnsentMessages$91$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$getUnsentMessages$87$MessagesStorage(int i) {
         try {
             int i2;
             NativeByteBuffer byteBufferValue;
@@ -5586,7 +5212,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public boolean checkMessageByRandomId(long j) {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$PoTwjYrS6pxJPiRR597ApEYVaPc(this, j, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$8LScnlQZslO0EbqFvovKSsTTFc0(this, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -5635,7 +5261,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         	at jadx.api.JavaClass.decompile(JavaClass.java:62)
         	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
-    public /* synthetic */ void lambda$checkMessageByRandomId$92$MessagesStorage(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageByRandomId$88$MessagesStorage(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
         /*
         r6 = this;
         r0 = 0;
@@ -5677,13 +5303,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x003a:
         throw r7;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$92$MessagesStorage(long, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$88$MessagesStorage(long, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
-    public boolean checkMessageId(long j, int i) {
+    public boolean checkMessageId(long j, boolean z, int i) {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$MyltJFTWCbeWEL4NJSFRYx66nZE(this, j, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$h0vkrdxti-V1B_YELNc1_e0rGWw(this, i, z, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -5732,59 +5358,67 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         	at jadx.api.JavaClass.decompile(JavaClass.java:62)
         	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
-    public /* synthetic */ void lambda$checkMessageId$93$MessagesStorage(long r6, int r8, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageId$89$MessagesStorage(int r6, boolean r7, long r8, boolean[] r10, java.util.concurrent.CountDownLatch r11) {
         /*
         r5 = this;
-        r0 = 0;
-        r1 = r5.database;	 Catch:{ Exception -> 0x002f }
-        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x002f }
-        r3 = "SELECT mid FROM messages WHERE uid = %d AND mid = %d";	 Catch:{ Exception -> 0x002f }
-        r4 = 2;	 Catch:{ Exception -> 0x002f }
-        r4 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x002f }
-        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x002f }
-        r7 = 0;	 Catch:{ Exception -> 0x002f }
-        r4[r7] = r6;	 Catch:{ Exception -> 0x002f }
-        r6 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x002f }
-        r8 = 1;	 Catch:{ Exception -> 0x002f }
-        r4[r8] = r6;	 Catch:{ Exception -> 0x002f }
-        r6 = java.lang.String.format(r2, r3, r4);	 Catch:{ Exception -> 0x002f }
-        r2 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x002f }
-        r0 = r1.queryFinalized(r6, r2);	 Catch:{ Exception -> 0x002f }
-        r6 = r0.next();	 Catch:{ Exception -> 0x002f }
-        if (r6 == 0) goto L_0x002a;	 Catch:{ Exception -> 0x002f }
-    L_0x0028:
-        r9[r7] = r8;	 Catch:{ Exception -> 0x002f }
-    L_0x002a:
-        if (r0 == 0) goto L_0x0038;
-    L_0x002c:
-        goto L_0x0035;
-    L_0x002d:
-        r6 = move-exception;
-        goto L_0x003c;
-    L_0x002f:
-        r6 = move-exception;
-        org.telegram.messenger.FileLog.e(r6);	 Catch:{ all -> 0x002d }
-        if (r0 == 0) goto L_0x0038;
+        r0 = (long) r6;
+        if (r7 == 0) goto L_0x0008;
+    L_0x0003:
+        r6 = -r8;
+        r2 = 32;
+        r6 = r6 << r2;
+        r0 = r0 | r6;
+    L_0x0008:
+        r6 = 0;
+        r7 = r5.database;	 Catch:{ Exception -> 0x0037 }
+        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x0037 }
+        r3 = "SELECT mid FROM messages WHERE uid = %d AND mid = %d";	 Catch:{ Exception -> 0x0037 }
+        r4 = 2;	 Catch:{ Exception -> 0x0037 }
+        r4 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0037 }
+        r8 = java.lang.Long.valueOf(r8);	 Catch:{ Exception -> 0x0037 }
+        r9 = 0;	 Catch:{ Exception -> 0x0037 }
+        r4[r9] = r8;	 Catch:{ Exception -> 0x0037 }
+        r8 = java.lang.Long.valueOf(r0);	 Catch:{ Exception -> 0x0037 }
+        r0 = 1;	 Catch:{ Exception -> 0x0037 }
+        r4[r0] = r8;	 Catch:{ Exception -> 0x0037 }
+        r8 = java.lang.String.format(r2, r3, r4);	 Catch:{ Exception -> 0x0037 }
+        r1 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0037 }
+        r6 = r7.queryFinalized(r8, r1);	 Catch:{ Exception -> 0x0037 }
+        r7 = r6.next();	 Catch:{ Exception -> 0x0037 }
+        if (r7 == 0) goto L_0x0032;	 Catch:{ Exception -> 0x0037 }
+    L_0x0030:
+        r10[r9] = r0;	 Catch:{ Exception -> 0x0037 }
+    L_0x0032:
+        if (r6 == 0) goto L_0x0040;
+    L_0x0034:
+        goto L_0x003d;
     L_0x0035:
-        r0.dispose();
-    L_0x0038:
-        r10.countDown();
+        r7 = move-exception;
+        goto L_0x0044;
+    L_0x0037:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x0035 }
+        if (r6 == 0) goto L_0x0040;
+    L_0x003d:
+        r6.dispose();
+    L_0x0040:
+        r11.countDown();
         return;
-    L_0x003c:
-        if (r0 == 0) goto L_0x0041;
-    L_0x003e:
-        r0.dispose();
-    L_0x0041:
-        throw r6;
+    L_0x0044:
+        if (r6 == 0) goto L_0x0049;
+    L_0x0046:
+        r6.dispose();
+    L_0x0049:
+        throw r7;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$93$MessagesStorage(long, int, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$89$MessagesStorage(int, boolean, long, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public void getUnreadMention(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$HAMiPiXIFe_W3mXZzhQllTVtDm0(this, j, intCallback));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$aY9xMvh-rzPL-R1D-_XrV6Vd9Hg(this, j, intCallback));
     }
 
-    public /* synthetic */ void lambda$getUnreadMention$95$MessagesStorage(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getUnreadMention$91$MessagesStorage(long j, IntCallback intCallback) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             Object[] objArr = new Object[1];
@@ -5795,17 +5429,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 i = queryFinalized.intValue(0);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$nXMoCrqLrakLlqQgsAWkSviQJ_c(intCallback, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$bAJRVxJL-F8T3vg8lkbGW9uJ6ck(intCallback, i));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
     public void getMessagesCount(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$03vHr1a92OlFmtnRuIrJWUMU7Z4(this, j, intCallback));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Ek9AwSToKVzhFSLd8S5b9_EIPuk(this, j, intCallback));
     }
 
-    public /* synthetic */ void lambda$getMessagesCount$97$MessagesStorage(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getMessagesCount$93$MessagesStorage(long j, IntCallback intCallback) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             Object[] objArr = new Object[1];
@@ -5816,92 +5450,98 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 i = queryFinalized.intValue(0);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$7RfQN--QTE44TVQC-dq2KbZAbOI(intCallback, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$uKoT1QRUcZ9KZW59r0X9RxYbAXY(intCallback, i));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
     public void getMessages(long j, int i, int i2, int i3, int i4, int i5, int i6, boolean z, boolean z2, int i7) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$TA9zJeEg1fC4IYC_AFqoSHmyRJ4(this, i, i2, z, j, z2, i6, i4, i3, i5, i7));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$1ckIoqYQ8Nm11SUQ6RtmYLxVDXE(this, i, i2, z, j, z2, i6, i4, i3, i5, i7));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:823:0x13b2 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:820:0x13a4 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:845:0x13fb A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:826:0x13b9 A:{SYNTHETIC, Splitter:B:826:0x13b9} */
-    /* JADX WARNING: Removed duplicated region for block: B:820:0x13a4 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:823:0x13b2 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:826:0x13b9 A:{SYNTHETIC, Splitter:B:826:0x13b9} */
-    /* JADX WARNING: Removed duplicated region for block: B:845:0x13fb A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:876:0x14a5 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:720:0x11cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:879:0x14c6 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:901:0x1506 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:500:0x0ba5  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0ba3  */
-    /* JADX WARNING: Removed duplicated region for block: B:518:0x0bf9  */
-    /* JADX WARNING: Removed duplicated region for block: B:502:0x0ba8 A:{SYNTHETIC, Splitter:B:502:0x0ba8} */
-    /* JADX WARNING: Removed duplicated region for block: B:556:0x0d30 A:{Catch:{ Exception -> 0x0dae, all -> 0x0dac }} */
-    /* JADX WARNING: Removed duplicated region for block: B:520:0x0bfd A:{SYNTHETIC, Splitter:B:520:0x0bfd} */
-    /* JADX WARNING: Removed duplicated region for block: B:720:0x11cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:876:0x14a5 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:879:0x14c6 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:901:0x1506 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0ba3  */
-    /* JADX WARNING: Removed duplicated region for block: B:500:0x0ba5  */
-    /* JADX WARNING: Removed duplicated region for block: B:502:0x0ba8 A:{SYNTHETIC, Splitter:B:502:0x0ba8} */
-    /* JADX WARNING: Removed duplicated region for block: B:518:0x0bf9  */
-    /* JADX WARNING: Removed duplicated region for block: B:520:0x0bfd A:{SYNTHETIC, Splitter:B:520:0x0bfd} */
-    /* JADX WARNING: Removed duplicated region for block: B:556:0x0d30 A:{Catch:{ Exception -> 0x0dae, all -> 0x0dac }} */
-    /* JADX WARNING: Removed duplicated region for block: B:876:0x14a5 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:720:0x11cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:879:0x14c6 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:901:0x1506 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:720:0x11cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:876:0x14a5 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:879:0x14c6 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:901:0x1506 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:876:0x14a5 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:720:0x11cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:879:0x14c6 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:901:0x1506 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:720:0x11cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:876:0x14a5 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:879:0x14c6 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:901:0x1506 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:968:0x165c  */
-    /* JADX WARNING: Removed duplicated region for block: B:932:0x15a0 A:{SYNTHETIC, Splitter:B:932:0x15a0} */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261, PHI: r3 r22 r43 r44 r50 } */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261, PHI: r3 r22 r43 r44 r50 } */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261, PHI: r3 r22 r43 r44 r50 } */
+    /* JADX WARNING: Removed duplicated region for block: B:826:0x13b5 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:823:0x13a7 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:848:0x13fe A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x13bc A:{SYNTHETIC, Splitter:B:829:0x13bc} */
+    /* JADX WARNING: Removed duplicated region for block: B:823:0x13a7 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:826:0x13b5 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x13bc A:{SYNTHETIC, Splitter:B:829:0x13bc} */
+    /* JADX WARNING: Removed duplicated region for block: B:848:0x13fe A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:879:0x14a8 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:723:0x11ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:882:0x14c9 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:904:0x1509 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:503:0x0ba8  */
+    /* JADX WARNING: Removed duplicated region for block: B:502:0x0ba6  */
+    /* JADX WARNING: Removed duplicated region for block: B:521:0x0bfc  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x0bab A:{SYNTHETIC, Splitter:B:505:0x0bab} */
+    /* JADX WARNING: Removed duplicated region for block: B:559:0x0d33 A:{Catch:{ Exception -> 0x0db1, all -> 0x0daf }} */
+    /* JADX WARNING: Removed duplicated region for block: B:523:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:523:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:723:0x11ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:879:0x14a8 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:882:0x14c9 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:904:0x1509 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:502:0x0ba6  */
+    /* JADX WARNING: Removed duplicated region for block: B:503:0x0ba8  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x0bab A:{SYNTHETIC, Splitter:B:505:0x0bab} */
+    /* JADX WARNING: Removed duplicated region for block: B:521:0x0bfc  */
+    /* JADX WARNING: Removed duplicated region for block: B:523:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:523:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:559:0x0d33 A:{Catch:{ Exception -> 0x0db1, all -> 0x0daf }} */
+    /* JADX WARNING: Removed duplicated region for block: B:879:0x14a8 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:723:0x11ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:882:0x14c9 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:904:0x1509 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:723:0x11ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:879:0x14a8 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:882:0x14c9 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:904:0x1509 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:879:0x14a8 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:723:0x11ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:882:0x14c9 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:904:0x1509 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:723:0x11ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:879:0x14a8 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:882:0x14c9 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:904:0x1509 A:{Catch:{ Exception -> 0x1733, all -> 0x1730 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:971:0x165f  */
+    /* JADX WARNING: Removed duplicated region for block: B:935:0x15a3 A:{SYNTHETIC, Splitter:B:935:0x15a3} */
+    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:724:0x11d0} */
+    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:724:0x11d0} */
+    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1730 A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:724:0x11d0} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing block: B:837:0x13eb, code skipped:
+    /* JADX WARNING: Missing block: B:840:0x13ee, code skipped:
             r0 = e;
      */
-    /* JADX WARNING: Missing block: B:839:0x13ef, code skipped:
+    /* JADX WARNING: Missing block: B:842:0x13f2, code skipped:
             r0 = e;
      */
-    /* JADX WARNING: Missing block: B:840:0x13f0, code skipped:
+    /* JADX WARNING: Missing block: B:843:0x13f3, code skipped:
             r29 = r5;
             r28 = r7;
      */
-    /* JADX WARNING: Missing block: B:847:0x1408, code skipped:
+    /* JADX WARNING: Missing block: B:865:0x1468, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:849:0x140b, code skipped:
+    /* JADX WARNING: Missing block: B:866:0x1469, code skipped:
+            r43 = r4;
+     */
+    /* JADX WARNING: Missing block: B:872:0x1488, code skipped:
             r0 = e;
      */
-    /* JADX WARNING: Missing block: B:1016:0x172d, code skipped:
+    /* JADX WARNING: Missing block: B:873:0x1489, code skipped:
+            r43 = r4;
+     */
+    /* JADX WARNING: Missing block: B:1019:0x1730, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:1017:0x1730, code skipped:
+    /* JADX WARNING: Missing block: B:1020:0x1733, code skipped:
             r0 = e;
      */
-    public /* synthetic */ void lambda$getMessages$99$MessagesStorage(int r43, int r44, boolean r45, long r46, boolean r48, int r49, int r50, int r51, int r52, int r53) {
+    public /* synthetic */ void lambda$getMessages$95$MessagesStorage(int r43, int r44, boolean r45, long r46, boolean r48, int r49, int r50, int r51, int r52, int r53) {
         /*
         r42 = this;
         r1 = r42;
@@ -5943,17 +5583,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0034:
         r8 = 1;
     L_0x0035:
-        r9 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
-        r9.<init>();	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
-        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
-        r10.<init>();	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
-        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
-        r12.<init>();	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
+        r9 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
+        r9.<init>();	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
+        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
+        r10.<init>();	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
+        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
+        r12.<init>();	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
         r21 = r13;
-        r13 = new android.util.SparseArray;	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
-        r13.<init>();	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
-        r14 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
-        r14.<init>();	 Catch:{ Exception -> 0x1785, all -> 0x1773 }
+        r13 = new android.util.SparseArray;	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
+        r13.<init>();	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
+        r14 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
+        r14.<init>();	 Catch:{ Exception -> 0x1788, all -> 0x1776 }
         r23 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         if (r48 == 0) goto L_0x01ec;
     L_0x0054:
@@ -6165,7 +5805,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r43;
         r7 = r44;
         r13 = r10;
-        goto L_0x153e;
+        goto L_0x1541;
     L_0x01c6:
         r0 = move-exception;
         r7 = r44;
@@ -6181,7 +5821,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r21 = 0;
     L_0x01d5:
         r6 = r43;
-        goto L_0x17c1;
+        goto L_0x17c4;
     L_0x01d9:
         r0 = move-exception;
         r7 = r44;
@@ -6197,12 +5837,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r21 = 0;
     L_0x01e8:
         r6 = r43;
-        goto L_0x1796;
+        goto L_0x1799;
     L_0x01ec:
         r27 = r9;
         r2 = r14;
         r1 = (int) r4;
-        if (r1 == 0) goto L_0x0e4b;
+        if (r1 == 0) goto L_0x0e4e;
     L_0x01f2:
         r9 = "SELECT inbox_max, unread_count, date, unread_count_i FROM dialogs WHERE did = ";
         r15 = r49;
@@ -6307,7 +5947,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = 0;
         r6 = r44;
         r29 = r13;
-        goto L_0x063f;
+        goto L_0x0642;
     L_0x028b:
         r0 = move-exception;
         r7 = r44;
@@ -6366,18 +6006,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = r42;
         r28 = r2;
         r2 = 1;
-        if (r15 == r2) goto L_0x062a;
+        if (r15 == r2) goto L_0x062d;
     L_0x02d0:
         r2 = 3;
-        if (r15 == r2) goto L_0x062a;
+        if (r15 == r2) goto L_0x062d;
     L_0x02d3:
         r2 = 4;
-        if (r15 == r2) goto L_0x062a;
+        if (r15 == r2) goto L_0x062d;
     L_0x02d6:
-        if (r50 != 0) goto L_0x062a;
+        if (r50 != 0) goto L_0x062d;
     L_0x02d8:
         r2 = 2;
-        if (r15 != r2) goto L_0x05bf;
+        if (r15 != r2) goto L_0x05c2;
     L_0x02db:
         r2 = r14.database;	 Catch:{ Exception -> 0x02bc, all -> 0x02af }
         r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02bc, all -> 0x02af }
@@ -6390,23 +6030,23 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x02bc, all -> 0x02af }
         r2 = r2.queryFinalized(r3, r13);	 Catch:{ Exception -> 0x02bc, all -> 0x02af }
         r3 = r2.next();	 Catch:{ Exception -> 0x02bc, all -> 0x02af }
-        if (r3 == 0) goto L_0x0383;
+        if (r3 == 0) goto L_0x0386;
     L_0x02fb:
         r3 = r2.intValue(r9);	 Catch:{ Exception -> 0x02bc, all -> 0x02af }
         r9 = r12;
         r12 = (long) r3;
         r21 = r3;
         r3 = 1;
-        r22 = r2.intValue(r3);	 Catch:{ Exception -> 0x037a, all -> 0x0371 }
+        r22 = r2.intValue(r3);	 Catch:{ Exception -> 0x037d, all -> 0x0374 }
         r3 = 2;
-        r30 = r2.intValue(r3);	 Catch:{ Exception -> 0x0366, all -> 0x035b }
+        r30 = r2.intValue(r3);	 Catch:{ Exception -> 0x0369, all -> 0x035e }
         r3 = 3;
-        r31 = r2.intValue(r3);	 Catch:{ Exception -> 0x034e, all -> 0x0341 }
+        r31 = r2.intValue(r3);	 Catch:{ Exception -> 0x0351, all -> 0x0344 }
         r16 = 0;
         r3 = (r12 > r16 ? 1 : (r12 == r16 ? 0 : -1));
-        if (r3 == 0) goto L_0x032f;
+        if (r3 == 0) goto L_0x0324;
     L_0x0318:
-        if (r11 == 0) goto L_0x032f;
+        if (r11 == 0) goto L_0x0324;
     L_0x031a:
         r32 = r9;
         r3 = r10;
@@ -6414,26 +6054,31 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r18 = 32;
         r9 = r9 << r18;
         r9 = r9 | r12;
+        goto L_0x0328;
+    L_0x0324:
+        r32 = r9;
+        r3 = r10;
+        r9 = r12;
+    L_0x0328:
+        r12 = (long) r7;
+        r33 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1));
         r12 = r21;
         r13 = r30;
+        if (r33 != 0) goto L_0x0339;
+    L_0x0331:
+        r22 = r31;
+        r30 = r9;
+        r9 = 1;
+        r10 = 0;
+        goto L_0x0393;
+    L_0x0339:
         r40 = r9;
         r10 = r22;
         r22 = r31;
         r9 = 1;
-        goto L_0x033d;
-    L_0x032f:
-        r32 = r9;
-        r3 = r10;
-        r10 = r22;
-        r22 = r31;
-        r9 = 1;
-        r40 = r12;
-        r12 = r21;
-        r13 = r30;
-    L_0x033d:
         r30 = r40;
-        goto L_0x0390;
-    L_0x0341:
+        goto L_0x0393;
+    L_0x0344:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -6442,7 +6087,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r22;
         r14 = r30;
         goto L_0x023b;
-    L_0x034e:
+    L_0x0351:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -6451,7 +6096,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r22;
         r14 = r30;
         goto L_0x0247;
-    L_0x035b:
+    L_0x035e:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -6459,7 +6104,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r21;
         r13 = r22;
         goto L_0x0251;
-    L_0x0366:
+    L_0x0369:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -6467,21 +6112,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r21;
         r13 = r22;
         goto L_0x025b;
-    L_0x0371:
+    L_0x0374:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
         r3 = r6;
         r11 = r21;
         goto L_0x02b5;
-    L_0x037a:
+    L_0x037d:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
         r3 = r6;
         r11 = r21;
         goto L_0x02c2;
-    L_0x0383:
+    L_0x0386:
         r3 = r10;
         r32 = r12;
         r30 = r21;
@@ -6491,36 +6136,36 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = 0;
         r22 = 0;
         r21 = r44;
-    L_0x0390:
-        r2.dispose();	 Catch:{ Exception -> 0x05a2, all -> 0x0585 }
-        if (r9 != 0) goto L_0x046a;
-    L_0x0395:
-        r2 = r14.database;	 Catch:{ Exception -> 0x0454, all -> 0x043e }
+    L_0x0393:
+        r2.dispose();	 Catch:{ Exception -> 0x05a5, all -> 0x0588 }
+        if (r9 != 0) goto L_0x046d;
+    L_0x0398:
+        r2 = r14.database;	 Catch:{ Exception -> 0x0457, all -> 0x0441 }
         r33 = r9;
-        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x043c, all -> 0x043a }
+        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x043f, all -> 0x043d }
         r34 = r12;
         r12 = "SELECT min(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > 0";
         r36 = r3;
         r35 = r13;
         r13 = 1;
-        r3 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0434, all -> 0x0432 }
-        r13 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0434, all -> 0x0432 }
+        r3 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0437, all -> 0x0435 }
+        r13 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0437, all -> 0x0435 }
         r37 = r6;
         r6 = 0;
-        r3[r6] = r13;	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r3 = java.lang.String.format(r9, r12, r3);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r9 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r2 = r2.queryFinalized(r3, r9);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r3 = r2.next();	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        if (r3 == 0) goto L_0x03e9;
-    L_0x03bf:
-        r3 = r2.intValue(r6);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
+        r3[r6] = r13;	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r3 = java.lang.String.format(r9, r12, r3);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r9 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r2 = r2.queryFinalized(r3, r9);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r3 = r2.next();	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        if (r3 == 0) goto L_0x03ec;
+    L_0x03c2:
+        r3 = r2.intValue(r6);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
         r6 = 1;
-        r9 = r2.intValue(r6);	 Catch:{ Exception -> 0x03db, all -> 0x03cd }
+        r9 = r2.intValue(r6);	 Catch:{ Exception -> 0x03de, all -> 0x03d0 }
         r34 = r3;
         r35 = r9;
-        goto L_0x03e9;
-    L_0x03cd:
+        goto L_0x03ec;
+    L_0x03d0:
         r0 = move-exception;
         r6 = r43;
         r7 = r44;
@@ -6529,8 +6174,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r10;
         r21 = r22;
         r20 = r33;
-        goto L_0x0612;
-    L_0x03db:
+        goto L_0x0615;
+    L_0x03de:
         r0 = move-exception;
         r6 = r43;
         r7 = r44;
@@ -6539,90 +6184,73 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r10;
         r21 = r22;
         r20 = r33;
-        goto L_0x0624;
-    L_0x03e9:
-        r2.dispose();	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        if (r34 == 0) goto L_0x041e;
-    L_0x03ee:
-        r2 = r14.database;	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
+        goto L_0x0627;
+    L_0x03ec:
+        r2.dispose();	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        if (r34 == 0) goto L_0x0421;
+    L_0x03f1:
+        r2 = r14.database;	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
         r6 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid >= %d AND out = 0 AND read_state IN(0,2)";
         r9 = 2;
-        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r9 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
+        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r9 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
         r13 = 0;
-        r12[r13] = r9;	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r9 = java.lang.Integer.valueOf(r34);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
+        r12[r13] = r9;	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r9 = java.lang.Integer.valueOf(r34);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
         r19 = 1;
-        r12[r19] = r9;	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r3 = java.lang.String.format(r3, r6, r12);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r2 = r2.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        r3 = r2.next();	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        if (r3 == 0) goto L_0x041b;
-    L_0x0416:
-        r3 = r2.intValue(r13);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
+        r12[r19] = r9;	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r3 = java.lang.String.format(r3, r6, r12);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r2 = r2.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        r3 = r2.next();	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        if (r3 == 0) goto L_0x041e;
+    L_0x0419:
+        r3 = r2.intValue(r13);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
         r10 = r3;
-    L_0x041b:
-        r2.dispose();	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
     L_0x041e:
+        r2.dispose();	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+    L_0x0421:
         r2 = r43;
-        goto L_0x05d6;
-    L_0x0422:
+        goto L_0x05d9;
+    L_0x0425:
         r0 = move-exception;
         r6 = r43;
         r7 = r44;
         r1 = r0;
-        goto L_0x060b;
-    L_0x042a:
+        goto L_0x060e;
+    L_0x042d:
         r0 = move-exception;
         r6 = r43;
         r7 = r44;
         r1 = r0;
-        goto L_0x061d;
-    L_0x0432:
+        goto L_0x0620;
+    L_0x0435:
         r0 = move-exception;
-        goto L_0x0445;
-    L_0x0434:
+        goto L_0x0448;
+    L_0x0437:
         r0 = move-exception;
-        goto L_0x045b;
-    L_0x0436:
+        goto L_0x045e;
+    L_0x0439:
         r0 = move-exception;
-        goto L_0x0443;
-    L_0x0438:
+        goto L_0x0446;
+    L_0x043b:
         r0 = move-exception;
-        goto L_0x0459;
-    L_0x043a:
+        goto L_0x045c;
+    L_0x043d:
         r0 = move-exception;
-        goto L_0x0441;
-    L_0x043c:
+        goto L_0x0444;
+    L_0x043f:
         r0 = move-exception;
-        goto L_0x0457;
-    L_0x043e:
-        r0 = move-exception;
-        r33 = r9;
+        goto L_0x045a;
     L_0x0441:
-        r34 = r12;
-    L_0x0443:
-        r35 = r13;
-    L_0x0445:
-        r7 = r44;
-        r1 = r0;
-        r3 = r6;
-        r13 = r10;
-        r21 = r22;
-        r20 = r33;
-        r11 = r34;
-        r14 = r35;
-        goto L_0x059d;
-    L_0x0454:
         r0 = move-exception;
         r33 = r9;
-    L_0x0457:
+    L_0x0444:
         r34 = r12;
-    L_0x0459:
+    L_0x0446:
         r35 = r13;
-    L_0x045b:
+    L_0x0448:
         r7 = r44;
         r1 = r0;
         r3 = r6;
@@ -6631,183 +6259,200 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r20 = r33;
         r11 = r34;
         r14 = r35;
-        goto L_0x05ba;
-    L_0x046a:
+        goto L_0x05a0;
+    L_0x0457:
+        r0 = move-exception;
+        r33 = r9;
+    L_0x045a:
+        r34 = r12;
+    L_0x045c:
+        r35 = r13;
+    L_0x045e:
+        r7 = r44;
+        r1 = r0;
+        r3 = r6;
+        r13 = r10;
+        r21 = r22;
+        r20 = r33;
+        r11 = r34;
+        r14 = r35;
+        goto L_0x05bd;
+    L_0x046d:
         r36 = r3;
         r37 = r6;
         r33 = r9;
         r34 = r12;
         r35 = r13;
-        if (r21 != 0) goto L_0x04fa;
-    L_0x0476:
-        r2 = r14.database;	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
+        if (r21 != 0) goto L_0x04fd;
+    L_0x0479:
+        r2 = r14.database;	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
         r6 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid > 0 AND out = 0 AND read_state IN(0,2)";
         r9 = 1;
-        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r9 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
+        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r9 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
         r13 = 0;
-        r12[r13] = r9;	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r3 = java.lang.String.format(r3, r6, r12);	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r2 = r2.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r3 = r2.next();	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        if (r3 == 0) goto L_0x049b;
-    L_0x0496:
-        r3 = r2.intValue(r13);	 Catch:{ Exception -> 0x042a, all -> 0x0422 }
-        goto L_0x049c;
-    L_0x049b:
+        r12[r13] = r9;	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r3 = java.lang.String.format(r3, r6, r12);	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r2 = r2.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r3 = r2.next();	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        if (r3 == 0) goto L_0x049e;
+    L_0x0499:
+        r3 = r2.intValue(r13);	 Catch:{ Exception -> 0x042d, all -> 0x0425 }
+        goto L_0x049f;
+    L_0x049e:
         r3 = 0;
-    L_0x049c:
-        r2.dispose();	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        if (r3 != r10) goto L_0x04e8;
-    L_0x04a1:
-        r2 = r14.database;	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
+    L_0x049f:
+        r2.dispose();	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        if (r3 != r10) goto L_0x04eb;
+    L_0x04a4:
+        r2 = r14.database;	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
         r6 = "SELECT min(mid) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > 0";
         r9 = 1;
-        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r9 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
+        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r9 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
         r13 = 0;
-        r12[r13] = r9;	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r3 = java.lang.String.format(r3, r6, r12);	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r2 = r2.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        r3 = r2.next();	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
-        if (r3 == 0) goto L_0x04df;
-    L_0x04c1:
-        r3 = r2.intValue(r13);	 Catch:{ Exception -> 0x04f6, all -> 0x04f2 }
+        r12[r13] = r9;	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r3 = java.lang.String.format(r3, r6, r12);	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r2 = r2.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        r3 = r2.next();	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
+        if (r3 == 0) goto L_0x04e2;
+    L_0x04c4:
+        r3 = r2.intValue(r13);	 Catch:{ Exception -> 0x04f9, all -> 0x04f5 }
         r12 = (long) r3;
         r16 = 0;
         r6 = (r12 > r16 ? 1 : (r12 == r16 ? 0 : -1));
-        if (r6 == 0) goto L_0x04d9;
-    L_0x04cc:
-        if (r11 == 0) goto L_0x04d9;
-    L_0x04ce:
+        if (r6 == 0) goto L_0x04dc;
+    L_0x04cf:
+        if (r11 == 0) goto L_0x04dc;
+    L_0x04d1:
         r6 = r10;
         r9 = (long) r11;
         r18 = 32;
         r9 = r9 << r18;
         r30 = r12 | r9;
         r34 = r3;
-        goto L_0x04e2;
-    L_0x04d9:
+        goto L_0x04e5;
+    L_0x04dc:
         r6 = r10;
         r34 = r3;
         r30 = r12;
-        goto L_0x04e2;
-    L_0x04df:
+        goto L_0x04e5;
+    L_0x04e2:
         r6 = r10;
         r3 = r21;
-    L_0x04e2:
-        r2.dispose();	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+    L_0x04e5:
+        r2.dispose();	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r21 = r3;
-        goto L_0x04e9;
-    L_0x04e8:
+        goto L_0x04ec;
+    L_0x04eb:
         r6 = r10;
-    L_0x04e9:
+    L_0x04ec:
         r10 = r34;
         r2 = r43;
         r34 = r10;
-    L_0x04ef:
-        r10 = r6;
-        goto L_0x05d6;
     L_0x04f2:
+        r10 = r6;
+        goto L_0x05d9;
+    L_0x04f5:
         r0 = move-exception;
         r6 = r10;
-        goto L_0x058f;
-    L_0x04f6:
+        goto L_0x0592;
+    L_0x04f9:
         r0 = move-exception;
         r6 = r10;
-        goto L_0x05ac;
-    L_0x04fa:
+        goto L_0x05af;
+    L_0x04fd:
         r6 = r10;
-        r2 = r14.database;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r2 = r14.database;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r9 = "SELECT start, end FROM messages_holes WHERE uid = %d AND start < %d AND end > %d";
         r10 = 3;
-        r12 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r12 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r13 = 0;
-        r12[r13] = r10;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r10 = java.lang.Integer.valueOf(r21);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r12[r13] = r10;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r10 = java.lang.Integer.valueOf(r21);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r13 = 1;
-        r12[r13] = r10;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r10 = java.lang.Integer.valueOf(r21);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r12[r13] = r10;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r10 = java.lang.Integer.valueOf(r21);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r13 = 2;
-        r12[r13] = r10;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r3 = java.lang.String.format(r3, r9, r12);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r12[r13] = r10;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r3 = java.lang.String.format(r3, r9, r12);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r9 = 0;
-        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r2 = r2.queryFinalized(r3, r10);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r3 = r2.next();	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        if (r3 != 0) goto L_0x052c;
-    L_0x052a:
-        r3 = 1;
-        goto L_0x052d;
-    L_0x052c:
-        r3 = 0;
+        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r2 = r2.queryFinalized(r3, r10);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r3 = r2.next();	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        if (r3 != 0) goto L_0x052f;
     L_0x052d:
-        r2.dispose();	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        if (r3 == 0) goto L_0x057d;
-    L_0x0532:
-        r2 = r14.database;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r3 = 1;
+        goto L_0x0530;
+    L_0x052f:
+        r3 = 0;
+    L_0x0530:
+        r2.dispose();	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        if (r3 == 0) goto L_0x0580;
+    L_0x0535:
+        r2 = r14.database;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r9 = "SELECT min(mid) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > %d";
         r10 = 2;
-        r12 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r12 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r13 = 0;
-        r12[r13] = r10;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r10 = java.lang.Integer.valueOf(r21);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r12[r13] = r10;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r10 = java.lang.Integer.valueOf(r21);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r19 = 1;
-        r12[r19] = r10;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r3 = java.lang.String.format(r3, r9, r12);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r9 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r2 = r2.queryFinalized(r3, r9);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r3 = r2.next();	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        if (r3 == 0) goto L_0x0572;
-    L_0x055a:
-        r3 = r2.intValue(r13);	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
-        r9 = (long) r3;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        r12[r19] = r10;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r3 = java.lang.String.format(r3, r9, r12);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r9 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r2 = r2.queryFinalized(r3, r9);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r3 = r2.next();	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        if (r3 == 0) goto L_0x0575;
+    L_0x055d:
+        r3 = r2.intValue(r13);	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
+        r9 = (long) r3;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r12 = 0;
         r21 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1));
-        if (r21 == 0) goto L_0x056f;
-    L_0x0565:
-        if (r11 == 0) goto L_0x056f;
-    L_0x0567:
-        r12 = (long) r11;	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+        if (r21 == 0) goto L_0x0572;
+    L_0x0568:
+        if (r11 == 0) goto L_0x0572;
+    L_0x056a:
+        r12 = (long) r11;	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r18 = 32;
         r12 = r12 << r18;
         r30 = r9 | r12;
-        goto L_0x0574;
-    L_0x056f:
-        r30 = r9;
-        goto L_0x0574;
+        goto L_0x0577;
     L_0x0572:
+        r30 = r9;
+        goto L_0x0577;
+    L_0x0575:
         r3 = r21;
-    L_0x0574:
-        r2.dispose();	 Catch:{ Exception -> 0x0583, all -> 0x0581 }
+    L_0x0577:
+        r2.dispose();	 Catch:{ Exception -> 0x0586, all -> 0x0584 }
         r2 = r43;
         r21 = r3;
-        goto L_0x04ef;
-    L_0x057d:
+        goto L_0x04f2;
+    L_0x0580:
         r2 = r43;
-        goto L_0x04ef;
-    L_0x0581:
+        goto L_0x04f2;
+    L_0x0584:
         r0 = move-exception;
-        goto L_0x058f;
-    L_0x0583:
+        goto L_0x0592;
+    L_0x0586:
         r0 = move-exception;
-        goto L_0x05ac;
-    L_0x0585:
+        goto L_0x05af;
+    L_0x0588:
         r0 = move-exception;
         r37 = r6;
         r33 = r9;
         r6 = r10;
         r34 = r12;
         r35 = r13;
-    L_0x058f:
+    L_0x0592:
         r7 = r44;
         r1 = r0;
         r13 = r6;
@@ -6816,18 +6461,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r34;
         r14 = r35;
         r3 = r37;
-    L_0x059d:
+    L_0x05a0:
         r12 = 0;
         r17 = 0;
         goto L_0x01d5;
-    L_0x05a2:
+    L_0x05a5:
         r0 = move-exception;
         r37 = r6;
         r33 = r9;
         r6 = r10;
         r34 = r12;
         r35 = r13;
-    L_0x05ac:
+    L_0x05af:
         r7 = r44;
         r1 = r0;
         r13 = r6;
@@ -6836,11 +6481,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r34;
         r14 = r35;
         r3 = r37;
-    L_0x05ba:
+    L_0x05bd:
         r12 = 0;
         r17 = 0;
         goto L_0x01e8;
-    L_0x05bf:
+    L_0x05c2:
         r37 = r6;
         r36 = r10;
         r32 = r12;
@@ -6853,24 +6498,24 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r34 = 0;
         r35 = 0;
         r21 = r44;
-    L_0x05d6:
-        if (r2 > r10) goto L_0x05e5;
-    L_0x05d8:
-        if (r10 >= r8) goto L_0x05db;
-    L_0x05da:
-        goto L_0x05e5;
+    L_0x05d9:
+        if (r2 > r10) goto L_0x05e8;
     L_0x05db:
+        if (r10 >= r8) goto L_0x05de;
+    L_0x05dd:
+        goto L_0x05e8;
+    L_0x05de:
         r3 = r10 - r2;
         r2 = r2 + 10;
         r9 = r10;
         r6 = r21;
         r10 = r33;
-        goto L_0x05ff;
-    L_0x05e5:
+        goto L_0x0602;
+    L_0x05e8:
         r3 = r10 + 10;
-        r2 = java.lang.Math.max(r2, r3);	 Catch:{ Exception -> 0x0618, all -> 0x0606 }
-        if (r10 >= r8) goto L_0x05f9;
-    L_0x05ed:
+        r2 = java.lang.Math.max(r2, r3);	 Catch:{ Exception -> 0x061b, all -> 0x0609 }
+        if (r10 >= r8) goto L_0x05fc;
+    L_0x05f0:
         r6 = r21;
         r30 = r22;
         r3 = 0;
@@ -6878,48 +6523,48 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = 0;
         r21 = 0;
         r34 = 0;
-        goto L_0x063f;
-    L_0x05f9:
+        goto L_0x0642;
+    L_0x05fc:
         r9 = r10;
         r6 = r21;
         r10 = r33;
         r3 = 0;
-    L_0x05ff:
+    L_0x0602:
         r40 = r30;
         r30 = r22;
         r21 = r40;
-        goto L_0x063f;
-    L_0x0606:
+        goto L_0x0642;
+    L_0x0609:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
         r6 = r2;
-    L_0x060b:
+    L_0x060e:
         r13 = r10;
         r21 = r22;
         r20 = r33;
-    L_0x0610:
+    L_0x0613:
         r11 = r34;
-    L_0x0612:
+    L_0x0615:
         r14 = r35;
         r3 = r37;
-        goto L_0x0e2f;
-    L_0x0618:
+        goto L_0x0e32;
+    L_0x061b:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
         r6 = r2;
-    L_0x061d:
+    L_0x0620:
         r13 = r10;
         r21 = r22;
         r20 = r33;
-    L_0x0622:
+    L_0x0625:
         r11 = r34;
-    L_0x0624:
+    L_0x0627:
         r14 = r35;
         r3 = r37;
-        goto L_0x0e46;
-    L_0x062a:
+        goto L_0x0e49;
+    L_0x062d:
         r2 = r43;
         r37 = r6;
         r36 = r10;
@@ -6932,38 +6577,38 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r30 = 0;
         r34 = 0;
         r35 = 0;
-    L_0x063f:
-        r8 = r14.database;	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r12 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
+    L_0x0642:
+        r8 = r14.database;	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r12 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
         r13 = "SELECT start FROM messages_holes WHERE uid = %d AND start IN (0, 1)";
         r31 = r1;
         r43 = r6;
         r6 = 1;
-        r1 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
+        r1 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
         r33 = r7;
         r7 = 0;
-        r1[r7] = r6;	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r1 = java.lang.String.format(r12, r13, r1);	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r6 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r1 = r8.queryFinalized(r1, r6);	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r6 = r1.next();	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        if (r6 == 0) goto L_0x06b8;
-    L_0x0665:
-        r6 = r1.intValue(r7);	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
+        r1[r7] = r6;	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r1 = java.lang.String.format(r12, r13, r1);	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r6 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r1 = r8.queryFinalized(r1, r6);	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r6 = r1.next();	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        if (r6 == 0) goto L_0x06bb;
+    L_0x0668:
+        r6 = r1.intValue(r7);	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
         r7 = 1;
-        if (r6 != r7) goto L_0x066e;
-    L_0x066c:
-        r6 = 1;
-        goto L_0x066f;
-    L_0x066e:
-        r6 = 0;
+        if (r6 != r7) goto L_0x0671;
     L_0x066f:
-        r1.dispose();	 Catch:{ Exception -> 0x068b, all -> 0x0676 }
+        r6 = 1;
+        goto L_0x0672;
+    L_0x0671:
+        r6 = 0;
+    L_0x0672:
+        r1.dispose();	 Catch:{ Exception -> 0x068e, all -> 0x0679 }
         r12 = r6;
         r1 = 3;
-        goto L_0x0704;
-    L_0x0676:
+        goto L_0x0707;
+    L_0x0679:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -6976,8 +6621,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r37;
         r12 = 0;
         r6 = r2;
-        goto L_0x17c1;
-    L_0x068b:
+        goto L_0x17c4;
+    L_0x068e:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -6990,8 +6635,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r37;
         r12 = 0;
         r6 = r2;
-        goto L_0x1796;
-    L_0x06a0:
+        goto L_0x1799;
+    L_0x06a3:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -6999,8 +6644,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r9;
         r20 = r10;
         r21 = r30;
-        goto L_0x0610;
-    L_0x06ac:
+        goto L_0x0613;
+    L_0x06af:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -7008,146 +6653,146 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r9;
         r20 = r10;
         r21 = r30;
-        goto L_0x0622;
-    L_0x06b8:
-        r1.dispose();	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r1 = r14.database;	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
+        goto L_0x0625;
+    L_0x06bb:
+        r1.dispose();	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r1 = r14.database;	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
         r7 = "SELECT min(mid) FROM messages WHERE uid = %d AND mid > 0";
         r8 = 1;
-        r12 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
+        r12 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
         r13 = 0;
-        r12[r13] = r8;	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r6 = java.lang.String.format(r6, r7, r12);	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r7 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r1 = r1.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        r6 = r1.next();	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
-        if (r6 == 0) goto L_0x06ff;
-    L_0x06db:
-        r6 = r1.intValue(r13);	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
-        if (r6 == 0) goto L_0x06ff;
-    L_0x06e1:
-        r7 = r14.database;	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
+        r12[r13] = r8;	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r6 = java.lang.String.format(r6, r7, r12);	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r7 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r1 = r1.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        r6 = r1.next();	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
+        if (r6 == 0) goto L_0x0702;
+    L_0x06de:
+        r6 = r1.intValue(r13);	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
+        if (r6 == 0) goto L_0x0702;
+    L_0x06e4:
+        r7 = r14.database;	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
         r8 = "REPLACE INTO messages_holes VALUES(?, ?, ?)";
-        r7 = r7.executeFast(r8);	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
-        r7.requery();	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
+        r7 = r7.executeFast(r8);	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
+        r7.requery();	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
         r8 = 1;
-        r7.bindLong(r8, r4);	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
+        r7.bindLong(r8, r4);	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
         r8 = 2;
         r12 = 0;
-        r7.bindInteger(r8, r12);	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
+        r7.bindInteger(r8, r12);	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
         r8 = 3;
-        r7.bindInteger(r8, r6);	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
-        r7.step();	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
-        r7.dispose();	 Catch:{ Exception -> 0x06ac, all -> 0x06a0 }
-    L_0x06ff:
-        r1.dispose();	 Catch:{ Exception -> 0x0e34, all -> 0x0e1d }
+        r7.bindInteger(r8, r6);	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
+        r7.step();	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
+        r7.dispose();	 Catch:{ Exception -> 0x06af, all -> 0x06a3 }
+    L_0x0702:
+        r1.dispose();	 Catch:{ Exception -> 0x0e37, all -> 0x0e20 }
         r1 = 3;
         r12 = 0;
-    L_0x0704:
-        if (r15 == r1) goto L_0x0a02;
-    L_0x0706:
-        r1 = 4;
-        if (r15 == r1) goto L_0x0a02;
+    L_0x0707:
+        if (r15 == r1) goto L_0x0a05;
     L_0x0709:
-        r1 = 2;
-        if (r10 == 0) goto L_0x0710;
+        r1 = 4;
+        if (r15 == r1) goto L_0x0a05;
     L_0x070c:
-        if (r15 != r1) goto L_0x0710;
-    L_0x070e:
-        goto L_0x0a02;
-    L_0x0710:
-        r6 = 1;
-        if (r15 != r6) goto L_0x07ec;
+        r1 = 2;
+        if (r10 == 0) goto L_0x0713;
+    L_0x070f:
+        if (r15 != r1) goto L_0x0713;
+    L_0x0711:
+        goto L_0x0a05;
     L_0x0713:
-        r3 = r14.database;	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
+        r6 = 1;
+        if (r15 != r6) goto L_0x07ef;
+    L_0x0716:
+        r3 = r14.database;	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
         r7 = "SELECT start, end FROM messages_holes WHERE uid = %d AND start >= %d AND start != 1 AND end != 1 ORDER BY start ASC LIMIT 1";
-        r8 = new java.lang.Object[r1];	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
-        r1 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
+        r8 = new java.lang.Object[r1];	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
+        r1 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
         r13 = 0;
-        r8[r13] = r1;	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
-        r1 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
+        r8[r13] = r1;	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
+        r1 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
         r19 = 1;
-        r8[r19] = r1;	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
-        r1 = java.lang.String.format(r6, r7, r8);	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
-        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
-        r1 = r3.queryFinalized(r1, r6);	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
-        r3 = r1.next();	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
-        if (r3 == 0) goto L_0x0748;
-    L_0x073a:
-        r3 = r1.intValue(r13);	 Catch:{ Exception -> 0x07d7, all -> 0x07c2 }
+        r8[r19] = r1;	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
+        r1 = java.lang.String.format(r6, r7, r8);	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
+        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
+        r1 = r3.queryFinalized(r1, r6);	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
+        r3 = r1.next();	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
+        if (r3 == 0) goto L_0x074b;
+    L_0x073d:
+        r3 = r1.intValue(r13);	 Catch:{ Exception -> 0x07da, all -> 0x07c5 }
         r6 = (long) r3;
         r8 = r10;
-        if (r11 == 0) goto L_0x074b;
-    L_0x0742:
+        if (r11 == 0) goto L_0x074e;
+    L_0x0745:
         r10 = (long) r11;
         r3 = 32;
         r10 = r10 << r3;
         r6 = r6 | r10;
-        goto L_0x074b;
-    L_0x0748:
+        goto L_0x074e;
+    L_0x074b:
         r8 = r10;
         r6 = 0;
-    L_0x074b:
-        r1.dispose();	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+    L_0x074e:
+        r1.dispose();	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r10 = 0;
         r1 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1));
-        if (r1 == 0) goto L_0x0790;
-    L_0x0754:
-        r1 = r14.database;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        if (r1 == 0) goto L_0x0793;
+    L_0x0757:
+        r1 = r14.database;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r10 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d";
         r11 = 5;
-        r13 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r11 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r11 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r19 = 0;
-        r13[r19] = r11;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r11 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r19] = r11;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r11 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r20 = 1;
-        r13[r20] = r11;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r11 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r20] = r11;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r11 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r21 = 2;
-        r13[r21] = r11;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r21] = r11;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r7 = 3;
-        r13[r7] = r6;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r7] = r6;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r7 = 4;
-        r13[r7] = r6;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.lang.String.format(r3, r10, r13);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r7] = r6;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.lang.String.format(r3, r10, r13);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r6 = 0;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        goto L_0x08d1;
-    L_0x0790:
-        r1 = r14.database;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        goto L_0x08d4;
+    L_0x0793:
+        r1 = r14.database;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r6 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d";
         r7 = 4;
-        r10 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r11 = 0;
-        r10[r11] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r11] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r11 = 1;
-        r10[r11] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r11] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r11 = 2;
-        r10[r11] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r11] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r11 = 3;
-        r10[r11] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.lang.String.format(r3, r6, r10);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r11] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.lang.String.format(r3, r6, r10);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r6 = 0;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        goto L_0x08d1;
-    L_0x07c2:
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        goto L_0x08d4;
+    L_0x07c5:
         r0 = move-exception;
         r8 = r10;
-    L_0x07c4:
+    L_0x07c7:
         r7 = r44;
         r1 = r0;
         r6 = r2;
@@ -7158,11 +6803,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r34;
         r14 = r35;
         r3 = r37;
-        goto L_0x0e03;
-    L_0x07d7:
+        goto L_0x0e06;
+    L_0x07da:
         r0 = move-exception;
         r8 = r10;
-    L_0x07d9:
+    L_0x07dc:
         r7 = r44;
         r1 = r0;
         r6 = r2;
@@ -7173,230 +6818,230 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r34;
         r14 = r35;
         r3 = r37;
-        goto L_0x0e1a;
-    L_0x07ec:
-        r8 = r10;
-        if (r50 == 0) goto L_0x08e2;
+        goto L_0x0e1d;
     L_0x07ef:
+        r8 = r10;
+        if (r50 == 0) goto L_0x08e5;
+    L_0x07f2:
         r6 = 0;
         r1 = (r21 > r6 ? 1 : (r21 == r6 ? 0 : -1));
-        if (r1 == 0) goto L_0x08a1;
-    L_0x07f5:
-        r1 = r14.database;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        if (r1 == 0) goto L_0x08a4;
+    L_0x07f8:
+        r1 = r14.database;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r6 = "SELECT end FROM messages_holes WHERE uid = %d AND end <= %d ORDER BY end DESC LIMIT 1";
         r7 = 2;
-        r10 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r13 = 0;
-        r10[r13] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r13] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r19 = 1;
-        r10[r19] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.lang.String.format(r3, r6, r10);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r1 = r1.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = r1.next();	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        if (r3 == 0) goto L_0x082a;
-    L_0x081d:
-        r3 = r1.intValue(r13);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r6 = (long) r3;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        if (r11 == 0) goto L_0x082c;
-    L_0x0824:
-        r10 = (long) r11;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r19] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.lang.String.format(r3, r6, r10);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r1 = r1.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = r1.next();	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        if (r3 == 0) goto L_0x082d;
+    L_0x0820:
+        r3 = r1.intValue(r13);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r6 = (long) r3;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        if (r11 == 0) goto L_0x082f;
+    L_0x0827:
+        r10 = (long) r11;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r3 = 32;
         r10 = r10 << r3;
         r6 = r6 | r10;
-        goto L_0x082c;
-    L_0x082a:
+        goto L_0x082f;
+    L_0x082d:
         r6 = 0;
-    L_0x082c:
-        r1.dispose();	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+    L_0x082f:
+        r1.dispose();	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r10 = 0;
         r1 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1));
-        if (r1 == 0) goto L_0x0870;
-    L_0x0835:
-        r1 = r14.database;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        if (r1 == 0) goto L_0x0873;
+    L_0x0838:
+        r1 = r14.database;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r10 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d";
         r11 = 5;
-        r13 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r11 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r11 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r19 = 0;
-        r13[r19] = r11;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r11 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r19] = r11;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r11 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r20 = 1;
-        r13[r20] = r11;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r11 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r20] = r11;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r11 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r21 = 2;
-        r13[r21] = r11;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r21] = r11;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r7 = 3;
-        r13[r7] = r6;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r7] = r6;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r7 = 4;
-        r13[r7] = r6;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.lang.String.format(r3, r10, r13);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r13[r7] = r6;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.lang.String.format(r3, r10, r13);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r6 = 0;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        goto L_0x08d1;
-    L_0x0870:
-        r1 = r14.database;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        goto L_0x08d4;
+    L_0x0873:
+        r1 = r14.database;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r6 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d ORDER BY m.date DESC, m.mid DESC LIMIT %d";
         r7 = 4;
-        r10 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r11 = 0;
-        r10[r11] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r11] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r11 = 1;
-        r10[r11] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r11] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r11 = 2;
-        r10[r11] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r7 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r11] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r7 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r11 = 3;
-        r10[r11] = r7;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.lang.String.format(r3, r6, r10);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r10[r11] = r7;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.lang.String.format(r3, r6, r10);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r6 = 0;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        goto L_0x08d1;
-    L_0x08a1:
-        r1 = r14.database;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        goto L_0x08d4;
+    L_0x08a4:
+        r1 = r14.database;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r7 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";
         r10 = 4;
-        r11 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r11 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r13 = 0;
-        r11[r13] = r10;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r10 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r11[r13] = r10;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r10 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r13 = 1;
-        r11[r13] = r10;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r11[r13] = r10;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r10 = 2;
-        r11[r10] = r3;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r11[r10] = r3;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r10 = 3;
-        r11[r10] = r3;	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r3 = java.lang.String.format(r6, r7, r11);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
+        r11[r10] = r3;	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r3 = java.lang.String.format(r6, r7, r11);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
         r6 = 0;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08df, all -> 0x08dc }
-    L_0x08d1:
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x08e2, all -> 0x08df }
+    L_0x08d4:
         r6 = r43;
         r4 = r44;
         r5 = r2;
         r2 = r30;
         r3 = 6;
         r10 = 0;
-        goto L_0x0fb2;
-    L_0x08dc:
-        r0 = move-exception;
-        goto L_0x07c4;
+        goto L_0x0fb5;
     L_0x08df:
         r0 = move-exception;
-        goto L_0x07d9;
+        goto L_0x07c7;
     L_0x08e2:
-        r1 = r14.database;	 Catch:{ Exception -> 0x09f6, all -> 0x09ea }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x09f6, all -> 0x09ea }
+        r0 = move-exception;
+        goto L_0x07dc;
+    L_0x08e5:
+        r1 = r14.database;	 Catch:{ Exception -> 0x09f9, all -> 0x09ed }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x09f9, all -> 0x09ed }
         r7 = "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0";
         r10 = 1;
-        r13 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x09f6, all -> 0x09ea }
-        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x09f6, all -> 0x09ea }
+        r13 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x09f9, all -> 0x09ed }
+        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x09f9, all -> 0x09ed }
         r38 = r8;
         r8 = 0;
-        r13[r8] = r10;	 Catch:{ Exception -> 0x09e8, all -> 0x09e6 }
-        r6 = java.lang.String.format(r6, r7, r13);	 Catch:{ Exception -> 0x09e8, all -> 0x09e6 }
-        r7 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x09e8, all -> 0x09e6 }
-        r1 = r1.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x09e8, all -> 0x09e6 }
-        r6 = r1.next();	 Catch:{ Exception -> 0x09e8, all -> 0x09e6 }
-        if (r6 == 0) goto L_0x090a;
-    L_0x0904:
-        r6 = r1.intValue(r8);	 Catch:{ Exception -> 0x09e8, all -> 0x09e6 }
+        r13[r8] = r10;	 Catch:{ Exception -> 0x09eb, all -> 0x09e9 }
+        r6 = java.lang.String.format(r6, r7, r13);	 Catch:{ Exception -> 0x09eb, all -> 0x09e9 }
+        r7 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x09eb, all -> 0x09e9 }
+        r1 = r1.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x09eb, all -> 0x09e9 }
+        r6 = r1.next();	 Catch:{ Exception -> 0x09eb, all -> 0x09e9 }
+        if (r6 == 0) goto L_0x090d;
+    L_0x0907:
+        r6 = r1.intValue(r8);	 Catch:{ Exception -> 0x09eb, all -> 0x09e9 }
         r10 = r6;
-        goto L_0x090b;
-    L_0x090a:
+        goto L_0x090e;
+    L_0x090d:
         r10 = 0;
-    L_0x090b:
-        r1.dispose();	 Catch:{ Exception -> 0x09ce, all -> 0x09b6 }
-        r1 = r14.database;	 Catch:{ Exception -> 0x09ce, all -> 0x09b6 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x09ce, all -> 0x09b6 }
+    L_0x090e:
+        r1.dispose();	 Catch:{ Exception -> 0x09d1, all -> 0x09b9 }
+        r1 = r14.database;	 Catch:{ Exception -> 0x09d1, all -> 0x09b9 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x09d1, all -> 0x09b9 }
         r7 = "SELECT max(end) FROM messages_holes WHERE uid = %d";
         r8 = 1;
-        r13 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x09ce, all -> 0x09b6 }
-        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x09ce, all -> 0x09b6 }
+        r13 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x09d1, all -> 0x09b9 }
+        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x09d1, all -> 0x09b9 }
         r50 = r10;
         r10 = 0;
-        r13[r10] = r8;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r6 = java.lang.String.format(r6, r7, r13);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r7 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r1 = r1.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r6 = r1.next();	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        if (r6 == 0) goto L_0x093d;
-    L_0x0930:
-        r6 = r1.intValue(r10);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r6 = (long) r6;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        if (r11 == 0) goto L_0x093f;
-    L_0x0937:
-        r10 = (long) r11;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r13[r10] = r8;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r6 = java.lang.String.format(r6, r7, r13);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r7 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r1 = r1.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r6 = r1.next();	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        if (r6 == 0) goto L_0x0940;
+    L_0x0933:
+        r6 = r1.intValue(r10);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r6 = (long) r6;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        if (r11 == 0) goto L_0x0942;
+    L_0x093a:
+        r10 = (long) r11;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r8 = 32;
         r10 = r10 << r8;
         r6 = r6 | r10;
-        goto L_0x093f;
-    L_0x093d:
+        goto L_0x0942;
+    L_0x0940:
         r6 = 0;
-    L_0x093f:
-        r1.dispose();	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+    L_0x0942:
+        r1.dispose();	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r10 = 0;
         r1 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1));
-        if (r1 == 0) goto L_0x097a;
-    L_0x0948:
-        r1 = r14.database;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        if (r1 == 0) goto L_0x097d;
+    L_0x094b:
+        r1 = r14.database;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r10 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";
         r11 = 4;
-        r13 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r11 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r13 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r11 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r19 = 0;
-        r13[r19] = r11;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r13[r19] = r11;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r7 = 1;
-        r13[r7] = r6;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r13[r7] = r6;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r6 = 2;
-        r13[r6] = r3;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r13[r6] = r3;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r6 = 3;
-        r13[r6] = r3;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r3 = java.lang.String.format(r8, r10, r13);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r13[r6] = r3;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r3 = java.lang.String.format(r8, r10, r13);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r6 = 0;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        goto L_0x09a3;
-    L_0x097a:
-        r1 = r14.database;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        goto L_0x09a6;
+    L_0x097d:
+        r1 = r14.database;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r7 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";
         r8 = 3;
-        r10 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r10 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r11 = 0;
-        r10[r11] = r8;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r10[r11] = r8;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r8 = 1;
-        r10[r8] = r3;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r10[r8] = r3;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r8 = 2;
-        r10[r8] = r3;	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r3 = java.lang.String.format(r6, r7, r10);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
+        r10[r8] = r3;	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r3 = java.lang.String.format(r6, r7, r10);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
         r6 = 0;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x09b4, all -> 0x09b2 }
-    L_0x09a3:
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x09b7, all -> 0x09b5 }
+    L_0x09a6:
         r6 = r43;
         r4 = r44;
         r39 = r50;
@@ -7405,33 +7050,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r8 = r38;
         r3 = 6;
         r10 = 0;
-        goto L_0x11c6;
-    L_0x09b2:
+        goto L_0x11c9;
+    L_0x09b5:
         r0 = move-exception;
-        goto L_0x09b9;
-    L_0x09b4:
+        goto L_0x09bc;
+    L_0x09b7:
         r0 = move-exception;
-        goto L_0x09d1;
-    L_0x09b6:
-        r0 = move-exception;
-        r50 = r10;
+        goto L_0x09d4;
     L_0x09b9:
-        r7 = r44;
-        r1 = r0;
-        r6 = r2;
-        r13 = r9;
-        r17 = r12;
-        r21 = r30;
-        r11 = r34;
-        r14 = r35;
-        r3 = r37;
-        r20 = r38;
-        r12 = r50;
-        goto L_0x17c1;
-    L_0x09ce:
         r0 = move-exception;
         r50 = r10;
-    L_0x09d1:
+    L_0x09bc:
         r7 = r44;
         r1 = r0;
         r6 = r2;
@@ -7443,81 +7072,97 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r37;
         r20 = r38;
         r12 = r50;
-        goto L_0x1796;
-    L_0x09e6:
+        goto L_0x17c4;
+    L_0x09d1:
         r0 = move-exception;
-        goto L_0x09ed;
-    L_0x09e8:
+        r50 = r10;
+    L_0x09d4:
+        r7 = r44;
+        r1 = r0;
+        r6 = r2;
+        r13 = r9;
+        r17 = r12;
+        r21 = r30;
+        r11 = r34;
+        r14 = r35;
+        r3 = r37;
+        r20 = r38;
+        r12 = r50;
+        goto L_0x1799;
+    L_0x09e9:
         r0 = move-exception;
-        goto L_0x09f9;
-    L_0x09ea:
+        goto L_0x09f0;
+    L_0x09eb:
         r0 = move-exception;
-        r38 = r8;
+        goto L_0x09fc;
     L_0x09ed:
-        r7 = r44;
-        r1 = r0;
-        r6 = r2;
-        r13 = r9;
-        r17 = r12;
-        goto L_0x0df9;
-    L_0x09f6:
         r0 = move-exception;
         r38 = r8;
-    L_0x09f9:
+    L_0x09f0:
         r7 = r44;
         r1 = r0;
         r6 = r2;
         r13 = r9;
         r17 = r12;
-        goto L_0x0e10;
-    L_0x0a02:
+        goto L_0x0dfc;
+    L_0x09f9:
+        r0 = move-exception;
+        r38 = r8;
+    L_0x09fc:
+        r7 = r44;
+        r1 = r0;
+        r6 = r2;
+        r13 = r9;
+        r17 = r12;
+        goto L_0x0e13;
+    L_0x0a05:
         r38 = r10;
-        r1 = r14.database;	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
+        r1 = r14.database;	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
         r6 = "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0";
         r7 = 1;
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
         r10 = 0;
-        r8[r10] = r7;	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
-        r3 = java.lang.String.format(r3, r6, r8);	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
-        r6 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
-        r1 = r1.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
-        r3 = r1.next();	 Catch:{ Exception -> 0x0e06, all -> 0x0def }
-        if (r3 == 0) goto L_0x0a2a;
-    L_0x0a24:
-        r3 = r1.intValue(r10);	 Catch:{ Exception -> 0x09e8, all -> 0x09e6 }
+        r8[r10] = r7;	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
+        r3 = java.lang.String.format(r3, r6, r8);	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
+        r6 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
+        r1 = r1.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
+        r3 = r1.next();	 Catch:{ Exception -> 0x0e09, all -> 0x0df2 }
+        if (r3 == 0) goto L_0x0a2d;
+    L_0x0a27:
+        r3 = r1.intValue(r10);	 Catch:{ Exception -> 0x09eb, all -> 0x09e9 }
         r10 = r3;
-        goto L_0x0a2b;
-    L_0x0a2a:
+        goto L_0x0a2e;
+    L_0x0a2d:
         r10 = 0;
-    L_0x0a2b:
-        r1.dispose();	 Catch:{ Exception -> 0x0dd7, all -> 0x0dbf }
+    L_0x0a2e:
+        r1.dispose();	 Catch:{ Exception -> 0x0dda, all -> 0x0dc2 }
         r1 = 4;
-        if (r15 != r1) goto L_0x0b9a;
-    L_0x0a31:
-        if (r51 == 0) goto L_0x0b9a;
-    L_0x0a33:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
+        if (r15 != r1) goto L_0x0b9d;
+    L_0x0a34:
+        if (r51 == 0) goto L_0x0b9d;
+    L_0x0a36:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
         r6 = "SELECT max(mid) FROM messages WHERE uid = %d AND date <= %d AND mid > 0";
         r7 = 2;
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
         r13 = 0;
-        r8[r13] = r7;	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r7 = java.lang.Integer.valueOf(r51);	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
+        r8[r13] = r7;	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r7 = java.lang.Integer.valueOf(r51);	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
         r19 = 1;
-        r8[r19] = r7;	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r3 = java.lang.String.format(r3, r6, r8);	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r1 = r1.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r3 = r1.next();	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        if (r3 == 0) goto L_0x0a8a;
-    L_0x0a5b:
-        r3 = r1.intValue(r13);	 Catch:{ Exception -> 0x0a75, all -> 0x0a60 }
-        goto L_0x0a8b;
-    L_0x0a60:
+        r8[r19] = r7;	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r3 = java.lang.String.format(r3, r6, r8);	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r1 = r1.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r3 = r1.next();	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        if (r3 == 0) goto L_0x0a8d;
+    L_0x0a5e:
+        r3 = r1.intValue(r13);	 Catch:{ Exception -> 0x0a78, all -> 0x0a63 }
+        goto L_0x0a8e;
+    L_0x0a63:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -7530,8 +7175,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r37;
         r20 = r38;
         r12 = r10;
-        goto L_0x17c1;
-    L_0x0a75:
+        goto L_0x17c4;
+    L_0x0a78:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -7544,161 +7189,145 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r37;
         r20 = r38;
         r12 = r10;
-        goto L_0x1796;
-    L_0x0a8a:
+        goto L_0x1799;
+    L_0x0a8d:
         r3 = -1;
-    L_0x0a8b:
-        r1.dispose();	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r1 = r14.database;	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
+    L_0x0a8e:
+        r1.dispose();	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r1 = r14.database;	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
         r8 = "SELECT min(mid) FROM messages WHERE uid = %d AND date >= %d AND mid > 0";
         r13 = 2;
-        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
-        r13 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0b82, all -> 0x0b6a }
+        r6 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
+        r13 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0b85, all -> 0x0b6d }
         r39 = r10;
         r10 = 0;
-        r6[r10] = r13;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r13 = java.lang.Integer.valueOf(r51);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r6[r10] = r13;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r13 = java.lang.Integer.valueOf(r51);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r19 = 1;
-        r6[r19] = r13;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r6 = java.lang.String.format(r7, r8, r6);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r7 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r1 = r1.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r6 = r1.next();	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        if (r6 == 0) goto L_0x0ad1;
-    L_0x0ab8:
-        r6 = r1.intValue(r10);	 Catch:{ Exception -> 0x0ac7, all -> 0x0abd }
-        goto L_0x0ad2;
-    L_0x0abd:
+        r6[r19] = r13;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r6 = java.lang.String.format(r7, r8, r6);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r7 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r1 = r1.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r6 = r1.next();	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        if (r6 == 0) goto L_0x0ad4;
+    L_0x0abb:
+        r6 = r1.intValue(r10);	 Catch:{ Exception -> 0x0aca, all -> 0x0ac0 }
+        goto L_0x0ad5;
+    L_0x0ac0:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
         r6 = r2;
         r13 = r9;
         r17 = r12;
-        goto L_0x0dcb;
-    L_0x0ac7:
+        goto L_0x0dce;
+    L_0x0aca:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
         r6 = r2;
         r13 = r9;
         r17 = r12;
-        goto L_0x0de3;
-    L_0x0ad1:
+        goto L_0x0de6;
+    L_0x0ad4:
         r6 = -1;
-    L_0x0ad2:
-        r1.dispose();	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+    L_0x0ad5:
+        r1.dispose();	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r1 = -1;
-        if (r3 == r1) goto L_0x0b9c;
-    L_0x0ad8:
-        if (r6 == r1) goto L_0x0b9c;
-    L_0x0ada:
-        if (r3 != r6) goto L_0x0ae0;
-    L_0x0adc:
+        if (r3 == r1) goto L_0x0b9f;
+    L_0x0adb:
+        if (r6 == r1) goto L_0x0b9f;
+    L_0x0add:
+        if (r3 != r6) goto L_0x0ae3;
+    L_0x0adf:
         r6 = r3;
         r1 = r12;
-        goto L_0x0b9f;
-    L_0x0ae0:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        goto L_0x0ba2;
+    L_0x0ae3:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r8 = "SELECT start FROM messages_holes WHERE uid = %d AND start <= %d AND end > %d";
         r10 = 3;
-        r13 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r13 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r19 = 0;
-        r13[r19] = r10;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r10 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r13[r19] = r10;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r10 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r20 = 1;
-        r13[r20] = r10;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r10 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r13[r20] = r10;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r10 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r25 = 2;
-        r13[r25] = r10;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r7 = java.lang.String.format(r7, r8, r13);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r13[r25] = r10;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r7 = java.lang.String.format(r7, r8, r13);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r8 = 0;
-        r10 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r1 = r1.queryFinalized(r7, r10);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r7 = r1.next();	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        if (r7 == 0) goto L_0x0b13;
-    L_0x0b12:
+        r10 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r1 = r1.queryFinalized(r7, r10);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r7 = r1.next();	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        if (r7 == 0) goto L_0x0b16;
+    L_0x0b15:
         r3 = -1;
-    L_0x0b13:
-        r1.dispose();	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+    L_0x0b16:
+        r1.dispose();	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r1 = -1;
-        if (r3 == r1) goto L_0x0b9c;
-    L_0x0b19:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        if (r3 == r1) goto L_0x0b9f;
+    L_0x0b1c:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r7 = "SELECT start FROM messages_holes WHERE uid = %d AND start <= %d AND end > %d";
         r8 = 3;
-        r10 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r10 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r13 = 0;
-        r10[r13] = r8;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r8 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r10[r13] = r8;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r8 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r13 = 1;
-        r10[r13] = r8;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r8 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r10[r13] = r8;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r8 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r13 = 2;
-        r10[r13] = r8;	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r3 = java.lang.String.format(r3, r7, r10);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+        r10[r13] = r8;	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r3 = java.lang.String.format(r3, r7, r10);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r7 = 0;
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r1 = r1.queryFinalized(r3, r8);	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        r3 = r1.next();	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
-        if (r3 == 0) goto L_0x0b49;
-    L_0x0b48:
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r1 = r1.queryFinalized(r3, r8);	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        r3 = r1.next();	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
+        if (r3 == 0) goto L_0x0b4c;
+    L_0x0b4b:
         r6 = -1;
-    L_0x0b49:
-        r1.dispose();	 Catch:{ Exception -> 0x0b68, all -> 0x0b66 }
+    L_0x0b4c:
+        r1.dispose();	 Catch:{ Exception -> 0x0b6b, all -> 0x0b69 }
         r1 = -1;
-        if (r6 == r1) goto L_0x0b9c;
-    L_0x0b4f:
+        if (r6 == r1) goto L_0x0b9f;
+    L_0x0b52:
         r7 = (long) r6;
         r16 = 0;
         r1 = (r7 > r16 ? 1 : (r7 == r16 ? 0 : -1));
-        if (r1 == 0) goto L_0x0b61;
-    L_0x0b56:
-        if (r11 == 0) goto L_0x0b61;
-    L_0x0b58:
+        if (r1 == 0) goto L_0x0b64;
+    L_0x0b59:
+        if (r11 == 0) goto L_0x0b64;
+    L_0x0b5b:
         r1 = r12;
         r12 = (long) r11;
         r3 = 32;
         r12 = r12 << r3;
         r21 = r7 | r12;
         r3 = r6;
-        goto L_0x0ba1;
-    L_0x0b61:
+        goto L_0x0ba4;
+    L_0x0b64:
         r1 = r12;
         r3 = r6;
         r21 = r7;
-        goto L_0x0ba1;
-    L_0x0b66:
+        goto L_0x0ba4;
+    L_0x0b69:
         r0 = move-exception;
-        goto L_0x0b6d;
-    L_0x0b68:
+        goto L_0x0b70;
+    L_0x0b6b:
         r0 = move-exception;
-        goto L_0x0b85;
-    L_0x0b6a:
-        r0 = move-exception;
-        r39 = r10;
+        goto L_0x0b88;
     L_0x0b6d:
-        r1 = r12;
-        r7 = r44;
-        r17 = r1;
-        r6 = r2;
-        r13 = r9;
-        r21 = r30;
-        r11 = r34;
-        r14 = r35;
-        r3 = r37;
-        r20 = r38;
-        r12 = r39;
-        goto L_0x17c0;
-    L_0x0b82:
         r0 = move-exception;
         r39 = r10;
-    L_0x0b85:
+    L_0x0b70:
         r1 = r12;
         r7 = r44;
         r17 = r1;
@@ -7710,100 +7339,116 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r37;
         r20 = r38;
         r12 = r39;
-        goto L_0x1158;
-    L_0x0b9a:
+        goto L_0x17c3;
+    L_0x0b85:
+        r0 = move-exception;
         r39 = r10;
-    L_0x0b9c:
+    L_0x0b88:
+        r1 = r12;
+        r7 = r44;
+        r17 = r1;
+        r6 = r2;
+        r13 = r9;
+        r21 = r30;
+        r11 = r34;
+        r14 = r35;
+        r3 = r37;
+        r20 = r38;
+        r12 = r39;
+        goto L_0x115b;
+    L_0x0b9d:
+        r39 = r10;
+    L_0x0b9f:
         r1 = r12;
         r6 = r43;
-    L_0x0b9f:
+    L_0x0ba2:
         r3 = r44;
-    L_0x0ba1:
-        if (r6 == 0) goto L_0x0ba5;
-    L_0x0ba3:
-        r10 = 1;
-        goto L_0x0ba6;
-    L_0x0ba5:
-        r10 = 0;
+    L_0x0ba4:
+        if (r6 == 0) goto L_0x0ba8;
     L_0x0ba6:
-        if (r10 == 0) goto L_0x0bf9;
+        r10 = 1;
+        goto L_0x0ba9;
     L_0x0ba8:
-        r7 = r14.database;	 Catch:{ Exception -> 0x0bef, all -> 0x0be5 }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0bef, all -> 0x0be5 }
+        r10 = 0;
+    L_0x0ba9:
+        if (r10 == 0) goto L_0x0bfc;
+    L_0x0bab:
+        r7 = r14.database;	 Catch:{ Exception -> 0x0bf2, all -> 0x0be8 }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0bf2, all -> 0x0be8 }
         r12 = "SELECT start FROM messages_holes WHERE uid = %d AND start < %d AND end > %d";
         r43 = r1;
         r13 = 3;
-        r1 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
-        r13 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
+        r1 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
+        r13 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
         r19 = 0;
-        r1[r19] = r13;	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
-        r13 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
+        r1[r19] = r13;	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
+        r13 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
         r20 = 1;
-        r1[r20] = r13;	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
-        r13 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
+        r1[r20] = r13;	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
+        r13 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
         r25 = 2;
-        r1[r25] = r13;	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
-        r1 = java.lang.String.format(r8, r12, r1);	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
+        r1[r25] = r13;	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
+        r1 = java.lang.String.format(r8, r12, r1);	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
         r8 = 0;
-        r12 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
-        r1 = r7.queryFinalized(r1, r12);	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
-        r7 = r1.next();	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
-        if (r7 == 0) goto L_0x0bdd;
-    L_0x0bdc:
+        r12 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
+        r1 = r7.queryFinalized(r1, r12);	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
+        r7 = r1.next();	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
+        if (r7 == 0) goto L_0x0be0;
+    L_0x0bdf:
         r10 = 0;
-    L_0x0bdd:
-        r1.dispose();	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
-        goto L_0x0bfb;
-    L_0x0be1:
+    L_0x0be0:
+        r1.dispose();	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
+        goto L_0x0bfe;
+    L_0x0be4:
         r0 = move-exception;
-        goto L_0x0be8;
-    L_0x0be3:
+        goto L_0x0beb;
+    L_0x0be6:
         r0 = move-exception;
-        goto L_0x0bf2;
-    L_0x0be5:
-        r0 = move-exception;
-        r43 = r1;
+        goto L_0x0bf5;
     L_0x0be8:
-        r17 = r43;
-        r1 = r0;
-        r6 = r2;
-        r7 = r3;
-        goto L_0x0dca;
-    L_0x0bef:
         r0 = move-exception;
         r43 = r1;
-    L_0x0bf2:
+    L_0x0beb:
         r17 = r43;
         r1 = r0;
         r6 = r2;
         r7 = r3;
-        goto L_0x0de2;
-    L_0x0bf9:
+        goto L_0x0dcd;
+    L_0x0bf2:
+        r0 = move-exception;
         r43 = r1;
-    L_0x0bfb:
-        if (r10 == 0) goto L_0x0d30;
-    L_0x0bfd:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r10 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
+    L_0x0bf5:
+        r17 = r43;
+        r1 = r0;
+        r6 = r2;
+        r7 = r3;
+        goto L_0x0de5;
+    L_0x0bfc:
+        r43 = r1;
+    L_0x0bfe:
+        if (r10 == 0) goto L_0x0d33;
+    L_0x0CLASSNAME:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r10 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
         r12 = "SELECT start FROM messages_holes WHERE uid = %d AND start >= %d ORDER BY start ASC LIMIT 1";
         r13 = 2;
-        r7 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
+        r7 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
         r13 = 0;
-        r7[r13] = r8;	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r8 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
+        r7[r13] = r8;	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r8 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
         r19 = 1;
-        r7[r19] = r8;	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r7 = java.lang.String.format(r10, r12, r7);	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r8 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r1 = r1.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r7 = r1.next();	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
+        r7[r19] = r8;	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r7 = java.lang.String.format(r10, r12, r7);	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r8 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r1 = r1.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r7 = r1.next();	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
         if (r7 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
-        r7 = r1.intValue(r13);	 Catch:{ Exception -> 0x0be3, all -> 0x0be1 }
+        r7 = r1.intValue(r13);	 Catch:{ Exception -> 0x0be6, all -> 0x0be4 }
         r7 = (long) r7;
         if (r11 == 0) goto L_0x0CLASSNAME;
-    L_0x0c2c:
+    L_0x0c2f:
         r12 = (long) r11;
         r10 = 32;
         r12 = r12 << r10;
@@ -7812,261 +7457,261 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0CLASSNAME:
         r7 = 0;
     L_0x0CLASSNAME:
-        r1.dispose();	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r1 = r14.database;	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
-        r10 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d2b, all -> 0x0d26 }
+        r1.dispose();	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r1 = r14.database;	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
+        r10 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d2e, all -> 0x0d29 }
         r12 = "SELECT end FROM messages_holes WHERE uid = %d AND end <= %d ORDER BY end DESC LIMIT 1";
         r44 = r3;
         r13 = 2;
-        r3 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r13 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r3 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r13 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 0;
-        r3[r4] = r13;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r5 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r3[r4] = r13;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r5 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r13 = 1;
-        r3[r13] = r5;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.String.format(r10, r12, r3);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r5 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r1 = r1.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = r1.next();	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        if (r3 == 0) goto L_0x0c6d;
+        r3[r13] = r5;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.String.format(r10, r12, r3);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r5 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r1 = r1.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = r1.next();	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        if (r3 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
-        r3 = r1.intValue(r4);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = (long) r3;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        if (r11 == 0) goto L_0x0c6f;
-    L_0x0CLASSNAME:
-        r12 = (long) r11;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r3 = r1.intValue(r4);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = (long) r3;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        if (r11 == 0) goto L_0x0CLASSNAME;
+    L_0x0c6a:
+        r12 = (long) r11;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r5 = 32;
         r12 = r12 << r5;
         r3 = r3 | r12;
-        goto L_0x0c6f;
-    L_0x0c6d:
+        goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
         r3 = 1;
-    L_0x0c6f:
-        r1.dispose();	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+    L_0x0CLASSNAME:
+        r1.dispose();	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r12 = 0;
         r1 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1));
-        if (r1 != 0) goto L_0x0cc2;
-    L_0x0CLASSNAME:
+        if (r1 != 0) goto L_0x0cc5;
+    L_0x0c7b:
         r12 = 1;
         r1 = (r3 > r12 ? 1 : (r3 == r12 ? 0 : -1));
-        if (r1 == 0) goto L_0x0c7f;
-    L_0x0c7e:
-        goto L_0x0cc2;
-    L_0x0c7f:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        if (r1 == 0) goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
+        goto L_0x0cc5;
+    L_0x0CLASSNAME:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
         r5 = 6;
-        r7 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r5 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r5 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = 0;
-        r7[r8] = r5;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r5 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r8] = r5;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r5 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = 1;
-        r7[r8] = r5;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r8] = r5;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r5 = r2 / 2;
-        r5 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r5 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = 2;
-        r7[r8] = r5;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r5 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r8] = r5;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r5 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = 3;
-        r7[r8] = r5;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r5 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r8] = r5;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r5 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = 4;
-        r7[r8] = r5;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r8] = r5;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r5 = r2 / 2;
-        r5 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r5 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = 5;
-        r7[r8] = r5;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.String.format(r3, r4, r7);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r8] = r5;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.String.format(r3, r4, r7);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 0;
-        r5 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r1 = r1.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        goto L_0x0d23;
-    L_0x0cc2:
+        r5 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r1 = r1.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        goto L_0x0d26;
+    L_0x0cc5:
         r12 = 0;
         r1 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1));
-        if (r1 != 0) goto L_0x0cd2;
-    L_0x0cc8:
+        if (r1 != 0) goto L_0x0cd5;
+    L_0x0ccb:
         r7 = NUM; // 0x3b9aca00 float:0.NUM double:4.94065646E-315;
-        if (r11 == 0) goto L_0x0cd2;
-    L_0x0ccd:
-        r10 = (long) r11;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        if (r11 == 0) goto L_0x0cd5;
+    L_0x0cd0:
+        r10 = (long) r11;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r1 = 32;
         r10 = r10 << r1;
         r7 = r7 | r10;
-    L_0x0cd2:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+    L_0x0cd5:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r10 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND (m.mid <= %d OR m.mid < 0) ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
         r11 = 8;
-        r11 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r12 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r11 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r12 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r13 = 0;
-        r11[r13] = r12;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r12 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r11[r13] = r12;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r12 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r13 = 1;
-        r11[r13] = r12;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.Long.valueOf(r3);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r11[r13] = r12;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.Long.valueOf(r3);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 2;
-        r11[r4] = r3;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r11[r4] = r3;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r3 = r2 / 2;
-        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 3;
-        r11[r4] = r3;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r11[r4] = r3;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 4;
-        r11[r4] = r3;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r11[r4] = r3;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 5;
-        r11[r4] = r3;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.Long.valueOf(r7);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r11[r4] = r3;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.Long.valueOf(r7);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 6;
-        r11[r4] = r3;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r11[r4] = r3;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r3 = 7;
         r4 = r2 / 2;
-        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r11[r3] = r4;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.String.format(r5, r10, r11);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r11[r3] = r4;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.String.format(r5, r10, r11);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 0;
-        r5 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r1 = r1.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-    L_0x0d23:
-        r5 = 6;
-        goto L_0x0db2;
+        r5 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r1 = r1.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
     L_0x0d26:
+        r5 = 6;
+        goto L_0x0db5;
+    L_0x0d29:
         r0 = move-exception;
         r44 = r3;
-        goto L_0x0dc4;
-    L_0x0d2b:
+        goto L_0x0dc7;
+    L_0x0d2e:
         r0 = move-exception;
         r44 = r3;
-        goto L_0x0ddc;
-    L_0x0d30:
+        goto L_0x0ddf;
+    L_0x0d33:
         r44 = r3;
         r1 = 2;
-        if (r15 != r1) goto L_0x0db0;
-    L_0x0d35:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        if (r15 != r1) goto L_0x0db3;
+    L_0x0d38:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid != 0 AND out = 0 AND read_state IN(0,2)";
         r5 = 1;
-        r7 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r5 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r5 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = 0;
-        r7[r8] = r5;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.String.format(r3, r4, r7);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r4 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r1 = r1.queryFinalized(r3, r4);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = r1.next();	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        if (r3 == 0) goto L_0x0d5a;
-    L_0x0d55:
-        r10 = r1.intValue(r8);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        goto L_0x0d5b;
-    L_0x0d5a:
+        r7[r8] = r5;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.String.format(r3, r4, r7);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r4 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r1 = r1.queryFinalized(r3, r4);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = r1.next();	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        if (r3 == 0) goto L_0x0d5d;
+    L_0x0d58:
+        r10 = r1.intValue(r8);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        goto L_0x0d5e;
+    L_0x0d5d:
         r10 = 0;
-    L_0x0d5b:
-        r1.dispose();	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        if (r10 != r9) goto L_0x0da5;
-    L_0x0d60:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+    L_0x0d5e:
+        r1.dispose();	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        if (r10 != r9) goto L_0x0da8;
+    L_0x0d63:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
         r5 = 6;
-        r7 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r10 = 0;
-        r7[r10] = r8;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r8 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r10] = r8;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r8 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r10 = 1;
-        r7[r10] = r8;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r10] = r8;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = r2 / 2;
-        r8 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r8 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r10 = 2;
-        r7[r10] = r8;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r10] = r8;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r8 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r10 = 3;
-        r7[r10] = r8;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r8 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r10] = r8;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r8 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r10 = 4;
-        r7[r10] = r8;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r10] = r8;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r8 = r2 / 2;
-        r8 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r8 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r10 = 5;
-        r7[r10] = r8;	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r3 = java.lang.String.format(r3, r4, r7);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7[r10] = r8;	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r3 = java.lang.String.format(r3, r4, r7);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r4 = 0;
-        r7 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
-        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x0dae, all -> 0x0dac }
+        r7 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
+        r1 = r1.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x0db1, all -> 0x0daf }
         r3 = r1;
         r1 = 1;
-        goto L_0x0da9;
-    L_0x0da5:
+        goto L_0x0dac;
+    L_0x0da8:
         r5 = 6;
         r1 = 0;
         r3 = r1;
         r1 = 0;
-    L_0x0da9:
+    L_0x0dac:
         r10 = r1;
         r1 = r3;
-        goto L_0x0db3;
-    L_0x0dac:
+        goto L_0x0db6;
+    L_0x0daf:
         r0 = move-exception;
-        goto L_0x0dc4;
-    L_0x0dae:
+        goto L_0x0dc7;
+    L_0x0db1:
         r0 = move-exception;
-        goto L_0x0ddc;
-    L_0x0db0:
+        goto L_0x0ddf;
+    L_0x0db3:
         r5 = 6;
         r1 = 0;
-    L_0x0db2:
+    L_0x0db5:
         r10 = 0;
-    L_0x0db3:
+    L_0x0db6:
         r12 = r43;
         r4 = r44;
         r5 = r2;
         r2 = r30;
         r8 = r38;
         r3 = 6;
-        goto L_0x11c6;
-    L_0x0dbf:
+        goto L_0x11c9;
+    L_0x0dc2:
         r0 = move-exception;
         r39 = r10;
         r43 = r12;
-    L_0x0dc4:
+    L_0x0dc7:
         r17 = r43;
         r7 = r44;
         r1 = r0;
         r6 = r2;
-    L_0x0dca:
+    L_0x0dcd:
         r13 = r9;
-    L_0x0dcb:
+    L_0x0dce:
         r21 = r30;
         r11 = r34;
         r14 = r35;
         r3 = r37;
         r20 = r38;
-        goto L_0x1481;
-    L_0x0dd7:
+        goto L_0x1484;
+    L_0x0dda:
         r0 = move-exception;
         r39 = r10;
         r43 = r12;
-    L_0x0ddc:
+    L_0x0ddf:
         r17 = r43;
         r7 = r44;
         r1 = r0;
         r6 = r2;
-    L_0x0de2:
+    L_0x0de5:
         r13 = r9;
-    L_0x0de3:
+    L_0x0de6:
         r21 = r30;
         r11 = r34;
         r14 = r35;
         r3 = r37;
         r20 = r38;
-        goto L_0x14a1;
-    L_0x0def:
+        goto L_0x14a4;
+    L_0x0df2:
         r0 = move-exception;
         r43 = r12;
         r17 = r43;
@@ -8074,16 +7719,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0;
         r6 = r2;
         r13 = r9;
-    L_0x0df9:
+    L_0x0dfc:
         r21 = r30;
         r11 = r34;
         r14 = r35;
         r3 = r37;
         r20 = r38;
-    L_0x0e03:
-        r12 = 0;
-        goto L_0x17c1;
     L_0x0e06:
+        r12 = 0;
+        goto L_0x17c4;
+    L_0x0e09:
         r0 = move-exception;
         r43 = r12;
         r17 = r43;
@@ -8091,16 +7736,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0;
         r6 = r2;
         r13 = r9;
-    L_0x0e10:
+    L_0x0e13:
         r21 = r30;
         r11 = r34;
         r14 = r35;
         r3 = r37;
         r20 = r38;
-    L_0x0e1a:
-        r12 = 0;
-        goto L_0x1796;
     L_0x0e1d:
+        r12 = 0;
+        goto L_0x1799;
+    L_0x0e20:
         r0 = move-exception;
         r38 = r10;
         r7 = r44;
@@ -8112,11 +7757,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = r35;
         r3 = r37;
         r20 = r38;
-    L_0x0e2f:
+    L_0x0e32:
         r12 = 0;
         r17 = 0;
-        goto L_0x17c1;
-    L_0x0e34:
+        goto L_0x17c4;
+    L_0x0e37:
         r0 = move-exception;
         r38 = r10;
         r7 = r44;
@@ -8128,11 +7773,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = r35;
         r3 = r37;
         r20 = r38;
-    L_0x0e46:
+    L_0x0e49:
         r12 = 0;
         r17 = 0;
-        goto L_0x1796;
-    L_0x0e4b:
+        goto L_0x1799;
+    L_0x0e4e:
         r14 = r42;
         r15 = r49;
         r31 = r1;
@@ -8147,82 +7792,82 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = "SELECT min(mid) FROM messages WHERE uid = %d AND mid < 0";
         r3 = 3;
         if (r15 != r3) goto L_0x0var_;
-    L_0x0e65:
+    L_0x0e68:
         if (r50 != 0) goto L_0x0var_;
-    L_0x0e67:
+    L_0x0e6a:
+        r3 = r14.database;	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        r6 = 1;
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        r9 = 0;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        r4 = java.lang.String.format(r4, r1, r7);	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        r6 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        r4 = r3.next();	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        if (r4 == 0) goto L_0x0e8d;
+    L_0x0e88:
+        r10 = r3.intValue(r9);	 Catch:{ Exception -> 0x0var_, all -> 0x0f5a }
+        goto L_0x0e8e;
+    L_0x0e8d:
+        r10 = 0;
+    L_0x0e8e:
+        r3.dispose();	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
         r3 = r14.database;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
         r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r6 = 1;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r9 = 0;
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r4 = java.lang.String.format(r4, r1, r7);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r6 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r4 = r3.next();	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        if (r4 == 0) goto L_0x0e8a;
-    L_0x0e85:
-        r10 = r3.intValue(r9);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        goto L_0x0e8b;
-    L_0x0e8a:
-        r10 = 0;
-    L_0x0e8b:
-        r3.dispose();	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        r3 = r14.database;	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
         r6 = "SELECT max(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid < 0";
         r7 = 1;
-        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
+        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
         r11 = 0;
-        r9[r11] = r7;	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        r4 = java.lang.String.format(r4, r6, r9);	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        r6 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        r4 = r3.next();	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        if (r4 == 0) goto L_0x0eb8;
-    L_0x0eae:
-        r4 = r3.intValue(r11);	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
+        r9[r11] = r7;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r4 = java.lang.String.format(r4, r6, r9);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r6 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r4 = r3.next();	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        if (r4 == 0) goto L_0x0ebb;
+    L_0x0eb1:
+        r4 = r3.intValue(r11);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
         r6 = 1;
-        r7 = r3.intValue(r6);	 Catch:{ Exception -> 0x0f4e, all -> 0x0var_ }
-        goto L_0x0eba;
-    L_0x0eb8:
+        r7 = r3.intValue(r6);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        goto L_0x0ebd;
+    L_0x0ebb:
         r4 = 0;
         r7 = 0;
-    L_0x0eba:
-        r3.dispose();	 Catch:{ Exception -> 0x0var_, all -> 0x0f1f }
-        if (r4 == 0) goto L_0x0var_;
-    L_0x0ebf:
-        r3 = r14.database;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
+    L_0x0ebd:
+        r3.dispose();	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        if (r4 == 0) goto L_0x0f1a;
+    L_0x0ec2:
+        r3 = r14.database;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
         r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid <= %d AND out = 0 AND read_state IN(0,2)";
         r10 = 2;
-        r11 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
+        r11 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        r10 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
         r12 = 0;
-        r11[r12] = r10;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        r10 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
+        r11[r12] = r10;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        r10 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
         r13 = 1;
-        r11[r13] = r10;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        r6 = java.lang.String.format(r6, r9, r11);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        r9 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        if (r6 == 0) goto L_0x0eeb;
-    L_0x0ee6:
-        r10 = r3.intValue(r12);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0b }
-        goto L_0x0eec;
-    L_0x0eeb:
+        r11[r13] = r10;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        r6 = java.lang.String.format(r6, r9, r11);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        r9 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        if (r6 == 0) goto L_0x0eee;
+    L_0x0ee9:
+        r10 = r3.intValue(r12);	 Catch:{ Exception -> 0x0var_, all -> 0x0f0e }
+        goto L_0x0eef;
+    L_0x0eee:
         r10 = 0;
-    L_0x0eec:
-        r3.dispose();	 Catch:{ Exception -> 0x0var_, all -> 0x0ef7 }
+    L_0x0eef:
+        r3.dispose();	 Catch:{ Exception -> 0x0var_, all -> 0x0efa }
         r34 = r4;
         r35 = r7;
         r9 = r10;
         r3 = 3;
-        goto L_0x0var_;
-    L_0x0ef7:
+        goto L_0x0f7a;
+    L_0x0efa:
         r0 = move-exception;
         r1 = r0;
         r6 = r2;
@@ -8231,7 +7876,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r10;
         r3 = r37;
         r12 = 0;
-        goto L_0x0var_;
+        goto L_0x0f2b;
     L_0x0var_:
         r0 = move-exception;
         r1 = r0;
@@ -8241,8 +7886,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r10;
         r3 = r37;
         r12 = 0;
-        goto L_0x0f3b;
-    L_0x0f0b:
+        goto L_0x0f3e;
+    L_0x0f0e:
         r0 = move-exception;
         r1 = r0;
         r6 = r2;
@@ -8255,61 +7900,73 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r2;
         r11 = r4;
         r14 = r7;
-        goto L_0x0var_;
-    L_0x0var_:
+        goto L_0x0f3a;
+    L_0x0f1a:
         r35 = r7;
         r34 = r10;
         r3 = 3;
         r9 = 0;
+        goto L_0x0f7a;
+    L_0x0var_:
+        r0 = move-exception;
+        r1 = r0;
+        r6 = r2;
+        r14 = r7;
+        r11 = r10;
+    L_0x0var_:
+        r3 = r37;
+        r12 = 0;
+        r13 = 0;
+    L_0x0f2b:
+        r17 = 1;
+        r20 = 0;
+        r21 = 0;
+        r7 = r44;
+        goto L_0x17c4;
+    L_0x0var_:
+        r0 = move-exception;
+        r1 = r0;
+        r6 = r2;
+        r14 = r7;
+        r11 = r10;
+    L_0x0f3a:
+        r3 = r37;
+        r12 = 0;
+        r13 = 0;
+    L_0x0f3e:
+        r17 = 1;
+        r20 = 0;
+        r21 = 0;
+        r7 = r44;
+        goto L_0x1799;
+    L_0x0var_:
+        r0 = move-exception;
+        r7 = r44;
+        r1 = r0;
+        r6 = r2;
+        r11 = r10;
+        r3 = r37;
         goto L_0x0var_;
-    L_0x0f1f:
+    L_0x0var_:
         r0 = move-exception;
+        r7 = r44;
         r1 = r0;
         r6 = r2;
-        r14 = r7;
         r11 = r10;
-    L_0x0var_:
         r3 = r37;
+        goto L_0x0f6f;
+    L_0x0f5a:
+        r0 = move-exception;
+        r7 = r44;
+        r1 = r0;
+        r6 = r2;
+        r3 = r37;
+        r11 = 0;
+    L_0x0var_:
         r12 = 0;
         r13 = 0;
-    L_0x0var_:
-        r17 = 1;
-        r20 = 0;
-        r21 = 0;
-        r7 = r44;
-        goto L_0x17c1;
-    L_0x0var_:
-        r0 = move-exception;
-        r1 = r0;
-        r6 = r2;
-        r14 = r7;
-        r11 = r10;
-    L_0x0var_:
-        r3 = r37;
-        r12 = 0;
-        r13 = 0;
-    L_0x0f3b:
-        r17 = 1;
-        r20 = 0;
-        r21 = 0;
-        r7 = r44;
-        goto L_0x1796;
-    L_0x0var_:
-        r0 = move-exception;
-        r7 = r44;
-        r1 = r0;
-        r6 = r2;
-        r11 = r10;
-        r3 = r37;
-        goto L_0x0f5f;
-    L_0x0f4e:
-        r0 = move-exception;
-        r7 = r44;
-        r1 = r0;
-        r6 = r2;
-        r11 = r10;
-        r3 = r37;
-        goto L_0x0f6c;
+        r14 = 0;
+        goto L_0x1762;
     L_0x0var_:
         r0 = move-exception;
         r7 = r44;
@@ -8317,69 +7974,57 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r2;
         r3 = r37;
         r11 = 0;
-    L_0x0f5f:
+    L_0x0f6f:
         r12 = 0;
         r13 = 0;
         r14 = 0;
-        goto L_0x175f;
-    L_0x0var_:
-        r0 = move-exception;
-        r7 = r44;
-        r1 = r0;
-        r6 = r2;
-        r3 = r37;
-        r11 = 0;
-    L_0x0f6c:
-        r12 = 0;
-        r13 = 0;
-        r14 = 0;
-        goto L_0x1770;
+        goto L_0x1773;
     L_0x0var_:
         r3 = 3;
         r9 = 0;
         r34 = 0;
         r35 = 0;
-    L_0x0var_:
-        if (r15 == r3) goto L_0x115b;
-    L_0x0var_:
-        r4 = 4;
-        if (r15 != r4) goto L_0x0f7e;
+    L_0x0f7a:
+        if (r15 == r3) goto L_0x115e;
     L_0x0f7c:
-        goto L_0x115b;
-    L_0x0f7e:
-        r4 = 1;
-        if (r15 != r4) goto L_0x0fd2;
+        r4 = 4;
+        if (r15 != r4) goto L_0x0var_;
+    L_0x0f7f:
+        goto L_0x115e;
     L_0x0var_:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r4 = 1;
+        if (r15 != r4) goto L_0x0fd5;
+    L_0x0var_:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r6 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid < %d ORDER BY m.mid DESC LIMIT %d";
-        r7 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r3 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r3 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r8 = 0;
-        r7[r8] = r3;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r3 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r8] = r3;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r3 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r8 = 1;
-        r7[r8] = r3;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r3 = java.lang.Integer.valueOf(r43);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r8] = r3;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r3 = java.lang.Integer.valueOf(r43);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r8 = 2;
-        r7[r8] = r3;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r3 = java.lang.String.format(r4, r6, r7);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r8] = r3;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r3 = java.lang.String.format(r4, r6, r7);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r4 = 0;
-        r6 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r1 = r1.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r6 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r1 = r1.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r4 = r44;
         r6 = r4;
         r5 = r2;
         r2 = 0;
         r3 = 6;
-    L_0x0faf:
+    L_0x0fb2:
         r8 = 0;
         r10 = 0;
         r12 = 1;
-    L_0x0fb2:
+    L_0x0fb5:
         r39 = 0;
-        goto L_0x11c6;
-    L_0x0fb6:
+        goto L_0x11c9;
+    L_0x0fb9:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -8388,8 +8033,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r34;
         r14 = r35;
         r3 = r37;
-        goto L_0x175e;
-    L_0x0fc4:
+        goto L_0x1761;
+    L_0x0fc7:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -8398,178 +8043,178 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r34;
         r14 = r35;
         r3 = r37;
-        goto L_0x176f;
-    L_0x0fd2:
-        if (r50 == 0) goto L_0x1036;
-    L_0x0fd4:
-        r3 = 6;
-        if (r44 == 0) goto L_0x1006;
+        goto L_0x1772;
+    L_0x0fd5:
+        if (r50 == 0) goto L_0x1039;
     L_0x0fd7:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r3 = 6;
+        if (r44 == 0) goto L_0x1009;
+    L_0x0fda:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r5 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d";
         r6 = 3;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r8 = 0;
-        r7[r8] = r6;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r6 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r8] = r6;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r6 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r8 = 1;
-        r7[r8] = r6;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r6 = java.lang.Integer.valueOf(r43);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r8] = r6;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r6 = java.lang.Integer.valueOf(r43);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r8 = 2;
-        r7[r8] = r6;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r8] = r6;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r5 = 0;
-        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r1 = r1.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-    L_0x1000:
+        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r1 = r1.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+    L_0x1003:
         r4 = r44;
         r6 = r4;
         r5 = r2;
         r2 = 0;
-        goto L_0x0faf;
-    L_0x1006:
-        r1 = r14.database;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        goto L_0x0fb2;
+    L_0x1009:
+        r1 = r14.database;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r5 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.mid ASC LIMIT %d,%d";
         r6 = 4;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r8 = 0;
-        r7[r8] = r6;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r6 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r8] = r6;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r6 = java.lang.Integer.valueOf(r50);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r10 = 1;
-        r7[r10] = r6;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r6 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r10] = r6;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r6 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r10 = 2;
-        r7[r10] = r6;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r6 = java.lang.Integer.valueOf(r43);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r10] = r6;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r6 = java.lang.Integer.valueOf(r43);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r10 = 3;
-        r7[r10] = r6;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r5 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r1 = r1.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        goto L_0x1000;
-    L_0x1036:
+        r7[r10] = r6;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r5 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r1 = r1.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        goto L_0x1003;
+    L_0x1039:
         r3 = 6;
         r4 = 2;
-        if (r15 != r4) goto L_0x10c1;
-    L_0x103a:
-        r4 = r14.database;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        if (r15 != r4) goto L_0x10c4;
+    L_0x103d:
+        r4 = r14.database;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r6 = 1;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r10 = 0;
-        r7[r10] = r6;	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r1 = java.lang.String.format(r5, r1, r7);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r5 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r1 = r4.queryFinalized(r1, r5);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        r4 = r1.next();	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        if (r4 == 0) goto L_0x105e;
-    L_0x1058:
-        r4 = r1.intValue(r10);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
+        r7[r10] = r6;	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r1 = java.lang.String.format(r5, r1, r7);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r5 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r1 = r4.queryFinalized(r1, r5);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        r4 = r1.next();	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        if (r4 == 0) goto L_0x1061;
+    L_0x105b:
+        r4 = r1.intValue(r10);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
         r10 = r4;
-        goto L_0x105f;
-    L_0x105e:
+        goto L_0x1062;
+    L_0x1061:
         r10 = 0;
-    L_0x105f:
-        r1.dispose();	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r1 = r14.database;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+    L_0x1062:
+        r1.dispose();	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r1 = r14.database;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r5 = "SELECT max(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid < 0";
         r6 = 1;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r11 = 0;
-        r7[r11] = r6;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r5 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r1 = r1.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = r1.next();	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        if (r4 == 0) goto L_0x108b;
-    L_0x1082:
-        r34 = r1.intValue(r11);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r7[r11] = r6;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r5 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r1 = r1.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = r1.next();	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        if (r4 == 0) goto L_0x108e;
+    L_0x1085:
+        r34 = r1.intValue(r11);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r4 = 1;
-        r35 = r1.intValue(r4);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-    L_0x108b:
-        r1.dispose();	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        if (r34 == 0) goto L_0x10be;
-    L_0x1090:
-        r1 = r14.database;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r35 = r1.intValue(r4);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+    L_0x108e:
+        r1.dispose();	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        if (r34 == 0) goto L_0x10c1;
+    L_0x1093:
+        r1 = r14.database;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r5 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid <= %d AND out = 0 AND read_state IN(0,2)";
         r6 = 2;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r11 = 0;
-        r7[r11] = r6;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r6 = java.lang.Integer.valueOf(r34);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r7[r11] = r6;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r6 = java.lang.Integer.valueOf(r34);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r12 = 1;
-        r7[r12] = r6;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r5 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r1 = r1.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = r1.next();	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        if (r4 == 0) goto L_0x10bb;
-    L_0x10b7:
-        r9 = r1.intValue(r11);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-    L_0x10bb:
-        r1.dispose();	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r7[r12] = r6;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r5 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r1 = r1.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = r1.next();	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        if (r4 == 0) goto L_0x10be;
+    L_0x10ba:
+        r9 = r1.intValue(r11);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
     L_0x10be:
+        r1.dispose();	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+    L_0x10c1:
         r1 = r10;
         r10 = r9;
-        goto L_0x10c3;
-    L_0x10c1:
+        goto L_0x10c6;
+    L_0x10c4:
         r10 = r9;
         r1 = 0;
-    L_0x10c3:
-        if (r2 > r10) goto L_0x10ce;
-    L_0x10c5:
-        if (r10 >= r8) goto L_0x10c8;
-    L_0x10c7:
-        goto L_0x10ce;
+    L_0x10c6:
+        if (r2 > r10) goto L_0x10d1;
     L_0x10c8:
+        if (r10 >= r8) goto L_0x10cb;
+    L_0x10ca:
+        goto L_0x10d1;
+    L_0x10cb:
         r4 = r10 - r2;
         r2 = r2 + 10;
         r9 = r10;
-        goto L_0x10de;
-    L_0x10ce:
+        goto L_0x10e1;
+    L_0x10d1:
         r4 = r10 + 10;
-        r2 = java.lang.Math.max(r2, r4);	 Catch:{ Exception -> 0x1146, all -> 0x1132 }
-        if (r10 >= r8) goto L_0x10dc;
-    L_0x10d6:
+        r2 = java.lang.Math.max(r2, r4);	 Catch:{ Exception -> 0x1149, all -> 0x1135 }
+        if (r10 >= r8) goto L_0x10df;
+    L_0x10d9:
         r4 = 0;
         r9 = 0;
         r10 = 0;
         r34 = 0;
-        goto L_0x10df;
-    L_0x10dc:
+        goto L_0x10e2;
+    L_0x10df:
         r9 = r10;
         r4 = 0;
-    L_0x10de:
+    L_0x10e1:
         r10 = r1;
-    L_0x10df:
-        r1 = r14.database;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+    L_0x10e2:
+        r1 = r14.database;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r6 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.mid ASC LIMIT %d,%d";
         r7 = 3;
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r11 = 0;
-        r8[r11] = r7;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r8[r11] = r7;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r7 = 1;
-        r8[r7] = r4;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r8[r7] = r4;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r7 = 2;
-        r8[r7] = r4;	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r4 = java.lang.String.format(r5, r6, r8);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
+        r8[r7] = r4;	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r4 = java.lang.String.format(r5, r6, r8);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
         r5 = 0;
-        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-        r1 = r1.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x1123, all -> 0x1114 }
-    L_0x1108:
+        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+        r1 = r1.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x1126, all -> 0x1117 }
+    L_0x110b:
         r4 = r44;
         r6 = r4;
         r5 = r2;
@@ -8578,8 +8223,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r8 = 0;
         r10 = 0;
         r12 = 1;
-        goto L_0x11c6;
-    L_0x1114:
+        goto L_0x11c9;
+    L_0x1117:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -8589,8 +8234,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r34;
         r14 = r35;
         r3 = r37;
-        goto L_0x175f;
-    L_0x1123:
+        goto L_0x1762;
+    L_0x1126:
         r0 = move-exception;
         r7 = r44;
         r1 = r0;
@@ -8600,8 +8245,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r34;
         r14 = r35;
         r3 = r37;
-        goto L_0x1770;
-    L_0x1132:
+        goto L_0x1773;
+    L_0x1135:
         r0 = move-exception;
         r7 = r44;
         r12 = r1;
@@ -8613,8 +8258,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r17 = 1;
         r20 = 0;
         r21 = 0;
-        goto L_0x17c0;
-    L_0x1146:
+        goto L_0x17c3;
+    L_0x1149:
         r0 = move-exception;
         r7 = r44;
         r12 = r1;
@@ -8626,97 +8271,97 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r17 = 1;
         r20 = 0;
         r21 = 0;
-    L_0x1158:
-        r1 = r0;
-        goto L_0x1796;
     L_0x115b:
+        r1 = r0;
+        goto L_0x1799;
+    L_0x115e:
         r3 = 6;
-        r4 = r14.database;	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
-        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
+        r4 = r14.database;	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
+        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
         r6 = 1;
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
-        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
+        r6 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
         r8 = 0;
-        r7[r8] = r6;	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
-        r1 = java.lang.String.format(r5, r1, r7);	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
-        r5 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
-        r1 = r4.queryFinalized(r1, r5);	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
-        r4 = r1.next();	 Catch:{ Exception -> 0x1762, all -> 0x1751 }
-        if (r4 == 0) goto L_0x117f;
-    L_0x117a:
-        r10 = r1.intValue(r8);	 Catch:{ Exception -> 0x0fc4, all -> 0x0fb6 }
-        goto L_0x1180;
-    L_0x117f:
+        r7[r8] = r6;	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
+        r1 = java.lang.String.format(r5, r1, r7);	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
+        r5 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
+        r1 = r4.queryFinalized(r1, r5);	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
+        r4 = r1.next();	 Catch:{ Exception -> 0x1765, all -> 0x1754 }
+        if (r4 == 0) goto L_0x1182;
+    L_0x117d:
+        r10 = r1.intValue(r8);	 Catch:{ Exception -> 0x0fc7, all -> 0x0fb9 }
+        goto L_0x1183;
+    L_0x1182:
         r10 = 0;
-    L_0x1180:
-        r1.dispose();	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        r1 = r14.database;	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+    L_0x1183:
+        r1.dispose();	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        r1 = r14.database;	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r5 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d)";
-        r6 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r6 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r8 = 0;
-        r6[r8] = r7;	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        r7 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r6[r8] = r7;	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        r7 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r8 = 1;
-        r6[r8] = r7;	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r6[r8] = r7;	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r7 = r2 / 2;
-        r7 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r7 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r8 = 2;
-        r6[r8] = r7;	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r6[r8] = r7;	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r8 = 3;
-        r6[r8] = r7;	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        r7 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r6[r8] = r7;	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        r7 = java.lang.Long.valueOf(r21);	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r8 = 4;
-        r6[r8] = r7;	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r6[r8] = r7;	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r7 = r2 / 2;
-        r7 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r7 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r8 = 5;
-        r6[r8] = r7;	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        r4 = java.lang.String.format(r4, r5, r6);	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
+        r6[r8] = r7;	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        r4 = java.lang.String.format(r4, r5, r6);	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
         r5 = 0;
-        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        r1 = r1.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x1742, all -> 0x1733 }
-        goto L_0x1108;
-    L_0x11c6:
+        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        r1 = r1.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x1745, all -> 0x1736 }
+        goto L_0x110b;
+    L_0x11c9:
         r7 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        if (r1 == 0) goto L_0x14a5;
-    L_0x11cb:
+        if (r1 == 0) goto L_0x14a8;
+    L_0x11ce:
         r11 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-    L_0x11cd:
-        r13 = r1.next();	 Catch:{ Exception -> 0x1485, all -> 0x1465 }
-        if (r13 == 0) goto L_0x144a;
-    L_0x11d3:
+    L_0x11d0:
+        r13 = r1.next();	 Catch:{ Exception -> 0x1488, all -> 0x1468 }
+        if (r13 == 0) goto L_0x144d;
+    L_0x11d6:
         r13 = 1;
-        r3 = r1.byteBufferValue(r13);	 Catch:{ Exception -> 0x1485, all -> 0x1465 }
-        if (r3 == 0) goto L_0x1419;
-    L_0x11da:
+        r3 = r1.byteBufferValue(r13);	 Catch:{ Exception -> 0x1488, all -> 0x1468 }
+        if (r3 == 0) goto L_0x141c;
+    L_0x11dd:
         r43 = r4;
         r13 = 0;
-        r4 = r3.readInt32(r13);	 Catch:{ Exception -> 0x1416, all -> 0x1414 }
-        r4 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r3, r4, r13);	 Catch:{ Exception -> 0x1416, all -> 0x1414 }
+        r4 = r3.readInt32(r13);	 Catch:{ Exception -> 0x1419, all -> 0x1417 }
+        r4 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r3, r4, r13);	 Catch:{ Exception -> 0x1419, all -> 0x1417 }
         r44 = r5;
         r13 = 2;
-        r5 = r1.intValue(r13);	 Catch:{ Exception -> 0x1411, all -> 0x140e }
-        r4.send_state = r5;	 Catch:{ Exception -> 0x1411, all -> 0x140e }
+        r5 = r1.intValue(r13);	 Catch:{ Exception -> 0x1414, all -> 0x1411 }
+        r4.send_state = r5;	 Catch:{ Exception -> 0x1414, all -> 0x1411 }
         r5 = 3;
-        r13 = r1.intValue(r5);	 Catch:{ Exception -> 0x1411, all -> 0x140e }
-        r4.id = r13;	 Catch:{ Exception -> 0x1411, all -> 0x140e }
-        r5 = r4.id;	 Catch:{ Exception -> 0x1411, all -> 0x140e }
-        if (r5 <= 0) goto L_0x1230;
-    L_0x11f9:
-        r5 = r4.send_state;	 Catch:{ Exception -> 0x121b, all -> 0x1206 }
-        if (r5 == 0) goto L_0x1230;
-    L_0x11fd:
-        r5 = r4.send_state;	 Catch:{ Exception -> 0x121b, all -> 0x1206 }
+        r13 = r1.intValue(r5);	 Catch:{ Exception -> 0x1414, all -> 0x1411 }
+        r4.id = r13;	 Catch:{ Exception -> 0x1414, all -> 0x1411 }
+        r5 = r4.id;	 Catch:{ Exception -> 0x1414, all -> 0x1411 }
+        if (r5 <= 0) goto L_0x1233;
+    L_0x11fc:
+        r5 = r4.send_state;	 Catch:{ Exception -> 0x121e, all -> 0x1209 }
+        if (r5 == 0) goto L_0x1233;
+    L_0x1200:
+        r5 = r4.send_state;	 Catch:{ Exception -> 0x121e, all -> 0x1209 }
         r13 = 3;
-        if (r5 == r13) goto L_0x1230;
-    L_0x1202:
+        if (r5 == r13) goto L_0x1233;
+    L_0x1205:
         r5 = 0;
-        r4.send_state = r5;	 Catch:{ Exception -> 0x121b, all -> 0x1206 }
-        goto L_0x1230;
-    L_0x1206:
+        r4.send_state = r5;	 Catch:{ Exception -> 0x121e, all -> 0x1209 }
+        goto L_0x1233;
+    L_0x1209:
         r0 = move-exception;
         r7 = r43;
         r6 = r44;
@@ -8725,12 +8370,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r20 = r8;
         r13 = r9;
         r17 = r12;
-    L_0x1213:
+    L_0x1216:
         r11 = r34;
         r14 = r35;
         r3 = r37;
-        goto L_0x1481;
-    L_0x121b:
+        goto L_0x1484;
+    L_0x121e:
         r0 = move-exception;
         r7 = r43;
         r6 = r44;
@@ -8739,12 +8384,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r20 = r8;
         r13 = r9;
         r17 = r12;
-    L_0x1228:
+    L_0x122b:
         r11 = r34;
         r14 = r35;
         r3 = r37;
-        goto L_0x14a1;
-    L_0x1230:
+        goto L_0x14a4;
+    L_0x1233:
         r50 = r12;
         r5 = r33;
         r12 = (long) r5;
@@ -8752,12 +8397,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r21 = r10;
         r9 = r46;
         r30 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1));
-        if (r30 != 0) goto L_0x1261;
-    L_0x123f:
+        if (r30 != 0) goto L_0x1264;
+    L_0x1242:
         r12 = 1;
-        r4.out = r12;	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-        goto L_0x1261;
-    L_0x1243:
+        r4.out = r12;	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+        goto L_0x1264;
+    L_0x1246:
         r0 = move-exception;
         r7 = r43;
         r6 = r44;
@@ -8766,8 +8411,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r21 = r2;
         r20 = r8;
         r13 = r22;
-        goto L_0x1213;
-    L_0x1252:
+        goto L_0x1216;
+    L_0x1255:
         r0 = move-exception;
         r7 = r43;
         r6 = r44;
@@ -8776,264 +8421,264 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r21 = r2;
         r20 = r8;
         r13 = r22;
-        goto L_0x1228;
-    L_0x1261:
-        r4.readAttachPath(r3, r5);	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
-        r3.reuse();	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
+        goto L_0x122b;
+    L_0x1264:
+        r4.readAttachPath(r3, r5);	 Catch:{ Exception -> 0x140e, all -> 0x140b }
+        r3.reuse();	 Catch:{ Exception -> 0x140e, all -> 0x140b }
         r3 = 0;
-        r12 = r1.intValue(r3);	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
-        org.telegram.messenger.MessageObject.setUnreadFlags(r4, r12);	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
-        r3 = r4.id;	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
-        if (r3 <= 0) goto L_0x127f;
-    L_0x1273:
-        r3 = r4.id;	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-        r7 = java.lang.Math.min(r3, r7);	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-        r3 = r4.id;	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-        r11 = java.lang.Math.max(r3, r11);	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-    L_0x127f:
+        r12 = r1.intValue(r3);	 Catch:{ Exception -> 0x140e, all -> 0x140b }
+        org.telegram.messenger.MessageObject.setUnreadFlags(r4, r12);	 Catch:{ Exception -> 0x140e, all -> 0x140b }
+        r3 = r4.id;	 Catch:{ Exception -> 0x140e, all -> 0x140b }
+        if (r3 <= 0) goto L_0x1282;
+    L_0x1276:
+        r3 = r4.id;	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+        r7 = java.lang.Math.min(r3, r7);	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+        r3 = r4.id;	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+        r11 = java.lang.Math.max(r3, r11);	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+    L_0x1282:
         r3 = 4;
-        r12 = r1.intValue(r3);	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
-        r4.date = r12;	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
-        r4.dialog_id = r9;	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
-        r3 = r4.flags;	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
+        r12 = r1.intValue(r3);	 Catch:{ Exception -> 0x140e, all -> 0x140b }
+        r4.date = r12;	 Catch:{ Exception -> 0x140e, all -> 0x140b }
+        r4.dialog_id = r9;	 Catch:{ Exception -> 0x140e, all -> 0x140b }
+        r3 = r4.flags;	 Catch:{ Exception -> 0x140e, all -> 0x140b }
         r3 = r3 & 1024;
-        if (r3 == 0) goto L_0x1295;
-    L_0x128e:
+        if (r3 == 0) goto L_0x1298;
+    L_0x1291:
         r3 = 7;
-        r3 = r1.intValue(r3);	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-        r4.views = r3;	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-    L_0x1295:
-        if (r31 == 0) goto L_0x12a3;
-    L_0x1297:
-        r3 = r4.ttl;	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-        if (r3 != 0) goto L_0x12a3;
-    L_0x129b:
+        r3 = r1.intValue(r3);	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+        r4.views = r3;	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+    L_0x1298:
+        if (r31 == 0) goto L_0x12a6;
+    L_0x129a:
+        r3 = r4.ttl;	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+        if (r3 != 0) goto L_0x12a6;
+    L_0x129e:
         r3 = 8;
-        r3 = r1.intValue(r3);	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-        r4.ttl = r3;	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
-    L_0x12a3:
+        r3 = r1.intValue(r3);	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+        r4.ttl = r3;	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+    L_0x12a6:
         r3 = 9;
-        r3 = r1.intValue(r3);	 Catch:{ Exception -> 0x140b, all -> 0x1408 }
-        if (r3 == 0) goto L_0x12ae;
-    L_0x12ab:
-        r3 = 1;
-        r4.mentioned = r3;	 Catch:{ Exception -> 0x1252, all -> 0x1243 }
+        r3 = r1.intValue(r3);	 Catch:{ Exception -> 0x140e, all -> 0x140b }
+        if (r3 == 0) goto L_0x12b1;
     L_0x12ae:
+        r3 = 1;
+        r4.mentioned = r3;	 Catch:{ Exception -> 0x1255, all -> 0x1246 }
+    L_0x12b1:
         r3 = r37;
-        r12 = r3.messages;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r12.add(r4);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r12 = r3.messages;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r12.add(r4);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r12 = r27;
         r13 = r36;
-        addUsersAndChatsFromMessage(r4, r12, r13);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        addUsersAndChatsFromMessage(r4, r12, r13);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r27 = r7;
-        r7 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 != 0) goto L_0x12d7;
-    L_0x12c2:
-        r9 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r7 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 != 0) goto L_0x12da;
+    L_0x12c5:
+        r9 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r16 = 0;
         r7 = (r9 > r16 ? 1 : (r9 == r16 ? 0 : -1));
-        if (r7 == 0) goto L_0x12cb;
-    L_0x12ca:
-        goto L_0x12d7;
-    L_0x12cb:
+        if (r7 == 0) goto L_0x12ce;
+    L_0x12cd:
+        goto L_0x12da;
+    L_0x12ce:
         r30 = r11;
         r33 = r12;
         r7 = r28;
         r9 = r29;
         r18 = 32;
-        goto L_0x13a2;
-    L_0x12d7:
+        goto L_0x13a5;
+    L_0x12da:
         r9 = 6;
-        r7 = r1.isNull(r9);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 != 0) goto L_0x130e;
-    L_0x12de:
-        r7 = r1.byteBufferValue(r9);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 == 0) goto L_0x130e;
-    L_0x12e4:
+        r7 = r1.isNull(r9);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 != 0) goto L_0x1311;
+    L_0x12e1:
+        r7 = r1.byteBufferValue(r9);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 == 0) goto L_0x1311;
+    L_0x12e7:
         r10 = 0;
-        r9 = r7.readInt32(r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r9 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r7, r9, r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r4.replyMessage = r9;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r9 = r4.replyMessage;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r9.readAttachPath(r7, r5);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7.reuse();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = r4.replyMessage;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 == 0) goto L_0x130e;
-    L_0x12fb:
-        r7 = org.telegram.messenger.MessageObject.isMegagroup(r4);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 == 0) goto L_0x1309;
-    L_0x1301:
-        r7 = r4.replyMessage;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r9 = r7.flags;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r9 = r7.readInt32(r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r9 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r7, r9, r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r4.replyMessage = r9;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r9 = r4.replyMessage;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r9.readAttachPath(r7, r5);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7.reuse();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = r4.replyMessage;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 == 0) goto L_0x1311;
+    L_0x12fe:
+        r7 = org.telegram.messenger.MessageObject.isMegagroup(r4);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 == 0) goto L_0x130c;
+    L_0x1304:
+        r7 = r4.replyMessage;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r9 = r7.flags;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r9 = r9 | r23;
-        r7.flags = r9;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-    L_0x1309:
-        r7 = r4.replyMessage;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        addUsersAndChatsFromMessage(r7, r12, r13);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-    L_0x130e:
-        r7 = r4.replyMessage;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 != 0) goto L_0x12cb;
-    L_0x1312:
-        r7 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 == 0) goto L_0x1365;
-    L_0x1316:
-        r7 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r9 = (long) r7;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = r4.to_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = r7.channel_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 == 0) goto L_0x132e;
-    L_0x131f:
-        r7 = r4.to_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = r7.channel_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r7.flags = r9;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+    L_0x130c:
+        r7 = r4.replyMessage;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        addUsersAndChatsFromMessage(r7, r12, r13);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+    L_0x1311:
+        r7 = r4.replyMessage;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 != 0) goto L_0x12ce;
+    L_0x1315:
+        r7 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 == 0) goto L_0x1368;
+    L_0x1319:
+        r7 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r9 = (long) r7;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = r4.to_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = r7.channel_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 == 0) goto L_0x1331;
+    L_0x1322:
+        r7 = r4.to_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = r7.channel_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r30 = r11;
         r33 = r12;
-        r11 = (long) r7;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r11 = (long) r7;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r18 = 32;
         r11 = r11 << r18;
         r9 = r9 | r11;
-        goto L_0x1334;
-    L_0x132e:
+        goto L_0x1337;
+    L_0x1331:
         r30 = r11;
         r33 = r12;
         r18 = 32;
-    L_0x1334:
-        r7 = java.lang.Long.valueOf(r9);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+    L_0x1337:
+        r7 = java.lang.Long.valueOf(r9);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r12 = r32;
-        r7 = r12.contains(r7);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 != 0) goto L_0x1347;
-    L_0x1340:
-        r7 = java.lang.Long.valueOf(r9);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r12.add(r7);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-    L_0x1347:
-        r7 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r7 = r12.contains(r7);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 != 0) goto L_0x134a;
+    L_0x1343:
+        r7 = java.lang.Long.valueOf(r9);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r12.add(r7);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+    L_0x134a:
+        r7 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r9 = r29;
-        r7 = r9.get(r7);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = (java.util.ArrayList) r7;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 != 0) goto L_0x135d;
-    L_0x1353:
-        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7.<init>();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r10 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r9.put(r10, r7);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-    L_0x135d:
-        r7.add(r4);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r7 = r9.get(r7);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = (java.util.ArrayList) r7;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 != 0) goto L_0x1360;
+    L_0x1356:
+        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7.<init>();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r10 = r4.reply_to_msg_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r9.put(r10, r7);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+    L_0x1360:
+        r7.add(r4);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r32 = r12;
         r7 = r28;
+        goto L_0x13a5;
+    L_0x1368:
+        r30 = r11;
+        r33 = r12;
+        r9 = r29;
+        r12 = r32;
+        r18 = 32;
+        r10 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = java.lang.Long.valueOf(r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = r12.contains(r7);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r7 != 0) goto L_0x1387;
+    L_0x137e:
+        r10 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = java.lang.Long.valueOf(r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r12.add(r7);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+    L_0x1387:
+        r10 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = r28;
+        r10 = r7.get(r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r10 = (java.util.ArrayList) r10;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r10 != 0) goto L_0x13a0;
+    L_0x1393:
+        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r10.<init>();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r32 = r12;
+        r11 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7.put(r11, r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         goto L_0x13a2;
-    L_0x1365:
-        r30 = r11;
-        r33 = r12;
-        r9 = r29;
-        r12 = r32;
-        r18 = 32;
-        r10 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = java.lang.Long.valueOf(r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = r12.contains(r7);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r7 != 0) goto L_0x1384;
-    L_0x137b:
-        r10 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = java.lang.Long.valueOf(r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r12.add(r7);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-    L_0x1384:
-        r10 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = r28;
-        r10 = r7.get(r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r10 = (java.util.ArrayList) r10;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r10 != 0) goto L_0x139d;
-    L_0x1390:
-        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r10.<init>();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+    L_0x13a0:
         r32 = r12;
-        r11 = r4.reply_to_random_id;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7.put(r11, r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        goto L_0x139f;
-    L_0x139d:
-        r32 = r12;
-    L_0x139f:
-        r10.add(r4);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
     L_0x13a2:
-        if (r31 != 0) goto L_0x13b2;
-    L_0x13a4:
+        r10.add(r4);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+    L_0x13a5:
+        if (r31 != 0) goto L_0x13b5;
+    L_0x13a7:
         r10 = 5;
-        r11 = r1.isNull(r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r11 != 0) goto L_0x13b3;
-    L_0x13ab:
-        r11 = r1.longValue(r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r4.random_id = r11;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        goto L_0x13b3;
-    L_0x13b2:
+        r11 = r1.isNull(r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r11 != 0) goto L_0x13b6;
+    L_0x13ae:
+        r11 = r1.longValue(r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r4.random_id = r11;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        goto L_0x13b6;
+    L_0x13b5:
         r10 = 5;
-    L_0x13b3:
-        r11 = org.telegram.messenger.MessageObject.isSecretMedia(r4);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r11 == 0) goto L_0x13fb;
-    L_0x13b9:
-        r11 = r14.database;	 Catch:{ Exception -> 0x13ef, all -> 0x172d }
-        r12 = java.util.Locale.US;	 Catch:{ Exception -> 0x13ef, all -> 0x172d }
+    L_0x13b6:
+        r11 = org.telegram.messenger.MessageObject.isSecretMedia(r4);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r11 == 0) goto L_0x13fe;
+    L_0x13bc:
+        r11 = r14.database;	 Catch:{ Exception -> 0x13f2, all -> 0x1730 }
+        r12 = java.util.Locale.US;	 Catch:{ Exception -> 0x13f2, all -> 0x1730 }
         r10 = "SELECT date FROM enc_tasks_v2 WHERE mid = %d";
         r29 = r5;
         r28 = r7;
         r7 = 1;
-        r5 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x13ed, all -> 0x172d }
-        r7 = r4.id;	 Catch:{ Exception -> 0x13ed, all -> 0x172d }
-        r7 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x13ed, all -> 0x172d }
+        r5 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x13f0, all -> 0x1730 }
+        r7 = r4.id;	 Catch:{ Exception -> 0x13f0, all -> 0x1730 }
+        r7 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x13f0, all -> 0x1730 }
         r36 = r9;
         r9 = 0;
-        r5[r9] = r7;	 Catch:{ Exception -> 0x13eb, all -> 0x172d }
-        r5 = java.lang.String.format(r12, r10, r5);	 Catch:{ Exception -> 0x13eb, all -> 0x172d }
-        r7 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x13eb, all -> 0x172d }
-        r5 = r11.queryFinalized(r5, r7);	 Catch:{ Exception -> 0x13eb, all -> 0x172d }
-        r7 = r5.next();	 Catch:{ Exception -> 0x13eb, all -> 0x172d }
-        if (r7 == 0) goto L_0x13e7;
-    L_0x13e1:
-        r7 = r5.intValue(r9);	 Catch:{ Exception -> 0x13eb, all -> 0x172d }
-        r4.destroyTime = r7;	 Catch:{ Exception -> 0x13eb, all -> 0x172d }
-    L_0x13e7:
-        r5.dispose();	 Catch:{ Exception -> 0x13eb, all -> 0x172d }
-        goto L_0x1401;
-    L_0x13eb:
+        r5[r9] = r7;	 Catch:{ Exception -> 0x13ee, all -> 0x1730 }
+        r5 = java.lang.String.format(r12, r10, r5);	 Catch:{ Exception -> 0x13ee, all -> 0x1730 }
+        r7 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x13ee, all -> 0x1730 }
+        r5 = r11.queryFinalized(r5, r7);	 Catch:{ Exception -> 0x13ee, all -> 0x1730 }
+        r7 = r5.next();	 Catch:{ Exception -> 0x13ee, all -> 0x1730 }
+        if (r7 == 0) goto L_0x13ea;
+    L_0x13e4:
+        r7 = r5.intValue(r9);	 Catch:{ Exception -> 0x13ee, all -> 0x1730 }
+        r4.destroyTime = r7;	 Catch:{ Exception -> 0x13ee, all -> 0x1730 }
+    L_0x13ea:
+        r5.dispose();	 Catch:{ Exception -> 0x13ee, all -> 0x1730 }
+        goto L_0x1404;
+    L_0x13ee:
         r0 = move-exception;
-        goto L_0x13f6;
-    L_0x13ed:
+        goto L_0x13f9;
+    L_0x13f0:
         r0 = move-exception;
-        goto L_0x13f4;
-    L_0x13ef:
+        goto L_0x13f7;
+    L_0x13f2:
         r0 = move-exception;
         r29 = r5;
         r28 = r7;
-    L_0x13f4:
+    L_0x13f7:
         r36 = r9;
-    L_0x13f6:
+    L_0x13f9:
         r4 = r0;
-        org.telegram.messenger.FileLog.e(r4);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        goto L_0x1401;
-    L_0x13fb:
+        org.telegram.messenger.FileLog.e(r4);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        goto L_0x1404;
+    L_0x13fe:
         r29 = r5;
         r28 = r7;
         r36 = r9;
-    L_0x1401:
+    L_0x1404:
         r7 = r27;
         r4 = r28;
         r11 = r30;
-        goto L_0x1431;
-    L_0x1408:
-        r0 = move-exception;
-        goto L_0x146e;
+        goto L_0x1434;
     L_0x140b:
         r0 = move-exception;
-        goto L_0x148e;
+        goto L_0x1471;
     L_0x140e:
         r0 = move-exception;
-        goto L_0x146a;
+        goto L_0x1491;
     L_0x1411:
         r0 = move-exception;
-        goto L_0x148a;
+        goto L_0x146d;
     L_0x1414:
         r0 = move-exception;
-        goto L_0x1468;
-    L_0x1416:
+        goto L_0x148d;
+    L_0x1417:
         r0 = move-exception;
-        goto L_0x1488;
+        goto L_0x146b;
     L_0x1419:
+        r0 = move-exception;
+        goto L_0x148b;
+    L_0x141c:
         r43 = r4;
         r44 = r5;
         r22 = r9;
@@ -9046,7 +8691,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r36 = r29;
         r29 = r33;
         r33 = r27;
-    L_0x1431:
+    L_0x1434:
         r5 = r44;
         r12 = r50;
         r37 = r3;
@@ -9059,8 +8704,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r33 = r29;
         r29 = r36;
         r36 = r13;
-        goto L_0x11cd;
-    L_0x144a:
+        goto L_0x11d0;
+    L_0x144d:
         r43 = r4;
         r44 = r5;
         r22 = r9;
@@ -9072,42 +8717,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r36 = r29;
         r29 = r33;
         r33 = r27;
-        r1.dispose();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        goto L_0x14bd;
-    L_0x1465:
-        r0 = move-exception;
-        r43 = r4;
+        r1.dispose();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        goto L_0x14c0;
     L_0x1468:
-        r44 = r5;
-    L_0x146a:
-        r22 = r9;
-        r50 = r12;
-    L_0x146e:
-        r3 = r37;
-    L_0x1470:
-        r7 = r43;
-        r6 = r44;
-        r17 = r50;
-        r1 = r0;
-        r21 = r2;
-        r20 = r8;
-        r13 = r22;
-        r11 = r34;
-        r14 = r35;
-    L_0x1481:
-        r12 = r39;
-        goto L_0x17c1;
-    L_0x1485:
         r0 = move-exception;
         r43 = r4;
-    L_0x1488:
+    L_0x146b:
         r44 = r5;
-    L_0x148a:
+    L_0x146d:
         r22 = r9;
         r50 = r12;
-    L_0x148e:
+    L_0x1471:
         r3 = r37;
-    L_0x1490:
+    L_0x1473:
         r7 = r43;
         r6 = r44;
         r17 = r50;
@@ -9117,10 +8739,33 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r22;
         r11 = r34;
         r14 = r35;
-    L_0x14a1:
+    L_0x1484:
         r12 = r39;
-        goto L_0x1796;
-    L_0x14a5:
+        goto L_0x17c4;
+    L_0x1488:
+        r0 = move-exception;
+        r43 = r4;
+    L_0x148b:
+        r44 = r5;
+    L_0x148d:
+        r22 = r9;
+        r50 = r12;
+    L_0x1491:
+        r3 = r37;
+    L_0x1493:
+        r7 = r43;
+        r6 = r44;
+        r17 = r50;
+        r1 = r0;
+        r21 = r2;
+        r20 = r8;
+        r13 = r22;
+        r11 = r34;
+        r14 = r35;
+    L_0x14a4:
+        r12 = r39;
+        goto L_0x1799;
+    L_0x14a8:
         r43 = r4;
         r44 = r5;
         r22 = r9;
@@ -9133,81 +8778,81 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r29 = r33;
         r33 = r27;
         r11 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-    L_0x14bd:
-        r1 = r3.messages;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r5 = org.telegram.messenger.-$$Lambda$MessagesStorage$YKXnzK5NsKAk1akSr7E5zM7Zk70.INSTANCE;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        java.util.Collections.sort(r1, r5);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r31 == 0) goto L_0x1504;
-    L_0x14c6:
-        r1 = 3;
-        if (r15 == r1) goto L_0x14d6;
+    L_0x14c0:
+        r1 = r3.messages;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r5 = org.telegram.messenger.-$$Lambda$MessagesStorage$w-CS_xp2CSQ-MvRi_vpbZTsK6rk.INSTANCE;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        java.util.Collections.sort(r1, r5);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r31 == 0) goto L_0x1507;
     L_0x14c9:
-        r1 = 4;
-        if (r15 == r1) goto L_0x14d6;
-    L_0x14cc:
-        r1 = 2;
-        if (r15 != r1) goto L_0x14d4;
-    L_0x14cf:
-        if (r8 == 0) goto L_0x14d4;
-    L_0x14d1:
-        if (r21 != 0) goto L_0x14d4;
-    L_0x14d3:
-        goto L_0x14d6;
-    L_0x14d4:
-        r1 = 4;
-        goto L_0x14f1;
-    L_0x14d6:
-        r1 = r3.messages;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r1 = r1.isEmpty();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r1 != 0) goto L_0x14d4;
-    L_0x14de:
-        if (r7 > r6) goto L_0x14e2;
-    L_0x14e0:
-        if (r11 >= r6) goto L_0x14d4;
-    L_0x14e2:
-        r32.clear();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r33.clear();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r13.clear();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r1 = r3.messages;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r1.clear();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        goto L_0x14d4;
-    L_0x14f1:
-        if (r15 == r1) goto L_0x14f6;
-    L_0x14f3:
         r1 = 3;
-        if (r15 != r1) goto L_0x1504;
+        if (r15 == r1) goto L_0x14d9;
+    L_0x14cc:
+        r1 = 4;
+        if (r15 == r1) goto L_0x14d9;
+    L_0x14cf:
+        r1 = 2;
+        if (r15 != r1) goto L_0x14d7;
+    L_0x14d2:
+        if (r8 == 0) goto L_0x14d7;
+    L_0x14d4:
+        if (r21 != 0) goto L_0x14d7;
+    L_0x14d6:
+        goto L_0x14d9;
+    L_0x14d7:
+        r1 = 4;
+        goto L_0x14f4;
+    L_0x14d9:
+        r1 = r3.messages;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r1 = r1.isEmpty();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r1 != 0) goto L_0x14d7;
+    L_0x14e1:
+        if (r7 > r6) goto L_0x14e5;
+    L_0x14e3:
+        if (r11 >= r6) goto L_0x14d7;
+    L_0x14e5:
+        r32.clear();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r33.clear();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r13.clear();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r1 = r3.messages;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r1.clear();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        goto L_0x14d7;
+    L_0x14f4:
+        if (r15 == r1) goto L_0x14f9;
     L_0x14f6:
-        r1 = r3.messages;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r1 = r1.size();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r1 = 3;
+        if (r15 != r1) goto L_0x1507;
+    L_0x14f9:
+        r1 = r3.messages;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r1 = r1.size();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r5 = 1;
-        if (r1 != r5) goto L_0x1504;
-    L_0x14ff:
-        r1 = r3.messages;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r1.clear();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-    L_0x1504:
-        if (r2 == 0) goto L_0x1531;
-    L_0x1506:
-        r1 = r14.database;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        if (r1 != r5) goto L_0x1507;
+    L_0x1502:
+        r1 = r3.messages;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r1.clear();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+    L_0x1507:
+        if (r2 == 0) goto L_0x1534;
+    L_0x1509:
+        r1 = r14.database;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r6 = "SELECT COUNT(mid) FROM messages WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)";
         r7 = 1;
-        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
+        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r7 = java.lang.Long.valueOf(r46);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
         r10 = 0;
-        r9[r10] = r7;	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r5 = java.lang.String.format(r5, r6, r9);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r6 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r1 = r1.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        r5 = r1.next();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r5 == 0) goto L_0x152c;
-    L_0x1526:
-        r5 = r1.intValue(r10);	 Catch:{ Exception -> 0x1730, all -> 0x172d }
-        if (r2 == r5) goto L_0x152e;
-    L_0x152c:
+        r9[r10] = r7;	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r5 = java.lang.String.format(r5, r6, r9);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r6 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r1 = r1.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        r5 = r1.next();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r5 == 0) goto L_0x152f;
+    L_0x1529:
+        r5 = r1.intValue(r10);	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+        if (r2 == r5) goto L_0x1531;
+    L_0x152f:
         r2 = r2 * -1;
-    L_0x152e:
-        r1.dispose();	 Catch:{ Exception -> 0x1730, all -> 0x172d }
     L_0x1531:
+        r1.dispose();	 Catch:{ Exception -> 0x1733, all -> 0x1730 }
+    L_0x1534:
         r7 = r43;
         r6 = r44;
         r18 = r50;
@@ -9215,244 +8860,244 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r8;
         r11 = r34;
         r12 = r39;
-    L_0x153e:
-        r2 = r32.isEmpty();	 Catch:{ Exception -> 0x171b, all -> 0x1709 }
+    L_0x1541:
+        r2 = r32.isEmpty();	 Catch:{ Exception -> 0x171e, all -> 0x170c }
         r5 = ",";
-        if (r2 != 0) goto L_0x16b2;
-    L_0x1546:
-        r2 = r36.size();	 Catch:{ Exception -> 0x171b, all -> 0x1709 }
-        if (r2 <= 0) goto L_0x157c;
-    L_0x154c:
-        r2 = r14.database;	 Catch:{ Exception -> 0x1577, all -> 0x1572 }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x1577, all -> 0x1572 }
+        if (r2 != 0) goto L_0x16b5;
+    L_0x1549:
+        r2 = r36.size();	 Catch:{ Exception -> 0x171e, all -> 0x170c }
+        if (r2 <= 0) goto L_0x157f;
+    L_0x154f:
+        r2 = r14.database;	 Catch:{ Exception -> 0x157a, all -> 0x1575 }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x157a, all -> 0x1575 }
         r9 = "SELECT data, mid, date FROM messages WHERE mid IN(%s)";
         r10 = 1;
-        r15 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x1577, all -> 0x1572 }
+        r15 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x157a, all -> 0x1575 }
         r10 = r32;
-        r10 = android.text.TextUtils.join(r5, r10);	 Catch:{ Exception -> 0x1577, all -> 0x1572 }
+        r10 = android.text.TextUtils.join(r5, r10);	 Catch:{ Exception -> 0x157a, all -> 0x1575 }
         r43 = r1;
         r1 = 0;
-        r15[r1] = r10;	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        r8 = java.lang.String.format(r8, r9, r15);	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        r9 = new java.lang.Object[r1];	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        r1 = r2.queryFinalized(r8, r9);	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-    L_0x156a:
+        r15[r1] = r10;	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        r8 = java.lang.String.format(r8, r9, r15);	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        r9 = new java.lang.Object[r1];	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        r1 = r2.queryFinalized(r8, r9);	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+    L_0x156d:
         r10 = 0;
-        goto L_0x159a;
-    L_0x156c:
-        r0 = move-exception;
-        goto L_0x1710;
+        goto L_0x159d;
     L_0x156f:
         r0 = move-exception;
-        goto L_0x1722;
+        goto L_0x1713;
     L_0x1572:
         r0 = move-exception;
-        r43 = r1;
-        goto L_0x1710;
-    L_0x1577:
+        goto L_0x1725;
+    L_0x1575:
         r0 = move-exception;
         r43 = r1;
-        goto L_0x1722;
-    L_0x157c:
+        goto L_0x1713;
+    L_0x157a:
+        r0 = move-exception;
+        r43 = r1;
+        goto L_0x1725;
+    L_0x157f:
         r43 = r1;
         r10 = r32;
-        r1 = r14.database;	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
-        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
+        r1 = r14.database;	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
+        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
         r8 = "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)";
         r9 = 1;
-        r15 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
-        r9 = android.text.TextUtils.join(r5, r10);	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
+        r15 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
+        r9 = android.text.TextUtils.join(r5, r10);	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
         r10 = 0;
-        r15[r10] = r9;	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
-        r2 = java.lang.String.format(r2, r8, r15);	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
-        r8 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
-        r1 = r1.queryFinalized(r2, r8);	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
-    L_0x159a:
-        r2 = r1.next();	 Catch:{ Exception -> 0x16af, all -> 0x16ac }
-        if (r2 == 0) goto L_0x165c;
-    L_0x15a0:
-        r2 = r1.byteBufferValue(r10);	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
-        if (r2 == 0) goto L_0x1648;
-    L_0x15a6:
-        r8 = r2.readInt32(r10);	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
-        r8 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r2, r8, r10);	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
+        r15[r10] = r9;	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
+        r2 = java.lang.String.format(r2, r8, r15);	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
+        r8 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
+        r1 = r1.queryFinalized(r2, r8);	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
+    L_0x159d:
+        r2 = r1.next();	 Catch:{ Exception -> 0x16b2, all -> 0x16af }
+        if (r2 == 0) goto L_0x165f;
+    L_0x15a3:
+        r2 = r1.byteBufferValue(r10);	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
+        if (r2 == 0) goto L_0x164b;
+    L_0x15a9:
+        r8 = r2.readInt32(r10);	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
+        r8 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r2, r8, r10);	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
         r9 = r29;
-        r8.readAttachPath(r2, r9);	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
-        r2.reuse();	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
+        r8.readAttachPath(r2, r9);	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
+        r2.reuse();	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
         r15 = 1;
-        r2 = r1.intValue(r15);	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
-        r8.id = r2;	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
+        r2 = r1.intValue(r15);	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
+        r8.id = r2;	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
         r2 = 2;
-        r10 = r1.intValue(r2);	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
-        r8.date = r10;	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
+        r10 = r1.intValue(r2);	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
+        r8.date = r10;	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
         r29 = r9;
         r9 = r46;
-        r8.dialog_id = r9;	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
+        r8.dialog_id = r9;	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
         r2 = r33;
-        addUsersAndChatsFromMessage(r8, r2, r13);	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
-        r20 = r36.size();	 Catch:{ Exception -> 0x1657, all -> 0x1652 }
-        if (r20 <= 0) goto L_0x160d;
-    L_0x15d5:
-        r15 = r8.id;	 Catch:{ Exception -> 0x156f, all -> 0x156c }
+        addUsersAndChatsFromMessage(r8, r2, r13);	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
+        r20 = r36.size();	 Catch:{ Exception -> 0x165a, all -> 0x1655 }
+        if (r20 <= 0) goto L_0x1610;
+    L_0x15d8:
+        r15 = r8.id;	 Catch:{ Exception -> 0x1572, all -> 0x156f }
         r9 = r36;
-        r10 = r9.get(r15);	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        r10 = (java.util.ArrayList) r10;	 Catch:{ Exception -> 0x156f, all -> 0x156c }
+        r10 = r9.get(r15);	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        r10 = (java.util.ArrayList) r10;	 Catch:{ Exception -> 0x1572, all -> 0x156f }
         r36 = r9;
-        if (r10 == 0) goto L_0x160a;
-    L_0x15e3:
+        if (r10 == 0) goto L_0x160d;
+    L_0x15e6:
         r15 = 0;
-    L_0x15e4:
-        r9 = r10.size();	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        if (r15 >= r9) goto L_0x160a;
-    L_0x15ea:
-        r9 = r10.get(r15);	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        r9 = (org.telegram.tgnet.TLRPC.Message) r9;	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        r9.replyMessage = r8;	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        r24 = org.telegram.messenger.MessageObject.isMegagroup(r9);	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        if (r24 == 0) goto L_0x1603;
-    L_0x15f8:
-        r9 = r9.replyMessage;	 Catch:{ Exception -> 0x156f, all -> 0x156c }
+    L_0x15e7:
+        r9 = r10.size();	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        if (r15 >= r9) goto L_0x160d;
+    L_0x15ed:
+        r9 = r10.get(r15);	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        r9 = (org.telegram.tgnet.TLRPC.Message) r9;	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        r9.replyMessage = r8;	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        r24 = org.telegram.messenger.MessageObject.isMegagroup(r9);	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        if (r24 == 0) goto L_0x1606;
+    L_0x15fb:
+        r9 = r9.replyMessage;	 Catch:{ Exception -> 0x1572, all -> 0x156f }
         r44 = r10;
-        r10 = r9.flags;	 Catch:{ Exception -> 0x156f, all -> 0x156c }
+        r10 = r9.flags;	 Catch:{ Exception -> 0x1572, all -> 0x156f }
         r10 = r10 | r23;
-        r9.flags = r10;	 Catch:{ Exception -> 0x156f, all -> 0x156c }
-        goto L_0x1605;
-    L_0x1603:
+        r9.flags = r10;	 Catch:{ Exception -> 0x1572, all -> 0x156f }
+        goto L_0x1608;
+    L_0x1606:
         r44 = r10;
-    L_0x1605:
+    L_0x1608:
         r15 = r15 + 1;
         r10 = r44;
-        goto L_0x15e4;
-    L_0x160a:
-        r44 = r11;
-        goto L_0x164c;
+        goto L_0x15e7;
     L_0x160d:
         r44 = r11;
+        goto L_0x164f;
+    L_0x1610:
+        r44 = r11;
         r9 = 3;
-        r10 = r1.longValue(r9);	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r15 = r4.get(r10);	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r15 = (java.util.ArrayList) r15;	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r4.remove(r10);	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        if (r15 == 0) goto L_0x164c;
-    L_0x161f:
+        r10 = r1.longValue(r9);	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r15 = r4.get(r10);	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r15 = (java.util.ArrayList) r15;	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r4.remove(r10);	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        if (r15 == 0) goto L_0x164f;
+    L_0x1622:
         r10 = 0;
-    L_0x1620:
-        r11 = r15.size();	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        if (r10 >= r11) goto L_0x164c;
-    L_0x1626:
-        r11 = r15.get(r10);	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r11 = (org.telegram.tgnet.TLRPC.Message) r11;	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r11.replyMessage = r8;	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r9 = r8.id;	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r11.reply_to_msg_id = r9;	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r9 = org.telegram.messenger.MessageObject.isMegagroup(r11);	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        if (r9 == 0) goto L_0x1640;
-    L_0x1638:
-        r9 = r11.replyMessage;	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-        r11 = r9.flags;	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
+    L_0x1623:
+        r11 = r15.size();	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        if (r10 >= r11) goto L_0x164f;
+    L_0x1629:
+        r11 = r15.get(r10);	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r11 = (org.telegram.tgnet.TLRPC.Message) r11;	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r11.replyMessage = r8;	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r9 = r8.id;	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r11.reply_to_msg_id = r9;	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r9 = org.telegram.messenger.MessageObject.isMegagroup(r11);	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        if (r9 == 0) goto L_0x1643;
+    L_0x163b:
+        r9 = r11.replyMessage;	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+        r11 = r9.flags;	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
         r11 = r11 | r23;
-        r9.flags = r11;	 Catch:{ Exception -> 0x1646, all -> 0x1644 }
-    L_0x1640:
+        r9.flags = r11;	 Catch:{ Exception -> 0x1649, all -> 0x1647 }
+    L_0x1643:
         r10 = r10 + 1;
         r9 = 3;
-        goto L_0x1620;
-    L_0x1644:
+        goto L_0x1623;
+    L_0x1647:
         r0 = move-exception;
-        goto L_0x169d;
-    L_0x1646:
+        goto L_0x16a0;
+    L_0x1649:
         r0 = move-exception;
-        goto L_0x16a6;
-    L_0x1648:
+        goto L_0x16a9;
+    L_0x164b:
         r44 = r11;
         r2 = r33;
-    L_0x164c:
+    L_0x164f:
         r11 = r44;
         r33 = r2;
-        goto L_0x156a;
-    L_0x1652:
+        goto L_0x156d;
+    L_0x1655:
         r0 = move-exception;
         r44 = r11;
-        goto L_0x1710;
-    L_0x1657:
+        goto L_0x1713;
+    L_0x165a:
         r0 = move-exception;
         r44 = r11;
-        goto L_0x1722;
-    L_0x165c:
+        goto L_0x1725;
+    L_0x165f:
         r44 = r11;
         r2 = r33;
-        r1.dispose();	 Catch:{ Exception -> 0x16a3, all -> 0x169a }
-        r1 = r4.size();	 Catch:{ Exception -> 0x16a3, all -> 0x169a }
-        if (r1 <= 0) goto L_0x1697;
-    L_0x1669:
+        r1.dispose();	 Catch:{ Exception -> 0x16a6, all -> 0x169d }
+        r1 = r4.size();	 Catch:{ Exception -> 0x16a6, all -> 0x169d }
+        if (r1 <= 0) goto L_0x169a;
+    L_0x166c:
         r1 = 0;
-    L_0x166a:
-        r8 = r4.size();	 Catch:{ Exception -> 0x16a3, all -> 0x169a }
-        if (r1 >= r8) goto L_0x1697;
-    L_0x1670:
-        r8 = r4.valueAt(r1);	 Catch:{ Exception -> 0x16a3, all -> 0x169a }
-        r8 = (java.util.ArrayList) r8;	 Catch:{ Exception -> 0x16a3, all -> 0x169a }
+    L_0x166d:
+        r8 = r4.size();	 Catch:{ Exception -> 0x16a6, all -> 0x169d }
+        if (r1 >= r8) goto L_0x169a;
+    L_0x1673:
+        r8 = r4.valueAt(r1);	 Catch:{ Exception -> 0x16a6, all -> 0x169d }
+        r8 = (java.util.ArrayList) r8;	 Catch:{ Exception -> 0x16a6, all -> 0x169d }
         r9 = 0;
-    L_0x1677:
-        r10 = r8.size();	 Catch:{ Exception -> 0x16a3, all -> 0x169a }
-        if (r9 >= r10) goto L_0x168e;
-    L_0x167d:
-        r10 = r8.get(r9);	 Catch:{ Exception -> 0x16a3, all -> 0x169a }
-        r10 = (org.telegram.tgnet.TLRPC.Message) r10;	 Catch:{ Exception -> 0x16a3, all -> 0x169a }
+    L_0x167a:
+        r10 = r8.size();	 Catch:{ Exception -> 0x16a6, all -> 0x169d }
+        if (r9 >= r10) goto L_0x1691;
+    L_0x1680:
+        r10 = r8.get(r9);	 Catch:{ Exception -> 0x16a6, all -> 0x169d }
+        r10 = (org.telegram.tgnet.TLRPC.Message) r10;	 Catch:{ Exception -> 0x16a6, all -> 0x169d }
         r50 = r12;
         r11 = 0;
-        r10.reply_to_random_id = r11;	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
+        r10.reply_to_random_id = r11;	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
         r9 = r9 + 1;
         r12 = r50;
-        goto L_0x1677;
-    L_0x168e:
+        goto L_0x167a;
+    L_0x1691:
         r50 = r12;
         r11 = 0;
         r1 = r1 + 1;
         r12 = r50;
-        goto L_0x166a;
-    L_0x1697:
-        r50 = r12;
-        goto L_0x16ba;
+        goto L_0x166d;
     L_0x169a:
-        r0 = move-exception;
         r50 = r12;
+        goto L_0x16bd;
     L_0x169d:
-        r20 = r43;
-        r11 = r44;
-        goto L_0x1712;
-    L_0x16a3:
         r0 = move-exception;
         r50 = r12;
-    L_0x16a6:
+    L_0x16a0:
         r20 = r43;
         r11 = r44;
-        goto L_0x1724;
-    L_0x16ac:
+        goto L_0x1715;
+    L_0x16a6:
         r0 = move-exception;
-        goto L_0x170c;
+        r50 = r12;
+    L_0x16a9:
+        r20 = r43;
+        r11 = r44;
+        goto L_0x1727;
     L_0x16af:
         r0 = move-exception;
-        goto L_0x171e;
+        goto L_0x170f;
     L_0x16b2:
+        r0 = move-exception;
+        goto L_0x1721;
+    L_0x16b5:
         r43 = r1;
         r44 = r11;
         r50 = r12;
         r2 = r33;
-    L_0x16ba:
-        r1 = r2.isEmpty();	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
-        if (r1 != 0) goto L_0x16c9;
-    L_0x16c0:
-        r1 = android.text.TextUtils.join(r5, r2);	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
-        r2 = r3.users;	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
-        r14.getUsersInternal(r1, r2);	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
-    L_0x16c9:
-        r1 = r13.isEmpty();	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
-        if (r1 != 0) goto L_0x16d8;
-    L_0x16cf:
-        r1 = android.text.TextUtils.join(r5, r13);	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
-        r2 = r3.chats;	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
-        r14.getChatsInternal(r1, r2);	 Catch:{ Exception -> 0x1701, all -> 0x16f9 }
-    L_0x16d8:
+    L_0x16bd:
+        r1 = r2.isEmpty();	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
+        if (r1 != 0) goto L_0x16cc;
+    L_0x16c3:
+        r1 = android.text.TextUtils.join(r5, r2);	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
+        r2 = r3.users;	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
+        r14.getUsersInternal(r1, r2);	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
+    L_0x16cc:
+        r1 = r13.isEmpty();	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
+        if (r1 != 0) goto L_0x16db;
+    L_0x16d2:
+        r1 = android.text.TextUtils.join(r5, r13);	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
+        r2 = r3.chats;	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
+        r14.getChatsInternal(r1, r2);	 Catch:{ Exception -> 0x1704, all -> 0x16fc }
+    L_0x16db:
         r2 = r42.getMessagesController();
         r9 = 1;
         r4 = r46;
@@ -9468,66 +9113,54 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r18 = r48;
         r19 = r53;
         r20 = r43;
-        goto L_0x17bb;
-    L_0x16f9:
+        goto L_0x17be;
+    L_0x16fc:
         r0 = move-exception;
         r20 = r43;
         r11 = r44;
         r12 = r50;
-        goto L_0x1712;
-    L_0x1701:
+        goto L_0x1715;
+    L_0x1704:
         r0 = move-exception;
         r20 = r43;
         r11 = r44;
         r12 = r50;
-        goto L_0x1724;
-    L_0x1709:
-        r0 = move-exception;
-        r43 = r1;
+        goto L_0x1727;
     L_0x170c:
-        r44 = r11;
-        r50 = r12;
-    L_0x1710:
-        r20 = r43;
-    L_0x1712:
-        r1 = r0;
-        r17 = r18;
-        r13 = r22;
-        r14 = r35;
-        goto L_0x17c1;
-    L_0x171b:
         r0 = move-exception;
         r43 = r1;
-    L_0x171e:
+    L_0x170f:
         r44 = r11;
         r50 = r12;
-    L_0x1722:
+    L_0x1713:
         r20 = r43;
-    L_0x1724:
+    L_0x1715:
         r1 = r0;
         r17 = r18;
         r13 = r22;
         r14 = r35;
-        goto L_0x1796;
-    L_0x172d:
+        goto L_0x17c4;
+    L_0x171e:
         r0 = move-exception;
-        goto L_0x1470;
+        r43 = r1;
+    L_0x1721:
+        r44 = r11;
+        r50 = r12;
+    L_0x1725:
+        r20 = r43;
+    L_0x1727:
+        r1 = r0;
+        r17 = r18;
+        r13 = r22;
+        r14 = r35;
+        goto L_0x1799;
     L_0x1730:
         r0 = move-exception;
-        goto L_0x1490;
+        goto L_0x1473;
     L_0x1733:
         r0 = move-exception;
-        r3 = r37;
-        r1 = 0;
-        r7 = r44;
-        r1 = r0;
-        r6 = r2;
-        r13 = r9;
-        r12 = r10;
-        r11 = r34;
-        r14 = r35;
-        goto L_0x175f;
-    L_0x1742:
+        goto L_0x1493;
+    L_0x1736:
         r0 = move-exception;
         r3 = r37;
         r1 = 0;
@@ -9538,8 +9171,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12 = r10;
         r11 = r34;
         r14 = r35;
-        goto L_0x1770;
-    L_0x1751:
+        goto L_0x1762;
+    L_0x1745:
+        r0 = move-exception;
+        r3 = r37;
+        r1 = 0;
+        r7 = r44;
+        r1 = r0;
+        r6 = r2;
+        r13 = r9;
+        r12 = r10;
+        r11 = r34;
+        r14 = r35;
+        goto L_0x1773;
+    L_0x1754:
         r0 = move-exception;
         r3 = r37;
         r1 = 0;
@@ -9549,12 +9194,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r9;
         r11 = r34;
         r14 = r35;
-    L_0x175e:
+    L_0x1761:
         r12 = 0;
-    L_0x175f:
-        r17 = 1;
-        goto L_0x1780;
     L_0x1762:
+        r17 = 1;
+        goto L_0x1783;
+    L_0x1765:
         r0 = move-exception;
         r3 = r37;
         r1 = 0;
@@ -9564,12 +9209,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = r9;
         r11 = r34;
         r14 = r35;
-    L_0x176f:
+    L_0x1772:
         r12 = 0;
-    L_0x1770:
-        r17 = 1;
-        goto L_0x1792;
     L_0x1773:
+        r17 = 1;
+        goto L_0x1795;
+    L_0x1776:
         r0 = move-exception;
         r3 = r6;
         r1 = 0;
@@ -9581,11 +9226,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = 0;
         r14 = 0;
         r17 = 0;
-    L_0x1780:
+    L_0x1783:
         r20 = 0;
         r21 = 0;
-        goto L_0x17c1;
-    L_0x1785:
+        goto L_0x17c4;
+    L_0x1788:
         r0 = move-exception;
         r3 = r6;
         r1 = 0;
@@ -9597,17 +9242,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = 0;
         r14 = 0;
         r17 = 0;
-    L_0x1792:
+    L_0x1795:
         r20 = 0;
         r21 = 0;
-    L_0x1796:
-        r2 = r3.messages;	 Catch:{ all -> 0x17bf }
-        r2.clear();	 Catch:{ all -> 0x17bf }
-        r2 = r3.chats;	 Catch:{ all -> 0x17bf }
-        r2.clear();	 Catch:{ all -> 0x17bf }
-        r2 = r3.users;	 Catch:{ all -> 0x17bf }
-        r2.clear();	 Catch:{ all -> 0x17bf }
-        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x17bf }
+    L_0x1799:
+        r2 = r3.messages;	 Catch:{ all -> 0x17c2 }
+        r2.clear();	 Catch:{ all -> 0x17c2 }
+        r2 = r3.chats;	 Catch:{ all -> 0x17c2 }
+        r2.clear();	 Catch:{ all -> 0x17c2 }
+        r2 = r3.users;	 Catch:{ all -> 0x17c2 }
+        r2.clear();	 Catch:{ all -> 0x17c2 }
+        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x17c2 }
         r2 = r42.getMessagesController();
         r9 = 1;
         r4 = r46;
@@ -9617,14 +9262,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r16 = r45;
         r18 = r48;
         r19 = r53;
-    L_0x17bb:
+    L_0x17be:
         r2.processLoadedMessages(r3, r4, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20, r21);
         return;
-    L_0x17bf:
+    L_0x17c2:
         r0 = move-exception;
-    L_0x17c0:
+    L_0x17c3:
         r1 = r0;
-    L_0x17c1:
+    L_0x17c4:
         r2 = r42.getMessagesController();
         r9 = 1;
         r4 = r46;
@@ -9635,16 +9280,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r18 = r48;
         r19 = r53;
         r2.processLoadedMessages(r3, r4, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20, r21);
-        goto L_0x17d9;
-    L_0x17d8:
+        goto L_0x17dc;
+    L_0x17db:
         throw r1;
-    L_0x17d9:
-        goto L_0x17d8;
+    L_0x17dc:
+        goto L_0x17db;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getMessages$99$MessagesStorage(int, int, boolean, long, boolean, int, int, int, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getMessages$95$MessagesStorage(int, int, boolean, long, boolean, int, int, int, int, int):void");
     }
 
-    static /* synthetic */ int lambda$null$98(Message message, Message message2) {
+    static /* synthetic */ int lambda$null$94(Message message, Message message2) {
         int i;
         int i2 = message.id;
         if (i2 > 0) {
@@ -9684,10 +9329,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void clearSentMedia() {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$rS-yF6XXVFxWDaoxuId8hRplZ2c(this));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$njxbifD6AXEPiNOzHZsIqSblVS8(this));
     }
 
-    public /* synthetic */ void lambda$clearSentMedia$100$MessagesStorage() {
+    public /* synthetic */ void lambda$clearSentMedia$96$MessagesStorage() {
         try {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
         } catch (Exception e) {
@@ -9701,7 +9346,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Object[] objArr = new Object[2];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$oJehT56UqiUoiqjDnAOsjR4uA-w(this, str, i, objArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$s-45P4D9OAiSlKuJqqgnARiK_mM(this, str, i, objArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -9713,7 +9358,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return null;
     }
 
-    public /* synthetic */ void lambda$getSentFile$101$MessagesStorage(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getSentFile$97$MessagesStorage(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
         try {
             if (Utilities.MD5(str) != null) {
                 SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data, parent FROM sent_files_v2 WHERE uid = '%s' AND type = %d", new Object[]{str, Integer.valueOf(i)}), new Object[0]);
@@ -9744,7 +9389,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putSentFile(String str, TLObject tLObject, int i, String str2) {
         if (str != null && tLObject != null && str2 != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$L9JMKzizHIDAF9nQMG7Sccp61D4(this, str, tLObject, i, str2));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$mTGwtSWOg-fOMb8bNazzz_gdl0s(this, str, tLObject, i, str2));
         }
     }
 
@@ -9760,7 +9405,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:21:0x006d, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$putSentFile$102$MessagesStorage(java.lang.String r5, org.telegram.tgnet.TLObject r6, int r7, java.lang.String r8) {
+    public /* synthetic */ void lambda$putSentFile$98$MessagesStorage(java.lang.String r5, org.telegram.tgnet.TLObject r6, int r7, java.lang.String r8) {
         /*
         r4 = this;
         r0 = 0;
@@ -9842,16 +9487,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0075:
         goto L_0x0074;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$102$MessagesStorage(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$98$MessagesStorage(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
     }
 
     public void updateEncryptedChatSeq(EncryptedChat encryptedChat, boolean z) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$iKCSI3RvOAEFtVZdjfIxLR9YuA4(this, encryptedChat, z));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$vx1OpWNdAe5jIgeIshD6Cyduj80(this, encryptedChat, z));
         }
     }
 
-    public /* synthetic */ void lambda$updateEncryptedChatSeq$103$MessagesStorage(EncryptedChat encryptedChat, boolean z) {
+    public /* synthetic */ void lambda$updateEncryptedChatSeq$99$MessagesStorage(EncryptedChat encryptedChat, boolean z) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?");
@@ -9885,11 +9530,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void updateEncryptedChatTTL(EncryptedChat encryptedChat) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$PCeo7YoL-93CPidH62I0eACgCLASSNAME(this, encryptedChat));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$DGY8npr5gioqJLEAmLJ7LcMehr8(this, encryptedChat));
         }
     }
 
-    public /* synthetic */ void lambda$updateEncryptedChatTTL$104$MessagesStorage(EncryptedChat encryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChatTTL$100$MessagesStorage(EncryptedChat encryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET ttl = ? WHERE uid = ?");
@@ -9915,11 +9560,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void updateEncryptedChatLayer(EncryptedChat encryptedChat) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Rj9ciYeihcI3WVehiy0ujZexAXQ(this, encryptedChat));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$QyJdkRbwRrKR-Ts-lvar_e8NW3c(this, encryptedChat));
         }
     }
 
-    public /* synthetic */ void lambda$updateEncryptedChatLayer$105$MessagesStorage(EncryptedChat encryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChatLayer$101$MessagesStorage(EncryptedChat encryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             sQLitePreparedStatement = this.database.executeFast("UPDATE enc_chats SET layer = ? WHERE uid = ?");
@@ -9945,11 +9590,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void updateEncryptedChat(EncryptedChat encryptedChat) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$vL56QOhGq-BG-IqB3wL5QCBk7es(this, encryptedChat));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$XFQmW8MwiJ7mArJFrvtIZIIp-j8(this, encryptedChat));
         }
     }
 
-    public /* synthetic */ void lambda$updateEncryptedChat$106$MessagesStorage(EncryptedChat encryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChat$102$MessagesStorage(EncryptedChat encryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             if ((encryptedChat.key_hash == null || encryptedChat.key_hash.length < 16) && encryptedChat.auth_key != null) {
@@ -10017,7 +9662,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public boolean isDialogHasMessages(long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$bpdKKbHj_4yTsVGbLanmgtT7yEQ(this, j, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$xVnKpRJTs-1vA4217QyeJWYXb54(this, j, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -10026,7 +9671,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return zArr[0];
     }
 
-    public /* synthetic */ void lambda$isDialogHasMessages$107$MessagesStorage(long j, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$isDialogHasMessages$103$MessagesStorage(long j, boolean[] zArr, CountDownLatch countDownLatch) {
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages WHERE uid = %d LIMIT 1", new Object[]{Long.valueOf(j)}), new Object[0]);
             zArr[0] = queryFinalized.next();
@@ -10042,7 +9687,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public boolean hasAuthMessage(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$MolWuv6undEOOCYO4T0pVDDUqaU(this, i, zArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0WkebghSVZdScodImy6u-4DrYzc(this, i, zArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -10051,7 +9696,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return zArr[0];
     }
 
-    public /* synthetic */ void lambda$hasAuthMessage$108$MessagesStorage(int i, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$hasAuthMessage$104$MessagesStorage(int i, boolean[] zArr, CountDownLatch countDownLatch) {
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages WHERE uid = 777000 AND date = %d AND mid < 0 LIMIT 1", new Object[]{Integer.valueOf(i)}), new Object[0]);
             zArr[0] = queryFinalized.next();
@@ -10066,11 +9711,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void getEncryptedChat(int i, CountDownLatch countDownLatch, ArrayList<TLObject> arrayList) {
         if (countDownLatch != null && arrayList != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$_pXIyjhu_kP98F6egDscibKmq9o(this, i, arrayList, countDownLatch));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Ys9BmtDj5yAwfuNo_Yj_T3FtYnM(this, i, arrayList, countDownLatch));
         }
     }
 
-    public /* synthetic */ void lambda$getEncryptedChat$109$MessagesStorage(int i, ArrayList arrayList, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getEncryptedChat$105$MessagesStorage(int i, ArrayList arrayList, CountDownLatch countDownLatch) {
         try {
             ArrayList arrayList2 = new ArrayList();
             ArrayList arrayList3 = new ArrayList();
@@ -10096,11 +9741,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putEncryptedChat(EncryptedChat encryptedChat, User user, Dialog dialog) {
         if (encryptedChat != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$1t-jxz28XWD5_NWkNbPBhw1nX7g(this, encryptedChat, user, dialog));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$DnelZa1G0UoWk1ZgHtU-AICVVxQ(this, encryptedChat, user, dialog));
         }
     }
 
-    public /* synthetic */ void lambda$putEncryptedChat$110$MessagesStorage(EncryptedChat encryptedChat, User user, Dialog dialog) {
+    public /* synthetic */ void lambda$putEncryptedChat$106$MessagesStorage(EncryptedChat encryptedChat, User user, Dialog dialog) {
         EncryptedChat encryptedChat2 = encryptedChat;
         User user2 = user;
         Dialog dialog2 = dialog;
@@ -10263,11 +9908,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void updateChatDefaultBannedRights(int i, TL_chatBannedRights tL_chatBannedRights, int i2) {
         if (tL_chatBannedRights != null && i != 0) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$TGCpCB7LSA8DHwGSSxiFKsy33dc(this, i, i2, tL_chatBannedRights));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$u73NEAoH0FZeksfL9eeIz4uLrL0(this, i, i2, tL_chatBannedRights));
         }
     }
 
-    public /* synthetic */ void lambda$updateChatDefaultBannedRights$111$MessagesStorage(int i, int i2, TL_chatBannedRights tL_chatBannedRights) {
+    public /* synthetic */ void lambda$updateChatDefaultBannedRights$107$MessagesStorage(int i, int i2, TL_chatBannedRights tL_chatBannedRights) {
         Chat chat = null;
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM chats WHERE uid = %d", new Object[]{Integer.valueOf(i)}), new Object[0]);
@@ -10473,22 +10118,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void putUsersAndChats(ArrayList<User> arrayList, ArrayList<Chat> arrayList2, boolean z, boolean z2) {
         if (arrayList == null || !arrayList.isEmpty() || arrayList2 == null || !arrayList2.isEmpty()) {
             if (z2) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$JSVWYXjn12VPJmM6MTbASbqykBc(this, arrayList, arrayList2, z));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$FRdthxn_PMzsOPnqC6D8MtAH2HI(this, arrayList, arrayList2, z));
             } else {
                 putUsersAndChatsInternal(arrayList, arrayList2, z);
             }
         }
     }
 
-    public /* synthetic */ void lambda$putUsersAndChats$112$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, boolean z) {
+    public /* synthetic */ void lambda$putUsersAndChats$108$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, boolean z) {
         putUsersAndChatsInternal(arrayList, arrayList2, z);
     }
 
     public void removeFromDownloadQueue(long j, int i, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$HKGkQTUsIOZlhpThsH0y0WFB6BU(this, z, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$aTq1I_sTlcC3aX3sCf-OY6rwxXc(this, z, i, j));
     }
 
-    public /* synthetic */ void lambda$removeFromDownloadQueue$113$MessagesStorage(boolean z, int i, long j) {
+    public /* synthetic */ void lambda$removeFromDownloadQueue$109$MessagesStorage(boolean z, int i, long j) {
         if (z) {
             try {
                 SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT min(date) FROM download_queue WHERE type = %d", new Object[]{Integer.valueOf(i)}), new Object[0]);
@@ -10508,10 +10153,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void clearDownloadQueue(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$XOOEFv6-nsLaFqlkwgqCYgCZf7k(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$2j00OtO7VT4auLIM_kQx7Z3LLC0(this, i));
     }
 
-    public /* synthetic */ void lambda$clearDownloadQueue$114$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$clearDownloadQueue$110$MessagesStorage(int i) {
         if (i == 0) {
             try {
                 this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
@@ -10525,10 +10170,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getDownloadQueue(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$_aRsab9_X9ZREnx4AONPkkbkYtg(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$MDhQVfNZmNZBYCBBl31q2G9pbbg(this, i));
     }
 
-    public /* synthetic */ void lambda$getDownloadQueue$116$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$getDownloadQueue$112$MessagesStorage(int i) {
         try {
             ArrayList arrayList = new ArrayList();
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, type, data, parent FROM download_queue WHERE type = %d ORDER BY date DESC LIMIT 3", new Object[]{Integer.valueOf(i)}), new Object[0]);
@@ -10553,13 +10198,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 arrayList.add(downloadObject);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$vPVwfuTkV5H-gkaM5h6YUplRp5o(this, i, arrayList));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$f4Ywh1aQsEB6vnx8exhHF-VMhzM(this, i, arrayList));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    public /* synthetic */ void lambda$null$115$MessagesStorage(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$111$MessagesStorage(int i, ArrayList arrayList) {
         getDownloadController().processDownloadObjects(i, arrayList);
     }
 
@@ -10644,11 +10289,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putWebPages(LongSparseArray<WebPage> longSparseArray) {
         if (!isEmpty((LongSparseArray) longSparseArray)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$SNHJFPY2Ny0IvDGiULb1L66FS80(this, longSparseArray));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$H0qvW6G0XWu1E5Qhn_LekFbVPFE(this, longSparseArray));
         }
     }
 
-    public /* synthetic */ void lambda$putWebPages$118$MessagesStorage(LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$putWebPages$114$MessagesStorage(LongSparseArray longSparseArray) {
         try {
             ArrayList arrayList = new ArrayList();
             int i = 0;
@@ -10708,26 +10353,26 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 executeFast.dispose();
                 executeFast2.dispose();
                 this.database.commitTransaction();
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$HT3P_3rgmlngxKvE3Pe1la5iw3M(this, arrayList));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$Jywv3U_eM6e1Ryz8g--xCCRrzLk(this, arrayList));
             }
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    public /* synthetic */ void lambda$null$117$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$113$MessagesStorage(ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.didReceivedWebpages, arrayList);
     }
 
     public void overwriteChannel(int i, TL_updates_channelDifferenceTooLong tL_updates_channelDifferenceTooLong, int i2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$KuQHt8KDUvTVhWEX0_0hfrx6B_4(this, i, i2, tL_updates_channelDifferenceTooLong));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$raA2_pcbxTe4GCBWKMdSRUof4ow(this, i, i2, tL_updates_channelDifferenceTooLong));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:12:0x0114 A:{Catch:{ Exception -> 0x0145 }} */
     /* JADX WARNING: Removed duplicated region for block: B:11:0x0112 A:{Catch:{ Exception -> 0x0145 }} */
     /* JADX WARNING: Removed duplicated region for block: B:21:? A:{SYNTHETIC, RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:15:0x0133 A:{Catch:{ Exception -> 0x0145 }} */
-    public /* synthetic */ void lambda$overwriteChannel$120$MessagesStorage(int r11, int r12, org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong r13) {
+    public /* synthetic */ void lambda$overwriteChannel$116$MessagesStorage(int r11, int r12, org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong r13) {
         /*
         r10 = this;
         r0 = -r11;
@@ -10852,7 +10497,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0145 }
         r13.<init>();	 Catch:{ Exception -> 0x0145 }
         r10.updateDialogsWithDeletedMessages(r13, r7, r4, r11);	 Catch:{ Exception -> 0x0145 }
-        r13 = new org.telegram.messenger.-$$Lambda$MessagesStorage$IVTeTWiTLzKQ9bc5LJpQklArBmw;	 Catch:{ Exception -> 0x0145 }
+        r13 = new org.telegram.messenger.-$$Lambda$MessagesStorage$orNkObitaRfQdOiVK8wmjhp7nhM;	 Catch:{ Exception -> 0x0145 }
         r13.<init>(r10, r0);	 Catch:{ Exception -> 0x0145 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r13);	 Catch:{ Exception -> 0x0145 }
         if (r6 == 0) goto L_0x0149;
@@ -10872,20 +10517,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0149:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$120$MessagesStorage(int, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$116$MessagesStorage(int, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");
     }
 
-    public /* synthetic */ void lambda$null$119$MessagesStorage(long j) {
+    public /* synthetic */ void lambda$null$115$MessagesStorage(long j) {
         getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), Boolean.valueOf(true));
     }
 
     public void putChannelViews(SparseArray<SparseIntArray> sparseArray, boolean z) {
         if (!isEmpty((SparseArray) sparseArray)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$UQE2liI7aCswLSqyo6gLkVLwAy0(this, sparseArray, z));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$V4GicTEsvEKlkqYc2NvS_f_Cy2o(this, sparseArray, z));
         }
     }
 
-    public /* synthetic */ void lambda$putChannelViews$121$MessagesStorage(SparseArray sparseArray, boolean z) {
+    public /* synthetic */ void lambda$putChannelViews$117$MessagesStorage(SparseArray sparseArray, boolean z) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE messages SET media = max((SELECT media FROM messages WHERE mid = ?), ?) WHERE mid = ?");
@@ -12369,7 +12014,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2.processDialogsUpdateRead(r3, r9);	 Catch:{ Exception -> 0x0113 }
         if (r37 == 0) goto L_0x0a5c;
     L_0x0a49:
-        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$1aV9FLis1C-HpFT5dsmh6TknWTM;	 Catch:{ Exception -> 0x0113 }
+        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$Bw9l9LNNVmXi_Z-kQjR6piu3DAs;	 Catch:{ Exception -> 0x0113 }
         r7 = r37;
         r2.<init>(r1, r7);	 Catch:{ Exception -> 0x0113 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0113 }
@@ -12386,7 +12031,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.putMessagesInternal(java.util.ArrayList, boolean, boolean, int, boolean, boolean):void");
     }
 
-    public /* synthetic */ void lambda$putMessagesInternal$122$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$putMessagesInternal$118$MessagesStorage(int i) {
         getDownloadController().newDownloadObjectsAvailable(i);
     }
 
@@ -12397,22 +12042,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void putMessages(ArrayList<Message> arrayList, boolean z, boolean z2, boolean z3, int i, boolean z4, boolean z5) {
         if (arrayList.size() != 0) {
             if (z2) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$KggamDzeEC2R-dcavc2M-YMGwao(this, arrayList, z, z3, i, z4, z5));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$YFwsLfv6ccqp08M2WGcFgcOROdk(this, arrayList, z, z3, i, z4, z5));
             } else {
                 putMessagesInternal(arrayList, z, z3, i, z4, z5);
             }
         }
     }
 
-    public /* synthetic */ void lambda$putMessages$123$MessagesStorage(ArrayList arrayList, boolean z, boolean z2, int i, boolean z3, boolean z4) {
+    public /* synthetic */ void lambda$putMessages$119$MessagesStorage(ArrayList arrayList, boolean z, boolean z2, int i, boolean z3, boolean z4) {
         putMessagesInternal(arrayList, z, z2, i, z3, z4);
     }
 
     public void markMessageAsSendError(Message message, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$cdtpimONQnH7ghPCZDIapVj6hU4(this, message, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$iv61JbFyQ2jGaIur6_FKhwhb9HE(this, message, z));
     }
 
-    public /* synthetic */ void lambda$markMessageAsSendError$124$MessagesStorage(Message message, boolean z) {
+    public /* synthetic */ void lambda$markMessageAsSendError$120$MessagesStorage(Message message, boolean z) {
         try {
             long j = (long) message.id;
             if (message.to_id.channel_id != 0) {
@@ -12439,10 +12084,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void setMessageSeq(int i, int i2, int i3) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$sSBfacOo1rZXR-hrAmC6Ccd9t-c(this, i, i2, i3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$tfio61Jg7EwU_lYu8vz8qjAm11M(this, i, i2, i3));
     }
 
-    public /* synthetic */ void lambda$setMessageSeq$125$MessagesStorage(int i, int i2, int i3) {
+    public /* synthetic */ void lambda$setMessageSeq$121$MessagesStorage(int i, int i2, int i3) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO messages_seq VALUES(?, ?, ?)");
             executeFast.requery();
@@ -13073,13 +12718,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.updateMessageStateAndIdInternal(long, java.lang.Integer, int, int, int, int):long[]");
     }
 
-    public /* synthetic */ void lambda$updateMessageStateAndId$126$MessagesStorage(long j, Integer num, int i, int i2, int i3, int i4) {
+    public /* synthetic */ void lambda$updateMessageStateAndId$122$MessagesStorage(long j, Integer num, int i, int i2, int i3, int i4) {
         updateMessageStateAndIdInternal(j, num, i, i2, i3, i4);
     }
 
     public long[] updateMessageStateAndId(long j, Integer num, int i, int i2, boolean z, int i3, int i4) {
         if (z) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$u6msWq1WqDcnHiB_oDdsHPJSnjQ(this, j, num, i, i2, i3, i4));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$8trnP44k-Zj6kUr2bLUzz-qMuHc(this, j, num, i, i2, i3, i4));
             return null;
         }
         return updateMessageStateAndIdInternal(j, num, i, i2, i3, i4);
@@ -13164,14 +12809,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void updateUsers(ArrayList<User> arrayList, boolean z, boolean z2, boolean z3) {
         if (arrayList != null && !arrayList.isEmpty()) {
             if (z3) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$2rSLesjUIF5bNuhypz114rjoBYA(this, arrayList, z, z2));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$f8uWvtGd5y8flPqv-Ei_D6-ZZiM(this, arrayList, z, z2));
             } else {
                 updateUsersInternal(arrayList, z, z2);
             }
         }
     }
 
-    public /* synthetic */ void lambda$updateUsers$127$MessagesStorage(ArrayList arrayList, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$updateUsers$123$MessagesStorage(ArrayList arrayList, boolean z, boolean z2) {
         updateUsersInternal(arrayList, z, z2);
     }
 
@@ -13222,11 +12867,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void markMessagesContentAsRead(ArrayList<Long> arrayList, int i) {
         if (!isEmpty((List) arrayList)) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$qeKigrejOYtw3HKCiEwq71f4Lz0(this, arrayList, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$KmlxaGLCxdF9itv8SdAamxQs34s(this, arrayList, i));
         }
     }
 
-    public /* synthetic */ void lambda$markMessagesContentAsRead$128$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$markMessagesContentAsRead$124$MessagesStorage(ArrayList arrayList, int i) {
         try {
             String join = TextUtils.join(",", arrayList);
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE mid IN (%s)", new Object[]{join})).stepThis().dispose();
@@ -13249,13 +12894,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$markMessagesAsRead$129$MessagesStorage(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray) {
+    public /* synthetic */ void lambda$markMessagesAsRead$125$MessagesStorage(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray) {
         markMessagesAsReadInternal(sparseLongArray, sparseLongArray2, sparseIntArray);
     }
 
     public void markMessagesAsRead(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray, boolean z) {
         if (z) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$2MNv0SKJNgbBQnYhb2DVEAlNVTE(this, sparseLongArray, sparseLongArray2, sparseIntArray));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$KkoZhkq6PjNpGY0bOzZH8M7tawE(this, sparseLongArray, sparseLongArray2, sparseIntArray));
         } else {
             markMessagesAsReadInternal(sparseLongArray, sparseLongArray2, sparseIntArray);
         }
@@ -13263,11 +12908,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void markMessagesAsDeletedByRandoms(ArrayList<Long> arrayList) {
         if (!arrayList.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$LjhGqqPcYQzZzHaoxyEV5G1C8qE(this, arrayList));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$oZWR0RwulVJnhLveiz-L711j8Fg(this, arrayList));
         }
     }
 
-    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$131$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$127$MessagesStorage(ArrayList arrayList) {
         try {
             String join = TextUtils.join(",", arrayList);
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM randoms WHERE random_id IN(%s)", new Object[]{join}), new Object[0]);
@@ -13277,7 +12922,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
             queryFinalized.dispose();
             if (!arrayList2.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$t1DfILde5DGJaOF3qAHGUjqwy9k(this, arrayList2));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$rXHoyNwd2Kd96mOnp948GW2nXjY(this, arrayList2));
                 updateDialogsWithReadMessagesInternal(arrayList2, null, null, null);
                 markMessagesAsDeletedInternal(arrayList2, 0, true, false);
                 updateDialogsWithDeletedMessagesInternal(arrayList2, null, 0);
@@ -13287,7 +12932,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$130$MessagesStorage(ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$126$MessagesStorage(ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, Integer.valueOf(0), Boolean.valueOf(false));
     }
 
@@ -13311,13 +12956,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 i = queryFinalized.intValue(0);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$7iWNAvAehTxYii65YWvXcRKbRXA(this, l, i));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$Q9bV47vHWumXBIHs7iypkp_SqNw(this, l, i));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    public /* synthetic */ void lambda$broadcastScheduledMessagesChange$132$MessagesStorage(Long l, int i) {
+    public /* synthetic */ void lambda$broadcastScheduledMessagesChange$128$MessagesStorage(Long l, int i) {
         getNotificationCenter().postNotificationName(NotificationCenter.scheduledMessagesUpdated, l, Integer.valueOf(i));
     }
 
@@ -13422,14 +13067,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                                     numArr[0] = Integer.valueOf(numArr[0].intValue() + 1);
                                 }
                             }
-                            if (((int) longValue2) == 0 || z) {
-                                NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
-                                if (byteBufferValue != null) {
-                                    Message TLdeserialize = Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                    TLdeserialize.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
-                                    byteBufferValue.reuse();
-                                    addFilesToDelete(TLdeserialize, arrayList8, false);
-                                }
+                        }
+                        if (((int) longValue2) == 0 || z) {
+                            NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
+                            if (byteBufferValue != null) {
+                                Message TLdeserialize = Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                                TLdeserialize.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
+                                byteBufferValue.reuse();
+                                addFilesToDelete(TLdeserialize, arrayList8, false);
                             }
                         }
                         i3 = 0;
@@ -13698,14 +13343,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public void updateDialogsWithDeletedMessages(ArrayList<Integer> arrayList, ArrayList<Long> arrayList2, boolean z, int i) {
         if (!arrayList.isEmpty() || i != 0) {
             if (z) {
-                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$MA7HhVEAT2vamXfRirkyxddYYBE(this, arrayList, arrayList2, i));
+                this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$iK8A-SAdCdfVOMqr20ENyrWEKkc(this, arrayList, arrayList2, i));
             } else {
                 updateDialogsWithDeletedMessagesInternal(arrayList, arrayList2, i);
             }
         }
     }
 
-    public /* synthetic */ void lambda$updateDialogsWithDeletedMessages$133$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i) {
+    public /* synthetic */ void lambda$updateDialogsWithDeletedMessages$129$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i) {
         updateDialogsWithDeletedMessagesInternal(arrayList, arrayList2, i);
     }
 
@@ -13716,11 +13361,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (!z) {
             return markMessagesAsDeletedInternal(arrayList, i, z2, z3);
         }
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$HQfq3K7xp6O4Uq6A5b-7WVxoEOk(this, arrayList, i, z2, z3));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$var_l5l4YmV9xGDKz8o9vxI8SwU(this, arrayList, i, z2, z3));
         return null;
     }
 
-    public /* synthetic */ void lambda$markMessagesAsDeleted$134$MessagesStorage(ArrayList arrayList, int i, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$markMessagesAsDeleted$130$MessagesStorage(ArrayList arrayList, int i, boolean z, boolean z2) {
         markMessagesAsDeletedInternal(arrayList, i, z, z2);
     }
 
@@ -13758,14 +13403,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                                 numArr[0] = Integer.valueOf(numArr[0].intValue() + 1);
                             }
                         }
-                        if (((int) longValue) == 0 || z) {
-                            NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
-                            if (byteBufferValue != null) {
-                                Message TLdeserialize = Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                TLdeserialize.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
-                                byteBufferValue.reuse();
-                                addFilesToDelete(TLdeserialize, arrayList2, false);
-                            }
+                    }
+                    if (((int) longValue) == 0 || z) {
+                        NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
+                        if (byteBufferValue != null) {
+                            Message TLdeserialize = Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                            TLdeserialize.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
+                            byteBufferValue.reuse();
+                            addFilesToDelete(TLdeserialize, arrayList2, false);
                         }
                     }
                     i4 = 0;
@@ -13811,7 +13456,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$markMessagesAsDeleted$135$MessagesStorage(int i, int i2, boolean z) {
+    public /* synthetic */ void lambda$markMessagesAsDeleted$131$MessagesStorage(int i, int i2, boolean z) {
         markMessagesAsDeletedInternal(i, i2, z);
     }
 
@@ -13819,7 +13464,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (!z) {
             return markMessagesAsDeletedInternal(i, i2, z2);
         }
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$0yMZVwrc7W9ZqZ8puLkQWwGfdhA(this, i, i2, z2));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$h5YyXRaxJqni75pbOUW0YJmqvQg(this, i, i2, z2));
         return null;
     }
 
@@ -13829,13 +13474,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (messageMedia instanceof TL_messageMediaUnsupported_old) {
                 if (messageMedia.bytes.length == 0) {
                     messageMedia.bytes = new byte[1];
-                    messageMedia.bytes[0] = (byte) 106;
+                    messageMedia.bytes[0] = (byte) 108;
                 }
             } else if (messageMedia instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 messageMedia = message.media;
                 messageMedia.bytes = new byte[1];
-                messageMedia.bytes[0] = (byte) 106;
+                messageMedia.bytes[0] = (byte) 108;
                 message.flags |= 512;
             }
         }
@@ -14135,7 +13780,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void replaceMessageIfExists(Message message, int i, ArrayList<User> arrayList, ArrayList<Chat> arrayList2, boolean z) {
         if (message != null) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$pND7SeCnHWGSkCmeT8Uq6NOWqtE(this, message, z, arrayList, arrayList2, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$7WTSHIQPfcUMYxwWAQonwMJHQII(this, message, z, arrayList, arrayList2, i));
         }
     }
 
@@ -14258,9 +13903,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r2 = new org.telegram.messenger.MessageObject(r20, r16, r5, r0, true);
             r0 = new java.util.ArrayList();
             r0.add(r2);
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.-$$Lambda$MessagesStorage$gjhvLB2dNIvHmzW5tkQ7jymYeFU(r15, r2, r0));
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.-$$Lambda$MessagesStorage$Igy6jdP8JDjFz2_TGYETpcN3X6Q(r15, r2, r0));
      */
-    public /* synthetic */ void lambda$replaceMessageIfExists$137$MessagesStorage(org.telegram.tgnet.TLRPC.Message r16, boolean r17, java.util.ArrayList r18, java.util.ArrayList r19, int r20) {
+    public /* synthetic */ void lambda$replaceMessageIfExists$133$MessagesStorage(org.telegram.tgnet.TLRPC.Message r16, boolean r17, java.util.ArrayList r18, java.util.ArrayList r19, int r20) {
         /*
         r15 = this;
         r1 = r15;
@@ -14453,7 +14098,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0176 }
         r0.<init>();	 Catch:{ Exception -> 0x0176 }
         r0.add(r8);	 Catch:{ Exception -> 0x0176 }
-        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$gjhvLB2dNIvHmzW5tkQ7jymYeFU;	 Catch:{ Exception -> 0x0176 }
+        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$Igy6jdP8JDjFz2_TGYETpcN3X6Q;	 Catch:{ Exception -> 0x0176 }
         r2.<init>(r15, r8, r0);	 Catch:{ Exception -> 0x0176 }
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0176 }
         goto L_0x017a;
@@ -14469,15 +14114,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x017a:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$137$MessagesStorage(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$133$MessagesStorage(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList, int):void");
     }
 
-    public /* synthetic */ void lambda$null$136$MessagesStorage(MessageObject messageObject, ArrayList arrayList) {
+    public /* synthetic */ void lambda$null$132$MessagesStorage(MessageObject messageObject, ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, Long.valueOf(messageObject.getDialogId()), arrayList);
     }
 
     public void putMessages(messages_Messages messages_messages, long j, int i, int i2, boolean z, boolean z2) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$TTMiEnqYaYe2HHAdhUxlHMYi1Ik(this, z2, j, messages_messages, i, i2, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$8C3Kex6g8Avar_H71IxnDhbVs7iA(this, z2, j, messages_messages, i, i2, z));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:82:0x0264 A:{Catch:{ Exception -> 0x0559 }} */
@@ -14512,7 +14157,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:67:0x0232, code skipped:
             if (r10.media.photo.id == r15.media.photo.id) goto L_0x0234;
      */
-    public /* synthetic */ void lambda$putMessages$138$MessagesStorage(boolean r31, long r32, org.telegram.tgnet.TLRPC.messages_Messages r34, int r35, int r36, boolean r37) {
+    public /* synthetic */ void lambda$putMessages$134$MessagesStorage(boolean r31, long r32, org.telegram.tgnet.TLRPC.messages_Messages r34, int r35, int r36, boolean r37) {
         /*
         r30 = this;
         r7 = r30;
@@ -15286,7 +14931,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x055d:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$138$MessagesStorage(boolean, long, org.telegram.tgnet.TLRPC$messages_Messages, int, int, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$134$MessagesStorage(boolean, long, org.telegram.tgnet.TLRPC$messages_Messages, int, int, boolean):void");
     }
 
     public static void addUsersAndChatsFromMessage(Message message, ArrayList<Integer> arrayList, ArrayList<Integer> arrayList2) {
@@ -15380,561 +15025,695 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public void getDialogs(int i, int i2, int i3) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$xgSn2rhYdKpJx8E6odU-ONY7l64(this, i, i2, i3));
+    public void getDialogs(int i, int i2, int i3, boolean z) {
+        long[] jArr = null;
+        if (z) {
+            LongSparseArray drafts = getMediaDataController().getDrafts();
+            int size = drafts.size();
+            if (size > 0) {
+                jArr = new long[size];
+                for (int i4 = 0; i4 < size; i4++) {
+                    jArr[i4] = drafts.keyAt(i4);
+                }
+            }
+        }
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5X-GQzTUsL_TJG4ZKnsInj8fCJ4(this, i, i2, i3, jArr));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x028c A:{Catch:{ Exception -> 0x0395 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x0265 A:{Catch:{ Exception -> 0x0395 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0138 A:{Catch:{ Exception -> 0x02a6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x0136 A:{Catch:{ Exception -> 0x02a6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x014f A:{Catch:{ Exception -> 0x02a6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x014d A:{Catch:{ Exception -> 0x02a6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0166 A:{SYNTHETIC, Splitter:B:54:0x0166} */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x018d A:{Catch:{ Exception -> 0x02a6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x0265 A:{Catch:{ Exception -> 0x0395 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x028c A:{Catch:{ Exception -> 0x0395 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x028c A:{Catch:{ Exception -> 0x0395 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x0265 A:{Catch:{ Exception -> 0x0395 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x0265 A:{Catch:{ Exception -> 0x0395 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x028c A:{Catch:{ Exception -> 0x0395 }} */
-    public /* synthetic */ void lambda$getDialogs$139$MessagesStorage(int r20, int r21, int r22) {
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x02b3 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x028c A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x0141 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x013f A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x0158 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x0156 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x0171 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0193 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x01a1 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x028c A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x02b3 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x02b3 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x028c A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x028c A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x02b3 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x02b3 A:{Catch:{ Exception -> 0x0462 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x028c A:{Catch:{ Exception -> 0x0462 }} */
+    public /* synthetic */ void lambda$getDialogs$136$MessagesStorage(int r24, int r25, int r26, long[] r27) {
         /*
-        r19 = this;
-        r1 = r19;
+        r23 = this;
+        r1 = r23;
+        r2 = r27;
         r12 = new org.telegram.tgnet.TLRPC$TL_messages_dialogs;
         r12.<init>();
         r13 = new java.util.ArrayList;
         r13.<init>();
-        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x039b }
-        r2.<init>();	 Catch:{ Exception -> 0x039b }
-        r0 = r19.getUserConfig();	 Catch:{ Exception -> 0x039b }
-        r0 = r0.getClientUserId();	 Catch:{ Exception -> 0x039b }
-        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x039b }
-        r2.add(r0);	 Catch:{ Exception -> 0x039b }
-        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x039b }
-        r3.<init>();	 Catch:{ Exception -> 0x039b }
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x039b }
-        r4.<init>();	 Catch:{ Exception -> 0x039b }
-        r5 = new java.util.ArrayList;	 Catch:{ Exception -> 0x039b }
-        r5.<init>();	 Catch:{ Exception -> 0x039b }
-        r6 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x039b }
-        r6.<init>();	 Catch:{ Exception -> 0x039b }
-        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x039b }
-        r8 = 2;
-        r7.<init>(r8);	 Catch:{ Exception -> 0x039b }
-        r0 = java.lang.Integer.valueOf(r20);	 Catch:{ Exception -> 0x039b }
-        r7.add(r0);	 Catch:{ Exception -> 0x039b }
-        r10 = 0;
-    L_0x0042:
-        r0 = r7.size();	 Catch:{ Exception -> 0x039b }
-        r14 = 3;
-        if (r10 >= r0) goto L_0x02c2;
+        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0468 }
+        r3.<init>();	 Catch:{ Exception -> 0x0468 }
+        r0 = r23.getUserConfig();	 Catch:{ Exception -> 0x0468 }
+        r0 = r0.getClientUserId();	 Catch:{ Exception -> 0x0468 }
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0468 }
+        r3.add(r0);	 Catch:{ Exception -> 0x0468 }
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0468 }
+        r4.<init>();	 Catch:{ Exception -> 0x0468 }
+        r5 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0468 }
+        r5.<init>();	 Catch:{ Exception -> 0x0468 }
+        r6 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0468 }
+        r6.<init>();	 Catch:{ Exception -> 0x0468 }
+        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0468 }
+        r7.<init>();	 Catch:{ Exception -> 0x0468 }
+        r8 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x0468 }
+        r8.<init>();	 Catch:{ Exception -> 0x0468 }
+        r9 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0468 }
+        r10 = 2;
+        r9.<init>(r10);	 Catch:{ Exception -> 0x0468 }
+        r0 = java.lang.Integer.valueOf(r24);	 Catch:{ Exception -> 0x0468 }
+        r9.add(r0);	 Catch:{ Exception -> 0x0468 }
+        r14 = 0;
     L_0x0049:
-        r0 = r7.get(r10);	 Catch:{ Exception -> 0x02bb }
-        r0 = (java.lang.Integer) r0;	 Catch:{ Exception -> 0x02bb }
-        r0 = r0.intValue();	 Catch:{ Exception -> 0x02bb }
-        if (r10 != 0) goto L_0x005a;
-    L_0x0055:
-        r16 = r21;
-        r17 = r22;
-        goto L_0x0060;
-    L_0x005a:
-        r16 = 50;
-        r16 = 0;
+        r0 = r9.size();	 Catch:{ Exception -> 0x0468 }
+        r15 = 3;
+        if (r14 >= r0) goto L_0x02ee;
+    L_0x0050:
+        r0 = r9.get(r14);	 Catch:{ Exception -> 0x02e8 }
+        r0 = (java.lang.Integer) r0;	 Catch:{ Exception -> 0x02e8 }
+        r0 = r0.intValue();	 Catch:{ Exception -> 0x02e8 }
+        if (r14 != 0) goto L_0x0061;
+    L_0x005c:
+        r17 = r25;
+        r18 = r26;
+        goto L_0x0067;
+    L_0x0061:
         r17 = 50;
-    L_0x0060:
-        r11 = r1.database;	 Catch:{ Exception -> 0x02bb }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x02bb }
-        r15 = "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i, d.flags, d.folder_id, d.data FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did WHERE d.folder_id = %d ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d";
-        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x02bb }
-        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x02bb }
-        r18 = 0;
-        r9[r18] = r0;	 Catch:{ Exception -> 0x02bb }
-        r0 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x02bb }
-        r16 = 1;
-        r9[r16] = r0;	 Catch:{ Exception -> 0x02bb }
-        r0 = java.lang.Integer.valueOf(r17);	 Catch:{ Exception -> 0x02bb }
+        r17 = 0;
+        r18 = 50;
+    L_0x0067:
+        r10 = r1.database;	 Catch:{ Exception -> 0x02e8 }
+        r11 = java.util.Locale.US;	 Catch:{ Exception -> 0x02e8 }
+        r20 = r13;
+        r13 = "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i, d.flags, d.folder_id, d.data FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did WHERE d.folder_id = %d ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d";
+        r1 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x0462 }
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0462 }
+        r19 = 0;
+        r1[r19] = r0;	 Catch:{ Exception -> 0x0462 }
+        r0 = java.lang.Integer.valueOf(r17);	 Catch:{ Exception -> 0x0462 }
+        r17 = 1;
+        r1[r17] = r0;	 Catch:{ Exception -> 0x0462 }
+        r0 = java.lang.Integer.valueOf(r18);	 Catch:{ Exception -> 0x0462 }
         r16 = 2;
-        r9[r16] = r0;	 Catch:{ Exception -> 0x02bb }
-        r0 = java.lang.String.format(r8, r15, r9);	 Catch:{ Exception -> 0x02bb }
-        r8 = 0;
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x02bb }
-        r9 = r11.queryFinalized(r0, r9);	 Catch:{ Exception -> 0x02bb }
-    L_0x008b:
-        r0 = r9.next();	 Catch:{ Exception -> 0x02bb }
-        if (r0 == 0) goto L_0x02ab;
-    L_0x0091:
-        r14 = r9.longValue(r8);	 Catch:{ Exception -> 0x02bb }
-        r0 = org.telegram.messenger.DialogObject.isFolderDialogId(r14);	 Catch:{ Exception -> 0x02bb }
-        if (r0 == 0) goto L_0x00e4;
-    L_0x009b:
-        r0 = new org.telegram.tgnet.TLRPC$TL_dialogFolder;	 Catch:{ Exception -> 0x039b }
-        r0.<init>();	 Catch:{ Exception -> 0x039b }
-        r8 = 18;
-        r16 = r9.isNull(r8);	 Catch:{ Exception -> 0x039b }
-        if (r16 != 0) goto L_0x00ce;
-    L_0x00a8:
-        r8 = r9.byteBufferValue(r8);	 Catch:{ Exception -> 0x039b }
-        if (r8 == 0) goto L_0x00bc;
-    L_0x00ae:
-        r17 = r13;
-        r11 = 0;
-        r13 = r8.readInt32(r11);	 Catch:{ Exception -> 0x00de }
-        r13 = org.telegram.tgnet.TLRPC.TL_folder.TLdeserialize(r8, r13, r11);	 Catch:{ Exception -> 0x00de }
-        r0.folder = r13;	 Catch:{ Exception -> 0x00de }
-        goto L_0x00ca;
-    L_0x00bc:
-        r17 = r13;
-        r11 = new org.telegram.tgnet.TLRPC$TL_folder;	 Catch:{ Exception -> 0x00de }
-        r11.<init>();	 Catch:{ Exception -> 0x00de }
-        r0.folder = r11;	 Catch:{ Exception -> 0x00de }
-        r11 = r0.folder;	 Catch:{ Exception -> 0x00de }
-        r13 = (int) r14;	 Catch:{ Exception -> 0x00de }
-        r11.id = r13;	 Catch:{ Exception -> 0x00de }
-    L_0x00ca:
-        r8.reuse();	 Catch:{ Exception -> 0x00de }
-        goto L_0x00d0;
-    L_0x00ce:
-        r17 = r13;
-    L_0x00d0:
-        if (r10 != 0) goto L_0x00eb;
-    L_0x00d2:
-        r8 = r0.folder;	 Catch:{ Exception -> 0x00de }
-        r8 = r8.id;	 Catch:{ Exception -> 0x00de }
-        r8 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x00de }
-        r7.add(r8);	 Catch:{ Exception -> 0x00de }
-        goto L_0x00eb;
-    L_0x00de:
-        r0 = move-exception;
-        r13 = r12;
-        r14 = r17;
-        goto L_0x039e;
-    L_0x00e4:
-        r17 = r13;
-        r0 = new org.telegram.tgnet.TLRPC$TL_dialog;	 Catch:{ Exception -> 0x02a6 }
-        r0.<init>();	 Catch:{ Exception -> 0x02a6 }
-    L_0x00eb:
-        r8 = r0;
-        r8.id = r14;	 Catch:{ Exception -> 0x02a6 }
+        r1[r16] = r0;	 Catch:{ Exception -> 0x0462 }
+        r0 = java.lang.String.format(r11, r13, r1);	 Catch:{ Exception -> 0x0462 }
+        r1 = 0;
+        r11 = new java.lang.Object[r1];	 Catch:{ Exception -> 0x0462 }
+        r10 = r10.queryFinalized(r0, r11);	 Catch:{ Exception -> 0x0462 }
+    L_0x0094:
+        r0 = r10.next();	 Catch:{ Exception -> 0x0462 }
+        if (r0 == 0) goto L_0x02cf;
+    L_0x009a:
+        r11 = r7;
+        r13 = r8;
+        r7 = r10.longValue(r1);	 Catch:{ Exception -> 0x0462 }
+        r0 = org.telegram.messenger.DialogObject.isFolderDialogId(r7);	 Catch:{ Exception -> 0x0462 }
+        if (r0 == 0) goto L_0x00e9;
+    L_0x00a6:
+        r0 = new org.telegram.tgnet.TLRPC$TL_dialogFolder;	 Catch:{ Exception -> 0x0462 }
+        r0.<init>();	 Catch:{ Exception -> 0x0462 }
+        r1 = 18;
+        r17 = r10.isNull(r1);	 Catch:{ Exception -> 0x0462 }
+        if (r17 != 0) goto L_0x00d9;
+    L_0x00b3:
+        r1 = r10.byteBufferValue(r1);	 Catch:{ Exception -> 0x0462 }
+        if (r1 == 0) goto L_0x00c7;
+    L_0x00b9:
+        r18 = r11;
+        r15 = 0;
+        r11 = r1.readInt32(r15);	 Catch:{ Exception -> 0x0462 }
+        r11 = org.telegram.tgnet.TLRPC.TL_folder.TLdeserialize(r1, r11, r15);	 Catch:{ Exception -> 0x0462 }
+        r0.folder = r11;	 Catch:{ Exception -> 0x0462 }
+        goto L_0x00d5;
+    L_0x00c7:
+        r18 = r11;
+        r11 = new org.telegram.tgnet.TLRPC$TL_folder;	 Catch:{ Exception -> 0x0462 }
+        r11.<init>();	 Catch:{ Exception -> 0x0462 }
+        r0.folder = r11;	 Catch:{ Exception -> 0x0462 }
+        r11 = r0.folder;	 Catch:{ Exception -> 0x0462 }
+        r15 = (int) r7;	 Catch:{ Exception -> 0x0462 }
+        r11.id = r15;	 Catch:{ Exception -> 0x0462 }
+    L_0x00d5:
+        r1.reuse();	 Catch:{ Exception -> 0x0462 }
+        goto L_0x00db;
+    L_0x00d9:
+        r18 = r11;
+    L_0x00db:
+        if (r14 != 0) goto L_0x00f0;
+    L_0x00dd:
+        r1 = r0.folder;	 Catch:{ Exception -> 0x0462 }
+        r1 = r1.id;	 Catch:{ Exception -> 0x0462 }
+        r1 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x0462 }
+        r9.add(r1);	 Catch:{ Exception -> 0x0462 }
+        goto L_0x00f0;
+    L_0x00e9:
+        r18 = r11;
+        r0 = new org.telegram.tgnet.TLRPC$TL_dialog;	 Catch:{ Exception -> 0x0462 }
+        r0.<init>();	 Catch:{ Exception -> 0x0462 }
+    L_0x00f0:
+        r1 = r0;
+        r1.id = r7;	 Catch:{ Exception -> 0x0462 }
         r11 = 1;
-        r0 = r9.intValue(r11);	 Catch:{ Exception -> 0x02a6 }
-        r8.top_message = r0;	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r11);	 Catch:{ Exception -> 0x0462 }
+        r1.top_message = r0;	 Catch:{ Exception -> 0x0462 }
         r11 = 2;
-        r0 = r9.intValue(r11);	 Catch:{ Exception -> 0x02a6 }
-        r8.unread_count = r0;	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r11);	 Catch:{ Exception -> 0x0462 }
+        r1.unread_count = r0;	 Catch:{ Exception -> 0x0462 }
         r11 = 3;
-        r0 = r9.intValue(r11);	 Catch:{ Exception -> 0x02a6 }
-        r8.last_message_date = r0;	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r11);	 Catch:{ Exception -> 0x0462 }
+        r1.last_message_date = r0;	 Catch:{ Exception -> 0x0462 }
         r0 = 10;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r8.pts = r0;	 Catch:{ Exception -> 0x02a6 }
-        r0 = r8.pts;	 Catch:{ Exception -> 0x02a6 }
-        if (r0 == 0) goto L_0x0117;
-    L_0x010f:
-        r13 = r8.id;	 Catch:{ Exception -> 0x00de }
-        r0 = (int) r13;
-        if (r0 <= 0) goto L_0x0115;
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r1.pts = r0;	 Catch:{ Exception -> 0x0462 }
+        r0 = r1.pts;	 Catch:{ Exception -> 0x0462 }
+        if (r0 == 0) goto L_0x011e;
     L_0x0114:
-        goto L_0x0117;
-    L_0x0115:
+        r15 = r13;
+        r11 = r14;
+        r13 = r1.id;	 Catch:{ Exception -> 0x0462 }
+        r0 = (int) r13;	 Catch:{ Exception -> 0x0462 }
+        if (r0 <= 0) goto L_0x011c;
+    L_0x011b:
+        goto L_0x0120;
+    L_0x011c:
         r0 = 1;
-        goto L_0x0118;
-    L_0x0117:
+        goto L_0x0121;
+    L_0x011e:
+        r15 = r13;
+        r11 = r14;
+    L_0x0120:
         r0 = 0;
-    L_0x0118:
-        r8.flags = r0;	 Catch:{ Exception -> 0x02a6 }
+    L_0x0121:
+        r1.flags = r0;	 Catch:{ Exception -> 0x0462 }
         r0 = 11;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r8.read_inbox_max_id = r0;	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r1.read_inbox_max_id = r0;	 Catch:{ Exception -> 0x0462 }
         r0 = 12;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r8.read_outbox_max_id = r0;	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r1.read_outbox_max_id = r0;	 Catch:{ Exception -> 0x0462 }
         r0 = 14;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r8.pinnedNum = r0;	 Catch:{ Exception -> 0x02a6 }
-        r0 = r8.pinnedNum;	 Catch:{ Exception -> 0x02a6 }
-        if (r0 == 0) goto L_0x0138;
-    L_0x0136:
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r1.pinnedNum = r0;	 Catch:{ Exception -> 0x0462 }
+        r0 = r1.pinnedNum;	 Catch:{ Exception -> 0x0462 }
+        if (r0 == 0) goto L_0x0141;
+    L_0x013f:
         r0 = 1;
-        goto L_0x0139;
-    L_0x0138:
+        goto L_0x0142;
+    L_0x0141:
         r0 = 0;
-    L_0x0139:
-        r8.pinned = r0;	 Catch:{ Exception -> 0x02a6 }
+    L_0x0142:
+        r1.pinned = r0;	 Catch:{ Exception -> 0x0462 }
         r0 = 15;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r8.unread_mentions_count = r0;	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r1.unread_mentions_count = r0;	 Catch:{ Exception -> 0x0462 }
         r0 = 16;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
         r13 = 1;
         r0 = r0 & r13;
-        if (r0 == 0) goto L_0x014f;
-    L_0x014d:
+        if (r0 == 0) goto L_0x0158;
+    L_0x0156:
         r0 = 1;
-        goto L_0x0150;
-    L_0x014f:
+        goto L_0x0159;
+    L_0x0158:
         r0 = 0;
-    L_0x0150:
-        r8.unread_mark = r0;	 Catch:{ Exception -> 0x02a6 }
+    L_0x0159:
+        r1.unread_mark = r0;	 Catch:{ Exception -> 0x0462 }
         r0 = 8;
-        r13 = r9.longValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r0 = (int) r13;	 Catch:{ Exception -> 0x02a6 }
-        r15 = new org.telegram.tgnet.TLRPC$TL_peerNotifySettings;	 Catch:{ Exception -> 0x02a6 }
-        r15.<init>();	 Catch:{ Exception -> 0x02a6 }
-        r8.notify_settings = r15;	 Catch:{ Exception -> 0x02a6 }
-        r15 = 1;
-        r0 = r0 & r15;
-        r15 = 32;
-        if (r0 == 0) goto L_0x0179;
-    L_0x0166:
-        r0 = r8.notify_settings;	 Catch:{ Exception -> 0x00de }
-        r13 = r13 >> r15;
-        r14 = (int) r13;	 Catch:{ Exception -> 0x00de }
-        r0.mute_until = r14;	 Catch:{ Exception -> 0x00de }
-        r0 = r8.notify_settings;	 Catch:{ Exception -> 0x00de }
-        r0 = r0.mute_until;	 Catch:{ Exception -> 0x00de }
-        if (r0 != 0) goto L_0x0179;
-    L_0x0172:
-        r0 = r8.notify_settings;	 Catch:{ Exception -> 0x00de }
+        r13 = r10.longValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r0 = (int) r13;	 Catch:{ Exception -> 0x0462 }
+        r21 = r9;
+        r9 = new org.telegram.tgnet.TLRPC$TL_peerNotifySettings;	 Catch:{ Exception -> 0x0462 }
+        r9.<init>();	 Catch:{ Exception -> 0x0462 }
+        r1.notify_settings = r9;	 Catch:{ Exception -> 0x0462 }
+        r9 = 1;
+        r0 = r0 & r9;
+        r9 = 32;
+        if (r0 == 0) goto L_0x0184;
+    L_0x0171:
+        r0 = r1.notify_settings;	 Catch:{ Exception -> 0x0462 }
+        r13 = r13 >> r9;
+        r14 = (int) r13;	 Catch:{ Exception -> 0x0462 }
+        r0.mute_until = r14;	 Catch:{ Exception -> 0x0462 }
+        r0 = r1.notify_settings;	 Catch:{ Exception -> 0x0462 }
+        r0 = r0.mute_until;	 Catch:{ Exception -> 0x0462 }
+        if (r0 != 0) goto L_0x0184;
+    L_0x017d:
+        r0 = r1.notify_settings;	 Catch:{ Exception -> 0x0462 }
         r13 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        r0.mute_until = r13;	 Catch:{ Exception -> 0x00de }
-    L_0x0179:
+        r0.mute_until = r13;	 Catch:{ Exception -> 0x0462 }
+    L_0x0184:
         r0 = 17;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r8.folder_id = r0;	 Catch:{ Exception -> 0x02a6 }
-        r0 = r12.dialogs;	 Catch:{ Exception -> 0x02a6 }
-        r0.add(r8);	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r1.folder_id = r0;	 Catch:{ Exception -> 0x0462 }
+        r0 = r12.dialogs;	 Catch:{ Exception -> 0x0462 }
+        r0.add(r1);	 Catch:{ Exception -> 0x0462 }
+        if (r2 == 0) goto L_0x019a;
+    L_0x0193:
+        r0 = java.lang.Long.valueOf(r7);	 Catch:{ Exception -> 0x0462 }
+        r6.add(r0);	 Catch:{ Exception -> 0x0462 }
+    L_0x019a:
         r0 = 4;
-        r0 = r9.byteBufferValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        if (r0 == 0) goto L_0x025b;
-    L_0x018d:
-        r13 = 0;
-        r14 = r0.readInt32(r13);	 Catch:{ Exception -> 0x02a6 }
-        r14 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r0, r14, r13);	 Catch:{ Exception -> 0x02a6 }
-        r13 = r19.getUserConfig();	 Catch:{ Exception -> 0x02a6 }
-        r13 = r13.clientUserId;	 Catch:{ Exception -> 0x02a6 }
-        r14.readAttachPath(r0, r13);	 Catch:{ Exception -> 0x02a6 }
-        r0.reuse();	 Catch:{ Exception -> 0x02a6 }
-        if (r14 == 0) goto L_0x025b;
-    L_0x01a4:
+        r0 = r10.byteBufferValue(r0);	 Catch:{ Exception -> 0x0462 }
+        if (r0 == 0) goto L_0x027d;
+    L_0x01a1:
+        r7 = 0;
+        r8 = r0.readInt32(r7);	 Catch:{ Exception -> 0x0462 }
+        r8 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r0, r8, r7);	 Catch:{ Exception -> 0x0462 }
+        r7 = r23.getUserConfig();	 Catch:{ Exception -> 0x0462 }
+        r7 = r7.clientUserId;	 Catch:{ Exception -> 0x0462 }
+        r8.readAttachPath(r0, r7);	 Catch:{ Exception -> 0x0462 }
+        r0.reuse();	 Catch:{ Exception -> 0x0462 }
+        if (r8 == 0) goto L_0x027d;
+    L_0x01b8:
         r0 = 5;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        org.telegram.messenger.MessageObject.setUnreadFlags(r14, r0);	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        org.telegram.messenger.MessageObject.setUnreadFlags(r8, r0);	 Catch:{ Exception -> 0x0462 }
         r0 = 6;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r14.id = r0;	 Catch:{ Exception -> 0x02a6 }
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r8.id = r0;	 Catch:{ Exception -> 0x0462 }
         r0 = 9;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        if (r0 == 0) goto L_0x01bd;
-    L_0x01bb:
-        r8.last_message_date = r0;	 Catch:{ Exception -> 0x00de }
-    L_0x01bd:
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        if (r0 == 0) goto L_0x01d1;
+    L_0x01cf:
+        r1.last_message_date = r0;	 Catch:{ Exception -> 0x0462 }
+    L_0x01d1:
         r0 = 7;
-        r0 = r9.intValue(r0);	 Catch:{ Exception -> 0x02a6 }
-        r14.send_state = r0;	 Catch:{ Exception -> 0x02a6 }
-        r13 = r12;
-        r11 = r8.id;	 Catch:{ Exception -> 0x0395 }
-        r14.dialog_id = r11;	 Catch:{ Exception -> 0x0395 }
-        r12 = r13;
-        r0 = r12.messages;	 Catch:{ Exception -> 0x02a6 }
-        r0.add(r14);	 Catch:{ Exception -> 0x02a6 }
-        addUsersAndChatsFromMessage(r14, r2, r3);	 Catch:{ Exception -> 0x02a6 }
-        r0 = r14.reply_to_msg_id;	 Catch:{ Exception -> 0x0255 }
-        if (r0 == 0) goto L_0x025b;
-    L_0x01d6:
-        r0 = r14.action;	 Catch:{ Exception -> 0x0255 }
-        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;	 Catch:{ Exception -> 0x0255 }
-        if (r0 != 0) goto L_0x01e8;
-    L_0x01dc:
-        r0 = r14.action;	 Catch:{ Exception -> 0x0255 }
-        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;	 Catch:{ Exception -> 0x0255 }
-        if (r0 != 0) goto L_0x01e8;
-    L_0x01e2:
-        r0 = r14.action;	 Catch:{ Exception -> 0x0255 }
-        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageActionGameScore;	 Catch:{ Exception -> 0x0255 }
-        if (r0 == 0) goto L_0x025b;
+        r0 = r10.intValue(r0);	 Catch:{ Exception -> 0x0462 }
+        r8.send_state = r0;	 Catch:{ Exception -> 0x0462 }
+        r13 = r1.id;	 Catch:{ Exception -> 0x0462 }
+        r8.dialog_id = r13;	 Catch:{ Exception -> 0x0462 }
+        r0 = r12.messages;	 Catch:{ Exception -> 0x0462 }
+        r0.add(r8);	 Catch:{ Exception -> 0x0462 }
+        addUsersAndChatsFromMessage(r8, r3, r4);	 Catch:{ Exception -> 0x0462 }
+        r0 = r8.reply_to_msg_id;	 Catch:{ Exception -> 0x0273 }
+        if (r0 == 0) goto L_0x027d;
     L_0x01e8:
+        r0 = r8.action;	 Catch:{ Exception -> 0x0273 }
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;	 Catch:{ Exception -> 0x0273 }
+        if (r0 != 0) goto L_0x01fa;
+    L_0x01ee:
+        r0 = r8.action;	 Catch:{ Exception -> 0x0273 }
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;	 Catch:{ Exception -> 0x0273 }
+        if (r0 != 0) goto L_0x01fa;
+    L_0x01f4:
+        r0 = r8.action;	 Catch:{ Exception -> 0x0273 }
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageActionGameScore;	 Catch:{ Exception -> 0x0273 }
+        if (r0 == 0) goto L_0x027d;
+    L_0x01fa:
         r0 = 13;
-        r11 = r9.isNull(r0);	 Catch:{ Exception -> 0x0255 }
-        if (r11 != 0) goto L_0x0227;
-    L_0x01f0:
-        r0 = r9.byteBufferValue(r0);	 Catch:{ Exception -> 0x0255 }
-        if (r0 == 0) goto L_0x0227;
-    L_0x01f6:
-        r11 = 0;
-        r13 = r0.readInt32(r11);	 Catch:{ Exception -> 0x0255 }
-        r13 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r0, r13, r11);	 Catch:{ Exception -> 0x0255 }
-        r14.replyMessage = r13;	 Catch:{ Exception -> 0x0255 }
-        r11 = r14.replyMessage;	 Catch:{ Exception -> 0x0255 }
-        r13 = r19.getUserConfig();	 Catch:{ Exception -> 0x0255 }
-        r13 = r13.clientUserId;	 Catch:{ Exception -> 0x0255 }
-        r11.readAttachPath(r0, r13);	 Catch:{ Exception -> 0x0255 }
-        r0.reuse();	 Catch:{ Exception -> 0x0255 }
-        r0 = r14.replyMessage;	 Catch:{ Exception -> 0x0255 }
-        if (r0 == 0) goto L_0x0227;
-    L_0x0213:
-        r0 = org.telegram.messenger.MessageObject.isMegagroup(r14);	 Catch:{ Exception -> 0x0255 }
-        if (r0 == 0) goto L_0x0222;
-    L_0x0219:
-        r0 = r14.replyMessage;	 Catch:{ Exception -> 0x0255 }
-        r11 = r0.flags;	 Catch:{ Exception -> 0x0255 }
-        r13 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        r11 = r11 | r13;
-        r0.flags = r11;	 Catch:{ Exception -> 0x0255 }
-    L_0x0222:
-        r0 = r14.replyMessage;	 Catch:{ Exception -> 0x0255 }
-        addUsersAndChatsFromMessage(r0, r2, r3);	 Catch:{ Exception -> 0x0255 }
-    L_0x0227:
-        r0 = r14.replyMessage;	 Catch:{ Exception -> 0x0255 }
-        if (r0 != 0) goto L_0x025b;
+        r7 = r10.isNull(r0);	 Catch:{ Exception -> 0x0273 }
+        if (r7 != 0) goto L_0x0239;
+    L_0x0202:
+        r0 = r10.byteBufferValue(r0);	 Catch:{ Exception -> 0x0273 }
+        if (r0 == 0) goto L_0x0239;
+    L_0x0208:
+        r7 = 0;
+        r13 = r0.readInt32(r7);	 Catch:{ Exception -> 0x0273 }
+        r13 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r0, r13, r7);	 Catch:{ Exception -> 0x0273 }
+        r8.replyMessage = r13;	 Catch:{ Exception -> 0x0273 }
+        r7 = r8.replyMessage;	 Catch:{ Exception -> 0x0273 }
+        r13 = r23.getUserConfig();	 Catch:{ Exception -> 0x0273 }
+        r13 = r13.clientUserId;	 Catch:{ Exception -> 0x0273 }
+        r7.readAttachPath(r0, r13);	 Catch:{ Exception -> 0x0273 }
+        r0.reuse();	 Catch:{ Exception -> 0x0273 }
+        r0 = r8.replyMessage;	 Catch:{ Exception -> 0x0273 }
+        if (r0 == 0) goto L_0x0239;
+    L_0x0225:
+        r0 = org.telegram.messenger.MessageObject.isMegagroup(r8);	 Catch:{ Exception -> 0x0273 }
+        if (r0 == 0) goto L_0x0234;
     L_0x022b:
-        r0 = r14.reply_to_msg_id;	 Catch:{ Exception -> 0x0255 }
-        r13 = r12;
-        r11 = (long) r0;
-        r0 = r14.to_id;	 Catch:{ Exception -> 0x0253 }
-        r0 = r0.channel_id;	 Catch:{ Exception -> 0x0253 }
-        if (r0 == 0) goto L_0x023c;
-    L_0x0235:
-        r0 = r14.to_id;	 Catch:{ Exception -> 0x0253 }
-        r0 = r0.channel_id;	 Catch:{ Exception -> 0x0253 }
-        r0 = (long) r0;	 Catch:{ Exception -> 0x0253 }
-        r0 = r0 << r15;
-        r11 = r11 | r0;
-    L_0x023c:
-        r0 = java.lang.Long.valueOf(r11);	 Catch:{ Exception -> 0x0253 }
-        r0 = r5.contains(r0);	 Catch:{ Exception -> 0x0253 }
-        if (r0 != 0) goto L_0x024d;
+        r0 = r8.replyMessage;	 Catch:{ Exception -> 0x0273 }
+        r7 = r0.flags;	 Catch:{ Exception -> 0x0273 }
+        r13 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+        r7 = r7 | r13;
+        r0.flags = r7;	 Catch:{ Exception -> 0x0273 }
+    L_0x0234:
+        r0 = r8.replyMessage;	 Catch:{ Exception -> 0x0273 }
+        addUsersAndChatsFromMessage(r0, r3, r4);	 Catch:{ Exception -> 0x0273 }
+    L_0x0239:
+        r0 = r8.replyMessage;	 Catch:{ Exception -> 0x0273 }
+        if (r0 != 0) goto L_0x027d;
+    L_0x023d:
+        r0 = r8.reply_to_msg_id;	 Catch:{ Exception -> 0x0273 }
+        r13 = (long) r0;	 Catch:{ Exception -> 0x0273 }
+        r0 = r8.to_id;	 Catch:{ Exception -> 0x0273 }
+        r0 = r0.channel_id;	 Catch:{ Exception -> 0x0273 }
+        if (r0 == 0) goto L_0x0250;
     L_0x0246:
-        r0 = java.lang.Long.valueOf(r11);	 Catch:{ Exception -> 0x0253 }
-        r5.add(r0);	 Catch:{ Exception -> 0x0253 }
-    L_0x024d:
-        r0 = r8.id;	 Catch:{ Exception -> 0x0253 }
-        r6.put(r0, r14);	 Catch:{ Exception -> 0x0253 }
-        goto L_0x025c;
-    L_0x0253:
-        r0 = move-exception;
-        goto L_0x0257;
-    L_0x0255:
-        r0 = move-exception;
-        r13 = r12;
-    L_0x0257:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0395 }
-        goto L_0x025c;
-    L_0x025b:
-        r13 = r12;
-    L_0x025c:
-        r0 = r8.id;	 Catch:{ Exception -> 0x0395 }
-        r1 = (int) r0;	 Catch:{ Exception -> 0x0395 }
-        r11 = r8.id;	 Catch:{ Exception -> 0x0395 }
-        r11 = r11 >> r15;
-        r0 = (int) r11;	 Catch:{ Exception -> 0x0395 }
-        if (r1 == 0) goto L_0x028c;
+        r0 = r8.to_id;	 Catch:{ Exception -> 0x0273 }
+        r0 = r0.channel_id;	 Catch:{ Exception -> 0x0273 }
+        r22 = r6;
+        r6 = (long) r0;
+        r6 = r6 << r9;
+        r13 = r13 | r6;
+        goto L_0x0252;
+    L_0x0250:
+        r22 = r6;
+    L_0x0252:
+        r0 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0271 }
+        r6 = r18;
+        r0 = r6.contains(r0);	 Catch:{ Exception -> 0x026e }
+        if (r0 != 0) goto L_0x0265;
+    L_0x025e:
+        r0 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x026e }
+        r6.add(r0);	 Catch:{ Exception -> 0x026e }
     L_0x0265:
-        if (r1 <= 0) goto L_0x0279;
-    L_0x0267:
-        r0 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x0395 }
-        r0 = r2.contains(r0);	 Catch:{ Exception -> 0x0395 }
-        if (r0 != 0) goto L_0x029d;
-    L_0x0271:
-        r0 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x0395 }
-        r2.add(r0);	 Catch:{ Exception -> 0x0395 }
-        goto L_0x029d;
-    L_0x0279:
-        r0 = -r1;
-        r1 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0395 }
-        r1 = r3.contains(r1);	 Catch:{ Exception -> 0x0395 }
-        if (r1 != 0) goto L_0x029d;
-    L_0x0284:
-        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0395 }
-        r3.add(r0);	 Catch:{ Exception -> 0x0395 }
-        goto L_0x029d;
-    L_0x028c:
-        r1 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0395 }
-        r1 = r4.contains(r1);	 Catch:{ Exception -> 0x0395 }
-        if (r1 != 0) goto L_0x029d;
-    L_0x0296:
-        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0395 }
-        r4.add(r0);	 Catch:{ Exception -> 0x0395 }
-    L_0x029d:
-        r8 = 0;
-        r14 = 3;
-        r1 = r19;
-        r12 = r13;
-        r13 = r17;
-        goto L_0x008b;
-    L_0x02a6:
+        r13 = r1.id;	 Catch:{ Exception -> 0x026e }
+        r7 = r15;
+        r7.put(r13, r8);	 Catch:{ Exception -> 0x026c }
+        goto L_0x0282;
+    L_0x026c:
         r0 = move-exception;
-        r13 = r12;
-        r14 = r17;
-        goto L_0x02be;
+        goto L_0x0279;
+    L_0x026e:
+        r0 = move-exception;
+        r7 = r15;
+        goto L_0x0279;
+    L_0x0271:
+        r0 = move-exception;
+        goto L_0x0276;
+    L_0x0273:
+        r0 = move-exception;
+        r22 = r6;
+    L_0x0276:
+        r7 = r15;
+        r6 = r18;
+    L_0x0279:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0462 }
+        goto L_0x0282;
+    L_0x027d:
+        r22 = r6;
+        r7 = r15;
+        r6 = r18;
+    L_0x0282:
+        r13 = r1.id;	 Catch:{ Exception -> 0x0462 }
+        r0 = (int) r13;	 Catch:{ Exception -> 0x0462 }
+        r13 = r1.id;	 Catch:{ Exception -> 0x0462 }
+        r8 = r13 >> r9;
+        r1 = (int) r8;	 Catch:{ Exception -> 0x0462 }
+        if (r0 == 0) goto L_0x02b3;
+    L_0x028c:
+        if (r0 <= 0) goto L_0x02a0;
+    L_0x028e:
+        r1 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0462 }
+        r1 = r3.contains(r1);	 Catch:{ Exception -> 0x0462 }
+        if (r1 != 0) goto L_0x02c4;
+    L_0x0298:
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0462 }
+        r3.add(r0);	 Catch:{ Exception -> 0x0462 }
+        goto L_0x02c4;
+    L_0x02a0:
+        r0 = -r0;
+        r1 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0462 }
+        r1 = r4.contains(r1);	 Catch:{ Exception -> 0x0462 }
+        if (r1 != 0) goto L_0x02c4;
     L_0x02ab:
-        r17 = r13;
-        r13 = r12;
-        r9.dispose();	 Catch:{ Exception -> 0x0395 }
-        r10 = r10 + 1;
-        r1 = r19;
-        r12 = r13;
-        r13 = r17;
-        r8 = 2;
-        goto L_0x0042;
-    L_0x02bb:
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x0462 }
+        r4.add(r0);	 Catch:{ Exception -> 0x0462 }
+        goto L_0x02c4;
+    L_0x02b3:
+        r0 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x0462 }
+        r0 = r5.contains(r0);	 Catch:{ Exception -> 0x0462 }
+        if (r0 != 0) goto L_0x02c4;
+    L_0x02bd:
+        r0 = java.lang.Integer.valueOf(r1);	 Catch:{ Exception -> 0x0462 }
+        r5.add(r0);	 Catch:{ Exception -> 0x0462 }
+    L_0x02c4:
+        r8 = r7;
+        r14 = r11;
+        r9 = r21;
+        r1 = 0;
+        r15 = 3;
+        r7 = r6;
+        r6 = r22;
+        goto L_0x0094;
+    L_0x02cf:
+        r22 = r6;
+        r6 = r7;
+        r7 = r8;
+        r21 = r9;
+        r11 = r14;
+        r10.dispose();	 Catch:{ Exception -> 0x0462 }
+        r14 = r11 + 1;
+        r1 = r23;
+        r8 = r7;
+        r13 = r20;
+        r9 = r21;
+        r10 = 2;
+        r7 = r6;
+        r6 = r22;
+        goto L_0x0049;
+    L_0x02e8:
         r0 = move-exception;
         r14 = r13;
-        r13 = r12;
-    L_0x02be:
-        r12 = r19;
-        goto L_0x039f;
-    L_0x02c2:
-        r17 = r13;
-        r13 = r12;
-        r0 = r5.isEmpty();	 Catch:{ Exception -> 0x0395 }
+        r13 = r23;
+        goto L_0x046b;
+    L_0x02ee:
+        r22 = r6;
+        r6 = r7;
+        r7 = r8;
+        r20 = r13;
+        r0 = r6.isEmpty();	 Catch:{ Exception -> 0x0462 }
         r1 = ",";
-        if (r0 != 0) goto L_0x034b;
-    L_0x02cd:
-        r12 = r19;
-        r0 = r12.database;	 Catch:{ Exception -> 0x0393 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0393 }
-        r8 = "SELECT data, mid, date, uid FROM messages WHERE mid IN(%s)";
-        r9 = 1;
-        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0393 }
-        r5 = android.text.TextUtils.join(r1, r5);	 Catch:{ Exception -> 0x0393 }
-        r9 = 0;
-        r10[r9] = r5;	 Catch:{ Exception -> 0x0393 }
-        r5 = java.lang.String.format(r7, r8, r10);	 Catch:{ Exception -> 0x0393 }
-        r7 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0393 }
-        r0 = r0.queryFinalized(r5, r7);	 Catch:{ Exception -> 0x0393 }
-    L_0x02e9:
-        r5 = r0.next();	 Catch:{ Exception -> 0x0393 }
-        if (r5 == 0) goto L_0x0347;
-    L_0x02ef:
-        r5 = r0.byteBufferValue(r9);	 Catch:{ Exception -> 0x0393 }
-        if (r5 == 0) goto L_0x0341;
-    L_0x02f5:
-        r7 = r5.readInt32(r9);	 Catch:{ Exception -> 0x0393 }
-        r7 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r5, r7, r9);	 Catch:{ Exception -> 0x0393 }
-        r8 = r19.getUserConfig();	 Catch:{ Exception -> 0x0393 }
-        r8 = r8.clientUserId;	 Catch:{ Exception -> 0x0393 }
-        r7.readAttachPath(r5, r8);	 Catch:{ Exception -> 0x0393 }
-        r5.reuse();	 Catch:{ Exception -> 0x0393 }
-        r5 = 1;
-        r8 = r0.intValue(r5);	 Catch:{ Exception -> 0x0393 }
-        r7.id = r8;	 Catch:{ Exception -> 0x0393 }
-        r8 = 2;
-        r10 = r0.intValue(r8);	 Catch:{ Exception -> 0x0393 }
-        r7.date = r10;	 Catch:{ Exception -> 0x0393 }
-        r10 = 3;
-        r14 = r0.longValue(r10);	 Catch:{ Exception -> 0x0393 }
-        r7.dialog_id = r14;	 Catch:{ Exception -> 0x0393 }
-        addUsersAndChatsFromMessage(r7, r2, r3);	 Catch:{ Exception -> 0x0393 }
-        r14 = r7.dialog_id;	 Catch:{ Exception -> 0x0393 }
-        r11 = r6.get(r14);	 Catch:{ Exception -> 0x0393 }
-        r11 = (org.telegram.tgnet.TLRPC.Message) r11;	 Catch:{ Exception -> 0x0393 }
-        if (r11 == 0) goto L_0x0344;
-    L_0x032b:
-        r11.replyMessage = r7;	 Catch:{ Exception -> 0x0393 }
-        r14 = r11.dialog_id;	 Catch:{ Exception -> 0x0393 }
-        r7.dialog_id = r14;	 Catch:{ Exception -> 0x0393 }
-        r7 = org.telegram.messenger.MessageObject.isMegagroup(r11);	 Catch:{ Exception -> 0x0393 }
-        if (r7 == 0) goto L_0x0344;
-    L_0x0337:
-        r7 = r11.replyMessage;	 Catch:{ Exception -> 0x0393 }
-        r11 = r7.flags;	 Catch:{ Exception -> 0x0393 }
-        r14 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        r11 = r11 | r14;
-        r7.flags = r11;	 Catch:{ Exception -> 0x0393 }
-        goto L_0x02e9;
-    L_0x0341:
-        r5 = 1;
-        r8 = 2;
-        r10 = 3;
-    L_0x0344:
-        r14 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        goto L_0x02e9;
-    L_0x0347:
-        r0.dispose();	 Catch:{ Exception -> 0x0393 }
-        goto L_0x034d;
-    L_0x034b:
-        r12 = r19;
-    L_0x034d:
-        r0 = r4.isEmpty();	 Catch:{ Exception -> 0x0393 }
-        if (r0 != 0) goto L_0x035d;
-    L_0x0353:
-        r0 = android.text.TextUtils.join(r1, r4);	 Catch:{ Exception -> 0x0393 }
-        r14 = r17;
-        r12.getEncryptedChatsInternal(r0, r14, r2);	 Catch:{ Exception -> 0x0391 }
-        goto L_0x035f;
-    L_0x035d:
-        r14 = r17;
-    L_0x035f:
-        r0 = r3.isEmpty();	 Catch:{ Exception -> 0x0391 }
-        if (r0 != 0) goto L_0x036e;
-    L_0x0365:
-        r0 = android.text.TextUtils.join(r1, r3);	 Catch:{ Exception -> 0x0391 }
-        r3 = r13.chats;	 Catch:{ Exception -> 0x0391 }
-        r12.getChatsInternal(r0, r3);	 Catch:{ Exception -> 0x0391 }
-    L_0x036e:
-        r0 = r2.isEmpty();	 Catch:{ Exception -> 0x0391 }
         if (r0 != 0) goto L_0x037d;
+    L_0x02fc:
+        r13 = r23;
+        r0 = r13.database;	 Catch:{ Exception -> 0x037a }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x037a }
+        r9 = "SELECT data, mid, date, uid FROM messages WHERE mid IN(%s)";
+        r10 = 1;
+        r11 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x037a }
+        r6 = android.text.TextUtils.join(r1, r6);	 Catch:{ Exception -> 0x037a }
+        r10 = 0;
+        r11[r10] = r6;	 Catch:{ Exception -> 0x037a }
+        r6 = java.lang.String.format(r8, r9, r11);	 Catch:{ Exception -> 0x037a }
+        r8 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x037a }
+        r0 = r0.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x037a }
+    L_0x0318:
+        r6 = r0.next();	 Catch:{ Exception -> 0x037a }
+        if (r6 == 0) goto L_0x0376;
+    L_0x031e:
+        r6 = r0.byteBufferValue(r10);	 Catch:{ Exception -> 0x037a }
+        if (r6 == 0) goto L_0x0370;
+    L_0x0324:
+        r8 = r6.readInt32(r10);	 Catch:{ Exception -> 0x037a }
+        r8 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r6, r8, r10);	 Catch:{ Exception -> 0x037a }
+        r9 = r23.getUserConfig();	 Catch:{ Exception -> 0x037a }
+        r9 = r9.clientUserId;	 Catch:{ Exception -> 0x037a }
+        r8.readAttachPath(r6, r9);	 Catch:{ Exception -> 0x037a }
+        r6.reuse();	 Catch:{ Exception -> 0x037a }
+        r6 = 1;
+        r9 = r0.intValue(r6);	 Catch:{ Exception -> 0x037a }
+        r8.id = r9;	 Catch:{ Exception -> 0x037a }
+        r6 = 2;
+        r9 = r0.intValue(r6);	 Catch:{ Exception -> 0x037a }
+        r8.date = r9;	 Catch:{ Exception -> 0x037a }
+        r9 = 3;
+        r10 = r0.longValue(r9);	 Catch:{ Exception -> 0x037a }
+        r8.dialog_id = r10;	 Catch:{ Exception -> 0x037a }
+        addUsersAndChatsFromMessage(r8, r3, r4);	 Catch:{ Exception -> 0x037a }
+        r10 = r8.dialog_id;	 Catch:{ Exception -> 0x037a }
+        r10 = r7.get(r10);	 Catch:{ Exception -> 0x037a }
+        r10 = (org.telegram.tgnet.TLRPC.Message) r10;	 Catch:{ Exception -> 0x037a }
+        if (r10 == 0) goto L_0x0372;
+    L_0x035a:
+        r10.replyMessage = r8;	 Catch:{ Exception -> 0x037a }
+        r14 = r10.dialog_id;	 Catch:{ Exception -> 0x037a }
+        r8.dialog_id = r14;	 Catch:{ Exception -> 0x037a }
+        r8 = org.telegram.messenger.MessageObject.isMegagroup(r10);	 Catch:{ Exception -> 0x037a }
+        if (r8 == 0) goto L_0x0372;
+    L_0x0366:
+        r8 = r10.replyMessage;	 Catch:{ Exception -> 0x037a }
+        r10 = r8.flags;	 Catch:{ Exception -> 0x037a }
+        r11 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+        r10 = r10 | r11;
+        r8.flags = r10;	 Catch:{ Exception -> 0x037a }
+        goto L_0x0374;
+    L_0x0370:
+        r6 = 2;
+        r9 = 3;
+    L_0x0372:
+        r11 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
     L_0x0374:
-        r0 = android.text.TextUtils.join(r1, r2);	 Catch:{ Exception -> 0x0391 }
-        r1 = r13.users;	 Catch:{ Exception -> 0x0391 }
-        r12.getUsersInternal(r0, r1);	 Catch:{ Exception -> 0x0391 }
+        r10 = 0;
+        goto L_0x0318;
+    L_0x0376:
+        r0.dispose();	 Catch:{ Exception -> 0x037a }
+        goto L_0x037f;
+    L_0x037a:
+        r0 = move-exception;
+        goto L_0x0465;
     L_0x037d:
-        r2 = r19.getMessagesController();	 Catch:{ Exception -> 0x0391 }
+        r13 = r23;
+    L_0x037f:
+        if (r2 == 0) goto L_0x041c;
+    L_0x0381:
+        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x037a }
+        r0.<init>();	 Catch:{ Exception -> 0x037a }
+        r6 = 0;
+    L_0x0387:
+        r7 = r2.length;	 Catch:{ Exception -> 0x037a }
+        if (r6 >= r7) goto L_0x03cf;
+    L_0x038a:
+        r7 = r2[r6];	 Catch:{ Exception -> 0x037a }
+        r8 = (int) r7;	 Catch:{ Exception -> 0x037a }
+        if (r8 <= 0) goto L_0x03a1;
+    L_0x038f:
+        r7 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x037a }
+        r7 = r3.contains(r7);	 Catch:{ Exception -> 0x037a }
+        if (r7 != 0) goto L_0x03b3;
+    L_0x0399:
+        r7 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x037a }
+        r3.add(r7);	 Catch:{ Exception -> 0x037a }
+        goto L_0x03b3;
+    L_0x03a1:
+        r7 = -r8;
+        r8 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x037a }
+        r8 = r4.contains(r8);	 Catch:{ Exception -> 0x037a }
+        if (r8 != 0) goto L_0x03b3;
+    L_0x03ac:
+        r7 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x037a }
+        r4.add(r7);	 Catch:{ Exception -> 0x037a }
+    L_0x03b3:
+        r7 = r2[r6];	 Catch:{ Exception -> 0x037a }
+        r7 = java.lang.Long.valueOf(r7);	 Catch:{ Exception -> 0x037a }
+        r8 = r22;
+        r7 = r8.contains(r7);	 Catch:{ Exception -> 0x037a }
+        if (r7 != 0) goto L_0x03ca;
+    L_0x03c1:
+        r9 = r2[r6];	 Catch:{ Exception -> 0x037a }
+        r7 = java.lang.Long.valueOf(r9);	 Catch:{ Exception -> 0x037a }
+        r0.add(r7);	 Catch:{ Exception -> 0x037a }
+    L_0x03ca:
+        r6 = r6 + 1;
+        r22 = r8;
+        goto L_0x0387;
+    L_0x03cf:
+        r2 = r0.isEmpty();	 Catch:{ Exception -> 0x037a }
+        if (r2 != 0) goto L_0x0413;
+    L_0x03d5:
+        r2 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x037a }
+        r6 = r0.size();	 Catch:{ Exception -> 0x037a }
+        r2.<init>(r6);	 Catch:{ Exception -> 0x037a }
+        r6 = r13.database;	 Catch:{ Exception -> 0x037a }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x037a }
+        r8 = "SELECT did, folder_id FROM dialogs WHERE did IN(%s)";
+        r9 = 1;
+        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x037a }
+        r0 = android.text.TextUtils.join(r1, r0);	 Catch:{ Exception -> 0x037a }
+        r9 = 0;
+        r10[r9] = r0;	 Catch:{ Exception -> 0x037a }
+        r0 = java.lang.String.format(r7, r8, r10);	 Catch:{ Exception -> 0x037a }
+        r7 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x037a }
+        r0 = r6.queryFinalized(r0, r7);	 Catch:{ Exception -> 0x037a }
+    L_0x03f8:
+        r6 = r0.next();	 Catch:{ Exception -> 0x037a }
+        if (r6 == 0) goto L_0x040f;
+    L_0x03fe:
+        r6 = r0.longValue(r9);	 Catch:{ Exception -> 0x037a }
+        r8 = 1;
+        r10 = r0.intValue(r8);	 Catch:{ Exception -> 0x037a }
+        r10 = java.lang.Integer.valueOf(r10);	 Catch:{ Exception -> 0x037a }
+        r2.put(r6, r10);	 Catch:{ Exception -> 0x037a }
+        goto L_0x03f8;
+    L_0x040f:
+        r0.dispose();	 Catch:{ Exception -> 0x037a }
+        goto L_0x0414;
+    L_0x0413:
+        r2 = 0;
+    L_0x0414:
+        r0 = new org.telegram.messenger.-$$Lambda$MessagesStorage$ydIjALm1InJP9OKz1LdVNHK0_eY;	 Catch:{ Exception -> 0x037a }
+        r0.<init>(r13, r2);	 Catch:{ Exception -> 0x037a }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);	 Catch:{ Exception -> 0x037a }
+    L_0x041c:
+        r0 = r5.isEmpty();	 Catch:{ Exception -> 0x037a }
+        if (r0 != 0) goto L_0x042c;
+    L_0x0422:
+        r0 = android.text.TextUtils.join(r1, r5);	 Catch:{ Exception -> 0x037a }
+        r14 = r20;
+        r13.getEncryptedChatsInternal(r0, r14, r3);	 Catch:{ Exception -> 0x0460 }
+        goto L_0x042e;
+    L_0x042c:
+        r14 = r20;
+    L_0x042e:
+        r0 = r4.isEmpty();	 Catch:{ Exception -> 0x0460 }
+        if (r0 != 0) goto L_0x043d;
+    L_0x0434:
+        r0 = android.text.TextUtils.join(r1, r4);	 Catch:{ Exception -> 0x0460 }
+        r2 = r12.chats;	 Catch:{ Exception -> 0x0460 }
+        r13.getChatsInternal(r0, r2);	 Catch:{ Exception -> 0x0460 }
+    L_0x043d:
+        r0 = r3.isEmpty();	 Catch:{ Exception -> 0x0460 }
+        if (r0 != 0) goto L_0x044c;
+    L_0x0443:
+        r0 = android.text.TextUtils.join(r1, r3);	 Catch:{ Exception -> 0x0460 }
+        r1 = r12.users;	 Catch:{ Exception -> 0x0460 }
+        r13.getUsersInternal(r0, r1);	 Catch:{ Exception -> 0x0460 }
+    L_0x044c:
+        r2 = r23.getMessagesController();	 Catch:{ Exception -> 0x0460 }
         r8 = 1;
         r9 = 0;
         r10 = 0;
         r11 = 1;
-        r3 = r13;
+        r3 = r12;
         r4 = r14;
-        r5 = r20;
-        r6 = r21;
-        r7 = r22;
-        r2.processLoadedDialogs(r3, r4, r5, r6, r7, r8, r9, r10, r11);	 Catch:{ Exception -> 0x0391 }
-        goto L_0x03c6;
-    L_0x0391:
+        r5 = r24;
+        r6 = r25;
+        r7 = r26;
+        r2.processLoadedDialogs(r3, r4, r5, r6, r7, r8, r9, r10, r11);	 Catch:{ Exception -> 0x0460 }
+        goto L_0x0492;
+    L_0x0460:
         r0 = move-exception;
-        goto L_0x039f;
-    L_0x0393:
+        goto L_0x046b;
+    L_0x0462:
         r0 = move-exception;
-        goto L_0x0398;
-    L_0x0395:
-        r0 = move-exception;
-        r12 = r19;
-    L_0x0398:
-        r14 = r17;
-        goto L_0x039f;
-    L_0x039b:
+        r13 = r23;
+    L_0x0465:
+        r14 = r20;
+        goto L_0x046b;
+    L_0x0468:
         r0 = move-exception;
         r14 = r13;
-        r13 = r12;
-    L_0x039e:
-        r12 = r1;
-    L_0x039f:
-        r1 = r13.dialogs;
+        r13 = r1;
+    L_0x046b:
+        r1 = r12.dialogs;
         r1.clear();
-        r1 = r13.users;
+        r1 = r12.users;
         r1.clear();
-        r1 = r13.chats;
+        r1 = r12.chats;
         r1.clear();
         r14.clear();
         org.telegram.messenger.FileLog.e(r0);
-        r2 = r19.getMessagesController();
+        r2 = r23.getMessagesController();
         r6 = 0;
         r7 = 100;
         r8 = 1;
         r9 = 1;
         r10 = 0;
         r11 = 1;
-        r3 = r13;
+        r3 = r12;
         r4 = r14;
-        r5 = r20;
+        r5 = r24;
         r2.processLoadedDialogs(r3, r4, r5, r6, r7, r8, r9, r10, r11);
-    L_0x03c6:
+    L_0x0492:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogs$139$MessagesStorage(int, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogs$136$MessagesStorage(int, int, int, long[]):void");
+    }
+
+    public /* synthetic */ void lambda$null$135$MessagesStorage(LongSparseArray longSparseArray) {
+        MediaDataController mediaDataController = getMediaDataController();
+        mediaDataController.clearDraftsFolderIds();
+        if (longSparseArray != null) {
+            int size = longSparseArray.size();
+            for (int i = 0; i < size; i++) {
+                mediaDataController.setDraftFolderId(longSparseArray.keyAt(i), ((Integer) longSparseArray.valueAt(i)).intValue());
+            }
+        }
     }
 
     public static void createFirstHoles(long j, SQLitePreparedStatement sQLitePreparedStatement, SQLitePreparedStatement sQLitePreparedStatement2, int i) throws Exception {
@@ -16397,15 +16176,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void getDialogFolderId(long j, IntCallback intCallback) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$SkuV6Hpjk5GQ4ZDcr1sIT7ixm50(this, j, intCallback));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$t_jq6Paav5KKR5kzd1LlVrcehvI(this, j, intCallback));
     }
 
-    public /* synthetic */ void lambda$getDialogFolderId$141$MessagesStorage(long j, IntCallback intCallback) {
+    public /* synthetic */ void lambda$getDialogFolderId$138$MessagesStorage(long j, IntCallback intCallback) {
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT folder_id FROM dialogs WHERE did = ?", Long.valueOf(j));
             int intValue = queryFinalized.next() ? queryFinalized.intValue(0) : -1;
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$xdTHE1xxbNeC9wpGamcxi56OJSI(intCallback, intValue));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$XsoFtSzS0YToICW3cjox1fH80xY(intCallback, intValue));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -16413,11 +16192,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void setDialogsFolderId(ArrayList<TL_folderPeer> arrayList, ArrayList<TL_inputFolderPeer> arrayList2, long j, int i) {
         if (arrayList != null || arrayList2 != null || j != 0) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$vU3H4O_uMIIPLYpg8QUqZEOJanU(this, arrayList, arrayList2, i, j));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$R773_K8RtbzYzQJ4L6bSJxmWu-I(this, arrayList, arrayList2, i, j));
         }
     }
 
-    public /* synthetic */ void lambda$setDialogsFolderId$142$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
+    public /* synthetic */ void lambda$setDialogsFolderId$139$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET folder_id = ?, pinned = ? WHERE did = ?");
@@ -16463,7 +16242,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT did FROM dialogs WHERE folder_id = ?", Integer.valueOf(i));
             if (!queryFinalized.next()) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$PjPiLXNm6_EsiAsuc-msXC__TJg(this, i));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$pS4-TFYlNVgaHrQVJbRd8fOrGwo(this, i));
                 SQLiteDatabase sQLiteDatabase = this.database;
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("DELETE FROM dialogs WHERE did = ");
@@ -16476,23 +16255,23 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$143$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$140$MessagesStorage(int i) {
         getMessagesController().onFolderEmpty(i);
     }
 
     public void checkIfFolderEmpty(int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$icwTQAKHt7cMla2SxcMIgCt-hLo(this, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$XOiv1SwjzIOrCmL5Vk0FOP6bXno(this, i));
     }
 
-    public /* synthetic */ void lambda$checkIfFolderEmpty$144$MessagesStorage(int i) {
+    public /* synthetic */ void lambda$checkIfFolderEmpty$141$MessagesStorage(int i) {
         checkIfFolderEmptyInternal(i);
     }
 
     public void unpinAllDialogsExceptNew(ArrayList<Long> arrayList, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$UNG3O_q0_n6IbfxTyxeEDWN4wjc(this, arrayList, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Ddew0CEJ_p2AJHgB5NoeH3eCdQw(this, arrayList, i));
     }
 
-    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$145$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$142$MessagesStorage(ArrayList arrayList, int i) {
         try {
             long longValue;
             ArrayList arrayList2 = new ArrayList();
@@ -16521,7 +16300,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void setDialogUnread(long j, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$YR6_-nj0nsdVFY6J-MW9CHpRtYs(this, j, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CKiP2jQhP3bMHRkic2tVwmgJfig(this, j, z));
     }
 
     /* JADX WARNING: Missing block: B:5:0x0025, code skipped:
@@ -16552,7 +16331,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:25:?, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$setDialogUnread$146$MessagesStorage(long r6, boolean r8) {
+    public /* synthetic */ void lambda$setDialogUnread$143$MessagesStorage(long r6, boolean r8) {
         /*
         r5 = this;
         r0 = 0;
@@ -16614,14 +16393,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x005c:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$146$MessagesStorage(long, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$143$MessagesStorage(long, boolean):void");
     }
 
     public void setDialogPinned(long j, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$pydpGfyEJY86wZVM-5gk1G5enLU(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$AiDYTHRLDJEhuW3_82Vb-TsqO_c(this, i, j));
     }
 
-    public /* synthetic */ void lambda$setDialogPinned$147$MessagesStorage(int i, long j) {
+    public /* synthetic */ void lambda$setDialogPinned$144$MessagesStorage(int i, long j) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
             executeFast.bindInteger(1, i);
@@ -16635,11 +16414,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putDialogs(messages_Dialogs messages_dialogs, int i) {
         if (!messages_dialogs.dialogs.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$hry9IvsaQDnemeIROZgTEzWio5I(this, messages_dialogs, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$SP4NWDIhBs89x83JhEQbPgHfl_0(this, messages_dialogs, i));
         }
     }
 
-    public /* synthetic */ void lambda$putDialogs$148$MessagesStorage(messages_Dialogs messages_dialogs, int i) {
+    public /* synthetic */ void lambda$putDialogs$145$MessagesStorage(messages_Dialogs messages_dialogs, int i) {
         putDialogsInternal(messages_dialogs, i);
         try {
             loadUnreadMessages();
@@ -16651,7 +16430,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public int getDialogReadMax(boolean z, long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$NotrdRfLQ2qAM8nf7f6dNfZC9LQ(this, z, j, numArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$oo0v__1RdN_rO0e5kqW6A04D4Ao(this, z, j, numArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -16693,7 +16472,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         	at jadx.api.JavaClass.decompile(JavaClass.java:62)
         	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
-    public /* synthetic */ void lambda$getDialogReadMax$149$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
+    public /* synthetic */ void lambda$getDialogReadMax$146$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
         /*
         r4 = this;
         r0 = 0;
@@ -16751,13 +16530,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x005f:
         throw r5;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$149$MessagesStorage(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$146$MessagesStorage(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public int getChannelPtsSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5zCr421jp6BG9VEI5v5DJ7UN8Ng(this, i, numArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$dKOeLXgsGhw-RvlccPAsrIwQZqA(this, i, numArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -16824,7 +16603,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:19:?, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$getChannelPtsSync$150$MessagesStorage(int r5, java.lang.Integer[] r6, java.util.concurrent.CountDownLatch r7) {
+    public /* synthetic */ void lambda$getChannelPtsSync$147$MessagesStorage(int r5, java.lang.Integer[] r6, java.util.concurrent.CountDownLatch r7) {
         /*
         r4 = this;
         r0 = 0;
@@ -16875,13 +16654,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004a:
         throw r5;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$150$MessagesStorage(int, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$147$MessagesStorage(int, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public User getUserSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         User[] userArr = new User[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$OGtMr0HOJdFgtGCQ7p3NBahgzn8(this, userArr, i, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$LtS-FKOcgVH3YBCZPLDRfDpE-FQ(this, userArr, i, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -16890,7 +16669,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return userArr[0];
     }
 
-    public /* synthetic */ void lambda$getUserSync$151$MessagesStorage(User[] userArr, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getUserSync$148$MessagesStorage(User[] userArr, int i, CountDownLatch countDownLatch) {
         userArr[0] = getUser(i);
         countDownLatch.countDown();
     }
@@ -16898,7 +16677,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public Chat getChatSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Chat[] chatArr = new Chat[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$coeKkTQyQbVSBUMnXP7SoD3ukxc(this, chatArr, i, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CdZ7E32u1n6P7Cpm7mlm0LMfBhM(this, chatArr, i, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -16907,7 +16686,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return chatArr[0];
     }
 
-    public /* synthetic */ void lambda$getChatSync$152$MessagesStorage(Chat[] chatArr, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getChatSync$149$MessagesStorage(Chat[] chatArr, int i, CountDownLatch countDownLatch) {
         chatArr[0] = getChat(i);
         countDownLatch.countDown();
     }

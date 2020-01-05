@@ -19,5 +19,7 @@
     <string name="common_signin_button_text">Kirish</string>
     <string name="common_signin_button_text_long">Google orqali kirish</string>
     <string name="fcm_fallback_notification_channel_label">Har xil</string>
+    <string name="google_assistant_verification_channel_name">Assistent yordamida tekshirish</string>
+    <string name="google_assistant_verification_notification_title">Google Assistent xabar yubormoqda</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

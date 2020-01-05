@@ -1,8 +1,11 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -11,6 +14,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 
 public class LocationLoadingCell extends FrameLayout {
+    private ImageView imageView;
     private RadialProgressView progressBar;
     private TextView textView;
 
@@ -18,11 +22,17 @@ public class LocationLoadingCell extends FrameLayout {
         super(context);
         this.progressBar = new RadialProgressView(context);
         addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
+        this.imageView = new ImageView(context);
+        this.imageView.setImageResource(NUM);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), Mode.MULTIPLY));
+        addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 24.0f));
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
-        this.textView.setTextSize(1, 16.0f);
-        this.textView.setText(LocaleController.getString("NoResult", NUM));
-        addView(this.textView, LayoutHelper.createFrame(-2, -2, 17));
+        this.textView.setTextColor(Theme.getColor("dialogEmptyText"));
+        this.textView.setGravity(17);
+        this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.textView.setTextSize(1, 17.0f);
+        this.textView.setText(LocaleController.getString("NoPlacesFound", NUM));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 34.0f, 0.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
@@ -33,10 +43,11 @@ public class LocationLoadingCell extends FrameLayout {
     public void setLoading(boolean z) {
         int i = 0;
         this.progressBar.setVisibility(z ? 0 : 4);
-        TextView textView = this.textView;
+        this.textView.setVisibility(z ? 4 : 0);
+        ImageView imageView = this.imageView;
         if (z) {
             i = 4;
         }
-        textView.setVisibility(i);
+        imageView.setVisibility(i);
     }
 }

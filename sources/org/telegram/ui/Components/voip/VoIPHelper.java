@@ -14,7 +14,6 @@ import android.provider.Settings.System;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +52,7 @@ import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Components.BetterRatingView;
 import org.telegram.ui.Components.BetterRatingView.OnRatingChangeListener;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.VoIPActivity;
@@ -281,16 +281,16 @@ public class VoIPHelper {
         }
         linearLayout.addView(linearLayout2, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
         linearLayout2.setVisibility(8);
-        EditText editText = new EditText(context2);
-        editText.setHint(LocaleController.getString("VoipFeedbackCommentHint", NUM));
-        editText.setInputType(147457);
-        editText.setTextColor(Theme.getColor(str));
-        editText.setHintTextColor(Theme.getColor("dialogTextHint"));
-        editText.setBackgroundDrawable(Theme.createEditTextDrawable(context2, true));
-        editText.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
-        editText.setTextSize(18.0f);
-        editText.setVisibility(8);
-        linearLayout.addView(editText, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
+        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
+        editTextBoldCursor.setHint(LocaleController.getString("VoipFeedbackCommentHint", NUM));
+        editTextBoldCursor.setInputType(147457);
+        editTextBoldCursor.setTextColor(Theme.getColor(str));
+        editTextBoldCursor.setHintTextColor(Theme.getColor("dialogTextHint"));
+        editTextBoldCursor.setBackgroundDrawable(Theme.createEditTextDrawable(context2, true));
+        editTextBoldCursor.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
+        editTextBoldCursor.setTextSize(18.0f);
+        editTextBoldCursor.setVisibility(8);
+        linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
         final boolean[] zArr = new boolean[]{true};
         checkBoxCell = new CheckBoxCell(context2, 1);
         AnonymousClass2 anonymousClass2 = new OnClickListener() {
@@ -360,7 +360,7 @@ public class VoIPHelper {
         });
         final BetterRatingView betterRatingView2 = betterRatingView;
         linearLayout = linearLayout2;
-        final EditText editText2 = editText;
+        final EditTextBoldCursor editTextBoldCursor2 = editTextBoldCursor;
         final boolean[] zArr2 = zArr;
         final long j3 = j2;
         AnonymousClass7 anonymousClass7 = r0;
@@ -383,7 +383,7 @@ public class VoIPHelper {
                         betterRatingView2.setVisibility(8);
                         textView.setVisibility(8);
                         alertDialog2.setTitle(LocaleController.getString("CallReportHint", NUM));
-                        editText2.setVisibility(0);
+                        editTextBoldCursor2.setVisibility(0);
                         if (logFile.exists()) {
                             checkBoxCell3.setVisibility(0);
                             textView3.setVisibility(0);
@@ -407,7 +407,7 @@ public class VoIPHelper {
                     }
                 }
                 if (tL_phone_setCallRating.rating < 5) {
-                    tL_phone_setCallRating.comment = editText2.getText().toString();
+                    tL_phone_setCallRating.comment = editTextBoldCursor2.getText().toString();
                 } else {
                     tL_phone_setCallRating.comment = "";
                 }

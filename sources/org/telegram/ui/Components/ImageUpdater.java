@@ -42,6 +42,7 @@ import org.telegram.ui.PhotoCropActivity;
 import org.telegram.ui.PhotoCropActivity.PhotoEditActivityDelegate;
 import org.telegram.ui.PhotoPickerActivity;
 import org.telegram.ui.PhotoPickerActivity.PhotoPickerActivityDelegate;
+import org.telegram.ui.PhotoPickerActivity.PhotoPickerActivityDelegate.-CC;
 import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.PhotoViewer.EmptyPhotoViewerProvider;
 
@@ -143,7 +144,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
         if (this.parentFragment != null) {
             final HashMap hashMap = new HashMap();
             final ArrayList arrayList = new ArrayList();
-            PhotoPickerActivity photoPickerActivity = new PhotoPickerActivity(0, null, hashMap, arrayList, new ArrayList(), 1, false, null);
+            PhotoPickerActivity photoPickerActivity = new PhotoPickerActivity(0, null, hashMap, arrayList, 1, false, null);
             photoPickerActivity.setDelegate(new PhotoPickerActivityDelegate() {
                 private boolean sendPressed;
 
@@ -151,6 +152,10 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
 
                 public void onCaptionChanged(CharSequence charSequence) {
+                }
+
+                public /* synthetic */ void onOpenInPressed() {
+                    -CC.$default$onOpenInPressed(this);
                 }
 
                 public void selectedPhotosChanged() {
@@ -289,6 +294,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
             }
             PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(1, false, false, null);
+            photoAlbumPickerActivity.setAllowSearchImages(this.searchAvailable);
             photoAlbumPickerActivity.setDelegate(new PhotoAlbumPickerActivityDelegate() {
                 public void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList, boolean z, int i) {
                     ImageUpdater.this.didSelectPhotos(arrayList);
@@ -320,7 +326,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$28$LaunchActivity(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$32$LaunchActivity(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -329,30 +335,31 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     }
 
     public void onActivityResult(int i, int i2, Intent intent) {
+        int i3 = i;
         if (i2 != -1) {
             return;
         }
-        if (i == 13) {
-            int i3;
+        if (i3 == 13) {
+            int i4;
             PhotoViewer.getInstance().setParentActivity(this.parentFragment.getParentActivity());
-            i = 0;
+            int i5 = 0;
             try {
-                i2 = new ExifInterface(this.currentPicturePath).getAttributeInt("Orientation", 1);
-                if (i2 == 3) {
-                    i = 180;
-                } else if (i2 == 6) {
-                    i = 90;
-                } else if (i2 == 8) {
-                    i = 270;
+                i3 = new ExifInterface(this.currentPicturePath).getAttributeInt("Orientation", 1);
+                if (i3 == 3) {
+                    i5 = 180;
+                } else if (i3 == 6) {
+                    i5 = 90;
+                } else if (i3 == 8) {
+                    i5 = 270;
                 }
-                i3 = i;
+                i4 = i5;
             } catch (Exception e) {
                 FileLog.e(e);
-                i3 = 0;
+                i4 = 0;
             }
             final ArrayList arrayList = new ArrayList();
-            arrayList.add(new PhotoEntry(0, 0, 0, this.currentPicturePath, i3, false));
-            PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 1, new EmptyPhotoViewerProvider() {
+            arrayList.add(new PhotoEntry(0, 0, 0, this.currentPicturePath, i4, false, 0, 0, 0));
+            PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 1, false, new EmptyPhotoViewerProvider() {
                 public boolean allowCaption() {
                     return false;
                 }
@@ -375,7 +382,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
             }, null);
             AndroidUtilities.addMediaToGallery(this.currentPicturePath);
             this.currentPicturePath = null;
-        } else if (i == 14 && intent != null && intent.getData() != null) {
+        } else if (i3 == 14 && intent != null && intent.getData() != null) {
             startCrop(null, intent.getData());
         }
     }

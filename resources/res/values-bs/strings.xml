@@ -19,5 +19,7 @@
     <string name="common_signin_button_text">Prijavi se</string>
     <string name="common_signin_button_text_long">Prijavi se pomoću Googlea</string>
     <string name="fcm_fallback_notification_channel_label">Razno</string>
+    <string name="google_assistant_verification_channel_name">Verifikator Asistenta</string>
+    <string name="google_assistant_verification_notification_title">Google Asistent šalje poruku</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

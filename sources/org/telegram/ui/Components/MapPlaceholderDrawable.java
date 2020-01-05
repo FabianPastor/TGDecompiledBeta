@@ -5,9 +5,10 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.Theme;
 
 public class MapPlaceholderDrawable extends Drawable {
-    private Paint linePaint;
+    private Paint linePaint = new Paint();
     private Paint paint = new Paint();
 
     public int getIntrinsicHeight() {
@@ -29,10 +30,14 @@ public class MapPlaceholderDrawable extends Drawable {
     }
 
     public MapPlaceholderDrawable() {
-        this.paint.setColor(-2172970);
-        this.linePaint = new Paint();
-        this.linePaint.setColor(-3752002);
         this.linePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
+        if (Theme.getCurrentTheme().isDark()) {
+            this.paint.setColor(-14865331);
+            this.linePaint.setColor(-15854042);
+            return;
+        }
+        this.paint.setColor(-2172970);
+        this.linePaint.setColor(-3752002);
     }
 
     public void draw(Canvas canvas) {

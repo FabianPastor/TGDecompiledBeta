@@ -3,7 +3,10 @@ package org.telegram.ui.Cells;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
     private int bottomPadding;
     private int fixedSize;
     private String linkTextColorKey;
+    private CharSequence text;
     private TextView textView;
 
     public TextInfoPrivacyCell(Context context) {
@@ -65,12 +69,36 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     public void setText(CharSequence charSequence) {
-        if (charSequence == null) {
-            this.textView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
-        } else {
-            this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp((float) this.bottomPadding));
+        if (!TextUtils.equals(charSequence, this.text)) {
+            this.text = charSequence;
+            int i = 0;
+            if (charSequence == null) {
+                this.textView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
+            } else {
+                this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp((float) this.bottomPadding));
+            }
+            CharSequence charSequence2 = null;
+            if (charSequence != null) {
+                int length = charSequence.length();
+                while (i < length - 1) {
+                    if (charSequence.charAt(i) == 10) {
+                        int i2 = i + 1;
+                        if (charSequence.charAt(i2) == 10) {
+                            if (charSequence2 == null) {
+                                charSequence2 = new SpannableString(charSequence);
+                            }
+                            charSequence2.setSpan(new AbsoluteSizeSpan(10, true), i2, i + 2, 33);
+                        }
+                    }
+                    i++;
+                }
+            }
+            TextView textView = this.textView;
+            if (charSequence2 != null) {
+                charSequence = charSequence2;
+            }
+            textView.setText(charSequence);
         }
-        this.textView.setText(charSequence);
     }
 
     public void setTextColor(int i) {

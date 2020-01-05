@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 public class TLRPC {
     public static final int CHAT_FLAG_IS_PUBLIC = 64;
-    public static final int LAYER = 106;
+    public static final int LAYER = 108;
     public static final int MESSAGE_FLAG_EDITED = 32768;
     public static final int MESSAGE_FLAG_FWD = 4;
     public static final int MESSAGE_FLAG_HAS_BOT_ID = 2048;
@@ -70,6 +70,39 @@ public class TLRPC {
                 tL_audio_old2.readParams(abstractSerializedData, z);
             }
             return tL_audio_old2;
+        }
+    }
+
+    public static abstract class BaseTheme extends TLObject {
+        public static BaseTheme TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            TLObject tL_baseThemeNight;
+            switch (i) {
+                case -1212997976:
+                    tL_baseThemeNight = new TL_baseThemeNight();
+                    break;
+                case -1012849566:
+                    tL_baseThemeNight = new TL_baseThemeClassic();
+                    break;
+                case -69724536:
+                    tL_baseThemeNight = new TL_baseThemeDay();
+                    break;
+                case 1527845466:
+                    tL_baseThemeNight = new TL_baseThemeArctic();
+                    break;
+                case 1834973166:
+                    tL_baseThemeNight = new TL_baseThemeTinted();
+                    break;
+                default:
+                    tL_baseThemeNight = null;
+                    break;
+            }
+            if (tL_baseThemeNight == null && z) {
+                throw new RuntimeException(String.format("can't parse magic %x in BaseTheme", new Object[]{Integer.valueOf(i)}));
+            }
+            if (tL_baseThemeNight != null) {
+                tL_baseThemeNight.readParams(abstractSerializedData, z);
+            }
+            return tL_baseThemeNight;
         }
     }
 
@@ -1884,9 +1917,6 @@ public class TLRPC {
                 case -786326563:
                     tL_inputPrivacyKeyForwards = new TL_inputPrivacyKeyAddedByPhone();
                     break;
-                case -640916697:
-                    tL_inputPrivacyKeyForwards = new TL_inputPrivacyKeyWalletAddress();
-                    break;
                 case -610373422:
                     tL_inputPrivacyKeyForwards = new TL_inputPrivacyKeyPhoneP2P();
                     break;
@@ -2066,7 +2096,7 @@ public class TLRPC {
 
     public static abstract class InputWallPaper extends TLObject {
         public static InputWallPaper TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-            TLObject tL_inputWallPaperSlug = i != -NUM ? i != NUM ? null : new TL_inputWallPaperSlug() : new TL_inputWallPaper();
+            TLObject tL_inputWallPaperSlug = i != -NUM ? i != -NUM ? i != NUM ? null : new TL_inputWallPaperSlug() : new TL_inputWallPaper() : new TL_inputWallPaperNoFile();
             if (tL_inputWallPaperSlug == null && z) {
                 throw new RuntimeException(String.format("can't parse magic %x in InputWallPaper", new Object[]{Integer.valueOf(i)}));
             }
@@ -2346,7 +2376,7 @@ public class TLRPC {
 
         /* JADX WARNING: Removed duplicated region for block: B:28:0x0045  */
         /* JADX WARNING: Removed duplicated region for block: B:37:0x0057  */
-        /* JADX WARNING: Removed duplicated region for block: B:57:0x009f  */
+        /* JADX WARNING: Removed duplicated region for block: B:57:0x00a0  */
         /* JADX WARNING: Missing block: B:34:0x0051, code skipped:
             if (r6 == r9) goto L_0x0053;
      */
@@ -2432,22 +2462,22 @@ public class TLRPC {
             if (r9 == r5) goto L_0x0061;
         L_0x005d:
             r9 = r7.legacy;
-            if (r9 == 0) goto L_0x011d;
+            if (r9 == 0) goto L_0x011e;
         L_0x0061:
             r9 = 2;
-            if (r0 == 0) goto L_0x0099;
+            if (r0 == 0) goto L_0x009a;
         L_0x0064:
-            if (r3 == 0) goto L_0x0099;
+            if (r3 == 0) goto L_0x009a;
         L_0x0066:
             r0 = r7.message;
             r0 = r0.length();
             r3 = 6;
-            if (r0 <= r3) goto L_0x0089;
+            if (r0 <= r3) goto L_0x008a;
         L_0x006f:
             r0 = r7.message;
             r0 = r0.charAt(r9);
             r3 = 95;
-            if (r0 != r3) goto L_0x0089;
+            if (r0 != r3) goto L_0x008a;
         L_0x0079:
             r0 = new java.util.HashMap;
             r0.<init>();
@@ -2456,80 +2486,80 @@ public class TLRPC {
             r3 = r7.message;
             r4 = "ve";
             r0.put(r4, r3);
-        L_0x0089:
+        L_0x008a:
             r0 = r7.params;
-            if (r0 != 0) goto L_0x0095;
-        L_0x008d:
+            if (r0 != 0) goto L_0x0096;
+        L_0x008e:
             r0 = r7.message;
             r0 = r0.length();
-            if (r0 != r9) goto L_0x0099;
-        L_0x0095:
+            if (r0 != r9) goto L_0x009a;
+        L_0x0096:
             r0 = "";
             r7.message = r0;
-        L_0x0099:
+        L_0x009a:
             r0 = r8.remaining();
-            if (r0 <= 0) goto L_0x011d;
-        L_0x009f:
+            if (r0 <= 0) goto L_0x011e;
+        L_0x00a0:
             r0 = r8.readString(r1);
             r7.attachPath = r0;
             r0 = r7.attachPath;
-            if (r0 == 0) goto L_0x011d;
-        L_0x00a9:
+            if (r0 == 0) goto L_0x011e;
+        L_0x00aa:
             r0 = r7.id;
-            if (r0 < 0) goto L_0x00b5;
-        L_0x00ad:
+            if (r0 < 0) goto L_0x00b6;
+        L_0x00ae:
             r0 = r7.send_state;
-            if (r0 == r5) goto L_0x00b5;
-        L_0x00b1:
+            if (r0 == r5) goto L_0x00b6;
+        L_0x00b2:
             r0 = r7.legacy;
-            if (r0 == 0) goto L_0x0115;
-        L_0x00b5:
+            if (r0 == 0) goto L_0x0116;
+        L_0x00b6:
             r0 = r7.attachPath;
             r3 = "||";
             r0 = r0.startsWith(r3);
-            if (r0 == 0) goto L_0x0115;
-        L_0x00c0:
+            if (r0 == 0) goto L_0x0116;
+        L_0x00c1:
             r0 = r7.attachPath;
             r3 = "\\|\\|";
             r0 = r0.split(r3);
             r3 = r0.length;
-            if (r3 <= 0) goto L_0x011d;
-        L_0x00cb:
+            if (r3 <= 0) goto L_0x011e;
+        L_0x00cc:
             r3 = r7.params;
-            if (r3 != 0) goto L_0x00d6;
-        L_0x00cf:
+            if (r3 != 0) goto L_0x00d7;
+        L_0x00d0:
             r3 = new java.util.HashMap;
             r3.<init>();
             r7.params = r3;
-        L_0x00d6:
-            r3 = 1;
         L_0x00d7:
+            r3 = 1;
+        L_0x00d8:
             r4 = r0.length;
             r4 = r4 - r2;
-            if (r3 >= r4) goto L_0x00f2;
-        L_0x00db:
+            if (r3 >= r4) goto L_0x00f3;
+        L_0x00dc:
             r4 = r0[r3];
             r5 = "\\|=\\|";
             r4 = r4.split(r5);
             r5 = r4.length;
-            if (r5 != r9) goto L_0x00ef;
-        L_0x00e6:
+            if (r5 != r9) goto L_0x00f0;
+        L_0x00e7:
             r5 = r7.params;
             r6 = r4[r1];
             r4 = r4[r2];
             r5.put(r6, r4);
-        L_0x00ef:
+        L_0x00f0:
             r3 = r3 + 1;
-            goto L_0x00d7;
-        L_0x00f2:
+            goto L_0x00d8;
+        L_0x00f3:
             r9 = r0.length;
             r9 = r9 - r2;
             r9 = r0[r9];
             r9 = r9.trim();
             r7.attachPath = r9;
             r9 = r7.legacy;
-            if (r9 == 0) goto L_0x011d;
-        L_0x0100:
+            if (r9 == 0) goto L_0x011e;
+        L_0x0101:
             r9 = r7.params;
             r0 = "legacy_layer";
             r9 = r9.get(r0);
@@ -2537,22 +2567,22 @@ public class TLRPC {
             r9 = org.telegram.messenger.Utilities.parseInt(r9);
             r9 = r9.intValue();
             r7.layer = r9;
-            goto L_0x011d;
-        L_0x0115:
+            goto L_0x011e;
+        L_0x0116:
             r9 = r7.attachPath;
             r9 = r9.trim();
             r7.attachPath = r9;
-        L_0x011d:
+        L_0x011e:
             r9 = r7.flags;
             r9 = r9 & 4;
-            if (r9 == 0) goto L_0x012d;
-        L_0x0123:
+            if (r9 == 0) goto L_0x012e;
+        L_0x0124:
             r9 = r7.id;
-            if (r9 >= 0) goto L_0x012d;
-        L_0x0127:
+            if (r9 >= 0) goto L_0x012e;
+        L_0x0128:
             r8 = r8.readInt32(r1);
             r7.fwd_msg_id = r8;
-        L_0x012d:
+        L_0x012e:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, int):void");
@@ -2597,8 +2627,8 @@ public class TLRPC {
                 if (this.params == null) {
                     this.params = new HashMap();
                 }
-                this.layer = 106;
-                this.params.put("legacy_layer", "106");
+                this.layer = 108;
+                this.params.put("legacy_layer", "108");
             }
             if (this.id < 0 || this.send_state == 3 || this.legacy) {
                 hashMap = this.params;
@@ -3649,9 +3679,6 @@ public class TLRPC {
                 case 961092808:
                     tL_privacyKeyProfilePhoto = new TL_privacyKeyPhoneP2P();
                     break;
-                case 963559926:
-                    tL_privacyKeyProfilePhoto = new TL_privacyKeyWalletAddress();
-                    break;
                 case 1030105979:
                     tL_privacyKeyProfilePhoto = new TL_privacyKeyPhoneCall();
                     break;
@@ -4527,8 +4554,10 @@ public class TLRPC {
     }
 
     public static class TL_account_createTheme extends TLObject {
-        public static int constructor = NUM;
+        public static int constructor = -NUM;
         public InputDocument document;
+        public int flags;
+        public TL_inputThemeSettings settings;
         public String slug;
         public String title;
 
@@ -4538,9 +4567,15 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
             abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(this.flags);
             abstractSerializedData.writeString(this.slug);
             abstractSerializedData.writeString(this.title);
-            this.document.serializeToStream(abstractSerializedData);
+            if ((this.flags & 4) != 0) {
+                this.document.serializeToStream(abstractSerializedData);
+            }
+            if ((this.flags & 8) != 0) {
+                this.settings.serializeToStream(abstractSerializedData);
+            }
         }
     }
 
@@ -4661,6 +4696,34 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
             abstractSerializedData.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_account_getMultiWallPapers extends TLObject {
+        public static int constructor = NUM;
+        public ArrayList<InputWallPaper> wallpapers = new ArrayList();
+
+        public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            Vector vector = new Vector();
+            int readInt32 = abstractSerializedData.readInt32(z);
+            for (int i2 = 0; i2 < readInt32; i2++) {
+                WallPaper TLdeserialize = WallPaper.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return vector;
+                }
+                vector.objects.add(TLdeserialize);
+            }
+            return vector;
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(NUM);
+            int size = this.wallpapers.size();
+            abstractSerializedData.writeInt32(size);
+            for (int i = 0; i < size; i++) {
+                ((InputWallPaper) this.wallpapers.get(i)).serializeToStream(abstractSerializedData);
+            }
         }
     }
 
@@ -5505,20 +5568,6 @@ public class TLRPC {
         }
     }
 
-    public static class TL_account_setWalletAddress extends TLObject {
-        public static int constructor = NUM;
-        public String wallet_address;
-
-        public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-            return Bool.TLdeserialize(abstractSerializedData, i, z);
-        }
-
-        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
-            abstractSerializedData.writeInt32(constructor);
-            abstractSerializedData.writeString(this.wallet_address);
-        }
-    }
-
     public static class TL_account_tmpPassword extends TLObject {
         public static int constructor = -NUM;
         public byte[] tmp_password;
@@ -5662,6 +5711,7 @@ public class TLRPC {
         public InputDocument document;
         public int flags;
         public String format;
+        public TL_inputThemeSettings settings;
         public String slug;
         public InputTheme theme;
         public String title;
@@ -5683,6 +5733,9 @@ public class TLRPC {
             }
             if ((this.flags & 4) != 0) {
                 this.document.serializeToStream(abstractSerializedData);
+            }
+            if ((this.flags & 8) != 0) {
+                this.settings.serializeToStream(abstractSerializedData);
             }
         }
     }
@@ -5846,6 +5899,20 @@ public class TLRPC {
         }
     }
 
+    public static class TL_auth_acceptLoginToken extends TLObject {
+        public static int constructor = -NUM;
+        public byte[] token;
+
+        public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            return TL_authorization.TLdeserialize(abstractSerializedData, i, z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeByteArray(this.token);
+        }
+    }
+
     public static class TL_auth_cancelCode extends TLObject {
         public static int constructor = NUM;
         public String phone_code_hash;
@@ -5887,6 +5954,29 @@ public class TLRPC {
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
             abstractSerializedData.writeInt32(constructor);
             abstractSerializedData.writeInt32(this.dc_id);
+        }
+    }
+
+    public static class TL_auth_exportLoginToken extends TLObject {
+        public static int constructor = -NUM;
+        public String api_hash;
+        public int api_id;
+        public ArrayList<Integer> except_ids = new ArrayList();
+
+        public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            return auth_LoginToken.TLdeserialize(abstractSerializedData, i, z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(this.api_id);
+            abstractSerializedData.writeString(this.api_hash);
+            abstractSerializedData.writeInt32(NUM);
+            int size = this.except_ids.size();
+            abstractSerializedData.writeInt32(size);
+            for (int i = 0; i < size; i++) {
+                abstractSerializedData.writeInt32(((Integer) this.except_ids.get(i)).intValue());
+            }
         }
     }
 
@@ -5932,6 +6022,20 @@ public class TLRPC {
             abstractSerializedData.writeInt32(constructor);
             abstractSerializedData.writeInt32(this.id);
             abstractSerializedData.writeByteArray(this.bytes);
+        }
+    }
+
+    public static class TL_auth_importLoginToken extends TLObject {
+        public static int constructor = -NUM;
+        public byte[] token;
+
+        public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            return auth_LoginToken.TLdeserialize(abstractSerializedData, i, z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeByteArray(this.token);
         }
     }
 
@@ -6216,6 +6320,7 @@ public class TLRPC {
         public int photo_size_max;
         public boolean video_preload_large;
         public int video_size_max;
+        public int video_upload_maxbitrate;
 
         public static TL_autoDownloadSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
             if (constructor == i) {
@@ -6242,6 +6347,7 @@ public class TLRPC {
             this.photo_size_max = abstractSerializedData.readInt32(z);
             this.video_size_max = abstractSerializedData.readInt32(z);
             this.file_size_max = abstractSerializedData.readInt32(z);
+            this.video_upload_maxbitrate = abstractSerializedData.readInt32(z);
         }
 
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -6254,6 +6360,7 @@ public class TLRPC {
             abstractSerializedData.writeInt32(this.photo_size_max);
             abstractSerializedData.writeInt32(this.video_size_max);
             abstractSerializedData.writeInt32(this.file_size_max);
+            abstractSerializedData.writeInt32(this.video_upload_maxbitrate);
         }
     }
 
@@ -7003,6 +7110,18 @@ public class TLRPC {
 
         public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
             return messages_Chats.TLdeserialize(abstractSerializedData, i, z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_channels_getInactiveChannels extends TLObject {
+        public static int constructor = NUM;
+
+        public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            return TL_messages_inactiveChats.TLdeserialize(abstractSerializedData, i, z);
         }
 
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -10078,6 +10197,66 @@ public class TLRPC {
         }
     }
 
+    public static class TL_inputThemeSettings extends TLObject {
+        public static int constructor = -NUM;
+        public int accent_color;
+        public BaseTheme base_theme;
+        public int flags;
+        public int message_bottom_color;
+        public int message_top_color;
+        public InputWallPaper wallpaper;
+        public WallPaperSettings wallpaper_settings;
+
+        public static TL_inputThemeSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            if (constructor == i) {
+                TL_inputThemeSettings tL_inputThemeSettings = new TL_inputThemeSettings();
+                tL_inputThemeSettings.readParams(abstractSerializedData, z);
+                return tL_inputThemeSettings;
+            } else if (!z) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_inputThemeSettings", new Object[]{Integer.valueOf(i)}));
+            }
+        }
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.flags = abstractSerializedData.readInt32(z);
+            this.base_theme = BaseTheme.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.accent_color = abstractSerializedData.readInt32(z);
+            if ((this.flags & 1) != 0) {
+                this.message_top_color = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 1) != 0) {
+                this.message_bottom_color = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 2) != 0) {
+                this.wallpaper = InputWallPaper.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+            if ((this.flags & 2) != 0) {
+                this.wallpaper_settings = WallPaperSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(this.flags);
+            this.base_theme.serializeToStream(abstractSerializedData);
+            abstractSerializedData.writeInt32(this.accent_color);
+            if ((this.flags & 1) != 0) {
+                abstractSerializedData.writeInt32(this.message_top_color);
+            }
+            if ((this.flags & 1) != 0) {
+                abstractSerializedData.writeInt32(this.message_bottom_color);
+            }
+            if ((this.flags & 2) != 0) {
+                this.wallpaper.serializeToStream(abstractSerializedData);
+            }
+            if ((this.flags & 2) != 0) {
+                this.wallpaper_settings.serializeToStream(abstractSerializedData);
+            }
+        }
+    }
+
     public static class TL_inputWebDocument extends TLObject {
         public static int constructor = -NUM;
         public ArrayList<DocumentAttribute> attributes = new ArrayList();
@@ -12499,6 +12678,92 @@ public class TLRPC {
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
             abstractSerializedData.writeInt32(constructor);
             abstractSerializedData.writeString(this.hash);
+        }
+    }
+
+    public static class TL_messages_inactiveChats extends TLObject {
+        public static int constructor = -NUM;
+        public ArrayList<Chat> chats = new ArrayList();
+        public ArrayList<Integer> dates = new ArrayList();
+        public ArrayList<User> users = new ArrayList();
+
+        public static TL_messages_inactiveChats TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            if (constructor == i) {
+                TL_messages_inactiveChats tL_messages_inactiveChats = new TL_messages_inactiveChats();
+                tL_messages_inactiveChats.readParams(abstractSerializedData, z);
+                return tL_messages_inactiveChats;
+            } else if (!z) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_messages_inactiveChats", new Object[]{Integer.valueOf(i)}));
+            }
+        }
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            String str = "wrong Vector magic, got %x";
+            int i = 0;
+            int readInt32;
+            if (abstractSerializedData.readInt32(z) == NUM) {
+                int i2;
+                readInt32 = abstractSerializedData.readInt32(z);
+                for (i2 = 0; i2 < readInt32; i2++) {
+                    this.dates.add(Integer.valueOf(abstractSerializedData.readInt32(z)));
+                }
+                if (abstractSerializedData.readInt32(z) == NUM) {
+                    readInt32 = abstractSerializedData.readInt32(z);
+                    i2 = 0;
+                    while (i2 < readInt32) {
+                        Chat TLdeserialize = Chat.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                        if (TLdeserialize != null) {
+                            this.chats.add(TLdeserialize);
+                            i2++;
+                        } else {
+                            return;
+                        }
+                    }
+                    if (abstractSerializedData.readInt32(z) == NUM) {
+                        readInt32 = abstractSerializedData.readInt32(z);
+                        while (i < readInt32) {
+                            User TLdeserialize2 = User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                            if (TLdeserialize2 != null) {
+                                this.users.add(TLdeserialize2);
+                                i++;
+                            } else {
+                                return;
+                            }
+                        }
+                    } else if (z) {
+                        throw new RuntimeException(String.format(str, new Object[]{Integer.valueOf(readInt32)}));
+                    }
+                } else if (z) {
+                    throw new RuntimeException(String.format(str, new Object[]{Integer.valueOf(readInt32)}));
+                }
+            } else if (z) {
+                throw new RuntimeException(String.format(str, new Object[]{Integer.valueOf(readInt32)}));
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            int i;
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(NUM);
+            int size = this.dates.size();
+            abstractSerializedData.writeInt32(size);
+            for (i = 0; i < size; i++) {
+                abstractSerializedData.writeInt32(((Integer) this.dates.get(i)).intValue());
+            }
+            abstractSerializedData.writeInt32(NUM);
+            size = this.chats.size();
+            abstractSerializedData.writeInt32(size);
+            for (i = 0; i < size; i++) {
+                ((Chat) this.chats.get(i)).serializeToStream(abstractSerializedData);
+            }
+            abstractSerializedData.writeInt32(NUM);
+            int size2 = this.users.size();
+            abstractSerializedData.writeInt32(size2);
+            for (int i2 = 0; i2 < size2; i2++) {
+                ((User) this.users.get(i2)).serializeToStream(abstractSerializedData);
+            }
         }
     }
 
@@ -16036,6 +16301,59 @@ public class TLRPC {
         }
     }
 
+    public static class TL_themeSettings extends TLObject {
+        public static int constructor = -NUM;
+        public int accent_color;
+        public BaseTheme base_theme;
+        public int flags;
+        public int message_bottom_color;
+        public int message_top_color;
+        public WallPaper wallpaper;
+
+        public static TL_themeSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            if (constructor == i) {
+                TL_themeSettings tL_themeSettings = new TL_themeSettings();
+                tL_themeSettings.readParams(abstractSerializedData, z);
+                return tL_themeSettings;
+            } else if (!z) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_themeSettings", new Object[]{Integer.valueOf(i)}));
+            }
+        }
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.flags = abstractSerializedData.readInt32(z);
+            this.base_theme = BaseTheme.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.accent_color = abstractSerializedData.readInt32(z);
+            if ((this.flags & 1) != 0) {
+                this.message_top_color = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 1) != 0) {
+                this.message_bottom_color = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 2) != 0) {
+                this.wallpaper = WallPaper.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(this.flags);
+            this.base_theme.serializeToStream(abstractSerializedData);
+            abstractSerializedData.writeInt32(this.accent_color);
+            if ((this.flags & 1) != 0) {
+                abstractSerializedData.writeInt32(this.message_top_color);
+            }
+            if ((this.flags & 1) != 0) {
+                abstractSerializedData.writeInt32(this.message_bottom_color);
+            }
+            if ((this.flags & 2) != 0) {
+                this.wallpaper.serializeToStream(abstractSerializedData);
+            }
+        }
+    }
+
     public static class TL_topPeer extends TLObject {
         public static int constructor = -NUM;
         public Peer peer;
@@ -16496,56 +16814,6 @@ public class TLRPC {
         }
     }
 
-    public static class TL_wallPaperSettings extends TLObject {
-        public static int constructor = -NUM;
-        public int background_color;
-        public boolean blur;
-        public int flags;
-        public int intensity;
-        public boolean motion;
-
-        public static TL_wallPaperSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-            if (constructor == i) {
-                TL_wallPaperSettings tL_wallPaperSettings = new TL_wallPaperSettings();
-                tL_wallPaperSettings.readParams(abstractSerializedData, z);
-                return tL_wallPaperSettings;
-            } else if (!z) {
-                return null;
-            } else {
-                throw new RuntimeException(String.format("can't parse magic %x in TL_wallPaperSettings", new Object[]{Integer.valueOf(i)}));
-            }
-        }
-
-        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-            this.flags = abstractSerializedData.readInt32(z);
-            boolean z2 = false;
-            this.blur = (this.flags & 2) != 0;
-            if ((this.flags & 4) != 0) {
-                z2 = true;
-            }
-            this.motion = z2;
-            if ((this.flags & 1) != 0) {
-                this.background_color = abstractSerializedData.readInt32(z);
-            }
-            if ((this.flags & 8) != 0) {
-                this.intensity = abstractSerializedData.readInt32(z);
-            }
-        }
-
-        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
-            abstractSerializedData.writeInt32(constructor);
-            this.flags = this.blur ? this.flags | 2 : this.flags & -3;
-            this.flags = this.motion ? this.flags | 4 : this.flags & -5;
-            abstractSerializedData.writeInt32(this.flags);
-            if ((this.flags & 1) != 0) {
-                abstractSerializedData.writeInt32(this.background_color);
-            }
-            if ((this.flags & 8) != 0) {
-                abstractSerializedData.writeInt32(this.intensity);
-            }
-        }
-    }
-
     public static class TL_wallet_getKeySecretSalt extends TLObject {
         public static int constructor = NUM;
         public boolean revoke;
@@ -16676,16 +16944,78 @@ public class TLRPC {
         }
     }
 
+    public static class TL_webPageAttributeTheme extends TLObject {
+        public static int constructor = NUM;
+        public ArrayList<Document> documents = new ArrayList();
+        public int flags;
+        public TL_themeSettings settings;
+
+        public static TL_webPageAttributeTheme TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            if (constructor == i) {
+                TL_webPageAttributeTheme tL_webPageAttributeTheme = new TL_webPageAttributeTheme();
+                tL_webPageAttributeTheme.readParams(abstractSerializedData, z);
+                return tL_webPageAttributeTheme;
+            } else if (!z) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_webPageAttributeTheme", new Object[]{Integer.valueOf(i)}));
+            }
+        }
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.flags = abstractSerializedData.readInt32(z);
+            if ((this.flags & 1) != 0) {
+                int i = 0;
+                int readInt32;
+                if (abstractSerializedData.readInt32(z) == NUM) {
+                    readInt32 = abstractSerializedData.readInt32(z);
+                    while (i < readInt32) {
+                        Document TLdeserialize = Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                        if (TLdeserialize != null) {
+                            this.documents.add(TLdeserialize);
+                            i++;
+                        } else {
+                            return;
+                        }
+                    }
+                } else if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
+                } else {
+                    return;
+                }
+            }
+            if ((this.flags & 2) != 0) {
+                this.settings = TL_themeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(this.flags);
+            if ((this.flags & 1) != 0) {
+                abstractSerializedData.writeInt32(NUM);
+                int size = this.documents.size();
+                abstractSerializedData.writeInt32(size);
+                for (int i = 0; i < size; i++) {
+                    ((Document) this.documents.get(i)).serializeToStream(abstractSerializedData);
+                }
+            }
+            if ((this.flags & 2) != 0) {
+                this.settings.serializeToStream(abstractSerializedData);
+            }
+        }
+    }
+
     public static abstract class Theme extends TLObject {
         public static Theme TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-            TLObject tL_themeDocumentNotModified = i != -NUM ? i != NUM ? null : new TL_themeDocumentNotModified() : new TL_theme();
-            if (tL_themeDocumentNotModified == null && z) {
+            TLObject tL_themeDocumentNotModified_layer106 = i != -NUM ? i != 42930452 ? i != NUM ? null : new TL_themeDocumentNotModified_layer106() : new TL_theme() : new TL_theme_layer106();
+            if (tL_themeDocumentNotModified_layer106 == null && z) {
                 throw new RuntimeException(String.format("can't parse magic %x in Theme", new Object[]{Integer.valueOf(i)}));
             }
-            if (tL_themeDocumentNotModified != null) {
-                tL_themeDocumentNotModified.readParams(abstractSerializedData, z);
+            if (tL_themeDocumentNotModified_layer106 != null) {
+                tL_themeDocumentNotModified_layer106.readParams(abstractSerializedData, z);
             }
-            return tL_themeDocumentNotModified;
+            return tL_themeDocumentNotModified_layer106;
         }
     }
 
@@ -16743,6 +17073,9 @@ public class TLRPC {
                     break;
                 case -2046916883:
                     tL_updateUserBlocked = new TL_updateGroupCall();
+                    break;
+                case -2027964103:
+                    tL_updateUserBlocked = new TL_updateGeoLiveViewed();
                     break;
                 case -1987495099:
                     tL_updateUserBlocked = new TL_updateChannelReadMessagesContents();
@@ -16905,6 +17238,9 @@ public class TLRPC {
                     break;
                 case 1442983757:
                     tL_updateUserBlocked = new TL_updateLangPack();
+                    break;
+                case 1448076945:
+                    tL_updateUserBlocked = new TL_updateLoginToken();
                     break;
                 case 1461528386:
                     tL_updateUserBlocked = new TL_updateReadFeaturedStickers();
@@ -17142,34 +17478,16 @@ public class TLRPC {
         public Photo profile_photo;
         public TL_peerSettings settings;
         public User user;
-        public String wallet_address;
 
         public static UserFull TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-            TL_userFull tL_userFull_layer98;
-            switch (i) {
-                case -1901811583:
-                    tL_userFull_layer98 = new TL_userFull_layer98();
-                    break;
-                case -1684333439:
-                    tL_userFull_layer98 = new TL_userFull();
-                    break;
-                case -302941166:
-                    tL_userFull_layer98 = new TL_userFull_layer105();
-                    break;
-                case 1951750604:
-                    tL_userFull_layer98 = new TL_userFull_layer101();
-                    break;
-                default:
-                    tL_userFull_layer98 = null;
-                    break;
-            }
-            if (tL_userFull_layer98 == null && z) {
+            TL_userFull tL_userFull_layer101 = i != -NUM ? i != -NUM ? i != NUM ? null : new TL_userFull_layer101() : new TL_userFull() : new TL_userFull_layer98();
+            if (tL_userFull_layer101 == null && z) {
                 throw new RuntimeException(String.format("can't parse magic %x in UserFull", new Object[]{Integer.valueOf(i)}));
             }
-            if (tL_userFull_layer98 != null) {
-                tL_userFull_layer98.readParams(abstractSerializedData, z);
+            if (tL_userFull_layer101 != null) {
+                tL_userFull_layer101.readParams(abstractSerializedData, z);
             }
-            return tL_userFull_layer98;
+            return tL_userFull_layer101;
         }
     }
 
@@ -17303,8 +17621,19 @@ public class TLRPC {
     }
 
     public static abstract class WallPaper extends TLObject {
+        public long access_hash;
+        public boolean creator;
+        public boolean dark;
+        public Document document;
+        public int flags;
+        public long id;
+        public boolean isDefault;
+        public boolean pattern;
+        public WallPaperSettings settings;
+        public String slug;
+
         public static WallPaper TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-            TL_wallPaper tL_wallPaper_layer94 = i != -NUM ? i != -NUM ? null : new TL_wallPaper_layer94() : new TL_wallPaper();
+            TLObject tL_wallPaper_layer94 = i != -NUM ? i != -NUM ? i != -NUM ? null : new TL_wallPaper_layer94() : new TL_wallPaper() : new TL_wallPaperNoFile();
             if (tL_wallPaper_layer94 == null && z) {
                 throw new RuntimeException(String.format("can't parse magic %x in WallPaper", new Object[]{Integer.valueOf(i)}));
             }
@@ -17312,6 +17641,27 @@ public class TLRPC {
                 tL_wallPaper_layer94.readParams(abstractSerializedData, z);
             }
             return tL_wallPaper_layer94;
+        }
+    }
+
+    public static abstract class WallPaperSettings extends TLObject {
+        public int background_color;
+        public boolean blur;
+        public int flags;
+        public int intensity;
+        public boolean motion;
+        public int rotation;
+        public int second_background_color;
+
+        public static WallPaperSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            TL_wallPaperSettings tL_wallPaperSettings = i != -NUM ? i != 84438264 ? null : new TL_wallPaperSettings() : new TL_wallPaperSettings_layer106();
+            if (tL_wallPaperSettings == null && z) {
+                throw new RuntimeException(String.format("can't parse magic %x in WallPaperSettings", new Object[]{Integer.valueOf(i)}));
+            }
+            if (tL_wallPaperSettings != null) {
+                tL_wallPaperSettings.readParams(abstractSerializedData, z);
+            }
+            return tL_wallPaperSettings;
         }
     }
 
@@ -17335,13 +17685,13 @@ public class TLRPC {
     }
 
     public static abstract class WebPage extends TLObject {
+        public ArrayList<TL_webPageAttributeTheme> attributes = new ArrayList();
         public String author;
         public Page cached_page;
         public int date;
         public String description;
         public String display_url;
         public Document document;
-        public ArrayList<Document> documents = new ArrayList();
         public int duration;
         public int embed_height;
         public String embed_type;
@@ -17374,11 +17724,14 @@ public class TLRPC {
                 case -736472729:
                     tL_webPageNotModified = new TL_webPageUrlPending();
                     break;
+                case -392411726:
+                    tL_webPageNotModified = new TL_webPage();
+                    break;
                 case -350980120:
                     tL_webPageNotModified = new TL_webPageEmpty();
                     break;
                 case -94051982:
-                    tL_webPageNotModified = new TL_webPage();
+                    tL_webPageNotModified = new TL_webPage_layer107();
                     break;
                 case 1594340540:
                     tL_webPageNotModified = new TL_webPage_layer104();
@@ -17446,6 +17799,19 @@ public class TLRPC {
                 tL_auth_codeTypeCall.readParams(abstractSerializedData, z);
             }
             return tL_auth_codeTypeCall;
+        }
+    }
+
+    public static abstract class auth_LoginToken extends TLObject {
+        public static auth_LoginToken TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            TLObject tL_auth_loginToken = i != NUM ? i != NUM ? i != NUM ? null : new TL_auth_loginToken() : new TL_auth_loginTokenSuccess() : new TL_auth_loginTokenMigrateTo();
+            if (tL_auth_loginToken == null && z) {
+                throw new RuntimeException(String.format("can't parse magic %x in auth_LoginToken", new Object[]{Integer.valueOf(i)}));
+            }
+            if (tL_auth_loginToken != null) {
+                tL_auth_loginToken.readParams(abstractSerializedData, z);
+            }
+            return tL_auth_loginToken;
         }
     }
 
@@ -18254,6 +18620,54 @@ public class TLRPC {
         }
     }
 
+    public static class TL_auth_loginToken extends auth_LoginToken {
+        public static int constructor = NUM;
+        public int expires;
+        public byte[] token;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.expires = abstractSerializedData.readInt32(z);
+            this.token = abstractSerializedData.readByteArray(z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(this.expires);
+            abstractSerializedData.writeByteArray(this.token);
+        }
+    }
+
+    public static class TL_auth_loginTokenMigrateTo extends auth_LoginToken {
+        public static int constructor = NUM;
+        public int dc_id;
+        public byte[] token;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.dc_id = abstractSerializedData.readInt32(z);
+            this.token = abstractSerializedData.readByteArray(z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(this.dc_id);
+            abstractSerializedData.writeByteArray(this.token);
+        }
+    }
+
+    public static class TL_auth_loginTokenSuccess extends auth_LoginToken {
+        public static int constructor = NUM;
+        public auth_Authorization authorization;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.authorization = auth_Authorization.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            this.authorization.serializeToStream(abstractSerializedData);
+        }
+    }
+
     public static class TL_auth_sentCodeTypeApp extends auth_SentCodeType {
         public static int constructor = NUM;
 
@@ -18303,6 +18717,46 @@ public class TLRPC {
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
             abstractSerializedData.writeInt32(constructor);
             abstractSerializedData.writeInt32(this.length);
+        }
+    }
+
+    public static class TL_baseThemeArctic extends BaseTheme {
+        public static int constructor = NUM;
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_baseThemeClassic extends BaseTheme {
+        public static int constructor = -NUM;
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_baseThemeDay extends BaseTheme {
+        public static int constructor = -69724536;
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_baseThemeNight extends BaseTheme {
+        public static int constructor = -NUM;
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_baseThemeTinted extends BaseTheme {
+        public static int constructor = NUM;
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
         }
     }
 
@@ -23352,14 +23806,6 @@ public class TLRPC {
         }
     }
 
-    public static class TL_inputPrivacyKeyWalletAddress extends InputPrivacyKey {
-        public static int constructor = -NUM;
-
-        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
-            abstractSerializedData.writeInt32(constructor);
-        }
-    }
-
     public static class TL_inputPrivacyValueAllowAll extends InputPrivacyRule {
         public static int constructor = NUM;
 
@@ -23822,6 +24268,14 @@ public class TLRPC {
             abstractSerializedData.writeInt32(constructor);
             abstractSerializedData.writeInt64(this.id);
             abstractSerializedData.writeInt64(this.access_hash);
+        }
+    }
+
+    public static class TL_inputWallPaperNoFile extends InputWallPaper {
+        public static int constructor = -NUM;
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
         }
     }
 
@@ -28319,14 +28773,6 @@ public class TLRPC {
         }
     }
 
-    public static class TL_privacyKeyWalletAddress extends PrivacyKey {
-        public static int constructor = NUM;
-
-        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
-            abstractSerializedData.writeInt32(constructor);
-        }
-    }
-
     public static class TL_privacyValueAllowAll extends PrivacyRule {
         public static int constructor = NUM;
 
@@ -29713,7 +30159,7 @@ public class TLRPC {
     }
 
     public static class TL_theme extends Theme {
-        public static int constructor = -NUM;
+        public static int constructor = 42930452;
         public long access_hash;
         public boolean creator;
         public Document document;
@@ -29721,6 +30167,7 @@ public class TLRPC {
         public long id;
         public int installs_count;
         public boolean isDefault;
+        public TL_themeSettings settings;
         public String slug;
         public String title;
 
@@ -29739,6 +30186,9 @@ public class TLRPC {
             if ((this.flags & 4) != 0) {
                 this.document = Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
+            if ((this.flags & 8) != 0) {
+                this.settings = TL_themeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
             this.installs_count = abstractSerializedData.readInt32(z);
         }
 
@@ -29754,11 +30204,14 @@ public class TLRPC {
             if ((this.flags & 4) != 0) {
                 this.document.serializeToStream(abstractSerializedData);
             }
+            if ((this.flags & 8) != 0) {
+                this.settings.serializeToStream(abstractSerializedData);
+            }
             abstractSerializedData.writeInt32(this.installs_count);
         }
     }
 
-    public static class TL_themeDocumentNotModified extends Theme {
+    public static class TL_themeDocumentNotModified_layer106 extends Theme {
         public static int constructor = NUM;
 
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -30486,6 +30939,23 @@ public class TLRPC {
         }
     }
 
+    public static class TL_updateGeoLiveViewed extends Update {
+        public static int constructor = -NUM;
+        public int msg_id;
+        public Peer peer;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.peer = Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.msg_id = abstractSerializedData.readInt32(z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            this.peer.serializeToStream(abstractSerializedData);
+            abstractSerializedData.writeInt32(this.msg_id);
+        }
+    }
+
     public static class TL_updateGroupCall extends Update {
         public static int constructor = -NUM;
         public GroupCall call;
@@ -30542,6 +31012,14 @@ public class TLRPC {
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
             abstractSerializedData.writeInt32(constructor);
             abstractSerializedData.writeString(this.lang_code);
+        }
+    }
+
+    public static class TL_updateLoginToken extends Update {
+        public static int constructor = NUM;
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
         }
     }
 
@@ -32439,9 +32917,6 @@ public class TLRPC {
             if ((this.flags & 2048) != 0) {
                 this.folder_id = abstractSerializedData.readInt32(z);
             }
-            if ((this.flags & 8192) != 0) {
-                this.wallet_address = abstractSerializedData.readString(z);
-            }
         }
 
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -32470,9 +32945,6 @@ public class TLRPC {
             abstractSerializedData.writeInt32(this.common_chats_count);
             if ((this.flags & 2048) != 0) {
                 abstractSerializedData.writeInt32(this.folder_id);
-            }
-            if ((this.flags & 8192) != 0) {
-                abstractSerializedData.writeString(this.wallet_address);
             }
         }
     }
@@ -32660,16 +33132,6 @@ public class TLRPC {
 
     public static class TL_wallPaper extends WallPaper {
         public static int constructor = -NUM;
-        public long access_hash;
-        public boolean creator;
-        public boolean dark;
-        public Document document;
-        public int flags;
-        public long id;
-        public boolean isDefault;
-        public boolean pattern;
-        public TL_wallPaperSettings settings;
-        public String slug;
 
         public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
             this.id = abstractSerializedData.readInt64(z);
@@ -32686,7 +33148,7 @@ public class TLRPC {
             this.slug = abstractSerializedData.readString(z);
             this.document = Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             if ((this.flags & 4) != 0) {
-                this.settings = TL_wallPaperSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                this.settings = WallPaperSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
         }
 
@@ -32703,6 +33165,78 @@ public class TLRPC {
             this.document.serializeToStream(abstractSerializedData);
             if ((this.flags & 4) != 0) {
                 this.settings.serializeToStream(abstractSerializedData);
+            }
+        }
+    }
+
+    public static class TL_wallPaperNoFile extends WallPaper {
+        public static int constructor = -NUM;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.flags = abstractSerializedData.readInt32(z);
+            boolean z2 = true;
+            this.isDefault = (this.flags & 2) != 0;
+            if ((this.flags & 16) == 0) {
+                z2 = false;
+            }
+            this.dark = z2;
+            if ((this.flags & 4) != 0) {
+                this.settings = WallPaperSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            this.flags = this.isDefault ? this.flags | 2 : this.flags & -3;
+            this.flags = this.dark ? this.flags | 16 : this.flags & -17;
+            abstractSerializedData.writeInt32(this.flags);
+            if ((this.flags & 4) != 0) {
+                this.settings.serializeToStream(abstractSerializedData);
+            }
+        }
+    }
+
+    public static class TL_wallPaperSettings extends WallPaperSettings {
+        public static int constructor = 84438264;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.flags = abstractSerializedData.readInt32(z);
+            boolean z2 = false;
+            this.blur = (this.flags & 2) != 0;
+            if ((this.flags & 4) != 0) {
+                z2 = true;
+            }
+            this.motion = z2;
+            if ((this.flags & 1) != 0) {
+                this.background_color = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 16) != 0) {
+                this.second_background_color = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 8) != 0) {
+                this.intensity = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 16) != 0) {
+                this.rotation = abstractSerializedData.readInt32(z);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            this.flags = this.blur ? this.flags | 2 : this.flags & -3;
+            this.flags = this.motion ? this.flags | 4 : this.flags & -5;
+            abstractSerializedData.writeInt32(this.flags);
+            if ((this.flags & 1) != 0) {
+                abstractSerializedData.writeInt32(this.background_color);
+            }
+            if ((this.flags & 16) != 0) {
+                abstractSerializedData.writeInt32(this.second_background_color);
+            }
+            if ((this.flags & 8) != 0) {
+                abstractSerializedData.writeInt32(this.intensity);
+            }
+            if ((this.flags & 16) != 0) {
+                abstractSerializedData.writeInt32(this.rotation);
             }
         }
     }
@@ -32788,7 +33322,7 @@ public class TLRPC {
     }
 
     public static class TL_webPage extends WebPage {
-        public static int constructor = -94051982;
+        public static int constructor = -NUM;
 
         public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
             this.flags = abstractSerializedData.readInt32(z);
@@ -32832,15 +33366,18 @@ public class TLRPC {
             if ((this.flags & 512) != 0) {
                 this.document = Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
-            if ((this.flags & 2048) != 0) {
+            if ((this.flags & 1024) != 0) {
+                this.cached_page = Page.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+            if ((this.flags & 4096) != 0) {
                 int i = 0;
                 int readInt32;
                 if (abstractSerializedData.readInt32(z) == NUM) {
                     readInt32 = abstractSerializedData.readInt32(z);
                     while (i < readInt32) {
-                        Document TLdeserialize = Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                        TL_webPageAttributeTheme TLdeserialize = TL_webPageAttributeTheme.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                         if (TLdeserialize != null) {
-                            this.documents.add(TLdeserialize);
+                            this.attributes.add(TLdeserialize);
                             i++;
                         } else {
                             return;
@@ -32848,12 +33385,7 @@ public class TLRPC {
                     }
                 } else if (z) {
                     throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
-                } else {
-                    return;
                 }
-            }
-            if ((this.flags & 1024) != 0) {
-                this.cached_page = Page.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
         }
 
@@ -32900,16 +33432,16 @@ public class TLRPC {
             if ((this.flags & 512) != 0) {
                 this.document.serializeToStream(abstractSerializedData);
             }
-            if ((this.flags & 2048) != 0) {
-                abstractSerializedData.writeInt32(NUM);
-                int size = this.documents.size();
-                abstractSerializedData.writeInt32(size);
-                for (int i = 0; i < size; i++) {
-                    ((Document) this.documents.get(i)).serializeToStream(abstractSerializedData);
-                }
-            }
             if ((this.flags & 1024) != 0) {
                 this.cached_page.serializeToStream(abstractSerializedData);
+            }
+            if ((this.flags & 4096) != 0) {
+                abstractSerializedData.writeInt32(NUM);
+                int size = this.attributes.size();
+                abstractSerializedData.writeInt32(size);
+                for (int i = 0; i < size; i++) {
+                    ((TL_webPageAttributeTheme) this.attributes.get(i)).serializeToStream(abstractSerializedData);
+                }
             }
         }
     }
@@ -39176,6 +39708,43 @@ public class TLRPC {
         }
     }
 
+    public static class TL_theme_layer106 extends TL_theme {
+        public static int constructor = -NUM;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.flags = abstractSerializedData.readInt32(z);
+            boolean z2 = true;
+            this.creator = (this.flags & 1) != 0;
+            if ((this.flags & 2) == 0) {
+                z2 = false;
+            }
+            this.isDefault = z2;
+            this.id = abstractSerializedData.readInt64(z);
+            this.access_hash = abstractSerializedData.readInt64(z);
+            this.slug = abstractSerializedData.readString(z);
+            this.title = abstractSerializedData.readString(z);
+            if ((this.flags & 4) != 0) {
+                this.document = Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+            this.installs_count = abstractSerializedData.readInt32(z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            this.flags = this.creator ? this.flags | 1 : this.flags & -2;
+            this.flags = this.isDefault ? this.flags | 2 : this.flags & -3;
+            abstractSerializedData.writeInt32(this.flags);
+            abstractSerializedData.writeInt64(this.id);
+            abstractSerializedData.writeInt64(this.access_hash);
+            abstractSerializedData.writeString(this.slug);
+            abstractSerializedData.writeString(this.title);
+            if ((this.flags & 4) != 0) {
+                this.document.serializeToStream(abstractSerializedData);
+            }
+            abstractSerializedData.writeInt32(this.installs_count);
+        }
+    }
+
     public static class TL_userContact_old extends TL_userContact_old2 {
         public static int constructor = -NUM;
 
@@ -39287,71 +39856,6 @@ public class TLRPC {
                 abstractSerializedData.writeString(this.about);
             }
             this.link.serializeToStream(abstractSerializedData);
-            if ((this.flags & 4) != 0) {
-                this.profile_photo.serializeToStream(abstractSerializedData);
-            }
-            this.notify_settings.serializeToStream(abstractSerializedData);
-            if ((this.flags & 8) != 0) {
-                this.bot_info.serializeToStream(abstractSerializedData);
-            }
-            if ((this.flags & 64) != 0) {
-                abstractSerializedData.writeInt32(this.pinned_msg_id);
-            }
-            abstractSerializedData.writeInt32(this.common_chats_count);
-            if ((this.flags & 2048) != 0) {
-                abstractSerializedData.writeInt32(this.folder_id);
-            }
-        }
-    }
-
-    public static class TL_userFull_layer105 extends TL_userFull {
-        public static int constructor = -NUM;
-
-        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-            this.flags = abstractSerializedData.readInt32(z);
-            boolean z2 = true;
-            this.blocked = (this.flags & 1) != 0;
-            this.phone_calls_available = (this.flags & 16) != 0;
-            this.phone_calls_private = (this.flags & 32) != 0;
-            this.can_pin_message = (this.flags & 128) != 0;
-            if ((this.flags & 4096) == 0) {
-                z2 = false;
-            }
-            this.has_scheduled = z2;
-            this.user = User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-            if ((this.flags & 2) != 0) {
-                this.about = abstractSerializedData.readString(z);
-            }
-            this.settings = TL_peerSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-            if ((this.flags & 4) != 0) {
-                this.profile_photo = Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-            }
-            this.notify_settings = PeerNotifySettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-            if ((this.flags & 8) != 0) {
-                this.bot_info = BotInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-            }
-            if ((this.flags & 64) != 0) {
-                this.pinned_msg_id = abstractSerializedData.readInt32(z);
-            }
-            this.common_chats_count = abstractSerializedData.readInt32(z);
-            if ((this.flags & 2048) != 0) {
-                this.folder_id = abstractSerializedData.readInt32(z);
-            }
-        }
-
-        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
-            abstractSerializedData.writeInt32(constructor);
-            this.flags = this.blocked ? this.flags | 1 : this.flags & -2;
-            this.flags = this.phone_calls_available ? this.flags | 16 : this.flags & -17;
-            this.flags = this.phone_calls_private ? this.flags | 32 : this.flags & -33;
-            this.flags = this.can_pin_message ? this.flags | 128 : this.flags & -129;
-            this.flags = this.has_scheduled ? this.flags | 4096 : this.flags & -4097;
-            abstractSerializedData.writeInt32(this.flags);
-            this.user.serializeToStream(abstractSerializedData);
-            if ((this.flags & 2) != 0) {
-                abstractSerializedData.writeString(this.about);
-            }
-            this.settings.serializeToStream(abstractSerializedData);
             if ((this.flags & 4) != 0) {
                 this.profile_photo.serializeToStream(abstractSerializedData);
             }
@@ -39968,6 +40472,39 @@ public class TLRPC {
         }
     }
 
+    public static class TL_wallPaperSettings_layer106 extends TL_wallPaperSettings {
+        public static int constructor = -NUM;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.flags = abstractSerializedData.readInt32(z);
+            boolean z2 = false;
+            this.blur = (this.flags & 2) != 0;
+            if ((this.flags & 4) != 0) {
+                z2 = true;
+            }
+            this.motion = z2;
+            if ((this.flags & 1) != 0) {
+                this.background_color = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 8) != 0) {
+                this.intensity = abstractSerializedData.readInt32(z);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            this.flags = this.blur ? this.flags | 2 : this.flags & -3;
+            this.flags = this.motion ? this.flags | 4 : this.flags & -5;
+            abstractSerializedData.writeInt32(this.flags);
+            if ((this.flags & 1) != 0) {
+                abstractSerializedData.writeInt32(this.background_color);
+            }
+            if ((this.flags & 8) != 0) {
+                abstractSerializedData.writeInt32(this.intensity);
+            }
+        }
+    }
+
     public static class TL_wallPaper_layer94 extends TL_wallPaper {
         public static int constructor = -NUM;
 
@@ -40132,6 +40669,130 @@ public class TLRPC {
             }
             if ((this.flags & 512) != 0) {
                 this.document.serializeToStream(abstractSerializedData);
+            }
+            if ((this.flags & 1024) != 0) {
+                this.cached_page.serializeToStream(abstractSerializedData);
+            }
+        }
+    }
+
+    public static class TL_webPage_layer107 extends TL_webPage {
+        public static int constructor = -94051982;
+
+        public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            this.flags = abstractSerializedData.readInt32(z);
+            this.id = abstractSerializedData.readInt64(z);
+            this.url = abstractSerializedData.readString(z);
+            this.display_url = abstractSerializedData.readString(z);
+            this.hash = abstractSerializedData.readInt32(z);
+            if ((this.flags & 1) != 0) {
+                this.type = abstractSerializedData.readString(z);
+            }
+            if ((this.flags & 2) != 0) {
+                this.site_name = abstractSerializedData.readString(z);
+            }
+            if ((this.flags & 4) != 0) {
+                this.title = abstractSerializedData.readString(z);
+            }
+            if ((this.flags & 8) != 0) {
+                this.description = abstractSerializedData.readString(z);
+            }
+            if ((this.flags & 16) != 0) {
+                this.photo = Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+            if ((this.flags & 32) != 0) {
+                this.embed_url = abstractSerializedData.readString(z);
+            }
+            if ((this.flags & 32) != 0) {
+                this.embed_type = abstractSerializedData.readString(z);
+            }
+            if ((this.flags & 64) != 0) {
+                this.embed_width = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 64) != 0) {
+                this.embed_height = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 128) != 0) {
+                this.duration = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 256) != 0) {
+                this.author = abstractSerializedData.readString(z);
+            }
+            if ((this.flags & 512) != 0) {
+                this.document = Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+            if ((this.flags & 2048) != 0) {
+                int i = 0;
+                if (abstractSerializedData.readInt32(z) == NUM) {
+                    TL_webPageAttributeTheme tL_webPageAttributeTheme = new TL_webPageAttributeTheme();
+                    int readInt32 = abstractSerializedData.readInt32(z);
+                    while (i < readInt32) {
+                        Document TLdeserialize = Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                        if (TLdeserialize != null) {
+                            tL_webPageAttributeTheme.documents.add(TLdeserialize);
+                            i++;
+                        } else {
+                            return;
+                        }
+                    }
+                    this.attributes.add(tL_webPageAttributeTheme);
+                } else if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(r0)}));
+                } else {
+                    return;
+                }
+            }
+            if ((this.flags & 1024) != 0) {
+                this.cached_page = Page.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            abstractSerializedData.writeInt32(this.flags);
+            abstractSerializedData.writeInt64(this.id);
+            abstractSerializedData.writeString(this.url);
+            abstractSerializedData.writeString(this.display_url);
+            abstractSerializedData.writeInt32(this.hash);
+            if ((this.flags & 1) != 0) {
+                abstractSerializedData.writeString(this.type);
+            }
+            if ((this.flags & 2) != 0) {
+                abstractSerializedData.writeString(this.site_name);
+            }
+            if ((this.flags & 4) != 0) {
+                abstractSerializedData.writeString(this.title);
+            }
+            if ((this.flags & 8) != 0) {
+                abstractSerializedData.writeString(this.description);
+            }
+            if ((this.flags & 16) != 0) {
+                this.photo.serializeToStream(abstractSerializedData);
+            }
+            if ((this.flags & 32) != 0) {
+                abstractSerializedData.writeString(this.embed_url);
+            }
+            if ((this.flags & 32) != 0) {
+                abstractSerializedData.writeString(this.embed_type);
+            }
+            if ((this.flags & 64) != 0) {
+                abstractSerializedData.writeInt32(this.embed_width);
+            }
+            if ((this.flags & 64) != 0) {
+                abstractSerializedData.writeInt32(this.embed_height);
+            }
+            if ((this.flags & 128) != 0) {
+                abstractSerializedData.writeInt32(this.duration);
+            }
+            if ((this.flags & 256) != 0) {
+                abstractSerializedData.writeString(this.author);
+            }
+            if ((this.flags & 512) != 0) {
+                this.document.serializeToStream(abstractSerializedData);
+            }
+            if ((this.flags & 2048) != 0) {
+                abstractSerializedData.writeInt32(NUM);
+                abstractSerializedData.writeInt32(0);
             }
             if ((this.flags & 1024) != 0) {
                 this.cached_page.serializeToStream(abstractSerializedData);

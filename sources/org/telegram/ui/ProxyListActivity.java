@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
@@ -229,6 +230,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     private class ListAdapter extends SelectionAdapter {
+        public static final int PAYLOAD_CHECKED_CHANGED = 0;
         private Context mContext;
 
         public ListAdapter(Context context) {
@@ -282,6 +284,22 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             } else {
                 viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
             }
+        }
+
+        public void onBindViewHolder(ViewHolder viewHolder, int i, List list) {
+            if (viewHolder.getItemViewType() == 3 && list.contains(Integer.valueOf(0))) {
+                TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
+                if (i == ProxyListActivity.this.useProxyRow) {
+                    textCheckCell.setChecked(ProxyListActivity.this.useProxySettings);
+                    return;
+                } else if (i == ProxyListActivity.this.callsRow) {
+                    textCheckCell.setChecked(ProxyListActivity.this.useProxyForCalls);
+                    return;
+                } else {
+                    return;
+                }
+            }
+            super.onBindViewHolder(viewHolder, i, list);
         }
 
         public void onViewAttachedToWindow(ViewHolder viewHolder) {
@@ -515,21 +533,31 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         builder.setMessage(LocaleController.getString("DeleteProxy", NUM));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$ProxyListActivity$EKG2JZVGlri4YGLLqmSPnpTdC4w(this, proxyInfo));
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$ProxyListActivity$OajISs3QuB64bwKXTSHCR_ffCLASSNAME(this, proxyInfo, i));
         showDialog(builder.create());
         return true;
     }
 
-    public /* synthetic */ void lambda$null$1$ProxyListActivity(ProxyInfo proxyInfo, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$1$ProxyListActivity(ProxyInfo proxyInfo, int i, DialogInterface dialogInterface, int i2) {
         SharedConfig.deleteProxy(proxyInfo);
-        if (SharedConfig.currentProxy == null) {
+        proxyInfo = SharedConfig.currentProxy;
+        Integer valueOf = Integer.valueOf(0);
+        if (proxyInfo == null) {
             this.useProxyForCalls = false;
             this.useProxySettings = false;
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.proxySettingsChanged);
-        updateRows(true);
+        updateRows(false);
+        ListAdapter listAdapter = this.listAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyItemRemoved(i);
+            if (SharedConfig.currentProxy == null) {
+                this.listAdapter.notifyItemChanged(this.useProxyRow, valueOf);
+                this.listAdapter.notifyItemChanged(this.callsRow, valueOf);
+            }
+        }
     }
 
     private void updateRows(boolean z) {

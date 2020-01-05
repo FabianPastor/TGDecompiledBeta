@@ -86,6 +86,7 @@ public class AlertDialog extends Dialog implements Callback {
     private AnimatorSet[] shadowAnimation = new AnimatorSet[2];
     private Drawable shadowDrawable;
     private boolean[] shadowVisibility = new boolean[2];
+    private Runnable showRunnable = new -$$Lambda$-i1Go4T4bFhAon1K9U_CB2RZElw(this);
     private CharSequence subtitle;
     private TextView subtitleTextView;
     private CharSequence title;
@@ -1302,6 +1303,7 @@ public class AlertDialog extends Dialog implements Callback {
             super.dismiss();
         } catch (Throwable unused) {
         }
+        AndroidUtilities.cancelRunOnUIThread(this.showRunnable);
     }
 
     public void setCanceledOnTouchOutside(boolean z) {
@@ -1432,5 +1434,9 @@ public class AlertDialog extends Dialog implements Callback {
     /* Access modifiers changed, original: protected */
     public int getThemeColor(String str) {
         return Theme.getColor(str);
+    }
+
+    public void showDelayed(long j) {
+        AndroidUtilities.runOnUIThread(this.showRunnable, j);
     }
 }

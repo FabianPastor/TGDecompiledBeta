@@ -1063,7 +1063,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
 
     private void processOpenQrReader() {
         if (this.walletActionSheet != null) {
-            this.cameraScanLayout = CameraScanActivity.showAsSheet(this, new CameraScanActivityDelegate() {
+            this.cameraScanLayout = CameraScanActivity.showAsSheet(this, true, new CameraScanActivityDelegate() {
                 public /* synthetic */ void didFindMrzInfo(Result result) {
                     CameraScanActivityDelegate.-CC.$default$didFindMrzInfo(this, result);
                 }

@@ -311,17 +311,51 @@ public class ActionBar extends FrameLayout {
         this.subtitleTextView.setTextColor(i);
     }
 
-    public void setPopupItemsColor(int i, boolean z) {
-        ActionBarMenu actionBarMenu = this.menu;
-        if (actionBarMenu != null) {
-            actionBarMenu.setPopupItemsColor(i, z);
+    public void setPopupItemsColor(int i, boolean z, boolean z2) {
+        if (z2) {
+            ActionBarMenu actionBarMenu = this.actionMode;
+            if (actionBarMenu != null) {
+                actionBarMenu.setPopupItemsColor(i, z);
+                return;
+            }
+        }
+        if (!z2) {
+            ActionBarMenu actionBarMenu2 = this.menu;
+            if (actionBarMenu2 != null) {
+                actionBarMenu2.setPopupItemsColor(i, z);
+            }
         }
     }
 
-    public void setPopupBackgroundColor(int i) {
-        ActionBarMenu actionBarMenu = this.menu;
-        if (actionBarMenu != null) {
-            actionBarMenu.redrawPopup(i);
+    public void setPopupItemsSelectorColor(int i, boolean z) {
+        if (z) {
+            ActionBarMenu actionBarMenu = this.actionMode;
+            if (actionBarMenu != null) {
+                actionBarMenu.setPopupItemsSelectorColor(i);
+                return;
+            }
+        }
+        if (!z) {
+            ActionBarMenu actionBarMenu2 = this.menu;
+            if (actionBarMenu2 != null) {
+                actionBarMenu2.setPopupItemsSelectorColor(i);
+            }
+        }
+    }
+
+    public void setPopupBackgroundColor(int i, boolean z) {
+        if (z) {
+            ActionBarMenu actionBarMenu = this.actionMode;
+            if (actionBarMenu != null) {
+                actionBarMenu.redrawPopup(i);
+                return;
+            }
+        }
+        if (!z) {
+            ActionBarMenu actionBarMenu2 = this.menu;
+            if (actionBarMenu2 != null) {
+                actionBarMenu2.redrawPopup(i);
+            }
         }
     }
 
@@ -383,7 +417,8 @@ public class ActionBar extends FrameLayout {
         this.actionMode = new ActionBarMenu(getContext(), this);
         actionBarMenu = this.actionMode;
         actionBarMenu.isActionMode = true;
-        actionBarMenu.setBackgroundColor(Theme.getColor("actionBarActionModeDefault"));
+        actionBarMenu.setClickable(true);
+        this.actionMode.setBackgroundColor(Theme.getColor("actionBarActionModeDefault"));
         addView(this.actionMode, indexOfChild(this.backButtonImageView));
         this.actionMode.setPadding(0, this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0, 0, 0);
         LayoutParams layoutParams = (LayoutParams) this.actionMode.getLayoutParams();

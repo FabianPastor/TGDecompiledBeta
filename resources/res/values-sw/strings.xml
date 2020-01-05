@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">Ingia katika akaunti</string>
     <string name="common_signin_button_text_long">Ingia katika akaunti ukitumia Google</string>
     <string name="fcm_fallback_notification_channel_label">Zinginezo</string>
+    <string name="google_assistant_verification_channel_name">Kithibitishaji cha programu ya Mratibu</string>
+    <string name="google_assistant_verification_notification_title">Programu ya Mratibu wa Google inatuma ujumbe</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Nunua ukitumia Google Wallet</string>
 </resources>

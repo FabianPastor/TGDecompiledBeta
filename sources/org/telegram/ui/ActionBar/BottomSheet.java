@@ -58,7 +58,7 @@ public class BottomSheet extends Dialog {
     private boolean bigTitle;
     private boolean canDismissWithSwipe = true;
     protected ContainerView container;
-    protected ViewGroup containerView = r0[0];
+    protected ViewGroup containerView = r4[0];
     protected int currentAccount = UserConfig.selectedAccount;
     protected AnimatorSet currentSheetAnimation;
     protected int currentSheetAnimationType;
@@ -853,6 +853,9 @@ public class BottomSheet extends Dialog {
         Window window = getWindow();
         window.setWindowAnimations(NUM);
         setContentView(this.container, new LayoutParams(-1, -1));
+        if (VERSION.SDK_INT >= 23 && Theme.getColor("actionBarDefault", null, true) == -1) {
+            this.container.setSystemUiVisibility(this.container.getSystemUiVisibility() | 8192);
+        }
         if (this.containerView == null) {
             this.containerView = new FrameLayout(getContext()) {
                 public boolean hasOverlappingRendering() {

@@ -2,9 +2,12 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build.VERSION;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -17,6 +20,7 @@ import android.widget.LinearLayout.LayoutParams;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.Theme;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int currentPosition = 0;
@@ -151,9 +155,23 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                     ((IconTabProvider) PagerSlidingTabStrip.this.pager.getAdapter()).customOnDraw(canvas, i);
                 }
             }
+
+            public void setSelected(boolean z) {
+                super.setSelected(z);
+                Drawable background = getBackground();
+                if (VERSION.SDK_INT >= 21 && background != null) {
+                    int color = Theme.getColor(z ? "chat_emojiPanelIconSelected" : "chat_emojiBottomPanelIcon");
+                    Theme.setSelectorDrawableColor(background, Color.argb(30, Color.red(color), Color.green(color), Color.blue(color)), true);
+                }
+            }
         };
         boolean z = true;
         anonymousClass2.setFocusable(true);
+        if (VERSION.SDK_INT >= 21) {
+            RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(Theme.getColor("chat_emojiBottomPanelIcon"));
+            Theme.setRippleDrawableForceSoftware(rippleDrawable);
+            anonymousClass2.setBackground(rippleDrawable);
+        }
         anonymousClass2.setImageDrawable(drawable);
         anonymousClass2.setScaleType(ScaleType.CENTER);
         anonymousClass2.setOnClickListener(new -$$Lambda$PagerSlidingTabStrip$uPwWgO9fi9vraIMG_OGzLnle64Y(this, i));

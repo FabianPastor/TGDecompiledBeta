@@ -1098,9 +1098,11 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$initTransfer$7$ChatRightsEditActivity(InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, int i) {
-        this.chatId = i;
-        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
-        initTransfer(inputCheckPasswordSRP, twoStepVerificationActivity);
+        if (i != 0) {
+            this.chatId = i;
+            this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
+            initTransfer(inputCheckPasswordSRP, twoStepVerificationActivity);
+        }
     }
 
     public /* synthetic */ void lambda$initTransfer$14$ChatRightsEditActivity(InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TL_channels_editCreator tL_channels_editCreator, TLObject tLObject, TL_error tL_error) {
@@ -1196,6 +1198,8 @@ public class ChatRightsEditActivity extends BaseFragment {
                     } else {
                         if ("SRP_ID_INVALID".equals(tL_error2.text)) {
                             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new -$$Lambda$ChatRightsEditActivity$EmEFuBPyDzxsPVJjrp4s9BS_M7o(this, twoStepVerificationActivity2), 8);
+                        } else if (tL_error2.text.equals("CHANNELS_TOO_MUCH")) {
+                            presentFragment(new TooManyCommunitiesActivity(1));
                         } else {
                             if (twoStepVerificationActivity2 != null) {
                                 twoStepVerificationActivity.needHideProgress();
@@ -1475,15 +1479,15 @@ public class ChatRightsEditActivity extends BaseFragment {
         return;
     L_0x003e:
         r0 = r13.currentType;
-        if (r0 != 0) goto L_0x00da;
+        if (r0 != 0) goto L_0x00db;
     L_0x0042:
         r0 = r13.rankRow;
-        if (r0 == r2) goto L_0x007e;
+        if (r0 == r2) goto L_0x007f;
     L_0x0046:
         r0 = r13.currentRank;
         r2 = r0.length();
         r0 = r0.codePointCount(r4, r2);
-        if (r0 <= r1) goto L_0x007e;
+        if (r0 <= r1) goto L_0x007f;
     L_0x0052:
         r0 = r13.listView;
         r1 = r13.rankRow;
@@ -1492,34 +1496,34 @@ public class ChatRightsEditActivity extends BaseFragment {
         r1 = "vibrator";
         r0 = r0.getSystemService(r1);
         r0 = (android.os.Vibrator) r0;
-        if (r0 == 0) goto L_0x006c;
-    L_0x0067:
+        if (r0 == 0) goto L_0x006d;
+    L_0x0068:
         r1 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r0.vibrate(r1);
-    L_0x006c:
+    L_0x006d:
         r0 = r13.listView;
         r1 = r13.rankHeaderRow;
         r0 = r0.findViewHolderForAdapterPosition(r1);
-        if (r0 == 0) goto L_0x007d;
-    L_0x0076:
+        if (r0 == 0) goto L_0x007e;
+    L_0x0077:
         r0 = r0.itemView;
         r1 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         org.telegram.messenger.AndroidUtilities.shakeView(r0, r1, r4);
-    L_0x007d:
-        return;
     L_0x007e:
+        return;
+    L_0x007f:
         r0 = r13.isChannel;
-        if (r0 == 0) goto L_0x0089;
-    L_0x0082:
+        if (r0 == 0) goto L_0x008a;
+    L_0x0083:
         r0 = r13.adminRights;
         r0.ban_users = r4;
         r0.pin_messages = r4;
-        goto L_0x008f;
-    L_0x0089:
+        goto L_0x0090;
+    L_0x008a:
         r0 = r13.adminRights;
         r0.edit_messages = r4;
         r0.post_messages = r4;
-    L_0x008f:
+    L_0x0090:
         r0 = r13.currentAccount;
         r5 = org.telegram.messenger.MessagesController.getInstance(r0);
         r6 = r13.chatId;
@@ -1531,45 +1535,45 @@ public class ChatRightsEditActivity extends BaseFragment {
         r12 = r13.isAddingNew;
         r5.setUserAdminRole(r6, r7, r8, r9, r10, r11, r12);
         r0 = r13.delegate;
-        if (r0 == 0) goto L_0x0120;
-    L_0x00ac:
+        if (r0 == 0) goto L_0x0121;
+    L_0x00ad:
         r1 = r13.adminRights;
         r2 = r1.change_info;
-        if (r2 != 0) goto L_0x00d0;
-    L_0x00b2:
+        if (r2 != 0) goto L_0x00d1;
+    L_0x00b3:
         r2 = r1.post_messages;
-        if (r2 != 0) goto L_0x00d0;
-    L_0x00b6:
+        if (r2 != 0) goto L_0x00d1;
+    L_0x00b7:
         r2 = r1.edit_messages;
-        if (r2 != 0) goto L_0x00d0;
-    L_0x00ba:
+        if (r2 != 0) goto L_0x00d1;
+    L_0x00bb:
         r2 = r1.delete_messages;
-        if (r2 != 0) goto L_0x00d0;
-    L_0x00be:
+        if (r2 != 0) goto L_0x00d1;
+    L_0x00bf:
         r2 = r1.ban_users;
-        if (r2 != 0) goto L_0x00d0;
-    L_0x00c2:
+        if (r2 != 0) goto L_0x00d1;
+    L_0x00c3:
         r2 = r1.invite_users;
-        if (r2 != 0) goto L_0x00d0;
-    L_0x00c6:
+        if (r2 != 0) goto L_0x00d1;
+    L_0x00c7:
         r2 = r1.pin_messages;
-        if (r2 != 0) goto L_0x00d0;
-    L_0x00ca:
+        if (r2 != 0) goto L_0x00d1;
+    L_0x00cb:
         r1 = r1.add_admins;
-        if (r1 == 0) goto L_0x00cf;
-    L_0x00ce:
-        goto L_0x00d0;
+        if (r1 == 0) goto L_0x00d0;
     L_0x00cf:
-        r3 = 0;
+        goto L_0x00d1;
     L_0x00d0:
+        r3 = 0;
+    L_0x00d1:
         r1 = r13.adminRights;
         r2 = r13.bannedRights;
         r4 = r13.currentRank;
         r0.didSetRights(r3, r1, r2, r4);
-        goto L_0x0120;
-    L_0x00da:
-        if (r0 != r3) goto L_0x0120;
-    L_0x00dc:
+        goto L_0x0121;
+    L_0x00db:
+        if (r0 != r3) goto L_0x0121;
+    L_0x00dd:
         r0 = r13.currentAccount;
         r5 = org.telegram.messenger.MessagesController.getInstance(r0);
         r6 = r13.chatId;
@@ -1580,39 +1584,39 @@ public class ChatRightsEditActivity extends BaseFragment {
         r5.setUserBannedRole(r6, r7, r8, r9, r10);
         r0 = r13.bannedRights;
         r1 = r0.send_messages;
-        if (r1 != 0) goto L_0x0113;
-    L_0x00f7:
+        if (r1 != 0) goto L_0x0114;
+    L_0x00f8:
         r1 = r0.send_stickers;
-        if (r1 != 0) goto L_0x0113;
-    L_0x00fb:
+        if (r1 != 0) goto L_0x0114;
+    L_0x00fc:
         r1 = r0.embed_links;
-        if (r1 != 0) goto L_0x0113;
-    L_0x00ff:
+        if (r1 != 0) goto L_0x0114;
+    L_0x0100:
         r1 = r0.send_media;
-        if (r1 != 0) goto L_0x0113;
-    L_0x0103:
+        if (r1 != 0) goto L_0x0114;
+    L_0x0104:
         r1 = r0.send_gifs;
-        if (r1 != 0) goto L_0x0113;
-    L_0x0107:
+        if (r1 != 0) goto L_0x0114;
+    L_0x0108:
         r1 = r0.send_games;
-        if (r1 != 0) goto L_0x0113;
-    L_0x010b:
+        if (r1 != 0) goto L_0x0114;
+    L_0x010c:
         r1 = r0.send_inline;
-        if (r1 == 0) goto L_0x0110;
-    L_0x010f:
-        goto L_0x0113;
+        if (r1 == 0) goto L_0x0111;
     L_0x0110:
+        goto L_0x0114;
+    L_0x0111:
         r0.until_date = r4;
         r3 = 2;
-    L_0x0113:
+    L_0x0114:
         r0 = r13.delegate;
-        if (r0 == 0) goto L_0x0120;
-    L_0x0117:
+        if (r0 == 0) goto L_0x0121;
+    L_0x0118:
         r1 = r13.adminRights;
         r2 = r13.bannedRights;
         r4 = r13.currentRank;
         r0.didSetRights(r3, r1, r2, r4);
-    L_0x0120:
+    L_0x0121:
         r13.finishFragment();
         return;
         */
@@ -1620,9 +1624,11 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$onDonePressed$15$ChatRightsEditActivity(int i) {
-        this.chatId = i;
-        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
-        onDonePressed();
+        if (i != 0) {
+            this.chatId = i;
+            this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
+            onDonePressed();
+        }
     }
 
     public void setDelegate(ChatRightsEditActivityDelegate chatRightsEditActivityDelegate) {

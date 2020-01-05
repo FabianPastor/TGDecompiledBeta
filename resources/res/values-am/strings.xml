@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">ግባ</string>
     <string name="common_signin_button_text_long">በGoogle ይግቡ</string>
     <string name="fcm_fallback_notification_channel_label">የተለያዩ</string>
+    <string name="google_assistant_verification_channel_name">ረዳት ማረጋገጫ</string>
+    <string name="google_assistant_verification_notification_title">Google ረዳት መልዕክት በመላክ ላይ</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">በGoogle ይግዙ</string>
 </resources>

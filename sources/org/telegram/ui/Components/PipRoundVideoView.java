@@ -235,6 +235,9 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             this.windowView.setScaleX(0.8f);
             this.windowView.setScaleY(0.8f);
             this.textureView = new TextureView(activity);
+            float dpf2 = (AndroidUtilities.dpf2(120.0f) + AndroidUtilities.dpf2(2.0f)) / AndroidUtilities.dpf2(120.0f);
+            this.textureView.setScaleX(dpf2);
+            this.textureView.setScaleY(dpf2);
             this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1.0f));
             this.imageView = new ImageView(activity);
             this.aspectRatioFrameLayout.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));

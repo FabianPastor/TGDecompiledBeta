@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">Hasi saioa</string>
     <string name="common_signin_button_text_long">Hasi saioa Google kontuarekin</string>
     <string name="fcm_fallback_notification_channel_label">Askotarikoak</string>
+    <string name="google_assistant_verification_channel_name">Laguntzailea eginbidearen egiaztatzailea</string>
+    <string name="google_assistant_verification_notification_title">Google Laguntzailea mezu bat bidaltzen ari da</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Erosi Google erabilita</string>
 </resources>

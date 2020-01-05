@@ -19,5 +19,7 @@
     <string name="common_signin_button_text">Identifikohu</string>
     <string name="common_signin_button_text_long">Identifikohu me Google</string>
     <string name="fcm_fallback_notification_channel_label">Të ndryshme</string>
+    <string name="google_assistant_verification_channel_name">Verifikuesi i \"Asistentit\"</string>
+    <string name="google_assistant_verification_notification_title">\"Asistenti i Google\" po dërgon mesazh</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

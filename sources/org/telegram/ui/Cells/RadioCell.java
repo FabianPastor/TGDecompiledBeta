@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
+import android.util.Property;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
@@ -94,17 +96,18 @@ public class RadioCell extends FrameLayout {
         float f = 1.0f;
         if (arrayList != null) {
             TextView textView = this.textView;
+            Property property = View.ALPHA;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.5f;
-            String str = "alpha";
-            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView, property, fArr));
             RadioButton radioButton = this.radioButton;
+            property = View.ALPHA;
             float[] fArr2 = new float[1];
             if (!z) {
                 f = 0.5f;
             }
             fArr2[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(radioButton, str, fArr2));
+            arrayList.add(ObjectAnimator.ofFloat(radioButton, property, fArr2));
             return;
         }
         this.textView.setAlpha(z ? 1.0f : 0.5f);

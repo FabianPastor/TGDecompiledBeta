@@ -46,7 +46,6 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -91,6 +90,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CorrectlyMeasuringTextView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.IdenticonDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.voip.CallSwipeView;
@@ -1589,19 +1589,19 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         bottomSheetCell2.setTextColor(-1);
         frameLayout.addView(bottomSheetCell2);
         FrameLayout frameLayout2 = new FrameLayout(this);
-        EditText editText = new EditText(this);
-        editText.setTextSize(1, 16.0f);
-        editText.setTextColor(-1);
-        editText.setHintTextColor(DarkTheme.getColor("chat_messagePanelHint"));
-        editText.setBackgroundDrawable(null);
-        editText.setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(11.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
-        editText.setHint(LocaleController.getString(str, NUM));
-        editText.setMinHeight(AndroidUtilities.dp(48.0f));
-        editText.setGravity(80);
-        editText.setMaxLines(4);
-        editText.setSingleLine(false);
-        editText.setInputType((editText.getInputType() | 16384) | 131072);
-        frameLayout2.addView(editText, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 48.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 48.0f, 0.0f));
+        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(this);
+        editTextBoldCursor.setTextSize(1, 16.0f);
+        editTextBoldCursor.setTextColor(-1);
+        editTextBoldCursor.setHintTextColor(DarkTheme.getColor("chat_messagePanelHint"));
+        editTextBoldCursor.setBackgroundDrawable(null);
+        editTextBoldCursor.setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(11.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
+        editTextBoldCursor.setHint(LocaleController.getString(str, NUM));
+        editTextBoldCursor.setMinHeight(AndroidUtilities.dp(48.0f));
+        editTextBoldCursor.setGravity(80);
+        editTextBoldCursor.setMaxLines(4);
+        editTextBoldCursor.setSingleLine(false);
+        editTextBoldCursor.setInputType((editTextBoldCursor.getInputType() | 16384) | 131072);
+        frameLayout2.addView(editTextBoldCursor, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 48.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 48.0f, 0.0f));
         final ImageView imageView = new ImageView(this);
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setImageDrawable(DarkTheme.getThemedDrawable(this, NUM, "chat_messagePanelSend"));
@@ -1613,14 +1613,14 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         imageView.setScaleY(0.1f);
         imageView.setAlpha(0.0f);
         frameLayout2.addView(imageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
-        imageView.setOnClickListener(new -$$Lambda$VoIPActivity$qS8Hi4upiPbU6ePN9io5C_dQhsw(this, editText, bottomSheet));
+        imageView.setOnClickListener(new -$$Lambda$VoIPActivity$qot2mYrZZZaecrEqkIoWDTO7CBw(this, editTextBoldCursor, bottomSheet));
         imageView.setVisibility(4);
         final ImageView imageView2 = new ImageView(this);
         imageView2.setScaleType(ScaleType.CENTER);
         imageView2.setImageDrawable(DarkTheme.getThemedDrawable(this, NUM, "chat_messagePanelIcons"));
         frameLayout2.addView(imageView2, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
-        imageView2.setOnClickListener(new -$$Lambda$VoIPActivity$EkpRskxpSAZKneCZj3Wgdr5iMNs(this, frameLayout2, bottomSheetCell2, editText));
-        editText.addTextChangedListener(new TextWatcher() {
+        imageView2.setOnClickListener(new -$$Lambda$VoIPActivity$_dzNYTb4VHGAfo2gr5CFtBtb3f4(this, frameLayout2, bottomSheetCell2, editTextBoldCursor));
+        editTextBoldCursor.addTextChangedListener(new TextWatcher() {
             boolean prevState = false;
 
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -1655,7 +1655,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         });
         frameLayout2.setVisibility(8);
         frameLayout.addView(frameLayout2);
-        bottomSheetCell2.setOnClickListener(new -$$Lambda$VoIPActivity$M5rvyVwU8mGC-6jzCkCqo_MOVmg(this, frameLayout2, bottomSheetCell2, editText));
+        bottomSheetCell2.setOnClickListener(new -$$Lambda$VoIPActivity$oYWreFShsVaxuR-CC8wb_y63Qek(this, frameLayout2, bottomSheetCell2, editTextBoldCursor));
         linearLayout.addView(frameLayout);
         bottomSheet.setCustomView(linearLayout);
         bottomSheet.setBackgroundColor(-13948117);
@@ -1677,30 +1677,30 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         sendTextMessage((String) view.getTag());
     }
 
-    public /* synthetic */ void lambda$showMessagesSheet$7$VoIPActivity(final EditText editText, BottomSheet bottomSheet, View view) {
-        if (editText.length() != 0) {
+    public /* synthetic */ void lambda$showMessagesSheet$7$VoIPActivity(final EditTextBoldCursor editTextBoldCursor, BottomSheet bottomSheet, View view) {
+        if (editTextBoldCursor.length() != 0) {
             bottomSheet.dismiss();
             if (VoIPService.getSharedInstance() != null) {
                 VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable() {
                     public void run() {
-                        VoIPActivity.this.sendTextMessage(editText.getText().toString());
+                        VoIPActivity.this.sendTextMessage(editTextBoldCursor.getText().toString());
                     }
                 });
             }
         }
     }
 
-    public /* synthetic */ void lambda$showMessagesSheet$8$VoIPActivity(FrameLayout frameLayout, BottomSheetCell bottomSheetCell, EditText editText, View view) {
+    public /* synthetic */ void lambda$showMessagesSheet$8$VoIPActivity(FrameLayout frameLayout, BottomSheetCell bottomSheetCell, EditTextBoldCursor editTextBoldCursor, View view) {
         frameLayout.setVisibility(8);
         bottomSheetCell.setVisibility(0);
-        editText.setText("");
-        ((InputMethodManager) getSystemService("input_method")).hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        editTextBoldCursor.setText("");
+        ((InputMethodManager) getSystemService("input_method")).hideSoftInputFromWindow(editTextBoldCursor.getWindowToken(), 0);
     }
 
-    public /* synthetic */ void lambda$showMessagesSheet$9$VoIPActivity(FrameLayout frameLayout, BottomSheetCell bottomSheetCell, EditText editText, View view) {
+    public /* synthetic */ void lambda$showMessagesSheet$9$VoIPActivity(FrameLayout frameLayout, BottomSheetCell bottomSheetCell, EditTextBoldCursor editTextBoldCursor, View view) {
         frameLayout.setVisibility(0);
         bottomSheetCell.setVisibility(4);
-        editText.requestFocus();
-        ((InputMethodManager) getSystemService("input_method")).showSoftInput(editText, 0);
+        editTextBoldCursor.requestFocus();
+        ((InputMethodManager) getSystemService("input_method")).showSoftInput(editTextBoldCursor, 0);
     }
 }

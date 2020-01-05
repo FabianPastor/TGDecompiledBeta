@@ -38,6 +38,11 @@ import org.telegram.tgnet.TLRPC.WebDocument;
 import org.telegram.tgnet.TLRPC.WebPage;
 
 public class FileLoader extends BaseController {
+    public static final int IMAGE_TYPE_ANIMATION = 2;
+    public static final int IMAGE_TYPE_LOTTIE = 1;
+    public static final int IMAGE_TYPE_SVG = 3;
+    public static final int IMAGE_TYPE_SVG_WHITE = 4;
+    public static final int IMAGE_TYPE_THEME_PREVIEW = 5;
     private static volatile FileLoader[] Instance = new FileLoader[3];
     public static final int MEDIA_DIR_AUDIO = 1;
     public static final int MEDIA_DIR_CACHE = 4;

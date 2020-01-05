@@ -19,5 +19,7 @@
     <string name="common_signin_button_text">ਸਾਈਨ-ਇਨ ਕਰੋ</string>
     <string name="common_signin_button_text_long">Google ਨਾਲ ਸਾਈਨ-ਇਨ ਕਰੋ</string>
     <string name="fcm_fallback_notification_channel_label">ਫੁਟਕਲ</string>
+    <string name="google_assistant_verification_channel_name">\'ਅਸਿਸਟੈਂਟ\' ਪੁਸ਼ਟੀਕਰਤਾ</string>
+    <string name="google_assistant_verification_notification_title">\'Google ਅਸਿਸਟੈਂਟ\' ਸੁਨੇਹਾ ਭੇਜ ਰਹੀ ਹੈ</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

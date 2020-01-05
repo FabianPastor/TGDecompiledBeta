@@ -7,11 +7,11 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Point;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -44,6 +44,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.MessagesStorage.BooleanCallback;
 import org.telegram.messenger.MessagesStorage.IntCallback;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SharedConfig;
@@ -80,6 +81,8 @@ import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.Theme.ThemeAccent;
+import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Cells.AccountSelectCell;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.RadioColorCell;
@@ -90,6 +93,7 @@ import org.telegram.ui.NotificationsCustomSettingsActivity;
 import org.telegram.ui.NotificationsSettingsActivity.NotificationException;
 import org.telegram.ui.ProfileNotificationsActivity;
 import org.telegram.ui.ReportOtherActivity;
+import org.telegram.ui.ThemePreviewActivity;
 
 public class AlertsCreator {
 
@@ -109,403 +113,446 @@ public class AlertsCreator {
         void didSelectDate(boolean z, int i);
     }
 
-    static /* synthetic */ void lambda$null$29(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$createThemeCreateDialog$61(DialogInterface dialogInterface, int i) {
     }
 
-    static /* synthetic */ void lambda$null$57(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$null$31(TLObject tLObject, TL_error tL_error) {
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x04ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x04c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x04c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x04ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x04ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x04c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0338  */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x031b  */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x031b  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0338  */
-    /* JADX WARNING: Removed duplicated region for block: B:200:0x03c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x03b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x03b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:200:0x03c8  */
-    public static android.app.Dialog processError(int r17, org.telegram.tgnet.TLRPC.TL_error r18, org.telegram.ui.ActionBar.BaseFragment r19, org.telegram.tgnet.TLObject r20, java.lang.Object... r21) {
+    static /* synthetic */ void lambda$null$59(TLObject tLObject, TL_error tL_error) {
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x054a  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0520  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0520  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x054a  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x054a  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0520  */
+    /* JADX WARNING: Removed duplicated region for block: B:181:0x0387  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x036a  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x036a  */
+    /* JADX WARNING: Removed duplicated region for block: B:181:0x0387  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x041a  */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x041a  */
+    public static android.app.Dialog processError(int r18, org.telegram.tgnet.TLRPC.TL_error r19, org.telegram.ui.ActionBar.BaseFragment r20, org.telegram.tgnet.TLObject r21, java.lang.Object... r22) {
         /*
-        r0 = r18;
-        r1 = r19;
-        r2 = r20;
-        r3 = r21;
+        r0 = r19;
+        r1 = r20;
+        r2 = r21;
+        r3 = r22;
         r4 = r0.code;
-        r5 = 406; // 0x196 float:5.69E-43 double:2.006E-321;
-        if (r4 == r5) goto L_0x059a;
-    L_0x000e:
-        r5 = r0.text;
-        if (r5 != 0) goto L_0x0014;
-    L_0x0012:
-        goto L_0x059a;
-    L_0x0014:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_saveSecureValue;
-        r7 = "\n";
-        r9 = "InvalidPhoneNumber";
-        r10 = "PHONE_NUMBER_INVALID";
-        r11 = NUM; // 0x7f0e041c float:1.8877171E38 double:1.0531626764E-314;
-        r12 = "ErrorOccurred";
-        r13 = NUM; // 0x7f0e049c float:1.887743E38 double:1.0531627396E-314;
-        r14 = "FloodWait";
-        r15 = "FLOOD_WAIT";
-        if (r6 != 0) goto L_0x053b;
-    L_0x002a:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_getAuthorizationForm;
-        if (r6 == 0) goto L_0x0030;
-    L_0x002e:
-        goto L_0x053b;
-    L_0x0030:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
-        r8 = 0;
-        if (r6 != 0) goto L_0x0504;
+        r5 = 0;
+        r6 = 406; // 0x196 float:5.69E-43 double:2.006E-321;
+        if (r4 == r6) goto L_0x061b;
+    L_0x000f:
+        r6 = r0.text;
+        if (r6 != 0) goto L_0x0015;
+    L_0x0013:
+        goto L_0x061b;
+    L_0x0015:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_saveSecureValue;
+        r8 = "\n";
+        r10 = "InvalidPhoneNumber";
+        r11 = "PHONE_NUMBER_INVALID";
+        r13 = "ErrorOccurred";
+        r15 = "FloodWait";
+        r9 = "FLOOD_WAIT";
+        if (r7 != 0) goto L_0x05bb;
+    L_0x0025:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_getAuthorizationForm;
+        if (r7 == 0) goto L_0x002b;
+    L_0x0029:
+        goto L_0x05bb;
+    L_0x002b:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
+        r12 = "CHANNELS_TOO_MUCH";
+        if (r7 != 0) goto L_0x055f;
+    L_0x0031:
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_editAdmin;
+        if (r14 != 0) goto L_0x055f;
     L_0x0035:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_editAdmin;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
+        if (r14 != 0) goto L_0x055f;
     L_0x0039:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_addChatUser;
+        if (r14 != 0) goto L_0x055f;
     L_0x003d:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_addChatUser;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_startBot;
+        if (r14 != 0) goto L_0x055f;
     L_0x0041:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_startBot;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_editBanned;
+        if (r14 != 0) goto L_0x055f;
     L_0x0045:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_editBanned;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editChatDefaultBannedRights;
+        if (r14 != 0) goto L_0x055f;
     L_0x0049:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editChatDefaultBannedRights;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editChatAdmin;
+        if (r14 != 0) goto L_0x055f;
     L_0x004d:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editChatAdmin;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_migrateChat;
+        if (r14 == 0) goto L_0x0053;
     L_0x0051:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_migrateChat;
-        if (r6 == 0) goto L_0x0057;
-    L_0x0055:
-        goto L_0x0504;
-    L_0x0057:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_createChat;
-        if (r6 == 0) goto L_0x006f;
-    L_0x005b:
-        r3 = r5.startsWith(r15);
-        if (r3 == 0) goto L_0x0068;
-    L_0x0061:
-        r0 = r0.text;
-        showFloodWaitAlert(r0, r1);
-        goto L_0x0598;
-    L_0x0068:
-        r0 = r0.text;
-        showAddUserAlert(r0, r1, r8, r2);
-        goto L_0x0598;
+        goto L_0x055f;
+    L_0x0053:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_createChat;
+        r14 = 2;
+        if (r7 == 0) goto L_0x007e;
+    L_0x0058:
+        r3 = r6.equals(r12);
+        if (r3 == 0) goto L_0x0067;
+    L_0x005e:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
+        r0.<init>(r14);
+        r1.presentFragment(r0);
+        return r5;
+    L_0x0067:
+        r3 = r0.text;
+        r3 = r3.startsWith(r9);
+        if (r3 == 0) goto L_0x0076;
     L_0x006f:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_createChannel;
-        if (r6 == 0) goto L_0x0087;
-    L_0x0073:
-        r3 = r5.startsWith(r15);
-        if (r3 == 0) goto L_0x0080;
-    L_0x0079:
         r0 = r0.text;
         showFloodWaitAlert(r0, r1);
-        goto L_0x0598;
-    L_0x0080:
+        goto L_0x061b;
+    L_0x0076:
         r0 = r0.text;
-        showAddUserAlert(r0, r1, r8, r2);
-        goto L_0x0598;
-    L_0x0087:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editMessage;
-        if (r6 == 0) goto L_0x00b1;
-    L_0x008b:
+        r3 = 0;
+        showAddUserAlert(r0, r1, r3, r2);
+        goto L_0x061b;
+    L_0x007e:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_createChannel;
+        if (r7 == 0) goto L_0x00a8;
+    L_0x0082:
+        r3 = r6.equals(r12);
+        if (r3 == 0) goto L_0x0091;
+    L_0x0088:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
+        r0.<init>(r14);
+        r1.presentFragment(r0);
+        return r5;
+    L_0x0091:
+        r3 = r0.text;
+        r3 = r3.startsWith(r9);
+        if (r3 == 0) goto L_0x00a0;
+    L_0x0099:
+        r0 = r0.text;
+        showFloodWaitAlert(r0, r1);
+        goto L_0x061b;
+    L_0x00a0:
+        r0 = r0.text;
+        r3 = 0;
+        showAddUserAlert(r0, r1, r3, r2);
+        goto L_0x061b;
+    L_0x00a8:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editMessage;
+        if (r7 == 0) goto L_0x00d2;
+    L_0x00ac:
         r0 = "MESSAGE_NOT_MODIFIED";
-        r0 = r5.equals(r0);
-        if (r0 != 0) goto L_0x0598;
-    L_0x0093:
-        if (r1 == 0) goto L_0x00a3;
-    L_0x0095:
-        r0 = NUM; // 0x7f0e03e9 float:1.8877068E38 double:1.053162651E-314;
+        r0 = r6.equals(r0);
+        if (r0 != 0) goto L_0x061b;
+    L_0x00b4:
+        if (r1 == 0) goto L_0x00c4;
+    L_0x00b6:
+        r0 = NUM; // 0x7f0e0409 float:1.8877133E38 double:1.053162667E-314;
         r2 = "EditMessageError";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x00a3:
-        r0 = NUM; // 0x7f0e03e9 float:1.8877068E38 double:1.053162651E-314;
+        goto L_0x061b;
+    L_0x00c4:
+        r0 = NUM; // 0x7f0e0409 float:1.8877133E38 double:1.053162667E-314;
         r2 = "EditMessageError";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x00b1:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMessage;
-        r16 = -1;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00b7:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMedia;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00bb:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendInlineBotResult;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00bf:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_forwardMessages;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00c3:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMultiMedia;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00c7:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendScheduledMessages;
-        if (r6 == 0) goto L_0x00cd;
-    L_0x00cb:
-        goto L_0x048d;
-    L_0x00cd:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
-        if (r6 == 0) goto L_0x0106;
-    L_0x00d1:
-        r2 = r5.startsWith(r15);
-        if (r2 == 0) goto L_0x00e0;
-    L_0x00d7:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
-        showSimpleAlert(r1, r0);
-        goto L_0x0598;
+        goto L_0x061b;
+    L_0x00d2:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMessage;
+        r17 = -1;
+        if (r7 != 0) goto L_0x04e9;
+    L_0x00d8:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMedia;
+        if (r7 != 0) goto L_0x04e9;
+    L_0x00dc:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendInlineBotResult;
+        if (r7 != 0) goto L_0x04e9;
     L_0x00e0:
-        r0 = r0.text;
-        r2 = "USERS_TOO_MUCH";
-        r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x00f8;
-    L_0x00ea:
-        r0 = NUM; // 0x7f0e0578 float:1.8877877E38 double:1.0531628483E-314;
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_forwardMessages;
+        if (r7 != 0) goto L_0x04e9;
+    L_0x00e4:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMultiMedia;
+        if (r7 != 0) goto L_0x04e9;
+    L_0x00e8:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendScheduledMessages;
+        if (r7 == 0) goto L_0x00ee;
+    L_0x00ec:
+        goto L_0x04e9;
+    L_0x00ee:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
+        if (r7 == 0) goto L_0x013d;
+    L_0x00f2:
+        r2 = r6.startsWith(r9);
+        if (r2 == 0) goto L_0x0104;
+    L_0x00f8:
+        r2 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
+        showSimpleAlert(r1, r0);
+        goto L_0x061b;
+    L_0x0104:
+        r2 = r0.text;
+        r3 = "USERS_TOO_MUCH";
+        r2 = r2.equals(r3);
+        if (r2 == 0) goto L_0x011c;
+    L_0x010e:
+        r0 = NUM; // 0x7f0e059f float:1.8877956E38 double:1.0531628676E-314;
         r2 = "JoinToGroupErrorFull";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x00f8:
-        r0 = NUM; // 0x7f0e0579 float:1.887788E38 double:1.053162849E-314;
+        goto L_0x061b;
+    L_0x011c:
+        r0 = r0.text;
+        r0 = r0.equals(r12);
+        if (r0 == 0) goto L_0x012f;
+    L_0x0124:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
+        r2 = 0;
+        r0.<init>(r2);
+        r1.presentFragment(r0);
+        goto L_0x061b;
+    L_0x012f:
+        r0 = NUM; // 0x7f0e05a0 float:1.8877958E38 double:1.053162868E-314;
         r2 = "JoinToGroupErrorNotExist";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0106:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_getAttachedStickers;
-        if (r6 == 0) goto L_0x0137;
-    L_0x010a:
-        if (r1 == 0) goto L_0x0598;
-    L_0x010c:
-        r2 = r19.getParentActivity();
-        if (r2 == 0) goto L_0x0598;
-    L_0x0112:
-        r1 = r19.getParentActivity();
+        goto L_0x061b;
+    L_0x013d:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_getAttachedStickers;
+        if (r7 == 0) goto L_0x0172;
+    L_0x0141:
+        if (r1 == 0) goto L_0x061b;
+    L_0x0143:
+        r2 = r20.getParentActivity();
+        if (r2 == 0) goto L_0x061b;
+    L_0x0149:
+        r1 = r20.getParentActivity();
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = org.telegram.messenger.LocaleController.getString(r12, r11);
+        r3 = NUM; // 0x7f0e043e float:1.887724E38 double:1.053162693E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r2.append(r3);
-        r2.append(r7);
+        r2.append(r8);
         r0 = r0.text;
         r2.append(r0);
         r0 = r2.toString();
-        r0 = android.widget.Toast.makeText(r1, r0, r8);
+        r2 = 0;
+        r0 = android.widget.Toast.makeText(r1, r0, r2);
         r0.show();
-        goto L_0x0598;
-    L_0x0137:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
-        r8 = "InvalidCode";
-        r11 = "PHONE_CODE_EMPTY";
-        if (r6 != 0) goto L_0x041f;
-    L_0x013f:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_verifyPhone;
-        if (r6 != 0) goto L_0x041f;
-    L_0x0143:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_verifyEmail;
-        if (r6 == 0) goto L_0x0149;
-    L_0x0147:
-        goto L_0x041f;
-    L_0x0149:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_auth_resendCode;
-        if (r6 == 0) goto L_0x01cd;
-    L_0x014d:
-        r2 = r5.contains(r10);
-        if (r2 == 0) goto L_0x015f;
-    L_0x0153:
-        r2 = NUM; // 0x7f0e055a float:1.8877816E38 double:1.0531628335E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        goto L_0x061b;
+    L_0x0172:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
+        if (r7 != 0) goto L_0x0474;
+    L_0x0176:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_verifyPhone;
+        if (r7 != 0) goto L_0x0474;
+    L_0x017a:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_verifyEmail;
+        if (r7 == 0) goto L_0x0180;
+    L_0x017e:
+        goto L_0x0474;
+    L_0x0180:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_auth_resendCode;
+        if (r7 == 0) goto L_0x020b;
+    L_0x0184:
+        r2 = r6.contains(r11);
+        if (r2 == 0) goto L_0x0196;
+    L_0x018a:
+        r2 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r10, r2);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x015f:
+    L_0x0196:
         r2 = r0.text;
-        r2 = r2.contains(r11);
-        if (r2 != 0) goto L_0x01c1;
-    L_0x0167:
+        r3 = "PHONE_CODE_EMPTY";
+        r2 = r2.contains(r3);
+        if (r2 != 0) goto L_0x01fd;
+    L_0x01a0:
         r2 = r0.text;
         r3 = "PHONE_CODE_INVALID";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x0172;
-    L_0x0171:
-        goto L_0x01c1;
-    L_0x0172:
+        if (r2 == 0) goto L_0x01ab;
+    L_0x01aa:
+        goto L_0x01fd;
+    L_0x01ab:
         r2 = r0.text;
         r3 = "PHONE_CODE_EXPIRED";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x018a;
-    L_0x017c:
-        r0 = NUM; // 0x7f0e02f4 float:1.887657E38 double:1.05316253E-314;
+        if (r2 == 0) goto L_0x01c3;
+    L_0x01b5:
+        r0 = NUM; // 0x7f0e0305 float:1.8876605E38 double:1.0531625385E-314;
         r2 = "CodeExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x018a:
+    L_0x01c3:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x019b;
-    L_0x0192:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x01d7;
+    L_0x01cb:
+        r2 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x019b:
+    L_0x01d7:
         r2 = r0.code;
         r3 = -1000; // 0xfffffffffffffCLASSNAME float:NaN double:NaN;
-        if (r2 == r3) goto L_0x0598;
-    L_0x01a1:
+        if (r2 == r3) goto L_0x061b;
+    L_0x01dd:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = NUM; // 0x7f0e041c float:1.8877171E38 double:1.0531626764E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r12, r3);
+        r3 = NUM; // 0x7f0e043e float:1.887724E38 double:1.053162693E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r2.append(r3);
-        r2.append(r7);
+        r2.append(r8);
         r0 = r0.text;
         r2.append(r0);
         r0 = r2.toString();
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x01c1:
-        r0 = NUM; // 0x7f0e0557 float:1.887781E38 double:1.053162832E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
+    L_0x01fd:
+        r0 = NUM; // 0x7f0e057e float:1.887789E38 double:1.0531628513E-314;
+        r2 = "InvalidCode";
+        r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x01cd:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_sendConfirmPhoneCode;
-        if (r6 == 0) goto L_0x0200;
-    L_0x01d1:
+    L_0x020b:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_sendConfirmPhoneCode;
+        if (r7 == 0) goto L_0x0241;
+    L_0x020f:
         r0 = 400; // 0x190 float:5.6E-43 double:1.976E-321;
-        if (r4 != r0) goto L_0x01e3;
-    L_0x01d5:
-        r0 = NUM; // 0x7f0e0208 float:1.8876092E38 double:1.0531624135E-314;
+        if (r4 != r0) goto L_0x0221;
+    L_0x0213:
+        r0 = NUM; // 0x7f0e0218 float:1.8876125E38 double:1.0531624214E-314;
         r2 = "CancelLinkExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x01e3:
-        if (r5 == 0) goto L_0x0598;
-    L_0x01e5:
-        r0 = r5.startsWith(r15);
-        if (r0 == 0) goto L_0x01f4;
-    L_0x01eb:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+    L_0x0221:
+        if (r6 == 0) goto L_0x061b;
+    L_0x0223:
+        r0 = r6.startsWith(r9);
+        if (r0 == 0) goto L_0x0235;
+    L_0x0229:
+        r0 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x01f4:
-        r0 = NUM; // 0x7f0e041c float:1.8877171E38 double:1.0531626764E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r12, r0);
+    L_0x0235:
+        r0 = NUM; // 0x7f0e043e float:1.887724E38 double:1.053162693E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r13, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x0200:
+    L_0x0241:
         r4 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_changePhone;
-        if (r4 == 0) goto L_0x0265;
-    L_0x0204:
-        r2 = r5.contains(r10);
-        if (r2 == 0) goto L_0x0216;
-    L_0x020a:
-        r2 = NUM; // 0x7f0e055a float:1.8877816E38 double:1.0531628335E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        if (r4 == 0) goto L_0x02ad;
+    L_0x0245:
+        r2 = r6.contains(r11);
+        if (r2 == 0) goto L_0x0257;
+    L_0x024b:
+        r2 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r10, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0216:
+        goto L_0x061b;
+    L_0x0257:
         r2 = r0.text;
-        r2 = r2.contains(r11);
-        if (r2 != 0) goto L_0x0259;
-    L_0x021e:
+        r3 = "PHONE_CODE_EMPTY";
+        r2 = r2.contains(r3);
+        if (r2 != 0) goto L_0x029f;
+    L_0x0261:
         r2 = r0.text;
         r3 = "PHONE_CODE_INVALID";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x0229;
-    L_0x0228:
-        goto L_0x0259;
-    L_0x0229:
+        if (r2 == 0) goto L_0x026c;
+    L_0x026b:
+        goto L_0x029f;
+    L_0x026c:
         r2 = r0.text;
         r3 = "PHONE_CODE_EXPIRED";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x0241;
-    L_0x0233:
-        r0 = NUM; // 0x7f0e02f4 float:1.887657E38 double:1.05316253E-314;
+        if (r2 == 0) goto L_0x0284;
+    L_0x0276:
+        r0 = NUM; // 0x7f0e0305 float:1.8876605E38 double:1.0531625385E-314;
         r2 = "CodeExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0241:
+        goto L_0x061b;
+    L_0x0284:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x0252;
-    L_0x0249:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x0298;
+    L_0x028c:
+        r2 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0252:
+        goto L_0x061b;
+    L_0x0298:
         r0 = r0.text;
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0259:
-        r0 = NUM; // 0x7f0e0557 float:1.887781E38 double:1.053162832E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
+        goto L_0x061b;
+    L_0x029f:
+        r0 = NUM; // 0x7f0e057e float:1.887789E38 double:1.0531628513E-314;
+        r2 = "InvalidCode";
+        r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0265:
+        goto L_0x061b;
+    L_0x02ad:
         r4 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_sendChangePhoneCode;
-        if (r4 == 0) goto L_0x02f1;
-    L_0x0269:
-        r2 = r5.contains(r10);
-        if (r2 == 0) goto L_0x027b;
-    L_0x026f:
-        r2 = NUM; // 0x7f0e055a float:1.8877816E38 double:1.0531628335E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        if (r4 == 0) goto L_0x0340;
+    L_0x02b1:
+        r2 = r6.contains(r11);
+        if (r2 == 0) goto L_0x02c3;
+    L_0x02b7:
+        r2 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r10, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x027b:
+        goto L_0x061b;
+    L_0x02c3:
         r2 = r0.text;
-        r2 = r2.contains(r11);
-        if (r2 != 0) goto L_0x02e5;
-    L_0x0283:
+        r4 = "PHONE_CODE_EMPTY";
+        r2 = r2.contains(r4);
+        if (r2 != 0) goto L_0x0332;
+    L_0x02cd:
         r2 = r0.text;
         r4 = "PHONE_CODE_INVALID";
         r2 = r2.contains(r4);
-        if (r2 == 0) goto L_0x028e;
-    L_0x028d:
-        goto L_0x02e5;
-    L_0x028e:
+        if (r2 == 0) goto L_0x02d8;
+    L_0x02d7:
+        goto L_0x0332;
+    L_0x02d8:
         r2 = r0.text;
         r4 = "PHONE_CODE_EXPIRED";
         r2 = r2.contains(r4);
-        if (r2 == 0) goto L_0x02a6;
-    L_0x0298:
-        r0 = NUM; // 0x7f0e02f4 float:1.887657E38 double:1.05316253E-314;
+        if (r2 == 0) goto L_0x02f0;
+    L_0x02e2:
+        r0 = NUM; // 0x7f0e0305 float:1.8876605E38 double:1.0531625385E-314;
         r2 = "CodeExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02a6:
+        goto L_0x061b;
+    L_0x02f0:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x02b7;
-    L_0x02ae:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x0304;
+    L_0x02f8:
+        r2 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02b7:
+        goto L_0x061b;
+    L_0x0304:
         r0 = r0.text;
         r2 = "PHONE_NUMBER_OCCUPIED";
         r0 = r0.startsWith(r2);
-        if (r0 == 0) goto L_0x02d9;
-    L_0x02c1:
-        r0 = NUM; // 0x7f0e021d float:1.8876135E38 double:1.053162424E-314;
+        if (r0 == 0) goto L_0x0326;
+    L_0x030e:
+        r0 = NUM; // 0x7f0e022d float:1.8876167E38 double:1.053162432E-314;
         r2 = 1;
         r2 = new java.lang.Object[r2];
         r4 = 0;
@@ -515,344 +562,377 @@ public class AlertsCreator {
         r3 = "ChangePhoneNumberOccupied";
         r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02d9:
-        r0 = NUM; // 0x7f0e041c float:1.8877171E38 double:1.0531626764E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r12, r0);
+        goto L_0x061b;
+    L_0x0326:
+        r0 = NUM; // 0x7f0e043e float:1.887724E38 double:1.053162693E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r13, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02e5:
-        r0 = NUM; // 0x7f0e0557 float:1.887781E38 double:1.053162832E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
+        goto L_0x061b;
+    L_0x0332:
+        r0 = NUM; // 0x7f0e057e float:1.887789E38 double:1.0531628513E-314;
+        r2 = "InvalidCode";
+        r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02f1:
+        goto L_0x061b;
+    L_0x0340:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_updateUserName;
-        if (r3 == 0) goto L_0x0346;
-    L_0x02f5:
-        r0 = r5.hashCode();
+        if (r3 == 0) goto L_0x0395;
+    L_0x0344:
+        r0 = r6.hashCode();
         r2 = NUM; // 0x1137676e float:1.4468026E-28 double:1.427077146E-315;
-        if (r0 == r2) goto L_0x030e;
-    L_0x02fe:
+        if (r0 == r2) goto L_0x035d;
+    L_0x034d:
         r2 = NUM; // 0x1fCLASSNAMEbe7 float:8.45377E-20 double:2.634235846E-315;
-        if (r0 == r2) goto L_0x0304;
-    L_0x0303:
-        goto L_0x0318;
-    L_0x0304:
+        if (r0 == r2) goto L_0x0353;
+    L_0x0352:
+        goto L_0x0367;
+    L_0x0353:
         r0 = "USERNAME_OCCUPIED";
-        r0 = r5.equals(r0);
-        if (r0 == 0) goto L_0x0318;
-    L_0x030c:
+        r0 = r6.equals(r0);
+        if (r0 == 0) goto L_0x0367;
+    L_0x035b:
         r0 = 1;
-        goto L_0x0319;
-    L_0x030e:
+        goto L_0x0368;
+    L_0x035d:
         r0 = "USERNAME_INVALID";
-        r0 = r5.equals(r0);
-        if (r0 == 0) goto L_0x0318;
-    L_0x0316:
+        r0 = r6.equals(r0);
+        if (r0 == 0) goto L_0x0367;
+    L_0x0365:
         r0 = 0;
-        goto L_0x0319;
-    L_0x0318:
+        goto L_0x0368;
+    L_0x0367:
         r0 = -1;
-    L_0x0319:
-        if (r0 == 0) goto L_0x0338;
-    L_0x031b:
+    L_0x0368:
+        if (r0 == 0) goto L_0x0387;
+    L_0x036a:
         r2 = 1;
-        if (r0 == r2) goto L_0x032a;
-    L_0x031e:
-        r0 = NUM; // 0x7f0e041c float:1.8877171E38 double:1.0531626764E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r12, r0);
+        if (r0 == r2) goto L_0x0379;
+    L_0x036d:
+        r0 = NUM; // 0x7f0e043e float:1.887724E38 double:1.053162693E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r13, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x032a:
-        r0 = NUM; // 0x7f0e0b5c float:1.8880936E38 double:1.0531635934E-314;
+        goto L_0x061b;
+    L_0x0379:
+        r0 = NUM; // 0x7f0e0b9d float:1.8881068E38 double:1.0531636255E-314;
         r2 = "UsernameInUse";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0338:
-        r0 = NUM; // 0x7f0e0b5d float:1.8880938E38 double:1.053163594E-314;
+        goto L_0x061b;
+    L_0x0387:
+        r0 = NUM; // 0x7f0e0b9e float:1.888107E38 double:1.053163626E-314;
         r2 = "UsernameInvalid";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0346:
+        goto L_0x061b;
+    L_0x0395:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_contacts_importContacts;
-        if (r3 == 0) goto L_0x037c;
-    L_0x034a:
-        if (r0 == 0) goto L_0x0373;
-    L_0x034c:
-        r2 = r5.startsWith(r15);
-        if (r2 == 0) goto L_0x0353;
-    L_0x0352:
-        goto L_0x0373;
-    L_0x0353:
+        if (r3 == 0) goto L_0x03ce;
+    L_0x0399:
+        if (r0 == 0) goto L_0x03c2;
+    L_0x039b:
+        r2 = r6.startsWith(r9);
+        if (r2 == 0) goto L_0x03a2;
+    L_0x03a1:
+        goto L_0x03c2;
+    L_0x03a2:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = NUM; // 0x7f0e041c float:1.8877171E38 double:1.0531626764E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r12, r3);
+        r3 = NUM; // 0x7f0e043e float:1.887724E38 double:1.053162693E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r2.append(r3);
-        r2.append(r7);
+        r2.append(r8);
         r0 = r0.text;
         r2.append(r0);
         r0 = r2.toString();
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0373:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        goto L_0x061b;
+    L_0x03c2:
+        r0 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x037c:
+        goto L_0x061b;
+    L_0x03ce:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_getPassword;
-        if (r3 != 0) goto L_0x0405;
-    L_0x0380:
+        if (r3 != 0) goto L_0x045a;
+    L_0x03d2:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_getTmpPassword;
-        if (r3 == 0) goto L_0x0386;
-    L_0x0384:
-        goto L_0x0405;
-    L_0x0386:
+        if (r3 == 0) goto L_0x03d8;
+    L_0x03d6:
+        goto L_0x045a;
+    L_0x03d8:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_payments_sendPaymentForm;
-        if (r3 == 0) goto L_0x03d6;
-    L_0x038a:
-        r2 = r5.hashCode();
+        if (r3 == 0) goto L_0x0428;
+    L_0x03dc:
+        r2 = r6.hashCode();
         r3 = -NUM; // 0xffffffffbbcefe0b float:-0.NUM double:NaN;
-        if (r2 == r3) goto L_0x03a3;
-    L_0x0393:
+        if (r2 == r3) goto L_0x03f5;
+    L_0x03e5:
         r3 = -NUM; // 0xffffffffd14178b6 float:-5.1934618E10 double:NaN;
-        if (r2 == r3) goto L_0x0399;
-    L_0x0398:
-        goto L_0x03ad;
-    L_0x0399:
+        if (r2 == r3) goto L_0x03eb;
+    L_0x03ea:
+        goto L_0x03ff;
+    L_0x03eb:
         r2 = "PAYMENT_FAILED";
-        r2 = r5.equals(r2);
-        if (r2 == 0) goto L_0x03ad;
-    L_0x03a1:
+        r2 = r6.equals(r2);
+        if (r2 == 0) goto L_0x03ff;
+    L_0x03f3:
         r2 = 1;
-        goto L_0x03ae;
-    L_0x03a3:
+        goto L_0x0400;
+    L_0x03f5:
         r2 = "BOT_PRECHECKOUT_FAILED";
-        r2 = r5.equals(r2);
-        if (r2 == 0) goto L_0x03ad;
-    L_0x03ab:
+        r2 = r6.equals(r2);
+        if (r2 == 0) goto L_0x03ff;
+    L_0x03fd:
         r2 = 0;
-        goto L_0x03ae;
-    L_0x03ad:
+        goto L_0x0400;
+    L_0x03ff:
         r2 = -1;
-    L_0x03ae:
-        if (r2 == 0) goto L_0x03c8;
-    L_0x03b0:
+    L_0x0400:
+        if (r2 == 0) goto L_0x041a;
+    L_0x0402:
         r3 = 1;
-        if (r2 == r3) goto L_0x03ba;
-    L_0x03b3:
+        if (r2 == r3) goto L_0x040c;
+    L_0x0405:
         r0 = r0.text;
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x03ba:
-        r0 = NUM; // 0x7f0e0847 float:1.8879335E38 double:1.0531632036E-314;
+        goto L_0x061b;
+    L_0x040c:
+        r0 = NUM; // 0x7f0e087d float:1.8879445E38 double:1.05316323E-314;
         r2 = "PaymentFailed";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x03c8:
-        r0 = NUM; // 0x7f0e0854 float:1.8879362E38 double:1.05316321E-314;
+        goto L_0x061b;
+    L_0x041a:
+        r0 = NUM; // 0x7f0e088a float:1.8879471E38 double:1.0531632367E-314;
         r2 = "PaymentPrecheckoutFailed";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x03d6:
+        goto L_0x061b;
+    L_0x0428:
         r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_payments_validateRequestedInfo;
-        if (r2 == 0) goto L_0x0598;
-    L_0x03da:
-        r2 = r5.hashCode();
+        if (r2 == 0) goto L_0x061b;
+    L_0x042c:
+        r2 = r6.hashCode();
         r3 = NUM; // 0x68CLASSNAMEc float:7.606448E24 double:8.68580028E-315;
-        if (r2 == r3) goto L_0x03e4;
-    L_0x03e3:
-        goto L_0x03ee;
-    L_0x03e4:
+        if (r2 == r3) goto L_0x0436;
+    L_0x0435:
+        goto L_0x0441;
+    L_0x0436:
         r2 = "SHIPPING_NOT_AVAILABLE";
-        r2 = r5.equals(r2);
-        if (r2 == 0) goto L_0x03ee;
-    L_0x03ec:
+        r2 = r6.equals(r2);
+        if (r2 == 0) goto L_0x0441;
+    L_0x043e:
         r16 = 0;
-    L_0x03ee:
-        if (r16 == 0) goto L_0x03f7;
-    L_0x03f0:
+        goto L_0x0443;
+    L_0x0441:
+        r16 = -1;
+    L_0x0443:
+        if (r16 == 0) goto L_0x044c;
+    L_0x0445:
         r0 = r0.text;
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x03f7:
-        r0 = NUM; // 0x7f0e0849 float:1.887934E38 double:1.0531632045E-314;
+        goto L_0x061b;
+    L_0x044c:
+        r0 = NUM; // 0x7f0e087f float:1.8879449E38 double:1.053163231E-314;
         r2 = "PaymentNoShippingMethod";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x0405:
+        goto L_0x061b;
+    L_0x045a:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x0418;
-    L_0x040d:
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x046d;
+    L_0x0462:
         r0 = r0.text;
         r0 = getFloodWaitString(r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x0418:
+        goto L_0x061b;
+    L_0x046d:
         r0 = r0.text;
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x041f:
+        goto L_0x061b;
+    L_0x0474:
         r2 = r0.text;
-        r2 = r2.contains(r11);
-        if (r2 != 0) goto L_0x0481;
-    L_0x0427:
+        r3 = "PHONE_CODE_EMPTY";
+        r2 = r2.contains(r3);
+        if (r2 != 0) goto L_0x04db;
+    L_0x047e:
         r2 = r0.text;
         r3 = "PHONE_CODE_INVALID";
         r2 = r2.contains(r3);
-        if (r2 != 0) goto L_0x0481;
-    L_0x0431:
+        if (r2 != 0) goto L_0x04db;
+    L_0x0488:
         r2 = r0.text;
         r3 = "CODE_INVALID";
         r2 = r2.contains(r3);
-        if (r2 != 0) goto L_0x0481;
-    L_0x043b:
+        if (r2 != 0) goto L_0x04db;
+    L_0x0492:
         r2 = r0.text;
         r3 = "CODE_EMPTY";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x0446;
-    L_0x0445:
-        goto L_0x0481;
-    L_0x0446:
+        if (r2 == 0) goto L_0x049d;
+    L_0x049c:
+        goto L_0x04db;
+    L_0x049d:
         r2 = r0.text;
         r3 = "PHONE_CODE_EXPIRED";
         r2 = r2.contains(r3);
-        if (r2 != 0) goto L_0x0473;
-    L_0x0450:
+        if (r2 != 0) goto L_0x04cd;
+    L_0x04a7:
         r2 = r0.text;
         r3 = "EMAIL_VERIFY_EXPIRED";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x045b;
-    L_0x045a:
-        goto L_0x0473;
-    L_0x045b:
+        if (r2 == 0) goto L_0x04b2;
+    L_0x04b1:
+        goto L_0x04cd;
+    L_0x04b2:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x046c;
-    L_0x0463:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x04c6;
+    L_0x04ba:
+        r2 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x046c:
+    L_0x04c6:
         r0 = r0.text;
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x0473:
-        r0 = NUM; // 0x7f0e02f4 float:1.887657E38 double:1.05316253E-314;
+    L_0x04cd:
+        r0 = NUM; // 0x7f0e0305 float:1.8876605E38 double:1.0531625385E-314;
         r2 = "CodeExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x0481:
-        r0 = NUM; // 0x7f0e0557 float:1.887781E38 double:1.053162832E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
+    L_0x04db:
+        r0 = NUM; // 0x7f0e057e float:1.887789E38 double:1.0531628513E-314;
+        r2 = "InvalidCode";
+        r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x048d:
+    L_0x04e9:
         r0 = r0.text;
         r2 = r0.hashCode();
         r3 = -NUM; // 0xfffffffvar_b816 float:-8.417163E-27 double:NaN;
-        if (r2 == r3) goto L_0x04b7;
-    L_0x0498:
+        if (r2 == r3) goto L_0x0513;
+    L_0x04f4:
         r3 = -NUM; // 0xffffffffe4efe6c1 float:-3.5403195E22 double:NaN;
-        if (r2 == r3) goto L_0x04ad;
-    L_0x049d:
+        if (r2 == r3) goto L_0x0509;
+    L_0x04f9:
         r3 = NUM; // 0x45b984e0 float:5936.6094 double:5.77951115E-315;
-        if (r2 == r3) goto L_0x04a3;
-    L_0x04a2:
-        goto L_0x04c1;
-    L_0x04a3:
+        if (r2 == r3) goto L_0x04ff;
+    L_0x04fe:
+        goto L_0x051d;
+    L_0x04ff:
         r2 = "SCHEDULE_TOO_MUCH";
         r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x04c1;
-    L_0x04ab:
-        r8 = 2;
-        goto L_0x04c2;
-    L_0x04ad:
+        if (r0 == 0) goto L_0x051d;
+    L_0x0507:
+        r0 = 2;
+        goto L_0x051e;
+    L_0x0509:
         r2 = "PEER_FLOOD";
         r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x04c1;
-    L_0x04b5:
-        r8 = 0;
-        goto L_0x04c2;
-    L_0x04b7:
+        if (r0 == 0) goto L_0x051d;
+    L_0x0511:
+        r0 = 0;
+        goto L_0x051e;
+    L_0x0513:
         r2 = "USER_BANNED_IN_CHANNEL";
         r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x04c1;
-    L_0x04bf:
-        r8 = 1;
-        goto L_0x04c2;
-    L_0x04c1:
-        r8 = -1;
-    L_0x04c2:
-        if (r8 == 0) goto L_0x04ef;
-    L_0x04c4:
+        if (r0 == 0) goto L_0x051d;
+    L_0x051b:
         r0 = 1;
-        if (r8 == r0) goto L_0x04da;
-    L_0x04c7:
-        r0 = 2;
-        if (r8 == r0) goto L_0x04cc;
-    L_0x04ca:
-        goto L_0x0598;
-    L_0x04cc:
-        r0 = NUM; // 0x7f0e0622 float:1.8878222E38 double:1.0531629323E-314;
+        goto L_0x051e;
+    L_0x051d:
+        r0 = -1;
+    L_0x051e:
+        if (r0 == 0) goto L_0x054a;
+    L_0x0520:
+        r2 = 1;
+        if (r0 == r2) goto L_0x0535;
+    L_0x0523:
+        if (r0 == r14) goto L_0x0527;
+    L_0x0525:
+        goto L_0x061b;
+    L_0x0527:
+        r0 = NUM; // 0x7f0e064b float:1.8878305E38 double:1.0531629526E-314;
         r2 = "MessageScheduledLimitReached";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x04da:
-        r1 = org.telegram.messenger.NotificationCenter.getInstance(r17);
-        r2 = org.telegram.messenger.NotificationCenter.needShowAlert;
-        r0 = new java.lang.Object[r0];
+        goto L_0x061b;
+    L_0x0535:
+        r0 = org.telegram.messenger.NotificationCenter.getInstance(r18);
+        r1 = org.telegram.messenger.NotificationCenter.needShowAlert;
+        r2 = new java.lang.Object[r2];
         r3 = 5;
         r3 = java.lang.Integer.valueOf(r3);
         r4 = 0;
-        r0[r4] = r3;
-        r1.postNotificationName(r2, r0);
-        goto L_0x0598;
-    L_0x04ef:
-        r0 = 1;
+        r2[r4] = r3;
+        r0.postNotificationName(r1, r2);
+        goto L_0x061b;
+    L_0x054a:
+        r2 = 1;
         r4 = 0;
-        r1 = org.telegram.messenger.NotificationCenter.getInstance(r17);
-        r2 = org.telegram.messenger.NotificationCenter.needShowAlert;
-        r0 = new java.lang.Object[r0];
+        r0 = org.telegram.messenger.NotificationCenter.getInstance(r18);
+        r1 = org.telegram.messenger.NotificationCenter.needShowAlert;
+        r2 = new java.lang.Object[r2];
         r3 = java.lang.Integer.valueOf(r4);
-        r0[r4] = r3;
-        r1.postNotificationName(r2, r0);
-        goto L_0x0598;
-    L_0x0504:
-        if (r1 == 0) goto L_0x051d;
-    L_0x0506:
-        r0 = r0.text;
-        if (r3 == 0) goto L_0x0517;
-    L_0x050a:
-        r4 = r3.length;
-        if (r4 <= 0) goto L_0x0517;
-    L_0x050d:
+        r2[r4] = r3;
+        r0.postNotificationName(r1, r2);
+        goto L_0x061b;
+    L_0x055f:
+        if (r1 == 0) goto L_0x0584;
+    L_0x0561:
+        r4 = r0.text;
+        r4 = r4.equals(r12);
+        if (r4 == 0) goto L_0x0584;
+    L_0x0569:
+        if (r7 != 0) goto L_0x057a;
+    L_0x056b:
+        r0 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
+        if (r0 == 0) goto L_0x0570;
+    L_0x056f:
+        goto L_0x057a;
+    L_0x0570:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
+        r2 = 1;
+        r0.<init>(r2);
+        r1.presentFragment(r0);
+        goto L_0x0583;
+    L_0x057a:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
         r4 = 0;
+        r0.<init>(r4);
+        r1.presentFragment(r0);
+    L_0x0583:
+        return r5;
+    L_0x0584:
+        r4 = 0;
+        if (r1 == 0) goto L_0x059d;
+    L_0x0587:
+        r0 = r0.text;
+        if (r3 == 0) goto L_0x0597;
+    L_0x058b:
+        r6 = r3.length;
+        if (r6 <= 0) goto L_0x0597;
+    L_0x058e:
         r3 = r3[r4];
         r3 = (java.lang.Boolean) r3;
-        r8 = r3.booleanValue();
-        goto L_0x0518;
-    L_0x0517:
-        r8 = 0;
-    L_0x0518:
-        showAddUserAlert(r0, r1, r8, r2);
+        r14 = r3.booleanValue();
         goto L_0x0598;
-    L_0x051d:
+    L_0x0597:
+        r14 = 0;
+    L_0x0598:
+        showAddUserAlert(r0, r1, r14, r2);
+        goto L_0x061b;
+    L_0x059d:
         r0 = r0.text;
         r1 = "PEER_FLOOD";
         r0 = r0.equals(r1);
-        if (r0 == 0) goto L_0x0598;
-    L_0x0527:
-        r0 = org.telegram.messenger.NotificationCenter.getInstance(r17);
+        if (r0 == 0) goto L_0x061b;
+    L_0x05a7:
+        r0 = org.telegram.messenger.NotificationCenter.getInstance(r18);
         r1 = org.telegram.messenger.NotificationCenter.needShowAlert;
         r2 = 1;
         r3 = new java.lang.Object[r2];
@@ -860,54 +940,51 @@ public class AlertsCreator {
         r4 = 0;
         r3[r4] = r2;
         r0.postNotificationName(r1, r3);
-        goto L_0x0598;
-    L_0x053b:
+        goto L_0x061b;
+    L_0x05bb:
         r2 = r0.text;
-        r2 = r2.contains(r10);
-        if (r2 == 0) goto L_0x054e;
-    L_0x0543:
-        r2 = NUM; // 0x7f0e055a float:1.8877816E38 double:1.0531628335E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        r2 = r2.contains(r11);
+        if (r2 == 0) goto L_0x05ce;
+    L_0x05c3:
+        r2 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r10, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x054e:
+        goto L_0x061b;
+    L_0x05ce:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x055e;
-    L_0x0556:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x05e1;
+    L_0x05d6:
+        r2 = NUM; // 0x7f0e04bf float:1.8877502E38 double:1.053162757E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x055e:
+        goto L_0x061b;
+    L_0x05e1:
         r2 = r0.text;
         r3 = "APP_VERSION_OUTDATED";
         r2 = r3.equals(r2);
-        if (r2 == 0) goto L_0x057a;
-    L_0x0568:
-        r0 = r19.getParentActivity();
-        r1 = NUM; // 0x7f0e0b0d float:1.8880775E38 double:1.0531635543E-314;
+        if (r2 == 0) goto L_0x05fd;
+    L_0x05eb:
+        r0 = r20.getParentActivity();
+        r1 = NUM; // 0x7f0e0b4d float:1.8880905E38 double:1.053163586E-314;
         r2 = "UpdateAppAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = 1;
         showUpdateAppAlert(r0, r1, r2);
-        goto L_0x0598;
-    L_0x057a:
+        goto L_0x061b;
+    L_0x05fd:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = NUM; // 0x7f0e041c float:1.8877171E38 double:1.0531626764E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r12, r3);
+        r3 = NUM; // 0x7f0e043e float:1.887724E38 double:1.053162693E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r2.append(r3);
-        r2.append(r7);
+        r2.append(r8);
         r0 = r0.text;
         r2.append(r0);
         r0 = r2.toString();
         showSimpleAlert(r1, r0);
-    L_0x0598:
-        r0 = 0;
-        return r0;
-    L_0x059a:
-        r0 = 0;
-        return r0;
+    L_0x061b:
+        return r5;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.processError(int, org.telegram.tgnet.TLRPC$TL_error, org.telegram.ui.ActionBar.BaseFragment, org.telegram.tgnet.TLObject, java.lang.Object[]):android.app.Dialog");
     }
@@ -1094,21 +1171,25 @@ public class AlertsCreator {
         return create;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x00eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x00e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x00f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00f5  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x00f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0102  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x00fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0136  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x004a  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x01e0  */
     public static void showBlockReportSpamAlert(org.telegram.ui.ActionBar.BaseFragment r18, long r19, org.telegram.tgnet.TLRPC.User r21, org.telegram.tgnet.TLRPC.Chat r22, org.telegram.tgnet.TLRPC.EncryptedChat r23, boolean r24, org.telegram.tgnet.TLRPC.ChatFull r25, org.telegram.messenger.MessagesStorage.IntCallback r26) {
         /*
         r0 = r18;
         r7 = r22;
         r1 = r25;
-        if (r0 == 0) goto L_0x01df;
+        if (r0 == 0) goto L_0x01e9;
     L_0x0008:
         r2 = r18.getParentActivity();
         if (r2 != 0) goto L_0x0010;
     L_0x000e:
-        goto L_0x01df;
+        goto L_0x01e9;
     L_0x0010:
         r3 = r18.getAccountInstance();
         r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
@@ -1116,191 +1197,204 @@ public class AlertsCreator {
         r11.<init>(r2);
         r2 = r18.getCurrentAccount();
         r2 = org.telegram.messenger.MessagesController.getNotificationsSettings(r2);
-        r4 = new java.lang.StringBuilder;
-        r4.<init>();
-        r5 = "dialog_bar_report";
-        r4.append(r5);
-        r5 = r19;
-        r4.append(r5);
-        r4 = r4.toString();
-        r8 = 0;
-        r2 = r2.getBoolean(r4, r8);
         r4 = 1;
-        if (r21 == 0) goto L_0x012c;
-    L_0x0040:
-        r1 = NUM; // 0x7f0e01c8 float:1.8875962E38 double:1.053162382E-314;
-        r9 = new java.lang.Object[r4];
+        r5 = 0;
+        if (r23 != 0) goto L_0x0045;
+    L_0x0029:
+        r6 = new java.lang.StringBuilder;
+        r6.<init>();
+        r8 = "dialog_bar_report";
+        r6.append(r8);
+        r8 = r19;
+        r6.append(r8);
+        r6 = r6.toString();
+        r2 = r2.getBoolean(r6, r5);
+        if (r2 == 0) goto L_0x0043;
+    L_0x0042:
+        goto L_0x0047;
+    L_0x0043:
+        r2 = 0;
+        goto L_0x0048;
+    L_0x0045:
+        r8 = r19;
+    L_0x0047:
+        r2 = 1;
+    L_0x0048:
+        if (r21 == 0) goto L_0x0136;
+    L_0x004a:
+        r1 = NUM; // 0x7f0e01d8 float:1.8875995E38 double:1.05316239E-314;
+        r6 = new java.lang.Object[r4];
         r10 = org.telegram.messenger.UserObject.getFirstName(r21);
-        r9[r8] = r10;
+        r6[r5] = r10;
         r10 = "BlockUserTitle";
-        r1 = org.telegram.messenger.LocaleController.formatString(r10, r1, r9);
+        r1 = org.telegram.messenger.LocaleController.formatString(r10, r1, r6);
         r11.setTitle(r1);
-        r1 = NUM; // 0x7f0e01c4 float:1.8875954E38 double:1.05316238E-314;
-        r9 = new java.lang.Object[r4];
+        r1 = NUM; // 0x7f0e01d4 float:1.8875987E38 double:1.053162388E-314;
+        r6 = new java.lang.Object[r4];
         r10 = org.telegram.messenger.UserObject.getFirstName(r21);
-        r9[r8] = r10;
+        r6[r5] = r10;
         r10 = "BlockUserAlert";
-        r1 = org.telegram.messenger.LocaleController.formatString(r10, r1, r9);
+        r1 = org.telegram.messenger.LocaleController.formatString(r10, r1, r6);
         r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
         r11.setMessage(r1);
-        r1 = NUM; // 0x7f0e01c2 float:1.887595E38 double:1.053162379E-314;
-        r9 = "BlockContact";
-        r1 = org.telegram.messenger.LocaleController.getString(r9, r1);
-        r9 = 2;
-        r10 = new org.telegram.ui.Cells.CheckBoxCell[r9];
+        r1 = NUM; // 0x7f0e01d2 float:1.8875983E38 double:1.053162387E-314;
+        r6 = "BlockContact";
+        r1 = org.telegram.messenger.LocaleController.getString(r6, r1);
+        r6 = 2;
+        r10 = new org.telegram.ui.Cells.CheckBoxCell[r6];
         r14 = new android.widget.LinearLayout;
         r15 = r18.getParentActivity();
         r14.<init>(r15);
         r14.setOrientation(r4);
         r15 = 0;
-    L_0x0085:
-        if (r15 >= r9) goto L_0x011d;
-    L_0x0087:
-        if (r15 != 0) goto L_0x0091;
-    L_0x0089:
-        if (r2 != 0) goto L_0x0091;
-    L_0x008b:
+    L_0x008f:
+        if (r15 >= r6) goto L_0x0127;
+    L_0x0091:
+        if (r15 != 0) goto L_0x009b;
+    L_0x0093:
+        if (r2 != 0) goto L_0x009b;
+    L_0x0095:
         r16 = r1;
         r17 = r2;
-        goto L_0x0114;
-    L_0x0091:
-        r9 = new org.telegram.ui.Cells.CheckBoxCell;
+        goto L_0x011e;
+    L_0x009b:
+        r6 = new org.telegram.ui.Cells.CheckBoxCell;
         r13 = r18.getParentActivity();
-        r9.<init>(r13, r4);
-        r10[r15] = r9;
-        r9 = r10[r15];
-        r13 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8);
-        r9.setBackgroundDrawable(r13);
-        r9 = r10[r15];
+        r6.<init>(r13, r4);
+        r10[r15] = r6;
+        r6 = r10[r15];
+        r13 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5);
+        r6.setBackgroundDrawable(r13);
+        r6 = r10[r15];
         r13 = java.lang.Integer.valueOf(r15);
-        r9.setTag(r13);
-        r9 = "";
-        if (r15 != 0) goto L_0x00c3;
-    L_0x00b2:
+        r6.setTag(r13);
+        r6 = "";
+        if (r15 != 0) goto L_0x00cd;
+    L_0x00bc:
         r13 = r10[r15];
-        r12 = NUM; // 0x7f0e038a float:1.8876875E38 double:1.0531626043E-314;
+        r12 = NUM; // 0x7f0e03a7 float:1.8876934E38 double:1.0531626186E-314;
         r16 = r1;
         r1 = "DeleteReportSpam";
         r1 = org.telegram.messenger.LocaleController.getString(r1, r12);
-        r13.setText(r1, r9, r4, r8);
-        goto L_0x00da;
-    L_0x00c3:
+        r13.setText(r1, r6, r4, r5);
+        goto L_0x00e4;
+    L_0x00cd:
         r16 = r1;
-        if (r15 != r4) goto L_0x00da;
-    L_0x00c7:
+        if (r15 != r4) goto L_0x00e4;
+    L_0x00d1:
         r1 = r10[r15];
-        r12 = NUM; // 0x7f0e038e float:1.8876883E38 double:1.053162606E-314;
-        r13 = new java.lang.Object[r8];
+        r12 = NUM; // 0x7f0e03ac float:1.8876944E38 double:1.053162621E-314;
+        r13 = new java.lang.Object[r5];
         r17 = r2;
         r2 = "DeleteThisChat";
         r2 = org.telegram.messenger.LocaleController.formatString(r2, r12, r13);
-        r1.setText(r2, r9, r4, r8);
-        goto L_0x00dc;
-    L_0x00da:
+        r1.setText(r2, r6, r4, r5);
+        goto L_0x00e6;
+    L_0x00e4:
         r17 = r2;
-    L_0x00dc:
+    L_0x00e6:
         r1 = r10[r15];
         r2 = org.telegram.messenger.LocaleController.isRTL;
-        r9 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r6 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
         r12 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        if (r2 == 0) goto L_0x00eb;
-    L_0x00e6:
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        goto L_0x00ef;
-    L_0x00eb:
+        if (r2 == 0) goto L_0x00f5;
+    L_0x00f0:
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        goto L_0x00f9;
+    L_0x00f5:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r12);
-    L_0x00ef:
+    L_0x00f9:
         r13 = org.telegram.messenger.LocaleController.isRTL;
-        if (r13 == 0) goto L_0x00f8;
-    L_0x00f3:
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r12);
-        goto L_0x00fc;
-    L_0x00f8:
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-    L_0x00fc:
-        r1.setPadding(r2, r8, r9, r8);
+        if (r13 == 0) goto L_0x0102;
+    L_0x00fd:
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r12);
+        goto L_0x0106;
+    L_0x0102:
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+    L_0x0106:
+        r1.setPadding(r2, r5, r6, r5);
         r1 = r10[r15];
         r2 = -2;
-        r9 = -1;
-        r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r2);
+        r6 = -1;
+        r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r2);
         r14.addView(r1, r2);
         r1 = r10[r15];
         r2 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$UlzF7udPi23pwPuOF4VG7RaKfIg;
         r2.<init>(r10);
         r1.setOnClickListener(r2);
-    L_0x0114:
+    L_0x011e:
         r15 = r15 + 1;
         r1 = r16;
         r2 = r17;
-        r9 = 2;
-        goto L_0x0085;
-    L_0x011d:
+        r6 = 2;
+        goto L_0x008f;
+    L_0x0127:
         r16 = r1;
         r1 = 12;
         r11.setCustomViewOffset(r1);
         r11.setView(r14);
         r4 = r10;
         r12 = r16;
-        goto L_0x01a4;
-    L_0x012c:
-        if (r7 == 0) goto L_0x016a;
-    L_0x012e:
-        if (r24 == 0) goto L_0x016a;
-    L_0x0130:
-        r2 = NUM; // 0x7f0e0934 float:1.8879816E38 double:1.0531633206E-314;
-        r9 = "ReportUnrelatedGroup";
-        r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        goto L_0x01ae;
+    L_0x0136:
+        if (r7 == 0) goto L_0x0174;
+    L_0x0138:
+        if (r24 == 0) goto L_0x0174;
+    L_0x013a:
+        r2 = NUM; // 0x7f0e096c float:1.887993E38 double:1.0531633483E-314;
+        r6 = "ReportUnrelatedGroup";
+        r2 = org.telegram.messenger.LocaleController.getString(r6, r2);
         r11.setTitle(r2);
-        if (r1 == 0) goto L_0x015d;
-    L_0x013e:
+        if (r1 == 0) goto L_0x0167;
+    L_0x0148:
         r1 = r1.location;
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_channelLocation;
-        if (r2 == 0) goto L_0x015d;
-    L_0x0144:
+        if (r2 == 0) goto L_0x0167;
+    L_0x014e:
         r1 = (org.telegram.tgnet.TLRPC.TL_channelLocation) r1;
-        r2 = NUM; // 0x7f0e0935 float:1.8879818E38 double:1.053163321E-314;
+        r2 = NUM; // 0x7f0e096d float:1.8879932E38 double:1.053163349E-314;
         r4 = new java.lang.Object[r4];
         r1 = r1.address;
-        r4[r8] = r1;
+        r4[r5] = r1;
         r1 = "ReportUnrelatedGroupText";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r2, r4);
         r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
         r11.setMessage(r1);
-        goto L_0x0199;
-    L_0x015d:
-        r1 = NUM; // 0x7f0e0936 float:1.887982E38 double:1.0531633216E-314;
+        goto L_0x01a3;
+    L_0x0167:
+        r1 = NUM; // 0x7f0e096e float:1.8879934E38 double:1.0531633493E-314;
         r2 = "ReportUnrelatedGroupTextNoAddress";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
-        goto L_0x0199;
-    L_0x016a:
-        r1 = NUM; // 0x7f0e0932 float:1.8879812E38 double:1.0531633197E-314;
+        goto L_0x01a3;
+    L_0x0174:
+        r1 = NUM; // 0x7f0e096a float:1.8879926E38 double:1.0531633473E-314;
         r2 = "ReportSpamTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setTitle(r1);
         r1 = org.telegram.messenger.ChatObject.isChannel(r22);
-        if (r1 == 0) goto L_0x018d;
-    L_0x017c:
+        if (r1 == 0) goto L_0x0197;
+    L_0x0186:
         r1 = r7.megagroup;
-        if (r1 != 0) goto L_0x018d;
-    L_0x0180:
-        r1 = NUM; // 0x7f0e092e float:1.8879804E38 double:1.0531633177E-314;
+        if (r1 != 0) goto L_0x0197;
+    L_0x018a:
+        r1 = NUM; // 0x7f0e0966 float:1.8879917E38 double:1.0531633454E-314;
         r2 = "ReportSpamAlertChannel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
-        goto L_0x0199;
-    L_0x018d:
-        r1 = NUM; // 0x7f0e092f float:1.8879806E38 double:1.053163318E-314;
+        goto L_0x01a3;
+    L_0x0197:
+        r1 = NUM; // 0x7f0e0967 float:1.887992E38 double:1.053163346E-314;
         r2 = "ReportSpamAlertGroup";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
-    L_0x0199:
-        r1 = NUM; // 0x7f0e0924 float:1.8879784E38 double:1.0531633127E-314;
+    L_0x01a3:
+        r1 = NUM; // 0x7f0e095c float:1.8879897E38 double:1.0531633404E-314;
         r2 = "ReportChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r12 = r1;
         r4 = 0;
-    L_0x01a4:
+    L_0x01ae:
         r13 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$FzGvQfgCXLhRw__kmqisROHRtNs;
         r1 = r13;
         r2 = r21;
@@ -1311,7 +1405,7 @@ public class AlertsCreator {
         r10 = r26;
         r1.<init>(r2, r3, r4, r5, r7, r8, r9, r10);
         r11.setPositiveButton(r12, r13);
-        r1 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
+        r1 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = 0;
@@ -1321,12 +1415,12 @@ public class AlertsCreator {
         r0 = -1;
         r0 = r1.getButton(r0);
         r0 = (android.widget.TextView) r0;
-        if (r0 == 0) goto L_0x01df;
-    L_0x01d6:
+        if (r0 == 0) goto L_0x01e9;
+    L_0x01e0:
         r1 = "dialogTextRed2";
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r0.setTextColor(r1);
-    L_0x01df:
+    L_0x01e9:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.showBlockReportSpamAlert(org.telegram.ui.ActionBar.BaseFragment, long, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$EncryptedChat, boolean, org.telegram.tgnet.TLRPC$ChatFull, org.telegram.messenger.MessagesStorage$IntCallback):void");
@@ -2138,139 +2232,375 @@ public class AlertsCreator {
         return timeInMillis - currentTimeMillis > 60000;
     }
 
-    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, boolean z, ScheduleDatePickerDelegate scheduleDatePickerDelegate) {
-        return createScheduleDatePickerDialog(context, z, -1, scheduleDatePickerDelegate, null);
+    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long j, ScheduleDatePickerDelegate scheduleDatePickerDelegate) {
+        return createScheduleDatePickerDialog(context, j, -1, scheduleDatePickerDelegate, null);
     }
 
-    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, boolean z, ScheduleDatePickerDelegate scheduleDatePickerDelegate, Runnable runnable) {
-        return createScheduleDatePickerDialog(context, z, -1, scheduleDatePickerDelegate, runnable);
+    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long j, ScheduleDatePickerDelegate scheduleDatePickerDelegate, Runnable runnable) {
+        return createScheduleDatePickerDialog(context, j, -1, scheduleDatePickerDelegate, runnable);
     }
 
-    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, boolean z, long j, ScheduleDatePickerDelegate scheduleDatePickerDelegate, Runnable runnable) {
-        Context context2 = context;
-        boolean z2 = z;
-        if (context2 == null) {
-            return null;
-        }
-        int i;
-        String str;
-        Calendar calendar;
-        BottomSheet.Builder builder = new BottomSheet.Builder(context2, false);
-        builder.setApplyBottomPadding(false);
-        final NumberPicker numberPicker = new NumberPicker(context2);
-        numberPicker.setTextOffset(AndroidUtilities.dp(10.0f));
-        numberPicker.setItemCount(5);
-        final NumberPicker numberPicker2 = new NumberPicker(context2);
-        numberPicker2.setItemCount(5);
-        numberPicker2.setTextOffset(-AndroidUtilities.dp(10.0f));
-        final NumberPicker numberPicker3 = new NumberPicker(context2);
-        numberPicker3.setItemCount(5);
-        numberPicker3.setTextOffset(-AndroidUtilities.dp(34.0f));
-        AnonymousClass4 anonymousClass4 = new LinearLayout(context2) {
-            boolean ignoreLayout = false;
-
-            /* Access modifiers changed, original: protected */
-            public void onMeasure(int i, int i2) {
-                this.ignoreLayout = true;
-                Point point = AndroidUtilities.displaySize;
-                int i3 = point.x > point.y ? 3 : 5;
-                numberPicker.setItemCount(i3);
-                numberPicker2.setItemCount(i3);
-                numberPicker3.setItemCount(i3);
-                numberPicker.getLayoutParams().height = AndroidUtilities.dp(54.0f) * i3;
-                numberPicker2.getLayoutParams().height = AndroidUtilities.dp(54.0f) * i3;
-                numberPicker3.getLayoutParams().height = AndroidUtilities.dp(54.0f) * i3;
-                this.ignoreLayout = false;
-                super.onMeasure(i, i2);
-            }
-
-            public void requestLayout() {
-                if (!this.ignoreLayout) {
-                    super.requestLayout();
-                }
-            }
-        };
-        anonymousClass4.setOrientation(1);
-        TextView textView = new TextView(context2);
-        if (z2) {
-            i = NUM;
-            str = "SetReminder";
-        } else {
-            i = NUM;
-            str = "ScheduleMessage";
-        }
-        textView.setText(LocaleController.getString(str, i));
-        textView.setTextColor(Theme.getColor("dialogTextBlack"));
-        textView.setTextSize(1, 20.0f);
-        String str2 = "fonts/rmedium.ttf";
-        textView.setTypeface(AndroidUtilities.getTypeface(str2));
-        anonymousClass4.addView(textView, LayoutHelper.createLinear(-1, -2, 51, 22, 12, 22, 4));
-        textView.setOnTouchListener(-$$Lambda$AlertsCreator$7vxVL9TgAW5Vn6ZIlSM9Zg3Jmqc.INSTANCE);
-        LinearLayout linearLayout = new LinearLayout(context2);
-        linearLayout.setOrientation(0);
-        linearLayout.setWeightSum(1.0f);
-        anonymousClass4.addView(linearLayout, LayoutHelper.createLinear(-1, -2));
-        long currentTimeMillis = System.currentTimeMillis();
-        Calendar instance = Calendar.getInstance();
-        instance.setTimeInMillis(currentTimeMillis);
-        int i2 = instance.get(1);
-        TextView textView2 = new TextView(context2);
-        linearLayout.addView(numberPicker, LayoutHelper.createLinear(0, 270, 0.5f));
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(365);
-        numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setFormatter(new -$$Lambda$AlertsCreator$S8IVp4ro537QRHJsGZF0Tvy23PA(currentTimeMillis, instance, i2));
-        -$$Lambda$AlertsCreator$AoS0yEr1wQv0zK5zFQt2NMzqXOQ -__lambda_alertscreator_aos0yer1wqv0zk5zfqt2nmzqxoq = r0;
-        Calendar calendar2 = instance;
-        LinearLayout linearLayout2 = linearLayout;
-        -$$Lambda$AlertsCreator$AoS0yEr1wQv0zK5zFQt2NMzqXOQ -__lambda_alertscreator_aos0yer1wqv0zk5zfqt2nmzqxoq2 = new -$$Lambda$AlertsCreator$AoS0yEr1wQv0zK5zFQt2NMzqXOQ(textView2, z, numberPicker, numberPicker2, numberPicker3);
-        numberPicker.setOnValueChangedListener(-__lambda_alertscreator_aos0yer1wqv0zk5zfqt2nmzqxoq);
-        numberPicker2.setMinValue(0);
-        numberPicker2.setMaxValue(23);
-        LinearLayout linearLayout3 = linearLayout2;
-        linearLayout3.addView(numberPicker2, LayoutHelper.createLinear(0, 270, 0.2f));
-        numberPicker2.setFormatter(-$$Lambda$AlertsCreator$cTWaWPpARtn2mZSMxvTqevgwElI.INSTANCE);
-        numberPicker2.setOnValueChangedListener(-__lambda_alertscreator_aos0yer1wqv0zk5zfqt2nmzqxoq);
-        numberPicker3.setMinValue(0);
-        numberPicker3.setMaxValue(59);
-        numberPicker3.setValue(0);
-        numberPicker3.setFormatter(-$$Lambda$AlertsCreator$VSdCDpRaOSSEWlFtIMHcNwKBt7E.INSTANCE);
-        linearLayout3.addView(numberPicker3, LayoutHelper.createLinear(0, 270, 0.3f));
-        numberPicker3.setOnValueChangedListener(-__lambda_alertscreator_aos0yer1wqv0zk5zfqt2nmzqxoq);
-        if (j > 0) {
-            long j2 = 1000 * j;
-            calendar = calendar2;
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(12, 0);
-            calendar.set(11, 0);
-            int timeInMillis = (int) ((j2 - calendar.getTimeInMillis()) / 86400000);
-            calendar.setTimeInMillis(j2);
-            if (timeInMillis >= 0) {
-                numberPicker3.setValue(calendar.get(12));
-                numberPicker2.setValue(calendar.get(11));
-                numberPicker.setValue(timeInMillis);
-            }
-        } else {
-            calendar = calendar2;
-        }
-        boolean[] zArr = new boolean[]{true};
-        checkScheduleDate(textView2, z2, numberPicker, numberPicker2, numberPicker3);
-        textView2.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-        textView2.setGravity(17);
-        textView2.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-        textView2.setTextSize(1, 14.0f);
-        textView2.setTypeface(AndroidUtilities.getTypeface(str2));
-        textView2.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-        anonymousClass4.addView(textView2, LayoutHelper.createLinear(-1, 48, 83, 16, 15, 16, 16));
-        NumberPicker numberPicker4 = numberPicker2;
-        boolean[] zArr2 = zArr;
-        textView2.setOnClickListener(new -$$Lambda$AlertsCreator$5-lZYxMK4SyRqWBsGAs7CrRik3Q(zArr, z, numberPicker, numberPicker4, numberPicker3, calendar, scheduleDatePickerDelegate, builder));
-        builder.setCustomView(anonymousClass4);
-        builder.show().setOnDismissListener(new -$$Lambda$AlertsCreator$XV0y1q8-l5UYh_GaKmTABvo6FCI(runnable, zArr2));
-        return builder;
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x027f  */
+    public static org.telegram.ui.ActionBar.BottomSheet.Builder createScheduleDatePickerDialog(android.content.Context r32, long r33, long r35, org.telegram.ui.Components.AlertsCreator.ScheduleDatePickerDelegate r37, java.lang.Runnable r38) {
+        /*
+        r0 = r32;
+        r8 = r33;
+        r1 = 0;
+        if (r0 != 0) goto L_0x0008;
+    L_0x0007:
+        return r1;
+    L_0x0008:
+        r2 = org.telegram.messenger.UserConfig.selectedAccount;
+        r2 = org.telegram.messenger.UserConfig.getInstance(r2);
+        r10 = r2.getClientUserId();
+        r11 = new org.telegram.ui.ActionBar.BottomSheet$Builder;
+        r12 = 0;
+        r11.<init>(r0, r12);
+        r11.setApplyBottomPadding(r12);
+        r13 = new org.telegram.ui.Components.NumberPicker;
+        r13.<init>(r0);
+        r2 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r13.setTextOffset(r3);
+        r3 = 5;
+        r13.setItemCount(r3);
+        r14 = new org.telegram.ui.Components.NumberPicker;
+        r14.<init>(r0);
+        r14.setItemCount(r3);
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r2 = -r2;
+        r14.setTextOffset(r2);
+        r15 = new org.telegram.ui.Components.NumberPicker;
+        r15.<init>(r0);
+        r15.setItemCount(r3);
+        r16 = NUM; // 0x42080000 float:34.0 double:5.473360725E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r16);
+        r2 = -r2;
+        r15.setTextOffset(r2);
+        r7 = new org.telegram.ui.Components.AlertsCreator$4;
+        r7.<init>(r0, r13, r14, r15);
+        r6 = 1;
+        r7.setOrientation(r6);
+        r2 = new android.widget.FrameLayout;
+        r2.<init>(r0);
+        r17 = -1;
+        r18 = -2;
+        r19 = 51;
+        r20 = 22;
+        r21 = 0;
+        r22 = 0;
+        r23 = 4;
+        r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22, r23);
+        r7.addView(r2, r3);
+        r3 = new android.widget.TextView;
+        r3.<init>(r0);
+        r4 = (long) r10;
+        r17 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1));
+        if (r17 != 0) goto L_0x0089;
+    L_0x007c:
+        r1 = NUM; // 0x7f0e0a1c float:1.8880287E38 double:1.0531634353E-314;
+        r12 = "SetReminder";
+        r1 = org.telegram.messenger.LocaleController.getString(r12, r1);
+        r3.setText(r1);
+        goto L_0x0095;
+    L_0x0089:
+        r1 = NUM; // 0x7f0e09ab float:1.8880057E38 double:1.0531633794E-314;
+        r12 = "ScheduleMessage";
+        r1 = org.telegram.messenger.LocaleController.getString(r12, r1);
+        r3.setText(r1);
+    L_0x0095:
+        r1 = "dialogTextBlack";
+        r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
+        r3.setTextColor(r1);
+        r1 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+        r3.setTextSize(r6, r1);
+        r12 = "fonts/rmedium.ttf";
+        r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r12);
+        r3.setTypeface(r1);
+        r19 = -2;
+        r20 = -NUM; // 0xffffffffCLASSNAME float:-2.0 double:NaN;
+        r21 = 51;
+        r22 = 0;
+        r23 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
+        r24 = 0;
+        r25 = 0;
+        r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25);
+        r2.addView(r3, r1);
+        r1 = org.telegram.ui.Components.-$$Lambda$AlertsCreator$7vxVL9TgAW5Vn6ZIlSM9Zg3Jmqc.INSTANCE;
+        r3.setOnTouchListener(r1);
+        r1 = (int) r8;
+        if (r1 <= 0) goto L_0x017f;
+    L_0x00c9:
+        r3 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1));
+        if (r3 == 0) goto L_0x017f;
+    L_0x00cd:
+        r3 = org.telegram.messenger.UserConfig.selectedAccount;
+        r3 = org.telegram.messenger.MessagesController.getInstance(r3);
+        r1 = java.lang.Integer.valueOf(r1);
+        r1 = r3.getUser(r1);
+        if (r1 == 0) goto L_0x017f;
+    L_0x00dd:
+        r3 = r1.bot;
+        if (r3 != 0) goto L_0x017f;
+    L_0x00e1:
+        r3 = r1.status;
+        if (r3 == 0) goto L_0x017f;
+    L_0x00e5:
+        r3 = r3.expires;
+        if (r3 <= 0) goto L_0x017f;
+    L_0x00e9:
+        r1 = org.telegram.messenger.UserObject.getFirstName(r1);
+        r3 = r1.length();
+        r6 = 10;
+        if (r3 <= r6) goto L_0x010f;
+    L_0x00f5:
+        r3 = new java.lang.StringBuilder;
+        r3.<init>();
+        r20 = r4;
+        r4 = 0;
+        r1 = r1.substring(r4, r6);
+        r3.append(r1);
+        r1 = "…";
+        r3.append(r1);
+        r1 = r3.toString();
+        goto L_0x0112;
+    L_0x010f:
+        r20 = r4;
+        r4 = 0;
+    L_0x0112:
+        r3 = new org.telegram.ui.ActionBar.ActionBarMenuItem;
+        r5 = "key_sheet_other";
+        r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
+        r6 = 0;
+        r3.<init>(r0, r6, r4, r5);
+        r3.setLongClickEnabled(r4);
+        r4 = 2;
+        r3.setSubMenuOpenSide(r4);
+        r4 = NUM; // 0x7var_f9 float:1.7945083E38 double:1.052935626E-314;
+        r3.setIcon(r4);
+        r4 = "player_actionBarSelector";
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
+        r5 = 1;
+        r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r5);
+        r3.setBackgroundDrawable(r4);
+        r22 = 40;
+        r23 = NUM; // 0x42200000 float:40.0 double:5.481131706E-315;
+        r24 = 53;
+        r25 = 0;
+        r26 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+        r27 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
+        r28 = 0;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28);
+        r2.addView(r3, r4);
+        r2 = NUM; // 0x7f0e09ac float:1.888006E38 double:1.05316338E-314;
+        r4 = 1;
+        r5 = new java.lang.Object[r4];
+        r6 = 0;
+        r5[r6] = r1;
+        r1 = "ScheduleWhenOnline";
+        r1 = org.telegram.messenger.LocaleController.formatString(r1, r2, r5);
+        r3.addSubItem(r4, r1);
+        r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$8KnvvPJIzLIdgYs5h2wTeC9iFLw;
+        r1.<init>(r3);
+        r3.setOnClickListener(r1);
+        r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$KR_OgeK9dqo37BHX7GI6av8Vcek;
+        r6 = r37;
+        r1.<init>(r6, r11);
+        r3.setDelegate(r1);
+        r1 = NUM; // 0x7f0e002c float:1.8875127E38 double:1.0531621784E-314;
+        r2 = "AccDescrMoreOptions";
+        r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
+        r3.setContentDescription(r1);
+        goto L_0x0183;
+    L_0x017f:
+        r6 = r37;
+        r20 = r4;
+    L_0x0183:
+        r5 = new android.widget.LinearLayout;
+        r5.<init>(r0);
+        r1 = 0;
+        r5.setOrientation(r1);
+        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r5.setWeightSum(r1);
+        r1 = -1;
+        r2 = -2;
+        r1 = org.telegram.ui.Components.LayoutHelper.createLinear(r1, r2);
+        r7.addView(r5, r1);
+        r1 = java.lang.System.currentTimeMillis();
+        r3 = java.util.Calendar.getInstance();
+        r3.setTimeInMillis(r1);
+        r4 = 1;
+        r6 = r3.get(r4);
+        r17 = r11;
+        r11 = new android.widget.TextView;
+        r11.<init>(r0);
+        r0 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
+        r19 = r12;
+        r12 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        r4 = 0;
+        r0 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r12, r0);
+        r5.addView(r13, r0);
+        r13.setMinValue(r4);
+        r0 = 365; // 0x16d float:5.11E-43 double:1.803E-321;
+        r13.setMaxValue(r0);
+        r13.setWrapSelectorWheel(r4);
+        r0 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$r8Tt-baFJlhUXYOi4kO6UUP-Dbg;
+        r0.<init>(r1, r3, r6);
+        r13.setFormatter(r0);
+        r6 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$6AnhMphU6whhzbgD5XkCr_q_09g;
+        r0 = r6;
+        r1 = r11;
+        r2 = r10;
+        r29 = r3;
+        r22 = 1;
+        r3 = r33;
+        r30 = r5;
+        r5 = r13;
+        r12 = r6;
+        r22 = r10;
+        r10 = 1;
+        r6 = r14;
+        r31 = r7;
+        r7 = r15;
+        r0.<init>(r1, r2, r3, r5, r6, r7);
+        r13.setOnValueChangedListener(r12);
+        r0 = 0;
+        r14.setMinValue(r0);
+        r1 = 23;
+        r14.setMaxValue(r1);
+        r1 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
+        r2 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        r1 = org.telegram.ui.Components.LayoutHelper.createLinear(r0, r2, r1);
+        r2 = r30;
+        r2.addView(r14, r1);
+        r1 = org.telegram.ui.Components.-$$Lambda$AlertsCreator$TSQJEOtVCEhgAIPpdVghXXq1LRE.INSTANCE;
+        r14.setFormatter(r1);
+        r14.setOnValueChangedListener(r12);
+        r15.setMinValue(r0);
+        r1 = 59;
+        r15.setMaxValue(r1);
+        r15.setValue(r0);
+        r1 = org.telegram.ui.Components.-$$Lambda$AlertsCreator$KakG1tQ5ETn782zFMW9iKAMpW2A.INSTANCE;
+        r15.setFormatter(r1);
+        r1 = NUM; // 0x3e99999a float:0.3 double:5.188942835E-315;
+        r3 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        r1 = org.telegram.ui.Components.LayoutHelper.createLinear(r0, r3, r1);
+        r2.addView(r15, r1);
+        r15.setOnValueChangedListener(r12);
+        r0 = 0;
+        r2 = (r35 > r0 ? 1 : (r35 == r0 ? 0 : -1));
+        if (r2 <= 0) goto L_0x0274;
+    L_0x0232:
+        r0 = NUM; // 0x7ffffffe float:NaN double:1.0609978945E-314;
+        r2 = (r35 > r0 ? 1 : (r35 == r0 ? 0 : -1));
+        if (r2 == 0) goto L_0x0274;
+    L_0x0239:
+        r0 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r0 = r0 * r35;
+        r2 = java.lang.System.currentTimeMillis();
+        r12 = r29;
+        r12.setTimeInMillis(r2);
+        r2 = 12;
+        r3 = 0;
+        r12.set(r2, r3);
+        r4 = 11;
+        r12.set(r4, r3);
+        r5 = r12.getTimeInMillis();
+        r5 = r0 - r5;
+        r23 = 86400000; // 0x5265CLASSNAME float:7.82218E-36 double:4.2687272E-316;
+        r5 = r5 / r23;
+        r3 = (int) r5;
+        r12.setTimeInMillis(r0);
+        if (r3 < 0) goto L_0x0276;
+    L_0x0262:
+        r0 = r12.get(r2);
+        r15.setValue(r0);
+        r0 = r12.get(r4);
+        r14.setValue(r0);
+        r13.setValue(r3);
+        goto L_0x0276;
+    L_0x0274:
+        r12 = r29;
+    L_0x0276:
+        r7 = new boolean[r10];
+        r0 = 0;
+        r7[r0] = r10;
+        r1 = (r20 > r8 ? 1 : (r20 == r8 ? 0 : -1));
+        if (r1 != 0) goto L_0x0281;
+    L_0x027f:
+        r1 = 1;
+        goto L_0x0282;
+    L_0x0281:
+        r1 = 0;
+    L_0x0282:
+        checkScheduleDate(r11, r1, r13, r14, r15);
+        r1 = org.telegram.messenger.AndroidUtilities.dp(r16);
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r16);
+        r11.setPadding(r1, r0, r2, r0);
+        r0 = 17;
+        r11.setGravity(r0);
+        r0 = "featuredStickers_buttonText";
+        r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
+        r11.setTextColor(r0);
+        r0 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
+        r11.setTextSize(r10, r0);
+        r0 = org.telegram.messenger.AndroidUtilities.getTypeface(r19);
+        r11.setTypeface(r0);
+        r0 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
+        r1 = "featuredStickers_addButton";
+        r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
+        r2 = "featuredStickers_addButtonPressed";
+        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
+        r0 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorRoundRectDrawable(r0, r1, r2);
+        r11.setBackgroundDrawable(r0);
+        r23 = -1;
+        r24 = 48;
+        r25 = 83;
+        r26 = 16;
+        r27 = 15;
+        r28 = 16;
+        r29 = 16;
+        r0 = org.telegram.ui.Components.LayoutHelper.createLinear(r23, r24, r25, r26, r27, r28, r29);
+        r10 = r31;
+        r10.addView(r11, r0);
+        r6 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$ZpZtLHOTj8yqCPWZNifekiyWumA;
+        r0 = r6;
+        r1 = r7;
+        r2 = r22;
+        r3 = r33;
+        r5 = r13;
+        r13 = r6;
+        r6 = r14;
+        r14 = r7;
+        r7 = r15;
+        r8 = r12;
+        r9 = r37;
+        r12 = r10;
+        r10 = r17;
+        r0.<init>(r1, r2, r3, r5, r6, r7, r8, r9, r10);
+        r11.setOnClickListener(r13);
+        r0 = r17;
+        r0.setCustomView(r12);
+        r1 = r0.show();
+        r2 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$1lIWD0cerrPgajgmoGrGBRAlclk;
+        r3 = r38;
+        r2.<init>(r3, r14);
+        r1.setOnDismissListener(r2);
+        return r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.createScheduleDatePickerDialog(android.content.Context, long, long, org.telegram.ui.Components.AlertsCreator$ScheduleDatePickerDelegate, java.lang.Runnable):org.telegram.ui.ActionBar.BottomSheet$Builder");
     }
 
-    static /* synthetic */ String lambda$createScheduleDatePickerDialog$22(long j, Calendar calendar, int i, int i2) {
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$23(ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, int i) {
+        if (i == 1) {
+            scheduleDatePickerDelegate.didSelectDate(true, NUM);
+            builder.getDismissRunnable().run();
+        }
+    }
+
+    static /* synthetic */ String lambda$createScheduleDatePickerDialog$24(long j, Calendar calendar, int i, int i2) {
         if (i2 == 0) {
             return LocaleController.getString("MessageScheduleToday", NUM);
         }
@@ -2282,9 +2612,13 @@ public class AlertsCreator {
         return LocaleController.getInstance().formatterScheduleYear.format(j);
     }
 
-    static /* synthetic */ void lambda$createScheduleDatePickerDialog$26(boolean[] zArr, boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$25(TextView textView, int i, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i2, int i3) {
+        checkScheduleDate(textView, ((long) i) == j, numberPicker, numberPicker2, numberPicker3);
+    }
+
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$28(boolean[] zArr, int i, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
         zArr[0] = false;
-        boolean checkScheduleDate = checkScheduleDate(null, z, numberPicker, numberPicker2, numberPicker3);
+        boolean checkScheduleDate = checkScheduleDate(null, ((long) i) == j, numberPicker, numberPicker2, numberPicker3);
         calendar.setTimeInMillis(System.currentTimeMillis() + (((((long) numberPicker.getValue()) * 24) * 3600) * 1000));
         calendar.set(11, numberPicker2.getValue());
         calendar.set(12, numberPicker3.getValue());
@@ -2295,7 +2629,7 @@ public class AlertsCreator {
         builder.getDismissRunnable().run();
     }
 
-    static /* synthetic */ void lambda$createScheduleDatePickerDialog$27(Runnable runnable, boolean[] zArr, DialogInterface dialogInterface) {
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$29(Runnable runnable, boolean[] zArr, DialogInterface dialogInterface) {
         if (runnable != null && zArr[0]) {
             runnable.run();
         }
@@ -2315,11 +2649,11 @@ public class AlertsCreator {
         charSequenceArr[1] = LocaleController.formatString(str, NUM, LocaleController.formatPluralString("Hours", 8));
         charSequenceArr[2] = LocaleController.formatString(str, NUM, LocaleController.formatPluralString("Days", 2));
         charSequenceArr[3] = LocaleController.getString("MuteDisable", NUM);
-        builder.setItems(charSequenceArr, new -$$Lambda$AlertsCreator$t2Ybx4P5povsI8rLJfyId65Wgtc(j));
+        builder.setItems(charSequenceArr, new -$$Lambda$AlertsCreator$S6Vo-T677tzumXQiZlpxidWWOI4(j));
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createMuteAlert$28(long j, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createMuteAlert$30(long j, DialogInterface dialogInterface, int i) {
         int i2 = 2;
         if (i == 0) {
             i2 = 0;
@@ -2335,12 +2669,12 @@ public class AlertsCreator {
         if (context != null && baseFragment != null) {
             BottomSheet.Builder builder = new BottomSheet.Builder(context);
             builder.setTitle(LocaleController.getString("ReportChat", NUM), true);
-            builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)}, new -$$Lambda$AlertsCreator$T53vdwu9Baw7mp6rou_Dgn0z1tE(j, i, baseFragment, context));
+            builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)}, new -$$Lambda$AlertsCreator$dlmdqoQ3R6pBq6j2guFwIdEgVE0(j, i, baseFragment, context));
             baseFragment.showDialog(builder.create());
         }
     }
 
-    static /* synthetic */ void lambda$createReportAlert$30(long j, int i, BaseFragment baseFragment, Context context, DialogInterface dialogInterface, int i2) {
+    static /* synthetic */ void lambda$createReportAlert$32(long j, int i, BaseFragment baseFragment, Context context, DialogInterface dialogInterface, int i2) {
         if (i2 == 4) {
             Bundle bundle = new Bundle();
             bundle.putLong("dialog_id", j);
@@ -2376,7 +2710,7 @@ public class AlertsCreator {
                 tL_messages_report.reason = new TL_inputReportReasonPornography();
             }
         }
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tL_messages_report, -$$Lambda$AlertsCreator$ipvWLYO2H-0n1c-wDoGY-DRLDu0.INSTANCE);
+        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tL_messages_report, -$$Lambda$AlertsCreator$NpoDU2Mba05BmoLPTdtKeWiFGaI.INSTANCE);
         Toast.makeText(context, LocaleController.getString("ReportChatSent", NUM), 0).show();
     }
 
@@ -2530,6 +2864,12 @@ public class AlertsCreator {
                         break;
                     }
                     break;
+                case 1377621075:
+                    if (str.equals("USER_CHANNELS_TOO_MUCH")) {
+                        obj = 19;
+                        break;
+                    }
+                    break;
                 case 1623167701:
                     if (str.equals("USER_NOT_MUTUAL_CONTACT")) {
                         obj = 5;
@@ -2549,10 +2889,11 @@ public class AlertsCreator {
                     }
                     break;
             }
+            String str2 = "ChannelTooMuchTitle";
             switch (obj) {
                 case null:
                     builder.setMessage(LocaleController.getString("NobodyLikesSpam2", NUM));
-                    builder.setNegativeButton(LocaleController.getString("MoreInfo", NUM), new -$$Lambda$AlertsCreator$FG737OZ0DoNKPJjQXh_OkRfCA0o(baseFragment));
+                    builder.setNegativeButton(LocaleController.getString("MoreInfo", NUM), new -$$Lambda$AlertsCreator$05NWor8e9g8v84nB8eC2NpLdD5o(baseFragment));
                     break;
                 case 1:
                 case 2:
@@ -2630,7 +2971,7 @@ public class AlertsCreator {
                     builder.setMessage(LocaleController.getString("LocatedChannelsTooMuch", NUM));
                     break;
                 case 18:
-                    builder.setTitle(LocaleController.getString("ChannelTooMuchTitle", NUM));
+                    builder.setTitle(LocaleController.getString(str2, NUM));
                     if (!(tLObject instanceof TL_channels_createChannel)) {
                         builder.setMessage(LocaleController.getString("ChannelTooMuchJoin", NUM));
                         break;
@@ -2638,6 +2979,10 @@ public class AlertsCreator {
                         builder.setMessage(LocaleController.getString("ChannelTooMuch", NUM));
                         break;
                     }
+                case 19:
+                    builder.setTitle(LocaleController.getString(str2, NUM));
+                    builder.setMessage(LocaleController.getString("UserChannelTooMuchJoin", NUM));
+                    break;
                 default:
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(LocaleController.getString("ErrorOccurred", NUM));
@@ -2696,22 +3041,22 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(iArr2[i5], iArr2[i5]);
             radioColorCell.setTextAndValue(strArr[i5], i2 == TextColorCell.colorsToSave[i5]);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$ScqzpZH4v14YocninsFGZW7M2Jg(linearLayout, iArr));
+            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$HFAm3goRkxSxcPQK05l9kfLrhHg(linearLayout, iArr));
             i5++;
             i4 = 9;
         }
         Builder builder = new Builder(context);
         builder.setTitle(LocaleController.getString("LedColor", NUM));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Set", NUM), new -$$Lambda$AlertsCreator$FvZi-Oc6SB-TNIVCJ_gANG1xN6Q(j, iArr, i, runnable));
-        builder.setNeutralButton(LocaleController.getString("LedDisabled", NUM), new -$$Lambda$AlertsCreator$MiBCObfRNfGTxHncINZd0ySicJI(j2, i3, runnable2));
+        builder.setPositiveButton(LocaleController.getString("Set", NUM), new -$$Lambda$AlertsCreator$f5-lXMPH008ooPa5FMJuEwh0OrQ(j, iArr, i, runnable));
+        builder.setNeutralButton(LocaleController.getString("LedDisabled", NUM), new -$$Lambda$AlertsCreator$0TAT2OqvSjJdKO3lAw6w3B95D9k(j2, i3, runnable2));
         if (j2 != 0) {
-            builder.setNegativeButton(LocaleController.getString("Default", NUM), new -$$Lambda$AlertsCreator$YJRTLtRAU8CFlit5MrQHwkrqy0Q(j2, runnable2));
+            builder.setNegativeButton(LocaleController.getString("Default", NUM), new -$$Lambda$AlertsCreator$7gGGrRc8bYYUeDry48ux1LpgV4s(j2, runnable2));
         }
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createColorSelectDialog$32(LinearLayout linearLayout, int[] iArr, View view) {
+    static /* synthetic */ void lambda$createColorSelectDialog$34(LinearLayout linearLayout, int[] iArr, View view) {
         int childCount = linearLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View view2 = (RadioColorCell) linearLayout.getChildAt(i);
@@ -2720,7 +3065,7 @@ public class AlertsCreator {
         iArr[0] = TextColorCell.colorsToSave[((Integer) view.getTag()).intValue()];
     }
 
-    static /* synthetic */ void lambda$createColorSelectDialog$33(long j, int[] iArr, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
+    static /* synthetic */ void lambda$createColorSelectDialog$35(long j, int[] iArr, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
         Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -2740,7 +3085,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createColorSelectDialog$34(long j, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
+    static /* synthetic */ void lambda$createColorSelectDialog$36(long j, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
         Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -2760,7 +3105,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createColorSelectDialog$35(long j, Runnable runnable, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createColorSelectDialog$37(long j, Runnable runnable, DialogInterface dialogInterface, int i) {
         Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("color_");
@@ -2824,12 +3169,12 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr2[i2], iArr[i] == i2);
             linearLayout.addView(radioColorCell);
-            -$$Lambda$AlertsCreator$syzpMtTwphGwWxsLrHqlm0H7ZL0 -__lambda_alertscreator_syzpmttwphgwwxslrhqlm0h7zl0 = r1;
+            -$$Lambda$AlertsCreator$Tk2YqVMTqwW8mYxUqnK8-9-w364 -__lambda_alertscreator_tk2yqvmtqww8myxuqnk8-9-w364 = r1;
             FrameLayout frameLayout = radioColorCell;
             int i3 = i2;
             builder = builder2;
-            -$$Lambda$AlertsCreator$syzpMtTwphGwWxsLrHqlm0H7ZL0 -__lambda_alertscreator_syzpmttwphgwwxslrhqlm0h7zl02 = new -$$Lambda$AlertsCreator$syzpMtTwphGwWxsLrHqlm0H7ZL0(iArr, j, str, builder2, runnable);
-            frameLayout.setOnClickListener(-__lambda_alertscreator_syzpmttwphgwwxslrhqlm0h7zl0);
+            -$$Lambda$AlertsCreator$Tk2YqVMTqwW8mYxUqnK8-9-w364 -__lambda_alertscreator_tk2yqvmtqww8myxuqnk8-9-w3642 = new -$$Lambda$AlertsCreator$Tk2YqVMTqwW8mYxUqnK8-9-w364(iArr, j, str, builder2, runnable);
+            frameLayout.setOnClickListener(-__lambda_alertscreator_tk2yqvmtqww8myxuqnk8-9-w364);
             i2 = i3 + 1;
             i = 0;
             builder2 = builder;
@@ -2842,7 +3187,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createVibrationSelectDialog$36(int[] iArr, long j, String str, Builder builder, Runnable runnable, View view) {
+    static /* synthetic */ void lambda$createVibrationSelectDialog$38(int[] iArr, long j, String str, Builder builder, Runnable runnable, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
@@ -2914,18 +3259,18 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i], iArr[0] == i);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$jseC0HYyR6q-PUszkpljeGky6c4(iArr, linearLayout));
+            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$hAp3bfIJRf-X8ZqxnAYFVZoSg6g(iArr, linearLayout));
             i++;
         }
         Builder builder = new Builder(context);
         builder.setTopImage(new ShareLocationDrawable(context, 0), Theme.getColor("dialogTopBackground"));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("ShareFile", NUM), new -$$Lambda$AlertsCreator$4DgzvGzLV2R1O7syobir4ZMBj70(iArr, intCallback));
+        builder.setPositiveButton(LocaleController.getString("ShareFile", NUM), new -$$Lambda$AlertsCreator$zvbzJHjlBZQIkowXbIV84jyO3o0(iArr, intCallback));
         builder.setNeutralButton(LocaleController.getString("Cancel", NUM), null);
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createLocationUpdateDialog$37(int[] iArr, LinearLayout linearLayout, View view) {
+    static /* synthetic */ void lambda$createLocationUpdateDialog$39(int[] iArr, LinearLayout linearLayout, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         int childCount = linearLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -2936,7 +3281,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createLocationUpdateDialog$38(int[] iArr, IntCallback intCallback, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createLocationUpdateDialog$40(int[] iArr, IntCallback intCallback, DialogInterface dialogInterface, int i) {
         int i2 = iArr[0] == 0 ? 900 : iArr[0] == 1 ? 3600 : 28800;
         intCallback.run(i2);
     }
@@ -2945,8 +3290,8 @@ public class AlertsCreator {
         Builder builder = new Builder((Context) activity);
         builder.setTopImage(NUM, Theme.getColor("dialogTopBackground"));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("ContactsPermissionAlert", NUM)));
-        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", NUM), new -$$Lambda$AlertsCreator$sSs0RRmSmQ5x-TafRaBFBiuL70Q(intCallback));
-        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), new -$$Lambda$AlertsCreator$sDLDnfWTCsAi_gc9Vf8y3-fzeAw(intCallback));
+        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", NUM), new -$$Lambda$AlertsCreator$NbNSmrEGNAuorerzpV7fH1xWr4E(intCallback));
+        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), new -$$Lambda$AlertsCreator$MyqgLv-vQ0gI1odORBtLNhHQEvI(intCallback));
         return builder;
     }
 
@@ -2985,19 +3330,19 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i2], iArr[0] == i2);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$eQUomDIkBtJHqhk8FO0iWAMg7Qs(iArr, linearLayout));
+            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$4zQOCx7szZg2PNvAzTA1bpbrFQA(iArr, linearLayout));
             i2++;
         }
         Builder builder = new Builder(context);
         builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", NUM));
         builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", NUM));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$AlertsCreator$KHkLeEyAM3ueqVXJldazmtZAKQY(iArr));
-        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", NUM), new -$$Lambda$AlertsCreator$iClqD2-jkNM7kdikk3gtVUT5Sn4(context));
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$AlertsCreator$KjNI7sT_C-bswPjwnMDRlnskBPc(iArr));
+        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", NUM), new -$$Lambda$AlertsCreator$Va_eEgh11ksr6bHiAG-lOGJYMp8(context));
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createFreeSpaceDialog$41(int[] iArr, LinearLayout linearLayout, View view) {
+    static /* synthetic */ void lambda$createFreeSpaceDialog$43(int[] iArr, LinearLayout linearLayout, View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         if (intValue == 0) {
             iArr[0] = 3;
@@ -3105,13 +3450,13 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i6], iArr[i3] == i6);
             linearLayout.addView(radioColorCell);
-            -$$Lambda$AlertsCreator$oQy1pJfs9yOPZRG3s-N56Cz0IZU -__lambda_alertscreator_oqy1pjfs9yopzrg3s-n56cz0izu = r1;
+            -$$Lambda$AlertsCreator$A8Ah-02R-GWIahgC-Bv-fH-0imo -__lambda_alertscreator_a8ah-02r-gwiahgc-bv-fh-0imo = r1;
             FrameLayout frameLayout = radioColorCell;
             int i7 = i6;
             Builder builder2 = builder;
             view = linearLayout;
-            -$$Lambda$AlertsCreator$oQy1pJfs9yOPZRG3s-N56Cz0IZU -__lambda_alertscreator_oqy1pjfs9yopzrg3s-n56cz0izu2 = new -$$Lambda$AlertsCreator$oQy1pJfs9yOPZRG3s-N56Cz0IZU(iArr, j, i, notificationsSettings, builder, runnable);
-            frameLayout.setOnClickListener(-__lambda_alertscreator_oqy1pjfs9yopzrg3s-n56cz0izu);
+            -$$Lambda$AlertsCreator$A8Ah-02R-GWIahgC-Bv-fH-0imo -__lambda_alertscreator_a8ah-02r-gwiahgc-bv-fh-0imo2 = new -$$Lambda$AlertsCreator$A8Ah-02R-GWIahgC-Bv-fH-0imo(iArr, j, i, notificationsSettings, builder, runnable);
+            frameLayout.setOnClickListener(-__lambda_alertscreator_a8ah-02r-gwiahgc-bv-fh-0imo);
             i6 = i7 + 1;
             i3 = 0;
             context = activity;
@@ -3126,7 +3471,7 @@ public class AlertsCreator {
         return builder3.create();
     }
 
-    static /* synthetic */ void lambda$createPrioritySelectDialog$44(int[] iArr, long j, int i, SharedPreferences sharedPreferences, Builder builder, Runnable runnable, View view) {
+    static /* synthetic */ void lambda$createPrioritySelectDialog$46(int[] iArr, long j, int i, SharedPreferences sharedPreferences, Builder builder, Runnable runnable, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         int i2 = 5;
@@ -3189,7 +3534,7 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i2], iArr[0] == i2);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$RGMgMsZL-ejZf0S_hIu1EuItwsE(iArr, i, builder, runnable));
+            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$nPpY9ibadcCLASSNAMEcml3wjF5p5_Vyg(iArr, i, builder, runnable));
             i2++;
         }
         builder.setTitle(LocaleController.getString("PopupNotification", NUM));
@@ -3198,7 +3543,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createPopupSelectDialog$45(int[] iArr, int i, Builder builder, Runnable runnable, View view) {
+    static /* synthetic */ void lambda$createPopupSelectDialog$47(int[] iArr, int i, Builder builder, Runnable runnable, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (i == 1) {
@@ -3227,7 +3572,7 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i2], i == i2);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$s_f4il5Cdz2aKo3SpNpW8kGHrcQ(builder, onClickListener));
+            radioColorCell.setOnClickListener(new -$$Lambda$AlertsCreator$LWtnoVn16WLVqoU3zq1q2hohPjg(builder, onClickListener));
             i2++;
         }
         builder.setTitle(str);
@@ -3236,7 +3581,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createSingleChoiceDialog$46(Builder builder, OnClickListener onClickListener, View view) {
+    static /* synthetic */ void lambda$createSingleChoiceDialog$48(Builder builder, OnClickListener onClickListener, View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         builder.getDismissRunnable().run();
         onClickListener.onClick(null, intValue);
@@ -3267,13 +3612,13 @@ public class AlertsCreator {
         } else {
             numberPicker.setValue(i);
         }
-        numberPicker.setFormatter(-$$Lambda$AlertsCreator$uoFeTKAjtXsAuhg_3CHs0TvRxWE.INSTANCE);
+        numberPicker.setFormatter(-$$Lambda$AlertsCreator$gGUuyj3b3BbVn9I3aKfktk8so9Q.INSTANCE);
         builder.setView(numberPicker);
-        builder.setNegativeButton(LocaleController.getString("Done", NUM), new -$$Lambda$AlertsCreator$Ky57ZWK-GIOKEvj3_MJdqhC5X9o(encryptedChat, numberPicker));
+        builder.setNegativeButton(LocaleController.getString("Done", NUM), new -$$Lambda$AlertsCreator$elY6BxYZd2w1Q3YdF1ndgHl4T4g(encryptedChat, numberPicker));
         return builder;
     }
 
-    static /* synthetic */ String lambda$createTTLAlert$47(int i) {
+    static /* synthetic */ String lambda$createTTLAlert$49(int i) {
         if (i == 0) {
             return LocaleController.getString("ShortMessageLifetimeForever", NUM);
         }
@@ -3295,7 +3640,7 @@ public class AlertsCreator {
         return i == 20 ? LocaleController.formatTTLString(604800) : "";
     }
 
-    static /* synthetic */ void lambda$createTTLAlert$48(EncryptedChat encryptedChat, NumberPicker numberPicker, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createTTLAlert$50(EncryptedChat encryptedChat, NumberPicker numberPicker, DialogInterface dialogInterface, int i) {
         int i2 = encryptedChat.ttl;
         int value = numberPicker.getValue();
         if (value >= 0 && value < 16) {
@@ -3333,7 +3678,7 @@ public class AlertsCreator {
                 accountSelectCell.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
                 accountSelectCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 linearLayout.addView(accountSelectCell, LayoutHelper.createLinear(-1, 50));
-                accountSelectCell.setOnClickListener(new -$$Lambda$AlertsCreator$0y0_2Pk2ItkXAjP_tr7kpNUKH0k(alertDialogArr, dismissRunnable, accountSelectDelegate));
+                accountSelectCell.setOnClickListener(new -$$Lambda$AlertsCreator$O9BULpaauaaWtGXQsuOhgCJ9ct0(alertDialogArr, dismissRunnable, accountSelectDelegate));
             }
         }
         builder.setTitle(LocaleController.getString("SelectAccount", NUM));
@@ -3344,7 +3689,7 @@ public class AlertsCreator {
         return create;
     }
 
-    static /* synthetic */ void lambda$createAccountSelectDialog$49(AlertDialog[] alertDialogArr, Runnable runnable, AccountSelectDelegate accountSelectDelegate, View view) {
+    static /* synthetic */ void lambda$createAccountSelectDialog$51(AlertDialog[] alertDialogArr, Runnable runnable, AccountSelectDelegate accountSelectDelegate, View view) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnDismissListener(null);
         }
@@ -3369,7 +3714,7 @@ public class AlertsCreator {
         r9 = r41;
         r11 = r43;
         r0 = r45;
-        if (r14 == 0) goto L_0x05e7;
+        if (r14 == 0) goto L_0x05e9;
     L_0x0010:
         if (r3 != 0) goto L_0x0018;
     L_0x0012:
@@ -3377,7 +3722,7 @@ public class AlertsCreator {
     L_0x0014:
         if (r5 != 0) goto L_0x0018;
     L_0x0016:
-        goto L_0x05e7;
+        goto L_0x05e9;
     L_0x0018:
         r1 = r34.getParentActivity();
         if (r1 != 0) goto L_0x001f;
@@ -3682,7 +4027,7 @@ public class AlertsCreator {
         r0 = r0.getInputUser(r3);
         r12.user_id = r0;
         r11 = org.telegram.tgnet.ConnectionsManager.getInstance(r15);
-        r10 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$lDp8yqhR02j-Tm5fYE0PsJuUsAE;
+        r10 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$PfqFazdn9NQ97ARqEHrnjPsSobk;
         r0 = r10;
         r1 = r13;
         r2 = r34;
@@ -3705,7 +4050,7 @@ public class AlertsCreator {
         r0.<init>(r1, r2, r3, r4, r5, r6, r7, r9, r10, r11, r12, r13);
         r0 = r16;
         r0 = r15.sendRequest(r14, r0);
-        r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$W2EWhTpIMHSc6Msis0wOifLCBfg;
+        r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$s2TKXlQWhiQaw3CtiAviNd-var_E;
         r6 = r19;
         r3 = r33;
         r1.<init>(r3, r6, r0, r2);
@@ -3743,7 +4088,7 @@ public class AlertsCreator {
         r14.setTag(r13);
         if (r9 != 0) goto L_0x024a;
     L_0x023a:
-        r13 = NUM; // 0x7f0e0373 float:1.8876828E38 double:1.053162593E-314;
+        r13 = NUM; // 0x7f0e0391 float:1.887689E38 double:1.0531626077E-314;
         r15 = "DeleteBanUser";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r15 = 0;
@@ -3756,7 +4101,7 @@ public class AlertsCreator {
         r15 = 0;
         if (r9 != r13) goto L_0x025b;
     L_0x024e:
-        r13 = NUM; // 0x7f0e038a float:1.8876875E38 double:1.0531626043E-314;
+        r13 = NUM; // 0x7f0e03a7 float:1.8876934E38 double:1.0531626186E-314;
         r0 = "DeleteReportSpam";
         r0 = org.telegram.messenger.LocaleController.getString(r0, r13);
         r14.setText(r0, r11, r15, r15);
@@ -3773,7 +4118,7 @@ public class AlertsCreator {
         r7 = org.telegram.messenger.ContactsController.formatName(r13, r7);
         r0[r15] = r7;
         r7 = "DeleteAllFrom";
-        r13 = NUM; // 0x7f0e0368 float:1.8876806E38 double:1.0531625875E-314;
+        r13 = NUM; // 0x7f0e0386 float:1.8876867E38 double:1.0531626023E-314;
         r0 = org.telegram.messenger.LocaleController.formatString(r7, r13, r0);
         r14.setText(r0, r11, r15, r15);
     L_0x0279:
@@ -3806,7 +4151,7 @@ public class AlertsCreator {
         r27 = r0;
         r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r23, r24, r25, r26, r27, r28, r29);
         r8.addView(r14, r0);
-        r0 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$DwEKuO6ZyzaWNWnekWtkR1v9rpE;
+        r0 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$VV1-P4Ux4zkJ-q55i6EgDEwfAZA;
         r0.<init>(r12);
         r14.setOnClickListener(r0);
         r10 = r10 + 1;
@@ -3835,7 +4180,7 @@ public class AlertsCreator {
         r1 = 0;
         r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1);
         r8.setBackgroundDrawable(r9);
-        r9 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
+        r9 = NUM; // 0x7f0e039f float:1.8876918E38 double:1.0531626146E-314;
         r10 = "DeleteMessagesOption";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r8.setText(r9, r11, r1, r1);
@@ -3866,7 +4211,7 @@ public class AlertsCreator {
         r19 = 0;
         r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19);
         r7.addView(r8, r1);
-        r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$1UbQhjcQQh0Q-8XlrRhVnlVtboI;
+        r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$oLtqhGeaZR0ainTSrxnNxCm_SWk;
         r9 = r22;
         r1.<init>(r9);
         r8.setOnClickListener(r1);
@@ -4049,7 +4394,7 @@ public class AlertsCreator {
         r6.setBackgroundDrawable(r10);
         if (r31 == 0) goto L_0x044a;
     L_0x0433:
-        r10 = NUM; // 0x7f0e0383 float:1.887686E38 double:1.053162601E-314;
+        r10 = NUM; // 0x7f0e03a0 float:1.887692E38 double:1.053162615E-314;
         r13 = new java.lang.Object[r8];
         r8 = org.telegram.messenger.UserObject.getFirstName(r35);
         r13[r1] = r8;
@@ -4066,13 +4411,13 @@ public class AlertsCreator {
     L_0x0450:
         if (r7 != r8) goto L_0x045f;
     L_0x0452:
-        r10 = NUM; // 0x7f0e0379 float:1.887684E38 double:1.053162596E-314;
+        r10 = NUM; // 0x7f0e0397 float:1.8876901E38 double:1.0531626107E-314;
         r13 = "DeleteForAll";
         r10 = org.telegram.messenger.LocaleController.getString(r13, r10);
         r6.setText(r10, r11, r1, r1);
         goto L_0x046b;
     L_0x045f:
-        r10 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
+        r10 = NUM; // 0x7f0e039f float:1.8876918E38 double:1.0531626146E-314;
         r13 = "DeleteMessagesOption";
         r10 = org.telegram.messenger.LocaleController.getString(r13, r10);
         r6.setText(r10, r11, r1, r1);
@@ -4104,7 +4449,7 @@ public class AlertsCreator {
         r28 = 0;
         r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28);
         r5.addView(r6, r1);
-        r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$VV1-P4Ux4zkJ-q55i6EgDEwfAZA;
+        r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$4OHKaYeK4rq2SjIUdvqrdqZQdMA;
         r1.<init>(r9);
         r6.setOnClickListener(r1);
         r0.setView(r5);
@@ -4125,10 +4470,10 @@ public class AlertsCreator {
     L_0x04bb:
         r25 = 0;
     L_0x04bd:
-        r5 = NUM; // 0x7f0e0363 float:1.8876796E38 double:1.053162585E-314;
+        r5 = NUM; // 0x7f0e0381 float:1.8876857E38 double:1.0531626E-314;
         r6 = "Delete";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
-        r6 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$4yTgCoGKvK2-DGmNDTg0ZKZlWLU;
+        r6 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$broXPqwNv8W5CV_H317xOPkk6GM;
         r10 = r19;
         r15 = r6;
         r16 = r41;
@@ -4147,13 +4492,13 @@ public class AlertsCreator {
         r6 = 1;
         if (r8 != r6) goto L_0x04f7;
     L_0x04ea:
-        r9 = NUM; // 0x7f0e038b float:1.8876877E38 double:1.0531626047E-314;
+        r9 = NUM; // 0x7f0e03a8 float:1.8876936E38 double:1.053162619E-314;
         r10 = "DeleteSingleMessagesTitle";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r0.setTitle(r9);
         goto L_0x050c;
     L_0x04f7:
-        r9 = NUM; // 0x7f0e0387 float:1.887687E38 double:1.053162603E-314;
+        r9 = NUM; // 0x7f0e03a4 float:1.8876928E38 double:1.053162617E-314;
         r10 = new java.lang.Object[r6];
         r6 = org.telegram.messenger.LocaleController.formatPluralString(r5, r8);
         r11 = 0;
@@ -4162,9 +4507,9 @@ public class AlertsCreator {
         r6 = org.telegram.messenger.LocaleController.formatString(r6, r9, r10);
         r0.setTitle(r6);
     L_0x050c:
-        r6 = NUM; // 0x7f0e012a float:1.8875642E38 double:1.053162304E-314;
+        r6 = NUM; // 0x7f0e012e float:1.887565E38 double:1.053162306E-314;
         r9 = "AreYouSureDeleteSingleMessage";
-        r10 = NUM; // 0x7f0e0124 float:1.887563E38 double:1.053162301E-314;
+        r10 = NUM; // 0x7f0e0128 float:1.8875638E38 double:1.053162303E-314;
         r11 = "AreYouSureDeleteFewMessages";
         if (r4 == 0) goto L_0x054b;
     L_0x0518:
@@ -4174,7 +4519,7 @@ public class AlertsCreator {
     L_0x051c:
         if (r7 == r8) goto L_0x0536;
     L_0x051e:
-        r1 = NUM; // 0x7f0e0386 float:1.8876867E38 double:1.0531626023E-314;
+        r1 = NUM; // 0x7f0e03a3 float:1.8876926E38 double:1.0531626166E-314;
         r3 = 1;
         r3 = new java.lang.Object[r3];
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r7);
@@ -4183,18 +4528,18 @@ public class AlertsCreator {
         r4 = "DeleteMessagesTextGroupPart";
         r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3);
         r0.setMessage(r1);
-        goto L_0x05c1;
+        goto L_0x05c3;
     L_0x0536:
         r3 = 1;
         if (r8 != r3) goto L_0x0542;
     L_0x0539:
         r1 = org.telegram.messenger.LocaleController.getString(r9, r6);
         r0.setMessage(r1);
-        goto L_0x05c1;
+        goto L_0x05c3;
     L_0x0542:
         r1 = org.telegram.messenger.LocaleController.getString(r11, r10);
         r0.setMessage(r1);
-        goto L_0x05c1;
+        goto L_0x05c3;
     L_0x054b:
         if (r1 == 0) goto L_0x058c;
     L_0x054d:
@@ -4204,7 +4549,7 @@ public class AlertsCreator {
     L_0x0551:
         if (r4 == 0) goto L_0x056a;
     L_0x0553:
-        r1 = NUM; // 0x7f0e0385 float:1.8876865E38 double:1.053162602E-314;
+        r1 = NUM; // 0x7f0e03a2 float:1.8876924E38 double:1.053162616E-314;
         r3 = 1;
         r3 = new java.lang.Object[r3];
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r7);
@@ -4213,10 +4558,10 @@ public class AlertsCreator {
         r4 = "DeleteMessagesTextGroup";
         r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3);
         r0.setMessage(r1);
-        goto L_0x05c1;
+        goto L_0x05c3;
     L_0x056a:
         r6 = 0;
-        r1 = NUM; // 0x7f0e0384 float:1.8876863E38 double:1.0531626013E-314;
+        r1 = NUM; // 0x7f0e03a1 float:1.8876922E38 double:1.0531626156E-314;
         r3 = 2;
         r3 = new java.lang.Object[r3];
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r7);
@@ -4228,39 +4573,41 @@ public class AlertsCreator {
         r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3);
         r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
         r0.setMessage(r1);
-        goto L_0x05c1;
+        goto L_0x05c3;
     L_0x058c:
-        if (r4 == 0) goto L_0x05af;
+        if (r4 == 0) goto L_0x05b1;
     L_0x058e:
         r1 = r4.megagroup;
-        if (r1 == 0) goto L_0x05af;
+        if (r1 == 0) goto L_0x05b1;
     L_0x0592:
+        if (r44 != 0) goto L_0x05b1;
+    L_0x0594:
         r1 = 1;
-        if (r8 != r1) goto L_0x05a2;
-    L_0x0595:
-        r1 = NUM; // 0x7f0e012b float:1.8875644E38 double:1.0531623044E-314;
+        if (r8 != r1) goto L_0x05a4;
+    L_0x0597:
+        r1 = NUM; // 0x7f0e012f float:1.8875652E38 double:1.0531623063E-314;
         r3 = "AreYouSureDeleteSingleMessageMega";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        goto L_0x05c1;
-    L_0x05a2:
-        r1 = NUM; // 0x7f0e0125 float:1.8875632E38 double:1.0531623014E-314;
+        goto L_0x05c3;
+    L_0x05a4:
+        r1 = NUM; // 0x7f0e0129 float:1.887564E38 double:1.0531623034E-314;
         r3 = "AreYouSureDeleteFewMessagesMega";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        goto L_0x05c1;
-    L_0x05af:
+        goto L_0x05c3;
+    L_0x05b1:
         r1 = 1;
-        if (r8 != r1) goto L_0x05ba;
-    L_0x05b2:
+        if (r8 != r1) goto L_0x05bc;
+    L_0x05b4:
         r1 = org.telegram.messenger.LocaleController.getString(r9, r6);
         r0.setMessage(r1);
-        goto L_0x05c1;
-    L_0x05ba:
+        goto L_0x05c3;
+    L_0x05bc:
         r1 = org.telegram.messenger.LocaleController.getString(r11, r10);
         r0.setMessage(r1);
-    L_0x05c1:
-        r1 = NUM; // 0x7f0e0203 float:1.8876082E38 double:1.053162411E-314;
+    L_0x05c3:
+        r1 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
         r3 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = 0;
@@ -4270,18 +4617,18 @@ public class AlertsCreator {
         r1 = -1;
         r0 = r0.getButton(r1);
         r0 = (android.widget.TextView) r0;
-        if (r0 == 0) goto L_0x05e7;
-    L_0x05de:
+        if (r0 == 0) goto L_0x05e9;
+    L_0x05e0:
         r1 = "dialogTextRed2";
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r0.setTextColor(r1);
-    L_0x05e7:
+    L_0x05e9:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.createDeleteMessagesAlert(org.telegram.ui.ActionBar.BaseFragment, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$ChatFull, long, org.telegram.messenger.MessageObject, android.util.SparseArray[], org.telegram.messenger.MessageObject$GroupedMessages, boolean, int, java.lang.Runnable):void");
     }
 
-    static /* synthetic */ void lambda$null$50(AlertDialog[] alertDialogArr, TLObject tLObject, BaseFragment baseFragment, User user, Chat chat, EncryptedChat encryptedChat, ChatFull chatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, GroupedMessages groupedMessages, boolean z, Runnable runnable) {
+    static /* synthetic */ void lambda$null$52(AlertDialog[] alertDialogArr, TLObject tLObject, BaseFragment baseFragment, User user, Chat chat, EncryptedChat encryptedChat, ChatFull chatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, GroupedMessages groupedMessages, boolean z, Runnable runnable) {
         int i;
         try {
             alertDialogArr[0].dismiss();
@@ -4299,14 +4646,14 @@ public class AlertsCreator {
         createDeleteMessagesAlert(baseFragment, user, chat, encryptedChat, chatFull, j, messageObject, sparseArrayArr, groupedMessages, z, i, runnable);
     }
 
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$53(AlertDialog[] alertDialogArr, int i, int i2, BaseFragment baseFragment) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$55(AlertDialog[] alertDialogArr, int i, int i2, BaseFragment baseFragment) {
         if (alertDialogArr[0] != null) {
-            alertDialogArr[0].setOnCancelListener(new -$$Lambda$AlertsCreator$jpF5yH_8BUaBH_d3vb0aVnNLKR4(i, i2));
+            alertDialogArr[0].setOnCancelListener(new -$$Lambda$AlertsCreator$nZ0vhjin-DIdWeCiq6nwyI2M8P0(i, i2));
             baseFragment.showDialog(alertDialogArr[0]);
         }
     }
 
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$54(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$56(boolean[] zArr, View view) {
         if (view.isEnabled()) {
             CheckBoxCell checkBoxCell = (CheckBoxCell) view;
             Integer num = (Integer) checkBoxCell.getTag();
@@ -4315,13 +4662,13 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$55(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$57(boolean[] zArr, View view) {
         CheckBoxCell checkBoxCell = (CheckBoxCell) view;
         zArr[0] = zArr[0] ^ 1;
         checkBoxCell.setChecked(zArr[0], true);
     }
 
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$56(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$58(boolean[] zArr, View view) {
         CheckBoxCell checkBoxCell = (CheckBoxCell) view;
         zArr[0] = zArr[0] ^ 1;
         checkBoxCell.setChecked(zArr[0], true);
@@ -4329,7 +4676,7 @@ public class AlertsCreator {
 
     /* JADX WARNING: Removed duplicated region for block: B:49:0x0116  */
     /* JADX WARNING: Removed duplicated region for block: B:39:0x00e8  */
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$58(org.telegram.messenger.MessageObject r19, org.telegram.messenger.MessageObject.GroupedMessages r20, org.telegram.tgnet.TLRPC.EncryptedChat r21, int r22, long r23, boolean[] r25, boolean r26, android.util.SparseArray[] r27, org.telegram.tgnet.TLRPC.User r28, boolean[] r29, org.telegram.tgnet.TLRPC.Chat r30, org.telegram.tgnet.TLRPC.ChatFull r31, java.lang.Runnable r32, android.content.DialogInterface r33, int r34) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$60(org.telegram.messenger.MessageObject r19, org.telegram.messenger.MessageObject.GroupedMessages r20, org.telegram.tgnet.TLRPC.EncryptedChat r21, int r22, long r23, boolean[] r25, boolean r26, android.util.SparseArray[] r27, org.telegram.tgnet.TLRPC.User r28, boolean[] r29, org.telegram.tgnet.TLRPC.Chat r30, org.telegram.tgnet.TLRPC.ChatFull r31, java.lang.Runnable r32, android.content.DialogInterface r33, int r34) {
         /*
         r0 = r19;
         r1 = r20;
@@ -4535,7 +4882,7 @@ public class AlertsCreator {
         r0.user_id = r1;
         r0.id = r7;
         r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r22);
-        r2 = org.telegram.ui.Components.-$$Lambda$AlertsCreator$tYCa1lgn0riGcq9hDcB5xxGo_bI.INSTANCE;
+        r2 = org.telegram.ui.Components.-$$Lambda$AlertsCreator$A22Jxfm5gYlBAKThQRHubUhFEUI.INSTANCE;
         r1.sendRequest(r0, r2);
     L_0x0170:
         r0 = 2;
@@ -4551,6 +4898,1160 @@ public class AlertsCreator {
     L_0x0181:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createDeleteMessagesAlert$58(org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject$GroupedMessages, org.telegram.tgnet.TLRPC$EncryptedChat, int, long, boolean[], boolean, android.util.SparseArray[], org.telegram.tgnet.TLRPC$User, boolean[], org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$ChatFull, java.lang.Runnable, android.content.DialogInterface, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createDeleteMessagesAlert$60(org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject$GroupedMessages, org.telegram.tgnet.TLRPC$EncryptedChat, int, long, boolean[], boolean, android.util.SparseArray[], org.telegram.tgnet.TLRPC$User, boolean[], org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$ChatFull, java.lang.Runnable, android.content.DialogInterface, int):void");
+    }
+
+    public static void createThemeCreateDialog(BaseFragment baseFragment, int i, ThemeInfo themeInfo, ThemeAccent themeAccent) {
+        BaseFragment baseFragment2 = baseFragment;
+        if (baseFragment2 != null && baseFragment.getParentActivity() != null) {
+            Context parentActivity = baseFragment.getParentActivity();
+            EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(parentActivity);
+            editTextBoldCursor.setBackgroundDrawable(Theme.createEditTextDrawable(parentActivity, true));
+            Builder builder = new Builder(parentActivity);
+            builder.setTitle(LocaleController.getString("NewTheme", NUM));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+            builder.setPositiveButton(LocaleController.getString("Create", NUM), -$$Lambda$AlertsCreator$0QtuIWIKEN8KFAWtr5Uy2CbfW1o.INSTANCE);
+            LinearLayout linearLayout = new LinearLayout(parentActivity);
+            linearLayout.setOrientation(1);
+            builder.setView(linearLayout);
+            TextView textView = new TextView(parentActivity);
+            if (i != 0) {
+                textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EnterThemeNameEdit", NUM)));
+            } else {
+                textView.setText(LocaleController.getString("EnterThemeName", NUM));
+            }
+            textView.setTextSize(16.0f);
+            textView.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(23.0f), AndroidUtilities.dp(6.0f));
+            String str = "dialogTextBlack";
+            textView.setTextColor(Theme.getColor(str));
+            linearLayout.addView(textView, LayoutHelper.createLinear(-1, -2));
+            editTextBoldCursor.setTextSize(1, 16.0f);
+            editTextBoldCursor.setTextColor(Theme.getColor(str));
+            editTextBoldCursor.setMaxLines(1);
+            editTextBoldCursor.setLines(1);
+            editTextBoldCursor.setInputType(16385);
+            editTextBoldCursor.setGravity(51);
+            editTextBoldCursor.setSingleLine(true);
+            editTextBoldCursor.setImeOptions(6);
+            editTextBoldCursor.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            editTextBoldCursor.setCursorSize(AndroidUtilities.dp(20.0f));
+            editTextBoldCursor.setCursorWidth(1.5f);
+            editTextBoldCursor.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
+            linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, 36, 51, 24, 6, 24, 0));
+            editTextBoldCursor.setOnEditorActionListener(-$$Lambda$AlertsCreator$DJqb4RTx9GX9dj02-QDzvL2X5Jo.INSTANCE);
+            editTextBoldCursor.setText(generateThemeName(themeAccent));
+            editTextBoldCursor.setSelection(editTextBoldCursor.length());
+            AlertDialog create = builder.create();
+            create.setOnShowListener(new -$$Lambda$AlertsCreator$dywCIYGCwAk2dvnBomvTJlKTZmI(editTextBoldCursor));
+            baseFragment2.showDialog(create);
+            editTextBoldCursor.requestFocus();
+            create.getButton(-1).setOnClickListener(new -$$Lambda$AlertsCreator$kY_IuBuIRtt9K0_qm7YfE68TTG8(baseFragment, editTextBoldCursor, themeAccent, themeInfo, create));
+        }
+    }
+
+    static /* synthetic */ void lambda$null$63(EditTextBoldCursor editTextBoldCursor) {
+        editTextBoldCursor.requestFocus();
+        AndroidUtilities.showKeyboard(editTextBoldCursor);
+    }
+
+    static /* synthetic */ void lambda$createThemeCreateDialog$67(BaseFragment baseFragment, EditTextBoldCursor editTextBoldCursor, ThemeAccent themeAccent, ThemeInfo themeInfo, AlertDialog alertDialog, View view) {
+        if (baseFragment.getParentActivity() != null) {
+            if (editTextBoldCursor.length() == 0) {
+                Vibrator vibrator = (Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator");
+                if (vibrator != null) {
+                    vibrator.vibrate(200);
+                }
+                AndroidUtilities.shakeView(editTextBoldCursor, 2.0f, 0);
+                return;
+            }
+            if (baseFragment instanceof ThemePreviewActivity) {
+                Theme.applyPreviousTheme();
+                baseFragment.finishFragment();
+            }
+            if (themeAccent != null) {
+                themeInfo.setCurrentAccentId(themeAccent.id);
+                Theme.refreshThemeColors();
+                Utilities.searchQueue.postRunnable(new -$$Lambda$AlertsCreator$1jvar_OO0E8-EZLKIOCErJX2WIT8(editTextBoldCursor, alertDialog, baseFragment));
+                return;
+            }
+            processCreate(editTextBoldCursor, alertDialog, baseFragment);
+        }
+    }
+
+    private static void processCreate(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, BaseFragment baseFragment) {
+        AndroidUtilities.hideKeyboard(editTextBoldCursor);
+        ThemeInfo createNewTheme = Theme.createNewTheme(editTextBoldCursor.getText().toString());
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeListUpdated, new Object[0]);
+        new ThemeEditorView().show(baseFragment.getParentActivity(), createNewTheme);
+        alertDialog.dismiss();
+        SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+        String str = "themehint";
+        if (!globalMainSettings.getBoolean(str, false)) {
+            globalMainSettings.edit().putBoolean(str, true).commit();
+            try {
+                Toast.makeText(baseFragment.getParentActivity(), LocaleController.getString("CreateNewThemeHelp", NUM), 1).show();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+    }
+
+    /* JADX WARNING: Missing block: B:6:0x0906, code skipped:
+            if (r5 != 0) goto L_0x0913;
+     */
+    private static java.lang.String generateThemeName(org.telegram.ui.ActionBar.Theme.ThemeAccent r18) {
+        /*
+        r0 = 107; // 0x6b float:1.5E-43 double:5.3E-322;
+        r0 = new java.lang.String[r0];
+        r1 = 0;
+        r2 = "Ancient";
+        r0[r1] = r2;
+        r2 = 1;
+        r3 = "Antique";
+        r0[r2] = r3;
+        r3 = 2;
+        r4 = "Autumn";
+        r0[r3] = r4;
+        r4 = 3;
+        r5 = "Baby";
+        r0[r4] = r5;
+        r5 = 4;
+        r6 = "Barely";
+        r0[r5] = r6;
+        r6 = 5;
+        r7 = "Baroque";
+        r0[r6] = r7;
+        r7 = 6;
+        r8 = "Blazing";
+        r0[r7] = r8;
+        r8 = 7;
+        r9 = "Blushing";
+        r0[r8] = r9;
+        r9 = 8;
+        r10 = "Bohemian";
+        r0[r9] = r10;
+        r10 = 9;
+        r11 = "Bubbly";
+        r0[r10] = r11;
+        r11 = 10;
+        r12 = "Burning";
+        r0[r11] = r12;
+        r12 = 11;
+        r13 = "Buttered";
+        r0[r12] = r13;
+        r13 = 12;
+        r14 = "Classic";
+        r0[r13] = r14;
+        r14 = 13;
+        r15 = "Clear";
+        r0[r14] = r15;
+        r15 = 14;
+        r16 = "Cool";
+        r0[r15] = r16;
+        r16 = 15;
+        r17 = "Cosmic";
+        r0[r16] = r17;
+        r16 = 16;
+        r17 = "Cotton";
+        r0[r16] = r17;
+        r16 = 17;
+        r17 = "Cozy";
+        r0[r16] = r17;
+        r16 = 18;
+        r17 = "Crystal";
+        r0[r16] = r17;
+        r16 = 19;
+        r17 = "Dark";
+        r0[r16] = r17;
+        r16 = 20;
+        r17 = "Daring";
+        r0[r16] = r17;
+        r16 = 21;
+        r17 = "Darling";
+        r0[r16] = r17;
+        r16 = 22;
+        r17 = "Dawn";
+        r0[r16] = r17;
+        r16 = 23;
+        r17 = "Dazzling";
+        r0[r16] = r17;
+        r16 = 24;
+        r17 = "Deep";
+        r0[r16] = r17;
+        r16 = 25;
+        r17 = "Deepest";
+        r0[r16] = r17;
+        r16 = 26;
+        r17 = "Delicate";
+        r0[r16] = r17;
+        r16 = 27;
+        r17 = "Delightful";
+        r0[r16] = r17;
+        r16 = 28;
+        r17 = "Divine";
+        r0[r16] = r17;
+        r16 = 29;
+        r17 = "Double";
+        r0[r16] = r17;
+        r16 = 30;
+        r17 = "Downtown";
+        r0[r16] = r17;
+        r16 = 31;
+        r17 = "Dreamy";
+        r0[r16] = r17;
+        r16 = 32;
+        r17 = "Dusky";
+        r0[r16] = r17;
+        r16 = 33;
+        r17 = "Dusty";
+        r0[r16] = r17;
+        r16 = 34;
+        r17 = "Electric";
+        r0[r16] = r17;
+        r16 = 35;
+        r17 = "Enchanted";
+        r0[r16] = r17;
+        r16 = 36;
+        r17 = "Endless";
+        r0[r16] = r17;
+        r16 = 37;
+        r17 = "Evening";
+        r0[r16] = r17;
+        r16 = 38;
+        r17 = "Fantastic";
+        r0[r16] = r17;
+        r16 = 39;
+        r17 = "Flirty";
+        r0[r16] = r17;
+        r16 = 40;
+        r17 = "Forever";
+        r0[r16] = r17;
+        r16 = 41;
+        r17 = "Frigid";
+        r0[r16] = r17;
+        r16 = 42;
+        r17 = "Frosty";
+        r0[r16] = r17;
+        r16 = 43;
+        r17 = "Frozen";
+        r0[r16] = r17;
+        r16 = 44;
+        r17 = "Gentle";
+        r0[r16] = r17;
+        r16 = 45;
+        r17 = "Heavenly";
+        r0[r16] = r17;
+        r16 = 46;
+        r17 = "Hyper";
+        r0[r16] = r17;
+        r16 = 47;
+        r17 = "Icy";
+        r0[r16] = r17;
+        r16 = 48;
+        r17 = "Infinite";
+        r0[r16] = r17;
+        r16 = 49;
+        r17 = "Innocent";
+        r0[r16] = r17;
+        r16 = 50;
+        r17 = "Instant";
+        r0[r16] = r17;
+        r16 = 51;
+        r17 = "Luscious";
+        r0[r16] = r17;
+        r16 = 52;
+        r17 = "Lunar";
+        r0[r16] = r17;
+        r16 = 53;
+        r17 = "Lustrous";
+        r0[r16] = r17;
+        r16 = 54;
+        r17 = "Magic";
+        r0[r16] = r17;
+        r16 = 55;
+        r17 = "Majestic";
+        r0[r16] = r17;
+        r16 = 56;
+        r17 = "Mambo";
+        r0[r16] = r17;
+        r16 = 57;
+        r17 = "Midnight";
+        r0[r16] = r17;
+        r16 = 58;
+        r17 = "Millenium";
+        r0[r16] = r17;
+        r16 = 59;
+        r17 = "Morning";
+        r0[r16] = r17;
+        r16 = 60;
+        r17 = "Mystic";
+        r0[r16] = r17;
+        r16 = 61;
+        r17 = "Natural";
+        r0[r16] = r17;
+        r16 = 62;
+        r17 = "Neon";
+        r0[r16] = r17;
+        r16 = 63;
+        r17 = "Night";
+        r0[r16] = r17;
+        r16 = 64;
+        r17 = "Opaque";
+        r0[r16] = r17;
+        r16 = 65;
+        r17 = "Paradise";
+        r0[r16] = r17;
+        r16 = 66;
+        r17 = "Perfect";
+        r0[r16] = r17;
+        r16 = 67;
+        r17 = "Perky";
+        r0[r16] = r17;
+        r16 = 68;
+        r17 = "Polished";
+        r0[r16] = r17;
+        r16 = 69;
+        r17 = "Powerful";
+        r0[r16] = r17;
+        r16 = 70;
+        r17 = "Rich";
+        r0[r16] = r17;
+        r16 = 71;
+        r17 = "Royal";
+        r0[r16] = r17;
+        r16 = 72;
+        r17 = "Sheer";
+        r0[r16] = r17;
+        r16 = 73;
+        r17 = "Simply";
+        r0[r16] = r17;
+        r16 = 74;
+        r17 = "Sizzling";
+        r0[r16] = r17;
+        r16 = 75;
+        r17 = "Solar";
+        r0[r16] = r17;
+        r16 = 76;
+        r17 = "Sparkling";
+        r0[r16] = r17;
+        r16 = 77;
+        r17 = "Splendid";
+        r0[r16] = r17;
+        r16 = 78;
+        r17 = "Spicy";
+        r0[r16] = r17;
+        r16 = 79;
+        r17 = "Spring";
+        r0[r16] = r17;
+        r16 = 80;
+        r17 = "Stellar";
+        r0[r16] = r17;
+        r16 = 81;
+        r17 = "Sugared";
+        r0[r16] = r17;
+        r16 = 82;
+        r17 = "Summer";
+        r0[r16] = r17;
+        r16 = 83;
+        r17 = "Sunny";
+        r0[r16] = r17;
+        r16 = 84;
+        r17 = "Super";
+        r0[r16] = r17;
+        r16 = 85;
+        r17 = "Sweet";
+        r0[r16] = r17;
+        r16 = 86;
+        r17 = "Tender";
+        r0[r16] = r17;
+        r16 = 87;
+        r17 = "Tenacious";
+        r0[r16] = r17;
+        r16 = 88;
+        r17 = "Tidal";
+        r0[r16] = r17;
+        r16 = 89;
+        r17 = "Toasted";
+        r0[r16] = r17;
+        r16 = 90;
+        r17 = "Totally";
+        r0[r16] = r17;
+        r16 = 91;
+        r17 = "Tranquil";
+        r0[r16] = r17;
+        r16 = 92;
+        r17 = "Tropical";
+        r0[r16] = r17;
+        r16 = 93;
+        r17 = "True";
+        r0[r16] = r17;
+        r16 = 94;
+        r17 = "Twilight";
+        r0[r16] = r17;
+        r16 = 95;
+        r17 = "Twinkling";
+        r0[r16] = r17;
+        r16 = 96;
+        r17 = "Ultimate";
+        r0[r16] = r17;
+        r16 = 97;
+        r17 = "Ultra";
+        r0[r16] = r17;
+        r16 = 98;
+        r17 = "Velvety";
+        r0[r16] = r17;
+        r16 = 99;
+        r17 = "Vibrant";
+        r0[r16] = r17;
+        r16 = 100;
+        r17 = "Vintage";
+        r0[r16] = r17;
+        r16 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r17 = "Virtual";
+        r0[r16] = r17;
+        r16 = 102; // 0x66 float:1.43E-43 double:5.04E-322;
+        r17 = "Warm";
+        r0[r16] = r17;
+        r16 = 103; // 0x67 float:1.44E-43 double:5.1E-322;
+        r17 = "Warmest";
+        r0[r16] = r17;
+        r16 = 104; // 0x68 float:1.46E-43 double:5.14E-322;
+        r17 = "Whipped";
+        r0[r16] = r17;
+        r16 = 105; // 0x69 float:1.47E-43 double:5.2E-322;
+        r17 = "Wild";
+        r0[r16] = r17;
+        r16 = 106; // 0x6a float:1.49E-43 double:5.24E-322;
+        r17 = "Winsome";
+        r0[r16] = r17;
+        r0 = java.util.Arrays.asList(r0);
+        r15 = 81;
+        r15 = new java.lang.String[r15];
+        r17 = "Ambrosia";
+        r15[r1] = r17;
+        r17 = "Attack";
+        r15[r2] = r17;
+        r2 = "Avalanche";
+        r15[r3] = r2;
+        r2 = "Blast";
+        r15[r4] = r2;
+        r2 = "Bliss";
+        r15[r5] = r2;
+        r2 = "Blossom";
+        r15[r6] = r2;
+        r2 = "Blush";
+        r15[r7] = r2;
+        r2 = "Burst";
+        r15[r8] = r2;
+        r2 = "Butter";
+        r15[r9] = r2;
+        r2 = "Candy";
+        r15[r10] = r2;
+        r2 = "Carnival";
+        r15[r11] = r2;
+        r2 = "Charm";
+        r15[r12] = r2;
+        r2 = "Chiffon";
+        r15[r13] = r2;
+        r2 = "Cloud";
+        r15[r14] = r2;
+        r2 = "Comet";
+        r4 = 14;
+        r15[r4] = r2;
+        r2 = 15;
+        r4 = "Delight";
+        r15[r2] = r4;
+        r2 = 16;
+        r4 = "Dream";
+        r15[r2] = r4;
+        r2 = 17;
+        r4 = "Dust";
+        r15[r2] = r4;
+        r2 = 18;
+        r4 = "Fantasy";
+        r15[r2] = r4;
+        r2 = 19;
+        r4 = "Flame";
+        r15[r2] = r4;
+        r2 = 20;
+        r4 = "Flash";
+        r15[r2] = r4;
+        r2 = 21;
+        r4 = "Fire";
+        r15[r2] = r4;
+        r2 = 22;
+        r4 = "Freeze";
+        r15[r2] = r4;
+        r2 = 23;
+        r4 = "Frost";
+        r15[r2] = r4;
+        r2 = 24;
+        r4 = "Glade";
+        r15[r2] = r4;
+        r2 = 25;
+        r4 = "Glaze";
+        r15[r2] = r4;
+        r2 = 26;
+        r4 = "Gleam";
+        r15[r2] = r4;
+        r2 = 27;
+        r4 = "Glimmer";
+        r15[r2] = r4;
+        r2 = 28;
+        r4 = "Glitter";
+        r15[r2] = r4;
+        r2 = 29;
+        r4 = "Glow";
+        r15[r2] = r4;
+        r2 = 30;
+        r4 = "Grande";
+        r15[r2] = r4;
+        r2 = 31;
+        r4 = "Haze";
+        r15[r2] = r4;
+        r2 = 32;
+        r4 = "Highlight";
+        r15[r2] = r4;
+        r2 = 33;
+        r4 = "Ice";
+        r15[r2] = r4;
+        r2 = 34;
+        r4 = "Illusion";
+        r15[r2] = r4;
+        r2 = 35;
+        r4 = "Intrigue";
+        r15[r2] = r4;
+        r2 = 36;
+        r4 = "Jewel";
+        r15[r2] = r4;
+        r2 = 37;
+        r4 = "Jubilee";
+        r15[r2] = r4;
+        r2 = 38;
+        r4 = "Kiss";
+        r15[r2] = r4;
+        r2 = 39;
+        r4 = "Lights";
+        r15[r2] = r4;
+        r2 = 40;
+        r4 = "Lollypop";
+        r15[r2] = r4;
+        r2 = 41;
+        r4 = "Love";
+        r15[r2] = r4;
+        r2 = 42;
+        r4 = "Luster";
+        r15[r2] = r4;
+        r2 = 43;
+        r4 = "Madness";
+        r15[r2] = r4;
+        r2 = 44;
+        r4 = "Matte";
+        r15[r2] = r4;
+        r2 = 45;
+        r4 = "Mirage";
+        r15[r2] = r4;
+        r2 = 46;
+        r4 = "Mist";
+        r15[r2] = r4;
+        r2 = 47;
+        r4 = "Moon";
+        r15[r2] = r4;
+        r2 = 48;
+        r4 = "Muse";
+        r15[r2] = r4;
+        r2 = 49;
+        r4 = "Myth";
+        r15[r2] = r4;
+        r2 = 50;
+        r4 = "Nectar";
+        r15[r2] = r4;
+        r2 = 51;
+        r4 = "Nova";
+        r15[r2] = r4;
+        r2 = 52;
+        r4 = "Parfait";
+        r15[r2] = r4;
+        r2 = 53;
+        r4 = "Passion";
+        r15[r2] = r4;
+        r2 = 54;
+        r4 = "Pop";
+        r15[r2] = r4;
+        r2 = 55;
+        r4 = "Rain";
+        r15[r2] = r4;
+        r2 = 56;
+        r4 = "Reflection";
+        r15[r2] = r4;
+        r2 = 57;
+        r4 = "Rhapsody";
+        r15[r2] = r4;
+        r2 = 58;
+        r4 = "Romance";
+        r15[r2] = r4;
+        r2 = 59;
+        r4 = "Satin";
+        r15[r2] = r4;
+        r2 = 60;
+        r4 = "Sensation";
+        r15[r2] = r4;
+        r2 = 61;
+        r4 = "Silk";
+        r15[r2] = r4;
+        r2 = 62;
+        r4 = "Shine";
+        r15[r2] = r4;
+        r2 = 63;
+        r4 = "Shadow";
+        r15[r2] = r4;
+        r2 = 64;
+        r4 = "Shimmer";
+        r15[r2] = r4;
+        r2 = 65;
+        r4 = "Sky";
+        r15[r2] = r4;
+        r2 = 66;
+        r4 = "Spice";
+        r15[r2] = r4;
+        r2 = 67;
+        r4 = "Star";
+        r15[r2] = r4;
+        r2 = 68;
+        r4 = "Sugar";
+        r15[r2] = r4;
+        r2 = 69;
+        r4 = "Sunrise";
+        r15[r2] = r4;
+        r2 = 70;
+        r4 = "Sunset";
+        r15[r2] = r4;
+        r2 = 71;
+        r4 = "Sun";
+        r15[r2] = r4;
+        r2 = 72;
+        r4 = "Twist";
+        r15[r2] = r4;
+        r2 = 73;
+        r4 = "Unbound";
+        r15[r2] = r4;
+        r2 = 74;
+        r4 = "Velvet";
+        r15[r2] = r4;
+        r2 = 75;
+        r4 = "Vibrant";
+        r15[r2] = r4;
+        r2 = 76;
+        r4 = "Waters";
+        r15[r2] = r4;
+        r2 = 77;
+        r4 = "Wine";
+        r15[r2] = r4;
+        r2 = 78;
+        r4 = "Wink";
+        r15[r2] = r4;
+        r2 = 79;
+        r4 = "Wonder";
+        r15[r2] = r4;
+        r2 = 80;
+        r4 = "Zone";
+        r15[r2] = r4;
+        r2 = java.util.Arrays.asList(r15);
+        r4 = new java.util.HashMap;
+        r4.<init>();
+        r5 = 9306112; // 0x8e0000 float:1.304064E-38 double:4.59783E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Berry";
+        r4.put(r5, r6);
+        r5 = 14598550; // 0xdeCLASSNAME float:2.0456926E-38 double:7.212642E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Brandy";
+        r4.put(r5, r6);
+        r5 = 8391495; // 0x800b47 float:1.1758989E-38 double:4.1459494E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cherry";
+        r4.put(r5, r6);
+        r5 = 16744272; // 0xff7var_ float:2.3463723E-38 double:8.2727696E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Coral";
+        r4.put(r5, r6);
+        r5 = 14372985; // 0xdb5079 float:2.0140842E-38 double:7.101198E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cranberry";
+        r4.put(r5, r6);
+        r5 = 14423100; // 0xdCLASSNAMEc float:2.0211068E-38 double:7.125958E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Crimson";
+        r4.put(r5, r6);
+        r5 = 14725375; // 0xe0b0ff float:2.0634645E-38 double:7.275302E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mauve";
+        r4.put(r5, r6);
+        r5 = 16761035; // 0xffc0cb float:2.3487213E-38 double:8.2810516E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Pink";
+        r4.put(r5, r6);
+        r5 = 16711680; // 0xfvar_ float:2.3418052E-38 double:8.256667E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Red";
+        r4.put(r5, r6);
+        r5 = 16711807; // 0xfvar_f float:2.341823E-38 double:8.2567297E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Rose";
+        r4.put(r5, r6);
+        r5 = 8406555; // 0x80461b float:1.1780093E-38 double:4.15339E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Russet";
+        r4.put(r5, r6);
+        r5 = 16720896; // 0xfvar_ float:2.3430966E-38 double:8.2612203E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Scarlet";
+        r4.put(r5, r6);
+        r5 = 15856113; // 0xf1f1f1 float:2.2219147E-38 double:7.8339607E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Seashell";
+        r4.put(r5, r6);
+        r5 = 16724889; // 0xfvar_ float:2.3436561E-38 double:8.263193E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Strawberry";
+        r4.put(r5, r6);
+        r5 = 16760576; // 0xffbvar_ float:2.348657E-38 double:8.280825E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Amber";
+        r4.put(r5, r6);
+        r5 = 15438707; // 0xeb9373 float:2.1634236E-38 double:7.6277347E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Apricot";
+        r4.put(r5, r6);
+        r5 = 16508850; // 0xfbe7b2 float:2.3133826E-38 double:8.1564556E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Banana";
+        r4.put(r5, r6);
+        r5 = 10601738; // 0xa1CLASSNAMEa float:1.4856199E-38 double:5.2379545E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Citrus";
+        r4.put(r5, r6);
+        r5 = 11560192; // 0xb06500 float:1.6199279E-38 double:5.7114937E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Ginger";
+        r4.put(r5, r6);
+        r5 = 16766720; // 0xffd700 float:2.3495179E-38 double:8.2838603E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Gold";
+        r4.put(r5, r6);
+        r5 = 16640272; // 0xfde910 float:2.3317988E-38 double:8.2213867E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lemon";
+        r4.put(r5, r6);
+        r5 = 16753920; // 0xffa500 float:2.3477242E-38 double:8.2775363E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Orange";
+        r4.put(r5, r6);
+        r5 = 16770484; // 0xffe5b4 float:2.3500453E-38 double:8.28572E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Peach";
+        r4.put(r5, r6);
+        r5 = 16739155; // 0xff6b53 float:2.3456552E-38 double:8.2702414E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Persimmon";
+        r4.put(r5, r6);
+        r5 = 14996514; // 0xe4d422 float:2.1014592E-38 double:7.4092624E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sunflower";
+        r4.put(r5, r6);
+        r5 = 15893760; // 0xvar_ float:2.2271901E-38 double:7.852561E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Tangerine";
+        r4.put(r5, r6);
+        r5 = 16763004; // 0xffCLASSNAMEc float:2.3489972E-38 double:8.2820244E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Topaz";
+        r4.put(r5, r6);
+        r5 = 16776960; // 0xfffvar_ float:2.3509528E-38 double:8.2889196E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Yellow";
+        r4.put(r5, r6);
+        r5 = 3688720; // 0x384910 float:5.168998E-39 double:1.82247E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Clover";
+        r4.put(r5, r6);
+        r5 = 8628829; // 0x83aa5d float:1.2091565E-38 double:4.263208E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cucumber";
+        r4.put(r5, r6);
+        r5 = 5294200; // 0x50CLASSNAME float:7.418754E-39 double:2.6156823E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Emerald";
+        r4.put(r5, r6);
+        r5 = 11907932; // 0xb5b35c float:1.6686567E-38 double:5.8833E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Olive";
+        r4.put(r5, r6);
+        r5 = 65280; // 0xfvar_ float:9.1477E-41 double:3.22526E-319;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Green";
+        r4.put(r5, r6);
+        r5 = 43115; // 0xa86b float:6.0417E-41 double:2.13016E-319;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Jade";
+        r4.put(r5, r6);
+        r5 = 2730887; // 0x29ab87 float:3.826788E-39 double:1.3492374E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Jungle";
+        r4.put(r5, r6);
+        r5 = 12582656; // 0xbffvar_ float:1.7632057E-38 double:6.216658E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lime";
+        r4.put(r5, r6);
+        r5 = 776785; // 0xbda51 float:1.088508E-39 double:3.83783E-318;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Malachite";
+        r4.put(r5, r6);
+        r5 = 10026904; // 0x98fvar_ float:1.4050685E-38 double:4.953949E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mint";
+        r4.put(r5, r6);
+        r5 = 11394989; // 0xaddfad float:1.596778E-38 double:5.6298726E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Moss";
+        r4.put(r5, r6);
+        r5 = 3234721; // 0x315ba1 float:4.53281E-39 double:1.5981645E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Azure";
+        r4.put(r5, r6);
+        r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Blue";
+        r4.put(r5, r6);
+        r5 = 18347; // 0x47ab float:2.571E-41 double:9.0646E-320;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cobalt";
+        r4.put(r5, r6);
+        r5 = 5204422; // 0x4var_c6 float:7.292949E-39 double:2.571326E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Indigo";
+        r4.put(r5, r6);
+        r5 = 96647; // 0x17987 float:1.35431E-40 double:4.775E-319;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lagoon";
+        r4.put(r5, r6);
+        r5 = 7461346; // 0x71d9e2 float:1.0455573E-38 double:3.6863947E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Aquamarine";
+        r4.put(r5, r6);
+        r5 = 1182351; // 0x120a8f float:1.656827E-39 double:5.84159E-318;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Ultramarine";
+        r4.put(r5, r6);
+        r5 = 128; // 0x80 float:1.794E-43 double:6.32E-322;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Navy";
+        r4.put(r5, r6);
+        r5 = 3101086; // 0x2var_e float:4.345547E-39 double:1.53214E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sapphire";
+        r4.put(r5, r6);
+        r5 = 7788522; // 0x76d7ea float:1.0914044E-38 double:3.848041E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sky";
+        r4.put(r5, r6);
+        r5 = 32896; // 0x8080 float:4.6097E-41 double:1.6253E-319;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Teal";
+        r4.put(r5, r6);
+        r5 = 4251856; // 0x40e0d0 float:5.958119E-39 double:2.100696E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Turquoise";
+        r4.put(r5, r6);
+        r5 = 10053324; // 0x9966cc float:1.4087707E-38 double:4.967002E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Amethyst";
+        r4.put(r5, r6);
+        r5 = 5046581; // 0x4d0135 float:7.071766E-39 double:2.4933423E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Blackberry";
+        r4.put(r5, r6);
+        r5 = 6373457; // 0x614051 float:8.931116E-39 double:3.148906E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Eggplant";
+        r4.put(r5, r6);
+        r5 = 13148872; // 0xc8a2c8 float:1.8425494E-38 double:6.496406E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lilac";
+        r4.put(r5, r6);
+        r5 = 11894492; // 0xb57edc float:1.6667733E-38 double:5.87666E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lavender";
+        r4.put(r5, r6);
+        r5 = 13421823; // 0xccccff float:1.880798E-38 double:6.6312616E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Periwinkle";
+        r4.put(r5, r6);
+        r5 = 8663417; // 0x843179 float:1.2140033E-38 double:4.2802967E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Plum";
+        r4.put(r5, r6);
+        r5 = 6684825; // 0x660099 float:9.367435E-39 double:3.3027424E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Purple";
+        r4.put(r5, r6);
+        r5 = 14204888; // 0xd8bfd8 float:1.9905288E-38 double:7.018147E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Thistle";
+        r4.put(r5, r6);
+        r5 = 14315734; // 0xda70d6 float:2.0060616E-38 double:7.0729124E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Orchid";
+        r4.put(r5, r6);
+        r5 = 2361920; // 0x240a40 float:3.309755E-39 double:1.1669435E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Violet";
+        r4.put(r5, r6);
+        r5 = 4137225; // 0x3var_ float:5.797487E-39 double:2.0440607E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Bronze";
+        r4.put(r5, r6);
+        r5 = 3604994; // 0x370202 float:5.051673E-39 double:1.7811037E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Chocolate";
+        r4.put(r5, r6);
+        r5 = 8077056; // 0x7b3var_ float:1.1318366E-38 double:3.990596E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cinnamon";
+        r4.put(r5, r6);
+        r5 = 3153694; // 0x301f1e float:4.419267E-39 double:1.558132E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cocoa";
+        r4.put(r5, r6);
+        r5 = 7365973; // 0x706555 float:1.0321927E-38 double:3.639274E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Coffee";
+        r4.put(r5, r6);
+        r5 = 7956873; // 0x796989 float:1.1149954E-38 double:3.9312176E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Rum";
+        r4.put(r5, r6);
+        r5 = 5113350; // 0x4e0606 float:7.16533E-39 double:2.5263306E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mahogany";
+        r4.put(r5, r6);
+        r5 = 7875865; // 0x782d19 float:1.1036438E-38 double:3.8911943E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mocha";
+        r4.put(r5, r6);
+        r5 = 12759680; // 0xc2b280 float:1.788012E-38 double:6.3041195E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sand";
+        r4.put(r5, r6);
+        r5 = 8924439; // 0x882d17 float:1.2505803E-38 double:4.4092587E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sienna";
+        r4.put(r5, r6);
+        r5 = 7864585; // 0x780109 float:1.1020631E-38 double:3.8856213E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Maple";
+        r4.put(r5, r6);
+        r5 = 15787660; // 0xf0e68c float:2.2123224E-38 double:7.8001404E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Khaki";
+        r4.put(r5, r6);
+        r5 = 12088115; // 0xb87333 float:1.6939057E-38 double:5.9723223E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Copper";
+        r4.put(r5, r6);
+        r5 = 12144200; // 0xb94e48 float:1.7017649E-38 double:6.000032E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Chestnut";
+        r4.put(r5, r6);
+        r5 = 15653316; // 0xeed9c4 float:2.1934968E-38 double:7.7337657E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Almond";
+        r4.put(r5, r6);
+        r5 = 16776656; // 0xfffdd0 float:2.3509102E-38 double:8.2887694E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cream";
+        r4.put(r5, r6);
+        r5 = 12186367; // 0xb9f2ff float:1.7076737E-38 double:6.0208653E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Diamond";
+        r4.put(r5, r6);
+        r5 = 11109127; // 0xa98307 float:1.5567203E-38 double:5.488638E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Honey";
+        r4.put(r5, r6);
+        r5 = 16777200; // 0xfffff0 float:2.3509865E-38 double:8.289038E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Ivory";
+        r4.put(r5, r6);
+        r5 = 15392968; // 0xeae0c8 float:2.1570142E-38 double:7.6051367E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Pearl";
+        r4.put(r5, r6);
+        r5 = 15725299; // 0xeff2f3 float:2.2035837E-38 double:7.76933E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Porcelain";
+        r4.put(r5, r6);
+        r5 = 13745832; // 0xd1bea8 float:1.9262013E-38 double:6.7913434E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Vanilla";
+        r4.put(r5, r6);
+        r5 = 16777215; // 0xffffff float:2.3509886E-38 double:8.2890456E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "White";
+        r4.put(r5, r6);
+        r5 = 8421504; // 0x808080 float:1.180104E-38 double:4.160776E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Gray";
+        r4.put(r5, r6);
+        r5 = java.lang.Integer.valueOf(r1);
+        r6 = "Black";
+        r4.put(r5, r6);
+        r5 = 15266260; // 0xe8f1d4 float:2.1392587E-38 double:7.5425346E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Chrome";
+        r4.put(r5, r6);
+        r5 = 3556687; // 0x36454f float:4.98398E-39 double:1.757237E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Charcoal";
+        r4.put(r5, r6);
+        r5 = 789277; // 0xc0b1d float:1.106013E-39 double:3.899547E-318;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Ebony";
+        r4.put(r5, r6);
+        r5 = 12632256; // 0xc0c0c0 float:1.7701561E-38 double:6.2411637E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Silver";
+        r4.put(r5, r6);
+        r5 = 16119285; // 0xf5f5f5 float:2.258793E-38 double:7.963985E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Smoke";
+        r4.put(r5, r6);
+        r5 = 2499381; // 0x262335 float:3.502379E-39 double:1.2348583E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Steel";
+        r4.put(r5, r6);
+        r5 = 5220413; // 0x4fa83d float:7.315357E-39 double:2.5792267E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Apple";
+        r4.put(r5, r6);
+        r5 = 8434628; // 0x80b3c4 float:1.1819431E-38 double:4.16726E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Glacier";
+        r4.put(r5, r6);
+        r5 = 16693933; // 0xfebaad float:2.3393183E-38 double:8.247899E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Melon";
+        r4.put(r5, r6);
+        r5 = 12929932; // 0xCLASSNAMEb8c float:1.8118694E-38 double:6.388235E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mulberry";
+        r4.put(r5, r6);
+        r5 = 11126466; // 0xa9c6c2 float:1.55915E-38 double:5.4972046E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Opal";
+        r4.put(r5, r6);
+        r5 = 5547512; // 0x54a5f8 float:7.77372E-39 double:2.740835E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Blue";
+        r4.put(r5, r6);
+        if (r18 != 0) goto L_0x0900;
+    L_0x08f7:
+        r5 = org.telegram.ui.ActionBar.Theme.getCurrentTheme();
+        r5 = r5.getAccent(r1);
+        goto L_0x0902;
+    L_0x0900:
+        r5 = r18;
+    L_0x0902:
+        if (r5 == 0) goto L_0x0909;
+    L_0x0904:
+        r5 = r5.accentColor;
+        if (r5 == 0) goto L_0x0909;
+    L_0x0908:
+        goto L_0x0913;
+    L_0x0909:
+        r5 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper();
+        r5 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r5);
+        r5 = r5[r1];
+    L_0x0913:
+        r1 = 0;
+        r6 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+        r7 = android.graphics.Color.red(r5);
+        r8 = android.graphics.Color.green(r5);
+        r5 = android.graphics.Color.blue(r5);
+        r4 = r4.entrySet();
+        r4 = r4.iterator();
+    L_0x092b:
+        r10 = r4.hasNext();
+        if (r10 == 0) goto L_0x097e;
+    L_0x0931:
+        r10 = r4.next();
+        r10 = (java.util.Map.Entry) r10;
+        r11 = r10.getKey();
+        r11 = (java.lang.Integer) r11;
+        r12 = r11.intValue();
+        r12 = android.graphics.Color.red(r12);
+        r13 = r11.intValue();
+        r13 = android.graphics.Color.green(r13);
+        r11 = r11.intValue();
+        r11 = android.graphics.Color.blue(r11);
+        r14 = r7 + r12;
+        r14 = r14 / r3;
+        r12 = r7 - r12;
+        r13 = r8 - r13;
+        r11 = r5 - r11;
+        r15 = r14 + 512;
+        r15 = r15 * r12;
+        r15 = r15 * r12;
+        r12 = r15 >> 8;
+        r15 = r13 * 4;
+        r15 = r15 * r13;
+        r12 = r12 + r15;
+        r13 = 767 - r14;
+        r13 = r13 * r11;
+        r13 = r13 * r11;
+        r11 = r13 >> 8;
+        r12 = r12 + r11;
+        if (r12 >= r6) goto L_0x092b;
+    L_0x0976:
+        r1 = r10.getValue();
+        r1 = (java.lang.String) r1;
+        r6 = r12;
+        goto L_0x092b;
+    L_0x097e:
+        r4 = org.telegram.messenger.Utilities.random;
+        r4 = r4.nextInt();
+        r4 = r4 % r3;
+        if (r4 != 0) goto L_0x09ac;
+    L_0x0987:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r3 = org.telegram.messenger.Utilities.random;
+        r4 = r0.size();
+        r3 = r3.nextInt(r4);
+        r0 = r0.get(r3);
+        r0 = (java.lang.String) r0;
+        r2.append(r0);
+        r0 = " ";
+        r2.append(r0);
+        r2.append(r1);
+        r0 = r2.toString();
+        goto L_0x09d0;
+    L_0x09ac:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r0.append(r1);
+        r1 = " ";
+        r0.append(r1);
+        r1 = org.telegram.messenger.Utilities.random;
+        r3 = r2.size();
+        r1 = r1.nextInt(r3);
+        r1 = r2.get(r1);
+        r1 = (java.lang.String) r1;
+        r0.append(r1);
+        r0 = r0.toString();
+    L_0x09d0:
+        return r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.generateThemeName(org.telegram.ui.ActionBar.Theme$ThemeAccent):java.lang.String");
     }
 }

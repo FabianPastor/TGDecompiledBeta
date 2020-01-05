@@ -161,7 +161,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private RadialProgressView avatarProgressView;
     private int bioRow;
     private int chatRow;
+    private String currentBio;
     private int dataRow;
+    private int devicesRow;
     private int emptyRow;
     private EmptyTextProgressView emptyView;
     private int extraHeight;
@@ -296,16 +298,19 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     textCell.setTextAndIcon(LocaleController.getString("ChatSettings", NUM), NUM, true);
                 } else if (i == SettingsActivity.this.helpRow) {
                     textCell.setTextAndIcon(LocaleController.getString("SettingsHelp", NUM), NUM, false);
+                } else if (i == SettingsActivity.this.devicesRow) {
+                    textCell.setTextAndIcon(LocaleController.getString("Devices", NUM), NUM, true);
                 }
             } else if (itemViewType != 4) {
                 if (itemViewType == 6) {
                     TextDetailCell textDetailCell = (TextDetailCell) viewHolder.itemView;
                     User currentUser;
+                    String str;
                     String format;
                     if (i == SettingsActivity.this.numberRow) {
                         currentUser = UserConfig.getInstance(SettingsActivity.this.currentAccount).getCurrentUser();
                         if (currentUser != null) {
-                            String str = currentUser.phone;
+                            str = currentUser.phone;
                             if (!(str == null || str.length() == 0)) {
                                 PhoneFormat instance = PhoneFormat.getInstance();
                                 StringBuilder stringBuilder = new StringBuilder();
@@ -329,12 +334,19 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         }
                         textDetailCell.setTextAndValue(format, LocaleController.getString("Username", NUM), true);
                     } else if (i == SettingsActivity.this.bioRow) {
+                        str = null;
                         String str2 = "UserBio";
                         if (SettingsActivity.this.userInfo == null || !TextUtils.isEmpty(SettingsActivity.this.userInfo.about)) {
                             textDetailCell.setTextWithEmojiAndValue(SettingsActivity.this.userInfo == null ? LocaleController.getString("Loading", NUM) : SettingsActivity.this.userInfo.about, LocaleController.getString(str2, NUM), false);
-                        } else {
-                            textDetailCell.setTextAndValue(LocaleController.getString(str2, NUM), LocaleController.getString("UserBioDetail", NUM), false);
+                            SettingsActivity settingsActivity = SettingsActivity.this;
+                            if (settingsActivity.userInfo != null) {
+                                str = SettingsActivity.this.userInfo.about;
+                            }
+                            settingsActivity.currentBio = str;
+                            return;
                         }
+                        textDetailCell.setTextAndValue(LocaleController.getString(str2, NUM), LocaleController.getString("UserBioDetail", NUM), false);
+                        SettingsActivity.this.currentBio = null;
                     }
                 }
             } else if (i == SettingsActivity.this.settingsSectionRow2) {
@@ -346,7 +358,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         public boolean isEnabled(ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
-            return adapterPosition == SettingsActivity.this.notificationRow || adapterPosition == SettingsActivity.this.numberRow || adapterPosition == SettingsActivity.this.privacyRow || adapterPosition == SettingsActivity.this.languageRow || adapterPosition == SettingsActivity.this.usernameRow || adapterPosition == SettingsActivity.this.bioRow || adapterPosition == SettingsActivity.this.versionRow || adapterPosition == SettingsActivity.this.dataRow || adapterPosition == SettingsActivity.this.chatRow || adapterPosition == SettingsActivity.this.helpRow;
+            return adapterPosition == SettingsActivity.this.notificationRow || adapterPosition == SettingsActivity.this.numberRow || adapterPosition == SettingsActivity.this.privacyRow || adapterPosition == SettingsActivity.this.languageRow || adapterPosition == SettingsActivity.this.usernameRow || adapterPosition == SettingsActivity.this.bioRow || adapterPosition == SettingsActivity.this.versionRow || adapterPosition == SettingsActivity.this.dataRow || adapterPosition == SettingsActivity.this.chatRow || adapterPosition == SettingsActivity.this.helpRow || adapterPosition == SettingsActivity.this.devicesRow;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -431,7 +443,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (i == SettingsActivity.this.settingsSectionRow) {
                 return 1;
             }
-            if (i == SettingsActivity.this.notificationRow || i == SettingsActivity.this.privacyRow || i == SettingsActivity.this.languageRow || i == SettingsActivity.this.dataRow || i == SettingsActivity.this.chatRow || i == SettingsActivity.this.helpRow) {
+            if (i == SettingsActivity.this.notificationRow || i == SettingsActivity.this.privacyRow || i == SettingsActivity.this.languageRow || i == SettingsActivity.this.dataRow || i == SettingsActivity.this.chatRow || i == SettingsActivity.this.helpRow || i == SettingsActivity.this.devicesRow) {
                 return 2;
             }
             if (i == SettingsActivity.this.versionRow) {
@@ -743,7 +755,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$35$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new DataSettingsActivity());
+            this.this$0.presentFragment(new SessionsActivity(0));
         }
 
         public /* synthetic */ void lambda$new$36$SettingsActivity$SearchAdapter() {
@@ -751,7 +763,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$37$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new CacheControlActivity());
+            this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         public /* synthetic */ void lambda$new$38$SettingsActivity$SearchAdapter() {
@@ -767,27 +779,27 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$41$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new DataUsageActivity());
+            this.this$0.presentFragment(new CacheControlActivity());
         }
 
         public /* synthetic */ void lambda$new$42$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new DataSettingsActivity());
+            this.this$0.presentFragment(new DataUsageActivity());
         }
 
         public /* synthetic */ void lambda$new$43$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new DataAutoDownloadActivity(0));
+            this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         public /* synthetic */ void lambda$new$44$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new DataAutoDownloadActivity(1));
+            this.this$0.presentFragment(new DataAutoDownloadActivity(0));
         }
 
         public /* synthetic */ void lambda$new$45$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new DataAutoDownloadActivity(2));
+            this.this$0.presentFragment(new DataAutoDownloadActivity(1));
         }
 
         public /* synthetic */ void lambda$new$46$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new DataSettingsActivity());
+            this.this$0.presentFragment(new DataAutoDownloadActivity(2));
         }
 
         public /* synthetic */ void lambda$new$47$SettingsActivity$SearchAdapter() {
@@ -823,7 +835,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$55$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new ProxyListActivity());
+            this.this$0.presentFragment(new DataSettingsActivity());
         }
 
         public /* synthetic */ void lambda$new$56$SettingsActivity$SearchAdapter() {
@@ -831,7 +843,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$57$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new ThemeActivity(0));
+            this.this$0.presentFragment(new ProxyListActivity());
         }
 
         public /* synthetic */ void lambda$new$58$SettingsActivity$SearchAdapter() {
@@ -839,23 +851,23 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$59$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new WallpapersListActivity(0));
+            this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         public /* synthetic */ void lambda$new$60$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new WallpapersListActivity(1));
-        }
-
-        public /* synthetic */ void lambda$new$61$SettingsActivity$SearchAdapter() {
             this.this$0.presentFragment(new WallpapersListActivity(0));
         }
 
+        public /* synthetic */ void lambda$new$61$SettingsActivity$SearchAdapter() {
+            this.this$0.presentFragment(new WallpapersListActivity(1));
+        }
+
         public /* synthetic */ void lambda$new$62$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new ThemeActivity(1));
+            this.this$0.presentFragment(new WallpapersListActivity(0));
         }
 
         public /* synthetic */ void lambda$new$63$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new ThemeActivity(0));
+            this.this$0.presentFragment(new ThemeActivity(1));
         }
 
         public /* synthetic */ void lambda$new$64$SettingsActivity$SearchAdapter() {
@@ -887,7 +899,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$71$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new StickersActivity(0));
+            this.this$0.presentFragment(new ThemeActivity(0));
         }
 
         public /* synthetic */ void lambda$new$72$SettingsActivity$SearchAdapter() {
@@ -895,41 +907,45 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$73$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new FeaturedStickersActivity());
+            this.this$0.presentFragment(new StickersActivity(0));
         }
 
         public /* synthetic */ void lambda$new$74$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new StickersActivity(1));
+            this.this$0.presentFragment(new FeaturedStickersActivity());
         }
 
         public /* synthetic */ void lambda$new$75$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new ArchivedStickersActivity(0));
+            this.this$0.presentFragment(new StickersActivity(1));
         }
 
         public /* synthetic */ void lambda$new$76$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new ArchivedStickersActivity(1));
+            this.this$0.presentFragment(new ArchivedStickersActivity(0));
         }
 
         public /* synthetic */ void lambda$new$77$SettingsActivity$SearchAdapter() {
+            this.this$0.presentFragment(new ArchivedStickersActivity(1));
+        }
+
+        public /* synthetic */ void lambda$new$78$SettingsActivity$SearchAdapter() {
             this.this$0.presentFragment(new LanguageSelectActivity());
         }
 
-        public /* synthetic */ void lambda$new$79$SettingsActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$80$SettingsActivity$SearchAdapter() {
             SettingsActivity settingsActivity = this.this$0;
             settingsActivity.showDialog(AlertsCreator.createSupportAlert(settingsActivity));
         }
 
-        public /* synthetic */ void lambda$new$80$SettingsActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$81$SettingsActivity$SearchAdapter() {
             Browser.openUrl(this.this$0.getParentActivity(), LocaleController.getString("TelegramFaqUrl", NUM));
         }
 
-        public /* synthetic */ void lambda$new$81$SettingsActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$82$SettingsActivity$SearchAdapter() {
             Browser.openUrl(this.this$0.getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", NUM));
         }
 
         public SearchAdapter(SettingsActivity settingsActivity, Context context) {
             this.this$0 = settingsActivity;
-            SearchResult[] searchResultArr = new SearchResult[82];
+            SearchResult[] searchResultArr = new SearchResult[83];
             searchResultArr[0] = new SearchResult(this, 500, LocaleController.getString("EditName", NUM), 0, new -$$Lambda$SettingsActivity$SearchAdapter$fYhNxPaKcCcAqdniDsRVcdOfAcw(this));
             searchResultArr[1] = new SearchResult(this, 501, LocaleController.getString("ChangePhoneNumber", NUM), 0, new -$$Lambda$SettingsActivity$SearchAdapter$AQE0PybSOWsTppwbXC4ScpJt5cU(this));
             searchResultArr[2] = new SearchResult(this, 502, LocaleController.getString("AddAnotherAccount", NUM), 0, new -$$Lambda$SettingsActivity$SearchAdapter$qf5DMONPDpbbFVQlIYoeluu6fAg(this));
@@ -957,7 +973,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             searchResultArr[22] = new SearchResult(this, 107, LocaleController.getString("GroupsAndChannels", NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$YveYfMPgJtpzBc_Aye2IlUKRL_E(this));
             searchResultArr[23] = new SearchResult(this, 108, LocaleController.getString("Passcode", NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$OE5ko5HrJRcdo_04aDjTiMIRF4o(this));
             searchResultArr[24] = new SearchResult(this, 109, LocaleController.getString("TwoStepVerification", NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$-P9hp4zriAme7mOQTdmdfHidC8Y(this));
-            searchResultArr[25] = new SearchResult(this, 110, LocaleController.getString("SessionsTitle", NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$B_YXrprYoUDKN_R4RWC-vN8dQ3Y(this));
+            searchResultArr[25] = new SearchResult(this, 110, LocaleController.getString("SessionsTitle", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$B_YXrprYoUDKN_R4RWC-vN8dQ3Y(this));
             searchResultArr[26] = new SearchResult(this, 111, LocaleController.getString("PrivacyDeleteCloudDrafts", NUM), "clearDraftsRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$5sT7VrARMFm8AXSv5eWPD8wnHec(this));
             searchResultArr[27] = new SearchResult(this, 112, LocaleController.getString("DeleteAccountIfAwayFor2", NUM), "deleteAccountRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$lQlwXu3fj_1ozEGBWi7cV-Yrauo(this));
             searchResultArr[28] = new SearchResult(this, 113, LocaleController.getString("PrivacyPaymentsClear", NUM), "paymentsClearRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$VLzl5etbBP7OOe7IzDvNV3te2pQ(this));
@@ -967,59 +983,60 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             searchResultArr[32] = new SearchResult(this, 117, LocaleController.getString("SuggestContacts", NUM), "contactsSuggestRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$gXqnmEjhglRSWqeZPzgMYOpOhsk(this));
             searchResultArr[33] = new SearchResult(this, 118, LocaleController.getString("MapPreviewProvider", NUM), "secretMapRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$lb1RmyZ9zEsc2hcDKKU7dHdJeD8(this));
             searchResultArr[34] = new SearchResult(this, 119, LocaleController.getString("SecretWebPage", NUM), "secretWebpageRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$CPyFvh3ngQ1x3gECH51yA4WVVU8(this));
+            searchResultArr[35] = new SearchResult(this, 120, LocaleController.getString("Devices", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$SR0QQ8fXitd2n2FmlZnOuv-PjCM(this));
             String str2 = "DataSettings";
-            searchResultArr[35] = new SearchResult(this, 200, LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$SR0QQ8fXitd2n2FmlZnOuv-PjCM(this));
-            searchResultArr[36] = new SearchResult(this, 201, LocaleController.getString("DataUsage", NUM), "usageSectionRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$jxZ1ug5oHHZLFprdCJ2sObOMdeY(this));
+            searchResultArr[36] = new SearchResult(this, 200, LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$jxZ1ug5oHHZLFprdCJ2sObOMdeY(this));
+            searchResultArr[37] = new SearchResult(this, 201, LocaleController.getString("DataUsage", NUM), "usageSectionRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$2a_PtgyUOPZ5daThh02W6OTXvjI(this));
             String str3 = "StorageUsage";
-            searchResultArr[37] = new SearchResult(this, 202, LocaleController.getString(str3, NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$2a_PtgyUOPZ5daThh02W6OTXvjI(this));
+            searchResultArr[38] = new SearchResult(this, 202, LocaleController.getString(str3, NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$OfGBrtqXQbffkrMJs-wPG7G0fXA(this));
             String str4 = str3;
-            searchResultArr[38] = new SearchResult(203, LocaleController.getString("KeepMedia", NUM), "keepMediaRow", LocaleController.getString(str2, NUM), LocaleController.getString(str3, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$OfGBrtqXQbffkrMJs-wPG7G0fXA(this));
-            searchResultArr[39] = new SearchResult(204, LocaleController.getString("ClearMediaCache", NUM), "cacheRow", LocaleController.getString(str2, NUM), LocaleController.getString(str4, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$d-3fa2mVqtsd9YcCWBrdaK4AvwI(this));
-            searchResultArr[40] = new SearchResult(205, LocaleController.getString("LocalDatabase", NUM), "databaseRow", LocaleController.getString(str2, NUM), LocaleController.getString(str4, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$TWYG1OVbu9uZ6lFX1vM2hYJxs7w(this));
-            searchResultArr[41] = new SearchResult(this, 206, LocaleController.getString("NetworkUsage", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$2CLVCiRkKjEbcz0jARW3ZP41JX8(this));
-            searchResultArr[42] = new SearchResult(this, 207, LocaleController.getString("AutomaticMediaDownload", NUM), "mediaDownloadSectionRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$VUKBbuzi1KBkCnnX2JlWeTm2Cac(this));
-            searchResultArr[43] = new SearchResult(this, 208, LocaleController.getString("WhenUsingMobileData", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$K3WxuNbtWdfw44GPZwu3Vih5_x4(this));
-            searchResultArr[44] = new SearchResult(this, 209, LocaleController.getString("WhenConnectedOnWiFi", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$BLHHvMFpEDhqBkzKQy4VYJV2Wzg(this));
-            searchResultArr[45] = new SearchResult(this, 210, LocaleController.getString("WhenRoaming", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$Pqx2xX3w9fZ7nlbzuimuQvpIHXo(this));
-            searchResultArr[46] = new SearchResult(this, 211, LocaleController.getString("ResetAutomaticMediaDownload", NUM), "resetDownloadRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$LMKnGgygm7Zy5y5yA0ZMoVKQ0rQ(this));
-            searchResultArr[47] = new SearchResult(this, 212, LocaleController.getString("AutoplayMedia", NUM), "autoplayHeaderRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$lrHAN36teH_lCOFJ5PXNFKTwHTM(this));
-            searchResultArr[48] = new SearchResult(this, 213, LocaleController.getString("AutoplayGIF", NUM), "autoplayGifsRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$raORBf9hVrFvO0t2rS9X8ZjwExo(this));
-            searchResultArr[49] = new SearchResult(this, 214, LocaleController.getString("AutoplayVideo", NUM), "autoplayVideoRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$ZTzEE1deo_nmR-UL_VYD8uhoHoI(this));
-            searchResultArr[50] = new SearchResult(this, 215, LocaleController.getString("Streaming", NUM), "streamSectionRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$rOx4Eve-2YVGzrlUGIGIovv9JXE(this));
-            searchResultArr[51] = new SearchResult(this, 216, LocaleController.getString("EnableStreaming", NUM), "enableStreamRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$rGwlYZXuIw_8MDI7I45SYbMs0G8(this));
-            searchResultArr[52] = new SearchResult(this, 217, LocaleController.getString("Calls", NUM), "callsSectionRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$yQdZ2pbhXfP1NJfQiJKJVPctbyk(this));
-            searchResultArr[53] = new SearchResult(this, 218, LocaleController.getString("VoipUseLessData", NUM), "useLessDataForCallsRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$B4etMl_s5sjFGhMYip4XHa1DxEY(this));
-            searchResultArr[54] = new SearchResult(this, 219, LocaleController.getString("VoipQuickReplies", NUM), "quickRepliesRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$i2kSSNMxTtfCLASSNAMERmjV3ptURjCLA(this));
-            searchResultArr[55] = new SearchResult(this, 220, LocaleController.getString("ProxySettings", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$XMZSE9GUh-0GP5dBwOjHByrjteo(this));
-            searchResultArr[56] = new SearchResult(221, LocaleController.getString("UseProxyForCalls", NUM), "callsRow", LocaleController.getString(str2, NUM), LocaleController.getString("ProxySettings", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$t63Mb0PWa1-oMCnIjcS62wWkWhI(this));
+            searchResultArr[39] = new SearchResult(203, LocaleController.getString("KeepMedia", NUM), "keepMediaRow", LocaleController.getString(str2, NUM), LocaleController.getString(str3, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$d-3fa2mVqtsd9YcCWBrdaK4AvwI(this));
+            searchResultArr[40] = new SearchResult(204, LocaleController.getString("ClearMediaCache", NUM), "cacheRow", LocaleController.getString(str2, NUM), LocaleController.getString(str4, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$TWYG1OVbu9uZ6lFX1vM2hYJxs7w(this));
+            searchResultArr[41] = new SearchResult(205, LocaleController.getString("LocalDatabase", NUM), "databaseRow", LocaleController.getString(str2, NUM), LocaleController.getString(str4, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$2CLVCiRkKjEbcz0jARW3ZP41JX8(this));
+            searchResultArr[42] = new SearchResult(this, 206, LocaleController.getString("NetworkUsage", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$VUKBbuzi1KBkCnnX2JlWeTm2Cac(this));
+            searchResultArr[43] = new SearchResult(this, 207, LocaleController.getString("AutomaticMediaDownload", NUM), "mediaDownloadSectionRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$K3WxuNbtWdfw44GPZwu3Vih5_x4(this));
+            searchResultArr[44] = new SearchResult(this, 208, LocaleController.getString("WhenUsingMobileData", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$BLHHvMFpEDhqBkzKQy4VYJV2Wzg(this));
+            searchResultArr[45] = new SearchResult(this, 209, LocaleController.getString("WhenConnectedOnWiFi", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$Pqx2xX3w9fZ7nlbzuimuQvpIHXo(this));
+            searchResultArr[46] = new SearchResult(this, 210, LocaleController.getString("WhenRoaming", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$LMKnGgygm7Zy5y5yA0ZMoVKQ0rQ(this));
+            searchResultArr[47] = new SearchResult(this, 211, LocaleController.getString("ResetAutomaticMediaDownload", NUM), "resetDownloadRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$lrHAN36teH_lCOFJ5PXNFKTwHTM(this));
+            searchResultArr[48] = new SearchResult(this, 212, LocaleController.getString("AutoplayMedia", NUM), "autoplayHeaderRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$raORBf9hVrFvO0t2rS9X8ZjwExo(this));
+            searchResultArr[49] = new SearchResult(this, 213, LocaleController.getString("AutoplayGIF", NUM), "autoplayGifsRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$ZTzEE1deo_nmR-UL_VYD8uhoHoI(this));
+            searchResultArr[50] = new SearchResult(this, 214, LocaleController.getString("AutoplayVideo", NUM), "autoplayVideoRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$rOx4Eve-2YVGzrlUGIGIovv9JXE(this));
+            searchResultArr[51] = new SearchResult(this, 215, LocaleController.getString("Streaming", NUM), "streamSectionRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$rGwlYZXuIw_8MDI7I45SYbMs0G8(this));
+            searchResultArr[52] = new SearchResult(this, 216, LocaleController.getString("EnableStreaming", NUM), "enableStreamRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$yQdZ2pbhXfP1NJfQiJKJVPctbyk(this));
+            searchResultArr[53] = new SearchResult(this, 217, LocaleController.getString("Calls", NUM), "callsSectionRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$B4etMl_s5sjFGhMYip4XHa1DxEY(this));
+            searchResultArr[54] = new SearchResult(this, 218, LocaleController.getString("VoipUseLessData", NUM), "useLessDataForCallsRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$i2kSSNMxTtfCLASSNAMERmjV3ptURjCLA(this));
+            searchResultArr[55] = new SearchResult(this, 219, LocaleController.getString("VoipQuickReplies", NUM), "quickRepliesRow", LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$XMZSE9GUh-0GP5dBwOjHByrjteo(this));
+            searchResultArr[56] = new SearchResult(this, 220, LocaleController.getString("ProxySettings", NUM), LocaleController.getString(str2, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$t63Mb0PWa1-oMCnIjcS62wWkWhI(this));
+            searchResultArr[57] = new SearchResult(221, LocaleController.getString("UseProxyForCalls", NUM), "callsRow", LocaleController.getString(str2, NUM), LocaleController.getString("ProxySettings", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$oHMz_dP6H50aHqxTbdc3E7d4Oyo(this));
             str = "ChatSettings";
-            searchResultArr[57] = new SearchResult(this, 300, LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$oHMz_dP6H50aHqxTbdc3E7d4Oyo(this));
-            searchResultArr[58] = new SearchResult(this, 301, LocaleController.getString("TextSizeHeader", NUM), "textSizeHeaderRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$PQPKVfMuNVXvznSLWUi9d_FbGD8(this));
-            searchResultArr[59] = new SearchResult(this, 302, LocaleController.getString("ChatBackground", NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$hzumI77K9pwC4a7mUUTUW31jkYs(this));
-            searchResultArr[60] = new SearchResult(303, LocaleController.getString("SetColor", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString("ChatBackground", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$Ov5OcCfPmPzmx4efoTSoB8-YMKk(this));
-            searchResultArr[61] = new SearchResult(304, LocaleController.getString("ResetChatBackgrounds", NUM), "resetRow", LocaleController.getString(str, NUM), LocaleController.getString("ChatBackground", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$mEajmgrt04XurJBLXFyM6GNHru0(this));
-            searchResultArr[62] = new SearchResult(this, 305, LocaleController.getString("AutoNightTheme", NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$vSOlOOSDVPitPhRnpx1o7rNw4zw(this));
-            searchResultArr[63] = new SearchResult(this, 306, LocaleController.getString("ColorTheme", NUM), "themeHeaderRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$46GIfyE4OhRvg3Gs4uaPMW_J3UM(this));
-            searchResultArr[64] = new SearchResult(this, 307, LocaleController.getString("ChromeCustomTabs", NUM), "customTabsRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$s0h_sbhuVis6N-TS7j6bEyh7FfQ(this));
-            searchResultArr[65] = new SearchResult(this, 308, LocaleController.getString("DirectShare", NUM), "directShareRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$5_PGzT67poE7m5IzEQLBofn8u-o(this));
-            searchResultArr[66] = new SearchResult(this, 309, LocaleController.getString("EnableAnimations", NUM), "enableAnimationsRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$djYxV0TLWfpCNMAt-hbj8er6rqo(this));
-            searchResultArr[67] = new SearchResult(this, 310, LocaleController.getString("RaiseToSpeak", NUM), "raiseToSpeakRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$NM0akNEGYlYo-ZnAPY_boq0dLjY(this));
-            searchResultArr[68] = new SearchResult(this, 311, LocaleController.getString("SendByEnter", NUM), "sendByEnterRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$WOvivT9gT9S9mbWbIsPI-YD8I38(this));
-            searchResultArr[69] = new SearchResult(this, 312, LocaleController.getString("SaveToGallerySettings", NUM), "saveToGalleryRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$LE1pN2xBggeckg4BXNGrk8dAfCA(this));
-            searchResultArr[70] = new SearchResult(this, 312, LocaleController.getString("DistanceUnits", NUM), "distanceRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$guZCAugp-k8fJ3Gd84aSwGDA7co(this));
+            searchResultArr[58] = new SearchResult(this, 300, LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$PQPKVfMuNVXvznSLWUi9d_FbGD8(this));
+            searchResultArr[59] = new SearchResult(this, 301, LocaleController.getString("TextSizeHeader", NUM), "textSizeHeaderRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$hzumI77K9pwC4a7mUUTUW31jkYs(this));
+            searchResultArr[60] = new SearchResult(this, 302, LocaleController.getString("ChatBackground", NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$Ov5OcCfPmPzmx4efoTSoB8-YMKk(this));
+            searchResultArr[61] = new SearchResult(303, LocaleController.getString("SetColor", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString("ChatBackground", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$mEajmgrt04XurJBLXFyM6GNHru0(this));
+            searchResultArr[62] = new SearchResult(304, LocaleController.getString("ResetChatBackgrounds", NUM), "resetRow", LocaleController.getString(str, NUM), LocaleController.getString("ChatBackground", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$vSOlOOSDVPitPhRnpx1o7rNw4zw(this));
+            searchResultArr[63] = new SearchResult(this, 305, LocaleController.getString("AutoNightTheme", NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$46GIfyE4OhRvg3Gs4uaPMW_J3UM(this));
+            searchResultArr[64] = new SearchResult(this, 306, LocaleController.getString("ColorTheme", NUM), "themeHeaderRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$s0h_sbhuVis6N-TS7j6bEyh7FfQ(this));
+            searchResultArr[65] = new SearchResult(this, 307, LocaleController.getString("ChromeCustomTabs", NUM), "customTabsRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$5_PGzT67poE7m5IzEQLBofn8u-o(this));
+            searchResultArr[66] = new SearchResult(this, 308, LocaleController.getString("DirectShare", NUM), "directShareRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$djYxV0TLWfpCNMAt-hbj8er6rqo(this));
+            searchResultArr[67] = new SearchResult(this, 309, LocaleController.getString("EnableAnimations", NUM), "enableAnimationsRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$NM0akNEGYlYo-ZnAPY_boq0dLjY(this));
+            searchResultArr[68] = new SearchResult(this, 310, LocaleController.getString("RaiseToSpeak", NUM), "raiseToSpeakRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$WOvivT9gT9S9mbWbIsPI-YD8I38(this));
+            searchResultArr[69] = new SearchResult(this, 311, LocaleController.getString("SendByEnter", NUM), "sendByEnterRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$LE1pN2xBggeckg4BXNGrk8dAfCA(this));
+            searchResultArr[70] = new SearchResult(this, 312, LocaleController.getString("SaveToGallerySettings", NUM), "saveToGalleryRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$guZCAugp-k8fJ3Gd84aSwGDA7co(this));
+            searchResultArr[71] = new SearchResult(this, 312, LocaleController.getString("DistanceUnits", NUM), "distanceRow", LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$a2LSsVzKR8HJrNBIEh5xSXFk_kY(this));
             String str5 = "StickersAndMasks";
-            searchResultArr[71] = new SearchResult(this, 313, LocaleController.getString(str5, NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$a2LSsVzKR8HJrNBIEh5xSXFk_kY(this));
-            searchResultArr[72] = new SearchResult(314, LocaleController.getString("SuggestStickers", NUM), "suggestRow", LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$vTZmp1Lfwd9Jvvar_tEr9C2amaYY(this));
-            searchResultArr[73] = new SearchResult(315, LocaleController.getString("FeaturedStickers", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$O-sT8FF_ujolqkcXgAFR2EWMCOQ(this));
-            searchResultArr[74] = new SearchResult(316, LocaleController.getString("Masks", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$dg765ZjLDUr492FSgTOKjOaKweE(this));
-            searchResultArr[75] = new SearchResult(317, LocaleController.getString("ArchivedStickers", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$h743V_ShaSJwbDnqAuxpCdWSljA(this));
-            searchResultArr[76] = new SearchResult(317, LocaleController.getString("ArchivedMasks", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$6umUiixsrbn0nLlRd8bqshWjNeU(this));
-            searchResultArr[77] = new SearchResult(this, 400, LocaleController.getString("Language", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$8sCZE9SRgbZa275PGe2lLCWITbw(this));
+            searchResultArr[72] = new SearchResult(this, 313, LocaleController.getString(str5, NUM), LocaleController.getString(str, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$vTZmp1Lfwd9Jvvar_tEr9C2amaYY(this));
+            searchResultArr[73] = new SearchResult(314, LocaleController.getString("SuggestStickers", NUM), "suggestRow", LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$O-sT8FF_ujolqkcXgAFR2EWMCOQ(this));
+            searchResultArr[74] = new SearchResult(315, LocaleController.getString("FeaturedStickers", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$dg765ZjLDUr492FSgTOKjOaKweE(this));
+            searchResultArr[75] = new SearchResult(316, LocaleController.getString("Masks", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$h743V_ShaSJwbDnqAuxpCdWSljA(this));
+            searchResultArr[76] = new SearchResult(317, LocaleController.getString("ArchivedStickers", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$6umUiixsrbn0nLlRd8bqshWjNeU(this));
+            searchResultArr[77] = new SearchResult(317, LocaleController.getString("ArchivedMasks", NUM), null, LocaleController.getString(str, NUM), LocaleController.getString(str5, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$8sCZE9SRgbZa275PGe2lLCWITbw(this));
+            searchResultArr[78] = new SearchResult(this, 400, LocaleController.getString("Language", NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$UKpWGlt--8lNdI9VfZj9-2dBm0k(this));
             String str6 = "SettingsHelp";
-            searchResultArr[78] = new SearchResult(this, 401, LocaleController.getString(str6, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$7xFoRzDCPm6wMZqZveW9cBPBiAg(this.this$0));
-            searchResultArr[79] = new SearchResult(this, 402, LocaleController.getString("AskAQuestion", NUM), LocaleController.getString(str6, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$dYFPJFhuxdXwNU2N5QyWTOm1hz8(this));
-            searchResultArr[80] = new SearchResult(this, 403, LocaleController.getString("TelegramFAQ", NUM), LocaleController.getString(str6, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$98mN5UJETCB-Tj6G-z-MUvkMLLk(this));
-            searchResultArr[81] = new SearchResult(this, 404, LocaleController.getString("PrivacyPolicy", NUM), LocaleController.getString(str6, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$T6LmnZuXx3-RYB-6IOpAraah3ds(this));
+            searchResultArr[79] = new SearchResult(this, 401, LocaleController.getString(str6, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$JOnPaeK_uIy91_LPgGyi-g-FEkA(this.this$0));
+            searchResultArr[80] = new SearchResult(this, 402, LocaleController.getString("AskAQuestion", NUM), LocaleController.getString(str6, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$98mN5UJETCB-Tj6G-z-MUvkMLLk(this));
+            searchResultArr[81] = new SearchResult(this, 403, LocaleController.getString("TelegramFAQ", NUM), LocaleController.getString(str6, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$T6LmnZuXx3-RYB-6IOpAraah3ds(this));
+            searchResultArr[82] = new SearchResult(this, 404, LocaleController.getString("PrivacyPolicy", NUM), LocaleController.getString(str6, NUM), NUM, new -$$Lambda$SettingsActivity$SearchAdapter$yKnsP8v67jJI-d3lKhy1KZ_BUQk(this));
             this.searchArray = searchResultArr;
             this.mContext = context;
             HashMap hashMap = new HashMap();
@@ -1066,10 +1083,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             }
-            Collections.sort(this.recentSearches, new -$$Lambda$SettingsActivity$SearchAdapter$DcfIlOzNUPdRnevmEqR_T3RCqYQ(this));
+            Collections.sort(this.recentSearches, new -$$Lambda$SettingsActivity$SearchAdapter$3-Nv6NiCpuj20HjBRWWZ-bVzYfE(this));
         }
 
-        public /* synthetic */ int lambda$new$82$SettingsActivity$SearchAdapter(Object obj, Object obj2) {
+        public /* synthetic */ int lambda$new$83$SettingsActivity$SearchAdapter(Object obj, Object obj2) {
             int num = getNum(obj);
             int num2 = getNum(obj2);
             if (num < num2) {
@@ -1084,11 +1101,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 TL_messages_getWebPage tL_messages_getWebPage = new TL_messages_getWebPage();
                 tL_messages_getWebPage.url = LocaleController.getString("TelegramFaqUrl", NUM);
                 tL_messages_getWebPage.hash = 0;
-                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_messages_getWebPage, new -$$Lambda$SettingsActivity$SearchAdapter$ZVDO-mqLSgTYgHN4L7sJ3RXXXj0(this));
+                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_messages_getWebPage, new -$$Lambda$SettingsActivity$SearchAdapter$a3oWFPx2z1Xg1Prynvar_WdOjIQ(this));
             }
         }
 
-        public /* synthetic */ void lambda$loadFaqWebPage$83$SettingsActivity$SearchAdapter(TLObject tLObject, TL_error tL_error) {
+        public /* synthetic */ void lambda$loadFaqWebPage$84$SettingsActivity$SearchAdapter(TLObject tLObject, TL_error tL_error) {
             if (tLObject instanceof WebPage) {
                 WebPage webPage = (WebPage) tLObject;
                 Page page = webPage.cached_page;
@@ -1292,12 +1309,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 return;
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            -$$Lambda$SettingsActivity$SearchAdapter$gFQTg_CI3E60WOkp9EeNPvq-3p0 -__lambda_settingsactivity_searchadapter_gfqtg_ci3e60wokp9eenpvq-3p0 = new -$$Lambda$SettingsActivity$SearchAdapter$gFQTg_CI3E60WOkp9EeNPvq-3p0(this, str);
-            this.searchRunnable = -__lambda_settingsactivity_searchadapter_gfqtg_ci3e60wokp9eenpvq-3p0;
-            dispatchQueue.postRunnable(-__lambda_settingsactivity_searchadapter_gfqtg_ci3e60wokp9eenpvq-3p0, 300);
+            -$$Lambda$SettingsActivity$SearchAdapter$LgPWmspn2qmpxhrX8aw21-e3-qk -__lambda_settingsactivity_searchadapter_lgpwmspn2qmpxhrx8aw21-e3-qk = new -$$Lambda$SettingsActivity$SearchAdapter$LgPWmspn2qmpxhrX8aw21-e3-qk(this, str);
+            this.searchRunnable = -__lambda_settingsactivity_searchadapter_lgpwmspn2qmpxhrx8aw21-e3-qk;
+            dispatchQueue.postRunnable(-__lambda_settingsactivity_searchadapter_lgpwmspn2qmpxhrx8aw21-e3-qk, 300);
         }
 
-        public /* synthetic */ void lambda$search$85$SettingsActivity$SearchAdapter(String str) {
+        public /* synthetic */ void lambda$search$86$SettingsActivity$SearchAdapter(String str) {
             SpannableStringBuilder spannableStringBuilder;
             String str2;
             int i;
@@ -1442,10 +1459,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     i2 = i2;
                 }
             }
-            AndroidUtilities.runOnUIThread(new -$$Lambda$SettingsActivity$SearchAdapter$cA51I_ySr7jMzJzNEVZCd6ugB6Y(this, str, arrayList, arrayList2, arrayList3));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$SettingsActivity$SearchAdapter$Qgy0kqOPf_AVF_2_iJo66fzSqoo(this, str, arrayList, arrayList2, arrayList3));
         }
 
-        public /* synthetic */ void lambda$null$84$SettingsActivity$SearchAdapter(String str, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
+        public /* synthetic */ void lambda$null$85$SettingsActivity$SearchAdapter(String str, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
             if (str.equals(this.lastSearchString)) {
                 if (!this.searchWas) {
                     this.this$0.emptyView.setTopImage(NUM);
@@ -1512,6 +1529,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.chatRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.devicesRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.languageRow = i;
@@ -1748,7 +1768,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (i == 6) {
                     MessagesStorage.getInstance(SettingsActivity.this.currentAccount).clearSentMedia();
                     SharedConfig.setNoSoundHintShowed(false);
-                    MessagesController.getGlobalMainSettings().edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").commit();
+                    MessagesController.getGlobalMainSettings().edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("themehint").commit();
+                    SharedConfig.textSelectionHintShows = 0;
                 } else if (i == 7) {
                     VoIPHelper.showCallDebugSettings(SettingsActivity.this.getParentActivity());
                 } else if (i == 8) {
@@ -1780,6 +1801,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.emptyView.setTextSize(18);
         this.emptyView.setVisibility(8);
         this.emptyView.setShowAtCenter(true);
+        this.emptyView.setPadding(0, AndroidUtilities.dp(50.0f), 0, 0);
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.topView = new TopView(context2);
         this.topView.setBackgroundColor(Theme.getColor(str2));
@@ -1900,6 +1922,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             presentFragment(new DataSettingsActivity());
         } else if (i == this.chatRow) {
             presentFragment(new ThemeActivity(0));
+        } else if (i == this.devicesRow) {
+            presentFragment(new SessionsActivity(0));
         } else if (i == this.helpRow) {
             showHelpAlert();
         } else if (i == this.languageRow) {
@@ -2306,11 +2330,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 updateUserData();
             }
         } else if (i == NotificationCenter.userInfoDidLoad) {
-            if (((Integer) objArr[0]).intValue() == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                ListAdapter listAdapter = this.listAdapter;
-                if (listAdapter != null) {
-                    this.userInfo = (UserFull) objArr[1];
-                    listAdapter.notifyItemChanged(this.bioRow);
+            if (((Integer) objArr[0]).intValue() == UserConfig.getInstance(this.currentAccount).getClientUserId() && this.listAdapter != null) {
+                this.userInfo = (UserFull) objArr[1];
+                if (!TextUtils.equals(this.userInfo.about, this.currentBio)) {
+                    this.listAdapter.notifyItemChanged(this.bioRow);
                 }
             }
         } else if (i == NotificationCenter.emojiDidLoad) {
@@ -2343,7 +2366,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             this.openAnimationInProgress = true;
         }
         if (z) {
-            NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaCountsDidLoad});
+            NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaCountsDidLoad, NotificationCenter.userInfoDidLoad});
             NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
         }
     }

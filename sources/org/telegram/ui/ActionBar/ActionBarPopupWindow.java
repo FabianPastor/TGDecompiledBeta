@@ -49,6 +49,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         private int backAlpha = 255;
         private float backScaleX = 1.0f;
         private float backScaleY = 1.0f;
+        private int backgroundColor = -1;
         protected Drawable backgroundDrawable = getResources().getDrawable(NUM).mutate();
         private ArrayList<AnimatorSet> itemAnimators;
         private int lastStartedChild = 0;
@@ -60,7 +61,7 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         public ActionBarPopupWindowLayout(Context context) {
             super(context);
-            this.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuBackground"), Mode.MULTIPLY));
+            setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuBackground"));
             setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             setWillNotDraw(false);
             try {
@@ -86,6 +87,18 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         public void setDispatchKeyEventListener(OnDispatchKeyEventListener onDispatchKeyEventListener) {
             this.mOnDispatchKeyEventListener = onDispatchKeyEventListener;
+        }
+
+        public int getBackgroundColor() {
+            return this.backgroundColor;
+        }
+
+        public void setBackgroundColor(int i) {
+            if (this.backgroundColor != i) {
+                Drawable drawable = this.backgroundDrawable;
+                this.backgroundColor = i;
+                drawable.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+            }
         }
 
         @Keep
@@ -141,6 +154,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
 
         public void setBackgroundDrawable(Drawable drawable) {
+            this.backgroundColor = -1;
             this.backgroundDrawable = drawable;
         }
 
@@ -203,9 +217,9 @@ public class ActionBarPopupWindow extends PopupWindow {
             Drawable drawable = this.backgroundDrawable;
             if (drawable != null) {
                 drawable.setAlpha(this.backAlpha);
-                getMeasuredHeight();
                 if (this.showedFromBotton) {
-                    this.backgroundDrawable.setBounds(0, (int) (((float) getMeasuredHeight()) * (1.0f - this.backScaleY)), (int) (((float) getMeasuredWidth()) * this.backScaleX), getMeasuredHeight());
+                    int measuredHeight = getMeasuredHeight();
+                    this.backgroundDrawable.setBounds(0, (int) (((float) measuredHeight) * (1.0f - this.backScaleY)), (int) (((float) getMeasuredWidth()) * this.backScaleX), measuredHeight);
                 } else {
                     this.backgroundDrawable.setBounds(0, 0, (int) (((float) getMeasuredWidth()) * this.backScaleX), (int) (((float) getMeasuredHeight()) * this.backScaleY));
                 }

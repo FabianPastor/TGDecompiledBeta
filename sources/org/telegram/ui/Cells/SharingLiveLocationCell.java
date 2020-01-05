@@ -55,7 +55,7 @@ public class SharingLiveLocationCell extends FrameLayout {
     public SharingLiveLocationCell(Context context, boolean z, int i) {
         super(context);
         this.avatarImageView = new BackupImageView(context);
-        this.avatarImageView.setRoundRadius(AndroidUtilities.dp(20.0f));
+        this.avatarImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
         this.avatarDrawable = new AvatarDrawable();
         this.nameTextView = new SimpleTextView(context);
         this.nameTextView.setTextSize(16);
@@ -65,7 +65,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         SimpleTextView simpleTextView;
         if (z) {
-            addView(this.avatarImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
+            addView(this.avatarImageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 12.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
             addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? (float) i : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : (float) i, 0.0f));
             this.distanceTextView = new SimpleTextView(context);
             this.distanceTextView.setTextSize(14);
@@ -77,7 +77,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             }
             addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? (float) i : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : (float) i, 0.0f));
         } else {
-            addView(this.avatarImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 7.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
+            addView(this.avatarImageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 6.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
             simpleTextView = this.nameTextView;
             if (!LocaleController.isRTL) {
                 i2 = 3;
@@ -173,8 +173,8 @@ public class SharingLiveLocationCell extends FrameLayout {
             Drawable drawable = getResources().getDrawable(NUM);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLocationIcon"), Mode.MULTIPLY));
             int color = Theme.getColor("location_placeLocationBackground");
-            CombinedDrawable combinedDrawable = new CombinedDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), color, color), drawable);
-            combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(42.0f), color, color), drawable);
+            combinedDrawable.setCustomSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
             combinedDrawable.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
             this.avatarImageView.setImageDrawable(combinedDrawable);
         }
@@ -230,6 +230,8 @@ public class SharingLiveLocationCell extends FrameLayout {
 
     public void setDialog(SharingLocationInfo sharingLocationInfo) {
         this.currentInfo = sharingLocationInfo;
+        this.currentAccount = sharingLocationInfo.account;
+        this.avatarImageView.getImageReceiver().setCurrentAccount(this.currentAccount);
         int i = (int) sharingLocationInfo.did;
         String str = "50_50";
         Object user;

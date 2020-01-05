@@ -19,6 +19,8 @@
     <string name="common_signin_button_text">সাইন-ইন করুন</string>
     <string name="common_signin_button_text_long">Google এর মাধ্যমে সাইন-ইন করুন</string>
     <string name="fcm_fallback_notification_channel_label">বিবিধ</string>
+    <string name="google_assistant_verification_channel_name">অ্যাসিস্ট্যান্ট যাচাইকারী</string>
+    <string name="google_assistant_verification_notification_title">Google অ্যাসিস্ট্যান্ট মেসেজ পাঠাচ্ছে</string>
     <string name="status_bar_notification_info_overflow">৯৯৯+</string>
     <string name="wallet_buy_button_place_holder">Google ব্যবহার করে কিনুন</string>
 </resources>

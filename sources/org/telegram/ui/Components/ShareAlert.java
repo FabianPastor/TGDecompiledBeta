@@ -19,6 +19,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.LongSparseArray;
 import android.util.Property;
@@ -81,7 +82,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private AnimatorSet animatorSet;
     private EditTextEmoji commentTextView;
     private boolean copyLinkOnEnd;
-    private int currentAccount = UserConfig.selectedAccount;
     private ShareAlertDelegate delegate;
     private TL_exportedMessageLink exportedMessageLink;
     private FrameLayout frameLayout;
@@ -1000,7 +1000,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                     Utilities.searchQueue.cancelRunnable(this.searchRunnable);
                     this.searchRunnable = null;
                 }
-                if (str == null || str.length() == 0) {
+                if (TextUtils.isEmpty(str)) {
                     this.searchResult.clear();
                     ShareAlert shareAlert = ShareAlert.this;
                     shareAlert.topBeforeSwitch = shareAlert.getCurrentTop();
@@ -1688,9 +1688,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.writeButtonContainer.setAlpha(0.0f);
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
         this.containerView.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 6.0f, 10.0f));
-        this.writeButtonContainer.setOnClickListener(new -$$Lambda$ShareAlert$7m2JWNxMvSKoRyVHsLYwsIAMWC0(this));
         ImageView imageView = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor("dialogFloatingButtonPressed"));
+        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
         if (VERSION.SDK_INT < 21) {
             Drawable mutate = context.getResources().getDrawable(NUM).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
@@ -1712,6 +1711,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             });
         }
         this.writeButtonContainer.addView(imageView, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 51, VERSION.SDK_INT >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
+        imageView.setOnClickListener(new -$$Lambda$ShareAlert$7m2JWNxMvSKoRyVHsLYwsIAMWC0(this));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedCountView = new View(context2) {

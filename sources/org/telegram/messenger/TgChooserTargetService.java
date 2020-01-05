@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.LaunchActivity;
 
 @TargetApi(23)
@@ -42,14 +43,14 @@ public class TgChooserTargetService extends ChooserTargetService {
         return arrayList;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x019c  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0180  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0180  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x019c  */
-    public /* synthetic */ void lambda$onGetChooserTargets$0$TgChooserTargetService(int r17, java.util.List r18, android.content.ComponentName r19, java.util.concurrent.CountDownLatch r20) {
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0199  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0199  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01b5  */
+    public /* synthetic */ void lambda$onGetChooserTargets$0$TgChooserTargetService(int r18, java.util.List r19, android.content.ComponentName r20, java.util.concurrent.CountDownLatch r21) {
         /*
-        r16 = this;
-        r1 = r16;
+        r17 = this;
+        r1 = r17;
         r2 = new java.util.ArrayList;
         r2.<init>();
         r3 = new java.util.ArrayList;
@@ -60,13 +61,13 @@ public class TgChooserTargetService extends ChooserTargetService {
         r6 = 0;
         r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x00bd }
         r0.<init>();	 Catch:{ Exception -> 0x00bd }
-        r7 = org.telegram.messenger.UserConfig.getInstance(r17);	 Catch:{ Exception -> 0x00bd }
+        r7 = org.telegram.messenger.UserConfig.getInstance(r18);	 Catch:{ Exception -> 0x00bd }
         r7 = r7.getClientUserId();	 Catch:{ Exception -> 0x00bd }
         r7 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x00bd }
         r0.add(r7);	 Catch:{ Exception -> 0x00bd }
         r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x00bd }
         r7.<init>();	 Catch:{ Exception -> 0x00bd }
-        r8 = org.telegram.messenger.MessagesStorage.getInstance(r17);	 Catch:{ Exception -> 0x00bd }
+        r8 = org.telegram.messenger.MessagesStorage.getInstance(r18);	 Catch:{ Exception -> 0x00bd }
         r8 = r8.getDatabase();	 Catch:{ Exception -> 0x00bd }
         r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x00bd }
         r10 = "SELECT did FROM dialogs ORDER BY date DESC LIMIT %d,%d";
@@ -117,14 +118,14 @@ public class TgChooserTargetService extends ChooserTargetService {
         r9 = ",";
         if (r8 != 0) goto L_0x00ab;
     L_0x00a0:
-        r8 = org.telegram.messenger.MessagesStorage.getInstance(r17);	 Catch:{ Exception -> 0x00bd }
+        r8 = org.telegram.messenger.MessagesStorage.getInstance(r18);	 Catch:{ Exception -> 0x00bd }
         r7 = android.text.TextUtils.join(r9, r7);	 Catch:{ Exception -> 0x00bd }
         r8.getChatsInternal(r7, r3);	 Catch:{ Exception -> 0x00bd }
     L_0x00ab:
         r7 = r0.isEmpty();	 Catch:{ Exception -> 0x00bd }
         if (r7 != 0) goto L_0x00c1;
     L_0x00b1:
-        r7 = org.telegram.messenger.MessagesStorage.getInstance(r17);	 Catch:{ Exception -> 0x00bd }
+        r7 = org.telegram.messenger.MessagesStorage.getInstance(r18);	 Catch:{ Exception -> 0x00bd }
         r0 = android.text.TextUtils.join(r9, r0);	 Catch:{ Exception -> 0x00bd }
         r7.getUsersInternal(r0, r4);	 Catch:{ Exception -> 0x00bd }
         goto L_0x00c1;
@@ -146,7 +147,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         r0 = 0;
     L_0x00e1:
         r7 = r2.size();
-        if (r0 >= r7) goto L_0x01a2;
+        if (r0 >= r7) goto L_0x01bb;
     L_0x00e7:
         r13 = new android.os.Bundle;
         r13.<init>();
@@ -156,114 +157,125 @@ public class TgChooserTargetService extends ChooserTargetService {
         r8 = "hash";
         r9 = "dialogId";
         r10 = 0;
-        if (r7 <= 0) goto L_0x013b;
+        if (r7 <= 0) goto L_0x0154;
     L_0x00fd:
         r11 = 0;
     L_0x00fe:
         r12 = r4.size();
-        if (r11 >= r12) goto L_0x0138;
+        if (r11 >= r12) goto L_0x0151;
     L_0x0104:
         r12 = r4.get(r11);
         r12 = (org.telegram.tgnet.TLRPC.User) r12;
         r14 = r12.id;
-        if (r14 != r7) goto L_0x0135;
+        if (r14 != r7) goto L_0x014e;
     L_0x010e:
         r11 = r12.bot;
-        if (r11 != 0) goto L_0x0138;
+        if (r11 != 0) goto L_0x0151;
     L_0x0112:
         r14 = (long) r7;
         r13.putLong(r9, r14);
         r14 = org.telegram.messenger.SharedConfig.directShareHash;
         r13.putLong(r8, r14);
-        r7 = r12.photo;
-        if (r7 == 0) goto L_0x012c;
-    L_0x011f:
-        r7 = r7.photo_small;
-        if (r7 == 0) goto L_0x012c;
-    L_0x0123:
-        r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r5);
-        r7 = r1.createRoundBitmap(r7);
+        r7 = org.telegram.messenger.UserObject.isUserSelf(r12);
+        if (r7 == 0) goto L_0x0134;
+    L_0x0121:
+        r7 = NUM; // 0x7f0e09a7 float:1.888005E38 double:1.0531633775E-314;
+        r8 = "SavedMessages";
+        r10 = org.telegram.messenger.LocaleController.getString(r8, r7);
+        r7 = r17.createSavedMessagesIcon();
+        r16 = r10;
         r10 = r7;
-    L_0x012c:
+        r7 = r16;
+        goto L_0x0152;
+    L_0x0134:
         r7 = r12.first_name;
         r8 = r12.last_name;
         r7 = org.telegram.messenger.ContactsController.formatName(r7, r8);
-        goto L_0x0139;
-    L_0x0135:
+        r8 = r12.photo;
+        if (r8 == 0) goto L_0x0152;
+    L_0x0140:
+        r8 = r8.photo_small;
+        if (r8 == 0) goto L_0x0152;
+    L_0x0144:
+        r8 = org.telegram.messenger.FileLoader.getPathToAttach(r8, r5);
+        r8 = r1.createRoundBitmap(r8);
+        r10 = r8;
+        goto L_0x0152;
+    L_0x014e:
         r11 = r11 + 1;
         goto L_0x00fe;
-    L_0x0138:
+    L_0x0151:
         r7 = r10;
-    L_0x0139:
+    L_0x0152:
         r9 = r7;
-        goto L_0x017e;
-    L_0x013b:
+        goto L_0x0197;
+    L_0x0154:
         r11 = 0;
-    L_0x013c:
+    L_0x0155:
         r12 = r3.size();
-        if (r11 >= r12) goto L_0x017d;
-    L_0x0142:
+        if (r11 >= r12) goto L_0x0196;
+    L_0x015b:
         r12 = r3.get(r11);
         r12 = (org.telegram.tgnet.TLRPC.Chat) r12;
         r14 = r12.id;
         r15 = -r7;
-        if (r14 != r15) goto L_0x017a;
-    L_0x014d:
+        if (r14 != r15) goto L_0x0193;
+    L_0x0166:
         r11 = org.telegram.messenger.ChatObject.isNotInChat(r12);
-        if (r11 != 0) goto L_0x017d;
-    L_0x0153:
+        if (r11 != 0) goto L_0x0196;
+    L_0x016c:
         r11 = org.telegram.messenger.ChatObject.isChannel(r12);
-        if (r11 == 0) goto L_0x015d;
-    L_0x0159:
+        if (r11 == 0) goto L_0x0176;
+    L_0x0172:
         r11 = r12.megagroup;
-        if (r11 == 0) goto L_0x017d;
-    L_0x015d:
+        if (r11 == 0) goto L_0x0196;
+    L_0x0176:
         r14 = (long) r7;
         r13.putLong(r9, r14);
         r14 = org.telegram.messenger.SharedConfig.directShareHash;
         r13.putLong(r8, r14);
         r7 = r12.photo;
-        if (r7 == 0) goto L_0x0177;
-    L_0x016a:
+        if (r7 == 0) goto L_0x0190;
+    L_0x0183:
         r7 = r7.photo_small;
-        if (r7 == 0) goto L_0x0177;
-    L_0x016e:
+        if (r7 == 0) goto L_0x0190;
+    L_0x0187:
         r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r5);
         r7 = r1.createRoundBitmap(r7);
         r10 = r7;
-    L_0x0177:
+    L_0x0190:
         r7 = r12.title;
-        goto L_0x0139;
-    L_0x017a:
+        goto L_0x0152;
+    L_0x0193:
         r11 = r11 + 1;
-        goto L_0x013c;
-    L_0x017d:
+        goto L_0x0155;
+    L_0x0196:
         r9 = r10;
-    L_0x017e:
-        if (r9 == 0) goto L_0x019c;
-    L_0x0180:
-        if (r10 != 0) goto L_0x018c;
-    L_0x0182:
+    L_0x0197:
+        if (r9 == 0) goto L_0x01b5;
+    L_0x0199:
+        if (r10 != 0) goto L_0x01a5;
+    L_0x019b:
         r7 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r8 = NUM; // 0x7var_ float:1.7945332E38 double:1.052935687E-314;
+        r8 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
         r7 = android.graphics.drawable.Icon.createWithResource(r7, r8);
         r10 = r7;
-    L_0x018c:
+    L_0x01a5:
         r7 = new android.service.chooser.ChooserTarget;
         r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r8 = r7;
-        r12 = r19;
+        r12 = r20;
         r8.<init>(r9, r10, r11, r12, r13);
-        r8 = r18;
+        r8 = r19;
         r8.add(r7);
-        goto L_0x019e;
-    L_0x019c:
-        r8 = r18;
-    L_0x019e:
+        goto L_0x01b7;
+    L_0x01b5:
+        r8 = r19;
+    L_0x01b7:
         r0 = r0 + 1;
         goto L_0x00e1;
-    L_0x01a2:
-        r20.countDown();
+    L_0x01bb:
+        r21.countDown();
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.TgChooserTargetService.lambda$onGetChooserTargets$0$TgChooserTargetService(int, java.util.List, android.content.ComponentName, java.util.concurrent.CountDownLatch):void");
@@ -290,5 +302,19 @@ public class TgChooserTargetService extends ChooserTargetService {
             FileLog.e(th);
         }
         return null;
+    }
+
+    private Icon createSavedMessagesIcon() {
+        try {
+            Bitmap createBitmap = Bitmap.createBitmap(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f), Config.ARGB_8888);
+            AvatarDrawable avatarDrawable = new AvatarDrawable();
+            avatarDrawable.setAvatarType(1);
+            avatarDrawable.setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
+            avatarDrawable.draw(new Canvas(createBitmap));
+            return Icon.createWithBitmap(createBitmap);
+        } catch (Throwable th) {
+            FileLog.e(th);
+            return null;
+        }
     }
 }

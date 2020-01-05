@@ -78,16 +78,16 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private AnimatorSet animatorSet;
     private ArrayList<AudioEntry> audioEntries = new ArrayList();
     private ChatActivity chatActivity;
-    protected EditTextEmoji commentTextView;
+    private EditTextEmoji commentTextView;
     private AudioSelectActivityDelegate delegate;
     private ImageView emptyImageView;
     private TextView emptySubtitleTextView;
     private TextView emptyTitleTextView;
     private LinearLayout emptyView;
-    protected FrameLayout frameLayout2;
+    private FrameLayout frameLayout2;
     private ActionBarMenuSubItem[] itemCells;
+    private ListAdapter listAdapter;
     private RecyclerListView listView;
-    private ListAdapter listViewAdapter;
     private boolean loadingAudio;
     private Paint paint = new Paint(1);
     private MessageObject playingAudio;
@@ -98,15 +98,15 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private boolean searchWas;
     private boolean searching;
     private LongSparseArray<AudioEntry> selectedAudios = new LongSparseArray();
-    protected View selectedCountView;
+    private View selectedCountView;
     private ActionBarPopupWindowLayout sendPopupLayout;
     private ActionBarPopupWindow sendPopupWindow;
     private boolean sendPressed;
-    protected View shadow;
+    private View shadow;
     private SizeNotifierFrameLayout sizeNotifierFrameLayout;
     private TextPaint textPaint = new TextPaint(1);
     private ImageView writeButton;
-    protected FrameLayout writeButtonContainer;
+    private FrameLayout writeButtonContainer;
 
     public interface AudioSelectActivityDelegate {
         void didSelectAudio(ArrayList<MessageObject> arrayList, CharSequence charSequence, boolean z, int i);
@@ -194,8 +194,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 if (!this.searchResult.isEmpty()) {
                     this.searchResult.clear();
                 }
-                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listViewAdapter) {
-                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listViewAdapter);
+                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listAdapter) {
+                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listAdapter);
                 }
                 notifyDataSetChanged();
                 return;
@@ -327,6 +327,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public View createView(Context context) {
         Context context2 = context;
+        this.searchWas = false;
         this.searching = false;
         String str = "dialogBackground";
         this.actionBar.setBackgroundColor(Theme.getColor(str));
@@ -350,9 +351,10 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             }
 
             public void onSearchCollapse() {
+                AudioSelectActivity.this.searchWas = false;
                 AudioSelectActivity.this.searching = false;
-                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listViewAdapter) {
-                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listViewAdapter);
+                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listAdapter) {
+                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listAdapter);
                 }
                 AudioSelectActivity.this.updateEmptyView();
                 AudioSelectActivity.this.searchAdapter.search(null);
@@ -380,26 +382,21 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 int size2 = MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
                 int i3 = 0;
-                if (getKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
-                    EditTextEmoji editTextEmoji = AudioSelectActivity.this.commentTextView;
-                    if (editTextEmoji != null) {
-                        this.ignoreLayout = true;
-                        editTextEmoji.hideEmojiView();
-                        this.ignoreLayout = false;
-                    }
-                } else if (!AndroidUtilities.isInMultiwindow) {
-                    AudioSelectActivity audioSelectActivity = AudioSelectActivity.this;
-                    if (audioSelectActivity.commentTextView != null && audioSelectActivity.frameLayout2.getParent() == this) {
+                if (getKeyboardHeight() <= AndroidUtilities.dp(20.0f)) {
+                    if (!(AndroidUtilities.isInMultiwindow || AudioSelectActivity.this.commentTextView == null || AudioSelectActivity.this.frameLayout2.getParent() != this)) {
                         size2 -= AudioSelectActivity.this.commentTextView.getEmojiPadding();
                         i2 = MeasureSpec.makeMeasureSpec(size2, NUM);
                     }
+                } else if (AudioSelectActivity.this.commentTextView != null) {
+                    this.ignoreLayout = true;
+                    AudioSelectActivity.this.commentTextView.hideEmojiView();
+                    this.ignoreLayout = false;
                 }
                 int childCount = getChildCount();
                 while (i3 < childCount) {
                     View childAt = getChildAt(i3);
                     if (!(childAt == null || childAt.getVisibility() == 8)) {
-                        EditTextEmoji editTextEmoji2 = AudioSelectActivity.this.commentTextView;
-                        if (editTextEmoji2 == null || !editTextEmoji2.isPopupView(childAt)) {
+                        if (AudioSelectActivity.this.commentTextView == null || !AudioSelectActivity.this.commentTextView.isPopupView(childAt)) {
                             measureChildWithMargins(childAt, i, 0, i2, 0);
                         } else if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
                             childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
@@ -414,12 +411,12 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             }
 
             /* Access modifiers changed, original: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:52:0x00ed  */
-            /* JADX WARNING: Removed duplicated region for block: B:51:0x00e4  */
-            /* JADX WARNING: Removed duplicated region for block: B:43:0x00c5  */
-            /* JADX WARNING: Removed duplicated region for block: B:36:0x00ab  */
-            /* JADX WARNING: Removed duplicated region for block: B:51:0x00e4  */
-            /* JADX WARNING: Removed duplicated region for block: B:52:0x00ed  */
+            /* JADX WARNING: Removed duplicated region for block: B:52:0x00fd  */
+            /* JADX WARNING: Removed duplicated region for block: B:51:0x00f4  */
+            /* JADX WARNING: Removed duplicated region for block: B:43:0x00cd  */
+            /* JADX WARNING: Removed duplicated region for block: B:36:0x00b3  */
+            /* JADX WARNING: Removed duplicated region for block: B:51:0x00f4  */
+            /* JADX WARNING: Removed duplicated region for block: B:52:0x00fd  */
             public void onLayout(boolean r9, int r10, int r11, int r12, int r13) {
                 /*
                 r8 = this;
@@ -443,104 +440,105 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             L_0x0024:
                 r9 = r8.getChildCount();
                 r10 = org.telegram.ui.AudioSelectActivity.this;
-                r0 = r10.commentTextView;
-                r1 = 0;
-                if (r0 == 0) goto L_0x0056;
-            L_0x002f:
+                r10 = r10.commentTextView;
+                r0 = 0;
+                if (r10 == 0) goto L_0x005e;
+            L_0x0031:
+                r10 = org.telegram.ui.AudioSelectActivity.this;
                 r10 = r10.frameLayout2;
                 r10 = r10.getParent();
-                if (r10 != r8) goto L_0x0056;
-            L_0x0037:
+                if (r10 != r8) goto L_0x005e;
+            L_0x003d:
                 r10 = r8.getKeyboardHeight();
-                r0 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-                r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
-                if (r10 > r0) goto L_0x0056;
-            L_0x0043:
+                r1 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+                r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
+                if (r10 > r1) goto L_0x005e;
+            L_0x0049:
                 r10 = org.telegram.messenger.AndroidUtilities.isInMultiwindow;
-                if (r10 != 0) goto L_0x0056;
-            L_0x0047:
-                r10 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r10 != 0) goto L_0x0056;
+                if (r10 != 0) goto L_0x005e;
             L_0x004d:
+                r10 = org.telegram.messenger.AndroidUtilities.isTablet();
+                if (r10 != 0) goto L_0x005e;
+            L_0x0053:
                 r10 = org.telegram.ui.AudioSelectActivity.this;
                 r10 = r10.commentTextView;
                 r10 = r10.getEmojiPadding();
-                goto L_0x0057;
-            L_0x0056:
+                goto L_0x005f;
+            L_0x005e:
                 r10 = 0;
-            L_0x0057:
+            L_0x005f:
                 r8.setBottomClip(r10);
-            L_0x005a:
-                if (r1 >= r9) goto L_0x0104;
-            L_0x005c:
-                r0 = r8.getChildAt(r1);
-                r2 = r0.getVisibility();
+            L_0x0062:
+                if (r0 >= r9) goto L_0x0114;
+            L_0x0064:
+                r1 = r8.getChildAt(r0);
+                r2 = r1.getVisibility();
                 r3 = 8;
-                if (r2 != r3) goto L_0x006a;
-            L_0x0068:
-                goto L_0x0100;
-            L_0x006a:
-                r2 = r0.getLayoutParams();
+                if (r2 != r3) goto L_0x0072;
+            L_0x0070:
+                goto L_0x0110;
+            L_0x0072:
+                r2 = r1.getLayoutParams();
                 r2 = (android.widget.FrameLayout.LayoutParams) r2;
-                r3 = r0.getMeasuredWidth();
-                r4 = r0.getMeasuredHeight();
+                r3 = r1.getMeasuredWidth();
+                r4 = r1.getMeasuredHeight();
                 r5 = r2.gravity;
                 r6 = -1;
-                if (r5 != r6) goto L_0x007f;
-            L_0x007d:
+                if (r5 != r6) goto L_0x0087;
+            L_0x0085:
                 r5 = 51;
-            L_0x007f:
+            L_0x0087:
                 r6 = r5 & 7;
                 r5 = r5 & 112;
                 r6 = r6 & 7;
                 r7 = 1;
-                if (r6 == r7) goto L_0x009d;
-            L_0x0088:
+                if (r6 == r7) goto L_0x00a5;
+            L_0x0090:
                 r7 = 5;
-                if (r6 == r7) goto L_0x0093;
-            L_0x008b:
+                if (r6 == r7) goto L_0x009b;
+            L_0x0093:
                 r6 = r2.leftMargin;
                 r7 = r8.getPaddingLeft();
                 r6 = r6 + r7;
-                goto L_0x00a7;
-            L_0x0093:
+                goto L_0x00af;
+            L_0x009b:
                 r6 = r12 - r3;
                 r7 = r2.rightMargin;
                 r6 = r6 - r7;
                 r7 = r8.getPaddingRight();
-                goto L_0x00a6;
-            L_0x009d:
+                goto L_0x00ae;
+            L_0x00a5:
                 r6 = r12 - r3;
                 r6 = r6 / 2;
                 r7 = r2.leftMargin;
                 r6 = r6 + r7;
                 r7 = r2.rightMargin;
-            L_0x00a6:
+            L_0x00ae:
                 r6 = r6 - r7;
-            L_0x00a7:
-                r7 = 16;
-                if (r5 == r7) goto L_0x00c5;
-            L_0x00ab:
-                r7 = 48;
-                if (r5 == r7) goto L_0x00bd;
             L_0x00af:
-                r7 = 80;
-                if (r5 == r7) goto L_0x00b6;
+                r7 = 16;
+                if (r5 == r7) goto L_0x00cd;
             L_0x00b3:
+                r7 = 48;
+                if (r5 == r7) goto L_0x00c5;
+            L_0x00b7:
+                r7 = 80;
+                if (r5 == r7) goto L_0x00be;
+            L_0x00bb:
                 r2 = r2.topMargin;
-                goto L_0x00d2;
-            L_0x00b6:
+                goto L_0x00da;
+            L_0x00be:
                 r5 = r13 - r10;
                 r5 = r5 - r11;
                 r5 = r5 - r4;
                 r2 = r2.bottomMargin;
-                goto L_0x00d0;
-            L_0x00bd:
+                goto L_0x00d8;
+            L_0x00c5:
                 r2 = r2.topMargin;
                 r5 = r8.getPaddingTop();
                 r2 = r2 + r5;
-                goto L_0x00d2;
-            L_0x00c5:
+                goto L_0x00da;
+            L_0x00cd:
                 r5 = r13 - r10;
                 r5 = r5 - r11;
                 r5 = r5 - r4;
@@ -548,37 +546,39 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 r7 = r2.topMargin;
                 r5 = r5 + r7;
                 r2 = r2.bottomMargin;
-            L_0x00d0:
+            L_0x00d8:
                 r2 = r5 - r2;
-            L_0x00d2:
+            L_0x00da:
                 r5 = org.telegram.ui.AudioSelectActivity.this;
                 r5 = r5.commentTextView;
-                if (r5 == 0) goto L_0x00fb;
-            L_0x00d8:
-                r5 = r5.isPopupView(r0);
-                if (r5 == 0) goto L_0x00fb;
-            L_0x00de:
+                if (r5 == 0) goto L_0x010b;
+            L_0x00e2:
+                r5 = org.telegram.ui.AudioSelectActivity.this;
+                r5 = r5.commentTextView;
+                r5 = r5.isPopupView(r1);
+                if (r5 == 0) goto L_0x010b;
+            L_0x00ee:
                 r2 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r2 == 0) goto L_0x00ed;
-            L_0x00e4:
+                if (r2 == 0) goto L_0x00fd;
+            L_0x00f4:
                 r2 = r8.getMeasuredHeight();
-                r5 = r0.getMeasuredHeight();
-                goto L_0x00fa;
-            L_0x00ed:
+                r5 = r1.getMeasuredHeight();
+                goto L_0x010a;
+            L_0x00fd:
                 r2 = r8.getMeasuredHeight();
                 r5 = r8.getKeyboardHeight();
                 r2 = r2 + r5;
-                r5 = r0.getMeasuredHeight();
-            L_0x00fa:
+                r5 = r1.getMeasuredHeight();
+            L_0x010a:
                 r2 = r2 - r5;
-            L_0x00fb:
+            L_0x010b:
                 r3 = r3 + r6;
                 r4 = r4 + r2;
-                r0.layout(r6, r2, r3, r4);
-            L_0x0100:
-                r1 = r1 + 1;
-                goto L_0x005a;
-            L_0x0104:
+                r1.layout(r6, r2, r3, r4);
+            L_0x0110:
+                r0 = r0 + 1;
+                goto L_0x0062;
+            L_0x0114:
                 r8.notifyHeightChanged();
                 return;
                 */
@@ -607,15 +607,14 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), Mode.MULTIPLY));
         this.emptyView.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
         this.emptyTitleTextView = new TextView(context2);
-        String str4 = "dialogEmptyText";
-        this.emptyTitleTextView.setTextColor(Theme.getColor(str4));
+        this.emptyTitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
         this.emptyTitleTextView.setGravity(17);
         this.emptyTitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.emptyTitleTextView.setTextSize(1, 17.0f);
         this.emptyTitleTextView.setPadding(AndroidUtilities.dp(40.0f), 0, AndroidUtilities.dp(40.0f), 0);
         this.emptyView.addView(this.emptyTitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 11, 0, 0));
         this.emptySubtitleTextView = new TextView(context2);
-        this.emptySubtitleTextView.setTextColor(Theme.getColor(str4));
+        this.emptySubtitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
         this.emptySubtitleTextView.setGravity(17);
         this.emptySubtitleTextView.setTextSize(1, 15.0f);
         this.emptyView.addView(this.emptySubtitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 6, 0, 0));
@@ -625,10 +624,9 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false));
         RecyclerListView recyclerListView = this.listView;
         ListAdapter listAdapter = new ListAdapter(context2);
-        this.listViewAdapter = listAdapter;
+        this.listAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(50.0f));
+        this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.searchAdapter = new SearchAdapter(context2);
         this.listView.setOnItemClickListener(new -$$Lambda$AudioSelectActivity$udgf5SVc7GntWL9Gfvar_UulPGZU(this));
@@ -668,11 +666,9 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.writeButtonContainer.setScaleY(0.2f);
         this.writeButtonContainer.setAlpha(0.0f);
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
-        this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 6.0f, 10.0f));
-        this.writeButtonContainer.setOnClickListener(new -$$Lambda$AudioSelectActivity$yCkpzfYdMW7ExlFmoo7A5yK5n7o(this));
-        this.writeButtonContainer.setOnLongClickListener(new -$$Lambda$AudioSelectActivity$op1868hUHQ4ktj1ACa-ggMteGuo(this));
+        this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
         this.writeButton = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor("dialogFloatingButtonPressed"));
+        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
         if (VERSION.SDK_INT < 21) {
             Drawable mutate = context.getResources().getDrawable(NUM).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
@@ -693,6 +689,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             });
         }
         this.writeButtonContainer.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 51, VERSION.SDK_INT >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
+        this.writeButton.setOnClickListener(new -$$Lambda$AudioSelectActivity$yCkpzfYdMW7ExlFmoo7A5yK5n7o(this));
+        this.writeButton.setOnLongClickListener(new -$$Lambda$AudioSelectActivity$op1868hUHQ4ktj1ACa-ggMteGuo(this));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedCountView = new View(context2) {
@@ -719,7 +717,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.selectedCountView.setAlpha(0.0f);
         this.selectedCountView.setScaleX(0.2f);
         this.selectedCountView.setScaleY(0.2f);
-        this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -8.0f, 9.0f));
+        this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));
         updateEmptyView();
         updateCountButton(0);
         return this.fragmentView;
@@ -739,7 +737,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         if (chatActivity == null || !chatActivity.isInScheduleMode()) {
             sendSelectedAudios(true, 0);
         } else {
-            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), UserObject.isUserSelf(this.chatActivity.getCurrentUser()), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
+            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
         }
     }
 
@@ -824,7 +822,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             this.sendPopupWindow.dismiss();
         }
         if (i == 0) {
-            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), UserObject.isUserSelf(this.chatActivity.getCurrentUser()), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
+            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
         } else if (i == 1) {
             sendSelectedAudios(true, 0);
         }
@@ -1101,15 +1099,15 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         Utilities.globalQueue.postRunnable(new -$$Lambda$AudioSelectActivity$0AW56Hl2qVFIVsXD4PDb-caMNoU(this));
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x016a */
-    /* JADX WARNING: Missing block: B:19:0x0163, code skipped:
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x016c */
+    /* JADX WARNING: Missing block: B:19:0x0165, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:20:0x0164, code skipped:
+    /* JADX WARNING: Missing block: B:20:0x0166, code skipped:
             r3 = r0;
      */
-    /* JADX WARNING: Missing block: B:21:0x0165, code skipped:
-            if (r2 != null) goto L_0x0167;
+    /* JADX WARNING: Missing block: B:21:0x0167, code skipped:
+            if (r2 != null) goto L_0x0169;
      */
     /* JADX WARNING: Missing block: B:23:?, code skipped:
             r2.close();
@@ -1140,165 +1138,165 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         r4[r12] = r2;
         r13 = new java.util.ArrayList;
         r13.<init>();
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x016b }
-        r2 = r2.getContentResolver();	 Catch:{ Exception -> 0x016b }
-        r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;	 Catch:{ Exception -> 0x016b }
+        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x016d }
+        r2 = r2.getContentResolver();	 Catch:{ Exception -> 0x016d }
+        r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;	 Catch:{ Exception -> 0x016d }
         r5 = "is_music != 0";
         r6 = 0;
         r7 = "title";
-        r2 = r2.query(r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x016b }
+        r2 = r2.query(r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x016d }
         r3 = -NUM; // 0xfffffffvar_ca6CLASSNAME float:-1.2182823E-33 double:NaN;
-    L_0x003c:
-        r4 = r2.moveToNext();	 Catch:{ all -> 0x0161 }
-        if (r4 == 0) goto L_0x015b;
-    L_0x0042:
-        r4 = new org.telegram.messenger.MediaController$AudioEntry;	 Catch:{ all -> 0x0161 }
-        r4.<init>();	 Catch:{ all -> 0x0161 }
-        r5 = r2.getInt(r0);	 Catch:{ all -> 0x0161 }
-        r5 = (long) r5;	 Catch:{ all -> 0x0161 }
-        r4.id = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getString(r8);	 Catch:{ all -> 0x0161 }
-        r4.author = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getString(r9);	 Catch:{ all -> 0x0161 }
-        r4.title = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getString(r10);	 Catch:{ all -> 0x0161 }
-        r4.path = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getLong(r11);	 Catch:{ all -> 0x0161 }
+    L_0x003e:
+        r4 = r2.moveToNext();	 Catch:{ all -> 0x0163 }
+        if (r4 == 0) goto L_0x015d;
+    L_0x0044:
+        r4 = new org.telegram.messenger.MediaController$AudioEntry;	 Catch:{ all -> 0x0163 }
+        r4.<init>();	 Catch:{ all -> 0x0163 }
+        r5 = r2.getInt(r0);	 Catch:{ all -> 0x0163 }
+        r5 = (long) r5;	 Catch:{ all -> 0x0163 }
+        r4.id = r5;	 Catch:{ all -> 0x0163 }
+        r5 = r2.getString(r8);	 Catch:{ all -> 0x0163 }
+        r4.author = r5;	 Catch:{ all -> 0x0163 }
+        r5 = r2.getString(r9);	 Catch:{ all -> 0x0163 }
+        r4.title = r5;	 Catch:{ all -> 0x0163 }
+        r5 = r2.getString(r10);	 Catch:{ all -> 0x0163 }
+        r4.path = r5;	 Catch:{ all -> 0x0163 }
+        r5 = r2.getLong(r11);	 Catch:{ all -> 0x0163 }
         r14 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 / r14;
-        r6 = (int) r5;	 Catch:{ all -> 0x0161 }
-        r4.duration = r6;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getString(r12);	 Catch:{ all -> 0x0161 }
-        r4.genre = r5;	 Catch:{ all -> 0x0161 }
-        r5 = new java.io.File;	 Catch:{ all -> 0x0161 }
-        r6 = r4.path;	 Catch:{ all -> 0x0161 }
-        r5.<init>(r6);	 Catch:{ all -> 0x0161 }
-        r6 = new org.telegram.tgnet.TLRPC$TL_message;	 Catch:{ all -> 0x0161 }
-        r6.<init>();	 Catch:{ all -> 0x0161 }
-        r6.out = r8;	 Catch:{ all -> 0x0161 }
-        r6.id = r3;	 Catch:{ all -> 0x0161 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_peerUser;	 Catch:{ all -> 0x0161 }
-        r7.<init>();	 Catch:{ all -> 0x0161 }
-        r6.to_id = r7;	 Catch:{ all -> 0x0161 }
-        r7 = r6.to_id;	 Catch:{ all -> 0x0161 }
-        r8 = r1.currentAccount;	 Catch:{ all -> 0x0161 }
-        r8 = org.telegram.messenger.UserConfig.getInstance(r8);	 Catch:{ all -> 0x0161 }
-        r8 = r8.getClientUserId();	 Catch:{ all -> 0x0161 }
-        r6.from_id = r8;	 Catch:{ all -> 0x0161 }
-        r7.user_id = r8;	 Catch:{ all -> 0x0161 }
-        r7 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x0161 }
+        r6 = (int) r5;	 Catch:{ all -> 0x0163 }
+        r4.duration = r6;	 Catch:{ all -> 0x0163 }
+        r5 = r2.getString(r12);	 Catch:{ all -> 0x0163 }
+        r4.genre = r5;	 Catch:{ all -> 0x0163 }
+        r5 = new java.io.File;	 Catch:{ all -> 0x0163 }
+        r6 = r4.path;	 Catch:{ all -> 0x0163 }
+        r5.<init>(r6);	 Catch:{ all -> 0x0163 }
+        r6 = new org.telegram.tgnet.TLRPC$TL_message;	 Catch:{ all -> 0x0163 }
+        r6.<init>();	 Catch:{ all -> 0x0163 }
+        r6.out = r8;	 Catch:{ all -> 0x0163 }
+        r6.id = r3;	 Catch:{ all -> 0x0163 }
+        r7 = new org.telegram.tgnet.TLRPC$TL_peerUser;	 Catch:{ all -> 0x0163 }
+        r7.<init>();	 Catch:{ all -> 0x0163 }
+        r6.to_id = r7;	 Catch:{ all -> 0x0163 }
+        r7 = r6.to_id;	 Catch:{ all -> 0x0163 }
+        r8 = r1.currentAccount;	 Catch:{ all -> 0x0163 }
+        r8 = org.telegram.messenger.UserConfig.getInstance(r8);	 Catch:{ all -> 0x0163 }
+        r8 = r8.getClientUserId();	 Catch:{ all -> 0x0163 }
+        r6.from_id = r8;	 Catch:{ all -> 0x0163 }
+        r7.user_id = r8;	 Catch:{ all -> 0x0163 }
+        r7 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x0163 }
         r7 = r7 / r14;
-        r8 = (int) r7;	 Catch:{ all -> 0x0161 }
-        r6.date = r8;	 Catch:{ all -> 0x0161 }
+        r8 = (int) r7;	 Catch:{ all -> 0x0163 }
+        r6.date = r8;	 Catch:{ all -> 0x0163 }
         r7 = "";
-        r6.message = r7;	 Catch:{ all -> 0x0161 }
-        r7 = r4.path;	 Catch:{ all -> 0x0161 }
-        r6.attachPath = r7;	 Catch:{ all -> 0x0161 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ all -> 0x0161 }
-        r7.<init>();	 Catch:{ all -> 0x0161 }
-        r6.media = r7;	 Catch:{ all -> 0x0161 }
-        r7 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r7.flags;	 Catch:{ all -> 0x0161 }
+        r6.message = r7;	 Catch:{ all -> 0x0163 }
+        r7 = r4.path;	 Catch:{ all -> 0x0163 }
+        r6.attachPath = r7;	 Catch:{ all -> 0x0163 }
+        r7 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ all -> 0x0163 }
+        r7.<init>();	 Catch:{ all -> 0x0163 }
+        r6.media = r7;	 Catch:{ all -> 0x0163 }
+        r7 = r6.media;	 Catch:{ all -> 0x0163 }
+        r8 = r7.flags;	 Catch:{ all -> 0x0163 }
         r8 = r8 | r10;
-        r7.flags = r8;	 Catch:{ all -> 0x0161 }
-        r7 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = new org.telegram.tgnet.TLRPC$TL_document;	 Catch:{ all -> 0x0161 }
-        r8.<init>();	 Catch:{ all -> 0x0161 }
-        r7.document = r8;	 Catch:{ all -> 0x0161 }
-        r7 = r6.flags;	 Catch:{ all -> 0x0161 }
+        r7.flags = r8;	 Catch:{ all -> 0x0163 }
+        r7 = r6.media;	 Catch:{ all -> 0x0163 }
+        r8 = new org.telegram.tgnet.TLRPC$TL_document;	 Catch:{ all -> 0x0163 }
+        r8.<init>();	 Catch:{ all -> 0x0163 }
+        r7.document = r8;	 Catch:{ all -> 0x0163 }
+        r7 = r6.flags;	 Catch:{ all -> 0x0163 }
         r7 = r7 | 768;
-        r6.flags = r7;	 Catch:{ all -> 0x0161 }
-        r7 = org.telegram.messenger.FileLoader.getFileExtension(r5);	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
+        r6.flags = r7;	 Catch:{ all -> 0x0163 }
+        r7 = org.telegram.messenger.FileLoader.getFileExtension(r5);	 Catch:{ all -> 0x0163 }
+        r8 = r6.media;	 Catch:{ all -> 0x0163 }
+        r8 = r8.document;	 Catch:{ all -> 0x0163 }
         r14 = 0;
-        r8.id = r14;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r8.access_hash = r14;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r14 = new byte[r0];	 Catch:{ all -> 0x0161 }
-        r8.file_reference = r14;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r14 = r6.date;	 Catch:{ all -> 0x0161 }
-        r8.date = r14;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r14 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0161 }
-        r14.<init>();	 Catch:{ all -> 0x0161 }
+        r8.id = r14;	 Catch:{ all -> 0x0163 }
+        r8 = r6.media;	 Catch:{ all -> 0x0163 }
+        r8 = r8.document;	 Catch:{ all -> 0x0163 }
+        r8.access_hash = r14;	 Catch:{ all -> 0x0163 }
+        r8 = r6.media;	 Catch:{ all -> 0x0163 }
+        r8 = r8.document;	 Catch:{ all -> 0x0163 }
+        r14 = new byte[r0];	 Catch:{ all -> 0x0163 }
+        r8.file_reference = r14;	 Catch:{ all -> 0x0163 }
+        r8 = r6.media;	 Catch:{ all -> 0x0163 }
+        r8 = r8.document;	 Catch:{ all -> 0x0163 }
+        r14 = r6.date;	 Catch:{ all -> 0x0163 }
+        r8.date = r14;	 Catch:{ all -> 0x0163 }
+        r8 = r6.media;	 Catch:{ all -> 0x0163 }
+        r8 = r8.document;	 Catch:{ all -> 0x0163 }
+        r14 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0163 }
+        r14.<init>();	 Catch:{ all -> 0x0163 }
         r15 = "audio/";
-        r14.append(r15);	 Catch:{ all -> 0x0161 }
-        r15 = r7.length();	 Catch:{ all -> 0x0161 }
-        if (r15 <= 0) goto L_0x00fb;
-    L_0x00fa:
-        goto L_0x00fd;
-    L_0x00fb:
-        r7 = "mp3";
+        r14.append(r15);	 Catch:{ all -> 0x0163 }
+        r15 = r7.length();	 Catch:{ all -> 0x0163 }
+        if (r15 <= 0) goto L_0x00fd;
+    L_0x00fc:
+        goto L_0x00ff;
     L_0x00fd:
-        r14.append(r7);	 Catch:{ all -> 0x0161 }
-        r7 = r14.toString();	 Catch:{ all -> 0x0161 }
-        r8.mime_type = r7;	 Catch:{ all -> 0x0161 }
-        r7 = r6.media;	 Catch:{ all -> 0x0161 }
-        r7 = r7.document;	 Catch:{ all -> 0x0161 }
-        r14 = r5.length();	 Catch:{ all -> 0x0161 }
-        r8 = (int) r14;	 Catch:{ all -> 0x0161 }
-        r7.size = r8;	 Catch:{ all -> 0x0161 }
-        r7 = r6.media;	 Catch:{ all -> 0x0161 }
-        r7 = r7.document;	 Catch:{ all -> 0x0161 }
-        r7.dc_id = r0;	 Catch:{ all -> 0x0161 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;	 Catch:{ all -> 0x0161 }
-        r7.<init>();	 Catch:{ all -> 0x0161 }
-        r8 = r4.duration;	 Catch:{ all -> 0x0161 }
-        r7.duration = r8;	 Catch:{ all -> 0x0161 }
-        r8 = r4.title;	 Catch:{ all -> 0x0161 }
-        r7.title = r8;	 Catch:{ all -> 0x0161 }
-        r8 = r4.author;	 Catch:{ all -> 0x0161 }
-        r7.performer = r8;	 Catch:{ all -> 0x0161 }
-        r8 = r7.flags;	 Catch:{ all -> 0x0161 }
+        r7 = "mp3";
+    L_0x00ff:
+        r14.append(r7);	 Catch:{ all -> 0x0163 }
+        r7 = r14.toString();	 Catch:{ all -> 0x0163 }
+        r8.mime_type = r7;	 Catch:{ all -> 0x0163 }
+        r7 = r6.media;	 Catch:{ all -> 0x0163 }
+        r7 = r7.document;	 Catch:{ all -> 0x0163 }
+        r14 = r5.length();	 Catch:{ all -> 0x0163 }
+        r8 = (int) r14;	 Catch:{ all -> 0x0163 }
+        r7.size = r8;	 Catch:{ all -> 0x0163 }
+        r7 = r6.media;	 Catch:{ all -> 0x0163 }
+        r7 = r7.document;	 Catch:{ all -> 0x0163 }
+        r7.dc_id = r0;	 Catch:{ all -> 0x0163 }
+        r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;	 Catch:{ all -> 0x0163 }
+        r7.<init>();	 Catch:{ all -> 0x0163 }
+        r8 = r4.duration;	 Catch:{ all -> 0x0163 }
+        r7.duration = r8;	 Catch:{ all -> 0x0163 }
+        r8 = r4.title;	 Catch:{ all -> 0x0163 }
+        r7.title = r8;	 Catch:{ all -> 0x0163 }
+        r8 = r4.author;	 Catch:{ all -> 0x0163 }
+        r7.performer = r8;	 Catch:{ all -> 0x0163 }
+        r8 = r7.flags;	 Catch:{ all -> 0x0163 }
         r8 = r8 | r10;
-        r7.flags = r8;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r8 = r8.attributes;	 Catch:{ all -> 0x0161 }
-        r8.add(r7);	 Catch:{ all -> 0x0161 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;	 Catch:{ all -> 0x0161 }
-        r7.<init>();	 Catch:{ all -> 0x0161 }
-        r5 = r5.getName();	 Catch:{ all -> 0x0161 }
-        r7.file_name = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r6.media;	 Catch:{ all -> 0x0161 }
-        r5 = r5.document;	 Catch:{ all -> 0x0161 }
-        r5 = r5.attributes;	 Catch:{ all -> 0x0161 }
-        r5.add(r7);	 Catch:{ all -> 0x0161 }
-        r5 = new org.telegram.messenger.MessageObject;	 Catch:{ all -> 0x0161 }
-        r7 = r1.currentAccount;	 Catch:{ all -> 0x0161 }
-        r5.<init>(r7, r6, r0);	 Catch:{ all -> 0x0161 }
-        r4.messageObject = r5;	 Catch:{ all -> 0x0161 }
-        r13.add(r4);	 Catch:{ all -> 0x0161 }
+        r7.flags = r8;	 Catch:{ all -> 0x0163 }
+        r8 = r6.media;	 Catch:{ all -> 0x0163 }
+        r8 = r8.document;	 Catch:{ all -> 0x0163 }
+        r8 = r8.attributes;	 Catch:{ all -> 0x0163 }
+        r8.add(r7);	 Catch:{ all -> 0x0163 }
+        r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;	 Catch:{ all -> 0x0163 }
+        r7.<init>();	 Catch:{ all -> 0x0163 }
+        r5 = r5.getName();	 Catch:{ all -> 0x0163 }
+        r7.file_name = r5;	 Catch:{ all -> 0x0163 }
+        r5 = r6.media;	 Catch:{ all -> 0x0163 }
+        r5 = r5.document;	 Catch:{ all -> 0x0163 }
+        r5 = r5.attributes;	 Catch:{ all -> 0x0163 }
+        r5.add(r7);	 Catch:{ all -> 0x0163 }
+        r5 = new org.telegram.messenger.MessageObject;	 Catch:{ all -> 0x0163 }
+        r7 = r1.currentAccount;	 Catch:{ all -> 0x0163 }
+        r5.<init>(r7, r6, r0);	 Catch:{ all -> 0x0163 }
+        r4.messageObject = r5;	 Catch:{ all -> 0x0163 }
+        r13.add(r4);	 Catch:{ all -> 0x0163 }
         r3 = r3 + -1;
         r8 = 1;
-        goto L_0x003c;
-    L_0x015b:
-        if (r2 == 0) goto L_0x016f;
+        goto L_0x003e;
     L_0x015d:
-        r2.close();	 Catch:{ Exception -> 0x016b }
-        goto L_0x016f;
-    L_0x0161:
-        r0 = move-exception;
-        throw r0;	 Catch:{ all -> 0x0163 }
+        if (r2 == 0) goto L_0x0171;
+    L_0x015f:
+        r2.close();	 Catch:{ Exception -> 0x016d }
+        goto L_0x0171;
     L_0x0163:
         r0 = move-exception;
+        throw r0;	 Catch:{ all -> 0x0165 }
+    L_0x0165:
+        r0 = move-exception;
         r3 = r0;
-        if (r2 == 0) goto L_0x016a;
-    L_0x0167:
-        r2.close();	 Catch:{ all -> 0x016a }
-    L_0x016a:
-        throw r3;	 Catch:{ Exception -> 0x016b }
-    L_0x016b:
+        if (r2 == 0) goto L_0x016c;
+    L_0x0169:
+        r2.close();	 Catch:{ all -> 0x016c }
+    L_0x016c:
+        throw r3;	 Catch:{ Exception -> 0x016d }
+    L_0x016d:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x016f:
+    L_0x0171:
         r0 = new org.telegram.ui.-$$Lambda$AudioSelectActivity$qHu3jZT6Csp1zx-1DQDOfjLHr4c;
         r0.<init>(r1, r13);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
@@ -1314,7 +1312,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             this.searchItem.setVisibility(8);
         }
         updateEmptyView();
-        this.listViewAdapter.notifyDataSetChanged();
+        this.listAdapter.notifyDataSetChanged();
     }
 
     public ThemeDescription[] getThemeDescriptions() {
@@ -1333,7 +1331,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         r1[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_descriptionTextPaint, null, null, "windowBackgroundWhiteGrayText2");
         r1[20] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "dialogFloatingIcon");
         r1[21] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "dialogFloatingButton");
-        r1[22] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "dialogFloatingButtonPressed");
+        r1[22] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton");
         return r1;
     }
 }

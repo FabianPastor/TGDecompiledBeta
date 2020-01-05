@@ -1,14 +1,14 @@
 package org.telegram.ui.Adapters;
 
 import android.location.Location;
+import android.os.Build.VERSION;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
+import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineMessage;
@@ -31,15 +31,17 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     private BaseLocationAdapterDelegate delegate;
     private long dialogId;
     protected ArrayList<String> iconUrls = new ArrayList();
+    private String lastFoundQuery;
     private Location lastSearchLocation;
     private String lastSearchQuery;
     protected ArrayList<TL_messageMediaVenue> places = new ArrayList();
-    private Timer searchTimer;
+    private boolean searchInProgress;
+    private Runnable searchRunnable;
     protected boolean searching;
     private boolean searchingUser;
 
     public interface BaseLocationAdapterDelegate {
-        void didLoadedSearchResult(ArrayList<TL_messageMediaVenue> arrayList);
+        void didLoadSearchResult(ArrayList<TL_messageMediaVenue> arrayList);
     }
 
     public void destroy() {
@@ -54,36 +56,32 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         this.delegate = baseLocationAdapterDelegate;
     }
 
-    public void searchDelayed(final String str, final Location location) {
+    public void searchDelayed(String str, Location location) {
         if (str == null || str.length() == 0) {
             this.places.clear();
+            this.searchInProgress = false;
             notifyDataSetChanged();
             return;
         }
-        try {
-            if (this.searchTimer != null) {
-                this.searchTimer.cancel();
-            }
-        } catch (Exception e) {
-            FileLog.e(e);
+        if (this.searchRunnable != null) {
+            Utilities.searchQueue.cancelRunnable(this.searchRunnable);
+            this.searchRunnable = null;
         }
-        this.searchTimer = new Timer();
-        this.searchTimer.schedule(new TimerTask() {
-            public void run() {
-                try {
-                    BaseLocationAdapter.this.searchTimer.cancel();
-                    BaseLocationAdapter.this.searchTimer = null;
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-                AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$1$kUOM7MJ1viSwJRv7kesEXXY9pCs(this, str, location));
-            }
+        this.searchInProgress = true;
+        DispatchQueue dispatchQueue = Utilities.searchQueue;
+        -$$Lambda$BaseLocationAdapter$T_85LSiVXaUUUWP3WNWn8qK1uUI -__lambda_baselocationadapter_t_85lsivxauuuwp3wnwn8qk1uui = new -$$Lambda$BaseLocationAdapter$T_85LSiVXaUUUWP3WNWn8qK1uUI(this, str, location);
+        this.searchRunnable = -__lambda_baselocationadapter_t_85lsivxauuuwp3wnwn8qk1uui;
+        dispatchQueue.postRunnable(-__lambda_baselocationadapter_t_85lsivxauuuwp3wnwn8qk1uui, 400);
+    }
 
-            public /* synthetic */ void lambda$run$0$BaseLocationAdapter$1(String str, Location location) {
-                BaseLocationAdapter.this.lastSearchLocation = null;
-                BaseLocationAdapter.this.searchPlacesWithQuery(str, location, true);
-            }
-        }, 200, 500);
+    public /* synthetic */ void lambda$searchDelayed$1$BaseLocationAdapter(String str, Location location) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$7x00Ah4GCWHHyZQ38tHoBWV8Hyc(this, str, location));
+    }
+
+    public /* synthetic */ void lambda$null$0$BaseLocationAdapter(String str, Location location) {
+        this.searchRunnable = null;
+        this.lastSearchLocation = null;
+        searchPlacesWithQuery(str, location, true);
     }
 
     private void searchBotUser() {
@@ -91,17 +89,17 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
             this.searchingUser = true;
             TL_contacts_resolveUsername tL_contacts_resolveUsername = new TL_contacts_resolveUsername();
             tL_contacts_resolveUsername.username = MessagesController.getInstance(this.currentAccount).venueSearchBot;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_contacts_resolveUsername, new -$$Lambda$BaseLocationAdapter$OUu2tRVUfz8Mg0cIvwT-Hlk9dBk(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_contacts_resolveUsername, new -$$Lambda$BaseLocationAdapter$EXf5flObCtbTzRIFqsolFWFtyyU(this));
         }
     }
 
-    public /* synthetic */ void lambda$searchBotUser$1$BaseLocationAdapter(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$searchBotUser$3$BaseLocationAdapter(TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$3QgE-sikMAhKXc3W4CzFrcyGhVs(this, tLObject));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$8XXcylBQyklzy9fKLPpuyJeZxWw(this, tLObject));
         }
     }
 
-    public /* synthetic */ void lambda$null$0$BaseLocationAdapter(TLObject tLObject) {
+    public /* synthetic */ void lambda$null$2$BaseLocationAdapter(TLObject tLObject) {
         TL_contacts_resolvedPeer tL_contacts_resolvedPeer = (TL_contacts_resolvedPeer) tLObject;
         MessagesController.getInstance(this.currentAccount).putUsers(tL_contacts_resolvedPeer.users, false);
         MessagesController.getInstance(this.currentAccount).putChats(tL_contacts_resolvedPeer.chats, false);
@@ -111,11 +109,23 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         searchPlacesWithQuery(this.lastSearchQuery, location, false);
     }
 
+    public boolean isSearching() {
+        return this.searchInProgress;
+    }
+
+    public String getLastSearchString() {
+        return this.lastFoundQuery;
+    }
+
     public void searchPlacesWithQuery(String str, Location location, boolean z) {
+        searchPlacesWithQuery(str, location, z, false);
+    }
+
+    public void searchPlacesWithQuery(String str, Location location, boolean z, boolean z2) {
         if (location != null) {
             Location location2 = this.lastSearchLocation;
             if (location2 == null || location.distanceTo(location2) >= 200.0f) {
-                this.lastSearchLocation = location;
+                this.lastSearchLocation = new Location(location);
                 this.lastSearchQuery = str;
                 if (this.searching) {
                     this.searching = false;
@@ -124,16 +134,15 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                         this.currentRequestNum = 0;
                     }
                 }
+                int itemCount = getItemCount();
+                boolean z3 = this.searching;
                 this.searching = true;
                 TLObject userOrChat = MessagesController.getInstance(this.currentAccount).getUserOrChat(MessagesController.getInstance(this.currentAccount).venueSearchBot);
                 if (userOrChat instanceof User) {
                     User user = (User) userOrChat;
                     TL_messages_getInlineBotResults tL_messages_getInlineBotResults = new TL_messages_getInlineBotResults();
                     String str2 = "";
-                    if (str == null) {
-                        str = str2;
-                    }
-                    tL_messages_getInlineBotResults.query = str;
+                    tL_messages_getInlineBotResults.query = str == null ? str2 : str;
                     tL_messages_getInlineBotResults.bot = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                     tL_messages_getInlineBotResults.offset = str2;
                     tL_messages_getInlineBotResults.geo_point = new TL_inputGeoPoint();
@@ -146,8 +155,17 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                     } else {
                         tL_messages_getInlineBotResults.peer = new TL_inputPeerEmpty();
                     }
-                    this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getInlineBotResults, new -$$Lambda$BaseLocationAdapter$qLcpONoyStiIgQpEIiVXznU9o5o(this));
-                    notifyDataSetChanged();
+                    this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getInlineBotResults, new -$$Lambda$BaseLocationAdapter$Q_AKnGvZK4rCf-iCn8zQfX2dHBA(this, str));
+                    if (!z2 || VERSION.SDK_INT < 19) {
+                        notifyDataSetChanged();
+                    } else if (!this.places.isEmpty() && !z3) {
+                        int size = this.places.size() + 1;
+                        itemCount -= size;
+                        notifyItemInserted(itemCount);
+                        notifyItemRangeRemoved(itemCount, size);
+                    } else if (!z3) {
+                        notifyItemChanged(getItemCount() - 1);
+                    }
                 } else {
                     if (z) {
                         searchBotUser();
@@ -157,22 +175,19 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         }
     }
 
-    public /* synthetic */ void lambda$searchPlacesWithQuery$3$BaseLocationAdapter(TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$cZ-97u5GiOnofWCJZtoLbhQZqEs(this, tL_error, tLObject));
+    public /* synthetic */ void lambda$searchPlacesWithQuery$5$BaseLocationAdapter(String str, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$7gITzgpAhQdM5ZDr0Er_UR5wo2g(this, str, tL_error, tLObject));
     }
 
-    public /* synthetic */ void lambda$null$2$BaseLocationAdapter(TL_error tL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$null$4$BaseLocationAdapter(String str, TL_error tL_error, TLObject tLObject) {
         int i = 0;
         this.currentRequestNum = 0;
         this.searching = false;
         this.places.clear();
         this.iconUrls.clear();
-        if (tL_error != null) {
-            BaseLocationAdapterDelegate baseLocationAdapterDelegate = this.delegate;
-            if (baseLocationAdapterDelegate != null) {
-                baseLocationAdapterDelegate.didLoadedSearchResult(this.places);
-            }
-        } else {
+        this.searchInProgress = false;
+        this.lastFoundQuery = str;
+        if (tL_error == null) {
             messages_BotResults messages_botresults = (messages_BotResults) tLObject;
             int size = messages_botresults.results.size();
             while (i < size) {
@@ -199,6 +214,10 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 }
                 i++;
             }
+        }
+        BaseLocationAdapterDelegate baseLocationAdapterDelegate = this.delegate;
+        if (baseLocationAdapterDelegate != null) {
+            baseLocationAdapterDelegate.didLoadSearchResult(this.places);
         }
         notifyDataSetChanged();
     }

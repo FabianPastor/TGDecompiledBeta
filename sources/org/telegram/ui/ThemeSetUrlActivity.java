@@ -20,7 +20,6 @@ import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -46,6 +45,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.Theme.ThemeAccent;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
@@ -67,10 +67,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     private boolean creatingNewTheme;
     private View divider;
     private View doneButton;
-    private EditText editText;
+    private EditTextBoldCursor editText;
     private HeaderCell headerCell;
     private TextInfoPrivacyCell helpInfoCell;
     private boolean ignoreCheck;
+    private TL_theme info;
     private CharSequence infoText;
     private String lastCheckName;
     private boolean lastNameAvailable;
@@ -79,6 +80,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     private ThemePreviewMessagesCell messagesCell;
     private EditTextBoldCursor nameField;
     private AlertDialog progressDialog;
+    private ThemeAccent themeAccent;
     private ThemeInfo themeInfo;
 
     private static class LinkMovementMethodMy extends LinkMovementMethod {
@@ -128,8 +130,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     static /* synthetic */ void lambda$saveTheme$9(DialogInterface dialogInterface) {
     }
 
-    public ThemeSetUrlActivity(ThemeInfo themeInfo, boolean z) {
+    public ThemeSetUrlActivity(ThemeInfo themeInfo, ThemeAccent themeAccent, boolean z) {
         this.themeInfo = themeInfo;
+        this.themeAccent = themeAccent;
+        this.info = themeAccent != null ? themeAccent.info : themeInfo.info;
+        this.currentAccount = themeAccent != null ? themeAccent.account : themeInfo.account;
         this.creatingNewTheme = z;
     }
 
@@ -207,12 +212,12 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         LinearLayout linearLayout2 = new LinearLayout(context2);
         linearLayout2.setOrientation(0);
         this.linearLayoutTypeContainer.addView(linearLayout2, LayoutHelper.createLinear(-1, 50, 23.0f, 0.0f, 23.0f, 0.0f));
-        this.editText = new EditText(context2);
-        EditText editText = this.editText;
+        this.editText = new EditTextBoldCursor(context2);
+        EditTextBoldCursor editTextBoldCursor = this.editText;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getMessagesController().linkPrefix);
         stringBuilder.append("/addtheme/");
-        editText.setText(stringBuilder.toString());
+        editTextBoldCursor.setText(stringBuilder.toString());
         this.editText.setTextSize(1, 18.0f);
         this.editText.setHintTextColor(Theme.getColor(str));
         this.editText.setTextColor(Theme.getColor(str2));
@@ -258,7 +263,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                     if (ThemeSetUrlActivity.this.linkField.length() > 0) {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append("https://");
-                        stringBuilder.append(MessagesController.getInstance(ThemeSetUrlActivity.this.themeInfo.account).linkPrefix);
+                        stringBuilder.append(ThemeSetUrlActivity.this.getMessagesController().linkPrefix);
                         stringBuilder.append("/addtheme/");
                         stringBuilder.append(ThemeSetUrlActivity.this.linkField.getText());
                         String stringBuilder2 = stringBuilder.toString();
@@ -312,15 +317,15 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         } else {
             this.helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, str3));
         }
-        ThemeInfo themeInfo = this.themeInfo;
-        if (themeInfo != null) {
+        TL_theme tL_theme = this.info;
+        if (tL_theme != null) {
             this.ignoreCheck = true;
-            this.nameField.setText(themeInfo.name);
-            EditTextBoldCursor editTextBoldCursor = this.nameField;
-            editTextBoldCursor.setSelection(editTextBoldCursor.length());
-            this.linkField.setText(this.themeInfo.info.slug);
-            editTextBoldCursor = this.linkField;
-            editTextBoldCursor.setSelection(editTextBoldCursor.length());
+            this.nameField.setText(tL_theme.title);
+            EditTextBoldCursor editTextBoldCursor2 = this.nameField;
+            editTextBoldCursor2.setSelection(editTextBoldCursor2.length());
+            this.linkField.setText(this.info.slug);
+            editTextBoldCursor2 = this.linkField;
+            editTextBoldCursor2.setSelection(editTextBoldCursor2.length());
             this.ignoreCheck = false;
         }
         return this.fragmentView;
@@ -401,9 +406,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
+        ThemeAccent themeAccent;
         AlertDialog alertDialog;
         if (i == NotificationCenter.themeUploadedToServer) {
-            if (((ThemeInfo) objArr[0]) == this.themeInfo) {
+            themeAccent = (ThemeAccent) objArr[1];
+            if (((ThemeInfo) objArr[0]) == this.themeInfo && themeAccent == this.themeAccent) {
                 alertDialog = this.progressDialog;
                 if (alertDialog != null) {
                     try {
@@ -416,171 +423,172 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                     finishFragment();
                 }
             }
-        } else if (i == NotificationCenter.themeUploadError && ((ThemeInfo) objArr[0]) == this.themeInfo) {
-            alertDialog = this.progressDialog;
-            if (alertDialog != null) {
-                try {
-                    alertDialog.dismiss();
-                    this.progressDialog = null;
-                } catch (Exception e2) {
-                    FileLog.e(e2);
+        } else if (i == NotificationCenter.themeUploadError) {
+            themeAccent = (ThemeAccent) objArr[1];
+            if (((ThemeInfo) objArr[0]) == this.themeInfo && themeAccent == this.themeAccent) {
+                alertDialog = this.progressDialog;
+                if (alertDialog != null) {
+                    try {
+                        alertDialog.dismiss();
+                        this.progressDialog = null;
+                    } catch (Exception e2) {
+                        FileLog.e(e2);
+                    }
                 }
             }
         }
     }
 
-    /* JADX WARNING: Missing block: B:55:0x00e3, code skipped:
-            if (r13 != null) goto L_0x00e8;
+    /* JADX WARNING: Missing block: B:55:0x00e0, code skipped:
+            if (r13 != null) goto L_0x00e5;
      */
     private boolean checkUrl(java.lang.String r12, boolean r13) {
         /*
         r11 = this;
         r0 = r11.checkRunnable;
         r1 = 1;
-        if (r0 == 0) goto L_0x001e;
+        if (r0 == 0) goto L_0x001c;
     L_0x0005:
         org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0);
         r0 = 0;
         r11.checkRunnable = r0;
         r11.lastCheckName = r0;
         r0 = r11.checkReqId;
-        if (r0 == 0) goto L_0x001e;
+        if (r0 == 0) goto L_0x001c;
     L_0x0011:
-        r0 = r11.themeInfo;
-        r0 = r0.account;
+        r0 = r11.currentAccount;
         r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
         r2 = r11.checkReqId;
         r0.cancelRequest(r2, r1);
-    L_0x001e:
+    L_0x001c:
         r0 = 0;
         r11.lastNameAvailable = r0;
-        r2 = NUM; // 0x7f0e0aa2 float:1.8880558E38 double:1.0531635015E-314;
+        r2 = NUM; // 0x7f0e0ada float:1.8880672E38 double:1.053163529E-314;
         r3 = "Theme";
         r4 = "windowBackgroundWhiteRedText4";
-        if (r12 == 0) goto L_0x00ac;
-    L_0x002a:
+        if (r12 == 0) goto L_0x00ab;
+    L_0x0029:
         r5 = "_";
         r6 = r12.startsWith(r5);
-        r7 = NUM; // 0x7f0e09ea float:1.8880185E38 double:1.0531634106E-314;
+        r7 = NUM; // 0x7f0e0a21 float:1.8880297E38 double:1.0531634377E-314;
         r8 = "SetUrlInvalid";
-        if (r6 != 0) goto L_0x00a4;
-    L_0x0037:
+        if (r6 != 0) goto L_0x00a3;
+    L_0x0036:
         r5 = r12.endsWith(r5);
-        if (r5 == 0) goto L_0x003e;
+        if (r5 == 0) goto L_0x003d;
+    L_0x003c:
+        goto L_0x00a3;
     L_0x003d:
-        goto L_0x00a4;
-    L_0x003e:
         r5 = 0;
-    L_0x003f:
+    L_0x003e:
         r6 = r12.length();
-        if (r5 >= r6) goto L_0x00ac;
-    L_0x0045:
+        if (r5 >= r6) goto L_0x00ab;
+    L_0x0044:
         r6 = r12.charAt(r5);
         r9 = 57;
         r10 = 48;
-        if (r5 != 0) goto L_0x0073;
-    L_0x004f:
-        if (r6 < r10) goto L_0x0073;
-    L_0x0051:
-        if (r6 > r9) goto L_0x0073;
-    L_0x0053:
-        if (r13 == 0) goto L_0x0066;
-    L_0x0055:
+        if (r5 != 0) goto L_0x0072;
+    L_0x004e:
+        if (r6 < r10) goto L_0x0072;
+    L_0x0050:
+        if (r6 > r9) goto L_0x0072;
+    L_0x0052:
+        if (r13 == 0) goto L_0x0065;
+    L_0x0054:
         r12 = org.telegram.messenger.LocaleController.getString(r3, r2);
-        r13 = NUM; // 0x7f0e09ed float:1.8880191E38 double:1.053163412E-314;
+        r13 = NUM; // 0x7f0e0a24 float:1.8880303E38 double:1.053163439E-314;
         r1 = "SetUrlInvalidStartNumber";
         r13 = org.telegram.messenger.LocaleController.getString(r1, r13);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r12, r13);
-        goto L_0x0072;
-    L_0x0066:
-        r12 = NUM; // 0x7f0e09ed float:1.8880191E38 double:1.053163412E-314;
+        goto L_0x0071;
+    L_0x0065:
+        r12 = NUM; // 0x7f0e0a24 float:1.8880303E38 double:1.053163439E-314;
         r13 = "SetUrlInvalidStartNumber";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r11.setCheckText(r12, r4);
-    L_0x0072:
+    L_0x0071:
         return r0;
-    L_0x0073:
-        if (r6 < r10) goto L_0x0077;
-    L_0x0075:
-        if (r6 <= r9) goto L_0x00a1;
-    L_0x0077:
+    L_0x0072:
+        if (r6 < r10) goto L_0x0076;
+    L_0x0074:
+        if (r6 <= r9) goto L_0x00a0;
+    L_0x0076:
         r9 = 97;
-        if (r6 < r9) goto L_0x007f;
-    L_0x007b:
+        if (r6 < r9) goto L_0x007e;
+    L_0x007a:
         r9 = 122; // 0x7a float:1.71E-43 double:6.03E-322;
-        if (r6 <= r9) goto L_0x00a1;
-    L_0x007f:
+        if (r6 <= r9) goto L_0x00a0;
+    L_0x007e:
         r9 = 65;
-        if (r6 < r9) goto L_0x0087;
-    L_0x0083:
+        if (r6 < r9) goto L_0x0086;
+    L_0x0082:
         r9 = 90;
-        if (r6 <= r9) goto L_0x00a1;
-    L_0x0087:
+        if (r6 <= r9) goto L_0x00a0;
+    L_0x0086:
         r9 = 95;
-        if (r6 == r9) goto L_0x00a1;
-    L_0x008b:
-        if (r13 == 0) goto L_0x0099;
-    L_0x008d:
+        if (r6 == r9) goto L_0x00a0;
+    L_0x008a:
+        if (r13 == 0) goto L_0x0098;
+    L_0x008c:
         r12 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r13 = org.telegram.messenger.LocaleController.getString(r8, r7);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r12, r13);
-        goto L_0x00a0;
-    L_0x0099:
+        goto L_0x009f;
+    L_0x0098:
         r12 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r11.setCheckText(r12, r4);
+    L_0x009f:
+        return r0;
     L_0x00a0:
-        return r0;
-    L_0x00a1:
         r5 = r5 + 1;
-        goto L_0x003f;
-    L_0x00a4:
+        goto L_0x003e;
+    L_0x00a3:
         r12 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r11.setCheckText(r12, r4);
         return r0;
-    L_0x00ac:
-        if (r12 == 0) goto L_0x0120;
-    L_0x00ae:
+    L_0x00ab:
+        if (r12 == 0) goto L_0x011f;
+    L_0x00ad:
         r5 = r12.length();
         r6 = 5;
-        if (r5 >= r6) goto L_0x00b6;
+        if (r5 >= r6) goto L_0x00b5;
+    L_0x00b4:
+        goto L_0x011f;
     L_0x00b5:
-        goto L_0x0120;
-    L_0x00b6:
         r5 = r12.length();
         r6 = 64;
-        if (r5 <= r6) goto L_0x00d9;
-    L_0x00be:
-        r12 = NUM; // 0x7f0e09eb float:1.8880187E38 double:1.053163411E-314;
+        if (r5 <= r6) goto L_0x00d8;
+    L_0x00bd:
+        r12 = NUM; // 0x7f0e0a22 float:1.8880299E38 double:1.053163438E-314;
         r1 = "SetUrlInvalidLong";
-        if (r13 == 0) goto L_0x00d1;
-    L_0x00c5:
+        if (r13 == 0) goto L_0x00d0;
+    L_0x00c4:
         r13 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r13, r12);
-        goto L_0x00d8;
-    L_0x00d1:
+        goto L_0x00d7;
+    L_0x00d0:
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         r11.setCheckText(r12, r4);
-    L_0x00d8:
+    L_0x00d7:
         return r0;
-    L_0x00d9:
-        if (r13 != 0) goto L_0x011f;
-    L_0x00db:
-        r13 = r11.themeInfo;
-        if (r13 == 0) goto L_0x00e6;
-    L_0x00df:
-        r13 = r13.info;
+    L_0x00d8:
+        if (r13 != 0) goto L_0x011e;
+    L_0x00da:
+        r13 = r11.info;
+        if (r13 == 0) goto L_0x00e3;
+    L_0x00de:
         r13 = r13.slug;
-        if (r13 == 0) goto L_0x00e6;
-    L_0x00e5:
-        goto L_0x00e8;
-    L_0x00e6:
+        if (r13 == 0) goto L_0x00e3;
+    L_0x00e2:
+        goto L_0x00e5;
+    L_0x00e3:
         r13 = "";
-    L_0x00e8:
+    L_0x00e5:
         r13 = r12.equals(r13);
-        if (r13 == 0) goto L_0x0101;
-    L_0x00ee:
-        r13 = NUM; // 0x7f0e09e7 float:1.888018E38 double:1.053163409E-314;
+        if (r13 == 0) goto L_0x00ff;
+    L_0x00eb:
+        r13 = NUM; // 0x7f0e0a1e float:1.888029E38 double:1.0531634363E-314;
         r2 = new java.lang.Object[r1];
         r2[r0] = r12;
         r12 = "SetUrlAvailable";
@@ -588,8 +596,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r13 = "windowBackgroundWhiteGreenText";
         r11.setCheckText(r12, r13);
         return r1;
-    L_0x0101:
-        r13 = NUM; // 0x7f0e09e8 float:1.8880181E38 double:1.0531634096E-314;
+    L_0x00ff:
+        r13 = NUM; // 0x7f0e0a1f float:1.8880293E38 double:1.053163437E-314;
         r0 = "SetUrlChecking";
         r13 = org.telegram.messenger.LocaleController.getString(r0, r13);
         r0 = "windowBackgroundWhiteGrayText8";
@@ -601,21 +609,21 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r12 = r11.checkRunnable;
         r2 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r12, r2);
-    L_0x011f:
+    L_0x011e:
         return r1;
-    L_0x0120:
-        r12 = NUM; // 0x7f0e09ec float:1.888019E38 double:1.0531634116E-314;
+    L_0x011f:
+        r12 = NUM; // 0x7f0e0a23 float:1.88803E38 double:1.0531634387E-314;
         r1 = "SetUrlInvalidShort";
-        if (r13 == 0) goto L_0x0133;
-    L_0x0127:
+        if (r13 == 0) goto L_0x0132;
+    L_0x0126:
         r13 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r13, r12);
-        goto L_0x013a;
-    L_0x0133:
+        goto L_0x0139;
+    L_0x0132:
         r12 = org.telegram.messenger.LocaleController.getString(r1, r12);
         r11.setCheckText(r12, r4);
-    L_0x013a:
+    L_0x0139:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeSetUrlActivity.checkUrl(java.lang.String, boolean):boolean");
@@ -626,7 +634,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         tL_account_createTheme.slug = str;
         tL_account_createTheme.title = "";
         tL_account_createTheme.document = new TL_inputDocumentEmpty();
-        this.checkReqId = ConnectionsManager.getInstance(this.themeInfo.account).sendRequest(tL_account_createTheme, new -$$Lambda$ThemeSetUrlActivity$aQbtyL09ngk96Vga3xgJIqv0TIQ(this, str), 2);
+        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_createTheme, new -$$Lambda$ThemeSetUrlActivity$aQbtyL09ngk96Vga3xgJIqv0TIQ(this, str), 2);
     }
 
     public /* synthetic */ void lambda$null$7$ThemeSetUrlActivity(String str, TLObject tLObject, TL_error tL_error) {
@@ -634,7 +642,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     }
 
     /* JADX WARNING: Missing block: B:8:0x0021, code skipped:
-            if ("THEME_SLUG_OCCUPIED".equals(r5.text) == false) goto L_0x0035;
+            if ("THEME_SLUG_OCCUPIED".equals(r5.text) == false) goto L_0x0036;
      */
     public /* synthetic */ void lambda$null$6$ThemeSetUrlActivity(java.lang.String r4, org.telegram.tgnet.TLRPC.TL_error r5) {
         /*
@@ -642,12 +650,12 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r0 = 0;
         r3.checkReqId = r0;
         r1 = r3.lastCheckName;
-        if (r1 == 0) goto L_0x004a;
+        if (r1 == 0) goto L_0x004c;
     L_0x0007:
         r1 = r1.equals(r4);
-        if (r1 == 0) goto L_0x004a;
+        if (r1 == 0) goto L_0x004c;
     L_0x000d:
-        if (r5 == 0) goto L_0x0035;
+        if (r5 == 0) goto L_0x0036;
     L_0x000f:
         r1 = r5.text;
         r2 = "THEME_SLUG_INVALID";
@@ -659,17 +667,17 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r5 = r1.equals(r5);
         if (r5 != 0) goto L_0x0024;
     L_0x0023:
-        goto L_0x0035;
+        goto L_0x0036;
     L_0x0024:
-        r4 = NUM; // 0x7f0e09e9 float:1.8880183E38 double:1.05316341E-314;
+        r4 = NUM; // 0x7f0e0a20 float:1.8880295E38 double:1.0531634372E-314;
         r5 = "SetUrlInUse";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "windowBackgroundWhiteRedText4";
         r3.setCheckText(r4, r5);
         r3.lastNameAvailable = r0;
-        goto L_0x004a;
-    L_0x0035:
-        r5 = NUM; // 0x7f0e09e7 float:1.888018E38 double:1.053163409E-314;
+        goto L_0x004c;
+    L_0x0036:
+        r5 = NUM; // 0x7f0e0a1e float:1.888029E38 double:1.0531634363E-314;
         r1 = 1;
         r2 = new java.lang.Object[r1];
         r2[r0] = r4;
@@ -678,7 +686,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r5 = "windowBackgroundWhiteGreenText";
         r3.setCheckText(r4, r5);
         r3.lastNameAvailable = r1;
-    L_0x004a:
+    L_0x004c:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeSetUrlActivity.lambda$null$6$ThemeSetUrlActivity(java.lang.String, org.telegram.tgnet.TLRPC$TL_error):void");
@@ -716,26 +724,26 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (this.nameField.length() == 0) {
             AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", NUM), LocaleController.getString("ThemeNameInvalid", NUM));
         } else if (this.creatingNewTheme) {
-            ThemeInfo themeInfo = this.themeInfo;
-            str = themeInfo.name;
-            str2 = themeInfo.info.slug;
+            TL_theme tL_theme = this.info;
+            str = tL_theme.title;
+            str2 = tL_theme.slug;
             this.progressDialog = new AlertDialog(getParentActivity(), 3);
             this.progressDialog.setOnCancelListener(-$$Lambda$ThemeSetUrlActivity$DJii0csNwFlvBjy-KJ7HA1_lGQY.INSTANCE);
             this.progressDialog.show();
-            themeInfo = this.themeInfo;
-            TL_theme tL_theme = themeInfo.info;
+            ThemeInfo themeInfo = this.themeInfo;
+            TL_theme tL_theme2 = this.info;
             str = this.nameField.getText().toString();
-            tL_theme.title = str;
+            tL_theme2.title = str;
             themeInfo.name = str;
             this.themeInfo.info.slug = this.linkField.getText().toString();
             Theme.saveCurrentTheme(this.themeInfo, true, true, true);
         } else {
-            str2 = this.themeInfo.info.slug;
+            str2 = this.info.slug;
             str = "";
             if (str2 == null) {
                 str2 = str;
             }
-            String str3 = this.themeInfo.name;
+            String str3 = this.info.title;
             if (str3 != null) {
                 str = str3;
             }
@@ -748,18 +756,17 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             this.progressDialog = new AlertDialog(getParentActivity(), 3);
             TL_account_updateTheme tL_account_updateTheme = new TL_account_updateTheme();
             TL_inputTheme tL_inputTheme = new TL_inputTheme();
-            ThemeInfo themeInfo2 = this.themeInfo;
-            TL_theme tL_theme2 = themeInfo2.info;
-            tL_inputTheme.id = tL_theme2.id;
-            tL_inputTheme.access_hash = tL_theme2.access_hash;
+            TL_theme tL_theme3 = this.info;
+            tL_inputTheme.id = tL_theme3.id;
+            tL_inputTheme.access_hash = tL_theme3.access_hash;
             tL_account_updateTheme.theme = tL_inputTheme;
             tL_account_updateTheme.format = "android";
             tL_account_updateTheme.slug = str3;
             tL_account_updateTheme.flags = 1 | tL_account_updateTheme.flags;
             tL_account_updateTheme.title = obj;
             tL_account_updateTheme.flags |= 2;
-            int sendRequest = ConnectionsManager.getInstance(themeInfo2.account).sendRequest(tL_account_updateTheme, new -$$Lambda$ThemeSetUrlActivity$RZNy0C-blX8HMmj88uQdPDrohSI(this, tL_account_updateTheme), 2);
-            ConnectionsManager.getInstance(this.themeInfo.account).bindRequestToGuid(sendRequest, this.classGuid);
+            int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateTheme, new -$$Lambda$ThemeSetUrlActivity$RZNy0C-blX8HMmj88uQdPDrohSI(this, tL_account_updateTheme), 2);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
             this.progressDialog.setOnCancelListener(new -$$Lambda$ThemeSetUrlActivity$-rj0xYcSJRokmADGaQlIk9tW0x0(this, sendRequest));
             this.progressDialog.show();
         }
@@ -780,7 +787,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         } catch (Exception e) {
             FileLog.e(e);
         }
-        Theme.setThemeUploadInfo(this.themeInfo, tL_theme, false);
+        Theme.setThemeUploadInfo(this.themeInfo, this.themeAccent, tL_theme, this.currentAccount, false);
         finishFragment();
     }
 
@@ -791,11 +798,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         } catch (Exception e) {
             FileLog.e(e);
         }
-        AlertsCreator.processError(this.themeInfo.account, tL_error, this, tL_account_updateTheme, new Object[0]);
+        AlertsCreator.processError(this.currentAccount, tL_error, this, tL_account_updateTheme, new Object[0]);
     }
 
     public /* synthetic */ void lambda$saveTheme$13$ThemeSetUrlActivity(int i, DialogInterface dialogInterface) {
-        ConnectionsManager.getInstance(this.themeInfo.account).cancelRequest(i, true);
+        ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
     }
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
@@ -806,68 +813,63 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[57];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        themeDescriptionArr[1] = new ThemeDescription(this.linearLayoutTypeContainer, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        r1 = new ThemeDescription[58];
         View view = this.headerCell;
         Class[] clsArr = new Class[]{HeaderCell.class};
         String[] strArr = new String[1];
         strArr[0] = "textView";
-        themeDescriptionArr[6] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueHeader");
-        themeDescriptionArr[7] = new ThemeDescription(this.createInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[8] = new ThemeDescription(this.createInfoCell, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        themeDescriptionArr[9] = new ThemeDescription(this.helpInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[10] = new ThemeDescription(this.helpInfoCell, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        themeDescriptionArr[11] = new ThemeDescription(this.checkInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[12] = new ThemeDescription(this.checkInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteRedText4");
-        themeDescriptionArr[13] = new ThemeDescription(this.checkInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText8");
-        themeDescriptionArr[14] = new ThemeDescription(this.checkInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGreenText");
-        themeDescriptionArr[15] = new ThemeDescription(this.createCell, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[16] = new ThemeDescription(this.createCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[17] = new ThemeDescription(this.createCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[18] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[19] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[20] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
-        themeDescriptionArr[21] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
-        themeDescriptionArr[22] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[23] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[24] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[25] = new ThemeDescription(this.nameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[26] = new ThemeDescription(this.nameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[27] = new ThemeDescription(this.nameField, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[28] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[29] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[30] = new ThemeDescription(this.divider, 0, null, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[31] = new ThemeDescription(this.divider, ThemeDescription.FLAG_BACKGROUND, null, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[32] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInDrawable, Theme.chat_msgInMediaDrawable}, null, "chat_inBubble");
-        themeDescriptionArr[33] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInSelectedDrawable, Theme.chat_msgInMediaSelectedDrawable}, null, "chat_inBubbleSelected");
-        themeDescriptionArr[34] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInShadowDrawable, Theme.chat_msgInMediaShadowDrawable}, null, "chat_inBubbleShadow");
-        themeDescriptionArr[35] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubble");
-        themeDescriptionArr[36] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutSelectedDrawable, Theme.chat_msgOutMediaSelectedDrawable}, null, "chat_outBubbleSelected");
-        themeDescriptionArr[37] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutShadowDrawable, Theme.chat_msgOutMediaShadowDrawable}, null, "chat_outBubbleShadow");
-        themeDescriptionArr[38] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_messageTextIn");
-        themeDescriptionArr[39] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_messageTextOut");
-        themeDescriptionArr[40] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckDrawable}, null, "chat_outSentCheck");
-        themeDescriptionArr[41] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckSelectedDrawable}, null, "chat_outSentCheckSelected");
-        themeDescriptionArr[42] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckReadDrawable, Theme.chat_msgOutHalfCheckDrawable}, null, "chat_outSentCheckRead");
-        themeDescriptionArr[43] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckReadSelectedDrawable, Theme.chat_msgOutHalfCheckSelectedDrawable}, null, "chat_outSentCheckReadSelected");
-        themeDescriptionArr[44] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgMediaCheckDrawable, Theme.chat_msgMediaHalfCheckDrawable}, null, "chat_mediaSentCheck");
-        themeDescriptionArr[45] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inReplyLine");
-        themeDescriptionArr[46] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outReplyLine");
-        themeDescriptionArr[47] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inReplyNameText");
-        themeDescriptionArr[48] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outReplyNameText");
-        themeDescriptionArr[49] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inReplyMessageText");
-        themeDescriptionArr[50] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outReplyMessageText");
-        themeDescriptionArr[51] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inReplyMediaMessageSelectedText");
-        themeDescriptionArr[52] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outReplyMediaMessageSelectedText");
-        themeDescriptionArr[53] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inTimeText");
-        themeDescriptionArr[54] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outTimeText");
-        themeDescriptionArr[55] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inTimeSelectedText");
-        themeDescriptionArr[56] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outTimeSelectedText");
-        return themeDescriptionArr;
+        r1[6] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueHeader");
+        r1[7] = new ThemeDescription(this.createInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1[8] = new ThemeDescription(this.createInfoCell, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        r1[9] = new ThemeDescription(this.helpInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1[10] = new ThemeDescription(this.helpInfoCell, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        r1[11] = new ThemeDescription(this.checkInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1[12] = new ThemeDescription(this.checkInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteRedText4");
+        r1[13] = new ThemeDescription(this.checkInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText8");
+        r1[14] = new ThemeDescription(this.checkInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGreenText");
+        r1[15] = new ThemeDescription(this.createCell, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[16] = new ThemeDescription(this.createCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "listSelectorSDK21");
+        r1[17] = new ThemeDescription(this.createCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "windowBackgroundWhite");
+        r1[18] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[19] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
+        r1[20] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
+        r1[21] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
+        r1[22] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[23] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
+        r1[24] = new ThemeDescription(this.linkField, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[25] = new ThemeDescription(this.nameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[26] = new ThemeDescription(this.nameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
+        r1[27] = new ThemeDescription(this.nameField, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[28] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[29] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
+        r1[30] = new ThemeDescription(this.divider, 0, null, Theme.dividerPaint, null, null, "divider");
+        r1[31] = new ThemeDescription(this.divider, ThemeDescription.FLAG_BACKGROUND, null, Theme.dividerPaint, null, null, "divider");
+        r1[32] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInDrawable, Theme.chat_msgInMediaDrawable}, null, "chat_inBubble");
+        r1[33] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInSelectedDrawable, Theme.chat_msgInMediaSelectedDrawable}, null, "chat_inBubbleSelected");
+        r1[34] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInShadowDrawable, Theme.chat_msgInMediaShadowDrawable}, null, "chat_inBubbleShadow");
+        r1[35] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubble");
+        r1[36] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubbleGradient");
+        r1[37] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutSelectedDrawable, Theme.chat_msgOutMediaSelectedDrawable}, null, "chat_outBubbleSelected");
+        r1[38] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutShadowDrawable, Theme.chat_msgOutMediaShadowDrawable}, null, "chat_outBubbleShadow");
+        r1[39] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_messageTextIn");
+        r1[40] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_messageTextOut");
+        r1[41] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckDrawable}, null, "chat_outSentCheck");
+        r1[42] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckSelectedDrawable}, null, "chat_outSentCheckSelected");
+        r1[43] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckReadDrawable, Theme.chat_msgOutHalfCheckDrawable}, null, "chat_outSentCheckRead");
+        r1[44] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckReadSelectedDrawable, Theme.chat_msgOutHalfCheckSelectedDrawable}, null, "chat_outSentCheckReadSelected");
+        r1[45] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgMediaCheckDrawable, Theme.chat_msgMediaHalfCheckDrawable}, null, "chat_mediaSentCheck");
+        r1[46] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inReplyLine");
+        r1[47] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outReplyLine");
+        r1[48] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inReplyNameText");
+        r1[49] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outReplyNameText");
+        r1[50] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inReplyMessageText");
+        r1[51] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outReplyMessageText");
+        r1[52] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inReplyMediaMessageSelectedText");
+        r1[53] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outReplyMediaMessageSelectedText");
+        r1[54] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inTimeText");
+        r1[55] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outTimeText");
+        r1[56] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_inTimeSelectedText");
+        r1[57] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_outTimeSelectedText");
+        return r1;
     }
 }

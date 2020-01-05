@@ -20,6 +20,7 @@ import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.ShareLocationDrawable;
 
 public class SendLocationCell extends FrameLayout {
     private SimpleTextView accurateTextView;
@@ -41,7 +42,7 @@ public class SendLocationCell extends FrameLayout {
         super(context);
         this.imageView = new ImageView(context);
         this.imageView.setTag(z ? "location_sendLiveLocationBackgroundlocation_sendLiveLocationIcon" : "location_sendLocationBackgroundlocation_sendLocationIcon");
-        int dp = AndroidUtilities.dp(40.0f);
+        int dp = AndroidUtilities.dp(42.0f);
         String str = "location_sendLiveLocationBackground";
         String str2 = "location_sendLocationBackground";
         int color = Theme.getColor(z ? str : str2);
@@ -49,38 +50,37 @@ public class SendLocationCell extends FrameLayout {
             str = str2;
         }
         Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(dp, color, Theme.getColor(str));
-        Drawable drawable;
         CombinedDrawable combinedDrawable;
         if (z) {
             this.rect = new RectF();
-            drawable = getResources().getDrawable(NUM);
-            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLiveLocationIcon"), Mode.MULTIPLY));
-            combinedDrawable = new CombinedDrawable(createSimpleSelectorCircleDrawable, drawable);
-            combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
+            ShareLocationDrawable shareLocationDrawable = new ShareLocationDrawable(context, 4);
+            shareLocationDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLiveLocationIcon"), Mode.MULTIPLY));
+            combinedDrawable = new CombinedDrawable(createSimpleSelectorCircleDrawable, shareLocationDrawable);
+            combinedDrawable.setCustomSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
             this.imageView.setBackgroundDrawable(combinedDrawable);
             AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
             setWillNotDraw(false);
         } else {
-            drawable = getResources().getDrawable(NUM);
+            Drawable drawable = getResources().getDrawable(NUM);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLocationIcon"), Mode.MULTIPLY));
             combinedDrawable = new CombinedDrawable(createSimpleSelectorCircleDrawable, drawable);
-            combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
+            combinedDrawable.setCustomSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
             combinedDrawable.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
             this.imageView.setBackgroundDrawable(combinedDrawable);
         }
         ImageView imageView = this.imageView;
         int i = 5;
         int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-        float f = 17.0f;
-        float f2 = LocaleController.isRTL ? 0.0f : 17.0f;
+        float f = 15.0f;
+        float f2 = LocaleController.isRTL ? 0.0f : 15.0f;
         if (!LocaleController.isRTL) {
             f = 0.0f;
         }
-        addView(imageView, LayoutHelper.createFrame(40, 40.0f, i2, f2, 13.0f, f, 0.0f));
+        addView(imageView, LayoutHelper.createFrame(42, 42.0f, i2, f2, 12.0f, f, 0.0f));
         this.titleTextView = new SimpleTextView(context);
         this.titleTextView.setTextSize(16);
-        String str3 = "windowBackgroundWhiteRedText2";
-        str = "windowBackgroundWhiteBlueText7";
+        String str3 = "location_sendLiveLocationText";
+        str = "location_sendLocationText";
         this.titleTextView.setTag(z ? str3 : str);
         SimpleTextView simpleTextView = this.titleTextView;
         if (!z) {
