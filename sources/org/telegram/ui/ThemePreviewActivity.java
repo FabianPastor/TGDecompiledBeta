@@ -1356,6 +1356,10 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
                     if (ThemePreviewActivity.this.removeBackgroundOverride) {
                         Theme.resetCustomWallpaper(false);
                     }
+                    File pathToWallpaper = ThemePreviewActivity.this.accent.getPathToWallpaper();
+                    if (pathToWallpaper != null) {
+                        pathToWallpaper.delete();
+                    }
                     ThemePreviewActivity.this.accent.patternSlug = ThemePreviewActivity.this.selectedPattern != null ? ThemePreviewActivity.this.selectedPattern.slug : "";
                     ThemePreviewActivity.this.accent.patternIntensity = ThemePreviewActivity.this.currentIntensity;
                     ThemePreviewActivity.this.accent.patternMotion = ThemePreviewActivity.this.isMotion;

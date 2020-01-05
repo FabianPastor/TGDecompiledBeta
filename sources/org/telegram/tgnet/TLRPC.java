@@ -17008,14 +17008,14 @@ public class TLRPC {
 
     public static abstract class Theme extends TLObject {
         public static Theme TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-            TLObject tL_themeDocumentNotModified = i != -NUM ? i != 42930452 ? i != NUM ? null : new TL_themeDocumentNotModified() : new TL_theme() : new TL_theme_layer106();
-            if (tL_themeDocumentNotModified == null && z) {
+            TLObject tL_themeDocumentNotModified_layer106 = i != -NUM ? i != 42930452 ? i != NUM ? null : new TL_themeDocumentNotModified_layer106() : new TL_theme() : new TL_theme_layer106();
+            if (tL_themeDocumentNotModified_layer106 == null && z) {
                 throw new RuntimeException(String.format("can't parse magic %x in Theme", new Object[]{Integer.valueOf(i)}));
             }
-            if (tL_themeDocumentNotModified != null) {
-                tL_themeDocumentNotModified.readParams(abstractSerializedData, z);
+            if (tL_themeDocumentNotModified_layer106 != null) {
+                tL_themeDocumentNotModified_layer106.readParams(abstractSerializedData, z);
             }
-            return tL_themeDocumentNotModified;
+            return tL_themeDocumentNotModified_layer106;
         }
     }
 
@@ -30211,7 +30211,7 @@ public class TLRPC {
         }
     }
 
-    public static class TL_themeDocumentNotModified extends Theme {
+    public static class TL_themeDocumentNotModified_layer106 extends Theme {
         public static int constructor = NUM;
 
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {

@@ -1240,6 +1240,11 @@ public class MessagesController extends BaseController implements NotificationCe
                             if (i3 != 0) {
                                 tL_inputThemeSettings.message_top_color = i3;
                                 tL_inputThemeSettings.flags |= 1;
+                            } else {
+                                i3 = tL_inputThemeSettings.message_bottom_color;
+                                if (i3 != 0) {
+                                    tL_inputThemeSettings.message_top_color = i3;
+                                }
                             }
                             tL_inputThemeSettings.flags |= 2;
                             tL_inputThemeSettings.wallpaper_settings = new TL_wallPaperSettings();

@@ -1816,7 +1816,7 @@ public class Theme {
             if (TextUtils.isEmpty(this.patternSlug)) {
                 return null;
             }
-            return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id)}));
+            return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id), this.patternSlug}));
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:53:0x01ee A:{SYNTHETIC, Splitter:B:53:0x01ee} */
@@ -2833,11 +2833,48 @@ public class Theme {
             }
         }
 
-        public ThemeAccent createNewAccent(TL_themeSettings tL_themeSettings) {
-            ThemeAccent themeAccent = new ThemeAccent();
+        public static boolean accentEquals(ThemeAccent themeAccent, TL_themeSettings tL_themeSettings) {
+            int i;
+            int i2;
+            long j;
+            int i3 = tL_themeSettings.message_top_color;
+            if (tL_themeSettings.message_bottom_color == i3) {
+                i3 = 0;
+            }
+            CharSequence charSequence = null;
+            float f = 0.0f;
+            WallPaper wallPaper = tL_themeSettings.wallpaper;
+            if (wallPaper != null) {
+                WallPaperSettings wallPaperSettings = wallPaper.settings;
+                if (wallPaperSettings != null) {
+                    i = wallPaperSettings.background_color;
+                    i2 = wallPaperSettings.second_background_color;
+                    j = i2 == 0 ? 4294967296L : (long) i2;
+                    i2 = AndroidUtilities.getWallpaperRotation(tL_themeSettings.wallpaper.settings.rotation, false);
+                    WallPaper wallPaper2 = tL_themeSettings.wallpaper;
+                    if (!(wallPaper2 instanceof TL_wallPaperNoFile) && wallPaper2.pattern) {
+                        charSequence = wallPaper2.slug;
+                        f = ((float) wallPaper2.settings.intensity) / 100.0f;
+                    }
+                    if (tL_themeSettings.accent_color != themeAccent.accentColor && tL_themeSettings.message_bottom_color == themeAccent.myMessagesAccentColor && i3 == themeAccent.myMessagesGradientAccentColor && ((long) i) == themeAccent.backgroundOverrideColor && j == themeAccent.backgroundGradientOverrideColor && r4 == themeAccent.backgroundRotation && TextUtils.equals(charSequence, themeAccent.patternSlug) && ((double) Math.abs(f - themeAccent.patternIntensity)) < 0.001d) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            j = 0;
+            i = 0;
+            i2 = 0;
+            return tL_themeSettings.accent_color != themeAccent.accentColor ? false : false;
+        }
+
+        public static void fillAccentValues(ThemeAccent themeAccent, TL_themeSettings tL_themeSettings) {
             themeAccent.accentColor = tL_themeSettings.accent_color;
             themeAccent.myMessagesAccentColor = tL_themeSettings.message_bottom_color;
             themeAccent.myMessagesGradientAccentColor = tL_themeSettings.message_top_color;
+            if (themeAccent.myMessagesAccentColor == themeAccent.myMessagesGradientAccentColor) {
+                themeAccent.myMessagesGradientAccentColor = 0;
+            }
             WallPaper wallPaper = tL_themeSettings.wallpaper;
             if (wallPaper != null) {
                 WallPaperSettings wallPaperSettings = wallPaper.settings;
@@ -2859,6 +2896,11 @@ public class Theme {
                     }
                 }
             }
+        }
+
+        public ThemeAccent createNewAccent(TL_themeSettings tL_themeSettings) {
+            ThemeAccent themeAccent = new ThemeAccent();
+            fillAccentValues(themeAccent, tL_themeSettings);
             themeAccent.parentTheme = this;
             return themeAccent;
         }
@@ -2873,40 +2915,14 @@ public class Theme {
             }
             int i2 = this.lastAccentId + 1;
             this.lastAccentId = i2;
-            ThemeAccent themeAccent2 = new ThemeAccent();
-            TL_themeSettings tL_themeSettings = tL_theme.settings;
-            themeAccent2.accentColor = tL_themeSettings.accent_color;
-            themeAccent2.myMessagesAccentColor = tL_themeSettings.message_bottom_color;
-            themeAccent2.myMessagesGradientAccentColor = tL_themeSettings.message_top_color;
-            WallPaper wallPaper = tL_themeSettings.wallpaper;
-            if (wallPaper != null) {
-                WallPaperSettings wallPaperSettings = wallPaper.settings;
-                if (wallPaperSettings != null) {
-                    themeAccent2.backgroundOverrideColor = (long) wallPaperSettings.background_color;
-                    int i3 = wallPaperSettings.second_background_color;
-                    if (i3 == 0) {
-                        themeAccent2.backgroundGradientOverrideColor = 4294967296L;
-                    } else {
-                        themeAccent2.backgroundGradientOverrideColor = (long) i3;
-                    }
-                    themeAccent2.backgroundRotation = AndroidUtilities.getWallpaperRotation(tL_theme.settings.wallpaper.settings.rotation, false);
-                    wallPaper = tL_theme.settings.wallpaper;
-                    if (!(wallPaper instanceof TL_wallPaperNoFile) && wallPaper.pattern) {
-                        themeAccent2.patternSlug = wallPaper.slug;
-                        wallPaperSettings = wallPaper.settings;
-                        themeAccent2.patternIntensity = ((float) wallPaperSettings.intensity) / 100.0f;
-                        themeAccent2.patternMotion = wallPaperSettings.motion;
-                    }
-                }
-            }
-            themeAccent2.parentTheme = this;
-            themeAccent2.id = i2;
-            themeAccent2.info = tL_theme;
-            themeAccent2.account = i;
-            this.themeAccentsMap.put(i2, themeAccent2);
-            this.themeAccents.add(0, themeAccent2);
-            this.accentsByThemeId.put(tL_theme.id, themeAccent2);
-            return themeAccent2;
+            ThemeAccent createNewAccent = createNewAccent(tL_theme.settings);
+            createNewAccent.id = i2;
+            createNewAccent.info = tL_theme;
+            createNewAccent.account = i;
+            this.themeAccentsMap.put(i2, createNewAccent);
+            this.themeAccents.add(0, createNewAccent);
+            this.accentsByThemeId.put(tL_theme.id, createNewAccent);
+            return createNewAccent;
         }
 
         public ThemeAccent getAccent(boolean z) {
@@ -3043,70 +3059,99 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x2CLASSNAME A:{Catch:{ all -> 0x2CLASSNAME }} */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x2c1c A:{Catch:{ all -> 0x2CLASSNAME }} */
-    /* JADX WARNING: Removed duplicated region for block: B:159:0x2d58 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:167:0x2d78 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x2d75 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x2d91 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x2d85 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x2ad6 A:{SYNTHETIC, Splitter:B:68:0x2ad6} */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x2ac5 A:{Catch:{ Exception -> 0x2e34 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x2b25 A:{Catch:{ Exception -> 0x2e34 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:176:0x2d9f A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:180:0x2e05 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:179:0x2dfe A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x2e21 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:183:0x2e1a A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x2e8b  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:159:0x2d58 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x2d75 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:167:0x2d78 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x2d85 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x2d91 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:159:0x2d58 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:167:0x2d78 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x2d75 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x2d91 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x2d85 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x2e8b  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x2e8b  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:159:0x2d58 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x2d75 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:167:0x2d78 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x2d85 A:{Catch:{ Exception -> 0x2e32 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x2d91 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x2e3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x2e3b  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x2e8b  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x2edc  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x2efb  */
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x2eff  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x2c2c A:{Catch:{ all -> 0x2CLASSNAME }} */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x2CLASSNAME A:{Catch:{ all -> 0x2CLASSNAME }} */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d6a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d8a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d87 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x2daa A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d97 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x2ad9 A:{SYNTHETIC, Splitter:B:67:0x2ad9} */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x2ac8 A:{Catch:{ Exception -> 0x2e55 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x2afa A:{SYNTHETIC, Splitter:B:78:0x2afa} */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x2b28 A:{Catch:{ Exception -> 0x2e51 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x2db8 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:208:0x2e1e A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x2e17 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x2e3a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x2e33 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d6a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d87 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d8a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d97 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x2daa A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d6a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d8a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d87 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x2daa A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d97 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d6a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d87 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d8a A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d97 A:{Catch:{ Exception -> 0x2e4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x2daa A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x2e60  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x2e5d  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x2ead  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2efe  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x2f1d  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x2var_  */
     static {
         /*
         r0 = new java.lang.Object;
@@ -6873,8 +6918,8 @@ public class Theme {
         r10[r8] = r3;
         r8 = new int[r15];
         r8 = {0, 180, 45, 0, 45, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r4 = new int[r15];
-        r4 = {0, 52, 46, 57, 47, 64, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r7 = new int[r15];
+        r7 = {0, 52, 46, 57, 47, 64, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r16 = r11;
         r11 = r0;
         r21 = 16;
@@ -6883,7 +6928,7 @@ public class Theme {
         r17 = r6;
         r18 = r10;
         r19 = r8;
-        r20 = r4;
+        r20 = r7;
         r11.setAccentColorOptions(r12, r13, r14, r15, r16, r17, r18, r19, r20);
         r2 = themes;
         defaultTheme = r0;
@@ -6891,8 +6936,8 @@ public class Theme {
         currentDayTheme = r0;
         r2.add(r0);
         r2 = themesDict;
-        r4 = "Blue";
-        r2.put(r4, r0);
+        r6 = "Blue";
+        r2.put(r6, r0);
         r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
         r0.<init>();
         r2 = "Dark Blue";
@@ -6905,7 +6950,7 @@ public class Theme {
         r0.previewInColor = r2;
         r2 = -8214301; // 0xfffffffffvar_a8e3 float:NaN double:NaN;
         r0.previewOutColor = r2;
-        r0.sortIndex = r7;
+        r0.sortIndex = r4;
         r2 = 17;
         r11 = new int[r2];
         r11 = {-7177260, -9860357, -14440464, -8687151, -9848491, -14053142, -9403671, -13203974, -12138259, -11880383, -1344335, -1142742, -6127120, -2931932, -1131212, -8417365, -13270557};
@@ -6919,63 +6964,63 @@ public class Theme {
         r15 = {-15593453, -14277074, -15459034, -14541276, -15064812, -14932432, -15461096, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r2 = new int[r2];
         r2 = {11, 12, 13, 14, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        r4 = 17;
-        r4 = new java.lang.String[r4];
-        r6 = "dhf9pceaQVACAAAAbzdVo4SCiZA";
-        r4[r1] = r6;
-        r6 = "p-pXcflrmFIBAAAAvXYQk-mCwZU";
-        r4[r5] = r6;
-        r6 = "dk_wwlghOFACAAAAfz9xrxi6euw";
-        r4[r7] = r6;
-        r6 = "p-pXcflrmFIBAAAAvXYQk-mCwZU";
-        r8 = 3;
-        r4[r8] = r6;
-        r6 = "F5oWoCs7QFACAAAAgf2bD_mg8Bw";
-        r8 = 4;
-        r4[r8] = r6;
-        r6 = "-Xc-np9y2VMCAAAARKr0yNNPYW0";
-        r8 = 5;
-        r4[r8] = r6;
-        r6 = "JqSUrO0-mFIBAAAAWwTvLzoWGQI";
-        r8 = 6;
-        r4[r8] = r6;
-        r6 = 7;
-        r4[r6] = r3;
-        r6 = 8;
-        r4[r6] = r3;
-        r6 = 9;
-        r4[r6] = r3;
-        r6 = 10;
-        r4[r6] = r3;
-        r6 = 11;
-        r4[r6] = r3;
-        r6 = 12;
-        r4[r6] = r3;
-        r6 = 13;
-        r4[r6] = r3;
-        r6 = 14;
-        r4[r6] = r3;
-        r6 = 15;
-        r4[r6] = r3;
-        r4[r21] = r3;
         r6 = 17;
-        r6 = new int[r6];
-        r6 = {225, 45, 225, 135, 45, 225, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r6 = new java.lang.String[r6];
+        r7 = "dhf9pceaQVACAAAAbzdVo4SCiZA";
+        r6[r1] = r7;
+        r7 = "p-pXcflrmFIBAAAAvXYQk-mCwZU";
+        r6[r5] = r7;
+        r7 = "dk_wwlghOFACAAAAfz9xrxi6euw";
+        r8 = 2;
+        r6[r8] = r7;
+        r7 = "p-pXcflrmFIBAAAAvXYQk-mCwZU";
+        r6[r4] = r7;
+        r7 = "F5oWoCs7QFACAAAAgf2bD_mg8Bw";
+        r8 = 4;
+        r6[r8] = r7;
+        r7 = "-Xc-np9y2VMCAAAARKr0yNNPYW0";
+        r8 = 5;
+        r6[r8] = r7;
+        r7 = "JqSUrO0-mFIBAAAAWwTvLzoWGQI";
+        r8 = 6;
+        r6[r8] = r7;
+        r7 = 7;
+        r6[r7] = r3;
+        r7 = 8;
+        r6[r7] = r3;
+        r7 = 9;
+        r6[r7] = r3;
+        r7 = 10;
+        r6[r7] = r3;
+        r7 = 11;
+        r6[r7] = r3;
+        r7 = 12;
+        r6[r7] = r3;
+        r7 = 13;
+        r6[r7] = r3;
+        r7 = 14;
+        r6[r7] = r3;
+        r7 = 15;
+        r6[r7] = r3;
+        r6[r21] = r3;
+        r7 = 17;
+        r7 = new int[r7];
+        r7 = {225, 45, 225, 135, 45, 225, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r8 = 17;
         r8 = new int[r8];
         r8 = {35, 37, 31, 40, 30, 34, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r10 = r0;
         r16 = r2;
-        r17 = r4;
-        r18 = r6;
+        r17 = r6;
+        r18 = r7;
         r19 = r8;
         r10.setAccentColorOptions(r11, r12, r13, r14, r15, r16, r17, r18, r19);
         r2 = themes;
         r2.add(r0);
         r2 = themesDict;
         currentNightTheme = r0;
-        r4 = "Dark Blue";
-        r2.put(r4, r0);
+        r6 = "Dark Blue";
+        r2.put(r6, r0);
         r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
         r0.<init>();
         r2 = "Arctic Blue";
@@ -6988,7 +7033,7 @@ public class Theme {
         r0.previewInColor = r2;
         r2 = -9657877; // 0xffffffffff6ca1eb float:-3.1453853E38 double:NaN;
         r0.previewOutColor = r2;
-        r2 = 4;
+        r2 = 5;
         r0.sortIndex = r2;
         r2 = 15;
         r11 = new int[r2];
@@ -7001,58 +7046,58 @@ public class Theme {
         r14 = {-4922384, -2236758, -2437983, -1838093, -1120848, -1712148, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r15 = new int[r2];
         r15 = {-918020, -3544650, -1908290, -3610898, -1130838, -1980692, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r4 = new int[r2];
-        r4 = {9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8};
-        r6 = new java.lang.String[r2];
+        r6 = new int[r2];
+        r6 = {9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8};
+        r7 = new java.lang.String[r2];
         r2 = "bEuIiu4zQFAEAAAAD2nUXDlWBYw";
-        r6[r1] = r2;
+        r7[r1] = r2;
         r2 = "dhf9pceaQVACAAAAbzdVo4SCiZA";
-        r6[r5] = r2;
+        r7[r5] = r2;
         r2 = "fqv01SQemVIBAAAApND8LDRUhRU";
-        r6[r7] = r2;
+        r8 = 2;
+        r7[r8] = r2;
         r2 = "p-pXcflrmFIBAAAAvXYQk-mCwZU";
-        r8 = 3;
-        r6[r8] = r2;
+        r7[r4] = r2;
         r2 = "JqSUrO0-mFIBAAAAWwTvLzoWGQI";
         r8 = 4;
-        r6[r8] = r2;
+        r7[r8] = r2;
         r2 = "F5oWoCs7QFACAAAAgf2bD_mg8Bw";
         r8 = 5;
-        r6[r8] = r2;
+        r7[r8] = r2;
         r2 = 6;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 7;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 8;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 9;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 10;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 11;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 12;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 13;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 14;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 15;
         r8 = new int[r2];
         r8 = {315, 315, 225, 315, 0, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r2 = new int[r2];
         r2 = {37, 50, 58, 47, 46, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r10 = r0;
-        r16 = r4;
-        r17 = r6;
+        r16 = r6;
+        r17 = r7;
         r18 = r8;
         r19 = r2;
         r10.setAccentColorOptions(r11, r12, r13, r14, r15, r16, r17, r18, r19);
         r2 = themes;
         r2.add(r0);
         r2 = themesDict;
-        r4 = "Arctic Blue";
-        r2.put(r4, r0);
+        r6 = "Arctic Blue";
+        r2.put(r6, r0);
         r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
         r0.<init>();
         r2 = "Day";
@@ -7065,7 +7110,7 @@ public class Theme {
         r0.previewInColor = r2;
         r2 = -8604930; // 0xffffffffff7cb2fe float:-3.3589484E38 double:NaN;
         r0.previewOutColor = r2;
-        r2 = 3;
+        r2 = 2;
         r0.sortIndex = r2;
         r2 = 14;
         r11 = new int[r2];
@@ -7078,50 +7123,50 @@ public class Theme {
         r14 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r15 = new int[r2];
         r15 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r4 = new int[r2];
-        r4 = {9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8};
-        r6 = new java.lang.String[r2];
-        r6[r1] = r3;
-        r6[r5] = r3;
-        r6[r7] = r3;
-        r2 = 3;
-        r6[r2] = r3;
+        r6 = new int[r2];
+        r6 = {9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8};
+        r7 = new java.lang.String[r2];
+        r7[r1] = r3;
+        r7[r5] = r3;
+        r2 = 2;
+        r7[r2] = r3;
+        r7[r4] = r3;
         r2 = 4;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 5;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 6;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 7;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 8;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 9;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 10;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 11;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 12;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 13;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 14;
         r8 = new int[r2];
         r8 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r2 = new int[r2];
         r2 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r10 = r0;
-        r16 = r4;
-        r17 = r6;
+        r16 = r6;
+        r17 = r7;
         r18 = r8;
         r19 = r2;
         r10.setAccentColorOptions(r11, r12, r13, r14, r15, r16, r17, r18, r19);
         r2 = themes;
         r2.add(r0);
         r2 = themesDict;
-        r4 = "Day";
-        r2.put(r4, r0);
+        r6 = "Day";
+        r2.put(r6, r0);
         r0 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
         r0.<init>();
         r2 = "Night";
@@ -7134,11 +7179,11 @@ public class Theme {
         r0.previewInColor = r2;
         r2 = -9067802; // 0xfffffffffvar_a2e6 float:-3.2650668E38 double:NaN;
         r0.previewOutColor = r2;
-        r2 = 5;
+        r2 = 4;
         r0.sortIndex = r2;
         r2 = 9;
         r11 = new int[r2];
-        r11 = {-13203974, -12138259, -11880383, -1344335, -1142742, -6127120, -2931932, -1131212, -8417365};
+        r11 = {-12678921, -11881005, -11880383, -2534026, -1934037, -7115558, -3128522, -1528292, -8812381};
         r12 = new int[r2];
         r12 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         r13 = new int[r2];
@@ -7147,24 +7192,24 @@ public class Theme {
         r14 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         r15 = new int[r2];
         r15 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r4 = new int[r2];
-        r4 = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-        r6 = new java.lang.String[r2];
-        r6[r1] = r3;
-        r6[r5] = r3;
-        r6[r7] = r3;
-        r2 = 3;
-        r6[r2] = r3;
+        r6 = new int[r2];
+        r6 = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        r7 = new java.lang.String[r2];
+        r7[r1] = r3;
+        r7[r5] = r3;
+        r2 = 2;
+        r7[r2] = r3;
+        r7[r4] = r3;
         r2 = 4;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 5;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 6;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 7;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 8;
-        r6[r2] = r3;
+        r7[r2] = r3;
         r2 = 9;
         r8 = new int[r2];
         r8 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -7172,8 +7217,8 @@ public class Theme {
         r10 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         r2 = r10;
         r10 = r0;
-        r16 = r4;
-        r17 = r6;
+        r16 = r6;
+        r17 = r7;
         r18 = r8;
         r19 = r2;
         r10.setAccentColorOptions(r11, r12, r13, r14, r15, r16, r17, r18, r19);
@@ -7181,764 +7226,802 @@ public class Theme {
         r2.add(r0);
         r2 = themesDict;
         currentNightTheme = r0;
-        r4 = "Night";
-        r2.put(r4, r0);
+        r6 = "Night";
+        r2.put(r6, r0);
         r0 = "themes2";
         r2 = 0;
         r0 = r9.getString(r0, r2);
         r2 = 0;
     L_0x297d:
-        r4 = 3;
-        if (r2 >= r4) goto L_0x29c5;
-    L_0x2980:
-        r4 = remoteThemesHash;
-        r6 = new java.lang.StringBuilder;
-        r6.<init>();
+        if (r2 >= r4) goto L_0x29c4;
+    L_0x297f:
+        r6 = remoteThemesHash;
+        r7 = new java.lang.StringBuilder;
+        r7.<init>();
         r8 = "remoteThemesHash";
-        r6.append(r8);
-        if (r2 == 0) goto L_0x2993;
-    L_0x298e:
+        r7.append(r8);
+        if (r2 == 0) goto L_0x2992;
+    L_0x298d:
         r8 = java.lang.Integer.valueOf(r2);
-        goto L_0x2994;
+        goto L_0x2993;
+    L_0x2992:
+        r8 = r3;
     L_0x2993:
-        r8 = r3;
-    L_0x2994:
-        r6.append(r8);
-        r6 = r6.toString();
-        r6 = r9.getInt(r6, r1);
-        r4[r2] = r6;
-        r4 = lastLoadingThemesTime;
-        r6 = new java.lang.StringBuilder;
-        r6.<init>();
+        r7.append(r8);
+        r7 = r7.toString();
+        r7 = r9.getInt(r7, r1);
+        r6[r2] = r7;
+        r6 = lastLoadingThemesTime;
+        r7 = new java.lang.StringBuilder;
+        r7.<init>();
         r8 = "lastLoadingThemesTime";
-        r6.append(r8);
-        if (r2 == 0) goto L_0x29b4;
-    L_0x29af:
+        r7.append(r8);
+        if (r2 == 0) goto L_0x29b3;
+    L_0x29ae:
         r8 = java.lang.Integer.valueOf(r2);
-        goto L_0x29b5;
-    L_0x29b4:
+        goto L_0x29b4;
+    L_0x29b3:
         r8 = r3;
-    L_0x29b5:
-        r6.append(r8);
-        r6 = r6.toString();
-        r6 = r9.getInt(r6, r1);
-        r4[r2] = r6;
+    L_0x29b4:
+        r7.append(r8);
+        r7 = r7.toString();
+        r7 = r9.getInt(r7, r1);
+        r6[r2] = r7;
         r2 = r2 + 1;
         goto L_0x297d;
-    L_0x29c5:
+    L_0x29c4:
         r2 = android.text.TextUtils.isEmpty(r0);
-        if (r2 != 0) goto L_0x29ff;
-    L_0x29cb:
-        r2 = new org.json.JSONArray;	 Catch:{ Exception -> 0x29fa }
-        r2.<init>(r0);	 Catch:{ Exception -> 0x29fa }
+        if (r2 != 0) goto L_0x29fe;
+    L_0x29ca:
+        r2 = new org.json.JSONArray;	 Catch:{ Exception -> 0x29f9 }
+        r2.<init>(r0);	 Catch:{ Exception -> 0x29f9 }
         r0 = 0;
-    L_0x29d1:
-        r4 = r2.length();	 Catch:{ Exception -> 0x29fa }
-        if (r0 >= r4) goto L_0x2a46;
-    L_0x29d7:
-        r4 = r2.getJSONObject(r0);	 Catch:{ Exception -> 0x29fa }
-        r4 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r4);	 Catch:{ Exception -> 0x29fa }
-        if (r4 == 0) goto L_0x29f7;
-    L_0x29e1:
-        r6 = otherThemes;	 Catch:{ Exception -> 0x29fa }
-        r6.add(r4);	 Catch:{ Exception -> 0x29fa }
-        r6 = themes;	 Catch:{ Exception -> 0x29fa }
-        r6.add(r4);	 Catch:{ Exception -> 0x29fa }
-        r6 = themesDict;	 Catch:{ Exception -> 0x29fa }
-        r8 = r4.getKey();	 Catch:{ Exception -> 0x29fa }
-        r6.put(r8, r4);	 Catch:{ Exception -> 0x29fa }
-        r4.loadWallpapers(r9);	 Catch:{ Exception -> 0x29fa }
-    L_0x29f7:
+    L_0x29d0:
+        r6 = r2.length();	 Catch:{ Exception -> 0x29f9 }
+        if (r0 >= r6) goto L_0x2a45;
+    L_0x29d6:
+        r6 = r2.getJSONObject(r0);	 Catch:{ Exception -> 0x29f9 }
+        r6 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r6);	 Catch:{ Exception -> 0x29f9 }
+        if (r6 == 0) goto L_0x29f6;
+    L_0x29e0:
+        r7 = otherThemes;	 Catch:{ Exception -> 0x29f9 }
+        r7.add(r6);	 Catch:{ Exception -> 0x29f9 }
+        r7 = themes;	 Catch:{ Exception -> 0x29f9 }
+        r7.add(r6);	 Catch:{ Exception -> 0x29f9 }
+        r7 = themesDict;	 Catch:{ Exception -> 0x29f9 }
+        r8 = r6.getKey();	 Catch:{ Exception -> 0x29f9 }
+        r7.put(r8, r6);	 Catch:{ Exception -> 0x29f9 }
+        r6.loadWallpapers(r9);	 Catch:{ Exception -> 0x29f9 }
+    L_0x29f6:
         r0 = r0 + 1;
-        goto L_0x29d1;
-    L_0x29fa:
+        goto L_0x29d0;
+    L_0x29f9:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x2a46;
-    L_0x29ff:
+        goto L_0x2a45;
+    L_0x29fe:
         r0 = 0;
         r2 = "themes";
         r0 = r9.getString(r2, r0);
         r2 = android.text.TextUtils.isEmpty(r0);
-        if (r2 != 0) goto L_0x2a46;
-    L_0x2a0d:
+        if (r2 != 0) goto L_0x2a45;
+    L_0x2a0c:
         r2 = "&";
         r0 = r0.split(r2);
         r2 = 0;
-    L_0x2a14:
-        r4 = r0.length;
-        if (r2 >= r4) goto L_0x2a35;
-    L_0x2a17:
-        r4 = r0[r2];
-        r4 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r4);
-        if (r4 == 0) goto L_0x2a32;
-    L_0x2a1f:
-        r6 = otherThemes;
-        r6.add(r4);
-        r6 = themes;
-        r6.add(r4);
-        r6 = themesDict;
-        r8 = r4.getKey();
-        r6.put(r8, r4);
-    L_0x2a32:
+    L_0x2a13:
+        r6 = r0.length;
+        if (r2 >= r6) goto L_0x2a34;
+    L_0x2a16:
+        r6 = r0[r2];
+        r6 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r6);
+        if (r6 == 0) goto L_0x2a31;
+    L_0x2a1e:
+        r7 = otherThemes;
+        r7.add(r6);
+        r7 = themes;
+        r7.add(r6);
+        r7 = themesDict;
+        r8 = r6.getKey();
+        r7.put(r8, r6);
+    L_0x2a31:
         r2 = r2 + 1;
-        goto L_0x2a14;
-    L_0x2a35:
+        goto L_0x2a13;
+    L_0x2a34:
         saveOtherThemes(r5, r5);
         r0 = r9.edit();
         r2 = "themes";
         r0 = r0.remove(r2);
         r0.commit();
-    L_0x2a46:
+    L_0x2a45:
         sortThemes();
         r2 = 0;
-        r4 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e34 }
-        r6 = "Dark Blue";
-        r0 = r0.get(r6);	 Catch:{ Exception -> 0x2e34 }
-        r6 = r0;
-        r6 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r6;	 Catch:{ Exception -> 0x2e34 }
+        r6 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e55 }
+        r7 = "Dark Blue";
+        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e55 }
+        r7 = r0;
+        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e55 }
         r0 = "theme";
         r8 = 0;
-        r0 = r4.getString(r0, r8);	 Catch:{ Exception -> 0x2e34 }
+        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e55 }
         r8 = "Default";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e34 }
-        if (r8 == 0) goto L_0x2a7e;
-    L_0x2a69:
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e34 }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e55 }
+        if (r8 == 0) goto L_0x2a7f;
+    L_0x2a68:
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e55 }
         r8 = "Blue";
-        r0 = r0.get(r8);	 Catch:{ Exception -> 0x2e34 }
+        r0 = r0.get(r8);	 Catch:{ Exception -> 0x2e55 }
         r8 = r0;
-        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e34 }
-        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a7a }
-        r8.currentAccentId = r0;	 Catch:{ Exception -> 0x2a7a }
-    L_0x2a78:
+        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e55 }
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a79 }
+        r8.currentAccentId = r0;	 Catch:{ Exception -> 0x2a79 }
+    L_0x2a77:
         r2 = r8;
-        goto L_0x2ab6;
-    L_0x2a7a:
+        goto L_0x2ab9;
+    L_0x2a79:
         r0 = move-exception;
+        r4 = r3;
+        r1 = r6;
         r2 = r8;
-        goto L_0x2e35;
-    L_0x2a7e:
+        goto L_0x2e58;
+    L_0x2a7f:
         r8 = "Dark";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e34 }
-        if (r8 == 0) goto L_0x2a90;
-    L_0x2a86:
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e55 }
+        if (r8 == 0) goto L_0x2a93;
+    L_0x2a87:
         r8 = 9;
-        r6.currentAccentId = r8;	 Catch:{ Exception -> 0x2a8c }
-        r2 = r6;
-        goto L_0x2ab6;
-    L_0x2a8c:
+        r7.currentAccentId = r8;	 Catch:{ Exception -> 0x2a8d }
+        r2 = r7;
+        goto L_0x2ab9;
+    L_0x2a8d:
         r0 = move-exception;
-        r2 = r6;
-        goto L_0x2e35;
-    L_0x2a90:
-        if (r0 == 0) goto L_0x2ab6;
-    L_0x2a92:
-        r8 = themesDict;	 Catch:{ Exception -> 0x2e34 }
-        r0 = r8.get(r0);	 Catch:{ Exception -> 0x2e34 }
+        r4 = r3;
+        r1 = r6;
+        r2 = r7;
+        goto L_0x2e58;
+    L_0x2a93:
+        if (r0 == 0) goto L_0x2ab9;
+    L_0x2a95:
+        r8 = themesDict;	 Catch:{ Exception -> 0x2e55 }
+        r0 = r8.get(r0);	 Catch:{ Exception -> 0x2e55 }
         r8 = r0;
-        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e34 }
-        if (r8 == 0) goto L_0x2a78;
-    L_0x2a9d:
+        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e55 }
+        if (r8 == 0) goto L_0x2a77;
+    L_0x2aa0:
         r0 = "lastDayTheme";
-        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2a7a }
-        if (r0 != 0) goto L_0x2a78;
-    L_0x2aa5:
-        r0 = r9.edit();	 Catch:{ Exception -> 0x2a7a }
+        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2a79 }
+        if (r0 != 0) goto L_0x2a77;
+    L_0x2aa8:
+        r0 = r9.edit();	 Catch:{ Exception -> 0x2a79 }
         r2 = "lastDayTheme";
-        r10 = r8.getKey();	 Catch:{ Exception -> 0x2a7a }
-        r0.putString(r2, r10);	 Catch:{ Exception -> 0x2a7a }
-        r0.commit();	 Catch:{ Exception -> 0x2a7a }
-        goto L_0x2a78;
-    L_0x2ab6:
+        r10 = r8.getKey();	 Catch:{ Exception -> 0x2a79 }
+        r0.putString(r2, r10);	 Catch:{ Exception -> 0x2a79 }
+        r0.commit();	 Catch:{ Exception -> 0x2a79 }
+        goto L_0x2a77;
+    L_0x2ab9:
         r0 = "nighttheme";
         r8 = 0;
-        r0 = r4.getString(r0, r8);	 Catch:{ Exception -> 0x2e34 }
+        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e55 }
         r8 = "Default";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e34 }
-        if (r8 == 0) goto L_0x2ad6;
-    L_0x2ac5:
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e34 }
-        r6 = "Blue";
-        r0 = r0.get(r6);	 Catch:{ Exception -> 0x2e34 }
-        r6 = r0;
-        r6 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r6;	 Catch:{ Exception -> 0x2e34 }
-        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a8c }
-        r6.currentAccentId = r0;	 Catch:{ Exception -> 0x2a8c }
-        r2 = r6;
-        goto L_0x2af3;
-    L_0x2ad6:
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e55 }
+        if (r8 == 0) goto L_0x2ad9;
+    L_0x2ac8:
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e55 }
+        r7 = "Blue";
+        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e55 }
+        r7 = r0;
+        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e55 }
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a8d }
+        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2a8d }
+        r2 = r7;
+        goto L_0x2af6;
+    L_0x2ad9:
         r8 = "Dark";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e34 }
-        if (r8 == 0) goto L_0x2ae5;
-    L_0x2ade:
-        currentNightTheme = r6;	 Catch:{ Exception -> 0x2e34 }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e55 }
+        if (r8 == 0) goto L_0x2ae8;
+    L_0x2ae1:
+        currentNightTheme = r7;	 Catch:{ Exception -> 0x2e55 }
         r8 = 9;
-        r6.currentAccentId = r8;	 Catch:{ Exception -> 0x2e34 }
-        goto L_0x2af3;
-    L_0x2ae5:
-        if (r0 == 0) goto L_0x2af3;
-    L_0x2ae7:
-        r6 = themesDict;	 Catch:{ Exception -> 0x2e34 }
-        r0 = r6.get(r0);	 Catch:{ Exception -> 0x2e34 }
-        r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0;	 Catch:{ Exception -> 0x2e34 }
-        if (r0 == 0) goto L_0x2af3;
-    L_0x2af1:
-        currentNightTheme = r0;	 Catch:{ Exception -> 0x2e34 }
-    L_0x2af3:
-        r0 = currentNightTheme;	 Catch:{ Exception -> 0x2e34 }
-        if (r0 == 0) goto L_0x2b11;
-    L_0x2af7:
+        r7.currentAccentId = r8;	 Catch:{ Exception -> 0x2e55 }
+        goto L_0x2af6;
+    L_0x2ae8:
+        if (r0 == 0) goto L_0x2af6;
+    L_0x2aea:
+        r7 = themesDict;	 Catch:{ Exception -> 0x2e55 }
+        r0 = r7.get(r0);	 Catch:{ Exception -> 0x2e55 }
+        r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0;	 Catch:{ Exception -> 0x2e55 }
+        if (r0 == 0) goto L_0x2af6;
+    L_0x2af4:
+        currentNightTheme = r0;	 Catch:{ Exception -> 0x2e55 }
+    L_0x2af6:
+        r0 = currentNightTheme;	 Catch:{ Exception -> 0x2e51 }
+        if (r0 == 0) goto L_0x2b14;
+    L_0x2afa:
         r0 = "lastDarkTheme";
-        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2e34 }
-        if (r0 != 0) goto L_0x2b11;
-    L_0x2aff:
-        r0 = r9.edit();	 Catch:{ Exception -> 0x2e34 }
-        r6 = "lastDarkTheme";
-        r8 = currentNightTheme;	 Catch:{ Exception -> 0x2e34 }
-        r8 = r8.getKey();	 Catch:{ Exception -> 0x2e34 }
-        r0.putString(r6, r8);	 Catch:{ Exception -> 0x2e34 }
-        r0.commit();	 Catch:{ Exception -> 0x2e34 }
-    L_0x2b11:
+        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2e55 }
+        if (r0 != 0) goto L_0x2b14;
+    L_0x2b02:
+        r0 = r9.edit();	 Catch:{ Exception -> 0x2e55 }
+        r7 = "lastDarkTheme";
+        r8 = currentNightTheme;	 Catch:{ Exception -> 0x2e55 }
+        r8 = r8.getKey();	 Catch:{ Exception -> 0x2e55 }
+        r0.putString(r7, r8);	 Catch:{ Exception -> 0x2e55 }
+        r0.commit();	 Catch:{ Exception -> 0x2e55 }
+    L_0x2b14:
         r0 = 0;
-        r6 = 0;
-        r8 = themesDict;	 Catch:{ Exception -> 0x2e34 }
-        r8 = r8.values();	 Catch:{ Exception -> 0x2e34 }
-        r8 = r8.iterator();	 Catch:{ Exception -> 0x2e34 }
-        r10 = r6;
-        r6 = r0;
-    L_0x2b1f:
-        r0 = r8.hasNext();	 Catch:{ Exception -> 0x2e34 }
-        if (r0 == 0) goto L_0x2d9a;
-    L_0x2b25:
-        r0 = r8.next();	 Catch:{ Exception -> 0x2e34 }
+        r7 = 0;
+        r8 = themesDict;	 Catch:{ Exception -> 0x2e51 }
+        r8 = r8.values();	 Catch:{ Exception -> 0x2e51 }
+        r8 = r8.iterator();	 Catch:{ Exception -> 0x2e51 }
+        r10 = r7;
+        r7 = r0;
+    L_0x2b22:
+        r0 = r8.hasNext();	 Catch:{ Exception -> 0x2e51 }
+        if (r0 == 0) goto L_0x2db2;
+    L_0x2b28:
+        r0 = r8.next();	 Catch:{ Exception -> 0x2e51 }
         r11 = r0;
-        r11 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r11;	 Catch:{ Exception -> 0x2e34 }
-        r0 = r11.assetName;	 Catch:{ Exception -> 0x2e34 }
-        if (r0 == 0) goto L_0x2d8a;
-    L_0x2b30:
-        r0 = r11.accentBaseColor;	 Catch:{ Exception -> 0x2e34 }
-        if (r0 == 0) goto L_0x2d8a;
-    L_0x2b34:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e34 }
-        r0.<init>();	 Catch:{ Exception -> 0x2e34 }
+        r11 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r11;	 Catch:{ Exception -> 0x2e51 }
+        r0 = r11.assetName;	 Catch:{ Exception -> 0x2e51 }
+        if (r0 == 0) goto L_0x2da4;
+    L_0x2b33:
+        r0 = r11.accentBaseColor;	 Catch:{ Exception -> 0x2e51 }
+        if (r0 == 0) goto L_0x2da4;
+    L_0x2b37:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e51 }
+        r0.<init>();	 Catch:{ Exception -> 0x2e51 }
         r12 = "accents_";
-        r0.append(r12);	 Catch:{ Exception -> 0x2e34 }
-        r12 = r11.assetName;	 Catch:{ Exception -> 0x2e34 }
-        r0.append(r12);	 Catch:{ Exception -> 0x2e34 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e34 }
+        r0.append(r12);	 Catch:{ Exception -> 0x2e51 }
+        r12 = r11.assetName;	 Catch:{ Exception -> 0x2e51 }
+        r0.append(r12);	 Catch:{ Exception -> 0x2e51 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e51 }
         r12 = 0;
-        r0 = r9.getString(r0, r12);	 Catch:{ Exception -> 0x2e34 }
-        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e34 }
-        r12.<init>();	 Catch:{ Exception -> 0x2e34 }
+        r0 = r9.getString(r0, r12);	 Catch:{ Exception -> 0x2e51 }
+        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e51 }
+        r12.<init>();	 Catch:{ Exception -> 0x2e51 }
         r13 = "accent_current_";
-        r12.append(r13);	 Catch:{ Exception -> 0x2e34 }
-        r13 = r11.assetName;	 Catch:{ Exception -> 0x2e34 }
-        r12.append(r13);	 Catch:{ Exception -> 0x2e34 }
-        r12 = r12.toString();	 Catch:{ Exception -> 0x2e34 }
-        r13 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e34 }
-        if (r13 == 0) goto L_0x2b66;
-    L_0x2b63:
-        r13 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e34 }
-        goto L_0x2b67;
+        r12.append(r13);	 Catch:{ Exception -> 0x2e51 }
+        r13 = r11.assetName;	 Catch:{ Exception -> 0x2e51 }
+        r12.append(r13);	 Catch:{ Exception -> 0x2e51 }
+        r12 = r12.toString();	 Catch:{ Exception -> 0x2e51 }
+        r13 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e51 }
+        if (r13 == 0) goto L_0x2b69;
     L_0x2b66:
+        r13 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e55 }
+        goto L_0x2b6a;
+    L_0x2b69:
         r13 = 0;
-    L_0x2b67:
-        r12 = r9.getInt(r12, r13);	 Catch:{ Exception -> 0x2e34 }
-        r11.currentAccentId = r12;	 Catch:{ Exception -> 0x2e34 }
-        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x2e34 }
-        r12.<init>();	 Catch:{ Exception -> 0x2e34 }
-        r13 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x2e34 }
-        if (r13 != 0) goto L_0x2c5a;
-    L_0x2b78:
-        r13 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x2c4d }
-        r14 = 3;
-        r0 = android.util.Base64.decode(r0, r14);	 Catch:{ all -> 0x2c4d }
-        r13.<init>(r0);	 Catch:{ all -> 0x2c4d }
-        r0 = r13.readInt32(r5);	 Catch:{ all -> 0x2c4d }
-        r14 = r13.readInt32(r5);	 Catch:{ all -> 0x2c4d }
+    L_0x2b6a:
+        r12 = r9.getInt(r12, r13);	 Catch:{ Exception -> 0x2e51 }
+        r11.currentAccentId = r12;	 Catch:{ Exception -> 0x2e51 }
+        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x2e51 }
+        r12.<init>();	 Catch:{ Exception -> 0x2e51 }
+        r13 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x2e51 }
+        if (r13 != 0) goto L_0x2CLASSNAME;
+    L_0x2b7b:
+        r13 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x2CLASSNAME }
+        r0 = android.util.Base64.decode(r0, r4);	 Catch:{ all -> 0x2CLASSNAME }
+        r13.<init>(r0);	 Catch:{ all -> 0x2CLASSNAME }
+        r0 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r14 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
         r15 = 0;
-    L_0x2b8b:
-        if (r15 >= r14) goto L_0x2CLASSNAME;
     L_0x2b8d:
-        r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ all -> 0x2c4d }
-        r1.<init>();	 Catch:{ all -> 0x2c4d }
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2c4d }
-        r1.id = r7;	 Catch:{ all -> 0x2c4d }
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2c4d }
-        r1.accentColor = r7;	 Catch:{ all -> 0x2c4d }
-        r1.parentTheme = r11;	 Catch:{ all -> 0x2c4d }
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2c4d }
-        r1.myMessagesAccentColor = r7;	 Catch:{ all -> 0x2c4d }
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2c4d }
-        r1.myMessagesGradientAccentColor = r7;	 Catch:{ all -> 0x2c4d }
-        r7 = 3;
-        if (r0 < r7) goto L_0x2bb8;
-    L_0x2baf:
-        r18 = r8;
-        r7 = r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundOverrideColor = r7;	 Catch:{ all -> 0x2CLASSNAME }
-        goto L_0x2bc1;
-    L_0x2bb8:
-        r18 = r8;
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = (long) r7;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundOverrideColor = r7;	 Catch:{ all -> 0x2CLASSNAME }
-    L_0x2bc1:
-        r7 = 2;
-        if (r0 < r7) goto L_0x2bcb;
-    L_0x2bc4:
-        r7 = r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundGradientOverrideColor = r7;	 Catch:{ all -> 0x2CLASSNAME }
-        goto L_0x2bd2;
-    L_0x2bcb:
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = (long) r7;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundGradientOverrideColor = r7;	 Catch:{ all -> 0x2CLASSNAME }
-    L_0x2bd2:
-        if (r0 < r5) goto L_0x2bda;
-    L_0x2bd4:
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.backgroundRotation = r7;	 Catch:{ all -> 0x2CLASSNAME }
-    L_0x2bda:
-        r7 = 4;
-        if (r0 < r7) goto L_0x2bf6;
-    L_0x2bdd:
+        if (r15 >= r14) goto L_0x2c4b;
+    L_0x2b8f:
+        r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.<init>();	 Catch:{ all -> 0x2CLASSNAME }
+        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.id = r4;	 Catch:{ all -> 0x2CLASSNAME }
+        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.accentColor = r4;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.parentTheme = r11;	 Catch:{ all -> 0x2CLASSNAME }
+        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.myMessagesAccentColor = r4;	 Catch:{ all -> 0x2CLASSNAME }
+        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.myMessagesGradientAccentColor = r4;	 Catch:{ all -> 0x2CLASSNAME }
+        r4 = 3;
+        if (r0 < r4) goto L_0x2bbb;
+    L_0x2bb1:
+        r18 = r2;
+        r4 = r3;
+        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        goto L_0x2bc5;
+    L_0x2bbb:
+        r18 = r2;
+        r4 = r3;
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = (long) r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2bc5:
+        r2 = 2;
+        if (r0 < r2) goto L_0x2bcf;
+    L_0x2bc8:
+        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        goto L_0x2bd6;
+    L_0x2bcf:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = (long) r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2bd6:
+        if (r0 < r5) goto L_0x2bde;
+    L_0x2bd8:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundRotation = r2;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2bde:
+        r2 = 4;
+        if (r0 < r2) goto L_0x2bfa;
+    L_0x2be1:
         r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = r13.readDouble(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = (float) r7;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.patternIntensity = r7;	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = r13.readBool(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.patternMotion = r7;	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = 5;
-        if (r0 < r7) goto L_0x2bf7;
-    L_0x2bf0:
-        r7 = r13.readString(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.patternSlug = r7;	 Catch:{ all -> 0x2CLASSNAME }
-    L_0x2bf6:
-        r7 = 5;
-    L_0x2bf7:
-        if (r0 < r7) goto L_0x2CLASSNAME;
-    L_0x2bf9:
-        r7 = r13.readBool(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        if (r7 == 0) goto L_0x2CLASSNAME;
-    L_0x2bff:
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.account = r7;	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = org.telegram.tgnet.TLRPC.Theme.TLdeserialize(r13, r7, r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = (org.telegram.tgnet.TLRPC.TL_theme) r7;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.info = r7;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r13.readDouble(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = (float) r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.patternIntensity = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.patternMotion = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = 5;
+        if (r0 < r2) goto L_0x2bfb;
+    L_0x2bf4:
+        r2 = r13.readString(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.patternSlug = r2;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2bfa:
+        r2 = 5;
+    L_0x2bfb:
+        if (r0 < r2) goto L_0x2CLASSNAME;
+    L_0x2bfd:
+        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        if (r2 == 0) goto L_0x2CLASSNAME;
     L_0x2CLASSNAME:
-        r7 = r11.themeAccentsMap;	 Catch:{ all -> 0x2CLASSNAME }
-        r8 = r1.id;	 Catch:{ all -> 0x2CLASSNAME }
-        r7.put(r8, r1);	 Catch:{ all -> 0x2CLASSNAME }
-        r7 = r1.info;	 Catch:{ all -> 0x2CLASSNAME }
-        if (r7 == 0) goto L_0x2CLASSNAME;
-    L_0x2c1c:
-        r7 = r11.accentsByThemeId;	 Catch:{ all -> 0x2CLASSNAME }
-        r8 = r1.info;	 Catch:{ all -> 0x2CLASSNAME }
-        r20 = r6;
-        r5 = r8.id;	 Catch:{ all -> 0x2CLASSNAME }
-        r7.put(r5, r1);	 Catch:{ all -> 0x2CLASSNAME }
-        goto L_0x2c2a;
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.account = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = org.telegram.tgnet.TLRPC.Theme.TLdeserialize(r13, r2, r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = (org.telegram.tgnet.TLRPC.TL_theme) r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.info = r2;	 Catch:{ all -> 0x2CLASSNAME }
     L_0x2CLASSNAME:
+        r2 = r11.themeAccentsMap;	 Catch:{ all -> 0x2CLASSNAME }
+        r3 = r1.id;	 Catch:{ all -> 0x2CLASSNAME }
+        r2.put(r3, r1);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r1.info;	 Catch:{ all -> 0x2CLASSNAME }
+        if (r2 == 0) goto L_0x2c2c;
+    L_0x2CLASSNAME:
+        r2 = r11.accentsByThemeId;	 Catch:{ all -> 0x2CLASSNAME }
+        r3 = r1.info;	 Catch:{ all -> 0x2CLASSNAME }
         r20 = r6;
-    L_0x2c2a:
+        r5 = r3.id;	 Catch:{ all -> 0x2CLASSNAME }
+        r2.put(r5, r1);	 Catch:{ all -> 0x2CLASSNAME }
+        goto L_0x2c2e;
+    L_0x2c2c:
+        r20 = r6;
+    L_0x2c2e:
         r12.add(r1);	 Catch:{ all -> 0x2CLASSNAME }
-        r5 = r11.lastAccentId;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r11.lastAccentId;	 Catch:{ all -> 0x2CLASSNAME }
         r1 = r1.id;	 Catch:{ all -> 0x2CLASSNAME }
-        r1 = java.lang.Math.max(r5, r1);	 Catch:{ all -> 0x2CLASSNAME }
+        r1 = java.lang.Math.max(r2, r1);	 Catch:{ all -> 0x2CLASSNAME }
         r11.lastAccentId = r1;	 Catch:{ all -> 0x2CLASSNAME }
         r15 = r15 + 1;
-        r8 = r18;
+        r3 = r4;
+        r2 = r18;
         r6 = r20;
         r1 = 0;
+        r4 = 3;
         r5 = 1;
-        r7 = 2;
-        goto L_0x2b8b;
+        goto L_0x2b8d;
     L_0x2CLASSNAME:
         r0 = move-exception;
         goto L_0x2CLASSNAME;
     L_0x2CLASSNAME:
         r0 = move-exception;
-        r20 = r6;
         goto L_0x2CLASSNAME;
+    L_0x2c4b:
+        r18 = r2;
+        r4 = r3;
+        r1 = r6;
+        r3 = 5;
+        goto L_0x2c5e;
     L_0x2CLASSNAME:
-        r20 = r6;
-        r18 = r8;
-        goto L_0x2CLASSNAME;
-    L_0x2c4d:
         r0 = move-exception;
-        r20 = r6;
-        r18 = r8;
+        r18 = r2;
+        r4 = r3;
     L_0x2CLASSNAME:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x2e34 }
-    L_0x2CLASSNAME:
-        r5 = 5;
-        r7 = 1;
-        r8 = 3;
-        goto L_0x2d52;
-    L_0x2c5a:
         r20 = r6;
-        r18 = r8;
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e34 }
-        r0.<init>();	 Catch:{ Exception -> 0x2e34 }
+    L_0x2CLASSNAME:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x2CLASSNAME }
+        r1 = r20;
+    L_0x2c5c:
+        r3 = 5;
+        r5 = 1;
+    L_0x2c5e:
+        r6 = 3;
+        goto L_0x2d64;
+    L_0x2CLASSNAME:
+        r0 = move-exception;
+        r2 = r18;
+        r1 = r20;
+    L_0x2CLASSNAME:
+        r5 = 1;
+        goto L_0x2e58;
+    L_0x2CLASSNAME:
+        r18 = r2;
+        r4 = r3;
+        r20 = r6;
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2d9e }
+        r0.<init>();	 Catch:{ Exception -> 0x2d9e }
         r1 = "accent_for_";
-        r0.append(r1);	 Catch:{ Exception -> 0x2e34 }
-        r1 = r11.assetName;	 Catch:{ Exception -> 0x2e34 }
-        r0.append(r1);	 Catch:{ Exception -> 0x2e34 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e34 }
-        r1 = 0;
-        r5 = r4.getInt(r0, r1);	 Catch:{ Exception -> 0x2e34 }
-        if (r5 == 0) goto L_0x2CLASSNAME;
+        r0.append(r1);	 Catch:{ Exception -> 0x2d9e }
+        r1 = r11.assetName;	 Catch:{ Exception -> 0x2d9e }
+        r0.append(r1);	 Catch:{ Exception -> 0x2d9e }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2d9e }
+        r1 = r20;
+        r2 = 0;
+        r3 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2d9c }
+        if (r3 == 0) goto L_0x2c5c;
+    L_0x2c8a:
+        if (r7 != 0) goto L_0x2c9a;
+    L_0x2c8c:
+        r7 = r1.edit();	 Catch:{ Exception -> 0x2CLASSNAME }
+        r2 = r9.edit();	 Catch:{ Exception -> 0x2CLASSNAME }
+        r10 = r2;
+        goto L_0x2c9a;
     L_0x2CLASSNAME:
-        if (r20 != 0) goto L_0x2CLASSNAME;
-    L_0x2c7a:
-        r6 = r4.edit();	 Catch:{ Exception -> 0x2e34 }
-        r1 = r9.edit();	 Catch:{ Exception -> 0x2e34 }
-        r10 = r1;
+        r0 = move-exception;
+        r2 = r18;
         goto L_0x2CLASSNAME;
-    L_0x2CLASSNAME:
-        r6 = r20;
-    L_0x2CLASSNAME:
-        r6.remove(r0);	 Catch:{ Exception -> 0x2e34 }
-        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2e34 }
-        r0 = r0.size();	 Catch:{ Exception -> 0x2e34 }
-        r1 = 0;
-    L_0x2CLASSNAME:
-        if (r1 >= r0) goto L_0x2ca7;
-    L_0x2CLASSNAME:
-        r7 = r11.themeAccents;	 Catch:{ Exception -> 0x2e34 }
-        r7 = r7.get(r1);	 Catch:{ Exception -> 0x2e34 }
-        r7 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r7;	 Catch:{ Exception -> 0x2e34 }
-        r8 = r7.accentColor;	 Catch:{ Exception -> 0x2e34 }
-        if (r8 != r5) goto L_0x2ca4;
-    L_0x2c9e:
-        r0 = r7.id;	 Catch:{ Exception -> 0x2e34 }
-        r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2e34 }
-        r0 = 1;
-        goto L_0x2ca8;
+    L_0x2c9a:
+        r7.remove(r0);	 Catch:{ Exception -> 0x2d9c }
+        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2d9c }
+        r0 = r0.size();	 Catch:{ Exception -> 0x2d9c }
+        r2 = 0;
     L_0x2ca4:
-        r1 = r1 + 1;
-        goto L_0x2CLASSNAME;
-    L_0x2ca7:
+        if (r2 >= r0) goto L_0x2cbb;
+    L_0x2ca6:
+        r5 = r11.themeAccents;	 Catch:{ Exception -> 0x2CLASSNAME }
+        r5 = r5.get(r2);	 Catch:{ Exception -> 0x2CLASSNAME }
+        r5 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r5;	 Catch:{ Exception -> 0x2CLASSNAME }
+        r6 = r5.accentColor;	 Catch:{ Exception -> 0x2CLASSNAME }
+        if (r6 != r3) goto L_0x2cb8;
+    L_0x2cb2:
+        r0 = r5.id;	 Catch:{ Exception -> 0x2CLASSNAME }
+        r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2CLASSNAME }
+        r0 = 1;
+        goto L_0x2cbc;
+    L_0x2cb8:
+        r2 = r2 + 1;
+        goto L_0x2ca4;
+    L_0x2cbb:
         r0 = 0;
-    L_0x2ca8:
-        if (r0 != 0) goto L_0x2d35;
-    L_0x2caa:
-        r0 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ Exception -> 0x2e34 }
-        r0.<init>();	 Catch:{ Exception -> 0x2e34 }
-        r1 = 100;
-        r0.id = r1;	 Catch:{ Exception -> 0x2e34 }
-        r0.accentColor = r5;	 Catch:{ Exception -> 0x2e34 }
-        r0.parentTheme = r11;	 Catch:{ Exception -> 0x2e34 }
-        r1 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e34 }
-        r5 = r0.id;	 Catch:{ Exception -> 0x2e34 }
-        r1.put(r5, r0);	 Catch:{ Exception -> 0x2e34 }
-        r1 = 0;
-        r12.add(r1, r0);	 Catch:{ Exception -> 0x2e34 }
-        r1 = 100;
-        r11.currentAccentId = r1;	 Catch:{ Exception -> 0x2e34 }
-        r1 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
-        r11.lastAccentId = r1;	 Catch:{ Exception -> 0x2e34 }
-        r1 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x2e34 }
-        r5 = 68;
-        r1.<init>(r5);	 Catch:{ Exception -> 0x2e34 }
-        r5 = 5;
-        r1.writeInt32(r5);	 Catch:{ Exception -> 0x2e34 }
-        r7 = 1;
-        r1.writeInt32(r7);	 Catch:{ Exception -> 0x2e32 }
-        r8 = r0.id;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeInt32(r8);	 Catch:{ Exception -> 0x2e32 }
-        r8 = r0.accentColor;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeInt32(r8);	 Catch:{ Exception -> 0x2e32 }
-        r8 = r0.myMessagesAccentColor;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeInt32(r8);	 Catch:{ Exception -> 0x2e32 }
-        r8 = r0.myMessagesGradientAccentColor;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeInt32(r8);	 Catch:{ Exception -> 0x2e32 }
-        r13 = r0.backgroundOverrideColor;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeInt64(r13);	 Catch:{ Exception -> 0x2e32 }
-        r13 = r0.backgroundGradientOverrideColor;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeInt64(r13);	 Catch:{ Exception -> 0x2e32 }
-        r8 = r0.backgroundRotation;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeInt32(r8);	 Catch:{ Exception -> 0x2e32 }
-        r13 = 0;
-        r1.writeInt64(r13);	 Catch:{ Exception -> 0x2e32 }
-        r8 = r0.patternIntensity;	 Catch:{ Exception -> 0x2e32 }
-        r13 = (double) r8;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeDouble(r13);	 Catch:{ Exception -> 0x2e32 }
-        r8 = r0.patternMotion;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeBool(r8);	 Catch:{ Exception -> 0x2e32 }
-        r0 = r0.patternSlug;	 Catch:{ Exception -> 0x2e32 }
-        r1.writeString(r0);	 Catch:{ Exception -> 0x2e32 }
-        r8 = 0;
-        r1.writeBool(r8);	 Catch:{ Exception -> 0x2e32 }
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e32 }
-        r0.<init>();	 Catch:{ Exception -> 0x2e32 }
-        r8 = "accents_";
-        r0.append(r8);	 Catch:{ Exception -> 0x2e32 }
-        r8 = r11.assetName;	 Catch:{ Exception -> 0x2e32 }
-        r0.append(r8);	 Catch:{ Exception -> 0x2e32 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e32 }
-        r1 = r1.toByteArray();	 Catch:{ Exception -> 0x2e32 }
-        r8 = 3;
-        r1 = android.util.Base64.encodeToString(r1, r8);	 Catch:{ Exception -> 0x2e32 }
-        r10.putString(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        goto L_0x2d38;
-    L_0x2d35:
-        r5 = 5;
-        r7 = 1;
-        r8 = 3;
-    L_0x2d38:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e32 }
-        r0.<init>();	 Catch:{ Exception -> 0x2e32 }
-        r1 = "accent_current_";
-        r0.append(r1);	 Catch:{ Exception -> 0x2e32 }
-        r1 = r11.assetName;	 Catch:{ Exception -> 0x2e32 }
-        r0.append(r1);	 Catch:{ Exception -> 0x2e32 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e32 }
-        r1 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e32 }
-        r10.putInt(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        r20 = r6;
-    L_0x2d52:
-        r0 = r12.isEmpty();	 Catch:{ Exception -> 0x2e32 }
-        if (r0 != 0) goto L_0x2d63;
-    L_0x2d58:
-        r0 = org.telegram.ui.ActionBar.-$$Lambda$Theme$-1eio9W5h8f4eCuCQ0q4O3hfyjg.INSTANCE;	 Catch:{ Exception -> 0x2e32 }
-        java.util.Collections.sort(r12, r0);	 Catch:{ Exception -> 0x2e32 }
-        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2e32 }
-        r1 = 0;
-        r0.addAll(r1, r12);	 Catch:{ Exception -> 0x2e32 }
-    L_0x2d63:
-        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e32 }
-        if (r0 == 0) goto L_0x2d7b;
-    L_0x2d67:
-        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e32 }
-        r1 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e32 }
-        r0 = r0.get(r1);	 Catch:{ Exception -> 0x2e32 }
-        if (r0 != 0) goto L_0x2d7b;
-    L_0x2d71:
-        r0 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e32 }
-        if (r0 == 0) goto L_0x2d78;
-    L_0x2d75:
-        r1 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e32 }
-        goto L_0x2d79;
-    L_0x2d78:
-        r1 = 0;
-    L_0x2d79:
-        r11.currentAccentId = r1;	 Catch:{ Exception -> 0x2e32 }
-    L_0x2d7b:
-        r11.loadWallpapers(r9);	 Catch:{ Exception -> 0x2e32 }
-        r1 = 0;
-        r0 = r11.getAccent(r1);	 Catch:{ Exception -> 0x2e32 }
-        if (r0 == 0) goto L_0x2d91;
-    L_0x2d85:
-        r0 = r0.overrideWallpaper;	 Catch:{ Exception -> 0x2e32 }
-        r11.overrideWallpaper = r0;	 Catch:{ Exception -> 0x2e32 }
-        goto L_0x2d91;
-    L_0x2d8a:
-        r20 = r6;
-        r18 = r8;
-        r5 = 5;
-        r7 = 1;
-        r8 = 3;
-    L_0x2d91:
-        r6 = r20;
-        r8 = r18;
-        r1 = 0;
+    L_0x2cbc:
+        if (r0 != 0) goto L_0x2d49;
+    L_0x2cbe:
+        r0 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ Exception -> 0x2d9c }
+        r0.<init>();	 Catch:{ Exception -> 0x2d9c }
+        r2 = 100;
+        r0.id = r2;	 Catch:{ Exception -> 0x2d9c }
+        r0.accentColor = r3;	 Catch:{ Exception -> 0x2d9c }
+        r0.parentTheme = r11;	 Catch:{ Exception -> 0x2d9c }
+        r2 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2d9c }
+        r3 = r0.id;	 Catch:{ Exception -> 0x2d9c }
+        r2.put(r3, r0);	 Catch:{ Exception -> 0x2d9c }
+        r2 = 0;
+        r12.add(r2, r0);	 Catch:{ Exception -> 0x2d9c }
+        r2 = 100;
+        r11.currentAccentId = r2;	 Catch:{ Exception -> 0x2d9c }
+        r2 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r11.lastAccentId = r2;	 Catch:{ Exception -> 0x2d9c }
+        r2 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x2d9c }
+        r3 = 68;
+        r2.<init>(r3);	 Catch:{ Exception -> 0x2d9c }
+        r3 = 5;
+        r2.writeInt32(r3);	 Catch:{ Exception -> 0x2d9c }
         r5 = 1;
-        r7 = 2;
-        goto L_0x2b1f;
-    L_0x2d9a:
-        r20 = r6;
-        r7 = 1;
-        if (r20 == 0) goto L_0x2da5;
-    L_0x2d9f:
-        r20.commit();	 Catch:{ Exception -> 0x2e32 }
-        r10.commit();	 Catch:{ Exception -> 0x2e32 }
-    L_0x2da5:
+        r2.writeInt32(r5);	 Catch:{ Exception -> 0x2e4d }
+        r6 = r0.id;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
+        r6 = r0.accentColor;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
+        r6 = r0.myMessagesAccentColor;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
+        r6 = r0.myMessagesGradientAccentColor;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
+        r13 = r0.backgroundOverrideColor;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e4d }
+        r13 = r0.backgroundGradientOverrideColor;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e4d }
+        r6 = r0.backgroundRotation;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e4d }
+        r13 = 0;
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e4d }
+        r6 = r0.patternIntensity;	 Catch:{ Exception -> 0x2e4d }
+        r13 = (double) r6;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeDouble(r13);	 Catch:{ Exception -> 0x2e4d }
+        r6 = r0.patternMotion;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e4d }
+        r0 = r0.patternSlug;	 Catch:{ Exception -> 0x2e4d }
+        r2.writeString(r0);	 Catch:{ Exception -> 0x2e4d }
+        r6 = 0;
+        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e4d }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e4d }
+        r0.<init>();	 Catch:{ Exception -> 0x2e4d }
+        r6 = "accents_";
+        r0.append(r6);	 Catch:{ Exception -> 0x2e4d }
+        r6 = r11.assetName;	 Catch:{ Exception -> 0x2e4d }
+        r0.append(r6);	 Catch:{ Exception -> 0x2e4d }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e4d }
+        r2 = r2.toByteArray();	 Catch:{ Exception -> 0x2e4d }
+        r6 = 3;
+        r2 = android.util.Base64.encodeToString(r2, r6);	 Catch:{ Exception -> 0x2e4d }
+        r10.putString(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        goto L_0x2d4c;
+    L_0x2d49:
+        r3 = 5;
+        r5 = 1;
+        r6 = 3;
+    L_0x2d4c:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e4d }
+        r0.<init>();	 Catch:{ Exception -> 0x2e4d }
+        r2 = "accent_current_";
+        r0.append(r2);	 Catch:{ Exception -> 0x2e4d }
+        r2 = r11.assetName;	 Catch:{ Exception -> 0x2e4d }
+        r0.append(r2);	 Catch:{ Exception -> 0x2e4d }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e4d }
+        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e4d }
+        r10.putInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+    L_0x2d64:
+        r0 = r12.isEmpty();	 Catch:{ Exception -> 0x2e4d }
+        if (r0 != 0) goto L_0x2d75;
+    L_0x2d6a:
+        r0 = org.telegram.ui.ActionBar.-$$Lambda$Theme$-1eio9W5h8f4eCuCQ0q4O3hfyjg.INSTANCE;	 Catch:{ Exception -> 0x2e4d }
+        java.util.Collections.sort(r12, r0);	 Catch:{ Exception -> 0x2e4d }
+        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2e4d }
+        r2 = 0;
+        r0.addAll(r2, r12);	 Catch:{ Exception -> 0x2e4d }
+    L_0x2d75:
+        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e4d }
+        if (r0 == 0) goto L_0x2d8d;
+    L_0x2d79:
+        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e4d }
+        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e4d }
+        r0 = r0.get(r2);	 Catch:{ Exception -> 0x2e4d }
+        if (r0 != 0) goto L_0x2d8d;
+    L_0x2d83:
+        r0 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e4d }
+        if (r0 == 0) goto L_0x2d8a;
+    L_0x2d87:
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e4d }
+        goto L_0x2d8b;
+    L_0x2d8a:
+        r0 = 0;
+    L_0x2d8b:
+        r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2e4d }
+    L_0x2d8d:
+        r11.loadWallpapers(r9);	 Catch:{ Exception -> 0x2e4d }
+        r2 = 0;
+        r0 = r11.getAccent(r2);	 Catch:{ Exception -> 0x2e4d }
+        if (r0 == 0) goto L_0x2daa;
+    L_0x2d97:
+        r0 = r0.overrideWallpaper;	 Catch:{ Exception -> 0x2e4d }
+        r11.overrideWallpaper = r0;	 Catch:{ Exception -> 0x2e4d }
+        goto L_0x2daa;
+    L_0x2d9c:
+        r0 = move-exception;
+        goto L_0x2da1;
+    L_0x2d9e:
+        r0 = move-exception;
+        r1 = r20;
+    L_0x2da1:
+        r5 = 1;
+        goto L_0x2e4e;
+    L_0x2da4:
+        r18 = r2;
+        r4 = r3;
+        r1 = r6;
+        r3 = 5;
+        r6 = 3;
+    L_0x2daa:
+        r6 = r1;
+        r3 = r4;
+        r2 = r18;
+        r1 = 0;
+        r4 = 3;
+        goto L_0x2b22;
+    L_0x2db2:
+        r18 = r2;
+        r4 = r3;
+        r1 = r6;
+        if (r7 == 0) goto L_0x2dbe;
+    L_0x2db8:
+        r7.commit();	 Catch:{ Exception -> 0x2e4d }
+        r10.commit();	 Catch:{ Exception -> 0x2e4d }
+    L_0x2dbe:
         r0 = "selectedAutoNightType";
-        r1 = 0;
-        r0 = r4.getInt(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        selectedAutoNightType = r0;	 Catch:{ Exception -> 0x2e32 }
+        r2 = 0;
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        selectedAutoNightType = r0;	 Catch:{ Exception -> 0x2e4d }
         r0 = "autoNightScheduleByLocation";
-        r0 = r4.getBoolean(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        autoNightScheduleByLocation = r0;	 Catch:{ Exception -> 0x2e32 }
+        r0 = r1.getBoolean(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightScheduleByLocation = r0;	 Catch:{ Exception -> 0x2e4d }
         r0 = "autoNightBrighnessThreshold";
-        r1 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
-        r0 = r4.getFloat(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        autoNightBrighnessThreshold = r0;	 Catch:{ Exception -> 0x2e32 }
+        r2 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
+        r0 = r1.getFloat(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightBrighnessThreshold = r0;	 Catch:{ Exception -> 0x2e4d }
         r0 = "autoNightDayStartTime";
-        r1 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r0 = r4.getInt(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        autoNightDayStartTime = r0;	 Catch:{ Exception -> 0x2e32 }
+        r2 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightDayStartTime = r0;	 Catch:{ Exception -> 0x2e4d }
         r0 = "autoNightDayEndTime";
-        r1 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r0 = r4.getInt(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        autoNightDayEndTime = r0;	 Catch:{ Exception -> 0x2e32 }
+        r2 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightDayEndTime = r0;	 Catch:{ Exception -> 0x2e4d }
         r0 = "autoNightSunsetTime";
-        r1 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r0 = r4.getInt(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        autoNightSunsetTime = r0;	 Catch:{ Exception -> 0x2e32 }
+        r2 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightSunsetTime = r0;	 Catch:{ Exception -> 0x2e4d }
         r0 = "autoNightSunriseTime";
-        r1 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r0 = r4.getInt(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        autoNightSunriseTime = r0;	 Catch:{ Exception -> 0x2e32 }
+        r2 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightSunriseTime = r0;	 Catch:{ Exception -> 0x2e4d }
         r0 = "autoNightCityName";
-        r0 = r4.getString(r0, r3);	 Catch:{ Exception -> 0x2e32 }
-        autoNightCityName = r0;	 Catch:{ Exception -> 0x2e32 }
+        r0 = r1.getString(r0, r4);	 Catch:{ Exception -> 0x2e4d }
+        autoNightCityName = r0;	 Catch:{ Exception -> 0x2e4d }
         r0 = "autoNightLocationLatitude3";
-        r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r0 = r4.getLong(r0, r5);	 Catch:{ Exception -> 0x2e32 }
-        r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r8 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-        if (r8 == 0) goto L_0x2e05;
-    L_0x2dfe:
-        r0 = java.lang.Double.longBitsToDouble(r0);	 Catch:{ Exception -> 0x2e32 }
-        autoNightLocationLatitude = r0;	 Catch:{ Exception -> 0x2e32 }
-        goto L_0x2e0c;
-    L_0x2e05:
-        r0 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLatitude = r0;	 Catch:{ Exception -> 0x2e32 }
-    L_0x2e0c:
+        r2 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1));
+        if (r0 == 0) goto L_0x2e1e;
+    L_0x2e17:
+        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e4d }
+        goto L_0x2e25;
+    L_0x2e1e:
+        r2 = NUM; // 0x40cNUM float:0.0 double:10000.0;
+        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e4d }
+    L_0x2e25:
         r0 = "autoNightLocationLongitude3";
-        r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r0 = r4.getLong(r0, r5);	 Catch:{ Exception -> 0x2e32 }
-        r5 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r8 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-        if (r8 == 0) goto L_0x2e21;
-    L_0x2e1a:
-        r0 = java.lang.Double.longBitsToDouble(r0);	 Catch:{ Exception -> 0x2e32 }
-        autoNightLocationLongitude = r0;	 Catch:{ Exception -> 0x2e32 }
-        goto L_0x2e28;
-    L_0x2e21:
-        r0 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLongitude = r0;	 Catch:{ Exception -> 0x2e32 }
-    L_0x2e28:
+        r2 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
+        r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1));
+        if (r0 == 0) goto L_0x2e3a;
+    L_0x2e33:
+        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e4d }
+        goto L_0x2e41;
+    L_0x2e3a:
+        r2 = NUM; // 0x40cNUM float:0.0 double:10000.0;
+        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e4d }
+    L_0x2e41:
         r0 = "autoNightLastSunCheckDay";
-        r1 = -1;
-        r0 = r4.getInt(r0, r1);	 Catch:{ Exception -> 0x2e32 }
-        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x2e32 }
-        goto L_0x2e39;
-    L_0x2e32:
+        r2 = -1;
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e4d }
+        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x2e4d }
+        r2 = r18;
+        goto L_0x2e5b;
+    L_0x2e4d:
         r0 = move-exception;
-        goto L_0x2e36;
-    L_0x2e34:
+    L_0x2e4e:
+        r2 = r18;
+        goto L_0x2e58;
+    L_0x2e51:
         r0 = move-exception;
-    L_0x2e35:
-        r7 = 1;
-    L_0x2e36:
+        r18 = r2;
+        goto L_0x2e56;
+    L_0x2e55:
+        r0 = move-exception;
+    L_0x2e56:
+        r4 = r3;
+        r1 = r6;
+    L_0x2e58:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x2e39:
-        if (r2 != 0) goto L_0x2e3e;
-    L_0x2e3b:
+    L_0x2e5b:
+        if (r2 != 0) goto L_0x2e60;
+    L_0x2e5d:
         r2 = defaultTheme;
-        goto L_0x2e40;
-    L_0x2e3e:
+        goto L_0x2e62;
+    L_0x2e60:
         currentDayTheme = r2;
-    L_0x2e40:
+    L_0x2e62:
         r0 = "overrideThemeWallpaper";
-        r0 = r4.contains(r0);
-        if (r0 != 0) goto L_0x2e50;
-    L_0x2e48:
+        r0 = r1.contains(r0);
+        if (r0 != 0) goto L_0x2e72;
+    L_0x2e6a:
         r0 = "selectedBackground2";
-        r0 = r4.contains(r0);
-        if (r0 == 0) goto L_0x2ef4;
-    L_0x2e50:
+        r0 = r1.contains(r0);
+        if (r0 == 0) goto L_0x2var_;
+    L_0x2e72:
         r0 = "overrideThemeWallpaper";
-        r1 = 0;
-        r0 = r4.getBoolean(r0, r1);
-        r5 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
-        r1 = "selectedBackground2";
-        r5 = r4.getLong(r1, r5);
+        r3 = 0;
+        r0 = r1.getBoolean(r0, r3);
+        r6 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
+        r3 = "selectedBackground2";
+        r6 = r1.getLong(r3, r6);
         r8 = -2;
-        r1 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
-        if (r1 == 0) goto L_0x2ee1;
-    L_0x2e66:
-        if (r0 != 0) goto L_0x2e6f;
-    L_0x2e68:
-        r0 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
-        r8 = (r5 > r0 ? 1 : (r5 == r0 ? 0 : -1));
-        if (r8 == 0) goto L_0x2ee1;
-    L_0x2e6f:
+        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
+        if (r3 == 0) goto L_0x2var_;
+    L_0x2e88:
+        if (r0 != 0) goto L_0x2e91;
+    L_0x2e8a:
+        r8 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
+        r0 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
+        if (r0 == 0) goto L_0x2var_;
+    L_0x2e91:
         r0 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo;
         r0.<init>();
-        r1 = "selectedColor";
+        r3 = "selectedColor";
         r8 = 0;
-        r1 = r4.getInt(r1, r8);
-        r0.color = r1;
-        r1 = "selectedBackgroundSlug";
-        r1 = r4.getString(r1, r3);
-        r0.slug = r1;
+        r3 = r1.getInt(r3, r8);
+        r0.color = r3;
+        r3 = "selectedBackgroundSlug";
+        r3 = r1.getString(r3, r4);
+        r0.slug = r3;
         r8 = -1;
-        r1 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
-        if (r1 != 0) goto L_0x2e9c;
-    L_0x2e8b:
-        r1 = r0.slug;
-        r1 = android.text.TextUtils.isEmpty(r1);
-        if (r1 == 0) goto L_0x2e9c;
-    L_0x2e93:
-        r1 = "c";
-        r0.slug = r1;
+        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
+        if (r3 != 0) goto L_0x2ebe;
+    L_0x2ead:
+        r3 = r0.slug;
+        r3 = android.text.TextUtils.isEmpty(r3);
+        if (r3 == 0) goto L_0x2ebe;
+    L_0x2eb5:
+        r3 = "c";
+        r0.slug = r3;
+        r0.fileName = r4;
+        r0.originalFileName = r4;
+        goto L_0x2ec8;
+    L_0x2ebe:
+        r3 = "wallpaper.jpg";
         r0.fileName = r3;
+        r3 = "wallpaper_original.jpg";
         r0.originalFileName = r3;
-        goto L_0x2ea6;
-    L_0x2e9c:
-        r1 = "wallpaper.jpg";
-        r0.fileName = r1;
-        r1 = "wallpaper_original.jpg";
-        r0.originalFileName = r1;
-    L_0x2ea6:
-        r1 = "selectedGradientColor";
-        r3 = 0;
-        r1 = r4.getInt(r1, r3);
-        r0.gradientColor = r1;
-        r1 = 45;
-        r5 = "selectedGradientRotation";
-        r1 = r4.getInt(r5, r1);
-        r0.rotation = r1;
-        r1 = "selectedBackgroundBlurred";
-        r1 = r4.getBoolean(r1, r3);
-        r0.isBlurred = r1;
-        r1 = "selectedBackgroundMotion";
-        r1 = r4.getBoolean(r1, r3);
-        r0.isMotion = r1;
-        r1 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
-        r3 = "selectedIntensity";
-        r1 = r4.getFloat(r3, r1);
-        r0.intensity = r1;
-        r1 = currentDayTheme;
-        r1.setOverrideWallpaper(r0);
-        r1 = selectedAutoNightType;
-        if (r1 == 0) goto L_0x2ee1;
-    L_0x2edc:
-        r1 = currentNightTheme;
-        r1.setOverrideWallpaper(r0);
-    L_0x2ee1:
-        r0 = r4.edit();
+    L_0x2ec8:
+        r3 = "selectedGradientColor";
+        r4 = 0;
+        r3 = r1.getInt(r3, r4);
+        r0.gradientColor = r3;
+        r3 = 45;
+        r6 = "selectedGradientRotation";
+        r3 = r1.getInt(r6, r3);
+        r0.rotation = r3;
+        r3 = "selectedBackgroundBlurred";
+        r3 = r1.getBoolean(r3, r4);
+        r0.isBlurred = r3;
+        r3 = "selectedBackgroundMotion";
+        r3 = r1.getBoolean(r3, r4);
+        r0.isMotion = r3;
+        r3 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
+        r4 = "selectedIntensity";
+        r3 = r1.getFloat(r4, r3);
+        r0.intensity = r3;
+        r3 = currentDayTheme;
+        r3.setOverrideWallpaper(r0);
+        r3 = selectedAutoNightType;
+        if (r3 == 0) goto L_0x2var_;
+    L_0x2efe:
+        r3 = currentNightTheme;
+        r3.setOverrideWallpaper(r0);
+    L_0x2var_:
+        r0 = r1.edit();
         r1 = "overrideThemeWallpaper";
         r0 = r0.remove(r1);
         r1 = "selectedBackground2";
         r0 = r0.remove(r1);
         r0.commit();
-    L_0x2ef4:
+    L_0x2var_:
         r0 = needSwitchToTheme();
         r1 = 2;
-        if (r0 != r1) goto L_0x2efd;
-    L_0x2efb:
+        if (r0 != r1) goto L_0x2f1f;
+    L_0x2f1d:
         r2 = currentNightTheme;
-    L_0x2efd:
+    L_0x2f1f:
         if (r0 != r1) goto L_0x2var_;
-    L_0x2eff:
+    L_0x2var_:
         r1 = 0;
         goto L_0x2var_;
     L_0x2var_:
         r1 = 0;
-        r7 = 0;
+        r5 = 0;
     L_0x2var_:
-        applyTheme(r2, r1, r1, r7);
+        applyTheme(r2, r1, r1, r5);
         r0 = org.telegram.ui.ActionBar.-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I.INSTANCE;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
         r0 = new org.telegram.ui.ActionBar.Theme$7;
@@ -9964,7 +10047,7 @@ public class Theme {
                         tL_inputTheme.access_hash = tL_theme.access_hash;
                         tL_inputTheme.id = tL_theme.id;
                         tL_account_getTheme.theme = tL_inputTheme;
-                        ConnectionsManager.getInstance(i2).sendRequest(tL_account_getTheme, new -$$Lambda$Theme$svh6g1eAA1ckXbR4FzwxJEf4RsY(tL_theme, accent, themeInfo));
+                        ConnectionsManager.getInstance(i2).sendRequest(tL_account_getTheme, new -$$Lambda$Theme$bHZHOZdIgRjDGDBY1nruG_xjQ3A(accent, themeInfo, tL_theme));
                     }
                 }
                 i++;
@@ -9972,51 +10055,120 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x002a  */
-    static /* synthetic */ void lambda$null$3(org.telegram.tgnet.TLObject r6, org.telegram.tgnet.TLRPC.TL_theme r7, org.telegram.ui.ActionBar.Theme.ThemeAccent r8, org.telegram.ui.ActionBar.Theme.ThemeInfo r9) {
+    /* JADX WARNING: Removed duplicated region for block: B:39:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x008f  */
+    /* JADX WARNING: Missing block: B:24:0x006a, code skipped:
+            if (r7.motion != false) goto L_0x006e;
+     */
+    static /* synthetic */ void lambda$null$3(org.telegram.tgnet.TLObject r7, org.telegram.ui.ActionBar.Theme.ThemeAccent r8, org.telegram.ui.ActionBar.Theme.ThemeInfo r9, org.telegram.tgnet.TLRPC.TL_theme r10) {
         /*
         r0 = loadingCurrentTheme;
         r1 = 1;
         r0 = r0 - r1;
         loadingCurrentTheme = r0;
-        r0 = r6 instanceof org.telegram.tgnet.TLRPC.TL_theme;
-        if (r0 == 0) goto L_0x0025;
-    L_0x000a:
-        r6 = (org.telegram.tgnet.TLRPC.TL_theme) r6;
-        r0 = r6.document;
-        if (r0 == 0) goto L_0x0025;
-    L_0x0010:
-        r2 = r0.id;
-        r7 = r7.document;
-        r4 = r7.id;
-        r7 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r7 == 0) goto L_0x0025;
-    L_0x001a:
-        if (r8 == 0) goto L_0x001f;
-    L_0x001c:
-        r8.info = r6;
-        goto L_0x0026;
-    L_0x001f:
-        r9.info = r6;
-        r9.loadThemeDocument();
-        goto L_0x0026;
-    L_0x0025:
+        r0 = r7 instanceof org.telegram.tgnet.TLRPC.TL_theme;
+        r2 = 0;
+        if (r0 == 0) goto L_0x008a;
+    L_0x000b:
+        r7 = (org.telegram.tgnet.TLRPC.TL_theme) r7;
+        r0 = r7.settings;
+        if (r0 == 0) goto L_0x0071;
+    L_0x0011:
+        r10 = org.telegram.ui.ActionBar.Theme.ThemeInfo.accentEquals(r8, r0);
+        if (r10 != 0) goto L_0x005e;
+    L_0x0017:
+        r10 = r8.getPathToWallpaper();
+        if (r10 == 0) goto L_0x0020;
+    L_0x001d:
+        r10.delete();
+    L_0x0020:
+        r10 = r7.settings;
+        org.telegram.ui.ActionBar.Theme.ThemeInfo.fillAccentValues(r8, r10);
+        r10 = currentTheme;
+        if (r10 != r9) goto L_0x005b;
+    L_0x0029:
+        r9 = r10.currentAccentId;
+        r10 = r8.id;
+        if (r9 != r10) goto L_0x005b;
+    L_0x002f:
+        refreshThemeColors();
+        r9 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r10 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme;
+        r0 = 4;
+        r0 = new java.lang.Object[r0];
+        r3 = currentTheme;
+        r0[r2] = r3;
+        r4 = currentNightTheme;
+        if (r4 != r3) goto L_0x0045;
+    L_0x0043:
+        r3 = 1;
+        goto L_0x0046;
+    L_0x0045:
+        r3 = 0;
+    L_0x0046:
+        r3 = java.lang.Boolean.valueOf(r3);
+        r0[r1] = r3;
+        r3 = 2;
+        r4 = 0;
+        r0[r3] = r4;
+        r3 = 3;
+        r4 = -1;
+        r4 = java.lang.Integer.valueOf(r4);
+        r0[r3] = r4;
+        r9.postNotificationName(r10, r0);
+    L_0x005b:
+        org.telegram.ui.ActionBar.Theme.PatternsLoader.createLoader(r1);
+    L_0x005e:
+        r7 = r7.settings;
+        r7 = r7.wallpaper;
+        if (r7 == 0) goto L_0x006d;
+    L_0x0064:
+        r7 = r7.settings;
+        if (r7 == 0) goto L_0x006d;
+    L_0x0068:
+        r7 = r7.motion;
+        if (r7 == 0) goto L_0x006d;
+    L_0x006c:
+        goto L_0x006e;
+    L_0x006d:
         r1 = 0;
-    L_0x0026:
-        r6 = loadingCurrentTheme;
-        if (r6 != 0) goto L_0x0037;
-    L_0x002a:
-        r6 = java.lang.System.currentTimeMillis();
-        r8 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        r6 = r6 / r8;
-        r7 = (int) r6;
-        lastLoadingCurrentThemeTime = r7;
+    L_0x006e:
+        r8.patternMotion = r1;
+        goto L_0x008a;
+    L_0x0071:
+        r0 = r7.document;
+        if (r0 == 0) goto L_0x008a;
+    L_0x0075:
+        r3 = r0.id;
+        r10 = r10.document;
+        r5 = r10.id;
+        r10 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
+        if (r10 == 0) goto L_0x008a;
+    L_0x007f:
+        if (r8 == 0) goto L_0x0084;
+    L_0x0081:
+        r8.info = r7;
+        goto L_0x008b;
+    L_0x0084:
+        r9.info = r7;
+        r9.loadThemeDocument();
+        goto L_0x008b;
+    L_0x008a:
+        r1 = 0;
+    L_0x008b:
+        r7 = loadingCurrentTheme;
+        if (r7 != 0) goto L_0x009c;
+    L_0x008f:
+        r7 = java.lang.System.currentTimeMillis();
+        r9 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r7 = r7 / r9;
+        r8 = (int) r7;
+        lastLoadingCurrentThemeTime = r8;
         saveOtherThemes(r1);
-    L_0x0037:
+    L_0x009c:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$null$3(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_theme, org.telegram.ui.ActionBar.Theme$ThemeAccent, org.telegram.ui.ActionBar.Theme$ThemeInfo):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$null$3(org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.Theme$ThemeAccent, org.telegram.ui.ActionBar.Theme$ThemeInfo, org.telegram.tgnet.TLRPC$TL_theme):void");
     }
 
     public static void loadRemoteThemes(int i, boolean z) {
@@ -10031,141 +10183,207 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x01c2 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0177  */
-    static /* synthetic */ void lambda$null$5(int r12, org.telegram.tgnet.TLObject r13) {
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x01db  */
+    /* JADX WARNING: Missing block: B:56:0x0107, code skipped:
+            if (r8.motion != false) goto L_0x010b;
+     */
+    static /* synthetic */ void lambda$null$5(int r16, org.telegram.tgnet.TLObject r17) {
         /*
-        r0 = loadingRemoteThemes;
-        r1 = 0;
-        r0[r12] = r1;
-        r0 = r13 instanceof org.telegram.tgnet.TLRPC.TL_account_themes;
-        if (r0 == 0) goto L_0x01de;
-    L_0x0009:
-        r13 = (org.telegram.tgnet.TLRPC.TL_account_themes) r13;
-        r0 = remoteThemesHash;
-        r2 = r13.hash;
-        r0[r12] = r2;
-        r0 = lastLoadingThemesTime;
-        r2 = java.lang.System.currentTimeMillis();
-        r4 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        r2 = r2 / r4;
-        r3 = (int) r2;
-        r0[r12] = r3;
-        r0 = new java.util.ArrayList;
-        r0.<init>();
-        r2 = themes;
-        r2 = r2.size();
+        r0 = r16;
+        r1 = r17;
+        r2 = loadingRemoteThemes;
         r3 = 0;
-    L_0x0029:
-        if (r3 >= r2) goto L_0x0065;
-    L_0x002b:
+        r2[r0] = r3;
+        r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_account_themes;
+        if (r2 == 0) goto L_0x0244;
+    L_0x000d:
+        r1 = (org.telegram.tgnet.TLRPC.TL_account_themes) r1;
+        r2 = remoteThemesHash;
+        r4 = r1.hash;
+        r2[r0] = r4;
+        r2 = lastLoadingThemesTime;
+        r4 = java.lang.System.currentTimeMillis();
+        r6 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r4 = r4 / r6;
+        r5 = (int) r4;
+        r2[r0] = r5;
+        r2 = new java.util.ArrayList;
+        r2.<init>();
         r4 = themes;
-        r4 = r4.get(r3);
-        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;
-        r5 = r4.info;
-        if (r5 == 0) goto L_0x003f;
-    L_0x0037:
-        r5 = r4.account;
-        if (r5 != r12) goto L_0x003f;
-    L_0x003b:
-        r0.add(r4);
-        goto L_0x0062;
-    L_0x003f:
-        r5 = r4.themeAccents;
-        if (r5 == 0) goto L_0x0062;
-    L_0x0043:
+        r4 = r4.size();
         r5 = 0;
-    L_0x0044:
-        r6 = r4.themeAccents;
-        r6 = r6.size();
-        if (r5 >= r6) goto L_0x0062;
-    L_0x004c:
-        r6 = r4.themeAccents;
+    L_0x002d:
+        if (r5 >= r4) goto L_0x0069;
+    L_0x002f:
+        r6 = themes;
         r6 = r6.get(r5);
-        r6 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r6;
+        r6 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r6;
         r7 = r6.info;
-        if (r7 == 0) goto L_0x005f;
-    L_0x0058:
+        if (r7 == 0) goto L_0x0043;
+    L_0x003b:
         r7 = r6.account;
-        if (r7 != r12) goto L_0x005f;
+        if (r7 != r0) goto L_0x0043;
+    L_0x003f:
+        r2.add(r6);
+        goto L_0x0066;
+    L_0x0043:
+        r7 = r6.themeAccents;
+        if (r7 == 0) goto L_0x0066;
+    L_0x0047:
+        r7 = 0;
+    L_0x0048:
+        r8 = r6.themeAccents;
+        r8 = r8.size();
+        if (r7 >= r8) goto L_0x0066;
+    L_0x0050:
+        r8 = r6.themeAccents;
+        r8 = r8.get(r7);
+        r8 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r8;
+        r9 = r8.info;
+        if (r9 == 0) goto L_0x0063;
     L_0x005c:
-        r0.add(r6);
-    L_0x005f:
+        r9 = r8.account;
+        if (r9 != r0) goto L_0x0063;
+    L_0x0060:
+        r2.add(r8);
+    L_0x0063:
+        r7 = r7 + 1;
+        goto L_0x0048;
+    L_0x0066:
         r5 = r5 + 1;
-        goto L_0x0044;
-    L_0x0062:
-        r3 = r3 + 1;
-        goto L_0x0029;
-    L_0x0065:
-        r2 = r13.themes;
-        r2 = r2.size();
-        r3 = 0;
-        r4 = 0;
+        goto L_0x002d;
+    L_0x0069:
+        r4 = r1.themes;
+        r4 = r4.size();
         r5 = 0;
-    L_0x006e:
-        r6 = 1;
-        if (r3 >= r2) goto L_0x0121;
-    L_0x0071:
-        r7 = r13.themes;
-        r7 = r7.get(r3);
-        r7 = (org.telegram.tgnet.TLRPC.Theme) r7;
-        r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_theme;
-        if (r8 != 0) goto L_0x007f;
-    L_0x007d:
-        goto L_0x011d;
-    L_0x007f:
-        r7 = (org.telegram.tgnet.TLRPC.TL_theme) r7;
-        r8 = r7.settings;
-        if (r8 == 0) goto L_0x00bb;
+        r6 = 0;
+        r7 = 0;
+    L_0x0072:
+        r8 = -1;
+        r12 = 4;
+        r13 = 1;
+        if (r5 >= r4) goto L_0x0185;
+    L_0x0077:
+        r14 = r1.themes;
+        r14 = r14.get(r5);
+        r14 = (org.telegram.tgnet.TLRPC.Theme) r14;
+        r15 = r14 instanceof org.telegram.tgnet.TLRPC.TL_theme;
+        if (r15 != 0) goto L_0x0085;
+    L_0x0083:
+        goto L_0x0181;
     L_0x0085:
-        r8 = getBaseThemeKey(r8);
-        if (r8 != 0) goto L_0x008d;
+        r14 = (org.telegram.tgnet.TLRPC.TL_theme) r14;
+        r15 = r14.settings;
+        if (r15 == 0) goto L_0x011f;
     L_0x008b:
-        goto L_0x011d;
-    L_0x008d:
+        r15 = getBaseThemeKey(r15);
+        if (r15 != 0) goto L_0x0093;
+    L_0x0091:
+        goto L_0x0181;
+    L_0x0093:
         r9 = themesDict;
-        r8 = r9.get(r8);
-        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;
-        if (r8 == 0) goto L_0x011d;
-    L_0x0097:
-        r9 = r8.themeAccents;
-        if (r9 != 0) goto L_0x009d;
-    L_0x009b:
-        goto L_0x011d;
+        r9 = r9.get(r15);
+        r9 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r9;
+        if (r9 == 0) goto L_0x0181;
     L_0x009d:
-        r9 = r8.accentsByThemeId;
-        r10 = r7.id;
-        r9 = r9.get(r10);
-        r9 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r9;
-        if (r9 == 0) goto L_0x00ad;
-    L_0x00a9:
-        r0.remove(r9);
-        goto L_0x011d;
-    L_0x00ad:
-        r7 = r8.createNewAccent(r7, r12);
-        r7 = r7.patternSlug;
-        r7 = android.text.TextUtils.isEmpty(r7);
-        if (r7 != 0) goto L_0x011d;
-    L_0x00b9:
-        r4 = 1;
-        goto L_0x011d;
-    L_0x00bb:
+        r15 = r9.themeAccents;
+        if (r15 != 0) goto L_0x00a3;
+    L_0x00a1:
+        goto L_0x0181;
+    L_0x00a3:
+        r15 = r9.accentsByThemeId;
+        r10 = r14.id;
+        r10 = r15.get(r10);
+        r10 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r10;
+        if (r10 == 0) goto L_0x0111;
+    L_0x00af:
+        r11 = r14.settings;
+        r11 = org.telegram.ui.ActionBar.Theme.ThemeInfo.accentEquals(r10, r11);
+        if (r11 != 0) goto L_0x00fb;
+    L_0x00b7:
+        r6 = r10.getPathToWallpaper();
+        if (r6 == 0) goto L_0x00c0;
+    L_0x00bd:
+        r6.delete();
+    L_0x00c0:
+        r6 = r14.settings;
+        org.telegram.ui.ActionBar.Theme.ThemeInfo.fillAccentValues(r10, r6);
+        r6 = currentTheme;
+        if (r6 != r9) goto L_0x00f9;
+    L_0x00c9:
+        r6 = r6.currentAccentId;
+        r7 = r10.id;
+        if (r6 != r7) goto L_0x00f9;
+    L_0x00cf:
+        refreshThemeColors();
+        r6 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r7 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme;
+        r9 = new java.lang.Object[r12];
+        r11 = currentTheme;
+        r9[r3] = r11;
+        r12 = currentNightTheme;
+        if (r12 != r11) goto L_0x00e4;
+    L_0x00e2:
+        r11 = 1;
+        goto L_0x00e5;
+    L_0x00e4:
+        r11 = 0;
+    L_0x00e5:
+        r11 = java.lang.Boolean.valueOf(r11);
+        r9[r13] = r11;
+        r11 = 0;
+        r12 = 2;
+        r9[r12] = r11;
+        r8 = java.lang.Integer.valueOf(r8);
+        r11 = 3;
+        r9[r11] = r8;
+        r6.postNotificationName(r7, r9);
+    L_0x00f9:
+        r6 = 1;
+        r7 = 1;
+    L_0x00fb:
+        r8 = r14.settings;
+        r8 = r8.wallpaper;
+        if (r8 == 0) goto L_0x010a;
+    L_0x0101:
+        r8 = r8.settings;
+        if (r8 == 0) goto L_0x010a;
+    L_0x0105:
+        r8 = r8.motion;
+        if (r8 == 0) goto L_0x010a;
+    L_0x0109:
+        goto L_0x010b;
+    L_0x010a:
+        r13 = 0;
+    L_0x010b:
+        r10.patternMotion = r13;
+        r2.remove(r10);
+        goto L_0x0181;
+    L_0x0111:
+        r8 = r9.createNewAccent(r14, r0);
+        r8 = r8.patternSlug;
+        r8 = android.text.TextUtils.isEmpty(r8);
+        if (r8 != 0) goto L_0x0181;
+    L_0x011d:
+        r6 = 1;
+        goto L_0x0181;
+    L_0x011f:
         r8 = new java.lang.StringBuilder;
         r8.<init>();
         r9 = "remote";
         r8.append(r9);
-        r9 = r7.id;
+        r9 = r14.id;
         r8.append(r9);
         r8 = r8.toString();
         r9 = themesDict;
         r9 = r9.get(r8);
         r9 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r9;
-        if (r9 != 0) goto L_0x010b;
-    L_0x00d8:
+        if (r9 != 0) goto L_0x016f;
+    L_0x013c:
         r9 = new org.telegram.ui.ActionBar.Theme$ThemeInfo;
         r9.<init>();
-        r9.account = r12;
-        r5 = new java.io.File;
+        r9.account = r0;
+        r7 = new java.io.File;
         r10 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
         r11 = new java.lang.StringBuilder;
         r11.<init>();
@@ -10173,142 +10391,145 @@ public class Theme {
         r8 = ".attheme";
         r11.append(r8);
         r8 = r11.toString();
-        r5.<init>(r10, r8);
-        r5 = r5.getAbsolutePath();
-        r9.pathToFile = r5;
-        r5 = themes;
-        r5.add(r9);
-        r5 = otherThemes;
-        r5.add(r9);
-        r5 = 1;
-        goto L_0x010e;
-    L_0x010b:
-        r0.remove(r9);
-    L_0x010e:
-        r6 = r7.title;
-        r9.name = r6;
-        r9.info = r7;
-        r6 = themesDict;
-        r7 = r9.getKey();
-        r6.put(r7, r9);
-    L_0x011d:
-        r3 = r3 + 1;
-        goto L_0x006e;
-    L_0x0121:
-        r12 = r0.size();
-        r13 = 0;
-    L_0x0126:
-        if (r13 >= r12) goto L_0x01c6;
-    L_0x0128:
-        r2 = r0.get(r13);
-        r3 = r2 instanceof org.telegram.ui.ActionBar.Theme.ThemeInfo;
-        if (r3 == 0) goto L_0x0182;
-    L_0x0130:
-        r2 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r2;
-        r2.removeObservers();
-        r3 = otherThemes;
-        r3.remove(r2);
-        r3 = themesDict;
-        r7 = r2.name;
-        r3.remove(r7);
-        r3 = r2.overrideWallpaper;
-        if (r3 == 0) goto L_0x0148;
-    L_0x0145:
-        r3.delete();
-    L_0x0148:
-        r3 = themes;
-        r3.remove(r2);
-        r3 = new java.io.File;
-        r7 = r2.pathToFile;
-        r3.<init>(r7);
-        r3.delete();
-        r3 = currentDayTheme;
-        if (r3 != r2) goto L_0x0160;
-    L_0x015b:
-        r3 = defaultTheme;
-        currentDayTheme = r3;
+        r7.<init>(r10, r8);
+        r7 = r7.getAbsolutePath();
+        r9.pathToFile = r7;
+        r7 = themes;
+        r7.add(r9);
+        r7 = otherThemes;
+        r7.add(r9);
+        r7 = 1;
         goto L_0x0172;
-    L_0x0160:
-        r3 = currentNightTheme;
-        if (r3 != r2) goto L_0x0172;
-    L_0x0164:
-        r3 = themesDict;
-        r7 = "Dark Blue";
-        r3 = r3.get(r7);
-        r3 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r3;
-        currentNightTheme = r3;
-        r3 = 1;
-        goto L_0x0173;
+    L_0x016f:
+        r2.remove(r9);
     L_0x0172:
-        r3 = 0;
-    L_0x0173:
-        r7 = currentTheme;
-        if (r7 != r2) goto L_0x01c2;
-    L_0x0177:
-        if (r3 == 0) goto L_0x017c;
-    L_0x0179:
-        r2 = currentNightTheme;
-        goto L_0x017e;
-    L_0x017c:
-        r2 = currentDayTheme;
-    L_0x017e:
-        applyTheme(r2, r6, r1, r3);
-        goto L_0x01c2;
-    L_0x0182:
-        r3 = r2 instanceof org.telegram.ui.ActionBar.Theme.ThemeAccent;
-        if (r3 == 0) goto L_0x01c2;
-    L_0x0186:
-        r2 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r2;
-        r3 = r2.parentTheme;
-        r3 = deleteThemeAccent(r3, r2, r1);
-        if (r3 == 0) goto L_0x01c2;
-    L_0x0190:
-        r3 = currentTheme;
-        r2 = r2.parentTheme;
-        if (r3 != r2) goto L_0x01c2;
-    L_0x0196:
-        refreshThemeColors();
-        r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
-        r3 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme;
-        r7 = 4;
-        r7 = new java.lang.Object[r7];
-        r8 = currentTheme;
-        r7[r1] = r8;
-        r9 = currentNightTheme;
-        if (r9 != r8) goto L_0x01ac;
-    L_0x01aa:
-        r8 = 1;
-        goto L_0x01ad;
+        r8 = r14.title;
+        r9.name = r8;
+        r9.info = r14;
+        r8 = themesDict;
+        r10 = r9.getKey();
+        r8.put(r10, r9);
+    L_0x0181:
+        r5 = r5 + 1;
+        goto L_0x0072;
+    L_0x0185:
+        r0 = r2.size();
+        r1 = 0;
+    L_0x018a:
+        if (r1 >= r0) goto L_0x022c;
+    L_0x018c:
+        r4 = r2.get(r1);
+        r5 = r4 instanceof org.telegram.ui.ActionBar.Theme.ThemeInfo;
+        if (r5 == 0) goto L_0x01e6;
+    L_0x0194:
+        r4 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r4;
+        r4.removeObservers();
+        r5 = otherThemes;
+        r5.remove(r4);
+        r5 = themesDict;
+        r9 = r4.name;
+        r5.remove(r9);
+        r5 = r4.overrideWallpaper;
+        if (r5 == 0) goto L_0x01ac;
+    L_0x01a9:
+        r5.delete();
     L_0x01ac:
-        r8 = 0;
-    L_0x01ad:
-        r8 = java.lang.Boolean.valueOf(r8);
-        r7[r6] = r8;
-        r8 = 2;
-        r9 = 0;
-        r7[r8] = r9;
-        r8 = 3;
-        r9 = -1;
-        r9 = java.lang.Integer.valueOf(r9);
-        r7[r8] = r9;
-        r2.postNotificationName(r3, r7);
-    L_0x01c2:
-        r13 = r13 + 1;
-        goto L_0x0126;
-    L_0x01c6:
-        saveOtherThemes(r6);
-        sortThemes();
-        if (r5 == 0) goto L_0x01d9;
-    L_0x01ce:
-        r12 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
-        r13 = org.telegram.messenger.NotificationCenter.themeListUpdated;
-        r0 = new java.lang.Object[r1];
-        r12.postNotificationName(r13, r0);
-    L_0x01d9:
-        if (r4 == 0) goto L_0x01de;
+        r5 = themes;
+        r5.remove(r4);
+        r5 = new java.io.File;
+        r9 = r4.pathToFile;
+        r5.<init>(r9);
+        r5.delete();
+        r5 = currentDayTheme;
+        if (r5 != r4) goto L_0x01c4;
+    L_0x01bf:
+        r5 = defaultTheme;
+        currentDayTheme = r5;
+        goto L_0x01d6;
+    L_0x01c4:
+        r5 = currentNightTheme;
+        if (r5 != r4) goto L_0x01d6;
+    L_0x01c8:
+        r5 = themesDict;
+        r9 = "Dark Blue";
+        r5 = r5.get(r9);
+        r5 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r5;
+        currentNightTheme = r5;
+        r5 = 1;
+        goto L_0x01d7;
+    L_0x01d6:
+        r5 = 0;
+    L_0x01d7:
+        r9 = currentTheme;
+        if (r9 != r4) goto L_0x0225;
     L_0x01db:
-        org.telegram.ui.ActionBar.Theme.PatternsLoader.createLoader(r6);
-    L_0x01de:
+        if (r5 == 0) goto L_0x01e0;
+    L_0x01dd:
+        r4 = currentNightTheme;
+        goto L_0x01e2;
+    L_0x01e0:
+        r4 = currentDayTheme;
+    L_0x01e2:
+        applyTheme(r4, r13, r3, r5);
+        goto L_0x0225;
+    L_0x01e6:
+        r5 = r4 instanceof org.telegram.ui.ActionBar.Theme.ThemeAccent;
+        if (r5 == 0) goto L_0x0225;
+    L_0x01ea:
+        r4 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r4;
+        r5 = r4.parentTheme;
+        r5 = deleteThemeAccent(r5, r4, r3);
+        if (r5 == 0) goto L_0x0225;
+    L_0x01f4:
+        r5 = currentTheme;
+        r4 = r4.parentTheme;
+        if (r5 != r4) goto L_0x0225;
+    L_0x01fa:
+        refreshThemeColors();
+        r4 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r5 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme;
+        r9 = new java.lang.Object[r12];
+        r10 = currentTheme;
+        r9[r3] = r10;
+        r11 = currentNightTheme;
+        if (r11 != r10) goto L_0x020f;
+    L_0x020d:
+        r10 = 1;
+        goto L_0x0210;
+    L_0x020f:
+        r10 = 0;
+    L_0x0210:
+        r10 = java.lang.Boolean.valueOf(r10);
+        r9[r13] = r10;
+        r10 = 0;
+        r11 = 2;
+        r9[r11] = r10;
+        r14 = java.lang.Integer.valueOf(r8);
+        r15 = 3;
+        r9[r15] = r14;
+        r4.postNotificationName(r5, r9);
+        goto L_0x0228;
+    L_0x0225:
+        r10 = 0;
+        r11 = 2;
+        r15 = 3;
+    L_0x0228:
+        r1 = r1 + 1;
+        goto L_0x018a;
+    L_0x022c:
+        saveOtherThemes(r13);
+        sortThemes();
+        if (r7 == 0) goto L_0x023f;
+    L_0x0234:
+        r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r1 = org.telegram.messenger.NotificationCenter.themeListUpdated;
+        r2 = new java.lang.Object[r3];
+        r0.postNotificationName(r1, r2);
+    L_0x023f:
+        if (r6 == 0) goto L_0x0244;
+    L_0x0241:
+        org.telegram.ui.ActionBar.Theme.PatternsLoader.createLoader(r13);
+    L_0x0244:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.lambda$null$5(int, org.telegram.tgnet.TLObject):void");
@@ -10391,6 +10612,7 @@ public class Theme {
                     return;
                 }
                 if (themeAccent != null) {
+                    boolean z2;
                     TL_theme tL_theme2 = themeAccent.info;
                     if (tL_theme2 != null) {
                         themeInfo.accentsByThemeId.remove(tL_theme2.id);
@@ -10398,22 +10620,38 @@ public class Theme {
                     themeAccent.info = tL_theme;
                     themeAccent.account = i;
                     themeInfo.accentsByThemeId.put(tL_theme.id, themeAccent);
-                    TL_themeSettings tL_themeSettings2 = tL_theme.settings;
-                    themeAccent.accentColor = tL_themeSettings2.accent_color;
-                    themeAccent.myMessagesAccentColor = tL_themeSettings2.message_bottom_color;
-                    themeAccent.myMessagesGradientAccentColor = tL_themeSettings2.message_top_color;
-                    WallPaper wallPaper = tL_themeSettings2.wallpaper;
-                    if (wallPaper != null && wallPaper.pattern) {
+                    if (!ThemeInfo.accentEquals(themeAccent, tL_theme.settings)) {
+                        File pathToWallpaper = themeAccent.getPathToWallpaper();
+                        if (pathToWallpaper != null) {
+                            pathToWallpaper.delete();
+                        }
+                        ThemeInfo.fillAccentValues(themeAccent, tL_theme.settings);
+                        ThemeInfo themeInfo2 = currentTheme;
+                        if (themeInfo2 == themeInfo && themeInfo2.currentAccentId == themeAccent.id) {
+                            refreshThemeColors();
+                            NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
+                            int i2 = NotificationCenter.needSetDayNightTheme;
+                            Object[] objArr = new Object[4];
+                            ThemeInfo themeInfo3 = currentTheme;
+                            objArr[0] = themeInfo3;
+                            objArr[1] = Boolean.valueOf(currentNightTheme == themeInfo3);
+                            objArr[2] = null;
+                            objArr[3] = Integer.valueOf(-1);
+                            globalInstance.postNotificationName(i2, objArr);
+                        }
+                        PatternsLoader.createLoader(true);
+                    }
+                    WallPaper wallPaper = tL_theme.settings.wallpaper;
+                    if (wallPaper != null) {
                         WallPaperSettings wallPaperSettings = wallPaper.settings;
-                        if (wallPaperSettings != null) {
-                            themeAccent.backgroundOverrideColor = (long) wallPaperSettings.background_color;
-                            themeAccent.backgroundGradientOverrideColor = (long) wallPaperSettings.second_background_color;
-                            themeAccent.backgroundRotation = AndroidUtilities.getWallpaperRotation(wallPaperSettings.rotation, false);
-                            WallPaperSettings wallPaperSettings2 = tL_theme.settings.wallpaper.settings;
-                            themeAccent.patternIntensity = ((float) wallPaperSettings2.intensity) / 100.0f;
-                            themeAccent.patternMotion = wallPaperSettings2.motion;
+                        if (wallPaperSettings != null && wallPaperSettings.motion) {
+                            z2 = true;
+                            themeAccent.patternMotion = z2;
+                            themeInfo.previewParsed = false;
                         }
                     }
+                    z2 = false;
+                    themeAccent.patternMotion = z2;
                     themeInfo.previewParsed = false;
                 } else {
                     return;

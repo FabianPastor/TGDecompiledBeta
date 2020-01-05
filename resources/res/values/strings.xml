@@ -788,7 +788,7 @@
     <string name="ColorSepia">Sepia</string>
     <string name="ColorTheme">Color theme</string>
     <string name="ColorThemeChanged">Color theme changed.</string>
-    <string name="ColorThemeChangedInfo">You can change it back in Chat Settings.</string>
+    <string name="ColorThemeChangedInfo">You can change it back in *Chat Settings*.</string>
     <string name="ColorThemes">Color Themes</string>
     <string name="ColorViolet">Violet</string>
     <string name="ColorWhite">White</string>
