@@ -490,7 +490,7 @@ public class FileLoader extends BaseController {
     }
 
     public boolean isLoadingFile(String str) {
-        return this.loadOperationPathsUI.containsKey(str);
+        return str != null && this.loadOperationPathsUI.containsKey(str);
     }
 
     public float getBufferedProgressFromPosition(float f, String str) {
